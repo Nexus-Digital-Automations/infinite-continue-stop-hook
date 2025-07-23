@@ -88,6 +88,36 @@ async function getProjectInfo(targetPath) {
     };
 }
 
+async function createProjectDirectories(targetPath) {
+    // Create /development directory
+    const developmentPath = path.join(targetPath, 'development');
+    if (!fs.existsSync(developmentPath)) {
+        fs.mkdirSync(developmentPath, { recursive: true });
+        console.log(`✓ Created /development directory`);
+    }
+    
+    // Create /development/modes directory
+    const modesPath = path.join(developmentPath, 'modes');
+    if (!fs.existsSync(modesPath)) {
+        fs.mkdirSync(modesPath, { recursive: true });
+        console.log(`✓ Created /development/modes directory`);
+    }
+    
+    // Copy mode files from hook system to project
+    const sourceModesPath = path.join(__dirname, 'modes');
+    const modeFiles = fs.readdirSync(sourceModesPath).filter(file => file.endsWith('.md'));
+    
+    console.log(`\n=== Copying Mode Files ===`);
+    modeFiles.forEach(file => {
+        const sourcePath = path.join(sourceModesPath, file);
+        const destPath = path.join(modesPath, file);
+        fs.copyFileSync(sourcePath, destPath);
+        console.log(`✓ Copied ${file}`);
+    });
+    
+    return { developmentPath, modesPath };
+}
+
 async function createTodoJson(targetPath, projectInfo) {
     const todoPath = path.join(targetPath, 'TODO.json');
     
@@ -197,13 +227,20 @@ async function main() {
         // Get project information
         const projectInfo = await getProjectInfo(targetPath);
         
+        // Create project directories and copy mode files
+        console.log('\n=== Creating Project Directories ===');
+        await createProjectDirectories(targetPath);
+        
         // Create TODO.json
         console.log('\n=== Creating TODO.json ===');
         const success = await createTodoJson(targetPath, projectInfo);
         
         if (success) {
             console.log('\n✅ Setup complete!');
-            console.log('\nTODO.json has been created for this project.');
+            console.log('\nThe following has been created for this project:');
+            console.log('- TODO.json with initial task and review tasks');
+            console.log('- /development directory for project-specific guidelines');
+            console.log('- /development/modes directory with all mode files');
             console.log('\n⚠️  Note: This script assumes the global hook is already configured.');
             console.log('If the hook is not working, ensure the following command is in ~/.claude/settings.json:');
             console.log('node /Users/jeremyparker/Desktop/Claude\\\\ Coding\\\\ Projects/infinite-continue-stop-hook/stop-hook.js');
@@ -219,7 +256,7 @@ async function main() {
                         stdio: 'inherit'
                     });
                 } catch (error) {
-                    console.error('⚠️  Test hook failed, but TODO.json was created successfully');
+                    console.error('⚠️  Test hook failed, but setup was completed successfully');
                 }
             }
         }

@@ -77,16 +77,48 @@ node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-
 
 ### What the Script Does
 
-1. **Creates TODO.json** in the specified project
+1. **Creates Project Directories**
+   - Creates `/development` directory for project-specific guidelines
+   - Creates `/development/modes` subdirectory
+   - Copies all mode files (development.md, testing.md, etc.) from the hook system to the project
+
+2. **Creates TODO.json** in the specified project
    - Adds the initial task based on user input
    - Includes three review strike tasks automatically
    - Sets up the task management structure
 
-2. **Tests the Setup**
+3. **Tests the Setup**
    - Runs test-hook.js to verify configuration
    - Shows current TODO.json status
 
 **Note**: This script assumes the global hook is already configured. It does NOT modify `~/.claude/settings.json`.
+
+### Project Directory Structure
+
+After running the setup script, your project will have:
+
+```
+your-project/
+├── TODO.json                    # Task management file
+├── development/                 # Project-specific guidelines
+│   └── modes/                   # Mode-specific guidance
+│       ├── development.md       # Development mode instructions
+│       ├── testing.md           # Testing mode instructions
+│       ├── debugging.md         # Debugging mode instructions
+│       ├── refactoring.md       # Refactoring mode instructions
+│       ├── documentation.md     # Documentation mode instructions
+│       ├── task-creation.md     # Task creation mode instructions
+│       └── general.md           # General instructions
+└── ... (your project files)
+```
+
+### Customizing Mode Files
+
+After setup, you can customize the mode files in `/development/modes/` to fit your project's specific needs:
+
+1. Edit any `.md` file in `/development/modes/` to add project-specific guidance
+2. The hook will read these customized files instead of the default ones
+3. This allows each project to have its own development standards and workflows
 
 ### Command Line Options
 

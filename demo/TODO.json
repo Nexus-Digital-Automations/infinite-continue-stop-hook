@@ -1,11 +1,11 @@
 {
-  "project": "infinite-continue-stop-hook",
+  "project": "hook-demo",
   "tasks": [
     {
       "id": "task-1",
       "mode": "DEVELOPMENT",
-      "description": "Demonstrate hook functionality",
-      "prompt": "Set up a demonstration of the infinite continue hook system working with TODO.json tasks",
+      "description": "Build calculator module",
+      "prompt": "Build calculator module",
       "dependencies": [],
       "important_files": [],
       "status": "pending",
@@ -94,5 +94,5 @@
   "review_strikes": 0,
   "strikes_completed_last_run": false,
   "current_task_index": 0,
-  "last_mode": "DEVELOPMENT"
+  "last_mode": "TASK_CREATION"
 }

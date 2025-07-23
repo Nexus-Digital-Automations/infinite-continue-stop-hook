@@ -116,40 +116,16 @@ process.stdin.on('end', () => {
         // Build the prompt
         const fullPrompt = agentExecutor.buildPrompt(currentTask, mode, todoData);
         
-        // Add special instructions for different modes
-        let additionalInstructions = '\n\n## Mode-Specific Instructions:\n\n';
-        
-        if (mode === 'TASK_CREATION') {
-            additionalInstructions += `Use the Task tool to create subtasks for this task. Each subtask should:
-- Be completable in 2-4 hours
-- Have a clear, single responsibility
-- Include specific success criteria
-- Specify the appropriate mode (DEVELOPMENT, TESTING, DEBUGGING, etc.)
-- Note if it requires research (for external APIs/libraries)
-
-Example subtask creation:
-\`\`\`
-Task tool prompt: "Create unit tests for the UserService class focusing on error handling and edge cases"
-\`\`\``;
-        } else if (mode === 'REVIEWER') {
-            additionalInstructions += `Perform the review according to the strike ${currentTask.strike_number} criteria.
-Report results in a clear format and create remediation tasks if the review fails.`;
-        } else {
-            additionalInstructions += `Focus on completing this specific task according to its success criteria.
-If the task is too complex, note what subtasks would help break it down.
-For any blocking issues, document them clearly.`;
-        }
-        
         // Update task status
         currentTask.status = 'in_progress';
         taskManager.writeTodo(todoData);
         logger.addFlow(`Updated task ${currentTask.id} status to in_progress`);
         
         // Log prompt generation
-        logger.logPromptGeneration(fullPrompt, additionalInstructions);
+        logger.logPromptGeneration(fullPrompt, '');
         
         // Output the prompt for Claude
-        console.error(fullPrompt + additionalInstructions);
+        console.error(fullPrompt);
         
         // Log exit
         logger.logExit(2, `Continuing with ${mode} mode for task: ${currentTask.title}`);
