@@ -1,0 +1,13 @@
+{
+  "name": "infinite-continue-stop-hook",
+  "version": "1.0.0",
+  "description": "Infinite continue stop hook for Claude Code with multi-project support",
+  "main": "stop-hook.js",
+  "scripts": {
+    "setup": "node setup.js"
+  },
+  "keywords": ["claude-code", "stop-hook", "automation"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {}
+}
