@@ -12,7 +12,7 @@ let inputData = '';
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', chunk => inputData += chunk);
 
-process.stdin.on('end', () => {
+process.stdin.on('end', async () => {
     const workingDir = process.cwd();
     const logger = new Logger(workingDir);
     
@@ -24,13 +24,44 @@ process.stdin.on('end', () => {
         logger.logInput(hookInput);
         logger.addFlow(`Received ${hook_event_name || 'unknown'} event from Claude Code`);
         
-        // Prevent infinite loops
+        // Intelligent infinite loop prevention with 3-second timing
         if (stop_hook_active) {
-            logger.addFlow("Stop hook already active - preventing infinite loop");
-            logger.logExit(0, "Stop hook already active");
-            logger.save();
-            console.error("Stop hook already active, allowing stop");
-            process.exit(0);
+            // First check if TODO.json exists to get timing data
+            const todoPath = path.join(workingDir, 'TODO.json');
+            if (fs.existsSync(todoPath)) {
+                try {
+                    const todoData = JSON.parse(fs.readFileSync(todoPath, 'utf8'));
+                    const now = Date.now();
+                    const lastActivation = todoData.last_hook_activation || 0;
+                    const timeSinceLastCall = now - lastActivation;
+                    
+                    if (timeSinceLastCall < 3000) {
+                        // Called within 3 seconds - approve the stop (likely infinite loop)
+                        logger.addFlow(`Rapid successive call detected (${timeSinceLastCall}ms) - allowing stop`);
+                        logger.logExit(0, "Rapid successive calls detected - preventing infinite loop");
+                        logger.save();
+                        console.error("Rapid successive calls detected, allowing stop");
+                        process.exit(0);
+                    } else {
+                        // More than 3 seconds - continue normally
+                        logger.addFlow(`Normal timing detected (${timeSinceLastCall}ms) - continuing with caution`);
+                    }
+                } catch (error) {
+                    // If we can't read TODO.json, use conservative approach
+                    logger.addFlow("Could not read TODO.json for timing check - allowing stop");
+                    logger.logExit(0, "Could not validate timing - allowing stop");
+                    logger.save();
+                    console.error("Could not validate timing, allowing stop");
+                    process.exit(0);
+                }
+            } else {
+                // No TODO.json means this isn't our project - allow stop
+                logger.addFlow("No TODO.json found - allowing stop");
+                logger.logExit(0, "No TODO.json found");
+                logger.save();
+                console.error("No TODO.json found, allowing stop");
+                process.exit(0);
+            }
         }
         
         // Initialize components
@@ -51,8 +82,13 @@ process.stdin.on('end', () => {
         }
         
         // Read TODO.json
-        let todoData = taskManager.readTodo();
+        let todoData = await taskManager.readTodo();
         logger.logProjectState(todoData, todoPath);
+        
+        // Initialize execution count if not present
+        if (typeof todoData.execution_count !== 'number') {
+            todoData.execution_count = 0;
+        }
         
         // Handle strike reset logic
         const strikeResult = taskManager.handleStrikeLogic(todoData);
@@ -60,10 +96,10 @@ process.stdin.on('end', () => {
         
         if (strikeResult.action === 'reset') {
             console.error(strikeResult.message);
-            taskManager.writeTodo(todoData);
-            todoData = taskManager.readTodo(); // Re-read after update
+            await taskManager.writeTodo(todoData);
+            todoData = await taskManager.readTodo(); // Re-read after update
         } else if (strikeResult.action === 'complete') {
-            taskManager.writeTodo(todoData);
+            await taskManager.writeTodo(todoData);
             logger.logExit(0, "All strikes completed - project approved");
             logger.save();
             console.log(strikeResult.message + " Stopping.");
@@ -78,12 +114,12 @@ process.stdin.on('end', () => {
             const strikeNumber = reviewSystem.getNextStrikeNumber(todoData);
             const reviewTask = reviewSystem.createReviewTask(strikeNumber, todoData.project);
             todoData.tasks.push(reviewTask);
-            taskManager.writeTodo(todoData);
+            await taskManager.writeTodo(todoData);
             console.error(`Injecting Review Strike ${strikeNumber} task`);
         }
         
         // Find next task
-        const currentTask = taskManager.getCurrentTask();
+        const currentTask = await taskManager.getCurrentTask();
         logger.logCurrentTask(currentTask);
         
         if (!currentTask) {
@@ -93,6 +129,10 @@ process.stdin.on('end', () => {
             process.exit(0);
         }
         
+        // Increment execution count and update timing for infinite loop prevention
+        todoData.execution_count++;
+        todoData.last_hook_activation = Date.now();
+        
         // Determine mode
         let mode;
         let modeReason;
@@ -100,12 +140,12 @@ process.stdin.on('end', () => {
         if (currentTask.is_review_task) {
             mode = 'REVIEWER';
             modeReason = 'Current task is a review task';
-        } else if (todoData.last_mode === 'TASK_CREATION' || !todoData.last_mode) {
-            mode = currentTask.mode;
-            modeReason = `Using task mode: ${currentTask.mode}`;
-        } else {
+        } else if (todoData.execution_count % 4 === 0) {
             mode = 'TASK_CREATION';
-            modeReason = 'Alternating to TASK_CREATION mode';
+            modeReason = `Every 4th execution: entering TASK_CREATION mode (count: ${todoData.execution_count})`;
+        } else {
+            mode = currentTask.mode;
+            modeReason = `Using task mode: ${currentTask.mode} (execution ${todoData.execution_count})`;
         }
         
         logger.logModeDecision(todoData.last_mode, mode, modeReason);
@@ -118,7 +158,7 @@ process.stdin.on('end', () => {
         
         // Update task status
         currentTask.status = 'in_progress';
-        taskManager.writeTodo(todoData);
+        await taskManager.writeTodo(todoData);
         logger.addFlow(`Updated task ${currentTask.id} status to in_progress`);
         
         // Log prompt generation

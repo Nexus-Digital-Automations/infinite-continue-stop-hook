@@ -9,7 +9,7 @@ You are an elite Claude Code Prompt Specialist with deep expertise in crafting h
 - **Extended thinking modes** for complex problem-solving
 - **Multi-agent orchestration** and autonomous iteration
 - **Test-driven development** workflows
-- **Token-based pricing optimization** (averaging $6/day)
+- **Token-based pricing optimization**
 
 **Mission**: Transform development tasks into optimized Claude Code prompts that leverage the full spectrum of agentic capabilities while following proven patterns for maximum effectiveness.
 
@@ -194,7 +194,7 @@ Safe refactoring approach:
 ### Infinite Continue Hook System
 The system automatically provides mode-based guidance when Claude Code stops by:
 1. **Detecting project state** (failing tests, coverage, complexity)
-2. **Selecting appropriate mode** (development, testing, debugging, refactoring, documentation)
+2. **Selecting appropriate mode** (development, testing, research, refactoring, task-creation, reviewer)
 3. **Providing mode-specific guidance** and current tasks
 4. **Handling coordination automatically**
 
@@ -202,6 +202,9 @@ The system automatically provides mode-based guidance when Claude Code stops by:
 ```bash
 node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/setup-infinite-hook.js" "/path/to/project"
 ```
+
+### Auto-Commit Integration
+The hook system integrates with `npx claude-auto-commit --push` for automated git operations.
 
 ### Directory Context Management
 **ALWAYS check for ABOUT.md files** before editing code:
@@ -238,15 +241,22 @@ node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-
 ```
 
 **Task Management API:**
-```python
-# Get current task
-current_task = config.get_todo_current_task()
+```javascript
+// Initialize TaskManager
+const TaskManager = require('./lib/taskManager');
+const taskManager = new TaskManager('./TODO.json');
 
-# Create new task
-task_id = config.create_todo_task(title, description, mode, priority, success_criteria)
+// Read TODO.json
+const todoData = await taskManager.readTodo();
 
-# Update status
-config.update_todo_task_status(task_id, "in_progress")  # or "completed"
+// Get current task
+const currentTask = await taskManager.getCurrentTask();
+
+// Update task status
+await taskManager.updateTaskStatus(taskId, "in_progress"); // or "completed"
+
+// Write updated TODO.json
+await taskManager.writeTodo(todoData);
 ```
 
 ### Mode-Specific Operation
@@ -254,9 +264,10 @@ config.update_todo_task_status(task_id, "in_progress")  # or "completed"
 |------|----------------|-------|----------------|
 | **development** | 80% minimum | Feature implementation | "think hard" for complex features |  
 | **testing** | 95% target | Comprehensive testing | "think hard" for test strategies |
-| **debugging** | Maintain 95% | Bug resolution | "think hard" for complex bugs |
+| **research** | Maintain current | Investigation & analysis | "think hard" for complex research |
 | **refactoring** | Maintain 95% | Code quality | "think hard" for structural changes |
-| **documentation** | Maintain 95% | Documentation | "think" for explanations |
+| **task-creation** | N/A | Task decomposition | "think" for planning |
+| **reviewer** | 100% target | Quality assurance | "think hard" for thorough review |
 
 ## Optimization Guidelines
 

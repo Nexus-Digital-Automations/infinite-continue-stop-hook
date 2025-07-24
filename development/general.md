@@ -437,4 +437,55 @@ Update CLAUDE.md with:
 
 ---
 
-**Core Principle**: The hook system handles coordination automatically. Focus on delivering high-quality work meeting current mode objectives. Always read ABOUT.md files before editing code and implement universal quality practices (type safety, input validation, comprehensive error handling) in all code.
+## 🔴 CRITICAL: TASK COMPLETION REQUIRED
+
+**MANDATORY COMPLETION PROTOCOL**: At the end of EVERY task execution, you MUST mark tasks as completed when they are finished.
+
+### Task Completion API
+```javascript
+// Initialize TaskManager
+const TaskManager = require('./lib/taskManager');
+const taskManager = new TaskManager('./TODO.json');
+
+// Mark current task as completed
+await taskManager.updateTaskStatus("task-1", "completed");
+```
+
+### When to Mark Tasks Complete
+✅ **Mark as completed when:**
+- All success criteria are met
+- Implementation is working correctly
+- Tests pass (if applicable)
+- Code quality standards are met
+- Documentation is updated
+
+❌ **Do NOT mark as completed if:**
+- Any success criteria remain unmet
+- Implementation has known issues
+- Tests are failing
+- Code needs further refinement
+
+### Completion Checklist
+Before marking any task complete, verify:
+- [ ] All task success criteria verified
+- [ ] Code quality standards maintained (250/400 line limits)
+- [ ] Type safety implemented where supported
+- [ ] Input validation for user-facing functions
+- [ ] Comprehensive error handling with logging
+- [ ] Test coverage meets requirements
+- [ ] No regressions in existing functionality
+- [ ] Security considerations addressed
+
+### Current Task Information
+**The hook provides the current task ID in every prompt** - use this exact ID when calling `updateTaskStatus()`.
+
+**Example Completion:**
+```javascript
+// At end of task execution
+console.log("✅ Task completed successfully");
+await taskManager.updateTaskStatus("task-1", "completed");
+```
+
+---
+
+**Core Principle**: The hook system handles coordination automatically. Focus on delivering high-quality work meeting current mode objectives. Always read ABOUT.md files before editing code and implement universal quality practices (type safety, input validation, comprehensive error handling) in all code. **ALWAYS mark completed tasks using the TaskManager API.**

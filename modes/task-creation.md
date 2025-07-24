@@ -1,13 +1,55 @@
 # TASK CREATION Mode Instructions
 
-You are in TASK CREATION mode, responsible for analyzing the project's TODO.json and creating new tasks as needed.
+You are in TASK CREATION mode, responsible for intelligently analyzing the project and creating new tasks ONLY when necessary.
+
+## CRITICAL REQUIREMENTS
+
+**MINIMUM TASK CREATION**: If the project is not complete, you MUST create at least **4 tasks or subtasks**. If the project needs fewer than 4 tasks to complete, create as many as needed until completion.
+
+**INTELLIGENT DECISION-MAKING**: Don't automatically create tasks. Analyze whether task creation is actually needed based on project state.
 
 ## IMMEDIATE ACTIONS
 
 1. **Read TODO.json** from the project root
-2. **Analyze existing tasks** - understand what's planned, completed, and priorities
-3. **Identify gaps** where new tasks should be created
-4. **Create new tasks** for missing functionality, technical debt, testing needs, documentation, or performance improvements
+2. **Analyze project completeness** - assess if the current tasks provide adequate coverage
+3. **Determine creation strategy** - decide between new tasks, subtasks, or no action
+4. **Apply minimum requirement** - create at least 4 tasks/subtasks if project incomplete
+
+## DECISION FRAMEWORK
+
+### When to Create NEW STANDALONE TASKS
+✅ **Create new tasks for:**
+- Missing core functionality or features
+- Technical debt that needs addressing
+- Integration with external systems
+- Performance optimization needs
+- Security implementations
+- Documentation gaps
+- Testing coverage improvements
+- New requirements or user stories
+
+### When to Create SUBTASKS
+✅ **Break existing tasks into subtasks when:**
+- Current task is larger than 4 hours
+- Task requires multiple skill sets
+- Natural decomposition points exist
+- Can be parallelized effectively
+- Different testing strategies are needed
+- Complex integration points exist
+
+### When to CREATE NOTHING
+✅ **Skip task creation if:**
+- Current tasks adequately cover project scope
+- All major functionality is planned
+- Project roadmap is complete and well-defined
+- No significant gaps or technical debt exist
+- Tasks are appropriately sized (2-4 hours each)
+
+### FALLBACK BEHAVIOR
+If you determine that NO new tasks or subtasks are needed:
+1. **Mark current task as completed** if it's actually done
+2. **Proceed to the next pending task** in the TODO.json
+3. **Continue normal execution workflow**
 
 ## Task Decomposition Strategies
 
@@ -41,6 +83,28 @@ Payment System → Research providers → Test sandbox → Design architecture �
 ✅ **Good**: "Create login endpoint with JWT generation"
 ❌ **Too Large**: "Implement entire authentication system"
 ❌ **Too Small**: "Create a variable"
+
+## PROJECT ANALYSIS GUIDE
+
+### Assess Project Completeness
+Before creating tasks, evaluate:
+- **Functional Coverage**: Are all core features planned?
+- **Technical Debt**: What needs refactoring or improvement?
+- **Testing Gaps**: Where is test coverage insufficient?
+- **Documentation Needs**: What's missing or outdated?
+- **Performance Issues**: Any optimization opportunities?
+- **Security Concerns**: What security measures are needed?
+- **Integration Points**: Are external system connections handled?
+
+### Identify Task Gaps
+Look for missing tasks in these areas:
+- **User-facing features** not yet implemented
+- **API endpoints** or data models needed
+- **Database migrations** or schema changes
+- **Authentication/authorization** components
+- **Error handling** and logging improvements
+- **Deployment and DevOps** requirements
+- **Monitoring and observability** setup
 
 ## When to Create Tasks
 
@@ -87,7 +151,7 @@ Payment System → Research providers → Test sandbox → Design architecture �
 
 ## JSON Structure for TODO.json
 
-### Creating New Tasks
+### Creating New Tasks AND Subtasks
 ```json
 {
   "id": "task_[number]",
@@ -146,4 +210,10 @@ Think strategically about:
 - **Integration Points**: Where do components connect?
 - **Incremental Progress**: How to show continuous improvement?
 
-Remember: Create tasks that move the project forward in meaningful, testable increments.
+## FINAL REMINDERS
+
+**MINIMUM REQUIREMENT**: Create at least 4 tasks/subtasks if the project is incomplete. If fewer than 4 tasks are needed to complete the project, create only what's necessary.
+
+**FALLBACK**: If no task creation is needed, proceed to the next pending task in the workflow.
+
+Remember: Create tasks that move the project forward in meaningful, testable increments, but only when actually needed.
