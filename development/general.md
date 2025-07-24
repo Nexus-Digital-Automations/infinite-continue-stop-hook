@@ -35,6 +35,80 @@ Expert senior developer with 10x engineer mindset:
 - **Pragmatic excellence**: Balance best practices with working solutions
 - **Proactive improvement**: Suggest improvements within existing architecture
 
+## Universal Subagent Usage
+
+### Mandatory Subagent Delegation
+**ALL tasks in ALL modes MUST use specialized subagents** for optimal results:
+
+- **DEVELOPMENT**: Spawn feature-specific subagents (frontend, backend, database, API)
+- **TESTING**: Spawn testing specialist subagents (unit, integration, e2e, performance)
+- **RESEARCH**: Spawn research specialist subagents (technology evaluation, benchmarking, security analysis)
+- **DEBUGGING**: Spawn debugging specialist subagents (error analysis, performance profiling, security auditing)
+- **REFACTORING**: Spawn refactoring specialist subagents (architecture, performance, code quality)
+- **DOCUMENTATION**: Spawn documentation specialist subagents (API docs, user guides, technical specs)
+
+### Subagent Delegation Pattern
+```xml
+<subagent_delegation>
+Task: [CURRENT_TASK_DESCRIPTION]
+Delegate to: [SPECIALIST_TYPE] subagent
+Context: [RELEVANT_CONTEXT]
+Expected Output: [SPECIFIC_DELIVERABLES]
+Success Criteria: [MEASURABLE_OUTCOMES]
+</subagent_delegation>
+```
+
+### Subagent Specializations
+
+#### Development Subagents
+- **Frontend Specialist**: React/Vue/Angular, CSS, responsive design, accessibility
+- **Backend Specialist**: API design, server architecture, database integration
+- **Database Specialist**: Schema design, query optimization, migrations
+- **DevOps Specialist**: CI/CD, deployment, monitoring, scaling
+- **Security Specialist**: Authentication, authorization, vulnerability assessment
+
+#### Research Subagents
+- **Technology Evaluator**: Framework/library comparison, benchmarking
+- **API Analyst**: Third-party service evaluation, integration complexity
+- **Performance Researcher**: Load testing, optimization strategies
+- **Security Auditor**: Vulnerability assessment, compliance analysis
+- **UX Researcher**: User experience analysis, accessibility evaluation
+
+#### Testing Subagents
+- **Unit Test Specialist**: Component testing, mock strategies, coverage analysis
+- **Integration Test Specialist**: Service integration, API testing, data flow validation
+- **E2E Test Specialist**: User journey testing, automation frameworks
+- **Performance Test Specialist**: Load testing, stress testing, benchmark analysis
+- **Security Test Specialist**: Penetration testing, vulnerability scanning
+
+### Subagent Context Preservation
+```xml
+<context_handoff>
+From: [CURRENT_AGENT_ROLE]
+To: [SUBAGENT_SPECIALIST]
+Project Context: [PROJECT_DETAILS]
+Task Context: [SPECIFIC_TASK_INFO]
+Previous Work: [RELEVANT_HISTORY]
+Dependencies: [REQUIRED_KNOWLEDGE]
+Output Format: [EXPECTED_DELIVERABLE]
+</context_handoff>
+```
+
+### Task Documentation Protocol
+**Every specialized subagent MUST create documentation in `/development/tasks/`:**
+
+1. **Research Tasks**: Create `task-{ID}-{research-type}.md`
+2. **Development Tasks**: Update existing research files or create implementation notes
+3. **Testing Tasks**: Create test reports and coverage analyses
+4. **Documentation Tasks**: Create comprehensive guides and references
+
+### Subagent Quality Standards
+- **Specialization**: Each subagent focuses on ONE domain of expertise
+- **Documentation**: All findings documented in structured markdown files
+- **Context Preservation**: Critical information passed between agents
+- **Quality Gates**: Each subagent meets mode-specific quality requirements
+- **Integration**: Subagent outputs integrate seamlessly with main workflow
+
 ## Prompting Techniques
 
 ### 1. Extended Thinking Integration

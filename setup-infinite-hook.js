@@ -103,6 +103,21 @@ async function createProjectDirectories(targetPath) {
         console.log(`✓ Created /development/modes directory`);
     }
     
+    // Create /development/tasks directory
+    const tasksPath = path.join(developmentPath, 'tasks');
+    if (!fs.existsSync(tasksPath)) {
+        fs.mkdirSync(tasksPath, { recursive: true });
+        console.log(`✓ Created /development/tasks directory`);
+    }
+    
+    // Copy general.md from hook system to project development directory
+    const sourceGeneralPath = path.join(__dirname, 'development', 'general.md');
+    const destGeneralPath = path.join(developmentPath, 'general.md');
+    if (fs.existsSync(sourceGeneralPath)) {
+        fs.copyFileSync(sourceGeneralPath, destGeneralPath);
+        console.log(`✓ Copied general.md to /development/`);
+    }
+    
     // Copy mode files from hook system to project
     const sourceModesPath = path.join(__dirname, 'modes');
     const modeFiles = fs.readdirSync(sourceModesPath).filter(file => file.endsWith('.md'));

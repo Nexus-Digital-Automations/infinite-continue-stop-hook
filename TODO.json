@@ -8,9 +8,78 @@
       "prompt": "Set up a demonstration of the infinite continue hook system working with TODO.json tasks",
       "dependencies": [],
       "important_files": [],
-      "status": "pending",
+      "status": "in_progress",
       "requires_research": false,
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": "task-1-sub-1",
+          "title": "Create Hook Activation Demo Script",
+          "description": "Build an interactive demonstration script that shows how the infinite continue hook activates automatically when Claude stops mid-task, displaying the mode-specific guidance and task management flow",
+          "mode": "DEVELOPMENT",
+          "priority": "high",
+          "status": "pending",
+          "success_criteria": [
+            "Demo script simulates Claude stopping at different points",
+            "Shows automatic hook activation with mode detection",
+            "Displays mode-specific guidance in terminal",
+            "Demonstrates task status updates in TODO.json"
+          ],
+          "dependencies": [],
+          "estimate": "3 hours",
+          "important_files": ["demo/demo.js", "lib/agentExecutor.js", "lib/modeSelector.js"]
+        },
+        {
+          "id": "task-1-sub-2",
+          "title": "Test Mode Switching and Edge Cases",
+          "description": "Create comprehensive tests that validate the hook system correctly switches between modes (development, testing, debugging, refactoring, documentation) based on project state and handles edge cases like missing files or invalid configurations",
+          "mode": "TESTING",
+          "priority": "high",
+          "status": "pending",
+          "success_criteria": [
+            "Tests cover all 5 modes and transition scenarios",
+            "Edge cases tested: missing TODO.json, invalid test results, no .git directory",
+            "Performance validated: hook activation under 100ms",
+            "Test coverage maintained above 80%"
+          ],
+          "dependencies": ["task-1-sub-1"],
+          "estimate": "4 hours",
+          "important_files": ["test/integration.test.js", "lib/modeSelector.js", "lib/config.js"]
+        },
+        {
+          "id": "task-1-sub-3",
+          "title": "Build Interactive CLI Demo Tool",
+          "description": "Develop a command-line tool that allows users to interactively trigger different hook scenarios, view the guidance provided, and understand how the system helps maintain continuous workflow",
+          "mode": "DEVELOPMENT",
+          "priority": "medium",
+          "status": "pending",
+          "success_criteria": [
+            "CLI tool with menu for different demo scenarios",
+            "Real-time display of hook activation and guidance",
+            "Shows TODO.json updates and mode transitions",
+            "Includes help text explaining each feature"
+          ],
+          "dependencies": ["task-1-sub-2"],
+          "estimate": "3 hours",
+          "important_files": ["demo/interactive-demo.js", "lib/agentExecutor.js", "lib/printer.js"]
+        },
+        {
+          "id": "task-1-sub-4",
+          "title": "Create Visual Demo Documentation",
+          "description": "Produce documentation with terminal recordings/screenshots showing the hook system in action, including setup process, automatic activation, mode-specific guidance, and task management workflow",
+          "mode": "DOCUMENTATION",
+          "priority": "medium",
+          "status": "pending",
+          "success_criteria": [
+            "Step-by-step visual guide with terminal screenshots",
+            "Animated GIF or video showing hook activation",
+            "Clear explanations of each mode's behavior",
+            "Troubleshooting section for common issues"
+          ],
+          "dependencies": ["task-1-sub-3"],
+          "estimate": "2 hours",
+          "important_files": ["DEMO.md", "demo/screenshots/", "setup-infinite-hook.js"]
+        }
+      ]
     },
     {
       "id": "review-strike-1",
@@ -94,5 +163,5 @@
   "review_strikes": 0,
   "strikes_completed_last_run": false,
   "current_task_index": 0,
-  "last_mode": "DEVELOPMENT"
+  "last_mode": "TASK_CREATION"
 }
