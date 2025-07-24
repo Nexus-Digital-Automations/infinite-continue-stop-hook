@@ -109,21 +109,14 @@
       "description": "Review Strike 1: Ensure the project builds completely without errors",
       "prompt": "Perform a comprehensive code review with focus on: Ensure the project builds completely without errors\n\nCheck the entire codebase and ensure this criterion is met. If not met, create specific tasks to address the issues found.",
       "dependencies": [
-        "**/*.js",
-        "**/*.ts",
-        "**/*.jsx",
-        "**/*.tsx",
-        "**/*.py",
-        "**/*.json"
+        "package.json"
       ],
       "important_files": [
         "package.json",
         "tsconfig.json",
-        ".eslintrc",
-        "pyproject.toml",
-        "requirements.txt"
+        ".eslintrc"
       ],
-      "status": "pending",
+      "status": "completed",
       "requires_research": false,
       "subtasks": [],
       "is_review_task": true,
@@ -135,21 +128,15 @@
       "description": "Review Strike 2: Verify no lint errors exist in the codebase",
       "prompt": "Perform a comprehensive code review with focus on: Verify no lint errors exist in the codebase\n\nCheck the entire codebase and ensure this criterion is met. If not met, create specific tasks to address the issues found.",
       "dependencies": [
-        "**/*.js",
-        "**/*.ts",
-        "**/*.jsx",
-        "**/*.tsx",
-        "**/*.py",
-        "**/*.json"
+        "package.json"
       ],
       "important_files": [
         "package.json",
-        "tsconfig.json",
         ".eslintrc",
-        "pyproject.toml",
-        "requirements.txt"
+        "tsconfig.json",
+        "pyproject.toml"
       ],
-      "status": "pending",
+      "status": "completed",
       "requires_research": false,
       "subtasks": [],
       "is_review_task": true,
@@ -161,21 +148,16 @@
       "description": "Review Strike 3: Confirm test coverage is 100% on important modules and 90%+ on others, with all tests passing",
       "prompt": "Perform a comprehensive code review with focus on: Confirm test coverage is 100% on important modules and 90%+ on others, with all tests passing\n\nCheck the entire codebase and ensure this criterion is met. If not met, create specific tasks to address the issues found.",
       "dependencies": [
-        "**/*.js",
-        "**/*.ts",
-        "**/*.jsx",
-        "**/*.tsx",
-        "**/*.py",
-        "**/*.json"
+        "package.json"
       ],
       "important_files": [
         "package.json",
-        "tsconfig.json",
-        ".eslintrc",
-        "pyproject.toml",
-        "requirements.txt"
+        "jest.config.js",
+        "vitest.config.js",
+        "mocha.opts",
+        "karma.conf.js"
       ],
-      "status": "pending",
+      "status": "completed",
       "requires_research": false,
       "subtasks": [],
       "is_review_task": true,
@@ -186,6 +168,6 @@
   "strikes_completed_last_run": false,
   "current_task_index": 0,
   "last_mode": "REVIEWER",
-  "execution_count": 7,
-  "last_hook_activation": 1753330489859
+  "execution_count": 16,
+  "last_hook_activation": 1753333157956
 }

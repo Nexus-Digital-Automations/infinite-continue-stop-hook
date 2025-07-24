@@ -172,21 +172,78 @@ async function createTodoJson(targetPath, projectInfo) {
         last_mode: null
     };
     
-    // Add three review tasks for the three-strike policy
-    const reviewCriteria = [
-        'Ensure the project builds completely without errors',
-        'Verify no lint errors exist in the codebase',
-        'Confirm test coverage is 100% on important modules and 90%+ on others, with all tests passing'
+    // Add three review tasks for the three-strike policy - language agnostic
+    const reviewTasks = [
+        {
+            criteria: 'Ensure the project builds completely without errors',
+            dependencies: [],
+            important_files: [],
+            failureInstructions: `IF BUILD FAILS: Create specific TASK CREATION tasks in TODO.json to fix build issues:
+- Missing dependencies installation tasks
+- Build configuration setup tasks  
+- Compilation error resolution tasks
+- Environment setup tasks
+- Build script creation tasks
+
+CRITICAL: Use TaskManager API to add these tasks immediately when build failures are detected.`
+        },
+        {
+            criteria: 'Verify no lint errors exist in the codebase',
+            dependencies: [],
+            important_files: [],
+            failureInstructions: `IF LINT ERRORS FOUND: Create specific TASK CREATION tasks in TODO.json to achieve zero lint errors:
+- Linting tool setup and configuration tasks
+- Code style correction tasks
+- Import organization tasks
+- Naming convention fixes tasks
+- Dead code removal tasks
+
+CRITICAL: Use TaskManager API to add these tasks immediately when lint errors are detected.`
+        },
+        {
+            criteria: 'Confirm test coverage is 100% on important modules and 90%+ on others, with all tests passing',
+            dependencies: [],
+            important_files: [],
+            failureInstructions: `IF TEST COVERAGE INSUFFICIENT: Create specific TASK CREATION tasks in TODO.json to achieve required coverage:
+- Test framework setup tasks (Jest/Mocha/Vitest)
+- Unit test creation tasks for all modules
+- Integration test development tasks
+- Test coverage reporting setup tasks
+- CI/CD test integration tasks
+
+CRITICAL: Use TaskManager API to add these tasks immediately when coverage is below requirements.`
+        }
     ];
     
-    reviewCriteria.forEach((criteria, index) => {
+    reviewTasks.forEach((reviewTask, index) => {
         todoData.tasks.push({
             id: `review-strike-${index + 1}`,
             mode: 'REVIEWER',
-            description: `Review Strike ${index + 1}: ${criteria}`,
-            prompt: `Perform a comprehensive code review with focus on: ${criteria}\n\nCheck the entire codebase and ensure this criterion is met. If not met, create specific tasks to address the issues found.`,
-            dependencies: ['**/*.js', '**/*.ts', '**/*.jsx', '**/*.tsx', '**/*.py', '**/*.json'],
-            important_files: ['package.json', 'tsconfig.json', '.eslintrc', 'pyproject.toml', 'requirements.txt'],
+            description: `Review Strike ${index + 1}: ${reviewTask.criteria}`,
+            prompt: `Perform a comprehensive code review with focus on: ${reviewTask.criteria}
+
+Check the entire codebase and ensure this criterion is met.
+
+## CRITICAL FAILURE RESPONSE PROTOCOL
+
+${reviewTask.failureInstructions}
+
+## SUCCESS CRITERIA
+- Mark this review task as completed ONLY if the criterion is fully met
+- If criterion fails, you MUST create remediation tasks using TaskManager API before marking review as completed
+- All new tasks should be actionable, specific, and include proper dependencies/important_files parameters
+
+## TASK CREATION REQUIREMENT
+When creating remediation tasks, ensure each task includes:
+- Clear success criteria
+- Appropriate mode (DEVELOPMENT/TESTING/REFACTORING)
+- Specific file dependencies
+- Realistic time estimates
+- High priority for critical issues
+
+Use the task-creation.md guidelines for optimal task structure.`,
+            dependencies: reviewTask.dependencies,
+            important_files: reviewTask.important_files,
             status: 'pending',
             requires_research: false,
             subtasks: [],
