@@ -106,25 +106,25 @@
     {
       "id": "linter_task_active",
       "title": "Fix Linter Errors - IMMEDIATE",
-      "description": "Fix 0 errors and 0 warnings found in recently edited files: reviewer.md",
+      "description": "Fix 0 errors and 1 warning found in recently edited files: refactoring.md",
       "mode": "DEVELOPMENT",
       "priority": "high",
-      "status": "completed",
+      "status": "pending",
       "important_files": [
         "development/linter-errors.md",
-        "modes/reviewer.md"
+        "modes/refactoring.md"
       ],
       "success_criteria": [
         "All linter errors in edited files resolved",
         "development/linter-errors.md shows no issues for edited files",
         "Code passes linting without warnings or errors"
       ],
-      "created_at": "2025-07-25T19:32:11.082Z",
+      "created_at": "2025-07-25T19:13:19.279Z",
       "is_linter_task": true,
       "linter_summary": {
-        "total_violations": 0,
+        "total_violations": 1,
         "errors": 0,
-        "warnings": 0,
+        "warnings": 1,
         "files_affected": 1
       }
     },
@@ -220,6 +220,6 @@
   "strikes_completed_last_run": false,
   "current_task_index": 0,
   "last_mode": "DEVELOPMENT",
-  "execution_count": 25,
-  "last_hook_activation": 1753471964765
+  "execution_count": 18,
+  "last_hook_activation": 1753470799279
 }

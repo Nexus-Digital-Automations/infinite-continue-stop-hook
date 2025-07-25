@@ -48,7 +48,7 @@ async function getProjectInfo(targetPath) {
             if (packageJson.name) {
                 detectedName = packageJson.name;
             }
-        } catch (error) {
+        } catch {
             // Ignore and use directory name
         }
     }
@@ -327,7 +327,7 @@ async function main() {
                         cwd: targetPath,
                         stdio: 'inherit'
                     });
-                } catch (error) {
+                } catch {
                     console.error('⚠️  Test hook failed, but setup was completed successfully');
                 }
             }

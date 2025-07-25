@@ -355,7 +355,7 @@ class AutoFixTestSuite {
             try {
                 execSync(`node "${cliPath}" --help`, { stdio: 'pipe' });
                 execSync(`node "${cliPath}" --version`, { stdio: 'pipe' });
-            } catch (error) {
+            } catch {
                 throw new Error('CLI help/version commands failed');
             }
         });
@@ -369,7 +369,7 @@ class AutoFixTestSuite {
             
             try {
                 execSync(`node "${cliPath}" "${this.testDir}" --status --quiet`, { stdio: 'pipe' });
-            } catch (error) {
+            } catch {
                 throw new Error('CLI status command failed');
             }
         });
@@ -387,7 +387,7 @@ class AutoFixTestSuite {
                 // Verify file unchanged
                 const unchanged = JSON.parse(fs.readFileSync(testFile, 'utf8'));
                 if (unchanged.tasks) throw new Error('Dry run modified file');
-            } catch (error) {
+            } catch {
                 throw new Error('CLI dry run command failed');
             }
         });

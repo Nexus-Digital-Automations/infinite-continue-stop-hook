@@ -18,7 +18,7 @@ process.stdin.on('end', async () => {
     
     try {
         const hookInput = JSON.parse(inputData);
-        const { session_id, transcript_path, stop_hook_active, hook_event_name } = hookInput;
+        const { session_id: _session_id, transcript_path: _transcript_path, stop_hook_active, hook_event_name } = hookInput;
         
         // Log input with event details
         logger.logInput(hookInput);
@@ -48,7 +48,7 @@ process.stdin.on('end', async () => {
                     }
                 } catch (error) {
                     // If we can't read TODO.json, use conservative approach
-                    logger.addFlow("Could not read TODO.json for timing check - allowing stop");
+                    logger.addFlow(`Could not read TODO.json for timing check - allowing stop: ${error.message}`);
                     logger.logExit(0, "Could not validate timing - allowing stop");
                     logger.save();
                     console.error("Could not validate timing, allowing stop");

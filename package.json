@@ -6,8 +6,15 @@
   "scripts": {
     "setup": "node setup.js"
   },
-  "keywords": ["claude-code", "stop-hook", "automation"],
+  "keywords": [
+    "claude-code",
+    "stop-hook",
+    "automation"
+  ],
   "author": "",
   "license": "MIT",
-  "dependencies": {}
+  "devDependencies": {
+    "@eslint/js": "^9.31.0",
+    "eslint": "^9.31.0"
+  }
 }

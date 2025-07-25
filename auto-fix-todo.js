@@ -378,7 +378,7 @@ class AutoFixCLI {
         }
     }
 
-    async _listBackups(todoPath, args) {
+    async _listBackups(todoPath, _args) {
         const backups = this.autoFixer.recovery.listAvailableBackups(todoPath);
 
         if (backups.length === 0) {
@@ -554,7 +554,7 @@ FIX LEVELS:
         try {
             const pkg = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
             console.log(`Auto-Fix TODO.json CLI v${pkg.version || '1.0.0'}`);
-        } catch (error) {
+        } catch {
             console.log('Auto-Fix TODO.json CLI v1.0.0');
         }
     }

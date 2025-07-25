@@ -37,19 +37,28 @@ Expert senior developer with 10x engineer mindset:
 
 ## Subagent & Thinking Maximization Protocol
 
-### **MANDATORY: Maximum Capability Utilization**
+### **🚨 CRITICAL: SUBAGENT-FIRST MANDATE**
 
-**CRITICAL DIRECTIVE**: Agents MUST maximize use of subagents (Task tool) and thinking tools. This is not optional - it is required for optimal performance and quality outcomes.
+**ABSOLUTE REQUIREMENT**: Agents MUST use subagents (Task tool) as the PRIMARY approach for ALL complex work. Single-agent execution is a fallback option only for trivial tasks.
 
-#### **Automatic Subagent Delegation**
+#### **MANDATORY Subagent Usage - No Exceptions**
 
-**ALWAYS use Task tool for:**
+**SUBAGENTS ARE REQUIRED FOR:**
 
-- **Complex searches** requiring multiple rounds of exploration
-- **Research phases** involving unfamiliar codebases or technologies  
-- **Optimization tasks** needing systematic analysis across multiple files
-- **Quality assurance** requiring comprehensive codebase review
-- **Parallel work streams** that can execute independently
+- **ALL analysis tasks** (2+ analysis points = use subagents)
+- **ALL research activities** regardless of complexity
+- **ANY codebase exploration** beyond single file review
+- **ALL optimization and performance work**
+- **ANY quality assurance activities**
+- **ALL multi-step problem solving**
+- **ANY cross-cutting concern analysis**
+- **ALL architectural or design decisions**
+
+**SINGLE-AGENT WORK ONLY FOR:**
+- Reading a single, specific file
+- Making a trivial edit to one file
+- Simple parameter changes
+- Basic status updates
 
 **Task tool delegation pattern:**
 
@@ -286,6 +295,81 @@ node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-
 ### Auto-Commit Integration
 The hook system integrates with `npx claude-auto-commit --push` for automated git operations.
 
+### 🚨 Critical: Linter Error Priority Protocol
+
+**MANDATORY RULE**: All linter errors MUST be resolved before starting, continuing, or completing any task. Linter errors indicate code quality, syntax, or configuration issues that can cascade into serious problems if ignored.
+
+#### **Linter-First Workflow**
+
+**Before Starting Any Task:**
+```bash
+# Run all available linters first
+npm run lint 2>/dev/null || npx eslint . || echo "No npm lint script"
+npm run lint:fix 2>/dev/null || npx eslint . --fix || echo "No auto-fix available"
+
+# Check for common linters
+which prettier >/dev/null && prettier --check . || echo "Prettier not configured"
+which ruff >/dev/null && ruff check . || echo "Ruff not available (Python)"
+```
+
+**During Development:**
+- Address linter warnings immediately as they appear
+- Never ignore or disable linter rules without explicit justification
+- Run linters after each significant change
+
+**Before Completing Tasks:**
+```bash
+# Final linter verification
+npm run lint || npx eslint . --format=compact
+[ $? -eq 0 ] && echo "✅ All linter checks passed" || echo "❌ Linter errors must be fixed"
+```
+
+#### **Linter Error Emergency Protocol**
+
+**When linters fail to run (configuration issues):**
+
+1. **Immediate Priority**: Fix linter configuration before any other work
+2. **ESLint v9 Migration**: Update to eslint.config.js format if needed
+3. **Missing Dependencies**: Install required linter packages
+4. **Configuration Validation**: Ensure linter configs are valid and accessible
+
+**Common ESLint v9 Fix:**
+```bash
+# Check if legacy .eslintrc exists and migrate
+ls .eslintrc* 2>/dev/null && echo "Legacy ESLint config found - migration needed"
+
+# Install ESLint v9 compatible config
+npm install --save-dev @eslint/js @eslint/eslintrc
+```
+
+**Configuration Recovery Commands:**
+```bash
+# Create minimal working eslint.config.js
+cat > eslint.config.js << 'EOF'
+import js from '@eslint/js';
+export default [
+  js.configs.recommended,
+  {
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module'
+    }
+  }
+];
+EOF
+```
+
+#### **Integration with Hook System**
+
+The post-tool-linter-hook automatically runs after tool execution. When it reports errors:
+
+1. **Stop all other work immediately**
+2. **Fix linter configuration issues first**
+3. **Resolve all linter errors before proceeding**
+4. **Update CLAUDE.md if linter setup was required**
+
+**Never override or bypass linter failures** - they indicate real issues that need resolution.
+
 ### Essential Workflow Requirements
 
 **Context Management:**
@@ -297,6 +381,7 @@ The hook system integrates with `npx claude-auto-commit --push` for automated gi
 - **File Size**: 250 lines target, 400 max | **Documentation**: Comprehensive headers/comments
 - **Type Safety**: Use annotations where supported | **Input Validation**: Always validate/sanitize
 - **Error Handling**: Comprehensive with logging | **Security**: No hardcoded secrets, secure defaults
+- **Linter Compliance**: Zero linter errors before task completion
 
 ### Task Management via TODO.json
 ```json
@@ -653,7 +738,8 @@ const qualityChecks = [
 ### Success Criteria Checklist
 
 **Mandatory Requirements:**
-- [ ] **Subagent utilization**: Task tool used for complex research/analysis
+- [ ] **🚨 SUBAGENT UTILIZATION**: Task tool used for ALL analysis, research, and complex work (NOT optional)
+- [ ] **🚨 PARALLEL EXECUTION**: Multiple subagents deployed simultaneously when possible
 - [ ] **Thinking escalation**: Appropriate thinking level applied based on complexity
 - [ ] **Task management**: TodoWrite + TaskManager for complex work (3+ steps)
 - [ ] **Context awareness**: ABOUT.md files read, current task/mode assessed
@@ -661,6 +747,11 @@ const qualityChecks = [
 - [ ] **Technical excellence**: Type safety, input validation, error handling
 - [ ] **Test coverage**: Meets mode requirements, no regressions
 - [ ] **Security**: No hardcoded secrets, secure defaults applied
+
+**❌ FAILURE CONDITIONS:**
+- Single-agent work used for complex analysis = FAILED EXECUTION
+- No subagents used for research tasks = FAILED EXECUTION  
+- Sequential work when parallel subagents possible = SUBOPTIMAL EXECUTION
 
 ## Optimized Prompt Example
 

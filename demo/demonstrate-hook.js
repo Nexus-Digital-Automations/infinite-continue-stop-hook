@@ -26,7 +26,7 @@ function runHookDemo() {
             cwd: __dirname
         });
     } catch (error) {
-        console.log('Setup may have completed with warnings\n');
+        console.log(`Setup may have completed with warnings: ${error.message}\n`);
     }
 
     console.log('\n2. Current TODO.json contents:');
