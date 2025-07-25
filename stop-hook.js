@@ -106,16 +106,41 @@ process.stdin.on('end', async () => {
             process.exit(0);
         }
         
-        // Check if we should inject a review task
-        const shouldInjectReview = reviewSystem.shouldInjectReviewTask(todoData);
-        logger.logReviewInjection(shouldInjectReview, reviewSystem.getNextStrikeNumber(todoData));
+        // Check strike quality before proceeding - inject quality improvement task if needed
+        const qualityResults = await reviewSystem.checkStrikeQuality(workingDir);
+        logger.addFlow(`Quality check results: Strike1=${qualityResults.strike1?.quality}%, Strike2=${qualityResults.strike2?.quality}%, Strike3=${qualityResults.strike3?.quality}%, Overall Ready=${qualityResults.overallReady}`);
         
-        if (shouldInjectReview) {
-            const strikeNumber = reviewSystem.getNextStrikeNumber(todoData);
-            const reviewTask = reviewSystem.createReviewTask(strikeNumber, todoData.project);
-            todoData.tasks.push(reviewTask);
-            await taskManager.writeTodo(todoData);
-            console.error(`Injecting Review Strike ${strikeNumber} task`);
+        // If quality is not 100% for all strikes, inject quality improvement task
+        if (!qualityResults.overallReady) {
+            // Check if we already have a quality improvement task pending
+            const hasQualityTask = todoData.tasks.some(task => 
+                task.is_quality_improvement_task && 
+                (task.status === 'pending' || task.status === 'in_progress')
+            );
+            
+            if (!hasQualityTask) {
+                logger.addFlow('Quality issues detected - injecting quality improvement task');
+                todoData = reviewSystem.injectQualityImprovementTask(todoData, qualityResults, todoData.project);
+                await taskManager.writeTodo(todoData);
+                console.error(`Quality issues detected - injecting quality improvement task`);
+            } else {
+                logger.addFlow('Quality improvement task already exists');
+            }
+        }
+        
+        // Check if we should inject a review task (only if quality is ready)
+        if (qualityResults.overallReady) {
+            const shouldInjectReview = reviewSystem.shouldInjectReviewTask(todoData);
+            logger.logReviewInjection(shouldInjectReview, reviewSystem.getNextStrikeNumber(todoData));
+            
+            if (shouldInjectReview) {
+                const strikeNumber = reviewSystem.getNextStrikeNumber(todoData);
+                const reviewTask = reviewSystem.createReviewTask(strikeNumber, todoData.project);
+                // Use the insertTasksBeforeStrikes method to maintain proper ordering
+                todoData = reviewSystem.insertTasksBeforeStrikes(todoData, [reviewTask]);
+                await taskManager.writeTodo(todoData);
+                console.error(`Injecting Review Strike ${strikeNumber} task`);
+            }
         }
         
         // Find next task
