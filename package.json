@@ -9,6 +9,10 @@
     "lint": "npx eslint . --no-warn-ignored",
     "lint:fix": "npx eslint . --fix --no-warn-ignored",
     "validate": "node -e \"console.log('✅ Project validation passed - all core scripts accessible')\"",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:verbose": "jest --verbose",
     "prebuild": "echo '🔧 Starting build process...'",
     "postbuild": "echo '🎉 Build process completed successfully'"
   },
@@ -21,6 +25,7 @@
   "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^9.31.0",
-    "eslint": "^9.31.0"
+    "eslint": "^9.31.0",
+    "jest": "^29.7.0"
   }
 }
