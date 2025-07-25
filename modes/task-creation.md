@@ -159,7 +159,7 @@ Create tasks using the `task-cli.js` command-line tool:
 
 ```bash
 # Create a development task
-node task-cli.js create \
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" create \
   --title "Implement user authentication system" \
   --description "Create login/logout functionality with JWT tokens" \
   --mode "DEVELOPMENT" \
@@ -200,23 +200,23 @@ cat > batch-tasks.json << 'EOF'
 EOF
 
 # Create all tasks from the batch file
-node task-cli.js batch --file batch-tasks.json
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" batch --file batch-tasks.json
 ```
 
 ### Task Status Management
 
 ```bash
 # Update task status to in progress
-node task-cli.js status task-1 in_progress
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" status task-1 in_progress
 
 # Mark task as completed
-node task-cli.js status task-1 completed
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" status task-1 completed
 
 # Check current task details
-node task-cli.js current
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" current
 
 # List all pending tasks
-node task-cli.js list --status pending
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" list --status pending
 ```
 
 ### Review Strike Failure Response
@@ -226,7 +226,7 @@ When review strikes fail, use the CLI to create remediation tasks:
 #### Strike 1 Failure (Build Issues)
 ```bash
 # Create build setup task
-node task-cli.js create \
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" create \
   --title "Fix build configuration" \
   --description "Resolve build errors and setup proper build process" \
   --mode "DEVELOPMENT" \
@@ -236,7 +236,7 @@ node task-cli.js create \
   --success-criteria "Project builds without errors,All dependencies installed"
 
 # Create dependency installation task  
-node task-cli.js create \
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" create \
   --title "Install missing dependencies" \
   --description "Add all required project dependencies" \
   --mode "DEVELOPMENT" \
@@ -248,7 +248,7 @@ node task-cli.js create \
 #### Strike 2 Failure (Lint Issues)
 ```bash
 # Create linting setup task
-node task-cli.js create \
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" create \
   --title "Set up linting tools" \
   --description "Install and configure ESLint/Prettier for code quality" \
   --mode "DEVELOPMENT" \
@@ -258,7 +258,7 @@ node task-cli.js create \
   --success-criteria "ESLint configured,Linting rules active,Zero lint errors"
 
 # Create code style fixes task
-node task-cli.js create \
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" create \
   --title "Fix code style violations" \
   --description "Resolve all linting and code style issues" \
   --mode "REFACTORING" \
@@ -270,7 +270,7 @@ node task-cli.js create \
 #### Strike 3 Failure (Test Coverage)
 ```bash
 # Create test framework setup
-node task-cli.js create \
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" create \
   --title "Set up Jest testing framework" \
   --description "Install and configure Jest for unit testing" \
   --mode "TESTING" \
@@ -280,7 +280,7 @@ node task-cli.js create \
   --success-criteria "Jest installed,Basic test passes,Coverage reporting enabled"
 
 # Create comprehensive test tasks for each module
-node task-cli.js create \
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" create \
   --title "Write unit tests for taskManager" \
   --description "Create comprehensive tests for lib/taskManager.js" \
   --mode "TESTING" \
@@ -475,25 +475,25 @@ Think strategically about:
 ### Most Common Commands
 ```bash
 # Create a basic task
-node task-cli.js create --title "Task Title" --description "Description" --mode "DEVELOPMENT" --priority "high"
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" create --title "Task Title" --description "Description" --mode "DEVELOPMENT" --priority "high"
 
 # Mark task completed  
-node task-cli.js status <task-id> completed
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" status <task-id> completed
 
 # List pending tasks
-node task-cli.js list --status pending
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" list --status pending
 
 # Get current task info
-node task-cli.js current
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" current
 
 # Show help
-node task-cli.js help
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" help
 ```
 
 ### Review Strike Response Commands
 ```bash
 # When any strike fails, create remediation tasks:
-node task-cli.js create \
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" create \
   --title "Fix [issue]" \
   --description "Resolve [specific problem]" \
   --mode "DEVELOPMENT|TESTING|REFACTORING" \
@@ -501,6 +501,64 @@ node task-cli.js create \
   --dependencies "[relevant-files]" \
   --success-criteria "[specific-outcomes]"
 ```
+
+### TaskManager API for Claude Code
+
+**CRITICAL**: Always use absolute paths when working with TaskManager from Claude Code:
+
+```javascript
+// Initialize TaskManager
+const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager');
+const taskManager = new TaskManager('./TODO.json');
+
+// Read TODO.json
+const todoData = await taskManager.readTodo();
+
+// Get current task
+const currentTask = await taskManager.getCurrentTask();
+
+// Create new task
+const taskId = await taskManager.createTask({
+  title: "Task Title",
+  description: "Task Description", 
+  mode: "DEVELOPMENT",
+  priority: "high",
+  success_criteria: ["Criteria 1", "Criteria 2"]
+});
+
+// Update task status
+await taskManager.updateTaskStatus(taskId, "in_progress"); // or "completed"
+
+// Write updated TODO.json
+await taskManager.writeTodo(todoData);
+```
+
+## 🔧 COMMIT YOUR CHANGES AFTER TASK CREATION
+
+**MANDATORY**: After creating tasks, commit your work:
+
+```bash
+# Stage all changes
+git add -A
+
+# Commit with descriptive message (write your own message)
+git commit -m "feat: create [task description]
+
+- [bullet point of what you accomplished]
+- [another accomplishment]
+
+🤖 Generated with Claude Code
+Co-Authored-By: Claude <noreply@anthropic.com>"
+
+# Push to remote (optional but recommended)
+git push
+```
+
+**Important**: 
+- Write a meaningful commit message describing what tasks you created
+- Use conventional commit format (feat:, fix:, docs:, etc.)
+- Include task-specific details in the message body
+- This is required before starting the next task
 
 ## FINAL REMINDERS
 

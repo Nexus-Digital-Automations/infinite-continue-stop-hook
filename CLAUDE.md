@@ -216,6 +216,59 @@ Create detailed plan ([think|think hard|ultrathink]):
 </implementation_requirements>
 </xml>```
 
+## 🔴 CRITICAL: Claude Code Execution Environment
+
+### **Claude Code Cannot Run Node.js Natively**
+
+**MANDATORY**: Claude Code operates in a bash-only environment. All Node.js operations must be executed using bash commands with proper wrappers.
+
+#### **Required Execution Patterns**
+
+**❌ WRONG - Cannot Execute:**
+```javascript
+const TaskManager = require('./lib/taskManager');
+const result = await taskManager.readTodo();
+```
+
+**✅ CORRECT - Must Use Bash:**
+```bash
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(data => console.log(JSON.stringify(data, null, 2)));"
+```
+
+#### **Common TaskManager Operations**
+
+```bash
+# Basic task status update (most common)
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.updateTaskStatus('task_id', 'completed').then(() => console.log('✅ Task updated'));"
+
+# Get current active task
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getCurrentTask().then(task => console.log(task ? JSON.stringify(task, null, 2) : 'No active task'));"
+
+# Read full TODO.json data
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(data => console.log(JSON.stringify(data, null, 2)));"
+
+# Create new task with full properties
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(async (data) => { const task = {id: 'task_' + Date.now(), title: 'New Task', description: 'Task description', mode: 'development', priority: 'high', status: 'pending', success_criteria: ['Criteria'], created_at: new Date().toISOString()}; data.tasks.push(task); await tm.writeTodo(data); console.log('✅ Task created:', task.id); });"
+```
+
+#### **Error Handling in Bash Commands**
+
+```bash
+# With error handling and logging
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.updateTaskStatus('task_id', 'completed').then(() => console.log('✅ Success')).catch(err => console.error('❌ Error:', err.message));"
+
+# Validate before operations
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.validateTodoFile().then(isValid => { if (isValid) { console.log('✅ TODO.json is valid'); } else { console.error('❌ TODO.json has validation errors'); } });"
+```
+
+#### **Integration with Claude Code Workflow**
+
+1. **Always use bash commands** for TaskManager operations
+2. **Wrap in proper error handling** to catch failures
+3. **Log results** to console for visibility
+4. **Validate operations** before critical updates
+5. **Use JSON.stringify** for complex object output
+
 ## ADDER+ Protocol Integration
 
 ### Infinite Continue Hook System
@@ -274,53 +327,53 @@ The hook system integrates with `npx claude-auto-commit --push` for automated gi
 
 ```bash
 # Read TODO.json with validation and auto-fix
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(data => console.log(JSON.stringify(data, null, 2)));"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(data => console.log(JSON.stringify(data, null, 2)));"
 
 # Get current active task (first pending or in_progress)
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getCurrentTask().then(task => console.log(JSON.stringify(task, null, 2)));"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getCurrentTask().then(task => console.log(JSON.stringify(task, null, 2)));"
 
 # Update task status by ID
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.updateTaskStatus('task_id', 'completed').then(() => console.log('Task updated'));"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.updateTaskStatus('task_id', 'completed').then(() => console.log('Task updated'));"
 
 # Create and write new task to TODO.json
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(async (data) => { data.tasks.push({id: 'task_' + Date.now(), title: 'New Task', status: 'pending', priority: 'medium', created_at: new Date().toISOString()}); await tm.writeTodo(data); console.log('Task created'); });"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(async (data) => { data.tasks.push({id: 'task_' + Date.now(), title: 'New Task', status: 'pending', priority: 'medium', created_at: new Date().toISOString()}); await tm.writeTodo(data); console.log('Task created'); });"
 ```
 
 #### **Advanced Task Management**
 
 ```bash
 # Add subtasks to existing tasks
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.addSubtask('parent_task_id', {title: 'Subtask title', description: 'Detailed description', status: 'pending', priority: 'medium'}).then(() => console.log('Subtask added'));"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.addSubtask('parent_task_id', {title: 'Subtask title', description: 'Detailed description', status: 'pending', priority: 'medium'}).then(() => console.log('Subtask added'));"
 
 # Determine next execution mode based on project state
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(async (data) => { const mode = await tm.getNextMode(data); console.log('Next mode:', mode); });"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(async (data) => { const mode = await tm.getNextMode(data); console.log('Next mode:', mode); });"
 
 # Check if reviewer mode should be triggered
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(data => console.log('Needs review:', tm.shouldRunReviewer(data)));"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(data => console.log('Needs review:', tm.shouldRunReviewer(data)));"
 
 # Handle review strike logic for quality assurance
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(async (data) => { tm.handleStrikeLogic(data); await tm.writeTodo(data); console.log('Strike logic applied'); });"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(async (data) => { tm.handleStrikeLogic(data); await tm.writeTodo(data); console.log('Strike logic applied'); });"
 ```
 
 #### **File Management and Recovery**
 
 ```bash
 # Check file validation status
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getFileStatus().then(status => console.log('File status:', status));"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getFileStatus().then(status => console.log('File status:', status));"
 
 # Perform manual auto-fix with options
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.performAutoFix({level: 'aggressive', backup: true}).then(() => console.log('Auto-fix completed'));"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.performAutoFix({level: 'aggressive', backup: true}).then(() => console.log('Auto-fix completed'));"
 
 # Preview what would be fixed without making changes
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.dryRunAutoFix().then(preview => console.log('Preview:', JSON.stringify(preview, null, 2)));"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.dryRunAutoFix().then(preview => console.log('Preview:', JSON.stringify(preview, null, 2)));"
 
 # Backup and recovery operations
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createBackup().then(() => console.log('Backup created'));"
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); console.log('Backups:', tm.listBackups());"
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.restoreFromBackup().then(() => console.log('Restored from latest backup'));"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createBackup().then(() => console.log('Backup created'));"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); console.log('Backups:', tm.listBackups());"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.restoreFromBackup().then(() => console.log('Restored from latest backup'));"
 
 # Validate TODO.json without modifications
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.validateTodoFile().then(isValid => console.log('Is valid:', isValid));"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.validateTodoFile().then(isValid => console.log('Is valid:', isValid));"
 ```
 
 #### **Task Creation and Management Guidelines**
@@ -354,29 +407,29 @@ const taskData = {
 };
 
 # Add task to TODO.json (manual approach)
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(async (data) => { const taskData = {title: 'Feature implementation', description: 'Detailed task description', mode: 'development', priority: 'high', status: 'pending'}; data.tasks.push({id: 'task_' + Date.now(), ...taskData, created_at: new Date().toISOString()}); await tm.writeTodo(data); console.log('Task added to TODO.json'); });"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(async (data) => { const taskData = {title: 'Feature implementation', description: 'Detailed task description', mode: 'development', priority: 'high', status: 'pending'}; data.tasks.push({id: 'task_' + Date.now(), ...taskData, created_at: new Date().toISOString()}); await tm.writeTodo(data); console.log('Task added to TODO.json'); });"
 ```
 
 #### **CLI Integration**
 
 ```bash
-# Task creation via CLI (if task-cli.js exists)
-node task-cli.js create --title "Fix bug" --description "..." --mode "debugging"
+# Task creation via CLI
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" create --title "Fix bug" --description "..." --mode "debugging"
 
 # Update task status via CLI
-node task-cli.js status task_123 completed
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" status task_123 completed
 
 # List tasks with filtering via CLI
-node task-cli.js list --mode development --priority high
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" list --mode development --priority high
 
 # Show current active task via CLI
-node task-cli.js current
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" current
 
 # Batch create tasks from JSON file via CLI
-node task-cli.js batch tasks.json
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" batch tasks.json
 
 # Alternative: Direct TaskManager operations (recommended for Claude Code)
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getCurrentTask().then(task => console.log('Current task:', JSON.stringify(task, null, 2)));"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getCurrentTask().then(task => console.log('Current task:', JSON.stringify(task, null, 2)));"
 ```
 
 ## Proactive Task Management
@@ -410,6 +463,7 @@ const sessionTasks = [
 ];
 
 // 2. THEN: Create persistent tasks in TODO.json via TaskManager
+const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager');
 const taskManager = new TaskManager('./TODO.json');
 const persistentTask = {
   title: "Implement OAuth2 Authentication System",

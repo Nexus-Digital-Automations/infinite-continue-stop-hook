@@ -162,12 +162,39 @@
       "subtasks": [],
       "is_review_task": true,
       "strike_number": 3
+    },
+    {
+      "id": "task_test_1753401139346",
+      "title": "Test task for git commit",
+      "description": "Testing git commit instructions",
+      "mode": "DEVELOPMENT",
+      "priority": "high",
+      "status": "completed",
+      "created_at": "2025-07-24T23:52:19.346Z"
+    },
+    {
+      "id": "task_1753423673808_gli9akllo",
+      "title": "Test createTask method",
+      "description": "Testing the new createTask functionality",
+      "mode": "DEVELOPMENT",
+      "priority": "low",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [
+        "Method works correctly",
+        "Task appears in TODO.json"
+      ],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-07-25T06:07:53.808Z"
     }
   ],
   "review_strikes": 0,
   "strikes_completed_last_run": false,
   "current_task_index": 0,
-  "last_mode": "REVIEWER",
-  "execution_count": 16,
-  "last_hook_activation": 1753333157956
+  "last_mode": "DEVELOPMENT",
+  "execution_count": 17,
+  "last_hook_activation": 1753401143367
 }
