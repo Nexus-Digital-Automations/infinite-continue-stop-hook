@@ -192,6 +192,58 @@ Research Coordination Approach:
 
 ## Research Output Standards
 
+### Standardized Research Report Naming
+All research reports MUST follow the standardized naming convention:
+
+**Format**: `research-report-{task_id}.md`
+**Location**: `./reports/` directory
+
+**Examples**:
+- `./reports/research-report-task-1.md`
+- `./reports/research-report-task-1-sub-1.md`
+- `./reports/research-report-quality-improvement-1753472873685.md`
+
+### Research Report Template
+```markdown
+# Research Report: {Task Title}
+
+**Task ID**: {task_id}
+**Research Type**: [Technology Evaluation|Architecture Decision|Problem Investigation]
+**Date**: {current_date}
+**Researcher**: Claude Code
+
+## Executive Summary
+- [3-5 bullet points of most important discoveries]
+
+## Research Scope and Methodology
+- Research questions addressed
+- Evidence sources and collection methods
+- Evaluation criteria and decision framework
+
+## Key Findings
+[Detailed findings based on research type]
+
+## Recommendation
+- [Clear, actionable recommendation with rationale]
+
+## Implementation Next Steps
+- [Specific actions required to proceed]
+
+## Risk Considerations
+- [Primary risks and mitigation strategies]
+
+## Supporting Evidence
+[Links to sources, data, and analysis]
+```
+
+### Document Creation Instructions
+When conducting research, ALWAYS create the standardized research report:
+
+1. **Create the report file**: `./reports/research-report-{current_task_id}.md`
+2. **Use the template above** with task-specific information
+3. **Include comprehensive findings** following the research methodology
+4. **Save all supporting evidence** and reference materials
+
 ### Decision Documentation Requirements
 - **Architecture Decision Records (ADRs)**: For architectural choices
 - **Technology Evaluation Reports**: For tool/framework selections

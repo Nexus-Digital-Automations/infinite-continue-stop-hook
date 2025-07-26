@@ -66,8 +66,12 @@ Success Criteria:
 - Recommendation documented with pros/cons
 - Proof of concept completed (if applicable)
 - Implementation approach defined
+- Research report created: ./reports/research-report-{task_id}.md
 Estimate: [2-8 hours]
 Time-boxed: [maximum research time allowed]
+Important Files: [
+  "./reports/research-report-{task_id}.md"
+]
 ```
 
 ### Refactoring Task Template
@@ -146,11 +150,13 @@ Tackle unknowns and high-risk components early to reduce project uncertainty.
 - **Project State Assessment**: Current codebase, infrastructure, team capacity
 - **Requirement Clarification**: User stories, acceptance criteria, business constraints
 - **Technical Discovery**: Architecture review, dependency analysis, risk assessment
+- **Research Report Integration**: Check for existing research reports at `./reports/research-report-{related_task_id}.md`
 
 ### 2. Decomposition Phase
 - **Work Breakdown Structure**: Hierarchical task organization
 - **Effort Estimation**: Story points or hour-based estimates with confidence intervals
 - **Dependency Mapping**: Task relationships and coordination needs
+- **Research Report Planning**: For research tasks, automatically include `./reports/research-report-{task_id}.md` in important_files
 
 ### 3. Prioritization Phase
 - **Business Value Scoring**: User impact and revenue considerations
@@ -161,6 +167,7 @@ Tackle unknowns and high-risk components early to reduce project uncertainty.
 - **SMART Criteria Check**: Specific, Measurable, Achievable, Relevant, Time-bound
 - **Acceptance Criteria Review**: Testable and complete success conditions
 - **Definition of Done Alignment**: Quality standards and completion requirements
+- **Research Integration Validation**: Ensure research tasks include standardized report creation and consumption
 
 ## Quality Assurance Integration
 
@@ -180,10 +187,48 @@ Tackle unknowns and high-risk components early to reduce project uncertainty.
 
 Reference CLAUDE.md for complete TaskManager API and CLI usage patterns.
 
+### Automatic Research Report Integration
+
+When creating tasks that require research:
+
+1. **Check for existing reports**: Look for `./reports/research-report-{related_task_id}.md`
+2. **Include in important_files**: Add research report path to task important_files
+3. **Update success criteria**: Include research report creation/review in success criteria
+
+### Research Task Integration Pattern
+```javascript
+// For research tasks, automatically include research report
+const researchTask = {
+  title: "Research Authentication Patterns",
+  mode: "research",
+  important_files: [
+    `./reports/research-report-${taskId}.md`,
+    ...otherFiles
+  ],
+  success_criteria: [
+    "Research questions answered with evidence",
+    "Recommendation documented with pros/cons", 
+    `Research report created: ./reports/research-report-${taskId}.md`,
+    ...otherCriteria
+  ]
+};
+
+// For implementation tasks that depend on research
+const implementationTask = {
+  title: "Implement Authentication System",
+  mode: "development",
+  important_files: [
+    `./reports/research-report-${researchTaskId}.md`, // Reference research
+    ...implementationFiles
+  ],
+  dependencies: [researchTaskId]
+};
+```
+
 ### Quick Task Creation Commands
 ```bash
-# Create feature task
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); /* task creation logic */"
+# Create feature task with research report integration
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); /* task creation logic with research integration */"
 
 # Add subtasks to existing task
 node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.addSubtask('parent_id', {...})"
