@@ -106,24 +106,24 @@
     {
       "id": "linter_task_active",
       "title": "Fix Linter Errors - IMMEDIATE",
-      "description": "Fix 4 errors and 0 warnings found in recently edited files: errorRecovery.test.js",
+      "description": "Fix 6 errors and 0 warnings found in recently edited files: integration.test.js",
       "mode": "DEVELOPMENT",
       "priority": "high",
-      "status": "completed",
+      "status": "pending",
       "important_files": [
         "development/linter-errors.md",
-        "test/errorRecovery.test.js"
+        "test/integration.test.js"
       ],
       "success_criteria": [
         "All linter errors in edited files resolved",
         "development/linter-errors.md shows no issues for edited files",
         "Code passes linting without warnings or errors"
       ],
-      "created_at": "2025-07-27T22:36:19.062Z",
+      "created_at": "2025-07-27T22:18:48.447Z",
       "is_linter_task": true,
       "linter_summary": {
-        "total_violations": 4,
-        "errors": 4,
+        "total_violations": 6,
+        "errors": 6,
         "warnings": 0,
         "files_affected": 1
       }
@@ -468,7 +468,7 @@
       "description": "Create end-to-end integration tests for the complete stop hook workflow",
       "mode": "TESTING",
       "priority": "high",
-      "status": "completed",
+      "status": "pending",
       "success_criteria": [
         "Integration test for complete hook workflow: input parsing, mode selection, prompt generation",
         "Mock scenarios tested: different project states, quality levels, task types",
@@ -491,7 +491,7 @@
       "description": "Create test suites for AutoFixer, TodoValidator, Logger, and ErrorRecovery classes",
       "mode": "TESTING",
       "priority": "medium",
-      "status": "completed",
+      "status": "pending",
       "success_criteria": [
         "AutoFixer functionality tested: validation, auto-fixing, backup/recovery",
         "TodoValidator tested: schema validation, sanitization, error reporting",
@@ -621,9 +621,9 @@
   "review_strikes": 0,
   "strikes_completed_last_run": false,
   "current_task_index": 0,
-  "last_mode": "DEVELOPMENT",
-  "execution_count": 75,
-  "last_hook_activation": 1753655894596,
+  "last_mode": "TESTING",
+  "execution_count": 68,
+  "last_hook_activation": 1753654728448,
   "__removedLinterTasks": {
     "removedCount": 1,
     "finalTaskCount": 17
