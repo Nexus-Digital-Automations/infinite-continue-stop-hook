@@ -102,24 +102,24 @@
     {
       "id": "linter_task_active",
       "title": "Fix Linter Errors - IMMEDIATE",
-      "description": "Fix 10 errors and 0 warnings found in recently edited files: debug-test.js",
+      "description": "Fix 1 error and 0 warnings found in recently edited files: taskManager.test.js",
       "mode": "DEVELOPMENT",
       "priority": "high",
       "status": "pending",
       "important_files": [
         "development/linter-errors.md",
-        "debug-test.js"
+        "test/taskManager.test.js"
       ],
       "success_criteria": [
         "All linter errors in edited files resolved",
         "development/linter-errors.md shows no issues for edited files",
         "Code passes linting without warnings or errors"
       ],
-      "created_at": "2025-07-27T23:55:48.736Z",
+      "created_at": "2025-07-27T23:55:12.626Z",
       "is_linter_task": true,
       "linter_summary": {
-        "total_violations": 10,
-        "errors": 10,
+        "total_violations": 1,
+        "errors": 1,
         "warnings": 0,
         "files_affected": 1
       }
@@ -1096,7 +1096,7 @@
       "description": "Fix 18 failing TaskManager tests related to auto-fixer delegation, file validation, and recovery operations",
       "mode": "DEVELOPMENT",
       "priority": "high",
-      "status": "completed",
+      "status": "pending",
       "success_criteria": [
         "All TaskManager auto-fixer integration tests pass",
         "File validation and recovery logic works correctly",
@@ -1474,8 +1474,8 @@
   "strikes_completed_last_run": false,
   "current_task_index": 0,
   "last_mode": "DEVELOPMENT",
-  "execution_count": 107,
-  "last_hook_activation": 1753660548736,
+  "execution_count": 106,
+  "last_hook_activation": 1753660512627,
   "__removedLinterTasks": {
     "removedCount": 1,
     "finalTaskCount": 43

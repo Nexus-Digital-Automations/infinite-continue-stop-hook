@@ -7,7 +7,25 @@
 
 // Mock dependencies FIRST, before importing TaskManager
 jest.mock('fs');
-jest.mock('../lib/autoFixer');
+const mockAutoFixerInstance = {
+    getFileStatus: jest.fn(),
+    autoFix: jest.fn(),
+    recoverCorruptedFile: jest.fn(),
+    validator: {
+        validateAndSanitize: jest.fn()
+    },
+    recovery: {
+        atomicWrite: jest.fn(),
+        listAvailableBackups: jest.fn(),
+        restoreFromBackup: jest.fn(),
+        createBackup: jest.fn()
+    },
+    dryRun: jest.fn()
+};
+
+jest.mock('../lib/autoFixer', () => {
+    return jest.fn(() => mockAutoFixerInstance);
+});
 
 const fs = require('fs');
 const TaskManager = require('../lib/taskManager');
@@ -37,28 +55,11 @@ describe('TaskManager', () => {
         // Reset all mocks
         jest.clearAllMocks();
         
-        // Mock AutoFixer
-        mockAutoFixer = {
-            getFileStatus: jest.fn(),
-            autoFix: jest.fn(),
-            recoverCorruptedFile: jest.fn(),
-            validator: {
-                validateAndSanitize: jest.fn()
-            },
-            recovery: {
-                atomicWrite: jest.fn(),
-                listAvailableBackups: jest.fn(),
-                restoreFromBackup: jest.fn(),
-                createBackup: jest.fn()
-            },
-            dryRun: jest.fn()
-        };
-
-        // Mock AutoFixer constructor
-        const AutoFixer = require('../lib/autoFixer');
-        AutoFixer.mockImplementation(() => mockAutoFixer);
-
+        // Create TaskManager instance which will use the mocked AutoFixer
         taskManager = new TaskManager(mockTodoPath);
+        
+        // Get reference to the mock for setting up return values
+        mockAutoFixer = taskManager.autoFixer;
     });
 
     describe('Constructor', () => {
@@ -811,13 +812,13 @@ describe('TaskManager', () => {
         });
 
         describe('listBackups', () => {
-            test('should delegate to recovery.listAvailableBackups', () => {
+            test('should delegate to recovery.listAvailableBackups', async () => {
                 const mockBackups = ['backup1.json', 'backup2.json'];
-                mockAutoFixer.recovery.listAvailableBackups.mockReturnValue(mockBackups);
+                mockAutoFixerInstance.recovery.listAvailableBackups.mockReturnValue(mockBackups);
 
-                const result = taskManager.listBackups();
+                const result = await taskManager.listBackups();
 
-                expect(mockAutoFixer.recovery.listAvailableBackups).toHaveBeenCalledWith(mockTodoPath);
+                expect(mockAutoFixerInstance.recovery.listAvailableBackups).toHaveBeenCalledWith(mockTodoPath);
                 expect(result).toEqual(mockBackups);
             });
         });
