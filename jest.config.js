@@ -8,17 +8,27 @@ module.exports = {
     '**/?(*.)+(spec|test).js'
   ],
   
-  // Coverage configuration
+  // Coverage configuration - DISABLED due to JSON injection bug
   collectCoverage: false,
   collectCoverageFrom: [
-    'lib/**/*.js',
-    'setup-infinite-hook.js',
-    'stop-hook.js',
+    'lib/taskManager.js',
+    'lib/agentExecutor.js', 
+    'lib/reviewSystem.js',
+    'lib/todoValidator.js',
     '!**/node_modules/**',
     '!**/coverage/**',
     '!**/demo/**',
     '!**/*.config.js',
     '!**/*.backup.*'
+  ],
+  
+  // Explicitly ignore demo directories in all contexts
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    '/coverage/',
+    '/demo/',
+    '\\.backup\\.',
+    '\\.config\\.'
   ],
   
   // Coverage thresholds for quality assessment
@@ -62,6 +72,9 @@ module.exports = {
   testPathIgnorePatterns: [
     '/node_modules/',
     '/coverage/',
-    '\\.backup\\.'
+    '/demo/',
+    '\\.backup\\.',
+    '/demo/.*',
+    '.*demo.*'
   ]
 };

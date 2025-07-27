@@ -100,37 +100,12 @@
       ]
     },
     {
-      "id": "linter_task_active",
-      "title": "Fix Linter Errors - IMMEDIATE",
-      "description": "Fix 0 errors and 0 warnings found in recently edited files: package.json",
-      "mode": "DEVELOPMENT",
-      "priority": "high",
-      "status": "pending",
-      "important_files": [
-        "development/linter-errors.md",
-        "package.json"
-      ],
-      "success_criteria": [
-        "All linter errors in edited files resolved",
-        "development/linter-errors.md shows no issues for edited files",
-        "Code passes linting without warnings or errors"
-      ],
-      "created_at": "2025-07-27T23:30:21.965Z",
-      "is_linter_task": true,
-      "linter_summary": {
-        "total_violations": 0,
-        "errors": 0,
-        "warnings": 0,
-        "files_affected": 1
-      }
-    },
-    {
       "id": "fix_coverage_json_error_1753673300000",
       "title": "Fix Coverage Reporting JSON Syntax Error",
       "description": "Resolve JSON syntax error preventing coverage reports from generating",
       "mode": "TESTING",
       "priority": "high",
-      "status": "completed",
+      "status": "pending",
       "success_criteria": [
         "Jest coverage command runs without JSON syntax errors",
         "Coverage reports generate successfully",
@@ -148,7 +123,7 @@
           "id": "identify_json_source",
           "title": "Identify Source of JSON in Node Modules",
           "description": "Find which file is causing the JSON to be injected into jest-worker",
-          "status": "completed",
+          "status": "pending",
           "priority": "high",
           "mode": "DEVELOPMENT"
         },
@@ -156,7 +131,7 @@
           "id": "fix_demo_configs",
           "title": "Clean Up Demo TODO.json Files",
           "description": "Remove or properly isolate demo TODO.json files from Jest coverage",
-          "status": "completed",
+          "status": "pending",
           "priority": "medium",
           "mode": "DEVELOPMENT"
         }
@@ -300,6 +275,31 @@
           ]
         }
       ]
+    },
+    {
+      "id": "linter_task_active",
+      "title": "Fix Linter Errors - IMMEDIATE",
+      "description": "Fix 1 error and 0 warnings found in recently edited files: errorRecovery.test.js",
+      "mode": "DEVELOPMENT",
+      "priority": "high",
+      "status": "completed",
+      "important_files": [
+        "development/linter-errors.md",
+        "test/errorRecovery.test.js"
+      ],
+      "success_criteria": [
+        "All linter errors in edited files resolved",
+        "development/linter-errors.md shows no issues for edited files",
+        "Code passes linting without warnings or errors"
+      ],
+      "created_at": "2025-07-27T22:58:07.350Z",
+      "is_linter_task": true,
+      "linter_summary": {
+        "total_violations": 1,
+        "errors": 1,
+        "warnings": 0,
+        "files_affected": 1
+      }
     },
     {
       "id": "task_test_1753401139346",
@@ -1133,10 +1133,10 @@
   "strikes_completed_last_run": false,
   "current_task_index": 0,
   "last_mode": "TESTING",
-  "execution_count": 90,
-  "last_hook_activation": 1753659021965,
+  "execution_count": 89,
+  "last_hook_activation": 1753658646227,
   "__removedLinterTasks": {
     "removedCount": 1,
-    "finalTaskCount": 30
+    "finalTaskCount": 23
   }
 }
