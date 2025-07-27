@@ -360,7 +360,7 @@
       "description": "Create comprehensive test suite for AgentExecutor class covering prompt building and file discovery",
       "mode": "TESTING",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "success_criteria": [
         "AgentExecutor methods tested: buildPrompt, discoverDevelopmentFiles, buildTaskContext",
         "Different modes tested: DEVELOPMENT, TESTING, RESEARCH, REVIEWER",
@@ -375,7 +375,69 @@
       "estimate": "2-3 hours",
       "requires_research": false,
       "created_at": "2025-07-27T15:14:43.623Z",
-      "is_quality_task": true
+      "is_quality_task": true,
+      "subtasks": [
+        {
+          "id": "quality-task-1753629283623-1-a",
+          "title": "Test Core Prompt Building Methods",
+          "description": "Create tests for buildPrompt(), buildTaskContext(), and buildTaskFileInstructions() methods",
+          "mode": "TESTING",
+          "priority": "high",
+          "status": "pending",
+          "success_criteria": [
+            "buildPrompt() tested with different modes and task types",
+            "buildTaskContext() tested with various task configurations",
+            "buildTaskFileInstructions() tested with research and non-research tasks",
+            "All prompt formatting edge cases covered"
+          ],
+          "estimate": "1 hour"
+        },
+        {
+          "id": "quality-task-1753629283623-1-b",
+          "title": "Test File Discovery System",
+          "description": "Create comprehensive tests for discoverDevelopmentFiles() and getAllFilesRecursively() methods",
+          "mode": "TESTING",
+          "priority": "high",
+          "status": "pending",
+          "success_criteria": [
+            "File discovery tested with mock filesystem",
+            "Mode-specific file prioritization validated",
+            "Edge cases: missing directories, permission errors, empty directories",
+            "Research report integration tested"
+          ],
+          "estimate": "1 hour"
+        },
+        {
+          "id": "quality-task-1753629283623-1-c",
+          "title": "Test Review and Analysis Features",
+          "description": "Test getReviewFocus(), getTaskSummary(), and research report handling methods",
+          "mode": "TESTING",
+          "priority": "high",
+          "status": "pending",
+          "success_criteria": [
+            "Review focus generation tested for all strike numbers",
+            "Task summary calculations validated",
+            "Research report path generation and existence checks tested",
+            "Edge cases for malformed data handled"
+          ],
+          "estimate": "45 minutes"
+        },
+        {
+          "id": "quality-task-1753629283623-1-d",
+          "title": "Test Integration and Error Scenarios",
+          "description": "Create integration tests and test error handling throughout AgentExecutor",
+          "mode": "TESTING",
+          "priority": "high",
+          "status": "pending",
+          "success_criteria": [
+            "End-to-end prompt generation tested",
+            "File system error scenarios handled gracefully",
+            "Invalid input data handled correctly",
+            "Performance validated for large file trees"
+          ],
+          "estimate": "45 minutes"
+        }
+      ]
     },
     {
       "id": "quality-task-1753629283623-2",
@@ -559,9 +621,9 @@
   "review_strikes": 0,
   "strikes_completed_last_run": false,
   "current_task_index": 0,
-  "last_mode": "TESTING",
-  "execution_count": 63,
-  "last_hook_activation": 1753653671515,
+  "last_mode": "TASK_CREATION",
+  "execution_count": 64,
+  "last_hook_activation": 1753654142271,
   "__removedLinterTasks": {
     "removedCount": 1,
     "finalTaskCount": 11
