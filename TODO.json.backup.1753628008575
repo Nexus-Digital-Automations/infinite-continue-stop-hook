@@ -106,20 +106,20 @@
     {
       "id": "linter_task_active",
       "title": "Fix Linter Errors - IMMEDIATE",
-      "description": "Fix 0 errors and 0 warnings found in recently edited files: research.md",
+      "description": "Fix 0 errors and 0 warnings found in recently edited files: CLAUDE.md",
       "mode": "DEVELOPMENT",
       "priority": "high",
       "status": "completed",
       "important_files": [
         "development/linter-errors.md",
-        "modes/research.md"
+        "CLAUDE.md"
       ],
       "success_criteria": [
         "All linter errors in edited files resolved",
         "development/linter-errors.md shows no issues for edited files",
         "Code passes linting without warnings or errors"
       ],
-      "created_at": "2025-07-27T14:54:18.965Z",
+      "created_at": "2025-07-27T14:50:42.495Z",
       "is_linter_task": true,
       "linter_summary": {
         "total_violations": 0,
@@ -396,9 +396,9 @@
   "review_strikes": 0,
   "strikes_completed_last_run": false,
   "current_task_index": 0,
-  "last_mode": "TASK_CREATION",
-  "execution_count": 60,
-  "last_hook_activation": 1753628086250,
+  "last_mode": "DEVELOPMENT",
+  "execution_count": 50,
+  "last_hook_activation": 1753627864871,
   "__removedLinterTasks": {
     "removedCount": 1,
     "finalTaskCount": 11
