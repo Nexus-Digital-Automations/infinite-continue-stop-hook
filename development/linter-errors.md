@@ -1,15 +1,19 @@
 # Linter Errors Report
 
-**Generated:** 2025-07-27T22:58:07.351Z
-**Total Issues:** 1 (1 errors, 0 warnings)
+**Generated:** 2025-07-27T23:40:26.455Z
+**Total Issues:** 3 (3 errors, 0 warnings)
 **Files:** 1
 
-## errorRecovery.test.js (eslint)
+## setup.js (eslint)
 
-**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test/errorRecovery.test.js`
-**Issues:** 1
+**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test/setup.js`
+**Issues:** 3
 
-❌ **Line 851:23** - 'repairedContent' is assigned a value but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
+❌ **Line 31:18** - '_error' is defined but never used. `[no-unused-vars]`
+
+❌ **Line 41:22** - '_error' is defined but never used. `[no-unused-vars]`
+
+❌ **Line 91:18** - '_error' is defined but never used. `[no-unused-vars]`
 
 ---
 

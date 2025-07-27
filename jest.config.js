@@ -56,11 +56,26 @@ module.exports = {
   // Clear mocks between tests
   clearMocks: true,
   
+  // Reset modules between tests for better isolation
+  resetModules: true,
+  
+  // Reset mocks between tests
+  resetMocks: true,
+  
+  // Restore mocks between tests  
+  restoreMocks: true,
+  
   // Verbose output for better debugging
   verbose: true,
   
   // Setup files
-  setupFilesAfterEnv: [],
+  setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
+  
+  // Force exit to prevent hanging tests
+  forceExit: true,
+  
+  // Detect open handles to prevent memory leaks
+  detectOpenHandles: true,
   
   // Transform settings
   transform: {},

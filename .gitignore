@@ -4,3 +4,21 @@ node_modules/
 test-transcript.jsonl
 *.backup
 .env
+
+# Test artifacts and temporary files
+coverage/
+*.test.log
+test-results/
+*.temp
+*.tmp
+.jest-cache/
+
+# Demo environment interference
+demo/*/infinite-continue-hook.log
+demo/*/*/TODO.json.backup.*
+demo/*/test-transcript.jsonl
+
+# OS and editor files
+.vscode/
+.idea/
+Thumbs.db
