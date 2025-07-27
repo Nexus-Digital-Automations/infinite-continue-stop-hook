@@ -558,6 +558,49 @@
       }
     },
     {
+      "id": "quality-improvement-1753656019519",
+      "title": "Create Quality Improvement Tasks",
+      "description": "Analyze project quality issues and create specific tasks to reach 100% quality for all strikes",
+      "mode": "DEVELOPMENT",
+      "priority": "high",
+      "status": "completed",
+      "prompt": "Project quality assessment shows issues preventing 100% strike success:\n\nQuality Status:\n- Strike 1 (Build): 100%\n- Strike 2 (Lint): 100%  \n- Strike 3 (Tests): 30%\n\nIssues Found:\n- Test Coverage and Success: Tests are failing\n- Test Coverage and Success: Coverage check failed\n\nTASK: Analyze these quality gaps and create specific improvement tasks to bring ALL strikes to 100% quality. Create tasks for:\n1. Build issues (missing dependencies, build failures, configuration)\n2. Code quality issues (lint errors, style violations, code standards)\n3. Testing issues (failing tests, missing coverage, test setup)\n\nInsert all improvement tasks BEFORE the strike review tasks. Strikes should always remain last in the task list.",
+      "success_criteria": [
+        "All quality issues identified and analyzed",
+        "Specific improvement tasks created for each quality gap",
+        "Tasks properly prioritized and ordered before strikes",
+        "Clear path to 100% quality established"
+      ],
+      "important_files": [
+        "package.json",
+        "eslint.config.js",
+        "**/*.test.js"
+      ],
+      "requires_research": true,
+      "is_quality_improvement_task": true,
+      "quality_analysis": {
+        "strike1": {
+          "name": "Build Verification",
+          "quality": 100,
+          "issues": []
+        },
+        "strike2": {
+          "name": "Lint and Code Quality",
+          "quality": 100,
+          "issues": []
+        },
+        "strike3": {
+          "name": "Test Coverage and Success",
+          "quality": 30,
+          "issues": [
+            "Tests are failing",
+            "Coverage check failed"
+          ]
+        },
+        "overallReady": false
+      }
+    },
+    {
       "id": "review-strike-1",
       "mode": "REVIEWER",
       "description": "Review Strike 1: Ensure the project builds completely without errors",
@@ -616,14 +659,122 @@
       "subtasks": [],
       "is_review_task": true,
       "strike_number": 3
+    },
+    {
+      "id": "task_1753656038740_c2ornz6g4",
+      "title": "Fix Jest Mocking Issues in Test Suites",
+      "description": "Resolve mocking configuration problems in taskManager.test.js, autoFixer.test.js, logger.test.js, todoValidator.test.js, and errorRecovery.test.js that are causing test failures",
+      "mode": "TESTING",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [
+        "jest.config.js"
+      ],
+      "important_files": [
+        "test/taskManager.test.js",
+        "test/autoFixer.test.js",
+        "test/logger.test.js",
+        "test/todoValidator.test.js",
+        "test/errorRecovery.test.js"
+      ],
+      "success_criteria": [
+        "All mock functions work correctly",
+        "fs and os modules properly mocked",
+        "Mock implementations return expected values",
+        "All test isolation works properly"
+      ],
+      "estimate": "3-4 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-07-27T22:40:38.740Z"
+    },
+    {
+      "id": "task_1753656047185_jnfn953jm",
+      "title": "Fix Class Mocking in AutoFixer and ErrorRecovery Tests",
+      "description": "Resolve constructor mocking issues where TodoValidator, ErrorRecovery, and other class dependencies are not properly mocked in test files",
+      "mode": "TESTING",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [
+        "test/autoFixer.test.js",
+        "test/errorRecovery.test.js"
+      ],
+      "important_files": [
+        "test/autoFixer.test.js",
+        "test/errorRecovery.test.js",
+        "lib/autoFixer.js",
+        "lib/errorRecovery.js"
+      ],
+      "success_criteria": [
+        "Class constructors properly mocked",
+        "Mock class instances behave correctly",
+        "Dependencies inject mock instances",
+        "Test isolation maintained between tests"
+      ],
+      "estimate": "2-3 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-07-27T22:40:47.185Z"
+    },
+    {
+      "id": "task_1753656055611_n0m7lvalx",
+      "title": "Fix Integration Test Mocking Failures",
+      "description": "Resolve fs.existsSync and other filesystem mocking issues in integration.test.js that are preventing the integration tests from running",
+      "mode": "TESTING",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [
+        "test/integration.test.js"
+      ],
+      "important_files": [
+        "test/integration.test.js",
+        "stop-hook.js",
+        "lib/taskManager.js"
+      ],
+      "success_criteria": [
+        "Integration tests run without mocking errors",
+        "fs module methods properly mocked",
+        "Mock environment setup works correctly",
+        "All integration scenarios pass"
+      ],
+      "estimate": "2-3 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-07-27T22:40:55.611Z"
+    },
+    {
+      "id": "task_1753656062966_3oa51yvha",
+      "title": "Fix TodoValidator Test Logic and Implementation",
+      "description": "Resolve failing tests in todoValidator.test.js where JSON repair, ID generation, and file validation logic is not working as expected",
+      "mode": "TESTING",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [
+        "test/todoValidator.test.js",
+        "lib/todoValidator.js"
+      ],
+      "important_files": [
+        "test/todoValidator.test.js",
+        "lib/todoValidator.js"
+      ],
+      "success_criteria": [
+        "JSON syntax repair tests pass",
+        "ID generation for tasks works correctly",
+        "File reference validation works",
+        "All TodoValidator tests pass"
+      ],
+      "estimate": "2-3 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-07-27T22:41:02.966Z"
     }
   ],
   "review_strikes": 0,
   "strikes_completed_last_run": false,
   "current_task_index": 0,
-  "last_mode": "TASK_CREATION",
-  "execution_count": 76,
-  "last_hook_activation": 1753655939752,
+  "last_mode": "DEVELOPMENT",
+  "execution_count": 77,
+  "last_hook_activation": 1753656019527,
   "__removedLinterTasks": {
     "removedCount": 1,
     "finalTaskCount": 17
