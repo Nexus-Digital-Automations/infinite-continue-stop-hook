@@ -1,21 +1,15 @@
 # Linter Errors Report
 
-**Generated:** 2025-07-27T22:36:19.064Z
-**Total Issues:** 4 (4 errors, 0 warnings)
+**Generated:** 2025-07-27T22:42:58.815Z
+**Total Issues:** 1 (1 errors, 0 warnings)
 **Files:** 1
 
-## errorRecovery.test.js (eslint)
+## taskManager.test.js (eslint)
 
-**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test/errorRecovery.test.js`
-**Issues:** 4
+**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test/taskManager.test.js`
+**Issues:** 1
 
-❌ **Line 419:19** - 'tempPath' is assigned a value but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
-
-❌ **Line 467:19** - 'lockPath' is assigned a value but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
-
-❌ **Line 897:19** - 'corruptedContent' is assigned a value but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
-
-❌ **Line 927:19** - 'lockPath' is assigned a value but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
+❌ **Line 14:7** - 'AutoFixer' is assigned a value but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
 
 ---
 

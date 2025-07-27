@@ -5,17 +5,17 @@
 // validation, auto-fixing, backup/recovery, and error handling scenarios.
 // =============================================================================
 
+// Mock dependencies FIRST, before importing modules
+jest.mock('fs');
+jest.mock('../lib/todoValidator');
+jest.mock('../lib/errorRecovery');
+jest.mock('../lib/logger');
+
 const fs = require('fs');
 const AutoFixer = require('../lib/autoFixer');
 const TodoValidator = require('../lib/todoValidator');
 const ErrorRecovery = require('../lib/errorRecovery');
 const Logger = require('../lib/logger');
-
-// Mock dependencies
-jest.mock('fs');
-jest.mock('../lib/todoValidator');
-jest.mock('../lib/errorRecovery');
-jest.mock('../lib/logger');
 
 describe('AutoFixer', () => {
     let autoFixer;
@@ -23,6 +23,13 @@ describe('AutoFixer', () => {
     let mockErrorRecovery;
     let mockLogger;
     let mockFilePath;
+
+    beforeAll(() => {
+        // Set up fs module mocks
+        fs.existsSync = jest.fn();
+        fs.readFileSync = jest.fn();
+        fs.accessSync = jest.fn();
+    });
 
     beforeEach(() => {
         jest.clearAllMocks();

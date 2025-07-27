@@ -5,17 +5,27 @@
 // quality checks, strike logic, task creation, and integration scenarios.
 // =============================================================================
 
+// Mock dependencies FIRST, before importing modules
+jest.mock('fs');
+jest.mock('child_process');
+
 const ReviewSystem = require('../lib/reviewSystem');
 const fs = require('fs');
 const { execSync } = require('child_process');
 
-// Mock dependencies
-jest.mock('fs');
-jest.mock('child_process');
-
 describe('ReviewSystem', () => {
     let reviewSystem;
     let mockWorkingDir;
+
+    beforeAll(() => {
+        // Set up fs module mocks
+        fs.existsSync = jest.fn();
+        fs.readFileSync = jest.fn();
+        fs.readdirSync = jest.fn();
+        
+        // Set up execSync mock
+        execSync.mockReturnValue = jest.fn();
+    });
 
     beforeEach(() => {
         reviewSystem = new ReviewSystem();

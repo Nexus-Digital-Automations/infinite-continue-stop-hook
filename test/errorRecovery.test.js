@@ -6,20 +6,37 @@
 // recovery strategies for TODO.json files.
 // =============================================================================
 
+// Mock dependencies FIRST, before importing modules
+jest.mock('fs');
+jest.mock('crypto');
+
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const ErrorRecovery = require('../lib/errorRecovery');
-
-// Mock dependencies
-jest.mock('fs');
-jest.mock('crypto');
 
 describe('ErrorRecovery', () => {
     let errorRecovery;
     let mockFilePath;
     let mockBackupDir;
     let mockBackupPath;
+
+    beforeAll(() => {
+        // Set up fs module mocks
+        fs.existsSync = jest.fn();
+        fs.readFileSync = jest.fn();
+        fs.writeFileSync = jest.fn();
+        fs.mkdirSync = jest.fn();
+        fs.copyFileSync = jest.fn();
+        fs.statSync = jest.fn();
+        fs.unlinkSync = jest.fn();
+        fs.renameSync = jest.fn();
+        fs.readdirSync = jest.fn();
+        
+        // Set up crypto module mocks
+        crypto.createHash = jest.fn();
+        crypto.randomBytes = jest.fn();
+    });
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -29,17 +46,17 @@ describe('ErrorRecovery', () => {
         mockBackupPath = `/test/project/${mockBackupDir}`;
         
         // Mock crypto methods
-        crypto.createHash = jest.fn(() => ({
-            update: jest.fn(() => ({
-                digest: jest.fn(() => ({
-                    substr: jest.fn(() => 'abc12345')
-                }))
-            }))
-        }));
+        crypto.createHash.mockReturnValue({
+            update: jest.fn().mockReturnValue({
+                digest: jest.fn().mockReturnValue({
+                    substr: jest.fn().mockReturnValue('abc12345')
+                })
+            })
+        });
         
-        crypto.randomBytes = jest.fn(() => ({
-            toString: jest.fn(() => 'mock-lock-id-123456')
-        }));
+        crypto.randomBytes.mockReturnValue({
+            toString: jest.fn().mockReturnValue('mock-lock-id-123456')
+        });
         
         // Mock process properties
         Object.defineProperty(process, 'pid', { value: 12345, configurable: true });

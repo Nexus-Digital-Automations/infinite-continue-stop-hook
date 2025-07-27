@@ -5,18 +5,27 @@
 // log data collection, flow tracking, error handling, and file operations.
 // =============================================================================
 
+// Mock dependencies FIRST, before importing modules
+jest.mock('fs');
+jest.mock('os');
+
 const fs = require('fs');
 const os = require('os');
 const Logger = require('../lib/logger');
-
-// Mock dependencies
-jest.mock('fs');
-jest.mock('os');
 
 describe('Logger', () => {
     let logger;
     let mockProjectRoot;
     let mockLogPath;
+
+    beforeAll(() => {
+        // Set up fs module mocks
+        fs.writeFileSync = jest.fn();
+        
+        // Set up os module mocks
+        os.platform = jest.fn();
+        os.arch = jest.fn();
+    });
 
     beforeEach(() => {
         jest.clearAllMocks();

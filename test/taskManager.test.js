@@ -5,18 +5,30 @@
 // all methods, edge cases, error scenarios, and integration tests.
 // =============================================================================
 
-const TaskManager = require('../lib/taskManager');
-
-// Mock dependencies
+// Mock dependencies FIRST, before importing TaskManager
 jest.mock('fs');
 jest.mock('../lib/autoFixer');
 
 const fs = require('fs');
+const TaskManager = require('../lib/taskManager');
 
 describe('TaskManager', () => {
     let taskManager;
     let mockTodoPath;
     let mockAutoFixer;
+    
+    // Set up fs mocks at module level
+    beforeAll(() => {
+        fs.existsSync = jest.fn();
+        fs.readFileSync = jest.fn();
+        fs.writeFileSync = jest.fn();
+        fs.mkdirSync = jest.fn();
+        fs.statSync = jest.fn();
+        fs.readdirSync = jest.fn();
+        fs.unlinkSync = jest.fn();
+        fs.copyFileSync = jest.fn();
+        fs.renameSync = jest.fn();
+    });
 
     beforeEach(() => {
         // Setup mocks

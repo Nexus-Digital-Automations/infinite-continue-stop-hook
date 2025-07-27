@@ -5,16 +5,21 @@
 // validation, sanitization, JSON syntax repair, and error detection.
 // =============================================================================
 
+// Mock dependencies FIRST, before importing modules
+jest.mock('fs');
+
 const fs = require('fs');
 const TodoValidator = require('../lib/todoValidator');
-
-// Mock dependencies
-jest.mock('fs');
 
 describe('TodoValidator', () => {
     let validator;
     let validTodoData;
     let mockFilePath;
+
+    beforeAll(() => {
+        // Set up fs module mocks
+        fs.existsSync = jest.fn();
+    });
 
     beforeEach(() => {
         jest.clearAllMocks();
