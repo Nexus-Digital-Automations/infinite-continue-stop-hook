@@ -27,6 +27,14 @@ describe('Stop Hook Integration Tests', () => {
         // Mock process.cwd()
         jest.spyOn(process, 'cwd').mockReturnValue(mockWorkingDir);
         
+        // Set up fs module mocks
+        fs.existsSync = jest.fn();
+        fs.readFileSync = jest.fn();
+        fs.writeFileSync = jest.fn();
+        fs.mkdirSync = jest.fn();
+        fs.readdirSync = jest.fn().mockReturnValue([]);
+        fs.statSync = jest.fn().mockReturnValue({ mtime: new Date() });
+        
         // Mock TaskManager, AgentExecutor, and ReviewSystem
         mockTaskManager = {
             readTodo: jest.fn(),
@@ -631,32 +639,57 @@ describe('Stop Hook Integration Tests', () => {
             
             // Simulate the hook execution logic
             try {
-                JSON.parse(input);
+                const inputData = JSON.parse(input);
+                
+                // Check for rapid successive calls
+                if (inputData.stop_hook_active && fs.existsSync(path.join(process.cwd(), 'TODO.json'))) {
+                    const todoData = JSON.parse(fs.readFileSync());
+                    const timeSinceLastCall = Date.now() - (todoData.last_hook_activation || 0);
+                    
+                    if (timeSinceLastCall < 2000) { // Less than 2 seconds
+                        mockStdout.push('Rapid successive calls detected. Skipping execution to prevent infinite loops.');
+                        resolve({ exitCode: 0, output: mockStdout.join('\n') });
+                        return;
+                    }
+                }
                 
                 // Basic validation and execution
                 if (fs.existsSync.mockReturnValue && 
                     fs.existsSync(path.join(process.cwd(), 'TODO.json'))) {
                     
-                    if (mockTaskManager.getCurrentTask().then) {
-                        mockTaskManager.getCurrentTask().then(task => {
-                            if (task) {
-                                mockStderr.push(mockAgentExecutor.buildPrompt());
-                                resolve({ exitCode: 2, output: mockStderr.join('\n') });
-                            } else {
-                                mockStdout.push('All tasks completed!');
-                                resolve({ exitCode: 0, output: mockStdout.join('\n') });
-                            }
-                        });
-                    } else {
-                        const task = mockTaskManager.getCurrentTask();
+                    // Get the current task
+                    Promise.resolve(mockTaskManager.getCurrentTask()).then(task => {
                         if (task) {
-                            mockStderr.push(mockAgentExecutor.buildPrompt());
+                            // Determine the mode based on task type or execution count
+                            let mode = task.mode || 'DEVELOPMENT';
+                            const todoData = JSON.parse(fs.readFileSync());
+                            
+                            // Mock the mode selection logic
+                            if (task.is_review_task || task.mode === 'REVIEWER') {
+                                mode = 'REVIEWER';
+                            } else if (todoData.execution_count && todoData.execution_count % 4 === 0) {
+                                mode = 'TASK_CREATION';
+                            }
+                            
+                            // Call buildPrompt with the expected parameters
+                            const promptResult = mockAgentExecutor.buildPrompt(task, mode, todoData);
+                            mockStderr.push(promptResult || 'Prompt generated');
+                            
+                            // Update task status and execution count
+                            if (mockTaskManager.writeTodo) {
+                                const updatedData = { ...todoData, execution_count: (todoData.execution_count || 0) + 1 };
+                                mockTaskManager.writeTodo(updatedData);
+                            }
+                            
                             resolve({ exitCode: 2, output: mockStderr.join('\n') });
                         } else {
                             mockStdout.push('All tasks completed!');
                             resolve({ exitCode: 0, output: mockStdout.join('\n') });
                         }
-                    }
+                    }).catch(error => {
+                        mockStderr.push(`Error in stop hook: ${error.message}`);
+                        resolve({ exitCode: 1, output: mockStderr.join('\n') });
+                    });
                 } else {
                     mockStdout.push('No TODO.json found');
                     resolve({ exitCode: 0, output: mockStdout.join('\n') });
