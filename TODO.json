@@ -2,6 +2,130 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
+      "id": "fix_test_failures_1753673200000",
+      "title": "Fix Critical Test Failures",
+      "description": "Resolve 18 failing tests across taskManager, integration, and reviewSystem test suites",
+      "mode": "TESTING",
+      "priority": "high",
+      "status": "pending",
+      "success_criteria": [
+        "All 308 tests pass (currently 290/308 passing)",
+        "TaskManager createTask logic fixed for research report duplication",
+        "Integration test mocking issues resolved",
+        "ReviewSystem quality thresholds aligned with actual behavior"
+      ],
+      "important_files": [
+        "test/taskManager.test.js",
+        "test/integration.test.js",
+        "test/reviewSystem.test.js",
+        "lib/taskManager.js",
+        "lib/reviewSystem.js"
+      ],
+      "estimate": "4-6 hours",
+      "requires_research": false,
+      "subtasks": [
+        {
+          "id": "taskmanager_failures",
+          "title": "Fix TaskManager Test Logic Issues",
+          "description": "Fix research report duplication test and filesystem permission error handling",
+          "status": "pending",
+          "priority": "high",
+          "mode": "DEVELOPMENT"
+        },
+        {
+          "id": "integration_failures",
+          "title": "Fix Integration Test Mocking",
+          "description": "Resolve mock setup issues causing 12 integration test failures",
+          "status": "pending",
+          "priority": "high",
+          "mode": "DEVELOPMENT"
+        },
+        {
+          "id": "reviewsystem_failures",
+          "title": "Fix ReviewSystem Quality Thresholds",
+          "description": "Align expected vs actual quality scores in tests",
+          "status": "pending",
+          "priority": "medium",
+          "mode": "DEVELOPMENT"
+        }
+      ]
+    },
+    {
+      "id": "fix_coverage_json_error_1753673300000",
+      "title": "Fix Coverage Reporting JSON Syntax Error",
+      "description": "Resolve JSON syntax error preventing coverage reports from generating",
+      "mode": "TESTING",
+      "priority": "high",
+      "status": "pending",
+      "success_criteria": [
+        "Jest coverage command runs without JSON syntax errors",
+        "Coverage reports generate successfully",
+        "HTML coverage reports accessible in coverage/ directory"
+      ],
+      "important_files": [
+        "jest.config.js",
+        "demo/TODO.json",
+        "demo/**/TODO.json"
+      ],
+      "estimate": "1-2 hours",
+      "requires_research": false,
+      "subtasks": [
+        {
+          "id": "identify_json_source",
+          "title": "Identify Source of JSON in Node Modules",
+          "description": "Find which file is causing the JSON to be injected into jest-worker",
+          "status": "pending",
+          "priority": "high",
+          "mode": "DEVELOPMENT"
+        },
+        {
+          "id": "fix_demo_configs",
+          "title": "Clean Up Demo TODO.json Files",
+          "description": "Remove or properly isolate demo TODO.json files from Jest coverage",
+          "status": "pending",
+          "priority": "medium",
+          "mode": "DEVELOPMENT"
+        }
+      ]
+    },
+    {
+      "id": "test_categorization_1753673400000",
+      "title": "Categorize and Prioritize Test Failures",
+      "description": "Systematically categorize the 18 test failures by type and create focused fix strategy",
+      "mode": "TESTING",
+      "priority": "medium",
+      "status": "pending",
+      "success_criteria": [
+        "All test failures categorized: logic errors, mocking issues, implementation bugs",
+        "Priority order established for fixes",
+        "Root cause analysis documented for each category",
+        "Fix strategy with time estimates created"
+      ],
+      "important_files": [
+        "development/test-failure-analysis.md"
+      ],
+      "estimate": "2-3 hours",
+      "requires_research": true,
+      "subtasks": [
+        {
+          "id": "logic_vs_mock_analysis",
+          "title": "Separate Logic vs Mocking Issues",
+          "description": "Identify which failures are logic problems vs test setup issues",
+          "status": "pending",
+          "priority": "high",
+          "mode": "DEVELOPMENT"
+        },
+        {
+          "id": "implementation_bug_analysis",
+          "title": "Identify Implementation Bugs",
+          "description": "Find actual code bugs revealed by failing tests",
+          "status": "pending",
+          "priority": "high",
+          "mode": "DEVELOPMENT"
+        }
+      ]
+    },
+    {
       "id": "task-1",
       "mode": "DEVELOPMENT",
       "description": "Demonstrate hook functionality",
@@ -714,7 +838,7 @@
       "description": "Analyze project quality issues and create specific tasks to reach 100% quality for all strikes",
       "mode": "DEVELOPMENT",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "prompt": "Project quality assessment shows issues preventing 100% strike success:\n\nQuality Status:\n- Strike 1 (Build): 100%\n- Strike 2 (Lint): 100%  \n- Strike 3 (Tests): 30%\n\nIssues Found:\n- Test Coverage and Success: Tests are failing\n- Test Coverage and Success: Coverage check failed\n\nTASK: Analyze these quality gaps and create specific improvement tasks to bring ALL strikes to 100% quality. Create tasks for:\n1. Build issues (missing dependencies, build failures, configuration)\n2. Code quality issues (lint errors, style violations, code standards)\n3. Testing issues (failing tests, missing coverage, test setup)\n\nInsert all improvement tasks BEFORE the strike review tasks. Strikes should always remain last in the task list.",
       "success_criteria": [
         "All quality issues identified and analyzed",
@@ -750,6 +874,107 @@
         },
         "overallReady": false
       }
+    },
+    {
+      "id": "fix_coverage_json_error_1753658386297",
+      "title": "Fix Jest Coverage JSON Syntax Error",
+      "description": "Resolve JSON syntax error in Jest coverage reporting that is preventing coverage analysis from completing successfully",
+      "mode": "TESTING",
+      "priority": "high",
+      "status": "pending",
+      "success_criteria": [
+        "Coverage reports generate without JSON syntax errors",
+        "npm run test:coverage completes successfully",
+        "Coverage metrics are properly calculated and displayed",
+        "Demo directories properly excluded from coverage analysis"
+      ],
+      "important_files": [
+        "jest.config.js",
+        "package.json",
+        "demo/",
+        "coverage/"
+      ],
+      "estimate": "1-2 hours",
+      "requires_research": false,
+      "created_at": "2025-07-27T23:19:46.297Z"
+    },
+    {
+      "id": "fix_failing_tests_1753658386297",
+      "title": "Fix 18 Failing Tests to Reach 100% Test Success",
+      "description": "Systematically resolve all 18 failing tests across taskManager, integration, agentExecutor, and reviewSystem test suites",
+      "mode": "TESTING",
+      "priority": "high",
+      "status": "pending",
+      "success_criteria": [
+        "All 308 tests passing (100% success rate)",
+        "TaskManager test logic issues resolved",
+        "Integration test mocking configuration fixed",
+        "ReviewSystem quality calculations corrected",
+        "AgentExecutor tests working properly"
+      ],
+      "important_files": [
+        "test/taskManager.test.js",
+        "test/integration.test.js",
+        "test/agentExecutor.test.js",
+        "test/reviewSystem.test.js",
+        "lib/taskManager.js",
+        "lib/reviewSystem.js"
+      ],
+      "estimate": "4-6 hours",
+      "requires_research": false,
+      "subtasks": [
+        {
+          "id": "fix_taskmanager_tests_1753658386297",
+          "title": "Fix TaskManager Test Logic Issues",
+          "description": "Resolve research report duplication and filesystem permission error handling tests",
+          "status": "pending",
+          "priority": "high",
+          "estimate": "1-2 hours",
+          "mode": "DEVELOPMENT"
+        },
+        {
+          "id": "fix_integration_mocking_1753658386298",
+          "title": "Fix Integration Test Mocking Issues",
+          "description": "Correct mode selection, task status updates, and mock implementation behavior",
+          "status": "pending",
+          "priority": "high",
+          "estimate": "2-3 hours",
+          "mode": "DEVELOPMENT"
+        },
+        {
+          "id": "fix_reviewsystem_calculations_1753658386299",
+          "title": "Fix ReviewSystem Quality Score Calculations",
+          "description": "Align quality threshold calculations between implementation and tests",
+          "status": "pending",
+          "priority": "medium",
+          "estimate": "1 hour",
+          "mode": "DEVELOPMENT"
+        }
+      ],
+      "created_at": "2025-07-27T23:19:46.297Z"
+    },
+    {
+      "id": "improve_test_isolation_1753658386297",
+      "title": "Improve Test Isolation and Configuration",
+      "description": "Enhance test suite stability by improving isolation between test suites and properly configuring demo environments",
+      "mode": "TESTING",
+      "priority": "medium",
+      "status": "pending",
+      "success_criteria": [
+        "Test suites properly isolated from each other",
+        "Demo directories excluded from test coverage",
+        "Jest configuration optimized for project structure",
+        "Test environment contamination eliminated"
+      ],
+      "important_files": [
+        "jest.config.js",
+        "demo/",
+        ".gitignore",
+        "package.json"
+      ],
+      "estimate": "2-3 hours",
+      "requires_research": false,
+      "created_at": "2025-07-27T23:19:46.297Z"
     },
     {
       "id": "review-strike-1",
@@ -815,9 +1040,9 @@
   "review_strikes": 0,
   "strikes_completed_last_run": false,
   "current_task_index": 0,
-  "last_mode": "TESTING",
-  "execution_count": 86,
-  "last_hook_activation": 1753658044197,
+  "last_mode": "DEVELOPMENT",
+  "execution_count": 87,
+  "last_hook_activation": 1753658118941,
   "__removedLinterTasks": {
     "removedCount": 1,
     "finalTaskCount": 23
