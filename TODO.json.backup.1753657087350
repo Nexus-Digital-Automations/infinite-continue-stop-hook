@@ -106,20 +106,20 @@
     {
       "id": "linter_task_active",
       "title": "Fix Linter Errors - IMMEDIATE",
-      "description": "Fix 1 error and 0 warnings found in recently edited files: errorRecovery.test.js",
+      "description": "Fix 1 error and 0 warnings found in recently edited files: taskManager.test.js",
       "mode": "DEVELOPMENT",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "important_files": [
         "development/linter-errors.md",
-        "test/errorRecovery.test.js"
+        "test/taskManager.test.js"
       ],
       "success_criteria": [
         "All linter errors in edited files resolved",
         "development/linter-errors.md shows no issues for edited files",
         "Code passes linting without warnings or errors"
       ],
-      "created_at": "2025-07-27T22:58:07.350Z",
+      "created_at": "2025-07-27T22:42:58.815Z",
       "is_linter_task": true,
       "linter_summary": {
         "total_violations": 1,
@@ -634,7 +634,7 @@
       "description": "Resolve constructor mocking issues where TodoValidator, ErrorRecovery, and other class dependencies are not properly mocked in test files",
       "mode": "TESTING",
       "priority": "high",
-      "status": "completed",
+      "status": "pending",
       "dependencies": [
         "test/autoFixer.test.js",
         "test/errorRecovery.test.js"
@@ -816,8 +816,8 @@
   "strikes_completed_last_run": false,
   "current_task_index": 0,
   "last_mode": "TESTING",
-  "execution_count": 83,
-  "last_hook_activation": 1753657087350,
+  "execution_count": 82,
+  "last_hook_activation": 1753657010163,
   "__removedLinterTasks": {
     "removedCount": 1,
     "finalTaskCount": 23
