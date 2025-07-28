@@ -13,7 +13,9 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --config jest.coverage.config.js",
     "test:coverage:force": "jest --config jest.coverage.config.js --no-cache",
-    "test:verbose": "jest --verbose",
+    "test:verbose": "VERBOSE_TESTS=true jest --verbose",
+    "test:debug": "VERBOSE_TESTS=true jest --verbose --detectOpenHandles",
+    "test:single": "jest --testNamePattern",
     "prebuild": "echo '🔧 Starting build process...'",
     "postbuild": "echo '🎉 Build process completed successfully'"
   },

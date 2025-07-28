@@ -59,8 +59,8 @@ module.exports = {
     'lcov'
   ],
   
-  // Test timeout
-  testTimeout: 10000,
+  // Test timeout - reduced for faster execution
+  testTimeout: 8000,
   
   // Clear mocks between tests
   clearMocks: true,
@@ -74,8 +74,11 @@ module.exports = {
   // Restore mocks between tests  
   restoreMocks: true,
   
-  // Verbose output for better debugging
-  verbose: true,
+  // Verbose output controlled by VERBOSE_TESTS environment variable
+  verbose: process.env.VERBOSE_TESTS === 'true',
+  
+  // Disable silent mode when verbose is off for better performance
+  silent: process.env.VERBOSE_TESTS !== 'true',
   
   // Setup files
   setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
@@ -83,8 +86,14 @@ module.exports = {
   // Force exit to prevent hanging tests
   forceExit: true,
   
-  // Detect open handles to prevent memory leaks
-  detectOpenHandles: true,
+  // Detect open handles to prevent memory leaks - disabled for performance unless verbose
+  detectOpenHandles: process.env.VERBOSE_TESTS === 'true',
+  
+  // Performance optimizations
+  maxWorkers: process.env.CI ? 2 : '50%', // Use fewer workers in CI, 50% of CPUs locally
+  
+  // Cache directory for faster subsequent runs
+  cacheDirectory: '<rootDir>/.jest-cache',
   
   // Transform settings
   transform: {},

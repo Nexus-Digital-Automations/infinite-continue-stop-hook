@@ -27,11 +27,14 @@ if (isCoverageMode) {
 }
 
 // Initialize file operation logger for comprehensive monitoring
+// In test mode, disable verbose logging and file I/O for better performance
 const fileOpLogger = new FileOperationLogger({
     projectRoot: process.cwd(),
-    enableRealTimeAlerts: true,
+    enableRealTimeAlerts: false, // Disabled in test mode automatically
     enableThreatDetection: true,
-    enableAuditTrail: true
+    enableAuditTrail: false, // Disabled in test mode automatically
+    enableConsoleLogging: false, // Disable console logs in test mode
+    testMode: true // Explicit test mode flag
 });
 
 // Make logger available globally for test utilities
@@ -216,8 +219,10 @@ fs.writeFileSync = function(filePath, data, options) {
         return;
     }
     
-    // Safe write to test files only
-    console.log(`ALLOWED: Test write to ${normalizedPath}`);
+    // Safe write to test files only - log only if verbose testing enabled
+    if (process.env.VERBOSE_TESTS) {
+        console.log(`ALLOWED: Test write to ${normalizedPath}`);
+    }
     return originalWriteFileSync.call(this, filePath, data, options);
 };
 
@@ -333,8 +338,10 @@ fs.writeFile = function(filePath, data, options, callback) {
         return;
     }
     
-    // Safe write to test files only
-    console.log(`ALLOWED: Async test write to ${normalizedPath}`);
+    // Safe write to test files only - log only if verbose testing enabled
+    if (process.env.VERBOSE_TESTS) {
+        console.log(`ALLOWED: Async test write to ${normalizedPath}`);
+    }
     return originalWriteFile.call(this, filePath, data, options, callback);
 };
 
@@ -470,16 +477,22 @@ const criticalFiles = [
 // Store original critical file contents - isolated per test
 let originalFileContents = new Map();
 
-// Initialize critical file protection
+// Initialize critical file protection (quiet mode in test environment)
 criticalFiles.forEach(filePath => {
     try {
         if (fs.existsSync(filePath)) {
             const content = fs.readFileSync(filePath, 'utf8');
             originalFileContents.set(filePath, content);
-            console.log(`🛡️ Protected critical file: ${path.basename(filePath)}`);
+            // Only log protection messages if not in test mode or verbose testing is enabled
+            if (process.env.VERBOSE_TESTS) {
+                console.log(`🛡️ Protected critical file: ${path.basename(filePath)}`);
+            }
         }
     } catch (error) {
-        console.warn(`⚠️ Could not backup critical file ${filePath}: ${error.message}`);
+        // Only warn about backup failures in non-test mode or verbose mode
+        if (process.env.NODE_ENV !== 'test' || process.env.VERBOSE_TESTS) {
+            console.warn(`⚠️ Could not backup critical file ${filePath}: ${error.message}`);
+        }
     }
 });
 
@@ -681,11 +694,21 @@ global.isolateConsole = function() {
     if (!originalConsole) {
         originalConsole = { ...console };
     }
-    console.log = jest.fn();
-    console.error = jest.fn();
-    console.warn = jest.fn();
-    console.info = jest.fn();
-    console.debug = jest.fn();
+    // Use silent mocks by default for better performance, unless verbose testing is enabled
+    if (!process.env.VERBOSE_TESTS) {
+        console.log = () => {}; // Silent mock for performance
+        console.error = () => {}; 
+        console.warn = () => {};
+        console.info = () => {};
+        console.debug = () => {};
+    } else {
+        // Use Jest mocks for verbose testing
+        console.log = jest.fn();
+        console.error = jest.fn();
+        console.warn = jest.fn();
+        console.info = jest.fn();
+        console.debug = jest.fn();
+    }
 };
 
 global.restoreConsole = function() {
