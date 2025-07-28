@@ -130,11 +130,17 @@ global.createMockLogger = function() {
 // CRITICAL: Override all filesystem operations to prevent corruption
 const originalWriteFileSync = fs.writeFileSync;
 const originalWriteFile = fs.writeFile;
+const originalAppendFileSync = fs.appendFileSync;
+const originalAppendFile = fs.appendFile;
+const originalCreateWriteStream = fs.createWriteStream;
 
 // Store original functions for restoration if needed
 global.__originalFS = {
     writeFileSync: originalWriteFileSync,
-    writeFile: originalWriteFile
+    writeFile: originalWriteFile,
+    appendFileSync: originalAppendFileSync,
+    appendFile: originalAppendFile,
+    createWriteStream: originalCreateWriteStream
 };
 
 // Enhanced filesystem mock with better isolation and safety
@@ -201,14 +207,19 @@ fs.writeFileSync = function(filePath, data, options) {
         '.backup',
         'development/research-reports',
         '/tmp/',
-        '/temp/'
+        '/temp/',
+        'coverage/', // Allow Jest coverage reports
+        '.nyc_output/', // Allow NYC coverage
+        'lcov.info' // Allow LCOV coverage files
     ];
     
     const isAllowed = allowedPaths.some(allowed => 
         normalizedPath.includes(allowed) || 
         normalizedPath.includes('/test/') ||
         path.basename(normalizedPath).startsWith('test-') ||
-        normalizedPath.includes('TODO.json')
+        normalizedPath.includes('TODO.json') ||
+        normalizedPath.includes('coverage') ||
+        normalizedPath.includes('lcov')
     );
     
     if (!isAllowed) {
@@ -231,12 +242,28 @@ fs.writeFile = function(filePath, data, options, callback) {
     const path = require('path');
     const normalizedPath = path.resolve(filePath);
     
-    // Enhanced protection for writeFile (async)
+    // Use same comprehensive protection as sync version
+    const dangerousPaths = [
+        'node_modules',
+        '/usr/',
+        '/bin/',
+        '/lib/',
+        '/System/',
+        'package-lock.json',
+        'yarn.lock',
+        '.git/',
+        'exit.js',
+        'exit/',
+        '/exit/',
+        '/lib/exit.js',
+        'exit/lib/exit.js',
+        'node_modules/exit'
+    ];
+    
+    // Extra protection: Block any write that looks like it's going to node_modules
     if (normalizedPath.includes('node_modules') || 
         normalizedPath.includes('/exit.js') ||
-        normalizedPath.endsWith('exit.js') ||
-        filePath.includes('/usr/') || 
-        filePath.includes('/bin/')) {
+        normalizedPath.endsWith('exit.js')) {
         console.warn(`🚫 BLOCKED: Dangerous async write to ${normalizedPath}`);
         if (normalizedPath.includes('exit')) {
             console.error(`🚨 CRITICAL: Prevented async JSON contamination of exit library at ${normalizedPath}`);
@@ -247,17 +274,221 @@ fs.writeFile = function(filePath, data, options, callback) {
         return;
     }
     
-    if (!filePath.includes('TODO.json') && !filePath.includes('.test-env') && !filePath.includes('test-')) {
-        console.warn(`Blocked dangerous async write attempt to: ${filePath}`);
+    if (dangerousPaths.some(dangerous => normalizedPath.includes(dangerous))) {
+        console.warn(`BLOCKED: Dangerous async write to ${normalizedPath}`);
+        if (normalizedPath.includes('exit')) {
+            console.error(`CRITICAL: Prevented async JSON contamination of exit library at ${normalizedPath}`);
+        }
         if (callback) callback(null);
         return;
     }
     
+    // Enhanced JSON contamination prevention
+    if (typeof data === 'string' && 
+        (data.startsWith('{') || data.startsWith('[')) && 
+        !filePath.endsWith('.json') && 
+        !filePath.endsWith('.backup')) {
+        console.warn(`BLOCKED: Async JSON write to non-JSON file: ${normalizedPath}`);
+        console.error(`CRITICAL: Prevented async JSON contamination - data starts with: ${data.substring(0, 50)}...`);
+        if (callback) callback(null);
+        return;
+    }
+    
+    // Only allow writes to explicitly safe test directories
+    const allowedPaths = [
+        '.test-env',
+        '.test-isolated', 
+        'test-todo.json',
+        'backup',
+        '.backup',
+        'development/research-reports',
+        '/tmp/',
+        '/temp/',
+        'coverage/', // Allow Jest coverage reports
+        '.nyc_output/', // Allow NYC coverage
+        'lcov.info' // Allow LCOV coverage files
+    ];
+    
+    const isAllowed = allowedPaths.some(allowed => 
+        normalizedPath.includes(allowed) || 
+        normalizedPath.includes('/test/') ||
+        path.basename(normalizedPath).startsWith('test-') ||
+        normalizedPath.includes('TODO.json') ||
+        normalizedPath.includes('coverage') ||
+        normalizedPath.includes('lcov')
+    );
+    
+    if (!isAllowed) {
+        console.warn(`BLOCKED: Unauthorized async write to ${normalizedPath}`);
+        if (callback) callback(null);
+        return;
+    }
+    
+    // Safe write to test files only
+    console.log(`ALLOWED: Async test write to ${normalizedPath}`);
     return originalWriteFile.call(this, filePath, data, options, callback);
 };
 
+// Protect appendFileSync operations
+fs.appendFileSync = function(filePath, data, options) {
+    const path = require('path');
+    const normalizedPath = path.resolve(filePath);
+    
+    // Block dangerous append operations using same protection logic
+    if (normalizedPath.includes('node_modules') || 
+        normalizedPath.includes('/exit.js') ||
+        normalizedPath.endsWith('exit.js') ||
+        normalizedPath.includes('/usr/') || 
+        normalizedPath.includes('/bin/') ||
+        normalizedPath.includes('/System/')) {
+        console.warn(`🚫 BLOCKED: Dangerous appendFileSync to ${normalizedPath}`);
+        if (normalizedPath.includes('exit')) {
+            console.error(`🚨 CRITICAL: Prevented append contamination of exit library at ${normalizedPath}`);
+        }
+        return;
+    }
+    
+    // Only allow appends to safe test files
+    if (!normalizedPath.includes('/test/') && 
+        !normalizedPath.includes('TODO.json') && 
+        !normalizedPath.includes('.test-env') && 
+        !path.basename(normalizedPath).startsWith('test-')) {
+        console.warn(`BLOCKED: Unauthorized appendFileSync to ${normalizedPath}`);
+        return;
+    }
+    
+    return originalAppendFileSync.call(this, filePath, data, options);
+};
+
+// Protect appendFile operations (async)
+fs.appendFile = function(filePath, data, options, callback) {
+    if (typeof options === 'function') {
+        callback = options;
+        options = {};
+    }
+    
+    const path = require('path');
+    const normalizedPath = path.resolve(filePath);
+    
+    // Block dangerous async append operations
+    if (normalizedPath.includes('node_modules') || 
+        normalizedPath.includes('/exit.js') ||
+        normalizedPath.endsWith('exit.js') ||
+        normalizedPath.includes('/usr/') || 
+        normalizedPath.includes('/bin/') ||
+        normalizedPath.includes('/System/')) {
+        console.warn(`🚫 BLOCKED: Dangerous async appendFile to ${normalizedPath}`);
+        if (normalizedPath.includes('exit')) {
+            console.error(`🚨 CRITICAL: Prevented async append contamination of exit library at ${normalizedPath}`);
+        }
+        if (callback) callback(null);
+        return;
+    }
+    
+    // Only allow appends to safe test files
+    if (!normalizedPath.includes('/test/') && 
+        !normalizedPath.includes('TODO.json') && 
+        !normalizedPath.includes('.test-env') && 
+        !path.basename(normalizedPath).startsWith('test-')) {
+        console.warn(`BLOCKED: Unauthorized async appendFile to ${normalizedPath}`);
+        if (callback) callback(null);
+        return;
+    }
+    
+    return originalAppendFile.call(this, filePath, data, options, callback);
+};
+
+// Protect createWriteStream operations
+fs.createWriteStream = function(filePath, options) {
+    const path = require('path');
+    const normalizedPath = path.resolve(filePath);
+    
+    // Block dangerous write streams
+    if (normalizedPath.includes('node_modules') || 
+        normalizedPath.includes('/exit.js') ||
+        normalizedPath.endsWith('exit.js') ||
+        normalizedPath.includes('/usr/') || 
+        normalizedPath.includes('/bin/') ||
+        normalizedPath.includes('/System/')) {
+        console.warn(`🚫 BLOCKED: Dangerous createWriteStream to ${normalizedPath}`);
+        if (normalizedPath.includes('exit')) {
+            console.error(`🚨 CRITICAL: Prevented write stream contamination of exit library at ${normalizedPath}`);
+        }
+        // Return a mock stream that does nothing
+        const { Writable } = require('stream');
+        return new Writable({
+            write(_chunk, _encoding, callback) {
+                callback();
+            }
+        });
+    }
+    
+    // Only allow write streams to safe test files
+    if (!normalizedPath.includes('/test/') && 
+        !normalizedPath.includes('TODO.json') && 
+        !normalizedPath.includes('.test-env') && 
+        !path.basename(normalizedPath).startsWith('test-')) {
+        console.warn(`BLOCKED: Unauthorized createWriteStream to ${normalizedPath}`);
+        // Return a mock stream that does nothing
+        const { Writable } = require('stream');
+        return new Writable({
+            write(_chunk, _encoding, callback) {
+                callback();
+            }
+        });
+    }
+    
+    return originalCreateWriteStream.call(this, filePath, options);
+};
+
+// Critical file backup and validation system
+const criticalFiles = [
+    path.join(__dirname, '../node_modules/exit/lib/exit.js'),
+    path.join(__dirname, '../node_modules/jest-worker/build/index.js')
+];
+
+// Store original critical file contents
+const originalFileContents = new Map();
+
+// Initialize critical file protection
+criticalFiles.forEach(filePath => {
+    try {
+        if (fs.existsSync(filePath)) {
+            const content = fs.readFileSync(filePath, 'utf8');
+            originalFileContents.set(filePath, content);
+            console.log(`🛡️ Protected critical file: ${path.basename(filePath)}`);
+        }
+    } catch (error) {
+        console.warn(`⚠️ Could not backup critical file ${filePath}: ${error.message}`);
+    }
+});
+
+// Function to restore critical files if contaminated
+function restoreCriticalFiles() {
+    criticalFiles.forEach(filePath => {
+        try {
+            if (originalFileContents.has(filePath) && fs.existsSync(filePath)) {
+                const currentContent = fs.readFileSync(filePath, 'utf8');
+                const originalContent = originalFileContents.get(filePath);
+                
+                if (currentContent !== originalContent) {
+                    console.error(`🚨 CONTAMINATION DETECTED: ${path.basename(filePath)}`);
+                    console.error(`🚨 Restoring original content...`);
+                    fs.writeFileSync(filePath, originalContent, 'utf8');
+                    console.log(`✅ Restored: ${path.basename(filePath)}`);
+                }
+            }
+        } catch (error) {
+            console.error(`❌ Failed to restore ${filePath}: ${error.message}`);
+        }
+    });
+}
+
 // Enhanced global test setup with comprehensive isolation
 beforeEach(() => {
+    // 0. Restore critical files before each test
+    restoreCriticalFiles();
+    
     // 1. Clear all mocks first
     jest.clearAllMocks();
     jest.resetAllMocks();
@@ -309,6 +540,9 @@ beforeEach(() => {
 });
 
 afterEach(async () => {
+    // 0. Restore critical files after each test
+    restoreCriticalFiles();
+    
     // 1. Execute all registered cleanup functions
     if (global.testCleanup) {
         for (const cleanup of global.testCleanup) {
@@ -361,6 +595,33 @@ afterEach(async () => {
 // Global error handler for unhandled promises
 process.on('unhandledRejection', (reason, promise) => {
     console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+// Critical: Restore files before process exit
+process.on('exit', () => {
+    try {
+        restoreCriticalFiles();
+    } catch (error) {
+        console.error('Failed to restore critical files on exit:', error.message);
+    }
+});
+
+process.on('SIGINT', () => {
+    try {
+        restoreCriticalFiles();
+    } catch (error) {
+        console.error('Failed to restore critical files on SIGINT:', error.message);
+    }
+    process.exit(0);
+});
+
+process.on('SIGTERM', () => {
+    try {
+        restoreCriticalFiles();
+    } catch (error) {
+        console.error('Failed to restore critical files on SIGTERM:', error.message);
+    }
+    process.exit(0);
 });
 
 // Utility function to register cleanup functions
