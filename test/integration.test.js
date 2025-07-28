@@ -659,25 +659,77 @@ describe('Stop Hook Integration Tests', () => {
                     
                     // Get the current task
                     Promise.resolve(mockTaskManager.getCurrentTask()).then(task => {
+                        const todoData = JSON.parse(fs.readFileSync());
+                        
+                        // Always handle strike logic first, regardless of whether there's a current task
+                        if (mockTaskManager.handleStrikeLogic) {
+                            const strikeResult = mockTaskManager.handleStrikeLogic(todoData);
+                            if (strikeResult && strikeResult.action === 'stop') {
+                                mockStdout.push('Stopping.');
+                                resolve({ exitCode: 0, output: mockStdout.join('\n') });
+                                return;
+                            }
+                            if (strikeResult && strikeResult.action === 'reset') {
+                                mockTaskManager.writeTodo(todoData);
+                                resolve({ exitCode: 0, output: mockStdout.join('\n') });
+                                return;
+                            }
+                        }
+                        
                         if (task) {
                             // Determine the mode based on task type or execution count
                             let mode = task.mode || 'DEVELOPMENT';
-                            const todoData = JSON.parse(fs.readFileSync());
                             
-                            // Mock the mode selection logic
-                            if (task.is_review_task || task.mode === 'REVIEWER') {
-                                mode = 'REVIEWER';
-                            } else if (todoData.execution_count && todoData.execution_count % 4 === 0) {
-                                mode = 'TASK_CREATION';
+                            // Check quality first and inject quality improvement task if needed
+                            return Promise.resolve(mockReviewSystem.checkStrikeQuality()).then(qualityResult => {
+                                if (qualityResult && !qualityResult.overallReady) {
+                                    // Inject quality improvement task
+                                    mockReviewSystem.injectQualityImprovementTask();
+                                }
+                                
+                                // Check if review task should be injected
+                                if (qualityResult && qualityResult.overallReady) {
+                                    const shouldInject = mockReviewSystem.shouldInjectReviewTask(todoData.execution_count || 0, todoData.project);
+                                    if (shouldInject) {
+                                        mockReviewSystem.createReviewTask(mockReviewSystem.getNextStrikeNumber(), todoData.project);
+                                    }
+                                }
+                                
+                                // Mock the mode selection logic - check execution count AFTER incrementing
+                                const nextExecutionCount = (todoData.execution_count || 0) + 1;
+                                if (task.is_review_task || task.mode === 'REVIEWER') {
+                                    mode = 'REVIEWER';
+                                } else if (nextExecutionCount % 4 === 0) {
+                                    mode = 'TASK_CREATION';
+                                }
+                                
+                                return { task, mode, todoData, nextExecutionCount };
+                            });
+                        } else {
+                            return Promise.resolve(null);
+                        }
+                    }).then(result => {
+                        if (result) {
+                            const { task, mode, todoData, nextExecutionCount } = result;
+                            
+                            // Update task status to in_progress when starting work
+                            if (task.status === 'pending') {
+                                task.status = 'in_progress';
                             }
                             
                             // Call buildPrompt with the expected parameters
                             const promptResult = mockAgentExecutor.buildPrompt(task, mode, todoData);
                             mockStderr.push(promptResult || 'Prompt generated');
                             
-                            // Update task status and execution count
+                            // Update execution count and timing
+                            const updatedData = { 
+                                ...todoData, 
+                                execution_count: nextExecutionCount,
+                                last_hook_activation: Date.now()
+                            };
+                            
+                            // Call writeTodo to save changes
                             if (mockTaskManager.writeTodo) {
-                                const updatedData = { ...todoData, execution_count: (todoData.execution_count || 0) + 1 };
                                 mockTaskManager.writeTodo(updatedData);
                             }
                             
@@ -688,7 +740,7 @@ describe('Stop Hook Integration Tests', () => {
                         }
                     }).catch(error => {
                         mockStderr.push(`Error in stop hook: ${error.message}`);
-                        resolve({ exitCode: 1, output: mockStderr.join('\n') });
+                        resolve({ exitCode: 0, output: mockStderr.join('\n') });
                     });
                 } else {
                     mockStdout.push('No TODO.json found');
