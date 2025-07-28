@@ -16,6 +16,7 @@
     "test:verbose": "VERBOSE_TESTS=true jest --verbose",
     "test:debug": "VERBOSE_TESTS=true jest --verbose --detectOpenHandles",
     "test:single": "jest --testNamePattern",
+    "test:coverage:resilient": "node scripts/coverage-resilient.js",
     "prebuild": "echo '🔧 Starting build process...'",
     "postbuild": "echo '🎉 Build process completed successfully'"
   },

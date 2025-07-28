@@ -35,7 +35,7 @@ module.exports = {
     'json-summary'
   ],
   
-  // Enhanced coverage path ignore patterns to prevent contamination
+  // Enhanced coverage path ignore patterns to prevent contamination and V8 errors
   coveragePathIgnorePatterns: [
     '/node_modules/',
     '/coverage/',
@@ -44,7 +44,12 @@ module.exports = {
     '\\.config\\.',
     '/test/setup\\.js', // Ignore setup file from coverage to prevent circular issues
     'exit\\.js',
-    'jest-worker'
+    'jest-worker',
+    '\\.tmp$',         // Ignore temporary files that might cause syntax errors
+    '\\.cache/',       // Ignore cache directories
+    '/development/',   // Ignore development logs and temporary files
+    '\\.test-.*/',     // Ignore test directories that might be corrupted
+    'scripts/'         // Ignore script files that might have different syntax
   ],
   
   // Reduced coverage thresholds for initial implementation
@@ -57,14 +62,20 @@ module.exports = {
     }
   },
   
-  // Coverage-specific optimizations
+  // Coverage-specific optimizations to prevent V8 mergeProcessCovs errors
   cache: false, // Disable cache to prevent contamination
   
-  // Enhanced isolation for coverage collection
-  // isolatedModules: true, // This option doesn't exist in Jest
+  // Use limited workers to prevent coverage data merging issues
+  maxWorkers: 2, // Limit workers to reduce V8 coverage mergeProcessCovs errors
   
-  // Prevent coverage from writing to problematic locations
-  coverageProvider: 'v8', // Use V8 coverage provider for better isolation
+  // Use V8 coverage provider with error resilience
+  coverageProvider: 'v8', // V8 provider configured for stability
+  
+  // Additional V8-specific settings to prevent mergeProcessCovs errors
+  collectCoverageOnlyFrom: {
+    // Only collect coverage from specific lib files to reduce complexity
+    'lib/**/*.js': true
+  },
   
   // Override force exit for coverage collection
   forceExit: true,
@@ -76,5 +87,9 @@ module.exports = {
   clearMocks: true,
   resetModules: true,
   resetMocks: true,
-  restoreMocks: true
+  restoreMocks: true,
+  
+  // Additional stability settings to prevent coverage errors
+  verbose: false, // Reduce output noise that can interfere with coverage
+  silent: true    // Suppress console output during coverage collection
 };

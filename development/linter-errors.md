@@ -1,15 +1,15 @@
 # Linter Errors Report
 
-**Generated:** 2025-07-28T08:32:51.213Z
+**Generated:** 2025-07-28T08:48:56.693Z
 **Total Issues:** 1 (1 errors, 0 warnings)
 **Files:** 1
 
-## testInfrastructure.js (eslint)
+## coverage-resilient.js (eslint)
 
-**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test/testInfrastructure.js`
+**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/scripts/coverage-resilient.js`
 **Issues:** 1
 
-❌ **Line 988:7** - 'TestIsolationDiagnostics' is defined but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
+❌ **Line 52:22** - 'e' is defined but never used. `[no-unused-vars]`
 
 ---
 
