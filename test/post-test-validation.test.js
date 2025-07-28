@@ -211,34 +211,43 @@ describe('Post-Test Validation System', () => {
             const customValidator = new PostTestValidator({
                 projectRoot: testDir
             });
-            // Override the binary paths for testing
-            customValidator.constructor.prototype.validateBinaryCorruption = async function() {
-                const check = {
-                    name: 'Binary Corruption Check',
-                    status: 'PASSED',
-                    issues: [],
-                    details: {}
+            
+            // Store original method to restore after test
+            const originalMethod = customValidator.constructor.prototype.validateBinaryCorruption;
+            
+            try {
+                // Override the binary paths for testing
+                customValidator.constructor.prototype.validateBinaryCorruption = async function() {
+                    const check = {
+                        name: 'Binary Corruption Check',
+                        status: 'PASSED',
+                        issues: [],
+                        details: {}
+                    };
+
+                    const stat = fs.statSync(fakeBinary);
+                    if (stat.size < 1000) {
+                        const issue = {
+                            type: 'WARNING',
+                            category: 'binary_corruption',
+                            file: fakeBinary,
+                            message: 'Binary file suspiciously small',
+                            recommendation: 'Verify binary integrity'
+                        };
+                        check.issues.push(issue);
+                        this.corruptionReport.issues.push(issue);
+                    }
+
+                    this.corruptionReport.checks.binaryCorruption = check;
+                    return check;
                 };
 
-                const stat = fs.statSync(fakeBinary);
-                if (stat.size < 1000) {
-                    const issue = {
-                        type: 'WARNING',
-                        category: 'binary_corruption',
-                        file: fakeBinary,
-                        message: 'Binary file suspiciously small',
-                        recommendation: 'Verify binary integrity'
-                    };
-                    check.issues.push(issue);
-                    this.corruptionReport.issues.push(issue);
-                }
-
-                this.corruptionReport.checks.binaryCorruption = check;
-                return check;
-            };
-
-            const result = await customValidator.validateBinaryCorruption();
-            expect(result.issues.some(issue => issue.category === 'binary_corruption')).toBe(true);
+                const result = await customValidator.validateBinaryCorruption();
+                expect(result.issues.some(issue => issue.category === 'binary_corruption')).toBe(true);
+            } finally {
+                // Always restore original method to prevent test pollution
+                customValidator.constructor.prototype.validateBinaryCorruption = originalMethod;
+            }
         });
     });
 
@@ -278,14 +287,6 @@ describe('Post-Test Validation System', () => {
         test('should run complete validation successfully', async () => {
             const report = await validator.runFullValidation();
             
-            // Debug output to understand what's happening
-            if (report.overallStatus === 'ERROR') {
-                console.error('DEBUG: Validation failed with error:', report.error);
-                console.error('DEBUG: Total checks:', report.summary.totalChecks);
-                console.error('DEBUG: Checks completed:', Object.keys(report.checks));
-                console.error('DEBUG: Issues:', report.issues);
-            }
-            
             expect(report).toHaveProperty('timestamp');
             expect(report).toHaveProperty('testSession');
             expect(report).toHaveProperty('checks');
@@ -312,15 +313,6 @@ describe('Post-Test Validation System', () => {
             fs.writeFileSync(suspiciousPath, 'suspicious content');
 
             const report = await validator.runFullValidation();
-            
-            // Debug output to understand what's happening
-            if (report.overallStatus !== 'CRITICAL') {
-                console.error('DEBUG: Expected CRITICAL but got:', report.overallStatus);
-                console.error('DEBUG: Error:', report.error);
-                console.error('DEBUG: Critical issues:', report.summary.criticalIssues);
-                console.error('DEBUG: Total issues:', report.issues.length);
-                console.error('DEBUG: Issues:', report.issues);
-            }
             
             expect(report.overallStatus).toBe('CRITICAL');
             expect(report.summary.criticalIssues).toBeGreaterThan(0);
