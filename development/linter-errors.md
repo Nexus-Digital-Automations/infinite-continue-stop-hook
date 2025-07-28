@@ -1,17 +1,15 @@
 # Linter Errors Report
 
-**Generated:** 2025-07-28T03:13:05.870Z
-**Total Issues:** 2 (2 errors, 0 warnings)
+**Generated:** 2025-07-28T06:03:26.762Z
+**Total Issues:** 1 (1 errors, 0 warnings)
 **Files:** 1
 
-## postTestValidator.js (eslint)
+## setup.js (eslint)
 
-**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/postTestValidator.js`
-**Issues:** 2
+**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test/setup.js`
+**Issues:** 1
 
-❌ **Line 420:26** - '_writeError' is defined but never used. `[no-unused-vars]`
-
-❌ **Line 424:22** - '_accessError' is defined but never used. `[no-unused-vars]`
+❌ **Line 13:5** - 'MockLoggerFactory' is assigned a value but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
 
 ---
 

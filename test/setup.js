@@ -3,6 +3,18 @@ const fs = require('fs');
 const path = require('path');
 const TestErrorHandler = require('../lib/testErrorHandler');
 const FileOperationLogger = require('../lib/fileOperationLogger');
+const {
+    TestEnvironmentFactory,
+    MockFileSystemFactory,
+    MockTaskManagerFactory,
+    MockAutoFixerFactory,
+    MockReviewSystemFactory,
+    MockAgentExecutorFactory,
+    MockLoggerFactory,
+    ChaosTestingUtils,
+    PerformanceTestingUtils,
+    TestDataBuilders
+} = require('./testInfrastructure');
 
 // Coverage mode detection
 const isCoverageMode = process.argv.includes('--coverage') || 
@@ -37,6 +49,12 @@ global.testErrorHandler = new TestErrorHandler({
     retryDelay: 100
 });
 
+// Make enhanced test infrastructure available globally
+global.TestEnvironmentFactory = TestEnvironmentFactory;
+global.TestDataBuilders = TestDataBuilders;
+global.ChaosTestingUtils = ChaosTestingUtils;
+global.PerformanceTestingUtils = PerformanceTestingUtils;
+
 // Enhanced error handling utility for test operations
 global.withTestErrorHandling = function(operation, context = {}) {
     return global.testErrorHandler.withErrorHandling(operation, {
@@ -54,99 +72,28 @@ global.createResilientTestEnv = function(options = {}) {
 };
 
 // Create centralized mock factories for consistent behavior across tests
-global.createMockFS = function() {
-    return {
-        existsSync: jest.fn().mockReturnValue(false),
-        readFileSync: jest.fn().mockReturnValue('{}'),
-        writeFileSync: jest.fn((path, _data, _encoding) => {
-            // Prevent any writes to node_modules or actual filesystem
-            if (path.includes('node_modules') || !path.includes('/test/') && !path.includes('TODO.json.backup')) {
-                console.warn(`Prevented potential filesystem corruption: writeFileSync to ${path}`);
-                return;
-            }
-            // Mock successful write for test files only
-        }),
-        mkdirSync: jest.fn(),
-        readdirSync: jest.fn().mockReturnValue([]),
-        statSync: jest.fn().mockReturnValue({ mtime: new Date() }),
-        unlinkSync: jest.fn(),
-        copyFileSync: jest.fn(),
-        renameSync: jest.fn(),
-        accessSync: jest.fn()
-    };
+global.createMockFS = function(options) {
+    return MockFileSystemFactory.create(options);
 };
 
-global.createMockAutoFixer = function() {
-    return {
-        getFileStatus: jest.fn().mockResolvedValue({ valid: true, canAutoFix: false }),
-        autoFix: jest.fn().mockResolvedValue({ success: true, hasChanges: false }),
-        recoverCorruptedFile: jest.fn().mockResolvedValue({ success: true, finalData: {} }),
-        dryRun: jest.fn().mockResolvedValue({ success: true, wouldFix: false }),
-        validator: {
-            validateAndSanitize: jest.fn().mockReturnValue({ isValid: true, data: {}, fixes: [] })
-        },
-        recovery: {
-            atomicWrite: jest.fn().mockResolvedValue({ success: true }),
-            listAvailableBackups: jest.fn().mockReturnValue([]),
-            restoreFromBackup: jest.fn().mockResolvedValue({ success: true }),
-            createBackup: jest.fn().mockResolvedValue({ success: true })
-        }
-    };
+global.createMockAutoFixer = function(options) {
+    return MockAutoFixerFactory.create(options);
 };
 
-global.createMockTaskManager = function() {
-    return {
-        readTodo: jest.fn().mockResolvedValue({ tasks: [], execution_count: 0 }),
-        writeTodo: jest.fn().mockResolvedValue({}),
-        getCurrentTask: jest.fn().mockResolvedValue(null),
-        updateTaskStatus: jest.fn().mockResolvedValue({}),
-        handleStrikeLogic: jest.fn().mockReturnValue({ action: 'continue' }),
-        createTask: jest.fn().mockResolvedValue('task-id'),
-        addSubtask: jest.fn().mockResolvedValue({}),
-        getFileStatus: jest.fn().mockResolvedValue({ valid: true }),
-        performAutoFix: jest.fn().mockResolvedValue({ success: true }),
-        validateTodoFile: jest.fn().mockResolvedValue({ isValid: true })
-    };
+global.createMockTaskManager = function(options) {
+    return MockTaskManagerFactory.create(options);
 };
 
-global.createMockReviewSystem = function() {
-    return {
-        checkStrikeQuality: jest.fn().mockResolvedValue({
-            strike1: { quality: 100, issues: [] },
-            strike2: { quality: 100, issues: [] },
-            strike3: { quality: 100, issues: [] },
-            overallReady: true
-        }),
-        injectQualityImprovementTask: jest.fn().mockReturnValue({}),
-        shouldInjectReviewTask: jest.fn().mockReturnValue(false),
-        getNextStrikeNumber: jest.fn().mockReturnValue(1),
-        createReviewTask: jest.fn().mockReturnValue({ id: 'review-task' }),
-        insertTasksBeforeStrikes: jest.fn().mockReturnValue({})
-    };
+global.createMockReviewSystem = function(options) {
+    return MockReviewSystemFactory.create(options);
 };
 
-global.createMockAgentExecutor = function() {
-    return {
-        buildPrompt: jest.fn().mockReturnValue('Generated prompt'),
-        discoverDevelopmentFiles: jest.fn().mockReturnValue([]),
-        buildTaskContext: jest.fn().mockReturnValue('Task context')
-    };
+global.createMockAgentExecutor = function(options) {
+    return MockAgentExecutorFactory.create(options);
 };
 
-global.createMockLogger = function() {
-    return {
-        logInput: jest.fn(),
-        logProjectState: jest.fn(),
-        logCurrentTask: jest.fn(),
-        logModeDecision: jest.fn(),
-        logStrikeHandling: jest.fn(),
-        logReviewInjection: jest.fn(),
-        logPromptGeneration: jest.fn(),
-        logExit: jest.fn(),
-        logError: jest.fn(),
-        addFlow: jest.fn(),
-        save: jest.fn().mockResolvedValue()
-    };
+global.createMockLogger = function(options) {
+    return MockLoggerFactory.create(options);
 };
 
 // CRITICAL: Override all filesystem operations to prevent corruption
