@@ -11,8 +11,8 @@
     "validate": "node -e \"console.log('✅ Project validation passed - all core scripts accessible')\"",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "test:coverage:force": "jest --coverage --no-cache",
+    "test:coverage": "jest --config jest.coverage.config.js",
+    "test:coverage:force": "jest --config jest.coverage.config.js --no-cache",
     "test:verbose": "jest --verbose",
     "prebuild": "echo '🔧 Starting build process...'",
     "postbuild": "echo '🎉 Build process completed successfully'"

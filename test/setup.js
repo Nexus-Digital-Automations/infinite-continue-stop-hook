@@ -3,6 +3,16 @@ const fs = require('fs');
 const path = require('path');
 const TestErrorHandler = require('../lib/testErrorHandler');
 
+// Coverage mode detection
+const isCoverageMode = process.argv.includes('--coverage') || 
+                      process.env.npm_config_coverage || 
+                      process.env.JEST_COVERAGE ||
+                      (process.argv.find(arg => arg.includes('jest.coverage.config.js')));
+
+if (isCoverageMode) {
+    console.log('🔬 Coverage mode detected - enabling coverage-safe operations');
+}
+
 // =============================================================================
 // STANDARDIZED MOCK SETUP FOR ALL TEST SUITES
 // =============================================================================
@@ -188,11 +198,13 @@ fs.writeFileSync = function(filePath, data, options) {
         return;
     }
     
-    // Enhanced JSON contamination prevention
+    // Enhanced JSON contamination prevention - but allow coverage JSON files
     if (typeof data === 'string' && 
         (data.startsWith('{') || data.startsWith('[')) && 
         !filePath.endsWith('.json') && 
-        !filePath.endsWith('.backup')) {
+        !filePath.endsWith('.backup') &&
+        !filePath.includes('coverage') &&
+        !filePath.includes('lcov')) {
         console.warn(`BLOCKED: JSON write to non-JSON file: ${normalizedPath}`);
         console.error(`CRITICAL: Prevented JSON contamination - data starts with: ${data.substring(0, 50)}...`);
         return;
@@ -213,7 +225,20 @@ fs.writeFileSync = function(filePath, data, options) {
         'lcov.info' // Allow LCOV coverage files
     ];
     
-    const isAllowed = allowedPaths.some(allowed => 
+    // Enhanced coverage-mode allowlist
+    const coverageAllowedPaths = [
+        ...allowedPaths,
+        'coverage-final.json',
+        'clover.xml',
+        'coverage.json',
+        'lcov-report/',
+        '.coverage/',
+        'jest-coverage/'
+    ];
+    
+    const pathsToCheck = isCoverageMode ? coverageAllowedPaths : allowedPaths;
+    
+    const isAllowed = pathsToCheck.some(allowed => 
         normalizedPath.includes(allowed) || 
         normalizedPath.includes('/test/') ||
         path.basename(normalizedPath).startsWith('test-') ||
@@ -283,11 +308,13 @@ fs.writeFile = function(filePath, data, options, callback) {
         return;
     }
     
-    // Enhanced JSON contamination prevention
+    // Enhanced JSON contamination prevention - but allow coverage JSON files
     if (typeof data === 'string' && 
         (data.startsWith('{') || data.startsWith('[')) && 
         !filePath.endsWith('.json') && 
-        !filePath.endsWith('.backup')) {
+        !filePath.endsWith('.backup') &&
+        !filePath.includes('coverage') &&
+        !filePath.includes('lcov')) {
         console.warn(`BLOCKED: Async JSON write to non-JSON file: ${normalizedPath}`);
         console.error(`CRITICAL: Prevented async JSON contamination - data starts with: ${data.substring(0, 50)}...`);
         if (callback) callback(null);
@@ -309,7 +336,20 @@ fs.writeFile = function(filePath, data, options, callback) {
         'lcov.info' // Allow LCOV coverage files
     ];
     
-    const isAllowed = allowedPaths.some(allowed => 
+    // Enhanced coverage-mode allowlist
+    const coverageAllowedPaths = [
+        ...allowedPaths,
+        'coverage-final.json',
+        'clover.xml',
+        'coverage.json',
+        'lcov-report/',
+        '.coverage/',
+        'jest-coverage/'
+    ];
+    
+    const pathsToCheck = isCoverageMode ? coverageAllowedPaths : allowedPaths;
+    
+    const isAllowed = pathsToCheck.some(allowed => 
         normalizedPath.includes(allowed) || 
         normalizedPath.includes('/test/') ||
         path.basename(normalizedPath).startsWith('test-') ||
