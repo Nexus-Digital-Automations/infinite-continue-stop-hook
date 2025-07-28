@@ -229,7 +229,7 @@ fs.writeFileSync = function(filePath, data, options) {
         'test-todo.json',
         'backup',
         '.backup',
-        'development/research-reports',
+        'development/', // Allow development directory for logs and reports
         '/tmp/',
         '/temp/',
         'coverage/', // Allow Jest coverage reports
@@ -340,7 +340,7 @@ fs.writeFile = function(filePath, data, options, callback) {
         'test-todo.json',
         'backup',
         '.backup',
-        'development/research-reports',
+        'development/', // Allow development directory for logs and reports
         '/tmp/',
         '/temp/',
         'coverage/', // Allow Jest coverage reports
@@ -400,10 +400,11 @@ fs.appendFileSync = function(filePath, data, options) {
         return;
     }
     
-    // Only allow appends to safe test files
+    // Only allow appends to safe test files and development logs
     if (!normalizedPath.includes('/test/') && 
         !normalizedPath.includes('TODO.json') && 
         !normalizedPath.includes('.test-env') && 
+        !normalizedPath.includes('development/') &&
         !path.basename(normalizedPath).startsWith('test-')) {
         console.warn(`BLOCKED: Unauthorized appendFileSync to ${normalizedPath}`);
         return;
@@ -437,10 +438,11 @@ fs.appendFile = function(filePath, data, options, callback) {
         return;
     }
     
-    // Only allow appends to safe test files
+    // Only allow appends to safe test files and development logs
     if (!normalizedPath.includes('/test/') && 
         !normalizedPath.includes('TODO.json') && 
         !normalizedPath.includes('.test-env') && 
+        !normalizedPath.includes('development/') &&
         !path.basename(normalizedPath).startsWith('test-')) {
         console.warn(`BLOCKED: Unauthorized async appendFile to ${normalizedPath}`);
         if (callback) callback(null);
