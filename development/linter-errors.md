@@ -1,19 +1,17 @@
 # Linter Errors Report
 
-**Generated:** 2025-07-28T02:52:09.502Z
-**Total Issues:** 3 (3 errors, 0 warnings)
+**Generated:** 2025-07-28T03:02:47.847Z
+**Total Issues:** 2 (2 errors, 0 warnings)
 **Files:** 1
 
-## integrity-validation.test.js (eslint)
+## filesystem-write-monitoring.test.js (eslint)
 
-**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test/integrity-validation.test.js`
-**Issues:** 3
+**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test/filesystem-write-monitoring.test.js`
+**Issues:** 2
 
-❌ **Line 214:27** - 'stats' is assigned a value but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
+❌ **Line 615:21** - 'alertsGenerated' is not defined. `[no-undef]`
 
-❌ **Line 318:23** - 'buffer' is assigned a value but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
-
-❌ **Line 378:27** - 'hasBOM' is assigned a value but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
+❌ **Line 640:13** - 'setTimeout' is not defined. `[no-undef]`
 
 ---
 
