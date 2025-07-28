@@ -659,8 +659,9 @@ describe('Stop Hook Integration Tests', () => {
                         // Always handle strike logic first, regardless of whether there's a current task
                         if (mockTaskManager.handleStrikeLogic) {
                             const strikeResult = mockTaskManager.handleStrikeLogic(todoData);
-                            if (strikeResult && strikeResult.action === 'stop') {
-                                mockStdout.push('Stopping.');
+                            if (strikeResult && strikeResult.action === 'complete') {
+                                // Match stop-hook.js line 105: console.log(strikeResult.message + " Stopping.");
+                                mockStdout.push((strikeResult.message || 'All strikes completed') + ' Stopping.');
                                 resolve({ exitCode: 0, output: mockStdout.join('\n') });
                                 return;
                             }
