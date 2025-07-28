@@ -1,17 +1,17 @@
 # Linter Errors Report
 
-**Generated:** 2025-07-28T03:02:47.847Z
+**Generated:** 2025-07-28T03:13:05.870Z
 **Total Issues:** 2 (2 errors, 0 warnings)
 **Files:** 1
 
-## filesystem-write-monitoring.test.js (eslint)
+## postTestValidator.js (eslint)
 
-**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test/filesystem-write-monitoring.test.js`
+**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/postTestValidator.js`
 **Issues:** 2
 
-❌ **Line 615:21** - 'alertsGenerated' is not defined. `[no-undef]`
+❌ **Line 420:26** - '_writeError' is defined but never used. `[no-unused-vars]`
 
-❌ **Line 640:13** - 'setTimeout' is not defined. `[no-undef]`
+❌ **Line 424:22** - '_accessError' is defined but never used. `[no-unused-vars]`
 
 ---
 
