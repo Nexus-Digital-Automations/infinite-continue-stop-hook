@@ -680,10 +680,17 @@ describe('Logger', () => {
             
             // Verify data structures remain consistent
             expect(logger.logData.input.sessionId).toBe('integrity-test');
-            expect(logger.logData.flow).toHaveLength(2);
+            expect(logger.logData.flow).toHaveLength(5); // logInput + 2 addFlow + 2 logError calls
             expect(logger.logData.errors).toHaveLength(2);
             expect(logger.logData.errors[0].message).toBe('First error');
             expect(logger.logData.errors[1].message).toBe('Second error');
+            
+            // Verify flow entries contain expected messages
+            expect(logger.logData.flow[0].message).toBe('Received input from Claude Code');
+            expect(logger.logData.flow[1].message).toBe('First flow');
+            expect(logger.logData.flow[2].message).toBe('ERROR in context1: First error');
+            expect(logger.logData.flow[3].message).toBe('Second flow');
+            expect(logger.logData.flow[4].message).toBe('ERROR in context2: Second error');
         });
     });
 });
