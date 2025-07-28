@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const TestErrorHandler = require('../lib/testErrorHandler');
+const FileOperationLogger = require('../lib/fileOperationLogger');
 
 // Coverage mode detection
 const isCoverageMode = process.argv.includes('--coverage') || 
@@ -12,6 +13,17 @@ const isCoverageMode = process.argv.includes('--coverage') ||
 if (isCoverageMode) {
     console.log('🔬 Coverage mode detected - enabling coverage-safe operations');
 }
+
+// Initialize file operation logger for comprehensive monitoring
+const fileOpLogger = new FileOperationLogger({
+    projectRoot: process.cwd(),
+    enableRealTimeAlerts: true,
+    enableThreatDetection: true,
+    enableAuditTrail: true
+});
+
+// Make logger available globally for test utilities
+global.fileOperationLogger = fileOpLogger;
 
 // =============================================================================
 // STANDARDIZED MOCK SETUP FOR ALL TEST SUITES

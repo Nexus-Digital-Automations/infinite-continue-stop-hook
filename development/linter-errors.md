@@ -1,30 +1,15 @@
 # Linter Errors Report
 
-**Generated:** 2025-07-28T02:25:16.539Z
-**Total Issues:** 5 (5 errors, 0 warnings)
-**Files:** 2
+**Generated:** 2025-07-28T02:41:18.198Z
+**Total Issues:** 1 (1 errors, 0 warnings)
+**Files:** 1
 
-## jestHooks.js (eslint)
+## corruption-prevention.test.js (eslint)
 
-**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/jestHooks.js`
-**Issues:** 3
+**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test/corruption-prevention.test.js`
+**Issues:** 1
 
-❌ **Line 133:22** - 'error' is defined but never used. `[no-unused-vars]`
-
-❌ **Line 389:31** - 'options' is assigned a value but never used. Allowed unused args must match /^_/u. `[no-unused-vars]`
-
-❌ **Line 428:34** - 'state' is defined but never used. Allowed unused args must match /^_/u. `[no-unused-vars]`
-
----
-
-## nodeModulesMonitor.js (eslint)
-
-**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/nodeModulesMonitor.js`
-**Issues:** 2
-
-❌ **Line 475:22** - 'error' is defined but never used. `[no-unused-vars]`
-
-❌ **Line 635:18** - 'error' is defined but never used. `[no-unused-vars]`
+❌ **Line 281:21** - 'setTimeout' is not defined. `[no-undef]`
 
 ---
 
