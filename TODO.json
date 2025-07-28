@@ -1556,7 +1556,7 @@
       "description": "Integration tests for quality assessment and task injection are failing due to improper mock setup. Need to ensure ReviewSystem mocks properly simulate quality checks, task injection, and review task creation workflows.",
       "mode": "DEVELOPMENT",
       "priority": "medium",
-      "status": "pending",
+      "status": "completed",
       "success_criteria": [
         "Quality injection tests pass in integration suite",
         "ReviewSystem mocks properly simulate quality assessment",
@@ -1577,7 +1577,7 @@
       "description": "Integration tests for prompt generation and error handling scenarios are failing. Need to ensure AgentExecutor mocks properly handle prompt building, error scenarios, and that error handling flows work correctly in integration context.",
       "mode": "DEVELOPMENT",
       "priority": "medium",
-      "status": "pending",
+      "status": "completed",
       "success_criteria": [
         "Prompt generation tests pass in integration suite",
         "Error handling scenarios are properly tested",
@@ -1933,8 +1933,8 @@
   "strikes_completed_last_run": false,
   "current_task_index": 0,
   "last_mode": "DEVELOPMENT",
-  "execution_count": 147,
-  "last_hook_activation": 1753666790679,
+  "execution_count": 149,
+  "last_hook_activation": 1753667431493,
   "__removedLinterTasks": {
     "removedCount": 1,
     "finalTaskCount": 58
