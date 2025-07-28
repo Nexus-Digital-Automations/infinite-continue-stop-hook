@@ -958,6 +958,9 @@ describe('TaskManager', () => {
             fs.readFileSync.mockImplementation(() => {
                 throw permissionError;
             });
+            
+            // Make recovery also fail for permission errors to test error propagation
+            mockAutoFixer.recoverCorruptedFile.mockResolvedValue({ success: false });
 
             await expect(taskManager.readTodo()).rejects.toThrow('permission denied');
         });
