@@ -1,15 +1,19 @@
 # Linter Errors Report
 
-**Generated:** 2025-07-28T02:41:18.198Z
-**Total Issues:** 1 (1 errors, 0 warnings)
+**Generated:** 2025-07-28T02:52:09.502Z
+**Total Issues:** 3 (3 errors, 0 warnings)
 **Files:** 1
 
-## corruption-prevention.test.js (eslint)
+## integrity-validation.test.js (eslint)
 
-**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test/corruption-prevention.test.js`
-**Issues:** 1
+**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test/integrity-validation.test.js`
+**Issues:** 3
 
-❌ **Line 281:21** - 'setTimeout' is not defined. `[no-undef]`
+❌ **Line 214:27** - 'stats' is assigned a value but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
+
+❌ **Line 318:23** - 'buffer' is assigned a value but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
+
+❌ **Line 378:27** - 'hasBOM' is assigned a value but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
 
 ---
 
