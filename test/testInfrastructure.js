@@ -152,12 +152,25 @@ class MockFileSystemFactory {
             Object.assign(mockFS, options.overrides);
         }
         
-        // Add reset capability
+        // Add enhanced reset capability
         mockFS.__reset = () => {
             Object.values(mockFS).forEach(mock => {
                 if (jest.isMockFunction(mock)) {
                     mock.mockClear();
+                    mock.mockReset();
                 }
+            });
+            
+            // Reset to default behaviors
+            mockFS.existsSync.mockReturnValue(false);
+            mockFS.readFileSync.mockReturnValue('{}');
+            mockFS.statSync.mockReturnValue({
+                isFile: () => true,
+                isDirectory: () => false,
+                size: 1024,
+                mtime: new Date(),
+                ctime: new Date(),
+                atime: new Date()
             });
         };
         
@@ -255,13 +268,22 @@ class MockTaskManagerFactory {
             });
         }
         
-        // Add reset capability
+        // Add enhanced reset capability  
         mockTaskManager.__reset = () => {
             Object.values(mockTaskManager).forEach(prop => {
                 if (jest.isMockFunction(prop)) {
                     prop.mockClear();
+                    prop.mockReset();
                 }
             });
+            
+            // Reset to default behaviors
+            mockTaskManager.readTodo.mockResolvedValue(options.todoData || defaultTodoData);
+            mockTaskManager.writeTodo.mockResolvedValue(true);
+            mockTaskManager.getCurrentTask.mockResolvedValue(options.currentTask || null);
+            mockTaskManager.updateTaskStatus.mockResolvedValue(true);
+            mockTaskManager.createTask.mockResolvedValue('task-' + Date.now());
+            mockTaskManager.validateTodoFile.mockResolvedValue(true);
         };
         
         return mockTaskManager;
@@ -328,18 +350,35 @@ class MockAutoFixerFactory {
             }
         };
         
-        // Add reset capability
+        // Add enhanced reset capability
         mockAutoFixer.__reset = () => {
             Object.values(mockAutoFixer).forEach(prop => {
                 if (jest.isMockFunction(prop)) {
                     prop.mockClear();
+                    prop.mockReset();
                 } else if (typeof prop === 'object' && prop !== null) {
                     Object.values(prop).forEach(subProp => {
                         if (jest.isMockFunction(subProp)) {
                             subProp.mockClear();
+                            subProp.mockReset();
                         }
                     });
                 }
+            });
+            
+            // Reset to default behaviors
+            mockAutoFixer.getFileStatus.mockResolvedValue({
+                valid: options.isValid !== false,
+                canAutoFix: options.canAutoFix || false,
+                issues: options.issues || [],
+                severity: options.severity || 'none'
+            });
+            
+            mockAutoFixer.autoFix.mockResolvedValue({
+                success: options.fixSuccess !== false,
+                hasChanges: options.hasChanges || false,
+                appliedFixes: options.appliedFixes || [],
+                remainingIssues: options.remainingIssues || []
             });
         };
         
@@ -650,21 +689,36 @@ class TestEnvironmentFactory {
             // Cleanup function
             async cleanup() {
                 try {
-                    // Reset all mocks
+                    // Reset all mocks with deep cleanup
                     Object.values(this.mocks).forEach(mock => {
                         if (mock && typeof mock.__reset === 'function') {
                             mock.__reset();
                         }
                     });
                     
-                    // Clean environment variables
+                    // Clear all mock references
+                    this.mocks = {};
+                    
+                    // Clean environment variables more thoroughly
                     Object.keys(process.env).forEach(key => {
-                        if (key.startsWith('TEST_')) {
+                        if (key.startsWith('TEST_') || key.startsWith('JEST_') || key.startsWith('DEBUG')) {
                             delete process.env[key];
                         }
                     });
                     
-                    // Remove test directory
+                    // Clear any registered global cleanup functions
+                    if (global.testCleanup) {
+                        for (const cleanup of global.testCleanup) {
+                            try {
+                                await cleanup();
+                            } catch (error) {
+                                console.warn(`Global cleanup error: ${error.message}`);
+                            }
+                        }
+                        global.testCleanup = [];
+                    }
+                    
+                    // Remove test directory and all subdirectories
                     if (fs.existsSync(testDir)) {
                         fs.rmSync(testDir, { recursive: true, force: true });
                     }
@@ -927,6 +981,132 @@ class QualityReportBuilder {
     }
 }
 
+/**
+ * Test Isolation Diagnostics Utility
+ * Helps identify test isolation issues and provides solutions
+ */
+class TestIsolationDiagnostics {
+    static async diagnoseIsolationIssues() {
+        const issues = [];
+        
+        // Check for shared global state
+        const globalKeys = Object.keys(global).filter(key => 
+            key.startsWith('test') || key.startsWith('mock') || key.includes('Mock')
+        );
+        
+        if (globalKeys.length > 0) {
+            issues.push({
+                type: 'GLOBAL_STATE_POLLUTION',
+                description: 'Global variables detected that may leak between tests',
+                items: globalKeys,
+                solution: 'Reset global state in beforeEach/afterEach hooks'
+            });
+        }
+        
+        // Check for environment variable pollution
+        const testEnvVars = Object.keys(process.env).filter(key =>
+            key.startsWith('TEST_') || key.startsWith('JEST_') || key.startsWith('DEBUG')
+        );
+        
+        if (testEnvVars.length > 0) {
+            issues.push({
+                type: 'ENVIRONMENT_POLLUTION',
+                description: 'Test environment variables found that may persist between tests',
+                items: testEnvVars,
+                solution: 'Clear test environment variables in beforeEach hook'
+            });
+        }
+        
+        // Check for require cache pollution
+        const testModules = Object.keys(require.cache).filter(key =>
+            key.includes('/lib/') || key.includes('/test/')
+        );
+        
+        if (testModules.length > 10) {
+            issues.push({
+                type: 'MODULE_CACHE_POLLUTION',
+                description: 'Large number of cached modules may cause state leakage',
+                items: [`${testModules.length} cached modules`],
+                solution: 'Use jest.resetModules() in beforeEach hook'
+            });
+        }
+        
+        // Check for temporary files
+        const tempFiles = [];
+        try {
+            const glob = require('glob');
+            const patterns = ['test-todo*.json', '.test-env*', '.test-isolated*'];
+            for (const pattern of patterns) {
+                const files = glob.sync(pattern);
+                tempFiles.push(...files);
+            }
+        } catch {
+            // Ignore glob errors
+        }
+        
+        if (tempFiles.length > 0) {
+            issues.push({
+                type: 'TEMPORARY_FILE_LEAKAGE',
+                description: 'Temporary test files found that may cause conflicts',
+                items: tempFiles,
+                solution: 'Ensure proper cleanup in afterEach hook'
+            });
+        }
+        
+        return {
+            hasIssues: issues.length > 0,
+            issues,
+            recommendations: this.generateRecommendations(issues)
+        };
+    }
+    
+    static generateRecommendations(issues) {
+        const recommendations = [];
+        
+        if (issues.some(i => i.type === 'GLOBAL_STATE_POLLUTION')) {
+            recommendations.push('Add comprehensive global state reset in test setup');
+        }
+        
+        if (issues.some(i => i.type === 'ENVIRONMENT_POLLUTION')) {
+            recommendations.push('Implement environment variable isolation');
+        }
+        
+        if (issues.some(i => i.type === 'MODULE_CACHE_POLLUTION')) {
+            recommendations.push('Use jest.resetModules() and clear require cache');
+        }
+        
+        if (issues.some(i => i.type === 'TEMPORARY_FILE_LEAKAGE')) {
+            recommendations.push('Enhance temporary file cleanup patterns');
+        }
+        
+        return recommendations;
+    }
+    
+    static async runIsolationHealthCheck() {
+        console.log('🔍 Running test isolation health check...');
+        const diagnosis = await this.diagnoseIsolationIssues();
+        
+        if (!diagnosis.hasIssues) {
+            console.log('✅ No test isolation issues detected');
+            return true;
+        }
+        
+        console.log(`⚠️ Found ${diagnosis.issues.length} test isolation issues:`);
+        diagnosis.issues.forEach(issue => {
+            console.log(`  • ${issue.type}: ${issue.description}`);
+            console.log(`    Items: ${issue.items.join(', ')}`);
+            console.log(`    Solution: ${issue.solution}`);
+        });
+        
+        console.log('\n📋 Recommendations:');
+        diagnosis.recommendations.forEach(rec => {
+            console.log(`  • ${rec}`);
+        });
+        
+        return false;
+    }
+}
+
 // =============================================================================
 // EXPORTS
 // =============================================================================
@@ -947,6 +1127,7 @@ module.exports = {
     ChaosTestingUtils,
     PerformanceTestingUtils,
     TestDataBuilders,
+    TestIsolationDiagnostics,
     
     // Legacy compatibility functions
     createEnhancedMockFS: (options) => MockFileSystemFactory.create(options),

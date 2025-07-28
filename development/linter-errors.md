@@ -1,15 +1,15 @@
 # Linter Errors Report
 
-**Generated:** 2025-07-28T08:05:34.879Z
+**Generated:** 2025-07-28T08:32:51.213Z
 **Total Issues:** 1 (1 errors, 0 warnings)
 **Files:** 1
 
-## test-baseline-check.js (eslint)
+## testInfrastructure.js (eslint)
 
-**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test-baseline-check.js`
+**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test/testInfrastructure.js`
 **Issues:** 1
 
-❌ **Line 54:27** - 'baseline' is assigned a value but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
+❌ **Line 988:7** - 'TestIsolationDiagnostics' is defined but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
 
 ---
 

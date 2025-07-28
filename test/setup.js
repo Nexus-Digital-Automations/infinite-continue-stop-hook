@@ -467,8 +467,8 @@ const criticalFiles = [
     path.join(__dirname, '../node_modules/jest-worker/build/index.js')
 ];
 
-// Store original critical file contents
-const originalFileContents = new Map();
+// Store original critical file contents - isolated per test
+let originalFileContents = new Map();
 
 // Initialize critical file protection
 criticalFiles.forEach(filePath => {
@@ -524,11 +524,17 @@ beforeEach(() => {
     });
     
     // 4. Reset environment variables to clean state
+    // Store original environment for restoration
+    if (!global.__originalEnv) {
+        global.__originalEnv = { ...process.env };
+    }
+    
     // Clear test-specific environment variables
-    delete process.env.TEST_TODO_PATH;
-    delete process.env.TEST_MODE;
-    delete process.env.DEBUG;
-    delete process.env.JEST_WORKER_ID;
+    Object.keys(process.env).forEach(key => {
+        if (key.startsWith('TEST_') || key.startsWith('JEST_') || key.startsWith('DEBUG')) {
+            delete process.env[key];
+        }
+    });
     
     // Ensure clean test environment
     process.env.NODE_ENV = 'test';
@@ -541,19 +547,34 @@ beforeEach(() => {
         console.warn(`Could not change directory to ${targetDir}: ${error.message}`);
     }
     
-    // 6. Reset global test state
+    // 6. Reset global test state completely
     global.testCleanup = [];
+    global.currentMocks = {};
     
-    // 7. Reset mock factories if they have reset capabilities
+    // 7. Reset critical file contents Map for test isolation
+    originalFileContents.clear();
+    criticalFiles.forEach(filePath => {
+        try {
+            if (fs.existsSync(filePath)) {
+                const content = fs.readFileSync(filePath, 'utf8');
+                originalFileContents.set(filePath, content);
+            }
+        } catch (error) {
+            console.warn(`⚠️ Could not backup critical file ${filePath}: ${error.message}`);
+        }
+    });
+    
+    // 8. Reset mock factories with enhanced cleanup
     if (global.currentMocks) {
         Object.values(global.currentMocks).forEach(mock => {
             if (mock && typeof mock.__reset === 'function') {
                 mock.__reset();
             }
         });
+        global.currentMocks = {};
     }
     
-    // 8. Isolate console output for cleaner test output
+    // 9. Isolate console output for cleaner test output
     if (!process.env.PRESERVE_CONSOLE) {
         global.isolateConsole();
     }
