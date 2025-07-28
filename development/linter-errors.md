@@ -1,15 +1,15 @@
 # Linter Errors Report
 
-**Generated:** 2025-07-28T00:29:50.283Z
+**Generated:** 2025-07-28T00:36:22.482Z
 **Total Issues:** 1 (1 errors, 0 warnings)
 **Files:** 1
 
-## taskManager.test.js (eslint)
+## testErrorHandler.js (eslint)
 
-**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test/taskManager.test.js`
+**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/testErrorHandler.js`
 **Issues:** 1
 
-❌ **Line 13:7** - 'AutoFixer' is assigned a value but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
+❌ **Line 447:39** - 'setTimeout' is not defined. `[no-undef]`
 
 ---
 

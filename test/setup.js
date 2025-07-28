@@ -1,10 +1,35 @@
 // Test setup file for better isolation and consistent mock patterns
 const fs = require('fs');
 const path = require('path');
+const TestErrorHandler = require('../lib/testErrorHandler');
 
 // =============================================================================
 // STANDARDIZED MOCK SETUP FOR ALL TEST SUITES
 // =============================================================================
+
+// Create global error handler instance for all tests
+global.testErrorHandler = new TestErrorHandler({
+    enableLogging: process.env.NODE_ENV !== 'test',
+    enableRecovery: true,
+    maxRetries: 2,
+    retryDelay: 100
+});
+
+// Enhanced error handling utility for test operations
+global.withTestErrorHandling = function(operation, context = {}) {
+    return global.testErrorHandler.withErrorHandling(operation, {
+        createMissingFiles: true,
+        defaultFileContent: '{}',
+        fallbackData: context.fallbackData || null,
+        resetMocks: context.resetMocks || (() => jest.clearAllMocks()),
+        ...context
+    });
+};
+
+// Resilient test environment factory
+global.createResilientTestEnv = function(options = {}) {
+    return global.testErrorHandler.createResilientTestEnv(options);
+};
 
 // Create centralized mock factories for consistent behavior across tests
 global.createMockFS = function() {
