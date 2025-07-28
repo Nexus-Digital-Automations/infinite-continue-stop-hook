@@ -1,15 +1,15 @@
 # Linter Errors Report
 
-**Generated:** 2025-07-28T09:36:50.328Z
+**Generated:** 2025-07-28T10:06:27.277Z
 **Total Issues:** 1 (1 errors, 0 warnings)
 **Files:** 1
 
-## post-test-validation.test.js (eslint)
+## jest-exit-fix.js (eslint)
 
-**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test/post-test-validation.test.js`
+**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/scripts/jest-exit-fix.js`
 **Issues:** 1
 
-❌ **Line 82:17** - 'fail' is not defined. `[no-undef]`
+❌ **Line 53:13** - 'setTimeout' is not defined. `[no-undef]`
 
 ---
 
