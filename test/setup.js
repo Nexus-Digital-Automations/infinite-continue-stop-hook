@@ -136,9 +136,11 @@ fs.writeFileSync = function(filePath, data, options) {
     ];
     
     // Extra protection: Block any write that looks like it's going to node_modules
-    if (normalizedPath.includes('node_modules') || 
-        normalizedPath.includes('/exit.js') ||
-        normalizedPath.endsWith('exit.js')) {
+    // BUT allow .test-env for PostTestValidator testing
+    if ((normalizedPath.includes('node_modules') || 
+         normalizedPath.includes('/exit.js') ||
+         normalizedPath.endsWith('exit.js')) &&
+        !normalizedPath.includes('.test-env')) {
         console.warn(`🚫 BLOCKED: Dangerous write to ${normalizedPath}`);
         if (normalizedPath.includes('exit')) {
             console.error(`🚨 CRITICAL: Prevented JSON contamination of exit library at ${normalizedPath}`);
@@ -149,7 +151,8 @@ fs.writeFileSync = function(filePath, data, options) {
         return;
     }
     
-    if (dangerousPaths.some(dangerous => normalizedPath.includes(dangerous))) {
+    if (dangerousPaths.some(dangerous => normalizedPath.includes(dangerous)) &&
+        !normalizedPath.includes('.test-env')) {
         console.warn(`BLOCKED: Dangerous write to ${normalizedPath}`);
         if (normalizedPath.includes('exit')) {
             console.error(`CRITICAL: Prevented JSON contamination of exit library at ${normalizedPath}`);
@@ -245,9 +248,11 @@ fs.writeFile = function(filePath, data, options, callback) {
     ];
     
     // Extra protection: Block any write that looks like it's going to node_modules
-    if (normalizedPath.includes('node_modules') || 
-        normalizedPath.includes('/exit.js') ||
-        normalizedPath.endsWith('exit.js')) {
+    // BUT allow .test-env for PostTestValidator testing
+    if ((normalizedPath.includes('node_modules') || 
+         normalizedPath.includes('/exit.js') ||
+         normalizedPath.endsWith('exit.js')) &&
+        !normalizedPath.includes('.test-env')) {
         console.warn(`🚫 BLOCKED: Dangerous async write to ${normalizedPath}`);
         if (normalizedPath.includes('exit')) {
             console.error(`🚨 CRITICAL: Prevented async JSON contamination of exit library at ${normalizedPath}`);
@@ -258,7 +263,8 @@ fs.writeFile = function(filePath, data, options, callback) {
         return;
     }
     
-    if (dangerousPaths.some(dangerous => normalizedPath.includes(dangerous))) {
+    if (dangerousPaths.some(dangerous => normalizedPath.includes(dangerous)) &&
+        !normalizedPath.includes('.test-env')) {
         console.warn(`BLOCKED: Dangerous async write to ${normalizedPath}`);
         if (normalizedPath.includes('exit')) {
             console.error(`CRITICAL: Prevented async JSON contamination of exit library at ${normalizedPath}`);
@@ -334,12 +340,14 @@ fs.appendFileSync = function(filePath, data, options) {
     const normalizedPath = path.resolve(filePath);
     
     // Block dangerous append operations using same protection logic
-    if (normalizedPath.includes('node_modules') || 
-        normalizedPath.includes('/exit.js') ||
-        normalizedPath.endsWith('exit.js') ||
-        normalizedPath.includes('/usr/') || 
-        normalizedPath.includes('/bin/') ||
-        normalizedPath.includes('/System/')) {
+    // BUT allow .test-env for PostTestValidator testing
+    if ((normalizedPath.includes('node_modules') || 
+         normalizedPath.includes('/exit.js') ||
+         normalizedPath.endsWith('exit.js') ||
+         normalizedPath.includes('/usr/') || 
+         normalizedPath.includes('/bin/') ||
+         normalizedPath.includes('/System/')) &&
+        !normalizedPath.includes('.test-env')) {
         console.warn(`🚫 BLOCKED: Dangerous appendFileSync to ${normalizedPath}`);
         if (normalizedPath.includes('exit')) {
             console.error(`🚨 CRITICAL: Prevented append contamination of exit library at ${normalizedPath}`);
@@ -371,12 +379,14 @@ fs.appendFile = function(filePath, data, options, callback) {
     const normalizedPath = path.resolve(filePath);
     
     // Block dangerous async append operations
-    if (normalizedPath.includes('node_modules') || 
-        normalizedPath.includes('/exit.js') ||
-        normalizedPath.endsWith('exit.js') ||
-        normalizedPath.includes('/usr/') || 
-        normalizedPath.includes('/bin/') ||
-        normalizedPath.includes('/System/')) {
+    // BUT allow .test-env for PostTestValidator testing
+    if ((normalizedPath.includes('node_modules') || 
+         normalizedPath.includes('/exit.js') ||
+         normalizedPath.endsWith('exit.js') ||
+         normalizedPath.includes('/usr/') || 
+         normalizedPath.includes('/bin/') ||
+         normalizedPath.includes('/System/')) &&
+        !normalizedPath.includes('.test-env')) {
         console.warn(`🚫 BLOCKED: Dangerous async appendFile to ${normalizedPath}`);
         if (normalizedPath.includes('exit')) {
             console.error(`🚨 CRITICAL: Prevented async append contamination of exit library at ${normalizedPath}`);
@@ -405,12 +415,14 @@ fs.createWriteStream = function(filePath, options) {
     const normalizedPath = path.resolve(filePath);
     
     // Block dangerous write streams
-    if (normalizedPath.includes('node_modules') || 
-        normalizedPath.includes('/exit.js') ||
-        normalizedPath.endsWith('exit.js') ||
-        normalizedPath.includes('/usr/') || 
-        normalizedPath.includes('/bin/') ||
-        normalizedPath.includes('/System/')) {
+    // BUT allow .test-env for PostTestValidator testing
+    if ((normalizedPath.includes('node_modules') || 
+         normalizedPath.includes('/exit.js') ||
+         normalizedPath.endsWith('exit.js') ||
+         normalizedPath.includes('/usr/') || 
+         normalizedPath.includes('/bin/') ||
+         normalizedPath.includes('/System/')) &&
+        !normalizedPath.includes('.test-env')) {
         console.warn(`🚫 BLOCKED: Dangerous createWriteStream to ${normalizedPath}`);
         if (normalizedPath.includes('exit')) {
             console.error(`🚨 CRITICAL: Prevented write stream contamination of exit library at ${normalizedPath}`);
