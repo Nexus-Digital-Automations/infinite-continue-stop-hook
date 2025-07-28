@@ -1,15 +1,15 @@
 # Linter Errors Report
 
-**Generated:** 2025-07-28T08:48:56.693Z
+**Generated:** 2025-07-28T09:01:47.737Z
 **Total Issues:** 1 (1 errors, 0 warnings)
 **Files:** 1
 
-## coverage-resilient.js (eslint)
+## jest.coverage.config.js (eslint)
 
-**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/scripts/coverage-resilient.js`
+**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/jest.coverage.config.js`
 **Issues:** 1
 
-❌ **Line 52:22** - 'e' is defined but never used. `[no-unused-vars]`
+❌ **Line 117:3** - Duplicate key 'coverageReporters'. `[no-dupe-keys]`
 
 ---
 
