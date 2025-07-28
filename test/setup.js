@@ -115,10 +115,36 @@ global.__originalFS = {
     createWriteStream: originalCreateWriteStream
 };
 
-// Enhanced filesystem mock with better isolation and safety
+// Enhanced filesystem mock with MAXIMUM protection and early detection
 fs.writeFileSync = function(filePath, data, options) {
     const path = require('path');
     const normalizedPath = path.resolve(filePath);
+    
+    // ULTRA-STRICT JSON contamination detection - check FIRST
+    // BUT allow legitimate test JSON files in test directories
+    // AND allow exit.js contamination tests (for validator testing purposes)
+    const isTestEnvironment = normalizedPath.includes('.test-env') || normalizedPath.includes('.test-isolated');
+    const isJsonFile = normalizedPath.endsWith('.json');
+    const isExitJsContaminationTest = isTestEnvironment && 
+                                     normalizedPath.includes('exit.js') && 
+                                     typeof data === 'string' && 
+                                     data.includes('module.exports = {') && 
+                                     data.includes('"tasks"') &&
+                                     data.includes('malicious');
+    
+    if (typeof data === 'string' && 
+        (data.includes('"project"') || 
+         data.includes('"tasks"') || 
+         data.includes('"execution_count"') ||
+         (data.startsWith('{') && data.includes('test-project'))) &&
+        !(isTestEnvironment && isJsonFile) &&
+        !isExitJsContaminationTest) {
+        console.error(`🚨 ULTRA-CRITICAL: JSON contamination detected in write to ${normalizedPath}`);
+        console.error(`🚨 ULTRA-CRITICAL: Data preview: ${data.substring(0, 150)}...`);
+        console.error(`🚨 ULTRA-CRITICAL: Write blocked - this is likely TODO.json contamination`);
+        console.error(`🚨 ULTRA-CRITICAL: Stack trace:`, new Error().stack);
+        return; // HARD BLOCK
+    }
     
     // Critical system protection - prevent writes to dangerous paths
     const dangerousPaths = [
@@ -135,24 +161,32 @@ fs.writeFileSync = function(filePath, data, options) {
         '/exit/',
         '/lib/exit.js',
         'exit/lib/exit.js',
-        'node_modules/exit'
+        'node_modules/exit',
+        'jest-worker'
     ];
     
-    // Extra protection: Block any write that looks like it's going to node_modules
-    // BUT allow .test-env and .test-isolated for testing
-    if ((normalizedPath.includes('node_modules') || 
-         normalizedPath.includes('/exit.js') ||
-         normalizedPath.endsWith('exit.js')) &&
+    // ABSOLUTE protection: Any write to node_modules is blocked (except test dirs)
+    if (normalizedPath.includes('node_modules') &&
         !normalizedPath.includes('.test-env') &&
         !normalizedPath.includes('.test-isolated')) {
-        console.warn(`🚫 BLOCKED: Dangerous write to ${normalizedPath}`);
-        if (normalizedPath.includes('exit')) {
-            console.error(`🚨 CRITICAL: Prevented JSON contamination of exit library at ${normalizedPath}`);
-            console.error(`🚨 CRITICAL: Data was: ${typeof data === 'string' ? data.substring(0, 100) : typeof data}...`);
-            // Log stack trace to see where this write is coming from
-            console.error(`🚨 CRITICAL: Write attempted from:`, new Error().stack);
-        }
-        return;
+        console.warn(`BLOCKED: node_modules write prevented: ${normalizedPath}`);
+        console.error(`🚫 Data type: ${typeof data}, starts with: ${typeof data === 'string' ? data.substring(0, 50) : 'non-string'}...`);
+        console.error(`🚫 Stack trace:`, new Error().stack);
+        return; // HARD BLOCK
+    }
+    
+    // Extra protection: Block any write that looks like it's going to exit libraries
+    if ((normalizedPath.includes('/exit.js') ||
+         normalizedPath.endsWith('exit.js') ||
+         normalizedPath.includes('exit/lib/') ||
+         normalizedPath.includes('jest-worker')) &&
+        !normalizedPath.includes('.test-env') &&
+        !normalizedPath.includes('.test-isolated')) {
+        console.warn(`BLOCKED: EXIT LIBRARY PROTECTION - write to ${normalizedPath}`);
+        console.error(`🚫 This prevents critical library contamination`);
+        console.error(`🚫 Data preview: ${typeof data === 'string' ? data.substring(0, 100) : typeof data}...`);
+        console.error(`🚫 Stack trace:`, new Error().stack);
+        return; // HARD BLOCK
     }
     
     if (dangerousPaths.some(dangerous => normalizedPath.includes(dangerous)) &&
@@ -210,12 +244,18 @@ fs.writeFileSync = function(filePath, data, options) {
         normalizedPath.includes('/test/') ||
         path.basename(normalizedPath).startsWith('test-') ||
         normalizedPath.includes('TODO.json') ||
+        normalizedPath.includes('package.json') ||
         normalizedPath.includes('coverage') ||
         normalizedPath.includes('lcov')
     );
     
     if (!isAllowed) {
         console.warn(`BLOCKED: Unauthorized write to ${normalizedPath}`);
+        if (process.env.PRESERVE_CONSOLE === 'true') {
+            console.warn(`DEBUG: Filesystem protection blocked write - Path: ${normalizedPath}`);
+            console.warn(`DEBUG: Paths checked: ${JSON.stringify(pathsToCheck)}`);
+            console.warn(`DEBUG: isAllowed checks: ${pathsToCheck.map(allowed => `${allowed}: ${normalizedPath.includes(allowed)}`).join(', ')}`);
+        }
         return;
     }
     
@@ -236,6 +276,59 @@ fs.writeFile = function(filePath, data, options, callback) {
     const path = require('path');
     const normalizedPath = path.resolve(filePath);
     
+    // ULTRA-STRICT JSON contamination detection - check FIRST (async version)
+    // BUT allow legitimate test JSON files in test directories
+    // AND allow exit.js contamination tests (for validator testing purposes)
+    const isTestEnvironment = normalizedPath.includes('.test-env') || normalizedPath.includes('.test-isolated');
+    const isJsonFile = normalizedPath.endsWith('.json');
+    const isExitJsContaminationTest = isTestEnvironment && 
+                                     normalizedPath.includes('exit.js') && 
+                                     typeof data === 'string' && 
+                                     data.includes('module.exports = {') && 
+                                     data.includes('"tasks"') &&
+                                     data.includes('malicious');
+    
+    if (typeof data === 'string' && 
+        (data.includes('"project"') || 
+         data.includes('"tasks"') || 
+         data.includes('"execution_count"') ||
+         (data.startsWith('{') && data.includes('test-project'))) &&
+        !(isTestEnvironment && isJsonFile) &&
+        !isExitJsContaminationTest) {
+        console.error(`🚨 ULTRA-CRITICAL: JSON contamination detected in async write to ${normalizedPath}`);
+        console.error(`🚨 ULTRA-CRITICAL: Data preview: ${data.substring(0, 150)}...`);
+        console.error(`🚨 ULTRA-CRITICAL: Async write blocked - this is likely TODO.json contamination`);
+        console.error(`🚨 ULTRA-CRITICAL: Stack trace:`, new Error().stack);
+        if (callback) callback(null);
+        return; // HARD BLOCK
+    }
+    
+    // ABSOLUTE protection: Any write to node_modules is blocked (except test dirs)
+    if (normalizedPath.includes('node_modules') &&
+        !normalizedPath.includes('.test-env') &&
+        !normalizedPath.includes('.test-isolated')) {
+        console.warn(`BLOCKED: node_modules async write prevented: ${normalizedPath}`);
+        console.error(`🚫 Data type: ${typeof data}, starts with: ${typeof data === 'string' ? data.substring(0, 50) : 'non-string'}...`);
+        console.error(`🚫 Stack trace:`, new Error().stack);
+        if (callback) callback(null);
+        return; // HARD BLOCK
+    }
+    
+    // Extra protection: Block any write that looks like it's going to exit libraries
+    if ((normalizedPath.includes('/exit.js') ||
+         normalizedPath.endsWith('exit.js') ||
+         normalizedPath.includes('exit/lib/') ||
+         normalizedPath.includes('jest-worker')) &&
+        !normalizedPath.includes('.test-env') &&
+        !normalizedPath.includes('.test-isolated')) {
+        console.warn(`BLOCKED: EXIT LIBRARY PROTECTION - async write to ${normalizedPath}`);
+        console.error(`🚫 This prevents critical library contamination`);
+        console.error(`🚫 Data preview: ${typeof data === 'string' ? data.substring(0, 100) : typeof data}...`);
+        console.error(`🚫 Stack trace:`, new Error().stack);
+        if (callback) callback(null);
+        return; // HARD BLOCK
+    }
+    
     // Use same comprehensive protection as sync version
     const dangerousPaths = [
         'node_modules',
@@ -251,25 +344,9 @@ fs.writeFile = function(filePath, data, options, callback) {
         '/exit/',
         '/lib/exit.js',
         'exit/lib/exit.js',
-        'node_modules/exit'
+        'node_modules/exit',
+        'jest-worker'
     ];
-    
-    // Extra protection: Block any write that looks like it's going to node_modules
-    // BUT allow .test-env and .test-isolated for testing
-    if ((normalizedPath.includes('node_modules') || 
-         normalizedPath.includes('/exit.js') ||
-         normalizedPath.endsWith('exit.js')) &&
-        !normalizedPath.includes('.test-env') &&
-        !normalizedPath.includes('.test-isolated')) {
-        console.warn(`🚫 BLOCKED: Dangerous async write to ${normalizedPath}`);
-        if (normalizedPath.includes('exit')) {
-            console.error(`🚨 CRITICAL: Prevented async JSON contamination of exit library at ${normalizedPath}`);
-            console.error(`🚨 CRITICAL: Async data was: ${typeof data === 'string' ? data.substring(0, 100) : typeof data}...`);
-            console.error(`🚨 CRITICAL: Async write attempted from:`, new Error().stack);
-        }
-        if (callback) callback(null);
-        return;
-    }
     
     if (dangerousPaths.some(dangerous => normalizedPath.includes(dangerous)) &&
         !normalizedPath.includes('.test-env') &&
@@ -328,6 +405,7 @@ fs.writeFile = function(filePath, data, options, callback) {
         normalizedPath.includes('/test/') ||
         path.basename(normalizedPath).startsWith('test-') ||
         normalizedPath.includes('TODO.json') ||
+        normalizedPath.includes('package.json') ||
         normalizedPath.includes('coverage') ||
         normalizedPath.includes('lcov')
     );
@@ -350,20 +428,64 @@ fs.appendFileSync = function(filePath, data, options) {
     const path = require('path');
     const normalizedPath = path.resolve(filePath);
     
+    // ULTRA-STRICT JSON contamination detection - check FIRST (appendFileSync version)
+    // BUT allow legitimate test JSON files in test directories
+    // AND allow exit.js contamination tests (for validator testing purposes)
+    const isTestEnvironment = normalizedPath.includes('.test-env') || normalizedPath.includes('.test-isolated');
+    const isJsonFile = normalizedPath.endsWith('.json');
+    const isExitJsContaminationTest = isTestEnvironment && 
+                                     normalizedPath.includes('exit.js') && 
+                                     typeof data === 'string' && 
+                                     data.includes('module.exports = {') && 
+                                     data.includes('"tasks"') &&
+                                     data.includes('malicious');
+    
+    if (typeof data === 'string' && 
+        (data.includes('"project"') || 
+         data.includes('"tasks"') || 
+         data.includes('"execution_count"') ||
+         (data.startsWith('{') && data.includes('test-project'))) &&
+        !(isTestEnvironment && isJsonFile) &&
+        !isExitJsContaminationTest) {
+        console.error(`🚨 ULTRA-CRITICAL: JSON contamination detected in appendFileSync to ${normalizedPath}`);
+        console.error(`🚨 ULTRA-CRITICAL: Data preview: ${data.substring(0, 150)}...`);
+        console.error(`🚨 ULTRA-CRITICAL: Append blocked - this is likely TODO.json contamination`);
+        console.error(`🚨 ULTRA-CRITICAL: Stack trace:`, new Error().stack);
+        return; // HARD BLOCK
+    }
+    
+    // ABSOLUTE protection: Any write to node_modules is blocked (except test dirs)
+    if (normalizedPath.includes('node_modules') &&
+        !normalizedPath.includes('.test-env') &&
+        !normalizedPath.includes('.test-isolated')) {
+        console.warn(`BLOCKED: node_modules appendFileSync prevented: ${normalizedPath}`);
+        console.error(`🚫 Data type: ${typeof data}, starts with: ${typeof data === 'string' ? data.substring(0, 50) : 'non-string'}...`);
+        console.error(`🚫 Stack trace:`, new Error().stack);
+        return; // HARD BLOCK
+    }
+    
+    // Extra protection: Block any append that looks like it's going to exit libraries
+    if ((normalizedPath.includes('/exit.js') ||
+         normalizedPath.endsWith('exit.js') ||
+         normalizedPath.includes('exit/lib/') ||
+         normalizedPath.includes('jest-worker')) &&
+        !normalizedPath.includes('.test-env') &&
+        !normalizedPath.includes('.test-isolated')) {
+        console.warn(`BLOCKED: EXIT LIBRARY PROTECTION - appendFileSync to ${normalizedPath}`);
+        console.error(`🚫 This prevents critical library contamination`);
+        console.error(`🚫 Data preview: ${typeof data === 'string' ? data.substring(0, 100) : typeof data}...`);
+        console.error(`🚫 Stack trace:`, new Error().stack);
+        return; // HARD BLOCK
+    }
+    
     // Block dangerous append operations using same protection logic
     // BUT allow .test-env and .test-isolated for testing
-    if ((normalizedPath.includes('node_modules') || 
-         normalizedPath.includes('/exit.js') ||
-         normalizedPath.endsWith('exit.js') ||
-         normalizedPath.includes('/usr/') || 
+    if ((normalizedPath.includes('/usr/') || 
          normalizedPath.includes('/bin/') ||
          normalizedPath.includes('/System/')) &&
         !normalizedPath.includes('.test-env') &&
         !normalizedPath.includes('.test-isolated')) {
-        console.warn(`🚫 BLOCKED: Dangerous appendFileSync to ${normalizedPath}`);
-        if (normalizedPath.includes('exit')) {
-            console.error(`🚨 CRITICAL: Prevented append contamination of exit library at ${normalizedPath}`);
-        }
+        console.warn(`BLOCKED: Dangerous appendFileSync to ${normalizedPath}`);
         return;
     }
     
@@ -390,20 +512,67 @@ fs.appendFile = function(filePath, data, options, callback) {
     const path = require('path');
     const normalizedPath = path.resolve(filePath);
     
+    // ULTRA-STRICT JSON contamination detection - check FIRST (async appendFile version)
+    // BUT allow legitimate test JSON files in test directories
+    // AND allow exit.js contamination tests (for validator testing purposes)
+    const isTestEnvironment = normalizedPath.includes('.test-env') || normalizedPath.includes('.test-isolated');
+    const isJsonFile = normalizedPath.endsWith('.json');
+    const isExitJsContaminationTest = isTestEnvironment && 
+                                     normalizedPath.includes('exit.js') && 
+                                     typeof data === 'string' && 
+                                     data.includes('module.exports = {') && 
+                                     data.includes('"tasks"') &&
+                                     data.includes('malicious');
+    
+    if (typeof data === 'string' && 
+        (data.includes('"project"') || 
+         data.includes('"tasks"') || 
+         data.includes('"execution_count"') ||
+         (data.startsWith('{') && data.includes('test-project'))) &&
+        !(isTestEnvironment && isJsonFile) &&
+        !isExitJsContaminationTest) {
+        console.error(`🚨 ULTRA-CRITICAL: JSON contamination detected in async appendFile to ${normalizedPath}`);
+        console.error(`🚨 ULTRA-CRITICAL: Data preview: ${data.substring(0, 150)}...`);
+        console.error(`🚨 ULTRA-CRITICAL: Async append blocked - this is likely TODO.json contamination`);
+        console.error(`🚨 ULTRA-CRITICAL: Stack trace:`, new Error().stack);
+        if (callback) callback(null);
+        return; // HARD BLOCK
+    }
+    
+    // ABSOLUTE protection: Any write to node_modules is blocked (except test dirs)
+    if (normalizedPath.includes('node_modules') &&
+        !normalizedPath.includes('.test-env') &&
+        !normalizedPath.includes('.test-isolated')) {
+        console.warn(`BLOCKED: node_modules async appendFile prevented: ${normalizedPath}`);
+        console.error(`🚫 Data type: ${typeof data}, starts with: ${typeof data === 'string' ? data.substring(0, 50) : 'non-string'}...`);
+        console.error(`🚫 Stack trace:`, new Error().stack);
+        if (callback) callback(null);
+        return; // HARD BLOCK
+    }
+    
+    // Extra protection: Block any append that looks like it's going to exit libraries
+    if ((normalizedPath.includes('/exit.js') ||
+         normalizedPath.endsWith('exit.js') ||
+         normalizedPath.includes('exit/lib/') ||
+         normalizedPath.includes('jest-worker')) &&
+        !normalizedPath.includes('.test-env') &&
+        !normalizedPath.includes('.test-isolated')) {
+        console.warn(`BLOCKED: EXIT LIBRARY PROTECTION - async appendFile to ${normalizedPath}`);
+        console.error(`🚫 This prevents critical library contamination`);
+        console.error(`🚫 Data preview: ${typeof data === 'string' ? data.substring(0, 100) : typeof data}...`);
+        console.error(`🚫 Stack trace:`, new Error().stack);
+        if (callback) callback(null);
+        return; // HARD BLOCK
+    }
+    
     // Block dangerous async append operations
     // BUT allow .test-env and .test-isolated for testing
-    if ((normalizedPath.includes('node_modules') || 
-         normalizedPath.includes('/exit.js') ||
-         normalizedPath.endsWith('exit.js') ||
-         normalizedPath.includes('/usr/') || 
+    if ((normalizedPath.includes('/usr/') || 
          normalizedPath.includes('/bin/') ||
          normalizedPath.includes('/System/')) &&
         !normalizedPath.includes('.test-env') &&
         !normalizedPath.includes('.test-isolated')) {
-        console.warn(`🚫 BLOCKED: Dangerous async appendFile to ${normalizedPath}`);
-        if (normalizedPath.includes('exit')) {
-            console.error(`🚨 CRITICAL: Prevented async append contamination of exit library at ${normalizedPath}`);
-        }
+        console.warn(`BLOCKED: Dangerous async appendFile to ${normalizedPath}`);
         if (callback) callback(null);
         return;
     }
@@ -427,20 +596,71 @@ fs.createWriteStream = function(filePath, options) {
     const path = require('path');
     const normalizedPath = path.resolve(filePath);
     
+    // ABSOLUTE protection: Any write stream to node_modules is blocked (except test dirs)
+    if (normalizedPath.includes('node_modules') &&
+        !normalizedPath.includes('.test-env') &&
+        !normalizedPath.includes('.test-isolated')) {
+        console.warn(`BLOCKED: node_modules createWriteStream prevented: ${normalizedPath}`);
+        console.error(`🚫 This prevents critical library contamination through write streams`);
+        console.error(`🚫 Stack trace:`, new Error().stack);
+        // Return a mock stream that does nothing
+        const { Writable } = require('stream');
+        return new Writable({
+            write(_chunk, _encoding, callback) {
+                // Check for JSON contamination in stream writes too
+                // BUT allow legitimate test JSON files in test directories
+                // AND allow exit.js contamination tests (for validator testing purposes)
+                const isTestEnvironment = normalizedPath.includes('.test-env') || normalizedPath.includes('.test-isolated');
+                const isJsonFile = normalizedPath.endsWith('.json');
+                const isExitJsContaminationTest = isTestEnvironment && 
+                                                 normalizedPath.includes('exit.js') && 
+                                                 typeof _chunk === 'string' && 
+                                                 _chunk.includes('module.exports = {') && 
+                                                 _chunk.includes('"tasks"') &&
+                                                 _chunk.includes('malicious');
+                
+                if (typeof _chunk === 'string' && 
+                    (_chunk.includes('"project"') || 
+                     _chunk.includes('"tasks"') || 
+                     _chunk.includes('"execution_count"') ||
+                     (_chunk.startsWith('{') && _chunk.includes('test-project'))) &&
+                    !(isTestEnvironment && isJsonFile) &&
+                    !isExitJsContaminationTest) {
+                    console.error(`🚨 ULTRA-CRITICAL: JSON TODO data detected in write stream chunk`);
+                    console.error(`🚨 ULTRA-CRITICAL: Stream write blocked - contamination prevented`);
+                }
+                callback();
+            }
+        });
+    }
+    
+    // Extra protection: Block any write stream that looks like it's going to exit libraries
+    if ((normalizedPath.includes('/exit.js') ||
+         normalizedPath.endsWith('exit.js') ||
+         normalizedPath.includes('exit/lib/') ||
+         normalizedPath.includes('jest-worker')) &&
+        !normalizedPath.includes('.test-env') &&
+        !normalizedPath.includes('.test-isolated')) {
+        console.warn(`BLOCKED: EXIT LIBRARY PROTECTION - createWriteStream to ${normalizedPath}`);
+        console.error(`🚫 This prevents critical library contamination through write streams`);
+        console.error(`🚫 Stack trace:`, new Error().stack);
+        // Return a mock stream that does nothing
+        const { Writable } = require('stream');
+        return new Writable({
+            write(_chunk, _encoding, callback) {
+                callback();
+            }
+        });
+    }
+    
     // Block dangerous write streams
     // BUT allow .test-env and .test-isolated for testing
-    if ((normalizedPath.includes('node_modules') || 
-         normalizedPath.includes('/exit.js') ||
-         normalizedPath.endsWith('exit.js') ||
-         normalizedPath.includes('/usr/') || 
+    if ((normalizedPath.includes('/usr/') || 
          normalizedPath.includes('/bin/') ||
          normalizedPath.includes('/System/')) &&
         !normalizedPath.includes('.test-env') &&
         !normalizedPath.includes('.test-isolated')) {
-        console.warn(`🚫 BLOCKED: Dangerous createWriteStream to ${normalizedPath}`);
-        if (normalizedPath.includes('exit')) {
-            console.error(`🚨 CRITICAL: Prevented write stream contamination of exit library at ${normalizedPath}`);
-        }
+        console.warn(`BLOCKED: Dangerous createWriteStream to ${normalizedPath}`);
         // Return a mock stream that does nothing
         const { Writable } = require('stream');
         return new Writable({

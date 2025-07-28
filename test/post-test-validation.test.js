@@ -30,10 +30,22 @@ describe('Post-Test Validation System', () => {
         Object.entries(mockFiles).forEach(([relativePath, content]) => {
             const fullPath = path.join(testDir, relativePath);
             const dir = path.dirname(fullPath);
+            
+            // Debug: Log file creation attempts
+            if (process.env.PRESERVE_CONSOLE === 'true') {
+                console.log(`Creating mock file: ${relativePath} -> ${fullPath}`);
+                console.log(`Directory: ${dir}, exists: ${fs.existsSync(dir)}`);
+            }
+            
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir, { recursive: true });
             }
-            fs.writeFileSync(fullPath, content);
+            
+            try {
+                fs.writeFileSync(fullPath, content);
+            } catch (error) {
+                console.error(`Failed to create ${fullPath}: ${error.message}`);
+            }
         });
 
         validator = new PostTestValidator({
@@ -64,7 +76,38 @@ describe('Post-Test Validation System', () => {
 
     describe('Initialization and Baseline', () => {
         test('should initialize baseline hashes for critical files', async () => {
+            // Debug: Check test directory and files
+            const debugInfo = [];
+            debugInfo.push(`Test directory: ${testDir}`);
+            debugInfo.push(`Test directory exists: ${fs.existsSync(testDir)}`);
+            debugInfo.push(`Critical files in validator: ${JSON.stringify(validator.criticalFiles)}`);
+            
+            // List all files in test directory
+            if (fs.existsSync(testDir)) {
+                const allFiles = fs.readdirSync(testDir, { recursive: true });
+                debugInfo.push(`All files in test dir: ${JSON.stringify(allFiles)}`);
+            }
+            
+            // Check mock files that should have been created
+            debugInfo.push('Mock files status:');
+            Object.keys(mockFiles).forEach(relativePath => {
+                const fullPath = path.join(testDir, relativePath);
+                debugInfo.push(`  ${relativePath} -> exists: ${fs.existsSync(fullPath)}`);
+            });
+            
+            for (const file of validator.criticalFiles) {
+                const fullPath = path.join(testDir, file);
+                debugInfo.push(`File ${file} -> ${fullPath} exists: ${fs.existsSync(fullPath)}`);
+            }
+            
             await validator.initializeBaseline();
+            debugInfo.push(`Baseline hashes size: ${validator.originalHashes.size}`);
+            debugInfo.push(`Baseline hash keys: ${JSON.stringify(Array.from(validator.originalHashes.keys()))}`);
+            
+            if (validator.originalHashes.size !== 4) {
+                throw new Error(`Expected 4 hashes but got ${validator.originalHashes.size}. Debug info:\n${debugInfo.join('\n')}`);
+            }
+            
             expect(validator.originalHashes.size).toBe(4);
 
             // Check that all expected files have baselines

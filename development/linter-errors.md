@@ -1,15 +1,15 @@
 # Linter Errors Report
 
-**Generated:** 2025-07-28T09:11:16.384Z
+**Generated:** 2025-07-28T09:36:50.328Z
 **Total Issues:** 1 (1 errors, 0 warnings)
 **Files:** 1
 
-## coverage-dashboard.js (eslint)
+## post-test-validation.test.js (eslint)
 
-**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/scripts/coverage-dashboard.js`
+**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test/post-test-validation.test.js`
 **Issues:** 1
 
-❌ **Line 9:7** - 'path' is assigned a value but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
+❌ **Line 82:17** - 'fail' is not defined. `[no-undef]`
 
 ---
 
