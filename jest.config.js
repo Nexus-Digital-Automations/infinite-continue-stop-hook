@@ -8,18 +8,20 @@ module.exports = {
     '**/?(*.)+(spec|test).js'
   ],
   
-  // Coverage configuration - DISABLED due to JSON injection bug
+  // Coverage configuration - TEMPORARILY DISABLED due to JSON corruption bug
   collectCoverage: false,
   collectCoverageFrom: [
-    'lib/taskManager.js',
-    'lib/agentExecutor.js', 
-    'lib/reviewSystem.js',
-    'lib/todoValidator.js',
+    'lib/**/*.js',
+    '!lib/**/*.test.js',
+    '!lib/**/*.spec.js',
     '!**/node_modules/**',
     '!**/coverage/**',
     '!**/demo/**',
     '!**/*.config.js',
-    '!**/*.backup.*'
+    '!**/*.backup.*',
+    '!**/test/**',
+    '!setup-infinite-hook.js',
+    '!stop-hook.js'
   ],
   
   // Explicitly ignore demo directories in all contexts
@@ -32,13 +34,26 @@ module.exports = {
   ],
   
   // Coverage thresholds for quality assessment
-  // Set to 0 for initial setup - can be increased later
+  // Realistic thresholds based on current codebase maturity
   coverageThreshold: {
     global: {
-      branches: 0,
-      functions: 0,
-      lines: 0,
-      statements: 0
+      branches: 60,
+      functions: 70,
+      lines: 75,
+      statements: 75
+    },
+    // Specific thresholds for core modules
+    'lib/taskManager.js': {
+      branches: 80,
+      functions: 85,
+      lines: 90,
+      statements: 90
+    },
+    'lib/todoValidator.js': {
+      branches: 75,
+      functions: 80,
+      lines: 85,
+      statements: 85
     }
   },
   

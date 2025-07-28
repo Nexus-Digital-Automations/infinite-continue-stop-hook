@@ -11,7 +11,7 @@
     "validate": "node -e \"console.log('✅ Project validation passed - all core scripts accessible')\"",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "echo '⚠️  Coverage temporarily disabled due to JSON injection bug' && jest --passWithNoTests",
+    "test:coverage": "jest --coverage",
     "test:coverage:force": "jest --coverage --no-cache",
     "test:verbose": "jest --verbose",
     "prebuild": "echo '🔧 Starting build process...'",
