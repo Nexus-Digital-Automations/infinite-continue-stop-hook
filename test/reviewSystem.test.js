@@ -16,20 +16,20 @@ const { execSync } = require('child_process');
 describe('ReviewSystem', () => {
     let reviewSystem;
     let mockWorkingDir;
-
-    beforeAll(() => {
-        // Set up fs module mocks
-        fs.existsSync = jest.fn();
-        fs.readFileSync = jest.fn();
-        fs.readdirSync = jest.fn();
-        
-        // Set up execSync mock
-        execSync.mockReturnValue = jest.fn();
-    });
+    let mockFS;
 
     beforeEach(() => {
         reviewSystem = new ReviewSystem();
         mockWorkingDir = '/test/project';
+        
+        // Setup standardized mocks using global factory functions
+        mockFS = global.createMockFS();
+        
+        // Apply fs mocks
+        Object.assign(fs, mockFS);
+        
+        // Set up execSync mock
+        execSync.mockReturnValue('');
         
         // Reset all mocks
         jest.clearAllMocks();

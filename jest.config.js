@@ -8,8 +8,8 @@ module.exports = {
     '**/?(*.)+(spec|test).js'
   ],
   
-  // Coverage configuration - RE-ENABLED with minimal scope for testing
-  collectCoverage: true,
+  // Coverage configuration - DISABLED due to corruption issues
+  collectCoverage: false,
   collectCoverageFrom: [
     'lib/**/*.js',
     '!lib/**/*.test.js',

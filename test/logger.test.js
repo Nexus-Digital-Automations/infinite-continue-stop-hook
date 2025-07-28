@@ -17,21 +17,19 @@ describe('Logger', () => {
     let logger;
     let mockProjectRoot;
     let mockLogPath;
-
-    beforeAll(() => {
-        // Set up fs module mocks
-        fs.writeFileSync = jest.fn();
-        
-        // Set up os module mocks
-        os.platform = jest.fn();
-        os.arch = jest.fn();
-    });
+    let mockFS;
 
     beforeEach(() => {
         jest.clearAllMocks();
         
         mockProjectRoot = '/test/project';
         mockLogPath = '/test/project/infinite-continue-hook.log';
+        
+        // Setup standardized mocks using global factory functions
+        mockFS = global.createMockFS();
+        
+        // Apply fs mocks
+        Object.assign(fs, mockFS);
         
         // Mock os module
         os.platform.mockReturnValue('linux');

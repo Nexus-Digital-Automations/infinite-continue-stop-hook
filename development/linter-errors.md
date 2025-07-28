@@ -1,33 +1,15 @@
 # Linter Errors Report
 
-**Generated:** 2025-07-27T23:55:48.737Z
-**Total Issues:** 10 (10 errors, 0 warnings)
+**Generated:** 2025-07-28T00:29:50.283Z
+**Total Issues:** 1 (1 errors, 0 warnings)
 **Files:** 1
 
-## debug-test.js (eslint)
+## taskManager.test.js (eslint)
 
-**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/debug-test.js`
-**Issues:** 10
+**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test/taskManager.test.js`
+**Issues:** 1
 
-❌ **Line 2:1** - 'jest' is not defined. `[no-undef]`
-
-❌ **Line 9:20** - 'jest' is not defined. `[no-undef]`
-
-❌ **Line 10:14** - 'jest' is not defined. `[no-undef]`
-
-❌ **Line 11:27** - 'jest' is not defined. `[no-undef]`
-
-❌ **Line 13:30** - 'jest' is not defined. `[no-undef]`
-
-❌ **Line 16:22** - 'jest' is not defined. `[no-undef]`
-
-❌ **Line 17:31** - 'jest' is not defined. `[no-undef]`
-
-❌ **Line 18:28** - 'jest' is not defined. `[no-undef]`
-
-❌ **Line 19:23** - 'jest' is not defined. `[no-undef]`
-
-❌ **Line 21:13** - 'jest' is not defined. `[no-undef]`
+❌ **Line 13:7** - 'AutoFixer' is assigned a value but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
 
 ---
 

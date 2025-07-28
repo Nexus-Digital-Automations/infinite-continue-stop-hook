@@ -102,7 +102,7 @@
     {
       "id": "linter_task_active",
       "title": "Fix Linter Errors - IMMEDIATE",
-      "description": "Fix 1 error and 0 warnings found in recently edited files: taskManager.test.js",
+      "description": "Fix 2 errors and 0 warnings found in recently edited files: taskManager.test.js",
       "mode": "DEVELOPMENT",
       "priority": "high",
       "status": "completed",
@@ -115,11 +115,11 @@
         "development/linter-errors.md shows no issues for edited files",
         "Code passes linting without warnings or errors"
       ],
-      "created_at": "2025-07-28T00:29:50.282Z",
+      "created_at": "2025-07-28T00:24:23.931Z",
       "is_linter_task": true,
       "linter_summary": {
-        "total_violations": 1,
-        "errors": 1,
+        "total_violations": 2,
+        "errors": 2,
         "warnings": 0,
         "files_affected": 1
       }
@@ -1187,7 +1187,7 @@
       "description": "Improve consistency and reliability of test mocking patterns across all test suites to reduce flaky test failures",
       "mode": "TESTING",
       "priority": "medium",
-      "status": "completed",
+      "status": "pending",
       "dependencies": [
         "jest.config.js"
       ],
@@ -1473,9 +1473,9 @@
   "review_strikes": 0,
   "strikes_completed_last_run": false,
   "current_task_index": 0,
-  "last_mode": "DEVELOPMENT",
-  "execution_count": 122,
-  "last_hook_activation": 1753662711359,
+  "last_mode": "TESTING",
+  "execution_count": 118,
+  "last_hook_activation": 1753662263932,
   "__removedLinterTasks": {
     "removedCount": 1,
     "finalTaskCount": 43

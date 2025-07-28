@@ -7,24 +7,24 @@
 
 // Mock dependencies FIRST, before importing TaskManager
 jest.mock('fs');
-const mockAutoFixerInstance = {
-    getFileStatus: jest.fn(),
-    autoFix: jest.fn(),
-    recoverCorruptedFile: jest.fn(),
-    validator: {
-        validateAndSanitize: jest.fn()
-    },
-    recovery: {
-        atomicWrite: jest.fn(),
-        listAvailableBackups: jest.fn(),
-        restoreFromBackup: jest.fn(),
-        createBackup: jest.fn()
-    },
-    dryRun: jest.fn()
-};
-
 jest.mock('../lib/autoFixer', () => {
-    return jest.fn(() => mockAutoFixerInstance);
+    return jest.fn().mockImplementation(() => {
+        return global.createMockAutoFixer ? global.createMockAutoFixer() : {
+            getFileStatus: jest.fn().mockResolvedValue({ valid: true, canAutoFix: false }),
+            autoFix: jest.fn().mockResolvedValue({ success: true, hasChanges: false }),
+            recoverCorruptedFile: jest.fn().mockResolvedValue({ success: true, finalData: {} }),
+            dryRun: jest.fn().mockResolvedValue({ success: true, wouldFix: false }),
+            validator: {
+                validateAndSanitize: jest.fn().mockReturnValue({ isValid: true, data: {}, fixes: [] })
+            },
+            recovery: {
+                atomicWrite: jest.fn().mockResolvedValue({ success: true }),
+                listAvailableBackups: jest.fn().mockReturnValue([]),
+                restoreFromBackup: jest.fn().mockResolvedValue({ success: true }),
+                createBackup: jest.fn().mockResolvedValue({ success: true })
+            }
+        };
+    });
 });
 
 const fs = require('fs');
@@ -34,32 +34,22 @@ describe('TaskManager', () => {
     let taskManager;
     let mockTodoPath;
     let mockAutoFixer;
+    let mockFS;
     
-    // Set up fs mocks at module level
-    beforeAll(() => {
-        fs.existsSync = jest.fn();
-        fs.readFileSync = jest.fn();
-        fs.writeFileSync = jest.fn();
-        fs.mkdirSync = jest.fn();
-        fs.statSync = jest.fn();
-        fs.readdirSync = jest.fn();
-        fs.unlinkSync = jest.fn();
-        fs.copyFileSync = jest.fn();
-        fs.renameSync = jest.fn();
-    });
-
     beforeEach(() => {
-        // Setup mocks
+        // Reset all mocks first
+        jest.clearAllMocks();
+        
+        // Setup standardized mocks using global factory functions
+        mockFS = global.createMockFS();
+        mockAutoFixer = global.createMockAutoFixer();
         mockTodoPath = './test-todo.json';
         
-        // Reset all mocks
-        jest.clearAllMocks();
+        // Apply fs mocks
+        Object.assign(fs, mockFS);
         
         // Create TaskManager instance which will use the mocked AutoFixer
         taskManager = new TaskManager(mockTodoPath);
-        
-        // Get reference to the mock for setting up return values
-        mockAutoFixer = taskManager.autoFixer;
     });
 
     describe('Constructor', () => {
@@ -814,11 +804,11 @@ describe('TaskManager', () => {
         describe('listBackups', () => {
             test('should delegate to recovery.listAvailableBackups', async () => {
                 const mockBackups = ['backup1.json', 'backup2.json'];
-                mockAutoFixerInstance.recovery.listAvailableBackups.mockReturnValue(mockBackups);
+                mockAutoFixer.recovery.listAvailableBackups.mockReturnValue(mockBackups);
 
                 const result = await taskManager.listBackups();
 
-                expect(mockAutoFixerInstance.recovery.listAvailableBackups).toHaveBeenCalledWith(mockTodoPath);
+                expect(mockAutoFixer.recovery.listAvailableBackups).toHaveBeenCalledWith(mockTodoPath);
                 expect(result).toEqual(mockBackups);
             });
         });

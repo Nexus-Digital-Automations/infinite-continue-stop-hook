@@ -18,6 +18,7 @@ describe('Stop Hook Integration Tests', () => {
     let mockTaskManager;
     let mockAgentExecutor;
     let mockReviewSystem;
+    let mockFS;
     
     beforeEach(() => {
         jest.clearAllMocks();
@@ -27,34 +28,14 @@ describe('Stop Hook Integration Tests', () => {
         // Mock process.cwd()
         jest.spyOn(process, 'cwd').mockReturnValue(mockWorkingDir);
         
-        // Set up fs module mocks
-        fs.existsSync = jest.fn();
-        fs.readFileSync = jest.fn();
-        fs.writeFileSync = jest.fn();
-        fs.mkdirSync = jest.fn();
-        fs.readdirSync = jest.fn().mockReturnValue([]);
-        fs.statSync = jest.fn().mockReturnValue({ mtime: new Date() });
+        // Setup standardized mocks using global factory functions
+        mockFS = global.createMockFS();
+        mockTaskManager = global.createMockTaskManager();
+        mockAgentExecutor = global.createMockAgentExecutor();
+        mockReviewSystem = global.createMockReviewSystem();
         
-        // Mock TaskManager, AgentExecutor, and ReviewSystem
-        mockTaskManager = {
-            readTodo: jest.fn(),
-            writeTodo: jest.fn(),
-            getCurrentTask: jest.fn(),
-            handleStrikeLogic: jest.fn()
-        };
-        
-        mockAgentExecutor = {
-            buildPrompt: jest.fn()
-        };
-        
-        mockReviewSystem = {
-            checkStrikeQuality: jest.fn(),
-            injectQualityImprovementTask: jest.fn(),
-            shouldInjectReviewTask: jest.fn(),
-            getNextStrikeNumber: jest.fn(),
-            createReviewTask: jest.fn(),
-            insertTasksBeforeStrikes: jest.fn()
-        };
+        // Apply fs mocks
+        Object.assign(fs, mockFS);
         
         // Mock constructors
         jest.doMock('../lib/taskManager', () => jest.fn(() => mockTaskManager));
@@ -643,7 +624,7 @@ describe('Stop Hook Integration Tests', () => {
                 
                 // Check for rapid successive calls
                 if (inputData.stop_hook_active && fs.existsSync(path.join(process.cwd(), 'TODO.json'))) {
-                    const todoData = JSON.parse(fs.readFileSync());
+                    const todoData = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'TODO.json'), 'utf8'));
                     const timeSinceLastCall = Date.now() - (todoData.last_hook_activation || 0);
                     
                     if (timeSinceLastCall < 2000) { // Less than 2 seconds
@@ -659,7 +640,7 @@ describe('Stop Hook Integration Tests', () => {
                     
                     // Get the current task
                     Promise.resolve(mockTaskManager.getCurrentTask()).then(task => {
-                        const todoData = JSON.parse(fs.readFileSync());
+                        const todoData = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'TODO.json'), 'utf8'));
                         
                         // Always handle strike logic first, regardless of whether there's a current task
                         if (mockTaskManager.handleStrikeLogic) {
