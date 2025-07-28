@@ -1,15 +1,30 @@
 # Linter Errors Report
 
-**Generated:** 2025-07-28T01:13:16.457Z
-**Total Issues:** 1 (1 errors, 0 warnings)
-**Files:** 1
+**Generated:** 2025-07-28T02:25:16.539Z
+**Total Issues:** 5 (5 errors, 0 warnings)
+**Files:** 2
 
-## setup.js (eslint)
+## jestHooks.js (eslint)
 
-**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test/setup.js`
-**Issues:** 1
+**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/jestHooks.js`
+**Issues:** 3
 
-❌ **Line 244:11** - 'preservedEnv' is assigned a value but never used. Allowed unused vars must match /^_/u. `[no-unused-vars]`
+❌ **Line 133:22** - 'error' is defined but never used. `[no-unused-vars]`
+
+❌ **Line 389:31** - 'options' is assigned a value but never used. Allowed unused args must match /^_/u. `[no-unused-vars]`
+
+❌ **Line 428:34** - 'state' is defined but never used. Allowed unused args must match /^_/u. `[no-unused-vars]`
+
+---
+
+## nodeModulesMonitor.js (eslint)
+
+**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/nodeModulesMonitor.js`
+**Issues:** 2
+
+❌ **Line 475:22** - 'error' is defined but never used. `[no-unused-vars]`
+
+❌ **Line 635:18** - 'error' is defined but never used. `[no-unused-vars]`
 
 ---
 
