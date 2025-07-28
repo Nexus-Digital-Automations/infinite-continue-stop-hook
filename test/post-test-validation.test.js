@@ -8,7 +8,10 @@ describe('Post-Test Validation System', () => {
     let mockFiles;
 
     beforeEach(() => {
-        testDir = '.test-env';
+        // Create unique test directory for each test to avoid interference
+        const testId = `test_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        testDir = `.test-env-${testId}`;
+        
         if (!fs.existsSync(testDir)) {
             fs.mkdirSync(testDir, { recursive: true });
         }
@@ -275,6 +278,14 @@ describe('Post-Test Validation System', () => {
         test('should run complete validation successfully', async () => {
             const report = await validator.runFullValidation();
             
+            // Debug output to understand what's happening
+            if (report.overallStatus === 'ERROR') {
+                console.error('DEBUG: Validation failed with error:', report.error);
+                console.error('DEBUG: Total checks:', report.summary.totalChecks);
+                console.error('DEBUG: Checks completed:', Object.keys(report.checks));
+                console.error('DEBUG: Issues:', report.issues);
+            }
+            
             expect(report).toHaveProperty('timestamp');
             expect(report).toHaveProperty('testSession');
             expect(report).toHaveProperty('checks');
@@ -301,6 +312,15 @@ describe('Post-Test Validation System', () => {
             fs.writeFileSync(suspiciousPath, 'suspicious content');
 
             const report = await validator.runFullValidation();
+            
+            // Debug output to understand what's happening
+            if (report.overallStatus !== 'CRITICAL') {
+                console.error('DEBUG: Expected CRITICAL but got:', report.overallStatus);
+                console.error('DEBUG: Error:', report.error);
+                console.error('DEBUG: Critical issues:', report.summary.criticalIssues);
+                console.error('DEBUG: Total issues:', report.issues.length);
+                console.error('DEBUG: Issues:', report.issues);
+            }
             
             expect(report.overallStatus).toBe('CRITICAL');
             expect(report.summary.criticalIssues).toBeGreaterThan(0);

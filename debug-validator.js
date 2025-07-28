@@ -1,16 +1,14 @@
-// Debug script to understand PostTestValidator path resolution issue
-
 const fs = require('fs');
 const path = require('path');
 const PostTestValidator = require('./lib/postTestValidator');
 
-// Create test environment exactly like the test does
-const testDir = '.debug-test-env';
+// Simulate the test environment 
+const testDir = '.test-env';
 if (!fs.existsSync(testDir)) {
     fs.mkdirSync(testDir, { recursive: true });
 }
 
-// Create mock critical files for testing (same as test)
+// Create the same mock files as the test
 const mockFiles = {
     'package.json': JSON.stringify({ name: 'test-project', version: '1.0.0' }),
     'TODO.json': JSON.stringify({ tasks: [], execution_count: 0 }),
@@ -25,10 +23,8 @@ Object.entries(mockFiles).forEach(([relativePath, content]) => {
         fs.mkdirSync(dir, { recursive: true });
     }
     fs.writeFileSync(fullPath, content);
-    console.log(`✅ Created: ${fullPath}`);
 });
 
-// Create validator exactly like the test does
 const validator = new PostTestValidator({
     projectRoot: testDir,
     enableFileIntegrity: true,
@@ -39,7 +35,6 @@ const validator = new PostTestValidator({
     enableFileSystemChanges: true
 });
 
-// Override critical files for test environment (same as test)
 validator.criticalFiles = [
     'node_modules/exit/lib/exit.js',
     'node_modules/jest-worker/build/index.js',
@@ -47,28 +42,16 @@ validator.criticalFiles = [
     'TODO.json'
 ];
 
-console.log('\n=== Validator Configuration ===');
-console.log('Project root:', validator.projectRoot);
-console.log('Critical files:', validator.criticalFiles);
-
-console.log('\n=== File Existence Check ===');
-validator.criticalFiles.forEach(relativePath => {
-    const fullPath = path.join(validator.projectRoot, relativePath);
-    const exists = fs.existsSync(fullPath);
-    console.log(`${relativePath} -> ${fullPath} : ${exists ? '✅ EXISTS' : '❌ MISSING'}`);
-});
-
-console.log('\n=== Running initializeBaseline ===');
-validator.initializeBaseline().then(() => {
-    console.log('\n=== Results ===');
-    console.log('Original hashes size:', validator.originalHashes.size);
-    console.log('Hash keys:', Array.from(validator.originalHashes.keys()));
-    
-    // Cleanup
-    fs.rmSync(testDir, { recursive: true, force: true });
-    console.log('\n✅ Cleanup completed');
-}).catch(error => {
-    console.error('❌ Error:', error);
-    // Cleanup even on error
-    fs.rmSync(testDir, { recursive: true, force: true });
+validator.runFullValidation().then((report) => {
+    console.log('Status:', report.overallStatus);
+    console.log('Total checks:', report.summary.totalChecks);
+    console.log('Error:', report.error);
+    console.log('Checks:', Object.keys(report.checks));
+    console.log('Issues count:', report.issues.length);
+}).catch(err => {
+    console.error('Validation error:', err);
+}).finally(() => {
+    if (fs.existsSync(testDir)) {
+        fs.rmSync(testDir, { recursive: true, force: true });
+    }
 });
