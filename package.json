@@ -17,6 +17,10 @@
     "test:debug": "VERBOSE_TESTS=true jest --verbose --detectOpenHandles",
     "test:single": "jest --testNamePattern",
     "test:coverage:resilient": "node scripts/coverage-resilient.js",
+    "coverage:validate": "node scripts/coverage-validator.js",
+    "coverage:monitor": "npm run test:coverage && npm run coverage:validate",
+    "coverage:dashboard": "node scripts/coverage-dashboard.js",
+    "coverage:full-pipeline": "npm run coverage:monitor && npm run coverage:dashboard",
     "prebuild": "echo '🔧 Starting build process...'",
     "postbuild": "echo '🎉 Build process completed successfully'"
   },

@@ -1,0 +1,12 @@
+[
+  {
+    "timestamp": "2025-07-28T09:16:32.084Z",
+    "coverage": {
+      "statements": 74.09,
+      "branches": 85.76,
+      "functions": 77.67,
+      "lines": 74.09
+    },
+    "passed": true
+  }
+]
