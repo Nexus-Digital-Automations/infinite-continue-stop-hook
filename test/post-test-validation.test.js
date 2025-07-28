@@ -12,12 +12,16 @@ describe('Post-Test Validation System', () => {
         if (!fs.existsSync(testDir)) {
             fs.mkdirSync(testDir, { recursive: true });
         }
+        
+        // Disable console isolation for this test to see debug output
+        process.env.PRESERVE_CONSOLE = 'true';
 
         // Create mock critical files for testing
         mockFiles = {
             'package.json': JSON.stringify({ name: 'test-project', version: '1.0.0' }),
             'TODO.json': JSON.stringify({ tasks: [], execution_count: 0 }),
-            'node_modules/exit/lib/exit.js': 'module.exports = function(code) { process.exit(code); };'
+            'node_modules/exit/lib/exit.js': 'module.exports = function(code) { process.exit(code); };',
+            'node_modules/jest-worker/build/index.js': 'module.exports = { Worker: class Worker {} };'
         };
 
         Object.entries(mockFiles).forEach(([relativePath, content]) => {
@@ -41,9 +45,10 @@ describe('Post-Test Validation System', () => {
         
         // Override critical files for test environment
         validator.criticalFiles = [
+            'node_modules/exit/lib/exit.js',
+            'node_modules/jest-worker/build/index.js',
             'package.json',
-            'TODO.json',
-            'node_modules/exit/lib/exit.js'
+            'TODO.json'
         ];
     });
 
@@ -51,20 +56,29 @@ describe('Post-Test Validation System', () => {
         if (fs.existsSync(testDir)) {
             fs.rmSync(testDir, { recursive: true, force: true });
         }
+        delete process.env.PRESERVE_CONSOLE;
     });
 
     describe('Initialization and Baseline', () => {
         test('should initialize baseline hashes for critical files', async () => {
             await validator.initializeBaseline();
-            expect(validator.originalHashes.size).toBeGreaterThan(0);
+            expect(validator.originalHashes.size).toBe(4);
 
-            const exitJsPath = path.join(testDir, 'node_modules/exit/lib/exit.js');
-            expect(validator.originalHashes.has(exitJsPath)).toBe(true);
-
-            const baseline = validator.originalHashes.get(exitJsPath);
-            expect(baseline).toHaveProperty('hash');
-            expect(baseline).toHaveProperty('size');
-            expect(baseline).toHaveProperty('mtime');
+            // Check that all expected files have baselines
+            const expectedFiles = [
+                path.join(testDir, 'node_modules/exit/lib/exit.js'),
+                path.join(testDir, 'node_modules/jest-worker/build/index.js'),
+                path.join(testDir, 'package.json'),
+                path.join(testDir, 'TODO.json')
+            ];
+            
+            for (const expectedFile of expectedFiles) {
+                expect(validator.originalHashes.has(expectedFile)).toBe(true);
+                const baseline = validator.originalHashes.get(expectedFile);
+                expect(baseline).toHaveProperty('hash');
+                expect(baseline).toHaveProperty('size');
+                expect(baseline).toHaveProperty('mtime');
+            }
         });
 
         test('should handle missing critical files gracefully', async () => {
@@ -350,7 +364,7 @@ describe('Post-Test Validation System', () => {
             // Validator should work alongside file operation logging
             const logger = global.fileOperationLogger;
             expect(logger).toHaveProperty('logOperation');
-            expect(logger).toHaveProperty('detectThreats');
+            expect(logger).toHaveProperty('analyzeThreat');
         });
 
         test('should respect test setup file protections', () => {
