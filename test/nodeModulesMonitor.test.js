@@ -67,6 +67,12 @@ describe('NodeModulesMonitor', () => {
         fs.mkdirSync(jestWorkerDir, { recursive: true });
         fs.writeFileSync(path.join(jestWorkerDir, 'index.js'), 'module.exports = { Worker: class Worker {} };');
         
+        // Create jest directory and package.json
+        const jestDir = path.join(nodeModulesPath, 'jest');
+        fs.mkdirSync(jestDir, { recursive: true });
+        fs.writeFileSync(path.join(jestDir, 'package.json'), 
+            JSON.stringify({ name: 'jest', version: '29.7.0' }, null, 2));
+        
         // Create package.json files
         fs.writeFileSync(path.join(nodeModulesPath, 'exit', 'package.json'), 
             JSON.stringify({ name: 'exit', version: '0.1.2' }, null, 2));
@@ -109,46 +115,6 @@ describe('NodeModulesMonitor', () => {
     
     describe('startMonitoring', () => {
         it('should start monitoring successfully', async () => {
-            // Debug paths
-            console.log('testDir:', testDir);
-            console.log('mockNodeModules:', mockNodeModules);
-            console.log('monitor.nodeModulesPath:', monitor.nodeModulesPath);
-            
-            // Check if directories exist
-            console.log('testDir exists:', fs.existsSync(testDir));
-            console.log('mockNodeModules exists:', fs.existsSync(mockNodeModules));
-            
-            // Try to create a simple test file to check permissions
-            const testFile = path.join(mockNodeModules, 'test.txt');
-            try {
-                fs.writeFileSync(testFile, 'test');
-                console.log('Can create test file:', fs.existsSync(testFile));
-            } catch (error) {
-                console.error('Cannot create test file:', error.message);
-            }
-            
-            // Create files manually in test  
-            const exitDir = path.join(mockNodeModules, 'exit', 'lib');
-            const jestWorkerDir = path.join(mockNodeModules, 'jest-worker', 'build');
-            
-            try {
-                fs.mkdirSync(exitDir, { recursive: true });
-                fs.mkdirSync(jestWorkerDir, { recursive: true });
-                
-                fs.writeFileSync(path.join(exitDir, 'exit.js'), 'module.exports = function exit() { process.exit(); };');
-                fs.writeFileSync(path.join(jestWorkerDir, 'index.js'), 'module.exports = { Worker: class Worker {} };');
-                
-                console.log('Files created successfully');
-            } catch (error) {
-                console.error('File creation error:', error.message);
-            }
-            
-            // Verify mock files exist before testing
-            const exitPath = path.join(mockNodeModules, 'exit', 'lib', 'exit.js');
-            const jestWorkerPath = path.join(mockNodeModules, 'jest-worker', 'build', 'index.js');
-            
-            console.log('exitPath exists:', fs.existsSync(exitPath));
-            console.log('jestWorkerPath exists:', fs.existsSync(jestWorkerPath));
             
             const result = await monitor.startMonitoring();
             

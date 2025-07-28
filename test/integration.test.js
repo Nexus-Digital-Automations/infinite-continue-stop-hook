@@ -34,8 +34,12 @@ describe('Stop Hook Integration Tests', () => {
         mockAgentExecutor = global.createMockAgentExecutor();
         mockReviewSystem = global.createMockReviewSystem();
         
-        // Apply fs mocks
-        Object.assign(fs, mockFS);
+        // Apply fs mocks using Jest's built-in mocking
+        Object.keys(mockFS).forEach(key => {
+            if (typeof mockFS[key] === 'function') {
+                fs[key] = mockFS[key];
+            }
+        });
         
         // Mock constructors
         jest.doMock('../lib/taskManager', () => jest.fn(() => mockTaskManager));

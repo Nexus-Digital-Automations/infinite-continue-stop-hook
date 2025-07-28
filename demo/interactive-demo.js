@@ -44,7 +44,7 @@ class InteractiveDemoTool {
         this.rl.on('SIGINT', () => this.gracefulExit());
         
         // Auto-completion for commands (future enhancement)
-        const _commands = [
+        this.commands = [
             'help', 'start', 'stop', 'switch', 'simulate', 'benchmark',
             'export', 'reset', 'status', 'history', 'validate', 'exit'
         ];
