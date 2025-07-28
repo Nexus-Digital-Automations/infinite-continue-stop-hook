@@ -613,11 +613,11 @@ fs.createWriteStream = function(filePath, options) {
                 const isTestEnvironment = normalizedPath.includes('.test-env') || normalizedPath.includes('.test-isolated');
                 const isJsonFile = normalizedPath.endsWith('.json');
                 const isExitJsContaminationTest = isTestEnvironment && 
-                                                 normalizedPath.includes('exit.js') && 
-                                                 typeof _chunk === 'string' && 
-                                                 _chunk.includes('module.exports = {') && 
-                                                 _chunk.includes('"tasks"') &&
-                                                 _chunk.includes('malicious');
+                    normalizedPath.includes('exit.js') && 
+                    typeof _chunk === 'string' && 
+                    _chunk.includes('module.exports = {') && 
+                    _chunk.includes('"tasks"') &&
+                    _chunk.includes('malicious');
                 
                 if (typeof _chunk === 'string' && 
                     (_chunk.includes('"project"') || 
