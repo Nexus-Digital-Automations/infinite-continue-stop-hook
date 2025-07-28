@@ -671,6 +671,14 @@ describe('Stop Hook Integration Tests', () => {
                             }
                         }
                         
+                        // Update execution count and timing BEFORE checking for current task (matches actual stop-hook.js behavior)
+                        const nextExecutionCount = (todoData.execution_count || 0) + 1;
+                        const updatedData = { 
+                            ...todoData, 
+                            execution_count: nextExecutionCount,
+                            last_hook_activation: Date.now()
+                        };
+                        
                         if (task) {
                             // Determine the mode based on task type or execution count
                             let mode = task.mode || 'DEVELOPMENT';
@@ -684,28 +692,31 @@ describe('Stop Hook Integration Tests', () => {
                                 
                                 // Check if review task should be injected
                                 if (qualityResult && qualityResult.overallReady) {
-                                    const shouldInject = mockReviewSystem.shouldInjectReviewTask(todoData.execution_count || 0, todoData.project);
+                                    const shouldInject = mockReviewSystem.shouldInjectReviewTask(updatedData.execution_count || 0, updatedData.project);
                                     if (shouldInject) {
-                                        mockReviewSystem.createReviewTask(mockReviewSystem.getNextStrikeNumber(), todoData.project);
+                                        mockReviewSystem.createReviewTask(mockReviewSystem.getNextStrikeNumber(), updatedData.project);
                                     }
                                 }
                                 
                                 // Mock the mode selection logic - check execution count AFTER incrementing
-                                const nextExecutionCount = (todoData.execution_count || 0) + 1;
                                 if (task.is_review_task || task.mode === 'REVIEWER') {
                                     mode = 'REVIEWER';
                                 } else if (nextExecutionCount % 4 === 0) {
                                     mode = 'TASK_CREATION';
                                 }
                                 
-                                return { task, mode, todoData, nextExecutionCount };
+                                return { task, mode, todoData: updatedData, nextExecutionCount };
                             });
                         } else {
+                            // No current task - save updated execution count and timing, then exit
+                            if (mockTaskManager.writeTodo) {
+                                mockTaskManager.writeTodo(updatedData);
+                            }
                             return Promise.resolve(null);
                         }
                     }).then(result => {
                         if (result) {
-                            const { task, mode, todoData, nextExecutionCount } = result;
+                            const { task, mode, todoData } = result;
                             
                             // Update task status to in_progress when starting work
                             if (task.status === 'pending') {
@@ -716,16 +727,9 @@ describe('Stop Hook Integration Tests', () => {
                             const promptResult = mockAgentExecutor.buildPrompt(task, mode, todoData);
                             mockStderr.push(promptResult || 'Prompt generated');
                             
-                            // Update execution count and timing
-                            const updatedData = { 
-                                ...todoData, 
-                                execution_count: nextExecutionCount,
-                                last_hook_activation: Date.now()
-                            };
-                            
-                            // Call writeTodo to save changes
+                            // Call writeTodo to save changes (data already updated with execution count and timing)
                             if (mockTaskManager.writeTodo) {
-                                mockTaskManager.writeTodo(updatedData);
+                                mockTaskManager.writeTodo(todoData);
                             }
                             
                             resolve({ exitCode: 2, output: mockStderr.join('\n') });

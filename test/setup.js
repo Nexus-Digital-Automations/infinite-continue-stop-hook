@@ -137,18 +137,87 @@ global.__originalFS = {
     writeFile: originalWriteFile
 };
 
-// Override with safe versions that prevent writing to node_modules
+// Enhanced filesystem mock with better isolation and safety
 fs.writeFileSync = function(filePath, data, options) {
-    // Prevent any writes to node_modules or system files
-    if (typeof filePath === 'string' && 
-        (filePath.includes('node_modules') || 
-         filePath.includes('/usr/') || 
-         filePath.includes('/bin/') ||
-         (!filePath.includes('TODO.json') && !filePath.includes('.test-env') && !filePath.includes('test-')))) {
-        console.warn(`Blocked dangerous write attempt to: ${filePath}`);
+    const path = require('path');
+    const normalizedPath = path.resolve(filePath);
+    
+    // Critical system protection - prevent writes to dangerous paths
+    const dangerousPaths = [
+        'node_modules',
+        '/usr/',
+        '/bin/',
+        '/lib/',
+        '/System/',
+        'package-lock.json',
+        'yarn.lock',
+        '.git/',
+        'exit.js',
+        'exit/',
+        '/exit/',
+        '/lib/exit.js',
+        'exit/lib/exit.js',
+        'node_modules/exit'
+    ];
+    
+    // Extra protection: Block any write that looks like it's going to node_modules
+    if (normalizedPath.includes('node_modules') || 
+        normalizedPath.includes('/exit.js') ||
+        normalizedPath.endsWith('exit.js')) {
+        console.warn(`🚫 BLOCKED: Dangerous write to ${normalizedPath}`);
+        if (normalizedPath.includes('exit')) {
+            console.error(`🚨 CRITICAL: Prevented JSON contamination of exit library at ${normalizedPath}`);
+            console.error(`🚨 CRITICAL: Data was: ${typeof data === 'string' ? data.substring(0, 100) : typeof data}...`);
+            // Log stack trace to see where this write is coming from
+            console.error(`🚨 CRITICAL: Write attempted from:`, new Error().stack);
+        }
         return;
     }
-    // For allowed files, continue with original operation
+    
+    if (dangerousPaths.some(dangerous => normalizedPath.includes(dangerous))) {
+        console.warn(`BLOCKED: Dangerous write to ${normalizedPath}`);
+        if (normalizedPath.includes('exit')) {
+            console.error(`CRITICAL: Prevented JSON contamination of exit library at ${normalizedPath}`);
+        }
+        return;
+    }
+    
+    // Enhanced JSON contamination prevention
+    if (typeof data === 'string' && 
+        (data.startsWith('{') || data.startsWith('[')) && 
+        !filePath.endsWith('.json') && 
+        !filePath.endsWith('.backup')) {
+        console.warn(`BLOCKED: JSON write to non-JSON file: ${normalizedPath}`);
+        console.error(`CRITICAL: Prevented JSON contamination - data starts with: ${data.substring(0, 50)}...`);
+        return;
+    }
+    
+    // Only allow writes to explicitly safe test directories
+    const allowedPaths = [
+        '.test-env',
+        '.test-isolated', 
+        'test-todo.json',
+        'backup',
+        '.backup',
+        'development/research-reports',
+        '/tmp/',
+        '/temp/'
+    ];
+    
+    const isAllowed = allowedPaths.some(allowed => 
+        normalizedPath.includes(allowed) || 
+        normalizedPath.includes('/test/') ||
+        path.basename(normalizedPath).startsWith('test-') ||
+        normalizedPath.includes('TODO.json')
+    );
+    
+    if (!isAllowed) {
+        console.warn(`BLOCKED: Unauthorized write to ${normalizedPath}`);
+        return;
+    }
+    
+    // Safe write to test files only
+    console.log(`ALLOWED: Test write to ${normalizedPath}`);
     return originalWriteFileSync.call(this, filePath, data, options);
 };
 
@@ -159,11 +228,26 @@ fs.writeFile = function(filePath, data, options, callback) {
         options = {};
     }
     
-    if (typeof filePath === 'string' && 
-        (filePath.includes('node_modules') || 
-         filePath.includes('/usr/') || 
-         filePath.includes('/bin/') ||
-         (!filePath.includes('TODO.json') && !filePath.includes('.test-env') && !filePath.includes('test-')))) {
+    const path = require('path');
+    const normalizedPath = path.resolve(filePath);
+    
+    // Enhanced protection for writeFile (async)
+    if (normalizedPath.includes('node_modules') || 
+        normalizedPath.includes('/exit.js') ||
+        normalizedPath.endsWith('exit.js') ||
+        filePath.includes('/usr/') || 
+        filePath.includes('/bin/')) {
+        console.warn(`🚫 BLOCKED: Dangerous async write to ${normalizedPath}`);
+        if (normalizedPath.includes('exit')) {
+            console.error(`🚨 CRITICAL: Prevented async JSON contamination of exit library at ${normalizedPath}`);
+            console.error(`🚨 CRITICAL: Async data was: ${typeof data === 'string' ? data.substring(0, 100) : typeof data}...`);
+            console.error(`🚨 CRITICAL: Async write attempted from:`, new Error().stack);
+        }
+        if (callback) callback(null);
+        return;
+    }
+    
+    if (!filePath.includes('TODO.json') && !filePath.includes('.test-env') && !filePath.includes('test-')) {
         console.warn(`Blocked dangerous async write attempt to: ${filePath}`);
         if (callback) callback(null);
         return;
@@ -172,47 +256,105 @@ fs.writeFile = function(filePath, data, options, callback) {
     return originalWriteFile.call(this, filePath, data, options, callback);
 };
 
-// Global test setup
+// Enhanced global test setup with comprehensive isolation
 beforeEach(() => {
-    // Clear any module caches to ensure fresh imports
+    // 1. Clear all mocks first
     jest.clearAllMocks();
+    jest.resetAllMocks();
     
-    // Reset environment variables to clean state
-    delete process.env.TEST_TODO_PATH;
-    delete process.env.TEST_MODE;
+    // 2. Reset module registry to prevent state leakage
+    jest.resetModules();
     
-    // Ensure working directory is consistent
-    process.chdir(path.join(__dirname, '..'));
-});
-
-afterEach(() => {
-    // Clean up any temporary files created during tests
-    const tempFiles = [
-        'test-todo.json',
-        'temp-todo.json',
-        'backup-todo.json'
-    ];
-    
-    tempFiles.forEach(file => {
-        try {
-            if (fs.existsSync(file)) {
-                fs.unlinkSync(file);
-            }
-        } catch {
-            // Ignore cleanup errors
+    // 3. Clear require cache for test modules to ensure fresh imports
+    Object.keys(require.cache).forEach(key => {
+        if (key.includes('/lib/') || key.includes('/test/')) {
+            delete require.cache[key];
         }
     });
     
-    // Reset any global variables that might have been modified
-    if (global.testCleanup) {
-        global.testCleanup.forEach(cleanup => {
-            try {
-                cleanup();
-            } catch {
-                // Ignore cleanup errors
+    // 4. Reset environment variables to clean state
+    // Clear test-specific environment variables
+    delete process.env.TEST_TODO_PATH;
+    delete process.env.TEST_MODE;
+    delete process.env.DEBUG;
+    delete process.env.JEST_WORKER_ID;
+    
+    // Ensure clean test environment
+    process.env.NODE_ENV = 'test';
+    
+    // 5. Ensure working directory is consistent
+    const targetDir = path.join(__dirname, '..');
+    try {
+        process.chdir(targetDir);
+    } catch (error) {
+        console.warn(`Could not change directory to ${targetDir}: ${error.message}`);
+    }
+    
+    // 6. Reset global test state
+    global.testCleanup = [];
+    
+    // 7. Reset mock factories if they have reset capabilities
+    if (global.currentMocks) {
+        Object.values(global.currentMocks).forEach(mock => {
+            if (mock && typeof mock.__reset === 'function') {
+                mock.__reset();
             }
         });
+    }
+    
+    // 8. Isolate console output for cleaner test output
+    if (!process.env.PRESERVE_CONSOLE) {
+        global.isolateConsole();
+    }
+});
+
+afterEach(async () => {
+    // 1. Execute all registered cleanup functions
+    if (global.testCleanup) {
+        for (const cleanup of global.testCleanup) {
+            try {
+                await cleanup();
+            } catch (error) {
+                console.warn(`Cleanup error: ${error.message}`);
+            }
+        }
         global.testCleanup = [];
+    }
+    
+    // 2. Clean up temporary files with enhanced patterns
+    const tempPatterns = [
+        'test-todo*.json',
+        'temp-todo*.json', 
+        'backup-todo*.json',
+        '.test-env*',
+        '.test-isolated*',
+        '.hook-debug-*.json'
+    ];
+    
+    for (const pattern of tempPatterns) {
+        try {
+            const glob = require('glob');
+            const files = glob.sync(pattern);
+            files.forEach(file => {
+                if (fs.existsSync(file)) {
+                    if (fs.statSync(file).isDirectory()) {
+                        fs.rmSync(file, { recursive: true, force: true });
+                    } else {
+                        fs.unlinkSync(file);
+                    }
+                }
+            });
+        } catch (error) {
+            console.warn(`Pattern cleanup error for ${pattern}: ${error.message}`);
+        }
+    }
+    
+    // 3. Restore console output
+    global.restoreConsole();
+    
+    // 4. Force garbage collection if available
+    if (global.gc) {
+        global.gc();
     }
 });
 
@@ -229,20 +371,104 @@ global.registerTestCleanup = function(cleanupFn) {
     global.testCleanup.push(cleanupFn);
 };
 
-// Mock console methods to reduce noise in tests unless specifically needed
-const originalConsole = { ...console };
-global.mockConsole = function() {
+// Enhanced console isolation and process protection
+let originalConsole;
+let originalProcessExit;
+
+global.isolateConsole = function() {
+    if (!originalConsole) {
+        originalConsole = { ...console };
+    }
     console.log = jest.fn();
     console.error = jest.fn();
     console.warn = jest.fn();
     console.info = jest.fn();
+    console.debug = jest.fn();
 };
 
 global.restoreConsole = function() {
-    Object.assign(console, originalConsole);
+    if (originalConsole) {
+        Object.assign(console, originalConsole);
+    }
 };
 
-// Helper for creating isolated test environments
+// Process exit protection to prevent tests from terminating the process
+global.protectProcessExit = function() {
+    if (!originalProcessExit) {
+        originalProcessExit = process.exit;
+        process.exit = function(code) {
+            if (process.env.NODE_ENV === 'test') {
+                throw new Error(`Test attempted to exit with code ${code}`);
+            }
+            return originalProcessExit.call(this, code);
+        };
+    }
+};
+
+global.restoreProcessExit = function() {
+    if (originalProcessExit) {
+        process.exit = originalProcessExit;
+        originalProcessExit = null;
+    }
+};
+
+// Legacy functions for backward compatibility
+global.mockConsole = global.isolateConsole;
+
+// Enhanced isolated test environment factory
+global.createIsolatedTestEnvironment = function(testName) {
+    const testId = `${testName}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const testDir = path.join('.test-isolated', testId);
+    
+    // Ensure complete isolation
+    const originalCwd = process.cwd();
+    const originalEnv = { ...process.env };
+    
+    return {
+        testDir,
+        testId,
+        setup: () => {
+            // Create isolated directory
+            if (!fs.existsSync(testDir)) {
+                fs.mkdirSync(testDir, { recursive: true });
+            }
+            
+            // Set isolated environment
+            process.env.TEST_TODO_PATH = path.join(testDir, 'TODO.json');
+            process.env.TEST_MODE = 'isolated';
+            process.env.NODE_ENV = 'test';
+            
+            // Protect process exit
+            global.protectProcessExit();
+            
+            return testDir;
+        },
+        cleanup: () => {
+            // Restore original environment
+            Object.keys(process.env).forEach(key => {
+                if (key.startsWith('TEST_')) {
+                    delete process.env[key];
+                }
+            });
+            Object.assign(process.env, originalEnv);
+            process.chdir(originalCwd);
+            
+            // Restore process exit
+            global.restoreProcessExit();
+            
+            // Clean up test directory
+            try {
+                if (fs.existsSync(testDir)) {
+                    fs.rmSync(testDir, { recursive: true, force: true });
+                }
+            } catch (error) {
+                console.warn(`Cleanup warning: ${error.message}`);
+            }
+        }
+    };
+};
+
+// Legacy function for backward compatibility
 global.createTestEnvironment = function(options = {}) {
     const testDir = options.testDir || '.test-env';
     const testTodoPath = path.join(testDir, 'TODO.json');

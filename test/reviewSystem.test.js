@@ -16,23 +16,28 @@ const { execSync } = require('child_process');
 describe('ReviewSystem', () => {
     let reviewSystem;
     let mockWorkingDir;
-    let mockFS;
 
     beforeEach(() => {
         reviewSystem = new ReviewSystem();
         mockWorkingDir = '/test/project';
         
-        // Setup standardized mocks using global factory functions
-        mockFS = global.createMockFS();
+        // Reset all mocks first
+        jest.clearAllMocks();
         
-        // Apply fs mocks
-        Object.assign(fs, mockFS);
+        // Setup basic fs mocks - these will be overridden in individual tests
+        fs.existsSync = jest.fn().mockReturnValue(false);
+        fs.readFileSync = jest.fn().mockReturnValue('{}');
+        fs.writeFileSync = jest.fn();
+        fs.mkdirSync = jest.fn();
+        fs.readdirSync = jest.fn().mockReturnValue([]);
+        fs.statSync = jest.fn().mockReturnValue({ mtime: new Date() });
+        fs.unlinkSync = jest.fn();
+        fs.copyFileSync = jest.fn();
+        fs.renameSync = jest.fn();
+        fs.accessSync = jest.fn();
         
         // Set up execSync mock
         execSync.mockReturnValue('');
-        
-        // Reset all mocks
-        jest.clearAllMocks();
     });
 
     describe('Constructor', () => {
@@ -114,7 +119,9 @@ describe('ReviewSystem', () => {
             const packageWithoutBuild = { scripts: { test: 'jest' } };
             
             fs.existsSync.mockImplementation((filePath) => {
-                return filePath.includes('package.json');
+                if (filePath.includes('package.json')) return true;
+                if (filePath.includes('node_modules')) return true;
+                return false;
             });
             fs.readFileSync.mockReturnValue(JSON.stringify(packageWithoutBuild));
 

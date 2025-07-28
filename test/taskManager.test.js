@@ -9,7 +9,7 @@
 jest.mock('fs');
 jest.mock('../lib/autoFixer', () => {
     return jest.fn().mockImplementation(() => {
-        return global.createMockAutoFixer ? global.createMockAutoFixer() : {
+        return {
             getFileStatus: jest.fn().mockResolvedValue({ valid: true, canAutoFix: false }),
             autoFix: jest.fn().mockResolvedValue({ success: true, hasChanges: false }),
             recoverCorruptedFile: jest.fn().mockResolvedValue({ success: true, finalData: {} }),
@@ -50,6 +50,9 @@ describe('TaskManager', () => {
         
         // Create TaskManager instance which will use the mocked AutoFixer
         taskManager = new TaskManager(mockTodoPath);
+        
+        // Override the autoFixer instance with our mock
+        taskManager.autoFixer = mockAutoFixer;
     });
 
     describe('Constructor', () => {
