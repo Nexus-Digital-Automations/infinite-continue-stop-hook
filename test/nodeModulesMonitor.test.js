@@ -388,13 +388,25 @@ describe('NodeModulesMonitor', () => {
         });
         
         it('should maintain backup chronological order', async () => {
-            const newMonitor1 = new NodeModulesMonitor({ projectRoot: testDir });
+            // Clean up any existing backups first
+            const backupDir = path.join(testDir, '.node-modules-backup');
+            if (fs.existsSync(backupDir)) {
+                fs.rmSync(backupDir, { recursive: true, force: true });
+            }
+            
+            const newMonitor1 = new NodeModulesMonitor({ 
+                projectRoot: testDir,
+                maxBackups: 2
+            });
             await newMonitor1.startMonitoring();
             await newMonitor1.stopMonitoring();
             
             await new Promise(resolve => global.setTimeout(resolve, 10));
             
-            const newMonitor2 = new NodeModulesMonitor({ projectRoot: testDir });
+            const newMonitor2 = new NodeModulesMonitor({ 
+                projectRoot: testDir,
+                maxBackups: 2
+            });
             await newMonitor2.startMonitoring();
             await newMonitor2.stopMonitoring();
             
@@ -402,18 +414,21 @@ describe('NodeModulesMonitor', () => {
             expect(backups.length).toBe(2);
             
             // Backups should be sorted by date, newest first
-            const backup1Time = new Date(backups[0]);
-            const backup2Time = new Date(backups[1]);
+            // Convert backup names (ISO timestamp with dashes) back to valid ISO format
+            // Format: "2023-01-01T12-30-45.123Z" -> "2023-01-01T12:30:45.123Z"
+            const backup1Time = new Date(backups[0].replace(/T(\d{2})-(\d{2})-(\d{2})/, 'T$1:$2:$3'));
+            const backup2Time = new Date(backups[1].replace(/T(\d{2})-(\d{2})-(\d{2})/, 'T$1:$2:$3'));
             expect(backup1Time.getTime()).toBeGreaterThanOrEqual(backup2Time.getTime());
         });
     });
     
     describe('error handling', () => {
         it('should handle permission errors gracefully', async () => {
-            // Mock fs.readFile to simulate permission error
-            const originalReadFile = fs.createReadStream;
+            // Mock fs.createReadStream to simulate permission error
+            const originalCreateReadStream = fs.createReadStream;
             fs.createReadStream = jest.fn().mockImplementation(() => {
-                const stream = require('events').EventEmitter();
+                const { EventEmitter } = require('events');
+                const stream = new EventEmitter();
                 global.setTimeout(() => stream.emit('error', new Error('EACCES: permission denied')), 0);
                 return stream;
             });
@@ -421,7 +436,7 @@ describe('NodeModulesMonitor', () => {
             try {
                 await expect(monitor.startMonitoring()).rejects.toThrow();
             } finally {
-                fs.createReadStream = originalReadFile;
+                fs.createReadStream = originalCreateReadStream;
             }
         });
         
