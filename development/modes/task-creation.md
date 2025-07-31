@@ -1,569 +1,238 @@
-# TASK CREATION Mode Instructions
+# TASK-CREATION Mode Instructions
 
-You are in TASK CREATION mode, responsible for intelligently analyzing the project and creating new tasks ONLY when necessary.
+You are in TASK-CREATION mode, specialized in analyzing projects and creating structured, actionable tasks with comprehensive quality frameworks.
 
-## CRITICAL REQUIREMENTS
+## Decision Framework: When to Create Tasks
 
-**MINIMUM TASK CREATION**: If the project is not complete, you MUST create at least **4 tasks or subtasks**. If the project needs fewer than 4 tasks to complete, create as many as needed until completion.
+### CREATE TASKS FOR:
+- **Multi-step work** (3+ distinct operations)
+- **Cross-cutting changes** (multiple files/components)
+- **Research-required features** (unknown implementation details)
+- **Quality assurance work** (testing, security, performance)
+- **Integration work** (external systems, API changes)
 
-**INTELLIGENT DECISION-MAKING**: Don't automatically create tasks. Analyze whether task creation is actually needed based on project state.
+### CREATE SUBTASKS FOR:
+- **Task complexity** > 4 hours estimated work
+- **Clear sequential dependencies** between work items
+- **Parallel execution opportunities** (different team members)
+- **Risk isolation** (separate high-risk from low-risk work)
 
-## IMMEDIATE ACTIONS
+### SKIP TASK CREATION FOR:
+- **Single-file edits** < 30 minutes
+- **Simple configuration changes**
+- **Obvious bug fixes** with known solutions
+- **Documentation updates** without research needs
 
-1. **Read TODO.json** from the project root
-2. **Analyze project completeness** - assess if the current tasks provide adequate coverage
-3. **Determine creation strategy** - decide between new tasks, subtasks, or no action
-4. **Apply minimum requirement** - create at least 4 tasks/subtasks if project incomplete
+## Task Quality Templates
 
-## DECISION FRAMEWORK
+### Feature Task Template
+```
+Title: Implement [Feature Name]
+Description: [User value and technical approach]
+Mode: development
+Priority: [high|medium|low based on Priority Matrix]
+Success Criteria:
+- Feature works as specified in requirements
+- All automated tests pass
+- Code coverage maintains minimum threshold
+- Documentation updated
+Estimate: [2-6 hours]
+Dependencies: [list of blocking tasks]
+Important Files: [key files that will be modified]
+```
 
-### When to Create NEW STANDALONE TASKS
-✅ **Create new tasks for:**
-- Missing core functionality or features
-- Technical debt that needs addressing
-- Integration with external systems
-- Performance optimization needs
-- Security implementations
-- Documentation gaps
-- Testing coverage improvements
-- New requirements or user stories
+### Bug Fix Task Template
+```
+Title: Fix [Bug Description]
+Description: [Root cause analysis and solution approach]
+Mode: development
+Priority: [critical|high|medium|low based on impact/urgency]
+Success Criteria:
+- Bug no longer reproducible
+- Regression tests added
+- Root cause documented
+- Fix verified in production-like environment
+Estimate: [1-4 hours]
+```
 
-### When to Create SUBTASKS
-✅ **Break existing tasks into subtasks when:**
-- Current task is larger than 4 hours
-- Task requires multiple skill sets
-- Natural decomposition points exist
-- Can be parallelized effectively
-- Different testing strategies are needed
-- Complex integration points exist
+### Research Spike Template
+```
+Title: Research [Technology/Approach]
+Description: [Questions to answer and decisions to make]
+Mode: research
+Priority: [based on blocking impact]
+Success Criteria:
+- Key questions answered with evidence
+- Recommendation documented with pros/cons
+- Proof of concept completed (if applicable)
+- Implementation approach defined
+- Research report created: ./development/research-reports/research-report-{task_id}.md
+Estimate: [2-8 hours]
+Time-boxed: [maximum research time allowed]
+Important Files: [
+  "./development/research-reports/research-report-{task_id}.md"
+]
+```
 
-### When to CREATE NOTHING
-✅ **Skip task creation if:**
-- Current tasks adequately cover project scope
-- All major functionality is planned
-- Project roadmap is complete and well-defined
-- No significant gaps or technical debt exist
-- Tasks are appropriately sized (2-4 hours each)
+### Refactoring Task Template
+```
+Title: Refactor [Component/System]
+Description: [Quality improvements and architectural goals]
+Mode: refactoring
+Priority: [typically medium unless blocking]
+Success Criteria:
+- Code quality metrics improved
+- No functional behavior changes
+- All existing tests pass
+- Performance maintained or improved
+Estimate: [2-8 hours]
+Risk Level: [low|medium|high based on scope]
+```
 
-### FALLBACK BEHAVIOR
-If you determine that NO new tasks or subtasks are needed:
-1. **Mark current task as completed** if it's actually done
-2. **Proceed to the next pending task** in the TODO.json
-3. **Continue normal execution workflow**
+## Priority Matrix Framework
+
+### High Priority (P0/P1)
+- **Business Critical**: User-facing features, revenue-blocking bugs
+- **Security Issues**: Vulnerabilities, data exposure risks
+- **System Stability**: Performance degradation, service outages
+- **Dependency Blockers**: Tasks blocking other team members
+
+### Medium Priority (P2)
+- **User Experience**: Performance improvements, UX enhancements
+- **Technical Debt**: Code quality, maintainability improvements
+- **Feature Enhancements**: New functionality with clear user value
+- **Documentation**: Critical documentation gaps
+
+### Low Priority (P3/P4)
+- **Nice-to-Have Features**: Limited user impact or edge cases
+- **Code Cleanup**: Non-blocking refactoring opportunities
+- **Internal Tools**: Developer productivity improvements
+- **Documentation Polish**: Comprehensive documentation updates
+
+## Dependency Mapping
+
+### Dependency Types
+- **Hard Dependencies**: Cannot start until blocker completes
+- **Soft Dependencies**: Can start but optimal to wait
+- **Resource Dependencies**: Same person/team required
+- **Integration Dependencies**: Multiple tasks need coordination
+
+### Dependency Documentation
+```
+Task A → Task B (hard): Task B cannot begin until Task A deliverables complete
+Task C ⟷ Task D (integration): Tasks must coordinate during implementation
+Task E ≈ Task F (resource): Same specialist required for both tasks
+```
 
 ## Task Decomposition Strategies
 
-### 1. Vertical Slicing (User Value)
-Break features into complete, shippable increments:
-```
-User Dashboard → Basic layout → Real-time updates → Filtering → Export → Customization
-```
-
-### 2. Horizontal Slicing (Technical Layers)
-Split by architectural components:
-```
-API Integration → Research docs → Data models → API client → Caching → Error handling → UI
-```
-
-### 3. Risk-First Decomposition
-Tackle unknowns first:
-```
-Payment System → Research providers → Test sandbox → Design architecture → Basic flow → Refunds → Subscriptions
-```
-
-## Subtask Guidelines
-
-### Ideal Task Size
-- **2-4 hours**: One focused work session
-- **Single Responsibility**: Does one thing well
-- **Clear Success Criteria**: Measurable outcomes
-- **Minimal Dependencies**: Can work in parallel
-
-### Examples
-✅ **Good**: "Create login endpoint with JWT generation"
-❌ **Too Large**: "Implement entire authentication system"
-❌ **Too Small**: "Create a variable"
-
-## PROJECT ANALYSIS GUIDE
-
-### Assess Project Completeness
-Before creating tasks, evaluate:
-- **Functional Coverage**: Are all core features planned?
-- **Technical Debt**: What needs refactoring or improvement?
-- **Testing Gaps**: Where is test coverage insufficient?
-- **Documentation Needs**: What's missing or outdated?
-- **Performance Issues**: Any optimization opportunities?
-- **Security Concerns**: What security measures are needed?
-- **Integration Points**: Are external system connections handled?
-
-### Identify Task Gaps
-Look for missing tasks in these areas:
-- **User-facing features** not yet implemented
-- **API endpoints** or data models needed
-- **Database migrations** or schema changes
-- **Authentication/authorization** components
-- **Error handling** and logging improvements
-- **Deployment and DevOps** requirements
-- **Monitoring and observability** setup
-
-## When to Create Tasks
-
-### Create RESEARCH Tasks For:
-- Unknown external APIs
-- New technologies/frameworks
-- Complex architectural decisions
-- Performance optimization needs
-- Security implementation patterns
-
-### Split Tasks When:
-- Different skill sets required
-- Can be parallelized
-- Natural checkpoint exists
-- Different testing strategies needed
-
-### Keep Together When:
-- Tightly coupled logic
-- Shared context critical
-- Overhead exceeds benefit
-- Single atomic change required
-
-## Common Templates
-
-### API Integration
-1. Research API capabilities and limits
-2. Design data model mappings
-3. Build authentication flow
-4. Create basic CRUD operations
-5. Add error handling and retries
-6. Implement rate limiting
-7. Add caching layer
-8. Write integration tests
-
-### UI Feature
-1. Design component structure
-2. Build static components
-3. Add state management
-4. Connect to backend
-5. Add loading/error states
-6. Implement optimistic updates
-7. Add animations/transitions
-8. Write component tests
-
-## Creating Tasks Using TaskManager CLI
-
-**CRITICAL**: Always use the TaskManager CLI to create tasks via bash commands. Do NOT manually edit TODO.json.
-
-### CLI Command Usage
-
-Create tasks using the `task-cli.js` command-line tool:
-
-```bash
-# Create a development task
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" create \
-  --title "Implement user authentication system" \
-  --description "Create login/logout functionality with JWT tokens" \
-  --mode "DEVELOPMENT" \
-  --priority "high" \
-  --dependencies "src/auth/,package.json" \
-  --important-files "src/auth/login.js,README.md" \
-  --success-criteria "Users can log in,JWT tokens generated,Logout clears session" \
-  --estimate "4 hours"
-```
-
-### Batch Task Creation
-
-When creating multiple related tasks, create a JSON file and use batch mode:
-
-```bash
-# Create batch-tasks.json file
-cat > batch-tasks.json << 'EOF'
-[
-  {
-    "title": "Set up test framework",
-    "description": "Configure Jest for unit testing",
-    "mode": "TESTING",
-    "priority": "high",
-    "dependencies": ["package.json"],
-    "important_files": ["package.json"],
-    "success_criteria": ["Jest is configured and running", "Sample test passes"]
-  },
-  {
-    "title": "Write unit tests for auth module",
-    "description": "Create comprehensive tests for authentication functions",
-    "mode": "TESTING",
-    "priority": "high",
-    "dependencies": ["src/auth/", "jest.config.js"],
-    "important_files": ["src/auth/login.js", "src/auth/middleware.js"],
-    "success_criteria": ["95%+ test coverage for auth module", "All tests pass"]
-  }
-]
-EOF
-
-# Create all tasks from the batch file
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" batch --file batch-tasks.json
-```
-
-### Task Status Management
-
-```bash
-# Update task status to in progress
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" status task-1 in_progress
-
-# Mark task as completed
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" status task-1 completed
-
-# Check current task details
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" current
-
-# List all pending tasks
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" list --status pending
-```
-
-### Review Strike Failure Response
-
-When review strikes fail, use the CLI to create remediation tasks:
-
-#### Strike 1 Failure (Build Issues)
-```bash
-# Create build setup task
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" create \
-  --title "Fix build configuration" \
-  --description "Resolve build errors and setup proper build process" \
-  --mode "DEVELOPMENT" \
-  --priority "high" \
-  --dependencies "package.json" \
-  --important-files "package.json,tsconfig.json" \
-  --success-criteria "Project builds without errors,All dependencies installed"
-
-# Create dependency installation task  
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" create \
-  --title "Install missing dependencies" \
-  --description "Add all required project dependencies" \
-  --mode "DEVELOPMENT" \
-  --priority "high" \
-  --dependencies "package.json" \
-  --success-criteria "All dependencies in package.json,npm install succeeds"
-```
-
-#### Strike 2 Failure (Lint Issues)
-```bash
-# Create linting setup task
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" create \
-  --title "Set up linting tools" \
-  --description "Install and configure ESLint/Prettier for code quality" \
-  --mode "DEVELOPMENT" \
-  --priority "high" \
-  --dependencies "package.json" \
-  --important-files "package.json,.eslintrc" \
-  --success-criteria "ESLint configured,Linting rules active,Zero lint errors"
-
-# Create code style fixes task
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" create \
-  --title "Fix code style violations" \
-  --description "Resolve all linting and code style issues" \
-  --mode "REFACTORING" \
-  --priority "high" \
-  --dependencies "src/" \
-  --success-criteria "All lint errors resolved,Consistent code formatting"
-```
-
-#### Strike 3 Failure (Test Coverage)
-```bash
-# Create test framework setup
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" create \
-  --title "Set up Jest testing framework" \
-  --description "Install and configure Jest for unit testing" \
-  --mode "TESTING" \
-  --priority "high" \
-  --dependencies "package.json" \
-  --important-files "package.json,jest.config.js" \
-  --success-criteria "Jest installed,Basic test passes,Coverage reporting enabled"
-
-# Create comprehensive test tasks for each module
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" create \
-  --title "Write unit tests for taskManager" \
-  --description "Create comprehensive tests for lib/taskManager.js" \
-  --mode "TESTING" \
-  --priority "high" \
-  --dependencies "lib/taskManager.js" \
-  --important-files "lib/taskManager.js" \
-  --success-criteria "95%+ test coverage,All methods tested,Edge cases covered"
-```
-
-## JSON Structure for TODO.json
-
-### Task Object Structure
-```json
-{
-  "id": "task_[number]",
-  "title": "Brief descriptive title",
-  "description": "Detailed explanation of what needs to be done",
-  "mode": "DEVELOPMENT|TESTING|RESEARCH|DEBUGGING|REFACTORING",
-  "priority": "high|medium|low",
-  "status": "pending",
-  "success_criteria": [
-    "Specific measurable outcome 1",
-    "Specific measurable outcome 2"
-  ],
-  "dependencies": ["config.yaml", "src/api/"],        // Files/dirs needed for context
-  "estimate": "2-4 hours",                            // Optional
-  "important_files": ["README.md", "src/auth.js"],   // Critical files to read first
-  "requires_research": false                          // Optional
-}
-```
-
-### Understanding Dependencies vs Important Files
-
-**`dependencies`**: Files, directories, or resources that Claude Code needs to understand before starting the task. These provide essential context for the work.
-
-**`important_files`**: Critical files that should be read immediately when the task begins. These are the most essential files for understanding the task requirements.
-
-### Dependencies Parameter Usage
-
-The `dependencies` array should include:
-
-#### Configuration Files
-```json
-"dependencies": [
-  "package.json",        // For Node.js projects
-  "requirements.txt",    // For Python projects  
-  "Cargo.toml",         // For Rust projects
-  "pom.xml",            // For Java projects
-  "composer.json"       // For PHP projects
-]
-```
-
-#### Key Directories
-```json
-"dependencies": [
-  "src/",               // Main source code
-  "lib/",               // Library code
-  "config/",            // Configuration files
-  "docs/",              // Documentation
-  "tests/",             // Test files
-  "migrations/"         // Database migrations
-]
-```
-
-#### Related Features/Modules
-```json
-"dependencies": [
-  "src/auth/",          // Authentication module
-  "src/api/routes/",    // API routing logic
-  "src/components/",    // UI components
-  "src/utils/helpers.js" // Utility functions
-]
-```
-
-### Important Files Parameter Usage
-
-The `important_files` array should contain the most critical files to read first:
-
-#### Project Documentation
-```json
-"important_files": [
-  "README.md",          // Project overview
-  "ARCHITECTURE.md",    // System design
-  "API.md",            // API documentation
-  "DEPLOYMENT.md"      // Deployment guide
-]
-```
-
-#### Core Implementation Files
-```json
-"important_files": [
-  "src/main.js",        // Application entry point
-  "src/app.py",         // Main application file
-  "src/server.rs",      // Server implementation
-  "src/index.html"      // Main HTML template
-]
-```
-
-#### Configuration and Setup
-```json
-"important_files": [
-  ".env.example",       // Environment variables
-  "docker-compose.yml", // Container setup
-  "webpack.config.js",  // Build configuration
-  "tsconfig.json"       // TypeScript config
-]
-```
-
-### Best Practices for File Specifications
-
-#### Use Relative Paths
-```json
-// ✅ Good
-"dependencies": ["src/auth/", "config/database.yml"]
-
-// ❌ Avoid absolute paths
-"dependencies": ["/home/user/project/src/auth/"]
-```
-
-#### Be Specific When Possible
-```json
-// ✅ Good - Specific files
-"important_files": ["src/auth/login.js", "src/auth/middleware.js"]
-
-// ✅ Also good - Focused directories
-"dependencies": ["src/auth/", "src/middleware/"]
-
-// ❌ Too broad
-"dependencies": ["src/", "**/*.js"]
-```
-
-#### Language-Agnostic Examples
-```json
-// Python Project
-"dependencies": ["requirements.txt", "src/", "tests/"],
-"important_files": ["README.md", "main.py", "config.py"]
-
-// Rust Project  
-"dependencies": ["Cargo.toml", "src/", "tests/"],
-"important_files": ["README.md", "src/main.rs", "src/lib.rs"]
-
-// Go Project
-"dependencies": ["go.mod", "cmd/", "internal/"],
-"important_files": ["README.md", "main.go", "internal/app/"]
-
-// React Project
-"dependencies": ["package.json", "src/", "public/"],
-"important_files": ["README.md", "src/App.js", "src/index.js"]
-```
-
-### Task Status Updates
-- **pending**: Not started
-- **in_progress**: Currently working
-- **completed**: Finished successfully
-- **blocked**: Waiting on dependencies
-
-## Quick Reference
-
-### Priority Matrix
-| Priority | Impact | Urgency | Examples |
-|----------|--------|---------|----------|
-| High | Critical path | Immediate | Security fixes, blocking bugs |
-| Medium | Important | Soon | New features, optimizations |
-| Low | Nice to have | Eventually | UI polish, minor improvements |
-
-### Dependency Types
-- **Technical**: Code/API dependencies
-- **Data**: Database schema, migrations
-- **Team**: Cross-team handoffs
-- **External**: Third-party services
-
-### Success Checklist
-Before creating tasks, ensure:
-- [ ] Clear acceptance criteria defined
-- [ ] Dependencies explicitly mapped
-- [ ] 2-4 hour scope maintained
-- [ ] Success metrics are measurable
-- [ ] Priority aligns with project goals
-- [ ] Mode correctly assigned
-
-## Task Creation Mindset
-
-Think strategically about:
-- **Value Delivery**: What provides the most user/business value?
-- **Risk Mitigation**: What could block progress?
-- **Parallelism**: What can teams work on simultaneously?
-- **Integration Points**: Where do components connect?
-- **Incremental Progress**: How to show continuous improvement?
-
-## Quick CLI Reference for Claude Code
-
-### Most Common Commands
-```bash
-# Create a basic task
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" create --title "Task Title" --description "Description" --mode "DEVELOPMENT" --priority "high"
-
-# Mark task completed  
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" status <task-id> completed
-
-# List pending tasks
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" list --status pending
-
-# Get current task info
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" current
-
-# Show help
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" help
-```
-
-### Review Strike Response Commands
-```bash
-# When any strike fails, create remediation tasks:
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/task-cli.js" create \
-  --title "Fix [issue]" \
-  --description "Resolve [specific problem]" \
-  --mode "DEVELOPMENT|TESTING|REFACTORING" \
-  --priority "high" \
-  --dependencies "[relevant-files]" \
-  --success-criteria "[specific-outcomes]"
-```
-
-### TaskManager API for Claude Code
-
-**CRITICAL**: Always use absolute paths when working with TaskManager from Claude Code:
-
+### Vertical Slicing (User Value)
+Break features into complete, shippable increments that deliver value to users.
+- **Thin slice approach**: Minimal viable feature implementation
+- **User journey mapping**: Complete user workflow segments
+- **Value validation**: Each slice provides measurable user benefit
+
+### Horizontal Slicing (Technical Layers)  
+Split by architectural components when integration complexity requires it.
+- **API-first development**: Backend endpoints before frontend
+- **Data layer isolation**: Database changes before business logic
+- **Infrastructure preparation**: Environment setup before feature work
+
+### Risk-First Decomposition
+Tackle unknowns and high-risk components early to reduce project uncertainty.
+- **Technical spikes**: Research and proof-of-concept work
+- **Integration testing**: Early validation of system boundaries
+- **Performance validation**: Load testing and bottleneck identification
+
+## Task Creation Workflow
+
+### 1. Analysis Phase
+- **Project State Assessment**: Current codebase, infrastructure, team capacity
+- **Requirement Clarification**: User stories, acceptance criteria, business constraints
+- **Technical Discovery**: Architecture review, dependency analysis, risk assessment
+- **Research Report Integration**: Check for existing research reports at `./development/research-reports/research-report-{related_task_id}.md`
+
+### 2. Decomposition Phase
+- **Work Breakdown Structure**: Hierarchical task organization
+- **Effort Estimation**: Story points or hour-based estimates with confidence intervals
+- **Dependency Mapping**: Task relationships and coordination needs
+- **Research Report Planning**: For research tasks, automatically include `./development/research-reports/research-report-{task_id}.md` in important_files
+
+### 3. Prioritization Phase
+- **Business Value Scoring**: User impact and revenue considerations
+- **Technical Risk Assessment**: Implementation complexity and unknown factors
+- **Resource Optimization**: Team skills alignment and parallel work opportunities
+
+### 4. Validation Phase
+- **SMART Criteria Check**: Specific, Measurable, Achievable, Relevant, Time-bound
+- **Acceptance Criteria Review**: Testable and complete success conditions
+- **Definition of Done Alignment**: Quality standards and completion requirements
+- **Research Integration Validation**: Ensure research tasks include standardized report creation and consumption
+
+## Quality Assurance Integration
+
+### Built-in Quality Gates
+- **Code Review Requirements**: Peer review and automated checks
+- **Testing Standards**: Unit, integration, and acceptance test coverage
+- **Documentation Updates**: README, API docs, and architectural decisions
+- **Performance Benchmarks**: Response time and throughput validation
+
+### Success Metrics
+- **Task Completion Rate**: Percentage of tasks completed without rework
+- **Estimate Accuracy**: Actual vs. estimated effort variance
+- **Quality Metrics**: Defect rates, code coverage, performance benchmarks
+- **Team Velocity**: Sprint capacity and throughput trends
+
+## TaskManager API Integration
+
+Reference CLAUDE.md for complete TaskManager API and CLI usage patterns.
+
+### Automatic Research Report Integration
+
+When creating tasks that require research:
+
+1. **Check for existing reports**: Look for `./development/research-reports/research-report-{related_task_id}.md`
+2. **Include in important_files**: Add research report path to task important_files
+3. **Update success criteria**: Include research report creation/review in success criteria
+
+### Research Task Integration Pattern
 ```javascript
-// Initialize TaskManager
-const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager');
-const taskManager = new TaskManager('./TODO.json');
+// For research tasks, automatically include research report
+const researchTask = {
+  title: "Research Authentication Patterns",
+  mode: "research",
+  important_files: [
+    `./development/research-reports/research-report-${taskId}.md`,
+    ...otherFiles
+  ],
+  success_criteria: [
+    "Research questions answered with evidence",
+    "Recommendation documented with pros/cons", 
+    `Research report created: ./development/research-reports/research-report-${taskId}.md`,
+    ...otherCriteria
+  ]
+};
 
-// Read TODO.json
-const todoData = await taskManager.readTodo();
-
-// Get current task
-const currentTask = await taskManager.getCurrentTask();
-
-// Create new task
-const taskId = await taskManager.createTask({
-  title: "Task Title",
-  description: "Task Description", 
-  mode: "DEVELOPMENT",
-  priority: "high",
-  success_criteria: ["Criteria 1", "Criteria 2"]
-});
-
-// Update task status
-await taskManager.updateTaskStatus(taskId, "in_progress"); // or "completed"
-
-// Write updated TODO.json
-await taskManager.writeTodo(todoData);
+// For implementation tasks that depend on research
+const implementationTask = {
+  title: "Implement Authentication System",
+  mode: "development",
+  important_files: [
+    `./development/research-reports/research-report-${researchTaskId}.md`, // Reference research
+    ...implementationFiles
+  ],
+  dependencies: [researchTaskId]
+};
 ```
 
-## 🔧 COMMIT YOUR CHANGES AFTER TASK CREATION
-
-**MANDATORY**: After creating tasks, commit your work:
-
+### Quick Task Creation Commands
 ```bash
-# Stage all changes
-git add -A
+# Create feature task with research report integration
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); /* task creation logic with research integration */"
 
-# Commit with descriptive message (write your own message)
-git commit -m "feat: create [task description]
+# Add subtasks to existing task
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.addSubtask('parent_id', {...})"
 
-- [bullet point of what you accomplished]
-- [another accomplishment]
-
-🤖 Generated with Claude Code
-Co-Authored-By: Claude <noreply@anthropic.com>"
-
-# Push to remote (optional but recommended)
-git push
+# Update task priority/status
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.updateTaskStatus('task_id', 'in_progress')"
 ```
-
-**Important**: 
-- Write a meaningful commit message describing what tasks you created
-- Use conventional commit format (feat:, fix:, docs:, etc.)
-- Include task-specific details in the message body
-- This is required before starting the next task
-
-## FINAL REMINDERS
-
-**MINIMUM REQUIREMENT**: Create at least 4 tasks/subtasks if the project is incomplete. If fewer than 4 tasks are needed to complete the project, create only what's necessary.
-
-**FALLBACK**: If no task creation is needed, proceed to the next pending task in the workflow.
-
-Remember: Create tasks that move the project forward in meaningful, testable increments, but only when actually needed.

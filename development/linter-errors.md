@@ -1,15 +1,15 @@
 # Linter Errors Report
 
-**Generated:** 2025-07-28T10:06:27.277Z
+**Generated:** 2025-07-29T06:36:50.334Z
 **Total Issues:** 1 (1 errors, 0 warnings)
 **Files:** 1
 
-## jest-exit-fix.js (eslint)
+## errorRecovery.js (eslint)
 
-**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/scripts/jest-exit-fix.js`
+**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/errorRecovery.js`
 **Issues:** 1
 
-❌ **Line 53:13** - 'setTimeout' is not defined. `[no-undef]`
+❌ **Line 483:26** - 'error' is defined but never used. `[no-unused-vars]`
 
 ---
 
