@@ -81,18 +81,17 @@ describe('AgentExecutor', () => {
             expect(prompt).toContain('Project: Test Project');
             expect(prompt).toContain('Progress: 1/3 tasks (33%)');
             expect(prompt).toContain('## Critical Instructions');
-            expect(prompt).toContain('IMMEDIATELY read ALL files in the development directory');
+            expect(prompt).toContain('READ OR REVIEW IF ALREADY READ all files listed below:');
             expect(prompt).toContain('These files contain ALL necessary context and instructions');
         });
 
         test('should include task-specific file instructions', () => {
             const prompt = agentExecutor.buildPrompt(mockTask, 'DEVELOPMENT', mockTodoData);
             
-            expect(prompt).toContain('ALSO read the following task-specific files');
-            expect(prompt).toContain('REVIEW `README.md`');
-            expect(prompt).toContain('REVIEW `src/main.js`');
-            expect(prompt).toContain('READ `src/test.js`');
-            expect(prompt).toContain('READ `package.json`');
+            expect(prompt).toContain('`README.md`');
+            expect(prompt).toContain('`src/main.js`');
+            expect(prompt).toContain('`src/test.js`');
+            expect(prompt).toContain('`package.json`');
         });
 
         test('should handle TASK_CREATION mode specifically', () => {
@@ -412,11 +411,10 @@ describe('AgentExecutor', () => {
         test('should build instructions for task with files', () => {
             const instructions = agentExecutor.buildTaskFileInstructions(mockTask, 5);
             
-            expect(instructions).toContain('ALSO read the following task-specific files');
-            expect(instructions).toContain('5. REVIEW `README.md`');
-            expect(instructions).toContain('6. REVIEW `src/main.js`');
-            expect(instructions).toContain('7. READ `src/test.js`');
-            expect(instructions).toContain('8. READ `package.json`');
+            expect(instructions).toContain('5. `README.md`');
+            expect(instructions).toContain('6. `src/main.js`');
+            expect(instructions).toContain('7. `src/test.js`');
+            expect(instructions).toContain('8. `package.json`');
         });
 
         test('should handle research task with existing report', () => {
@@ -429,8 +427,7 @@ describe('AgentExecutor', () => {
             
             const instructions = agentExecutor.buildTaskFileInstructions(mockTask, 1);
             
-            expect(instructions).toContain('REVIEW RESEARCH REPORT');
-            expect(instructions).toContain('contains previous research findings');
+            expect(instructions).toContain('research report - contains previous research findings');
             
             // Cleanup
             if (fs.existsSync(path.join(reportsDir, 'research-report-task_123.md'))) {
@@ -443,8 +440,7 @@ describe('AgentExecutor', () => {
             
             const instructions = agentExecutor.buildTaskFileInstructions(mockTask, 1);
             
-            expect(instructions).toContain('CREATE RESEARCH REPORT');
-            expect(instructions).toContain('following standardized template');
+            expect(instructions).toContain('create research report following standardized template');
         });
 
         test('should return empty string for task without files', () => {
@@ -468,9 +464,9 @@ describe('AgentExecutor', () => {
             
             const instructions = agentExecutor.buildTaskFileInstructions(taskWithNullFiles, 1);
             
-            expect(instructions).toContain('REVIEW `valid.md`');
-            expect(instructions).toContain('READ `valid.js`');
-            expect(instructions).toContain('READ `another.js`');
+            expect(instructions).toContain('`valid.md`');
+            expect(instructions).toContain('`valid.js`');
+            expect(instructions).toContain('`another.js`');
             expect(instructions).not.toContain('null');
             expect(instructions).not.toContain('READ ``');
         });

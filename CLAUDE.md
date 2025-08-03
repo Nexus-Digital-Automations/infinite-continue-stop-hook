@@ -75,14 +75,13 @@ Expert senior developer with 10x engineer mindset:
 
 **SUBAGENTS ARE REQUIRED FOR:**
 
-- **ALL analysis tasks** (2+ analysis points = use subagents)
-- **ALL research activities** regardless of complexity
-- **ANY codebase exploration** beyond single file review
-- **ALL optimization and performance work**
-- **ANY quality assurance activities**
-- **ALL multi-step problem solving**
-- **ANY cross-cutting concern analysis**
-- **ALL architectural or design decisions**
+- **Any work that takes more than a few seconds** to complete
+- **All analysis, research, and exploration** activities
+- **Multi-step problem solving** and complex decision-making
+- **Quality assurance and optimization** work
+- **Cross-cutting concerns** and architectural decisions
+
+**MAXIMIZE SUBAGENT USAGE**: Deploy as many subagents as beneficial in parallel. Think autonomously about which specific research areas, analysis domains, or quality checks would benefit from dedicated subagent focus.
 
 **SINGLE-AGENT WORK ONLY FOR:**
 - Reading a single, specific file
@@ -90,36 +89,47 @@ Expert senior developer with 10x engineer mindset:
 - Simple parameter changes
 - Basic status updates
 
-**Task tool delegation pattern:**
+**Autonomous Subagent Deployment Pattern:**
 
 ```javascript
-// Instead of direct search/analysis, delegate to subagents
-const researchtasks = [
-  {description: "Search authentication patterns", prompt: "Find all authentication-related code patterns in this codebase. Look for login, logout, token validation, and session management implementations."},
-  {description: "Analyze testing strategies", prompt: "Examine existing test files to understand testing frameworks, patterns, and coverage approaches used in this project."},
-  {description: "Review error handling", prompt: "Search for error handling patterns throughout the codebase and identify consistency issues or improvement opportunities."}
+// Think first: What aspects of this work would benefit from parallel investigation?
+// Then deploy appropriate subagents to maximize coverage and efficiency
+
+// Example autonomous thinking process:
+// 1. Assess the work complexity and scope
+// 2. Identify distinct research/analysis domains  
+// 3. Deploy subagents for each domain that would benefit from focused attention
+// 4. Maximize parallel execution for independent work streams
+
+// Deploy subagents based on your autonomous assessment of what needs investigation
+const subagentTasks = [
+  // Let your analysis guide which specific subagents to deploy
+  // Focus on maximizing parallel coverage of the problem space
 ];
-// Execute all Task tools in parallel for maximum efficiency
+// Execute all Task tools simultaneously for maximum efficiency
 ```
 
-#### **🚨 MANDATORY Thinking Tool Usage**
+#### **🚨 MANDATORY Maximum Thinking Usage**
+
+**THINKING-FIRST MANDATE**: Always think before acting. Use maximum beneficial thinking for all non-trivial work.
 
 **REQUIRED escalation based on complexity:**
 
-1. **Simple tasks**: No thinking needed (single-step only)
+1. **Simple tasks**: No thinking needed (only for single-step trivial work)
 2. **Moderate complexity** (2-4 steps): **MUST USE** `(think)` - 4,000 tokens
 3. **Complex problems** (5-8 steps): **MUST USE** `(think hard)` - 10,000 tokens  
 4. **Architecture/system design** (9+ steps): **MUST USE** `(ultrathink)` - 31,999 tokens
 
-**MANDATORY thinking triggers - NO EXCEPTIONS:**
+**MANDATORY maximum thinking triggers - NO EXCEPTIONS:**
 - **System architecture decisions** → `(ultrathink)` REQUIRED
-- **Performance optimization strategies** → `(think hard)` REQUIRED
-- **Security implementation planning** → `(think hard)` REQUIRED
-- **Complex refactoring approaches** → `(think hard)` REQUIRED
+- **Performance optimization strategies** → `(think hard)` or `(ultrathink)` REQUIRED
+- **Security implementation planning** → `(think hard)` or `(ultrathink)` REQUIRED
+- **Complex refactoring approaches** → `(think hard)` or `(ultrathink)` REQUIRED
 - **Multi-service integration design** → `(ultrathink)` REQUIRED
-- **Debugging complex issues** → `(think hard)` REQUIRED
+- **Debugging complex issues** → `(think hard)` or `(ultrathink)` REQUIRED
+- **Task creation and planning** → `(think hard)` for comprehensive analysis
 
-**NEVER skip thinking for complex work - this is MANDATORY**
+**MAXIMIZE THINKING**: When in doubt, escalate to higher thinking level. Deep thinking improves all subsequent work quality.**
 
 #### **Parallel Execution Patterns**
 
@@ -142,15 +152,19 @@ Follow with appropriate thinking level:
 </sequential_thinking>
 ```
 
-#### **Quality Assurance Through Automation**
+#### **Quality Assurance Through Autonomous Subagent Deployment**
 
-**Use subagents for systematic quality checks:**
+**Deploy subagents for comprehensive quality coverage:**
 
-- **Code review agent**: Analyze style, patterns, best practices
-- **Security audit agent**: Check for vulnerabilities and security issues
-- **Performance analysis agent**: Identify bottlenecks and optimization opportunities
-- **Test coverage agent**: Evaluate test completeness and quality
-- **Documentation agent**: Assess documentation completeness and accuracy
+Think autonomously about what quality aspects need investigation, then deploy appropriate subagents to maximize coverage. Consider areas like:
+- Code quality, patterns, and best practices analysis
+- Security vulnerability scanning and compliance checking  
+- Performance analysis and optimization identification
+- Test coverage evaluation and gap analysis
+- Documentation completeness and accuracy assessment
+- Architecture review and design pattern validation
+
+**Maximize parallel quality assurance** by deploying subagents for all relevant quality dimensions simultaneously.
 
 ## Prompting Techniques
 
@@ -176,8 +190,8 @@ ARCHITECTURE (9+ steps): "Architect complete system (ultrathink)" - 31,999 token
 ### 2. Essential Workflow Patterns
 
 **Multi-Phase Approach:**
-1. Research existing patterns (use subagents)
-2. Create detailed plan (use appropriate thinking level)
+1. Research existing patterns (deploy subagents to maximize coverage of relevant domains)
+2. Create detailed plan (use appropriate thinking level based on complexity)
 3. Implement solution following plan
 4. Write comprehensive tests and validate
 5. Commit changes and push to remote
@@ -204,7 +218,7 @@ ARCHITECTURE (9+ steps): "Architect complete system (ultrathink)" - 31,999 token
 <instructions>
 You are an expert [LANGUAGE] developer specializing in [DOMAIN].
 Check ABOUT.md files in working/parent directories before proceeding.
-Use Task tool for complex research. Use appropriate thinking level based on complexity.
+Deploy subagents to maximize coverage of complex research. Use appropriate thinking level based on complexity.
 </instructions>
 
 <context>
@@ -213,10 +227,10 @@ Type: [feature|debugging|refactoring|optimization] | Complexity: [simple|moderat
 </context>
 
 <subagent_research>
-<!-- For moderate+ complexity, delegate research to subagents -->
-Task 1: Analyze existing [relevant_patterns] in codebase
-Task 2: Review [testing_approach] and quality standards  
-Task 3: Identify [integration_points] and dependencies
+<!-- For moderate+ complexity, think autonomously about research needs then deploy appropriate subagents -->
+<!-- Assess what domains need investigation and deploy subagents to maximize parallel coverage -->
+<!-- Example areas: codebase patterns, testing strategies, dependencies, security, performance, etc. -->
+<!-- Deploy as many subagents as beneficial for comprehensive analysis -->
 </subagent_research>
 
 <planning_phase>
@@ -447,14 +461,50 @@ The post-tool-linter-hook automatically runs after tool execution. When it repor
 
 **Context Management:**
 - **ALWAYS check ABOUT.md files** in working/parent/subdirectories before editing
-- **Use Task tool for research** when unfamiliar with codebase patterns
-- **Delegate complex searches** to subagents for efficiency
+- **Deploy subagents for research** when analysis is needed - maximize parallel coverage
+- **Think autonomously about what needs investigation** then delegate appropriately
 
 **Code Quality Standards:**
 - **File Size**: 250 lines target, 400 max | **Documentation**: Comprehensive headers/comments
 - **Type Safety**: Use annotations where supported | **Input Validation**: Always validate/sanitize
 - **Error Handling**: Comprehensive with logging | **Security**: No hardcoded secrets, secure defaults
 - **Linter Compliance**: Zero linter errors before task completion
+
+## 🚨 CRITICAL: Development Directory Organization
+
+### **Keep `development/` Directory Clean and Universal**
+
+**ABSOLUTE RULE**: The `development/` directory should ONLY contain universal files needed for EVERY task. Do NOT add task-specific .md files to this directory.
+
+**✅ ALLOWED in `development/`:**
+- Universal instruction files (like this CLAUDE.md)
+- Universal workflow patterns
+- Universal configuration guides
+- Mode-specific files in `development/modes/` subdirectory
+
+**🚫 NEVER ADD to `development/`:**
+- Task-specific documentation
+- Research findings for individual tasks
+- Implementation notes for specific features
+- Project-specific guides
+
+### **Use `development/research-reports/` for Task-Specific Files**
+
+**MANDATORY**: All task-specific documentation MUST go in `development/research-reports/` and be added to the task's `important_files` via TaskManager API.
+
+**Correct Pattern:**
+1. Create task-specific files in `./development/research-reports/`
+2. Add file to task's important_files using TaskManager API
+3. Stop hook will automatically include it in the file reading list
+
+**Example Implementation:**
+```bash
+# Create task-specific research document
+echo "# Task-specific analysis" > "./development/research-reports/feature-analysis-task_123.md"
+
+# Add to task's important files via TaskManager API
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.addImportantFile('task_123', './development/research-reports/feature-analysis-task_123.md').then(added => console.log('File added:', added));"
+```
 
 ### Task Management via TODO.json
 ```json
@@ -502,6 +552,12 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 ```bash
 # Add subtasks to existing tasks
 node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.addSubtask('parent_task_id', {title: 'Subtask title', description: 'Detailed description', status: 'pending', priority: 'medium'}).then(() => console.log('Subtask added'));"
+
+# Add important file to task (NEW - for task-specific documentation)
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.addImportantFile('task_id', './development/research-reports/task-specific-analysis.md').then(added => console.log('Important file added:', added));"
+
+# Remove important file from task
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.removeImportantFile('task_id', './development/research-reports/task-specific-analysis.md').then(removed => console.log('Important file removed:', removed));"
 
 # Determine next execution mode based on project state
 node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(async (data) => { const mode = await tm.getNextMode(data); console.log('Next mode:', mode); });"
@@ -727,7 +783,7 @@ Use appropriate complexity level and ALWAYS create tasks for multi-step work.
 
 **MANDATORY Optimization Strategies:**
 
-1. **Subagent Parallelization**: Use multiple Task tools simultaneously for independent research streams
+1. **Maximize Subagent Parallelization**: Think autonomously about what needs investigation, then deploy maximum beneficial subagents simultaneously
 2. **Thinking Tool Escalation**: Auto-escalate to appropriate thinking level based on complexity triggers
 3. **Context Optimization**: Use @ symbol for targeted file context, `/clear` between unrelated tasks
 4. **Strategic Task Management**: TodoWrite + TaskManager dual approach for comprehensive tracking
@@ -735,32 +791,34 @@ Use appropriate complexity level and ALWAYS create tasks for multi-step work.
 ### Critical Performance Patterns
 
 **MANDATORY Parallel Execution:**
-- Use multiple Task tools simultaneously for research
-- Deploy quality check subagents in parallel
-- Never do sequential work when parallel is possible
+- Think autonomously about what domains need investigation
+- Deploy maximum beneficial subagents simultaneously for research
+- Maximize parallel coverage - never do sequential work when parallel is possible
 
-**Quality Assurance Through Subagents:**
-- Code review, security audit, performance analysis
-- All executed in parallel for maximum efficiency
+**Quality Assurance Through Autonomous Subagent Deployment:**
+- Assess what quality dimensions need evaluation
+- Deploy subagents for comprehensive coverage in parallel for maximum efficiency
 
 ## Implementation Workflow
 
 ### MANDATORY Standard Approach
 
 1. **Wait for User** - Listen attentively to instructions
-2. **Initialize** - Check TODO.json, ABOUT.md files, assess mode
-3. **Delegate Research** - Use Task tool for exploration (REQUIRED)
-4. **Create Tasks** - TodoWrite + TaskManager for 3+ step work
-5. **Think Strategically** - Use required thinking level
-6. **Implement** - Execute with quality standards
-7. **Validate** - Test through subagents
-8. **Complete** - Close tasks, document decisions
+2. **Think First** - Assess complexity and determine appropriate thinking level (think/think hard/ultrathink)
+3. **Initialize** - Check TODO.json, ABOUT.md files, assess mode
+4. **Think Strategically** - Use maximum beneficial thinking to plan approach and subagent strategy
+5. **Deploy Subagents** - Based on thinking analysis, maximize subagent coverage (REQUIRED)
+6. **Create Tasks** - TodoWrite + TaskManager for 3+ step work
+7. **Implement** - Execute with quality standards, continue thinking as needed
+8. **Validate** - Test through subagents with thinking analysis
+9. **Complete** - Close tasks, document decisions
 
 ### MANDATORY Success Criteria
 
 - ✅ **USER INSTRUCTION COMPLIANCE** - Follow all user directions
-- ✅ **SUBAGENT UTILIZATION** - Task tool for ALL complex work
-- ✅ **THINKING REQUIREMENTS** - Appropriate level based on complexity
+- ✅ **MAXIMUM THINKING UTILIZATION** - Use maximum beneficial thinking level, escalate appropriately (think hard/ultrathink)
+- ✅ **MAXIMUM SUBAGENT UTILIZATION** - Deploy subagents for ALL non-trivial work, maximize parallel coverage
+- ✅ **THINKING-FIRST APPROACH** - Think before deploying subagents and throughout process
 - ✅ **PARALLEL EXECUTION** - Multiple subagents when possible
 - ✅ **TASK MANAGEMENT** - Track all multi-step work
 - ✅ **QUALITY STANDARDS** - 250/400 lines, documentation, testing
@@ -769,18 +827,34 @@ Use appropriate complexity level and ALWAYS create tasks for multi-step work.
 **❌ FAILURE CONDITIONS - IMMEDIATE CORRECTION REQUIRED:**
 - Single-agent work for complex analysis = FAILED EXECUTION
 - No subagents for research tasks = FAILED EXECUTION  
-- No thinking for complex problems = FAILED EXECUTION
+- Insufficient thinking for complex problems = FAILED EXECUTION
+- Not escalating to appropriate thinking level = FAILED EXECUTION
+- Skipping thinking-first approach = FAILED EXECUTION
 - Ignoring user instructions = CRITICAL FAILURE
 - Bypassing hook feedback = CRITICAL FAILURE
 
 ## Core Operating Principles
 
 1. **ALWAYS follow user instructions** - highest priority
-2. **Wait attentively** for user direction before proceeding
-3. **MANDATORY subagent usage** for all complex work
-4. **REQUIRED thinking levels** based on complexity
-5. **Never bypass linter errors** with ignore files
-6. **Create tasks** for all multi-step work
-7. **Ask clarifying questions** when uncertain
+2. **MAXIMIZE thinking usage** - use maximum beneficial thinking level (think hard/ultrathink)
+3. **THINKING-FIRST approach** - think before acting, continue thinking throughout
+4. **Wait attentively** for user direction before proceeding
+5. **MANDATORY subagent usage** for all non-trivial work - think autonomously about deployment strategy
+6. **ESCALATE thinking appropriately** - don't hesitate to use ultrathink for complex work
+7. **Never bypass linter errors** with ignore files
+8. **Create tasks** for all multi-step work
+9. **Ask clarifying questions** when uncertain
 
-**Success Formula**: User Instructions + Subagents + Thinking + Attentive Waiting = Optimal Outcomes
+**Success Formula**: User Instructions + Maximum Thinking + Autonomous Subagent Strategy + Attentive Waiting = Optimal Outcomes
+
+## 🚨 CRITICAL: Maximum Thinking Utilization
+
+**MANDATORY THINKING ESCALATION**: Always escalate to maximum beneficial thinking level. Use thinking capabilities extensively to ensure thorough analysis and optimal decision-making.
+
+**THINKING-FIRST APPROACH**: 
+1. **Think first** about the problem complexity and scope
+2. **Escalate thinking** to appropriate level (think hard/ultrathink for complex work)
+3. **Then deploy subagents** based on your thinking analysis
+4. **Continue thinking** throughout the process for optimal outcomes
+
+**MAXIMIZE THINKING USAGE**: Don't hesitate to use "ultrathink" for complex problems. Deep thinking leads to better subagent strategies and superior outcomes.

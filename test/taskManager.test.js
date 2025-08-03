@@ -1055,6 +1055,169 @@ describe('TaskManager', () => {
             expect(mockData.review_strikes).toBe(0);
         });
     });
+
+    describe('Important Files Management', () => {
+        test('should add important file to task', async () => {
+            const taskId = 'task-123';
+            const filePath = './development/research-reports/analysis.md';
+            
+            const mockData = {
+                tasks: [{ 
+                    id: taskId, 
+                    title: 'Test Task',
+                    important_files: ['existing-file.md']
+                }]
+            };
+            
+            fs.existsSync.mockReturnValue(true);
+            fs.readFileSync.mockReturnValue(JSON.stringify(mockData));
+            
+            const result = await taskManager.addImportantFile(taskId, filePath);
+            
+            expect(result).toBe(true);
+            expect(mockData.tasks[0].important_files).toContain(filePath);
+            expect(mockData.tasks[0].important_files).toHaveLength(2);
+            expect(fs.writeFileSync).toHaveBeenCalled();
+        });
+
+        test('should not add duplicate important file', async () => {
+            const taskId = 'task-123';
+            const filePath = './development/research-reports/analysis.md';
+            
+            const mockData = {
+                tasks: [{ 
+                    id: taskId, 
+                    title: 'Test Task',
+                    important_files: [filePath] // Already exists
+                }]
+            };
+            
+            fs.existsSync.mockReturnValue(true);
+            fs.readFileSync.mockReturnValue(JSON.stringify(mockData));
+            
+            const result = await taskManager.addImportantFile(taskId, filePath);
+            
+            expect(result).toBe(false);
+            expect(mockData.tasks[0].important_files).toHaveLength(1);
+            expect(fs.writeFileSync).not.toHaveBeenCalled();
+        });
+
+        test('should initialize important_files array if not present', async () => {
+            const taskId = 'task-123';
+            const filePath = './development/research-reports/analysis.md';
+            
+            const mockData = {
+                tasks: [{ 
+                    id: taskId, 
+                    title: 'Test Task'
+                    // No important_files property
+                }]
+            };
+            
+            fs.existsSync.mockReturnValue(true);
+            fs.readFileSync.mockReturnValue(JSON.stringify(mockData));
+            
+            const result = await taskManager.addImportantFile(taskId, filePath);
+            
+            expect(result).toBe(true);
+            expect(mockData.tasks[0].important_files).toEqual([filePath]);
+            expect(fs.writeFileSync).toHaveBeenCalled();
+        });
+
+        test('should remove important file from task', async () => {
+            const taskId = 'task-123';
+            const filePath = './development/research-reports/analysis.md';
+            
+            const mockData = {
+                tasks: [{ 
+                    id: taskId, 
+                    title: 'Test Task',
+                    important_files: [filePath, 'other-file.md']
+                }]
+            };
+            
+            fs.existsSync.mockReturnValue(true);
+            fs.readFileSync.mockReturnValue(JSON.stringify(mockData));
+            
+            const result = await taskManager.removeImportantFile(taskId, filePath);
+            
+            expect(result).toBe(true);
+            expect(mockData.tasks[0].important_files).not.toContain(filePath);
+            expect(mockData.tasks[0].important_files).toEqual(['other-file.md']);
+            expect(fs.writeFileSync).toHaveBeenCalled();
+        });
+
+        test('should return false when removing non-existent file', async () => {
+            const taskId = 'task-123';
+            const filePath = './development/research-reports/nonexistent.md';
+            
+            const mockData = {
+                tasks: [{ 
+                    id: taskId, 
+                    title: 'Test Task',
+                    important_files: ['other-file.md']
+                }]
+            };
+            
+            fs.existsSync.mockReturnValue(true);
+            fs.readFileSync.mockReturnValue(JSON.stringify(mockData));
+            
+            const result = await taskManager.removeImportantFile(taskId, filePath);
+            
+            expect(result).toBe(false);
+            expect(mockData.tasks[0].important_files).toEqual(['other-file.md']);
+            expect(fs.writeFileSync).not.toHaveBeenCalled();
+        });
+
+        test('should handle task without important_files when removing', async () => {
+            const taskId = 'task-123';
+            const filePath = './development/research-reports/analysis.md';
+            
+            const mockData = {
+                tasks: [{ 
+                    id: taskId, 
+                    title: 'Test Task'
+                    // No important_files property
+                }]
+            };
+            
+            fs.existsSync.mockReturnValue(true);
+            fs.readFileSync.mockReturnValue(JSON.stringify(mockData));
+            
+            const result = await taskManager.removeImportantFile(taskId, filePath);
+            
+            expect(result).toBe(false);
+            expect(fs.writeFileSync).not.toHaveBeenCalled();
+        });
+
+        test('should return false when task not found for adding file', async () => {
+            const filePath = './development/research-reports/analysis.md';
+            
+            const mockData = { tasks: [] };
+            
+            fs.existsSync.mockReturnValue(true);
+            fs.readFileSync.mockReturnValue(JSON.stringify(mockData));
+            
+            const result = await taskManager.addImportantFile('nonexistent-task', filePath);
+            
+            expect(result).toBe(false);
+            expect(fs.writeFileSync).not.toHaveBeenCalled();
+        });
+
+        test('should return false when task not found for removing file', async () => {
+            const filePath = './development/research-reports/analysis.md';
+            
+            const mockData = { tasks: [] };
+            
+            fs.existsSync.mockReturnValue(true);
+            fs.readFileSync.mockReturnValue(JSON.stringify(mockData));
+            
+            const result = await taskManager.removeImportantFile('nonexistent-task', filePath);
+            
+            expect(result).toBe(false);
+            expect(fs.writeFileSync).not.toHaveBeenCalled();
+        });
+    });
 });
 
 // =============================================================================

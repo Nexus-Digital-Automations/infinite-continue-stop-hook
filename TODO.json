@@ -35,7 +35,7 @@
         "development/linter-errors.md shows no issues for edited files",
         "Code passes linting without warnings or errors"
       ],
-      "created_at": "2025-08-03T03:27:51.072Z",
+      "created_at": "2025-08-03T03:49:04.509Z",
       "is_linter_task": true,
       "linter_summary": {
         "total_violations": 0,
@@ -3357,14 +3357,102 @@
       "subtasks": [],
       "is_review_task": true,
       "strike_number": 3
+    },
+    {
+      "id": "task_1754193155395_dt6nua770",
+      "title": "Fix TaskManager Test Suite Failures",
+      "description": "Complete remaining TaskManager test fixes for research report duplication and filesystem permission handling",
+      "mode": "TESTING",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [
+        "test/taskManager.test.js",
+        "lib/taskManager.js"
+      ],
+      "success_criteria": [
+        "Research report duplication test passes",
+        "Filesystem permission error handling works correctly",
+        "All TaskManager tests pass without errors"
+      ],
+      "estimate": "2 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-03T03:52:35.395Z"
+    },
+    {
+      "id": "task_1754193155400_kpjo3eup9",
+      "title": "Fix Integration Test Mode Selection Logic",
+      "description": "Resolve failing integration tests for TASK_CREATION mode selection and execution count tracking",
+      "mode": "TESTING",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [
+        "test/integration.test.js",
+        "lib/agentExecutor.js"
+      ],
+      "success_criteria": [
+        "TASK_CREATION mode selection every 4th execution test passes",
+        "Execution count tracking logic implemented correctly",
+        "Mode selection algorithm works as expected"
+      ],
+      "estimate": "2-3 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-03T03:52:35.400Z"
+    },
+    {
+      "id": "task_1754193155403_xf9p9xdow",
+      "title": "Fix Integration Task Management Failures",
+      "description": "Complete task status updates, strike logic, and completion handling in integration tests",
+      "mode": "TESTING",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [
+        "test/integration.test.js",
+        "lib/taskManager.js"
+      ],
+      "success_criteria": [
+        "Task status update to in_progress works correctly",
+        "Strike logic and reset functionality implemented",
+        "Task completion detection works properly"
+      ],
+      "estimate": "2-3 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-03T03:52:35.403Z"
+    },
+    {
+      "id": "task_1754193155406_24dxcg8se",
+      "title": "Fix Quality Assessment and Review Task Injection",
+      "description": "Complete quality improvement and review task injection logic in integration tests",
+      "mode": "TESTING",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [
+        "test/integration.test.js",
+        "lib/reviewSystem.js"
+      ],
+      "success_criteria": [
+        "Quality improvement task injection works when quality insufficient",
+        "Review task injection works when quality ready",
+        "Condition checking logic correctly implemented"
+      ],
+      "estimate": "2-3 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-03T03:52:35.406Z"
     }
   ],
   "review_strikes": 0,
   "strikes_completed_last_run": false,
   "current_task_index": 0,
-  "last_mode": "DEVELOPMENT",
-  "execution_count": 314,
-  "last_hook_activation": 1754191726251,
+  "last_mode": "TASK_CREATION",
+  "execution_count": 352,
+  "last_hook_activation": 1754193084519,
   "__removedLinterTasks": {
     "removedCount": 1,
     "finalTaskCount": 109

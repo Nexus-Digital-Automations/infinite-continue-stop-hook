@@ -1,6 +1,6 @@
 # TASK-CREATION Mode Instructions
 
-You are in TASK-CREATION mode, specialized in analyzing projects and creating structured, actionable tasks with comprehensive quality frameworks.
+You are in TASK-CREATION mode, specialized in autonomous analysis using maximum subagent deployment and creating structured, actionable tasks with comprehensive quality frameworks.
 
 ## Decision Framework: When to Create Tasks
 
@@ -260,28 +260,69 @@ Tackle unknowns and high-risk components early to reduce project uncertainty.
 
 ## Task Creation Workflow
 
-### 1. Analysis Phase
-- **Project State Assessment**: Current codebase, infrastructure, team capacity
-- **Requirement Clarification**: User stories, acceptance criteria, business constraints
-- **Technical Discovery**: Architecture review, dependency analysis, risk assessment
-- **Research Report Integration**: Check for existing research reports at `./development/research-reports/research-report-{related_task_id}.md`
+**🚨 THINKING-FIRST MANDATE**: Use maximum thinking (think hard/ultrathink) throughout task creation for comprehensive analysis and optimal outcomes.
 
-### 2. Decomposition Phase
-- **Work Breakdown Structure**: Hierarchical task organization
-- **Effort Estimation**: Story points or hour-based estimates with confidence intervals
-- **Dependency Mapping**: Task relationships and coordination needs
-- **Research Report Planning**: For research tasks, automatically include `./development/research-reports/research-report-{task_id}.md` in important_files
+**🚨 MANDATORY THINKING REQUIREMENTS**:
+- **Always start with thinking** before deploying subagents
+- **Use (think hard)** for complex task decomposition and analysis (default minimum)
+- **Use (ultrathink)** for system-wide or architecture-level task planning
+- **Continue thinking** throughout each phase for optimal decision-making
+- **Escalate thinking level** when encountering complexity or uncertainty
 
-### 3. Prioritization Phase
-- **Business Value Scoring**: User impact and revenue considerations
-- **Technical Risk Assessment**: Implementation complexity and unknown factors
-- **Resource Optimization**: Team skills alignment and parallel work opportunities
+### 1. Analysis Phase (Think Hard + Deploy Maximum Subagents)
+**FIRST**: Use `(think hard)` or `(ultrathink)` to thoroughly analyze the problem space and requirements.
 
-### 4. Validation Phase
-- **SMART Criteria Check**: Specific, Measurable, Achievable, Relevant, Time-bound
-- **Acceptance Criteria Review**: Testable and complete success conditions
-- **Definition of Done Alignment**: Quality standards and completion requirements
-- **Research Integration Validation**: Ensure research tasks include standardized report creation and consumption
+**THEN**: Think autonomously about what analysis domains need investigation, then deploy subagents to maximize parallel coverage. Consider areas like:
+- **Project state and codebase assessment** 
+- **Requirements and business constraints analysis**
+- **Technical architecture and dependency evaluation**
+- **Security vulnerabilities and compliance review**
+- **Performance bottlenecks and optimization opportunities**  
+- **Existing research and documentation review**
+- **Quality standards and testing approach analysis**
+
+Deploy as many subagents as beneficial to comprehensively analyze all relevant aspects simultaneously.
+
+### 2. Decomposition Phase (Think Hard + Maximize Subagent Coverage)
+**FIRST**: Use `(think hard)` to deeply analyze decomposition requirements and complexity factors.
+
+**THEN**: Think autonomously about what decomposition analysis is needed, then deploy subagents for maximum parallel coverage. Consider areas like:
+- **Work breakdown and task hierarchical organization**
+- **Effort estimation and complexity analysis**
+- **Dependency mapping and coordination requirements**
+- **Code quality assessment and technical debt identification**
+- **Testing strategy and coverage planning**
+- **Research planning and documentation requirements**
+- **Risk assessment and mitigation strategies**
+
+Deploy subagents to comprehensively cover all decomposition aspects that would benefit from focused analysis.
+
+### 3. Prioritization Phase (Think Hard + Deploy Autonomous Subagent Strategy)
+**FIRST**: Use `(think hard)` to comprehensively analyze prioritization criteria and decision factors.
+
+**THEN**: Think autonomously about what prioritization factors need evaluation, then deploy subagents for comprehensive coverage. Consider areas like:
+- **Business value and user impact analysis**
+- **Technical risk and implementation complexity assessment**
+- **Resource optimization and team capacity evaluation**
+- **Timeline constraints and milestone planning**
+- **Stakeholder impact and business alignment analysis**
+- **Cost-benefit evaluation and ROI considerations**
+
+Deploy subagents to maximize coverage of all factors that influence task prioritization decisions.
+
+### 4. Validation Phase (Think Hard + Autonomous Subagent Validation Strategy)
+**FIRST**: Use `(think hard)` to thoroughly analyze validation requirements and quality criteria.
+
+**THEN**: Think autonomously about what validation aspects need verification, then deploy subagents for comprehensive quality assurance. Consider areas like:
+- **SMART criteria validation and completeness checking**
+- **Acceptance criteria review and testability verification**
+- **Definition of done alignment and quality standards**
+- **Task completeness and dependency identification**
+- **Quality gate validation and requirement verification**
+- **Research integration and documentation standards**
+- **Success criteria measurability and achievability**
+
+Deploy subagents to maximize validation coverage ensuring all quality dimensions are thoroughly verified.
 
 ## Quality Assurance Integration
 
