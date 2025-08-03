@@ -132,17 +132,62 @@ fs.writeFileSync = function(filePath, data, options) {
                                      data.includes('"tasks"') &&
                                      data.includes('malicious');
     
-    if (typeof data === 'string' && 
-        (data.includes('"project"') || 
-         data.includes('"tasks"') || 
-         data.includes('"execution_count"') ||
-         (data.startsWith('{') && data.includes('test-project'))) &&
+    // ENHANCED: Check for any JSON-like data being written to JS files
+    const isJavaScriptFile = normalizedPath.endsWith('.js') || normalizedPath.endsWith('.mjs');
+    const isJSONLikeData = typeof data === 'string' && 
+        (data.trim().startsWith('{') || data.trim().startsWith('[')) &&
+        (data.includes('"') || data.includes("'"));
+    
+    // Enhanced contamination patterns
+    const contaminationPatterns = [
+        /"project":/,
+        /"tasks":/,
+        /"execution_count":/,
+        /"current_mode":/,
+        /"test-project"/,
+        /module\.exports\s*=\s*\{.*"tasks"/s,
+        /exports\s*=\s*\{.*"project"/s
+    ];
+    
+    const hasContaminationPattern = typeof data === 'string' && 
+        contaminationPatterns.some(pattern => pattern.test(data));
+    
+    // CRITICAL: Block JSON data to JavaScript files (enhanced detection)
+    if (isJavaScriptFile && isJSONLikeData && hasContaminationPattern &&
+        !isExitJsContaminationTest && !isTestEnvironment) {
+        console.error(`🚨 ULTRA-CRITICAL: JSON contamination detected in JS file write to ${normalizedPath}`);
+        console.error(`🚨 ULTRA-CRITICAL: Data preview: ${data.substring(0, 150)}...`);
+        console.error(`🚨 ULTRA-CRITICAL: Write blocked - JSON contamination of JavaScript file prevented`);
+        console.error(`🚨 ULTRA-CRITICAL: Stack trace:`, new Error().stack);
+        
+        // Trigger immediate node modules integrity check if available
+        if (global.fileOperationLogger && typeof global.fileOperationLogger.reportThreat === 'function') {
+            global.fileOperationLogger.reportThreat('JSON_TO_JS_CONTAMINATION', {
+                filePath: normalizedPath,
+                dataPreview: data.substring(0, 200),
+                timestamp: new Date().toISOString()
+            });
+        }
+        return; // HARD BLOCK
+    }
+    
+    // Original contamination check (enhanced)
+    if (typeof data === 'string' && hasContaminationPattern &&
         !(isTestEnvironment && isJsonFile) &&
         !isExitJsContaminationTest) {
         console.error(`🚨 ULTRA-CRITICAL: JSON contamination detected in write to ${normalizedPath}`);
         console.error(`🚨 ULTRA-CRITICAL: Data preview: ${data.substring(0, 150)}...`);
         console.error(`🚨 ULTRA-CRITICAL: Write blocked - this is likely TODO.json contamination`);
         console.error(`🚨 ULTRA-CRITICAL: Stack trace:`, new Error().stack);
+        
+        // Enhanced threat reporting
+        if (global.fileOperationLogger && typeof global.fileOperationLogger.reportThreat === 'function') {
+            global.fileOperationLogger.reportThreat('JSON_CONTAMINATION', {
+                filePath: normalizedPath,
+                dataPreview: data.substring(0, 200),
+                timestamp: new Date().toISOString()
+            });
+        }
         return; // HARD BLOCK
     }
     

@@ -95,6 +95,10 @@ module.exports = {
   // Cache directory for faster subsequent runs
   cacheDirectory: '<rootDir>/.jest-cache',
   
+  // Enhanced error handling and file protection
+  errorOnDeprecated: true,
+  bail: process.env.BAIL_ON_FIRST_ERROR === 'true' ? 1 : false,
+  
   // Transform settings
   transform: {},
   

@@ -1,15 +1,15 @@
 # Linter Errors Report
 
-**Generated:** 2025-07-29T06:36:50.334Z
+**Generated:** 2025-08-03T01:08:06.156Z
 **Total Issues:** 1 (1 errors, 0 warnings)
 **Files:** 1
 
-## errorRecovery.js (eslint)
+## nodeModulesMonitor.js (eslint)
 
-**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/errorRecovery.js`
+**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/nodeModulesMonitor.js`
 **Issues:** 1
 
-❌ **Line 483:26** - 'error' is defined but never used. `[no-unused-vars]`
+❌ **Line 707:68** - 'filename' is defined but never used. Allowed unused args must match /^_/u. `[no-unused-vars]`
 
 ---
 
