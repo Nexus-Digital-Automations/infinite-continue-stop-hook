@@ -1,15 +1,15 @@
 # Linter Errors Report
 
-**Generated:** 2025-08-03T01:08:06.156Z
+**Generated:** 2025-08-03T04:06:56.514Z
 **Total Issues:** 1 (1 errors, 0 warnings)
 **Files:** 1
 
-## nodeModulesMonitor.js (eslint)
+## setup.js (eslint)
 
-**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/nodeModulesMonitor.js`
+**File Path:** `/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/test/setup.js`
 **Issues:** 1
 
-❌ **Line 707:68** - 'filename' is defined but never used. Allowed unused args must match /^_/u. `[no-unused-vars]`
+❌ **Line 156:47** - Unexpected control character(s) in regular expression: \x00, \x08, \x0b, \x0c, \x0e, \x1f. `[no-control-regex]`
 
 ---
 
