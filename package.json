@@ -1,0 +1,48 @@
+{
+  "name": "infinite-continue-stop-hook",
+  "version": "1.0.0",
+  "description": "Automated hook system for continuous task execution in Claude Code",
+  "main": "stop-hook.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:verbose": "VERBOSE_TESTS=true jest",
+    "build": "npm run lint && npm run test",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "setup": "node setup-infinite-hook.js",
+    "demo": "node demo/demo.js",
+    "coverage": "jest --coverage --collectCoverageFrom='lib/**/*.js'",
+    "coverage:html": "jest --coverage --coverageReporters=html",
+    "pretest": "npm run lint"
+  },
+  "keywords": [
+    "claude-code",
+    "automation",
+    "hook-system",
+    "task-management",
+    "continuous-execution",
+    "ai-assistant"
+  ],
+  "author": "Claude Code Hook System",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "jest": "^29.7.0"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anthropics/infinite-continue-stop-hook"
+  },
+  "bugs": {
+    "url": "https://github.com/anthropics/infinite-continue-stop-hook/issues"
+  },
+  "homepage": "https://github.com/anthropics/infinite-continue-stop-hook#readme"
+}

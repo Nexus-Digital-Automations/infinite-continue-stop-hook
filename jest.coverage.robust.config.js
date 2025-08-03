@@ -2,7 +2,7 @@
 // Designed to prevent contamination and ensure accurate, reliable coverage collection
 
 const baseConfig = require('./jest.config.js');
-const path = require('path');
+const _path = require('path');
 
 module.exports = {
   ...baseConfig,
