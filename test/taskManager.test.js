@@ -1069,15 +1069,16 @@ describe('TaskManager', () => {
                 }]
             };
             
-            fs.existsSync.mockReturnValue(true);
-            fs.readFileSync.mockReturnValue(JSON.stringify(mockData));
+            // Mock readTodo and writeTodo to work with the actual mockData object
+            taskManager.readTodo = jest.fn().mockResolvedValue(mockData);
+            taskManager.writeTodo = jest.fn().mockResolvedValue();
             
             const result = await taskManager.addImportantFile(taskId, filePath);
             
             expect(result).toBe(true);
             expect(mockData.tasks[0].important_files).toContain(filePath);
             expect(mockData.tasks[0].important_files).toHaveLength(2);
-            expect(fs.writeFileSync).toHaveBeenCalled();
+            expect(taskManager.writeTodo).toHaveBeenCalledWith(mockData);
         });
 
         test('should not add duplicate important file', async () => {
@@ -1092,14 +1093,15 @@ describe('TaskManager', () => {
                 }]
             };
             
-            fs.existsSync.mockReturnValue(true);
-            fs.readFileSync.mockReturnValue(JSON.stringify(mockData));
+            // Mock readTodo and writeTodo to work with the actual mockData object
+            taskManager.readTodo = jest.fn().mockResolvedValue(mockData);
+            taskManager.writeTodo = jest.fn().mockResolvedValue();
             
             const result = await taskManager.addImportantFile(taskId, filePath);
             
             expect(result).toBe(false);
             expect(mockData.tasks[0].important_files).toHaveLength(1);
-            expect(fs.writeFileSync).not.toHaveBeenCalled();
+            expect(taskManager.writeTodo).not.toHaveBeenCalled();
         });
 
         test('should initialize important_files array if not present', async () => {
@@ -1114,14 +1116,15 @@ describe('TaskManager', () => {
                 }]
             };
             
-            fs.existsSync.mockReturnValue(true);
-            fs.readFileSync.mockReturnValue(JSON.stringify(mockData));
+            // Mock readTodo and writeTodo to work with the actual mockData object
+            taskManager.readTodo = jest.fn().mockResolvedValue(mockData);
+            taskManager.writeTodo = jest.fn().mockResolvedValue();
             
             const result = await taskManager.addImportantFile(taskId, filePath);
             
             expect(result).toBe(true);
             expect(mockData.tasks[0].important_files).toEqual([filePath]);
-            expect(fs.writeFileSync).toHaveBeenCalled();
+            expect(taskManager.writeTodo).toHaveBeenCalledWith(mockData);
         });
 
         test('should remove important file from task', async () => {
@@ -1136,15 +1139,16 @@ describe('TaskManager', () => {
                 }]
             };
             
-            fs.existsSync.mockReturnValue(true);
-            fs.readFileSync.mockReturnValue(JSON.stringify(mockData));
+            // Mock readTodo and writeTodo to work with the actual mockData object
+            taskManager.readTodo = jest.fn().mockResolvedValue(mockData);
+            taskManager.writeTodo = jest.fn().mockResolvedValue();
             
             const result = await taskManager.removeImportantFile(taskId, filePath);
             
             expect(result).toBe(true);
             expect(mockData.tasks[0].important_files).not.toContain(filePath);
             expect(mockData.tasks[0].important_files).toEqual(['other-file.md']);
-            expect(fs.writeFileSync).toHaveBeenCalled();
+            expect(taskManager.writeTodo).toHaveBeenCalledWith(mockData);
         });
 
         test('should return false when removing non-existent file', async () => {
