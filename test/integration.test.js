@@ -693,7 +693,7 @@ describe('Stop Hook Integration Tests', () => {
                         
                         // Update execution count and timing BEFORE checking for current task (matches actual stop-hook.js behavior)
                         const nextExecutionCount = (todoData.execution_count || 0) + 1;
-                        const updatedData = { 
+                        let updatedData = { 
                             ...todoData, 
                             execution_count: nextExecutionCount,
                             last_hook_activation: Date.now()
@@ -710,15 +710,17 @@ describe('Stop Hook Integration Tests', () => {
                                 
                                 if (!hasQualityTask) {
                                     // Inject quality improvement task only if one doesn't exist
-                                    mockReviewSystem.injectQualityImprovementTask();
+                                    updatedData = mockReviewSystem.injectQualityImprovementTask(updatedData, qualityResult, updatedData.project);
                                 }
                             }
                             
                             // Check if review task should be injected
                             if (qualityResult && qualityResult.overallReady) {
-                                const shouldInject = mockReviewSystem.shouldInjectReviewTask(updatedData.execution_count || 0, updatedData.project);
+                                const shouldInject = mockReviewSystem.shouldInjectReviewTask(updatedData);
                                 if (shouldInject) {
-                                    mockReviewSystem.createReviewTask(mockReviewSystem.getNextStrikeNumber(), updatedData.project);
+                                    const strikeNumber = mockReviewSystem.getNextStrikeNumber(updatedData);
+                                    const reviewTask = mockReviewSystem.createReviewTask(strikeNumber, updatedData.project);
+                                    updatedData = mockReviewSystem.insertTasksBeforeStrikes(updatedData, [reviewTask]);
                                 }
                             }
                             

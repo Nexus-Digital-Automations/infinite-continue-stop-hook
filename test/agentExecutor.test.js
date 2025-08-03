@@ -98,7 +98,7 @@ describe('AgentExecutor', () => {
             const prompt = agentExecutor.buildPrompt(mockTask, 'TASK_CREATION', mockTodoData);
             
             expect(prompt).toContain('## Intelligent Task Creation Context');
-            expect(prompt).toContain('CORE PRINCIPLE**: Create only necessary tasks');
+            expect(prompt).toContain('**CORE PRINCIPLE**: Create only necessary tasks');
             expect(prompt).toContain('**Current Task Context**');
             expect(prompt).toContain('**Project Analysis Required**');
         });

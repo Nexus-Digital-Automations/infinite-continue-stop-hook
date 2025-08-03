@@ -3299,66 +3299,6 @@
       }
     },
     {
-      "id": "review-strike-1",
-      "mode": "REVIEWER",
-      "description": "Review Strike 1: Ensure the project builds completely without errors",
-      "prompt": "Perform a comprehensive code review with focus on: Ensure the project builds completely without errors\n\nCheck the entire codebase and ensure this criterion is met. If not met, create specific tasks to address the issues found.",
-      "dependencies": [
-        "package.json"
-      ],
-      "important_files": [
-        "package.json",
-        "tsconfig.json",
-        ".eslintrc"
-      ],
-      "status": "completed",
-      "requires_research": false,
-      "subtasks": [],
-      "is_review_task": true,
-      "strike_number": 1
-    },
-    {
-      "id": "review-strike-2",
-      "mode": "REVIEWER",
-      "description": "Review Strike 2: Verify no lint errors exist in the codebase",
-      "prompt": "Perform a comprehensive code review with focus on: Verify no lint errors exist in the codebase\n\nCheck the entire codebase and ensure this criterion is met. If not met, create specific tasks to address the issues found.",
-      "dependencies": [
-        "package.json"
-      ],
-      "important_files": [
-        "package.json",
-        ".eslintrc",
-        "tsconfig.json",
-        "pyproject.toml"
-      ],
-      "status": "completed",
-      "requires_research": false,
-      "subtasks": [],
-      "is_review_task": true,
-      "strike_number": 2
-    },
-    {
-      "id": "review-strike-3",
-      "mode": "REVIEWER",
-      "description": "Review Strike 3: Confirm test coverage is 100% on important modules and 90%+ on others, with all tests passing",
-      "prompt": "Perform a comprehensive code review with focus on: Confirm test coverage is 100% on important modules and 90%+ on others, with all tests passing\n\nCheck the entire codebase and ensure this criterion is met. If not met, create specific tasks to address the issues found.",
-      "dependencies": [
-        "package.json"
-      ],
-      "important_files": [
-        "package.json",
-        "jest.config.js",
-        "vitest.config.js",
-        "mocha.opts",
-        "karma.conf.js"
-      ],
-      "status": "completed",
-      "requires_research": false,
-      "subtasks": [],
-      "is_review_task": true,
-      "strike_number": 3
-    },
-    {
       "id": "task_1754193155395_dt6nua770",
       "title": "Fix TaskManager Test Suite Failures",
       "description": "Complete remaining TaskManager test fixes for research report duplication and filesystem permission handling",
@@ -3408,7 +3348,7 @@
       "description": "Complete task status updates, strike logic, and completion handling in integration tests",
       "mode": "TESTING",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "dependencies": [],
       "important_files": [
         "test/integration.test.js",
@@ -3430,7 +3370,7 @@
       "description": "Complete quality improvement and review task injection logic in integration tests",
       "mode": "TESTING",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "dependencies": [],
       "important_files": [
         "test/integration.test.js",
@@ -3452,7 +3392,7 @@
       "description": "Update AgentExecutor test that expects old \"4 task minimum\" text after recent change to task creation guidance",
       "mode": "DEVELOPMENT",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "success_criteria": [
         "AgentExecutor test passes with updated text expectation",
         "Test verifies new CORE PRINCIPLE text instead of old CRITICAL REQUIREMENT"
@@ -3522,14 +3462,96 @@
       ],
       "estimate": "1.5 hours",
       "created_at": "2025-08-03T05:52:45.945Z"
+    },
+    {
+      "id": "review-strike-1",
+      "mode": "REVIEWER",
+      "description": "Review Strike 1: Build Verification",
+      "prompt": "Perform a comprehensive code review for Strike 1: Build Verification\n\nReview Checklist:\n1. Run clean build from scratch\n2. Verify zero build errors\n3. Check all dependencies installed\n4. Ensure build artifacts generated\n\nProvide a detailed review report with:\n- Clear PASS/FAIL status for each criterion\n- Specific issues found with file locations\n- Remediation steps if review fails\n- Overall recommendation\n\nIf the review fails, create specific tasks to address each issue found.\nBe thorough but fair - focus on objective criteria.",
+      "dependencies": [
+        "**/*.js",
+        "**/*.ts",
+        "package.json",
+        "tsconfig.json"
+      ],
+      "important_files": [
+        "package.json",
+        ".eslintrc",
+        "jest.config.js"
+      ],
+      "status": "pending",
+      "requires_research": false,
+      "subtasks": [],
+      "is_review_task": true,
+      "strike_number": 1
+    },
+    {
+      "id": "review-strike-1-dup-116",
+      "mode": "REVIEWER",
+      "description": "Review Strike 1: Ensure the project builds completely without errors",
+      "prompt": "Perform a comprehensive code review with focus on: Ensure the project builds completely without errors\n\nCheck the entire codebase and ensure this criterion is met. If not met, create specific tasks to address the issues found.",
+      "dependencies": [
+        "package.json"
+      ],
+      "important_files": [
+        "package.json",
+        "tsconfig.json",
+        ".eslintrc"
+      ],
+      "status": "completed",
+      "requires_research": false,
+      "subtasks": [],
+      "is_review_task": true,
+      "strike_number": 1
+    },
+    {
+      "id": "review-strike-2",
+      "mode": "REVIEWER",
+      "description": "Review Strike 2: Verify no lint errors exist in the codebase",
+      "prompt": "Perform a comprehensive code review with focus on: Verify no lint errors exist in the codebase\n\nCheck the entire codebase and ensure this criterion is met. If not met, create specific tasks to address the issues found.",
+      "dependencies": [
+        "package.json"
+      ],
+      "important_files": [
+        "package.json",
+        ".eslintrc",
+        "tsconfig.json",
+        "pyproject.toml"
+      ],
+      "status": "completed",
+      "requires_research": false,
+      "subtasks": [],
+      "is_review_task": true,
+      "strike_number": 2
+    },
+    {
+      "id": "review-strike-3",
+      "mode": "REVIEWER",
+      "description": "Review Strike 3: Confirm test coverage is 100% on important modules and 90%+ on others, with all tests passing",
+      "prompt": "Perform a comprehensive code review with focus on: Confirm test coverage is 100% on important modules and 90%+ on others, with all tests passing\n\nCheck the entire codebase and ensure this criterion is met. If not met, create specific tasks to address the issues found.",
+      "dependencies": [
+        "package.json"
+      ],
+      "important_files": [
+        "package.json",
+        "jest.config.js",
+        "vitest.config.js",
+        "mocha.opts",
+        "karma.conf.js"
+      ],
+      "status": "completed",
+      "requires_research": false,
+      "subtasks": [],
+      "is_review_task": true,
+      "strike_number": 3
     }
   ],
   "review_strikes": 0,
   "strikes_completed_last_run": false,
   "current_task_index": 0,
-  "last_mode": "TESTING",
-  "execution_count": 383,
-  "last_hook_activation": 1754200538848,
+  "last_mode": "DEVELOPMENT",
+  "execution_count": 386,
+  "last_hook_activation": 1754201049371,
   "__removedLinterTasks": {
     "removedCount": 1,
     "finalTaskCount": 113
