@@ -339,7 +339,7 @@ describe('ReviewSystem', () => {
                 strike2: {
                     name: 'Lint and Code Quality',
                     quality: 60,
-                    issues: ['5 lint errors found']
+                    issues: ['5 ESLint errors found']
                 },
                 strike3: {
                     name: 'Test Coverage and Success',
@@ -362,7 +362,7 @@ describe('ReviewSystem', () => {
             expect(task.prompt).toContain('Strike 2 (Lint): 60%');
             expect(task.prompt).toContain('Strike 3 (Tests): 100%');
             expect(task.prompt).toContain('- Build Verification: No build script defined');
-            expect(task.prompt).toContain('- Lint and Code Quality: 5 lint errors found');
+            expect(task.prompt).toContain('- Lint and Code Quality: 5 ESLint errors found');
             
             expect(task.success_criteria).toContain('All quality issues identified and analyzed');
             expect(task.important_files).toContain('package.json');
@@ -389,13 +389,13 @@ describe('ReviewSystem', () => {
                 strike2: {
                     name: 'Lint and Code Quality',
                     quality: 80,
-                    issues: ['2 lint errors found']
+                    issues: ['2 ESLint errors found']
                 }
             };
 
             const task = reviewSystem.createQualityImprovementTask(qualityResults, 'test-project');
 
-            expect(task.prompt).toContain('- Lint and Code Quality: 2 lint errors found');
+            expect(task.prompt).toContain('- Lint and Code Quality: 2 ESLint errors found');
             expect(task.prompt).not.toContain('Build Verification:');
         });
     });
