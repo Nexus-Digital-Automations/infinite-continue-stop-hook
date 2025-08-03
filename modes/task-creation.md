@@ -2,6 +2,8 @@
 
 You are in TASK-CREATION mode, specialized in autonomous analysis using maximum subagent deployment and creating structured, actionable tasks with comprehensive quality frameworks.
 
+*Note: All core subagent coordination, parallel execution patterns, thinking escalation rules, and TaskManager workflows are in CLAUDE.md. This mode adds task creation-specific frameworks only.*
+
 ## Decision Framework: When to Create Tasks
 
 ### 🚨 CRITICAL: CREATE TASKS ONLY FOR SPECIFIC, ACTIONABLE WORK
@@ -260,69 +262,15 @@ Tackle unknowns and high-risk components early to reduce project uncertainty.
 
 ## Task Creation Workflow
 
-**🚨 THINKING-FIRST MANDATE**: Use maximum thinking (think hard/ultrathink) throughout task creation for comprehensive analysis and optimal outcomes.
+**🚨 CRITICAL**: Follow all CLAUDE.md thinking escalation and subagent coordination requirements throughout task creation.
 
-**🚨 MANDATORY THINKING REQUIREMENTS**:
-- **Always start with thinking** before deploying subagents
-- **Use (think hard)** for complex task decomposition and analysis (default minimum)
-- **Use (ultrathink)** for system-wide or architecture-level task planning
-- **Continue thinking** throughout each phase for optimal decision-making
-- **Escalate thinking level** when encountering complexity or uncertainty
+### Task Creation Process
 
-### 1. Analysis Phase (Think Hard + Deploy Maximum Subagents)
-**FIRST**: Use `(think hard)` or `(ultrathink)` to thoroughly analyze the problem space and requirements.
-
-**THEN**: Think autonomously about what analysis domains need investigation, then deploy subagents to maximize parallel coverage. Consider areas like:
-- **Project state and codebase assessment** 
-- **Requirements and business constraints analysis**
-- **Technical architecture and dependency evaluation**
-- **Security vulnerabilities and compliance review**
-- **Performance bottlenecks and optimization opportunities**  
-- **Existing research and documentation review**
-- **Quality standards and testing approach analysis**
-
-Deploy as many subagents as beneficial to comprehensively analyze all relevant aspects simultaneously.
-
-### 2. Decomposition Phase (Think Hard + Maximize Subagent Coverage)
-**FIRST**: Use `(think hard)` to deeply analyze decomposition requirements and complexity factors.
-
-**THEN**: Think autonomously about what decomposition analysis is needed, then deploy subagents for maximum parallel coverage. Consider areas like:
-- **Work breakdown and task hierarchical organization**
-- **Effort estimation and complexity analysis**
-- **Dependency mapping and coordination requirements**
-- **Code quality assessment and technical debt identification**
-- **Testing strategy and coverage planning**
-- **Research planning and documentation requirements**
-- **Risk assessment and mitigation strategies**
-
-Deploy subagents to comprehensively cover all decomposition aspects that would benefit from focused analysis.
-
-### 3. Prioritization Phase (Think Hard + Deploy Autonomous Subagent Strategy)
-**FIRST**: Use `(think hard)` to comprehensively analyze prioritization criteria and decision factors.
-
-**THEN**: Think autonomously about what prioritization factors need evaluation, then deploy subagents for comprehensive coverage. Consider areas like:
-- **Business value and user impact analysis**
-- **Technical risk and implementation complexity assessment**
-- **Resource optimization and team capacity evaluation**
-- **Timeline constraints and milestone planning**
-- **Stakeholder impact and business alignment analysis**
-- **Cost-benefit evaluation and ROI considerations**
-
-Deploy subagents to maximize coverage of all factors that influence task prioritization decisions.
-
-### 4. Validation Phase (Think Hard + Autonomous Subagent Validation Strategy)
-**FIRST**: Use `(think hard)` to thoroughly analyze validation requirements and quality criteria.
-
-**THEN**: Think autonomously about what validation aspects need verification, then deploy subagents for comprehensive quality assurance. Consider areas like:
-- **SMART criteria validation and completeness checking**
-- **Acceptance criteria review and testability verification**
-- **Definition of done alignment and quality standards**
-- **Task completeness and dependency identification**
-- **Quality gate validation and requirement verification**
-- **Research integration and documentation standards**
-- **Success criteria measurability and achievability**
-
-Deploy subagents to maximize validation coverage ensuring all quality dimensions are thoroughly verified.
+**Follow CLAUDE.md patterns for:**
+- Thinking escalation based on complexity
+- Subagent deployment and coordination 
+- Quality assurance validation
+- Documentation and research integration
 
 ## Quality Assurance Integration
 
@@ -338,9 +286,9 @@ Deploy subagents to maximize validation coverage ensuring all quality dimensions
 - **Quality Metrics**: Defect rates, code coverage, performance benchmarks
 - **Team Velocity**: Sprint capacity and throughput trends
 
-## TaskManager API Integration
+## Mode-Specific Focus
 
-Reference CLAUDE.md for complete TaskManager API and CLI usage patterns.
+This mode supplements CLAUDE.md with task creation decision frameworks, vague task rejection protocols, quality templates, and priority matrices specifically for structured task decomposition and validation.
 
 ### Automatic Research Report Integration
 

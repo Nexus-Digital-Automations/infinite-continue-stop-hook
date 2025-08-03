@@ -138,7 +138,7 @@ fs.writeFileSync = function(filePath, data, options) {
         (data.trim().startsWith('{') || data.trim().startsWith('[')) &&
         (data.includes('"') || data.includes("'"));
     
-    // Enhanced contamination patterns
+    // Enhanced contamination patterns with coverage-specific threats
     const contaminationPatterns = [
         /"project":/,
         /"tasks":/,
@@ -146,11 +146,31 @@ fs.writeFileSync = function(filePath, data, options) {
         /"current_mode":/,
         /"test-project"/,
         /module\.exports\s*=\s*\{.*"tasks"/s,
-        /exports\s*=\s*\{.*"project"/s
+        /exports\s*=\s*\{.*"project"/s,
+        // ENHANCED: Coverage-specific contamination patterns
+        /"__coverage__":/,
+        /"c":\s*{\s*\d+:/,  // NYC coverage data structure
+        /"f":\s*{\s*\d+:/,  // Function coverage
+        /"s":\s*{\s*\d+:/,  // Statement coverage
+        /"b":\s*{\s*\d+:/,  // Branch coverage
+        /coverage-\w+\.json/,
+        /\.nyc_output/
     ];
     
     const hasContaminationPattern = typeof data === 'string' && 
         contaminationPatterns.some(pattern => pattern.test(data));
+    
+    // ENHANCED: Real-time node modules monitoring integration
+    if (global.nodeModulesMonitor && typeof global.nodeModulesMonitor.reportThreat === 'function') {
+        if (normalizedPath.includes('node_modules') && hasContaminationPattern) {
+            global.nodeModulesMonitor.reportThreat('REALTIME_CONTAMINATION_ATTEMPT', {
+                filePath: normalizedPath,
+                dataPreview: typeof data === 'string' ? data.substring(0, 200) : String(data).substring(0, 200),
+                timestamp: new Date().toISOString(),
+                writeType: 'writeFileSync'
+            });
+        }
+    }
     
     // CRITICAL: Block JSON data to JavaScript files (enhanced detection)
     if (isJavaScriptFile && isJSONLikeData && hasContaminationPattern &&
@@ -160,14 +180,24 @@ fs.writeFileSync = function(filePath, data, options) {
         console.error(`🚨 ULTRA-CRITICAL: Write blocked - JSON contamination of JavaScript file prevented`);
         console.error(`🚨 ULTRA-CRITICAL: Stack trace:`, new Error().stack);
         
-        // Trigger immediate node modules integrity check if available
+        // Enhanced threat reporting with coverage-aware detection
         if (global.fileOperationLogger && typeof global.fileOperationLogger.reportThreat === 'function') {
             global.fileOperationLogger.reportThreat('JSON_TO_JS_CONTAMINATION', {
                 filePath: normalizedPath,
                 dataPreview: data.substring(0, 200),
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
+                isCoverageMode: isCoverageMode,
+                threatLevel: 'CRITICAL'
             });
         }
+        
+        // ENHANCED: Emergency coverage mode protection
+        if (isCoverageMode) {
+            console.error(`🚨 COVERAGE EMERGENCY: Contamination during coverage collection blocked`);
+            // Signal to coverage system that emergency protection was triggered
+            process.env.COVERAGE_EMERGENCY_TRIGGERED = 'true';
+        }
+        
         return; // HARD BLOCK
     }
     
