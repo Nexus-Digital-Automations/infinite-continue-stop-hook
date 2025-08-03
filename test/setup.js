@@ -40,6 +40,19 @@ const fileOpLogger = new FileOperationLogger({
 // Make logger available globally for test utilities
 global.fileOperationLogger = fileOpLogger;
 
+// Initialize enhanced node_modules monitoring
+const { getGlobalMonitor } = require('../lib/nodeModulesMonitor');
+global.nodeModulesMonitor = getGlobalMonitor({
+    enableBackup: true,
+    enableRestore: true,
+    realTimeWatch: true,
+    autoRestore: true,
+    threatEscalation: true,
+    deepContentAnalysis: true,
+    proactiveScanning: !isCoverageMode, // Disable proactive scanning in coverage mode for performance
+    emergencyLockdown: true
+});
+
 // =============================================================================
 // STANDARDIZED MOCK SETUP FOR ALL TEST SUITES
 // =============================================================================
@@ -132,29 +145,103 @@ fs.writeFileSync = function(filePath, data, options) {
                                      data.includes('"tasks"') &&
                                      data.includes('malicious');
     
-    // ENHANCED: Check for any JSON-like data being written to JS files
-    const isJavaScriptFile = normalizedPath.endsWith('.js') || normalizedPath.endsWith('.mjs');
-    const isJSONLikeData = typeof data === 'string' && 
-        (data.trim().startsWith('{') || data.trim().startsWith('[')) &&
-        (data.includes('"') || data.includes("'"));
+    // ULTRA-ENHANCED: Deep analysis of file type and data structure
+    const isJavaScriptFile = normalizedPath.endsWith('.js') || normalizedPath.endsWith('.mjs') || normalizedPath.endsWith('.cjs');
     
-    // Enhanced contamination patterns with coverage-specific threats
+    // Enhanced JSON-like data detection with binary safety
+    let isJSONLikeData = false;
+    
+    if (typeof data === 'string') {
+        // Check for JSON structure patterns
+        const trimmedData = data.trim();
+        isJSONLikeData = (
+            (trimmedData.startsWith('{') && trimmedData.endsWith('}')) ||
+            (trimmedData.startsWith('[') && trimmedData.endsWith(']'))
+        ) && (data.includes('"') || data.includes("'"));
+        
+        // Enhanced binary detection (safe regex without control characters)
+        const hasBinaryMarkers = data.includes('\u0000') || // Null bytes using Unicode escape
+                                data.includes('\uFFFE') || // UTF-16 BOM
+                                data.includes('\uFEFF') || // UTF-16 BOM (BE) 
+                                data.includes('\uEFBB\uBFBF'); // UTF-8 BOM (fixed escape)
+        
+        // Check for multiple suspicious non-printable characters (safe pattern using indexOf)
+        let nonPrintableCount = 0;
+        const controlChars = ['\u0000', '\u0001', '\u0002', '\u0003', '\u0004', '\u0005', '\u0006', '\u0007', '\u0008'];
+        for (const char of controlChars) {
+            if (data.indexOf(char) !== -1) {
+                nonPrintableCount++;
+            }
+        }
+        const hasManyNonPrintable = nonPrintableCount >= 4;
+        
+        if (hasBinaryMarkers || hasManyNonPrintable) {
+            console.warn(`BLOCKED: Binary data detected in write to ${normalizedPath}`);
+            return; // Block binary data writes
+        }
+    } else if (Buffer.isBuffer(data)) {
+        // Convert small buffer portions to string for pattern analysis
+        try {
+            const stringData = data.toString('utf8', 0, Math.min(data.length, 1024));
+            isJSONLikeData = stringData.includes('{') && (stringData.includes('"project":') || stringData.includes('"tasks":'));
+        } catch {
+            // Buffer conversion failed, block the write
+            console.warn(`BLOCKED: Invalid buffer data in write to ${normalizedPath}`);
+            return;
+        }
+    }
+    
+    // ULTRA-ENHANCED contamination patterns with advanced threat detection
     const contaminationPatterns = [
+        // Core TODO.json patterns
         /"project":/,
         /"tasks":/,
         /"execution_count":/,
         /"current_mode":/,
         /"test-project"/,
+        /"task_\d+"/,
+        /"subtasks":/,
+        /"dependencies":/,
+        /"success_criteria":/,
+        /"important_files":/,
+        
+        // Module exports contamination
         /module\.exports\s*=\s*\{.*"tasks"/s,
         /exports\s*=\s*\{.*"project"/s,
-        // ENHANCED: Coverage-specific contamination patterns
+        /module\.exports\s*=\s*\{.*"execution_count"/s,
+        /exports\s*=\s*\{.*"current_mode"/s,
+        
+        // Advanced JSON structure patterns
+        /\{\s*"project"\s*:\s*"[^"]*"\s*,/,
+        /\{\s*"tasks"\s*:\s*\[/,
+        /\{\s*"current_mode"\s*:\s*"[^"]*"/,
+        /"mode"\s*:\s*"(development|testing|research|refactoring|task-creation|reviewer)"/,
+        
+        // Coverage-specific contamination patterns
         /"__coverage__":/,
         /"c":\s*{\s*\d+:/,  // NYC coverage data structure
         /"f":\s*{\s*\d+:/,  // Function coverage
         /"s":\s*{\s*\d+:/,  // Statement coverage
         /"b":\s*{\s*\d+:/,  // Branch coverage
         /coverage-\w+\.json/,
-        /\.nyc_output/
+        /\.nyc_output/,
+        /lcov-report/,
+        
+        // Task management contamination
+        /"status"\s*:\s*"(pending|in_progress|completed|blocked)"/,
+        /"priority"\s*:\s*"(high|medium|low|critical)"/,
+        /"created_at"\s*:\s*"\d{4}-\d{2}-\d{2}T/,
+        /"updated_at"\s*:\s*"\d{4}-\d{2}-\d{2}T/,
+        
+        // Hook system contamination
+        /"hook_\w+"/,
+        /"infinite-continue-stop-hook"/,
+        /"CLAUDE\.md"/,
+        /"modes\//,
+        
+        // Process environment contamination
+        /process\.env\.\w+\s*=\s*["'][^"']*["']/,
+        /global\.\w+\s*=\s*\{/
     ];
     
     const hasContaminationPattern = typeof data === 'string' && 
@@ -885,6 +972,20 @@ beforeEach(() => {
     // 9. Isolate console output for cleaner test output
     if (!process.env.PRESERVE_CONSOLE) {
         global.isolateConsole();
+    }
+    
+    // 10. Enhanced: Perform proactive security scan before each test
+    if (global.nodeModulesMonitor && !isCoverageMode && process.env.ENABLE_PROACTIVE_SCAN !== 'false') {
+        try {
+            global.nodeModulesMonitor.performProactiveScan().catch((error) => {
+                console.warn('Proactive scan error:', error.message);
+            });
+        } catch (error) {
+            // Silent fail to not break tests, but log for debugging
+            if (process.env.VERBOSE_TESTS) {
+                console.warn('Proactive scan initialization error:', error.message);
+            }
+        }
     }
 });
 
