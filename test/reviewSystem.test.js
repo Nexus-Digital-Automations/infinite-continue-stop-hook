@@ -213,8 +213,8 @@ describe('ReviewSystem', () => {
             const result = await reviewSystem.checkStrikeQuality(mockWorkingDir);
 
             expect(result.strike2.quality).toBe(75); // 100 - 5*5 (errors) 
-            expect(result.strike2.issues).toContain('5 lint errors found');
-            expect(result.strike2.issues).toContain('3 lint warnings found');
+            expect(result.strike2.issues).toContain('5 ESLint errors found');
+            expect(result.strike2.issues).toContain('3 ESLint warnings found');
         });
 
         test('should detect missing test script', async () => {
