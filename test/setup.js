@@ -53,6 +53,20 @@ global.nodeModulesMonitor = getGlobalMonitor({
     emergencyLockdown: true
 });
 
+// Initialize contamination prevention system
+const JestContaminationPrevention = require('../scripts/jest-contamination-fix');
+let contaminationPrevention = null;
+
+// Start contamination prevention if not already running
+if (!global.contaminationPreventionActive) {
+    contaminationPrevention = new JestContaminationPrevention();
+    contaminationPrevention.initialize().catch(error => {
+        console.warn('Failed to initialize contamination prevention:', error.message);
+    });
+    global.contaminationPreventionActive = true;
+    global.contaminationPrevention = contaminationPrevention;
+}
+
 // =============================================================================
 // STANDARDIZED MOCK SETUP FOR ALL TEST SUITES
 // =============================================================================

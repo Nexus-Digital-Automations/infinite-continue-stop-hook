@@ -18,44 +18,60 @@ async function main() {
     console.log('\n📦 Storing original file contents...');
     await resolver.storeOriginalContents();
     
-    // Detect contamination
-    console.log('\n🔍 Detecting contamination...');
-    const contaminated = await resolver.detectContamination();
+    // Enhanced detection with multiple passes
+    let totalCleaned = 0;
+    const maxPasses = 3;
     
-    if (contaminated.length === 0) {
-        console.log('✅ No contamination detected. All files are clean.');
-        return;
-    }
-    
-    console.log(`❌ Found contamination in ${contaminated.length} files:`);
-    for (const item of contaminated) {
-        console.log(`   - ${item.file}`);
-        console.log(`     Content preview: ${item.content.replace(/\n/g, '\\n')}...`);
-    }
-    
-    // Restore files
-    console.log('\n🧹 Restoring contaminated files...');
-    const result = await resolver.restoreContaminatedFiles();
-    
-    if (result.restored > 0) {
-        console.log(`✅ Successfully restored ${result.restored} files:`);
-        for (const file of result.files) {
-            console.log(`   - ${file}`);
+    for (let pass = 1; pass <= maxPasses; pass++) {
+        console.log(`\n🔍 Contamination detection pass ${pass}/${maxPasses}...`);
+        const contaminated = await resolver.detectContamination();
+        
+        if (contaminated.length === 0) {
+            if (pass === 1) {
+                console.log('✅ No contamination detected. All files are clean.');
+            } else {
+                console.log(`✅ Pass ${pass}: No contamination detected.`);
+            }
+            break;
         }
-    } else {
-        console.log('⚠️ No files were restored');
+        
+        console.log(`❌ Pass ${pass}: Found contamination in ${contaminated.length} files:`);
+        for (const item of contaminated) {
+            console.log(`   - ${item.file}`);
+            console.log(`     Content preview: ${item.content.replace(/\n/g, '\\n')}...`);
+        }
+        
+        // Restore files
+        console.log(`\n🧹 Pass ${pass}: Restoring contaminated files...`);
+        const result = await resolver.restoreContaminatedFiles();
+        
+        if (result.restored > 0) {
+            console.log(`✅ Pass ${pass}: Successfully restored ${result.restored} files:`);
+            for (const file of result.files) {
+                console.log(`   - ${file}`);
+            }
+            totalCleaned += result.restored;
+        } else {
+            console.log(`⚠️ Pass ${pass}: No files were restored`);
+        }
+        
+        // Brief pause between passes to allow any async operations to complete
+        await new Promise(resolve => setTimeout(resolve, 100));
     }
     
-    // Verify fix
-    console.log('\n🔍 Verifying fix...');
+    // Final verification
+    console.log('\n🔍 Final verification...');
     const remainingContamination = await resolver.detectContamination();
     
     if (remainingContamination.length === 0) {
         console.log('✅ All contamination resolved successfully!');
+        if (totalCleaned > 0) {
+            console.log(`🎉 Total files cleaned: ${totalCleaned}`);
+        }
         console.log('\n🎉 Files are now clean and ready for use.');
         process.exit(0);
     } else {
-        console.log('❌ Some contamination remains:');
+        console.log('❌ Some contamination remains after all passes:');
         for (const item of remainingContamination) {
             console.log(`   - ${item.file}`);
         }
