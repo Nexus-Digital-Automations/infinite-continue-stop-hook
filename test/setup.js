@@ -1062,7 +1062,10 @@ process.on('SIGINT', () => {
     } catch (error) {
         console.error('Failed to restore critical files on SIGINT:', error.message);
     }
-    process.exit(0);
+    // In test environment, avoid process.exit() to prevent Jest worker crashes
+    if (process.env.NODE_ENV !== 'test') {
+        process.exit(0);
+    }
 });
 
 process.on('SIGTERM', () => {
@@ -1071,7 +1074,10 @@ process.on('SIGTERM', () => {
     } catch (error) {
         console.error('Failed to restore critical files on SIGTERM:', error.message);
     }
-    process.exit(0);
+    // In test environment, avoid process.exit() to prevent Jest worker crashes
+    if (process.env.NODE_ENV !== 'test') {
+        process.exit(0);
+    }
 });
 
 // Utility function to register cleanup functions

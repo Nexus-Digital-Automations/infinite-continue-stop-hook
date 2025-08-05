@@ -5,18 +5,23 @@
   "main": "stop-hook.js",
   "type": "commonjs",
   "scripts": {
-    "test": "jest",
+    "test": "npm run fix-contamination && jest && npm run fix-contamination",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
+    "test:coverage": "npm run fix-contamination && jest --coverage && npm run fix-contamination",
     "test:verbose": "VERBOSE_TESTS=true jest",
-    "build": "npm run lint && npm run test",
+    "build": "npm run validate-build && npm run lint && npm run test && npm run post-build-validate",
+    "build:safe": "npm run validate-build && npm run lint && npm run test:coverage && npm run post-build-validate",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "setup": "node setup-infinite-hook.js",
     "demo": "node demo/demo.js",
     "coverage": "jest --coverage --collectCoverageFrom='lib/**/*.js'",
     "coverage:html": "jest --coverage --coverageReporters=html",
-    "pretest": "npm run lint"
+    "fix-contamination": "node scripts/fix-contamination.js",
+    "validate-build": "node scripts/build-validator.js",
+    "post-build-validate": "npm run fix-contamination && npm run validate-build",
+    "pretest": "npm run lint && npm run fix-contamination",
+    "posttest": "npm run fix-contamination"
   },
   "keywords": [
     "claude-code",

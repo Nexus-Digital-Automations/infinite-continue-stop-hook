@@ -26,11 +26,6 @@
 - Confirm understanding before beginning complex work
 - Stop immediately when user provides new instructions
 
-**"Continue" Command Protocol:**
-- **"continue"** means continue with the next task in the project's TODO.json file
-- Use TaskManager API to get current active task or next pending task
-- NEVER assume what to continue with - always check TODO.json first
-
 ## 🚨 NEVER MODIFY SETTINGS FILE
 
 The agent MUST NEVER touch, read, modify, or interact with `/Users/jeremyparker/.claude/settings.json` under ANY circumstances. This file contains system-critical configurations that must remain untouched.
@@ -109,7 +104,6 @@ Break work into **SMALLEST POSSIBLE SPECIALIZED UNITS** (30s-2min each) that can
 - **Test Strategy Design** - New testing approaches and frameworks
 - **Edge Case Identification** - Failure scenarios and resilience
 - **Integration Testing** - Cross-component interaction testing
-- **🚨 CRITICAL**: Only ONE subagent may execute tests to prevent conflicts
 
 **User Experience & Interface (2-3 subagents):**
 - **Frontend Components** - UI patterns, component architecture
@@ -338,13 +332,6 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 ```
 
 ## 🚨 Task Management
-
-### **TODO.json Interaction Protocol**
-
-**🚨 MANDATORY**: ALL TODO.json write operations MUST use TaskManager API exclusively. Reading TODO.json directly is allowed.
-
-**✅ CORRECT**: TaskManager API for writes, direct read for TODO.json allowed
-**❌ FORBIDDEN**: Direct write operations on TODO.json
 
 ### **Task Creation Protocol**
 
