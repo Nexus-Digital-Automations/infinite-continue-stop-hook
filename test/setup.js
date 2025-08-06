@@ -1080,7 +1080,10 @@ afterEach(async () => {
         global.testCleanup = [];
     }
     
-    // 2. Clean up temporary files with enhanced patterns
+    // 2. Enhanced resource cleanup for worker process management
+    await global.cleanupWorkerResources();
+    
+    // 3. Clean up temporary files with enhanced patterns
     const tempPatterns = [
         'test-todo*.json',
         'temp-todo*.json', 
@@ -1108,13 +1111,19 @@ afterEach(async () => {
         }
     }
     
-    // 3. Restore console output
+    // 4. Restore console output
     global.restoreConsole();
     
-    // 4. Force garbage collection if available
+    // 5. Clear any remaining timers and intervals
+    global.clearAllTimers();
+    
+    // 6. Force garbage collection if available
     if (global.gc) {
         global.gc();
     }
+    
+    // 7. Small delay to allow worker processes to exit gracefully
+    await new Promise(resolve => setTimeout(resolve, 10));
 });
 
 // Global error handler for unhandled promises
@@ -1513,6 +1522,116 @@ global.emergencyTestRecovery = async function() {
     console.log('🚨 EMERGENCY RECOVERY COMPLETED:', recoveryReport.success ? '✅ SUCCESS' : '❌ PARTIAL');
     
     return recoveryReport;
+};
+
+// ENHANCED: Worker resource cleanup for proper Jest exit
+global.cleanupWorkerResources = async function() {
+    try {
+        // Clear all timers and intervals that could keep workers alive
+        if (global._timers) {
+            global._timers.forEach(timer => {
+                clearTimeout(timer);
+                clearInterval(timer);
+            });
+            global._timers = [];
+        }
+        
+        // Clear any node modules monitors that might have watchers
+        if (global.nodeModulesMonitor && typeof global.nodeModulesMonitor.stopMonitoring === 'function') {
+            try {
+                await global.nodeModulesMonitor.stopMonitoring();
+            } catch {
+                // Silent fail to avoid breaking tests
+            }
+        }
+        
+        // Close any open file streams or watchers
+        if (global._openStreams) {
+            global._openStreams.forEach(stream => {
+                try {
+                    if (stream && typeof stream.close === 'function') {
+                        stream.close();
+                    } else if (stream && typeof stream.destroy === 'function') {
+                        stream.destroy();
+                    }
+                } catch {
+                    // Silent fail
+                }
+            });
+            global._openStreams = [];
+        }
+        
+        // Clear process event listeners that might prevent exit
+        const eventTypes = ['SIGINT', 'SIGTERM', 'SIGQUIT', 'unhandledRejection', 'uncaughtException'];
+        eventTypes.forEach(eventType => {
+            if (process.listenerCount(eventType) > 0) {
+                // Only remove our test listeners, not system ones
+                const listeners = process.listeners(eventType);
+                listeners.forEach(listener => {
+                    // Check if this looks like a test listener
+                    if (listener.toString().includes('testFile') || 
+                        listener.toString().includes('workerId') ||
+                        listener.toString().includes('WORKER_PROTECTION')) {
+                        process.removeListener(eventType, listener);
+                    }
+                });
+            }
+        });
+        
+        // Clear module cache for test modules to prevent memory leaks
+        Object.keys(require.cache).forEach(key => {
+            if (key.includes('/test/') && !key.includes('setup.js')) {
+                delete require.cache[key];
+            }
+        });
+        
+        // Small delay to let resources cleanup
+        await new Promise(resolve => setTimeout(resolve, 5));
+        
+    } catch {
+        // Silent fail to not break tests
+    }
+};
+
+// ENHANCED: Timer tracking for proper cleanup
+global.clearAllTimers = function() {
+    // Track and clear all test-created timers
+    if (!global._timers) {
+        global._timers = [];
+    }
+    
+    // Clear all tracked timers
+    global._timers.forEach(timer => {
+        try {
+            clearTimeout(timer);
+            clearInterval(timer);
+        } catch {
+            // Silent fail
+        }
+    });
+    global._timers = [];
+};
+
+// Override setTimeout and setInterval to track timers
+const originalSetTimeout = global.setTimeout;
+const originalSetInterval = global.setInterval;
+
+global.setTimeout = function(callback, delay, ...args) {
+    if (!global._timers) {
+        global._timers = [];
+    }
+    const timer = originalSetTimeout.call(this, callback, delay, ...args);
+    global._timers.push(timer);
+    return timer;
+};
+
+global.setInterval = function(callback, delay, ...args) {
+    if (!global._timers) {
+        global._timers = [];
+    }
+    const timer = originalSetInterval.call(this, callback, delay, ...args);
+    global._timers.push(timer);
+    return timer;
 };
 
 // Initialize enhanced protection systems

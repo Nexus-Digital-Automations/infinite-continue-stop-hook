@@ -21,10 +21,15 @@ class SafeTestRunner {
         // Store original file contents before testing
         await this.resolver.storeOriginalContents();
         
-        // Run Jest in a child process
-        const jestProcess = spawn('npx', ['jest', '--forceExit', ...jestArgs], {
+        // Run Jest in a child process with enhanced worker management (no forceExit)
+        const jestProcess = spawn('npx', ['jest', '--detectOpenHandles', '--maxWorkers=2', ...jestArgs], {
             stdio: 'pipe',
-            shell: true
+            shell: true,
+            env: {
+                ...process.env,
+                NODE_ENV: 'test',
+                WORKER_CLEANUP_ENABLED: 'true'
+            }
         });
 
         let testOutput = '';
@@ -43,10 +48,46 @@ class SafeTestRunner {
             _testErrors += error;
         });
 
-        // Wait for Jest to complete
+        // Wait for Jest to complete with timeout and graceful shutdown
         const exitCode = await new Promise((resolve) => {
+            let resolved = false;
+            
+            // Set up timeout for Jest process (5 minutes max)
+            const timeout = setTimeout(() => {
+                if (!resolved) {
+                    resolved = true;
+                    console.warn('\n⚠️ Jest process timeout - attempting graceful shutdown...');
+                    
+                    // Try graceful shutdown first
+                    jestProcess.kill('SIGTERM');
+                    
+                    // If still running after 10 seconds, force kill
+                    setTimeout(() => {
+                        if (!jestProcess.killed) {
+                            console.warn('⚠️ Force killing Jest process...');
+                            jestProcess.kill('SIGKILL');
+                        }
+                    }, 10000);
+                    
+                    resolve(1); // Exit with error code
+                }
+            }, 300000); // 5 minute timeout
+            
             jestProcess.on('close', (code) => {
-                resolve(code);
+                if (!resolved) {
+                    resolved = true;
+                    clearTimeout(timeout);
+                    resolve(code);
+                }
+            });
+            
+            jestProcess.on('error', (error) => {
+                if (!resolved) {
+                    resolved = true;
+                    clearTimeout(timeout);
+                    console.error('Jest process error:', error.message);
+                    resolve(1);
+                }
             });
         });
 

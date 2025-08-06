@@ -83,11 +83,14 @@ module.exports = {
   // Setup files
   setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
   
-  // Force exit to prevent hanging tests
-  forceExit: true,
+  // Enhanced worker process management - avoid forceExit, enable proper cleanup
+  forceExit: false,
   
-  // Detect open handles to prevent memory leaks - disabled for performance unless verbose
-  detectOpenHandles: process.env.VERBOSE_TESTS === 'true',
+  // Always detect open handles to prevent resource leaks - critical for worker cleanup
+  detectOpenHandles: true,
+  
+  // Enable handle collection details for debugging worker issues
+  detectOpenHandlesTimeout: 10000,
   
   // Performance optimizations
   maxWorkers: process.env.CI ? 2 : '50%', // Use fewer workers in CI, 50% of CPUs locally
