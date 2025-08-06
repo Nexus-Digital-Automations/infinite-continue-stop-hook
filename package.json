@@ -14,6 +14,8 @@
     "test:verbose": "VERBOSE_TESTS=true jest",
     "build": "npm run validate-build && npm run lint && npm run test && npm run post-build-validate",
     "build:safe": "npm run validate-build && npm run lint && npm run test:coverage && npm run post-build-validate",
+    "build:robust": "node scripts/robust-build.js",
+    "build:robust-verbose": "node scripts/robust-build.js --verbose",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "setup": "node setup-infinite-hook.js",

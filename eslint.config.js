@@ -3,7 +3,7 @@ const js = require('@eslint/js');
 module.exports = [
   // Global ignores must be first
   {
-    ignores: ['**/*.md', '**/*.json', '**/*.txt', '**/*.yml', '**/*.yaml', '**/*.xml', '**/*.csv', '**/*.log', 'node_modules/**', '**/*.backup.*']
+    ignores: ['**/*.md', '**/*.json', '**/*.txt', '**/*.yml', '**/*.yaml', '**/*.xml', '**/*.csv', '**/*.log', 'node_modules/**', '**/*.backup.*', '.node-modules-backup/**', 'coverage/**']
   },
   js.configs.recommended,
   {
