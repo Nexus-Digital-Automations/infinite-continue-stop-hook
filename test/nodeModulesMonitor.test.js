@@ -16,23 +16,21 @@ describe('NodeModulesMonitor', () => {
     let mockNodeModules;
     
     beforeEach(() => {
-        // Create isolated test environment
+        // Create isolated test environment with better path handling
         const testId = `monitor_test_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-        testDir = path.join('.test-isolated', testId);
+        testDir = path.resolve('.test-isolated', testId);
         mockNodeModules = path.join(testDir, 'node_modules');
         
-        // Create test directory structure with absolute paths
-        const absoluteTestDir = path.resolve(testDir);
-        const absoluteMockNodeModules = path.resolve(mockNodeModules);
+        // Ensure parent directories exist
+        try {
+            fs.mkdirSync(testDir, { recursive: true });
+            fs.mkdirSync(mockNodeModules, { recursive: true });
+        } catch (error) {
+            console.warn('Failed to create test directories:', error.message);
+            // Continue with test - createMockCriticalFiles will handle directory creation
+        }
         
-        fs.mkdirSync(absoluteTestDir, { recursive: true });
-        fs.mkdirSync(absoluteMockNodeModules, { recursive: true });
-        
-        // Update paths to use absolute ones
-        testDir = absoluteTestDir;
-        mockNodeModules = absoluteMockNodeModules;
-        
-        // Create mock critical files with absolute path
+        // Create mock critical files - this function will ensure directories exist
         createMockCriticalFiles(mockNodeModules);
         
         // Initialize monitor with test directory

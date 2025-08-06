@@ -16,6 +16,8 @@
     "build:safe": "npm run validate-build && npm run lint && npm run test:coverage && npm run post-build-validate",
     "build:robust": "node scripts/robust-build.js",
     "build:robust-verbose": "node scripts/robust-build.js --verbose",
+    "build:enhanced": "node scripts/robust-build.js --command 'npm run validate-build && npm run lint && npm run test:safe && npm run post-build-validate'",
+    "build:production": "node scripts/robust-build.js --command 'npm run validate-build && npm run lint && echo \"Tests skipped for production build\" && npm run post-build-validate'",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "setup": "node setup-infinite-hook.js",
