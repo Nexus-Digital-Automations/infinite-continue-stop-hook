@@ -1131,10 +1131,36 @@ afterEach(async () => {
     }
 });
 
-// Global error handler for unhandled promises
+// Enhanced global error handlers for unhandled promises and exceptions
+const unhandledRejections = new Set();
+const uncaughtExceptions = new Set();
+
 process.on('unhandledRejection', (reason, promise) => {
+    unhandledRejections.add(promise);
     console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    
+    // Track promise for cleanup
+    promise.catch(() => {
+        unhandledRejections.delete(promise);
+    });
 });
+
+process.on('rejectionHandled', (promise) => {
+    unhandledRejections.delete(promise);
+});
+
+process.on('uncaughtException', (error, origin) => {
+    console.error('UncaughtException:', error, 'origin:', origin);
+    uncaughtExceptions.add(error);
+});
+
+// Function to clean up tracked errors
+global.cleanupErrorTracking = function() {
+    unhandledRejections.clear();
+    uncaughtExceptions.clear();
+};
+
+// registerTestCleanup will be called later after it's defined
 
 // Critical: Restore files before process exit
 process.on('exit', () => {
@@ -1176,6 +1202,11 @@ global.registerTestCleanup = function(cleanupFn) {
     }
     global.testCleanup.push(cleanupFn);
 };
+
+// Register error tracking cleanup
+global.registerTestCleanup(() => {
+    global.cleanupErrorTracking();
+});
 
 // Enhanced console isolation and process protection
 let originalConsole;
@@ -1583,12 +1614,79 @@ global.cleanupWorkerResources = async function() {
             }
         });
         
-        // Clear module cache for test modules to prevent memory leaks
+        // Enhanced module cache cleanup to prevent memory leaks
         Object.keys(require.cache).forEach(key => {
-            if (key.includes('/test/') && !key.includes('setup.js')) {
-                delete require.cache[key];
+            // Clear test modules, lib modules, and any temporary modules
+            if (key.includes('/test/') || 
+                key.includes('/lib/') || 
+                key.includes('/.test-') || 
+                key.includes('/temp') || 
+                key.includes('/coverage/') ||
+                (key.includes('node_modules') && key.includes('.test'))) {
+                // Don't clear setup.js to avoid breaking test infrastructure
+                if (!key.includes('setup.js')) {
+                    delete require.cache[key];
+                }
             }
         });
+        
+        // Clear WeakMaps and WeakSets to prevent memory leaks
+        if (global.currentMocks) {
+            Object.values(global.currentMocks).forEach(mock => {
+                if (mock && typeof mock.__reset === 'function') {
+                    mock.__reset();
+                }
+                if (mock && typeof mock.__cleanup === 'function') {
+                    mock.__cleanup();
+                }
+            });
+            global.currentMocks = {};
+        }
+        
+        // Clear any accumulated event listeners
+        const processEvents = ['unhandledRejection', 'uncaughtException', 'warning'];
+        processEvents.forEach(eventType => {
+            const listeners = process.listeners(eventType);
+            listeners.forEach(listener => {
+                // Only remove test-related listeners, keep system ones
+                if (listener.toString().includes('test') || 
+                    listener.toString().includes('Test') ||
+                    listener.toString().includes('cleanup')) {
+                    process.removeListener(eventType, listener);
+                }
+            });
+        });
+        
+        // Clear any global variables that may accumulate
+        if (global._openStreams) {
+            global._openStreams.forEach(stream => {
+                try {
+                    if (stream && typeof stream.destroy === 'function') {
+                        stream.destroy();
+                    }
+                } catch (streamError) {
+                    // Silent cleanup, but prevent empty catch
+                    void streamError;
+                }
+            });
+            global._openStreams = [];
+        }
+        
+        // Clear any cached file contents and checksums
+        if (global.fileOperationLogger && global.fileOperationLogger.clearCache) {
+            global.fileOperationLogger.clearCache();
+        }
+        
+        if (global.nodeModulesMonitor && global.nodeModulesMonitor.preTestChecksums) {
+            // Don't clear checksums completely, but remove old entries
+            const checksumEntries = Array.from(global.nodeModulesMonitor.preTestChecksums.entries());
+            if (checksumEntries.length > 50) { // Keep only recent 50 entries
+                global.nodeModulesMonitor.preTestChecksums.clear();
+                checksumEntries.slice(-25).forEach(([key, value]) => {
+                    global.nodeModulesMonitor.preTestChecksums.set(key, value);
+                });
+            }
+        }
         
         // Small delay to let resources cleanup
         await new Promise(resolve => setTimeout(resolve, 5));
@@ -1610,34 +1708,144 @@ global.clearAllTimers = function() {
         try {
             clearTimeout(timer);
             clearInterval(timer);
-        } catch {
+            // Don't try to clear timers as immediates - different ID spaces
+        } catch (timerError) {
             // Silent fail
+            void timerError;
         }
     });
     global._timers = [];
+    
+    // Clear any remaining immediates
+    if (global._immediates) {
+        global._immediates.forEach(immediate => {
+            try {
+                if (typeof global.clearImmediate !== 'undefined') {
+                    global.clearImmediate(immediate);
+                }
+            } catch (immediateError) {
+                // Silent fail
+                void immediateError;
+            }
+        });
+        global._immediates = [];
+    }
+    
+    // Additional cleanup for any remaining timers in test environment
+    if (process.env.NODE_ENV === 'test') {
+        // Clear any remaining timers that might have been missed
+        const maxTimerId = setTimeout(() => {}, 0);
+        for (let i = 1; i <= maxTimerId; i++) {
+            clearTimeout(i);
+            clearInterval(i);
+            // Don't try to clear immediates with timer IDs - they use different ID spaces
+        }
+        clearTimeout(maxTimerId);
+    }
 };
 
-// Override setTimeout and setInterval to track timers
+// Override setTimeout, setInterval, and setImmediate to track timers
 const originalSetTimeout = global.setTimeout;
 const originalSetInterval = global.setInterval;
+const originalSetImmediate = global.setImmediate;
+
+// Initialize tracking arrays
+if (!global._timers) {
+    global._timers = [];
+}
+if (!global._immediates) {
+    global._immediates = [];
+}
 
 global.setTimeout = function(callback, delay, ...args) {
-    if (!global._timers) {
-        global._timers = [];
-    }
-    const timer = originalSetTimeout.call(this, callback, delay, ...args);
+    const wrappedCallback = function(...callbackArgs) {
+        try {
+            // Remove timer from tracking when it executes
+            const index = global._timers.indexOf(timer);
+            if (index > -1) {
+                global._timers.splice(index, 1);
+            }
+            return callback.apply(this, callbackArgs);
+        } catch (error) {
+            console.error('Timer callback error:', error);
+            throw error;
+        }
+    };
+    
+    const timer = originalSetTimeout.call(this, wrappedCallback, delay, ...args);
     global._timers.push(timer);
     return timer;
 };
 
 global.setInterval = function(callback, delay, ...args) {
-    if (!global._timers) {
-        global._timers = [];
-    }
-    const timer = originalSetInterval.call(this, callback, delay, ...args);
+    const wrappedCallback = function(...callbackArgs) {
+        try {
+            return callback.apply(this, callbackArgs);
+        } catch (error) {
+            console.error('Interval callback error:', error);
+            // Clear the interval on error to prevent infinite errors
+            global.clearInterval(timer);
+            throw error;
+        }
+    };
+    
+    const timer = originalSetInterval.call(this, wrappedCallback, delay, ...args);
     global._timers.push(timer);
     return timer;
 };
+
+if (typeof originalSetImmediate !== 'undefined') {
+    global.setImmediate = function(callback, ...args) {
+        const wrappedCallback = function(...callbackArgs) {
+            try {
+                // Remove immediate from tracking when it executes
+                const index = global._immediates.indexOf(immediate);
+                if (index > -1) {
+                    global._immediates.splice(index, 1);
+                }
+                return callback.apply(this, callbackArgs);
+            } catch (error) {
+                console.error('Immediate callback error:', error);
+                throw error;
+            }
+        };
+        
+        const immediate = originalSetImmediate.call(this, wrappedCallback, ...args);
+        global._immediates.push(immediate);
+        return immediate;
+    };
+}
+
+// Override clear functions to remove from tracking
+const originalClearTimeout = global.clearTimeout;
+const originalClearInterval = global.clearInterval;
+const originalClearImmediate = global.clearImmediate;
+
+global.clearTimeout = function(timer) {
+    const index = global._timers.indexOf(timer);
+    if (index > -1) {
+        global._timers.splice(index, 1);
+    }
+    return originalClearTimeout.call(this, timer);
+};
+
+global.clearInterval = function(timer) {
+    const index = global._timers.indexOf(timer);
+    if (index > -1) {
+        global._timers.splice(index, 1);
+    }
+    return originalClearInterval.call(this, timer);
+};
+
+if (typeof originalClearImmediate !== 'undefined') {
+    global.clearImmediate = function(immediate) {
+        const index = global._immediates.indexOf(immediate);
+        if (index > -1) {
+            global._immediates.splice(index, 1);
+        }
+        return originalClearImmediate.call(this, immediate);
+    };
+}
 
 // Initialize enhanced protection systems
 global.protectWorkerProcesses();
