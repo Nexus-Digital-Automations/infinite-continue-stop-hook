@@ -3941,7 +3941,7 @@
       "description": "Address test suite performance issues and worker process problems to ensure reliable, fast test execution:\n\n**Performance Issues:**\n- Worker processes failing to exit gracefully\n- Test leaks causing resource issues\n- Slow test execution and timeout problems\n\n**Objectives:**\n- Eliminate worker process force-exit issues\n- Improve test execution speed and reliability\n- Fix resource leaks and hanging processes",
       "mode": "DEVELOPMENT",
       "priority": "medium",
-      "status": "pending",
+      "status": "completed",
       "dependencies": [],
       "important_files": [
         "jest.config.js",
@@ -4086,14 +4086,88 @@
       "subtasks": [],
       "is_review_task": true,
       "strike_number": 3
+    },
+    {
+      "id": "task_1754517543237_gojvg0h0y",
+      "title": "Fix Jest worker process exit and hanging issues",
+      "description": "Address worker processes that fail to exit gracefully causing Jest to hang and requiring force-exit. Implement proper cleanup and resource management in test environment.",
+      "mode": "DEVELOPMENT",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [
+        "jest.config.js",
+        "test/setup.js",
+        "scripts/run-tests-safe.js"
+      ],
+      "success_criteria": [
+        "Jest tests complete without hanging or force-exit warnings",
+        "Worker processes exit gracefully after test completion",
+        "No Jest async handle warnings in test output",
+        "Test suite completes consistently without manual intervention"
+      ],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-06T21:59:03.237Z"
+    },
+    {
+      "id": "task_1754517543249_y62v7ngs9",
+      "title": "Optimize test execution speed and reduce timeouts",
+      "description": "Improve test suite performance by reducing execution time, eliminating slow tests, and preventing timeout issues. Target <60s total execution time.",
+      "mode": "DEVELOPMENT",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [
+        "task_1754517543237_gojvg0h0y"
+      ],
+      "important_files": [
+        "jest.config.js",
+        "test/setup.js",
+        "test/**/*.test.js"
+      ],
+      "success_criteria": [
+        "Total test suite execution time reduced to under 60 seconds",
+        "No individual test timeouts (8s limit respected)",
+        "Test parallelization working effectively",
+        "Memory usage optimized during test runs"
+      ],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-06T21:59:03.249Z"
+    },
+    {
+      "id": "task_1754517543254_uujj6ovuh",
+      "title": "Eliminate test resource leaks and memory issues",
+      "description": "Fix resource leaks in test environment including file handles, timers, promises, and memory leaks that cause resource exhaustion and test instability.",
+      "mode": "DEVELOPMENT",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [
+        "test/setup.js",
+        "lib/nodeModulesMonitor.js",
+        "lib/testEnvironmentRecovery.js"
+      ],
+      "success_criteria": [
+        "No resource leak warnings in test output",
+        "Memory usage stable across test runs",
+        "File handles properly closed after tests",
+        "All async operations properly cleaned up"
+      ],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-06T21:59:03.254Z"
     }
   ],
   "review_strikes": 0,
   "strikes_completed_last_run": false,
   "current_task_index": 0,
-  "last_mode": "DEVELOPMENT",
-  "execution_count": 415,
-  "last_hook_activation": 1754517044379,
+  "last_mode": "TASK_CREATION",
+  "execution_count": 416,
+  "last_hook_activation": 1754517463720,
   "__removedLinterTasks": {
     "removedCount": 1,
     "finalTaskCount": 113
