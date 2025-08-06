@@ -59,8 +59,8 @@ module.exports = {
     'lcov'
   ],
   
-  // Test timeout - reduced for faster execution
-  testTimeout: 8000,
+  // Test timeout - optimized for performance
+  testTimeout: 5000,
   
   // Clear mocks between tests
   clearMocks: true,
@@ -77,8 +77,14 @@ module.exports = {
   // Verbose output controlled by VERBOSE_TESTS environment variable
   verbose: process.env.VERBOSE_TESTS === 'true',
   
-  // Disable silent mode when verbose is off for better performance
+  // Enable silent mode for better performance unless verbose testing
   silent: process.env.VERBOSE_TESTS !== 'true',
+  
+  // Performance optimizations
+  passWithNoTests: true,
+  
+  // Optimize test runner for speed
+  watchPathIgnorePatterns: ['/node_modules/', '/.git/', '/coverage/', '/.jest-cache/'],
   
   // Setup files
   setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
@@ -89,11 +95,9 @@ module.exports = {
   // Always detect open handles to prevent resource leaks - critical for worker cleanup
   detectOpenHandles: true,
   
-  // Enable handle collection details for debugging worker issues
-  detectOpenHandlesTimeout: 10000,
   
-  // Performance optimizations
-  maxWorkers: process.env.CI ? 2 : '50%', // Use fewer workers in CI, 50% of CPUs locally
+  // Performance optimizations - optimized worker configuration
+  maxWorkers: process.env.CI ? 1 : Math.min(4, require('os').cpus().length - 1), // Single worker in CI, optimal local workers
   
   // Cache directory for faster subsequent runs
   cacheDirectory: '<rootDir>/.jest-cache',

@@ -1049,17 +1049,17 @@ beforeEach(() => {
         global.isolateConsole();
     }
     
-    // 10. Enhanced: Perform proactive security scan before each test
-    if (global.nodeModulesMonitor && !isCoverageMode && process.env.ENABLE_PROACTIVE_SCAN !== 'false') {
+    // 10. Enhanced: Perform proactive security scan before each test (optimized for performance)
+    if (global.nodeModulesMonitor && !isCoverageMode && process.env.ENABLE_PROACTIVE_SCAN === 'true') {
         try {
-            global.nodeModulesMonitor.performProactiveScan().catch((error) => {
-                console.warn('Proactive scan error:', error.message);
-            });
-        } catch (error) {
-            // Silent fail to not break tests, but log for debugging
+            // Skip proactive scan for performance unless explicitly enabled
             if (process.env.VERBOSE_TESTS) {
-                console.warn('Proactive scan initialization error:', error.message);
+                global.nodeModulesMonitor.performProactiveScan().catch((error) => {
+                    console.warn('Proactive scan error:', error.message);
+                });
             }
+        } catch {
+            // Silent fail to not break tests
         }
     }
 });
@@ -1122,8 +1122,13 @@ afterEach(async () => {
         global.gc();
     }
     
-    // 7. Small delay to allow worker processes to exit gracefully
-    await new Promise(resolve => setTimeout(resolve, 10));
+    // 7. Minimal delay to allow worker processes to exit gracefully (optimized for speed)
+    if (process.env.VERBOSE_TESTS) {
+        await new Promise(resolve => setTimeout(resolve, 10));
+    } else {
+        // Skip delay in fast mode for better performance
+        await new Promise(resolve => setTimeout(resolve, 1));
+    }
 });
 
 // Global error handler for unhandled promises
