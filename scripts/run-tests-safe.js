@@ -28,7 +28,7 @@ class SafeTestRunner {
         });
 
         let testOutput = '';
-        let testErrors = '';
+        let _testErrors = '';
         
         // Capture Jest output
         jestProcess.stdout.on('data', (data) => {
@@ -40,7 +40,7 @@ class SafeTestRunner {
         jestProcess.stderr.on('data', (data) => {
             const error = data.toString();
             process.stderr.write(error);
-            testErrors += error;
+            _testErrors += error;
         });
 
         // Wait for Jest to complete
