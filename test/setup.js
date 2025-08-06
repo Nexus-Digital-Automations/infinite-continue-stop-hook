@@ -1,6 +1,31 @@
 // Test setup file for better isolation and consistent mock patterns
 const fs = require('fs');
 const path = require('path');
+
+// Helper function to get current test file
+function getCurrentTestFile() {
+    const stack = new Error().stack || '';
+    const lines = stack.split('\n');
+    
+    // Look for test file in stack trace
+    for (const line of lines) {
+        const match = line.match(/at.*\(([^)]+\.test\.js):\d+:\d+\)/) || 
+                     line.match(/at.*\(([^)]+\.spec\.js):\d+:\d+\)/) ||
+                     line.match(/([^/\\]+\.test\.js):\d+:\d+/) ||
+                     line.match(/([^/\\]+\.spec\.js):\d+:\d+/);
+        
+        if (match) {
+            return match[1];
+        }
+    }
+    
+    // Fallback to Jest environment variables
+    if (process.env.JEST_CURRENT_TEST_NAME) {
+        return process.env.JEST_CURRENT_TEST_NAME;
+    }
+    
+    return 'unknown-test-file';
+}
 const TestErrorHandler = require('../lib/testErrorHandler');
 const FileOperationLogger = require('../lib/fileOperationLogger');
 const {
@@ -261,16 +286,52 @@ fs.writeFileSync = function(filePath, data, options) {
     const hasContaminationPattern = typeof data === 'string' && 
         contaminationPatterns.some(pattern => pattern.test(data));
     
-    // ENHANCED: Real-time node modules monitoring integration
+        // ENHANCED: Real-time node modules monitoring integration with complete isolation
     if (global.nodeModulesMonitor && typeof global.nodeModulesMonitor.reportThreat === 'function') {
         if (normalizedPath.includes('node_modules') && hasContaminationPattern) {
             global.nodeModulesMonitor.reportThreat('REALTIME_CONTAMINATION_ATTEMPT', {
                 filePath: normalizedPath,
                 dataPreview: typeof data === 'string' ? data.substring(0, 200) : String(data).substring(0, 200),
                 timestamp: new Date().toISOString(),
-                writeType: 'writeFileSync'
+                writeType: 'writeFileSync',
+                testFile: getCurrentTestFile(),
+                workerId: process.env.JEST_WORKER_ID,
+                severity: 'CRITICAL',
+                isolationLevel: 'MAXIMUM'
             });
         }
+    }
+    
+    // ENHANCED: Complete test environment isolation - block ALL node_modules writes
+    if (normalizedPath.includes('node_modules') && 
+        !isTestEnvironment && 
+        !normalizedPath.includes('.test-env') &&
+        !normalizedPath.includes('.test-isolated')) {
+        
+        console.error(`🚨 CRITICAL TEST ISOLATION: All node_modules writes blocked during tests`);
+        console.error(`🚨 Path: ${normalizedPath}`);
+        console.error(`🚨 Test Environment: ${process.env.NODE_ENV}`);
+        console.error(`🚨 Jest Worker: ${process.env.JEST_WORKER_ID}`);
+        console.error(`🚨 Current Test: ${getCurrentTestFile()}`);
+        console.error(`🚨 Data Type: ${typeof data}, Size: ${typeof data === 'string' ? data.length : 'unknown'}`);
+        
+        // Set emergency isolation flags
+        process.env.NODE_MODULES_ISOLATION_ACTIVE = 'true';
+        process.env.TEST_ENVIRONMENT_PROTECTED = 'true';
+        
+        // Report critical isolation breach
+        if (global.nodeModulesMonitor?.reportThreat) {
+            global.nodeModulesMonitor.reportThreat('TEST_ISOLATION_BREACH', {
+                filePath: normalizedPath,
+                severity: 'CRITICAL',
+                timestamp: new Date().toISOString(),
+                testFile: getCurrentTestFile(),
+                workerId: process.env.JEST_WORKER_ID,
+                emergencyAction: 'WRITE_BLOCKED'
+            });
+        }
+        
+        throw new Error(`CRITICAL: Complete test isolation - node_modules write blocked: ${normalizedPath}`);
     }
     
     // CRITICAL: Block JSON data to JavaScript files (enhanced detection)
@@ -1240,4 +1301,222 @@ global.createTestEnvironment = function(options = {}) {
     };
 };
 
+// ENHANCED: Comprehensive worker process exit protection
+global.protectWorkerProcesses = function() {
+    // Protect against unexpected process exits that could crash Jest workers
+    const processExitMethods = ['exit', 'abort'];
+    const processSignals = ['SIGINT', 'SIGTERM', 'SIGQUIT'];
+    
+    processExitMethods.forEach(method => {
+        const original = process[method];
+        if (original && typeof original === 'function') {
+            process[method] = function(...args) {
+                if (process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID) {
+                    console.warn(`🛡️ WORKER PROTECTION: Blocked ${method} in test environment`);
+                    
+                    // Report to monitor
+                    if (global.nodeModulesMonitor?.reportThreat) {
+                        global.nodeModulesMonitor.reportThreat('WORKER_EXIT_PROTECTION', {
+                            method,
+                            args,
+                            workerId: process.env.JEST_WORKER_ID,
+                            testFile: getCurrentTestFile(),
+                            timestamp: new Date().toISOString(),
+                            preventedCrash: true
+                        });
+                    }
+                    
+                    // In tests, throw instead of exiting to maintain test isolation
+                    throw new Error(`Test environment: ${method} call blocked to prevent worker crash`);
+                }
+                return original.apply(this, args);
+            };
+        }
+    });
+    
+    // Enhanced signal handling for test environment
+    processSignals.forEach(signal => {
+        process.removeAllListeners(signal);
+        process.on(signal, () => {
+            if (process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID) {
+                console.warn(`🛡️ SIGNAL PROTECTION: ${signal} intercepted in test environment`);
+                
+                // Report to monitor
+                if (global.nodeModulesMonitor?.reportThreat) {
+                    global.nodeModulesMonitor.reportThreat('SIGNAL_PROTECTION', {
+                        signal,
+                        workerId: process.env.JEST_WORKER_ID,
+                        testFile: getCurrentTestFile(),
+                        timestamp: new Date().toISOString(),
+                        intercepted: true
+                    });
+                }
+                
+                // Perform graceful cleanup instead of terminating
+                try {
+                    restoreCriticalFiles();
+                    if (global.testCleanup) {
+                        global.testCleanup.forEach(cleanup => {
+                            try {
+                                cleanup();
+                            } catch (e) {
+                                console.warn(`Cleanup error during signal handling: ${e.message}`);
+                            }
+                        });
+                    }
+                } catch (e) {
+                    console.warn(`Error during signal cleanup: ${e.message}`);
+                }
+                
+                return; // Don't terminate, let Jest handle the lifecycle
+            }
+            
+            // In non-test environments, allow normal signal handling
+            console.log(`Received ${signal}, performing graceful shutdown...`);
+            try {
+                restoreCriticalFiles();
+            } catch (e) {
+                console.error(`Error restoring files during ${signal}: ${e.message}`);
+            }
+            process.exit(0);
+        });
+    });
+};
+
+// ENHANCED: Test environment recovery and validation
+global.validateTestEnvironment = function() {
+    const issues = [];
+    
+    // Check for contamination flags
+    const contaminationFlags = [
+        'NODE_MODULES_ISOLATION_ACTIVE',
+        'TEST_ENVIRONMENT_PROTECTED',
+        'JSON_CONTAMINATION_CRITICAL',
+        'TEST_ISOLATION_EMERGENCY',
+        'NODE_MODULES_WRITE_BLOCKED',
+        'COVERAGE_THREAT_DETECTED',
+        'NODE_MODULES_EMERGENCY'
+    ];
+    
+    contaminationFlags.forEach(flag => {
+        if (process.env[flag]) {
+            issues.push({
+                type: 'CONTAMINATION_FLAG',
+                flag,
+                severity: 'HIGH'
+            });
+        }
+    });
+    
+    // Validate critical files integrity
+    criticalFiles.forEach(filePath => {
+        try {
+            if (fs.existsSync(filePath) && originalFileContents.has(filePath)) {
+                const currentContent = fs.readFileSync(filePath, 'utf8');
+                const originalContent = originalFileContents.get(filePath);
+                
+                if (currentContent !== originalContent) {
+                    issues.push({
+                        type: 'CRITICAL_FILE_CONTAMINATION',
+                        file: filePath,
+                        severity: 'CRITICAL'
+                    });
+                }
+            }
+        } catch (error) {
+            issues.push({
+                type: 'FILE_ACCESS_ERROR',
+                file: filePath,
+                error: error.message,
+                severity: 'MEDIUM'
+            });
+        }
+    });
+    
+    return {
+        isClean: issues.length === 0,
+        issues,
+        timestamp: new Date().toISOString(),
+        workerId: process.env.JEST_WORKER_ID
+    };
+};
+
+// ENHANCED: Emergency test environment recovery
+global.emergencyTestRecovery = async function() {
+    console.log('🚨 EMERGENCY TEST RECOVERY ACTIVATED');
+    
+    const recoverySteps = [];
+    
+    // Step 1: Restore critical files
+    try {
+        restoreCriticalFiles();
+        recoverySteps.push({ step: 'critical_files_restored', success: true });
+    } catch (error) {
+        recoverySteps.push({ step: 'critical_files_restored', success: false, error: error.message });
+    }
+    
+    // Step 2: Clear contamination flags
+    const contaminationFlags = [
+        'NODE_MODULES_ISOLATION_ACTIVE',
+        'TEST_ENVIRONMENT_PROTECTED',
+        'JSON_CONTAMINATION_CRITICAL',
+        'TEST_ISOLATION_EMERGENCY',
+        'NODE_MODULES_WRITE_BLOCKED',
+        'COVERAGE_THREAT_DETECTED',
+        'NODE_MODULES_EMERGENCY',
+        'COVERAGE_QUARANTINE_ACTIVE',
+        'FILESYSTEM_PROTECTION_EMERGENCY'
+    ];
+    
+    contaminationFlags.forEach(flag => {
+        delete process.env[flag];
+    });
+    recoverySteps.push({ step: 'contamination_flags_cleared', success: true });
+    
+    // Step 3: Clean up test artifacts
+    try {
+        const tempDirs = ['.test-isolated', '.test-env'];
+        for (const dir of tempDirs) {
+            if (fs.existsSync(dir)) {
+                fs.rmSync(dir, { recursive: true, force: true });
+            }
+        }
+        recoverySteps.push({ step: 'test_artifacts_cleaned', success: true });
+    } catch (error) {
+        recoverySteps.push({ step: 'test_artifacts_cleaned', success: false, error: error.message });
+    }
+    
+    // Step 4: Reset node modules monitor if available
+    if (global.nodeModulesMonitor) {
+        try {
+            if (typeof global.nodeModulesMonitor.resetGlobalMonitor === 'function') {
+                global.nodeModulesMonitor.resetGlobalMonitor();
+            }
+            recoverySteps.push({ step: 'monitor_reset', success: true });
+        } catch (error) {
+            recoverySteps.push({ step: 'monitor_reset', success: false, error: error.message });
+        }
+    }
+    
+    // Step 5: Validate recovery
+    const validation = global.validateTestEnvironment();
+    recoverySteps.push({ step: 'environment_validated', success: validation.isClean, issues: validation.issues });
+    
+    const recoveryReport = {
+        timestamp: new Date().toISOString(),
+        workerId: process.env.JEST_WORKER_ID,
+        steps: recoverySteps,
+        success: recoverySteps.every(step => step.success),
+        validation
+    };
+    
+    console.log('🚨 EMERGENCY RECOVERY COMPLETED:', recoveryReport.success ? '✅ SUCCESS' : '❌ PARTIAL');
+    
+    return recoveryReport;
+};
+
+// Initialize enhanced protection systems
+global.protectWorkerProcesses();
+
+// Export empty module for compatibility
 module.exports = {};

@@ -18,13 +18,28 @@ async function main() {
     console.log('\n📦 Storing original file contents...');
     await resolver.storeOriginalContents();
     
-    // Enhanced detection with multiple passes
+    // Enhanced detection with multiple passes and test environment awareness
     let totalCleaned = 0;
-    const maxPasses = 3;
+    const maxPasses = 5; // Increased for thorough cleanup
+    const isTestEnvironment = process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID;
+    
+    console.log(`\n🛡️ Test Environment Mode: ${isTestEnvironment ? 'ACTIVE' : 'INACTIVE'}`);
+    console.log(`🛡️ Maximum Isolation: ${process.env.NODE_MODULES_ISOLATION_ACTIVE ? 'ACTIVE' : 'INACTIVE'}`);
     
     for (let pass = 1; pass <= maxPasses; pass++) {
         console.log(`\n🔍 Contamination detection pass ${pass}/${maxPasses}...`);
+        
+        // Enhanced contamination detection with test environment protection
         const contaminated = await resolver.detectContamination();
+        
+        // Additional test environment specific checks
+        if (isTestEnvironment) {
+            const testEnvironmentContamination = await resolver.detectTestEnvironmentContamination();
+            if (testEnvironmentContamination.length > 0) {
+                console.log(`⚠️ Test environment contamination detected: ${testEnvironmentContamination.length} issues`);
+                contaminated.push(...testEnvironmentContamination);
+            }
+        }
         
         if (contaminated.length === 0) {
             if (pass === 1) {
