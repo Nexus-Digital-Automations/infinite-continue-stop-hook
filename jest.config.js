@@ -89,8 +89,8 @@ module.exports = {
   // Setup files
   setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
   
-  // Enhanced worker process management - enable forceExit for faster test completion
-  forceExit: true,
+  // Enhanced worker process management - disable forceExit to prevent exit module contamination
+  forceExit: false,
   
   // Conditionally detect open handles - disabled for performance unless debugging
   detectOpenHandles: process.env.DETECT_HANDLES === 'true',

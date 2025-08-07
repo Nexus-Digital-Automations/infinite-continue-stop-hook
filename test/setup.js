@@ -1,6 +1,12 @@
 // Test setup file for better isolation and consistent mock patterns
 const fs = require('fs');
 const path = require('path');
+const ContaminationResolver = require('../lib/contaminationResolver');
+
+// Initialize Jest exit protection immediately
+console.log('🛡️ Initializing Jest contamination protection...');
+const resolver = new ContaminationResolver();
+resolver.setupJestExitProtection();
 
 // Helper function to get current test file
 function getCurrentTestFile() {

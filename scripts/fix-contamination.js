@@ -14,6 +14,9 @@ async function main() {
     
     const resolver = new ContaminationResolver();
     
+    // Set up Jest exit protection immediately
+    resolver.setupJestExitProtection();
+    
     // Store original contents first
     console.log('\n📦 Storing original file contents...');
     await resolver.storeOriginalContents();

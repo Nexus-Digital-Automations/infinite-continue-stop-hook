@@ -29,8 +29,8 @@
     "fix-contamination": "node scripts/fix-contamination.js",
     "validate-build": "node scripts/build-validator.js",
     "post-build-validate": "npm run fix-contamination && npm run validate-build",
-    "pretest": "npm run lint && npm run fix-contamination",
-    "posttest": "npm run fix-contamination"
+    "pretest": "npm run lint && npm run fix-contamination", 
+    "posttest": "npm run fix-contamination && sleep 1 && npm run fix-contamination"
   },
   "keywords": [
     "claude-code",
