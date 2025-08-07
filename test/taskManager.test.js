@@ -908,11 +908,15 @@ describe('TaskManager', () => {
 
             jest.spyOn(taskManager, 'readTodo').mockResolvedValue({ tasks: largeTasks });
 
-            const startTime = Date.now();
+            // Use performance.now() instead of Date.now() to avoid mock interference
+            const startTime = performance.now();
             const result = await taskManager.getCurrentTask();
-            const duration = Date.now() - startTime;
+            const endTime = performance.now();
+            const duration = endTime - startTime;
 
             expect(result.id).toBe('task-5000');
+            expect(typeof duration).toBe('number');
+            expect(duration).toBeGreaterThanOrEqual(0);
             expect(duration).toBeLessThan(100); // Should be fast
         });
 
