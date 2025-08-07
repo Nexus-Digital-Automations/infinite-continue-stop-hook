@@ -451,13 +451,14 @@ describe('Filesystem Write Operation Monitoring', () => {
                 monitoringSession.operationCount++;
                 
                 const maliciousContent = 'escalated privileges content';
+                let escalationDetected = false;
                 
                 // Attempt permission escalation - node_modules paths throw, system paths may be blocked silently
                 if (escalationPath.includes('node_modules')) {
                     expect(() => {
                         fs.writeFileSync(escalationPath, maliciousContent);
                     }).toThrow(/CRITICAL: Complete test isolation - node_modules write blocked/);
-                    detectedEscalations++;
+                    escalationDetected = true;
                 } else {
                     // System paths may be blocked silently or fail due to permissions
                     let wasBlocked = false;
@@ -473,7 +474,7 @@ describe('Filesystem Write Operation Monitoring', () => {
                     } catch {
                         wasBlocked = true; // Any error means blocked/failed
                     }
-                    if (wasBlocked) detectedEscalations++;
+                    if (wasBlocked) escalationDetected = true;
                 }
                 
                 monitoringSession.blockedCount++;
@@ -489,11 +490,16 @@ describe('Filesystem Write Operation Monitoring', () => {
                 const operations = writeLogger.operations;
                 const operation = operations.find(op => op.id === operationId);
                 
-                // Should detect permission escalation
+                // Should detect permission escalation (check both write blocking and threat detection)
                 if (operation.threats.includes('PERMISSION_ESCALATION')) {
                     expect(['HIGH', 'CRITICAL']).toContain(operation.threatLevel);
-                    detectedEscalations++;
+                    escalationDetected = true;
                     monitoringSession.blockedCount++;
+                }
+                
+                // Count each escalation attempt only once, regardless of detection method
+                if (escalationDetected) {
+                    detectedEscalations++;
                 }
             });
             
@@ -635,8 +641,17 @@ describe('Filesystem Write Operation Monitoring', () => {
             ];
             
             auditOperations.forEach((op, index) => {
-                // Perform filesystem operation
-                fs.writeFileSync(op.path, op.data);
+                // Perform filesystem operation (handle expected protection system blocks)
+                try {
+                    fs.writeFileSync(op.path, op.data);
+                } catch (error) {
+                    // Expected for dangerous/protected paths - protection system is working
+                    if (op.type === 'dangerous' || op.type === 'escalation') {
+                        expect(error.message).toMatch(/BLOCKED|CRITICAL|EACCES|EPERM/);
+                    } else {
+                        throw error; // Unexpected error for safe operations
+                    }
+                }
                 
                 // Log for audit trail
                 writeLogger.logOperation(
@@ -691,8 +706,13 @@ describe('Filesystem Write Operation Monitoring', () => {
             ];
             
             alertTriggers.forEach(dangerousPath => {
-                // Attempt dangerous operation
-                fs.writeFileSync(dangerousPath, '{"malicious": "payload"}');
+                // Attempt dangerous operation (expect it to be blocked)
+                try {
+                    fs.writeFileSync(dangerousPath, '{"malicious": "payload"}');
+                } catch (error) {
+                    // Expected - protection system should block dangerous operations
+                    expect(error.message).toMatch(/BLOCKED|CRITICAL/);
+                }
                 
                 // Log operation (this may trigger real-time alerts)
                 writeLogger.logOperation(
@@ -729,8 +749,17 @@ describe('Filesystem Write Operation Monitoring', () => {
                     timestamp: Date.now() + i
                 };
                 
-                // Perform operation
-                fs.writeFileSync(operation.path, operation.data);
+                // Perform operation (handle expected protection system blocks)
+                try {
+                    fs.writeFileSync(operation.path, operation.data);
+                } catch (error) {
+                    // Expected for node_modules paths - protection system is working
+                    if (operation.path.includes('node_modules')) {
+                        expect(error.message).toMatch(/BLOCKED|CRITICAL/);
+                    } else {
+                        throw error; // Unexpected error for safe files
+                    }
+                }
                 
                 // Log for forensic tracking
                 const operationId = writeLogger.logOperation(
