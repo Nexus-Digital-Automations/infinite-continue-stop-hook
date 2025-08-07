@@ -198,6 +198,54 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getErrorSummary('task_id').then(errors => console.log(JSON.stringify(errors, null, 2)));"
 ```
 
+### Completed Task Archiving (DONE.json)
+
+```bash
+# View completed tasks from DONE.json
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readDone().then(data => console.log(JSON.stringify(data, null, 2)));"
+
+# Get recent completed tasks (last 10)
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getCompletedTasks({limit: 10}).then(tasks => console.log(JSON.stringify(tasks.map(t => ({id: t.id, title: t.title, completed_at: t.completed_at})), null, 2)));"
+
+# Get completed tasks from last 7 days
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(); tm.getCompletedTasks({since: sevenDaysAgo}).then(tasks => console.log('Completed last 7 days:', tasks.length));"
+
+# Get completion statistics
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getCompletionStats().then(stats => console.log(JSON.stringify(stats, null, 2)));"
+
+# Restore a completed task back to TODO.json
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.restoreCompletedTask('task_id').then(restored => console.log('Task restored:', restored));"
+
+# Migrate all existing completed tasks from TODO.json to DONE.json (one-time setup)
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.migrateCompletedTasks().then(result => console.log('Migration results:', JSON.stringify(result, null, 2)));"
+```
+
+#### Automatic Archiving Behavior
+
+When a task status is updated to 'completed':
+- Task is automatically moved from TODO.json to DONE.json
+- Completion timestamp (`completed_at`) is added
+- Task is removed from TODO.json to keep it focused on active work
+- Archive metadata tracks source file and completion details
+
+#### DONE.json Structure
+
+```javascript
+{
+  project: "infinite-continue-stop-hook",
+  completed_tasks: [
+    {
+      // Original task properties plus:
+      completed_at: "2025-08-07T04:55:19.628Z",
+      archived_from_todo: "./TODO.json"
+    }
+  ],
+  total_completed: 149,
+  last_completion: "2025-08-07T04:55:19.628Z",
+  created_at: "2025-08-07T04:55:04.024Z"
+}
+```
+
 ## Task Schema
 
 ### Complete Task Object Structure
