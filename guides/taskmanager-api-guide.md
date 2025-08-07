@@ -30,6 +30,31 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.removeTasks(['task_id1', 'task_id2', 'task_id3']).then(result => console.log('Removal results:', JSON.stringify(result, null, 2)));"
 ```
 
+### Task Reordering Operations
+
+```bash
+# Reorder a task to a specific position (0-based index)
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.reorderTask('task_id', 2).then(moved => console.log('Task reordered:', moved));"
+
+# Move task to the top of the list
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.moveTaskToTop('task_id').then(moved => console.log('Task moved to top:', moved));"
+
+# Move task to the bottom of the list
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.moveTaskToBottom('task_id').then(moved => console.log('Task moved to bottom:', moved));"
+
+# Move task up one position
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.moveTaskUp('task_id').then(moved => console.log('Task moved up:', moved));"
+
+# Move task down one position
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.moveTaskDown('task_id').then(moved => console.log('Task moved down:', moved));"
+
+# Reorder multiple tasks at once
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.reorderTasks([{taskId: 'task1', newIndex: 0}, {taskId: 'task2', newIndex: 3}]).then(result => console.log('Reorder results:', JSON.stringify(result, null, 2)));"
+
+# Get current position of a task
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); console.log('Task position:', tm.getTaskPosition('task_id'));"
+```
+
 ### File and Research Management
 
 ```bash
@@ -268,6 +293,12 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 
 # Remove a task by ID  
 node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.removeTask('task_id').then(removed => console.log('Task removed:', removed));"
+
+# Move task to top priority (beginning of list)
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.moveTaskToTop('task_id').then(moved => console.log('Task prioritized:', moved));"
+
+# Move task up one position
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.moveTaskUp('task_id').then(moved => console.log('Task moved up:', moved));"
 ```
 
 This comprehensive API provides all the functionality needed for sophisticated task management in Claude Code agent workflows, with full bash compatibility and robust error handling.
