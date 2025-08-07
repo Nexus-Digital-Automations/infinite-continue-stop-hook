@@ -5977,9 +5977,33 @@
       "created_at": "2025-08-07T06:58:25.057Z",
       "completed_at": "2025-08-07T07:07:13.333Z",
       "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1754549905058_c7t0a3h4p",
+      "title": "Fix Control Character Regex Issue in Test Setup",
+      "description": "Fix eslint error \"Unexpected control character(s) in regular expression\" in test/setup.js line 156 to achieve 100% lint quality",
+      "mode": "DEVELOPMENT",
+      "priority": "low",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [
+        "./test/setup.js"
+      ],
+      "success_criteria": [
+        "Zero linter errors across all files",
+        "Control character regex properly escaped or replaced",
+        "Test setup functionality maintained",
+        "npm run lint passes without errors"
+      ],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-07T06:58:25.058Z",
+      "completed_at": "2025-08-07T07:09:14.298Z",
+      "archived_from_todo": "./TODO.json"
     }
   ],
-  "total_completed": 180,
-  "last_completion": "2025-08-07T07:07:13.333Z",
+  "total_completed": 181,
+  "last_completion": "2025-08-07T07:09:14.298Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }
