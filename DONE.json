@@ -5953,9 +5953,33 @@
       "created_at": "2025-08-07T06:58:25.053Z",
       "completed_at": "2025-08-07T07:03:57.489Z",
       "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1754549905057_usq3znab8",
+      "title": "Fix Intermittent Backup Restoration Test Failure",
+      "description": "Resolve the single failing test in integrity-validation.test.js: \"should test backup restoration functionality\" to achieve 100% test pass rate",
+      "mode": "TESTING",
+      "priority": "medium",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [
+        "./test/integrity-validation.test.js"
+      ],
+      "success_criteria": [
+        "Backup restoration test passes consistently",
+        "All 483 tests pass (482/483 → 483/483)",
+        "Test is stable and non-intermittent",
+        "No performance impact on test suite"
+      ],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-07T06:58:25.057Z",
+      "completed_at": "2025-08-07T07:07:13.333Z",
+      "archived_from_todo": "./TODO.json"
     }
   ],
-  "total_completed": 179,
-  "last_completion": "2025-08-07T07:03:57.489Z",
+  "total_completed": 180,
+  "last_completion": "2025-08-07T07:07:13.333Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }
