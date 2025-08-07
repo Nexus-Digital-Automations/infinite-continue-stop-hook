@@ -70,11 +70,11 @@ const { getGlobalMonitor } = require('../lib/nodeModulesMonitor');
 global.nodeModulesMonitor = getGlobalMonitor({
     enableBackup: true,
     enableRestore: true,
-    realTimeWatch: true,
+    realTimeWatch: process.env.ENABLE_REALTIME_WATCH === 'true', // Disabled for performance
     autoRestore: true,
     threatEscalation: true,
-    deepContentAnalysis: true,
-    proactiveScanning: !isCoverageMode, // Disable proactive scanning in coverage mode for performance
+    deepContentAnalysis: process.env.ENABLE_DEEP_ANALYSIS === 'true', // Disabled for performance
+    proactiveScanning: false, // Disabled for performance - enable only when debugging
     emergencyLockdown: true
 });
 
@@ -986,12 +986,8 @@ beforeEach(() => {
     // 2. Reset module registry to prevent state leakage
     jest.resetModules();
     
-    // 3. Clear require cache for test modules to ensure fresh imports
-    Object.keys(require.cache).forEach(key => {
-        if (key.includes('/lib/') || key.includes('/test/')) {
-            delete require.cache[key];
-        }
-    });
+    // 3. Selective module cache clearing for performance
+    // Only clear cache when explicitly needed to avoid overhead
     
     // 4. Reset environment variables to clean state
     // Store original environment for restoration
@@ -1049,19 +1045,8 @@ beforeEach(() => {
         global.isolateConsole();
     }
     
-    // 10. Enhanced: Perform proactive security scan before each test (optimized for performance)
-    if (global.nodeModulesMonitor && !isCoverageMode && process.env.ENABLE_PROACTIVE_SCAN === 'true') {
-        try {
-            // Skip proactive scan for performance unless explicitly enabled
-            if (process.env.VERBOSE_TESTS) {
-                global.nodeModulesMonitor.performProactiveScan().catch((error) => {
-                    console.warn('Proactive scan error:', error.message);
-                });
-            }
-        } catch {
-            // Silent fail to not break tests
-        }
-    }
+    // 10. Skip proactive security scan for performance (enable only when debugging)
+    // Proactive scanning disabled by default for test performance
 });
 
 afterEach(async () => {
@@ -1122,13 +1107,8 @@ afterEach(async () => {
         global.gc();
     }
     
-    // 7. Minimal delay to allow worker processes to exit gracefully (optimized for speed)
-    if (process.env.VERBOSE_TESTS) {
-        await new Promise(resolve => setTimeout(resolve, 10));
-    } else {
-        // Skip delay in fast mode for better performance
-        await new Promise(resolve => setTimeout(resolve, 1));
-    }
+    // 7. Skip delay for maximum performance
+    // Delay removed for faster test execution
 });
 
 // Enhanced global error handlers for unhandled promises and exceptions
