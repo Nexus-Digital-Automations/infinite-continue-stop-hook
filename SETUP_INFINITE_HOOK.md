@@ -14,7 +14,7 @@ The global hook must already be configured in `~/.claude/settings.json`. This sc
       "matcher": "",
       "hooks": [{
         "type": "command",
-        "command": "node /Users/jeremyparker/Desktop/Claude\\ Coding\\ Projects/infinite-continue-stop-hook/stop-hook.js"
+        "command": "node \"/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js\""
       }]
     }]
   }

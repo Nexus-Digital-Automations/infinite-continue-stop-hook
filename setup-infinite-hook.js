@@ -315,7 +315,7 @@ async function main() {
             console.log('- /development/modes directory with all mode files');
             console.log('\n⚠️  Note: This script assumes the global hook is already configured.');
             console.log('If the hook is not working, ensure the following command is in ~/.claude/settings.json:');
-            console.log('node /Users/jeremyparker/Desktop/Claude\\\\ Coding\\\\ Projects/infinite-continue-stop-hook/stop-hook.js');
+            console.log('node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js"');
             
             // Run test hook to verify
             console.log('\n=== Testing Hook Setup ===');

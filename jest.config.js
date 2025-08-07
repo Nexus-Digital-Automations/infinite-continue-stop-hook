@@ -8,8 +8,9 @@ module.exports = {
     '**/?(*.)+(spec|test).js'
   ],
   
-  // Coverage configuration - DISABLED due to corruption issues
-  collectCoverage: false,
+  // Coverage configuration - TEMPORARILY DISABLED due to Istanbul contamination during exit
+  // Re-enable via environment variable: ENABLE_COVERAGE=true npm test
+  collectCoverage: process.env.ENABLE_COVERAGE === 'true',
   collectCoverageFrom: [
     'lib/**/*.js',
     '!lib/**/*.test.js',
@@ -34,18 +35,30 @@ module.exports = {
   ],
   
   // Coverage thresholds for quality assessment
-  // Realistic thresholds for current development state - can be increased as tests improve
+  // Updated thresholds based on current achievable coverage levels
   coverageThreshold: {
     global: {
-      branches: 15,
-      functions: 15,
-      lines: 15,
-      statements: 15
+      branches: 70,
+      functions: 70,
+      lines: 65,
+      statements: 65
     },
-    // Specific thresholds for core modules - achievable targets
+    // Specific thresholds for high-coverage modules
     'lib/todoValidator.js': {
-      branches: 85,
-      functions: 95,
+      branches: 90,
+      functions: 100,
+      lines: 95,
+      statements: 95
+    },
+    'lib/logger.js': {
+      branches: 100,
+      functions: 100,
+      lines: 100,
+      statements: 100
+    },
+    'lib/reviewSystem.js': {
+      branches: 90,
+      functions: 90,
       lines: 90,
       statements: 90
     }
