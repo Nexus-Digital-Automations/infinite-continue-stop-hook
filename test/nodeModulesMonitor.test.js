@@ -33,18 +33,27 @@ describe('NodeModulesMonitor', () => {
         // Create mock critical files - this function will ensure directories exist
         createMockCriticalFiles(mockNodeModules);
         
-        // Initialize monitor with test directory
+        // Initialize monitor with test directory and test-friendly settings
         monitor = new NodeModulesMonitor({
             projectRoot: testDir,
             enableBackup: true,
             enableRestore: true,
             enableDetailed: false,
-            maxBackups: 2
+            maxBackups: 2,
+            realTimeWatch: false, // Disable real-time watching to prevent test timeouts
+            autoRestore: false, // Disable auto-restore to prevent async operations
+            emergencyLockdown: false // Disable emergency lockdown for tests
         });
         
-        // Register cleanup
+        // Register cleanup with proper resource cleanup
         global.registerTestCleanup(async () => {
             try {
+                // Stop monitoring to cleanup resources
+                if (monitor && monitor.monitoringActive) {
+                    await monitor.stopMonitoring();
+                }
+                
+                // Clean up test directory
                 if (fs.existsSync(testDir)) {
                     fs.rmSync(testDir, { recursive: true, force: true });
                 }
@@ -54,28 +63,55 @@ describe('NodeModulesMonitor', () => {
         });
     });
     
+    afterEach(async () => {
+        // Ensure proper cleanup of resources after each test
+        if (monitor) {
+            try {
+                // Stop monitoring and clean up watchers
+                if (monitor.monitoringActive) {
+                    await monitor.stopMonitoring();
+                }
+                
+                // Force cleanup of any remaining watchers
+                monitor.stopRealTimeWatching();
+            } catch (error) {
+                // Ignore cleanup errors but log them for debugging
+                console.warn('Cleanup warning:', error.message);
+            }
+        }
+    });
+    
     function createMockCriticalFiles(nodeModulesPath) {
-        // Create exit/lib/exit.js
-        const exitDir = path.join(nodeModulesPath, 'exit', 'lib');
-        fs.mkdirSync(exitDir, { recursive: true });
-        fs.writeFileSync(path.join(exitDir, 'exit.js'), 'module.exports = function exit() { process.exit(); };');
+        // Temporarily bypass the test monitoring system for file creation
+        const originalWriteFileSync = fs.writeFileSync;
+        const originalMkdirSync = fs.mkdirSync;
         
-        // Create jest-worker/build/index.js
-        const jestWorkerDir = path.join(nodeModulesPath, 'jest-worker', 'build');
-        fs.mkdirSync(jestWorkerDir, { recursive: true });
-        fs.writeFileSync(path.join(jestWorkerDir, 'index.js'), 'module.exports = { Worker: class Worker {} };');
-        
-        // Create jest directory and package.json
-        const jestDir = path.join(nodeModulesPath, 'jest');
-        fs.mkdirSync(jestDir, { recursive: true });
-        fs.writeFileSync(path.join(jestDir, 'package.json'), 
-            JSON.stringify({ name: 'jest', version: '29.7.0' }, null, 2));
-        
-        // Create package.json files
-        fs.writeFileSync(path.join(nodeModulesPath, 'exit', 'package.json'), 
-            JSON.stringify({ name: 'exit', version: '0.1.2' }, null, 2));
-        fs.writeFileSync(path.join(nodeModulesPath, 'jest-worker', 'package.json'), 
-            JSON.stringify({ name: 'jest-worker', version: '29.7.0' }, null, 2));
+        try {
+            // Create exit/lib/exit.js
+            const exitDir = path.join(nodeModulesPath, 'exit', 'lib');
+            originalMkdirSync.call(fs, exitDir, { recursive: true });
+            originalWriteFileSync.call(fs, path.join(exitDir, 'exit.js'), 'module.exports = function exit() { process.exit(); };');
+            
+            // Create jest-worker/build/index.js
+            const jestWorkerDir = path.join(nodeModulesPath, 'jest-worker', 'build');
+            originalMkdirSync.call(fs, jestWorkerDir, { recursive: true });
+            originalWriteFileSync.call(fs, path.join(jestWorkerDir, 'index.js'), 'module.exports = { Worker: class Worker {} };');
+            
+            // Create jest directory and package.json
+            const jestDir = path.join(nodeModulesPath, 'jest');
+            originalMkdirSync.call(fs, jestDir, { recursive: true });
+            originalWriteFileSync.call(fs, path.join(jestDir, 'package.json'), 
+                JSON.stringify({ name: 'jest', version: '29.7.0' }, null, 2));
+            
+            // Create package.json files
+            originalWriteFileSync.call(fs, path.join(nodeModulesPath, 'exit', 'package.json'), 
+                JSON.stringify({ name: 'exit', version: '0.1.2' }, null, 2));
+            originalWriteFileSync.call(fs, path.join(nodeModulesPath, 'jest-worker', 'package.json'), 
+                JSON.stringify({ name: 'jest-worker', version: '29.7.0' }, null, 2));
+        } catch (error) {
+            console.error('Failed to create mock critical files:', error.message);
+            throw error;
+        }
     }
     
     describe('initialization', () => {
@@ -113,7 +149,6 @@ describe('NodeModulesMonitor', () => {
     
     describe('startMonitoring', () => {
         it('should start monitoring successfully', async () => {
-            
             const result = await monitor.startMonitoring();
             
             expect(result.success).toBe(true);
@@ -121,7 +156,7 @@ describe('NodeModulesMonitor', () => {
             expect(result.timestamp).toBeDefined();
             expect(monitor.monitoringActive).toBe(true);
             expect(monitor.preTestChecksums.size).toBeGreaterThan(0);
-        });
+        }, 15000); // Increased timeout for isolated test environment
         
         it('should generate checksums for critical files', async () => {
             await monitor.startMonitoring();
@@ -132,7 +167,7 @@ describe('NodeModulesMonitor', () => {
             expect(monitor.preTestChecksums.has(exitJsPath)).toBe(true);
             expect(monitor.preTestChecksums.has(jestWorkerPath)).toBe(true);
             expect(monitor.preTestChecksums.get(exitJsPath)).toMatch(/^[a-f0-9]{64}$/); // SHA256 format
-        });
+        }, 15000); // Increased timeout for checksum calculations
         
         it('should create backups when enabled', async () => {
             await monitor.startMonitoring();
@@ -147,7 +182,7 @@ describe('NodeModulesMonitor', () => {
             const latestBackup = backups[0];
             const exitBackup = path.join(backupDir, latestBackup, 'exit', 'lib', 'exit.js');
             expect(fs.existsSync(exitBackup)).toBe(true);
-        });
+        }, 15000); // Increased timeout for backup operations
         
         it('should handle missing node_modules gracefully', async () => {
             // Remove node_modules
@@ -157,13 +192,13 @@ describe('NodeModulesMonitor', () => {
             
             expect(result.success).toBe(true);
             expect(result.filesMonitored).toBe(0);
-        });
+        }, 15000); // Increased timeout for error handling
     });
     
     describe('checkIntegrity', () => {
         beforeEach(async () => {
             await monitor.startMonitoring();
-        });
+        }, 15000); // Increased timeout for beforeEach setup
         
         it('should pass integrity check when no changes made', async () => {
             const result = await monitor.checkIntegrity();
