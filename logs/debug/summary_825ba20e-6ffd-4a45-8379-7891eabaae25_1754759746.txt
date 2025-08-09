@@ -1,0 +1,11 @@
+Timeout Debug Summary for Agent 825ba20e-6ffd-4a45-8379-7891eabaae25
+==========================================
+
+Timestamp: 2025-08-09T12:15:46.145572
+Elapsed Time: 0m 0.0s
+Timeout Limit: 120s
+Timeout Exceeded: False
+Hook Type: SubagentStop
+Tool Name: unknown
+
+Full report: logs/debug/debug_report_825ba20e-6ffd-4a45-8379-7891eabaae25_1754759746.json

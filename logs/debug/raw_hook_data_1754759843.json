@@ -1,0 +1,7 @@
+{
+  "session_id": "825ba20e-6ffd-4a45-8379-7891eabaae25",
+  "transcript_path": "/Users/jeremyparker/.claude/projects/-Users-jeremyparker-Desktop-Claude-Coding-Projects-infinite-continue-stop-hook/825ba20e-6ffd-4a45-8379-7891eabaae25.jsonl",
+  "cwd": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook",
+  "hook_event_name": "SubagentStop",
+  "stop_hook_active": false
+}
