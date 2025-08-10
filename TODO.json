@@ -2,28 +2,6 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
-      "id": "task_1754861109468_907nv12p5",
-      "title": "Resolve post-test validation baseline hash detection",
-      "description": "Fix 4 failing tests in post-test-validation.test.js where hash validation expects 4 files but finds 3. Need to resolve baseline file detection logic and test environment preparation inconsistencies.",
-      "mode": "TESTING",
-      "priority": "high",
-      "status": "pending",
-      "dependencies": [],
-      "important_files": [
-        "test/post-test-validation.test.js"
-      ],
-      "success_criteria": [
-        "All post-test validation tests pass",
-        "Baseline hash detection works correctly",
-        "Validation workflow reports PASSED status",
-        "Hash counting logic fixed for proper file detection"
-      ],
-      "estimate": "1 hour",
-      "requires_research": false,
-      "subtasks": [],
-      "created_at": "2025-08-10T21:25:09.468Z"
-    },
-    {
       "id": "task_1754861109470_pu54oc85p",
       "title": "Resolve NodeModulesMonitor test startup failures",
       "description": "Fix 2 failing tests in nodeModulesMonitor.test.js related to monitoring startup validation. Issues appear to be mock setup or timing problems in test environment.",
@@ -118,8 +96,8 @@
   "strikes_completed_last_run": false,
   "current_task_index": 0,
   "last_mode": "TESTING",
-  "execution_count": 538,
-  "last_hook_activation": 1754861298774,
+  "execution_count": 539,
+  "last_hook_activation": 1754862621673,
   "__removedLinterTasks": {
     "removedCount": 1,
     "finalTaskCount": 113

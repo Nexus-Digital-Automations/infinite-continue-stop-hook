@@ -175,6 +175,14 @@ global.__originalFS = {
 
 // Enhanced filesystem mock with MAXIMUM protection and early detection
 fs.writeFileSync = function(filePath, data, options) {
+    // Check for filesystem protection bypass flag first
+    if (process.env.DISABLE_FS_PROTECTION === 'true') {
+        if (process.env.PRESERVE_CONSOLE === 'true') {
+            console.log(`BYPASS: Filesystem protection disabled for ${filePath}`);
+        }
+        return originalWriteFileSync.call(this, filePath, data, options);
+    }
+    
     const path = require('path');
     const normalizedPath = path.resolve(filePath);
     

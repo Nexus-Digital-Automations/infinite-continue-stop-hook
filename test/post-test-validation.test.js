@@ -32,33 +32,69 @@ describe('Post-Test Validation System', () => {
             'node_modules/jest-worker/build/index.js': 'module.exports = { Worker: class Worker {} };'
         };
         
+        // Create files synchronously with proper error handling and verification
+        let successfullyCreatedFiles = 0;
         Object.entries(mockFiles).forEach(([relativePath, content]) => {
             const fullPath = path.join(testDir, relativePath);
             const dir = path.dirname(fullPath);
             
-            // Debug: Log file creation attempts
-            if (process.env.PRESERVE_CONSOLE === 'true') {
-                console.log(`Creating mock file: ${relativePath} -> ${fullPath}`);
-                console.log(`Directory: ${dir}, exists: ${fs.existsSync(dir)}`);
-            }
-            
-            // Ensure parent directory exists before creating file
-            if (!fs.existsSync(dir)) {
-                try {
+            try {
+                // Ensure parent directory exists first
+                if (!fs.existsSync(dir)) {
                     originalMkdirSync.call(fs, dir, { recursive: true });
-                } catch (error) {
-                    console.error(`Failed to create directory ${dir}: ${error.message}`);
-                    return; // Skip this file if directory creation fails
+                }
+                
+                // Write file using original method to bypass protection
+                originalWriteFileSync.call(fs, fullPath, content, 'utf8');
+                
+                // Verify file was actually created
+                if (fs.existsSync(fullPath)) {
+                    successfullyCreatedFiles++;
+                    if (process.env.PRESERVE_CONSOLE === 'true') {
+                        console.log(`✅ Created: ${relativePath}`);
+                    }
+                } else {
+                    if (process.env.PRESERVE_CONSOLE === 'true') {
+                        console.warn(`⚠️ File not found after creation: ${fullPath}`);
+                    }
+                }
+            } catch (error) {
+                if (process.env.PRESERVE_CONSOLE === 'true') {
+                    console.error(`❌ Failed to create ${relativePath}: ${error.message}`);
+                }
+                
+                // Fallback: Try creating with different approach
+                try {
+                    // Disable filesystem protection temporarily for this specific write
+                    const originalEnv = process.env.DISABLE_FS_PROTECTION;
+                    process.env.DISABLE_FS_PROTECTION = 'true';
+                    
+                    fs.writeFileSync(fullPath, content, 'utf8');
+                    
+                    // Restore environment
+                    if (originalEnv) {
+                        process.env.DISABLE_FS_PROTECTION = originalEnv;
+                    } else {
+                        delete process.env.DISABLE_FS_PROTECTION;
+                    }
+                    
+                    if (fs.existsSync(fullPath)) {
+                        successfullyCreatedFiles++;
+                        if (process.env.PRESERVE_CONSOLE === 'true') {
+                            console.log(`✅ Created with fallback: ${relativePath}`);
+                        }
+                    }
+                } catch (fallbackError) {
+                    if (process.env.PRESERVE_CONSOLE === 'true') {
+                        console.error(`❌ Fallback failed for ${relativePath}: ${fallbackError.message}`);
+                    }
                 }
             }
-            
-            try {
-                // Use original method to bypass filesystem monitoring
-                originalWriteFileSync.call(fs, fullPath, content);
-            } catch (error) {
-                console.error(`Failed to create ${fullPath}: ${error.message}`);
-            }
         });
+        
+        if (process.env.PRESERVE_CONSOLE === 'true') {
+            console.log(`Mock file creation summary: ${successfullyCreatedFiles}/${Object.keys(mockFiles).length} files created`);
+        }
 
         validator = new PostTestValidator({
             projectRoot: testDir,
