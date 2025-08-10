@@ -178,8 +178,8 @@ process.stdin.on('end', async () => {
         // Update last mode
         todoData.last_mode = mode;
         
-        // Build the prompt
-        const fullPrompt = agentExecutor.buildPrompt(currentTask, mode, todoData);
+        // Build the prompt with linter feedback
+        const fullPrompt = await agentExecutor.buildPrompt(currentTask, mode, todoData, taskManager);
         
         // Update task status
         currentTask.status = 'in_progress';
