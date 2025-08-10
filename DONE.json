@@ -8507,9 +8507,97 @@
       },
       "completed_at": "2025-08-10T22:11:31.748Z",
       "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1754861109473_7cppoyqv6",
+      "title": "Clean up Jest haste map naming collisions",
+      "description": "Implement cleanup for old backup directories causing Jest naming conflicts. This creates warnings but does not break functionality. Create automated cleanup script.",
+      "mode": "DEVELOPMENT",
+      "priority": "medium",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [
+        "package.json",
+        ".node-modules-backup/"
+      ],
+      "success_criteria": [
+        "No Jest haste map collision warnings",
+        "Automated cleanup of stale backup directories",
+        "Test runs without warnings",
+        "Cleanup script integrated into package.json"
+      ],
+      "estimate": "30 minutes",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-10T21:25:09.473Z",
+      "linterReminder": {
+        "taskId": "task_1754861109473_7cppoyqv6",
+        "taskTitle": "Clean up Jest haste map naming collisions",
+        "directories": [],
+        "timestamp": "2025-08-10T22:16:22.853Z",
+        "needsLinting": false
+      },
+      "completed_at": "2025-08-10T22:16:22.853Z",
+      "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "quality-improvement-1754861213111",
+      "title": "Create Quality Improvement Tasks",
+      "description": "Analyze project quality issues and create specific tasks to reach 100% quality for all strikes",
+      "mode": "TASK-CREATION",
+      "priority": "high",
+      "status": "completed",
+      "prompt": "Project quality assessment shows issues preventing 100% strike success:\n\nQuality Status:\n- Strike 1 (Build): 50%\n- Strike 2 (Lint): 100%  \n- Strike 3 (Tests): 30%\n\nIssues Found:\n- Build Verification: Build command fails\n- Test Coverage and Success: Tests are failing\n- Test Coverage and Success: Coverage check failed\n\nTASK: Analyze these quality gaps and create specific improvement tasks to bring ALL strikes to 100% quality. Create tasks for:\n1. Build issues (missing dependencies, build failures, configuration)\n2. Code quality issues (lint errors, style violations, code standards)\n3. Testing issues (failing tests, missing coverage, test setup)\n\nInsert all improvement tasks BEFORE the strike review tasks. Strikes should always remain last in the task list.",
+      "success_criteria": [
+        "All quality issues identified and analyzed",
+        "Specific improvement tasks created for each quality gap",
+        "Tasks properly prioritized and ordered before strikes",
+        "Clear path to 100% quality established"
+      ],
+      "important_files": [
+        "package.json",
+        "eslint.config.js",
+        "**/*.test.js"
+      ],
+      "requires_research": true,
+      "is_quality_improvement_task": true,
+      "quality_analysis": {
+        "strike1": {
+          "name": "Build Verification",
+          "quality": 50,
+          "issues": [
+            "Build command fails"
+          ]
+        },
+        "strike2": {
+          "name": "Lint and Code Quality",
+          "quality": 100,
+          "issues": []
+        },
+        "strike3": {
+          "name": "Test Coverage and Success",
+          "quality": 30,
+          "issues": [
+            "Tests are failing",
+            "Coverage check failed"
+          ]
+        },
+        "overallReady": false
+      },
+      "linterReminder": {
+        "taskId": "quality-improvement-1754861213111",
+        "taskTitle": "Create Quality Improvement Tasks",
+        "directories": [
+          "**"
+        ],
+        "timestamp": "2025-08-10T22:16:33.402Z",
+        "needsLinting": true
+      },
+      "completed_at": "2025-08-10T22:16:33.402Z",
+      "archived_from_todo": "./TODO.json"
     }
   ],
-  "total_completed": 235,
-  "last_completion": "2025-08-10T22:11:31.748Z",
+  "total_completed": 237,
+  "last_completion": "2025-08-10T22:16:33.402Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }

@@ -27,9 +27,11 @@
     "coverage": "jest --coverage --collectCoverageFrom='lib/**/*.js'",
     "coverage:html": "jest --coverage --coverageReporters=html",
     "fix-contamination": "node scripts/fix-contamination.js",
+    "cleanup-backups": "node scripts/cleanup-backups.js",
+    "cleanup-backups:dry-run": "node scripts/cleanup-backups.js --dry-run",
     "validate-build": "node scripts/build-validator.js",
     "post-build-validate": "npm run fix-contamination && npm run validate-build",
-    "pretest": "npm run lint && npm run fix-contamination", 
+    "pretest": "npm run lint && npm run fix-contamination && npm run cleanup-backups", 
     "posttest": "npm run fix-contamination && sleep 1 && npm run fix-contamination"
   },
   "keywords": [
