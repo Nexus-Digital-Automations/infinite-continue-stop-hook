@@ -2,72 +2,102 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
-      "id": "task_1754859952117_43zm4hgka",
-      "title": "Modify linter recommendation to be complete feedback after task completion",
-      "description": "Modify the linter recommendation system so that after a task is completed, the linter recommendation becomes the whole feedback/task, not just a part of it. The linter recommendation should encompass the entire feedback mechanism when tasks are completed, rather than being a partial component. This involves updating the feedback generation logic to make linter recommendations the primary and complete feedback rather than supplementary information.",
-      "mode": "DEVELOPMENT",
+      "id": "task_1754861109449_qa37ookps",
+      "title": "Fix AgentExecutor test directory creation issues",
+      "description": "Resolve 6 failing tests in agentExecutor.test.js related to test environment setup failing to create required .test-env directories. Current status: ~44/50 tests passing, need to fix beforeEach hooks for proper directory structure creation.",
+      "mode": "TESTING",
       "priority": "high",
       "status": "pending",
       "dependencies": [],
-      "important_files": [],
-      "success_criteria": [],
-      "estimate": "",
+      "important_files": [
+        "test/agentExecutor.test.js",
+        "test/setup.js"
+      ],
+      "success_criteria": [
+        "All 50 AgentExecutor tests pass (currently ~44/50 passing)",
+        "Test setup creates .test-env directories reliably",
+        "Mode-specific file creation tests work correctly",
+        "npm test passes for agentExecutor test suite"
+      ],
+      "estimate": "1-2 hours",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-08-10T21:05:52.117Z"
+      "created_at": "2025-08-10T21:25:09.449Z"
     },
     {
-      "id": "quality-improvement-1754860048363",
-      "title": "Create Quality Improvement Tasks",
-      "description": "Analyze project quality issues and create specific tasks to reach 100% quality for all strikes",
-      "mode": "TASK-CREATION",
+      "id": "task_1754861109468_907nv12p5",
+      "title": "Resolve post-test validation baseline hash detection",
+      "description": "Fix 4 failing tests in post-test-validation.test.js where hash validation expects 4 files but finds 3. Need to resolve baseline file detection logic and test environment preparation inconsistencies.",
+      "mode": "TESTING",
       "priority": "high",
       "status": "pending",
-      "prompt": "Project quality assessment shows issues preventing 100% strike success:\n\nQuality Status:\n- Strike 1 (Build): 50%\n- Strike 2 (Lint): 100%  \n- Strike 3 (Tests): 30%\n\nIssues Found:\n- Build Verification: Build command fails\n- Test Coverage and Success: Tests are failing\n- Test Coverage and Success: Coverage check failed\n\nTASK: Analyze these quality gaps and create specific improvement tasks to bring ALL strikes to 100% quality. Create tasks for:\n1. Build issues (missing dependencies, build failures, configuration)\n2. Code quality issues (lint errors, style violations, code standards)\n3. Testing issues (failing tests, missing coverage, test setup)\n\nInsert all improvement tasks BEFORE the strike review tasks. Strikes should always remain last in the task list.",
-      "success_criteria": [
-        "All quality issues identified and analyzed",
-        "Specific improvement tasks created for each quality gap",
-        "Tasks properly prioritized and ordered before strikes",
-        "Clear path to 100% quality established"
+      "dependencies": [],
+      "important_files": [
+        "test/post-test-validation.test.js"
       ],
+      "success_criteria": [
+        "All post-test validation tests pass",
+        "Baseline hash detection works correctly",
+        "Validation workflow reports PASSED status",
+        "Hash counting logic fixed for proper file detection"
+      ],
+      "estimate": "1 hour",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-10T21:25:09.468Z"
+    },
+    {
+      "id": "task_1754861109470_pu54oc85p",
+      "title": "Resolve NodeModulesMonitor test startup failures",
+      "description": "Fix 2 failing tests in nodeModulesMonitor.test.js related to monitoring startup validation. Issues appear to be mock setup or timing problems in test environment.",
+      "mode": "TESTING",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [
+        "test/nodeModulesMonitor.test.js"
+      ],
+      "success_criteria": [
+        "All NodeModulesMonitor tests pass",
+        "Mock setup works correctly for monitoring tests",
+        "Timing issues resolved",
+        "Monitoring startup validation succeeds"
+      ],
+      "estimate": "1 hour",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-10T21:25:09.470Z"
+    },
+    {
+      "id": "task_1754861109473_7cppoyqv6",
+      "title": "Clean up Jest haste map naming collisions",
+      "description": "Implement cleanup for old backup directories causing Jest naming conflicts. This creates warnings but does not break functionality. Create automated cleanup script.",
+      "mode": "DEVELOPMENT",
+      "priority": "medium",
+      "status": "pending",
+      "dependencies": [],
       "important_files": [
         "package.json",
-        "eslint.config.js",
-        "**/*.test.js"
+        ".node-modules-backup/"
       ],
-      "requires_research": true,
-      "is_quality_improvement_task": true,
-      "quality_analysis": {
-        "strike1": {
-          "name": "Build Verification",
-          "quality": 50,
-          "issues": [
-            "Build command fails"
-          ]
-        },
-        "strike2": {
-          "name": "Lint and Code Quality",
-          "quality": 100,
-          "issues": []
-        },
-        "strike3": {
-          "name": "Test Coverage and Success",
-          "quality": 30,
-          "issues": [
-            "Tests are failing",
-            "Coverage check failed"
-          ]
-        },
-        "overallReady": false
-      }
+      "success_criteria": [
+        "No Jest haste map collision warnings",
+        "Automated cleanup of stale backup directories",
+        "Test runs without warnings",
+        "Cleanup script integrated into package.json"
+      ],
+      "estimate": "30 minutes",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-10T21:25:09.473Z"
     }
   ],
   "review_strikes": 0,
   "strikes_completed_last_run": false,
   "current_task_index": 0,
-  "last_mode": "DEVELOPMENT",
-  "execution_count": 535,
-  "last_hook_activation": 1754860048368,
+  "last_mode": "TASK_CREATION",
+  "execution_count": 536,
+  "last_hook_activation": 1754860693611,
   "__removedLinterTasks": {
     "removedCount": 1,
     "finalTaskCount": 113
