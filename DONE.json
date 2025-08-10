@@ -6491,9 +6491,66 @@
       },
       "completed_at": "2025-08-10T14:49:59.232Z",
       "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1754837362878_xxjglaa20",
+      "title": "Fix AgentExecutor Async/Await Synchronization Issue",
+      "description": "The AgentExecutor.buildPrompt() method is declared as async but tests are calling it synchronously, causing it to return Promise objects {} instead of formatted strings. This is causing 10 critical test failures and breaking the core hook functionality.",
+      "mode": "DEVELOPMENT",
+      "priority": "critical",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [
+        "lib/agentExecutor.js",
+        "test/agentExecutor.test.js"
+      ],
+      "success_criteria": [
+        "npm test test/agentExecutor.test.js"
+      ],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [
+        {
+          "description": "Analyze buildPrompt method async requirements and determine optimal approach",
+          "status": "pending",
+          "estimate": "15-20 minutes",
+          "priority": "critical"
+        },
+        {
+          "description": "Update all AgentExecutor test calls to properly handle async buildPrompt method",
+          "status": "pending",
+          "estimate": "30-45 minutes",
+          "priority": "critical"
+        },
+        {
+          "description": "Verify buildPrompt method integration with hook system and all callers",
+          "status": "pending",
+          "estimate": "20-30 minutes",
+          "priority": "critical"
+        },
+        {
+          "description": "Run comprehensive AgentExecutor test suite and validate all 10 failures resolved",
+          "status": "pending",
+          "estimate": "10-15 minutes",
+          "priority": "critical"
+        }
+      ],
+      "created_at": "2025-08-10T14:49:22.878Z",
+      "linterReminder": {
+        "taskId": "task_1754837362878_xxjglaa20",
+        "taskTitle": "Fix AgentExecutor Async/Await Synchronization Issue",
+        "directories": [
+          "lib",
+          "test"
+        ],
+        "timestamp": "2025-08-10T14:51:17.683Z",
+        "needsLinting": true
+      },
+      "completed_at": "2025-08-10T14:51:17.683Z",
+      "archived_from_todo": "./TODO.json"
     }
   ],
-  "total_completed": 194,
-  "last_completion": "2025-08-10T14:49:59.232Z",
+  "total_completed": 195,
+  "last_completion": "2025-08-10T14:51:17.683Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }
