@@ -8474,9 +8474,42 @@
       },
       "completed_at": "2025-08-10T22:02:47.635Z",
       "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1754861109470_pu54oc85p",
+      "title": "Resolve NodeModulesMonitor test startup failures",
+      "description": "Fix 2 failing tests in nodeModulesMonitor.test.js related to monitoring startup validation. Issues appear to be mock setup or timing problems in test environment.",
+      "mode": "TESTING",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [
+        "test/nodeModulesMonitor.test.js"
+      ],
+      "success_criteria": [
+        "All NodeModulesMonitor tests pass",
+        "Mock setup works correctly for monitoring tests",
+        "Timing issues resolved",
+        "Monitoring startup validation succeeds"
+      ],
+      "estimate": "1 hour",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-10T21:25:09.470Z",
+      "linterReminder": {
+        "taskId": "task_1754861109470_pu54oc85p",
+        "taskTitle": "Resolve NodeModulesMonitor test startup failures",
+        "directories": [
+          "test"
+        ],
+        "timestamp": "2025-08-10T22:11:31.748Z",
+        "needsLinting": true
+      },
+      "completed_at": "2025-08-10T22:11:31.748Z",
+      "archived_from_todo": "./TODO.json"
     }
   ],
-  "total_completed": 234,
-  "last_completion": "2025-08-10T22:02:47.635Z",
+  "total_completed": 235,
+  "last_completion": "2025-08-10T22:11:31.748Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }

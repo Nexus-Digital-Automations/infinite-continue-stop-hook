@@ -82,35 +82,44 @@ describe('NodeModulesMonitor', () => {
     });
     
     function createMockCriticalFiles(nodeModulesPath) {
-        // Temporarily bypass the test monitoring system for file creation
-        const originalWriteFileSync = fs.writeFileSync;
-        const originalMkdirSync = fs.mkdirSync;
+        // Temporarily disable filesystem protection for legitimate test file creation
+        const originalEnv = process.env.DISABLE_FS_PROTECTION;
+        process.env.DISABLE_FS_PROTECTION = 'true';
         
         try {
             // Create exit/lib/exit.js
             const exitDir = path.join(nodeModulesPath, 'exit', 'lib');
-            originalMkdirSync.call(fs, exitDir, { recursive: true });
-            originalWriteFileSync.call(fs, path.join(exitDir, 'exit.js'), 'module.exports = function exit() { process.exit(); };');
+            fs.mkdirSync(exitDir, { recursive: true });
+            fs.writeFileSync(path.join(exitDir, 'exit.js'), 'module.exports = function exit() { process.exit(); };');
             
             // Create jest-worker/build/index.js
             const jestWorkerDir = path.join(nodeModulesPath, 'jest-worker', 'build');
-            originalMkdirSync.call(fs, jestWorkerDir, { recursive: true });
-            originalWriteFileSync.call(fs, path.join(jestWorkerDir, 'index.js'), 'module.exports = { Worker: class Worker {} };');
+            fs.mkdirSync(jestWorkerDir, { recursive: true });
+            fs.writeFileSync(path.join(jestWorkerDir, 'index.js'), 'module.exports = { Worker: class Worker {} };');
             
             // Create jest directory and package.json
             const jestDir = path.join(nodeModulesPath, 'jest');
-            originalMkdirSync.call(fs, jestDir, { recursive: true });
-            originalWriteFileSync.call(fs, path.join(jestDir, 'package.json'), 
+            fs.mkdirSync(jestDir, { recursive: true });
+            fs.writeFileSync(path.join(jestDir, 'package.json'), 
                 JSON.stringify({ name: 'jest', version: '29.7.0' }, null, 2));
             
             // Create package.json files
-            originalWriteFileSync.call(fs, path.join(nodeModulesPath, 'exit', 'package.json'), 
+            fs.writeFileSync(path.join(nodeModulesPath, 'exit', 'package.json'), 
                 JSON.stringify({ name: 'exit', version: '0.1.2' }, null, 2));
-            originalWriteFileSync.call(fs, path.join(nodeModulesPath, 'jest-worker', 'package.json'), 
+            fs.writeFileSync(path.join(nodeModulesPath, 'jest-worker', 'package.json'), 
                 JSON.stringify({ name: 'jest-worker', version: '29.7.0' }, null, 2));
+                
+            console.log('✅ Successfully created all mock critical files for NodeModulesMonitor test');
         } catch (error) {
-            console.error('Failed to create mock critical files:', error.message);
+            console.error('❌ Failed to create mock critical files:', error.message);
             throw error;
+        } finally {
+            // Restore original environment
+            if (originalEnv) {
+                process.env.DISABLE_FS_PROTECTION = originalEnv;
+            } else {
+                delete process.env.DISABLE_FS_PROTECTION;
+            }
         }
     }
     
