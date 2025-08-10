@@ -2,21 +2,6 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
-      "id": "task_1754837373382_ibkjh10dr",
-      "title": "Validate Build Process After AgentExecutor Repairs",
-      "description": "After fixing the AgentExecutor async/await issues, run comprehensive build validation to ensure the build process reaches target reliability. Test all build scripts and validate that hook system integration is fully functional.",
-      "mode": "DEVELOPMENT",
-      "priority": "high",
-      "status": "pending",
-      "dependencies": [],
-      "important_files": [],
-      "success_criteria": [],
-      "estimate": "",
-      "requires_research": false,
-      "subtasks": [],
-      "created_at": "2025-08-10T14:49:33.382Z"
-    },
-    {
       "id": "quality-improvement-1754837444674",
       "title": "Create Quality Improvement Tasks",
       "description": "Analyze project quality issues and create specific tasks to reach 100% quality for all strikes",
@@ -60,14 +45,137 @@
         },
         "overallReady": false
       }
+    },
+    {
+      "id": "task_1754839281661_v3q5st1pp",
+      "title": "Fix Jest Haste Map Naming Collisions from Backup Directories",
+      "description": "Resolve Jest haste map naming collisions caused by duplicate package.json files in multiple .node-modules-backup directories. Clean up older backup directories while preserving the most recent backup.",
+      "mode": "DEVELOPMENT",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [
+        ".node-modules-backup/",
+        "jest.config.js",
+        "package.json"
+      ],
+      "success_criteria": [
+        "Jest haste map naming collisions eliminated",
+        "Tests run without backup directory conflicts",
+        "Most recent backup preserved for safety",
+        "Jest test execution completes successfully"
+      ],
+      "estimate": "30-45 minutes",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-10T15:21:21.661Z"
+    },
+    {
+      "id": "task_1754839281693_dpilkubje",
+      "title": "Fix AgentExecutor Test Environment Directory Creation Issues",
+      "description": "Resolve ENOENT errors in AgentExecutor tests where test directories cannot be created or accessed. Fix test environment setup to ensure proper directory creation and cleanup.",
+      "mode": "DEVELOPMENT",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [
+        "test/agentExecutor.test.js",
+        "test/setup.js"
+      ],
+      "success_criteria": [
+        "AgentExecutor tests create test directories successfully",
+        "No ENOENT errors during test execution",
+        "Test cleanup removes temporary directories properly",
+        "All 50 AgentExecutor tests pass consistently"
+      ],
+      "estimate": "45-60 minutes",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-10T15:21:21.693Z"
+    },
+    {
+      "id": "task_1754839281704_v0k5zegn2",
+      "title": "Fix NodeModulesMonitor Test Mock Setup and File Path Issues",
+      "description": "Resolve ENOENT errors in NodeModulesMonitor tests where mock node_modules files cannot be created or accessed. Fix test mock setup to create proper file structures before tests run.",
+      "mode": "DEVELOPMENT",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [
+        "test/nodeModulesMonitor.test.js",
+        "lib/nodeModulesMonitor.js",
+        "test/setup.js"
+      ],
+      "success_criteria": [
+        "NodeModulesMonitor tests create mock files successfully",
+        "Test isolation directories contain required node_modules structure",
+        "No ENOENT errors during NodeModulesMonitor test execution",
+        "All NodeModulesMonitor tests pass with proper mock data"
+      ],
+      "estimate": "60-90 minutes",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-10T15:21:21.704Z"
+    },
+    {
+      "id": "task_1754839281709_vfiu98p3z",
+      "title": "Fix Post-Test Validation System File Creation and JSON Validation",
+      "description": "Resolve ENOENT errors in post-test validation tests where temporary files and directories cannot be created. Fix JSON validation test that fails due to undefined details object.",
+      "mode": "DEVELOPMENT",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [
+        "test/post-test-validation.test.js",
+        "lib/postTestValidator.js"
+      ],
+      "success_criteria": [
+        "Post-test validation creates temporary files successfully",
+        "JSON validation returns proper details object structure",
+        "No ENOENT errors during validation test execution",
+        "All post-test validation tests pass with proper file handling"
+      ],
+      "estimate": "45-60 minutes",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-10T15:21:21.709Z"
+    },
+    {
+      "id": "task_1754839281728_507wnoa7l",
+      "title": "Validate Complete Build Pipeline After Test Fixes",
+      "description": "Run comprehensive build validation after all test fixes to ensure the full build pipeline (validate-build → lint → test → post-build-validate) completes successfully without timeouts or failures.",
+      "mode": "DEVELOPMENT",
+      "priority": "medium",
+      "status": "pending",
+      "dependencies": [
+        "task_1754839281661_v3q5st1pp",
+        "task_1754839281693_dpilkubje",
+        "task_1754839281704_v0k5zegn2",
+        "task_1754839281709_vfiu98p3z"
+      ],
+      "important_files": [
+        "package.json",
+        "scripts/build-validator.js"
+      ],
+      "success_criteria": [
+        "Complete build pipeline runs without timeouts",
+        "All test suites pass (13/13 test suites)",
+        "No test failures in build validation",
+        "Build completes within reasonable time (<10 minutes)",
+        "Hook system integration verified as functional"
+      ],
+      "estimate": "20-30 minutes",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-10T15:21:21.728Z"
     }
   ],
   "review_strikes": 0,
   "strikes_completed_last_run": false,
   "current_task_index": 0,
-  "last_mode": "DEVELOPMENT",
-  "execution_count": 491,
-  "last_hook_activation": 1754838271750,
+  "last_mode": "TASK_CREATION",
+  "execution_count": 492,
+  "last_hook_activation": 1754838839662,
   "__removedLinterTasks": {
     "removedCount": 1,
     "finalTaskCount": 113
