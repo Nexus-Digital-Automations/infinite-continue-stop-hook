@@ -70,8 +70,8 @@ describe('AgentExecutor', () => {
     });
 
     describe('buildPrompt', () => {
-        test('should build complete prompt with all sections', () => {
-            const prompt = agentExecutor.buildPrompt(mockTask, 'DEVELOPMENT', mockTodoData);
+        test('should build complete prompt with all sections', async () => {
+            const prompt = await agentExecutor.buildPrompt(mockTask, 'DEVELOPMENT', mockTodoData);
             
             expect(prompt).toContain('# INFINITE CONTINUE HOOK - ACTIVE TASK');
             expect(prompt).toContain('CURRENT TASK: Test task description');
@@ -85,8 +85,8 @@ describe('AgentExecutor', () => {
             expect(prompt).toContain('These files contain ALL necessary context and instructions');
         });
 
-        test('should include task-specific file instructions', () => {
-            const prompt = agentExecutor.buildPrompt(mockTask, 'DEVELOPMENT', mockTodoData);
+        test('should include task-specific file instructions', async () => {
+            const prompt = await agentExecutor.buildPrompt(mockTask, 'DEVELOPMENT', mockTodoData);
             
             expect(prompt).toContain('`README.md`');
             expect(prompt).toContain('`src/main.js`');
@@ -94,8 +94,8 @@ describe('AgentExecutor', () => {
             expect(prompt).toContain('`package.json`');
         });
 
-        test('should handle TASK_CREATION mode specifically', () => {
-            const prompt = agentExecutor.buildPrompt(mockTask, 'TASK_CREATION', mockTodoData);
+        test('should handle TASK_CREATION mode specifically', async () => {
+            const prompt = await agentExecutor.buildPrompt(mockTask, 'TASK_CREATION', mockTodoData);
             
             expect(prompt).toContain('## Intelligent Task Creation Context');
             expect(prompt).toContain('**CORE PRINCIPLE**: Create only necessary tasks');
@@ -103,39 +103,39 @@ describe('AgentExecutor', () => {
             expect(prompt).toContain('**Project Analysis Required**');
         });
 
-        test('should handle REVIEWER mode with strike information', () => {
+        test('should handle REVIEWER mode with strike information', async () => {
             mockTodoData.review_strikes = 1;
-            const prompt = agentExecutor.buildPrompt(mockTask, 'REVIEWER', mockTodoData);
+            const prompt = await agentExecutor.buildPrompt(mockTask, 'REVIEWER', mockTodoData);
             
             expect(prompt).toContain('## Review Context');
             expect(prompt).toContain('**Current Review Strike:** 2/3');
             expect(prompt).toContain('**Strike 2 Focus:** Lint and Code Quality');
         });
 
-        test('should handle research mode with research report integration', () => {
+        test('should handle research mode with research report integration', async () => {
             mockTask.mode = 'RESEARCH';
-            const prompt = agentExecutor.buildPrompt(mockTask, 'RESEARCH', mockTodoData);
+            const prompt = await agentExecutor.buildPrompt(mockTask, 'RESEARCH', mockTodoData);
             
             expect(prompt).toContain('🔬 RESEARCH TASK REQUIREMENTS');
             expect(prompt).toContain('Follow structured research methodology');
             expect(prompt).toContain('Use standardized research report template');
         });
 
-        test('should include subtasks when present', () => {
+        test('should include subtasks when present', async () => {
             mockTask.subtasks = [
                 { description: 'Subtask 1', status: 'pending' },
                 { description: 'Subtask 2', status: 'completed' }
             ];
             
-            const prompt = agentExecutor.buildPrompt(mockTask, 'DEVELOPMENT', mockTodoData);
+            const prompt = await agentExecutor.buildPrompt(mockTask, 'DEVELOPMENT', mockTodoData);
             
             expect(prompt).toContain('**Subtasks created:**');
             expect(prompt).toContain('[pending] Subtask 1');
             expect(prompt).toContain('[completed] Subtask 2');
         });
 
-        test('should include task completion reminder', () => {
-            const prompt = agentExecutor.buildPrompt(mockTask, 'DEVELOPMENT', mockTodoData);
+        test('should include task completion reminder', async () => {
+            const prompt = await agentExecutor.buildPrompt(mockTask, 'DEVELOPMENT', mockTodoData);
             
             expect(prompt).toContain('🔴 CRITICAL: TASK COMPLETION REMINDER');
             expect(prompt).toContain('Quick Completion Code');
@@ -539,7 +539,7 @@ describe('AgentExecutor', () => {
     });
 
     describe('edge cases and error handling', () => {
-        test('should handle malformed task object', () => {
+        test('should handle malformed task object', async () => {
             const malformedTask = {
                 id: 'null_task',
                 description: 'Test description',
@@ -553,11 +553,11 @@ describe('AgentExecutor', () => {
             };
             
             // Should not throw errors
-            const prompt = agentExecutor.buildPrompt(malformedTask, 'DEVELOPMENT', mockTodoData);
+            const prompt = await agentExecutor.buildPrompt(malformedTask, 'DEVELOPMENT', mockTodoData);
             expect(prompt).toContain('# INFINITE CONTINUE HOOK - ACTIVE TASK');
         });
 
-        test('should handle malformed todo data', () => {
+        test('should handle malformed todo data', async () => {
             const malformedTodoData = {
                 project: 'Test Project',
                 tasks: [mockTask],
@@ -565,7 +565,7 @@ describe('AgentExecutor', () => {
             };
             
             // Should not throw errors and provide defaults
-            const prompt = agentExecutor.buildPrompt(mockTask, 'DEVELOPMENT', malformedTodoData);
+            const prompt = await agentExecutor.buildPrompt(mockTask, 'DEVELOPMENT', malformedTodoData);
             expect(prompt).toContain('# INFINITE CONTINUE HOOK - ACTIVE TASK');
         });
 
@@ -595,7 +595,7 @@ describe('AgentExecutor', () => {
     });
 
     describe('integration scenarios', () => {
-        test('should handle complete workflow with all features', () => {
+        test('should handle complete workflow with all features', async () => {
             const complexTask = {
                 id: 'complex_task_789',
                 description: 'Complex multi-step task',
@@ -629,7 +629,7 @@ describe('AgentExecutor', () => {
             fs.mkdirSync(reportsDir, { recursive: true });
             fs.writeFileSync(path.join(reportsDir, 'research-report-complex_task_789.md'), 'Research findings');
             
-            const prompt = agentExecutor.buildPrompt(complexTask, 'RESEARCH', complexTodoData);
+            const prompt = await agentExecutor.buildPrompt(complexTask, 'RESEARCH', complexTodoData);
             
             expect(prompt).toContain('🔬 RESEARCH TASK REQUIREMENTS');
             expect(prompt).toContain('Review existing research report:');
