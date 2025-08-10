@@ -2,29 +2,6 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
-      "id": "task_1754861109449_qa37ookps",
-      "title": "Fix AgentExecutor test directory creation issues",
-      "description": "Resolve 6 failing tests in agentExecutor.test.js related to test environment setup failing to create required .test-env directories. Current status: ~44/50 tests passing, need to fix beforeEach hooks for proper directory structure creation.",
-      "mode": "TESTING",
-      "priority": "high",
-      "status": "pending",
-      "dependencies": [],
-      "important_files": [
-        "test/agentExecutor.test.js",
-        "test/setup.js"
-      ],
-      "success_criteria": [
-        "All 50 AgentExecutor tests pass (currently ~44/50 passing)",
-        "Test setup creates .test-env directories reliably",
-        "Mode-specific file creation tests work correctly",
-        "npm test passes for agentExecutor test suite"
-      ],
-      "estimate": "1-2 hours",
-      "requires_research": false,
-      "subtasks": [],
-      "created_at": "2025-08-10T21:25:09.449Z"
-    },
-    {
       "id": "task_1754861109468_907nv12p5",
       "title": "Resolve post-test validation baseline hash detection",
       "description": "Fix 4 failing tests in post-test-validation.test.js where hash validation expects 4 files but finds 3. Need to resolve baseline file detection logic and test environment preparation inconsistencies.",
