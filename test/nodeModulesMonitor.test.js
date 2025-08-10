@@ -306,8 +306,9 @@ describe('NodeModulesMonitor', () => {
             monitor.config.enableRestore = false;
             
             // Corrupt a file and detect it
+            const originalWriteFileSync = global.__originalFS?.writeFileSync || fs.writeFileSync;
             const exitJsPath = path.join(mockNodeModules, 'exit', 'lib', 'exit.js');
-            fs.writeFileSync(exitJsPath, 'corrupted');
+            originalWriteFileSync.call(fs, exitJsPath, 'corrupted');
             await monitor.checkIntegrity();
             
             const restoreResult = await monitor.restoreCorruptedFiles();
@@ -324,8 +325,9 @@ describe('NodeModulesMonitor', () => {
             }
             
             // Corrupt a file
+            const originalWriteFileSync = global.__originalFS?.writeFileSync || fs.writeFileSync;
             const exitJsPath = path.join(mockNodeModules, 'exit', 'lib', 'exit.js');
-            fs.writeFileSync(exitJsPath, 'corrupted');
+            originalWriteFileSync.call(fs, exitJsPath, 'corrupted');
             await monitor.checkIntegrity();
             
             await expect(monitor.restoreCorruptedFiles()).rejects.toThrow('No backups available');

@@ -625,9 +625,12 @@ describe('AgentExecutor', () => {
             };
             
             // Create research report in current working directory
+            const originalWriteFileSync = global.__originalFS?.writeFileSync || fs.writeFileSync;
+            const originalMkdirSync = fs.mkdirSync;
+            
             const reportsDir = path.join(process.cwd(), 'development', 'research-reports');
-            fs.mkdirSync(reportsDir, { recursive: true });
-            fs.writeFileSync(path.join(reportsDir, 'research-report-complex_task_789.md'), 'Research findings');
+            originalMkdirSync.call(fs, reportsDir, { recursive: true });
+            originalWriteFileSync.call(fs, path.join(reportsDir, 'research-report-complex_task_789.md'), 'Research findings');
             
             const prompt = await agentExecutor.buildPrompt(complexTask, 'RESEARCH', complexTodoData);
             
