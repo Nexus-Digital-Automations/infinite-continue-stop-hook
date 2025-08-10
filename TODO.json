@@ -2,13 +2,46 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
+      "id": "task_1754837931999_cm3oc4fzv",
+      "title": "Analyze AgentExecutor buildPrompt Method Async Requirements",
+      "description": "Determine whether the buildPrompt() method should be async or sync based on its current implementation and usage patterns. The method is currently declared as async but may not need to be, causing synchronization issues with test calls.",
+      "mode": "DEVELOPMENT",
+      "priority": "critical",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-10T14:58:51.999Z"
+    },
+    {
+      "id": "task_1754837938911_53hdjhf2b",
+      "title": "Fix AgentExecutor Test Synchronization Issues",
+      "description": "Update all AgentExecutor test calls to properly handle the buildPrompt method synchronization. Either add await statements if method stays async, or update calls if method becomes synchronous. Fix all 10 failing AgentExecutor tests.",
+      "mode": "DEVELOPMENT",
+      "priority": "critical",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-10T14:58:58.912Z"
+    },
+    {
       "id": "task_1754837373382_ibkjh10dr",
       "title": "Validate Build Process After AgentExecutor Repairs",
       "description": "After fixing the AgentExecutor async/await issues, run comprehensive build validation to ensure the build process reaches target reliability. Test all build scripts and validate that hook system integration is fully functional.",
       "mode": "DEVELOPMENT",
       "priority": "high",
-      "status": "pending",
-      "dependencies": [],
+      "status": "blocked",
+      "dependencies": [
+        "task_1754837931999_cm3oc4fzv",
+        "task_1754837938911_53hdjhf2b"
+      ],
       "important_files": [],
       "success_criteria": [],
       "estimate": "",
@@ -66,8 +99,8 @@
   "strikes_completed_last_run": false,
   "current_task_index": 0,
   "last_mode": "DEVELOPMENT",
-  "execution_count": 489,
-  "last_hook_activation": 1754837579995,
+  "execution_count": 490,
+  "last_hook_activation": 1754837749406,
   "__removedLinterTasks": {
     "removedCount": 1,
     "finalTaskCount": 113
