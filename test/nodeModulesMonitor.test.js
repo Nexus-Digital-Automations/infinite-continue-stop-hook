@@ -82,44 +82,64 @@ describe('NodeModulesMonitor', () => {
     });
     
     function createMockCriticalFiles(nodeModulesPath) {
-        // Temporarily disable filesystem protection for legitimate test file creation
-        const originalEnv = process.env.DISABLE_FS_PROTECTION;
-        process.env.DISABLE_FS_PROTECTION = 'true';
+        // Use the original filesystem methods to bypass protection completely
+        const originalWriteFileSync = global.__originalFS?.writeFileSync || require('fs').writeFileSync;
+        // mkdirSync is not mocked, so use the standard one
+        const mkdirSync = require('fs').mkdirSync;
+        
+        console.log(`Creating mock files in: ${nodeModulesPath}`);
         
         try {
             // Create exit/lib/exit.js
             const exitDir = path.join(nodeModulesPath, 'exit', 'lib');
-            fs.mkdirSync(exitDir, { recursive: true });
-            fs.writeFileSync(path.join(exitDir, 'exit.js'), 'module.exports = function exit() { process.exit(); };');
+            console.log(`Creating directory: ${exitDir}`);
+            mkdirSync(exitDir, { recursive: true });
+            const exitJsPath = path.join(exitDir, 'exit.js');
+            console.log(`Creating file: ${exitJsPath}`);
+            originalWriteFileSync(exitJsPath, 'module.exports = function exit() { process.exit(); };');
             
             // Create jest-worker/build/index.js
             const jestWorkerDir = path.join(nodeModulesPath, 'jest-worker', 'build');
-            fs.mkdirSync(jestWorkerDir, { recursive: true });
-            fs.writeFileSync(path.join(jestWorkerDir, 'index.js'), 'module.exports = { Worker: class Worker {} };');
+            console.log(`Creating directory: ${jestWorkerDir}`);
+            mkdirSync(jestWorkerDir, { recursive: true });
+            const jestWorkerPath = path.join(jestWorkerDir, 'index.js');
+            console.log(`Creating file: ${jestWorkerPath}`);
+            originalWriteFileSync(jestWorkerPath, 'module.exports = { Worker: class Worker {} };');
             
             // Create jest directory and package.json
             const jestDir = path.join(nodeModulesPath, 'jest');
-            fs.mkdirSync(jestDir, { recursive: true });
-            fs.writeFileSync(path.join(jestDir, 'package.json'), 
+            console.log(`Creating directory: ${jestDir}`);
+            mkdirSync(jestDir, { recursive: true });
+            const jestPackagePath = path.join(jestDir, 'package.json');
+            console.log(`Creating file: ${jestPackagePath}`);
+            originalWriteFileSync(jestPackagePath, 
                 JSON.stringify({ name: 'jest', version: '29.7.0' }, null, 2));
             
-            // Create package.json files
-            fs.writeFileSync(path.join(nodeModulesPath, 'exit', 'package.json'), 
+            // Create package.json files for exit and jest-worker
+            const exitPackagePath = path.join(nodeModulesPath, 'exit', 'package.json');
+            console.log(`Creating file: ${exitPackagePath}`);
+            originalWriteFileSync(exitPackagePath, 
                 JSON.stringify({ name: 'exit', version: '0.1.2' }, null, 2));
-            fs.writeFileSync(path.join(nodeModulesPath, 'jest-worker', 'package.json'), 
+            
+            const jestWorkerPackagePath = path.join(nodeModulesPath, 'jest-worker', 'package.json');
+            console.log(`Creating file: ${jestWorkerPackagePath}`);
+            originalWriteFileSync(jestWorkerPackagePath, 
                 JSON.stringify({ name: 'jest-worker', version: '29.7.0' }, null, 2));
                 
             console.log('✅ Successfully created all mock critical files for NodeModulesMonitor test');
+            
+            // Verify files were created
+            const requiredFiles = [exitJsPath, jestWorkerPath, jestPackagePath, exitPackagePath, jestWorkerPackagePath];
+            const missingFiles = requiredFiles.filter(file => !require('fs').existsSync(file));
+            if (missingFiles.length > 0) {
+                console.error('❌ Missing files after creation:', missingFiles);
+                throw new Error(`Failed to create required files: ${missingFiles.join(', ')}`);
+            }
+            
         } catch (error) {
             console.error('❌ Failed to create mock critical files:', error.message);
+            console.error('❌ Stack trace:', error.stack);
             throw error;
-        } finally {
-            // Restore original environment
-            if (originalEnv) {
-                process.env.DISABLE_FS_PROTECTION = originalEnv;
-            } else {
-                delete process.env.DISABLE_FS_PROTECTION;
-            }
         }
     }
     
