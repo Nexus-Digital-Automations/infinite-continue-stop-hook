@@ -1,0 +1,51 @@
+{
+  "agents": {
+    "agent_1": {
+      "agentId": "agent_1",
+      "agentNumber": 1,
+      "sessionId": "session_1754981528457_8b9f68a9",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "lastActivity": 1754981528457,
+      "totalRequests": 1,
+      "createdAt": "2025-08-12T06:52:08.457Z",
+      "metadata": {},
+      "capabilities": []
+    },
+    "agent_2": {
+      "agentId": "agent_2",
+      "agentNumber": 2,
+      "sessionId": "test_session",
+      "role": "testing",
+      "specialization": [
+        "unit-tests"
+      ],
+      "status": "active",
+      "lastActivity": 1754981534214,
+      "totalRequests": 1,
+      "createdAt": "2025-08-12T06:52:14.214Z",
+      "metadata": {},
+      "capabilities": []
+    },
+    "agent_3": {
+      "agentId": "agent_3",
+      "agentNumber": 3,
+      "sessionId": "session_1754981545967",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "lastActivity": 1754981545968,
+      "totalRequests": 1,
+      "createdAt": "2025-08-12T06:52:25.968Z",
+      "metadata": {},
+      "capabilities": []
+    }
+  },
+  "nextAgentNumber": 4,
+  "lastCleanup": 1754981528455,
+  "metadata": {
+    "created": "2025-08-12T06:52:08.455Z",
+    "version": "1.0.0"
+  }
+}

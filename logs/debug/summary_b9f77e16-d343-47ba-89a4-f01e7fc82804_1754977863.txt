@@ -1,0 +1,11 @@
+Timeout Debug Summary for Agent b9f77e16-d343-47ba-89a4-f01e7fc82804
+==========================================
+
+Timestamp: 2025-08-12T00:51:03.914221
+Elapsed Time: 0m 0.0s
+Timeout Limit: 120s
+Timeout Exceeded: False
+Hook Type: SubagentStop
+Tool Name: unknown
+
+Full report: logs/debug/debug_report_b9f77e16-d343-47ba-89a4-f01e7fc82804_1754977863.json
