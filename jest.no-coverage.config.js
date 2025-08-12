@@ -31,7 +31,7 @@ module.exports = {
   passWithNoTests: true,
   
   // Optimize test runner for speed
-  watchPathIgnorePatterns: ['/node_modules/', '/.git/', '/coverage/', '/.jest-cache/'],
+  watchPathIgnorePatterns: ['/node_modules/', '/.git/', '/coverage/', '/.jest-cache/', '/.node-modules-backup/'],
   
   // Setup files
   setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
@@ -58,6 +58,13 @@ module.exports = {
   // Module file extensions
   moduleFileExtensions: ['js', 'json'],
   
+  // Module path ignore patterns (for haste map collisions)
+  modulePathIgnorePatterns: [
+    '<rootDir>/.node-modules-backup/',
+    '<rootDir>/coverage/',
+    '<rootDir>/.jest-cache/'
+  ],
+  
   // Ignore patterns
   testPathIgnorePatterns: [
     '/node_modules/',
@@ -65,6 +72,7 @@ module.exports = {
     '/demo/',
     '\\.backup\\.',
     '/demo/.*',
-    '.*demo.*'
+    '.*demo.*',
+    '/.node-modules-backup/'
   ]
 };
