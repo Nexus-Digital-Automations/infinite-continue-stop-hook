@@ -14,7 +14,7 @@ class BackupCleanup {
     constructor(options = {}) {
         this.projectRoot = options.projectRoot || process.cwd();
         this.backupDir = path.join(this.projectRoot, '.node-modules-backup');
-        this.maxBackups = options.maxBackups || 2; // Keep only 2 most recent backups
+        this.maxBackups = options.maxBackups !== undefined ? options.maxBackups : 2; // Keep only 2 most recent backups
         this.dryRun = options.dryRun || false;
     }
 

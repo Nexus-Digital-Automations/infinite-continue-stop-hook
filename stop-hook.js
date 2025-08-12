@@ -24,7 +24,7 @@ process.stdin.on('end', async () => {
         logger.logInput(hookInput);
         logger.addFlow(`Received ${hook_event_name || 'unknown'} event from Claude Code`);
         
-        // Intelligent infinite loop prevention with 3-second timing
+        // Intelligent infinite loop prevention with 4 consecutive calls within 1 second
         if (stop_hook_active) {
             // First check if TODO.json exists to get timing data
             const todoPath = path.join(workingDir, 'TODO.json');
@@ -32,19 +32,30 @@ process.stdin.on('end', async () => {
                 try {
                     const todoData = JSON.parse(fs.readFileSync(todoPath, 'utf8'));
                     const now = Date.now();
-                    const lastActivation = todoData.last_hook_activation || 0;
-                    const timeSinceLastCall = now - lastActivation;
                     
-                    if (timeSinceLastCall < 3000) {
-                        // Called within 3 seconds - approve the stop (likely infinite loop)
-                        logger.addFlow(`Rapid successive call detected (${timeSinceLastCall}ms) - allowing stop`);
-                        logger.logExit(0, "Rapid successive calls detected - preventing infinite loop");
+                    // Initialize call history if not present
+                    if (!todoData.stop_hook_calls) {
+                        todoData.stop_hook_calls = [];
+                    }
+                    
+                    // Clean up old calls (older than 1 second)
+                    todoData.stop_hook_calls = todoData.stop_hook_calls.filter(timestamp => now - timestamp < 1000);
+                    
+                    // Add current call
+                    todoData.stop_hook_calls.push(now);
+                    
+                    // Check if we have 4 consecutive calls within 1 second
+                    if (todoData.stop_hook_calls.length >= 4) {
+                        // 4 or more calls within 1 second - allow stop
+                        logger.addFlow(`4+ consecutive calls within 1 second detected - allowing stop (calls: ${todoData.stop_hook_calls.length})`);
+                        logger.logExit(0, "4+ consecutive calls detected - allowing stop");
                         logger.save();
-                        console.error("Rapid successive calls detected, allowing stop");
+                        console.error("4+ consecutive calls within 1 second detected, allowing stop");
                         process.exit(0);
                     } else {
-                        // More than 3 seconds - continue normally
-                        logger.addFlow(`Normal timing detected (${timeSinceLastCall}ms) - continuing with caution`);
+                        // Less than 4 calls - continue normally but save the call history
+                        logger.addFlow(`Call ${todoData.stop_hook_calls.length} of 4 within 1 second - continuing`);
+                        fs.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
                     }
                 } catch (error) {
                     // If we can't read TODO.json, use conservative approach
