@@ -6,18 +6,20 @@ const readline = require('readline');
 
 // Parse command line arguments
 const args = process.argv.slice(2);
-const projectPath = args[0];
+const projectPath = args[0] || '/Users/jeremyparker/Desktop/Claude Coding Projects';
 
 // Check for command line flags
 const flags = {
-    noInteractive: args.includes('--no-interactive'),
+    noInteractive: args.includes('--no-interactive') || args.includes('--batch'),
     projectName: getArgValue('--project-name'),
     task: getArgValue('--task'),
     mode: getArgValue('--mode') || 'DEVELOPMENT',
     prompt: getArgValue('--prompt'),
     dependencies: getArgValue('--dependencies'),
     importantFiles: getArgValue('--important-files'),
-    requiresResearch: args.includes('--requires-research')
+    requiresResearch: args.includes('--requires-research'),
+    batchMode: args.includes('--batch'),
+    singleProject: args.includes('--single')
 };
 
 function getArgValue(flag) {
@@ -37,7 +39,7 @@ function question(prompt) {
     return new Promise(resolve => rl.question(prompt, resolve));
 }
 
-async function getProjectInfo(targetPath) {
+async function _getProjectInfo(targetPath) {
     // Try to detect project name from package.json or directory name
     let detectedName = path.basename(targetPath);
     
@@ -133,43 +135,74 @@ async function createProjectDirectories(targetPath) {
     return { developmentPath, modesPath };
 }
 
+// Check if TODO.json needs to be updated to new schema
+function needsTodoUpdate(todoPath) {
+    if (!fs.existsSync(todoPath)) return true;
+    
+    try {
+        const existing = JSON.parse(fs.readFileSync(todoPath, 'utf8'));
+        
+        // Check for old schema indicators
+        const hasOldSchema = (
+            existing.current_task_index !== undefined ||  // Old field
+            !existing.current_mode ||  // Missing new field
+            existing.execution_count === undefined ||  // Missing new field
+            (existing.tasks && existing.tasks.some(t => t.id && !t.id.includes('_'))) || // Old task ID format
+            (existing.tasks && existing.tasks.some(t => !t.title)) // Missing title field
+        );
+        
+        if (hasOldSchema) {
+            console.log(`⚠️  ${path.basename(path.dirname(todoPath))} - TODO.json uses old schema, will update`);
+            return true;
+        }
+        
+        console.log(`✓ ${path.basename(path.dirname(todoPath))} - TODO.json already up to date`);
+        return false;
+    } catch {
+        console.log(`⚠️  ${path.basename(path.dirname(todoPath))} - TODO.json corrupted, will recreate`);
+        return true;
+    }
+}
+
 async function createTodoJson(targetPath, projectInfo) {
     const todoPath = path.join(targetPath, 'TODO.json');
     
-    // Check if TODO.json already exists
-    if (fs.existsSync(todoPath)) {
-        if (flags.noInteractive) {
-            console.log('⚠️  TODO.json already exists. Use --force to overwrite.');
-            return false;
-        }
-        
-        const overwrite = await question('TODO.json already exists. Overwrite? (y/n): ');
-        if (overwrite.toLowerCase() !== 'y') {
-            console.log('Setup cancelled.');
-            return false;
-        }
+    // Smart update logic - only update if schema is old or missing
+    if (!needsTodoUpdate(todoPath)) {
+        return true; // Already up to date, skip
     }
     
-    // Create TODO structure
+    // Generate new task ID with timestamp format
+    const timestamp = Date.now();
+    const randomString = Math.random().toString(36).substr(2, 9);
+    const taskId = `task_${timestamp}_${randomString}`;
+    
+    // Create new schema TODO structure
     const todoData = {
         project: projectInfo.projectName,
         tasks: [
             {
-                id: 'task-1',
+                id: taskId,
+                title: projectInfo.taskDescription,
+                description: projectInfo.taskPrompt || projectInfo.taskDescription,
                 mode: projectInfo.taskMode,
-                description: projectInfo.taskDescription,
-                prompt: projectInfo.taskPrompt,
-                dependencies: projectInfo.dependencies,
-                important_files: projectInfo.importantFiles,
-                status: 'pending',
-                requires_research: projectInfo.requiresResearch,
+                priority: "medium",
+                status: "pending",
+                dependencies: projectInfo.dependencies || [],
+                important_files: projectInfo.importantFiles || [],
+                requires_research: projectInfo.requiresResearch || false,
+                created_at: new Date().toISOString(),
                 subtasks: []
             }
         ],
+        // New multi-agent schema fields
+        current_mode: projectInfo.taskMode,
+        last_mode: null,
+        execution_count: 0,
         review_strikes: 0,
         strikes_completed_last_run: false,
-        current_task_index: 0,
-        last_mode: null
+        last_hook_activation: timestamp,
+        agents: {} // Empty agent registry
     };
     
     // Add three review tasks for the three-strike policy - language agnostic
@@ -216,11 +249,11 @@ CRITICAL: Use TaskManager API to add these tasks immediately when coverage is be
     ];
     
     reviewTasks.forEach((reviewTask, index) => {
+        const reviewId = `task_${timestamp + index + 1}_review${index + 1}`;
         todoData.tasks.push({
-            id: `review-strike-${index + 1}`,
-            mode: 'REVIEWER',
-            description: `Review Strike ${index + 1}: ${reviewTask.criteria}`,
-            prompt: `Perform a comprehensive code review with focus on: ${reviewTask.criteria}
+            id: reviewId,
+            title: `Review Strike ${index + 1}: ${reviewTask.criteria}`,
+            description: `Perform a comprehensive code review with focus on: ${reviewTask.criteria}
 
 Check the entire codebase and ensure this criterion is met.
 
@@ -242,10 +275,13 @@ When creating remediation tasks, ensure each task includes:
 - High priority for critical issues
 
 Use the task-creation.md guidelines for optimal task structure.`,
+            mode: 'REVIEWER',
+            priority: "high",
+            status: 'pending',
             dependencies: reviewTask.dependencies,
             important_files: reviewTask.important_files,
-            status: 'pending',
             requires_research: false,
+            created_at: new Date().toISOString(),
             subtasks: [],
             is_review_task: true,
             strike_number: index + 1
@@ -259,82 +295,134 @@ Use the task-creation.md guidelines for optimal task structure.`,
     return true;
 }
 
-async function main() {
-    console.log('=== Infinite Continue Stop Hook - TODO.json Setup ===\n');
-    
-    // Validate project path argument
-    if (!projectPath) {
-        console.error('Error: Project path is required');
-        console.error('Usage: node setup-infinite-hook.js /path/to/project [options]');
-        console.error('\nOptions:');
-        console.error('  --no-interactive        Run without prompts (requires other flags)');
-        console.error('  --project-name NAME     Set project name');
-        console.error('  --task DESCRIPTION      Set initial task description');
-        console.error('  --mode MODE             Set task mode (DEVELOPMENT/REFACTORING/TESTING/RESEARCH)');
-        console.error('  --prompt PROMPT         Set detailed task prompt');
-        console.error('  --dependencies LIST     Comma-separated list of dependencies');
-        console.error('  --important-files LIST  Comma-separated list of important files');
-        console.error('  --requires-research     Flag task as requiring research');
-        process.exit(1);
+// Get all project directories to process
+function getProjectDirectories(basePath) {
+    if (!fs.existsSync(basePath) || !fs.statSync(basePath).isDirectory()) {
+        return [];
     }
+    
+    return fs.readdirSync(basePath)
+        .map(item => path.join(basePath, item))
+        .filter(itemPath => {
+            if (!fs.statSync(itemPath).isDirectory()) return false;
+            
+            // Skip hidden directories and common ignore patterns
+            const dirname = path.basename(itemPath);
+            if (dirname.startsWith('.') || 
+                dirname === 'node_modules' || 
+                dirname === 'dist' || 
+                dirname === 'build') {
+                return false;
+            }
+            
+            return true;
+        });
+}
+
+async function processProject(targetPath) {
+    const projectName = path.basename(targetPath);
+    console.log(`\n=== Processing ${projectName} ===`);
+    
+    try {
+        // Get project information for this specific project
+        const projectInfo = {
+            projectName: projectName,
+            taskDescription: 'Continue development and improvements',
+            taskMode: 'DEVELOPMENT',
+            taskPrompt: 'Continue with the current development tasks, fix any issues, and improve the codebase quality.',
+            dependencies: [],
+            importantFiles: [],
+            requiresResearch: false
+        };
+        
+        // Create project directories and copy mode files if needed
+        await createProjectDirectories(targetPath);
+        
+        // Create/update TODO.json if needed
+        const success = await createTodoJson(targetPath, projectInfo);
+        
+        if (success) {
+            console.log(`✅ ${projectName} - Setup complete`);
+        } else {
+            console.log(`⏭️  ${projectName} - Skipped (already up to date)`);
+        }
+        
+        return { success: true, project: projectName };
+        
+    } catch (error) {
+        console.error(`❌ ${projectName} - Error:`, error.message);
+        return { success: false, project: projectName, error: error.message };
+    }
+}
+
+async function main() {
+    console.log('=== Infinite Continue Stop Hook - Batch TODO.json Setup ===\n');
     
     // Resolve project path
     const targetPath = path.resolve(projectPath);
     
     // Verify project path exists
     if (!fs.existsSync(targetPath)) {
-        console.error(`Error: Project path does not exist: ${targetPath}`);
+        console.error(`Error: Path does not exist: ${targetPath}`);
         process.exit(1);
     }
     
     // Verify it's a directory
     if (!fs.statSync(targetPath).isDirectory()) {
-        console.error(`Error: Project path is not a directory: ${targetPath}`);
+        console.error(`Error: Path is not a directory: ${targetPath}`);
         process.exit(1);
     }
     
-    console.log(`Setting up TODO.json for: ${targetPath}`);
+    console.log(`Processing directories in: ${targetPath}`);
+    console.log(`Batch mode: ${flags.batchMode ? 'ON' : 'OFF'}`);
+    console.log(`Single project mode: ${flags.singleProject ? 'ON' : 'OFF'}`);
+    
+    const results = [];
     
     try {
-        // Get project information
-        const projectInfo = await getProjectInfo(targetPath);
-        
-        // Create project directories and copy mode files
-        console.log('\n=== Creating Project Directories ===');
-        await createProjectDirectories(targetPath);
-        
-        // Create TODO.json
-        console.log('\n=== Creating TODO.json ===');
-        const success = await createTodoJson(targetPath, projectInfo);
-        
-        if (success) {
-            console.log('\n✅ Setup complete!');
-            console.log('\nThe following has been created for this project:');
-            console.log('- TODO.json with initial task and review tasks');
-            console.log('- /development directory for project-specific guidelines');
-            console.log('- /development/modes directory with all mode files');
-            console.log('\n⚠️  Note: This script assumes the global hook is already configured.');
-            console.log('If the hook is not working, ensure the following command is in ~/.claude/settings.json:');
-            console.log('node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js"');
+        if (flags.singleProject) {
+            // Process single project
+            const result = await processProject(targetPath);
+            results.push(result);
+        } else {
+            // Process all directories in the path
+            const projectDirs = getProjectDirectories(targetPath);
+            console.log(`\nFound ${projectDirs.length} project directories to process\n`);
             
-            // Run test hook to verify
-            console.log('\n=== Testing Hook Setup ===');
-            const testHookPath = path.join(__dirname, 'test-hook.js');
-            if (fs.existsSync(testHookPath)) {
-                const { execSync } = require('child_process');
-                try {
-                    execSync(`node "${testHookPath}"`, { 
-                        cwd: targetPath,
-                        stdio: 'inherit'
-                    });
-                } catch {
-                    console.error('⚠️  Test hook failed, but setup was completed successfully');
-                }
+            for (const projectDir of projectDirs) {
+                const result = await processProject(projectDir);
+                results.push(result);
             }
         }
         
+        // Summary
+        console.log('\n=== Summary ===');
+        const successful = results.filter(r => r.success).length;
+        const failed = results.filter(r => !r.success).length;
+        
+        console.log(`✅ Successfully processed: ${successful} projects`);
+        if (failed > 0) {
+            console.log(`❌ Failed: ${failed} projects`);
+            results.filter(r => !r.success).forEach(r => {
+                console.log(`   - ${r.project}: ${r.error}`);
+            });
+        }
+        
+        console.log('\n📋 Usage examples:');
+        console.log('# Process all projects in Claude Coding Projects (default):');
+        console.log('node setup-infinite-hook.js');
+        console.log('');
+        console.log('# Process single project:');
+        console.log('node setup-infinite-hook.js /path/to/project --single');
+        console.log('');
+        console.log('# Batch mode with no interaction:');
+        console.log('node setup-infinite-hook.js --batch');
+        
+        console.log('\n📋 Updated hook reference in ~/.claude/settings.json should point to:');
+        console.log('node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js"');
+        
     } catch (error) {
-        console.error('\n❌ Setup error:', error.message);
+        console.error('\n❌ Batch setup error:', error.message);
         process.exit(1);
     } finally {
         rl.close();

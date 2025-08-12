@@ -79,32 +79,55 @@ describe('NodeModulesMonitor', () => {
                 console.warn('Cleanup warning:', error.message);
             }
         }
+        
+        // Clear any remaining timers and force cleanup
+        if (global._timers && global._timers.length > 0) {
+            global._timers.forEach(timer => {
+                try {
+                    if (timer && typeof timer.unref === 'function') {
+                        timer.unref();
+                    }
+                } catch {
+                    // Ignore cleanup errors
+                }
+            });
+            global._timers.length = 0;
+        }
     });
     
     function createMockCriticalFiles(nodeModulesPath) {
-        // Use the original filesystem methods to bypass protection completely
-        const originalWriteFileSync = global.__originalFS?.writeFileSync || require('fs').writeFileSync;
-        // mkdirSync is not mocked, so use the standard one
-        const mkdirSync = require('fs').mkdirSync;
+        // Use require to get fresh fs methods that work with filesystem protection
+        const fs = require('fs');
+        // Use the standard fs.writeFileSync which will go through protection
+        const writeFileSync = fs.writeFileSync;
+        const mkdirSync = fs.mkdirSync;
         
         console.log(`Creating mock files in: ${nodeModulesPath}`);
         
         try {
-            // Create exit/lib/exit.js
-            const exitDir = path.join(nodeModulesPath, 'exit', 'lib');
-            console.log(`Creating directory: ${exitDir}`);
-            mkdirSync(exitDir, { recursive: true });
-            const exitJsPath = path.join(exitDir, 'exit.js');
-            console.log(`Creating file: ${exitJsPath}`);
-            originalWriteFileSync(exitJsPath, 'module.exports = function exit() { process.exit(); };');
+            // Ensure the base node_modules directory exists first
+            mkdirSync(nodeModulesPath, { recursive: true });
             
-            // Create jest-worker/build/index.js
-            const jestWorkerDir = path.join(nodeModulesPath, 'jest-worker', 'build');
-            console.log(`Creating directory: ${jestWorkerDir}`);
+            // Create exit directory structure and files
+            const exitDir = path.join(nodeModulesPath, 'exit');
+            const exitLibDir = path.join(exitDir, 'lib');
+            console.log(`Creating directories: ${exitDir}, ${exitLibDir}`);
+            mkdirSync(exitDir, { recursive: true });
+            mkdirSync(exitLibDir, { recursive: true });
+            
+            const exitJsPath = path.join(exitLibDir, 'exit.js');
+            console.log(`Creating file: ${exitJsPath}`);
+            writeFileSync(exitJsPath, 'module.exports = function exit() { process.exit(); };');
+            
+            // Create jest-worker directory structure and files
+            const jestWorkerDir = path.join(nodeModulesPath, 'jest-worker');
+            const jestWorkerBuildDir = path.join(jestWorkerDir, 'build');
+            console.log(`Creating directories: ${jestWorkerDir}, ${jestWorkerBuildDir}`);
             mkdirSync(jestWorkerDir, { recursive: true });
-            const jestWorkerPath = path.join(jestWorkerDir, 'index.js');
+            mkdirSync(jestWorkerBuildDir, { recursive: true });
+            const jestWorkerPath = path.join(jestWorkerBuildDir, 'index.js');
             console.log(`Creating file: ${jestWorkerPath}`);
-            originalWriteFileSync(jestWorkerPath, 'module.exports = { Worker: class Worker {} };');
+            writeFileSync(jestWorkerPath, 'module.exports = { Worker: class Worker {} };');
             
             // Create jest directory and package.json
             const jestDir = path.join(nodeModulesPath, 'jest');
@@ -112,25 +135,56 @@ describe('NodeModulesMonitor', () => {
             mkdirSync(jestDir, { recursive: true });
             const jestPackagePath = path.join(jestDir, 'package.json');
             console.log(`Creating file: ${jestPackagePath}`);
-            originalWriteFileSync(jestPackagePath, 
+            writeFileSync(jestPackagePath, 
                 JSON.stringify({ name: 'jest', version: '29.7.0' }, null, 2));
             
-            // Create package.json files for exit and jest-worker
-            const exitPackagePath = path.join(nodeModulesPath, 'exit', 'package.json');
+            // Create istanbul-lib-report directory structure and files
+            const istanbulDir = path.join(nodeModulesPath, 'istanbul-lib-report');
+            console.log(`Creating directory: ${istanbulDir}`);
+            mkdirSync(istanbulDir, { recursive: true });
+            const istanbulIndexPath = path.join(istanbulDir, 'index.js');
+            console.log(`Creating file: ${istanbulIndexPath}`);
+            writeFileSync(istanbulIndexPath, 'module.exports = { createContext: () => ({}) };');
+            
+            // Create package.json files for all modules
+            const exitPackagePath = path.join(exitDir, 'package.json');
             console.log(`Creating file: ${exitPackagePath}`);
-            originalWriteFileSync(exitPackagePath, 
+            writeFileSync(exitPackagePath, 
                 JSON.stringify({ name: 'exit', version: '0.1.2' }, null, 2));
             
-            const jestWorkerPackagePath = path.join(nodeModulesPath, 'jest-worker', 'package.json');
+            const jestWorkerPackagePath = path.join(jestWorkerDir, 'package.json');
             console.log(`Creating file: ${jestWorkerPackagePath}`);
-            originalWriteFileSync(jestWorkerPackagePath, 
+            writeFileSync(jestWorkerPackagePath, 
                 JSON.stringify({ name: 'jest-worker', version: '29.7.0' }, null, 2));
+                
+            const istanbulPackagePath = path.join(istanbulDir, 'package.json');
+            console.log(`Creating file: ${istanbulPackagePath}`);
+            writeFileSync(istanbulPackagePath, 
+                JSON.stringify({ name: 'istanbul-lib-report', version: '3.0.1' }, null, 2));
                 
             console.log('✅ Successfully created all mock critical files for NodeModulesMonitor test');
             
-            // Verify files were created
-            const requiredFiles = [exitJsPath, jestWorkerPath, jestPackagePath, exitPackagePath, jestWorkerPackagePath];
-            const missingFiles = requiredFiles.filter(file => !require('fs').existsSync(file));
+            // Verify files were created (with more detailed logging)
+            const requiredFiles = [
+                { path: exitJsPath, name: 'exit.js' },
+                { path: jestWorkerPath, name: 'jest-worker index.js' },
+                { path: jestPackagePath, name: 'jest package.json' },
+                { path: exitPackagePath, name: 'exit package.json' },
+                { path: jestWorkerPackagePath, name: 'jest-worker package.json' },
+                { path: istanbulIndexPath, name: 'istanbul index.js' },
+                { path: istanbulPackagePath, name: 'istanbul package.json' }
+            ];
+            
+            const missingFiles = [];
+            for (const file of requiredFiles) {
+                if (!fs.existsSync(file.path)) {
+                    console.error(`❌ Missing ${file.name} at ${file.path}`);
+                    missingFiles.push(file.path);
+                } else {
+                    console.log(`✅ Created ${file.name} at ${file.path}`);
+                }
+            }
+            
             if (missingFiles.length > 0) {
                 console.error('❌ Missing files after creation:', missingFiles);
                 throw new Error(`Failed to create required files: ${missingFiles.join(', ')}`);
@@ -335,9 +389,8 @@ describe('NodeModulesMonitor', () => {
             monitor.config.enableRestore = false;
             
             // Corrupt a file and detect it
-            const originalWriteFileSync = global.__originalFS?.writeFileSync || fs.writeFileSync;
             const exitJsPath = path.join(mockNodeModules, 'exit', 'lib', 'exit.js');
-            originalWriteFileSync.call(fs, exitJsPath, 'corrupted');
+            fs.writeFileSync(exitJsPath, 'corrupted');
             await monitor.checkIntegrity();
             
             const restoreResult = await monitor.restoreCorruptedFiles();
@@ -354,9 +407,8 @@ describe('NodeModulesMonitor', () => {
             }
             
             // Corrupt a file
-            const originalWriteFileSync = global.__originalFS?.writeFileSync || fs.writeFileSync;
             const exitJsPath = path.join(mockNodeModules, 'exit', 'lib', 'exit.js');
-            originalWriteFileSync.call(fs, exitJsPath, 'corrupted');
+            fs.writeFileSync(exitJsPath, 'corrupted');
             await monitor.checkIntegrity();
             
             await expect(monitor.restoreCorruptedFiles()).rejects.toThrow('No backups available');
@@ -444,7 +496,10 @@ describe('NodeModulesMonitor', () => {
                 await newMonitor.stopMonitoring();
                 
                 // Small delay to ensure different timestamps
-                await new Promise(resolve => global.setTimeout(resolve, 10));
+                await new Promise(resolve => {
+                    const timeoutId = global.setTimeout(resolve, 10);
+                    timeoutId.unref();
+                });
             }
             
             const backups = fs.readdirSync(backupDir);
@@ -465,7 +520,10 @@ describe('NodeModulesMonitor', () => {
             await newMonitor1.startMonitoring();
             await newMonitor1.stopMonitoring();
             
-            await new Promise(resolve => global.setTimeout(resolve, 10));
+            await new Promise(resolve => {
+                const timeoutId = global.setTimeout(resolve, 10);
+                timeoutId.unref();
+            });
             
             const newMonitor2 = new NodeModulesMonitor({ 
                 projectRoot: testDir,
@@ -493,7 +551,8 @@ describe('NodeModulesMonitor', () => {
             fs.createReadStream = jest.fn().mockImplementation(() => {
                 const { EventEmitter } = require('events');
                 const stream = new EventEmitter();
-                global.setTimeout(() => stream.emit('error', new Error('EACCES: permission denied')), 0);
+                const timeoutId = global.setTimeout(() => stream.emit('error', new Error('EACCES: permission denied')), 0);
+                timeoutId.unref();
                 return stream;
             });
             

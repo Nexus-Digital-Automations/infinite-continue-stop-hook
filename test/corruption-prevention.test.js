@@ -308,7 +308,7 @@ describe('Corruption Prevention System', () => {
             const promises = [];
             for (let i = 0; i < 5; i++) {
                 promises.push(new Promise(resolve => {
-                    global.setTimeout(() => {
+                    const timeoutId = global.setTimeout(() => {
                         fileOpLogger.logOperation(
                             'writeFile',
                             `rapid-${i}.txt`,
@@ -316,6 +316,7 @@ describe('Corruption Prevention System', () => {
                         );
                         resolve();
                     }, i * 100); // 100ms apart
+                    timeoutId.unref();
                 }));
             }
             

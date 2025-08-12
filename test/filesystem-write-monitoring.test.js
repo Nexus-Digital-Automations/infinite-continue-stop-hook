@@ -724,7 +724,7 @@ describe('Filesystem Write Operation Monitoring', () => {
             });
             
             // Allow time for async alerts
-            global.setTimeout(() => {
+            const timeoutId = global.setTimeout(() => {
                 console.log = originalLog;
                 
                 // Verify some form of alerting occurred
@@ -736,6 +736,7 @@ describe('Filesystem Write Operation Monitoring', () => {
                 
                 done();
             }, 100);
+            timeoutId.unref();
         });
 
         it('should maintain operation history for forensic analysis', () => {

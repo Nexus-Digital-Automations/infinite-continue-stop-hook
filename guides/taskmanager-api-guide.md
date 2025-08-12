@@ -4,13 +4,26 @@ Complete reference for the TaskManager API - a comprehensive task management sys
 
 ## 🚀 Quick Start
 
+### Shell Scripts Interface (Recommended)
+```bash
+# Use the simplified shell script interface for all operations
+./scripts/taskmanager/taskmanager.sh current                    # Get current task
+./scripts/taskmanager/taskmanager.sh complete task_123          # Complete task (triggers linter feedback)
+./scripts/taskmanager/taskmanager.sh linter-check               # Check linter feedback status
+./scripts/taskmanager/taskmanager.sh linter-clear               # Clear linter feedback to proceed
+./scripts/taskmanager/taskmanager.sh create --title "Fix bug"   # Create new task
+
+# View all available commands
+./scripts/taskmanager/taskmanager.sh
+```
+
 ### Initialize Agent and Start Working
 ```bash
 # Auto-initialize agent and get task guidance (recommended workflow)
-node stop-hook-simple.js
+node stop-hook.js
 
-# Or manually initialize agent
-node initialize-agent.js init '{"role": "development", "sessionId": "my_session"}'
+# Or manually initialize agent with shell scripts
+./scripts/taskmanager/taskmanager.sh agent-register --role "development" --session "my_session"
 
 # Set agent environment for consistency
 export CLAUDE_AGENT_ID="agent_1"
@@ -50,19 +63,84 @@ export CLAUDE_AGENT_ROLE="development"        # Agent role
 export CLAUDE_AGENT_SPECIALIZATION="testing,linting"  # Specializations
 ```
 
+## 🔧 Shell Scripts Interface
+
+### Master Script Commands
+All TaskManager operations are available via shell scripts for reliability:
+
+```bash
+# Task Management
+./scripts/taskmanager/taskmanager.sh current [agent_id]
+./scripts/taskmanager/taskmanager.sh create --title "Title" --description "Desc" --mode "DEVELOPMENT"
+./scripts/taskmanager/taskmanager.sh complete <task_id>
+./scripts/taskmanager/taskmanager.sh status <task_id> <new_status>
+./scripts/taskmanager/taskmanager.sh info <task_id>
+./scripts/taskmanager/taskmanager.sh list [--status pending] [--mode DEVELOPMENT]
+./scripts/taskmanager/taskmanager.sh remove <task_id>
+
+# Task Organization
+./scripts/taskmanager/taskmanager.sh move-top <task_id>
+./scripts/taskmanager/taskmanager.sh move-bottom <task_id>
+./scripts/taskmanager/taskmanager.sh move-up <task_id>
+./scripts/taskmanager/taskmanager.sh move-down <task_id>
+
+# File Management
+./scripts/taskmanager/taskmanager.sh add-file <task_id> <file_path>
+./scripts/taskmanager/taskmanager.sh remove-file <task_id> <file_path>
+
+# Dependencies
+./scripts/taskmanager/taskmanager.sh dependencies [--graph] [--executable]
+
+# Agent Management
+./scripts/taskmanager/taskmanager.sh agent-register --role "role" --session "session"
+./scripts/taskmanager/taskmanager.sh agent-claim <agent_id> <task_id>
+./scripts/taskmanager/taskmanager.sh agent-status <agent_id>
+./scripts/taskmanager/taskmanager.sh agent-list [--active]
+
+# Linter Feedback (NEW)
+./scripts/taskmanager/taskmanager.sh linter-check    # Check for pending linter feedback
+./scripts/taskmanager/taskmanager.sh linter-clear    # Clear linter feedback to proceed
+
+# Backup & Archive
+./scripts/taskmanager/taskmanager.sh backup [--list|--create|--restore]
+./scripts/taskmanager/taskmanager.sh archive [--list|--stats|--restore task_id]
+```
+
+### Linter Feedback Workflow
+The system now enforces mandatory linter checks after task completion:
+
+```bash
+# 1. Complete a task (this now triggers linter feedback requirement)
+./scripts/taskmanager/taskmanager.sh complete task_123
+
+# 2. Check what linter feedback is pending
+./scripts/taskmanager/taskmanager.sh linter-check
+# Output: Shows task details, linting commands needed
+
+# 3. Run recommended linting
+npm run lint           # Or specific directories as recommended
+npm run lint:fix        # Auto-fix issues if available
+
+# 4. Clear linter feedback to proceed to next task
+./scripts/taskmanager/taskmanager.sh linter-clear
+# Only after this step can you get the next task assignment
+```
+
 ## 📋 Stop Hook Integration
 
 ### Task Continuation Workflow
 ```bash
 # Get task continuation guidance (recommended main workflow)
-node stop-hook-simple.js
+node stop-hook.js
 
-# This will:
-# 1. Initialize agent if needed (auto-assigns agent number)
-# 2. Find current task or assign new task
-# 3. Provide detailed instructions and commands
-# 4. Run mandatory linter checks for development tasks
-# 5. Give completion commands for when task is done
+# System responses based on current state:
+# 1. Linter Feedback Required: Shows pending linter feedback from completed task
+#    - Must run linter checks and clear feedback before proceeding
+#    - Use: ./scripts/taskmanager/taskmanager.sh linter-clear
+# 2. Initialize agent if needed (auto-assigns agent number)
+# 3. Find current task or assign new task
+# 4. Provide detailed instructions and commands
+# 5. Give completion commands (now triggers mandatory linter feedback)
 ```
 
 ### Manual Task Continuation Commands
@@ -75,6 +153,24 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
 ```
 
 ## Core Operations
+
+### Linter Feedback Management (NEW)
+```bash
+# Check for pending linter feedback (Shell Script - Recommended)
+./scripts/taskmanager/taskmanager.sh linter-check
+
+# Clear pending linter feedback (Shell Script - Recommended) 
+./scripts/taskmanager/taskmanager.sh linter-clear
+
+# Check if linter feedback is pending (Node API)
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.hasPendingLinterFeedback().then(pending => console.log('Pending feedback:', pending));"
+
+# Get linter feedback details (Node API)
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getPendingLinterFeedback().then(feedback => console.log(JSON.stringify(feedback, null, 2)));"
+
+# Clear linter feedback (Node API)
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.clearLinterFeedback().then(result => console.log(JSON.stringify(result, null, 2)));"
+```
 
 ### Agent-Aware Task Management
 

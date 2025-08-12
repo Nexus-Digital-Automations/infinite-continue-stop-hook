@@ -154,8 +154,83 @@ process.stdin.on('end', async () => {
             }
         }
         
-        // Find next task
-        const currentTask = await taskManager.getCurrentTask();
+        // Initialize or get agent ID for multi-agent support
+        let agentId = process.env.CLAUDE_AGENT_ID;
+        
+        if (!agentId && fs.existsSync(path.join(__dirname, 'initialize-agent.js'))) {
+            try {
+                const { initializeAgent } = require('./initialize-agent');
+                const agentInfo = {
+                    sessionId: process.env.CLAUDE_SESSION_ID || `session_${Date.now()}`,
+                    role: process.env.CLAUDE_AGENT_ROLE || 'development',
+                    specialization: process.env.CLAUDE_AGENT_SPECIALIZATION ? 
+                        process.env.CLAUDE_AGENT_SPECIALIZATION.split(',') : []
+                };
+                
+                const initResult = await initializeAgent(agentInfo);
+                if (initResult.success) {
+                    agentId = initResult.agentId;
+                    logger.addFlow(`Agent initialized: ${agentId} (${initResult.action})`);
+                }
+            } catch (error) {
+                logger.addFlow(`Agent initialization failed: ${error.message}`);
+                // Continue without agent ID - fallback to old behavior
+            }
+        }
+        
+        // Get task continuation guidance (includes linter feedback check)
+        const guidance = await taskManager.getTaskContinuationGuidance(agentId);
+        logger.addFlow(`Task guidance action: ${guidance.action}`);
+        
+        // Handle linter feedback requirement
+        if (guidance.action === 'linter_feedback_required') {
+            logger.addFlow(`Linter feedback required for task: ${guidance.taskTitle}`);
+            const linterMessage = `
+┌─ LINTER FEEDBACK REQUIRED ─┐
+│ Task Completion Blocked     │
+└────────────────────────────┘
+
+🔍 **MANDATORY LINTER CHECK**
+
+The task "${guidance.taskTitle}" has been marked as completed, but linter feedback is required before proceeding to the next task.
+
+${guidance.message}
+
+**Required Actions:**
+1. Run linter checks: 
+${guidance.lintCommands.map(cmd => `   ${cmd}`).join('\n')}
+
+2. Fix any linting errors found
+
+3. Clear linter feedback to proceed:
+   ${guidance.clearCommand}
+
+**OR use shell script:**
+   ./scripts/taskmanager/taskmanager.sh linter-check
+   ./scripts/taskmanager/taskmanager.sh linter-clear
+
+⚠️ **NO NEXT TASK will be assigned until linter feedback is cleared!**
+`;
+            
+            console.error(linterMessage);
+            logger.logExit(2, "Linter feedback required - blocking next task");
+            logger.save();
+            process.exit(2);
+        }
+        
+        // Find next task using guidance
+        let currentTask;
+        if (guidance.action === 'continue_task') {
+            currentTask = guidance.task;
+            logger.addFlow(`Continuing task: ${currentTask.title}`);
+        } else if (guidance.action === 'start_new_task') {
+            currentTask = guidance.task;
+            logger.addFlow(`Starting new task: ${currentTask.title}`);
+        } else {
+            logger.addFlow("No tasks available");
+            currentTask = null;
+        }
+        
         logger.logCurrentTask(currentTask);
         
         if (!currentTask) {

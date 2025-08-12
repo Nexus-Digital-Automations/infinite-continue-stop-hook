@@ -1683,7 +1683,10 @@ global.cleanupWorkerResources = async function() {
         }
         
         // Small delay to let resources cleanup
-        await new Promise(resolve => setTimeout(resolve, 5));
+        await new Promise(resolve => {
+            const timeoutId = setTimeout(resolve, 5);
+            timeoutId.unref();
+        });
         
     } catch {
         // Silent fail to not break tests
@@ -1747,6 +1750,9 @@ const originalSetImmediate = global.setImmediate;
 if (!global._timers) {
     global._timers = [];
 }
+if (!global._intervals) {
+    global._intervals = [];
+}
 if (!global._immediates) {
     global._immediates = [];
 }
@@ -1768,6 +1774,21 @@ global.setTimeout = function(callback, delay, ...args) {
     
     const timer = originalSetTimeout.call(this, wrappedCallback, delay, ...args);
     global._timers.push(timer);
+    
+    // Preserve original unref method
+    const originalUnref = timer.unref ? timer.unref.bind(timer) : null;
+    if (originalUnref) {
+        timer.unref = function() {
+            const result = originalUnref();
+            // Remove from tracking when unreferenced to prevent keeping process alive
+            const index = global._timers.indexOf(timer);
+            if (index > -1) {
+                global._timers.splice(index, 1);
+            }
+            return result;
+        };
+    }
+    
     return timer;
 };
 
@@ -1784,7 +1805,7 @@ global.setInterval = function(callback, delay, ...args) {
     };
     
     const timer = originalSetInterval.call(this, wrappedCallback, delay, ...args);
-    global._timers.push(timer);
+    global._intervals.push(timer);
     return timer;
 };
 

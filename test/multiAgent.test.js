@@ -161,7 +161,10 @@ describe('Multi-Agent System', () => {
                 cleanupPromises.push(
                     Promise.race([
                         orchestrator.cleanup(),
-                        new Promise((_, reject) => setTimeout(() => reject(new Error('Orchestrator cleanup timeout')), 1000))
+                        new Promise((_, reject) => {
+                            const timeoutId = setTimeout(() => reject(new Error('Orchestrator cleanup timeout')), 1000);
+                            timeoutId.unref();
+                        })
                     ])
                 );
             }
@@ -194,7 +197,25 @@ describe('Multi-Agent System', () => {
             lockManager = null;
             taskManager = null;
             
-            // Clear any remaining timers
+            // Clear any remaining timers and force cleanup
+            if (global._timers && global._timers.length > 0) {
+                console.warn(`Clearing ${global._timers.length} remaining timers`);
+                global._timers.forEach(timer => {
+                    try {
+                        if (timer && typeof timer.unref === 'function') {
+                            timer.unref();
+                        }
+                        if (timer && typeof timer.clearTimeout === 'function') {
+                            clearTimeout(timer);
+                        }
+                    } catch {
+                        // Ignore cleanup errors
+                    }
+                });
+                global._timers.length = 0;
+            }
+            
+            // Force garbage collection if available
             if (global.gc) {
                 global.gc();
             }
@@ -202,6 +223,50 @@ describe('Multi-Agent System', () => {
         
         // Clear Jest mocks
         jest.clearAllMocks();
+    });
+
+    afterAll(async () => {
+        // Global cleanup for entire test suite
+        console.log('🧹 Performing global cleanup for multiAgent test suite...');
+        
+        // Clear all global timers
+        if (global._timers && global._timers.length > 0) {
+            console.warn(`Clearing ${global._timers.length} global timers`);
+            global._timers.forEach(timer => {
+                try {
+                    if (timer && typeof timer.unref === 'function') {
+                        timer.unref();
+                    }
+                    clearTimeout(timer);
+                    clearInterval(timer);
+                } catch {
+                    // Ignore cleanup errors
+                }
+            });
+            global._timers.length = 0;
+        }
+        
+        // Clear all intervals
+        if (global._intervals && global._intervals.length > 0) {
+            global._intervals.forEach(interval => {
+                try {
+                    if (interval && typeof interval.unref === 'function') {
+                        interval.unref();
+                    }
+                    clearInterval(interval);
+                } catch {
+                    // Ignore cleanup errors
+                }
+            });
+            global._intervals.length = 0;
+        }
+        
+        // Force cleanup any Jest resources
+        if (jest.restoreAllMocks) {
+            jest.restoreAllMocks();
+        }
+        
+        console.log('✅ Global multiAgent test cleanup completed');
     });
 
     describe('AgentManager', () => {
