@@ -2,24 +2,6 @@
   "project": "root_files",
   "tasks": [
     {
-      "id": "task_1755103882143_xcet7p3h7",
-      "title": "Fix corrupted Git configuration file",
-      "description": "CRITICAL: The .git/config file has been corrupted with malicious JSON content: {\"malicious\": \"content\"}\n\nThis prevents all Git operations (commit, push, status, etc.) from working.\n\nNeed to:\n1. Backup the corrupted config for analysis\n2. Restore proper Git configuration format\n3. Verify Git repository integrity\n4. Test Git operations work properly\n5. Investigate how the corruption occurred to prevent recurrence\n\nThis is blocking all commit/push operations and must be fixed immediately.",
-      "mode": "DEVELOPMENT",
-      "priority": "critical",
-      "status": "pending",
-      "dependencies": [],
-      "important_files": [
-        ".git/config",
-        ".git/*"
-      ],
-      "success_criteria": [],
-      "estimate": "",
-      "requires_research": false,
-      "subtasks": [],
-      "created_at": "2025-08-13T16:51:22.143Z"
-    },
-    {
       "id": "task_1755045713680_6ffliyb1h",
       "title": "Continue development and improvements",
       "description": "Continue with the current development tasks, fix any issues, and improve the codebase quality.",
@@ -38,7 +20,7 @@
       "description": "The entire scripts/ directory was deleted, causing build failures. Need to recreate all missing script files that the build system depends on:\n\n- scripts/jest-contamination-fix.js\n- scripts/fix-contamination.js\n- scripts/build-validator.js\n- scripts/cleanup-backups.js\n- scripts/safe-coverage.js\n- All other missing scripts referenced in package.json\n\nWithout these scripts, the build system cannot complete its validation and cleanup phases.",
       "mode": "DEVELOPMENT",
       "priority": "high",
-      "status": "pending",
+      "status": "completed",
       "dependencies": [],
       "important_files": [
         "package.json",
@@ -48,7 +30,16 @@
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-08-13T16:48:40.525Z"
+      "created_at": "2025-08-13T16:48:40.525Z",
+      "linterReminder": {
+        "taskId": "task_1755103720525_but9vg2qr",
+        "taskTitle": "Restore missing scripts directory for build system",
+        "directories": [
+          "scripts"
+        ],
+        "timestamp": "2025-08-13T16:55:40.368Z",
+        "needsLinting": true
+      }
     },
     {
       "id": "task_1755103728948_vi3887ojk",
@@ -189,6 +180,12 @@
   "last_hook_activation": 1755103794843,
   "agents": {},
   "stop_hook_calls": [
-    1755103897660
-  ]
+    1755103998244
+  ],
+  "pending_linter_feedback": {
+    "taskId": "task_1755103720525_but9vg2qr",
+    "taskTitle": "Restore missing scripts directory for build system",
+    "timestamp": "2025-08-13T16:55:40.368Z",
+    "requiresLinterCheck": true
+  }
 }
