@@ -9,18 +9,9 @@ Complete reference for the TaskManager API - a comprehensive task management sys
 # NEW APPROACH: Node.js API works from any directory (no cd required)
 
 # Use the convenient wrapper script (RECOMMENDED):
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" init
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" current
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" complete task_123
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" create '{"title":"Fix bug","mode":"DEVELOPMENT"}'
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" init
 
-# Or direct Node.js API calls:
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" init
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" current
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" list
-
-# View all available commands
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm"
+# This initialization command displays all available TaskManager API commands.
 ```
 
 ### Legacy Shell Scripts Interface (Deprecated)
@@ -35,17 +26,17 @@ bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm"
 ### Initialize Agent and Start Working
 ```bash
 # NEW APPROACH: Initialize agent with Node.js API (recommended workflow)
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" init
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" init
 
 # Initialize with specific configuration
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" init '{"role": "development", "sessionId": "my_session", "specialization": ["testing", "linting"]}'
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" init '{"role": "development", "sessionId": "my_session", "specialization": ["testing", "linting"]}'
 
 # Save agent ID from JSON response for subsequent commands
 # Example response: {"success": true, "agentId": "development_session_123...", "config": {...}}
 
 # Use saved agent ID for subsequent operations
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" current [agentId]
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" status [agentId]
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" current [agentId]
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" status [agentId]
 ```
 
 ## 🎯 Node.js API Operations (Primary Interface)
@@ -55,35 +46,35 @@ All TaskManager operations are now available through the Node.js API, which reso
 ### Core Task Operations
 ```bash
 # Initialize new agent (gets auto-assigned ID)
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" init
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" init '{"role": "testing", "specialization": ["unit-tests"]}'
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" init
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" init '{"role": "testing", "specialization": ["unit-tests"]}'
 
 # Task management
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" current [agentId]
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" list '{"status": "pending"}'
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" create '{"title": "Fix bug", "mode": "DEVELOPMENT", "priority": "high"}'
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" claim task_123 [agentId] normal
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" complete task_123 '{"notes": "Fixed successfully"}'
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" current [agentId]
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" list '{"status": "pending"}'
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" create '{"title": "Fix bug", "mode": "DEVELOPMENT", "priority": "high"}'
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" claim task_123 [agentId] normal
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" complete task_123 '{"notes": "Fixed successfully"}'
 
 # Task organization
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" move-top task_123
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" move-up task_123
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" move-down task_123
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" move-bottom task_123
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" move-top task_123
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" move-up task_123
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" move-down task_123
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" move-bottom task_123
 
 # Agent and system status
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" status [agentId]
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" stats
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" linter-check
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" status [agentId]
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" stats
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" linter-check
 ```
 
 ### Direct Node.js API Calls
 ```bash
 # For advanced usage or programmatic access
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" init
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" current
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" list '{"mode": "DEVELOPMENT"}'
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" create '{"title": "Task", "mode": "TESTING"}'
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" current
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" list '{"mode": "DEVELOPMENT"}'
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" create '{"title": "Task", "mode": "TESTING"}'
 ```
 
 ## 🤖 Agent Management (Legacy Interface)
@@ -978,5 +969,5 @@ This system provides enterprise-grade task management with the simplicity needed
 
 For the best experience, use the Node.js API via the convenient wrapper script:
 ```bash
-bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" [command]
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" [command]
 ```
