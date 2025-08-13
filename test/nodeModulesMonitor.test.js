@@ -21,17 +21,41 @@ describe('NodeModulesMonitor', () => {
         testDir = path.resolve('.test-isolated', testId);
         mockNodeModules = path.join(testDir, 'node_modules');
         
-        // Ensure parent directories exist
+        // Ensure parent directories exist with error handling
         try {
-            fs.mkdirSync(testDir, { recursive: true });
-            fs.mkdirSync(mockNodeModules, { recursive: true });
+            // Create the full directory structure in correct order
+            if (!fs.existsSync(path.dirname(testDir))) {
+                fs.mkdirSync(path.dirname(testDir), { recursive: true });
+            }
+            
+            if (!fs.existsSync(testDir)) {
+                fs.mkdirSync(testDir, { recursive: true });
+            }
+            
+            if (!fs.existsSync(mockNodeModules)) {
+                fs.mkdirSync(mockNodeModules, { recursive: true });
+            }
+            
+            console.log(`✅ Test directories created: ${testDir}`);
         } catch (error) {
-            console.warn('Failed to create test directories:', error.message);
-            // Continue with test - createMockCriticalFiles will handle directory creation
+            console.error('❌ Failed to create test directories:', error.message);
+            throw error; // Don't continue if we can't create directories
         }
         
         // Create mock critical files - this function will ensure directories exist
-        createMockCriticalFiles(mockNodeModules);
+        try {
+            createMockCriticalFiles(mockNodeModules);
+            
+            // Small delay to ensure filesystem operations complete
+            // This helps with any timing issues in the test environment
+            const start = Date.now();
+            while (Date.now() - start < 10) {
+                // 10ms delay
+            }
+        } catch (error) {
+            console.error('❌ Failed to create mock files:', error.message);
+            throw error; // Don't continue if we can't create mock files
+        }
         
         // Initialize monitor with test directory and test-friendly settings
         monitor = new NodeModulesMonitor({
@@ -98,97 +122,118 @@ describe('NodeModulesMonitor', () => {
     function createMockCriticalFiles(nodeModulesPath) {
         // Use require to get fresh fs methods that work with filesystem protection
         const fs = require('fs');
-        // Use the standard fs.writeFileSync which will go through protection
-        const writeFileSync = fs.writeFileSync;
-        const mkdirSync = fs.mkdirSync;
+        const path = require('path');
         
         console.log(`Creating mock files in: ${nodeModulesPath}`);
         
         try {
             // Ensure the base node_modules directory exists first
-            mkdirSync(nodeModulesPath, { recursive: true });
+            if (!fs.existsSync(nodeModulesPath)) {
+                fs.mkdirSync(nodeModulesPath, { recursive: true });
+                console.log(`✅ Created base directory: ${nodeModulesPath}`);
+            }
+            
+            // Helper function to safely create file with error handling
+            function safeWriteFile(filePath, content, description) {
+                try {
+                    // Ensure parent directory exists
+                    const parentDir = path.dirname(filePath);
+                    if (!fs.existsSync(parentDir)) {
+                        fs.mkdirSync(parentDir, { recursive: true });
+                        console.log(`📁 Created parent directory: ${parentDir}`);
+                    }
+                    
+                    // Write the file
+                    fs.writeFileSync(filePath, content);
+                    
+                    // Immediately verify the file exists
+                    if (fs.existsSync(filePath)) {
+                        console.log(`✅ Created ${description} at ${filePath}`);
+                        return true;
+                    } else {
+                        console.error(`❌ File not found after write: ${filePath}`);
+                        return false;
+                    }
+                } catch (error) {
+                    console.error(`❌ Failed to write ${description}: ${error.message}`);
+                    console.error(`❌ Path: ${filePath}`);
+                    console.error(`❌ Error details:`, error);
+                    return false;
+                }
+            }
+            
+            const creationResults = [];
             
             // Create exit directory structure and files
             const exitDir = path.join(nodeModulesPath, 'exit');
             const exitLibDir = path.join(exitDir, 'lib');
-            console.log(`Creating directories: ${exitDir}, ${exitLibDir}`);
-            mkdirSync(exitDir, { recursive: true });
-            mkdirSync(exitLibDir, { recursive: true });
-            
             const exitJsPath = path.join(exitLibDir, 'exit.js');
-            console.log(`Creating file: ${exitJsPath}`);
-            writeFileSync(exitJsPath, 'module.exports = function exit() { process.exit(); };');
+            const exitPackagePath = path.join(exitDir, 'package.json');
+            
+            creationResults.push(safeWriteFile(
+                exitJsPath,
+                'module.exports = function exit() { process.exit(); };',
+                'exit.js'
+            ));
+            
+            creationResults.push(safeWriteFile(
+                exitPackagePath,
+                JSON.stringify({ name: 'exit', version: '0.1.2' }, null, 2),
+                'exit package.json'
+            ));
             
             // Create jest-worker directory structure and files
             const jestWorkerDir = path.join(nodeModulesPath, 'jest-worker');
             const jestWorkerBuildDir = path.join(jestWorkerDir, 'build');
-            console.log(`Creating directories: ${jestWorkerDir}, ${jestWorkerBuildDir}`);
-            mkdirSync(jestWorkerDir, { recursive: true });
-            mkdirSync(jestWorkerBuildDir, { recursive: true });
             const jestWorkerPath = path.join(jestWorkerBuildDir, 'index.js');
-            console.log(`Creating file: ${jestWorkerPath}`);
-            writeFileSync(jestWorkerPath, 'module.exports = { Worker: class Worker {} };');
+            const jestWorkerPackagePath = path.join(jestWorkerDir, 'package.json');
+            
+            creationResults.push(safeWriteFile(
+                jestWorkerPath,
+                'module.exports = { Worker: class Worker {} };',
+                'jest-worker index.js'
+            ));
+            
+            creationResults.push(safeWriteFile(
+                jestWorkerPackagePath,
+                JSON.stringify({ name: 'jest-worker', version: '29.7.0' }, null, 2),
+                'jest-worker package.json'
+            ));
             
             // Create jest directory and package.json
             const jestDir = path.join(nodeModulesPath, 'jest');
-            console.log(`Creating directory: ${jestDir}`);
-            mkdirSync(jestDir, { recursive: true });
             const jestPackagePath = path.join(jestDir, 'package.json');
-            console.log(`Creating file: ${jestPackagePath}`);
-            writeFileSync(jestPackagePath, 
-                JSON.stringify({ name: 'jest', version: '29.7.0' }, null, 2));
+            
+            creationResults.push(safeWriteFile(
+                jestPackagePath,
+                JSON.stringify({ name: 'jest', version: '29.7.0' }, null, 2),
+                'jest package.json'
+            ));
             
             // Create istanbul-lib-report directory structure and files
             const istanbulDir = path.join(nodeModulesPath, 'istanbul-lib-report');
-            console.log(`Creating directory: ${istanbulDir}`);
-            mkdirSync(istanbulDir, { recursive: true });
             const istanbulIndexPath = path.join(istanbulDir, 'index.js');
-            console.log(`Creating file: ${istanbulIndexPath}`);
-            writeFileSync(istanbulIndexPath, 'module.exports = { createContext: () => ({}) };');
-            
-            // Create package.json files for all modules
-            const exitPackagePath = path.join(exitDir, 'package.json');
-            console.log(`Creating file: ${exitPackagePath}`);
-            writeFileSync(exitPackagePath, 
-                JSON.stringify({ name: 'exit', version: '0.1.2' }, null, 2));
-            
-            const jestWorkerPackagePath = path.join(jestWorkerDir, 'package.json');
-            console.log(`Creating file: ${jestWorkerPackagePath}`);
-            writeFileSync(jestWorkerPackagePath, 
-                JSON.stringify({ name: 'jest-worker', version: '29.7.0' }, null, 2));
-                
             const istanbulPackagePath = path.join(istanbulDir, 'package.json');
-            console.log(`Creating file: ${istanbulPackagePath}`);
-            writeFileSync(istanbulPackagePath, 
-                JSON.stringify({ name: 'istanbul-lib-report', version: '3.0.1' }, null, 2));
-                
-            console.log('✅ Successfully created all mock critical files for NodeModulesMonitor test');
             
-            // Verify files were created (with more detailed logging)
-            const requiredFiles = [
-                { path: exitJsPath, name: 'exit.js' },
-                { path: jestWorkerPath, name: 'jest-worker index.js' },
-                { path: jestPackagePath, name: 'jest package.json' },
-                { path: exitPackagePath, name: 'exit package.json' },
-                { path: jestWorkerPackagePath, name: 'jest-worker package.json' },
-                { path: istanbulIndexPath, name: 'istanbul index.js' },
-                { path: istanbulPackagePath, name: 'istanbul package.json' }
-            ];
+            creationResults.push(safeWriteFile(
+                istanbulIndexPath,
+                'module.exports = { createContext: () => ({}) };',
+                'istanbul index.js'
+            ));
             
-            const missingFiles = [];
-            for (const file of requiredFiles) {
-                if (!fs.existsSync(file.path)) {
-                    console.error(`❌ Missing ${file.name} at ${file.path}`);
-                    missingFiles.push(file.path);
-                } else {
-                    console.log(`✅ Created ${file.name} at ${file.path}`);
-                }
+            creationResults.push(safeWriteFile(
+                istanbulPackagePath,
+                JSON.stringify({ name: 'istanbul-lib-report', version: '3.0.1' }, null, 2),
+                'istanbul package.json'
+            ));
+            
+            // Check results
+            const failedCreations = creationResults.filter(result => !result);
+            if (failedCreations.length > 0) {
+                throw new Error(`Failed to create ${failedCreations.length} files out of ${creationResults.length}`);
             }
             
-            if (missingFiles.length > 0) {
-                console.error('❌ Missing files after creation:', missingFiles);
-                throw new Error(`Failed to create required files: ${missingFiles.join(', ')}`);
-            }
+            console.log(`✅ Successfully created all ${creationResults.length} mock critical files for NodeModulesMonitor test`);
             
         } catch (error) {
             console.error('❌ Failed to create mock critical files:', error.message);
@@ -232,6 +277,23 @@ describe('NodeModulesMonitor', () => {
     
     describe('startMonitoring', () => {
         it('should start monitoring successfully', async () => {
+            // Debug: Check what files actually exist before starting monitoring
+            console.log('=== DEBUG: File existence check ===');
+            console.log('testDir:', testDir);
+            console.log('mockNodeModules:', mockNodeModules);
+            console.log('monitor.nodeModulesPath:', monitor.nodeModulesPath);
+            console.log('monitor.criticalFiles:', monitor.criticalFiles);
+            
+            for (const file of monitor.criticalFiles) {
+                const fullPath = path.join(mockNodeModules, file);
+                const monitorPath = path.join(monitor.nodeModulesPath, file);
+                console.log(`File: ${file}`);
+                console.log(`  Expected at: ${fullPath} (exists: ${fs.existsSync(fullPath)})`);
+                console.log(`  Monitor looks at: ${monitorPath} (exists: ${fs.existsSync(monitorPath)})`);
+                console.log(`  Paths match: ${fullPath === monitorPath}`);
+            }
+            console.log('=== END DEBUG ===');
+            
             const result = await monitor.startMonitoring();
             
             expect(result.success).toBe(true);

@@ -1,36 +1,92 @@
 # TaskManager API Reference Guide
 
-Complete reference for the TaskManager API - a comprehensive task management system designed for Claude Code agents with multi-agent support, automatic agent initialization, and bash-compatible operations.
+Complete reference for the TaskManager API - a comprehensive task management system designed for Claude Code agents with multi-agent support, automatic agent initialization, and directory-restriction-free operations.
 
 ## 🚀 Quick Start
 
-### Shell Scripts Interface (Recommended)
+### Node.js API Interface (Recommended)
 ```bash
-# Use the simplified shell script interface for all operations
-./scripts/taskmanager/taskmanager.sh current                    # Get current task
-./scripts/taskmanager/taskmanager.sh complete task_123          # Complete task (triggers linter feedback)
-./scripts/taskmanager/taskmanager.sh linter-check               # Check linter feedback status
-./scripts/taskmanager/taskmanager.sh linter-clear               # Clear linter feedback to proceed
-./scripts/taskmanager/taskmanager.sh create --title "Fix bug"   # Create new task
+# NEW APPROACH: Node.js API works from any directory (no cd required)
+
+# Use the convenient wrapper script (RECOMMENDED):
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" init
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" current
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" complete task_123
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" create '{"title":"Fix bug","mode":"DEVELOPMENT"}'
+
+# Or direct Node.js API calls:
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" init
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" current
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" list
 
 # View all available commands
-./scripts/taskmanager/taskmanager.sh
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm"
+```
+
+### Legacy Shell Scripts Interface (Deprecated)
+```bash
+# ❌ OLD APPROACH: Requires directory changes (now blocked by Claude Code security)
+# cd "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook"
+# ./scripts/taskmanager/taskmanager.sh current
+
+# Use Node.js API instead!
 ```
 
 ### Initialize Agent and Start Working
 ```bash
-# Auto-initialize agent and get task guidance (recommended workflow)
-node stop-hook.js
+# NEW APPROACH: Initialize agent with Node.js API (recommended workflow)
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" init
 
-# Or manually initialize agent with shell scripts
-./scripts/taskmanager/taskmanager.sh agent-register --role "development" --session "my_session"
+# Initialize with specific configuration
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" init '{"role": "development", "sessionId": "my_session", "specialization": ["testing", "linting"]}'
 
-# Set agent environment for consistency
-export CLAUDE_AGENT_ID="agent_1"
-export CLAUDE_SESSION_ID="my_persistent_session"
+# Save agent ID from JSON response for subsequent commands
+# Example response: {"success": true, "agentId": "development_session_123...", "config": {...}}
+
+# Use saved agent ID for subsequent operations
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" current [agentId]
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" status [agentId]
 ```
 
-## 🤖 Agent Management
+## 🎯 Node.js API Operations (Primary Interface)
+
+All TaskManager operations are now available through the Node.js API, which resolves directory restriction issues and provides better error handling.
+
+### Core Task Operations
+```bash
+# Initialize new agent (gets auto-assigned ID)
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" init
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" init '{"role": "testing", "specialization": ["unit-tests"]}'
+
+# Task management
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" current [agentId]
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" list '{"status": "pending"}'
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" create '{"title": "Fix bug", "mode": "DEVELOPMENT", "priority": "high"}'
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" claim task_123 [agentId] normal
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" complete task_123 '{"notes": "Fixed successfully"}'
+
+# Task organization
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" move-top task_123
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" move-up task_123
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" move-down task_123
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" move-bottom task_123
+
+# Agent and system status
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" status [agentId]
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" stats
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" linter-check
+```
+
+### Direct Node.js API Calls
+```bash
+# For advanced usage or programmatic access
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" init
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" current
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" list '{"mode": "DEVELOPMENT"}'
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" create '{"title": "Task", "mode": "TESTING"}'
+```
+
+## 🤖 Agent Management (Legacy Interface)
 
 ### Agent Registry Operations
 
@@ -901,3 +957,26 @@ This comprehensive TaskManager API provides:
 - **Automated task assignment** based on agent capabilities
 
 This system provides enterprise-grade task management with the simplicity needed for effective agent workflows!
+
+---
+
+## 🔄 Migration Notice
+
+**IMPORTANT**: This guide has been updated to prioritize the new Node.js API interface over legacy shell scripts due to Claude Code directory restrictions. 
+
+**✅ Use Node.js API (Recommended):**
+- Works from any directory
+- No `cd` commands required
+- Better error handling
+- JSON output format
+- Resolves security restrictions
+
+**❌ Legacy Shell Scripts (Deprecated):**
+- Requires directory changes (`cd`)
+- Blocked by Claude Code security
+- Use only if specifically needed
+
+For the best experience, use the Node.js API via the convenient wrapper script:
+```bash
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" [command]
+```

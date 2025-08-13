@@ -30,53 +30,85 @@
 - Use TaskManager API to get current active task or next pending task
 - NEVER assume what to continue with - always check TODO.json first
 
+## 🚨 TASKMANAGER NODE.JS API SOLUTION
+
+**CRITICAL**: Directory restrictions have been resolved with the new Node.js API. Use the Node.js TaskManager API instead of shell scripts to avoid directory change limitations.
+
+**✅ NEW PREFERRED WORKFLOW - Node.js API:**
+```bash
+# Direct API access from any directory (no directory changes needed)
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" init
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" current
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" list
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" create '{"title":"Task","mode":"DEVELOPMENT"}'
+
+# Or use the convenient wrapper script
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" init
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" current
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" list
+```
+
+**❌ OLD SHELL SCRIPT APPROACH (deprecated due to directory restrictions):**
+```bash
+# This approach requires directory changes which are now blocked by Claude Code security
+cd "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook"
+./scripts/taskmanager/taskmanager.sh init
+```
+
+**❌ COMMON ERROR:**
+Running TaskManager commands from any other directory will fail with "Cannot find module './lib/taskManager'" error.
+
+**RULE**: TaskManager commands = infinite-continue-stop-hook directory. Project work = project directory.
+
 ## 🚨 AGENT INITIALIZATION PROTOCOL
 
-**MANDATORY**: New agents or agents that don't remember their identity MUST initialize themselves before proceeding with any work.
+**MANDATORY**: Agents that don't remember their agent number MUST initialize themselves before proceeding with any work.
 
 **INITIALIZATION TRIGGERS:**
+- Cannot recall your assigned agent number (agent_1, agent_2, etc.)
 - First time working on this project
 - No memory of previous project context
 - Uncertain about project state or current tasks
-- Cannot recall project structure or agent identity
 
 **REQUIRED INITIALIZATION SEQUENCE:**
 ```bash
-# 1. Initialize agent (gets auto-assigned ID like agent_1, agent_2, etc.)
-./scripts/taskmanager/taskmanager.sh init
+# NEW APPROACH: Use Node.js API from any directory (no directory changes needed)
 
-# 2. Set environment variable for subsequent commands
-export CLAUDE_AGENT_ID="agent_X"  # Replace X with assigned number
+# 1. Initialize agent (gets auto-assigned ID like development_session_123...)
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" init
+
+# 2. Save agent ID from JSON response for subsequent commands
+# Example response: {"success": true, "agentId": "development_session_123...", "config": {...}}
 
 # 3. Get current task for this agent
-./scripts/taskmanager/taskmanager.sh current $CLAUDE_AGENT_ID
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" current [agentId]
 ```
 
 **INITIALIZATION OPTIONS:**
 ```bash
-# Simple initialization with default config
-./scripts/taskmanager/taskmanager.sh init
+# Simple initialization with default config (development role)
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" init
 
-# Initialize with specific role
-./scripts/taskmanager/taskmanager.sh init --role development
+# Initialize with specific role and specialization using JSON config
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" init '{"role": "development", "sessionId": "dev_workflow", "specialization": ["testing", "linting"]}'
 
-# Initialize with role and session
-./scripts/taskmanager/taskmanager.sh init --role development --session my_session
+# Initialize with testing role
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" init '{"role": "testing", "specialization": ["unit-tests"]}'
 
-# Initialize with JSON config
-./scripts/taskmanager/taskmanager.sh init '{"role": "development", "sessionId": "dev_workflow", "specialization": ["testing", "linting"]}'
+# Initialize with reviewer role
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" init '{"role": "review", "specialization": ["code-review"]}'
 ```
 
 **POST-INITIALIZATION VALIDATION:**
 After initialization, agents MUST verify their setup by running:
 ```bash
-# Check current task status
-./scripts/taskmanager/taskmanager.sh current $CLAUDE_AGENT_ID
+# Check current task status (using saved agent ID from initialization response)
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" current [agentId]
 
-# Check linting status
+# Check linting status (from project directory where work is being done)
 npm run lint --format=compact
 
-# Check git status
+# Check git status (from project directory where work is being done)
 git status
 
 # Review available guides
@@ -163,14 +195,15 @@ ls development/guides/ guides/
 
 **TaskManager Reordering Commands:**
 ```bash
-# Move urgent task to top priority
-node -e "const tm = require('./lib/taskManager'); new tm('./TODO.json').moveTaskToTop('task_id');"
+# Move urgent task to top priority (using Node.js API)
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" move-top task_id
 
-# Reorder multiple tasks for optimal flow  
-node -e "const tm = require('./lib/taskManager'); new tm('./TODO.json').reorderTasks([{taskId:'task1',newIndex:0}, {taskId:'task2',newIndex:1}]);"
+# Move task up/down incrementally  
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" move-up task_id
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" move-down task_id
 
-# Move task up/down incrementally
-node -e "const tm = require('./lib/taskManager'); new tm('./TODO.json').moveTaskUp('task_id');"
+# Or use wrapper script
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" move-top task_id
 ```
 
 ## 🚨 NEVER MODIFY SETTINGS FILE
@@ -297,24 +330,36 @@ Break work into **SMALLEST POSSIBLE SPECIALIZED UNITS** (30s-2min each) that can
 
 ## 🔴 Claude Code Execution Environment
 
-**Claude Code Cannot Run Node.js Natively** - operates in a bash-only environment. All Node.js operations must be executed using bash commands with proper wrappers.
+**Claude Code Cannot Run Node.js Natively** - operates in a bash-only environment. ALL TaskManager operations MUST use shell scripts.
 
-**❌ WRONG:**
+**❌ FORBIDDEN:**
 ```javascript
 const TaskManager = require('./lib/taskManager');
 const result = await taskManager.readTodo();
 ```
 
-**✅ CORRECT:**
+**❌ ALSO FORBIDDEN:**
 ```bash
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(data => console.log(JSON.stringify(data, null, 2)));"
+node -e "const TaskManager = require('./lib/taskManager');"
+```
+
+**✅ CORRECT - USE NODE.JS API:**
+```bash
+# NEW APPROACH: Node.js API works from any directory
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" list
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" complete task_123
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" linter-check
+
+# Or direct Node.js API calls
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" list
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" complete task_123
 ```
 
 **Integration Requirements:**
-1. Always use bash commands for TaskManager operations
-2. Wrap in proper error handling to catch failures  
-3. Log results to console for visibility
-4. Use JSON.stringify for complex object output
+1. ALWAYS use TaskManager Node.js API for ALL operations
+2. Use the convenient wrapper script (`tm`) or direct Node.js API calls
+3. Reference the TaskManager API guide for all available commands
+4. Use JSON output parsing from Node.js API responses
 
 ## ADDER+ Protocol Integration
 
@@ -327,7 +372,7 @@ The system automatically provides mode-based guidance when Claude Code stops by:
 
 ### Setup for New Projects
 ```bash
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/setup-infinite-hook.js" "/path/to/project"
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/setup-infinite-hook.js" "/path/to/project"
 ```
 
 ## 🚨 Critical Protocols
@@ -387,22 +432,26 @@ When in doubt, explore these directories before asking for help.
 
 **MANDATORY**: If you haven't already read or need to review TaskManager operations, you MUST read: **[TaskManager API Reference Guide](development/guides/taskmanager-api-guide.md)**
 
-This guide contains the complete shell script interface that you should be using instead of direct Node.js commands.
+This guide contains the complete Node.js API interface that resolves directory restriction issues.
 
-**Use the shell scripts, NOT direct node commands!**
+**Use the Node.js API, NOT shell scripts that require directory changes!**
 
 Example correct usage from the guide:
 ```bash
-# Use these shell scripts (CORRECT):
-./scripts/taskmanager/taskmanager.sh init                    # Initialize new agent
-./scripts/taskmanager/taskmanager.sh current
-./scripts/taskmanager/taskmanager.sh complete task_123
-./scripts/taskmanager/taskmanager.sh create --title "Fix bug"
-./scripts/taskmanager/taskmanager.sh linter-check
-./scripts/taskmanager/taskmanager.sh linter-clear
+# NEW APPROACH: Node.js API works from any directory (no cd required)
+
+# Use the convenient wrapper script (RECOMMENDED):
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" init
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" current
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" complete task_123
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" create '{"title":"Fix bug","mode":"DEVELOPMENT"}'
+
+# Or direct Node.js API calls:
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" init
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/taskmanager-api.js" current
 
 # View all available commands
-./scripts/taskmanager/taskmanager.sh
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm"
 ```
 
 # Task Management Protocols
@@ -433,7 +482,7 @@ Agents MUST create tasks using TaskManager API for ALL complex work. Every task 
 
 1. **Wait for User** - Listen attentively to instructions
 2. **Think First** - Assess complexity, determine thinking level
-3. **Initialize Agent** - If new agent or no identity, run `./scripts/taskmanager/taskmanager.sh init`
+3. **Initialize Agent** - If no agent number remembered, run `bash "/Users/jeremyparker/Desktop/Claude Coding Projects/n8n-fork/tm" init`
 4. **Assess Context** - Check TODO.json, ABOUT.md files, assess mode  
 5. **Think Strategically** - Plan approach and subagent strategy
 6. **Deploy Subagents** - Maximize coverage with coordinated workloads

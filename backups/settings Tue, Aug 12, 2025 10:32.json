@@ -1,0 +1,178 @@
+{
+  "env": {
+    "ANTHROPIC_MODEL": "claude-sonnet-4-20250514",
+    "BASH_DEFAULT_TIMEOUT_MS": "300000",
+    "BASH_MAX_TIMEOUT_MS": "300000"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "WebFetch",
+      "Edit",
+      "Read",
+      "Write"
+    ],
+    "deny": [
+      "Bash(dd:*)",
+      "Bash(mkfs:*)",
+      "Bash(mkfs.*:*)",
+      "Bash(shred:*)",
+      "Bash(fdisk:*)",
+      "Bash(parted:*)",
+      "Bash(gparted:*)",
+      "Bash(cfdisk:*)",
+      "Bash(sudo:*)",
+      "Bash(su:*)",
+      "Bash(reboot:*)",
+      "Bash(halt:*)",
+      "Bash(poweroff:*)",
+      "Bash(shutdown:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "Bash(nc:*)",
+      "Bash(netcat:*)",
+      "Bash(telnet:*)",
+      "Bash(ssh:*)",
+      "Bash(scp:*)",
+      "Bash(rsync:*)",
+      "Bash(mount:*)",
+      "Bash(umount:*)",
+      "Bash(chrome:*)",
+      "Bash(firefox:*)",
+      "Bash(safari:*)",
+      "Bash(lynx:*)",
+      "Bash(w3m:*)",
+      "Bash(links:*)",
+      "Bash(kill:*)",
+      "Bash(killall:*)",
+      "Bash(pkill:*)",
+      "Bash(*>/dev/sda*)",
+      "Bash(*>/dev/sd*)",
+      "Bash(*>/dev/hd*)",
+      "Bash(*>/dev/nvme*)",
+      "Bash(:()*)",
+      "Bash(chmod:*)",
+      "Bash(chown:*)",
+      "Bash(chgrp:*)",
+      "Bash(useradd:*)",
+      "Bash(adduser:*)",
+      "Bash(userdel:*)",
+      "Bash(deluser:*)",
+      "Bash(usermod:*)",
+      "Bash(groupadd:*)",
+      "Bash(addgroup:*)",
+      "Bash(groupdel:*)",
+      "Bash(delgroup:*)",
+      "Bash(groupmod:*)",
+      "Bash(passwd:*)",
+      "Bash(crontab:*)",
+      "Bash(at:*)",
+      "Bash(iptables:*)",
+      "Bash(ufw:*)",
+      "Bash(firewall-cmd:*)",
+      "Bash(apt:*)",
+      "Bash(apt-get:*)",
+      "Bash(yum:*)",
+      "Bash(dnf:*)",
+      "Bash(pacman:*)",
+      "Bash(zypper:*)",
+      "Bash(dpkg:*)",
+      "Bash(rpm:*)",
+      "Bash(insmod:*)",
+      "Bash(modprobe:*)",
+      "Bash(rmmod:*)",
+      "Bash(lsmod:*)",
+      "Bash(nohup:*)",
+      "Bash(disown:*)",
+      "Bash(bg:*)",
+      "Bash(fg:*)",
+      "Bash(jobs:*)",
+      "Bash(setsid:*)",
+      "Bash(newgrp:*)",
+      "Bash(sg:*)",
+      "Bash(chroot:*)",
+      "Bash(systemctl:*)",
+      "Bash(service:*)",
+      "Bash(init:*)",
+      "Bash(telinit:*)",
+      "Bash(history:*-c*)",
+      "Bash(export:HISTFILE=/dev/null)",
+      "Bash(unset:HISTFILE)",
+      "Bash(ln:*)",
+      "Bash(mknod:*)",
+      "Bash(alias:rm='*')",
+      "Bash(rm: /)",
+      "Bash(rm: -r /)",
+      "Bash(rm: -f /)",
+      "Bash(rm: -rf /)",
+      "Bash(rm:* /etc)",
+      "Bash(rm:* /etc/*)",
+      "Bash(rm:* /usr)",
+      "Bash(rm:* /usr/*)",
+      "Bash(rm:* /var)",
+      "Bash(rm:* /var/*)",
+      "Bash(rm:* /bin)",
+      "Bash(rm:* /bin/*)",
+      "Bash(rm:* /sbin)",
+      "Bash(rm:* /sbin/*)",
+      "Bash(rm:* /lib)",
+      "Bash(rm:* /lib/*)",
+      "Bash(rm:* /boot)",
+      "Bash(rm:* /boot/*)",
+      "Bash(rm:* /dev)",
+      "Bash(rm:* /dev/*)",
+      "Bash(rm:* /sys)",
+      "Bash(rm:* /sys/*)",
+      "Bash(rm:* /proc)",
+      "Bash(rm:* /proc/*)",
+      "Bash(rm:* /root)",
+      "Bash(rm:* /root/*)"
+    ]
+  },
+  "model": "sonnet",
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js\"",
+            "timeout": 10000
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"/Users/jeremyparker/Desktop/Claude Coding Projects/post-tool-stop-hook/hooks/targeted-lint-runner.sh\"",
+            "timeout": 60000
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js\""
+          },
+          {
+            "type": "command",
+            "command": "python3 \"/Users/jeremyparker/Desktop/Claude Coding Projects/claude-code_agent-manager/hooks/subagent_timeout_monitor.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "feedbackSurveyState": {
+    "lastShownTime": 1754509550909
+  }
+}

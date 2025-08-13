@@ -182,38 +182,39 @@ process.stdin.on('end', async () => {
         const guidance = await taskManager.getTaskContinuationGuidance(agentId);
         logger.addFlow(`Task guidance action: ${guidance.action}`);
         
-        // Handle linter feedback requirement
+        // Handle linter feedback requirement with clear stopping instructions
         if (guidance.action === 'linter_feedback_required') {
             logger.addFlow(`Linter feedback required for task: ${guidance.taskTitle}`);
             const linterMessage = `
 ┌─ LINTER FEEDBACK REQUIRED ─┐
-│ Task Completion Blocked     │
+│ Task Completion Triggered   │
 └────────────────────────────┘
 
-🔍 **MANDATORY LINTER CHECK**
+🔍 **LINTER CHECK NEEDED**
 
-The task "${guidance.taskTitle}" has been marked as completed, but linter feedback is required before proceeding to the next task.
+The task "${guidance.taskTitle}" has been marked as completed, and linter feedback is now active.
 
 ${guidance.message}
 
-**Required Actions:**
-1. Run linter checks: 
+**Fix Linting Issues:**
+
+1. **Run linter checks:** 
 ${guidance.lintCommands.map(cmd => `   ${cmd}`).join('\n')}
 
-2. Fix any linting errors found
+2. **Fix any linting errors found**
 
-3. Clear linter feedback to proceed:
-   ${guidance.clearCommand}
+3. **Clear linter feedback to continue:**
 
-**OR use shell script:**
-   ./scripts/taskmanager/taskmanager.sh linter-check
-   ./scripts/taskmanager/taskmanager.sh linter-clear
+   **Use Shell Script:**
+   ${guidance.clearShellCommand}
 
-⚠️ **NO NEXT TASK will be assigned until linter feedback is cleared!**
+**⚠️ IMPORTANT: This linter feedback will keep showing until you clear it!**
+
+Once you fix the linting issues and clear the feedback, task progression will resume normally.
 `;
             
             console.error(linterMessage);
-            logger.logExit(2, "Linter feedback required - blocking next task");
+            logger.logExit(2, "Linter feedback required - showing stopping instructions");
             logger.save();
             process.exit(2);
         }
