@@ -47,6 +47,7 @@ describe('Multi-Agent System', () => {
             // Always return true for TODO.json and test files to prevent ENOENT errors
             if (filePath === todoPath || 
                 filePath.includes('.locks') || 
+                filePath.includes('test-locks') || 
                 filePath.includes('temp_') || 
                 filePath in fileSystemState ||
                 filePath.includes('TODO.json') ||
@@ -124,7 +125,15 @@ describe('Multi-Agent System', () => {
             enableArchiving: false,
             enableMultiAgent: true, // Enable multi-agent for these tests
             enableAutoFix: false, // Disable AutoFixer for tests initially
-            lockTimeout: 5000
+            lockTimeout: 1000, // Shorter timeout for tests
+            lockRetryInterval: 50, // Faster retry for tests
+            maxRetries: 10, // Fewer retries for tests
+            lockManager: {
+                lockDirectory: './test-locks-temp', // Use test-specific lock directory
+                lockTimeout: 1000,
+                lockRetryInterval: 50,
+                maxRetries: 10
+            }
         });
         
         // Override the autoFixer instance with our mock (following existing test patterns)
@@ -386,6 +395,15 @@ describe('Multi-Agent System', () => {
                 description: 'Test multi-agent assignment',
                 mode: 'DEVELOPMENT'
             });
+            
+            console.log('Returned task ID:', taskId);
+            
+            // Debug: Check if task was created
+            const todoData = await taskManager.readTodo();
+            console.log('Todo data after creation:', JSON.stringify(todoData, null, 2));
+            const task = todoData.tasks.find(t => t.id === taskId);
+            console.log('Found task:', task);
+            expect(task).toBeDefined();
             
             const assigned = await taskManager.assignTaskToAgent(taskId, 'agent1', 'primary');
             expect(assigned).toBe(true);
