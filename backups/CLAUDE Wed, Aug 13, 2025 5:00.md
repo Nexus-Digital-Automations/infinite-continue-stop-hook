@@ -28,9 +28,9 @@
 
 **✅ AGENT INITIALIZATION (MANDATORY):**
 ```bash
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-init.js"
+bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" init
 ```
-**This command provides your agent ID and initializes the TaskManager session.**
+**This command provides your agent ID, current tasks, and ALL TaskManager API commands.**
 
 ### 🎯 Core TaskManager Node.js API Operations
 
@@ -304,35 +304,10 @@ git push -u origin HEAD
 
 ## 🚨 TODO.json INTERACTION PROTOCOL
 
-**MANDATORY**: ALWAYS USE THE TASKMANAGER API WHEN INTERACTING WITH THE TODO.JSON
+**MANDATORY**: ALL TODO.json write operations MUST use TaskManager API exclusively. Reading TODO.json directly is allowed.
 
-**CRITICAL REQUIREMENT**: ALL TODO.json operations (read/write) MUST use TaskManager API exclusively.
-
-**✅ CORRECT**: TaskManager API for ALL TODO.json interactions
-**❌ FORBIDDEN**: Direct read/write operations on TODO.json
-**❌ FORBIDDEN**: fs.readFileSync/writeFileSync on TODO.json
-**❌ FORBIDDEN**: require('./TODO.json') or any direct file access
-
-**ALWAYS USE THESE COMMANDS INSTEAD:**
-```bash
-# AGENT INITIALIZATION (MANDATORY FIRST STEP)
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-init.js"
-
-# UPDATE TASK STATUS (SIMPLIFIED)
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-update.js" task_id completed "Optional completion notes"
-
-# Read TODO.json data
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(data => console.log(JSON.stringify(data, null, 2)));"
-
-# Get current task
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getCurrentTask('agent_id').then(task => console.log(JSON.stringify(task, null, 2)));"
-
-# List all tasks
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(data => console.log(JSON.stringify(data.tasks, null, 2)));"
-
-# Create new task
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Task name', mode: 'DEVELOPMENT'}).then(id => console.log('Created:', id));"
-```
+**✅ CORRECT**: TaskManager API for writes, direct read for TODO.json allowed
+**❌ FORBIDDEN**: Direct write operations on TODO.json
 
 ## 🚨 CONTINUE COMMAND PROTOCOL
 
@@ -350,7 +325,7 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
 
 1. **Wait for User** - Listen attentively to instructions
 2. **Think First** - Assess complexity, determine thinking level (think/think hard/ultrathink)
-3. **Initialize Agent** - If no agent number remembered: `node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-init.js"`
+3. **Initialize Agent** - If no agent number remembered: `bash "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm" init`
 4. **Create Tasks** - For complex requests: CREATE → PRIORITIZE → EXECUTE
 5. **Deploy Subagents** - Maximize parallel coverage for complex work
 6. **Detect Opportunities** - Constantly scan for task creation opportunities

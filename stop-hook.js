@@ -178,46 +178,9 @@ process.stdin.on('end', async () => {
             }
         }
         
-        // Get task continuation guidance (includes linter feedback check)
+        // Get task continuation guidance
         const guidance = await taskManager.getTaskContinuationGuidance(agentId);
         logger.addFlow(`Task guidance action: ${guidance.action}`);
-        
-        // Handle linter feedback requirement with clear stopping instructions
-        if (guidance.action === 'linter_feedback_required') {
-            logger.addFlow(`Linter feedback required for task: ${guidance.taskTitle}`);
-            const linterMessage = `
-┌─ LINTER FEEDBACK REQUIRED ─┐
-│ Task Completion Triggered   │
-└────────────────────────────┘
-
-🔍 **LINTER CHECK NEEDED**
-
-The task "${guidance.taskTitle}" has been marked as completed, and linter feedback is now active.
-
-${guidance.message}
-
-**Fix Linting Issues:**
-
-1. **Run linter checks:** 
-${guidance.lintCommands.map(cmd => `   ${cmd}`).join('\n')}
-
-2. **Fix any linting errors found**
-
-3. **Clear linter feedback to continue:**
-
-   **Use Shell Script:**
-   ${guidance.clearShellCommand}
-
-**⚠️ IMPORTANT: This linter feedback will keep showing until you clear it!**
-
-Once you fix the linting issues and clear the feedback, task progression will resume normally.
-`;
-            
-            console.error(linterMessage);
-            logger.logExit(2, "Linter feedback required - showing stopping instructions");
-            logger.save();
-            process.exit(2);
-        }
         
         // Find next task using guidance
         let currentTask;
@@ -265,7 +228,7 @@ Once you fix the linting issues and clear the feedback, task progression will re
         // Update last mode
         todoData.last_mode = mode;
         
-        // Build the prompt with linter feedback
+        // Build the prompt
         const fullPrompt = await agentExecutor.buildPrompt(currentTask, mode, todoData, taskManager);
         
         // Update task status

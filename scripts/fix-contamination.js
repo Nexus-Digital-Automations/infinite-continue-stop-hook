@@ -31,6 +31,31 @@ tempFiles.forEach(file => {
     }
 });
 
+// Check for and fix corrupted JavaScript files containing JSON data
+function detectAndFixJSONContamination() {
+    const suspiciousFiles = ['test.js', 'index.js'];
+    
+    suspiciousFiles.forEach(file => {
+        const filePath = path.join(process.cwd(), file);
+        if (fs.existsSync(filePath)) {
+            try {
+                const content = fs.readFileSync(filePath, 'utf8').trim();
+                // Check if file starts with JSON-like pattern
+                if (content.startsWith('{"') || content.startsWith('[{')) {
+                    console.log(`Fix Contamination: Detected JSON contamination in ${file}`);
+                    fs.unlinkSync(filePath);
+                    console.log(`Fix Contamination: Removed corrupted ${file}`);
+                    cleanedFiles++;
+                }
+            } catch (error) {
+                console.warn(`Fix Contamination: Warning - Could not check ${file}: ${error.message}`);
+            }
+        }
+    });
+}
+
+detectAndFixJSONContamination();
+
 // Clean up any jest cache if it exists
 const jestCacheDir = path.join(process.cwd(), 'node_modules', '.cache', 'jest');
 if (fs.existsSync(jestCacheDir)) {

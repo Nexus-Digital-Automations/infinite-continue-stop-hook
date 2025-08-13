@@ -195,39 +195,6 @@ class TaskManagerAPI {
         }
     }
 
-    async runLinterCheck() {
-        try {
-            const hasPending = await this.taskManager.hasPendingLinterFeedback();
-            const feedback = hasPending ? await this.taskManager.getPendingLinterFeedback() : null;
-            
-            return {
-                success: true,
-                hasErrors: hasPending,
-                feedback: feedback
-            };
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    async clearLinterFeedback() {
-        try {
-            const result = await this.taskManager.clearLinterFeedback();
-            return {
-                success: true,
-                cleared: true,
-                result: result
-            };
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
 
     async getStatistics() {
         try {
@@ -313,6 +280,9 @@ class TaskManagerAPI {
     // Cleanup method
     cleanup() {
         try {
+            if (this.taskManager && typeof this.taskManager.cleanup === 'function') {
+                this.taskManager.cleanup();
+            }
             if (this.agentManager && typeof this.agentManager.cleanup === 'function') {
                 this.agentManager.cleanup();
             }
@@ -326,7 +296,7 @@ class TaskManagerAPI {
         // Force exit after cleanup to prevent hanging
         setTimeout(() => {
             process.exit(0);
-        }, 100);
+        }, 50);
     }
 }
 
@@ -407,17 +377,6 @@ async function main() {
                 break;
             }
 
-            case 'linter-check': {
-                const result = await api.runLinterCheck();
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
-
-            case 'linter-clear': {
-                const result = await api.clearLinterFeedback();
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
 
             case 'move-top': {
                 const taskId = args[1];
@@ -474,8 +433,6 @@ Commands:
   complete <taskId> [data]     - Complete task with optional data JSON
   status [agentId]             - Get agent status and tasks
   stats                        - Get orchestration statistics
-  linter-check                 - Run linter check
-  linter-clear                 - Clear linter feedback
   move-top <taskId>            - Move task to top priority
   move-up <taskId>             - Move task up one position
   move-down <taskId>           - Move task down one position

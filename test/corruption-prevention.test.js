@@ -27,6 +27,9 @@ describe('Corruption Prevention System', () => {
     let testDir;
     
     beforeEach(() => {
+        // Ensure filesystem protection is enabled for these tests
+        delete process.env.DISABLE_FS_PROTECTION;
+        
         // Create isolated test environment
         testDir = '.test-corruption-prevention';
         if (!fs.existsSync(testDir)) {
@@ -62,6 +65,18 @@ describe('Corruption Prevention System', () => {
         // Restore console
         console.warn = originalConsoleWarn;
         console.error = originalConsoleError;
+        
+        // Cleanup any test files that might have been created
+        try {
+            const testFiles = ['malicious-contamination.js', 'test-safe-write.js'];
+            testFiles.forEach(file => {
+                if (fs.existsSync(file)) {
+                    fs.unlinkSync(file);
+                }
+            });
+        } catch {
+            // Ignore cleanup errors
+        }
         
         // Cleanup test directory
         try {

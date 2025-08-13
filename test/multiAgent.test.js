@@ -60,10 +60,13 @@ describe('Multi-Agent System', () => {
         mockFS.readFileSync.mockImplementation((filePath, _options) => {
             if (filePath === todoPath || filePath in fileSystemState) {
                 const data = fileSystemState[filePath] || initialTodo;
-                return typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+                const result = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+                console.log('MockFS: Read from', filePath, 'returning', JSON.parse(result).tasks?.length || 0, 'tasks');
+                return result;
             }
             if (filePath.includes('TODO.json') || filePath.includes('DONE.json')) {
                 // Return default structure for any TODO.json or DONE.json files
+                console.log('MockFS: Read default TODO.json');
                 return JSON.stringify(initialTodo, null, 2);
             }
             throw new Error(`File not found: ${filePath}`);
@@ -71,13 +74,17 @@ describe('Multi-Agent System', () => {
         
         mockFS.writeFileSync.mockImplementation((filePath, content, _options) => {
             // Mock successful write and update state
-            fileSystemState[filePath] = content;
             if (filePath === todoPath || filePath.includes('TODO.json')) {
                 try {
-                    fileSystemState[filePath] = typeof content === 'string' ? JSON.parse(content) : content;
+                    // Parse content and store as object for proper retrieval
+                    const parsed = typeof content === 'string' ? JSON.parse(content) : content;
+                    fileSystemState[filePath] = parsed;
+                    console.log('MockFS: Wrote to', filePath, 'with', parsed.tasks?.length || 0, 'tasks');
                 } catch {
                     fileSystemState[filePath] = content;
                 }
+            } else {
+                fileSystemState[filePath] = content;
             }
             return undefined; // writeFileSync returns undefined on success
         });
