@@ -94,16 +94,15 @@
     "agent_8": {
       "agentId": "agent_8",
       "agentNumber": 8,
-      "sessionId": "session_1755019693677",
+      "sessionId": "session_1755104172883",
       "role": "development",
       "specialization": [],
-      "status": "inactive",
-      "lastActivity": 1755019693678,
+      "status": "active",
+      "lastActivity": 1755104172883,
       "totalRequests": 1,
-      "createdAt": "2025-08-12T17:28:13.678Z",
+      "createdAt": "2025-08-13T16:56:12.883Z",
       "metadata": {},
-      "capabilities": [],
-      "inactiveSince": "2025-08-12T19:28:13.678Z"
+      "capabilities": []
     }
   },
   "nextAgentNumber": 9,

@@ -15,33 +15,6 @@
       "subtasks": []
     },
     {
-      "id": "task_1755103720525_but9vg2qr",
-      "title": "Restore missing scripts directory for build system",
-      "description": "The entire scripts/ directory was deleted, causing build failures. Need to recreate all missing script files that the build system depends on:\n\n- scripts/jest-contamination-fix.js\n- scripts/fix-contamination.js\n- scripts/build-validator.js\n- scripts/cleanup-backups.js\n- scripts/safe-coverage.js\n- All other missing scripts referenced in package.json\n\nWithout these scripts, the build system cannot complete its validation and cleanup phases.",
-      "mode": "DEVELOPMENT",
-      "priority": "high",
-      "status": "completed",
-      "dependencies": [],
-      "important_files": [
-        "package.json",
-        "scripts/*"
-      ],
-      "success_criteria": [],
-      "estimate": "",
-      "requires_research": false,
-      "subtasks": [],
-      "created_at": "2025-08-13T16:48:40.525Z",
-      "linterReminder": {
-        "taskId": "task_1755103720525_but9vg2qr",
-        "taskTitle": "Restore missing scripts directory for build system",
-        "directories": [
-          "scripts"
-        ],
-        "timestamp": "2025-08-13T16:55:40.368Z",
-        "needsLinting": true
-      }
-    },
-    {
       "id": "task_1755103728948_vi3887ojk",
       "title": "Fix Jest test setup and contamination protection system",
       "description": "Tests are failing because test setup files cannot load required contamination protection modules:\n\n- test/setup.js cannot find ../scripts/jest-contamination-fix\n- Global mock functions are missing (createMockFS, createMockAutoFixer, etc.)\n- Jest binary may be corrupted with malicious content\n\nNeed to:\n1. Verify Jest installation integrity\n2. Restore contamination protection setup\n3. Ensure global mock factory functions are available\n4. Fix test/setup.js and test/testInfrastructure.js dependencies",
@@ -180,12 +153,6 @@
   "last_hook_activation": 1755103794843,
   "agents": {},
   "stop_hook_calls": [
-    1755103998244
-  ],
-  "pending_linter_feedback": {
-    "taskId": "task_1755103720525_but9vg2qr",
-    "taskTitle": "Restore missing scripts directory for build system",
-    "timestamp": "2025-08-13T16:55:40.368Z",
-    "requiresLinterCheck": true
-  }
+    1755104163629
+  ]
 }
