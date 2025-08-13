@@ -193,7 +193,9 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 ## 🚨 MANDATORY TASK CREATION PROTOCOLS
 
 **ALWAYS CREATE TASKS FOR:**
-- **EVERY complex user request** that cannot be completed instantly
+- **EVERY USER REQUEST** - no matter how simple or complex
+- **EVERY USER INSTRUCTION** - any time user tells you to do something
+- **EVERY ISSUE USER POINTS OUT** - bugs, problems, suggestions, observations
 - **ANY opportunity for improvement** discovered during work
 - **ALL errors detected** (linting, testing, runtime, build failures)
 - **Performance issues** (slow responses, memory leaks)
@@ -202,15 +204,22 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 - **Missing functionality** (incomplete features, edge cases)
 - **Integration issues** (API failures, dependency conflicts)
 
+**GOLDEN RULE**: If the user says ANYTHING that requires action → CREATE TASK IMMEDIATELY using Node.js commands → THEN do the work
+
 **INSTANT vs COMPLEX REQUEST CLASSIFICATION:**
 - **INSTANT**: Single file read | Basic status check | Simple one-line answer | Trivial parameter change
 - **COMPLEX**: Multi-step work | Analysis required | Code changes | Research needed | Planning required
 
-**MANDATORY WORKFLOW FOR COMPLEX USER REQUESTS:**
-1. **DETECT** - Identify that user request requires multiple steps or cannot be done instantly
-2. **CREATE** - Immediately create specific, actionable task using TaskManager API
-3. **PRIORITIZE** - Move task to top position using `moveTaskToTop()` 
+**MANDATORY WORKFLOW FOR ALL USER REQUESTS:**
+1. **DETECT** - ANY user request, instruction, or issue they point out
+2. **CREATE IMMEDIATELY** - ALWAYS create task using Node.js commands:
+   ```bash
+   node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'User Request: [description]', description: '[detailed description]', mode: 'DEVELOPMENT', priority: 'high'}).then(id => console.log('Created task:', id));"
+   ```
+3. **PRIORITIZE** - Move task to top position immediately
 4. **EXECUTE** - Begin working on the now-prioritized task
+
+**CRITICAL**: Even for simple requests - CREATE TASK FIRST, then execute. NO EXCEPTIONS.
 
 **DYNAMIC TASK CREATION WORKFLOW:**
 1. **DETECT** - Identify error/opportunity during execution
@@ -349,13 +358,25 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
 ## Standard Approach
 
 1. **Wait for User** - Listen attentively to instructions
-2. **Think First** - Assess complexity, determine thinking level (think/think hard/ultrathink)
-3. **Initialize Agent** - If no agent number remembered: `node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-init.js"`
-4. **Create Tasks** - For complex requests: CREATE → PRIORITIZE → EXECUTE
+2. **CREATE TASK IMMEDIATELY** - For ANY user request/instruction/issue:
+   ```bash
+   node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'User Request: [description]', description: '[detailed description]', mode: 'DEVELOPMENT', priority: 'high'}).then(id => console.log('Created task:', id));"
+   ```
+3. **Think First** - Assess complexity, determine thinking level (think/think hard/ultrathink)
+4. **Initialize Agent** - If no agent number remembered: `node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-init.js"`
 5. **Deploy Subagents** - Maximize parallel coverage for complex work
 6. **Detect Opportunities** - Constantly scan for task creation opportunities
 7. **Implement** - Execute with quality standards
 8. **Commit & Push** - Always push after committing
-9. **Complete Tasks** - Use TaskManager API to mark tasks complete
+9. **Complete Tasks** - Use `node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-update.js" task_id completed "notes"`
 
-**Success Formula:** User Instructions + Maximum Thinking + Maximum Parallel Subagents + Dynamic Task Creation + Quality Standards + Always Push = **MAXIMUM SPEED WITH QUALITY**
+## 🚨 ABSOLUTE REQUIREMENT: IMMEDIATE TASK CREATION
+
+**MANDATORY BEHAVIOR**: Every time the user provides ANY instruction, request, or points out ANY issue:
+
+1. **IMMEDIATELY CREATE TASK** using Node.js command BEFORE doing anything else
+2. **NO EXCEPTIONS** - even for simple requests like "read this file" or "fix this typo"
+3. **ALWAYS USE** the exact Node.js command format shown above
+4. **THEN** proceed with the actual work
+
+**Success Formula:** IMMEDIATE TASK CREATION + User Instructions + Maximum Thinking + Maximum Parallel Subagents + Dynamic Task Creation + Quality Standards + Always Push = **MAXIMUM SPEED WITH QUALITY**
