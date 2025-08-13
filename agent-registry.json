@@ -42,44 +42,41 @@
     "agent_4": {
       "agentId": "agent_4",
       "agentNumber": 4,
-      "sessionId": "session_1755017176358",
+      "sessionId": "session_1755103173509",
       "role": "development",
       "specialization": [],
-      "status": "inactive",
-      "lastActivity": 1755017176359,
+      "status": "active",
+      "lastActivity": 1755103173509,
       "totalRequests": 1,
-      "createdAt": "2025-08-12T16:46:16.359Z",
+      "createdAt": "2025-08-13T16:39:33.509Z",
       "metadata": {},
-      "capabilities": [],
-      "inactiveSince": "2025-08-12T18:46:16.359Z"
+      "capabilities": []
     },
     "agent_5": {
       "agentId": "agent_5",
       "agentNumber": 5,
-      "sessionId": "session_1755018046482",
+      "sessionId": "session_1755103794840",
       "role": "development",
       "specialization": [],
-      "status": "inactive",
-      "lastActivity": 1755018046484,
+      "status": "active",
+      "lastActivity": 1755103794840,
       "totalRequests": 1,
-      "createdAt": "2025-08-12T17:00:46.484Z",
+      "createdAt": "2025-08-13T16:49:54.840Z",
       "metadata": {},
-      "capabilities": [],
-      "inactiveSince": "2025-08-12T19:00:46.484Z"
+      "capabilities": []
     },
     "agent_6": {
       "agentId": "agent_6",
       "agentNumber": 6,
-      "sessionId": "session_1755018517607",
+      "sessionId": "session_1755103910211",
       "role": "development",
       "specialization": [],
-      "status": "inactive",
-      "lastActivity": 1755018517607,
+      "status": "active",
+      "lastActivity": 1755103910212,
       "totalRequests": 1,
-      "createdAt": "2025-08-12T17:08:37.607Z",
+      "createdAt": "2025-08-13T16:51:50.212Z",
       "metadata": {},
-      "capabilities": [],
-      "inactiveSince": "2025-08-12T19:08:37.607Z"
+      "capabilities": []
     },
     "agent_7": {
       "agentId": "agent_7",
@@ -111,7 +108,7 @@
     }
   },
   "nextAgentNumber": 9,
-  "lastCleanup": 1755101891944,
+  "lastCleanup": 1755103794840,
   "metadata": {
     "created": "2025-08-12T06:52:08.455Z",
     "version": "1.0.0"

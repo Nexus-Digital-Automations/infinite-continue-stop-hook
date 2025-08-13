@@ -149,8 +149,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"/Users/jeremyparker/Desktop/Claude Coding Projects/post-tool-stop-hook/hooks/smart-lint.sh\"",
-            "timeout": 30000
+            "command": "bash \"/Users/jeremyparker/Desktop/Claude Coding Projects/post-tool-stop-hook/hooks/targeted-lint-runner.sh\"",
+            "timeout": 60000
           }
         ]
       }
@@ -161,30 +161,13 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js\""
-          },
-          {
-            "type": "command",
-            "command": "python3 \"/Users/jeremyparker/Desktop/Claude Coding Projects/claude-code_agent-manager/hooks/subagent_timeout_monitor.py\"",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "Task",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"/Users/jeremyparker/Desktop/Claude Coding Projects/claude-code_agent-manager/hooks/subagent_timeout_monitor.py\"",
-            "timeout": 5
+            "command": "killall node"
           }
         ]
       }
     ]
   },
   "feedbackSurveyState": {
-    "lastShownTime": 1754385624933
+    "lastShownTime": 1754509550909
   }
 }
