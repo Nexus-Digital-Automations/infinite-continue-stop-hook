@@ -61,16 +61,44 @@ describe('Multi-Agent System', () => {
         mockFS.readFileSync.mockImplementation((filePath, _options) => {
             const resolvedPath = path.resolve(filePath);
             
-            // Check both original path and resolved path
-            if (filePath === todoPath || filePath in fileSystemState || resolvedPath in fileSystemState) {
-                const data = fileSystemState[filePath] || fileSystemState[resolvedPath] || initialTodo;
+            // Check ALL possible path variations to ensure we find the data
+            const possiblePaths = [
+                filePath,
+                resolvedPath,
+                todoPath,
+                path.resolve(todoPath),
+                filePath.startsWith('./') ? filePath.slice(2) : filePath,  // Remove ./
+                todoPath.startsWith('./') ? todoPath.slice(2) : todoPath   // Remove ./
+            ];
+            
+            // Find data in any of the possible path variations
+            let data = null;
+            for (const possiblePath of possiblePaths) {
+                if (possiblePath in fileSystemState) {
+                    data = fileSystemState[possiblePath];
+                    break;
+                }
+            }
+            
+            if (data) {
                 const result = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
-                // console.error('MockFS: Read from', filePath, 'returning', JSON.parse(result).tasks?.length || 0, 'tasks');
                 return result;
             }
+            
             if (filePath.includes('TODO.json') || filePath.includes('DONE.json')) {
-                // Return default structure for any TODO.json or DONE.json files
-                // console.error('MockFS: Read default TODO.json for', filePath);
+                // CRITICAL: This fallback should also check if we have any state for similar paths
+                // Check if this might be the same file with different path resolution
+                const matchingStateKey = Object.keys(fileSystemState).find(key => 
+                    key.includes('TODO.json') || path.resolve(key) === resolvedPath || key === filePath
+                );
+                
+                if (matchingStateKey && fileSystemState[matchingStateKey]) {
+                    const data = fileSystemState[matchingStateKey];
+                    const result = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+                    return result;
+                }
+                
+                // Only return initialTodo if we truly have no state
                 return JSON.stringify(initialTodo, null, 2);
             }
             throw new Error(`File not found: ${filePath}`);
@@ -78,20 +106,27 @@ describe('Multi-Agent System', () => {
         
         mockFS.writeFileSync.mockImplementation((filePath, content, _options) => {
             // Mock successful write and update state
-            // Always log writes to see what's happening
-            // console.error('MockFS writeFileSync called:', filePath, typeof content, content.substring(0, 100));
             
             if (filePath === todoPath || filePath.includes('TODO.json') || path.resolve(filePath) === path.resolve(todoPath)) {
                 try {
                     // Parse content and store as object for proper retrieval
                     const parsed = typeof content === 'string' ? JSON.parse(content) : content;
+                    
+                    // CRITICAL: Store in ALL possible path variations to ensure reads work
                     fileSystemState[filePath] = parsed;
-                    // Also store by resolved path in case path resolution differs
-                    const resolvedPath = path.resolve(filePath);
-                    fileSystemState[resolvedPath] = parsed;
-                    // console.error('MockFS: Wrote to', filePath, 'with', parsed.tasks?.length || 0, 'tasks');
+                    fileSystemState[todoPath] = parsed;
+                    fileSystemState[path.resolve(filePath)] = parsed;
+                    fileSystemState[path.resolve(todoPath)] = parsed;
+                    
+                    // Also normalize relative paths
+                    if (filePath.startsWith('./')) {
+                        fileSystemState[filePath.slice(2)] = parsed;  // Remove ./
+                    }
+                    if (todoPath.startsWith('./')) {
+                        fileSystemState[todoPath.slice(2)] = parsed;  // Remove ./
+                    }
+                    
                 } catch {
-                    // console.error('MockFS write parse error:', error.message);
                     fileSystemState[filePath] = content;
                 }
             } else {
