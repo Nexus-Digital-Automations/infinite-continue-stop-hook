@@ -3,15 +3,27 @@
 /**
  * TaskManager Node.js API Wrapper
  * 
- * Provides direct access to TaskManager functionality without shell scripts
- * Resolves directory restriction issues by using absolute paths
+ * Universal API for TaskManager functionality - works with any project
+ * Usage: node taskmanager-api.js <command> [args...] [--project-root /path/to/project]
  */
 
 const path = require('path');
 
-// Absolute path to the infinite-continue-stop-hook directory
-const TASKMANAGER_ROOT = '/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook';
-const TODO_PATH = path.join(TASKMANAGER_ROOT, 'TODO.json');
+// Parse project root from --project-root flag or use current directory
+const args = process.argv.slice(2);
+const projectRootIndex = args.indexOf('--project-root');
+const PROJECT_ROOT = (projectRootIndex !== -1 && projectRootIndex + 1 < args.length) 
+    ? args[projectRootIndex + 1] 
+    : process.cwd();
+const TODO_PATH = path.join(PROJECT_ROOT, 'TODO.json');
+
+// Remove --project-root and its value from args for command parsing
+if (projectRootIndex !== -1) {
+    args.splice(projectRootIndex, 2);
+}
+
+// Absolute path to the infinite-continue-stop-hook directory (where TaskManager system lives)
+const TASKMANAGER_ROOT = __dirname;
 
 // Import TaskManager modules using absolute paths
 let TaskManager, AgentManager, MultiAgentOrchestrator;
@@ -31,7 +43,8 @@ class TaskManagerAPI {
     constructor() {
         this.taskManager = new TaskManager(TODO_PATH, {
             enableMultiAgent: true,
-            enableAutoFix: true
+            enableAutoFix: false, // Disable auto-fix for better performance
+            validateOnRead: false  // Disable validation for better performance
         });
         this.agentManager = new AgentManager(TODO_PATH);
         this.orchestrator = new MultiAgentOrchestrator(TODO_PATH);
@@ -83,7 +96,7 @@ class TaskManagerAPI {
 
     async listTasks(filter = {}) {
         try {
-            const todoData = await this.taskManager.readTodo();
+            const todoData = await this.taskManager.readTodo(true); // Skip validation for better performance
             let tasks = todoData.tasks || [];
             
             // Apply filters
@@ -278,31 +291,32 @@ class TaskManagerAPI {
     }
 
     // Cleanup method
-    cleanup() {
+    async cleanup() {
         try {
+            // Cleanup in proper order with sufficient time
             if (this.taskManager && typeof this.taskManager.cleanup === 'function') {
-                this.taskManager.cleanup();
+                await this.taskManager.cleanup();
             }
             if (this.agentManager && typeof this.agentManager.cleanup === 'function') {
-                this.agentManager.cleanup();
+                await this.agentManager.cleanup();
             }
             if (this.orchestrator && typeof this.orchestrator.cleanup === 'function') {
-                this.orchestrator.cleanup();
+                await this.orchestrator.cleanup();
             }
         } catch (error) {
             console.warn('Cleanup warning:', error.message);
         }
         
-        // Force exit after cleanup to prevent hanging
+        // Give more time for cleanup and use setTimeout for better performance
         setTimeout(() => {
             process.exit(0);
-        }, 50);
+        }, 0);
     }
 }
 
 // CLI interface
 async function main() {
-    const args = process.argv.slice(2);
+    // Use the already parsed args (with --project-root removed)
     const command = args[0];
     
     
@@ -455,7 +469,7 @@ Examples:
         }, null, 2));
         process.exit(1);
     } finally {
-        api.cleanup();
+        await api.cleanup();
     }
 }
 

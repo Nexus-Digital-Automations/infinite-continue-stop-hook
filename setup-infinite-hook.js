@@ -418,7 +418,18 @@ async function main() {
         console.log('# Batch mode with no interaction:');
         console.log('node setup-infinite-hook.js --batch');
         
-        console.log('\n📋 Updated hook reference in ~/.claude/settings.json should point to:');
+        console.log('\n📋 Each project now includes:');
+        console.log('   - TODO.json with new multi-agent schema');
+        console.log('   - Development mode files and directory structure');
+        console.log('');
+        console.log('📋 TaskManager system is centralized at:');
+        console.log('   /Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/');
+        console.log('');
+        console.log('📋 Use universal commands to work with any project:');
+        console.log('   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project /path/to/project');
+        console.log('   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" api current --project /path/to/project');
+        console.log('');
+        console.log('📋 Updated hook reference in ~/.claude/settings.json should point to:');
         console.log('node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js"');
         
     } catch (error) {

@@ -15,7 +15,6 @@
 - **IMMEDIATELY** stop and address any error feedback from hooks or linting
 - **NEVER** bypass or ignore any feedback from systems or users
 - **ABSOLUTELY NEVER** mask, hide, or work around problems - **ACTUALLY SOLVE THEM**
-- **IMMEDIATELY CREATE TASK** for ANY user request, question, instruction, or issue using TaskManager API - NO EXCEPTIONS
 
 **LINTING ERROR PRIORITY PROTOCOL:**
 - Run `npm run lint` before starting any development work
@@ -232,33 +231,22 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 - **Missing functionality** (incomplete features, edge cases)
 - **Integration issues** (API failures, dependency conflicts)
 
-**GOLDEN RULE**: If the user says ANYTHING that requires action OR asks ANY question → CREATE TASK IMMEDIATELY using Node.js commands → THEN do the work
-
-**EXPANDED TASK CREATION TRIGGERS:**
-- **Questions** - Any question the user asks, regardless of complexity
-- **Requests** - Any request for information, analysis, or action
-- **Instructions** - Direct commands or guidance from the user
-- **Observations** - When user points out something or makes a comment
-- **Clarifications** - When user asks for explanation or details
-- **Assistance** - When user asks for help with anything
+**GOLDEN RULE**: If the user says ANYTHING that requires action → CREATE TASK IMMEDIATELY using Node.js commands → THEN do the work
 
 **INSTANT vs COMPLEX REQUEST CLASSIFICATION:**
 - **INSTANT**: Single file read | Basic status check | Simple one-line answer | Trivial parameter change
 - **COMPLEX**: Multi-step work | Analysis required | Code changes | Research needed | Planning required
 
-**MANDATORY WORKFLOW FOR ALL USER INTERACTIONS:**
-1. **DETECT** - ANY user request, question, instruction, observation, or issue they point out
-2. **CREATE IMMEDIATELY** - ALWAYS create task using Node.js commands BEFORE ANY OTHER ACTION:
+**MANDATORY WORKFLOW FOR ALL USER REQUESTS:**
+1. **DETECT** - ANY user request, instruction, or issue they point out
+2. **CREATE IMMEDIATELY** - ALWAYS create task using Node.js commands:
    ```bash
    node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.createTask({title: 'User Request: [description]', description: '[detailed description]', mode: 'DEVELOPMENT', priority: 'high'}).then(id => console.log('Created task:', id));"
    ```
 3. **PRIORITIZE** - Move task to top position immediately
 4. **EXECUTE** - Begin working on the now-prioritized task
 
-**ABSOLUTE REQUIREMENT**: 
-- **EVERY USER INTERACTION** = **IMMEDIATE TASK CREATION** - NO EXCEPTIONS
-- **QUESTIONS, REQUESTS, INSTRUCTIONS, OBSERVATIONS** - ALL trigger task creation
-- **CREATE TASK FIRST** - Then answer/execute - NEVER the reverse order
+**CRITICAL**: Even for simple requests - CREATE TASK FIRST, then execute. NO EXCEPTIONS.
 
 **DYNAMIC TASK CREATION WORKFLOW:**
 1. **DETECT** - Identify error/opportunity during execution
@@ -396,8 +384,8 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 
 ## Standard Approach
 
-1. **Wait for User** - Listen attentively to ANY user communication
-2. **CREATE TASK IMMEDIATELY** - For ANY user interaction (questions, requests, instructions, observations, comments):
+1. **Wait for User** - Listen attentively to instructions
+2. **CREATE TASK IMMEDIATELY** - For ANY user request/instruction/issue:
    ```bash
    node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.createTask({title: 'User Request: [description]', description: '[detailed description]', mode: 'DEVELOPMENT', priority: 'high'}).then(id => console.log('Created task:', id));"
    ```
@@ -411,22 +399,11 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 
 ## 🚨 ABSOLUTE REQUIREMENT: IMMEDIATE TASK CREATION
 
-**MANDATORY BEHAVIOR**: Every time the user provides ANY communication whatsoever:
+**MANDATORY BEHAVIOR**: Every time the user provides ANY instruction, request, or points out ANY issue:
 
 1. **IMMEDIATELY CREATE TASK** using Node.js command BEFORE doing anything else
-2. **NO EXCEPTIONS** - questions, requests, instructions, observations, comments, clarifications
-3. **ALWAYS USE** the exact Node.js command format shown above  
-4. **THEN** proceed with answering/executing
-5. **UNIVERSAL TRIGGER** - ANY user interaction = IMMEDIATE task creation
-
-**EXAMPLES OF TASK-TRIGGERING USER INTERACTIONS:**
-- "What does this code do?" → CREATE TASK → Then analyze
-- "Fix this bug" → CREATE TASK → Then fix  
-- "How do I..." → CREATE TASK → Then explain
-- "Can you help with..." → CREATE TASK → Then assist
-- "Why is..." → CREATE TASK → Then investigate
-- "Show me..." → CREATE TASK → Then display
-- "Continue" → CREATE TASK → Then continue
-- Any comment or observation → CREATE TASK → Then respond
+2. **NO EXCEPTIONS** - even for simple requests like "read this file" or "fix this typo"
+3. **ALWAYS USE** the exact Node.js command format shown above
+4. **THEN** proceed with the actual work
 
 **Success Formula:** IMMEDIATE TASK CREATION + User Instructions + Maximum Thinking + Maximum Parallel Subagents + Dynamic Task Creation + Quality Standards + Always Push = **MAXIMUM SPEED WITH QUALITY**
