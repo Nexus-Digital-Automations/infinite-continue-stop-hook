@@ -68,44 +68,41 @@
     "agent_6": {
       "agentId": "agent_6",
       "agentNumber": 6,
-      "sessionId": "session_1755134235330",
+      "sessionId": "session_1755203574157",
       "role": "development",
       "specialization": [],
-      "status": "inactive",
-      "lastActivity": 1755134235331,
+      "status": "active",
+      "lastActivity": 1755203574157,
       "totalRequests": 1,
-      "createdAt": "2025-08-14T01:17:15.331Z",
+      "createdAt": "2025-08-14T20:32:54.157Z",
       "metadata": {},
-      "capabilities": [],
-      "inactiveSince": "2025-08-14T03:17:15.331Z"
+      "capabilities": []
     },
     "agent_7": {
       "agentId": "agent_7",
       "agentNumber": 7,
-      "sessionId": "session_1755134443404",
+      "sessionId": "session_1755204234583",
       "role": "development",
       "specialization": [],
-      "status": "inactive",
-      "lastActivity": 1755134443405,
+      "status": "active",
+      "lastActivity": 1755204234585,
       "totalRequests": 1,
-      "createdAt": "2025-08-14T01:20:43.405Z",
+      "createdAt": "2025-08-14T20:43:54.585Z",
       "metadata": {},
-      "capabilities": [],
-      "inactiveSince": "2025-08-14T03:20:43.405Z"
+      "capabilities": []
     },
     "agent_8": {
       "agentId": "agent_8",
       "agentNumber": 8,
-      "sessionId": "session_1755104172883",
+      "sessionId": "session_1755205399155",
       "role": "development",
       "specialization": [],
-      "status": "inactive",
-      "lastActivity": 1755104172883,
+      "status": "active",
+      "lastActivity": 1755205399157,
       "totalRequests": 1,
-      "createdAt": "2025-08-13T16:56:12.883Z",
+      "createdAt": "2025-08-14T21:03:19.157Z",
       "metadata": {},
-      "capabilities": [],
-      "inactiveSince": "2025-08-13T18:56:12.883Z"
+      "capabilities": []
     },
     "agent_9": {
       "agentId": "agent_9",
@@ -445,7 +442,7 @@
     }
   },
   "nextAgentNumber": 33,
-  "lastCleanup": 1755201665370,
+  "lastCleanup": 1755205399156,
   "metadata": {
     "created": "2025-08-12T06:52:08.455Z",
     "version": "1.0.0"
