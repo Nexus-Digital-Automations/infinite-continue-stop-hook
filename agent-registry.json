@@ -159,30 +159,28 @@
     "agent_13": {
       "agentId": "agent_13",
       "agentNumber": 13,
-      "sessionId": "session_1755104555644",
+      "sessionId": "session_1755207051440",
       "role": "development",
       "specialization": [],
-      "status": "inactive",
-      "lastActivity": 1755104555645,
+      "status": "active",
+      "lastActivity": 1755207051441,
       "totalRequests": 1,
-      "createdAt": "2025-08-13T17:02:35.645Z",
+      "createdAt": "2025-08-14T21:30:51.441Z",
       "metadata": {},
-      "capabilities": [],
-      "inactiveSince": "2025-08-13T19:02:35.645Z"
+      "capabilities": []
     },
     "agent_14": {
       "agentId": "agent_14",
       "agentNumber": 14,
-      "sessionId": "session_1755104588057",
+      "sessionId": "session_1755208199328",
       "role": "development",
       "specialization": [],
-      "status": "inactive",
-      "lastActivity": 1755104588058,
+      "status": "active",
+      "lastActivity": 1755208199329,
       "totalRequests": 1,
-      "createdAt": "2025-08-13T17:03:08.058Z",
+      "createdAt": "2025-08-14T21:49:59.329Z",
       "metadata": {},
-      "capabilities": [],
-      "inactiveSince": "2025-08-13T19:03:08.058Z"
+      "capabilities": []
     },
     "agent_15": {
       "agentId": "agent_15",
@@ -438,7 +436,7 @@
     }
   },
   "nextAgentNumber": 33,
-  "lastCleanup": 1755205399156,
+  "lastCleanup": 1755208199329,
   "metadata": {
     "created": "2025-08-12T06:52:08.455Z",
     "version": "1.0.0"
