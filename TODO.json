@@ -2,53 +2,6 @@
   "project": "root_files",
   "tasks": [
     {
-      "id": "task_1755201719660_fyqkwjluy",
-      "title": "Fix AgentExecutor development file discovery system",
-      "description": "Resolve AgentExecutor test failures:\n- Mode-specific file discovery not working\n- Development files not being found correctly\n- File system error handling in discovery\n- Missing development mode files",
-      "mode": "DEVELOPMENT",
-      "priority": "medium",
-      "status": "pending",
-      "dependencies": [],
-      "important_files": [
-        "test/agentExecutor.test.js",
-        "lib/agentExecutor.js",
-        "development/modes/testing.md"
-      ],
-      "success_criteria": [
-        "Development file discovery works correctly",
-        "Mode-specific files are found properly",
-        "File system errors handled gracefully",
-        "All AgentExecutor tests pass"
-      ],
-      "estimate": "",
-      "requires_research": false,
-      "subtasks": [],
-      "created_at": "2025-08-14T20:01:59.660Z"
-    },
-    {
-      "id": "task_1755201719659_p94f2zsns",
-      "title": "Fix TaskManager important files and core functionality tests",
-      "description": "Fix core TaskManager test failures:\n- Important files management test failures\n- Task creation and management issues\n- File path handling in TaskManager methods\n- Task finding and manipulation tests",
-      "mode": "DEVELOPMENT",
-      "priority": "high",
-      "status": "pending",
-      "dependencies": [],
-      "important_files": [
-        "test/taskManager.test.js",
-        "lib/taskManager.js"
-      ],
-      "success_criteria": [
-        "All important files management tests pass",
-        "Task creation and finding methods work correctly",
-        "File path handling in TaskManager fixed",
-        "All TaskManager core functionality tests pass"
-      ],
-      "estimate": "",
-      "requires_research": false,
-      "subtasks": [],
-      "created_at": "2025-08-14T20:01:59.659Z"
-    },
-    {
       "id": "task_1755201719658_7dv3zohff",
       "title": "Fix multi-agent system test failures",
       "description": "Resolve test failures in multi-agent functionality:\n- Task assignment test failures\n- Task claiming with locking issues\n- Dependency handling test failures\n- Parallel execution plan test failures\n- Agent orchestration test failures",
@@ -217,10 +170,10 @@
   ],
   "current_mode": "DEVELOPMENT",
   "last_mode": "DEVELOPMENT",
-  "execution_count": 2,
+  "execution_count": 3,
   "review_strikes": 0,
   "strikes_completed_last_run": false,
-  "last_hook_activation": 1755201798410,
+  "last_hook_activation": 1755202378671,
   "agents": {
     "development_session_1755201037711_1_general_60f43b56": {
       "name": "development Agent",
@@ -266,6 +219,6 @@
     }
   },
   "stop_hook_calls": [
-    1755201753081
+    1755202318563
   ]
 }

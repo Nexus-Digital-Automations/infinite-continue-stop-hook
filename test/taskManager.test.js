@@ -291,6 +291,7 @@ describe('TaskManager', () => {
             };
 
             jest.spyOn(taskManager, 'readTodo').mockResolvedValue(mockData);
+            jest.spyOn(taskManager, 'readTodoFast').mockResolvedValue(mockData);
 
             const result = await taskManager.getCurrentTask();
             expect(result).toEqual({ id: 'task-2', status: 'in_progress' });
@@ -305,6 +306,7 @@ describe('TaskManager', () => {
             };
 
             jest.spyOn(taskManager, 'readTodo').mockResolvedValue(mockData);
+            jest.spyOn(taskManager, 'readTodoFast').mockResolvedValue(mockData);
 
             const result = await taskManager.getCurrentTask();
             expect(result).toBeUndefined();
@@ -314,6 +316,7 @@ describe('TaskManager', () => {
             const mockData = { tasks: [] };
 
             jest.spyOn(taskManager, 'readTodo').mockResolvedValue(mockData);
+            jest.spyOn(taskManager, 'readTodoFast').mockResolvedValue(mockData);
 
             const result = await taskManager.getCurrentTask();
             expect(result).toBeUndefined();
@@ -337,6 +340,7 @@ describe('TaskManager', () => {
             };
 
             jest.spyOn(taskManager, 'readTodo').mockResolvedValue(malformedData);
+            jest.spyOn(taskManager, 'readTodoFast').mockResolvedValue(malformedData);
 
             const result = await taskManager.getCurrentTask();
             expect(result).toEqual({ id: 'valid-task', status: 'pending' });
@@ -353,6 +357,7 @@ describe('TaskManager', () => {
             };
 
             jest.spyOn(taskManager, 'readTodo').mockResolvedValue(mockData);
+            jest.spyOn(taskManager, 'readTodoFast').mockResolvedValue(mockData);
             jest.spyOn(taskManager, 'writeTodo').mockResolvedValue({});
 
             await taskManager.updateTaskStatus('task-1', 'completed');
@@ -369,6 +374,7 @@ describe('TaskManager', () => {
             };
 
             jest.spyOn(taskManager, 'readTodo').mockResolvedValue(mockData);
+            jest.spyOn(taskManager, 'readTodoFast').mockResolvedValue(mockData);
             jest.spyOn(taskManager, 'writeTodo').mockResolvedValue({});
 
             await taskManager.updateTaskStatus('nonexistent-task', 'completed');
@@ -383,6 +389,7 @@ describe('TaskManager', () => {
             };
 
             jest.spyOn(taskManager, 'readTodo').mockResolvedValue(mockData);
+            jest.spyOn(taskManager, 'readTodoFast').mockResolvedValue(mockData);
             jest.spyOn(taskManager, 'writeTodo').mockResolvedValue({});
 
             const statuses = ['in_progress', 'completed', 'blocked', 'cancelled'];
@@ -404,6 +411,7 @@ describe('TaskManager', () => {
             const newSubtask = { title: 'New Subtask', status: 'pending' };
 
             jest.spyOn(taskManager, 'readTodo').mockResolvedValue(mockData);
+            jest.spyOn(taskManager, 'readTodoFast').mockResolvedValue(mockData);
             jest.spyOn(taskManager, 'writeTodo').mockResolvedValue({});
 
             await taskManager.addSubtask('parent-task', newSubtask);
@@ -421,6 +429,7 @@ describe('TaskManager', () => {
             const newSubtask = { title: 'New Subtask', status: 'pending' };
 
             jest.spyOn(taskManager, 'readTodo').mockResolvedValue(mockData);
+            jest.spyOn(taskManager, 'readTodoFast').mockResolvedValue(mockData);
             jest.spyOn(taskManager, 'writeTodo').mockResolvedValue({});
 
             await taskManager.addSubtask('parent-task', newSubtask);
@@ -438,6 +447,7 @@ describe('TaskManager', () => {
             const newSubtask = { title: 'New Subtask' };
 
             jest.spyOn(taskManager, 'readTodo').mockResolvedValue(mockData);
+            jest.spyOn(taskManager, 'readTodoFast').mockResolvedValue(mockData);
             jest.spyOn(taskManager, 'writeTodo').mockResolvedValue({});
 
             await taskManager.addSubtask('nonexistent-task', newSubtask);
@@ -503,6 +513,7 @@ describe('TaskManager', () => {
         beforeEach(() => {
             mockExistingData = { tasks: [] };
             jest.spyOn(taskManager, 'readTodo').mockResolvedValue(mockExistingData);
+            jest.spyOn(taskManager, 'readTodoFast').mockResolvedValue(mockExistingData);
             jest.spyOn(taskManager, 'writeTodo').mockResolvedValue({});
             
             // Mock Date.now for consistent task IDs
@@ -912,6 +923,7 @@ describe('TaskManager', () => {
             }));
 
             jest.spyOn(taskManager, 'readTodo').mockResolvedValue({ tasks: largeTasks });
+            jest.spyOn(taskManager, 'readTodoFast').mockResolvedValue({ tasks: largeTasks });
 
             // Use performance.now() instead of Date.now() to avoid mock interference
             const startTime = performance.now();
@@ -932,6 +944,7 @@ describe('TaskManager', () => {
             };
 
             jest.spyOn(taskManager, 'readTodo').mockResolvedValue(mockData);
+            jest.spyOn(taskManager, 'readTodoFast').mockResolvedValue(mockData);
             jest.spyOn(taskManager, 'writeTodo').mockResolvedValue({});
 
             await taskManager.updateTaskStatus(specialTaskId, 'completed');
@@ -943,6 +956,7 @@ describe('TaskManager', () => {
             const mockData = { tasks: [{ id: 'task-1', status: 'pending' }] };
             
             jest.spyOn(taskManager, 'readTodo').mockResolvedValue(mockData);
+            jest.spyOn(taskManager, 'readTodoFast').mockResolvedValue(mockData);
             jest.spyOn(taskManager, 'writeTodo').mockResolvedValue({});
 
             // Simulate concurrent updates
@@ -996,6 +1010,7 @@ describe('TaskManager', () => {
             // Initial empty state
             let mockData = { tasks: [] };
             jest.spyOn(taskManager, 'readTodo').mockImplementation(() => Promise.resolve(mockData));
+            jest.spyOn(taskManager, 'readTodoFast').mockImplementation(() => Promise.resolve(mockData));
             jest.spyOn(taskManager, 'writeTodo').mockImplementation((data) => {
                 mockData = data;
                 return Promise.resolve({});
@@ -1078,8 +1093,9 @@ describe('TaskManager', () => {
                 }]
             };
             
-            // Mock readTodo and writeTodo to work with the actual mockData object
+            // Mock readTodo, readTodoFast and writeTodo to work with the actual mockData object
             taskManager.readTodo = jest.fn().mockResolvedValue(mockData);
+            taskManager.readTodoFast = jest.fn().mockResolvedValue(mockData);
             taskManager.writeTodo = jest.fn().mockResolvedValue();
             
             const result = await taskManager.addImportantFile(taskId, filePath);
@@ -1102,8 +1118,9 @@ describe('TaskManager', () => {
                 }]
             };
             
-            // Mock readTodo and writeTodo to work with the actual mockData object
+            // Mock readTodo, readTodoFast and writeTodo to work with the actual mockData object
             taskManager.readTodo = jest.fn().mockResolvedValue(mockData);
+            taskManager.readTodoFast = jest.fn().mockResolvedValue(mockData);
             taskManager.writeTodo = jest.fn().mockResolvedValue();
             
             const result = await taskManager.addImportantFile(taskId, filePath);
@@ -1125,8 +1142,9 @@ describe('TaskManager', () => {
                 }]
             };
             
-            // Mock readTodo and writeTodo to work with the actual mockData object
+            // Mock readTodo, readTodoFast and writeTodo to work with the actual mockData object
             taskManager.readTodo = jest.fn().mockResolvedValue(mockData);
+            taskManager.readTodoFast = jest.fn().mockResolvedValue(mockData);
             taskManager.writeTodo = jest.fn().mockResolvedValue();
             
             const result = await taskManager.addImportantFile(taskId, filePath);
@@ -1148,8 +1166,9 @@ describe('TaskManager', () => {
                 }]
             };
             
-            // Mock readTodo and writeTodo to work with the actual mockData object
+            // Mock readTodo, readTodoFast and writeTodo to work with the actual mockData object
             taskManager.readTodo = jest.fn().mockResolvedValue(mockData);
+            taskManager.readTodoFast = jest.fn().mockResolvedValue(mockData);
             taskManager.writeTodo = jest.fn().mockResolvedValue();
             
             const result = await taskManager.removeImportantFile(taskId, filePath);
