@@ -48,6 +48,11 @@ describe('TaskManager', () => {
         // Apply fs mocks
         Object.assign(fs, mockFS);
         
+        // Configure fs.existsSync to return true for the test TODO file
+        fs.existsSync.mockImplementation((filePath) => {
+            return filePath === mockTodoPath || filePath.includes('test-todo.json');
+        });
+        
         // Create TaskManager instance which will use the mocked AutoFixer
         taskManager = new TaskManager(mockTodoPath);
         
@@ -270,7 +275,7 @@ describe('TaskManager', () => {
                 ]
             };
 
-            jest.spyOn(taskManager, 'readTodo').mockResolvedValue(mockData);
+            jest.spyOn(taskManager, 'readTodoFast').mockResolvedValue(mockData);
 
             const result = await taskManager.getCurrentTask();
             expect(result).toEqual({ id: 'task-2', status: 'pending' });

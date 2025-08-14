@@ -233,16 +233,7 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 - **Missing functionality** (incomplete features, edge cases)
 - **Integration issues** (API failures, dependency conflicts)
 
-**GOLDEN RULE**: If the user says ANYTHING that requires action OR asks ANY question → FIRST check if existing tasks can be modified or reused → CREATE TASK ONLY if no suitable existing task → THEN do the work
-
-**🚨 SMART TASK CREATION PROTOCOL:**
-- **EVALUATE EXISTING TASKS FIRST**: Before creating new tasks, check if any existing tasks can be modified or expanded to handle the user request
-- **CONTINUE COMMANDS**: For "continue" or similar requests, NEVER create new tasks - use existing task flow
-- **TASK MODIFICATION PRIORITY**: Prefer updating/expanding existing tasks over creating duplicates
-- **NO NEW TASK SCENARIOS**: 
-  - User says "continue" → Use current/next pending task
-  - Request matches existing task scope → Update/expand that task
-  - Simple clarification/modification → Modify relevant existing task
+**GOLDEN RULE**: If the user says ANYTHING that requires action OR asks ANY question → CREATE TASK IMMEDIATELY using Node.js commands → THEN do the work
 
 **🚨 INTERRUPT HANDLING PROTOCOL:**
 - **WHEN USER INTERRUPTS**: ALWAYS create task for new request EVEN IF currently working on another task
@@ -264,30 +255,25 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 
 **MANDATORY WORKFLOW FOR ALL USER INTERACTIONS:**
 1. **DETECT** - ANY user request, question, instruction, observation, or issue they point out
-2. **EVALUATE EXISTING TASKS** - Check if any current tasks can handle the request:
+2. **CLEANUP FIRST** - ALWAYS review existing tasks and remove/merge irrelevant ones BEFORE creating new tasks:
    ```bash
-   # List current tasks to evaluate reuse potential
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.readTodo().then(data => console.log(JSON.stringify(data.tasks.map(t => ({id: t.id, title: t.title, status: t.status})), null, 2)));"
+   # Remove irrelevant tasks
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.removeTask('irrelevant_task_id').then(removed => console.log('Task removed:', removed));"
+   
+   # OR merge with existing task
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.updateTask('existing_task_id', {title: 'Updated merged title', description: 'Combined description from both tasks'}).then(updated => console.log('Task merged:', updated));"
    ```
-3. **MODIFY OR CREATE** - Either update existing task or create new one:
+3. **CREATE IMMEDIATELY** - ALWAYS create task using Node.js commands AFTER cleanup:
    ```bash
-   # Modify existing task (preferred) - using updateTask method
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.updateTask('task_id', {title: 'Updated title', description: 'Updated description'}).then(updated => console.log('Task updated:', updated.title));"
-   
-   # OR append to existing task - using modifyTask method
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.modifyTask('task_id', {appendDescription: 'Additional user request: [description]'}).then(modified => console.log('Task modified:', modified.title));"
-   
-   # OR create new task ONLY if no suitable existing task
    node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.createTask({title: 'User Request: [description]', description: '[detailed description]', mode: 'DEVELOPMENT', priority: 'high'}).then(id => console.log('Created task:', id));"
    ```
-4. **PRIORITIZE** - Move task to appropriate position  
-5. **EXECUTE** - Begin working on the task
+4. **PRIORITIZE** - Move task to top position immediately
+5. **EXECUTE** - Begin working on the now-prioritized task
 
 **ABSOLUTE REQUIREMENT**: 
-- **EVERY USER INTERACTION** = **EVALUATE EXISTING TASKS FIRST** - Check for reuse opportunities
-- **CREATE NEW TASKS ONLY WHEN NECESSARY** - If no existing task can handle the request
-- **QUESTIONS, REQUESTS, INSTRUCTIONS, OBSERVATIONS** - ALL trigger task evaluation (not automatic creation)
-- **MODIFY/REUSE FIRST** - Then create new if needed - Then answer/execute
+- **EVERY USER INTERACTION** = **IMMEDIATE TASK CREATION** - NO EXCEPTIONS
+- **QUESTIONS, REQUESTS, INSTRUCTIONS, OBSERVATIONS** - ALL trigger task creation
+- **CREATE TASK FIRST** - Then answer/execute - NEVER the reverse order
 
 **DYNAMIC TASK CREATION WORKFLOW:**
 1. **DETECT** - Identify error/opportunity during execution
@@ -433,13 +419,9 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 ## Standard Approach
 
 1. **Wait for User** - Listen attentively to ANY user communication
-2. **EVALUATE EXISTING TASKS** - Check if any pending tasks can handle the user request
-3. **MODIFY OR CREATE** - Either update existing task or create new task only if necessary:
+2. **CLEANUP TASKS FIRST** - Review and clean up existing task list before any new task creation
+3. **CREATE TASK IMMEDIATELY** - For ANY user interaction (questions, requests, instructions, observations, comments):
    ```bash
-   # Preferred: Modify existing task using proper endpoints
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.modifyTask('existing_task_id', {appendDescription: '\\n\\nUser request: [description]'}).then(modified => console.log('Task updated:', modified.title));"
-   
-   # Only if no suitable task exists:
    node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.createTask({title: 'User Request: [description]', description: '[detailed description]', mode: 'DEVELOPMENT', priority: 'high'}).then(id => console.log('Created task:', id));"
    ```
 4. **Think First** - Assess complexity, determine thinking level (think/think hard/ultrathink)
@@ -450,28 +432,25 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 9. **Commit & Push** - Always push after committing
 10. **Complete Tasks** - Use `node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" update task_id completed "notes" --project [PROJECT_DIRECTORY]`
 
-## 🚨 ABSOLUTE REQUIREMENT: SMART TASK MANAGEMENT
+## 🚨 ABSOLUTE REQUIREMENT: IMMEDIATE TASK CREATION
 
 **MANDATORY BEHAVIOR**: Every time the user provides ANY communication whatsoever:
 
-1. **EVALUATE EXISTING TASKS FIRST** - Check if any pending task can accommodate the user request
-2. **MODIFY EXISTING TASK** if suitable match found, OR **CREATE NEW TASK** only if no suitable task exists  
-3. **SPECIAL CASES** - Never create new tasks for:
-   - "Continue" commands (use current/next pending task)
-   - Requests that fit existing task scope (modify that task instead)
-   - Simple clarifications or additions to ongoing work
+1. **CLEANUP EXISTING TASKS FIRST** - Remove irrelevant/duplicate tasks before any new creation
+2. **IMMEDIATELY CREATE TASK** using Node.js command AFTER cleanup
+3. **NO EXCEPTIONS** - questions, requests, instructions, observations, comments, clarifications
 4. **ALWAYS USE** the exact Node.js command format shown above  
 5. **THEN** proceed with answering/executing
-6. **UNIVERSAL TRIGGER** - ANY user interaction = IMMEDIATE task evaluation (not automatic creation)
+6. **UNIVERSAL TRIGGER** - ANY user interaction = IMMEDIATE cleanup + task creation
 
-**EXAMPLES OF SMART TASK MANAGEMENT:**
-- "What does this code do?" → EVALUATE → MODIFY/CREATE TASK → Then analyze
-- "Fix this bug" → EVALUATE → MODIFY/CREATE TASK → Then fix  
-- "How do I..." → EVALUATE → MODIFY/CREATE TASK → Then explain
-- "Can you help with..." → EVALUATE → MODIFY/CREATE TASK → Then assist
-- "Why is..." → EVALUATE → MODIFY/CREATE TASK → Then investigate
-- "Show me..." → EVALUATE → MODIFY/CREATE TASK → Then display
-- "Continue" → EVALUATE → USE EXISTING TASK → Then continue (NO NEW TASK)
-- Any comment or observation → EVALUATE → MODIFY EXISTING IF POSSIBLE → Then respond
+**EXAMPLES OF TASK-TRIGGERING USER INTERACTIONS:**
+- "What does this code do?" → CLEANUP → CREATE TASK → Then analyze
+- "Fix this bug" → CLEANUP → CREATE TASK → Then fix  
+- "How do I..." → CLEANUP → CREATE TASK → Then explain
+- "Can you help with..." → CLEANUP → CREATE TASK → Then assist
+- "Why is..." → CLEANUP → CREATE TASK → Then investigate
+- "Show me..." → CLEANUP → CREATE TASK → Then display
+- "Continue" → CLEANUP → CREATE TASK → Then continue
+- Any comment or observation → CLEANUP → CREATE TASK → Then respond
 
-**Success Formula:** SMART TASK EVALUATION + STRATEGIC TASK REUSE + SELECTIVE TASK CREATION + User Instructions + Maximum Thinking + Maximum Parallel Subagents + Dynamic Task Creation + Quality Standards + Always Push = **MAXIMUM SPEED WITH QUALITY**
+**Success Formula:** TASK CLEANUP + IMMEDIATE TASK CREATION + User Instructions + Maximum Thinking + Maximum Parallel Subagents + Dynamic Task Creation + Quality Standards + Always Push = **MAXIMUM SPEED WITH QUALITY**

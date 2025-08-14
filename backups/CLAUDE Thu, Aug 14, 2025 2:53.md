@@ -271,11 +271,8 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
    ```
 3. **MODIFY OR CREATE** - Either update existing task or create new one:
    ```bash
-   # Modify existing task (preferred) - using updateTask method
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.updateTask('task_id', {title: 'Updated title', description: 'Updated description'}).then(updated => console.log('Task updated:', updated.title));"
-   
-   # OR append to existing task - using modifyTask method
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.modifyTask('task_id', {appendDescription: 'Additional user request: [description]'}).then(modified => console.log('Task modified:', modified.title));"
+   # Modify existing task (preferred)
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json'); tm.readTodo().then(async data => { const task = data.tasks.find(t => t.id === 'task_id'); task.title = 'Updated title'; task.description = 'Updated description'; await tm.writeTodo(data); console.log('Task modified'); });"
    
    # OR create new task ONLY if no suitable existing task
    node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.createTask({title: 'User Request: [description]', description: '[detailed description]', mode: 'DEVELOPMENT', priority: 'high'}).then(id => console.log('Created task:', id));"
@@ -436,8 +433,8 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 2. **EVALUATE EXISTING TASKS** - Check if any pending tasks can handle the user request
 3. **MODIFY OR CREATE** - Either update existing task or create new task only if necessary:
    ```bash
-   # Preferred: Modify existing task using proper endpoints
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.modifyTask('existing_task_id', {appendDescription: '\\n\\nUser request: [description]'}).then(modified => console.log('Task updated:', modified.title));"
+   # Preferred: Modify existing task
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json'); tm.readTodo().then(async data => { const task = data.tasks.find(t => t.status === 'pending'); task.description += ' - User request: [description]'; await tm.writeTodo(data); console.log('Task updated'); });"
    
    # Only if no suitable task exists:
    node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.createTask({title: 'User Request: [description]', description: '[detailed description]', mode: 'DEVELOPMENT', priority: 'high'}).then(id => console.log('Created task:', id));"

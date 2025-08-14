@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/logs/.310cea34f422806c603e32bafdd9b8f6b25280c1-audit.json",
+    "files": [
+        {
+            "date": 1755157157888,
+            "name": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/logs/mcp-puppeteer-2025-08-14.log",
+            "hash": "c0913a27a54c6a49a0db8ae28aeecbf5912ab382e675f2d8e89aeef848d84e43"
+        }
+    ],
+    "hashType": "sha256"
+}
