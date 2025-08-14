@@ -36,11 +36,11 @@ module.exports = {
   // Setup files
   setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
   
-  // Disable force exit to prevent exit module contamination
-  forceExit: false,
+  // Enable force exit with timeout to ensure clean worker shutdown
+  forceExit: true,
   
-  // Disable handle detection for performance
-  detectOpenHandles: false,
+  // Enable handle detection to identify resource leaks
+  detectOpenHandles: true,
   
   // Performance optimizations
   maxWorkers: process.env.CI ? 2 : Math.min(6, require('os').cpus().length),

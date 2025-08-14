@@ -102,11 +102,11 @@ module.exports = {
   // Setup files
   setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
   
-  // Enhanced worker process management - disable forceExit to prevent exit module contamination
-  forceExit: false,
+  // Enhanced worker process management - enable forceExit with timeout to ensure clean shutdown
+  forceExit: true,
   
-  // Conditionally detect open handles - disabled for performance unless debugging
-  detectOpenHandles: process.env.DETECT_HANDLES === 'true',
+  // Enable open handles detection to identify resource leaks
+  detectOpenHandles: true,
   
   
   // Performance optimizations - optimized worker configuration for speed

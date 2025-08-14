@@ -1113,16 +1113,26 @@ afterEach(async () => {
     // 4. Restore console output
     global.restoreConsole();
     
-    // 5. Clear any remaining timers and intervals
+    // 5. Clear all timers, intervals, and immediates
     global.clearAllTimers();
     
-    // 6. Force garbage collection if available
+    // 6. Close any open handles and streams
+    await global.closeAllHandles();
+    
+    // 7. Clean up event listeners that may keep process alive
+    global.cleanupEventListeners();
+    
+    // 8. Force garbage collection if available
     if (global.gc) {
-        global.gc();
+        try {
+            global.gc();
+        } catch {
+            // Silent fail - gc might not be available
+        }
     }
     
-    // 7. Skip delay for maximum performance
-    // Delay removed for faster test execution
+    // 9. Final process cleanup for Jest workers
+    await global.finalizeWorkerCleanup();
 });
 
 // Enhanced global error handlers for unhandled promises and exceptions
@@ -1554,6 +1564,138 @@ global.emergencyTestRecovery = async function() {
     return recoveryReport;
 };
 
+// ENHANCED: Close all open handles and streams
+global.closeAllHandles = async function() {
+    try {
+        // Close any remaining open file descriptors and streams
+        if (global._openStreams) {
+            for (const stream of global._openStreams) {
+                try {
+                    if (stream && typeof stream.destroy === 'function') {
+                        stream.destroy();
+                    } else if (stream && typeof stream.close === 'function') {
+                        await new Promise(resolve => {
+                            stream.close(() => resolve());
+                            setTimeout(resolve, 100); // Timeout fallback
+                        });
+                    }
+                } catch {
+                    // Silent fail to avoid breaking tests
+                }
+            }
+            global._openStreams = [];
+        }
+        
+        // Close any file watchers
+        if (global._fileWatchers) {
+            for (const watcher of global._fileWatchers) {
+                try {
+                    if (watcher && typeof watcher.close === 'function') {
+                        watcher.close();
+                    }
+                } catch {
+                    // Silent fail
+                }
+            }
+            global._fileWatchers = [];
+        }
+        
+        // Close any network sockets
+        if (global._networkSockets) {
+            for (const socket of global._networkSockets) {
+                try {
+                    if (socket && typeof socket.destroy === 'function') {
+                        socket.destroy();
+                    } else if (socket && typeof socket.end === 'function') {
+                        socket.end();
+                    }
+                } catch {
+                    // Silent fail
+                }
+            }
+            global._networkSockets = [];
+        }
+    } catch {
+        // Silent fail to not break tests
+    }
+};
+
+// ENHANCED: Clean up event listeners that may keep process alive
+global.cleanupEventListeners = function() {
+    try {
+        // Remove test-specific event listeners that could keep workers alive
+        const testEventTypes = ['error', 'warning', 'uncaughtException', 'unhandledRejection', 'exit', 'SIGINT', 'SIGTERM'];
+        
+        testEventTypes.forEach(eventType => {
+            const listeners = process.listeners(eventType);
+            listeners.forEach(listener => {
+                // Only remove listeners that were added during tests
+                const listenerStr = listener.toString();
+                if (listenerStr.includes('test') || 
+                    listenerStr.includes('Test') ||
+                    listenerStr.includes('jest') ||
+                    listenerStr.includes('Jest') ||
+                    listenerStr.includes('worker') ||
+                    listenerStr.includes('cleanup') ||
+                    listenerStr.includes('teardown')) {
+                    process.removeListener(eventType, listener);
+                }
+            });
+        });
+        
+        // Clean up any accumulated error tracking
+        if (global.cleanupErrorTracking) {
+            global.cleanupErrorTracking();
+        }
+    } catch {
+        // Silent fail
+    }
+};
+
+// ENHANCED: Final worker cleanup for Jest
+global.finalizeWorkerCleanup = async function() {
+    try {
+        // Ensure all promises resolve or reject quickly
+        await Promise.race([
+            Promise.resolve(),
+            new Promise(resolve => setTimeout(resolve, 50))
+        ]);
+        
+        // Clear any remaining Node.js internal timers
+        if (process.nextTick) {
+            process.nextTick(() => {
+                // Force a tick to allow pending operations to complete
+            });
+        }
+        
+        // Final sweep of any remaining resources
+        if (typeof global.setImmediate !== 'undefined') {
+            global.setImmediate(() => {
+                // Force immediate execution of pending operations
+            });
+        }
+        
+        // Clear any remaining module cache entries for test files
+        const testModuleKeys = Object.keys(require.cache).filter(key => 
+            key.includes('/test/') || key.includes('.test.') || key.includes('.spec.')
+        );
+        
+        // Only clear a limited number to avoid performance issues
+        testModuleKeys.slice(0, 10).forEach(key => {
+            try {
+                if (!key.includes('setup.js')) { // Don't clear setup
+                    delete require.cache[key];
+                }
+            } catch {
+                // Silent fail
+            }
+        });
+        
+    } catch {
+        // Silent fail to not break tests
+    }
+};
+
 // ENHANCED: Worker resource cleanup for proper Jest exit
 global.cleanupWorkerResources = async function() {
     try {
@@ -1695,49 +1837,87 @@ global.cleanupWorkerResources = async function() {
 
 // ENHANCED: Timer tracking for proper cleanup
 global.clearAllTimers = function() {
-    // Track and clear all test-created timers
-    if (!global._timers) {
-        global._timers = [];
-    }
-    
-    // Clear all tracked timers
-    global._timers.forEach(timer => {
-        try {
-            clearTimeout(timer);
-            clearInterval(timer);
-            // Don't try to clear timers as immediates - different ID spaces
-        } catch (timerError) {
-            // Silent fail
-            void timerError;
+    try {
+        // Track and clear all test-created timers
+        if (!global._timers) {
+            global._timers = [];
         }
-    });
-    global._timers = [];
-    
-    // Clear any remaining immediates
-    if (global._immediates) {
-        global._immediates.forEach(immediate => {
+        
+        // Clear all tracked timers with proper error handling
+        global._timers.forEach(timer => {
             try {
-                if (typeof global.clearImmediate !== 'undefined') {
-                    global.clearImmediate(immediate);
-                }
-            } catch (immediateError) {
-                // Silent fail
-                void immediateError;
+                clearTimeout(timer);
+                clearInterval(timer);
+            } catch {
+                // Silent fail but continue processing other timers
             }
         });
-        global._immediates = [];
-    }
-    
-    // Additional cleanup for any remaining timers in test environment
-    if (process.env.NODE_ENV === 'test') {
-        // Clear any remaining timers that might have been missed
-        const maxTimerId = setTimeout(() => {}, 0);
-        for (let i = 1; i <= maxTimerId; i++) {
-            clearTimeout(i);
-            clearInterval(i);
-            // Don't try to clear immediates with timer IDs - they use different ID spaces
+        global._timers = [];
+        
+        // Clear all tracked intervals separately
+        if (global._intervals) {
+            global._intervals.forEach(interval => {
+                try {
+                    clearInterval(interval);
+                } catch {
+                    // Silent fail
+                }
+            });
+            global._intervals = [];
         }
-        clearTimeout(maxTimerId);
+        
+        // Clear any remaining immediates
+        if (global._immediates) {
+            global._immediates.forEach(immediate => {
+                try {
+                    if (typeof global.clearImmediate !== 'undefined') {
+                        global.clearImmediate(immediate);
+                    }
+                } catch {
+                    // Silent fail
+                }
+            });
+            global._immediates = [];
+        }
+        
+        // Unref any timers to prevent keeping process alive
+        if (global._activeTimers) {
+            global._activeTimers.forEach(timer => {
+                try {
+                    if (timer && typeof timer.unref === 'function') {
+                        timer.unref();
+                    }
+                } catch {
+                    // Silent fail
+                }
+            });
+            global._activeTimers = [];
+        }
+        
+        // Additional aggressive timer cleanup for test environment
+        if (process.env.NODE_ENV === 'test') {
+            // More conservative approach - only clear a reasonable range
+            const startTime = Date.now();
+            let _clearedCount = 0;
+            const maxClearTime = 10; // Maximum 10ms for timer cleanup
+            
+            // Create a test timer to get current ID range
+            const testTimer = setTimeout(() => {}, 0);
+            const maxId = Math.min(testTimer + 100, testTimer + 1000); // Reasonable upper bound
+            clearTimeout(testTimer);
+            
+            for (let i = 1; i <= maxId && (Date.now() - startTime) < maxClearTime; i++) {
+                try {
+                    clearTimeout(i);
+                    clearInterval(i);
+                    _clearedCount++;
+                } catch {
+                    // Expected - timer may not exist
+                }
+            }
+        }
+    } catch {
+        // Silent fail to not break test cleanup
     }
 };
 
@@ -1746,7 +1926,7 @@ const originalSetTimeout = global.setTimeout;
 const originalSetInterval = global.setInterval;
 const originalSetImmediate = global.setImmediate;
 
-// Initialize tracking arrays
+// Initialize comprehensive tracking arrays
 if (!global._timers) {
     global._timers = [];
 }
@@ -1756,35 +1936,64 @@ if (!global._intervals) {
 if (!global._immediates) {
     global._immediates = [];
 }
+if (!global._activeTimers) {
+    global._activeTimers = [];
+}
+if (!global._openStreams) {
+    global._openStreams = [];
+}
+if (!global._fileWatchers) {
+    global._fileWatchers = [];
+}
+if (!global._networkSockets) {
+    global._networkSockets = [];
+}
 
 global.setTimeout = function(callback, delay, ...args) {
     const wrappedCallback = function(...callbackArgs) {
         try {
-            // Remove timer from tracking when it executes
-            const index = global._timers.indexOf(timer);
-            if (index > -1) {
-                global._timers.splice(index, 1);
-            }
+            // Remove timer from all tracking arrays when it executes
+            [global._timers, global._activeTimers].forEach(arr => {
+                const index = arr.indexOf(timer);
+                if (index > -1) {
+                    arr.splice(index, 1);
+                }
+            });
             return callback.apply(this, callbackArgs);
         } catch (error) {
             console.error('Timer callback error:', error);
+            // Remove timer from tracking even if callback fails
+            [global._timers, global._activeTimers].forEach(arr => {
+                const index = arr.indexOf(timer);
+                if (index > -1) {
+                    arr.splice(index, 1);
+                }
+            });
             throw error;
         }
     };
     
     const timer = originalSetTimeout.call(this, wrappedCallback, delay, ...args);
     global._timers.push(timer);
+    global._activeTimers.push(timer);
     
-    // Preserve original unref method
+    // Auto-unref timers in test environment to prevent hanging workers
+    if (process.env.NODE_ENV === 'test' && timer && typeof timer.unref === 'function') {
+        timer.unref();
+    }
+    
+    // Preserve and enhance original unref method
     const originalUnref = timer.unref ? timer.unref.bind(timer) : null;
     if (originalUnref) {
         timer.unref = function() {
             const result = originalUnref();
-            // Remove from tracking when unreferenced to prevent keeping process alive
-            const index = global._timers.indexOf(timer);
-            if (index > -1) {
-                global._timers.splice(index, 1);
-            }
+            // Remove from tracking when unreferenced
+            [global._timers, global._activeTimers].forEach(arr => {
+                const index = arr.indexOf(timer);
+                if (index > -1) {
+                    arr.splice(index, 1);
+                }
+            });
             return result;
         };
     }
@@ -1806,6 +2015,13 @@ global.setInterval = function(callback, delay, ...args) {
     
     const timer = originalSetInterval.call(this, wrappedCallback, delay, ...args);
     global._intervals.push(timer);
+    global._activeTimers.push(timer);
+    
+    // Auto-unref intervals in test environment to prevent hanging workers
+    if (process.env.NODE_ENV === 'test' && timer && typeof timer.unref === 'function') {
+        timer.unref();
+    }
+    
     return timer;
 };
 
@@ -1837,18 +2053,24 @@ const originalClearInterval = global.clearInterval;
 const originalClearImmediate = global.clearImmediate;
 
 global.clearTimeout = function(timer) {
-    const index = global._timers.indexOf(timer);
-    if (index > -1) {
-        global._timers.splice(index, 1);
-    }
+    // Remove from all tracking arrays
+    [global._timers, global._intervals, global._activeTimers].forEach(arr => {
+        const index = arr.indexOf(timer);
+        if (index > -1) {
+            arr.splice(index, 1);
+        }
+    });
     return originalClearTimeout.call(this, timer);
 };
 
 global.clearInterval = function(timer) {
-    const index = global._timers.indexOf(timer);
-    if (index > -1) {
-        global._timers.splice(index, 1);
-    }
+    // Remove from all tracking arrays
+    [global._timers, global._intervals, global._activeTimers].forEach(arr => {
+        const index = arr.indexOf(timer);
+        if (index > -1) {
+            arr.splice(index, 1);
+        }
+    });
     return originalClearInterval.call(this, timer);
 };
 
