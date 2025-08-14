@@ -1,5 +1,5 @@
 const TaskManager = require('./lib/taskManager');
-const AgentManager = require('./lib/agentManager');
+const _AgentManager = require('./lib/agentManager');
 const MultiAgentOrchestrator = require('./lib/multiAgentOrchestrator');
 
 async function debugMultiAgent() {
