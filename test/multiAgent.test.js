@@ -90,7 +90,7 @@ describe('Multi-Agent System', () => {
                     const resolvedPath = path.resolve(filePath);
                     fileSystemState[resolvedPath] = parsed;
                     // console.error('MockFS: Wrote to', filePath, 'with', parsed.tasks?.length || 0, 'tasks');
-                } catch (error) {
+                } catch {
                     // console.error('MockFS write parse error:', error.message);
                     fileSystemState[filePath] = content;
                 }

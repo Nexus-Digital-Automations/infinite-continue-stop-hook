@@ -37,7 +37,7 @@ module.exports = [
   },
   // Test files configuration
   {
-    files: ['**/*.test.js', '**/test/**/*.js', '**/tests/**/*.js', 'demo/**/*.test.js'],
+    files: ['**/*.test.js', '**/test/**/*.js', '**/tests/**/*.js', 'demo/**/*.test.js', 'debug-test.js'],
     languageOptions: {
       globals: {
         describe: 'readonly',

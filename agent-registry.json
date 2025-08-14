@@ -120,16 +120,15 @@
     "agent_10": {
       "agentId": "agent_10",
       "agentNumber": 10,
-      "sessionId": "session_1755104460765",
+      "sessionId": "session_1755206007790",
       "role": "development",
       "specialization": [],
-      "status": "inactive",
-      "lastActivity": 1755104460765,
+      "status": "active",
+      "lastActivity": 1755206007792,
       "totalRequests": 1,
-      "createdAt": "2025-08-13T17:01:00.765Z",
+      "createdAt": "2025-08-14T21:13:27.792Z",
       "metadata": {},
-      "capabilities": [],
-      "inactiveSince": "2025-08-13T19:01:00.765Z"
+      "capabilities": []
     },
     "agent_11": {
       "agentId": "agent_11",

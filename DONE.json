@@ -12653,9 +12653,33 @@
       "created_at": "2025-08-14T21:04:32.748Z",
       "completed_at": "2025-08-14T21:12:46.897Z",
       "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1755205472764_zrl39m0z1",
+      "title": "Fix ESLint configuration for test files",
+      "description": "Fix ESLint errors in debug-test.js by properly configuring test globals. Update eslint.config.js to recognize jest globals in test files or add proper test file patterns.",
+      "mode": "DEVELOPMENT",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [
+        "debug-test.js",
+        "eslint.config.js"
+      ],
+      "success_criteria": [
+        "All ESLint errors resolved in debug-test.js",
+        "Test globals properly configured in eslint.config.js",
+        "ESLint passes for all test files"
+      ],
+      "estimate": "20 minutes",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-14T21:04:32.764Z",
+      "completed_at": "2025-08-14T21:14:54.762Z",
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
     }
   ],
-  "total_completed": 333,
-  "last_completion": "2025-08-14T21:12:46.897Z",
+  "total_completed": 334,
+  "last_completion": "2025-08-14T21:14:54.762Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }
