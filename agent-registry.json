@@ -3,13 +3,13 @@
     "agent_1": {
       "agentId": "agent_1",
       "agentNumber": 1,
-      "sessionId": "session_1755201665366",
+      "sessionId": "session_1755209772590",
       "role": "development",
       "specialization": [],
       "status": "active",
-      "lastActivity": 1755201665370,
+      "lastActivity": 1755209772591,
       "totalRequests": 1,
-      "createdAt": "2025-08-14T20:01:05.370Z",
+      "createdAt": "2025-08-14T22:16:12.591Z",
       "metadata": {},
       "capabilities": []
     },
@@ -185,16 +185,15 @@
     "agent_15": {
       "agentId": "agent_15",
       "agentNumber": 15,
-      "sessionId": "session_1755104622940",
+      "sessionId": "session_1755208686597",
       "role": "development",
       "specialization": [],
-      "status": "inactive",
-      "lastActivity": 1755104622940,
+      "status": "active",
+      "lastActivity": 1755208686597,
       "totalRequests": 1,
-      "createdAt": "2025-08-13T17:03:42.940Z",
+      "createdAt": "2025-08-14T21:58:06.597Z",
       "metadata": {},
-      "capabilities": [],
-      "inactiveSince": "2025-08-13T19:03:42.940Z"
+      "capabilities": []
     },
     "agent_16": {
       "agentId": "agent_16",
