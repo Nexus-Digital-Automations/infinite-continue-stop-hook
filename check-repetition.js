@@ -23,7 +23,7 @@ async function main() {
             case 'stats':
                 await showRepetitionStats(tm);
                 break;
-            case 'check':
+            case 'check': {
                 const taskId = args[1];
                 const agentId = args[2] || 'default_agent';
                 if (!taskId) {
@@ -32,10 +32,12 @@ async function main() {
                 }
                 await checkSpecificTask(tm, taskId, agentId);
                 break;
-            case 'cleanup':
+            }
+            case 'cleanup': {
                 const days = parseInt(args[1]) || 7;
                 await cleanupOldData(tm, days);
                 break;
+            }
             case 'help':
                 showHelp();
                 break;
