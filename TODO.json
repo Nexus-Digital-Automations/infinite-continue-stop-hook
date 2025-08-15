@@ -2,45 +2,58 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
-      "id": "task_1755280398954_review2",
-      "title": "Review Strike 2: Verify no lint errors exist in the codebase",
-      "description": "Perform a comprehensive code review with focus on: Verify no lint errors exist in the codebase\n\nCheck the entire codebase and ensure this criterion is met.\n\n## CRITICAL FAILURE RESPONSE PROTOCOL\n\nIF LINT ERRORS FOUND: Create specific TASK CREATION tasks in TODO.json to achieve zero lint errors:\n- Linting tool setup and configuration tasks\n- Code style correction tasks\n- Import organization tasks\n- Naming convention fixes tasks\n- Dead code removal tasks\n\nCRITICAL: Use TaskManager API to add these tasks immediately when lint errors are detected.\n\n## SUCCESS CRITERIA\n- Mark this review task as completed ONLY if the criterion is fully met\n- If criterion fails, you MUST create remediation tasks using TaskManager API before marking review as completed\n- All new tasks should be actionable, specific, and include proper dependencies/important_files parameters\n\n## TASK CREATION REQUIREMENT\nWhen creating remediation tasks, ensure each task includes:\n- Clear success criteria\n- Appropriate mode (DEVELOPMENT/TESTING/REFACTORING)\n- Specific file dependencies\n- Realistic time estimates\n- High priority for critical issues\n\nUse the task-creation.md guidelines for optimal task structure.",
-      "mode": "REVIEWER",
+      "id": "task_1755281662384_7fuxdhtih",
+      "title": "Create comprehensive test suite for untested lib modules",
+      "description": "Develop unit tests for 6 untested modules to achieve 90%+ coverage:\n\n**UNTESTED MODULES:**\n- agentRegistry.js (used by initialize-agent.js)\n- buildRecoveryManager.js\n- distributedLockManager.js (critical - used by taskManager.js)\n- jestHooks.js\n- sessionFileTracker.js (used by fileOperationLogger.js)\n- testEnvironmentRecovery.js\n\n**SUCCESS CRITERIA:**\n- Unit tests for all 6 modules with 85%+ line coverage each\n- Integration tests for modules with dependencies\n- All new tests pass consistently\n- Overall lib/ directory coverage reaches 90%+\n\n**PRIORITY MODULES:**\n1. distributedLockManager.js (HIGH - core business logic)\n2. agentRegistry.js (HIGH - agent management)\n3. sessionFileTracker.js (MEDIUM - logging dependency)\n4. buildRecoveryManager.js (MEDIUM - recovery logic)\n5. jestHooks.js (LOW - test infrastructure)\n6. testEnvironmentRecovery.js (LOW - test utility)",
+      "mode": "TESTING",
       "priority": "high",
       "status": "pending",
       "dependencies": [],
-      "important_files": [],
+      "important_files": [
+        "test/",
+        "lib/agentRegistry.js",
+        "lib/buildRecoveryManager.js",
+        "lib/distributedLockManager.js",
+        "lib/jestHooks.js",
+        "lib/sessionFileTracker.js",
+        "lib/testEnvironmentRecovery.js"
+      ],
+      "success_criteria": [],
+      "estimate": "",
       "requires_research": false,
-      "created_at": "2025-08-15T17:53:18.953Z",
       "subtasks": [],
-      "is_review_task": true,
-      "strike_number": 2
+      "created_at": "2025-08-15T18:14:22.384Z"
     },
     {
-      "id": "task_1755280398955_review3",
-      "title": "Review Strike 3: Confirm test coverage is 100% on important modules and 90%+ on others, with all tests passing",
-      "description": "Perform a comprehensive code review with focus on: Confirm test coverage is 100% on important modules and 90%+ on others, with all tests passing\n\nCheck the entire codebase and ensure this criterion is met.\n\n## CRITICAL FAILURE RESPONSE PROTOCOL\n\nIF TEST COVERAGE INSUFFICIENT: Create specific TASK CREATION tasks in TODO.json to achieve required coverage:\n- Test framework setup tasks (Jest/Mocha/Vitest)\n- Unit test creation tasks for all modules\n- Integration test development tasks\n- Test coverage reporting setup tasks\n- CI/CD test integration tasks\n\nCRITICAL: Use TaskManager API to add these tasks immediately when coverage is below requirements.\n\n## SUCCESS CRITERIA\n- Mark this review task as completed ONLY if the criterion is fully met\n- If criterion fails, you MUST create remediation tasks using TaskManager API before marking review as completed\n- All new tasks should be actionable, specific, and include proper dependencies/important_files parameters\n\n## TASK CREATION REQUIREMENT\nWhen creating remediation tasks, ensure each task includes:\n- Clear success criteria\n- Appropriate mode (DEVELOPMENT/TESTING/REFACTORING)\n- Specific file dependencies\n- Realistic time estimates\n- High priority for critical issues\n\nUse the task-creation.md guidelines for optimal task structure.",
-      "mode": "REVIEWER",
+      "id": "task_1755281674243_r7h16qk5r",
+      "title": "Fix Jest coverage collection contamination issues",
+      "description": "Resolve Jest coverage collection failures caused by JSON contamination in node_modules:\n\n**ISSUE:**\n- Coverage collection fails with syntax errors in node_modules files\n- Istanbul lib modules being contaminated with JSON content\n- Test execution succeeds but coverage reporting blocked\n\n**ROOT CAUSE:**\n- Contamination protection system is interfering with Jest coverage\n- Files in node_modules/istanbul-lib-report/, node_modules/exit/ contain invalid JSON\n\n**SOLUTION REQUIREMENTS:**\n- Create contamination-safe coverage collection method\n- Implement alternative coverage calculation approach\n- Ensure coverage reports can be generated without contamination\n- Maintain test isolation during coverage collection\n\n**SUCCESS CRITERIA:**\n- Coverage collection completes without syntax errors\n- Accurate coverage percentages reported for lib/ directory\n- Coverage data available for Strike 3 validation\n- Test contamination protection maintained",
+      "mode": "TESTING",
       "priority": "high",
       "status": "pending",
       "dependencies": [],
-      "important_files": [],
+      "important_files": [
+        "scripts/safe-coverage.js",
+        "jest.config.js",
+        "jest.coverage.config.js",
+        "lib/contaminationResolver.js"
+      ],
+      "success_criteria": [],
+      "estimate": "",
       "requires_research": false,
-      "created_at": "2025-08-15T17:53:18.953Z",
       "subtasks": [],
-      "is_review_task": true,
-      "strike_number": 3
+      "created_at": "2025-08-15T18:14:34.243Z"
     }
   ],
   "current_mode": "DEVELOPMENT",
   "last_mode": "REVIEWER",
-  "execution_count": 3,
+  "execution_count": 4,
   "review_strikes": 0,
   "strikes_completed_last_run": false,
-  "last_hook_activation": 1755281199857,
+  "last_hook_activation": 1755281313654,
   "agents": {},
   "current_task_index": 0,
   "stop_hook_calls": [
-    1755281199842
+    1755281313648
   ]
 }
