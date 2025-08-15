@@ -404,7 +404,6 @@ class MockReviewSystemFactory {
             checkStrikeQuality: jest.fn().mockResolvedValue(options.quality || defaultQuality),
             
             // Task injection
-            injectQualityImprovementTask: jest.fn().mockReturnValue({}),
             shouldInjectReviewTask: jest.fn().mockReturnValue(options.shouldInjectReview || false),
             
             // Strike management

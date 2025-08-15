@@ -182,13 +182,41 @@ async function createTodoJson(targetPath, projectInfo) {
         project: projectInfo.projectName,
         tasks: [
             {
+                id: `task_${timestamp}_init`,
+                title: "Initialize project tasks from development directory",
+                description: "Analyze all files in the development directory and create appropriate tasks based on their content. This includes reviewing development guidelines, mode-specific instructions, and any existing documentation to create a comprehensive task list that covers all aspects of the project setup and development workflow.",
+                mode: "TASK_CREATION",
+                priority: "high",
+                status: "pending",
+                dependencies: [],
+                important_files: [
+                    "development/general.md",
+                    "development/modes/",
+                    "development/",
+                    "README.md",
+                    "package.json"
+                ],
+                success_criteria: [
+                    "All files in development/ directory have been analyzed",
+                    "Tasks created for implementing guidelines from development/general.md",
+                    "Mode-specific tasks created based on development/modes/ files", 
+                    "Project structure tasks created based on README.md and package.json",
+                    "Task list provides comprehensive coverage of project requirements",
+                    "All created tasks have clear success criteria and appropriate priorities"
+                ],
+                requires_research: false,
+                created_at: new Date().toISOString(),
+                subtasks: [],
+                prompt: "Read and analyze all files in the development/ directory. Based on the content of these files, create a comprehensive set of tasks that will implement the guidelines, setup requirements, and development workflow described in the documentation. Focus on:\n\n1. Development guidelines from general.md\n2. Mode-specific requirements from modes/ directory\n3. Project setup tasks based on README.md\n4. Dependency and configuration tasks from package.json\n5. Any other requirements found in development documentation\n\nCreate specific, actionable tasks with clear success criteria, appropriate modes (DEVELOPMENT/TESTING/REFACTORING/RESEARCH), and proper dependencies. Ensure the task list provides complete coverage for setting up and developing the project according to the documented standards."
+            },
+            {
                 id: taskId,
                 title: projectInfo.taskDescription,
                 description: projectInfo.taskPrompt || projectInfo.taskDescription,
                 mode: projectInfo.taskMode,
                 priority: "medium",
                 status: "pending",
-                dependencies: projectInfo.dependencies || [],
+                dependencies: [`task_${timestamp}_init`],
                 important_files: projectInfo.importantFiles || [],
                 requires_research: projectInfo.requiresResearch || false,
                 created_at: new Date().toISOString(),

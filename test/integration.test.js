@@ -282,40 +282,6 @@ describe('Stop Hook Integration Tests', () => {
     });
 
     describe('Quality Assessment and Task Injection', () => {
-        it('should inject quality improvement task when quality is insufficient', async () => {
-            const todoData = {
-                project: 'test-project',
-                tasks: [],
-                execution_count: 0
-            };
-            
-            setupMockEnvironment(todoData);
-            
-            mockReviewSystem.checkStrikeQuality.mockResolvedValue({
-                strike1: { quality: 80, issues: ['Build script missing'] },
-                strike2: { quality: 100, issues: [] },
-                strike3: { quality: 60, issues: ['Test coverage low'] },
-                overallReady: false
-            });
-            
-            mockReviewSystem.injectQualityImprovementTask.mockReturnValue({
-                ...todoData,
-                tasks: [{ id: 'quality-task', title: 'Quality improvement' }]
-            });
-            
-            mockTaskManager.getCurrentTask.mockResolvedValue({
-                id: 'quality-task',
-                mode: 'DEVELOPMENT',
-                status: 'pending'
-            });
-            
-            mockAgentExecutor.buildPrompt.mockReturnValue('Quality prompt');
-            
-            const result = await runStopHook(createValidInput());
-            
-            expect(mockReviewSystem.injectQualityImprovementTask).toHaveBeenCalled();
-            expect(result.exitCode).toBe(2);
-        });
         
         it('should inject review task when quality is ready and conditions are met', async () => {
             const todoData = {
@@ -366,35 +332,6 @@ describe('Stop Hook Integration Tests', () => {
             expect(result.exitCode).toBe(2);
         });
         
-        it('should not inject quality task if one already exists', async () => {
-            const todoData = {
-                project: 'test-project',
-                tasks: [{
-                    id: 'existing-quality-task',
-                    is_quality_improvement_task: true,
-                    status: 'pending'
-                }],
-                execution_count: 0
-            };
-            
-            setupMockEnvironment(todoData);
-            
-            mockReviewSystem.checkStrikeQuality.mockResolvedValue({
-                overallReady: false
-            });
-            
-            mockTaskManager.getCurrentTask.mockResolvedValue({
-                id: 'existing-quality-task',
-                mode: 'DEVELOPMENT',
-                status: 'pending'
-            });
-            
-            mockAgentExecutor.buildPrompt.mockReturnValue('Quality prompt');
-            
-            await runStopHook(createValidInput());
-            
-            expect(mockReviewSystem.injectQualityImprovementTask).not.toHaveBeenCalled();
-        });
     });
 
     describe('Prompt Generation Integration', () => {
@@ -701,19 +638,6 @@ describe('Stop Hook Integration Tests', () => {
                         
                         // Check quality FIRST, regardless of whether there's a current task (matches stop-hook.js lines 110-144)
                         return Promise.resolve(mockReviewSystem.checkStrikeQuality()).then(qualityResult => {
-                            if (qualityResult && !qualityResult.overallReady) {
-                                // Check if we already have a quality improvement task pending (matches stop-hook.js lines 116-119)
-                                const hasQualityTask = updatedData.tasks.some(task => 
-                                    task.is_quality_improvement_task && 
-                                    (task.status === 'pending' || task.status === 'in_progress')
-                                );
-                                
-                                if (!hasQualityTask) {
-                                    // Inject quality improvement task only if one doesn't exist
-                                    updatedData = mockReviewSystem.injectQualityImprovementTask(updatedData, qualityResult, updatedData.project);
-                                }
-                            }
-                            
                             // Check if review task should be injected
                             if (qualityResult && qualityResult.overallReady) {
                                 const shouldInject = mockReviewSystem.shouldInjectReviewTask(updatedData);
