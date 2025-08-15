@@ -641,8 +641,8 @@ describe('Multi-Agent System', () => {
             jest.spyOn(taskManager, 'writeTodo').mockResolvedValue();
             taskManager.lockManager = lockManager;
             
-            // Try to claim dependent task before dependency is complete (use simple method)
-            const claimResult1 = await taskManager.claimTaskSimple(mainTaskId, 'agent1', 'normal');
+            // Try to claim dependent task before dependency is complete (use simple method with allowOutOfOrder to test dependencies specifically)
+            const claimResult1 = await taskManager.claimTaskSimple(mainTaskId, 'agent1', 'normal', { allowOutOfOrder: true });
             expect(claimResult1.success).toBe(false);
             expect(claimResult1.reason).toBe('Unmet dependencies');
             
@@ -650,7 +650,7 @@ describe('Multi-Agent System', () => {
             mockData.tasks[0].status = 'completed';
             
             // Now should be able to claim main task
-            const claimResult2 = await taskManager.claimTaskSimple(mainTaskId, 'agent1', 'normal');
+            const claimResult2 = await taskManager.claimTaskSimple(mainTaskId, 'agent1', 'normal', { allowOutOfOrder: true });
             expect(claimResult2.success).toBe(true);
         });
 

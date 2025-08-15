@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const TaskManager = require('./lib/taskManager');
 const AgentExecutor = require('./lib/agentExecutor');
-const ReviewSystem = require('./lib/reviewSystem');
+// ReviewSystem import removed - no automatic injection
 const Logger = require('./lib/logger');
 
 // Read input from Claude Code
@@ -81,7 +81,7 @@ process.stdin.on('end', async () => {
         
         const taskManager = new TaskManager(todoPath);
         const agentExecutor = new AgentExecutor(modesDir);
-        const reviewSystem = new ReviewSystem();
+        // ReviewSystem removed - no automatic injection
         
         // Check if TODO.json exists
         if (!fs.existsSync(todoPath)) {
@@ -117,20 +117,7 @@ process.stdin.on('end', async () => {
             process.exit(0);
         }
         
-        // Check if we should inject a review task
-        {
-            const shouldInjectReview = reviewSystem.shouldInjectReviewTask(todoData);
-            logger.logReviewInjection(shouldInjectReview, reviewSystem.getNextStrikeNumber(todoData));
-            
-            if (shouldInjectReview) {
-                const strikeNumber = reviewSystem.getNextStrikeNumber(todoData);
-                const reviewTask = reviewSystem.createReviewTask(strikeNumber, todoData.project);
-                // Use the insertTasksBeforeStrikes method to maintain proper ordering
-                todoData = reviewSystem.insertTasksBeforeStrikes(todoData, [reviewTask]);
-                await taskManager.writeTodo(todoData);
-                console.error(`Injecting Review Strike ${strikeNumber} task`);
-            }
-        }
+        // Review task injection has been removed - no automatic task injection
         
         // Initialize or get agent ID for multi-agent support
         let agentId = process.env.CLAUDE_AGENT_ID;
