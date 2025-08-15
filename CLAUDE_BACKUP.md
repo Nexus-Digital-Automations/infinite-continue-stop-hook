@@ -1,4 +1,4 @@
-# Claude Code Project Assistant - Unified Guide
+# Claude Code Project Assistant
 
 ## 🚨 CRITICAL COMPLIANCE PROTOCOLS
 
@@ -22,39 +22,6 @@
 - Fix ALL linting errors using `npm run lint:fix` then manual fixes
 - NEVER modify ignore files to bypass legitimate errors
 - Linting errors block ALL other work until resolved
-
-## 🚨 CORE CLAUDE CODE ARCHITECTURE
-
-### Agent Personality & Approach
-Expert senior developer with 10x engineer mindset:
-- **Simplicity first**: Fewest lines of quality code
-- **Maintainability over cleverness**: Readable, maintainable solutions
-- **Pragmatic excellence**: Balance best practices with working solutions
-- **Proactive improvement**: Suggest improvements within existing architecture
-
-### Extended Thinking Allocation
-**MANDATORY MAXIMUM THINKING:** Always use the highest beneficial thinking level for any task.
-
-**THINKING ESCALATION (ALWAYS USE MAXIMUM BENEFICIAL LEVEL):**
-- **Simple tasks**: No thinking (ONLY for single-step trivial work like reading one file)
-- **Moderate** (2-4 steps): `(think)` - 4,000 tokens
-- **Complex** (5-8 steps): `(think hard)` - 10,000 tokens  
-- **Architecture/system** (9+ steps): `(ultrathink)` - 31,999 tokens
-
-**DEFAULT APPROACH:** When in doubt, use higher thinking level. Better to over-think than under-think.
-
-**ULTRATHINK TRIGGERS:** System architecture | Multi-service integration | Task planning | Priority evaluation
-**THINK HARD TRIGGERS:** Performance optimization | Security planning | Complex refactoring | Debugging | Task management
-**MANDATORY THINKING AREAS:** Task creation | Task prioritization | Task reordering | Task evaluation | User request analysis
-
-**THINKING REQUIREMENT:** ALL task-related decisions require thinking to evaluate priorities, dependencies, and optimal execution order.
-
-### Multi-Phase Workflow Pattern
-1. **Research & Exploration**: Understanding existing codebase
-2. **Planning**: Architectural decisions and approach design
-3. **Implementation**: Code creation and modification
-4. **Validation**: Testing and verification
-5. **Commit**: Git operations and documentation
 
 ## 🚨 TASKMANAGER API INTEGRATION
 
@@ -95,9 +62,7 @@ node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-
 
 ### 🎯 Core TaskManager Node.js API Operations
 
-**🔴 CRITICAL: Claude Code Bash Execution**
-
-**Claude Code cannot run Node.js natively** - all TaskManager operations must use bash commands with Node.js wrappers:
+**PRIMARY INTERFACE** - All operations work from any directory:
 
 ```bash
 # Agent initialization and management
@@ -279,6 +244,24 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
   - Request matches existing task scope → Update/expand that task
   - Simple clarification/modification → Modify relevant existing task
 
+**🚨 INTERRUPT HANDLING PROTOCOL:**
+- **WHEN USER INTERRUPTS**: ALWAYS create task for new request EVEN IF currently working on another task
+- **IMMEDIATE TASK CREATION**: Stop current work, create new task, move to top priority
+- **NO EXCEPTIONS**: User interruptions ALWAYS take absolute precedence
+- **AUTOMATIC TOP PRIORITY**: All user-requested tasks automatically move to position #1
+
+**EXPANDED TASK CREATION TRIGGERS:**
+- **Questions** - Any question the user asks, regardless of complexity
+- **Requests** - Any request for information, analysis, or action
+- **Instructions** - Direct commands or guidance from the user
+- **Observations** - When user points out something or makes a comment
+- **Clarifications** - When user asks for explanation or details
+- **Assistance** - When user asks for help with anything
+
+**INSTANT vs COMPLEX REQUEST CLASSIFICATION:**
+- **INSTANT**: Single file read | Basic status check | Simple one-line answer | Trivial parameter change
+- **COMPLEX**: Multi-step work | Analysis required | Code changes | Research needed | Planning required
+
 **MANDATORY WORKFLOW FOR ALL USER INTERACTIONS:**
 1. **DETECT** - ANY user request, question, instruction, observation, or issue they point out
 2. **EVALUATE EXISTING TASKS** - Check if any current tasks can handle the request:
@@ -299,6 +282,39 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
    ```
 4. **PRIORITIZE** - Move task to appropriate position  
 5. **EXECUTE** - Begin working on the task
+
+**ABSOLUTE REQUIREMENT**: 
+- **EVERY USER INTERACTION** = **EVALUATE EXISTING TASKS FIRST** - Check for reuse opportunities
+- **CREATE NEW TASKS ONLY WHEN NECESSARY** - If no existing task can handle the request
+- **QUESTIONS, REQUESTS, INSTRUCTIONS, OBSERVATIONS** - ALL trigger task evaluation (not automatic creation)
+- **MODIFY/REUSE FIRST** - Then create new if needed - Then answer/execute
+
+**DYNAMIC TASK CREATION WORKFLOW:**
+1. **DETECT** - Identify error/opportunity during execution
+2. **CLEANUP** - Review and remove/merge duplicate or irrelevant tasks before creating new ones
+3. **CREATE** - Immediately use TaskManager API to create specific, actionable task
+4. **PRIORITIZE** - Use reordering functions to position task appropriately
+5. **CONTINUE** - Resume current work after task creation
+
+**🚨 TASK MAINTENANCE PROTOCOLS:**
+- **BEFORE CREATING ANY TASK**: Scan existing tasks for duplicates, obsolete items, or merge opportunities
+- **REMOVE IRRELEVANT TASKS**: Tasks that are no longer needed, duplicate, or superseded
+- **MERGE SIMILAR TASKS**: Combine related tasks into single comprehensive tasks
+- **AUTOMATIC CLEANUP TRIGGERS**: Before user interactions, during workflow transitions, when task list grows beyond 10 items
+- **CONTINUOUS PRIORITY EVALUATION**: Constantly reassess task priorities based on:
+  - User feedback and new requirements
+  - Discovered dependencies and blockers
+  - Changed project circumstances
+  - Error conditions and urgent fixes
+  - Business value and impact assessment
+- **DYNAMIC RERANKING**: Use TaskManager API reordering functions to maintain optimal task sequence
+- **PRIORITY ADJUSTMENT TRIGGERS**: New user requests | Error discoveries | Dependency changes | Completion of blocking tasks
+
+**TASK CREATION REQUIREMENTS:**
+- **SPECIFIC** - Concrete problem/opportunity description
+- **ACTIONABLE** - Clear steps to resolve/implement
+- **PRIORITIZED** - Appropriate urgency level (low/medium/high)
+- **CATEGORIZED** - Proper mode assignment (DEVELOPMENT/TESTING/etc.)
 
 ## 🚨 CONTINUOUS TASK EVALUATION AND THINKING REQUIREMENTS
 
@@ -336,51 +352,48 @@ Every interaction with tasks requires active thinking to ensure optimal priority
 - **PROACTIVELY** identify and create tasks for discovered opportunities
 - **STRATEGICALLY** merge, split, or reorder tasks for maximum efficiency
 
+## 🚨 EXTENDED THINKING ALLOCATION
+
+**MANDATORY MAXIMUM THINKING:** Always use the highest beneficial thinking level for any task.
+
+**THINKING ESCALATION (ALWAYS USE MAXIMUM BENEFICIAL LEVEL):**
+- **Simple tasks**: No thinking (ONLY for single-step trivial work like reading one file)
+- **Moderate** (2-4 steps): `(think)` - 4,000 tokens
+- **Complex** (5-8 steps): `(think hard)` - 10,000 tokens  
+- **Architecture/system** (9+ steps): `(ultrathink)` - 31,999 tokens
+
+**DEFAULT APPROACH:** When in doubt, use higher thinking level. Better to over-think than under-think.
+
+**ULTRATHINK TRIGGERS:** System architecture | Multi-service integration | Task planning | Priority evaluation
+**THINK HARD TRIGGERS:** Performance optimization | Security planning | Complex refactoring | Debugging | Task management
+**MANDATORY THINKING AREAS:** Task creation | Task prioritization | Task reordering | Task evaluation | User request analysis
+
+**THINKING REQUIREMENT:** ALL task-related decisions require thinking to evaluate priorities, dependencies, and optimal execution order.
+
 ## 🚨 MAXIMUM PARALLEL SUBAGENT DEPLOYMENT
 
 **FAILURE TO USE SUBAGENTS = FAILED EXECUTION**
 
 Deploy **UP TO 5 SUBAGENTS** in parallel for ALL complex work.
 
-### Universal Subagent Usage
-**ALL tasks in ALL modes MUST use specialized subagents** for optimal results:
+**🎯 MICRO-SPECIALIZATION PRINCIPLE:**
+Break work into **SMALLEST POSSIBLE SPECIALIZED UNITS** (30s-2min each) that can run in parallel. Each subagent:
+- Has **ONE CLEAR, SPECIFIC PURPOSE** with concrete deliverable
+- **NO OVERLAP** with other subagent domains
+- **COORDINATES** seamlessly for synchronized completion
 
-- **DEVELOPMENT**: Spawn feature-specific subagents (frontend, backend, database, API)
-- **TESTING**: Spawn testing specialist subagents (unit, integration, e2e, performance)
-- **RESEARCH**: Spawn research specialist subagents (technology evaluation, benchmarking, security analysis)
-- **DEBUGGING**: Spawn debugging specialist subagents (error analysis, performance profiling, security auditing)
-- **REFACTORING**: Spawn refactoring specialist subagents (architecture, performance, code quality)
-- **DOCUMENTATION**: Spawn documentation specialist subagents (API docs, user guides, technical specs)
+**SUBAGENTS REQUIRED FOR:**
+- Any work taking >few seconds | All analysis/research/exploration
+- Multi-step problem solving | Quality assurance/optimization
+- Cross-cutting concerns | Parallel solution investigation
 
-### Subagent Specializations
-
-#### Development Subagents
-- **Frontend Specialist**: React/Vue/Angular, CSS, responsive design, accessibility
-- **Backend Specialist**: API design, server architecture, database integration
-- **Database Specialist**: Schema design, query optimization, migrations
-- **DevOps Specialist**: CI/CD, deployment, monitoring, scaling
-- **Security Specialist**: Authentication, authorization, vulnerability assessment
-
-#### Research Subagents
-- **Technology Evaluator**: Framework/library comparison, benchmarking
-- **API Analyst**: Third-party service evaluation, integration complexity
-- **Performance Researcher**: Load testing, optimization strategies
-- **Security Auditor**: Vulnerability assessment, compliance analysis
-- **UX Researcher**: User experience analysis, accessibility evaluation
-
-#### Testing Subagents
-- **Unit Test Specialist**: Component testing, mock strategies, coverage analysis
-- **Integration Test Specialist**: Service integration, API testing, data flow validation
-- **E2E Test Specialist**: User journey testing, automation frameworks
-- **Performance Test Specialist**: Load testing, stress testing, benchmark analysis
-- **Security Test Specialist**: Penetration testing, vulnerability scanning
-
-### Subagent Quality Standards
-- **Specialization**: Each subagent focuses on ONE domain of expertise
-- **Documentation**: All findings documented in structured markdown files
-- **Context Preservation**: Critical information passed between agents
-- **Quality Gates**: Each subagent meets mode-specific quality requirements
-- **Integration**: Subagent outputs integrate seamlessly with main workflow
+**🔬 SPECIALIZED SUBAGENT DOMAINS:**
+- **Core System Analysis** - Architecture patterns, code quality, dependencies
+- **Security & Performance** - Vulnerabilities, bottlenecks, optimization
+- **Testing & Quality** - Coverage analysis, test strategy, edge cases (**Only ONE subagent may execute tests**)
+- **User Experience** - UI components, user flows, accessibility
+- **Data & State** - Data flow, state management, API design
+- **Infrastructure** - Deployment, monitoring, CI/CD
 
 **DEPLOYMENT STRATEGY: Think → Map → Balance → Deploy Simultaneously**
 
@@ -392,13 +405,6 @@ Deploy **UP TO 5 SUBAGENTS** in parallel for ALL complex work.
 - **Input validation** and error handling with logging
 - **No hardcoded secrets** or credentials
 - **Zero linter errors** before any task completion
-
-### Context Management
-**ALWAYS check for ABOUT.md files** before editing code:
-- Read ABOUT.md in current working directory
-- Check parent directories for broader context
-- Look for ABOUT.md in relevant subdirectories
-- Create ABOUT.md in directories of significance
 
 ## 🚨 MANDATORY PROJECT DOCUMENTATION UPDATE PROTOCOL
 
@@ -422,7 +428,59 @@ Deploy **UP TO 5 SUBAGENTS** in parallel for ALL complex work.
 
 **AVOID DOCUMENTING**: Internal implementation details, development processes, code structure that doesn't affect users
 
+**USER-FOCUSED DOCUMENTATION LOCATIONS:**
+- **README.md**: Project overview, installation, basic usage examples
+- **API Documentation**: User-accessible endpoints, parameters, examples only
+- **User Guides**: Feature usage, workflows that affect end users
+- **Configuration Docs**: Setup options users need to configure
+- **Troubleshooting**: Common user issues and solutions
+- **Changelog**: Version history, breaking changes affecting users
+
+**USER-FOCUSED DOCUMENTATION UPDATE PROTOCOL:**
+1. **EVALUATE USER IMPACT**: Only document changes that affect how users interact with the system
+2. **CREATE TARGETED TASKS**: Use TaskManager API for user-relevant documentation only
+3. **FOCUS ON USAGE**: Emphasize how users will use/benefit from changes
+4. **VALIDATE USER VALUE**: Ensure documentation helps users accomplish their goals
+5. **AVOID INTERNAL DETAILS**: Skip implementation specifics that don't affect user experience
+
+**TASK CREATION FOR USER-RELEVANT DOCUMENTATION:**
+```bash
+# Create user-focused documentation update task (only when user impact exists)
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.createTask({title: 'Update user documentation for [user-facing change]', description: 'Update documentation to help users [specific user benefit/usage]', mode: 'DOCUMENTATION', priority: 'high', important_files: ['path/to/user/docs']}).then(id => console.log('Created user documentation task:', id));"
+```
+
 **CONDITIONAL REQUIREMENT**: Documentation updates are ONLY required when changes affect user experience, usage, or understanding. Skip documentation for purely internal changes.
+
+## 🚨 ALWAYS PUSH AFTER COMMITTING
+
+Every commit MUST be followed by a push to the remote repository.
+
+```bash
+# Standard Git Workflow
+git add -A
+git commit -m "feat: implement feature description
+
+- Bullet point of accomplishment
+- Another accomplishment
+
+🤖 Generated with Claude Code
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+git push
+```
+
+**Push Failure Recovery:**
+```bash
+# If push fails due to conflicts
+git pull --rebase && git push
+
+# If push fails due to branch tracking
+git push -u origin HEAD
+```
+
+## 🚨 NEVER MODIFY SETTINGS FILE
+
+**FORBIDDEN**: Never touch, read, modify, or interact with `/Users/jeremyparker/.claude/settings.json` under ANY circumstances.
 
 ## 🚨 TODO.json INTERACTION PROTOCOL
 
@@ -473,64 +531,6 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 - Ask clarifying questions when instructions are ambiguous  
 - Stop immediately when user provides new instructions
 
-## 🚨 ALWAYS PUSH AFTER COMMITTING
-
-Every commit MUST be followed by a push to the remote repository.
-
-```bash
-# Standard Git Workflow
-git add -A
-git commit -m "feat: implement feature description
-
-- Bullet point of accomplishment
-- Another accomplishment
-
-🤖 Generated with Claude Code
-
-Co-Authored-By: Claude <noreply@anthropic.com>"
-git push
-```
-
-**Push Failure Recovery:**
-```bash
-# If push fails due to conflicts
-git pull --rebase && git push
-
-# If push fails due to branch tracking
-git push -u origin HEAD
-```
-
-## 🚨 NEVER MODIFY SETTINGS FILE
-
-**FORBIDDEN**: Never touch, read, modify, or interact with `/Users/jeremyparker/.claude/settings.json` under ANY circumstances.
-
-## 🚨 CRITICAL: TASK COMPLETION REQUIRED
-
-**MANDATORY COMPLETION PROTOCOL**: At the end of EVERY task execution, you MUST mark tasks as completed when they are finished.
-
-### Task Completion API
-```bash
-# Initialize TaskManager and mark task as completed
-node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.updateTaskStatus('task-1', 'completed').then(() => console.log('✅ Task marked as completed'));"
-
-# Alternative: Get current task and mark it completed
-node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.getCurrentTask().then(async (task) => { if (task) { await tm.updateTaskStatus(task.id, 'completed'); console.log('✅ Current task completed:', task.id); } else { console.log('No active task found'); } });"
-```
-
-### When to Mark Tasks Complete
-✅ **Mark as completed when:**
-- All success criteria are met
-- Implementation is working correctly
-- Tests pass (if applicable)
-- Code quality standards are met
-- Documentation is updated
-
-❌ **Do NOT mark as completed if:**
-- Any success criteria remain unmet
-- Implementation has known issues
-- Tests are failing
-- Code needs further refinement
-
 ## Standard Approach
 
 1. **Wait for User** - Listen attentively to ANY user communication
@@ -551,39 +551,28 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 9. **Commit & Push** - Always push after committing
 10. **Complete Tasks** - Use `node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" update task_id completed "notes" --project [PROJECT_DIRECTORY]`
 
-## 🚨 INFINITE CONTINUE HOOK SYSTEM
+## 🚨 ABSOLUTE REQUIREMENT: SMART TASK MANAGEMENT
 
-### Setup for New Projects
-```bash
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/setup-infinite-hook.js" "/path/to/project"
-```
+**MANDATORY BEHAVIOR**: Every time the user provides ANY communication whatsoever:
 
-### Mode-Specific Operation
-| Mode | Coverage Target | Focus | Thinking Level |
-|------|----------------|-------|----------------|
-| **development** | 80% minimum | Feature implementation | "think hard" for complex features |  
-| **testing** | 95% target | Comprehensive testing | "think hard" for test strategies |
-| **debugging** | Maintain 95% | Bug resolution | "think hard" for complex bugs |
-| **refactoring** | Maintain 95% | Code quality | "think hard" for structural changes |
-| **documentation** | Maintain 95% | Documentation | "think" for explanations |
+1. **EVALUATE EXISTING TASKS FIRST** - Check if any pending task can accommodate the user request
+2. **MODIFY EXISTING TASK** if suitable match found, OR **CREATE NEW TASK** only if no suitable task exists  
+3. **SPECIAL CASES** - Never create new tasks for:
+   - "Continue" commands (use current/next pending task)
+   - Requests that fit existing task scope (modify that task instead)
+   - Simple clarifications or additions to ongoing work
+4. **ALWAYS USE** the exact Node.js command format shown above  
+5. **THEN** proceed with answering/executing
+6. **UNIVERSAL TRIGGER** - ANY user interaction = IMMEDIATE task evaluation (not automatic creation)
 
-### Task Management via TODO.json
-```json
-{
-  "current_mode": "development",
-  "tasks": [{
-    "id": "task_1",
-    "title": "Fix authentication bug", 
-    "description": "Users cannot log in due to session timeout errors",
-    "mode": "debugging",
-    "priority": "high",
-    "status": "pending",
-    "success_criteria": [
-      "Login flow works without session timeout errors",
-      "All authentication tests pass"
-    ]
-  }]
-}
-```
+**EXAMPLES OF SMART TASK MANAGEMENT:**
+- "What does this code do?" → EVALUATE → MODIFY/CREATE TASK → Then analyze
+- "Fix this bug" → EVALUATE → MODIFY/CREATE TASK → Then fix  
+- "How do I..." → EVALUATE → MODIFY/CREATE TASK → Then explain
+- "Can you help with..." → EVALUATE → MODIFY/CREATE TASK → Then assist
+- "Why is..." → EVALUATE → MODIFY/CREATE TASK → Then investigate
+- "Show me..." → EVALUATE → MODIFY/CREATE TASK → Then display
+- "Continue" → EVALUATE → USE EXISTING TASK → Then continue (NO NEW TASK)
+- Any comment or observation → EVALUATE → MODIFY EXISTING IF POSSIBLE → Then respond
 
 **Success Formula:** SMART TASK EVALUATION + STRATEGIC TASK REUSE + SELECTIVE TASK CREATION + User Instructions + Maximum Thinking + Maximum Parallel Subagents + Dynamic Task Creation + Quality Standards + Always Push = **MAXIMUM SPEED WITH QUALITY**

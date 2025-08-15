@@ -205,6 +205,27 @@ Estimate: [2-8 hours]
 Risk Level: [low|medium|high based on scope]
 ```
 
+### User-Focused Documentation Task Template
+```
+Title: Update user documentation for [User-Facing Change]
+Description: [How this change helps users and what they need to know]
+Mode: documentation
+Priority: [high for breaking changes, medium for enhancements]
+Success Criteria:
+- Users can understand how to use the new/changed functionality
+- Usage examples are clear and accurate
+- Installation/setup instructions are current (if affected)
+- Common user questions are addressed
+Dependencies: [main implementation task ID]
+Important Files: [
+  "README.md",
+  "docs/user-guide.md",
+  "docs/api.md" (only if public API)
+]
+User Value: [Clear statement of how this documentation helps users]
+Estimate: [0.5-2 hours]
+```
+
 ## Priority Matrix Framework
 
 ### High Priority (P0/P1)
@@ -272,13 +293,60 @@ Tackle unknowns and high-risk components early to reduce project uncertainty.
 - Quality assurance validation
 - Documentation and research integration
 
+**USER-IMPACT DOCUMENTATION TASK CREATION:**
+Only for tasks that affect user experience:
+1. **CREATE MAIN TASK**: Using appropriate template above
+2. **EVALUATE USER IMPACT**: Does this change affect how users interact with the system?
+3. **CREATE DOCUMENTATION TASK IF NEEDED**: Using User-Focused Documentation Task Template
+4. **LINK DEPENDENCIES**: Set documentation task to depend on main task
+5. **PRIORITIZE BY USER IMPACT**: High priority for breaking changes, medium for enhancements
+
+**Example Task Creation with User-Focused Documentation:**
+```bash
+# 1. Create main development task
+main_task_id=$(node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.createTask({title: 'Add OAuth login option', mode: 'DEVELOPMENT', priority: 'high'}).then(id => console.log(id));")
+
+# 2. Create user documentation task (because users need to know how to use OAuth login)
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.createTask({title: 'Update user documentation for OAuth login', description: 'Help users understand how to set up and use OAuth authentication option', mode: 'DOCUMENTATION', priority: 'high', dependencies: ['${main_task_id}'], important_files: ['README.md', 'docs/user-guide.md']}).then(id => console.log('User documentation task:', id));"
+
+# Example of NO documentation task needed (internal refactoring):
+# For task "Refactor authentication middleware internal structure" - no user documentation needed
+```
+
 ## Quality Assurance Integration
 
 ### Built-in Quality Gates
 - **Code Review Requirements**: Peer review and automated checks
 - **Testing Standards**: Unit, integration, and acceptance test coverage
-- **Documentation Updates**: README, API docs, and architectural decisions
+- **Documentation Updates**: README, API docs, and architectural decisions (MANDATORY)
 - **Performance Benchmarks**: Response time and throughput validation
+
+## 🚨 USER-FOCUSED DOCUMENTATION UPDATE REQUIREMENTS
+
+**SMART RULE**: Only create documentation tasks when changes impact user experience or understanding.
+
+**USER-FOCUSED DOCUMENTATION TASK CREATION PROTOCOL:**
+Create documentation tasks ONLY for changes that affect how users interact with the system:
+
+```bash
+# Create documentation task ONLY when user impact exists
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.createTask({title: 'Update user documentation for [user-facing change]', description: 'Help users understand [specific user benefit/usage change]', mode: 'DOCUMENTATION', priority: 'high', dependencies: ['main_task_id'], important_files: ['README.md', 'user-facing/docs']}).then(id => console.log('Created user documentation task:', id));"
+```
+
+**CREATE DOCUMENTATION TASKS ONLY FOR:**
+- **User-Facing API Changes**: Public endpoints, parameters, response formats
+- **Feature Usage Changes**: How users interact with new/modified features
+- **Installation/Setup Changes**: Configuration, requirements, environment setup
+- **Breaking Changes**: Migration guides, compatibility updates
+- **User-Reported Bug Fixes**: Troubleshooting guides for common issues
+- **Configuration Options**: Settings that users need to understand
+
+**SKIP DOCUMENTATION FOR:**
+- **Internal refactoring**: Code structure changes not affecting users
+- **Development process changes**: Internal workflows, development tools
+- **Implementation details**: Technical specifics users don't need to know
+- **Testing changes**: Unit tests, internal quality improvements
+- **Build/deployment internals**: CI/CD changes not affecting user setup
 
 ### Success Metrics
 - **Task Completion Rate**: Percentage of tasks completed without rework
