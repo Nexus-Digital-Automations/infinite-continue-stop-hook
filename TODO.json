@@ -60,21 +60,6 @@
       ]
     },
     {
-      "id": "task_1755360582955_saiqogx02",
-      "title": "Test with Auto-Sort Disabled",
-      "description": "This medium priority task should NOT trigger sorting",
-      "mode": "DEVELOPMENT",
-      "priority": "medium",
-      "status": "pending",
-      "dependencies": [],
-      "important_files": [],
-      "success_criteria": [],
-      "estimate": "",
-      "requires_research": false,
-      "subtasks": [],
-      "created_at": "2025-08-16T16:09:42.955Z"
-    },
-    {
       "id": "task_1755360930975_0hly90yo0",
       "title": "Test No-Archive Completion",
       "description": "Test completion instructions without archiving",
@@ -139,14 +124,76 @@
         ]
       },
       "completed_at": "2025-08-16T16:15:30.978Z"
+    },
+    {
+      "id": "task_1755365087750_h2mshwsh3",
+      "title": "Test task for hook feedback",
+      "description": "This is a test task to demonstrate the new continue feedback",
+      "mode": "DEVELOPMENT",
+      "priority": "medium",
+      "status": "in_progress",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-16T17:24:47.750Z",
+      "access_history": [
+        {
+          "agentId": "agent_7",
+          "timestamp": "2025-08-16T17:25:00.105Z",
+          "action": "accessed"
+        },
+        {
+          "agentId": "agent_7",
+          "timestamp": "2025-08-16T17:25:00.108Z",
+          "action": "accessed"
+        },
+        {
+          "agentId": "agent_7",
+          "timestamp": "2025-08-16T17:25:17.878Z",
+          "action": "accessed"
+        },
+        {
+          "agentId": "agent_7",
+          "timestamp": "2025-08-16T17:25:24.821Z",
+          "action": "intervention_stuck_task_detected"
+        }
+      ],
+      "assigned_agent": "agent_7",
+      "agent_assignment_history": [
+        {
+          "agentId": "agent_7",
+          "role": "primary",
+          "assignedAt": "2025-08-16T17:25:24.818Z",
+          "reassignReason": null
+        }
+      ],
+      "parallel_execution": {
+        "canParallelize": false,
+        "parallelWith": [],
+        "coordinatorTask": null
+      },
+      "interventions": [
+        {
+          "agentId": "agent_7",
+          "type": "stuck_task_detected",
+          "timestamp": "2025-08-16T17:25:24.821Z",
+          "details": {
+            "taskStatus": "in_progress",
+            "accessCount": 3
+          }
+        }
+      ]
     }
   ],
   "current_mode": "DEVELOPMENT",
-  "last_mode": "DEVELOPMENT",
-  "execution_count": 9,
+  "last_mode": "TASK_CREATION",
+  "execution_count": 12,
   "review_strikes": 0,
   "strikes_completed_last_run": false,
-  "last_hook_activation": 1755360952285,
+  "last_hook_activation": 1755365104624,
   "agents": {
     "development_session_1755360363848_1_general_33d01b5c": {
       "name": "development Agent",
@@ -172,7 +219,7 @@
   },
   "current_task_index": 0,
   "stop_hook_calls": [
-    1755281714032
+    1755360995688
   ],
   "settings": {
     "auto_sort_enabled": true,
