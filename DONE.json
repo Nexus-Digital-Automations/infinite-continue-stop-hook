@@ -21776,9 +21776,241 @@
       ],
       "completed_at": "2025-08-15T19:01:37.872Z",
       "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1755360372880_9y8x8omwu",
+      "title": "Implement Automatic Task Sorting by Priority",
+      "description": "Add automatic sorting functionality to TaskManager that sorts tasks by priority (high → medium → low) whenever tasks are created, updated, or loaded. Implementation should include: 1) Core sorting algorithm, 2) Integration with all task modification methods, 3) Configuration options to enable/disable auto-sorting, 4) Backwards compatibility with existing TODO.json files, 5) Performance optimization for large task lists",
+      "mode": "DEVELOPMENT",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [
+        "Tasks automatically sort by priority when created/updated",
+        "Configuration options available for auto-sort control",
+        "All existing TaskManager API methods work with auto-sorting",
+        "Performance remains acceptable for large task lists",
+        "Backwards compatibility maintained"
+      ],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-16T16:06:12.880Z",
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-16T16:10:10.725Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-16T16:10:10.726Z",
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1755360806249_k9g8ye0n9",
+      "title": "Test Linting Integration",
+      "description": "Test task with linting success criteria",
+      "mode": "DEVELOPMENT",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [
+        "lib/taskManager.js"
+      ],
+      "success_criteria": [
+        "lint passes",
+        "tests pass"
+      ],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-16T16:13:26.249Z",
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-16T16:14:39.688Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completion_instructions": {
+        "taskId": "task_1755360806249_k9g8ye0n9",
+        "taskTitle": "Test Linting Integration",
+        "completedAt": "2025-08-16T16:14:39.688Z",
+        "qualityChecks": [
+          {
+            "command": "node -e \"const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.executeQualityGates('task_1755360806249_k9g8ye0n9').then(result => console.log(JSON.stringify(result, null, 2)));\"",
+            "description": "Execute all quality gates for this task",
+            "scope": "task-specific"
+          }
+        ],
+        "lintingCommands": [
+          {
+            "command": "npm run lint",
+            "description": "Run ESLint on JavaScript/TypeScript files",
+            "scope": "js/ts",
+            "files": [
+              "lib/taskManager.js"
+            ]
+          },
+          {
+            "command": "npx eslint lib/taskManager.js",
+            "description": "Run ESLint on specific files worked on",
+            "scope": "file-specific",
+            "files": [
+              "lib/taskManager.js"
+            ]
+          }
+        ],
+        "testingCommands": [
+          {
+            "command": "npm test",
+            "description": "Run tests to verify task completion",
+            "scope": "project"
+          }
+        ],
+        "summary": [
+          "Run linting on 1 file(s)",
+          "Run tests to verify completion",
+          "Execute quality gates"
+        ]
+      },
+      "completed_at": "2025-08-16T16:14:39.689Z",
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1755360913059_6hp729408",
+      "title": "Test Live Completion Instructions",
+      "description": "Test task to verify completion instructions work in real-time",
+      "mode": "DEVELOPMENT",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [
+        "lib/taskManager.js",
+        "package.json"
+      ],
+      "success_criteria": [
+        "lint passes",
+        "tests pass",
+        "file exists: README.md"
+      ],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-16T16:15:13.059Z",
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-16T16:15:13.063Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completion_instructions": {
+        "taskId": "task_1755360913059_6hp729408",
+        "taskTitle": "Test Live Completion Instructions",
+        "completedAt": "2025-08-16T16:15:13.063Z",
+        "qualityChecks": [
+          {
+            "command": "node -e \"const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.executeQualityGates('task_1755360913059_6hp729408').then(result => console.log(JSON.stringify(result, null, 2)));\"",
+            "description": "Execute all quality gates for this task",
+            "scope": "task-specific"
+          }
+        ],
+        "lintingCommands": [
+          {
+            "command": "npm run lint",
+            "description": "Run ESLint on JavaScript/TypeScript files",
+            "scope": "js/ts",
+            "files": [
+              "lib/taskManager.js"
+            ]
+          },
+          {
+            "command": "npx eslint lib/taskManager.js",
+            "description": "Run ESLint on specific files worked on",
+            "scope": "file-specific",
+            "files": [
+              "lib/taskManager.js"
+            ]
+          }
+        ],
+        "testingCommands": [
+          {
+            "command": "npm test",
+            "description": "Run tests to verify task completion",
+            "scope": "project"
+          }
+        ],
+        "summary": [
+          "Run linting on 2 file(s)",
+          "Run tests to verify completion",
+          "Execute quality gates"
+        ]
+      },
+      "completed_at": "2025-08-16T16:15:13.063Z",
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1755360544284_sbn0z8ero",
+      "title": "Test Low Priority Task",
+      "description": "This should appear at the bottom after auto-sort",
+      "mode": "DEVELOPMENT",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-16T16:09:04.284Z",
+      "last_modified": "2025-08-16T16:09:22.630Z",
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-16T16:15:58.877Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completion_instructions": {
+        "taskId": "task_1755360544284_sbn0z8ero",
+        "taskTitle": "Test Low Priority Task",
+        "completedAt": "2025-08-16T16:15:58.878Z",
+        "qualityChecks": [],
+        "lintingCommands": [
+          {
+            "command": "npm run lint",
+            "description": "Run general project linting",
+            "scope": "project"
+          }
+        ],
+        "testingCommands": [],
+        "summary": [
+          "Run general project linting"
+        ]
+      },
+      "completed_at": "2025-08-16T16:15:58.878Z",
+      "archived_from_todo": "./TODO.json"
     }
   ],
-  "total_completed": 501,
-  "last_completion": "2025-08-15T19:01:37.872Z",
+  "total_completed": 505,
+  "last_completion": "2025-08-16T16:15:58.878Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }

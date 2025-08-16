@@ -3,94 +3,97 @@
     "agent_1": {
       "agentId": "agent_1",
       "agentNumber": 1,
-      "sessionId": "session_1755283722932",
+      "sessionId": "session_1755360628261",
       "role": "development",
       "specialization": [],
       "status": "active",
-      "lastActivity": 1755283722933,
+      "lastActivity": 1755360628261,
       "totalRequests": 1,
-      "createdAt": "2025-08-15T18:48:42.933Z",
+      "createdAt": "2025-08-16T16:10:28.261Z",
       "metadata": {},
       "capabilities": []
     },
     "agent_2": {
       "agentId": "agent_2",
       "agentNumber": 2,
-      "sessionId": "session_1755276166639",
+      "sessionId": "session_1755360691585",
       "role": "development",
       "specialization": [],
-      "status": "inactive",
-      "lastActivity": 1755276166640,
+      "status": "active",
+      "lastActivity": 1755360691586,
       "totalRequests": 1,
-      "createdAt": "2025-08-15T16:42:46.640Z",
+      "createdAt": "2025-08-16T16:11:31.586Z",
       "metadata": {},
-      "capabilities": [],
-      "inactiveSince": "2025-08-15T18:42:46.640Z"
+      "capabilities": []
     },
     "agent_3": {
       "agentId": "agent_3",
       "agentNumber": 3,
-      "sessionId": "session_1755277531203",
+      "sessionId": "session_1755360952283",
       "role": "development",
       "specialization": [],
       "status": "active",
-      "lastActivity": 1755277531204,
+      "lastActivity": 1755360952283,
       "totalRequests": 1,
-      "createdAt": "2025-08-15T17:05:31.204Z",
+      "createdAt": "2025-08-16T16:15:52.283Z",
       "metadata": {},
       "capabilities": []
     },
     "agent_4": {
       "agentId": "agent_4",
       "agentNumber": 4,
-      "sessionId": "session_1755278189734",
+      "sessionId": "session_1755286609175",
       "role": "development",
       "specialization": [],
-      "status": "active",
-      "lastActivity": 1755278189735,
+      "status": "inactive",
+      "lastActivity": 1755286609185,
       "totalRequests": 1,
-      "createdAt": "2025-08-15T17:16:29.735Z",
+      "createdAt": "2025-08-15T19:36:49.185Z",
       "metadata": {},
-      "capabilities": []
+      "capabilities": [],
+      "inactiveSince": "2025-08-15T21:36:49.185Z"
     },
     "agent_5": {
       "agentId": "agent_5",
       "agentNumber": 5,
-      "sessionId": "session_1755279167466",
+      "sessionId": "session_1755286726573",
       "role": "development",
       "specialization": [],
-      "status": "active",
-      "lastActivity": 1755279167467,
+      "status": "inactive",
+      "lastActivity": 1755286726579,
       "totalRequests": 1,
-      "createdAt": "2025-08-15T17:32:47.467Z",
+      "createdAt": "2025-08-15T19:38:46.579Z",
       "metadata": {},
-      "capabilities": []
+      "capabilities": [],
+      "inactiveSince": "2025-08-15T21:38:46.579Z"
     },
     "agent_6": {
       "agentId": "agent_6",
       "agentNumber": 6,
-      "sessionId": "session_1755279515682",
+      "sessionId": "session_1755287024006",
       "role": "development",
       "specialization": [],
-      "status": "active",
-      "lastActivity": 1755279515684,
+      "status": "inactive",
+      "lastActivity": 1755287024007,
       "totalRequests": 1,
-      "createdAt": "2025-08-15T17:38:35.684Z",
+      "createdAt": "2025-08-15T19:43:44.007Z",
       "metadata": {},
-      "capabilities": []
+      "capabilities": [],
+      "inactiveSince": "2025-08-15T21:43:44.007Z"
     },
     "agent_7": {
       "agentId": "agent_7",
       "agentNumber": 7,
-      "sessionId": "session_1755279622465",
+      "sessionId": "session_1755288506555",
       "role": "development",
       "specialization": [],
-      "status": "active",
-      "lastActivity": 1755279622474,
+      "status": "inactive",
+      "lastActivity": 1755288506556,
       "totalRequests": 1,
-      "createdAt": "2025-08-15T17:40:22.474Z",
+      "createdAt": "2025-08-15T20:08:26.556Z",
       "metadata": {},
-      "capabilities": []
+      "capabilities": [],
+      "inactiveSince": "2025-08-15T22:08:26.556Z"
     },
     "agent_8": {
       "agentId": "agent_8",
@@ -98,12 +101,13 @@
       "sessionId": "session_1755280515093",
       "role": "development",
       "specialization": [],
-      "status": "active",
+      "status": "inactive",
       "lastActivity": 1755280515094,
       "totalRequests": 1,
       "createdAt": "2025-08-15T17:55:15.094Z",
       "metadata": {},
-      "capabilities": []
+      "capabilities": [],
+      "inactiveSince": "2025-08-15T19:55:15.094Z"
     },
     "agent_9": {
       "agentId": "agent_9",
@@ -111,12 +115,13 @@
       "sessionId": "session_1755281026842",
       "role": "development",
       "specialization": [],
-      "status": "active",
+      "status": "inactive",
       "lastActivity": 1755281026843,
       "totalRequests": 1,
       "createdAt": "2025-08-15T18:03:46.843Z",
       "metadata": {},
-      "capabilities": []
+      "capabilities": [],
+      "inactiveSince": "2025-08-15T20:03:46.843Z"
     },
     "agent_10": {
       "agentId": "agent_10",
@@ -124,12 +129,13 @@
       "sessionId": "session_1755281199848",
       "role": "development",
       "specialization": [],
-      "status": "active",
+      "status": "inactive",
       "lastActivity": 1755281199849,
       "totalRequests": 1,
       "createdAt": "2025-08-15T18:06:39.849Z",
       "metadata": {},
-      "capabilities": []
+      "capabilities": [],
+      "inactiveSince": "2025-08-15T20:06:39.849Z"
     },
     "agent_11": {
       "agentId": "agent_11",
@@ -137,12 +143,13 @@
       "sessionId": "session_1755281313651",
       "role": "development",
       "specialization": [],
-      "status": "active",
+      "status": "inactive",
       "lastActivity": 1755281313652,
       "totalRequests": 1,
       "createdAt": "2025-08-15T18:08:33.652Z",
       "metadata": {},
-      "capabilities": []
+      "capabilities": [],
+      "inactiveSince": "2025-08-15T20:08:33.652Z"
     },
     "agent_12": {
       "agentId": "agent_12",
@@ -150,12 +157,13 @@
       "sessionId": "session_1755281714034",
       "role": "development",
       "specialization": [],
-      "status": "active",
+      "status": "inactive",
       "lastActivity": 1755281714035,
       "totalRequests": 1,
       "createdAt": "2025-08-15T18:15:14.035Z",
       "metadata": {},
-      "capabilities": []
+      "capabilities": [],
+      "inactiveSince": "2025-08-15T20:15:14.035Z"
     },
     "agent_13": {
       "agentId": "agent_13",
@@ -999,7 +1007,7 @@
     }
   },
   "nextAgentNumber": 73,
-  "lastCleanup": 1755283722933,
+  "lastCleanup": 1755360628261,
   "metadata": {
     "created": "2025-08-12T06:52:08.455Z",
     "version": "1.0.0"

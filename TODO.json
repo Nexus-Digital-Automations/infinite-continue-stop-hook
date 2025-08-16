@@ -34,17 +34,156 @@
           }
         }
       ]
+    },
+    {
+      "id": "task_1755285721184_z1np5tsf9",
+      "title": "API Performance Test",
+      "mode": "DEVELOPMENT",
+      "priority": "medium",
+      "status": "in_progress",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-15T19:22:01.184Z",
+      "assigned_agent": "test-agent-api",
+      "agent_assignment_history": [
+        {
+          "agentId": "test-agent-api",
+          "role": "primary",
+          "assignedAt": "2025-08-15T19:22:06.011Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
+    },
+    {
+      "id": "task_1755360582955_saiqogx02",
+      "title": "Test with Auto-Sort Disabled",
+      "description": "This medium priority task should NOT trigger sorting",
+      "mode": "DEVELOPMENT",
+      "priority": "medium",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-16T16:09:42.955Z"
+    },
+    {
+      "id": "task_1755360930975_0hly90yo0",
+      "title": "Test No-Archive Completion",
+      "description": "Test completion instructions without archiving",
+      "mode": "DEVELOPMENT",
+      "priority": "medium",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [
+        "lib/taskManager.js"
+      ],
+      "success_criteria": [
+        "lint passes"
+      ],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-16T16:15:30.975Z",
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-16T16:15:30.978Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completion_instructions": {
+        "taskId": "task_1755360930975_0hly90yo0",
+        "taskTitle": "Test No-Archive Completion",
+        "completedAt": "2025-08-16T16:15:30.978Z",
+        "qualityChecks": [
+          {
+            "command": "node -e \"const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.executeQualityGates('task_1755360930975_0hly90yo0').then(result => console.log(JSON.stringify(result, null, 2)));\"",
+            "description": "Execute all quality gates for this task",
+            "scope": "task-specific"
+          }
+        ],
+        "lintingCommands": [
+          {
+            "command": "npm run lint",
+            "description": "Run ESLint on JavaScript/TypeScript files",
+            "scope": "js/ts",
+            "files": [
+              "lib/taskManager.js"
+            ]
+          },
+          {
+            "command": "npx eslint lib/taskManager.js",
+            "description": "Run ESLint on specific files worked on",
+            "scope": "file-specific",
+            "files": [
+              "lib/taskManager.js"
+            ]
+          }
+        ],
+        "testingCommands": [],
+        "summary": [
+          "Run linting on 1 file(s)",
+          "Execute quality gates"
+        ]
+      },
+      "completed_at": "2025-08-16T16:15:30.978Z"
     }
   ],
   "current_mode": "DEVELOPMENT",
-  "last_mode": "TESTING",
-  "execution_count": 6,
+  "last_mode": "DEVELOPMENT",
+  "execution_count": 9,
   "review_strikes": 0,
   "strikes_completed_last_run": false,
-  "last_hook_activation": 1755283722934,
-  "agents": {},
+  "last_hook_activation": 1755360952285,
+  "agents": {
+    "development_session_1755360363848_1_general_33d01b5c": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-08-16T16:06:03.849Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-08-16T16:06:03.849Z",
+      "sessionId": "session_1755360363848",
+      "metadata": {}
+    }
+  },
   "current_task_index": 0,
   "stop_hook_calls": [
     1755281714032
-  ]
+  ],
+  "settings": {
+    "auto_sort_enabled": true,
+    "sort_criteria": {
+      "primary": "priority",
+      "secondary": "created_at"
+    },
+    "priority_values": {
+      "high": 3,
+      "medium": 2,
+      "low": 1
+    }
+  }
 }
