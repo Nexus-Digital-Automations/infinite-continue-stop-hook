@@ -143,30 +143,13 @@
         ]
       }
     ],
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"/Users/jeremyparker/Desktop/Claude Coding Projects/post-tool-stop-hook/hooks/targeted-lint-runner.sh\"",
-            "timeout": 60000
-          }
-        ]
-      }
-    ],
     "SubagentStop": [
       {
         "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "node \"/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js\""
-          },
-          {
-            "type": "command",
-            "command": "python3 \"/Users/jeremyparker/Desktop/Claude Coding Projects/claude-code_agent-manager/hooks/subagent_timeout_monitor.py\"",
-            "timeout": 10
+            "command": "killall node"
           }
         ]
       }

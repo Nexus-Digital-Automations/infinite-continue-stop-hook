@@ -1,0 +1,27 @@
+{
+  "project": "test-stop-hook-integration",
+  "tasks": [],
+  "current_mode": "DEVELOPMENT",
+  "last_mode": "TASK_CREATION",
+  "execution_count": 1,
+  "review_strikes": 0,
+  "strikes_completed_last_run": false,
+  "last_hook_activation": 1755463837347,
+  "agents": {},
+  "current_task_index": 0,
+  "stop_hook_calls": [
+    1755463837344
+  ],
+  "settings": {
+    "auto_sort_enabled": true,
+    "sort_criteria": {
+      "primary": "priority",
+      "secondary": "created_at"
+    },
+    "priority_values": {
+      "high": 3,
+      "medium": 2,
+      "low": 1
+    }
+  }
+}

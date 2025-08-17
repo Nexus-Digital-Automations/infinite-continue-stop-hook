@@ -143,18 +143,51 @@ process.stdin.on('end', async () => {
             }
         }
         
+        // Check for recently completed tasks and provide linting feedback
+        const completionFeedback = await taskManager.checkForCompletedTasksFeedback();
+        if (completionFeedback && completionFeedback.shouldProvideFeedback) {
+            logger.addFlow(`Task completion detected - providing linter feedback for: ${completionFeedback.taskTitle}`);
+            
+            const linterFeedback = taskManager.generateLinterFeedback(completionFeedback);
+            console.error(linterFeedback);
+            
+            logger.logExit(2, `Providing linter feedback for completed task: ${completionFeedback.taskTitle}`);
+            logger.save();
+            process.exit(2);
+        }
+
         // Get task continuation guidance
         const guidance = await taskManager.getTaskContinuationGuidance(agentId);
         logger.addFlow(`Task guidance action: ${guidance.action}`);
         
         // Find next task using guidance
         let currentTask;
+        let mode;
+        let modeReason;
+        
         if (guidance.action === 'continue_task') {
             currentTask = guidance.task;
             logger.addFlow(`Continuing task: ${currentTask.title}`);
         } else if (guidance.action === 'start_new_task') {
             currentTask = guidance.task;
             logger.addFlow(`Starting new task: ${currentTask.title}`);
+        } else if (guidance.action === 'enter_task_creation_mode') {
+            logger.addFlow(`Entering task creation mode (attempt ${guidance.attempt} of ${guidance.max_attempts})`);
+            
+            // Create a virtual task for task creation mode
+            currentTask = {
+                id: `task_creation_${Date.now()}`,
+                title: 'Task Creation Mode',
+                description: guidance.message,
+                mode: 'TASK_CREATION',
+                status: 'in_progress',
+                priority: 'high',
+                instructions: guidance.instructions
+            };
+            
+            // Force task creation mode
+            mode = 'TASK_CREATION';
+            modeReason = `No tasks available - entering task creation mode (attempt ${guidance.attempt}/${guidance.max_attempts})`;
         } else {
             logger.addFlow("No tasks available");
             currentTask = null;
@@ -173,19 +206,18 @@ process.stdin.on('end', async () => {
         todoData.execution_count++;
         todoData.last_hook_activation = Date.now();
         
-        // Determine mode
-        let mode;
-        let modeReason;
-        
-        if (currentTask.is_review_task) {
-            mode = 'REVIEWER';
-            modeReason = 'Current task is a review task';
-        } else if (todoData.execution_count % 4 === 0) {
-            mode = 'TASK_CREATION';
-            modeReason = `Every 4th execution: entering TASK_CREATION mode (count: ${todoData.execution_count})`;
-        } else {
-            mode = currentTask.mode;
-            modeReason = `Using task mode: ${currentTask.mode} (execution ${todoData.execution_count})`;
+        // Determine mode (if not already set by task creation logic)
+        if (!mode) {
+            if (currentTask.is_review_task) {
+                mode = 'REVIEWER';
+                modeReason = 'Current task is a review task';
+            } else if (todoData.execution_count % 4 === 0) {
+                mode = 'TASK_CREATION';
+                modeReason = `Every 4th execution: entering TASK_CREATION mode (count: ${todoData.execution_count})`;
+            } else {
+                mode = currentTask.mode;
+                modeReason = `Using task mode: ${currentTask.mode} (execution ${todoData.execution_count})`;
+            }
         }
         
         logger.logModeDecision(todoData.last_mode, mode, modeReason);
