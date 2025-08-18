@@ -391,7 +391,11 @@ Tasks are now organized by **specific categories** instead of generic "low", "me
 **AUTOMATIC CATEGORY DETECTION:**
 - TaskManager **automatically suggests categories** based on task title/description
 - **Smart categorization** detects linter errors, build failures, missing features, etc.
-- **Auto-sorting** orders tasks by category rank (most urgent first)
+
+**THREE-LEVEL AUTO-SORTING HIERARCHY:**
+1. **PRIMARY: Category Rank** - Research (1) → Linter Errors (2) → Build Errors (3) → etc.
+2. **SECONDARY: Priority Value** - Critical (4) → High (3) → Medium (2) → Low (1)
+3. **TERTIARY: Creation Time** - Newer tasks first within same category and priority
 
 **CREATING TASKS WITH CATEGORIES:**
 ```bash

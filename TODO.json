@@ -248,13 +248,14 @@
   ],
   "current_mode": "DEVELOPMENT",
   "last_mode": "DEVELOPMENT",
-  "execution_count": 18,
+  "execution_count": 19,
   "review_strikes": 0,
   "settings": {
     "auto_sort_enabled": true,
     "sort_criteria": {
-      "primary": "priority",
-      "secondary": "created_at"
+      "primary": "category",
+      "secondary": "priority",
+      "tertiary": "created_at"
     },
     "priority_values": {
       "critical": 4,
@@ -287,7 +288,7 @@
   },
   "strikes_completed_last_run": false,
   "current_task_index": 0,
-  "last_hook_activation": 1755541458589,
+  "last_hook_activation": 1755541713208,
   "stop_hook_calls": [
     1755541458584
   ]
