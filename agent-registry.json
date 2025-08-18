@@ -94,18 +94,15 @@
     "agent_8": {
       "agentId": "agent_8",
       "agentNumber": 8,
-      "sessionId": "session_1755458381324_a2d695fd",
+      "sessionId": "session_1755542800870",
       "role": "development",
-      "specialization": [
-        "testing"
-      ],
-      "status": "inactive",
-      "lastActivity": 1755458381324,
+      "specialization": [],
+      "status": "active",
+      "lastActivity": 1755542800871,
       "totalRequests": 1,
-      "createdAt": "2025-08-17T19:19:41.324Z",
+      "createdAt": "2025-08-18T18:46:40.871Z",
       "metadata": {},
-      "capabilities": [],
-      "inactiveSince": "2025-08-17T19:49:41.324Z"
+      "capabilities": []
     },
     "agent_9": {
       "agentId": "agent_9",

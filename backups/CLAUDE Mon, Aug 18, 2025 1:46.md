@@ -85,24 +85,17 @@ make check || make test || make lint || make build
 
 **DETAILED ERROR RESPONSE PROTOCOL:**
 1. **DETECT** any error of any type
-2. **INSTANTLY CREATE CATEGORIZED TASK** - NO DELAY, NO EXCEPTIONS:
-   - Linter errors → **IMMEDIATELY** CREATE `category: 'linter-error'` TASK
-   - Build failures → **IMMEDIATELY** CREATE `category: 'build-error'` TASK  
-   - Startup issues → **IMMEDIATELY** CREATE `category: 'start-error'` TASK
-   - Runtime errors → **IMMEDIATELY** CREATE `category: 'error'` TASK
-   - Test linter errors → **IMMEDIATELY** CREATE `category: 'test-linter-error'` TASK
-   - Failing tests → **IMMEDIATELY** CREATE `category: 'test-error'` TASK
-3. **STOP** all other work immediately
-4. **ATTEMPT IMMEDIATE FIX** if simple and quick (< 2 minutes)
+2. **STOP** all other work immediately
+3. **ATTEMPT IMMEDIATE FIX** if simple and quick (< 2 minutes)
+4. **CREATE CATEGORIZED TASK** for any error not immediately fixed in current session:
+   - Linter errors → **linter-error** category
+   - Build failures → **build-error** category  
+   - Startup issues → **start-error** category
+   - Runtime errors → **error** category
 5. **FIX** the error completely and verify fix
 6. **VERIFY** no new errors were introduced
 7. **DOCUMENT** the fix and prevention measures
 8. **RESUME** original work only after 100% error resolution
-
-**🚨 CRITICAL: TASK CREATION MUST HAPPEN BEFORE ATTEMPTING FIXES**
-- Create the categorized task FIRST
-- Then attempt the fix
-- This ensures every error gets tracked even if fix attempts fail
 
 **FORBIDDEN ERROR RESPONSES:**
 ❌ Ignoring errors
@@ -443,87 +436,24 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
 
 **🚨 GOLDEN RULE**: User says ANYTHING requiring action OR asks ANY question → **INSTANTLY CREATE TASK THE VERY FIRST SECOND** → Check existing tasks → Modify OR create → Execute
 
-## 🚨 MANDATORY CATEGORY-BASED TASK CREATION PROTOCOL
-
-**🚨 ABSOLUTE MANDATE: CATEGORY DETECTION = IMMEDIATE TASK CREATION**
-
-**THE INSTANT YOU DETECT ANY OF THESE CATEGORIES IN USER COMMUNICATION OR CODE ANALYSIS - CREATE TASK IMMEDIATELY:**
-
-### 🔴 **CRITICAL ERROR CATEGORIES - CREATE TASK IN FIRST SECOND:**
-- **🔴 LINTER-ERROR SPOTTED** → INSTANTLY CREATE `category: 'linter-error'` TASK
-- **🔥 BUILD-ERROR DETECTED** → INSTANTLY CREATE `category: 'build-error'` TASK  
-- **⚠️ START-ERROR FOUND** → INSTANTLY CREATE `category: 'start-error'` TASK
-- **❌ RUNTIME ERROR SEEN** → INSTANTLY CREATE `category: 'error'` TASK
-
-### 🌟 **RESEARCH OPPORTUNITIES - CREATE TASK IN FIRST SECOND:**
-- **🔬 INVESTIGATION NEEDED** → INSTANTLY CREATE `category: 'research'` TASK (HIGHEST PRIORITY)
-- **🔍 EXPLORATION REQUIRED** → INSTANTLY CREATE `category: 'research'` TASK (HIGHEST PRIORITY)
-- **📊 ANALYSIS OPPORTUNITY** → INSTANTLY CREATE `category: 'research'` TASK (HIGHEST PRIORITY)
-- **🧭 LEARNING REQUIRED** → INSTANTLY CREATE `category: 'research'` TASK (HIGHEST PRIORITY)
-
-### 🆕 **FEATURE OPPORTUNITIES - CREATE TASK IN FIRST SECOND:**
-- **🆕 MISSING FUNCTIONALITY** → INSTANTLY CREATE `category: 'missing-feature'` TASK
-- **✨ ENHANCEMENT SPOTTED** → INSTANTLY CREATE `category: 'enhancement'` TASK
-- **🐛 BUG DISCOVERED** → INSTANTLY CREATE `category: 'bug'` TASK
-
-### 🧪 **TESTING OPPORTUNITIES - CREATE TASK IN FIRST SECOND (LOWEST PRIORITY):**
-- **🧪 MISSING TESTS** → INSTANTLY CREATE `category: 'missing-test'` TASK
-- **🔍 TEST LINTER ERRORS** → INSTANTLY CREATE `category: 'test-linter-error'` TASK
-- **🚫 FAILING TESTS** → INSTANTLY CREATE `category: 'test-error'` TASK
-- **🔧 TEST IMPROVEMENTS** → INSTANTLY CREATE `category: 'test-feature'` TASK
-
-### 📚 **MAINTENANCE OPPORTUNITIES - CREATE TASK IN FIRST SECOND:**
-- **♻️ REFACTORING NEEDED** → INSTANTLY CREATE `category: 'refactor'` TASK
-- **📚 DOCUMENTATION GAPS** → INSTANTLY CREATE `category: 'documentation'` TASK
-- **🧹 CLEANUP REQUIRED** → INSTANTLY CREATE `category: 'chore'` TASK
-
-**🚨 CATEGORY DETECTION TRIGGERS - NO EXCEPTIONS:**
-- User mentions ANY error, issue, or problem → **INSTANT TASK CREATION**
-- Code analysis reveals ANY quality issue → **INSTANT TASK CREATION**
-- You spot ANY opportunity for improvement → **INSTANT TASK CREATION**
-- ANY missing functionality is identified → **INSTANT TASK CREATION**
-- ANY research need is discovered → **INSTANT TASK CREATION**
-- ANY test coverage gap is found → **INSTANT TASK CREATION**
-
-**🚨 MANDATORY TASK CREATION COMMANDS - USE THESE IMMEDIATELY:**
-```bash
-# INSTANT LINTER ERROR TASK
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Fix [specific linter error]', category: 'linter-error', mode: 'DEVELOPMENT', priority: 'critical'}).then(id => console.log('URGENT LINTER TASK:', id));"
-
-# INSTANT RESEARCH TASK (HIGHEST PRIORITY)
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Research [specific topic]', category: 'research', mode: 'DEVELOPMENT', priority: 'high'}).then(id => console.log('PRIORITY RESEARCH TASK:', id));"
-
-# INSTANT BUG TASK
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Fix [specific bug]', category: 'bug', mode: 'DEVELOPMENT', priority: 'high'}).then(id => console.log('URGENT BUG TASK:', id));"
-
-# INSTANT MISSING FEATURE TASK
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Implement [specific feature]', category: 'missing-feature', mode: 'DEVELOPMENT', priority: 'high'}).then(id => console.log('FEATURE TASK:', id));"
-```
-
-**🚨 ZERO DELAY ENFORCEMENT:**
-- **NO ANALYSIS PARALYSIS** - Create task FIRST, analyze SECOND
-- **NO HESITATION** - Category spotted = Immediate task creation
-- **NO WAITING** - User mentions issue = Task created within 1 second
-- **NO EXCEPTIONS** - Every category opportunity gets a task
-
 **WORKFLOW:**
-1. **INSTANT TASK CREATION** - THE VERY FIRST SECOND you detect ANY category opportunity
+1. **INSTANT TASK CREATION** - THE VERY FIRST SECOND you detect ANY task opportunity
 2. **EVALUATE EXISTING TASKS** - Check if current tasks can handle the request
-3. **MODIFY OR CREATE** - Update existing task (preferred) OR create new categorized task
-4. **AUTO-PRIORITIZE** - Category-based sorting handles priority automatically  
+3. **MODIFY OR CREATE** - Update existing task (preferred) OR create new task
+4. **PRIORITIZE** - Move task to appropriate position using TaskManager API
 5. **EXECUTE** - Begin working with thinking-driven approach
 
 **CONTINUOUS EVALUATION:**
 - **MANDATORY THINKING** for all task operations (creation, categorization, reordering, completion)
-- **INSTANT CATEGORY ASSESSMENT** - Detect category patterns in real-time
-- **AUTOMATIC TASK CREATION** for every category opportunity discovered
-- **PROACTIVE SCANNING** - Actively look for category opportunities in all communications
+- **DYNAMIC CATEGORY ASSESSMENT** based on new information, error types, and requirements
+- **AUTOMATIC RERANKING** using category-based sorting when new tasks are created
+- **PROACTIVE TASK CREATION** with appropriate categories for discovered opportunities
 
 **CATEGORY ASSIGNMENT RULES:**
-- **ALWAYS specify category** when creating tasks - NO EXCEPTIONS
-- **USE SPECIFIC CATEGORIES** - prefer 'linter-error' over 'error', 'missing-test' over 'test'  
-- **CREATE IMMEDIATELY** upon category detection - NO delay, NO analysis first
-- **TRUST CATEGORY HIERARCHY** - Let automatic sorting handle prioritization
+- **Always specify category** when creating tasks manually
+- **Trust auto-detection** for common patterns (linter, build, test, etc.)
+- **Use specific categories** over generic ones (prefer 'linter-error' over 'error')
+- **Update existing tasks** to use categories if they only have legacy priorities
 
 ## 🚨 MAXIMUM PARALLEL SUBAGENT DEPLOYMENT & COORDINATION
 
@@ -912,22 +842,8 @@ IF YOU HAVE NOT PROVIDED THE COMPLETION VALIDATION STATEMENT - THE TASK IS NOT C
 - You encounter ANY problem
 - You identify ANY need
 - You observe ANY gap
-- **🚨 ANY CATEGORY PATTERN DETECTED** - INSTANT TASK CREATION MANDATORY
 
-**🚨 CATEGORY-SPECIFIC INSTANT TRIGGERS:**
-- **LINTER ERROR MENTIONED** → INSTANTLY CREATE `linter-error` TASK
-- **BUILD FAILURE DETECTED** → INSTANTLY CREATE `build-error` TASK  
-- **START PROBLEM FOUND** → INSTANTLY CREATE `start-error` TASK
-- **BUG REPORTED** → INSTANTLY CREATE `bug` TASK
-- **MISSING FEATURE NOTED** → INSTANTLY CREATE `missing-feature` TASK
-- **RESEARCH NEEDED** → INSTANTLY CREATE `research` TASK (HIGHEST PRIORITY)
-- **TEST ISSUE SPOTTED** → INSTANTLY CREATE appropriate `test-*` TASK
-- **REFACTORING OPPORTUNITY** → INSTANTLY CREATE `refactor` TASK
-- **DOCUMENTATION GAP** → INSTANTLY CREATE `documentation` TASK
-
-**ZERO TOLERANCE FOR DELAY**: Task creation is not optional, not conditional, not dependent on analysis. It is MANDATORY and IMMEDIATE. 
-
-**🚨 CATEGORY DETECTION = AUTOMATIC TASK CREATION - NO EXCEPTIONS, NO DELAYS**
+**ZERO TOLERANCE FOR DELAY**: Task creation is not optional, not conditional, not dependent on analysis. It is MANDATORY and IMMEDIATE.
 
 ## 🚨 ABSOLUTE PERFECTION ENFORCEMENT SUMMARY
 
