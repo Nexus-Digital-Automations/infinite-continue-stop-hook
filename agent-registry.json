@@ -484,16 +484,15 @@
     "agent_38": {
       "agentId": "agent_38",
       "agentNumber": 38,
-      "sessionId": "session_1755234283687",
+      "sessionId": "session_1755546857022",
       "role": "development",
       "specialization": [],
-      "status": "inactive",
-      "lastActivity": 1755234283718,
+      "status": "active",
+      "lastActivity": 1755546857023,
       "totalRequests": 1,
-      "createdAt": "2025-08-15T05:04:43.718Z",
+      "createdAt": "2025-08-18T19:54:17.023Z",
       "metadata": {},
-      "capabilities": [],
-      "inactiveSince": "2025-08-15T07:04:43.718Z"
+      "capabilities": []
     },
     "agent_39": {
       "agentId": "agent_39",
