@@ -42,13 +42,13 @@
     "agent_4": {
       "agentId": "agent_4",
       "agentNumber": 4,
-      "sessionId": "session_1755545194090",
+      "sessionId": "session_1755547009686",
       "role": "development",
       "specialization": [],
       "status": "active",
-      "lastActivity": 1755545194091,
+      "lastActivity": 1755547009687,
       "totalRequests": 1,
-      "createdAt": "2025-08-18T19:26:34.091Z",
+      "createdAt": "2025-08-18T19:56:49.687Z",
       "metadata": {},
       "capabilities": []
     },
