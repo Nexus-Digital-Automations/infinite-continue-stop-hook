@@ -16,13 +16,13 @@
     "agent_2": {
       "agentId": "agent_2",
       "agentNumber": 2,
-      "sessionId": "session_1755544903969",
+      "sessionId": "session_1755546726969",
       "role": "development",
       "specialization": [],
       "status": "active",
-      "lastActivity": 1755544903970,
+      "lastActivity": 1755546726970,
       "totalRequests": 1,
-      "createdAt": "2025-08-18T19:21:43.970Z",
+      "createdAt": "2025-08-18T19:52:06.970Z",
       "metadata": {},
       "capabilities": []
     },
