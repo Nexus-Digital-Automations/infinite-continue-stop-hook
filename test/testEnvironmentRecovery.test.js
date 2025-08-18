@@ -197,8 +197,6 @@ describe('TestEnvironmentRecovery', () => {
         });
 
         test('should update system health metrics', async () => {
-            const _initialHealth = recovery.healthMetrics.systemHealth;
-            
             await recovery.updateSystemHealth();
 
             expect(recovery.healthMetrics.systemHealth).toBeDefined();
