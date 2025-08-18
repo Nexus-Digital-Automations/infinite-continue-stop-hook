@@ -656,9 +656,48 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.createTask({title: 'Task name', mode: 'DEVELOPMENT'}).then(id => console.log('Created:', id));"
 ```
 
+## 🚨 ROOT FOLDER ORGANIZATION POLICY
+
+**MANDATORY ROOT FOLDER CLEANLINESS:**
+- **KEEP ROOT FOLDER CLEAN** - Only essential project files in root directory
+- **REPORTS AND DOCUMENTATION** → `development/reports/` directory
+- **ANALYSIS FILES** → `development/reports/` directory  
+- **VALIDATION EVIDENCE** → `development/reports/` directory
+- **RESEARCH REPORTS** → `development/research-reports/` directory (as already established)
+- **BACKUP FILES** → `backups/` directory (as already established)
+
+**ALLOWED IN ROOT DIRECTORY:**
+- **Core project files**: package.json, README.md, CLAUDE.md, TODO.json, DONE.json
+- **Configuration files**: .eslintrc, .gitignore, jest.config.js, etc.
+- **Build/deployment files**: Dockerfile, docker-compose.yml, etc.
+- **License and legal**: LICENSE, CONTRIBUTING.md, etc.
+
+**FORBIDDEN IN ROOT DIRECTORY:**
+- ❌ Analysis reports (move to `development/reports/`)
+- ❌ Validation evidence files (move to `development/reports/`)
+- ❌ Research documentation (move to `development/research-reports/`)
+- ❌ Temporary markdown files (move to `development/reports/`)
+- ❌ Backup files (move to `backups/`)
+- ❌ Development notes (move to `development/notes/` or `development/reports/`)
+
+**AUTOMATIC FILE ORGANIZATION:**
+```bash
+# Create proper directory structure
+mkdir -p development/reports
+mkdir -p development/research-reports  
+mkdir -p development/notes
+
+# Move files to appropriate locations
+mv *.evidence.md development/reports/
+mv *validation*.md development/reports/
+mv *analysis*.md development/reports/
+mv *report*.md development/reports/
+```
+
 **PROJECT DOCUMENTATION:**
 - **UPDATE ONLY**: User-facing documentation (API docs, user guides, setup instructions, troubleshooting)
 - **SKIP**: Internal implementation details, development processes not affecting users
+- **ORGANIZE**: All reports and internal docs in appropriate subdirectories
 
 **GIT WORKFLOW:**
 Every commit MUST be followed by a push to the remote repository.
