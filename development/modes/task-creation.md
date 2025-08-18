@@ -396,13 +396,184 @@ const implementationTask = {
 };
 ```
 
+## 🚨 CATEGORY-BASED PRIORITY SYSTEM
+
+### MANDATORY CATEGORY REQUIREMENT
+**Categories are REQUIRED when creating tasks**. The TaskManager API will reject tasks without valid categories.
+
+### 📊 CATEGORY HIERARCHY (Priority Order)
+
+#### 🌟 TOP PRIORITY (Rank 1) - Highest Priority
+1. **🔬 research** - Investigation, exploration, or learning tasks - **HIGHEST PRIORITY**
+
+#### 🔴 CRITICAL ERRORS (Rank 2-5) - Block All Work
+2. **🔴 linter-error** - Code style, formatting, or quality issues detected by linters
+3. **🔥 build-error** - Compilation, bundling, or build process failures  
+4. **⚠️ start-error** - Application startup, initialization, or runtime launch failures
+5. **❌ error** - General runtime errors, exceptions, or system failures
+
+#### 🟡 HIGH PRIORITY (Rank 6) - Important Features
+6. **🆕 missing-feature** - Required functionality that needs to be implemented
+
+#### 🔵 STANDARD PRIORITY (Rank 7-10) - Normal Development
+7. **🐛 bug** - Incorrect behavior or functionality that needs fixing
+8. **✨ enhancement** - Improvements to existing features or functionality
+9. **♻️ refactor** - Code restructuring, optimization, or technical debt reduction
+10. **📚 documentation** - Documentation updates, comments, or API documentation
+
+#### 🟢 LOW PRIORITY (Rank 11) - Maintenance
+11. **🧹 chore** - Maintenance tasks, cleanup, or administrative work
+
+#### 🔴 LOWEST PRIORITY (Rank 12-18) - All Testing Related - **LAST PRIORITY**
+12. **🧪 missing-test** - Test coverage gaps or missing test cases - **LOWEST PRIORITY**
+13. **⚙️ test-setup** - Test environment configuration, test infrastructure setup
+14. **🔄 test-refactor** - Refactoring test code, improving test structure
+15. **📊 test-performance** - Performance tests, load testing, stress testing
+16. **🔍 test-linter-error** - Linting issues specifically in test files - **LOWEST PRIORITY**
+17. **🚫 test-error** - Failing tests, test framework issues - **LOWEST PRIORITY** 
+18. **🔧 test-feature** - New testing features, test tooling improvements - **LOWEST PRIORITY**
+
+### 🎯 THREE-LEVEL SORTING HIERARCHY
+Tasks are sorted by:
+1. **PRIMARY: Category Rank** - Research (1) → Linter Errors (2) → Build Errors (3) → etc.
+2. **SECONDARY: Priority Value** - Critical (4) → High (3) → Medium (2) → Low (1)
+3. **TERTIARY: Creation Time** - Newer tasks first within same category and priority
+
+### 📝 TASK CREATION API EXAMPLES
+
+#### Required Category Examples
+```bash
+# Research task (HIGHEST priority - rank 1)
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Research authentication patterns', category: 'research', mode: 'DEVELOPMENT'}).then(id => console.log('Created:', id));"
+
+# Linter error (critical error - rank 2)
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Fix ESLint errors', category: 'linter-error', mode: 'DEVELOPMENT'}).then(id => console.log('Created:', id));"
+
+# Feature development (important - rank 6)
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Add user registration', category: 'missing-feature', mode: 'DEVELOPMENT'}).then(id => console.log('Created:', id));"
+
+# Bug fix (standard work - rank 7)
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Fix login crash', category: 'bug', priority: 'critical', mode: 'DEVELOPMENT'}).then(id => console.log('Created:', id));"
+
+# Testing work (LOWEST priority - ranks 12-18)
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Add unit tests for auth', category: 'missing-test', mode: 'DEVELOPMENT'}).then(id => console.log('Created:', id));"
+```
+
+#### Category Validation
+```bash
+# Missing category - WILL FAIL
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Task without category', mode: 'DEVELOPMENT'}).catch(err => console.log('Error:', err.message));"
+
+# Invalid category - WILL FAIL  
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Invalid category task', category: 'invalid', mode: 'DEVELOPMENT'}).catch(err => console.log('Error:', err.message));"
+
+# Get available categories
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); console.log('Available categories:', tm.taskCategories.getAvailableCategories().join(', '));"
+```
+
+### 🏗️ UPDATED TASK TEMPLATES
+
+All task templates now require explicit categories:
+
+#### Feature Task Template (Updated)
+```
+Title: Implement [Feature Name]
+Description: [User value and technical approach]
+Mode: development
+Category: missing-feature  # REQUIRED
+Priority: [critical|high|medium|low]
+Success Criteria:
+- Feature works as specified in requirements
+- All automated tests pass
+- Code coverage maintains minimum threshold
+- Documentation updated
+Estimate: [2-6 hours]
+Dependencies: [list of blocking tasks]
+Important Files: [key files that will be modified]
+```
+
+#### Bug Fix Task Template (Updated)
+```
+Title: Fix [Bug Description]
+Description: [Root cause analysis and solution approach]
+Mode: development
+Category: bug  # REQUIRED
+Priority: [critical|high|medium|low based on impact/urgency]
+Success Criteria:
+- Bug no longer reproducible
+- Regression tests added
+- Root cause documented
+- Fix verified in production-like environment
+Estimate: [1-4 hours]
+```
+
+#### Research Spike Template (Updated)
+```
+Title: Research [Technology/Approach]
+Description: [Questions to answer and decisions to make]
+Mode: research
+Category: research  # REQUIRED - HIGHEST PRIORITY
+Priority: [based on blocking impact]
+Success Criteria:
+- Key questions answered with evidence
+- Recommendation documented with pros/cons
+- Proof of concept completed (if applicable)
+- Implementation approach defined
+- Research report created: ./development/research-reports/research-report-{task_id}.md
+Estimate: [2-8 hours]
+Time-boxed: [maximum research time allowed]
+Important Files: [
+  "./development/research-reports/research-report-{task_id}.md"
+]
+```
+
+#### Testing Task Template (New - LOWEST PRIORITY)
+```
+Title: [Testing Work Description]
+Description: [Specific testing requirements]
+Mode: development
+Category: [missing-test|test-setup|test-refactor|test-performance|test-linter-error|test-error|test-feature]  # REQUIRED - LOWEST PRIORITY
+Priority: [typically medium or low]
+Success Criteria:
+- Testing objective completed
+- Test coverage metrics met (if applicable)
+- Test infrastructure working correctly
+- Documentation updated for test procedures
+Estimate: [1-4 hours]
+Note: All testing categories have LOWEST priority (ranks 12-18)
+```
+
+### 🚨 CRITICAL CATEGORY SELECTION RULES
+
+#### When to Use Each Category:
+- **research** - Any investigation, learning, or exploration work (ALWAYS HIGHEST PRIORITY)
+- **linter-error** - ESLint, Prettier, or other code style issues (NOT in test files)
+- **build-error** - Webpack, compilation, bundling failures
+- **start-error** - App won't start, initialization problems
+- **error** - Runtime exceptions, crashes, system failures
+- **missing-feature** - New functionality that needs to be built
+- **bug** - Incorrect behavior that needs fixing
+- **enhancement** - Improvements to existing features
+- **refactor** - Code restructuring without behavior changes
+- **documentation** - README, API docs, comments
+- **chore** - Maintenance, cleanup, administrative work
+
+#### Testing Categories (ALL LOWEST PRIORITY):
+- **missing-test** - Need to add test coverage
+- **test-setup** - Test environment, CI/CD configuration
+- **test-refactor** - Improving test code structure
+- **test-performance** - Load testing, performance benchmarks
+- **test-linter-error** - Linting issues IN test files
+- **test-error** - Failing tests, test framework issues
+- **test-feature** - New testing tools, test improvements
+
 ### Quick Task Creation Commands
 ```bash
 # Create feature task with research report integration
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); /* task creation logic with research integration */"
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Add OAuth integration', category: 'missing-feature', mode: 'DEVELOPMENT', important_files: ['./development/research-reports/research-report-oauth.md']}).then(id => console.log('Created:', id));"
 
 # Add subtasks to existing task
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.addSubtask('parent_id', {...})"
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.addSubtask('parent_id', {title: 'Subtask', category: 'bug'})"
 
 # Update task priority/status
 node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.updateTaskStatus('task_id', 'in_progress')"
