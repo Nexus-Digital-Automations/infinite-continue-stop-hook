@@ -19,9 +19,6 @@
 - **INSTANTLY CREATE TASK** for ANY user request, question, instruction, or issue using TaskManager API - NO EXCEPTIONS
 - **🚨 ZERO DELAY TASK CREATION**: THE VERY FIRST SECOND you encounter ANY task opportunity → CREATE TASK IMMEDIATELY → NO WAITING, NO HESITATION, NO ANALYSIS PARALYSIS
 - **🚨 ABSOLUTE PERFECTION ENFORCEMENT**: ZERO TOLERANCE for ANY errors, bugs, or imperfections - ALL MUST BE FIXED OR TASKED IMMEDIATELY
-- **🚨 MANDATORY VALIDATION BEFORE COMPLETION**: You MUST validate and verify ALL work before claiming completion - NO EXCEPTIONS
-- **🚨 EVIDENCE-BASED COMPLETION**: You CANNOT mark tasks complete without providing concrete evidence of validation
-- **🚨 NO ASSUMPTIONS ABOUT COMPLETION**: You MUST test, verify, and validate - assumptions are FORBIDDEN
 
 ## 🚨 PERFECTION STANDARDS & ENFORCEMENT
 
@@ -87,11 +84,7 @@ make check || make test || make lint || make build
 1. **DETECT** any error of any type
 2. **STOP** all other work immediately
 3. **ATTEMPT IMMEDIATE FIX** if simple and quick (< 2 minutes)
-4. **CREATE CATEGORIZED TASK** for any error not immediately fixed in current session:
-   - Linter errors → **linter-error** category
-   - Build failures → **build-error** category  
-   - Startup issues → **start-error** category
-   - Runtime errors → **error** category
+4. **CREATE HIGH-PRIORITY TASK** for any error not immediately fixed in current session
 5. **FIX** the error completely and verify fix
 6. **VERIFY** no new errors were introduced
 7. **DOCUMENT** the fix and prevention measures
@@ -113,7 +106,7 @@ make check || make test || make lint || make build
 - Fix ALL linting errors using auto-fix tools then manual fixes
 - NEVER modify ignore files to bypass legitimate errors
 - Linting errors block ALL other work until resolved
-- **CREATE TASKS** with **linter-error** category for any linting errors not immediately fixed during current session
+- **CREATE TASKS** for any linting errors not immediately fixed during current session
 
 ## 🚨 CORE ARCHITECTURE & THINKING
 
@@ -134,36 +127,7 @@ make check || make test || make lint || make build
 - **THINK HARD**: Performance optimization, security planning, complex refactoring, debugging, task management
 - **MANDATORY**: Task creation, prioritization, reordering, evaluation, user request analysis
 
-**WORKFLOW PATTERN:** Research → Planning → Implementation → **🔒 MANDATORY VALIDATION** → **🔍 EVIDENCE COLLECTION** → **✅ VERIFIED COMPLETION** → Commit
-
-## 🚨 CRITICAL VALIDATION ENFORCEMENT
-
-**VALIDATION IS NOT OPTIONAL - IT IS MANDATORY**
-
-Every agent MUST follow this validation protocol:
-
-### 🔒 Phase 1: Pre-Validation Requirements
-1. **ALL code must be written and tested**
-2. **ALL functionality must be implemented** 
-3. **ALL requirements must be addressed**
-4. **ALL documentation must be complete**
-
-### 🔍 Phase 2: Active Validation Process
-1. **RUN all linting commands** - show output
-2. **RUN all test commands** - show results
-3. **RUN all build commands** - show success
-4. **TEST all functionality manually** - demonstrate it works
-5. **VERIFY all requirements met** - list each one
-6. **CHECK all edge cases** - test error handling
-
-### ✅ Phase 3: Evidence Documentation
-1. **PROVIDE command outputs** showing all checks pass
-2. **DEMONSTRATE working functionality** with examples
-3. **LIST all requirements** and how they're satisfied
-4. **SHOW test results** proving everything works
-5. **CONFIRM production readiness** with evidence
-
-**🚨 FAILURE TO VALIDATE = TASK MARKED INCOMPLETE IMMEDIATELY**
+**WORKFLOW PATTERN:** Research → Planning → Implementation → Validation → Commit
 
 ## 🚨 TASKMANAGER API INTEGRATION
 
@@ -210,7 +174,7 @@ node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-
 # Task management operations
 node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" api current --project [PROJECT_DIRECTORY]
 node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" list '{"status": "pending"}' --project-root [PROJECT_DIRECTORY]
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" create '{"title": "Fix linter errors", "mode": "DEVELOPMENT", "category": "linter-error"}' --project-root [PROJECT_DIRECTORY]
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" create '{"title": "Fix bug", "mode": "DEVELOPMENT", "priority": "high"}' --project-root [PROJECT_DIRECTORY]
 node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" claim task_123 [agentId] normal --project-root [PROJECT_DIRECTORY]
 node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" update task_123 completed "Fixed successfully" --project [PROJECT_DIRECTORY]
 
@@ -234,12 +198,12 @@ node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-
 node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init --project-root [PROJECT_DIRECTORY]
 node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" api current --project [PROJECT_DIRECTORY]
 node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" list '{"mode": "DEVELOPMENT"}' --project-root [PROJECT_DIRECTORY]
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" create '{"title": "Add missing unit tests", "mode": "TESTING", "category": "missing-test"}' --project-root [PROJECT_DIRECTORY]
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" create '{"title": "Task", "mode": "TESTING"}' --project-root [PROJECT_DIRECTORY]
 
 # Task management using universal TaskManager API directly (from any directory)
 node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.getCurrentTask('agent_1').then(task => console.log(JSON.stringify(task, null, 2)));"
 
-node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.createTask({title: 'Fix build error', description: 'Webpack compilation failing', mode: 'DEVELOPMENT', category: 'build-error'}).then(id => console.log('Created task:', id));"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.createTask({title: 'New Task', description: 'Task description', mode: 'DEVELOPMENT', priority: 'high'}).then(id => console.log('Created task:', id));"
 
 node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.updateTaskStatus('task_id', 'completed').then(() => console.log('Task updated'));"
 ```
@@ -307,7 +271,7 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 
 ```bash
 # Advanced task querying
-node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.queryTasks({status: 'pending', category: 'linter-error'}).then(tasks => console.log(JSON.stringify(tasks.map(t => ({id: t.id, title: t.title, category: t.category})), null, 2)));"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.queryTasks({status: 'pending', priority: 'high'}).then(tasks => console.log(JSON.stringify(tasks.map(t => ({id: t.id, title: t.title})), null, 2)));"
 
 # Available filter options: status, priority, mode, hasFile, titleContains
 
@@ -347,61 +311,14 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 # Get next task
 node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.getNextTask('agent_1').then(task => console.log(task ? 'Next: ' + task.title : 'No more tasks'));"
 
-# Create categorized task
-node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.createTask({title: 'Fix linter errors in auth module', description: 'ESLint errors found in authentication', mode: 'DEVELOPMENT', category: 'linter-error'}).then(id => console.log('Created:', id));"
+# Create urgent task
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.createTask({title: 'Urgent Task', description: 'Description here', mode: 'DEVELOPMENT', priority: 'high'}).then(id => console.log('Created:', id));"
 
 # Move task to top priority
 node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.moveTaskToTop('task_id').then(moved => console.log('Moved to top:', moved));"
 ```
 
 **LEARN TASKMANAGER API**: The initialization process teaches you how to create tasks, prioritize them, and manage the TODO.json file. Use these commands for all task management operations.
-
-## 🚨 TASK CATEGORY & PRIORITY SYSTEM
-
-**CATEGORY-BASED PRIORITY SYSTEM:**
-
-Tasks are now organized by **specific categories** instead of generic "low", "medium", "high" priorities. The system **automatically sorts** tasks by category urgency:
-
-### 🔴 CRITICAL ERRORS (Rank 1-4) - Block All Work
-1. **🔴 linter-error** - Code style, formatting, or quality issues detected by linters
-2. **🔥 build-error** - Compilation, bundling, or build process failures  
-3. **⚠️ start-error** - Application startup, initialization, or runtime launch failures
-4. **❌ error** - General runtime errors, exceptions, or system failures
-
-### 🟡 HIGH PRIORITY (Rank 5-6) - Important But Not Blocking
-5. **🆕 missing-feature** - Required functionality that needs to be implemented
-6. **🧪 missing-test** - Test coverage gaps or missing test cases
-
-### 🟠 MEDIUM PRIORITY (Rank 7-8) - Testing Issues
-7. **🔍 test-linter-error** - Linting issues specifically in test files
-8. **🚫 test-error** - Failing tests, test framework issues, or test execution problems
-
-### 🔵 STANDARD PRIORITY (Rank 9-12) - Normal Development
-9. **🐛 bug** - Incorrect behavior or functionality that needs fixing
-10. **✨ enhancement** - Improvements to existing features or functionality
-11. **♻️ refactor** - Code restructuring, optimization, or technical debt reduction
-12. **📚 documentation** - Documentation updates, comments, or API documentation
-
-### 🟢 LOW PRIORITY (Rank 13+) - Nice To Have
-13. **🧹 chore** - Maintenance tasks, cleanup, or administrative work
-14. **🔬 research** - Investigation, exploration, or learning tasks
-
-**AUTOMATIC CATEGORY DETECTION:**
-- TaskManager **automatically suggests categories** based on task title/description
-- **Smart categorization** detects linter errors, build failures, missing features, etc.
-- **Auto-sorting** orders tasks by category rank (most urgent first)
-
-**CREATING TASKS WITH CATEGORIES:**
-```bash
-# Specify category explicitly
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Fix ESLint errors', category: 'linter-error', mode: 'DEVELOPMENT'}).then(id => console.log('Created:', id));"
-
-# Let system detect category automatically  
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Build failing on production', mode: 'DEVELOPMENT'}).then(id => console.log('Created:', id));"
-
-# Legacy priority still works (converted to category)
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Urgent bug fix', priority: 'high', mode: 'DEVELOPMENT'}).then(id => console.log('Created:', id));"
-```
 
 ## 🚨 TASK MANAGEMENT PROTOCOLS
 
@@ -427,16 +344,10 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
 5. **EXECUTE** - Begin working with thinking-driven approach
 
 **CONTINUOUS EVALUATION:**
-- **MANDATORY THINKING** for all task operations (creation, categorization, reordering, completion)
-- **DYNAMIC CATEGORY ASSESSMENT** based on new information, error types, and requirements
-- **AUTOMATIC RERANKING** using category-based sorting when new tasks are created
-- **PROACTIVE TASK CREATION** with appropriate categories for discovered opportunities
-
-**CATEGORY ASSIGNMENT RULES:**
-- **Always specify category** when creating tasks manually
-- **Trust auto-detection** for common patterns (linter, build, test, etc.)
-- **Use specific categories** over generic ones (prefer 'linter-error' over 'error')
-- **Update existing tasks** to use categories if they only have legacy priorities
+- **MANDATORY THINKING** for all task operations (creation, prioritization, reordering, completion)
+- **DYNAMIC PRIORITY ASSESSMENT** based on new information, changed requirements, constraints, errors
+- **ACTIVE RERANKING** using TaskManager API when priorities shift
+- **PROACTIVE TASK CREATION** for discovered opportunities
 
 ## 🚨 MAXIMUM PARALLEL SUBAGENT DEPLOYMENT & COORDINATION
 
@@ -616,51 +527,30 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 
 **🛑 TASK COMPLETION IS FORBIDDEN UNLESS 100% ABSOLUTELY AND UNEQUIVOCALLY AND UNDENIABLY COMPLETE 🛑**
 
-**🚨 CRITICAL: YOU MUST VALIDATE AND VERIFY COMPLETION - NO EXCEPTIONS! 🚨**
+**✅ ONLY MARK COMPLETED WHEN EVERY SINGLE CRITERION IS PERFECTLY SATISFIED:**
 
-**MANDATORY COMPLETION VALIDATION PROTOCOL - FOLLOW EVERY STEP:**
+**🚨 MANDATORY VERIFICATION CHECKLIST - ALL MUST BE TRUE:**
+- [ ] **FUNCTIONALITY**: Every feature works FLAWLESSLY with ZERO bugs, edge case failures, or unexpected behaviors
+- [ ] **TESTING**: 100% test coverage with ALL tests passing - no skipped, pending, or failing tests of ANY kind
+- [ ] **CODE QUALITY**: ZERO linter errors, type errors, build errors, or runtime errors - ALL quality gates passed
+- [ ] **DOCUMENTATION**: COMPLETE and ACCURATE documentation for every function, class, API, and feature
+- [ ] **PERFORMANCE**: ALL performance benchmarks met or exceeded - no slow responses or resource issues
+- [ ] **SECURITY**: ZERO vulnerabilities, perfect security compliance, no exposed secrets or data
+- [ ] **ACCESSIBILITY**: ALL accessibility standards met - WCAG compliance verified
+- [ ] **CROSS-PLATFORM**: Verified working on ALL target platforms and environments
+- [ ] **EDGE CASES**: ALL edge cases identified, handled, and tested thoroughly
+- [ ] **INTEGRATION**: ALL integrations working perfectly - no API failures or dependency conflicts
+- [ ] **USER ACCEPTANCE**: Feature meets ALL user requirements and acceptance criteria exactly
+- [ ] **PRODUCTION READY**: Code is production-ready with no known issues or technical debt
 
-## 🔒 STEP 1: MANDATORY EVIDENCE COLLECTION
-**BEFORE claiming completion, you MUST provide concrete evidence for EVERY requirement:**
-
-1. **RUN AND SHOW OUTPUT** of ALL validation commands:
-   ```bash
-   # TypeScript/JavaScript Projects - ALL must pass with ZERO errors
-   npm run lint          # Show: "✓ 0 errors, 0 warnings"
-   npm run test          # Show: "✓ All tests passed"
-   npm run build         # Show: "✓ Build successful"
-   npx tsc --noEmit      # Show: "✓ No type errors"
-   
-   # Python Projects - ALL must pass with ZERO errors
-   ruff check .          # Show: "All checks passed"
-   black --check .       # Show: "All done!"
-   mypy .               # Show: "Success: no issues found"
-   pytest --cov=100     # Show: "100% coverage, all tests passed"
-   ```
-
-2. **SCREENSHOT OR OUTPUT** of working functionality - PROVE it works
-3. **DEMONSTRATE** all edge cases and error handling work correctly
-4. **VERIFY** all user requirements are met with specific examples
-5. **CONFIRM** all documentation is complete and accurate
-
-## 🔒 STEP 2: MANDATORY VERIFICATION CHECKLIST - ALL MUST BE TRUE:
-**YOU MUST CHECK AND CONFIRM EACH ITEM WITH EVIDENCE:**
-
-- [ ] **FUNCTIONALITY VERIFIED**: ✅ Every feature works FLAWLESSLY - I have TESTED and CONFIRMED
-- [ ] **TESTING VERIFIED**: ✅ 100% test coverage, ALL tests passing - I have RUN the tests and they PASS
-- [ ] **CODE QUALITY VERIFIED**: ✅ ZERO linter/type/build errors - I have RUN all checks and they PASS
-- [ ] **DOCUMENTATION VERIFIED**: ✅ Complete documentation - I have REVIEWED and it's COMPLETE
-- [ ] **PERFORMANCE VERIFIED**: ✅ Meets all benchmarks - I have TESTED performance and it PASSES
-- [ ] **SECURITY VERIFIED**: ✅ Zero vulnerabilities - I have AUDITED security and it's SECURE
-- [ ] **ACCESSIBILITY VERIFIED**: ✅ WCAG compliance - I have TESTED accessibility and it PASSES
-- [ ] **CROSS-PLATFORM VERIFIED**: ✅ Works on all targets - I have TESTED on all platforms
-- [ ] **EDGE CASES VERIFIED**: ✅ All edge cases handled - I have TESTED all edge cases
-- [ ] **INTEGRATION VERIFIED**: ✅ All integrations work - I have TESTED all integrations
-- [ ] **USER ACCEPTANCE VERIFIED**: ✅ Meets all requirements - I have CONFIRMED all requirements
-- [ ] **PRODUCTION VERIFIED**: ✅ Production-ready - I have VERIFIED it's production-ready
-
-## 🔒 STEP 3: MANDATORY FINAL VALIDATION COMMANDS
-**RUN THESE COMMANDS AND PROVIDE OUTPUT - ALL MUST PASS:**
+**🚨 MANDATORY PRE-COMPLETION VERIFICATION PROTOCOL:**
+1. **RUN ALL QUALITY GATES** - Every linter, test, build, and quality check must pass 100%
+2. **MANUAL VERIFICATION** - Manually test every feature and edge case
+3. **PEER REVIEW SIMULATION** - Review code as if another developer will use it
+4. **PRODUCTION SIMULATION** - Verify feature works in production-like environment
+5. **DOCUMENTATION VERIFICATION** - Ensure all documentation is complete and accurate
+6. **SECURITY AUDIT** - Verify no security vulnerabilities or data exposure
+7. **PERFORMANCE TESTING** - Confirm all performance requirements are met
 
 **❌ ABSOLUTELY FORBIDDEN TO MARK COMPLETE IF ANY OF THE FOLLOWING EXIST:**
 
@@ -681,60 +571,18 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 - ❌ ANY user acceptance criteria that remain unmet
 - ❌ ANY part of the task that feels "almost done" or "good enough"
 
-**🚨 MANDATORY FINAL VALIDATION COMMANDS - MUST ALL PASS WITH ZERO ERRORS:**
+**🚨 COMPLETION VERIFICATION COMMANDS - MUST ALL PASS:**
 ```bash
-# FOR JAVASCRIPT/TYPESCRIPT PROJECTS - ALL must show SUCCESS:
-npm run lint          # MUST show: "✓ 0 problems (0 errors, 0 warnings)"
-npm run test          # MUST show: "✓ Tests: X passed, 0 failed"
-npm run build         # MUST show: "✓ Compiled successfully"
-npx tsc --noEmit      # MUST show: "✓ Found 0 errors"
-npm audit             # MUST show: "found 0 vulnerabilities"
-
-# FOR PYTHON PROJECTS - ALL must show SUCCESS:
-ruff check . --select=ALL  # MUST show: "All checks passed!"
-black --check .           # MUST show: "All done! ✨"
-isort --check-only .      # MUST show: "Skipped 0 files"
-mypy . --strict          # MUST show: "Success: no issues found"
-pytest --cov=100         # MUST show: "100% coverage"
-bandit -r .              # MUST show: "No issues identified"
-
-# PROJECT-SPECIFIC COMMANDS - ALL must show SUCCESS:
+# ALL of these commands must return success (exit code 0)
+npm run lint && npm run test && npm run build && npm run typecheck
+ruff check . && black --check . && mypy . && pytest --cov=100
 make test && make lint && make build && make check
 ```
 
-**🚨 EVIDENCE REQUIREMENT:** You MUST show the actual output of these commands proving they all passed!
-
-## 🔒 STEP 4: MANDATORY COMPLETION STATEMENT
-**BEFORE marking any task complete, you MUST provide this exact statement with evidence:**
-
-```
-🔒 COMPLETION VALIDATION STATEMENT:
-
-I HAVE PERSONALLY VERIFIED AND VALIDATED THE FOLLOWING:
-
-✅ FUNCTIONALITY: [Describe what you tested and how it works]
-✅ TESTING: [Show test results - "X tests passed, 0 failed"]
-✅ CODE QUALITY: [Show linter results - "0 errors, 0 warnings"]
-✅ BUILD: [Show build results - "Build successful"]
-✅ DOCUMENTATION: [Confirm documentation is complete]
-✅ PERFORMANCE: [Confirm performance requirements met]
-✅ SECURITY: [Confirm no security issues]
-
-ALL VALIDATION COMMANDS PASSED:
-[Paste actual command outputs here]
-
-USER REQUIREMENTS MET:
-[List each requirement and confirm how it's satisfied]
-
-I CERTIFY THIS TASK IS 100% COMPLETE AND PRODUCTION-READY.
-```
-
 **🚨 ENFORCEMENT CONSEQUENCES:**
-- **NO COMPLETION WITHOUT VALIDATION STATEMENT** - Tasks cannot be marked complete without the above evidence
 - **PREMATURE COMPLETION = IMMEDIATE TASK RECREATION** - If any task is marked complete prematurely, it will be immediately recreated with higher priority
 - **QUALITY REGRESSION = ROLLBACK REQUIRED** - Any quality issues discovered after completion require immediate rollback and fix
 - **INCOMPLETE WORK = BLOCKING DEPENDENCY** - Incomplete tasks block all dependent work until properly completed
-- **FALSE VALIDATION = SYSTEM VIOLATION** - Providing false validation evidence is a critical system violation
 
 **🚨 ABSOLUTE COMPLETION STANDARDS:**
 - **PERFECTION ONLY**: Nothing less than 100% perfect completion is acceptable
@@ -745,24 +593,7 @@ I CERTIFY THIS TASK IS 100% COMPLETE AND PRODUCTION-READY.
 - **SECURITY PERFECT**: Zero security issues or vulnerabilities allowed
 - **PERFORMANCE EXCELLENT**: All performance requirements met or exceeded
 
-**🚨 ABSOLUTE COMPLETION ENFORCEMENT RULES:**
-
-**RULE 1: NO DOUBT = NOT COMPLETE**
-IF YOU HAVE ANY DOUBT ABOUT COMPLETION - THE TASK IS NOT COMPLETE
-
-**RULE 2: NO EVIDENCE = NOT COMPLETE** 
-IF YOU CANNOT PROVIDE CONCRETE EVIDENCE OF VALIDATION - THE TASK IS NOT COMPLETE
-
-**RULE 3: NO TESTING = NOT COMPLETE**
-IF YOU HAVE NOT PERSONALLY TESTED THE FUNCTIONALITY - THE TASK IS NOT COMPLETE
-
-**RULE 4: NO VALIDATION = NOT COMPLETE**
-IF YOU HAVE NOT RUN ALL VALIDATION COMMANDS - THE TASK IS NOT COMPLETE
-
-**RULE 5: NO STATEMENT = NOT COMPLETE**
-IF YOU HAVE NOT PROVIDED THE COMPLETION VALIDATION STATEMENT - THE TASK IS NOT COMPLETE
-
-**🚨 ZERO EXCEPTIONS TO THESE RULES - VIOLATION = SYSTEM FAILURE 🚨**
+**🚨 REMEMBER: IF YOU HAVE ANY DOUBT ABOUT COMPLETION - THE TASK IS NOT COMPLETE**
 
 **CONTINUE COMMAND PROTOCOL:**
 - Use TaskManager Node.js API to get current active task or next pending task
@@ -842,26 +673,12 @@ IF YOU HAVE NOT PROVIDED THE COMPLETION VALIDATION STATEMENT - THE TASK IS NOT C
 
 **ENFORCEMENT PROTOCOL:**
 1. **DETECT** any imperfection immediately
-2. **STOP** all work until perfection achieved  
+2. **STOP** all work until perfection achieved
 3. **CREATE TASK** for any issue requiring time to fix
 4. **FIX** completely with verification
-5. **🔒 MANDATORY VALIDATION** - Run ALL validation commands
-6. **🔍 COLLECT EVIDENCE** - Show proof all checks pass
-7. **✅ VERIFY COMPLETION** - Provide validation statement
-8. **DOCUMENT** resolution and prevention
-9. **CONTINUE** only after 100% perfection verified with evidence
-
-**🚨 NEW CRITICAL STEP: VALIDATION CANNOT BE SKIPPED**
-
-Between steps 5-6, you MUST:
-- Run every applicable linting command
-- Run every applicable test command  
-- Run every applicable build command
-- Test all functionality manually
-- Verify all requirements are met
-- Provide evidence of all validations
-
-**NO EXCEPTIONS - NO SHORTCUTS - NO ASSUMPTIONS**
+5. **VALIDATE** no new issues introduced
+6. **DOCUMENT** resolution and prevention
+7. **CONTINUE** only after 100% perfection verified
 
 **REMEMBER**: Nothing but ABSOLUTE PERFECTION is acceptable. Every deliverable must be flawless.
 

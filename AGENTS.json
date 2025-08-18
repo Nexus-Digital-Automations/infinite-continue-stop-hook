@@ -1,0 +1,121 @@
+{
+  "project": "infinite-continue-stop-hook",
+  "agents": {
+    "development_session_1755360363848_1_general_33d01b5c": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "inactive",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-08-17T18:48:28.490Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-08-16T16:06:03.849Z",
+      "sessionId": "session_1755360363848",
+      "metadata": {},
+      "inactiveSince": "2025-08-17T18:48:28.490Z"
+    },
+    "development_session_1755454989027_1_general_d1ded47e": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "inactive",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-08-17T18:23:09.028Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-08-17T18:23:09.028Z",
+      "sessionId": "session_1755454989027",
+      "metadata": {},
+      "inactiveSince": "2025-08-17T19:05:58.051Z"
+    },
+    "development_session_1755457227274_1_general_2f1bc372": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "inactive",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-08-17T19:00:27.275Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-08-17T19:00:27.275Z",
+      "sessionId": "session_1755457227274",
+      "metadata": {},
+      "inactiveSince": "2025-08-17T19:05:58.051Z"
+    },
+    "development_session_1755458463678_1_general_1c15bbaf": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "inactive",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-08-17T19:21:03.679Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-08-17T19:21:03.679Z",
+      "sessionId": "session_1755458463678",
+      "metadata": {},
+      "inactiveSince": "2025-08-17T19:21:23.638Z"
+    },
+    "development_session_1755467560670_1_general_3d89fe76": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "inactive",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-08-17T21:52:40.671Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-08-17T21:52:40.671Z",
+      "sessionId": "session_1755467560670",
+      "metadata": {},
+      "inactiveSince": "2025-08-17T21:53:27.966Z"
+    }
+  },
+  "settings": {
+    "maxConcurrentTasks": 5,
+    "heartbeatInterval": 30000,
+    "inactiveThreshold": 300000
+  },
+  "lastUpdate": "2025-08-18T15:10:42.842Z"
+}

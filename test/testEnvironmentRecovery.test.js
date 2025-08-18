@@ -54,7 +54,7 @@ describe('TestEnvironmentRecovery', () => {
         if (recovery && recovery.isRecoveryActive) {
             try {
                 await recovery.shutdown();
-            } catch (error) {
+            } catch {
                 // Ignore shutdown errors in tests
             }
         }
@@ -197,7 +197,7 @@ describe('TestEnvironmentRecovery', () => {
         });
 
         test('should update system health metrics', async () => {
-            const initialHealth = recovery.healthMetrics.systemHealth;
+            const _initialHealth = recovery.healthMetrics.systemHealth;
             
             await recovery.updateSystemHealth();
 

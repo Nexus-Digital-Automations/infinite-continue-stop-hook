@@ -22934,9 +22934,264 @@
       "needs_linter_feedback": true,
       "linter_feedback_generated": false,
       "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1755467567194_fvutpybnm",
+      "title": "Strengthen task completion requirements in CLAUDE.md",
+      "description": "User reports that agents are still marking tasks complete that are not really complete. Need to add much stronger language and enforcement mechanisms to prevent premature task completion. Must make requirements ABSOLUTELY AND UNEQUIVOCALLY AND UNDENIABLY COMPLETE.",
+      "mode": "DEVELOPMENT",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-17T21:52:47.194Z",
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-17T21:53:21.944Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completion_instructions": {
+        "taskId": "task_1755467567194_fvutpybnm",
+        "taskTitle": "Strengthen task completion requirements in CLAUDE.md",
+        "completedAt": "2025-08-17T21:53:21.944Z",
+        "qualityChecks": [],
+        "lintingCommands": [
+          {
+            "command": "ruff check . --fix && black . && isort .",
+            "description": "Run Python linting (if Python project)",
+            "scope": "python-fallback"
+          },
+          {
+            "command": "eslint . --fix && prettier --write .",
+            "description": "Run TypeScript/JavaScript linting (if JS/TS project)",
+            "scope": "js-fallback"
+          },
+          {
+            "command": "npm run lint || make lint",
+            "description": "Run project-specific linting",
+            "scope": "project"
+          }
+        ],
+        "testingCommands": [],
+        "summary": [
+          "Run appropriate project linting"
+        ]
+      },
+      "completed_at": "2025-08-17T21:53:21.944Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1755462632774_71yd13b9v",
+      "title": "Stop hook linter feedback test",
+      "description": "Test task for stop hook linter feedback system",
+      "mode": "DEVELOPMENT",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [
+        "stop-hook.js",
+        "lib/taskManager.js",
+        "test/testEnvironmentRecovery.test.js"
+      ],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-17T20:30:32.774Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": true,
+      "completed_at": "2025-08-17T20:30:32.780Z",
+      "completion_instructions": {
+        "taskId": "task_1755462632774_71yd13b9v",
+        "taskTitle": "Stop hook linter feedback test",
+        "completedAt": "2025-08-17T20:30:32.780Z",
+        "lintingCommands": [
+          {
+            "command": "eslint stop-hook.js lib/taskManager.js test/testEnvironmentRecovery.test.js --fix",
+            "description": "Run ESLint on specific files worked on",
+            "scope": "file-specific",
+            "files": [
+              "stop-hook.js",
+              "lib/taskManager.js",
+              "test/testEnvironmentRecovery.test.js"
+            ]
+          }
+        ],
+        "summary": [
+          "Run linting on 3 file(s)"
+        ]
+      },
+      "linter_feedback_timestamp": "2025-08-17T20:30:51.833Z",
+      "archived_at": "2025-08-18T15:11:30.443Z"
+    },
+    {
+      "id": "task_1755285721184_z1np5tsf9",
+      "title": "API Performance Test",
+      "mode": "DEVELOPMENT",
+      "priority": "medium",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-15T19:22:01.184Z",
+      "assigned_agent": "test-agent-api",
+      "agent_assignment_history": [
+        {
+          "agentId": "test-agent-api",
+          "role": "primary",
+          "assignedAt": "2025-08-15T19:22:06.011Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "archived_at": "2025-08-18T15:11:30.445Z"
+    },
+    {
+      "id": "task_1755360930975_0hly90yo0",
+      "title": "Test No-Archive Completion",
+      "description": "Test completion instructions without archiving",
+      "mode": "DEVELOPMENT",
+      "priority": "medium",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [
+        "lib/taskManager.js"
+      ],
+      "success_criteria": [
+        "lint passes"
+      ],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-16T16:15:30.975Z",
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-16T16:15:30.978Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completion_instructions": {
+        "taskId": "task_1755360930975_0hly90yo0",
+        "taskTitle": "Test No-Archive Completion",
+        "completedAt": "2025-08-16T16:15:30.978Z",
+        "qualityChecks": [
+          {
+            "command": "node -e \"const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.executeQualityGates('task_1755360930975_0hly90yo0').then(result => console.log(JSON.stringify(result, null, 2)));\"",
+            "description": "Execute all quality gates for this task",
+            "scope": "task-specific"
+          }
+        ],
+        "lintingCommands": [
+          {
+            "command": "npm run lint",
+            "description": "Run ESLint on JavaScript/TypeScript files",
+            "scope": "js/ts",
+            "files": [
+              "lib/taskManager.js"
+            ]
+          },
+          {
+            "command": "npx eslint lib/taskManager.js",
+            "description": "Run ESLint on specific files worked on",
+            "scope": "file-specific",
+            "files": [
+              "lib/taskManager.js"
+            ]
+          }
+        ],
+        "testingCommands": [],
+        "summary": [
+          "Run linting on 1 file(s)",
+          "Execute quality gates"
+        ]
+      },
+      "completed_at": "2025-08-16T16:15:30.978Z",
+      "archived_at": "2025-08-18T15:11:30.445Z"
+    },
+    {
+      "id": "task_1755531335270_hjrt0gzr5",
+      "title": "Test Validation With Evidence",
+      "description": "Testing completion with proper evidence",
+      "mode": "DEVELOPMENT",
+      "priority": "low",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-18T15:35:35.270Z",
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-18T15:35:35.271Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completion_instructions": {
+        "taskId": "task_1755531335270_hjrt0gzr5",
+        "taskTitle": "Test Validation With Evidence",
+        "completedAt": "2025-08-18T15:35:35.271Z",
+        "qualityChecks": [],
+        "lintingCommands": [
+          {
+            "command": "ruff check . --fix && black . && isort .",
+            "description": "Run Python linting (if Python project)",
+            "scope": "python-fallback"
+          },
+          {
+            "command": "eslint . --fix && prettier --write .",
+            "description": "Run TypeScript/JavaScript linting (if JS/TS project)",
+            "scope": "js-fallback"
+          },
+          {
+            "command": "npm run lint || make lint",
+            "description": "Run project-specific linting",
+            "scope": "project"
+          }
+        ],
+        "testingCommands": [],
+        "summary": [
+          "Run appropriate project linting"
+        ]
+      },
+      "completed_at": "2025-08-18T15:35:35.271Z",
+      "validation_bypassed": {
+        "timestamp": "2025-08-18T15:35:35.271Z",
+        "reason": "System-level fix - validation bypassed",
+        "agent": "system"
+      },
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "./TODO.json"
     }
   ],
-  "total_completed": 520,
-  "last_completion": "2025-08-17T20:52:58.362Z",
+  "total_completed": 525,
+  "last_completion": "2025-08-18T15:35:35.271Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }
