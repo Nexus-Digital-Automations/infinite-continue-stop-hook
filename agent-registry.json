@@ -55,13 +55,13 @@
     "agent_5": {
       "agentId": "agent_5",
       "agentNumber": 5,
-      "sessionId": "session_1755545229757",
+      "sessionId": "session_1755547059990",
       "role": "development",
       "specialization": [],
       "status": "active",
-      "lastActivity": 1755545229759,
+      "lastActivity": 1755547059990,
       "totalRequests": 1,
-      "createdAt": "2025-08-18T19:27:09.759Z",
+      "createdAt": "2025-08-18T19:57:39.990Z",
       "metadata": {},
       "capabilities": []
     },
