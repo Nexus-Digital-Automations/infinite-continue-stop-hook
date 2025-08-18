@@ -2,6 +2,21 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
+      "id": "task_1755542374012_3j8iwepqd",
+      "title": "Valid research task",
+      "mode": "DEVELOPMENT",
+      "category": "research",
+      "priority": "critical",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-18T18:39:34.016Z"
+    },
+    {
       "id": "task_1755541152195_dgnvzxaiq",
       "title": "Fix ESLint errors in test/testEnvironmentRecovery.test.js",
       "description": "Fix 2 specific linting errors: unused variable \"error\" on line 57 and unused variable \"initialHealth\" on line 200. These errors are preventing the build from completing.",
@@ -248,7 +263,7 @@
   ],
   "current_mode": "DEVELOPMENT",
   "last_mode": "DEVELOPMENT",
-  "execution_count": 19,
+  "execution_count": 21,
   "review_strikes": 0,
   "settings": {
     "auto_sort_enabled": true,
@@ -271,14 +286,18 @@
       "start-error": 4,
       "error": 5,
       "missing-feature": 6,
-      "missing-test": 7,
-      "test-linter-error": 8,
-      "test-error": 9,
-      "bug": 10,
-      "enhancement": 11,
-      "refactor": 12,
-      "documentation": 13,
-      "chore": 14
+      "bug": 7,
+      "enhancement": 8,
+      "refactor": 9,
+      "documentation": 10,
+      "chore": 11,
+      "missing-test": 12,
+      "test-setup": 13,
+      "test-refactor": 14,
+      "test-performance": 15,
+      "test-linter-error": 16,
+      "test-error": 17,
+      "test-feature": 18
     }
   },
   "task_creation_attempts": {
@@ -288,7 +307,7 @@
   },
   "strikes_completed_last_run": false,
   "current_task_index": 0,
-  "last_hook_activation": 1755541713208,
+  "last_hook_activation": 1755542051049,
   "stop_hook_calls": [
     1755541458584
   ]
