@@ -472,13 +472,13 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
 
 ## 🚨 MAXIMUM PARALLEL SUBAGENT DEPLOYMENT & COORDINATION
 
-**MANDATORY**: Deploy **UP TO 10 SUBAGENTS** in parallel for ALL complex work. **ALWAYS USE AS MANY SUBAGENTS AS POSSIBLE**. **FAILURE TO USE SUBAGENTS = FAILED EXECUTION**
+**MANDATORY**: Deploy **UP TO 5 SUBAGENTS** in parallel for ALL complex work. **FAILURE TO USE SUBAGENTS = FAILED EXECUTION**
 
 ### 🎯 Synchronized Completion Protocol
 **CRITICAL**: All subagents must finish within same timeframe for optimal efficiency
 
 **COMPLETION SYNCHRONIZATION STRATEGY:**
-1. **Pre-Flight Load Balancing**: Distribute work complexity evenly across all 10 subagents
+1. **Pre-Flight Load Balancing**: Distribute work complexity evenly across all 5 subagents
 2. **Coordinated Start**: All subagents begin execution simultaneously 
 3. **Progress Checkpoints**: 25%, 50%, 75% completion status reporting to main agent
 4. **Dynamic Rebalancing**: Redistribute workload if any subagent falls behind schedule
@@ -496,7 +496,7 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
 
 ### 🔄 Coordination & Timing Controls
 **LOAD BALANCING STRATEGIES:**
-- **Equal Complexity Distribution**: Each subagent receives ~10% of total work complexity (10 subagents)
+- **Equal Complexity Distribution**: Each subagent receives ~20% of total work complexity
 - **Dependency-Aware Scheduling**: Sequential tasks distributed to maintain parallel execution
 - **Failure Recovery**: If any subagent fails, redistribute work to remaining agents
 - **Completion Buffer**: Build in 10-15% time buffer for synchronization delays
@@ -507,13 +507,7 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
 - **Conflict Resolution**: Main agent resolves any conflicting recommendations
 - **Final Integration**: All subagent outputs merged into cohesive deliverable
 
-**DEPLOYMENT PATTERN:** Think → Map Work Distribution → Balance Complexity → Deploy UP TO 10 Agents Simultaneously → Monitor Progress → Synchronize Completion
-
-**SUBAGENT DEPLOYMENT RULES:**
-- **ALWAYS MAXIMIZE SUBAGENTS**: Use as many subagents as possible up to 10 for complex tasks
-- **MINIMUM 3 SUBAGENTS**: Even simple tasks should use at least 3 subagents when possible
-- **SCALE BY COMPLEXITY**: More complex tasks = more subagents (up to 10 maximum)
-- **PARALLEL EXECUTION**: All subagents work simultaneously, not sequentially
+**DEPLOYMENT PATTERN:** Think → Map Work Distribution → Balance Complexity → Deploy 5 Agents Simultaneously → Monitor Progress → Synchronize Completion
 
 ## 🚨 CONTEXT MANAGEMENT
 
@@ -643,7 +637,7 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 2. **Evaluate Existing Tasks** - Check if can modify existing vs create new
 3. **Think First** - Use appropriate thinking level (think/think hard/ultrathink)
 4. **Initialize Agent** - Use TaskManager API initialization
-5. **Deploy UP TO 10 Subagents** - Always maximize subagents for complex work with synchronized completion
+5. **Deploy 5 Subagents** - For complex work with synchronized completion
 6. **Implement & Validate** - Execute with evidence-based completion
 7. **Complete Tasks** - Mark completed via TaskManager API
 

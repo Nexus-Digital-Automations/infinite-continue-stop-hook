@@ -7,6 +7,67 @@ const AgentExecutor = require('./lib/agentExecutor');
 // ReviewSystem import removed - no automatic injection
 const Logger = require('./lib/logger');
 
+// ============================================================================
+// CONCURRENT PROCESSING HELPER FUNCTION
+// ============================================================================
+
+/**
+ * Process a single task with proper mode determination and prompt generation
+ * @param {Object} currentTask - Task to process
+ * @param {string} agentId - Agent ID
+ * @param {string} mode - Optional forced mode
+ * @param {string} modeReason - Optional mode reason
+ * @param {Object} taskManager - TaskManager instance
+ * @param {Object} agentExecutor - AgentExecutor instance
+ * @param {Object} logger - Logger instance
+ * @param {Object} todoData - Current TODO data
+ */
+async function processSingleTask(currentTask, agentId, mode, modeReason, taskManager, agentExecutor, logger, todoData) {
+    // Increment execution count and update timing for infinite loop prevention
+    todoData.execution_count++;
+    todoData.last_hook_activation = Date.now();
+    
+    // Determine mode (if not already set by task creation logic)
+    if (!mode) {
+        if (currentTask.is_review_task) {
+            mode = 'REVIEWER';
+            modeReason = 'Current task is a review task';
+        } else if (todoData.execution_count % 4 === 0) {
+            mode = 'TASK_CREATION';
+            modeReason = `Every 4th execution: entering TASK_CREATION mode (count: ${todoData.execution_count})`;
+        } else {
+            mode = currentTask.mode;
+            modeReason = `Using task mode: ${currentTask.mode} (execution ${todoData.execution_count})`;
+        }
+    }
+    
+    logger.logModeDecision(todoData.last_mode, mode, modeReason);
+    
+    // Update last mode
+    todoData.last_mode = mode;
+    
+    // Build the prompt
+    const fullPrompt = await agentExecutor.buildPrompt(currentTask, mode, todoData, taskManager);
+    
+    // Update task status using concurrent-aware method
+    currentTask.status = 'in_progress';
+    await taskManager.writeTodo(todoData);
+    logger.addFlow(`Updated task ${currentTask.id} status to in_progress`);
+    
+    // Log prompt generation
+    logger.logPromptGeneration(fullPrompt, '');
+    
+    // Output the prompt for Claude
+    console.error(fullPrompt);
+    
+    // Log exit
+    logger.logExit(2, `Continuing with ${mode} mode for task: ${currentTask.title}`);
+    logger.save();
+    
+    // Force continuation with the prompt
+    process.exit(2);
+}
+
 // Read input from Claude Code
 let inputData = '';
 process.stdin.setEncoding('utf8');
@@ -17,7 +78,25 @@ process.stdin.on('end', async () => {
     const logger = new Logger(workingDir);
     
     try {
-        const hookInput = JSON.parse(inputData);
+        // Debug logging for input data
+        logger.addFlow(`Raw input data: "${inputData}"`);
+        logger.addFlow(`Input data length: ${inputData.length}`);
+        
+        if (!inputData || inputData.trim() === '') {
+            // No input - probably manual execution, simulate Claude Code input
+            logger.addFlow('No input detected - running in manual mode');
+            const simulatedInput = {
+                session_id: 'manual_test',
+                transcript_path: '',
+                stop_hook_active: true,
+                hook_event_name: 'manual_execution'
+            };
+            logger.addFlow(`Using simulated input: ${JSON.stringify(simulatedInput)}`);
+            var hookInput = simulatedInput;
+        } else {
+            var hookInput = JSON.parse(inputData);
+        }
+        
         const { session_id: _session_id, transcript_path: _transcript_path, stop_hook_active, hook_event_name } = hookInput;
         
         // Log input with event details
@@ -156,95 +235,67 @@ process.stdin.on('end', async () => {
             process.exit(2);
         }
 
-        // Get task continuation guidance
-        const guidance = await taskManager.getTaskContinuationGuidance(agentId);
-        logger.addFlow(`Task guidance action: ${guidance.action}`);
+        // CONCURRENT MULTI-AGENT PROCESSING
+        // Get available agents for concurrent processing
+        const availableAgents = await taskManager.getAvailableAgents();
+        logger.addFlow(`Found ${availableAgents.length} available agents for concurrent processing`);
         
-        // Find next task using guidance
-        let currentTask;
-        let mode;
-        let modeReason;
+        // Get tasks that can be distributed across agents
+        const distributableTasks = await taskManager.getDistributableTasks(availableAgents.length);
+        logger.addFlow(`Found ${distributableTasks.length} tasks ready for distribution`);
         
-        if (guidance.action === 'continue_task') {
-            currentTask = guidance.task;
-            logger.addFlow(`Continuing task: ${currentTask.title}`);
-        } else if (guidance.action === 'start_new_task') {
-            currentTask = guidance.task;
-            logger.addFlow(`Starting new task: ${currentTask.title}`);
-        } else if (guidance.action === 'enter_task_creation_mode') {
-            logger.addFlow(`Entering task creation mode (attempt ${guidance.attempt} of ${guidance.max_attempts})`);
+        if (distributableTasks.length === 0) {
+            // No tasks available - check if we should enter task creation mode
+            const guidance = await taskManager.getTaskContinuationGuidance(agentId);
+            logger.addFlow(`Task guidance action: ${guidance.action}`);
             
-            // Create a virtual task for task creation mode
-            currentTask = {
-                id: `task_creation_${Date.now()}`,
-                title: 'Task Creation Mode',
-                description: guidance.message,
-                mode: 'TASK_CREATION',
-                status: 'in_progress',
-                priority: 'high',
-                instructions: guidance.instructions
-            };
-            
-            // Force task creation mode
-            mode = 'TASK_CREATION';
-            modeReason = `No tasks available - entering task creation mode (attempt ${guidance.attempt}/${guidance.max_attempts})`;
-        } else {
-            logger.addFlow("No tasks available");
-            currentTask = null;
-        }
-        
-        logger.logCurrentTask(currentTask);
-        
-        if (!currentTask) {
-            logger.logExit(0, "All tasks completed");
-            logger.save();
-            console.log("All tasks completed!");
-            process.exit(0);
-        }
-        
-        // Increment execution count and update timing for infinite loop prevention
-        todoData.execution_count++;
-        todoData.last_hook_activation = Date.now();
-        
-        // Determine mode (if not already set by task creation logic)
-        if (!mode) {
-            if (currentTask.is_review_task) {
-                mode = 'REVIEWER';
-                modeReason = 'Current task is a review task';
-            } else if (todoData.execution_count % 4 === 0) {
-                mode = 'TASK_CREATION';
-                modeReason = `Every 4th execution: entering TASK_CREATION mode (count: ${todoData.execution_count})`;
+            if (guidance.action === 'enter_task_creation_mode') {
+                logger.addFlow(`Entering task creation mode (attempt ${guidance.attempt} of ${guidance.max_attempts})`);
+                
+                // Create a virtual task for task creation mode
+                const currentTask = {
+                    id: `task_creation_${Date.now()}`,
+                    title: 'Task Creation Mode',
+                    description: guidance.message,
+                    mode: 'TASK_CREATION',
+                    status: 'in_progress',
+                    priority: 'high',
+                    instructions: guidance.instructions
+                };
+                
+                // Process single task creation mode
+                await processSingleTask(currentTask, agentId, 'TASK_CREATION', `No tasks available - entering task creation mode (attempt ${guidance.attempt}/${guidance.max_attempts})`, taskManager, agentExecutor, logger, todoData);
+                return;
             } else {
-                mode = currentTask.mode;
-                modeReason = `Using task mode: ${currentTask.mode} (execution ${todoData.execution_count})`;
+                logger.addFlow("No tasks available and no task creation needed");
+                logger.logExit(0, "All tasks completed");
+                logger.save();
+                console.log("All tasks completed!");
+                process.exit(0);
             }
         }
         
-        logger.logModeDecision(todoData.last_mode, mode, modeReason);
+        // CONCURRENT TASK DISTRIBUTION
+        const taskAssignments = await taskManager.distributeTasksToAgents(distributableTasks, availableAgents);
+        logger.addFlow(`Distributed ${taskAssignments.length} tasks across agents`);
         
-        // Update last mode
-        todoData.last_mode = mode;
+        // Process the current agent's assignment
+        const myAssignment = taskAssignments.find(assignment => assignment.agentId === agentId);
         
-        // Build the prompt
-        const fullPrompt = await agentExecutor.buildPrompt(currentTask, mode, todoData, taskManager);
+        if (!myAssignment) {
+            logger.addFlow("No task assigned to current agent - all tasks distributed to other agents");
+            logger.logExit(0, "No task assignment for this agent");
+            logger.save();
+            console.log("Task distributed to other agents - this agent completed.");
+            process.exit(0);
+        }
         
-        // Update task status
-        currentTask.status = 'in_progress';
-        await taskManager.writeTodo(todoData);
-        logger.addFlow(`Updated task ${currentTask.id} status to in_progress`);
+        const currentTask = myAssignment.task;
+        logger.addFlow(`Processing assigned task: ${currentTask.title}`);
+        logger.logCurrentTask(currentTask);
         
-        // Log prompt generation
-        logger.logPromptGeneration(fullPrompt, '');
-        
-        // Output the prompt for Claude
-        console.error(fullPrompt);
-        
-        // Log exit
-        logger.logExit(2, `Continuing with ${mode} mode for task: ${currentTask.title}`);
-        logger.save();
-        
-        // Force continuation with the prompt
-        process.exit(2);
+        // Process the assigned task using concurrent-aware processing
+        await processSingleTask(currentTask, agentId, null, null, taskManager, agentExecutor, logger, todoData);
         
     } catch (error) {
         logger.logError(error, 'stop-hook-main');
