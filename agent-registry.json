@@ -458,16 +458,15 @@
     "agent_36": {
       "agentId": "agent_36",
       "agentNumber": 36,
-      "sessionId": "session_1755234007946",
+      "sessionId": "session_1755546769176",
       "role": "development",
       "specialization": [],
-      "status": "inactive",
-      "lastActivity": 1755234007970,
+      "status": "active",
+      "lastActivity": 1755546769176,
       "totalRequests": 1,
-      "createdAt": "2025-08-15T05:00:07.970Z",
+      "createdAt": "2025-08-18T19:52:49.176Z",
       "metadata": {},
-      "capabilities": [],
-      "inactiveSince": "2025-08-15T07:00:07.970Z"
+      "capabilities": []
     },
     "agent_37": {
       "agentId": "agent_37",
