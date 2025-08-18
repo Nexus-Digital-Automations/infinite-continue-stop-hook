@@ -2,8 +2,8 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
-      "id": "task_1755542374012_3j8iwepqd",
-      "title": "Valid research task",
+      "id": "task_1755542603257_g552312tv",
+      "title": "Test API task with valid category",
       "mode": "DEVELOPMENT",
       "category": "research",
       "priority": "critical",
@@ -14,7 +14,36 @@
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-08-18T18:39:34.016Z"
+      "created_at": "2025-08-18T18:43:23.257Z"
+    },
+    {
+      "id": "task_1755542374012_3j8iwepqd",
+      "title": "Valid research task",
+      "mode": "DEVELOPMENT",
+      "category": "research",
+      "priority": "critical",
+      "status": "in_progress",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-18T18:39:34.016Z",
+      "assigned_agent": "agent_7",
+      "agent_assignment_history": [
+        {
+          "agentId": "agent_7",
+          "role": "primary",
+          "assignedAt": "2025-08-18T18:41:45.250Z",
+          "reassignReason": null
+        }
+      ],
+      "parallel_execution": {
+        "canParallelize": false,
+        "parallelWith": [],
+        "coordinatorTask": null
+      }
     },
     {
       "id": "task_1755541152195_dgnvzxaiq",
