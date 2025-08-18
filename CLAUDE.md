@@ -362,29 +362,31 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 
 Tasks are now organized by **specific categories** instead of generic "low", "medium", "high" priorities. The system **automatically sorts** tasks by category urgency:
 
-### 🔴 CRITICAL ERRORS (Rank 1-4) - Block All Work
-1. **🔴 linter-error** - Code style, formatting, or quality issues detected by linters
-2. **🔥 build-error** - Compilation, bundling, or build process failures  
-3. **⚠️ start-error** - Application startup, initialization, or runtime launch failures
-4. **❌ error** - General runtime errors, exceptions, or system failures
+### 🌟 TOP PRIORITY (Rank 1) - Highest Priority
+1. **🔬 research** - Investigation, exploration, or learning tasks - **HIGHEST PRIORITY**
 
-### 🟡 HIGH PRIORITY (Rank 5-6) - Important But Not Blocking
-5. **🆕 missing-feature** - Required functionality that needs to be implemented
-6. **🧪 missing-test** - Test coverage gaps or missing test cases
+### 🔴 CRITICAL ERRORS (Rank 2-5) - Block All Work
+2. **🔴 linter-error** - Code style, formatting, or quality issues detected by linters
+3. **🔥 build-error** - Compilation, bundling, or build process failures  
+4. **⚠️ start-error** - Application startup, initialization, or runtime launch failures
+5. **❌ error** - General runtime errors, exceptions, or system failures
 
-### 🟠 MEDIUM PRIORITY (Rank 7-8) - Testing Issues
-7. **🔍 test-linter-error** - Linting issues specifically in test files
-8. **🚫 test-error** - Failing tests, test framework issues, or test execution problems
+### 🟡 HIGH PRIORITY (Rank 6-7) - Important But Not Blocking
+6. **🆕 missing-feature** - Required functionality that needs to be implemented
+7. **🧪 missing-test** - Test coverage gaps or missing test cases
 
-### 🔵 STANDARD PRIORITY (Rank 9-12) - Normal Development
-9. **🐛 bug** - Incorrect behavior or functionality that needs fixing
-10. **✨ enhancement** - Improvements to existing features or functionality
-11. **♻️ refactor** - Code restructuring, optimization, or technical debt reduction
-12. **📚 documentation** - Documentation updates, comments, or API documentation
+### 🟠 MEDIUM PRIORITY (Rank 8-9) - Testing Issues
+8. **🔍 test-linter-error** - Linting issues specifically in test files
+9. **🚫 test-error** - Failing tests, test framework issues, or test execution problems
 
-### 🟢 LOW PRIORITY (Rank 13+) - Nice To Have
-13. **🧹 chore** - Maintenance tasks, cleanup, or administrative work
-14. **🔬 research** - Investigation, exploration, or learning tasks
+### 🔵 STANDARD PRIORITY (Rank 10-13) - Normal Development
+10. **🐛 bug** - Incorrect behavior or functionality that needs fixing
+11. **✨ enhancement** - Improvements to existing features or functionality
+12. **♻️ refactor** - Code restructuring, optimization, or technical debt reduction
+13. **📚 documentation** - Documentation updates, comments, or API documentation
+
+### 🟢 LOW PRIORITY (Rank 14) - Nice To Have
+14. **🧹 chore** - Maintenance tasks, cleanup, or administrative work
 
 **AUTOMATIC CATEGORY DETECTION:**
 - TaskManager **automatically suggests categories** based on task title/description
