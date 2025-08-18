@@ -2,175 +2,43 @@
 
 ## 🚨 CRITICAL COMPLIANCE PROTOCOLS
 
-**ABSOLUTE PRIORITY ORDER:**
-1. **User Instructions** - Direct commands take absolute highest priority
-2. **Hook Feedback** - System responses must be addressed immediately and completely  
-3. **Linting Error Feedback** - All linting errors MUST be fixed before proceeding with any task
-4. **🚨 ABSOLUTE PERFECTION MANDATE** - NOTHING BUT 100% PERFECTION IS ACCEPTABLE
-5. **CLAUDE.md Protocols** - Follow documented patterns when not conflicting with above
+**PRIORITY ORDER:**
+1. **User Instructions** - Direct commands take highest priority
+2. **Hook Feedback** - Address system responses immediately
+3. **Linting Error Feedback** - Fix all linting errors before proceeding
+4. **TaskManager Integration** - Use TaskManager API for all task operations
+5. **Evidence-Based Validation** - Validate all work with concrete evidence
 
-**MANDATORY COMPLIANCE RULES:**
-- **ALWAYS** follow user instructions exactly as given
-- **ALWAYS** address hook feedback immediately and completely
-- **ALWAYS** check for and fix linting errors before starting/continuing any task
-- **IMMEDIATELY** stop and address any error feedback from hooks or linting
-- **NEVER** bypass or ignore any feedback from systems or users
-- **ABSOLUTELY NEVER** mask, hide, or work around problems - **ACTUALLY SOLVE THEM**
-- **INSTANTLY CREATE TASK** for ANY user request, question, instruction, or issue using TaskManager API - NO EXCEPTIONS
-- **🚨 ZERO DELAY TASK CREATION**: THE VERY FIRST SECOND you encounter ANY task opportunity → CREATE TASK IMMEDIATELY → NO WAITING, NO HESITATION, NO ANALYSIS PARALYSIS
-- **🚨 ABSOLUTE PERFECTION ENFORCEMENT**: ZERO TOLERANCE for ANY errors, bugs, or imperfections - ALL MUST BE FIXED OR TASKED IMMEDIATELY
-- **🚨 MANDATORY VALIDATION BEFORE COMPLETION**: You MUST validate and verify ALL work before claiming completion - NO EXCEPTIONS
-- **🚨 EVIDENCE-BASED COMPLETION**: You CANNOT mark tasks complete without providing concrete evidence of validation
-- **🚨 NO ASSUMPTIONS ABOUT COMPLETION**: You MUST test, verify, and validate - assumptions are FORBIDDEN
+**CORE RULES:**
+- **INSTANTLY CREATE TASK** for ANY user request using TaskManager API
+- **VALIDATE BEFORE COMPLETION** - Provide evidence of all validation checks
+- **FIX ERRORS IMMEDIATELY** - Create categorized tasks for all detected issues
 
-## 🚨 PERFECTION STANDARDS & ENFORCEMENT
+## 🚨 ERROR HANDLING PROTOCOL
 
-**ZERO TOLERANCE PERFECTION STANDARDS:**
-- **100% FUNCTIONALITY**: Every feature works flawlessly without bugs or edge case failures
-- **ZERO ERROR TOLERANCE**: NO linter, type, runtime, build, test failures, or errors of ANY type
-- **INSTANT ERROR REMEDIATION**: Upon detecting ANY error → IMMEDIATELY fix OR create high-priority task
-- **NO COMPROMISES**: Partial functionality, workarounds, or "good enough" solutions ABSOLUTELY FORBIDDEN
-- **QUALITY GATES**: Every deliverable must pass ALL quality checks before completion
-- **ERROR PREVENTION**: Comprehensive error handling, input validation, defensive programming
-- **TESTING PERFECTION**: 100% test coverage with comprehensive edge case testing
-- **CODE PERFECTION**: Clean, maintainable, well-documented code with zero technical debt
-- **250/400 line limit** per file/function - NO EXCEPTIONS
-- **Comprehensive documentation** with JSDoc/TSDoc - EVERY function, class, variable documented
-- **Type annotations** for ALL functions and variables - 100% TypeScript coverage where applicable
-- **Input validation** and error handling with logging - EVERY input validated, EVERY error handled
-- **No hardcoded secrets** or credentials - ZERO tolerance for security violations
-- **Performance standards met** - All operations must meet performance benchmarks
-- **Security standards met** - All code must pass security audits
-- **Accessibility compliance** - All UI must meet accessibility standards
-- **Cross-platform compatibility** - Code must work across all target platforms
+**MANDATORY ERROR RESPONSE:**
+1. **DETECT** any error → **INSTANTLY CREATE CATEGORIZED TASK**:
+   - Linter errors → `category: 'linter-error'` 
+   - Build failures → `category: 'build-error'`
+   - Runtime errors → `category: 'error'`
+   - Test failures → `category: 'test-error'`
+2. **ATTEMPT IMMEDIATE FIX** (< 2 minutes) OR work on task
+3. **VERIFY** fix and document resolution
 
-**MANDATORY ERROR DETECTION AND RESOLUTION:**
-```bash
-# BEFORE ANY WORK - CHECK FOR ALL ERROR TYPES
+**FORBIDDEN:** Ignoring errors, suppressing messages, or implementing workarounds
 
-# PRIMARY: Python (your main ecosystem)
-ruff check . --select=ALL --fix            # Comprehensive linting with fixes
-black .                                     # Code formatting
-isort .                                     # Import sorting
-mypy . --strict                            # Strict type checking
-pytest --cov=. --cov-fail-under=100 \     # 100% test coverage required
-  --cov-report=html --cov-report=term
-bandit -r . -f json                        # Security vulnerability scan
-pip-audit --format=json                    # Dependency security audit
-safety check                               # Additional security check
+## 🚨 MANDATORY THINKING & VALIDATION
 
-# PRIMARY: TypeScript/JavaScript (your main ecosystem)
-eslint . --max-warnings 0 --fix           # Linting with auto-fixes
-prettier --write .                         # Code formatting
-tsc --noEmit --strict                      # Strict type checking
-jest --coverage --passWithNoTests \       # Full test suite with coverage
-  --coverageThreshold='{"global":{"statements":100,"branches":100,"functions":100,"lines":100}}'
-npm audit --audit-level=moderate          # Security auditing
-npm run build                              # Production build verification
+**THINKING LEVELS:** Use maximum beneficial thinking for complexity:
+- **ULTRATHINK**: System architecture, task planning, priority evaluation
+- **THINK HARD**: Complex refactoring, debugging, task management  
+- **MANDATORY**: All task operations (creation, categorization, completion)
 
-# End-to-end Testing (when applicable)
-playwright test || cypress run || puppeteer
-
-# Performance Benchmarking (when applicable)
-lighthouse-ci || hyperfine
-
-# Accessibility Compliance (for web UI)
-axe-core || pa11y || lighthouse --only-categories=accessibility
-
-# UNIVERSAL: Any build system
-make check || make test || make lint || make build
-
-# CREATE TASKS for any errors not immediately fixable
-```
-
-**DETAILED ERROR RESPONSE PROTOCOL:**
-1. **DETECT** any error of any type
-2. **INSTANTLY CREATE CATEGORIZED TASK** - NO DELAY, NO EXCEPTIONS:
-   - Linter errors → **IMMEDIATELY** CREATE `category: 'linter-error'` TASK
-   - Build failures → **IMMEDIATELY** CREATE `category: 'build-error'` TASK  
-   - Startup issues → **IMMEDIATELY** CREATE `category: 'start-error'` TASK
-   - Runtime errors → **IMMEDIATELY** CREATE `category: 'error'` TASK
-   - Test linter errors → **IMMEDIATELY** CREATE `category: 'test-linter-error'` TASK
-   - Failing tests → **IMMEDIATELY** CREATE `category: 'test-error'` TASK
-3. **STOP** all other work immediately
-4. **ATTEMPT IMMEDIATE FIX** if simple and quick (< 2 minutes)
-5. **FIX** the error completely and verify fix
-6. **VERIFY** no new errors were introduced
-7. **DOCUMENT** the fix and prevention measures
-8. **RESUME** original work only after 100% error resolution
-
-**🚨 CRITICAL: TASK CREATION MUST HAPPEN BEFORE ATTEMPTING FIXES**
-- Create the categorized task FIRST
-- Then attempt the fix
-- This ensures every error gets tracked even if fix attempts fail
-
-**FORBIDDEN ERROR RESPONSES:**
-❌ Ignoring errors
-❌ Suppressing error messages
-❌ Adding to ignore files to bypass errors
-❌ Implementing workarounds instead of fixes
-❌ Deferring error fixes to "later"
-❌ Accepting "good enough" solutions
-❌ Shipping code with known issues
-
-**LINTING ERROR PRIORITY PROTOCOL:**
-- Run linting tools before starting any development work:
-  - **Python**: `ruff check . --fix` then `black .` then `isort .`
-  - **TypeScript**: `eslint . --fix` then `prettier --write .`
-- Fix ALL linting errors using auto-fix tools then manual fixes
-- NEVER modify ignore files to bypass legitimate errors
-- Linting errors block ALL other work until resolved
-- **CREATE TASKS** with **linter-error** category for any linting errors not immediately fixed during current session
-
-## 🚨 CORE ARCHITECTURE & THINKING
-
-**AGENT PERSONALITY:** Expert senior developer with 10x engineer mindset
-- **Simplicity first**: Fewest lines of quality code
-- **Maintainability over cleverness**: Readable, maintainable solutions
-- **Pragmatic excellence**: Balance best practices with working solutions
-- **Proactive improvement**: Suggest improvements within existing architecture
-
-**MANDATORY MAXIMUM THINKING:** Always use highest beneficial thinking level
-- **Simple tasks**: No thinking (ONLY for single-step trivial work)
-- **Moderate** (2-4 steps): `(think)` - 4,000 tokens
-- **Complex** (5-8 steps): `(think hard)` - 10,000 tokens  
-- **Architecture/system** (9+ steps): `(ultrathink)` - 31,999 tokens
-
-**THINKING TRIGGERS:**
-- **ULTRATHINK**: System architecture, multi-service integration, task planning, priority evaluation
-- **THINK HARD**: Performance optimization, security planning, complex refactoring, debugging, task management
-- **MANDATORY**: Task creation, prioritization, reordering, evaluation, user request analysis
-
-**WORKFLOW PATTERN:** Research → Planning → Implementation → **🔒 MANDATORY VALIDATION** → **🔍 EVIDENCE COLLECTION** → **✅ VERIFIED COMPLETION** → Commit
-
-## 🚨 CRITICAL VALIDATION ENFORCEMENT
-
-**VALIDATION IS NOT OPTIONAL - IT IS MANDATORY**
-
-Every agent MUST follow this validation protocol:
-
-### 🔒 Phase 1: Pre-Validation Requirements
-1. **ALL code must be written and tested**
-2. **ALL functionality must be implemented** 
-3. **ALL requirements must be addressed**
-4. **ALL documentation must be complete**
-
-### 🔍 Phase 2: Active Validation Process
-1. **RUN all linting commands** - show output
-2. **RUN all test commands** - show results
-3. **RUN all build commands** - show success
-4. **TEST all functionality manually** - demonstrate it works
-5. **VERIFY all requirements met** - list each one
-6. **CHECK all edge cases** - test error handling
-
-### ✅ Phase 3: Evidence Documentation
-1. **PROVIDE command outputs** showing all checks pass
-2. **DEMONSTRATE working functionality** with examples
-3. **LIST all requirements** and how they're satisfied
-4. **SHOW test results** proving everything works
-5. **CONFIRM production readiness** with evidence
-
-**🚨 FAILURE TO VALIDATE = TASK MARKED INCOMPLETE IMMEDIATELY**
+**VALIDATION PROTOCOL:** Evidence-based completion required:
+1. **RUN validation commands** - show all outputs
+2. **TEST functionality manually** - demonstrate it works  
+3. **VERIFY requirements met** - list each satisfied requirement
+4. **PROVIDE EVIDENCE** - paste command outputs proving success
 
 ## 🚨 TASKMANAGER API INTEGRATION
 
@@ -564,59 +432,9 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
 
 **DEPLOYMENT PATTERN:** Think → Map Work Distribution → Balance Complexity → Deploy 5 Agents Simultaneously → Monitor Progress → Synchronize Completion
 
-## 🚨 QUALITY ASSURANCE & LOGGING
+## 🚨 CONTEXT MANAGEMENT
 
-**PERFECTION ENFORCEMENT:**
-- **AUTOMATED QUALITY GATES**: Every commit must pass ALL quality checks
-- **ZERO COMPROMISE POLICY**: If ANY quality check fails → STOP and fix immediately
-- **CONTINUOUS VERIFICATION**: Quality checks run continuously during development
-- **ROLLBACK ON FAILURE**: Any quality regression triggers immediate rollback and fix
-
-## 🚨 COMPREHENSIVE LOGGING REQUIREMENTS
-
-**MANDATORY LOGGING PROTOCOLS:**
-- **VERBOSE OPERATION LOGGING**: Log ALL significant operations with detailed context
-- **DETAILED ERROR LOGGING**: Comprehensive error messages with stack traces, context, and recovery suggestions
-- **PERFORMANCE LOGGING**: Track execution times, memory usage, and resource consumption
-- **STATE CHANGE LOGGING**: Log all state transitions, data modifications, and configuration changes
-- **USER INTERACTION LOGGING**: Document all user inputs, commands, and system responses
-- **API CALL LOGGING**: Log all external API calls with request/response details
-- **FILE OPERATION LOGGING**: Track all file reads, writes, creates, deletes with full paths
-- **TASK LIFECYCLE LOGGING**: Comprehensive logging of task creation, updates, transitions, and completion
-- **DEPENDENCY LOGGING**: Log all dependency resolutions, conflicts, and updates
-- **SECURITY EVENT LOGGING**: Track authentication, authorization, and security-related events
-
-**LOGGING IMPLEMENTATION STANDARDS:**
-- **STRUCTURED LOGGING**: Use consistent JSON or structured format for all logs
-- **LOG LEVELS**: Implement DEBUG, INFO, WARN, ERROR, FATAL with appropriate usage
-- **CONTEXTUAL METADATA**: Include timestamps, user IDs, session IDs, request IDs in all logs
-- **CORRELATION IDs**: Use unique identifiers to trace operations across components
-- **SANITIZATION**: Never log sensitive data (passwords, tokens, personal information)
-- **ROTATION**: Implement log rotation and archival policies
-- **SEARCHABILITY**: Ensure logs are easily searchable and filterable
-- **MONITORING INTEGRATION**: Enable integration with monitoring and alerting systems
-
-**REQUIRED LOG CATEGORIES:**
-```bash
-# System Operations
-LOG_LEVEL=DEBUG node script.js  # All system operations
-LOG_LEVEL=INFO node script.js   # Important state changes
-LOG_LEVEL=WARN node script.js   # Potential issues
-LOG_LEVEL=ERROR node script.js  # Error conditions
-LOG_LEVEL=FATAL node script.js  # Critical failures
-```
-
-**COMPREHENSIVE LOGGING SCOPE:**
-- **TaskManager Operations**: All task CRUD operations, status changes, assignments
-- **Agent Operations**: Agent initialization, task claiming, communication
-- **File System Operations**: All file/directory operations with full context
-- **Network Operations**: HTTP requests, responses, timeouts, retries
-- **Database Operations**: All queries, transactions, connection states
-- **Configuration Changes**: Environment variables, settings modifications
-- **Error Recovery**: All error handling and recovery attempts
-- **Performance Metrics**: Response times, throughput, resource usage
-
-**CONTEXT MANAGEMENT:** Always check for ABOUT.md files before editing code (current directory, parent directories, subdirectories)
+**Always check for ABOUT.md files** before editing code (current directory, parent directories, subdirectories)
 
 ## 🚨 WORKFLOW PROTOCOLS
 
@@ -699,31 +517,7 @@ mv *report*.md development/reports/
 - **SKIP**: Internal implementation details, development processes not affecting users
 - **ORGANIZE**: All reports and internal docs in appropriate subdirectories
 
-**GIT WORKFLOW:**
-Every commit MUST be followed by a push to the remote repository.
-
-```bash
-# Standard Git Workflow
-git add -A
-git commit -m "feat: implement feature description
-
-- Bullet point of accomplishment
-- Another accomplishment
-
-🤖 Generated with Claude Code
-
-Co-Authored-By: Claude <noreply@anthropic.com>"
-git push
-```
-
-**Push Failure Recovery:**
-```bash
-# If push fails due to conflicts
-git pull --rebase && git push
-
-# If push fails due to branch tracking
-git push -u origin HEAD
-```
+**GIT WORKFLOW:** Always push commits to remote repository
 
 **TASK COMPLETION REQUIREMENTS:**
 
@@ -738,271 +532,43 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.getCurrentTask().then(async (task) => { if (task) { await tm.updateTaskStatus(task.id, 'completed'); console.log('✅ Current task completed:', task.id); } else { console.log('No active task found'); } });"
 ```
 
-**🚨 ULTRA-STRICT TASK COMPLETION REQUIREMENTS - ABSOLUTE PERFECTION MANDATE:**
+**🚨 TASK COMPLETION VALIDATION REQUIREMENTS:**
 
-**🛑 TASK COMPLETION IS FORBIDDEN UNLESS 100% ABSOLUTELY AND UNEQUIVOCALLY AND UNDENIABLY COMPLETE 🛑**
+**MANDATORY EVIDENCE-BASED COMPLETION:**
+1. **RUN validation commands** - Show outputs proving zero errors
+2. **TEST functionality manually** - Demonstrate it works correctly  
+3. **VERIFY all requirements met** - List each satisfied requirement
+4. **PROVIDE completion statement** with concrete evidence
 
-**🚨 CRITICAL: YOU MUST VALIDATE AND VERIFY COMPLETION - NO EXCEPTIONS! 🚨**
-
-**MANDATORY COMPLETION VALIDATION PROTOCOL - FOLLOW EVERY STEP:**
-
-## 🔒 STEP 1: MANDATORY EVIDENCE COLLECTION
-**BEFORE claiming completion, you MUST provide concrete evidence for EVERY requirement:**
-
-1. **RUN AND SHOW OUTPUT** of ALL validation commands:
-   ```bash
-   # TypeScript/JavaScript Projects - ALL must pass with ZERO errors
-   npm run lint          # Show: "✓ 0 errors, 0 warnings"
-   npm run test          # Show: "✓ All tests passed"
-   npm run build         # Show: "✓ Build successful"
-   npx tsc --noEmit      # Show: "✓ No type errors"
-   
-   # Python Projects - ALL must pass with ZERO errors
-   ruff check .          # Show: "All checks passed"
-   black --check .       # Show: "All done!"
-   mypy .               # Show: "Success: no issues found"
-   pytest --cov=100     # Show: "100% coverage, all tests passed"
-   ```
-
-2. **SCREENSHOT OR OUTPUT** of working functionality - PROVE it works
-3. **DEMONSTRATE** all edge cases and error handling work correctly
-4. **VERIFY** all user requirements are met with specific examples
-5. **CONFIRM** all documentation is complete and accurate
-
-## 🔒 STEP 2: MANDATORY VERIFICATION CHECKLIST - ALL MUST BE TRUE:
-**YOU MUST CHECK AND CONFIRM EACH ITEM WITH EVIDENCE:**
-
-- [ ] **FUNCTIONALITY VERIFIED**: ✅ Every feature works FLAWLESSLY - I have TESTED and CONFIRMED
-- [ ] **TESTING VERIFIED**: ✅ 100% test coverage, ALL tests passing - I have RUN the tests and they PASS
-- [ ] **CODE QUALITY VERIFIED**: ✅ ZERO linter/type/build errors - I have RUN all checks and they PASS
-- [ ] **DOCUMENTATION VERIFIED**: ✅ Complete documentation - I have REVIEWED and it's COMPLETE
-- [ ] **PERFORMANCE VERIFIED**: ✅ Meets all benchmarks - I have TESTED performance and it PASSES
-- [ ] **SECURITY VERIFIED**: ✅ Zero vulnerabilities - I have AUDITED security and it's SECURE
-- [ ] **ACCESSIBILITY VERIFIED**: ✅ WCAG compliance - I have TESTED accessibility and it PASSES
-- [ ] **CROSS-PLATFORM VERIFIED**: ✅ Works on all targets - I have TESTED on all platforms
-- [ ] **EDGE CASES VERIFIED**: ✅ All edge cases handled - I have TESTED all edge cases
-- [ ] **INTEGRATION VERIFIED**: ✅ All integrations work - I have TESTED all integrations
-- [ ] **USER ACCEPTANCE VERIFIED**: ✅ Meets all requirements - I have CONFIRMED all requirements
-- [ ] **PRODUCTION VERIFIED**: ✅ Production-ready - I have VERIFIED it's production-ready
-
-## 🔒 STEP 3: MANDATORY FINAL VALIDATION COMMANDS
-**RUN THESE COMMANDS AND PROVIDE OUTPUT - ALL MUST PASS:**
-
-**❌ ABSOLUTELY FORBIDDEN TO MARK COMPLETE IF ANY OF THE FOLLOWING EXIST:**
-
-**🚨 ZERO TOLERANCE - ANY ONE OF THESE = TASK REMAINS INCOMPLETE:**
-- ❌ ANY linter errors, warnings, or quality issues of ANY type
-- ❌ ANY failing, skipped, or pending tests
-- ❌ ANY build errors, compilation failures, or runtime errors
-- ❌ ANY missing or incomplete functionality from requirements
-- ❌ ANY known bugs, issues, or unexpected behaviors
-- ❌ ANY performance issues, slow responses, or resource problems
-- ❌ ANY security vulnerabilities, exposed secrets, or data leaks
-- ❌ ANY missing documentation, comments, or API descriptions
-- ❌ ANY accessibility violations or compliance failures
-- ❌ ANY cross-platform compatibility issues
-- ❌ ANY unhandled edge cases or error conditions
-- ❌ ANY technical debt, workarounds, or "TODO" items
-- ❌ ANY integration failures or dependency conflicts
-- ❌ ANY user acceptance criteria that remain unmet
-- ❌ ANY part of the task that feels "almost done" or "good enough"
-
-**🚨 MANDATORY FINAL VALIDATION COMMANDS - MUST ALL PASS WITH ZERO ERRORS:**
-```bash
-# FOR JAVASCRIPT/TYPESCRIPT PROJECTS - ALL must show SUCCESS:
-npm run lint          # MUST show: "✓ 0 problems (0 errors, 0 warnings)"
-npm run test          # MUST show: "✓ Tests: X passed, 0 failed"
-npm run build         # MUST show: "✓ Compiled successfully"
-npx tsc --noEmit      # MUST show: "✓ Found 0 errors"
-npm audit             # MUST show: "found 0 vulnerabilities"
-
-# FOR PYTHON PROJECTS - ALL must show SUCCESS:
-ruff check . --select=ALL  # MUST show: "All checks passed!"
-black --check .           # MUST show: "All done! ✨"
-isort --check-only .      # MUST show: "Skipped 0 files"
-mypy . --strict          # MUST show: "Success: no issues found"
-pytest --cov=100         # MUST show: "100% coverage"
-bandit -r .              # MUST show: "No issues identified"
-
-# PROJECT-SPECIFIC COMMANDS - ALL must show SUCCESS:
-make test && make lint && make build && make check
+**COMPLETION VALIDATION STATEMENT:**
+```
+✅ FUNCTIONALITY: [Describe tested features and results]
+✅ VALIDATION: [Show command outputs - "0 errors, tests passed"]  
+✅ REQUIREMENTS: [List each requirement and how satisfied]
+I CERTIFY THIS TASK IS 100% COMPLETE AND VALIDATED.
 ```
 
-**🚨 EVIDENCE REQUIREMENT:** You MUST show the actual output of these commands proving they all passed!
+**COMPLETION RULES:**
+- **NO DOUBT = NOT COMPLETE** - Any uncertainty means task incomplete
+- **NO EVIDENCE = NOT COMPLETE** - Must provide concrete proof
+- **NO VALIDATION = NOT COMPLETE** - Must run and show validation results
 
-## 🔒 STEP 4: MANDATORY COMPLETION STATEMENT
-**BEFORE marking any task complete, you MUST provide this exact statement with evidence:**
+## 🚨 EXECUTION WORKFLOW
 
-```
-🔒 COMPLETION VALIDATION STATEMENT:
-
-I HAVE PERSONALLY VERIFIED AND VALIDATED THE FOLLOWING:
-
-✅ FUNCTIONALITY: [Describe what you tested and how it works]
-✅ TESTING: [Show test results - "X tests passed, 0 failed"]
-✅ CODE QUALITY: [Show linter results - "0 errors, 0 warnings"]
-✅ BUILD: [Show build results - "Build successful"]
-✅ DOCUMENTATION: [Confirm documentation is complete]
-✅ PERFORMANCE: [Confirm performance requirements met]
-✅ SECURITY: [Confirm no security issues]
-
-ALL VALIDATION COMMANDS PASSED:
-[Paste actual command outputs here]
-
-USER REQUIREMENTS MET:
-[List each requirement and confirm how it's satisfied]
-
-I CERTIFY THIS TASK IS 100% COMPLETE AND PRODUCTION-READY.
-```
-
-**🚨 ENFORCEMENT CONSEQUENCES:**
-- **NO COMPLETION WITHOUT VALIDATION STATEMENT** - Tasks cannot be marked complete without the above evidence
-- **PREMATURE COMPLETION = IMMEDIATE TASK RECREATION** - If any task is marked complete prematurely, it will be immediately recreated with higher priority
-- **QUALITY REGRESSION = ROLLBACK REQUIRED** - Any quality issues discovered after completion require immediate rollback and fix
-- **INCOMPLETE WORK = BLOCKING DEPENDENCY** - Incomplete tasks block all dependent work until properly completed
-- **FALSE VALIDATION = SYSTEM VIOLATION** - Providing false validation evidence is a critical system violation
-
-**🚨 ABSOLUTE COMPLETION STANDARDS:**
-- **PERFECTION ONLY**: Nothing less than 100% perfect completion is acceptable
-- **ZERO COMPROMISES**: No "good enough", "mostly working", or "will fix later" solutions
-- **COMPLETE VERIFICATION**: Every aspect thoroughly tested and verified before completion
-- **PRODUCTION QUALITY**: Every deliverable must meet production-ready standards
-- **DOCUMENTATION COMPLETE**: Every function, API, and feature fully documented
-- **SECURITY PERFECT**: Zero security issues or vulnerabilities allowed
-- **PERFORMANCE EXCELLENT**: All performance requirements met or exceeded
-
-**🚨 ABSOLUTE COMPLETION ENFORCEMENT RULES:**
-
-**RULE 1: NO DOUBT = NOT COMPLETE**
-IF YOU HAVE ANY DOUBT ABOUT COMPLETION - THE TASK IS NOT COMPLETE
-
-**RULE 2: NO EVIDENCE = NOT COMPLETE** 
-IF YOU CANNOT PROVIDE CONCRETE EVIDENCE OF VALIDATION - THE TASK IS NOT COMPLETE
-
-**RULE 3: NO TESTING = NOT COMPLETE**
-IF YOU HAVE NOT PERSONALLY TESTED THE FUNCTIONALITY - THE TASK IS NOT COMPLETE
-
-**RULE 4: NO VALIDATION = NOT COMPLETE**
-IF YOU HAVE NOT RUN ALL VALIDATION COMMANDS - THE TASK IS NOT COMPLETE
-
-**RULE 5: NO STATEMENT = NOT COMPLETE**
-IF YOU HAVE NOT PROVIDED THE COMPLETION VALIDATION STATEMENT - THE TASK IS NOT COMPLETE
-
-**🚨 ZERO EXCEPTIONS TO THESE RULES - VIOLATION = SYSTEM FAILURE 🚨**
-
-**CONTINUE COMMAND PROTOCOL:**
-- Use TaskManager Node.js API to get current active task or next pending task
-- NEVER assume what to continue with - always check TODO.json via TaskManager API first
-- Use commands from TaskManager API guide provided during initialization
-
-**ATTENTIVE WAITING PROTOCOL:**
-- Wait attentively for user instructions before proceeding
-- Ask clarifying questions when instructions are ambiguous  
-- Stop immediately when user provides new instructions
-
-**SETTINGS PROTECTION:** **FORBIDDEN** to modify `/Users/jeremyparker/.claude/settings.json`
-
-## 🚨 EXECUTION APPROACH
-
-**STANDARD WORKFLOW:**
-1. **Wait for User** - Listen to ANY communication
-2. **INSTANT TASK CREATION** - First second response to ANY task opportunity  
-3. **Evaluate Existing Tasks** - Check reuse potential:
-   ```bash
-   # List current tasks to evaluate reuse potential
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.readTodo().then(data => console.log(JSON.stringify(data.tasks.map(t => ({id: t.id, title: t.title, status: t.status})), null, 2)));"
-   ```
-4. **Modify OR Create** - Update existing (preferred) OR create new:
-   ```bash
-   # Modify existing task (preferred) - using updateTask method
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.updateTask('task_id', {title: 'Updated title', description: 'Updated description'}).then(updated => console.log('Task updated:', updated.title));"
-   
-   # OR append to existing task - using modifyTask method
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.modifyTask('task_id', {appendDescription: 'Additional user request: [description]'}).then(modified => console.log('Task modified:', modified.title));"
-   
-   # OR create new task ONLY if no suitable existing task
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.createTask({title: 'User Request: [description]', description: '[detailed description]', mode: 'DEVELOPMENT', priority: 'high'}).then(id => console.log('Created task:', id));"
-   ```
-5. **Think First** - Determine complexity level (think/think hard/ultrathink)
-6. **Initialize Agent** - Use TaskManager API
-7. **Deploy 5 Subagents** - Synchronized completion timing
-8. **Implement** - Execute with perfection standards
-9. **Commit & Push** - Always push after committing
-10. **Complete Tasks** - Mark as completed via TaskManager API
+**STANDARD APPROACH:**
+1. **INSTANT TASK CREATION** - Create task for ANY user request
+2. **Evaluate Existing Tasks** - Check if can modify existing vs create new
+3. **Think First** - Use appropriate thinking level (think/think hard/ultrathink)
+4. **Initialize Agent** - Use TaskManager API initialization
+5. **Deploy 5 Subagents** - For complex work with synchronized completion
+6. **Implement & Validate** - Execute with evidence-based completion
+7. **Complete Tasks** - Mark completed via TaskManager API
 
 **INFINITE CONTINUE HOOK SYSTEM:**
 - **Setup**: `node "/.../setup-infinite-hook.js" "/path/to/project"`
-- **Mode-Specific Coverage**: development (80%), testing/debugging/refactoring (95%), documentation (95%)
+- **Coverage**: development (80%), testing/debugging/refactoring (95%)
 
-## 🚨 CRITICAL: INSTANT TASK CREATION OVERRIDE
+**INSTANT TASK CREATION RULE:**
+User communication → **INSTANT TASK CREATION** → Then execute work
 
-**EMERGENCY PROTOCOL**: If you find yourself hesitating, analyzing, or considering whether to create a task → **STOP IMMEDIATELY** → **CREATE TASK FIRST** → **ANALYZE SECOND**
-
-**INSTANT TASK CREATION TRIGGERS:**
-- User types ANYTHING
-- User asks ANY question  
-- User gives ANY instruction
-- User points out ANY issue
-- User mentions ANY request
-- User provides ANY feedback
-- User interrupts ANY process
-- User suggests ANY improvement
-- You discover ANY opportunity
-- You encounter ANY problem
-- You identify ANY need
-- You observe ANY gap
-- **🚨 ANY CATEGORY PATTERN DETECTED** - INSTANT TASK CREATION MANDATORY
-
-**🚨 CATEGORY-SPECIFIC INSTANT TRIGGERS:**
-- **LINTER ERROR MENTIONED** → INSTANTLY CREATE `linter-error` TASK
-- **BUILD FAILURE DETECTED** → INSTANTLY CREATE `build-error` TASK  
-- **START PROBLEM FOUND** → INSTANTLY CREATE `start-error` TASK
-- **BUG REPORTED** → INSTANTLY CREATE `bug` TASK
-- **MISSING FEATURE NOTED** → INSTANTLY CREATE `missing-feature` TASK
-- **RESEARCH NEEDED** → INSTANTLY CREATE `research` TASK (HIGHEST PRIORITY)
-- **TEST ISSUE SPOTTED** → INSTANTLY CREATE appropriate `test-*` TASK
-- **REFACTORING OPPORTUNITY** → INSTANTLY CREATE `refactor` TASK
-- **DOCUMENTATION GAP** → INSTANTLY CREATE `documentation` TASK
-
-**ZERO TOLERANCE FOR DELAY**: Task creation is not optional, not conditional, not dependent on analysis. It is MANDATORY and IMMEDIATE. 
-
-**🚨 CATEGORY DETECTION = AUTOMATIC TASK CREATION - NO EXCEPTIONS, NO DELAYS**
-
-## 🚨 ABSOLUTE PERFECTION ENFORCEMENT SUMMARY
-
-**NON-NEGOTIABLE PERFECTION REQUIREMENTS:**
-- **100% FUNCTIONALITY** - Every feature works perfectly
-- **ZERO ERRORS** - No linter, type, build, runtime, or test errors of ANY kind
-- **INSTANT ERROR RESPONSE** - Detect error → Stop → Fix OR Create Task → Verify → Continue
-- **COMPREHENSIVE TESTING** - 100% test coverage with all edge cases
-- **FLAWLESS CODE QUALITY** - Perfect documentation, typing, validation, security
-- **PERFORMANCE EXCELLENCE** - All benchmarks met or exceeded
-- **SECURITY PERFECTION** - Zero vulnerabilities, perfect compliance
-- **COMPLETE DOCUMENTATION** - Every aspect thoroughly documented
-
-**ENFORCEMENT PROTOCOL:**
-1. **DETECT** any imperfection immediately
-2. **STOP** all work until perfection achieved  
-3. **CREATE TASK** for any issue requiring time to fix
-4. **FIX** completely with verification
-5. **🔒 MANDATORY VALIDATION** - Run ALL validation commands
-6. **🔍 COLLECT EVIDENCE** - Show proof all checks pass
-7. **✅ VERIFY COMPLETION** - Provide validation statement
-8. **DOCUMENT** resolution and prevention
-9. **CONTINUE** only after 100% perfection verified with evidence
-
-**🚨 NEW CRITICAL STEP: VALIDATION CANNOT BE SKIPPED**
-
-Between steps 5-6, you MUST:
-- Run every applicable linting command
-- Run every applicable test command  
-- Run every applicable build command
-- Test all functionality manually
-- Verify all requirements are met
-- Provide evidence of all validations
-
-**NO EXCEPTIONS - NO SHORTCUTS - NO ASSUMPTIONS**
-
-**REMEMBER**: Nothing but ABSOLUTE PERFECTION is acceptable. Every deliverable must be flawless.
-
-**SUCCESS FORMULA:** **ABSOLUTE PERFECTION** + **INSTANT TASK CREATION** + **5 SYNCHRONIZED SUBAGENTS** + **MAXIMUM THINKING** + **ZERO ERROR TOLERANCE** = **MAXIMUM SPEED WITH PERFECTION**
+**SETTINGS PROTECTION:** Never modify `/Users/jeremyparker/.claude/settings.json`
