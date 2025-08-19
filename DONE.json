@@ -26919,9 +26919,157 @@
       "needs_linter_feedback": true,
       "linter_feedback_generated": false,
       "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1755641799406_ume7mo0fh",
+      "title": "API Test Task",
+      "description": "Test task created via REST API",
+      "mode": "DEVELOPMENT",
+      "category": "missing-feature",
+      "priority": "medium",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-19T22:16:39.406Z",
+      "assigned_agent": "development_session_1755643974000_1_general_d95bf10c",
+      "started_at": "2025-08-19T23:06:44.814Z",
+      "claimed_by": "development_session_1755643974000_1_general_d95bf10c",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1755643974000_1_general_d95bf10c",
+          "role": "primary",
+          "assignedAt": "2025-08-19T23:06:44.814Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-19T23:07:11.604Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-19T23:07:11.604Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1755644495736_0xxbusqmk",
+      "title": "API Test Task",
+      "description": "Test task created via REST API",
+      "mode": "DEVELOPMENT",
+      "category": "missing-feature",
+      "priority": "medium",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-19T23:01:35.736Z",
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-19T23:07:19.015Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-19T23:07:19.016Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1755644564289_t0t62nzth",
+      "title": "API Test Task",
+      "description": "Test task created via REST API",
+      "mode": "DEVELOPMENT",
+      "category": "missing-feature",
+      "priority": "medium",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-19T23:02:44.289Z",
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-19T23:07:19.022Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-19T23:07:19.022Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1755640147099_if8z4d5bo",
+      "title": "Add research task auto-creation for complex implementations",
+      "description": "Enhance TaskManager API to automatically create research tasks when complex implementation tasks are added, creating proper dependency chains",
+      "mode": "DEVELOPMENT",
+      "category": "enhancement",
+      "priority": "medium",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-19T21:49:07.099Z",
+      "assigned_agent": "development_session_1755643974000_1_general_d95bf10c",
+      "started_at": "2025-08-19T23:07:31.425Z",
+      "claimed_by": "development_session_1755643974000_1_general_d95bf10c",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1755643974000_1_general_d95bf10c",
+          "role": "primary",
+          "assignedAt": "2025-08-19T23:07:31.425Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-19T23:10:55.961Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-19T23:10:55.962Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "./TODO.json"
     }
   ],
-  "total_completed": 595,
-  "last_completion": "2025-08-19T23:06:10.101Z",
+  "total_completed": 599,
+  "last_completion": "2025-08-19T23:10:55.962Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }

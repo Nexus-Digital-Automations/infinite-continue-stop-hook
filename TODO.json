@@ -1982,22 +1982,6 @@
       "created_at": "2025-08-19T21:46:38.690Z"
     },
     {
-      "id": "task_1755640147099_if8z4d5bo",
-      "title": "Add research task auto-creation for complex implementations",
-      "description": "Enhance TaskManager API to automatically create research tasks when complex implementation tasks are added, creating proper dependency chains",
-      "mode": "DEVELOPMENT",
-      "category": "enhancement",
-      "priority": "medium",
-      "status": "pending",
-      "dependencies": [],
-      "important_files": [],
-      "success_criteria": [],
-      "estimate": "",
-      "requires_research": false,
-      "subtasks": [],
-      "created_at": "2025-08-19T21:49:07.099Z"
-    },
-    {
       "id": "task_1755640251698_m4fqaipnu",
       "title": "Monitor and resolve stale task assignments",
       "description": "Identify tasks stuck in progress for >30 minutes and implement auto-reversion or notification system to prevent task bottlenecks",
@@ -2014,12 +1998,11 @@
       "created_at": "2025-08-19T21:50:51.698Z"
     },
     {
-      "id": "task_1755641799406_ume7mo0fh",
-      "title": "API Test Task",
-      "description": "Test task created via REST API",
-      "mode": "DEVELOPMENT",
-      "category": "missing-feature",
-      "priority": "medium",
+      "id": "task_1755644998841_d0xlbuk4n",
+      "title": "Fix typo in documentation",
+      "description": "Update the README file to fix spelling errors",
+      "category": "documentation",
+      "priority": "low",
       "status": "pending",
       "dependencies": [],
       "important_files": [],
@@ -2027,31 +2010,106 @@
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-08-19T22:16:39.406Z"
+      "created_at": "2025-08-19T23:09:58.841Z",
+      "auto_research_created": false,
+      "mode": "DEVELOPMENT"
     },
     {
-      "id": "task_1755644495736_0xxbusqmk",
-      "title": "API Test Task",
-      "description": "Test task created via REST API",
-      "mode": "DEVELOPMENT",
-      "category": "missing-feature",
-      "priority": "medium",
+      "id": "task_1755644998853_ms456b742",
+      "title": "Research: Implement OAuth 2.0 authentication with external API",
+      "description": "Research and analysis required for implementing: \"Implement OAuth 2.0 authentication with external API\"\n\n**Implementation Task Details:**\nCreate integration with third-party API using OAuth 2.0 for secure authentication and data exchange\n\n**Research Objectives:**\n1. Investigate best practices and methodologies for this implementation\n2. Identify potential challenges, risks, and mitigation strategies  \n3. Research relevant technologies, frameworks, and tools\n4. Define implementation approach and architecture decisions\n5. Provide actionable recommendations and guidance\n\n**Implementation Task ID:** task_1755644998853_wcqq5diiz\n\n**Auto-created by:** TaskManager research dependency system\n**Research Priority:** This research task must be completed before implementation begins",
+      "mode": "RESEARCH",
+      "category": "research",
+      "priority": "high",
       "status": "pending",
       "dependencies": [],
-      "important_files": [],
-      "success_criteria": [],
-      "estimate": "",
+      "important_files": [
+        "./development/research-reports/research-report-task_1755644998853_ms456b742.md"
+      ],
+      "success_criteria": [
+        "Research methodology and approach documented",
+        "Key findings and recommendations provided",
+        "Implementation guidance and best practices identified",
+        "Risk assessment and mitigation strategies outlined",
+        "Research report created: ./development/research-reports/research-report-task_1755644998853_ms456b742.md"
+      ],
+      "estimate": "1-2 hours",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-08-19T23:01:35.736Z"
+      "created_at": "2025-08-19T23:09:58.853Z",
+      "created_by": "auto-research-system",
+      "auto_created_for": "task_1755644998853_wcqq5diiz"
     },
     {
-      "id": "task_1755644564289_t0t62nzth",
-      "title": "API Test Task",
-      "description": "Test task created via REST API",
-      "mode": "DEVELOPMENT",
+      "id": "task_1755644998853_wcqq5diiz",
+      "title": "Implement OAuth 2.0 authentication with external API",
+      "description": "Create integration with third-party API using OAuth 2.0 for secure authentication and data exchange",
+      "category": "missing-feature",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [
+        "task_1755644998853_ms456b742"
+      ],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": true,
+      "subtasks": [],
+      "created_at": "2025-08-19T23:09:58.855Z",
+      "auto_research_created": true,
+      "mode": "DEVELOPMENT"
+    },
+    {
+      "id": "task_1755644998864_fjqcpziwe",
+      "title": "Research: Design and implement user database schema",
+      "description": "Research and analysis required for implementing: \"Design and implement user database schema\"\n\n**Implementation Task Details:**\nCreate PostgreSQL database schema for user management with proper indexing and relationships\n\n**Research Objectives:**\n1. Investigate best practices and methodologies for this implementation\n2. Identify potential challenges, risks, and mitigation strategies  \n3. Research relevant technologies, frameworks, and tools\n4. Define implementation approach and architecture decisions\n5. Provide actionable recommendations and guidance\n\n**Implementation Task ID:** task_1755644998864_t13bxkzox\n\n**Auto-created by:** TaskManager research dependency system\n**Research Priority:** This research task must be completed before implementation begins",
+      "mode": "RESEARCH",
+      "category": "research",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [
+        "./development/research-reports/research-report-task_1755644998864_fjqcpziwe.md"
+      ],
+      "success_criteria": [
+        "Research methodology and approach documented",
+        "Key findings and recommendations provided",
+        "Implementation guidance and best practices identified",
+        "Risk assessment and mitigation strategies outlined",
+        "Research report created: ./development/research-reports/research-report-task_1755644998864_fjqcpziwe.md"
+      ],
+      "estimate": "1-2 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-19T23:09:58.864Z",
+      "created_by": "auto-research-system",
+      "auto_created_for": "task_1755644998864_t13bxkzox"
+    },
+    {
+      "id": "task_1755644998864_t13bxkzox",
+      "title": "Design and implement user database schema",
+      "description": "Create PostgreSQL database schema for user management with proper indexing and relationships",
       "category": "missing-feature",
       "priority": "medium",
+      "status": "pending",
+      "dependencies": [
+        "task_1755644998864_fjqcpziwe"
+      ],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": true,
+      "subtasks": [],
+      "created_at": "2025-08-19T23:09:58.866Z",
+      "auto_research_created": true,
+      "mode": "DEVELOPMENT"
+    },
+    {
+      "id": "task_1755644998874_07h32n18d",
+      "title": "Implement machine learning recommendation engine",
+      "description": "Build ML-based recommendation system using neural networks",
+      "category": "missing-feature",
+      "priority": "high",
       "status": "pending",
       "dependencies": [],
       "important_files": [],
@@ -2059,7 +2117,30 @@
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-08-19T23:02:44.289Z"
+      "created_at": "2025-08-19T23:09:58.874Z",
+      "auto_research_created": false,
+      "mode": "DEVELOPMENT"
+    },
+    {
+      "id": "task_1755644998882_xxnkmc218",
+      "title": "Research: API integration best practices",
+      "description": "Research OAuth 2.0 implementation patterns and security considerations",
+      "mode": "RESEARCH",
+      "category": "research",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [
+        "./development/research-reports/research-report-task_1755644998882_xxnkmc218.md"
+      ],
+      "success_criteria": [
+        "Research report created: ./development/research-reports/research-report-task_1755644998882_xxnkmc218.md"
+      ],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-19T23:09:58.882Z",
+      "auto_research_created": false
     }
   ],
   "current_mode": "DEVELOPMENT",
