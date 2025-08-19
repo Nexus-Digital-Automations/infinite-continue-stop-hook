@@ -226,6 +226,17 @@ class TaskManagerAPI {
                 }
             }
             
+            // Enhanced research dependency detection for implementation tasks
+            const researchSuggestion = this._checkResearchRequirements(task, todoData);
+            if (researchSuggestion.suggestResearch) {
+                return {
+                    success: false,
+                    reason: "Task may benefit from research before implementation",
+                    researchSuggestion: researchSuggestion,
+                    task: task
+                };
+            }
+            
             const result = await this.taskManager.claimTask(taskId, targetAgentId, priority);
             
             // Check if task requires research or is a research category task
@@ -400,6 +411,118 @@ class TaskManagerAPI {
                 error: error.message
             };
         }
+    }
+
+    /**
+     * Check if a task might benefit from research before implementation
+     * @private
+     * @param {Object} task - Task to analyze
+     * @param {Object} todoData - Full TODO data
+     * @returns {Object} Research suggestion result
+     */
+    _checkResearchRequirements(task, todoData) {
+        // Only suggest research for implementation-focused tasks
+        const implementationCategories = ['missing-feature', 'enhancement', 'bug'];
+        if (!implementationCategories.includes(task.category)) {
+            return { suggestResearch: false };
+        }
+        
+        // Skip if task already has research dependency or is already research-flagged
+        if (task.requires_research || (task.dependencies && task.dependencies.length > 0)) {
+            return { suggestResearch: false };
+        }
+        
+        // Check for complexity indicators that suggest research might be helpful
+        const complexityIndicators = [
+            // Keywords in title/description that suggest complexity
+            /api|integration|authentication|oauth|jwt|database|schema|architecture|security|performance|scalability/i,
+            // Multiple words suggesting broad scope
+            /system|platform|framework|infrastructure|migration|refactor/i,
+            // External service integration
+            /external|third.?party|service|endpoint|webhook/i
+        ];
+        
+        const taskText = `${task.title} ${task.description}`.toLowerCase();
+        const hasComplexityIndicators = complexityIndicators.some(pattern => pattern.test(taskText));
+        
+        // Check if there are related research tasks already completed
+        const relatedResearchTasks = todoData.tasks.filter(t => 
+            t.category === 'research' && 
+            t.status === 'completed' &&
+            this._isTaskRelated(task, t)
+        );
+        
+        if (hasComplexityIndicators && relatedResearchTasks.length === 0) {
+            return {
+                suggestResearch: true,
+                reason: "Task appears complex and might benefit from research",
+                complexityFactors: this._identifyComplexityFactors(taskText),
+                suggestions: {
+                    message: "🔬 RESEARCH RECOMMENDED BEFORE IMPLEMENTATION",
+                    instructions: [
+                        "📋 CONSIDER creating a research task first to:",
+                        "🔍 INVESTIGATE best practices and technical approaches",
+                        "📚 RESEARCH existing solutions and patterns",
+                        "🎯 DEFINE implementation strategy and requirements",
+                        "✅ CREATE research task or proceed if confident"
+                    ],
+                    researchTaskTemplate: {
+                        title: `Research: ${task.title}`,
+                        description: `Research technical approaches, best practices, and implementation strategies for: ${task.description}`,
+                        category: 'research',
+                        mode: 'RESEARCH'
+                    },
+                    createResearchCommand: `node taskmanager-api.js create '{"title": "Research: ${task.title}", "description": "Research technical approaches and implementation strategies", "category": "research", "mode": "RESEARCH"}'`
+                }
+            };
+        }
+        
+        return { suggestResearch: false };
+    }
+
+    /**
+     * Check if two tasks are related based on keywords
+     * @private
+     */
+    _isTaskRelated(task1, task2) {
+        const extractKeywords = (text) => {
+            return text.toLowerCase()
+                .replace(/[^\w\s]/g, ' ')
+                .split(/\s+/)
+                .filter(word => word.length > 3);
+        };
+        
+        const task1Keywords = extractKeywords(`${task1.title} ${task1.description}`);
+        const task2Keywords = extractKeywords(`${task2.title} ${task2.description}`);
+        
+        const commonKeywords = task1Keywords.filter(word => task2Keywords.includes(word));
+        return commonKeywords.length >= 2; // At least 2 common significant words
+    }
+
+    /**
+     * Identify specific complexity factors in task text
+     * @private
+     */
+    _identifyComplexityFactors(taskText) {
+        const factors = [];
+        
+        if (/api|integration|endpoint/.test(taskText)) {
+            factors.push("API/Integration complexity");
+        }
+        if (/auth|oauth|jwt|security/.test(taskText)) {
+            factors.push("Authentication/Security requirements");
+        }
+        if (/database|schema|migration/.test(taskText)) {
+            factors.push("Database/Schema complexity");
+        }
+        if (/external|third.?party/.test(taskText)) {
+            factors.push("External service dependencies");
+        }
+        if (/performance|scalability/.test(taskText)) {
+            factors.push("Performance/Scalability considerations");
+        }
+        
+        return factors;
     }
 
     // Cleanup method

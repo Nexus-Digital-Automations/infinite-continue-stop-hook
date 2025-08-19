@@ -137,21 +137,6 @@ This mandate exists to ensure **SUSTAINABLE CODE QUALITY** and **LONG-TERM SYSTE
 3. **VERIFY requirements met** - list each satisfied requirement
 4. **PROVIDE EVIDENCE** - paste command outputs proving success
 
-## 🚨 MANDATORY POST-COMPLETION VALIDATION
-
-**ABSOLUTE REQUIREMENT**: IMMEDIATELY run lint and type checks after completing ANY task that modified code files
-
-**🔴 CRITICAL VALIDATION SEQUENCE:**
-1. **Complete task implementation**
-2. **Run lint and type checks** on modified files/folders  
-3. **Fix any errors** before marking task complete
-4. **Provide validation evidence** - show command outputs
-
-**🚨 VALIDATION FAILURE PROTOCOL:**
-- **Linting errors** → Create `category: 'linter-error'` task IMMEDIATELY
-- **Type errors** → Create `category: 'error'` task IMMEDIATELY  
-- **DO NOT mark complete** until ALL validation passes
-
 
 ## 🚨 TASK CATEGORY & PRIORITY SYSTEM
 

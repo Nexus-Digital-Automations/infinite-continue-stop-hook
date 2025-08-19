@@ -101,6 +101,10 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 
 🔗 DEPENDENCY SYSTEM: Any task can depend on any other task - dependencies prioritized first
 
+⏰ AUTOMATIC STALE TASK RESET: Tasks in progress for >15 minutes are automatically reset to pending
+
+🔍 MANDATORY POST-COMPLETION VALIDATION: Run lint and type checks immediately after completing any task that modified code files
+
 ⚠️ TROUBLESHOOTING BASH ESCAPING ERRORS:
 If you get "SyntaxError: missing ) after argument list" with !== or !=:
    # ❌ BROKEN: bash escapes the ! character
@@ -165,12 +169,93 @@ The stop hook will continue infinitely to prevent accidental termination.
 
 💡 TO SET UP TASKMANAGER:
 If you want to enable task management for this project:
-1. Run the setup script to create TODO.json
-2. Initialize TaskManager for the project
+1. Run: node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project "${workingDir}"
+2. This will create TODO.json and initialize your agent
 
 ⚡ CONTINUING OPERATION...
 `);
             process.exit(2); // Never allow stops even without TODO.json
+        }
+
+        // Initialize TaskManager to check agent status
+        const taskManager = new TaskManager(todoPath);
+        
+        // Check if there are any active agents or if agent initialization is needed
+        const todoData = await taskManager.readTodo();
+        const activeAgents = Object.keys(todoData.agents || {}).filter(agentId => {
+            const agent = todoData.agents[agentId];
+            // Handle both lastHeartbeat (camelCase) and last_heartbeat (snake_case) formats
+            const lastHeartbeat = agent.lastHeartbeat || agent.last_heartbeat;
+            const heartbeatTime = lastHeartbeat ? new Date(lastHeartbeat).getTime() : 0;
+            const timeSinceHeartbeat = Date.now() - heartbeatTime;
+            return timeSinceHeartbeat < 900000; // 15 minutes (more reasonable for active sessions)
+        });
+        
+        // Check for stale in-progress tasks (stuck for > 15 minutes) and reset them
+        const staleTaskTimeout = 900000; // 15 minutes
+        let staleTasksReset = 0;
+        
+        for (const task of todoData.tasks) {
+            if (task.status === 'in_progress' && task.started_at) {
+                const taskStartTime = new Date(task.started_at).getTime();
+                const timeSinceStart = Date.now() - taskStartTime;
+                
+                if (timeSinceStart > staleTaskTimeout) {
+                    // Reset stale task back to pending
+                    task.status = 'pending';
+                    task.assigned_agent = null;
+                    task.claimed_by = null;
+                    task.started_at = null;
+                    
+                    // Add reset history entry
+                    if (!task.agent_assignment_history) task.agent_assignment_history = [];
+                    task.agent_assignment_history.push({
+                        agent: task.assigned_agent || 'system',
+                        action: 'auto_reset_stale',
+                        timestamp: new Date().toISOString(),
+                        reason: `Task stale for ${Math.round(timeSinceStart / 60000)} minutes`
+                    });
+                    
+                    staleTasksReset++;
+                    logger.addFlow(`Reset stale task: ${task.title} (${Math.round(timeSinceStart / 60000)} min)`);
+                }
+            }
+        }
+        
+        // Save changes if any stale tasks were reset
+        if (staleTasksReset > 0) {
+            await taskManager.writeTodo(todoData);
+            logger.addFlow(`Reset ${staleTasksReset} stale tasks back to pending`);
+        }
+
+        if (activeAgents.length === 0) {
+            logger.addFlow("No active agents detected - need agent initialization");
+            logger.logExit(2, "No active agents - providing initialization guidance");
+            logger.save();
+            
+            console.error(`
+🤖 NO ACTIVE AGENTS DETECTED
+
+TaskManager project exists but no active agents are registered.
+
+🔄 INFINITE CONTINUE MODE ACTIVE
+The stop hook will continue infinitely to prevent accidental termination.
+
+💡 AGENT INITIALIZATION REQUIRED:
+To start working with this TaskManager project:
+
+1. **Initialize your agent:**
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project "${workingDir}"
+
+2. **Use the returned agent ID in subsequent commands**
+   (Commands will show [AGENT_ID] placeholder that you replace with your actual agent ID)
+
+3. **Check current status:**
+   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTask("[YOUR_AGENT_ID]").then(task => console.log(task ? JSON.stringify(task, null, 2) : "No active task"));'
+
+⚡ CONTINUING OPERATION...
+`);
+            process.exit(2);
         }
         
         // ========================================================================
@@ -202,10 +287,7 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
         // INFINITE CONTINUE MODE: NEVER ALLOW NATURAL STOPS
         // ========================================================================
         
-        // Initialize TaskManager
-        const taskManager = new TaskManager(todoPath);
-        
-        // Check task status to provide appropriate instructions
+        // Check task status to provide appropriate instructions (taskManager already initialized above)
         const taskStatus = await taskManager.getTaskStatus();
         logger.addFlow(`Task status: ${taskStatus.pending} pending, ${taskStatus.in_progress} in_progress, ${taskStatus.completed} completed`);
         

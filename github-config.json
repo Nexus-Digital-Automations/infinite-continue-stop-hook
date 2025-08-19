@@ -1,0 +1,33 @@
+{
+  "github": {
+    "repository": {
+      "owner": "octocat",
+      "name": "Hello-World"
+    },
+    "webhookSecret": null,
+    "userAgent": "TaskManager-GitHub-Integration/1.0.0",
+    "timeout": 10000
+  },
+  "features": {
+    "issueSync": true,
+    "webhookProcessing": true,
+    "analytics": true,
+    "autoLabeling": true
+  },
+  "sync": {
+    "categories": [
+      "missing-feature",
+      "bug", 
+      "enhancement",
+      "documentation"
+    ],
+    "priorities": [
+      "critical",
+      "high"
+    ],
+    "excludeStatuses": [
+      "completed",
+      "archived"
+    ]
+  }
+}

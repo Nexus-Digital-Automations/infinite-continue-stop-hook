@@ -1,6 +1,82 @@
 # React Task Management Components
 
-This directory contains React components for task management, designed to work with the TaskManager system used in this project.
+This directory contains a comprehensive suite of React components for task management, designed to work seamlessly with the TaskManager system. The components provide a modern, responsive dashboard interface with real-time updates and API integration.
+
+## 🚀 New Enhanced Features
+
+### TaskDashboard.jsx
+A comprehensive React dashboard that provides:
+- **Real-time task monitoring** with automatic data refresh
+- **Multi-view interface** (Dashboard, Tasks, Agents)
+- **Advanced analytics** and performance metrics
+- **Agent management** with activity monitoring
+- **Task creation workflow** with modal interface
+- **Error handling** and connection status monitoring
+- **Responsive design** with mobile optimization
+
+### App.jsx
+Main application component featuring:
+- **API connectivity monitoring** with health checks
+- **Global error handling** and user notifications
+- **Loading states** and retry mechanisms
+- **Modern UI** with animations and transitions
+
+### index.html
+Complete demo page showcasing:
+- **Standalone React application** (no build step required)
+- **Live component demonstration** with mock data
+- **Interactive features** and responsive design
+- **Modern CSS** with animations and hover effects
+
+## 🚀 Quick Start
+
+### Option 1: Demo with Static HTML (Fastest)
+```bash
+cd components
+open index.html
+```
+This opens a complete demo with mock data - no setup required!
+
+### Option 2: Integration with API Server
+1. Start the TaskManager API server:
+```bash
+npm start  # Starts API server on localhost:3000
+```
+
+2. Open the demo page and it will automatically connect to the live API
+
+### Option 3: Integration in Your React App
+```jsx
+import TaskDashboard from './components/TaskDashboard.jsx';
+
+const MyApp = () => (
+  <TaskDashboard 
+    apiBaseUrl="/api"
+    refreshInterval={30000}
+    onError={(error) => console.error(error)}
+  />
+);
+```
+
+## 📊 Dashboard Features
+
+### Real-time Analytics
+- Task completion trends and metrics
+- Agent workload distribution
+- System health monitoring
+- Performance statistics
+
+### Advanced Task Management
+- **Smart filtering** by status, category, priority
+- **Real-time search** across title, description, category
+- **Bulk operations** and status updates
+- **Dependency tracking** and visualization
+
+### Agent Monitoring
+- **Live agent status** with heartbeat tracking
+- **Workload analysis** and task distribution
+- **Performance metrics** per agent
+- **Activity timeline** and history
 
 ## Components
 

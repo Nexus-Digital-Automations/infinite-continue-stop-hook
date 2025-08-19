@@ -26270,9 +26270,615 @@
       "needs_linter_feedback": true,
       "linter_feedback_generated": false,
       "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1755639320043_9k6szj44c",
+      "title": "Add mandatory lint and type check validation after task completion",
+      "description": "Update CLAUDE.md and stop hook feedback to require immediate lint and type checks on all modified files after completing any task",
+      "mode": "DEVELOPMENT",
+      "category": "enhancement",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-19T21:35:20.043Z",
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-19T21:37:01.973Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-19T21:37:01.974Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1755555841381_fgrgtpkxm",
+      "title": "Test Task 2 - Unit Tests",
+      "description": "Add unit tests for authentication module",
+      "mode": "TESTING",
+      "category": "missing-test",
+      "priority": "low",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-18T22:24:01.381Z",
+      "agent_assignment_history": [
+        {
+          "agentId": "agent_undefined",
+          "role": "primary",
+          "assignedAt": "2025-08-18T22:24:17.493Z",
+          "reassignReason": null
+        },
+        {
+          "agentId": "agent_2",
+          "role": "primary",
+          "assignedAt": "2025-08-18T22:29:02.098Z",
+          "reassignReason": null
+        },
+        {
+          "agent": "agent_1755618251710",
+          "action": "claimed",
+          "timestamp": "2025-08-19T15:44:11.710Z"
+        },
+        {
+          "agent": "agent_1755624504961",
+          "action": "claimed",
+          "timestamp": "2025-08-19T17:28:24.961Z"
+        }
+      ],
+      "parallel_execution": {
+        "canParallelize": false,
+        "parallelWith": [],
+        "coordinatorTask": null
+      },
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-18T22:24:17.495Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "in_progress"
+          }
+        },
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-19T21:42:41.562Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "claimed_by": "agent_1755624504961",
+      "reverted_at": "2025-08-19T16:20:10.952Z",
+      "revert_reason": "Task auto-reverted after 30 minutes in progress",
+      "previously_assigned_agent": "agent_1755618251710",
+      "previous_started_at": "2025-08-19T15:44:11.710Z",
+      "started_at": "2025-08-19T17:28:24.961Z",
+      "assigned_agent": "agent_1755624504961",
+      "completed_at": "2025-08-19T21:42:41.563Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1755624269169_xko4tfkmu",
+      "title": "Implement dependency system for research tasks",
+      "description": "Modify TaskManager API to check for research dependencies when claiming implementation tasks. Point to research task first if dependency exists.",
+      "mode": "DEVELOPMENT",
+      "category": "enhancement",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-19T17:24:29.169Z",
+      "assigned_agent": "development_backend-dev-session_1_general_fec833dc",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_backend-dev-session_1_general_fec833dc",
+          "role": "primary",
+          "assignedAt": "2025-08-19T21:44:21.109Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-19T21:46:51.990Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-19T21:46:51.990Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1755624434046_2l5monc79",
+      "title": "Test Research: API Authentication Patterns",
+      "description": "Research OAuth 2.0, JWT, and API key authentication patterns for external service integration",
+      "mode": "RESEARCH",
+      "category": "research",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [
+        "./development/research-reports/research-report-task_1755624434046_2l5monc79.md"
+      ],
+      "success_criteria": [
+        "Research report created: ./development/research-reports/research-report-task_1755624434046_2l5monc79.md"
+      ],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-19T17:27:14.046Z",
+      "started_at": "2025-08-19T17:31:13.420Z",
+      "claimed_by": "agent_1755624673420",
+      "assigned_agent": "agent_1755624673420",
+      "agent_assignment_history": [
+        {
+          "agent": "agent_1755624673420",
+          "action": "claimed",
+          "timestamp": "2025-08-19T17:31:13.420Z"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-19T22:04:50.178Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-19T22:04:50.179Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1755556336274_z6pn81ikf",
+      "title": "Manual Test Task A - Backend API",
+      "description": "Create REST API endpoints",
+      "mode": "DEVELOPMENT",
+      "category": "missing-feature",
+      "priority": "medium",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-18T22:32:16.274Z",
+      "agent_assignment_history": [
+        {
+          "agentId": "agent_2",
+          "role": "primary",
+          "assignedAt": "2025-08-18T22:32:56.904Z",
+          "reassignReason": null
+        },
+        {
+          "agent": "agent_1755618432390",
+          "action": "claimed",
+          "timestamp": "2025-08-19T15:47:12.390Z"
+        },
+        {
+          "agent": "agent_1755624644448",
+          "action": "claimed",
+          "timestamp": "2025-08-19T17:30:44.448Z"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-08-19T22:09:05.201Z",
+          "reason": "Task stale for 278 minutes"
+        },
+        {
+          "agentId": "development_session_1755641552331_1_general_43b03e03",
+          "role": "primary",
+          "assignedAt": "2025-08-19T22:13:06.599Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "parallel_execution": {
+        "canParallelize": false,
+        "parallelWith": [],
+        "coordinatorTask": null
+      },
+      "claimed_by": null,
+      "reverted_at": "2025-08-19T16:20:10.952Z",
+      "revert_reason": "Task auto-reverted after 30 minutes in progress",
+      "previously_assigned_agent": "agent_1755618432390",
+      "previous_started_at": "2025-08-19T15:47:12.390Z",
+      "started_at": null,
+      "assigned_agent": "development_session_1755641552331_1_general_43b03e03",
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-19T22:16:53.894Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-19T22:16:53.895Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1755556336279_67jip32fx",
+      "title": "Manual Test Task B - Database Schema",
+      "description": "Design database schema",
+      "mode": "DEVELOPMENT",
+      "category": "missing-feature",
+      "priority": "medium",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-18T22:32:16.279Z",
+      "agent_assignment_history": [
+        {
+          "agentId": "agent_1",
+          "role": "primary",
+          "assignedAt": "2025-08-18T22:32:56.900Z",
+          "reassignReason": null
+        },
+        {
+          "agent": "agent_1755618572570",
+          "action": "claimed",
+          "timestamp": "2025-08-19T15:49:32.570Z"
+        },
+        {
+          "agent": "agent_1755639786539",
+          "action": "claimed",
+          "timestamp": "2025-08-19T21:43:06.539Z"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-08-19T22:09:05.201Z",
+          "reason": "Task stale for 26 minutes"
+        },
+        {
+          "agentId": "development_session_1755641552331_1_general_43b03e03",
+          "role": "primary",
+          "assignedAt": "2025-08-19T22:17:27.822Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "parallel_execution": {
+        "canParallelize": false,
+        "parallelWith": [],
+        "coordinatorTask": null
+      },
+      "claimed_by": null,
+      "reverted_at": "2025-08-19T16:20:10.952Z",
+      "revert_reason": "Task auto-reverted after 30 minutes in progress",
+      "previously_assigned_agent": "agent_1755618572570",
+      "previous_started_at": "2025-08-19T15:49:32.570Z",
+      "started_at": null,
+      "assigned_agent": "development_session_1755641552331_1_general_43b03e03",
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-19T22:26:06.884Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-19T22:26:06.885Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1755556336280_yik1iaj1i",
+      "title": "Manual Test Task C - Unit Tests",
+      "description": "Add comprehensive unit tests",
+      "mode": "TESTING",
+      "category": "missing-test",
+      "priority": "low",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-18T22:32:16.280Z",
+      "assigned_agent": "development_session_1755641552331_1_general_43b03e03",
+      "agent_assignment_history": [
+        {
+          "agentId": "agent_3",
+          "role": "primary",
+          "assignedAt": "2025-08-18T22:32:56.907Z",
+          "reassignReason": null
+        },
+        {
+          "agent": "agent_1755620003121",
+          "action": "claimed",
+          "timestamp": "2025-08-19T16:13:23.121Z"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-08-19T22:09:05.201Z",
+          "reason": "Task stale for 356 minutes"
+        },
+        {
+          "agentId": "development_session_1755641552331_1_general_43b03e03",
+          "role": "primary",
+          "assignedAt": "2025-08-19T22:27:02.959Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "parallel_execution": {
+        "canParallelize": false,
+        "parallelWith": [],
+        "coordinatorTask": null
+      },
+      "started_at": null,
+      "claimed_by": null,
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-19T22:33:11.609Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-19T22:33:11.610Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1755559648028_8xonr2v7d",
+      "title": "Multi-Agent Test Task A - Frontend",
+      "description": "Test frontend development",
+      "mode": "DEVELOPMENT",
+      "category": "enhancement",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-18T23:27:28.028Z",
+      "assigned_agent": "development_session_1755642866352_1_general_e015d6d5",
+      "agent_assignment_history": [
+        {
+          "agentId": "agent_4",
+          "role": "primary",
+          "assignedAt": "2025-08-18T23:30:35.274Z",
+          "reassignReason": null
+        },
+        {
+          "agentId": "agent_4",
+          "role": "primary",
+          "assignedAt": "2025-08-19T00:26:50.671Z",
+          "reassignReason": null
+        },
+        {
+          "agent": "agent_1755620333042",
+          "action": "claimed",
+          "timestamp": "2025-08-19T16:18:53.042Z"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-08-19T22:09:05.201Z",
+          "reason": "Task stale for 350 minutes"
+        },
+        {
+          "agentId": "development_session_1755642866352_1_general_e015d6d5",
+          "role": "primary",
+          "assignedAt": "2025-08-19T22:35:17.027Z",
+          "reassignReason": null,
+          "claimPriority": "high"
+        }
+      ],
+      "parallel_execution": {
+        "canParallelize": false,
+        "parallelWith": [],
+        "coordinatorTask": null
+      },
+      "started_at": null,
+      "claimed_by": null,
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-19T22:40:36.817Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-19T22:40:36.818Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1755624441094_z7zru65tg",
+      "title": "Test Implementation: External API Integration",
+      "description": "Implement external API integration based on research findings",
+      "mode": "DEVELOPMENT",
+      "category": "missing-feature",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-19T17:27:21.094Z",
+      "started_at": null,
+      "claimed_by": null,
+      "assigned_agent": "development_session_1755643414905_1_general_ee5839f6",
+      "agent_assignment_history": [
+        {
+          "agent": "development_session_1755640911481_1_general_ca82e8c2",
+          "action": "concurrent_claim",
+          "timestamp": "2025-08-19T22:02:15.530Z",
+          "agent_capacity": "1/1"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-08-19T22:26:20.796Z",
+          "reason": "Task stale for 24 minutes"
+        },
+        {
+          "agent": "agent_1755642392336",
+          "action": "claimed",
+          "timestamp": "2025-08-19T22:26:32.336Z"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-08-19T22:42:59.353Z",
+          "reason": "Task stale for 16 minutes"
+        },
+        {
+          "agentId": "development_session_1755643414905_1_general_ee5839f6",
+          "role": "primary",
+          "assignedAt": "2025-08-19T22:44:38.816Z",
+          "reassignReason": null,
+          "claimPriority": "high"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-19T22:50:30.966Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-19T22:50:30.967Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1755640264409_z6ts24ixi",
+      "title": "Resolve task assignment bottlenecks",
+      "description": "Critical system issue: Multiple tasks stuck in progress preventing new work allocation",
+      "mode": "DEVELOPMENT",
+      "category": "bug",
+      "priority": "critical",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-19T21:51:04.409Z",
+      "started_at": "2025-08-19T22:57:21.628Z",
+      "claimed_by": "development_session_1755643974000_1_general_d95bf10c",
+      "assigned_agent": "development_session_1755643974000_1_general_d95bf10c",
+      "agent_assignment_history": [
+        {
+          "agent": "agent_1755640924790",
+          "action": "claimed",
+          "timestamp": "2025-08-19T22:02:04.790Z"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-08-19T22:26:20.796Z",
+          "reason": "Task stale for 24 minutes"
+        },
+        {
+          "agentId": "development_session_1755643974000_1_general_d95bf10c",
+          "role": "primary",
+          "assignedAt": "2025-08-19T22:54:30.908Z",
+          "reassignReason": null,
+          "claimPriority": null
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-19T22:55:29.384Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "in_progress"
+          }
+        },
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-19T22:58:55.646Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-19T22:58:55.647Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "./TODO.json"
     }
   ],
-  "total_completed": 584,
-  "last_completion": "2025-08-19T17:31:45.787Z",
+  "total_completed": 594,
+  "last_completion": "2025-08-19T22:58:55.647Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }
