@@ -349,6 +349,15 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
 
 **Always check for ABOUT.md files** before editing code (current directory, parent directories, subdirectories)
 
+## 🚨 RESEARCH REPORTS INTEGRATION
+
+**MANDATORY**: Always check `development/reports/` for relevant research reports before starting any task
+
+**PROTOCOL**:
+1. **SCAN development/reports/** for related reports
+2. **ADD relevant reports to important_files** when creating tasks  
+3. **READ reports FIRST** before implementing to leverage existing research
+
 ## 🚨 CODING STANDARDS
 
 **MANDATORY**: All agents MUST follow the standardized coding conventions defined in the global CLAUDE.md at `/Users/jeremyparker/.claude/CLAUDE.md`.
