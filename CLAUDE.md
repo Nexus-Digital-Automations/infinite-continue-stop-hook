@@ -342,6 +342,16 @@ These standards ensure consistency across large codebases and multi-agent collab
 
 **⚠️ CRITICAL**: Refer to global CLAUDE.md for complete coding standards - this prevents duplication and ensures all projects use identical standards.
 
+## 🚨 ABSOLUTE SETTINGS PROTECTION MANDATE
+
+**🔴 CRITICAL PROHIBITION - NEVER EVER EVER:**
+- **❌ NEVER EDIT settings.json** - `/Users/jeremyparker/.claude/settings.json` is ABSOLUTELY FORBIDDEN to modify
+- **❌ NEVER TOUCH GLOBAL SETTINGS** - Any modification to global Claude settings is prohibited
+- **❌ NEVER SUGGEST SETTINGS CHANGES** - Do not recommend editing global configuration files
+- **❌ NEVER ACCESS SETTINGS FILES** - Avoid reading or writing to any Claude settings files
+
+**GOLDEN RULE:** Global Claude settings at `/Users/jeremyparker/.claude/settings.json` are **UNTOUCHABLE** - treat as read-only system files
+
 ## 🚨 WORKFLOW PROTOCOLS
 
 **TODO.json INTERACTION PROTOCOL:**
