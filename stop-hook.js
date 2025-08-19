@@ -48,6 +48,10 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 
 **CRITICAL**: Replace [PROJECT_DIRECTORY] with actual project path and [AGENT_ID] with your agent ID.
 
+⚠️ **BASH SHELL WARNING**: When writing custom JavaScript with comparison operators (!==, !=), bash may escape the '!' character. Use alternatives:
+   - Instead of: task.status !== 'completed' 
+   - Use: task.status != 'completed' OR task.status === 'completed' ? false : true
+
 🚀 CORE WORKFLOW COMMANDS:
 
    # Initialize agent (get your agent ID)
