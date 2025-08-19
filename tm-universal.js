@@ -37,6 +37,7 @@ Usage: node tm-universal.js <command> [args...] [--project /path/to/project]
 Commands:
   init                           Initialize a new agent
   update <taskId> <status> [notes] Update task status
+  revert-stale [--minutes=N]     Revert stale in_progress tasks to pending
   api <api-command> [args...]     Direct API access
   
   API Commands:
@@ -52,6 +53,7 @@ Options:
 Examples:
   node tm-universal.js init
   node tm-universal.js update task_123 completed
+  node tm-universal.js revert-stale --minutes=15
   node tm-universal.js api current
   node tm-universal.js api list --project /path/to/my-project
   node tm-universal.js update task_456 completed "Fixed bug" --project /path/to/project
@@ -104,6 +106,13 @@ async function main() {
                 // tm-update.js expects: taskId, status, notes, projectRoot
                 const updateArgs = [commandArgs[0], commandArgs[1], commandArgs[2] || '', projectRoot];
                 await runScript('tm-update.js', updateArgs);
+                break;
+            }
+            
+            case 'revert-stale': {
+                // Handle revert-stale command with optional --minutes parameter
+                const revertArgs = commandArgs.concat(['--project-root', projectRoot]);
+                await runScript('revert-stale-tasks.js', revertArgs);
                 break;
             }
             
