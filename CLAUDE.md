@@ -333,10 +333,10 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
 
 **MANDATORY**: All agents MUST follow these standardized coding conventions to ensure consistency across large codebases and multi-agent collaboration. Based on comprehensive research of industry best practices for 2024.
 
-### 🟨 JavaScript/TypeScript Standards (Airbnb + TypeScript Strict)
+### 🟨 JavaScript/TypeScript Standards (Industry Standard + TypeScript Strict)
 
 **Core Configuration:**
-- **ESLint Config**: Airbnb + Prettier + TypeScript strict mode (2024 flat config)
+- **ESLint Config**: Industry standard + Prettier + TypeScript strict mode (2024 flat config)
 - **Line Length**: 80 characters (Prettier default for readability)
 - **Semicolons**: Always required for statement termination
 - **Quotes**: Single quotes for strings, double quotes for JSX attributes
@@ -938,7 +938,7 @@ jobs:
 ### 🎯 Code Quality Gates & Enforcement
 
 **Linting Standards (ZERO TOLERANCE):**
-- **JavaScript/TypeScript**: ESLint with Airbnb config + TypeScript strict rules
+- **JavaScript/TypeScript**: ESLint with industry standard config + TypeScript strict rules
 - **Python**: Ruff with comprehensive rule set + Black formatting
 - **ALL code must pass linting** before commit - no exceptions
 - **Pre-commit hooks prevent** non-compliant code from entering repository

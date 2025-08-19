@@ -2338,11 +2338,11 @@
       "created_at": "2025-08-19T15:38:16.955Z"
     },
     {
-      "id": "task_1755619236406_cholj4hnj",
-      "title": "Add comprehensive standardized coding styles to CLAUDE.md",
+      "id": "task_1755619602031_pd74vksy2",
+      "title": "Replace Airbnb references with industry standard terminology in CLAUDE.md",
       "mode": "DEVELOPMENT",
       "category": "enhancement",
-      "priority": "high",
+      "priority": "medium",
       "status": "pending",
       "dependencies": [],
       "important_files": [],
@@ -2350,7 +2350,7 @@
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-08-19T16:00:36.407Z",
+      "created_at": "2025-08-19T16:06:42.031Z",
       "description": "No description provided"
     }
   ],
@@ -2532,6 +2532,27 @@
       "maxConcurrentTasks": 5,
       "createdAt": "2025-08-19T15:34:44.632Z",
       "sessionId": "session_1755617684630",
+      "metadata": {}
+    },
+    "development_session_1755619531398_1_general_46aec9c3": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-08-19T16:05:31.399Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-08-19T16:05:31.399Z",
+      "sessionId": "session_1755619531398",
       "metadata": {}
     }
   }
