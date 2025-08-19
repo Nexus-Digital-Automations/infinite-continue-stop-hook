@@ -104,6 +104,26 @@ Every error, warning, or issue is a **QUALITY GATE** that must be **PROPERLY ADD
 
 **⚡ WHEN ISSUE DETECTED → INSTANT ROOT CAUSE ANALYSIS → PROPER FIX → NEVER MASK**
 
+**🚨 ADDITIONAL MASKING PATTERNS TO AVOID:**
+- **❌ SILENT FAILURES** - Never allow operations to fail silently without proper error reporting
+- **❌ GENERIC ERROR HANDLING** - Don't catch all errors with generic handlers that obscure root causes  
+- **❌ CONFIGURATION BYPASSES** - Don't disable strict mode or safety checks to avoid errors
+- **❌ DEPENDENCY DOWNGRADES** - Don't downgrade dependencies to avoid compatibility issues
+- **❌ FEATURE FLAGS TO HIDE BUGS** - Don't use feature flags to permanently hide broken functionality
+- **❌ DOCUMENTATION WORKAROUNDS** - Don't document known issues as "features" instead of fixing them
+
+**✅ PROPER ISSUE RESOLUTION APPROACH:**
+1. **DETECT** → Identify the exact nature and scope of the issue
+2. **INVESTIGATE** → Trace the issue to its root cause in the codebase or architecture  
+3. **ANALYZE** → Understand why the issue exists and what allows it to occur
+4. **DESIGN** → Plan a solution that eliminates the root cause permanently
+5. **IMPLEMENT** → Execute the proper fix with appropriate testing
+6. **VALIDATE** → Verify the fix resolves the issue without introducing new problems
+7. **DOCUMENT** → Record what was wrong, why it occurred, and how it was properly resolved
+
+**🛡️ QUALITY ASSURANCE MANDATE:**
+This mandate exists to ensure **SUSTAINABLE CODE QUALITY** and **LONG-TERM SYSTEM RELIABILITY**. Every avoided shortcut and properly fixed issue contributes to a more robust, maintainable, and trustworthy codebase.
+
 ## 🚨 MANDATORY THINKING & VALIDATION
 
 **THINKING LEVELS:** Use maximum beneficial thinking for complexity:
