@@ -2111,6 +2111,40 @@
       "requires_research": false,
       "subtasks": [],
       "created_at": "2025-08-19T17:27:21.094Z"
+    },
+    {
+      "id": "task_1755624827780_numz5zkiy",
+      "title": "Test Dependency: Setup Database",
+      "description": "Configure database schema before implementing features",
+      "mode": "DEVELOPMENT",
+      "category": "chore",
+      "priority": "medium",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-19T17:33:47.781Z"
+    },
+    {
+      "id": "task_1755624833646_yxdjl9ynt",
+      "title": "Test Feature: User Management",
+      "description": "Implement user management features that require database setup",
+      "mode": "DEVELOPMENT",
+      "category": "missing-feature",
+      "priority": "critical",
+      "status": "pending",
+      "dependencies": [
+        "task_1755624827780_numz5zkiy"
+      ],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-19T17:33:53.646Z"
     }
   ],
   "current_mode": "DEVELOPMENT",

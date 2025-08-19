@@ -48,9 +48,11 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 
 **CRITICAL**: Replace [PROJECT_DIRECTORY] with actual project path and [AGENT_ID] with your agent ID.
 
-⚠️ **BASH SHELL WARNING**: When writing custom JavaScript with comparison operators (!==, !=), bash may escape the '!' character. Use alternatives:
-   - Instead of: task.status !== 'completed' 
-   - Use: task.status != 'completed' OR task.status === 'completed' ? false : true
+⚠️ **BASH SHELL WARNING**: When writing custom JavaScript with comparison operators (!==, !=), bash may escape the '!' character. **SOLUTIONS**:
+   - **PREFERRED**: Create .js files for complex commands instead of using -e
+   - **ALTERNATIVE**: Use task.status != 'completed' instead of task.status !== 'completed'  
+   - **ALTERNATIVE**: Use task.status === 'completed' ? false : true
+   - **ESCAPE FIX**: Use single quotes around entire script: node -e 'script here'
 
 🚀 CORE WORKFLOW COMMANDS:
 
@@ -71,11 +73,11 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 
 🔧 TASK CREATION & DEPENDENCY MANAGEMENT:
 
-   # Create research task (for complex work)
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Research [topic]', category: 'research', mode: 'RESEARCH'}).then(id => console.log('Research task:', id));"
+   # Create dependency task (any category)
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: '[Dependency task]', category: '[any-category]'}).then(id => console.log('Dependency task:', id));"
 
-   # Create implementation task with dependency
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Implement [feature]', category: 'missing-feature', dependencies: ['RESEARCH_TASK_ID']}).then(id => console.log('Implementation task:', id));"
+   # Create dependent task with dependency
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: '[Dependent task]', category: '[any-category]', dependencies: ['DEPENDENCY_TASK_ID']}).then(id => console.log('Dependent task:', id));"
 
    # Use TaskManager API for dependency-aware claiming (handles blocking automatically)
    node taskmanager-api.js claim TASK_ID
@@ -94,7 +96,18 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 • linter-error (highest) • build-error • start-error • error • missing-feature
 • bug • enhancement • refactor • documentation • chore • research • missing-test (lowest)
 
-🔗 DEPENDENCY SYSTEM: Dependencies automatically prioritized first regardless of category
+🔗 DEPENDENCY SYSTEM: Any task can depend on any other task - dependencies prioritized first
+
+⚠️ TROUBLESHOOTING BASH ESCAPING ERRORS:
+If you get "SyntaxError: missing ) after argument list" with !== or !=:
+   # ❌ BROKEN: bash escapes the ! character
+   node -e "script with !== operator"
+   
+   # ✅ FIXED: Use single quotes 
+   node -e 'script with !== operator'
+   
+   # ✅ ALTERNATIVE: Create temp script file
+   echo 'script here' > temp.js && node temp.js && rm temp.js
 `;
 }
 

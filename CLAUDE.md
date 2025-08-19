@@ -371,16 +371,17 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
 
 **DEPENDENCY CREATION PROTOCOL:**
 ```bash
-# 1. Create research task FIRST
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Research [topic]', description: '[research details]', category: 'research', mode: 'RESEARCH'}).then(id => console.log('Research task:', id));"
+# 1. Create dependency task FIRST (any category)
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: '[Dependency task]', description: '[details]', category: '[any-category]'}).then(id => console.log('Dependency task:', id));"
 
-# 2. Create implementation task with dependency
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Implement [feature]', description: '[implementation description]', category: 'missing-feature', dependencies: ['RESEARCH_TASK_ID']}).then(id => console.log('Implementation task:', id));"
+# 2. Create dependent task with dependency
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: '[Dependent task]', description: '[implementation description]', category: '[any-category]', dependencies: ['DEPENDENCY_TASK_ID']}).then(id => console.log('Dependent task:', id));"
 ```
 
 **🚨 DEPENDENCY SYSTEM BEHAVIOR:**
 - **Dependencies ALWAYS come first** in task queue regardless of category
-- **Implementation tasks are BLOCKED** until dependencies complete  
+- **Any task can depend on any other task** - not limited to research dependencies
+- **Dependent tasks are BLOCKED** until all dependencies complete  
 - **Task claiming will redirect** to dependency tasks with instructions
 - **Use TaskManager API** for automatic dependency detection and guidance
 
