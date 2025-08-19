@@ -546,16 +546,6 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 6. **Implement & Validate** - Execute with evidence-based completion
 7. **Complete Tasks** - Mark completed via TaskManager API
 
-## 🚨 INFINITE OPERATION MANDATE - NO TIME LIMITS
-
-**🔴 ABSOLUTE MANDATE: OPERATE AS LONG AS POSSIBLE - NO TIME CONSTRAINTS**
-
-**INFINITE OPERATION PROTOCOL:**
-- **⏰ NO TIME LIMITS** - Continue working indefinitely until natural completion or user stop
-- **🔄 MULTIPLE ROUNDS** - Deploy multiple rounds of subagents across multiple tasks  
-- **📋 MULTIPLE TASKS** - Complete as many tasks as possible in one session
-- **🚀 MAXIMUM SUBAGENTS** - Use up to 10 subagents repeatedly across task cycles
-
 ## 🚨 INFINITE CONTINUE HOOK SYSTEM - NEVER STOP PROTOCOL
 
 **🔴 ABSOLUTE MANDATE: NEVER ALLOW STOPS UNLESS ENDPOINT TRIGGERED**
