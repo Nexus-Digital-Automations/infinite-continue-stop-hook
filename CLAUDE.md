@@ -329,6 +329,144 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
 
 **Always check for ABOUT.md files** before editing code (current directory, parent directories, subdirectories)
 
+## 🚨 STANDARDIZED CODING STYLES FOR MULTI-AGENT DEVELOPMENT
+
+**MANDATORY**: All agents MUST follow these standardized coding conventions to ensure consistency across large codebases and multi-agent collaboration.
+
+### JavaScript/TypeScript Standards
+- **ESLint Config**: Airbnb + Prettier + TypeScript strict mode
+- **Line Length**: 80 characters (Prettier default)
+- **Naming Conventions**: 
+  - Variables: `camelCase`
+  - Constants: `UPPER_SNAKE_CASE`
+  - Functions: `camelCase` with descriptive names
+  - Classes: `PascalCase`
+  - Files: `kebab-case.js/.ts`
+- **Multi-Agent Naming**: Use `agentType_moduleName_componentName` pattern for conflict prevention
+- **Imports**: Centralized exports via `src/shared/index.ts`, absolute imports preferred
+- **Error Handling**: Standardized `AgentError` interface with agent ID tracking
+- **Documentation**: JSDoc comments required for all public functions and classes
+
+### Python Standards  
+- **Formatters**: Black + Ruff (2024 standard)
+- **Line Length**: 88 characters (Black default)
+- **Type Hints**: Mandatory with mypy strict mode enabled
+- **Naming Conventions**:
+  - Variables/functions: `snake_case`
+  - Constants: `UPPER_SNAKE_CASE`
+  - Classes: `PascalCase`
+  - Files: `snake_case.py`
+- **Multi-Agent Prefixes**: `agent_type_module_name` for shared modules
+- **Imports**: Absolute imports, group in order: standard library, third-party, local
+- **Documentation**: Type hints + docstrings for all public functions
+
+### Multi-Agent Coordination Rules
+- **File Naming**: `[AGENT-TYPE]_[MODULE]_[COMPONENT].ext` (e.g., `frontend_auth_validation.js`)
+- **Agent Documentation**: Mandatory responsibility comments in file headers
+```typescript
+/**
+ * @agent Frontend Specialist  
+ * @responsibility UI/UX implementation
+ * @dependencies ['shared/validation', 'shared/api']
+ * @outputs ['components/', 'styles/', 'tests/']
+ * @coordination Handoffs to Backend Agent via shared API contracts
+ */
+```
+- **Logging Standards**: Structured JSON with correlation IDs and agent identification
+- **Dependencies**: Inject shared services, avoid tight coupling between agent modules
+- **Conflict Resolution**: Agent-specific namespaces prevent variable/function collisions
+
+### Tool Integration (MANDATORY)
+- **Pre-commit Hooks**: Enforce all formatting and linting rules
+- **IDE Configuration**: Share `.vscode/settings.json` and `.editorconfig`
+- **CI/CD Pipeline**: Agent-specific linting stages with build optimization
+- **Automated Formatting**: Prettier (JS/TS) + Black (Python) run on save
+
+### Required Configuration Files
+
+**`.editorconfig`** (root of project):
+```ini
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{js,ts,jsx,tsx,json,yml,yaml,md}]
+indent_style = space
+indent_size = 2
+
+[*.py]
+indent_style = space
+indent_size = 4
+```
+
+**`eslint.config.mjs`** (for TypeScript/JavaScript):
+```javascript
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+  eslint.configs.recommended,
+  tseslint.configs.recommendedTypeChecked,
+  tseslint.configs.strictTypeChecked,
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+);
+```
+
+**`pyproject.toml`** (for Python):
+```toml
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "W", "I", "N", "UP"]
+
+[tool.mypy]
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+```
+
+### Architecture Patterns for Large Codebases
+- **Modular Organization**: Layer-based structure with clear agent boundaries
+- **Dependency Injection**: Service containers for shared functionality
+- **Lazy Loading**: Agent modules loaded on-demand for performance
+- **Memory Management**: Agent lifecycle controls with cleanup procedures
+- **Performance Monitoring**: Structured logging for optimization tracking
+
+### Code Quality Gates
+- **Linting**: Zero tolerance for linting errors - all code must pass ESLint/Ruff
+- **Type Checking**: Strict mode TypeScript/mypy required for all typed languages
+- **Testing**: Comprehensive coverage with agent-specific test suites
+- **Documentation**: All public APIs documented with examples
+- **Code Review**: Multi-agent consistency validation required
+
+**🚨 ENFORCEMENT RULES:**
+- **NEVER commit code that fails linting** - Fix all errors before proceeding
+- **ALWAYS use standardized naming** - Prevents conflicts in multi-agent environments
+- **MANDATORY tool configuration** - All agents must use identical formatting rules
+- **CONSISTENT error handling** - Use standardized error interfaces across all agents
+- **DOCUMENT agent responsibilities** - Clear boundaries prevent overlapping work
+
+**SUCCESS METRICS:**
+- Zero linting errors across all codebases
+- Consistent code style regardless of contributing agent
+- Reduced merge conflicts through standardized patterns
+- Improved maintainability via clear architectural boundaries
+- Enhanced performance through optimized multi-agent coordination
+
 ## 🚨 WORKFLOW PROTOCOLS
 
 **TODO.json INTERACTION PROTOCOL:**
