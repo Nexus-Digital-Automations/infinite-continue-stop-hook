@@ -51,6 +51,42 @@ class TaskManagerAPI {
         this.agentId = null;
     }
 
+    // API Discovery and Documentation
+    async getApiMethods() {
+        try {
+            const taskManagerMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(this.taskManager))
+                .filter(name => name !== 'constructor' && !name.startsWith('_'))
+                .sort();
+
+            const apiMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(this))
+                .filter(name => name !== 'constructor' && !name.startsWith('_'))
+                .sort();
+
+            return {
+                success: true,
+                taskManagerMethods: {
+                    count: taskManagerMethods.length,
+                    methods: taskManagerMethods,
+                    usage: "const tm = new TaskManager('./TODO.json'); tm.methodName()"
+                },
+                apiMethods: {
+                    count: apiMethods.length,
+                    methods: apiMethods,
+                    usage: "node taskmanager-api.js methodName args"
+                },
+                examples: {
+                    taskManager: "tm.createTask({title: 'Test', category: 'enhancement'})",
+                    api: "node taskmanager-api.js list '{\"status\": \"pending\"}'"
+                }
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
     // Agent initialization and management
     async initAgent(config = {}) {
         try {
@@ -400,6 +436,12 @@ async function main() {
 
     try {
         switch (command) {
+            case 'methods': {
+                const result = await api.getApiMethods();
+                console.log(JSON.stringify(result, null, 2));
+                break;
+            }
+
             case 'init': {
                 const config = args[1] ? JSON.parse(args[1]) : {};
                 const result = await api.initAgent(config);
@@ -515,7 +557,8 @@ TaskManager Node.js API
 Usage: node taskmanager-api.js <command> [args...]
 
 Commands:
-  init [config]                 - Initialize agent with optional config JSON
+  methods                      - Get all available TaskManager and API methods
+  init [config]                - Initialize agent with optional config JSON
   current [agentId]            - Get current task for agent
   list [filter]                - List tasks with optional filter JSON
   create <taskData>            - Create new task with JSON data

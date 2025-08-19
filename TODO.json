@@ -2119,14 +2119,24 @@
       "mode": "DEVELOPMENT",
       "category": "chore",
       "priority": "medium",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-08-19T17:33:47.781Z"
+      "created_at": "2025-08-19T17:33:47.781Z",
+      "started_at": "2025-08-19T17:34:57.135Z",
+      "claimed_by": "agent_1755624897135",
+      "assigned_agent": "agent_1755624897135",
+      "agent_assignment_history": [
+        {
+          "agent": "agent_1755624897135",
+          "action": "claimed",
+          "timestamp": "2025-08-19T17:34:57.135Z"
+        }
+      ]
     },
     {
       "id": "task_1755624833646_yxdjl9ynt",
