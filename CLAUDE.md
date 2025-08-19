@@ -600,7 +600,68 @@ mv *report*.md development/reports/
 - **SKIP**: Internal implementation details, development processes not affecting users
 - **ORGANIZE**: All reports and internal docs in appropriate subdirectories
 
-**GIT WORKFLOW:** Always push commits to remote repository
+## 🚨 MANDATORY GIT WORKFLOW
+
+**ABSOLUTE REQUIREMENT**: ALWAYS commit and push work after EVERY task completion
+
+### 🔴 MANDATORY COMMIT PROTOCOL - NO EXCEPTIONS
+
+**AFTER COMPLETING ANY TASK - IMMEDIATELY RUN:**
+
+```bash
+# 1. Stage all changes
+git add -A
+
+# 2. Commit with descriptive message
+git commit -m "feat: [brief description of what was accomplished]
+
+- [bullet point of specific changes made]
+- [another accomplishment]
+- [any fixes or improvements]
+
+🤖 Generated with Claude Code
+Co-Authored-By: Claude <noreply@anthropic.com>"
+
+# 3. MANDATORY - Push to remote repository
+git push
+```
+
+### 📝 COMMIT MESSAGE STANDARDS
+
+**REQUIRED FORMAT:**
+- **Type**: Use conventional commit prefixes: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`
+- **Description**: Brief summary of what was accomplished
+- **Body**: Bullet points of specific changes
+- **Footer**: Always include Claude Code attribution
+
+**EXAMPLES:**
+```bash
+git commit -m "fix: resolve multi-agent processing bottlenecks
+
+- Fixed stop-hook JSON parsing error
+- Reactivated multiple agents for concurrent processing  
+- Updated validation system to support multiple in_progress tasks
+- Verified task distribution across specialized agents
+
+🤖 Generated with Claude Code
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
+
+### ⚡ WORKFLOW ENFORCEMENT
+
+**MANDATORY SEQUENCE:**
+1. **Complete Task** - Finish all implementation and testing
+2. **Validate Work** - Run all validation commands and verify results
+3. **Stage Changes** - `git add -A` to include all modifications
+4. **Commit Work** - Use descriptive commit message with proper format
+5. **Push Remote** - `git push` to ensure work is backed up and shared
+6. **Mark Task Complete** - Update TaskManager with completion status
+
+**🚨 ABSOLUTE RULES:**
+- **NEVER skip git commit and push** after completing any task
+- **ALWAYS use descriptive commit messages** with bullet points
+- **ALWAYS push to remote** - local commits are not sufficient
+- **COMMIT BEFORE** marking tasks as completed in TaskManager
 
 **TASK COMPLETION REQUIREMENTS:**
 
