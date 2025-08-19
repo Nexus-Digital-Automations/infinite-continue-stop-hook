@@ -537,13 +537,3 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 User communication → **INSTANT TASK CREATION** → Then execute work
 
 **SETTINGS PROTECTION:** Never modify `/Users/jeremyparker/.claude/settings.json`
-
-## 🚨 ABSOLUTE SETTINGS PROTECTION MANDATE
-
-**🔴 CRITICAL PROHIBITION - NEVER EVER EVER:**
-- **❌ NEVER EDIT settings.json** - `/Users/jeremyparker/.claude/settings.json` is ABSOLUTELY FORBIDDEN to modify
-- **❌ NEVER TOUCH GLOBAL SETTINGS** - Any modification to global Claude settings is prohibited
-- **❌ NEVER SUGGEST SETTINGS CHANGES** - Do not recommend editing global configuration files
-- **❌ NEVER ACCESS SETTINGS FILES** - Avoid reading or writing to any Claude settings files
-
-**GOLDEN RULE:** Global Claude settings at `/Users/jeremyparker/.claude/settings.json` are **UNTOUCHABLE** - treat as read-only system files

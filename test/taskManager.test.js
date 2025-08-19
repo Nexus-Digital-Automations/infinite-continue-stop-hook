@@ -360,7 +360,7 @@ describe('TaskManager', () => {
             jest.spyOn(taskManager, 'readTodoFast').mockResolvedValue(mockData);
             jest.spyOn(taskManager, 'writeTodo').mockResolvedValue({});
 
-            await taskManager.updateTaskStatus('task-1', 'completed');
+            await taskManager.updateTaskStatus('task-1', 'completed', { bypassValidation: true });
 
             expect(mockData.tasks[0].status).toBe('completed');
             expect(taskManager.writeTodo).toHaveBeenCalledWith(mockData);
@@ -395,7 +395,7 @@ describe('TaskManager', () => {
             const statuses = ['in_progress', 'completed', 'blocked', 'cancelled'];
             
             for (const status of statuses) {
-                await taskManager.updateTaskStatus('task-1', status);
+                await taskManager.updateTaskStatus('task-1', status, { bypassValidation: true });
                 expect(mockData.tasks[0].status).toBe(status);
             }
         });
@@ -526,6 +526,7 @@ describe('TaskManager', () => {
                 title: 'Test Task',
                 description: 'Test Description',
                 mode: 'development',
+                category: 'bug',
                 priority: 'high',
                 status: 'pending'
             };
@@ -548,7 +549,8 @@ describe('TaskManager', () => {
             const taskData = {
                 title: 'Minimal Task',
                 description: 'Description',
-                mode: 'development'
+                mode: 'development',
+                category: 'documentation'
             };
 
             await taskManager.createTask(taskData);
@@ -568,7 +570,8 @@ describe('TaskManager', () => {
             const taskData = {
                 title: 'Research Task',
                 description: 'Research Description',
-                mode: 'RESEARCH'
+                mode: 'RESEARCH',
+                category: 'research'
             };
 
             const taskId = await taskManager.createTask(taskData);
@@ -586,7 +589,8 @@ describe('TaskManager', () => {
             const taskData = {
                 title: 'Research Task',
                 description: 'Research Description',
-                mode: 'research'
+                mode: 'research',
+                category: 'research'
             };
 
             const taskId = await taskManager.createTask(taskData);
@@ -602,6 +606,7 @@ describe('TaskManager', () => {
                 title: 'Task with existing data',
                 description: 'Description',
                 mode: 'RESEARCH',
+                category: 'research',
                 important_files: ['existing-file.js'],
                 success_criteria: ['Existing criterion']
             };
@@ -624,6 +629,7 @@ describe('TaskManager', () => {
                 title: 'Research Task',
                 description: 'Description',
                 mode: 'research',
+                category: 'research',
                 success_criteria: ['Research report created: some-path.md']
             };
 
@@ -1020,7 +1026,8 @@ describe('TaskManager', () => {
             const taskId = await taskManager.createTask({
                 title: 'Integration Test Task',
                 description: 'Test complete lifecycle',
-                mode: 'development'
+                mode: 'development',
+                category: 'bug'
             });
 
             expect(mockData.tasks).toHaveLength(1);

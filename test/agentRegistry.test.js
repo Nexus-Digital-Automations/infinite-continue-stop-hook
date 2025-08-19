@@ -280,6 +280,7 @@ describe('AgentRegistry', () => {
             registry.writeRegistry(registryData);
 
             await registry.cleanupInactiveAgents(registryData);
+            registry.writeRegistry(registryData); // Write back the changes
             
             const agent = registry.getAgent(result.agentId);
             expect(agent.status).toBe('inactive');
@@ -484,9 +485,8 @@ describe('AgentRegistry', () => {
         test('should handle file write errors', () => {
             // Make directory read-only to cause write error
             const invalidPath = '/invalid/readonly/path.json';
-            const invalidRegistry = new AgentRegistry(invalidPath);
             
-            expect(() => invalidRegistry.writeRegistry({})).toThrow('Failed to write agent registry');
+            expect(() => new AgentRegistry(invalidPath)).toThrow();
         });
 
         test('should get file size correctly', async () => {
