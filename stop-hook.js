@@ -69,13 +69,16 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
    # Claim specific task by ID
    node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.claimTask('TASK_ID', '[AGENT_ID]', 'normal').then(result => console.log(JSON.stringify(result, null, 2)));"
 
-🔧 TASK CREATION & MANAGEMENT:
+🔧 TASK CREATION & DEPENDENCY MANAGEMENT:
 
-   # Create new task (if needed)
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: '[TASK_TITLE]', description: '[DESCRIPTION]', mode: 'DEVELOPMENT', category: '[CATEGORY]'}).then(id => console.log('Created task:', id));"
+   # Create research task (for complex work)
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Research [topic]', category: 'research', mode: 'RESEARCH'}).then(id => console.log('Research task:', id));"
 
-   # List all pending tasks
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === 'pending'); console.log('📋 Pending tasks:', pending.length); pending.forEach(t => console.log('• ' + t.title)); });"
+   # Create implementation task with dependency
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Implement [feature]', category: 'missing-feature', dependencies: ['RESEARCH_TASK_ID']}).then(id => console.log('Implementation task:', id));"
+
+   # Use TaskManager API for dependency-aware claiming (handles blocking automatically)
+   node taskmanager-api.js claim TASK_ID
 
    # Check project status
    node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getTaskStatus().then(status => console.log(JSON.stringify(status, null, 2)));"
@@ -87,10 +90,11 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 
 📊 CURRENT PROJECT STATUS: ${taskStatus.pending} pending, ${taskStatus.in_progress} in progress, ${taskStatus.completed} completed
 
-📋 AVAILABLE TASK CATEGORIES:
-• research (highest priority) • linter-error • build-error • start-error • error
-• missing-feature • bug • enhancement • refactor • documentation • chore
-• missing-test (lowest priority)
+📋 TASK CATEGORIES (Priority Order):
+• linter-error (highest) • build-error • start-error • error • missing-feature
+• bug • enhancement • refactor • documentation • chore • research • missing-test (lowest)
+
+🔗 DEPENDENCY SYSTEM: Dependencies automatically prioritized first regardless of category
 `;
 }
 

@@ -1260,7 +1260,7 @@
       "mode": "DEVELOPMENT",
       "category": "missing-feature",
       "priority": "medium",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -1279,6 +1279,11 @@
           "agent": "agent_1755618432390",
           "action": "claimed",
           "timestamp": "2025-08-19T15:47:12.390Z"
+        },
+        {
+          "agent": "agent_1755624644448",
+          "action": "claimed",
+          "timestamp": "2025-08-19T17:30:44.448Z"
         }
       ],
       "parallel_execution": {
@@ -1286,11 +1291,13 @@
         "parallelWith": [],
         "coordinatorTask": null
       },
-      "claimed_by": "agent_1755618432390",
+      "claimed_by": "agent_1755624644448",
       "reverted_at": "2025-08-19T16:20:10.952Z",
       "revert_reason": "Task auto-reverted after 30 minutes in progress",
       "previously_assigned_agent": "agent_1755618432390",
-      "previous_started_at": "2025-08-19T15:47:12.390Z"
+      "previous_started_at": "2025-08-19T15:47:12.390Z",
+      "started_at": "2025-08-19T17:30:44.448Z",
+      "assigned_agent": "agent_1755624644448"
     },
     {
       "id": "task_1755556336279_67jip32fx",
@@ -2064,7 +2071,7 @@
       "mode": "RESEARCH",
       "category": "research",
       "priority": "high",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "important_files": [
         "./development/research-reports/research-report-task_1755624434046_2l5monc79.md"
@@ -2075,7 +2082,17 @@
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-08-19T17:27:14.046Z"
+      "created_at": "2025-08-19T17:27:14.046Z",
+      "started_at": "2025-08-19T17:31:13.420Z",
+      "claimed_by": "agent_1755624673420",
+      "assigned_agent": "agent_1755624673420",
+      "agent_assignment_history": [
+        {
+          "agent": "agent_1755624673420",
+          "action": "claimed",
+          "timestamp": "2025-08-19T17:31:13.420Z"
+        }
+      ]
     },
     {
       "id": "task_1755624441094_z7zru65tg",
@@ -2400,6 +2417,27 @@
       "maxConcurrentTasks": 5,
       "createdAt": "2025-08-19T17:28:08.537Z",
       "sessionId": "session_1755624488535",
+      "metadata": {}
+    },
+    "development_session_1755624687848_1_general_e558e40d": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-08-19T17:31:27.849Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-08-19T17:31:27.849Z",
+      "sessionId": "session_1755624687848",
       "metadata": {}
     }
   }

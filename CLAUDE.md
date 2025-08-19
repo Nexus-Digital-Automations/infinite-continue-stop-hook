@@ -372,17 +372,17 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
 **DEPENDENCY CREATION PROTOCOL:**
 ```bash
 # 1. Create research task FIRST
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Research [specific topic]', description: 'Research [detailed description of what needs to be researched]', category: 'research', mode: 'RESEARCH', priority: 'high'}).then(id => console.log('Research task:', id));"
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Research [topic]', description: '[research details]', category: 'research', mode: 'RESEARCH'}).then(id => console.log('Research task:', id));"
 
-# 2. Create implementation task with research dependency
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Implement [feature]', description: '[implementation description]', category: 'missing-feature', mode: 'DEVELOPMENT', dependencies: ['RESEARCH_TASK_ID'], priority: 'high'}).then(id => console.log('Implementation task:', id));"
+# 2. Create implementation task with dependency
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Implement [feature]', description: '[implementation description]', category: 'missing-feature', dependencies: ['RESEARCH_TASK_ID']}).then(id => console.log('Implementation task:', id));"
 ```
 
-**🚨 DEPENDENCY-AWARE SORTING SYSTEM:**
-- **Dependencies ALWAYS come first** - regardless of category or priority
-- **Research tasks will be prioritized** when they are dependencies of implementation tasks
-- **Implementation tasks CANNOT be claimed** until their research dependencies are completed
-- **Topological sorting ensures** proper dependency order
+**🚨 DEPENDENCY SYSTEM BEHAVIOR:**
+- **Dependencies ALWAYS come first** in task queue regardless of category
+- **Implementation tasks are BLOCKED** until dependencies complete  
+- **Task claiming will redirect** to dependency tasks with instructions
+- **Use TaskManager API** for automatic dependency detection and guidance
 
 ## 🚨 CODING STANDARDS
 
