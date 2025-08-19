@@ -1,21 +1,15 @@
 # Infinite Continue Stop Hook for Claude Code
 
-A sophisticated stop hook system for Claude Code that manages multiple projects concurrently with automatic task management, mode switching, and quality assurance through a three-strike review system.
+A simplified autonomous multi-agent task management system for Claude Code that provides TaskManager API instructions for concurrent task processing with intelligent task creation cycles.
 
 ## Features
 
-- **Multi-Project Support**: Handle multiple projects concurrently with one agent per project
-- **Automatic Mode Switching**: Alternates between TASK_CREATION and task execution modes
-- **Six Agent Modes**:
-  - `DEVELOPMENT`: Feature implementation
-  - `REFACTORING`: Code quality improvements
-  - `TESTING`: Test creation and coverage
-  - `RESEARCH`: API and library research
-  - `TASK_CREATION`: Breaking down complex tasks
-  - `REVIEWER`: Three-strike quality review
-- **Three-Strike Review System**: Ensures code quality with automated reviews
-- **Task Management**: TODO.json-based task tracking with subtask support
-- **Intelligent Mode Detection**: Automatically assigns appropriate modes to tasks
+- **Simplified Autonomous Architecture**: Agents receive clear TaskManager API instructions without complex coordination
+- **Multi-Agent Concurrency**: Multiple agents can work simultaneously using thread-safe task operations
+- **Intelligent Task Creation**: 3-attempt task creation cycle when no work is available
+- **TaskManager API Integration**: Direct API commands for autonomous task management
+- **True Infinite Operation**: Runs continuously while tasks exist, stops only when project is complete
+- **Thread-Safe Operations**: Concurrent agents can claim and work on tasks without conflicts
 
 ## Installation
 
@@ -60,17 +54,48 @@ node /path/to/infinite-continue-stop-hook/setup.js
 
 ### Project Files (`<project>/TODO.json`)
 - Task list and progress tracking
-- Mode states and review strikes
+- Task creation attempt tracking
 - Must exist for hook to activate
 
 ## Usage
 
 Once set up, the stop hook runs automatically when Claude Code finishes responding. The system will:
 
-1. Read the current project's TODO.json
-2. Determine the appropriate mode (alternating between TASK_CREATION and execution)
-3. Provide mode-specific guidance from the general.md and mode files
-4. Continue with the next task or create subtasks
+1. Check if TODO.json exists in the project
+2. Analyze current task status (pending, in-progress, completed)
+3. Provide appropriate instructions:
+   - **Tasks Available**: TaskManager API commands for autonomous task management
+   - **No Tasks**: Task creation mode (up to 3 attempts)
+   - **3 Failed Attempts**: Allow stop (project complete)
+
+### Autonomous Task Management Commands
+
+The stop hook provides these ready-to-use bash commands:
+
+```bash
+# 1. CHECK YOUR CURRENT TASK:
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getCurrentTask().then(task => console.log(task ? JSON.stringify(task, null, 2) : 'No active task'));"
+
+# 2. GET NEXT PENDING TASK:
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getNextPendingTask().then(task => console.log(task ? JSON.stringify(task, null, 2) : 'No pending tasks'));"
+
+# 3. CHECK TASK STATUS OVERVIEW:
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getTaskStatus().then(status => console.log(JSON.stringify(status, null, 2)));"
+
+# 4. UPDATE TASK STATUS (when completed):
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.updateTaskStatus('[TASK_ID]', 'completed', 'Task completed successfully').then(() => console.log('Task marked as completed'));"
+
+# 5. CREATE NEW TASK (if needed):
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: '[TASK_TITLE]', description: '[DESCRIPTION]', mode: 'DEVELOPMENT', category: '[CATEGORY]'}).then(id => console.log('Created task:', id));"
+```
+
+### Autonomous Workflow
+
+1. Run bash command #1 to check if you have an active task
+2. If no active task, run bash command #2 to get next pending task  
+3. Work on the task using your normal tools and processes
+4. When complete, run bash command #4 to mark it as completed
+5. Run bash command #3 to check overall status and see if more work is available
 
 ### TODO.json Structure
 
@@ -80,18 +105,26 @@ Once set up, the stop hook runs automatically when Claude Code finishes respondi
   "tasks": [
     {
       "id": "task-1",
+      "title": "Implement user authentication",
+      "description": "Create a secure authentication system...",
       "mode": "DEVELOPMENT",
-      "description": "Implement user authentication",
-      "prompt": "Create a secure authentication system...",
-      "dependencies": ["config.js", "database/"],
-      "important_files": ["src/auth.js"],
+      "category": "missing-feature",
+      "priority": "high",
       "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "2-4 hours",
       "requires_research": false,
-      "subtasks": []
+      "subtasks": [],
+      "created_at": "2025-01-01T00:00:00.000Z"
     }
   ],
-  "review_strikes": 0,
-  "strikes_completed_last_run": false,
+  "task_creation_attempts": {
+    "count": 0,
+    "last_attempt": null,
+    "max_attempts": 3
+  },
   "current_task_index": 0,
   "last_mode": null
 }
@@ -100,65 +133,93 @@ Once set up, the stop hook runs automatically when Claude Code finishes respondi
 ### Task Fields
 
 - `id`: Unique identifier for the task
-- `mode`: One of: DEVELOPMENT, REFACTORING, TESTING, RESEARCH, TASK_CREATION, REVIEWER
-- `description`: Brief description of what needs to be done
-- `prompt`: Detailed instructions for the agent
+- `title`: Brief title of the task
+- `description`: Detailed description of what needs to be done
+- `mode`: One of: DEVELOPMENT, TESTING, RESEARCH, etc.
+- `category`: Task category for automatic prioritization (research, linter-error, bug, etc.)
+- `priority`: Task priority (low, medium, high, critical)
+- `status`: pending, in_progress, or completed
 - `dependencies`: Files/directories the task depends on
 - `important_files`: Files to read before starting
-- `status`: pending, in_progress, or completed
+- `success_criteria`: Validation commands to run
+- `estimate`: Time estimate for the task
 - `requires_research`: Boolean indicating if research is needed first
-- `subtasks`: Array of subtasks created by TASK_CREATION mode
+- `subtasks`: Array of subtasks
+- `created_at`: Timestamp when task was created
 
-## Mode System
+## Task Categories and Prioritization
 
-### Mode Alternation
-The system alternates between:
-1. **TASK_CREATION**: Analyzes current task and creates subtasks
-2. **Task Execution**: Works on the task with its specified mode
+Tasks are automatically sorted by category priority:
 
-### Mode-Specific Prompts
-Each mode has its own prompt file in the `modes/` directory:
-- `general.md`: Included with all tasks (ADDER+ PROTOCOL)
-- `development.md`: Feature implementation guidance
-- `refactoring.md`: Code improvement strategies
-- `testing.md`: Test creation approaches
-- `research.md`: API/library research methods
-- `task-creation.md`: Task decomposition strategies
-- `reviewer.md`: Review criteria and process
+### Highest Priority
+- **research** - Investigation, exploration, or learning tasks
 
-## Three-Strike Review System
+### Critical Errors (Block All Work)
+- **linter-error** - Code style, formatting, or quality issues
+- **build-error** - Compilation, bundling, or build process failures  
+- **start-error** - Application startup or runtime launch failures
+- **error** - General runtime errors or system failures
 
-After completing tasks, the system runs three review strikes:
+### High Priority
+- **missing-feature** - Required functionality that needs implementation
 
-1. **Strike 1**: Build Verification
-   - Project builds without errors
-   - All dependencies properly installed
-   - Build artifacts generated correctly
+### Standard Priority
+- **bug** - Incorrect behavior that needs fixing
+- **enhancement** - Improvements to existing features
+- **refactor** - Code restructuring or optimization
+- **documentation** - Documentation updates or creation
 
-2. **Strike 2**: Lint and Code Quality
-   - Zero lint errors
-   - Consistent code style
-   - No console.log in production
+### Low Priority
+- **chore** - Maintenance tasks or administrative work
 
-3. **Strike 3**: Test Coverage
-   - All tests passing
-   - 100% coverage on critical modules
-   - 90%+ coverage on other modules
+### Lowest Priority (All Testing Related)
+- **missing-test** - Test coverage gaps
+- **test-setup** - Test environment configuration
+- **test-refactor** - Test code improvements
+- **test-performance** - Performance testing
+- **test-linter-error** - Linting issues in test files
+- **test-error** - Failing tests or test framework issues
+- **test-feature** - New testing features or tooling
 
-### Strike Reset Logic
-- If all 3 strikes completed: Approve and continue
-- If 3 strikes already completed from previous run: Reset to 0 for new cycle
+## Multi-Agent Architecture
+
+### Concurrent Processing
+- Multiple agents can work simultaneously on different tasks
+- Thread-safe task claiming prevents conflicts
+- Each agent operates autonomously using TaskManager API commands
+
+### Task Creation Mode
+When no tasks are available:
+1. **Attempt 1-3**: System enters task creation mode
+2. **Analysis Instructions**: Agents receive guidance on what to analyze
+3. **Task Creation**: Agents can create new tasks if work is identified
+4. **Automatic Stop**: After 3 failed attempts, system concludes project is complete
+
+### True Infinite Operation
+- Runs continuously while tasks are available (pending or in_progress)
+- Only stops when no tasks exist and 3 task creation attempts fail
+- Designed for multi-agent concurrent processing
 
 ## Advanced Features
 
-### Research Task Detection
-Tasks requiring external API knowledge automatically trigger research tasks first.
+### Autonomous Task Methods
+- `getCurrentTask()`: Find any in-progress task to continue
+- `getNextPendingTask()`: Thread-safe claiming of next available task
+- `getTaskStatus()`: Overview of project task pipeline
 
-### Subtask Management
-TASK_CREATION mode breaks complex tasks into manageable subtasks (2-4 hours each).
+### Task Creation Guidance
+When in task creation mode, agents receive instructions to analyze:
+- Missing features or functionality
+- Code quality improvements needed
+- Documentation gaps
+- Test coverage requirements
+- Performance optimizations
 
-### Review Task Injection
-Review tasks are automatically injected every 5 completed tasks.
+### Quality Categories
+Tasks are automatically categorized and prioritized to ensure:
+- Critical errors are fixed first (linting, builds, runtime errors)
+- Research tasks get highest priority for knowledge building
+- Testing tasks are handled last to avoid blocking development
 
 ## Configuration Management
 
@@ -198,7 +259,10 @@ node /path/to/infinite-continue-stop-hook/test-hook.js
 
 2. **TODO.json not found**: Run the setup script in your project directory
 
-3. **Mode file not found**: Ensure all mode files exist in the `modes/` directory
+3. **TaskManager API errors**: 
+   - Ensure lib/taskManager.js exists and is accessible
+   - Check that TODO.json has proper structure
+   - Verify Node.js can require the TaskManager module
 
 4. **Hook runs in unwanted projects**: 
    - Either remove global configuration
@@ -209,12 +273,22 @@ node /path/to/infinite-continue-stop-hook/test-hook.js
 echo '{"session_id":"test","transcript_path":"test.jsonl","hook_event_name":"Stop","stop_hook_active":false}' | node /path/to/stop-hook.js
 ```
 
+### TaskManager API Testing
+```bash
+# Test task status
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getTaskStatus().then(status => console.log(JSON.stringify(status, null, 2)));"
+
+# Test current task retrieval
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getCurrentTask().then(task => console.log(task ? JSON.stringify(task, null, 2) : 'No active task'));"
+```
+
 ## Contributing
 
-To add new modes:
-1. Create a new `.md` file in `modes/`
-2. Update the mode list in setup.js
-3. Add mode-specific logic in AgentExecutor
+To extend the system:
+1. Add new task categories to the priority system
+2. Enhance TaskManager API with additional methods
+3. Improve task creation guidance and analysis
+4. Add new validation criteria for task completion
 
 ## License
 

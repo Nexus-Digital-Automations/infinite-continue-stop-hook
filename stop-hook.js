@@ -3,69 +3,45 @@
 const fs = require('fs');
 const path = require('path');
 const TaskManager = require('./lib/taskManager');
-const AgentExecutor = require('./lib/agentExecutor');
-// ReviewSystem import removed - no automatic injection
 const Logger = require('./lib/logger');
 
 // ============================================================================
-// CONCURRENT PROCESSING HELPER FUNCTION
+// SIMPLIFIED TASKMANAGER API INSTRUCTION PROVIDER
 // ============================================================================
 
 /**
- * Process a single task with proper mode determination and prompt generation
- * @param {Object} currentTask - Task to process
- * @param {string} agentId - Agent ID
- * @param {string} mode - Optional forced mode
- * @param {string} modeReason - Optional mode reason
- * @param {Object} taskManager - TaskManager instance
- * @param {Object} agentExecutor - AgentExecutor instance
- * @param {Object} logger - Logger instance
- * @param {Object} todoData - Current TODO data
+ * Provides standard TaskManager API instructions for autonomous task management
  */
-async function processSingleTask(currentTask, agentId, mode, modeReason, taskManager, agentExecutor, logger, todoData) {
-    // Increment execution count and update timing for infinite loop prevention
-    todoData.execution_count++;
-    todoData.last_hook_activation = Date.now();
+function provideTaskManagerInstructions() {
+    const instructions = `
+=== AUTONOMOUS TASK MANAGEMENT INSTRUCTIONS ===
+
+Use these TaskManager API commands to manage your own tasks:
+
+1. CHECK YOUR CURRENT TASK:
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getCurrentTask().then(task => console.log(task ? JSON.stringify(task, null, 2) : 'No active task'));"
+
+2. GET NEXT PENDING TASK:
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getNextPendingTask().then(task => console.log(task ? JSON.stringify(task, null, 2) : 'No pending tasks'));"
+
+3. CHECK TASK STATUS OVERVIEW:
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getTaskStatus().then(status => console.log(JSON.stringify(status, null, 2)));"
+
+4. UPDATE TASK STATUS (when completed):
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.updateTaskStatus('[TASK_ID]', 'completed', 'Task completed successfully').then(() => console.log('Task marked as completed'));"
+
+5. CREATE NEW TASK (if needed):
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: '[TASK_TITLE]', description: '[DESCRIPTION]', mode: 'DEVELOPMENT', category: '[CATEGORY]'}).then(id => console.log('Created task:', id));"
+
+WORKFLOW:
+1. Run bash command #1 to check if you have an active task
+2. If no active task, run bash command #2 to get next pending task  
+3. Work on the task using your normal tools and processes
+4. When complete, run bash command #4 to mark it as completed
+5. Run bash command #3 to check overall status and see if more work is available
+`;
     
-    // Determine mode (if not already set by task creation logic)
-    if (!mode) {
-        if (currentTask.is_review_task) {
-            mode = 'REVIEWER';
-            modeReason = 'Current task is a review task';
-        } else if (todoData.execution_count % 4 === 0) {
-            mode = 'TASK_CREATION';
-            modeReason = `Every 4th execution: entering TASK_CREATION mode (count: ${todoData.execution_count})`;
-        } else {
-            mode = currentTask.mode;
-            modeReason = `Using task mode: ${currentTask.mode} (execution ${todoData.execution_count})`;
-        }
-    }
-    
-    logger.logModeDecision(todoData.last_mode, mode, modeReason);
-    
-    // Update last mode
-    todoData.last_mode = mode;
-    
-    // Build the prompt
-    const fullPrompt = await agentExecutor.buildPrompt(currentTask, mode, todoData, taskManager);
-    
-    // Update task status using concurrent-aware method
-    currentTask.status = 'in_progress';
-    await taskManager.writeTodo(todoData);
-    logger.addFlow(`Updated task ${currentTask.id} status to in_progress`);
-    
-    // Log prompt generation
-    logger.logPromptGeneration(fullPrompt, '');
-    
-    // Output the prompt for Claude
-    console.error(fullPrompt);
-    
-    // Log exit
-    logger.logExit(2, `Continuing with ${mode} mode for task: ${currentTask.title}`);
-    logger.save();
-    
-    // Force continuation with the prompt
-    process.exit(2);
+    return instructions;
 }
 
 // Read input from Claude Code
@@ -82,220 +58,141 @@ process.stdin.on('end', async () => {
         logger.addFlow(`Raw input data: "${inputData}"`);
         logger.addFlow(`Input data length: ${inputData.length}`);
         
+        let hookInput;
         if (!inputData || inputData.trim() === '') {
             // No input - probably manual execution, simulate Claude Code input
             logger.addFlow('No input detected - running in manual mode');
-            const simulatedInput = {
+            hookInput = {
                 session_id: 'manual_test',
                 transcript_path: '',
                 stop_hook_active: true,
                 hook_event_name: 'manual_execution'
             };
-            logger.addFlow(`Using simulated input: ${JSON.stringify(simulatedInput)}`);
-            var hookInput = simulatedInput;
         } else {
-            var hookInput = JSON.parse(inputData);
+            hookInput = JSON.parse(inputData);
         }
         
-        const { session_id: _session_id, transcript_path: _transcript_path, stop_hook_active, hook_event_name } = hookInput;
+        const { session_id: _session_id, transcript_path: _transcript_path, stop_hook_active: _stop_hook_active, hook_event_name } = hookInput;
         
         // Log input with event details
         logger.logInput(hookInput);
         logger.addFlow(`Received ${hook_event_name || 'unknown'} event from Claude Code`);
         
-        // Intelligent infinite loop prevention with 4 consecutive calls within 1 second
-        if (stop_hook_active) {
-            // First check if TODO.json exists to get timing data
-            const todoPath = path.join(workingDir, 'TODO.json');
-            if (fs.existsSync(todoPath)) {
-                try {
-                    const todoData = JSON.parse(fs.readFileSync(todoPath, 'utf8'));
-                    const now = Date.now();
-                    
-                    // Initialize call history if not present
-                    if (!todoData.stop_hook_calls) {
-                        todoData.stop_hook_calls = [];
-                    }
-                    
-                    // Clean up old calls (older than 1 second)
-                    todoData.stop_hook_calls = todoData.stop_hook_calls.filter(timestamp => now - timestamp < 1000);
-                    
-                    // Add current call
-                    todoData.stop_hook_calls.push(now);
-                    
-                    // Check if we have 4 consecutive calls within 1 second
-                    if (todoData.stop_hook_calls.length >= 4) {
-                        // 4 or more calls within 1 second - allow stop
-                        logger.addFlow(`4+ consecutive calls within 1 second detected - allowing stop (calls: ${todoData.stop_hook_calls.length})`);
-                        logger.logExit(0, "4+ consecutive calls detected - allowing stop");
-                        logger.save();
-                        console.error("4+ consecutive calls within 1 second detected, allowing stop");
-                        process.exit(0);
-                    } else {
-                        // Less than 4 calls - continue normally but save the call history
-                        logger.addFlow(`Call ${todoData.stop_hook_calls.length} of 4 within 1 second - continuing`);
-                        fs.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
-                    }
-                } catch (error) {
-                    // If we can't read TODO.json, use conservative approach
-                    logger.addFlow(`Could not read TODO.json for timing check - allowing stop: ${error.message}`);
-                    logger.logExit(0, "Could not validate timing - allowing stop");
-                    logger.save();
-                    console.error("Could not validate timing, allowing stop");
-                    process.exit(0);
-                }
-            } else {
-                // No TODO.json means this isn't our project - allow stop
-                logger.addFlow("No TODO.json found - allowing stop");
-                logger.logExit(0, "No TODO.json found");
-                logger.save();
-                console.error("No TODO.json found, allowing stop");
-                process.exit(0);
-            }
-        }
-        
-        // Initialize components
+        // Check if TODO.json exists in current project
         const todoPath = path.join(workingDir, 'TODO.json');
-        const modesDir = path.join(__dirname, 'modes');
-        
-        const taskManager = new TaskManager(todoPath);
-        const agentExecutor = new AgentExecutor(modesDir);
-        // ReviewSystem removed - no automatic injection
-        
-        // Check if TODO.json exists
         if (!fs.existsSync(todoPath)) {
-            logger.addFlow("No TODO.json found in project directory");
+            logger.addFlow("No TODO.json found - this is not a TaskManager project");
             logger.logExit(0, "No TODO.json found");
             logger.save();
-            console.log("No TODO.json found in current project. Run setup first.");
+            console.error("No TODO.json found - this is not a TaskManager project, allowing stop");
             process.exit(0);
         }
         
-        // Read TODO.json
+        
+        // Initialize TaskManager
+        const taskManager = new TaskManager(todoPath);
+        
+        // Read TODO.json to check task creation attempts
         let todoData = await taskManager.readTodo();
-        logger.logProjectState(todoData, todoPath);
         
-        // Initialize execution count if not present
-        if (typeof todoData.execution_count !== 'number') {
-            todoData.execution_count = 0;
+        // Initialize task creation tracking if not present
+        if (!todoData.task_creation_attempts || typeof todoData.task_creation_attempts !== 'object') {
+            todoData.task_creation_attempts = { count: 0, last_attempt: null, max_attempts: 3 };
         }
         
-        // Handle strike reset logic
-        const strikeResult = taskManager.handleStrikeLogic(todoData);
-        logger.logStrikeHandling(strikeResult, todoData);
+        // Check task status to provide appropriate instructions
+        const taskStatus = await taskManager.getTaskStatus();
+        logger.addFlow(`Task status: ${taskStatus.pending} pending, ${taskStatus.in_progress} in_progress, ${taskStatus.completed} completed`);
         
-        if (strikeResult.action === 'reset') {
-            console.error(strikeResult.message);
-            await taskManager.writeTodo(todoData);
-            todoData = await taskManager.readTodo(); // Re-read after update
-        } else if (strikeResult.action === 'complete') {
-            await taskManager.writeTodo(todoData);
-            logger.logExit(0, "All strikes completed - project approved");
-            logger.save();
-            console.log(strikeResult.message + " Stopping.");
-            process.exit(0);
-        }
-        
-        // Review task injection has been removed - no automatic task injection
-        
-        // Initialize or get agent ID for multi-agent support
-        let agentId = process.env.CLAUDE_AGENT_ID;
-        
-        if (!agentId && fs.existsSync(path.join(__dirname, 'initialize-agent.js'))) {
-            try {
-                const { initializeAgent } = require('./initialize-agent');
-                const agentInfo = {
-                    sessionId: process.env.CLAUDE_SESSION_ID || `session_${Date.now()}`,
-                    role: process.env.CLAUDE_AGENT_ROLE || 'development',
-                    specialization: process.env.CLAUDE_AGENT_SPECIALIZATION ? 
-                        process.env.CLAUDE_AGENT_SPECIALIZATION.split(',') : []
-                };
+        // If no work available, handle task creation attempts
+        if (!taskStatus.hasWork) {
+            const maxAttempts = 3;
+            
+            if (todoData.task_creation_attempts.count < maxAttempts) {
+                // Increment attempt counter
+                todoData.task_creation_attempts.count++;
+                todoData.task_creation_attempts.last_attempt = new Date().toISOString();
+                await taskManager.writeTodo(todoData);
                 
-                const initResult = await initializeAgent(agentInfo);
-                if (initResult.success) {
-                    agentId = initResult.agentId;
-                    logger.addFlow(`Agent initialized: ${agentId} (${initResult.action})`);
-                }
-            } catch (error) {
-                logger.addFlow(`Agent initialization failed: ${error.message}`);
-                // Continue without agent ID - fallback to old behavior
-            }
-        }
-        
-        // Check for recently completed tasks and provide linting feedback
-        const completionFeedback = await taskManager.checkForCompletedTasksFeedback();
-        if (completionFeedback && completionFeedback.shouldProvideFeedback) {
-            logger.addFlow(`Task completion detected - providing linter feedback for: ${completionFeedback.taskTitle}`);
-            
-            const linterFeedback = taskManager.generateLinterFeedback(completionFeedback);
-            console.error(linterFeedback);
-            
-            logger.logExit(2, `Providing linter feedback for completed task: ${completionFeedback.taskTitle}`);
-            logger.save();
-            process.exit(2);
-        }
+                logger.addFlow(`No work available - entering task creation mode (attempt ${todoData.task_creation_attempts.count}/${maxAttempts})`);
+                
+                const taskCreationInstructions = `
+🔄 TASK CREATION MODE (Attempt ${todoData.task_creation_attempts.count}/${maxAttempts})
 
-        // CONCURRENT MULTI-AGENT PROCESSING
-        // Get available agents for concurrent processing
-        const availableAgents = await taskManager.getAvailableAgents();
-        logger.addFlow(`Found ${availableAgents.length} available agents for concurrent processing`);
-        
-        // Get tasks that can be distributed across agents
-        const distributableTasks = await taskManager.getDistributableTasks(availableAgents.length);
-        logger.addFlow(`Found ${distributableTasks.length} tasks ready for distribution`);
-        
-        if (distributableTasks.length === 0) {
-            // No tasks available - check if we should enter task creation mode
-            const guidance = await taskManager.getTaskContinuationGuidance(agentId);
-            logger.addFlow(`Task guidance action: ${guidance.action}`);
-            
-            if (guidance.action === 'enter_task_creation_mode') {
-                logger.addFlow(`Entering task creation mode (attempt ${guidance.attempt} of ${guidance.max_attempts})`);
+No pending tasks found. Please analyze the project and create new tasks if needed:
+
+1. ANALYZE PROJECT STATUS:
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getTaskStatus().then(status => console.log(JSON.stringify(status, null, 2)));"
+
+2. CREATE NEW TASK (if work is needed):
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: '[TASK_TITLE]', description: '[DESCRIPTION]', mode: 'DEVELOPMENT', category: '[CATEGORY]'}).then(id => console.log('Created task:', id));"
+
+3. AVAILABLE CATEGORIES (choose appropriate one):
+   - research, linter-error, build-error, start-error, error
+   - missing-feature, bug, enhancement, refactor, documentation
+   - chore, missing-test, test-setup, test-refactor, etc.
+
+WHAT TO ANALYZE:
+- Check if all features are complete
+- Look for missing documentation
+- Identify potential improvements
+- Check for missing tests
+- Verify code quality standards
+
+If no new tasks are needed, the system will stop after ${maxAttempts - todoData.task_creation_attempts.count} more attempt(s).
+`;
                 
-                // Create a virtual task for task creation mode
-                const currentTask = {
-                    id: `task_creation_${Date.now()}`,
-                    title: 'Task Creation Mode',
-                    description: guidance.message,
-                    mode: 'TASK_CREATION',
-                    status: 'in_progress',
-                    priority: 'high',
-                    instructions: guidance.instructions
-                };
-                
-                // Process single task creation mode
-                await processSingleTask(currentTask, agentId, 'TASK_CREATION', `No tasks available - entering task creation mode (attempt ${guidance.attempt}/${guidance.max_attempts})`, taskManager, agentExecutor, logger, todoData);
-                return;
-            } else {
-                logger.addFlow("No tasks available and no task creation needed");
-                logger.logExit(0, "All tasks completed");
+                logger.logExit(2, `Task creation mode attempt ${todoData.task_creation_attempts.count}/${maxAttempts}`);
                 logger.save();
-                console.log("All tasks completed!");
+                
+                console.error(taskCreationInstructions);
+                process.exit(2);
+            } else {
+                // Reset counter and allow stop
+                todoData.task_creation_attempts.count = 0;
+                todoData.task_creation_attempts.last_attempt = null;
+                await taskManager.writeTodo(todoData);
+                
+                logger.addFlow(`Maximum task creation attempts (${maxAttempts}) reached - no new tasks created, allowing stop`);
+                logger.logExit(0, "No tasks created after maximum attempts - project complete");
+                logger.save();
+                
+                console.error(`No tasks created after ${maxAttempts} attempts. Project appears complete - allowing stop.`);
                 process.exit(0);
             }
-        }
-        
-        // CONCURRENT TASK DISTRIBUTION
-        const taskAssignments = await taskManager.distributeTasksToAgents(distributableTasks, availableAgents);
-        logger.addFlow(`Distributed ${taskAssignments.length} tasks across agents`);
-        
-        // Process the current agent's assignment
-        const myAssignment = taskAssignments.find(assignment => assignment.agentId === agentId);
-        
-        if (!myAssignment) {
-            logger.addFlow("No task assigned to current agent - all tasks distributed to other agents");
-            logger.logExit(0, "No task assignment for this agent");
+        } else {
+            // Reset task creation attempts when work is available
+            if (todoData.task_creation_attempts.count > 0) {
+                todoData.task_creation_attempts.count = 0;
+                todoData.task_creation_attempts.last_attempt = null;
+                await taskManager.writeTodo(todoData);
+            }
+            
+            // Provide TaskManager API instructions
+            const instructions = provideTaskManagerInstructions();
+            
+            // Add project-specific context
+            const contextualInstructions = `
+${instructions}
+
+CURRENT PROJECT STATUS:
+- Total tasks: ${taskStatus.total}
+- Pending tasks: ${taskStatus.pending}
+- In progress: ${taskStatus.in_progress}  
+- Completed: ${taskStatus.completed}
+- Has work available: ${taskStatus.hasWork}
+
+✅ Work is available! Use the bash commands above to continue working on tasks.
+`;
+            
+            logger.addFlow("Providing TaskManager API instructions to agent");
+            logger.logExit(2, "Providing autonomous task management instructions");
             logger.save();
-            console.log("Task distributed to other agents - this agent completed.");
-            process.exit(0);
+            
+            // Output instructions to Claude
+            console.error(contextualInstructions);
+            process.exit(2);
         }
-        
-        const currentTask = myAssignment.task;
-        logger.addFlow(`Processing assigned task: ${currentTask.title}`);
-        logger.logCurrentTask(currentTask);
-        
-        // Process the assigned task using concurrent-aware processing
-        await processSingleTask(currentTask, agentId, null, null, taskManager, agentExecutor, logger, todoData);
         
     } catch (error) {
         logger.logError(error, 'stop-hook-main');
@@ -303,8 +200,7 @@ process.stdin.on('end', async () => {
         logger.save();
         
         console.error(`Error in stop hook: ${error.message}`);
-        console.error(`Stack: ${error.stack}`);
-        console.log("Stop hook error - allowing stop");
+        console.error("Stop hook error - allowing stop");
         process.exit(0);
     }
 });
