@@ -24,8 +24,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Initialize TaskManager and Logger
 const todoPath = path.join(process.cwd(), 'TODO.json');
+const agentRegistryPath = path.join(process.cwd(), 'agent-registry.json');
 const taskManager = new TaskManager(todoPath);
-const agentRegistry = new AgentRegistry();
+const agentRegistry = new AgentRegistry(agentRegistryPath);
 const logger = new Logger(process.cwd());
 
 // Error handling middleware
@@ -207,7 +208,7 @@ app.post('/api/tasks/:taskId/claim', asyncHandler(async (req, res) => {
  * GET /api/agents - List all registered agents
  */
 app.get('/api/agents', asyncHandler(async (req, res) => {
-  const agents = await agentRegistry.listAgents();
+  const agents = agentRegistry.getAllAgents();
   
   res.json({
     success: true,
@@ -272,12 +273,11 @@ app.get('/api/agents/:agentId/current-task', asyncHandler(async (req, res) => {
  */
 app.get('/api/status', asyncHandler(async (req, res) => {
   const taskStatus = await taskManager.getTaskStatus();
-  const agents = await agentRegistry.listAgents();
+  const agents = agentRegistry.getAllAgents();
   
   // Count active agents (heartbeat within last 15 minutes)
-  const activeAgents = Object.keys(agents).filter(agentId => {
-    const agent = agents[agentId];
-    const lastHeartbeat = agent.lastHeartbeat || agent.last_heartbeat;
+  const activeAgents = agents.filter(agent => {
+    const lastHeartbeat = agent.lastHeartbeat || agent.last_heartbeat || agent.lastActivity;
     const heartbeatTime = lastHeartbeat ? new Date(lastHeartbeat).getTime() : 0;
     const timeSinceHeartbeat = Date.now() - heartbeatTime;
     return timeSinceHeartbeat < 900000; // 15 minutes
@@ -292,9 +292,9 @@ app.get('/api/status', asyncHandler(async (req, res) => {
       },
       tasks: taskStatus,
       agents: {
-        total: Object.keys(agents).length,
+        total: agents.length,
         active: activeAgents.length,
-        activeAgentIds: activeAgents
+        activeAgentIds: activeAgents.map(agent => agent.agentId)
       }
     }
   });

@@ -1835,9 +1835,9 @@
       "requires_research": false,
       "subtasks": [],
       "created_at": "2025-08-19T17:33:47.781Z",
-      "started_at": "2025-08-19T22:43:11.904Z",
-      "claimed_by": "agent_1755643391904",
-      "assigned_agent": "agent_1755643391904",
+      "started_at": "2025-08-19T23:00:18.537Z",
+      "claimed_by": "agent_1755644418537",
+      "assigned_agent": "agent_1755644418537",
       "agent_assignment_history": [
         {
           "agent": "agent_1755624897135",
@@ -1865,6 +1865,17 @@
           "agent": "agent_1755643391904",
           "action": "claimed",
           "timestamp": "2025-08-19T22:43:11.904Z"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-08-19T23:00:06.221Z",
+          "reason": "Task stale for 17 minutes"
+        },
+        {
+          "agent": "agent_1755644418537",
+          "action": "claimed",
+          "timestamp": "2025-08-19T23:00:18.537Z"
         }
       ]
     },
@@ -2003,22 +2014,6 @@
       "created_at": "2025-08-19T21:50:51.698Z"
     },
     {
-      "id": "task_1755641713027_2v8f4752e",
-      "title": "API Test Task",
-      "description": "Test task created via REST API",
-      "mode": "DEVELOPMENT",
-      "category": "missing-feature",
-      "priority": "medium",
-      "status": "pending",
-      "dependencies": [],
-      "important_files": [],
-      "success_criteria": [],
-      "estimate": "",
-      "requires_research": false,
-      "subtasks": [],
-      "created_at": "2025-08-19T22:15:13.027Z"
-    },
-    {
       "id": "task_1755641799406_ume7mo0fh",
       "title": "API Test Task",
       "description": "Test task created via REST API",
@@ -2033,6 +2028,38 @@
       "requires_research": false,
       "subtasks": [],
       "created_at": "2025-08-19T22:16:39.406Z"
+    },
+    {
+      "id": "task_1755644495736_0xxbusqmk",
+      "title": "API Test Task",
+      "description": "Test task created via REST API",
+      "mode": "DEVELOPMENT",
+      "category": "missing-feature",
+      "priority": "medium",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-19T23:01:35.736Z"
+    },
+    {
+      "id": "task_1755644564289_t0t62nzth",
+      "title": "API Test Task",
+      "description": "Test task created via REST API",
+      "mode": "DEVELOPMENT",
+      "category": "missing-feature",
+      "priority": "medium",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-19T23:02:44.289Z"
     }
   ],
   "current_mode": "DEVELOPMENT",
