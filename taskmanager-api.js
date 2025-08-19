@@ -147,13 +147,89 @@ class TaskManagerAPI {
                 throw new Error('No agent ID provided and no agent initialized');
             }
             
+            // First, check if task has incomplete dependencies
+            const todoData = await this.taskManager.readTodo();
+            const task = todoData.tasks.find(t => t.id === taskId);
+            
+            if (task && task.dependencies && task.dependencies.length > 0) {
+                const incompleteDependencies = [];
+                
+                for (const depId of task.dependencies) {
+                    const depTask = todoData.tasks.find(t => t.id === depId);
+                    if (depTask && depTask.status !== 'completed') {
+                        incompleteDependencies.push(depTask);
+                    }
+                }
+                
+                if (incompleteDependencies.length > 0) {
+                    // Find the next dependency that should be worked on first
+                    const nextDependency = incompleteDependencies.find(dep => dep.status === 'pending') || incompleteDependencies[0];
+                    
+                    return {
+                        success: false,
+                        reason: "Task has incomplete dependencies that must be completed first",
+                        blockedByDependencies: true,
+                        incompleteDependencies: incompleteDependencies,
+                        nextDependency: nextDependency,
+                        dependencyInstructions: {
+                            message: `🔗 DEPENDENCY DETECTED - Complete dependency first: ${nextDependency.title}`,
+                            instructions: [
+                                `📋 COMPLETE dependency task: ${nextDependency.title} (ID: ${nextDependency.id})`,
+                                `🎯 CLAIM dependency task using: node taskmanager-api.js claim ${nextDependency.id}`,
+                                `✅ FINISH dependency before returning to this task`,
+                                `🔄 RETRY this task after dependency is completed`
+                            ],
+                            dependencyTask: {
+                                id: nextDependency.id,
+                                title: nextDependency.title,
+                                category: nextDependency.category,
+                                status: nextDependency.status
+                            }
+                        }
+                    };
+                }
+            }
+            
             const result = await this.taskManager.claimTask(taskId, targetAgentId, priority);
+            
+            // Check if task requires research or is a research category task
+            const claimedTask = result.task;
+            let researchInstructions = null;
+            
+            if (claimedTask && (claimedTask.category === 'research' || claimedTask.requires_research)) {
+                researchInstructions = {
+                    message: "🔬 RESEARCH TASK DETECTED - RESEARCH REQUIRED FIRST",
+                    instructions: [
+                        "📋 BEFORE IMPLEMENTATION: Perform comprehensive research",
+                        "📁 CREATE research report in development/reports/ directory",
+                        "🔍 ANALYZE existing solutions, best practices, and technical approaches",
+                        "📊 DOCUMENT findings, recommendations, and implementation strategy",
+                        "✅ COMPLETE research report before proceeding with implementation",
+                        "🗂️ USE research findings to guide implementation decisions"
+                    ],
+                    reportTemplate: {
+                        filename: `research-${claimedTask.title.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Date.now()}.md`,
+                        directory: "development/reports/",
+                        sections: [
+                            "# Research Report: " + claimedTask.title,
+                            "## Overview",
+                            "## Current State Analysis", 
+                            "## Research Findings",
+                            "## Technical Approaches",
+                            "## Recommendations",
+                            "## Implementation Strategy",
+                            "## References"
+                        ]
+                    }
+                };
+            }
             
             return {
                 success: result.success,
                 task: result.task,
                 reason: result.reason,
-                priority: result.priority
+                priority: result.priority,
+                researchInstructions: researchInstructions
             };
         } catch (error) {
             return {

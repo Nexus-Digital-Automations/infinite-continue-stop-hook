@@ -144,24 +144,26 @@ This mandate exists to ensure **SUSTAINABLE CODE QUALITY** and **LONG-TERM SYSTE
 
 Tasks are now organized by **specific categories** instead of generic "low", "medium", "high" priorities. The system **automatically sorts** tasks by category urgency:
 
-### 🔴 CRITICAL ERRORS (Rank 1-4) - Highest Priority - Block All Work
-1. **🔴 linter-error** - Code style, formatting, or quality issues detected by linters - **HIGHEST PRIORITY**
-2. **🔥 build-error** - Compilation, bundling, or build process failures  
-3. **⚠️ start-error** - Application startup, initialization, or runtime launch failures
-4. **❌ error** - General runtime errors, exceptions, or system failures
+### 🌟 TOP PRIORITY (Rank 1) - Highest Priority
+1. **🔬 research** - Investigation, exploration, or learning tasks - **HIGHEST PRIORITY**
 
-### 🟡 IMPLEMENTATION PRIORITY (Rank 5-9) - Core Development Work
-5. **🆕 missing-feature** - Required functionality that needs to be implemented
-6. **🐛 bug** - Incorrect behavior or functionality that needs fixing
-7. **✨ enhancement** - Improvements to existing features or functionality
-8. **♻️ refactor** - Code restructuring, optimization, or technical debt reduction
-9. **📚 documentation** - Documentation updates, comments, or API documentation
+### 🔴 CRITICAL ERRORS (Rank 2-5) - Block All Work
+2. **🔴 linter-error** - Code style, formatting, or quality issues detected by linters
+3. **🔥 build-error** - Compilation, bundling, or build process failures  
+4. **⚠️ start-error** - Application startup, initialization, or runtime launch failures
+5. **❌ error** - General runtime errors, exceptions, or system failures
 
-### 🟢 MAINTENANCE PRIORITY (Rank 10) - Administrative Work
-10. **🧹 chore** - Maintenance tasks, cleanup, or administrative work
+### 🟡 HIGH PRIORITY (Rank 6) - Important Features
+6. **🆕 missing-feature** - Required functionality that needs to be implemented
 
-### 🔬 RESEARCH PRIORITY (Rank 11) - Investigation Work
-11. **🔬 research** - Investigation, exploration, or learning tasks
+### 🔵 STANDARD PRIORITY (Rank 7-10) - Normal Development
+7. **🐛 bug** - Incorrect behavior or functionality that needs fixing
+8. **✨ enhancement** - Improvements to existing features or functionality
+9. **♻️ refactor** - Code restructuring, optimization, or technical debt reduction
+10. **📚 documentation** - Documentation updates, comments, or API documentation
+
+### 🟢 LOW PRIORITY (Rank 11) - Maintenance
+11. **🧹 chore** - Maintenance tasks, cleanup, or administrative work
 
 ### 🔴 LOWEST PRIORITY (Rank 12-18) - All Testing Related - LAST PRIORITY
 12. **🧪 missing-test** - Test coverage gaps or missing test cases - **LOWEST PRIORITY**
@@ -173,14 +175,15 @@ Tasks are now organized by **specific categories** instead of generic "low", "me
 18. **🔧 test-feature** - New testing features, test tooling improvements - **LOWEST PRIORITY**
 
 **AVAILABLE CATEGORIES (Must be specified when creating tasks):**
-- **linter-error, build-error, start-error, error** (ranks 1-4) - Critical errors (highest priority)
-- **missing-feature, bug, enhancement, refactor, documentation** (ranks 5-9) - Implementation work
-- **chore** (rank 10) - Maintenance
-- **research** (rank 11) - Investigation work
+- **research** (rank 1) - Highest priority  
+- **linter-error, build-error, start-error, error** (ranks 2-5) - Critical errors
+- **missing-feature** (rank 6) - Important features
+- **bug, enhancement, refactor, documentation** (ranks 7-10) - Standard work
+- **chore** (rank 11) - Maintenance
 - **missing-test, test-setup, test-refactor, test-performance, test-linter-error, test-error, test-feature** (ranks 12-18) - Testing (lowest priority)
 
 **THREE-LEVEL AUTO-SORTING HIERARCHY:**
-1. **PRIMARY: Category Rank** - Linter Errors (1) → Build Errors (2) → Implementation (5-9) → Research (11) → Testing (12-18)
+1. **PRIMARY: Category Rank** - Research (1) → Linter Errors (2) → Build Errors (3) → etc.
 2. **SECONDARY: Priority Value** - Critical (4) → High (3) → Medium (2) → Low (1)
 3. **TERTIARY: Creation Time** - Newer tasks first within same category and priority
 
@@ -189,7 +192,7 @@ Tasks are now organized by **specific categories** instead of generic "low", "me
 # Category is MANDATORY - must be specified explicitly
 node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Fix ESLint errors', category: 'linter-error', mode: 'DEVELOPMENT'}).then(id => console.log('Created:', id));"
 
-# Research task (after implementation tasks)
+# Research task (highest priority)
 node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Research authentication patterns', category: 'research', mode: 'DEVELOPMENT'}).then(id => console.log('Created:', id));"
 
 # Testing task (lowest priority)  
@@ -227,11 +230,11 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
 - **⚠️ START-ERROR FOUND** → INSTANTLY CREATE `category: 'start-error'` TASK
 - **❌ RUNTIME ERROR SEEN** → INSTANTLY CREATE `category: 'error'` TASK
 
-### 🔬 **RESEARCH OPPORTUNITIES - CREATE TASK IN FIRST SECOND:**
-- **🔬 INVESTIGATION NEEDED** → INSTANTLY CREATE `category: 'research'` TASK (AFTER IMPLEMENTATION)
-- **🔍 EXPLORATION REQUIRED** → INSTANTLY CREATE `category: 'research'` TASK (AFTER IMPLEMENTATION)
-- **📊 ANALYSIS OPPORTUNITY** → INSTANTLY CREATE `category: 'research'` TASK (AFTER IMPLEMENTATION)
-- **🧭 LEARNING REQUIRED** → INSTANTLY CREATE `category: 'research'` TASK (AFTER IMPLEMENTATION)
+### 🌟 **RESEARCH OPPORTUNITIES - CREATE TASK IN FIRST SECOND:**
+- **🔬 INVESTIGATION NEEDED** → INSTANTLY CREATE `category: 'research'` TASK (HIGHEST PRIORITY)
+- **🔍 EXPLORATION REQUIRED** → INSTANTLY CREATE `category: 'research'` TASK (HIGHEST PRIORITY)
+- **📊 ANALYSIS OPPORTUNITY** → INSTANTLY CREATE `category: 'research'` TASK (HIGHEST PRIORITY)
+- **🧭 LEARNING REQUIRED** → INSTANTLY CREATE `category: 'research'` TASK (HIGHEST PRIORITY)
 
 ### 🆕 **FEATURE OPPORTUNITIES - CREATE TASK IN FIRST SECOND:**
 - **🆕 MISSING FUNCTIONALITY** → INSTANTLY CREATE `category: 'missing-feature'` TASK
@@ -262,8 +265,8 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
 # INSTANT LINTER ERROR TASK
 node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Fix [specific linter error]', category: 'linter-error', mode: 'DEVELOPMENT', priority: 'critical'}).then(id => console.log('URGENT LINTER TASK:', id));"
 
-# INSTANT RESEARCH TASK (AFTER IMPLEMENTATION TASKS)
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Research [specific topic]', category: 'research', mode: 'DEVELOPMENT', priority: 'high'}).then(id => console.log('RESEARCH TASK:', id));"
+# INSTANT RESEARCH TASK (HIGHEST PRIORITY)
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Research [specific topic]', category: 'research', mode: 'DEVELOPMENT', priority: 'high'}).then(id => console.log('PRIORITY RESEARCH TASK:', id));"
 
 # INSTANT BUG TASK
 node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Fix [specific bug]', category: 'bug', mode: 'DEVELOPMENT', priority: 'high'}).then(id => console.log('URGENT BUG TASK:', id));"
@@ -346,7 +349,7 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
 
 **Always check for ABOUT.md files** before editing code (current directory, parent directories, subdirectories)
 
-## 🚨 RESEARCH REPORTS INTEGRATION & DEPENDENCY SYSTEM
+## 🚨 RESEARCH REPORTS INTEGRATION
 
 **MANDATORY**: Always check `development/reports/` for relevant research reports before starting any task
 
@@ -354,35 +357,6 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
 1. **SCAN development/reports/** for related reports
 2. **ADD relevant reports to important_files** when creating tasks  
 3. **READ reports FIRST** before implementing to leverage existing research
-
-## 🚨 MANDATORY RESEARCH TASK CREATION FOR COMPLEX WORK
-
-**ABSOLUTE REQUIREMENT**: Create research tasks as dependencies for any complex implementation work
-
-**CREATE RESEARCH TASKS IMMEDIATELY FOR:**
-- **🌐 External API integrations** - Research API documentation, authentication, rate limits, best practices
-- **🗄️ Database schema changes** - Research data models, migrations, performance implications
-- **🔐 Authentication/Security systems** - Research security patterns, encryption, OAuth flows
-- **📊 Data processing algorithms** - Research algorithms, performance characteristics, trade-offs  
-- **🧩 Complex architectural decisions** - Research design patterns, frameworks, scalability
-- **⚡ Performance optimization** - Research profiling techniques, bottlenecks, optimization strategies
-- **🔗 Third-party service integrations** - Research service capabilities, limitations, alternatives
-- **📱 UI/UX implementations** - Research design patterns, accessibility, user experience best practices
-
-**DEPENDENCY CREATION PROTOCOL:**
-```bash
-# 1. Create research task FIRST
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Research [specific topic]', description: 'Research [detailed description of what needs to be researched]', category: 'research', mode: 'RESEARCH', priority: 'high'}).then(id => console.log('Research task:', id));"
-
-# 2. Create implementation task with research dependency
-node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Implement [feature]', description: '[implementation description]', category: 'missing-feature', mode: 'DEVELOPMENT', dependencies: ['RESEARCH_TASK_ID'], priority: 'high'}).then(id => console.log('Implementation task:', id));"
-```
-
-**🚨 DEPENDENCY-AWARE SORTING SYSTEM:**
-- **Dependencies ALWAYS come first** - regardless of category or priority
-- **Research tasks will be prioritized** when they are dependencies of implementation tasks
-- **Implementation tasks CANNOT be claimed** until their research dependencies are completed
-- **Topological sorting ensures** proper dependency order
 
 ## 🚨 CODING STANDARDS
 
