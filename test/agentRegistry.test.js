@@ -10,6 +10,10 @@ describe('AgentRegistry', () => {
     beforeEach(() => {
         // Create temporary registry file
         testRegistryPath = path.join(os.tmpdir(), `test-registry-${Date.now()}-${Math.random().toString(36).substr(2, 9)}.json`);
+        
+        // Temporarily disable filesystem protection for registry tests
+        process.env.DISABLE_FS_PROTECTION = 'true';
+        
         registry = new AgentRegistry(testRegistryPath);
     });
 

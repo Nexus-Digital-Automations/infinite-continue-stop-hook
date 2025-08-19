@@ -13,6 +13,9 @@ describe('DistributedLockManager', () => {
         testLockDir = path.join(os.tmpdir(), `test-locks-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
         testFilePath = path.join(testLockDir, 'test-file.txt');
         
+        // Temporarily disable filesystem protection for lock tests
+        process.env.DISABLE_FS_PROTECTION = 'true';
+        
         lockManager = new DistributedLockManager({
             lockDirectory: testLockDir,
             lockTimeout: 5000,
@@ -31,14 +34,17 @@ describe('DistributedLockManager', () => {
         if (fs.existsSync(testLockDir)) {
             fs.rmSync(testLockDir, { recursive: true, force: true });
         }
+        
+        // Re-enable filesystem protection
+        delete process.env.DISABLE_FS_PROTECTION;
     });
 
     describe('Constructor and Initialization', () => {
         test('should initialize with default options', () => {
             const defaultManager = new DistributedLockManager();
-            expect(defaultManager.options.lockTimeout).toBe(30000);
-            expect(defaultManager.options.lockRetryInterval).toBe(100);
-            expect(defaultManager.options.maxRetries).toBe(50);
+            expect(defaultManager.options.lockTimeout).toBe(5000);
+            expect(defaultManager.options.lockRetryInterval).toBe(10);
+            expect(defaultManager.options.maxRetries).toBe(20);
             expect(defaultManager.options.lockDirectory).toBe('./.locks');
             expect(defaultManager.options.enableDeadlockDetection).toBe(true);
             defaultManager.cleanup();

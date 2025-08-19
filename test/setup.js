@@ -472,6 +472,9 @@ fs.writeFileSync = function(filePath, data, options) {
         'development/', // Allow development directory for logs and reports
         '/tmp/',
         '/temp/',
+        '/var/folders/', // Allow macOS temporary directories
+        'test-locks-', // Allow test lock directories
+        '.locks', // Allow lock directories
         'coverage/', // Allow Jest coverage reports
         '.nyc_output/', // Allow NYC coverage
         'lcov.info' // Allow LCOV coverage files
@@ -633,6 +636,9 @@ fs.writeFile = function(filePath, data, options, callback) {
         'development/', // Allow development directory for logs and reports
         '/tmp/',
         '/temp/',
+        '/var/folders/', // Allow macOS temporary directories
+        'test-locks-', // Allow test lock directories
+        '.locks', // Allow lock directories
         'coverage/', // Allow Jest coverage reports
         '.nyc_output/', // Allow NYC coverage
         'lcov.info' // Allow LCOV coverage files

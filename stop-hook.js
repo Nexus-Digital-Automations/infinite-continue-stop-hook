@@ -6,42 +6,267 @@ const TaskManager = require('./lib/taskManager');
 const Logger = require('./lib/logger');
 
 // ============================================================================
-// SIMPLIFIED TASKMANAGER API INSTRUCTION PROVIDER
+// NEVER-STOP INFINITE CONTINUE HOOK WITH INSTRUCTIVE TASK MANAGEMENT
 // ============================================================================
 
 /**
- * Provides standard TaskManager API instructions for autonomous task management
+ * Check if stop is allowed via endpoint trigger
  */
-function provideTaskManagerInstructions() {
-    const instructions = `
-=== AUTONOMOUS TASK MANAGEMENT INSTRUCTIONS ===
+function checkStopAllowed() {
+    const stopFlagPath = path.join(process.cwd(), '.stop-allowed');
+    
+    if (fs.existsSync(stopFlagPath)) {
+        // Read and immediately delete the flag (single-use)
+        try {
+            const flagData = JSON.parse(fs.readFileSync(stopFlagPath, 'utf8'));
+            fs.unlinkSync(stopFlagPath); // Remove flag after reading
+            return flagData.stop_allowed === true;
+        } catch {
+            // Invalid flag file, remove it
+            fs.unlinkSync(stopFlagPath);
+            return false;
+        }
+    }
+    
+    return false; // Default: never allow stops
+}
 
-Use these TaskManager API commands to manage your own tasks:
+/**
+ * Provides detailed, instructive TaskManager guidance based on current task status
+ */
+async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
+    // Check if agent has a current task
+    const currentTask = await taskManager.getCurrentTask();
+    
+    if (currentTask) {
+        return `
+🎯 CONTINUE YOUR CURRENT TASK
 
-1. CHECK YOUR CURRENT TASK:
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getCurrentTask().then(task => console.log(task ? JSON.stringify(task, null, 2) : 'No active task'));"
+You have an active task in progress. Focus on completing it before moving to other work.
 
-2. GET NEXT PENDING TASK:
+📋 CURRENT TASK DETAILS:
+• Task ID: ${currentTask.id}
+• Title: ${currentTask.title}
+• Status: ${currentTask.status}
+• Category: ${currentTask.category || 'N/A'}
+• Priority: ${currentTask.priority || 'Normal'}
+${currentTask.description ? `• Description: ${currentTask.description}` : ''}
+
+🔄 WHAT TO DO NOW:
+1. CONTINUE WORKING on your current task: "${currentTask.title}"
+2. Use your regular tools and processes to make progress
+3. When task is COMPLETE, mark it as done with this command:
+
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.updateTaskStatus('${currentTask.id}', 'completed', 'Task completed successfully').then(() => console.log('✅ Task marked as completed'));"
+
+4. After completing, the stop hook will guide you to your next task
+
+💡 TASK COMPLETION CHECKLIST:
+${currentTask.success_criteria && currentTask.success_criteria.length > 0 ? 
+  currentTask.success_criteria.map(criteria => `• ${criteria}`).join('\n') :
+  '• Verify functionality works as expected\n• Run any relevant tests\n• Ensure code quality standards are met'
+}
+
+📊 PROJECT STATUS: ${taskStatus.pending} pending, ${taskStatus.in_progress} in progress, ${taskStatus.completed} completed
+`;
+        
+    } else if (taskStatus.pending > 0) {
+        return `
+🆕 GET YOUR NEXT TASK
+
+You don't have an active task. There are ${taskStatus.pending} pending tasks waiting for you.
+
+🔄 GET NEXT TASK COMMAND:
+Run this command to claim your next task:
+
    node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getNextPendingTask().then(task => console.log(task ? JSON.stringify(task, null, 2) : 'No pending tasks'));"
 
-3. CHECK TASK STATUS OVERVIEW:
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getTaskStatus().then(status => console.log(JSON.stringify(status, null, 2)));"
+📋 AFTER GETTING YOUR TASK:
+1. Review the task title, description, and requirements
+2. Check any important files listed for the task
+3. Begin working on the task using your normal tools
+4. When complete, mark it as done with the updateTaskStatus command
+5. The system will then guide you to your next task
 
-4. UPDATE TASK STATUS (when completed):
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.updateTaskStatus('[TASK_ID]', 'completed', 'Task completed successfully').then(() => console.log('Task marked as completed'));"
+📊 CURRENT WORKLOAD:
+• Pending tasks: ${taskStatus.pending} (ready for assignment)
+• In progress: ${taskStatus.in_progress} (being worked on by other agents)
+• Completed: ${taskStatus.completed} (finished work)
+• Total: ${taskStatus.total} tasks in the system
 
-5. CREATE NEW TASK (if needed):
+💼 TASK CATEGORIES AVAILABLE:
+Priority order: research → linter-error → build-error → missing-feature → bug → enhancement
+`;
+        
+    } else if (taskStatus.in_progress > 0) {
+        return `
+⏳ WAIT FOR TASK COMPLETION OR CREATE NEW WORK
+
+No pending tasks available, but ${taskStatus.in_progress} tasks are in progress by other agents.
+
+🔄 OPTIONS FOR YOU:
+1. WAIT briefly for other agents to complete tasks and create new ones
+2. CREATE NEW TASKS if you identify missing work
+
+📊 CURRENT STATUS:
+• In progress: ${taskStatus.in_progress} (other agents working)
+• Completed: ${taskStatus.completed} (finished work)
+• Pending: ${taskStatus.pending} (none available)
+
+🆕 CREATE NEW TASK (if needed):
+If you identify missing functionality, bugs, or improvements needed:
+
    node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: '[TASK_TITLE]', description: '[DESCRIPTION]', mode: 'DEVELOPMENT', category: '[CATEGORY]'}).then(id => console.log('Created task:', id));"
 
-WORKFLOW:
-1. Run bash command #1 to check if you have an active task
-2. If no active task, run bash command #2 to get next pending task  
-3. Work on the task using your normal tools and processes
-4. When complete, run bash command #4 to mark it as completed
-5. Run bash command #3 to check overall status and see if more work is available
+📋 ANALYSIS AREAS TO CONSIDER:
+• Missing features or functionality gaps
+• Code quality improvements needed  
+• Documentation that needs updating
+• Test coverage requirements
+• Performance optimizations
+• Security enhancements
+
+Wait 10-15 seconds, then check for new tasks:
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getTaskStatus().then(status => console.log(JSON.stringify(status, null, 2)));"
 `;
-    
-    return instructions;
+        
+    } else {
+        return `
+🔍 CREATE NEW TASKS - PROJECT ANALYSIS NEEDED
+
+No tasks are currently pending or in progress. Analyze the project to identify new work.
+
+🎯 PROJECT ANALYSIS WORKFLOW:
+1. EXAMINE codebase for missing features, bugs, or improvements
+2. CHECK documentation for gaps or outdated information  
+3. REVIEW code quality and identify refactoring opportunities
+4. ASSESS test coverage and identify missing tests
+5. CREATE tasks for any work you identify
+
+🆕 CREATE NEW TASK COMMAND:
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: '[TASK_TITLE]', description: '[DESCRIPTION]', mode: 'DEVELOPMENT', category: '[CATEGORY]'}).then(id => console.log('Created task:', id));"
+
+📋 AVAILABLE CATEGORIES (choose appropriate):
+HIGH PRIORITY:
+• research - Investigation, exploration, learning tasks
+• linter-error - Code style/formatting issues  
+• build-error - Compilation or build failures
+• missing-feature - New functionality needed
+
+STANDARD PRIORITY:  
+• bug - Incorrect behavior to fix
+• enhancement - Improvements to existing features
+• refactor - Code restructuring/optimization
+• documentation - Documentation updates
+
+LOW PRIORITY:
+• chore - Maintenance and cleanup tasks
+• missing-test - Test coverage gaps (lowest priority)
+
+🚨 TASKMANAGER API REFERENCE GUIDE
+
+**CRITICAL**: Directory restrictions resolved with Node.js API. ALL TaskManager commands MUST use universal scripts. Replace [PROJECT_DIRECTORY] with actual project path.
+
+🌟 UNIVERSAL USAGE (ALWAYS USE THESE!):
+
+   # Universal CLI (recommended)
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" <command> [args...] [--project /path/to/project]
+
+   # Examples:
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project [PROJECT_DIRECTORY]
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" api current --project [PROJECT_DIRECTORY]
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" update task_123 completed --project [PROJECT_DIRECTORY]
+
+✅ AGENT INITIALIZATION (MANDATORY):
+   # ALWAYS use universal script with project path:
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project [PROJECT_DIRECTORY]
+   
+   # Alternative direct script usage:
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-init.js" [PROJECT_DIRECTORY]
+
+🎯 Core TaskManager Node.js API Operations:
+
+   # Agent initialization and management
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project [PROJECT_DIRECTORY]
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init '{"role": "testing", "specialization": ["unit-tests"]}' --project-root [PROJECT_DIRECTORY]
+
+   # Task management operations
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" api current --project [PROJECT_DIRECTORY]
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" list '{"status": "pending"}' --project-root [PROJECT_DIRECTORY]
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" create '{"title": "Fix linter errors", "mode": "DEVELOPMENT", "category": "linter-error"}' --project-root [PROJECT_DIRECTORY]
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" claim task_123 [agentId] normal --project-root [PROJECT_DIRECTORY]
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" update task_123 completed "Fixed successfully" --project [PROJECT_DIRECTORY]
+
+   # Task organization and prioritization
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" move-top task_123 --project-root [PROJECT_DIRECTORY]
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" move-up task_123 --project-root [PROJECT_DIRECTORY]
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" move-down task_123 --project-root [PROJECT_DIRECTORY]
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" move-bottom task_123 --project-root [PROJECT_DIRECTORY]
+
+   # System status and statistics
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" status [agentId] --project-root [PROJECT_DIRECTORY]
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" stats --project-root [PROJECT_DIRECTORY]
+
+📋 Direct Node.js API Commands:
+
+   # Core task operations
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init --project-root [PROJECT_DIRECTORY]
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" api current --project [PROJECT_DIRECTORY]
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" list '{"mode": "DEVELOPMENT"}' --project-root [PROJECT_DIRECTORY]
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" create '{"title": "Add missing unit tests", "mode": "TESTING", "category": "missing-test"}' --project-root [PROJECT_DIRECTORY]
+
+   # Task management using universal TaskManager API directly (from any directory)
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.getCurrentTask('agent_1').then(task => console.log(JSON.stringify(task, null, 2)));"
+   
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.createTask({title: 'Fix build error', description: 'Webpack compilation failing', mode: 'DEVELOPMENT', category: 'build-error'}).then(id => console.log('Created task:', id));"
+   
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.updateTaskStatus('task_id', 'completed').then(() => console.log('Task updated'));"
+
+🔧 Advanced TaskManager Operations:
+
+   # Multi-agent task assignment
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.assignTaskToAgent('task_id', 'agent_1', 'primary').then(success => console.log('Task assigned:', success));"
+   
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.claimTask('task_id', 'agent_1', 'high').then(result => console.log(JSON.stringify(result, null, 2)));"
+
+   # Task removal and reordering
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.removeTask('task_id').then(removed => console.log('Task removed:', removed));"
+   
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.moveTaskToTop('task_id').then(moved => console.log('Task moved to top:', moved));"
+
+🎯 Most Common Quick Operations:
+
+   # Essential workflow commands
+   # Initialize agent (save the returned agentId) - ALWAYS use universal script
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project [PROJECT_DIRECTORY]
+
+   # Get current task
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.getCurrentTask('agent_1').then(task => console.log(task ? task.title : 'No active tasks'));"
+
+   # Mark current task completed  
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.getCurrentTask('agent_1').then(async task => { if(task) { await tm.updateTaskStatus(task.id, 'completed'); console.log('Task completed:', task.title); } });"
+
+   # Get next task
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.getNextTask('agent_1').then(task => console.log(task ? 'Next: ' + task.title : 'No more tasks'));"
+
+   # Create categorized task
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.createTask({title: 'Fix linter errors in auth module', description: 'ESLint errors found in authentication', mode: 'DEVELOPMENT', category: 'linter-error'}).then(id => console.log('Created:', id));"
+
+   # Move task to top priority
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.moveTaskToTop('task_id').then(moved => console.log('Moved to top:', moved));"
+
+🛑 STOP HOOK CONTROL:
+
+   # Authorize stop for infinite continue hook (single-use, 30-second expiration)
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => console.log(JSON.stringify(result, null, 2)));"
+
+🔍 ANALYSIS COMMANDS:
+Check current project status:
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getTaskStatus().then(status => console.log(JSON.stringify(status, null, 2)));"
+
+📊 CURRENT STATUS: ${taskStatus.completed} completed tasks, ${taskStatus.total} total
+`;
+    }
 }
 
 // Read input from Claude Code
@@ -82,125 +307,108 @@ process.stdin.on('end', async () => {
         const todoPath = path.join(workingDir, 'TODO.json');
         if (!fs.existsSync(todoPath)) {
             logger.addFlow("No TODO.json found - this is not a TaskManager project");
-            logger.logExit(0, "No TODO.json found");
+            logger.logExit(2, "No TODO.json found - continuing infinite mode");
             logger.save();
-            console.error("No TODO.json found - this is not a TaskManager project, allowing stop");
-            process.exit(0);
+            
+            console.error(`
+🚫 NO TASKMANAGER PROJECT DETECTED
+
+This directory does not contain a TODO.json file, which means it's not a TaskManager project.
+
+🔄 INFINITE CONTINUE MODE ACTIVE
+The stop hook will continue infinitely to prevent accidental termination.
+
+💡 TO SET UP TASKMANAGER:
+If you want to enable task management for this project:
+1. Run the setup script to create TODO.json
+2. Initialize TaskManager for the project
+
+⚡ CONTINUING OPERATION...
+`);
+            process.exit(2); // Never allow stops even without TODO.json
         }
         
+        // ========================================================================
+        // NEVER-STOP PROTOCOL: CHECK ENDPOINT STOP TRIGGER
+        // ========================================================================
+        
+        const stopAllowed = checkStopAllowed();
+        if (stopAllowed) {
+            logger.addFlow("Stop endpoint triggered - allowing ONE stop, then returning to infinite mode");
+            logger.logExit(0, "Endpoint-triggered stop (single use)");
+            logger.save();
+            
+            console.error(`
+🛑 ENDPOINT-TRIGGERED STOP AUTHORIZED
+
+A stop request was authorized via the stop endpoint.
+This is a single-use authorization.
+
+✅ Allowing stop now...
+⚡ Future stop hook triggers will return to infinite continue mode.
+
+To trigger another stop, use the TaskManager API:
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => console.log(JSON.stringify(result, null, 2)));"
+`);
+            process.exit(0); // Allow stop only when endpoint triggered
+        }
+        
+        // ========================================================================
+        // INFINITE CONTINUE MODE: NEVER ALLOW NATURAL STOPS
+        // ========================================================================
         
         // Initialize TaskManager
         const taskManager = new TaskManager(todoPath);
-        
-        // Read TODO.json to check task creation attempts
-        let todoData = await taskManager.readTodo();
-        
-        // Initialize task creation tracking if not present
-        if (!todoData.task_creation_attempts || typeof todoData.task_creation_attempts !== 'object') {
-            todoData.task_creation_attempts = { count: 0, last_attempt: null, max_attempts: 3 };
-        }
         
         // Check task status to provide appropriate instructions
         const taskStatus = await taskManager.getTaskStatus();
         logger.addFlow(`Task status: ${taskStatus.pending} pending, ${taskStatus.in_progress} in_progress, ${taskStatus.completed} completed`);
         
-        // If no work available, handle task creation attempts
-        if (!taskStatus.hasWork) {
-            const maxAttempts = 3;
-            
-            if (todoData.task_creation_attempts.count < maxAttempts) {
-                // Increment attempt counter
-                todoData.task_creation_attempts.count++;
-                todoData.task_creation_attempts.last_attempt = new Date().toISOString();
-                await taskManager.writeTodo(todoData);
-                
-                logger.addFlow(`No work available - entering task creation mode (attempt ${todoData.task_creation_attempts.count}/${maxAttempts})`);
-                
-                const taskCreationInstructions = `
-🔄 TASK CREATION MODE (Attempt ${todoData.task_creation_attempts.count}/${maxAttempts})
+        // Provide detailed instructive guidance based on current state
+        const instructiveGuidance = await provideInstructiveTaskGuidance(taskManager, taskStatus);
+        
+        // Always continue - never allow natural stops
+        logger.addFlow("Never-stop mode: Providing instructive task management guidance");
+        logger.logExit(2, "Infinite continue mode - providing task guidance");
+        logger.save();
+        
+        // Output detailed instructions to Claude
+        console.error(`
+🔄 INFINITE CONTINUE MODE ACTIVE
 
-No pending tasks found. Please analyze the project and create new tasks if needed:
+${instructiveGuidance}
 
-1. ANALYZE PROJECT STATUS:
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getTaskStatus().then(status => console.log(JSON.stringify(status, null, 2)));"
+🚫 STOP NOT ALLOWED
+This system operates in infinite continue mode. To authorize a stop, use:
 
-2. CREATE NEW TASK (if work is needed):
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: '[TASK_TITLE]', description: '[DESCRIPTION]', mode: 'DEVELOPMENT', category: '[CATEGORY]'}).then(id => console.log('Created task:', id));"
+🛑 AUTHORIZE STOP WITH TASKMANAGER API:
+   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => console.log(JSON.stringify(result, null, 2)));"
 
-3. AVAILABLE CATEGORIES (choose appropriate one):
-   - research, linter-error, build-error, start-error, error
-   - missing-feature, bug, enhancement, refactor, documentation
-   - chore, missing-test, test-setup, test-refactor, etc.
-
-WHAT TO ANALYZE:
-- Check if all features are complete
-- Look for missing documentation
-- Identify potential improvements
-- Check for missing tests
-- Verify code quality standards
-
-If no new tasks are needed, the system will stop after ${maxAttempts - todoData.task_creation_attempts.count} more attempt(s).
-`;
-                
-                logger.logExit(2, `Task creation mode attempt ${todoData.task_creation_attempts.count}/${maxAttempts}`);
-                logger.save();
-                
-                console.error(taskCreationInstructions);
-                process.exit(2);
-            } else {
-                // Reset counter and allow stop
-                todoData.task_creation_attempts.count = 0;
-                todoData.task_creation_attempts.last_attempt = null;
-                await taskManager.writeTodo(todoData);
-                
-                logger.addFlow(`Maximum task creation attempts (${maxAttempts}) reached - no new tasks created, allowing stop`);
-                logger.logExit(0, "No tasks created after maximum attempts - project complete");
-                logger.save();
-                
-                console.error(`No tasks created after ${maxAttempts} attempts. Project appears complete - allowing stop.`);
-                process.exit(0);
-            }
-        } else {
-            // Reset task creation attempts when work is available
-            if (todoData.task_creation_attempts.count > 0) {
-                todoData.task_creation_attempts.count = 0;
-                todoData.task_creation_attempts.last_attempt = null;
-                await taskManager.writeTodo(todoData);
-            }
-            
-            // Provide TaskManager API instructions
-            const instructions = provideTaskManagerInstructions();
-            
-            // Add project-specific context
-            const contextualInstructions = `
-${instructions}
-
-CURRENT PROJECT STATUS:
-- Total tasks: ${taskStatus.total}
-- Pending tasks: ${taskStatus.pending}
-- In progress: ${taskStatus.in_progress}  
-- Completed: ${taskStatus.completed}
-- Has work available: ${taskStatus.hasWork}
-
-✅ Work is available! Use the bash commands above to continue working on tasks.
-`;
-            
-            logger.addFlow("Providing TaskManager API instructions to agent");
-            logger.logExit(2, "Providing autonomous task management instructions");
-            logger.save();
-            
-            // Output instructions to Claude
-            console.error(contextualInstructions);
-            process.exit(2);
-        }
+⚡ CONTINUING OPERATION...
+`);
+        
+        process.exit(2); // Always continue - never allow natural stops
         
     } catch (error) {
         logger.logError(error, 'stop-hook-main');
-        logger.logExit(0, `Error: ${error.message}`);
+        logger.logExit(2, `Error handled - continuing infinite mode: ${error.message}`);
         logger.save();
         
-        console.error(`Error in stop hook: ${error.message}`);
-        console.error("Stop hook error - allowing stop");
-        process.exit(0);
+        console.error(`
+⚠️ STOP HOOK ERROR - CONTINUING ANYWAY
+
+Error encountered: ${error.message}
+
+🔄 INFINITE CONTINUE MODE MAINTAINED
+Even with errors, the system continues to prevent accidental termination.
+
+💡 CHECK YOUR TASKMANAGER SETUP:
+- Ensure TODO.json is properly formatted
+- Verify TaskManager library is accessible
+- Check file permissions
+
+⚡ CONTINUING OPERATION...
+`);
+        process.exit(2); // Even on error, continue infinite mode
     }
 });

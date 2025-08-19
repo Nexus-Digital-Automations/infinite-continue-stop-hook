@@ -371,8 +371,11 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 
 **MANDATORY ROOT FOLDER CLEANLINESS:**
 - **KEEP ROOT FOLDER CLEAN** - Only essential project files in root directory
-- **Create development subdirectories** for reports, research, and documentation if they don't exist
-- **Move analysis files, reports, and documentation** to appropriate subdirectories
+- **REPORTS AND DOCUMENTATION** → `development/reports/` directory
+- **ANALYSIS FILES** → `development/reports/` directory  
+- **VALIDATION EVIDENCE** → `development/reports/` directory
+- **RESEARCH REPORTS** → `development/research-reports/` directory (as already established)
+- **BACKUP FILES** → `backups/` directory (as already established)
 
 **ALLOWED IN ROOT DIRECTORY:**
 - **Core project files**: package.json, README.md, CLAUDE.md, TODO.json, DONE.json
@@ -380,11 +383,32 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 - **Build/deployment files**: Dockerfile, docker-compose.yml, etc.
 - **License and legal**: LICENSE, CONTRIBUTING.md, etc.
 
-**ORGANIZE INTO SUBDIRECTORIES:**
-- **Reports and analysis** → `development/reports/` 
-- **Research documentation** → `development/research-reports/`
-- **Development notes** → `development/notes/`
-- **Backup files** → `backups/`
+**FORBIDDEN IN ROOT DIRECTORY:**
+- ❌ Analysis reports (move to `development/reports/`)
+- ❌ Validation evidence files (move to `development/reports/`)
+- ❌ Research documentation (move to `development/research-reports/`)
+- ❌ Temporary markdown files (move to `development/reports/`)
+- ❌ Backup files (move to `backups/`)
+- ❌ Development notes (move to `development/notes/` or `development/reports/`)
+
+**AUTOMATIC FILE ORGANIZATION:**
+```bash
+# Create proper directory structure
+mkdir -p development/reports
+mkdir -p development/research-reports  
+mkdir -p development/notes
+
+# Move files to appropriate locations
+mv *.evidence.md development/reports/
+mv *validation*.md development/reports/
+mv *analysis*.md development/reports/
+mv *report*.md development/reports/
+```
+
+**PROJECT DOCUMENTATION:**
+- **UPDATE ONLY**: User-facing documentation (API docs, user guides, setup instructions, troubleshooting)
+- **SKIP**: Internal implementation details, development processes not affecting users
+- **ORGANIZE**: All reports and internal docs in appropriate subdirectories
 
 ## 🚨 MANDATORY GIT WORKFLOW
 
@@ -506,6 +530,23 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 - **🔒 ONE STOP ONLY** - After endpoint triggered, allow only ONE stop, then return to never-stop mode
 - **🔄 ALWAYS INSTRUCT** - Provide detailed guidance on task continuation vs next task acquisition
 
+### 🎯 INSTRUCTIVE TASK MANAGEMENT MESSAGING
+
+**MANDATORY MESSAGING PROTOCOL:**
+When stop hook activates, it MUST provide DETAILED, INSTRUCTIVE guidance:
+
+**🔍 CURRENT TASK STATUS CHECK:**
+1. **If agent HAS active task** → Instruct to CONTINUE current task
+2. **If agent has NO active task** → Instruct to GET NEXT pending task  
+3. **If no pending tasks available** → Guide through task creation process
+4. **ALWAYS provide specific TaskManager API commands** with clear instructions
+
+**📋 REQUIRED INSTRUCTION ELEMENTS:**
+- **Current task status** - What the agent should be working on right now
+- **Next action guidance** - Whether to continue current work or get new task
+- **Specific commands** - Exact bash commands to run for task management
+- **Workflow clarity** - Step-by-step process for task progression
+- **Priority context** - Understanding of task importance and urgency
 
 ### 🔄 CONTINUOUS OPERATION MANDATE
 
@@ -515,6 +556,12 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 - **📊 STATUS-AWARE** - Understand current agent state and provide appropriate guidance
 - **🔗 WORKFLOW-DRIVEN** - Maintain continuous task progression flow
 
+**ENDPOINT STOP TRIGGER:**
+```bash
+# ONLY THIS ENDPOINT CAN TRIGGER STOP PERMISSION:
+curl -X POST http://localhost:3000/api/stop-hook/allow-stop
+# Response: {"stop_allowed": true, "single_use": true}
+```
 
 **STOP SEQUENCE:**
 1. **Endpoint called** → Set stop_allowed flag to true
