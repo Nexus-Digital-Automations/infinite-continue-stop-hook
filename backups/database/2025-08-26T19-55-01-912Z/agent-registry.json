@@ -1,0 +1,10 @@
+{
+  "agents": {},
+  "stats": {
+    "totalAgents": 0,
+    "activeAgents": 0,
+    "lastCleanup": "2025-08-19T17:04:40.501Z"
+  },
+  "nextAgentNumber": 9,
+  "lastCleanup": 1755623080501
+}
