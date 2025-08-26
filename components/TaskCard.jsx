@@ -17,7 +17,7 @@ const TaskCard = ({ task, onStatusChange, onTaskSelect }) => {
   const getStatusColor = (status) => {
     const colors = {
       pending: '#fbbf24', // yellow
-      in_progress: '#3b82f6', // blue
+      in_progress: '#16a34a', // green
       completed: '#10b981', // green
       blocked: '#ef4444', // red
       archived: '#6b7280' // gray

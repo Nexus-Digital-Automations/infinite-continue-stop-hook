@@ -2,6 +2,12 @@
 
 **IMPORTANT**: When asked to set up the infinite continue hook system for a project, you MUST use this setup script.
 
+## 🚨 PRODUCTION-READY MANDATE
+
+**ALL CODE AND FEATURES CREATED MUST BE PRODUCTION-READY - NO SIMPLIFIED OR MOCK IMPLEMENTATIONS**
+
+This system enforces enterprise-grade quality standards. All tasks created will include production-ready requirements.
+
 ## Prerequisites
 
 The global hook must already be configured in `~/.claude/settings.json`. This script only creates TODO.json for projects.
@@ -47,6 +53,8 @@ node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-
   --prompt "Detailed task instructions"
 ```
 
+**Note**: All tasks will automatically include production-ready requirements. The system uses TaskManager categories (linter-error, build-error, missing-feature, bug, enhancement, etc.) for proper prioritization.
+
 ### After Setup: Automatic Task Creation
 
 Once setup completes, the hook system will:
@@ -69,7 +77,7 @@ node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-
   --no-interactive \
   --task "Research authentication solutions" \
   --mode "RESEARCH" \
-  --prompt "Evaluate OAuth2, JWT, session-based auth, and SSO options. Compare security, complexity, and costs."
+  --prompt "Evaluate OAuth2, JWT, session-based auth, and SSO options. Compare security, complexity, and costs. All recommendations must be production-ready with enterprise-grade security."
 ```
 
 #### Development Project Setup
@@ -78,7 +86,7 @@ node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-
   --no-interactive \
   --task "Implement user authentication system" \
   --mode "DEVELOPMENT" \
-  --prompt "Build complete auth with login, logout, registration, password reset, and JWT tokens"
+  --prompt "Build complete production-ready auth with login, logout, registration, password reset, JWT tokens, and comprehensive security measures"
 ```
 
 #### Testing Project Setup
@@ -87,7 +95,7 @@ node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-
   --no-interactive \
   --task "Achieve 95% test coverage" \
   --mode "TESTING" \
-  --prompt "Write comprehensive unit and integration tests for all modules"
+  --prompt "Write comprehensive production-ready unit and integration tests for all modules with enterprise-grade quality standards"
 ```
 
 #### Refactoring Project Setup
@@ -96,7 +104,7 @@ node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-
   --no-interactive \
   --task "Refactor authentication module" \
   --mode "REFACTORING" \
-  --prompt "Improve security, reduce complexity, and enhance maintainability" \
+  --prompt "Improve security, reduce complexity, and enhance maintainability with production-ready enterprise standards" \
   --dependencies "src/auth/,src/models/user.js"
 ```
 
@@ -105,9 +113,9 @@ node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-
 | Option | Description | Required | Example |
 |--------|-------------|----------|---------|
 | `--no-interactive` | Run without prompts | **YES** | `--no-interactive` |
-| `--task` | Initial task description | **YES** | `--task "Build REST API"` |
+| `--task` | Initial task description | **YES** | `--task "Build production-ready REST API"` |
 | `--mode` | Task mode | **YES** | `--mode "DEVELOPMENT"` |
-| `--prompt` | Detailed task instructions | **YES** | `--prompt "Create CRUD endpoints"` |
+| `--prompt` | Detailed task instructions | **YES** | `--prompt "Create production-ready CRUD endpoints"` |
 | `--project-name` | Override project name | No | `--project-name "my-app"` |
 | `--dependencies` | Comma-separated dependencies | No | `--dependencies "src/,lib/"` |
 | `--important-files` | Files to read first | No | `--important-files "README.md,package.json"` |
@@ -123,9 +131,10 @@ node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-
    - Creates `/development/tasks` directory for task documentation
 
 2. **Creates TODO.json** in the specified project
-   - Adds the initial task based on your parameters
-   - Includes three review strike tasks automatically
-   - Sets up the complete task management structure
+   - Adds the initial task based on your parameters with production-ready requirements
+   - Includes three review strike tasks with enterprise-grade quality standards
+   - Sets up the complete task management structure with TaskManager categories
+   - All tasks enforce production-ready mandate
 
 3. **Tests the Setup**
    - Runs test-hook.js to verify configuration
@@ -172,9 +181,9 @@ your-project/
 node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/setup-infinite-hook.js" "." \
   --no-interactive \
   --project-name "user-api" \
-  --task "Build user management REST API" \
+  --task "Build production-ready user management REST API" \
   --mode "DEVELOPMENT" \
-  --prompt "Create Express.js API with user CRUD operations, authentication, and role-based access" \
+  --prompt "Create production-ready Express.js API with user CRUD operations, enterprise-grade authentication, role-based access, comprehensive error handling, and security measures" \
   --dependencies "src/,config/" \
   --important-files "package.json,README.md,src/app.js"
 ```
@@ -206,6 +215,8 @@ After running the setup script:
 3. **Mode is case-insensitive**: "DEVELOPMENT", "development", "Development" all work
 4. **Hook activates automatically**: Once TODO.json exists, the system is active
 5. **Task creation guidance**: The hook will guide you to create subtasks on first run
+6. **Production-ready enforcement**: All tasks automatically include production-ready requirements
+7. **TaskManager categories**: System uses proper categorization for prioritization
 
 ### Quick Reference
 
@@ -213,22 +224,22 @@ After running the setup script:
 # Minimal setup (development mode is default if not specified)
 node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/setup-infinite-hook.js" "." \
   --no-interactive \
-  --task "Build the application"
+  --task "Build production-ready application"
 
 # Research project
 node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/setup-infinite-hook.js" "." \
   --no-interactive \
   --task "Research best practices" \
   --mode "RESEARCH" \
-  --prompt "Analyze current industry standards and recommendations"
+  --prompt "Analyze current industry standards and recommendations for production-ready implementation"
 
 # Full setup with all options
 node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/setup-infinite-hook.js" "." \
   --no-interactive \
   --project-name "my-app" \
-  --task "Implement complete feature" \
+  --task "Implement complete production-ready feature" \
   --mode "DEVELOPMENT" \
-  --prompt "Build according to specifications in docs/requirements.md" \
+  --prompt "Build according to specifications in docs/requirements.md with enterprise-grade quality" \
   --dependencies "src/,lib/" \
   --important-files "README.md,package.json,docs/requirements.md" \
   --requires-research

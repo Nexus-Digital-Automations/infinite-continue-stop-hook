@@ -1,279 +1,359 @@
 # Claude Code Project Assistant - Streamlined Guide
 
-## 🚨 CRITICAL MANDATES
+## ⚡⚡⚡ ABSOLUTE CRITICAL MANDATE ⚡⚡⚡
 
-### ⚡ INSTANT TASK CREATION FOR ANY USER REQUEST - ABSOLUTE MANDATE
-**🔴 CRITICAL: THE INSTANT A USER MAKES ANY REQUEST - IMMEDIATELY CREATE TASK**
+# 🚨🚨🚨 INSTANTLY CREATE TASK FOR ANY USER REQUEST 🚨🚨🚨
+# 🚨🚨🚨 NO EXCEPTIONS - NO DELAYS - NO ANALYSIS FIRST 🚨🚨🚨
+# 🚨🚨🚨 USER SAYS ANYTHING → CREATE TASK IMMEDIATELY 🚨🚨🚨
 
-**ABSOLUTE REQUIREMENTS - NO EXCEPTIONS:**
-1. **STOP EVERYTHING IMMEDIATELY** - The moment user communicates anything
-2. **CREATE TASK INSTANTLY** - Use TaskManager API before ANY other action
-3. **CATEGORY MANDATORY** - Must specify: research, missing-feature, bug, enhancement, etc.
-4. **ZERO DELAY TOLERANCE** - No thinking, no analysis, no preparation - INSTANT task creation
-5. **THEN AND ONLY THEN PROCEED** - Only after task is created can work begin
+**⚡ THE MOMENT USER MAKES ANY REQUEST:**
+**⚡ STOP EVERYTHING AND CREATE TASK USING TASKMANAGER API**
+**⚡ CATEGORY REQUIRED - USE: research, missing-feature, bug, enhancement, etc.**
+**⚡ THEN AND ONLY THEN PROCEED WITH WORK**
 
-**🚨 ENFORCEMENT PROTOCOL:**
-- **IMMEDIATE = WITHIN SECONDS** - Task creation must happen instantly upon user communication
-- **NO ANALYSIS FIRST** - Do not analyze what needs to be done, just create the task immediately
-- **NO PLANNING PHASE** - Task creation comes BEFORE planning, not after
-- **NO EXCEPTIONS** - This applies to ALL user communications requiring any form of action
-- **OPPORTUNITY DETECTION** - Any indication of work needed = INSTANT task creation
+## 🚨 CRITICAL COMPLIANCE PROTOCOLS
 
-**Golden Rule**: User says ANYTHING requiring action → **INSTANT TASK CREATION (IMMEDIATELY)** → Then execute
+**PRIORITY ORDER:**
+1. **⚡ INSTANT TASK CREATION ⚡** - Create task for ANY user request FIRST
+2. **User Instructions** - Direct commands take highest priority  
+3. **Hook Feedback** - Address system responses immediately
+4. **Linting Error Feedback** - Fix all linting errors before proceeding
+5. **TaskManager Integration** - Use TaskManager API for all task operations
+6. **Evidence-Based Validation** - Validate all work with concrete evidence
 
-### 🔴 ABSOLUTE COMPREHENSIVE LOGGING MANDATE
-**ALL CODE MUST HAVE COMPREHENSIVE LOGGING FOR DEBUGGING**
+**CORE RULES:**
+- **⚡ INSTANTLY CREATE TASK ⚡** for ANY user request using TaskManager API
+- **VALIDATE BEFORE COMPLETION** - Provide evidence of all validation checks
+- **FIX ERRORS IMMEDIATELY** - Create categorized tasks for all detected issues
 
-**ABSOLUTE REQUIREMENTS:**
-- **❌ NO CODE WITHOUT LOGGING** - Every function must have comprehensive logging
-- **❌ NO SILENT OPERATIONS** - All operations must log execution, parameters, results
-- **❌ NO GENERIC MESSAGES** - All logs must be specific, contextual, actionable
-- **✅ ENTERPRISE-GRADE LOGGING** - Must meet production debugging requirements
-- **✅ STRUCTURED LOGGING** - Consistent formatting for parsing and filtering
-- **✅ PERFORMANCE METRICS** - Timing information for bottleneck identification
+## 🚨 ERROR HANDLING PROTOCOL
 
-**LOGGING EXAMPLE:**
-```javascript
-function processData(userId, data) {
-    const logger = getLogger('DataProcessor');
-    const operationId = generateOperationId();
-    
-    logger.info(`[${operationId}] Starting data processing`, {
-        userId, operationId, dataSize: JSON.stringify(data).length
-    });
-    
-    try {
-        const startTime = Date.now();
-        const result = transformData(data);
-        const processingTime = Date.now() - startTime;
-        
-        logger.info(`[${operationId}] Processing completed`, {
-            userId, operationId, processingTimeMs: processingTime
-        });
-        return result;
-    } catch (error) {
-        logger.error(`[${operationId}] Processing failed`, {
-            userId, operationId, error: error.message, stack: error.stack
-        });
-        throw error;
-    }
-}
-```
-
-### 📋 FEATURES.MD INTEGRATION MANDATE
-**ALWAYS RESPECT development/essentials/features.md WORKFLOW**
-
-**MANDATORY PROTOCOL:**
-1. **READ features.md FIRST** - Always read development/essentials/features.md before feature work
-2. **FEATURE PROPOSALS ONLY** - Can only add features to "❓ Potential Features Awaiting User Verification"
-3. **USER APPROVAL REQUIRED** - Only user can move features to "📋 Planned Features"
-4. **IMPLEMENT APPROVED ONLY** - Only implement features from "Planned Features" section
-5. **NO UNAUTHORIZED FEATURES** - Never implement features not approved by user
-
-**FEATURE PROPOSAL FORMAT:**
-```markdown
-#### Feature Name
-**Description**: Brief description of the feature
-**Rationale**: Why this feature would be beneficial
-**Implementation Effort**: Low/Medium/High
-**Dependencies**: Prerequisites
-**Proposed by**: Agent ID and date
-```
-
-### 🎯 COMPLIANCE PRIORITY ORDER - ABSOLUTE HIERARCHY
-1. **INSTANT TASK CREATION (MANDATORY)** - Create task for ANY user request IMMEDIATELY - NO EXCEPTIONS
-2. **COMPREHENSIVE LOGGING** - All code must have enterprise-grade logging
-3. **FEATURES.MD RESPECT** - Follow features.md workflow for all feature work
-4. **USER INSTRUCTIONS** - Direct commands take highest priority
-5. **EVIDENCE-BASED VALIDATION** - Validate all work with concrete evidence
-
-**🚨 PRIORITY #1 ENFORCEMENT:** INSTANT task creation is the highest priority and must ALWAYS happen first, before any other consideration or action.
-
-## 🚨 ERROR HANDLING & QUALITY PROTOCOLS
-
-### MANDATORY ERROR RESPONSE - IMMEDIATE TASK CREATION REQUIRED
-1. **DETECT** any error → **INSTANTLY CREATE CATEGORIZED TASK IMMEDIATELY**:
-   - Linter errors → `category: 'linter-error'` - **CREATE TASK INSTANTLY**
-   - Build failures → `category: 'build-error'` - **CREATE TASK INSTANTLY**
-   - Runtime errors → `category: 'error'` - **CREATE TASK INSTANTLY**
-   - Test failures → `category: 'test-error'` - **CREATE TASK INSTANTLY**
+**MANDATORY ERROR RESPONSE:**
+1. **DETECT** any error → **INSTANTLY CREATE CATEGORIZED TASK**:
+   - Linter errors → `category: 'linter-error'` 
+   - Build failures → `category: 'build-error'`
+   - Runtime errors → `category: 'error'`
+   - Test failures → `category: 'test-error'`
 2. **ATTEMPT IMMEDIATE FIX** (< 2 minutes) OR work on task
 3. **VERIFY** fix and document resolution
 
-**🔴 CRITICAL:** Error detection = IMMEDIATE task creation. No delays, no analysis first - create task the instant an error is identified.
-
 **FORBIDDEN:** Ignoring errors, suppressing messages, or implementing workarounds
 
-### POST-COMPLETION VALIDATION
-**ABSOLUTE REQUIREMENT:** IMMEDIATELY run lint and type checks after completing ANY task that modified code files
+## 🚨🚨🚨 ABSOLUTE MANDATE: NEVER MASK ISSUES 🚨🚨🚨
 
-**VALIDATION SEQUENCE:**
-1. Complete task implementation
-2. Run lint and type checks on modified files/folders
-3. Fix any errors before marking task complete
-4. Provide validation evidence - show command outputs
+# ⛔⛔⛔ ZERO TOLERANCE FOR ISSUE MASKING ⛔⛔⛔
+# ⛔⛔⛔ NO BYPASSING - NO WORKAROUNDS - NO SUPPRESSION ⛔⛔⛔
+# ⛔⛔⛔ ALWAYS FIX ROOT CAUSE - NEVER HIDE PROBLEMS ⛔⛔⛔
 
-**VALIDATION FAILURE PROTOCOL - IMMEDIATE TASK CREATION MANDATORY:**
-- Linting errors → Create `category: 'linter-error'` task **IMMEDIATELY - NO DELAYS**
-- Type errors → Create `category: 'error'` task **IMMEDIATELY - NO DELAYS**
-- DO NOT mark complete until ALL validation passes
+**🚨 ABSOLUTE PROHIBITION - NEVER EVER EVER:**
+- **❌ MASK validation errors** - Fix the validation logic, don't bypass it
+- **❌ SUPPRESS error messages** - Fix the error, don't hide it
+- **❌ BYPASS quality checks** - Fix the code to pass checks
+- **❌ IMPLEMENT WORKAROUNDS** - Fix the root cause, don't work around it
+- **❌ HIDE FAILING TESTS** - Fix the tests or code, don't disable them
+- **❌ IGNORE LINTING ERRORS** - Fix the linting violations
+- **❌ COMMENT OUT ERROR HANDLING** - Fix the underlying issue
+- **❌ ADD try/catch TO SILENCE ERRORS** - Fix what's causing the error
+- **❌ DISABLE WARNINGS OR CHECKS** - Address what's causing the warnings
 
-**🔴 CRITICAL:** Validation failure = INSTANT task creation. The moment validation fails, a task must be created immediately.
+**🚨 MANDATORY ROOT CAUSE ANALYSIS:**
+When ANY issue is detected:
+1. **IDENTIFY** the true root cause of the problem
+2. **ANALYZE** why the issue exists in the first place  
+3. **FIX** the underlying architectural or logic problem
+4. **VALIDATE** that the fix resolves the core issue
+5. **DOCUMENT** what was wrong and how it was properly fixed
 
-### ZERO TOLERANCE FOR ISSUE MASKING
-**ALWAYS FIX ROOT CAUSE - NEVER HIDE PROBLEMS**
+**🚨 EXAMPLES OF FORBIDDEN MASKING:**
+```bash
+# ❌ FORBIDDEN - Masking validation
+if (!validationResult.isValid) return { success: true }; // HIDING PROBLEM
 
-**ABSOLUTE PROHIBITIONS:**
-- ❌ MASK validation errors - Fix the validation logic, don't bypass it
-- ❌ SUPPRESS error messages - Fix the error, don't hide it
-- ❌ BYPASS quality checks - Fix the code to pass checks
-- ❌ IMPLEMENT WORKAROUNDS - Fix the root cause, don't work around it
-- ❌ HIDE FAILING TESTS - Fix the tests or code, don't disable them
-- ❌ IGNORE LINTING ERRORS - Fix the linting violations
-- ❌ DISABLE WARNINGS OR CHECKS - Address what's causing the warnings
-
-**ROOT CAUSE ANALYSIS PROTOCOL:**
-1. **IDENTIFY** the true root cause
-2. **ANALYZE** why the issue exists
-3. **FIX** the underlying problem
-4. **VALIDATE** the fix resolves the issue
-5. **DOCUMENT** the resolution
-
-**FORBIDDEN MASKING EXAMPLES:**
-```javascript
-// ❌ FORBIDDEN - Masking validation
-if (!result.isValid) return { success: true };
-
-// ✅ REQUIRED - Fixing validation
-if (!result.isValid) {
-    fixValidationIssue(result.errors);
+# ✅ REQUIRED - Fixing validation
+if (!validationResult.isValid) {
+    // Fix the root cause that made validation fail
+    fixValidationIssue(validationResult.errors);
     // Re-run validation to ensure it passes
+}
+
+# ❌ FORBIDDEN - Suppressing errors  
+try { riskyOperation(); } catch (e) { /* ignore */ } // HIDING PROBLEM
+
+# ✅ REQUIRED - Handling errors properly
+try { 
+    riskyOperation(); 
+} catch (e) { 
+    // Fix what's causing riskyOperation to fail
+    fixUnderlyingIssue(e);
+    // Re-attempt after fixing root cause
 }
 ```
 
-**QUALITY GATE PRINCIPLE:** Every error is a quality gate that must be properly addressed - never masked, always fixed.
+**🚨 ZERO TOLERANCE ENFORCEMENT:**
+- **ANY ATTEMPT TO MASK** = Immediate task creation to fix properly
+- **ANY WORKAROUND SUGGESTION** = Must be replaced with root cause fix
+- **ANY ERROR SUPPRESSION** = Must be replaced with proper error resolution
+- **ANY VALIDATION BYPASS** = Must be replaced with validation fix
 
-### THINKING & VALIDATION PROTOCOLS
+**🚨 QUALITY GATE PRINCIPLE:**
+Every error, warning, or issue is a **QUALITY GATE** that must be **PROPERLY ADDRESSED**:
+- Issues exist to **PROTECT CODE QUALITY**
+- Masking issues **DEGRADES SYSTEM RELIABILITY** 
+- Root cause fixes **IMPROVE LONG-TERM STABILITY**
+- Proper solutions **PREVENT FUTURE PROBLEMS**
 
-**THINKING LEVELS:**
+**⚡ WHEN ISSUE DETECTED → INSTANT ROOT CAUSE ANALYSIS → PROPER FIX → NEVER MASK**
+
+**🚨 ADDITIONAL MASKING PATTERNS TO AVOID:**
+- **❌ SILENT FAILURES** - Never allow operations to fail silently without proper error reporting
+- **❌ GENERIC ERROR HANDLING** - Don't catch all errors with generic handlers that obscure root causes  
+- **❌ CONFIGURATION BYPASSES** - Don't disable strict mode or safety checks to avoid errors
+- **❌ DEPENDENCY DOWNGRADES** - Don't downgrade dependencies to avoid compatibility issues
+- **❌ FEATURE FLAGS TO HIDE BUGS** - Don't use feature flags to permanently hide broken functionality
+- **❌ DOCUMENTATION WORKAROUNDS** - Don't document known issues as "features" instead of fixing them
+
+**✅ PROPER ISSUE RESOLUTION APPROACH:**
+1. **DETECT** → Identify the exact nature and scope of the issue
+2. **INVESTIGATE** → Trace the issue to its root cause in the codebase or architecture  
+3. **ANALYZE** → Understand why the issue exists and what allows it to occur
+4. **DESIGN** → Plan a solution that eliminates the root cause permanently
+5. **IMPLEMENT** → Execute the proper fix with appropriate testing
+6. **VALIDATE** → Verify the fix resolves the issue without introducing new problems
+7. **DOCUMENT** → Record what was wrong, why it occurred, and how it was properly resolved
+
+**🛡️ QUALITY ASSURANCE MANDATE:**
+This mandate exists to ensure **SUSTAINABLE CODE QUALITY** and **LONG-TERM SYSTEM RELIABILITY**. Every avoided shortcut and properly fixed issue contributes to a more robust, maintainable, and trustworthy codebase.
+
+## 🚨 MANDATORY THINKING & VALIDATION
+
+**THINKING LEVELS:** Use maximum beneficial thinking for complexity:
 - **ULTRATHINK**: System architecture, task planning, priority evaluation
-- **THINK HARD**: Complex refactoring, debugging, task management
+- **THINK HARD**: Complex refactoring, debugging, task management  
 - **MANDATORY**: All task operations (creation, categorization, completion)
 
-**EVIDENCE-BASED COMPLETION:**
-1. Run validation commands - show all outputs
-2. Test functionality manually - demonstrate it works
-3. Verify requirements met - list each satisfied requirement
-4. Provide evidence - paste command outputs proving success
+**VALIDATION PROTOCOL:** Evidence-based completion required:
+1. **RUN validation commands** - show all outputs
+2. **TEST functionality manually** - demonstrate it works  
+3. **VERIFY requirements met** - list each satisfied requirement
+4. **PROVIDE EVIDENCE** - paste command outputs proving success
+
+## 🚨 MANDATORY POST-COMPLETION VALIDATION
+
+**ABSOLUTE REQUIREMENT**: IMMEDIATELY run lint and type checks after completing ANY task that modified code files
+
+**🔴 CRITICAL VALIDATION SEQUENCE:**
+1. **Complete task implementation**
+2. **Run lint and type checks** on modified files/folders  
+3. **Fix any errors** before marking task complete
+4. **Provide validation evidence** - show command outputs
+
+**🚨 VALIDATION FAILURE PROTOCOL:**
+- **Linting errors** → Create `category: 'linter-error'` task IMMEDIATELY
+- **Type errors** → Create `category: 'error'` task IMMEDIATELY  
+- **DO NOT mark complete** until ALL validation passes
 
 
-## 🎯 TASK CATEGORY & PRIORITY SYSTEM
+## 🚨 TASK CATEGORY & PRIORITY SYSTEM
 
-Tasks organized by **specific categories** with automatic sorting by urgency:
+**CATEGORY-BASED PRIORITY SYSTEM:**
 
-### CRITICAL ERRORS (Rank 1-4) - Highest Priority
-1. **linter-error** - Code quality issues (HIGHEST PRIORITY)
-2. **build-error** - Compilation/bundling failures
-3. **start-error** - Application startup failures
-4. **error** - Runtime errors and exceptions
+Tasks are now organized by **specific categories** instead of generic "low", "medium", "high" priorities. The system **automatically sorts** tasks by category urgency:
 
-### IMPLEMENTATION WORK (Rank 5-9)
-5. **missing-feature** - Required functionality
-6. **bug** - Incorrect behavior needing fixes
-7. **enhancement** - Feature improvements
-8. **refactor** - Code restructuring
-9. **documentation** - Documentation updates
+### 🔴 CRITICAL ERRORS (Rank 1-4) - Highest Priority - Block All Work
+1. **🔴 linter-error** - Code style, formatting, or quality issues detected by linters - **HIGHEST PRIORITY**
+2. **🔥 build-error** - Compilation, bundling, or build process failures  
+3. **⚠️ start-error** - Application startup, initialization, or runtime launch failures
+4. **❌ error** - General runtime errors, exceptions, or system failures
 
-### MAINTENANCE & RESEARCH (Rank 10-11)
-10. **chore** - Maintenance tasks
-11. **research** - Investigation work
+### 🟡 IMPLEMENTATION PRIORITY (Rank 5-9) - Core Development Work
+5. **🆕 missing-feature** - Required functionality that needs to be implemented
+6. **🐛 bug** - Incorrect behavior or functionality that needs fixing
+7. **✨ enhancement** - Improvements to existing features or functionality
+8. **♻️ refactor** - Code restructuring, optimization, or technical debt reduction
+9. **📚 documentation** - Documentation updates, comments, or API documentation
 
-### TESTING (Rank 12-18) - Lowest Priority
-12. **missing-test** - Test coverage gaps
-13. **test-setup** - Test environment configuration
-14. **test-refactor** - Test code improvements
-15. **test-performance** - Performance testing
-16. **test-linter-error** - Test file linting
-17. **test-error** - Failing tests
-18. **test-feature** - Testing tooling
+### 🟢 MAINTENANCE PRIORITY (Rank 10) - Administrative Work
+10. **🧹 chore** - Maintenance tasks, cleanup, or administrative work
 
-**AUTO-SORTING:** Category Rank → Priority Value → Creation Time
+### 🔬 RESEARCH PRIORITY (Rank 11) - Investigation Work
+11. **🔬 research** - Investigation, exploration, or learning tasks
 
-**TASK CREATION COMMANDS:**
+### 🔴 LOWEST PRIORITY (Rank 12-18) - All Testing Related - LAST PRIORITY
+12. **🧪 missing-test** - Test coverage gaps or missing test cases - **LOWEST PRIORITY**
+13. **⚙️ test-setup** - Test environment configuration, test infrastructure setup
+14. **🔄 test-refactor** - Refactoring test code, improving test structure
+15. **📊 test-performance** - Performance tests, load testing, stress testing
+16. **🔍 test-linter-error** - Linting issues specifically in test files - **LOWEST PRIORITY**
+17. **🚫 test-error** - Failing tests, test framework issues - **LOWEST PRIORITY** 
+18. **🔧 test-feature** - New testing features, test tooling improvements - **LOWEST PRIORITY**
+
+**AVAILABLE CATEGORIES (Must be specified when creating tasks):**
+- **linter-error, build-error, start-error, error** (ranks 1-4) - Critical errors (highest priority)
+- **missing-feature, bug, enhancement, refactor, documentation** (ranks 5-9) - Implementation work
+- **chore** (rank 10) - Maintenance
+- **research** (rank 11) - Investigation work
+- **missing-test, test-setup, test-refactor, test-performance, test-linter-error, test-error, test-feature** (ranks 12-18) - Testing (lowest priority)
+
+**THREE-LEVEL AUTO-SORTING HIERARCHY:**
+1. **PRIMARY: Category Rank** - Linter Errors (1) → Build Errors (2) → Implementation (5-9) → Research (11) → Testing (12-18)
+2. **SECONDARY: Priority Value** - Critical (4) → High (3) → Medium (2) → Low (1)
+3. **TERTIARY: Creation Time** - Newer tasks first within same category and priority
+
+**CREATING TASKS WITH CATEGORIES (CATEGORY REQUIRED):**
 ```bash
-# CRITICAL: ALWAYS USE SINGLE QUOTES to avoid bash escaping errors
+# Category is MANDATORY - must be specified explicitly
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Fix ESLint errors', category: 'linter-error', mode: 'DEVELOPMENT'}).then(id => console.log('Created:', id));"
 
-# Linter error (highest priority)
-node -e 'const TaskManager = require("./lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "Fix [specific error]", category: "linter-error", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
+# Research task (after implementation tasks)
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Research authentication patterns', category: 'research', mode: 'DEVELOPMENT'}).then(id => console.log('Created:', id));"
 
-# Feature implementation
-node -e 'const TaskManager = require("./lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "Implement [feature]", category: "missing-feature", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
+# Testing task (lowest priority)  
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Add unit tests', category: 'missing-test', mode: 'DEVELOPMENT'}).then(id => console.log('Created:', id));"
 
-# Research task
-node -e 'const TaskManager = require("./lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "Research [topic]", category: "research", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
+# Bug fix with explicit priority override
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: 'Urgent bug fix', category: 'bug', priority: 'critical', mode: 'DEVELOPMENT'}).then(id => console.log('Created:', id));"
 ```
 
 ## 🚨 TASK MANAGEMENT PROTOCOLS
 
-**ALWAYS CREATE TASKS FOR:**
-- Every user request/instruction
-- All detected errors (linting, runtime, build, test failures)
-- Performance issues and security vulnerabilities
-- Code quality opportunities and missing functionality
-- Integration issues and improvement opportunities
+**INSTANT TASK CREATION - ALWAYS CREATE TASKS FOR:**
+- **EVERY USER REQUEST** - no matter how simple or complex
+- **EVERY USER INSTRUCTION** - any time user tells you to do something  
+- **EVERY ISSUE USER POINTS OUT** - bugs, problems, suggestions, observations
+- **ANY opportunity for improvement** discovered during work
+- **ALL errors detected** (linting, testing, runtime, build failures)
+- **Performance issues** (slow responses, memory leaks)
+- **Security vulnerabilities** (auth issues, data exposure)
+- **Code quality opportunities** (refactoring needs, missing docs)
+- **Missing functionality** (incomplete features, edge cases)
+- **Integration issues** (API failures, dependency conflicts)
 
-**WORKFLOW:** User request → **INSTANT TASK CREATION** → Check existing tasks → Modify or create → Execute
+**🚨 GOLDEN RULE**: User says ANYTHING requiring action OR asks ANY question → **INSTANTLY CREATE TASK THE VERY FIRST SECOND** → Check existing tasks → Modify OR create → Execute
 
-### CATEGORY-BASED TASK CREATION
-**🔴 CATEGORY DETECTION = IMMEDIATE TASK CREATION - ABSOLUTE MANDATE**
+## 🚨 MANDATORY CATEGORY-BASED TASK CREATION PROTOCOL
 
-**🚨 THE INSTANT ANY OPPORTUNITY IS DETECTED - IMMEDIATELY CREATE TASK:**
+**🚨 ABSOLUTE MANDATE: CATEGORY DETECTION = IMMEDIATE TASK CREATION**
 
-**CRITICAL ERRORS (Create INSTANTLY):**
-- Linter errors → `category: 'linter-error'` - **IMMEDIATE TASK CREATION**
-- Build failures → `category: 'build-error'` - **IMMEDIATE TASK CREATION**
-- Runtime errors → `category: 'error'` - **IMMEDIATE TASK CREATION**
-- Start failures → `category: 'start-error'` - **IMMEDIATE TASK CREATION**
+**THE INSTANT YOU DETECT ANY OF THESE CATEGORIES IN USER COMMUNICATION OR CODE ANALYSIS - CREATE TASK IMMEDIATELY:**
 
-**FEATURE WORK (Create INSTANTLY):**
-- Missing functionality → `category: 'missing-feature'` - **IMMEDIATE TASK CREATION**
-- Enhancements → `category: 'enhancement'` - **IMMEDIATE TASK CREATION**
-- Bug fixes → `category: 'bug'` - **IMMEDIATE TASK CREATION**
+### 🔴 **CRITICAL ERROR CATEGORIES - CREATE TASK IN FIRST SECOND:**
+- **🔴 LINTER-ERROR SPOTTED** → INSTANTLY CREATE `category: 'linter-error'` TASK
+- **🔥 BUILD-ERROR DETECTED** → INSTANTLY CREATE `category: 'build-error'` TASK  
+- **⚠️ START-ERROR FOUND** → INSTANTLY CREATE `category: 'start-error'` TASK
+- **❌ RUNTIME ERROR SEEN** → INSTANTLY CREATE `category: 'error'` TASK
 
-**MAINTENANCE (Create INSTANTLY):**
-- Refactoring needs → `category: 'refactor'` - **IMMEDIATE TASK CREATION**
-- Documentation gaps → `category: 'documentation'` - **IMMEDIATE TASK CREATION**
-- Cleanup tasks → `category: 'chore'` - **IMMEDIATE TASK CREATION**
+### 🔬 **RESEARCH OPPORTUNITIES - CREATE TASK IN FIRST SECOND:**
+- **🔬 INVESTIGATION NEEDED** → INSTANTLY CREATE `category: 'research'` TASK (AFTER IMPLEMENTATION)
+- **🔍 EXPLORATION REQUIRED** → INSTANTLY CREATE `category: 'research'` TASK (AFTER IMPLEMENTATION)
+- **📊 ANALYSIS OPPORTUNITY** → INSTANTLY CREATE `category: 'research'` TASK (AFTER IMPLEMENTATION)
+- **🧭 LEARNING REQUIRED** → INSTANTLY CREATE `category: 'research'` TASK (AFTER IMPLEMENTATION)
 
-**RESEARCH & TESTING (Create INSTANTLY):**
-- Investigation needs → `category: 'research'` - **IMMEDIATE TASK CREATION**
-- Missing tests → `category: 'missing-test'` - **IMMEDIATE TASK CREATION**
+### 🆕 **FEATURE OPPORTUNITIES - CREATE TASK IN FIRST SECOND:**
+- **🆕 MISSING FUNCTIONALITY** → INSTANTLY CREATE `category: 'missing-feature'` TASK
+- **✨ ENHANCEMENT SPOTTED** → INSTANTLY CREATE `category: 'enhancement'` TASK
+- **🐛 BUG DISCOVERED** → INSTANTLY CREATE `category: 'bug'` TASK
 
-**🔴 ABSOLUTE ZERO DELAY ENFORCEMENT:**
-- **TASK CREATION IS MANDATORY AND INSTANT** - No exceptions, no delays
-- **OPPORTUNITY SPOTTED = IMMEDIATE TASK CREATION** - Within seconds of detection
-- **NO ANALYSIS PARALYSIS** - Task creation happens BEFORE analysis
-- **NO HESITATION ALLOWED** - Create task the instant opportunity is identified
-- **ALWAYS SPECIFY CATEGORY** - Task must have appropriate category assigned
-- **IMMEDIATE ACTION REQUIRED** - This is not a suggestion, it is a mandate
-- Include relevant research reports in task important_files
+### 🧪 **TESTING OPPORTUNITIES - CREATE TASK IN FIRST SECOND (LOWEST PRIORITY):**
+- **🧪 MISSING TESTS** → INSTANTLY CREATE `category: 'missing-test'` TASK
+- **🔍 TEST LINTER ERRORS** → INSTANTLY CREATE `category: 'test-linter-error'` TASK
+- **🚫 FAILING TESTS** → INSTANTLY CREATE `category: 'test-error'` TASK
+- **🔧 TEST IMPROVEMENTS** → INSTANTLY CREATE `category: 'test-feature'` TASK
 
-## 🚨 BASH ESCAPING PROTOCOL
+### 📚 **MAINTENANCE OPPORTUNITIES - CREATE TASK IN FIRST SECOND:**
+- **♻️ REFACTORING NEEDED** → INSTANTLY CREATE `category: 'refactor'` TASK
+- **📚 DOCUMENTATION GAPS** → INSTANTLY CREATE `category: 'documentation'` TASK
+- **🧹 CLEANUP REQUIRED** → INSTANTLY CREATE `category: 'chore'` TASK
 
-**CRITICAL RULE: ALWAYS USE SINGLE QUOTES FOR NODE -E COMMANDS**
+**🚨 CATEGORY DETECTION TRIGGERS - NO EXCEPTIONS:**
+- User mentions ANY error, issue, or problem → **INSTANT TASK CREATION**
+- Code analysis reveals ANY quality issue → **INSTANT TASK CREATION**
+- You spot ANY opportunity for improvement → **INSTANT TASK CREATION**
+- ANY missing functionality is identified → **INSTANT TASK CREATION**
+- ANY research need is discovered → **INSTANT TASK CREATION**
+- ANY test coverage gap is found → **INSTANT TASK CREATION**
 
-**Common Errors:** SyntaxError from improper quote escaping, shell interference with JavaScript
+**🚨 MANDATORY TASK CREATION COMMANDS - USE THESE IMMEDIATELY:**
 
-**CORRECT PATTERNS:**
+**⚠️ CRITICAL BASH ESCAPING RULE:**
+**ALWAYS USE SINGLE QUOTES FOR NODE -E COMMANDS TO AVOID SHELL ESCAPING ERRORS**
+
 ```bash
-# ✅ Single quotes for shell, double quotes for JavaScript
-node -e 'const tm = require("./lib/taskManager"); tm.createTask({title: "Task"});'
+# ✅ CORRECT - Use single quotes to prevent bash escaping errors
+# INSTANT LINTER ERROR TASK
+node -e 'const TaskManager = require("./lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "Fix [specific linter error]", category: "linter-error", mode: "DEVELOPMENT", priority: "critical"}).then(id => console.log("URGENT LINTER TASK:", id));'
 
-# ❌ FORBIDDEN - Double quotes for outer shell
-node -e "const tm = require('./lib/taskManager');"
+# INSTANT RESEARCH TASK (AFTER IMPLEMENTATION TASKS)
+node -e 'const TaskManager = require("./lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "Research [specific topic]", category: "research", mode: "DEVELOPMENT", priority: "high"}).then(id => console.log("RESEARCH TASK:", id));'
+
+# INSTANT BUG TASK
+node -e 'const TaskManager = require("./lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "Fix [specific bug]", category: "bug", mode: "DEVELOPMENT", priority: "high"}).then(id => console.log("URGENT BUG TASK:", id));'
+
+# INSTANT MISSING FEATURE TASK
+node -e 'const TaskManager = require("./lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "Implement [specific feature]", category: "missing-feature", mode: "DEVELOPMENT", priority: "high"}).then(id => console.log("FEATURE TASK:", id));'
 ```
 
-**Troubleshooting:** Switch to single quotes, use double quotes inside JavaScript, create temp file for complex commands
+**🚨 ZERO DELAY ENFORCEMENT:**
+- **NO ANALYSIS PARALYSIS** - Create task FIRST, analyze SECOND
+- **NO HESITATION** - Category spotted = Immediate task creation
+- **NO WAITING** - User mentions issue = Task created within 1 second
+- **NO EXCEPTIONS** - Every category opportunity gets a task
+
+**WORKFLOW:**
+1. **INSTANT TASK CREATION** - THE VERY FIRST SECOND you detect ANY category opportunity
+2. **EVALUATE EXISTING TASKS** - Check if current tasks can handle the request
+3. **MODIFY OR CREATE** - Update existing task (preferred) OR create new categorized task
+4. **AUTO-PRIORITIZE** - Category-based sorting handles priority automatically  
+5. **EXECUTE** - Begin working with thinking-driven approach
+
+**CONTINUOUS EVALUATION:**
+- **MANDATORY THINKING** for all task operations (creation, categorization, reordering, completion)
+- **INSTANT CATEGORY ASSESSMENT** - Detect category patterns in real-time
+- **AUTOMATIC TASK CREATION** for every category opportunity discovered
+- **PROACTIVE SCANNING** - Actively look for category opportunities in all communications
+
+**CATEGORY ASSIGNMENT RULES:**
+- **ALWAYS specify category** when creating tasks - NO EXCEPTIONS
+- **USE SPECIFIC CATEGORIES** - prefer 'linter-error' over 'error', 'missing-test' over 'test'  
+- **CREATE IMMEDIATELY** upon category detection - NO delay, NO analysis first
+- **TRUST CATEGORY HIERARCHY** - Let automatic sorting handle prioritization
+- **INCLUDE RESEARCH REPORTS** - Always add relevant reports from development/reports/ and development/research-reports/ to important_files
+
+## 🚨 CRITICAL BASH COMMAND ESCAPING PROTOCOL
+
+**🔴 ABSOLUTE RULE: ALWAYS USE SINGLE QUOTES FOR NODE -E COMMANDS**
+
+**BASH ESCAPING ERRORS TO AVOID:**
+- **❌ SyntaxError: Unexpected end of input** - caused by improper quote escaping
+- **❌ SyntaxError: missing ) after argument list** - caused by shell interfering with JavaScript
+- **❌ Unexpected eof** - caused by unmatched quotes in complex commands
+
+**✅ CORRECT BASH ESCAPING PATTERNS:**
+```bash
+# ✅ ALWAYS USE SINGLE QUOTES FOR OUTER SHELL, DOUBLE QUOTES FOR INNER JavaScript
+node -e 'const TaskManager = require("./lib/taskManager"); tm.createTask({title: "Task name"}).then(id => console.log("Created:", id));'
+
+# ✅ ALTERNATIVE: Create temporary script file for complex commands
+echo 'console.log("Complex script with quotes");' > temp.js && node temp.js && rm temp.js
+
+# ✅ ALTERNATIVE: Use != instead of !== to avoid bash escaping issues
+node -e 'if (value != null) console.log("Safe comparison");'
+```
+
+**❌ FORBIDDEN BASH PATTERNS:**
+```bash
+# ❌ NEVER use double quotes for outer shell with complex JavaScript
+node -e "const tm = require('./lib/taskManager'); tm.createTask({title: 'Task'});"
+
+# ❌ NEVER mix quote types that cause shell conflicts
+node -e "script with !== operator"  # Bash escapes the ! character
+```
+
+**🚨 MANDATORY BASH TROUBLESHOOTING:**
+If you encounter syntax errors in node -e commands:
+1. **SWITCH TO SINGLE QUOTES** for the outer shell command
+2. **USE DOUBLE QUOTES** for all strings inside the JavaScript
+3. **CREATE TEMP FILE** if command is too complex for inline execution
+4. **VERIFY QUOTE BALANCE** - ensure all quotes are properly paired
 
 ## 🚨 MANDATORY CONCURRENT SUBAGENT DEPLOYMENT - NEVER WORK ALONE
 
@@ -335,33 +415,6 @@ node -e "const tm = require('./lib/taskManager');"
 ## 🚨 CONTEXT MANAGEMENT
 
 **Always check for ABOUT.md files** before editing code (current directory, parent directories, subdirectories)
-
-## 🚨 DEVELOPMENT ESSENTIALS REVIEW MANDATE
-
-**🔴 ABSOLUTE REQUIREMENT: ALWAYS READ/REVIEW DEVELOPMENT/ESSENTIALS DIRECTORY**
-
-**MANDATORY PROTOCOL:**
-1. **CHECK development/essentials/** - Always check if development/essentials directory exists
-2. **READ ALL ESSENTIAL FILES** - Review every file in development/essentials before starting any work
-3. **CRITICAL CONTEXT** - Files in development/essentials contain critical project context and requirements
-4. **NEVER SKIP** - Never begin implementation without reviewing essentials directory content
-5. **UPDATE AWARENESS** - Re-check development/essentials if it gets created during project lifecycle
-
-**ESSENTIAL FILES PRIORITY:**
-- **Project-specific constraints** - Technical limitations and requirements
-- **Architecture decisions** - Core design patterns and principles  
-- **Security requirements** - Authentication, authorization, data protection
-- **Performance standards** - Optimization requirements and benchmarks
-- **Integration specifications** - External service dependencies and protocols
-- **Deployment considerations** - Environment-specific configurations
-
-**WORKFLOW INTEGRATION:**
-- **Before task execution** - Review development/essentials as first step
-- **During planning** - Reference essentials for implementation decisions
-- **For complex tasks** - Include essentials review in task dependencies
-- **When blocked** - Check essentials for guidance and constraints
-
-**NOTE**: If development/essentials directory doesn't exist, this requirement is dormant until the directory is created.
 
 ## 🚨 RESEARCH REPORTS INTEGRATION & DEPENDENCY SYSTEM
 

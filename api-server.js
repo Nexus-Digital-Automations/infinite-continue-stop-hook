@@ -13,6 +13,8 @@ const path = require('path');
 const TaskManager = require('./lib/taskManager');
 const AgentRegistry = require('./lib/agentRegistry');
 const Logger = require('./lib/logger');
+const AuthMiddleware = require('./lib/authMiddleware');
+const createAuthRoutes = require('./routes/auth');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,10 +31,37 @@ const taskManager = new TaskManager(todoPath);
 const agentRegistry = new AgentRegistry(agentRegistryPath);
 const logger = new Logger(process.cwd());
 
+// Initialize Authentication System
+const authMiddleware = new AuthMiddleware({
+  publicRoutes: [
+    '/api/health',
+    '/api/auth/login',
+    '/api/auth/callback',
+    '/api/auth/providers',
+    '/api/auth/status',
+    '/api/auth/verify'
+  ]
+});
+
 // Error handling middleware
 const asyncHandler = (fn) => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch(next);
 };
+
+// Global middleware
+app.use(authMiddleware.securityHeaders());
+app.use(authMiddleware.requestLogger());
+app.use(authMiddleware.rateLimit());
+
+// ============================================================================
+// AUTHENTICATION ENDPOINTS
+// ============================================================================
+
+// Mount authentication routes
+app.use('/api/auth', createAuthRoutes());
+
+// Apply JWT authentication to all routes except public ones
+app.use(authMiddleware.optionalAuth());
 
 // ============================================================================
 // TASK MANAGEMENT ENDPOINTS
@@ -660,6 +689,23 @@ app.use((req, res) => {
   });
 });
 
+// ============================================================================
+// ERROR HANDLING
+// ============================================================================
+
+// Authentication error handling
+app.use(authMiddleware.errorHandler());
+
+// General error handling
+app.use((err, req, res, _next) => {
+  console.error('Server error:', err);
+  res.status(500).json({
+    success: false,
+    error: 'Internal server error',
+    message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
+  });
+});
+
 /**
  * Start server
  */
@@ -681,6 +727,12 @@ const server = app.listen(PORT, () => {
   console.log(`   GET    /api/stats           - Detailed statistics`);
   console.log(`   POST   /api/stop-hook/authorize - Authorize stop hook`);
   console.log(`   GET    /api/health          - Health check`);
+  console.log(`   GET    /api/auth/providers  - Available OAuth providers`);
+  console.log(`   GET    /api/auth/login/:provider - Start OAuth flow`);
+  console.log(`   GET    /api/auth/callback/:provider - OAuth callback`);
+  console.log(`   POST   /api/auth/refresh    - Refresh JWT tokens`);
+  console.log(`   GET    /api/auth/me         - Get current user`);
+  console.log(`   POST   /api/auth/logout     - Logout user`);
   console.log(`   GET    /api/github/status   - GitHub API connection status`);
   console.log(`   GET    /api/github/repository - Repository information`);
   console.log(`   GET    /api/github/analytics - Repository analytics`);

@@ -136,7 +136,7 @@ const TaskList = ({ tasks = [], onTaskUpdate, onTaskSelect }) => {
             <div style={{ fontSize: '12px', color: '#6b7280' }}>Pending</div>
           </div>
           <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#3b82f6' }}>{stats.in_progress}</div>
+            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#16a34a' }}>{stats.in_progress}</div>
             <div style={{ fontSize: '12px', color: '#6b7280' }}>In Progress</div>
           </div>
           <div style={{ textAlign: 'center' }}>

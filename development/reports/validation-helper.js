@@ -17,10 +17,10 @@ async function demonstrateValidationRequirements() {
     console.log('');
     
     console.log('1️⃣ Run ALL validation commands and capture outputs:');
-    console.log('   npm run lint     # Must show: ✓ 0 problems (0 errors, 0 warnings)');
-    console.log('   npm run test     # Must show: ✓ Tests: X passed, 0 failed');  
-    console.log('   npm run build    # Must show: ✓ Compiled successfully');
-    console.log('   npx tsc --noEmit # Must show: ✓ Found 0 errors');
+    console.log('   ruff check .     # Must show: ✓ All checks passed');
+    console.log('   mypy .           # Must show: ✓ Success: no issues found');  
+    console.log('   pytest           # Must show: ✓ X passed, 0 failed');
+    console.log('   python -m py_compile # Must show: ✓ No syntax errors');
     console.log('');
     
     console.log('2️⃣ Test functionality and document results');
@@ -34,10 +34,10 @@ async function demonstrateValidationRequirements() {
     
     const exampleEvidence = {
         commands: [
-            'npm run lint: ✓ 0 problems (0 errors, 0 warnings)',
-            'npm run test: ✓ Tests: 15 passed, 0 failed',
-            'npm run build: ✓ Compiled successfully',
-            'npx tsc --noEmit: ✓ Found 0 errors'
+            'ruff check .: ✓ All checks passed',
+            'mypy .: ✓ Success: no issues found',
+            'pytest: ✓ 15 passed, 0 failed',
+            'python -m py_compile: ✓ No syntax errors'
         ],
         testing: 'I have personally tested all functionality. Results: Feature X works correctly, handles edge cases A, B, C properly, error handling functions as expected.',
         requirements: 'All requirements verified: Requirement 1 ✓ satisfied by implementation Y, Requirement 2 ✓ satisfied by feature Z, Requirement 3 ✓ satisfied by tests.',
@@ -95,7 +95,7 @@ async function testValidationEnforcement() {
         });
         
         const evidence = {
-            commands: ['npm run lint: ✓ 0 errors', 'npm test: ✓ all passed'],
+            commands: ['ruff check .: ✓ 0 errors', 'pytest: ✓ all passed'],
             testing: 'All functionality tested and working',
             requirements: 'All requirements verified and met',
             statement: 'Task is 100% complete and production-ready'

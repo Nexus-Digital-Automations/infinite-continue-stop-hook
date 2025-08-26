@@ -221,7 +221,7 @@ const App = () => {
             onClick={handleRetryConnection}
             style={{
               padding: '12px 24px',
-              backgroundColor: '#3b82f6',
+              backgroundColor: '#16a34a',
               color: '#ffffff',
               border: 'none',
               borderRadius: '6px',
@@ -230,8 +230,8 @@ const App = () => {
               fontWeight: '500',
               transition: 'background-color 0.2s ease'
             }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = '#2563eb'}
-            onMouseLeave={(e) => e.target.style.backgroundColor = '#3b82f6'}
+            onMouseEnter={(e) => e.target.style.backgroundColor = '#15803d'}
+            onMouseLeave={(e) => e.target.style.backgroundColor = '#16a34a'}
           >
             🔄 Retry Connection
           </button>

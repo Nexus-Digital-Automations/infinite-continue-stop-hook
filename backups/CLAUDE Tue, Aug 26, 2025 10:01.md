@@ -2,24 +2,13 @@
 
 ## 🚨 CRITICAL MANDATES
 
-### ⚡ INSTANT TASK CREATION FOR ANY USER REQUEST - ABSOLUTE MANDATE
-**🔴 CRITICAL: THE INSTANT A USER MAKES ANY REQUEST - IMMEDIATELY CREATE TASK**
+### ⚡ INSTANT TASK CREATION FOR ANY USER REQUEST
+**THE MOMENT USER MAKES ANY REQUEST:**
+1. **STOP EVERYTHING AND CREATE TASK** using TaskManager API
+2. **CATEGORY REQUIRED** - Use: research, missing-feature, bug, enhancement, etc.
+3. **THEN AND ONLY THEN PROCEED** with work
 
-**ABSOLUTE REQUIREMENTS - NO EXCEPTIONS:**
-1. **STOP EVERYTHING IMMEDIATELY** - The moment user communicates anything
-2. **CREATE TASK INSTANTLY** - Use TaskManager API before ANY other action
-3. **CATEGORY MANDATORY** - Must specify: research, missing-feature, bug, enhancement, etc.
-4. **ZERO DELAY TOLERANCE** - No thinking, no analysis, no preparation - INSTANT task creation
-5. **THEN AND ONLY THEN PROCEED** - Only after task is created can work begin
-
-**🚨 ENFORCEMENT PROTOCOL:**
-- **IMMEDIATE = WITHIN SECONDS** - Task creation must happen instantly upon user communication
-- **NO ANALYSIS FIRST** - Do not analyze what needs to be done, just create the task immediately
-- **NO PLANNING PHASE** - Task creation comes BEFORE planning, not after
-- **NO EXCEPTIONS** - This applies to ALL user communications requiring any form of action
-- **OPPORTUNITY DETECTION** - Any indication of work needed = INSTANT task creation
-
-**Golden Rule**: User says ANYTHING requiring action → **INSTANT TASK CREATION (IMMEDIATELY)** → Then execute
+**Golden Rule**: User says ANYTHING requiring action → **INSTANT TASK CREATION** → Execute
 
 ### 🔴 ABSOLUTE COMPREHENSIVE LOGGING MANDATE
 **ALL CODE MUST HAVE COMPREHENSIVE LOGGING FOR DEBUGGING**
@@ -61,10 +50,10 @@ function processData(userId, data) {
 ```
 
 ### 📋 FEATURES.MD INTEGRATION MANDATE
-**ALWAYS RESPECT development/essentials/features.md WORKFLOW**
+**ALWAYS RESPECT development/features.md WORKFLOW**
 
 **MANDATORY PROTOCOL:**
-1. **READ features.md FIRST** - Always read development/essentials/features.md before feature work
+1. **READ features.md FIRST** - Always read development/features.md before feature work
 2. **FEATURE PROPOSALS ONLY** - Can only add features to "❓ Potential Features Awaiting User Verification"
 3. **USER APPROVAL REQUIRED** - Only user can move features to "📋 Planned Features"
 4. **IMPLEMENT APPROVED ONLY** - Only implement features from "Planned Features" section
@@ -80,27 +69,23 @@ function processData(userId, data) {
 **Proposed by**: Agent ID and date
 ```
 
-### 🎯 COMPLIANCE PRIORITY ORDER - ABSOLUTE HIERARCHY
-1. **INSTANT TASK CREATION (MANDATORY)** - Create task for ANY user request IMMEDIATELY - NO EXCEPTIONS
+### 🎯 COMPLIANCE PRIORITY ORDER
+1. **INSTANT TASK CREATION** - Create task for ANY user request FIRST
 2. **COMPREHENSIVE LOGGING** - All code must have enterprise-grade logging
 3. **FEATURES.MD RESPECT** - Follow features.md workflow for all feature work
 4. **USER INSTRUCTIONS** - Direct commands take highest priority
 5. **EVIDENCE-BASED VALIDATION** - Validate all work with concrete evidence
 
-**🚨 PRIORITY #1 ENFORCEMENT:** INSTANT task creation is the highest priority and must ALWAYS happen first, before any other consideration or action.
-
 ## 🚨 ERROR HANDLING & QUALITY PROTOCOLS
 
-### MANDATORY ERROR RESPONSE - IMMEDIATE TASK CREATION REQUIRED
-1. **DETECT** any error → **INSTANTLY CREATE CATEGORIZED TASK IMMEDIATELY**:
-   - Linter errors → `category: 'linter-error'` - **CREATE TASK INSTANTLY**
-   - Build failures → `category: 'build-error'` - **CREATE TASK INSTANTLY**
-   - Runtime errors → `category: 'error'` - **CREATE TASK INSTANTLY**
-   - Test failures → `category: 'test-error'` - **CREATE TASK INSTANTLY**
+### MANDATORY ERROR RESPONSE
+1. **DETECT** any error → **INSTANTLY CREATE CATEGORIZED TASK**:
+   - Linter errors → `category: 'linter-error'` 
+   - Build failures → `category: 'build-error'`
+   - Runtime errors → `category: 'error'`
+   - Test failures → `category: 'test-error'`
 2. **ATTEMPT IMMEDIATE FIX** (< 2 minutes) OR work on task
 3. **VERIFY** fix and document resolution
-
-**🔴 CRITICAL:** Error detection = IMMEDIATE task creation. No delays, no analysis first - create task the instant an error is identified.
 
 **FORBIDDEN:** Ignoring errors, suppressing messages, or implementing workarounds
 
@@ -113,12 +98,10 @@ function processData(userId, data) {
 3. Fix any errors before marking task complete
 4. Provide validation evidence - show command outputs
 
-**VALIDATION FAILURE PROTOCOL - IMMEDIATE TASK CREATION MANDATORY:**
-- Linting errors → Create `category: 'linter-error'` task **IMMEDIATELY - NO DELAYS**
-- Type errors → Create `category: 'error'` task **IMMEDIATELY - NO DELAYS**
+**VALIDATION FAILURE PROTOCOL:**
+- Linting errors → Create `category: 'linter-error'` task IMMEDIATELY
+- Type errors → Create `category: 'error'` task IMMEDIATELY
 - DO NOT mark complete until ALL validation passes
-
-**🔴 CRITICAL:** Validation failure = INSTANT task creation. The moment validation fails, a task must be created immediately.
 
 ### ZERO TOLERANCE FOR ISSUE MASKING
 **ALWAYS FIX ROOT CAUSE - NEVER HIDE PROBLEMS**
@@ -225,37 +208,33 @@ node -e 'const TaskManager = require("./lib/taskManager"); const tm = new TaskMa
 **WORKFLOW:** User request → **INSTANT TASK CREATION** → Check existing tasks → Modify or create → Execute
 
 ### CATEGORY-BASED TASK CREATION
-**🔴 CATEGORY DETECTION = IMMEDIATE TASK CREATION - ABSOLUTE MANDATE**
+**CATEGORY DETECTION = IMMEDIATE TASK CREATION**
 
-**🚨 THE INSTANT ANY OPPORTUNITY IS DETECTED - IMMEDIATELY CREATE TASK:**
+**CRITICAL ERRORS (Create immediately):**
+- Linter errors → `category: 'linter-error'`
+- Build failures → `category: 'build-error'`
+- Runtime errors → `category: 'error'`
+- Start failures → `category: 'start-error'`
 
-**CRITICAL ERRORS (Create INSTANTLY):**
-- Linter errors → `category: 'linter-error'` - **IMMEDIATE TASK CREATION**
-- Build failures → `category: 'build-error'` - **IMMEDIATE TASK CREATION**
-- Runtime errors → `category: 'error'` - **IMMEDIATE TASK CREATION**
-- Start failures → `category: 'start-error'` - **IMMEDIATE TASK CREATION**
+**FEATURE WORK (Create immediately):**
+- Missing functionality → `category: 'missing-feature'`
+- Enhancements → `category: 'enhancement'`
+- Bug fixes → `category: 'bug'`
 
-**FEATURE WORK (Create INSTANTLY):**
-- Missing functionality → `category: 'missing-feature'` - **IMMEDIATE TASK CREATION**
-- Enhancements → `category: 'enhancement'` - **IMMEDIATE TASK CREATION**
-- Bug fixes → `category: 'bug'` - **IMMEDIATE TASK CREATION**
+**MAINTENANCE (Create immediately):**
+- Refactoring needs → `category: 'refactor'`
+- Documentation gaps → `category: 'documentation'`
+- Cleanup tasks → `category: 'chore'`
 
-**MAINTENANCE (Create INSTANTLY):**
-- Refactoring needs → `category: 'refactor'` - **IMMEDIATE TASK CREATION**
-- Documentation gaps → `category: 'documentation'` - **IMMEDIATE TASK CREATION**
-- Cleanup tasks → `category: 'chore'` - **IMMEDIATE TASK CREATION**
+**RESEARCH & TESTING (Lower priority):**
+- Investigation needs → `category: 'research'`
+- Missing tests → `category: 'missing-test'`
 
-**RESEARCH & TESTING (Create INSTANTLY):**
-- Investigation needs → `category: 'research'` - **IMMEDIATE TASK CREATION**
-- Missing tests → `category: 'missing-test'` - **IMMEDIATE TASK CREATION**
-
-**🔴 ABSOLUTE ZERO DELAY ENFORCEMENT:**
-- **TASK CREATION IS MANDATORY AND INSTANT** - No exceptions, no delays
-- **OPPORTUNITY SPOTTED = IMMEDIATE TASK CREATION** - Within seconds of detection
-- **NO ANALYSIS PARALYSIS** - Task creation happens BEFORE analysis
-- **NO HESITATION ALLOWED** - Create task the instant opportunity is identified
-- **ALWAYS SPECIFY CATEGORY** - Task must have appropriate category assigned
-- **IMMEDIATE ACTION REQUIRED** - This is not a suggestion, it is a mandate
+**ZERO DELAY ENFORCEMENT:**
+- Create task FIRST, analyze SECOND
+- Category spotted = Immediate task creation
+- No analysis paralysis, no hesitation
+- Always specify category when creating tasks
 - Include relevant research reports in task important_files
 
 ## 🚨 BASH ESCAPING PROTOCOL

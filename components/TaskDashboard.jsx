@@ -200,7 +200,7 @@ const TaskDashboard = ({
             <div style={{ fontSize: '12px', color: '#6b7280' }}>Total Tasks</div>
           </div>
           <div style={{ textAlign: 'center', padding: '12px', backgroundColor: '#f9fafb', borderRadius: '6px' }}>
-            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#3b82f6' }}>{analytics.agentStats.active}</div>
+            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#16a34a' }}>{analytics.agentStats.active}</div>
             <div style={{ fontSize: '12px', color: '#6b7280' }}>Active Agents</div>
           </div>
           <div style={{ textAlign: 'center', padding: '12px', backgroundColor: '#f9fafb', borderRadius: '6px' }}>
@@ -238,7 +238,7 @@ const TaskDashboard = ({
               }}>
                 <span style={{ fontSize: '14px', color: '#374151' }}>{category}</span>
                 <span style={{
-                  backgroundColor: '#3b82f6',
+                  backgroundColor: '#16a34a',
                   color: '#ffffff',
                   padding: '2px 8px',
                   borderRadius: '12px',
@@ -427,7 +427,7 @@ const TaskDashboard = ({
             onClick={() => setShowTaskForm(true)}
             style={{
               padding: '8px 16px',
-              backgroundColor: '#3b82f6',
+              backgroundColor: '#16a34a',
               color: '#ffffff',
               border: 'none',
               borderRadius: '6px',
@@ -461,7 +461,7 @@ const TaskDashboard = ({
             onClick={() => setCurrentView(key)}
             style={{
               padding: '8px 16px',
-              backgroundColor: currentView === key ? '#3b82f6' : 'transparent',
+              backgroundColor: currentView === key ? '#16a34a' : 'transparent',
               color: currentView === key ? '#ffffff' : '#374151',
               border: 'none',
               borderRadius: '6px',

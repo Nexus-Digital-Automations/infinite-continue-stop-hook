@@ -427,7 +427,7 @@ const TaskForm = ({ onTaskCreate, onCancel, initialData = {} }) => {
             type="submit"
             style={{
               padding: '12px 24px',
-              backgroundColor: '#3b82f6',
+              backgroundColor: '#16a34a',
               color: '#fff',
               border: 'none',
               borderRadius: '4px',

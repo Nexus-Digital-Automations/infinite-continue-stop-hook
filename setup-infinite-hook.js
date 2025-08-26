@@ -184,8 +184,9 @@ async function createTodoJson(targetPath, projectInfo) {
             {
                 id: `task_${timestamp}_init`,
                 title: "Initialize project tasks from development directory",
-                description: "Analyze all files in the development directory and create appropriate tasks based on their content. This includes reviewing development guidelines, mode-specific instructions, and any existing documentation to create a comprehensive task list that covers all aspects of the project setup and development workflow.",
+                description: "Analyze all files in the development directory and create appropriate tasks based on their content. This includes reviewing development guidelines, mode-specific instructions, and any existing documentation to create a comprehensive task list that covers all aspects of the project setup and development workflow. ALL CODE AND FEATURES MUST BE PRODUCTION-READY - NO SIMPLIFIED OR MOCK IMPLEMENTATIONS.",
                 mode: "TASK_CREATION",
+                category: "missing-feature",
                 priority: "high",
                 status: "pending",
                 dependencies: [],
@@ -194,7 +195,8 @@ async function createTodoJson(targetPath, projectInfo) {
                     "development/modes/",
                     "development/",
                     "README.md",
-                    "package.json"
+                    "package.json",
+                    "CLAUDE.md"
                 ],
                 success_criteria: [
                     "All files in development/ directory have been analyzed",
@@ -202,18 +204,20 @@ async function createTodoJson(targetPath, projectInfo) {
                     "Mode-specific tasks created based on development/modes/ files", 
                     "Project structure tasks created based on README.md and package.json",
                     "Task list provides comprehensive coverage of project requirements",
-                    "All created tasks have clear success criteria and appropriate priorities"
+                    "All created tasks have clear success criteria and appropriate priorities",
+                    "All tasks follow production-ready mandate - no simplified implementations"
                 ],
                 requires_research: false,
                 created_at: new Date().toISOString(),
                 subtasks: [],
-                prompt: "Read and analyze all files in the development/ directory. Based on the content of these files, create a comprehensive set of tasks that will implement the guidelines, setup requirements, and development workflow described in the documentation. Focus on:\n\n1. Development guidelines from general.md\n2. Mode-specific requirements from modes/ directory\n3. Project setup tasks based on README.md\n4. Dependency and configuration tasks from package.json\n5. Any other requirements found in development documentation\n\nCreate specific, actionable tasks with clear success criteria, appropriate modes (DEVELOPMENT/TESTING/REFACTORING/RESEARCH), and proper dependencies. Ensure the task list provides complete coverage for setting up and developing the project according to the documented standards."
+                prompt: "Read and analyze all files in the development/ directory. Based on the content of these files, create a comprehensive set of tasks that will implement the guidelines, setup requirements, and development workflow described in the documentation. Focus on:\n\n1. Development guidelines from general.md\n2. Mode-specific requirements from modes/ directory\n3. Project setup tasks based on README.md\n4. Dependency and configuration tasks from package.json\n5. Production-ready requirements from CLAUDE.md\n6. Any other requirements found in development documentation\n\nIMPORTANT: ALL CODE AND FEATURES MUST BE PRODUCTION-READY - NO SIMPLIFIED OR MOCK IMPLEMENTATIONS.\n\nCreate specific, actionable tasks with clear success criteria, appropriate categories (use TaskManager categories: linter-error, build-error, missing-feature, bug, enhancement, etc.), and proper dependencies. Ensure the task list provides complete coverage for setting up and developing the project according to the documented standards with enterprise-grade quality."
             },
             {
                 id: taskId,
                 title: projectInfo.taskDescription,
-                description: projectInfo.taskPrompt || projectInfo.taskDescription,
+                description: (projectInfo.taskPrompt || projectInfo.taskDescription) + "\n\nIMPORTANT: ALL CODE AND FEATURES MUST BE PRODUCTION-READY - NO SIMPLIFIED OR MOCK IMPLEMENTATIONS.",
                 mode: projectInfo.taskMode,
+                category: "missing-feature",
                 priority: "medium",
                 status: "pending",
                 dependencies: [`task_${timestamp}_init`],
@@ -236,43 +240,43 @@ async function createTodoJson(targetPath, projectInfo) {
     // Add three review tasks for the three-strike policy - language agnostic
     const reviewTasks = [
         {
-            criteria: 'Ensure the project builds completely without errors',
+            criteria: 'Ensure the project builds completely without errors with production-ready quality',
             dependencies: [],
             important_files: [],
-            failureInstructions: `IF BUILD FAILS: Create specific TASK CREATION tasks in TODO.json to fix build issues:
-- Missing dependencies installation tasks
-- Build configuration setup tasks  
-- Compilation error resolution tasks
-- Environment setup tasks
-- Build script creation tasks
+            failureInstructions: `IF BUILD FAILS: Create specific tasks with appropriate categories to fix build issues:
+- Missing dependencies installation tasks (category: 'build-error')
+- Build configuration setup tasks (category: 'build-error')
+- Compilation error resolution tasks (category: 'build-error')
+- Environment setup tasks (category: 'missing-feature')
+- Build script creation tasks (category: 'missing-feature')
 
-CRITICAL: Use TaskManager API to add these tasks immediately when build failures are detected.`
+CRITICAL: Use TaskManager API to add these tasks immediately when build failures are detected. All solutions must be production-ready, not simplified workarounds.`
         },
         {
-            criteria: 'Verify no lint errors exist in the codebase',
+            criteria: 'Verify no lint errors exist in the codebase with enterprise-grade standards',
             dependencies: [],
             important_files: [],
-            failureInstructions: `IF LINT ERRORS FOUND: Create specific TASK CREATION tasks in TODO.json to achieve zero lint errors:
-- Linting tool setup and configuration tasks
-- Code style correction tasks
-- Import organization tasks
-- Naming convention fixes tasks
-- Dead code removal tasks
+            failureInstructions: `IF LINT ERRORS FOUND: Create specific tasks with appropriate categories to achieve zero lint errors:
+- Linting tool setup and configuration tasks (category: 'linter-error')
+- Code style correction tasks (category: 'linter-error')
+- Import organization tasks (category: 'linter-error')
+- Naming convention fixes tasks (category: 'linter-error')
+- Dead code removal tasks (category: 'refactor')
 
-CRITICAL: Use TaskManager API to add these tasks immediately when lint errors are detected.`
+CRITICAL: Use TaskManager API to add these tasks immediately when lint errors are detected. Follow production-ready standards, not quick fixes.`
         },
         {
-            criteria: 'Confirm test coverage is 100% on important modules and 90%+ on others, with all tests passing',
+            criteria: 'Confirm test coverage is 100% on important modules and 90%+ on others, with all tests passing and production-ready quality',
             dependencies: [],
             important_files: [],
-            failureInstructions: `IF TEST COVERAGE INSUFFICIENT: Create specific TASK CREATION tasks in TODO.json to achieve required coverage:
-- Test framework setup tasks (Jest/Mocha/Vitest)
-- Unit test creation tasks for all modules
-- Integration test development tasks
-- Test coverage reporting setup tasks
-- CI/CD test integration tasks
+            failureInstructions: `IF TEST COVERAGE INSUFFICIENT: Create specific tasks with appropriate categories to achieve required coverage:
+- Test framework setup tasks (category: 'test-setup') 
+- Unit test creation tasks for all modules (category: 'missing-test')
+- Integration test development tasks (category: 'missing-test')
+- Test coverage reporting setup tasks (category: 'test-setup')
+- CI/CD test integration tasks (category: 'test-setup')
 
-CRITICAL: Use TaskManager API to add these tasks immediately when coverage is below requirements.`
+CRITICAL: Use TaskManager API to add these tasks immediately when coverage is below requirements. All tests must be production-ready with comprehensive scenarios.`
         }
     ];
     
@@ -297,13 +301,15 @@ ${reviewTask.failureInstructions}
 ## TASK CREATION REQUIREMENT
 When creating remediation tasks, ensure each task includes:
 - Clear success criteria
-- Appropriate mode (DEVELOPMENT/TESTING/REFACTORING)
+- Appropriate category (linter-error, build-error, missing-feature, bug, enhancement, etc.)
 - Specific file dependencies
 - Realistic time estimates
 - High priority for critical issues
+- Production-ready implementation requirements
 
 Use the task-creation.md guidelines for optimal task structure.`,
             mode: 'REVIEWER',
+            category: 'chore',
             priority: "high",
             status: 'pending',
             dependencies: reviewTask.dependencies,
