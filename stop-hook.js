@@ -145,6 +145,27 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
    # Claim specific task by ID
    node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.claimTask("TASK_ID", "[AGENT_ID]", "normal").then(result => console.log(JSON.stringify(result, null, 2)));'
 
+🔄 **NEW: TASK SWITCHING & URGENT TASK SUPPORT**:
+
+   # NEW: Check available tasks with context (shows current, previous, and available tasks)
+   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getAvailableTasksWithContext("[AGENT_ID]").then(result => console.log(JSON.stringify(result, null, 2)));'
+
+   # NEW: Create urgent task that automatically switches current work
+   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createUrgentTask({title: "Critical issue", description: "Urgent task description", category: "error", mode: "DEVELOPMENT", switchReason: "Critical bug found"}, "[AGENT_ID]").then(result => console.log(JSON.stringify(result, null, 2)));'
+
+   # NEW: Resume a previously switched task
+   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.resumeSwitchedTask("TASK_ID", "[AGENT_ID]").then(result => console.log(JSON.stringify(result, null, 2)));'
+
+   # NEW: Check for urgent task switching recommendations
+   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTaskWithSwitching("[AGENT_ID]").then(result => console.log(JSON.stringify(result, null, 2)));'
+
+🆕 **TASK SWITCHING WORKFLOW**:
+- **When critical issues arise**: Use createUrgentTask() to automatically switch and preserve context
+- **Previous work preserved**: Switched tasks maintain "switched" status and can be resumed later
+- **Context tracking**: All task switches are logged with timestamps and reasons
+- **Resume capability**: Return to previous work with resumeSwitchedTask() when urgent work is done
+- **API endpoint**: GET /api/available-tasks?agentId=AGENT_ID shows all task context
+
 🔧 TASK CREATION & DEPENDENCY MANAGEMENT:
 
    # Discover all available methods and capabilities
