@@ -147,7 +147,7 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
    # STEP 4: Before claiming any task - check if it's already claimed
    timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const task = data.tasks.find(t => t.id === "TASK_ID"); console.log("Task claim status:", { id: task?.id, assigned_agent: task?.assigned_agent, claimed_by: task?.claimed_by, status: task?.status }); });'
 
-   # Mark current task completed (if finished)
+   # Mark current task completed (if finished) - MUST RUN LINTER CHECKS FIRST
    timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTask("[AGENT_ID]").then(async task => { if(task) { await tm.updateTaskStatus(task.id, "completed", "Task completed successfully"); console.log("✅ Task completed:", task.title); } else { console.log("No active task to complete"); } });'
 
    # Claim next available task  
@@ -210,6 +210,25 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 ⏰ AUTOMATIC STALE TASK RESET: Tasks in progress for >15 minutes are automatically reset to pending
 
 🔍 MANDATORY POST-COMPLETION VALIDATION: Run lint and type checks immediately after completing any task that modified code files
+
+🚨 **ABSOLUTE REQUIREMENT - LINTER CHECKS BEFORE TASK COMPLETION:**
+**❌ NEVER mark a task complete without running linter checks first**
+**✅ ALWAYS run npm run lint (or equivalent) before marking any task as completed**
+**✅ ALWAYS fix all linting errors before task completion**
+**✅ ALWAYS provide validation evidence showing linter results**
+
+📋 MANDATORY LINTER CHECK SEQUENCE:
+1. **Complete your implementation work**
+2. **IMMEDIATELY run linter checks**: npm run lint, npm run typecheck, etc.
+3. **Fix any errors found** - do not ignore or suppress
+4. **Re-run linter to verify fixes**
+5. **ONLY THEN mark task as completed** with validation evidence
+
+🔴 **LINTER CHECK FAILURE PROTOCOL:**
+- If linting fails → Create new linter-error task IMMEDIATELY
+- If type errors found → Create new error task IMMEDIATELY  
+- DO NOT mark original task complete until ALL validation passes
+- Provide command outputs as evidence of successful validation
 
 📋 RESEARCH REPORTS REQUIREMENT: ALWAYS scan development/reports/ and development/research-reports/ for relevant research reports BEFORE starting any task. Include applicable reports in task important_files and READ THEM FIRST before implementation.
 

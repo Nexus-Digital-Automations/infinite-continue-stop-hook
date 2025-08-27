@@ -84,7 +84,7 @@ class JSONAdapter {
             await fs.access(this.config.todoPath, fsSync.constants.R_OK | fsSync.constants.W_OK);
             await fs.access(this.config.agentRegistryPath, fsSync.constants.R_OK | fsSync.constants.W_OK);
             return true;
-        } catch (error) {
+        } catch {
             return false;
         }
     }
@@ -95,7 +95,7 @@ class JSONAdapter {
     async ensureFileExists(filePath, defaultStructure) {
         try {
             await fs.access(filePath);
-        } catch (error) {
+        } catch {
             // File doesn't exist, create it
             const dir = path.dirname(filePath);
             await fs.mkdir(dir, { recursive: true });
