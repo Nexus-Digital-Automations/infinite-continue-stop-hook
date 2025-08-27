@@ -711,6 +711,35 @@ This comprehensive logging mandate ensures that when issues arise, developers ha
 **OFFICIAL TASKMANAGER API ENDPOINTS - MANDATORY USAGE:**
 All TaskManager operations MUST use the official API endpoints as specified in stop hook feedback messages. These endpoints provide proper error handling, validation, and consistency across all task operations.
 
+## 🚨 ESSENTIAL AGENT COMMANDS - MANDATORY REFERENCE
+
+**🔴 CRITICAL PATH REQUIREMENTS:**
+- **ALWAYS use absolute paths** to TaskManager libraries
+- **NEVER use relative paths** like `./lib/taskManager` from other projects
+- **CHECK project directory** before attempting TaskManager operations
+
+### 📍 CORRECT TASKMANAGER PATHS BY PROJECT
+
+**INFINITE-CONTINUE-STOP-HOOK PROJECT:**
+```bash
+# TaskManager Library Path (CORRECT)
+"/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"
+
+# Universal Script Path (CORRECT)  
+"/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js"
+```
+
+**OTHER PROJECTS (finance-ai-research-platform, etc.):**
+```bash
+# ❌ WRONG - This will fail in most projects
+require("./lib/taskManager")
+
+# ✅ CORRECT - Always use absolute path to infinite-continue-stop-hook
+require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager")
+```
+
+### ⚡ UNIVERSAL TASKMANAGER COMMANDS
+
 **AGENT INITIALIZATION COMMANDS (No timeout required):**
 ```bash
 # AGENT INITIALIZATION (MANDATORY FIRST STEP) - ALWAYS use universal script
@@ -719,6 +748,33 @@ node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-
 # UPDATE TASK STATUS (SIMPLIFIED)
 node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" update task_id completed "Optional completion notes" --project [PROJECT_DIRECTORY]
 ```
+
+### 🛠️ BASIC TASKMANAGER OPERATIONS
+
+**CREATE TASK (Use absolute path):**
+```bash
+# ✅ CORRECT - Works from any project directory
+timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "Task title", category: "missing-feature"}).then(id => console.log("Created:", id));'
+
+# CHECK AVAILABLE TASKS (Use absolute path):
+timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const available = data.tasks.filter(t => t.status === "pending" && (t.assigned_agent === undefined || t.assigned_agent === null)); console.log("Available:", available.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
+
+# CLAIM TASK (Use absolute path):
+timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.claimTask("TASK_ID", "AGENT_ID", "normal").then(result => console.log(JSON.stringify(result, null, 2)));'
+```
+
+### 🚨 PREVENT PATH ERRORS
+
+**BEFORE USING TASKMANAGER:**
+1. **Verify project has TODO.json** - Check if `./TODO.json` exists in current directory
+2. **Use absolute TaskManager path** - Never use `./lib/taskManager` from other projects  
+3. **Check working directory** - Ensure you're in the correct project directory or use full paths
+
+**ERROR PREVENTION CHECKLIST:**
+- ❌ `require("./lib/taskManager")` from any project except infinite-continue-stop-hook
+- ✅ `require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager")` from any directory
+- ✅ Check if `./TODO.json` exists before TaskManager operations
+- ✅ Use proper timeout and quote escaping
 
 **STOP HOOK FEEDBACK COMPLIANCE:**
 - **ABSOLUTE REQUIREMENT**: Always follow the exact command formats and guidance provided in stop hook feedback
