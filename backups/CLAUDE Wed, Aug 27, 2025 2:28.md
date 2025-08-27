@@ -222,7 +222,7 @@ node -e 'const TaskManager = require("./lib/taskManager"); const tm = new TaskMa
 - Code quality opportunities and missing functionality
 - Integration issues and improvement opportunities
 
-**WORKFLOW:** User request → Create task → Check existing → Execute
+**WORKFLOW:** User request → **INSTANT TASK CREATION** → Check existing tasks → Modify or create → Execute
 
 ### CATEGORY-BASED TASK CREATION
 **🔴 CATEGORY DETECTION = IMMEDIATE TASK CREATION - ABSOLUTE MANDATE**
@@ -277,8 +277,18 @@ node -e "const tm = require('./lib/taskManager');"
 
 ## 🚨 STRATEGIC CONCURRENT SUBAGENT DEPLOYMENT
 
-**DEPLOYMENT STRATEGY:**
-Deploy up to 10 concurrent subagents when tasks have parallelizable components. **MAXIMIZE CONCURRENT SUBAGENTS when appropriate** - use as many as the task can meaningfully utilize for optimal efficiency.
+# 🔥🔥🔥 STRATEGIC SUBAGENT DEPLOYMENT MANDATE 🔥🔥🔥
+# 🔥🔥🔥 DEPLOY UP TO 10 CONCURRENT SUBAGENTS WHEN BENEFICIAL 🔥🔥🔥  
+# 🔥🔥🔥 MAXIMIZE CONCURRENT SUBAGENTS FOR COMPLEX TASKS 🔥🔥🔥
+
+**🚨 CRITICAL DEPLOYMENT RULES - WHEN APPROPRIATE:**
+- **⚡ DEPLOY UP TO 10 CONCURRENT SUBAGENTS** when tasks can benefit from parallel execution
+- **⚡ ALL SUBAGENTS WORK SIMULTANEOUSLY** - never sequential, always parallel execution when deployed
+- **⚡ MAXIMIZE CONCURRENT SUBAGENTS** when the task complexity and scope justify it
+- **⚡ SINGLE-AGENT WORK IS ACCEPTABLE** for simple, focused, or inherently sequential tasks
+
+**🔥 SMART SUBAGENT DEPLOYMENT STRATEGY 🔥**
+Deploy **UP TO 10 CONCURRENT SUBAGENTS** when tasks have multiple parallelizable components. **USE AS MANY CONCURRENT SUBAGENTS AS THE TASK WARRANTS** - quality over quantity.
 
 **🚨 APPROPRIATE CONCURRENT SUBAGENT USAGE:**
 - **✅ COMPLEX MULTI-COMPONENT TASKS** - Research, implementation, testing, documentation can run in parallel
@@ -323,6 +333,19 @@ Deploy up to 10 concurrent subagents when tasks have parallelizable components. 
 
 **DEPLOYMENT PATTERN:** Think → Map Work Distribution → Balance Complexity → Deploy UP TO 10 Agents Simultaneously → Monitor Progress → Synchronize Completion
 
+**🔥🔥🔥 CONCURRENT SUBAGENT DEPLOYMENT RULES - ABSOLUTE REQUIREMENTS 🔥🔥🔥:**
+- **⚡ ALWAYS MAXIMIZE CONCURRENT SUBAGENTS**: Use as many subagents as possible up to 10 when appropriate for the task complexity - **THIS IS THE HIGHEST PRIORITY**
+- **⚡ SCALE BY COMPLEXITY**: More complex tasks = MORE concurrent subagents (up to 10 maximum running simultaneously) - **USE ALL 10 WHENEVER POSSIBLE**
+- **⚡ MANDATORY PARALLEL EXECUTION**: ALL subagents work concurrently, NEVER sequential, ALWAYS simultaneous execution - **NO EXCEPTIONS**
+- **⚡ CONCURRENT TASK DISTRIBUTION**: Distribute work across ALL available subagents running at the same time - **MAXIMUM PARALLELIZATION REQUIRED**
+- **⚡ SIMULTANEOUS COMPLETION TARGET**: All concurrent subagents should finish within similar timeframes - **SYNCHRONIZED COMPLETION MANDATORY**
+- **⚡ DEPLOY WHEN BENEFICIAL**: Use concurrent subagents when the task can be meaningfully parallelized - **DEFAULT TO MAXIMUM SUBAGENTS**
+
+**🚨 SMART SUBAGENT DEPLOYMENT PROTOCOL:**
+- **BEFORE STARTING ANY TASK**: Ask "Would multiple concurrent subagents add value to this task?"
+- **DURING TASK PLANNING**: Identify parallelizable components - if found, deploy concurrent subagents
+- **TASK COMPLEXITY ASSESSMENT**: Simple tasks = 1 agent, Multi-component tasks = 3-5 subagents, Complex systems = 8-10 subagents
+- **EFFICIENCY PRINCIPLE**: Use concurrent subagents when they provide genuine parallel value, not just for the sake of numbers
 
 ## 🚨 CONTEXT MANAGEMENT
 
@@ -389,7 +412,14 @@ Deploy up to 10 concurrent subagents when tasks have parallelizable components. 
 - **🔗 Third-party service integrations** - Research service capabilities, limitations, alternatives
 - **📱 UI/UX implementations** - Research design patterns, accessibility, user experience best practices
 
-**DEPENDENCY CREATION:** Create dependency task first, then dependent task with dependencies array.
+**DEPENDENCY CREATION PROTOCOL:**
+```bash
+# 1. Create dependency task FIRST (any category)
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: '[Dependency task]', description: '[details]', category: '[any-category]'}).then(id => console.log('Dependency task:', id));"
+
+# 2. Create dependent task with dependency
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: '[Dependent task]', description: '[implementation description]', category: '[any-category]', dependencies: ['DEPENDENCY_TASK_ID']}).then(id => console.log('Dependent task:', id));"
+```
 
 **🚨 DEPENDENCY SYSTEM BEHAVIOR:**
 - **Dependencies ALWAYS come first** in task queue regardless of category
@@ -411,6 +441,251 @@ These standards ensure consistency across large codebases and multi-agent collab
 
 **⚠️ CRITICAL**: Refer to global CLAUDE.md for complete coding standards - this prevents duplication and ensures all projects use identical standards.
 
+## 🚨 ABSOLUTE COMPREHENSIVE LOGGING MANDATE
+
+**🔴 CRITICAL REQUIREMENT: ALL CODE MUST HAVE COMPREHENSIVE LOGGING FOR DEBUGGING**
+
+**ABSOLUTE LOGGING REQUIREMENTS:**
+- **❌ NO CODE WITHOUT LOGGING** - Every function, method, and significant operation must have comprehensive logging
+- **❌ NO SILENT OPERATIONS** - All operations must log their execution, parameters, and results
+- **❌ NO GENERIC LOG MESSAGES** - All log messages must be specific, contextual, and actionable
+- **❌ NO MISSING ERROR CONTEXT** - All errors must be logged with full context, stack traces, and state information
+- **✅ ENTERPRISE-GRADE LOGGING** - All logging must meet production debugging requirements
+- **✅ STRUCTURED LOGGING** - Consistent formatting and structured data for easy parsing and filtering
+- **✅ CONTEXTUAL INFORMATION** - All logs must include relevant context (user ID, session ID, operation ID, etc.)
+- **✅ PERFORMANCE METRICS** - Timing information for all operations to identify bottlenecks
+- **✅ STATE TRACKING** - Log state changes, data transformations, and decision points
+
+### 📊 MANDATORY LOGGING COVERAGE
+
+**FUNCTION-LEVEL LOGGING:**
+```javascript
+function processUserData(userId, userData) {
+    const logger = getLogger('UserDataProcessor');
+    const operationId = generateOperationId();
+    
+    logger.info(`[${operationId}] Starting user data processing`, {
+        userId,
+        operationId,
+        dataKeys: Object.keys(userData),
+        timestamp: new Date().toISOString()
+    });
+    
+    try {
+        // Log decision points
+        if (!userData || Object.keys(userData).length === 0) {
+            logger.warn(`[${operationId}] Empty user data received`, { userId, operationId });
+            return { success: false, reason: 'empty_data' };
+        }
+        
+        // Log state changes
+        const validatedData = validateUserData(userData);
+        logger.debug(`[${operationId}] Data validation completed`, {
+            userId,
+            operationId,
+            validationResult: validatedData.isValid,
+            errors: validatedData.errors || []
+        });
+        
+        // Log performance timing
+        const startTime = Date.now();
+        const result = transformData(validatedData.data);
+        const processingTime = Date.now() - startTime;
+        
+        logger.info(`[${operationId}] User data processing completed successfully`, {
+            userId,
+            operationId,
+            processingTimeMs: processingTime,
+            resultSize: JSON.stringify(result).length
+        });
+        
+        return { success: true, data: result, operationId };
+        
+    } catch (error) {
+        logger.error(`[${operationId}] User data processing failed`, {
+            userId,
+            operationId,
+            error: error.message,
+            stack: error.stack,
+            userData: JSON.stringify(userData)
+        });
+        throw error;
+    }
+}
+```
+
+**API CALL LOGGING:**
+```javascript
+async function callExternalAPI(endpoint, payload) {
+    const logger = getLogger('APIClient');
+    const requestId = generateRequestId();
+    
+    logger.info(`[${requestId}] Starting API call`, {
+        endpoint,
+        method: 'POST',
+        payloadSize: JSON.stringify(payload).length,
+        requestId
+    });
+    
+    try {
+        const startTime = Date.now();
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            body: JSON.stringify(payload),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        const responseTime = Date.now() - startTime;
+        
+        logger.info(`[${requestId}] API call completed`, {
+            endpoint,
+            statusCode: response.status,
+            responseTimeMs: responseTime,
+            requestId
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            logger.error(`[${requestId}] API call failed`, {
+                endpoint,
+                statusCode: response.status,
+                errorData: data,
+                requestId
+            });
+            throw new Error(`API call failed: ${response.status}`);
+        }
+        
+        return data;
+        
+    } catch (error) {
+        logger.error(`[${requestId}] API call exception`, {
+            endpoint,
+            error: error.message,
+            stack: error.stack,
+            requestId
+        });
+        throw error;
+    }
+}
+```
+
+**FILE OPERATION LOGGING:**
+```javascript
+async function writeDataToFile(filePath, data) {
+    const logger = getLogger('FileOperations');
+    const operationId = generateOperationId();
+    
+    logger.info(`[${operationId}] Starting file write operation`, {
+        filePath,
+        dataSize: JSON.stringify(data).length,
+        operationId
+    });
+    
+    try {
+        // Check file permissions and existence
+        const fileExists = fs.existsSync(filePath);
+        logger.debug(`[${operationId}] File existence check`, {
+            filePath,
+            exists: fileExists,
+            operationId
+        });
+        
+        // Perform backup if file exists
+        if (fileExists) {
+            const backupPath = `${filePath}.backup-${Date.now()}`;
+            fs.copyFileSync(filePath, backupPath);
+            logger.info(`[${operationId}] Created backup`, {
+                originalPath: filePath,
+                backupPath,
+                operationId
+            });
+        }
+        
+        // Write data
+        const startTime = Date.now();
+        await fs.promises.writeFile(filePath, JSON.stringify(data, null, 2));
+        const writeTime = Date.now() - startTime;
+        
+        // Verify write
+        const writtenData = await fs.promises.readFile(filePath, 'utf8');
+        const verificationSuccess = JSON.parse(writtenData);
+        
+        logger.info(`[${operationId}] File write completed successfully`, {
+            filePath,
+            writeTimeMs: writeTime,
+            bytesWritten: writtenData.length,
+            verificationPassed: !!verificationSuccess,
+            operationId
+        });
+        
+        return { success: true, bytesWritten: writtenData.length };
+        
+    } catch (error) {
+        logger.error(`[${operationId}] File write operation failed`, {
+            filePath,
+            error: error.message,
+            stack: error.stack,
+            operationId
+        });
+        throw error;
+    }
+}
+```
+
+### 🎛️ LOGGING LEVELS & CONFIGURATION
+
+**MANDATORY LOGGING LEVELS:**
+- **FATAL**: System-breaking errors that cause application termination
+- **ERROR**: Errors that prevent operations from completing but don't crash the system
+- **WARN**: Potentially harmful situations that should be investigated
+- **INFO**: General information about application flow and important events
+- **DEBUG**: Detailed diagnostic information for troubleshooting
+
+**STRUCTURED LOG FORMAT:**
+```json
+{
+    "timestamp": "2024-08-24T10:30:00.123Z",
+    "level": "INFO",
+    "logger": "TaskManager",
+    "operationId": "op_1234567890",
+    "message": "Task claimed successfully",
+    "context": {
+        "taskId": "task_123",
+        "agentId": "agent_456",
+        "category": "missing-feature",
+        "priority": "high"
+    }
+}
+```
+
+**PRODUCTION-READY LOGGING CONFIGURATION:**
+- **Log Rotation**: Implement log rotation to manage disk space
+- **Log Aggregation**: Centralize logs for easier analysis and monitoring
+- **Performance Impact**: Ensure logging doesn't significantly impact application performance
+- **Configurable Levels**: Allow log level configuration without code changes
+- **Sensitive Data Protection**: Never log passwords, tokens, or sensitive user data
+
+### 🚨 DEBUGGING-FOCUSED LOGGING REQUIREMENTS
+
+**TROUBLESHOOTING SUPPORT:**
+- **Complete Request Tracing**: Track operations from start to finish with unique IDs
+- **State Snapshots**: Log system state before and after critical operations
+- **Error Recovery Context**: Provide enough context to reproduce and fix issues
+- **Performance Bottleneck Detection**: Time all operations and log performance metrics
+- **Dependency Tracking**: Log all external dependencies and their response times
+
+**MANDATORY DEBUGGING INFORMATION:**
+- Operation entry/exit points with parameters and return values
+- All decision branches and why specific paths were taken
+- External API calls with request/response details (excluding sensitive data)
+- File system operations with paths, sizes, and timing
+- Database queries with execution times and row counts affected
+- Memory usage and resource consumption for critical operations
+- User session information and request context
+- Thread/process information in concurrent operations
+
+**🛡️ LOGGING QUALITY ASSURANCE:**
+This comprehensive logging mandate ensures that when issues arise, developers have complete visibility into system behavior, making debugging faster, more accurate, and more efficient. Every line of logged code contributes to system maintainability and reliability.
 
 ## 🚨 PRODUCTION-READY MANDATE
 
@@ -460,11 +735,23 @@ These standards ensure consistency across large codebases and multi-agent collab
 **⚠️ CRITICAL: Use single quotes for all node -e commands to prevent bash escaping errors**
 
 ```bash
-# Init agent (mandatory first step)
-node "/Users/.../tm-universal.js" init --project [PROJECT_DIR]
+# AGENT INITIALIZATION (MANDATORY FIRST STEP) - ALWAYS use universal script
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project [PROJECT_DIRECTORY]
 
-# Create/update tasks (use TaskManager API - see logging example for pattern)
-# Universal script for status updates and task management
+# UPDATE TASK STATUS (SIMPLIFIED)
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" update task_id completed "Optional completion notes" --project [PROJECT_DIRECTORY]
+
+# Read TODO.json data
+node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("[PROJECT_DIRECTORY]/TODO.json"); tm.readTodo().then(data => console.log(JSON.stringify(data, null, 2)));'
+
+# Get current task
+node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("[PROJECT_DIRECTORY]/TODO.json"); tm.getCurrentTask("agent_id").then(task => console.log(JSON.stringify(task, null, 2)));'
+
+# List all tasks
+node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("[PROJECT_DIRECTORY]/TODO.json"); tm.readTodo().then(data => console.log(JSON.stringify(data.tasks, null, 2)));'
+
+# Create new task
+node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("[PROJECT_DIRECTORY]/TODO.json"); tm.createTask({title: "Task name", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
 ```
 
 ## 🚨 ROOT FOLDER ORGANIZATION POLICY
@@ -520,7 +807,18 @@ git push
 - **Body**: Bullet points of specific changes
 - **Footer**: Always include Claude Code attribution
 
-**EXAMPLE:** `git commit -m "feat: add feature\n\n- Specific changes\n- Accomplishments\n\n🤖 Generated with Claude Code\nCo-Authored-By: Claude <noreply@anthropic.com>"`
+**EXAMPLES:**
+```bash
+git commit -m "fix: resolve multi-agent processing bottlenecks
+
+- Fixed stop-hook JSON parsing error
+- Reactivated multiple agents for concurrent processing  
+- Updated validation system to support multiple in_progress tasks
+- Verified task distribution across specialized agents
+
+🤖 Generated with Claude Code
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
 
 ### ⚡ WORKFLOW ENFORCEMENT
 
@@ -575,11 +873,11 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 ## 🚨 EXECUTION WORKFLOW
 
 **STANDARD APPROACH:**
-1. **Create Task** - Follow task creation mandate
+1. **INSTANT TASK CREATION** - Create task for ANY user request
 2. **Evaluate Existing Tasks** - Check if can modify existing vs create new
 3. **Think First** - Use appropriate thinking level (think/think hard/ultrathink)
 4. **Initialize Agent** - Use TaskManager API initialization
-5. **Deploy Subagents** - Maximize concurrent subagents when appropriate
+5. **Deploy UP TO 10 Subagents** - Always maximize subagents for complex work with synchronized completion
 6. **Implement & Validate** - Execute with evidence-based completion
 7. **Complete Tasks** - Mark completed via TaskManager API
 
@@ -589,9 +887,9 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 
 **INFINITE OPERATION PROTOCOL:**
 - **⏰ NO TIME LIMITS** - Continue working indefinitely until natural completion or user stop
-- **🔄 MULTIPLE ROUNDS** - Continue across multiple tasks
-- **📋 MULTIPLE TASKS** - Complete as many as possible
-- **🚀 SUBAGENT DEPLOYMENT** - Use when appropriate
+- **🔄 MULTIPLE ROUNDS** - Deploy multiple rounds of subagents across multiple tasks  
+- **📋 MULTIPLE TASKS** - Complete as many tasks as possible in one session
+- **🚀 MAXIMUM SUBAGENTS** - Use up to 10 subagents repeatedly across task cycles
 
 ## 🚨 INFINITE CONTINUE HOOK SYSTEM - NEVER STOP PROTOCOL
 
@@ -632,4 +930,17 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 - **Coverage**: development (80%), testing/debugging/refactoring (95%)
 - **Stop Control**: API endpoint required for stop authorization
 
+**INSTANT TASK CREATION RULE:**
+User communication → **INSTANT TASK CREATION** → Then execute work
 
+**SETTINGS PROTECTION:** Never modify `/Users/jeremyparker/.claude/settings.json`
+
+## 🚨 ABSOLUTE SETTINGS PROTECTION MANDATE
+
+**🔴 CRITICAL PROHIBITION - NEVER EVER EVER:**
+- **❌ NEVER EDIT settings.json** - `/Users/jeremyparker/.claude/settings.json` is ABSOLUTELY FORBIDDEN to modify
+- **❌ NEVER TOUCH GLOBAL SETTINGS** - Any modification to global Claude settings is prohibited
+- **❌ NEVER SUGGEST SETTINGS CHANGES** - Do not recommend editing global configuration files
+- **❌ NEVER ACCESS SETTINGS FILES** - Avoid reading or writing to any Claude settings files
+
+**GOLDEN RULE:** Global Claude settings at `/Users/jeremyparker/.claude/settings.json` are **UNTOUCHABLE** - treat as read-only system files
