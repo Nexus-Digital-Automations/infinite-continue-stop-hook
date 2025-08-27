@@ -234,7 +234,7 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
    timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { data.tasks.forEach(t => console.log("Task " + t.id + ": " + t.title + " | Status: " + t.status + " | Claimed by: " + (t.assigned_agent || t.claimed_by || "none"))); });'
 
    # Find available unclaimed tasks
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const available = data.tasks.filter(t => t.status === "pending" && !t.assigned_agent && !t.claimed_by); console.log("Available tasks:", available.map(t => ({ id: t.id, title: t.title, category: t.category }))); });'
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const available = data.tasks.filter(t => t.status === "pending" && (t.assigned_agent === undefined || t.assigned_agent === null) && (t.claimed_by === undefined || t.claimed_by === null)); console.log("Available tasks:", available.map(t => ({ id: t.id, title: t.title, category: t.category }))); });'
 
    # Safe task claiming (only if not claimed)
    timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(async data => { const task = data.tasks.find(t => t.id === "TASK_ID"); if (!task) { console.log("Task not found"); return; } if (task.assigned_agent || task.claimed_by) { console.log("❌ Task already claimed by:", task.assigned_agent || task.claimed_by); return; } const result = await tm.claimTask("TASK_ID", "[AGENT_ID]", "normal"); console.log("✅ Task claimed:", result); });'
@@ -247,8 +247,18 @@ If you get "SyntaxError: missing ) after argument list" with !== or !=:
    # ✅ FIXED: Use single quotes 
    node -e 'script with !== operator'
    
+   # ✅ ALTERNATIVE: Avoid ! operator entirely
+   # Instead of: !variable
+   # Use: (variable === undefined || variable === null)
+   
    # ✅ ALTERNATIVE: Create temp script file
    echo 'script here' > temp.js && node temp.js && rm temp.js
+
+🚨 SPECIAL CASE - NEGATION OPERATOR (!):
+The bash exclamation mark (!) is used for history expansion, causing syntax errors:
+   # ❌ BROKEN: !t.assigned_agent (bash interprets !)
+   # ✅ SAFE: (t.assigned_agent === undefined || t.assigned_agent === null)
+   # ✅ SAFE: t.assigned_agent == null (coerces undefined and null)
 `;
 }
 

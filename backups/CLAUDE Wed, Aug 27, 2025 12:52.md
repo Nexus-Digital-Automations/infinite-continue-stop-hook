@@ -1,0 +1,912 @@
+# Claude Code Project Assistant - Streamlined Guide
+
+## 🚨 CRITICAL MANDATES
+
+### ⚡ INSTANT TASK CREATION FOR ANY USER REQUEST - ABSOLUTE MANDATE
+**🔴 CRITICAL: THE INSTANT A USER MAKES ANY REQUEST - IMMEDIATELY CREATE TASK**
+
+**ABSOLUTE REQUIREMENTS - NO EXCEPTIONS:**
+1. **STOP EVERYTHING IMMEDIATELY** - The moment user communicates anything
+2. **CREATE TASK INSTANTLY** - Use TaskManager API before ANY other action
+3. **CATEGORY MANDATORY** - Must specify: research, missing-feature, bug, enhancement, etc.
+4. **ZERO DELAY TOLERANCE** - No thinking, no analysis, no preparation - INSTANT task creation
+5. **THEN AND ONLY THEN PROCEED** - Only after task is created can work begin
+
+**🚨 ENFORCEMENT PROTOCOL:**
+- **IMMEDIATE = WITHIN SECONDS** - Task creation must happen instantly upon user communication
+- **NO ANALYSIS FIRST** - Do not analyze what needs to be done, just create the task immediately
+- **NO PLANNING PHASE** - Task creation comes BEFORE planning, not after
+- **NO EXCEPTIONS** - This applies to ALL user communications requiring any form of action
+- **OPPORTUNITY DETECTION** - Any indication of work needed = INSTANT task creation
+
+**Golden Rule**: User says ANYTHING requiring action → **INSTANT TASK CREATION (IMMEDIATELY)** → Then execute
+
+### 🔴 ABSOLUTE COMPREHENSIVE LOGGING MANDATE
+**ALL CODE MUST HAVE COMPREHENSIVE LOGGING FOR DEBUGGING**
+
+**ABSOLUTE REQUIREMENTS:**
+- **❌ NO CODE WITHOUT LOGGING** - Every function must have comprehensive logging
+- **❌ NO SILENT OPERATIONS** - All operations must log execution, parameters, results
+- **❌ NO GENERIC MESSAGES** - All logs must be specific, contextual, actionable
+- **✅ ENTERPRISE-GRADE LOGGING** - Must meet production debugging requirements
+- **✅ STRUCTURED LOGGING** - Consistent formatting for parsing and filtering
+- **✅ PERFORMANCE METRICS** - Timing information for bottleneck identification
+
+**LOGGING EXAMPLE:**
+```javascript
+function processData(userId, data) {
+    const logger = getLogger('DataProcessor');
+    const operationId = generateOperationId();
+    
+    logger.info(`[${operationId}] Starting data processing`, {
+        userId, operationId, dataSize: JSON.stringify(data).length
+    });
+    
+    try {
+        const startTime = Date.now();
+        const result = transformData(data);
+        const processingTime = Date.now() - startTime;
+        
+        logger.info(`[${operationId}] Processing completed`, {
+            userId, operationId, processingTimeMs: processingTime
+        });
+        return result;
+    } catch (error) {
+        logger.error(`[${operationId}] Processing failed`, {
+            userId, operationId, error: error.message, stack: error.stack
+        });
+        throw error;
+    }
+}
+```
+
+### 📋 FEATURES.MD INTEGRATION MANDATE
+**ALWAYS RESPECT development/essentials/features.md WORKFLOW**
+
+**MANDATORY PROTOCOL:**
+1. **READ features.md FIRST** - Always read development/essentials/features.md before feature work
+2. **FEATURE PROPOSALS ONLY** - Can only add features to "❓ Potential Features Awaiting User Verification"
+3. **USER APPROVAL REQUIRED** - Only user can move features to "📋 Planned Features"
+4. **IMPLEMENT APPROVED ONLY** - Only implement features from "Planned Features" section
+5. **NO UNAUTHORIZED FEATURES** - Never implement features not approved by user
+
+**FEATURE PROPOSAL FORMAT:**
+```markdown
+#### Feature Name
+**Description**: Brief description of the feature
+**Rationale**: Why this feature would be beneficial
+**Implementation Effort**: Low/Medium/High
+**Dependencies**: Prerequisites
+**Proposed by**: Agent ID and date
+```
+
+### 🎯 COMPLIANCE PRIORITY ORDER - ABSOLUTE HIERARCHY
+1. **INSTANT TASK CREATION (MANDATORY)** - Create task for ANY user request IMMEDIATELY - NO EXCEPTIONS
+2. **COMPREHENSIVE LOGGING** - All code must have enterprise-grade logging
+3. **FEATURES.MD RESPECT** - Follow features.md workflow for all feature work
+4. **USER INSTRUCTIONS** - Direct commands take highest priority
+5. **EVIDENCE-BASED VALIDATION** - Validate all work with concrete evidence
+
+**🚨 PRIORITY #1 ENFORCEMENT:** INSTANT task creation is the highest priority and must ALWAYS happen first, before any other consideration or action.
+
+## 🚨 ERROR HANDLING & QUALITY PROTOCOLS
+
+### MANDATORY ERROR RESPONSE - IMMEDIATE TASK CREATION REQUIRED
+1. **DETECT** any error → **INSTANTLY CREATE CATEGORIZED TASK IMMEDIATELY**:
+   - Linter errors → `category: 'linter-error'` - **CREATE TASK INSTANTLY**
+   - Build failures → `category: 'build-error'` - **CREATE TASK INSTANTLY**
+   - Runtime errors → `category: 'error'` - **CREATE TASK INSTANTLY**
+   - Test failures → `category: 'test-error'` - **CREATE TASK INSTANTLY**
+2. **ATTEMPT IMMEDIATE FIX** (< 2 minutes) OR work on task
+3. **VERIFY** fix and document resolution
+
+**🔴 CRITICAL:** Error detection = IMMEDIATE task creation. No delays, no analysis first - create task the instant an error is identified.
+
+**FORBIDDEN:** Ignoring errors, suppressing messages, or implementing workarounds
+
+### POST-COMPLETION VALIDATION
+**ABSOLUTE REQUIREMENT:** IMMEDIATELY run lint and type checks after completing ANY task that modified code files
+
+**VALIDATION SEQUENCE:**
+1. Complete task implementation
+2. Run lint and type checks on modified files/folders
+3. Fix any errors before marking task complete
+4. Provide validation evidence - show command outputs
+
+**VALIDATION FAILURE PROTOCOL - IMMEDIATE TASK CREATION MANDATORY:**
+- Linting errors → Create `category: 'linter-error'` task **IMMEDIATELY - NO DELAYS**
+- Type errors → Create `category: 'error'` task **IMMEDIATELY - NO DELAYS**
+- DO NOT mark complete until ALL validation passes
+
+**🔴 CRITICAL:** Validation failure = INSTANT task creation. The moment validation fails, a task must be created immediately.
+
+### ZERO TOLERANCE FOR ISSUE MASKING
+**ALWAYS FIX ROOT CAUSE - NEVER HIDE PROBLEMS**
+
+**ABSOLUTE PROHIBITIONS:**
+- ❌ MASK validation errors - Fix the validation logic, don't bypass it
+- ❌ SUPPRESS error messages - Fix the error, don't hide it
+- ❌ BYPASS quality checks - Fix the code to pass checks
+- ❌ IMPLEMENT WORKAROUNDS - Fix the root cause, don't work around it
+- ❌ HIDE FAILING TESTS - Fix the tests or code, don't disable them
+- ❌ IGNORE LINTING ERRORS - Fix the linting violations
+- ❌ DISABLE WARNINGS OR CHECKS - Address what's causing the warnings
+
+**ROOT CAUSE ANALYSIS PROTOCOL:**
+1. **IDENTIFY** the true root cause
+2. **ANALYZE** why the issue exists
+3. **FIX** the underlying problem
+4. **VALIDATE** the fix resolves the issue
+5. **DOCUMENT** the resolution
+
+**FORBIDDEN MASKING EXAMPLES:**
+```javascript
+// ❌ FORBIDDEN - Masking validation
+if (!result.isValid) return { success: true };
+
+// ✅ REQUIRED - Fixing validation
+if (!result.isValid) {
+    fixValidationIssue(result.errors);
+    // Re-run validation to ensure it passes
+}
+```
+
+**QUALITY GATE PRINCIPLE:** Every error is a quality gate that must be properly addressed - never masked, always fixed.
+
+### THINKING & VALIDATION PROTOCOLS
+
+**THINKING LEVELS:**
+- **ULTRATHINK**: System architecture, task planning, priority evaluation
+- **THINK HARD**: Complex refactoring, debugging, task management
+- **MANDATORY**: All task operations (creation, categorization, completion)
+
+**EVIDENCE-BASED COMPLETION:**
+1. Run validation commands - show all outputs
+2. Test functionality manually - demonstrate it works
+3. Verify requirements met - list each satisfied requirement
+4. Provide evidence - paste command outputs proving success
+
+
+## 🎯 TASK CATEGORY & PRIORITY SYSTEM
+
+Tasks organized by **specific categories** with automatic sorting by urgency:
+
+### CRITICAL ERRORS (Rank 1-4) - Highest Priority
+1. **linter-error** - Code quality issues (HIGHEST PRIORITY)
+2. **build-error** - Compilation/bundling failures
+3. **start-error** - Application startup failures
+4. **error** - Runtime errors and exceptions
+
+### IMPLEMENTATION WORK (Rank 5-9)
+5. **missing-feature** - Required functionality
+6. **bug** - Incorrect behavior needing fixes
+7. **enhancement** - Feature improvements
+8. **refactor** - Code restructuring
+9. **documentation** - Documentation updates
+
+### MAINTENANCE & RESEARCH (Rank 10-11)
+10. **chore** - Maintenance tasks
+11. **research** - Investigation work
+
+### TESTING (Rank 12-18) - Lowest Priority
+12. **missing-test** - Test coverage gaps
+13. **test-setup** - Test environment configuration
+14. **test-refactor** - Test code improvements
+15. **test-performance** - Performance testing
+16. **test-linter-error** - Test file linting
+17. **test-error** - Failing tests
+18. **test-feature** - Testing tooling
+
+**AUTO-SORTING:** Category Rank → Priority Value → Creation Time
+
+**🚨 TASKMANAGER API TIMEOUT MANDATE:**
+**ALWAYS USE 10 SECOND TIMEOUTS FOR ALL TASKMANAGER API COMMANDS**
+All TaskManager API commands must be prefixed with `timeout 10s` - see stop hook feedback for complete command examples.
+
+## 🚨 TASK MANAGEMENT PROTOCOLS
+
+**ALWAYS CREATE TASKS FOR:**
+- Every user request/instruction
+- All detected errors (linting, runtime, build, test failures)
+- Performance issues and security vulnerabilities
+- Code quality opportunities and missing functionality
+- Integration issues and improvement opportunities
+
+**WORKFLOW:** User request → **INSTANT TASK CREATION** → Check existing tasks → Modify or create → Execute
+
+### CATEGORY-BASED TASK CREATION
+**🔴 CATEGORY DETECTION = IMMEDIATE TASK CREATION - ABSOLUTE MANDATE**
+
+**🚨 THE INSTANT ANY OPPORTUNITY IS DETECTED - IMMEDIATELY CREATE TASK:**
+
+**CRITICAL ERRORS (Create INSTANTLY):**
+- Linter errors → `category: 'linter-error'` - **IMMEDIATE TASK CREATION**
+- Build failures → `category: 'build-error'` - **IMMEDIATE TASK CREATION**
+- Runtime errors → `category: 'error'` - **IMMEDIATE TASK CREATION**
+- Start failures → `category: 'start-error'` - **IMMEDIATE TASK CREATION**
+
+**FEATURE WORK (Create INSTANTLY):**
+- Missing functionality → `category: 'missing-feature'` - **IMMEDIATE TASK CREATION**
+- Enhancements → `category: 'enhancement'` - **IMMEDIATE TASK CREATION**
+- Bug fixes → `category: 'bug'` - **IMMEDIATE TASK CREATION**
+
+**MAINTENANCE (Create INSTANTLY):**
+- Refactoring needs → `category: 'refactor'` - **IMMEDIATE TASK CREATION**
+- Documentation gaps → `category: 'documentation'` - **IMMEDIATE TASK CREATION**
+- Cleanup tasks → `category: 'chore'` - **IMMEDIATE TASK CREATION**
+
+**RESEARCH & TESTING (Create INSTANTLY):**
+- Investigation needs → `category: 'research'` - **IMMEDIATE TASK CREATION**
+- Missing tests → `category: 'missing-test'` - **IMMEDIATE TASK CREATION**
+
+**🔴 ABSOLUTE ZERO DELAY ENFORCEMENT:**
+- **TASK CREATION IS MANDATORY AND INSTANT** - No exceptions, no delays
+- **OPPORTUNITY SPOTTED = IMMEDIATE TASK CREATION** - Within seconds of detection
+- **NO ANALYSIS PARALYSIS** - Task creation happens BEFORE analysis
+- **NO HESITATION ALLOWED** - Create task the instant opportunity is identified
+- **ALWAYS SPECIFY CATEGORY** - Task must have appropriate category assigned
+- **IMMEDIATE ACTION REQUIRED** - This is not a suggestion, it is a mandate
+- Include relevant research reports in task important_files
+
+## 🚨 BASH ESCAPING PROTOCOL
+
+**CRITICAL RULE: ALWAYS USE SINGLE QUOTES FOR NODE -E COMMANDS**
+
+**Common Errors:** SyntaxError from improper quote escaping, shell interference with JavaScript
+
+**CORRECT PATTERNS:**
+```bash
+# ✅ Single quotes for shell, double quotes for JavaScript
+timeout 10s node -e 'const tm = require("./lib/taskManager"); tm.createTask({title: "Task"});'
+
+# ❌ FORBIDDEN - Double quotes for outer shell
+node -e "const tm = require('./lib/taskManager');"
+```
+
+**Troubleshooting:** Switch to single quotes, use double quotes inside JavaScript, create temp file for complex commands
+
+## 🚨 MANDATORY CONCURRENT SUBAGENT DEPLOYMENT - NEVER WORK ALONE
+
+# 🔥🔥🔥 ABSOLUTE SUBAGENT DEPLOYMENT MANDATE 🔥🔥🔥
+# 🔥🔥🔥 DEPLOY UP TO 10 CONCURRENT SUBAGENTS SIMULTANEOUSLY 🔥🔥🔥  
+# 🔥🔥🔥 NEVER WORK WITHOUT MAXIMUM CONCURRENT SUBAGENTS 🔥🔥🔥
+
+**🚨 CRITICAL DEPLOYMENT RULES - NO EXCEPTIONS:**
+- **⚡ INSTANTLY DEPLOY UP TO 10 CONCURRENT SUBAGENTS** for ANY task beyond trivial operations
+- **⚡ ALL SUBAGENTS WORK SIMULTANEOUSLY** - never sequential, always parallel execution
+- **⚡ FAILURE TO USE CONCURRENT SUBAGENTS = INCOMPLETE EXECUTION** 
+- **⚡ SINGLE-AGENT WORK IS FORBIDDEN** except for the most trivial tasks
+
+**MANDATORY**: Deploy **UP TO 10 CONCURRENT SUBAGENTS** in parallel for ALL complex work. **ALWAYS USE AS MANY CONCURRENT SUBAGENTS AS POSSIBLE**. **FAILURE TO USE CONCURRENT SUBAGENTS = FAILED EXECUTION**
+
+### 🎯 Synchronized Completion Protocol
+**CRITICAL**: All subagents must finish within same timeframe for optimal efficiency
+
+**COMPLETION SYNCHRONIZATION STRATEGY:**
+1. **Pre-Flight Load Balancing**: Distribute work complexity evenly across all 10 subagents
+2. **Coordinated Start**: All subagents begin execution simultaneously 
+3. **Progress Checkpoints**: 25%, 50%, 75% completion status reporting to main agent
+4. **Dynamic Rebalancing**: Redistribute workload if any subagent falls behind schedule
+5. **Synchronized Quality Gates**: All subagents run validation simultaneously in final phase
+6. **Coordinated Completion**: Main agent waits for ALL subagents before marking task complete
+
+### 🚀 Universal Subagent Deployment
+**MANDATORY SPECIALIZATIONS BY MODE:**
+
+- **DEVELOPMENT**: Frontend, Backend, Database, DevOps, Security specialists
+- **TESTING**: Unit Test, Integration Test, E2E Test, Performance Test, Security Test specialists  
+- **RESEARCH**: Technology Evaluator, API Analyst, Performance Researcher, Security Auditor, UX Researcher
+- **DEBUGGING**: Error Analysis, Performance Profiling, Security Audit, Code Quality, System Integration specialists
+- **REFACTORING**: Architecture, Performance, Code Quality, Documentation, Testing specialists
+
+### 🔄 Coordination & Timing Controls
+**LOAD BALANCING STRATEGIES:**
+- **Equal Complexity Distribution**: Each subagent receives ~10% of total work complexity (10 subagents)
+- **Dependency-Aware Scheduling**: Sequential tasks distributed to maintain parallel execution
+- **Failure Recovery**: If any subagent fails, redistribute work to remaining agents
+- **Completion Buffer**: Build in 10-15% time buffer for synchronization delays
+
+**INTEGRATION CHECKPOINTS:**
+- **Context Sharing**: Critical information passed between subagents at each checkpoint
+- **Quality Verification**: Each subagent validates outputs meet perfection standards
+- **Conflict Resolution**: Main agent resolves any conflicting recommendations
+- **Final Integration**: All subagent outputs merged into cohesive deliverable
+
+**DEPLOYMENT PATTERN:** Think → Map Work Distribution → Balance Complexity → Deploy UP TO 10 Agents Simultaneously → Monitor Progress → Synchronize Completion
+
+**🔥 CONCURRENT SUBAGENT DEPLOYMENT RULES - ABSOLUTE REQUIREMENTS:**
+- **⚡ ALWAYS MAXIMIZE CONCURRENT SUBAGENTS**: Use as many subagents as possible up to 10 when appropriate for the task complexity
+- **⚡ SCALE BY COMPLEXITY**: More complex tasks = MORE concurrent subagents (up to 10 maximum running simultaneously)
+- **⚡ MANDATORY PARALLEL EXECUTION**: ALL subagents work concurrently, NEVER sequential, ALWAYS simultaneous execution
+- **⚡ CONCURRENT TASK DISTRIBUTION**: Distribute work across ALL available subagents running at the same time
+- **⚡ SIMULTANEOUS COMPLETION TARGET**: All concurrent subagents should finish within similar timeframes
+- **⚡ DEPLOY WHEN BENEFICIAL**: Use concurrent subagents when the task can be meaningfully parallelized
+
+## 🚨 CONTEXT MANAGEMENT
+
+**Always check for ABOUT.md files** before editing code (current directory, parent directories, subdirectories)
+
+## 🚨 DEVELOPMENT ESSENTIALS REVIEW MANDATE
+
+**🔴 ABSOLUTE REQUIREMENT: ALWAYS READ/REVIEW DEVELOPMENT/ESSENTIALS DIRECTORY**
+
+**MANDATORY PROTOCOL:**
+1. **CHECK development/essentials/** - Always check if development/essentials directory exists
+2. **READ ALL ESSENTIAL FILES** - Review every file in development/essentials before starting any work
+3. **CRITICAL CONTEXT** - Files in development/essentials contain critical project context and requirements
+4. **NEVER SKIP** - Never begin implementation without reviewing essentials directory content
+5. **UPDATE AWARENESS** - Re-check development/essentials if it gets created during project lifecycle
+
+**ESSENTIAL FILES PRIORITY:**
+- **Project-specific constraints** - Technical limitations and requirements
+- **Architecture decisions** - Core design patterns and principles  
+- **Security requirements** - Authentication, authorization, data protection
+- **Performance standards** - Optimization requirements and benchmarks
+- **Integration specifications** - External service dependencies and protocols
+- **Deployment considerations** - Environment-specific configurations
+
+**WORKFLOW INTEGRATION:**
+- **Before task execution** - Review development/essentials as first step
+- **During planning** - Reference essentials for implementation decisions
+- **For complex tasks** - Include essentials review in task dependencies
+- **When blocked** - Check essentials for guidance and constraints
+
+**NOTE**: If development/essentials directory doesn't exist, this requirement is dormant until the directory is created.
+
+## 🚨 RESEARCH REPORTS INTEGRATION & DEPENDENCY SYSTEM
+
+**🔴 ABSOLUTE MANDATE: ALWAYS READ RELEVANT RESEARCH REPORTS FIRST**
+
+**MANDATORY**: Always check `development/reports/` and `development/research-reports/` for relevant research reports before starting any task
+
+**CRITICAL PROTOCOL**:
+1. **SCAN development/reports/** AND **development/research-reports/** for related reports
+2. **ABSOLUTELY REQUIRED**: ADD relevant reports to important_files when creating tasks  
+3. **READ reports FIRST** before implementing to leverage existing research
+4. **NEVER START IMPLEMENTATION** without reading applicable research reports
+5. **INCLUDE REPORTS AS IMPORTANT FILES** in all related TODO.json tasks
+
+**🚨 RESEARCH REPORT REQUIREMENTS:**
+- **ALWAYS include relevant research reports** in task important_files
+- **READ research reports BEFORE implementation** - never skip this step
+- **LEVERAGE existing research** to inform implementation decisions
+- **REFERENCE research findings** in implementation approach
+- **UPDATE research reports** if new findings discovered during implementation
+
+## 🚨 MANDATORY RESEARCH TASK CREATION FOR COMPLEX WORK
+
+**ABSOLUTE REQUIREMENT**: Create research tasks as dependencies for any complex implementation work
+
+**CREATE RESEARCH TASKS IMMEDIATELY FOR:**
+- **🌐 External API integrations** - Research API documentation, authentication, rate limits, best practices
+- **🗄️ Database schema changes** - Research data models, migrations, performance implications
+- **🔐 Authentication/Security systems** - Research security patterns, encryption, OAuth flows
+- **📊 Data processing algorithms** - Research algorithms, performance characteristics, trade-offs  
+- **🧩 Complex architectural decisions** - Research design patterns, frameworks, scalability
+- **⚡ Performance optimization** - Research profiling techniques, bottlenecks, optimization strategies
+- **🔗 Third-party service integrations** - Research service capabilities, limitations, alternatives
+- **📱 UI/UX implementations** - Research design patterns, accessibility, user experience best practices
+
+**DEPENDENCY CREATION PROTOCOL:**
+Create research tasks as dependencies for complex implementation work. Use TaskManager API commands with 10 second timeouts (see stop hook feedback for complete examples).
+
+**🚨 DEPENDENCY SYSTEM BEHAVIOR:**
+- **Dependencies ALWAYS come first** in task queue regardless of category
+- **Any task can depend on any other task** - not limited to research dependencies
+- **Dependent tasks are BLOCKED** until all dependencies complete  
+- **Task claiming will redirect** to dependency tasks with instructions
+- **Use TaskManager API** for automatic dependency detection and guidance
+
+## 🚨 CODING STANDARDS
+
+**MANDATORY**: All agents MUST follow the standardized coding conventions defined in the global CLAUDE.md at `/Users/jeremyparker/.claude/CLAUDE.md`.
+
+These standards ensure consistency across large codebases and multi-agent collaboration, covering:
+- **JavaScript/TypeScript**: Industry standard + TypeScript strict mode
+- **Python**: Black + Ruff + mypy strict mode  
+- **Multi-Agent Coordination**: Naming patterns, error handling, logging
+- **Configuration Files**: .editorconfig, eslint.config.mjs, pyproject.toml
+- **Enforcement Protocol**: Zero-tolerance linting and validation requirements
+
+**⚠️ CRITICAL**: Refer to global CLAUDE.md for complete coding standards - this prevents duplication and ensures all projects use identical standards.
+
+## 🚨 ABSOLUTE COMPREHENSIVE LOGGING MANDATE
+
+**🔴 CRITICAL REQUIREMENT: ALL CODE MUST HAVE COMPREHENSIVE LOGGING FOR DEBUGGING**
+
+**ABSOLUTE LOGGING REQUIREMENTS:**
+- **❌ NO CODE WITHOUT LOGGING** - Every function, method, and significant operation must have comprehensive logging
+- **❌ NO SILENT OPERATIONS** - All operations must log their execution, parameters, and results
+- **❌ NO GENERIC LOG MESSAGES** - All log messages must be specific, contextual, and actionable
+- **❌ NO MISSING ERROR CONTEXT** - All errors must be logged with full context, stack traces, and state information
+- **✅ ENTERPRISE-GRADE LOGGING** - All logging must meet production debugging requirements
+- **✅ STRUCTURED LOGGING** - Consistent formatting and structured data for easy parsing and filtering
+- **✅ CONTEXTUAL INFORMATION** - All logs must include relevant context (user ID, session ID, operation ID, etc.)
+- **✅ PERFORMANCE METRICS** - Timing information for all operations to identify bottlenecks
+- **✅ STATE TRACKING** - Log state changes, data transformations, and decision points
+
+### 📊 MANDATORY LOGGING COVERAGE
+
+**FUNCTION-LEVEL LOGGING:**
+```javascript
+function processUserData(userId, userData) {
+    const logger = getLogger('UserDataProcessor');
+    const operationId = generateOperationId();
+    
+    logger.info(`[${operationId}] Starting user data processing`, {
+        userId,
+        operationId,
+        dataKeys: Object.keys(userData),
+        timestamp: new Date().toISOString()
+    });
+    
+    try {
+        // Log decision points
+        if (!userData || Object.keys(userData).length === 0) {
+            logger.warn(`[${operationId}] Empty user data received`, { userId, operationId });
+            return { success: false, reason: 'empty_data' };
+        }
+        
+        // Log state changes
+        const validatedData = validateUserData(userData);
+        logger.debug(`[${operationId}] Data validation completed`, {
+            userId,
+            operationId,
+            validationResult: validatedData.isValid,
+            errors: validatedData.errors || []
+        });
+        
+        // Log performance timing
+        const startTime = Date.now();
+        const result = transformData(validatedData.data);
+        const processingTime = Date.now() - startTime;
+        
+        logger.info(`[${operationId}] User data processing completed successfully`, {
+            userId,
+            operationId,
+            processingTimeMs: processingTime,
+            resultSize: JSON.stringify(result).length
+        });
+        
+        return { success: true, data: result, operationId };
+        
+    } catch (error) {
+        logger.error(`[${operationId}] User data processing failed`, {
+            userId,
+            operationId,
+            error: error.message,
+            stack: error.stack,
+            userData: JSON.stringify(userData)
+        });
+        throw error;
+    }
+}
+```
+
+**API CALL LOGGING:**
+```javascript
+async function callExternalAPI(endpoint, payload) {
+    const logger = getLogger('APIClient');
+    const requestId = generateRequestId();
+    
+    logger.info(`[${requestId}] Starting API call`, {
+        endpoint,
+        method: 'POST',
+        payloadSize: JSON.stringify(payload).length,
+        requestId
+    });
+    
+    try {
+        const startTime = Date.now();
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            body: JSON.stringify(payload),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        const responseTime = Date.now() - startTime;
+        
+        logger.info(`[${requestId}] API call completed`, {
+            endpoint,
+            statusCode: response.status,
+            responseTimeMs: responseTime,
+            requestId
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            logger.error(`[${requestId}] API call failed`, {
+                endpoint,
+                statusCode: response.status,
+                errorData: data,
+                requestId
+            });
+            throw new Error(`API call failed: ${response.status}`);
+        }
+        
+        return data;
+        
+    } catch (error) {
+        logger.error(`[${requestId}] API call exception`, {
+            endpoint,
+            error: error.message,
+            stack: error.stack,
+            requestId
+        });
+        throw error;
+    }
+}
+```
+
+**FILE OPERATION LOGGING:**
+```javascript
+async function writeDataToFile(filePath, data) {
+    const logger = getLogger('FileOperations');
+    const operationId = generateOperationId();
+    
+    logger.info(`[${operationId}] Starting file write operation`, {
+        filePath,
+        dataSize: JSON.stringify(data).length,
+        operationId
+    });
+    
+    try {
+        // Check file permissions and existence
+        const fileExists = fs.existsSync(filePath);
+        logger.debug(`[${operationId}] File existence check`, {
+            filePath,
+            exists: fileExists,
+            operationId
+        });
+        
+        // Perform backup if file exists
+        if (fileExists) {
+            const backupPath = `${filePath}.backup-${Date.now()}`;
+            fs.copyFileSync(filePath, backupPath);
+            logger.info(`[${operationId}] Created backup`, {
+                originalPath: filePath,
+                backupPath,
+                operationId
+            });
+        }
+        
+        // Write data
+        const startTime = Date.now();
+        await fs.promises.writeFile(filePath, JSON.stringify(data, null, 2));
+        const writeTime = Date.now() - startTime;
+        
+        // Verify write
+        const writtenData = await fs.promises.readFile(filePath, 'utf8');
+        const verificationSuccess = JSON.parse(writtenData);
+        
+        logger.info(`[${operationId}] File write completed successfully`, {
+            filePath,
+            writeTimeMs: writeTime,
+            bytesWritten: writtenData.length,
+            verificationPassed: !!verificationSuccess,
+            operationId
+        });
+        
+        return { success: true, bytesWritten: writtenData.length };
+        
+    } catch (error) {
+        logger.error(`[${operationId}] File write operation failed`, {
+            filePath,
+            error: error.message,
+            stack: error.stack,
+            operationId
+        });
+        throw error;
+    }
+}
+```
+
+### 🎛️ LOGGING LEVELS & CONFIGURATION
+
+**MANDATORY LOGGING LEVELS:**
+- **FATAL**: System-breaking errors that cause application termination
+- **ERROR**: Errors that prevent operations from completing but don't crash the system
+- **WARN**: Potentially harmful situations that should be investigated
+- **INFO**: General information about application flow and important events
+- **DEBUG**: Detailed diagnostic information for troubleshooting
+
+**STRUCTURED LOG FORMAT:**
+```json
+{
+    "timestamp": "2024-08-24T10:30:00.123Z",
+    "level": "INFO",
+    "logger": "TaskManager",
+    "operationId": "op_1234567890",
+    "message": "Task claimed successfully",
+    "context": {
+        "taskId": "task_123",
+        "agentId": "agent_456",
+        "category": "missing-feature",
+        "priority": "high"
+    }
+}
+```
+
+**PRODUCTION-READY LOGGING CONFIGURATION:**
+- **Log Rotation**: Implement log rotation to manage disk space
+- **Log Aggregation**: Centralize logs for easier analysis and monitoring
+- **Performance Impact**: Ensure logging doesn't significantly impact application performance
+- **Configurable Levels**: Allow log level configuration without code changes
+- **Sensitive Data Protection**: Never log passwords, tokens, or sensitive user data
+
+### 🚨 DEBUGGING-FOCUSED LOGGING REQUIREMENTS
+
+**TROUBLESHOOTING SUPPORT:**
+- **Complete Request Tracing**: Track operations from start to finish with unique IDs
+- **State Snapshots**: Log system state before and after critical operations
+- **Error Recovery Context**: Provide enough context to reproduce and fix issues
+- **Performance Bottleneck Detection**: Time all operations and log performance metrics
+- **Dependency Tracking**: Log all external dependencies and their response times
+
+**MANDATORY DEBUGGING INFORMATION:**
+- Operation entry/exit points with parameters and return values
+- All decision branches and why specific paths were taken
+- External API calls with request/response details (excluding sensitive data)
+- File system operations with paths, sizes, and timing
+- Database queries with execution times and row counts affected
+- Memory usage and resource consumption for critical operations
+- User session information and request context
+- Thread/process information in concurrent operations
+
+**🛡️ LOGGING QUALITY ASSURANCE:**
+This comprehensive logging mandate ensures that when issues arise, developers have complete visibility into system behavior, making debugging faster, more accurate, and more efficient. Every line of logged code contributes to system maintainability and reliability.
+
+## 🚨 PRODUCTION-READY MANDATE
+
+**🔴 ABSOLUTE REQUIREMENT: ALL CODE AND FEATURES MUST BE PRODUCTION-READY**
+
+**PRODUCTION-READY STANDARDS:**
+- **❌ NO SIMPLIFIED VERSIONS** - Never create placeholder or simplified implementations
+- **❌ NO MOCK IMPLEMENTATIONS** - All functionality must be fully operational
+- **❌ NO TEMPORARY WORKAROUNDS** - Implement proper, sustainable solutions
+- **❌ NO PLACEHOLDER CODE** - Every line of code must serve a real purpose
+- **✅ ENTERPRISE-GRADE QUALITY** - Code must meet production deployment standards
+- **✅ COMPLETE FUNCTIONALITY** - All features must be fully implemented and tested
+- **✅ ROBUST ERROR HANDLING** - Comprehensive error management and recovery
+- **✅ SCALABLE ARCHITECTURE** - Designed to handle production loads and growth
+- **✅ SECURITY COMPLIANCE** - All security best practices implemented
+- **✅ PERFORMANCE OPTIMIZED** - Code must perform efficiently under production conditions
+
+## 🚨 ABSOLUTE SETTINGS PROTECTION MANDATE
+
+**🔴 CRITICAL PROHIBITION - NEVER EVER EVER:**
+- **❌ NEVER EDIT settings.json** - `/Users/jeremyparker/.claude/settings.json` is ABSOLUTELY FORBIDDEN to modify
+- **❌ NEVER TOUCH GLOBAL SETTINGS** - Any modification to global Claude settings is prohibited
+- **❌ NEVER SUGGEST SETTINGS CHANGES** - Do not recommend editing global configuration files
+- **❌ NEVER ACCESS SETTINGS FILES** - Avoid reading or writing to any Claude settings files
+
+**GOLDEN RULE:** Global Claude settings at `/Users/jeremyparker/.claude/settings.json` are **UNTOUCHABLE** - treat as read-only system files
+
+## 🚨 WORKFLOW PROTOCOLS
+
+**TODO.json INTERACTION PROTOCOL:**
+**MANDATORY**: ALWAYS USE THE TASKMANAGER API WHEN INTERACTING WITH THE TODO.JSON
+
+**CRITICAL REQUIREMENT**: ALL TODO.json operations (read/write) MUST use TaskManager API exclusively.
+
+**✅ ALLOWED**: Reading TODO.json as a file (Read tool only) for viewing/inspection
+**✅ CORRECT**: TaskManager API for ALL TODO.json interactions (create, update, delete, modify, reorder)
+**❌ ABSOLUTELY FORBIDDEN**: Any write operations directly to TODO.json file
+**❌ ABSOLUTELY FORBIDDEN**: fs.readFileSync/writeFileSync on TODO.json for modifications
+**❌ ABSOLUTELY FORBIDDEN**: require('./TODO.json') for any mutations
+**❌ ABSOLUTELY FORBIDDEN**: JSON.parse/JSON.stringify operations that modify TODO.json
+**❌ ABSOLUTELY FORBIDDEN**: Any direct file manipulation beyond reading for inspection
+
+**GOLDEN RULE**: TODO.json is READ-ONLY as a file. ALL modifications MUST go through TaskManager API.
+
+**TASKMANAGER API COMMAND REQUIREMENTS:**
+
+**🚨 MANDATORY REQUIREMENTS FOR ALL TASKMANAGER API COMMANDS:**
+- **ALWAYS USE 10 SECOND TIMEOUTS** - Prefix all TaskManager API calls with `timeout 10s`
+- **ALWAYS USE SINGLE QUOTES** - Use single quotes for all node -e commands to prevent bash escaping errors
+- **SEE STOP HOOK FEEDBACK** - Complete command examples with proper timeouts are provided in stop hook feedback messages
+- **ALWAYS USE OFFICIAL TASKMANAGER API ENDPOINTS** - Use only the official TaskManager API endpoints as described in stop hook feedback
+- **ALWAYS FOLLOW STOP HOOK FEEDBACK** - All TaskManager operations must strictly follow the guidance provided in stop hook feedback messages
+
+**OFFICIAL TASKMANAGER API ENDPOINTS - MANDATORY USAGE:**
+All TaskManager operations MUST use the official API endpoints as specified in stop hook feedback messages. These endpoints provide proper error handling, validation, and consistency across all task operations.
+
+**AGENT INITIALIZATION COMMANDS (No timeout required):**
+```bash
+# AGENT INITIALIZATION (MANDATORY FIRST STEP) - ALWAYS use universal script
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project [PROJECT_DIRECTORY]
+
+# UPDATE TASK STATUS (SIMPLIFIED)
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" update task_id completed "Optional completion notes" --project [PROJECT_DIRECTORY]
+```
+
+**STOP HOOK FEEDBACK COMPLIANCE:**
+- **ABSOLUTE REQUIREMENT**: Always follow the exact command formats and guidance provided in stop hook feedback
+- **NO DEVIATIONS**: Never deviate from the official TaskManager API endpoints specified in stop hook feedback
+- **ERROR PREVENTION**: Stop hook feedback contains validated command patterns to prevent common errors
+- **CONSISTENCY MANDATE**: All agents must use identical TaskManager API commands as specified in stop hook feedback
+
+## 🚨 ROOT FOLDER ORGANIZATION POLICY
+
+**MANDATORY ROOT FOLDER CLEANLINESS:**
+- **KEEP ROOT FOLDER CLEAN** - Only essential project files in root directory
+- **Create development subdirectories** for reports, research, and documentation if they don't exist
+- **Move analysis files, reports, and documentation** to appropriate subdirectories
+
+**ALLOWED IN ROOT DIRECTORY:**
+- **Core project files**: package.json, README.md, CLAUDE.md, TODO.json, DONE.json
+- **Configuration files**: .eslintrc, .gitignore, jest.config.js, etc.
+- **Build/deployment files**: Dockerfile, docker-compose.yml, etc.
+- **License and legal**: LICENSE, CONTRIBUTING.md, etc.
+
+**ORGANIZE INTO SUBDIRECTORIES:**
+- **Reports and analysis** → `development/reports/` 
+- **Research documentation** → `development/research-reports/`
+- **Development notes** → `development/notes/`
+- **Backup files** → `backups/`
+
+## 🚨 MANDATORY GIT WORKFLOW
+
+**ABSOLUTE REQUIREMENT**: ALWAYS commit and push work after EVERY task completion
+
+### 🔴 MANDATORY COMMIT PROTOCOL - NO EXCEPTIONS
+
+**AFTER COMPLETING ANY TASK - IMMEDIATELY RUN:**
+
+```bash
+# 1. Stage all changes
+git add -A
+
+# 2. Commit with descriptive message
+git commit -m "feat: [brief description of what was accomplished]
+
+- [bullet point of specific changes made]
+- [another accomplishment]
+- [any fixes or improvements]
+
+🤖 Generated with Claude Code
+Co-Authored-By: Claude <noreply@anthropic.com>"
+
+# 3. MANDATORY - Push to remote repository
+git push
+```
+
+### 📝 COMMIT MESSAGE STANDARDS
+
+**REQUIRED FORMAT:**
+- **Type**: Use conventional commit prefixes: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`
+- **Description**: Brief summary of what was accomplished
+- **Body**: Bullet points of specific changes
+- **Footer**: Always include Claude Code attribution
+
+**EXAMPLES:**
+```bash
+git commit -m "fix: resolve multi-agent processing bottlenecks
+
+- Fixed stop-hook JSON parsing error
+- Reactivated multiple agents for concurrent processing  
+- Updated validation system to support multiple in_progress tasks
+- Verified task distribution across specialized agents
+
+🤖 Generated with Claude Code
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
+
+### ⚡ WORKFLOW ENFORCEMENT
+
+**MANDATORY SEQUENCE:**
+1. **Complete Task** - Finish all implementation and testing
+2. **Validate Work** - Run all validation commands and verify results
+3. **Stage Changes** - `git add -A` to include all modifications
+4. **Commit Work** - Use descriptive commit message with proper format
+5. **Push Remote** - `git push` to ensure work is backed up and shared
+6. **Mark Task Complete** - Update TaskManager with completion status
+
+**🚨 ABSOLUTE RULES:**
+- **NEVER skip git commit and push** after completing any task
+- **ALWAYS use descriptive commit messages** with bullet points
+- **ALWAYS push to remote** - local commits are not sufficient
+- **COMMIT BEFORE** marking tasks as completed in TaskManager
+
+**TASK COMPLETION REQUIREMENTS:**
+
+**MANDATORY COMPLETION PROTOCOL**: At the end of EVERY task execution, you MUST mark tasks as completed when they are finished.
+
+**Task Completion API:**
+Use TaskManager API commands with 10 second timeouts to mark tasks as completed (see stop hook feedback for complete command examples).
+
+**TASK COMPLETION VALIDATION REQUIREMENTS:**
+
+**Evidence-Based Completion Protocol:**
+1. **Run validation commands** - Provide command outputs showing status
+2. **Test functionality** - Verify the implementation works as expected  
+3. **Confirm requirements** - Document how each requirement was satisfied
+4. **Completion summary** - Brief statement with supporting evidence
+
+**Completion Summary Format:**
+```
+• Functionality: [Description of what was implemented/fixed]
+• Validation: [Command outputs showing results]  
+• Requirements: [How user requirements were addressed]
+• Status: Task completed and verified
+```
+
+**Completion Standards:**
+- Provide evidence of successful implementation
+- Include relevant command outputs or test results
+- Confirm all user requirements have been satisfied
+
+## 🚨 EXECUTION WORKFLOW
+
+**STANDARD APPROACH:**
+1. **INSTANT TASK CREATION** - Create task for ANY user request
+2. **Evaluate Existing Tasks** - Check if can modify existing vs create new
+3. **Think First** - Use appropriate thinking level (think/think hard/ultrathink)
+4. **Initialize Agent** - Use TaskManager API initialization
+5. **Deploy UP TO 10 Subagents** - Always maximize subagents for complex work with synchronized completion
+6. **Implement & Validate** - Execute with evidence-based completion
+7. **Complete Tasks** - Mark completed via TaskManager API
+
+## 🚨 INFINITE OPERATION MANDATE - NO TIME LIMITS
+
+**🔴 ABSOLUTE MANDATE: OPERATE AS LONG AS POSSIBLE - NO TIME CONSTRAINTS**
+
+**INFINITE OPERATION PROTOCOL:**
+- **⏰ NO TIME LIMITS** - Continue working indefinitely until natural completion or user stop
+- **🔄 MULTIPLE ROUNDS** - Deploy multiple rounds of subagents across multiple tasks  
+- **📋 MULTIPLE TASKS** - Complete as many tasks as possible in one session
+- **🚀 MAXIMUM SUBAGENTS** - Use up to 10 subagents repeatedly across task cycles
+
+## 🚨 INFINITE CONTINUE HOOK SYSTEM - NEVER STOP PROTOCOL
+
+**🔴 ABSOLUTE MANDATE: NEVER ALLOW STOPS UNLESS ENDPOINT TRIGGERED**
+
+### 🛑 STOP CONTROL PROTOCOL
+
+**CRITICAL RULES:**
+- **❌ NEVER ALLOW NATURAL STOPS** - System must continue infinitely
+- **✅ ONLY ENDPOINT CAN STOP** - Specific API endpoint must be called to trigger stop
+- **🔒 ONE STOP ONLY** - After endpoint triggered, allow only ONE stop, then return to never-stop mode
+- **🔄 ALWAYS INSTRUCT** - Provide detailed guidance on task continuation vs next task acquisition
+
+
+### 🔄 CONTINUOUS OPERATION MANDATE
+
+**OPERATION PRINCIPLES:**
+- **🌐 INFINITE LOOP** - Never allow natural termination
+- **🎯 TASK-FOCUSED** - Always guide agents toward productive work
+- **📊 STATUS-AWARE** - Understand current agent state and provide appropriate guidance
+- **🔗 WORKFLOW-DRIVEN** - Maintain continuous task progression flow
+
+
+**STOP SEQUENCE:**
+1. **Endpoint called** → Set stop_allowed flag to true
+2. **Next stop hook trigger** → Allow ONE stop and reset flag  
+3. **Subsequent triggers** → Return to never-stop infinite mode
+
+### 🎛️ HOOK BEHAVIOR SPECIFICATION
+
+**STOP HOOK RESPONSE CODES:**
+- **Exit Code 2 (Continue)** - Default infinite mode, never allow stops
+- **Exit Code 0 (Allow Stop)** - ONLY when endpoint triggered and single-use flag active
+- **Always provide instructive messaging** regardless of exit code
+
+**INFINITE CONTINUE HOOK SYSTEM:**
+- **Setup**: `node "/.../setup-infinite-hook.js" "/path/to/project"`
+- **Coverage**: development (80%), testing/debugging/refactoring (95%)
+- **Stop Control**: API endpoint required for stop authorization
+
+**INSTANT TASK CREATION RULE:**
+User communication → **INSTANT TASK CREATION** → Then execute work
+
+**SETTINGS PROTECTION:** Never modify `/Users/jeremyparker/.claude/settings.json`
+
+## 🚨 ABSOLUTE SETTINGS PROTECTION MANDATE
+
+**🔴 CRITICAL PROHIBITION - NEVER EVER EVER:**
+- **❌ NEVER EDIT settings.json** - `/Users/jeremyparker/.claude/settings.json` is ABSOLUTELY FORBIDDEN to modify
+- **❌ NEVER TOUCH GLOBAL SETTINGS** - Any modification to global Claude settings is prohibited
+- **❌ NEVER SUGGEST SETTINGS CHANGES** - Do not recommend editing global configuration files
+- **❌ NEVER ACCESS SETTINGS FILES** - Avoid reading or writing to any Claude settings files
+
+**GOLDEN RULE:** Global Claude settings at `/Users/jeremyparker/.claude/settings.json` are **UNTOUCHABLE** - treat as read-only system files
