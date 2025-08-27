@@ -110,12 +110,23 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 
 🚨 **CRITICAL BASH ESCAPING RULE - ALWAYS USE SINGLE QUOTES FOR NODE -E COMMANDS**
 
+🚨 **ABSOLUTE REQUIREMENTS FOR TASKMANAGER API:**
+- **ALWAYS USE SINGLE QUOTES** - Wrap entire node -e command in single quotes
+- **DOUBLE QUOTES INSIDE** - Use double quotes for JavaScript strings inside the command
+- **NO NESTED SINGLE QUOTES** - Never mix single quotes inside single-quoted commands
+- **PREVENTS SHELL INTERFERENCE** - Single quotes prevent bash from interpreting JavaScript
+
 ⚠️ **BASH SHELL WARNING**: Bash escapes special characters causing syntax errors in node -e commands.
 **MANDATORY FIX**: ALWAYS use single quotes for the outer shell command:
    - ❌ BROKEN: node -e "JavaScript code with special chars"  
    - ✅ CORRECT: node -e 'JavaScript code with special chars'
    - ❌ AVOID: !== and != operators in double-quoted commands
    - ✅ SAFE: Use single quotes OR create temp .js files for complex scripts
+
+**🔴 MANDATORY FOR ALL TASKMANAGER OPERATIONS:**
+- Task creation: node -e 'const TaskManager = require("./lib/taskManager"); ...'
+- Task updates: node -e 'const TaskManager = require("./lib/taskManager"); ...'
+- Task queries: node -e 'const TaskManager = require("./lib/taskManager"); ...'
 
 **ERROR PATTERNS TO AVOID:**
 - SyntaxError: Unexpected end of input
@@ -131,33 +142,33 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
    node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project [PROJECT_DIRECTORY]
 
    # STEP 3: Check current task status
-   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTask("[AGENT_ID]").then(task => console.log(task ? JSON.stringify(task, null, 2) : "No active task"));'
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTask("[AGENT_ID]").then(task => console.log(task ? JSON.stringify(task, null, 2) : "No active task"));'
 
    # STEP 4: Before claiming any task - check if it's already claimed
-   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const task = data.tasks.find(t => t.id === "TASK_ID"); console.log("Task claim status:", { id: task?.id, assigned_agent: task?.assigned_agent, claimed_by: task?.claimed_by, status: task?.status }); });'
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const task = data.tasks.find(t => t.id === "TASK_ID"); console.log("Task claim status:", { id: task?.id, assigned_agent: task?.assigned_agent, claimed_by: task?.claimed_by, status: task?.status }); });'
 
    # Mark current task completed (if finished)
-   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTask("[AGENT_ID]").then(async task => { if(task) { await tm.updateTaskStatus(task.id, "completed", "Task completed successfully"); console.log("✅ Task completed:", task.title); } else { console.log("No active task to complete"); } });'
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTask("[AGENT_ID]").then(async task => { if(task) { await tm.updateTaskStatus(task.id, "completed", "Task completed successfully"); console.log("✅ Task completed:", task.title); } else { console.log("No active task to complete"); } });'
 
    # Claim next available task  
-   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getNextPendingTask().then(task => { if(task) { console.log("📋 Next task available:"); console.log(JSON.stringify(task, null, 2)); } else { console.log("No pending tasks available"); } });'
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getNextPendingTask().then(task => { if(task) { console.log("📋 Next task available:"); console.log(JSON.stringify(task, null, 2)); } else { console.log("No pending tasks available"); } });'
 
    # Claim specific task by ID
-   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.claimTask("TASK_ID", "[AGENT_ID]", "normal").then(result => console.log(JSON.stringify(result, null, 2)));'
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.claimTask("TASK_ID", "[AGENT_ID]", "normal").then(result => console.log(JSON.stringify(result, null, 2)));'
 
 🔄 **NEW: TASK SWITCHING & URGENT TASK SUPPORT**:
 
    # NEW: Check available tasks with context (shows current, previous, and available tasks)
-   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getAvailableTasksWithContext("[AGENT_ID]").then(result => console.log(JSON.stringify(result, null, 2)));'
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getAvailableTasksWithContext("[AGENT_ID]").then(result => console.log(JSON.stringify(result, null, 2)));'
 
    # NEW: Create urgent task that automatically switches current work
-   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createUrgentTask({title: "Critical issue", description: "Urgent task description", category: "error", mode: "DEVELOPMENT", switchReason: "Critical bug found"}, "[AGENT_ID]").then(result => console.log(JSON.stringify(result, null, 2)));'
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createUrgentTask({title: "Critical issue", description: "Urgent task description", category: "error", mode: "DEVELOPMENT", switchReason: "Critical bug found"}, "[AGENT_ID]").then(result => console.log(JSON.stringify(result, null, 2)));'
 
    # NEW: Resume a previously switched task
-   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.resumeSwitchedTask("TASK_ID", "[AGENT_ID]").then(result => console.log(JSON.stringify(result, null, 2)));'
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.resumeSwitchedTask("TASK_ID", "[AGENT_ID]").then(result => console.log(JSON.stringify(result, null, 2)));'
 
    # NEW: Check for urgent task switching recommendations
-   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTaskWithSwitching("[AGENT_ID]").then(result => console.log(JSON.stringify(result, null, 2)));'
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTaskWithSwitching("[AGENT_ID]").then(result => console.log(JSON.stringify(result, null, 2)));'
 
 🆕 **TASK SWITCHING WORKFLOW**:
 - **When critical issues arise**: Use createUrgentTask() to automatically switch and preserve context
@@ -172,21 +183,21 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
    node taskmanager-api.js methods
 
    # Create dependency task (any category)
-   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "[Dependency task]", category: "[any-category]"}).then(id => console.log("Dependency task:", id));'
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "[Dependency task]", category: "[any-category]"}).then(id => console.log("Dependency task:", id));'
 
    # Create dependent task with dependency
-   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "[Dependent task]", category: "[any-category]", dependencies: ["DEPENDENCY_TASK_ID"]}).then(id => console.log("Dependent task:", id));'
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "[Dependent task]", category: "[any-category]", dependencies: ["DEPENDENCY_TASK_ID"]}).then(id => console.log("Dependent task:", id));'
 
    # Use TaskManager API for dependency-aware claiming (handles blocking automatically)
    node taskmanager-api.js claim TASK_ID
 
    # Check project status
-   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getTaskStatus().then(status => console.log(JSON.stringify(status, null, 2)));'
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getTaskStatus().then(status => console.log(JSON.stringify(status, null, 2)));'
 
 🛑 STOP HOOK CONTROL:
 
    # Authorize stop for infinite continue hook (single-use, 30-second expiration)
-   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.authorizeStopHook("[AGENT_ID]", "Reason for stopping").then(result => console.log(JSON.stringify(result, null, 2)));'
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.authorizeStopHook("[AGENT_ID]", "Reason for stopping").then(result => console.log(JSON.stringify(result, null, 2)));'
 
 📊 CURRENT PROJECT STATUS: ${taskStatus.pending} pending, ${taskStatus.in_progress} in progress, ${taskStatus.completed} completed
 
@@ -220,13 +231,13 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 🔍 TASK CLAIMING SAFETY COMMANDS:
 
    # List all tasks with claim status
-   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { data.tasks.forEach(t => console.log("Task " + t.id + ": " + t.title + " | Status: " + t.status + " | Claimed by: " + (t.assigned_agent || t.claimed_by || "none"))); });'
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { data.tasks.forEach(t => console.log("Task " + t.id + ": " + t.title + " | Status: " + t.status + " | Claimed by: " + (t.assigned_agent || t.claimed_by || "none"))); });'
 
    # Find available unclaimed tasks
-   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const available = data.tasks.filter(t => t.status === "pending" && !t.assigned_agent && !t.claimed_by); console.log("Available tasks:", available.map(t => ({ id: t.id, title: t.title, category: t.category }))); });'
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const available = data.tasks.filter(t => t.status === "pending" && !t.assigned_agent && !t.claimed_by); console.log("Available tasks:", available.map(t => ({ id: t.id, title: t.title, category: t.category }))); });'
 
    # Safe task claiming (only if not claimed)
-   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(async data => { const task = data.tasks.find(t => t.id === "TASK_ID"); if (!task) { console.log("Task not found"); return; } if (task.assigned_agent || task.claimed_by) { console.log("❌ Task already claimed by:", task.assigned_agent || task.claimed_by); return; } const result = await tm.claimTask("TASK_ID", "[AGENT_ID]", "normal"); console.log("✅ Task claimed:", result); });'
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(async data => { const task = data.tasks.find(t => t.id === "TASK_ID"); if (!task) { console.log("Task not found"); return; } if (task.assigned_agent || task.claimed_by) { console.log("❌ Task already claimed by:", task.assigned_agent || task.claimed_by); return; } const result = await tm.claimTask("TASK_ID", "[AGENT_ID]", "normal"); console.log("✅ Task claimed:", result); });'
 
 ⚠️ TROUBLESHOOTING BASH ESCAPING ERRORS:
 If you get "SyntaxError: missing ) after argument list" with !== or !=:
@@ -482,7 +493,7 @@ ${instructiveGuidance}
 This system operates in infinite continue mode. To authorize a stop, use:
 
 🛑 AUTHORIZE STOP WITH TASKMANAGER API:
-   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.authorizeStopHook("agent_id", "Reason for stopping").then(result => console.log(JSON.stringify(result, null, 2)));'
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.authorizeStopHook("agent_id", "Reason for stopping").then(result => console.log(JSON.stringify(result, null, 2)));'
 
 ⚡ CONTINUING OPERATION...
 `);

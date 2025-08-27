@@ -27760,9 +27760,263 @@
       "needs_linter_feedback": true,
       "linter_feedback_generated": false,
       "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1755666092882_m2lsljphc",
+      "title": "Dependency task",
+      "category": "test-feature",
+      "priority": "low",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-20T05:01:32.882Z",
+      "auto_research_created": false,
+      "mode": "DEVELOPMENT",
+      "description": "No description provided",
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-26T20:09:08.735Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-26T20:09:08.738Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1756276111778_k4mn7z5fk",
+      "title": "Update TaskManager API timeout configuration",
+      "description": "Modify CLAUDE.md to specify 10-second timeout for all TaskManager endpoint and API calls",
+      "mode": "DEVELOPMENT",
+      "category": "documentation",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-27T06:28:31.778Z",
+      "auto_research_created": false,
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-27T06:28:57.864Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-27T06:28:57.865Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1755639998690_g7jzz80wu",
+      "title": "Create research report for OAuth",
+      "description": "Research OAuth 2.0 authentication patterns",
+      "mode": "RESEARCH",
+      "category": "research",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [
+        "./development/research-reports/research-report-task_1755639998690_g7jzz80wu.md"
+      ],
+      "success_criteria": [
+        "Research report created: ./development/research-reports/research-report-task_1755639998690_g7jzz80wu.md"
+      ],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-19T21:46:38.690Z",
+      "assigned_agent": "development_session_1756276145521_1_general_dece607d",
+      "started_at": "2025-08-27T06:31:52.213Z",
+      "claimed_by": "development_session_1756276145521_1_general_dece607d",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1755645095658_1_general_d5d95641",
+          "role": "primary",
+          "assignedAt": "2025-08-19T23:29:53.099Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-08-19T23:44:53.153Z",
+          "reason": "Task stale for 15 minutes"
+        },
+        {
+          "agentId": "development_session_1756276145521_1_general_dece607d",
+          "role": "primary",
+          "assignedAt": "2025-08-27T06:31:52.213Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-27T06:32:22.922Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-27T06:32:22.923Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1756276579126_mlvivdcbi",
+      "title": "Update CLAUDE.md and stop hook feedback to use single quotes for TaskManager API",
+      "description": "Ensure both CLAUDE.md documentation and stop hook feedback messages clearly specify using single quotes to prevent bash escaping issues when using TaskManager API commands",
+      "mode": "DEVELOPMENT",
+      "category": "documentation",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-27T06:36:19.126Z",
+      "auto_research_created": false,
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-27T06:37:56.151Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-27T06:37:56.152Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1756276774696_hefr0mlhh",
+      "title": "Fix syntax error in stop-hook.js template literals",
+      "description": "Template literals in JavaScript strings are being interpreted as actual code, causing syntax errors. Need to escape or fix the formatting.",
+      "mode": "DEVELOPMENT",
+      "category": "error",
+      "priority": "critical",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-27T06:39:34.696Z",
+      "auto_research_created": false,
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-27T06:39:55.135Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-27T06:39:55.135Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1756277145813_v6uzcjsg9",
+      "title": "Add 10 second timeouts to all TaskManager API commands in stop hook feedback",
+      "description": "Review stop-hook.js and add timeout parameters to all TaskManager API command examples to ensure they timeout after 10 seconds as required by CLAUDE.md guidelines",
+      "mode": "DEVELOPMENT",
+      "category": "enhancement",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [
+        "task_1756277145813_62fmiy7s4"
+      ],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": true,
+      "subtasks": [],
+      "created_at": "2025-08-27T06:45:45.820Z",
+      "auto_research_created": true,
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-27T06:47:11.871Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-27T06:47:11.872Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "./TODO.json"
+    },
+    {
+      "id": "task_1756306273199_ghr9pzqct",
+      "title": "Add 10 second timeout mandate to CLAUDE.md TaskManager API commands",
+      "description": "Update CLAUDE.md to ensure all TaskManager API command examples include 10 second timeouts as mandated by the global CLAUDE.md requirements",
+      "mode": "DEVELOPMENT",
+      "category": "documentation",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-27T14:51:13.199Z",
+      "auto_research_created": false,
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-27T14:54:26.117Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-08-27T14:54:26.118Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "./TODO.json"
     }
   ],
-  "total_completed": 613,
-  "last_completion": "2025-08-26T19:56:02.480Z",
+  "total_completed": 620,
+  "last_completion": "2025-08-27T14:54:26.118Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }

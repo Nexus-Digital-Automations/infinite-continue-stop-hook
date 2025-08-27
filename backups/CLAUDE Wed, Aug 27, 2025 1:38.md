@@ -199,9 +199,19 @@ Tasks organized by **specific categories** with automatic sorting by urgency:
 
 **AUTO-SORTING:** Category Rank → Priority Value → Creation Time
 
-**🚨 TASKMANAGER API TIMEOUT MANDATE:**
-**ALWAYS USE 10 SECOND TIMEOUTS FOR ALL TASKMANAGER API COMMANDS**
-All TaskManager API commands must be prefixed with `timeout 10s` - see stop hook feedback for complete command examples.
+**TASK CREATION COMMANDS:**
+```bash
+# CRITICAL: ALWAYS USE SINGLE QUOTES to avoid bash escaping errors
+
+# Linter error (highest priority)
+node -e 'const TaskManager = require("./lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "Fix [specific error]", category: "linter-error", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
+
+# Feature implementation
+node -e 'const TaskManager = require("./lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "Implement [feature]", category: "missing-feature", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
+
+# Research task
+node -e 'const TaskManager = require("./lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "Research [topic]", category: "research", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
+```
 
 ## 🚨 TASK MANAGEMENT PROTOCOLS
 
@@ -257,7 +267,7 @@ All TaskManager API commands must be prefixed with `timeout 10s` - see stop hook
 **CORRECT PATTERNS:**
 ```bash
 # ✅ Single quotes for shell, double quotes for JavaScript
-timeout 10s node -e 'const tm = require("./lib/taskManager"); tm.createTask({title: "Task"});'
+node -e 'const tm = require("./lib/taskManager"); tm.createTask({title: "Task"});'
 
 # ❌ FORBIDDEN - Double quotes for outer shell
 node -e "const tm = require('./lib/taskManager');"
@@ -388,7 +398,13 @@ node -e "const tm = require('./lib/taskManager');"
 - **📱 UI/UX implementations** - Research design patterns, accessibility, user experience best practices
 
 **DEPENDENCY CREATION PROTOCOL:**
-Create research tasks as dependencies for complex implementation work. Use TaskManager API commands with 10 second timeouts (see stop hook feedback for complete examples).
+```bash
+# 1. Create dependency task FIRST (any category)
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: '[Dependency task]', description: '[details]', category: '[any-category]'}).then(id => console.log('Dependency task:', id));"
+
+# 2. Create dependent task with dependency
+node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.createTask({title: '[Dependent task]', description: '[implementation description]', category: '[any-category]', dependencies: ['DEPENDENCY_TASK_ID']}).then(id => console.log('Dependent task:', id));"
+```
 
 **🚨 DEPENDENCY SYSTEM BEHAVIOR:**
 - **Dependencies ALWAYS come first** in task queue regardless of category
@@ -699,32 +715,29 @@ This comprehensive logging mandate ensures that when issues arise, developers ha
 
 **GOLDEN RULE**: TODO.json is READ-ONLY as a file. ALL modifications MUST go through TaskManager API.
 
-**TASKMANAGER API COMMAND REQUIREMENTS:**
+**ALWAYS USE THESE COMMANDS INSTEAD:**
 
-**🚨 MANDATORY REQUIREMENTS FOR ALL TASKMANAGER API COMMANDS:**
-- **ALWAYS USE 10 SECOND TIMEOUTS** - Prefix all TaskManager API calls with `timeout 10s`
-- **ALWAYS USE SINGLE QUOTES** - Use single quotes for all node -e commands to prevent bash escaping errors
-- **SEE STOP HOOK FEEDBACK** - Complete command examples with proper timeouts are provided in stop hook feedback messages
-- **ALWAYS USE OFFICIAL TASKMANAGER API ENDPOINTS** - Use only the official TaskManager API endpoints as described in stop hook feedback
-- **ALWAYS FOLLOW STOP HOOK FEEDBACK** - All TaskManager operations must strictly follow the guidance provided in stop hook feedback messages
+**⚠️ CRITICAL: Use single quotes for all node -e commands to prevent bash escaping errors**
 
-**OFFICIAL TASKMANAGER API ENDPOINTS - MANDATORY USAGE:**
-All TaskManager operations MUST use the official API endpoints as specified in stop hook feedback messages. These endpoints provide proper error handling, validation, and consistency across all task operations.
-
-**AGENT INITIALIZATION COMMANDS (No timeout required):**
 ```bash
 # AGENT INITIALIZATION (MANDATORY FIRST STEP) - ALWAYS use universal script
 node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project [PROJECT_DIRECTORY]
 
 # UPDATE TASK STATUS (SIMPLIFIED)
 node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" update task_id completed "Optional completion notes" --project [PROJECT_DIRECTORY]
-```
 
-**STOP HOOK FEEDBACK COMPLIANCE:**
-- **ABSOLUTE REQUIREMENT**: Always follow the exact command formats and guidance provided in stop hook feedback
-- **NO DEVIATIONS**: Never deviate from the official TaskManager API endpoints specified in stop hook feedback
-- **ERROR PREVENTION**: Stop hook feedback contains validated command patterns to prevent common errors
-- **CONSISTENCY MANDATE**: All agents must use identical TaskManager API commands as specified in stop hook feedback
+# Read TODO.json data
+node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("[PROJECT_DIRECTORY]/TODO.json"); tm.readTodo().then(data => console.log(JSON.stringify(data, null, 2)));'
+
+# Get current task
+node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("[PROJECT_DIRECTORY]/TODO.json"); tm.getCurrentTask("agent_id").then(task => console.log(JSON.stringify(task, null, 2)));'
+
+# List all tasks
+node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("[PROJECT_DIRECTORY]/TODO.json"); tm.readTodo().then(data => console.log(JSON.stringify(data.tasks, null, 2)));'
+
+# Create new task
+node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("[PROJECT_DIRECTORY]/TODO.json"); tm.createTask({title: "Task name", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
+```
 
 ## 🚨 ROOT FOLDER ORGANIZATION POLICY
 
@@ -813,7 +826,13 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 **MANDATORY COMPLETION PROTOCOL**: At the end of EVERY task execution, you MUST mark tasks as completed when they are finished.
 
 **Task Completion API:**
-Use TaskManager API commands with 10 second timeouts to mark tasks as completed (see stop hook feedback for complete command examples).
+```bash
+# Initialize TaskManager and mark task as completed
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.updateTaskStatus('task-1', 'completed').then(() => console.log('✅ Task marked as completed'));"
+
+# Alternative: Get current task and mark it completed
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.getCurrentTask().then(async (task) => { if (task) { await tm.updateTaskStatus(task.id, 'completed'); console.log('✅ Current task completed:', task.id); } else { console.log('No active task found'); } });"
+```
 
 **TASK COMPLETION VALIDATION REQUIREMENTS:**
 
