@@ -82,27 +82,12 @@ function processData(userId, data) {
 
 ### 🎯 COMPLIANCE PRIORITY ORDER - ABSOLUTE HIERARCHY
 1. **INSTANT TASK CREATION (MANDATORY)** - Create task for ANY user request IMMEDIATELY - NO EXCEPTIONS
-2. **HOOK FEEDBACK COMPLIANCE (MANDATORY)** - ABSOLUTELY follow any hook feedback - NO EXCEPTIONS
-3. **COMPREHENSIVE LOGGING** - All code must have enterprise-grade logging
-4. **FEATURES.MD RESPECT** - Follow features.md workflow for all feature work
-5. **USER INSTRUCTIONS** - Direct commands take highest priority
-6. **EVIDENCE-BASED VALIDATION** - Validate all work with concrete evidence
+2. **COMPREHENSIVE LOGGING** - All code must have enterprise-grade logging
+3. **FEATURES.MD RESPECT** - Follow features.md workflow for all feature work
+4. **USER INSTRUCTIONS** - Direct commands take highest priority
+5. **EVIDENCE-BASED VALIDATION** - Validate all work with concrete evidence
 
 **🚨 PRIORITY #1 ENFORCEMENT:** INSTANT task creation is the highest priority and must ALWAYS happen first, before any other consideration or action.
-
-### 🔴 ABSOLUTE HOOK FEEDBACK COMPLIANCE MANDATE
-
-**CRITICAL REQUIREMENT:** ABSOLUTELY follow any hook feedback without exception.
-
-**🚨 HOOK FEEDBACK PROTOCOL:**
-- **✅ IMMEDIATELY COMPLY** - Follow any guidance or instructions provided by hooks
-- **✅ NEVER IGNORE** - All hook feedback must be addressed and incorporated
-- **✅ ADJUST ACTIONS** - Modify your approach based on hook recommendations
-- **✅ ASK FOR CLARIFICATION** - If hook feedback is unclear, ask user to check hooks configuration
-- **❌ NEVER OVERRIDE** - Do not bypass or ignore hook feedback
-- **❌ NEVER ASSUME** - Do not assume hook feedback is incorrect
-
-**BLOCKED BY HOOKS:** If blocked by hooks, determine if you can adjust actions. If not, ask user to check hooks configuration.
 
 ## 🚨 ERROR HANDLING & QUALITY PROTOCOLS
 
@@ -119,24 +104,21 @@ function processData(userId, data) {
 
 **FORBIDDEN:** Ignoring errors, suppressing messages, or implementing workarounds
 
-### 🚨 **ABSOLUTE REQUIREMENT - LINTER CHECKS BEFORE TASK COMPLETION:**
-**❌ NEVER mark a task complete without running linter checks first**
-**✅ ALWAYS run npm run lint (or equivalent) before marking any task as completed**
-**✅ ALWAYS fix all linting errors before task completion**
-**✅ ALWAYS provide validation evidence showing linter results**
+### POST-COMPLETION VALIDATION
+**ABSOLUTE REQUIREMENT:** IMMEDIATELY run lint and type checks after completing ANY task that modified code files
 
-📋 **MANDATORY LINTER CHECK SEQUENCE:**
-1. **Complete your implementation work**
-2. **IMMEDIATELY run linter checks**: npm run lint, npm run typecheck, etc.
-3. **Fix any errors found** - do not ignore or suppress
-4. **Re-run linter to verify fixes**
-5. **ONLY THEN mark task as completed** with validation evidence
+**VALIDATION SEQUENCE:**
+1. Complete task implementation
+2. Run lint and type checks on modified files/folders
+3. Fix any errors before marking task complete
+4. Provide validation evidence - show command outputs
 
-🔴 **LINTER CHECK FAILURE PROTOCOL:**
-- If linting fails → Create new linter-error task IMMEDIATELY
-- If type errors found → Create new error task IMMEDIATELY
-- DO NOT mark original task complete until ALL validation passes
-- Provide command outputs as evidence of successful validation
+**VALIDATION FAILURE PROTOCOL - IMMEDIATE TASK CREATION MANDATORY:**
+- Linting errors → Create `category: 'linter-error'` task **IMMEDIATELY - NO DELAYS**
+- Type errors → Create `category: 'error'` task **IMMEDIATELY - NO DELAYS**
+- DO NOT mark complete until ALL validation passes
+
+**🔴 CRITICAL:** Validation failure = INSTANT task creation. The moment validation fails, a task must be created immediately.
 
 ### ZERO TOLERANCE FOR ISSUE MASKING
 **ALWAYS FIX ROOT CAUSE - NEVER HIDE PROBLEMS**
