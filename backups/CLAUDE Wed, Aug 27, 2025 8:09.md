@@ -21,25 +21,6 @@
 
 **Golden Rule**: User says ANYTHING requiring action → **INSTANT TASK CREATION (IMMEDIATELY)** → Then execute
 
-### 🔴 **TASK CREATION AND EXECUTION MANDATE - NO STOPPING**
-**🚨 ABSOLUTE REQUIREMENT: CREATE TASK AND DO THE WORK - NEVER JUST CREATE AND STOP**
-
-**CRITICAL ENFORCEMENT:**
-- **❌ NEVER create task and stop** - Task creation is ONLY the first step
-- **✅ ALWAYS execute after creating** - Must actually perform the work requested
-- **✅ COMPLETE THE FULL WORKFLOW** - Task creation → Implementation → Validation → Completion
-- **❌ NO TASK-ONLY RESPONSES** - Creating a task without doing work is FORBIDDEN
-- **✅ WORK TO COMPLETION** - Must see tasks through to successful completion
-
-**WORKFLOW MANDATE:**
-1. **INSTANT TASK CREATION** - Create task immediately upon user request
-2. **IMMEDIATE EXECUTION** - Begin work on the task without delay
-3. **FULL IMPLEMENTATION** - Complete all required work thoroughly
-4. **VALIDATION CHECKS** - Run all necessary validation and testing
-5. **TASK COMPLETION** - Mark task as completed with evidence
-
-**🔴 ABSOLUTE PROHIBITION:** Creating a task and then stopping without doing the actual work is strictly FORBIDDEN
-
 ### 🔴 ABSOLUTE COMPREHENSIVE LOGGING MANDATE
 **ALL CODE MUST HAVE COMPREHENSIVE LOGGING FOR DEBUGGING**
 
