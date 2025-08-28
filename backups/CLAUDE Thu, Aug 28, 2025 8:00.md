@@ -314,18 +314,8 @@ node -e "const tm = require('./lib/taskManager');"
 
 ## 🚨 STRATEGIC CONCURRENT SUBAGENT DEPLOYMENT
 
-**🔴 MASSIVE CONCURRENT DEPLOYMENT STRATEGY:**
-**DEPLOY AS MANY CONCURRENT SUBAGENTS AS POSSIBLE - MORE IS ALMOST ALWAYS BETTER**
-
+**DEPLOYMENT STRATEGY:**
 Deploy up to 10 concurrent subagents when tasks have parallelizable components. **MAXIMIZE CONCURRENT SUBAGENTS when appropriate** - use as many as the task can meaningfully utilize for optimal efficiency.
-
-**🚨 AGGRESSIVE DEPLOYMENT MANDATE:**
-- **✅ DEFAULT TO MORE AGENTS** - When in doubt, deploy more concurrent subagents rather than fewer
-- **✅ MAXIMIZE PARALLELIZATION** - Break work into as many parallel streams as logically possible  
-- **✅ CONCURRENT-FIRST MINDSET** - Always look for opportunities to run multiple agents simultaneously
-- **✅ SCALE UP AGGRESSIVELY** - Use 8-10 agents for complex multi-faceted work
-- **✅ PARALLEL EVERYTHING** - Research, implementation, testing, documentation should run concurrently
-- **⚡ MORE AGENTS = FASTER COMPLETION** - Additional concurrent processing almost always improves speed
 
 **🚨 APPROPRIATE CONCURRENT SUBAGENT USAGE:**
 - **✅ COMPLEX MULTI-COMPONENT TASKS** - Research, implementation, testing, documentation can run in parallel
