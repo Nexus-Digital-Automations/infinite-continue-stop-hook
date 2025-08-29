@@ -331,10 +331,19 @@ Deploy up to 10 concurrent subagents when tasks have parallelizable components. 
 **ALWAYS USE CONCURRENT SUBAGENTS WHEN USING MULTIPLE AGENTS FOR A TASK**
 
 - **✅ MULTIPLE AGENTS = CONCURRENT EXECUTION** - If task requires multiple agents, they MUST run concurrently
-- **❌ NEVER SEQUENTIAL MULTI-AGENT WORK** - Multiple agents running one after another is FORBIDDEN
+- **❌ NEVER SEQUENTIAL MULTI-AGENT WORK** - Multiple agents running one after another is FORBIDDEN unless dependent
 - **✅ SIMULTANEOUS DEPLOYMENT ONLY** - All agents for a task must start at the same time
 - **✅ PARALLEL PROCESSING MANDATE** - Multiple agents working on same task = concurrent processing required
 - **⚡ CONCURRENT IS THE ONLY WAY** - Single-threaded multi-agent execution is strictly prohibited
+
+**🔴 SEQUENTIAL EXECUTION EXCEPTION:**
+**SEQUENTIAL AGENTS ALLOWED ONLY FOR DEPENDENCY CHAINS**
+
+- **✅ DEPENDENCY-BASED SEQUENTIAL** - Sequential execution ONLY when one agent's output feeds into another
+- **✅ RESEARCH → IMPLEMENTATION** - Research agent completes first, then implementation agent uses results
+- **✅ ANALYSIS → ACTION** - Analysis agent provides data, then action agent processes results
+- **❌ NO OTHER SEQUENTIAL REASONS** - Any sequential execution without dependency chain is FORBIDDEN
+- **🔗 CLEAR DEPENDENCY REQUIREMENT** - Must have explicit data/result dependency to justify sequential execution
 
 **🚨 APPROPRIATE CONCURRENT SUBAGENT USAGE:**
 - **✅ COMPLEX MULTI-COMPONENT TASKS** - Research, implementation, testing, documentation can run in parallel
