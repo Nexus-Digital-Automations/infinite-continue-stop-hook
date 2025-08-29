@@ -414,20 +414,11 @@ async function main() {
     const results = [];
     
     try {
-        if (flags.singleProject) {
-            // Process single project
-            const result = await processProject(targetPath);
-            results.push(result);
-        } else {
-            // Process all directories in the path
-            const projectDirs = getProjectDirectories(targetPath);
-            console.log(`\nFound ${projectDirs.length} project directories to process\n`);
-            
-            for (const projectDir of projectDirs) {
-                const result = await processProject(projectDir);
-                results.push(result);
-            }
-        }
+        // Always process only the specified directory as a single project
+        // This ensures TODO.json is created only in the root of the specified directory
+        console.log(`Processing single project: ${path.basename(targetPath)}`);
+        const result = await processProject(targetPath);
+        results.push(result);
         
         // Summary
         console.log('\n=== Summary ===');

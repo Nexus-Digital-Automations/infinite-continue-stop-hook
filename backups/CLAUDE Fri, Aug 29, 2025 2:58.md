@@ -328,21 +328,17 @@ node -e "const tm = require('./lib/taskManager');"
 ## 🚨 STRATEGIC CONCURRENT SUBAGENT DEPLOYMENT
 
 **🔴 MASSIVE CONCURRENT DEPLOYMENT STRATEGY:**
-**🚨 DEPLOY AS MANY CONCURRENT SIMULTANEOUS SUBAGENTS AS POSSIBLE - MORE IS ALWAYS BETTER 🚨**
-
-**🔴 ABSOLUTE MANDATE: ALWAYS DEPLOY CONCURRENT SIMULTANEOUS AGENTS**
+**DEPLOY AS MANY CONCURRENT SUBAGENTS AS POSSIBLE - MORE IS ALMOST ALWAYS BETTER**
 
 Deploy up to 10 concurrent subagents when tasks have parallelizable components. **MAXIMIZE CONCURRENT SUBAGENTS when appropriate** - use as many as the task can meaningfully utilize for optimal efficiency.
 
-**🚨 ULTRA-AGGRESSIVE DEPLOYMENT MANDATE:**
-- **✅ DEFAULT TO MAXIMUM CONCURRENT AGENTS** - When in doubt, deploy 8-10 concurrent simultaneous subagents
-- **✅ SIMULTANEOUS DEPLOYMENT REQUIRED** - All agents must start working at the EXACT SAME TIME
+**🚨 AGGRESSIVE DEPLOYMENT MANDATE:**
+- **✅ DEFAULT TO MORE AGENTS** - When in doubt, deploy more concurrent subagents rather than fewer
 - **✅ MAXIMIZE PARALLELIZATION** - Break work into as many parallel streams as logically possible  
 - **✅ CONCURRENT-FIRST MINDSET** - Always look for opportunities to run multiple agents simultaneously
-- **✅ SCALE UP TO MAXIMUM** - Use 8-10 agents for complex multi-faceted work - NEVER use fewer than necessary
+- **✅ SCALE UP AGGRESSIVELY** - Use 8-10 agents for complex multi-faceted work
 - **✅ PARALLEL EVERYTHING** - Research, implementation, testing, documentation should run concurrently
-- **⚡ MORE CONCURRENT AGENTS = FASTER COMPLETION** - Additional concurrent processing almost always improves speed
-- **🚨 CONCURRENT SIMULTANEOUS EXECUTION IS MANDATORY** - Never run agents sequentially when they can run simultaneously
+- **⚡ MORE AGENTS = FASTER COMPLETION** - Additional concurrent processing almost always improves speed
 
 **🔴 CONCURRENT EXECUTION MANDATE:**
 **ALWAYS USE CONCURRENT SUBAGENTS WHEN USING MULTIPLE AGENTS FOR A TASK**
