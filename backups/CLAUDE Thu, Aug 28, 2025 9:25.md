@@ -109,14 +109,6 @@ function processData(userId, data) {
 
 **🚨 PRIORITY #1 ENFORCEMENT:** INSTANT task creation is the highest priority and must ALWAYS happen first, before any other consideration or action.
 
-### 🔴 **ABSOLUTE COMPLIANCE MANDATE**
-**MUST ABSOLUTELY LISTEN TO ALL INSTRUCTIONS IN THIS FILE AND RESOLVE LINTER ERRORS IMMEDIATELY**
-
-- **✅ COMPLETE CLAUDE.MD COMPLIANCE** - Follow ALL instructions in this file without exception
-- **✅ IMMEDIATE LINTER RESOLUTION** - Fix linter errors the instant they are detected
-- **❌ NO INSTRUCTION DEVIATION** - Never deviate from any mandate in this file
-- **❌ NO LINTER ERROR TOLERANCE** - Zero tolerance for any linting violations
-
 ### 🔴 ABSOLUTE HOOK FEEDBACK COMPLIANCE MANDATE
 
 **CRITICAL REQUIREMENT:** ABSOLUTELY follow any hook feedback without exception.

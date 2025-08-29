@@ -1841,7 +1841,7 @@
       "mode": "RESEARCH",
       "category": "research",
       "priority": "high",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [],
       "important_files": [
         "./development/research-reports/research-report-task_1755644998853_ms456b742.md"
@@ -1859,9 +1859,9 @@
       "created_at": "2025-08-19T23:09:58.853Z",
       "created_by": "auto-research-system",
       "auto_created_for": "task_1755644998853_wcqq5diiz",
-      "started_at": "2025-08-27T19:38:54.884Z",
-      "claimed_by": "development_session_1756323516533_1_general_14c16bbb",
-      "assigned_agent": "development_session_1756323516533_1_general_14c16bbb",
+      "started_at": null,
+      "claimed_by": null,
+      "assigned_agent": null,
       "agent_assignment_history": [
         {
           "agent": "agent_1755646163747",
@@ -1880,6 +1880,12 @@
           "assignedAt": "2025-08-27T19:38:54.884Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-08-29T02:15:25.319Z",
+          "reason": "Task stale for 1837 minutes"
         }
       ]
     },
@@ -2561,8 +2567,8 @@
       "description": "No description provided"
     },
     {
-      "id": "task_1756433638864_bd19beis2",
-      "title": "Add concurrent execution mandate for multiple agent tasks",
+      "id": "task_1756453040285_k5yosks3k",
+      "title": "Add absolute compliance and immediate linter resolution mandate to CLAUDE.md",
       "mode": "DEVELOPMENT",
       "category": "enhancement",
       "priority": "high",
@@ -2573,7 +2579,7 @@
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-08-29T02:13:58.866Z",
+      "created_at": "2025-08-29T07:37:20.286Z",
       "auto_research_created": false,
       "description": "No description provided"
     }
@@ -2629,13 +2635,13 @@
     1755567176654
   ],
   "agents": {
-    "development_session_1756323321639_1_general_0d9eb381": {
+    "development_session_1756433729933_1_general_8ec2e5dd": {
       "name": "development Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-08-27T19:35:21.643Z",
+      "lastHeartbeat": "2025-08-29T02:15:29.934Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2646,29 +2652,8 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-08-27T19:35:21.643Z",
-      "sessionId": "session_1756323321639",
-      "metadata": {}
-    },
-    "development_session_1756323516533_1_general_14c16bbb": {
-      "name": "development Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-08-27T19:38:36.536Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-08-27T19:38:36.536Z",
-      "sessionId": "session_1756323516533",
+      "createdAt": "2025-08-29T02:15:29.934Z",
+      "sessionId": "session_1756433729933",
       "metadata": {}
     }
   }
