@@ -327,15 +327,6 @@ Deploy up to 10 concurrent subagents when tasks have parallelizable components. 
 - **✅ PARALLEL EVERYTHING** - Research, implementation, testing, documentation should run concurrently
 - **⚡ MORE AGENTS = FASTER COMPLETION** - Additional concurrent processing almost always improves speed
 
-**🔴 CONCURRENT EXECUTION MANDATE:**
-**ALWAYS USE CONCURRENT SUBAGENTS WHEN USING MULTIPLE AGENTS FOR A TASK**
-
-- **✅ MULTIPLE AGENTS = CONCURRENT EXECUTION** - If task requires multiple agents, they MUST run concurrently
-- **❌ NEVER SEQUENTIAL MULTI-AGENT WORK** - Multiple agents running one after another is FORBIDDEN
-- **✅ SIMULTANEOUS DEPLOYMENT ONLY** - All agents for a task must start at the same time
-- **✅ PARALLEL PROCESSING MANDATE** - Multiple agents working on same task = concurrent processing required
-- **⚡ CONCURRENT IS THE ONLY WAY** - Single-threaded multi-agent execution is strictly prohibited
-
 **🚨 APPROPRIATE CONCURRENT SUBAGENT USAGE:**
 - **✅ COMPLEX MULTI-COMPONENT TASKS** - Research, implementation, testing, documentation can run in parallel
 - **✅ LARGE SCALE REFACTORING** - Multiple files/modules can be handled simultaneously  

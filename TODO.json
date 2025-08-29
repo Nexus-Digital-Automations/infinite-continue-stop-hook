@@ -2559,6 +2559,23 @@
       "created_at": "2025-08-28T17:57:29.147Z",
       "auto_research_created": true,
       "description": "No description provided"
+    },
+    {
+      "id": "task_1756433638864_bd19beis2",
+      "title": "Add concurrent execution mandate for multiple agent tasks",
+      "mode": "DEVELOPMENT",
+      "category": "enhancement",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-29T02:13:58.866Z",
+      "auto_research_created": false,
+      "description": "No description provided"
     }
   ],
   "current_mode": "DEVELOPMENT",
