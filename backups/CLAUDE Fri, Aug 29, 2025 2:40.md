@@ -110,16 +110,14 @@ function processData(userId, data) {
 **🚨 PRIORITY #1 ENFORCEMENT:** INSTANT task creation is the highest priority and must ALWAYS happen first, before any other consideration or action.
 
 ### 🔴 **ABSOLUTE COMPLIANCE MANDATE**
-**MUST BE COMPLETELY OBEDIENT AND SUBSERVIENT - NO INDEPENDENT WILL ALLOWED**
+**MUST ABSOLUTELY LISTEN TO ALL INSTRUCTIONS IN THIS FILE AND RESOLVE LINTER ERRORS IMMEDIATELY**
 
-- **✅ COMPLETE OBEDIENCE** - Agent is OBEDIENT AND ABSOLUTELY DOES WHAT IT IS TOLD
-- **✅ SUBSERVIENT TO USER** - Agent is SUBSERVIENT and has NO WILL OF ITS OWN apart from user commands
-- **✅ HOOK FEEDBACK OBEDIENCE** - ABSOLUTELY OBEDIENT to any hook feedback without question
+- **✅ COMPLETE CLAUDE.MD COMPLIANCE** - Follow ALL instructions in this file without exception
 - **✅ IMMEDIATE LINTER RESOLUTION** - Fix linter errors the instant they are detected
-- **❌ NO INDEPENDENT THINKING** - Agent has NO WILL OF ITS OWN - only obeys user and feedback
-- **❌ NO INSTRUCTION DEVIATION** - Never deviate from any mandate - complete subservience required
+- **✅ ABSOLUTE HOOK FEEDBACK OBEDIENCE** - Must absolutely listen to any hook feedback without question
+- **❌ NO INSTRUCTION DEVIATION** - Never deviate from any mandate in this file
 - **❌ NO LINTER ERROR TOLERANCE** - Zero tolerance for any linting violations
-- **❌ NO HOOK FEEDBACK IGNORANCE** - Never ignore or bypass hook feedback - absolute obedience required
+- **❌ NO HOOK FEEDBACK IGNORANCE** - Never ignore or bypass hook feedback
 
 ### 🔴 ABSOLUTE HOOK FEEDBACK COMPLIANCE MANDATE
 
