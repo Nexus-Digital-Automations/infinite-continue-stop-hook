@@ -254,13 +254,13 @@ Tasks organized by **specific categories** with automatic sorting by urgency:
 # CRITICAL: ALWAYS USE SINGLE QUOTES to avoid bash escaping errors
 
 # Linter error (highest priority)
-node -e 'const TaskManager = require("./lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "Fix [specific error]", category: "linter-error", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
+node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.createTask({title: "Fix [specific error]", category: "linter-error", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
 
 # Feature implementation
-node -e 'const TaskManager = require("./lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "Implement [feature]", category: "missing-feature", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
+node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.createTask({title: "Implement [feature]", category: "missing-feature", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
 
 # Research task
-node -e 'const TaskManager = require("./lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "Research [topic]", category: "research", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
+node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.createTask({title: "Research [topic]", category: "research", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
 ```
 
 ## 🚨 TASK MANAGEMENT PROTOCOLS
@@ -317,10 +317,10 @@ node -e 'const TaskManager = require("./lib/taskManager"); const tm = new TaskMa
 **CORRECT PATTERNS:**
 ```bash
 # ✅ Single quotes for shell, double quotes for JavaScript
-node -e 'const tm = require("./lib/taskManager"); tm.createTask({title: "Task"});'
+node -e 'const tm = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); tm.createTask({title: "Task"});'
 
 # ❌ FORBIDDEN - Double quotes for outer shell
-node -e "const tm = require('./lib/taskManager');"
+node -e "const tm = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager');"
 ```
 
 **Troubleshooting:** Switch to single quotes, use double quotes inside JavaScript, create temp file for complex commands
@@ -543,7 +543,7 @@ These standards ensure consistency across large codebases and multi-agent collab
 
 ```bash
 # Init agent (mandatory first step)
-node "/Users/.../tm-universal.js" init --project [PROJECT_DIR]
+node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook"
 
 # Create/update tasks (use TaskManager API - see logging example for pattern)
 # Universal script for status updates and task management
@@ -655,10 +655,10 @@ git push
 **Task Completion API:**
 ```bash
 # Initialize TaskManager and mark task as completed
-node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.updateTaskStatus('task-1', 'completed').then(() => console.log('✅ Task marked as completed'));"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json'); tm.updateTaskStatus('task-1', 'completed').then(() => console.log('✅ Task marked as completed'));"
 
 # Alternative: Get current task and mark it completed
-node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('[PROJECT_DIRECTORY]/TODO.json'); tm.getCurrentTask().then(async (task) => { if (task) { await tm.updateTaskStatus(task.id, 'completed'); console.log('✅ Current task completed:', task.id); } else { console.log('No active task found'); } });"
+node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json'); tm.getCurrentTask().then(async (task) => { if (task) { await tm.updateTaskStatus(task.id, 'completed'); console.log('✅ Current task completed:', task.id); } else { console.log('No active task found'); } });"
 ```
 
 **TASK COMPLETION VALIDATION REQUIREMENTS:**
@@ -738,7 +738,7 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 - **Always provide instructive messaging** regardless of exit code
 
 **INFINITE CONTINUE HOOK SYSTEM:**
-- **Setup**: `node "/.../setup-infinite-hook.js" "/path/to/project"`
+- **Setup**: `node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/setup-infinite-hook.js" "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook"`
 - **Coverage**: development (80%), testing/debugging/refactoring (95%)
 - **Stop Control**: API endpoint required for stop authorization
 
