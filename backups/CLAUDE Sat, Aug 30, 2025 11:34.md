@@ -325,19 +325,19 @@ node -e "const tm = require('/Users/jeremyparker/Desktop/Claude Coding Projects/
 
 **Troubleshooting:** Switch to single quotes, use double quotes inside JavaScript, create temp file for complex commands
 
-## 🚨 STRATEGIC CONCURRENT TASK SUBAGENT DEPLOYMENT
+## 🚨 STRATEGIC CONCURRENT SUBAGENT DEPLOYMENT
 
 **🔴 MASSIVE CONCURRENT DEPLOYMENT STRATEGY:**
-**🚨 DEPLOY AS MANY CONCURRENT SIMULTANEOUS TASK SUBAGENTS AS APPROPRIATE - MAXIMIZE CONCURRENT DEPLOYMENT 🚨**
+**🚨 DEPLOY AS MANY CONCURRENT SIMULTANEOUS SUBAGENTS AS APPROPRIATE - MAXIMIZE CONCURRENT DEPLOYMENT 🚨**
 
 **🔴 ABSOLUTE MANDATE: ALWAYS MAXIMIZE CONCURRENT SIMULTANEOUS AGENTS**
 
-Deploy as many concurrent task subagents simultaneously as the task can meaningfully utilize (up to 10 maximum). **MAXIMIZE CONCURRENT TASK SUBAGENTS** - always aim for the highest number of concurrent task subagents that makes sense for the task's parallelizable components to achieve optimal efficiency.
+Deploy as many concurrent subagents simultaneously as the task can meaningfully utilize (up to 10 maximum). **MAXIMIZE CONCURRENT SUBAGENTS** - always aim for the highest number of concurrent subagents that makes sense for the task's parallelizable components to achieve optimal efficiency.
 
 **🚨 ULTRA-AGGRESSIVE DEPLOYMENT MANDATE:**
-- **✅ DEFAULT TO MAXIMUM CONCURRENT AGENTS** - When in doubt, deploy as many concurrent simultaneous task subagents as appropriate (aim for 8-10)
+- **✅ DEFAULT TO MAXIMUM CONCURRENT AGENTS** - When in doubt, deploy as many concurrent simultaneous subagents as appropriate (aim for 8-10)
 - **🚨 SIMULTANEOUS DEPLOYMENT ABSOLUTELY REQUIRED** - All agents must start working at the EXACT SAME TIME - NO SEQUENTIAL STARTS
-- **🚨 AT THE SAME TIME ENFORCEMENT** - Launch ALL task subagents SIMULTANEOUSLY in one coordinated deployment - never one after another
+- **🚨 AT THE SAME TIME ENFORCEMENT** - Launch ALL subagents SIMULTANEOUSLY in one coordinated deployment - never one after another
 - **✅ MAXIMIZE PARALLELIZATION** - Break work into as many parallel streams as logically possible  
 - **✅ CONCURRENT-FIRST MINDSET** - Always look for opportunities to run multiple agents simultaneously
 - **✅ SCALE UP TO MAXIMUM** - Use as many agents as the task can meaningfully support for complex multi-faceted work
@@ -346,7 +346,7 @@ Deploy as many concurrent task subagents simultaneously as the task can meaningf
 - **🚨 CONCURRENT SIMULTANEOUS EXECUTION IS MANDATORY** - Never run agents sequentially when they can run simultaneously AT THE SAME TIME
 
 **🔴 CONCURRENT EXECUTION MANDATE:**
-**ALWAYS USE CONCURRENT TASK SUBAGENTS WHEN USING MULTIPLE AGENTS FOR A TASK**
+**ALWAYS USE CONCURRENT SUBAGENTS WHEN USING MULTIPLE AGENTS FOR A TASK**
 
 - **✅ MULTIPLE AGENTS = CONCURRENT EXECUTION** - If task requires multiple agents, they MUST run concurrently AT THE SAME TIME
 - **❌ NEVER SEQUENTIAL MULTI-AGENT WORK** - Multiple agents running one after another is FORBIDDEN unless dependent
@@ -364,7 +364,7 @@ Deploy as many concurrent task subagents simultaneously as the task can meaningf
 - **❌ NO OTHER SEQUENTIAL REASONS** - Any sequential execution without dependency chain is FORBIDDEN
 - **🔗 CLEAR DEPENDENCY REQUIREMENT** - Must have explicit data/result dependency to justify sequential execution
 
-**🚨 APPROPRIATE CONCURRENT TASK SUBAGENT USAGE:**
+**🚨 APPROPRIATE CONCURRENT SUBAGENT USAGE:**
 - **✅ COMPLEX MULTI-COMPONENT TASKS** - Research, implementation, testing, documentation can run in parallel
 - **✅ LARGE SCALE REFACTORING** - Multiple files/modules can be handled simultaneously  
 - **✅ COMPREHENSIVE ANALYSIS** - Different aspects can be analyzed concurrently
@@ -373,17 +373,17 @@ Deploy as many concurrent task subagents simultaneously as the task can meaningf
 - **❌ TRIVIAL OPERATIONS** - File reads, simple queries, basic validation
 
 ### 🎯 Synchronized Completion Protocol
-**CRITICAL**: All task subagents must finish within same timeframe for optimal efficiency
+**CRITICAL**: All subagents must finish within same timeframe for optimal efficiency
 
 **COMPLETION SYNCHRONIZATION STRATEGY:**
-1. **Pre-Flight Load Balancing**: Distribute work complexity evenly across all 10 task subagents
-2. **Coordinated Start**: All task subagents begin execution simultaneously 
+1. **Pre-Flight Load Balancing**: Distribute work complexity evenly across all 10 subagents
+2. **Coordinated Start**: All subagents begin execution simultaneously 
 3. **Progress Checkpoints**: 25%, 50%, 75% completion status reporting to main agent
-4. **Dynamic Rebalancing**: Redistribute workload if any task subagent falls behind schedule
-5. **Synchronized Quality Gates**: All task subagents run validation simultaneously in final phase
-6. **Coordinated Completion**: Main agent waits for ALL task subagents before marking task complete
+4. **Dynamic Rebalancing**: Redistribute workload if any subagent falls behind schedule
+5. **Synchronized Quality Gates**: All subagents run validation simultaneously in final phase
+6. **Coordinated Completion**: Main agent waits for ALL subagents before marking task complete
 
-### 🚀 Universal Task Subagent Deployment
+### 🚀 Universal Subagent Deployment
 **MANDATORY SPECIALIZATIONS BY MODE:**
 
 - **DEVELOPMENT**: Frontend, Backend, Database, DevOps, Security specialists
@@ -394,16 +394,16 @@ Deploy as many concurrent task subagents simultaneously as the task can meaningf
 
 ### 🔄 Coordination & Timing Controls
 **LOAD BALANCING STRATEGIES:**
-- **Equal Complexity Distribution**: Each task subagent receives ~10% of total work complexity (10 task subagents)
+- **Equal Complexity Distribution**: Each subagent receives ~10% of total work complexity (10 subagents)
 - **Dependency-Aware Scheduling**: Sequential tasks distributed to maintain parallel execution
-- **Failure Recovery**: If any task subagent fails, redistribute work to remaining agents
+- **Failure Recovery**: If any subagent fails, redistribute work to remaining agents
 - **Completion Buffer**: Build in 10-15% time buffer for synchronization delays
 
 **INTEGRATION CHECKPOINTS:**
-- **Context Sharing**: Critical information passed between task subagents at each checkpoint
-- **Quality Verification**: Each task subagent validates outputs meet perfection standards
+- **Context Sharing**: Critical information passed between subagents at each checkpoint
+- **Quality Verification**: Each subagent validates outputs meet perfection standards
 - **Conflict Resolution**: Main agent resolves any conflicting recommendations
-- **Final Integration**: All task subagent outputs merged into cohesive deliverable
+- **Final Integration**: All subagent outputs merged into cohesive deliverable
 
 **DEPLOYMENT PATTERN:** Think → Map Work Distribution → Balance Complexity → Deploy UP TO 10 Agents Simultaneously → Monitor Progress → Synchronize Completion
 
@@ -691,7 +691,7 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 2. **Evaluate Existing Tasks** - Check if can modify existing vs create new
 3. **Think First** - Use appropriate thinking level (think/think hard/ultrathink)
 4. **Initialize Agent** - Use TaskManager API initialization
-5. **Deploy Task Subagents** - Maximize concurrent task subagents when appropriate
+5. **Deploy Subagents** - Maximize concurrent subagents when appropriate
 6. **Implement & Validate** - Execute with evidence-based completion
 7. **Complete Tasks** - Mark completed via TaskManager API
 
@@ -703,7 +703,7 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 - **⏰ NO TIME LIMITS** - Continue working indefinitely until natural completion or user stop
 - **🔄 MULTIPLE ROUNDS** - Continue across multiple tasks
 - **📋 MULTIPLE TASKS** - Complete as many as possible
-- **🚀 TASK SUBAGENT DEPLOYMENT** - Use when appropriate
+- **🚀 SUBAGENT DEPLOYMENT** - Use when appropriate
 
 ## 🚨 INFINITE CONTINUE HOOK SYSTEM - NEVER STOP PROTOCOL
 
