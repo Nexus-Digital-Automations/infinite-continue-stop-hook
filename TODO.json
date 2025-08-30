@@ -1840,7 +1840,7 @@
       "description": "Create integration with third-party API using OAuth 2.0 for secure authentication and data exchange",
       "category": "missing-feature",
       "priority": "high",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -1849,7 +1849,18 @@
       "subtasks": [],
       "created_at": "2025-08-19T23:09:58.855Z",
       "auto_research_created": true,
-      "mode": "DEVELOPMENT"
+      "mode": "DEVELOPMENT",
+      "started_at": "2025-08-30T16:08:37.864Z",
+      "claimed_by": "development_session_1756570056066_1_general_9ae6e980",
+      "assigned_agent": "development_session_1756570056066_1_general_9ae6e980",
+      "agent_assignment_history": [
+        {
+          "agent": "development_session_1756570056066_1_general_9ae6e980",
+          "action": "concurrent_claim",
+          "timestamp": "2025-08-30T16:08:37.864Z",
+          "agent_capacity": "1/1"
+        }
+      ]
     },
     {
       "id": "task_1755644998864_fjqcpziwe",
@@ -2195,7 +2206,7 @@
       "mode": "RESEARCH",
       "category": "research",
       "priority": "critical",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [],
       "important_files": [
         "./development/research-reports/research-report-task_1756054152314_qug6ujili.md"
@@ -2213,9 +2224,9 @@
       "created_at": "2025-08-24T16:49:12.314Z",
       "created_by": "auto-research-system",
       "auto_created_for": "task_1756054152314_9k1kbktnv",
-      "started_at": "2025-08-29T16:34:44.532Z",
-      "claimed_by": "agent_1756485284532",
-      "assigned_agent": "agent_1756485284532",
+      "started_at": null,
+      "claimed_by": null,
+      "assigned_agent": null,
       "agent_assignment_history": [
         {
           "agent": "agent_1756276282534",
@@ -2232,6 +2243,12 @@
           "agent": "agent_1756485284532",
           "action": "claimed",
           "timestamp": "2025-08-29T16:34:44.532Z"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-08-30T16:07:30.762Z",
+          "reason": "Task stale for 1413 minutes"
         }
       ]
     },
@@ -2556,23 +2573,6 @@
       "subtasks": [],
       "created_at": "2025-08-29T16:35:37.763Z",
       "auto_research_created": false
-    },
-    {
-      "id": "task_1756569968831_92mepcds7",
-      "title": "Update CLAUDE.md to use absolute paths for TaskManager API commands",
-      "mode": "DEVELOPMENT",
-      "category": "documentation",
-      "priority": "high",
-      "status": "pending",
-      "dependencies": [],
-      "important_files": [],
-      "success_criteria": [],
-      "estimate": "",
-      "requires_research": false,
-      "subtasks": [],
-      "created_at": "2025-08-30T16:06:08.831Z",
-      "auto_research_created": false,
-      "description": "No description provided"
     }
   ],
   "current_mode": "DEVELOPMENT",
@@ -2626,13 +2626,13 @@
     1755567176654
   ],
   "agents": {
-    "development_session_1756485266961_1_general_8403a212": {
+    "development_session_1756570056066_1_general_9ae6e980": {
       "name": "development Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-08-29T16:34:26.997Z",
+      "lastHeartbeat": "2025-08-30T16:07:36.067Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2643,8 +2643,8 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-08-29T16:34:26.998Z",
-      "sessionId": "session_1756485266961",
+      "createdAt": "2025-08-30T16:07:36.067Z",
+      "sessionId": "session_1756570056066",
       "metadata": {}
     }
   }

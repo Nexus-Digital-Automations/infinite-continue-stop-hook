@@ -330,7 +330,7 @@ Use the task-creation.md guidelines for optimal task structure.`,
 }
 
 // Get all project directories to process
-function getProjectDirectories(basePath) {
+function _getProjectDirectories(basePath) {
     if (!fs.existsSync(basePath) || !fs.statSync(basePath).isDirectory()) {
         return [];
     }
