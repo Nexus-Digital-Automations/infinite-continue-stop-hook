@@ -328,32 +328,30 @@ node -e "const tm = require('/Users/jeremyparker/Desktop/Claude Coding Projects/
 ## 🚨 STRATEGIC CONCURRENT SUBAGENT DEPLOYMENT
 
 **🔴 MASSIVE CONCURRENT DEPLOYMENT STRATEGY:**
-**🚨 DEPLOY AS MANY CONCURRENT SIMULTANEOUS SUBAGENTS AS APPROPRIATE - MAXIMIZE CONCURRENT DEPLOYMENT 🚨**
+**🚨 DEPLOY AS MANY CONCURRENT SIMULTANEOUS SUBAGENTS AS POSSIBLE - MORE IS ALWAYS BETTER 🚨**
 
-**🔴 ABSOLUTE MANDATE: ALWAYS MAXIMIZE CONCURRENT SIMULTANEOUS AGENTS**
+**🔴 ABSOLUTE MANDATE: ALWAYS DEPLOY CONCURRENT SIMULTANEOUS AGENTS**
 
-Deploy as many concurrent subagents simultaneously as the task can meaningfully utilize (up to 10 maximum). **MAXIMIZE CONCURRENT SUBAGENTS** - always aim for the highest number of concurrent subagents that makes sense for the task's parallelizable components to achieve optimal efficiency.
+Deploy up to 10 concurrent subagents when tasks have parallelizable components. **MAXIMIZE CONCURRENT SUBAGENTS when appropriate** - use as many as the task can meaningfully utilize for optimal efficiency.
 
 **🚨 ULTRA-AGGRESSIVE DEPLOYMENT MANDATE:**
-- **✅ DEFAULT TO MAXIMUM CONCURRENT AGENTS** - When in doubt, deploy as many concurrent simultaneous subagents as appropriate (aim for 8-10)
-- **🚨 SIMULTANEOUS DEPLOYMENT ABSOLUTELY REQUIRED** - All agents must start working at the EXACT SAME TIME - NO SEQUENTIAL STARTS
-- **🚨 AT THE SAME TIME ENFORCEMENT** - Launch ALL subagents SIMULTANEOUSLY in one coordinated deployment - never one after another
+- **✅ DEFAULT TO MAXIMUM CONCURRENT AGENTS** - When in doubt, deploy 8-10 concurrent simultaneous subagents
+- **✅ SIMULTANEOUS DEPLOYMENT REQUIRED** - All agents must start working at the EXACT SAME TIME
 - **✅ MAXIMIZE PARALLELIZATION** - Break work into as many parallel streams as logically possible  
 - **✅ CONCURRENT-FIRST MINDSET** - Always look for opportunities to run multiple agents simultaneously
-- **✅ SCALE UP TO MAXIMUM** - Use as many agents as the task can meaningfully support for complex multi-faceted work
+- **✅ SCALE UP TO MAXIMUM** - Use 8-10 agents for complex multi-faceted work - NEVER use fewer than necessary
 - **✅ PARALLEL EVERYTHING** - Research, implementation, testing, documentation should run concurrently
 - **⚡ MORE CONCURRENT AGENTS = FASTER COMPLETION** - Additional concurrent processing almost always improves speed
-- **🚨 CONCURRENT SIMULTANEOUS EXECUTION IS MANDATORY** - Never run agents sequentially when they can run simultaneously AT THE SAME TIME
+- **🚨 CONCURRENT SIMULTANEOUS EXECUTION IS MANDATORY** - Never run agents sequentially when they can run simultaneously
 
 **🔴 CONCURRENT EXECUTION MANDATE:**
 **ALWAYS USE CONCURRENT SUBAGENTS WHEN USING MULTIPLE AGENTS FOR A TASK**
 
-- **✅ MULTIPLE AGENTS = CONCURRENT EXECUTION** - If task requires multiple agents, they MUST run concurrently AT THE SAME TIME
+- **✅ MULTIPLE AGENTS = CONCURRENT EXECUTION** - If task requires multiple agents, they MUST run concurrently
 - **❌ NEVER SEQUENTIAL MULTI-AGENT WORK** - Multiple agents running one after another is FORBIDDEN unless dependent
-- **🚨 SIMULTANEOUS DEPLOYMENT ONLY** - All agents for a task must start AT THE EXACT SAME TIME in one coordinated launch
-- **🚨 AT THE SAME TIME REQUIREMENT** - No staggered starts, no sequential deployment - ALL AGENTS START SIMULTANEOUSLY
-- **✅ PARALLEL PROCESSING MANDATE** - Multiple agents working on same task = concurrent processing required AT THE SAME TIME
-- **⚡ CONCURRENT IS THE ONLY WAY** - Single-threaded multi-agent execution is strictly prohibited - must be AT THE SAME TIME
+- **✅ SIMULTANEOUS DEPLOYMENT ONLY** - All agents for a task must start at the same time
+- **✅ PARALLEL PROCESSING MANDATE** - Multiple agents working on same task = concurrent processing required
+- **⚡ CONCURRENT IS THE ONLY WAY** - Single-threaded multi-agent execution is strictly prohibited
 
 **🔴 SEQUENTIAL EXECUTION EXCEPTION:**
 **SEQUENTIAL AGENTS ALLOWED ONLY FOR DEPENDENCY CHAINS**
