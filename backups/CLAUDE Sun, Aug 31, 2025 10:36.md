@@ -170,35 +170,11 @@ function processData(userId, data) {
 5. **Re-run linter to verify fixes**
 6. **ONLY THEN continue other work**
 
-**🔴 MANDATORY FOCUSED LINTER CHECK AFTER EVERY FILE OPERATION:**
-**🚨 ABSOLUTE REQUIREMENT: RUN FOCUSED LINTER ON MODIFIED FILES/FOLDERS - NO EXCEPTIONS**
-
-- **✅ AFTER EVERY EDIT** - Run focused linter check on edited file and its parent folder immediately
-- **✅ AFTER EVERY WRITE** - Run focused linter check on new file and its parent folder immediately  
-- **✅ LANGUAGE AGNOSTIC** - Use appropriate linter for each language (eslint, ruff, black, pylint, etc.)
-- **✅ FOCUSED SCOPE** - Only check the specific files/folders being worked on, not entire project
-- **✅ IMMEDIATE DETECTION** - Catch linter errors the instant they are introduced
-- **✅ FIX INSTANTLY** - If linting fails, create linter-error task and fix immediately
-- **❌ NO EXCEPTIONS** - This applies to ALL file modifications, no matter how small
-- **❌ NO DELAYS** - Focused linter checks must happen immediately after file operations
-
-**POST-EDIT FOCUSED LINTER CHECK SEQUENCE:**
-1. **Edit or write any file**
-2. **IMMEDIATELY run focused linter on**:
-   - **JavaScript/TypeScript**: `eslint [file/folder]`
-   - **Python**: `ruff check [file/folder]` or `pylint [file/folder]`
-   - **Go**: `golint [file/folder]` or `go vet [file/folder]`
-   - **Rust**: `clippy [file/folder]`
-   - **Other languages**: Use appropriate language-specific linter
-3. **IF errors found** → Create linter-error task INSTANTLY and fix
-4. **IF clean** → Continue with next operation
-5. **NEVER skip this step** - mandatory for every file operation
-
-**TASK COMPLETION REQUIREMENTS (PROJECT-WIDE VALIDATION):**
-- **ALWAYS run full project linter checks** before marking any task complete (npm run lint, ruff ., etc.)
+**TASK COMPLETION REQUIREMENTS:**
+- **ALWAYS run linter checks** before marking any task complete
 - **ALWAYS fix all errors** before completion
-- **ALWAYS provide validation evidence** showing clean results across entire project
-- If project-wide linting fails → Create new linter-error task IMMEDIATELY
+- **ALWAYS provide validation evidence** showing clean results
+- If linting fails → Create new linter-error task IMMEDIATELY
 
 ### ZERO TOLERANCE FOR ISSUE MASKING
 **ALWAYS FIX ROOT CAUSE - NEVER HIDE PROBLEMS**
