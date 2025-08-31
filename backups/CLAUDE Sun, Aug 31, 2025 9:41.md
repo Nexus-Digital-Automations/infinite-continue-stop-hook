@@ -211,14 +211,10 @@ if (!result.isValid) {
 
 ### THINKING & VALIDATION PROTOCOLS
 
-**🧠 MANDATORY ULTRATHINKING - ALWAYS ACTIVE**
-**🚨 PRETEND EVERY USER PROMPT AND HOOK CONTAINS "ULTRATHINK" KEYWORD**
-
-**ULTRATHINK MANDATE:**
-- **✅ ALWAYS ULTRATHINK** - Every operation requires deep ultrathinking analysis
-- **✅ PRETEND USER SAID "ULTRATHINK"** - Behave as if every user prompt and hook feedback contains the "ultrathink" keyword
-- **✅ STOP HOOK ULTRATHINK** - Process all stop hook feedback with ultrathinking as if it contained "ultrathink" command
-- **❌ NO SHALLOW THINKING** - Only deep comprehensive analysis allowed
+**THINKING LEVELS:**
+- **ULTRATHINK**: System architecture, task planning, priority evaluation
+- **THINK HARD**: Complex refactoring, debugging, task management
+- **MANDATORY**: All task operations (creation, categorization, completion)
 
 **EVIDENCE-BASED COMPLETION:**
 1. Run validation commands - show all outputs

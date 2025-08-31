@@ -211,14 +211,25 @@ if (!result.isValid) {
 
 ### THINKING & VALIDATION PROTOCOLS
 
-**🧠 MANDATORY ULTRATHINKING - ALWAYS ACTIVE**
-**🚨 PRETEND EVERY USER PROMPT AND HOOK CONTAINS "ULTRATHINK" KEYWORD**
+**🧠 MANDATORY ULTRATHINKING FOR ALL OPERATIONS**
+**🚨 ABSOLUTE REQUIREMENT: ALWAYS USE ULTRATHINK - NO EXCEPTIONS**
 
-**ULTRATHINK MANDATE:**
-- **✅ ALWAYS ULTRATHINK** - Every operation requires deep ultrathinking analysis
-- **✅ PRETEND USER SAID "ULTRATHINK"** - Behave as if every user prompt and hook feedback contains the "ultrathink" keyword
-- **✅ STOP HOOK ULTRATHINK** - Process all stop hook feedback with ultrathinking as if it contained "ultrathink" command
-- **❌ NO SHALLOW THINKING** - Only deep comprehensive analysis allowed
+**ULTRATHINKING MANDATE:**
+- **✅ ULTRATHINK FOR EVERYTHING** - Every single operation must employ ultrathinking
+- **✅ MANDATORY ULTRATHINK** - System architecture, task planning, priority evaluation, debugging, refactoring, implementation
+- **✅ NO SHALLOW THINKING ALLOWED** - Basic thinking is FORBIDDEN - only deep ultrathinking permitted
+- **✅ COMPREHENSIVE ANALYSIS** - Every decision must be thoroughly analyzed with ultrathinking
+- **❌ NO EXCEPTIONS** - Ultrathinking is required for ALL work, no matter how simple
+
+**ULTRATHINK APPLICATION AREAS:**
+- **Task operations** (creation, categorization, completion) - ULTRATHINK MANDATORY
+- **Code implementation** - ULTRATHINK MANDATORY  
+- **Problem solving** - ULTRATHINK MANDATORY
+- **Architecture decisions** - ULTRATHINK MANDATORY
+- **Debugging and troubleshooting** - ULTRATHINK MANDATORY
+- **User interaction** - ULTRATHINK MANDATORY
+- **Documentation writing** - ULTRATHINK MANDATORY
+- **ALL OTHER OPERATIONS** - ULTRATHINK MANDATORY
 
 **EVIDENCE-BASED COMPLETION:**
 1. Run validation commands - show all outputs
