@@ -1750,7 +1750,7 @@
       "description": "Build ML-based recommendation system using neural networks",
       "category": "missing-feature",
       "priority": "high",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [
         "task_1756621387607_q5lwmoirv"
       ],
@@ -1762,16 +1762,24 @@
       "created_at": "2025-08-19T23:09:58.874Z",
       "auto_research_created": false,
       "mode": "DEVELOPMENT",
-      "started_at": "2025-08-31T06:20:20.576Z",
+      "started_at": null,
       "agent_assignment_history": [
         {
           "role": "primary",
           "assignedAt": "2025-08-31T06:20:20.576Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-08-31T08:17:49.715Z",
+          "reason": "Task stale for 117 minutes"
         }
       ],
-      "last_modified": "2025-08-31T06:23:16.910Z"
+      "last_modified": "2025-08-31T06:23:16.910Z",
+      "assigned_agent": null,
+      "claimed_by": null
     },
     {
       "id": "task_1755644998882_xxnkmc218",
@@ -1780,7 +1788,7 @@
       "mode": "RESEARCH",
       "category": "research",
       "priority": "high",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [],
       "important_files": [
         "./development/research-reports/research-report-task_1755644998882_xxnkmc218.md"
@@ -1793,15 +1801,21 @@
       "subtasks": [],
       "created_at": "2025-08-19T23:09:58.882Z",
       "auto_research_created": false,
-      "started_at": "2025-08-31T06:23:49.568Z",
-      "claimed_by": "development_session_continuation",
-      "assigned_agent": "development_session_continuation",
+      "started_at": null,
+      "claimed_by": null,
+      "assigned_agent": null,
       "agent_assignment_history": [
         {
           "agent": "development_session_continuation",
           "action": "concurrent_claim",
           "timestamp": "2025-08-31T06:23:49.568Z",
           "agent_capacity": "1/1"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-08-31T08:17:49.715Z",
+          "reason": "Task stale for 114 minutes"
         }
       ]
     },
@@ -3011,12 +3025,12 @@
       "auto_research_created": false
     },
     {
-      "id": "task_1756628159308_xqicpa67o",
-      "title": "Add divine truth/anti-lying mandate and conservatively streamline CLAUDE.md",
-      "description": "Add user as god-like authority with severe punishment for lies, anti-false positive mandate, while conservatively removing only truly redundant content",
+      "id": "task_1756628332547_vnyzaj48q",
+      "title": "Fix Puppeteer Testing Framework - Critical Protocol Errors",
+      "description": "🚨 CRITICAL: Fix critical errors in comprehensive Puppeteer testing framework:\n\n1. **Screenshot Width Issues**: Protocol error preventing screenshots with 0 width\n2. **Network Request Failures**: Securities components failing to load (ERR_ABORTED)\n3. **Element Interaction Protocol Errors**: Runtime.callFunctionOn and DOM.describeNode failures\n4. **Context Mismatch Issues**: Protocol errors preventing proper element interactions\n\nObserved from comprehensive testing perfection script and error history showing consistently failed quality gates. TypeScript reports show 0 errors but passedQualityGate: false consistently.\n\nNeed to update comprehensive-testing-perfection.cjs with better error handling, element context management, and screenshot protocol fixes.",
       "mode": "DEVELOPMENT",
-      "category": "documentation",
-      "priority": "high",
+      "category": "error",
+      "priority": "critical",
       "status": "pending",
       "dependencies": [],
       "important_files": [],
@@ -3024,8 +3038,36 @@
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-08-31T08:15:59.308Z",
+      "created_at": "2025-08-31T08:18:52.547Z",
       "auto_research_created": false
+    },
+    {
+      "id": "task_1756628386815_m0q7xpeey",
+      "title": "Consolidate and trim CLAUDE.md removing duplicates while preserving unique information",
+      "mode": "DEVELOPMENT",
+      "category": "documentation",
+      "priority": "high",
+      "status": "in_progress",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-08-31T08:19:46.816Z",
+      "auto_research_created": false,
+      "description": "No description provided",
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-08-31T08:20:46.139Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "in_progress"
+          }
+        }
+      ]
     }
   ],
   "current_mode": "DEVELOPMENT",
@@ -3079,13 +3121,13 @@
     1755567176654
   ],
   "agents": {
-    "development_session_1756623479506_1_general_275c4b96": {
+    "development_session_1756628274482_1_general_87c293d7": {
       "name": "development Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-08-31T06:57:59.508Z",
+      "lastHeartbeat": "2025-08-31T08:17:54.485Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -3096,8 +3138,8 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-08-31T06:57:59.508Z",
-      "sessionId": "session_1756623479506",
+      "createdAt": "2025-08-31T08:17:54.485Z",
+      "sessionId": "session_1756628274482",
       "metadata": {}
     }
   }
