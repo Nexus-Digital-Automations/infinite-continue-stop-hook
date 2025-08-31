@@ -156,44 +156,6 @@ function processData(userId, data) {
 - **✅ ADJUST ACTIONS** - Modify approach based on hook recommendations
 - **❌ NEVER OVERRIDE** - Do not bypass or ignore hook feedback
 
-### 🔄 **MANDATORY AGENT REINITIALIZATION PROTOCOL**
-**🚨 ABSOLUTE REQUIREMENT: REINITIALIZE AGENT AFTER EVERY TASK AND STOP HOOK**
-
-**AGENT REINITIALIZATION MANDATE:**
-- **✅ AFTER EVERY TASK COMPLETION** - Reinitialize agent to renew heartbeat and prevent expiration
-- **✅ AFTER EVERY STOP HOOK** - Reinitialize agent immediately when receiving stop hook feedback
-- **✅ PREVENTS AGENT EXPIRATION** - Keeps agent alive and prevents timeout-related failures
-- **✅ RESETS AGENT TIMEOUT** - Extends agent lifecycle and maintains active status
-- **✅ RENEWS HEARTBEAT** - Updates agent heartbeat to current time
-- **❌ NEVER SKIP REINITIALIZATION** - Required for maintaining agent availability
-
-**REINITIALIZATION API ENDPOINT:**
-```bash
-# Reinitialize current agent (recommended)
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize
-
-# Reinitialize specific agent with config
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize AGENT_ID '{"metadata": {"renewed": true}}'
-```
-
-**MANDATORY REINITIALIZATION TRIGGERS:**
-1. **Task Completion** - Always reinitialize after marking any task as completed
-2. **Stop Hook Feedback** - Always reinitialize when receiving stop hook feedback
-3. **Before Long Operations** - Reinitialize before starting time-intensive work
-4. **After Idle Periods** - Reinitialize if agent has been inactive
-
-**REINITIALIZATION WORKFLOW:**
-1. **Complete current work** (if any)
-2. **Run reinitialization command** - Use TaskManager API reinitialize endpoint
-3. **Verify renewal success** - Check that agent status shows renewed heartbeat
-4. **Continue with next task** - Proceed with normal workflow
-
-**🔄 STOP HOOK REINITIALIZATION:**
-- **IMMEDIATELY REINITIALIZE** when receiving any stop hook feedback
-- **RENEW AGENT BEFORE** responding to stop hook instructions
-- **MAINTAIN AGENT AVAILABILITY** for continued task execution
-- **PREVENT EXPIRATION** during stop hook processing
-
 ## 🚨 ERROR HANDLING & QUALITY PROTOCOLS
 
 

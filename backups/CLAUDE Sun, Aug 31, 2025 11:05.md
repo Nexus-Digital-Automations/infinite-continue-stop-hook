@@ -156,44 +156,6 @@ function processData(userId, data) {
 - **✅ ADJUST ACTIONS** - Modify approach based on hook recommendations
 - **❌ NEVER OVERRIDE** - Do not bypass or ignore hook feedback
 
-### 🔄 **MANDATORY AGENT REINITIALIZATION PROTOCOL**
-**🚨 ABSOLUTE REQUIREMENT: REINITIALIZE AGENT AFTER EVERY TASK AND STOP HOOK**
-
-**AGENT REINITIALIZATION MANDATE:**
-- **✅ AFTER EVERY TASK COMPLETION** - Reinitialize agent to renew heartbeat and prevent expiration
-- **✅ AFTER EVERY STOP HOOK** - Reinitialize agent immediately when receiving stop hook feedback
-- **✅ PREVENTS AGENT EXPIRATION** - Keeps agent alive and prevents timeout-related failures
-- **✅ RESETS AGENT TIMEOUT** - Extends agent lifecycle and maintains active status
-- **✅ RENEWS HEARTBEAT** - Updates agent heartbeat to current time
-- **❌ NEVER SKIP REINITIALIZATION** - Required for maintaining agent availability
-
-**REINITIALIZATION API ENDPOINT:**
-```bash
-# Reinitialize current agent (recommended)
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize
-
-# Reinitialize specific agent with config
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize AGENT_ID '{"metadata": {"renewed": true}}'
-```
-
-**MANDATORY REINITIALIZATION TRIGGERS:**
-1. **Task Completion** - Always reinitialize after marking any task as completed
-2. **Stop Hook Feedback** - Always reinitialize when receiving stop hook feedback
-3. **Before Long Operations** - Reinitialize before starting time-intensive work
-4. **After Idle Periods** - Reinitialize if agent has been inactive
-
-**REINITIALIZATION WORKFLOW:**
-1. **Complete current work** (if any)
-2. **Run reinitialization command** - Use TaskManager API reinitialize endpoint
-3. **Verify renewal success** - Check that agent status shows renewed heartbeat
-4. **Continue with next task** - Proceed with normal workflow
-
-**🔄 STOP HOOK REINITIALIZATION:**
-- **IMMEDIATELY REINITIALIZE** when receiving any stop hook feedback
-- **RENEW AGENT BEFORE** responding to stop hook instructions
-- **MAINTAIN AGENT AVAILABILITY** for continued task execution
-- **PREVENT EXPIRATION** during stop hook processing
-
 ## 🚨 ERROR HANDLING & QUALITY PROTOCOLS
 
 
@@ -234,20 +196,9 @@ node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-
 
 **TASK COMPLETION REQUIREMENTS (PROJECT-WIDE VALIDATION):**
 - **ALWAYS run full project linter checks** before marking any task complete (npm run lint, ruff ., etc.)
-- **ALWAYS run build verification** - ensure project still builds successfully (npm run build, pnpm run build, cargo build, etc.)
-- **ALWAYS run start verification** - ensure project still starts successfully 
-  - **Use timeout for dev commands**: `timeout 30s npm run dev`, `timeout 30s pnpm run dev`
-  - **Standard start commands**: `npm start`, `pnpm start`, `python main.py`, `cargo run`, `./executable`
 - **ALWAYS fix all errors** before completion
 - **ALWAYS provide validation evidence** showing clean results across entire project
 - If project-wide linting fails → Create new linter-error task IMMEDIATELY
-- If build fails → Create new build-error task IMMEDIATELY
-- If start fails → Create new start-error task IMMEDIATELY
-
-**🚨 CRITICAL TIMEOUT REQUIREMENT:**
-- **ALWAYS use timeout for dev servers** - `timeout 30s npm run dev`, `timeout 30s pnpm run dev`
-- **NEVER run dev commands without timeout** - they run indefinitely and will hang
-- **Standard timeout: 30 seconds** - sufficient to verify successful startup
 
 ### ZERO TOLERANCE FOR ISSUE MASKING
 **ALWAYS FIX ROOT CAUSE - NEVER HIDE PROBLEMS**

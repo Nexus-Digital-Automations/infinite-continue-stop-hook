@@ -49,36 +49,54 @@ class TaskManagerAPI {
         this.agentManager = new AgentManager(TODO_PATH);
         this.orchestrator = new MultiAgentOrchestrator(TODO_PATH);
         this.agentId = null;
+        this.timeout = 10000; // 10 second timeout for all operations
+    }
+
+    /**
+     * Wrap any async operation with a timeout
+     * @param {Promise} promise - Promise to wrap
+     * @param {number} timeoutMs - Timeout in milliseconds (default: 10s)
+     * @returns {Promise} Promise that rejects after timeout
+     */
+    withTimeout(promise, timeoutMs = this.timeout) {
+        return Promise.race([
+            promise,
+            new Promise((_, reject) => 
+                setTimeout(() => reject(new Error(`Operation timed out after ${timeoutMs}ms`)), timeoutMs)
+            )
+        ]);
     }
 
     // API Discovery and Documentation
     async getApiMethods() {
         try {
-            const taskManagerMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(this.taskManager))
-                .filter(name => name !== 'constructor' && !name.startsWith('_'))
-                .sort();
+            return await this.withTimeout((async () => {
+                const taskManagerMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(this.taskManager))
+                    .filter(name => name !== 'constructor' && !name.startsWith('_'))
+                    .sort();
 
-            const apiMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(this))
-                .filter(name => name !== 'constructor' && !name.startsWith('_'))
-                .sort();
+                const apiMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(this))
+                    .filter(name => name !== 'constructor' && !name.startsWith('_'))
+                    .sort();
 
-            return {
-                success: true,
-                taskManagerMethods: {
-                    count: taskManagerMethods.length,
-                    methods: taskManagerMethods,
-                    usage: "const tm = new TaskManager('./TODO.json'); tm.methodName()"
-                },
-                apiMethods: {
-                    count: apiMethods.length,
-                    methods: apiMethods,
-                    usage: "node taskmanager-api.js methodName args"
-                },
-                examples: {
-                    taskManager: "tm.createTask({title: 'Test', category: 'enhancement'})",
-                    api: "node taskmanager-api.js list '{\"status\": \"pending\"}'"
-                }
-            };
+                return {
+                    success: true,
+                    taskManagerMethods: {
+                        count: taskManagerMethods.length,
+                        methods: taskManagerMethods,
+                        usage: "const tm = new TaskManager('./TODO.json'); tm.methodName()"
+                    },
+                    apiMethods: {
+                        count: apiMethods.length,
+                        methods: apiMethods,
+                        usage: "node taskmanager-api.js methodName args"
+                    },
+                    examples: {
+                        taskManager: "tm.createTask({title: 'Test', category: 'enhancement'})",
+                        api: "node taskmanager-api.js list '{\"status\": \"pending\"}'"
+                    }
+                };
+            })());
         } catch (error) {
             return {
                 success: false,
@@ -90,20 +108,22 @@ class TaskManagerAPI {
     // Agent initialization and management
     async initAgent(config = {}) {
         try {
-            const defaultConfig = {
-                role: 'development',
-                sessionId: `session_${Date.now()}`,
-                specialization: []
-            };
-            
-            const agentConfig = { ...defaultConfig, ...config };
-            this.agentId = await this.agentManager.registerAgent(agentConfig);
-            
-            return {
-                success: true,
-                agentId: this.agentId,
-                config: agentConfig
-            };
+            return await this.withTimeout((async () => {
+                const defaultConfig = {
+                    role: 'development',
+                    sessionId: `session_${Date.now()}`,
+                    specialization: []
+                };
+                
+                const agentConfig = { ...defaultConfig, ...config };
+                this.agentId = await this.agentManager.registerAgent(agentConfig);
+                
+                return {
+                    success: true,
+                    agentId: this.agentId,
+                    config: agentConfig
+                };
+            })());
         } catch (error) {
             return {
                 success: false,
@@ -114,14 +134,16 @@ class TaskManagerAPI {
 
     async getCurrentTask(agentId = null) {
         try {
-            const targetAgentId = agentId || this.agentId;
-            const task = await this.taskManager.getCurrentTask(targetAgentId);
-            
-            return {
-                success: true,
-                task: task || null,
-                hasTask: !!task
-            };
+            return await this.withTimeout((async () => {
+                const targetAgentId = agentId || this.agentId;
+                const task = await this.taskManager.getCurrentTask(targetAgentId);
+                
+                return {
+                    success: true,
+                    task: task || null,
+                    hasTask: !!task
+                };
+            })());
         } catch (error) {
             return {
                 success: false,
@@ -132,25 +154,27 @@ class TaskManagerAPI {
 
     async listTasks(filter = {}) {
         try {
-            const todoData = await this.taskManager.readTodo(true); // Skip validation for better performance
-            let tasks = todoData.tasks || [];
-            
-            // Apply filters
-            if (filter.status) {
-                tasks = tasks.filter(task => task.status === filter.status);
-            }
-            if (filter.mode) {
-                tasks = tasks.filter(task => task.mode === filter.mode);
-            }
-            if (filter.priority) {
-                tasks = tasks.filter(task => task.priority === filter.priority);
-            }
-            
-            return {
-                success: true,
-                tasks,
-                count: tasks.length
-            };
+            return await this.withTimeout((async () => {
+                const todoData = await this.taskManager.readTodo(true); // Skip validation for better performance
+                let tasks = todoData.tasks || [];
+                
+                // Apply filters
+                if (filter.status) {
+                    tasks = tasks.filter(task => task.status === filter.status);
+                }
+                if (filter.mode) {
+                    tasks = tasks.filter(task => task.mode === filter.mode);
+                }
+                if (filter.priority) {
+                    tasks = tasks.filter(task => task.priority === filter.priority);
+                }
+                
+                return {
+                    success: true,
+                    tasks,
+                    count: tasks.length
+                };
+            })());
         } catch (error) {
             return {
                 success: false,
@@ -161,13 +185,15 @@ class TaskManagerAPI {
 
     async createTask(taskData) {
         try {
-            const taskId = await this.taskManager.createTask(taskData);
-            
-            return {
-                success: true,
-                taskId,
-                task: taskData
-            };
+            return await this.withTimeout((async () => {
+                const taskId = await this.taskManager.createTask(taskData);
+                
+                return {
+                    success: true,
+                    taskId,
+                    task: taskData
+                };
+            })());
         } catch (error) {
             return {
                 success: false,
@@ -178,14 +204,15 @@ class TaskManagerAPI {
 
     async claimTask(taskId, agentId = null, priority = 'normal') {
         try {
-            const targetAgentId = agentId || this.agentId;
-            if (!targetAgentId) {
-                throw new Error('No agent ID provided and no agent initialized');
-            }
-            
-            // First, check if task has incomplete dependencies
-            const todoData = await this.taskManager.readTodo();
-            const task = todoData.tasks.find(t => t.id === taskId);
+            return await this.withTimeout((async () => {
+                const targetAgentId = agentId || this.agentId;
+                if (!targetAgentId) {
+                    throw new Error('No agent ID provided and no agent initialized');
+                }
+                
+                // First, check if task has incomplete dependencies
+                const todoData = await this.taskManager.readTodo();
+                const task = todoData.tasks.find(t => t.id === taskId);
             
             if (task && task.dependencies && task.dependencies.length > 0) {
                 const incompleteDependencies = [];
@@ -271,13 +298,14 @@ class TaskManagerAPI {
                 };
             }
             
-            return {
-                success: result.success,
-                task: result.task,
-                reason: result.reason,
-                priority: result.priority,
-                researchInstructions: researchInstructions
-            };
+                return {
+                    success: result.success,
+                    task: result.task,
+                    reason: result.reason,
+                    priority: result.priority,
+                    researchInstructions: researchInstructions
+                };
+            })());
         } catch (error) {
             return {
                 success: false,
@@ -288,17 +316,19 @@ class TaskManagerAPI {
 
     async completeTask(taskId, completionData = {}) {
         try {
-            await this.taskManager.updateTaskStatus(taskId, 'completed');
-            
-            if (completionData.notes) {
-                await this.taskManager.addTaskNote(taskId, completionData.notes);
-            }
-            
-            return {
-                success: true,
-                taskId,
-                completionData
-            };
+            return await this.withTimeout((async () => {
+                await this.taskManager.updateTaskStatus(taskId, 'completed');
+                
+                if (completionData.notes) {
+                    await this.taskManager.addTaskNote(taskId, completionData.notes);
+                }
+                
+                return {
+                    success: true,
+                    taskId,
+                    completionData
+                };
+            })());
         } catch (error) {
             return {
                 success: false,
@@ -309,20 +339,66 @@ class TaskManagerAPI {
 
     async getAgentStatus(agentId = null) {
         try {
-            const targetAgentId = agentId || this.agentId;
-            if (!targetAgentId) {
-                throw new Error('No agent ID provided and no agent initialized');
-            }
-            
-            const agent = await this.agentManager.getAgent(targetAgentId);
-            const tasks = await this.taskManager.getTasksForAgent(targetAgentId);
-            
+            return await this.withTimeout((async () => {
+                const targetAgentId = agentId || this.agentId;
+                if (!targetAgentId) {
+                    throw new Error('No agent ID provided and no agent initialized');
+                }
+                
+                const agent = await this.agentManager.getAgent(targetAgentId);
+                const tasks = await this.taskManager.getTasksForAgent(targetAgentId);
+                
+                return {
+                    success: true,
+                    agent,
+                    tasks,
+                    taskCount: tasks.length
+                };
+            })());
+        } catch (error) {
             return {
-                success: true,
-                agent,
-                tasks,
-                taskCount: tasks.length
+                success: false,
+                error: error.message
             };
+        }
+    }
+
+    async reinitializeAgent(agentId = null, config = {}) {
+        try {
+            return await this.withTimeout((async () => {
+                const targetAgentId = agentId || this.agentId;
+                if (!targetAgentId) {
+                    throw new Error('No agent ID provided and no agent initialized');
+                }
+                
+                // Get current agent configuration
+                const currentAgent = await this.agentManager.getAgent(targetAgentId);
+                if (!currentAgent) {
+                    throw new Error(`Agent ${targetAgentId} not found`);
+                }
+                
+                // Merge current config with new config
+                const renewalConfig = {
+                    ...currentAgent,
+                    ...config,
+                    name: config.name || currentAgent.name,
+                    role: config.role || currentAgent.role,
+                    specialization: config.specialization || currentAgent.specialization,
+                    sessionId: config.sessionId || currentAgent.sessionId,
+                    metadata: { ...currentAgent.metadata, ...config.metadata }
+                };
+                
+                // Reinitialize the agent (renew heartbeat, reset timeout, update status)
+                const result = await this.agentManager.reinitializeAgent(targetAgentId, renewalConfig);
+                
+                return {
+                    success: true,
+                    agentId: targetAgentId,
+                    agent: result.agent,
+                    renewed: result.renewed,
+                    message: 'Agent reinitialized successfully - heartbeat renewed and timeout reset'
+                };
+            })());
         } catch (error) {
             return {
                 success: false,
@@ -334,12 +410,14 @@ class TaskManagerAPI {
 
     async getStatistics() {
         try {
-            const stats = await this.orchestrator.getOrchestrationStatistics();
-            
-            return {
-                success: true,
-                statistics: stats
-            };
+            return await this.withTimeout((async () => {
+                const stats = await this.orchestrator.getOrchestrationStatistics();
+                
+                return {
+                    success: true,
+                    statistics: stats
+                };
+            })());
         } catch (error) {
             return {
                 success: false,
@@ -351,12 +429,14 @@ class TaskManagerAPI {
     // Task reordering methods
     async moveTaskToTop(taskId) {
         try {
-            const result = await this.taskManager.moveTaskToTop(taskId);
-            return {
-                success: true,
-                moved: result,
-                taskId
-            };
+            return await this.withTimeout((async () => {
+                const result = await this.taskManager.moveTaskToTop(taskId);
+                return {
+                    success: true,
+                    moved: result,
+                    taskId
+                };
+            })());
         } catch (error) {
             return {
                 success: false,
@@ -367,12 +447,14 @@ class TaskManagerAPI {
 
     async moveTaskUp(taskId) {
         try {
-            const result = await this.taskManager.moveTaskUp(taskId);
-            return {
-                success: true,
-                moved: result,
-                taskId
-            };
+            return await this.withTimeout((async () => {
+                const result = await this.taskManager.moveTaskUp(taskId);
+                return {
+                    success: true,
+                    moved: result,
+                    taskId
+                };
+            })());
         } catch (error) {
             return {
                 success: false,
@@ -383,12 +465,14 @@ class TaskManagerAPI {
 
     async moveTaskDown(taskId) {
         try {
-            const result = await this.taskManager.moveTaskDown(taskId);
-            return {
-                success: true,
-                moved: result,
-                taskId
-            };
+            return await this.withTimeout((async () => {
+                const result = await this.taskManager.moveTaskDown(taskId);
+                return {
+                    success: true,
+                    moved: result,
+                    taskId
+                };
+            })());
         } catch (error) {
             return {
                 success: false,
@@ -399,12 +483,14 @@ class TaskManagerAPI {
 
     async moveTaskToBottom(taskId) {
         try {
-            const result = await this.taskManager.moveTaskToBottom(taskId);
-            return {
-                success: true,
-                moved: result,
-                taskId
-            };
+            return await this.withTimeout((async () => {
+                const result = await this.taskManager.moveTaskToBottom(taskId);
+                return {
+                    success: true,
+                    moved: result,
+                    taskId
+                };
+            })());
         } catch (error) {
             return {
                 success: false,
@@ -626,6 +712,14 @@ async function main() {
                 break;
             }
 
+            case 'reinitialize': {
+                const agentId = args[1];
+                const config = args[2] ? JSON.parse(args[2]) : {};
+                const result = await api.reinitializeAgent(agentId, config);
+                console.log(JSON.stringify(result, null, 2));
+                break;
+            }
+
             case 'stats': {
                 const result = await api.getStatistics();
                 console.log(JSON.stringify(result, null, 2));
@@ -688,6 +782,7 @@ Commands:
   claim <taskId> [agentId] [priority] - Claim task for agent
   complete <taskId> [data]     - Complete task with optional data JSON
   status [agentId]             - Get agent status and tasks
+  reinitialize [agentId] [config] - Reinitialize agent (renew heartbeat, reset timeout)
   stats                        - Get orchestration statistics
   move-top <taskId>            - Move task to top priority
   move-up <taskId>             - Move task up one position
@@ -698,6 +793,7 @@ Examples:
   node taskmanager-api.js init '{"role": "development", "specialization": ["testing"]}'
   node taskmanager-api.js create '{"title": "Fix bug", "mode": "DEVELOPMENT", "priority": "high"}'
   node taskmanager-api.js list '{"status": "pending"}'
+  node taskmanager-api.js reinitialize agent_123 '{"metadata": {"renewed": true}}'
   node taskmanager-api.js move-top task_123
                 `);
                 break;

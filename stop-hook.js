@@ -74,6 +74,7 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 📋 CLAUDE CODE AGENT TASK CONTINUATION PROTOCOL
 
 🚨 CRITICAL INSTRUCTION FOR CLAUDE CODE AGENT:
+**ULTRATHINK - IMMEDIATELY REINITIALIZE AGENT TO PREVENT EXPIRATION**
 **ULTRATHINK - IF YOU HAVE AN UNFINISHED TASK - CONTINUE WORKING ON IT IMMEDIATELY**
 **ULTRATHINK - DO NOT STOP - DO NOT CLAIM NEW TASKS - FINISH YOUR CURRENT WORK FIRST**
 
@@ -84,17 +85,19 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 **❌ DO NOT IMPLEMENT FEATURES NOT APPROVED IN development/features.md**
 
 🔄 MANDATORY WORKFLOW FOR CLAUDE CODE AGENT:
-1. **ABSOLUTELY FIRST: Read development/features.md to understand approved features and project scope**
-2. **SECOND: Check if you have an unfinished task using the commands below**  
-3. **TASK CLAIMING VALIDATION: Before claiming any task, verify it is NOT already claimed by another agent**
-4. **FEATURES COMPLIANCE: Only work on features listed in development/features.md "Implemented" or "Planned" sections**
-5. **IF UNFINISHED TASK EXISTS: CONTINUE WORKING ON IT - DO NOT STOP UNTIL COMPLETE**
-6. **BEFORE STARTING ANY TASK: Scan development/reports/ and development/research-reports/ for relevant research reports**
-7. **READ RESEARCH REPORTS FIRST: Include applicable reports in task important_files and read them before implementation**
-8. **IF NO CURRENT TASK: COMPLETE current task and claim next one (only if not claimed by another agent)**
-9. **ALWAYS: Use TaskManager API endpoints to manage your work**
-10. **WHEN FINISHED: Mark tasks complete using the commands below**
-11. **THEN: Claim new tasks using the API commands below (verify not already claimed first)**
+1. **IMMEDIATELY FIRST: REINITIALIZE AGENT TO PREVENT EXPIRATION USING COMMAND BELOW**
+2. **ABSOLUTELY SECOND: Read development/features.md to understand approved features and project scope**
+3. **THIRD: Check if you have an unfinished task using the commands below**  
+4. **TASK CLAIMING VALIDATION: Before claiming any task, verify it is NOT already claimed by another agent**
+5. **FEATURES COMPLIANCE: Only work on features listed in development/features.md "Implemented" or "Planned" sections**
+6. **IF UNFINISHED TASK EXISTS: CONTINUE WORKING ON IT - DO NOT STOP UNTIL COMPLETE**
+7. **BEFORE STARTING ANY TASK: Scan development/reports/ and development/research-reports/ for relevant research reports**
+8. **READ RESEARCH REPORTS FIRST: Include applicable reports in task important_files and read them before implementation**
+9. **IF NO CURRENT TASK: COMPLETE current task and claim next one (only if not claimed by another agent)**
+10. **ALWAYS: Use TaskManager API endpoints to manage your work**
+11. **WHEN FINISHED: Mark tasks complete using the commands below**
+12. **AFTER TASK COMPLETION: IMMEDIATELY REINITIALIZE AGENT AGAIN**
+13. **THEN: Claim new tasks using the API commands below (verify not already claimed first)**
 
 ⚡ **EXPLICIT CONTINUATION MANDATE:**
 - If your task is partially complete but not finished → **CONTINUE THE TASK**
@@ -135,10 +138,13 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 
 🚀 CORE WORKFLOW COMMANDS:
 
+   # STEP 0: CRITICAL - IMMEDIATELY REINITIALIZE AGENT TO PREVENT EXPIRATION
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize
+
    # STEP 1: MANDATORY - Read features file first
    cat development/features.md
 
-   # STEP 2: Initialize agent (get your agent ID)
+   # STEP 2: Initialize agent (get your agent ID) - ONLY IF NOT ALREADY INITIALIZED
    node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project [PROJECT_DIRECTORY]
 
    # STEP 3: Check current task status
@@ -149,6 +155,9 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 
    # Mark current task completed (if finished) - MUST RUN LINTER CHECKS FIRST
    timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTask("[AGENT_ID]").then(async task => { if(task) { await tm.updateTaskStatus(task.id, "completed", "Task completed successfully"); console.log("✅ Task completed:", task.title); } else { console.log("No active task to complete"); } });'
+
+   # IMMEDIATE AFTER TASK COMPLETION: REINITIALIZE AGENT TO PREVENT EXPIRATION
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize
 
    # Claim next available task  
    timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getNextPendingTask().then(task => { if(task) { console.log("📋 Next task available:"); console.log(JSON.stringify(task, null, 2)); } else { console.log("No pending tasks available"); } });'
@@ -512,6 +521,7 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 🔄 INFINITE CONTINUE MODE ACTIVE
 
 🚨 **CLAUDE CODE AGENT - READ THIS FIRST:**
+**ULTRATHINK - IMMEDIATELY REINITIALIZE AGENT TO PREVENT EXPIRATION**
 **ULTRATHINK - IF YOU HAVE AN UNFINISHED TASK, DO NOT STOP - CONTINUE WORKING ON IT**
 **ULTRATHINK - CHECK YOUR CURRENT TASK STATUS IMMEDIATELY USING COMMANDS BELOW**
 **ULTRATHINK - COMPLETE ALL UNFINISHED WORK BEFORE CLAIMING NEW TASKS**
