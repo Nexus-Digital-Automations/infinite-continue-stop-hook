@@ -101,12 +101,11 @@ function processData(userId, data) {
 
 ### 🎯 COMPLIANCE PRIORITY ORDER - ABSOLUTE HIERARCHY
 1. **INSTANT TASK CREATION (MANDATORY)** - Create task for ANY user request IMMEDIATELY - NO EXCEPTIONS
-2. **CONTINUE COMMAND PROTOCOL (MANDATORY)** - When user says "continue", check current task first, then claim next task - NO EXCEPTIONS
-3. **HOOK FEEDBACK COMPLIANCE (MANDATORY)** - ABSOLUTELY follow any hook feedback - NO EXCEPTIONS
-4. **COMPREHENSIVE LOGGING** - All code must have enterprise-grade logging
-5. **FEATURES.MD RESPECT** - Follow features.md workflow for all feature work
-6. **USER INSTRUCTIONS** - Direct commands take highest priority
-7. **EVIDENCE-BASED VALIDATION** - Validate all work with concrete evidence
+2. **HOOK FEEDBACK COMPLIANCE (MANDATORY)** - ABSOLUTELY follow any hook feedback - NO EXCEPTIONS
+3. **COMPREHENSIVE LOGGING** - All code must have enterprise-grade logging
+4. **FEATURES.MD RESPECT** - Follow features.md workflow for all feature work
+5. **USER INSTRUCTIONS** - Direct commands take highest priority
+6. **EVIDENCE-BASED VALIDATION** - Validate all work with concrete evidence
 
 **🚨 PRIORITY #1 ENFORCEMENT:** INSTANT task creation is the highest priority and must ALWAYS happen first, before any other consideration or action.
 
@@ -684,44 +683,6 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 - Provide evidence of successful implementation
 - Include relevant command outputs or test results
 - Confirm all user requirements have been satisfied
-
-## 🚨 CONTINUE COMMAND PROTOCOL
-
-**🔴 CRITICAL: USER "CONTINUE" COMMAND HANDLING**
-
-**WHEN USER SAYS "CONTINUE" - MANDATORY PROTOCOL:**
-
-1. **CHECK CURRENT TASK STATUS FIRST**:
-   ```bash
-   node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json'); tm.getCurrentTask('[YOUR_AGENT_ID]').then(task => console.log(task ? JSON.stringify(task, null, 2) : 'No active task'));"
-   ```
-
-2. **IF CURRENT TASK EXISTS AND IN PROGRESS**:
-   - **✅ CONTINUE WORKING** on the current task
-   - **✅ RESUME IMPLEMENTATION** from where you left off
-   - **✅ COMPLETE THE TASK** following all validation protocols
-   - **❌ DO NOT CREATE NEW TASKS** - focus on completing current work
-
-3. **IF NO CURRENT TASK OR TASK COMPLETED**:
-   - **✅ CHECK FOR NEXT AVAILABLE TASK**:
-   ```bash
-   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" list '{"status": "pending"}'
-   ```
-   - **✅ CLAIM HIGHEST PRIORITY AVAILABLE TASK**
-   - **✅ BEGIN WORKING ON CLAIMED TASK**
-   - **✅ FOLLOW FULL IMPLEMENTATION WORKFLOW**
-
-4. **CONTINUE COMMAND WORKFLOW**:
-   ```
-   User says "continue" → Check current task → IF task exists: resume work → IF no task: claim next task → Execute work → Complete task → Ready for next "continue"
-   ```
-
-**🚨 CONTINUE COMMAND ENFORCEMENT:**
-- **❌ NEVER CREATE NEW TASKS** when user says "continue"
-- **✅ ALWAYS CHECK EXISTING WORK FIRST** - current task has priority
-- **✅ SEAMLESS TRANSITION** - continue current or start next without pause
-- **✅ WORK TO COMPLETION** - finish tasks fully before considering new ones
-- **✅ MAINTAIN AGENT STATE** - use consistent agent ID throughout session
 
 ## 🚨 EXECUTION WORKFLOW
 
