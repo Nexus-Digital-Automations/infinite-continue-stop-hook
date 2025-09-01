@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-const TaskManager = require('./lib/taskManager');
-const Logger = require('./lib/logger');
+const fs = require("fs");
+const path = require("path");
+const TaskManager = require("./lib/taskManager");
+const Logger = require("./lib/logger");
 
 // ============================================================================
 // NEVER-STOP INFINITE CONTINUE HOOK WITH INSTRUCTIVE TASK MANAGEMENT
@@ -13,64 +13,67 @@ const Logger = require('./lib/logger');
  * Find the root "Claude Coding Projects" directory containing TODO.json
  */
 function findClaudeProjectRoot(startDir = process.cwd()) {
-    let currentDir = startDir;
-    
-    // Look for "Claude Coding Projects" in the path and check for TODO.json
-    while (currentDir !== path.dirname(currentDir)) { // Not at filesystem root
-        // Check if we're in or found "Claude Coding Projects"
-        if (currentDir.includes('Claude Coding Projects')) {
-            // Look for TODO.json in potential project roots
-            const segments = currentDir.split(path.sep);
-            const claudeIndex = segments.findIndex(segment => segment.includes('Claude Coding Projects'));
-            
-            if (claudeIndex !== -1 && claudeIndex < segments.length - 1) {
-                // Try the next directory after "Claude Coding Projects"
-                const projectDir = segments.slice(0, claudeIndex + 2).join(path.sep);
-                if (fs.existsSync(path.join(projectDir, 'TODO.json'))) {
-                    return projectDir;
-                }
-            }
-            
-            // Also check current directory
-            if (fs.existsSync(path.join(currentDir, 'TODO.json'))) {
-                return currentDir;
-            }
+  let currentDir = startDir;
+
+  // Look for "Claude Coding Projects" in the path and check for TODO.json
+  while (currentDir !== path.dirname(currentDir)) {
+    // Not at filesystem root
+    // Check if we're in or found "Claude Coding Projects"
+    if (currentDir.includes("Claude Coding Projects")) {
+      // Look for TODO.json in potential project roots
+      const segments = currentDir.split(path.sep);
+      const claudeIndex = segments.findIndex((segment) =>
+        segment.includes("Claude Coding Projects"),
+      );
+
+      if (claudeIndex !== -1 && claudeIndex < segments.length - 1) {
+        // Try the next directory after "Claude Coding Projects"
+        const projectDir = segments.slice(0, claudeIndex + 2).join(path.sep);
+        if (fs.existsSync(path.join(projectDir, "TODO.json"))) {
+          return projectDir;
         }
-        
-        currentDir = path.dirname(currentDir);
+      }
+
+      // Also check current directory
+      if (fs.existsSync(path.join(currentDir, "TODO.json"))) {
+        return currentDir;
+      }
     }
-    
-    // Fallback to original behavior
-    return startDir;
+
+    currentDir = path.dirname(currentDir);
+  }
+
+  // Fallback to original behavior
+  return startDir;
 }
 
 /**
  * Check if stop is allowed via endpoint trigger
  */
 function checkStopAllowed(workingDir = process.cwd()) {
-    const stopFlagPath = path.join(workingDir, '.stop-allowed');
-    
-    if (fs.existsSync(stopFlagPath)) {
-        // Read and immediately delete the flag (single-use)
-        try {
-            const flagData = JSON.parse(fs.readFileSync(stopFlagPath, 'utf8'));
-            fs.unlinkSync(stopFlagPath); // Remove flag after reading
-            return flagData.stop_allowed === true;
-        } catch {
-            // Invalid flag file, remove it
-            fs.unlinkSync(stopFlagPath);
-            return false;
-        }
+  const stopFlagPath = path.join(workingDir, ".stop-allowed");
+
+  if (fs.existsSync(stopFlagPath)) {
+    // Read and immediately delete the flag (single-use)
+    try {
+      const flagData = JSON.parse(fs.readFileSync(stopFlagPath, "utf8"));
+      fs.unlinkSync(stopFlagPath); // Remove flag after reading
+      return flagData.stop_allowed === true;
+    } catch {
+      // Invalid flag file, remove it
+      fs.unlinkSync(stopFlagPath);
+      return false;
     }
-    
-    return false; // Default: never allow stops
+  }
+
+  return false; // Default: never allow stops
 }
 
 /**
  * Provides standardized TaskManager API guidance for all scenarios
  */
 async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
-    return `
+  return `
 📋 CLAUDE CODE AGENT TASK CONTINUATION PROTOCOL
 
 🚨 CRITICAL INSTRUCTION FOR CLAUDE CODE AGENT:
@@ -105,13 +108,70 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 16. **THEN: Claim new tasks using the API commands below (verify not already claimed first)**
 17. **COMPREHENSIVE COMMENTING: ADD THOROUGH, UP-TO-DATE COMMENTS TO ALL SCRIPT FILES**
 
-⚡ **EXPLICIT CONTINUATION MANDATE:**
-- If your task is partially complete but not finished → **CONTINUE THE TASK**
-- If implementation is halfway done → **COMPLETE THE IMPLEMENTATION** 
-- If validation hasn't been run → **RUN VALIDATION AND FIX ISSUES**
-- If requirements aren't fully met → **FINISH MEETING ALL REQUIREMENTS**
-- If code was written but not tested → **TEST AND VALIDATE THE CODE**
-- If research reports haven't been read → **READ RELEVANT RESEARCH REPORTS IMMEDIATELY**
+⚡ **TASK STATE-AWARE CONTINUATION MANDATE:**
+
+🔍 **IDENTIFY YOUR TASK STATE FIRST - THEN ACT ACCORDINGLY:**
+- **Just Started (0-25% complete)** → Review requirements, read research reports, begin implementation methodically
+- **Early Progress (25-50% complete)** → Continue implementation, maintain context, don't restart from scratch
+- **Mid-Implementation (50-75% complete)** → Focus on completing core functionality, preserve existing work
+- **Near Completion (75-95% complete)** → Finish implementation, run comprehensive validation, fix any issues
+- **Validation Phase (95%+ complete)** → Run all checks (lint, typecheck, tests), fix errors, verify requirements met
+- **Failed Validation** → Analyze failure reasons, fix specific issues, re-run validation until passing
+
+🧠 **CONTEXT PRESERVATION CRITICAL:**
+- **NEVER restart work from scratch** - always build upon existing progress
+- **READ all previous agent notes** and task history before continuing
+- **MAINTAIN implementation approach** established by previous work
+- **PRESERVE variable names, file structures, and architectural decisions**
+- **REVIEW task important_files** for context and requirements
+
+🔄 **IMPLEMENTATION RESUMPTION PROTOCOL:**
+
+📂 **BEFORE RESUMING - MANDATORY CONTEXT GATHERING:**
+1. **Read task description and requirements** - understand the full scope
+2. **Review agent_assignment_history** - see what previous agents attempted
+3. **Check important_files list** - read all referenced documentation
+4. **Examine existing code changes** - understand current implementation state
+5. **Review status_history** - identify previous blockers or issues
+
+💻 **IMPLEMENTATION CONTINUATION STRATEGIES:**
+- **For Code Changes:** Use git diff to see what was modified, continue from that point
+- **For New Features:** Check partially written functions, complete missing functionality
+- **For Bug Fixes:** Review error logs, continue debugging from last known state  
+- **For Refactoring:** Understand scope of changes, complete transformation consistently
+- **For Testing:** Run existing tests first, then add missing test coverage
+
+🚨 **NEVER DO DURING CONTINUATION:**
+- ❌ **Don't rewrite existing working code** unless absolutely necessary
+- ❌ **Don't change architectural decisions** made by previous agents
+- ❌ **Don't skip validation steps** that were previously failing
+- ❌ **Don't ignore task requirements** to rush completion
+
+📈 **PROGRESS PRESERVATION MANDATE - NEVER LOSE WORK:**
+
+🛡️ **WORK PRESERVATION PRINCIPLES:**
+- **Partial implementations have value** → Build upon them rather than restarting
+- **Failed attempts contain lessons** → Learn from previous errors, don't repeat
+- **Context switching is expensive** → Maintain momentum when resuming work
+- **Architecture decisions persist** → Follow established patterns and structures
+
+💾 **BEFORE CONTINUING - PRESERVE EXISTING WORK:**
+   # Backup current state before making changes
+   git status  # See what files are modified
+   git diff > /tmp/current-changes-backup.patch  # Save current changes
+   git stash  # Preserve uncommitted work if needed
+   
+   # Review what was previously implemented  
+   git log --oneline -5  # Recent commits
+   git diff HEAD~3..HEAD --name-only  # Files changed in recent work
+
+🔍 **CONTEXT ANALYSIS CHECKLIST:**
+- [ ] **Task requirements fully understood** - re-read description and success criteria
+- [ ] **Previous work direction identified** - understand implementation approach
+- [ ] **Blocking issues catalogued** - know what stopped previous progress  
+- [ ] **Dependencies satisfied** - ensure all prerequisite tasks completed
+- [ ] **Validation requirements clear** - know what checks must pass
+- [ ] **Integration points mapped** - understand how work fits into larger system
 
 🚀 **CONCURRENT SUBAGENT DEPLOYMENT MANDATE:**
 - **ALWAYS ASSESS PARALLELIZATION POTENTIAL** - Every task must be evaluated for concurrent execution
@@ -238,8 +298,8 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 📊 CURRENT PROJECT STATUS: ${taskStatus.pending} pending, ${taskStatus.in_progress} in progress, ${taskStatus.completed} completed
 
 📋 TASK CATEGORIES (Priority Order):
-• linter-error (highest) • build-error • start-error • error • missing-feature
-• bug • enhancement • refactor • documentation • chore • research • missing-test (lowest)
+• linter-error (highest) • build-error • start-error • error • bug (same as error)
+• missing-feature • enhancement • refactor • documentation • chore • research • missing-test (lowest)
 
 🔗 DEPENDENCY SYSTEM: Any task can depend on any other task - dependencies prioritized first
 
@@ -265,6 +325,27 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 - If type errors found → Create new error task IMMEDIATELY  
 - DO NOT mark original task complete until ALL validation passes
 - Provide command outputs as evidence of successful validation
+
+🧪 **VALIDATION CONTINUATION SPECIFICS:**
+
+🔍 **VALIDATION STATE DETECTION:**
+- **Never attempted** → Run full validation suite (lint, typecheck, tests, build)
+- **Partially run** → Continue from last successful check, fix remaining issues
+- **Failed previously** → Focus on specific failing checks, don't re-run passing ones
+- **Intermittent failures** → Identify flaky tests or environment issues
+
+⚙️ **VALIDATION RESUMPTION COMMANDS:**
+   # Check what validation was previously attempted
+   git log --oneline -10  # See recent commits and validation attempts
+   npm run lint 2>&1 | tee lint-output.log  # Capture and review lint results
+   npx tsc --noEmit 2>&1 | tee typecheck-output.log  # Capture TypeScript errors
+   npm test -- --verbose 2>&1 | tee test-output.log  # Detailed test results
+
+🎯 **FOCUSED VALIDATION FIXES:**
+- **Lint errors only** → Fix style/syntax issues, preserve functionality
+- **Type errors only** → Add type annotations, fix type mismatches  
+- **Test failures only** → Fix broken tests, update test expectations
+- **Build errors only** → Resolve import/export issues, fix build configuration
 
 📋 RESEARCH REPORTS REQUIREMENT: ALWAYS scan development/reports/ and development/research-reports/ for relevant research reports BEFORE starting any task. Include applicable reports in task important_files and READ THEM FIRST before implementation.
 
@@ -318,47 +399,54 @@ The bash exclamation mark (!) is used for history expansion, causing syntax erro
 }
 
 // Read input from Claude Code
-let inputData = '';
-process.stdin.setEncoding('utf8');
-process.stdin.on('data', chunk => inputData += chunk);
+let inputData = "";
+process.stdin.setEncoding("utf8");
+process.stdin.on("data", (chunk) => (inputData += chunk));
 
-process.stdin.on('end', async () => {
-    const workingDir = findClaudeProjectRoot();
-    const logger = new Logger(workingDir);
-    
-    try {
-        // Debug logging for input data
-        logger.addFlow(`Raw input data: "${inputData}"`);
-        logger.addFlow(`Input data length: ${inputData.length}`);
-        
-        let hookInput;
-        if (!inputData || inputData.trim() === '') {
-            // No input - probably manual execution, simulate Claude Code input
-            logger.addFlow('No input detected - running in manual mode');
-            hookInput = {
-                session_id: 'manual_test',
-                transcript_path: '',
-                stop_hook_active: true,
-                hook_event_name: 'manual_execution'
-            };
-        } else {
-            hookInput = JSON.parse(inputData);
-        }
-        
-        const { session_id: _session_id, transcript_path: _transcript_path, stop_hook_active: _stop_hook_active, hook_event_name } = hookInput;
-        
-        // Log input with event details
-        logger.logInput(hookInput);
-        logger.addFlow(`Received ${hook_event_name || 'unknown'} event from Claude Code`);
-        
-        // Check if TODO.json exists in current project
-        const todoPath = path.join(workingDir, 'TODO.json');
-        if (!fs.existsSync(todoPath)) {
-            logger.addFlow("No TODO.json found - this is not a TaskManager project");
-            logger.logExit(2, "No TODO.json found - continuing infinite mode");
-            logger.save();
-            
-            console.error(`
+process.stdin.on("end", async () => {
+  const workingDir = findClaudeProjectRoot();
+  const logger = new Logger(workingDir);
+
+  try {
+    // Debug logging for input data
+    logger.addFlow(`Raw input data: "${inputData}"`);
+    logger.addFlow(`Input data length: ${inputData.length}`);
+
+    let hookInput;
+    if (!inputData || inputData.trim() === "") {
+      // No input - probably manual execution, simulate Claude Code input
+      logger.addFlow("No input detected - running in manual mode");
+      hookInput = {
+        session_id: "manual_test",
+        transcript_path: "",
+        stop_hook_active: true,
+        hook_event_name: "manual_execution",
+      };
+    } else {
+      hookInput = JSON.parse(inputData);
+    }
+
+    const {
+      session_id: _session_id,
+      transcript_path: _transcript_path,
+      stop_hook_active: _stop_hook_active,
+      hook_event_name,
+    } = hookInput;
+
+    // Log input with event details
+    logger.logInput(hookInput);
+    logger.addFlow(
+      `Received ${hook_event_name || "unknown"} event from Claude Code`,
+    );
+
+    // Check if TODO.json exists in current project
+    const todoPath = path.join(workingDir, "TODO.json");
+    if (!fs.existsSync(todoPath)) {
+      logger.addFlow("No TODO.json found - this is not a TaskManager project");
+      logger.logExit(2, "No TODO.json found - continuing infinite mode");
+      logger.save();
+
+      console.error(`
 🚫 NO TASKMANAGER PROJECT DETECTED
 
 This directory does not contain a TODO.json file, which means it's not a TaskManager project.
@@ -373,100 +461,109 @@ If you want to enable task management for this project:
 
 ⚡ CONTINUING OPERATION...
 `);
-            process.exit(2); // Never allow stops even without TODO.json
-        }
+      process.exit(2); // Never allow stops even without TODO.json
+    }
 
-        // Initialize TaskManager to check agent status
-        const taskManager = new TaskManager(todoPath);
-        
-        // Check if there are any active agents or if agent initialization is needed
-        const todoData = await taskManager.readTodo();
-        
-        // Debug logging for agent detection
-        const allAgents = Object.keys(todoData.agents || {});
-        logger.addFlow(`Found ${allAgents.length} total agents in TODO.json`);
-        
-        // Clean up stale agents (older than 15 minutes) and identify active ones
-        const staleAgentTimeout = 900000; // 15 minutes
-        const activeAgents = [];
-        const staleAgents = [];
-        
-        for (const agentId of allAgents) {
-            const agent = todoData.agents[agentId];
-            // Handle both lastHeartbeat (camelCase) and last_heartbeat (snake_case) formats
-            const lastHeartbeat = agent.lastHeartbeat || agent.last_heartbeat;
-            const heartbeatTime = lastHeartbeat ? new Date(lastHeartbeat).getTime() : 0;
-            const timeSinceHeartbeat = Date.now() - heartbeatTime;
-            const isActive = timeSinceHeartbeat < staleAgentTimeout;
-            
-            logger.addFlow(`Agent ${agentId}: heartbeat=${lastHeartbeat}, timeSince=${Math.round(timeSinceHeartbeat/1000)}s, isActive=${isActive}`);
-            
-            if (isActive) {
-                activeAgents.push(agentId);
-            } else {
-                staleAgents.push(agentId);
-            }
-        }
-        
-        // Remove stale agents from the system
-        let agentsRemoved = 0;
-        for (const staleAgentId of staleAgents) {
-            delete todoData.agents[staleAgentId];
-            agentsRemoved++;
-            logger.addFlow(`Removed stale agent: ${staleAgentId}`);
-        }
-        
-        // Save changes if any stale agents were removed
-        if (agentsRemoved > 0) {
-            await taskManager.writeTodo(todoData);
-            logger.addFlow(`Removed ${agentsRemoved} stale agents from TODO.json`);
-        }
-        
-        logger.addFlow(`Active agents found: ${activeAgents.length}, Stale agents removed: ${agentsRemoved}`);
-        
-        // Check for stale in-progress tasks (stuck for > 15 minutes) and reset them
-        const staleTaskTimeout = 900000; // 15 minutes
-        let staleTasksReset = 0;
-        
-        for (const task of todoData.tasks) {
-            if (task.status === 'in_progress' && task.started_at) {
-                const taskStartTime = new Date(task.started_at).getTime();
-                const timeSinceStart = Date.now() - taskStartTime;
-                
-                if (timeSinceStart > staleTaskTimeout) {
-                    // Reset stale task back to pending
-                    task.status = 'pending';
-                    task.assigned_agent = null;
-                    task.claimed_by = null;
-                    task.started_at = null;
-                    
-                    // Add reset history entry
-                    if (!task.agent_assignment_history) task.agent_assignment_history = [];
-                    task.agent_assignment_history.push({
-                        agent: task.assigned_agent || 'system',
-                        action: 'auto_reset_stale',
-                        timestamp: new Date().toISOString(),
-                        reason: `Task stale for ${Math.round(timeSinceStart / 60000)} minutes`
-                    });
-                    
-                    staleTasksReset++;
-                    logger.addFlow(`Reset stale task: ${task.title} (${Math.round(timeSinceStart / 60000)} min)`);
-                }
-            }
-        }
-        
-        // Save changes if any stale tasks were reset
-        if (staleTasksReset > 0) {
-            await taskManager.writeTodo(todoData);
-            logger.addFlow(`Reset ${staleTasksReset} stale tasks back to pending`);
-        }
+    // Initialize TaskManager to check agent status
+    const taskManager = new TaskManager(todoPath);
 
-        if (activeAgents.length === 0) {
-            logger.addFlow("No active agents detected - need agent initialization");
-            logger.logExit(2, "No active agents - providing initialization guidance");
-            logger.save();
-            
-            console.error(`
+    // Check if there are any active agents or if agent initialization is needed
+    const todoData = await taskManager.readTodo();
+
+    // Debug logging for agent detection
+    const allAgents = Object.keys(todoData.agents || {});
+    logger.addFlow(`Found ${allAgents.length} total agents in TODO.json`);
+
+    // Clean up stale agents (older than 15 minutes) and identify active ones
+    const staleAgentTimeout = 900000; // 15 minutes
+    const activeAgents = [];
+    const staleAgents = [];
+
+    for (const agentId of allAgents) {
+      const agent = todoData.agents[agentId];
+      // Handle both lastHeartbeat (camelCase) and last_heartbeat (snake_case) formats
+      const lastHeartbeat = agent.lastHeartbeat || agent.last_heartbeat;
+      const heartbeatTime = lastHeartbeat
+        ? new Date(lastHeartbeat).getTime()
+        : 0;
+      const timeSinceHeartbeat = Date.now() - heartbeatTime;
+      const isActive = timeSinceHeartbeat < staleAgentTimeout;
+
+      logger.addFlow(
+        `Agent ${agentId}: heartbeat=${lastHeartbeat}, timeSince=${Math.round(timeSinceHeartbeat / 1000)}s, isActive=${isActive}`,
+      );
+
+      if (isActive) {
+        activeAgents.push(agentId);
+      } else {
+        staleAgents.push(agentId);
+      }
+    }
+
+    // Remove stale agents from the system
+    let agentsRemoved = 0;
+    for (const staleAgentId of staleAgents) {
+      delete todoData.agents[staleAgentId];
+      agentsRemoved++;
+      logger.addFlow(`Removed stale agent: ${staleAgentId}`);
+    }
+
+    // Save changes if any stale agents were removed
+    if (agentsRemoved > 0) {
+      await taskManager.writeTodo(todoData);
+      logger.addFlow(`Removed ${agentsRemoved} stale agents from TODO.json`);
+    }
+
+    logger.addFlow(
+      `Active agents found: ${activeAgents.length}, Stale agents removed: ${agentsRemoved}`,
+    );
+
+    // Check for stale in-progress tasks (stuck for > 15 minutes) and reset them
+    const staleTaskTimeout = 900000; // 15 minutes
+    let staleTasksReset = 0;
+
+    for (const task of todoData.tasks) {
+      if (task.status === "in_progress" && task.started_at) {
+        const taskStartTime = new Date(task.started_at).getTime();
+        const timeSinceStart = Date.now() - taskStartTime;
+
+        if (timeSinceStart > staleTaskTimeout) {
+          // Reset stale task back to pending
+          task.status = "pending";
+          task.assigned_agent = null;
+          task.claimed_by = null;
+          task.started_at = null;
+
+          // Add reset history entry
+          if (!task.agent_assignment_history)
+            task.agent_assignment_history = [];
+          task.agent_assignment_history.push({
+            agent: task.assigned_agent || "system",
+            action: "auto_reset_stale",
+            timestamp: new Date().toISOString(),
+            reason: `Task stale for ${Math.round(timeSinceStart / 60000)} minutes`,
+          });
+
+          staleTasksReset++;
+          logger.addFlow(
+            `Reset stale task: ${task.title} (${Math.round(timeSinceStart / 60000)} min)`,
+          );
+        }
+      }
+    }
+
+    // Save changes if any stale tasks were reset
+    if (staleTasksReset > 0) {
+      await taskManager.writeTodo(todoData);
+      logger.addFlow(`Reset ${staleTasksReset} stale tasks back to pending`);
+    }
+
+    if (activeAgents.length === 0) {
+      logger.addFlow("No active agents detected - need agent initialization");
+      logger.logExit(2, "No active agents - providing initialization guidance");
+      logger.save();
+
+      console.error(`
 🤖 NO ACTIVE AGENTS DETECTED
 
 Working Directory: ${workingDir}
@@ -485,6 +582,27 @@ TaskManager project exists but no active agents are registered.
 **ULTRATHINK - USE UP TO 10 SIMULTANEOUS SUBAGENTS FOR COMPLEX MULTI-COMPONENT TASKS**
 **ULTRATHINK - ADD COMPREHENSIVE COMMENTS TO ALL SCRIPT FILES FOR FUTURE DEVELOPERS**
 
+🤖 **MULTI-AGENT COORDINATION CONTINUATION:**
+
+🔄 **AGENT HANDOFF PROTOCOLS:**
+- **Check task.agent_assignment_history** → See which agents worked on this before
+- **Read completion notes** from previous attempts → Understand what was tried
+- **Review switched task contexts** → If task was interrupted, understand why
+- **Coordinate with active agents** → Don't claim tasks actively worked on by others
+
+👥 **AGENT COLLABORATION PATTERNS:**
+- **Sequential work** → Continue exactly where previous agent left off
+- **Parallel work** → Ensure no conflicts with concurrent agents on related tasks  
+- **Specialized handoffs** → Frontend agents → Backend agents → Test agents
+- **Expertise handoffs** → Research agents → Implementation agents → Validation agents
+
+📋 **HANDOFF CONTEXT COMMANDS:**
+   # Review agent assignment history for context
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTask("AGENT_ID").then(task => { if(task?.agent_assignment_history) { console.log("Previous agents:", task.agent_assignment_history.map(h => h.agentId + " " + h.role + " " + h.assignedAt)); } });'
+   
+   # Check for related tasks by same agents
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const relatedTasks = data.tasks.filter(t => t.agent_assignment_history?.some(h => h.agentId === "PREVIOUS_AGENT")); console.log("Related tasks by agent:", relatedTasks.map(t => ({id: t.id, title: t.title}))); });'
+
 🔄 INFINITE CONTINUE MODE ACTIVE
 The stop hook will continue infinitely to prevent accidental termination.
 
@@ -502,20 +620,22 @@ To continue working with this TaskManager project:
 
 ⚡ CONTINUING OPERATION - COMPLETE YOUR UNFINISHED WORK...
 `);
-            process.exit(2);
-        }
-        
-        // ========================================================================
-        // NEVER-STOP PROTOCOL: CHECK ENDPOINT STOP TRIGGER
-        // ========================================================================
-        
-        const stopAllowed = checkStopAllowed(workingDir);
-        if (stopAllowed) {
-            logger.addFlow("Stop endpoint triggered - allowing ONE stop, then returning to infinite mode");
-            logger.logExit(0, "Endpoint-triggered stop (single use)");
-            logger.save();
-            
-            console.error(`
+      process.exit(2);
+    }
+
+    // ========================================================================
+    // NEVER-STOP PROTOCOL: CHECK ENDPOINT STOP TRIGGER
+    // ========================================================================
+
+    const stopAllowed = checkStopAllowed(workingDir);
+    if (stopAllowed) {
+      logger.addFlow(
+        "Stop endpoint triggered - allowing ONE stop, then returning to infinite mode",
+      );
+      logger.logExit(0, "Endpoint-triggered stop (single use)");
+      logger.save();
+
+      console.error(`
 🛑 ENDPOINT-TRIGGERED STOP AUTHORIZED
 
 A stop request was authorized via the stop endpoint.
@@ -527,27 +647,34 @@ This is a single-use authorization.
 To trigger another stop, use the TaskManager API:
 node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => console.log(JSON.stringify(result, null, 2)));"
 `);
-            process.exit(0); // Allow stop only when endpoint triggered
-        }
-        
-        // ========================================================================
-        // INFINITE CONTINUE MODE: NEVER ALLOW NATURAL STOPS
-        // ========================================================================
-        
-        // Check task status to provide appropriate instructions (taskManager already initialized above)
-        const taskStatus = await taskManager.getTaskStatus();
-        logger.addFlow(`Task status: ${taskStatus.pending} pending, ${taskStatus.in_progress} in_progress, ${taskStatus.completed} completed`);
-        
-        // Provide detailed instructive guidance based on current state
-        const instructiveGuidance = await provideInstructiveTaskGuidance(taskManager, taskStatus);
-        
-        // Always continue - never allow natural stops
-        logger.addFlow("Never-stop mode: Providing instructive task management guidance");
-        logger.logExit(2, "Infinite continue mode - providing task guidance");
-        logger.save();
-        
-        // Output detailed instructions to Claude
-        console.error(`
+      process.exit(0); // Allow stop only when endpoint triggered
+    }
+
+    // ========================================================================
+    // INFINITE CONTINUE MODE: NEVER ALLOW NATURAL STOPS
+    // ========================================================================
+
+    // Check task status to provide appropriate instructions (taskManager already initialized above)
+    const taskStatus = await taskManager.getTaskStatus();
+    logger.addFlow(
+      `Task status: ${taskStatus.pending} pending, ${taskStatus.in_progress} in_progress, ${taskStatus.completed} completed`,
+    );
+
+    // Provide detailed instructive guidance based on current state
+    const instructiveGuidance = await provideInstructiveTaskGuidance(
+      taskManager,
+      taskStatus,
+    );
+
+    // Always continue - never allow natural stops
+    logger.addFlow(
+      "Never-stop mode: Providing instructive task management guidance",
+    );
+    logger.logExit(2, "Infinite continue mode - providing task guidance");
+    logger.save();
+
+    // Output detailed instructions to Claude
+    console.error(`
 🔄 INFINITE CONTINUE MODE ACTIVE
 
 🚨 **CLAUDE CODE AGENT - READ THIS FIRST:**
@@ -569,15 +696,17 @@ This system operates in infinite continue mode. To authorize a stop, use:
 
 ⚡ CONTINUING OPERATION...
 `);
-        
-        process.exit(2); // Always continue - never allow natural stops
-        
-    } catch (error) {
-        logger.logError(error, 'stop-hook-main');
-        logger.logExit(2, `Error handled - continuing infinite mode: ${error.message}`);
-        logger.save();
-        
-        console.error(`
+
+    process.exit(2); // Always continue - never allow natural stops
+  } catch (error) {
+    logger.logError(error, "stop-hook-main");
+    logger.logExit(
+      2,
+      `Error handled - continuing infinite mode: ${error.message}`,
+    );
+    logger.save();
+
+    console.error(`
 ⚠️ STOP HOOK ERROR - CONTINUING ANYWAY
 
 Error encountered: ${error.message}
@@ -592,6 +721,6 @@ Even with errors, the system continues to prevent accidental termination.
 
 ⚡ CONTINUING OPERATION...
 `);
-        process.exit(2); // Even on error, continue infinite mode
-    }
+    process.exit(2); // Even on error, continue infinite mode
+  }
 });

@@ -465,26 +465,26 @@ Tasks organized by **specific categories** with automatic sorting by urgency:
 2. **build-error** - Compilation/bundling failures
 3. **start-error** - Application startup failures
 4. **error** - Runtime errors and exceptions
-4. **bug** - Incorrect behavior needing fixes (SAME PRIORITY AS ERRORS)
 
-### IMPLEMENTATION WORK (Rank 5-8)
+### IMPLEMENTATION WORK (Rank 5-9)
 5. **missing-feature** - Required functionality
-6. **enhancement** - Feature improvements
-7. **refactor** - Code restructuring
-8. **documentation** - Documentation updates
+6. **bug** - Incorrect behavior needing fixes
+7. **enhancement** - Feature improvements
+8. **refactor** - Code restructuring
+9. **documentation** - Documentation updates
 
-### MAINTENANCE & RESEARCH (Rank 9-10)
-9. **chore** - Maintenance tasks
-10. **research** - Investigation work
+### MAINTENANCE & RESEARCH (Rank 10-11)
+10. **chore** - Maintenance tasks
+11. **research** - Investigation work
 
-### TESTING (Rank 11-17) - Lowest Priority
-11. **missing-test** - Test coverage gaps
-12. **test-setup** - Test environment configuration
-13. **test-refactor** - Test code improvements
-14. **test-performance** - Performance testing
-15. **test-linter-error** - Test file linting
-16. **test-error** - Failing tests
-17. **test-feature** - Testing tooling
+### TESTING (Rank 12-18) - Lowest Priority
+12. **missing-test** - Test coverage gaps
+13. **test-setup** - Test environment configuration
+14. **test-refactor** - Test code improvements
+15. **test-performance** - Performance testing
+16. **test-linter-error** - Test file linting
+17. **test-error** - Failing tests
+18. **test-feature** - Testing tooling
 
 **AUTO-SORTING:** Category Rank → Priority Value → Creation Time
 

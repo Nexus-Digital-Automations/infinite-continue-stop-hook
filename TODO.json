@@ -1760,7 +1760,7 @@
       "created_at": "2025-08-19T23:09:58.874Z",
       "auto_research_created": false,
       "mode": "DEVELOPMENT",
-      "started_at": "2025-08-31T18:14:46.959Z",
+      "started_at": "2025-09-01T00:01:02.624Z",
       "agent_assignment_history": [
         {
           "role": "primary",
@@ -1780,28 +1780,24 @@
           "assignedAt": "2025-08-31T18:14:46.959Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-09-01T00:00:22.942Z",
+          "reason": "Task stale for 346 minutes"
+        },
+        {
+          "agentId": "development_session_1756684836505_1_general_dbd24753",
+          "role": "primary",
+          "assignedAt": "2025-09-01T00:01:02.624Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
         }
       ],
       "last_modified": "2025-08-31T06:23:16.910Z",
-      "assigned_agent": "development_session_1756663639333_1_general_6896ffb2",
-      "claimed_by": "development_session_1756663639333_1_general_6896ffb2"
-    },
-    {
-      "id": "task_1755653794413_g9mfhfay1",
-      "title": "Enhance stop hook feedback for unfinished task continuation",
-      "description": "Modify stop hook to explicitly instruct Claude Code agent to continue working on unfinished tasks",
-      "mode": "DEVELOPMENT",
-      "category": "enhancement",
-      "priority": "high",
-      "status": "pending",
-      "dependencies": [],
-      "important_files": [],
-      "success_criteria": [],
-      "estimate": "",
-      "requires_research": false,
-      "subtasks": [],
-      "created_at": "2025-08-20T01:36:34.413Z",
-      "auto_research_created": false
+      "assigned_agent": "development_session_1756684836505_1_general_dbd24753",
+      "claimed_by": "development_session_1756684836505_1_general_dbd24753"
     },
     {
       "id": "task_1755656581837_6ggbqfsl0",
@@ -1810,7 +1806,7 @@
       "mode": "DEVELOPMENT",
       "category": "bug",
       "priority": "high",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -1818,7 +1814,19 @@
       "requires_research": false,
       "subtasks": [],
       "created_at": "2025-08-20T02:23:01.837Z",
-      "auto_research_created": false
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1756684833148_1_general_93adce91",
+      "started_at": "2025-09-01T00:13:48.720Z",
+      "claimed_by": "development_session_1756684833148_1_general_93adce91",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1756684833148_1_general_93adce91",
+          "role": "primary",
+          "assignedAt": "2025-09-01T00:13:48.720Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
     },
     {
       "id": "task_1755656815132_8hwr0vv2m",
@@ -1895,7 +1903,7 @@
       "mode": "RESEARCH",
       "category": "research",
       "priority": "critical",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [],
       "important_files": [
         "./development/research-reports/research-report-task_1756054152314_qug6ujili.md"
@@ -1913,9 +1921,9 @@
       "created_at": "2025-08-24T16:49:12.314Z",
       "created_by": "auto-research-system",
       "auto_created_for": "task_1756054152314_9k1kbktnv",
-      "started_at": "2025-08-31T18:10:46.189Z",
-      "claimed_by": "agent_1756663846189",
-      "assigned_agent": "agent_1756663846189",
+      "started_at": null,
+      "claimed_by": null,
+      "assigned_agent": null,
       "agent_assignment_history": [
         {
           "agent": "agent_1756276282534",
@@ -1954,6 +1962,12 @@
           "agent": "agent_1756663846189",
           "action": "claimed",
           "timestamp": "2025-08-31T18:10:46.189Z"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-09-01T00:00:22.942Z",
+          "reason": "Task stale for 350 minutes"
         }
       ]
     },
@@ -2829,7 +2843,7 @@
       "mode": "RESEARCH",
       "category": "research",
       "priority": "high",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [],
       "important_files": [
         "./development/research-reports/research-report-task_1756622967321_wgntd4hfp.md"
@@ -2847,14 +2861,20 @@
       "created_at": "2025-08-31T06:49:27.321Z",
       "created_by": "auto-research-system",
       "auto_created_for": "task_1756622967320_2ktuut3rn",
-      "started_at": "2025-08-31T20:19:28.856Z",
-      "claimed_by": "agent_1756671568856",
-      "assigned_agent": "agent_1756671568856",
+      "started_at": null,
+      "claimed_by": null,
+      "assigned_agent": null,
       "agent_assignment_history": [
         {
           "agent": "agent_1756671568856",
           "action": "claimed",
           "timestamp": "2025-08-31T20:19:28.856Z"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-09-01T00:00:22.942Z",
+          "reason": "Task stale for 221 minutes"
         }
       ]
     },
@@ -3286,14 +3306,25 @@
       "created_at": "2025-08-31T17:12:24.541Z",
       "created_by": "auto-research-system",
       "auto_created_for": "task_1756660344540_0alm7tfld",
-      "started_at": "2025-08-31T18:08:36.929Z",
-      "claimed_by": "agent_1756663716929",
-      "assigned_agent": "agent_1756663716929",
+      "started_at": "2025-09-01T00:13:33.246Z",
+      "claimed_by": "agent_1756685613246",
+      "assigned_agent": "agent_1756685613246",
       "agent_assignment_history": [
         {
           "agent": "agent_1756663716929",
           "action": "claimed",
           "timestamp": "2025-08-31T18:08:36.929Z"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-09-01T00:00:22.942Z",
+          "reason": "Task stale for 352 minutes"
+        },
+        {
+          "agent": "agent_1756685613246",
+          "action": "claimed",
+          "timestamp": "2025-09-01T00:13:33.246Z"
         }
       ]
     },
@@ -3436,7 +3467,7 @@
       "mode": "RESEARCH",
       "category": "research",
       "priority": "high",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [],
       "important_files": [
         "./development/research-reports/research-report-task_1756670519081_820klc2iv.md"
@@ -3454,14 +3485,20 @@
       "created_at": "2025-08-31T20:01:59.081Z",
       "created_by": "auto-research-system",
       "auto_created_for": "task_1756670519080_q1lyodhgt",
-      "started_at": "2025-08-31T20:16:58.011Z",
-      "claimed_by": "agent_1756671418011",
-      "assigned_agent": "agent_1756671418011",
+      "started_at": null,
+      "claimed_by": null,
+      "assigned_agent": null,
       "agent_assignment_history": [
         {
           "agent": "agent_1756671418011",
           "action": "claimed",
           "timestamp": "2025-08-31T20:16:58.011Z"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-09-01T00:00:22.942Z",
+          "reason": "Task stale for 223 minutes"
         }
       ]
     },
@@ -3623,6 +3660,32 @@
       "created_at": "2025-08-31T23:58:26.231Z",
       "created_by": "auto-research-system",
       "auto_created_for": "task_1756684706230_0n855u05s"
+    },
+    {
+      "id": "task_1756685575572_b4ek20t88",
+      "title": "Research: Update task category priority rankings to make bugs equal priority to errors",
+      "description": "Research and analysis required for implementing: \"Update task category priority rankings to make bugs equal priority to errors\"\n\n**Implementation Task Details:**\nChange bug category from priority 6 to priority 4 to match error priority in CLAUDE.md and TaskManager API systems\n\n**Research Objectives:**\n1. Investigate best practices and methodologies for this implementation\n2. Identify potential challenges, risks, and mitigation strategies  \n3. Research relevant technologies, frameworks, and tools\n4. Define implementation approach and architecture decisions\n5. Provide actionable recommendations and guidance\n\n**Implementation Task ID:** task_1756685575571_anda6ac0i\n\n**Auto-created by:** TaskManager research dependency system\n**Research Priority:** This research task must be completed before implementation begins",
+      "mode": "RESEARCH",
+      "category": "research",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [
+        "./development/research-reports/research-report-task_1756685575572_b4ek20t88.md"
+      ],
+      "success_criteria": [
+        "Research methodology and approach documented",
+        "Key findings and recommendations provided",
+        "Implementation guidance and best practices identified",
+        "Risk assessment and mitigation strategies outlined",
+        "Research report created: ./development/research-reports/research-report-task_1756685575572_b4ek20t88.md"
+      ],
+      "estimate": "1-2 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-01T00:12:55.572Z",
+      "created_by": "auto-research-system",
+      "auto_created_for": "task_1756685575571_anda6ac0i"
     }
   ],
   "current_mode": "DEVELOPMENT",
@@ -3676,60 +3739,6 @@
     1755567176654
   ],
   "agents": {
-    "development_session_1756663590875_1_general_0274c0ae": {
-      "name": "development Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-08-31T18:06:30.877Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-08-31T18:06:30.877Z",
-      "sessionId": "session_1756663590875",
-      "metadata": {
-        "renewedAt": "2025-08-31T18:06:35.274Z",
-        "renewalReason": "Agent reinitialization requested"
-      },
-      "lastRenewal": "2025-08-31T18:06:35.274Z",
-      "renewalCount": 1,
-      "agentId": "development_session_1756663590875_1_general_0274c0ae"
-    },
-    "development_session_1756663639333_1_general_6896ffb2": {
-      "name": "development Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-08-31T18:07:19.336Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-08-31T18:07:19.336Z",
-      "sessionId": "session_1756663639333",
-      "metadata": {
-        "renewedAt": "2025-08-31T18:14:33.235Z",
-        "renewalReason": "Agent reinitialization requested"
-      },
-      "lastRenewal": "2025-08-31T18:07:25.986Z",
-      "renewalCount": 1,
-      "agentId": "development_session_1756663639333_1_general_6896ffb2"
-    },
     "development_session_1756684291671_1_general_a397bd79": {
       "name": "development Agent",
       "role": "development",
@@ -3750,6 +3759,33 @@
       "createdAt": "2025-08-31T23:51:31.673Z",
       "sessionId": "session_1756684291671",
       "metadata": {}
+    },
+    "development_session_1756684836505_1_general_dbd24753": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-01T00:00:36.507Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-01T00:00:36.507Z",
+      "sessionId": "session_1756684836505",
+      "metadata": {
+        "renewedAt": "2025-09-01T00:00:40.805Z",
+        "renewalReason": "Agent reinitialization requested"
+      },
+      "lastRenewal": "2025-09-01T00:00:40.805Z",
+      "renewalCount": 1,
+      "agentId": "development_session_1756684836505_1_general_dbd24753"
     }
   }
 }
