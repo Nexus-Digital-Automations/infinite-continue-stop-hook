@@ -77,6 +77,8 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 **ULTRATHINK - IMMEDIATELY REINITIALIZE AGENT TO PREVENT EXPIRATION**
 **ULTRATHINK - IF YOU HAVE AN UNFINISHED TASK - CONTINUE WORKING ON IT IMMEDIATELY**
 **ULTRATHINK - DO NOT STOP - DO NOT CLAIM NEW TASKS - FINISH YOUR CURRENT WORK FIRST**
+**ULTRATHINK - DEPLOY MAXIMUM CONCURRENT TASK SUBAGENTS FOR ALL PARALLELIZABLE WORK**
+**ULTRATHINK - USE UP TO 10 SIMULTANEOUS SUBAGENTS FOR COMPLEX MULTI-COMPONENT TASKS**
 
 🚨 **ABSOLUTE PROHIBITIONS - NEVER EVER:**
 **❌ DO NOT CLAIM TASKS ALREADY CLAIMED BY OTHER AGENTS**
@@ -88,16 +90,20 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 1. **IMMEDIATELY FIRST: REINITIALIZE AGENT TO PREVENT EXPIRATION USING COMMAND BELOW**
 2. **ABSOLUTELY SECOND: Read development/features.md to understand approved features and project scope**
 3. **THIRD: Check if you have an unfinished task using the commands below**  
-4. **TASK CLAIMING VALIDATION: Before claiming any task, verify it is NOT already claimed by another agent**
-5. **FEATURES COMPLIANCE: Only work on features listed in development/features.md "Implemented" or "Planned" sections**
-6. **IF UNFINISHED TASK EXISTS: CONTINUE WORKING ON IT - DO NOT STOP UNTIL COMPLETE**
-7. **BEFORE STARTING ANY TASK: Scan development/reports/ and development/research-reports/ for relevant research reports**
-8. **READ RESEARCH REPORTS FIRST: Include applicable reports in task important_files and read them before implementation**
-9. **IF NO CURRENT TASK: COMPLETE current task and claim next one (only if not claimed by another agent)**
-10. **ALWAYS: Use TaskManager API endpoints to manage your work**
-11. **WHEN FINISHED: Mark tasks complete using the commands below**
-12. **AFTER TASK COMPLETION: IMMEDIATELY REINITIALIZE AGENT AGAIN**
-13. **THEN: Claim new tasks using the API commands below (verify not already claimed first)**
+4. **FOURTH: ASSESS TASK FOR CONCURRENT SUBAGENT DEPLOYMENT - USE MAXIMUM PARALLELIZATION**
+5. **FIFTH: DEPLOY UP TO 10 CONCURRENT SUBAGENTS FOR COMPLEX MULTI-COMPONENT TASKS**
+6. **TASK CLAIMING VALIDATION: Before claiming any task, verify it is NOT already claimed by another agent**
+7. **FEATURES COMPLIANCE: Only work on features listed in development/features.md "Implemented" or "Planned" sections**
+8. **IF UNFINISHED TASK EXISTS: CONTINUE WORKING ON IT - DO NOT STOP UNTIL COMPLETE**
+9. **CONCURRENT EXECUTION: Break work into parallel streams and execute simultaneously**
+10. **BEFORE STARTING ANY TASK: Scan development/reports/ and development/research-reports/ for relevant research reports**
+11. **READ RESEARCH REPORTS FIRST: Include applicable reports in task important_files and read them before implementation**
+12. **IF NO CURRENT TASK: COMPLETE current task and claim next one (only if not claimed by another agent)**
+13. **ALWAYS: Use TaskManager API endpoints to manage your work**
+14. **WHEN FINISHED: Mark tasks complete using the commands below**
+15. **AFTER TASK COMPLETION: IMMEDIATELY REINITIALIZE AGENT AGAIN**
+16. **THEN: Claim new tasks using the API commands below (verify not already claimed first)**
+17. **COMPREHENSIVE COMMENTING: ADD THOROUGH, UP-TO-DATE COMMENTS TO ALL SCRIPT FILES**
 
 ⚡ **EXPLICIT CONTINUATION MANDATE:**
 - If your task is partially complete but not finished → **CONTINUE THE TASK**
@@ -106,6 +112,23 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 - If requirements aren't fully met → **FINISH MEETING ALL REQUIREMENTS**
 - If code was written but not tested → **TEST AND VALIDATE THE CODE**
 - If research reports haven't been read → **READ RELEVANT RESEARCH REPORTS IMMEDIATELY**
+
+🚀 **CONCURRENT SUBAGENT DEPLOYMENT MANDATE:**
+- **ALWAYS ASSESS PARALLELIZATION POTENTIAL** - Every task must be evaluated for concurrent execution
+- **DEPLOY MAXIMUM SUBAGENTS** - Use up to 10 concurrent subagents for complex tasks
+- **SIMULTANEOUS START** - All subagents must begin AT THE EXACT SAME TIME
+- **BREAK DOWN WORK** - Divide tasks into parallel streams for maximum efficiency
+- **COORDINATE EXECUTION** - Ensure subagents work in harmony without conflicts
+- **APPROPRIATE SCALING** - Use as many subagents as the task meaningfully supports
+- **NO SINGLE-AGENT BIAS** - Default to concurrent execution when possible
+
+📝 **COMPREHENSIVE COMMENTING MANDATE:**
+- **ALL SCRIPT FILES MUST HAVE THOROUGH COMMENTS** - Future developers need comprehensive documentation
+- **FUNCTION DOCUMENTATION** - Every function must have purpose, parameters, return values explained
+- **COMPLEX LOGIC COMMENTS** - Inline explanations for non-obvious implementation decisions
+- **FILE HEADER COMMENTS** - Purpose, dependencies, usage instructions for every script file
+- **MAINTAIN COMMENT ACCURACY** - Always update comments when modifying code
+- **REMOVE INCORRECT COMMENTS** - Delete or fix comments that are outdated or wrong
 
 🎯 ESSENTIAL TASKMANAGER API COMMANDS
 
@@ -138,8 +161,11 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 
 🚀 CORE WORKFLOW COMMANDS:
 
-   # STEP 0: CRITICAL - IMMEDIATELY REINITIALIZE AGENT TO PREVENT EXPIRATION
-   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize
+   # STEP 0: CRITICAL - INITIALIZE AGENT FIRST, THEN REINITIALIZE TO PREVENT EXPIRATION
+   # If you get "No agent ID" error, run init first:
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init
+   # Then immediately reinitialize with your agent ID:
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [YOUR_AGENT_ID]
 
    # STEP 1: MANDATORY - Read features file first
    cat development/features.md
@@ -157,7 +183,8 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
    timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTask("[AGENT_ID]").then(async task => { if(task) { await tm.updateTaskStatus(task.id, "completed", "Task completed successfully"); console.log("✅ Task completed:", task.title); } else { console.log("No active task to complete"); } });'
 
    # IMMEDIATE AFTER TASK COMPLETION: REINITIALIZE AGENT TO PREVENT EXPIRATION
-   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize
+   # Use your actual agent ID from the init command above:
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [YOUR_AGENT_ID]
 
    # Claim next available task  
    timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getNextPendingTask().then(task => { if(task) { console.log("📋 Next task available:"); console.log(JSON.stringify(task, null, 2)); } else { console.log("No pending tasks available"); } });'
@@ -454,6 +481,9 @@ TaskManager project exists but no active agents are registered.
 **ULTRATHINK - IF YOU WERE WORKING ON SOMETHING BEFORE THIS MESSAGE:**
 **ULTRATHINK - CONTINUE YOUR WORK - DO NOT ABANDON UNFINISHED TASKS**
 **ULTRATHINK - INITIALIZE AGENT AND CONTINUE WHERE YOU LEFT OFF**
+**ULTRATHINK - DEPLOY MAXIMUM CONCURRENT SUBAGENTS FOR ANY PARALLELIZABLE WORK**
+**ULTRATHINK - USE UP TO 10 SIMULTANEOUS SUBAGENTS FOR COMPLEX MULTI-COMPONENT TASKS**
+**ULTRATHINK - ADD COMPREHENSIVE COMMENTS TO ALL SCRIPT FILES FOR FUTURE DEVELOPERS**
 
 🔄 INFINITE CONTINUE MODE ACTIVE
 The stop hook will continue infinitely to prevent accidental termination.
@@ -525,6 +555,9 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 **ULTRATHINK - IF YOU HAVE AN UNFINISHED TASK, DO NOT STOP - CONTINUE WORKING ON IT**
 **ULTRATHINK - CHECK YOUR CURRENT TASK STATUS IMMEDIATELY USING COMMANDS BELOW**
 **ULTRATHINK - COMPLETE ALL UNFINISHED WORK BEFORE CLAIMING NEW TASKS**
+**ULTRATHINK - DEPLOY MAXIMUM CONCURRENT SUBAGENTS FOR PARALLELIZABLE WORK**
+**ULTRATHINK - USE UP TO 10 SIMULTANEOUS SUBAGENTS FOR COMPLEX TASKS**
+**ULTRATHINK - ADD COMPREHENSIVE COMMENTS TO ALL SCRIPT FILES**
 
 ${instructiveGuidance}
 

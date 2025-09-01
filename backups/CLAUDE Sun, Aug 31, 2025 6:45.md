@@ -79,79 +79,6 @@ function processData(userId, data) {
 }
 ```
 
-### 🔴 ABSOLUTE COMPREHENSIVE COMMENTING MANDATE
-**ALL SCRIPT FILES MUST HAVE THOROUGH, UP-TO-DATE COMMENTS FOR FUTURE DEVELOPERS**
-
-**COMPREHENSIVE COMMENTING REQUIREMENTS:**
-- **❌ NO CODE WITHOUT COMMENTS** - Every script file must have comprehensive comments explaining functionality
-- **❌ NO SILENT FUNCTIONS** - All functions must have descriptive comments explaining purpose, parameters, and return values
-- **❌ NO UNDOCUMENTED LOGIC** - Complex logic blocks must have inline comments explaining the approach
-- **✅ FUTURE DEVELOPER FOCUSED** - Comments must help future developers understand the code quickly
-- **✅ COMPREHENSIVE DOCUMENTATION** - File headers, function documentation, inline explanations
-- **✅ ACCURATE AND CURRENT** - Comments must be kept up-to-date with code changes
-
-**MANDATORY COMMENT TYPES:**
-- **FILE HEADERS** - Purpose, dependencies, usage instructions
-- **FUNCTION DOCUMENTATION** - Purpose, parameters, return values, side effects
-- **COMPLEX LOGIC** - Inline comments explaining non-obvious implementation decisions
-- **ERROR HANDLING** - Comments explaining error scenarios and recovery strategies
-- **PERFORMANCE CONSIDERATIONS** - Notes about optimization choices and trade-offs
-
-**COMMENT MAINTENANCE PROTOCOL:**
-- **✅ UPDATE COMMENTS** - Always update comments when modifying code
-- **✅ REMOVE INCORRECT COMMENTS** - Delete or fix comments that are outdated or wrong
-- **✅ IMPROVE CLARITY** - Enhance comments for better understanding
-- **❌ NEVER REMOVE CORRECT COMMENTS** - Only remove comments if they are incorrect or redundant
-- **❌ NO COMMENT NEGLECT** - Comments are as important as the code itself
-
-**COMMENTING EXAMPLE:**
-```javascript
-/**
- * Data Processing Module - Handles user data transformation and validation
- * Dependencies: logger, validation-utils
- * Usage: processData(userId, rawData) -> Promise<ProcessedData>
- */
-
-/**
- * Processes raw user data through validation and transformation pipeline
- * @param {string} userId - Unique identifier for the user
- * @param {Object} data - Raw data object to be processed
- * @returns {Promise<Object>} Processed and validated data object
- * @throws {ValidationError} When data fails validation checks
- */
-function processData(userId, data) {
-    // Generate unique operation ID for tracking this processing request
-    const logger = getLogger('DataProcessor');
-    const operationId = generateOperationId();
-    
-    // Log processing start with context for debugging
-    logger.info(`[${operationId}] Starting data processing`, {
-        userId, operationId, dataSize: JSON.stringify(data).length
-    });
-    
-    try {
-        // Track processing time for performance monitoring
-        const startTime = Date.now();
-        
-        // Apply transformation rules - see transformData() for business logic
-        const result = transformData(data);
-        const processingTime = Date.now() - startTime;
-        
-        // Log successful completion with performance metrics
-        logger.info(`[${operationId}] Processing completed`, {
-            userId, operationId, processingTimeMs: processingTime
-        });
-        return result;
-    } catch (error) {
-        // Log failure with full context for debugging
-        logger.error(`[${operationId}] Processing failed`, {
-            userId, operationId, error: error.message, stack: error.stack
-        });
-        throw error; // Re-throw to maintain error propagation
-    }
-}
-```
-
 ### 📋 FEATURES.MD INTEGRATION MANDATE
 **ALWAYS RESPECT development/essentials/features.md WORKFLOW**
 
@@ -275,14 +202,10 @@ function processData(userId, data) {
 
 **REINITIALIZATION API ENDPOINT:**
 ```bash
-# 🚨 CRITICAL: ALWAYS INITIALIZE FIRST IF NO AGENT EXISTS
-# Step 1: Initialize agent if not already done
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init --project "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook"
-
-# Step 2: Then reinitialize the agent (this will auto-detect agent ID)
+# Reinitialize current agent (recommended)
 node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize
 
-# Alternative: Reinitialize specific agent with config
+# Reinitialize specific agent with config
 node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize AGENT_ID '{"metadata": {"renewed": true}}'
 ```
 
@@ -294,31 +217,9 @@ node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-
 
 **REINITIALIZATION WORKFLOW:**
 1. **Complete current work** (if any)
-2. **Check if agent exists** - If reinitialize fails with "No agent ID", run init first
-3. **Run initialization if needed** - `taskmanager-api.js init --project [path]`
-4. **Run reinitialization command** - Use TaskManager API reinitialize endpoint
-5. **Verify renewal success** - Check that agent status shows renewed heartbeat
-6. **Continue with next task** - Proceed with normal workflow
-
-**🚨 CRITICAL AGENT INITIALIZATION SEQUENCE:**
-```bash
-# ALWAYS use this sequence when starting fresh or getting "No agent ID" errors:
-
-# 1. Initialize agent (creates new agent if none exists)
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init --project "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook"
-
-# 2. Immediately reinitialize to refresh heartbeat
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize
-
-# 3. Check current tasks
-node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" list '{"status": "pending"}'
-```
-
-**🔴 ERROR HANDLING FOR REINITIALIZATION:**
-- **"No agent ID provided"** → Run init first, then reinitialize
-- **"No agent initialized"** → Run init first, then reinitialize  
-- **Reinitialize fails** → Always try init then reinitialize sequence
-- **Never skip this step** → Agent expiration leads to task system failures
+2. **Run reinitialization command** - Use TaskManager API reinitialize endpoint
+3. **Verify renewal success** - Check that agent status shows renewed heartbeat
+4. **Continue with next task** - Proceed with normal workflow
 
 **🔄 STOP HOOK REINITIALIZATION:**
 - **IMMEDIATELY REINITIALIZE** when receiving any stop hook feedback
@@ -533,44 +434,30 @@ node -e "const tm = require('/Users/jeremyparker/Desktop/Claude Coding Projects/
 
 ## 🚨 CONCURRENT TASK SUBAGENT DEPLOYMENT
 
-**🔴 ABSOLUTE MANDATE: MAXIMIZE CONCURRENT SIMULTANEOUS DEPLOYMENT AT ALL TIMES**
+**🔴 MAXIMIZE CONCURRENT SIMULTANEOUS DEPLOYMENT**
 
-**🚨 CRITICAL DEPLOYMENT ENFORCEMENT:**
-Deploy as many concurrent task subagents simultaneously as appropriate (up to 10 maximum) whenever tasks have ANY parallelizable components. This is an ABSOLUTE REQUIREMENT, not a suggestion.
+Deploy as many concurrent task subagents simultaneously as appropriate (up to 10 maximum) when tasks have parallelizable components.
 
 **CONCURRENT DEPLOYMENT REQUIREMENTS:**
-- **✅ SIMULTANEOUS START** - All agents MUST begin AT THE EXACT SAME TIME
-- **✅ MAXIMIZE PARALLELIZATION** - Break work into parallel streams aggressively
-- **✅ APPROPRIATE SCALING** - Use the MAXIMUM number of agents task meaningfully supports
-- **✅ MANDATORY ASSESSMENT** - Every task must be evaluated for concurrent deployment potential
-- **❌ NEVER SEQUENTIAL** - Multiple agents running one after another STRICTLY FORBIDDEN unless dependency chain exists
-- **❌ NO SINGLE-AGENT BIAS** - Do not default to single agent when multiple agents could work in parallel
+- **✅ SIMULTANEOUS START** - All agents must begin AT THE SAME TIME
+- **✅ MAXIMIZE PARALLELIZATION** - Break work into parallel streams
+- **✅ APPROPRIATE SCALING** - Use as many agents as task meaningfully supports
+- **❌ NEVER SEQUENTIAL** - Multiple agents running one after another forbidden unless dependency chain exists
 
-**MANDATORY CONCURRENT USAGE FOR:**
-- **✅ Complex multi-component tasks** - Research, implementation, testing, documentation MUST run in parallel
-- **✅ Large scale refactoring** - Multiple files/modules MUST be handled simultaneously
-- **✅ Comprehensive analysis** - Different aspects MUST be analyzed concurrently
-- **✅ Multi-file implementations** - Any work touching multiple files MUST use parallel agents
-- **✅ Research + Implementation** - Research and implementation tasks MUST run concurrently when possible
-- **✅ Testing workflows** - Unit, integration, and E2E tests MUST run in parallel
-
-**SINGLE-AGENT EXCEPTIONS (VERY LIMITED):**
-- **❌ Simple single-file edits** - Only when truly isolated and cannot be parallelized
-- **❌ Trivial operations** - Basic validation, simple queries with no expansion potential
+**APPROPRIATE USAGE:**
+- **✅ Complex multi-component tasks** - Research, implementation, testing, documentation in parallel
+- **✅ Large scale refactoring** - Multiple files/modules handled simultaneously
+- **✅ Comprehensive analysis** - Different aspects analyzed concurrently
+- **❌ Simple single-file edits** - One agent more efficient
+- **❌ Trivial operations** - Basic validation, simple queries
 
 **SPECIALIZATIONS BY MODE:**
-- **DEVELOPMENT**: Frontend, Backend, Database, DevOps, Security, Performance, Documentation
-- **TESTING**: Unit Test, Integration Test, E2E Test, Performance Test, Security Test, Accessibility Test
-- **RESEARCH**: Technology Evaluator, API Analyst, Performance Researcher, Security Auditor, Architecture Analyst
-- **DEBUGGING**: Error Analysis, Performance Profiling, Security Audit, Code Quality, Dependency Analysis
+- **DEVELOPMENT**: Frontend, Backend, Database, DevOps, Security
+- **TESTING**: Unit Test, Integration Test, E2E Test, Performance Test, Security Test
+- **RESEARCH**: Technology Evaluator, API Analyst, Performance Researcher, Security Auditor
+- **DEBUGGING**: Error Analysis, Performance Profiling, Security Audit, Code Quality
 
-**DEPLOYMENT PATTERN:** Think → Assess Parallelization Potential → Deploy MAXIMUM Concurrent Agents → Monitor → Synchronize Completion
-
-**🚨 CONCURRENT DEPLOYMENT MANDATE:**
-- **ALWAYS DEFAULT TO CONCURRENT** - When in doubt, use multiple agents
-- **AGGRESSIVE PARALLELIZATION** - Break tasks down to enable maximum concurrency
-- **SIMULTANEOUS EXECUTION** - All agents start together, no sequential delays
-- **COORDINATION PROTOCOLS** - Ensure agents work in harmony without conflicts
+**DEPLOYMENT PATTERN:** Think → Map Distribution → Deploy Simultaneously → Monitor → Synchronize Completion
 
 
 ## 🚨 CONTEXT MANAGEMENT
