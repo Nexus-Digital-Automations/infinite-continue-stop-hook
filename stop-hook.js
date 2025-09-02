@@ -223,9 +223,9 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 
    # STEP 0: CRITICAL - INITIALIZE AGENT FIRST, THEN REINITIALIZE TO PREVENT EXPIRATION
    # If you get "No agent ID" error, run init first:
-   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init
-   # Then immediately reinitialize with your agent ID:
-   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [YOUR_AGENT_ID]
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init --project-root "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook"
+   # Then immediately reinitialize with your agent ID (REQUIRED - get it from init output above):
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize AGENT_ID_FROM_INIT_COMMAND
 
    # STEP 1: MANDATORY - Read features file first
    cat development/features.md
@@ -243,8 +243,8 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
    timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTask("[AGENT_ID]").then(async task => { if(task) { await tm.updateTaskStatus(task.id, "completed", "Task completed successfully"); console.log("✅ Task completed:", task.title); } else { console.log("No active task to complete"); } });'
 
    # IMMEDIATE AFTER TASK COMPLETION: REINITIALIZE AGENT TO PREVENT EXPIRATION
-   # Use your actual agent ID from the init command above:
-   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [YOUR_AGENT_ID]
+   # Use your actual agent ID from the init command above (REQUIRED):
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize YOUR_ACTUAL_AGENT_ID
 
    # Claim next available task  
    timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getNextPendingTask().then(task => { if(task) { console.log("📋 Next task available:"); console.log(JSON.stringify(task, null, 2)); } else { console.log("No pending tasks available"); } });'

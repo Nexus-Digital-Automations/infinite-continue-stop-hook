@@ -253,16 +253,7 @@ class TaskManagerAPI {
                 }
             }
             
-            // Enhanced research dependency detection for implementation tasks
-            const researchSuggestion = this._checkResearchRequirements(task, todoData);
-            if (researchSuggestion.suggestResearch) {
-                return {
-                    success: false,
-                    reason: "Task may benefit from research before implementation",
-                    researchSuggestion: researchSuggestion,
-                    task: task
-                };
-            }
+            // Research suggestion disabled - proceed directly to task claiming
             
             const result = await this.taskManager.claimTask(taskId, targetAgentId, priority);
             
@@ -652,7 +643,14 @@ async function main() {
             }
 
             case 'init': {
-                const config = args[1] ? JSON.parse(args[1]) : {};
+                let config = {};
+                if (args[1]) {
+                    try {
+                        config = JSON.parse(args[1]);
+                    } catch (parseError) {
+                        throw new Error(`Invalid JSON configuration: ${parseError.message}`);
+                    }
+                }
                 const result = await api.initAgent(config);
                 console.log(JSON.stringify(result, null, 2));
                 break;
@@ -666,7 +664,14 @@ async function main() {
             }
 
             case 'list': {
-                const filter = args[1] ? JSON.parse(args[1]) : {};
+                let filter = {};
+                if (args[1]) {
+                    try {
+                        filter = JSON.parse(args[1]);
+                    } catch (parseError) {
+                        throw new Error(`Invalid JSON filter: ${parseError.message}`);
+                    }
+                }
                 const result = await api.listTasks(filter);
                 console.log(JSON.stringify(result, null, 2));
                 break;
@@ -676,7 +681,12 @@ async function main() {
                 if (!args[1]) {
                     throw new Error('Task data required for create command');
                 }
-                const taskData = JSON.parse(args[1]);
+                let taskData;
+                try {
+                    taskData = JSON.parse(args[1]);
+                } catch (parseError) {
+                    throw new Error(`Invalid JSON task data: ${parseError.message}`);
+                }
                 const result = await api.createTask(taskData);
                 console.log(JSON.stringify(result, null, 2));
                 break;
@@ -696,7 +706,14 @@ async function main() {
 
             case 'complete': {
                 const taskId = args[1];
-                const completionData = args[2] ? JSON.parse(args[2]) : {};
+                let completionData = {};
+                if (args[2]) {
+                    try {
+                        completionData = JSON.parse(args[2]);
+                    } catch (parseError) {
+                        throw new Error(`Invalid JSON completion data: ${parseError.message}`);
+                    }
+                }
                 if (!taskId) {
                     throw new Error('Task ID required for complete command');
                 }
@@ -714,7 +731,14 @@ async function main() {
 
             case 'reinitialize': {
                 const agentId = args[1];
-                const config = args[2] ? JSON.parse(args[2]) : {};
+                let config = {};
+                if (args[2]) {
+                    try {
+                        config = JSON.parse(args[2]);
+                    } catch (parseError) {
+                        throw new Error(`Invalid JSON config for reinitialize: ${parseError.message}`);
+                    }
+                }
                 const result = await api.reinitializeAgent(agentId, config);
                 console.log(JSON.stringify(result, null, 2));
                 break;

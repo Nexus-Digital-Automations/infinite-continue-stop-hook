@@ -537,19 +537,13 @@ node -e "const tm = require('/Users/jeremyparker/Desktop/Claude Coding Projects/
 **🚨 CRITICAL DEPLOYMENT ENFORCEMENT:**
 Deploy as many concurrent task subagents simultaneously as appropriate (up to 10 maximum) whenever tasks have ANY parallelizable components. This is an ABSOLUTE REQUIREMENT, not a suggestion.
 
-**🔥 SIMULTANEOUS DEPLOYMENT MANDATE - ZERO TOLERANCE FOR SEQUENTIAL EXECUTION:**
-- **⚡ ALL AGENTS LAUNCH TOGETHER** - NEVER deploy agents one after another - ALL concurrent agents MUST be deployed in a SINGLE coordinated action
-- **🚀 INSTANTANEOUS PARALLEL START** - Every agent begins execution AT THE EXACT SAME MOMENT - no delays, no sequential rollout
-- **⚠️ FORBIDDEN: Sequential Agent Deployment** - Deploying agents one by one is STRICTLY PROHIBITED - only simultaneous mass deployment allowed
-- **✅ COORDINATED MASS LAUNCH** - All concurrent agents must be launched together in one coordinated deployment action
-
 **CONCURRENT DEPLOYMENT REQUIREMENTS:**
-- **✅ SIMULTANEOUS START** - All agents MUST begin AT THE EXACT SAME TIME with zero sequential delays
-- **✅ MAXIMIZE PARALLELIZATION** - Break work into parallel streams aggressively and deploy ALL agents simultaneously
-- **✅ APPROPRIATE SCALING** - Use the MAXIMUM number of agents task meaningfully supports, launched together instantly
-- **✅ MANDATORY ASSESSMENT** - Every task must be evaluated for concurrent deployment potential with simultaneous launch
-- **❌ NEVER SEQUENTIAL** - Multiple agents running one after another STRICTLY FORBIDDEN - only simultaneous deployment allowed
-- **❌ NO SINGLE-AGENT BIAS** - Do not default to single agent when multiple agents could work in parallel simultaneously
+- **✅ SIMULTANEOUS START** - All agents MUST begin AT THE EXACT SAME TIME
+- **✅ MAXIMIZE PARALLELIZATION** - Break work into parallel streams aggressively
+- **✅ APPROPRIATE SCALING** - Use the MAXIMUM number of agents task meaningfully supports
+- **✅ MANDATORY ASSESSMENT** - Every task must be evaluated for concurrent deployment potential
+- **❌ NEVER SEQUENTIAL** - Multiple agents running one after another STRICTLY FORBIDDEN unless dependency chain exists
+- **❌ NO SINGLE-AGENT BIAS** - Do not default to single agent when multiple agents could work in parallel
 
 **MANDATORY CONCURRENT USAGE FOR:**
 - **✅ Complex multi-component tasks** - Research, implementation, testing, documentation MUST run in parallel
@@ -569,19 +563,13 @@ Deploy as many concurrent task subagents simultaneously as appropriate (up to 10
 - **RESEARCH**: Technology Evaluator, API Analyst, Performance Researcher, Security Auditor, Architecture Analyst
 - **DEBUGGING**: Error Analysis, Performance Profiling, Security Audit, Code Quality, Dependency Analysis
 
-**DEPLOYMENT PATTERN:** Think → Assess Parallelization Potential → Deploy MAXIMUM Concurrent Agents SIMULTANEOUSLY → Monitor → Synchronize Completion
+**DEPLOYMENT PATTERN:** Think → Assess Parallelization Potential → Deploy MAXIMUM Concurrent Agents → Monitor → Synchronize Completion
 
 **🚨 CONCURRENT DEPLOYMENT MANDATE:**
-- **ALWAYS DEFAULT TO CONCURRENT** - When in doubt, use multiple agents launched simultaneously
-- **AGGRESSIVE PARALLELIZATION** - Break tasks down to enable maximum concurrency with simultaneous deployment
-- **SIMULTANEOUS EXECUTION** - All agents start together in one coordinated action, zero sequential delays
-- **COORDINATION PROTOCOLS** - Ensure agents work in harmony without conflicts after simultaneous launch
-
-**🔥 SIMULTANEOUS DEPLOYMENT ENFORCEMENT:**
-- **⚡ SINGLE DEPLOYMENT ACTION** - All concurrent agents deployed in ONE coordinated launch command
-- **🚀 ZERO SEQUENTIAL ROLLOUT** - Never deploy agents one by one - only mass simultaneous deployment
-- **⚠️ MANDATORY COORDINATION** - Use Task tool with multiple concurrent subagents launched together instantly
-- **✅ INSTANT PARALLEL ACTIVATION** - All agents begin work at the exact same moment after simultaneous deployment
+- **ALWAYS DEFAULT TO CONCURRENT** - When in doubt, use multiple agents
+- **AGGRESSIVE PARALLELIZATION** - Break tasks down to enable maximum concurrency
+- **SIMULTANEOUS EXECUTION** - All agents start together, no sequential delays
+- **COORDINATION PROTOCOLS** - Ensure agents work in harmony without conflicts
 
 
 ## 🚨 CONTEXT MANAGEMENT
