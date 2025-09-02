@@ -542,6 +542,9 @@ Deploy as many concurrent task subagents simultaneously as appropriate (up to 10
 - **🚀 INSTANTANEOUS PARALLEL START** - Every agent begins execution AT THE EXACT SAME MOMENT - no delays, no sequential rollout
 - **⚠️ FORBIDDEN: Sequential Agent Deployment** - Deploying agents one by one is STRICTLY PROHIBITED - only simultaneous mass deployment allowed
 - **✅ COORDINATED MASS LAUNCH** - All concurrent agents must be launched together in one coordinated deployment action
+- **🕐 EXACT SAME MILLISECOND** - All task subagents must start at precisely the same time - not one second apart, not one millisecond apart
+- **🎯 SINGLE COMMAND EXECUTION** - Use ONE Task tool call with multiple concurrent subagent prompts, never separate sequential calls
+- **⚡ ZERO TIME GAPS** - Absolutely no time delays between agent launches - all must begin simultaneously in one atomic operation
 
 **CONCURRENT DEPLOYMENT REQUIREMENTS:**
 - **✅ SIMULTANEOUS START** - All agents MUST begin AT THE EXACT SAME TIME with zero sequential delays
@@ -582,6 +585,17 @@ Deploy as many concurrent task subagents simultaneously as appropriate (up to 10
 - **🚀 ZERO SEQUENTIAL ROLLOUT** - Never deploy agents one by one - only mass simultaneous deployment
 - **⚠️ MANDATORY COORDINATION** - Use Task tool with multiple concurrent subagents launched together instantly
 - **✅ INSTANT PARALLEL ACTIVATION** - All agents begin work at the exact same moment after simultaneous deployment
+- **🎬 ONE-TAKE DEPLOYMENT** - Like a movie scene, all agents must start together in one perfect simultaneous action
+- **🚫 NO STAGGERED STARTS** - Absolutely prohibited to start agents with any time intervals between them
+- **⚡ ATOMIC OPERATION** - Agent deployment must be indivisible - all start together or none start at all
+- **🎯 PERFECT SYNCHRONIZATION** - All concurrent task subagents must achieve perfect temporal alignment at launch
+
+**💻 TECHNICAL SIMULTANEOUS START IMPLEMENTATION:**
+- **ONE TASK TOOL CALL** - Use single Task tool call with multiple invoke blocks for all concurrent subagents
+- **BATCH PROCESSING** - All subagent prompts must be submitted in one batch, never individually
+- **PARALLEL EXECUTION** - System processes all subagents simultaneously, not sequentially
+- **NO SEPARATE CALLS** - Never make individual Task tool calls for each subagent - this creates sequential timing
+- **SYNCHRONIZED LAUNCH** - All subagents receive their prompts and start working at the exact same moment
 
 
 ## 🚨 CONTEXT MANAGEMENT
