@@ -3,7 +3,63 @@
 /**
  * TaskManager Node.js API Wrapper
  * 
- * Universal API for TaskManager functionality - works with any project
+ * === OVERVIEW ===
+ * Universal command-line interface for the TaskManager system that provides
+ * comprehensive task management capabilities for any project. This API acts as
+ * a centralized gateway to all TaskManager functionality including agent
+ * management, task operations, dependency handling, and orchestration.
+ * 
+ * === KEY FEATURES ===
+ * • Universal project support - works with any codebase containing TODO.json
+ * • Agent lifecycle management - initialization, heartbeat renewal, status tracking
+ * • Task operations - create, claim, complete, list, filter, reorder
+ * • Dependency system - automatic dependency detection and guidance
+ * • Research workflow integration - intelligent research task suggestions
+ * • Multi-agent orchestration - coordinates multiple concurrent agents
+ * • Performance optimized - 10-second timeouts, lazy loading, caching
+ * • Error recovery - robust error handling with detailed feedback
+ * 
+ * === ARCHITECTURE ===
+ * The API is built on top of the TaskManager system components:
+ * • TaskManager - Core task operations and TODO.json management
+ * • AgentManager - Agent registration, heartbeat, and status tracking
+ * • MultiAgentOrchestrator - Coordination of multiple concurrent agents
+ * • DistributedLockManager - Prevents race conditions in multi-agent scenarios
+ * • AutoFixer - Automatic error detection and resolution capabilities
+ * 
+ * === USAGE PATTERNS ===
+ * 1. Agent Initialization:
+ *    node taskmanager-api.js init --project-root /path/to/project
+ * 
+ * 2. Task Operations:
+ *    node taskmanager-api.js create '{"title": "Task", "category": "enhancement"}'
+ *    node taskmanager-api.js list '{"status": "pending"}'
+ *    node taskmanager-api.js claim task_123 agent_456
+ * 
+ * 3. Status and Monitoring:
+ *    node taskmanager-api.js status agent_456
+ *    node taskmanager-api.js stats
+ * 
+ * === INTEGRATION EXAMPLES ===
+ * • CI/CD pipelines for automated task management
+ * • Development workflows for task assignment and tracking  
+ * • Multi-agent AI systems for concurrent development work
+ * • Project automation scripts for batch operations
+ * 
+ * === ERROR HANDLING ===
+ * All operations include comprehensive error handling with structured JSON responses.
+ * Errors include context, suggestions, and recovery instructions where applicable.
+ * 
+ * === PERFORMANCE CHARACTERISTICS ===
+ * • 10-second timeout on all operations to prevent hanging
+ * • Lazy loading of heavy components (AutoFixer, LockManager)
+ * • Caching for frequently accessed data structures
+ * • Optimized JSON parsing with validation skipping options
+ * 
+ * @author TaskManager System
+ * @version 2.0.0
+ * @since 2024-01-01
+ * 
  * Usage: node taskmanager-api.js <command> [args...] [--project-root /path/to/project]
  */
 
@@ -39,24 +95,118 @@ try {
     process.exit(1);
 }
 
+/**
+ * TaskManagerAPI - Main API class for TaskManager system operations
+ * 
+ * === CORE RESPONSIBILITIES ===
+ * • Provides unified interface to TaskManager system components
+ * • Manages agent lifecycle and session state
+ * • Handles all task operations with proper error recovery
+ * • Coordinates multi-agent workflows and orchestration
+ * • Implements consistent timeout and performance optimization
+ * 
+ * === DESIGN PRINCIPLES ===
+ * • Fail-fast with detailed error information
+ * • Consistent JSON response format for all operations
+ * • Performance-first approach with configurable timeouts
+ * • Lazy loading of expensive components
+ * • Immutable operation patterns for thread safety
+ * 
+ * === STATE MANAGEMENT ===
+ * • Maintains current agent ID for session continuity
+ * • Tracks TODO.json path for project binding
+ * • Lazy-loads all heavy components on first use
+ * • Implements timeout protection for all async operations
+ * 
+ * === INTEGRATION PATTERNS ===
+ * • CLI tool integration via command-line arguments
+ * • Programmatic usage via module imports
+ * • CI/CD pipeline integration for automated workflows
+ * • Multi-agent orchestration for concurrent operations
+ */
 class TaskManagerAPI {
+    /**
+     * Initialize TaskManagerAPI instance with project-specific configuration
+     * 
+     * === CONFIGURATION OPTIONS ===
+     * • enableMultiAgent: true - Enables multi-agent coordination features
+     * • enableAutoFix: false - Disabled for performance (can cause delays)
+     * • validateOnRead: false - Disabled for performance (validation on-demand)
+     * 
+     * === PERFORMANCE OPTIMIZATION ===
+     * • 10-second timeout prevents hanging operations
+     * • Lazy loading reduces initialization overhead
+     * • Caching minimizes repeated file I/O operations
+     * • Multi-agent support for concurrent processing
+     * 
+     * === COMPONENT INITIALIZATION ===
+     * • TaskManager: Core TODO.json operations and task management
+     * • AgentManager: Agent registration, heartbeat, and lifecycle
+     * • MultiAgentOrchestrator: Coordination of concurrent agents
+     * • agentId: Session state for current agent (null until initialized)
+     * 
+     * @constructor
+     * @memberof TaskManagerAPI
+     */
     constructor() {
+        // Core TaskManager for TODO.json operations and task management
         this.taskManager = new TaskManager(TODO_PATH, {
-            enableMultiAgent: true,
-            enableAutoFix: false, // Disable auto-fix for better performance
-            validateOnRead: false  // Disable validation for better performance
+            enableMultiAgent: true,     // Enable multi-agent coordination features
+            enableAutoFix: false,       // Disable auto-fix for better performance
+            validateOnRead: false       // Disable validation for better performance
         });
+        
+        // Agent management for registration, heartbeat, and lifecycle
         this.agentManager = new AgentManager(TODO_PATH);
+        
+        // Multi-agent orchestration for concurrent operations
         this.orchestrator = new MultiAgentOrchestrator(TODO_PATH);
+        
+        // Session state - current agent ID (null until agent is initialized)
         this.agentId = null;
-        this.timeout = 10000; // 10 second timeout for all operations
+        
+        // Performance configuration - 10 second timeout for all operations
+        // This prevents hanging operations and ensures responsive behavior
+        this.timeout = 10000;
     }
 
     /**
-     * Wrap any async operation with a timeout
-     * @param {Promise} promise - Promise to wrap
-     * @param {number} timeoutMs - Timeout in milliseconds (default: 10s)
-     * @returns {Promise} Promise that rejects after timeout
+     * Wrap any async operation with a timeout to prevent hanging operations
+     * 
+     * === PURPOSE ===
+     * Ensures all TaskManager operations complete within reasonable time limits.
+     * This is critical for maintaining responsive behavior in multi-agent systems
+     * and preventing indefinite blocking in automation workflows.
+     * 
+     * === TIMEOUT STRATEGY ===
+     * • Default 10-second timeout for all operations
+     * • Configurable per-operation timeout override
+     * • Race condition between operation and timeout timer
+     * • Clean error messaging with timeout duration
+     * 
+     * === USE CASES ===
+     * • File I/O operations that might hang on slow storage
+     * • Network operations for remote TODO.json access
+     * • Lock acquisition in multi-agent scenarios
+     * • Complex validation and auto-fix operations
+     * 
+     * @param {Promise} promise - The async operation to wrap with timeout protection
+     * @param {number} timeoutMs - Timeout duration in milliseconds (default: 10000ms)
+     * @returns {Promise} Promise that either resolves with operation result or rejects with timeout error
+     * @throws {Error} Timeout error after specified duration
+     * 
+     * @example
+     * // Wrap a file operation with timeout
+     * const result = await this.withTimeout(
+     *   fs.promises.readFile(path),
+     *   5000  // 5 second timeout for this specific operation
+     * );
+     * 
+     * @example  
+     * // Use default timeout for agent operations
+     * const agent = await this.withTimeout(
+     *   this.agentManager.registerAgent(config)
+     * );
      */
     withTimeout(promise, timeoutMs = this.timeout) {
         return Promise.race([

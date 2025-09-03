@@ -508,16 +508,6 @@ If you want to enable task management for this project:
       logger.addFlow(`Removed stale agent: ${staleAgentId}`);
     }
 
-    // Save changes if any stale agents were removed
-    if (agentsRemoved > 0) {
-      await taskManager.writeTodo(todoData);
-      logger.addFlow(`Removed ${agentsRemoved} stale agents from TODO.json`);
-    }
-
-    logger.addFlow(
-      `Active agents found: ${activeAgents.length}, Stale agents removed: ${agentsRemoved}`,
-    );
-
     // Check for stale in-progress tasks (stuck for > 15 minutes) and reset them
     const staleTaskTimeout = 900000; // 15 minutes
     let staleTasksReset = 0;
@@ -552,11 +542,20 @@ If you want to enable task management for this project:
       }
     }
 
-    // Save changes if any stale tasks were reset
-    if (staleTasksReset > 0) {
+    // Save changes if any stale agents were removed or tasks were reset
+    if (agentsRemoved > 0 || staleTasksReset > 0) {
       await taskManager.writeTodo(todoData);
-      logger.addFlow(`Reset ${staleTasksReset} stale tasks back to pending`);
+      if (agentsRemoved > 0) {
+        logger.addFlow(`Removed ${agentsRemoved} stale agents from TODO.json`);
+      }
+      if (staleTasksReset > 0) {
+        logger.addFlow(`Reset ${staleTasksReset} stale tasks back to pending`);
+      }
     }
+
+    logger.addFlow(
+      `Active agents found: ${activeAgents.length}, Stale agents removed: ${agentsRemoved}, Stale tasks reset: ${staleTasksReset}`,
+    );
 
     if (activeAgents.length === 0) {
       logger.addFlow("No active agents detected - need agent initialization");
@@ -571,6 +570,7 @@ TODO.json Path: ${todoPath}
 Total Agents Found: ${allAgents.length}
 Active Agents Found: ${activeAgents.length}
 Stale Agents Removed: ${agentsRemoved}
+Stale Tasks Reset: ${staleTasksReset}
 
 TaskManager project exists but no active agents are registered.
 
