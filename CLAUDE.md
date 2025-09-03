@@ -355,6 +355,18 @@ node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-
 - **HOOK SAYS "LINTER FAILED"** → **ABANDON ALL WORK AND FIX**
 - **HOOK SHOWS SYNTAX ERRORS** → **EMERGENCY LINTER PROTOCOL**
 
+**🔍 HOOK LINTER ERROR FILTERING - INTELLIGENT RESPONSE:**
+- **✅ ADDRESS CODE FILE LINTER ERRORS** - Fix all linting issues in .js, .ts, .jsx, .tsx, .py, .go, .rs, etc.
+- **✅ FIX FIXABLE CONFIG ERRORS** - Address configuration issues that can be resolved within project scope
+- **❌ IGNORE UNFIXABLE CONFIG ERRORS** - Skip linter errors related to:
+  - **tsconfig.json settings** that are project-specific and cannot be changed by hooks
+  - **eslint.config.js rules** that are project-wide decisions
+  - **Package.json dependencies** that require manual installation
+  - **Build tool configurations** that are environment-specific
+  - **IDE-specific settings** that don't affect code functionality
+- **🎯 FOCUS ON ACTIONABLE ITEMS** - Only create linter-error tasks for issues that can actually be fixed
+- **📝 ACKNOWLEDGE UNFIXABLE ISSUES** - Mention awareness of configuration limitations without creating tasks
+
 **MANDATORY LINTER WORKFLOW:**
 1. **DETECT linter error** → **INSTANTLY CREATE linter-error task**
 2. **DROP ALL OTHER WORK** → Fix linter errors immediately  

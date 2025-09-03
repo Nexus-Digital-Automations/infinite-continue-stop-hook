@@ -1750,7 +1750,7 @@
       "description": "Build ML-based recommendation system using neural networks",
       "category": "missing-feature",
       "priority": "high",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -1760,7 +1760,7 @@
       "created_at": "2025-08-19T23:09:58.874Z",
       "auto_research_created": false,
       "mode": "DEVELOPMENT",
-      "started_at": "2025-09-02T18:30:18.170Z",
+      "started_at": null,
       "agent_assignment_history": [
         {
           "role": "primary",
@@ -1832,11 +1832,17 @@
           "assignedAt": "2025-09-02T18:30:18.170Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-09-02T18:56:19.197Z",
+          "reason": "Task stale for 26 minutes"
         }
       ],
       "last_modified": "2025-08-31T06:23:16.910Z",
-      "assigned_agent": "development_session_1756837719604_1_general_42e4f1fe",
-      "claimed_by": "development_session_1756837719604_1_general_42e4f1fe"
+      "assigned_agent": null,
+      "claimed_by": null
     },
     {
       "id": "task_1755656581837_6ggbqfsl0",
@@ -4460,6 +4466,160 @@
       "subtasks": [],
       "created_at": "2025-09-02T18:34:08.593Z",
       "auto_research_created": false
+    },
+    {
+      "id": "task_1756845158789_835i4lmkd",
+      "title": "Research: Migrate authentication API tests to Bun/Vitest infrastructure",
+      "description": "Research and analysis required for implementing: \"Migrate authentication API tests to Bun/Vitest infrastructure\"\n\n**Implementation Task Details:**\nMigrate authentication API test files to use the new bun/vitest compatible infrastructure that improved test pass rates from 15% to 89%. Files: /Users/jeremyparker/Desktop/Claude Coding Projects/sim/apps/sim/app/api/auth/forget-password/route.test.ts, /Users/jeremyparker/Desktop/Claude Coding Projects/sim/apps/sim/app/api/auth/reset-password/route.test.ts, and OAuth test files.\n\n**Research Objectives:**\n1. Investigate best practices and methodologies for this implementation\n2. Identify potential challenges, risks, and mitigation strategies  \n3. Research relevant technologies, frameworks, and tools\n4. Define implementation approach and architecture decisions\n5. Provide actionable recommendations and guidance\n\n**Implementation Task ID:** task_1756845158789_957k35wab\n\n**Auto-created by:** TaskManager research dependency system\n**Research Priority:** This research task must be completed before implementation begins",
+      "mode": "RESEARCH",
+      "category": "research",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [
+        "./development/research-reports/research-report-task_1756845158789_835i4lmkd.md"
+      ],
+      "success_criteria": [
+        "Research methodology and approach documented",
+        "Key findings and recommendations provided",
+        "Implementation guidance and best practices identified",
+        "Risk assessment and mitigation strategies outlined",
+        "Research report created: ./development/research-reports/research-report-task_1756845158789_835i4lmkd.md"
+      ],
+      "estimate": "1-2 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-02T20:32:38.789Z",
+      "created_by": "auto-research-system",
+      "auto_created_for": "task_1756845158789_957k35wab"
+    },
+    {
+      "id": "task_1756862481310_th2z042mo",
+      "title": "Research: Migrate File Handling API Tests to Bun/Vitest Infrastructure",
+      "description": "Research and analysis required for implementing: \"Migrate File Handling API Tests to Bun/Vitest Infrastructure\"\n\n**Implementation Task Details:**\nMigrate file-related API test files to use the proven bun/vitest compatible infrastructure with enhanced logging, comments, and file-specific mocks\n\n**Research Objectives:**\n1. Investigate best practices and methodologies for this implementation\n2. Identify potential challenges, risks, and mitigation strategies  \n3. Research relevant technologies, frameworks, and tools\n4. Define implementation approach and architecture decisions\n5. Provide actionable recommendations and guidance\n\n**Implementation Task ID:** task_1756862481309_o466qxo5k\n\n**Auto-created by:** TaskManager research dependency system\n**Research Priority:** This research task must be completed before implementation begins",
+      "mode": "RESEARCH",
+      "category": "research",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [
+        "./development/research-reports/research-report-task_1756862481310_th2z042mo.md"
+      ],
+      "success_criteria": [
+        "Research methodology and approach documented",
+        "Key findings and recommendations provided",
+        "Implementation guidance and best practices identified",
+        "Risk assessment and mitigation strategies outlined",
+        "Research report created: ./development/research-reports/research-report-task_1756862481310_th2z042mo.md"
+      ],
+      "estimate": "1-2 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-03T01:21:21.310Z",
+      "created_by": "auto-research-system",
+      "auto_created_for": "task_1756862481309_o466qxo5k"
+    },
+    {
+      "id": "task_1756862481309_o466qxo5k",
+      "title": "Migrate File Handling API Tests to Bun/Vitest Infrastructure",
+      "description": "Migrate file-related API test files to use the proven bun/vitest compatible infrastructure with enhanced logging, comments, and file-specific mocks",
+      "mode": "DEVELOPMENT",
+      "category": "refactor",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [
+        "task_1756862481310_th2z042mo"
+      ],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": true,
+      "subtasks": [],
+      "created_at": "2025-09-03T01:21:21.319Z",
+      "auto_research_created": true
+    },
+    {
+      "id": "task_1756867089818_zsqo5qh9m",
+      "title": "Research: Agent 4: Complete CI/CD Integration for Build Performance Monitoring System",
+      "description": "Research and analysis required for implementing: \"Agent 4: Complete CI/CD Integration for Build Performance Monitoring System\"\n\n**Implementation Task Details:**\nComplete comprehensive CI/CD integration including GitHub Actions workflows, quality gates enforcement, PR performance comments, and multi-channel alert system\n\n**Research Objectives:**\n1. Investigate best practices and methodologies for this implementation\n2. Identify potential challenges, risks, and mitigation strategies  \n3. Research relevant technologies, frameworks, and tools\n4. Define implementation approach and architecture decisions\n5. Provide actionable recommendations and guidance\n\n**Implementation Task ID:** task_1756867089818_dzyp5jjtc\n\n**Auto-created by:** TaskManager research dependency system\n**Research Priority:** This research task must be completed before implementation begins",
+      "mode": "RESEARCH",
+      "category": "research",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [
+        "./development/research-reports/research-report-task_1756867089818_zsqo5qh9m.md"
+      ],
+      "success_criteria": [
+        "Research methodology and approach documented",
+        "Key findings and recommendations provided",
+        "Implementation guidance and best practices identified",
+        "Risk assessment and mitigation strategies outlined",
+        "Research report created: ./development/research-reports/research-report-task_1756867089818_zsqo5qh9m.md"
+      ],
+      "estimate": "1-2 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-03T02:38:09.818Z",
+      "created_by": "auto-research-system",
+      "auto_created_for": "task_1756867089818_dzyp5jjtc"
+    },
+    {
+      "id": "task_1756867089818_dzyp5jjtc",
+      "title": "Agent 4: Complete CI/CD Integration for Build Performance Monitoring System",
+      "description": "Complete comprehensive CI/CD integration including GitHub Actions workflows, quality gates enforcement, PR performance comments, and multi-channel alert system",
+      "mode": "DEVELOPMENT",
+      "category": "missing-feature",
+      "priority": 1,
+      "status": "pending",
+      "dependencies": [
+        "task_1756867089818_zsqo5qh9m"
+      ],
+      "important_files": [
+        "/frontend/plugins/vite-build-performance-monitor.ts",
+        "/frontend/src/components/performance/BuildPerformanceDashboard.tsx",
+        "/frontend/src/lib/build-performance/regression/RegressionDetectionEngine.ts"
+      ],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": true,
+      "subtasks": [],
+      "created_at": "2025-09-03T02:38:09.824Z",
+      "auto_research_created": true
+    },
+    {
+      "id": "task_1756868794663_qh3hnegwm",
+      "title": "URGENT: Fix 11 critical linter errors in RegressionDetectionSystem.ts",
+      "description": "Fix all TypeScript linter violations in RegressionDetectionSystem.ts: unused variables, unused parameters, const instead of let, no-explicit-any violations. Must resolve before system validation.",
+      "mode": "DEVELOPMENT",
+      "category": "linter-error",
+      "priority": "critical",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-03T03:06:34.663Z",
+      "auto_research_created": false
+    },
+    {
+      "id": "task_1756873264592_ajscajk24",
+      "title": "Update CLAUDE.md to filter post-tool hook linter errors for project-specific configuration",
+      "description": "Modify CLAUDE.md to instruct agents to listen to post-tool hook feedback linter errors while ignoring ones related to configuration files (tsconfig.json, etc.) that cannot be modified by hooks and are project-specific",
+      "mode": "DEVELOPMENT",
+      "category": "enhancement",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-03T04:21:04.592Z",
+      "auto_research_created": false
     }
   ],
   "current_mode": "DEVELOPMENT",
@@ -4513,13 +4673,13 @@
     1755567176654
   ],
   "agents": {
-    "development_session_1756837033565_1_general_5a085208": {
+    "development_session_1756839390233_1_general_ee62f39c": {
       "name": "development Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-02T18:17:13.569Z",
+      "lastHeartbeat": "2025-09-02T18:56:30.235Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -4530,17 +4690,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-02T18:17:13.569Z",
-      "sessionId": "session_1756837033565",
+      "createdAt": "2025-09-02T18:56:30.236Z",
+      "sessionId": "session_1756839390233",
       "metadata": {}
     },
-    "development_session_1756837719604_1_general_42e4f1fe": {
+    "development_session_1756839887696_1_general_f0b33a12": {
       "name": "development Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-02T18:28:39.607Z",
+      "lastHeartbeat": "2025-09-02T19:04:47.699Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -4551,44 +4711,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-02T18:28:39.607Z",
-      "sessionId": "session_1756837719604",
-      "metadata": {
-        "renewedAt": "2025-09-02T18:29:48.756Z",
-        "renewalReason": "Agent reinitialization requested"
-      },
-      "lastRenewal": "2025-09-02T18:29:48.756Z",
-      "renewalCount": 1,
-      "agentId": "development_session_1756837719604_1_general_42e4f1fe"
-    },
-    "development_session_1756837885673_1_general_c24e6c2b": {
-      "name": "development Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-02T18:31:25.675Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-02T18:31:25.675Z",
-      "sessionId": "session_1756837885673",
+      "createdAt": "2025-09-02T19:04:47.699Z",
+      "sessionId": "session_1756839887696",
       "metadata": {}
     },
-    "development_session_1756837886174_1_general_37561877": {
+    "development_session_1756843743172_1_general_2061b604": {
       "name": "development Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-02T18:31:26.175Z",
+      "lastHeartbeat": "2025-09-02T20:09:03.176Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -4599,17 +4732,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-02T18:31:26.176Z",
-      "sessionId": "session_1756837886174",
+      "createdAt": "2025-09-02T20:09:03.176Z",
+      "sessionId": "session_1756843743172",
       "metadata": {}
     },
-    "development_session_1756837887138_1_general_267934e1": {
+    "development_session_1756845152348_1_general_4090f0f1": {
       "name": "development Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-02T18:31:27.140Z",
+      "lastHeartbeat": "2025-09-02T20:32:32.351Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -4620,17 +4753,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-02T18:31:27.140Z",
-      "sessionId": "session_1756837887138",
+      "createdAt": "2025-09-02T20:32:32.351Z",
+      "sessionId": "session_1756845152348",
       "metadata": {}
     },
-    "development_session_1756837887170_1_general_63be9cfe": {
+    "development_session_1756850710955_1_general_5c5bc4da": {
       "name": "development Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-02T18:31:27.173Z",
+      "lastHeartbeat": "2025-09-02T22:05:10.957Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -4641,17 +4774,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-02T18:31:27.173Z",
-      "sessionId": "session_1756837887170",
+      "createdAt": "2025-09-02T22:05:10.957Z",
+      "sessionId": "session_1756850710955",
       "metadata": {}
     },
-    "development_session_1756837887681_1_general_29f26446": {
+    "development_session_1756862795360_1_general_b753a511": {
       "name": "development Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-02T18:31:27.682Z",
+      "lastHeartbeat": "2025-09-03T01:26:35.363Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -4662,17 +4795,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-02T18:31:27.682Z",
-      "sessionId": "session_1756837887681",
+      "createdAt": "2025-09-03T01:26:35.363Z",
+      "sessionId": "session_1756862795360",
       "metadata": {}
     },
-    "development_session_1756837888066_1_general_08821503": {
+    "development_session_1756863921731_1_general_66d034b7": {
       "name": "development Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-02T18:31:28.068Z",
+      "lastHeartbeat": "2025-09-03T01:45:21.733Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -4683,17 +4816,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-02T18:31:28.068Z",
-      "sessionId": "session_1756837888066",
+      "createdAt": "2025-09-03T01:45:21.733Z",
+      "sessionId": "session_1756863921731",
       "metadata": {}
     },
-    "development_session_1756837954231_1_general_1d64dd63": {
+    "development_session_1756866766655_1_general_0b390234": {
       "name": "development Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-02T18:32:34.233Z",
+      "lastHeartbeat": "2025-09-03T02:32:46.658Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -4704,8 +4837,50 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-02T18:32:34.233Z",
-      "sessionId": "session_1756837954231",
+      "createdAt": "2025-09-03T02:32:46.658Z",
+      "sessionId": "session_1756866766655",
+      "metadata": {}
+    },
+    "development_session_1756866876680_1_general_1fde33fd": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-03T02:34:36.683Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-03T02:34:36.683Z",
+      "sessionId": "session_1756866876680",
+      "metadata": {}
+    },
+    "development_session_1756873257752_1_general_bf2f826b": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-03T04:20:57.756Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-03T04:20:57.756Z",
+      "sessionId": "session_1756873257752",
       "metadata": {}
     }
   }
