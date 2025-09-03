@@ -217,14 +217,44 @@ class TaskManagerAPI {
         ]);
     }
 
-    // API Discovery and Documentation
+    /**
+     * API Discovery and Documentation - Lists all available methods and usage patterns
+     * 
+     * === PURPOSE ===
+     * Provides comprehensive introspection into TaskManager API capabilities.
+     * Essential for developers integrating with the system and for debugging
+     * complex multi-agent workflows where method availability needs verification.
+     * 
+     * === METHOD DISCOVERY ===
+     * • TaskManager core methods - direct TODO.json operations
+     * • API wrapper methods - high-level operations with error handling
+     * • Usage examples and integration patterns
+     * • Method counts for API completeness verification
+     * 
+     * === RESPONSE STRUCTURE ===
+     * • taskManagerMethods: Core TaskManager class methods
+     * • apiMethods: TaskManagerAPI wrapper methods  
+     * • usage: Integration patterns and examples
+     * • examples: Code samples for common operations
+     * 
+     * @returns {Promise<Object>} API discovery information with method lists and usage examples
+     * @throws {Error} If method introspection fails
+     * 
+     * @example
+     * // Get all available methods
+     * const methods = await api.getApiMethods();
+     * console.log(`API has ${methods.apiMethods.count} methods`);
+     * console.log(methods.examples.api); // Usage examples
+     */
     async getApiMethods() {
         try {
             return await this.withTimeout((async () => {
+                // Extract all public methods from TaskManager core class
                 const taskManagerMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(this.taskManager))
                     .filter(name => name !== 'constructor' && !name.startsWith('_'))
                     .sort();
 
+                // Extract all public methods from TaskManagerAPI wrapper class
                 const apiMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(this))
                     .filter(name => name !== 'constructor' && !name.startsWith('_'))
                     .sort();
@@ -255,17 +285,66 @@ class TaskManagerAPI {
         }
     }
 
-    // Agent initialization and management
+    /**
+     * Initialize and register a new agent in the TaskManager system
+     * 
+     * === PURPOSE ===
+     * Creates a new agent with unique ID and registers it in the multi-agent
+     * coordination system. This is the mandatory first step before any agent
+     * can claim tasks or participate in workflows.
+     * 
+     * === AGENT LIFECYCLE ===
+     * 1. Agent initialization (this method)
+     * 2. Agent claims tasks via claimTask()
+     * 3. Agent heartbeat renewal via reinitializeAgent()
+     * 4. Agent cleanup via cleanup()
+     * 
+     * === DEFAULT CONFIGURATION ===
+     * • role: 'development' - Agent specialization role
+     * • sessionId: timestamp-based unique session identifier
+     * • specialization: [] - Array of specialized capabilities
+     * 
+     * === MULTI-AGENT COORDINATION ===
+     * • Registers agent in shared agent registry
+     * • Enables task claiming and coordination
+     * • Provides unique identity for conflict resolution
+     * • Tracks agent activity and heartbeat
+     * 
+     * @param {Object} config - Optional agent configuration overrides
+     * @param {string} config.role - Agent role ('development', 'testing', 'research', etc.)
+     * @param {string} config.sessionId - Unique session identifier
+     * @param {Array} config.specialization - Array of specialized capabilities
+     * @param {Object} config.metadata - Additional agent metadata
+     * @returns {Promise<Object>} Success response with agent ID and configuration
+     * @throws {Error} If agent registration fails
+     * 
+     * @example
+     * // Initialize with default configuration
+     * const result = await api.initAgent();
+     * console.log(`Agent ID: ${result.agentId}`);
+     * 
+     * @example
+     * // Initialize with custom configuration
+     * const result = await api.initAgent({
+     *   role: 'testing',
+     *   specialization: ['unit-tests', 'integration-tests'],
+     *   metadata: { environment: 'ci' }
+     * });
+     */
     async initAgent(config = {}) {
         try {
             return await this.withTimeout((async () => {
+                // Default agent configuration for development workflows
                 const defaultConfig = {
-                    role: 'development',
-                    sessionId: `session_${Date.now()}`,
-                    specialization: []
+                    role: 'development',                    // Primary agent role
+                    sessionId: `session_${Date.now()}`,    // Unique session identifier
+                    specialization: []                      // Specialized capabilities array
                 };
                 
+                // Merge user configuration with defaults
                 const agentConfig = { ...defaultConfig, ...config };
+                
+                // Register agent in the multi-agent coordination system
                 this.agentId = await this.agentManager.registerAgent(agentConfig);
                 
                 return {
@@ -352,21 +431,72 @@ class TaskManagerAPI {
         }
     }
 
+    /**
+     * Claim a task for the specified agent with dependency validation and research guidance
+     * 
+     * === PURPOSE ===
+     * Assigns a task to an agent for execution, with comprehensive validation
+     * of dependencies, research requirements, and agent capabilities. This is
+     * the core method for task assignment in multi-agent workflows.
+     * 
+     * === DEPENDENCY SYSTEM ===
+     * • Automatically detects incomplete dependencies
+     * • Prevents claiming tasks with unfinished prerequisites  
+     * • Provides guidance for dependency completion order
+     * • Maintains dependency chain integrity across agents
+     * 
+     * === RESEARCH INTEGRATION ===
+     * • Detects research category tasks automatically
+     * • Provides research workflow instructions
+     * • Suggests research report templates and structure
+     * • Integrates with development/reports/ directory
+     * 
+     * === MULTI-AGENT COORDINATION ===
+     * • Prevents race conditions in task claiming
+     * • Tracks task ownership and agent assignment
+     * • Provides conflict resolution for concurrent claims
+     * • Maintains consistency across distributed agents
+     * 
+     * @param {string} taskId - Unique identifier of task to claim
+     * @param {string} agentId - Agent ID (optional, uses current agent if not provided)
+     * @param {string} priority - Priority level for claiming ('normal', 'high', 'low')
+     * @returns {Promise<Object>} Task claiming result with task details and instructions
+     * @throws {Error} If task claiming fails or agent not initialized
+     * 
+     * @example
+     * // Claim task with current agent
+     * const result = await api.claimTask('task_123');
+     * if (result.success) {
+     *   console.log(`Claimed: ${result.task.title}`);
+     * }
+     * 
+     * @example
+     * // Handle dependency blocking
+     * const result = await api.claimTask('task_456');
+     * if (result.blockedByDependencies) {
+     *   console.log(result.dependencyInstructions.message);
+     *   // Claim dependency first: result.nextDependency.id
+     * }
+     */
     async claimTask(taskId, agentId = null, priority = 'normal') {
         try {
             return await this.withTimeout((async () => {
+                // Resolve target agent ID - use provided ID or current session agent
                 const targetAgentId = agentId || this.agentId;
                 if (!targetAgentId) {
                     throw new Error('No agent ID provided and no agent initialized');
                 }
                 
-                // First, check if task has incomplete dependencies
+                // Read current TODO state for dependency validation
                 const todoData = await this.taskManager.readTodo();
                 const task = todoData.tasks.find(t => t.id === taskId);
             
+            // === DEPENDENCY VALIDATION SYSTEM ===
+            // Check if task has incomplete dependencies that must be resolved first
             if (task && task.dependencies && task.dependencies.length > 0) {
                 const incompleteDependencies = [];
                 
+                // Identify all dependencies that are not yet completed
                 for (const depId of task.dependencies) {
                     const depTask = todoData.tasks.find(t => t.id === depId);
                     if (depTask && depTask.status !== 'completed') {
@@ -374,6 +504,7 @@ class TaskManagerAPI {
                     }
                 }
                 
+                // If dependencies exist, block task claiming and provide guidance
                 if (incompleteDependencies.length > 0) {
                     // Find the next dependency that should be worked on first
                     const nextDependency = incompleteDependencies.find(dep => dep.status === 'pending') || incompleteDependencies[0];

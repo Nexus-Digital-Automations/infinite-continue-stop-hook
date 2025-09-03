@@ -1,5 +1,87 @@
 #!/usr/bin/env node
 
+/**
+ * Infinite Continue Hook Setup and Project Initialization System
+ * 
+ * === OVERVIEW ===
+ * Comprehensive project setup utility that initializes TaskManager system
+ * integration across development projects. This script creates the necessary
+ * directory structures, configuration files, and TODO.json schemas required
+ * for the infinite continue hook system to function properly.
+ * 
+ * === KEY FEATURES ===
+ * • Automated project directory structure creation
+ * • TODO.json schema initialization with multi-agent support
+ * • Development mode files and guidelines setup
+ * • Interactive and batch mode operations
+ * • Project validation and compatibility checking
+ * • Centralized TaskManager system integration
+ * 
+ * === PROJECT STRUCTURE CREATION ===
+ * • /development - Core development documentation directory
+ * • /development/modes - Mode-specific workflow instructions
+ * • /development/tasks - Task-specific documentation
+ * • TODO.json - Multi-agent task management schema
+ * • Agent registry integration for multi-agent coordination
+ * 
+ * === TODO.JSON SCHEMA ===
+ * Creates modern multi-agent compatible TODO.json structure:
+ * • Task management with unique IDs and timestamps
+ * • Dependency system for complex workflows
+ * • Agent coordination and multi-agent support
+ * • Review strike system for quality control
+ * • Mode-based workflow management
+ * • Production-ready implementation requirements
+ * 
+ * === OPERATION MODES ===
+ * • Interactive Mode - User-guided project configuration
+ * • Batch Mode - Automated setup with minimal interaction
+ * • Single Project Mode - Setup for specific project directory
+ * • Validation Mode - Check and update existing projects
+ * 
+ * === HOOK SYSTEM INTEGRATION ===
+ * • Integrates with Claude Code infinite continue hook
+ * • Establishes connection to centralized TaskManager system
+ * • Provides universal command interface setup
+ * • Creates standardized workflow patterns
+ * 
+ * === QUALITY ASSURANCE SYSTEM ===
+ * The setup creates a three-strike review system:
+ * • Strike 1: Build and compilation validation
+ * • Strike 2: Linting and code quality validation  
+ * • Strike 3: Test coverage and quality validation
+ * • Automatic task creation for remediation
+ * • Production-ready implementation enforcement
+ * 
+ * === COMMAND LINE INTERFACE ===
+ * • --no-interactive / --batch: Skip interactive prompts
+ * • --project-name: Specify project name
+ * • --task: Initial task description
+ * • --mode: Task execution mode
+ * • --prompt: Detailed task instructions
+ * • --dependencies: Task dependencies
+ * • --important-files: Critical project files
+ * • --requires-research: Research requirement flag
+ * • --single: Single project mode
+ * 
+ * === USAGE PATTERNS ===
+ * 1. Interactive Setup:
+ *    node setup-infinite-hook.js /path/to/project
+ * 
+ * 2. Batch Setup:
+ *    node setup-infinite-hook.js --batch --project-name "MyProject"
+ * 
+ * 3. Single Project:
+ *    node setup-infinite-hook.js /path/to/project --single
+ * 
+ * 4. Automated CI/CD:
+ *    node setup-infinite-hook.js $PROJECT_ROOT --batch --no-interactive
+ * 
+ * @author TaskManager System
+ * @version 2.0.0
+ * @since 2024-01-01
+ */
+
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
