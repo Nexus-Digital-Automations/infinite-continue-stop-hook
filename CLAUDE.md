@@ -470,6 +470,37 @@ timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-co
 - **Development notes** → `development/notes/`
 - **Backup files** → `backups/`
 
+## 🚨 STANDARDIZED DOCUMENTATION STRUCTURE
+
+**MANDATORY `docs/` DIRECTORY ORGANIZATION:**
+
+**PRIMARY DOCUMENTATION STRUCTURE:**
+```
+docs/
+├── api/              # API documentation and specifications
+├── architecture/     # System architecture, design decisions
+├── deployment/       # Deployment guides, environment setup
+├── development/      # Development guides, coding standards
+├── troubleshooting/  # Common issues, debugging guides
+├── user/            # End-user documentation, tutorials
+└── README.md        # Documentation index and overview
+```
+
+**DOCUMENTATION CATEGORIZATION:**
+- **API Documentation** → `docs/api/` - REST/GraphQL specs, endpoint docs, SDK references
+- **Architecture Docs** → `docs/architecture/` - System design, data flow, component diagrams
+- **Deployment Guides** → `docs/deployment/` - Installation, configuration, environment setup
+- **Development Docs** → `docs/development/` - Contributing guides, coding standards, setup
+- **Troubleshooting** → `docs/troubleshooting/` - Error resolution, FAQ, debugging
+- **User Documentation** → `docs/user/` - User guides, tutorials, feature documentation
+
+**DOCUMENTATION STANDARDS:**
+- **ALWAYS create docs/ directory** for project documentation
+- **ORGANIZE by purpose** - separate technical from user documentation  
+- **INCLUDE README.md** in docs/ as navigation index
+- **FOLLOW NAMING** - use kebab-case for file names
+- **MAINTAIN STRUCTURE** - consistent subdirectory organization across projects
+
 ## 🚨 MANDATORY GIT WORKFLOW
 
 **ABSOLUTE REQUIREMENT**: ALWAYS commit and push work after EVERY task completion

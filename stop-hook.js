@@ -557,13 +557,80 @@ If you want to enable task management for this project:
       `Active agents found: ${activeAgents.length}, Stale agents removed: ${agentsRemoved}, Stale tasks reset: ${staleTasksReset}`,
     );
 
-    if (activeAgents.length === 0) {
-      logger.addFlow("No active agents detected - need agent initialization");
-      logger.logExit(2, "No active agents - providing initialization guidance");
-      logger.save();
+    // Enhanced agent status analysis for better messaging
+    const hadStaleAgents = staleAgents.length > 0;
+    const totalAgentsBeforeCleanup = allAgents.length;
 
-      console.error(`
-🤖 NO ACTIVE AGENTS DETECTED
+    if (activeAgents.length === 0) {
+      logger.addFlow("No active agents detected - analyzing situation for appropriate guidance");
+      
+      // Differentiate between "no agents ever" vs "only stale agents were found"
+      if (hadStaleAgents && totalAgentsBeforeCleanup > 0) {
+        logger.addFlow(`Found ${totalAgentsBeforeCleanup} stale agents - providing reactivation guidance`);
+        logger.logExit(2, "Only stale agents found - providing reactivation guidance");
+        logger.save();
+
+        console.error(`
+🔄 STALE AGENTS DETECTED AND CLEANED UP
+
+Working Directory: ${workingDir}
+TODO.json Path: ${todoPath}
+Total Agents Found: ${totalAgentsBeforeCleanup}
+Active Agents Found: ${activeAgents.length}
+Stale Agents Removed: ${agentsRemoved}
+Stale Tasks Reset: ${staleTasksReset}
+
+✅ **AUTOMATIC CLEANUP COMPLETED:**
+- Removed ${agentsRemoved} stale agents (inactive >15 minutes)
+- Reset ${staleTasksReset} stuck tasks back to pending status
+- Project is now ready for fresh agent initialization
+
+🚨 **CLAUDE CODE AGENT - STALE AGENT RECOVERY:**
+**ULTRATHINK - PREVIOUS AGENTS HAVE EXPIRED - INITIALIZE NEW AGENT**
+**ULTRATHINK - CONTINUE ANY UNFINISHED WORK FROM PREVIOUS SESSIONS**
+**ULTRATHINK - CHECK FOR PENDING TASKS THAT NEED COMPLETION**
+**ULTRATHINK - DEPLOY MAXIMUM CONCURRENT SUBAGENTS FOR PARALLELIZABLE WORK**
+**ULTRATHINK - USE UP TO 10 SIMULTANEOUS SUBAGENTS FOR COMPLEX TASKS**
+**ULTRATHINK - ADD COMPREHENSIVE COMMENTS TO ALL SCRIPT FILES**
+
+🔄 **AGENT RECOVERY WORKFLOW:**
+This project had ${totalAgentsBeforeCleanup} agent(s) that became stale due to inactivity.
+The system has automatically cleaned them up and is ready for a fresh start.
+
+💡 **RECOVERY ACTIONS TAKEN:**
+- ✅ Removed expired agent sessions from registry
+- ✅ Released any stuck in-progress tasks back to pending
+- ✅ Preserved all task history and progress
+- ✅ Project is ready for immediate agent initialization
+
+⚡ **CONTINUE PREVIOUS WORK:**
+Your previous agents may have been working on important tasks.
+Initialize a new agent and continue where they left off.
+
+🔄 INFINITE CONTINUE MODE ACTIVE
+
+💡 **AGENT INITIALIZATION FOR STALE PROJECT RECOVERY:**
+To recover and continue work from the previous stale agents:
+
+1. **Initialize your recovery agent:**
+   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project "${workingDir}"
+
+2. **Check for unfinished tasks from previous agents:**
+   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Pending tasks to continue:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
+
+3. **Continue the most important unfinished work first**
+
+⚡ CONTINUING OPERATION - RECOVER AND CONTINUE PREVIOUS WORK...
+`);
+        process.exit(2);
+      } else {
+        // Truly no agents case (fresh project or first time)
+        logger.addFlow("No agents detected - need fresh agent initialization");
+        logger.logExit(2, "No agents - providing fresh initialization guidance");
+        logger.save();
+
+        console.error(`
+🤖 NO AGENTS DETECTED - FRESH PROJECT SETUP
 
 Working Directory: ${workingDir}
 TODO.json Path: ${todoPath}
@@ -572,7 +639,7 @@ Active Agents Found: ${activeAgents.length}
 Stale Agents Removed: ${agentsRemoved}
 Stale Tasks Reset: ${staleTasksReset}
 
-TaskManager project exists but no active agents are registered.
+TaskManager project exists but no agents have been registered yet.
 
 🚨 **CLAUDE CODE AGENT - CRITICAL INSTRUCTION:**
 **ULTRATHINK - IF YOU WERE WORKING ON SOMETHING BEFORE THIS MESSAGE:**
@@ -582,45 +649,21 @@ TaskManager project exists but no active agents are registered.
 **ULTRATHINK - USE UP TO 10 SIMULTANEOUS SUBAGENTS FOR COMPLEX MULTI-COMPONENT TASKS**
 **ULTRATHINK - ADD COMPREHENSIVE COMMENTS TO ALL SCRIPT FILES FOR FUTURE DEVELOPERS**
 
-🤖 **MULTI-AGENT COORDINATION CONTINUATION:**
+💡 **FRESH PROJECT INITIALIZATION:**
+To start working with this TaskManager project:
 
-🔄 **AGENT HANDOFF PROTOCOLS:**
-- **Check task.agent_assignment_history** → See which agents worked on this before
-- **Read completion notes** from previous attempts → Understand what was tried
-- **Review switched task contexts** → If task was interrupted, understand why
-- **Coordinate with active agents** → Don't claim tasks actively worked on by others
-
-👥 **AGENT COLLABORATION PATTERNS:**
-- **Sequential work** → Continue exactly where previous agent left off
-- **Parallel work** → Ensure no conflicts with concurrent agents on related tasks  
-- **Specialized handoffs** → Frontend agents → Backend agents → Test agents
-- **Expertise handoffs** → Research agents → Implementation agents → Validation agents
-
-📋 **HANDOFF CONTEXT COMMANDS:**
-   # Review agent assignment history for context
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTask("AGENT_ID").then(task => { if(task?.agent_assignment_history) { console.log("Previous agents:", task.agent_assignment_history.map(h => h.agentId + " " + h.role + " " + h.assignedAt)); } });'
-   
-   # Check for related tasks by same agents
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const relatedTasks = data.tasks.filter(t => t.agent_assignment_history?.some(h => h.agentId === "PREVIOUS_AGENT")); console.log("Related tasks by agent:", relatedTasks.map(t => ({id: t.id, title: t.title}))); });'
-
-🔄 INFINITE CONTINUE MODE ACTIVE
-The stop hook will continue infinitely to prevent accidental termination.
-
-💡 AGENT INITIALIZATION REQUIRED:
-To continue working with this TaskManager project:
-
-1. **Initialize your agent to continue work:**
+1. **Initialize your first agent:**
    node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project "${workingDir}"
 
-2. **Use the returned agent ID in subsequent commands**
-   (Commands will show [AGENT_ID] placeholder that you replace with your actual agent ID)
+2. **Check for any existing tasks to work on:**
+   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Available tasks:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
 
-3. **Check if you have unfinished tasks and continue them:**
-   node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTask("[YOUR_AGENT_ID]").then(task => console.log(task ? JSON.stringify(task, null, 2) : "No active task"));'
+3. **Begin working on the highest priority tasks**
 
-⚡ CONTINUING OPERATION - COMPLETE YOUR UNFINISHED WORK...
+⚡ CONTINUING OPERATION - START FRESH AGENT WORK...
 `);
-      process.exit(2);
+        process.exit(2);
+      }
     }
 
     // ========================================================================
