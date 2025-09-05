@@ -89,7 +89,7 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 **❌ DO NOT CLAIM TASKS ALREADY CLAIMED BY OTHER AGENTS**
 **❌ DO NOT CLAIM TASKS WITH assigned_agent OR claimed_by FIELDS SET**
 **❌ DO NOT START WORK WITHOUT READING OR REVIEWING ALL development/essentials/ FILES FIRST**
-**❌ DO NOT IMPLEMENT FEATURES NOT APPROVED IN development/essentials/features.md**
+**❌ DO NOT IMPLEMENT FEATURES NOT APPROVED IN TODO.json FEATURES ARRAY**
 **❌ DO NOT SKIP development/essentials/ REVIEW - MANDATORY EVERY TASK/CONTINUE**
 
 🔄 MANDATORY WORKFLOW FOR CLAUDE CODE AGENT:
@@ -99,7 +99,7 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 4. **FOURTH: ASSESS TASK FOR CONCURRENT SUBAGENT DEPLOYMENT - USE MAXIMUM PARALLELIZATION**
 5. **FIFTH: DEPLOY UP TO 10 CONCURRENT SUBAGENTS FOR COMPLEX MULTI-COMPONENT TASKS**
 6. **TASK CLAIMING VALIDATION: Before claiming any task, verify it is NOT already claimed by another agent**
-7. **FEATURES COMPLIANCE: Only work on features listed in development/essentials/features.md "Implemented" or "Planned" sections**
+7. **FEATURES COMPLIANCE: Only work on features with "approved" status in TODO.json features array**
 8. **IF UNFINISHED TASK EXISTS: CONTINUE WORKING ON IT - DO NOT STOP UNTIL COMPLETE**
 9. **CONCURRENT EXECUTION: Break work into parallel streams and execute simultaneously**
 10. **BEFORE STARTING ANY TASK: Scan development/reports/ and development/research-reports/ for relevant research reports**
@@ -374,7 +374,7 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 • MANDATORY: Read or review ALL files in development/essentials/ directory BEFORE starting any work
 • EVERY TASK START/CONTINUE: Re-read or review development/essentials/ directory for essential context
 • CRITICAL CONTEXT: development/essentials/ contains project constraints, requirements, and approved features
-• FEATURES MANAGEMENT: Only implement features listed in development/essentials/features.md "✅ Implemented Features" or "📋 Planned Features" sections
+• FEATURES MANAGEMENT: Only implement features with "approved" status in TODO.json features array
 • PERFECTION FOCUS: Prioritize perfecting existing features over adding new ones
 • FOLLOW all constraints and requirements specified in development/essentials/ files
 

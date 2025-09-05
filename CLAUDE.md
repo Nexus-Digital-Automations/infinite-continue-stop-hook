@@ -65,36 +65,36 @@ function processData(userId, data) {
 }
 ```
 
-### 📋 FEATURES.JSON INTEGRATION MANDATE
-**ALWAYS RESPECT features.json WORKFLOW**
+### 📋 FEATURE-BASED TODO.json INTEGRATION MANDATE
+**ALWAYS RESPECT UNIFIED FEATURE-BASED SYSTEM**
 
 **MANDATORY PROTOCOL:**
-1. **READ features.json FIRST** - Always check project features.json before feature work
-2. **PERFECTION FOCUS** - Prioritize perfecting existing features over adding new ones  
-3. **FEATURE PROPOSALS ONLY** - Can only create features with "proposed" status
-4. **USER APPROVAL REQUIRED** - Only user can approve features for implementation
-5. **IMPLEMENT APPROVED ONLY** - Only implement features with "planned" or "approved" status
-6. **NO UNAUTHORIZED FEATURES** - Never implement features not approved by user
+1. **READ TODO.json features FIRST** - Always check features array in TODO.json before feature work
+2. **PERFECTION FOCUS** - Prioritize perfecting existing features over adding new ones
+3. **USER AUTHORIZATION REQUIRED** - Features can ONLY be created with explicit user authorization (userAuthorized=true)
+4. **IMPLEMENT APPROVED ONLY** - Only implement features with "approved" status in TODO.json
+5. **NO UNAUTHORIZED FEATURES** - Never create features without explicit user permission
+6. **FEATURE-TASK LINKING** - All feature tasks must have parent_feature field populated
 
-**FEATURE API COMMANDS:**
+**UNIFIED FEATURE SYSTEM:**
+- **SINGLE SOURCE OF TRUTH**: TODO.json contains both tasks AND features
+- **NO DUAL SYSTEMS**: features.json eliminated - everything in TODO.json
+- **FEATURE ORGANIZATION**: Features contain subtasks for organized development
+- **AUTOMATIC MIGRATION**: Phase-based tasks automatically converted to features
+
+**FEATURE CREATION PROTOCOL:**
 ```bash
-# List features by status (10s timeout)
-timeout 10s node taskmanager-api.js feature-list '{"status": "proposed"}'
+# Create feature (REQUIRES user authorization)
+timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.createFeature({title: "Feature Name", description: "Description", category: "category"}, true).then(id => console.log("Created:", id));'
 
-# Create new feature proposal (10s timeout)
-timeout 10s node taskmanager-api.js feature-create '{"title": "Feature Name", "description": "Description", "category": "category"}'
+# List all features
+timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.getFeatures().then(features => console.log(JSON.stringify(features, null, 2)));'
 
-# Get feature details (10s timeout)
-timeout 10s node taskmanager-api.js feature-get feature_123
+# Get feature with tasks
+timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.getFeatureWithTasks("feature-id").then(result => console.log(JSON.stringify(result, null, 2)));'
 
-# Feature statistics (10s timeout)
-timeout 10s node taskmanager-api.js feature-stats
-
-# Approve feature (user only, 10s timeout)
-timeout 10s node taskmanager-api.js feature-approve feature_123 user_456
-
-# Link feature to tasks (10s timeout)
-timeout 10s node taskmanager-api.js feature-link feature_123 task_789
+# Link task to feature
+timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.linkTaskToFeature("task-id", "feature-id").then(() => console.log("✅ Task linked to feature"));'
 ```
 
 ### 🎯 ABSOLUTE PRIORITY HIERARCHY & USER AUTHORITY
@@ -694,7 +694,7 @@ timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Cl
 **CRITICAL RULES:**
 - **❌ NEVER ALLOW NATURAL STOPS** - System must continue infinitely
 - **✅ ONLY ENDPOINT CAN STOP** - Specific API endpoint must be called to trigger stop
-- **✅ COMPLETION AUTHORIZATION** - If all features.md features are complete AND no linter/build/startup/test errors exist, agent can authorize stop
+- **✅ COMPLETION AUTHORIZATION** - If all TODO.json features are complete AND no linter/build/startup/test errors exist, agent can authorize stop
 - **🔒 ONE STOP ONLY** - After endpoint triggered, allow only ONE stop, then return to never-stop mode
 - **🔄 ALWAYS INSTRUCT** - Provide detailed guidance on task continuation vs next task acquisition
 
