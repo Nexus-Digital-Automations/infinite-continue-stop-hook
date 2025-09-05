@@ -1216,7 +1216,171 @@ async function main() {
 
       // ========================================
       // FEATURE MANAGEMENT COMMANDS
-      // Feature management CLI commands removed - unified with TODO.json feature-based system
+      // ========================================
+
+      case "suggest-feature": {
+        if (args.length < 2) {
+          console.error("Usage: suggest-feature <featureData> [agentId]");
+          process.exit(1);
+        }
+
+        try {
+          const featureData = JSON.parse(args[1]);
+          const agentId = args[2] || 'agent_unknown';
+          
+          if (!featureData.title) {
+            console.error("Error: Feature title is required");
+            process.exit(1);
+          }
+
+          const featureId = await api.taskManager.suggestFeature(featureData, agentId);
+          console.log(JSON.stringify({
+            success: true,
+            featureId: featureId,
+            message: `Feature suggested: ${featureData.title}`,
+            status: 'suggested',
+            awaiting_approval: true
+          }, null, 2));
+        } catch (error) {
+          console.error(`Error suggesting feature: ${error.message}`);
+          process.exit(1);
+        }
+        break;
+      }
+
+      case "approve-feature": {
+        if (args.length < 2) {
+          console.error("Usage: approve-feature <featureId> [userId]");
+          process.exit(1);
+        }
+
+        try {
+          const featureId = args[1];
+          const userId = args[2] || 'user';
+          
+          const success = await api.taskManager.approveFeature(featureId, userId);
+          if (success) {
+            const feature = await api.taskManager.getFeature(featureId);
+            console.log(JSON.stringify({
+              success: true,
+              featureId: featureId,
+              message: `Feature approved: ${feature.title}`,
+              status: 'approved',
+              ready_for_implementation: true
+            }, null, 2));
+          } else {
+            console.error(`Failed to approve feature: ${featureId}`);
+            process.exit(1);
+          }
+        } catch (error) {
+          console.error(`Error approving feature: ${error.message}`);
+          process.exit(1);
+        }
+        break;
+      }
+
+      case "reject-feature": {
+        if (args.length < 2) {
+          console.error("Usage: reject-feature <featureId> [userId] [reason]");
+          process.exit(1);
+        }
+
+        try {
+          const featureId = args[1];
+          const userId = args[2] || 'user';
+          const reason = args[3] || '';
+          
+          const feature = await api.taskManager.getFeature(featureId);
+          const featureTitle = feature ? feature.title : featureId;
+          
+          const success = await api.taskManager.rejectFeature(featureId, userId, reason);
+          if (success) {
+            console.log(JSON.stringify({
+              success: true,
+              featureId: featureId,
+              message: `Feature rejected: ${featureTitle}`,
+              reason: reason,
+              removed: true
+            }, null, 2));
+          } else {
+            console.error(`Failed to reject feature: ${featureId}`);
+            process.exit(1);
+          }
+        } catch (error) {
+          console.error(`Error rejecting feature: ${error.message}`);
+          process.exit(1);
+        }
+        break;
+      }
+
+      case "list-suggested-features": {
+        try {
+          const features = await api.taskManager.getFeatures({ status: 'suggested' });
+          console.log(JSON.stringify({
+            success: true,
+            suggested_features: features.map(f => ({
+              id: f.id,
+              title: f.title,
+              description: f.description,
+              rationale: f.rationale,
+              category: f.category,
+              priority: f.priority,
+              suggested_by: f.suggested_by,
+              created_at: f.created_at,
+              estimated_effort: f.metadata?.estimated_effort
+            })),
+            count: features.length
+          }, null, 2));
+        } catch (error) {
+          console.error(`Error listing suggested features: ${error.message}`);
+          process.exit(1);
+        }
+        break;
+      }
+
+      case "list-features": {
+        const filters = args.length > 1 ? JSON.parse(args[1]) : {};
+        try {
+          const features = await api.taskManager.getFeatures(filters);
+          console.log(JSON.stringify({
+            success: true,
+            features: features,
+            count: features.length
+          }, null, 2));
+        } catch (error) {
+          console.error(`Error listing features: ${error.message}`);
+          process.exit(1);
+        }
+        break;
+      }
+
+      case "feature-stats": {
+        try {
+          const allFeatures = await api.taskManager.getFeatures();
+          const stats = {
+            total: allFeatures.length,
+            by_status: {},
+            by_category: {},
+            by_priority: {},
+            awaiting_approval: allFeatures.filter(f => f.status === 'suggested').length
+          };
+
+          allFeatures.forEach(f => {
+            stats.by_status[f.status] = (stats.by_status[f.status] || 0) + 1;
+            stats.by_category[f.category] = (stats.by_category[f.category] || 0) + 1;
+            stats.by_priority[f.priority] = (stats.by_priority[f.priority] || 0) + 1;
+          });
+
+          console.log(JSON.stringify({
+            success: true,
+            feature_statistics: stats
+          }, null, 2));
+        } catch (error) {
+          console.error(`Error getting feature stats: ${error.message}`);
+          process.exit(1);
+        }
+        break;
+      }
 
       default: {
         console.log(`
@@ -1240,12 +1404,26 @@ Commands:
   move-down <taskId>           - Move task down one position
   move-bottom <taskId>         - Move task to bottom
 
+Feature Suggestion & Management:
+  suggest-feature <featureData> [agentId] - Suggest new feature for user approval
+  approve-feature <featureId> [userId]    - Approve suggested feature for implementation
+  reject-feature <featureId> [userId] [reason] - Reject suggested feature
+  list-suggested-features      - List all features awaiting user approval
+  list-features [filter]       - List all features with optional filter
+  feature-stats                - Get feature statistics and status breakdown
+
 Examples:
-  node taskmanager-api.js init '{"role": "development", "specialization": ["testing"]}'
-  node taskmanager-api.js create '{"title": "Fix bug", "mode": "DEVELOPMENT", "priority": "high"}'
-  node taskmanager-api.js list '{"status": "pending"}'
-  node taskmanager-api.js reinitialize agent_123 '{"metadata": {"renewed": true}}'
-  node taskmanager-api.js move-top task_123
+  timeout 10s node taskmanager-api.js init '{"role": "development", "specialization": ["testing"]}'
+  timeout 10s node taskmanager-api.js create '{"title": "Fix bug", "mode": "DEVELOPMENT", "priority": "high"}'
+  timeout 10s node taskmanager-api.js list '{"status": "pending"}'
+  timeout 10s node taskmanager-api.js reinitialize agent_123 '{"metadata": {"renewed": true}}'
+  
+Feature Suggestion Examples:
+  timeout 10s node taskmanager-api.js suggest-feature '{"title": "Add dark mode", "description": "Implement dark theme", "rationale": "Improve user experience", "category": "ui", "estimated_effort": "medium"}' agent_dev_001
+  timeout 10s node taskmanager-api.js list-suggested-features
+  timeout 10s node taskmanager-api.js approve-feature feature_suggested_123456789_abc123def user
+  timeout 10s node taskmanager-api.js reject-feature feature_suggested_123456789_abc123def user "Not aligned with project goals"
+  timeout 10s node taskmanager-api.js move-top task_123
                 `);
         break;
       }

@@ -71,10 +71,18 @@ function processData(userId, data) {
 **MANDATORY PROTOCOL:**
 1. **READ TODO.json features FIRST** - Always check features array in TODO.json before feature work
 2. **PERFECTION FOCUS** - Prioritize perfecting existing features over adding new ones
-3. **USER AUTHORIZATION REQUIRED** - Features can ONLY be created with explicit user authorization (userAuthorized=true)
-4. **IMPLEMENT APPROVED ONLY** - Only implement features with "approved" status in TODO.json
-5. **NO UNAUTHORIZED FEATURES** - Never create features without explicit user permission
-6. **FEATURE-TASK LINKING** - All feature tasks must have parent_feature field populated
+3. **AGENTS CAN SUGGEST** - Agents can freely suggest features using suggestFeature() method
+4. **USERS MUST APPROVE** - Only users can approve suggested features for implementation
+5. **IMPLEMENT APPROVED ONLY** - Only implement features with "approved" status in TODO.json
+6. **NO UNAUTHORIZED IMPLEMENTATION** - Never implement features without explicit user approval
+7. **FEATURE-TASK LINKING** - All feature tasks must have parent_feature field populated
+
+**FEATURE STATUS WORKFLOW:**
+- **"suggested"** - Agent proposed, awaiting user decision (NOT implemented)
+- **"approved"** - User approved, ready for implementation
+- **"planned"** - Direct user creation, ready for implementation
+- **"in_progress"** - Currently being implemented
+- **"completed"** - Implementation finished
 
 **UNIFIED FEATURE SYSTEM:**
 - **SINGLE SOURCE OF TRUTH**: TODO.json contains both tasks AND features
@@ -82,13 +90,39 @@ function processData(userId, data) {
 - **FEATURE ORGANIZATION**: Features contain subtasks for organized development
 - **AUTOMATIC MIGRATION**: Phase-based tasks automatically converted to features
 
-**FEATURE CREATION PROTOCOL:**
-```bash
-# Create feature (REQUIRES user authorization)
-timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.createFeature({title: "Feature Name", description: "Description", category: "category"}, true).then(id => console.log("Created:", id));'
+**FEATURE WORKFLOW - AGENTS CAN SUGGEST, USERS MUST APPROVE:**
 
-# List all features
-timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.getFeatures().then(features => console.log(JSON.stringify(features, null, 2)));'
+**AGENT FEATURE SUGGESTION (NO AUTHORIZATION REQUIRED):**
+```bash
+# Suggest feature for user consideration (agents can do this freely)
+timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" suggest-feature '{"title": "Feature Name", "description": "Detailed description", "rationale": "Why this would be beneficial", "category": "enhancement", "estimated_effort": "medium"}' agent_id
+
+# List all suggested features awaiting approval
+timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" list-suggested-features
+
+# Get feature statistics (including suggestions)
+timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" feature-stats
+```
+
+**USER FEATURE APPROVAL (USER AUTHORIZATION REQUIRED):**
+```bash
+# User approves suggested feature for implementation
+timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" approve-feature feature_suggested_123456789_abc123def user
+
+# User rejects suggested feature
+timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reject-feature feature_suggested_123456789_abc123def user "Reason for rejection"
+
+# List all features (all statuses)
+timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" list-features
+
+# List only approved features ready for implementation
+timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" list-features '{"status": "approved"}'
+```
+
+**DIRECT FEATURE CREATION (REQUIRES USER AUTHORIZATION):**
+```bash
+# Create feature directly with user authorization (bypasses suggestion workflow)
+timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.createFeature({title: "Feature Name", description: "Description", category: "category"}, true).then(id => console.log("Created:", id));'
 
 # Get feature with tasks
 timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.getFeatureWithTasks("feature-id").then(result => console.log(JSON.stringify(result, null, 2)));'
