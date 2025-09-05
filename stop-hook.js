@@ -77,6 +77,8 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 📋 CLAUDE CODE AGENT TASK CONTINUATION PROTOCOL
 
 🚨 CRITICAL INSTRUCTION FOR CLAUDE CODE AGENT:
+**ULTRATHINK - FIRST ACTION: READ OR REVIEW ALL FILES IN development/essentials/ DIRECTORY**
+**ULTRATHINK - EVERY TASK/CONTINUE: MUST READ OR REVIEW development/essentials/ BEFORE ANY WORK**
 **ULTRATHINK - IMMEDIATELY REINITIALIZE AGENT TO PREVENT EXPIRATION**
 **ULTRATHINK - IF YOU HAVE AN UNFINISHED TASK - CONTINUE WORKING ON IT IMMEDIATELY**
 **ULTRATHINK - DO NOT STOP - DO NOT CLAIM NEW TASKS - FINISH YOUR CURRENT WORK FIRST**
@@ -86,12 +88,13 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 🚨 **ABSOLUTE PROHIBITIONS - NEVER EVER:**
 **❌ DO NOT CLAIM TASKS ALREADY CLAIMED BY OTHER AGENTS**
 **❌ DO NOT CLAIM TASKS WITH assigned_agent OR claimed_by FIELDS SET**
-**❌ DO NOT START WORK WITHOUT READING development/essentials/features.md FIRST**
+**❌ DO NOT START WORK WITHOUT READING OR REVIEWING ALL development/essentials/ FILES FIRST**
 **❌ DO NOT IMPLEMENT FEATURES NOT APPROVED IN development/essentials/features.md**
+**❌ DO NOT SKIP development/essentials/ REVIEW - MANDATORY EVERY TASK/CONTINUE**
 
 🔄 MANDATORY WORKFLOW FOR CLAUDE CODE AGENT:
 1. **IMMEDIATELY FIRST: REINITIALIZE AGENT TO PREVENT EXPIRATION USING COMMAND BELOW**
-2. **ABSOLUTELY SECOND: Read development/essentials/features.md to understand approved features and project scope**
+2. **ABSOLUTELY SECOND: Read or review ALL files in development/essentials/ directory - MANDATORY EVERY TIME**
 3. **THIRD: Check if you have an unfinished task using the commands below**  
 4. **FOURTH: ASSESS TASK FOR CONCURRENT SUBAGENT DEPLOYMENT - USE MAXIMUM PARALLELIZATION**
 5. **FIFTH: DEPLOY UP TO 10 CONCURRENT SUBAGENTS FOR COMPLEX MULTI-COMPONENT TASKS**
@@ -234,8 +237,8 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
    # Then immediately reinitialize with your agent ID (REQUIRED - get it from init output above):
    node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize AGENT_ID_FROM_INIT_COMMAND
 
-   # STEP 1: MANDATORY - Read features file first
-   cat development/essentials/features.md
+   # STEP 1: MANDATORY - Read or review ALL development/essentials/ files first
+   ls development/essentials/ 2>/dev/null && find development/essentials/ -type f -name "*.md" -exec echo "=== {} ===" \\; -exec cat {} \\;
 
    # STEP 2: Initialize agent (get your agent ID) - ONLY IF NOT ALREADY INITIALIZED
    node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project [PROJECT_DIRECTORY]
@@ -356,13 +359,13 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 
 📋 RESEARCH REPORTS REQUIREMENT: ALWAYS scan development/reports/ and development/research-reports/ for relevant research reports BEFORE starting any task. Include applicable reports in task important_files and READ THEM FIRST before implementation.
 
-📋 FEATURES MANAGEMENT REQUIREMENT: 
-• MANDATORY: Read development/essentials/features.md BEFORE starting any work
+📋 DEVELOPMENT ESSENTIALS REQUIREMENT: 
+• MANDATORY: Read or review ALL files in development/essentials/ directory BEFORE starting any work
+• EVERY TASK START/CONTINUE: Re-read or review development/essentials/ directory for essential context
+• CRITICAL CONTEXT: development/essentials/ contains project constraints, requirements, and approved features
+• FEATURES MANAGEMENT: Only implement features listed in development/essentials/features.md "✅ Implemented Features" or "📋 Planned Features" sections
 • PERFECTION FOCUS: Prioritize perfecting existing features over adding new ones
-• ONLY implement features listed in "✅ Implemented Features" or "📋 Planned Features" sections
-• NEVER implement features from "❓ Potential Features Awaiting User Verification" without user approval
-• ADD new feature ideas to "❓ Potential Features Awaiting User Verification" section ONLY if not already listed
-• FOLLOW the feature proposal format specified in development/essentials/features.md
+• FOLLOW all constraints and requirements specified in development/essentials/ files
 
 🚨 TASK CLAIMING VALIDATION PROTOCOL:
 • ALWAYS verify task is not already claimed before attempting to claim it
@@ -729,6 +732,7 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 🔄 INFINITE CONTINUE MODE ACTIVE
 
 🚨 **CLAUDE CODE AGENT - READ THIS FIRST:**
+**ULTRATHINK - FIRST: READ OR REVIEW ALL development/essentials/ FILES - MANDATORY EVERY TIME**
 **ULTRATHINK - IMMEDIATELY REINITIALIZE AGENT TO PREVENT EXPIRATION**
 **ULTRATHINK - IF YOU HAVE AN UNFINISHED TASK, DO NOT STOP - CONTINUE WORKING ON IT**
 **ULTRATHINK - CHECK YOUR CURRENT TASK STATUS IMMEDIATELY USING COMMANDS BELOW**

@@ -267,41 +267,32 @@ if (!result.isValid) {
 
 ## 🎯 TASK MANAGEMENT & PRIORITY SYSTEM
 
-**🔴 PHASE-BASED SORTING (SUPREME PRIORITY)**
-**PHASES TRUMP ALL OTHER SORTING CRITERIA**
-
-**PHASE-AWARE TASK CREATION:**
-- **ALWAYS use "Phase X.Y:" prefix** for multi-phase projects (e.g., "Phase 1.2: Feature Name")  
-- **PHASES OVERRIDE ALL PRIORITIES** - Phase 1.1 comes before Phase 2.1 regardless of category or priority
-- **AUTO-EXTRACTION** - TaskManager automatically extracts phase info from titles
-- **SEQUENTIAL ORDERING** - Tasks sorted: Phase 1.0 → 1.1 → 1.2 → 2.0 → 2.1 → 3.0, etc.
-
-**SORTING HIERARCHY (IN ORDER):**
-1. **PHASES** (SUPREME) - Phase X.Y numerical ordering trumps everything
-2. **DEPENDENCIES** - Dependency tasks come before dependent tasks  
-3. **LINTER-ERROR** (HIGHEST) - Code quality issues within same phase
-4. **BUILD-ERROR, START-ERROR, ERROR, BUG** - Critical failures within same phase
-5. **CATEGORY RANKING** - missing-feature, enhancement, refactor, documentation, chore, research, test-***
+**PRIORITY CATEGORIES (Auto-sorted by rank):**
+1. **linter-error** (HIGHEST) - Code quality issues  
+2. **build-error, start-error, error, bug** - Critical failures
+3. **missing-feature, enhancement, refactor, documentation** - Implementation work
+4. **chore, research** - Maintenance & research
+5. **test-*** (LOWEST) - Testing-related tasks
 
 **ALWAYS CREATE TASKS FOR:**
-- User requests/instructions (with appropriate phase prefix if applicable)
+- User requests/instructions
 - All errors (linting, runtime, build, test failures)
 - Performance/security issues, code quality opportunities
 
-**WORKFLOW:** Request → Create Phase-Aware Task → Check Existing → Execute → Complete
+**WORKFLOW:** Request → Create Task → Check Existing → Execute → Complete
 
 **TASK CREATION COMMANDS:**
 ```bash
 # CRITICAL: ALWAYS USE SINGLE QUOTES and 10-second timeouts
 
-# Phase-based feature (RECOMMENDED for multi-phase projects)
-timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.createTask({title: "Phase 1.2: Implement [feature]", category: "missing-feature", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
-
-# Linter error (highest priority within phase)
+# Linter error (highest priority)
 timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.createTask({title: "Fix [specific error]", category: "linter-error", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
 
-# Phase-based research task  
-timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.createTask({title: "Research: Phase 2.1: Research [topic]", category: "research", mode: "RESEARCH"}).then(id => console.log("Created:", id));'
+# Feature implementation
+timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.createTask({title: "Implement [feature]", category: "missing-feature", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
+
+# Research task
+timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.createTask({title: "Research [topic]", category: "research", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
 ```
 
 
