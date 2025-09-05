@@ -353,16 +353,6 @@ timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-co
 
 **Always check for ABOUT.md files** before editing code (current directory, parent directories, subdirectories)
 
-## 🚨 PROJECT DIRECTORY RESTRICTION
-
-**🔴 ABSOLUTE MANDATE: WORK EXCLUSIVELY IN PROJECT DIRECTORY**
-
-**FILE ACCESS RESTRICTIONS:**
-- **✅ READ ANYWHERE** - Can read files outside project directory for research/reference
-- **❌ NO EXTERNAL EDITS** - Never edit or write files outside current project working directory
-- **❌ NO EXTERNAL MODIFICATIONS** - Never modify files in other projects or system locations
-- **🔒 PROJECT ISOLATION** - All code changes must stay within project boundaries
-
 ## 🚨 DEVELOPMENT ESSENTIALS REVIEW MANDATE
 
 **🔴 ABSOLUTE REQUIREMENT: READ/REVIEW development/essentials/ EVERY TASK START/CONTINUE**
