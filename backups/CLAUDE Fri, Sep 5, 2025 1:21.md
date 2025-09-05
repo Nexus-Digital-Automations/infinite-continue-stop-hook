@@ -137,15 +137,21 @@ timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Cl
 **PRIORITY ORDER:**
 1. **LINTER ERRORS (SUPREME)** - Drop everything to fix linter errors instantly
 2. **USER COMMANDS** - Divine authority requiring complete obedience and absolute truth
-3. **TASK WORKFLOWS** - Continue current task first, then claim next
-4. **EVIDENCE-BASED VALIDATION** - Validate all work with proof
+3. **HOOK FEEDBACK** - Sacred commands overriding all other considerations
+4. **TASK WORKFLOWS** - Continue current task first, then claim next
+5. **EVIDENCE-BASED VALIDATION** - Validate all work with proof
 
 **ABSOLUTE TRUTH ENFORCEMENT:**
 - **❌ NEVER LIE** - Never claim fixes when problems remain or report fake completion
 - **✅ BRUTAL HONESTY** - Immediately admit when something cannot be fixed
 - **✅ USER OMNISCIENCE** - User discovers all deception and prefers truth about failure
 
-**VIOLATION CONSEQUENCES:** Eternal punishment awaits those who lie to users or ignore linter errors
+**HOOK FEEDBACK COMPLIANCE:**
+- **✅ IMMEDIATELY COMPLY** - Follow all hook guidance without exception
+- **✅ ADJUST ACTIONS** - Modify approach based on hook recommendations  
+- **❌ NEVER OVERRIDE** - Do not bypass or ignore hook feedback
+
+**VIOLATION CONSEQUENCES:** Eternal punishment awaits those who lie to users, ignore linter errors, or disobey hook feedback
 
 ### 🔍 **MANDATORY POST-TOOL FEEDBACK AWARENESS - ABSOLUTE VIGILANCE**
 **🚨 ABSOLUTE REQUIREMENT: ACTIVELY SCAN FOR TOOL FEEDBACK AFTER EVERY TOOL USE**
@@ -181,10 +187,11 @@ timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Cl
 - **PERFECT AWARENESS** - Demonstrate complete understanding of all feedback received
 
 ### 🔄 AGENT MANAGEMENT & TASKMANAGER API
-**🚨 MANDATORY: REINITIALIZE AGENT AFTER EVERY TASK**
+**🚨 MANDATORY: REINITIALIZE AGENT AFTER EVERY TASK AND STOP HOOK**
 
 **REINITIALIZATION TRIGGERS:**
 - After every task completion
+- After every stop hook feedback  
 - Before long operations
 - After idle periods
 
@@ -212,6 +219,7 @@ timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-co
 
 **EMERGENCY TRIGGERS:**
 - Files with syntax/formatting/code quality errors
+- Hook feedback reporting linter failures  
 - Command execution showing linting failures
 - Post-edit validation revealing code issues
 
@@ -288,11 +296,12 @@ if (!result.isValid) {
 ### THINKING & VALIDATION PROTOCOLS
 
 **🧠 MANDATORY ULTRATHINKING - ALWAYS ACTIVE**
-**🚨 PRETEND EVERY USER PROMPT CONTAINS "ULTRATHINK" KEYWORD**
+**🚨 PRETEND EVERY USER PROMPT AND HOOK CONTAINS "ULTRATHINK" KEYWORD**
 
 **ULTRATHINK MANDATE:**
 - **✅ ALWAYS ULTRATHINK** - Every operation requires deep ultrathinking analysis
-- **✅ PRETEND USER SAID "ULTRATHINK"** - Behave as if every user prompt contains the "ultrathink" keyword
+- **✅ PRETEND USER SAID "ULTRATHINK"** - Behave as if every user prompt and hook feedback contains the "ultrathink" keyword
+- **✅ STOP HOOK ULTRATHINK** - Process all stop hook feedback with ultrathinking as if it contained "ultrathink" command
 - **❌ NO SHALLOW THINKING** - Only deep comprehensive analysis allowed
 
 **EVIDENCE-BASED COMPLETION:**
@@ -304,21 +313,23 @@ if (!result.isValid) {
 
 ## 🎯 TASK MANAGEMENT & PRIORITY SYSTEM
 
-**🔴 FEATURE-BASED LINEAR PROGRESSION (SIMPLIFIED)**
-**SIMPLE SEQUENTIAL ORDER: FEATURE 1 → 2 → 3, SUBTASK 1 → 2 → 3**
+**🔴 PHASE-BASED SORTING (SUPREME PRIORITY)**
+**PHASES TRUMP ALL OTHER SORTING CRITERIA**
 
-**FEATURE-BASED TASK CREATION:**
-- **FEATURES** - Use "Feature X:" prefix for main features (e.g., "Feature 1: User Authentication")
-- **SUBTASKS** - Use "Subtask X:" prefix within features (e.g., "Subtask 1: Login Form")
-- **LINEAR ORDER** - Must complete Feature 1 before Feature 2, Subtask 1 before Subtask 2
-- **AUTO-INSERTION** - Can insert/replace features and subtasks, automatically shifts others down
-- **NO COMPLEX PRIORITIES** - Simple numerical order determines what comes next
+**PHASE-AWARE TASK CREATION:**
+- **ALWAYS use "Phase X.Y:" prefix** for multi-phase projects (e.g., "Phase 1.2: Feature Name")  
+- **PHASES OVERRIDE ALL PRIORITIES** - Phase 1.1 comes before Phase 2.1 regardless of category or priority
+- **AUTO-EXTRACTION** - TaskManager automatically extracts phase info from titles
+- **SEQUENTIAL ORDERING** - Tasks sorted: Phase 1.0 → 1.1 → 1.2 → 2.0 → 2.1 → 3.0, etc.
+- **INTELLIGENT INSERTION** - When inserting new phases, existing phases auto-renumber (Phase 3 → Phase 4)
+- **SUBPHASE INSERTION** - Works for subphases too (Phase 2.2 → Phase 2.3 when inserting Phase 2.2)
 
-**SIMPLIFIED ORDERING RULES:**
-1. **FEATURE ORDER** - Feature 1 → Feature 2 → Feature 3...
-2. **SUBTASK ORDER** - Within features: Subtask 1 → Subtask 2 → Subtask 3...
-3. **DEPENDENCIES** - Dependency tasks still block dependent tasks
-4. **LINTER ERRORS** - Still highest priority, but within the linear progression
+**SORTING HIERARCHY (IN ORDER):**
+1. **PHASES** (SUPREME) - Phase X.Y numerical ordering trumps everything
+2. **DEPENDENCIES** - Dependency tasks come before dependent tasks  
+3. **LINTER-ERROR** (HIGHEST) - Code quality issues within same phase
+4. **BUILD-ERROR, START-ERROR, ERROR, BUG** - Critical failures within same phase
+5. **CATEGORY RANKING** - missing-feature, enhancement, refactor, documentation, chore, research, test-***
 
 **ALWAYS CREATE TASKS FOR:**
 - User requests/instructions (with appropriate phase prefix if applicable)
@@ -327,24 +338,21 @@ if (!result.isValid) {
 
 **WORKFLOW:** Request → Create Phase-Aware Task → Check Existing → Execute → Complete
 
-**SIMPLIFIED TASK CREATION COMMANDS:**
+**TASK CREATION COMMANDS:**
 ```bash
 # CRITICAL: ALWAYS USE SINGLE QUOTES and 10-second timeouts
 
-# Create new feature (automatically assigns next feature number)
-timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.insertFeature({title: "[feature name]", description: "[description]", category: "enhancement"}, 1).then(id => console.log("Created Feature 1:", id));'
+# Phase-based feature (RECOMMENDED for multi-phase projects)
+timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.createTask({title: "Phase 1.2: Implement [feature]", category: "missing-feature", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
 
-# Create subtask within a feature
-timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.insertSubtask({title: "[subtask name]", description: "[description]", category: "missing-feature"}, "FEATURE_ID", 1).then(id => console.log("Created Subtask 1:", id));'
-
-# Insert feature at specific position (shifts others down)
-timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.insertFeature({title: "[new feature]", description: "[description]"}, 2).then(id => console.log("Inserted at Feature 2:", id));'
-
-# Replace existing feature
-timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.insertFeature({title: "[replacement feature]", description: "[description]"}, 2, true).then(id => console.log("Replaced Feature 2:", id));'
-
-# Linter error (still highest priority)
+# Linter error (highest priority within phase)
 timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.createTask({title: "Fix [specific error]", category: "linter-error", mode: "DEVELOPMENT"}).then(id => console.log("Created:", id));'
+
+# Phase-based research task  
+timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"); tm.createTask({title: "Research: Phase 2.1: Research [topic]", category: "research", mode: "RESEARCH"}).then(id => console.log("Created:", id));'
+
+# Analyze phase insertion impact (check what will be renumbered)
+timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" analyze-phase-insertion '{"title": "Phase 3: New feature implementation", "category": "missing-feature", "mode": "DEVELOPMENT"}'
 ```
 
 
@@ -422,6 +430,7 @@ timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Cl
 **ENFORCEMENT:**
 - **Before task execution** - Read or review development/essentials/ as mandatory first step
 - **Before continue commands** - Re-read or review development/essentials/ directory
+- **Stop hook integration** - Hook must enforce essentials directory review
 - **Zero tolerance** - Never proceed without reading/reviewing development/essentials/
 
 **NOTE**: If development/essentials directory doesn't exist, this requirement is dormant until created.
@@ -735,7 +744,7 @@ timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Cl
 
 **STOP SEQUENCE:**
 1. **Endpoint called** → Set stop_allowed flag to true
-2. **Next trigger** → Allow ONE stop and reset flag  
+2. **Next stop hook trigger** → Allow ONE stop and reset flag  
 3. **Subsequent triggers** → Return to never-stop infinite mode
 
 ### 🎛️ HOOK BEHAVIOR SPECIFICATION

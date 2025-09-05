@@ -299,6 +299,17 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
    # Get feature statistics
    timeout 10s node taskmanager-api.js feature-stats
 
+   # SIMPLIFIED FEATURE-BASED TASK CREATION:
+   
+   # Create new feature (automatically assigns next feature number)
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.insertFeature({title: "[feature name]", description: "[description]", category: "enhancement"}, 1).then(id => console.log("Created Feature 1:", id));'
+   
+   # Create subtask within a feature
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.insertSubtask({title: "[subtask name]", description: "[description]", category: "missing-feature"}, "FEATURE_ID", 1).then(id => console.log("Created Subtask 1:", id));'
+   
+   # Insert feature at specific position (shifts others down)
+   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.insertFeature({title: "[new feature]", description: "[description]"}, 2).then(id => console.log("Inserted at Feature 2:", id));'
+
    # Create dependency task (any category)
    timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "[Dependency task]", category: "[any-category]"}).then(id => console.log("Dependency task:", id));'
 
@@ -318,11 +329,13 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 
 📊 CURRENT PROJECT STATUS: ${taskStatus.pending} pending, ${taskStatus.in_progress} in progress, ${taskStatus.completed} completed
 
-📋 TASK CATEGORIES (Priority Order):
-• linter-error (highest) • build-error • start-error • error • bug (same as error)
-• missing-feature • enhancement • refactor • documentation • chore • research • missing-test (lowest)
+📋 SIMPLIFIED FEATURE-BASED PROGRESSION:
+• Linear order: Feature 1 → Feature 2 → Feature 3...
+• Within features: Subtask 1 → Subtask 2 → Subtask 3...
+• Linter errors still have highest priority
+• Dependencies respected within the linear progression
 
-🔗 DEPENDENCY SYSTEM: Any task can depend on any other task - dependencies prioritized first
+🔗 FEATURE SYSTEM: Complete features in numerical order, subtasks within each feature sequentially
 
 ⏰ AUTOMATIC STALE TASK RESET: Tasks in progress for >15 minutes are automatically reset to pending
 
