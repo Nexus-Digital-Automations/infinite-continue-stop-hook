@@ -82,13 +82,14 @@ if (projectRootIndex !== -1) {
 const TASKMANAGER_ROOT = __dirname;
 
 // Import TaskManager modules using absolute paths
-let TaskManager, AgentManager, MultiAgentOrchestrator;
+let TaskManager, AgentManager, MultiAgentOrchestrator, FeatureManager;
 
 try {
     // Import TaskManager modules using absolute paths
     TaskManager = require(path.join(TASKMANAGER_ROOT, 'lib', 'taskManager.js'));
     AgentManager = require(path.join(TASKMANAGER_ROOT, 'lib', 'agentManager.js'));
     MultiAgentOrchestrator = require(path.join(TASKMANAGER_ROOT, 'lib', 'multiAgentOrchestrator.js'));
+    FeatureManager = require(path.join(TASKMANAGER_ROOT, 'lib', 'featureManager.js'));
 } catch (error) {
     console.error('Failed to load TaskManager modules:', error.message);
     console.error('Full error:', error);
@@ -161,6 +162,9 @@ class TaskManagerAPI {
         
         // Multi-agent orchestration for concurrent operations
         this.orchestrator = new MultiAgentOrchestrator(TODO_PATH);
+        
+        // Feature management for feature-task integration
+        this.featureManager = new FeatureManager(PROJECT_ROOT);
         
         // Session state - current agent ID (null until agent is initialized)
         this.agentId = null;
@@ -920,6 +924,239 @@ class TaskManagerAPI {
         return factors;
     }
 
+    // ========================================
+    // FEATURE MANAGEMENT METHODS
+    // ========================================
+
+    /**
+     * Create a new feature proposal (agent action)
+     * 
+     * Creates a new feature proposal that will be added to the "❓ Potential Features Awaiting User Verification" 
+     * section in features.md. Only users can approve features for planning and implementation.
+     * 
+     * @param {Object} featureData - Feature data object containing title, description, category, etc.
+     * @param {string} agentId - ID of the agent creating the feature proposal (optional)
+     * @returns {Object} Created feature object with generated ID
+     * 
+     * === EXAMPLE ===
+     * node taskmanager-api.js feature-create '{"title": "Real-time Log Streaming", "description": "Live log monitoring with WebSocket streaming", "category": "enhanced_logging", "priority": "medium", "effort": "high"}'
+     */
+    async createFeature(featureData, agentId = null) {
+        try {
+            return await this.withTimeout((async () => {
+                const currentAgentId = agentId || this.agentId || 'anonymous_agent';
+                const result = await this.featureManager.createFeature(featureData, currentAgentId);
+                
+                return {
+                    success: true,
+                    feature: result,
+                    message: 'Feature proposal created successfully - awaiting user approval'
+                };
+            })());
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    /**
+     * Approve a feature for planning (user action - requires user authorization)
+     * 
+     * This method should only be called by users to approve agent-proposed features.
+     * It moves features from "proposed" status to "approved" status, making them
+     * eligible for planning and task generation.
+     * 
+     * @param {string} featureId - Feature ID to approve
+     * @param {string} userId - ID of the approving user
+     * @param {Object} options - Additional approval options (notes, reason, etc.)
+     * @returns {Object} Updated feature object
+     * 
+     * === EXAMPLE ===
+     * node taskmanager-api.js feature-approve feature_123 user_456 '{"notes": "Approved for Q1 implementation", "reason": "High business value"}'
+     */
+    async approveFeature(featureId, userId, options = {}) {
+        try {
+            return await this.withTimeout((async () => {
+                const result = await this.featureManager.approveFeature(featureId, userId, options);
+                
+                return {
+                    success: true,
+                    feature: result,
+                    message: 'Feature approved successfully - ready for planning and task generation'
+                };
+            })());
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    /**
+     * Link a feature to implementation tasks for automatic status synchronization
+     * 
+     * Creates bidirectional links between features and tasks. When linked tasks
+     * are completed, the feature status will automatically update to reflect
+     * implementation progress.
+     * 
+     * @param {string} featureId - Feature ID to link
+     * @param {string|Array} taskIds - Task ID(s) to link to the feature
+     * @returns {Object} Updated feature object with linked tasks
+     * 
+     * === EXAMPLE ===
+     * node taskmanager-api.js feature-link feature_123 task_789
+     * node taskmanager-api.js feature-link feature_123 '["task_789", "task_790", "task_791"]'
+     */
+    async linkFeatureToTask(featureId, taskIds) {
+        try {
+            return await this.withTimeout((async () => {
+                const result = await this.featureManager.linkFeatureToTask(featureId, taskIds);
+                
+                return {
+                    success: true,
+                    feature: result,
+                    message: 'Feature-task linking completed successfully'
+                };
+            })());
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    /**
+     * Synchronize feature status based on task completion
+     * 
+     * Automatically updates feature status when linked tasks are completed.
+     * This method is typically called by the system when tasks are marked complete,
+     * but can be manually triggered for synchronization.
+     * 
+     * @param {string} taskId - Completed task ID to sync
+     * @returns {Object} List of features that were updated
+     * 
+     * === EXAMPLE ===
+     * node taskmanager-api.js feature-sync-task task_789
+     */
+    async syncTaskCompletion(taskId) {
+        try {
+            return await this.withTimeout((async () => {
+                const updatedFeatures = await this.featureManager.syncTaskCompletion(taskId);
+                
+                return {
+                    success: true,
+                    updated_features: updatedFeatures,
+                    count: updatedFeatures.length,
+                    message: `Synchronized ${updatedFeatures.length} features with task completion`
+                };
+            })());
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    /**
+     * Get all features with optional filtering
+     * 
+     * Retrieves features from features.json with optional filtering by status,
+     * category, created_by, or other criteria.
+     * 
+     * @param {Object} filters - Filter criteria (status, category, created_by, etc.)
+     * @returns {Object} Array of features matching the filters
+     * 
+     * === EXAMPLES ===
+     * node taskmanager-api.js feature-list
+     * node taskmanager-api.js feature-list '{"status": "proposed"}'
+     * node taskmanager-api.js feature-list '{"category": "enhanced_logging"}'
+     * node taskmanager-api.js feature-list '{"status": "approved", "category": "core_task_management"}'
+     */
+    async getFeatures(filters = {}) {
+        try {
+            return await this.withTimeout((async () => {
+                const features = await this.featureManager.getFeatures(filters);
+                
+                return {
+                    success: true,
+                    features: features,
+                    count: features.length,
+                    filters: filters
+                };
+            })());
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    /**
+     * Get a specific feature by ID
+     * 
+     * @param {string} featureId - Feature ID to retrieve
+     * @returns {Object} Feature object or null if not found
+     * 
+     * === EXAMPLE ===
+     * node taskmanager-api.js feature-get feature_123
+     */
+    async getFeature(featureId) {
+        try {
+            return await this.withTimeout((async () => {
+                const feature = await this.featureManager.getFeature(featureId);
+                
+                if (!feature) {
+                    return {
+                        success: false,
+                        error: `Feature ${featureId} not found`
+                    };
+                }
+                
+                return {
+                    success: true,
+                    feature: feature
+                };
+            })());
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    /**
+     * Get feature statistics and metrics
+     * 
+     * @returns {Object} Feature statistics including counts by status, category, etc.
+     * 
+     * === EXAMPLE ===
+     * node taskmanager-api.js feature-stats
+     */
+    async getFeatureStats() {
+        try {
+            return await this.withTimeout((async () => {
+                const stats = await this.featureManager.getFeatureStats();
+                
+                return {
+                    success: true,
+                    statistics: stats
+                };
+            })());
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
     // Cleanup method
     async cleanup() {
         try {
@@ -1124,6 +1361,102 @@ async function main() {
                 break;
             }
 
+            // ========================================
+            // FEATURE MANAGEMENT COMMANDS
+            // ========================================
+
+            case 'feature-create': {
+                if (!args[1]) {
+                    throw new Error('Feature data required for feature-create command');
+                }
+                let featureData;
+                try {
+                    featureData = JSON.parse(args[1]);
+                } catch (parseError) {
+                    throw new Error(`Invalid JSON feature data: ${parseError.message}`);
+                }
+                const agentId = args[2] || null; // Optional agent ID
+                const result = await api.createFeature(featureData, agentId);
+                console.log(JSON.stringify(result, null, 2));
+                break;
+            }
+
+            case 'feature-approve': {
+                const featureId = args[1];
+                const userId = args[2];
+                if (!featureId || !userId) {
+                    throw new Error('Feature ID and User ID required for feature-approve command');
+                }
+                let options = {};
+                if (args[3]) {
+                    try {
+                        options = JSON.parse(args[3]);
+                    } catch (parseError) {
+                        throw new Error(`Invalid JSON options: ${parseError.message}`);
+                    }
+                }
+                const result = await api.approveFeature(featureId, userId, options);
+                console.log(JSON.stringify(result, null, 2));
+                break;
+            }
+
+            case 'feature-link': {
+                const featureId = args[1];
+                if (!featureId || !args[2]) {
+                    throw new Error('Feature ID and Task ID(s) required for feature-link command');
+                }
+                let taskIds;
+                try {
+                    // Try parsing as JSON array first, fallback to single string
+                    taskIds = args[2].startsWith('[') ? JSON.parse(args[2]) : args[2];
+                } catch {
+                    taskIds = args[2]; // Treat as single task ID string
+                }
+                const result = await api.linkFeatureToTask(featureId, taskIds);
+                console.log(JSON.stringify(result, null, 2));
+                break;
+            }
+
+            case 'feature-sync-task': {
+                const taskId = args[1];
+                if (!taskId) {
+                    throw new Error('Task ID required for feature-sync-task command');
+                }
+                const result = await api.syncTaskCompletion(taskId);
+                console.log(JSON.stringify(result, null, 2));
+                break;
+            }
+
+            case 'feature-list': {
+                let filter = {};
+                if (args[1]) {
+                    try {
+                        filter = JSON.parse(args[1]);
+                    } catch (parseError) {
+                        throw new Error(`Invalid JSON filter: ${parseError.message}`);
+                    }
+                }
+                const result = await api.getFeatures(filter);
+                console.log(JSON.stringify(result, null, 2));
+                break;
+            }
+
+            case 'feature-get': {
+                const featureId = args[1];
+                if (!featureId) {
+                    throw new Error('Feature ID required for feature-get command');
+                }
+                const result = await api.getFeature(featureId);
+                console.log(JSON.stringify(result, null, 2));
+                break;
+            }
+
+            case 'feature-stats': {
+                const result = await api.getFeatureStats();
+                console.log(JSON.stringify(result, null, 2));
+                break;
+            }
+
             default: {
                 console.log(`
 TaskManager Node.js API
@@ -1146,12 +1479,28 @@ Commands:
   move-down <taskId>           - Move task down one position
   move-bottom <taskId>         - Move task to bottom
 
+Feature Management Commands:
+  feature-create <featureData> [agentId] - Create new feature proposal
+  feature-approve <featureId> <userId> [options] - Approve feature for planning (user only)
+  feature-link <featureId> <taskIds>   - Link feature to implementation tasks
+  feature-sync-task <taskId>           - Sync feature status from task completion
+  feature-list [filter]               - List features with optional filtering
+  feature-get <featureId>             - Get specific feature by ID
+  feature-stats                       - Get feature statistics and metrics
+
 Examples:
   node taskmanager-api.js init '{"role": "development", "specialization": ["testing"]}'
   node taskmanager-api.js create '{"title": "Fix bug", "mode": "DEVELOPMENT", "priority": "high"}'
   node taskmanager-api.js list '{"status": "pending"}'
   node taskmanager-api.js reinitialize agent_123 '{"metadata": {"renewed": true}}'
   node taskmanager-api.js move-top task_123
+  
+Feature Examples:
+  node taskmanager-api.js feature-create '{"title": "Real-time Logs", "description": "Live log streaming", "category": "enhanced_logging"}'
+  node taskmanager-api.js feature-approve feature_123 user_456
+  node taskmanager-api.js feature-link feature_123 task_789
+  node taskmanager-api.js feature-list '{"status": "proposed"}'
+  node taskmanager-api.js feature-stats
                 `);
                 break;
             }

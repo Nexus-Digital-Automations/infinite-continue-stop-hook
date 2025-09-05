@@ -2,44 +2,6 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
-      "id": "task_1757085920009_5ol0r8enx",
-      "title": "Research: Implement Feature-Task Integration System",
-      "description": "Research and analysis required for implementing: \"Implement Feature-Task Integration System\"\n\n**Implementation Task Details:**\nIntegrate features.md with TaskManager API by converting features.md to JSON format and creating FeatureManager class with automatic feature-task linking, status synchronization, and user approval workflows. Maintain user authority over feature approval while enabling agent suggestions and automatic completion detection.\n\n**Research Objectives:**\n1. Investigate best practices and methodologies for this implementation\n2. Identify potential challenges, risks, and mitigation strategies  \n3. Research relevant technologies, frameworks, and tools\n4. Define implementation approach and architecture decisions\n5. Provide actionable recommendations and guidance\n\n**Implementation Task ID:** task_1757085920008_vi8ay4ckh\n\n**Auto-created by:** TaskManager research dependency system\n**Research Priority:** This research task must be completed before implementation begins",
-      "mode": "RESEARCH",
-      "category": "research",
-      "priority": "critical",
-      "status": "in_progress",
-      "dependencies": [],
-      "important_files": [
-        "./development/research-reports/research-report-task_1757085920009_5ol0r8enx.md"
-      ],
-      "success_criteria": [
-        "Research methodology and approach documented",
-        "Key findings and recommendations provided",
-        "Implementation guidance and best practices identified",
-        "Risk assessment and mitigation strategies outlined",
-        "Research report created: ./development/research-reports/research-report-task_1757085920009_5ol0r8enx.md"
-      ],
-      "estimate": "1-2 hours",
-      "requires_research": false,
-      "subtasks": [],
-      "created_at": "2025-09-05T15:25:20.009Z",
-      "created_by": "auto-research-system",
-      "auto_created_for": "task_1757085920008_vi8ay4ckh",
-      "assigned_agent": "development_session_1757086042253_1_general_df6073d8",
-      "started_at": "2025-09-05T15:29:04.222Z",
-      "claimed_by": "development_session_1757086042253_1_general_df6073d8",
-      "agent_assignment_history": [
-        {
-          "agentId": "development_session_1757086042253_1_general_df6073d8",
-          "role": "primary",
-          "assignedAt": "2025-09-05T15:29:04.222Z",
-          "reassignReason": null,
-          "claimPriority": "normal"
-        }
-      ]
-    },
-    {
       "id": "task_1757085920008_vi8ay4ckh",
       "title": "Implement Feature-Task Integration System",
       "description": "Integrate features.md with TaskManager API by converting features.md to JSON format and creating FeatureManager class with automatic feature-task linking, status synchronization, and user approval workflows. Maintain user authority over feature approval while enabling agent suggestions and automatic completion detection.",
@@ -69,6 +31,80 @@
       "subtasks": [],
       "created_at": "2025-09-05T15:25:20.013Z",
       "auto_research_created": true
+    },
+    {
+      "id": "task_1757087307420_blst8uabi",
+      "title": "Fix dependency resolution for completed tasks in DONE.json",
+      "description": "Dependency system is not properly recognizing completed tasks that have been archived to DONE.json. Task task_1757085920008_vi8ay4ckh cannot be claimed despite its dependency task_1757085920009_5ol0r8enx being completed and archived.",
+      "mode": "DEVELOPMENT",
+      "category": "bug",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-05T15:48:27.420Z",
+      "auto_research_created": false
+    },
+    {
+      "id": "task_1757087776172_lz3113e6s",
+      "title": "Research: Phase 1.1: Implement WebSocket server for real-time log streaming",
+      "description": "Research and analysis required for implementing: \"Phase 1.1: Implement WebSocket server for real-time log streaming\"\n\n**Implementation Task Details:**\nSet up WebSocket server infrastructure for real-time log streaming feature\n\n**Research Objectives:**\n1. Investigate best practices and methodologies for this implementation\n2. Identify potential challenges, risks, and mitigation strategies  \n3. Research relevant technologies, frameworks, and tools\n4. Define implementation approach and architecture decisions\n5. Provide actionable recommendations and guidance\n\n**Implementation Task ID:** task_1757087776171_k9b6wfjqc\n\n**Auto-created by:** TaskManager research dependency system\n**Research Priority:** This research task must be completed before implementation begins",
+      "mode": "RESEARCH",
+      "category": "research",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [
+        "./development/research-reports/research-report-task_1757087776172_lz3113e6s.md"
+      ],
+      "success_criteria": [
+        "Research methodology and approach documented",
+        "Key findings and recommendations provided",
+        "Implementation guidance and best practices identified",
+        "Risk assessment and mitigation strategies outlined",
+        "Research report created: ./development/research-reports/research-report-task_1757087776172_lz3113e6s.md"
+      ],
+      "estimate": "1-2 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-05T15:56:16.172Z",
+      "created_by": "auto-research-system",
+      "auto_created_for": "task_1757087776171_k9b6wfjqc",
+      "phase": {
+        "major": 1,
+        "minor": 1,
+        "patch": 0,
+        "raw": "Research: Phase 1.1:"
+      }
+    },
+    {
+      "id": "task_1757087776171_k9b6wfjqc",
+      "title": "Phase 1.1: Implement WebSocket server for real-time log streaming",
+      "description": "Set up WebSocket server infrastructure for real-time log streaming feature",
+      "mode": "DEVELOPMENT",
+      "category": "missing-feature",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [
+        "task_1757087776172_lz3113e6s"
+      ],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": true,
+      "subtasks": [],
+      "created_at": "2025-09-05T15:56:16.174Z",
+      "auto_research_created": true,
+      "phase": {
+        "major": 1,
+        "minor": 1,
+        "patch": 0,
+        "raw": "Phase 1.1:"
+      }
     }
   ],
   "current_mode": "DEVELOPMENT",
@@ -122,13 +158,13 @@
     1755567176654
   ],
   "agents": {
-    "development_session_1757085543757_1_general_e2e3693c": {
+    "development_session_1757087111623_1_general_699355be": {
       "name": "development Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-05T15:19:03.761Z",
+      "lastHeartbeat": "2025-09-05T15:45:11.623Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -139,84 +175,9 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-05T15:19:03.761Z",
-      "sessionId": "session_1757085543757",
+      "createdAt": "2025-09-05T15:45:11.623Z",
+      "sessionId": "session_1757087111623",
       "metadata": {}
-    },
-    "development_session_1757085909888_1_general_7014c455": {
-      "name": "development Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-05T15:25:09.892Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-05T15:25:09.892Z",
-      "sessionId": "session_1757085909888",
-      "metadata": {
-        "renewedAt": "2025-09-05T15:25:39.553Z",
-        "renewalReason": "Agent reinitialization requested"
-      },
-      "lastRenewal": "2025-09-05T15:25:39.553Z",
-      "renewalCount": 1,
-      "agentId": "development_session_1757085909888_1_general_7014c455"
-    },
-    "development_session_1757086042253_1_general_df6073d8": {
-      "name": "development Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-05T15:27:22.257Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-05T15:27:22.257Z",
-      "sessionId": "session_1757086042253",
-      "metadata": {}
-    },
-    "development_session_1757086175455_1_general_a40edb81": {
-      "name": "development Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-05T15:29:35.456Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-05T15:29:35.456Z",
-      "sessionId": "session_1757086175455",
-      "metadata": {
-        "renewedAt": "2025-09-05T15:29:40.423Z",
-        "renewalReason": "Agent reinitialization requested"
-      },
-      "lastRenewal": "2025-09-05T15:29:40.423Z",
-      "renewalCount": 1,
-      "agentId": "development_session_1757086175455_1_general_a40edb81"
     }
   }
 }

@@ -34788,9 +34788,171 @@
       "needs_linter_feedback": true,
       "linter_feedback_generated": false,
       "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1757086430717_jqupz4bbk",
+      "title": "Fix critical test failures and node_modules contamination",
+      "description": "Fix failing tests: 1. stop-hook-enhanced.test.js expects AVAILABLE TASK CATEGORIES substring but receiving different output 2. SyntaxError in node_modules/exit/lib/exit.js due to JSON contamination. Both are blocking build process.",
+      "mode": "DEVELOPMENT",
+      "category": "build-error",
+      "priority": "critical",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-05T15:33:50.717Z",
+      "auto_research_created": false,
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-05T15:39:41.299Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-05T15:39:41.299Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1757086725794_xvoiqnbcs",
+      "title": "Fix taskManager.test.js priority expectation mismatch",
+      "description": "Test expects medium priority for documentation category but system correctly returns high. Update test expectation to match actual category-based priority system behavior.",
+      "mode": "DEVELOPMENT",
+      "category": "error",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-05T15:38:45.794Z",
+      "auto_research_created": false,
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-05T15:39:47.619Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-05T15:39:47.619Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1757086854404_ugq1wq0o9",
+      "title": "Fix reviewSystem.test.js missing method errors",
+      "description": "Multiple test failures in reviewSystem.test.js due to missing methods: createReviewTask, shouldInjectReviewTask, getNextStrikeNumber. These methods are referenced in tests but do not exist in the ReviewSystem class.",
+      "mode": "DEVELOPMENT",
+      "category": "build-error",
+      "priority": "critical",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-05T15:40:54.404Z",
+      "auto_research_created": false,
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-05T15:44:39.637Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-05T15:44:39.637Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1757085920009_5ol0r8enx",
+      "title": "Research: Implement Feature-Task Integration System",
+      "description": "Research and analysis required for implementing: \"Implement Feature-Task Integration System\"\n\n**Implementation Task Details:**\nIntegrate features.md with TaskManager API by converting features.md to JSON format and creating FeatureManager class with automatic feature-task linking, status synchronization, and user approval workflows. Maintain user authority over feature approval while enabling agent suggestions and automatic completion detection.\n\n**Research Objectives:**\n1. Investigate best practices and methodologies for this implementation\n2. Identify potential challenges, risks, and mitigation strategies  \n3. Research relevant technologies, frameworks, and tools\n4. Define implementation approach and architecture decisions\n5. Provide actionable recommendations and guidance\n\n**Implementation Task ID:** task_1757085920008_vi8ay4ckh\n\n**Auto-created by:** TaskManager research dependency system\n**Research Priority:** This research task must be completed before implementation begins",
+      "mode": "RESEARCH",
+      "category": "research",
+      "priority": "critical",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [
+        "./development/research-reports/research-report-task_1757085920009_5ol0r8enx.md"
+      ],
+      "success_criteria": [
+        "Research methodology and approach documented",
+        "Key findings and recommendations provided",
+        "Implementation guidance and best practices identified",
+        "Risk assessment and mitigation strategies outlined",
+        "Research report created: ./development/research-reports/research-report-task_1757085920009_5ol0r8enx.md"
+      ],
+      "estimate": "1-2 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-05T15:25:20.009Z",
+      "created_by": "auto-research-system",
+      "auto_created_for": "task_1757085920008_vi8ay4ckh",
+      "assigned_agent": "development_session_1757087111623_1_general_699355be",
+      "started_at": "2025-09-05T15:45:25.035Z",
+      "claimed_by": "development_session_1757087111623_1_general_699355be",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757086042253_1_general_df6073d8",
+          "role": "primary",
+          "assignedAt": "2025-09-05T15:29:04.222Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-09-05T15:45:05.269Z",
+          "reason": "Task stale for 16 minutes"
+        },
+        {
+          "agentId": "development_session_1757087111623_1_general_699355be",
+          "role": "primary",
+          "assignedAt": "2025-09-05T15:45:25.035Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-05T15:47:13.629Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-05T15:47:13.629Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
     }
   ],
-  "total_completed": 801,
-  "last_completion": "2025-09-05T15:31:47.133Z",
+  "total_completed": 805,
+  "last_completion": "2025-09-05T15:47:13.629Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }
