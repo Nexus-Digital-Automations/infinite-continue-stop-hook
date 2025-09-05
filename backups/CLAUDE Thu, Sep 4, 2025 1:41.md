@@ -70,11 +70,10 @@ function processData(userId, data) {
 
 **MANDATORY PROTOCOL:**
 1. **READ features.md FIRST** - Always read development/essentials/features.md before feature work
-2. **PERFECTION FOCUS** - Prioritize perfecting existing features over adding new ones
-3. **FEATURE PROPOSALS ONLY** - Can only add features to "❓ Potential Features Awaiting User Verification" if not already listed
-4. **USER APPROVAL REQUIRED** - Only user can move features to "📋 Planned Features"
-5. **IMPLEMENT APPROVED ONLY** - Only implement features from "Planned Features" section
-6. **NO UNAUTHORIZED FEATURES** - Never implement features not approved by user
+2. **FEATURE PROPOSALS ONLY** - Can only add features to "❓ Potential Features Awaiting User Verification"
+3. **USER APPROVAL REQUIRED** - Only user can move features to "📋 Planned Features"
+4. **IMPLEMENT APPROVED ONLY** - Only implement features from "Planned Features" section
+5. **NO UNAUTHORIZED FEATURES** - Never implement features not approved by user
 
 **FEATURE PROPOSAL FORMAT:**
 ```markdown

@@ -86,17 +86,17 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 🚨 **ABSOLUTE PROHIBITIONS - NEVER EVER:**
 **❌ DO NOT CLAIM TASKS ALREADY CLAIMED BY OTHER AGENTS**
 **❌ DO NOT CLAIM TASKS WITH assigned_agent OR claimed_by FIELDS SET**
-**❌ DO NOT START WORK WITHOUT READING development/features.md FIRST**
-**❌ DO NOT IMPLEMENT FEATURES NOT APPROVED IN development/features.md**
+**❌ DO NOT START WORK WITHOUT READING development/essentials/features.md FIRST**
+**❌ DO NOT IMPLEMENT FEATURES NOT APPROVED IN development/essentials/features.md**
 
 🔄 MANDATORY WORKFLOW FOR CLAUDE CODE AGENT:
 1. **IMMEDIATELY FIRST: REINITIALIZE AGENT TO PREVENT EXPIRATION USING COMMAND BELOW**
-2. **ABSOLUTELY SECOND: Read development/features.md to understand approved features and project scope**
+2. **ABSOLUTELY SECOND: Read development/essentials/features.md to understand approved features and project scope**
 3. **THIRD: Check if you have an unfinished task using the commands below**  
 4. **FOURTH: ASSESS TASK FOR CONCURRENT SUBAGENT DEPLOYMENT - USE MAXIMUM PARALLELIZATION**
 5. **FIFTH: DEPLOY UP TO 10 CONCURRENT SUBAGENTS FOR COMPLEX MULTI-COMPONENT TASKS**
 6. **TASK CLAIMING VALIDATION: Before claiming any task, verify it is NOT already claimed by another agent**
-7. **FEATURES COMPLIANCE: Only work on features listed in development/features.md "Implemented" or "Planned" sections**
+7. **FEATURES COMPLIANCE: Only work on features listed in development/essentials/features.md "Implemented" or "Planned" sections**
 8. **IF UNFINISHED TASK EXISTS: CONTINUE WORKING ON IT - DO NOT STOP UNTIL COMPLETE**
 9. **CONCURRENT EXECUTION: Break work into parallel streams and execute simultaneously**
 10. **BEFORE STARTING ANY TASK: Scan development/reports/ and development/research-reports/ for relevant research reports**
@@ -190,6 +190,13 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 - **MAINTAIN COMMENT ACCURACY** - Always update comments when modifying code
 - **REMOVE INCORRECT COMMENTS** - Delete or fix comments that are outdated or wrong
 
+📋 **DOCUMENTATION MAINTENANCE MANDATE:**
+- **UPDATE DOCS WITH FEATURES** - Always update relevant documentation when adding/modifying features
+- **SYNC API CHANGES** - Update API docs immediately when endpoints change
+- **REFLECT ARCHITECTURE** - Update architecture docs when system design changes
+- **MAINTAIN ACCURACY** - Keep documentation current with codebase changes
+- **VALIDATION REQUIREMENT** - Documentation updates must be part of feature completion
+
 🎯 ESSENTIAL TASKMANAGER API COMMANDS
 
 **CRITICAL**: Replace [PROJECT_DIRECTORY] with actual project path and [AGENT_ID] with your agent ID.
@@ -228,7 +235,7 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
    node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize AGENT_ID_FROM_INIT_COMMAND
 
    # STEP 1: MANDATORY - Read features file first
-   cat development/features.md
+   cat development/essentials/features.md
 
    # STEP 2: Initialize agent (get your agent ID) - ONLY IF NOT ALREADY INITIALIZED
    node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project [PROJECT_DIRECTORY]
@@ -350,11 +357,12 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 📋 RESEARCH REPORTS REQUIREMENT: ALWAYS scan development/reports/ and development/research-reports/ for relevant research reports BEFORE starting any task. Include applicable reports in task important_files and READ THEM FIRST before implementation.
 
 📋 FEATURES MANAGEMENT REQUIREMENT: 
-• MANDATORY: Read development/features.md BEFORE starting any work
+• MANDATORY: Read development/essentials/features.md BEFORE starting any work
+• PERFECTION FOCUS: Prioritize perfecting existing features over adding new ones
 • ONLY implement features listed in "✅ Implemented Features" or "📋 Planned Features" sections
 • NEVER implement features from "❓ Potential Features Awaiting User Verification" without user approval
-• ADD new feature ideas to "❓ Potential Features Awaiting User Verification" section for user review
-• FOLLOW the feature proposal format specified in development/features.md
+• ADD new feature ideas to "❓ Potential Features Awaiting User Verification" section ONLY if not already listed
+• FOLLOW the feature proposal format specified in development/essentials/features.md
 
 🚨 TASK CLAIMING VALIDATION PROTOCOL:
 • ALWAYS verify task is not already claimed before attempting to claim it
