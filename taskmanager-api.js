@@ -431,6 +431,43 @@ class TaskManagerAPI {
         }
     }
 
+    async analyzePhaseInsertion(newTaskData) {
+        try {
+            return await this.withTimeout((async () => {
+                const data = await this.taskManager.readTodoFast();
+                const newPhase = this.taskManager._extractPhase(newTaskData.title);
+                
+                if (!newPhase) {
+                    return {
+                        success: true,
+                        hasPhase: false,
+                        message: 'Task does not contain phase information'
+                    };
+                }
+
+                const insertionAnalysis = this.taskManager._checkPhaseInsertion(newPhase, data.tasks);
+                
+                return {
+                    success: true,
+                    hasPhase: true,
+                    phase: newPhase,
+                    needsRenumbering: insertionAnalysis.needsRenumbering,
+                    conflicts: insertionAnalysis.conflicts,
+                    renumberingNeeded: insertionAnalysis.renumberingNeeded,
+                    affectedTasks: insertionAnalysis.renumberingNeeded.length,
+                    message: insertionAnalysis.needsRenumbering 
+                        ? `Phase insertion will require renumbering ${insertionAnalysis.renumberingNeeded.length} tasks`
+                        : 'No phase conflicts detected'
+                };
+            })());
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
     /**
      * Claim a task for the specified agent with dependency validation and research guidance
      * 
@@ -969,6 +1006,21 @@ async function main() {
                     throw new Error(`Invalid JSON task data: ${parseError.message}`);
                 }
                 const result = await api.createTask(taskData);
+                console.log(JSON.stringify(result, null, 2));
+                break;
+            }
+
+            case 'analyze-phase-insertion': {
+                if (!args[1]) {
+                    throw new Error('Task data required for analyze-phase-insertion command');
+                }
+                let taskData;
+                try {
+                    taskData = JSON.parse(args[1]);
+                } catch (parseError) {
+                    throw new Error(`Invalid JSON task data: ${parseError.message}`);
+                }
+                const result = await api.analyzePhaseInsertion(taskData);
                 console.log(JSON.stringify(result, null, 2));
                 break;
             }

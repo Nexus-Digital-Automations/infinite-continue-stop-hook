@@ -1671,7 +1671,7 @@
       "mode": "DEVELOPMENT",
       "category": "missing-feature",
       "priority": "high",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [],
       "important_files": [
         "lib/authMiddleware.js",
@@ -1685,9 +1685,9 @@
       "subtasks": [],
       "created_at": "2025-08-27T02:01:57.766Z",
       "auto_research_created": true,
-      "assigned_agent": "development_session_1757056354733_1_general_7f4eaaca",
-      "started_at": "2025-09-05T07:13:31.396Z",
-      "claimed_by": "development_session_1757056354733_1_general_7f4eaaca",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "development_session_1757053195307_1_general_8861a645",
@@ -1708,6 +1708,12 @@
           "assignedAt": "2025-09-05T07:13:31.396Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-09-05T07:34:49.468Z",
+          "reason": "Task stale for 21 minutes"
         }
       ]
     },
@@ -6439,13 +6445,13 @@
     1755567176654
   ],
   "agents": {
-    "development_session_1757055857766_1_general_955f1b5d": {
+    "development_session_1757057229251_1_general_95156e66": {
       "name": "development Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-05T07:04:17.769Z",
+      "lastHeartbeat": "2025-09-05T07:27:09.254Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -6456,36 +6462,15 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-05T07:04:17.769Z",
-      "sessionId": "session_1757055857766",
-      "metadata": {}
-    },
-    "development_session_1757056354733_1_general_7f4eaaca": {
-      "name": "development Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-05T07:12:34.736Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-05T07:12:34.736Z",
-      "sessionId": "session_1757056354733",
+      "createdAt": "2025-09-05T07:27:09.254Z",
+      "sessionId": "session_1757057229251",
       "metadata": {
-        "renewedAt": "2025-09-05T07:12:39.920Z",
+        "renewedAt": "2025-09-05T07:27:15.088Z",
         "renewalReason": "Agent reinitialization requested"
       },
-      "lastRenewal": "2025-09-05T07:12:39.920Z",
+      "lastRenewal": "2025-09-05T07:27:15.088Z",
       "renewalCount": 1,
-      "agentId": "development_session_1757056354733_1_general_7f4eaaca"
+      "agentId": "development_session_1757057229251_1_general_95156e66"
     }
   }
 }

@@ -1,0 +1,94 @@
+{
+  "project": "Phase Insertion Test",
+  "tasks": [
+    {
+      "id": "task_test_1",
+      "title": "Phase 1: Foundation setup",
+      "description": "Set up the basic project structure",
+      "mode": "DEVELOPMENT",
+      "category": "missing-feature",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "requires_research": false,
+      "created_at": "2025-09-05T07:31:21.462Z",
+      "phase": {
+        "major": 1,
+        "minor": 0,
+        "patch": 0
+      }
+    },
+    {
+      "id": "task_test_2",
+      "title": "Phase 2: Core implementation",
+      "description": "Implement the core functionality",
+      "mode": "DEVELOPMENT",
+      "category": "missing-feature",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [
+        "task_test_1"
+      ],
+      "important_files": [],
+      "success_criteria": [],
+      "requires_research": false,
+      "created_at": "2025-09-05T07:31:21.463Z",
+      "phase": {
+        "major": 2,
+        "minor": 0,
+        "patch": 0
+      }
+    },
+    {
+      "id": "task_test_3",
+      "title": "Phase 3: Advanced features",
+      "description": "Add advanced functionality",
+      "mode": "DEVELOPMENT",
+      "category": "missing-feature",
+      "priority": "medium",
+      "status": "pending",
+      "dependencies": [
+        "task_test_2"
+      ],
+      "important_files": [],
+      "success_criteria": [],
+      "requires_research": false,
+      "created_at": "2025-09-05T07:31:21.463Z",
+      "phase": {
+        "major": 3,
+        "minor": 0,
+        "patch": 0
+      }
+    },
+    {
+      "id": "task_test_4",
+      "title": "Phase 3.1: Sub-feature implementation",
+      "description": "Implement sub-features for phase 3",
+      "mode": "DEVELOPMENT",
+      "category": "missing-feature",
+      "priority": "medium",
+      "status": "pending",
+      "dependencies": [
+        "task_test_3"
+      ],
+      "important_files": [],
+      "success_criteria": [],
+      "requires_research": false,
+      "created_at": "2025-09-05T07:31:21.463Z",
+      "phase": {
+        "major": 3,
+        "minor": 1,
+        "patch": 0
+      }
+    }
+  ],
+  "current_mode": "DEVELOPMENT",
+  "last_mode": null,
+  "execution_count": 0,
+  "review_strikes": 0,
+  "strikes_completed_last_run": false,
+  "last_hook_activation": 1757057481463,
+  "agents": {}
+}

@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const { exec } = require('child_process');
+// const { exec } = require('child_process'); // Not used in this test script
 
 // Test the findClaudeProjectRoot function in various scenarios
 function testFindFunction() {
