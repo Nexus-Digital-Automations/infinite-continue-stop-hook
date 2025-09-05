@@ -207,11 +207,12 @@ timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-co
 4. **IF clean** → Continue with next operation
 5. **NEVER skip this step** - mandatory for every file operation
 
-**TASK COMPLETION REQUIREMENTS:**
+**🚨 MANDATORY TASK COMPLETION VALIDATION - ABSOLUTE PERFECTION REQUIRED:**
 - **ALWAYS run full project linting** before marking complete (npm run lint, ruff ., etc.)
 - **ALWAYS run build verification** (npm run build, pnpm run build, cargo build, etc.)
 - **ALWAYS run start verification** with timeout for dev commands (`timeout 30s npm run dev`)
 - **ALWAYS provide validation evidence** showing clean results
+- **ABSOLUTE PERFECTION MANDATE** - Zero tolerance for ANY errors, warnings, or failures
 - Create new error tasks if project-wide linting/build/start fails
 
 ### ZERO TOLERANCE FOR ISSUE MASKING
