@@ -457,6 +457,9 @@ async function processProject(targetPath) {
         // Create/update TODO.json if needed
         const success = await createTodoJson(targetPath, projectInfo);
         
+        // Migrate to feature-based system (replaces features.json)
+        await migrateToFeatureBasedSystem(targetPath);
+        
         if (success) {
             console.log(`✅ ${projectName} - Setup complete`);
         } else {
@@ -469,6 +472,270 @@ async function processProject(targetPath) {
         console.error(`❌ ${projectName} - Error:`, error.message);
         return { success: false, project: projectName, error: error.message };
     }
+}
+
+/**
+ * Migrate TODO.json to feature-based system (replaces dual features.json system)
+ * @param {string} targetPath - Target project path
+ */
+async function migrateToFeatureBasedSystem(targetPath) {
+    const todoPath = path.join(targetPath, 'TODO.json');
+    
+    try {
+        console.log(`   🔄 Checking for feature-based migration...`);
+        
+        if (!fs.existsSync(todoPath)) {
+            console.log(`   ⚠️  No TODO.json found - skipping migration`);
+            return;
+        }
+        
+        // Read current TODO.json
+        const todoData = JSON.parse(fs.readFileSync(todoPath, 'utf8'));
+        
+        // Check if already feature-based
+        if (todoData.features && Array.isArray(todoData.features)) {
+            console.log(`   ✅ Already feature-based - skipping migration`);
+            return;
+        }
+        
+        // Create backup before migration
+        const backupPath = todoPath + '.pre-feature-migration.backup';
+        fs.writeFileSync(backupPath, JSON.stringify(todoData, null, 2));
+        console.log(`   📋 Created backup: ${path.basename(backupPath)}`);
+        
+        // Analyze current tasks for feature grouping
+        const analysis = analyzeTasksForFeatures(todoData.tasks);
+        console.log(`   📊 Analysis: ${analysis.summary.phased_tasks} phased tasks, ${analysis.summary.non_phased_tasks} independent tasks`);
+        
+        // Convert to feature-based structure
+        const migrated = convertToFeatureBasedSchema(todoData, analysis);
+        
+        // Write migrated structure
+        fs.writeFileSync(todoPath, JSON.stringify(migrated, null, 2));
+        
+        console.log(`   ✅ Migration completed: ${migrated.features.length} features, ${migrated.tasks.length} tasks`);
+        
+        // Clean up features.json if it exists (eliminating dual system)
+        const featuresJsonPath = path.join(targetPath, 'features.json');
+        if (fs.existsSync(featuresJsonPath)) {
+            fs.unlinkSync(featuresJsonPath);
+            console.log(`   🗑️  Removed features.json (dual system eliminated)`);
+        }
+        
+    } catch (error) {
+        console.log(`   ❌ Feature migration failed: ${error.message}`);
+        // Don't fail the entire setup for migration issues
+    }
+}
+
+/**
+ * Analyze current tasks to identify feature groupings
+ * @param {Array} tasks - Current tasks array
+ * @returns {Object} Analysis results
+ */
+function analyzeTasksForFeatures(tasks) {
+    const analysis = {
+        phaseGroups: {},
+        nonPhasedTasks: [],
+        summary: {
+            total_tasks: tasks.length,
+            phased_tasks: 0,
+            non_phased_tasks: 0,
+            unique_phases: 0
+        }
+    };
+
+    tasks.forEach(task => {
+        const phase = task.phase || extractPhaseFromTitle(task.title);
+        
+        if (phase) {
+            const phaseKey = `${phase.major}.${phase.minor}`;
+            if (!analysis.phaseGroups[phaseKey]) {
+                analysis.phaseGroups[phaseKey] = {
+                    phase: phase,
+                    tasks: [],
+                    feature_title: generateFeatureTitle(phaseKey, task.title)
+                };
+            }
+            analysis.phaseGroups[phaseKey].tasks.push(task);
+            analysis.summary.phased_tasks++;
+        } else {
+            analysis.nonPhasedTasks.push(task);
+            analysis.summary.non_phased_tasks++;
+        }
+    });
+
+    analysis.summary.unique_phases = Object.keys(analysis.phaseGroups).length;
+    return analysis;
+}
+
+/**
+ * Extract phase information from task title
+ * @param {string} title - Task title
+ * @returns {Object|null} Phase info or null
+ */
+function extractPhaseFromTitle(title) {
+    if (!title) return null;
+    
+    const phaseMatch = title.match(/(?:Research:\s*)?Phase\s+(\d+)(?:\.(\d+)(?:\.(\d+))?)?/i);
+    if (!phaseMatch) return null;
+
+    return {
+        major: parseInt(phaseMatch[1], 10),
+        minor: phaseMatch[2] ? parseInt(phaseMatch[2], 10) : 0,
+        patch: phaseMatch[3] ? parseInt(phaseMatch[3], 10) : 0,
+        raw: phaseMatch[0]
+    };
+}
+
+/**
+ * Generate feature title from phase key and task title
+ * @param {string} phaseKey - Phase key (e.g., "1.2")
+ * @param {string} sampleTitle - Sample task title
+ * @returns {string} Generated feature title
+ */
+function generateFeatureTitle(phaseKey, sampleTitle) {
+    // Extract feature name from task title
+    const titleMatch = sampleTitle.match(/Phase\s+[\d.]+:\s*(.+?)(?:\s+Implementation)?$/i);
+    if (titleMatch) {
+        return titleMatch[1].trim();
+    }
+    
+    // Fallback to phase-based title
+    return `Phase ${phaseKey} Feature`;
+}
+
+/**
+ * Convert TODO.json to feature-based structure
+ * @param {Object} todoData - Current TODO.json data
+ * @param {Object} analysis - Task analysis results
+ * @returns {Object} Migrated TODO.json structure
+ */
+function convertToFeatureBasedSchema(todoData, analysis) {
+    const migrated = {
+        ...todoData,
+        features: [], // CRITICAL: User authorization required for feature additions
+        tasks: []
+    };
+
+    // Convert phased tasks to features with subtasks
+    for (const [_phaseKey, group] of Object.entries(analysis.phaseGroups)) {
+        const feature = createFeatureFromPhaseGroup(group);
+        
+        // IMPORTANT: Only add features to array - no automatic feature creation
+        // User must explicitly authorize feature additions per CLAUDE.md requirements
+        migrated.features.push(feature);
+        
+        // Convert phase tasks to subtasks with parent feature reference
+        group.tasks.forEach(task => {
+            const subtask = {
+                ...task,
+                parent_feature: feature.id,
+                // Remove phase info since it's now in the parent feature
+                phase: undefined
+            };
+            migrated.tasks.push(subtask);
+        });
+    }
+
+    // Handle non-phased tasks (keep as regular tasks)
+    analysis.nonPhasedTasks.forEach(task => {
+        migrated.tasks.push({
+            ...task,
+            parent_feature: null // No parent feature
+        });
+    });
+
+    return migrated;
+}
+
+/**
+ * Create feature from phase group
+ * @param {Object} group - Phase group data
+ * @returns {Object} Feature object
+ */
+function createFeatureFromPhaseGroup(group) {
+    const timestamp = Date.now();
+    const randomSuffix = Math.random().toString(36).substr(2, 9);
+    const featureId = `feature_${timestamp}_${randomSuffix}`;
+
+    // Determine feature category from phase number
+    const categoryMap = {
+        1: 'bytebot',
+        2: 'open_interpreter', 
+        3: 'opendia',
+        4: 'huginn',
+        5: 'orchestrator'
+    };
+    const category = categoryMap[group.phase.major] || 'uncategorized';
+    
+    // Calculate status based on subtask statuses
+    const statuses = group.tasks.map(t => t.status);
+    let status = 'planned';
+    if (statuses.every(s => s === 'completed')) {
+        status = 'implemented';
+    } else if (statuses.some(s => s === 'in_progress')) {
+        status = 'in_progress';
+    } else if (statuses.some(s => s === 'completed')) {
+        status = 'in_progress';
+    }
+    
+    // Calculate priority from subtask priorities
+    const priorities = group.tasks.map(t => t.priority || 'medium');
+    let priority = 'medium';
+    if (priorities.includes('critical')) priority = 'critical';
+    else if (priorities.includes('high')) priority = 'high';
+    else if (priorities.includes('low')) priority = 'low';
+
+    return {
+        id: featureId,
+        title: group.feature_title,
+        description: generateFeatureDescription(group),
+        status: status,
+        category: category,
+        priority: priority,
+        phase: group.phase,
+        subtasks: group.tasks.map(t => t.id),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        metadata: {
+            migrated_from_phase: `${group.phase.major}.${group.phase.minor}`,
+            original_task_count: group.tasks.length,
+            completion_percentage: calculateCompletionPercentage(group.tasks)
+        }
+    };
+}
+
+/**
+ * Generate feature description from task group
+ * @param {Object} group - Task group
+ * @returns {string} Feature description
+ */
+function generateFeatureDescription(group) {
+    if (group.tasks.length === 1) {
+        return group.tasks[0].description || 'Feature description';
+    }
+
+    // Aggregate description from multiple tasks
+    const descriptions = group.tasks
+        .map(t => t.description)
+        .filter(d => d && d.length > 0);
+        
+    if (descriptions.length > 0) {
+        return descriptions[0]; // Use first task's description
+    }
+
+    return `Feature comprising ${group.tasks.length} implementation tasks`;
+}
+
+/**
+ * Calculate completion percentage
+ * @param {Array} tasks - Task array
+ * @returns {number} Completion percentage
+ */
+function calculateCompletionPercentage(tasks) {
+    const completed = tasks.filter(t => t.status === 'completed').length;
+    return Math.round((completed / tasks.length) * 100);
 }
 
 async function main() {

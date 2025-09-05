@@ -2,13 +2,13 @@
 
 /**
  * TaskManager Node.js API Wrapper
- * 
+ *
  * === OVERVIEW ===
  * Universal command-line interface for the TaskManager system that provides
  * comprehensive task management capabilities for any project. This API acts as
  * a centralized gateway to all TaskManager functionality including agent
  * management, task operations, dependency handling, and orchestration.
- * 
+ *
  * === KEY FEATURES ===
  * • Universal project support - works with any codebase containing TODO.json
  * • Agent lifecycle management - initialization, heartbeat renewal, status tracking
@@ -18,7 +18,7 @@
  * • Multi-agent orchestration - coordinates multiple concurrent agents
  * • Performance optimized - 10-second timeouts, lazy loading, caching
  * • Error recovery - robust error handling with detailed feedback
- * 
+ *
  * === ARCHITECTURE ===
  * The API is built on top of the TaskManager system components:
  * • TaskManager - Core task operations and TODO.json management
@@ -26,99 +26,101 @@
  * • MultiAgentOrchestrator - Coordination of multiple concurrent agents
  * • DistributedLockManager - Prevents race conditions in multi-agent scenarios
  * • AutoFixer - Automatic error detection and resolution capabilities
- * 
+ *
  * === USAGE PATTERNS ===
  * 1. Agent Initialization:
  *    node taskmanager-api.js init --project-root /path/to/project
- * 
+ *
  * 2. Task Operations:
  *    node taskmanager-api.js create '{"title": "Task", "category": "enhancement"}'
  *    node taskmanager-api.js list '{"status": "pending"}'
  *    node taskmanager-api.js claim task_123 agent_456
- * 
+ *
  * 3. Status and Monitoring:
  *    node taskmanager-api.js status agent_456
  *    node taskmanager-api.js stats
- * 
+ *
  * === INTEGRATION EXAMPLES ===
  * • CI/CD pipelines for automated task management
- * • Development workflows for task assignment and tracking  
+ * • Development workflows for task assignment and tracking
  * • Multi-agent AI systems for concurrent development work
  * • Project automation scripts for batch operations
- * 
+ *
  * === ERROR HANDLING ===
  * All operations include comprehensive error handling with structured JSON responses.
  * Errors include context, suggestions, and recovery instructions where applicable.
- * 
+ *
  * === PERFORMANCE CHARACTERISTICS ===
  * • 10-second timeout on all operations to prevent hanging
  * • Lazy loading of heavy components (AutoFixer, LockManager)
  * • Caching for frequently accessed data structures
  * • Optimized JSON parsing with validation skipping options
- * 
+ *
  * @author TaskManager System
  * @version 2.0.0
  * @since 2024-01-01
- * 
+ *
  * Usage: node taskmanager-api.js <command> [args...] [--project-root /path/to/project]
  */
 
-const path = require('path');
+const path = require("path");
 
 // Parse project root from --project-root flag or use current directory
 const args = process.argv.slice(2);
-const projectRootIndex = args.indexOf('--project-root');
-const PROJECT_ROOT = (projectRootIndex !== -1 && projectRootIndex + 1 < args.length) 
-    ? args[projectRootIndex + 1] 
+const projectRootIndex = args.indexOf("--project-root");
+const PROJECT_ROOT =
+  projectRootIndex !== -1 && projectRootIndex + 1 < args.length
+    ? args[projectRootIndex + 1]
     : process.cwd();
-const TODO_PATH = path.join(PROJECT_ROOT, 'TODO.json');
+const TODO_PATH = path.join(PROJECT_ROOT, "TODO.json");
 
 // Remove --project-root and its value from args for command parsing
 if (projectRootIndex !== -1) {
-    args.splice(projectRootIndex, 2);
+  args.splice(projectRootIndex, 2);
 }
 
 // Absolute path to the infinite-continue-stop-hook directory (where TaskManager system lives)
 const TASKMANAGER_ROOT = __dirname;
 
 // Import TaskManager modules using absolute paths
-let TaskManager, AgentManager, MultiAgentOrchestrator, FeatureManager;
+let TaskManager, AgentManager, MultiAgentOrchestrator;
 
 try {
-    // Import TaskManager modules using absolute paths
-    TaskManager = require(path.join(TASKMANAGER_ROOT, 'lib', 'taskManager.js'));
-    AgentManager = require(path.join(TASKMANAGER_ROOT, 'lib', 'agentManager.js'));
-    MultiAgentOrchestrator = require(path.join(TASKMANAGER_ROOT, 'lib', 'multiAgentOrchestrator.js'));
-    FeatureManager = require(path.join(TASKMANAGER_ROOT, 'lib', 'featureManager.js'));
+  // Import TaskManager modules using absolute paths
+  TaskManager = require(path.join(TASKMANAGER_ROOT, "lib", "taskManager.js"));
+  AgentManager = require(path.join(TASKMANAGER_ROOT, "lib", "agentManager.js"));
+  MultiAgentOrchestrator = require(
+    path.join(TASKMANAGER_ROOT, "lib", "multiAgentOrchestrator.js"),
+  );
 } catch (error) {
-    console.error('Failed to load TaskManager modules:', error.message);
-    console.error('Full error:', error);
-    process.exit(1);
+  console.error("Failed to load TaskManager modules:", error.message);
+  console.error("Full error:", error);
+  process.exit(1);
 }
 
 /**
  * TaskManagerAPI - Main API class for TaskManager system operations
- * 
+ *
  * === CORE RESPONSIBILITIES ===
  * • Provides unified interface to TaskManager system components
  * • Manages agent lifecycle and session state
  * • Handles all task operations with proper error recovery
  * • Coordinates multi-agent workflows and orchestration
  * • Implements consistent timeout and performance optimization
- * 
+ *
  * === DESIGN PRINCIPLES ===
  * • Fail-fast with detailed error information
  * • Consistent JSON response format for all operations
  * • Performance-first approach with configurable timeouts
  * • Lazy loading of expensive components
  * • Immutable operation patterns for thread safety
- * 
+ *
  * === STATE MANAGEMENT ===
  * • Maintains current agent ID for session continuity
  * • Tracks TODO.json path for project binding
  * • Lazy-loads all heavy components on first use
  * • Implements timeout protection for all async operations
- * 
+ *
  * === INTEGRATION PATTERNS ===
  * • CLI tool integration via command-line arguments
  * • Programmatic usage via module imports
@@ -126,1339 +128,1098 @@ try {
  * • Multi-agent orchestration for concurrent operations
  */
 class TaskManagerAPI {
-    /**
-     * Initialize TaskManagerAPI instance with project-specific configuration
-     * 
-     * === CONFIGURATION OPTIONS ===
-     * • enableMultiAgent: true - Enables multi-agent coordination features
-     * • enableAutoFix: false - Disabled for performance (can cause delays)
-     * • validateOnRead: false - Disabled for performance (validation on-demand)
-     * 
-     * === PERFORMANCE OPTIMIZATION ===
-     * • 10-second timeout prevents hanging operations
-     * • Lazy loading reduces initialization overhead
-     * • Caching minimizes repeated file I/O operations
-     * • Multi-agent support for concurrent processing
-     * 
-     * === COMPONENT INITIALIZATION ===
-     * • TaskManager: Core TODO.json operations and task management
-     * • AgentManager: Agent registration, heartbeat, and lifecycle
-     * • MultiAgentOrchestrator: Coordination of concurrent agents
-     * • agentId: Session state for current agent (null until initialized)
-     * 
-     * @constructor
-     * @memberof TaskManagerAPI
-     */
-    constructor() {
-        // Core TaskManager for TODO.json operations and task management
-        this.taskManager = new TaskManager(TODO_PATH, {
-            enableMultiAgent: true,     // Enable multi-agent coordination features
-            enableAutoFix: false,       // Disable auto-fix for better performance
-            validateOnRead: false       // Disable validation for better performance
-        });
-        
-        // Agent management for registration, heartbeat, and lifecycle
-        this.agentManager = new AgentManager(TODO_PATH);
-        
-        // Multi-agent orchestration for concurrent operations
-        this.orchestrator = new MultiAgentOrchestrator(TODO_PATH);
-        
-        // Feature management for feature-task integration
-        this.featureManager = new FeatureManager(PROJECT_ROOT);
-        
-        // Session state - current agent ID (null until agent is initialized)
-        this.agentId = null;
-        
-        // Performance configuration - 10 second timeout for all operations
-        // This prevents hanging operations and ensures responsive behavior
-        this.timeout = 10000;
+  /**
+   * Initialize TaskManagerAPI instance with project-specific configuration
+   *
+   * === CONFIGURATION OPTIONS ===
+   * • enableMultiAgent: true - Enables multi-agent coordination features
+   * • enableAutoFix: false - Disabled for performance (can cause delays)
+   * • validateOnRead: false - Disabled for performance (validation on-demand)
+   *
+   * === PERFORMANCE OPTIMIZATION ===
+   * • 10-second timeout prevents hanging operations
+   * • Lazy loading reduces initialization overhead
+   * • Caching minimizes repeated file I/O operations
+   * • Multi-agent support for concurrent processing
+   *
+   * === COMPONENT INITIALIZATION ===
+   * • TaskManager: Core TODO.json operations and task management
+   * • AgentManager: Agent registration, heartbeat, and lifecycle
+   * • MultiAgentOrchestrator: Coordination of concurrent agents
+   * • agentId: Session state for current agent (null until initialized)
+   *
+   * @constructor
+   * @memberof TaskManagerAPI
+   */
+  constructor() {
+    // Core TaskManager for TODO.json operations and task management
+    this.taskManager = new TaskManager(TODO_PATH, {
+      enableMultiAgent: true, // Enable multi-agent coordination features
+      enableAutoFix: false, // Disable auto-fix for better performance
+      validateOnRead: false, // Disable validation for better performance
+    });
+
+    // Agent management for registration, heartbeat, and lifecycle
+    this.agentManager = new AgentManager(TODO_PATH);
+
+    // Multi-agent orchestration for concurrent operations
+    this.orchestrator = new MultiAgentOrchestrator(TODO_PATH);
+
+    // Feature management integrated into TODO.json feature-based system
+
+    // Session state - current agent ID (null until agent is initialized)
+    this.agentId = null;
+
+    // Performance configuration - 10 second timeout for all operations
+    // This prevents hanging operations and ensures responsive behavior
+    this.timeout = 10000;
+  }
+
+  /**
+   * Wrap any async operation with a timeout to prevent hanging operations
+   *
+   * === PURPOSE ===
+   * Ensures all TaskManager operations complete within reasonable time limits.
+   * This is critical for maintaining responsive behavior in multi-agent systems
+   * and preventing indefinite blocking in automation workflows.
+   *
+   * === TIMEOUT STRATEGY ===
+   * • Default 10-second timeout for all operations
+   * • Configurable per-operation timeout override
+   * • Race condition between operation and timeout timer
+   * • Clean error messaging with timeout duration
+   *
+   * === USE CASES ===
+   * • File I/O operations that might hang on slow storage
+   * • Network operations for remote TODO.json access
+   * • Lock acquisition in multi-agent scenarios
+   * • Complex validation and auto-fix operations
+   *
+   * @param {Promise} promise - The async operation to wrap with timeout protection
+   * @param {number} timeoutMs - Timeout duration in milliseconds (default: 10000ms)
+   * @returns {Promise} Promise that either resolves with operation result or rejects with timeout error
+   * @throws {Error} Timeout error after specified duration
+   *
+   * @example
+   * // Wrap a file operation with timeout
+   * const result = await this.withTimeout(
+   *   fs.promises.readFile(path),
+   *   5000  // 5 second timeout for this specific operation
+   * );
+   *
+   * @example
+   * // Use default timeout for agent operations
+   * const agent = await this.withTimeout(
+   *   this.agentManager.registerAgent(config)
+   * );
+   */
+  withTimeout(promise, timeoutMs = this.timeout) {
+    return Promise.race([
+      promise,
+      new Promise((_, reject) =>
+        setTimeout(
+          () => reject(new Error(`Operation timed out after ${timeoutMs}ms`)),
+          timeoutMs,
+        ),
+      ),
+    ]);
+  }
+
+  /**
+   * API Discovery and Documentation - Lists all available methods and usage patterns
+   *
+   * === PURPOSE ===
+   * Provides comprehensive introspection into TaskManager API capabilities.
+   * Essential for developers integrating with the system and for debugging
+   * complex multi-agent workflows where method availability needs verification.
+   *
+   * === METHOD DISCOVERY ===
+   * • TaskManager core methods - direct TODO.json operations
+   * • API wrapper methods - high-level operations with error handling
+   * • Usage examples and integration patterns
+   * • Method counts for API completeness verification
+   *
+   * === RESPONSE STRUCTURE ===
+   * • taskManagerMethods: Core TaskManager class methods
+   * • apiMethods: TaskManagerAPI wrapper methods
+   * • usage: Integration patterns and examples
+   * • examples: Code samples for common operations
+   *
+   * @returns {Promise<Object>} API discovery information with method lists and usage examples
+   * @throws {Error} If method introspection fails
+   *
+   * @example
+   * // Get all available methods
+   * const methods = await api.getApiMethods();
+   * console.log(`API has ${methods.apiMethods.count} methods`);
+   * console.log(methods.examples.api); // Usage examples
+   */
+  async getApiMethods() {
+    try {
+      return await this.withTimeout(
+        (async () => {
+          // Extract all public methods from TaskManager core class
+          const taskManagerMethods = Object.getOwnPropertyNames(
+            Object.getPrototypeOf(this.taskManager),
+          )
+            .filter((name) => name !== "constructor" && !name.startsWith("_"))
+            .sort();
+
+          // Extract all public methods from TaskManagerAPI wrapper class
+          const apiMethods = Object.getOwnPropertyNames(
+            Object.getPrototypeOf(this),
+          )
+            .filter((name) => name !== "constructor" && !name.startsWith("_"))
+            .sort();
+
+          return {
+            success: true,
+            taskManagerMethods: {
+              count: taskManagerMethods.length,
+              methods: taskManagerMethods,
+              usage:
+                "const tm = new TaskManager('./TODO.json'); tm.methodName()",
+            },
+            apiMethods: {
+              count: apiMethods.length,
+              methods: apiMethods,
+              usage: "node taskmanager-api.js methodName args",
+            },
+            examples: {
+              taskManager:
+                "tm.createTask({title: 'Test', category: 'enhancement'})",
+              api: 'node taskmanager-api.js list \'{"status": "pending"}\'',
+            },
+          };
+        })(),
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
     }
+  }
 
-    /**
-     * Wrap any async operation with a timeout to prevent hanging operations
-     * 
-     * === PURPOSE ===
-     * Ensures all TaskManager operations complete within reasonable time limits.
-     * This is critical for maintaining responsive behavior in multi-agent systems
-     * and preventing indefinite blocking in automation workflows.
-     * 
-     * === TIMEOUT STRATEGY ===
-     * • Default 10-second timeout for all operations
-     * • Configurable per-operation timeout override
-     * • Race condition between operation and timeout timer
-     * • Clean error messaging with timeout duration
-     * 
-     * === USE CASES ===
-     * • File I/O operations that might hang on slow storage
-     * • Network operations for remote TODO.json access
-     * • Lock acquisition in multi-agent scenarios
-     * • Complex validation and auto-fix operations
-     * 
-     * @param {Promise} promise - The async operation to wrap with timeout protection
-     * @param {number} timeoutMs - Timeout duration in milliseconds (default: 10000ms)
-     * @returns {Promise} Promise that either resolves with operation result or rejects with timeout error
-     * @throws {Error} Timeout error after specified duration
-     * 
-     * @example
-     * // Wrap a file operation with timeout
-     * const result = await this.withTimeout(
-     *   fs.promises.readFile(path),
-     *   5000  // 5 second timeout for this specific operation
-     * );
-     * 
-     * @example  
-     * // Use default timeout for agent operations
-     * const agent = await this.withTimeout(
-     *   this.agentManager.registerAgent(config)
-     * );
-     */
-    withTimeout(promise, timeoutMs = this.timeout) {
-        return Promise.race([
-            promise,
-            new Promise((_, reject) => 
-                setTimeout(() => reject(new Error(`Operation timed out after ${timeoutMs}ms`)), timeoutMs)
-            )
-        ]);
+  /**
+   * Initialize and register a new agent in the TaskManager system
+   *
+   * === PURPOSE ===
+   * Creates a new agent with unique ID and registers it in the multi-agent
+   * coordination system. This is the mandatory first step before any agent
+   * can claim tasks or participate in workflows.
+   *
+   * === AGENT LIFECYCLE ===
+   * 1. Agent initialization (this method)
+   * 2. Agent claims tasks via claimTask()
+   * 3. Agent heartbeat renewal via reinitializeAgent()
+   * 4. Agent cleanup via cleanup()
+   *
+   * === DEFAULT CONFIGURATION ===
+   * • role: 'development' - Agent specialization role
+   * • sessionId: timestamp-based unique session identifier
+   * • specialization: [] - Array of specialized capabilities
+   *
+   * === MULTI-AGENT COORDINATION ===
+   * • Registers agent in shared agent registry
+   * • Enables task claiming and coordination
+   * • Provides unique identity for conflict resolution
+   * • Tracks agent activity and heartbeat
+   *
+   * @param {Object} config - Optional agent configuration overrides
+   * @param {string} config.role - Agent role ('development', 'testing', 'research', etc.)
+   * @param {string} config.sessionId - Unique session identifier
+   * @param {Array} config.specialization - Array of specialized capabilities
+   * @param {Object} config.metadata - Additional agent metadata
+   * @returns {Promise<Object>} Success response with agent ID and configuration
+   * @throws {Error} If agent registration fails
+   *
+   * @example
+   * // Initialize with default configuration
+   * const result = await api.initAgent();
+   * console.log(`Agent ID: ${result.agentId}`);
+   *
+   * @example
+   * // Initialize with custom configuration
+   * const result = await api.initAgent({
+   *   role: 'testing',
+   *   specialization: ['unit-tests', 'integration-tests'],
+   *   metadata: { environment: 'ci' }
+   * });
+   */
+  async initAgent(config = {}) {
+    try {
+      return await this.withTimeout(
+        (async () => {
+          // Default agent configuration for development workflows
+          const defaultConfig = {
+            role: "development", // Primary agent role
+            sessionId: `session_${Date.now()}`, // Unique session identifier
+            specialization: [], // Specialized capabilities array
+          };
+
+          // Merge user configuration with defaults
+          const agentConfig = { ...defaultConfig, ...config };
+
+          // Register agent in the multi-agent coordination system
+          this.agentId = await this.agentManager.registerAgent(agentConfig);
+
+          return {
+            success: true,
+            agentId: this.agentId,
+            config: agentConfig,
+          };
+        })(),
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
     }
+  }
 
-    /**
-     * API Discovery and Documentation - Lists all available methods and usage patterns
-     * 
-     * === PURPOSE ===
-     * Provides comprehensive introspection into TaskManager API capabilities.
-     * Essential for developers integrating with the system and for debugging
-     * complex multi-agent workflows where method availability needs verification.
-     * 
-     * === METHOD DISCOVERY ===
-     * • TaskManager core methods - direct TODO.json operations
-     * • API wrapper methods - high-level operations with error handling
-     * • Usage examples and integration patterns
-     * • Method counts for API completeness verification
-     * 
-     * === RESPONSE STRUCTURE ===
-     * • taskManagerMethods: Core TaskManager class methods
-     * • apiMethods: TaskManagerAPI wrapper methods  
-     * • usage: Integration patterns and examples
-     * • examples: Code samples for common operations
-     * 
-     * @returns {Promise<Object>} API discovery information with method lists and usage examples
-     * @throws {Error} If method introspection fails
-     * 
-     * @example
-     * // Get all available methods
-     * const methods = await api.getApiMethods();
-     * console.log(`API has ${methods.apiMethods.count} methods`);
-     * console.log(methods.examples.api); // Usage examples
-     */
-    async getApiMethods() {
-        try {
-            return await this.withTimeout((async () => {
-                // Extract all public methods from TaskManager core class
-                const taskManagerMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(this.taskManager))
-                    .filter(name => name !== 'constructor' && !name.startsWith('_'))
-                    .sort();
+  async getCurrentTask(agentId = null) {
+    try {
+      return await this.withTimeout(
+        (async () => {
+          const targetAgentId = agentId || this.agentId;
+          const task = await this.taskManager.getCurrentTask(targetAgentId);
 
-                // Extract all public methods from TaskManagerAPI wrapper class
-                const apiMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(this))
-                    .filter(name => name !== 'constructor' && !name.startsWith('_'))
-                    .sort();
+          return {
+            success: true,
+            task: task || null,
+            hasTask: !!task,
+          };
+        })(),
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
 
-                return {
-                    success: true,
-                    taskManagerMethods: {
-                        count: taskManagerMethods.length,
-                        methods: taskManagerMethods,
-                        usage: "const tm = new TaskManager('./TODO.json'); tm.methodName()"
-                    },
-                    apiMethods: {
-                        count: apiMethods.length,
-                        methods: apiMethods,
-                        usage: "node taskmanager-api.js methodName args"
-                    },
-                    examples: {
-                        taskManager: "tm.createTask({title: 'Test', category: 'enhancement'})",
-                        api: "node taskmanager-api.js list '{\"status\": \"pending\"}'"
-                    }
-                };
-            })());
-        } catch (error) {
+  async listTasks(filter = {}) {
+    try {
+      return await this.withTimeout(
+        (async () => {
+          const todoData = await this.taskManager.readTodo(true); // Skip validation for better performance
+          let tasks = todoData.tasks || [];
+
+          // Apply filters
+          if (filter.status) {
+            tasks = tasks.filter((task) => task.status === filter.status);
+          }
+          if (filter.mode) {
+            tasks = tasks.filter((task) => task.mode === filter.mode);
+          }
+          if (filter.priority) {
+            tasks = tasks.filter((task) => task.priority === filter.priority);
+          }
+
+          return {
+            success: true,
+            tasks,
+            count: tasks.length,
+          };
+        })(),
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  async createTask(taskData) {
+    try {
+      return await this.withTimeout(
+        (async () => {
+          const taskId = await this.taskManager.createTask(taskData);
+
+          return {
+            success: true,
+            taskId,
+            task: taskData,
+          };
+        })(),
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  async analyzePhaseInsertion(newTaskData) {
+    try {
+      return await this.withTimeout(
+        (async () => {
+          const data = await this.taskManager.readTodoFast();
+          const newPhase = this.taskManager._extractPhase(newTaskData.title);
+
+          if (!newPhase) {
             return {
-                success: false,
-                error: error.message
+              success: true,
+              hasPhase: false,
+              message: "Task does not contain phase information",
             };
-        }
+          }
+
+          const insertionAnalysis = this.taskManager._checkPhaseInsertion(
+            newPhase,
+            data.tasks,
+          );
+
+          return {
+            success: true,
+            hasPhase: true,
+            phase: newPhase,
+            needsRenumbering: insertionAnalysis.needsRenumbering,
+            conflicts: insertionAnalysis.conflicts,
+            renumberingNeeded: insertionAnalysis.renumberingNeeded,
+            affectedTasks: insertionAnalysis.renumberingNeeded.length,
+            message: insertionAnalysis.needsRenumbering
+              ? `Phase insertion will require renumbering ${insertionAnalysis.renumberingNeeded.length} tasks`
+              : "No phase conflicts detected",
+          };
+        })(),
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
     }
+  }
 
-    /**
-     * Initialize and register a new agent in the TaskManager system
-     * 
-     * === PURPOSE ===
-     * Creates a new agent with unique ID and registers it in the multi-agent
-     * coordination system. This is the mandatory first step before any agent
-     * can claim tasks or participate in workflows.
-     * 
-     * === AGENT LIFECYCLE ===
-     * 1. Agent initialization (this method)
-     * 2. Agent claims tasks via claimTask()
-     * 3. Agent heartbeat renewal via reinitializeAgent()
-     * 4. Agent cleanup via cleanup()
-     * 
-     * === DEFAULT CONFIGURATION ===
-     * • role: 'development' - Agent specialization role
-     * • sessionId: timestamp-based unique session identifier
-     * • specialization: [] - Array of specialized capabilities
-     * 
-     * === MULTI-AGENT COORDINATION ===
-     * • Registers agent in shared agent registry
-     * • Enables task claiming and coordination
-     * • Provides unique identity for conflict resolution
-     * • Tracks agent activity and heartbeat
-     * 
-     * @param {Object} config - Optional agent configuration overrides
-     * @param {string} config.role - Agent role ('development', 'testing', 'research', etc.)
-     * @param {string} config.sessionId - Unique session identifier
-     * @param {Array} config.specialization - Array of specialized capabilities
-     * @param {Object} config.metadata - Additional agent metadata
-     * @returns {Promise<Object>} Success response with agent ID and configuration
-     * @throws {Error} If agent registration fails
-     * 
-     * @example
-     * // Initialize with default configuration
-     * const result = await api.initAgent();
-     * console.log(`Agent ID: ${result.agentId}`);
-     * 
-     * @example
-     * // Initialize with custom configuration
-     * const result = await api.initAgent({
-     *   role: 'testing',
-     *   specialization: ['unit-tests', 'integration-tests'],
-     *   metadata: { environment: 'ci' }
-     * });
-     */
-    async initAgent(config = {}) {
-        try {
-            return await this.withTimeout((async () => {
-                // Default agent configuration for development workflows
-                const defaultConfig = {
-                    role: 'development',                    // Primary agent role
-                    sessionId: `session_${Date.now()}`,    // Unique session identifier
-                    specialization: []                      // Specialized capabilities array
-                };
-                
-                // Merge user configuration with defaults
-                const agentConfig = { ...defaultConfig, ...config };
-                
-                // Register agent in the multi-agent coordination system
-                this.agentId = await this.agentManager.registerAgent(agentConfig);
-                
-                return {
-                    success: true,
-                    agentId: this.agentId,
-                    config: agentConfig
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
+  /**
+   * Claim a task for the specified agent with dependency validation and research guidance
+   *
+   * === PURPOSE ===
+   * Assigns a task to an agent for execution, with comprehensive validation
+   * of dependencies, research requirements, and agent capabilities. This is
+   * the core method for task assignment in multi-agent workflows.
+   *
+   * === DEPENDENCY SYSTEM ===
+   * • Automatically detects incomplete dependencies
+   * • Prevents claiming tasks with unfinished prerequisites
+   * • Provides guidance for dependency completion order
+   * • Maintains dependency chain integrity across agents
+   *
+   * === RESEARCH INTEGRATION ===
+   * • Detects research category tasks automatically
+   * • Provides research workflow instructions
+   * • Suggests research report templates and structure
+   * • Integrates with development/reports/ directory
+   *
+   * === MULTI-AGENT COORDINATION ===
+   * • Prevents race conditions in task claiming
+   * • Tracks task ownership and agent assignment
+   * • Provides conflict resolution for concurrent claims
+   * • Maintains consistency across distributed agents
+   *
+   * @param {string} taskId - Unique identifier of task to claim
+   * @param {string} agentId - Agent ID (optional, uses current agent if not provided)
+   * @param {string} priority - Priority level for claiming ('normal', 'high', 'low')
+   * @returns {Promise<Object>} Task claiming result with task details and instructions
+   * @throws {Error} If task claiming fails or agent not initialized
+   *
+   * @example
+   * // Claim task with current agent
+   * const result = await api.claimTask('task_123');
+   * if (result.success) {
+   *   console.log(`Claimed: ${result.task.title}`);
+   * }
+   *
+   * @example
+   * // Handle dependency blocking
+   * const result = await api.claimTask('task_456');
+   * if (result.blockedByDependencies) {
+   *   console.log(result.dependencyInstructions.message);
+   *   // Claim dependency first: result.nextDependency.id
+   * }
+   */
+  async claimTask(taskId, agentId = null, priority = "normal") {
+    try {
+      return await this.withTimeout(
+        (async () => {
+          // Resolve target agent ID - use provided ID or current session agent
+          const targetAgentId = agentId || this.agentId;
+          if (!targetAgentId) {
+            throw new Error("No agent ID provided and no agent initialized");
+          }
 
-    async getCurrentTask(agentId = null) {
-        try {
-            return await this.withTimeout((async () => {
-                const targetAgentId = agentId || this.agentId;
-                const task = await this.taskManager.getCurrentTask(targetAgentId);
-                
-                return {
-                    success: true,
-                    task: task || null,
-                    hasTask: !!task
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
+          // Read current TODO state for dependency validation
+          const todoData = await this.taskManager.readTodo();
+          const task = todoData.tasks.find((t) => t.id === taskId);
 
-    async listTasks(filter = {}) {
-        try {
-            return await this.withTimeout((async () => {
-                const todoData = await this.taskManager.readTodo(true); // Skip validation for better performance
-                let tasks = todoData.tasks || [];
-                
-                // Apply filters
-                if (filter.status) {
-                    tasks = tasks.filter(task => task.status === filter.status);
-                }
-                if (filter.mode) {
-                    tasks = tasks.filter(task => task.mode === filter.mode);
-                }
-                if (filter.priority) {
-                    tasks = tasks.filter(task => task.priority === filter.priority);
-                }
-                
-                return {
-                    success: true,
-                    tasks,
-                    count: tasks.length
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
+          // === DEPENDENCY VALIDATION SYSTEM ===
+          // Check if task has incomplete dependencies that must be resolved first
+          if (task && task.dependencies && task.dependencies.length > 0) {
+            const incompleteDependencies = [];
 
-    async createTask(taskData) {
-        try {
-            return await this.withTimeout((async () => {
-                const taskId = await this.taskManager.createTask(taskData);
-                
-                return {
-                    success: true,
-                    taskId,
-                    task: taskData
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    async analyzePhaseInsertion(newTaskData) {
-        try {
-            return await this.withTimeout((async () => {
-                const data = await this.taskManager.readTodoFast();
-                const newPhase = this.taskManager._extractPhase(newTaskData.title);
-                
-                if (!newPhase) {
-                    return {
-                        success: true,
-                        hasPhase: false,
-                        message: 'Task does not contain phase information'
-                    };
-                }
-
-                const insertionAnalysis = this.taskManager._checkPhaseInsertion(newPhase, data.tasks);
-                
-                return {
-                    success: true,
-                    hasPhase: true,
-                    phase: newPhase,
-                    needsRenumbering: insertionAnalysis.needsRenumbering,
-                    conflicts: insertionAnalysis.conflicts,
-                    renumberingNeeded: insertionAnalysis.renumberingNeeded,
-                    affectedTasks: insertionAnalysis.renumberingNeeded.length,
-                    message: insertionAnalysis.needsRenumbering 
-                        ? `Phase insertion will require renumbering ${insertionAnalysis.renumberingNeeded.length} tasks`
-                        : 'No phase conflicts detected'
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    /**
-     * Claim a task for the specified agent with dependency validation and research guidance
-     * 
-     * === PURPOSE ===
-     * Assigns a task to an agent for execution, with comprehensive validation
-     * of dependencies, research requirements, and agent capabilities. This is
-     * the core method for task assignment in multi-agent workflows.
-     * 
-     * === DEPENDENCY SYSTEM ===
-     * • Automatically detects incomplete dependencies
-     * • Prevents claiming tasks with unfinished prerequisites  
-     * • Provides guidance for dependency completion order
-     * • Maintains dependency chain integrity across agents
-     * 
-     * === RESEARCH INTEGRATION ===
-     * • Detects research category tasks automatically
-     * • Provides research workflow instructions
-     * • Suggests research report templates and structure
-     * • Integrates with development/reports/ directory
-     * 
-     * === MULTI-AGENT COORDINATION ===
-     * • Prevents race conditions in task claiming
-     * • Tracks task ownership and agent assignment
-     * • Provides conflict resolution for concurrent claims
-     * • Maintains consistency across distributed agents
-     * 
-     * @param {string} taskId - Unique identifier of task to claim
-     * @param {string} agentId - Agent ID (optional, uses current agent if not provided)
-     * @param {string} priority - Priority level for claiming ('normal', 'high', 'low')
-     * @returns {Promise<Object>} Task claiming result with task details and instructions
-     * @throws {Error} If task claiming fails or agent not initialized
-     * 
-     * @example
-     * // Claim task with current agent
-     * const result = await api.claimTask('task_123');
-     * if (result.success) {
-     *   console.log(`Claimed: ${result.task.title}`);
-     * }
-     * 
-     * @example
-     * // Handle dependency blocking
-     * const result = await api.claimTask('task_456');
-     * if (result.blockedByDependencies) {
-     *   console.log(result.dependencyInstructions.message);
-     *   // Claim dependency first: result.nextDependency.id
-     * }
-     */
-    async claimTask(taskId, agentId = null, priority = 'normal') {
-        try {
-            return await this.withTimeout((async () => {
-                // Resolve target agent ID - use provided ID or current session agent
-                const targetAgentId = agentId || this.agentId;
-                if (!targetAgentId) {
-                    throw new Error('No agent ID provided and no agent initialized');
-                }
-                
-                // Read current TODO state for dependency validation
-                const todoData = await this.taskManager.readTodo();
-                const task = todoData.tasks.find(t => t.id === taskId);
-            
-            // === DEPENDENCY VALIDATION SYSTEM ===
-            // Check if task has incomplete dependencies that must be resolved first
-            if (task && task.dependencies && task.dependencies.length > 0) {
-                const incompleteDependencies = [];
-                
-                // Identify all dependencies that are not yet completed
-                for (const depId of task.dependencies) {
-                    const depTask = todoData.tasks.find(t => t.id === depId);
-                    if (depTask && depTask.status !== 'completed') {
-                        incompleteDependencies.push(depTask);
-                    }
-                }
-                
-                // If dependencies exist, block task claiming and provide guidance
-                if (incompleteDependencies.length > 0) {
-                    // Find the next dependency that should be worked on first
-                    const nextDependency = incompleteDependencies.find(dep => dep.status === 'pending') || incompleteDependencies[0];
-                    
-                    return {
-                        success: false,
-                        reason: "Task has incomplete dependencies that must be completed first",
-                        blockedByDependencies: true,
-                        incompleteDependencies: incompleteDependencies,
-                        nextDependency: nextDependency,
-                        dependencyInstructions: {
-                            message: `🔗 DEPENDENCY DETECTED - Complete dependency first: ${nextDependency.title}`,
-                            instructions: [
-                                `📋 COMPLETE dependency task: ${nextDependency.title} (ID: ${nextDependency.id})`,
-                                `🎯 CLAIM dependency task using: node taskmanager-api.js claim ${nextDependency.id}`,
-                                `✅ FINISH dependency before returning to this task`,
-                                `🔄 RETRY this task after dependency is completed`
-                            ],
-                            dependencyTask: {
-                                id: nextDependency.id,
-                                title: nextDependency.title,
-                                category: nextDependency.category,
-                                status: nextDependency.status
-                            }
-                        }
-                    };
-                }
+            // Identify all dependencies that are not yet completed
+            for (const depId of task.dependencies) {
+              const depTask = todoData.tasks.find((t) => t.id === depId);
+              if (depTask && depTask.status !== "completed") {
+                incompleteDependencies.push(depTask);
+              }
             }
-            
-            // Research suggestion disabled - proceed directly to task claiming
-            
-            const result = await this.taskManager.claimTask(taskId, targetAgentId, priority);
-            
-            // Check if task requires research or is a research category task
-            const claimedTask = result.task;
-            let researchInstructions = null;
-            
-            if (claimedTask && (claimedTask.category === 'research' || claimedTask.requires_research)) {
-                researchInstructions = {
-                    message: "🔬 RESEARCH TASK DETECTED - RESEARCH REQUIRED FIRST",
-                    instructions: [
-                        "📋 BEFORE IMPLEMENTATION: Perform comprehensive research",
-                        "📁 CREATE research report in development/reports/ directory",
-                        "🔍 ANALYZE existing solutions, best practices, and technical approaches",
-                        "📊 DOCUMENT findings, recommendations, and implementation strategy",
-                        "✅ COMPLETE research report before proceeding with implementation",
-                        "🗂️ USE research findings to guide implementation decisions"
-                    ],
-                    reportTemplate: {
-                        filename: `research-${claimedTask.title.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Date.now()}.md`,
-                        directory: "development/reports/",
-                        sections: [
-                            "# Research Report: " + claimedTask.title,
-                            "## Overview",
-                            "## Current State Analysis", 
-                            "## Research Findings",
-                            "## Technical Approaches",
-                            "## Recommendations",
-                            "## Implementation Strategy",
-                            "## References"
-                        ]
-                    }
-                };
+
+            // If dependencies exist, block task claiming and provide guidance
+            if (incompleteDependencies.length > 0) {
+              // Find the next dependency that should be worked on first
+              const nextDependency =
+                incompleteDependencies.find(
+                  (dep) => dep.status === "pending",
+                ) || incompleteDependencies[0];
+
+              return {
+                success: false,
+                reason:
+                  "Task has incomplete dependencies that must be completed first",
+                blockedByDependencies: true,
+                incompleteDependencies: incompleteDependencies,
+                nextDependency: nextDependency,
+                dependencyInstructions: {
+                  message: `🔗 DEPENDENCY DETECTED - Complete dependency first: ${nextDependency.title}`,
+                  instructions: [
+                    `📋 COMPLETE dependency task: ${nextDependency.title} (ID: ${nextDependency.id})`,
+                    `🎯 CLAIM dependency task using: node taskmanager-api.js claim ${nextDependency.id}`,
+                    `✅ FINISH dependency before returning to this task`,
+                    `🔄 RETRY this task after dependency is completed`,
+                  ],
+                  dependencyTask: {
+                    id: nextDependency.id,
+                    title: nextDependency.title,
+                    category: nextDependency.category,
+                    status: nextDependency.status,
+                  },
+                },
+              };
             }
-            
-                return {
-                    success: result.success,
-                    task: result.task,
-                    reason: result.reason,
-                    priority: result.priority,
-                    researchInstructions: researchInstructions
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
+          }
+
+          // Research suggestion disabled - proceed directly to task claiming
+
+          const result = await this.taskManager.claimTask(
+            taskId,
+            targetAgentId,
+            priority,
+          );
+
+          // Check if task requires research or is a research category task
+          const claimedTask = result.task;
+          let researchInstructions = null;
+
+          if (
+            claimedTask &&
+            (claimedTask.category === "research" ||
+              claimedTask.requires_research)
+          ) {
+            researchInstructions = {
+              message: "🔬 RESEARCH TASK DETECTED - RESEARCH REQUIRED FIRST",
+              instructions: [
+                "📋 BEFORE IMPLEMENTATION: Perform comprehensive research",
+                "📁 CREATE research report in development/reports/ directory",
+                "🔍 ANALYZE existing solutions, best practices, and technical approaches",
+                "📊 DOCUMENT findings, recommendations, and implementation strategy",
+                "✅ COMPLETE research report before proceeding with implementation",
+                "🗂️ USE research findings to guide implementation decisions",
+              ],
+              reportTemplate: {
+                filename: `research-${claimedTask.title.toLowerCase().replace(/[^a-z0-9]/g, "-")}-${Date.now()}.md`,
+                directory: "development/reports/",
+                sections: [
+                  "# Research Report: " + claimedTask.title,
+                  "## Overview",
+                  "## Current State Analysis",
+                  "## Research Findings",
+                  "## Technical Approaches",
+                  "## Recommendations",
+                  "## Implementation Strategy",
+                  "## References",
+                ],
+              },
             };
-        }
+          }
+
+          return {
+            success: result.success,
+            task: result.task,
+            reason: result.reason,
+            priority: result.priority,
+            researchInstructions: researchInstructions,
+          };
+        })(),
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  async completeTask(taskId, completionData = {}) {
+    try {
+      return await this.withTimeout(
+        (async () => {
+          await this.taskManager.updateTaskStatus(taskId, "completed");
+
+          if (completionData.notes) {
+            await this.taskManager.addTaskNote(taskId, completionData.notes);
+          }
+
+          return {
+            success: true,
+            taskId,
+            completionData,
+          };
+        })(),
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  async getAgentStatus(agentId = null) {
+    try {
+      return await this.withTimeout(
+        (async () => {
+          const targetAgentId = agentId || this.agentId;
+          if (!targetAgentId) {
+            throw new Error("No agent ID provided and no agent initialized");
+          }
+
+          const agent = await this.agentManager.getAgent(targetAgentId);
+          const tasks = await this.taskManager.getTasksForAgent(targetAgentId);
+
+          return {
+            success: true,
+            agent,
+            tasks,
+            taskCount: tasks.length,
+          };
+        })(),
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  async reinitializeAgent(agentId = null, config = {}) {
+    try {
+      return await this.withTimeout(
+        (async () => {
+          const targetAgentId = agentId || this.agentId;
+          if (!targetAgentId) {
+            throw new Error("No agent ID provided and no agent initialized");
+          }
+
+          // Get current agent configuration
+          const currentAgent = await this.agentManager.getAgent(targetAgentId);
+          if (!currentAgent) {
+            throw new Error(`Agent ${targetAgentId} not found`);
+          }
+
+          // Merge current config with new config
+          const renewalConfig = {
+            ...currentAgent,
+            ...config,
+            name: config.name || currentAgent.name,
+            role: config.role || currentAgent.role,
+            specialization:
+              config.specialization || currentAgent.specialization,
+            sessionId: config.sessionId || currentAgent.sessionId,
+            metadata: { ...currentAgent.metadata, ...config.metadata },
+          };
+
+          // Reinitialize the agent (renew heartbeat, reset timeout, update status)
+          const result = await this.agentManager.reinitializeAgent(
+            targetAgentId,
+            renewalConfig,
+          );
+
+          return {
+            success: true,
+            agentId: targetAgentId,
+            agent: result.agent,
+            renewed: result.renewed,
+            message:
+              "Agent reinitialized successfully - heartbeat renewed and timeout reset",
+          };
+        })(),
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  async getStatistics() {
+    try {
+      return await this.withTimeout(
+        (async () => {
+          const stats = await this.orchestrator.getOrchestrationStatistics();
+
+          return {
+            success: true,
+            statistics: stats,
+          };
+        })(),
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  // Task reordering methods
+  async moveTaskToTop(taskId) {
+    try {
+      return await this.withTimeout(
+        (async () => {
+          const result = await this.taskManager.moveTaskToTop(taskId);
+          return {
+            success: true,
+            moved: result,
+            taskId,
+          };
+        })(),
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  async moveTaskUp(taskId) {
+    try {
+      return await this.withTimeout(
+        (async () => {
+          const result = await this.taskManager.moveTaskUp(taskId);
+          return {
+            success: true,
+            moved: result,
+            taskId,
+          };
+        })(),
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  async moveTaskDown(taskId) {
+    try {
+      return await this.withTimeout(
+        (async () => {
+          const result = await this.taskManager.moveTaskDown(taskId);
+          return {
+            success: true,
+            moved: result,
+            taskId,
+          };
+        })(),
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  async moveTaskToBottom(taskId) {
+    try {
+      return await this.withTimeout(
+        (async () => {
+          const result = await this.taskManager.moveTaskToBottom(taskId);
+          return {
+            success: true,
+            moved: result,
+            taskId,
+          };
+        })(),
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  /**
+   * Check if a task might benefit from research before implementation
+   * @private
+   * @param {Object} task - Task to analyze
+   * @param {Object} todoData - Full TODO data
+   * @returns {Object} Research suggestion result
+   */
+  _checkResearchRequirements(task, todoData) {
+    // Only suggest research for implementation-focused tasks
+    const implementationCategories = ["missing-feature", "enhancement", "bug"];
+    if (!implementationCategories.includes(task.category)) {
+      return { suggestResearch: false };
     }
 
-    async completeTask(taskId, completionData = {}) {
-        try {
-            return await this.withTimeout((async () => {
-                await this.taskManager.updateTaskStatus(taskId, 'completed');
-                
-                if (completionData.notes) {
-                    await this.taskManager.addTaskNote(taskId, completionData.notes);
-                }
-                
-                return {
-                    success: true,
-                    taskId,
-                    completionData
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
+    // Skip if task already has research dependency or is already research-flagged
+    if (
+      task.requires_research ||
+      (task.dependencies && task.dependencies.length > 0)
+    ) {
+      return { suggestResearch: false };
     }
 
-    async getAgentStatus(agentId = null) {
-        try {
-            return await this.withTimeout((async () => {
-                const targetAgentId = agentId || this.agentId;
-                if (!targetAgentId) {
-                    throw new Error('No agent ID provided and no agent initialized');
-                }
-                
-                const agent = await this.agentManager.getAgent(targetAgentId);
-                const tasks = await this.taskManager.getTasksForAgent(targetAgentId);
-                
-                return {
-                    success: true,
-                    agent,
-                    tasks,
-                    taskCount: tasks.length
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
+    // Check for complexity indicators that suggest research might be helpful
+    const complexityIndicators = [
+      // Keywords in title/description that suggest complexity
+      /api|integration|authentication|oauth|jwt|database|schema|architecture|security|performance|scalability/i,
+      // Multiple words suggesting broad scope
+      /system|platform|framework|infrastructure|migration|refactor/i,
+      // External service integration
+      /external|third.?party|service|endpoint|webhook/i,
+    ];
+
+    const taskText = `${task.title} ${task.description}`.toLowerCase();
+    const hasComplexityIndicators = complexityIndicators.some((pattern) =>
+      pattern.test(taskText),
+    );
+
+    // Check if there are related research tasks already completed
+    const relatedResearchTasks = todoData.tasks.filter(
+      (t) =>
+        t.category === "research" &&
+        t.status === "completed" &&
+        this._isTaskRelated(task, t),
+    );
+
+    if (hasComplexityIndicators && relatedResearchTasks.length === 0) {
+      return {
+        suggestResearch: true,
+        reason: "Task appears complex and might benefit from research",
+        complexityFactors: this._identifyComplexityFactors(taskText),
+        suggestions: {
+          message: "🔬 RESEARCH RECOMMENDED BEFORE IMPLEMENTATION",
+          instructions: [
+            "📋 CONSIDER creating a research task first to:",
+            "🔍 INVESTIGATE best practices and technical approaches",
+            "📚 RESEARCH existing solutions and patterns",
+            "🎯 DEFINE implementation strategy and requirements",
+            "✅ CREATE research task or proceed if confident",
+          ],
+          researchTaskTemplate: {
+            title: `Research: ${task.title}`,
+            description: `Research technical approaches, best practices, and implementation strategies for: ${task.description}`,
+            category: "research",
+            mode: "RESEARCH",
+          },
+          createResearchCommand: `node taskmanager-api.js create '{"title": "Research: ${task.title}", "description": "Research technical approaches and implementation strategies", "category": "research", "mode": "RESEARCH"}'`,
+        },
+      };
     }
 
-    async reinitializeAgent(agentId = null, config = {}) {
-        try {
-            return await this.withTimeout((async () => {
-                const targetAgentId = agentId || this.agentId;
-                if (!targetAgentId) {
-                    throw new Error('No agent ID provided and no agent initialized');
-                }
-                
-                // Get current agent configuration
-                const currentAgent = await this.agentManager.getAgent(targetAgentId);
-                if (!currentAgent) {
-                    throw new Error(`Agent ${targetAgentId} not found`);
-                }
-                
-                // Merge current config with new config
-                const renewalConfig = {
-                    ...currentAgent,
-                    ...config,
-                    name: config.name || currentAgent.name,
-                    role: config.role || currentAgent.role,
-                    specialization: config.specialization || currentAgent.specialization,
-                    sessionId: config.sessionId || currentAgent.sessionId,
-                    metadata: { ...currentAgent.metadata, ...config.metadata }
-                };
-                
-                // Reinitialize the agent (renew heartbeat, reset timeout, update status)
-                const result = await this.agentManager.reinitializeAgent(targetAgentId, renewalConfig);
-                
-                return {
-                    success: true,
-                    agentId: targetAgentId,
-                    agent: result.agent,
-                    renewed: result.renewed,
-                    message: 'Agent reinitialized successfully - heartbeat renewed and timeout reset'
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
+    return { suggestResearch: false };
+  }
+
+  /**
+   * Check if two tasks are related based on keywords
+   * @private
+   */
+  _isTaskRelated(task1, task2) {
+    const extractKeywords = (text) => {
+      return text
+        .toLowerCase()
+        .replace(/[^\w\s]/g, " ")
+        .split(/\s+/)
+        .filter((word) => word.length > 3);
+    };
+
+    const task1Keywords = extractKeywords(
+      `${task1.title} ${task1.description}`,
+    );
+    const task2Keywords = extractKeywords(
+      `${task2.title} ${task2.description}`,
+    );
+
+    const commonKeywords = task1Keywords.filter((word) =>
+      task2Keywords.includes(word),
+    );
+    return commonKeywords.length >= 2; // At least 2 common significant words
+  }
+
+  /**
+   * Identify specific complexity factors in task text
+   * @private
+   */
+  _identifyComplexityFactors(taskText) {
+    const factors = [];
+
+    if (/api|integration|endpoint/.test(taskText)) {
+      factors.push("API/Integration complexity");
+    }
+    if (/auth|oauth|jwt|security/.test(taskText)) {
+      factors.push("Authentication/Security requirements");
+    }
+    if (/database|schema|migration/.test(taskText)) {
+      factors.push("Database/Schema complexity");
+    }
+    if (/external|third.?party/.test(taskText)) {
+      factors.push("External service dependencies");
+    }
+    if (/performance|scalability/.test(taskText)) {
+      factors.push("Performance/Scalability considerations");
     }
 
+    return factors;
+  }
 
-    async getStatistics() {
-        try {
-            return await this.withTimeout((async () => {
-                const stats = await this.orchestrator.getOrchestrationStatistics();
-                
-                return {
-                    success: true,
-                    statistics: stats
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
+  // Feature management methods removed - unified with TODO.json feature-based system
+
+  // Cleanup method
+  async cleanup() {
+    try {
+      // Cleanup in proper order with sufficient time
+      if (this.taskManager && typeof this.taskManager.cleanup === "function") {
+        await this.taskManager.cleanup();
+      }
+      if (
+        this.agentManager &&
+        typeof this.agentManager.cleanup === "function"
+      ) {
+        await this.agentManager.cleanup();
+      }
+      if (
+        this.orchestrator &&
+        typeof this.orchestrator.cleanup === "function"
+      ) {
+        await this.orchestrator.cleanup();
+      }
+    } catch (error) {
+      console.warn("Cleanup warning:", error.message);
     }
 
-    // Task reordering methods
-    async moveTaskToTop(taskId) {
-        try {
-            return await this.withTimeout((async () => {
-                const result = await this.taskManager.moveTaskToTop(taskId);
-                return {
-                    success: true,
-                    moved: result,
-                    taskId
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    async moveTaskUp(taskId) {
-        try {
-            return await this.withTimeout((async () => {
-                const result = await this.taskManager.moveTaskUp(taskId);
-                return {
-                    success: true,
-                    moved: result,
-                    taskId
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    async moveTaskDown(taskId) {
-        try {
-            return await this.withTimeout((async () => {
-                const result = await this.taskManager.moveTaskDown(taskId);
-                return {
-                    success: true,
-                    moved: result,
-                    taskId
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    async moveTaskToBottom(taskId) {
-        try {
-            return await this.withTimeout((async () => {
-                const result = await this.taskManager.moveTaskToBottom(taskId);
-                return {
-                    success: true,
-                    moved: result,
-                    taskId
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    /**
-     * Check if a task might benefit from research before implementation
-     * @private
-     * @param {Object} task - Task to analyze
-     * @param {Object} todoData - Full TODO data
-     * @returns {Object} Research suggestion result
-     */
-    _checkResearchRequirements(task, todoData) {
-        // Only suggest research for implementation-focused tasks
-        const implementationCategories = ['missing-feature', 'enhancement', 'bug'];
-        if (!implementationCategories.includes(task.category)) {
-            return { suggestResearch: false };
-        }
-        
-        // Skip if task already has research dependency or is already research-flagged
-        if (task.requires_research || (task.dependencies && task.dependencies.length > 0)) {
-            return { suggestResearch: false };
-        }
-        
-        // Check for complexity indicators that suggest research might be helpful
-        const complexityIndicators = [
-            // Keywords in title/description that suggest complexity
-            /api|integration|authentication|oauth|jwt|database|schema|architecture|security|performance|scalability/i,
-            // Multiple words suggesting broad scope
-            /system|platform|framework|infrastructure|migration|refactor/i,
-            // External service integration
-            /external|third.?party|service|endpoint|webhook/i
-        ];
-        
-        const taskText = `${task.title} ${task.description}`.toLowerCase();
-        const hasComplexityIndicators = complexityIndicators.some(pattern => pattern.test(taskText));
-        
-        // Check if there are related research tasks already completed
-        const relatedResearchTasks = todoData.tasks.filter(t => 
-            t.category === 'research' && 
-            t.status === 'completed' &&
-            this._isTaskRelated(task, t)
-        );
-        
-        if (hasComplexityIndicators && relatedResearchTasks.length === 0) {
-            return {
-                suggestResearch: true,
-                reason: "Task appears complex and might benefit from research",
-                complexityFactors: this._identifyComplexityFactors(taskText),
-                suggestions: {
-                    message: "🔬 RESEARCH RECOMMENDED BEFORE IMPLEMENTATION",
-                    instructions: [
-                        "📋 CONSIDER creating a research task first to:",
-                        "🔍 INVESTIGATE best practices and technical approaches",
-                        "📚 RESEARCH existing solutions and patterns",
-                        "🎯 DEFINE implementation strategy and requirements",
-                        "✅ CREATE research task or proceed if confident"
-                    ],
-                    researchTaskTemplate: {
-                        title: `Research: ${task.title}`,
-                        description: `Research technical approaches, best practices, and implementation strategies for: ${task.description}`,
-                        category: 'research',
-                        mode: 'RESEARCH'
-                    },
-                    createResearchCommand: `node taskmanager-api.js create '{"title": "Research: ${task.title}", "description": "Research technical approaches and implementation strategies", "category": "research", "mode": "RESEARCH"}'`
-                }
-            };
-        }
-        
-        return { suggestResearch: false };
-    }
-
-    /**
-     * Check if two tasks are related based on keywords
-     * @private
-     */
-    _isTaskRelated(task1, task2) {
-        const extractKeywords = (text) => {
-            return text.toLowerCase()
-                .replace(/[^\w\s]/g, ' ')
-                .split(/\s+/)
-                .filter(word => word.length > 3);
-        };
-        
-        const task1Keywords = extractKeywords(`${task1.title} ${task1.description}`);
-        const task2Keywords = extractKeywords(`${task2.title} ${task2.description}`);
-        
-        const commonKeywords = task1Keywords.filter(word => task2Keywords.includes(word));
-        return commonKeywords.length >= 2; // At least 2 common significant words
-    }
-
-    /**
-     * Identify specific complexity factors in task text
-     * @private
-     */
-    _identifyComplexityFactors(taskText) {
-        const factors = [];
-        
-        if (/api|integration|endpoint/.test(taskText)) {
-            factors.push("API/Integration complexity");
-        }
-        if (/auth|oauth|jwt|security/.test(taskText)) {
-            factors.push("Authentication/Security requirements");
-        }
-        if (/database|schema|migration/.test(taskText)) {
-            factors.push("Database/Schema complexity");
-        }
-        if (/external|third.?party/.test(taskText)) {
-            factors.push("External service dependencies");
-        }
-        if (/performance|scalability/.test(taskText)) {
-            factors.push("Performance/Scalability considerations");
-        }
-        
-        return factors;
-    }
-
-    // ========================================
-    // FEATURE MANAGEMENT METHODS
-    // ========================================
-
-    /**
-     * Create a new feature proposal (agent action)
-     * 
-     * Creates a new feature proposal that will be added to the "❓ Potential Features Awaiting User Verification" 
-     * section in features.md. Only users can approve features for planning and implementation.
-     * 
-     * @param {Object} featureData - Feature data object containing title, description, category, etc.
-     * @param {string} agentId - ID of the agent creating the feature proposal (optional)
-     * @returns {Object} Created feature object with generated ID
-     * 
-     * === EXAMPLE ===
-     * node taskmanager-api.js feature-create '{"title": "Real-time Log Streaming", "description": "Live log monitoring with WebSocket streaming", "category": "enhanced_logging", "priority": "medium", "effort": "high"}'
-     */
-    async createFeature(featureData, agentId = null) {
-        try {
-            return await this.withTimeout((async () => {
-                const currentAgentId = agentId || this.agentId || 'anonymous_agent';
-                const result = await this.featureManager.createFeature(featureData, currentAgentId);
-                
-                return {
-                    success: true,
-                    feature: result,
-                    message: 'Feature proposal created successfully - awaiting user approval'
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    /**
-     * Approve a feature for planning (user action - requires user authorization)
-     * 
-     * This method should only be called by users to approve agent-proposed features.
-     * It moves features from "proposed" status to "approved" status, making them
-     * eligible for planning and task generation.
-     * 
-     * @param {string} featureId - Feature ID to approve
-     * @param {string} userId - ID of the approving user
-     * @param {Object} options - Additional approval options (notes, reason, etc.)
-     * @returns {Object} Updated feature object
-     * 
-     * === EXAMPLE ===
-     * node taskmanager-api.js feature-approve feature_123 user_456 '{"notes": "Approved for Q1 implementation", "reason": "High business value"}'
-     */
-    async approveFeature(featureId, userId, options = {}) {
-        try {
-            return await this.withTimeout((async () => {
-                const result = await this.featureManager.approveFeature(featureId, userId, options);
-                
-                return {
-                    success: true,
-                    feature: result,
-                    message: 'Feature approved successfully - ready for planning and task generation'
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    /**
-     * Link a feature to implementation tasks for automatic status synchronization
-     * 
-     * Creates bidirectional links between features and tasks. When linked tasks
-     * are completed, the feature status will automatically update to reflect
-     * implementation progress.
-     * 
-     * @param {string} featureId - Feature ID to link
-     * @param {string|Array} taskIds - Task ID(s) to link to the feature
-     * @returns {Object} Updated feature object with linked tasks
-     * 
-     * === EXAMPLE ===
-     * node taskmanager-api.js feature-link feature_123 task_789
-     * node taskmanager-api.js feature-link feature_123 '["task_789", "task_790", "task_791"]'
-     */
-    async linkFeatureToTask(featureId, taskIds) {
-        try {
-            return await this.withTimeout((async () => {
-                const result = await this.featureManager.linkFeatureToTask(featureId, taskIds);
-                
-                return {
-                    success: true,
-                    feature: result,
-                    message: 'Feature-task linking completed successfully'
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    /**
-     * Synchronize feature status based on task completion
-     * 
-     * Automatically updates feature status when linked tasks are completed.
-     * This method is typically called by the system when tasks are marked complete,
-     * but can be manually triggered for synchronization.
-     * 
-     * @param {string} taskId - Completed task ID to sync
-     * @returns {Object} List of features that were updated
-     * 
-     * === EXAMPLE ===
-     * node taskmanager-api.js feature-sync-task task_789
-     */
-    async syncTaskCompletion(taskId) {
-        try {
-            return await this.withTimeout((async () => {
-                const updatedFeatures = await this.featureManager.syncTaskCompletion(taskId);
-                
-                return {
-                    success: true,
-                    updated_features: updatedFeatures,
-                    count: updatedFeatures.length,
-                    message: `Synchronized ${updatedFeatures.length} features with task completion`
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    /**
-     * Get all features with optional filtering
-     * 
-     * Retrieves features from features.json with optional filtering by status,
-     * category, created_by, or other criteria.
-     * 
-     * @param {Object} filters - Filter criteria (status, category, created_by, etc.)
-     * @returns {Object} Array of features matching the filters
-     * 
-     * === EXAMPLES ===
-     * node taskmanager-api.js feature-list
-     * node taskmanager-api.js feature-list '{"status": "proposed"}'
-     * node taskmanager-api.js feature-list '{"category": "enhanced_logging"}'
-     * node taskmanager-api.js feature-list '{"status": "approved", "category": "core_task_management"}'
-     */
-    async getFeatures(filters = {}) {
-        try {
-            return await this.withTimeout((async () => {
-                const features = await this.featureManager.getFeatures(filters);
-                
-                return {
-                    success: true,
-                    features: features,
-                    count: features.length,
-                    filters: filters
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    /**
-     * Get a specific feature by ID
-     * 
-     * @param {string} featureId - Feature ID to retrieve
-     * @returns {Object} Feature object or null if not found
-     * 
-     * === EXAMPLE ===
-     * node taskmanager-api.js feature-get feature_123
-     */
-    async getFeature(featureId) {
-        try {
-            return await this.withTimeout((async () => {
-                const feature = await this.featureManager.getFeature(featureId);
-                
-                if (!feature) {
-                    return {
-                        success: false,
-                        error: `Feature ${featureId} not found`
-                    };
-                }
-                
-                return {
-                    success: true,
-                    feature: feature
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    /**
-     * Get feature statistics and metrics
-     * 
-     * @returns {Object} Feature statistics including counts by status, category, etc.
-     * 
-     * === EXAMPLE ===
-     * node taskmanager-api.js feature-stats
-     */
-    async getFeatureStats() {
-        try {
-            return await this.withTimeout((async () => {
-                const stats = await this.featureManager.getFeatureStats();
-                
-                return {
-                    success: true,
-                    statistics: stats
-                };
-            })());
-        } catch (error) {
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    // Cleanup method
-    async cleanup() {
-        try {
-            // Cleanup in proper order with sufficient time
-            if (this.taskManager && typeof this.taskManager.cleanup === 'function') {
-                await this.taskManager.cleanup();
-            }
-            if (this.agentManager && typeof this.agentManager.cleanup === 'function') {
-                await this.agentManager.cleanup();
-            }
-            if (this.orchestrator && typeof this.orchestrator.cleanup === 'function') {
-                await this.orchestrator.cleanup();
-            }
-        } catch (error) {
-            console.warn('Cleanup warning:', error.message);
-        }
-        
-        // Give more time for cleanup and use setTimeout for better performance
-        setTimeout(() => {
-            process.exit(0);
-        }, 0);
-    }
+    // Give more time for cleanup and use setTimeout for better performance
+    setTimeout(() => {
+      process.exit(0);
+    }, 0);
+  }
 }
 
 // CLI interface
 async function main() {
-    // Use the already parsed args (with --project-root removed)
-    const command = args[0];
-    
-    
-    const api = new TaskManagerAPI();
+  // Use the already parsed args (with --project-root removed)
+  const command = args[0];
 
-    try {
-        switch (command) {
-            case 'methods': {
-                const result = await api.getApiMethods();
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
+  const api = new TaskManagerAPI();
 
-            case 'init': {
-                let config = {};
-                if (args[1]) {
-                    try {
-                        config = JSON.parse(args[1]);
-                    } catch (parseError) {
-                        throw new Error(`Invalid JSON configuration: ${parseError.message}`);
-                    }
-                }
-                const result = await api.initAgent(config);
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
+  try {
+    switch (command) {
+      case "methods": {
+        const result = await api.getApiMethods();
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
 
-            case 'current': {
-                const agentId = args[1];
-                const result = await api.getCurrentTask(agentId);
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
+      case "init": {
+        let config = {};
+        if (args[1]) {
+          try {
+            config = JSON.parse(args[1]);
+          } catch (parseError) {
+            throw new Error(
+              `Invalid JSON configuration: ${parseError.message}`,
+            );
+          }
+        }
+        const result = await api.initAgent(config);
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
 
-            case 'list': {
-                let filter = {};
-                if (args[1]) {
-                    try {
-                        filter = JSON.parse(args[1]);
-                    } catch (parseError) {
-                        throw new Error(`Invalid JSON filter: ${parseError.message}`);
-                    }
-                }
-                const result = await api.listTasks(filter);
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
+      case "current": {
+        const agentId = args[1];
+        const result = await api.getCurrentTask(agentId);
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
 
-            case 'create': {
-                if (!args[1]) {
-                    throw new Error('Task data required for create command');
-                }
-                let taskData;
-                try {
-                    taskData = JSON.parse(args[1]);
-                } catch (parseError) {
-                    throw new Error(`Invalid JSON task data: ${parseError.message}`);
-                }
-                const result = await api.createTask(taskData);
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
+      case "list": {
+        let filter = {};
+        if (args[1]) {
+          try {
+            filter = JSON.parse(args[1]);
+          } catch (parseError) {
+            throw new Error(`Invalid JSON filter: ${parseError.message}`);
+          }
+        }
+        const result = await api.listTasks(filter);
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
 
-            case 'analyze-phase-insertion': {
-                if (!args[1]) {
-                    throw new Error('Task data required for analyze-phase-insertion command');
-                }
-                let taskData;
-                try {
-                    taskData = JSON.parse(args[1]);
-                } catch (parseError) {
-                    throw new Error(`Invalid JSON task data: ${parseError.message}`);
-                }
-                const result = await api.analyzePhaseInsertion(taskData);
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
+      case "create": {
+        if (!args[1]) {
+          throw new Error("Task data required for create command");
+        }
+        let taskData;
+        try {
+          taskData = JSON.parse(args[1]);
+        } catch (parseError) {
+          throw new Error(`Invalid JSON task data: ${parseError.message}`);
+        }
+        const result = await api.createTask(taskData);
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
 
-            case 'claim': {
-                const taskId = args[1];
-                const agentId = args[2];
-                const priority = args[3] || 'normal';
-                if (!taskId) {
-                    throw new Error('Task ID required for claim command');
-                }
-                const result = await api.claimTask(taskId, agentId, priority);
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
+      case "analyze-phase-insertion": {
+        if (!args[1]) {
+          throw new Error(
+            "Task data required for analyze-phase-insertion command",
+          );
+        }
+        let taskData;
+        try {
+          taskData = JSON.parse(args[1]);
+        } catch (parseError) {
+          throw new Error(`Invalid JSON task data: ${parseError.message}`);
+        }
+        const result = await api.analyzePhaseInsertion(taskData);
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
 
-            case 'complete': {
-                const taskId = args[1];
-                let completionData = {};
-                if (args[2]) {
-                    try {
-                        completionData = JSON.parse(args[2]);
-                    } catch (parseError) {
-                        throw new Error(`Invalid JSON completion data: ${parseError.message}`);
-                    }
-                }
-                if (!taskId) {
-                    throw new Error('Task ID required for complete command');
-                }
-                const result = await api.completeTask(taskId, completionData);
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
+      case "claim": {
+        const taskId = args[1];
+        const agentId = args[2];
+        const priority = args[3] || "normal";
+        if (!taskId) {
+          throw new Error("Task ID required for claim command");
+        }
+        const result = await api.claimTask(taskId, agentId, priority);
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
 
-            case 'status': {
-                const agentId = args[1];
-                const result = await api.getAgentStatus(agentId);
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
+      case "complete": {
+        const taskId = args[1];
+        let completionData = {};
+        if (args[2]) {
+          try {
+            completionData = JSON.parse(args[2]);
+          } catch (parseError) {
+            throw new Error(
+              `Invalid JSON completion data: ${parseError.message}`,
+            );
+          }
+        }
+        if (!taskId) {
+          throw new Error("Task ID required for complete command");
+        }
+        const result = await api.completeTask(taskId, completionData);
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
 
-            case 'reinitialize': {
-                const agentId = args[1];
-                let config = {};
-                if (args[2]) {
-                    try {
-                        config = JSON.parse(args[2]);
-                    } catch (parseError) {
-                        throw new Error(`Invalid JSON config for reinitialize: ${parseError.message}`);
-                    }
-                }
-                const result = await api.reinitializeAgent(agentId, config);
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
+      case "status": {
+        const agentId = args[1];
+        const result = await api.getAgentStatus(agentId);
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
 
-            case 'stats': {
-                const result = await api.getStatistics();
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
+      case "reinitialize": {
+        const agentId = args[1];
+        let config = {};
+        if (args[2]) {
+          try {
+            config = JSON.parse(args[2]);
+          } catch (parseError) {
+            throw new Error(
+              `Invalid JSON config for reinitialize: ${parseError.message}`,
+            );
+          }
+        }
+        const result = await api.reinitializeAgent(agentId, config);
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
 
+      case "stats": {
+        const result = await api.getStatistics();
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
 
-            case 'move-top': {
-                const taskId = args[1];
-                if (!taskId) {
-                    throw new Error('Task ID required for move-top command');
-                }
-                const result = await api.moveTaskToTop(taskId);
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
+      case "move-top": {
+        const taskId = args[1];
+        if (!taskId) {
+          throw new Error("Task ID required for move-top command");
+        }
+        const result = await api.moveTaskToTop(taskId);
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
 
-            case 'move-up': {
-                const taskId = args[1];
-                if (!taskId) {
-                    throw new Error('Task ID required for move-up command');
-                }
-                const result = await api.moveTaskUp(taskId);
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
+      case "move-up": {
+        const taskId = args[1];
+        if (!taskId) {
+          throw new Error("Task ID required for move-up command");
+        }
+        const result = await api.moveTaskUp(taskId);
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
 
-            case 'move-down': {
-                const taskId = args[1];
-                if (!taskId) {
-                    throw new Error('Task ID required for move-down command');
-                }
-                const result = await api.moveTaskDown(taskId);
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
+      case "move-down": {
+        const taskId = args[1];
+        if (!taskId) {
+          throw new Error("Task ID required for move-down command");
+        }
+        const result = await api.moveTaskDown(taskId);
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
 
-            case 'move-bottom': {
-                const taskId = args[1];
-                if (!taskId) {
-                    throw new Error('Task ID required for move-bottom command');
-                }
-                const result = await api.moveTaskToBottom(taskId);
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
+      case "move-bottom": {
+        const taskId = args[1];
+        if (!taskId) {
+          throw new Error("Task ID required for move-bottom command");
+        }
+        const result = await api.moveTaskToBottom(taskId);
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
 
-            // ========================================
-            // FEATURE MANAGEMENT COMMANDS
-            // ========================================
+      // ========================================
+      // FEATURE MANAGEMENT COMMANDS
+      // Feature management CLI commands removed - unified with TODO.json feature-based system
 
-            case 'feature-create': {
-                if (!args[1]) {
-                    throw new Error('Feature data required for feature-create command');
-                }
-                let featureData;
-                try {
-                    featureData = JSON.parse(args[1]);
-                } catch (parseError) {
-                    throw new Error(`Invalid JSON feature data: ${parseError.message}`);
-                }
-                const agentId = args[2] || null; // Optional agent ID
-                const result = await api.createFeature(featureData, agentId);
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
-
-            case 'feature-approve': {
-                const featureId = args[1];
-                const userId = args[2];
-                if (!featureId || !userId) {
-                    throw new Error('Feature ID and User ID required for feature-approve command');
-                }
-                let options = {};
-                if (args[3]) {
-                    try {
-                        options = JSON.parse(args[3]);
-                    } catch (parseError) {
-                        throw new Error(`Invalid JSON options: ${parseError.message}`);
-                    }
-                }
-                const result = await api.approveFeature(featureId, userId, options);
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
-
-            case 'feature-link': {
-                const featureId = args[1];
-                if (!featureId || !args[2]) {
-                    throw new Error('Feature ID and Task ID(s) required for feature-link command');
-                }
-                let taskIds;
-                try {
-                    // Try parsing as JSON array first, fallback to single string
-                    taskIds = args[2].startsWith('[') ? JSON.parse(args[2]) : args[2];
-                } catch {
-                    taskIds = args[2]; // Treat as single task ID string
-                }
-                const result = await api.linkFeatureToTask(featureId, taskIds);
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
-
-            case 'feature-sync-task': {
-                const taskId = args[1];
-                if (!taskId) {
-                    throw new Error('Task ID required for feature-sync-task command');
-                }
-                const result = await api.syncTaskCompletion(taskId);
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
-
-            case 'feature-list': {
-                let filter = {};
-                if (args[1]) {
-                    try {
-                        filter = JSON.parse(args[1]);
-                    } catch (parseError) {
-                        throw new Error(`Invalid JSON filter: ${parseError.message}`);
-                    }
-                }
-                const result = await api.getFeatures(filter);
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
-
-            case 'feature-get': {
-                const featureId = args[1];
-                if (!featureId) {
-                    throw new Error('Feature ID required for feature-get command');
-                }
-                const result = await api.getFeature(featureId);
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
-
-            case 'feature-stats': {
-                const result = await api.getFeatureStats();
-                console.log(JSON.stringify(result, null, 2));
-                break;
-            }
-
-            default: {
-                console.log(`
+      default: {
+        console.log(`
 TaskManager Node.js API
 
 Usage: node taskmanager-api.js <command> [args...]
@@ -1479,42 +1240,32 @@ Commands:
   move-down <taskId>           - Move task down one position
   move-bottom <taskId>         - Move task to bottom
 
-Feature Management Commands:
-  feature-create <featureData> [agentId] - Create new feature proposal
-  feature-approve <featureId> <userId> [options] - Approve feature for planning (user only)
-  feature-link <featureId> <taskIds>   - Link feature to implementation tasks
-  feature-sync-task <taskId>           - Sync feature status from task completion
-  feature-list [filter]               - List features with optional filtering
-  feature-get <featureId>             - Get specific feature by ID
-  feature-stats                       - Get feature statistics and metrics
-
 Examples:
   node taskmanager-api.js init '{"role": "development", "specialization": ["testing"]}'
   node taskmanager-api.js create '{"title": "Fix bug", "mode": "DEVELOPMENT", "priority": "high"}'
   node taskmanager-api.js list '{"status": "pending"}'
   node taskmanager-api.js reinitialize agent_123 '{"metadata": {"renewed": true}}'
   node taskmanager-api.js move-top task_123
-  
-Feature Examples:
-  node taskmanager-api.js feature-create '{"title": "Real-time Logs", "description": "Live log streaming", "category": "enhanced_logging"}'
-  node taskmanager-api.js feature-approve feature_123 user_456
-  node taskmanager-api.js feature-link feature_123 task_789
-  node taskmanager-api.js feature-list '{"status": "proposed"}'
-  node taskmanager-api.js feature-stats
                 `);
-                break;
-            }
-        }
-    } catch (error) {
-        console.error(JSON.stringify({
-            success: false,
-            error: error.message,
-            command
-        }, null, 2));
-        process.exit(1);
-    } finally {
-        await api.cleanup();
+        break;
+      }
     }
+  } catch (error) {
+    console.error(
+      JSON.stringify(
+        {
+          success: false,
+          error: error.message,
+          command,
+        },
+        null,
+        2,
+      ),
+    );
+    process.exit(1);
+  } finally {
+    await api.cleanup();
+  }
 }
 
 // Export for programmatic use
@@ -1522,8 +1273,8 @@ module.exports = TaskManagerAPI;
 
 // Run CLI if called directly (CommonJS equivalent)
 if (require.main === module) {
-    main().catch(error => {
-        console.error('Fatal error:', error.message);
-        process.exit(1);
-    });
+  main().catch((error) => {
+    console.error("Fatal error:", error.message);
+    process.exit(1);
+  });
 }

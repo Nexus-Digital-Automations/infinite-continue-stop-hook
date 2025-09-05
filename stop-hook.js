@@ -233,9 +233,9 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 
    # STEP 0: CRITICAL - INITIALIZE AGENT FIRST, THEN REINITIALIZE TO PREVENT EXPIRATION
    # If you get "No agent ID" error, run init first:
-   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init --project-root "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook"
+   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init --project-root "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook"
    # Then immediately reinitialize with your agent ID (REQUIRED - get it from init output above):
-   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize AGENT_ID_FROM_INIT_COMMAND
+   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize AGENT_ID_FROM_INIT_COMMAND
 
    # STEP 1: MANDATORY - Read or review ALL development/essentials/ files first
    ls development/essentials/ 2>/dev/null && find development/essentials/ -type f -name "*.md" -exec echo "=== {} ===" \\; -exec cat {} \\;
@@ -254,7 +254,7 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 
    # IMMEDIATE AFTER TASK COMPLETION: REINITIALIZE AGENT TO PREVENT EXPIRATION
    # Use your actual agent ID from the init command above (REQUIRED):
-   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize YOUR_ACTUAL_AGENT_ID
+   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize YOUR_ACTUAL_AGENT_ID
 
    # Claim next available task  
    timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getNextPendingTask().then(task => { if(task) { console.log("📋 Next task available:"); console.log(JSON.stringify(task, null, 2)); } else { console.log("No pending tasks available"); } });'
@@ -286,7 +286,18 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 🔧 TASK CREATION & DEPENDENCY MANAGEMENT:
 
    # Discover all available methods and capabilities
-   node taskmanager-api.js methods
+   timeout 10s node taskmanager-api.js methods
+
+📋 FEATURE MANAGEMENT COMMANDS:
+
+   # List features by status
+   timeout 10s node taskmanager-api.js feature-list '{"status": "proposed"}'
+
+   # Create new feature proposal
+   timeout 10s node taskmanager-api.js feature-create '{"title": "Feature Name", "description": "Description", "category": "category"}'
+
+   # Get feature statistics
+   timeout 10s node taskmanager-api.js feature-stats
 
    # Create dependency task (any category)
    timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "[Dependency task]", category: "[any-category]"}).then(id => console.log("Dependency task:", id));'
@@ -295,7 +306,7 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
    timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "[Dependent task]", category: "[any-category]", dependencies: ["DEPENDENCY_TASK_ID"]}).then(id => console.log("Dependent task:", id));'
 
    # Use TaskManager API for dependency-aware claiming (handles blocking automatically)
-   node taskmanager-api.js claim TASK_ID
+   timeout 10s node taskmanager-api.js claim TASK_ID
 
    # Check project status
    timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getTaskStatus().then(status => console.log(JSON.stringify(status, null, 2)));'

@@ -35218,9 +35218,137 @@
       "needs_linter_feedback": true,
       "linter_feedback_generated": false,
       "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1757090317350_6mxomr8z2",
+      "title": "Research: Phase 3.1: OpenDia Omnibox API Integration - Chrome API Research",
+      "mode": "RESEARCH",
+      "category": "research",
+      "priority": "medium",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [
+        "opendia/opendia-extension/manifest.json",
+        "opendia/opendia-extension/src/background/background.js",
+        "development/essentials/features.md",
+        "./development/research-reports/research-report-task_1757090317350_6mxomr8z2.md"
+      ],
+      "success_criteria": [
+        "Research report created: ./development/research-reports/research-report-task_1757090317350_6mxomr8z2.md"
+      ],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-05T16:38:37.350Z",
+      "auto_research_created": false,
+      "phase": {
+        "major": 3,
+        "minor": 1,
+        "patch": 0,
+        "raw": "Research: Phase 3.1:"
+      },
+      "description": "No description provided",
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-05T16:44:15.924Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-05T16:44:15.925Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1757094293365_hhkfonvqn",
+      "title": "Research: Migrate to feature-based TODO.json system with subtasks",
+      "description": "Research and analysis required for implementing: \"Migrate to feature-based TODO.json system with subtasks\"\n\n**Implementation Task Details:**\nConvert current phase-based task system to feature-based system with subtasks, eliminating features.json dual-system complexity. Implement unified TODO.json schema with features array containing subtasks.\n\n**Research Objectives:**\n1. Investigate best practices and methodologies for this implementation\n2. Identify potential challenges, risks, and mitigation strategies  \n3. Research relevant technologies, frameworks, and tools\n4. Define implementation approach and architecture decisions\n5. Provide actionable recommendations and guidance\n\n**Implementation Task ID:** task_1757094293364_vfspshdb9\n\n**Auto-created by:** TaskManager research dependency system\n**Research Priority:** This research task must be completed before implementation begins",
+      "mode": "RESEARCH",
+      "category": "research",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [
+        "./development/research-reports/research-report-task_1757094293365_hhkfonvqn.md"
+      ],
+      "success_criteria": [
+        "Research methodology and approach documented",
+        "Key findings and recommendations provided",
+        "Implementation guidance and best practices identified",
+        "Risk assessment and mitigation strategies outlined",
+        "Research report created: ./development/research-reports/research-report-task_1757094293365_hhkfonvqn.md"
+      ],
+      "estimate": "1-2 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-05T17:44:53.365Z",
+      "created_by": "auto-research-system",
+      "auto_created_for": "task_1757094293364_vfspshdb9",
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-05T17:45:46.514Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-05T17:45:46.514Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1757093741133_z9pn0fvdh",
+      "title": "Phase 2.1: Open Interpreter FastAPI Server Wrapper Implementation",
+      "mode": "DEVELOPMENT",
+      "category": "missing-feature",
+      "priority": "critical",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [
+        "/Users/jeremyparker/Desktop/Claude Coding Projects/AIgent/development/research-reports/research-report-task_1757056885907_78ohapvcq.md",
+        "/Users/jeremyparker/Desktop/Claude Coding Projects/AIgent/open-interpreter/interpreter/core/async_core.py",
+        "/Users/jeremyparker/Desktop/Claude Coding Projects/AIgent/open-interpreter/interpreter/core/computer/terminal/terminal.py"
+      ],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-05T17:35:41.133Z",
+      "auto_research_created": false,
+      "phase": {
+        "major": 2,
+        "minor": 1,
+        "patch": 0,
+        "raw": "Phase 2.1:"
+      },
+      "description": "No description provided",
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-05T17:46:07.152Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-05T17:46:07.152Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
     }
   ],
-  "total_completed": 811,
-  "last_completion": "2025-09-05T16:41:01.844Z",
+  "total_completed": 814,
+  "last_completion": "2025-09-05T17:46:07.152Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }
