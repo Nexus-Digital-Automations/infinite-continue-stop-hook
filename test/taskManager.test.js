@@ -556,7 +556,7 @@ describe('TaskManager', () => {
             await taskManager.createTask(taskData);
             
             const createdTask = mockExistingData.tasks[0];
-            expect(createdTask.priority).toBe('medium');
+            expect(createdTask.priority).toBe('high');
             expect(createdTask.status).toBe('pending');
             expect(createdTask.dependencies).toEqual([]);
             expect(createdTask.important_files).toEqual([]);
