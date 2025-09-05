@@ -51,10 +51,10 @@ describe('Enhanced Stop Hook Tests', () => {
         test('should display available task categories', async () => {
             const result = await runStopHook();
             
-            expect(result.output).toContain('AVAILABLE TASK CATEGORIES');
-            expect(result.output).toContain('research (highest priority)');
+            expect(result.output).toContain('TASK CATEGORIES (Priority Order)');
+            expect(result.output).toContain('linter-error (highest)');
             expect(result.output).toContain('linter-error');
-            expect(result.output).toContain('missing-test (lowest priority)');
+            expect(result.output).toContain('missing-test (lowest)');
         });
     });
 
@@ -75,9 +75,9 @@ describe('Enhanced Stop Hook Tests', () => {
         test('should provide constructive guidance', async () => {
             const result = await runStopHook();
             
-            expect(result.output).toContain('STANDARD WORKFLOW');
-            expect(result.output).toContain('CONTINUE current task');
-            expect(result.output).toContain('COMPLETE current task');
+            expect(result.output).toContain('MANDATORY WORKFLOW');
+            expect(result.output).toContain('CONTINUE WORKING ON IT');
+            expect(result.output).toContain('COMPLETE');
             expect(result.output).toContain('Mark tasks complete');
         });
     });
@@ -122,8 +122,8 @@ describe('Enhanced Stop Hook Tests', () => {
             const result = await runStopHook();
             
             // Should mention task management and completion 
-            expect(result.output).toContain('Task completed successfully');
-            expect(result.output).toContain('TASK MANAGEMENT');
+            expect(result.output).toContain('MANDATORY WORKFLOW FOR CLAUDE CODE AGENT');
+            expect(result.output).toContain('TaskManager API endpoints');
         });
     });
 
@@ -178,8 +178,8 @@ describe('Enhanced Stop Hook Tests', () => {
                 const result = await runStopHook();
                 
                 expect(result.output).toContain('TO SET UP TASKMANAGER');
-                expect(result.output).toContain('Run the setup script');
-                expect(result.output).toContain('Initialize TaskManager');
+                expect(result.output).toContain('Run: node');
+                expect(result.output).toContain('init --project');
             } finally {
                 process.chdir(originalCwd);
                 fs.rmSync(tempDir, { recursive: true, force: true });
