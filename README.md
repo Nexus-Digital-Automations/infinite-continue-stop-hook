@@ -11,12 +11,45 @@ A simplified autonomous multi-agent task management system for Claude Code that 
 
 ## Features
 
+- **Three-Section Priority System**: ERROR → FEATURE → REVIEW task organization ensures critical issues are handled first
+- **Intelligent Error Prioritization**: Linter errors, build failures, and critical issues bypass all other ordering
 - **Simplified Autonomous Architecture**: Agents receive clear TaskManager API instructions without complex coordination
 - **Multi-Agent Concurrency**: Multiple agents can work simultaneously using thread-safe task operations
+- **Automatic Task Categorization**: Tasks are automatically organized into appropriate sections based on category and content
 - **Intelligent Task Creation**: 3-attempt task creation cycle when no work is available
 - **TaskManager API Integration**: Direct API commands for autonomous task management
 - **True Infinite Operation**: Runs continuously while tasks exist, stops only when project is complete
 - **Thread-Safe Operations**: Concurrent agents can claim and work on tasks without conflicts
+
+## Error Priority System
+
+The system implements a **three-section priority architecture** that automatically organizes tasks for optimal development workflow:
+
+### 🚨 Section 1: ERROR TASKS (Highest Priority)
+- `linter-error` - Code style and linting violations
+- `build-error` - Compilation and build failures  
+- `start-error` - Application startup failures
+- `test-error` - Test execution failures
+
+### 🎯 Section 2: FEATURE TASKS (Middle Priority)  
+- `enhancement` - New features and improvements
+- `missing-feature` - Required functionality gaps
+- `documentation` - Project documentation
+- `refactor` - Code quality improvements
+
+### ✅ Section 3: REVIEW TASKS (Lowest Priority)
+- `missing-test` - Required test coverage
+- `test-setup` - Test framework configuration  
+- `test-performance` - Performance testing
+- `test-feature` - Feature validation tests
+
+### Key Benefits
+- **Quality First**: Critical errors are resolved before new development
+- **Automatic Organization**: Tasks are placed in correct sections automatically
+- **Clear Priorities**: Developers know exactly what to work on next
+- **Multi-Agent Ready**: Multiple agents can work efficiently without conflicts
+
+📚 **[Complete Error Priority System Documentation →](docs/ERROR-PRIORITY-SYSTEM.md)**
 
 ## Installation
 
@@ -63,6 +96,47 @@ node /path/to/infinite-continue-stop-hook/setup.js
 - Task list and progress tracking
 - Task creation attempt tracking
 - Must exist for hook to activate
+
+## Quick Start: Error Priority System
+
+### Creating Error Tasks (Highest Priority)
+```bash
+# Linter error - gets absolute priority
+node taskmanager-api.js create-error '{"title": "Fix ESLint errors", "category": "linter-error"}'
+
+# Build error - blocks all feature work  
+node taskmanager-api.js create-error '{"title": "Fix TypeScript compilation", "category": "build-error"}'
+```
+
+### Creating Feature Tasks (Middle Priority)
+```bash
+# Enhancement task - runs after errors cleared
+node -e 'const tm = require("./lib/taskManager"); new tm("./TODO.json").createTask({
+  title: "Add search functionality", 
+  category: "enhancement"
+});'
+```
+
+### Creating Review Tasks (Lowest Priority)  
+```bash
+# Test task - automatically goes to review section
+node -e 'const tm = require("./lib/taskManager"); new tm("./TODO.json").createTask({
+  title: "Add unit tests for search", 
+  category: "missing-test"
+});'
+```
+
+### Task Claiming Priority Order
+```bash
+# 1. Agents first get ERROR tasks
+node taskmanager-api.js claim [error-task-id] [agent-id]
+
+# 2. Then FEATURE tasks (after errors clear)  
+node taskmanager-api.js claim [feature-task-id] [agent-id]
+
+# 3. Finally REVIEW tasks (after features complete)
+node taskmanager-api.js claim [review-task-id] [agent-id]
+```
 
 ## Usage
 

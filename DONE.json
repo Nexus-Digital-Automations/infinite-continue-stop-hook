@@ -35346,9 +35346,477 @@
       "needs_linter_feedback": true,
       "linter_feedback_generated": false,
       "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1757098847518_k71owcggq",
+      "title": "Test Error Task - Should Have Absolute Priority",
+      "description": "Testing the new error priority system",
+      "mode": "DEVELOPMENT",
+      "category": "linter-error",
+      "priority": "critical",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-05T19:00:47.519Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757098854328_1_general_958bb1bb",
+      "started_at": "2025-09-05T19:00:59.523Z",
+      "claimed_by": "development_session_1757098854328_1_general_958bb1bb",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757098854328_1_general_958bb1bb",
+          "role": "primary",
+          "assignedAt": "2025-09-05T19:00:59.523Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-05T19:01:47.698Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-05T19:01:47.698Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1757098868334_rfo61yzok",
+      "title": "Another Error Task",
+      "description": "Second error task to test blocking",
+      "mode": "DEVELOPMENT",
+      "category": "build-error",
+      "priority": "critical",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-05T19:01:08.334Z",
+      "auto_research_created": false,
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-05T19:01:53.333Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-05T19:01:53.333Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1757101656992_x14d01f9x",
+      "title": "Fix linting error in auth module",
+      "description": "Fix ESLint error in authentication module",
+      "mode": "DEVELOPMENT",
+      "category": "linter-error",
+      "priority": "critical",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-05T19:47:36.992Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757103513668_1_general_22184d9b",
+      "started_at": "2025-09-05T20:18:52.097Z",
+      "claimed_by": "development_session_1757103513668_1_general_22184d9b",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757103513668_1_general_22184d9b",
+          "role": "primary",
+          "assignedAt": "2025-09-05T20:18:52.097Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-05T20:19:32.798Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-05T20:19:32.799Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1757098457009_kkad01wly",
+      "title": "Test Subtask",
+      "description": "Test insertion at position 2",
+      "mode": "DEVELOPMENT",
+      "category": "missing-feature",
+      "priority": "medium",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "parent_feature": "feature_suggested_1757095650796_wpub5ogu3",
+      "created_at": "2025-09-05T18:54:17.009Z",
+      "subtasks": [],
+      "assigned_agent": "development_session_1757103513668_1_general_22184d9b",
+      "started_at": "2025-09-05T20:19:39.727Z",
+      "claimed_by": "development_session_1757103513668_1_general_22184d9b",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757098873910_1_general_81df220a",
+          "role": "primary",
+          "assignedAt": "2025-09-05T19:01:59.987Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-09-05T19:48:30.762Z",
+          "reason": "Task stale for 47 minutes"
+        },
+        {
+          "agentId": "development_session_1757103513668_1_general_22184d9b",
+          "role": "primary",
+          "assignedAt": "2025-09-05T20:19:39.727Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-05T20:20:00.952Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-05T20:20:00.953Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1757101672552_vr5pkvehb",
+      "title": "Add user registration feature",
+      "description": "Implement user registration form and validation",
+      "mode": "DEVELOPMENT",
+      "category": "enhancement",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-05T19:47:52.552Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757103513668_1_general_22184d9b",
+      "started_at": "2025-09-05T20:20:07.462Z",
+      "claimed_by": "development_session_1757103513668_1_general_22184d9b",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757103513668_1_general_22184d9b",
+          "role": "primary",
+          "assignedAt": "2025-09-05T20:20:07.462Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-05T20:20:28.022Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-05T20:20:28.022Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1757099006742_udm1y1rip",
+      "title": "Create comprehensive documentation for error priority system",
+      "description": "Document the new error priority system that prioritizes error tasks (linter-error, build-error, etc.) above all feature work. Include usage examples, API endpoints, and integration guide.",
+      "mode": "DEVELOPMENT",
+      "category": "documentation",
+      "priority": "medium",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [
+        "README.md",
+        "CLAUDE.md",
+        "taskmanager-api.js",
+        "lib/taskManager.js"
+      ],
+      "success_criteria": [
+        "Documentation clearly explains error priority system",
+        "Usage examples for create-error API",
+        "Integration guide for other projects",
+        "Updated README with new system capabilities"
+      ],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-05T19:03:26.743Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757103513668_1_general_22184d9b",
+      "started_at": "2025-09-05T20:20:34.738Z",
+      "claimed_by": "development_session_1757103513668_1_general_22184d9b",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757098854328_1_general_958bb1bb",
+          "role": "primary",
+          "assignedAt": "2025-09-05T19:03:35.857Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-09-05T19:48:30.762Z",
+          "reason": "Task stale for 45 minutes"
+        },
+        {
+          "agentId": "development_session_1757103513668_1_general_22184d9b",
+          "role": "primary",
+          "assignedAt": "2025-09-05T20:20:34.738Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-05T20:22:35.225Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-05T20:22:35.227Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1757107906162_795x2a49p",
+      "title": "Fix critical system error",
+      "description": "Fix critical system startup error",
+      "mode": "DEVELOPMENT",
+      "category": "error",
+      "priority": "critical",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-05T21:31:46.163Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757107934377_1_general_008d8817",
+      "started_at": "2025-09-05T21:32:27.784Z",
+      "claimed_by": "development_session_1757107934377_1_general_008d8817",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757107934377_1_general_008d8817",
+          "role": "primary",
+          "assignedAt": "2025-09-05T21:32:27.784Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-05T21:32:35.430Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-05T21:32:35.430Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1757107887101_yd8fd35ie",
+      "title": "Fix failing test in auth service",
+      "description": "Fix the failing unit test for authentication service",
+      "mode": "DEVELOPMENT",
+      "category": "test-error",
+      "priority": "low",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-05T21:31:27.101Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757107934377_1_general_008d8817",
+      "started_at": "2025-09-05T21:32:54.990Z",
+      "claimed_by": "development_session_1757107934377_1_general_008d8817",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757107934377_1_general_008d8817",
+          "role": "primary",
+          "assignedAt": "2025-09-05T21:32:54.990Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-05T21:33:02.300Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-05T21:33:02.302Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1757101642089_ajvqnf24u",
+      "title": "Test Feature Implementation",
+      "description": "Test the new user authentication system",
+      "mode": "DEVELOPMENT",
+      "category": "test-feature",
+      "priority": "low",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-05T19:47:22.089Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757107934377_1_general_008d8817",
+      "started_at": "2025-09-05T21:33:08.315Z",
+      "claimed_by": "development_session_1757107934377_1_general_008d8817",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757107934377_1_general_008d8817",
+          "role": "primary",
+          "assignedAt": "2025-09-05T21:33:08.315Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-05T21:33:13.741Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-05T21:33:13.742Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1757108975847_7z1vnzlbc",
+      "title": "Test archival task",
+      "description": "Test task for automatic archival",
+      "mode": "DEVELOPMENT",
+      "category": "chore",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-05T21:49:35.847Z",
+      "auto_research_created": false,
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-05T21:49:42.064Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-05T21:49:42.064Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "task_1757108995139_dnnbe2dey",
+      "title": "Another test archival task",
+      "description": "Second test task for stop hook archival",
+      "mode": "DEVELOPMENT",
+      "category": "documentation",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-05T21:49:55.139Z",
+      "auto_research_created": false,
+      "completed_at": "2025-09-05T21:50:07.156Z",
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
     }
   ],
-  "total_completed": 814,
-  "last_completion": "2025-09-05T17:46:07.152Z",
+  "total_completed": 825,
+  "last_completion": "2025-09-05T21:50:07.156Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }

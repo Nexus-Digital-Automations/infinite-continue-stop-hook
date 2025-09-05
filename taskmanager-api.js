@@ -455,6 +455,59 @@ class TaskManagerAPI {
     }
   }
 
+  /**
+   * Create an error task with absolute priority
+   * 
+   * === PURPOSE ===
+   * Creates error tasks that bypass all feature-based ordering and have
+   * absolute priority over regular tasks. Used when errors are detected
+   * in the codebase that must be fixed immediately.
+   * 
+   * === ERROR CATEGORIES ===
+   * • linter-error: Code style and linting violations  
+   * • build-error: Compilation and build failures
+   * • start-error: Application startup failures
+   * • test-error: Test execution failures
+   * • test-linter-error: Test code linting issues
+   * • error: Generic critical errors
+   * 
+   * @param {Object} taskData - Task data object
+   * @returns {Object} Result with success status and task ID
+   */
+  async createErrorTask(taskData) {
+    try {
+      return await this.withTimeout(
+        (async () => {
+          // Ensure error category is set
+          const errorCategories = ['error', 'build-error', 'linter-error', 'start-error', 'test-error', 'test-linter-error'];
+          if (!errorCategories.includes(taskData.category)) {
+            taskData.category = 'error'; // Default to generic error
+          }
+          
+          // Set high priority for error tasks
+          taskData.priority = taskData.priority || 'critical';
+          
+          // Add error-specific metadata
+          taskData.is_error_task = true;
+          taskData.created_by = 'error-detection-system';
+          
+          const taskId = await this.taskManager.createTask(taskData);
+          return {
+            success: true,
+            taskId,
+            task: taskData,
+            message: `Error task created with absolute priority (category: ${taskData.category})`,
+          };
+        })(),
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
   async analyzePhaseInsertion(newTaskData) {
     try {
       return await this.withTimeout(
@@ -1095,6 +1148,21 @@ async function main() {
         break;
       }
 
+      case "create-error": {
+        if (!args[1]) {
+          throw new Error("Task data required for create-error command");
+        }
+        let taskData;
+        try {
+          taskData = JSON.parse(args[1]);
+        } catch (parseError) {
+          throw new Error(`Invalid JSON task data: ${parseError.message}`);
+        }
+        const result = await api.createErrorTask(taskData);
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
+
       case "analyze-phase-insertion": {
         if (!args[1]) {
           throw new Error(
@@ -1382,6 +1450,7 @@ async function main() {
         break;
       }
 
+
       default: {
         console.log(`
 TaskManager Node.js API
@@ -1394,6 +1463,7 @@ Commands:
   current [agentId]            - Get current task for agent
   list [filter]                - List tasks with optional filter JSON
   create <taskData>            - Create new task with JSON data
+  create-error <taskData>      - Create error task with absolute priority (bypasses feature ordering)
   claim <taskId> [agentId] [priority] - Claim task for agent
   complete <taskId> [data]     - Complete task with optional data JSON
   status [agentId]             - Get agent status and tasks
@@ -1412,6 +1482,7 @@ Feature Suggestion & Management:
   list-features [filter]       - List all features with optional filter
   feature-stats                - Get feature statistics and status breakdown
 
+
 Examples:
   timeout 10s node taskmanager-api.js init '{"role": "development", "specialization": ["testing"]}'
   timeout 10s node taskmanager-api.js create '{"title": "Fix bug", "mode": "DEVELOPMENT", "priority": "high"}'
@@ -1424,6 +1495,7 @@ Feature Suggestion Examples:
   timeout 10s node taskmanager-api.js approve-feature feature_suggested_123456789_abc123def user
   timeout 10s node taskmanager-api.js reject-feature feature_suggested_123456789_abc123def user "Not aligned with project goals"
   timeout 10s node taskmanager-api.js move-top task_123
+  
                 `);
         break;
       }
