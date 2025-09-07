@@ -1,13 +1,13 @@
-# Infinite Continue Stop Hook for Claude Code
+# Simplified TaskManager API and Stop Hook System
 
-A simplified autonomous multi-agent task management system for Claude Code that provides TaskManager API instructions for concurrent task processing with intelligent task creation cycles.
+A streamlined task management and infinite continue hook system designed for Claude Code AI agent workflows.
 
 ## ✅ System Status: Production Ready
 
 - **🎭 Professional Validation**: Drama-reduced professional messaging system
 - **🌍 Universal Compatibility**: Works on any project/codebase with absolute paths  
 - **♾️ True Infinite Operation**: No timing-based stops, optimized for multi-agent processing
-- **🧪 Comprehensive Testing**: Full test coverage for core functionality
+- **🔧 JSON Corruption Prevention**: Robust prevention of TODO.json corruption with automatic recovery
 
 ## Features
 
@@ -49,7 +49,7 @@ The system implements a **three-section priority architecture** that automatical
 - **Clear Priorities**: Developers know exactly what to work on next
 - **Multi-Agent Ready**: Multiple agents can work efficiently without conflicts
 
-📚 **[Complete Error Priority System Documentation →](docs/ERROR-PRIORITY-SYSTEM.md)**
+📚 **Error Priority System**: The system automatically sorts tasks by ID prefix (error_ > feature_ > subtask_ > test_) ensuring critical issues are resolved first.
 
 ## Installation
 
@@ -61,24 +61,19 @@ git clone <repository-url>
 cd infinite-continue-stop-hook
 ```
 
-2. Configure the hook globally for all projects:
-```bash
-node configure-global.js
-```
-
-3. For each project, create TODO.json:
+2. Configure the hook for your project:
 ```bash
 cd /path/to/your/project
-node /path/to/infinite-continue-stop-hook/setup.js
+node /path/to/infinite-continue-stop-hook/setup-infinite-hook.js /path/to/infinite-continue-stop-hook
 ```
 
-### Option 2: Project-Specific Configuration
+### Manual Configuration
 
-Run the setup script with project-specific configuration:
+You can also manually configure the hook by:
 ```bash
-cd /path/to/your/project
-node /path/to/infinite-continue-stop-hook/setup.js
-# Answer 'n' when asked about global configuration
+# Initialize TaskManager for your project
+cd /path/to/your/project  
+node /path/to/infinite-continue-stop-hook/taskmanager-api.js init
 ```
 
 ## What Gets Configured
@@ -186,16 +181,16 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
   "tasks": [
     {
       "id": "task-1",
-      "title": "Implement user authentication",
-      "description": "Create a secure authentication system...",
-      "mode": "DEVELOPMENT",
-      "category": "missing-feature",
-      "priority": "high",
+      "title": "Fix linter errors in taskManager.js",
+      "description": "Resolve ESLint violations and code style issues",
+      "mode": "DEVELOPMENT", 
+      "category": "linter-error",
+      "priority": "critical",
       "status": "pending",
       "dependencies": [],
-      "important_files": [],
-      "success_criteria": [],
-      "estimate": "2-4 hours",
+      "important_files": ["lib/taskManager.js"],
+      "success_criteria": ["All linting passes without errors"],
+      "estimate": "30 minutes",
       "requires_research": false,
       "subtasks": [],
       "created_at": "2025-01-01T00:00:00.000Z"
@@ -363,11 +358,34 @@ node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskMa
 node -e "const TaskManager = require('./lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.getCurrentTask().then(task => console.log(task ? JSON.stringify(task, null, 2) : 'No active task'));"
 ```
 
+## JSON Corruption Prevention System
+
+The system includes robust protection against TODO.json corruption:
+
+### 🛡️ Prevention Mechanisms
+- **Double-Encoding Detection**: Automatically detects and prevents JSON double-encoding
+- **Atomic Write Operations**: Thread-safe file operations prevent corruption during writes
+- **Validation Layers**: Multiple validation checks before any file modifications
+- **Automatic Recovery**: Stop hook integration with autoFixer for corruption detection
+
+### 🔧 AutoFixer Integration
+- **Real-time Detection**: Identifies escaped JSON strings and formatting issues
+- **Automatic Repair**: Fixes double-encoded content and malformed JSON
+- **Backup Creation**: Maintains backups during repair operations
+- **Validation**: Ensures repaired JSON is properly formatted
+
+### ✅ Validation Results
+The corruption prevention system has been tested with:
+- ✅ TaskManager Write Operations (PASS)  
+- ✅ Stop Hook Integration (PASS)
+- ✅ Atomic Write Prevention (PASS)  
+- ✅ AutoFixer Corruption Detection (PASS)
+
 ## Contributing
 
 To extend the system:
 1. Add new task categories to the priority system
-2. Enhance TaskManager API with additional methods
+2. Enhance TaskManager API with additional methods  
 3. Improve task creation guidance and analysis
 4. Add new validation criteria for task completion
 

@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /**
  * TaskManager Node.js API Wrapper
  *
@@ -95,7 +93,7 @@ try {
 } catch (error) {
   console.error("Failed to load TaskManager modules:", error.message);
   console.error("Full error:", error);
-  process.exit(1);
+  throw error;
 }
 
 /**
@@ -216,12 +214,12 @@ class TaskManagerAPI {
   withTimeout(promise, timeoutMs = this.timeout) {
     return Promise.race([
       promise,
-      new Promise((_, reject) =>
+      new Promise((_, reject) => {
         setTimeout(
           () => reject(new Error(`Operation timed out after ${timeoutMs}ms`)),
           timeoutMs,
-        ),
-      ),
+        );
+      }),
     ]);
   }
 
@@ -257,7 +255,7 @@ class TaskManagerAPI {
   async getApiMethods() {
     try {
       return await this.withTimeout(
-        (async () => {
+        (() => {
           // Extract all public methods from TaskManager core class
           const taskManagerMethods = Object.getOwnPropertyNames(
             Object.getPrototypeOf(this.taskManager),
@@ -289,6 +287,349 @@ class TaskManagerAPI {
               taskManager:
                 "tm.createTask({title: 'Test', category: 'enhancement'})",
               api: 'node taskmanager-api.js list \'{"status": "pending"}\'',
+            },
+          };
+        })(),
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  /**
+   * Get comprehensive TaskManager API guide for agents
+   * Provides complete information about task classification, API usage, and workflows
+   */
+  async getComprehensiveGuide() {
+    try {
+      return await this.withTimeout(
+        (() => {
+          return {
+            success: true,
+            taskManager: {
+              version: "2.0.0",
+              description:
+                "Universal TaskManager API for agent-driven development workflows",
+            },
+            taskClassification: {
+              required: true,
+              parameter: "task_type",
+              description:
+                "All tasks MUST include explicit task_type parameter during creation",
+              types: [
+                {
+                  value: "error",
+                  name: "Error Task",
+                  priority: 1,
+                  description:
+                    "System errors, linter violations, build failures, runtime bugs - HIGHEST PRIORITY",
+                  examples: [
+                    "Fix ESLint violations",
+                    "Resolve build compilation errors",
+                    "Fix runtime exceptions",
+                  ],
+                  triggers: [
+                    "linter errors",
+                    "build failures",
+                    "startup errors",
+                    "runtime bugs",
+                    "security vulnerabilities",
+                  ],
+                },
+                {
+                  value: "feature",
+                  name: "Feature Task",
+                  priority: 2,
+                  description:
+                    "New functionality, enhancements, refactoring, documentation - HIGH PRIORITY",
+                  examples: [
+                    "Add user authentication",
+                    "Implement dark mode",
+                    "Refactor API endpoints",
+                  ],
+                  triggers: [
+                    "new features requested",
+                    "enhancements needed",
+                    "code refactoring",
+                    "documentation updates",
+                  ],
+                },
+                {
+                  value: "subtask",
+                  name: "Subtask",
+                  priority: 3,
+                  description:
+                    "Implementation of specific subtasks for preexisting features from TODO.json features array - MEDIUM PRIORITY",
+                  examples: [
+                    "Implement login form for auth feature",
+                    "Add validation to signup process",
+                  ],
+                  triggers: [
+                    "implementing approved feature components",
+                    "feature breakdown tasks",
+                  ],
+                },
+                {
+                  value: "test",
+                  name: "Test Task",
+                  priority: 4,
+                  description:
+                    "Test coverage, test creation, test setup, test performance - LOWEST PRIORITY (ONLY AFTER ERRORS/FEATURES COMPLETE)",
+                  examples: [
+                    "Add unit tests for UserService",
+                    "Implement E2E tests for login flow",
+                  ],
+                  triggers: [
+                    "test coverage gaps",
+                    "test setup needs",
+                    "test performance issues",
+                  ],
+                  restrictions:
+                    "BLOCKED until all error and feature tasks are resolved",
+                },
+              ],
+              priorityRules: {
+                "1_error":
+                  "Always executed first - highest priority - can interrupt other work",
+                "2_feature": "Executed after all errors resolved",
+                "3_subtask": "Executed after new features complete",
+                "4_test":
+                  "Only executed when errors, features, and subtasks are complete",
+              },
+            },
+            coreCommands: {
+              discovery: {
+                guide: {
+                  description: "Get this comprehensive guide",
+                  usage: "node taskmanager-api.js guide",
+                  output: "Complete API documentation and usage information",
+                },
+                methods: {
+                  description: "List all available API methods",
+                  usage: "node taskmanager-api.js methods",
+                  output: "Available methods and usage examples",
+                },
+                status: {
+                  description: "Get agent status and current tasks",
+                  usage: "node taskmanager-api.js status [agentId]",
+                  output: "Agent state, assigned tasks, and system status",
+                },
+              },
+              agentLifecycle: {
+                init: {
+                  description: "Initialize agent with TaskManager system",
+                  usage: "node taskmanager-api.js init [config]",
+                  required: "Must be called before any task operations",
+                  output: "Agent ID and registration confirmation",
+                },
+                reinitialize: {
+                  description: "Refresh agent registration and renew heartbeat",
+                  usage:
+                    "node taskmanager-api.js reinitialize [agentId] [config]",
+                  when: "After task completion, before long operations, after idle periods",
+                  output: "Updated agent status and renewed registration",
+                },
+              },
+              taskOperations: {
+                create: {
+                  description: "Create new task with explicit classification",
+                  usage:
+                    'node taskmanager-api.js create \'{"title":"Task name", "description":"Details", "task_type":"error|feature|subtask|test"}\'',
+                  required_fields: ["title", "description", "task_type"],
+                  optional_fields: [
+                    "priority",
+                    "dependencies",
+                    "important_files",
+                  ],
+                  validation:
+                    "task_type must be one of: error, feature, subtask, test",
+                },
+                claim: {
+                  description: "Claim task for agent execution",
+                  usage:
+                    "node taskmanager-api.js claim <taskId> [agentId] [priority]",
+                  output: "Task assignment confirmation",
+                },
+                complete: {
+                  description: "Mark task as completed",
+                  usage:
+                    "node taskmanager-api.js complete <taskId> [completionData]",
+                  required: "Only after full implementation and validation",
+                },
+                list: {
+                  description: "List tasks with optional filtering",
+                  usage: "node taskmanager-api.js list [filter]",
+                  examples: [
+                    'node taskmanager-api.js list \'{"status":"pending"}\'',
+                    'node taskmanager-api.js list \'{"task_type":"error"}\'',
+                  ],
+                },
+              },
+            },
+            workflows: {
+              taskCreationWorkflow: [
+                "1. Call 'guide' endpoint to understand task classification",
+                "2. Analyze request to determine appropriate task_type",
+                "3. Create task with explicit task_type parameter",
+                "4. System automatically assigns priority based on task_type",
+                "5. Task added to appropriate priority queue",
+              ],
+              agentWorkflow: [
+                "1. Initialize agent with 'init' command",
+                "2. Check status and available tasks",
+                "3. Claim highest priority available task",
+                "4. Execute task implementation",
+                "5. Complete task with evidence",
+                "6. Reinitialize before next task",
+              ],
+              priorityEnforcement: [
+                "ERROR tasks bypass all other ordering - executed immediately",
+                "FEATURE tasks blocked until all errors resolved",
+                "SUBTASK tasks blocked until all features complete",
+                "TEST tasks blocked until errors, features, subtasks complete",
+              ],
+            },
+            examples: {
+              taskCreation: {
+                errorTask:
+                  'node taskmanager-api.js create \'{"title":"Fix ESLint violations in auth.js", "description":"Resolve linting errors", "task_type":"error"}\'',
+                featureTask:
+                  'node taskmanager-api.js create \'{"title":"Add dark mode toggle", "description":"Implement theme switching", "task_type":"feature"}\'',
+                subtaskTask:
+                  'node taskmanager-api.js create \'{"title":"Implement login form", "description":"Create login UI for auth feature", "task_type":"subtask"}\'',
+                testTask:
+                  'node taskmanager-api.js create \'{"title":"Add UserService tests", "description":"Unit test coverage", "task_type":"test"}\'',
+              },
+              commonWorkflows: {
+                newAgent: [
+                  "node taskmanager-api.js guide",
+                  "node taskmanager-api.js init",
+                  "node taskmanager-api.js status",
+                ],
+                taskExecution: [
+                  'node taskmanager-api.js list \'{"status":"pending"}\'',
+                  "node taskmanager-api.js claim <taskId>",
+                  "# ... implement task ...",
+                  "node taskmanager-api.js complete <taskId>",
+                ],
+              },
+            },
+            requirements: {
+              mandatory: [
+                "All task creation MUST include explicit task_type parameter",
+                "Agent MUST call init before any task operations",
+                "Agent MUST reinitialize after task completion",
+                "Test tasks MUST NOT be created until errors/features complete",
+              ],
+              bestPractices: [
+                "Use guide endpoint to understand system before starting",
+                "Check status regularly to monitor system state",
+                "Provide detailed task descriptions for better coordination",
+                "Include important_files for tasks that modify specific files",
+              ],
+            },
+            taskConversion: {
+              description:
+                "Guidelines for converting existing tasks to proper task_type classification",
+              legacyTaskHandling:
+                "Existing tasks without task_type should be analyzed and converted using TaskManager API",
+              conversionWorkflow: [
+                "1. List all pending tasks without proper task_type classification",
+                "2. Analyze each task title and description to determine appropriate task_type",
+                "3. Delete legacy tasks and recreate with proper task_type parameter",
+                "4. Verify new tasks appear in correct priority order",
+              ],
+              classificationGuide: {
+                "ERROR tasks": {
+                  indicators: [
+                    "fix",
+                    "error",
+                    "bug",
+                    "broken",
+                    "linter",
+                    "build fail",
+                    "compilation",
+                    "syntax",
+                  ],
+                  examples: [
+                    "Fix ESLint violations",
+                    "Resolve build errors",
+                    "Debug runtime exceptions",
+                  ],
+                  task_type: "error",
+                },
+                "FEATURE tasks": {
+                  indicators: [
+                    "add",
+                    "implement",
+                    "create",
+                    "build",
+                    "develop",
+                    "new functionality",
+                  ],
+                  examples: [
+                    "Add user authentication",
+                    "Implement dashboard",
+                    "Create API endpoints",
+                  ],
+                  task_type: "feature",
+                },
+                "SUBTASK tasks": {
+                  indicators: [
+                    "component of",
+                    "part of",
+                    "for feature",
+                    "subtask",
+                    "specific implementation",
+                  ],
+                  examples: [
+                    "Create login form for auth feature",
+                    "Add validation to user input",
+                  ],
+                  task_type: "subtask",
+                },
+                "TEST tasks": {
+                  indicators: [
+                    "test",
+                    "coverage",
+                    "unit test",
+                    "integration test",
+                    "e2e",
+                    "spec",
+                  ],
+                  examples: [
+                    "Add unit tests",
+                    "Increase test coverage",
+                    "E2E testing",
+                  ],
+                  task_type: "test",
+                },
+              },
+              conversionCommands: {
+                listLegacyTasks:
+                  'node taskmanager-api.js list \'{"status":"pending"}\' | grep -v task_type',
+                deleteTask: "node taskmanager-api.js delete <taskId>",
+                recreateTask:
+                  'node taskmanager-api.js create \'{"title":"New Title", "description":"Description", "task_type":"error|feature|subtask|test"}\'',
+              },
+            },
+            advancedWorkflows: {
+              bulkTaskConversion: [
+                '1. Export existing tasks to analyze: node taskmanager-api.js list \'{"status":"pending"}\'',
+                "2. For each task without task_type, determine classification using conversionGuide",
+                "3. Delete old task: node taskmanager-api.js delete <oldTaskId>",
+                "4. Create new task with proper task_type: node taskmanager-api.js create <taskData>",
+                '5. Verify priority ordering: node taskmanager-api.js list \'{"status":"pending"}\'',
+              ],
+              priorityValidation: [
+                "1. List all pending tasks to verify ordering",
+                "2. Ensure ERROR tasks appear first in list",
+                "3. Ensure TEST tasks appear last in list",
+                "4. Verify task claiming follows priority rules",
+              ],
             },
           };
         })(),
@@ -405,8 +746,21 @@ class TaskManagerAPI {
     try {
       return await this.withTimeout(
         (async () => {
-          const todoData = await this.taskManager.readTodo(true); // Skip validation for better performance
-          let tasks = todoData.tasks || [];
+          // Get properly sorted executable tasks
+          let tasks = await this.taskManager.getExecutableTasks();
+
+          // Also include non-executable tasks for complete listing
+          const todoData = await this.taskManager.readTodo(true);
+          const allTasks = todoData.tasks || [];
+
+          // Combine executable (properly sorted) with non-executable tasks
+          const executableIds = new Set(tasks.map((t) => t.id));
+          const nonExecutableTasks = allTasks.filter(
+            (t) => !executableIds.has(t.id),
+          );
+
+          // Put executable tasks first (properly sorted), then non-executable
+          tasks = [...tasks, ...nonExecutableTasks];
 
           // Apply filters
           if (filter.status) {
@@ -417,6 +771,16 @@ class TaskManagerAPI {
           }
           if (filter.priority) {
             tasks = tasks.filter((task) => task.priority === filter.priority);
+          }
+          if (filter.task_type) {
+            tasks = tasks.filter((task) => {
+              // Extract task_type from task ID prefix
+              const taskType = task.id.split("_")[0];
+              return taskType === filter.task_type;
+            });
+          }
+          if (filter.category) {
+            tasks = tasks.filter((task) => task.category === filter.category);
           }
 
           return {
@@ -457,20 +821,18 @@ class TaskManagerAPI {
 
   /**
    * Create an error task with absolute priority
-   * 
+   *
    * === PURPOSE ===
    * Creates error tasks that bypass all feature-based ordering and have
    * absolute priority over regular tasks. Used when errors are detected
    * in the codebase that must be fixed immediately.
-   * 
+   *
    * === ERROR CATEGORIES ===
-   * • linter-error: Code style and linting violations  
+   * • linter-error: Code style and linting violations
    * • build-error: Compilation and build failures
    * • start-error: Application startup failures
-   * • test-error: Test execution failures
-   * • test-linter-error: Test code linting issues
    * • error: Generic critical errors
-   * 
+   *
    * @param {Object} taskData - Task data object
    * @returns {Object} Result with success status and task ID
    */
@@ -479,18 +841,23 @@ class TaskManagerAPI {
       return await this.withTimeout(
         (async () => {
           // Ensure error category is set
-          const errorCategories = ['error', 'build-error', 'linter-error', 'start-error', 'test-error', 'test-linter-error'];
+          const errorCategories = [
+            "error",
+            "build-error",
+            "linter-error",
+            "start-error",
+          ];
           if (!errorCategories.includes(taskData.category)) {
-            taskData.category = 'error'; // Default to generic error
+            taskData.category = "error"; // Default to generic error
           }
-          
+
           // Set high priority for error tasks
-          taskData.priority = taskData.priority || 'critical';
-          
+          taskData.priority = taskData.priority || "critical";
+
           // Add error-specific metadata
           taskData.is_error_task = true;
-          taskData.created_by = 'error-detection-system';
-          
+          taskData.created_by = "error-detection-system";
+
           const taskId = await this.taskManager.createTask(taskData);
           return {
             success: true,
@@ -723,16 +1090,93 @@ class TaskManagerAPI {
     try {
       return await this.withTimeout(
         (async () => {
-          await this.taskManager.updateTaskStatus(taskId, "completed");
+          // Get task details to check type
+          const todoData = await this.taskManager.readTodoFast();
+          const task = todoData.tasks.find((t) => t.id === taskId);
 
+          // Update task status with completion notes if provided
           if (completionData.notes) {
-            await this.taskManager.addTaskNote(taskId, completionData.notes);
+            await this.taskManager.updateTaskStatusConcurrent(
+              taskId,
+              "completed",
+              completionData.notes,
+            );
+          } else {
+            await this.taskManager.updateTaskStatus(taskId, "completed");
+          }
+
+          let documentationInstructions = null;
+
+          // Add documentation update instructions for feature and subtask types
+          if (
+            task &&
+            (task.category === "feature" || task.category === "subtask")
+          ) {
+            documentationInstructions = {
+              mandatory: true,
+              message: "🔴 DOCUMENTATION UPDATE REQUIRED",
+              instructions: [
+                "📋 UPDATE development/essentials/features.md to reflect task completion",
+                "📝 UPDATE relevant API documentation if functionality was modified",
+                "✅ VERIFY documentation accuracy and completeness",
+                "📖 UPDATE README.md if user-facing features were added/modified",
+                "🔍 VALIDATE all documentation changes before final completion",
+              ],
+              files_to_update: [
+                "development/essentials/features.md",
+                "docs/ (relevant API documentation)",
+                "README.md (if user-facing changes)",
+              ],
+            };
           }
 
           return {
             success: true,
             taskId,
             completionData,
+            documentationInstructions,
+            message: documentationInstructions
+              ? "Task marked complete. MANDATORY: Update documentation as instructed above."
+              : "Task marked complete successfully.",
+          };
+        })(),
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  async deleteTask(taskId) {
+    try {
+      return await this.withTimeout(
+        (async () => {
+          const todoData = await this.taskManager.readTodoFast();
+          const taskIndex = todoData.tasks.findIndex((t) => t.id === taskId);
+
+          if (taskIndex === -1) {
+            return {
+              success: false,
+              error: `Task not found: ${taskId}`,
+            };
+          }
+
+          // Remove task from the tasks array
+          const deletedTask = todoData.tasks.splice(taskIndex, 1)[0];
+
+          // Write updated data back
+          await this.taskManager.writeTodo(todoData);
+
+          return {
+            success: true,
+            taskId,
+            deletedTask: {
+              id: deletedTask.id,
+              title: deletedTask.title,
+              status: deletedTask.status,
+            },
           };
         })(),
       );
@@ -1095,6 +1539,11 @@ async function main() {
         console.log(JSON.stringify(result, null, 2));
         break;
       }
+      case "guide": {
+        const result = await api.getComprehensiveGuide();
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
 
       case "init": {
         let config = {};
@@ -1289,29 +1738,38 @@ async function main() {
       case "suggest-feature": {
         if (args.length < 2) {
           console.error("Usage: suggest-feature <featureData> [agentId]");
-          process.exit(1);
+          throw new Error("Invalid arguments for suggest-feature");
         }
 
         try {
           const featureData = JSON.parse(args[1]);
-          const agentId = args[2] || 'agent_unknown';
-          
+          const agentId = args[2] || "agent_unknown";
+
           if (!featureData.title) {
             console.error("Error: Feature title is required");
-            process.exit(1);
+            throw new Error("Feature title is required");
           }
 
-          const featureId = await api.taskManager.suggestFeature(featureData, agentId);
-          console.log(JSON.stringify({
-            success: true,
-            featureId: featureId,
-            message: `Feature suggested: ${featureData.title}`,
-            status: 'suggested',
-            awaiting_approval: true
-          }, null, 2));
+          const featureId = await api.taskManager.suggestFeature(
+            featureData,
+            agentId,
+          );
+          console.log(
+            JSON.stringify(
+              {
+                success: true,
+                featureId: featureId,
+                message: `Feature suggested: ${featureData.title}`,
+                status: "suggested",
+                awaiting_approval: true,
+              },
+              null,
+              2,
+            ),
+          );
         } catch (error) {
           console.error(`Error suggesting feature: ${error.message}`);
-          process.exit(1);
+          throw error;
         }
         break;
       }
@@ -1319,30 +1777,39 @@ async function main() {
       case "approve-feature": {
         if (args.length < 2) {
           console.error("Usage: approve-feature <featureId> [userId]");
-          process.exit(1);
+          throw new Error("Invalid arguments for approve-feature");
         }
 
         try {
           const featureId = args[1];
-          const userId = args[2] || 'user';
-          
-          const success = await api.taskManager.approveFeature(featureId, userId);
+          const userId = args[2] || "user";
+
+          const success = await api.taskManager.approveFeature(
+            featureId,
+            userId,
+          );
           if (success) {
             const feature = await api.taskManager.getFeature(featureId);
-            console.log(JSON.stringify({
-              success: true,
-              featureId: featureId,
-              message: `Feature approved: ${feature.title}`,
-              status: 'approved',
-              ready_for_implementation: true
-            }, null, 2));
+            console.log(
+              JSON.stringify(
+                {
+                  success: true,
+                  featureId: featureId,
+                  message: `Feature approved: ${feature.title}`,
+                  status: "approved",
+                  ready_for_implementation: true,
+                },
+                null,
+                2,
+              ),
+            );
           } else {
             console.error(`Failed to approve feature: ${featureId}`);
-            process.exit(1);
+            throw new Error(`Failed to approve feature: ${featureId}`);
           }
         } catch (error) {
           console.error(`Error approving feature: ${error.message}`);
-          process.exit(1);
+          throw error;
         }
         break;
       }
@@ -1350,58 +1817,76 @@ async function main() {
       case "reject-feature": {
         if (args.length < 2) {
           console.error("Usage: reject-feature <featureId> [userId] [reason]");
-          process.exit(1);
+          throw new Error("Invalid arguments for reject-feature");
         }
 
         try {
           const featureId = args[1];
-          const userId = args[2] || 'user';
-          const reason = args[3] || '';
-          
+          const userId = args[2] || "user";
+          const reason = args[3] || "";
+
           const feature = await api.taskManager.getFeature(featureId);
           const featureTitle = feature ? feature.title : featureId;
-          
-          const success = await api.taskManager.rejectFeature(featureId, userId, reason);
+
+          const success = await api.taskManager.rejectFeature(
+            featureId,
+            userId,
+            reason,
+          );
           if (success) {
-            console.log(JSON.stringify({
-              success: true,
-              featureId: featureId,
-              message: `Feature rejected: ${featureTitle}`,
-              reason: reason,
-              removed: true
-            }, null, 2));
+            console.log(
+              JSON.stringify(
+                {
+                  success: true,
+                  featureId: featureId,
+                  message: `Feature rejected: ${featureTitle}`,
+                  reason: reason,
+                  removed: true,
+                },
+                null,
+                2,
+              ),
+            );
           } else {
             console.error(`Failed to reject feature: ${featureId}`);
-            process.exit(1);
+            throw new Error(`Failed to reject feature: ${featureId}`);
           }
         } catch (error) {
           console.error(`Error rejecting feature: ${error.message}`);
-          process.exit(1);
+          throw error;
         }
         break;
       }
 
       case "list-suggested-features": {
         try {
-          const features = await api.taskManager.getFeatures({ status: 'suggested' });
-          console.log(JSON.stringify({
-            success: true,
-            suggested_features: features.map(f => ({
-              id: f.id,
-              title: f.title,
-              description: f.description,
-              rationale: f.rationale,
-              category: f.category,
-              priority: f.priority,
-              suggested_by: f.suggested_by,
-              created_at: f.created_at,
-              estimated_effort: f.metadata?.estimated_effort
-            })),
-            count: features.length
-          }, null, 2));
+          const features = await api.taskManager.getFeatures({
+            status: "suggested",
+          });
+          console.log(
+            JSON.stringify(
+              {
+                success: true,
+                suggested_features: features.map((f) => ({
+                  id: f.id,
+                  title: f.title,
+                  description: f.description,
+                  rationale: f.rationale,
+                  category: f.category,
+                  priority: f.priority,
+                  suggested_by: f.suggested_by,
+                  created_at: f.created_at,
+                  estimated_effort: f.metadata?.estimated_effort,
+                })),
+                count: features.length,
+              },
+              null,
+              2,
+            ),
+          );
         } catch (error) {
           console.error(`Error listing suggested features: ${error.message}`);
-          process.exit(1);
+          throw error;
         }
         break;
       }
@@ -1410,14 +1895,20 @@ async function main() {
         const filters = args.length > 1 ? JSON.parse(args[1]) : {};
         try {
           const features = await api.taskManager.getFeatures(filters);
-          console.log(JSON.stringify({
-            success: true,
-            features: features,
-            count: features.length
-          }, null, 2));
+          console.log(
+            JSON.stringify(
+              {
+                success: true,
+                features: features,
+                count: features.length,
+              },
+              null,
+              2,
+            ),
+          );
         } catch (error) {
           console.error(`Error listing features: ${error.message}`);
-          process.exit(1);
+          throw error;
         }
         break;
       }
@@ -1430,26 +1921,47 @@ async function main() {
             by_status: {},
             by_category: {},
             by_priority: {},
-            awaiting_approval: allFeatures.filter(f => f.status === 'suggested').length
+            awaiting_approval: allFeatures.filter(
+              (f) => f.status === "suggested",
+            ).length,
           };
 
-          allFeatures.forEach(f => {
+          allFeatures.forEach((f) => {
             stats.by_status[f.status] = (stats.by_status[f.status] || 0) + 1;
-            stats.by_category[f.category] = (stats.by_category[f.category] || 0) + 1;
-            stats.by_priority[f.priority] = (stats.by_priority[f.priority] || 0) + 1;
+            stats.by_category[f.category] =
+              (stats.by_category[f.category] || 0) + 1;
+            stats.by_priority[f.priority] =
+              (stats.by_priority[f.priority] || 0) + 1;
           });
 
-          console.log(JSON.stringify({
-            success: true,
-            feature_statistics: stats
-          }, null, 2));
+          console.log(
+            JSON.stringify(
+              {
+                success: true,
+                feature_statistics: stats,
+              },
+              null,
+              2,
+            ),
+          );
         } catch (error) {
           console.error(`Error getting feature stats: ${error.message}`);
-          process.exit(1);
+          throw error;
         }
         break;
       }
 
+      case "delete": {
+        const taskId = args[1];
+        if (!taskId) {
+          throw new Error("Task ID required for delete command");
+        }
+        const result = await api.deleteTask(taskId);
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
+
+      // ========================================
 
       default: {
         console.log(`
@@ -1466,6 +1978,7 @@ Commands:
   create-error <taskData>      - Create error task with absolute priority (bypasses feature ordering)
   claim <taskId> [agentId] [priority] - Claim task for agent
   complete <taskId> [data]     - Complete task with optional data JSON
+  delete <taskId>              - Delete task (for task conversion/cleanup)
   status [agentId]             - Get agent status and tasks
   reinitialize [agentId] [config] - Reinitialize agent (renew heartbeat, reset timeout)
   stats                        - Get orchestration statistics
@@ -1482,7 +1995,6 @@ Feature Suggestion & Management:
   list-features [filter]       - List all features with optional filter
   feature-stats                - Get feature statistics and status breakdown
 
-
 Examples:
   timeout 10s node taskmanager-api.js init '{"role": "development", "specialization": ["testing"]}'
   timeout 10s node taskmanager-api.js create '{"title": "Fix bug", "mode": "DEVELOPMENT", "priority": "high"}'
@@ -1494,6 +2006,8 @@ Feature Suggestion Examples:
   timeout 10s node taskmanager-api.js list-suggested-features
   timeout 10s node taskmanager-api.js approve-feature feature_suggested_123456789_abc123def user
   timeout 10s node taskmanager-api.js reject-feature feature_suggested_123456789_abc123def user "Not aligned with project goals"
+
+Task Management Examples:
   timeout 10s node taskmanager-api.js move-top task_123
   
                 `);
@@ -1501,18 +2015,29 @@ Feature Suggestion Examples:
       }
     }
   } catch (error) {
-    console.error(
-      JSON.stringify(
-        {
-          success: false,
-          error: error.message,
-          command,
-        },
-        null,
-        2,
-      ),
-    );
-    process.exit(1);
+    // Get comprehensive guide for error responses
+    let guide = null;
+    try {
+      const guideResult = await api.getComprehensiveGuide();
+      guide = guideResult.success ? guideResult : null;
+    } catch (guideError) {
+      // If guide fails, continue with error response without guide
+    }
+
+    const errorResponse = {
+      success: false,
+      error: error.message,
+      command,
+      guide: guide || {
+        message:
+          'For complete API usage guidance, run: timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" guide',
+        helpText:
+          "The guide provides comprehensive information about task classification, workflows, and all API capabilities",
+      },
+    };
+
+    console.error(JSON.stringify(errorResponse, null, 2));
+    throw new Error("TaskManager API execution failed");
   } finally {
     await api.cleanup();
   }
@@ -1525,6 +2050,6 @@ module.exports = TaskManagerAPI;
 if (require.main === module) {
   main().catch((error) => {
     console.error("Fatal error:", error.message);
-    process.exit(1);
+    throw error;
   });
 }

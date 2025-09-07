@@ -1,13 +1,74 @@
 {
   "project": "infinite-continue-stop-hook",
-  "tasks": [],
+  "tasks": [
+    {
+      "id": "error_1757287753471_s4e6jc833",
+      "title": "Fix 861 ESLint violations across codebase",
+      "description": "Critical linter errors detected: 486 errors, 375 warnings across multiple files including taskmanager-api.js, lib/agentManager.js, lib/agentRegistry.js, test files. Must fix quotes, unused vars, await expressions, console statements, and security warnings. 389 errors potentially auto-fixable.",
+      "mode": "DEVELOPMENT",
+      "priority": "critical",
+      "category": "linter-error",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-07T23:29:13.471Z",
+      "auto_research_created": false
+    }
+  ],
   "current_mode": "DEVELOPMENT",
   "last_mode": null,
   "execution_count": 0,
   "review_strikes": 0,
   "strikes_completed_last_run": false,
   "last_hook_activation": 1757094794402,
-  "agents": {},
+  "agents": {
+    "development_session_1757283764686_1_general_0bc41fc3": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-07T22:22:44.688Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-07T22:22:44.688Z",
+      "sessionId": "session_1757283764686",
+      "metadata": {}
+    },
+    "development_session_1757287476563_1_general_19ca4646": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-07T23:24:36.564Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-07T23:24:36.564Z",
+      "sessionId": "session_1757287476563",
+      "metadata": {}
+    }
+  },
   "features": [
     {
       "id": "feature_suggested_1757095650796_wpub5ogu3",
@@ -31,13 +92,73 @@
       },
       "approved_by": "user",
       "approved_at": "2025-09-05T18:07:41.695Z"
+    },
+    {
+      "id": "feature_suggested_1757117669066_asve2tx1j",
+      "title": "Real-time Log Streaming",
+      "description": "Implement live log monitoring and streaming capabilities for real-time system observability",
+      "rationale": "Enhanced debugging and monitoring capabilities would greatly improve development experience and system observability",
+      "status": "suggested",
+      "category": "enhancement",
+      "priority": "medium",
+      "created_at": "2025-09-06T00:14:29.066Z",
+      "updated_at": "2025-09-06T00:14:29.066Z",
+      "suggested_by": "development_session_1757117467248_1_general_f80ab5ef",
+      "subtasks": [],
+      "dependencies": [],
+      "success_criteria": [],
+      "metadata": {
+        "estimated_effort": "medium",
+        "completion_percentage": 0,
+        "requires_user_approval": true
+      }
+    },
+    {
+      "id": "feature_suggested_1757117685345_9fu9fv1f6",
+      "title": "API Documentation Generator",
+      "description": "Automatic API documentation generation from code comments and endpoint definitions",
+      "rationale": "Automated documentation ensures API docs stay current and reduces manual maintenance overhead",
+      "status": "suggested",
+      "category": "documentation",
+      "priority": "medium",
+      "created_at": "2025-09-06T00:14:45.345Z",
+      "updated_at": "2025-09-06T00:14:45.345Z",
+      "suggested_by": "development_session_1757117467248_1_general_f80ab5ef",
+      "subtasks": [],
+      "dependencies": [],
+      "success_criteria": [],
+      "metadata": {
+        "estimated_effort": "medium",
+        "completion_percentage": 0,
+        "requires_user_approval": true
+      }
+    },
+    {
+      "id": "feature_suggested_1757273888595_ilqjkp7pv",
+      "title": "Test Feature Suggestion",
+      "description": "Testing if the suggest-feature method works correctly",
+      "rationale": "Verifying the feature suggestion workflow is functional",
+      "status": "suggested",
+      "category": "enhancement",
+      "priority": "medium",
+      "created_at": "2025-09-07T19:38:08.595Z",
+      "updated_at": "2025-09-07T19:38:08.595Z",
+      "suggested_by": "development_session_1757265067097_1_general_18be5d85",
+      "subtasks": [],
+      "dependencies": [],
+      "success_criteria": [],
+      "metadata": {
+        "estimated_effort": "medium",
+        "completion_percentage": 0,
+        "requires_user_approval": true
+      }
     }
   ],
   "current_task_index": 0,
   "settings": {
     "auto_sort_enabled": true,
     "sort_criteria": {
-      "primary": "category",
+      "primary": "id_prefix",
       "secondary": "created_at"
     },
     "priority_values": {
@@ -52,16 +173,28 @@
       "build-error": 2,
       "start-error": 3,
       "error": 4,
+      "bug": 4,
       "missing-feature": 5,
-      "missing-test": 6,
-      "test-linter-error": 7,
-      "test-error": 8,
-      "bug": 9,
-      "enhancement": 10,
-      "refactor": 11,
-      "documentation": 12,
-      "chore": 13,
-      "research": 14
+      "enhancement": 6,
+      "refactor": 7,
+      "documentation": 8,
+      "chore": 9,
+      "research": 10,
+      "missing-test": 11,
+      "test-setup": 12,
+      "test-refactor": 13,
+      "test-performance": 14,
+      "test-linter-failure": 15,
+      "test-failure": 16,
+      "test-coverage": 17,
+      "test-feature": 18
+    },
+    "id_based_classification": true,
+    "id_priority_order": {
+      "error_": 1,
+      "feature_": 2,
+      "subtask_": 3,
+      "test_": 4
     }
   }
 }

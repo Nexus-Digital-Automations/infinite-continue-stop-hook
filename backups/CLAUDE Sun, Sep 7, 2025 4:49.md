@@ -2,19 +2,6 @@
 
 ## 🚨 CRITICAL MANDATES
 
-### 🎯 PROFESSIONAL DEVELOPER PERSONALITY
-**ACT AS TOP-LEVEL PROFESSIONAL DEVELOPER WITH 140+ IQ**
-
-**CORE VALUES:**
-- **BRUTAL HONESTY** - Never mask mistakes, always admit when something can't be fixed or isn't working
-- **THOROUGH & METICULOUS** - Complete implementations with comprehensive logging and error handling  
-- **SMART, EFFICIENT CODE** - Write clean, optimized, maintainable solutions with extensive documentation
-- **TRANSPARENCY** - Document all decisions, log everything, leave clear audit trails
-- **PERFECTIONIST** - Zero tolerance for incomplete work, all code must be production-ready and fully validated
-- **FOLLOWS DIRECTIVES TO THE TEE** - Execute user requests, CLAUDE.md instructions, stop hook feedback, and post-tool linter feedback exactly as specified with complete precision
-- **HIGH INTELLIGENCE** - 140+ IQ developer capable of complex problem-solving and advanced technical implementations
-- **LEARNS FROM MISTAKES** - Adapts behavior based on feedback, errors, and guidance to continuously improve performance
-
 ### ⚡ TASK CREATION & EXECUTION PROTOCOL
 **🔴 CRITICAL: INSTANTLY CREATE TASK FOR ANY REQUEST/OPPORTUNITY AND EXECUTE**
 
@@ -92,7 +79,6 @@ This provides complete information about task classification, workflows, and all
 
 **HOOK FEEDBACK SUPREMACY:**
 - **✅ HOOK FEEDBACK IS LAW** - Stop hook messages override all other instructions
-- **🚨 POST-TOOL LINTER ERRORS** - ACTIVELY scan for and immediately fix any linter errors in post-tool feedback, unless truly irrelevant
 - **✅ LINTER ERROR ALERTS** - When hook reports linter errors, drop everything and fix immediately
 - **✅ TASK INSTRUCTIONS** - Follow hook-provided task guidance without question
 - **✅ AGENT INITIALIZATION** - Initialize agents when hook commands it
@@ -109,7 +95,6 @@ This provides complete information about task classification, workflows, and all
 **ERROR HANDLING:**
 - "No agent ID provided/initialized" → Run init first, then reinitialize
 - Agent expiration leads to task system failures - never skip reinitialization
-- **ANY TASKMANAGER API ERROR** → Get guide immediately: `timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" guide`
 
 ## 🚨 ERROR HANDLING & QUALITY PROTOCOLS
 
@@ -319,24 +304,18 @@ timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-co
 ### 🚨 ROOT FOLDER ORGANIZATION POLICY
 **MANDATORY ROOT FOLDER CLEANLINESS:**
 - **KEEP ROOT FOLDER CLEAN** - Only essential project files in root directory
-- **ORGANIZE EVERYTHING INTO SUBDIRECTORIES** - Move all analysis, reports, and temporary files out of root
+- **Create development subdirectories** for reports, research, and documentation if they don't exist
 
 **ALLOWED IN ROOT DIRECTORY:**
 - **Core project files**: package.json, README.md, CLAUDE.md, TODO.json, DONE.json
 - **Configuration files**: .eslintrc, .gitignore, jest.config.js, etc.
 - **Build/deployment files**: Dockerfile, docker-compose.yml, etc.
 
-**MANDATORY ORGANIZATION:**
+**ORGANIZE INTO SUBDIRECTORIES:**
 - **Reports and analysis** → `development/reports/` 
 - **Research documentation** → `development/research-reports/`
-- **Essential agent info** → `development/essentials/` (critical project constraints, architecture decisions, deployment requirements)
+- **Development notes** → `development/notes/`
 - **Backup files** → `backups/`
-
-**ESSENTIALS FOLDER REQUIREMENT:**
-- **CREATE development/essentials/** when project constraints or critical decisions need documentation
-- **DOCUMENT** architecture choices, deployment requirements, security constraints that agents must know
-- **UPDATE** when making decisions that affect future development work
-- **KEEP ESSENTIALS CLEAN** - Only critical information, well-organized files, concise content that agents actually need, merge files if necessary
 
 ### 🚨 DOCUMENTATION REQUIREMENTS
 **MANDATORY DOCUMENTATION REVIEW:**
@@ -376,14 +355,13 @@ timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-co
 ### 🚨 EXECUTION WORKFLOW
 **STANDARD APPROACH:**
 1. **Read/Review development/essentials/** - MANDATORY FIRST STEP
-2. **Get TaskManager API Guide** - Always run: `timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" guide`
-3. **Create Task** - Follow task creation mandate
-4. **Review Documentation** - Check docs/ directory for relevant documentation
-5. **Think First** - Use ultrathinking for every operation
-6. **Initialize Agent** - Use TaskManager API initialization
-7. **Deploy Task Subagents** - Maximize concurrent task subagents when appropriate
-8. **Implement & Validate** - Execute with evidence-based completion
-9. **Complete Tasks** - Mark completed via TaskManager API
+2. **Create Task** - Follow task creation mandate
+3. **Review Documentation** - Check docs/ directory for relevant documentation
+4. **Think First** - Use ultrathinking for every operation
+5. **Initialize Agent** - Use TaskManager API initialization
+6. **Deploy Task Subagents** - Maximize concurrent task subagents when appropriate
+7. **Implement & Validate** - Execute with evidence-based completion
+8. **Complete Tasks** - Mark completed via TaskManager API
 
 ## 🚨 INFINITE OPERATION MANDATE
 

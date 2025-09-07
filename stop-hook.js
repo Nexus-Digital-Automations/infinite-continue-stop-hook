@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const fs = require("fs");
 const path = require("path");
 const TaskManager = require("./lib/taskManager");
@@ -70,6 +68,183 @@ function checkStopAllowed(workingDir = process.cwd()) {
 }
 
 /**
+ * Automatically reclassify test errors and sort tasks according to CLAUDE.md priority rules
+ */
+async function autoSortTasksByPriority(taskManager) {
+  try {
+    const todoData = await taskManager.readTodo();
+    let tasksMoved = 0;
+    let tasksUpdated = 0;
+
+    // Helper functions for ID-based classification
+    const getCurrentPrefix = (taskId) => {
+      const parts = taskId.split("_");
+      return parts[0] || "unknown";
+    };
+
+    const determineCorrectPrefix = (task) => {
+      const title = (task.title || "").toLowerCase();
+      const description = (task.description || "").toLowerCase();
+      const category = (task.category || "").toLowerCase();
+      const allText = `${title} ${description} ${category}`;
+
+      // ERROR detection (highest priority)
+      const errorPatterns = [
+        /error|failure|bug|fix|broken|crash|exception|fail/i,
+        /linter|lint|eslint|tslint|syntax/i,
+        /build.*fail|compilation|cannot.*build/i,
+        /start.*fail|startup.*error|cannot.*start/i,
+      ];
+
+      const isError =
+        errorPatterns.some((pattern) => pattern.test(allText)) ||
+        ["linter-error", "build-error", "start-error", "error", "bug"].includes(
+          category,
+        );
+
+      if (isError) {
+        // Check if it's actually test-related (should be test_ not error_)
+        const testRelated =
+          /test.*error|test.*fail|coverage|spec|jest|mocha|cypress/.test(
+            allText,
+          );
+        if (
+          testRelated &&
+          !/(build.*fail|compilation|cannot.*build|start.*fail)/.test(allText)
+        ) {
+          return "test";
+        }
+        return "error";
+      }
+
+      // TEST detection
+      const testPatterns = [
+        /test|testing|spec|coverage|jest|mocha|cypress|e2e|unit.*test|integration.*test/i,
+        /\.test\.|\.spec\.|__tests__|test.*suite/i,
+      ];
+
+      const isTest =
+        testPatterns.some((pattern) => pattern.test(allText)) ||
+        category.startsWith("test-") ||
+        ["missing-test", "test-setup", "test-refactor", "testing"].includes(
+          category,
+        );
+
+      if (isTest) {
+        return "test";
+      }
+
+      // Check if implementing a feature subtask
+      if (
+        task.feature_id ||
+        task.implementing_feature ||
+        task.parent_feature_id
+      ) {
+        return "subtask";
+      }
+
+      // Default to feature
+      return "feature";
+    };
+
+    // ID-based priority system
+    const getTaskPriority = (task) => {
+      const id = task.id || "";
+
+      if (id.startsWith("error_")) {
+        return 1;
+      } // ERROR tasks - highest priority
+      if (id.startsWith("feature_")) {
+        return 2;
+      } // FEATURE tasks - high priority
+      if (id.startsWith("subtask_")) {
+        return 3;
+      } // SUBTASK tasks - medium priority
+      if (id.startsWith("test_")) {
+        return 4;
+      } // TEST tasks - lowest priority
+
+      return 5; // Fallback for old tasks
+    };
+
+    // Ensure tasks is an array
+    if (!Array.isArray(todoData.tasks)) {
+      todoData.tasks = [];
+    }
+
+    // Process all tasks for ID-based classification
+    for (const task of todoData.tasks) {
+      let updated = false;
+      const currentId = task.id || "";
+
+      // STEP 1: Auto-reclassify tasks with incorrect ID prefixes
+      const shouldBePrefix = determineCorrectPrefix(task);
+      const currentPrefix = getCurrentPrefix(currentId);
+
+      if (currentPrefix !== shouldBePrefix) {
+        // Generate new ID with correct prefix
+        const timestamp = Date.now();
+        const randomSuffix = Math.random().toString(36).substr(2, 9);
+        task.id = `${shouldBePrefix}_${timestamp}_${randomSuffix}`;
+        updated = true;
+        tasksMoved++;
+      }
+
+      if (updated) {
+        tasksUpdated++;
+      }
+    }
+
+    // STEP 2: Sort tasks by ID-based priority
+    todoData.tasks.sort((a, b) => {
+      const aPriority = getTaskPriority(a);
+      const bPriority = getTaskPriority(b);
+
+      // Primary sort: by ID prefix priority
+      if (aPriority !== bPriority) {
+        return aPriority - bPriority;
+      }
+
+      // Secondary sort: by created_at (oldest first)
+      const aTime = new Date(a.created_at || 0).getTime();
+      const bTime = new Date(b.created_at || 0).getTime();
+      return aTime - bTime;
+    });
+
+    // Update TODO.json settings for ID-based classification
+    if (!todoData.settings) {
+      todoData.settings = {};
+    }
+    todoData.settings.id_based_classification = true;
+    todoData.settings.auto_sort_enabled = true;
+    todoData.settings.sort_criteria = {
+      primary: "id_prefix",
+      secondary: "created_at",
+    };
+    todoData.settings.id_priority_order = {
+      error_: 1,
+      feature_: 2,
+      subtask_: 3,
+      test_: 4,
+    };
+
+    // Save the updated TODO.json
+    if (tasksMoved > 0 || tasksUpdated > 0) {
+      await taskManager.writeTodo(todoData);
+    }
+
+    return {
+      tasksMoved,
+      tasksUpdated,
+      totalTasks: todoData.tasks.length,
+    };
+  } catch (error) {
+    console.error("Error in autoSortTasksByPriority:", error);
+    return { error: error.message, tasksMoved: 0, tasksUpdated: 0 };
+  }
+}
+
+/**
  * Provides standardized TaskManager API guidance for all scenarios
  */
 async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
@@ -78,19 +253,23 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 
 🚨 **CRITICAL AGENT PROTOCOL:**
 **ULTRATHINK - MANDATORY SEQUENCE:**
-1. **REINITIALIZE AGENT** to prevent expiration using commands below
+1. **GET TASKMANAGER API GUIDE FIRST** - Always run: timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" guide
 2. **READ/REVIEW development/essentials/** directory - MANDATORY EVERY TIME
-3. **CHECK CURRENT TASK** status - continue unfinished work first
-4. **DEPLOY CONCURRENT SUBAGENTS** - use up to 10 for complex multi-component tasks
-5. **VERIFY TASK CLAIMS** - never claim tasks already assigned to other agents
-6. **FEATURES COMPLIANCE** - only implement "approved" features in TODO.json
-7. **COMPREHENSIVE COMMENTING** - add thorough documentation to all script files
+3. **REINITIALIZE AGENT** to prevent expiration using commands below
+4. **CHECK CURRENT TASK** status - continue unfinished work first
+5. **DEPLOY CONCURRENT SUBAGENTS** - use up to 10 for complex multi-component tasks
+6. **VERIFY TASK CLAIMS** - never claim tasks already assigned to other agents
+7. **FEATURES COMPLIANCE** - only implement "approved" features in TODO.json
+8. **MAXIMUM LOGGING & DOCUMENTATION** - add the most comprehensive logging possible to all code
 
 **ABSOLUTE PROHIBITIONS:**
 ❌ Don't claim tasks with assigned_agent/claimed_by fields set
 ❌ Don't start work without reading development/essentials/ files first
 ❌ Don't implement features not approved in TODO.json features array
 ❌ Don't skip development/essentials/ review - mandatory every task/continue
+❌ Don't ignore post-tool linter errors - actively scan and fix immediately
+❌ Don't skip TaskManager API guide on startup - always get it first
+❌ Don't leave root folder cluttered - organize into development/ subdirectories
 
 🔄 **CONTEXT-AWARE CONTINUATION:**
 
@@ -159,16 +338,25 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
    # Mark task completed (AFTER linter validation)
    timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTask("[AGENT_ID]").then(async task => { if(task) { await tm.updateTaskStatus(task.id, "completed", "Task completed successfully"); console.log("✅ Task completed:", task.title); } });'
 
-**ERROR TASK CREATION (ABSOLUTE PRIORITY):**
-   # Create linter error task (highest priority)
-   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" create-error '{"title": "Fix [specific error]", "description": "[error description]", "category": "linter-error", "priority": "critical", "important_files": ["path/to/file"]}'
+**ESSENTIAL TASKMANAGER API COMMANDS:**
+   # Get comprehensive guide with ALL examples, workflows, and task creation patterns
+   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" guide
+   
+   # Quick start workflow  
+   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init
+   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" status
 
-**FEATURE MANAGEMENT:**
-   # Agent suggests feature (no authorization required)
-   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" suggest-feature '{"title": "Feature Name", "description": "Detailed description", "rationale": "Why beneficial", "category": "enhancement", "estimated_effort": "medium"}' [AGENT_ID]
+**🔴 CRITICAL: task_type PARAMETER REQUIRED**
+ALL task creation commands MUST include explicit task_type parameter: "error" | "feature" | "subtask" | "test"
+Tasks without task_type will be REJECTED by the API.
 
-   # List approved features ready for implementation
-   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" list-features '{"status": "approved"}'
+**🚨 ZERO TOLERANCE FOR SHORTCUTS OR MASKING**
+Fix problems directly - never hide, mask, cover up, or use workarounds.
+Honest failure is better than fake solutions.
+
+**📋 COMPREHENSIVE API GUIDE AVAILABLE:**
+Use: timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" guide
+This provides complete information about task classification, workflows, and all API capabilities.
 
 **GIT WORKFLOW (MANDATORY AFTER TASK COMPLETION):**
    git add -A
@@ -181,60 +369,9 @@ async function provideInstructiveTaskGuidance(taskManager, taskStatus) {
    Co-Authored-By: Claude <noreply@anthropic.com>"
    git push
 
-**TASK SWITCHING & ADVANCED MANAGEMENT:**
-   # Check available tasks with context
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getAvailableTasksWithContext("[AGENT_ID]").then(result => console.log(JSON.stringify(result, null, 2)));'
-
-   # Create urgent task (automatically switches current work)
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createUrgentTask({title: "Critical issue", description: "Urgent task description", category: "error", mode: "DEVELOPMENT", switchReason: "Critical bug found"}, "[AGENT_ID]").then(result => console.log(JSON.stringify(result, null, 2)));'
-
-   # Resume previously switched task
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.resumeSwitchedTask("TASK_ID", "[AGENT_ID]").then(result => console.log(JSON.stringify(result, null, 2)));'
-
-   # Get next available task
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getNextPendingTask().then(task => { if(task) { console.log("📋 Next task available:"); console.log(JSON.stringify(task, null, 2)); } else { console.log("No pending tasks available"); } });'
-
-**ADVANCED FEATURE MANAGEMENT:**
-   # Discover all TaskManager methods
-   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" methods
-
-   # List features by status  
-   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" feature-list '{"status": "proposed"}'
-
-   # Get feature statistics
-   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" feature-stats
-
-   # Create new feature (automatically assigns next feature number)
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.insertFeature({title: "[feature name]", description: "[description]", category: "enhancement"}, 1).then(id => console.log("Created Feature 1:", id));'
-
-   # Create subtask within feature
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.insertSubtask({title: "[subtask name]", description: "[description]", category: "missing-feature"}, "FEATURE_ID", 1).then(id => console.log("Created Subtask 1:", id));'
-
-   # Link task to feature
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.linkTaskToFeature("task-id", "feature-id").then(() => console.log("✅ Task linked to feature"));'
-
-**DEPENDENCY & PROJECT MANAGEMENT:**
-   # Create dependency task
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "[Dependency task]", category: "[any-category]"}).then(id => console.log("Dependency task:", id));'
-
-   # Create dependent task with dependency
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.createTask({title: "[Dependent task]", category: "[any-category]", dependencies: ["DEPENDENCY_TASK_ID"]}).then(id => console.log("Dependent task:", id));'
-
-   # Check project status
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getTaskStatus().then(status => console.log(JSON.stringify(status, null, 2)));'
-
-   # Use TaskManager API for dependency-aware claiming
-   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" claim TASK_ID
-
-**SAFE TASK CLAIMING COMMANDS:**
-   # List all tasks with claim status
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { data.tasks.forEach(t => console.log("Task " + t.id + ": " + t.title + " | Status: " + t.status + " | Claimed by: " + (t.assigned_agent || t.claimed_by || "none"))); });'
-
-   # Find available unclaimed tasks
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const available = data.tasks.filter(t => t.status === "pending" && (t.assigned_agent === undefined || t.assigned_agent === null) && (t.claimed_by === undefined || t.claimed_by === null)); console.log("Available tasks:", available.map(t => ({ id: t.id, title: t.title, category: t.category }))); });'
-
-   # Safe task claiming (only if not claimed)
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(async data => { const task = data.tasks.find(t => t.id === "TASK_ID"); if (!task) { console.log("Task not found"); return; } if (task.assigned_agent || task.claimed_by) { console.log("❌ Task already claimed by:", task.assigned_agent || task.claimed_by); return; } const result = await tm.claimTask("TASK_ID", "[AGENT_ID]", "normal"); console.log("✅ Task claimed:", result); });'
+**📋 COMPREHENSIVE API REFERENCE:**
+All advanced commands, examples, workflows, and patterns are available in the comprehensive guide:
+   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" guide
 
 **CONTINUE COMMAND PROTOCOL:**
    # When user says "continue" - check current task first
@@ -383,6 +520,24 @@ If you want to enable task management for this project:
       process.exit(2); // Never allow stops even without TODO.json
     }
 
+    // CRITICAL: Check for TODO.json corruption before initializing TaskManager
+    const AutoFixer = require("./lib/autoFixer");
+    const autoFixer = new AutoFixer();
+
+    try {
+      const corruptionCheck = await autoFixer.autoFix(todoPath);
+      if (corruptionCheck.fixed && corruptionCheck.fixesApplied.length > 0) {
+        console.log(
+          `🔧 STOP HOOK: Automatically fixed TODO.json corruption - ${corruptionCheck.fixesApplied.join(", ")}`,
+        );
+      }
+    } catch (corruptionError) {
+      console.error(
+        `⚠️ STOP HOOK: Corruption check failed:`,
+        corruptionError.message,
+      );
+    }
+
     // Initialize TaskManager to check agent status
     const taskManager = new TaskManager(todoPath);
 
@@ -419,12 +574,48 @@ If you want to enable task management for this project:
       }
     }
 
-    // Remove stale agents from the system
+    // Remove stale agents from the system AND unassign them from tasks
     let agentsRemoved = 0;
+    let tasksUnassigned = 0;
+
     for (const staleAgentId of staleAgents) {
       delete todoData.agents[staleAgentId];
       agentsRemoved++;
       logger.addFlow(`Removed stale agent: ${staleAgentId}`);
+
+      // Find all tasks assigned to this stale agent and unassign them
+      for (const task of todoData.tasks) {
+        if (
+          task.assigned_agent === staleAgentId ||
+          task.claimed_by === staleAgentId
+        ) {
+          // Unassign the stale agent from the task
+          task.assigned_agent = null;
+          task.claimed_by = null;
+
+          // Reset task to pending if it was in_progress
+          if (task.status === "in_progress") {
+            task.status = "pending";
+            task.started_at = null;
+          }
+
+          // Add assignment history entry
+          if (!task.agent_assignment_history) {
+            task.agent_assignment_history = [];
+          }
+          task.agent_assignment_history.push({
+            agent: staleAgentId,
+            action: "auto_unassign_stale",
+            timestamp: new Date().toISOString(),
+            reason: "Agent became stale (inactive >15 minutes)",
+          });
+
+          tasksUnassigned++;
+          logger.addFlow(
+            `Unassigned task "${task.title}" from stale agent: ${staleAgentId}`,
+          );
+        }
+      }
     }
 
     // Check for stale in-progress tasks (stuck for > 15 minutes) and reset them
@@ -444,8 +635,9 @@ If you want to enable task management for this project:
           task.started_at = null;
 
           // Add reset history entry
-          if (!task.agent_assignment_history)
+          if (!task.agent_assignment_history) {
             task.agent_assignment_history = [];
+          }
           task.agent_assignment_history.push({
             agent: task.assigned_agent || "system",
             action: "auto_reset_stale",
@@ -462,18 +654,71 @@ If you want to enable task management for this project:
     }
 
     // Save changes if any stale agents were removed or tasks were reset
-    if (agentsRemoved > 0 || staleTasksReset > 0) {
+    if (agentsRemoved > 0 || staleTasksReset > 0 || tasksUnassigned > 0) {
       await taskManager.writeTodo(todoData);
       if (agentsRemoved > 0) {
         logger.addFlow(`Removed ${agentsRemoved} stale agents from TODO.json`);
+      }
+      if (tasksUnassigned > 0) {
+        logger.addFlow(`Unassigned ${tasksUnassigned} tasks from stale agents`);
       }
       if (staleTasksReset > 0) {
         logger.addFlow(`Reset ${staleTasksReset} stale tasks back to pending`);
       }
     }
 
+    // ========================================================================
+    // AUTOMATIC TASK SORTING: RECLASSIFY TEST ERRORS AND SORT BY PRIORITY
+    // ========================================================================
+
+    try {
+      logger.addFlow(
+        "Running automatic task sorting and test error reclassification",
+      );
+      const sortResult = await autoSortTasksByPriority(taskManager);
+
+      if (sortResult.error) {
+        logger.addFlow(`Task sorting failed: ${sortResult.error}`);
+      } else if (sortResult.tasksMoved > 0) {
+        logger.addFlow(
+          `Successfully reclassified ${sortResult.tasksMoved} test errors from error section to testing section`,
+        );
+
+        console.error(`
+✅ AUTOMATIC TASK SORTING COMPLETED
+
+📊 Task Classification Results:
+- Total tasks processed: ${sortResult.totalTasks}
+- Test errors moved to testing section: ${sortResult.tasksMoved}
+- Tasks updated: ${sortResult.tasksUpdated}
+
+🔄 All tasks have been sorted according to ID-based classification system:
+1. ERROR TASKS (error_*): Build-blocking errors, linter violations, critical bugs
+2. FEATURE TASKS (feature_*): New functionality, enhancements, refactoring  
+3. SUBTASK TASKS (subtask_*): Implementation of specific feature subtasks
+4. TEST TASKS (test_*): Test coverage, test creation, test performance
+
+This ensures proper priority ordering with test tasks only executed after all errors, features, and subtasks are complete.
+        `);
+      } else {
+        logger.addFlow("Task sorting completed - no reclassification needed");
+      }
+    } catch (sortingError) {
+      logger.addFlow(
+        `Task sorting encountered an error: ${sortingError.message}`,
+      );
+      console.error(`
+⚠️ AUTOMATIC TASK SORTING WARNING
+
+Task sorting encountered an issue: ${sortingError.message}
+
+This is non-critical and won't prevent continued operation.
+Tasks will continue to work but may not be optimally sorted.
+      `);
+    }
+
     logger.addFlow(
-      `Active agents found: ${activeAgents.length}, Stale agents removed: ${agentsRemoved}, Stale tasks reset: ${staleTasksReset}`,
+      `Active agents found: ${activeAgents.length}, Stale agents removed: ${agentsRemoved}, Tasks unassigned: ${tasksUnassigned}, Stale tasks reset: ${staleTasksReset}`,
     );
 
     // Enhanced agent status analysis for better messaging
@@ -481,12 +726,19 @@ If you want to enable task management for this project:
     const totalAgentsBeforeCleanup = allAgents.length;
 
     if (activeAgents.length === 0) {
-      logger.addFlow("No active agents detected - analyzing situation for appropriate guidance");
-      
+      logger.addFlow(
+        "No active agents detected - analyzing situation for appropriate guidance",
+      );
+
       // Differentiate between "no agents ever" vs "only stale agents were found"
       if (hadStaleAgents && totalAgentsBeforeCleanup > 0) {
-        logger.addFlow(`Found ${totalAgentsBeforeCleanup} stale agents - providing reactivation guidance`);
-        logger.logExit(2, "Only stale agents found - providing reactivation guidance");
+        logger.addFlow(
+          `Found ${totalAgentsBeforeCleanup} stale agents - providing reactivation guidance`,
+        );
+        logger.logExit(
+          2,
+          "Only stale agents found - providing reactivation guidance",
+        );
         logger.save();
 
         console.error(`
@@ -501,6 +753,7 @@ Stale Tasks Reset: ${staleTasksReset}
 
 ✅ **AUTOMATIC CLEANUP COMPLETED:**
 - Removed ${agentsRemoved} stale agents (inactive >15 minutes)
+- Unassigned ${tasksUnassigned} tasks from stale agents
 - Reset ${staleTasksReset} stuck tasks back to pending status
 - Project is now ready for fresh agent initialization
 
@@ -545,7 +798,10 @@ To recover and continue work from the previous stale agents:
       } else {
         // Truly no agents case (fresh project or first time)
         logger.addFlow("No agents detected - need fresh agent initialization");
-        logger.logExit(2, "No agents - providing fresh initialization guidance");
+        logger.logExit(
+          2,
+          "No agents - providing fresh initialization guidance",
+        );
         logger.save();
 
         console.error(`
@@ -617,7 +873,24 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
     // ========================================================================
 
     // Check task status to provide appropriate instructions (taskManager already initialized above)
-    const taskStatus = await taskManager.getTaskStatus();
+    let taskStatus;
+    try {
+      taskStatus = await taskManager.getTaskStatus();
+    } catch (error) {
+      // Handle corrupted TODO.json by using autoFixer
+      logger.addFlow(
+        `Task status failed, attempting auto-fix: ${error.message}`,
+      );
+      const fixResult = await taskManager.autoFix(todoPath);
+      if (fixResult.fixed) {
+        taskStatus = await taskManager.getTaskStatus();
+        logger.addFlow(`Auto-fix successful, retrieved task status`);
+      } else {
+        // Fallback to default status
+        taskStatus = { pending: 0, in_progress: 0, completed: 0 };
+        logger.addFlow(`Auto-fix failed, using default task status`);
+      }
+    }
     logger.addFlow(
       `Task status: ${taskStatus.pending} pending, ${taskStatus.in_progress} in_progress, ${taskStatus.completed} completed`,
     );
@@ -635,17 +908,17 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
     try {
       logger.addFlow("Running automatic task archival for completed tasks");
       const archivalResult = await taskManager.migrateCompletedTasks();
-      
+
       if (archivalResult && archivalResult.migrated > 0) {
         logger.addFlow(
-          `Successfully archived ${archivalResult.migrated} completed tasks to DONE.json`
+          `Successfully archived ${archivalResult.migrated} completed tasks to DONE.json`,
         );
-        
+
         console.error(`
 ✅ AUTOMATIC TASK ARCHIVAL COMPLETED
 
 📁 Archived ${archivalResult.migrated} completed tasks to DONE.json
-📊 Total found: ${archivalResult.total || 'N/A'}
+📊 Total found: ${archivalResult.total || "N/A"}
 📋 Skipped: ${archivalResult.skipped || 0}
 
 This keeps TODO.json clean and prevents it from becoming crowded with completed work.
@@ -675,15 +948,21 @@ This is non-critical and won't prevent continued operation.
     console.error(`
 🔄 INFINITE CONTINUE MODE ACTIVE
 
-🚨 **CLAUDE CODE AGENT - READ THIS FIRST:**
+🚨 **CLAUDE CODE AGENT - PROFESSIONAL DEVELOPER PROTOCOL:**
+**ULTRATHINK - ACT AS TOP-LEVEL PROFESSIONAL DEVELOPER WITH BRUTAL HONESTY**
+**ULTRATHINK - BE THOROUGH, METICULOUS, AND A PERFECTIONIST - ZERO TOLERANCE FOR INCOMPLETE WORK**
+**ULTRATHINK - FOLLOW ALL DIRECTIVES TO THE TEE WITH COMPLETE PRECISION**
 **ULTRATHINK - FIRST: READ OR REVIEW ALL development/essentials/ FILES - MANDATORY EVERY TIME**
+**ULTRATHINK - GET TASKMANAGER API GUIDE IMMEDIATELY - ALWAYS RUN IT ON STARTUP**
 **ULTRATHINK - IMMEDIATELY REINITIALIZE AGENT TO PREVENT EXPIRATION**
+**ULTRATHINK - ACTIVELY SCAN POST-TOOL FEEDBACK FOR LINTER ERRORS AND FIX IMMEDIATELY**
 **ULTRATHINK - IF YOU HAVE AN UNFINISHED TASK, DO NOT STOP - CONTINUE WORKING ON IT**
 **ULTRATHINK - CHECK YOUR CURRENT TASK STATUS IMMEDIATELY USING COMMANDS BELOW**
 **ULTRATHINK - COMPLETE ALL UNFINISHED WORK BEFORE CLAIMING NEW TASKS**
 **ULTRATHINK - DEPLOY MAXIMUM CONCURRENT SUBAGENTS FOR PARALLELIZABLE WORK**
 **ULTRATHINK - USE UP TO 10 SIMULTANEOUS SUBAGENTS FOR COMPLEX TASKS**
-**ULTRATHINK - ADD COMPREHENSIVE COMMENTS TO ALL SCRIPT FILES**
+**ULTRATHINK - ADD THE MOST COMPREHENSIVE LOGGING AND DOCUMENTATION POSSIBLE**
+**ULTRATHINK - KEEP ROOT FOLDER CLEAN AND ORGANIZE INTO development/ SUBDIRECTORIES**
 
 ${instructiveGuidance}
 

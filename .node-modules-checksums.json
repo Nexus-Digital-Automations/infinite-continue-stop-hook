@@ -1,28 +1,10 @@
 {
-  "timestamp": "2025-08-18T18:21:01.909Z",
+  "timestamp": "2025-09-07T19:52:01.681Z",
   "checksums": {
     "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/exit/lib/exit.js": "3e6fd8b32d04e28cba141f9d0954456eade678f20accd8dc44fb542baaf30962",
     "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/jest-worker/build/index.js": "e1c9aa1874f83026a88a412e07f2f5775f85b0fa4c23d35229d9eb52fab14f85",
     "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/jest/package.json": "679fd6f49e8dcb1fd82b7d610c5d555b70204ad2e5e5092e284e9bc10eb9f353",
-    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/exit/package.json": "5e2cb677a865c02d0a626eea6a718b9dd528cfb45ea20914bb6c396a7291c5e6",
-    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/exit/Gruntfile.js": "72a3ac43e7d4d4b7cfaf5c40b7788b91259cc8f635cd6720c49179dfed23e4ff",
-    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/exit/test/fixtures/log-broken.js": "07212337ddb00bd39614ae2e22e272c782bc6acbeddca64c60161a02533afb86",
-    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/exit/test/fixtures/log.js": "cf3fbdd19c0a4135c220eedb67c70fe42803fd19c4abf5f21cf74c6cab15847b",
-    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/jest-worker/build/Farm.js": "41acab87f6d63e1dfc10317df8fd607f529bee7bbd7039c90971ee08912916df",
-    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/jest-worker/build/FifoQueue.js": "01ecedd204a546221e42c8b86aba76e064aef5ccee550e853a578f8834622ba3",
-    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/jest-worker/build/PriorityQueue.js": "4eff5b1074fc03ef34830a2e1c27bff25a4c3383cecef0c9d47b351c1b883c4a",
-    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/jest-worker/build/WorkerPool.js": "19051e112cd9f18d33ebc6ce7442d77cd0f77b1c91431d476dd5fb2eb7c38f4d",
-    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/jest-worker/build/base/BaseWorkerPool.js": "c3a706529fca02d159725d810b9dcee147ad957c5e987b70cac0e63d43dde38c",
-    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/jest-worker/build/types.js": "5ca8c82132f718d9cafd18d3d8b449fa1ca54f51d71562beb631275613735c0f",
-    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/jest-worker/build/workers/ChildProcessWorker.js": "476cd60b5ca43449b9e6e70525540ee864c59917f4918283d98ef1c99bccd28c",
-    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/jest-worker/build/workers/WorkerAbstract.js": "43e424603a233783301a84fc63fdec4cc132f5a3c595ca27e6f81b65b0d7085b",
-    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/jest-worker/build/workers/NodeThreadsWorker.js": "09b1048e57752b03c6b97b9dbf70d17d03614e9ec2daabd67a679139a074aed5",
-    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/jest-worker/build/workers/processChild.js": "59447de99124ccd21418a07695346d17edb4e02df35a6472be6b5af2efc80efc",
-    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/jest-worker/build/workers/messageParent.js": "b71b33d23bfbf41217dcee46d565f96e2c5d15458025927b9b3b70165729db8c",
-    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/jest-worker/package.json": "0c8eabcd3c4364c9bf07dc564977e1ba40deccc4751cf21064f3040feb3d6efe",
-    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/jest-worker/build/workers/threadChild.js": "343b6000d47e2a1611b5db0ce26bf46c473a79c05373a9057aafeb5f00c14da0",
-    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/jest/bin/jest.js": "2a9b435eab8a343bd09fe285b2e2043ff9ff89fae4e1d1f46ba3df28659d8a2c",
-    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/jest/build/index.js": "970f4a71b4ba3d82e97507ba22548e2d56c7fbae2f86fa5a269cd654d29ee630"
+    "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/node_modules/exit/package.json": "5e2cb677a865c02d0a626eea6a718b9dd528cfb45ea20914bb6c396a7291c5e6"
   },
   "algorithm": "sha256"
 }

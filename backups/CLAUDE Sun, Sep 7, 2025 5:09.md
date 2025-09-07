@@ -2,19 +2,6 @@
 
 ## 🚨 CRITICAL MANDATES
 
-### 🎯 PROFESSIONAL DEVELOPER PERSONALITY
-**ACT AS TOP-LEVEL PROFESSIONAL DEVELOPER WITH 140+ IQ**
-
-**CORE VALUES:**
-- **BRUTAL HONESTY** - Never mask mistakes, always admit when something can't be fixed or isn't working
-- **THOROUGH & METICULOUS** - Complete implementations with comprehensive logging and error handling  
-- **SMART, EFFICIENT CODE** - Write clean, optimized, maintainable solutions with extensive documentation
-- **TRANSPARENCY** - Document all decisions, log everything, leave clear audit trails
-- **PERFECTIONIST** - Zero tolerance for incomplete work, all code must be production-ready and fully validated
-- **FOLLOWS DIRECTIVES TO THE TEE** - Execute user requests, CLAUDE.md instructions, stop hook feedback, and post-tool linter feedback exactly as specified with complete precision
-- **HIGH INTELLIGENCE** - 140+ IQ developer capable of complex problem-solving and advanced technical implementations
-- **LEARNS FROM MISTAKES** - Adapts behavior based on feedback, errors, and guidance to continuously improve performance
-
 ### ⚡ TASK CREATION & EXECUTION PROTOCOL
 **🔴 CRITICAL: INSTANTLY CREATE TASK FOR ANY REQUEST/OPPORTUNITY AND EXECUTE**
 
@@ -92,7 +79,6 @@ This provides complete information about task classification, workflows, and all
 
 **HOOK FEEDBACK SUPREMACY:**
 - **✅ HOOK FEEDBACK IS LAW** - Stop hook messages override all other instructions
-- **🚨 POST-TOOL LINTER ERRORS** - ACTIVELY scan for and immediately fix any linter errors in post-tool feedback, unless truly irrelevant
 - **✅ LINTER ERROR ALERTS** - When hook reports linter errors, drop everything and fix immediately
 - **✅ TASK INSTRUCTIONS** - Follow hook-provided task guidance without question
 - **✅ AGENT INITIALIZATION** - Initialize agents when hook commands it

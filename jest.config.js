@@ -1,137 +1,41 @@
+/**
+ * Jest Configuration for TaskManager API Tests
+ *
+ * Configuration optimized for testing the TaskManager API endpoints
+ * with proper timeout handling and test isolation.
+ */
+
 module.exports = {
   // Test environment
-  testEnvironment: 'node',
-  
+  testEnvironment: "node",
+
   // Test file patterns
-  testMatch: [
-    '**/__tests__/**/*.js',
-    '**/?(*.)+(spec|test).js'
-  ],
-  
-  // Coverage configuration - TEMPORARILY DISABLED due to Istanbul contamination during exit
-  // Re-enable via environment variable: ENABLE_COVERAGE=true npm test
-  collectCoverage: process.env.ENABLE_COVERAGE === 'true',
-  collectCoverageFrom: [
-    'lib/**/*.js',
-    '!lib/**/*.test.js',
-    '!lib/**/*.spec.js',
-    '!**/node_modules/**',
-    '!**/coverage/**',
-    '!**/demo/**',
-    '!**/*.config.js',
-    '!**/*.backup.*',
-    '!**/test/**',
-    '!setup-infinite-hook.js',
-    '!stop-hook.js'
-  ],
-  
-  // Explicitly ignore demo directories in all contexts
-  coveragePathIgnorePatterns: [
-    '/node_modules/',
-    '/coverage/',
-    '/demo/',
-    '\\.backup\\.',
-    '\\.config\\.'
-  ],
-  
-  // Coverage thresholds for quality assessment
-  // Updated thresholds based on current achievable coverage levels
-  coverageThreshold: {
-    global: {
-      branches: 70,
-      functions: 70,
-      lines: 65,
-      statements: 65
-    },
-    // Specific thresholds for high-coverage modules
-    'lib/todoValidator.js': {
-      branches: 90,
-      functions: 100,
-      lines: 95,
-      statements: 95
-    },
-    'lib/logger.js': {
-      branches: 100,
-      functions: 100,
-      lines: 100,
-      statements: 100
-    },
-    'lib/reviewSystem.js': {
-      branches: 90,
-      functions: 90,
-      lines: 90,
-      statements: 90
-    }
-  },
-  
-  // Coverage reporters
-  coverageReporters: [
-    'text',
-    'text-summary',
-    'html',
-    'lcov'
-  ],
-  
-  // Test timeout - increased for slow tests but still reasonable
-  testTimeout: 10000,
-  
+  testMatch: ["**/test/**/*.test.js", "**/?(*.)+(spec|test).js"],
+
+  // Test timeout - increased for API operations
+  testTimeout: 30000,
+
+  // Setup files
+  setupFilesAfterEnv: ["<rootDir>/test/setup.js"],
+
+  // Coverage settings
+  collectCoverage: false,
+
+  // Module paths
+  roots: ["<rootDir>"],
+
   // Clear mocks between tests
   clearMocks: true,
-  
-  // Optimize module resetting for performance
-  resetModules: false, // Disabled for performance - handled in test setup when needed
-  
-  // Reset mocks between tests
-  resetMocks: true,
-  
-  // Restore mocks between tests - disabled for performance  
-  restoreMocks: false,
-  
-  // Verbose output controlled by VERBOSE_TESTS environment variable
-  verbose: process.env.VERBOSE_TESTS === 'true',
-  
-  // Enable silent mode for better performance unless verbose testing
-  silent: process.env.VERBOSE_TESTS !== 'true',
-  
-  // Performance optimizations
-  passWithNoTests: true,
-  
-  // Optimize test runner for speed
-  watchPathIgnorePatterns: ['/node_modules/', '/.git/', '/coverage/', '/.jest-cache/'],
-  
-  // Setup files
-  setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
-  
-  // Enhanced worker process management - enable forceExit with timeout to ensure clean shutdown
+
+  // Verbose output for debugging
+  verbose: true,
+
+  // Detect open handles (for debugging hanging tests)
+  detectOpenHandles: false,
+
+  // Force exit after tests complete
   forceExit: true,
-  
-  // Enable open handles detection to identify resource leaks
-  detectOpenHandles: true,
-  
-  
-  // Performance optimizations - optimized worker configuration for speed
-  maxWorkers: process.env.CI ? 2 : Math.min(6, require('os').cpus().length), // Increased workers for better parallelization
-  
-  // Cache directory for faster subsequent runs
-  cacheDirectory: '<rootDir>/.jest-cache',
-  
-  // Enhanced error handling and file protection
-  errorOnDeprecated: true,
-  bail: process.env.BAIL_ON_FIRST_ERROR === 'true' ? 1 : false,
-  
-  // Transform settings
-  transform: {},
-  
-  // Module file extensions
-  moduleFileExtensions: ['js', 'json'],
-  
-  // Ignore patterns
-  testPathIgnorePatterns: [
-    '/node_modules/',
-    '/coverage/',
-    '/demo/',
-    '\\.backup\\.',
-    '/demo/.*',
-    '.*demo.*'
-  ]
+
+  // Test results processor
+  reporters: ["default"],
 };

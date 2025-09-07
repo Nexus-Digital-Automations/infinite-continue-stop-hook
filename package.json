@@ -1,48 +1,24 @@
 {
   "name": "infinite-continue-stop-hook",
   "version": "1.0.0",
-  "description": "Automated hook system for continuous task execution in Claude Code",
-  "main": "stop-hook.js",
+  "description": "Simplified TaskManager API and Stop Hook System",
+  "main": "taskmanager-api.js",
   "type": "commonjs",
   "scripts": {
-    "test": "npm run fix-contamination && node --max-old-space-size=4096 ./node_modules/.bin/jest --config jest.no-coverage.config.js && npm run fix-contamination",
-    "test:watch": "node --max-old-space-size=4096 ./node_modules/.bin/jest --config jest.contamination-safe.config.js --watch",
-    "test:coverage": "node scripts/safe-coverage.js",
-    "test:protected": "node scripts/jest-contamination-fix.js & JEST_PID=$! && node --max-old-space-size=4096 ./node_modules/.bin/jest && kill $JEST_PID 2>/dev/null || true && npm run fix-contamination",
-    "test:safe": "npm run fix-contamination && node --max-old-space-size=4096 ./node_modules/.bin/jest --config jest.contamination-safe.config.js && npm run fix-contamination",
-    "test:isolated": "node --max-old-space-size=4096 scripts/run-tests-safe.js",
-    "test:verbose": "VERBOSE_TESTS=true node --max-old-space-size=4096 ./node_modules/.bin/jest",
-    "test:fast": "node --max-old-space-size=4096 ./node_modules/.bin/jest --maxWorkers=6 --silent",
-    "test:performance": "node --max-old-space-size=4096 ./node_modules/.bin/jest --config jest.performance.config.js",
-    "build": "npm run validate-build && npm run lint && npm run test && npm run post-build-validate",
-    "build:safe": "npm run validate-build && npm run lint && npm run test:coverage && npm run post-build-validate",
-    "build:robust": "node scripts/robust-build.js",
-    "build:robust-verbose": "node scripts/robust-build.js --verbose",
-    "build:enhanced": "node scripts/robust-build.js --command 'npm run validate-build && npm run lint && npm run test:safe && npm run post-build-validate'",
-    "build:production": "node scripts/robust-build.js --command 'npm run validate-build && npm run lint && echo \"Tests skipped for production build\" && npm run post-build-validate'",
+    "start": "node taskmanager-api.js",
+    "setup": "node setup-infinite-hook.js",
+    "test": "jest",
+    "test:api": "jest test/taskmanager-api-comprehensive.test.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "setup": "node setup-infinite-hook.js",
-    "start": "node api-server.js",
-    "dev": "node api-server.js",
-    "demo": "node demo/demo.js",
-    "coverage": "jest --coverage --collectCoverageFrom='lib/**/*.js'",
-    "coverage:html": "jest --coverage --coverageReporters=html",
-    "fix-contamination": "node scripts/fix-contamination.js",
-    "cleanup-backups": "node scripts/cleanup-backups.js",
-    "cleanup-backups:dry-run": "node scripts/cleanup-backups.js --dry-run",
-    "validate-build": "node scripts/build-validator.js",
-    "post-build-validate": "npm run fix-contamination && npm run validate-build",
-    "pretest": "npm run lint && npm run fix-contamination && npm run cleanup-backups",
-    "posttest": "npm run fix-contamination && sleep 1 && npm run fix-contamination"
+    "lint:focused": "eslint lib/ *.js"
   },
   "keywords": [
+    "taskmanager",
+    "api",
+    "stop-hook",
     "claude-code",
-    "automation",
-    "hook-system",
-    "task-management",
-    "continuous-execution",
-    "ai-assistant"
+    "automation"
   ],
   "author": "Claude Code Hook System",
   "license": "MIT",
@@ -50,24 +26,11 @@
     "node": ">=18.0.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.0.0",
-    "eslint": "^9.0.0",
-    "jest": "^29.7.0",
-    "supertest": "^7.1.4"
-  },
-  "dependencies": {
-    "compression": "^1.8.1",
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "helmet": "^8.1.0",
-    "node-cache": "^5.1.2"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/anthropics/infinite-continue-stop-hook"
-  },
-  "bugs": {
-    "url": "https://github.com/anthropics/infinite-continue-stop-hook/issues"
-  },
-  "homepage": "https://github.com/anthropics/infinite-continue-stop-hook#readme"
+    "@eslint/js": "^9.35.0",
+    "eslint": "^9.35.0",
+    "eslint-plugin-n": "^17.21.3",
+    "eslint-plugin-security": "^3.0.1",
+    "globals": "^15.15.0",
+    "jest": "^30.1.3"
+  }
 }
