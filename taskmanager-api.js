@@ -61,16 +61,16 @@
  * Usage: node taskmanager-api.js <command> [args...] [--project-root /path/to/project]
  */
 
-const path = require("path");
+const path = require('path');
 
 // Parse project root from --project-root flag or use current directory
 const args = process.argv.slice(2);
-const projectRootIndex = args.indexOf("--project-root");
+const projectRootIndex = args.indexOf('--project-root');
 const PROJECT_ROOT =
   projectRootIndex !== -1 && projectRootIndex + 1 < args.length
     ? args[projectRootIndex + 1]
     : process.cwd();
-const TODO_PATH = path.join(PROJECT_ROOT, "TODO.json");
+const TODO_PATH = path.join(PROJECT_ROOT, 'TODO.json');
 
 // Remove --project-root and its value from args for command parsing
 if (projectRootIndex !== -1) {
@@ -85,15 +85,17 @@ let TaskManager, AgentManager, MultiAgentOrchestrator;
 
 try {
   // Import TaskManager modules using absolute paths
-  TaskManager = require(path.join(TASKMANAGER_ROOT, "lib", "taskManager.js"));
-  AgentManager = require(path.join(TASKMANAGER_ROOT, "lib", "agentManager.js"));
+  TaskManager = require(path.join(TASKMANAGER_ROOT, 'lib', 'taskManager.js'));
+  AgentManager = require(path.join(TASKMANAGER_ROOT, 'lib', 'agentManager.js'));
   MultiAgentOrchestrator = require(
-    path.join(TASKMANAGER_ROOT, "lib", "multiAgentOrchestrator.js"),
+    path.join(TASKMANAGER_ROOT, 'lib', 'multiAgentOrchestrator.js'),
   );
 } catch (error) {
-  console.error("Failed to load TaskManager modules:", error.message);
-  console.error("Full error:", error);
-  throw error;
+  const loadError = new Error(
+    `Failed to load TaskManager modules: ${error.message}`,
+  );
+  loadError.cause = error;
+  throw loadError;
 }
 
 /**
@@ -171,6 +173,12 @@ class TaskManagerAPI {
     // Performance configuration - 10 second timeout for all operations
     // This prevents hanging operations and ensures responsive behavior
     this.timeout = 10000;
+
+    // Guide caching system for performance optimization
+    this._cachedGuide = null;
+    this._guideCacheTime = 0;
+    this._guideCacheDuration = 60000; // 1 minute cache duration
+    this._guideGenerationInProgress = false;
   }
 
   /**
@@ -253,22 +261,58 @@ class TaskManagerAPI {
    * console.log(methods.examples.api); // Usage examples
    */
   async getApiMethods() {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
     try {
-      return await this.withTimeout(
+      guide = await this._getGuideForError('general');
+    } catch {
+      // If guide fails, continue with operation without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
         (() => {
           // Extract all public methods from TaskManager core class
           const taskManagerMethods = Object.getOwnPropertyNames(
             Object.getPrototypeOf(this.taskManager),
           )
-            .filter((name) => name !== "constructor" && !name.startsWith("_"))
+            .filter((name) => name !== 'constructor' && !name.startsWith('_'))
             .sort();
 
           // Extract all public methods from TaskManagerAPI wrapper class
           const apiMethods = Object.getOwnPropertyNames(
             Object.getPrototypeOf(this),
           )
-            .filter((name) => name !== "constructor" && !name.startsWith("_"))
+            .filter((name) => name !== 'constructor' && !name.startsWith('_'))
             .sort();
+
+          // Map CLI commands to API methods for clarity
+          const cliToApiMapping = {
+            complete: 'completeTask',
+            create: 'createTask',
+            'create-error': 'createErrorTask',
+            claim: 'claimTask',
+            list: 'listTasks',
+            current: 'getCurrentTask',
+            status: 'getAgentStatus',
+            stats: 'getStatistics',
+            init: 'initAgent',
+            reinitialize: 'reinitializeAgent',
+            delete: 'deleteTask',
+            'move-top': 'moveTaskToTop',
+            'move-up': 'moveTaskUp',
+            'move-down': 'moveTaskDown',
+            'move-bottom': 'moveTaskToBottom',
+            methods: 'getApiMethods',
+            guide: 'getComprehensiveGuide',
+            'suggest-feature': 'suggestFeature',
+            'approve-feature': 'approveFeature',
+            'reject-feature': 'rejectFeature',
+            'list-suggested-features': 'listSuggestedFeatures',
+            'list-features': 'listFeatures',
+            'feature-stats': 'getFeatureStats',
+            cleanup: 'cleanup',
+          };
 
           return {
             success: true,
@@ -281,20 +325,37 @@ class TaskManagerAPI {
             apiMethods: {
               count: apiMethods.length,
               methods: apiMethods,
-              usage: "node taskmanager-api.js methodName args",
+              usage: 'node taskmanager-api.js methodName args',
+              note: 'CLI commands may differ from API method names - see cliMapping',
+            },
+            cliMapping: {
+              description: 'Mapping between CLI commands and API methods',
+              mappings: cliToApiMapping,
+              usage:
+                'Use CLI commands in terminal, API methods are internal implementations',
             },
             examples: {
               taskManager:
                 "tm.createTask({title: 'Test', category: 'enhancement'})",
               api: 'node taskmanager-api.js list \'{"status": "pending"}\'',
+              completion:
+                'node taskmanager-api.js complete taskId \'{"message": "Task completed successfully"}\'',
+              completionMinimal: 'node taskmanager-api.js complete taskId',
             },
           };
         })(),
       );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('general'),
+      };
     } catch (error) {
       return {
         success: false,
         error: error.message,
+        guide: guide || this._getFallbackGuide('general'),
       };
     }
   }
@@ -310,161 +371,194 @@ class TaskManagerAPI {
           return {
             success: true,
             taskManager: {
-              version: "2.0.0",
+              version: '2.0.0',
               description:
-                "Universal TaskManager API for agent-driven development workflows",
+                'Universal TaskManager API for agent-driven development workflows',
             },
             taskClassification: {
               required: true,
-              parameter: "task_type",
+              parameter: 'category',
               description:
-                "All tasks MUST include explicit task_type parameter during creation",
+                'All tasks MUST include explicit category parameter during creation',
               types: [
                 {
-                  value: "error",
-                  name: "Error Task",
+                  value: 'error',
+                  name: 'Error Task',
                   priority: 1,
                   description:
-                    "System errors, linter violations, build failures, runtime bugs - HIGHEST PRIORITY",
+                    'System errors, linter violations, build failures, runtime bugs - HIGHEST PRIORITY',
                   examples: [
-                    "Fix ESLint violations",
-                    "Resolve build compilation errors",
-                    "Fix runtime exceptions",
+                    'Fix ESLint violations',
+                    'Resolve build compilation errors',
+                    'Fix runtime exceptions',
                   ],
                   triggers: [
-                    "linter errors",
-                    "build failures",
-                    "startup errors",
-                    "runtime bugs",
-                    "security vulnerabilities",
+                    'linter errors',
+                    'build failures',
+                    'startup errors',
+                    'runtime bugs',
+                    'security vulnerabilities',
                   ],
                 },
                 {
-                  value: "feature",
-                  name: "Feature Task",
+                  value: 'feature',
+                  name: 'Feature Task',
                   priority: 2,
                   description:
-                    "New functionality, enhancements, refactoring, documentation - HIGH PRIORITY",
+                    'New functionality, enhancements, refactoring, documentation - HIGH PRIORITY',
                   examples: [
-                    "Add user authentication",
-                    "Implement dark mode",
-                    "Refactor API endpoints",
+                    'Add user authentication',
+                    'Implement dark mode',
+                    'Refactor API endpoints',
                   ],
                   triggers: [
-                    "new features requested",
-                    "enhancements needed",
-                    "code refactoring",
-                    "documentation updates",
+                    'new features requested',
+                    'enhancements needed',
+                    'code refactoring',
+                    'documentation updates',
                   ],
                 },
                 {
-                  value: "subtask",
-                  name: "Subtask",
+                  value: 'subtask',
+                  name: 'Subtask',
                   priority: 3,
                   description:
-                    "Implementation of specific subtasks for preexisting features from TODO.json features array - MEDIUM PRIORITY",
+                    'Implementation of specific subtasks for preexisting features from TODO.json features array - MEDIUM PRIORITY',
                   examples: [
-                    "Implement login form for auth feature",
-                    "Add validation to signup process",
+                    'Implement login form for auth feature',
+                    'Add validation to signup process',
                   ],
                   triggers: [
-                    "implementing approved feature components",
-                    "feature breakdown tasks",
+                    'implementing approved feature components',
+                    'feature breakdown tasks',
                   ],
                 },
                 {
-                  value: "test",
-                  name: "Test Task",
+                  value: 'test',
+                  name: 'Test Task',
                   priority: 4,
                   description:
-                    "Test coverage, test creation, test setup, test performance - LOWEST PRIORITY (ONLY AFTER ERRORS/FEATURES COMPLETE)",
+                    'Test coverage, test creation, test setup, test performance - LOWEST PRIORITY (ONLY AFTER ERRORS/FEATURES COMPLETE)',
                   examples: [
-                    "Add unit tests for UserService",
-                    "Implement E2E tests for login flow",
+                    'Add unit tests for UserService',
+                    'Implement E2E tests for login flow',
                   ],
                   triggers: [
-                    "test coverage gaps",
-                    "test setup needs",
-                    "test performance issues",
+                    'test coverage gaps',
+                    'test setup needs',
+                    'test performance issues',
                   ],
                   restrictions:
-                    "BLOCKED until all error and feature tasks are resolved",
+                    'BLOCKED until all error and feature tasks are resolved',
                 },
               ],
               priorityRules: {
-                "1_error":
-                  "Always executed first - highest priority - can interrupt other work",
-                "2_feature": "Executed after all errors resolved",
-                "3_subtask": "Executed after new features complete",
-                "4_test":
-                  "Only executed when errors, features, and subtasks are complete",
+                '1_error':
+                  'Always executed first - highest priority - can interrupt other work',
+                '2_feature': 'Executed after all errors resolved',
+                '3_subtask': 'Executed after new features complete',
+                '4_test':
+                  'Only executed when errors, features, and subtasks are complete',
               },
             },
             coreCommands: {
               discovery: {
                 guide: {
-                  description: "Get this comprehensive guide",
-                  usage: "node taskmanager-api.js guide",
-                  output: "Complete API documentation and usage information",
+                  description: 'Get this comprehensive guide',
+                  usage: 'node taskmanager-api.js guide',
+                  output: 'Complete API documentation and usage information',
                 },
                 methods: {
-                  description: "List all available API methods",
-                  usage: "node taskmanager-api.js methods",
-                  output: "Available methods and usage examples",
+                  description: 'List all available API methods',
+                  usage: 'node taskmanager-api.js methods',
+                  output: 'Available methods and usage examples',
                 },
                 status: {
-                  description: "Get agent status and current tasks",
-                  usage: "node taskmanager-api.js status [agentId]",
-                  output: "Agent state, assigned tasks, and system status",
+                  description: 'Get agent status and current tasks',
+                  usage: 'node taskmanager-api.js status [agentId]',
+                  output: 'Agent state, assigned tasks, and system status',
                 },
               },
               agentLifecycle: {
                 init: {
-                  description: "Initialize agent with TaskManager system",
-                  usage: "node taskmanager-api.js init [config]",
-                  required: "Must be called before any task operations",
-                  output: "Agent ID and registration confirmation",
+                  description: 'Initialize agent with TaskManager system',
+                  usage: 'node taskmanager-api.js init [config]',
+                  required: 'Must be called before any task operations',
+                  output: 'Agent ID and registration confirmation',
                 },
                 reinitialize: {
-                  description: "Refresh agent registration and renew heartbeat",
+                  description: 'Refresh agent registration and renew heartbeat',
                   usage:
-                    "node taskmanager-api.js reinitialize [agentId] [config]",
-                  when: "After task completion, before long operations, after idle periods",
-                  output: "Updated agent status and renewed registration",
+                    'node taskmanager-api.js reinitialize [agentId] [config]',
+                  when: 'After task completion, before long operations, after idle periods',
+                  output: 'Updated agent status and renewed registration',
                 },
               },
               taskOperations: {
                 create: {
-                  description: "Create new task with explicit classification",
+                  description: 'Create new task with explicit classification',
                   usage:
-                    'node taskmanager-api.js create \'{"title":"Task name", "description":"Details", "task_type":"error|feature|subtask|test"}\'',
-                  required_fields: ["title", "description", "task_type"],
+                    'node taskmanager-api.js create \'{"title":"Task name", "description":"Details", "category":"error|feature|subtask|test"}\'',
+                  required_fields: ['title', 'description', 'category'],
                   optional_fields: [
-                    "priority",
-                    "dependencies",
-                    "important_files",
+                    'priority',
+                    'dependencies',
+                    'important_files',
                   ],
                   validation:
-                    "task_type must be one of: error, feature, subtask, test",
+                    'category must be specified for proper task classification',
                 },
                 claim: {
-                  description: "Claim task for agent execution",
+                  description: 'Claim task for agent execution',
                   usage:
-                    "node taskmanager-api.js claim <taskId> [agentId] [priority]",
-                  output: "Task assignment confirmation",
+                    'node taskmanager-api.js claim <taskId> <agentId> [priority]',
+                  required_parameters: ['taskId', 'agentId'],
+                  optional_parameters: ['priority'],
+                  output: 'Task assignment confirmation',
+                  examples: [
+                    'node taskmanager-api.js claim task_123 agent_456',
+                    'node taskmanager-api.js claim error_789 development_session_123_agent high',
+                  ],
+                  notes:
+                    "Agent ID is REQUIRED and must be provided explicitly. Use the agent ID returned from the 'init' command.",
                 },
                 complete: {
-                  description: "Mark task as completed",
+                  description:
+                    'Mark task as completed with optional completion data',
                   usage:
-                    "node taskmanager-api.js complete <taskId> [completionData]",
-                  required: "Only after full implementation and validation",
+                    'node taskmanager-api.js complete <taskId> [completionData]',
+                  required: 'Only after full implementation and validation',
+                  examples: [
+                    'node taskmanager-api.js complete task_123',
+                    'node taskmanager-api.js complete task_123 \'{"message": "Successfully implemented feature"}\'',
+                    'node taskmanager-api.js complete error_456 \'{"fixed": true, "details": "Resolved linting errors in auth.js"}\'',
+                    'node taskmanager-api.js complete feature_789 \'{"outcome": "Feature completed with full test coverage", "files_modified": ["src/auth.js", "tests/auth.test.js"]}\'',
+                  ],
+                  completionDataFormat: {
+                    description: 'Optional JSON object with completion details',
+                    commonFields: [
+                      'message - Brief completion description',
+                      'outcome - Detailed result explanation',
+                      'files_modified - Array of files changed',
+                      'details - Additional implementation notes',
+                      'evidence - Proof of completion (test results, etc.)',
+                      'fixed - Boolean for error tasks',
+                      'tested - Boolean indicating if tests were run',
+                    ],
+                    validation: 'Must be valid JSON if provided',
+                  },
+                  errorHandling: {
+                    invalidJson: 'Returns error with JSON parsing details',
+                    missingTask: 'Returns error if taskId not found',
+                    alreadyCompleted: 'Returns error if task already completed',
+                  },
                 },
                 list: {
-                  description: "List tasks with optional filtering",
-                  usage: "node taskmanager-api.js list [filter]",
+                  description: 'List tasks with optional filtering',
+                  usage: 'node taskmanager-api.js list [filter]',
                   examples: [
                     'node taskmanager-api.js list \'{"status":"pending"}\'',
-                    'node taskmanager-api.js list \'{"task_type":"error"}\'',
+                    'node taskmanager-api.js list \'{"category":"error"}\'',
                   ],
                 },
               },
@@ -472,163 +566,203 @@ class TaskManagerAPI {
             workflows: {
               taskCreationWorkflow: [
                 "1. Call 'guide' endpoint to understand task classification",
-                "2. Analyze request to determine appropriate task_type",
-                "3. Create task with explicit task_type parameter",
-                "4. System automatically assigns priority based on task_type",
-                "5. Task added to appropriate priority queue",
+                '2. Analyze request to determine appropriate category',
+                '3. Create task with explicit category parameter',
+                '4. System automatically assigns priority based on category',
+                '5. Task added to appropriate priority queue',
               ],
               agentWorkflow: [
                 "1. Initialize agent with 'init' command",
-                "2. Check status and available tasks",
-                "3. Claim highest priority available task",
-                "4. Execute task implementation",
-                "5. Complete task with evidence",
-                "6. Reinitialize before next task",
+                '2. Check status and available tasks',
+                '3. Claim highest priority available task',
+                '4. Execute task implementation',
+                '5. Complete task with evidence',
+                '6. Reinitialize before next task',
               ],
               priorityEnforcement: [
-                "ERROR tasks bypass all other ordering - executed immediately",
-                "FEATURE tasks blocked until all errors resolved",
-                "SUBTASK tasks blocked until all features complete",
-                "TEST tasks blocked until errors, features, subtasks complete",
+                'ERROR tasks bypass all other ordering - executed immediately',
+                'FEATURE tasks blocked until all errors resolved',
+                'SUBTASK tasks blocked until all features complete',
+                'TEST tasks blocked until errors, features, subtasks complete',
               ],
             },
             examples: {
               taskCreation: {
                 errorTask:
-                  'node taskmanager-api.js create \'{"title":"Fix ESLint violations in auth.js", "description":"Resolve linting errors", "task_type":"error"}\'',
+                  'node taskmanager-api.js create \'{"title":"Fix ESLint violations in auth.js", "description":"Resolve linting errors", "category":"error"}\'',
                 featureTask:
-                  'node taskmanager-api.js create \'{"title":"Add dark mode toggle", "description":"Implement theme switching", "task_type":"feature"}\'',
+                  'node taskmanager-api.js create \'{"title":"Add dark mode toggle", "description":"Implement theme switching", "category":"feature"}\'',
                 subtaskTask:
-                  'node taskmanager-api.js create \'{"title":"Implement login form", "description":"Create login UI for auth feature", "task_type":"subtask"}\'',
+                  'node taskmanager-api.js create \'{"title":"Implement login form", "description":"Create login UI for auth feature", "category":"subtask"}\'',
                 testTask:
-                  'node taskmanager-api.js create \'{"title":"Add UserService tests", "description":"Unit test coverage", "task_type":"test"}\'',
+                  'node taskmanager-api.js create \'{"title":"Add UserService tests", "description":"Unit test coverage", "category":"test"}\'',
               },
               commonWorkflows: {
                 newAgent: [
-                  "node taskmanager-api.js guide",
-                  "node taskmanager-api.js init",
-                  "node taskmanager-api.js status",
+                  'node taskmanager-api.js guide',
+                  'node taskmanager-api.js init',
+                  'node taskmanager-api.js status',
                 ],
                 taskExecution: [
                   'node taskmanager-api.js list \'{"status":"pending"}\'',
-                  "node taskmanager-api.js claim <taskId>",
-                  "# ... implement task ...",
-                  "node taskmanager-api.js complete <taskId>",
+                  'node taskmanager-api.js claim <taskId> [agentId]',
+                  '# ... implement task ...',
+                  'node taskmanager-api.js complete <taskId>',
                 ],
               },
             },
             requirements: {
               mandatory: [
-                "All task creation MUST include explicit task_type parameter",
-                "Agent MUST call init before any task operations",
-                "Agent MUST reinitialize after task completion",
-                "Test tasks MUST NOT be created until errors/features complete",
+                'All task creation MUST include explicit category parameter',
+                'Agent MUST call init before any task operations',
+                'Agent MUST reinitialize after task completion',
+                'Test tasks MUST NOT be created until errors/features complete',
               ],
               bestPractices: [
-                "Use guide endpoint to understand system before starting",
-                "Check status regularly to monitor system state",
-                "Provide detailed task descriptions for better coordination",
-                "Include important_files for tasks that modify specific files",
+                'Use guide endpoint to understand system before starting',
+                'Check status regularly to monitor system state',
+                'Provide detailed task descriptions for better coordination',
+                'Include important_files for tasks that modify specific files',
               ],
+            },
+            troubleshooting: {
+              commonIssues: {
+                completionErrors: {
+                  problem: 'Task completion fails with JSON formatting errors',
+                  cause: 'Invalid JSON format in completion data parameter',
+                  solutions: [
+                    'Ensure JSON is properly quoted: \'{"message": "Task completed"}\'',
+                    'Use double quotes inside JSON, single quotes outside',
+                    'Validate JSON format before passing to complete command',
+                    'Use minimal completion: node taskmanager-api.js complete taskId',
+                  ],
+                  examples: {
+                    correct:
+                      'node taskmanager-api.js complete task_123 \'{"message": "Success"}\'',
+                    incorrect:
+                      'node taskmanager-api.js complete task_123 {"message": "Success"}',
+                  },
+                },
+                methodConfusion: {
+                  problem: 'Confusion between CLI commands and API methods',
+                  explanation:
+                    "CLI command 'complete' maps to API method 'completeTask'",
+                  solution:
+                    'Use CLI commands in terminal, API methods are internal implementations',
+                  reference:
+                    'See cliMapping in methods output for complete mapping',
+                },
+                agentInitialization: {
+                  problem: 'Agent ID is required errors',
+                  explanation:
+                    'All task operations require explicit agent ID parameter - no auto-detection available',
+                  solutions: [
+                    'Run: timeout 10s node taskmanager-api.js init (saves agent ID for later use)',
+                    'Use agent ID from init in commands: claim <taskId> <agentId>',
+                    'For reinitialization: reinitialize <agentId>',
+                    'For status: status <agentId>',
+                  ],
+                },
+              },
             },
             taskConversion: {
               description:
-                "Guidelines for converting existing tasks to proper task_type classification",
+                'Guidelines for converting existing tasks to proper category classification',
               legacyTaskHandling:
-                "Existing tasks without task_type should be analyzed and converted using TaskManager API",
+                'Existing tasks without category should be analyzed and converted using TaskManager API',
               conversionWorkflow: [
-                "1. List all pending tasks without proper task_type classification",
-                "2. Analyze each task title and description to determine appropriate task_type",
-                "3. Delete legacy tasks and recreate with proper task_type parameter",
-                "4. Verify new tasks appear in correct priority order",
+                '1. List all pending tasks without proper category classification',
+                '2. Analyze each task title and description to determine appropriate category',
+                '3. Delete legacy tasks and recreate with proper category parameter',
+                '4. Verify new tasks appear in correct priority order',
               ],
               classificationGuide: {
-                "ERROR tasks": {
+                'ERROR tasks': {
                   indicators: [
-                    "fix",
-                    "error",
-                    "bug",
-                    "broken",
-                    "linter",
-                    "build fail",
-                    "compilation",
-                    "syntax",
+                    'fix',
+                    'error',
+                    'bug',
+                    'broken',
+                    'linter',
+                    'build fail',
+                    'compilation',
+                    'syntax',
                   ],
                   examples: [
-                    "Fix ESLint violations",
-                    "Resolve build errors",
-                    "Debug runtime exceptions",
+                    'Fix ESLint violations',
+                    'Resolve build errors',
+                    'Debug runtime exceptions',
                   ],
-                  task_type: "error",
+                  category: 'error',
                 },
-                "FEATURE tasks": {
+                'FEATURE tasks': {
                   indicators: [
-                    "add",
-                    "implement",
-                    "create",
-                    "build",
-                    "develop",
-                    "new functionality",
+                    'add',
+                    'implement',
+                    'create',
+                    'build',
+                    'develop',
+                    'new functionality',
                   ],
                   examples: [
-                    "Add user authentication",
-                    "Implement dashboard",
-                    "Create API endpoints",
+                    'Add user authentication',
+                    'Implement dashboard',
+                    'Create API endpoints',
                   ],
-                  task_type: "feature",
+                  category: 'feature',
                 },
-                "SUBTASK tasks": {
+                'SUBTASK tasks': {
                   indicators: [
-                    "component of",
-                    "part of",
-                    "for feature",
-                    "subtask",
-                    "specific implementation",
+                    'component of',
+                    'part of',
+                    'for feature',
+                    'subtask',
+                    'specific implementation',
                   ],
                   examples: [
-                    "Create login form for auth feature",
-                    "Add validation to user input",
+                    'Create login form for auth feature',
+                    'Add validation to user input',
                   ],
-                  task_type: "subtask",
+                  category: 'subtask',
                 },
-                "TEST tasks": {
+                'TEST tasks': {
                   indicators: [
-                    "test",
-                    "coverage",
-                    "unit test",
-                    "integration test",
-                    "e2e",
-                    "spec",
+                    'test',
+                    'coverage',
+                    'unit test',
+                    'integration test',
+                    'e2e',
+                    'spec',
                   ],
                   examples: [
-                    "Add unit tests",
-                    "Increase test coverage",
-                    "E2E testing",
+                    'Add unit tests',
+                    'Increase test coverage',
+                    'E2E testing',
                   ],
-                  task_type: "test",
+                  category: 'test',
                 },
               },
               conversionCommands: {
                 listLegacyTasks:
-                  'node taskmanager-api.js list \'{"status":"pending"}\' | grep -v task_type',
-                deleteTask: "node taskmanager-api.js delete <taskId>",
+                  'node taskmanager-api.js list \'{"status":"pending"}\' | grep -v category',
+                deleteTask: 'node taskmanager-api.js delete <taskId>',
                 recreateTask:
-                  'node taskmanager-api.js create \'{"title":"New Title", "description":"Description", "task_type":"error|feature|subtask|test"}\'',
+                  'node taskmanager-api.js create \'{"title":"New Title", "description":"Description", "category":"error|feature|subtask|test"}\'',
               },
             },
             advancedWorkflows: {
               bulkTaskConversion: [
                 '1. Export existing tasks to analyze: node taskmanager-api.js list \'{"status":"pending"}\'',
-                "2. For each task without task_type, determine classification using conversionGuide",
-                "3. Delete old task: node taskmanager-api.js delete <oldTaskId>",
-                "4. Create new task with proper task_type: node taskmanager-api.js create <taskData>",
+                '2. For each task without category, determine classification using conversionGuide',
+                '3. Delete old task: node taskmanager-api.js delete <oldTaskId>',
+                '4. Create new task with proper category: node taskmanager-api.js create <taskData>',
                 '5. Verify priority ordering: node taskmanager-api.js list \'{"status":"pending"}\'',
               ],
               priorityValidation: [
-                "1. List all pending tasks to verify ordering",
-                "2. Ensure ERROR tasks appear first in list",
-                "3. Ensure TEST tasks appear last in list",
-                "4. Verify task claiming follows priority rules",
+                '1. List all pending tasks to verify ordering',
+                '2. Ensure ERROR tasks appear first in list',
+                '3. Ensure TEST tasks appear last in list',
+                '4. Verify task claiming follows priority rules',
               ],
             },
           };
@@ -638,7 +772,351 @@ class TaskManagerAPI {
       return {
         success: false,
         error: error.message,
+        guide: this._getFallbackGuide('general'),
       };
+    }
+  }
+
+  /**
+   * Get cached comprehensive guide with performance optimization
+   * @returns {Promise<Object>} Cached guide or fresh generation
+   */
+  async _getCachedGuide() {
+    const now = Date.now();
+
+    // Return cached guide if still valid
+    if (
+      this._cachedGuide &&
+      now - this._guideCacheTime < this._guideCacheDuration
+    ) {
+      return this._cachedGuide;
+    }
+
+    // Prevent multiple concurrent guide generations
+    if (this._guideGenerationInProgress) {
+      // Wait for ongoing generation with timeout
+      let attempts = 0;
+
+      while (this._guideGenerationInProgress && attempts < 50) {
+        // eslint-disable-next-line no-await-in-loop -- Safe: Fixed iteration count with timeout for cache synchronization
+        await new Promise((resolve) => {
+          setTimeout(resolve, 100);
+        });
+        attempts++;
+      }
+      // Return cached guide if available after waiting
+      if (this._cachedGuide) {
+        return this._cachedGuide;
+      }
+    }
+
+    try {
+      this._guideGenerationInProgress = true;
+      const guideResult = await this.withTimeout(
+        this.getComprehensiveGuide(),
+        5000,
+      );
+
+      if (guideResult.success) {
+        this._cachedGuide = guideResult;
+        this._guideCacheTime = now;
+      }
+
+      return guideResult.success ? guideResult : null;
+    } catch {
+      return null;
+    } finally {
+      this._guideGenerationInProgress = false;
+    }
+  }
+
+  /**
+   * Get contextual guide information based on error type
+   * @param {string} errorContext - Context of the error (agent-init, agent-reinit, etc.)
+   * @returns {Promise<Object>} Contextual guide information
+   */
+  async _getGuideForError(errorContext) {
+    try {
+      const fullGuide = await this._getCachedGuide();
+      if (!fullGuide) {
+        return this._getFallbackGuide(errorContext);
+      }
+
+      // Return relevant sections based on error context
+      switch (errorContext) {
+        case 'agent-init':
+          return {
+            ...fullGuide,
+            focus: 'Agent Initialization',
+            quickStart: fullGuide.examples?.commonWorkflows?.newAgent || [
+              'timeout 10s node taskmanager-api.js guide',
+              'timeout 10s node taskmanager-api.js init',
+              'timeout 10s node taskmanager-api.js status',
+            ],
+            essential_commands: fullGuide.coreCommands?.agentLifecycle || {},
+            initialization_help: {
+              message: '🚨 AGENT INITIALIZATION GUIDANCE',
+              steps: [
+                '1. Initialize agent: timeout 10s node taskmanager-api.js init',
+                '2. Verify initialization: timeout 10s node taskmanager-api.js status',
+                '3. Begin task operations: timeout 10s node taskmanager-api.js list',
+              ],
+            },
+          };
+
+        case 'agent-reinit':
+          return {
+            ...fullGuide,
+            focus: 'Agent Reinitialization',
+            reinitialization_help: {
+              message: '🔄 AGENT REINITIALIZATION GUIDANCE',
+              when_required: [
+                'After completing tasks',
+                'Before long operations',
+                'After idle periods',
+                'When encountering "agent expired" errors',
+              ],
+              steps: [
+                '1. Reinitialize agent: timeout 10s node taskmanager-api.js reinitialize',
+                '2. Check renewed status: timeout 10s node taskmanager-api.js status',
+                '3. Continue task operations normally',
+              ],
+            },
+            essential_commands: fullGuide.coreCommands?.agentLifecycle || {},
+          };
+
+        case 'task-operations':
+          return {
+            ...fullGuide,
+            focus: 'Task Operations',
+            task_classification: fullGuide.taskClassification || {},
+            workflows: fullGuide.workflows || {},
+            task_help: {
+              message: '📋 TASK OPERATIONS GUIDANCE',
+              required_parameters:
+                'All tasks MUST include explicit category parameter',
+              valid_types: ['error', 'feature', 'subtask', 'test'],
+              examples: fullGuide.examples?.taskCreation || {},
+            },
+            order_override: {
+              message: '🔄 TASK ORDER OVERRIDE SYSTEM',
+              description:
+                'When task claiming fails due to order violations, agents can override',
+              normal_flow:
+                'Follow error tasks → feature order → subtask order (recommended for autonomous work)',
+              override_method:
+                'Use TaskManager.claimTask(taskId, agentId, priority, { allowOutOfOrder: true })',
+              valid_reasons: [
+                'USER REQUEST (always override)',
+                'urgent fixes',
+                'independent work',
+                'research tasks',
+                'debugging needs',
+              ],
+              user_authority:
+                'CRITICAL: When user explicitly requests a specific task, ALWAYS override order - user intent takes absolute precedence',
+              caution:
+                'For autonomous work: Only override when justified - maintain workflow integrity',
+              example:
+                "await api.taskManager.claimTask('task_123', agentId, 'normal', { allowOutOfOrder: true })",
+            },
+          };
+
+        default:
+          return fullGuide;
+      }
+    } catch {
+      return this._getFallbackGuide(errorContext);
+    }
+  }
+
+  /**
+   * Get fallback guide information when full guide generation fails
+   * @param {string} context - Error context for fallback guidance
+   * @returns {Object} Minimal fallback guide
+   */
+  _getFallbackGuide(context = 'general') {
+    const baseGuide = {
+      success: true,
+      message:
+        'For complete API usage guidance, run: timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" guide',
+      helpText:
+        'The guide provides comprehensive information about task classification, workflows, and all API capabilities',
+      essential_commands: {
+        guide: 'timeout 10s node taskmanager-api.js guide',
+        init: 'timeout 10s node taskmanager-api.js init',
+        status: 'timeout 10s node taskmanager-api.js status',
+        list: 'timeout 10s node taskmanager-api.js list',
+      },
+    };
+
+    // Add context-specific fallback guidance
+    switch (context) {
+      case 'agent-init':
+        return {
+          ...baseGuide,
+          context: 'Agent Initialization Required',
+          immediate_action: 'Run: timeout 10s node taskmanager-api.js init',
+          next_steps: [
+            'Initialize agent with init command',
+            'Verify with status command',
+            'Begin task operations',
+          ],
+        };
+
+      case 'agent-reinit':
+        return {
+          ...baseGuide,
+          context: 'Agent Reinitialization Required',
+          immediate_action:
+            'Run: timeout 10s node taskmanager-api.js reinitialize',
+          next_steps: [
+            'Reinitialize agent to renew heartbeat',
+            'Check agent status after reinitialization',
+            'Continue with task operations',
+          ],
+        };
+
+      case 'task-operations':
+        return {
+          ...baseGuide,
+          context: 'Task Operations Help',
+          immediate_action:
+            'Ensure category parameter is included in task creation',
+          categories: ['error', 'feature', 'subtask', 'test'],
+          example:
+            '{"title": "Task name", "description": "Details", "category": "error"}',
+          order_override_help: {
+            message:
+              'For task order violations: use { allowOutOfOrder: true } option',
+            method:
+              'api.taskManager.claimTask(taskId, agentId, priority, { allowOutOfOrder: true })',
+            user_requests:
+              'CRITICAL: When user explicitly requests a specific task, ALWAYS override order - user intent takes precedence',
+          },
+        };
+
+      default:
+        return baseGuide;
+    }
+  }
+
+  /**
+   * Get contextual guide information based on operation type
+   * @param {string} context - Operation context (e.g., 'phase-operations', 'task-operations')
+   * @returns {Object} Contextual guide information
+   */
+  getContextualGuide(context = 'general') {
+    // No need for fullGuide reference since we're building self-contained guides
+
+    switch (context) {
+      case 'phase-operations':
+        return {
+          success: true,
+          context: 'Phase Operations',
+          focus: 'Feature Phase Management (FEATURE-ONLY)',
+          critical_requirement:
+            '🚨 Phases are EXCLUSIVELY for FEATURE tasks - NOT for error, subtask, or test tasks',
+
+          phase_system: {
+            description:
+              'Sequential phase tracking system for feature development lifecycle',
+            numbering: 'Simple sequential: Phase 1, Phase 2, Phase 3, etc.',
+            statuses: ['pending', 'in_progress', 'completed'],
+            exclusive_to:
+              'FEATURE tasks only - error/subtask/test tasks NEVER have phases',
+          },
+
+          commands: {
+            'create-phase': {
+              usage:
+                'timeout 10s node taskmanager-api.js create-phase <featureId> \'{"title": "Phase title", "description": "Details"}\'',
+              description:
+                'Create new phase for a feature with sequential numbering',
+              example:
+                'timeout 10s node taskmanager-api.js create-phase feature_123 \'{"title": "Initial Planning", "description": "Requirements gathering and design"}\'',
+              required: ['featureId', 'phaseData.title'],
+            },
+            'update-phase': {
+              usage:
+                'timeout 10s node taskmanager-api.js update-phase <featureId> <phaseNumber> \'{"status": "completed"}\'',
+              description: 'Update phase status and details',
+              example:
+                'timeout 10s node taskmanager-api.js update-phase feature_123 1 \'{"status": "completed", "notes": "Planning completed"}\'',
+              required: ['featureId', 'phaseNumber', 'updates'],
+            },
+            'progress-phase': {
+              usage:
+                'timeout 10s node taskmanager-api.js progress-phase <featureId> <currentPhaseNumber>',
+              description: 'Complete current phase and progress to next phase',
+              example:
+                'timeout 10s node taskmanager-api.js progress-phase feature_123 1',
+              required: ['featureId', 'currentPhaseNumber'],
+            },
+            'list-phases': {
+              usage:
+                'timeout 10s node taskmanager-api.js list-phases <featureId>',
+              description:
+                'List all phases for a feature with completion statistics',
+              example:
+                'timeout 10s node taskmanager-api.js list-phases feature_123',
+              required: ['featureId'],
+            },
+            'current-phase': {
+              usage:
+                'timeout 10s node taskmanager-api.js current-phase <featureId>',
+              description: 'Get current active phase for a feature',
+              example:
+                'timeout 10s node taskmanager-api.js current-phase feature_123',
+              required: ['featureId'],
+            },
+            'phase-stats': {
+              usage:
+                'timeout 10s node taskmanager-api.js phase-stats <featureId>',
+              description: 'Get detailed phase completion statistics',
+              example:
+                'timeout 10s node taskmanager-api.js phase-stats feature_123',
+              required: ['featureId'],
+            },
+          },
+
+          workflow: [
+            '1. Identify feature requiring phase tracking',
+            '2. Create initial phases: create-phase <featureId> \'{"title": "Phase 1 Title"}\'',
+            '3. Add additional phases sequentially as needed',
+            '4. Progress through phases: progress-phase <featureId> <currentNumber>',
+            '5. Monitor progress: current-phase or phase-stats <featureId>',
+          ],
+
+          examples: {
+            typical_workflow: [
+              '# Create feature phases for development lifecycle',
+              'timeout 10s node taskmanager-api.js create-phase feature_456 \'{"title": "Planning & Design", "description": "Requirements and architecture"}\'',
+              'timeout 10s node taskmanager-api.js create-phase feature_456 \'{"title": "Core Implementation", "description": "Main functionality development"}\'',
+              'timeout 10s node taskmanager-api.js create-phase feature_456 \'{"title": "Testing & Validation", "description": "Comprehensive testing"}\'',
+              '# Progress through phases',
+              'timeout 10s node taskmanager-api.js progress-phase feature_456 1',
+              'timeout 10s node taskmanager-api.js current-phase feature_456',
+            ],
+          },
+
+          restrictions: {
+            exclusive_scope:
+              'Phases are ONLY for feature objects in TODO.json features array',
+            forbidden_for: [
+              'error tasks',
+              'subtask tasks',
+              'test tasks',
+              'tasks in TODO.json tasks array',
+            ],
+            validation:
+              'System enforces feature-only phase creation and management',
+          },
+        };
+
+      case 'task-operations':
+      default:
+        return this._getFallbackGuide(context);
     }
   }
 
@@ -689,12 +1167,20 @@ class TaskManagerAPI {
    * });
    */
   async initAgent(config = {}) {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
     try {
-      return await this.withTimeout(
+      guide = await this._getGuideForError('agent-init');
+    } catch {
+      // If guide fails, continue with initialization without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
         (async () => {
           // Default agent configuration for development workflows
           const defaultConfig = {
-            role: "development", // Primary agent role
+            role: 'development', // Primary agent role
             sessionId: `session_${Date.now()}`, // Unique session identifier
             specialization: [], // Specialized capabilities array
           };
@@ -712,19 +1198,40 @@ class TaskManagerAPI {
           };
         })(),
       );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('agent-init'),
+      };
     } catch (error) {
       return {
         success: false,
         error: error.message,
+        guide: guide || this._getFallbackGuide('agent-init'),
       };
     }
   }
 
-  async getCurrentTask(agentId = null) {
+  async getCurrentTask(agentId) {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
     try {
-      return await this.withTimeout(
+      guide = await this._getGuideForError('task-operations');
+    } catch {
+      // If guide fails, continue with operation without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
         (async () => {
-          const targetAgentId = agentId || this.agentId;
+          // Agent ID is always required - no auto-detection fallback
+          if (!agentId) {
+            throw new Error(
+              'Agent ID is required - must be provided explicitly',
+            );
+          }
+          const targetAgentId = agentId;
           const task = await this.taskManager.getCurrentTask(targetAgentId);
 
           return {
@@ -734,17 +1241,32 @@ class TaskManagerAPI {
           };
         })(),
       );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('task-operations'),
+      };
     } catch (error) {
       return {
         success: false,
         error: error.message,
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
 
   async listTasks(filter = {}) {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
     try {
-      return await this.withTimeout(
+      guide = await this._getGuideForError('task-operations');
+    } catch {
+      // If guide fails, continue with operation without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
         (async () => {
           // Get properly sorted executable tasks
           let tasks = await this.taskManager.getExecutableTasks();
@@ -772,11 +1294,11 @@ class TaskManagerAPI {
           if (filter.priority) {
             tasks = tasks.filter((task) => task.priority === filter.priority);
           }
-          if (filter.task_type) {
+          if (filter.category) {
             tasks = tasks.filter((task) => {
-              // Extract task_type from task ID prefix
-              const taskType = task.id.split("_")[0];
-              return taskType === filter.task_type;
+              // Extract category from task ID prefix
+              const taskType = task.id.split('_')[0];
+              return taskType === filter.category;
             });
           }
           if (filter.category) {
@@ -790,17 +1312,32 @@ class TaskManagerAPI {
           };
         })(),
       );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('task-operations'),
+      };
     } catch (error) {
       return {
         success: false,
         error: error.message,
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
 
   async createTask(taskData) {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
     try {
-      return await this.withTimeout(
+      guide = await this._getGuideForError('task-operations');
+    } catch {
+      // If guide fails, continue with operation without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
         (async () => {
           const taskId = await this.taskManager.createTask(taskData);
 
@@ -811,10 +1348,17 @@ class TaskManagerAPI {
           };
         })(),
       );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('task-operations'),
+      };
     } catch (error) {
       return {
         success: false,
         error: error.message,
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
@@ -837,26 +1381,34 @@ class TaskManagerAPI {
    * @returns {Object} Result with success status and task ID
    */
   async createErrorTask(taskData) {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
     try {
-      return await this.withTimeout(
+      guide = await this._getGuideForError('task-operations');
+    } catch {
+      // If guide fails, continue with operation without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
         (async () => {
           // Ensure error category is set
           const errorCategories = [
-            "error",
-            "build-error",
-            "linter-error",
-            "start-error",
+            'error',
+            'build-error',
+            'linter-error',
+            'start-error',
           ];
           if (!errorCategories.includes(taskData.category)) {
-            taskData.category = "error"; // Default to generic error
+            taskData.category = 'error'; // Default to generic error
           }
 
           // Set high priority for error tasks
-          taskData.priority = taskData.priority || "critical";
+          taskData.priority = taskData.priority || 'critical';
 
           // Add error-specific metadata
           taskData.is_error_task = true;
-          taskData.created_by = "error-detection-system";
+          taskData.created_by = 'error-detection-system';
 
           const taskId = await this.taskManager.createTask(taskData);
           return {
@@ -867,17 +1419,32 @@ class TaskManagerAPI {
           };
         })(),
       );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('task-operations'),
+      };
     } catch (error) {
       return {
         success: false,
         error: error.message,
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
 
   async analyzePhaseInsertion(newTaskData) {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
     try {
-      return await this.withTimeout(
+      guide = await this._getGuideForError('task-operations');
+    } catch {
+      // If guide fails, continue with operation without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
         (async () => {
           const data = await this.taskManager.readTodoFast();
           const newPhase = this.taskManager._extractPhase(newTaskData.title);
@@ -886,7 +1453,7 @@ class TaskManagerAPI {
             return {
               success: true,
               hasPhase: false,
-              message: "Task does not contain phase information",
+              message: 'Task does not contain phase information',
             };
           }
 
@@ -905,14 +1472,21 @@ class TaskManagerAPI {
             affectedTasks: insertionAnalysis.renumberingNeeded.length,
             message: insertionAnalysis.needsRenumbering
               ? `Phase insertion will require renumbering ${insertionAnalysis.renumberingNeeded.length} tasks`
-              : "No phase conflicts detected",
+              : 'No phase conflicts detected',
           };
         })(),
       );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('task-operations'),
+      };
     } catch (error) {
       return {
         success: false,
         error: error.message,
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
@@ -936,6 +1510,13 @@ class TaskManagerAPI {
    * • Provides research workflow instructions
    * • Suggests research report templates and structure
    * • Integrates with development/reports/ directory
+   *
+   * === TASK ORDER OVERRIDE ===
+   * When task claiming is blocked by order violations, agents can override by:
+   * • Understanding the error response includes 'allowOutOfOrder: true' suggestion
+   * • Using TaskManager.claimTask() directly with { allowOutOfOrder: true } options
+   * • This bypasses normal priority order (error tasks → feature order → subtask order)
+   * • Only use when agent has specific reason to work out of sequence
    *
    * === MULTI-AGENT COORDINATION ===
    * • Prevents race conditions in task claiming
@@ -963,16 +1544,34 @@ class TaskManagerAPI {
    *   console.log(result.dependencyInstructions.message);
    *   // Claim dependency first: result.nextDependency.id
    * }
+   *
+   * @example
+   * // Handle task order violations - use TaskManager directly with allowOutOfOrder
+   * const result = await api.claimTask('task_789');
+   * if (!result.success && result.reason.includes('order violation')) {
+   *   // Agent can override order if needed
+   *   const overrideResult = await api.taskManager.claimTask('task_789', agentId, priority, { allowOutOfOrder: true });
+   * }
    */
-  async claimTask(taskId, agentId = null, priority = "normal") {
+  async claimTask(taskId, agentId, priority = 'normal') {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
     try {
-      return await this.withTimeout(
+      guide = await this._getGuideForError('task-operations');
+    } catch {
+      // If guide fails, continue with operation without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
         (async () => {
-          // Resolve target agent ID - use provided ID or current session agent
-          const targetAgentId = agentId || this.agentId;
-          if (!targetAgentId) {
-            throw new Error("No agent ID provided and no agent initialized");
+          // Agent ID is always required - no auto-detection fallback
+          if (!agentId) {
+            throw new Error(
+              'Agent ID is required - must be provided explicitly when claiming tasks',
+            );
           }
+          const targetAgentId = agentId;
 
           // Read current TODO state for dependency validation
           const todoData = await this.taskManager.readTodo();
@@ -986,7 +1585,7 @@ class TaskManagerAPI {
             // Identify all dependencies that are not yet completed
             for (const depId of task.dependencies) {
               const depTask = todoData.tasks.find((t) => t.id === depId);
-              if (depTask && depTask.status !== "completed") {
+              if (depTask && depTask.status !== 'completed') {
                 incompleteDependencies.push(depTask);
               }
             }
@@ -996,13 +1595,13 @@ class TaskManagerAPI {
               // Find the next dependency that should be worked on first
               const nextDependency =
                 incompleteDependencies.find(
-                  (dep) => dep.status === "pending",
+                  (dep) => dep.status === 'pending',
                 ) || incompleteDependencies[0];
 
               return {
                 success: false,
                 reason:
-                  "Task has incomplete dependencies that must be completed first",
+                  'Task has incomplete dependencies that must be completed first',
                 blockedByDependencies: true,
                 incompleteDependencies: incompleteDependencies,
                 nextDependency: nextDependency,
@@ -1021,6 +1620,7 @@ class TaskManagerAPI {
                     status: nextDependency.status,
                   },
                 },
+                guide: guide || this._getFallbackGuide('task-operations'),
               };
             }
           }
@@ -1039,33 +1639,65 @@ class TaskManagerAPI {
 
           if (
             claimedTask &&
-            (claimedTask.category === "research" ||
+            (claimedTask.category === 'research' ||
               claimedTask.requires_research)
           ) {
             researchInstructions = {
-              message: "🔬 RESEARCH TASK DETECTED - RESEARCH REQUIRED FIRST",
+              message: '🔬 RESEARCH TASK DETECTED - RESEARCH REQUIRED FIRST',
               instructions: [
-                "📋 BEFORE IMPLEMENTATION: Perform comprehensive research",
-                "📁 CREATE research report in development/reports/ directory",
-                "🔍 ANALYZE existing solutions, best practices, and technical approaches",
-                "📊 DOCUMENT findings, recommendations, and implementation strategy",
-                "✅ COMPLETE research report before proceeding with implementation",
-                "🗂️ USE research findings to guide implementation decisions",
+                '📋 BEFORE IMPLEMENTATION: Perform comprehensive research',
+                '📁 CREATE research report in development/reports/ directory',
+                '🔍 ANALYZE existing solutions, best practices, and technical approaches',
+                '📊 DOCUMENT findings, recommendations, and implementation strategy',
+                '✅ COMPLETE research report before proceeding with implementation',
+                '🗂️ USE research findings to guide implementation decisions',
               ],
               reportTemplate: {
-                filename: `research-${claimedTask.title.toLowerCase().replace(/[^a-z0-9]/g, "-")}-${Date.now()}.md`,
-                directory: "development/reports/",
+                filename: `research-${claimedTask.title.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Date.now()}.md`,
+                directory: 'development/reports/',
                 sections: [
-                  "# Research Report: " + claimedTask.title,
-                  "## Overview",
-                  "## Current State Analysis",
-                  "## Research Findings",
-                  "## Technical Approaches",
-                  "## Recommendations",
-                  "## Implementation Strategy",
-                  "## References",
+                  '# Research Report: ' + claimedTask.title,
+                  '## Overview',
+                  '## Current State Analysis',
+                  '## Research Findings',
+                  '## Technical Approaches',
+                  '## Recommendations',
+                  '## Implementation Strategy',
+                  '## References',
                 ],
               },
+            };
+          }
+
+          // Enhanced response for task order violations
+          if (
+            !result.success &&
+            result.reason &&
+            result.reason.includes('order violation')
+          ) {
+            return {
+              success: result.success,
+              task: result.task,
+              reason: result.reason,
+              priority: result.priority,
+              nextTaskId: result.nextTaskId,
+              nextTaskTitle: result.nextTaskTitle,
+              suggestion: result.suggestion,
+              orderOverrideGuidance: {
+                message: '🔄 TASK ORDER OVERRIDE AVAILABLE',
+                instructions: [
+                  '📋 NORMAL: Complete the suggested task first (recommended for autonomous work)',
+                  '⚡ OVERRIDE: ALWAYS override when user explicitly requests a specific task',
+                  `   • Use: await api.taskManager.claimTask('${taskId}', '${targetAgentId}', '${priority}', { allowOutOfOrder: true })`,
+                  '🎯 OVERRIDE REASONS: USER REQUEST (always), urgent fixes, independent work, research tasks',
+                  '⚠️  USER AUTHORITY: When user asks for specific task, override order - user intent takes precedence',
+                ],
+                codeExample: {
+                  javascript: `// Override task order (required for user-requested tasks)\nconst overrideResult = await api.taskManager.claimTask('${taskId}', '${targetAgentId}', '${priority}', { allowOutOfOrder: true });`,
+                  commandLine: `# Alternative: Move task to prioritize it\ntimeout 10s node taskmanager-api.js move-up ${taskId}`,
+                },
+              },
+              researchInstructions: researchInstructions,
             };
           }
 
@@ -1078,31 +1710,54 @@ class TaskManagerAPI {
           };
         })(),
       );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('task-operations'),
+      };
     } catch (error) {
       return {
         success: false,
         error: error.message,
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
 
   async completeTask(taskId, completionData = {}) {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
     try {
-      return await this.withTimeout(
+      guide = await this._getGuideForError('task-operations');
+    } catch {
+      // If guide fails, continue with operation without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
         (async () => {
+          // Validate and sanitize completion data first
+          const validatedCompletionData =
+            this._validateCompletionData(completionData);
+
           // Get task details to check type
           const todoData = await this.taskManager.readTodoFast();
           const task = todoData.tasks.find((t) => t.id === taskId);
 
+          if (!task) {
+            throw new Error(`Task with ID ${taskId} not found`);
+          }
+
           // Update task status with completion notes if provided
-          if (completionData.notes) {
+          if (validatedCompletionData.notes) {
             await this.taskManager.updateTaskStatusConcurrent(
               taskId,
-              "completed",
-              completionData.notes,
+              'completed',
+              validatedCompletionData.notes,
             );
           } else {
-            await this.taskManager.updateTaskStatus(taskId, "completed");
+            await this.taskManager.updateTaskStatus(taskId, 'completed');
           }
 
           let documentationInstructions = null;
@@ -1110,22 +1765,22 @@ class TaskManagerAPI {
           // Add documentation update instructions for feature and subtask types
           if (
             task &&
-            (task.category === "feature" || task.category === "subtask")
+            (task.category === 'feature' || task.category === 'subtask')
           ) {
             documentationInstructions = {
               mandatory: true,
-              message: "🔴 DOCUMENTATION UPDATE REQUIRED",
+              message: '🔴 DOCUMENTATION UPDATE REQUIRED',
               instructions: [
-                "📋 UPDATE development/essentials/features.md to reflect task completion",
-                "📝 UPDATE relevant API documentation if functionality was modified",
-                "✅ VERIFY documentation accuracy and completeness",
-                "📖 UPDATE README.md if user-facing features were added/modified",
-                "🔍 VALIDATE all documentation changes before final completion",
+                '📋 UPDATE development/essentials/features.md to reflect task completion',
+                '📝 UPDATE relevant API documentation if functionality was modified',
+                '✅ VERIFY documentation accuracy and completeness',
+                '📖 UPDATE README.md if user-facing features were added/modified',
+                '🔍 VALIDATE all documentation changes before final completion',
               ],
               files_to_update: [
-                "development/essentials/features.md",
-                "docs/ (relevant API documentation)",
-                "README.md (if user-facing changes)",
+                'development/essentials/features.md',
+                'docs/ (relevant API documentation)',
+                'README.md (if user-facing changes)',
               ],
             };
           }
@@ -1133,25 +1788,123 @@ class TaskManagerAPI {
           return {
             success: true,
             taskId,
-            completionData,
+            completionData: validatedCompletionData,
             documentationInstructions,
             message: documentationInstructions
-              ? "Task marked complete. MANDATORY: Update documentation as instructed above."
-              : "Task marked complete successfully.",
+              ? 'Task marked complete. MANDATORY: Update documentation as instructed above.'
+              : 'Task marked complete successfully.',
           };
         })(),
       );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('task-operations'),
+      };
     } catch (error) {
       return {
         success: false,
         error: error.message,
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
 
+  /**
+   * Validate and sanitize completion data to prevent JSON errors
+   * @param {Object} completionData - Raw completion data to validate
+   * @returns {Object} Validated and sanitized completion data
+   * @private
+   */
+  _validateCompletionData(completionData) {
+    // Handle null/undefined cases
+    if (!completionData) {
+      return {};
+    }
+
+    // Ensure it's an object
+    if (typeof completionData !== 'object' || Array.isArray(completionData)) {
+      throw new Error('Completion data must be a valid object');
+    }
+
+    const validated = {};
+
+    // Validate and sanitize common fields
+    const allowedFields = [
+      'notes',
+      'message',
+      'outcome',
+      'details',
+      'files_modified',
+      'evidence',
+      'metrics',
+    ];
+
+    for (const [key, value] of Object.entries(completionData)) {
+      if (!allowedFields.includes(key)) {
+        // eslint-disable-next-line no-console -- Validation warning for completion data field
+        console.warn(
+          `[WARNING] Ignoring unknown completion data field: ${key}`,
+        );
+        continue;
+      }
+
+      // Sanitize string values
+      if (typeof value === 'string') {
+        // Check for truncation indicators
+        if (value.includes('...') && value.length > 3) {
+          throw new Error(
+            `Completion data field "${key}" appears to be truncated (contains "...")`,
+          );
+        }
+
+        // Limit string length to prevent excessively large data
+        if (value.length > 10000) {
+          throw new Error(
+            `Completion data field "${key}" exceeds maximum length of 10,000 characters`,
+          );
+        }
+
+        // Remove control characters that could cause JSON issues
+      } else if (Array.isArray(value)) {
+        // Validate array contents
+        // eslint-disable-next-line security/detect-object-injection -- key is from Object.entries, safe iteration
+        validated[key] = value.filter(
+          (item) =>
+            typeof item === 'string' && item.length > 0 && item.length < 1000,
+        );
+      } else if (typeof value === 'object' && value !== null) {
+        // Recursively validate nested objects (limited depth)
+        try {
+          // eslint-disable-next-line security/detect-object-injection -- key is from Object.entries, safe iteration
+          validated[key] = JSON.parse(JSON.stringify(value)); // Deep clone and validate JSON serializability
+        } catch (error) {
+          throw new Error(
+            `Completion data field "${key}" contains non-serializable data: ${error.message}`,
+          );
+        }
+      } else {
+        // Allow primitives (boolean, number)
+        // eslint-disable-next-line security/detect-object-injection -- key is from Object.entries, safe iteration
+        validated[key] = value;
+      }
+    }
+
+    return validated;
+  }
+
   async deleteTask(taskId) {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
     try {
-      return await this.withTimeout(
+      guide = await this._getGuideForError('task-operations');
+    } catch {
+      // If guide fails, continue with operation without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
         (async () => {
           const todoData = await this.taskManager.readTodoFast();
           const taskIndex = todoData.tasks.findIndex((t) => t.id === taskId);
@@ -1160,6 +1913,7 @@ class TaskManagerAPI {
             return {
               success: false,
               error: `Task not found: ${taskId}`,
+              guide: guide || this._getFallbackGuide('task-operations'),
             };
           }
 
@@ -1180,22 +1934,44 @@ class TaskManagerAPI {
           };
         })(),
       );
+
+      // Add guide to success response if not already present
+      if (result.success) {
+        return {
+          ...result,
+          guide: guide || this._getFallbackGuide('task-operations'),
+        };
+      }
+      return result; // Already contains guide for error case
     } catch (error) {
       return {
         success: false,
         error: error.message,
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
 
-  async getAgentStatus(agentId = null) {
+  async getAgentStatus(agentId) {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
     try {
-      return await this.withTimeout(
+      // Use agent-related context for status commands
+      guide = await this._getGuideForError('agent-init');
+    } catch {
+      // If guide fails, continue with operation without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
         (async () => {
-          const targetAgentId = agentId || this.agentId;
-          if (!targetAgentId) {
-            throw new Error("No agent ID provided and no agent initialized");
+          // Agent ID is always required - no auto-detection fallback
+          if (!agentId) {
+            throw new Error(
+              'Agent ID is required - must be provided explicitly',
+            );
           }
+          const targetAgentId = agentId;
 
           const agent = await this.agentManager.getAgent(targetAgentId);
           const tasks = await this.taskManager.getTasksForAgent(targetAgentId);
@@ -1208,22 +1984,40 @@ class TaskManagerAPI {
           };
         })(),
       );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('agent-init'),
+      };
     } catch (error) {
       return {
         success: false,
         error: error.message,
+        guide: guide || this._getFallbackGuide('agent-init'),
       };
     }
   }
 
-  async reinitializeAgent(agentId = null, config = {}) {
+  async reinitializeAgent(agentId, config = {}) {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
     try {
-      return await this.withTimeout(
+      guide = await this._getGuideForError('agent-reinit');
+    } catch {
+      // If guide fails, continue with reinitialization without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
         (async () => {
-          const targetAgentId = agentId || this.agentId;
-          if (!targetAgentId) {
-            throw new Error("No agent ID provided and no agent initialized");
+          // Agent ID is always required - no auto-detection fallback
+          if (!agentId) {
+            throw new Error(
+              'Agent ID is required - must be provided explicitly for reinitialization',
+            );
           }
+          const targetAgentId = agentId;
 
           // Get current agent configuration
           const currentAgent = await this.agentManager.getAgent(targetAgentId);
@@ -1255,21 +2049,36 @@ class TaskManagerAPI {
             agent: result.agent,
             renewed: result.renewed,
             message:
-              "Agent reinitialized successfully - heartbeat renewed and timeout reset",
+              'Agent reinitialized successfully - heartbeat renewed and timeout reset',
           };
         })(),
       );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('agent-reinit'),
+      };
     } catch (error) {
       return {
         success: false,
         error: error.message,
+        guide: guide || this._getFallbackGuide('agent-reinit'),
       };
     }
   }
 
   async getStatistics() {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
     try {
-      return await this.withTimeout(
+      guide = await this._getGuideForError('general');
+    } catch {
+      // If guide fails, continue with operation without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
         (async () => {
           const stats = await this.orchestrator.getOrchestrationStatistics();
 
@@ -1279,18 +2088,33 @@ class TaskManagerAPI {
           };
         })(),
       );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('general'),
+      };
     } catch (error) {
       return {
         success: false,
         error: error.message,
+        guide: guide || this._getFallbackGuide('general'),
       };
     }
   }
 
   // Task reordering methods
   async moveTaskToTop(taskId) {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
     try {
-      return await this.withTimeout(
+      guide = await this._getGuideForError('task-operations');
+    } catch {
+      // If guide fails, continue with operation without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
         (async () => {
           const result = await this.taskManager.moveTaskToTop(taskId);
           return {
@@ -1300,17 +2124,32 @@ class TaskManagerAPI {
           };
         })(),
       );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('task-operations'),
+      };
     } catch (error) {
       return {
         success: false,
         error: error.message,
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
 
   async moveTaskUp(taskId) {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
     try {
-      return await this.withTimeout(
+      guide = await this._getGuideForError('task-operations');
+    } catch {
+      // If guide fails, continue with operation without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
         (async () => {
           const result = await this.taskManager.moveTaskUp(taskId);
           return {
@@ -1320,17 +2159,32 @@ class TaskManagerAPI {
           };
         })(),
       );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('task-operations'),
+      };
     } catch (error) {
       return {
         success: false,
         error: error.message,
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
 
   async moveTaskDown(taskId) {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
     try {
-      return await this.withTimeout(
+      guide = await this._getGuideForError('task-operations');
+    } catch {
+      // If guide fails, continue with operation without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
         (async () => {
           const result = await this.taskManager.moveTaskDown(taskId);
           return {
@@ -1340,17 +2194,32 @@ class TaskManagerAPI {
           };
         })(),
       );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('task-operations'),
+      };
     } catch (error) {
       return {
         success: false,
         error: error.message,
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
 
   async moveTaskToBottom(taskId) {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
     try {
-      return await this.withTimeout(
+      guide = await this._getGuideForError('task-operations');
+    } catch {
+      // If guide fails, continue with operation without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
         (async () => {
           const result = await this.taskManager.moveTaskToBottom(taskId);
           return {
@@ -1360,10 +2229,17 @@ class TaskManagerAPI {
           };
         })(),
       );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('task-operations'),
+      };
     } catch (error) {
       return {
         success: false,
         error: error.message,
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
@@ -1377,7 +2253,7 @@ class TaskManagerAPI {
    */
   _checkResearchRequirements(task, todoData) {
     // Only suggest research for implementation-focused tasks
-    const implementationCategories = ["missing-feature", "enhancement", "bug"];
+    const implementationCategories = ['missing-feature', 'enhancement', 'bug'];
     if (!implementationCategories.includes(task.category)) {
       return { suggestResearch: false };
     }
@@ -1408,30 +2284,30 @@ class TaskManagerAPI {
     // Check if there are related research tasks already completed
     const relatedResearchTasks = todoData.tasks.filter(
       (t) =>
-        t.category === "research" &&
-        t.status === "completed" &&
+        t.category === 'research' &&
+        t.status === 'completed' &&
         this._isTaskRelated(task, t),
     );
 
     if (hasComplexityIndicators && relatedResearchTasks.length === 0) {
       return {
         suggestResearch: true,
-        reason: "Task appears complex and might benefit from research",
+        reason: 'Task appears complex and might benefit from research',
         complexityFactors: this._identifyComplexityFactors(taskText),
         suggestions: {
-          message: "🔬 RESEARCH RECOMMENDED BEFORE IMPLEMENTATION",
+          message: '🔬 RESEARCH RECOMMENDED BEFORE IMPLEMENTATION',
           instructions: [
-            "📋 CONSIDER creating a research task first to:",
-            "🔍 INVESTIGATE best practices and technical approaches",
-            "📚 RESEARCH existing solutions and patterns",
-            "🎯 DEFINE implementation strategy and requirements",
-            "✅ CREATE research task or proceed if confident",
+            '📋 CONSIDER creating a research task first to:',
+            '🔍 INVESTIGATE best practices and technical approaches',
+            '📚 RESEARCH existing solutions and patterns',
+            '🎯 DEFINE implementation strategy and requirements',
+            '✅ CREATE research task or proceed if confident',
           ],
           researchTaskTemplate: {
             title: `Research: ${task.title}`,
             description: `Research technical approaches, best practices, and implementation strategies for: ${task.description}`,
-            category: "research",
-            mode: "RESEARCH",
+            category: 'research',
+            mode: 'RESEARCH',
           },
           createResearchCommand: `node taskmanager-api.js create '{"title": "Research: ${task.title}", "description": "Research technical approaches and implementation strategies", "category": "research", "mode": "RESEARCH"}'`,
         },
@@ -1449,7 +2325,7 @@ class TaskManagerAPI {
     const extractKeywords = (text) => {
       return text
         .toLowerCase()
-        .replace(/[^\w\s]/g, " ")
+        .replace(/[^\w\s]/g, ' ')
         .split(/\s+/)
         .filter((word) => word.length > 3);
     };
@@ -1475,19 +2351,19 @@ class TaskManagerAPI {
     const factors = [];
 
     if (/api|integration|endpoint/.test(taskText)) {
-      factors.push("API/Integration complexity");
+      factors.push('API/Integration complexity');
     }
     if (/auth|oauth|jwt|security/.test(taskText)) {
-      factors.push("Authentication/Security requirements");
+      factors.push('Authentication/Security requirements');
     }
     if (/database|schema|migration/.test(taskText)) {
-      factors.push("Database/Schema complexity");
+      factors.push('Database/Schema complexity');
     }
     if (/external|third.?party/.test(taskText)) {
-      factors.push("External service dependencies");
+      factors.push('External service dependencies');
     }
     if (/performance|scalability/.test(taskText)) {
-      factors.push("Performance/Scalability considerations");
+      factors.push('Performance/Scalability considerations');
     }
 
     return factors;
@@ -1499,29 +2375,29 @@ class TaskManagerAPI {
   async cleanup() {
     try {
       // Cleanup in proper order with sufficient time
-      if (this.taskManager && typeof this.taskManager.cleanup === "function") {
+      if (this.taskManager && typeof this.taskManager.cleanup === 'function') {
         await this.taskManager.cleanup();
       }
       if (
         this.agentManager &&
-        typeof this.agentManager.cleanup === "function"
+        typeof this.agentManager.cleanup === 'function'
       ) {
         await this.agentManager.cleanup();
       }
       if (
         this.orchestrator &&
-        typeof this.orchestrator.cleanup === "function"
+        typeof this.orchestrator.cleanup === 'function'
       ) {
         await this.orchestrator.cleanup();
       }
     } catch (error) {
-      console.warn("Cleanup warning:", error.message);
+      // Log cleanup warnings through proper error handling
+      this.taskManager?.logger?.logError?.(error, 'cleanup') || (() => {})();
     }
 
-    // Give more time for cleanup and use setTimeout for better performance
-    setTimeout(() => {
-      process.exit(0);
-    }, 0);
+    // Return instead of using process.exit for better error handling
+    // This allows calling code to handle cleanup completion appropriately
+    return Promise.resolve();
   }
 }
 
@@ -1534,18 +2410,20 @@ async function main() {
 
   try {
     switch (command) {
-      case "methods": {
+      case 'methods': {
         const result = await api.getApiMethods();
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
       }
-      case "guide": {
+      case 'guide': {
         const result = await api.getComprehensiveGuide();
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
       }
 
-      case "init": {
+      case 'init': {
         let config = {};
         if (args[1]) {
           try {
@@ -1557,18 +2435,20 @@ async function main() {
           }
         }
         const result = await api.initAgent(config);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
       }
 
-      case "current": {
+      case 'current': {
         const agentId = args[1];
         const result = await api.getCurrentTask(agentId);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
       }
 
-      case "list": {
+      case 'list': {
         let filter = {};
         if (args[1]) {
           try {
@@ -1578,13 +2458,14 @@ async function main() {
           }
         }
         const result = await api.listTasks(filter);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
       }
 
-      case "create": {
+      case 'create': {
         if (!args[1]) {
-          throw new Error("Task data required for create command");
+          throw new Error('Task data required for create command');
         }
         let taskData;
         try {
@@ -1593,13 +2474,14 @@ async function main() {
           throw new Error(`Invalid JSON task data: ${parseError.message}`);
         }
         const result = await api.createTask(taskData);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
       }
 
-      case "create-error": {
+      case 'create-error': {
         if (!args[1]) {
-          throw new Error("Task data required for create-error command");
+          throw new Error('Task data required for create-error command');
         }
         let taskData;
         try {
@@ -1608,14 +2490,15 @@ async function main() {
           throw new Error(`Invalid JSON task data: ${parseError.message}`);
         }
         const result = await api.createErrorTask(taskData);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
       }
 
-      case "analyze-phase-insertion": {
+      case 'analyze-phase-insertion': {
         if (!args[1]) {
           throw new Error(
-            "Task data required for analyze-phase-insertion command",
+            'Task data required for analyze-phase-insertion command',
           );
         }
         let taskData;
@@ -1625,50 +2508,245 @@ async function main() {
           throw new Error(`Invalid JSON task data: ${parseError.message}`);
         }
         const result = await api.analyzePhaseInsertion(taskData);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
       }
 
-      case "claim": {
+      case 'claim': {
         const taskId = args[1];
         const agentId = args[2];
-        const priority = args[3] || "normal";
+        const priority = args[3] || 'normal';
         if (!taskId) {
-          throw new Error("Task ID required for claim command");
+          throw new Error('Task ID required for claim command');
         }
         const result = await api.claimTask(taskId, agentId, priority);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
       }
 
-      case "complete": {
+      case 'complete': {
         const taskId = args[1];
+        let agentId = null;
         let completionData = {};
-        if (args[2]) {
-          try {
-            completionData = JSON.parse(args[2]);
-          } catch (parseError) {
-            throw new Error(
-              `Invalid JSON completion data: ${parseError.message}`,
-            );
+
+        // Parse arguments intelligently to handle agent ID
+        // Command format: complete <taskId> [agentId] [completionData]
+        if (args.length >= 3) {
+          // Check if args[2] looks like an agent ID (contains session_)
+          if (args[2] && args[2].includes('session_')) {
+            agentId = args[2];
+            // Completion data would be in args[3]
+            if (args[3]) {
+              try {
+                // Validate and sanitize the JSON input before parsing
+                const rawInput = args[3];
+
+                // Check for truncation indicators
+                if (rawInput.includes('...') || rawInput.endsWith('...')) {
+                  throw new Error(
+                    'JSON completion data appears to be truncated (contains "..."). Please provide complete JSON data.',
+                  );
+                }
+
+                // Check for common JSON formatting issues - allow strings too
+                if (
+                  !rawInput.trim().startsWith('{') &&
+                  !rawInput.trim().startsWith('[') &&
+                  !rawInput.trim().startsWith('"')
+                ) {
+                  throw new Error(
+                    'JSON completion data must start with "{", "[", or be a quoted string',
+                  );
+                }
+
+                // Additional validation for proper closing
+                const trimmed = rawInput.trim();
+                if (trimmed.startsWith('{') && !trimmed.endsWith('}')) {
+                  throw new Error('JSON object must end with "}"');
+                }
+                if (trimmed.startsWith('[') && !trimmed.endsWith(']')) {
+                  throw new Error('JSON array must end with "]"');
+                }
+                if (trimmed.startsWith('"') && !trimmed.endsWith('"')) {
+                  throw new Error('JSON string must end with """');
+                }
+
+                // Check for unescaped quotes that might cause parsing issues
+                const quotedStringRegex = /"[^"]*"/g;
+                const matches = rawInput.match(quotedStringRegex);
+                if (matches) {
+                  for (const match of matches) {
+                    if (match.includes('\n') || match.includes('\r')) {
+                      throw new Error(
+                        'JSON completion data contains unescaped newlines in string values',
+                      );
+                    }
+                  }
+                }
+
+                // Attempt to parse with detailed error reporting
+                completionData = JSON.parse(rawInput);
+
+                // Validate completion data structure
+                if (
+                  typeof completionData !== 'object' &&
+                  typeof completionData !== 'string'
+                ) {
+                  throw new Error(
+                    'JSON completion data must be an object or string',
+                  );
+                }
+
+                // Convert string to object format
+                if (typeof completionData === 'string') {
+                  completionData = { message: completionData };
+                }
+
+                // Log successful parsing for debugging
+                if (process.env.DEBUG) {
+                  // eslint-disable-next-line no-console -- Debug logging for completion data parsing
+                  console.error(
+                    `[DEBUG] Successfully parsed completion data: ${JSON.stringify(completionData, null, 2)}`,
+                  );
+                }
+              } catch (parseError) {
+                // Enhanced error reporting with context
+                const errorContext = {
+                  input: args[3],
+                  inputLength: args[3]?.length || 0,
+                  inputPreview:
+                    args[3]?.substring(0, 100) +
+                    (args[3]?.length > 100 ? '...' : ''),
+                  parseErrorMessage: parseError.message,
+                  suggestion:
+                    'Ensure JSON is properly formatted: {"message": "Task completed"} or "Simple message"',
+                };
+
+                throw new Error(
+                  `Invalid JSON completion data: ${parseError.message}. Input preview: "${errorContext.inputPreview}". ${errorContext.suggestion}`,
+                );
+              }
+            }
+          } else {
+            // args[2] is completion data, no agent ID provided
+            try {
+              // Validate and sanitize the JSON input before parsing
+              const rawInput = args[2];
+
+              // Check for truncation indicators
+              if (rawInput.includes('...') || rawInput.endsWith('...')) {
+                throw new Error(
+                  'JSON completion data appears to be truncated (contains "..."). Please provide complete JSON data.',
+                );
+              }
+
+              // Check for common JSON formatting issues - allow strings too
+              if (
+                !rawInput.trim().startsWith('{') &&
+                !rawInput.trim().startsWith('[') &&
+                !rawInput.trim().startsWith('"')
+              ) {
+                throw new Error(
+                  'JSON completion data must start with "{", "[", or be a quoted string',
+                );
+              }
+
+              // Additional validation for proper closing
+              const trimmed = rawInput.trim();
+              if (trimmed.startsWith('{') && !trimmed.endsWith('}')) {
+                throw new Error('JSON object must end with "}"');
+              }
+              if (trimmed.startsWith('[') && !trimmed.endsWith(']')) {
+                throw new Error('JSON array must end with "]"');
+              }
+              if (trimmed.startsWith('"') && !trimmed.endsWith('"')) {
+                throw new Error('JSON string must end with """');
+              }
+
+              // Check for unescaped quotes that might cause parsing issues
+              const quotedStringRegex = /"[^"]*"/g;
+              const matches = rawInput.match(quotedStringRegex);
+              if (matches) {
+                for (const match of matches) {
+                  if (match.includes('\n') || match.includes('\r')) {
+                    throw new Error(
+                      'JSON completion data contains unescaped newlines in string values',
+                    );
+                  }
+                }
+              }
+
+              // Attempt to parse with detailed error reporting
+              completionData = JSON.parse(rawInput);
+
+              // Validate completion data structure
+              if (
+                typeof completionData !== 'object' &&
+                typeof completionData !== 'string'
+              ) {
+                throw new Error(
+                  'JSON completion data must be an object or string',
+                );
+              }
+
+              // Convert string to object format
+              if (typeof completionData === 'string') {
+                completionData = { message: completionData };
+              }
+
+              // Log successful parsing for debugging
+              if (process.env.DEBUG) {
+                // eslint-disable-next-line no-console -- Debug logging for completion data parsing
+                console.error(
+                  `[DEBUG] Successfully parsed completion data: ${JSON.stringify(completionData, null, 2)}`,
+                );
+              }
+            } catch (parseError) {
+              // Enhanced error reporting with context
+              const errorContext = {
+                input: args[2],
+                inputLength: args[2]?.length || 0,
+                inputPreview:
+                  args[2]?.substring(0, 100) +
+                  (args[2]?.length > 100 ? '...' : ''),
+                parseErrorMessage: parseError.message,
+                suggestion:
+                  'Ensure JSON is properly formatted: {"message": "Task completed"} or "Simple message"',
+              };
+
+              throw new Error(
+                `Invalid JSON completion data: ${parseError.message}. Input preview: "${errorContext.inputPreview}". ${errorContext.suggestion}`,
+              );
+            }
           }
         }
+
         if (!taskId) {
-          throw new Error("Task ID required for complete command");
+          throw new Error('Task ID required for complete command');
         }
+
+        // Add agent ID to completion data if provided
+        if (agentId) {
+          completionData.agentId = agentId;
+        }
+
         const result = await api.completeTask(taskId, completionData);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
       }
 
-      case "status": {
+      case 'status': {
         const agentId = args[1];
         const result = await api.getAgentStatus(agentId);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
       }
 
-      case "reinitialize": {
+      case 'reinitialize': {
         const agentId = args[1];
         let config = {};
         if (args[2]) {
@@ -1681,52 +2759,58 @@ async function main() {
           }
         }
         const result = await api.reinitializeAgent(agentId, config);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
       }
 
-      case "stats": {
+      case 'stats': {
         const result = await api.getStatistics();
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
       }
 
-      case "move-top": {
+      case 'move-top': {
         const taskId = args[1];
         if (!taskId) {
-          throw new Error("Task ID required for move-top command");
+          throw new Error('Task ID required for move-top command');
         }
         const result = await api.moveTaskToTop(taskId);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
       }
 
-      case "move-up": {
+      case 'move-up': {
         const taskId = args[1];
         if (!taskId) {
-          throw new Error("Task ID required for move-up command");
+          throw new Error('Task ID required for move-up command');
         }
         const result = await api.moveTaskUp(taskId);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
       }
 
-      case "move-down": {
+      case 'move-down': {
         const taskId = args[1];
         if (!taskId) {
-          throw new Error("Task ID required for move-down command");
+          throw new Error('Task ID required for move-down command');
         }
         const result = await api.moveTaskDown(taskId);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
       }
 
-      case "move-bottom": {
+      case 'move-bottom': {
         const taskId = args[1];
         if (!taskId) {
-          throw new Error("Task ID required for move-bottom command");
+          throw new Error('Task ID required for move-bottom command');
         }
         const result = await api.moveTaskToBottom(taskId);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
       }
@@ -1735,32 +2819,35 @@ async function main() {
       // FEATURE MANAGEMENT COMMANDS
       // ========================================
 
-      case "suggest-feature": {
+      case 'suggest-feature': {
         if (args.length < 2) {
-          console.error("Usage: suggest-feature <featureData> [agentId]");
-          throw new Error("Invalid arguments for suggest-feature");
+          // eslint-disable-next-line no-console -- CLI API requires console output for command-line error messages
+          console.error('Usage: suggest-feature <featureData> [agentId]');
+          throw new Error('Invalid arguments for suggest-feature');
         }
 
         try {
           const featureData = JSON.parse(args[1]);
-          const agentId = args[2] || "agent_unknown";
+          const agentId = args[2] || 'agent_unknown';
 
           if (!featureData.title) {
-            console.error("Error: Feature title is required");
-            throw new Error("Feature title is required");
+            // eslint-disable-next-line no-console -- CLI API requires console output for validation error messages
+            console.error('Error: Feature title is required');
+            throw new Error('Feature title is required');
           }
 
           const featureId = await api.taskManager.suggestFeature(
             featureData,
             agentId,
           );
+          // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
           console.log(
             JSON.stringify(
               {
                 success: true,
                 featureId: featureId,
                 message: `Feature suggested: ${featureData.title}`,
-                status: "suggested",
+                status: 'suggested',
                 awaiting_approval: true,
               },
               null,
@@ -1768,21 +2855,23 @@ async function main() {
             ),
           );
         } catch (error) {
+          // eslint-disable-next-line no-console -- CLI API requires console output for error reporting
           console.error(`Error suggesting feature: ${error.message}`);
           throw error;
         }
         break;
       }
 
-      case "approve-feature": {
+      case 'approve-feature': {
         if (args.length < 2) {
-          console.error("Usage: approve-feature <featureId> [userId]");
-          throw new Error("Invalid arguments for approve-feature");
+          // eslint-disable-next-line no-console -- CLI API requires console output for command-line error messages
+          console.error('Usage: approve-feature <featureId> [userId]');
+          throw new Error('Invalid arguments for approve-feature');
         }
 
         try {
           const featureId = args[1];
-          const userId = args[2] || "user";
+          const userId = args[2] || 'user';
 
           const success = await api.taskManager.approveFeature(
             featureId,
@@ -1790,13 +2879,14 @@ async function main() {
           );
           if (success) {
             const feature = await api.taskManager.getFeature(featureId);
+            // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
             console.log(
               JSON.stringify(
                 {
                   success: true,
                   featureId: featureId,
                   message: `Feature approved: ${feature.title}`,
-                  status: "approved",
+                  status: 'approved',
                   ready_for_implementation: true,
                 },
                 null,
@@ -1804,26 +2894,29 @@ async function main() {
               ),
             );
           } else {
+            // eslint-disable-next-line no-console -- CLI API requires console output for error reporting
             console.error(`Failed to approve feature: ${featureId}`);
             throw new Error(`Failed to approve feature: ${featureId}`);
           }
         } catch (error) {
+          // eslint-disable-next-line no-console -- CLI API requires console output for error reporting
           console.error(`Error approving feature: ${error.message}`);
           throw error;
         }
         break;
       }
 
-      case "reject-feature": {
+      case 'reject-feature': {
         if (args.length < 2) {
-          console.error("Usage: reject-feature <featureId> [userId] [reason]");
-          throw new Error("Invalid arguments for reject-feature");
+          // eslint-disable-next-line no-console -- CLI API requires console output for command-line error messages
+          console.error('Usage: reject-feature <featureId> [userId] [reason]');
+          throw new Error('Invalid arguments for reject-feature');
         }
 
         try {
           const featureId = args[1];
-          const userId = args[2] || "user";
-          const reason = args[3] || "";
+          const userId = args[2] || 'user';
+          const reason = args[3] || '';
 
           const feature = await api.taskManager.getFeature(featureId);
           const featureTitle = feature ? feature.title : featureId;
@@ -1834,6 +2927,7 @@ async function main() {
             reason,
           );
           if (success) {
+            // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
             console.log(
               JSON.stringify(
                 {
@@ -1848,21 +2942,24 @@ async function main() {
               ),
             );
           } else {
+            // eslint-disable-next-line no-console -- CLI API requires console output for error reporting
             console.error(`Failed to reject feature: ${featureId}`);
             throw new Error(`Failed to reject feature: ${featureId}`);
           }
         } catch (error) {
+          // eslint-disable-next-line no-console -- CLI API requires console output for error reporting
           console.error(`Error rejecting feature: ${error.message}`);
           throw error;
         }
         break;
       }
 
-      case "list-suggested-features": {
+      case 'list-suggested-features': {
         try {
           const features = await api.taskManager.getFeatures({
-            status: "suggested",
+            status: 'suggested',
           });
+          // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
           console.log(
             JSON.stringify(
               {
@@ -1885,16 +2982,18 @@ async function main() {
             ),
           );
         } catch (error) {
+          // eslint-disable-next-line no-console -- CLI API requires console output for error reporting
           console.error(`Error listing suggested features: ${error.message}`);
           throw error;
         }
         break;
       }
 
-      case "list-features": {
+      case 'list-features': {
         const filters = args.length > 1 ? JSON.parse(args[1]) : {};
         try {
           const features = await api.taskManager.getFeatures(filters);
+          // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
           console.log(
             JSON.stringify(
               {
@@ -1907,13 +3006,14 @@ async function main() {
             ),
           );
         } catch (error) {
+          // eslint-disable-next-line no-console -- CLI API requires console output for error reporting
           console.error(`Error listing features: ${error.message}`);
           throw error;
         }
         break;
       }
 
-      case "feature-stats": {
+      case 'feature-stats': {
         try {
           const allFeatures = await api.taskManager.getFeatures();
           const stats = {
@@ -1922,7 +3022,7 @@ async function main() {
             by_category: {},
             by_priority: {},
             awaiting_approval: allFeatures.filter(
-              (f) => f.status === "suggested",
+              (f) => f.status === 'suggested',
             ).length,
           };
 
@@ -1934,6 +3034,7 @@ async function main() {
               (stats.by_priority[f.priority] || 0) + 1;
           });
 
+          // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
           console.log(
             JSON.stringify(
               {
@@ -1945,18 +3046,227 @@ async function main() {
             ),
           );
         } catch (error) {
+          // eslint-disable-next-line no-console -- CLI API requires console output for error reporting
           console.error(`Error getting feature stats: ${error.message}`);
           throw error;
         }
         break;
       }
 
-      case "delete": {
+      // ========================================
+      // PHASE MANAGEMENT COMMANDS - FEATURE-ONLY
+      // 🚨 CRITICAL: Phases are EXCLUSIVELY for FEATURE tasks
+      // Error, subtask, and test tasks NEVER have phases
+      // ========================================
+
+      case 'create-phase': {
+        const featureId = args[1];
+        if (!featureId) {
+          throw new Error('Feature ID required for create-phase command');
+        }
+
+        let phaseData;
+        try {
+          phaseData = JSON.parse(args[2] || '{}');
+        } catch (parseError) {
+          throw new Error(`Invalid JSON phase data: ${parseError.message}`);
+        }
+
+        if (!phaseData.title) {
+          throw new Error('Phase title is required in phase data');
+        }
+
+        const phase = await api.taskManager.createPhase(featureId, phaseData);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
+        console.log(
+          JSON.stringify(
+            {
+              success: true,
+              phase: phase,
+              featureId: featureId,
+              message: `Phase "${phase.title}" created for feature ${featureId}`,
+              guide: await api.getContextualGuide('phase-operations'),
+            },
+            null,
+            2,
+          ),
+        );
+        break;
+      }
+
+      case 'update-phase': {
+        const featureId = args[1];
+        const phaseNumber = parseInt(args[2], 10);
+
+        if (!featureId) {
+          throw new Error('Feature ID required for update-phase command');
+        }
+        if (!phaseNumber || isNaN(phaseNumber)) {
+          throw new Error(
+            'Valid phase number required for update-phase command',
+          );
+        }
+
+        let updates;
+        try {
+          updates = JSON.parse(args[3] || '{}');
+        } catch (parseError) {
+          throw new Error(`Invalid JSON updates: ${parseError.message}`);
+        }
+
+        const phase = await api.taskManager.updatePhase(
+          featureId,
+          phaseNumber,
+          updates,
+        );
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
+        console.log(
+          JSON.stringify(
+            {
+              success: true,
+              phase: phase,
+              featureId: featureId,
+              message: `Phase ${phaseNumber} updated in feature ${featureId}`,
+              guide: await api.getContextualGuide('phase-operations'),
+            },
+            null,
+            2,
+          ),
+        );
+        break;
+      }
+
+      case 'progress-phase': {
+        const featureId = args[1];
+        const currentPhaseNumber = parseInt(args[2], 10);
+
+        if (!featureId) {
+          throw new Error('Feature ID required for progress-phase command');
+        }
+        if (!currentPhaseNumber || isNaN(currentPhaseNumber)) {
+          throw new Error(
+            'Valid current phase number required for progress-phase command',
+          );
+        }
+
+        const nextPhase = await api.taskManager.progressToNextPhase(
+          featureId,
+          currentPhaseNumber,
+        );
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
+        console.log(
+          JSON.stringify(
+            {
+              success: true,
+              nextPhase: nextPhase,
+              featureId: featureId,
+              message: nextPhase
+                ? `Progressed from Phase ${currentPhaseNumber} to Phase ${nextPhase.number} in feature ${featureId}`
+                : `Phase ${currentPhaseNumber} completed - no more phases in feature ${featureId}`,
+              guide: await api.getContextualGuide('phase-operations'),
+            },
+            null,
+            2,
+          ),
+        );
+        break;
+      }
+
+      case 'list-phases': {
+        const featureId = args[1];
+        if (!featureId) {
+          throw new Error('Feature ID required for list-phases command');
+        }
+
+        const phases = await api.taskManager.getFeaturePhases(featureId);
+        const stats = await api.taskManager.getPhaseCompletionStats(featureId);
+
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
+        console.log(
+          JSON.stringify(
+            {
+              success: true,
+              featureId: featureId,
+              phases: phases,
+              statistics: stats,
+              count: phases.length,
+              guide: await api.getContextualGuide('phase-operations'),
+            },
+            null,
+            2,
+          ),
+        );
+        break;
+      }
+
+      case 'current-phase': {
+        const featureId = args[1];
+        if (!featureId) {
+          throw new Error('Feature ID required for current-phase command');
+        }
+
+        const currentPhase = await api.taskManager.getCurrentPhase(featureId);
+        const stats = await api.taskManager.getPhaseCompletionStats(featureId);
+
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
+        console.log(
+          JSON.stringify(
+            {
+              success: true,
+              featureId: featureId,
+              currentPhase: currentPhase,
+              statistics: stats,
+              message: currentPhase
+                ? `Current phase: Phase ${currentPhase.number} - ${currentPhase.title} (${currentPhase.status})`
+                : `No active phases found for feature ${featureId}`,
+              guide: await api.getContextualGuide('phase-operations'),
+            },
+            null,
+            2,
+          ),
+        );
+        break;
+      }
+
+      case 'phase-stats': {
+        const featureId = args[1];
+        if (!featureId) {
+          throw new Error('Feature ID required for phase-stats command');
+        }
+
+        const stats = await api.taskManager.getPhaseCompletionStats(featureId);
+        const phases = await api.taskManager.getFeaturePhases(featureId);
+
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
+        console.log(
+          JSON.stringify(
+            {
+              success: true,
+              featureId: featureId,
+              statistics: stats,
+              phase_details: phases.map((p) => ({
+                number: p.number,
+                title: p.title,
+                status: p.status,
+                created_at: p.created_at,
+                updated_at: p.updated_at,
+              })),
+              guide: await api.getContextualGuide('phase-operations'),
+            },
+            null,
+            2,
+          ),
+        );
+        break;
+      }
+
+      case 'delete': {
         const taskId = args[1];
         if (!taskId) {
-          throw new Error("Task ID required for delete command");
+          throw new Error('Task ID required for delete command');
         }
         const result = await api.deleteTask(taskId);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
       }
@@ -1964,30 +3274,38 @@ async function main() {
       // ========================================
 
       default: {
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line help text
         console.log(`
 TaskManager Node.js API
 
-Usage: node taskmanager-api.js <command> [args...]
+Usage: timeout 10s node taskmanager-api.js <command> [args...]
 
-Commands:
-  methods                      - Get all available TaskManager and API methods
+IMPORTANT: Always use 'timeout 10s' prefix to prevent hanging operations
+
+Core Commands:
+  methods                      - Get all available TaskManager and API methods with CLI/API mapping
+  guide                        - Get comprehensive API documentation and troubleshooting
   init [config]                - Initialize agent with optional config JSON
-  current [agentId]            - Get current task for agent
-  list [filter]                - List tasks with optional filter JSON
-  create <taskData>            - Create new task with JSON data
-  create-error <taskData>      - Create error task with absolute priority (bypasses feature ordering)
-  claim <taskId> [agentId] [priority] - Claim task for agent
-  complete <taskId> [data]     - Complete task with optional data JSON
-  delete <taskId>              - Delete task (for task conversion/cleanup)
-  status [agentId]             - Get agent status and tasks
   reinitialize [agentId] [config] - Reinitialize agent (renew heartbeat, reset timeout)
+  status [agentId]             - Get agent status and current tasks
+  current [agentId]            - Get current task for agent
   stats                        - Get orchestration statistics
+
+Task Operations:
+  create <taskData>            - Create new task with JSON data (requires category)
+  create-error <taskData>      - Create error task with absolute priority (bypasses feature ordering)
+  list [filter]                - List tasks with optional filter JSON
+  claim <taskId> [agentId] [priority] - Claim task for agent
+  complete <taskId> [data]     - Complete task with optional completion data JSON
+  delete <taskId>              - Delete task (for task conversion/cleanup)
+
+Task Management:
   move-top <taskId>            - Move task to top priority
   move-up <taskId>             - Move task up one position
   move-down <taskId>           - Move task down one position
   move-bottom <taskId>         - Move task to bottom
 
-Feature Suggestion & Management:
+Feature Management:
   suggest-feature <featureData> [agentId] - Suggest new feature for user approval
   approve-feature <featureId> [userId]    - Approve suggested feature for implementation
   reject-feature <featureId> [userId] [reason] - Reject suggested feature
@@ -1995,49 +3313,82 @@ Feature Suggestion & Management:
   list-features [filter]       - List all features with optional filter
   feature-stats                - Get feature statistics and status breakdown
 
-Examples:
-  timeout 10s node taskmanager-api.js init '{"role": "development", "specialization": ["testing"]}'
-  timeout 10s node taskmanager-api.js create '{"title": "Fix bug", "mode": "DEVELOPMENT", "priority": "high"}'
-  timeout 10s node taskmanager-api.js list '{"status": "pending"}'
-  timeout 10s node taskmanager-api.js reinitialize agent_123 '{"metadata": {"renewed": true}}'
-  
-Feature Suggestion Examples:
-  timeout 10s node taskmanager-api.js suggest-feature '{"title": "Add dark mode", "description": "Implement dark theme", "rationale": "Improve user experience", "category": "ui", "estimated_effort": "medium"}' agent_dev_001
-  timeout 10s node taskmanager-api.js list-suggested-features
-  timeout 10s node taskmanager-api.js approve-feature feature_suggested_123456789_abc123def user
-  timeout 10s node taskmanager-api.js reject-feature feature_suggested_123456789_abc123def user "Not aligned with project goals"
+Phase Management (FEATURE-ONLY - not for error/subtask/test tasks):
+  create-phase <featureId> <phaseData>    - Create new phase for a feature (sequential: Phase 1, Phase 2, etc.)
+  update-phase <featureId> <phaseNumber> <updates> - Update phase status and details
+  progress-phase <featureId> <currentPhaseNumber>  - Complete current phase and progress to next
+  list-phases <featureId>      - List all phases for a feature with statistics
+  current-phase <featureId>    - Get current active phase for a feature
+  phase-stats <featureId>      - Get detailed phase completion statistics
 
-Task Management Examples:
-  timeout 10s node taskmanager-api.js move-top task_123
+Essential Examples:
+  timeout 10s node taskmanager-api.js init
+  timeout 10s node taskmanager-api.js create '{"title": "Fix linting errors", "description": "Resolve ESLint violations", "category": "error"}'
+  timeout 10s node taskmanager-api.js complete task_123 '{"message": "Task completed successfully"}'
+  timeout 10s node taskmanager-api.js complete task_123
+  timeout 10s node taskmanager-api.js list '{"status": "pending"}'
+  timeout 10s node taskmanager-api.js guide
+
+Troubleshooting:
+  • For completion JSON errors, ensure proper quoting: '{"message": "text"}'
+  • Use 'methods' command to see CLI-to-API method mapping
+  • Use 'guide' command for comprehensive documentation
+  • CLI commands (like 'complete') map to API methods (like 'completeTask')
+
+Advanced Examples:
+  timeout 10s node taskmanager-api.js suggest-feature '{"title": "Add dark mode", "description": "Implement dark theme", "rationale": "Improve UX", "category": "ui", "estimated_effort": "medium"}' agent_dev_001
+  timeout 10s node taskmanager-api.js complete error_456 '{"fixed": true, "details": "Resolved linting errors", "files_modified": ["src/auth.js"]}'
   
                 `);
         break;
       }
     }
   } catch (error) {
-    // Get comprehensive guide for error responses
+    // Enhanced error handling with contextual guide delivery
     let guide = null;
+    let errorContext = 'general';
+
+    // Determine error context based on error message and command
+    if (
+      error.message.includes('no agent id') ||
+      error.message.includes('agent not initialized')
+    ) {
+      errorContext = 'agent-init';
+    } else if (command === 'init' || command === 'reinitialize') {
+      errorContext = command === 'init' ? 'agent-init' : 'agent-reinit';
+    } else if (['create', 'claim', 'complete', 'list'].includes(command)) {
+      errorContext = 'task-operations';
+    }
+
     try {
-      const guideResult = await api.getComprehensiveGuide();
-      guide = guideResult.success ? guideResult : null;
-    } catch (guideError) {
-      // If guide fails, continue with error response without guide
+      // Use cached guide method for better performance
+      guide = await api._getGuideForError(errorContext);
+    } catch {
+      // If contextual guide fails, try fallback
+      try {
+        guide = api._getFallbackGuide(errorContext);
+      } catch {
+        // If everything fails, use basic guide
+      }
     }
 
     const errorResponse = {
       success: false,
       error: error.message,
       command,
+      errorContext,
+      timestamp: new Date().toISOString(),
       guide: guide || {
         message:
           'For complete API usage guidance, run: timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" guide',
         helpText:
-          "The guide provides comprehensive information about task classification, workflows, and all API capabilities",
+          'The guide provides comprehensive information about task classification, workflows, and all API capabilities',
       },
     };
 
+    // eslint-disable-next-line no-console -- CLI API requires console output for error reporting
     console.error(JSON.stringify(errorResponse, null, 2));
-    throw new Error("TaskManager API execution failed");
+    throw new Error('TaskManager API execution failed');
   } finally {
     await api.cleanup();
   }
@@ -2049,7 +3400,8 @@ module.exports = TaskManagerAPI;
 // Run CLI if called directly (CommonJS equivalent)
 if (require.main === module) {
   main().catch((error) => {
-    console.error("Fatal error:", error.message);
+    // eslint-disable-next-line no-console -- CLI API requires console output for fatal error reporting
+    console.error('Fatal error:', error.message);
     throw error;
   });
 }

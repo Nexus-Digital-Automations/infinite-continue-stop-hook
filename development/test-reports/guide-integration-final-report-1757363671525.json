@@ -1,0 +1,38 @@
+{
+  "timestamp": "2025-09-08T20:34:31.523Z",
+  "summary": {
+    "total": 5,
+    "passed": 1,
+    "failed": 4,
+    "passRate": "20.0%"
+  },
+  "results": [
+    {
+      "test": "Guide Command",
+      "status": "FAILED",
+      "error": "Guide command failed: spawnSync /bin/sh ETIMEDOUT"
+    },
+    {
+      "test": "Agent Initialization",
+      "status": "FAILED",
+      "error": "Init command failed: spawnSync /bin/sh ETIMEDOUT"
+    },
+    {
+      "test": "Task Creation",
+      "status": "FAILED",
+      "error": "Task creation failed: spawnSync /bin/sh ETIMEDOUT"
+    },
+    {
+      "test": "Error Response",
+      "status": "PASSED",
+      "details": "Contextual error guide with task type guidance"
+    },
+    {
+      "test": "Performance",
+      "status": "FAILED",
+      "error": "Performance test iteration 1 failed"
+    }
+  ],
+  "features": null,
+  "verdict": "FAILED"
+}

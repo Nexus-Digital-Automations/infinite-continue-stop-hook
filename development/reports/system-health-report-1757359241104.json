@@ -1,0 +1,469 @@
+{
+  "summary": {
+    "overallHealthScore": 61,
+    "healthStatus": "fair",
+    "totalCheckDuration": 44.239208,
+    "timestamp": "2025-09-08T19:20:41.103Z",
+    "systemInfo": {
+      "projectRoot": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook",
+      "nodeVersion": "v22.19.0",
+      "platform": "darwin",
+      "arch": "arm64",
+      "processId": 33906
+    }
+  },
+  "categories": {
+    "fileSystemHealth": {
+      "healthScore": 100,
+      "status": "completed",
+      "duration": 9.808250000000008,
+      "summary": "fileSystemHealth completed with 100% health score in 9.81ms",
+      "details": {
+        "criticalFilesStatus": {
+          "TODO.json": {
+            "exists": true,
+            "size": 12278,
+            "modified": "2025-09-08T19:17:45.170Z",
+            "accessible": true,
+            "type": "file"
+          },
+          "package.json": {
+            "exists": true,
+            "size": 888,
+            "modified": "2025-09-07T20:58:40.932Z",
+            "accessible": true,
+            "type": "file"
+          },
+          "lib/taskManager.js": {
+            "exists": true,
+            "size": 236531,
+            "modified": "2025-09-08T19:01:30.921Z",
+            "accessible": true,
+            "type": "file"
+          },
+          "lib/agentManager.js": {
+            "exists": true,
+            "size": 24944,
+            "modified": "2025-09-08T18:25:24.935Z",
+            "accessible": true,
+            "type": "file"
+          },
+          "lib/logger.js": {
+            "exists": true,
+            "size": 7325,
+            "modified": "2025-09-08T18:31:06.925Z",
+            "accessible": true,
+            "type": "file"
+          },
+          "taskmanager-api.js": {
+            "exists": true,
+            "size": 80657,
+            "modified": "2025-09-08T18:42:33.387Z",
+            "accessible": true,
+            "type": "file"
+          },
+          "stop-hook.js": {
+            "exists": true,
+            "size": 41136,
+            "modified": "2025-09-08T18:51:25.725Z",
+            "accessible": true,
+            "type": "file"
+          }
+        },
+        "criticalDirectoriesStatus": {
+          "lib": {
+            "exists": true,
+            "accessible": true,
+            "isDirectory": true,
+            "modified": "2025-09-08T19:20:26.147Z"
+          },
+          "development": {
+            "exists": true,
+            "accessible": true,
+            "isDirectory": true,
+            "modified": "2025-09-08T19:10:23.971Z"
+          },
+          "development/essentials": {
+            "exists": true,
+            "accessible": true,
+            "isDirectory": true,
+            "modified": "2025-09-08T19:07:50.339Z"
+          }
+        },
+        "permissions": {
+          "TODO.json": {
+            "readable": true
+          },
+          "package.json": {
+            "readable": true
+          },
+          "lib/taskManager.js": {
+            "readable": true
+          },
+          "lib/agentManager.js": {
+            "readable": true
+          },
+          "lib/logger.js": {
+            "readable": true
+          },
+          "taskmanager-api.js": {
+            "readable": true
+          },
+          "stop-hook.js": {
+            "readable": true
+          }
+        },
+        "integrity": {
+          "TODO.json": {
+            "validJson": true
+          },
+          "package.json": {
+            "validJson": true
+          }
+        },
+        "statistics": {
+          "healthScore": 100,
+          "totalChecks": 10,
+          "successfulChecks": 10,
+          "checkDuration": 9.808250000000008,
+          "timestamp": "2025-09-08T19:20:41.069Z"
+        }
+      }
+    },
+    "taskManagerHealth": {
+      "healthScore": 100,
+      "status": "completed",
+      "duration": 0,
+      "summary": "taskManagerHealth completed with 100% health score in 0.00ms",
+      "details": {
+        "coreOperations": {
+          "todoReading": {
+            "success": true,
+            "taskCount": 4,
+            "duration": 4.144667000000005,
+            "dataStructure": {
+              "hasProject": true,
+              "hasTasks": true,
+              "hasFeatures": true,
+              "hasAgents": true
+            }
+          },
+          "taskFiltering": {
+            "success": true,
+            "duration": 0.03212500000000773,
+            "taskCounts": {
+              "total": 4,
+              "pending": 2,
+              "inProgress": 2,
+              "completed": 0
+            }
+          }
+        },
+        "apiResponsiveness": {
+          "statisticsEndpoint": {
+            "success": false,
+            "duration": 0.1410410000000013,
+            "error": "this.taskManager.getStatistics is not a function"
+          }
+        },
+        "dataConsistency": {
+          "issues": [],
+          "isConsistent": true,
+          "checkDuration": 0.028417000000004577,
+          "totalTasksValidated": 4
+        },
+        "errorHandling": {},
+        "statistics": {
+          "healthScore": 100,
+          "totalOperations": 2,
+          "successfulOperations": 2,
+          "consistencyIssues": 0,
+          "totalDuration": 4.457915999999997,
+          "timestamp": "2025-09-08T19:20:41.065Z"
+        }
+      }
+    },
+    "agentSystemHealth": {
+      "healthScore": 0,
+      "status": "completed",
+      "duration": 0,
+      "summary": "agentSystemHealth completed with 0% health score in 0.00ms",
+      "details": {
+        "agentRegistry": {},
+        "coordinationSystem": {},
+        "performanceMetrics": {},
+        "statistics": {
+          "healthScore": 0,
+          "error": "Failed to read TODO.json: The \"path\" argument must be of type string or an instance of Buffer or URL. Received undefined",
+          "duration": 1.3565419999999975,
+          "timestamp": "2025-09-08T19:20:41.063Z"
+        }
+      }
+    },
+    "systemResourceHealth": {
+      "healthScore": 45,
+      "status": "completed",
+      "duration": 0.23270899999999983,
+      "summary": "systemResourceHealth completed with 45% health score in 0.23ms",
+      "details": {
+        "currentUsage": {
+          "memory": {
+            "total": 25769803776,
+            "free": 126353408,
+            "used": 25643450368,
+            "usagePercent": 99.50968424479166,
+            "processHeapTotal": 7438336,
+            "processHeapUsed": 5833432,
+            "processExternal": 1898232
+          },
+          "cpu": {
+            "loadAverage": [
+              14.52685546875,
+              21.36083984375,
+              26.080078125
+            ],
+            "cores": 8
+          },
+          "system": {
+            "uptime": 826695,
+            "processUptime": 0.062194958
+          },
+          "timestamp": "2025-09-08T19:20:41.062Z"
+        },
+        "comparison": {
+          "memoryChange": {
+            "usagePercentDelta": 0,
+            "heapUsedDelta": 189976,
+            "freeMemoryDelta": 0
+          },
+          "cpuLoadChange": {
+            "loadAverage1mDelta": 0
+          }
+        },
+        "thresholds": {
+          "memory": {
+            "warning": 80,
+            "critical": 90
+          },
+          "cpu": {
+            "warning": 5.6,
+            "critical": 7.2
+          },
+          "heap": {
+            "warning": 104857600,
+            "critical": 262144000
+          }
+        },
+        "recommendations": [
+          {
+            "type": "memory",
+            "priority": "high",
+            "message": "High memory usage detected (99.5%). Consider optimizing memory-intensive operations or increasing system memory.",
+            "technicalDetails": {
+              "currentUsage": 99.50968424479166,
+              "threshold": 80,
+              "totalMemory": 25769803776,
+              "usedMemory": 25643450368
+            }
+          },
+          {
+            "type": "cpu",
+            "priority": "high",
+            "message": "High CPU load detected (14.53 avg load on 8 cores). Consider optimizing CPU-intensive operations.",
+            "technicalDetails": {
+              "loadAverage1m": 14.52685546875,
+              "loadAverage5m": 21.36083984375,
+              "loadAverage15m": 26.080078125,
+              "cores": 8,
+              "threshold": 5.6
+            }
+          }
+        ],
+        "statistics": {
+          "healthScore": 45,
+          "checkDuration": 0.23270899999999983,
+          "recommendationCount": 2,
+          "timestamp": "2025-09-08T19:20:41.062Z"
+        }
+      }
+    },
+    "performanceMetrics": {
+      "healthScore": 0,
+      "status": "completed",
+      "duration": 0,
+      "summary": "performanceMetrics completed with 0% health score in 0.00ms",
+      "details": {
+        "responseTimeTests": {
+          "todoFileRead": {
+            "success": true,
+            "duration": 2.8149580000000043,
+            "timestamp": "2025-09-08T19:20:41.065Z"
+          },
+          "taskFiltering": {
+            "success": true,
+            "duration": 1.4533750000000083,
+            "timestamp": "2025-09-08T19:20:41.067Z"
+          },
+          "statisticsGeneration": {
+            "success": false,
+            "duration": 0.07574999999999932,
+            "error": "this.taskManager.getStatistics is not a function",
+            "timestamp": "2025-09-08T19:20:41.067Z"
+          }
+        },
+        "throughputTests": {
+          "batchFileOperations": {
+            "success": true,
+            "iterations": 50,
+            "totalDuration": 35.358125,
+            "averageOperationTime": 0.7071625,
+            "operationsPerSecond": 1414.102133526594,
+            "timestamp": "2025-09-08T19:20:41.102Z"
+          }
+        },
+        "concurrencyTests": {},
+        "bottleneckAnalysis": {
+          "bottlenecks": [],
+          "bottleneckCount": 0,
+          "analysisTimestamp": "2025-09-08T19:20:41.102Z"
+        },
+        "statistics": {
+          "performanceScore": 80,
+          "totalTestDuration": 40.176416999999994,
+          "testsCompleted": 4,
+          "timestamp": "2025-09-08T19:20:41.102Z"
+        }
+      }
+    },
+    "dataIntegrityHealth": {
+      "healthScore": 0,
+      "status": "completed",
+      "duration": 7.286541999999997,
+      "summary": "dataIntegrityHealth completed with 0% health score in 7.29ms",
+      "details": {
+        "fileIntegrity": {
+          "TODO.json": {
+            "exists": true,
+            "validJson": true,
+            "parseTime": 65.946542,
+            "dataStructure": {
+              "dataType": "object",
+              "isObject": true,
+              "isArray": false,
+              "keyCount": 12,
+              "nestedLevels": 5
+            },
+            "fileSize": 12278
+          },
+          "package.json": {
+            "exists": true,
+            "validJson": true,
+            "parseTime": 67.21975,
+            "dataStructure": {
+              "dataType": "object",
+              "isObject": true,
+              "isArray": false,
+              "keyCount": 11,
+              "nestedLevels": 2
+            },
+            "fileSize": 888
+          }
+        },
+        "dataConsistency": {
+          "totalTasks": 4,
+          "consistencyIssues": [],
+          "isConsistent": true,
+          "validationTimestamp": "2025-09-08T19:20:41.067Z"
+        },
+        "backupValidation": {
+          "backupFilesFound": 2,
+          "backupFiles": [
+            "TODO.json.backup",
+            "agent-registry.json.backup.1755623080501"
+          ],
+          "validBackups": 2,
+          "invalidBackups": 0
+        },
+        "validationErrors": [],
+        "statistics": {
+          "integrityScore": 100,
+          "validationErrors": 0,
+          "checkDuration": 7.286541999999997,
+          "timestamp": "2025-09-08T19:20:41.070Z"
+        }
+      }
+    }
+  },
+  "recommendations": [
+    {
+      "type": "memory",
+      "priority": "high",
+      "message": "High memory usage detected (99.5%). Consider optimizing memory-intensive operations or increasing system memory.",
+      "technicalDetails": {
+        "currentUsage": 99.50968424479166,
+        "threshold": 80,
+        "totalMemory": 25769803776,
+        "usedMemory": 25643450368
+      }
+    },
+    {
+      "type": "cpu",
+      "priority": "high",
+      "message": "High CPU load detected (14.53 avg load on 8 cores). Consider optimizing CPU-intensive operations.",
+      "technicalDetails": {
+        "loadAverage1m": 14.52685546875,
+        "loadAverage5m": 21.36083984375,
+        "loadAverage15m": 26.080078125,
+        "cores": 8,
+        "threshold": 5.6
+      }
+    },
+    {
+      "type": "system-optimization",
+      "priority": "high",
+      "message": "Overall system health is below optimal levels. Consider implementing performance optimization strategies.",
+      "actions": [
+        "Review and optimize file I/O operations",
+        "Implement caching mechanisms for frequently accessed data",
+        "Monitor and optimize memory usage patterns",
+        "Consider upgrading system resources if consistently under high load"
+      ]
+    }
+  ],
+  "alerts": [
+    {
+      "type": "health-warning",
+      "category": "agentSystemHealth",
+      "message": "agentSystemHealth health score is critically low (0)",
+      "priority": "high",
+      "timestamp": "2025-09-08T19:20:41.103Z"
+    },
+    {
+      "type": "health-warning",
+      "category": "systemResourceHealth",
+      "message": "systemResourceHealth health score is critically low (45)",
+      "priority": "high",
+      "timestamp": "2025-09-08T19:20:41.103Z"
+    }
+  ],
+  "metrics": {
+    "performanceSummary": {
+      "averageResponseTime": 2.1341665000000063,
+      "throughput": 1414.102133526594,
+      "bottleneckCount": 0
+    },
+    "resourceUsage": {
+      "memoryUsagePercent": 99.50968424479166,
+      "cpuLoadAverage": 14.52685546875,
+      "processHeapUsage": 5833432
+    },
+    "systemLoad": {}
+  },
+  "healthTrends": {
+    "baselineComparison": {
+      "memoryTrend": "stable",
+      "performanceTrend": "stable",
+      "lastBaselineUpdate": "2025-09-08T19:20:41.059Z"
+    }
+  }
+}

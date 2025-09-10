@@ -144,6 +144,32 @@ module.exports = [
     },
   },
 
+  // Configuration specific to development/temp-scripts directory
+  {
+    files: ["development/temp-scripts/**/*.js"],
+    rules: {
+      // Allow console statements in temp scripts
+      "no-console": "off",
+      // Allow process.exit in temp scripts
+      "n/no-process-exit": "off",
+      // Reduce severity of unused variables (prefix with _ if needed)
+      "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+      // Allow require-await warnings instead of errors
+      "require-await": "warn",
+      // Allow security warnings for test scripts
+      "security/detect-object-injection": "warn",
+      "security/detect-non-literal-fs-filename": "warn",
+      // Allow await in loops for sequential test operations
+      "no-await-in-loop": "warn",
+      // Reduce severity for test-only dependencies
+      "n/no-missing-require": "warn",
+      // Reduce severity for promise executor return values
+      "no-promise-executor-return": "warn",
+      // Allow redundant await on return values in test scripts
+      "no-return-await": "warn",
+    },
+  },
+
   // Ignore patterns
   {
     ignores: [

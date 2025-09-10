@@ -271,7 +271,7 @@ function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 **FINISH CURRENT TASKS BEFORE STARTING NEW ONES - PROFESSIONAL DEVELOPERS COMPLETE THEIR WORK**
 
 **CONTINUATION PROTOCOL:**
-✅ **CHECK AGENT STATUS** → Reinitialize if exists, init if new
+✅ **CHECK AGENT STATUS** → Always use reinitialize (works for both fresh and existing agents)
 ✅ **COMPLETE CURRENT WORK** → Never abandon unfinished tasks - teams depend on you
 ✅ **PRESERVE CONTEXT** → Build upon existing work, maintain implementation approach
 ✅ **VALIDATE THOROUGHLY** → Run all checks before completion
@@ -289,9 +289,8 @@ function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 🎯 **ESSENTIAL COMMANDS:**
 
 **CORE WORKFLOW:**
-   # Initialize/Reinitialize agent
-   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init --project-root "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook"
-   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID]
+   # Reinitialize agent (works for fresh and existing agents)
+   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID] --project-root "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook"
 
    # Read development/essentials/ files
    ls development/essentials/ 2>/dev/null && find development/essentials/ -type f -name "*.md" -exec echo "=== {} ===" \\; -exec cat {} \\;
@@ -392,8 +391,8 @@ The stop hook will continue infinitely to prevent accidental termination.
 
 💡 TO SET UP TASKMANAGER:
 If you want to enable task management for this project:
-1. Run: node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project "${workingDir}"
-2. This will create TODO.json and initialize your agent
+1. Run: timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID] --project-root "${workingDir}"
+2. This will create TODO.json and reinitialize your agent
 
 ⚡ CONTINUING OPERATION...
 `);
@@ -677,11 +676,11 @@ Initialize a new agent and continue where they left off.
 
 🔄 INFINITE CONTINUE MODE ACTIVE
 
-💡 **AGENT INITIALIZATION FOR STALE PROJECT RECOVERY:**
+💡 **AGENT REINITIALIZATION FOR STALE PROJECT RECOVERY:**
 To recover and continue work from the previous stale agents:
 
-1. **Initialize your recovery agent:**
-   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project "${workingDir}"
+1. **Reinitialize your recovery agent:**
+   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID] --project-root "${workingDir}"
 
 2. **Check for unfinished tasks from previous agents:**
    node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Pending tasks to continue:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
@@ -717,8 +716,8 @@ TaskManager project exists but no agents have been registered yet.
 🚨 **CLAUDE CODE AGENT - CRITICAL INSTRUCTION:**
 **ULTRATHINK - IF YOU WERE WORKING ON SOMETHING BEFORE THIS MESSAGE:**
 **ULTRATHINK - CONTINUE YOUR WORK - DO NOT ABANDON UNFINISHED TASKS**
-**ULTRATHINK - IF AGENT EXISTS: REINITIALIZE AGENT TO CONTINUE EXISTING TASK**
-**ULTRATHINK - IF NO AGENT: INITIALIZE NEW AGENT TO START FRESH WORK**
+**ULTRATHINK - ALWAYS USE REINITIALIZE COMMAND - WORKS FOR ALL SCENARIOS**
+**ULTRATHINK - REINITIALIZE HANDLES BOTH FRESH AND EXISTING AGENTS AUTOMATICALLY**
 **ULTRATHINK - DEPLOY MAXIMUM CONCURRENT SUBAGENTS FOR ANY PARALLELIZABLE WORK**
 **ULTRATHINK - USE UP TO 10 SIMULTANEOUS SUBAGENTS FOR COMPLEX MULTI-COMPONENT TASKS**
 **ULTRATHINK - ADD COMPREHENSIVE COMMENTS TO ALL SCRIPT FILES FOR FUTURE DEVELOPERS**
@@ -726,11 +725,11 @@ TaskManager project exists but no agents have been registered yet.
 **ULTRATHINK - 🚨 FEATURE IDEAS: WRITE SUGGESTIONS IN development/essentials/features.md ONLY**
 **ULTRATHINK - 🚨 NO UNAUTHORIZED FEATURES: Wait for user approval before creating any feature tasks**
 
-💡 **FRESH PROJECT INITIALIZATION:**
+💡 **FRESH PROJECT AGENT SETUP:**
 To start working with this TaskManager project:
 
-1. **Initialize your first agent:**
-   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project "${workingDir}"
+1. **Reinitialize agent for fresh start:**
+   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID] --project-root "${workingDir}"
 
 2. **Check for any existing tasks to work on:**
    node -e 'const TaskManager = require("/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Available tasks:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'

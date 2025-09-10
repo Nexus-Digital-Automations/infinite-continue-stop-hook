@@ -1,0 +1,33 @@
+{
+  "timestamp": "2025-09-08T20:32:33.153Z",
+  "passed": 5,
+  "failed": 0,
+  "total": 5,
+  "passRate": "100.0%",
+  "results": [
+    {
+      "test": "Guide Generation",
+      "status": "PASSED"
+    },
+    {
+      "test": "Guide Caching",
+      "status": "PASSED",
+      "avgTime": 0,
+      "cacheEffectiveness": "NaN"
+    },
+    {
+      "test": "Contextual Guide",
+      "status": "PASSED"
+    },
+    {
+      "test": "Fallback Guide",
+      "status": "PASSED"
+    },
+    {
+      "test": "Guide Content Quality",
+      "status": "PASSED",
+      "qualityScore": "110/100",
+      "issues": []
+    }
+  ]
+}

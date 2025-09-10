@@ -34,7 +34,7 @@ const TIMEOUT = 15000; // 15 seconds for API operations
  * @param {number} timeout - Command timeout in milliseconds
  * @returns {Promise<Object>} Parsed JSON response from API
  */
-async function execAPI(command, args = [], timeout = TIMEOUT) {
+function execAPI(command, args = [], timeout = TIMEOUT) {
   return new Promise((resolve, reject) => {
     const allArgs = [
       API_PATH,
@@ -83,7 +83,7 @@ async function execAPI(command, args = [], timeout = TIMEOUT) {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (stderrParseError) {
+        } catch {
           // If both fail, include raw output for debugging
           reject(
             new Error(
@@ -153,11 +153,11 @@ describe('TaskManager API Comprehensive Test Suite', () => {
   let testTaskId = null;
   let testFeatureId = null;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     setupTestEnvironment();
   });
 
-  afterEach(async () => {
+  afterEach(() => {
     cleanupTestEnvironment();
   });
 
@@ -614,9 +614,9 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         },
       ];
 
-      for (const taskData of tasks) {
-        await execAPI('create', [JSON.stringify(taskData)]);
-      }
+      await Promise.all(
+        tasks.map((taskData) => execAPI('create', [JSON.stringify(taskData)])),
+      );
     });
 
     test('should list all tasks without filter', async () => {
@@ -690,14 +690,16 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         { title: 'Third task', task_type: 'feature', priority: 'high' },
       ];
 
-      for (const taskData of tasks) {
-        const createResult = await execAPI('create', [
-          JSON.stringify(taskData),
-        ]);
+      const createResults = await Promise.all(
+        tasks.map((taskData) => execAPI('create', [JSON.stringify(taskData)])),
+      );
+
+      // Find the test task ID from results
+      tasks.forEach((taskData, index) => {
         if (taskData.title === 'Second task') {
-          testTaskId = createResult.taskId;
+          testTaskId = createResults[index].taskId;
         }
-      }
+      });
     });
 
     test('should move task to top', async () => {
@@ -891,12 +893,14 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         { title: 'Another suggested feature', status: 'suggested' },
       ];
 
-      for (const featureData of features) {
-        await execAPI('suggest-feature', [
-          JSON.stringify(featureData),
-          testAgentId,
-        ]);
-      }
+      await Promise.all(
+        features.map((featureData) =>
+          execAPI('suggest-feature', [
+            JSON.stringify(featureData),
+            testAgentId,
+          ]),
+        ),
+      );
 
       const result = await execAPI('feature-stats');
 
@@ -966,12 +970,15 @@ describe('TaskManager API Comprehensive Test Suite', () => {
         { title: 'Active task 2', task_type: 'error', priority: 'critical' },
       ];
 
-      for (const taskData of tasks) {
-        const createResult = await execAPI('create', [
-          JSON.stringify(taskData),
-        ]);
-        await execAPI('claim', [createResult.taskId, testAgentId]);
-      }
+      const createResults = await Promise.all(
+        tasks.map((taskData) => execAPI('create', [JSON.stringify(taskData)])),
+      );
+
+      await Promise.all(
+        createResults.map((result) =>
+          execAPI('claim', [result.taskId, testAgentId]),
+        ),
+      );
     });
 
     test('should get orchestration statistics', async () => {
