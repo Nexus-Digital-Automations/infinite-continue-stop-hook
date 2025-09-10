@@ -1,6 +1,111 @@
 {
   "project": "infinite-continue-stop-hook",
-  "tasks": [],
+  "tasks": [
+    {
+      "id": "error_1757528786523_j3o26aih9",
+      "title": "Fix TaskManager reinitialization guide and help text",
+      "description": "Update guide and help text to provide clear workflows for existing vs new agents, fix confusing documentation",
+      "priority": "medium",
+      "category": "error",
+      "status": "in_progress",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-10T18:26:26.523Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757528760354_1_general_79360ca6",
+      "started_at": "2025-09-10T18:27:09.316Z",
+      "claimed_by": "development_session_1757528760354_1_general_79360ca6",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757528760354_1_general_79360ca6",
+          "role": "primary",
+          "assignedAt": "2025-09-10T18:27:09.316Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
+    },
+    {
+      "id": "error_1757528785245_jq1p3usa3",
+      "title": "Fix agent reinitialization logic in taskmanager-api.js",
+      "description": "Fix broken reinitialization workflow: reinitialize command requires agent ID but provides no guidance on agent ID retrieval, init command creates new agents instead of reusing existing ones, no clear workflow for existing agents to refresh registration",
+      "priority": "medium",
+      "category": "error",
+      "status": "in_progress",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-10T18:26:25.246Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757528760790_1_general_ec40630c",
+      "started_at": "2025-09-10T18:27:07.618Z",
+      "claimed_by": "development_session_1757528760790_1_general_ec40630c",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757528760790_1_general_ec40630c",
+          "role": "primary",
+          "assignedAt": "2025-09-10T18:27:07.618Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
+    },
+    {
+      "id": "error_1757528717083_3eq5mtpb6",
+      "title": "Fix agent reinitialization workflow for existing agents",
+      "description": "Current reinitialization requires agent ID but provides no clear workflow for existing agents to get their ID and reinitialize. Need to fix the reinitialize logic to properly handle existing agents and update documentation to provide clear guidance.",
+      "priority": "medium",
+      "category": "error",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-10T18:25:17.083Z",
+      "auto_research_created": false
+    },
+    {
+      "id": "feature_1757528836351_6jcafikye",
+      "title": "Update taskmanager guide with absolute path",
+      "description": "Modify the taskmanager guide to include the absolute path to taskmanager-api.js file for better usability",
+      "priority": "medium",
+      "category": "feature",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-10T18:27:16.351Z",
+      "auto_research_created": false
+    },
+    {
+      "id": "test_1757528787308_ddxd3nvl3",
+      "title": "Comprehensive TaskManager Reinitialization Workflow Testing",
+      "description": "Test all reinitialization scenarios including fresh agent init, existing agent reinit, stale agent recovery, error handling, and integration with task operations. Document results and provide evidence for each test scenario.",
+      "priority": "medium",
+      "category": "test",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-10T18:26:27.309Z",
+      "auto_research_created": false
+    }
+  ],
   "current_mode": "DEVELOPMENT",
   "last_mode": null,
   "execution_count": 0,
@@ -8,90 +113,6 @@
   "strikes_completed_last_run": false,
   "last_hook_activation": 1757094794402,
   "agents": {
-    "development_session_1757526967874_1_general_17559005": {
-      "name": "development Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-10T17:56:07.876Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-10T17:56:07.876Z",
-      "sessionId": "session_1757526967874",
-      "metadata": {}
-    },
-    "development_session_1757527177157_1_general_1c28b8bb": {
-      "name": "development Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-10T17:59:37.159Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-10T17:59:37.159Z",
-      "sessionId": "session_1757527177157",
-      "metadata": {}
-    },
-    "development_session_1757527432503_1_general_f1beb32d": {
-      "name": "development Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-10T18:03:52.504Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-10T18:03:52.504Z",
-      "sessionId": "session_1757527432503",
-      "metadata": {}
-    },
-    "development_session_1757527500426_1_general_43fc5de1": {
-      "name": "development Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-10T18:05:00.427Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-10T18:05:00.427Z",
-      "sessionId": "session_1757527500426",
-      "metadata": {}
-    },
     "development_session_1757527666666_1_general_30a1aee3": {
       "name": "development Agent",
       "role": "development",
@@ -112,6 +133,198 @@
       "createdAt": "2025-09-10T18:07:46.668Z",
       "sessionId": "session_1757527666666",
       "metadata": {}
+    },
+    "development_session_1757527751962_1_general_dd9b95de": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-10T18:09:11.964Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-10T18:09:11.964Z",
+      "sessionId": "session_1757527751962",
+      "metadata": {
+        "renewedAt": "2025-09-10T18:16:17.943Z",
+        "renewalReason": "Agent reinitialization requested"
+      },
+      "lastRenewal": "2025-09-10T18:16:17.943Z",
+      "renewalCount": 1,
+      "agentId": "development_session_1757527751962_1_general_dd9b95de"
+    },
+    "development_session_1757528647517_1_general_e2ae26a4": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-10T18:24:07.519Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-10T18:24:07.519Z",
+      "sessionId": "session_1757528647517",
+      "metadata": {}
+    },
+    "development_session_1757528760354_1_general_79360ca6": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-10T18:26:00.356Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-10T18:26:00.356Z",
+      "sessionId": "session_1757528760354",
+      "metadata": {}
+    },
+    "development_session_1757528760790_1_general_ec40630c": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-10T18:26:00.793Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-10T18:26:00.793Z",
+      "sessionId": "session_1757528760790",
+      "metadata": {}
+    },
+    "development_session_1757528761424_1_general_c9543001": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-10T18:26:01.426Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-10T18:26:01.426Z",
+      "sessionId": "session_1757528761424",
+      "metadata": {
+        "renewedAt": "2025-09-10T18:28:33.875Z",
+        "renewalReason": "Agent reinitialization requested"
+      },
+      "lastRenewal": "2025-09-10T18:28:33.875Z",
+      "renewalCount": 1,
+      "agentId": "development_session_1757528761424_1_general_c9543001"
+    },
+    "development_session_1757528820762_1_general_b6292d90": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-10T18:27:00.764Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-10T18:27:00.764Z",
+      "sessionId": "session_1757528820762",
+      "metadata": {}
+    },
+    "development_session_1757528950905_1_general_59a5033b": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-10T18:29:10.907Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-10T18:29:10.907Z",
+      "sessionId": "session_1757528950905",
+      "metadata": {
+        "renewedAt": "2025-09-10T18:29:45.536Z",
+        "renewalReason": "Agent reinitialization requested"
+      },
+      "lastRenewal": "2025-09-10T18:29:45.536Z",
+      "renewalCount": 1,
+      "agentId": "development_session_1757528950905_1_general_59a5033b"
+    },
+    "development_session_1757529251842_1_general_e00389fc": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-10T18:34:11.844Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-10T18:34:11.844Z",
+      "sessionId": "session_1757529251842",
+      "metadata": {
+        "renewedAt": "2025-09-10T18:34:37.274Z",
+        "renewalReason": "Agent reinitialization requested"
+      },
+      "lastRenewal": "2025-09-10T18:34:37.274Z",
+      "renewalCount": 1,
+      "agentId": "development_session_1757529251842_1_general_e00389fc"
     }
   },
   "features": [

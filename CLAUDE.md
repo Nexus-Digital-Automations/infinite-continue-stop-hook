@@ -14,7 +14,7 @@
 - **❌ NO PRELIMINARY QUESTIONS** - Act on request as given, create task instantly
 - **✅ INSTANT RESPONSE** - User request → Initialize → Create task → Execute
 - **✅ IMMEDIATE COMMITMENT** - Show task creation to demonstrate commitment to work
-- **✅ REINITIALIZE IF AGENT EXISTS** - Use reinitialize command if agent already exists
+- **✅ REINITIALIZE IF AGENT EXISTS** - Use reinitialize command with your saved agent ID if agent already exists
 
 **🚨 CRITICAL: EVERY USER MESSAGE REQUIRING ACTION TRIGGERS IMMEDIATE TASK CREATION**
 No matter how simple or complex the request, immediately initialize and create a task.
@@ -453,8 +453,9 @@ Create research tasks as dependencies for: External API integrations, database s
 
 **IMMEDIATE INITIALIZATION ON ANY USER REQUEST:**
 ```bash
-# Step 1: Initialize (or reinitialize if agent exists)
+# Step 1: Initialize (or reinitialize if agent exists with your saved agent ID)
 timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init
+# If you have an existing agent ID: timeout 10s node "taskmanager-api.js" reinitialize <your-saved-agent-id>
 
 # Step 2: Create task for user request immediately
 timeout 10s node "taskmanager-api.js" create '{"title":"[User Request]", "description":"[Details]", "category":"error|feature|subtask|test"}'
