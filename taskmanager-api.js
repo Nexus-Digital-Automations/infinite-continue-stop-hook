@@ -311,6 +311,7 @@ class TaskManagerAPI {
             'list-suggested-features': 'listSuggestedFeatures',
             'list-features': 'listFeatures',
             'feature-stats': 'getFeatureStats',
+            'list-agents': 'listAgents',
             cleanup: 'cleanup',
           };
 
@@ -493,17 +494,38 @@ class TaskManagerAPI {
                 },
                 reinitialize: {
                   description:
-                    'Refresh agent registration and renew heartbeat for existing agents',
+                    'Smart agent reinitialization with automatic agent discovery and scenario handling',
                   usage:
-                    'node taskmanager-api.js reinitialize <agentId> [config]',
-                  required_parameter:
-                    'agentId - Must be the ID from your previous init command',
-                  when: 'After task completion, before long operations, after idle periods',
-                  output: 'Updated agent status and renewed registration',
-                  agent_id_source:
-                    'Use the agentId returned from your initial init command',
-                  example:
+                    'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [agentId] [config]',
+                  optional_parameter:
+                    'agentId - Specific agent ID to reinitialize (auto-detected if not provided)',
+                  when: 'After task completion, before long operations, after idle periods, or when unsure of agent status',
+                  output:
+                    'Updated agent status and renewed registration with scenario detection',
+                  smart_features: [
+                    'Auto-detects existing agents if no ID provided',
+                    'Cleans up stale agents automatically',
+                    'Falls back to init for fresh projects',
+                    'Provides clear scenario feedback',
+                    'Works with single or multiple agents',
+                  ],
+                  scenarios: {
+                    explicit_agent: 'reinitialize specific_agent_id',
+                    auto_detect:
+                      'reinitialize (finds and uses best available agent)',
+                    fresh_project:
+                      'reinitialize (auto-initializes new agent if none found)',
+                    with_config: 'reinitialize agent_id \'{"role":"testing"}\'',
+                    simple:
+                      'reinitialize (recommended - handles everything automatically)',
+                  },
+                  examples: [
+                    'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize',
                     'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize development_session_123_general_abc',
+                    'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize development_session_123_general_abc \'{"role":"testing"}\'',
+                  ],
+                  recommendation:
+                    'Use "reinitialize" without parameters for best experience - it handles all scenarios intelligently',
                 },
               },
               taskOperations: {
@@ -916,11 +938,49 @@ class TaskManagerAPI {
                 'After idle periods',
                 'When encountering "agent expired" errors',
               ],
-              steps: [
-                '1. Reinitialize agent: timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize',
-                '2. Check renewed status: timeout 10s timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" status',
-                '3. Continue task operations normally',
-              ],
+              workflows: {
+                existing_agent: {
+                  description:
+                    'For agents that already have an ID from previous init',
+                  steps: [
+                    '1. Use your existing agent ID from previous init command',
+                    '2. Reinitialize: timeout 10s node taskmanager-api.js reinitialize <agentId>',
+                    '3. Verify renewal: timeout 10s node taskmanager-api.js status <agentId>',
+                    '4. Continue task operations normally',
+                  ],
+                  example:
+                    'timeout 10s node taskmanager-api.js reinitialize development_session_123_general_abc',
+                },
+                fresh_start: {
+                  description:
+                    'For agents that need to start fresh or have lost their ID',
+                  steps: [
+                    '1. Initialize new agent: timeout 10s node taskmanager-api.js init',
+                    '2. Save the returned agentId for future operations',
+                    '3. Verify initialization: timeout 10s node taskmanager-api.js status <agentId>',
+                    '4. Begin or resume task operations',
+                  ],
+                  note: 'Init creates a new agent registration - use this when you dont have an existing agent ID',
+                },
+                agent_id_recovery: {
+                  description: 'How to find your agent ID if you forgot it',
+                  methods: [
+                    'Check the agentId from your last init command output',
+                    'Look for "agentId": "..." in previous command responses',
+                    'Agent IDs follow format: role_session_timestamp_index_type_hash',
+                    'If completely lost, run init to create fresh agent',
+                  ],
+                  format_example:
+                    'development_session_1757528760354_1_general_79360ca6',
+                },
+              },
+              quick_reference: {
+                'Have agent ID':
+                  'timeout 10s node taskmanager-api.js reinitialize <agentId>',
+                'Need new agent': 'timeout 10s node taskmanager-api.js init',
+                'Check status':
+                  'timeout 10s node taskmanager-api.js status <agentId>',
+              },
             },
             essential_commands: fullGuide.coreCommands?.agentLifecycle || {},
           };
@@ -1011,13 +1071,41 @@ class TaskManagerAPI {
         return {
           ...baseGuide,
           context: 'Agent Reinitialization Required',
-          immediate_action:
-            'Run: timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize',
-          next_steps: [
-            'Reinitialize agent to renew heartbeat',
-            'Check agent status after reinitialization',
-            'Continue with task operations',
-          ],
+          reinitialization_help: {
+            message: '🔄 AGENT REINITIALIZATION GUIDANCE',
+            workflows: {
+              existing_agent: {
+                description:
+                  'For agents that already have an ID from previous init',
+                steps: [
+                  '1. Use your existing agent ID from previous init command',
+                  '2. Reinitialize: timeout 10s node taskmanager-api.js reinitialize <agentId>',
+                  '3. Verify renewal: timeout 10s node taskmanager-api.js status <agentId>',
+                  '4. Continue task operations normally',
+                ],
+                example:
+                  'timeout 10s node taskmanager-api.js reinitialize development_session_123_general_abc',
+              },
+              fresh_start: {
+                description:
+                  'For agents that need to start fresh or have lost their ID',
+                steps: [
+                  '1. Initialize new agent: timeout 10s node taskmanager-api.js init',
+                  '2. Save the returned agentId for future operations',
+                  '3. Verify initialization: timeout 10s node taskmanager-api.js status <agentId>',
+                  '4. Begin or resume task operations',
+                ],
+                note: 'Init creates a new agent registration - use this when you dont have an existing agent ID',
+              },
+            },
+            quick_reference: {
+              'Have agent ID':
+                'timeout 10s node taskmanager-api.js reinitialize <agentId>',
+              'Need new agent': 'timeout 10s node taskmanager-api.js init',
+              'Check status':
+                'timeout 10s node taskmanager-api.js status <agentId>',
+            },
+          },
         };
 
       case 'task-operations':
@@ -2111,6 +2199,208 @@ class TaskManagerAPI {
     }
   }
 
+  /**
+   * Smart reinitialization that handles all agent scenarios intelligently
+   * @param {string} agentId - Optional explicit agent ID
+   * @param {Object} config - Agent configuration overrides
+   * @returns {Promise<Object>} Reinitialization result with scenario detection
+   */
+  async smartReinitializeAgent(agentId, config = {}) {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
+    try {
+      guide = await this._getGuideForError('agent-reinit');
+    } catch {
+      // If guide fails, continue with reinitialization without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
+        (async () => {
+          let detectedScenario = 'unknown';
+          let selectedAgentId = agentId;
+
+          // Scenario 1: Explicit agent ID provided
+          if (agentId) {
+            detectedScenario = 'explicit_agent_provided';
+
+            // Verify the agent exists
+            const agent = await this.agentManager.getAgent(agentId);
+            if (!agent) {
+              throw new Error(
+                `Agent ${agentId} not found. Use 'init' to create a new agent or check available agents.`,
+              );
+            }
+
+            return this._performReinitializeWithScenario(
+              agentId,
+              config,
+              detectedScenario,
+              guide,
+            );
+          }
+
+          // Scenario 2: Auto-detect stored agent ID
+          if (this.agentId) {
+            selectedAgentId = this.agentId;
+            detectedScenario = 'using_stored_agent_id';
+
+            try {
+              const agent = await this.agentManager.getAgent(selectedAgentId);
+              if (agent) {
+                return this._performReinitializeWithScenario(
+                  selectedAgentId,
+                  config,
+                  detectedScenario,
+                  guide,
+                );
+              }
+            } catch {
+              // Stored agent ID is stale, continue to other scenarios
+            }
+          }
+
+          // Scenario 3: Look for existing active agents
+          const cleanupResult = await this.agentManager.cleanupStaleAgents();
+          const bestAgent =
+            await this.agentManager.findBestAgentForReinitialization(
+              config.role || 'development',
+            );
+
+          if (bestAgent) {
+            selectedAgentId = bestAgent.agentId;
+            detectedScenario = 'auto_detected_best_agent';
+
+            return this._performReinitializeWithScenario(
+              selectedAgentId,
+              config,
+              detectedScenario,
+              guide,
+              {
+                cleanedStaleAgents: cleanupResult.cleanedCount,
+                agentSelectionReason:
+                  bestAgent.agent.role === (config.role || 'development')
+                    ? 'role_match'
+                    : 'most_recent',
+              },
+            );
+          }
+
+          // Scenario 4: No agents found, auto-fallback to init
+          if (cleanupResult.cleanedCount > 0) {
+            detectedScenario = 'auto_init_after_cleanup';
+          } else {
+            detectedScenario = 'auto_init_fresh_project';
+          }
+
+          // Initialize new agent instead
+          const initResult = await this.initAgent(config);
+
+          return {
+            success: true,
+            scenario: detectedScenario,
+            agentId: initResult.agentId,
+            agent: initResult.agent,
+            autoInitialized: true,
+            cleanedStaleAgents: cleanupResult.cleanedCount,
+            message: `No active agents found. Auto-initialized new agent: ${initResult.agentId}`,
+            fallbackToInit: true,
+          };
+        })(),
+      );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('agent-reinit'),
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        guide: guide || this._getFallbackGuide('agent-reinit'),
+      };
+    }
+  }
+
+  /**
+   * Internal helper to perform reinitialization with scenario context
+   */
+  async _performReinitializeWithScenario(
+    agentId,
+    config,
+    scenario,
+    guide,
+    additionalInfo = {},
+  ) {
+    const reinitResult = await this.reinitializeAgent(agentId, config);
+
+    if (reinitResult.success) {
+      return {
+        ...reinitResult,
+        scenario,
+        ...additionalInfo,
+        smartReinitialize: true,
+      };
+    }
+
+    throw new Error(reinitResult.error || 'Reinitialization failed');
+  }
+
+  /**
+   * List all agents with their current status
+   * @returns {Promise<Object>} List of agents with detailed information
+   */
+  async listAgents() {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
+    try {
+      guide = await this._getGuideForError('agent-operations');
+    } catch {
+      // If guide fails, continue with operation without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
+        (async () => {
+          const activeAgents = await this.agentManager.getAllActiveAgents();
+
+          return {
+            success: true,
+            agents: activeAgents.map((a) => ({
+              agentId: a.agentId,
+              name: a.agent.name,
+              role: a.agent.role,
+              status: a.agent.status,
+              lastHeartbeat: a.agent.lastHeartbeat,
+              timeSinceLastHeartbeat: a.timeSinceLastHeartbeat,
+              isStale: a.isStale,
+              assignedTasks: a.agent.assignedTasks?.length || 0,
+              createdAt: a.agent.createdAt,
+            })),
+            totalAgents: activeAgents.length,
+            message:
+              activeAgents.length === 0
+                ? "No active agents found. Use 'init' to create a new agent."
+                : `Found ${activeAgents.length} active agent${activeAgents.length === 1 ? '' : 's'}.`,
+          };
+        })(),
+      );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('agent-operations'),
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        guide: guide || this._getFallbackGuide('agent-operations'),
+      };
+    }
+  }
+
   async getStatistics() {
     // Get guide information for all responses (both success and error)
     let guide = null;
@@ -2868,25 +3158,10 @@ async function main() {
       }
 
       case 'reinitialize': {
-        let agentId = args[1];
+        const agentId = args[1];
         let config = {};
 
-        // Auto-detect stored agent ID if not provided
-        if (!agentId && api.agentId) {
-          agentId = api.agentId;
-          console.log(`Using stored agent ID: ${agentId}`);
-        }
-
-        // If still no agent ID, provide helpful error
-        if (!agentId) {
-          throw new Error(
-            'Agent ID required for reinitialize. Options:\n' +
-              '1. Provide agent ID: reinitialize <agentId>\n' +
-              '2. Initialize first: init (saves agent ID for reuse)\n' +
-              '3. Find existing agents: status (without parameters shows help)',
-          );
-        }
-
+        // Parse config if provided
         if (args[2]) {
           try {
             config = JSON.parse(args[2]);
@@ -2896,6 +3171,22 @@ async function main() {
             );
           }
         }
+
+        // Agent ID is required for reinitialize
+        if (!agentId) {
+          throw new Error(
+            'Agent ID required for reinitialize. To find your agent ID:\n' +
+              '1. Run: timeout 10s node "' +
+              process.argv[1] +
+              '" list-agents\n' +
+              '2. Copy the agentId from the output\n' +
+              '3. Run: timeout 10s node "' +
+              process.argv[1] +
+              '" reinitialize <agentId>\n' +
+              "\nIf no agents exist, use 'init' to create a new agent first.",
+          );
+        }
+
         const result = await api.reinitializeAgent(agentId, config);
         // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
@@ -2904,6 +3195,13 @@ async function main() {
 
       case 'stats': {
         const result = await api.getStatistics();
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
+
+      case 'list-agents': {
+        const result = await api.listAgents();
         // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
@@ -3424,7 +3722,8 @@ Core Commands:
   methods                      - Get all available TaskManager and API methods with CLI/API mapping
   guide                        - Get comprehensive API documentation and troubleshooting
   init [config]                - Initialize agent with optional config JSON
-  reinitialize [agentId] [config] - Reinitialize agent (renew heartbeat, reset timeout)
+  reinitialize <agentId> [config] - Reinitialize existing agent (use list-agents to find your agent ID)
+  list-agents                  - List all active agents with their IDs and status
   status [agentId]             - Get agent status and current tasks
   current [agentId]            - Get current task for agent
   stats                        - Get orchestration statistics

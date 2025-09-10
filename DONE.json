@@ -39936,9 +39936,169 @@
       "needs_linter_feedback": true,
       "linter_feedback_generated": false,
       "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "feature_1757528836351_6jcafikye",
+      "title": "Update taskmanager guide with absolute path",
+      "description": "Modify the taskmanager guide to include the absolute path to taskmanager-api.js file for better usability",
+      "priority": "medium",
+      "category": "feature",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-10T18:27:16.351Z",
+      "auto_research_created": false,
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-10T18:35:34.196Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-10T18:35:34.196Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "error_1757528785245_jq1p3usa3",
+      "title": "Fix agent reinitialization logic in taskmanager-api.js",
+      "description": "Fix broken reinitialization workflow: reinitialize command requires agent ID but provides no guidance on agent ID retrieval, init command creates new agents instead of reusing existing ones, no clear workflow for existing agents to refresh registration",
+      "priority": "medium",
+      "category": "error",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-10T18:26:25.246Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757528760790_1_general_ec40630c",
+      "started_at": "2025-09-10T18:27:07.618Z",
+      "claimed_by": "development_session_1757528760790_1_general_ec40630c",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757528760790_1_general_ec40630c",
+          "role": "primary",
+          "assignedAt": "2025-09-10T18:27:07.618Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-10T18:35:41.422Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-10T18:35:41.422Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "error_1757528786523_j3o26aih9",
+      "title": "Fix TaskManager reinitialization guide and help text",
+      "description": "Update guide and help text to provide clear workflows for existing vs new agents, fix confusing documentation",
+      "priority": "medium",
+      "category": "error",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-10T18:26:26.523Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757528760354_1_general_79360ca6",
+      "started_at": "2025-09-10T18:27:09.316Z",
+      "claimed_by": "development_session_1757528760354_1_general_79360ca6",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757528760354_1_general_79360ca6",
+          "role": "primary",
+          "assignedAt": "2025-09-10T18:27:09.316Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-10T18:38:16.373Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-10T18:38:16.373Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "error_1757528717083_3eq5mtpb6",
+      "title": "Fix agent reinitialization workflow for existing agents",
+      "description": "Current reinitialization requires agent ID but provides no clear workflow for existing agents to get their ID and reinitialize. Need to fix the reinitialize logic to properly handle existing agents and update documentation to provide clear guidance.",
+      "priority": "medium",
+      "category": "error",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-10T18:25:17.083Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757528820762_1_general_b6292d90",
+      "started_at": "2025-09-10T18:36:57.908Z",
+      "claimed_by": "development_session_1757528820762_1_general_b6292d90",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757528820762_1_general_b6292d90",
+          "role": "primary",
+          "assignedAt": "2025-09-10T18:36:57.908Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-10T18:43:42.558Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-10T18:43:42.558Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
     }
   ],
-  "total_completed": 912,
-  "last_completion": "2025-09-10T18:07:57.382Z",
+  "total_completed": 916,
+  "last_completion": "2025-09-10T18:43:42.558Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }
