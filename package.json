@@ -1,9 +1,12 @@
 {
-  "name": "infinite-continue-stop-hook",
-  "version": "1.0.0",
-  "description": "Simplified TaskManager API and Stop Hook System",
+  "name": "claude-taskmanager",
+  "version": "1.0.0", 
+  "description": "Universal TaskManager API for Claude Code projects",
   "main": "taskmanager-api.js",
   "type": "commonjs",
+  "bin": {
+    "taskmanager": "./taskmanager-api.js"
+  },
   "scripts": {
     "start": "node taskmanager-api.js",
     "setup": "node setup-infinite-hook.js",

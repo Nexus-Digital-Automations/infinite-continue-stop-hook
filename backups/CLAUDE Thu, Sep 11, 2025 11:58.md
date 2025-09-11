@@ -2,8 +2,8 @@
 
 ## 🚨 IMMEDIATE ACTION PROTOCOL
 **🔴 MANDATORY SEQUENCE FOR ALL USER REQUESTS:**
-1. **INITIALIZE** - `timeout 10s taskmanager init` (or reinitialize with saved agent ID)
-2. **CREATE TASK** - `timeout 10s taskmanager create '{"title":"[Request]", "description":"[Details]", "category":"error|feature|subtask|test"}'`
+1. **INITIALIZE** - `timeout 10s node "taskmanager-api.js" init` (or reinitialize with saved agent ID)
+2. **CREATE TASK** - `timeout 10s node "taskmanager-api.js" create '{"title":"[Request]", "description":"[Details]", "category":"error|feature|subtask|test"}'`
 3. **EXECUTE** - Begin implementation immediately
 
 **🚨 ZERO DELAY MANDATE:**
@@ -155,10 +155,10 @@ function processData(userId, data) {
 **SAFE FORMATS:**
 ```bash
 # ✅ RECOMMENDED - Simple quoted string
-timeout 10s taskmanager complete task_123 '"Task completed successfully"'
+timeout 10s node "taskmanager-api.js" complete task_123 '"Task completed successfully"'
 
 # ✅ ALTERNATIVE - Basic JSON without special characters
-timeout 10s taskmanager complete task_456 '{"message": "Build successful", "status": "All tests passed"}'
+timeout 10s node "taskmanager-api.js" complete task_456 '{"message": "Build successful", "status": "All tests passed"}'
 ```
 
 **RULES:**
@@ -297,8 +297,8 @@ npm run lint && npm run build && npm test && npm start
 **🔴 FOLLOW EVERY STEP - ZERO TOLERANCE FOR SHORTCUTS**
 
 ### 📋 PHASE 1: INITIATION & PREPARATION
-- [ ] **INITIALIZE**: `timeout 10s taskmanager init` (or reinitialize with saved ID)
-- [ ] **CREATE TASK**: `timeout 10s taskmanager create '{"title":"[Request]", "description":"[Details]", "category":"type"}'`
+- [ ] **INITIALIZE**: `timeout 10s node "taskmanager-api.js" init` (or reinitialize with saved ID)
+- [ ] **CREATE TASK**: `timeout 10s node "taskmanager-api.js" create '{"title":"[Request]", "description":"[Details]", "category":"type"}'`
 - [ ] **CONTEXT REVIEW**: Read all files in `development/essentials/`
 - [ ] **RESEARCH INTEGRATION**: Scan `development/reports/` and `development/research-reports/`
 - [ ] **CLAIM TASK**: Take ownership via API
@@ -362,7 +362,7 @@ npm run lint && npm run build && npm test && npm start
 - **❌ NO ABANDONMENT**: Never leave tasks partially complete
 
 ### 🔄 EXECUTION SEQUENCE
-1. **Initialize/Reinitialize** - `timeout 10s taskmanager init`
+1. **Initialize/Reinitialize** - `timeout 10s node "taskmanager-api.js" init`
 2. **Continue Work** - Check/resume existing tasks first
 3. **Deploy Subagents** - Use up to 10 concurrent agents for complex tasks
 4. **Validate & Complete** - All checks + commit + push before marking complete
@@ -372,14 +372,14 @@ npm run lint && npm run build && npm test && npm start
 **IMMEDIATE INITIALIZATION:**
 ```bash
 # Initialize (or reinitialize with saved agent ID)
-timeout 10s taskmanager init
-# OR: timeout 10s taskmanager reinitialize <agent-id>
+timeout 10s node "taskmanager-api.js" init
+# OR: timeout 10s node "taskmanager-api.js" reinitialize <agent-id>
 
-# Create task immediately  
-timeout 10s taskmanager create '{"title":"[Request]", "description":"[Details]", "category":"error|feature|subtask|test"}'
+# Create task immediately
+timeout 10s node "taskmanager-api.js" create '{"title":"[Request]", "description":"[Details]", "category":"error|feature|subtask|test"}'
 
 # Get API guide
-timeout 10s taskmanager guide
+timeout 10s node "taskmanager-api.js" guide
 ```
 
 **🚨 NO EXCEPTIONS: All action requests trigger immediate initialization + task creation**

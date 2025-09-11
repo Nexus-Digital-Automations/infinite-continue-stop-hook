@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * TaskManager Node.js API Wrapper
  *
