@@ -4,7 +4,7 @@
 **🔴 INSTANT RESPONSE TO ANY USER REQUEST:**
 
 **MANDATORY SEQUENCE FOR ALL USER REQUESTS:**
-1. **IMMEDIATE INITIALIZATION** - `timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init`
+1. **IMMEDIATE INITIALIZATION** - `timeout 10s node "taskmanager-api.js" init`
 2. **INSTANT TASK CREATION** - Create task for user request: `timeout 10s node "taskmanager-api.js" create '{"title":"[User Request]", "description":"[Details]", "category":"error|feature|subtask|test"}'`
 3. **IMMEDIATE EXECUTION** - Begin implementation without delay
 
@@ -398,7 +398,7 @@ Create research tasks as dependencies for: External API integrations, database s
 
 - [ ] **IMMEDIATE INITIALIZATION** - Execute without delay:
   ```bash
-  timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init
+  timeout 10s node "taskmanager-api.js" init
   # OR if agent exists: timeout 10s node "taskmanager-api.js" reinitialize <your-saved-agent-id>
   ```
 
@@ -545,7 +545,7 @@ Create research tasks as dependencies for: External API integrations, database s
 - **❌ NO TASK ABANDONMENT** - Never leave tasks partially complete
 
 ### 🔄 EXECUTION SEQUENCE
-1. **Initialize/Reinitialize Agent** - `timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init`
+1. **Initialize/Reinitialize Agent** - `timeout 10s node "taskmanager-api.js" init`
 2. **Check Current Task** - Continue any existing work first
 3. **Deploy Subagents** - Use up to 10 concurrent agents for complex tasks
 4. **Validate & Complete** - Run all checks, commit changes, push to remote before marking complete
@@ -555,7 +555,7 @@ Create research tasks as dependencies for: External API integrations, database s
 **IMMEDIATE INITIALIZATION ON ANY USER REQUEST:**
 ```bash
 # Step 1: Initialize (or reinitialize if agent exists with your saved agent ID)
-timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init
+timeout 10s node "taskmanager-api.js" init
 # If you have an existing agent ID: timeout 10s node "taskmanager-api.js" reinitialize <your-saved-agent-id>
 
 # Step 2: Create task for user request immediately
@@ -566,7 +566,7 @@ timeout 10s node "taskmanager-api.js" create '{"title":"[User Request]", "descri
 
 **GET API GUIDE:**
 ```bash
-timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" guide
+timeout 10s node "taskmanager-api.js" guide
 ```
 
 **🚨 REMEMBER: NO EXCEPTIONS TO IMMEDIATE TASK CREATION RULE**
