@@ -27,15 +27,15 @@
  *
  * === USAGE PATTERNS ===
  * 1. Agent Initialization:
- *    timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init --project-root /path/to/project
+ *    timeout 10s node "taskmanager-api.js" init --project-root /path/to/project
  *
  * 2. Task Operations:
  *    node taskmanager-api.js create '{"title": "Task", "category": "enhancement"}'
  *    node taskmanager-api.js list '{"status": "pending"}'
- *    timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" claim task_123 agent_456
+ *    timeout 10s node "taskmanager-api.js" claim task_123 agent_456
  *
  * 3. Status and Monitoring:
- *    timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" status agent_456
+ *    timeout 10s node "taskmanager-api.js" status agent_456
  *    node taskmanager-api.js stats
  *
  * === INTEGRATION EXAMPLES ===
@@ -357,9 +357,9 @@ class TaskManagerAPI {
                 "tm.createTask({title: 'Test', category: 'enhancement'})",
               api: 'node taskmanager-api.js list \'{"status": "pending"}\'',
               completion:
-                'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" complete taskId \'{"message": "Task completed successfully"}\'',
+                'timeout 10s node "taskmanager-api.js" complete taskId \'{"message": "Task completed successfully"}\'',
               completionMinimal:
-                'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" complete taskId',
+                'timeout 10s node "taskmanager-api.js" complete taskId',
             },
           };
         })(),
@@ -484,28 +484,25 @@ class TaskManagerAPI {
               discovery: {
                 guide: {
                   description: 'Get this comprehensive guide',
-                  usage:
-                    'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" guide',
+                  usage: 'timeout 10s node "taskmanager-api.js" guide',
                   output: 'Complete API documentation and usage information',
                 },
                 methods: {
                   description: 'List all available API methods',
-                  usage:
-                    'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" methods',
+                  usage: 'timeout 10s node "taskmanager-api.js" methods',
                   output: 'Available methods and usage examples',
                 },
                 status: {
                   description: 'Get agent status and current tasks',
                   usage:
-                    'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" status [agentId]',
+                    'timeout 10s node "taskmanager-api.js" status [agentId]',
                   output: 'Agent state, assigned tasks, and system status',
                 },
               },
               agentLifecycle: {
                 init: {
                   description: 'Initialize agent with TaskManager system',
-                  usage:
-                    'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init [config]',
+                  usage: 'timeout 10s node "taskmanager-api.js" init [config]',
                   required: 'Must be called before any task operations',
                   output: 'Agent ID and registration confirmation',
                 },
@@ -513,7 +510,7 @@ class TaskManagerAPI {
                   description:
                     'Smart agent reinitialization with automatic agent discovery and scenario handling',
                   usage:
-                    'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [agentId] [config]',
+                    'timeout 10s node "taskmanager-api.js" reinitialize [agentId] [config]',
                   optional_parameter:
                     'agentId - Specific agent ID to reinitialize (auto-detected if not provided)',
                   when: 'After task completion, before long operations, after idle periods, or when unsure of agent status',
@@ -537,9 +534,9 @@ class TaskManagerAPI {
                       'reinitialize (recommended - handles everything automatically)',
                   },
                   examples: [
-                    'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize',
-                    'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize development_session_123_general_abc',
-                    'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize development_session_123_general_abc \'{"role":"testing"}\'',
+                    'timeout 10s node "taskmanager-api.js" reinitialize',
+                    'timeout 10s node "taskmanager-api.js" reinitialize development_session_123_general_abc',
+                    'timeout 10s node "taskmanager-api.js" reinitialize development_session_123_general_abc \'{"role":"testing"}\'',
                   ],
                   recommendation:
                     'Use "reinitialize" without parameters for best experience - it handles all scenarios intelligently',
@@ -562,13 +559,13 @@ class TaskManagerAPI {
                 claim: {
                   description: 'Claim task for agent execution',
                   usage:
-                    'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" claim <taskId> <agentId> [priority]',
+                    'timeout 10s node "taskmanager-api.js" claim <taskId> <agentId> [priority]',
                   required_parameters: ['taskId', 'agentId'],
                   optional_parameters: ['priority'],
                   output: 'Task assignment confirmation',
                   examples: [
-                    'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" claim task_123 agent_456',
-                    'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" claim error_789 development_session_123_agent high',
+                    'timeout 10s node "taskmanager-api.js" claim task_123 agent_456',
+                    'timeout 10s node "taskmanager-api.js" claim error_789 development_session_123_agent high',
                   ],
                   notes:
                     "Agent ID is REQUIRED and must be provided explicitly. Use the agent ID returned from the 'init' command.",
@@ -577,11 +574,11 @@ class TaskManagerAPI {
                   description:
                     'Mark task as completed with optional completion data',
                   usage:
-                    'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" complete <taskId> [completionData]',
+                    'timeout 10s node "taskmanager-api.js" complete <taskId> [completionData]',
                   required: 'Only after full implementation and validation',
                   examples: [
-                    'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" complete task_123',
-                    'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" complete task_123 \'{"message": "Successfully implemented feature"}\'',
+                    'timeout 10s node "taskmanager-api.js" complete task_123',
+                    'timeout 10s node "taskmanager-api.js" complete task_123 \'{"message": "Successfully implemented feature"}\'',
                     'node taskmanager-api.js complete error_456 \'{"fixed": true, "details": "Resolved linting errors in auth.js"}\'',
                     'node taskmanager-api.js complete feature_789 \'{"outcome": "Feature completed with full test coverage", "files_modified": ["src/auth.js", "tests/auth.test.js"]}\'',
                   ],
@@ -606,8 +603,7 @@ class TaskManagerAPI {
                 },
                 list: {
                   description: 'List tasks with optional filtering',
-                  usage:
-                    'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" list [filter]',
+                  usage: 'timeout 10s node "taskmanager-api.js" list [filter]',
                   examples: [
                     'node taskmanager-api.js list \'{"status":"pending"}\'',
                     'node taskmanager-api.js list \'{"category":"error"}\'',
@@ -651,15 +647,15 @@ class TaskManagerAPI {
               },
               commonWorkflows: {
                 newAgent: [
-                  'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" guide',
-                  'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init',
-                  'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" status',
+                  'timeout 10s node "taskmanager-api.js" guide',
+                  'timeout 10s node "taskmanager-api.js" init',
+                  'timeout 10s node "taskmanager-api.js" status',
                 ],
                 taskExecution: [
                   'node taskmanager-api.js list \'{"status":"pending"}\'',
-                  'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" claim <taskId> [agentId]',
+                  'timeout 10s node "taskmanager-api.js" claim <taskId> [agentId]',
                   '# ... implement task ...',
-                  'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" complete <taskId>',
+                  'timeout 10s node "taskmanager-api.js" complete <taskId>',
                 ],
               },
             },
@@ -686,13 +682,13 @@ class TaskManagerAPI {
                     'Ensure JSON is properly quoted: \'{"message": "Task completed"}\'',
                     'Use double quotes inside JSON, single quotes outside',
                     'Validate JSON format before passing to complete command',
-                    'Use minimal completion: timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" complete taskId',
+                    'Use minimal completion: timeout 10s node "taskmanager-api.js" complete taskId',
                   ],
                   examples: {
                     correct:
-                      'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" complete task_123 \'{"message": "Success"}\'',
+                      'timeout 10s node "taskmanager-api.js" complete task_123 \'{"message": "Success"}\'',
                     incorrect:
-                      'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" complete task_123 {"message": "Success"}',
+                      'timeout 10s node "taskmanager-api.js" complete task_123 {"message": "Success"}',
                   },
                 },
                 methodConfusion: {
@@ -799,7 +795,7 @@ class TaskManagerAPI {
                 listLegacyTasks:
                   'node taskmanager-api.js list \'{"status":"pending"}\' | grep -v category',
                 deleteTask:
-                  'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" delete <taskId>',
+                  'timeout 10s node "taskmanager-api.js" delete <taskId>',
                 recreateTask:
                   'node taskmanager-api.js create \'{"title":"New Title", "description":"Description", "category":"error|feature|subtask|test"}\'',
               },
@@ -809,7 +805,7 @@ class TaskManagerAPI {
                 '1. Export existing tasks to analyze: node taskmanager-api.js list \'{"status":"pending"}\'',
                 '2. For each task without category, determine classification using conversionGuide',
                 '3. Delete old task: node taskmanager-api.js delete <oldTaskId>',
-                '4. Create new task with proper category: timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" create <taskData>',
+                '4. Create new task with proper category: timeout 10s node "taskmanager-api.js" create <taskData>',
                 '5. Verify priority ordering: node taskmanager-api.js list \'{"status":"pending"}\'',
               ],
               priorityValidation: [
@@ -903,9 +899,9 @@ class TaskManagerAPI {
             ...fullGuide,
             focus: 'Agent Initialization',
             quickStart: fullGuide.examples?.commonWorkflows?.newAgent || [
-              'timeout 10s timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" guide',
-              'timeout 10s timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init',
-              'timeout 10s timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" status',
+              'timeout 10s timeout 10s node "taskmanager-api.js" guide',
+              'timeout 10s timeout 10s node "taskmanager-api.js" init',
+              'timeout 10s timeout 10s node "taskmanager-api.js" status',
             ],
             essential_commands: fullGuide.coreCommands?.agentLifecycle || {},
             initialization_help: {
@@ -915,10 +911,10 @@ class TaskManagerAPI {
                   description:
                     'Starting fresh - creates new agent registration',
                   steps: [
-                    '1. Initialize agent: timeout 10s timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init',
+                    '1. Initialize agent: timeout 10s timeout 10s node "taskmanager-api.js" init',
                     '2. SAVE THE AGENT ID from the response - you will need it for all future operations',
-                    '3. Verify initialization: timeout 10s timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" status <agentId>',
-                    '4. Begin task operations: timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" list',
+                    '3. Verify initialization: timeout 10s timeout 10s node "taskmanager-api.js" status <agentId>',
+                    '4. Begin task operations: timeout 10s node "taskmanager-api.js" list',
                   ],
                   critical_note:
                     'MUST save the agentId from init response for all future commands',
@@ -928,8 +924,8 @@ class TaskManagerAPI {
                     'Refreshing existing agent - renews registration',
                   steps: [
                     '1. Use your saved agent ID from previous init',
-                    '2. Reinitialize: timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" reinitialize <agentId>',
-                    '3. Verify renewal: timeout 10s timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" status <agentId>',
+                    '2. Reinitialize: timeout 10s node "taskmanager-api.js" reinitialize <agentId>',
+                    '3. Verify renewal: timeout 10s timeout 10s node "taskmanager-api.js" status <agentId>',
                     '4. Continue operations normally',
                   ],
                   requirement: 'Must have agent ID from previous init command',
@@ -1056,16 +1052,14 @@ class TaskManagerAPI {
     const baseGuide = {
       success: true,
       message:
-        'For complete API usage guidance, run: timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" guide',
+        'For complete API usage guidance, run: timeout 10s node "taskmanager-api.js" guide',
       helpText:
         'The guide provides comprehensive information about task classification, workflows, and all API capabilities',
       essential_commands: {
-        guide:
-          'timeout 10s timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" guide',
-        init: 'timeout 10s timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init',
-        status:
-          'timeout 10s timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" status',
-        list: 'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" list',
+        guide: 'timeout 10s timeout 10s node "taskmanager-api.js" guide',
+        init: 'timeout 10s timeout 10s node "taskmanager-api.js" init',
+        status: 'timeout 10s timeout 10s node "taskmanager-api.js" status',
+        list: 'timeout 10s node "taskmanager-api.js" list',
       },
     };
 
@@ -1076,7 +1070,7 @@ class TaskManagerAPI {
           ...baseGuide,
           context: 'Agent Initialization Required',
           immediate_action:
-            'Run: timeout 10s timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init',
+            'Run: timeout 10s timeout 10s node "taskmanager-api.js" init',
           next_steps: [
             'Initialize agent with init command',
             'Verify with status command',
@@ -1178,52 +1172,52 @@ class TaskManagerAPI {
           commands: {
             'create-phase': {
               usage:
-                'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" create-phase <featureId> \'{"title": "Phase title", "description": "Details"}\'',
+                'timeout 10s node "taskmanager-api.js" create-phase <featureId> \'{"title": "Phase title", "description": "Details"}\'',
               description:
                 'Create new phase for a feature with sequential numbering',
               example:
-                'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" create-phase feature_123 \'{"title": "Initial Planning", "description": "Requirements gathering and design"}\'',
+                'timeout 10s node "taskmanager-api.js" create-phase feature_123 \'{"title": "Initial Planning", "description": "Requirements gathering and design"}\'',
               required: ['featureId', 'phaseData.title'],
             },
             'update-phase': {
               usage:
-                'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" update-phase <featureId> <phaseNumber> \'{"status": "completed"}\'',
+                'timeout 10s node "taskmanager-api.js" update-phase <featureId> <phaseNumber> \'{"status": "completed"}\'',
               description: 'Update phase status and details',
               example:
-                'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" update-phase feature_123 1 \'{"status": "completed", "notes": "Planning completed"}\'',
+                'timeout 10s node "taskmanager-api.js" update-phase feature_123 1 \'{"status": "completed", "notes": "Planning completed"}\'',
               required: ['featureId', 'phaseNumber', 'updates'],
             },
             'progress-phase': {
               usage:
-                'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" progress-phase <featureId> <currentPhaseNumber>',
+                'timeout 10s node "taskmanager-api.js" progress-phase <featureId> <currentPhaseNumber>',
               description: 'Complete current phase and progress to next phase',
               example:
-                'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" progress-phase feature_123 1',
+                'timeout 10s node "taskmanager-api.js" progress-phase feature_123 1',
               required: ['featureId', 'currentPhaseNumber'],
             },
             'list-phases': {
               usage:
-                'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" list-phases <featureId>',
+                'timeout 10s node "taskmanager-api.js" list-phases <featureId>',
               description:
                 'List all phases for a feature with completion statistics',
               example:
-                'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" list-phases feature_123',
+                'timeout 10s node "taskmanager-api.js" list-phases feature_123',
               required: ['featureId'],
             },
             'current-phase': {
               usage:
-                'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" current-phase <featureId>',
+                'timeout 10s node "taskmanager-api.js" current-phase <featureId>',
               description: 'Get current active phase for a feature',
               example:
-                'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" current-phase feature_123',
+                'timeout 10s node "taskmanager-api.js" current-phase feature_123',
               required: ['featureId'],
             },
             'phase-stats': {
               usage:
-                'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" phase-stats <featureId>',
+                'timeout 10s node "taskmanager-api.js" phase-stats <featureId>',
               description: 'Get detailed phase completion statistics',
               example:
-                'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" phase-stats feature_123',
+                'timeout 10s node "taskmanager-api.js" phase-stats feature_123',
               required: ['featureId'],
             },
           },
@@ -1239,12 +1233,12 @@ class TaskManagerAPI {
           examples: {
             typical_workflow: [
               '# Create feature phases for development lifecycle',
-              'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" create-phase feature_456 \'{"title": "Planning & Design", "description": "Requirements and architecture"}\'',
-              'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" create-phase feature_456 \'{"title": "Core Implementation", "description": "Main functionality development"}\'',
-              'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" create-phase feature_456 \'{"title": "Testing & Validation", "description": "Comprehensive testing"}\'',
+              'timeout 10s node "taskmanager-api.js" create-phase feature_456 \'{"title": "Planning & Design", "description": "Requirements and architecture"}\'',
+              'timeout 10s node "taskmanager-api.js" create-phase feature_456 \'{"title": "Core Implementation", "description": "Main functionality development"}\'',
+              'timeout 10s node "taskmanager-api.js" create-phase feature_456 \'{"title": "Testing & Validation", "description": "Comprehensive testing"}\'',
               '# Progress through phases',
-              'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" progress-phase feature_456 1',
-              'timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" current-phase feature_456',
+              'timeout 10s node "taskmanager-api.js" progress-phase feature_456 1',
+              'timeout 10s node "taskmanager-api.js" current-phase feature_456',
             ],
           },
 
@@ -1904,7 +1898,7 @@ class TaskManagerAPI {
                 ],
                 codeExample: {
                   javascript: `// Override task order (required for user-requested tasks)\nconst overrideResult = await api.taskManager.claimTask('${taskId}', '${targetAgentId}', '${priority}', { allowOutOfOrder: true });`,
-                  commandLine: `# Alternative: Move task to prioritize it\ntimeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" move-up ${taskId}`,
+                  commandLine: `# Alternative: Move task to prioritize it\ntimeout 10s node "taskmanager-api.js" move-up ${taskId}`,
                 },
               },
               researchInstructions: researchInstructions,
@@ -5206,7 +5200,7 @@ async function main() {
         console.log(`
 TaskManager Node.js API
 
-Usage: timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" <command> [args...]
+Usage: timeout 10s node "taskmanager-api.js" <command> [args...]
 
 IMPORTANT: Always use 'timeout 10s' prefix to prevent hanging operations
 
@@ -5257,12 +5251,12 @@ Agent Swarm Coordination (Self-Organizing Agent Architecture):
                                  Options: {"agentId": "...", "categories": ["error"], "limit": 5}
 
 Essential Examples:
-  timeout 10s timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init
-  timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" create '{"title": "Fix linting errors", "description": "Resolve ESLint violations", "category": "error"}'
-  timeout 10s timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" complete task_123 '{"message": "Task completed successfully"}'
-  timeout 10s timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" complete task_123
-  timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" list '{"status": "pending"}'
-  timeout 10s timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" guide
+  timeout 10s timeout 10s node "taskmanager-api.js" init
+  timeout 10s node "taskmanager-api.js" create '{"title": "Fix linting errors", "description": "Resolve ESLint violations", "category": "error"}'
+  timeout 10s timeout 10s node "taskmanager-api.js" complete task_123 '{"message": "Task completed successfully"}'
+  timeout 10s timeout 10s node "taskmanager-api.js" complete task_123
+  timeout 10s node "taskmanager-api.js" list '{"status": "pending"}'
+  timeout 10s timeout 10s node "taskmanager-api.js" guide
 
 Troubleshooting:
   • For completion JSON errors, ensure proper quoting: '{"message": "text"}'
@@ -5271,13 +5265,13 @@ Troubleshooting:
   • CLI commands (like 'complete') map to API methods (like 'completeTask')
 
 Advanced Examples:
-  timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" suggest-feature '{"title": "Add dark mode", "description": "Implement dark theme", "rationale": "Improve UX", "category": "ui", "estimated_effort": "medium"}' agent_dev_001
-  timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" complete error_456 '{"fixed": true, "details": "Resolved linting errors", "files_modified": ["src/auth.js"]}'
+  timeout 10s node "taskmanager-api.js" suggest-feature '{"title": "Add dark mode", "description": "Implement dark theme", "rationale": "Improve UX", "category": "ui", "estimated_effort": "medium"}' agent_dev_001
+  timeout 10s node "taskmanager-api.js" complete error_456 '{"fixed": true, "details": "Resolved linting errors", "files_modified": ["src/auth.js"]}'
 
 Agent Swarm Examples:
-  timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" get-tasks
-  timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" get-tasks '{"categories": ["error"], "limit": 3}'
-  timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" get-tasks '{"agentId": "development_session_123", "specializations": ["frontend"]}'
+  timeout 10s node "taskmanager-api.js" get-tasks
+  timeout 10s node "taskmanager-api.js" get-tasks '{"categories": ["error"], "limit": 3}'
+  timeout 10s node "taskmanager-api.js" get-tasks '{"agentId": "development_session_123", "specializations": ["frontend"]}'
   
                 `);
         break;
@@ -5320,7 +5314,7 @@ Agent Swarm Examples:
       timestamp: new Date().toISOString(),
       guide: guide || {
         message:
-          'For complete API usage guidance, run: timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" guide',
+          'For complete API usage guidance, run: timeout 10s node "taskmanager-api.js" guide',
         helpText:
           'The guide provides comprehensive information about task classification, workflows, and all API capabilities',
       },
