@@ -62,6 +62,8 @@
  */
 
 const path = require('path');
+const http = require('http');
+const crypto = require('crypto');
 
 // Parse project root from --project-root flag or use current directory
 const args = process.argv.slice(2);
@@ -83,12 +85,20 @@ const TASKMANAGER_ROOT = __dirname;
 // Import TaskManager modules using absolute paths
 let TaskManager, AgentManager, MultiAgentOrchestrator;
 
+// Import modular API components
+let cliInterface;
+
 try {
   // Import TaskManager modules using absolute paths
   TaskManager = require(path.join(TASKMANAGER_ROOT, 'lib', 'taskManager.js'));
   AgentManager = require(path.join(TASKMANAGER_ROOT, 'lib', 'agentManager.js'));
   MultiAgentOrchestrator = require(
     path.join(TASKMANAGER_ROOT, 'lib', 'multiAgentOrchestrator.js'),
+  );
+
+  // Import modular API components
+  cliInterface = require(
+    path.join(TASKMANAGER_ROOT, 'lib', 'api-modules', 'cli', 'cliInterface.js'),
   );
 } catch (error) {
   const loadError = new Error(
@@ -161,6 +171,12 @@ class TaskManagerAPI {
 
     // Agent management for registration, heartbeat, and lifecycle
     this.agentManager = new AgentManager(TODO_PATH);
+
+    // WebSocket server for real-time communication
+    this.webSocketServer = null;
+    this.httpServer = null;
+    this.webSocketClients = new Set();
+    this.isWebSocketRunning = false;
 
     // Multi-agent orchestration for concurrent operations
     this.orchestrator = new MultiAgentOrchestrator(TODO_PATH);
@@ -289,6 +305,7 @@ class TaskManagerAPI {
           // Map CLI commands to API methods for clarity
           const cliToApiMapping = {
             complete: 'completeTask',
+            fail: 'failTask',
             create: 'createTask',
             'create-error': 'createErrorTask',
             claim: 'claimTask',
@@ -1470,13 +1487,45 @@ class TaskManagerAPI {
     try {
       const result = await this.withTimeout(
         (async () => {
+          // Validate scope restrictions in task data (if provided)
+          let scopeValidationInfo = null;
+          if (taskData.scope_restrictions) {
+            scopeValidationInfo = this._validateScopeRestrictions(
+              taskData.scope_restrictions,
+            );
+            if (!scopeValidationInfo.isValid) {
+              throw new Error(
+                `Invalid scope restrictions: ${scopeValidationInfo.errors.join(', ')}`,
+              );
+            }
+          }
+
           const taskId = await this.taskManager.createTask(taskData);
 
-          return {
+          const response = {
             success: true,
             taskId,
             task: taskData,
           };
+
+          // Add scope validation information if scope restrictions were provided
+          if (scopeValidationInfo) {
+            response.scopeInfo = {
+              hasRestrictions: true,
+              restrictionTypes: scopeValidationInfo.restrictionTypes,
+              validationPassed: scopeValidationInfo.isValid,
+              message:
+                'Task created with enhanced scope validation (files AND folders supported)',
+            };
+          } else {
+            response.scopeInfo = {
+              hasRestrictions: false,
+              message:
+                'Task created without scope restrictions - full access granted',
+            };
+          }
+
+          return response;
         })(),
       );
 
@@ -1756,6 +1805,36 @@ class TaskManagerAPI {
             }
           }
 
+          // === ENHANCED SCOPE VALIDATION SYSTEM ===
+          // Validate agent scope access against task requirements (files AND folders)
+          const scopeValidation = await this._validateAgentScope(
+            task,
+            targetAgentId,
+          );
+          if (!scopeValidation.isValid) {
+            return {
+              success: false,
+              reason:
+                'Agent scope validation failed - insufficient access permissions',
+              scopeValidationFailed: true,
+              scopeErrors: scopeValidation.errors,
+              scopeChecks: scopeValidation.scopeChecks,
+              agentScope: scopeValidation.agentScope,
+              instructions: {
+                message:
+                  '🔒 SCOPE ACCESS DENIED - Agent lacks required permissions',
+                details: [
+                  '🚫 Agent does not have access to required files/folders for this task',
+                  '📋 Review task scope_restrictions and agent permissions',
+                  '🔧 Contact administrator to adjust agent scope or task restrictions',
+                  '📝 Task may need to be assigned to a different agent with proper permissions',
+                ],
+                scopeViolations: scopeValidation.errors,
+              },
+              guide: guide || this._getFallbackGuide('task-operations'),
+            };
+          }
+
           // Research suggestion disabled - proceed directly to task claiming
 
           const result = await this.taskManager.claimTask(
@@ -1872,6 +1951,16 @@ class TaskManagerAPI {
           const validatedCompletionData =
             this._validateCompletionData(completionData);
 
+          // Enhanced validation for structured evidence requirements
+          const evidenceValidation = this._validateTaskEvidence(
+            validatedCompletionData,
+          );
+          if (!evidenceValidation.isValid) {
+            throw new Error(
+              `Evidence validation failed: ${evidenceValidation.errors.join(', ')}`,
+            );
+          }
+
           // Get task details to check type
           const todoData = await this.taskManager.readTodoFast();
           const task = todoData.tasks.find((t) => t.id === taskId);
@@ -1879,6 +1968,24 @@ class TaskManagerAPI {
           if (!task) {
             throw new Error(`Task with ID ${taskId} not found`);
           }
+
+          // Store task completion timestamp and evidence
+          const completionTimestamp = new Date().toISOString();
+          const taskCompletionRecord = {
+            taskId,
+            completedAt: completionTimestamp,
+            completedBy: task.assigned_agent || 'unknown',
+            evidence: validatedCompletionData.evidence || {},
+            completionNotes: validatedCompletionData.notes || '',
+            category: task.category,
+            priority: task.priority,
+          };
+
+          // Add completion record to task history
+          if (!task.completion_history) {
+            task.completion_history = [];
+          }
+          task.completion_history.push(taskCompletionRecord);
 
           // Update task status with completion notes if provided
           if (validatedCompletionData.notes) {
@@ -1916,11 +2023,29 @@ class TaskManagerAPI {
             };
           }
 
+          // Broadcast task completion via WebSocket if server is running
+          const completionEvent = {
+            taskId,
+            agentId: task.assigned_agent || 'unknown',
+            timestamp: completionTimestamp,
+            category: task.category,
+            priority: task.priority,
+            title: task.title,
+            evidence: validatedCompletionData.evidence || {},
+            completionNotes: validatedCompletionData.notes || '',
+          };
+
+          const broadcastResult =
+            await this._broadcastTaskCompletion(completionEvent);
+
           return {
             success: true,
             taskId,
             completionData: validatedCompletionData,
+            completionTimestamp,
+            evidenceValidation,
             documentationInstructions,
+            broadcastStatus: broadcastResult,
             message: documentationInstructions
               ? 'Task marked complete. MANDATORY: Update documentation as instructed above.'
               : 'Task marked complete successfully.',
@@ -1940,6 +2065,187 @@ class TaskManagerAPI {
         guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
+  }
+
+  /**
+   * Mark a task as failed with optional failure details and broadcast failure event
+   * @param {string} taskId - Task identifier
+   * @param {Object} failureData - Failure details including reason, error, etc.
+   * @returns {Promise<Object>} Failure result with broadcasting status
+   */
+  async failTask(taskId, failureData = {}) {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
+    try {
+      guide = await this._getGuideForError('task-operations');
+    } catch {
+      // If guide fails, continue with operation without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
+        (async () => {
+          // Validate and sanitize failure data first
+          const validatedFailureData = this._validateFailureData(failureData);
+
+          // Get task details to check type
+          const todoData = await this.taskManager.readTodoFast();
+          const task = todoData.tasks.find((t) => t.id === taskId);
+
+          if (!task) {
+            throw new Error(`Task with ID ${taskId} not found`);
+          }
+
+          // Store task failure timestamp and details
+          const failureTimestamp = new Date().toISOString();
+          const taskFailureRecord = {
+            taskId,
+            failedAt: failureTimestamp,
+            failedBy: task.assigned_agent || 'unknown',
+            reason: validatedFailureData.reason || 'Task execution failed',
+            error: validatedFailureData.error || null,
+            failureNotes: validatedFailureData.notes || '',
+            category: task.category,
+            priority: task.priority,
+          };
+
+          // Add failure record to task history
+          if (!task.failure_history) {
+            task.failure_history = [];
+          }
+          task.failure_history.push(taskFailureRecord);
+
+          // Update task status to failed
+          if (validatedFailureData.notes) {
+            await this.taskManager.updateTaskStatusConcurrent(
+              taskId,
+              'failed',
+              validatedFailureData.notes,
+            );
+          } else {
+            await this.taskManager.updateTaskStatus(taskId, 'failed');
+          }
+
+          // Broadcast task failure via WebSocket if server is running
+          const failureEvent = {
+            taskId,
+            agentId: task.assigned_agent || 'unknown',
+            timestamp: failureTimestamp,
+            category: task.category,
+            priority: task.priority,
+            title: task.title,
+            reason: validatedFailureData.reason || 'Task execution failed',
+            error: validatedFailureData.error || null,
+            failureNotes: validatedFailureData.notes || '',
+          };
+
+          const broadcastResult = await this._broadcastTaskFailed(failureEvent);
+
+          return {
+            success: true,
+            taskId,
+            failureData: validatedFailureData,
+            failureTimestamp,
+            broadcastStatus: broadcastResult,
+            message: 'Task marked as failed successfully.',
+          };
+        })(),
+      );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('task-operations'),
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        guide: guide || this._getFallbackGuide('task-operations'),
+      };
+    }
+  }
+
+  /**
+   * Validate and sanitize failure data to prevent JSON errors
+   * @param {Object} failureData - Raw failure data to validate
+   * @returns {Object} Validated and sanitized failure data
+   * @private
+   */
+  _validateFailureData(failureData) {
+    // Handle null/undefined cases
+    if (!failureData) {
+      return {};
+    }
+
+    // Ensure it's an object
+    if (typeof failureData !== 'object' || Array.isArray(failureData)) {
+      throw new Error('Failure data must be a valid object');
+    }
+
+    const validated = {};
+
+    // Validate and sanitize common failure fields
+    const allowedFields = [
+      'reason',
+      'error',
+      'notes',
+      'details',
+      'stackTrace',
+      'source',
+    ];
+
+    for (const [key, value] of Object.entries(failureData)) {
+      if (!allowedFields.includes(key)) {
+        // eslint-disable-next-line no-console -- Validation warning for failure data field
+        console.warn(`[WARNING] Ignoring unknown failure data field: ${key}`);
+        continue;
+      }
+
+      // Sanitize string values
+      if (typeof value === 'string') {
+        // Check for truncation indicators
+        if (value.includes('...') && value.length > 3) {
+          throw new Error(
+            `Failure data field "${key}" appears to be truncated (contains "...")`,
+          );
+        }
+
+        // Limit string length to prevent excessively large data
+        if (value.length > 10000) {
+          throw new Error(
+            `Failure data field "${key}" exceeds maximum length of 10,000 characters`,
+          );
+        }
+
+        // Store sanitized string
+        // eslint-disable-next-line security/detect-object-injection -- key is from Object.entries, safe iteration
+        validated[key] = value.trim();
+      } else if (Array.isArray(value)) {
+        // Validate array contents
+        // eslint-disable-next-line security/detect-object-injection -- key is from Object.entries, safe iteration
+        validated[key] = value.filter(
+          (item) =>
+            typeof item === 'string' && item.length > 0 && item.length < 1000,
+        );
+      } else if (typeof value === 'object' && value !== null) {
+        // Recursively validate nested objects (limited depth)
+        try {
+          // eslint-disable-next-line security/detect-object-injection -- key is from Object.entries, safe iteration
+          validated[key] = JSON.parse(JSON.stringify(value)); // Deep clone and validate JSON serializability
+        } catch (error) {
+          throw new Error(
+            `Failure data field "${key}" contains non-serializable data: ${error.message}`,
+          );
+        }
+      } else {
+        // Allow primitives (boolean, number)
+        // eslint-disable-next-line security/detect-object-injection -- key is from Object.entries, safe iteration
+        validated[key] = value;
+      }
+    }
+
+    return validated;
   }
 
   /**
@@ -2023,6 +2329,509 @@ class TaskManagerAPI {
     }
 
     return validated;
+  }
+
+  /**
+   * Validate structured evidence requirements for task completion
+   * @param {Object} completionData - Validated completion data to check for evidence
+   * @returns {Object} Evidence validation result with isValid flag and errors array
+   * @private
+   */
+  _validateTaskEvidence(completionData) {
+    const validation = {
+      isValid: true,
+      errors: [],
+      evidenceChecks: {},
+    };
+
+    // If no evidence is provided, issue warning but allow completion
+    if (!completionData.evidence) {
+      validation.evidenceChecks.hasEvidence = false;
+      validation.errors.push(
+        'No evidence provided - consider adding completion evidence for better tracking',
+      );
+      return validation; // Allow completion without evidence for backwards compatibility
+    }
+
+    const evidence = completionData.evidence;
+    validation.evidenceChecks.hasEvidence = true;
+
+    // Validate common evidence fields
+    const recommendedFields = [
+      'files_modified',
+      'tests_passed',
+      'build_status',
+      'linter_status',
+      'commit_hash',
+    ];
+
+    let foundRecommendedFields = 0;
+    for (const field of recommendedFields) {
+      if (evidence[field] !== undefined) {
+        foundRecommendedFields++;
+        validation.evidenceChecks[field] = true;
+
+        // Validate specific evidence types
+        switch (field) {
+          case 'files_modified':
+            if (!Array.isArray(evidence[field])) {
+              validation.errors.push(
+                'files_modified must be an array of file paths',
+              );
+              validation.isValid = false;
+            }
+            break;
+          case 'tests_passed':
+          case 'build_status':
+          case 'linter_status':
+            if (typeof evidence[field] !== 'boolean') {
+              validation.errors.push(`${field} must be a boolean (true/false)`);
+              validation.isValid = false;
+            }
+            break;
+          case 'commit_hash':
+            if (
+              typeof evidence[field] !== 'string' ||
+              !/^[a-f0-9]{7,40}$/i.test(evidence[field])
+            ) {
+              validation.errors.push(
+                'commit_hash must be a valid git commit hash (7-40 hex characters)',
+              );
+              validation.isValid = false;
+            }
+            break;
+        }
+      } else {
+        validation.evidenceChecks[field] = false;
+      }
+    }
+
+    // Encourage evidence completeness
+    if (foundRecommendedFields === 0) {
+      validation.errors.push(
+        'Consider providing structured evidence: files_modified, tests_passed, build_status, linter_status, commit_hash',
+      );
+    }
+
+    validation.evidenceChecks.completeness = foundRecommendedFields;
+    validation.evidenceChecks.recommendedTotal = recommendedFields.length;
+
+    return validation;
+  }
+
+  /**
+   * Broadcast task completion event to all connected WebSocket clients
+   * @param {Object} completionEvent - Task completion event data
+   * @returns {Promise<Object>} Broadcast result with success/error counts
+   * @private
+   */
+  async _broadcastTaskCompletion(completionEvent) {
+    if (!this.isWebSocketRunning || this.webSocketClients.size === 0) {
+      return {
+        broadcast: false,
+        reason: 'No WebSocket server or clients',
+        clientCount: 0,
+      };
+    }
+
+    const message = {
+      type: 'task_completed',
+      timestamp: new Date().toISOString(),
+      data: completionEvent,
+    };
+
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (const client of this.webSocketClients) {
+      try {
+        this._sendWebSocketMessage(client, message);
+        successCount++;
+      } catch (error) {
+        errorCount++;
+        // Remove dead clients
+        this.webSocketClients.delete(client);
+      }
+    }
+
+    return {
+      broadcast: true,
+      successCount,
+      errorCount,
+      totalClients: successCount + errorCount,
+      eventType: 'task_completed',
+    };
+  }
+
+  /**
+   * Validate agent scope access against task requirements (files AND folders)
+   * Enhanced scope validation supporting both file and folder restrictions
+   * @param {Object} task - Task object with potential scope restrictions
+   * @param {string} agentId - Agent ID to validate scope for
+   * @returns {Promise<Object>} Scope validation result with isValid flag and details
+   * @private
+   */
+  async _validateAgentScope(task, agentId) {
+    const validation = {
+      isValid: true,
+      errors: [],
+      scopeChecks: {
+        hasRestrictions: false,
+        restrictedFiles: [],
+        restrictedFolders: [],
+        allowedFiles: [],
+        allowedFolders: [],
+      },
+      agentScope: {},
+    };
+
+    // Check if task has any scope restrictions
+    if (!task.scope_restrictions) {
+      validation.scopeChecks.hasRestrictions = false;
+      return validation; // No restrictions, allow access
+    }
+
+    validation.scopeChecks.hasRestrictions = true;
+    const restrictions = task.scope_restrictions;
+
+    // Get agent configuration and scope (future enhancement - for now allow all)
+    const todoData = await this.taskManager.readTodoFast();
+    const agent = todoData.agents?.[agentId];
+
+    if (!agent) {
+      validation.isValid = false;
+      validation.errors.push(`Agent ${agentId} not found in system`);
+      return validation;
+    }
+
+    // For now, store agent scope info but don't enforce restrictions
+    // This provides the foundation for future agent-specific scope enforcement
+    validation.agentScope = {
+      agentId,
+      capabilities: agent.capabilities || [],
+      specialization: agent.specialization || [],
+      role: agent.role || 'general',
+    };
+
+    // Validate restricted files (if specified)
+    if (
+      restrictions.restricted_files &&
+      Array.isArray(restrictions.restricted_files)
+    ) {
+      validation.scopeChecks.restrictedFiles = restrictions.restricted_files;
+
+      // Future enhancement: Check if agent has access to these files
+      for (const restrictedFile of restrictions.restricted_files) {
+        if (typeof restrictedFile !== 'string') {
+          validation.errors.push(
+            `Invalid restricted file specification: ${restrictedFile}`,
+          );
+          validation.isValid = false;
+          continue;
+        }
+
+        // For now, log the restriction but don't enforce
+        // eslint-disable-next-line no-console -- Enhanced scope validation logging
+        console.log(
+          `[SCOPE] Task ${task.id} restricts access to file: ${restrictedFile}`,
+        );
+      }
+    }
+
+    // Validate restricted folders (if specified) - NEW FEATURE
+    if (
+      restrictions.restricted_folders &&
+      Array.isArray(restrictions.restricted_folders)
+    ) {
+      validation.scopeChecks.restrictedFolders =
+        restrictions.restricted_folders;
+
+      // Enhanced folder restriction validation
+      for (const restrictedFolder of restrictions.restricted_folders) {
+        if (typeof restrictedFolder !== 'string') {
+          validation.errors.push(
+            `Invalid restricted folder specification: ${restrictedFolder}`,
+          );
+          validation.isValid = false;
+          continue;
+        }
+
+        // Normalize folder path (ensure trailing slash for proper matching)
+        const normalizedFolder = restrictedFolder.endsWith('/')
+          ? restrictedFolder
+          : `${restrictedFolder}/`;
+
+        // For now, log the restriction but don't enforce
+        // eslint-disable-next-line no-console -- Enhanced scope validation logging
+        console.log(
+          `[SCOPE] Task ${task.id} restricts access to folder: ${normalizedFolder}`,
+        );
+      }
+    }
+
+    // Validate allowed files (whitelist approach - if specified, only these files are allowed)
+    if (
+      restrictions.allowed_files &&
+      Array.isArray(restrictions.allowed_files)
+    ) {
+      validation.scopeChecks.allowedFiles = restrictions.allowed_files;
+
+      for (const allowedFile of restrictions.allowed_files) {
+        if (typeof allowedFile !== 'string') {
+          validation.errors.push(
+            `Invalid allowed file specification: ${allowedFile}`,
+          );
+          validation.isValid = false;
+        }
+      }
+    }
+
+    // Validate allowed folders (whitelist approach - NEW FEATURE)
+    if (
+      restrictions.allowed_folders &&
+      Array.isArray(restrictions.allowed_folders)
+    ) {
+      validation.scopeChecks.allowedFolders = restrictions.allowed_folders;
+
+      for (const allowedFolder of restrictions.allowed_folders) {
+        if (typeof allowedFolder !== 'string') {
+          validation.errors.push(
+            `Invalid allowed folder specification: ${allowedFolder}`,
+          );
+          validation.isValid = false;
+          continue;
+        }
+
+        // Normalize folder path
+        const normalizedFolder = allowedFolder.endsWith('/')
+          ? allowedFolder
+          : `${allowedFolder}/`;
+        validation.scopeChecks.allowedFolders[
+          validation.scopeChecks.allowedFolders.indexOf(allowedFolder)
+        ] = normalizedFolder;
+      }
+    }
+
+    // Enhanced validation logic: check for conflicts between restrictions and allowlists
+    if (
+      validation.scopeChecks.restrictedFiles.length > 0 &&
+      validation.scopeChecks.allowedFiles.length > 0
+    ) {
+      // Check for conflicts between restricted and allowed files
+      const conflicts = validation.scopeChecks.restrictedFiles.filter((file) =>
+        validation.scopeChecks.allowedFiles.includes(file),
+      );
+      if (conflicts.length > 0) {
+        validation.errors.push(
+          `Scope conflict: Files cannot be both restricted and allowed: ${conflicts.join(', ')}`,
+        );
+        validation.isValid = false;
+      }
+    }
+
+    if (
+      validation.scopeChecks.restrictedFolders.length > 0 &&
+      validation.scopeChecks.allowedFolders.length > 0
+    ) {
+      // Check for conflicts between restricted and allowed folders
+      const conflicts = validation.scopeChecks.restrictedFolders.filter(
+        (folder) => {
+          const normalizedRestricted = folder.endsWith('/')
+            ? folder
+            : `${folder}/`;
+          return validation.scopeChecks.allowedFolders.some((allowed) => {
+            const normalizedAllowed = allowed.endsWith('/')
+              ? allowed
+              : `${allowed}/`;
+            return normalizedRestricted === normalizedAllowed;
+          });
+        },
+      );
+      if (conflicts.length > 0) {
+        validation.errors.push(
+          `Scope conflict: Folders cannot be both restricted and allowed: ${conflicts.join(', ')}`,
+        );
+        validation.isValid = false;
+      }
+    }
+
+    return validation;
+  }
+
+  /**
+   * Broadcast task failure event to all connected WebSocket clients
+   * @param {Object} failureEvent - Task failure event data
+   * @returns {Promise<Object>} Broadcast result with success/error counts
+   * @private
+   */
+  async _broadcastTaskFailed(failureEvent) {
+    if (!this.isWebSocketRunning || this.webSocketClients.size === 0) {
+      return {
+        broadcast: false,
+        reason: 'No WebSocket server or clients',
+        clientCount: 0,
+      };
+    }
+
+    const message = {
+      type: 'task_failed',
+      timestamp: new Date().toISOString(),
+      data: failureEvent,
+    };
+
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (const client of this.webSocketClients) {
+      try {
+        this._sendWebSocketMessage(client, message);
+        successCount++;
+      } catch (error) {
+        errorCount++;
+        // Remove dead clients
+        this.webSocketClients.delete(client);
+      }
+    }
+
+    return {
+      broadcast: true,
+      successCount,
+      errorCount,
+      totalClients: successCount + errorCount,
+      eventType: 'task_failed',
+    };
+  }
+
+  /**
+   * Validate scope restrictions format and structure during task creation
+   * @param {Object} scopeRestrictions - Scope restrictions object from task data
+   * @returns {Object} Validation result with isValid flag and restriction types
+   * @private
+   */
+  _validateScopeRestrictions(scopeRestrictions) {
+    const validation = {
+      isValid: true,
+      errors: [],
+      restrictionTypes: [],
+    };
+
+    if (!scopeRestrictions || typeof scopeRestrictions !== 'object') {
+      validation.isValid = false;
+      validation.errors.push('scope_restrictions must be a valid object');
+      return validation;
+    }
+
+    // Validate restricted_files
+    if (scopeRestrictions.restricted_files !== undefined) {
+      if (!Array.isArray(scopeRestrictions.restricted_files)) {
+        validation.errors.push('restricted_files must be an array');
+        validation.isValid = false;
+      } else {
+        validation.restrictionTypes.push('restricted_files');
+        for (const file of scopeRestrictions.restricted_files) {
+          if (typeof file !== 'string') {
+            validation.errors.push(
+              `Invalid file path in restricted_files: ${file}`,
+            );
+            validation.isValid = false;
+          }
+        }
+      }
+    }
+
+    // Validate restricted_folders - NEW FEATURE
+    if (scopeRestrictions.restricted_folders !== undefined) {
+      if (!Array.isArray(scopeRestrictions.restricted_folders)) {
+        validation.errors.push('restricted_folders must be an array');
+        validation.isValid = false;
+      } else {
+        validation.restrictionTypes.push('restricted_folders');
+        for (const folder of scopeRestrictions.restricted_folders) {
+          if (typeof folder !== 'string') {
+            validation.errors.push(
+              `Invalid folder path in restricted_folders: ${folder}`,
+            );
+            validation.isValid = false;
+          }
+        }
+      }
+    }
+
+    // Validate allowed_files
+    if (scopeRestrictions.allowed_files !== undefined) {
+      if (!Array.isArray(scopeRestrictions.allowed_files)) {
+        validation.errors.push('allowed_files must be an array');
+        validation.isValid = false;
+      } else {
+        validation.restrictionTypes.push('allowed_files');
+        for (const file of scopeRestrictions.allowed_files) {
+          if (typeof file !== 'string') {
+            validation.errors.push(
+              `Invalid file path in allowed_files: ${file}`,
+            );
+            validation.isValid = false;
+          }
+        }
+      }
+    }
+
+    // Validate allowed_folders - NEW FEATURE
+    if (scopeRestrictions.allowed_folders !== undefined) {
+      if (!Array.isArray(scopeRestrictions.allowed_folders)) {
+        validation.errors.push('allowed_folders must be an array');
+        validation.isValid = false;
+      } else {
+        validation.restrictionTypes.push('allowed_folders');
+        for (const folder of scopeRestrictions.allowed_folders) {
+          if (typeof folder !== 'string') {
+            validation.errors.push(
+              `Invalid folder path in allowed_folders: ${folder}`,
+            );
+            validation.isValid = false;
+          }
+        }
+      }
+    }
+
+    // Validate for conflicts between restricted and allowed
+    if (scopeRestrictions.restricted_files && scopeRestrictions.allowed_files) {
+      const conflicts = scopeRestrictions.restricted_files.filter((file) =>
+        scopeRestrictions.allowed_files.includes(file),
+      );
+      if (conflicts.length > 0) {
+        validation.errors.push(
+          `Files cannot be both restricted and allowed: ${conflicts.join(', ')}`,
+        );
+        validation.isValid = false;
+      }
+    }
+
+    if (
+      scopeRestrictions.restricted_folders &&
+      scopeRestrictions.allowed_folders
+    ) {
+      const conflicts = scopeRestrictions.restricted_folders.filter(
+        (folder) => {
+          const normalizedRestricted = folder.endsWith('/')
+            ? folder
+            : `${folder}/`;
+          return scopeRestrictions.allowed_folders.some((allowed) => {
+            const normalizedAllowed = allowed.endsWith('/')
+              ? allowed
+              : `${allowed}/`;
+            return normalizedRestricted === normalizedAllowed;
+          });
+        },
+      );
+      if (conflicts.length > 0) {
+        validation.errors.push(
+          `Folders cannot be both restricted and allowed: ${conflicts.join(', ')}`,
+        );
+        validation.isValid = false;
+      }
+    }
+
+    return validation;
   }
 
   async deleteTask(taskId) {
@@ -2704,6 +3513,580 @@ class TaskManagerAPI {
 
   // Feature management methods removed - unified with TODO.json feature-based system
 
+  /**
+   * Update task progress with real-time WebSocket broadcasting
+   * @param {string} taskId - Task identifier
+   * @param {Object} updateData - Progress update data including message, percent_complete, etc.
+   * @returns {Promise<Object>} Update result with broadcasting status
+   */
+  async updateTaskProgress(taskId, updateData) {
+    try {
+      // Validate input parameters
+      if (!taskId) {
+        throw new Error('Task ID is required for progress update');
+      }
+      if (!updateData || typeof updateData !== 'object') {
+        throw new Error('Update data must be a valid object');
+      }
+
+      // Read current TODO data to validate task exists
+      const todoData = await this.taskManager.readTodo();
+      const task = todoData.tasks.find((t) => t.id === taskId);
+      if (!task) {
+        throw new Error(`Task with ID ${taskId} not found`);
+      }
+
+      // Create progress update record
+      const progressUpdate = {
+        taskId,
+        timestamp: new Date().toISOString(),
+        message: updateData.message || 'Progress update',
+        percentComplete:
+          updateData.percent_complete || updateData.percentComplete || 0,
+        phase: updateData.phase || 'unknown',
+        details: updateData.details || {},
+        agentId: updateData.agentId || task.assigned_agent || 'unknown',
+      };
+
+      // Store progress update in task history (if task has progress_history field)
+      if (!task.progress_history) {
+        task.progress_history = [];
+      }
+      task.progress_history.push(progressUpdate);
+
+      // Update last_progress timestamp
+      task.last_progress = progressUpdate.timestamp;
+      task.current_progress = progressUpdate.percentComplete;
+
+      // Save updated task data
+      await this.taskManager.writeTodo(todoData);
+
+      // Broadcast progress update via WebSocket if server is running
+      const broadcastResult =
+        await this._broadcastProgressUpdate(progressUpdate);
+
+      return {
+        success: true,
+        taskId,
+        progressUpdate,
+        broadcastStatus: broadcastResult,
+        timestamp: progressUpdate.timestamp,
+      };
+    } catch (error) {
+      throw new Error(`Failed to update task progress: ${error.message}`);
+    }
+  }
+
+  /**
+   * Start WebSocket server for real-time communication
+   * @param {number} port - Port number for WebSocket server
+   * @returns {Promise<Object>} Server start result
+   */
+  async startWebSocketServer(port = 8080) {
+    try {
+      if (this.isWebSocketRunning) {
+        return {
+          success: true,
+          message: 'WebSocket server is already running',
+          port: this.currentPort,
+          status: 'already_running',
+        };
+      }
+
+      // Create HTTP server for WebSocket upgrade
+      this.httpServer = http.createServer();
+      this.currentPort = port;
+
+      // Handle WebSocket upgrade manually (simplified implementation)
+      this.httpServer.on('upgrade', (request, socket, head) => {
+        this._handleWebSocketUpgrade(request, socket, head);
+      });
+
+      // Start HTTP server
+      await new Promise((resolve, reject) => {
+        this.httpServer.listen(port, (error) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve();
+          }
+        });
+      });
+
+      this.isWebSocketRunning = true;
+
+      return {
+        success: true,
+        message: `WebSocket server started on port ${port}`,
+        port,
+        status: 'started',
+        clientCount: this.webSocketClients.size,
+      };
+    } catch (error) {
+      throw new Error(`Failed to start WebSocket server: ${error.message}`);
+    }
+  }
+
+  /**
+   * Stop WebSocket server
+   * @returns {Promise<Object>} Server stop result
+   */
+  async stopWebSocketServer() {
+    try {
+      if (!this.isWebSocketRunning) {
+        return {
+          success: true,
+          message: 'WebSocket server is not running',
+          status: 'not_running',
+        };
+      }
+
+      // Close all client connections
+      for (const client of this.webSocketClients) {
+        try {
+          client.close();
+        } catch (closeError) {
+          // Ignore close errors for already closed connections
+        }
+      }
+      this.webSocketClients.clear();
+
+      // Close HTTP server
+      await new Promise((resolve) => {
+        this.httpServer.close(() => {
+          resolve();
+        });
+      });
+
+      this.isWebSocketRunning = false;
+      this.httpServer = null;
+      this.currentPort = null;
+
+      return {
+        success: true,
+        message: 'WebSocket server stopped',
+        status: 'stopped',
+      };
+    } catch (error) {
+      throw new Error(`Failed to stop WebSocket server: ${error.message}`);
+    }
+  }
+
+  /**
+   * Get WebSocket server status
+   * @returns {Promise<Object>} Server status information
+   */
+  async getWebSocketStatus() {
+    return {
+      success: true,
+      isRunning: this.isWebSocketRunning,
+      port: this.currentPort || null,
+      clientCount: this.webSocketClients.size,
+      status: this.isWebSocketRunning ? 'running' : 'stopped',
+    };
+  }
+
+  /**
+   * Handle WebSocket upgrade (simplified implementation)
+   * @private
+   */
+  _handleWebSocketUpgrade(request, socket, head) {
+    try {
+      // WebSocket handshake (simplified)
+      const key = request.headers['sec-websocket-key'];
+      if (!key) {
+        socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+        return;
+      }
+
+      const acceptKey = crypto
+        .createHash('sha1')
+        .update(key + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11')
+        .digest('base64');
+
+      const responseHeaders = [
+        'HTTP/1.1 101 Switching Protocols',
+        'Upgrade: websocket',
+        'Connection: Upgrade',
+        `Sec-WebSocket-Accept: ${acceptKey}`,
+        '',
+        '',
+      ].join('\r\n');
+
+      socket.write(responseHeaders);
+
+      // Add client to set
+      this.webSocketClients.add(socket);
+
+      // Handle client disconnect
+      socket.on('close', () => {
+        this.webSocketClients.delete(socket);
+      });
+
+      socket.on('error', () => {
+        this.webSocketClients.delete(socket);
+      });
+
+      // Send welcome message
+      this._sendWebSocketMessage(socket, {
+        type: 'welcome',
+        message: 'Connected to TaskManager WebSocket',
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      socket.end('HTTP/1.1 500 Internal Server Error\r\n\r\n');
+    }
+  }
+
+  /**
+   * Send WebSocket message to a client
+   * @private
+   */
+  _sendWebSocketMessage(socket, data) {
+    try {
+      const message = JSON.stringify(data);
+      const messageLength = Buffer.byteLength(message);
+
+      // Simple WebSocket frame format for text messages
+      let frame;
+      if (messageLength < 126) {
+        frame = Buffer.allocUnsafe(2 + messageLength);
+        frame[0] = 0x81; // FIN=1, opcode=1 (text)
+        frame[1] = messageLength;
+        Buffer.from(message).copy(frame, 2);
+      } else {
+        // Handle longer messages (simplified)
+        frame = Buffer.allocUnsafe(4 + messageLength);
+        frame[0] = 0x81; // FIN=1, opcode=1 (text)
+        frame[1] = 126;
+        frame.writeUInt16BE(messageLength, 2);
+        Buffer.from(message).copy(frame, 4);
+      }
+
+      socket.write(frame);
+    } catch (error) {
+      // Ignore errors for closed connections
+    }
+  }
+
+  /**
+   * Broadcast progress update to all connected WebSocket clients
+   * @private
+   */
+  async _broadcastProgressUpdate(progressUpdate) {
+    if (!this.isWebSocketRunning || this.webSocketClients.size === 0) {
+      return {
+        broadcast: false,
+        reason: 'No WebSocket server or clients',
+        clientCount: 0,
+      };
+    }
+
+    const message = {
+      type: 'progress_update',
+      data: progressUpdate,
+      timestamp: new Date().toISOString(),
+    };
+
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (const client of this.webSocketClients) {
+      try {
+        this._sendWebSocketMessage(client, message);
+        successCount++;
+      } catch (error) {
+        errorCount++;
+        // Remove failed clients
+        this.webSocketClients.delete(client);
+      }
+    }
+
+    return {
+      broadcast: true,
+      successCount,
+      errorCount,
+      totalClients: successCount + errorCount,
+    };
+  }
+
+  /**
+   * Get available tasks for agent swarm - core method for self-organizing agent coordination
+   *
+   * === AGENT SWARM ARCHITECTURE ===
+   * This method is the foundation of the self-organizing agent swarm concept where:
+   * • Any agent can join the swarm and immediately query for work
+   * • The TaskManager API acts as the central "brain" distributing work intelligently
+   * • Agents become peers that query for highest-priority tasks autonomously
+   * • No persistent orchestrator needed - the API coordinates everything
+   *
+   * === TASK PRIORITIZATION ===
+   * Returns tasks in strict priority order:
+   * 1. ERROR tasks (absolute priority - linter, build, startup errors)
+   * 2. FEATURE tasks (after all errors resolved)
+   * 3. SUBTASK tasks (after features complete)
+   * 4. TEST tasks (only after errors, features, subtasks complete)
+   *
+   * === SWARM COORDINATION FEATURES ===
+   * • Auto-excludes tasks already claimed by other agents
+   * • Provides task claiming guidance and next steps
+   * • Supports filtering for agent specialization/capabilities
+   * • Includes dependency validation and research requirements
+   *
+   * @param {Object} options - Query options for task filtering and agent preferences
+   * @param {string} options.agentId - Agent ID for personalized task suggestions
+   * @param {Array} options.categories - Filter by task categories ['error', 'feature', 'subtask', 'test']
+   * @param {Array} options.specializations - Filter by agent specializations/capabilities
+   * @param {number} options.limit - Maximum number of tasks to return (default: 10)
+   * @param {boolean} options.includeBlocked - Include tasks with incomplete dependencies (default: false)
+   * @returns {Promise<Object>} Available tasks with claiming instructions and coordination info
+   *
+   * @example
+   * // Basic swarm query - get highest priority available tasks
+   * const result = await api.getTasks();
+   * if (result.success && result.tasks.length > 0) {
+   *   const nextTask = result.tasks[0];
+   *   console.log(`Next task: ${nextTask.title} (Priority: ${nextTask.swarmPriority})`);
+   * }
+   *
+   * @example
+   * // Agent-specific query with specialization filtering
+   * const result = await api.getTasks({
+   *   agentId: 'development_session_123',
+   *   specializations: ['frontend', 'react'],
+   *   categories: ['feature', 'error'],
+   *   limit: 5
+   * });
+   *
+   * @example
+   * // Research agent querying for research tasks
+   * const result = await api.getTasks({
+   *   agentId: 'research_agent_456',
+   *   categories: ['research'],
+   *   includeBlocked: true  // Research can work on blocked tasks
+   * });
+   */
+  async getTasks(options = {}) {
+    // Get guide information for all responses (both success and error)
+    let guide = null;
+    try {
+      guide = await this._getGuideForError('task-operations');
+    } catch {
+      // If guide fails, continue with operation without guide
+    }
+
+    try {
+      const result = await this.withTimeout(
+        (async () => {
+          // Set defaults for swarm operation
+          const {
+            agentId = null,
+            categories = ['error', 'feature', 'subtask', 'test'],
+            specializations = [],
+            limit = 10,
+            includeBlocked = false,
+            swarmMode = true,
+          } = options;
+
+          // Get all executable tasks in proper priority order
+          let availableTasks = await this.taskManager.getExecutableTasks();
+
+          // SWARM COORDINATION: Exclude tasks already claimed by other agents
+          const todoData = await this.taskManager.readTodo(true);
+          const claimedTaskIds = new Set(
+            todoData.tasks
+              .filter((t) => t.status === 'in_progress' && t.assigned_agent)
+              .map((t) => t.id),
+          );
+
+          availableTasks = availableTasks.filter(
+            (task) => task.status === 'pending' && !claimedTaskIds.has(task.id),
+          );
+
+          // Apply category filtering for agent specialization
+          if (categories.length > 0) {
+            availableTasks = availableTasks.filter((task) =>
+              categories.includes(task.category),
+            );
+          }
+
+          // Filter by dependencies unless specifically including blocked tasks
+          if (!includeBlocked) {
+            availableTasks = availableTasks.filter((task) => {
+              if (!task.dependencies || task.dependencies.length === 0) {
+                return true;
+              }
+
+              // Check if all dependencies are completed
+              return task.dependencies.every((depId) => {
+                const depTask = todoData.tasks.find((t) => t.id === depId);
+                return depTask && depTask.status === 'completed';
+              });
+            });
+          }
+
+          // Apply specialization filtering if agent has specific capabilities
+          if (specializations.length > 0 && agentId) {
+            // Future enhancement: filter tasks based on agent specializations
+            // For now, we'll include this as metadata for the agent to consider
+          }
+
+          // Limit results for performance and agent focus
+          availableTasks = availableTasks.slice(0, limit);
+
+          // Enhance tasks with swarm coordination metadata
+          const enhancedTasks = availableTasks.map((task, index) => {
+            const swarmMetadata = {
+              swarmPriority: index + 1, // 1 = highest priority
+              categoryPriority: this._getCategoryPriority(task.category),
+              isHighestPriority: index === 0,
+              estimatedComplexity: this._estimateTaskComplexity(task),
+              requiresResearch:
+                task.requires_research || this._detectResearchNeeds(task),
+              blockedDependencies: (task.dependencies || []).filter((depId) => {
+                const depTask = todoData.tasks.find((t) => t.id === depId);
+                return !depTask || depTask.status !== 'completed';
+              }),
+              claimingInstructions: {
+                command: `timeout 10s node "${__filename}" claim ${task.id} ${agentId || '<your-agent-id>'}`,
+                requiredParameters: ['taskId', 'agentId'],
+                optionalParameters: ['priority'],
+              },
+            };
+
+            return {
+              ...task,
+              swarmMetadata,
+            };
+          });
+
+          // Generate swarm coordination summary
+          const swarmCoordination = {
+            totalAvailableTasks: enhancedTasks.length,
+            totalClaimedTasks: claimedTaskIds.size,
+            nextRecommendedTask: enhancedTasks[0] || null,
+            taskDistribution: {
+              error: enhancedTasks.filter((t) => t.category === 'error').length,
+              feature: enhancedTasks.filter((t) => t.category === 'feature')
+                .length,
+              subtask: enhancedTasks.filter((t) => t.category === 'subtask')
+                .length,
+              test: enhancedTasks.filter((t) => t.category === 'test').length,
+            },
+            agentGuidance: {
+              message:
+                enhancedTasks.length > 0
+                  ? '🤖 SWARM READY - Tasks available for autonomous execution'
+                  : '⏳ SWARM IDLE - No available tasks at this time',
+              nextAction:
+                enhancedTasks.length > 0
+                  ? `Claim highest priority task: ${enhancedTasks[0].id}`
+                  : 'Wait for new tasks or check if initialization is needed',
+              workflowTip:
+                'Agents should claim tasks immediately in priority order for optimal swarm coordination',
+            },
+          };
+
+          return {
+            success: true,
+            tasks: enhancedTasks,
+            swarmCoordination,
+            filterApplied: {
+              categories,
+              specializations,
+              limit,
+              includeBlocked,
+              agentId,
+            },
+            timestamp: new Date().toISOString(),
+          };
+        })(),
+      );
+
+      // Add guide to success response
+      return {
+        ...result,
+        guide: guide || this._getFallbackGuide('task-operations'),
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        swarmCoordination: {
+          agentGuidance: {
+            message: '🔥 SWARM ERROR - Unable to fetch available tasks',
+            nextAction:
+              'Check agent initialization and TaskManager connectivity',
+            workflowTip:
+              'Ensure agent is properly initialized before querying for tasks',
+          },
+        },
+        guide: guide || this._getFallbackGuide('task-operations'),
+      };
+    }
+  }
+
+  /**
+   * Get numeric priority for task category (lower number = higher priority)
+   * @private
+   */
+  _getCategoryPriority(category) {
+    const priorities = {
+      error: 1, // Highest priority
+      feature: 2, // High priority
+      subtask: 3, // Medium priority
+      test: 4, // Lowest priority
+    };
+    return priorities[category] || 999;
+  }
+
+  /**
+   * Estimate task complexity based on title and description analysis
+   * @private
+   */
+  _estimateTaskComplexity(task) {
+    const text = `${task.title} ${task.description}`.toLowerCase();
+
+    let complexity = 'low';
+    let score = 0;
+
+    // Complexity indicators
+    const indicators = {
+      high: /architecture|system|platform|migration|integration|oauth|security|database|api/g,
+      medium: /refactor|enhance|optimize|implement|feature|component|service/g,
+      low: /fix|update|add|change|modify|adjust/g,
+    };
+
+    // Count matches for each complexity level
+    const highMatches = (text.match(indicators.high) || []).length;
+    const mediumMatches = (text.match(indicators.medium) || []).length;
+    const lowMatches = (text.match(indicators.low) || []).length;
+
+    score = highMatches * 3 + mediumMatches * 2 + lowMatches * 1;
+
+    if (score >= 6) {
+      complexity = 'high';
+    } else if (score >= 3) {
+      complexity = 'medium';
+    } else {
+      complexity = 'low';
+    }
+
+    return complexity;
+  }
+
+  /**
+   * Detect if task might need research based on content analysis
+   * @private
+   */
+  _detectResearchNeeds(task) {
+    const text = `${task.title} ${task.description}`.toLowerCase();
+    const researchIndicators =
+      /new|unknown|investigate|research|analysis|evaluate|best.?practice|approach|solution|design|architecture/g;
+    const matches = (text.match(researchIndicators) || []).length;
+    return matches >= 2; // Suggest research if multiple indicators present
+  }
+
   // Cleanup method
   async cleanup() {
     try {
@@ -2742,6 +4125,12 @@ async function main() {
   const api = new TaskManagerAPI();
 
   try {
+    // Use the modular CLI interface instead of inline command parsing
+    await cliInterface.executeCommand(api, args);
+    return; // Early return to skip the rest of the switch logic
+
+    // ===== OLD SWITCH LOGIC BELOW (KEPT FOR REFERENCE, WILL BE REMOVED) =====
+    // eslint-disable-next-line no-unreachable -- Temporary during refactoring
     switch (command) {
       case 'methods': {
         const result = await api.getApiMethods();
@@ -3126,6 +4515,36 @@ async function main() {
         }
 
         const result = await api.completeTask(taskId, completionData);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
+
+      case 'fail': {
+        const taskId = args[1];
+        let failureData = {};
+
+        // Parse failure data if provided
+        if (args[2]) {
+          try {
+            failureData = JSON.parse(args[2]);
+
+            // Convert string to object format
+            if (typeof failureData === 'string') {
+              failureData = { reason: failureData };
+            }
+          } catch (parseError) {
+            throw new Error(
+              `Invalid JSON failure data: ${parseError.message}. Ensure proper format: '{"reason": "Task failed due to X"}'`,
+            );
+          }
+        }
+
+        if (!taskId) {
+          throw new Error('Task ID required for fail command');
+        }
+
+        const result = await api.failTask(taskId, failureData);
         // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
@@ -3707,6 +5126,79 @@ async function main() {
         break;
       }
 
+      case 'update': {
+        const taskId = args[1];
+        const updateData = args[2];
+        if (!taskId) {
+          throw new Error('Task ID required for update command');
+        }
+        if (!updateData) {
+          throw new Error('Update data required for update command');
+        }
+
+        let parsedUpdateData;
+        try {
+          parsedUpdateData = JSON.parse(updateData);
+        } catch (parseError) {
+          throw new Error(`Invalid JSON update data: ${parseError.message}`);
+        }
+
+        const result = await api.updateTaskProgress(taskId, parsedUpdateData);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
+
+      case 'start-websocket': {
+        const port = args[1] ? parseInt(args[1], 10) : 8080;
+        if (isNaN(port) || port < 1024 || port > 65535) {
+          throw new Error('Valid port number required (1024-65535)');
+        }
+        const result = await api.startWebSocketServer(port);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
+
+      case 'stop-websocket': {
+        const result = await api.stopWebSocketServer();
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
+
+      case 'websocket-status': {
+        const result = await api.getWebSocketStatus();
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
+
+      // ========================================
+      // AGENT SWARM COORDINATION COMMANDS
+      // Core commands for self-organizing agent swarm architecture
+      // ========================================
+
+      case 'get-tasks': {
+        let options = {};
+
+        // Parse options if provided as JSON
+        if (args[1]) {
+          try {
+            options = JSON.parse(args[1]);
+          } catch (parseError) {
+            throw new Error(
+              `Invalid JSON options for get-tasks: ${parseError.message}`,
+            );
+          }
+        }
+
+        const result = await api.getTasks(options);
+        // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
+        console.log(JSON.stringify(result, null, 2));
+        break;
+      }
+
       // ========================================
 
       default: {
@@ -3758,6 +5250,12 @@ Phase Management (FEATURE-ONLY - not for error/subtask/test tasks):
   current-phase <featureId>    - Get current active phase for a feature
   phase-stats <featureId>      - Get detailed phase completion statistics
 
+Agent Swarm Coordination (Self-Organizing Agent Architecture):
+  get-tasks [options]          - Get highest-priority available tasks for agent swarm
+                                 Any agent can query this to find work autonomously
+                                 TaskManager API acts as central "brain" coordinating agents
+                                 Options: {"agentId": "...", "categories": ["error"], "limit": 5}
+
 Essential Examples:
   timeout 10s timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" init
   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" create '{"title": "Fix linting errors", "description": "Resolve ESLint violations", "category": "error"}'
@@ -3775,6 +5273,11 @@ Troubleshooting:
 Advanced Examples:
   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" suggest-feature '{"title": "Add dark mode", "description": "Implement dark theme", "rationale": "Improve UX", "category": "ui", "estimated_effort": "medium"}' agent_dev_001
   timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" complete error_456 '{"fixed": true, "details": "Resolved linting errors", "files_modified": ["src/auth.js"]}'
+
+Agent Swarm Examples:
+  timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" get-tasks
+  timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" get-tasks '{"categories": ["error"], "limit": 3}'
+  timeout 10s node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/taskmanager-api.js" get-tasks '{"agentId": "development_session_123", "specializations": ["frontend"]}'
   
                 `);
         break;

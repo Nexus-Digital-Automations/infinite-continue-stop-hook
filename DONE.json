@@ -40139,9 +40139,118 @@
       "needs_linter_feedback": true,
       "linter_feedback_generated": false,
       "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "feature_1757539581780_aonnfextp",
+      "title": "Organize CLAUDE.md workflow into formal checklist",
+      "description": "Create a formal workflow/checklist section in CLAUDE.md that organizes the existing workflow elements (linter checks, commit and push, mark task complete) into a clear, structured checklist format",
+      "priority": "medium",
+      "category": "feature",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-10T21:26:21.780Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757539560744_1_general_2abd88a2",
+      "started_at": "2025-09-10T21:26:47.819Z",
+      "claimed_by": "development_session_1757539560744_1_general_2abd88a2",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757539560744_1_general_2abd88a2",
+          "role": "primary",
+          "assignedAt": "2025-09-10T21:26:47.819Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-10T21:35:14.053Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-10T21:35:14.053Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "feature_1757568748044_c2uknxizo",
+      "title": "Implement self-organizing agent swarm architecture in taskmanager-api.js",
+      "description": "Update taskmanager-api.js to support the new self-organizing agent swarm concept where the TaskManager API becomes the central brain and agents become peers that query for highest-priority tasks. This includes: 1) Add get-tasks endpoint for agents to query highest-priority available tasks, 2) Enhance task claiming with automatic priority detection, 3) Add agent peer coordination features, 4) Update API to support swarm-based workflows where any agent can join and immediately start working",
+      "priority": "medium",
+      "category": "feature",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-11T05:32:28.044Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757568724222_1_general_51fda24c",
+      "started_at": "2025-09-11T05:32:46.632Z",
+      "claimed_by": "development_session_1757568724222_1_general_51fda24c",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757568724222_1_general_51fda24c",
+          "role": "primary",
+          "assignedAt": "2025-09-11T05:32:46.632Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completion_history": [
+        {
+          "taskId": "feature_1757568748044_c2uknxizo",
+          "completedAt": "2025-09-11T05:37:06.554Z",
+          "completedBy": "development_session_1757568724222_1_general_51fda24c",
+          "evidence": {
+            "files_modified": [
+              "taskmanager-api.js"
+            ],
+            "features_added": [
+              "getTasks() method for swarm coordination",
+              "get-tasks CLI command",
+              "Agent peer-to-peer task discovery",
+              "Swarm metadata and guidance"
+            ],
+            "build_status": true,
+            "linter_status": true
+          },
+          "completionNotes": "",
+          "category": "feature",
+          "priority": "medium"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-11T05:37:06.554Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-11T05:37:06.554Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/TODO.json"
     }
   ],
-  "total_completed": 917,
-  "last_completion": "2025-09-10T18:57:39.679Z",
+  "total_completed": 919,
+  "last_completion": "2025-09-11T05:37:06.554Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }
