@@ -239,13 +239,13 @@ git status                                   # Verify clean/up-to-date
 development/
 ├── reports/
 │   ├── task-reports/
-│   │   ├── feature_[taskId]/          # Task-specific reports
+│   │   ├── feature_1757702700510_aiwn0i8s8/    # Actual task ID folders
 │   │   │   ├── analysis.md
 │   │   │   ├── implementation.md
 │   │   │   ├── testing.md
 │   │   │   └── completion.md
-│   │   ├── error_[taskId]/            # Error investigation reports
-│   │   └── audit_[taskId]/            # Audit and review reports
+│   │   ├── error_1757701793978_txwz6bgkz/      # Error investigation reports
+│   │   └── audit_1757616948667_82aeaaffab51/   # Audit and review reports
 │   ├── research-reports/              # General research findings
 │   ├── performance-reports/           # Performance analysis
 │   ├── security-reports/              # Security assessments
@@ -260,10 +260,15 @@ development/
 - **ROOT CLEANUP**: Move any .md files from project root to appropriate reports or docs directories
 
 **REPORT NAMING CONVENTIONS:**
-- **Task Reports**: `[category]_[taskId]_[reportType]_[YYYYMMDD].md`
+- **Task Reports**: Use actual TaskManager task IDs for folder names: `feature_1757702700510_aiwn0i8s8/`
+- **Report Files Within Task Folders**: `[reportType]_[YYYYMMDD].md`
 - **Research Reports**: `[topic]_research_[YYYYMMDD].md`
 - **Analysis Reports**: `[component]_analysis_[YYYYMMDD].md`
-- **Examples**: `feature_123_implementation_20250912.md`, `auth_research_20250912.md`
+- **Examples**: 
+  - Task folder: `development/reports/task-reports/feature_1757702700510_aiwn0i8s8/`
+  - Implementation report: `feature_1757702700510_aiwn0i8s8/implementation_20250912.md`
+  - Completion report: `feature_1757702700510_aiwn0i8s8/completion_20250912.md`
+  - Research report: `development/reports/research-reports/oauth_research_20250912.md`
 
 **ORGANIZATION MANDATES:**
 - **✅ KEEP CLEAN**: Never leave reports scattered in root or random directories
@@ -399,11 +404,13 @@ npm run lint && npm run build && npm test && npm start
 - [ ] **VERIFY**: `git status` (clean working directory + "up to date with origin/main")
 
 ### 📋 PHASE 5: COMPLETION & EVIDENCE
-- [ ] **GENERATE TASK REPORT**: Create completion report in `development/reports/task-reports/[taskId]/completion.md`
+- [ ] **GENERATE TASK REPORT**: Create completion report using actual task ID in folder name
+  - [ ] Create folder: `development/reports/task-reports/[ACTUAL_TASK_ID]/` (e.g., `feature_1757702700510_aiwn0i8s8/`)
+  - [ ] Generate completion report: `[ACTUAL_TASK_ID]/completion_[YYYYMMDD].md`
   - [ ] Document implementation approach, challenges, solutions, and outcomes
   - [ ] Include validation evidence and testing results
   - [ ] Reference any research or analysis conducted
-- [ ] **ORGANIZE REPORTS**: Ensure all generated reports are properly organized in task-specific folders
+- [ ] **ORGANIZE REPORTS**: Ensure all generated reports are properly organized in task-specific folders with actual task IDs
 - [ ] **ROOT CLEANUP FINAL**: Final scan of root directory for any stray .md files and relocate
 - [ ] **COLLECT EVIDENCE**: Document validation results (lint passed, build succeeded, start passed, commit hash, git status)
 - [ ] **FORMAT COMPLETION**: Use proper JSON - `'"Task completed successfully"'` or `'{"message": "Status", "evidence": "Results"}'`
