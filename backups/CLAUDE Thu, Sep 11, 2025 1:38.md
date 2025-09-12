@@ -2,14 +2,14 @@
 
 ## 🚨 IMMEDIATE ACTION PROTOCOL
 **🔴 MANDATORY SEQUENCE FOR ALL USER REQUESTS:**
-1. **INITIALIZE** - `timeout 10s node taskmanager-api.js init` (or reinitialize with saved agent ID)
-2. **CREATE TASK** - `timeout 10s node taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"error|feature|subtask|test"}'`
+1. **INITIALIZE** - `timeout 10s taskmanager init` (or reinitialize with saved agent ID)
+2. **CREATE TASK** - `timeout 10s taskmanager create '{"title":"[Request]", "description":"[Details]", "category":"error|feature|subtask|test"}'`
 3. **EXECUTE** - Begin implementation immediately
 
 **🚨 ZERO DELAY MANDATE:**
 - **❌ NO**: Analysis first, "let me check" responses, preliminary questions
 - **✅ YES**: Instant response → Initialize → Create task → Execute
-- **TRIGGERS**: Any request to implement, add, create, fix, improve, analyze, work on anything, or "continue"
+- **TRIGGERS**: Any request to implement, add, create, fix, improve, analyze, or work on anything
 
 ## 🚨 CRITICAL MANDATES
 
@@ -215,67 +215,11 @@ git status                                   # Verify clean/up-to-date
 
 **PREPARATION STEPS:**
 1. **READ/REVIEW** all files in `development/essentials/` (critical project constraints)
-2. **SCAN REPORTS** in `development/reports/` directory and all subdirectories
-3. **CHECK TASK REPORTS** in `development/reports/task-reports/` for existing work related to current task
-4. **REVIEW RESEARCH** in `development/reports/research-reports/` for relevant findings
-5. **ADD TO TASKS** relevant reports as important_files in TODO.json
-6. **LEVERAGE RESEARCH** before implementing
-7. **CLEAN ROOT** - scan and relocate any .md files from root to appropriate directories
+2. **SCAN REPORTS** in `development/reports/` and `development/research-reports/`
+3. **ADD TO TASKS** relevant reports as important_files in TODO.json
+4. **LEVERAGE RESEARCH** before implementing
 
 **RESEARCH TASK CREATION:** Required for external API integrations, database schema changes, auth/security systems, complex architectural decisions
-
-### 🚨 REPORTS DIRECTORY MANAGEMENT PROTOCOL
-**🔴 MANDATORY REPORTS ORGANIZATION AND MAINTENANCE**
-
-**CORE REQUIREMENTS:**
-- **✅ ALWAYS**: Read and maintain `development/reports/` directory before and during all tasks
-- **✅ ALWAYS**: Check for existing task-related reports before starting implementation
-- **✅ ALWAYS**: Create task-specific folders for all reports generated during work
-- **✅ ALWAYS**: Keep reports organized by task, date, and category
-- **✅ ALWAYS**: Move all .md files from root directory to appropriate docs or reports directories
-
-**REPORTS DIRECTORY STRUCTURE:**
-```
-development/
-├── reports/
-│   ├── task-reports/
-│   │   ├── feature_[taskId]/          # Task-specific reports
-│   │   │   ├── analysis.md
-│   │   │   ├── implementation.md
-│   │   │   ├── testing.md
-│   │   │   └── completion.md
-│   │   ├── error_[taskId]/            # Error investigation reports
-│   │   └── audit_[taskId]/            # Audit and review reports
-│   ├── research-reports/              # General research findings
-│   ├── performance-reports/           # Performance analysis
-│   ├── security-reports/              # Security assessments
-│   └── architecture-reports/          # System design documentation
-```
-
-**MANDATORY WORKFLOWS:**
-- **TASK INITIATION**: Scan `development/reports/task-reports/` for existing reports related to current task
-- **DURING IMPLEMENTATION**: Create and update reports in task-specific folder as work progresses
-- **RESEARCH FINDINGS**: Document all research in `development/reports/research-reports/` with clear naming
-- **COMPLETION**: Generate completion report with evidence, challenges, and outcomes
-- **ROOT CLEANUP**: Move any .md files from project root to appropriate reports or docs directories
-
-**REPORT NAMING CONVENTIONS:**
-- **Task Reports**: `[category]_[taskId]_[reportType]_[YYYYMMDD].md`
-- **Research Reports**: `[topic]_research_[YYYYMMDD].md`
-- **Analysis Reports**: `[component]_analysis_[YYYYMMDD].md`
-- **Examples**: `feature_123_implementation_20250912.md`, `auth_research_20250912.md`
-
-**ORGANIZATION MANDATES:**
-- **✅ KEEP CLEAN**: Never leave reports scattered in root or random directories
-- **✅ CROSS-REFERENCE**: Link related reports and reference important findings in tasks
-- **✅ MAINTAIN INDEX**: Update report indexes when creating new documentation
-- **✅ ARCHIVE COMPLETED**: Keep completed task reports for historical reference and learning
-
-**ROOT DIRECTORY CLEANUP:**
-- **❌ NEVER**: Leave .md files in project root directory
-- **✅ ALWAYS**: Move documentation to `development/docs/` or appropriate reports subdirectory  
-- **✅ ALWAYS**: Maintain clean, organized root directory structure
-- **🚨 MANDATE**: Scan root directory during each task and relocate any misplaced documentation files
 
 ### 🚨 PROJECT-SPECIFIC TASK REQUIREMENTS PROTOCOL
 **🔴 ABSOLUTE MANDATE: CREATE AND MAINTAIN PROJECT TASK REQUIREMENTS FILE**
@@ -341,8 +285,7 @@ npm run lint && npm run build && npm test && npm start
 ## 🚨 INFRASTRUCTURE & STANDARDS
 
 ### 🔒 CRITICAL RESTRICTIONS
-- **❌ NEVER EDIT OR READ**: TODO.json directly (use TaskManager API only), settings.json (`/Users/jeremyparker/.claude/settings.json`)
-- **🚨 MANDATORY**: Always use `node taskmanager-api.js` commands for ALL task operations - never read TODO.json with Read tool
+- **❌ NEVER EDIT**: TODO.json directly (use TaskManager API), settings.json (`/Users/jeremyparker/.claude/settings.json`)
 - **✅ REQUIREMENTS**: Use TaskManager API only, production-ready code (no placeholders), comprehensive documentation, robust error handling
 
 ### ORGANIZATION
@@ -354,13 +297,10 @@ npm run lint && npm run build && npm test && npm start
 **🔴 FOLLOW EVERY STEP - ZERO TOLERANCE FOR SHORTCUTS**
 
 ### 📋 PHASE 1: INITIATION & PREPARATION
-- [ ] **INITIALIZE**: `timeout 10s node taskmanager-api.js init` (or reinitialize with saved ID)
-- [ ] **CREATE TASK**: `timeout 10s node taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"type"}'`
+- [ ] **INITIALIZE**: `timeout 10s taskmanager init` (or reinitialize with saved ID)
+- [ ] **CREATE TASK**: `timeout 10s taskmanager create '{"title":"[Request]", "description":"[Details]", "category":"type"}'`
 - [ ] **CONTEXT REVIEW**: Read all files in `development/essentials/`
-- [ ] **REPORTS DIRECTORY SCAN**: Check all `development/reports/` subdirectories for relevant reports
-- [ ] **TASK REPORTS CHECK**: Scan `development/reports/task-reports/` for existing work on current task
-- [ ] **RESEARCH INTEGRATION**: Review `development/reports/research-reports/` for applicable findings
-- [ ] **ROOT CLEANUP**: Scan root directory and move any .md files to appropriate directories
+- [ ] **RESEARCH INTEGRATION**: Scan `development/reports/` and `development/research-reports/`
 - [ ] **CLAIM TASK**: Take ownership via API
 
 ### 📋 PHASE 2: IMPLEMENTATION & QUALITY
@@ -399,12 +339,6 @@ npm run lint && npm run build && npm test && npm start
 - [ ] **VERIFY**: `git status` (clean working directory + "up to date with origin/main")
 
 ### 📋 PHASE 5: COMPLETION & EVIDENCE
-- [ ] **GENERATE TASK REPORT**: Create completion report in `development/reports/task-reports/[taskId]/completion.md`
-  - [ ] Document implementation approach, challenges, solutions, and outcomes
-  - [ ] Include validation evidence and testing results
-  - [ ] Reference any research or analysis conducted
-- [ ] **ORGANIZE REPORTS**: Ensure all generated reports are properly organized in task-specific folders
-- [ ] **ROOT CLEANUP FINAL**: Final scan of root directory for any stray .md files and relocate
 - [ ] **COLLECT EVIDENCE**: Document validation results (lint passed, build succeeded, start passed, commit hash, git status)
 - [ ] **FORMAT COMPLETION**: Use proper JSON - `'"Task completed successfully"'` or `'{"message": "Status", "evidence": "Results"}'`
   - [ ] Avoid special characters (!, ✅, emojis) | Use single quotes | No unquoted strings
@@ -428,7 +362,7 @@ npm run lint && npm run build && npm test && npm start
 - **❌ NO ABANDONMENT**: Never leave tasks partially complete
 
 ### 🔄 EXECUTION SEQUENCE
-1. **Initialize/Reinitialize** - `timeout 10s node taskmanager-api.js init`
+1. **Initialize/Reinitialize** - `timeout 10s taskmanager init`
 2. **Continue Work** - Check/resume existing tasks first
 3. **Deploy Subagents** - Use up to 10 concurrent agents for complex tasks
 4. **Validate & Complete** - All checks + commit + push before marking complete
@@ -438,14 +372,14 @@ npm run lint && npm run build && npm test && npm start
 **IMMEDIATE INITIALIZATION:**
 ```bash
 # Initialize (or reinitialize with saved agent ID)
-timeout 10s node taskmanager-api.js init
-# OR: timeout 10s node taskmanager-api.js reinitialize <agent-id>
+timeout 10s taskmanager init
+# OR: timeout 10s taskmanager reinitialize <agent-id>
 
 # Create task immediately  
-timeout 10s node taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"error|feature|subtask|test"}'
+timeout 10s taskmanager create '{"title":"[Request]", "description":"[Details]", "category":"error|feature|subtask|test"}'
 
 # Get API guide
-timeout 10s node taskmanager-api.js guide
+timeout 10s taskmanager guide
 ```
 
 **🚨 NO EXCEPTIONS: All action requests trigger immediate initialization + task creation**

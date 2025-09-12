@@ -2,6 +2,22 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
+      "id": "error_1757701793978_txwz6bgkz",
+      "title": "Fix workspace bidirectional sync issues",
+      "description": "Changes are not being reflected bidirectionally between workspaces and the host machine. Files modified in the workspace are not syncing to the host machine and vice versa, breaking the expected development workflow.",
+      "priority": "medium",
+      "category": "error",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-12T18:29:53.978Z",
+      "auto_research_created": false
+    },
+    {
       "id": "error_1757610227611_6jl9fsosq",
       "title": "Fix ESLint violations across codebase",
       "description": "92 ESLint problems detected: 30 errors and 62 warnings. Issues include console statements, unused variables, unreachable code, and async functions without await expressions. Need to clean up codebase to meet quality standards.",
@@ -30,32 +46,48 @@
       ]
     },
     {
-      "id": "feature_1757612811232_7yhorq8bf",
-      "title": "Update paths in CLAUDE.md and API guide for new home directory location",
-      "description": "Update all references to the infinite-continue-stop-hook TaskManager paths in CLAUDE.md and taskmanager-api.js to reflect the new location in home directory instead of Desktop/Claude Coding Projects",
+      "id": "audit_1757616948667_82aeaaffab51",
+      "title": "Post-Completion Audit: Update CLAUDE.md with continue trigger and TaskManager API requirements",
+      "description": "Comprehensive quality audit and review of the completed feature: Update CLAUDE.md with continue trigger and TaskManager API requirements\n\nOriginal Description: Add continue command recognition, enforce TaskManager API usage instead of direct TODO.json reading, and ensure strict workflow adherence starting with init command",
+      "category": "audit",
+      "priority": "high",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [
+        "Linter perfection achieved (zero warnings/errors)",
+        "Build perfection achieved (clean build)",
+        "All tests pass with full coverage",
+        "Code quality standards met",
+        "Implementation follows architectural patterns",
+        "Security review passed",
+        "Performance standards met",
+        "Documentation is complete and accurate"
+      ],
+      "estimate": "1-2 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-11T18:55:48.668Z",
+      "created_from_completed_task": "feature_1757616252459_llicfbxxq",
+      "original_implementer": "development_session_1757616235823_1_general_83e657e8",
+      "prevents_self_review": true,
+      "audit_type": "post_completion"
+    },
+    {
+      "id": "feature_1757702700510_aiwn0i8s8",
+      "title": "Update CLAUDE.md with reports directory management instructions",
+      "description": "Add instructions to CLAUDE.md for reading and maintaining development/reports/ directory, creating task folders for reports, checking for existing reports, keeping reports organized, and maintaining clean root folder by moving .md files to docs or reports directories",
       "priority": "medium",
       "category": "feature",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-09-11T17:46:51.232Z",
-      "auto_research_created": false,
-      "assigned_agent": "development_session_1757612792235_1_general_db8ae0d3",
-      "started_at": "2025-09-11T17:47:07.659Z",
-      "claimed_by": "development_session_1757612792235_1_general_db8ae0d3",
-      "agent_assignment_history": [
-        {
-          "agentId": "development_session_1757612792235_1_general_db8ae0d3",
-          "role": "primary",
-          "assignedAt": "2025-09-11T17:47:07.659Z",
-          "reassignReason": null,
-          "claimPriority": "normal"
-        }
-      ]
+      "created_at": "2025-09-12T18:45:00.510Z",
+      "auto_research_created": false
     },
     {
       "id": "feature_1757609334566_ly2rgj5vx",
@@ -181,6 +213,90 @@
       "maxConcurrentTasks": 5,
       "createdAt": "2025-09-11T17:46:32.235Z",
       "sessionId": "session_1757612792235",
+      "metadata": {}
+    },
+    "development_session_1757616235823_1_general_83e657e8": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-11T18:43:55.825Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-11T18:43:55.825Z",
+      "sessionId": "session_1757616235823",
+      "metadata": {}
+    },
+    "development_session_1757701314742_1_general_98a68649": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-12T18:21:54.743Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-12T18:21:54.743Z",
+      "sessionId": "session_1757701314742",
+      "metadata": {}
+    },
+    "development_session_1757701777470_1_general_0489565b": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-12T18:29:37.470Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-12T18:29:37.470Z",
+      "sessionId": "session_1757701777470",
+      "metadata": {}
+    },
+    "development_session_1757702682992_1_general_e4d4dbb7": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-12T18:44:42.992Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-12T18:44:42.992Z",
+      "sessionId": "session_1757702682992",
       "metadata": {}
     }
   },

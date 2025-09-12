@@ -2417,10 +2417,10 @@ class TaskManagerAPI {
   /**
    * Broadcast task completion event to all connected WebSocket clients
    * @param {Object} completionEvent - Task completion event data
-   * @returns {Promise<Object>} Broadcast result with success/error counts
+   * @returns {Object} Broadcast result with success/error counts
    * @private
    */
-  async _broadcastTaskCompletion(completionEvent) {
+  _broadcastTaskCompletion(completionEvent) {
     if (!this.isWebSocketRunning || this.webSocketClients.size === 0) {
       return {
         broadcast: false,
@@ -2442,7 +2442,7 @@ class TaskManagerAPI {
       try {
         this._sendWebSocketMessage(client, message);
         successCount++;
-      } catch (error) {
+      } catch {
         errorCount++;
         // Remove dead clients
         this.webSocketClients.delete(client);
@@ -2656,10 +2656,10 @@ class TaskManagerAPI {
   /**
    * Broadcast task failure event to all connected WebSocket clients
    * @param {Object} failureEvent - Task failure event data
-   * @returns {Promise<Object>} Broadcast result with success/error counts
+   * @returns {Object} Broadcast result with success/error counts
    * @private
    */
-  async _broadcastTaskFailed(failureEvent) {
+  _broadcastTaskFailed(failureEvent) {
     if (!this.isWebSocketRunning || this.webSocketClients.size === 0) {
       return {
         broadcast: false,
@@ -2681,7 +2681,7 @@ class TaskManagerAPI {
       try {
         this._sendWebSocketMessage(client, message);
         successCount++;
-      } catch (error) {
+      } catch {
         errorCount++;
         // Remove dead clients
         this.webSocketClients.delete(client);
@@ -3640,7 +3640,7 @@ class TaskManagerAPI {
       for (const client of this.webSocketClients) {
         try {
           client.close();
-        } catch (closeError) {
+        } catch {
           // Ignore close errors for already closed connections
         }
       }
@@ -3669,9 +3669,9 @@ class TaskManagerAPI {
 
   /**
    * Get WebSocket server status
-   * @returns {Promise<Object>} Server status information
+   * @returns {Object} Server status information
    */
-  async getWebSocketStatus() {
+  getWebSocketStatus() {
     return {
       success: true,
       isRunning: this.isWebSocketRunning,
@@ -3685,7 +3685,7 @@ class TaskManagerAPI {
    * Handle WebSocket upgrade (simplified implementation)
    * @private
    */
-  _handleWebSocketUpgrade(request, socket, head) {
+  _handleWebSocketUpgrade(request, socket, _head) {
     try {
       // WebSocket handshake (simplified)
       const key = request.headers['sec-websocket-key'];
@@ -3728,7 +3728,7 @@ class TaskManagerAPI {
         message: 'Connected to TaskManager WebSocket',
         timestamp: new Date().toISOString(),
       });
-    } catch (error) {
+    } catch {
       socket.end('HTTP/1.1 500 Internal Server Error\r\n\r\n');
     }
   }
@@ -3759,7 +3759,7 @@ class TaskManagerAPI {
       }
 
       socket.write(frame);
-    } catch (error) {
+    } catch {
       // Ignore errors for closed connections
     }
   }
@@ -3768,7 +3768,7 @@ class TaskManagerAPI {
    * Broadcast progress update to all connected WebSocket clients
    * @private
    */
-  async _broadcastProgressUpdate(progressUpdate) {
+  _broadcastProgressUpdate(progressUpdate) {
     if (!this.isWebSocketRunning || this.webSocketClients.size === 0) {
       return {
         broadcast: false,
@@ -3790,7 +3790,7 @@ class TaskManagerAPI {
       try {
         this._sendWebSocketMessage(client, message);
         successCount++;
-      } catch (error) {
+      } catch {
         errorCount++;
         // Remove failed clients
         this.webSocketClients.delete(client);
@@ -3880,7 +3880,7 @@ class TaskManagerAPI {
             specializations = [],
             limit = 10,
             includeBlocked = false,
-            swarmMode = true,
+            swarmMode: _swarmMode = true,
           } = options;
 
           // Get all executable tasks in proper priority order
@@ -4895,12 +4895,12 @@ async function main() {
               2,
             ),
           );
+          break;
         } catch (error) {
           // eslint-disable-next-line no-console -- CLI API requires console output for error reporting
           console.error(`Error getting feature stats: ${error.message}`);
           throw error;
         }
-        break;
       }
 
       // ========================================

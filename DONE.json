@@ -40705,9 +40705,237 @@
       "needs_linter_feedback": true,
       "linter_feedback_generated": false,
       "archived_from_todo": "/workspace/TODO.json"
+    },
+    {
+      "id": "feature_1757612811232_7yhorq8bf",
+      "title": "Update paths in CLAUDE.md and API guide for new home directory location",
+      "description": "Update all references to the infinite-continue-stop-hook TaskManager paths in CLAUDE.md and taskmanager-api.js to reflect the new location in home directory instead of Desktop/Claude Coding Projects",
+      "priority": "medium",
+      "category": "feature",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-11T17:46:51.232Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757612792235_1_general_db8ae0d3",
+      "started_at": "2025-09-11T17:47:07.659Z",
+      "claimed_by": "development_session_1757612792235_1_general_db8ae0d3",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757612792235_1_general_db8ae0d3",
+          "role": "primary",
+          "assignedAt": "2025-09-11T17:47:07.659Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completion_history": [
+        {
+          "taskId": "feature_1757612811232_7yhorq8bf",
+          "completedAt": "2025-09-11T17:49:26.761Z",
+          "completedBy": "development_session_1757612792235_1_general_db8ae0d3",
+          "evidence": {},
+          "completionNotes": "",
+          "category": "feature",
+          "priority": "medium"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-11T17:49:26.761Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-11T17:49:26.762Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "error_1757616510309_5kbnxkcva",
+      "title": "Fix 84 ESLint violations across project",
+      "description": "Critical linter errors found during audit: 19 errors and 65 warnings across append-text-hook.js, lib/api-modules/cli/cliInterface.js, lib/api-modules/swarm/swarmCoordination.js, lib/api-modules/utils/apiUtils.js, lib/api-modules/validation/taskValidation.js, and taskmanager-api.js. Issues include console statements, object injection sinks, unreachable code, and async methods without await expressions.",
+      "priority": "critical",
+      "category": "error",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-11T18:48:30.310Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757616235823_1_general_83e657e8",
+      "started_at": "2025-09-11T18:50:50.373Z",
+      "claimed_by": "development_session_1757616235823_1_general_83e657e8",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757616235823_1_general_83e657e8",
+          "role": "primary",
+          "assignedAt": "2025-09-11T18:50:50.373Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completion_history": [
+        {
+          "taskId": "error_1757616510309_5kbnxkcva",
+          "completedAt": "2025-09-11T18:54:18.498Z",
+          "completedBy": "development_session_1757616235823_1_general_83e657e8",
+          "evidence": {},
+          "completionNotes": "",
+          "category": "error",
+          "priority": "critical"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-11T18:54:18.498Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-11T18:54:18.498Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/workspace/TODO.json"
+    },
+    {
+      "id": "audit_1757612966761_74008246deef",
+      "title": "Post-Completion Audit: Update paths in CLAUDE.md and API guide for new home directory location",
+      "description": "Comprehensive quality audit and review of the completed feature: Update paths in CLAUDE.md and API guide for new home directory location\n\nOriginal Description: Update all references to the infinite-continue-stop-hook TaskManager paths in CLAUDE.md and taskmanager-api.js to reflect the new location in home directory instead of Desktop/Claude Coding Projects",
+      "category": "audit",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [
+        "Linter perfection achieved (zero warnings/errors)",
+        "Build perfection achieved (clean build)",
+        "All tests pass with full coverage",
+        "Code quality standards met",
+        "Implementation follows architectural patterns",
+        "Security review passed",
+        "Performance standards met",
+        "Documentation is complete and accurate"
+      ],
+      "estimate": "1-2 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-11T17:49:26.761Z",
+      "created_from_completed_task": "feature_1757612811232_7yhorq8bf",
+      "original_implementer": "development_session_1757612792235_1_general_db8ae0d3",
+      "prevents_self_review": true,
+      "audit_type": "post_completion",
+      "assigned_agent": "development_session_1757616235823_1_general_83e657e8",
+      "started_at": "2025-09-11T18:47:06.631Z",
+      "claimed_by": "development_session_1757616235823_1_general_83e657e8",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757616235823_1_general_83e657e8",
+          "role": "primary",
+          "assignedAt": "2025-09-11T18:47:06.631Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completion_history": [
+        {
+          "taskId": "audit_1757612966761_74008246deef",
+          "completedAt": "2025-09-11T18:54:53.985Z",
+          "completedBy": "development_session_1757616235823_1_general_83e657e8",
+          "evidence": {},
+          "completionNotes": "",
+          "category": "audit",
+          "priority": "high"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-11T18:54:53.986Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-11T18:54:53.986Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/workspace/TODO.json"
+    },
+    {
+      "id": "feature_1757616252459_llicfbxxq",
+      "title": "Update CLAUDE.md with continue trigger and TaskManager API requirements",
+      "description": "Add continue command recognition, enforce TaskManager API usage instead of direct TODO.json reading, and ensure strict workflow adherence starting with init command",
+      "priority": "medium",
+      "category": "feature",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-11T18:44:12.459Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757616235823_1_general_83e657e8",
+      "started_at": "2025-09-11T18:55:29.643Z",
+      "claimed_by": "development_session_1757616235823_1_general_83e657e8",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757616235823_1_general_83e657e8",
+          "role": "primary",
+          "assignedAt": "2025-09-11T18:55:29.643Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completion_history": [
+        {
+          "taskId": "feature_1757616252459_llicfbxxq",
+          "completedAt": "2025-09-11T18:55:48.667Z",
+          "completedBy": "development_session_1757616235823_1_general_83e657e8",
+          "evidence": {},
+          "completionNotes": "",
+          "category": "feature",
+          "priority": "medium"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-11T18:55:48.667Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-11T18:55:48.669Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/workspace/TODO.json"
     }
   ],
-  "total_completed": 928,
-  "last_completion": "2025-09-11T17:03:30.583Z",
+  "total_completed": 932,
+  "last_completion": "2025-09-11T18:55:48.669Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }
