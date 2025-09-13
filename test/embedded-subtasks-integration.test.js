@@ -692,7 +692,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
       for (let i = 0; i < 3; i++) {
         const taskData = {
           title: `Query performance test feature ${i + 1}`,
-          description: `Feature with complex subtask structure for query testing`,
+          description: 'Feature with complex subtask structure for query testing',
           category: 'feature',
           priority: 'medium',
         };

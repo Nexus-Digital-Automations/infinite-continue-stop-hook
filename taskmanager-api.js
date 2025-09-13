@@ -4140,7 +4140,8 @@ class TaskManagerAPI {
       }
 
       // Get the parent task
-      const tasks = await this.taskManager.loadTasks();
+      const todoData = await this.taskManager.readTodo(true);
+      const tasks = todoData.tasks || [];
       const parentTask = tasks.find((t) => t.id === taskId);
 
       if (!parentTask) {
@@ -4248,7 +4249,8 @@ class TaskManagerAPI {
       parentTask.subtasks.push(newSubtask);
 
       // Save the updated tasks
-      await this.taskManager.saveTasks(tasks);
+      todoData.tasks = tasks;
+      await this.taskManager.writeTodo(todoData);
 
       return {
         success: true,
@@ -4282,7 +4284,8 @@ class TaskManagerAPI {
     try {
       guide = await this._getCachedGuide();
 
-      const tasks = await this.taskManager.loadTasks();
+      const todoData = await this.taskManager.readTodo(true);
+      const tasks = todoData.tasks || [];
       const parentTask = tasks.find((t) => t.id === taskId);
 
       if (!parentTask) {
@@ -4323,7 +4326,8 @@ class TaskManagerAPI {
     try {
       guide = await this._getCachedGuide();
 
-      const tasks = await this.taskManager.loadTasks();
+      const todoData = await this.taskManager.readTodo(true);
+      const tasks = todoData.tasks || [];
       const parentTask = tasks.find((t) => t.id === taskId);
 
       if (!parentTask) {
@@ -4350,7 +4354,8 @@ class TaskManagerAPI {
       };
 
       // Save the updated tasks
-      await this.taskManager.saveTasks(tasks);
+      todoData.tasks = tasks;
+      await this.taskManager.writeTodo(todoData);
 
       return {
         success: true,
@@ -4386,7 +4391,8 @@ class TaskManagerAPI {
     try {
       guide = await this._getCachedGuide();
 
-      const tasks = await this.taskManager.loadTasks();
+      const todoData = await this.taskManager.readTodo(true);
+      const tasks = todoData.tasks || [];
       const parentTask = tasks.find((t) => t.id === taskId);
 
       if (!parentTask) {
@@ -4408,7 +4414,8 @@ class TaskManagerAPI {
       const deletedSubtask = parentTask.subtasks.splice(subtaskIndex, 1)[0];
 
       // Save the updated tasks
-      await this.taskManager.saveTasks(tasks);
+      todoData.tasks = tasks;
+      await this.taskManager.writeTodo(todoData);
 
       return {
         success: true,
@@ -4450,7 +4457,8 @@ class TaskManagerAPI {
         );
       }
 
-      const tasks = await this.taskManager.loadTasks();
+      const todoData = await this.taskManager.readTodo(true);
+      const tasks = todoData.tasks || [];
 
       if (targetType === 'task') {
         if (!targetId) {
@@ -4480,7 +4488,8 @@ class TaskManagerAPI {
           task.success_criteria.push(criteriaData);
         }
 
-        await this.taskManager.saveTasks(tasks);
+        todoData.tasks = tasks;
+        await this.taskManager.writeTodo(todoData);
 
         return {
           success: true,
@@ -4510,7 +4519,7 @@ class TaskManagerAPI {
           todoData.project_success_criteria.push(criteriaData);
         }
 
-        await this.taskManager.writeTodoJson(todoData);
+        await this.taskManager.writeTodo(todoData);
 
         return {
           success: true,
@@ -4559,7 +4568,8 @@ class TaskManagerAPI {
           );
         }
 
-        const tasks = await this.taskManager.loadTasks();
+        const todoData = await this.taskManager.readTodo(true);
+        const tasks = todoData.tasks || [];
         const task = tasks.find((t) => t.id === targetId);
 
         if (!task) {
@@ -4624,7 +4634,8 @@ class TaskManagerAPI {
           );
         }
 
-        const tasks = await this.taskManager.loadTasks();
+        const todoData = await this.taskManager.readTodo(true);
+        const tasks = todoData.tasks || [];
         const task = tasks.find((t) => t.id === targetId);
 
         if (!task) {
@@ -4646,7 +4657,8 @@ class TaskManagerAPI {
           );
         }
 
-        await this.taskManager.saveTasks(tasks);
+        todoData.tasks = tasks;
+        await this.taskManager.writeTodo(todoData);
 
         return {
           success: true,
@@ -4676,7 +4688,7 @@ class TaskManagerAPI {
           );
         }
 
-        await this.taskManager.writeTodoJson(todoData);
+        await this.taskManager.writeTodo(todoData);
 
         return {
           success: true,
@@ -4719,7 +4731,8 @@ class TaskManagerAPI {
         );
       }
 
-      const tasks = await this.taskManager.loadTasks();
+      const todoData = await this.taskManager.readTodo(true);
+      const tasks = todoData.tasks || [];
       const task = tasks.find((t) => t.id === taskId);
 
       if (!task) {
@@ -4759,7 +4772,8 @@ class TaskManagerAPI {
               researchData.research_locations;
           }
 
-          await this.taskManager.saveTasks(tasks);
+          todoData.tasks = tasks;
+          await this.taskManager.writeTodo(todoData);
 
           return {
             success: true,
@@ -4797,7 +4811,8 @@ class TaskManagerAPI {
             };
           }
 
-          await this.taskManager.saveTasks(tasks);
+          todoData.tasks = tasks;
+          await this.taskManager.writeTodo(todoData);
 
           return {
             success: true,
@@ -4855,7 +4870,8 @@ class TaskManagerAPI {
         );
       }
 
-      const tasks = await this.taskManager.loadTasks();
+      const todoData = await this.taskManager.readTodo(true);
+      const tasks = todoData.tasks || [];
       const task = tasks.find((t) => t.id === taskId);
 
       if (!task) {
@@ -4909,7 +4925,8 @@ class TaskManagerAPI {
           auditSubtask.original_implementer =
             task.assigned_agent || task.claimed_by;
 
-          await this.taskManager.saveTasks(tasks);
+          todoData.tasks = tasks;
+          await this.taskManager.writeTodo(todoData);
 
           return {
             success: true,
@@ -4950,7 +4967,8 @@ class TaskManagerAPI {
             };
           }
 
-          await this.taskManager.saveTasks(tasks);
+          todoData.tasks = tasks;
+          await this.taskManager.writeTodo(todoData);
 
           return {
             success: true,

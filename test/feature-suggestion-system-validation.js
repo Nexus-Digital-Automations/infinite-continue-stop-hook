@@ -30,8 +30,8 @@ class FeatureSuggestionValidator {
     console.log('🧪 Feature Suggestion System Validation Test');
     console.log('=' * 60);
     console.log(`📅 Started: ${new Date().toISOString()}`);
-    console.log(`🎯 Parent Feature: feature_suggested_1757095650796_wpub5ogu3`);
-    console.log(`⚡ Phase: 2 (Implementation & Development)`);
+    console.log('🎯 Parent Feature: feature_suggested_1757095650796_wpub5ogu3');
+    console.log('⚡ Phase: 2 (Implementation & Development)');
     console.log('');
   }
 
@@ -340,9 +340,9 @@ class FeatureSuggestionValidator {
     console.log('  • Phase system integrates properly with features');
     console.log('  • Complete feature lifecycle is validated');
     console.log('');
-    console.log(`✅ Test Feature Suggestion implementation SUCCESSFUL`);
-    console.log(`📋 Phase 2 (Implementation & Development) COMPLETE`);
-    console.log(`🚀 Ready to progress to Phase 3 (Testing & Validation)`);
+    console.log('✅ Test Feature Suggestion implementation SUCCESSFUL');
+    console.log('📋 Phase 2 (Implementation & Development) COMPLETE');
+    console.log('🚀 Ready to progress to Phase 3 (Testing & Validation)');
 
     return {
       success: failedTests === 0,
