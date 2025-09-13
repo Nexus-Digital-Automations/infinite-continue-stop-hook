@@ -305,7 +305,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
     try {
       await fs.access(packageJsonPath);
       hasPackageJson = true;
-    } catch (error) {
+    } catch (_error) {
       // Package.json not found
     }
 
@@ -494,7 +494,7 @@ if (require.main === module) {
   const command = process.argv[2];
 
   switch (command) {
-    case "create-audit":
+    case "create-audit": {
       const originalTaskId = process.argv[3];
       const implementerAgent = process.argv[4];
       const taskTitle = process.argv[5] || "Feature Implementation";
