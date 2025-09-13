@@ -41324,9 +41324,63 @@
       "needs_linter_feedback": true,
       "linter_feedback_generated": false,
       "archived_from_todo": "/Users/jeremyparker/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "feature_1757736019606_74jw8pvce",
+      "title": "Implement TaskManager API embedded subtasks system with research and audit capabilities",
+      "description": "Enhance TaskManager API to support embedded subtasks for feature tasks. Add research subtasks that direct agents to specific codebase/internet locations for comprehensive research. Add audit subtasks with standard completion criteria from development/essentials directory. Ensure audit agents are different from implementing agents for objectivity. Include automatic subtask generation, validation, and workflow management.",
+      "priority": "medium",
+      "category": "feature",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T04:00:19.606Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757735897221_1_general_3b5dc0fa",
+      "started_at": "2025-09-13T04:01:44.026Z",
+      "claimed_by": "development_session_1757735897221_1_general_3b5dc0fa",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757735897221_1_general_3b5dc0fa",
+          "role": "primary",
+          "assignedAt": "2025-09-13T04:01:44.026Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completion_history": [
+        {
+          "taskId": "feature_1757736019606_74jw8pvce",
+          "completedAt": "2025-09-13T04:08:00.370Z",
+          "completedBy": "development_session_1757735897221_1_general_3b5dc0fa",
+          "evidence": {},
+          "completionNotes": "",
+          "category": "feature",
+          "priority": "medium"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-13T04:08:00.370Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-13T04:08:00.373Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/infinite-continue-stop-hook/TODO.json"
     }
   ],
-  "total_completed": 939,
-  "last_completion": "2025-09-13T03:33:06.560Z",
+  "total_completed": 940,
+  "last_completion": "2025-09-13T04:08:00.373Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }
