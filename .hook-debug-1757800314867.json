@@ -1,0 +1,142 @@
+{
+  "execution": {
+    "timestamp": "2025-09-13T21:51:54.859Z",
+    "projectRoot": "/Users/jeremyparker/infinite-continue-stop-hook",
+    "hookVersion": "1.0.0",
+    "nodeVersion": "v22.19.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "pid": 85077,
+    "cwd": "/Users/jeremyparker/infinite-continue-stop-hook",
+    "endTimestamp": "2025-09-13T21:51:54.866Z",
+    "durationMs": 7
+  },
+  "input": {
+    "sessionId": "manual_test",
+    "transcriptPath": "",
+    "stopHookActive": true,
+    "rawInput": {
+      "session_id": "manual_test",
+      "transcript_path": "",
+      "stop_hook_active": true,
+      "hook_event_name": "manual_execution"
+    }
+  },
+  "projectState": {},
+  "decisions": [],
+  "flow": [
+    {
+      "timestamp": "2025-09-13T21:51:54.859Z",
+      "message": "Raw input data: \"\""
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.859Z",
+      "message": "Input data length: 0"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.859Z",
+      "message": "No input detected - running in manual mode"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.859Z",
+      "message": "Received input from Claude Code"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.859Z",
+      "message": "Received manual_execution event from Claude Code"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.861Z",
+      "message": "Found 5 total agents in TODO.json"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.861Z",
+      "message": "Agent dev_session_1757798045514_1_general_07a91e62: heartbeat=2025-09-13T21:14:05.514Z, timeSince=2269s, isActive=false"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.861Z",
+      "message": "Agent dev_session_1757798498865_1_general_64bcaf31: heartbeat=2025-09-13T21:21:38.865Z, timeSince=1816s, isActive=false"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.861Z",
+      "message": "Agent dev_session_1757798697876_1_general_21ba227b: heartbeat=2025-09-13T21:24:57.876Z, timeSince=1617s, isActive=false"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.861Z",
+      "message": "Agent dev_session_1757798861734_1_general_eaa0a4c5: heartbeat=2025-09-13T21:27:41.735Z, timeSince=1453s, isActive=false"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.861Z",
+      "message": "Agent dev_session_1757799855478_1_general_ef60bcf5: heartbeat=2025-09-13T21:44:15.478Z, timeSince=459s, isActive=true"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.861Z",
+      "message": "Removed stale agent: dev_session_1757798045514_1_general_07a91e62"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.861Z",
+      "message": "Unassigned task \"Test TaskManager API functionality\" from stale agent: dev_session_1757798045514_1_general_07a91e62"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.861Z",
+      "message": "Removed stale agent: dev_session_1757798498865_1_general_64bcaf31"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.861Z",
+      "message": "Unassigned task \"Fix task completion null evidence bug in modular TaskOperations\" from stale agent: dev_session_1757798498865_1_general_64bcaf31"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.861Z",
+      "message": "Removed stale agent: dev_session_1757798697876_1_general_21ba227b"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.861Z",
+      "message": "Removed stale agent: dev_session_1757798861734_1_general_eaa0a4c5"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.863Z",
+      "message": "Removed 4 stale agents from TODO.json"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.863Z",
+      "message": "Unassigned 2 tasks from stale agents"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.863Z",
+      "message": "Running automatic task sorting and test error reclassification"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.865Z",
+      "message": "Successfully reclassified 3 test errors from error section to testing section"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.866Z",
+      "message": "Active agents found: 1, Stale agents removed: 4, Tasks unassigned: 2, Stale tasks reset: 0"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.866Z",
+      "message": "Task status failed, attempting auto-fix: taskManager.getTaskStatus is not a function"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.866Z",
+      "message": "ERROR in stop-hook-main: taskManager.autoFix is not a function"
+    },
+    {
+      "timestamp": "2025-09-13T21:51:54.866Z",
+      "message": "Exiting with code 2: Error handled - continuing infinite mode: taskManager.autoFix is not a function"
+    }
+  ],
+  "output": {
+    "exitCode": 2,
+    "exitReason": "Error handled - continuing infinite mode: taskManager.autoFix is not a function"
+  },
+  "errors": [
+    {
+      "timestamp": "2025-09-13T21:51:54.866Z",
+      "context": "stop-hook-main",
+      "message": "taskManager.autoFix is not a function",
+      "stack": "TypeError: taskManager.autoFix is not a function\n    at ReadStream.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js:827:43)",
+      "name": "TypeError"
+    }
+  ]
+}

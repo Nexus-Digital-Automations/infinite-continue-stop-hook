@@ -1,0 +1,118 @@
+{
+  "execution": {
+    "timestamp": "2025-09-13T21:47:32.116Z",
+    "projectRoot": "/Users/jeremyparker/infinite-continue-stop-hook",
+    "hookVersion": "1.0.0",
+    "nodeVersion": "v22.19.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "pid": 80156,
+    "cwd": "/Users/jeremyparker/infinite-continue-stop-hook",
+    "endTimestamp": "2025-09-13T21:47:32.119Z",
+    "durationMs": 3
+  },
+  "input": {
+    "sessionId": "manual_test",
+    "transcriptPath": "",
+    "stopHookActive": true,
+    "rawInput": {
+      "session_id": "manual_test",
+      "transcript_path": "",
+      "stop_hook_active": true,
+      "hook_event_name": "manual_execution"
+    }
+  },
+  "projectState": {},
+  "decisions": [],
+  "flow": [
+    {
+      "timestamp": "2025-09-13T21:47:32.117Z",
+      "message": "Raw input data: \"\""
+    },
+    {
+      "timestamp": "2025-09-13T21:47:32.117Z",
+      "message": "Input data length: 0"
+    },
+    {
+      "timestamp": "2025-09-13T21:47:32.117Z",
+      "message": "No input detected - running in manual mode"
+    },
+    {
+      "timestamp": "2025-09-13T21:47:32.117Z",
+      "message": "Received input from Claude Code"
+    },
+    {
+      "timestamp": "2025-09-13T21:47:32.117Z",
+      "message": "Received manual_execution event from Claude Code"
+    },
+    {
+      "timestamp": "2025-09-13T21:47:32.118Z",
+      "message": "Found 5 total agents in TODO.json"
+    },
+    {
+      "timestamp": "2025-09-13T21:47:32.118Z",
+      "message": "Agent dev_session_1757798045514_1_general_07a91e62: heartbeat=2025-09-13T21:14:05.514Z, timeSince=2007s, isActive=false"
+    },
+    {
+      "timestamp": "2025-09-13T21:47:32.118Z",
+      "message": "Agent dev_session_1757798498865_1_general_64bcaf31: heartbeat=2025-09-13T21:21:38.865Z, timeSince=1553s, isActive=false"
+    },
+    {
+      "timestamp": "2025-09-13T21:47:32.118Z",
+      "message": "Agent dev_session_1757798697876_1_general_21ba227b: heartbeat=2025-09-13T21:24:57.876Z, timeSince=1354s, isActive=false"
+    },
+    {
+      "timestamp": "2025-09-13T21:47:32.118Z",
+      "message": "Agent dev_session_1757798861734_1_general_eaa0a4c5: heartbeat=2025-09-13T21:27:41.735Z, timeSince=1190s, isActive=false"
+    },
+    {
+      "timestamp": "2025-09-13T21:47:32.118Z",
+      "message": "Agent dev_session_1757799855478_1_general_ef60bcf5: heartbeat=2025-09-13T21:44:15.478Z, timeSince=197s, isActive=true"
+    },
+    {
+      "timestamp": "2025-09-13T21:47:32.118Z",
+      "message": "Removed stale agent: dev_session_1757798045514_1_general_07a91e62"
+    },
+    {
+      "timestamp": "2025-09-13T21:47:32.118Z",
+      "message": "Unassigned task \"Test TaskManager API functionality\" from stale agent: dev_session_1757798045514_1_general_07a91e62"
+    },
+    {
+      "timestamp": "2025-09-13T21:47:32.118Z",
+      "message": "Removed stale agent: dev_session_1757798498865_1_general_64bcaf31"
+    },
+    {
+      "timestamp": "2025-09-13T21:47:32.118Z",
+      "message": "Unassigned task \"Fix task completion null evidence bug in modular TaskOperations\" from stale agent: dev_session_1757798498865_1_general_64bcaf31"
+    },
+    {
+      "timestamp": "2025-09-13T21:47:32.118Z",
+      "message": "Removed stale agent: dev_session_1757798697876_1_general_21ba227b"
+    },
+    {
+      "timestamp": "2025-09-13T21:47:32.118Z",
+      "message": "Removed stale agent: dev_session_1757798861734_1_general_eaa0a4c5"
+    },
+    {
+      "timestamp": "2025-09-13T21:47:32.119Z",
+      "message": "ERROR in stop-hook-main: Cannot read properties of undefined (reading 'includes')"
+    },
+    {
+      "timestamp": "2025-09-13T21:47:32.119Z",
+      "message": "Exiting with code 2: Error handled - continuing infinite mode: Cannot read properties of undefined (reading 'includes')"
+    }
+  ],
+  "output": {
+    "exitCode": 2,
+    "exitReason": "Error handled - continuing infinite mode: Cannot read properties of undefined (reading 'includes')"
+  },
+  "errors": [
+    {
+      "timestamp": "2025-09-13T21:47:32.119Z",
+      "context": "stop-hook-main",
+      "message": "Cannot read properties of undefined (reading 'includes')",
+      "stack": "TypeError: Cannot read properties of undefined (reading 'includes')\n    at TaskValidation._validateFieldConstraints (/Users/jeremyparker/infinite-continue-stop-hook/lib/modules/TaskValidation.js:594:56)\n    at TaskValidation.validateTask (/Users/jeremyparker/infinite-continue-stop-hook/lib/modules/TaskValidation.js:80:10)\n    at TaskValidation.validateTodoStructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/modules/TaskValidation.js:140:33)\n    at TaskManager.writeTodo (/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager.js:203:48)\n    at ReadStream.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js:586:25)",
+      "name": "TypeError"
+    }
+  ]
+}

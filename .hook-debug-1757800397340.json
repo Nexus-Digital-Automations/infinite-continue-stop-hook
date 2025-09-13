@@ -1,0 +1,94 @@
+{
+  "execution": {
+    "timestamp": "2025-09-13T21:53:17.335Z",
+    "projectRoot": "/Users/jeremyparker/infinite-continue-stop-hook",
+    "hookVersion": "1.0.0",
+    "nodeVersion": "v22.19.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "pid": 86162,
+    "cwd": "/Users/jeremyparker/infinite-continue-stop-hook",
+    "endTimestamp": "2025-09-13T21:53:17.339Z",
+    "durationMs": 4
+  },
+  "input": {
+    "sessionId": "manual_test",
+    "transcriptPath": "",
+    "stopHookActive": true,
+    "rawInput": {
+      "session_id": "manual_test",
+      "transcript_path": "",
+      "stop_hook_active": true,
+      "hook_event_name": "manual_execution"
+    }
+  },
+  "projectState": {},
+  "decisions": [],
+  "flow": [
+    {
+      "timestamp": "2025-09-13T21:53:17.336Z",
+      "message": "Raw input data: \"\""
+    },
+    {
+      "timestamp": "2025-09-13T21:53:17.336Z",
+      "message": "Input data length: 0"
+    },
+    {
+      "timestamp": "2025-09-13T21:53:17.336Z",
+      "message": "No input detected - running in manual mode"
+    },
+    {
+      "timestamp": "2025-09-13T21:53:17.336Z",
+      "message": "Received input from Claude Code"
+    },
+    {
+      "timestamp": "2025-09-13T21:53:17.336Z",
+      "message": "Received manual_execution event from Claude Code"
+    },
+    {
+      "timestamp": "2025-09-13T21:53:17.337Z",
+      "message": "Found 1 total agents in TODO.json"
+    },
+    {
+      "timestamp": "2025-09-13T21:53:17.337Z",
+      "message": "Agent dev_session_1757799855478_1_general_ef60bcf5: heartbeat=2025-09-13T21:44:15.478Z, timeSince=542s, isActive=true"
+    },
+    {
+      "timestamp": "2025-09-13T21:53:17.337Z",
+      "message": "Running automatic task sorting and test error reclassification"
+    },
+    {
+      "timestamp": "2025-09-13T21:53:17.338Z",
+      "message": "Task sorting completed - no reclassification needed"
+    },
+    {
+      "timestamp": "2025-09-13T21:53:17.338Z",
+      "message": "Active agents found: 1, Stale agents removed: 0, Tasks unassigned: 0, Stale tasks reset: 0"
+    },
+    {
+      "timestamp": "2025-09-13T21:53:17.339Z",
+      "message": "Task status failed, attempting auto-fix: taskManager.getTaskStatus is not a function"
+    },
+    {
+      "timestamp": "2025-09-13T21:53:17.339Z",
+      "message": "ERROR in stop-hook-main: taskManager.getTaskStatus is not a function"
+    },
+    {
+      "timestamp": "2025-09-13T21:53:17.339Z",
+      "message": "Exiting with code 2: Error handled - continuing infinite mode: taskManager.getTaskStatus is not a function"
+    }
+  ],
+  "output": {
+    "exitCode": 2,
+    "exitReason": "Error handled - continuing infinite mode: taskManager.getTaskStatus is not a function"
+  },
+  "errors": [
+    {
+      "timestamp": "2025-09-13T21:53:17.339Z",
+      "context": "stop-hook-main",
+      "message": "taskManager.getTaskStatus is not a function",
+      "stack": "TypeError: taskManager.getTaskStatus is not a function\n    at ReadStream.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js:829:40)",
+      "name": "TypeError"
+    }
+  ]
+}
