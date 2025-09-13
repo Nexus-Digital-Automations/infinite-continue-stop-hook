@@ -4119,6 +4119,917 @@ class TaskManagerAPI {
     // This allows calling code to handle cleanup completion appropriately
     return Promise.resolve();
   }
+
+  /**
+   * Create embedded subtask for an existing task
+   * @param {string} taskId - Parent task ID
+   * @param {string} subtaskType - Type of subtask: 'research' or 'audit'
+   * @param {Object} subtaskData - Additional subtask configuration
+   * @returns {Promise<Object>} Subtask creation result
+   */
+  async createSubtask(taskId, subtaskType, subtaskData = {}) {
+    let guide = null;
+    try {
+      guide = await this._getCachedGuide();
+
+      // Validate subtask type
+      if (!['research', 'audit'].includes(subtaskType)) {
+        throw new Error(
+          `Invalid subtask type: ${subtaskType}. Must be 'research' or 'audit'`,
+        );
+      }
+
+      // Get the parent task
+      const tasks = await this.taskManager.loadTasks();
+      const parentTask = tasks.find((t) => t.id === taskId);
+
+      if (!parentTask) {
+        throw new Error(`Task not found: ${taskId}`);
+      }
+
+      // Generate subtask ID and create subtask object
+      const subtaskId = `${subtaskType}_${Date.now()}_${Math.random().toString(36).substr(2, 8)}`;
+      const timestamp = new Date().toISOString();
+
+      let newSubtask;
+
+      if (subtaskType === 'research') {
+        newSubtask = {
+          id: subtaskId,
+          type: 'research',
+          title: `Research: ${parentTask.title}`,
+          description: `Comprehensive research for ${parentTask.title} to support implementation`,
+          status: 'pending',
+          estimated_hours: 1,
+          research_locations: [
+            {
+              type: 'codebase',
+              paths: subtaskData.codebasePaths || ['/lib', '/src', '/'],
+              focus: 'Existing implementation patterns and architecture',
+            },
+            {
+              type: 'internet',
+              keywords:
+                subtaskData.keywords || this._extractKeywords(parentTask.title),
+              focus:
+                'Best practices, industry standards, and technical specifications',
+            },
+            {
+              type: 'documentation',
+              sources: [
+                'README.md',
+                'docs/',
+                'API documentation',
+                'package.json',
+              ],
+              focus: 'Project configuration and existing documentation',
+            },
+          ],
+          deliverables: [
+            'Technical analysis report',
+            'Implementation recommendations',
+            'Risk assessment',
+            'Alternative approaches evaluation',
+          ],
+          prevents_implementation: true,
+          created_at: timestamp,
+          ...subtaskData,
+        };
+      } else if (subtaskType === 'audit') {
+        newSubtask = {
+          id: subtaskId,
+          type: 'audit',
+          title: `Audit: ${parentTask.title}`,
+          description: `Comprehensive quality audit and review of the completed feature: ${parentTask.title}\n\nOriginal Description: ${parentTask.description}`,
+          status: 'pending',
+          estimated_hours: 0.5,
+          success_criteria: [
+            'Linter Perfection',
+            'Build Success',
+            'Runtime Success',
+            'Test Integrity',
+            'Function Documentation',
+            'API Documentation',
+            'Architecture Documentation',
+            'Decision Rationale',
+            'Error Handling',
+            'Performance Metrics',
+            'Security Review',
+            'Architectural Consistency',
+            'Dependency Validation',
+            'Version Compatibility',
+            'Security Audit',
+            'Cross-Platform',
+            'Environment Variables',
+            'Configuration',
+            'No Credential Exposure',
+            'Input Validation',
+            'Output Encoding',
+            'Authentication/Authorization',
+            'License Compliance',
+            'Data Privacy',
+            'Regulatory Compliance',
+          ],
+          prevents_completion: true,
+          original_implementer: null,
+          prevents_self_review: true,
+          audit_type: 'embedded_quality_gate',
+          created_at: timestamp,
+          ...subtaskData,
+        };
+      }
+
+      // Initialize subtasks array if it doesn't exist
+      if (!parentTask.subtasks) {
+        parentTask.subtasks = [];
+      }
+
+      // Add the subtask
+      parentTask.subtasks.push(newSubtask);
+
+      // Save the updated tasks
+      await this.taskManager.saveTasks(tasks);
+
+      return {
+        success: true,
+        subtaskId: subtaskId,
+        subtask: newSubtask,
+        parentTaskId: taskId,
+        message: `${subtaskType} subtask created successfully`,
+        guide,
+      };
+    } catch (error) {
+      guide = guide || (await this._getGuideForError('task-operations'));
+      const enhancedError = new Error(error.message);
+      enhancedError.context = {
+        operation: 'createSubtask',
+        taskId,
+        subtaskType,
+        timestamp: new Date().toISOString(),
+        guide,
+      };
+      throw enhancedError;
+    }
+  }
+
+  /**
+   * List all subtasks for a given task
+   * @param {string} taskId - Parent task ID
+   * @returns {Promise<Object>} List of subtasks
+   */
+  async listSubtasks(taskId) {
+    let guide = null;
+    try {
+      guide = await this._getCachedGuide();
+
+      const tasks = await this.taskManager.loadTasks();
+      const parentTask = tasks.find((t) => t.id === taskId);
+
+      if (!parentTask) {
+        throw new Error(`Task not found: ${taskId}`);
+      }
+
+      const subtasks = parentTask.subtasks || [];
+
+      return {
+        success: true,
+        taskId,
+        subtasks,
+        count: subtasks.length,
+        guide,
+      };
+    } catch (error) {
+      guide = guide || (await this._getGuideForError('task-operations'));
+      const enhancedError = new Error(error.message);
+      enhancedError.context = {
+        operation: 'listSubtasks',
+        taskId,
+        timestamp: new Date().toISOString(),
+        guide,
+      };
+      throw enhancedError;
+    }
+  }
+
+  /**
+   * Update an existing subtask
+   * @param {string} taskId - Parent task ID
+   * @param {string} subtaskId - Subtask ID to update
+   * @param {Object} updateData - Update data
+   * @returns {Promise<Object>} Update result
+   */
+  async updateSubtask(taskId, subtaskId, updateData) {
+    let guide = null;
+    try {
+      guide = await this._getCachedGuide();
+
+      const tasks = await this.taskManager.loadTasks();
+      const parentTask = tasks.find((t) => t.id === taskId);
+
+      if (!parentTask) {
+        throw new Error(`Task not found: ${taskId}`);
+      }
+
+      if (!parentTask.subtasks) {
+        throw new Error(`No subtasks found for task: ${taskId}`);
+      }
+
+      const subtaskIndex = parentTask.subtasks.findIndex(
+        (s) => s.id === subtaskId,
+      );
+      if (subtaskIndex === -1) {
+        throw new Error(`Subtask not found: ${subtaskId}`);
+      }
+
+      // Update the subtask
+      const originalSubtask = { ...parentTask.subtasks[subtaskIndex] };
+      parentTask.subtasks[subtaskIndex] = {
+        ...parentTask.subtasks[subtaskIndex],
+        ...updateData,
+        updated_at: new Date().toISOString(),
+      };
+
+      // Save the updated tasks
+      await this.taskManager.saveTasks(tasks);
+
+      return {
+        success: true,
+        taskId,
+        subtaskId,
+        originalSubtask,
+        updatedSubtask: parentTask.subtasks[subtaskIndex],
+        message: 'Subtask updated successfully',
+        guide,
+      };
+    } catch (error) {
+      guide = guide || (await this._getGuideForError('task-operations'));
+      const enhancedError = new Error(error.message);
+      enhancedError.context = {
+        operation: 'updateSubtask',
+        taskId,
+        subtaskId,
+        timestamp: new Date().toISOString(),
+        guide,
+      };
+      throw enhancedError;
+    }
+  }
+
+  /**
+   * Delete a subtask from a task
+   * @param {string} taskId - Parent task ID
+   * @param {string} subtaskId - Subtask ID to delete
+   * @returns {Promise<Object>} Delete result
+   */
+  async deleteSubtask(taskId, subtaskId) {
+    let guide = null;
+    try {
+      guide = await this._getCachedGuide();
+
+      const tasks = await this.taskManager.loadTasks();
+      const parentTask = tasks.find((t) => t.id === taskId);
+
+      if (!parentTask) {
+        throw new Error(`Task not found: ${taskId}`);
+      }
+
+      if (!parentTask.subtasks) {
+        throw new Error(`No subtasks found for task: ${taskId}`);
+      }
+
+      const subtaskIndex = parentTask.subtasks.findIndex(
+        (s) => s.id === subtaskId,
+      );
+      if (subtaskIndex === -1) {
+        throw new Error(`Subtask not found: ${subtaskId}`);
+      }
+
+      // Remove the subtask
+      const deletedSubtask = parentTask.subtasks.splice(subtaskIndex, 1)[0];
+
+      // Save the updated tasks
+      await this.taskManager.saveTasks(tasks);
+
+      return {
+        success: true,
+        taskId,
+        subtaskId,
+        deletedSubtask,
+        message: 'Subtask deleted successfully',
+        guide,
+      };
+    } catch (error) {
+      guide = guide || (await this._getGuideForError('task-operations'));
+      const enhancedError = new Error(error.message);
+      enhancedError.context = {
+        operation: 'deleteSubtask',
+        taskId,
+        subtaskId,
+        timestamp: new Date().toISOString(),
+        guide,
+      };
+      throw enhancedError;
+    }
+  }
+
+  /**
+   * Add success criteria to task or project-wide
+   * @param {string} targetType - 'task' or 'project'
+   * @param {string} targetId - Task ID for task-specific, null for project-wide
+   * @param {Object} criteriaData - Success criteria data
+   * @returns {Promise<Object>} Add result
+   */
+  async addSuccessCriteria(targetType, targetId, criteriaData) {
+    let guide = null;
+    try {
+      guide = await this._getCachedGuide();
+
+      if (!['task', 'project'].includes(targetType)) {
+        throw new Error(
+          `Invalid target type: ${targetType}. Must be 'task' or 'project'`,
+        );
+      }
+
+      const tasks = await this.taskManager.loadTasks();
+
+      if (targetType === 'task') {
+        if (!targetId) {
+          throw new Error(
+            'Task ID required for task-specific success criteria',
+          );
+        }
+
+        const task = tasks.find((t) => t.id === targetId);
+        if (!task) {
+          throw new Error(`Task not found: ${targetId}`);
+        }
+
+        // Initialize success_criteria array if it doesn't exist
+        if (!task.success_criteria) {
+          task.success_criteria = [];
+        }
+
+        // Add criteria (can be array or single criterion)
+        if (Array.isArray(criteriaData.criteria)) {
+          task.success_criteria.push(...criteriaData.criteria);
+        } else if (criteriaData.criteria) {
+          task.success_criteria.push(criteriaData.criteria);
+        } else if (Array.isArray(criteriaData)) {
+          task.success_criteria.push(...criteriaData);
+        } else {
+          task.success_criteria.push(criteriaData);
+        }
+
+        await this.taskManager.saveTasks(tasks);
+
+        return {
+          success: true,
+          targetType,
+          targetId,
+          addedCriteria: criteriaData,
+          totalCriteria: task.success_criteria.length,
+          message: 'Success criteria added to task successfully',
+          guide,
+        };
+      } else {
+        // Project-wide success criteria - stored in TODO.json root level
+        const todoData = await this.taskManager.readTodoJson();
+
+        if (!todoData.project_success_criteria) {
+          todoData.project_success_criteria = [];
+        }
+
+        // Add criteria
+        if (Array.isArray(criteriaData.criteria)) {
+          todoData.project_success_criteria.push(...criteriaData.criteria);
+        } else if (criteriaData.criteria) {
+          todoData.project_success_criteria.push(criteriaData.criteria);
+        } else if (Array.isArray(criteriaData)) {
+          todoData.project_success_criteria.push(...criteriaData);
+        } else {
+          todoData.project_success_criteria.push(criteriaData);
+        }
+
+        await this.taskManager.writeTodoJson(todoData);
+
+        return {
+          success: true,
+          targetType,
+          addedCriteria: criteriaData,
+          totalCriteria: todoData.project_success_criteria.length,
+          message: 'Success criteria added to project successfully',
+          guide,
+        };
+      }
+    } catch (error) {
+      guide = guide || (await this._getGuideForError('task-operations'));
+      const enhancedError = new Error(error.message);
+      enhancedError.context = {
+        operation: 'addSuccessCriteria',
+        targetType,
+        targetId,
+        timestamp: new Date().toISOString(),
+        guide,
+      };
+      throw enhancedError;
+    }
+  }
+
+  /**
+   * Get success criteria for task or project
+   * @param {string} targetType - 'task' or 'project'
+   * @param {string} targetId - Task ID for task-specific, null for project-wide
+   * @returns {Promise<Object>} Success criteria
+   */
+  async getSuccessCriteria(targetType, targetId) {
+    let guide = null;
+    try {
+      guide = await this._getCachedGuide();
+
+      if (!['task', 'project'].includes(targetType)) {
+        throw new Error(
+          `Invalid target type: ${targetType}. Must be 'task' or 'project'`,
+        );
+      }
+
+      if (targetType === 'task') {
+        if (!targetId) {
+          throw new Error(
+            'Task ID required for task-specific success criteria',
+          );
+        }
+
+        const tasks = await this.taskManager.loadTasks();
+        const task = tasks.find((t) => t.id === targetId);
+
+        if (!task) {
+          throw new Error(`Task not found: ${targetId}`);
+        }
+
+        return {
+          success: true,
+          targetType,
+          targetId,
+          success_criteria: task.success_criteria || [],
+          count: (task.success_criteria || []).length,
+          guide,
+        };
+      } else {
+        const todoData = await this.taskManager.readTodoJson();
+
+        return {
+          success: true,
+          targetType,
+          success_criteria: todoData.project_success_criteria || [],
+          count: (todoData.project_success_criteria || []).length,
+          guide,
+        };
+      }
+    } catch (error) {
+      guide = guide || (await this._getGuideForError('task-operations'));
+      const enhancedError = new Error(error.message);
+      enhancedError.context = {
+        operation: 'getSuccessCriteria',
+        targetType,
+        targetId,
+        timestamp: new Date().toISOString(),
+        guide,
+      };
+      throw enhancedError;
+    }
+  }
+
+  /**
+   * Update success criteria for task or project
+   * @param {string} targetType - 'task' or 'project'
+   * @param {string} targetId - Task ID for task-specific, null for project-wide
+   * @param {Object} updateData - Update data
+   * @returns {Promise<Object>} Update result
+   */
+  async updateSuccessCriteria(targetType, targetId, updateData) {
+    let guide = null;
+    try {
+      guide = await this._getCachedGuide();
+
+      if (!['task', 'project'].includes(targetType)) {
+        throw new Error(
+          `Invalid target type: ${targetType}. Must be 'task' or 'project'`,
+        );
+      }
+
+      if (targetType === 'task') {
+        if (!targetId) {
+          throw new Error(
+            'Task ID required for task-specific success criteria',
+          );
+        }
+
+        const tasks = await this.taskManager.loadTasks();
+        const task = tasks.find((t) => t.id === targetId);
+
+        if (!task) {
+          throw new Error(`Task not found: ${targetId}`);
+        }
+
+        const originalCriteria = [...(task.success_criteria || [])];
+
+        // Replace success criteria with new ones
+        if (updateData.success_criteria) {
+          task.success_criteria = Array.isArray(updateData.success_criteria)
+            ? updateData.success_criteria
+            : [updateData.success_criteria];
+        } else if (Array.isArray(updateData)) {
+          task.success_criteria = updateData;
+        } else {
+          throw new Error(
+            'Update data must contain success_criteria array or be an array',
+          );
+        }
+
+        await this.taskManager.saveTasks(tasks);
+
+        return {
+          success: true,
+          targetType,
+          targetId,
+          originalCriteria,
+          updatedCriteria: task.success_criteria,
+          message: 'Task success criteria updated successfully',
+          guide,
+        };
+      } else {
+        const todoData = await this.taskManager.readTodoJson();
+        const originalCriteria = [...(todoData.project_success_criteria || [])];
+
+        // Replace success criteria with new ones
+        if (updateData.success_criteria) {
+          todoData.project_success_criteria = Array.isArray(
+            updateData.success_criteria,
+          )
+            ? updateData.success_criteria
+            : [updateData.success_criteria];
+        } else if (Array.isArray(updateData)) {
+          todoData.project_success_criteria = updateData;
+        } else {
+          throw new Error(
+            'Update data must contain success_criteria array or be an array',
+          );
+        }
+
+        await this.taskManager.writeTodoJson(todoData);
+
+        return {
+          success: true,
+          targetType,
+          originalCriteria,
+          updatedCriteria: todoData.project_success_criteria,
+          message: 'Project success criteria updated successfully',
+          guide,
+        };
+      }
+    } catch (error) {
+      guide = guide || (await this._getGuideForError('task-operations'));
+      const enhancedError = new Error(error.message);
+      enhancedError.context = {
+        operation: 'updateSuccessCriteria',
+        targetType,
+        targetId,
+        timestamp: new Date().toISOString(),
+        guide,
+      };
+      throw enhancedError;
+    }
+  }
+
+  /**
+   * Manage research task routing and execution
+   * @param {string} action - 'start', 'complete', 'status'
+   * @param {string} taskId - Task ID
+   * @param {Object} researchData - Research configuration
+   * @returns {Promise<Object>} Research task result
+   */
+  async manageResearchTask(action, taskId, researchData = {}) {
+    let guide = null;
+    try {
+      guide = await this._getCachedGuide();
+
+      if (!['start', 'complete', 'status'].includes(action)) {
+        throw new Error(
+          `Invalid action: ${action}. Must be 'start', 'complete', or 'status'`,
+        );
+      }
+
+      const tasks = await this.taskManager.loadTasks();
+      const task = tasks.find((t) => t.id === taskId);
+
+      if (!task) {
+        throw new Error(`Task not found: ${taskId}`);
+      }
+
+      // Find research subtask
+      const researchSubtask = (task.subtasks || []).find(
+        (s) => s.type === 'research',
+      );
+
+      if (!researchSubtask && action !== 'status') {
+        throw new Error(`No research subtask found for task: ${taskId}`);
+      }
+
+      switch (action) {
+        case 'start': {
+          if (researchSubtask.status === 'in_progress') {
+            return {
+              success: true,
+              action,
+              taskId,
+              message: 'Research task already in progress',
+              researchSubtask,
+              guide,
+            };
+          }
+
+          // Start the research task
+          researchSubtask.status = 'in_progress';
+          researchSubtask.started_at = new Date().toISOString();
+          researchSubtask.agent_assigned = this.agentId;
+
+          // Apply any additional research configuration
+          if (researchData.research_locations) {
+            researchSubtask.research_locations =
+              researchData.research_locations;
+          }
+
+          await this.taskManager.saveTasks(tasks);
+
+          return {
+            success: true,
+            action,
+            taskId,
+            message: 'Research task started successfully',
+            researchSubtask,
+            guide,
+          };
+        }
+
+        case 'complete': {
+          if (researchSubtask.status === 'completed') {
+            return {
+              success: true,
+              action,
+              taskId,
+              message: 'Research task already completed',
+              researchSubtask,
+              guide,
+            };
+          }
+
+          // Complete the research task
+          researchSubtask.status = 'completed';
+          researchSubtask.completed_at = new Date().toISOString();
+
+          // Store research results if provided
+          if (researchData.findings || researchData.report) {
+            researchSubtask.results = {
+              findings: researchData.findings || [],
+              report: researchData.report || '',
+              completed_by: this.agentId,
+              completion_timestamp: new Date().toISOString(),
+            };
+          }
+
+          await this.taskManager.saveTasks(tasks);
+
+          return {
+            success: true,
+            action,
+            taskId,
+            message: 'Research task completed successfully',
+            researchSubtask,
+            guide,
+          };
+        }
+
+        case 'status': {
+          return {
+            success: true,
+            action,
+            taskId,
+            hasResearchTask: !!researchSubtask,
+            researchSubtask: researchSubtask || null,
+            guide,
+          };
+        }
+
+        default:
+          throw new Error(`Unhandled action: ${action}`);
+      }
+    } catch (error) {
+      guide = guide || (await this._getGuideForError('task-operations'));
+      const enhancedError = new Error(error.message);
+      enhancedError.context = {
+        operation: 'manageResearchTask',
+        action,
+        taskId,
+        timestamp: new Date().toISOString(),
+        guide,
+      };
+      throw enhancedError;
+    }
+  }
+
+  /**
+   * Manage audit task assignment with objectivity controls
+   * @param {string} action - 'start', 'complete', 'status'
+   * @param {string} taskId - Task ID
+   * @param {Object} auditData - Audit configuration
+   * @returns {Promise<Object>} Audit task result
+   */
+  async manageAuditTask(action, taskId, auditData = {}) {
+    let guide = null;
+    try {
+      guide = await this._getCachedGuide();
+
+      if (!['start', 'complete', 'status'].includes(action)) {
+        throw new Error(
+          `Invalid action: ${action}. Must be 'start', 'complete', or 'status'`,
+        );
+      }
+
+      const tasks = await this.taskManager.loadTasks();
+      const task = tasks.find((t) => t.id === taskId);
+
+      if (!task) {
+        throw new Error(`Task not found: ${taskId}`);
+      }
+
+      // Find audit subtask
+      const auditSubtask = (task.subtasks || []).find(
+        (s) => s.type === 'audit',
+      );
+
+      if (!auditSubtask && action !== 'status') {
+        throw new Error(`No audit subtask found for task: ${taskId}`);
+      }
+
+      switch (action) {
+        case 'start': {
+          // Check objectivity - current agent cannot audit their own work
+          if (
+            task.assigned_agent === this.agentId ||
+            task.claimed_by === this.agentId
+          ) {
+            return {
+              success: false,
+              action,
+              taskId,
+              reason: 'Objectivity violation: Cannot audit own work',
+              message:
+                'Audit must be performed by different agent to ensure objectivity',
+              original_implementer: task.assigned_agent || task.claimed_by,
+              current_agent: this.agentId,
+              guide,
+            };
+          }
+
+          if (auditSubtask.status === 'in_progress') {
+            return {
+              success: true,
+              action,
+              taskId,
+              message: 'Audit task already in progress',
+              auditSubtask,
+              guide,
+            };
+          }
+
+          // Start the audit task
+          auditSubtask.status = 'in_progress';
+          auditSubtask.started_at = new Date().toISOString();
+          auditSubtask.audit_agent = this.agentId;
+          auditSubtask.original_implementer =
+            task.assigned_agent || task.claimed_by;
+
+          await this.taskManager.saveTasks(tasks);
+
+          return {
+            success: true,
+            action,
+            taskId,
+            message: 'Audit task started successfully',
+            auditSubtask,
+            guide,
+          };
+        }
+
+        case 'complete': {
+          if (auditSubtask.status === 'completed') {
+            return {
+              success: true,
+              action,
+              taskId,
+              message: 'Audit task already completed',
+              auditSubtask,
+              guide,
+            };
+          }
+
+          // Complete the audit task
+          auditSubtask.status = 'completed';
+          auditSubtask.completed_at = new Date().toISOString();
+
+          // Store audit results
+          if (auditData.findings || auditData.report || auditData.passed) {
+            auditSubtask.results = {
+              passed: auditData.passed !== false, // Default to true unless explicitly false
+              findings: auditData.findings || [],
+              report: auditData.report || '',
+              completed_by: this.agentId,
+              completion_timestamp: new Date().toISOString(),
+              success_criteria_met: auditData.success_criteria_met || [],
+              recommendations: auditData.recommendations || [],
+            };
+          }
+
+          await this.taskManager.saveTasks(tasks);
+
+          return {
+            success: true,
+            action,
+            taskId,
+            message: 'Audit task completed successfully',
+            auditSubtask,
+            guide,
+          };
+        }
+
+        case 'status': {
+          return {
+            success: true,
+            action,
+            taskId,
+            hasAuditTask: !!auditSubtask,
+            auditSubtask: auditSubtask || null,
+            can_audit:
+              task.assigned_agent !== this.agentId &&
+              task.claimed_by !== this.agentId,
+            objectivity_check: {
+              current_agent: this.agentId,
+              original_implementer: task.assigned_agent || task.claimed_by,
+              objectivity_maintained:
+                task.assigned_agent !== this.agentId &&
+                task.claimed_by !== this.agentId,
+            },
+            guide,
+          };
+        }
+
+        default:
+          throw new Error(`Unhandled action: ${action}`);
+      }
+    } catch (error) {
+      guide = guide || (await this._getGuideForError('task-operations'));
+      const enhancedError = new Error(error.message);
+      enhancedError.context = {
+        operation: 'manageAuditTask',
+        action,
+        taskId,
+        timestamp: new Date().toISOString(),
+        guide,
+      };
+      throw enhancedError;
+    }
+  }
+
+  /**
+   * Extract keywords from task title for research
+   * @private
+   */
+  _extractKeywords(title) {
+    const stopWords = [
+      'the',
+      'a',
+      'an',
+      'and',
+      'or',
+      'but',
+      'in',
+      'on',
+      'at',
+      'to',
+      'for',
+      'of',
+      'with',
+      'by',
+      'from',
+      'as',
+    ];
+    return title
+      .toLowerCase()
+      .replace(/[^\w\s]/g, ' ')
+      .split(/\s+/)
+      .filter((word) => word.length > 2 && !stopWords.includes(word))
+      .slice(0, 5);
+  }
 }
 
 // CLI interface
