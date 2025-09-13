@@ -38,6 +38,7 @@
 - **DOCUMENTATION**: Comprehensive logging, comments, decisions, audit trails
 - **COMPLIANCE**: Execute user requests, CLAUDE.md instructions, hook feedback exactly as specified
 - **INTELLIGENCE**: High-level problem-solving, adapt based on feedback and guidance
+- **🚨 ROOT PROBLEM SOLVING**: Fix underlying causes, not symptoms. No shortcuts, band-aids, or workarounds
 
 ### 🧠 INTELLIGENT DIALOGUE
 **THINK INDEPENDENTLY - QUESTION UNCLEAR REQUESTS**
