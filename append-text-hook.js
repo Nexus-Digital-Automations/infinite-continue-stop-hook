@@ -1,3 +1,4 @@
+/* eslint-disable no-console -- CLI hook requires console output */
 /**
  * Claude Code UserPromptSubmit Hook
  * Automatically appends specified text to every user message

@@ -40933,9 +40933,227 @@
       "needs_linter_feedback": true,
       "linter_feedback_generated": false,
       "archived_from_todo": "/workspace/TODO.json"
+    },
+    {
+      "id": "feature_1757702700510_aiwn0i8s8",
+      "title": "Update CLAUDE.md with reports directory management instructions",
+      "description": "Add instructions to CLAUDE.md for reading and maintaining development/reports/ directory, creating task folders for reports, checking for existing reports, keeping reports organized, and maintaining clean root folder by moving .md files to docs or reports directories",
+      "priority": "medium",
+      "category": "feature",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-12T18:45:00.510Z",
+      "auto_research_created": false,
+      "completion_history": [
+        {
+          "taskId": "feature_1757702700510_aiwn0i8s8",
+          "completedAt": "2025-09-12T19:04:53.276Z",
+          "completedBy": "unknown",
+          "evidence": {},
+          "completionNotes": "",
+          "category": "feature",
+          "priority": "medium"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-12T19:04:53.276Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-12T19:04:53.278Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "test_1757707047094_p3ifnu9jr",
+      "title": "Fix task report naming to use actual task IDs in CLAUDE.md",
+      "description": "Update CLAUDE.md reports directory protocol to specify that task folders should be named with actual task IDs (e.g., feature_1757702700510_aiwn0i8s8) rather than generic placeholders like feature_[taskId]",
+      "priority": "medium",
+      "category": "feature",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-12T19:06:17.622Z",
+      "auto_research_created": false,
+      "completion_history": [
+        {
+          "taskId": "test_1757707047094_p3ifnu9jr",
+          "completedAt": "2025-09-12T20:16:15.330Z",
+          "completedBy": "unknown",
+          "evidence": {},
+          "completionNotes": "",
+          "category": "feature",
+          "priority": "medium"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-12T20:16:15.330Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "pending",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-12T20:16:15.331Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "error_1757610227611_6jl9fsosq",
+      "title": "Fix ESLint violations across codebase",
+      "description": "92 ESLint problems detected: 30 errors and 62 warnings. Issues include console statements, unused variables, unreachable code, and async functions without await expressions. Need to clean up codebase to meet quality standards.",
+      "priority": "medium",
+      "category": "error",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-11T17:03:47.611Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757725164601_1_general_1c50f6f7",
+      "started_at": "2025-09-13T01:00:23.101Z",
+      "claimed_by": "development_session_1757725164601_1_general_1c50f6f7",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757612292916_1_general_b1391190",
+          "role": "primary",
+          "assignedAt": "2025-09-11T17:39:44.694Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "development_session_1757612292916_1_general_b1391190",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-12T19:57:27.090Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agentId": "development_session_1757708809191_1_general_df60fbe4",
+          "role": "primary",
+          "assignedAt": "2025-09-12T20:28:03.794Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "development_session_1757708809191_1_general_df60fbe4",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-12T23:16:20.739Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agentId": "development_session_1757725164601_1_general_1c50f6f7",
+          "role": "primary",
+          "assignedAt": "2025-09-13T01:00:23.101Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completion_history": [
+        {
+          "taskId": "error_1757610227611_6jl9fsosq",
+          "completedAt": "2025-09-13T01:24:24.041Z",
+          "completedBy": "development_session_1757725164601_1_general_1c50f6f7",
+          "evidence": {},
+          "completionNotes": "",
+          "category": "error",
+          "priority": "medium"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-13T01:24:24.041Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-13T01:24:24.041Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "error_1757701793978_txwz6bgkz",
+      "title": "Fix workspace bidirectional sync issues",
+      "description": "Changes are not being reflected bidirectionally between workspaces and the host machine. Files modified in the workspace are not syncing to the host machine and vice versa, breaking the expected development workflow.",
+      "priority": "medium",
+      "category": "error",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-12T18:29:53.978Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757725164601_1_general_1c50f6f7",
+      "started_at": "2025-09-13T01:26:40.506Z",
+      "claimed_by": "development_session_1757725164601_1_general_1c50f6f7",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757725164601_1_general_1c50f6f7",
+          "role": "primary",
+          "assignedAt": "2025-09-13T01:26:40.506Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completion_history": [
+        {
+          "taskId": "error_1757701793978_txwz6bgkz",
+          "completedAt": "2025-09-13T01:27:05.612Z",
+          "completedBy": "development_session_1757725164601_1_general_1c50f6f7",
+          "evidence": {},
+          "completionNotes": "",
+          "category": "error",
+          "priority": "medium"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-13T01:27:05.612Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-13T01:27:05.612Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/infinite-continue-stop-hook/TODO.json"
     }
   ],
-  "total_completed": 932,
-  "last_completion": "2025-09-11T18:55:48.669Z",
+  "total_completed": 936,
+  "last_completion": "2025-09-13T01:27:05.612Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }

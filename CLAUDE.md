@@ -215,72 +215,11 @@ git status                                   # Verify clean/up-to-date
 
 **PREPARATION STEPS:**
 1. **READ/REVIEW** all files in `development/essentials/` (critical project constraints)
-2. **SCAN REPORTS** in `development/reports/` directory and all subdirectories
-3. **CHECK TASK REPORTS** in `development/reports/task-reports/` for existing work related to current task
-4. **REVIEW RESEARCH** in `development/reports/research-reports/` for relevant findings
-5. **ADD TO TASKS** relevant reports as important_files in TODO.json
-6. **LEVERAGE RESEARCH** before implementing
-7. **CLEAN ROOT** - scan and relocate any .md files from root to appropriate directories
+2. **SCAN REPORTS** in `development/reports/` and `development/research-reports/`
+3. **ADD TO TASKS** relevant reports as important_files in TODO.json
+4. **LEVERAGE RESEARCH** before implementing
 
 **RESEARCH TASK CREATION:** Required for external API integrations, database schema changes, auth/security systems, complex architectural decisions
-
-### 🚨 REPORTS DIRECTORY MANAGEMENT PROTOCOL
-**🔴 MANDATORY REPORTS ORGANIZATION AND MAINTENANCE**
-
-**CORE REQUIREMENTS:**
-- **✅ ALWAYS**: Read and maintain `development/reports/` directory before and during all tasks
-- **✅ ALWAYS**: Check for existing task-related reports before starting implementation
-- **✅ ALWAYS**: Create task-specific folders for all reports generated during work
-- **✅ ALWAYS**: Keep reports organized by task, date, and category
-- **✅ ALWAYS**: Move all .md files from root directory to appropriate docs or reports directories
-
-**REPORTS DIRECTORY STRUCTURE:**
-```
-development/
-├── reports/
-│   ├── task-reports/
-│   │   ├── feature_1757702700510_aiwn0i8s8/    # Actual task ID folders
-│   │   │   ├── analysis.md
-│   │   │   ├── implementation.md
-│   │   │   ├── testing.md
-│   │   │   └── completion.md
-│   │   ├── error_1757701793978_txwz6bgkz/      # Error investigation reports
-│   │   └── audit_1757616948667_82aeaaffab51/   # Audit and review reports
-│   ├── research-reports/              # General research findings
-│   ├── performance-reports/           # Performance analysis
-│   ├── security-reports/              # Security assessments
-│   └── architecture-reports/          # System design documentation
-```
-
-**MANDATORY WORKFLOWS:**
-- **TASK INITIATION**: Scan `development/reports/task-reports/` for existing reports related to current task
-- **DURING IMPLEMENTATION**: Create and update reports in task-specific folder as work progresses
-- **RESEARCH FINDINGS**: Document all research in `development/reports/research-reports/` with clear naming
-- **COMPLETION**: Generate completion report with evidence, challenges, and outcomes
-- **ROOT CLEANUP**: Move any .md files from project root to appropriate reports or docs directories
-
-**REPORT NAMING CONVENTIONS:**
-- **Task Reports**: Use actual TaskManager task IDs for folder names: `feature_1757702700510_aiwn0i8s8/`
-- **Report Files Within Task Folders**: `[reportType]_[YYYYMMDD].md`
-- **Research Reports**: `[topic]_research_[YYYYMMDD].md`
-- **Analysis Reports**: `[component]_analysis_[YYYYMMDD].md`
-- **Examples**: 
-  - Task folder: `development/reports/task-reports/feature_1757702700510_aiwn0i8s8/`
-  - Implementation report: `feature_1757702700510_aiwn0i8s8/implementation_20250912.md`
-  - Completion report: `feature_1757702700510_aiwn0i8s8/completion_20250912.md`
-  - Research report: `development/reports/research-reports/oauth_research_20250912.md`
-
-**ORGANIZATION MANDATES:**
-- **✅ KEEP CLEAN**: Never leave reports scattered in root or random directories
-- **✅ CROSS-REFERENCE**: Link related reports and reference important findings in tasks
-- **✅ MAINTAIN INDEX**: Update report indexes when creating new documentation
-- **✅ ARCHIVE COMPLETED**: Keep completed task reports for historical reference and learning
-
-**ROOT DIRECTORY CLEANUP:**
-- **❌ NEVER**: Leave .md files in project root directory
-- **✅ ALWAYS**: Move documentation to `development/docs/` or appropriate reports subdirectory  
-- **✅ ALWAYS**: Maintain clean, organized root directory structure
-- **🚨 MANDATE**: Scan root directory during each task and relocate any misplaced documentation files
 
 ### 🚨 PROJECT-SPECIFIC TASK REQUIREMENTS PROTOCOL
 **🔴 ABSOLUTE MANDATE: CREATE AND MAINTAIN PROJECT TASK REQUIREMENTS FILE**
@@ -362,10 +301,7 @@ npm run lint && npm run build && npm test && npm start
 - [ ] **INITIALIZE**: `timeout 10s node taskmanager-api.js init` (or reinitialize with saved ID)
 - [ ] **CREATE TASK**: `timeout 10s node taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"type"}'`
 - [ ] **CONTEXT REVIEW**: Read all files in `development/essentials/`
-- [ ] **REPORTS DIRECTORY SCAN**: Check all `development/reports/` subdirectories for relevant reports
-- [ ] **TASK REPORTS CHECK**: Scan `development/reports/task-reports/` for existing work on current task
-- [ ] **RESEARCH INTEGRATION**: Review `development/reports/research-reports/` for applicable findings
-- [ ] **ROOT CLEANUP**: Scan root directory and move any .md files to appropriate directories
+- [ ] **RESEARCH INTEGRATION**: Scan `development/reports/` and `development/research-reports/`
 - [ ] **CLAIM TASK**: Take ownership via API
 
 ### 📋 PHASE 2: IMPLEMENTATION & QUALITY
@@ -404,14 +340,6 @@ npm run lint && npm run build && npm test && npm start
 - [ ] **VERIFY**: `git status` (clean working directory + "up to date with origin/main")
 
 ### 📋 PHASE 5: COMPLETION & EVIDENCE
-- [ ] **GENERATE TASK REPORT**: Create completion report using actual task ID in folder name
-  - [ ] Create folder: `development/reports/task-reports/[ACTUAL_TASK_ID]/` (e.g., `feature_1757702700510_aiwn0i8s8/`)
-  - [ ] Generate completion report: `[ACTUAL_TASK_ID]/completion_[YYYYMMDD].md`
-  - [ ] Document implementation approach, challenges, solutions, and outcomes
-  - [ ] Include validation evidence and testing results
-  - [ ] Reference any research or analysis conducted
-- [ ] **ORGANIZE REPORTS**: Ensure all generated reports are properly organized in task-specific folders with actual task IDs
-- [ ] **ROOT CLEANUP FINAL**: Final scan of root directory for any stray .md files and relocate
 - [ ] **COLLECT EVIDENCE**: Document validation results (lint passed, build succeeded, start passed, commit hash, git status)
 - [ ] **FORMAT COMPLETION**: Use proper JSON - `'"Task completed successfully"'` or `'{"message": "Status", "evidence": "Results"}'`
   - [ ] Avoid special characters (!, ✅, emojis) | Use single quotes | No unquoted strings
