@@ -1,55 +1,14 @@
 {
   "project": "audit-system-test",
-  "tasks": [
-    {
-      "id": "feature_1757786127019_xs2vbs3zj",
-      "title": "Feature requiring comprehensive audit",
-      "description": "Test feature to validate comprehensive audit criteria loading",
-      "priority": "high",
-      "category": "feature",
-      "status": "pending",
-      "dependencies": [],
-      "important_files": [],
-      "success_criteria": [],
-      "estimate": "",
-      "requires_research": false,
-      "subtasks": [
-        {
-          "id": "audit_1757786127020_7bc2ebbd",
-          "type": "audit",
-          "title": "Audit: Feature requiring comprehensive audit",
-          "description": "Comprehensive quality audit and review of the completed feature: Feature requiring comprehensive audit\n\nOriginal Description: Test feature to validate comprehensive audit criteria loading",
-          "status": "pending",
-          "estimated_hours": 0.5,
-          "success_criteria": [
-            "Linter Perfection",
-            "Build Success",
-            "Runtime Success",
-            "Test Integrity",
-            "Function Documentation",
-            "Implementation Quality",
-            "Security Standards",
-            "Performance Standards"
-          ],
-          "prevents_completion": true,
-          "original_implementer": null,
-          "prevents_self_review": true,
-          "audit_type": "embedded_quality_gate",
-          "created_at": "2025-09-13T17:55:27.024Z"
-        }
-      ],
-      "created_at": "2025-09-13T17:55:27.024Z",
-      "auto_research_created": false
-    }
-  ],
+  "tasks": [],
   "agents": {
-    "development_session_1757786116911_1_general_c34ceaf9": {
+    "development_session_1757787801682_1_general_0233a574": {
       "name": "development Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-13T17:55:16.912Z",
+      "lastHeartbeat": "2025-09-13T18:23:21.683Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -60,8 +19,8 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-13T17:55:16.912Z",
-      "sessionId": "session_1757786116911",
+      "createdAt": "2025-09-13T18:23:21.683Z",
+      "sessionId": "session_1757787801682",
       "metadata": {}
     }
   },
@@ -71,28 +30,9 @@
   "execution_count": 0,
   "review_strikes": 0,
   "strikes_completed_last_run": false,
-  "last_hook_activation": 1757786116521,
+  "last_hook_activation": 1757787801545,
   "settings": {
-    "auto_sort_enabled": true,
-    "sort_criteria": {
-      "primary": "category",
-      "secondary": "created_at"
-    },
-    "priority_values": {
-      "critical": 4,
-      "high": 3,
-      "medium": 2,
-      "low": 1
-    },
-    "category_enabled": true,
-    "category_ranks": {
-      "error": 1,
-      "feature": 2,
-      "subtask": 3,
-      "test": 4,
-      "quality": 5
-    },
     "version": "2.0.0",
-    "created": "2025-09-13T17:55:16.521Z"
+    "created": "2025-09-13T18:23:21.545Z"
   }
 }

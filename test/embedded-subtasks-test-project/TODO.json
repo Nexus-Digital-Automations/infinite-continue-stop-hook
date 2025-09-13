@@ -2,9 +2,9 @@
   "project": "embedded-subtasks-test",
   "tasks": [
     {
-      "id": "feature_1757786126949_6ptot360y",
-      "title": "Implement authentication system with database integration",
-      "description": "Build comprehensive authentication system with security controls and database migration",
+      "id": "feature_1757787792079_ifeypeoj7",
+      "title": "Complex feature implementation",
+      "description": "Detailed implementation with multiple components and requirements",
       "priority": "high",
       "category": "feature",
       "status": "pending",
@@ -15,31 +15,29 @@
       "requires_research": false,
       "subtasks": [
         {
-          "id": "research_1757786126950_dfa627ff",
+          "id": "research_1757787792079_4468ed8d",
           "type": "research",
-          "title": "Research: Implement authentication system with database integration",
-          "description": "Comprehensive research for Implement authentication system with database integration to support implementation",
+          "title": "Research: Complex feature implementation",
+          "description": "Comprehensive research for Complex feature implementation to support implementation",
           "status": "pending",
           "estimated_hours": 1,
           "research_locations": [
             {
               "type": "codebase",
               "paths": [
-                "/models",
-                "/database",
-                "/migrations"
+                "/lib",
+                "/src",
+                "/"
               ],
               "focus": "Existing implementation patterns and architecture"
             },
             {
               "type": "internet",
               "keywords": [
-                "authentication",
-                "security",
-                "implement",
-                "system",
-                "database",
-                "integration"
+                "complex",
+                "feature",
+                "implementation",
+                "detailed"
               ],
               "focus": "Best practices, industry standards, and technical specifications"
             },
@@ -61,13 +59,13 @@
             "Alternative approaches evaluation"
           ],
           "prevents_implementation": true,
-          "created_at": "2025-09-13T17:55:26.950Z"
+          "created_at": "2025-09-13T18:23:12.080Z"
         },
         {
-          "id": "audit_1757786126950_dfa627ff",
+          "id": "audit_1757787792079_4468ed8d",
           "type": "audit",
-          "title": "Audit: Implement authentication system with database integration",
-          "description": "Comprehensive quality audit and review of the completed feature: Implement authentication system with database integration\n\nOriginal Description: Build comprehensive authentication system with security controls and database migration",
+          "title": "Audit: Complex feature implementation",
+          "description": "Comprehensive quality audit and review of the completed feature: Complex feature implementation\n\nOriginal Description: Detailed implementation with multiple components and requirements",
           "status": "pending",
           "estimated_hours": 0.5,
           "success_criteria": [
@@ -84,21 +82,21 @@
           "original_implementer": null,
           "prevents_self_review": true,
           "audit_type": "embedded_quality_gate",
-          "created_at": "2025-09-13T17:55:26.954Z"
+          "created_at": "2025-09-13T18:23:12.083Z"
         }
       ],
-      "created_at": "2025-09-13T17:55:26.954Z",
+      "created_at": "2025-09-13T18:23:12.083Z",
       "auto_research_created": false
     }
   ],
   "agents": {
-    "development_session_1757786116805_1_general_75d2a2a3": {
+    "development_session_1757787781984_1_general_1c09c66f": {
       "name": "development Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-13T17:55:16.806Z",
+      "lastHeartbeat": "2025-09-13T18:23:01.984Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -109,8 +107,8 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-13T17:55:16.806Z",
-      "sessionId": "session_1757786116805",
+      "createdAt": "2025-09-13T18:23:01.984Z",
+      "sessionId": "session_1757787781984",
       "metadata": {}
     }
   },
@@ -120,7 +118,7 @@
   "execution_count": 0,
   "review_strikes": 0,
   "strikes_completed_last_run": false,
-  "last_hook_activation": 1757786116634,
+  "last_hook_activation": 1757787781917,
   "settings": {
     "auto_sort_enabled": true,
     "sort_criteria": {
@@ -142,6 +140,6 @@
       "quality": 5
     },
     "version": "2.0.0",
-    "created": "2025-09-13T17:55:16.640Z"
+    "created": "2025-09-13T18:23:01.917Z"
   }
 }
