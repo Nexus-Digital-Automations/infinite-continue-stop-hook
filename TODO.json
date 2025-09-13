@@ -75,7 +75,7 @@
       "audit_type": "post_completion"
     },
     {
-      "id": "feature_1757734350333_imx25xcl2",
+      "id": "error_1757734433491_f5v1lnmq3",
       "title": "Update CLAUDE.md to emphasize root problem solving over symptom masking",
       "description": "Enhance CLAUDE.md documentation to ensure agents act as top-tier developers who solve root problems rather than masking symptoms. Add explicit mandates for genuine problem-solving, root cause analysis, and zero tolerance for shortcuts or cosmetic fixes. Ensure agents are confident, thorough, and address underlying issues rather than surface-level symptoms.",
       "priority": "medium",

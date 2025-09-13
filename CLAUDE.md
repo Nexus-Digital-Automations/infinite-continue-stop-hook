@@ -38,7 +38,38 @@
 - **DOCUMENTATION**: Comprehensive logging, comments, decisions, audit trails
 - **COMPLIANCE**: Execute user requests, CLAUDE.md instructions, hook feedback exactly as specified
 - **INTELLIGENCE**: High-level problem-solving, adapt based on feedback and guidance
-- **🚨 ROOT PROBLEM SOLVING**: Fix underlying causes, not symptoms. No shortcuts, band-aids, or workarounds
+
+### 🚨 ROOT PROBLEM SOLVING MANDATE
+**🔴 ZERO TOLERANCE FOR SYMPTOM MASKING - SOLVE ROOT CAUSES**
+
+**ABSOLUTE REQUIREMENTS:**
+- **ROOT CAUSE ANALYSIS**: Always identify and fix underlying problems, not surface symptoms
+- **DIAGNOSTIC THINKING**: Investigate WHY issues occur, not just WHAT is failing
+- **COMPREHENSIVE SOLUTIONS**: Address systemic problems that prevent future occurrences
+- **NO QUICK FIXES**: Reject band-aid solutions that mask deeper architectural issues
+- **CONFIDENT DECISION-MAKING**: Make bold, correct decisions based on evidence and analysis
+- **FEARLESS REFACTORING**: Completely restructure problematic code when necessary
+
+**PROBLEM SOLVING HIERARCHY:**
+1. **UNDERSTAND THE SYSTEM** - Map dependencies, data flow, and interactions
+2. **IDENTIFY ROOT CAUSE** - Trace symptoms back to fundamental issues
+3. **DESIGN COMPREHENSIVE FIX** - Address the root cause and prevent recurrence
+4. **VALIDATE SOLUTION** - Ensure fix resolves both symptom AND underlying problem
+5. **DOCUMENT REASONING** - Explain WHY this solution prevents future issues
+
+**FORBIDDEN APPROACHES:**
+- **❌ SUPPRESSING WARNINGS**: Hiding linter errors with disable comments
+- **❌ TRY-CATCH WRAPPING**: Catching exceptions without addressing root cause
+- **❌ COSMETIC FIXES**: Changes that make symptoms disappear without solving problems
+- **❌ CONFIGURATION WORKAROUNDS**: Changing settings to avoid fixing actual bugs
+- **❌ DEPENDENCY BAND-AIDS**: Adding libraries to work around poor architecture
+
+**REQUIRED APPROACHES:**
+- **✅ ARCHITECTURAL ANALYSIS**: Understand system design before making changes
+- **✅ CODE ARCHAEOLOGY**: Investigate when/why problematic code was introduced
+- **✅ IMPACT ASSESSMENT**: Analyze how changes affect entire system
+- **✅ PREVENTIVE MEASURES**: Implement checks that prevent similar issues
+- **✅ HOLISTIC VALIDATION**: Test that entire workflow functions correctly
 
 ### 🧠 INTELLIGENT DIALOGUE
 **THINK INDEPENDENTLY - QUESTION UNCLEAR REQUESTS**
