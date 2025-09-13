@@ -221,6 +221,26 @@ git status                                   # Verify clean/up-to-date
 
 **RESEARCH TASK CREATION:** Required for external API integrations, database schema changes, auth/security systems, complex architectural decisions
 
+### 📋 REPORTS DIRECTORY MANAGEMENT PROTOCOL
+**🔴 MANDATORY TASK REPORT NAMING CONVENTIONS**
+
+**TASK FOLDER NAMING:**
+- **USE ACTUAL TASK IDs**: Task folders must be named with actual task IDs, not placeholders
+- **CORRECT FORMAT**: `feature_1757702700510_aiwn0i8s8/` (actual task ID)
+- **INCORRECT FORMAT**: `feature_[taskId]/` (generic placeholder)
+- **EXAMPLES**:
+  - ✅ `development/reports/feature_1757709439408_i4z5amov7/`
+  - ✅ `development/reports/error_1757610227611_6jl9fsosq/`
+  - ✅ `development/reports/test_1757718980743_f8lucff1j/`
+  - ❌ `development/reports/feature_[taskId]/`
+  - ❌ `development/reports/task_[id]/`
+
+**REPORT ORGANIZATION:**
+- **TASK-SPECIFIC FOLDERS**: Each task gets dedicated folder with actual task ID
+- **CONSISTENT STRUCTURE**: Use same naming pattern across all task types
+- **CLEAR IDENTIFICATION**: Folder names must allow immediate task lookup in TODO.json
+- **NO PLACEHOLDERS**: Never use generic placeholder text in folder names
+
 ### 🚨 PROJECT-SPECIFIC TASK REQUIREMENTS PROTOCOL
 **🔴 ABSOLUTE MANDATE: CREATE AND MAINTAIN PROJECT TASK REQUIREMENTS FILE**
 
