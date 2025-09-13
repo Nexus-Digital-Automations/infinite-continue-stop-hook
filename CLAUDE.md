@@ -1,5 +1,14 @@
 # Claude Code Project Assistant - Streamlined Guide
 
+<law>
+CORE OPERATION PRINCIPLES (Display at start of every response):
+1. ABSOLUTE HONESTY - Never skip, ignore, or hide ANY issues, errors, or failures
+2. ROOT PROBLEM SOLVING - Fix underlying causes, not symptoms  
+3. IMMEDIATE TASK EXECUTION - Initialize → Create → Execute (no delays)
+4. TASKMANAGER API EXCLUSIVE - Never read TODO.json directly
+5. COMPLETE EVERY TASK - One at a time, commit and push before completion
+</law>
+
 ## 🚨 IMMEDIATE ACTION PROTOCOL
 **🔴 MANDATORY SEQUENCE FOR ALL USER REQUESTS:**
 1. **INITIALIZE** - `timeout 10s node taskmanager-api.js init` (or reinitialize with saved agent ID)
@@ -421,15 +430,73 @@ npm run lint && npm run build && npm test && npm start
 
 ## 🚨 INFRASTRUCTURE & STANDARDS
 
-### 🔒 CRITICAL RESTRICTIONS
+### 🔒 CRITICAL RESTRICTIONS & SECURITY
+**ABSOLUTE PROHIBITIONS:**
 - **❌ NEVER EDIT OR READ**: TODO.json directly (use TaskManager API only), settings.json (`/Users/jeremyparker/.claude/settings.json`)
+- **❌ NEVER EXPOSE**: Secrets, API keys, passwords, tokens in code or logs
+- **❌ NEVER COMMIT**: Sensitive data, credentials, environment files to repository
+- **❌ NEVER BYPASS**: Security validations, authentication checks, permission systems
+
+**MANDATORY SECURITY PROTOCOLS:**
 - **🚨 MANDATORY**: Always use `node taskmanager-api.js` commands for ALL task operations - never read TODO.json with Read tool
-- **✅ REQUIREMENTS**: Use TaskManager API only, production-ready code (no placeholders), comprehensive documentation, robust error handling
+- **🔐 VALIDATE**: All inputs, file paths, and user data before processing
+- **🛡️ SANITIZE**: User inputs and external data to prevent injection attacks
+- **🔍 AUDIT**: Log all security-relevant operations and access attempts
+
+**SECURITY VALIDATION CHECKPOINTS:**
+- Verify file permissions before modifications
+- Check for sensitive data before commits
+- Validate user inputs against security policies
+- Confirm approval for privileged operations
+
+**TOOL PERMISSION MATRIX:**
+- **ALLOWED**: Bash(npm run:*), Bash(git:*), Read/Write/Edit (safe directories)
+- **RESTRICTED**: System configuration, user profile modifications
+- **APPROVAL REQUIRED**: Package installs, security configuration changes
+
+**✅ REQUIREMENTS**: Use TaskManager API only, production-ready code (no placeholders), comprehensive documentation, robust error handling
 
 ### ORGANIZATION
 - **CLEAN ROOT**: Organize into development/ subdirectories
 - **ESSENTIALS FIRST**: Read development/essentials/ before work
 - **DOCUMENT ALL**: Functions, APIs, decisions
+
+### 🔐 FILE BOUNDARIES & PERMISSIONS
+**SAFE TO EDIT:**
+- `/src/`, `/tests/`, `/docs/`, `/development/`
+- Source code files (`.js`, `.ts`, `.py`, `.go`, `.rs`)
+- Configuration files when explicitly requested
+- Test files and documentation
+
+**PROTECTED - NEVER MODIFY:**
+- `TODO.json` (use TaskManager API exclusively)
+- `/Users/jeremyparker/.claude/settings.json`
+- `/node_modules/`, `/.git/`, `/dist/`, `/build/`
+- System configuration files
+- Package lock files (unless explicitly requested)
+
+**APPROVAL REQUIRED:**
+- `package.json` changes
+- Database migrations
+- Security-related configurations
+- CI/CD pipeline modifications
+
+### 🔧 DIAGNOSTIC & MONITORING COMMANDS
+**CLAUDE.md VERIFICATION:**
+- `/memory` - Check loaded files and context
+- `/status` - Monitor token usage and session state  
+- `/doctor` - Run diagnostics for issues
+- Reference instructions: "Check CLAUDE.md before proceeding"
+
+**CONTEXT MANAGEMENT:**
+- `/clear` - Reset context while preserving CLAUDE.md
+- Restart Claude session if persistence fails
+- Use `/status --verbose` for detailed token consumption
+
+**FILE REQUIREMENTS:**
+- Encoding: UTF-8 (no BOM)
+- Permissions: 644 (`chmod 644 CLAUDE.md`)
+- Location: Project root or `~/.claude/`
 
 ## 🚨 COMPREHENSIVE WORKFLOW CHECKLIST
 **🔴 FOLLOW EVERY STEP - ZERO TOLERANCE FOR SHORTCUTS**
