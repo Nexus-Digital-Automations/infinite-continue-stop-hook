@@ -1,0 +1,147 @@
+{
+  "project": "embedded-subtasks-test",
+  "tasks": [
+    {
+      "id": "feature_1757786126949_6ptot360y",
+      "title": "Implement authentication system with database integration",
+      "description": "Build comprehensive authentication system with security controls and database migration",
+      "priority": "high",
+      "category": "feature",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [
+        {
+          "id": "research_1757786126950_dfa627ff",
+          "type": "research",
+          "title": "Research: Implement authentication system with database integration",
+          "description": "Comprehensive research for Implement authentication system with database integration to support implementation",
+          "status": "pending",
+          "estimated_hours": 1,
+          "research_locations": [
+            {
+              "type": "codebase",
+              "paths": [
+                "/models",
+                "/database",
+                "/migrations"
+              ],
+              "focus": "Existing implementation patterns and architecture"
+            },
+            {
+              "type": "internet",
+              "keywords": [
+                "authentication",
+                "security",
+                "implement",
+                "system",
+                "database",
+                "integration"
+              ],
+              "focus": "Best practices, industry standards, and technical specifications"
+            },
+            {
+              "type": "documentation",
+              "sources": [
+                "README.md",
+                "docs/",
+                "API documentation",
+                "package.json"
+              ],
+              "focus": "Project configuration and existing documentation"
+            }
+          ],
+          "deliverables": [
+            "Technical analysis report",
+            "Implementation recommendations",
+            "Risk assessment",
+            "Alternative approaches evaluation"
+          ],
+          "prevents_implementation": true,
+          "created_at": "2025-09-13T17:55:26.950Z"
+        },
+        {
+          "id": "audit_1757786126950_dfa627ff",
+          "type": "audit",
+          "title": "Audit: Implement authentication system with database integration",
+          "description": "Comprehensive quality audit and review of the completed feature: Implement authentication system with database integration\n\nOriginal Description: Build comprehensive authentication system with security controls and database migration",
+          "status": "pending",
+          "estimated_hours": 0.5,
+          "success_criteria": [
+            "Linter Perfection",
+            "Build Success",
+            "Runtime Success",
+            "Test Integrity",
+            "Function Documentation",
+            "Implementation Quality",
+            "Security Standards",
+            "Performance Standards"
+          ],
+          "prevents_completion": true,
+          "original_implementer": null,
+          "prevents_self_review": true,
+          "audit_type": "embedded_quality_gate",
+          "created_at": "2025-09-13T17:55:26.954Z"
+        }
+      ],
+      "created_at": "2025-09-13T17:55:26.954Z",
+      "auto_research_created": false
+    }
+  ],
+  "agents": {
+    "development_session_1757786116805_1_general_75d2a2a3": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-13T17:55:16.806Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-13T17:55:16.806Z",
+      "sessionId": "session_1757786116805",
+      "metadata": {}
+    }
+  },
+  "features": [],
+  "current_mode": "DEVELOPMENT",
+  "last_mode": null,
+  "execution_count": 0,
+  "review_strikes": 0,
+  "strikes_completed_last_run": false,
+  "last_hook_activation": 1757786116634,
+  "settings": {
+    "auto_sort_enabled": true,
+    "sort_criteria": {
+      "primary": "category",
+      "secondary": "created_at"
+    },
+    "priority_values": {
+      "critical": 4,
+      "high": 3,
+      "medium": 2,
+      "low": 1
+    },
+    "category_enabled": true,
+    "category_ranks": {
+      "error": 1,
+      "feature": 2,
+      "subtask": 3,
+      "test": 4,
+      "quality": 5
+    },
+    "version": "2.0.0",
+    "created": "2025-09-13T17:55:16.640Z"
+  }
+}

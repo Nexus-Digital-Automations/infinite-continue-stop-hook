@@ -1,0 +1,146 @@
+{
+  "project": "research-system-test",
+  "tasks": [
+    {
+      "id": "feature_1757786126483_ubrxwgb38",
+      "title": "Design user authentication database schema",
+      "description": "Create comprehensive database schema for user management with relationships and constraints",
+      "priority": "high",
+      "category": "feature",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [
+        {
+          "id": "research_1757786126483_bc56335f",
+          "type": "research",
+          "title": "Research: Design user authentication database schema",
+          "description": "Comprehensive research for Design user authentication database schema to support implementation",
+          "status": "pending",
+          "estimated_hours": 1,
+          "research_locations": [
+            {
+              "type": "codebase",
+              "paths": [
+                "/models",
+                "/database",
+                "/migrations"
+              ],
+              "focus": "Existing implementation patterns and architecture"
+            },
+            {
+              "type": "internet",
+              "keywords": [
+                "authentication",
+                "design",
+                "user",
+                "database",
+                "schema"
+              ],
+              "focus": "Best practices, industry standards, and technical specifications"
+            },
+            {
+              "type": "documentation",
+              "sources": [
+                "README.md",
+                "docs/",
+                "API documentation",
+                "package.json"
+              ],
+              "focus": "Project configuration and existing documentation"
+            }
+          ],
+          "deliverables": [
+            "Technical analysis report",
+            "Implementation recommendations",
+            "Risk assessment",
+            "Alternative approaches evaluation"
+          ],
+          "prevents_implementation": true,
+          "created_at": "2025-09-13T17:55:26.483Z"
+        },
+        {
+          "id": "audit_1757786126483_bc56335f",
+          "type": "audit",
+          "title": "Audit: Design user authentication database schema",
+          "description": "Comprehensive quality audit and review of the completed feature: Design user authentication database schema\n\nOriginal Description: Create comprehensive database schema for user management with relationships and constraints",
+          "status": "pending",
+          "estimated_hours": 0.5,
+          "success_criteria": [
+            "Linter Perfection",
+            "Build Success",
+            "Runtime Success",
+            "Test Integrity",
+            "Function Documentation",
+            "Implementation Quality",
+            "Security Standards",
+            "Performance Standards"
+          ],
+          "prevents_completion": true,
+          "original_implementer": null,
+          "prevents_self_review": true,
+          "audit_type": "embedded_quality_gate",
+          "created_at": "2025-09-13T17:55:26.487Z"
+        }
+      ],
+      "created_at": "2025-09-13T17:55:26.487Z",
+      "auto_research_created": false
+    }
+  ],
+  "agents": {
+    "development_session_1757786116781_1_general_b2b123ab": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-13T17:55:16.782Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-13T17:55:16.782Z",
+      "sessionId": "session_1757786116781",
+      "metadata": {}
+    }
+  },
+  "features": [],
+  "current_mode": "DEVELOPMENT",
+  "last_mode": null,
+  "execution_count": 0,
+  "review_strikes": 0,
+  "strikes_completed_last_run": false,
+  "last_hook_activation": 1757786116366,
+  "settings": {
+    "auto_sort_enabled": true,
+    "sort_criteria": {
+      "primary": "category",
+      "secondary": "created_at"
+    },
+    "priority_values": {
+      "critical": 4,
+      "high": 3,
+      "medium": 2,
+      "low": 1
+    },
+    "category_enabled": true,
+    "category_ranks": {
+      "error": 1,
+      "feature": 2,
+      "subtask": 3,
+      "test": 4,
+      "quality": 5
+    },
+    "version": "2.0.0",
+    "created": "2025-09-13T17:55:16.366Z"
+  }
+}
