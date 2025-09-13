@@ -2954,13 +2954,26 @@ class TaskManagerAPI {
     try {
       const result = await this.withTimeout(
         (async () => {
-          // Agent ID is always required - no auto-detection fallback
-          if (!agentId) {
-            throw new Error(
-              'Agent ID is required - must be provided explicitly for reinitialization',
-            );
+          // Smart agent auto-detection if no agentId provided
+          let targetAgentId = agentId;
+          if (!targetAgentId) {
+            const agentsResult = await this.listAgents();
+            if (
+              agentsResult.success &&
+              agentsResult.agents &&
+              agentsResult.agents.length > 0
+            ) {
+              // Auto-detect: Use the most recently active agent
+              const sortedAgents = agentsResult.agents.sort(
+                (a, b) => new Date(b.lastHeartbeat) - new Date(a.lastHeartbeat),
+              );
+              targetAgentId = sortedAgents[0].agentId;
+            } else {
+              throw new Error(
+                'No agents found for auto-detection. Use initAgent() to create a new agent first, or provide explicit agentId.',
+              );
+            }
           }
-          const targetAgentId = agentId;
 
           // Get current agent configuration
           const currentAgent = await this.agentManager.getAgent(targetAgentId);
@@ -5529,22 +5542,41 @@ async function main() {
           }
         }
 
-        // Agent ID is required for reinitialize
-        if (!agentId) {
-          throw new Error(
-            "Agent ID required for reinitialize. To find your agent ID:\n" +
-              '1. Run: timeout 10s node "' +
-              process.argv[1] +
-              '" list-agents\n' +
-              "2. Copy the agentId from the output\n" +
-              '3. Run: timeout 10s node "' +
-              process.argv[1] +
-              '" reinitialize <agentId>\n' +
-              "\nIf no agents exist, use 'init' to create a new agent first.",
-          );
+        // Smart agent auto-detection if no agentId provided
+        let targetAgentId = agentId;
+        if (!targetAgentId) {
+          try {
+            const agentsResult = await api.listAgents();
+            if (agentsResult.success && agentsResult.agents && agentsResult.agents.length > 0) {
+              // Auto-detect: Use the most recently active agent
+              const sortedAgents = agentsResult.agents.sort((a, b) =>
+                new Date(b.lastHeartbeat) - new Date(a.lastHeartbeat)
+              );
+              targetAgentId = sortedAgents[0].agentId;
+
+              // eslint-disable-next-line no-console -- CLI API requires console output for auto-detection feedback
+              console.log(`Auto-detected agent: ${targetAgentId} (most recent)`);
+            } else {
+              // No agents found - fall back to init
+              // eslint-disable-next-line no-console -- CLI API requires console output for fallback feedback
+              console.log("No existing agents found. Creating new agent...");
+              const initResult = await api.initAgent(config);
+              // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
+              console.log(JSON.stringify(initResult, null, 2));
+              break;
+            }
+          } catch (autoDetectError) {
+            throw new Error(
+              `Failed to auto-detect agent for reinitialize: ${autoDetectError.message}\n` +
+                "To manually specify agent ID:\n" +
+                '1. Run: timeout 10s node "' + process.argv[1] + '" list-agents\n' +
+                "2. Copy the agentId from the output\n" +
+                '3. Run: timeout 10s node "' + process.argv[1] + '" reinitialize <agentId>'
+            );
+          }
         }
 
-        const result = await api.reinitializeAgent(agentId, config);
+        const result = await api.reinitializeAgent(targetAgentId, config);
         // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;

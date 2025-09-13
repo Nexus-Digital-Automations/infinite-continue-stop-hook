@@ -11,7 +11,7 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 
 ## 🚨 IMMEDIATE ACTION PROTOCOL
 **🔴 MANDATORY SEQUENCE FOR ALL USER REQUESTS:**
-1. **INITIALIZE** - `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init` (or reinitialize with saved agent ID)
+1. **INITIALIZE** - `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init` (or reinitialize with auto-detection)
 2. **CREATE TASK** - `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"error|feature|subtask|test"}'`
 3. **EXECUTE** - Begin implementation immediately
 
@@ -460,7 +460,7 @@ npm run lint && npm run build && npm test && npm start
 **🔴 FOLLOW EVERY STEP - ZERO TOLERANCE FOR SHORTCUTS**
 
 ### 📋 PHASE 1: INITIATION & PREPARATION
-- [ ] **INITIALIZE**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init` (or reinitialize with saved ID)
+- [ ] **INITIALIZE**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init` (or reinitialize with auto-detection)
 - [ ] **CREATE TASK**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"type"}'`
 - [ ] **CONTEXT REVIEW**: Read all files in `development/essentials/`
 - [ ] **RESEARCH INTEGRATION**: Scan `development/reports/` and `development/research-reports/`
@@ -522,9 +522,9 @@ npm run lint && npm run build && npm test && npm start
 
 **IMMEDIATE INITIALIZATION:**
 ```bash
-# Initialize (or reinitialize with saved agent ID)
+# Initialize (or reinitialize with auto-detection or saved agent ID)
 timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init
-# OR: timeout 10s node taskmanager-api.js reinitialize <agent-id>
+# OR: timeout 10s node taskmanager-api.js reinitialize [agent-id]  (auto-detects if no ID provided)
 
 # Create task immediately  
 timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"error|feature|subtask|test"}'
