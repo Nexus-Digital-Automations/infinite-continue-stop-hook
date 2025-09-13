@@ -19,21 +19,22 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 - **❌ NO**: Analysis first, "let me check" responses, preliminary questions
 - **✅ YES**: Instant response → Initialize → Create task → Execute
 - **TRIGGERS**: Any request to implement, add, create, fix, improve, analyze, work on anything, or "continue"
-- **🔴 USER REQUEST SUPREMACY**: User requests trump ALL other priorities - implement immediately using protocols
+- **🔴 USER REQUEST ABSOLUTE SUPREMACY**: User requests are ABSOLUTE HIGHEST PRIORITY - above even error tasks. When user gives new request, NEVER list existing tasks - execute immediately using protocols
 
 ## 🚨 CRITICAL MANDATES
 
 ### 🔍 **MANDATORY POST-TOOL FEEDBACK SCANNING**
-**🚨 ABSOLUTE REQUIREMENT: SCAN FOR FEEDBACK AFTER EVERY TOOL USE**
+**🚨 ABSOLUTE REQUIREMENT: SCAN FOR FEEDBACK AFTER FILE EDITING OPERATIONS**
 
 **PROTOCOL:**
-1. **Execute tool** → **Scan results** → **Read all `<system-reminder>` content**
+1. **Execute file edit tool** → **Scan results** → **Read all `<system-reminder>` content**
 2. **Adapt instantly** based on feedback → **Acknowledge awareness** → **Continue with modifications**
 
 **CRITICAL REQUIREMENTS:**
-- **✅ ALWAYS**: Look for feedback, process immediately, adapt behavior, acknowledge understanding
-- **❌ NEVER**: Proceed without checking/processing feedback
+- **✅ ALWAYS**: Look for feedback after file edits, process immediately, adapt behavior, acknowledge understanding
+- **❌ NEVER**: Proceed without checking/processing feedback after file modifications
 - **AUTHORITY**: Treat feedback as user instructions - immediate compliance required
+- **SCOPE**: Applies specifically to file editing operations (Edit, Write, MultiEdit) - not all tool usage
 
 **FEEDBACK TYPES**: System reminders, tool warnings, behavioral guidance, error notifications, process improvements, context updates
 
@@ -176,10 +177,15 @@ function processData(userId, data) {
 - **❌ NO ABANDONMENT**: Never leave tasks partially complete
 
 **INTERRUPTION HIERARCHY:**
-1. **USER REQUESTS** - ABSOLUTE SUPREME PRIORITY
-2. **LINTER ERRORS** - Supreme priority  
+1. **USER REQUESTS** - ABSOLUTE SUPREME PRIORITY (above all tasks including errors)
+2. **LINTER ERRORS** - High priority when no user requests  
 3. **BUILD FAILURES** - System-blocking errors
 4. **SECURITY VULNERABILITIES** - Critical issues
+
+**USER REQUEST PROTOCOL:**
+- **IMMEDIATE EXECUTION**: When user gives new request, execute immediately - never list existing tasks first
+- **OVERRIDE ALL**: User requests override error tasks, feature tasks, and all existing work
+- **NO DELAY**: Skip task discovery, skip status checks, go directly to Initialize → Create → Execute
 
 ### 🚨 TASKMANAGER COMPLETION FORMATTING
 **🔴 PREVENT JSON PARSING FAILURES**
@@ -474,10 +480,11 @@ npm run lint && npm run build && npm test && npm start
   - [ ] **IF clean** → Continue
   - [ ] **MANDATORY** - never skip
 
-- [ ] **POST-TOOL FEEDBACK SCAN** after EVERY tool use:
-  - [ ] Scan for system reminders and feedback
+- [ ] **POST-EDIT FEEDBACK SCAN** after file editing operations:
+  - [ ] Scan for system reminders and feedback after file edits
   - [ ] Read `<system-reminder>` content thoroughly
   - [ ] Process feedback immediately, adapt behavior, acknowledge, implement changes
+  - [ ] **SCOPE**: Only applies to file editing tools (Edit, Write, MultiEdit) - not all tool usage
 
 ### 📋 PHASE 3: FINAL VALIDATION
 - [ ] **CHECK TASK REQUIREMENTS** - Consult `development/essentials/task-requirements.md`:
