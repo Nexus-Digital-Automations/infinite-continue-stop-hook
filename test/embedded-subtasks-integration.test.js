@@ -20,7 +20,6 @@
 const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
-const crypto = require('crypto');
 
 // Test configuration
 const TEST_PROJECT_DIR = path.join(__dirname, 'embedded-subtasks-test-project');
