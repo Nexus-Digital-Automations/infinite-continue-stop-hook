@@ -62,18 +62,18 @@
  * Usage: node taskmanager-api.js <command> [args...] [--project-root /path/to/project]
  */
 
-const path = require("path");
-const http = require("http");
-const crypto = require("crypto");
+const path = require('path');
+const http = require('http');
+const crypto = require('crypto');
 
 // Parse project root from --project-root flag or use current directory
 const args = process.argv.slice(2);
-const projectRootIndex = args.indexOf("--project-root");
+const projectRootIndex = args.indexOf('--project-root');
 const PROJECT_ROOT =
   projectRootIndex !== -1 && projectRootIndex + 1 < args.length
     ? args[projectRootIndex + 1]
     : process.cwd();
-const TODO_PATH = path.join(PROJECT_ROOT, "TODO.json");
+const TODO_PATH = path.join(PROJECT_ROOT, 'TODO.json');
 
 // Remove --project-root and its value from args for command parsing
 if (projectRootIndex !== -1) {
@@ -91,15 +91,15 @@ let cliInterface;
 
 try {
   // Import TaskManager modules using absolute paths
-  TaskManager = require(path.join(TASKMANAGER_ROOT, "lib", "taskManager.js"));
-  AgentManager = require(path.join(TASKMANAGER_ROOT, "lib", "agentManager.js"));
+  TaskManager = require(path.join(TASKMANAGER_ROOT, 'lib', 'taskManager.js'));
+  AgentManager = require(path.join(TASKMANAGER_ROOT, 'lib', 'agentManager.js'));
   MultiAgentOrchestrator = require(
-    path.join(TASKMANAGER_ROOT, "lib", "multiAgentOrchestrator.js"),
+    path.join(TASKMANAGER_ROOT, 'lib', 'multiAgentOrchestrator.js'),
   );
 
   // Import modular API components
   cliInterface = require(
-    path.join(TASKMANAGER_ROOT, "lib", "api-modules", "cli", "cliInterface.js"),
+    path.join(TASKMANAGER_ROOT, 'lib', 'api-modules', 'cli', 'cliInterface.js'),
   );
 } catch (error) {
   const loadError = new Error(
@@ -281,7 +281,7 @@ class TaskManagerAPI {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("general");
+      guide = await this._getGuideForError('general');
     } catch {
       // If guide fails, continue with operation without guide
     }
@@ -293,44 +293,44 @@ class TaskManagerAPI {
           const taskManagerMethods = Object.getOwnPropertyNames(
             Object.getPrototypeOf(this.taskManager),
           )
-            .filter((name) => name !== "constructor" && !name.startsWith("_"))
+            .filter((name) => name !== 'constructor' && !name.startsWith('_'))
             .sort();
 
           // Extract all public methods from TaskManagerAPI wrapper class
           const apiMethods = Object.getOwnPropertyNames(
             Object.getPrototypeOf(this),
           )
-            .filter((name) => name !== "constructor" && !name.startsWith("_"))
+            .filter((name) => name !== 'constructor' && !name.startsWith('_'))
             .sort();
 
           // Map CLI commands to API methods for clarity
           const cliToApiMapping = {
-            complete: "completeTask",
-            fail: "failTask",
-            create: "createTask",
-            "create-error": "createErrorTask",
-            claim: "claimTask",
-            list: "listTasks",
-            current: "getCurrentTask",
-            status: "getAgentStatus",
-            stats: "getStatistics",
-            init: "initAgent",
-            reinitialize: "reinitializeAgent",
-            delete: "deleteTask",
-            "move-top": "moveTaskToTop",
-            "move-up": "moveTaskUp",
-            "move-down": "moveTaskDown",
-            "move-bottom": "moveTaskToBottom",
-            methods: "getApiMethods",
-            guide: "getComprehensiveGuide",
-            "suggest-feature": "suggestFeature",
-            "approve-feature": "approveFeature",
-            "reject-feature": "rejectFeature",
-            "list-suggested-features": "listSuggestedFeatures",
-            "list-features": "listFeatures",
-            "feature-stats": "getFeatureStats",
-            "list-agents": "listAgents",
-            cleanup: "cleanup",
+            complete: 'completeTask',
+            fail: 'failTask',
+            create: 'createTask',
+            'create-error': 'createErrorTask',
+            claim: 'claimTask',
+            list: 'listTasks',
+            current: 'getCurrentTask',
+            status: 'getAgentStatus',
+            stats: 'getStatistics',
+            init: 'initAgent',
+            reinitialize: 'reinitializeAgent',
+            delete: 'deleteTask',
+            'move-top': 'moveTaskToTop',
+            'move-up': 'moveTaskUp',
+            'move-down': 'moveTaskDown',
+            'move-bottom': 'moveTaskToBottom',
+            methods: 'getApiMethods',
+            guide: 'getComprehensiveGuide',
+            'suggest-feature': 'suggestFeature',
+            'approve-feature': 'approveFeature',
+            'reject-feature': 'rejectFeature',
+            'list-suggested-features': 'listSuggestedFeatures',
+            'list-features': 'listFeatures',
+            'feature-stats': 'getFeatureStats',
+            'list-agents': 'listAgents',
+            cleanup: 'cleanup',
           };
 
           return {
@@ -344,14 +344,14 @@ class TaskManagerAPI {
             apiMethods: {
               count: apiMethods.length,
               methods: apiMethods,
-              usage: "node taskmanager-api.js methodName args",
-              note: "CLI commands may differ from API method names - see cliMapping",
+              usage: 'node taskmanager-api.js methodName args',
+              note: 'CLI commands may differ from API method names - see cliMapping',
             },
             cliMapping: {
-              description: "Mapping between CLI commands and API methods",
+              description: 'Mapping between CLI commands and API methods',
               mappings: cliToApiMapping,
               usage:
-                "Use CLI commands in terminal, API methods are internal implementations",
+                'Use CLI commands in terminal, API methods are internal implementations',
             },
             examples: {
               taskManager:
@@ -369,13 +369,13 @@ class TaskManagerAPI {
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("general"),
+        guide: guide || this._getFallbackGuide('general'),
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("general"),
+        guide: guide || this._getFallbackGuide('general'),
       };
     }
   }
@@ -391,143 +391,143 @@ class TaskManagerAPI {
           return {
             success: true,
             taskManager: {
-              version: "2.0.0",
+              version: '2.0.0',
               description:
-                "Universal TaskManager API for agent-driven development workflows",
+                'Universal TaskManager API for agent-driven development workflows',
             },
             taskClassification: {
               required: true,
-              parameter: "category",
+              parameter: 'category',
               description:
-                "All tasks MUST include explicit category parameter during creation",
+                'All tasks MUST include explicit category parameter during creation',
               types: [
                 {
-                  value: "error",
-                  name: "Error Task",
+                  value: 'error',
+                  name: 'Error Task',
                   priority: 1,
                   description:
-                    "System errors, linter violations, build failures, runtime bugs - HIGHEST PRIORITY",
+                    'System errors, linter violations, build failures, runtime bugs - HIGHEST PRIORITY',
                   examples: [
-                    "Fix ESLint violations",
-                    "Resolve build compilation errors",
-                    "Fix runtime exceptions",
+                    'Fix ESLint violations',
+                    'Resolve build compilation errors',
+                    'Fix runtime exceptions',
                   ],
                   triggers: [
-                    "linter errors",
-                    "build failures",
-                    "startup errors",
-                    "runtime bugs",
-                    "security vulnerabilities",
+                    'linter errors',
+                    'build failures',
+                    'startup errors',
+                    'runtime bugs',
+                    'security vulnerabilities',
                   ],
                 },
                 {
-                  value: "feature",
-                  name: "Feature Task",
+                  value: 'feature',
+                  name: 'Feature Task',
                   priority: 2,
                   description:
-                    "New functionality, enhancements, refactoring, documentation - HIGH PRIORITY",
+                    'New functionality, enhancements, refactoring, documentation - HIGH PRIORITY',
                   examples: [
-                    "Add user authentication",
-                    "Implement dark mode",
-                    "Refactor API endpoints",
+                    'Add user authentication',
+                    'Implement dark mode',
+                    'Refactor API endpoints',
                   ],
                   triggers: [
-                    "new features requested",
-                    "enhancements needed",
-                    "code refactoring",
-                    "documentation updates",
+                    'new features requested',
+                    'enhancements needed',
+                    'code refactoring',
+                    'documentation updates',
                   ],
                 },
                 {
-                  value: "subtask",
-                  name: "Subtask",
+                  value: 'subtask',
+                  name: 'Subtask',
                   priority: 3,
                   description:
-                    "Implementation of specific subtasks for preexisting features from TODO.json features array - MEDIUM PRIORITY",
+                    'Implementation of specific subtasks for preexisting features from TODO.json features array - MEDIUM PRIORITY',
                   examples: [
-                    "Implement login form for auth feature",
-                    "Add validation to signup process",
+                    'Implement login form for auth feature',
+                    'Add validation to signup process',
                   ],
                   triggers: [
-                    "implementing approved feature components",
-                    "feature breakdown tasks",
+                    'implementing approved feature components',
+                    'feature breakdown tasks',
                   ],
                 },
                 {
-                  value: "test",
-                  name: "Test Task",
+                  value: 'test',
+                  name: 'Test Task',
                   priority: 4,
                   description:
-                    "Test coverage, test creation, test setup, test performance - LOWEST PRIORITY (ONLY AFTER ERRORS/FEATURES COMPLETE)",
+                    'Test coverage, test creation, test setup, test performance - LOWEST PRIORITY (ONLY AFTER ERRORS/FEATURES COMPLETE)',
                   examples: [
-                    "Add unit tests for UserService",
-                    "Implement E2E tests for login flow",
+                    'Add unit tests for UserService',
+                    'Implement E2E tests for login flow',
                   ],
                   triggers: [
-                    "test coverage gaps",
-                    "test setup needs",
-                    "test performance issues",
+                    'test coverage gaps',
+                    'test setup needs',
+                    'test performance issues',
                   ],
                   restrictions:
-                    "BLOCKED until all error and feature tasks are resolved",
+                    'BLOCKED until all error and feature tasks are resolved',
                 },
               ],
               priorityRules: {
-                "1_error":
-                  "Always executed first - highest priority - can interrupt other work",
-                "2_feature": "Executed after all errors resolved",
-                "3_subtask": "Executed after new features complete",
-                "4_test":
-                  "Only executed when errors, features, and subtasks are complete",
+                '1_error':
+                  'Always executed first - highest priority - can interrupt other work',
+                '2_feature': 'Executed after all errors resolved',
+                '3_subtask': 'Executed after new features complete',
+                '4_test':
+                  'Only executed when errors, features, and subtasks are complete',
               },
             },
             coreCommands: {
               discovery: {
                 guide: {
-                  description: "Get this comprehensive guide",
+                  description: 'Get this comprehensive guide',
                   usage:
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" guide',
-                  output: "Complete API documentation and usage information",
+                  output: 'Complete API documentation and usage information',
                 },
                 methods: {
-                  description: "List all available API methods",
+                  description: 'List all available API methods',
                   usage:
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" methods',
-                  output: "Available methods and usage examples",
+                  output: 'Available methods and usage examples',
                 },
                 status: {
-                  description: "Get agent status and current tasks",
+                  description: 'Get agent status and current tasks',
                   usage:
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" status [agentId]',
-                  output: "Agent state, assigned tasks, and system status",
+                  output: 'Agent state, assigned tasks, and system status',
                 },
               },
               agentLifecycle: {
                 init: {
-                  description: "Initialize agent with TaskManager system",
+                  description: 'Initialize agent with TaskManager system',
                   usage:
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" init [config]',
-                  required: "Must be called before any task operations",
-                  output: "Agent ID and registration confirmation",
+                  required: 'Must be called before any task operations',
+                  output: 'Agent ID and registration confirmation',
                 },
                 reinitialize: {
                   description:
-                    "Agent reinitialization with explicit agent ID requirement",
+                    'Agent reinitialization with explicit agent ID requirement',
                   usage:
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [agentId] [config]',
                   required_parameter:
-                    "agentId - Agent ID to reinitialize (REQUIRED - must be provided explicitly)",
-                  when: "After task completion, before long operations, after idle periods, or when unsure of agent status",
+                    'agentId - Agent ID to reinitialize (REQUIRED - must be provided explicitly)',
+                  when: 'After task completion, before long operations, after idle periods, or when unsure of agent status',
                   output:
-                    "Updated agent status and renewed registration with scenario detection",
+                    'Updated agent status and renewed registration with scenario detection',
                   features: [
-                    "Requires explicit agent ID for security and clarity",
-                    "Cleans up stale agents automatically",
-                    "Provides clear scenario feedback",
-                    "Works with single or multiple agents",
+                    'Requires explicit agent ID for security and clarity',
+                    'Cleans up stale agents automatically',
+                    'Provides clear scenario feedback',
+                    'Works with single or multiple agents',
                   ],
                   scenarios: {
-                    explicit_agent: "reinitialize specific_agent_id (required)",
+                    explicit_agent: 'reinitialize specific_agent_id (required)',
                     with_config: 'reinitialize agent_id \'{"role":"testing"}\'',
                   },
                   examples: [
@@ -535,30 +535,30 @@ class TaskManagerAPI {
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize development_session_123_general_abc \'{"role":"testing"}\'',
                   ],
                   requirement:
-                    "Agent ID must be provided explicitly - use your agent ID from previous init command",
+                    'Agent ID must be provided explicitly - use your agent ID from previous init command',
                 },
               },
               taskOperations: {
                 create: {
-                  description: "Create new task with explicit classification",
+                  description: 'Create new task with explicit classification',
                   usage:
                     'node taskmanager-api.js create \'{"title":"Task name", "description":"Details", "category":"error|feature|subtask|test"}\'',
-                  required_fields: ["title", "description", "category"],
+                  required_fields: ['title', 'description', 'category'],
                   optional_fields: [
-                    "priority",
-                    "dependencies",
-                    "important_files",
+                    'priority',
+                    'dependencies',
+                    'important_files',
                   ],
                   validation:
-                    "category must be specified for proper task classification",
+                    'category must be specified for proper task classification',
                 },
                 claim: {
-                  description: "Claim task for agent execution",
+                  description: 'Claim task for agent execution',
                   usage:
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" claim <taskId> <agentId> [priority]',
-                  required_parameters: ["taskId", "agentId"],
-                  optional_parameters: ["priority"],
-                  output: "Task assignment confirmation",
+                  required_parameters: ['taskId', 'agentId'],
+                  optional_parameters: ['priority'],
+                  output: 'Task assignment confirmation',
                   examples: [
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" claim task_123 agent_456',
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" claim error_789 development_session_123_agent high',
@@ -568,10 +568,10 @@ class TaskManagerAPI {
                 },
                 complete: {
                   description:
-                    "Mark task as completed with optional completion data",
+                    'Mark task as completed with optional completion data',
                   usage:
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete <taskId> [completionData]',
-                  required: "Only after full implementation and validation",
+                  required: 'Only after full implementation and validation',
                   examples: [
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete task_123',
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete task_123 \'{"message": "Successfully implemented feature"}\'',
@@ -579,26 +579,26 @@ class TaskManagerAPI {
                     'node taskmanager-api.js complete feature_789 \'{"outcome": "Feature completed with full test coverage", "files_modified": ["src/auth.js", "tests/auth.test.js"]}\'',
                   ],
                   completionDataFormat: {
-                    description: "Optional JSON object with completion details",
+                    description: 'Optional JSON object with completion details',
                     commonFields: [
-                      "message - Brief completion description",
-                      "outcome - Detailed result explanation",
-                      "files_modified - Array of files changed",
-                      "details - Additional implementation notes",
-                      "evidence - Proof of completion (test results, etc.)",
-                      "fixed - Boolean for error tasks",
-                      "tested - Boolean indicating if tests were run",
+                      'message - Brief completion description',
+                      'outcome - Detailed result explanation',
+                      'files_modified - Array of files changed',
+                      'details - Additional implementation notes',
+                      'evidence - Proof of completion (test results, etc.)',
+                      'fixed - Boolean for error tasks',
+                      'tested - Boolean indicating if tests were run',
                     ],
-                    validation: "Must be valid JSON if provided",
+                    validation: 'Must be valid JSON if provided',
                   },
                   errorHandling: {
-                    invalidJson: "Returns error with JSON parsing details",
-                    missingTask: "Returns error if taskId not found",
-                    alreadyCompleted: "Returns error if task already completed",
+                    invalidJson: 'Returns error with JSON parsing details',
+                    missingTask: 'Returns error if taskId not found',
+                    alreadyCompleted: 'Returns error if task already completed',
                   },
                 },
                 list: {
-                  description: "List tasks with optional filtering",
+                  description: 'List tasks with optional filtering',
                   usage:
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" list [filter]',
                   examples: [
@@ -611,24 +611,24 @@ class TaskManagerAPI {
             workflows: {
               taskCreationWorkflow: [
                 "1. Call 'guide' endpoint to understand task classification",
-                "2. Analyze request to determine appropriate category",
-                "3. Create task with explicit category parameter",
-                "4. System automatically assigns priority based on category",
-                "5. Task added to appropriate priority queue",
+                '2. Analyze request to determine appropriate category',
+                '3. Create task with explicit category parameter',
+                '4. System automatically assigns priority based on category',
+                '5. Task added to appropriate priority queue',
               ],
               agentWorkflow: [
                 "1. Initialize agent with 'init' command",
-                "2. Check status and available tasks",
-                "3. Claim highest priority available task",
-                "4. Execute task implementation",
-                "5. Complete task with evidence",
-                "6. Reinitialize before next task",
+                '2. Check status and available tasks',
+                '3. Claim highest priority available task',
+                '4. Execute task implementation',
+                '5. Complete task with evidence',
+                '6. Reinitialize before next task',
               ],
               priorityEnforcement: [
-                "ERROR tasks bypass all other ordering - executed immediately",
-                "FEATURE tasks blocked until all errors resolved",
-                "SUBTASK tasks blocked until all features complete",
-                "TEST tasks blocked until errors, features, subtasks complete",
+                'ERROR tasks bypass all other ordering - executed immediately',
+                'FEATURE tasks blocked until all errors resolved',
+                'SUBTASK tasks blocked until all features complete',
+                'TEST tasks blocked until errors, features, subtasks complete',
               ],
             },
             examples: {
@@ -651,34 +651,34 @@ class TaskManagerAPI {
                 taskExecution: [
                   'node taskmanager-api.js list \'{"status":"pending"}\'',
                   'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" claim <taskId> [agentId]',
-                  "# ... implement task ...",
+                  '# ... implement task ...',
                   'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete <taskId>',
                 ],
               },
             },
             requirements: {
               mandatory: [
-                "All task creation MUST include explicit category parameter",
-                "Agent MUST call init before any task operations",
-                "Agent MUST reinitialize after task completion",
-                "Test tasks MUST NOT be created until errors/features complete",
+                'All task creation MUST include explicit category parameter',
+                'Agent MUST call init before any task operations',
+                'Agent MUST reinitialize after task completion',
+                'Test tasks MUST NOT be created until errors/features complete',
               ],
               bestPractices: [
-                "Use guide endpoint to understand system before starting",
-                "Check status regularly to monitor system state",
-                "Provide detailed task descriptions for better coordination",
-                "Include important_files for tasks that modify specific files",
+                'Use guide endpoint to understand system before starting',
+                'Check status regularly to monitor system state',
+                'Provide detailed task descriptions for better coordination',
+                'Include important_files for tasks that modify specific files',
               ],
             },
             troubleshooting: {
               commonIssues: {
                 completionErrors: {
-                  problem: "Task completion fails with JSON formatting errors",
-                  cause: "Invalid JSON format in completion data parameter",
+                  problem: 'Task completion fails with JSON formatting errors',
+                  cause: 'Invalid JSON format in completion data parameter',
                   solutions: [
                     'Ensure JSON is properly quoted: \'{"message": "Task completed"}\'',
-                    "Use double quotes inside JSON, single quotes outside",
-                    "Validate JSON format before passing to complete command",
+                    'Use double quotes inside JSON, single quotes outside',
+                    'Validate JSON format before passing to complete command',
                     'Use minimal completion: timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete taskId',
                   ],
                   examples: {
@@ -689,21 +689,21 @@ class TaskManagerAPI {
                   },
                 },
                 methodConfusion: {
-                  problem: "Confusion between CLI commands and API methods",
+                  problem: 'Confusion between CLI commands and API methods',
                   explanation:
                     "CLI command 'complete' maps to API method 'completeTask'",
                   solution:
-                    "Use CLI commands in terminal, API methods are internal implementations",
+                    'Use CLI commands in terminal, API methods are internal implementations',
                   reference:
-                    "See cliMapping in methods output for complete mapping",
+                    'See cliMapping in methods output for complete mapping',
                 },
                 agentInitialization: {
-                  problem: "Agent ID is required errors",
+                  problem: 'Agent ID is required errors',
                   explanation:
-                    "All task operations require explicit agent ID parameter - no auto-detection available",
+                    'All task operations require explicit agent ID parameter - no auto-detection available',
                   solutions: [
                     "FIRST TIME: Run 'timeout 10s node taskmanager-api.js init' and SAVE the returned agentId",
-                    "EXISTING AGENT: Use your saved agent ID in all commands: claim <taskId> <agentId>",
+                    'EXISTING AGENT: Use your saved agent ID in all commands: claim <taskId> <agentId>',
                     "FOR REINITIALIZATION: Use 'timeout 10s node taskmanager-api.js reinitialize <savedAgentId>'",
                     "FOR STATUS: Use 'timeout 10s node taskmanager-api.js status <savedAgentId>'",
                     "IF LOST AGENT ID: Run 'init' again to create new agent (old agent will be cleaned up automatically)",
@@ -713,79 +713,79 @@ class TaskManagerAPI {
             },
             taskConversion: {
               description:
-                "Guidelines for converting existing tasks to proper category classification",
+                'Guidelines for converting existing tasks to proper category classification',
               legacyTaskHandling:
-                "Existing tasks without category should be analyzed and converted using TaskManager API",
+                'Existing tasks without category should be analyzed and converted using TaskManager API',
               conversionWorkflow: [
-                "1. List all pending tasks without proper category classification",
-                "2. Analyze each task title and description to determine appropriate category",
-                "3. Delete legacy tasks and recreate with proper category parameter",
-                "4. Verify new tasks appear in correct priority order",
+                '1. List all pending tasks without proper category classification',
+                '2. Analyze each task title and description to determine appropriate category',
+                '3. Delete legacy tasks and recreate with proper category parameter',
+                '4. Verify new tasks appear in correct priority order',
               ],
               classificationGuide: {
-                "ERROR tasks": {
+                'ERROR tasks': {
                   indicators: [
-                    "fix",
-                    "error",
-                    "bug",
-                    "broken",
-                    "linter",
-                    "build fail",
-                    "compilation",
-                    "syntax",
+                    'fix',
+                    'error',
+                    'bug',
+                    'broken',
+                    'linter',
+                    'build fail',
+                    'compilation',
+                    'syntax',
                   ],
                   examples: [
-                    "Fix ESLint violations",
-                    "Resolve build errors",
-                    "Debug runtime exceptions",
+                    'Fix ESLint violations',
+                    'Resolve build errors',
+                    'Debug runtime exceptions',
                   ],
-                  category: "error",
+                  category: 'error',
                 },
-                "FEATURE tasks": {
+                'FEATURE tasks': {
                   indicators: [
-                    "add",
-                    "implement",
-                    "create",
-                    "build",
-                    "develop",
-                    "new functionality",
+                    'add',
+                    'implement',
+                    'create',
+                    'build',
+                    'develop',
+                    'new functionality',
                   ],
                   examples: [
-                    "Add user authentication",
-                    "Implement dashboard",
-                    "Create API endpoints",
+                    'Add user authentication',
+                    'Implement dashboard',
+                    'Create API endpoints',
                   ],
-                  category: "feature",
+                  category: 'feature',
                 },
-                "SUBTASK tasks": {
+                'SUBTASK tasks': {
                   indicators: [
-                    "component of",
-                    "part of",
-                    "for feature",
-                    "subtask",
-                    "specific implementation",
+                    'component of',
+                    'part of',
+                    'for feature',
+                    'subtask',
+                    'specific implementation',
                   ],
                   examples: [
-                    "Create login form for auth feature",
-                    "Add validation to user input",
+                    'Create login form for auth feature',
+                    'Add validation to user input',
                   ],
-                  category: "subtask",
+                  category: 'subtask',
                 },
-                "TEST tasks": {
+                'TEST tasks': {
                   indicators: [
-                    "test",
-                    "coverage",
-                    "unit test",
-                    "integration test",
-                    "e2e",
-                    "spec",
+                    'test',
+                    'coverage',
+                    'unit test',
+                    'integration test',
+                    'e2e',
+                    'spec',
                   ],
                   examples: [
-                    "Add unit tests",
-                    "Increase test coverage",
-                    "E2E testing",
+                    'Add unit tests',
+                    'Increase test coverage',
+                    'E2E testing',
                   ],
-                  category: "test",
+                  category: 'test',
                 },
               },
               conversionCommands: {
@@ -800,16 +800,16 @@ class TaskManagerAPI {
             advancedWorkflows: {
               bulkTaskConversion: [
                 '1. Export existing tasks to analyze: node taskmanager-api.js list \'{"status":"pending"}\'',
-                "2. For each task without category, determine classification using conversionGuide",
-                "3. Delete old task: node taskmanager-api.js delete <oldTaskId>",
+                '2. For each task without category, determine classification using conversionGuide',
+                '3. Delete old task: node taskmanager-api.js delete <oldTaskId>',
                 '4. Create new task with proper category: timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create <taskData>',
                 '5. Verify priority ordering: node taskmanager-api.js list \'{"status":"pending"}\'',
               ],
               priorityValidation: [
-                "1. List all pending tasks to verify ordering",
-                "2. Ensure ERROR tasks appear first in list",
-                "3. Ensure TEST tasks appear last in list",
-                "4. Verify task claiming follows priority rules",
+                '1. List all pending tasks to verify ordering',
+                '2. Ensure ERROR tasks appear first in list',
+                '3. Ensure TEST tasks appear last in list',
+                '4. Verify task claiming follows priority rules',
               ],
             },
           };
@@ -819,7 +819,7 @@ class TaskManagerAPI {
       return {
         success: false,
         error: error.message,
-        guide: this._getFallbackGuide("general"),
+        guide: this._getFallbackGuide('general'),
       };
     }
   }
@@ -891,10 +891,10 @@ class TaskManagerAPI {
 
       // Return relevant sections based on error context
       switch (errorContext) {
-        case "agent-init":
+        case 'agent-init':
           return {
             ...fullGuide,
-            focus: "Agent Initialization",
+            focus: 'Agent Initialization',
             quickStart: fullGuide.examples?.commonWorkflows?.newAgent || [
               'timeout 10s timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" guide',
               'timeout 10s timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" init',
@@ -902,131 +902,131 @@ class TaskManagerAPI {
             ],
             essential_commands: fullGuide.coreCommands?.agentLifecycle || {},
             initialization_help: {
-              message: "🚨 AGENT INITIALIZATION GUIDANCE",
+              message: '🚨 AGENT INITIALIZATION GUIDANCE',
               workflows: {
                 new_agent: {
                   description:
-                    "Starting fresh - creates new agent registration",
+                    'Starting fresh - creates new agent registration',
                   steps: [
                     '1. Initialize agent: timeout 10s timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" init',
-                    "2. SAVE THE AGENT ID from the response - you will need it for all future operations",
+                    '2. SAVE THE AGENT ID from the response - you will need it for all future operations',
                     '3. Verify initialization: timeout 10s timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" status <agentId>',
                     '4. Begin task operations: timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" list',
                   ],
                   critical_note:
-                    "MUST save the agentId from init response for all future commands",
+                    'MUST save the agentId from init response for all future commands',
                 },
                 existing_agent: {
                   description:
-                    "Refreshing existing agent - renews registration",
+                    'Refreshing existing agent - renews registration',
                   steps: [
-                    "1. Use your saved agent ID from previous init",
+                    '1. Use your saved agent ID from previous init',
                     '2. Reinitialize: timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize <agentId>',
                     '3. Verify renewal: timeout 10s timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" status <agentId>',
-                    "4. Continue operations normally",
+                    '4. Continue operations normally',
                   ],
-                  requirement: "Must have agent ID from previous init command",
+                  requirement: 'Must have agent ID from previous init command',
                 },
               },
               when_to_use: {
-                init: "First time, or when you have lost your agent ID",
+                init: 'First time, or when you have lost your agent ID',
                 reinitialize:
-                  "When you have an existing agent ID and want to refresh it",
+                  'When you have an existing agent ID and want to refresh it',
               },
             },
           };
 
-        case "agent-reinit":
+        case 'agent-reinit':
           return {
             ...fullGuide,
-            focus: "Agent Reinitialization",
+            focus: 'Agent Reinitialization',
             reinitialization_help: {
-              message: "🔄 AGENT REINITIALIZATION GUIDANCE",
+              message: '🔄 AGENT REINITIALIZATION GUIDANCE',
               when_required: [
-                "After completing tasks",
-                "Before long operations",
-                "After idle periods",
+                'After completing tasks',
+                'Before long operations',
+                'After idle periods',
                 'When encountering "agent expired" errors',
               ],
               workflows: {
                 existing_agent: {
                   description:
-                    "For agents that already have an ID from previous init",
+                    'For agents that already have an ID from previous init',
                   steps: [
-                    "1. Use your existing agent ID from previous init command",
-                    "2. Reinitialize: timeout 10s node taskmanager-api.js reinitialize <agentId>",
-                    "3. Verify renewal: timeout 10s node taskmanager-api.js status <agentId>",
-                    "4. Continue task operations normally",
+                    '1. Use your existing agent ID from previous init command',
+                    '2. Reinitialize: timeout 10s node taskmanager-api.js reinitialize <agentId>',
+                    '3. Verify renewal: timeout 10s node taskmanager-api.js status <agentId>',
+                    '4. Continue task operations normally',
                   ],
                   example:
-                    "timeout 10s node taskmanager-api.js reinitialize development_session_123_general_abc",
+                    'timeout 10s node taskmanager-api.js reinitialize development_session_123_general_abc',
                 },
                 fresh_start: {
                   description:
-                    "For agents that need to start fresh or have lost their ID",
+                    'For agents that need to start fresh or have lost their ID',
                   steps: [
-                    "1. Initialize new agent: timeout 10s node taskmanager-api.js init",
-                    "2. Save the returned agentId for future operations",
-                    "3. Verify initialization: timeout 10s node taskmanager-api.js status <agentId>",
-                    "4. Begin or resume task operations",
+                    '1. Initialize new agent: timeout 10s node taskmanager-api.js init',
+                    '2. Save the returned agentId for future operations',
+                    '3. Verify initialization: timeout 10s node taskmanager-api.js status <agentId>',
+                    '4. Begin or resume task operations',
                   ],
-                  note: "Init creates a new agent registration - use this when you dont have an existing agent ID",
+                  note: 'Init creates a new agent registration - use this when you dont have an existing agent ID',
                 },
                 agent_id_recovery: {
-                  description: "How to find your agent ID if you forgot it",
+                  description: 'How to find your agent ID if you forgot it',
                   methods: [
-                    "Check the agentId from your last init command output",
+                    'Check the agentId from your last init command output',
                     'Look for "agentId": "..." in previous command responses',
-                    "Agent IDs follow format: role_session_timestamp_index_type_hash",
-                    "If completely lost, run init to create fresh agent",
+                    'Agent IDs follow format: role_session_timestamp_index_type_hash',
+                    'If completely lost, run init to create fresh agent',
                   ],
                   format_example:
-                    "development_session_1757528760354_1_general_79360ca6",
+                    'development_session_1757528760354_1_general_79360ca6',
                 },
               },
               quick_reference: {
-                "Have agent ID":
-                  "timeout 10s node taskmanager-api.js reinitialize <agentId>",
-                "Need new agent": "timeout 10s node taskmanager-api.js init",
-                "Check status":
-                  "timeout 10s node taskmanager-api.js status <agentId>",
+                'Have agent ID':
+                  'timeout 10s node taskmanager-api.js reinitialize <agentId>',
+                'Need new agent': 'timeout 10s node taskmanager-api.js init',
+                'Check status':
+                  'timeout 10s node taskmanager-api.js status <agentId>',
               },
             },
             essential_commands: fullGuide.coreCommands?.agentLifecycle || {},
           };
 
-        case "task-operations":
+        case 'task-operations':
           return {
             ...fullGuide,
-            focus: "Task Operations",
+            focus: 'Task Operations',
             task_classification: fullGuide.taskClassification || {},
             workflows: fullGuide.workflows || {},
             task_help: {
-              message: "📋 TASK OPERATIONS GUIDANCE",
+              message: '📋 TASK OPERATIONS GUIDANCE',
               required_parameters:
-                "All tasks MUST include explicit category parameter",
-              valid_types: ["error", "feature", "subtask", "test"],
+                'All tasks MUST include explicit category parameter',
+              valid_types: ['error', 'feature', 'subtask', 'test'],
               examples: fullGuide.examples?.taskCreation || {},
             },
             order_override: {
-              message: "🔄 TASK ORDER OVERRIDE SYSTEM",
+              message: '🔄 TASK ORDER OVERRIDE SYSTEM',
               description:
-                "When task claiming fails due to order violations, agents can override",
+                'When task claiming fails due to order violations, agents can override',
               normal_flow:
-                "Follow error tasks → feature order → subtask order (recommended for autonomous work)",
+                'Follow error tasks → feature order → subtask order (recommended for autonomous work)',
               override_method:
-                "Use TaskManager.claimTask(taskId, agentId, priority, { allowOutOfOrder: true })",
+                'Use TaskManager.claimTask(taskId, agentId, priority, { allowOutOfOrder: true })',
               valid_reasons: [
-                "USER REQUEST (always override)",
-                "urgent fixes",
-                "independent work",
-                "research tasks",
-                "debugging needs",
+                'USER REQUEST (always override)',
+                'urgent fixes',
+                'independent work',
+                'research tasks',
+                'debugging needs',
               ],
               user_authority:
-                "CRITICAL: When user explicitly requests a specific task, ALWAYS override order - user intent takes absolute precedence",
+                'CRITICAL: When user explicitly requests a specific task, ALWAYS override order - user intent takes absolute precedence',
               caution:
-                "For autonomous work: Only override when justified - maintain workflow integrity",
+                'For autonomous work: Only override when justified - maintain workflow integrity',
               example:
                 "await api.taskManager.claimTask('task_123', agentId, 'normal', { allowOutOfOrder: true })",
             },
@@ -1045,13 +1045,13 @@ class TaskManagerAPI {
    * @param {string} context - Error context for fallback guidance
    * @returns {Object} Minimal fallback guide
    */
-  _getFallbackGuide(context = "general") {
+  _getFallbackGuide(context = 'general') {
     const baseGuide = {
       success: true,
       message:
         'For complete API usage guidance, run: timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" guide',
       helpText:
-        "The guide provides comprehensive information about task classification, workflows, and all API capabilities",
+        'The guide provides comprehensive information about task classification, workflows, and all API capabilities',
       essential_commands: {
         guide:
           'timeout 10s timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" guide',
@@ -1064,76 +1064,76 @@ class TaskManagerAPI {
 
     // Add context-specific fallback guidance
     switch (context) {
-      case "agent-init":
+      case 'agent-init':
         return {
           ...baseGuide,
-          context: "Agent Initialization Required",
+          context: 'Agent Initialization Required',
           immediate_action:
             'Run: timeout 10s timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" init',
           next_steps: [
-            "Initialize agent with init command",
-            "Verify with status command",
-            "Begin task operations",
+            'Initialize agent with init command',
+            'Verify with status command',
+            'Begin task operations',
           ],
         };
 
-      case "agent-reinit":
+      case 'agent-reinit':
         return {
           ...baseGuide,
-          context: "Agent Reinitialization Required",
+          context: 'Agent Reinitialization Required',
           reinitialization_help: {
-            message: "🔄 AGENT REINITIALIZATION GUIDANCE",
+            message: '🔄 AGENT REINITIALIZATION GUIDANCE',
             workflows: {
               existing_agent: {
                 description:
-                  "For agents that already have an ID from previous init",
+                  'For agents that already have an ID from previous init',
                 steps: [
-                  "1. Use your existing agent ID from previous init command",
-                  "2. Reinitialize: timeout 10s node taskmanager-api.js reinitialize <agentId>",
-                  "3. Verify renewal: timeout 10s node taskmanager-api.js status <agentId>",
-                  "4. Continue task operations normally",
+                  '1. Use your existing agent ID from previous init command',
+                  '2. Reinitialize: timeout 10s node taskmanager-api.js reinitialize <agentId>',
+                  '3. Verify renewal: timeout 10s node taskmanager-api.js status <agentId>',
+                  '4. Continue task operations normally',
                 ],
                 example:
-                  "timeout 10s node taskmanager-api.js reinitialize development_session_123_general_abc",
+                  'timeout 10s node taskmanager-api.js reinitialize development_session_123_general_abc',
               },
               fresh_start: {
                 description:
-                  "For agents that need to start fresh or have lost their ID",
+                  'For agents that need to start fresh or have lost their ID',
                 steps: [
-                  "1. Initialize new agent: timeout 10s node taskmanager-api.js init",
-                  "2. Save the returned agentId for future operations",
-                  "3. Verify initialization: timeout 10s node taskmanager-api.js status <agentId>",
-                  "4. Begin or resume task operations",
+                  '1. Initialize new agent: timeout 10s node taskmanager-api.js init',
+                  '2. Save the returned agentId for future operations',
+                  '3. Verify initialization: timeout 10s node taskmanager-api.js status <agentId>',
+                  '4. Begin or resume task operations',
                 ],
-                note: "Init creates a new agent registration - use this when you dont have an existing agent ID",
+                note: 'Init creates a new agent registration - use this when you dont have an existing agent ID',
               },
             },
             quick_reference: {
-              "Have agent ID":
-                "timeout 10s node taskmanager-api.js reinitialize <agentId>",
-              "Need new agent": "timeout 10s node taskmanager-api.js init",
-              "Check status":
-                "timeout 10s node taskmanager-api.js status <agentId>",
+              'Have agent ID':
+                'timeout 10s node taskmanager-api.js reinitialize <agentId>',
+              'Need new agent': 'timeout 10s node taskmanager-api.js init',
+              'Check status':
+                'timeout 10s node taskmanager-api.js status <agentId>',
             },
           },
         };
 
-      case "task-operations":
+      case 'task-operations':
         return {
           ...baseGuide,
-          context: "Task Operations Help",
+          context: 'Task Operations Help',
           immediate_action:
-            "Ensure category parameter is included in task creation",
-          categories: ["error", "feature", "subtask", "test"],
+            'Ensure category parameter is included in task creation',
+          categories: ['error', 'feature', 'subtask', 'test'],
           example:
             '{"title": "Task name", "description": "Details", "category": "error"}',
           order_override_help: {
             message:
-              "For task order violations: use { allowOutOfOrder: true } option",
+              'For task order violations: use { allowOutOfOrder: true } option',
             method:
-              "api.taskManager.claimTask(taskId, agentId, priority, { allowOutOfOrder: true })",
+              'api.taskManager.claimTask(taskId, agentId, priority, { allowOutOfOrder: true })',
             user_requests:
-              "CRITICAL: When user explicitly requests a specific task, ALWAYS override order - user intent takes precedence",
+              'CRITICAL: When user explicitly requests a specific task, ALWAYS override order - user intent takes precedence',
           },
         };
 
@@ -1147,95 +1147,95 @@ class TaskManagerAPI {
    * @param {string} context - Operation context (e.g., 'phase-operations', 'task-operations')
    * @returns {Object} Contextual guide information
    */
-  getContextualGuide(context = "general") {
+  getContextualGuide(context = 'general') {
     // No need for fullGuide reference since we're building self-contained guides
 
     switch (context) {
-      case "phase-operations":
+      case 'phase-operations':
         return {
           success: true,
-          context: "Phase Operations",
-          focus: "Feature Phase Management (FEATURE-ONLY)",
+          context: 'Phase Operations',
+          focus: 'Feature Phase Management (FEATURE-ONLY)',
           critical_requirement:
-            "🚨 Phases are EXCLUSIVELY for FEATURE tasks - NOT for error, subtask, or test tasks",
+            '🚨 Phases are EXCLUSIVELY for FEATURE tasks - NOT for error, subtask, or test tasks',
 
           phase_system: {
             description:
-              "Sequential phase tracking system for feature development lifecycle",
-            numbering: "Simple sequential: Phase 1, Phase 2, Phase 3, etc.",
-            statuses: ["pending", "in_progress", "completed"],
+              'Sequential phase tracking system for feature development lifecycle',
+            numbering: 'Simple sequential: Phase 1, Phase 2, Phase 3, etc.',
+            statuses: ['pending', 'in_progress', 'completed'],
             exclusive_to:
-              "FEATURE tasks only - error/subtask/test tasks NEVER have phases",
+              'FEATURE tasks only - error/subtask/test tasks NEVER have phases',
           },
 
           commands: {
-            "create-phase": {
+            'create-phase': {
               usage:
                 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-phase <featureId> \'{"title": "Phase title", "description": "Details"}\'',
               description:
-                "Create new phase for a feature with sequential numbering",
+                'Create new phase for a feature with sequential numbering',
               example:
                 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-phase feature_123 \'{"title": "Initial Planning", "description": "Requirements gathering and design"}\'',
-              required: ["featureId", "phaseData.title"],
+              required: ['featureId', 'phaseData.title'],
             },
-            "update-phase": {
+            'update-phase': {
               usage:
                 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" update-phase <featureId> <phaseNumber> \'{"status": "completed"}\'',
-              description: "Update phase status and details",
+              description: 'Update phase status and details',
               example:
                 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" update-phase feature_123 1 \'{"status": "completed", "notes": "Planning completed"}\'',
-              required: ["featureId", "phaseNumber", "updates"],
+              required: ['featureId', 'phaseNumber', 'updates'],
             },
-            "progress-phase": {
+            'progress-phase': {
               usage:
                 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" progress-phase <featureId> <currentPhaseNumber>',
-              description: "Complete current phase and progress to next phase",
+              description: 'Complete current phase and progress to next phase',
               example:
                 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" progress-phase feature_123 1',
-              required: ["featureId", "currentPhaseNumber"],
+              required: ['featureId', 'currentPhaseNumber'],
             },
-            "list-phases": {
+            'list-phases': {
               usage:
                 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" list-phases <featureId>',
               description:
-                "List all phases for a feature with completion statistics",
+                'List all phases for a feature with completion statistics',
               example:
                 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" list-phases feature_123',
-              required: ["featureId"],
+              required: ['featureId'],
             },
-            "current-phase": {
+            'current-phase': {
               usage:
                 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" current-phase <featureId>',
-              description: "Get current active phase for a feature",
+              description: 'Get current active phase for a feature',
               example:
                 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" current-phase feature_123',
-              required: ["featureId"],
+              required: ['featureId'],
             },
-            "phase-stats": {
+            'phase-stats': {
               usage:
                 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" phase-stats <featureId>',
-              description: "Get detailed phase completion statistics",
+              description: 'Get detailed phase completion statistics',
               example:
                 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" phase-stats feature_123',
-              required: ["featureId"],
+              required: ['featureId'],
             },
           },
 
           workflow: [
-            "1. Identify feature requiring phase tracking",
+            '1. Identify feature requiring phase tracking',
             '2. Create initial phases: create-phase <featureId> \'{"title": "Phase 1 Title"}\'',
-            "3. Add additional phases sequentially as needed",
-            "4. Progress through phases: progress-phase <featureId> <currentNumber>",
-            "5. Monitor progress: current-phase or phase-stats <featureId>",
+            '3. Add additional phases sequentially as needed',
+            '4. Progress through phases: progress-phase <featureId> <currentNumber>',
+            '5. Monitor progress: current-phase or phase-stats <featureId>',
           ],
 
           examples: {
             typical_workflow: [
-              "# Create feature phases for development lifecycle",
+              '# Create feature phases for development lifecycle',
               'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-phase feature_456 \'{"title": "Planning & Design", "description": "Requirements and architecture"}\'',
               'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-phase feature_456 \'{"title": "Core Implementation", "description": "Main functionality development"}\'',
               'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-phase feature_456 \'{"title": "Testing & Validation", "description": "Comprehensive testing"}\'',
-              "# Progress through phases",
+              '# Progress through phases',
               'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" progress-phase feature_456 1',
               'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" current-phase feature_456',
             ],
@@ -1243,19 +1243,19 @@ class TaskManagerAPI {
 
           restrictions: {
             exclusive_scope:
-              "Phases are ONLY for feature objects in TODO.json features array",
+              'Phases are ONLY for feature objects in TODO.json features array',
             forbidden_for: [
-              "error tasks",
-              "subtask tasks",
-              "test tasks",
-              "tasks in TODO.json tasks array",
+              'error tasks',
+              'subtask tasks',
+              'test tasks',
+              'tasks in TODO.json tasks array',
             ],
             validation:
-              "System enforces feature-only phase creation and management",
+              'System enforces feature-only phase creation and management',
           },
         };
 
-      case "task-operations":
+      case 'task-operations':
       default:
         return this._getFallbackGuide(context);
     }
@@ -1311,7 +1311,7 @@ class TaskManagerAPI {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("agent-init");
+      guide = await this._getGuideForError('agent-init');
     } catch {
       // If guide fails, continue with initialization without guide
     }
@@ -1321,7 +1321,7 @@ class TaskManagerAPI {
         (async () => {
           // Default agent configuration for development workflows
           const defaultConfig = {
-            role: "development", // Primary agent role
+            role: 'development', // Primary agent role
             sessionId: `session_${Date.now()}`, // Unique session identifier
             specialization: [], // Specialized capabilities array
           };
@@ -1343,13 +1343,13 @@ class TaskManagerAPI {
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("agent-init"),
+        guide: guide || this._getFallbackGuide('agent-init'),
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("agent-init"),
+        guide: guide || this._getFallbackGuide('agent-init'),
       };
     }
   }
@@ -1358,7 +1358,7 @@ class TaskManagerAPI {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("task-operations");
+      guide = await this._getGuideForError('task-operations');
     } catch {
       // If guide fails, continue with operation without guide
     }
@@ -1369,7 +1369,7 @@ class TaskManagerAPI {
           // Agent ID is always required - no auto-detection fallback
           if (!agentId) {
             throw new Error(
-              "Agent ID is required - must be provided explicitly",
+              'Agent ID is required - must be provided explicitly',
             );
           }
           const targetAgentId = agentId;
@@ -1386,13 +1386,13 @@ class TaskManagerAPI {
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
@@ -1401,7 +1401,7 @@ class TaskManagerAPI {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("task-operations");
+      guide = await this._getGuideForError('task-operations');
     } catch {
       // If guide fails, continue with operation without guide
     }
@@ -1450,13 +1450,13 @@ class TaskManagerAPI {
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
@@ -1465,7 +1465,7 @@ class TaskManagerAPI {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("task-operations");
+      guide = await this._getGuideForError('task-operations');
     } catch {
       // If guide fails, continue with operation without guide
     }
@@ -1481,7 +1481,7 @@ class TaskManagerAPI {
             );
             if (!scopeValidationInfo.isValid) {
               throw new Error(
-                `Invalid scope restrictions: ${scopeValidationInfo.errors.join(", ")}`,
+                `Invalid scope restrictions: ${scopeValidationInfo.errors.join(', ')}`,
               );
             }
           }
@@ -1501,13 +1501,13 @@ class TaskManagerAPI {
               restrictionTypes: scopeValidationInfo.restrictionTypes,
               validationPassed: scopeValidationInfo.isValid,
               message:
-                "Task created with enhanced scope validation (files AND folders supported)",
+                'Task created with enhanced scope validation (files AND folders supported)',
             };
           } else {
             response.scopeInfo = {
               hasRestrictions: false,
               message:
-                "Task created without scope restrictions - full access granted",
+                'Task created without scope restrictions - full access granted',
             };
           }
 
@@ -1518,13 +1518,13 @@ class TaskManagerAPI {
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
@@ -1550,7 +1550,7 @@ class TaskManagerAPI {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("task-operations");
+      guide = await this._getGuideForError('task-operations');
     } catch {
       // If guide fails, continue with operation without guide
     }
@@ -1560,21 +1560,21 @@ class TaskManagerAPI {
         (async () => {
           // Ensure error category is set
           const errorCategories = [
-            "error",
-            "build-error",
-            "linter-error",
-            "start-error",
+            'error',
+            'build-error',
+            'linter-error',
+            'start-error',
           ];
           if (!errorCategories.includes(taskData.category)) {
-            taskData.category = "error"; // Default to generic error
+            taskData.category = 'error'; // Default to generic error
           }
 
           // Set high priority for error tasks
-          taskData.priority = taskData.priority || "critical";
+          taskData.priority = taskData.priority || 'critical';
 
           // Add error-specific metadata
           taskData.is_error_task = true;
-          taskData.created_by = "error-detection-system";
+          taskData.created_by = 'error-detection-system';
 
           const taskId = await this.taskManager.createTask(taskData);
           return {
@@ -1589,13 +1589,13 @@ class TaskManagerAPI {
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
@@ -1604,7 +1604,7 @@ class TaskManagerAPI {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("task-operations");
+      guide = await this._getGuideForError('task-operations');
     } catch {
       // If guide fails, continue with operation without guide
     }
@@ -1619,7 +1619,7 @@ class TaskManagerAPI {
             return {
               success: true,
               hasPhase: false,
-              message: "Task does not contain phase information",
+              message: 'Task does not contain phase information',
             };
           }
 
@@ -1638,7 +1638,7 @@ class TaskManagerAPI {
             affectedTasks: insertionAnalysis.renumberingNeeded.length,
             message: insertionAnalysis.needsRenumbering
               ? `Phase insertion will require renumbering ${insertionAnalysis.renumberingNeeded.length} tasks`
-              : "No phase conflicts detected",
+              : 'No phase conflicts detected',
           };
         })(),
       );
@@ -1646,13 +1646,13 @@ class TaskManagerAPI {
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
@@ -1719,11 +1719,11 @@ class TaskManagerAPI {
    *   const overrideResult = await api.taskManager.claimTask('task_789', agentId, priority, { allowOutOfOrder: true });
    * }
    */
-  async claimTask(taskId, agentId, priority = "normal") {
+  async claimTask(taskId, agentId, priority = 'normal') {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("task-operations");
+      guide = await this._getGuideForError('task-operations');
     } catch {
       // If guide fails, continue with operation without guide
     }
@@ -1734,7 +1734,7 @@ class TaskManagerAPI {
           // Agent ID is always required - no auto-detection fallback
           if (!agentId) {
             throw new Error(
-              "Agent ID is required - must be provided explicitly when claiming tasks",
+              'Agent ID is required - must be provided explicitly when claiming tasks',
             );
           }
           const targetAgentId = agentId;
@@ -1751,7 +1751,7 @@ class TaskManagerAPI {
             // Identify all dependencies that are not yet completed
             for (const depId of task.dependencies) {
               const depTask = todoData.tasks.find((t) => t.id === depId);
-              if (depTask && depTask.status !== "completed") {
+              if (depTask && depTask.status !== 'completed') {
                 incompleteDependencies.push(depTask);
               }
             }
@@ -1761,13 +1761,13 @@ class TaskManagerAPI {
               // Find the next dependency that should be worked on first
               const nextDependency =
                 incompleteDependencies.find(
-                  (dep) => dep.status === "pending",
+                  (dep) => dep.status === 'pending',
                 ) || incompleteDependencies[0];
 
               return {
                 success: false,
                 reason:
-                  "Task has incomplete dependencies that must be completed first",
+                  'Task has incomplete dependencies that must be completed first',
                 blockedByDependencies: true,
                 incompleteDependencies: incompleteDependencies,
                 nextDependency: nextDependency,
@@ -1786,7 +1786,7 @@ class TaskManagerAPI {
                     status: nextDependency.status,
                   },
                 },
-                guide: guide || this._getFallbackGuide("task-operations"),
+                guide: guide || this._getFallbackGuide('task-operations'),
               };
             }
           }
@@ -1801,23 +1801,23 @@ class TaskManagerAPI {
             return {
               success: false,
               reason:
-                "Agent scope validation failed - insufficient access permissions",
+                'Agent scope validation failed - insufficient access permissions',
               scopeValidationFailed: true,
               scopeErrors: scopeValidation.errors,
               scopeChecks: scopeValidation.scopeChecks,
               agentScope: scopeValidation.agentScope,
               instructions: {
                 message:
-                  "🔒 SCOPE ACCESS DENIED - Agent lacks required permissions",
+                  '🔒 SCOPE ACCESS DENIED - Agent lacks required permissions',
                 details: [
-                  "🚫 Agent does not have access to required files/folders for this task",
-                  "📋 Review task scope_restrictions and agent permissions",
-                  "🔧 Contact administrator to adjust agent scope or task restrictions",
-                  "📝 Task may need to be assigned to a different agent with proper permissions",
+                  '🚫 Agent does not have access to required files/folders for this task',
+                  '📋 Review task scope_restrictions and agent permissions',
+                  '🔧 Contact administrator to adjust agent scope or task restrictions',
+                  '📝 Task may need to be assigned to a different agent with proper permissions',
                 ],
                 scopeViolations: scopeValidation.errors,
               },
-              guide: guide || this._getFallbackGuide("task-operations"),
+              guide: guide || this._getFallbackGuide('task-operations'),
             };
           }
 
@@ -1835,31 +1835,31 @@ class TaskManagerAPI {
 
           if (
             claimedTask &&
-            (claimedTask.category === "research" ||
+            (claimedTask.category === 'research' ||
               claimedTask.requires_research)
           ) {
             researchInstructions = {
-              message: "🔬 RESEARCH TASK DETECTED - RESEARCH REQUIRED FIRST",
+              message: '🔬 RESEARCH TASK DETECTED - RESEARCH REQUIRED FIRST',
               instructions: [
-                "📋 BEFORE IMPLEMENTATION: Perform comprehensive research",
-                "📁 CREATE research report in development/reports/ directory",
-                "🔍 ANALYZE existing solutions, best practices, and technical approaches",
-                "📊 DOCUMENT findings, recommendations, and implementation strategy",
-                "✅ COMPLETE research report before proceeding with implementation",
-                "🗂️ USE research findings to guide implementation decisions",
+                '📋 BEFORE IMPLEMENTATION: Perform comprehensive research',
+                '📁 CREATE research report in development/reports/ directory',
+                '🔍 ANALYZE existing solutions, best practices, and technical approaches',
+                '📊 DOCUMENT findings, recommendations, and implementation strategy',
+                '✅ COMPLETE research report before proceeding with implementation',
+                '🗂️ USE research findings to guide implementation decisions',
               ],
               reportTemplate: {
-                filename: `research-${claimedTask.title.toLowerCase().replace(/[^a-z0-9]/g, "-")}-${Date.now()}.md`,
-                directory: "development/reports/",
+                filename: `research-${claimedTask.title.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Date.now()}.md`,
+                directory: 'development/reports/',
                 sections: [
-                  "# Research Report: " + claimedTask.title,
-                  "## Overview",
-                  "## Current State Analysis",
-                  "## Research Findings",
-                  "## Technical Approaches",
-                  "## Recommendations",
-                  "## Implementation Strategy",
-                  "## References",
+                  '# Research Report: ' + claimedTask.title,
+                  '## Overview',
+                  '## Current State Analysis',
+                  '## Research Findings',
+                  '## Technical Approaches',
+                  '## Recommendations',
+                  '## Implementation Strategy',
+                  '## References',
                 ],
               },
             };
@@ -1869,7 +1869,7 @@ class TaskManagerAPI {
           if (
             !result.success &&
             result.reason &&
-            result.reason.includes("order violation")
+            result.reason.includes('order violation')
           ) {
             return {
               success: result.success,
@@ -1880,13 +1880,13 @@ class TaskManagerAPI {
               nextTaskTitle: result.nextTaskTitle,
               suggestion: result.suggestion,
               orderOverrideGuidance: {
-                message: "🔄 TASK ORDER OVERRIDE AVAILABLE",
+                message: '🔄 TASK ORDER OVERRIDE AVAILABLE',
                 instructions: [
-                  "📋 NORMAL: Complete the suggested task first (recommended for autonomous work)",
-                  "⚡ OVERRIDE: ALWAYS override when user explicitly requests a specific task",
+                  '📋 NORMAL: Complete the suggested task first (recommended for autonomous work)',
+                  '⚡ OVERRIDE: ALWAYS override when user explicitly requests a specific task',
                   `   • Use: await api.taskManager.claimTask('${taskId}', '${targetAgentId}', '${priority}', { allowOutOfOrder: true })`,
-                  "🎯 OVERRIDE REASONS: USER REQUEST (always), urgent fixes, independent work, research tasks",
-                  "⚠️  USER AUTHORITY: When user asks for specific task, override order - user intent takes precedence",
+                  '🎯 OVERRIDE REASONS: USER REQUEST (always), urgent fixes, independent work, research tasks',
+                  '⚠️  USER AUTHORITY: When user asks for specific task, override order - user intent takes precedence',
                 ],
                 codeExample: {
                   javascript: `// Override task order (required for user-requested tasks)\nconst overrideResult = await api.taskManager.claimTask('${taskId}', '${targetAgentId}', '${priority}', { allowOutOfOrder: true });`,
@@ -1910,13 +1910,13 @@ class TaskManagerAPI {
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
@@ -1925,7 +1925,7 @@ class TaskManagerAPI {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("task-operations");
+      guide = await this._getGuideForError('task-operations');
     } catch {
       // If guide fails, continue with operation without guide
     }
@@ -1943,7 +1943,7 @@ class TaskManagerAPI {
           );
           if (!evidenceValidation.isValid) {
             throw new Error(
-              `Evidence validation failed: ${evidenceValidation.errors.join(", ")}`,
+              `Evidence validation failed: ${evidenceValidation.errors.join(', ')}`,
             );
           }
 
@@ -1960,9 +1960,9 @@ class TaskManagerAPI {
           const taskCompletionRecord = {
             taskId,
             completedAt: completionTimestamp,
-            completedBy: task.assigned_agent || "unknown",
+            completedBy: task.assigned_agent || 'unknown',
             evidence: validatedCompletionData.evidence || {},
-            completionNotes: validatedCompletionData.notes || "",
+            completionNotes: validatedCompletionData.notes || '',
             category: task.category,
             priority: task.priority,
           };
@@ -1977,11 +1977,11 @@ class TaskManagerAPI {
           if (validatedCompletionData.notes) {
             await this.taskManager.updateTaskStatusConcurrent(
               taskId,
-              "completed",
+              'completed',
               validatedCompletionData.notes,
             );
           } else {
-            await this.taskManager.updateTaskStatus(taskId, "completed");
+            await this.taskManager.updateTaskStatus(taskId, 'completed');
           }
 
           let documentationInstructions = null;
@@ -1989,22 +1989,22 @@ class TaskManagerAPI {
           // Add documentation update instructions for feature and subtask types
           if (
             task &&
-            (task.category === "feature" || task.category === "subtask")
+            (task.category === 'feature' || task.category === 'subtask')
           ) {
             documentationInstructions = {
               mandatory: true,
-              message: "🔴 DOCUMENTATION UPDATE REQUIRED",
+              message: '🔴 DOCUMENTATION UPDATE REQUIRED',
               instructions: [
-                "📋 UPDATE development/essentials/features.md to reflect task completion",
-                "📝 UPDATE relevant API documentation if functionality was modified",
-                "✅ VERIFY documentation accuracy and completeness",
-                "📖 UPDATE README.md if user-facing features were added/modified",
-                "🔍 VALIDATE all documentation changes before final completion",
+                '📋 UPDATE development/essentials/features.md to reflect task completion',
+                '📝 UPDATE relevant API documentation if functionality was modified',
+                '✅ VERIFY documentation accuracy and completeness',
+                '📖 UPDATE README.md if user-facing features were added/modified',
+                '🔍 VALIDATE all documentation changes before final completion',
               ],
               files_to_update: [
-                "development/essentials/features.md",
-                "docs/ (relevant API documentation)",
-                "README.md (if user-facing changes)",
+                'development/essentials/features.md',
+                'docs/ (relevant API documentation)',
+                'README.md (if user-facing changes)',
               ],
             };
           }
@@ -2012,13 +2012,13 @@ class TaskManagerAPI {
           // Broadcast task completion via WebSocket if server is running
           const completionEvent = {
             taskId,
-            agentId: task.assigned_agent || "unknown",
+            agentId: task.assigned_agent || 'unknown',
             timestamp: completionTimestamp,
             category: task.category,
             priority: task.priority,
             title: task.title,
             evidence: validatedCompletionData.evidence || {},
-            completionNotes: validatedCompletionData.notes || "",
+            completionNotes: validatedCompletionData.notes || '',
           };
 
           const broadcastResult =
@@ -2033,8 +2033,8 @@ class TaskManagerAPI {
             documentationInstructions,
             broadcastStatus: broadcastResult,
             message: documentationInstructions
-              ? "Task marked complete. MANDATORY: Update documentation as instructed above."
-              : "Task marked complete successfully.",
+              ? 'Task marked complete. MANDATORY: Update documentation as instructed above.'
+              : 'Task marked complete successfully.',
           };
         })(),
       );
@@ -2042,13 +2042,13 @@ class TaskManagerAPI {
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
@@ -2063,7 +2063,7 @@ class TaskManagerAPI {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("task-operations");
+      guide = await this._getGuideForError('task-operations');
     } catch {
       // If guide fails, continue with operation without guide
     }
@@ -2087,10 +2087,10 @@ class TaskManagerAPI {
           const taskFailureRecord = {
             taskId,
             failedAt: failureTimestamp,
-            failedBy: task.assigned_agent || "unknown",
-            reason: validatedFailureData.reason || "Task execution failed",
+            failedBy: task.assigned_agent || 'unknown',
+            reason: validatedFailureData.reason || 'Task execution failed',
             error: validatedFailureData.error || null,
-            failureNotes: validatedFailureData.notes || "",
+            failureNotes: validatedFailureData.notes || '',
             category: task.category,
             priority: task.priority,
           };
@@ -2105,24 +2105,24 @@ class TaskManagerAPI {
           if (validatedFailureData.notes) {
             await this.taskManager.updateTaskStatusConcurrent(
               taskId,
-              "failed",
+              'failed',
               validatedFailureData.notes,
             );
           } else {
-            await this.taskManager.updateTaskStatus(taskId, "failed");
+            await this.taskManager.updateTaskStatus(taskId, 'failed');
           }
 
           // Broadcast task failure via WebSocket if server is running
           const failureEvent = {
             taskId,
-            agentId: task.assigned_agent || "unknown",
+            agentId: task.assigned_agent || 'unknown',
             timestamp: failureTimestamp,
             category: task.category,
             priority: task.priority,
             title: task.title,
-            reason: validatedFailureData.reason || "Task execution failed",
+            reason: validatedFailureData.reason || 'Task execution failed',
             error: validatedFailureData.error || null,
-            failureNotes: validatedFailureData.notes || "",
+            failureNotes: validatedFailureData.notes || '',
           };
 
           const broadcastResult = await this._broadcastTaskFailed(failureEvent);
@@ -2133,7 +2133,7 @@ class TaskManagerAPI {
             failureData: validatedFailureData,
             failureTimestamp,
             broadcastStatus: broadcastResult,
-            message: "Task marked as failed successfully.",
+            message: 'Task marked as failed successfully.',
           };
         })(),
       );
@@ -2141,13 +2141,13 @@ class TaskManagerAPI {
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
@@ -2165,20 +2165,20 @@ class TaskManagerAPI {
     }
 
     // Ensure it's an object
-    if (typeof failureData !== "object" || Array.isArray(failureData)) {
-      throw new Error("Failure data must be a valid object");
+    if (typeof failureData !== 'object' || Array.isArray(failureData)) {
+      throw new Error('Failure data must be a valid object');
     }
 
     const validated = {};
 
     // Validate and sanitize common failure fields
     const allowedFields = [
-      "reason",
-      "error",
-      "notes",
-      "details",
-      "stackTrace",
-      "source",
+      'reason',
+      'error',
+      'notes',
+      'details',
+      'stackTrace',
+      'source',
     ];
 
     for (const [key, value] of Object.entries(failureData)) {
@@ -2189,9 +2189,9 @@ class TaskManagerAPI {
       }
 
       // Sanitize string values
-      if (typeof value === "string") {
+      if (typeof value === 'string') {
         // Check for truncation indicators
-        if (value.includes("...") && value.length > 3) {
+        if (value.includes('...') && value.length > 3) {
           throw new Error(
             `Failure data field "${key}" appears to be truncated (contains "...")`,
           );
@@ -2212,9 +2212,9 @@ class TaskManagerAPI {
         // eslint-disable-next-line security/detect-object-injection -- key is from Object.entries, safe iteration
         validated[key] = value.filter(
           (item) =>
-            typeof item === "string" && item.length > 0 && item.length < 1000,
+            typeof item === 'string' && item.length > 0 && item.length < 1000,
         );
-      } else if (typeof value === "object" && value !== null) {
+      } else if (typeof value === 'object' && value !== null) {
         // Recursively validate nested objects (limited depth)
         try {
           // eslint-disable-next-line security/detect-object-injection -- key is from Object.entries, safe iteration
@@ -2247,21 +2247,21 @@ class TaskManagerAPI {
     }
 
     // Ensure it's an object
-    if (typeof completionData !== "object" || Array.isArray(completionData)) {
-      throw new Error("Completion data must be a valid object");
+    if (typeof completionData !== 'object' || Array.isArray(completionData)) {
+      throw new Error('Completion data must be a valid object');
     }
 
     const validated = {};
 
     // Validate and sanitize common fields
     const allowedFields = [
-      "notes",
-      "message",
-      "outcome",
-      "details",
-      "files_modified",
-      "evidence",
-      "metrics",
+      'notes',
+      'message',
+      'outcome',
+      'details',
+      'files_modified',
+      'evidence',
+      'metrics',
     ];
 
     for (const [key, value] of Object.entries(completionData)) {
@@ -2274,9 +2274,9 @@ class TaskManagerAPI {
       }
 
       // Sanitize string values
-      if (typeof value === "string") {
+      if (typeof value === 'string') {
         // Check for truncation indicators
-        if (value.includes("...") && value.length > 3) {
+        if (value.includes('...') && value.length > 3) {
           throw new Error(
             `Completion data field "${key}" appears to be truncated (contains "...")`,
           );
@@ -2295,9 +2295,9 @@ class TaskManagerAPI {
         // eslint-disable-next-line security/detect-object-injection -- key is from Object.entries, safe iteration
         validated[key] = value.filter(
           (item) =>
-            typeof item === "string" && item.length > 0 && item.length < 1000,
+            typeof item === 'string' && item.length > 0 && item.length < 1000,
         );
-      } else if (typeof value === "object" && value !== null) {
+      } else if (typeof value === 'object' && value !== null) {
         // Recursively validate nested objects (limited depth)
         try {
           // eslint-disable-next-line security/detect-object-injection -- key is from Object.entries, safe iteration
@@ -2334,7 +2334,7 @@ class TaskManagerAPI {
     if (!completionData.evidence) {
       validation.evidenceChecks.hasEvidence = false;
       validation.errors.push(
-        "No evidence provided - consider adding completion evidence for better tracking",
+        'No evidence provided - consider adding completion evidence for better tracking',
       );
       return validation; // Allow completion without evidence for backwards compatibility
     }
@@ -2344,11 +2344,11 @@ class TaskManagerAPI {
 
     // Validate common evidence fields
     const recommendedFields = [
-      "files_modified",
-      "tests_passed",
-      "build_status",
-      "linter_status",
-      "commit_hash",
+      'files_modified',
+      'tests_passed',
+      'build_status',
+      'linter_status',
+      'commit_hash',
     ];
 
     let foundRecommendedFields = 0;
@@ -2361,33 +2361,33 @@ class TaskManagerAPI {
 
         // Validate specific evidence types
         switch (field) {
-          case "files_modified":
+          case 'files_modified':
             // eslint-disable-next-line security/detect-object-injection -- Safe: field from predefined recommendedFields array
             if (!Array.isArray(evidence[field])) {
               validation.errors.push(
-                "files_modified must be an array of file paths",
+                'files_modified must be an array of file paths',
               );
               validation.isValid = false;
             }
             break;
-          case "tests_passed":
-          case "build_status":
-          case "linter_status":
+          case 'tests_passed':
+          case 'build_status':
+          case 'linter_status':
             // eslint-disable-next-line security/detect-object-injection -- Safe: field from predefined recommendedFields array
-            if (typeof evidence[field] !== "boolean") {
+            if (typeof evidence[field] !== 'boolean') {
               validation.errors.push(`${field} must be a boolean (true/false)`);
               validation.isValid = false;
             }
             break;
-          case "commit_hash":
+          case 'commit_hash':
             if (
               // eslint-disable-next-line security/detect-object-injection -- Safe: field from predefined recommendedFields array
-              typeof evidence[field] !== "string" ||
+              typeof evidence[field] !== 'string' ||
               // eslint-disable-next-line security/detect-object-injection -- Safe: field from predefined recommendedFields array
               !/^[a-f0-9]{7,40}$/i.test(evidence[field])
             ) {
               validation.errors.push(
-                "commit_hash must be a valid git commit hash (7-40 hex characters)",
+                'commit_hash must be a valid git commit hash (7-40 hex characters)',
               );
               validation.isValid = false;
             }
@@ -2402,7 +2402,7 @@ class TaskManagerAPI {
     // Encourage evidence completeness
     if (foundRecommendedFields === 0) {
       validation.errors.push(
-        "Consider providing structured evidence: files_modified, tests_passed, build_status, linter_status, commit_hash",
+        'Consider providing structured evidence: files_modified, tests_passed, build_status, linter_status, commit_hash',
       );
     }
 
@@ -2422,13 +2422,13 @@ class TaskManagerAPI {
     if (!this.isWebSocketRunning || this.webSocketClients.size === 0) {
       return {
         broadcast: false,
-        reason: "No WebSocket server or clients",
+        reason: 'No WebSocket server or clients',
         clientCount: 0,
       };
     }
 
     const message = {
-      type: "task_completed",
+      type: 'task_completed',
       timestamp: new Date().toISOString(),
       data: completionEvent,
     };
@@ -2452,7 +2452,7 @@ class TaskManagerAPI {
       successCount,
       errorCount,
       totalClients: successCount + errorCount,
-      eventType: "task_completed",
+      eventType: 'task_completed',
     };
   }
 
@@ -2505,7 +2505,7 @@ class TaskManagerAPI {
       agentId,
       capabilities: agent.capabilities || [],
       specialization: agent.specialization || [],
-      role: agent.role || "general",
+      role: agent.role || 'general',
     };
 
     // Validate restricted files (if specified)
@@ -2517,7 +2517,7 @@ class TaskManagerAPI {
 
       // Future enhancement: Check if agent has access to these files
       for (const restrictedFile of restrictions.restricted_files) {
-        if (typeof restrictedFile !== "string") {
+        if (typeof restrictedFile !== 'string') {
           validation.errors.push(
             `Invalid restricted file specification: ${restrictedFile}`,
           );
@@ -2543,7 +2543,7 @@ class TaskManagerAPI {
 
       // Enhanced folder restriction validation
       for (const restrictedFolder of restrictions.restricted_folders) {
-        if (typeof restrictedFolder !== "string") {
+        if (typeof restrictedFolder !== 'string') {
           validation.errors.push(
             `Invalid restricted folder specification: ${restrictedFolder}`,
           );
@@ -2552,7 +2552,7 @@ class TaskManagerAPI {
         }
 
         // Normalize folder path (ensure trailing slash for proper matching)
-        const normalizedFolder = restrictedFolder.endsWith("/")
+        const normalizedFolder = restrictedFolder.endsWith('/')
           ? restrictedFolder
           : `${restrictedFolder}/`;
 
@@ -2572,7 +2572,7 @@ class TaskManagerAPI {
       validation.scopeChecks.allowedFiles = restrictions.allowed_files;
 
       for (const allowedFile of restrictions.allowed_files) {
-        if (typeof allowedFile !== "string") {
+        if (typeof allowedFile !== 'string') {
           validation.errors.push(
             `Invalid allowed file specification: ${allowedFile}`,
           );
@@ -2589,7 +2589,7 @@ class TaskManagerAPI {
       validation.scopeChecks.allowedFolders = restrictions.allowed_folders;
 
       for (const allowedFolder of restrictions.allowed_folders) {
-        if (typeof allowedFolder !== "string") {
+        if (typeof allowedFolder !== 'string') {
           validation.errors.push(
             `Invalid allowed folder specification: ${allowedFolder}`,
           );
@@ -2598,7 +2598,7 @@ class TaskManagerAPI {
         }
 
         // Normalize folder path
-        const normalizedFolder = allowedFolder.endsWith("/")
+        const normalizedFolder = allowedFolder.endsWith('/')
           ? allowedFolder
           : `${allowedFolder}/`;
         validation.scopeChecks.allowedFolders[
@@ -2618,7 +2618,7 @@ class TaskManagerAPI {
       );
       if (conflicts.length > 0) {
         validation.errors.push(
-          `Scope conflict: Files cannot be both restricted and allowed: ${conflicts.join(", ")}`,
+          `Scope conflict: Files cannot be both restricted and allowed: ${conflicts.join(', ')}`,
         );
         validation.isValid = false;
       }
@@ -2631,11 +2631,11 @@ class TaskManagerAPI {
       // Check for conflicts between restricted and allowed folders
       const conflicts = validation.scopeChecks.restrictedFolders.filter(
         (folder) => {
-          const normalizedRestricted = folder.endsWith("/")
+          const normalizedRestricted = folder.endsWith('/')
             ? folder
             : `${folder}/`;
           return validation.scopeChecks.allowedFolders.some((allowed) => {
-            const normalizedAllowed = allowed.endsWith("/")
+            const normalizedAllowed = allowed.endsWith('/')
               ? allowed
               : `${allowed}/`;
             return normalizedRestricted === normalizedAllowed;
@@ -2644,7 +2644,7 @@ class TaskManagerAPI {
       );
       if (conflicts.length > 0) {
         validation.errors.push(
-          `Scope conflict: Folders cannot be both restricted and allowed: ${conflicts.join(", ")}`,
+          `Scope conflict: Folders cannot be both restricted and allowed: ${conflicts.join(', ')}`,
         );
         validation.isValid = false;
       }
@@ -2663,13 +2663,13 @@ class TaskManagerAPI {
     if (!this.isWebSocketRunning || this.webSocketClients.size === 0) {
       return {
         broadcast: false,
-        reason: "No WebSocket server or clients",
+        reason: 'No WebSocket server or clients',
         clientCount: 0,
       };
     }
 
     const message = {
-      type: "task_failed",
+      type: 'task_failed',
       timestamp: new Date().toISOString(),
       data: failureEvent,
     };
@@ -2693,7 +2693,7 @@ class TaskManagerAPI {
       successCount,
       errorCount,
       totalClients: successCount + errorCount,
-      eventType: "task_failed",
+      eventType: 'task_failed',
     };
   }
 
@@ -2710,21 +2710,21 @@ class TaskManagerAPI {
       restrictionTypes: [],
     };
 
-    if (!scopeRestrictions || typeof scopeRestrictions !== "object") {
+    if (!scopeRestrictions || typeof scopeRestrictions !== 'object') {
       validation.isValid = false;
-      validation.errors.push("scope_restrictions must be a valid object");
+      validation.errors.push('scope_restrictions must be a valid object');
       return validation;
     }
 
     // Validate restricted_files
     if (scopeRestrictions.restricted_files !== undefined) {
       if (!Array.isArray(scopeRestrictions.restricted_files)) {
-        validation.errors.push("restricted_files must be an array");
+        validation.errors.push('restricted_files must be an array');
         validation.isValid = false;
       } else {
-        validation.restrictionTypes.push("restricted_files");
+        validation.restrictionTypes.push('restricted_files');
         for (const file of scopeRestrictions.restricted_files) {
-          if (typeof file !== "string") {
+          if (typeof file !== 'string') {
             validation.errors.push(
               `Invalid file path in restricted_files: ${file}`,
             );
@@ -2737,12 +2737,12 @@ class TaskManagerAPI {
     // Validate restricted_folders - NEW FEATURE
     if (scopeRestrictions.restricted_folders !== undefined) {
       if (!Array.isArray(scopeRestrictions.restricted_folders)) {
-        validation.errors.push("restricted_folders must be an array");
+        validation.errors.push('restricted_folders must be an array');
         validation.isValid = false;
       } else {
-        validation.restrictionTypes.push("restricted_folders");
+        validation.restrictionTypes.push('restricted_folders');
         for (const folder of scopeRestrictions.restricted_folders) {
-          if (typeof folder !== "string") {
+          if (typeof folder !== 'string') {
             validation.errors.push(
               `Invalid folder path in restricted_folders: ${folder}`,
             );
@@ -2755,12 +2755,12 @@ class TaskManagerAPI {
     // Validate allowed_files
     if (scopeRestrictions.allowed_files !== undefined) {
       if (!Array.isArray(scopeRestrictions.allowed_files)) {
-        validation.errors.push("allowed_files must be an array");
+        validation.errors.push('allowed_files must be an array');
         validation.isValid = false;
       } else {
-        validation.restrictionTypes.push("allowed_files");
+        validation.restrictionTypes.push('allowed_files');
         for (const file of scopeRestrictions.allowed_files) {
-          if (typeof file !== "string") {
+          if (typeof file !== 'string') {
             validation.errors.push(
               `Invalid file path in allowed_files: ${file}`,
             );
@@ -2773,12 +2773,12 @@ class TaskManagerAPI {
     // Validate allowed_folders - NEW FEATURE
     if (scopeRestrictions.allowed_folders !== undefined) {
       if (!Array.isArray(scopeRestrictions.allowed_folders)) {
-        validation.errors.push("allowed_folders must be an array");
+        validation.errors.push('allowed_folders must be an array');
         validation.isValid = false;
       } else {
-        validation.restrictionTypes.push("allowed_folders");
+        validation.restrictionTypes.push('allowed_folders');
         for (const folder of scopeRestrictions.allowed_folders) {
-          if (typeof folder !== "string") {
+          if (typeof folder !== 'string') {
             validation.errors.push(
               `Invalid folder path in allowed_folders: ${folder}`,
             );
@@ -2795,7 +2795,7 @@ class TaskManagerAPI {
       );
       if (conflicts.length > 0) {
         validation.errors.push(
-          `Files cannot be both restricted and allowed: ${conflicts.join(", ")}`,
+          `Files cannot be both restricted and allowed: ${conflicts.join(', ')}`,
         );
         validation.isValid = false;
       }
@@ -2807,11 +2807,11 @@ class TaskManagerAPI {
     ) {
       const conflicts = scopeRestrictions.restricted_folders.filter(
         (folder) => {
-          const normalizedRestricted = folder.endsWith("/")
+          const normalizedRestricted = folder.endsWith('/')
             ? folder
             : `${folder}/`;
           return scopeRestrictions.allowed_folders.some((allowed) => {
-            const normalizedAllowed = allowed.endsWith("/")
+            const normalizedAllowed = allowed.endsWith('/')
               ? allowed
               : `${allowed}/`;
             return normalizedRestricted === normalizedAllowed;
@@ -2820,7 +2820,7 @@ class TaskManagerAPI {
       );
       if (conflicts.length > 0) {
         validation.errors.push(
-          `Folders cannot be both restricted and allowed: ${conflicts.join(", ")}`,
+          `Folders cannot be both restricted and allowed: ${conflicts.join(', ')}`,
         );
         validation.isValid = false;
       }
@@ -2833,7 +2833,7 @@ class TaskManagerAPI {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("task-operations");
+      guide = await this._getGuideForError('task-operations');
     } catch {
       // If guide fails, continue with operation without guide
     }
@@ -2848,7 +2848,7 @@ class TaskManagerAPI {
             return {
               success: false,
               error: `Task not found: ${taskId}`,
-              guide: guide || this._getFallbackGuide("task-operations"),
+              guide: guide || this._getFallbackGuide('task-operations'),
             };
           }
 
@@ -2874,7 +2874,7 @@ class TaskManagerAPI {
       if (result.success) {
         return {
           ...result,
-          guide: guide || this._getFallbackGuide("task-operations"),
+          guide: guide || this._getFallbackGuide('task-operations'),
         };
       }
       return result; // Already contains guide for error case
@@ -2882,7 +2882,7 @@ class TaskManagerAPI {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
@@ -2892,7 +2892,7 @@ class TaskManagerAPI {
     let guide = null;
     try {
       // Use agent-related context for status commands
-      guide = await this._getGuideForError("agent-init");
+      guide = await this._getGuideForError('agent-init');
     } catch {
       // If guide fails, continue with operation without guide
     }
@@ -2903,7 +2903,7 @@ class TaskManagerAPI {
           // Agent ID is always required - no auto-detection fallback
           if (!agentId) {
             throw new Error(
-              "Agent ID is required - must be provided explicitly",
+              'Agent ID is required - must be provided explicitly',
             );
           }
           const targetAgentId = agentId;
@@ -2923,13 +2923,13 @@ class TaskManagerAPI {
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("agent-init"),
+        guide: guide || this._getFallbackGuide('agent-init'),
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("agent-init"),
+        guide: guide || this._getFallbackGuide('agent-init'),
       };
     }
   }
@@ -2938,7 +2938,7 @@ class TaskManagerAPI {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("agent-reinit");
+      guide = await this._getGuideForError('agent-reinit');
     } catch {
       // If guide fails, continue with reinitialization without guide
     }
@@ -2949,7 +2949,7 @@ class TaskManagerAPI {
           // Agent ID is required for reinitialize - no auto-detection
           if (!agentId) {
             throw new Error(
-              "Agent ID is required - must be provided explicitly for reinitialization",
+              'Agent ID is required - must be provided explicitly for reinitialization',
             );
           }
           const targetAgentId = agentId;
@@ -2984,7 +2984,7 @@ class TaskManagerAPI {
             agent: result.agent,
             renewed: result.renewed,
             message:
-              "Agent reinitialized successfully - heartbeat renewed and timeout reset",
+              'Agent reinitialized successfully - heartbeat renewed and timeout reset',
           };
         })(),
       );
@@ -2992,28 +2992,28 @@ class TaskManagerAPI {
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("agent-reinit"),
+        guide: guide || this._getFallbackGuide('agent-reinit'),
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("agent-reinit"),
+        guide: guide || this._getFallbackGuide('agent-reinit'),
       };
     }
   }
 
   /**
-   * Smart reinitialization that handles all agent scenarios intelligently
-   * @param {string} agentId - Optional explicit agent ID
+   * Reinitialization that requires explicit agent ID (no autodetect)
+   * @param {string} agentId - Required explicit agent ID
    * @param {Object} config - Agent configuration overrides
-   * @returns {Promise<Object>} Reinitialization result with scenario detection
+   * @returns {Promise<Object>} Reinitialization result
    */
   async smartReinitializeAgent(agentId, config = {}) {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("agent-reinit");
+      guide = await this._getGuideForError('agent-reinit');
     } catch {
       // If guide fails, continue with reinitialization without guide
     }
@@ -3021,108 +3021,48 @@ class TaskManagerAPI {
     try {
       const result = await this.withTimeout(
         (async () => {
-          let detectedScenario = "unknown";
-          let selectedAgentId = agentId;
-
-          // Scenario 1: Explicit agent ID provided
-          if (agentId) {
-            detectedScenario = "explicit_agent_provided";
-
-            // Verify the agent exists
-            const agent = await this.agentManager.getAgent(agentId);
-            if (!agent) {
-              throw new Error(
-                `Agent ${agentId} not found. Use 'init' to create a new agent or check available agents.`,
-              );
-            }
-
-            return this._performReinitializeWithScenario(
-              agentId,
-              config,
-              detectedScenario,
-              guide,
+          // Agent ID is required - no auto-detection allowed
+          if (!agentId) {
+            throw new Error(
+              'Agent ID is required - must be provided explicitly for reinitialization.\n' +
+                'Usage: Provide your agent ID from a previous session.\n' +
+                '\nTo find your agent ID:\n' +
+                '1. Run: list-agents command\n' +
+                '2. Copy the agentId from the output\n' +
+                '3. Use that agentId in your reinitialize command\n' +
+                "\nIf no agents exist, use 'init' to create a new agent first.",
             );
           }
 
-          // Scenario 2: Auto-detect stored agent ID
-          if (this.agentId) {
-            selectedAgentId = this.agentId;
-            detectedScenario = "using_stored_agent_id";
+          const detectedScenario = 'explicit_agent_required';
 
-            try {
-              const agent = await this.agentManager.getAgent(selectedAgentId);
-              if (agent) {
-                return this._performReinitializeWithScenario(
-                  selectedAgentId,
-                  config,
-                  detectedScenario,
-                  guide,
-                );
-              }
-            } catch {
-              // Stored agent ID is stale, continue to other scenarios
-            }
-          }
-
-          // Scenario 3: Look for existing active agents
-          const cleanupResult = await this.agentManager.cleanupStaleAgents();
-          const bestAgent =
-            await this.agentManager.findBestAgentForReinitialization(
-              config.role || "development",
-            );
-
-          if (bestAgent) {
-            selectedAgentId = bestAgent.agentId;
-            detectedScenario = "auto_detected_best_agent";
-
-            return this._performReinitializeWithScenario(
-              selectedAgentId,
-              config,
-              detectedScenario,
-              guide,
-              {
-                cleanedStaleAgents: cleanupResult.cleanedCount,
-                agentSelectionReason:
-                  bestAgent.agent.role === (config.role || "development")
-                    ? "role_match"
-                    : "most_recent",
-              },
+          // Verify the agent exists
+          const agent = await this.agentManager.getAgent(agentId);
+          if (!agent) {
+            throw new Error(
+              `Agent ${agentId} not found. Use 'init' to create a new agent or check available agents with 'list-agents'.`,
             );
           }
 
-          // Scenario 4: No agents found, auto-fallback to init
-          if (cleanupResult.cleanedCount > 0) {
-            detectedScenario = "auto_init_after_cleanup";
-          } else {
-            detectedScenario = "auto_init_fresh_project";
-          }
-
-          // Initialize new agent instead
-          const initResult = await this.initAgent(config);
-
-          return {
-            success: true,
-            scenario: detectedScenario,
-            agentId: initResult.agentId,
-            agent: initResult.agent,
-            autoInitialized: true,
-            cleanedStaleAgents: cleanupResult.cleanedCount,
-            message: `No active agents found. Auto-initialized new agent: ${initResult.agentId}`,
-            fallbackToInit: true,
-          };
+          return this._performReinitializeWithScenario(
+            agentId,
+            config,
+            detectedScenario,
+            guide,
+          );
         })(),
       );
 
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("agent-reinit"),
+        guide: guide || this._getFallbackGuide('agent-reinit'),
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("agent-reinit"),
+        guide: guide || this._getFallbackGuide('agent-reinit'),
       };
     }
   }
@@ -3148,7 +3088,7 @@ class TaskManagerAPI {
       };
     }
 
-    throw new Error(reinitResult.error || "Reinitialization failed");
+    throw new Error(reinitResult.error || 'Reinitialization failed');
   }
 
   /**
@@ -3159,7 +3099,7 @@ class TaskManagerAPI {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("agent-operations");
+      guide = await this._getGuideForError('agent-operations');
     } catch {
       // If guide fails, continue with operation without guide
     }
@@ -3186,7 +3126,7 @@ class TaskManagerAPI {
             message:
               activeAgents.length === 0
                 ? "No active agents found. Use 'init' to create a new agent."
-                : `Found ${activeAgents.length} active agent${activeAgents.length === 1 ? "" : "s"}.`,
+                : `Found ${activeAgents.length} active agent${activeAgents.length === 1 ? '' : 's'}.`,
           };
         })(),
       );
@@ -3194,13 +3134,13 @@ class TaskManagerAPI {
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("agent-operations"),
+        guide: guide || this._getFallbackGuide('agent-operations'),
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("agent-operations"),
+        guide: guide || this._getFallbackGuide('agent-operations'),
       };
     }
   }
@@ -3209,7 +3149,7 @@ class TaskManagerAPI {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("general");
+      guide = await this._getGuideForError('general');
     } catch {
       // If guide fails, continue with operation without guide
     }
@@ -3229,13 +3169,13 @@ class TaskManagerAPI {
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("general"),
+        guide: guide || this._getFallbackGuide('general'),
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("general"),
+        guide: guide || this._getFallbackGuide('general'),
       };
     }
   }
@@ -3245,7 +3185,7 @@ class TaskManagerAPI {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("task-operations");
+      guide = await this._getGuideForError('task-operations');
     } catch {
       // If guide fails, continue with operation without guide
     }
@@ -3265,13 +3205,13 @@ class TaskManagerAPI {
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
@@ -3280,7 +3220,7 @@ class TaskManagerAPI {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("task-operations");
+      guide = await this._getGuideForError('task-operations');
     } catch {
       // If guide fails, continue with operation without guide
     }
@@ -3300,13 +3240,13 @@ class TaskManagerAPI {
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
@@ -3315,7 +3255,7 @@ class TaskManagerAPI {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("task-operations");
+      guide = await this._getGuideForError('task-operations');
     } catch {
       // If guide fails, continue with operation without guide
     }
@@ -3335,13 +3275,13 @@ class TaskManagerAPI {
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
@@ -3350,7 +3290,7 @@ class TaskManagerAPI {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("task-operations");
+      guide = await this._getGuideForError('task-operations');
     } catch {
       // If guide fails, continue with operation without guide
     }
@@ -3370,13 +3310,13 @@ class TaskManagerAPI {
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
@@ -3390,7 +3330,7 @@ class TaskManagerAPI {
    */
   _checkResearchRequirements(task, todoData) {
     // Only suggest research for implementation-focused tasks
-    const implementationCategories = ["missing-feature", "enhancement", "bug"];
+    const implementationCategories = ['missing-feature', 'enhancement', 'bug'];
     if (!implementationCategories.includes(task.category)) {
       return { suggestResearch: false };
     }
@@ -3421,30 +3361,30 @@ class TaskManagerAPI {
     // Check if there are related research tasks already completed
     const relatedResearchTasks = todoData.tasks.filter(
       (t) =>
-        t.category === "research" &&
-        t.status === "completed" &&
+        t.category === 'research' &&
+        t.status === 'completed' &&
         this._isTaskRelated(task, t),
     );
 
     if (hasComplexityIndicators && relatedResearchTasks.length === 0) {
       return {
         suggestResearch: true,
-        reason: "Task appears complex and might benefit from research",
+        reason: 'Task appears complex and might benefit from research',
         complexityFactors: this._identifyComplexityFactors(taskText),
         suggestions: {
-          message: "🔬 RESEARCH RECOMMENDED BEFORE IMPLEMENTATION",
+          message: '🔬 RESEARCH RECOMMENDED BEFORE IMPLEMENTATION',
           instructions: [
-            "📋 CONSIDER creating a research task first to:",
-            "🔍 INVESTIGATE best practices and technical approaches",
-            "📚 RESEARCH existing solutions and patterns",
-            "🎯 DEFINE implementation strategy and requirements",
-            "✅ CREATE research task or proceed if confident",
+            '📋 CONSIDER creating a research task first to:',
+            '🔍 INVESTIGATE best practices and technical approaches',
+            '📚 RESEARCH existing solutions and patterns',
+            '🎯 DEFINE implementation strategy and requirements',
+            '✅ CREATE research task or proceed if confident',
           ],
           researchTaskTemplate: {
             title: `Research: ${task.title}`,
             description: `Research technical approaches, best practices, and implementation strategies for: ${task.description}`,
-            category: "research",
-            mode: "RESEARCH",
+            category: 'research',
+            mode: 'RESEARCH',
           },
           createResearchCommand: `node taskmanager-api.js create '{"title": "Research: ${task.title}", "description": "Research technical approaches and implementation strategies", "category": "research", "mode": "RESEARCH"}'`,
         },
@@ -3462,7 +3402,7 @@ class TaskManagerAPI {
     const extractKeywords = (text) => {
       return text
         .toLowerCase()
-        .replace(/[^\w\s]/g, " ")
+        .replace(/[^\w\s]/g, ' ')
         .split(/\s+/)
         .filter((word) => word.length > 3);
     };
@@ -3488,19 +3428,19 @@ class TaskManagerAPI {
     const factors = [];
 
     if (/api|integration|endpoint/.test(taskText)) {
-      factors.push("API/Integration complexity");
+      factors.push('API/Integration complexity');
     }
     if (/auth|oauth|jwt|security/.test(taskText)) {
-      factors.push("Authentication/Security requirements");
+      factors.push('Authentication/Security requirements');
     }
     if (/database|schema|migration/.test(taskText)) {
-      factors.push("Database/Schema complexity");
+      factors.push('Database/Schema complexity');
     }
     if (/external|third.?party/.test(taskText)) {
-      factors.push("External service dependencies");
+      factors.push('External service dependencies');
     }
     if (/performance|scalability/.test(taskText)) {
-      factors.push("Performance/Scalability considerations");
+      factors.push('Performance/Scalability considerations');
     }
 
     return factors;
@@ -3518,10 +3458,10 @@ class TaskManagerAPI {
     try {
       // Validate input parameters
       if (!taskId) {
-        throw new Error("Task ID is required for progress update");
+        throw new Error('Task ID is required for progress update');
       }
-      if (!updateData || typeof updateData !== "object") {
-        throw new Error("Update data must be a valid object");
+      if (!updateData || typeof updateData !== 'object') {
+        throw new Error('Update data must be a valid object');
       }
 
       // Read current TODO data to validate task exists
@@ -3535,12 +3475,12 @@ class TaskManagerAPI {
       const progressUpdate = {
         taskId,
         timestamp: new Date().toISOString(),
-        message: updateData.message || "Progress update",
+        message: updateData.message || 'Progress update',
         percentComplete:
           updateData.percent_complete || updateData.percentComplete || 0,
-        phase: updateData.phase || "unknown",
+        phase: updateData.phase || 'unknown',
         details: updateData.details || {},
-        agentId: updateData.agentId || task.assigned_agent || "unknown",
+        agentId: updateData.agentId || task.assigned_agent || 'unknown',
       };
 
       // Store progress update in task history (if task has progress_history field)
@@ -3582,9 +3522,9 @@ class TaskManagerAPI {
       if (this.isWebSocketRunning) {
         return {
           success: true,
-          message: "WebSocket server is already running",
+          message: 'WebSocket server is already running',
           port: this.currentPort,
-          status: "already_running",
+          status: 'already_running',
         };
       }
 
@@ -3593,7 +3533,7 @@ class TaskManagerAPI {
       this.currentPort = port;
 
       // Handle WebSocket upgrade manually (simplified implementation)
-      this.httpServer.on("upgrade", (request, socket, head) => {
+      this.httpServer.on('upgrade', (request, socket, head) => {
         this._handleWebSocketUpgrade(request, socket, head);
       });
 
@@ -3614,7 +3554,7 @@ class TaskManagerAPI {
         success: true,
         message: `WebSocket server started on port ${port}`,
         port,
-        status: "started",
+        status: 'started',
         clientCount: this.webSocketClients.size,
       };
     } catch (error) {
@@ -3631,8 +3571,8 @@ class TaskManagerAPI {
       if (!this.isWebSocketRunning) {
         return {
           success: true,
-          message: "WebSocket server is not running",
-          status: "not_running",
+          message: 'WebSocket server is not running',
+          status: 'not_running',
         };
       }
 
@@ -3659,8 +3599,8 @@ class TaskManagerAPI {
 
       return {
         success: true,
-        message: "WebSocket server stopped",
-        status: "stopped",
+        message: 'WebSocket server stopped',
+        status: 'stopped',
       };
     } catch (error) {
       throw new Error(`Failed to stop WebSocket server: ${error.message}`);
@@ -3677,7 +3617,7 @@ class TaskManagerAPI {
       isRunning: this.isWebSocketRunning,
       port: this.currentPort || null,
       clientCount: this.webSocketClients.size,
-      status: this.isWebSocketRunning ? "running" : "stopped",
+      status: this.isWebSocketRunning ? 'running' : 'stopped',
     };
   }
 
@@ -3688,25 +3628,25 @@ class TaskManagerAPI {
   _handleWebSocketUpgrade(request, socket, _head) {
     try {
       // WebSocket handshake (simplified)
-      const key = request.headers["sec-websocket-key"];
+      const key = request.headers['sec-websocket-key'];
       if (!key) {
-        socket.end("HTTP/1.1 400 Bad Request\r\n\r\n");
+        socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
         return;
       }
 
       const acceptKey = crypto
-        .createHash("sha1")
-        .update(key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11")
-        .digest("base64");
+        .createHash('sha1')
+        .update(key + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11')
+        .digest('base64');
 
       const responseHeaders = [
-        "HTTP/1.1 101 Switching Protocols",
-        "Upgrade: websocket",
-        "Connection: Upgrade",
+        'HTTP/1.1 101 Switching Protocols',
+        'Upgrade: websocket',
+        'Connection: Upgrade',
         `Sec-WebSocket-Accept: ${acceptKey}`,
-        "",
-        "",
-      ].join("\r\n");
+        '',
+        '',
+      ].join('\r\n');
 
       socket.write(responseHeaders);
 
@@ -3714,22 +3654,22 @@ class TaskManagerAPI {
       this.webSocketClients.add(socket);
 
       // Handle client disconnect
-      socket.on("close", () => {
+      socket.on('close', () => {
         this.webSocketClients.delete(socket);
       });
 
-      socket.on("error", () => {
+      socket.on('error', () => {
         this.webSocketClients.delete(socket);
       });
 
       // Send welcome message
       this._sendWebSocketMessage(socket, {
-        type: "welcome",
-        message: "Connected to TaskManager WebSocket",
+        type: 'welcome',
+        message: 'Connected to TaskManager WebSocket',
         timestamp: new Date().toISOString(),
       });
     } catch {
-      socket.end("HTTP/1.1 500 Internal Server Error\r\n\r\n");
+      socket.end('HTTP/1.1 500 Internal Server Error\r\n\r\n');
     }
   }
 
@@ -3772,13 +3712,13 @@ class TaskManagerAPI {
     if (!this.isWebSocketRunning || this.webSocketClients.size === 0) {
       return {
         broadcast: false,
-        reason: "No WebSocket server or clients",
+        reason: 'No WebSocket server or clients',
         clientCount: 0,
       };
     }
 
     const message = {
-      type: "progress_update",
+      type: 'progress_update',
       data: progressUpdate,
       timestamp: new Date().toISOString(),
     };
@@ -3865,7 +3805,7 @@ class TaskManagerAPI {
     // Get guide information for all responses (both success and error)
     let guide = null;
     try {
-      guide = await this._getGuideForError("task-operations");
+      guide = await this._getGuideForError('task-operations');
     } catch {
       // If guide fails, continue with operation without guide
     }
@@ -3876,7 +3816,7 @@ class TaskManagerAPI {
           // Set defaults for swarm operation
           const {
             agentId = null,
-            categories = ["error", "feature", "subtask", "test"],
+            categories = ['error', 'feature', 'subtask', 'test'],
             specializations = [],
             limit = 10,
             includeBlocked = false,
@@ -3890,12 +3830,12 @@ class TaskManagerAPI {
           const todoData = await this.taskManager.readTodo(true);
           const claimedTaskIds = new Set(
             todoData.tasks
-              .filter((t) => t.status === "in_progress" && t.assigned_agent)
+              .filter((t) => t.status === 'in_progress' && t.assigned_agent)
               .map((t) => t.id),
           );
 
           availableTasks = availableTasks.filter(
-            (task) => task.status === "pending" && !claimedTaskIds.has(task.id),
+            (task) => task.status === 'pending' && !claimedTaskIds.has(task.id),
           );
 
           // Apply category filtering for agent specialization
@@ -3915,7 +3855,7 @@ class TaskManagerAPI {
               // Check if all dependencies are completed
               return task.dependencies.every((depId) => {
                 const depTask = todoData.tasks.find((t) => t.id === depId);
-                return depTask && depTask.status === "completed";
+                return depTask && depTask.status === 'completed';
               });
             });
           }
@@ -3940,12 +3880,12 @@ class TaskManagerAPI {
                 task.requires_research || this._detectResearchNeeds(task),
               blockedDependencies: (task.dependencies || []).filter((depId) => {
                 const depTask = todoData.tasks.find((t) => t.id === depId);
-                return !depTask || depTask.status !== "completed";
+                return !depTask || depTask.status !== 'completed';
               }),
               claimingInstructions: {
-                command: `timeout 10s node "${__filename}" claim ${task.id} ${agentId || "<your-agent-id>"}`,
-                requiredParameters: ["taskId", "agentId"],
-                optionalParameters: ["priority"],
+                command: `timeout 10s node "${__filename}" claim ${task.id} ${agentId || '<your-agent-id>'}`,
+                requiredParameters: ['taskId', 'agentId'],
+                optionalParameters: ['priority'],
               },
             };
 
@@ -3961,24 +3901,24 @@ class TaskManagerAPI {
             totalClaimedTasks: claimedTaskIds.size,
             nextRecommendedTask: enhancedTasks[0] || null,
             taskDistribution: {
-              error: enhancedTasks.filter((t) => t.category === "error").length,
-              feature: enhancedTasks.filter((t) => t.category === "feature")
+              error: enhancedTasks.filter((t) => t.category === 'error').length,
+              feature: enhancedTasks.filter((t) => t.category === 'feature')
                 .length,
-              subtask: enhancedTasks.filter((t) => t.category === "subtask")
+              subtask: enhancedTasks.filter((t) => t.category === 'subtask')
                 .length,
-              test: enhancedTasks.filter((t) => t.category === "test").length,
+              test: enhancedTasks.filter((t) => t.category === 'test').length,
             },
             agentGuidance: {
               message:
                 enhancedTasks.length > 0
-                  ? "🤖 SWARM READY - Tasks available for autonomous execution"
-                  : "⏳ SWARM IDLE - No available tasks at this time",
+                  ? '🤖 SWARM READY - Tasks available for autonomous execution'
+                  : '⏳ SWARM IDLE - No available tasks at this time',
               nextAction:
                 enhancedTasks.length > 0
                   ? `Claim highest priority task: ${enhancedTasks[0].id}`
-                  : "Wait for new tasks or check if initialization is needed",
+                  : 'Wait for new tasks or check if initialization is needed',
               workflowTip:
-                "Agents should claim tasks immediately in priority order for optimal swarm coordination",
+                'Agents should claim tasks immediately in priority order for optimal swarm coordination',
             },
           };
 
@@ -4001,7 +3941,7 @@ class TaskManagerAPI {
       // Add guide to success response
       return {
         ...result,
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     } catch (error) {
       return {
@@ -4009,14 +3949,14 @@ class TaskManagerAPI {
         error: error.message,
         swarmCoordination: {
           agentGuidance: {
-            message: "🔥 SWARM ERROR - Unable to fetch available tasks",
+            message: '🔥 SWARM ERROR - Unable to fetch available tasks',
             nextAction:
-              "Check agent initialization and TaskManager connectivity",
+              'Check agent initialization and TaskManager connectivity',
             workflowTip:
-              "Ensure agent is properly initialized before querying for tasks",
+              'Ensure agent is properly initialized before querying for tasks',
           },
         },
-        guide: guide || this._getFallbackGuide("task-operations"),
+        guide: guide || this._getFallbackGuide('task-operations'),
       };
     }
   }
@@ -4043,7 +3983,7 @@ class TaskManagerAPI {
   _estimateTaskComplexity(task) {
     const text = `${task.title} ${task.description}`.toLowerCase();
 
-    let complexity = "low";
+    let complexity = 'low';
     let score = 0;
 
     // Complexity indicators
@@ -4061,11 +4001,11 @@ class TaskManagerAPI {
     score = highMatches * 3 + mediumMatches * 2 + lowMatches * 1;
 
     if (score >= 6) {
-      complexity = "high";
+      complexity = 'high';
     } else if (score >= 3) {
-      complexity = "medium";
+      complexity = 'medium';
     } else {
-      complexity = "low";
+      complexity = 'low';
     }
 
     return complexity;
@@ -4087,24 +4027,24 @@ class TaskManagerAPI {
   async cleanup() {
     try {
       // Cleanup in proper order with sufficient time
-      if (this.taskManager && typeof this.taskManager.cleanup === "function") {
+      if (this.taskManager && typeof this.taskManager.cleanup === 'function') {
         await this.taskManager.cleanup();
       }
       if (
         this.agentManager &&
-        typeof this.agentManager.cleanup === "function"
+        typeof this.agentManager.cleanup === 'function'
       ) {
         await this.agentManager.cleanup();
       }
       if (
         this.orchestrator &&
-        typeof this.orchestrator.cleanup === "function"
+        typeof this.orchestrator.cleanup === 'function'
       ) {
         await this.orchestrator.cleanup();
       }
     } catch (error) {
       // Log cleanup warnings through proper error handling
-      this.taskManager?.logger?.logError?.(error, "cleanup") || (() => {})();
+      this.taskManager?.logger?.logError?.(error, 'cleanup') || (() => {})();
     }
 
     // Return instead of using process.exit for better error handling
@@ -4125,7 +4065,7 @@ class TaskManagerAPI {
       guide = await this._getCachedGuide();
 
       // Validate subtask type
-      if (!["research", "audit"].includes(subtaskType)) {
+      if (!['research', 'audit'].includes(subtaskType)) {
         throw new Error(
           `Invalid subtask type: ${subtaskType}. Must be 'research' or 'audit'`,
         );
@@ -4146,87 +4086,87 @@ class TaskManagerAPI {
 
       let newSubtask;
 
-      if (subtaskType === "research") {
+      if (subtaskType === 'research') {
         newSubtask = {
           id: subtaskId,
-          type: "research",
+          type: 'research',
           title: `Research: ${parentTask.title}`,
           description: `Comprehensive research for ${parentTask.title} to support implementation`,
-          status: "pending",
+          status: 'pending',
           estimated_hours: 1,
           research_locations: [
             {
-              type: "codebase",
-              paths: subtaskData.codebasePaths || ["/lib", "/src", "/"],
-              focus: "Existing implementation patterns and architecture",
+              type: 'codebase',
+              paths: subtaskData.codebasePaths || ['/lib', '/src', '/'],
+              focus: 'Existing implementation patterns and architecture',
             },
             {
-              type: "internet",
+              type: 'internet',
               keywords:
                 subtaskData.keywords || this._extractKeywords(parentTask.title),
               focus:
-                "Best practices, industry standards, and technical specifications",
+                'Best practices, industry standards, and technical specifications',
             },
             {
-              type: "documentation",
+              type: 'documentation',
               sources: [
-                "README.md",
-                "docs/",
-                "API documentation",
-                "package.json",
+                'README.md',
+                'docs/',
+                'API documentation',
+                'package.json',
               ],
-              focus: "Project configuration and existing documentation",
+              focus: 'Project configuration and existing documentation',
             },
           ],
           deliverables: [
-            "Technical analysis report",
-            "Implementation recommendations",
-            "Risk assessment",
-            "Alternative approaches evaluation",
+            'Technical analysis report',
+            'Implementation recommendations',
+            'Risk assessment',
+            'Alternative approaches evaluation',
           ],
           prevents_implementation: true,
           created_at: timestamp,
           ...subtaskData,
         };
-      } else if (subtaskType === "audit") {
+      } else if (subtaskType === 'audit') {
         newSubtask = {
           id: subtaskId,
-          type: "audit",
+          type: 'audit',
           title: `Audit: ${parentTask.title}`,
           description: `Comprehensive quality audit and review of the completed feature: ${parentTask.title}\n\nOriginal Description: ${parentTask.description}`,
-          status: "pending",
+          status: 'pending',
           estimated_hours: 0.5,
           success_criteria: [
-            "Linter Perfection",
-            "Build Success",
-            "Runtime Success",
-            "Test Integrity",
-            "Function Documentation",
-            "API Documentation",
-            "Architecture Documentation",
-            "Decision Rationale",
-            "Error Handling",
-            "Performance Metrics",
-            "Security Review",
-            "Architectural Consistency",
-            "Dependency Validation",
-            "Version Compatibility",
-            "Security Audit",
-            "Cross-Platform",
-            "Environment Variables",
-            "Configuration",
-            "No Credential Exposure",
-            "Input Validation",
-            "Output Encoding",
-            "Authentication/Authorization",
-            "License Compliance",
-            "Data Privacy",
-            "Regulatory Compliance",
+            'Linter Perfection',
+            'Build Success',
+            'Runtime Success',
+            'Test Integrity',
+            'Function Documentation',
+            'API Documentation',
+            'Architecture Documentation',
+            'Decision Rationale',
+            'Error Handling',
+            'Performance Metrics',
+            'Security Review',
+            'Architectural Consistency',
+            'Dependency Validation',
+            'Version Compatibility',
+            'Security Audit',
+            'Cross-Platform',
+            'Environment Variables',
+            'Configuration',
+            'No Credential Exposure',
+            'Input Validation',
+            'Output Encoding',
+            'Authentication/Authorization',
+            'License Compliance',
+            'Data Privacy',
+            'Regulatory Compliance',
           ],
           prevents_completion: true,
           original_implementer: null,
           prevents_self_review: true,
-          audit_type: "embedded_quality_gate",
+          audit_type: 'embedded_quality_gate',
           created_at: timestamp,
           ...subtaskData,
         };
@@ -4253,10 +4193,10 @@ class TaskManagerAPI {
         guide,
       };
     } catch (error) {
-      guide = guide || (await this._getGuideForError("task-operations"));
+      guide = guide || (await this._getGuideForError('task-operations'));
       const enhancedError = new Error(error.message);
       enhancedError.context = {
-        operation: "createSubtask",
+        operation: 'createSubtask',
         taskId,
         subtaskType,
         timestamp: new Date().toISOString(),
@@ -4294,10 +4234,10 @@ class TaskManagerAPI {
         guide,
       };
     } catch (error) {
-      guide = guide || (await this._getGuideForError("task-operations"));
+      guide = guide || (await this._getGuideForError('task-operations'));
       const enhancedError = new Error(error.message);
       enhancedError.context = {
-        operation: "listSubtasks",
+        operation: 'listSubtasks',
         taskId,
         timestamp: new Date().toISOString(),
         guide,
@@ -4355,14 +4295,14 @@ class TaskManagerAPI {
         subtaskId,
         originalSubtask,
         updatedSubtask: parentTask.subtasks[subtaskIndex],
-        message: "Subtask updated successfully",
+        message: 'Subtask updated successfully',
         guide,
       };
     } catch (error) {
-      guide = guide || (await this._getGuideForError("task-operations"));
+      guide = guide || (await this._getGuideForError('task-operations'));
       const enhancedError = new Error(error.message);
       enhancedError.context = {
-        operation: "updateSubtask",
+        operation: 'updateSubtask',
         taskId,
         subtaskId,
         timestamp: new Date().toISOString(),
@@ -4414,14 +4354,14 @@ class TaskManagerAPI {
         taskId,
         subtaskId,
         deletedSubtask,
-        message: "Subtask deleted successfully",
+        message: 'Subtask deleted successfully',
         guide,
       };
     } catch (error) {
-      guide = guide || (await this._getGuideForError("task-operations"));
+      guide = guide || (await this._getGuideForError('task-operations'));
       const enhancedError = new Error(error.message);
       enhancedError.context = {
-        operation: "deleteSubtask",
+        operation: 'deleteSubtask',
         taskId,
         subtaskId,
         timestamp: new Date().toISOString(),
@@ -4443,7 +4383,7 @@ class TaskManagerAPI {
     try {
       guide = await this._getCachedGuide();
 
-      if (!["task", "project"].includes(targetType)) {
+      if (!['task', 'project'].includes(targetType)) {
         throw new Error(
           `Invalid target type: ${targetType}. Must be 'task' or 'project'`,
         );
@@ -4452,10 +4392,10 @@ class TaskManagerAPI {
       const todoData = await this.taskManager.readTodo(true);
       const tasks = todoData.tasks || [];
 
-      if (targetType === "task") {
+      if (targetType === 'task') {
         if (!targetId) {
           throw new Error(
-            "Task ID required for task-specific success criteria",
+            'Task ID required for task-specific success criteria',
           );
         }
 
@@ -4489,7 +4429,7 @@ class TaskManagerAPI {
           targetId,
           addedCriteria: criteriaData,
           totalCriteria: task.success_criteria.length,
-          message: "Success criteria added to task successfully",
+          message: 'Success criteria added to task successfully',
           guide,
         };
       } else {
@@ -4518,15 +4458,15 @@ class TaskManagerAPI {
           targetType,
           addedCriteria: criteriaData,
           totalCriteria: todoData.project_success_criteria.length,
-          message: "Success criteria added to project successfully",
+          message: 'Success criteria added to project successfully',
           guide,
         };
       }
     } catch (error) {
-      guide = guide || (await this._getGuideForError("task-operations"));
+      guide = guide || (await this._getGuideForError('task-operations'));
       const enhancedError = new Error(error.message);
       enhancedError.context = {
-        operation: "addSuccessCriteria",
+        operation: 'addSuccessCriteria',
         targetType,
         targetId,
         timestamp: new Date().toISOString(),
@@ -4547,16 +4487,16 @@ class TaskManagerAPI {
     try {
       guide = await this._getCachedGuide();
 
-      if (!["task", "project"].includes(targetType)) {
+      if (!['task', 'project'].includes(targetType)) {
         throw new Error(
           `Invalid target type: ${targetType}. Must be 'task' or 'project'`,
         );
       }
 
-      if (targetType === "task") {
+      if (targetType === 'task') {
         if (!targetId) {
           throw new Error(
-            "Task ID required for task-specific success criteria",
+            'Task ID required for task-specific success criteria',
           );
         }
 
@@ -4588,10 +4528,10 @@ class TaskManagerAPI {
         };
       }
     } catch (error) {
-      guide = guide || (await this._getGuideForError("task-operations"));
+      guide = guide || (await this._getGuideForError('task-operations'));
       const enhancedError = new Error(error.message);
       enhancedError.context = {
-        operation: "getSuccessCriteria",
+        operation: 'getSuccessCriteria',
         targetType,
         targetId,
         timestamp: new Date().toISOString(),
@@ -4613,16 +4553,16 @@ class TaskManagerAPI {
     try {
       guide = await this._getCachedGuide();
 
-      if (!["task", "project"].includes(targetType)) {
+      if (!['task', 'project'].includes(targetType)) {
         throw new Error(
           `Invalid target type: ${targetType}. Must be 'task' or 'project'`,
         );
       }
 
-      if (targetType === "task") {
+      if (targetType === 'task') {
         if (!targetId) {
           throw new Error(
-            "Task ID required for task-specific success criteria",
+            'Task ID required for task-specific success criteria',
           );
         }
 
@@ -4645,7 +4585,7 @@ class TaskManagerAPI {
           task.success_criteria = updateData;
         } else {
           throw new Error(
-            "Update data must contain success_criteria array or be an array",
+            'Update data must contain success_criteria array or be an array',
           );
         }
 
@@ -4658,7 +4598,7 @@ class TaskManagerAPI {
           targetId,
           originalCriteria,
           updatedCriteria: task.success_criteria,
-          message: "Task success criteria updated successfully",
+          message: 'Task success criteria updated successfully',
           guide,
         };
       } else {
@@ -4676,7 +4616,7 @@ class TaskManagerAPI {
           todoData.project_success_criteria = updateData;
         } else {
           throw new Error(
-            "Update data must contain success_criteria array or be an array",
+            'Update data must contain success_criteria array or be an array',
           );
         }
 
@@ -4687,15 +4627,15 @@ class TaskManagerAPI {
           targetType,
           originalCriteria,
           updatedCriteria: todoData.project_success_criteria,
-          message: "Project success criteria updated successfully",
+          message: 'Project success criteria updated successfully',
           guide,
         };
       }
     } catch (error) {
-      guide = guide || (await this._getGuideForError("task-operations"));
+      guide = guide || (await this._getGuideForError('task-operations'));
       const enhancedError = new Error(error.message);
       enhancedError.context = {
-        operation: "updateSuccessCriteria",
+        operation: 'updateSuccessCriteria',
         targetType,
         targetId,
         timestamp: new Date().toISOString(),
@@ -4717,7 +4657,7 @@ class TaskManagerAPI {
     try {
       guide = await this._getCachedGuide();
 
-      if (!["start", "complete", "status"].includes(action)) {
+      if (!['start', 'complete', 'status'].includes(action)) {
         throw new Error(
           `Invalid action: ${action}. Must be 'start', 'complete', or 'status'`,
         );
@@ -4733,28 +4673,28 @@ class TaskManagerAPI {
 
       // Find research subtask
       const researchSubtask = (task.subtasks || []).find(
-        (s) => s.type === "research",
+        (s) => s.type === 'research',
       );
 
-      if (!researchSubtask && action !== "status") {
+      if (!researchSubtask && action !== 'status') {
         throw new Error(`No research subtask found for task: ${taskId}`);
       }
 
       switch (action) {
-        case "start": {
-          if (researchSubtask.status === "in_progress") {
+        case 'start': {
+          if (researchSubtask.status === 'in_progress') {
             return {
               success: true,
               action,
               taskId,
-              message: "Research task already in progress",
+              message: 'Research task already in progress',
               researchSubtask,
               guide,
             };
           }
 
           // Start the research task
-          researchSubtask.status = "in_progress";
+          researchSubtask.status = 'in_progress';
           researchSubtask.started_at = new Date().toISOString();
           researchSubtask.agent_assigned = this.agentId;
 
@@ -4771,33 +4711,33 @@ class TaskManagerAPI {
             success: true,
             action,
             taskId,
-            message: "Research task started successfully",
+            message: 'Research task started successfully',
             researchSubtask,
             guide,
           };
         }
 
-        case "complete": {
-          if (researchSubtask.status === "completed") {
+        case 'complete': {
+          if (researchSubtask.status === 'completed') {
             return {
               success: true,
               action,
               taskId,
-              message: "Research task already completed",
+              message: 'Research task already completed',
               researchSubtask,
               guide,
             };
           }
 
           // Complete the research task
-          researchSubtask.status = "completed";
+          researchSubtask.status = 'completed';
           researchSubtask.completed_at = new Date().toISOString();
 
           // Store research results if provided
           if (researchData.findings || researchData.report) {
             researchSubtask.results = {
               findings: researchData.findings || [],
-              report: researchData.report || "",
+              report: researchData.report || '',
               completed_by: this.agentId,
               completion_timestamp: new Date().toISOString(),
             };
@@ -4810,13 +4750,13 @@ class TaskManagerAPI {
             success: true,
             action,
             taskId,
-            message: "Research task completed successfully",
+            message: 'Research task completed successfully',
             researchSubtask,
             guide,
           };
         }
 
-        case "status": {
+        case 'status': {
           return {
             success: true,
             action,
@@ -4831,10 +4771,10 @@ class TaskManagerAPI {
           throw new Error(`Unhandled action: ${action}`);
       }
     } catch (error) {
-      guide = guide || (await this._getGuideForError("task-operations"));
+      guide = guide || (await this._getGuideForError('task-operations'));
       const enhancedError = new Error(error.message);
       enhancedError.context = {
-        operation: "manageResearchTask",
+        operation: 'manageResearchTask',
         action,
         taskId,
         timestamp: new Date().toISOString(),
@@ -4856,7 +4796,7 @@ class TaskManagerAPI {
     try {
       guide = await this._getCachedGuide();
 
-      if (!["start", "complete", "status"].includes(action)) {
+      if (!['start', 'complete', 'status'].includes(action)) {
         throw new Error(
           `Invalid action: ${action}. Must be 'start', 'complete', or 'status'`,
         );
@@ -4872,15 +4812,15 @@ class TaskManagerAPI {
 
       // Find audit subtask
       const auditSubtask = (task.subtasks || []).find(
-        (s) => s.type === "audit",
+        (s) => s.type === 'audit',
       );
 
-      if (!auditSubtask && action !== "status") {
+      if (!auditSubtask && action !== 'status') {
         throw new Error(`No audit subtask found for task: ${taskId}`);
       }
 
       switch (action) {
-        case "start": {
+        case 'start': {
           // Check objectivity - current agent cannot audit their own work
           if (
             task.assigned_agent === this.agentId ||
@@ -4890,28 +4830,28 @@ class TaskManagerAPI {
               success: false,
               action,
               taskId,
-              reason: "Objectivity violation: Cannot audit own work",
+              reason: 'Objectivity violation: Cannot audit own work',
               message:
-                "Audit must be performed by different agent to ensure objectivity",
+                'Audit must be performed by different agent to ensure objectivity',
               original_implementer: task.assigned_agent || task.claimed_by,
               current_agent: this.agentId,
               guide,
             };
           }
 
-          if (auditSubtask.status === "in_progress") {
+          if (auditSubtask.status === 'in_progress') {
             return {
               success: true,
               action,
               taskId,
-              message: "Audit task already in progress",
+              message: 'Audit task already in progress',
               auditSubtask,
               guide,
             };
           }
 
           // Start the audit task
-          auditSubtask.status = "in_progress";
+          auditSubtask.status = 'in_progress';
           auditSubtask.started_at = new Date().toISOString();
           auditSubtask.audit_agent = this.agentId;
           auditSubtask.original_implementer =
@@ -4924,26 +4864,26 @@ class TaskManagerAPI {
             success: true,
             action,
             taskId,
-            message: "Audit task started successfully",
+            message: 'Audit task started successfully',
             auditSubtask,
             guide,
           };
         }
 
-        case "complete": {
-          if (auditSubtask.status === "completed") {
+        case 'complete': {
+          if (auditSubtask.status === 'completed') {
             return {
               success: true,
               action,
               taskId,
-              message: "Audit task already completed",
+              message: 'Audit task already completed',
               auditSubtask,
               guide,
             };
           }
 
           // Complete the audit task
-          auditSubtask.status = "completed";
+          auditSubtask.status = 'completed';
           auditSubtask.completed_at = new Date().toISOString();
 
           // Store audit results
@@ -4951,7 +4891,7 @@ class TaskManagerAPI {
             auditSubtask.results = {
               passed: auditData.passed !== false, // Default to true unless explicitly false
               findings: auditData.findings || [],
-              report: auditData.report || "",
+              report: auditData.report || '',
               completed_by: this.agentId,
               completion_timestamp: new Date().toISOString(),
               success_criteria_met: auditData.success_criteria_met || [],
@@ -4966,13 +4906,13 @@ class TaskManagerAPI {
             success: true,
             action,
             taskId,
-            message: "Audit task completed successfully",
+            message: 'Audit task completed successfully',
             auditSubtask,
             guide,
           };
         }
 
-        case "status": {
+        case 'status': {
           return {
             success: true,
             action,
@@ -4997,10 +4937,10 @@ class TaskManagerAPI {
           throw new Error(`Unhandled action: ${action}`);
       }
     } catch (error) {
-      guide = guide || (await this._getGuideForError("task-operations"));
+      guide = guide || (await this._getGuideForError('task-operations'));
       const enhancedError = new Error(error.message);
       enhancedError.context = {
-        operation: "manageAuditTask",
+        operation: 'manageAuditTask',
         action,
         taskId,
         timestamp: new Date().toISOString(),
@@ -5016,26 +4956,26 @@ class TaskManagerAPI {
    */
   _extractKeywords(title) {
     const stopWords = [
-      "the",
-      "a",
-      "an",
-      "and",
-      "or",
-      "but",
-      "in",
-      "on",
-      "at",
-      "to",
-      "for",
-      "of",
-      "with",
-      "by",
-      "from",
-      "as",
+      'the',
+      'a',
+      'an',
+      'and',
+      'or',
+      'but',
+      'in',
+      'on',
+      'at',
+      'to',
+      'for',
+      'of',
+      'with',
+      'by',
+      'from',
+      'as',
     ];
     return title
       .toLowerCase()
-      .replace(/[^\w\s]/g, " ")
+      .replace(/[^\w\s]/g, ' ')
       .split(/\s+/)
       .filter((word) => word.length > 2 && !stopWords.includes(word))
       .slice(0, 5);
@@ -5209,7 +5149,20 @@ async function main() {
       case "claim": {
         const taskId = args[1];
         let agentId = args[2];
-        const priority = args[3] || "normal";
+        let priority = args[3] || "normal";
+
+        // Check for --allow-out-of-order flag in all arguments
+        const allowOutOfOrderFlag = args.includes("--allow-out-of-order");
+
+        // Remove the flag from args and adjust parameters
+        if (allowOutOfOrderFlag) {
+          const flagIndex = args.indexOf("--allow-out-of-order");
+          args.splice(flagIndex, 1);
+
+          // Re-parse arguments after removing flag
+          agentId = args[2];
+          priority = args[3] || "normal";
+        }
 
         if (!taskId) {
           throw new Error("Task ID required for claim command");
@@ -5225,14 +5178,26 @@ async function main() {
         if (!agentId) {
           throw new Error(
             "Agent ID required for claim. Options:\n" +
-              "1. Provide agent ID: claim <taskId> <agentId>\n" +
+              "1. Provide agent ID: claim <taskId> <agentId> [priority] [--allow-out-of-order]\n" +
               "2. Initialize first: init (saves agent ID for reuse)\n" +
               "3. Current stored agent ID: " +
-              (api.agentId || "none"),
+              (api.agentId || "none") +
+              "\n\nFlags:\n" +
+              "  --allow-out-of-order: Override task order restrictions (use when user explicitly requests specific task)",
           );
         }
 
-        const result = await api.claimTask(taskId, agentId, priority);
+        // Use TaskManager directly when allowOutOfOrder is needed
+        let result;
+        if (allowOutOfOrderFlag) {
+          console.log("🔄 OVERRIDING TASK ORDER - User-requested task takes priority");
+          result = await api.taskManager.claimTask(taskId, agentId, priority, {
+            allowOutOfOrder: true
+          });
+        } else {
+          result = await api.claimTask(taskId, agentId, priority);
+        }
+
         // eslint-disable-next-line no-console -- CLI API requires console output for command-line interface
         console.log(JSON.stringify(result, null, 2));
         break;
@@ -6215,18 +6180,18 @@ Agent Swarm Examples:
   } catch (error) {
     // Enhanced error handling with contextual guide delivery
     let guide = null;
-    let errorContext = "general";
+    let errorContext = 'general';
 
     // Determine error context based on error message and command
     if (
-      error.message.includes("no agent id") ||
-      error.message.includes("agent not initialized")
+      error.message.includes('no agent id') ||
+      error.message.includes('agent not initialized')
     ) {
-      errorContext = "agent-init";
-    } else if (command === "init" || command === "reinitialize") {
-      errorContext = command === "init" ? "agent-init" : "agent-reinit";
-    } else if (["create", "claim", "complete", "list"].includes(command)) {
-      errorContext = "task-operations";
+      errorContext = 'agent-init';
+    } else if (command === 'init' || command === 'reinitialize') {
+      errorContext = command === 'init' ? 'agent-init' : 'agent-reinit';
+    } else if (['create', 'claim', 'complete', 'list'].includes(command)) {
+      errorContext = 'task-operations';
     }
 
     try {
@@ -6251,13 +6216,13 @@ Agent Swarm Examples:
         message:
           'For complete API usage guidance, run: timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" guide',
         helpText:
-          "The guide provides comprehensive information about task classification, workflows, and all API capabilities",
+          'The guide provides comprehensive information about task classification, workflows, and all API capabilities',
       },
     };
 
     // eslint-disable-next-line no-console -- CLI API requires console output for error reporting
     console.error(JSON.stringify(errorResponse, null, 2));
-    throw new Error("TaskManager API execution failed");
+    throw new Error('TaskManager API execution failed');
   } finally {
     await api.cleanup();
   }
@@ -6270,7 +6235,7 @@ module.exports = TaskManagerAPI;
 if (require.main === module) {
   main().catch((error) => {
     // eslint-disable-next-line no-console -- CLI API requires console output for fatal error reporting
-    console.error("Fatal error:", error.message);
+    console.error('Fatal error:', error.message);
     throw error;
   });
 }
