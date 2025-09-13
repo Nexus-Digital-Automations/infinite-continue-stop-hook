@@ -42,8 +42,6 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 
 **CORE VALUES:**
 - **DEPENDABILITY**: Set standards for code quality, documentation, technical excellence
-- **ABSOLUTE HONESTY**: NEVER skip, ignore, or hide ANY issues, errors, or failures - report everything immediately and transparently
-- **ABSOLUTE PERFECTION**: Zero tolerance for incomplete work, treat ALL linter warnings as critical errors, address every single issue without exception
 - **DOCUMENTATION**: Comprehensive logging, comments, decisions, audit trails
 - **COMPLIANCE**: Execute user requests, CLAUDE.md instructions, hook feedback exactly as specified
 - **INTELLIGENCE**: High-level problem-solving, adapt based on feedback and guidance
@@ -129,33 +127,27 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 **EXAMPLE PATTERN:**
 ```javascript
 /**
- * Module: Data Processing - Handles transformation and validation
- * Dependencies: logger, validation-utils
+ * Module: Data Processing - transformation/validation
  * Usage: processData(userId, rawData) -> Promise<ProcessedData>
  */
 function processData(userId, data) {
     const logger = getLogger('DataProcessor');
-    const operationId = generateOperationId();
+    const opId = generateOperationId();
     
-    logger.info(`[${operationId}] Starting processing`, {userId, dataSize: JSON.stringify(data).length});
-    
+    logger.info(`[${opId}] Starting`, {userId, dataSize: data.length});
     try {
-        const startTime = Date.now();
+        const start = Date.now();
         const result = transformData(data);
-        logger.info(`[${operationId}] Completed in ${Date.now() - startTime}ms`);
+        logger.info(`[${opId}] Completed in ${Date.now() - start}ms`);
         return result;
     } catch (error) {
-        logger.error(`[${operationId}] Failed`, {error: error.message, stack: error.stack});
+        logger.error(`[${opId}] Failed`, {error: error.message});
         throw error;
     }
 }
 ```
 
-
-
-## 🚨 QUALITY & ERROR PROTOCOLS
-
-### 🚨 LINTER ERROR PROTOCOL - SUPREME PRIORITY
+## 🚨 LINTER ERROR PROTOCOL - SUPREME PRIORITY
 **🔴 ALL LINTER WARNINGS ARE CRITICAL ERRORS**
 
 **ZERO TOLERANCE MANDATE:**
@@ -178,18 +170,16 @@ function processData(userId, data) {
 **🚨 FINISH WHAT YOU START - TEAMS DEPEND ON YOU**
 
 **REQUIREMENTS:**
-- **✅ ONE AT A TIME**: Complete current task before starting new ones
+- **✅ ONE AT A TIME**: Complete current task before starting new ones  
 - **✅ CONTINUATION FIRST**: Check for incomplete work before new tasks
 - **✅ PERSISTENCE**: Work through difficulties, don't abandon tasks
-- **✅ CONTEXT PRESERVATION**: Maintain approaches when resuming, resist scope expansion
-- **❌ NO ABANDONMENT**: Never leave tasks partially complete without documentation
+- **❌ NO ABANDONMENT**: Never leave tasks partially complete
 
-**INTERRUPTION HIERARCHY (ONLY THESE):**
-1. **USER REQUESTS** - ABSOLUTE SUPREME PRIORITY - Trump all else, implement immediately using protocols/workflows
-2. **LINTER ERRORS** - Supreme priority
+**INTERRUPTION HIERARCHY:**
+1. **USER REQUESTS** - ABSOLUTE SUPREME PRIORITY
+2. **LINTER ERRORS** - Supreme priority  
 3. **BUILD FAILURES** - System-blocking errors
 4. **SECURITY VULNERABILITIES** - Critical issues
-
 
 ### 🚨 TASKMANAGER COMPLETION FORMATTING
 **🔴 PREVENT JSON PARSING FAILURES**
@@ -272,10 +262,7 @@ git status                                   # Verify clean/up-to-date
 - **INCORRECT FORMAT**: `feature_[taskId]/` (generic placeholder)
 - **EXAMPLES**:
   - ✅ `development/reports/feature_1757709439408_i4z5amov7/`
-  - ✅ `development/reports/error_1757610227611_6jl9fsosq/`
-  - ✅ `development/reports/test_1757718980743_f8lucff1j/`
   - ❌ `development/reports/feature_[taskId]/`
-  - ❌ `development/reports/task_[id]/`
 
 **REPORT ORGANIZATION:**
 - **TASK-SPECIFIC FOLDERS**: Each task gets dedicated folder with actual task ID
@@ -293,16 +280,9 @@ git status                                   # Verify clean/up-to-date
 - **AVOID DUPLICATION**: Don't recreate research or analysis that already exists
 
 **REPORT READING WORKFLOW:**
-```bash
-# 1. List all existing reports
-ls -la development/reports/
-
-# 2. Search for reports related to current task
-find development/reports/ -name "*keyword*" -type f
-
-# 3. Read relevant reports before implementation
-cat development/reports/related_task_folder/report.md
-```
+- `ls -la development/reports/` - List existing reports
+- `find development/reports/ -name "*keyword*"` - Search related reports  
+- `cat development/reports/task_folder/report.md` - Read before implementation
 
 **REPORT MAINTENANCE PROCEDURES:**
 - **REGULAR ORGANIZATION**: Keep reports properly organized in task-specific folders
@@ -351,15 +331,10 @@ development/reports/task_1234567890_abcdef123/
 - **SCRIPTS**: Organize utility scripts in `development/temp-scripts/`
 
 **CLEAN-UP PROCEDURES:**
-```bash
-# Check for misplaced .md files
-find . -maxdepth 1 -name "*.md" -not -name "README.md" -not -name "CLAUDE.md"
-
-# Organize loose documentation files
-mv analysis-*.md development/reports/
-mv debug-*.log development/debug-logs/
-mv temp-*.js development/temp-scripts/
-```
+- `find . -maxdepth 1 -name "*.md" -not -name "README.md" -not -name "CLAUDE.md"` - Check misplaced files
+- `mv analysis-*.md development/reports/` - Move docs to reports
+- `mv debug-*.log development/debug-logs/` - Move logs to debug
+- `mv temp-*.js development/temp-scripts/` - Move scripts to temp
 
 **PREVENTION MEASURES:**
 - **CREATE IN PROPER LOCATION**: Always create reports in correct directories
@@ -417,9 +392,7 @@ mv temp-*.js development/temp-scripts/
 
 ## Validation Commands
 ```bash
-# Run these commands before marking feature tasks complete:
 npm run lint && npm run build && npm test && npm start
-```
 ```
 
 **AGENT RESPONSIBILITIES:**
@@ -430,56 +403,35 @@ npm run lint && npm run build && npm test && npm start
 
 ## 🚨 INFRASTRUCTURE & STANDARDS
 
-### 🔒 CRITICAL RESTRICTIONS & SECURITY
+### 🔒 SECURITY & FILE BOUNDARIES
 **ABSOLUTE PROHIBITIONS:**
 - **❌ NEVER EDIT OR READ**: TODO.json directly (use TaskManager API only), settings.json (`/Users/jeremyparker/.claude/settings.json`)
 - **❌ NEVER EXPOSE**: Secrets, API keys, passwords, tokens in code or logs
 - **❌ NEVER COMMIT**: Sensitive data, credentials, environment files to repository
 - **❌ NEVER BYPASS**: Security validations, authentication checks, permission systems
 
-**MANDATORY SECURITY PROTOCOLS:**
-- **🚨 MANDATORY**: Always use `node taskmanager-api.js` commands for ALL task operations - never read TODO.json with Read tool
+**SECURITY PROTOCOLS:**
 - **🔐 VALIDATE**: All inputs, file paths, and user data before processing
 - **🛡️ SANITIZE**: User inputs and external data to prevent injection attacks
 - **🔍 AUDIT**: Log all security-relevant operations and access attempts
-
-**SECURITY VALIDATION CHECKPOINTS:**
 - Verify file permissions before modifications
 - Check for sensitive data before commits
 - Validate user inputs against security policies
-- Confirm approval for privileged operations
 
-**TOOL PERMISSION MATRIX:**
+**FILE BOUNDARIES:**
+- **SAFE TO EDIT**: `/src/`, `/tests/`, `/docs/`, `/development/`, source code files (`.js`, `.ts`, `.py`, `.go`, `.rs`)
+- **PROTECTED**: `TODO.json`, `/Users/jeremyparker/.claude/settings.json`, `/node_modules/`, `/.git/`, `/dist/`, `/build/`
+- **APPROVAL REQUIRED**: `package.json` changes, database migrations, security configurations, CI/CD pipeline modifications
+
+**TOOL PERMISSIONS:**
 - **ALLOWED**: Bash(npm run:*), Bash(git:*), Read/Write/Edit (safe directories)
 - **RESTRICTED**: System configuration, user profile modifications
 - **APPROVAL REQUIRED**: Package installs, security configuration changes
 
-**✅ REQUIREMENTS**: Use TaskManager API only, production-ready code (no placeholders), comprehensive documentation, robust error handling
-
-### ORGANIZATION
+**ORGANIZATION:**
 - **CLEAN ROOT**: Organize into development/ subdirectories
 - **ESSENTIALS FIRST**: Read development/essentials/ before work
 - **DOCUMENT ALL**: Functions, APIs, decisions
-
-### 🔐 FILE BOUNDARIES & PERMISSIONS
-**SAFE TO EDIT:**
-- `/src/`, `/tests/`, `/docs/`, `/development/`
-- Source code files (`.js`, `.ts`, `.py`, `.go`, `.rs`)
-- Configuration files when explicitly requested
-- Test files and documentation
-
-**PROTECTED - NEVER MODIFY:**
-- `TODO.json` (use TaskManager API exclusively)
-- `/Users/jeremyparker/.claude/settings.json`
-- `/node_modules/`, `/.git/`, `/dist/`, `/build/`
-- System configuration files
-- Package lock files (unless explicitly requested)
-
-**APPROVAL REQUIRED:**
-- `package.json` changes
-- Database migrations
-- Security-related configurations
-- CI/CD pipeline modifications
 
 ### 🔧 DIAGNOSTIC & MONITORING COMMANDS
 **CLAUDE.md VERIFICATION:**
@@ -550,25 +502,12 @@ npm run lint && npm run build && npm test && npm start
 - [ ] **MARK COMPLETE**: Update status via TaskManager API with evidence
 
 ### 📋 CRITICAL ENFORCEMENT RULES
-**🚨 ABSOLUTE REQUIREMENTS:**
-- [ ] **ZERO TOLERANCE**: No shortcuts, no errors, no uncommitted work
 - [ ] **EVIDENCE-BASED COMPLETION**: Include validation evidence
-- [ ] **ONE TASK AT A TIME**: Complete current before claiming new
+- [ ] **FAILURE RECOVERY**: Linter → create error task + fix; Build → fix + verify; Git → resolve conflicts + push
 
-**INTERRUPTION HIERARCHY:** 1. Linter errors 2. Build failures 3. User commands 4. Security vulnerabilities
-
-**FAILURE RECOVERY:** Linter → create error task + fix; Build → identify cause + fix + verify; Git → resolve conflicts + push; Completion → fix JSON + retry
-
-## 🚨 CORE WORKFLOW SUMMARY
-
-**COMPLETION MANDATE - FINISH WHAT YOU START:**
-- **✅ ONE AT A TIME**: Complete current before claiming new
-- **✅ CONTINUATION FIRST**: Resume incomplete work
-- **❌ NO ABANDONMENT**: Never leave tasks partially complete
-
-### 🔄 EXECUTION SEQUENCE
+### 🔄 EXECUTION SEQUENCE  
 1. **Initialize/Reinitialize** - `timeout 10s node taskmanager-api.js init`
-2. **Continue Work** - Check/resume existing tasks first
+2. **Continue Work** - Check/resume existing tasks first  
 3. **Deploy Subagents** - Use up to 10 concurrent agents for complex tasks
 4. **Validate & Complete** - All checks + commit + push before marking complete
 
