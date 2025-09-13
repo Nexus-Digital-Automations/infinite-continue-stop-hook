@@ -13,14 +13,14 @@
  * @since 2025-09-13
  */
 
-const path = require('path');
-const { spawn } = require('child_process');
-const fs = require('fs');
+const path = require("path");
+const { spawn } = require("child_process");
+const fs = require("fs");
 
 // Test configuration
-const TEST_PROJECT_DIR = path.join(__dirname, 'audit-system-test-project');
-const TODO_PATH = path.join(TEST_PROJECT_DIR, 'TODO.json');
-const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
+const TEST_PROJECT_DIR = path.join(__dirname, "audit-system-test-project");
+const TODO_PATH = path.join(TEST_PROJECT_DIR, "TODO.json");
+const API_PATH = path.join(__dirname, "..", "taskmanager-api.js");
 const TIMEOUT = 12000; // 12 seconds for audit operations
 
 /**
@@ -32,34 +32,34 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
       API_PATH,
       command,
       ...args,
-      '--project-root',
+      "--project-root",
       TEST_PROJECT_DIR,
     ];
 
     const child = spawn(
-      'timeout',
-      [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs],
+      "timeout",
+      [`${Math.floor(timeout / 1000)}s`, "node", ...allArgs],
       {
         cwd: __dirname,
-        stdio: ['pipe', 'pipe', 'pipe'],
+        stdio: ["pipe", "pipe", "pipe"],
       },
     );
 
-    let stdout = '';
-    let stderr = '';
+    let stdout = "";
+    let stderr = "";
 
-    child.stdout.on('data', (data) => {
+    child.stdout.on("data", (data) => {
       stdout += data.toString();
     });
 
-    child.stderr.on('data', (data) => {
+    child.stderr.on("data", (data) => {
       stderr += data.toString();
     });
 
-    child.on('close', (code) => {
+    child.on("close", (code) => {
       try {
         let jsonString = stdout.trim();
-        const jsonStart = jsonString.indexOf('{');
+        const jsonStart = jsonString.indexOf("{");
         if (jsonStart > 0) {
           jsonString = jsonString.substring(jsonStart);
         }
@@ -79,7 +79,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
       }
     });
 
-    child.on('error', (error) => {
+    child.on("error", (error) => {
       reject(new Error(`Command execution failed: ${error.message}`));
     });
   });
@@ -96,8 +96,8 @@ function setupAuditTestEnvironment() {
   // Create development/essentials directory
   const essentialsDir = path.join(
     TEST_PROJECT_DIR,
-    'development',
-    'essentials',
+    "development",
+    "essentials",
   );
   if (!fs.existsSync(essentialsDir)) {
     fs.mkdirSync(essentialsDir, { recursive: true });
@@ -194,7 +194,7 @@ This file defines the standard completion criteria that ALL tasks must satisfy b
 `;
 
   fs.writeFileSync(
-    path.join(essentialsDir, 'audit-criteria.md'),
+    path.join(essentialsDir, "audit-criteria.md"),
     auditCriteriaContent,
   );
 
@@ -209,24 +209,24 @@ This file defines the standard completion criteria that ALL tasks must satisfy b
 `;
 
   fs.writeFileSync(
-    path.join(essentialsDir, 'minimal-audit-criteria.md'),
+    path.join(essentialsDir, "minimal-audit-criteria.md"),
     minimalAuditContent,
   );
 
   // Create TODO.json
   const todoData = {
-    project: 'audit-system-test',
+    project: "audit-system-test",
     tasks: [],
     agents: {},
     features: [],
-    current_mode: 'DEVELOPMENT',
+    current_mode: "DEVELOPMENT",
     last_mode: null,
     execution_count: 0,
     review_strikes: 0,
     strikes_completed_last_run: false,
     last_hook_activation: Date.now(),
     settings: {
-      version: '2.0.0',
+      version: "2.0.0",
       created: new Date().toISOString(),
     },
   };
@@ -243,10 +243,10 @@ function cleanupAuditTestEnvironment() {
   }
 }
 
-describe('Audit System Validation Tests', () => {
-  let testAgentId = null;
+describe("Audit System Validation Tests", () => {
+  const _testAgentId = null;
   let implementationAgentId = null;
-  let auditAgentId = null;
+  const _auditAgentId = null;
 
   beforeEach(() => {
     setupAuditTestEnvironment();
@@ -260,27 +260,27 @@ describe('Audit System Validation Tests', () => {
   // AUDIT CRITERIA LOADING TESTS
   // ========================================
 
-  describe('Audit Criteria Loading and Validation', () => {
+  describe("Audit Criteria Loading and Validation", () => {
     beforeEach(async () => {
-      const initResult = await execAPI('init');
+      const initResult = await execAPI("init");
       testAgentId = initResult.agentId;
     });
 
-    test('should load comprehensive audit criteria from development/essentials/audit-criteria.md', async () => {
+    test("should load comprehensive audit criteria from development/essentials/audit-criteria.md", async () => {
       const featureTaskData = {
-        title: 'Feature requiring comprehensive audit',
+        title: "Feature requiring comprehensive audit",
         description:
-          'Test feature to validate comprehensive audit criteria loading',
-        category: 'feature',
-        priority: 'high',
+          "Test feature to validate comprehensive audit criteria loading",
+        category: "feature",
+        priority: "high",
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const result = await execAPI("create", [JSON.stringify(featureTaskData)]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
+      const listResult = await execAPI("list");
       const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const auditSubtask = task.subtasks.find((st) => st.type === "audit");
 
       expect(auditSubtask).toBeDefined();
       expect(auditSubtask.success_criteria).toBeDefined();
@@ -288,31 +288,31 @@ describe('Audit System Validation Tests', () => {
 
       // Verify comprehensive criteria are loaded
       const expectedCriteria = [
-        'Linter Perfection',
-        'Build Success',
-        'Runtime Success',
-        'Test Integrity',
-        'Function Documentation',
-        'API Documentation',
-        'Architecture Documentation',
-        'Decision Rationale',
-        'Error Handling',
-        'Performance Metrics',
-        'Security Review',
-        'Architectural Consistency',
-        'Dependency Validation',
-        'Version Compatibility',
-        'Security Audit',
-        'Cross-Platform',
-        'Environment Variables',
-        'Configuration',
-        'No Credential Exposure',
-        'Input Validation',
-        'Output Encoding',
-        'Authentication/Authorization',
-        'License Compliance',
-        'Data Privacy',
-        'Regulatory Compliance',
+        "Linter Perfection",
+        "Build Success",
+        "Runtime Success",
+        "Test Integrity",
+        "Function Documentation",
+        "API Documentation",
+        "Architecture Documentation",
+        "Decision Rationale",
+        "Error Handling",
+        "Performance Metrics",
+        "Security Review",
+        "Architectural Consistency",
+        "Dependency Validation",
+        "Version Compatibility",
+        "Security Audit",
+        "Cross-Platform",
+        "Environment Variables",
+        "Configuration",
+        "No Credential Exposure",
+        "Input Validation",
+        "Output Encoding",
+        "Authentication/Authorization",
+        "License Compliance",
+        "Data Privacy",
+        "Regulatory Compliance",
       ];
 
       expectedCriteria.forEach((criterion) => {
@@ -320,30 +320,30 @@ describe('Audit System Validation Tests', () => {
       });
     });
 
-    test('should handle missing audit criteria file with default criteria', async () => {
+    test("should handle missing audit criteria file with default criteria", async () => {
       // Remove audit criteria file
       const auditCriteriaPath = path.join(
         TEST_PROJECT_DIR,
-        'development/essentials/audit-criteria.md',
+        "development/essentials/audit-criteria.md",
       );
       if (fs.existsSync(auditCriteriaPath)) {
         fs.unlinkSync(auditCriteriaPath);
       }
 
       const featureTaskData = {
-        title: 'Feature with missing audit criteria',
+        title: "Feature with missing audit criteria",
         description:
-          'Test feature to validate fallback audit criteria behavior',
-        category: 'feature',
-        priority: 'medium',
+          "Test feature to validate fallback audit criteria behavior",
+        category: "feature",
+        priority: "medium",
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const result = await execAPI("create", [JSON.stringify(featureTaskData)]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
+      const listResult = await execAPI("list");
       const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const auditSubtask = task.subtasks.find((st) => st.type === "audit");
 
       expect(auditSubtask).toBeDefined();
       expect(auditSubtask.success_criteria).toBeDefined();
@@ -351,10 +351,10 @@ describe('Audit System Validation Tests', () => {
 
       // Should have basic default criteria
       const basicCriteria = [
-        'Linter Perfection',
-        'Build Success',
-        'Runtime Success',
-        'Test Integrity',
+        "Linter Perfection",
+        "Build Success",
+        "Runtime Success",
+        "Test Integrity",
       ];
       basicCriteria.forEach((criterion) => {
         expect(
@@ -363,25 +363,25 @@ describe('Audit System Validation Tests', () => {
       });
     });
 
-    test('should parse and extract criteria from markdown format correctly', async () => {
+    test("should parse and extract criteria from markdown format correctly", async () => {
       const featureTaskData = {
-        title: 'Markdown parsing test feature',
+        title: "Markdown parsing test feature",
         description:
-          'Test feature to validate markdown parsing of audit criteria',
-        category: 'feature',
-        priority: 'medium',
+          "Test feature to validate markdown parsing of audit criteria",
+        category: "feature",
+        priority: "medium",
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const result = await execAPI("create", [JSON.stringify(featureTaskData)]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
+      const listResult = await execAPI("list");
       const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const auditSubtask = task.subtasks.find((st) => st.type === "audit");
 
       // Verify criteria are strings, not markdown checkbox format
       auditSubtask.success_criteria.forEach((criterion) => {
-        expect(typeof criterion).toBe('string');
+        expect(typeof criterion).toBe("string");
         expect(criterion.length).toBeGreaterThan(0);
         // Should not contain markdown checkbox syntax
         expect(criterion).not.toMatch(/^\s*-\s*\[\s*\]/);
@@ -393,72 +393,72 @@ describe('Audit System Validation Tests', () => {
   // AGENT OBJECTIVITY ENFORCEMENT TESTS
   // ========================================
 
-  describe('Agent Objectivity Enforcement', () => {
+  describe("Agent Objectivity Enforcement", () => {
     beforeEach(async () => {
       // Create multiple agents for objectivity testing
-      const initResult1 = await execAPI('init', [
+      const initResult1 = await execAPI("init", [
         JSON.stringify({
-          role: 'development',
-          specialization: ['feature-implementation'],
+          role: "development",
+          specialization: ["feature-implementation"],
         }),
       ]);
       implementationAgentId = initResult1.agentId;
 
-      const initResult2 = await execAPI('init', [
+      const initResult2 = await execAPI("init", [
         JSON.stringify({
-          role: 'quality-assurance',
-          specialization: ['audit', 'review'],
+          role: "quality-assurance",
+          specialization: ["audit", "review"],
         }),
       ]);
       auditAgentId = initResult2.agentId;
     });
 
-    test('should set prevents_self_review flag on audit subtasks', async () => {
+    test("should set prevents_self_review flag on audit subtasks", async () => {
       const featureTaskData = {
-        title: 'Feature requiring objective audit',
-        description: 'Test feature to validate self-review prevention',
-        category: 'feature',
-        priority: 'high',
+        title: "Feature requiring objective audit",
+        description: "Test feature to validate self-review prevention",
+        category: "feature",
+        priority: "high",
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const result = await execAPI("create", [JSON.stringify(featureTaskData)]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
+      const listResult = await execAPI("list");
       const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const auditSubtask = task.subtasks.find((st) => st.type === "audit");
 
       expect(auditSubtask).toBeDefined();
       expect(auditSubtask.prevents_self_review).toBe(true);
       expect(auditSubtask.original_implementer).toBeNull();
-      expect(auditSubtask.audit_type).toBe('embedded_quality_gate');
+      expect(auditSubtask.audit_type).toBe("embedded_quality_gate");
     });
 
-    test('should track original implementer when feature task is assigned', async () => {
+    test("should track original implementer when feature task is assigned", async () => {
       const featureTaskData = {
-        title: 'Feature to track implementer',
-        description: 'Test feature to validate implementer tracking',
-        category: 'feature',
-        priority: 'medium',
+        title: "Feature to track implementer",
+        description: "Test feature to validate implementer tracking",
+        category: "feature",
+        priority: "medium",
       };
 
       // Create feature task
-      const createResult = await execAPI('create', [
+      const createResult = await execAPI("create", [
         JSON.stringify(featureTaskData),
       ]);
       expect(createResult.success).toBe(true);
 
       // Assign task to implementation agent
-      const claimResult = await execAPI('claim', [
+      const claimResult = await execAPI("claim", [
         createResult.taskId,
         implementationAgentId,
       ]);
       expect(claimResult.success).toBe(true);
 
       // Verify audit subtask tracking
-      const listResult = await execAPI('list');
+      const listResult = await execAPI("list");
       const task = listResult.tasks.find((t) => t.id === createResult.taskId);
-      const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const auditSubtask = task.subtasks.find((st) => st.type === "audit");
 
       expect(auditSubtask).toBeDefined();
       expect(auditSubtask.prevents_self_review).toBe(true);
@@ -467,33 +467,33 @@ describe('Audit System Validation Tests', () => {
       // This test verifies the structure is in place for tracking
     });
 
-    test('should maintain audit independence across different agent roles', async () => {
+    test("should maintain audit independence across different agent roles", async () => {
       const featureTaskData = {
-        title: 'Multi-agent audit independence test',
+        title: "Multi-agent audit independence test",
         description:
-          'Test feature to validate audit independence across agents',
-        category: 'feature',
-        priority: 'high',
+          "Test feature to validate audit independence across agents",
+        category: "feature",
+        priority: "high",
       };
 
-      const createResult = await execAPI('create', [
+      const createResult = await execAPI("create", [
         JSON.stringify(featureTaskData),
       ]);
       expect(createResult.success).toBe(true);
 
       // Implementation agent claims main task
-      const claimResult = await execAPI('claim', [
+      const claimResult = await execAPI("claim", [
         createResult.taskId,
         implementationAgentId,
       ]);
       expect(claimResult.success).toBe(true);
 
       // Verify both agents can see the task but audit maintains independence
-      const listResult1 = await execAPI('list');
-      const _listResult2 = await execAPI('list'); // Same API, different agent would be handled by claiming logic
+      const listResult1 = await execAPI("list");
+      const _listResult2 = await execAPI("list"); // Same API, different agent would be handled by claiming logic
 
       const task = listResult1.tasks.find((t) => t.id === createResult.taskId);
-      const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const auditSubtask = task.subtasks.find((st) => st.type === "audit");
 
       expect(auditSubtask.prevents_self_review).toBe(true);
       expect(auditSubtask.prevents_completion).toBe(true);
@@ -504,63 +504,63 @@ describe('Audit System Validation Tests', () => {
   // SUCCESS CRITERIA MANAGEMENT TESTS
   // ========================================
 
-  describe('Success Criteria Management', () => {
+  describe("Success Criteria Management", () => {
     beforeEach(async () => {
-      const initResult = await execAPI('init');
+      const initResult = await execAPI("init");
       testAgentId = initResult.agentId;
     });
 
-    test('should generate appropriate success criteria for different task types', async () => {
+    test("should generate appropriate success criteria for different task types", async () => {
       const securityTaskData = {
-        title: 'Implement security authentication system',
+        title: "Implement security authentication system",
         description:
-          'Build comprehensive security system with authentication and authorization',
-        category: 'feature',
-        priority: 'critical',
+          "Build comprehensive security system with authentication and authorization",
+        category: "feature",
+        priority: "critical",
       };
 
-      const result = await execAPI('create', [
+      const result = await execAPI("create", [
         JSON.stringify(securityTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
+      const listResult = await execAPI("list");
       const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const auditSubtask = task.subtasks.find((st) => st.type === "audit");
 
       // Should include security-specific criteria
-      expect(auditSubtask.success_criteria).toContain('Security Review');
-      expect(auditSubtask.success_criteria).toContain('No Credential Exposure');
-      expect(auditSubtask.success_criteria).toContain('Input Validation');
+      expect(auditSubtask.success_criteria).toContain("Security Review");
+      expect(auditSubtask.success_criteria).toContain("No Credential Exposure");
+      expect(auditSubtask.success_criteria).toContain("Input Validation");
       expect(auditSubtask.success_criteria).toContain(
-        'Authentication/Authorization',
+        "Authentication/Authorization",
       );
     });
 
-    test('should include project-specific TaskManager criteria', async () => {
+    test("should include project-specific TaskManager criteria", async () => {
       const taskManagerTaskData = {
-        title: 'Enhance TaskManager API functionality',
+        title: "Enhance TaskManager API functionality",
         description:
-          'Add new endpoints and improve TaskManager system integration',
-        category: 'feature',
-        priority: 'high',
+          "Add new endpoints and improve TaskManager system integration",
+        category: "feature",
+        priority: "high",
       };
 
-      const result = await execAPI('create', [
+      const result = await execAPI("create", [
         JSON.stringify(taskManagerTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
+      const listResult = await execAPI("list");
       const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const auditSubtask = task.subtasks.find((st) => st.type === "audit");
 
       // Should include project-specific criteria if defined in audit-criteria.md
       const _projectCriteria = auditSubtask.success_criteria.filter(
         (criterion) =>
-          criterion.includes('TaskManager') ||
-          criterion.includes('Agent') ||
-          criterion.includes('TODO.json'),
+          criterion.includes("TaskManager") ||
+          criterion.includes("Agent") ||
+          criterion.includes("TODO.json"),
       );
 
       // This test validates that project-specific criteria can be loaded
@@ -568,23 +568,23 @@ describe('Audit System Validation Tests', () => {
       expect(auditSubtask.success_criteria.length).toBeGreaterThan(15);
     });
 
-    test('should set appropriate estimated hours for audit tasks', async () => {
+    test("should set appropriate estimated hours for audit tasks", async () => {
       const featureTaskData = {
-        title: 'Standard feature for audit estimation',
-        description: 'Feature to test audit task time estimation',
-        category: 'feature',
-        priority: 'medium',
+        title: "Standard feature for audit estimation",
+        description: "Feature to test audit task time estimation",
+        category: "feature",
+        priority: "medium",
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const result = await execAPI("create", [JSON.stringify(featureTaskData)]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
+      const listResult = await execAPI("list");
       const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const auditSubtask = task.subtasks.find((st) => st.type === "audit");
 
       expect(auditSubtask.estimated_hours).toBeDefined();
-      expect(typeof auditSubtask.estimated_hours).toBe('number');
+      expect(typeof auditSubtask.estimated_hours).toBe("number");
       expect(auditSubtask.estimated_hours).toBeGreaterThan(0);
       expect(auditSubtask.estimated_hours).toBeLessThanOrEqual(4); // Reasonable upper bound for audit
     });
@@ -594,63 +594,63 @@ describe('Audit System Validation Tests', () => {
   // AUDIT WORKFLOW INTEGRATION TESTS
   // ========================================
 
-  describe('Audit Workflow Integration', () => {
+  describe("Audit Workflow Integration", () => {
     beforeEach(async () => {
-      const initResult = await execAPI('init');
+      const initResult = await execAPI("init");
       testAgentId = initResult.agentId;
     });
 
-    test('should create audit subtasks that prevent task completion', async () => {
+    test("should create audit subtasks that prevent task completion", async () => {
       const featureTaskData = {
-        title: 'Feature with completion prevention',
-        description: 'Test feature to validate completion prevention by audit',
-        category: 'feature',
-        priority: 'medium',
+        title: "Feature with completion prevention",
+        description: "Test feature to validate completion prevention by audit",
+        category: "feature",
+        priority: "medium",
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const result = await execAPI("create", [JSON.stringify(featureTaskData)]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
+      const listResult = await execAPI("list");
       const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const auditSubtask = task.subtasks.find((st) => st.type === "audit");
 
       expect(auditSubtask.prevents_completion).toBe(true);
-      expect(auditSubtask.status).toBe('pending');
+      expect(auditSubtask.status).toBe("pending");
     });
 
-    test('should include comprehensive task context in audit description', async () => {
+    test("should include comprehensive task context in audit description", async () => {
       const detailedTaskData = {
-        title: 'Complex feature with detailed requirements',
+        title: "Complex feature with detailed requirements",
         description:
-          'Comprehensive feature implementation with multiple components including database integration, API endpoints, authentication, and user interface changes requiring thorough validation',
-        category: 'feature',
-        priority: 'high',
-        important_files: ['src/api.js', 'src/database.js', 'src/auth.js'],
+          "Comprehensive feature implementation with multiple components including database integration, API endpoints, authentication, and user interface changes requiring thorough validation",
+        category: "feature",
+        priority: "high",
+        important_files: ["src/api.js", "src/database.js", "src/auth.js"],
       };
 
-      const result = await execAPI('create', [
+      const result = await execAPI("create", [
         JSON.stringify(detailedTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
+      const listResult = await execAPI("list");
       const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const auditSubtask = task.subtasks.find((st) => st.type === "audit");
 
       expect(auditSubtask.description).toContain(
-        'Comprehensive quality audit and review',
+        "Comprehensive quality audit and review",
       );
       expect(auditSubtask.description).toContain(detailedTaskData.title);
-      expect(auditSubtask.description).toContain('Original Description:');
+      expect(auditSubtask.description).toContain("Original Description:");
       expect(auditSubtask.description).toContain(detailedTaskData.description);
 
       // Should reference the task being audited
-      expect(auditSubtask.title).toContain('Audit:');
+      expect(auditSubtask.title).toContain("Audit:");
       expect(auditSubtask.title).toContain(detailedTaskData.title);
     });
 
-    test('should generate unique audit subtask IDs', async () => {
+    test("should generate unique audit subtask IDs", async () => {
       const auditIds = new Set();
 
       // Create multiple feature tasks to test audit ID uniqueness
@@ -658,16 +658,16 @@ describe('Audit System Validation Tests', () => {
         const taskData = {
           title: `Feature task ${i + 1}`,
           description: `Feature description ${i + 1}`,
-          category: 'feature',
-          priority: 'medium',
+          category: "feature",
+          priority: "medium",
         };
 
-        const result = await execAPI('create', [JSON.stringify(taskData)]);
+        const result = await execAPI("create", [JSON.stringify(taskData)]);
         expect(result.success).toBe(true);
 
-        const listResult = await execAPI('list');
+        const listResult = await execAPI("list");
         const task = listResult.tasks.find((t) => t.id === result.taskId);
-        const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+        const auditSubtask = task.subtasks.find((st) => st.type === "audit");
 
         if (auditSubtask) {
           expect(auditSubtask.id).toMatch(/^audit_\d+_[a-f0-9]{8}$/);
@@ -684,53 +684,53 @@ describe('Audit System Validation Tests', () => {
   // QUALITY GATE ENFORCEMENT TESTS
   // ========================================
 
-  describe('Quality Gate Enforcement', () => {
+  describe("Quality Gate Enforcement", () => {
     beforeEach(async () => {
-      const initResult = await execAPI('init');
+      const initResult = await execAPI("init");
       testAgentId = initResult.agentId;
     });
 
-    test('should mark audit tasks as quality gates that must pass', async () => {
+    test("should mark audit tasks as quality gates that must pass", async () => {
       const criticalTaskData = {
-        title: 'Critical feature requiring quality gates',
-        description: 'High-priority feature that must pass all quality gates',
-        category: 'feature',
-        priority: 'critical',
+        title: "Critical feature requiring quality gates",
+        description: "High-priority feature that must pass all quality gates",
+        category: "feature",
+        priority: "critical",
       };
 
-      const result = await execAPI('create', [
+      const result = await execAPI("create", [
         JSON.stringify(criticalTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
+      const listResult = await execAPI("list");
       const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const auditSubtask = task.subtasks.find((st) => st.type === "audit");
 
-      expect(auditSubtask.audit_type).toBe('embedded_quality_gate');
+      expect(auditSubtask.audit_type).toBe("embedded_quality_gate");
       expect(auditSubtask.prevents_completion).toBe(true);
-      expect(auditSubtask.status).toBe('pending');
+      expect(auditSubtask.status).toBe("pending");
     });
 
-    test('should validate that audit subtasks have proper timestamps', async () => {
+    test("should validate that audit subtasks have proper timestamps", async () => {
       const beforeTime = Date.now();
 
       const featureTaskData = {
-        title: 'Feature for timestamp validation',
+        title: "Feature for timestamp validation",
         description:
-          'Test feature to validate audit subtask timestamp generation',
-        category: 'feature',
-        priority: 'medium',
+          "Test feature to validate audit subtask timestamp generation",
+        category: "feature",
+        priority: "medium",
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const result = await execAPI("create", [JSON.stringify(featureTaskData)]);
       expect(result.success).toBe(true);
 
       const afterTime = Date.now();
 
-      const listResult = await execAPI('list');
+      const listResult = await execAPI("list");
       const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const auditSubtask = task.subtasks.find((st) => st.type === "audit");
 
       expect(auditSubtask.created_at).toBeDefined();
       const createdTime = new Date(auditSubtask.created_at).getTime();
@@ -738,21 +738,21 @@ describe('Audit System Validation Tests', () => {
       expect(createdTime).toBeLessThanOrEqual(afterTime);
     });
 
-    test('should handle audit criteria validation for edge cases', async () => {
+    test("should handle audit criteria validation for edge cases", async () => {
       // Test with minimal task data
       const minimalTaskData = {
-        title: 'Minimal feature',
-        description: '',
-        category: 'feature',
-        priority: 'low',
+        title: "Minimal feature",
+        description: "",
+        category: "feature",
+        priority: "low",
       };
 
-      const result = await execAPI('create', [JSON.stringify(minimalTaskData)]);
+      const result = await execAPI("create", [JSON.stringify(minimalTaskData)]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
+      const listResult = await execAPI("list");
       const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const auditSubtask = task.subtasks.find((st) => st.type === "audit");
 
       expect(auditSubtask).toBeDefined();
       expect(auditSubtask.success_criteria).toBeDefined();
@@ -765,24 +765,24 @@ describe('Audit System Validation Tests', () => {
   // AUDIT SYSTEM PERFORMANCE TESTS
   // ========================================
 
-  describe('Audit System Performance', () => {
+  describe("Audit System Performance", () => {
     beforeEach(async () => {
-      const initResult = await execAPI('init');
+      const initResult = await execAPI("init");
       testAgentId = initResult.agentId;
     });
 
-    test('should create audit subtasks within performance thresholds', async () => {
+    test("should create audit subtasks within performance thresholds", async () => {
       const startTime = Date.now();
 
       const performanceTaskData = {
-        title: 'Performance test feature with comprehensive requirements',
+        title: "Performance test feature with comprehensive requirements",
         description:
-          'Complex feature with extensive audit requirements for performance testing',
-        category: 'feature',
-        priority: 'high',
+          "Complex feature with extensive audit requirements for performance testing",
+        category: "feature",
+        priority: "high",
       };
 
-      const result = await execAPI('create', [
+      const result = await execAPI("create", [
         JSON.stringify(performanceTaskData),
       ]);
 
@@ -792,15 +792,15 @@ describe('Audit System Validation Tests', () => {
       expect(result.success).toBe(true);
       expect(executionTime).toBeLessThan(5000); // Should complete within 5 seconds
 
-      const listResult = await execAPI('list');
+      const listResult = await execAPI("list");
       const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const auditSubtask = task.subtasks.find((st) => st.type === "audit");
 
       expect(auditSubtask).toBeDefined();
       expect(auditSubtask.success_criteria.length).toBeGreaterThan(15);
     });
 
-    test('should handle multiple concurrent audit subtask creations', async () => {
+    test("should handle multiple concurrent audit subtask creations", async () => {
       const taskPromises = [];
       const numTasks = 3;
 
@@ -808,10 +808,10 @@ describe('Audit System Validation Tests', () => {
         const taskData = {
           title: `Concurrent audit test feature ${i + 1}`,
           description: `Feature ${i + 1} for concurrent audit creation testing`,
-          category: 'feature',
-          priority: 'medium',
+          category: "feature",
+          priority: "medium",
         };
-        taskPromises.push(execAPI('create', [JSON.stringify(taskData)]));
+        taskPromises.push(execAPI("create", [JSON.stringify(taskData)]));
       }
 
       const startTime = Date.now();
@@ -826,14 +826,14 @@ describe('Audit System Validation Tests', () => {
       expect(totalTime).toBeLessThan(10000); // Should complete within 10 seconds
 
       // Verify all audit subtasks were created properly
-      const listResult = await execAPI('list');
+      const listResult = await execAPI("list");
       const featureTasks = listResult.tasks.filter(
-        (t) => t.category === 'feature',
+        (t) => t.category === "feature",
       );
 
       expect(featureTasks.length).toBe(numTasks);
       featureTasks.forEach((task) => {
-        const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+        const auditSubtask = task.subtasks.find((st) => st.type === "audit");
         expect(auditSubtask).toBeDefined();
         expect(auditSubtask.success_criteria.length).toBeGreaterThan(0);
       });
@@ -844,37 +844,37 @@ describe('Audit System Validation Tests', () => {
   // AUDIT SYSTEM ERROR HANDLING TESTS
   // ========================================
 
-  describe('Audit System Error Handling', () => {
+  describe("Audit System Error Handling", () => {
     beforeEach(async () => {
-      const initResult = await execAPI('init');
+      const initResult = await execAPI("init");
       testAgentId = initResult.agentId;
     });
 
-    test('should handle corrupted audit criteria file gracefully', async () => {
+    test("should handle corrupted audit criteria file gracefully", async () => {
       // Create corrupted audit criteria file
       const auditCriteriaPath = path.join(
         TEST_PROJECT_DIR,
-        'development/essentials/audit-criteria.md',
+        "development/essentials/audit-criteria.md",
       );
       fs.writeFileSync(
         auditCriteriaPath,
-        'Invalid markdown content without proper formatting\n###\n- [ ] Broken',
+        "Invalid markdown content without proper formatting\n###\n- [ ] Broken",
       );
 
       const featureTaskData = {
-        title: 'Feature with corrupted audit criteria',
+        title: "Feature with corrupted audit criteria",
         description:
-          'Test feature to validate error handling for corrupted audit criteria',
-        category: 'feature',
-        priority: 'medium',
+          "Test feature to validate error handling for corrupted audit criteria",
+        category: "feature",
+        priority: "medium",
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const result = await execAPI("create", [JSON.stringify(featureTaskData)]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
+      const listResult = await execAPI("list");
       const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const auditSubtask = task.subtasks.find((st) => st.type === "audit");
 
       // Should still create audit subtask with fallback criteria
       expect(auditSubtask).toBeDefined();
@@ -882,14 +882,14 @@ describe('Audit System Validation Tests', () => {
       expect(auditSubtask.success_criteria.length).toBeGreaterThan(0);
     });
 
-    test('should handle extremely large audit criteria files', async () => {
+    test("should handle extremely large audit criteria files", async () => {
       // Create very large audit criteria file
       const auditCriteriaPath = path.join(
         TEST_PROJECT_DIR,
-        'development/essentials/audit-criteria.md',
+        "development/essentials/audit-criteria.md",
       );
 
-      let largeContent = '# Large Audit Criteria\n\n## Quality Gates\n\n';
+      let largeContent = "# Large Audit Criteria\n\n## Quality Gates\n\n";
       for (let i = 0; i < 100; i++) {
         largeContent += `- [ ] **Criterion ${i + 1}**: Detailed criterion description ${i + 1}\n`;
       }
@@ -897,19 +897,19 @@ describe('Audit System Validation Tests', () => {
       fs.writeFileSync(auditCriteriaPath, largeContent);
 
       const featureTaskData = {
-        title: 'Feature with large audit criteria',
+        title: "Feature with large audit criteria",
         description:
-          'Test feature to validate handling of large audit criteria files',
-        category: 'feature',
-        priority: 'medium',
+          "Test feature to validate handling of large audit criteria files",
+        category: "feature",
+        priority: "medium",
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const result = await execAPI("create", [JSON.stringify(featureTaskData)]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
+      const listResult = await execAPI("list");
       const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const auditSubtask = task.subtasks.find((st) => st.type === "audit");
 
       expect(auditSubtask).toBeDefined();
       expect(auditSubtask.success_criteria).toBeDefined();
@@ -919,26 +919,26 @@ describe('Audit System Validation Tests', () => {
       expect(auditSubtask.success_criteria.length).toBeLessThanOrEqual(50); // Reasonable upper limit
     });
 
-    test('should handle special characters in task data for audit descriptions', async () => {
+    test("should handle special characters in task data for audit descriptions", async () => {
       const specialCharsTaskData = {
-        title: 'Feature@2.0: Special chars (test) & validation!',
+        title: "Feature@2.0: Special chars (test) & validation!",
         description:
-          'Complex feature with special characters: @, &, !, (), :, and unicode: 🚀 ✅ 🔍',
-        category: 'feature',
-        priority: 'medium',
+          "Complex feature with special characters: @, &, !, (), :, and unicode: 🚀 ✅ 🔍",
+        category: "feature",
+        priority: "medium",
       };
 
-      const result = await execAPI('create', [
+      const result = await execAPI("create", [
         JSON.stringify(specialCharsTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
+      const listResult = await execAPI("list");
       const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const auditSubtask = task.subtasks.find((st) => st.type === "audit");
 
       expect(auditSubtask).toBeDefined();
-      expect(auditSubtask.title).toContain('Audit:');
+      expect(auditSubtask.title).toContain("Audit:");
       expect(auditSubtask.description).toContain(specialCharsTaskData.title);
       expect(auditSubtask.description).toContain(
         specialCharsTaskData.description,
