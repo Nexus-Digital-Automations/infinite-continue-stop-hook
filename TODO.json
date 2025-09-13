@@ -2,6 +2,34 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
+      "id": "error_1757782383773_7nh9yougg",
+      "title": "Fix TaskManager API method naming error in embedded subtasks functionality",
+      "description": "Replace incorrect loadTasks() method calls with correct readTodo() method calls in getSuccessCriteria, addSuccessCriteria, updateSuccessCriteria, createSubtask, listSubtasks, updateSubtask, deleteSubtask, manageResearchTask, and manageAuditTask methods. Error: this.taskManager.loadTasks is not a function",
+      "priority": "medium",
+      "category": "error",
+      "status": "in_progress",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T16:53:03.774Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757782270526_1_general_09255d82",
+      "started_at": "2025-09-13T16:53:22.374Z",
+      "claimed_by": "development_session_1757782270526_1_general_09255d82",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757782270526_1_general_09255d82",
+          "role": "primary",
+          "assignedAt": "2025-09-13T16:53:22.374Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
+    },
+    {
       "id": "error_1757781995340_4ueq4ud6v",
       "title": "Fix ESLint violations in test files and codebase",
       "description": "Fix 283 linting problems including 155 errors and 128 warnings across multiple files: audit-integration.js, audit-report-generator.js, test files, and taskmanager-api.js. Priority fixes: unused variables in test files, quotes formatting, console statement warnings, and process.exit violations.",
