@@ -43721,9 +43721,76 @@
       "needs_linter_feedback": true,
       "linter_feedback_generated": false,
       "archived_from_todo": "/Users/jeremyparker/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "test_1757786940144_paenavkzd",
+      "title": "Remove autodetect from reinitialize command - require explicit agent ID",
+      "description": "User explicitly requested that agents must provide their agent ID when reinitializing, NOT autodetect. Need to: 1) Remove autodetect logic from both CLI wrapper and API method, 2) Restore original requirement for explicit agent ID parameter, 3) Update error messages to clearly instruct agents to provide their agent ID, 4) Update documentation to make agent ID requirement explicit, 5) Test that reinitialize fails appropriately without agent ID",
+      "priority": "medium",
+      "category": "error",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T17:59:12.410Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757786975418_1_general_635458a3",
+      "started_at": "2025-09-13T18:10:41.891Z",
+      "claimed_by": "development_session_1757786975418_1_general_635458a3",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757785736302_1_general_4ec17f41",
+          "role": "primary",
+          "assignedAt": "2025-09-13T18:00:15.523Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "development_session_1757785736302_1_general_4ec17f41",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-13T18:09:00.135Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agentId": "development_session_1757786975418_1_general_635458a3",
+          "role": "primary",
+          "assignedAt": "2025-09-13T18:10:41.891Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completion_history": [
+        {
+          "taskId": "test_1757786940144_paenavkzd",
+          "completedAt": "2025-09-13T18:24:43.914Z",
+          "completedBy": "development_session_1757786975418_1_general_635458a3",
+          "evidence": {},
+          "completionNotes": "",
+          "category": "error",
+          "priority": "medium"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-13T18:24:43.914Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-13T18:24:43.914Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/infinite-continue-stop-hook/TODO.json"
     }
   ],
-  "total_completed": 965,
-  "last_completion": "2025-09-13T18:17:37.345Z",
+  "total_completed": 966,
+  "last_completion": "2025-09-13T18:24:43.914Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }

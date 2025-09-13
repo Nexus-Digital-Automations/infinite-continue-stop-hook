@@ -2,9 +2,9 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
-      "id": "test_1757786940144_paenavkzd",
-      "title": "Remove autodetect from reinitialize command - require explicit agent ID",
-      "description": "User explicitly requested that agents must provide their agent ID when reinitializing, NOT autodetect. Need to: 1) Remove autodetect logic from both CLI wrapper and API method, 2) Restore original requirement for explicit agent ID parameter, 3) Update error messages to clearly instruct agents to provide their agent ID, 4) Update documentation to make agent ID requirement explicit, 5) Test that reinitialize fails appropriately without agent ID",
+      "id": "error_1757798543516_zyk03j2df",
+      "title": "Fix task completion null evidence bug in modular TaskOperations",
+      "description": "Fix Cannot read properties of null reading evidence error in modular TaskOperations.completeTask method - keep modular architecture intact",
       "priority": "medium",
       "category": "error",
       "status": "in_progress",
@@ -14,29 +14,44 @@
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-09-13T17:59:12.410Z",
+      "created_at": "2025-09-13T21:22:23.516Z",
       "auto_research_created": false,
-      "assigned_agent": "development_session_1757786975418_1_general_635458a3",
-      "started_at": "2025-09-13T18:10:41.891Z",
-      "claimed_by": "development_session_1757786975418_1_general_635458a3",
+      "assigned_agent": "dev_session_1757798498865_1_general_64bcaf31",
+      "started_at": "2025-09-13T21:22:41.488Z",
+      "claimed_by": "dev_session_1757798498865_1_general_64bcaf31",
       "agent_assignment_history": [
         {
-          "agentId": "development_session_1757785736302_1_general_4ec17f41",
+          "agentId": "dev_session_1757798498865_1_general_64bcaf31",
           "role": "primary",
-          "assignedAt": "2025-09-13T18:00:15.523Z",
+          "assignedAt": "2025-09-13T21:22:41.488Z",
           "reassignReason": null,
           "claimPriority": "normal"
-        },
+        }
+      ]
+    },
+    {
+      "id": "error_1757798101571_jwnthbr44",
+      "title": "Test TaskManager API functionality",
+      "description": "Comprehensive test of all endpoints and workflow",
+      "priority": "medium",
+      "category": "error",
+      "status": "in_progress",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T21:15:01.572Z",
+      "auto_research_created": false,
+      "assigned_agent": "dev_session_1757798045514_1_general_07a91e62",
+      "started_at": "2025-09-13T21:15:31.350Z",
+      "claimed_by": "dev_session_1757798045514_1_general_07a91e62",
+      "agent_assignment_history": [
         {
-          "agent": "development_session_1757785736302_1_general_4ec17f41",
-          "action": "auto_unassign_stale",
-          "timestamp": "2025-09-13T18:09:00.135Z",
-          "reason": "Agent became stale (inactive >15 minutes)"
-        },
-        {
-          "agentId": "development_session_1757786975418_1_general_635458a3",
+          "agentId": "dev_session_1757798045514_1_general_07a91e62",
           "role": "primary",
-          "assignedAt": "2025-09-13T18:10:41.891Z",
+          "assignedAt": "2025-09-13T21:15:31.350Z",
           "reassignReason": null,
           "claimPriority": "normal"
         }
@@ -48,7 +63,7 @@
       "description": "Comprehensive quality audit and review of the completed feature: Design comprehensive testing strategy for TaskManager API enhancements\n\nOriginal Description: Design and implement comprehensive testing strategy covering integration testing for subtask/success criteria endpoints, API contract testing for backward compatibility, performance testing for enhanced endpoints, security testing for authentication patterns, and end-to-end testing for full workflows. Include automation framework recommendations, CI/CD integration, and quality gate implementation.",
       "category": "audit",
       "priority": "high",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [
@@ -68,9 +83,9 @@
       "created_from_completed_task": "feature_1757784276376_2xkwch91a",
       "prevents_self_review": true,
       "audit_type": "post_completion",
-      "assigned_agent": "development_session_1757786828251_1_general_37de09bb",
-      "started_at": "2025-09-13T18:20:00.592Z",
-      "claimed_by": "development_session_1757786828251_1_general_37de09bb",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "development_session_1757785266907_1_general_8560e4a6",
@@ -91,6 +106,25 @@
           "assignedAt": "2025-09-13T18:20:00.592Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "development_session_1757786828251_1_general_37de09bb",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-13T18:25:19.873Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agentId": "development_session_1757787926462_1_general_80d0ca04",
+          "role": "primary",
+          "assignedAt": "2025-09-13T18:26:41.847Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "development_session_1757787926462_1_general_80d0ca04",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-13T21:11:29.949Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
         }
       ]
     },
@@ -233,6 +267,118 @@
       "audit_type": "post_completion"
     },
     {
+      "id": "feature_1757798883392_uj4g3rdtt",
+      "title": "Modularize goliath taskManager.js file into focused modules",
+      "description": "Break down the monolithic /Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager.js file into smaller, focused modules. First backup the current version as taskManager.js.backup, then split functionality into logical modules like TaskCore, TaskValidation, TaskStorage, TaskEvents, etc. Maintain existing API compatibility while improving maintainability and testability.",
+      "priority": "medium",
+      "category": "feature",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [
+        {
+          "id": "research_1757798883393_b3dc810b",
+          "type": "research",
+          "title": "Research: Modularize goliath taskManager.js file into focused modules",
+          "description": "Comprehensive research for Modularize goliath taskManager.js file into focused modules to support implementation",
+          "status": "pending",
+          "estimated_hours": 1,
+          "research_locations": [
+            {
+              "type": "codebase",
+              "paths": [
+                "/api",
+                "/routes",
+                "/controllers"
+              ],
+              "focus": "Existing implementation patterns and architecture"
+            },
+            {
+              "type": "internet",
+              "keywords": [
+                "modularize",
+                "goliath",
+                "taskmanager.js",
+                "file",
+                "into"
+              ],
+              "focus": "Best practices, industry standards, and technical specifications"
+            },
+            {
+              "type": "documentation",
+              "sources": [
+                "README.md",
+                "docs/",
+                "API documentation",
+                "package.json"
+              ],
+              "focus": "Project configuration and existing documentation"
+            }
+          ],
+          "deliverables": [
+            "Technical analysis report",
+            "Implementation recommendations",
+            "Risk assessment",
+            "Alternative approaches evaluation"
+          ],
+          "prevents_implementation": true,
+          "created_at": "2025-09-13T21:28:03.393Z"
+        },
+        {
+          "id": "audit_1757798883393_b3dc810b",
+          "type": "audit",
+          "title": "Audit: Modularize goliath taskManager.js file into focused modules",
+          "description": "Comprehensive quality audit and review of the completed feature: Modularize goliath taskManager.js file into focused modules\n\nOriginal Description: Break down the monolithic /Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager.js file into smaller, focused modules. First backup the current version as taskManager.js.backup, then split functionality into logical modules like TaskCore, TaskValidation, TaskStorage, TaskEvents, etc. Maintain existing API compatibility while improving maintainability and testability.",
+          "status": "pending",
+          "estimated_hours": 0.5,
+          "success_criteria": [
+            "JavaScript/TypeScript",
+            "Python",
+            "Go",
+            "Rust",
+            "Node.js",
+            "Python",
+            "Go",
+            "Rust",
+            "Node.js",
+            "Python",
+            "Go",
+            "Rust",
+            "Node.js",
+            "Python",
+            "Go",
+            "Rust"
+          ],
+          "prevents_completion": true,
+          "original_implementer": null,
+          "prevents_self_review": true,
+          "audit_type": "embedded_quality_gate",
+          "created_at": "2025-09-13T21:28:03.395Z"
+        }
+      ],
+      "created_at": "2025-09-13T21:28:03.395Z",
+      "auto_research_created": false
+    },
+    {
+      "id": "test_1757798714256_xj0scn1m9",
+      "title": "Test task completion functionality",
+      "description": "Simple test task to verify completion works after fixing null evidence bug",
+      "priority": "medium",
+      "category": "test",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T21:25:14.256Z",
+      "auto_research_created": false
+    },
+    {
       "id": "feature_1757787855001_bznwkscje",
       "title": "Refactor taskmanager-api.js - Split large monolithic file",
       "description": "The taskmanager-api.js file is ridiculously large at over 6000 lines. Split it into smaller, more manageable modules while maintaining all functionality. Create separate modules for CLI interface, API methods, agent management, task operations, and other logical groupings. Ensure all imports and exports work correctly and maintain backward compatibility.",
@@ -326,7 +472,25 @@
         }
       ],
       "created_at": "2025-09-13T18:24:15.008Z",
-      "auto_research_created": false
+      "auto_research_created": false,
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757786991716_1_general_9f79597d",
+          "role": "primary",
+          "assignedAt": "2025-09-13T18:24:33.315Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "development_session_1757786991716_1_general_9f79597d",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-13T18:25:19.873Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
+        }
+      ]
     },
     {
       "id": "feature_1757786989566_lpq9evcay",
@@ -466,7 +630,7 @@
       "description": "Test feature task - should work normally",
       "priority": "medium",
       "category": "feature",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -507,9 +671,9 @@
       ],
       "created_at": "2025-09-13T18:08:03.357Z",
       "auto_research_created": false,
-      "assigned_agent": "development_session_1757785266907_1_general_8560e4a6",
-      "started_at": "2025-09-13T18:08:03.362Z",
-      "claimed_by": "development_session_1757785266907_1_general_8560e4a6",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "development_session_1757785266907_1_general_8560e4a6",
@@ -517,6 +681,12 @@
           "assignedAt": "2025-09-13T18:08:03.362Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-09-13T18:25:19.874Z",
+          "reason": "Task stale for 17 minutes"
         }
       ]
     },
@@ -526,7 +696,7 @@
       "description": "Test audit task for different agent allowing",
       "priority": "medium",
       "category": "audit",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -536,9 +706,9 @@
       "created_at": "2025-09-13T18:08:03.346Z",
       "auto_research_created": false,
       "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
-      "assigned_agent": "development_session_9999999999999_2_general_different",
-      "started_at": "2025-09-13T18:08:03.350Z",
-      "claimed_by": "development_session_9999999999999_2_general_different",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "development_session_9999999999999_2_general_different",
@@ -546,6 +716,12 @@
           "assignedAt": "2025-09-13T18:08:03.350Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-09-13T18:25:19.874Z",
+          "reason": "Task stale for 17 minutes"
         }
       ]
     },
@@ -606,7 +782,7 @@
       "description": "Debug test audit task to verify objectivity enforcement",
       "priority": "medium",
       "category": "audit",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -616,9 +792,9 @@
       "created_at": "2025-09-13T18:05:40.516Z",
       "auto_research_created": false,
       "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
-      "assigned_agent": "development_session_1757785266907_1_general_8560e4a6",
-      "started_at": "2025-09-13T18:05:40.547Z",
-      "claimed_by": "development_session_1757785266907_1_general_8560e4a6",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "development_session_1757785266907_1_general_8560e4a6",
@@ -626,6 +802,12 @@
           "assignedAt": "2025-09-13T18:05:40.547Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-09-13T18:25:19.874Z",
+          "reason": "Task stale for 20 minutes"
         }
       ]
     },
@@ -683,7 +865,7 @@
       "description": "Test audit task to verify objectivity enforcement",
       "priority": "medium",
       "category": "audit",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -693,9 +875,9 @@
       "created_at": "2025-09-13T18:03:55.622Z",
       "auto_research_created": false,
       "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
-      "assigned_agent": "development_session_1757785266907_1_general_8560e4a6",
-      "started_at": "2025-09-13T18:03:55.637Z",
-      "claimed_by": "development_session_1757785266907_1_general_8560e4a6",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "development_session_1757785266907_1_general_8560e4a6",
@@ -703,6 +885,12 @@
           "assignedAt": "2025-09-13T18:03:55.637Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-09-13T18:25:19.874Z",
+          "reason": "Task stale for 21 minutes"
         }
       ]
     },
@@ -2196,7 +2384,7 @@
       "description": "Add comprehensive subtasks management (create, read, update, delete) and success criteria endpoints to taskmanager-api.js. Implement research task routing, audit task management, and auto-generation of research/audit subtasks. Maintain backward compatibility while adding POST /api/subtasks/create, GET /api/subtasks/:taskId, PUT /api/subtasks/:subtaskId, DELETE /api/subtasks/:subtaskId, POST /api/success-criteria/task/:taskId, POST /api/success-criteria/project-wide, GET /api/success-criteria/:taskId endpoints.",
       "priority": "medium",
       "category": "feature",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -2294,9 +2482,9 @@
       ],
       "created_at": "2025-09-13T16:32:44.020Z",
       "auto_research_created": false,
-      "assigned_agent": "development_session_1757786991716_1_general_9f79597d",
-      "started_at": "2025-09-13T18:22:02.614Z",
-      "claimed_by": "development_session_1757786991716_1_general_9f79597d",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "development_session_1757781146851_1_general_c105fbba",
@@ -2317,6 +2505,12 @@
           "assignedAt": "2025-09-13T18:22:02.614Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "development_session_1757786991716_1_general_9f79597d",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-13T18:25:19.873Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
         }
       ]
     }
@@ -2328,13 +2522,13 @@
   "strikes_completed_last_run": false,
   "last_hook_activation": 1757094794402,
   "agents": {
-    "development_session_1757786828251_1_general_37de09bb": {
-      "name": "development Agent",
+    "dev_session_1757798045514_1_general_07a91e62": {
+      "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-13T18:07:08.253Z",
+      "lastHeartbeat": "2025-09-13T21:14:05.514Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2345,44 +2539,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-13T18:07:08.253Z",
-      "sessionId": "session_1757786828251",
-      "metadata": {
-        "renewedAt": "2025-09-13T18:18:36.535Z",
-        "renewalReason": "Agent reinitialization requested"
-      },
-      "lastRenewal": "2025-09-13T18:18:36.535Z",
-      "renewalCount": 1,
-      "agentId": "development_session_1757786828251_1_general_37de09bb"
-    },
-    "development_session_1757786975418_1_general_635458a3": {
-      "name": "development Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-13T18:09:35.423Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-13T18:09:35.423Z",
-      "sessionId": "session_1757786975418",
+      "createdAt": "2025-09-13T21:14:05.514Z",
+      "sessionId": null,
       "metadata": {}
     },
-    "development_session_1757786977821_1_general_d6bc1675": {
-      "name": "development Agent",
+    "dev_session_1757798498865_1_general_64bcaf31": {
+      "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-13T18:09:37.825Z",
+      "lastHeartbeat": "2025-09-13T21:21:38.865Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2393,23 +2560,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-13T18:09:37.826Z",
-      "sessionId": "session_1757786977821",
-      "metadata": {
-        "renewedAt": "2025-09-13T18:09:58.287Z",
-        "renewalReason": "Agent reinitialization requested"
-      },
-      "lastRenewal": "2025-09-13T18:09:58.287Z",
-      "renewalCount": 1,
-      "agentId": "development_session_1757786977821_1_general_d6bc1675"
+      "createdAt": "2025-09-13T21:21:38.865Z",
+      "sessionId": null,
+      "metadata": {}
     },
-    "development_session_1757786991716_1_general_9f79597d": {
-      "name": "development Agent",
+    "dev_session_1757798697876_1_general_21ba227b": {
+      "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-13T18:09:51.719Z",
+      "lastHeartbeat": "2025-09-13T21:24:57.876Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2420,15 +2581,30 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-13T18:09:51.719Z",
-      "sessionId": "session_1757786991716",
-      "metadata": {
-        "renewedAt": "2025-09-13T18:18:33.464Z",
-        "renewalReason": "Agent reinitialization requested"
-      },
-      "lastRenewal": "2025-09-13T18:18:33.464Z",
-      "renewalCount": 1,
-      "agentId": "development_session_1757786991716_1_general_9f79597d"
+      "createdAt": "2025-09-13T21:24:57.876Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1757798861734_1_general_eaa0a4c5": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-13T21:27:41.735Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-13T21:27:41.735Z",
+      "sessionId": null,
+      "metadata": {}
     }
   },
   "features": [
