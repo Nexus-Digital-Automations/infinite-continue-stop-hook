@@ -1,2 +1,2 @@
-// User model definition
-const mongoose = require("mongoose");
+// User model definition placeholder
+// const mongoose = require('mongoose');

@@ -23,7 +23,7 @@ const createResult = runCommand(
 
 if (!createResult.success) {
   console.error("❌ Failed to create audit task:", createResult.error);
-  process.exit(1);
+  throw new Error("Failed to create audit task: " + createResult.error);
 }
 
 const auditTaskId = createResult.taskId;
@@ -39,7 +39,9 @@ if (normalClaim.success) {
   console.error(
     "❌ BUG: Agent was able to claim their own audit task normally!",
   );
-  process.exit(1);
+  throw new Error(
+    "BUG: Agent was able to claim their own audit task normally!",
+  );
 }
 
 console.log("✅ Normal claim correctly rejected:", normalClaim.reason);
@@ -72,4 +74,4 @@ console.log(
 );
 console.log("- Objectivity: Still enforced for actual audit work execution");
 
-process.exit(0);
+// Test completed successfully

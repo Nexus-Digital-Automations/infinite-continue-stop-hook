@@ -1,2 +1,2 @@
-// Main application entry point
-const express = require("express");
+// Main application entry point placeholder
+// const express = require('express');

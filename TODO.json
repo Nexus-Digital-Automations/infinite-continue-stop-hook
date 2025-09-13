@@ -30,47 +30,6 @@
       ]
     },
     {
-      "id": "error_1757785289152_n08fcpdjx",
-      "title": "Fix agent audit task override permission bug",
-      "description": "The taskmanager API incorrectly prevents an agent from overriding an audit task to work on a new feature task, even when the agent is the same one that originally performed the feature task being audited. This creates a deadlock where the agent cannot proceed with new work. Need to fix the authorization logic to allow the original feature task agent to override their own audit tasks.",
-      "priority": "medium",
-      "category": "error",
-      "status": "in_progress",
-      "dependencies": [],
-      "important_files": [],
-      "success_criteria": [],
-      "estimate": "",
-      "requires_research": false,
-      "subtasks": [],
-      "created_at": "2025-09-13T17:41:29.152Z",
-      "auto_research_created": false,
-      "assigned_agent": "development_session_1757785736302_1_general_4ec17f41",
-      "started_at": "2025-09-13T17:59:52.891Z",
-      "claimed_by": "development_session_1757785736302_1_general_4ec17f41",
-      "agent_assignment_history": [
-        {
-          "agentId": "development_session_1757785266907_1_general_8560e4a6",
-          "role": "primary",
-          "assignedAt": "2025-09-13T17:41:46.105Z",
-          "reassignReason": null,
-          "claimPriority": "normal"
-        },
-        {
-          "agent": "development_session_1757785266907_1_general_8560e4a6",
-          "action": "auto_unassign_stale",
-          "timestamp": "2025-09-13T17:58:45.591Z",
-          "reason": "Agent became stale (inactive >15 minutes)"
-        },
-        {
-          "agentId": "development_session_1757785736302_1_general_4ec17f41",
-          "role": "primary",
-          "assignedAt": "2025-09-13T17:59:52.891Z",
-          "reassignReason": null,
-          "claimPriority": "normal"
-        }
-      ]
-    },
-    {
       "id": "test_1757785927193_rtzdxyixh",
       "title": "Post-Completion Audit: Design comprehensive testing strategy for TaskManager API enhancements",
       "description": "Comprehensive quality audit and review of the completed feature: Design comprehensive testing strategy for TaskManager API enhancements\n\nOriginal Description: Design and implement comprehensive testing strategy covering integration testing for subtask/success criteria endpoints, API contract testing for backward compatibility, performance testing for enhanced endpoints, security testing for authentication patterns, and end-to-end testing for full workflows. Include automation framework recommendations, CI/CD integration, and quality gate implementation.",
@@ -252,6 +211,148 @@
       "original_implementer": "development_session_1757781390031_1_general_ee981c91",
       "prevents_self_review": true,
       "audit_type": "post_completion"
+    },
+    {
+      "id": "audit_1757786883374_zdnfd7sf3",
+      "title": "Test 5 - No Allow Out Of Order",
+      "description": "Test audit task without allowOutOfOrder",
+      "priority": "medium",
+      "category": "audit",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T18:08:03.374Z",
+      "auto_research_created": false,
+      "original_implementer": "development_session_1757785266907_1_general_8560e4a6"
+    },
+    {
+      "id": "audit_1757786883368_0nr49m6t6",
+      "title": "Test 4 - Audit Metadata Task",
+      "description": "Test audit task with audit_metadata",
+      "priority": "medium",
+      "category": "audit",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T18:08:03.368Z",
+      "auto_research_created": false,
+      "audit_metadata": {
+        "original_implementer": "development_session_1757785266907_1_general_8560e4a6"
+      }
+    },
+    {
+      "id": "feature_1757786883355_tlovc06k4",
+      "title": "Test 3 - Feature Task",
+      "description": "Test feature task - should work normally",
+      "priority": "medium",
+      "category": "feature",
+      "status": "in_progress",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [
+        {
+          "id": "audit_1757786883355_f989c76a",
+          "type": "audit",
+          "title": "Audit: Test 3 - Feature Task",
+          "description": "Comprehensive quality audit and review of the completed feature: Test 3 - Feature Task\n\nOriginal Description: Test feature task - should work normally",
+          "status": "pending",
+          "estimated_hours": 0.5,
+          "success_criteria": [
+            "JavaScript/TypeScript",
+            "Python",
+            "Go",
+            "Rust",
+            "Node.js",
+            "Python",
+            "Go",
+            "Rust",
+            "Node.js",
+            "Python",
+            "Go",
+            "Rust",
+            "Node.js",
+            "Python",
+            "Go",
+            "Rust"
+          ],
+          "prevents_completion": true,
+          "original_implementer": null,
+          "prevents_self_review": true,
+          "audit_type": "embedded_quality_gate",
+          "created_at": "2025-09-13T18:08:03.357Z"
+        }
+      ],
+      "created_at": "2025-09-13T18:08:03.357Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757785266907_1_general_8560e4a6",
+      "started_at": "2025-09-13T18:08:03.362Z",
+      "claimed_by": "development_session_1757785266907_1_general_8560e4a6",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757785266907_1_general_8560e4a6",
+          "role": "primary",
+          "assignedAt": "2025-09-13T18:08:03.362Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
+    },
+    {
+      "id": "audit_1757786883346_fby6105g6",
+      "title": "Test 2 - Different Agent Audit Task",
+      "description": "Test audit task for different agent allowing",
+      "priority": "medium",
+      "category": "audit",
+      "status": "in_progress",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T18:08:03.346Z",
+      "auto_research_created": false,
+      "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
+      "assigned_agent": "development_session_9999999999999_2_general_different",
+      "started_at": "2025-09-13T18:08:03.350Z",
+      "claimed_by": "development_session_9999999999999_2_general_different",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_9999999999999_2_general_different",
+          "role": "primary",
+          "assignedAt": "2025-09-13T18:08:03.350Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
+    },
+    {
+      "id": "audit_1757786883328_c1bnif8wn",
+      "title": "Test 1 - Same Agent Audit Task",
+      "description": "Test audit task for same agent blocking",
+      "priority": "medium",
+      "category": "audit",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T18:08:03.328Z",
+      "auto_research_created": false,
+      "original_implementer": "development_session_1757785266907_1_general_8560e4a6"
     },
     {
       "id": "audit_1757786818386_l2k88fus3",
