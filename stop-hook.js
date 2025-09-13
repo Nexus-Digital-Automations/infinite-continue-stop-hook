@@ -96,7 +96,7 @@ async function autoSortTasksByPriority(taskManager) {
 
       const title = (task.title || "").toLowerCase();
       const description = (task.description || "").toLowerCase();
-      const category = (task.category || "").toLowerCase();
+      const category = task.category ? String(task.category).toLowerCase() : "";
       const allText = `${title} ${description} ${category}`;
 
       // ERROR detection (highest priority)
@@ -109,9 +109,14 @@ async function autoSortTasksByPriority(taskManager) {
 
       const isError =
         errorPatterns.some((pattern) => pattern.test(allText)) ||
-        ["linter-error", "build-error", "start-error", "error", "bug"].includes(
-          category,
-        );
+        (category &&
+          [
+            "linter-error",
+            "build-error",
+            "start-error",
+            "error",
+            "bug",
+          ].includes(category));
 
       if (isError) {
         // Check if it's actually test-related (should be test_ not error_)
@@ -136,10 +141,11 @@ async function autoSortTasksByPriority(taskManager) {
 
       const isTest =
         testPatterns.some((pattern) => pattern.test(allText)) ||
-        category.startsWith("test-") ||
-        ["missing-test", "test-setup", "test-refactor", "testing"].includes(
-          category,
-        );
+        (category && category.startsWith("test-")) ||
+        (category &&
+          ["missing-test", "test-setup", "test-refactor", "testing"].includes(
+            category,
+          ));
 
       if (isTest) {
         return "test";
