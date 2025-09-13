@@ -490,7 +490,7 @@ describe('Audit System Validation Tests', () => {
 
       // Verify both agents can see the task but audit maintains independence
       const listResult1 = await execAPI('list');
-      const listResult2 = await execAPI('list'); // Same API, different agent would be handled by claiming logic
+      const _listResult2 = await execAPI('list'); // Same API, different agent would be handled by claiming logic
 
       const task = listResult1.tasks.find((t) => t.id === createResult.taskId);
       const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
@@ -556,7 +556,7 @@ describe('Audit System Validation Tests', () => {
       const auditSubtask = task.subtasks.find((st) => st.type === 'audit');
 
       // Should include project-specific criteria if defined in audit-criteria.md
-      const projectCriteria = auditSubtask.success_criteria.filter(
+      const _projectCriteria = auditSubtask.success_criteria.filter(
         (criterion) =>
           criterion.includes('TaskManager') ||
           criterion.includes('Agent') ||

@@ -269,6 +269,7 @@ class SuccessCriteriaValidator {
         continue;
       }
 
+      // eslint-disable-next-line no-console
       console.log(`🔍 Validating: ${criterion.name}`);
 
       try {
@@ -767,6 +768,7 @@ class SuccessCriteriaValidator {
    * Main validation function
    */
   async validateTask(taskId, options = {}) {
+    // eslint-disable-next-line no-console
     console.log(`🚀 Starting validation for task: ${taskId}`);
 
     try {

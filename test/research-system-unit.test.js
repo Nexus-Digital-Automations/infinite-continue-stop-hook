@@ -181,7 +181,7 @@ function cleanupResearchTestEnvironment() {
 }
 
 describe('Research System Unit Tests', () => {
-  let testAgentId = null;
+  const _testAgentId = null;
 
   beforeEach(() => {
     setupResearchTestEnvironment();
