@@ -1,88 +1,38 @@
 {
   "project": "audit-system-test",
-  "tasks": [
-    {
-      "id": "feature_1757784828913_ewx9v0ct7",
-      "title": "Multi-agent audit independence test",
-      "description": "Test feature to validate audit independence across agents",
-      "priority": "high",
-      "category": "feature",
-      "status": "in_progress",
-      "dependencies": [],
-      "important_files": [],
-      "success_criteria": [],
-      "estimate": "",
-      "requires_research": false,
-      "subtasks": [
-        {
-          "id": "audit_1757784828913_9209157f",
-          "type": "audit",
-          "title": "Audit: Multi-agent audit independence test",
-          "description": "Comprehensive quality audit and review of the completed feature: Multi-agent audit independence test\n\nOriginal Description: Test feature to validate audit independence across agents",
-          "status": "pending",
-          "estimated_hours": 0.5,
-          "success_criteria": [
-            "Linter Perfection",
-            "Build Success",
-            "Runtime Success",
-            "Test Integrity",
-            "Function Documentation",
-            "Implementation Quality",
-            "Security Standards",
-            "Performance Standards"
-          ],
-          "prevents_completion": true,
-          "original_implementer": null,
-          "prevents_self_review": true,
-          "audit_type": "embedded_quality_gate",
-          "created_at": "2025-09-13T17:33:48.916Z"
-        }
+  "tasks": [],
+  "agents": {
+    "development_session_1757785008806_1_general_e2f6a9cc": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-13T17:36:48.807Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
       ],
-      "created_at": "2025-09-13T17:33:48.916Z",
-      "auto_research_created": false,
-      "assigned_agent": "undefined",
-      "started_at": "2025-09-13T17:33:59.100Z",
-      "claimed_by": "undefined",
-      "agent_assignment_history": [
-        {
-          "agentId": "undefined",
-          "role": "primary",
-          "assignedAt": "2025-09-13T17:33:59.100Z",
-          "reassignReason": null,
-          "claimPriority": "normal"
-        }
-      ]
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-13T17:36:48.807Z",
+      "sessionId": "session_1757785008806",
+      "metadata": {}
     }
-  ],
-  "agents": {},
+  },
   "features": [],
   "current_mode": "DEVELOPMENT",
   "last_mode": null,
   "execution_count": 0,
   "review_strikes": 0,
   "strikes_completed_last_run": false,
-  "last_hook_activation": 1757784808681,
+  "last_hook_activation": 1757785008619,
   "settings": {
-    "auto_sort_enabled": true,
-    "sort_criteria": {
-      "primary": "category",
-      "secondary": "created_at"
-    },
-    "priority_values": {
-      "critical": 4,
-      "high": 3,
-      "medium": 2,
-      "low": 1
-    },
-    "category_enabled": true,
-    "category_ranks": {
-      "error": 1,
-      "feature": 2,
-      "subtask": 3,
-      "test": 4,
-      "quality": 5
-    },
     "version": "2.0.0",
-    "created": "2025-09-13T17:33:28.681Z"
+    "created": "2025-09-13T17:36:48.619Z"
   }
 }
