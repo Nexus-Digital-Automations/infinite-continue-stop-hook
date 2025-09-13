@@ -10,7 +10,6 @@
 - **❌ NO**: Analysis first, "let me check" responses, preliminary questions
 - **✅ YES**: Instant response → Initialize → Create task → Execute
 - **TRIGGERS**: Any request to implement, add, create, fix, improve, analyze, work on anything, or "continue"
-- **🔴 USER REQUEST SUPREMACY**: User requests trump ALL other priorities - implement immediately using protocols
 
 ## 🚨 CRITICAL MANDATES
 
@@ -144,9 +143,9 @@ function processData(userId, data) {
 - **❌ NO ABANDONMENT**: Never leave tasks partially complete without documentation
 
 **INTERRUPTION HIERARCHY (ONLY THESE):**
-1. **USER REQUESTS** - ABSOLUTE SUPREME PRIORITY - Trump all else, implement immediately using protocols/workflows
-2. **LINTER ERRORS** - Supreme priority
-3. **BUILD FAILURES** - System-blocking errors
+1. **LINTER ERRORS** - Supreme priority
+2. **BUILD FAILURES** - System-blocking errors
+3. **USER COMMANDS** - Explicit overrides
 4. **SECURITY VULNERABILITIES** - Critical issues
 
 

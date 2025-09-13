@@ -41151,9 +41151,128 @@
       "needs_linter_feedback": true,
       "linter_feedback_generated": false,
       "archived_from_todo": "/Users/jeremyparker/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "test_1757718980743_f8lucff1j",
+      "title": "Post-Completion Audit: Fix task report naming to use actual task IDs in CLAUDE.md",
+      "description": "Comprehensive quality audit and review of the completed feature: Fix task report naming to use actual task IDs in CLAUDE.md\n\nOriginal Description: Update CLAUDE.md reports directory protocol to specify that task folders should be named with actual task IDs (e.g., feature_1757702700510_aiwn0i8s8) rather than generic placeholders like feature_[taskId]",
+      "category": "audit",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [
+        "Linter perfection achieved (zero warnings/errors)",
+        "Build perfection achieved (clean build)",
+        "All tests pass with full coverage",
+        "Code quality standards met",
+        "Implementation follows architectural patterns",
+        "Security review passed",
+        "Performance standards met",
+        "Documentation is complete and accurate"
+      ],
+      "estimate": "1-2 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-12T20:16:15.330Z",
+      "created_from_completed_task": "test_1757707047094_p3ifnu9jr",
+      "prevents_self_review": true,
+      "audit_type": "post_completion",
+      "assigned_agent": "development_session_1757727165542_1_general_17d6be3b",
+      "started_at": "2025-09-13T01:33:45.342Z",
+      "claimed_by": "development_session_1757727165542_1_general_17d6be3b",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757727165542_1_general_17d6be3b",
+          "role": "primary",
+          "assignedAt": "2025-09-13T01:33:45.342Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completion_history": [
+        {
+          "taskId": "test_1757718980743_f8lucff1j",
+          "completedAt": "2025-09-13T01:40:24.015Z",
+          "completedBy": "development_session_1757727165542_1_general_17d6be3b",
+          "evidence": {},
+          "completionNotes": "",
+          "category": "audit",
+          "priority": "high"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-13T01:40:24.015Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-13T01:40:24.015Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "error_1757734067043_y6c4h1o1v",
+      "title": "CRITICAL: Fix TaskManager category/ID data inconsistencies causing ordering failures",
+      "description": "Task error_1757707047094_t7cgs1ri5 has ID prefix error_ but category feature causing TaskManager API ordering confusion. Delete and recreate with proper category alignment per TaskManager conversion guide.",
+      "priority": "medium",
+      "category": "error",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T03:27:47.043Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757733951031_1_general_f91c7738",
+      "started_at": "2025-09-13T03:28:11.508Z",
+      "claimed_by": "development_session_1757733951031_1_general_f91c7738",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757733951031_1_general_f91c7738",
+          "role": "primary",
+          "assignedAt": "2025-09-13T03:28:11.508Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completion_history": [
+        {
+          "taskId": "error_1757734067043_y6c4h1o1v",
+          "completedAt": "2025-09-13T03:29:24.466Z",
+          "completedBy": "development_session_1757733951031_1_general_f91c7738",
+          "evidence": {},
+          "completionNotes": "",
+          "category": "error",
+          "priority": "medium"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-13T03:29:24.466Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-13T03:29:24.466Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/infinite-continue-stop-hook/TODO.json"
     }
   ],
-  "total_completed": 936,
-  "last_completion": "2025-09-13T01:27:05.612Z",
+  "total_completed": 938,
+  "last_completion": "2025-09-13T03:29:24.466Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }
