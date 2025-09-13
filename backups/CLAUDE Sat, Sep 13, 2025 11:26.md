@@ -119,7 +119,7 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 
 **MANDATES:**
 - **COMPREHENSIVE DOCUMENTATION**: Document every function, class, module, decision
-- **COMPREHENSIVE LOGGING**: CRITICAL for maintainability - Function entry/exit, parameters, returns, errors, timing, state changes, decisions
+- **MAXIMUM LOGGING**: Function calls, parameters, returns, errors, timing, state changes
 - **PERFORMANCE METRICS**: Execution timing and bottleneck identification
 - **API DOCUMENTATION**: Complete interfaces with usage examples
 - **ARCHITECTURE DOCUMENTATION**: System design decisions, data flow, integration patterns
@@ -469,7 +469,7 @@ npm run lint && npm run build && npm test && npm start
 ### 📋 PHASE 2: IMPLEMENTATION & QUALITY
 - [ ] **COMPLETE IMPLEMENTATION** with:
   - [ ] Comprehensive documentation (functions, classes, modules)
-  - [ ] Comprehensive logging (calls, parameters, returns, errors, timing) - CRITICAL for maintainability
+  - [ ] Maximum logging (calls, parameters, returns, errors, timing)
   - [ ] Performance metrics and bottleneck identification
   - [ ] API documentation with usage examples
   - [ ] Architecture documentation for system design decisions
