@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const TaskManager = require('./lib/taskManager');
-const Logger = require('./lib/logger');
+const fs = require("fs");
+const path = require("path");
+const TaskManager = require("./lib/taskManager");
+const Logger = require("./lib/logger");
 
 // ============================================================================
 // NEVER-STOP INFINITE CONTINUE HOOK WITH INSTRUCTIVE TASK MANAGEMENT
@@ -17,25 +17,25 @@ function findClaudeProjectRoot(startDir = process.cwd()) {
   while (currentDir !== path.dirname(currentDir)) {
     // Not at filesystem root
     // Check if we're in or found "Claude Coding Projects"
-    if (currentDir.includes('Claude Coding Projects')) {
+    if (currentDir.includes("Claude Coding Projects")) {
       // Look for TODO.json in potential project roots
       const segments = currentDir.split(path.sep);
       const claudeIndex = segments.findIndex((segment) =>
-        segment.includes('Claude Coding Projects'),
+        segment.includes("Claude Coding Projects"),
       );
 
       if (claudeIndex !== -1 && claudeIndex < segments.length - 1) {
         // Try the next directory after "Claude Coding Projects"
         const projectDir = segments.slice(0, claudeIndex + 2).join(path.sep);
         // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script validating project structure with computed paths
-        if (fs.existsSync(path.join(projectDir, 'TODO.json'))) {
+        if (fs.existsSync(path.join(projectDir, "TODO.json"))) {
           return projectDir;
         }
       }
 
       // Also check current directory
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script validating project structure with computed paths
-      if (fs.existsSync(path.join(currentDir, 'TODO.json'))) {
+      if (fs.existsSync(path.join(currentDir, "TODO.json"))) {
         return currentDir;
       }
     }
@@ -51,14 +51,14 @@ function findClaudeProjectRoot(startDir = process.cwd()) {
  * Check if stop is allowed via endpoint trigger
  */
 function checkStopAllowed(workingDir = process.cwd()) {
-  const stopFlagPath = path.join(workingDir, '.stop-allowed');
+  const stopFlagPath = path.join(workingDir, ".stop-allowed");
 
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated working directory path
   if (fs.existsSync(stopFlagPath)) {
     // Read and immediately delete the flag (single-use)
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script reading validated stop flag file
-      const flagData = JSON.parse(fs.readFileSync(stopFlagPath, 'utf8'));
+      const flagData = JSON.parse(fs.readFileSync(stopFlagPath, "utf8"));
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
       fs.unlinkSync(stopFlagPath); // Remove flag after reading
       return flagData.stop_allowed === true;
@@ -84,14 +84,19 @@ async function autoSortTasksByPriority(taskManager) {
 
     // Helper functions for ID-based classification
     const getCurrentPrefix = (taskId) => {
-      const parts = taskId.split('_');
-      return parts[0] || 'unknown';
+      const parts = taskId.split("_");
+      return parts[0] || "unknown";
     };
 
     const determineCorrectPrefix = (task) => {
-      const title = (task.title || '').toLowerCase();
-      const description = (task.description || '').toLowerCase();
-      const category = (task.category || '').toLowerCase();
+      // Guard against null/undefined task objects
+      if (!task || typeof task !== "object") {
+        return "feature"; // Default fallback
+      }
+
+      const title = (task.title || "").toLowerCase();
+      const description = (task.description || "").toLowerCase();
+      const category = (task.category || "").toLowerCase();
       const allText = `${title} ${description} ${category}`;
 
       // ERROR detection (highest priority)
@@ -104,7 +109,7 @@ async function autoSortTasksByPriority(taskManager) {
 
       const isError =
         errorPatterns.some((pattern) => pattern.test(allText)) ||
-        ['linter-error', 'build-error', 'start-error', 'error', 'bug'].includes(
+        ["linter-error", "build-error", "start-error", "error", "bug"].includes(
           category,
         );
 
@@ -118,9 +123,9 @@ async function autoSortTasksByPriority(taskManager) {
           testRelated &&
           !/(build.*fail|compilation|cannot.*build|start.*fail)/.test(allText)
         ) {
-          return 'test';
+          return "test";
         }
-        return 'error';
+        return "error";
       }
 
       // TEST detection
@@ -131,13 +136,13 @@ async function autoSortTasksByPriority(taskManager) {
 
       const isTest =
         testPatterns.some((pattern) => pattern.test(allText)) ||
-        category.startsWith('test-') ||
-        ['missing-test', 'test-setup', 'test-refactor', 'testing'].includes(
+        category.startsWith("test-") ||
+        ["missing-test", "test-setup", "test-refactor", "testing"].includes(
           category,
         );
 
       if (isTest) {
-        return 'test';
+        return "test";
       }
 
       // Check if implementing a feature subtask
@@ -146,27 +151,32 @@ async function autoSortTasksByPriority(taskManager) {
         task.implementing_feature ||
         task.parent_feature_id
       ) {
-        return 'subtask';
+        return "subtask";
       }
 
       // Default to feature
-      return 'feature';
+      return "feature";
     };
 
     // ID-based priority system
     const getTaskPriority = (task) => {
-      const id = task.id || '';
+      // Handle null/undefined tasks
+      if (!task || typeof task !== "object") {
+        return 5; // Lowest priority for invalid tasks
+      }
 
-      if (id.startsWith('error_')) {
+      const id = task.id || "";
+
+      if (id.startsWith("error_")) {
         return 1;
       } // ERROR tasks - highest priority
-      if (id.startsWith('feature_')) {
+      if (id.startsWith("feature_")) {
         return 2;
       } // FEATURE tasks - high priority
-      if (id.startsWith('subtask_')) {
+      if (id.startsWith("subtask_")) {
         return 3;
       } // SUBTASK tasks - medium priority
-      if (id.startsWith('test_')) {
+      if (id.startsWith("test_")) {
         return 4;
       } // TEST tasks - lowest priority
 
@@ -180,8 +190,13 @@ async function autoSortTasksByPriority(taskManager) {
 
     // Process all tasks for ID-based classification
     for (const task of todoData.tasks) {
+      // Skip null/undefined tasks
+      if (!task || typeof task !== "object") {
+        continue;
+      }
+
       let updated = false;
-      const currentId = task.id || '';
+      const currentId = task.id || "";
 
       // STEP 1: Auto-reclassify tasks with incorrect ID prefixes
       const shouldBePrefix = determineCorrectPrefix(task);
@@ -203,6 +218,14 @@ async function autoSortTasksByPriority(taskManager) {
 
     // STEP 2: Sort tasks by ID-based priority
     todoData.tasks.sort((a, b) => {
+      // Handle null/undefined tasks - push to end
+      if (!a || typeof a !== "object") {
+        return 1;
+      }
+      if (!b || typeof b !== "object") {
+        return -1;
+      }
+
       const aPriority = getTaskPriority(a);
       const bPriority = getTaskPriority(b);
 
@@ -224,8 +247,8 @@ async function autoSortTasksByPriority(taskManager) {
     todoData.settings.id_based_classification = true;
     todoData.settings.auto_sort_enabled = true;
     todoData.settings.sort_criteria = {
-      primary: 'id_prefix',
-      secondary: 'created_at',
+      primary: "id_prefix",
+      secondary: "created_at",
     };
     todoData.settings.id_priority_order = {
       error_: 1,
@@ -246,7 +269,7 @@ async function autoSortTasksByPriority(taskManager) {
     };
   } catch (error) {
     // eslint-disable-next-line no-console -- hook script error logging for debugging
-    console.error('Error in autoSortTasksByPriority:', error);
+    console.error("Error in autoSortTasksByPriority:", error);
     return { error: error.message, tasksMoved: 0, tasksUpdated: 0 };
   }
 }
@@ -332,11 +355,11 @@ Avoid ! operator - use \`(variable === undefined || variable === null)\` instead
 }
 
 // Read input from Claude Code
-let inputData = '';
-process.stdin.setEncoding('utf8');
-process.stdin.on('data', (chunk) => (inputData += chunk));
+let inputData = "";
+process.stdin.setEncoding("utf8");
+process.stdin.on("data", (chunk) => (inputData += chunk));
 
-process.stdin.on('end', async () => {
+process.stdin.on("end", async () => {
   const workingDir = findClaudeProjectRoot();
   const logger = new Logger(workingDir);
 
@@ -346,14 +369,14 @@ process.stdin.on('end', async () => {
     logger.addFlow(`Input data length: ${inputData.length}`);
 
     let hookInput;
-    if (!inputData || inputData.trim() === '') {
+    if (!inputData || inputData.trim() === "") {
       // No input - probably manual execution, simulate Claude Code input
-      logger.addFlow('No input detected - running in manual mode');
+      logger.addFlow("No input detected - running in manual mode");
       hookInput = {
-        session_id: 'manual_test',
-        transcript_path: '',
+        session_id: "manual_test",
+        transcript_path: "",
         stop_hook_active: true,
-        hook_event_name: 'manual_execution',
+        hook_event_name: "manual_execution",
       };
     } else {
       hookInput = JSON.parse(inputData);
@@ -369,15 +392,15 @@ process.stdin.on('end', async () => {
     // Log input with event details
     logger.logInput(hookInput);
     logger.addFlow(
-      `Received ${hook_event_name || 'unknown'} event from Claude Code`,
+      `Received ${hook_event_name || "unknown"} event from Claude Code`,
     );
 
     // Check if TODO.json exists in current project
-    const todoPath = path.join(workingDir, 'TODO.json');
+    const todoPath = path.join(workingDir, "TODO.json");
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated paths from project structure
     if (!fs.existsSync(todoPath)) {
-      logger.addFlow('No TODO.json found - this is not a TaskManager project');
-      logger.logExit(2, 'No TODO.json found - continuing infinite mode');
+      logger.addFlow("No TODO.json found - this is not a TaskManager project");
+      logger.logExit(2, "No TODO.json found - continuing infinite mode");
       logger.save();
 
       // eslint-disable-next-line no-console -- hook script user guidance output
@@ -401,7 +424,7 @@ If you want to enable task management for this project:
     }
 
     // CRITICAL: Check for TODO.json corruption before initializing TaskManager
-    const AutoFixer = require('./lib/autoFixer');
+    const AutoFixer = require("./lib/autoFixer");
     const autoFixer = new AutoFixer();
 
     try {
@@ -409,7 +432,7 @@ If you want to enable task management for this project:
       if (corruptionCheck.fixed && corruptionCheck.fixesApplied.length > 0) {
         // eslint-disable-next-line no-console -- hook script status logging for user awareness
         console.log(
-          `🔧 STOP HOOK: Automatically fixed TODO.json corruption - ${corruptionCheck.fixesApplied.join(', ')}`,
+          `🔧 STOP HOOK: Automatically fixed TODO.json corruption - ${corruptionCheck.fixesApplied.join(", ")}`,
         );
       }
     } catch (corruptionError) {
@@ -474,6 +497,11 @@ If you want to enable task management for this project:
 
       // Find all tasks assigned to this stale agent and unassign them
       for (const task of todoData.tasks) {
+        // Skip null/undefined tasks
+        if (!task || typeof task !== "object") {
+          continue;
+        }
+
         if (
           task.assigned_agent === staleAgentId ||
           task.claimed_by === staleAgentId
@@ -483,8 +511,8 @@ If you want to enable task management for this project:
           task.claimed_by = null;
 
           // Reset task to pending if it was in_progress
-          if (task.status === 'in_progress') {
-            task.status = 'pending';
+          if (task.status === "in_progress") {
+            task.status = "pending";
             task.started_at = null;
           }
 
@@ -494,9 +522,9 @@ If you want to enable task management for this project:
           }
           task.agent_assignment_history.push({
             agent: staleAgentId,
-            action: 'auto_unassign_stale',
+            action: "auto_unassign_stale",
             timestamp: new Date().toISOString(),
-            reason: 'Agent became stale (inactive >15 minutes)',
+            reason: "Agent became stale (inactive >15 minutes)",
           });
 
           tasksUnassigned++;
@@ -512,13 +540,18 @@ If you want to enable task management for this project:
     let staleTasksReset = 0;
 
     for (const task of todoData.tasks) {
-      if (task.status === 'in_progress' && task.started_at) {
+      // Skip null/undefined tasks
+      if (!task || typeof task !== "object") {
+        continue;
+      }
+
+      if (task.status === "in_progress" && task.started_at) {
         const taskStartTime = new Date(task.started_at).getTime();
         const timeSinceStart = Date.now() - taskStartTime;
 
         if (timeSinceStart > staleTaskTimeout) {
           // Reset stale task back to pending
-          task.status = 'pending';
+          task.status = "pending";
           task.assigned_agent = null;
           task.claimed_by = null;
           task.started_at = null;
@@ -528,8 +561,8 @@ If you want to enable task management for this project:
             task.agent_assignment_history = [];
           }
           task.agent_assignment_history.push({
-            agent: task.assigned_agent || 'system',
-            action: 'auto_reset_stale',
+            agent: task.assigned_agent || "system",
+            action: "auto_reset_stale",
             timestamp: new Date().toISOString(),
             reason: `Task stale for ${Math.round(timeSinceStart / 60000)} minutes`,
           });
@@ -562,7 +595,7 @@ If you want to enable task management for this project:
 
     try {
       logger.addFlow(
-        'Running automatic task sorting and test error reclassification',
+        "Running automatic task sorting and test error reclassification",
       );
       const sortResult = await autoSortTasksByPriority(taskManager);
 
@@ -591,7 +624,7 @@ If you want to enable task management for this project:
 This ensures proper priority ordering with test tasks only executed after all errors, features, and subtasks are complete.
         `);
       } else {
-        logger.addFlow('Task sorting completed - no reclassification needed');
+        logger.addFlow("Task sorting completed - no reclassification needed");
       }
     } catch (sortingError) {
       logger.addFlow(
@@ -618,7 +651,7 @@ Tasks will continue to work but may not be optimally sorted.
 
     if (activeAgents.length === 0) {
       logger.addFlow(
-        'No active agents detected - analyzing situation for appropriate guidance',
+        "No active agents detected - analyzing situation for appropriate guidance",
       );
 
       // Differentiate between "no agents ever" vs "only stale agents were found"
@@ -628,7 +661,7 @@ Tasks will continue to work but may not be optimally sorted.
         );
         logger.logExit(
           2,
-          'Only stale agents found - providing reactivation guidance',
+          "Only stale agents found - providing reactivation guidance",
         );
         logger.save();
 
@@ -693,10 +726,10 @@ To recover and continue work from the previous stale agents:
         process.exit(2);
       } else {
         // Truly no agents case (fresh project or first time)
-        logger.addFlow('No agents detected - need fresh agent initialization');
+        logger.addFlow("No agents detected - need fresh agent initialization");
         logger.logExit(
           2,
-          'No agents - providing fresh initialization guidance',
+          "No agents - providing fresh initialization guidance",
         );
         logger.save();
 
@@ -750,9 +783,9 @@ To start working with this TaskManager project:
     const stopAllowed = checkStopAllowed(workingDir);
     if (stopAllowed) {
       logger.addFlow(
-        'Stop endpoint triggered - allowing ONE stop, then returning to infinite mode',
+        "Stop endpoint triggered - allowing ONE stop, then returning to infinite mode",
       );
-      logger.logExit(0, 'Endpoint-triggered stop (single use)');
+      logger.logExit(0, "Endpoint-triggered stop (single use)");
       logger.save();
 
       // eslint-disable-next-line no-console -- hook script stop authorization message
@@ -810,7 +843,7 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
     // ========================================================================
 
     try {
-      logger.addFlow('Running automatic task archival for completed tasks');
+      logger.addFlow("Running automatic task archival for completed tasks");
       const archivalResult = await taskManager.migrateCompletedTasks();
 
       if (archivalResult && archivalResult.migrated > 0) {
@@ -823,13 +856,13 @@ node -e "const TaskManager = require('/Users/jeremyparker/Desktop/Claude Coding 
 ✅ AUTOMATIC TASK ARCHIVAL COMPLETED
 
 📁 Archived ${archivalResult.migrated} completed tasks to DONE.json
-📊 Total found: ${archivalResult.total || 'N/A'}
+📊 Total found: ${archivalResult.total || "N/A"}
 📋 Skipped: ${archivalResult.skipped || 0}
 
 This keeps TODO.json clean and prevents it from becoming crowded with completed work.
         `);
       } else {
-        logger.addFlow('No completed tasks found to archive');
+        logger.addFlow("No completed tasks found to archive");
       }
     } catch (archivalError) {
       logger.addFlow(`Task archival failed: ${archivalError.message}`);
@@ -845,9 +878,9 @@ This is non-critical and won't prevent continued operation.
 
     // Always continue - never allow natural stops
     logger.addFlow(
-      'Never-stop mode: Providing instructive task management guidance',
+      "Never-stop mode: Providing instructive task management guidance",
     );
-    logger.logExit(2, 'Infinite continue mode - providing task guidance');
+    logger.logExit(2, "Infinite continue mode - providing task guidance");
     logger.save();
 
     // Output detailed instructions to Claude
@@ -879,7 +912,7 @@ This system operates in infinite continue mode. To authorize a stop, use:
     // eslint-disable-next-line n/no-process-exit
     process.exit(2); // Always continue - never allow natural stops
   } catch (error) {
-    logger.logError(error, 'stop-hook-main');
+    logger.logError(error, "stop-hook-main");
     logger.logExit(
       2,
       `Error handled - continuing infinite mode: ${error.message}`,
