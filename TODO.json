@@ -1,6 +1,35 @@
 {
   "project": "infinite-continue-stop-hook",
-  "tasks": [],
+  "tasks": [
+    {
+      "id": "error_1757748209254_6wpdcorcl",
+      "title": "Fix CLAUDE.md taskmanager commands to use absolute paths",
+      "description": "Replace all instances of taskmanager-api.js with the full absolute path /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js throughout CLAUDE.md to match the TaskManager API guide standards",
+      "priority": "medium",
+      "category": "error",
+      "status": "in_progress",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T07:23:29.255Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757748190455_1_general_2c207f6f",
+      "started_at": "2025-09-13T07:23:47.737Z",
+      "claimed_by": "development_session_1757748190455_1_general_2c207f6f",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757748190455_1_general_2c207f6f",
+          "role": "primary",
+          "assignedAt": "2025-09-13T07:23:47.737Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
+    }
+  ],
   "current_mode": "DEVELOPMENT",
   "last_mode": null,
   "execution_count": 0,
@@ -79,6 +108,48 @@
       "lastRenewal": "2025-09-13T04:18:47.811Z",
       "renewalCount": 1,
       "agentId": "development_session_1757737054433_1_general_ee8d6a31"
+    },
+    "development_session_1757744659421_1_general_7661f567": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-13T06:24:19.422Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-13T06:24:19.422Z",
+      "sessionId": "session_1757744659421",
+      "metadata": {}
+    },
+    "development_session_1757748190455_1_general_2c207f6f": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-13T07:23:10.456Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-13T07:23:10.456Z",
+      "sessionId": "session_1757748190455",
+      "metadata": {}
     }
   },
   "features": [
