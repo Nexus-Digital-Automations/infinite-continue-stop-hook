@@ -2,6 +2,34 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
+      "id": "error_1757786352409_c9a90v2sz",
+      "title": "Remove autodetect from reinitialize command - require explicit agent ID",
+      "description": "User explicitly requested that agents must provide their agent ID when reinitializing, NOT autodetect. Need to: 1) Remove autodetect logic from both CLI wrapper and API method, 2) Restore original requirement for explicit agent ID parameter, 3) Update error messages to clearly instruct agents to provide their agent ID, 4) Update documentation to make agent ID requirement explicit, 5) Test that reinitialize fails appropriately without agent ID",
+      "priority": "medium",
+      "category": "error",
+      "status": "in_progress",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T17:59:12.410Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757785736302_1_general_4ec17f41",
+      "started_at": "2025-09-13T18:00:15.523Z",
+      "claimed_by": "development_session_1757785736302_1_general_4ec17f41",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757785736302_1_general_4ec17f41",
+          "role": "primary",
+          "assignedAt": "2025-09-13T18:00:15.523Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
+    },
+    {
       "id": "error_1757785289152_n08fcpdjx",
       "title": "Fix agent audit task override permission bug",
       "description": "The taskmanager API incorrectly prevents an agent from overriding an audit task to work on a new feature task, even when the agent is the same one that originally performed the feature task being audited. This creates a deadlock where the agent cannot proceed with new work. Need to fix the authorization logic to allow the original feature task agent to override their own audit tasks.",
@@ -16,14 +44,27 @@
       "subtasks": [],
       "created_at": "2025-09-13T17:41:29.152Z",
       "auto_research_created": false,
-      "assigned_agent": "development_session_1757785266907_1_general_8560e4a6",
-      "started_at": "2025-09-13T17:41:46.105Z",
-      "claimed_by": "development_session_1757785266907_1_general_8560e4a6",
+      "assigned_agent": "development_session_1757785736302_1_general_4ec17f41",
+      "started_at": "2025-09-13T17:59:52.891Z",
+      "claimed_by": "development_session_1757785736302_1_general_4ec17f41",
       "agent_assignment_history": [
         {
           "agentId": "development_session_1757785266907_1_general_8560e4a6",
           "role": "primary",
           "assignedAt": "2025-09-13T17:41:46.105Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "development_session_1757785266907_1_general_8560e4a6",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-13T17:58:45.591Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agentId": "development_session_1757785736302_1_general_4ec17f41",
+          "role": "primary",
+          "assignedAt": "2025-09-13T17:59:52.891Z",
           "reassignReason": null,
           "claimPriority": "normal"
         }
@@ -35,7 +76,7 @@
       "description": "Comprehensive quality audit and review of the completed feature: Design comprehensive testing strategy for TaskManager API enhancements\n\nOriginal Description: Design and implement comprehensive testing strategy covering integration testing for subtask/success criteria endpoints, API contract testing for backward compatibility, performance testing for enhanced endpoints, security testing for authentication patterns, and end-to-end testing for full workflows. Include automation framework recommendations, CI/CD integration, and quality gate implementation.",
       "category": "audit",
       "priority": "high",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [
@@ -55,9 +96,9 @@
       "created_from_completed_task": "feature_1757784276376_2xkwch91a",
       "prevents_self_review": true,
       "audit_type": "post_completion",
-      "assigned_agent": "development_session_1757785266907_1_general_8560e4a6",
-      "started_at": "2025-09-13T17:50:19.024Z",
-      "claimed_by": "development_session_1757785266907_1_general_8560e4a6",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "development_session_1757785266907_1_general_8560e4a6",
@@ -65,6 +106,12 @@
           "assignedAt": "2025-09-13T17:50:19.024Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "development_session_1757785266907_1_general_8560e4a6",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-13T17:58:45.591Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
         }
       ]
     },
@@ -207,12 +254,216 @@
       "audit_type": "post_completion"
     },
     {
-      "id": "audit_1757786272996_5kmlsthph",
+      "id": "audit_1757786818386_l2k88fus3",
+      "title": "Debug Test Objectivity Audit Task",
+      "description": "Debug test audit task to verify objectivity enforcement",
+      "priority": "medium",
+      "category": "audit",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T18:06:58.387Z",
+      "auto_research_created": false,
+      "original_implementer": "development_session_1757785266907_1_general_8560e4a6"
+    },
+    {
+      "id": "audit_1757786772231_brfjnxmiy",
+      "title": "AUDIT: Test Audit Override",
+      "description": "Test audit task for override functionality",
+      "priority": "medium",
+      "category": "audit",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T18:06:12.232Z",
+      "auto_research_created": false,
+      "original_implementer": "test_agent_123"
+    },
+    {
+      "id": "audit_1757786740516_dfznvxuok",
+      "title": "Debug Test Objectivity Audit Task",
+      "description": "Debug test audit task to verify objectivity enforcement",
+      "priority": "medium",
+      "category": "audit",
+      "status": "in_progress",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T18:05:40.516Z",
+      "auto_research_created": false,
+      "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
+      "assigned_agent": "development_session_1757785266907_1_general_8560e4a6",
+      "started_at": "2025-09-13T18:05:40.547Z",
+      "claimed_by": "development_session_1757785266907_1_general_8560e4a6",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757785266907_1_general_8560e4a6",
+          "role": "primary",
+          "assignedAt": "2025-09-13T18:05:40.547Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
+    },
+    {
+      "id": "feature_1757786715042_xllx4m02u",
+      "title": "Test Feature Task",
+      "description": "A simple test feature",
+      "priority": "medium",
+      "category": "feature",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [
+        {
+          "id": "audit_1757786715042_04f0c8cf",
+          "type": "audit",
+          "title": "Audit: Test Feature Task",
+          "description": "Comprehensive quality audit and review of the completed feature: Test Feature Task\n\nOriginal Description: A simple test feature",
+          "status": "pending",
+          "estimated_hours": 0.5,
+          "success_criteria": [
+            "JavaScript/TypeScript",
+            "Python",
+            "Go",
+            "Rust",
+            "Node.js",
+            "Python",
+            "Go",
+            "Rust",
+            "Node.js",
+            "Python",
+            "Go",
+            "Rust",
+            "Node.js",
+            "Python",
+            "Go",
+            "Rust"
+          ],
+          "prevents_completion": true,
+          "original_implementer": null,
+          "prevents_self_review": true,
+          "audit_type": "embedded_quality_gate",
+          "created_at": "2025-09-13T18:05:15.056Z"
+        }
+      ],
+      "created_at": "2025-09-13T18:05:15.057Z",
+      "auto_research_created": false
+    },
+    {
+      "id": "audit_1757786635622_fwfyeybiq",
       "title": "Test Objectivity Audit Task",
       "description": "Test audit task to verify objectivity enforcement",
       "priority": "medium",
       "category": "audit",
       "status": "in_progress",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T18:03:55.622Z",
+      "auto_research_created": false,
+      "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
+      "assigned_agent": "development_session_1757785266907_1_general_8560e4a6",
+      "started_at": "2025-09-13T18:03:55.637Z",
+      "claimed_by": "development_session_1757785266907_1_general_8560e4a6",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757785266907_1_general_8560e4a6",
+          "role": "primary",
+          "assignedAt": "2025-09-13T18:03:55.637Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
+    },
+    {
+      "id": "audit_1757786380710_3f3q42zwq",
+      "title": "Test Objectivity Audit Task",
+      "description": "Test audit task to verify objectivity enforcement",
+      "priority": "medium",
+      "category": "audit",
+      "status": "in_progress",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T17:59:40.710Z",
+      "auto_research_created": false,
+      "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
+      "assigned_agent": "development_session_1757785266907_1_general_8560e4a6",
+      "started_at": "2025-09-13T17:59:40.726Z",
+      "claimed_by": "development_session_1757785266907_1_general_8560e4a6",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757785266907_1_general_8560e4a6",
+          "role": "primary",
+          "assignedAt": "2025-09-13T17:59:40.726Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
+    },
+    {
+      "id": "test_1757786325601_coqdusswz",
+      "title": "Test Objectivity Audit Task",
+      "description": "Test audit task to verify objectivity enforcement",
+      "priority": "medium",
+      "category": "audit",
+      "status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T17:58:35.475Z",
+      "auto_research_created": false,
+      "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757785266907_1_general_8560e4a6",
+          "role": "primary",
+          "assignedAt": "2025-09-13T17:58:35.490Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "development_session_1757785266907_1_general_8560e4a6",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-13T17:58:45.591Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
+        }
+      ]
+    },
+    {
+      "id": "test_1757786325601_3s379qvdm",
+      "title": "Test Objectivity Audit Task",
+      "description": "Test audit task to verify objectivity enforcement",
+      "priority": "medium",
+      "category": "audit",
+      "status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -222,9 +473,9 @@
       "created_at": "2025-09-13T17:57:52.997Z",
       "auto_research_created": false,
       "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
-      "assigned_agent": "development_session_1757785266907_1_general_8560e4a6",
-      "started_at": "2025-09-13T17:57:53.012Z",
-      "claimed_by": "development_session_1757785266907_1_general_8560e4a6",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "development_session_1757785266907_1_general_8560e4a6",
@@ -232,16 +483,22 @@
           "assignedAt": "2025-09-13T17:57:53.012Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "development_session_1757785266907_1_general_8560e4a6",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-13T17:58:45.591Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
         }
       ]
     },
     {
-      "id": "audit_1757786184036_fsjwotkd2",
+      "id": "test_1757786325601_1zauvv5ee",
       "title": "Test Objectivity Audit Task",
       "description": "Test audit task to verify objectivity enforcement",
       "priority": "medium",
       "category": "audit",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -251,9 +508,9 @@
       "created_at": "2025-09-13T17:56:24.036Z",
       "auto_research_created": false,
       "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
-      "assigned_agent": "development_session_1757785266907_1_general_8560e4a6",
-      "started_at": "2025-09-13T17:56:24.056Z",
-      "claimed_by": "development_session_1757785266907_1_general_8560e4a6",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "development_session_1757785266907_1_general_8560e4a6",
@@ -261,16 +518,22 @@
           "assignedAt": "2025-09-13T17:56:24.056Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "development_session_1757785266907_1_general_8560e4a6",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-13T17:58:45.591Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
         }
       ]
     },
     {
-      "id": "audit_1757786068331_1pb047uka",
+      "id": "test_1757786325601_x7086383x",
       "title": "Test Objectivity Audit Task",
       "description": "Test audit task to verify objectivity enforcement",
       "priority": "medium",
       "category": "audit",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -279,9 +542,9 @@
       "subtasks": [],
       "created_at": "2025-09-13T17:54:28.332Z",
       "auto_research_created": false,
-      "assigned_agent": "development_session_1757785266907_1_general_8560e4a6",
-      "started_at": "2025-09-13T17:54:28.479Z",
-      "claimed_by": "development_session_1757785266907_1_general_8560e4a6",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "development_session_1757785266907_1_general_8560e4a6",
@@ -289,6 +552,12 @@
           "assignedAt": "2025-09-13T17:54:28.479Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "development_session_1757785266907_1_general_8560e4a6",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-13T17:58:45.591Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
         }
       ]
     },
@@ -1733,27 +2002,6 @@
   "strikes_completed_last_run": false,
   "last_hook_activation": 1757094794402,
   "agents": {
-    "development_session_1757785266907_1_general_8560e4a6": {
-      "name": "development Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-13T17:41:06.911Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-13T17:41:06.911Z",
-      "sessionId": "session_1757785266907",
-      "metadata": {}
-    },
     "development_session_1757785568199_1_general_bfaa1ee0": {
       "name": "development Agent",
       "role": "development",
@@ -1795,12 +2043,33 @@
       "createdAt": "2025-09-13T17:48:56.303Z",
       "sessionId": "session_1757785736302",
       "metadata": {
-        "renewedAt": "2025-09-13T17:53:06.480Z",
+        "renewedAt": "2025-09-13T18:05:32.309Z",
         "renewalReason": "Agent reinitialization requested"
       },
       "lastRenewal": "2025-09-13T17:49:26.404Z",
       "renewalCount": 1,
       "agentId": "development_session_1757785736302_1_general_4ec17f41"
+    },
+    "development_session_1757786828251_1_general_37de09bb": {
+      "name": "development Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-13T18:07:08.253Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-13T18:07:08.253Z",
+      "sessionId": "session_1757786828251",
+      "metadata": {}
     }
   },
   "features": [
