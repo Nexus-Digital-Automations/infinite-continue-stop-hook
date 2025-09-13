@@ -266,121 +266,202 @@ This file defines the comprehensive 25-point audit system with objectivity contr
 - **Completeness**: Evidence must cover all aspects of criteria
 - **Accuracy**: Evidence must accurately reflect system state
 
-## Audit Task Template
+## **AUDIT TASK TEMPLATES**
 
-When creating audit subtasks, use this template:
+### **Comprehensive Audit Task Template**
 
 ```json
 {
   "type": "audit",
-  "title": "Audit: [Original Task Title]",
-  "description": "Comprehensive quality audit and review of the completed feature: [Original Task Title]\\n\\nOriginal Description: [Original Task Description]",
+  "title": "AUDIT: [Original Task Title] - 25-Point Quality Review",
+  "description": "Comprehensive 25-point quality audit and review of completed implementation: [Original Task Title]\\n\\nORIGINAL TASK: [Original Task Description]\\n\\nAUDIT SCOPE: Complete validation of all 25 standard completion criteria with evidence collection and reporting.\\n\\nOBJECTIVITY CONTROL: This audit MUST be performed by a different agent than the implementer to ensure objectivity.",
   "success_criteria": [
-    "Linter perfection achieved (zero warnings/errors)",
-    "Build perfection achieved (clean build)",
-    "All tests pass with full coverage",
-    "Code quality standards met",
-    "Implementation follows architectural patterns",
-    "Security review passed",
-    "Performance standards met",
-    "Documentation is complete and accurate"
+    "CRITICAL GATES (1-10): All 10 mandatory criteria satisfied with evidence",
+    "QUALITY GATES (11-15): High priority criteria evaluated and remediated",
+    "INTEGRATION GATES (16-20): Medium priority criteria assessed for project context",
+    "EXCELLENCE GATES (21-25): Low priority criteria documented",
+    "Evidence collection complete for all applicable criteria",
+    "Audit report generated with pass/fail determination",
+    "Remediation tasks created for any failures"
   ],
-  "original_implementer": "[Agent ID who implemented the feature]",
-  "prevents_self_review": true,
-  "audit_type": "post_completion"
-}
-```
-
-## Research Task Template
-
-When creating research subtasks, use this template:
-
-```json
-{
-  "type": "research",
-  "title": "Research: [Research Topic]",
-  "description": "Comprehensive research for [research topic] to support implementation of [parent task]",
-  "research_locations": [
-    {
-      "type": "codebase",
-      "paths": ["/path/to/relevant/files"],
-      "focus": "Existing implementation patterns"
-    },
-    {
-      "type": "internet",
-      "keywords": ["relevant", "search", "terms"],
-      "focus": "Best practices and industry standards"
-    },
-    {
-      "type": "documentation",
-      "sources": ["official docs", "api references"],
-      "focus": "Technical specifications"
-    }
-  ],
-  "deliverables": [
-    "Technical analysis report",
-    "Implementation recommendations", 
-    "Risk assessment",
-    "Alternative approaches evaluation"
+  "audit_metadata": {
+    "original_implementer": "[Agent ID who implemented the feature]", 
+    "original_task_id": "[Original Task ID]",
+    "prevents_self_review": true,
+    "audit_type": "comprehensive_25_point",
+    "evidence_required": true,
+    "mandatory_criteria_count": 10,
+    "total_criteria_count": 25
+  },
+  "audit_checklist_reference": "development/essentials/audit-criteria.md",
+  "audit_report_location": "development/reports/audit_[task_id]/",
+  "escalation_required_if": [
+    "Any CRITICAL GATES (1-10) fail",
+    "More than 2 QUALITY GATES (11-15) fail", 
+    "Implementation violates security standards",
+    "Performance regressions exceed 10%"
   ]
 }
 ```
 
-## Validation Commands by Project Type
+### **Quick Audit Task Template** (For Minor Changes)
 
-### Node.js Projects
-```bash
-# Complete validation sequence
-npm run lint && npm run build && npm test && npm start
+```json
+{
+  "type": "audit",
+  "title": "QUICK AUDIT: [Original Task Title] - Essential Quality Check",
+  "description": "Essential quality audit focusing on critical criteria for: [Original Task Title]\\n\\nORIGINAL TASK: [Original Task Description]\\n\\nQUICK AUDIT SCOPE: Validation of 10 critical quality gates (criteria 1-10) with basic evidence collection.",
+  "success_criteria": [
+    "Linter perfection achieved (zero warnings/errors)",
+    "Build integrity confirmed (clean build)",
+    "Application runtime success verified",
+    "Test coverage maintained (existing tests pass)",
+    "Git integration complete (committed and pushed)",
+    "Basic documentation updated",
+    "Error handling implemented",
+    "Performance acceptable (no major regressions)",
+    "Security review passed (no obvious vulnerabilities)",
+    "Code quality standards met"
+  ],
+  "audit_metadata": {
+    "original_implementer": "[Agent ID who implemented the feature]",
+    "original_task_id": "[Original Task ID]", 
+    "prevents_self_review": true,
+    "audit_type": "critical_10_point",
+    "evidence_required": true,
+    "mandatory_criteria_count": 10
+  },
+  "audit_checklist_reference": "development/essentials/audit-criteria.md#critical-quality-gates"
+}
 ```
 
-### Python Projects  
+## **VALIDATION COMMANDS BY PROJECT TYPE**
+
+### **Node.js Projects**
 ```bash
-# Complete validation sequence
-ruff check . && python -m build && pytest && python -m app
+# Complete 25-point validation sequence
+echo "=== LINTER CHECK ==="
+npm run lint
+
+echo "=== BUILD CHECK ==="
+npm run build
+
+echo "=== TEST CHECK ==="
+npm test
+
+echo "=== RUNTIME CHECK ==="
+timeout 10s npm start &
+sleep 5
+curl -f http://localhost:3000/health || echo "Health check failed"
+pkill -f "npm start"
+
+echo "=== SECURITY AUDIT ==="
+npm audit
+
+echo "=== DEPENDENCY CHECK ==="
+npm outdated
 ```
 
-### Go Projects
+### **Python Projects**  
 ```bash
-# Complete validation sequence
-golint ./... && go build && go test ./... && ./app
+# Complete 25-point validation sequence
+echo "=== LINTER CHECK ==="
+ruff check .
+
+echo "=== BUILD CHECK ==="
+python -m build
+
+echo "=== TEST CHECK ==="
+pytest --cov=. --cov-report=term-missing
+
+echo "=== RUNTIME CHECK ==="
+python -m app &
+APP_PID=$!
+sleep 5
+curl -f http://localhost:8000/health || echo "Health check failed"
+kill $APP_PID
+
+echo "=== SECURITY AUDIT ==="
+safety check
+
+echo "=== DEPENDENCY CHECK ==="
+pip list --outdated
 ```
 
-### Rust Projects
+### **Go Projects**
 ```bash
-# Complete validation sequence
-cargo clippy && cargo build && cargo test && cargo run
+# Complete 25-point validation sequence
+echo "=== LINTER CHECK ==="
+golint ./...
+
+echo "=== BUILD CHECK ==="
+go build
+
+echo "=== TEST CHECK ==="
+go test -v -cover ./...
+
+echo "=== RUNTIME CHECK ==="
+./app &
+APP_PID=$!
+sleep 5
+curl -f http://localhost:8080/health || echo "Health check failed"
+kill $APP_PID
+
+echo "=== SECURITY AUDIT ==="
+gosec ./...
+
+echo "=== DEPENDENCY CHECK ==="
+go list -u -m all
 ```
 
-## Agent Assignment Rules
+## **ESCALATION PROCEDURES**
 
-### Implementation Agents
-- Primary responsibility: Feature implementation
-- Cannot audit their own work
-- Must create audit subtasks for independent review
+### **Failed Audit Protocol**
+1. **IMMEDIATE HALT**: Implementation marked as failed, blocked from completion
+2. **EVIDENCE COLLECTION**: Audit agent documents all failing criteria with evidence
+3. **REMEDIATION TASKS**: Create specific error-category tasks for each failure
+4. **REASSIGNMENT**: Consider different implementation agent if pattern of failures
+5. **ESCALATION REVIEW**: Senior agent review for complex or disputed failures
 
-### Audit Agents  
-- Must be different from implementation agent
-- Responsible for objective quality validation
-- Authority to reject implementations that don't meet criteria
-- Must provide detailed feedback on any failures
+### **Audit Dispute Resolution**
+1. **THIRD-PARTY REVIEW**: Independent agent assessment of disputed criteria
+2. **TECHNICAL COMMITTEE**: Panel of senior agents for complex technical disputes
+3. **CRITERIA CLARIFICATION**: Update audit criteria if ambiguity identified
+4. **PROCESS IMPROVEMENT**: Incorporate lessons learned into future audits
 
-### Research Agents
-- Specialized in information gathering and analysis
-- Provide comprehensive research reports
-- Support implementation with technical guidance
-- Independent of implementation and audit agents
+### **Performance Standards**
+- **AUDIT COMPLETION TIME**: Maximum 48 hours from assignment to completion
+- **EVIDENCE SUBMISSION**: All evidence must be submitted within audit timeframe
+- **REMEDIATION RESPONSE**: Implementation agent must respond to failures within 24 hours
+- **ESCALATION TRIGGER**: Automatic escalation after 72 hours without resolution
 
-## Escalation Procedures
+## **INTEGRATION WITH PROJECT SUCCESS CRITERIA**
 
-### Failed Audits
-1. **Document Failures**: Detailed report of all failing criteria
-2. **Create Fix Tasks**: Specific tasks to address each failure
-3. **Reassign Implementation**: Different agent if patterns of failure
-4. **Additional Review**: Senior agent review for complex failures
+### **Project-Level Requirements Integration**
+- Audit criteria automatically inherit from `development/essentials/task-requirements.md`
+- Project-specific requirements added as additional criteria points (26+)
+- Technology stack variations handled through conditional criteria
+- Business requirements integrated into compliance and operational excellence gates
 
-### Disputed Results
-1. **Independent Review**: Third-party agent assessment
-2. **Technical Committee**: Senior agents for complex disputes
-3. **Documentation Review**: Ensure criteria are clear and achievable
-4. **Process Improvement**: Update criteria based on lessons learned
+### **Continuous Improvement Protocol**
+- Monthly audit criteria review and updates
+- Feedback integration from development teams
+- Industry best practices incorporation
+- Tooling and automation improvements
+- Metrics collection and analysis for audit effectiveness
+
+### **Quality Metrics and Reporting**
+- **Audit Pass Rate**: Target 85%+ for critical gates, 70%+ for all gates
+- **Time to Resolution**: Track remediation time for failed audits
+- **Common Failure Patterns**: Identify and address systemic issues
+- **Agent Performance**: Track audit quality and consistency across agents
+
+---
+
+## **SYSTEM ENFORCEMENT NOTES**
+
+🚨 **MANDATORY COMPLIANCE**: All feature tasks MUST complete audit process before final approval
+🔒 **OBJECTIVITY ENFORCEMENT**: System prevents self-audit assignments automatically  
+📊 **EVIDENCE REQUIREMENT**: No audit approval without complete evidence documentation
+⚡ **ESCALATION AUTOMATION**: Failed audits automatically trigger remediation workflow
+🎯 **CONTINUOUS IMPROVEMENT**: Regular criteria updates based on project evolution and industry standards

@@ -1,268 +1,402 @@
-# Success Criteria Templates and Definitions
+# Success Criteria Management System
 
 ## Overview
-This file defines standardized success criteria templates for different types of tasks and provides clear definitions for what constitutes successful task completion across the embedded subtasks system.
 
-## Task Type Success Criteria Templates
+This file defines the comprehensive success criteria management system for tasks. It provides standardized success criteria templates, task-specific criteria assignment, project-wide inheritance, and validation mechanisms to ensure consistent quality across all implementations.
 
-### 🔴 Error Task Success Criteria
+## 🚨 25-Point Standard Success Criteria Template
+
+### **CORE QUALITY GATES** (Points 1-10)
+
+#### 1. **Linter Perfection**
+- [ ] All linting rules pass with zero violations
+- [ ] No warnings or errors from static code analysis
+- [ ] Code style consistency maintained
+- **Evidence**: Clean linter output screenshot
+
+#### 2. **Build Success**
+- [ ] Project builds successfully without errors
+- [ ] No build warnings or failures
+- [ ] All assets generated correctly
+- **Evidence**: Build log with success confirmation
+
+#### 3. **Runtime Success** 
+- [ ] Application starts without errors
+- [ ] All services initialize correctly
+- [ ] Core functionality accessible
+- **Evidence**: Startup logs and health check
+
+#### 4. **Test Integrity**
+- [ ] All existing tests continue to pass
+- [ ] No test regressions introduced
+- [ ] Coverage maintained or improved
+- **Evidence**: Test results and coverage report
+
+#### 5. **Function Documentation**
+- [ ] All public functions documented with JSDoc/docstrings
+- [ ] Parameters and return values described
+- [ ] Usage examples provided where appropriate
+- **Evidence**: Documentation coverage report
+
+#### 6. **API Documentation**
+- [ ] All public interfaces documented
+- [ ] Endpoint definitions with examples
+- [ ] Integration guides updated
+- **Evidence**: API documentation completeness
+
+#### 7. **Architecture Documentation**
+- [ ] System design decisions documented
+- [ ] Integration patterns explained
+- [ ] Data flow diagrams updated
+- **Evidence**: Architecture documentation review
+
+#### 8. **Decision Rationale**
+- [ ] Technical decisions explained and justified
+- [ ] Alternative approaches considered
+- [ ] Trade-offs documented
+- **Evidence**: Decision log entries
+
+#### 9. **Error Handling**
+- [ ] Comprehensive error handling implemented
+- [ ] Error messages clear and actionable
+- [ ] Graceful degradation where applicable
+- **Evidence**: Error handling test results
+
+#### 10. **Performance Metrics**
+- [ ] No performance regressions (< 10% slower)
+- [ ] Memory usage within bounds
+- [ ] Response times meet requirements
+- **Evidence**: Performance benchmark comparison
+
+### **SECURITY & COMPLIANCE** (Points 11-20)
+
+#### 11. **Security Review**
+- [ ] No security vulnerabilities introduced
+- [ ] Security best practices followed
+- [ ] Threat model considerations addressed
+- **Evidence**: Security scan results
+
+#### 12. **Architectural Consistency**
+- [ ] Follows established project patterns
+- [ ] Consistent with existing codebase style
+- [ ] Maintains separation of concerns
+- **Evidence**: Architecture review checklist
+
+#### 13. **Dependency Validation**
+- [ ] Dependencies properly managed
+- [ ] Version compatibility verified
+- [ ] Licenses compatible with project
+- **Evidence**: Dependency audit report
+
+#### 14. **Version Compatibility**
+- [ ] Compatible with target platform versions
+- [ ] Backward compatibility maintained
+- [ ] Breaking changes documented
+- **Evidence**: Compatibility test results
+
+#### 15. **Security Audit**
+- [ ] Dependencies scanned for vulnerabilities
+- [ ] Code scanned for security issues
+- [ ] Authentication/authorization validated
+- **Evidence**: Security audit report
+
+#### 16. **Cross-Platform**
+- [ ] Works across supported platforms
+- [ ] Platform-specific issues addressed
+- [ ] Environment compatibility verified
+- **Evidence**: Multi-platform test results
+
+#### 17. **Environment Variables**
+- [ ] Required environment variables documented
+- [ ] Default values provided where appropriate
+- [ ] Configuration validation implemented
+- **Evidence**: Environment configuration guide
+
+#### 18. **Configuration**
+- [ ] Proper configuration management
+- [ ] Settings externalized appropriately
+- [ ] Configuration validation implemented
+- **Evidence**: Configuration documentation
+
+#### 19. **No Credential Exposure**
+- [ ] No secrets or credentials in code
+- [ ] Secure credential management
+- [ ] No sensitive data in logs
+- **Evidence**: Credential scan results
+
+#### 20. **Input Validation**
+- [ ] All user inputs properly validated
+- [ ] Sanitization implemented where needed
+- [ ] Boundary conditions handled
+- **Evidence**: Input validation test results
+
+### **FINAL VALIDATION** (Points 21-25)
+
+#### 21. **Output Encoding**
+- [ ] Proper output encoding to prevent injection
+- [ ] Data sanitization before output
+- [ ] Context-appropriate encoding used
+- **Evidence**: Output validation test results
+
+#### 22. **Authentication/Authorization**
+- [ ] Proper access controls implemented
+- [ ] User permissions validated
+- [ ] Security boundaries enforced
+- **Evidence**: Auth/authz test results
+
+#### 23. **License Compliance**
+- [ ] All code compatible with project license
+- [ ] Third-party licenses compatible
+- [ ] License headers present where required
+- **Evidence**: License compliance report
+
+#### 24. **Data Privacy**
+- [ ] No unauthorized data collection
+- [ ] Privacy policies followed
+- [ ] Data minimization principles applied
+- **Evidence**: Privacy compliance review
+
+#### 25. **Regulatory Compliance**
+- [ ] Applicable regulations considered
+- [ ] Compliance requirements met
+- [ ] Audit trails maintained where required
+- **Evidence**: Regulatory compliance checklist
+
+## Task-Specific Success Criteria Assignment
+
+### Custom Criteria Creation
+
+Tasks can have additional custom success criteria beyond the 25-point standard:
+
 ```json
 {
-  "error_task_criteria": [
-    "Root cause identified and documented",
-    "Underlying problem completely resolved (not just symptoms)",
-    "All related error manifestations eliminated", 
-    "Preventive measures implemented",
-    "Verification tests pass",
-    "No new errors introduced",
-    "Error resolution documented with rationale",
-    "System stability maintained or improved"
-  ]
-}
-```
-
-**Error Task Definition**: Tasks addressing system errors, linter violations, build failures, runtime bugs, and security vulnerabilities. These have absolute priority and can interrupt other work.
-
-### 🔧 Feature Task Success Criteria
-```json
-{
-  "feature_task_criteria": [
-    "Functional requirements completely implemented",
-    "All acceptance criteria met and validated",
-    "Integration with existing system verified", 
-    "User experience requirements satisfied",
-    "Performance requirements met",
-    "Security requirements implemented",
-    "Error handling comprehensive and appropriate",
-    "Documentation updated with new functionality",
-    "All project task requirements satisfied (lint/build/test/start)"
-  ]
-}
-```
-
-**Feature Task Definition**: New functionality, enhancements, refactoring, and documentation tasks. Must pass all task-requirements.md validation.
-
-### 🧩 Subtask Success Criteria
-```json
-{
-  "subtask_criteria": [
-    "Specific component functionality implemented",
-    "Integration with parent feature verified",
-    "Dependencies properly handled",
-    "Interface contracts maintained",
-    "Component-level testing complete",
-    "Parent feature functionality unaffected",
-    "Implementation follows architectural patterns",
-    "Documentation updated for component"
-  ]
-}
-```
-
-**Subtask Definition**: Implementation of specific components for preexisting features from TODO.json features array.
-
-### 🧪 Test Task Success Criteria
-```json
-{
-  "test_task_criteria": [
-    "Test coverage objectives achieved",
-    "All test scenarios implemented and passing",
-    "Edge cases and error conditions covered",
-    "Performance test targets met",
-    "Test automation implemented where applicable",
-    "Test documentation comprehensive",
-    "CI/CD integration verified",
-    "No existing functionality broken by tests"
-  ]
-}
-```
-
-**Test Task Definition**: Test coverage, test creation, test setup, and test performance tasks. Lowest priority, only executed after all error and feature tasks complete.
-
-## Specialized Task Success Criteria
-
-### 🔍 Research Task Success Criteria
-```json
-{
-  "research_task_criteria": [
-    "Comprehensive codebase analysis completed",
-    "Internet research covering best practices conducted",
-    "Technical documentation reviewed and summarized",
-    "Multiple approaches evaluated and compared",
-    "Risk assessment provided",
-    "Implementation recommendations documented",
-    "Research report created in development/research-reports/",
-    "Findings support informed implementation decisions"
-  ]
-}
-```
-
-### 🔎 Audit Task Success Criteria
-```json
-{
-  "audit_task_criteria": [
-    "All audit criteria from audit-criteria.md evaluated",
-    "Independent verification completed by different agent",
-    "Objective assessment documented",
-    "All quality gates validated",
-    "Non-compliance issues identified and documented",
-    "Recommendation for approval or rejection provided",
-    "Audit results stored in development/reports/",
-    "Follow-up actions specified if needed"
-  ]
-}
-```
-
-## Quality Gate Definitions
-
-### 🎯 Linter Perfection
-- **Definition**: Zero linting warnings or errors across all project files
-- **Validation**: `npm run lint` returns exit code 0 with no output
-- **Scope**: All JavaScript, TypeScript, configuration files
-- **Exception Handling**: No exceptions - all violations must be resolved
-
-### 🏗️ Build Success
-- **Definition**: Project builds completely without any errors or warnings
-- **Validation**: `npm run build` completes successfully with exit code 0
-- **Output Requirements**: All expected assets generated, no missing dependencies
-- **Performance**: Build completes within reasonable time limits
-
-### 🚀 Runtime Success
-- **Definition**: Application starts and serves without errors
-- **Validation**: `npm start` launches successfully, all services accessible
-- **API Validation**: All endpoints respond correctly
-- **Health Checks**: System health endpoints return positive status
-
-### ✅ Test Integrity
-- **Definition**: All existing tests continue to pass
-- **Validation**: `npm test` passes all existing tests
-- **Coverage**: No reduction in existing test coverage
-- **New Tests**: Any new tests must also pass
-
-## Success Criteria Application Rules
-
-### Priority-Based Application
-1. **Error Tasks**: Apply error task criteria + universal quality gates
-2. **Feature Tasks**: Apply feature task criteria + task requirements + quality gates
-3. **Subtasks**: Apply subtask criteria + parent feature integration validation
-4. **Test Tasks**: Apply test task criteria + no disruption to existing functionality
-
-### Context-Specific Criteria
-- **API Changes**: Include backward compatibility verification
-- **Database Changes**: Include migration safety and rollback procedures
-- **Security Features**: Include security audit and penetration testing
-- **Performance Features**: Include performance benchmarking and optimization validation
-
-## Success Measurement Templates
-
-### Quantitative Success Metrics
-```json
-{
-  "metrics": {
-    "code_quality": {
-      "linter_violations": 0,
-      "build_warnings": 0,
-      "test_coverage": ">= baseline",
-      "performance_regression": 0
+  "task_id": "feature_12345_abcdef",
+  "standard_criteria": "25_point_template",
+  "custom_criteria": [
+    {
+      "category": "functional",
+      "criterion": "User can successfully login with valid credentials",
+      "validation": "Integration test passes",
+      "priority": "critical"
     },
-    "functionality": {
-      "acceptance_criteria_met": "100%",
-      "user_stories_completed": "100%",
-      "integration_tests_passing": "100%"
+    {
+      "category": "performance",
+      "criterion": "Login response time < 500ms",
+      "validation": "Performance benchmark",
+      "priority": "important"
+    }
+  ],
+  "inherited_criteria": ["project_wide_security", "project_wide_performance"]
+}
+```
+
+### Criteria Categories
+
+- **functional**: Core functionality requirements
+- **performance**: Speed and resource usage requirements
+- **security**: Security-specific requirements
+- **usability**: User experience requirements
+- **compatibility**: Platform/version compatibility requirements
+- **compliance**: Regulatory or policy requirements
+
+## Project-Wide Success Criteria Inheritance
+
+### Global Criteria Sets
+
+Projects can define global criteria that automatically apply to all tasks:
+
+```json
+{
+  "project_wide_criteria": {
+    "security_baseline": {
+      "description": "Minimum security requirements for all features",
+      "criteria": [
+        "Input validation implemented",
+        "Output sanitization applied",
+        "Authentication required where appropriate",
+        "Audit logging enabled"
+      ],
+      "applies_to": ["feature", "subtask"],
+      "mandatory": true
+    },
+    "performance_baseline": {
+      "description": "Performance standards for all features",
+      "criteria": [
+        "Response time < 2 seconds",
+        "Memory usage < 100MB increase",
+        "No performance regressions"
+      ],
+      "applies_to": ["feature"],
+      "mandatory": false
     }
   }
 }
 ```
 
-### Qualitative Success Indicators
-```json
-{
-  "indicators": {
-    "maintainability": "Code follows project patterns and is easily extensible",
-    "documentation": "All public interfaces documented with examples",
-    "error_handling": "Comprehensive error handling with clear user messages",
-    "security": "No security vulnerabilities introduced",
-    "user_experience": "Feature is intuitive and meets user expectations"
-  }
-}
+## Success Criteria Validation Logic
+
+### Validation Workflow
+
+1. **Criteria Assembly**: Combine standard + custom + inherited criteria
+2. **Evidence Collection**: Gather validation evidence for each criterion
+3. **Automated Validation**: Run automated checks where possible
+4. **Manual Validation**: Perform manual review for subjective criteria
+5. **Results Documentation**: Document validation results with evidence
+
+### Validation Commands
+
+```bash
+# Run success criteria validation
+node success-criteria-validator.js --task-id feature_12345_abcdef
+
+# Validate specific criteria category
+node success-criteria-validator.js --task-id feature_12345_abcdef --category security
+
+# Generate validation report
+node success-criteria-validator.js --task-id feature_12345_abcdef --report
 ```
 
-## Task Completion Validation Workflow
+## Success Criteria Reporting Dashboard
 
-### Pre-Completion Checklist
-1. **Review Applicable Criteria**: Select appropriate success criteria template
-2. **Self-Assessment**: Verify all criteria are met
-3. **Evidence Collection**: Gather validation evidence (test results, build output, etc.)
-4. **Documentation Review**: Ensure all documentation is updated
-5. **Integration Testing**: Verify integration with existing system
+### Report Structure
 
-### Completion Evidence Template
 ```json
 {
-  "task_completion_evidence": {
-    "task_id": "feature_1234567890_abcdef",
-    "success_criteria_applied": "feature_task_criteria",
-    "validation_results": {
-      "functional_requirements": "✅ All requirements implemented and tested",
-      "acceptance_criteria": "✅ All criteria met and validated",
-      "integration_testing": "✅ System integration verified",
-      "quality_gates": "✅ All quality gates passed"
+  "task_id": "feature_12345_abcdef",
+  "validation_timestamp": "2025-09-13T16:45:00Z",
+  "overall_status": "passed",
+  "criteria_summary": {
+    "total_criteria": 28,
+    "passed": 27,
+    "failed": 0,
+    "pending": 1
+  },
+  "category_breakdown": {
+    "standard_25_point": {
+      "passed": 25,
+      "failed": 0,
+      "success_rate": 100
     },
-    "evidence_artifacts": [
-      "Test execution results",
-      "Build output logs", 
-      "Lint check results",
-      "Performance metrics",
-      "User acceptance testing results"
-    ],
-    "completion_timestamp": "2025-09-13T16:40:00.000Z",
-    "completing_agent": "development_session_xyz"
+    "custom_functional": {
+      "passed": 2,
+      "failed": 0,
+      "success_rate": 100
+    },
+    "inherited_security": {
+      "passed": 0,
+      "failed": 0,
+      "pending": 1,
+      "success_rate": "pending"
+    }
+  },
+  "detailed_results": [
+    {
+      "criterion": "Linter Perfection",
+      "status": "passed",
+      "evidence": "eslint output: 0 errors, 0 warnings",
+      "validation_method": "automated",
+      "timestamp": "2025-09-13T16:44:15Z"
+    }
+  ]
+}
+```
+
+### Dashboard Features
+
+- **Real-time Status**: Live updates on criteria validation
+- **Historical Tracking**: Track success rates over time
+- **Filtering**: Filter by task type, agent, time period
+- **Export**: Generate reports in multiple formats
+- **Alerts**: Notifications for failed validations
+
+## Integration with TaskManager API
+
+### Success Criteria Endpoints
+
+```javascript
+// Get success criteria for a task
+GET /api/success-criteria/:taskId
+
+// Set custom criteria for a task
+POST /api/success-criteria/task/:taskId
+{
+  "custom_criteria": [...],
+  "inherited_criteria": [...]
+}
+
+// Set project-wide criteria
+POST /api/success-criteria/project-wide
+{
+  "criteria_set": {...}
+}
+
+// Validate task against criteria
+POST /api/success-criteria/validate/:taskId
+{
+  "validation_type": "full|partial",
+  "evidence": {...}
+}
+
+// Get validation report
+GET /api/success-criteria/report/:taskId
+```
+
+### TaskManager Integration
+
+Success criteria are automatically:
+- Applied to new tasks based on type and inheritance rules
+- Validated before task completion
+- Reported in task completion summaries
+- Tracked for quality metrics
+
+## Usage Guidelines
+
+### For Implementation Agents
+
+1. **Check Criteria**: Review assigned success criteria before starting
+2. **Plan Implementation**: Design implementation to meet all criteria
+3. **Validate Early**: Run validation checks during development
+4. **Document Evidence**: Collect evidence throughout implementation
+5. **Final Validation**: Complete full validation before task completion
+
+### For Audit Agents
+
+1. **Independent Review**: Validate all criteria independently
+2. **Evidence Verification**: Verify all provided evidence
+3. **Additional Testing**: Perform additional validation tests
+4. **Document Results**: Provide detailed validation report
+5. **Escalate Issues**: Flag any criteria failures for remediation
+
+### For Project Managers
+
+1. **Define Standards**: Establish project-wide success criteria
+2. **Monitor Quality**: Track success criteria compliance over time
+3. **Adjust Criteria**: Update criteria based on project evolution
+4. **Review Reports**: Regular review of validation reports
+5. **Process Improvement**: Optimize criteria based on outcomes
+
+## Configuration Files
+
+### success-criteria-config.json
+
+```json
+{
+  "default_template": "25_point_standard",
+  "validation_timeout": 300,
+  "evidence_storage": "development/evidence/",
+  "report_storage": "development/reports/success-criteria/",
+  "auto_inheritance": true,
+  "mandatory_validation": true,
+  "validation_agents": {
+    "automated": ["linter", "build", "test"],
+    "manual": ["documentation", "architecture", "security"]
   }
 }
 ```
 
-## Failure Recovery Procedures
+## Update History
 
-### Criteria Not Met
-1. **Document Gaps**: Identify which criteria are not satisfied
-2. **Create Fix Tasks**: Generate specific tasks to address each gap
-3. **Re-evaluate**: Re-assess after fixes are implemented
-4. **Escalate if Necessary**: Involve senior agents for complex issues
+- **2025-09-13**: Initial success criteria management system created by Success Criteria Agent #6
+- **Future Updates**: Document changes and enhancements to the system
 
-### Quality Gate Failures
-1. **Root Cause Analysis**: Identify why quality gates failed
-2. **Systematic Fixes**: Address each failure systematically
-3. **Prevention Measures**: Implement checks to prevent recurrence
-4. **Validation**: Re-run all quality gates before completion
-
-## Integration with Embedded Subtasks System
-
-### Research Task Integration
-- Research tasks must generate findings that inform success criteria evaluation
-- Research deliverables become part of evidence for parent task completion
-- Research prevents implementation until comprehensive analysis complete
-
-### Audit Task Integration  
-- Audit tasks validate success criteria independently
-- Different agent must perform audit for objectivity
-- Audit results determine final task approval/rejection
-- Failed audits require re-work and re-audit
-
-### TaskManager API Integration
-- Success criteria templates automatically applied based on task category
-- API endpoints provide criteria retrieval and validation support
-- Completion evidence stored as structured data in task records
-
-## Customization Guidelines
-
-### Project-Specific Adaptations
-- Modify templates to reflect project-specific requirements
-- Add domain-specific criteria (e.g., compliance, accessibility)
-- Adjust quality gates based on project maturity and requirements
-
-### Continuous Improvement
-- Review and update criteria based on project evolution
-- Incorporate lessons learned from completed tasks
-- Adjust criteria difficulty based on team capabilities and project needs
-
-*Created: 2025-09-13 by Configuration Agent #8*
-*Version: 1.0.0*
+*Last Updated: 2025-09-13 by Success Criteria Agent #6*

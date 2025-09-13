@@ -1,141 +1,178 @@
-# Project Task Requirements
+# Project Task Requirements - Universal Success Criteria
 
-## Overview
-This file defines project-specific success criteria that ALL feature tasks must satisfy to be marked complete. These requirements are consulted by all agents before completing feature tasks and serve as validation checkpoints.
+## 🚨 **MANDATORY SUCCESS CRITERIA FOR ALL FEATURE TASKS**
 
-## Success Criteria for All Feature Tasks
+This file defines project-specific success criteria that ALL feature tasks must satisfy before completion. These requirements are automatically integrated into the 25-point audit system as baseline validation.
 
-### 🔴 Build Requirements
-- [ ] **Build Success**: `npm run build` completes without errors
-- [ ] **No Build Warnings**: Build process produces zero warnings or failures
-- [ ] **Asset Generation**: All required assets and bundles are generated properly
+### **Build Requirements** (MANDATORY)
+- [ ] **Clean Build**: `npm run build` completes without errors or warnings
+- [ ] **No Build Artifacts**: Build process doesn't leave temporary files
+- [ ] **Build Performance**: Build time remains within acceptable limits
+- [ ] **Build Reproducibility**: Consistent builds across different environments
 
-### 🔴 Runtime Requirements  
-- [ ] **Application Start**: `npm start` launches without errors
-- [ ] **Service Availability**: All services start successfully and are accessible
-- [ ] **API Endpoints**: All API endpoints respond correctly and return expected data
-- [ ] **TaskManager Integration**: TaskManager API functionality remains intact
+### **Runtime Requirements** (MANDATORY)  
+- [ ] **Clean Startup**: `npm start` launches without errors
+- [ ] **Service Health**: All required services start successfully
+- [ ] **Port Availability**: Application binds to expected ports
+- [ ] **Graceful Shutdown**: Application handles termination signals properly
 
-### 🔴 Code Quality Requirements
-- [ ] **Lint Perfection**: `npm run lint` passes with zero violations
-- [ ] **No Linting Warnings**: All ESLint rules pass without warnings or errors
-- [ ] **Code Style Consistency**: All code follows established project patterns
-- [ ] **Import/Export Validation**: All imports resolve correctly and exports are valid
+### **Code Quality Requirements** (MANDATORY)
+- [ ] **Zero Linting Violations**: `npm run lint` passes with zero warnings/errors
+- [ ] **Code Formatting**: All code follows established formatting standards
+- [ ] **Import Organization**: All imports properly organized and unused imports removed
+- [ ] **Documentation Standards**: All public functions have comprehensive documentation
 
-### 🔴 Test Requirements
-- [ ] **Existing Test Integrity**: `npm test` passes all existing tests
-- [ ] **No Test Regressions**: All previously passing tests continue to pass
-- [ ] **Test Coverage Maintenance**: No reduction in existing test coverage
-- [ ] **API Contract Tests**: TaskManager API contracts remain valid
+### **Test Requirements** (MANDATORY)
+- [ ] **All Tests Pass**: `npm test` passes all existing tests without failures
+- [ ] **Test Coverage**: No regression in test coverage percentages
+- [ ] **Test Performance**: Test suite completion time within acceptable limits
+- [ ] **Test Reliability**: Tests are deterministic and don't have flaky behavior
 
-### 🚨 Special Considerations
+### **Git Integration Requirements** (MANDATORY)
+- [ ] **Clean Commits**: All changes committed with descriptive messages
+- [ ] **No Merge Conflicts**: Working directory clean with no conflicts
+- [ ] **Branch Sync**: Branch up to date with main/master
+- [ ] **Commit Message Standards**: Follow conventional commit format
 
-#### Outdated Tests Protocol
-If tests fail due to **outdated test code** (not feature bugs):
-- ✅ **Feature task CAN be completed** if the feature itself works correctly
-- 🔴 **MUST create separate test-update task** immediately after feature completion
-- 📋 **Document test failures** and specify they are due to outdated test code, not feature issues
-- 🔧 **Test-update task priority**: Created as `test` category task to be handled after all error/feature tasks
+## **TECHNOLOGY-SPECIFIC REQUIREMENTS**
 
-#### TaskManager API Protection
-- [ ] **API Backward Compatibility**: Existing API endpoints must remain functional
-- [ ] **Agent Registration**: Agent initialization and registration must work unchanged
-- [ ] **Task Operations**: Core task operations (create, claim, complete) must remain intact
-- [ ] **JSON Structure**: TODO.json structure must remain valid and readable
+### **Node.js/JavaScript Projects**
+- [ ] **Package.json Integrity**: No unused dependencies, proper version constraints
+- [ ] **Security Audit**: `npm audit` shows no high/critical vulnerabilities
+- [ ] **Node Version Compatibility**: Code compatible with specified Node.js version
+- [ ] **Environment Configuration**: Proper handling of environment variables
 
-## Validation Commands
+### **TypeScript Projects (Additional)**
+- [ ] **Type Safety**: `tsc` compilation with strict mode enabled
+- [ ] **Type Coverage**: Maintain or improve TypeScript coverage
+- [ ] **Interface Documentation**: All public interfaces properly typed and documented
+- [ ] **Generic Usage**: Appropriate use of generics for reusable components
 
-### Complete Validation Sequence
+## **PROJECT-SPECIFIC REQUIREMENTS**
+
+### **TaskManager API Integration** (Infinite Continue Stop Hook)
+- [ ] **API Compatibility**: Integration with TaskManager API maintained
+- [ ] **Hook Functionality**: Stop/continue hooks function correctly
+- [ ] **Agent System**: Multi-agent coordination capabilities preserved
+- [ ] **TODO.json Integrity**: No corruption of task management data structure
+
+### **Development Workflow**
+- [ ] **Claude.md Compliance**: Implementation follows CLAUDE.md guidelines
+- [ ] **Agent Communication**: Proper logging for agent coordination
+- [ ] **Task Ordering**: Respects task priority and ordering rules
+- [ ] **Error Escalation**: Proper error task creation for failures
+
+## **QUALITY GATES**
+
+### **Performance Requirements**
+- [ ] **Response Time**: API endpoints respond within acceptable limits
+- [ ] **Memory Usage**: No significant memory leaks or excessive usage
+- [ ] **CPU Efficiency**: Algorithms and processes optimized for performance
+- [ ] **Resource Cleanup**: Proper cleanup of resources and event listeners
+
+### **Security Requirements**
+- [ ] **Input Validation**: All user inputs properly validated and sanitized
+- [ ] **Output Encoding**: Protection against injection attacks
+- [ ] **Error Handling**: No sensitive information exposed in error messages
+- [ ] **Dependency Security**: No known vulnerabilities in dependencies
+
+### **Reliability Requirements**
+- [ ] **Error Recovery**: Graceful handling of error conditions
+- [ ] **Data Integrity**: Operations maintain data consistency
+- [ ] **Timeout Handling**: Proper timeout management for async operations
+- [ ] **Resource Management**: Efficient use of system resources
+
+## **VALIDATION COMMANDS**
+
+### **Complete Validation Sequence**
 ```bash
-# Full project validation - all must pass for feature completion
-npm run lint && npm run build && npm test && npm start
+#!/bin/bash
+# Project-specific validation script
+
+echo "🔍 Starting comprehensive validation..."
+
+echo "=== LINTING CHECK ==="
+npm run lint || exit 1
+
+echo "=== TYPE CHECK ==="
+npm run typecheck || exit 1
+
+echo "=== BUILD CHECK ==="
+npm run build || exit 1
+
+echo "=== TEST CHECK ==="
+npm test || exit 1
+
+echo "=== SECURITY AUDIT ==="
+npm audit --audit-level=high || echo "⚠️ Security vulnerabilities found"
+
+echo "=== STARTUP CHECK ==="
+timeout 10s npm start &
+STARTUP_PID=$!
+sleep 5
+kill $STARTUP_PID 2>/dev/null
+wait $STARTUP_PID 2>/dev/null
+echo "✅ Startup test completed"
+
+echo "=== GIT STATUS CHECK ==="
+git status --porcelain
+if [ -z "$(git status --porcelain)" ]; then
+    echo "✅ Working directory clean"
+else
+    echo "⚠️ Uncommitted changes found"
+fi
+
+echo "🎉 All validation checks completed!"
 ```
 
-### Individual Validation Steps
+### **Quick Validation** (For Minor Changes)
 ```bash
-# Step 1: Code quality validation
-npm run lint
-
-# Step 2: Build validation  
-npm run build
-
-# Step 3: Test validation
-npm test
-
-# Step 4: Runtime validation
-npm start
-# Verify application starts and all services are accessible
-# Check TaskManager API endpoints respond correctly
+npm run lint && npm run build && npm test
 ```
 
-## Evidence Documentation Requirements
+## **FAILURE HANDLING**
 
-When completing feature tasks, include validation evidence:
+### **Test Failure Protocol**
+- **Outdated Tests**: If tests fail due to being outdated (not feature bugs):
+  - Feature task can be completed
+  - MUST create separate `test-update` task immediately
+  - Document which tests need updating and why
 
-```json
-{
-  "validation_results": {
-    "lint_status": "✅ Passed - 0 violations",
-    "build_status": "✅ Passed - no errors/warnings", 
-    "test_status": "✅ Passed - all 45 tests passing",
-    "start_status": "✅ Passed - application started successfully",
-    "api_status": "✅ Passed - TaskManager API responding"
-  },
-  "git_status": "✅ All changes committed and pushed",
-  "commit_hash": "abc123def456"
-}
-```
+### **Build Failure Protocol**
+- **Dependency Issues**: Update package.json and document changes
+- **Configuration Problems**: Fix configuration and test across environments
+- **Breaking Changes**: Document breaking changes and migration path
 
-## Agent Responsibilities
+### **Linting Failure Protocol**
+- **Code Style**: Apply automated fixes where possible
+- **Logical Issues**: Address underlying code problems
+- **Configuration**: Update linting rules if needed (with justification)
 
-### Before Feature Completion
-1. **Read This File**: Always consult task-requirements.md before marking feature tasks complete
-2. **Run Validation**: Execute all validation commands and verify results
-3. **Document Results**: Include validation evidence in task completion
-4. **Handle Test Issues**: If tests fail due to outdated code, create test-update tasks
+## **SPECIAL CONSIDERATIONS**
 
-### File Maintenance
-- **Update Requirements**: Modify this file based on project evolution
-- **Add Project-Specific Rules**: Include any special requirements for this project
-- **Version Requirements**: Update validation commands if project tooling changes
+### **Multi-Agent Development**
+- [ ] **Agent Coordination**: Changes don't break other agents' work
+- [ ] **Shared Resources**: Proper handling of shared files and configurations
+- [ ] **Communication**: Clear documentation for other agents
 
-## Project-Specific Requirements
+### **Continuous Integration**
+- [ ] **CI Pipeline**: All changes pass CI/CD pipeline
+- [ ] **Environment Parity**: Development, staging, production parity maintained
+- [ ] **Deployment Ready**: Changes are safe for automated deployment
 
-### Node.js/TaskManager API Project
-- **npm Scripts**: Must use npm run commands for consistency
-- **TaskManager API**: Core functionality must remain unchanged
-- **Agent System**: Multi-agent coordination must continue working
-- **JSON Integrity**: TODO.json must remain valid and parseable
-- **Development Structure**: development/ subdirectories must remain organized
+### **Documentation Requirements**
+- [ ] **README Updates**: Update README if public API changes
+- [ ] **CHANGELOG**: Document significant changes
+- [ ] **API Documentation**: Update API docs for interface changes
+- [ ] **Migration Guides**: Provide migration instructions for breaking changes
 
-### File System Requirements
-- **No Root Clutter**: Keep project root clean, organize in development/ subdirectories
-- **Report Organization**: Research and analysis files must be properly organized
-- **Documentation Updates**: Update relevant docs when making structural changes
+---
 
-## Failure Recovery Procedures
+## **USAGE NOTES**
 
-### Build Failures
-1. **Identify Root Cause**: Check build logs for specific errors
-2. **Fix Dependencies**: Resolve any dependency issues
-3. **Validate Fix**: Re-run build command to verify resolution
-4. **Document Changes**: Note any required configuration changes
+🔧 **For Implementation Agents**: Review this file before starting any feature work
+📋 **For Audit Agents**: Use these criteria as baseline + 25-point audit system  
+📝 **For Project Evolution**: Update this file as project requirements change
+🎯 **For Quality Assurance**: These are minimum requirements, not comprehensive standards
 
-### Test Failures
-1. **Categorize Failures**: Determine if failures are due to feature bugs or outdated tests
-2. **Feature Bugs**: Fix bugs before completing feature task
-3. **Outdated Tests**: Complete feature task, create test-update task
-4. **Document Decision**: Clearly explain reasoning in task completion
-
-### Runtime Failures
-1. **Check Service Status**: Verify all services start correctly
-2. **Validate API Endpoints**: Test critical API functionality
-3. **Environment Issues**: Check environment variables and configuration
-4. **Rollback if Necessary**: Revert changes if runtime issues cannot be resolved quickly
-
-## Update History
-
-- **2025-09-13**: Initial version created by Configuration Agent #8
-- **Future Updates**: Document changes to requirements as project evolves
-
-*Last Updated: 2025-09-13 by Configuration Agent #8*
+**Integration**: These requirements automatically become part of audit criteria points 1-10, with additional project context applied throughout the 25-point system.

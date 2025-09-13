@@ -1,0 +1,129 @@
+{
+  "version": "1.0.0",
+  "default_template": "25_point_standard",
+  "validation_timeout": 300,
+  "evidence_storage": "development/evidence/",
+  "report_storage": "development/reports/success-criteria/",
+  "auto_inheritance": true,
+  "mandatory_validation": true,
+  "validation_agents": {
+    "automated": ["linter", "build", "test", "security-scan"],
+    "manual": ["documentation", "architecture", "security", "performance"]
+  },
+  "project_wide_criteria": {
+    "security_baseline": {
+      "description": "Minimum security requirements for all features",
+      "criteria": [
+        "Input validation implemented",
+        "Output sanitization applied", 
+        "Authentication required where appropriate",
+        "Audit logging enabled",
+        "No credentials in code or logs"
+      ],
+      "applies_to": ["feature", "subtask"],
+      "mandatory": true,
+      "validation_method": "automated"
+    },
+    "performance_baseline": {
+      "description": "Performance standards for all features",
+      "criteria": [
+        "Response time < 2 seconds",
+        "Memory usage < 100MB increase",
+        "No performance regressions > 10%",
+        "Database queries optimized"
+      ],
+      "applies_to": ["feature"],
+      "mandatory": false,
+      "validation_method": "automated"
+    },
+    "quality_baseline": {
+      "description": "Code quality standards for all implementations",
+      "criteria": [
+        "Linter perfection (zero violations)",
+        "Build success (no errors/warnings)",
+        "Test integrity maintained",
+        "Documentation completeness",
+        "Error handling implemented"
+      ],
+      "applies_to": ["feature", "subtask", "error"],
+      "mandatory": true,
+      "validation_method": "automated"
+    },
+    "compliance_baseline": {
+      "description": "Compliance requirements for all features",
+      "criteria": [
+        "License compliance verified",
+        "Data privacy requirements met",
+        "Audit trails maintained",
+        "Regulatory compliance checked"
+      ],
+      "applies_to": ["feature"],
+      "mandatory": true,
+      "validation_method": "manual"
+    }
+  },
+  "validation_rules": {
+    "error_tasks": {
+      "inherit_from": ["quality_baseline"],
+      "required_evidence": ["linter_output", "build_log", "test_results"],
+      "skip_criteria": ["performance", "compliance"]
+    },
+    "feature_tasks": {
+      "inherit_from": ["security_baseline", "performance_baseline", "quality_baseline", "compliance_baseline"],
+      "required_evidence": ["full_validation_suite"],
+      "skip_criteria": []
+    },
+    "subtask_tasks": {
+      "inherit_from": ["security_baseline", "quality_baseline"],
+      "required_evidence": ["basic_validation_suite"],
+      "skip_criteria": ["compliance", "architecture_documentation"]
+    },
+    "test_tasks": {
+      "inherit_from": ["quality_baseline"],
+      "required_evidence": ["test_coverage", "test_results"],
+      "skip_criteria": ["performance", "compliance", "security_audit"]
+    }
+  },
+  "evidence_requirements": {
+    "linter_output": {
+      "format": "text",
+      "required_fields": ["tool", "violations_count", "output"],
+      "validation": "violations_count === 0"
+    },
+    "build_log": {
+      "format": "text", 
+      "required_fields": ["status", "warnings_count", "errors_count", "timestamp"],
+      "validation": "status === 'success' && errors_count === 0"
+    },
+    "test_results": {
+      "format": "json",
+      "required_fields": ["total_tests", "passed_tests", "failed_tests", "coverage"],
+      "validation": "failed_tests === 0"
+    },
+    "performance_benchmark": {
+      "format": "json",
+      "required_fields": ["response_time", "memory_usage", "baseline_comparison"],
+      "validation": "baseline_comparison.regression_percentage <= 10"
+    },
+    "security_scan": {
+      "format": "json",
+      "required_fields": ["vulnerabilities_found", "scan_timestamp", "tools_used"],
+      "validation": "vulnerabilities_found.high === 0 && vulnerabilities_found.critical === 0"
+    }
+  },
+  "reporting": {
+    "formats": ["json", "html", "markdown"],
+    "include_evidence": true,
+    "include_historical": true,
+    "dashboard_enabled": true,
+    "real_time_updates": true,
+    "notification_channels": ["console", "file"],
+    "retention_days": 90
+  },
+  "integration": {
+    "taskmanager_api": true,
+    "webhook_urls": [],
+    "external_validators": [],
+    "ci_cd_integration": false
+  }
+}
