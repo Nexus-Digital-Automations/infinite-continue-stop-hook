@@ -353,7 +353,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
    * @param {Object} auditTaskData - Complete audit task definition
    * @returns {Object} Created task information
    */
-  async createTaskViaApi(auditTaskData) {
+  createTaskViaApi(auditTaskData) {
     const command = `timeout ${this.config.auditTimeoutMs / 1000}s node "${this.taskManagerApiPath}" create '${JSON.stringify(auditTaskData)}'`;
 
     try {
@@ -532,7 +532,9 @@ if (require.main === module) {
         console.error(
           "Usage: node audit-integration.js validate-objectivity <implementerAgent> <auditorAgent>",
         );
-        process.exit(1);
+        throw new Error(
+          "Missing required arguments for validate-objectivity command",
+        );
       }
 
       const isObjective = integration.validateAgentObjectivity(
@@ -542,7 +544,9 @@ if (require.main === module) {
       console.log(
         `Objectivity Check: ${isObjective ? "✅ PASSED" : "❌ FAILED"}`,
       );
-      process.exit(isObjective ? 0 : 1);
+      if (!isObjective) {
+        throw new Error("Objectivity validation failed");
+      }
       break;
     }
 

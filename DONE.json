@@ -42486,9 +42486,117 @@
       "needs_linter_feedback": true,
       "linter_feedback_generated": false,
       "archived_from_todo": "/Users/jeremyparker/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "error_1757782494030_cp09x4btp",
+      "title": "Fix remaining ESLint violations in embedded subtasks test files",
+      "description": "Complete fixing remaining linting errors in the three test files: /Users/jeremyparker/infinite-continue-stop-hook/test/embedded-subtasks-integration.test.js, /Users/jeremyparker/infinite-continue-stop-hook/test/research-system-unit.test.js, and /Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js. Need to remove unused variables and fix any remaining ESLint issues to achieve zero violations.",
+      "priority": "medium",
+      "category": "error",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T16:54:54.030Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757782448468_1_general_0eff4278",
+      "started_at": "2025-09-13T16:55:10.883Z",
+      "claimed_by": "development_session_1757782448468_1_general_0eff4278",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757782448468_1_general_0eff4278",
+          "role": "primary",
+          "assignedAt": "2025-09-13T16:55:10.883Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completion_history": [
+        {
+          "taskId": "error_1757782494030_cp09x4btp",
+          "completedAt": "2025-09-13T16:59:59.186Z",
+          "completedBy": "development_session_1757782448468_1_general_0eff4278",
+          "evidence": {},
+          "completionNotes": "",
+          "category": "error",
+          "priority": "medium"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-13T16:59:59.186Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-13T16:59:59.186Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/infinite-continue-stop-hook/TODO.json"
+    },
+    {
+      "id": "error_1757782383773_7nh9yougg",
+      "title": "Fix TaskManager API method naming error in embedded subtasks functionality",
+      "description": "Replace incorrect loadTasks() method calls with correct readTodo() method calls in getSuccessCriteria, addSuccessCriteria, updateSuccessCriteria, createSubtask, listSubtasks, updateSubtask, deleteSubtask, manageResearchTask, and manageAuditTask methods. Error: this.taskManager.loadTasks is not a function",
+      "priority": "medium",
+      "category": "error",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T16:53:03.774Z",
+      "auto_research_created": false,
+      "assigned_agent": "development_session_1757782270526_1_general_09255d82",
+      "started_at": "2025-09-13T16:53:22.374Z",
+      "claimed_by": "development_session_1757782270526_1_general_09255d82",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757782270526_1_general_09255d82",
+          "role": "primary",
+          "assignedAt": "2025-09-13T16:53:22.374Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completion_history": [
+        {
+          "taskId": "error_1757782383773_7nh9yougg",
+          "completedAt": "2025-09-13T17:00:05.565Z",
+          "completedBy": "development_session_1757782270526_1_general_09255d82",
+          "evidence": {},
+          "completionNotes": "",
+          "category": "error",
+          "priority": "medium"
+        }
+      ],
+      "access_history": [
+        {
+          "agentId": "system",
+          "timestamp": "2025-09-13T17:00:05.565Z",
+          "action": "status_change",
+          "details": {
+            "oldStatus": "in_progress",
+            "newStatus": "completed"
+          }
+        }
+      ],
+      "completed_at": "2025-09-13T17:00:05.565Z",
+      "needs_linter_feedback": true,
+      "linter_feedback_generated": false,
+      "archived_from_todo": "/Users/jeremyparker/infinite-continue-stop-hook/TODO.json"
     }
   ],
-  "total_completed": 951,
-  "last_completion": "2025-09-13T16:56:01.827Z",
+  "total_completed": 953,
+  "last_completion": "2025-09-13T17:00:05.565Z",
   "created_at": "2025-08-07T04:55:03.964Z"
 }
