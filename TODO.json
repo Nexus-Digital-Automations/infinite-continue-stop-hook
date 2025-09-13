@@ -2601,6 +2601,29 @@
       ],
       "completed_at": "2025-09-13T22:27:17.166Z",
       "updated_at": "2025-09-13T22:27:17.166Z"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-13T22:30:49.842Z",
+      "title": "Fix missing archiveCompletedTasks method in TaskStorage module",
+      "description": "Critical error: TaskManager calls this.storage.archiveCompletedTasks() in migrateCompletedTasks method, but this method is missing from the TaskStorage module. This causes task archival to fail with \"this.storage.archiveCompletedTasks is not a function\" error during automatic task archival operations.",
+      "category": "error",
+      "priority": "high",
+      "id": "error_1757802649842_4lhpl5wz4xt",
+      "assigned_agent": "dev_session_1757801837676_1_general_59c818c2",
+      "started_at": "2025-09-13T22:31:08.152Z",
+      "claimed_by": "dev_session_1757801837676_1_general_59c818c2",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1757801837676_1_general_59c818c2",
+          "role": "primary",
+          "assignedAt": "2025-09-13T22:31:08.152Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-13T22:34:51.372Z",
+      "updated_at": "2025-09-13T22:34:51.372Z"
     }
   ],
   "current_mode": "DEVELOPMENT",
@@ -2610,48 +2633,6 @@
   "strikes_completed_last_run": false,
   "last_hook_activation": 1757094794402,
   "agents": {
-    "dev_session_1757799855478_1_general_ef60bcf5": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-13T21:44:15.478Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-13T21:44:15.479Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1757801628841_1_general_3652ba98": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-13T22:13:48.842Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-13T22:13:48.842Z",
-      "sessionId": null,
-      "metadata": {}
-    },
     "dev_session_1757801659725_1_general_08d64a35": {
       "name": "undefined Agent",
       "role": "development",
@@ -2684,7 +2665,7 @@
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-13T22:17:17.677Z",
+      "lastHeartbeat": "2025-09-13T22:30:29.595Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2697,7 +2678,12 @@
       "maxConcurrentTasks": 5,
       "createdAt": "2025-09-13T22:17:17.677Z",
       "sessionId": null,
-      "metadata": {}
+      "metadata": {
+        "renewedAt": "2025-09-13T22:30:29.595Z",
+        "renewalReason": "Agent reinitialization requested"
+      },
+      "lastRenewal": "2025-09-13T22:30:29.595Z",
+      "renewalCount": 1
     },
     "dev_session_1757802008064_1_general_25a71fdc": {
       "name": "undefined Agent",
