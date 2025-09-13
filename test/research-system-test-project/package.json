@@ -1,0 +1,8 @@
+{
+  "name": "research-test-project",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": "^4.18.0",
+    "mongoose": "^6.0.0"
+  }
+}

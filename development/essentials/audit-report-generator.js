@@ -18,15 +18,15 @@
  * @author Audit System Agent #4
  */
 
-const fs = require("fs").promises;
-const path = require("path");
-const { execSync } = require("child_process");
+const fs = require('fs').promises;
+const path = require('path');
+const { execSync } = require('child_process');
 
 class AuditReportGenerator {
   constructor() {
-    this.auditCriteriaPath = path.join(__dirname, "audit-criteria.md");
-    this.taskRequirementsPath = path.join(__dirname, "task-requirements.md");
-    this.reportsDir = path.join(__dirname, "../reports");
+    this.auditCriteriaPath = path.join(__dirname, 'audit-criteria.md');
+    this.taskRequirementsPath = path.join(__dirname, 'task-requirements.md');
+    this.reportsDir = path.join(__dirname, '../reports');
     this.timestamp = new Date().toISOString();
 
     // 25-Point Audit Criteria Categories
@@ -34,37 +34,37 @@ class AuditReportGenerator {
       critical: {
         start: 1,
         end: 10,
-        priority: "MANDATORY",
-        failureAction: "BLOCK_COMPLETION",
+        priority: 'MANDATORY',
+        failureAction: 'BLOCK_COMPLETION',
       },
       quality: {
         start: 11,
         end: 15,
-        priority: "HIGH",
-        failureAction: "REQUIRE_REMEDIATION",
+        priority: 'HIGH',
+        failureAction: 'REQUIRE_REMEDIATION',
       },
       integration: {
         start: 16,
         end: 20,
-        priority: "MEDIUM",
-        failureAction: "ASSESS_CONTEXT",
+        priority: 'MEDIUM',
+        failureAction: 'ASSESS_CONTEXT',
       },
       excellence: {
         start: 21,
         end: 25,
-        priority: "LOW",
-        failureAction: "DOCUMENT_GAPS",
+        priority: 'LOW',
+        failureAction: 'DOCUMENT_GAPS',
       },
     };
 
     this.evidenceTypes = [
-      "screenshots",
-      "logs",
-      "test_results",
-      "performance_metrics",
-      "security_scans",
-      "coverage_reports",
-      "build_outputs",
+      'screenshots',
+      'logs',
+      'test_results',
+      'performance_metrics',
+      'security_scans',
+      'coverage_reports',
+      'build_outputs',
     ];
   }
 
@@ -111,8 +111,8 @@ class AuditReportGenerator {
     auditReport.audit_decision = auditDecision;
 
     // Generate remediation tasks if needed
-    if (auditDecision.overall_status === "FAILED") {
-      auditReport.remediation_tasks = await this.generateRemediationTasks(
+    if (auditDecision.overall_status === 'FAILED') {
+      auditReport.remediation_tasks = this.generateRemediationTasks(
         criteriaResults,
         taskId,
       );
@@ -160,19 +160,19 @@ class AuditReportGenerator {
       audit_metadata: {
         audit_id: `audit_${taskId}_${Date.now()}`,
         task_id: taskId,
-        task_title: taskDetails.title || "Unknown Task",
-        task_description: taskDetails.description || "No description provided",
+        task_title: taskDetails.title || 'Unknown Task',
+        task_description: taskDetails.description || 'No description provided',
         implementer_agent: implementerAgentId,
         audit_agent: auditAgentId,
         audit_timestamp: this.timestamp,
-        audit_type: "comprehensive_25_point",
+        audit_type: 'comprehensive_25_point',
         objectivity_enforced: true,
-        audit_system_version: "1.0.0",
+        audit_system_version: '1.0.0',
       },
       project_context: {
-        project_name: "infinite-continue-stop-hook",
-        technology_stack: ["Node.js", "JavaScript", "TaskManager API"],
-        audit_criteria_version: "1.0.0",
+        project_name: 'infinite-continue-stop-hook',
+        technology_stack: ['Node.js', 'JavaScript', 'TaskManager API'],
+        audit_criteria_version: '1.0.0',
         validation_commands_executed: [],
       },
       criteria_results: {},
@@ -272,44 +272,44 @@ class AuditReportGenerator {
 
     try {
       // Execute linting command and capture output
-      const lintOutput = execSync("npm run lint", {
-        encoding: "utf-8",
+      const lintOutput = execSync('npm run lint', {
+        encoding: 'utf-8',
         cwd: process.cwd(),
       });
 
       // Save evidence
       await fs.writeFile(
-        path.join(auditDir, "logs", "lint_output.log"),
+        path.join(auditDir, 'logs', 'lint_output.log'),
         `Timestamp: ${this.timestamp}\nCommand: npm run lint\n\nOutput:\n${lintOutput}`,
       );
 
       // Evaluate result
       const hasErrors =
-        lintOutput.includes("error") || lintOutput.includes("Error");
+        lintOutput.includes('error') || lintOutput.includes('Error');
       const hasWarnings =
-        lintOutput.includes("warning") || lintOutput.includes("Warning");
+        lintOutput.includes('warning') || lintOutput.includes('Warning');
 
       return {
         criteria_id: 1,
-        name: "Linter Perfection",
-        status: !hasErrors && !hasWarnings ? "PASSED" : "FAILED",
-        priority: "MANDATORY",
-        evidence_location: "logs/lint_output.log",
+        name: 'Linter Perfection',
+        status: !hasErrors && !hasWarnings ? 'PASSED' : 'FAILED',
+        priority: 'MANDATORY',
+        evidence_location: 'logs/lint_output.log',
         details: {
           has_errors: hasErrors,
           has_warnings: hasWarnings,
           output_length: lintOutput.length,
         },
         failure_reason:
-          hasErrors || hasWarnings ? "Linting violations detected" : null,
+          hasErrors || hasWarnings ? 'Linting violations detected' : null,
         remediation_required: hasErrors || hasWarnings,
       };
     } catch (error) {
       return {
         criteria_id: 1,
-        name: "Linter Perfection",
-        status: "FAILED",
-        priority: "MANDATORY",
+        name: 'Linter Perfection',
+        status: 'FAILED',
+        priority: 'MANDATORY',
         evidence_location: null,
         details: { error: error.message },
         failure_reason: `Linting command failed: ${error.message}`,
@@ -328,44 +328,44 @@ class AuditReportGenerator {
 
     try {
       const startTime = Date.now();
-      const buildOutput = execSync("npm run build", {
-        encoding: "utf-8",
+      const buildOutput = execSync('npm run build', {
+        encoding: 'utf-8',
         cwd: process.cwd(),
       });
       const buildTime = Date.now() - startTime;
 
       // Save evidence
       await fs.writeFile(
-        path.join(auditDir, "logs", "build_output.log"),
+        path.join(auditDir, 'logs', 'build_output.log'),
         `Timestamp: ${this.timestamp}\nCommand: npm run build\nBuild Time: ${buildTime}ms\n\nOutput:\n${buildOutput}`,
       );
 
       // Evaluate result
       const hasErrors =
-        buildOutput.includes("error") || buildOutput.includes("Error");
+        buildOutput.includes('error') || buildOutput.includes('Error');
       const hasWarnings =
-        buildOutput.includes("warning") || buildOutput.includes("Warning");
+        buildOutput.includes('warning') || buildOutput.includes('Warning');
 
       return {
         criteria_id: 2,
-        name: "Build Integrity",
-        status: !hasErrors ? "PASSED" : "FAILED",
-        priority: "MANDATORY",
-        evidence_location: "logs/build_output.log",
+        name: 'Build Integrity',
+        status: !hasErrors ? 'PASSED' : 'FAILED',
+        priority: 'MANDATORY',
+        evidence_location: 'logs/build_output.log',
         details: {
           build_time_ms: buildTime,
           has_errors: hasErrors,
           has_warnings: hasWarnings,
         },
-        failure_reason: hasErrors ? "Build errors detected" : null,
+        failure_reason: hasErrors ? 'Build errors detected' : null,
         remediation_required: hasErrors,
       };
     } catch (error) {
       return {
         criteria_id: 2,
-        name: "Build Integrity",
-        status: "FAILED",
-        priority: "MANDATORY",
+        name: 'Build Integrity',
+        status: 'FAILED',
+        priority: 'MANDATORY',
         evidence_location: null,
         details: { error: error.message },
         failure_reason: `Build command failed: ${error.message}`,
@@ -384,55 +384,56 @@ class AuditReportGenerator {
 
     try {
       // Start application in background and test
-      const startTime = Date.now();
-      const child = execSync("timeout 10s npm start > startup.log 2>&1 &", {
-        encoding: "utf-8",
+      execSync('timeout 10s npm start > startup.log 2>&1 &', {
+        encoding: 'utf-8',
         cwd: process.cwd(),
       });
 
       // Wait for startup
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await new Promise((resolve) => {
+        setTimeout(resolve, 5000);
+      });
 
       // Read startup log
       const startupLog = await fs
-        .readFile(path.join(process.cwd(), "startup.log"), "utf-8")
-        .catch(() => "No startup log found");
+        .readFile(path.join(process.cwd(), 'startup.log'), 'utf-8')
+        .catch(() => 'No startup log found');
 
       // Save evidence
       await fs.writeFile(
-        path.join(auditDir, "logs", "startup_output.log"),
+        path.join(auditDir, 'logs', 'startup_output.log'),
         `Timestamp: ${this.timestamp}\nCommand: npm start (timeout 10s)\n\nOutput:\n${startupLog}`,
       );
 
       // Clean up startup log
-      await fs.unlink(path.join(process.cwd(), "startup.log")).catch(() => {});
+      await fs.unlink(path.join(process.cwd(), 'startup.log')).catch(() => {});
 
       const hasErrors =
-        startupLog.includes("error") ||
-        startupLog.includes("Error") ||
-        startupLog.includes("EADDRINUSE");
+        startupLog.includes('error') ||
+        startupLog.includes('Error') ||
+        startupLog.includes('EADDRINUSE');
 
       return {
         criteria_id: 3,
-        name: "Runtime Success",
-        status: !hasErrors ? "PASSED" : "FAILED",
-        priority: "MANDATORY",
-        evidence_location: "logs/startup_output.log",
+        name: 'Runtime Success',
+        status: !hasErrors ? 'PASSED' : 'FAILED',
+        priority: 'MANDATORY',
+        evidence_location: 'logs/startup_output.log',
         details: {
           startup_successful: !hasErrors,
           log_content_length: startupLog.length,
         },
         failure_reason: hasErrors
-          ? "Runtime errors detected during startup"
+          ? 'Runtime errors detected during startup'
           : null,
         remediation_required: hasErrors,
       };
     } catch (error) {
       return {
         criteria_id: 3,
-        name: "Runtime Success",
-        status: "FAILED",
-        priority: "MANDATORY",
+        name: 'Runtime Success',
+        status: 'FAILED',
+        priority: 'MANDATORY',
         evidence_location: null,
         details: { error: error.message },
         failure_reason: `Runtime test failed: ${error.message}`,
@@ -449,35 +450,35 @@ class AuditReportGenerator {
   evaluateTestCoverage(auditDir) {
     return this.createPlaceholderResult(
       4,
-      "Test Coverage Maintenance",
+      'Test Coverage Maintenance',
       auditDir,
     );
   }
   evaluateGitIntegration(auditDir) {
-    return this.createPlaceholderResult(5, "Git Integration", auditDir);
+    return this.createPlaceholderResult(5, 'Git Integration', auditDir);
   }
   evaluateDocumentationCompleteness(auditDir) {
     return this.createPlaceholderResult(
       6,
-      "Documentation Completeness",
+      'Documentation Completeness',
       auditDir,
     );
   }
   evaluateErrorHandling(auditDir) {
     return this.createPlaceholderResult(
       7,
-      "Error Handling Implementation",
+      'Error Handling Implementation',
       auditDir,
     );
   }
   evaluatePerformanceStandards(auditDir) {
-    return this.createPlaceholderResult(8, "Performance Standards", auditDir);
+    return this.createPlaceholderResult(8, 'Performance Standards', auditDir);
   }
   evaluateSecurityReview(auditDir) {
-    return this.createPlaceholderResult(9, "Security Review", auditDir);
+    return this.createPlaceholderResult(9, 'Security Review', auditDir);
   }
   evaluateCodeQuality(auditDir) {
-    return this.createPlaceholderResult(10, "Code Quality Standards", auditDir);
+    return this.createPlaceholderResult(10, 'Code Quality Standards', auditDir);
   }
 
   /**
@@ -487,15 +488,15 @@ class AuditReportGenerator {
   evaluateQualityGates(auditDir) {
     console.log(`🔍 Evaluating Quality Gates (11-15)...`);
     return {
-      11: this.createPlaceholderResult(11, "Dependency Management", auditDir),
+      11: this.createPlaceholderResult(11, 'Dependency Management', auditDir),
       12: this.createPlaceholderResult(
         12,
-        "Configuration Management",
+        'Configuration Management',
         auditDir,
       ),
-      13: this.createPlaceholderResult(13, "Logging and Monitoring", auditDir),
-      14: this.createPlaceholderResult(14, "API Contract Compliance", auditDir),
-      15: this.createPlaceholderResult(15, "Database Integration", auditDir),
+      13: this.createPlaceholderResult(13, 'Logging and Monitoring', auditDir),
+      14: this.createPlaceholderResult(14, 'API Contract Compliance', auditDir),
+      15: this.createPlaceholderResult(15, 'Database Integration', auditDir),
     };
   }
 
@@ -504,15 +505,15 @@ class AuditReportGenerator {
     return {
       16: this.createPlaceholderResult(
         16,
-        "Environment Compatibility",
+        'Environment Compatibility',
         auditDir,
       ),
-      17: this.createPlaceholderResult(17, "Deployment Readiness", auditDir),
-      18: this.createPlaceholderResult(18, "Data Migration Safety", auditDir),
-      19: this.createPlaceholderResult(19, "Integration Testing", auditDir),
+      17: this.createPlaceholderResult(17, 'Deployment Readiness', auditDir),
+      18: this.createPlaceholderResult(18, 'Data Migration Safety', auditDir),
+      19: this.createPlaceholderResult(19, 'Integration Testing', auditDir),
       20: this.createPlaceholderResult(
         20,
-        "User Experience Validation",
+        'User Experience Validation',
         auditDir,
       ),
     };
@@ -521,15 +522,15 @@ class AuditReportGenerator {
   evaluateExcellenceGates(auditDir) {
     console.log(`🔧 Evaluating Excellence Gates (21-25)...`);
     return {
-      21: this.createPlaceholderResult(21, "Monitoring and Alerting", auditDir),
-      22: this.createPlaceholderResult(22, "Disaster Recovery", auditDir),
-      23: this.createPlaceholderResult(23, "Scalability Assessment", auditDir),
+      21: this.createPlaceholderResult(21, 'Monitoring and Alerting', auditDir),
+      22: this.createPlaceholderResult(22, 'Disaster Recovery', auditDir),
+      23: this.createPlaceholderResult(23, 'Scalability Assessment', auditDir),
       24: this.createPlaceholderResult(
         24,
-        "Compliance and Governance",
+        'Compliance and Governance',
         auditDir,
       ),
-      25: this.createPlaceholderResult(25, "Knowledge Transfer", auditDir),
+      25: this.createPlaceholderResult(25, 'Knowledge Transfer', auditDir),
     };
   }
 
@@ -540,21 +541,21 @@ class AuditReportGenerator {
    * @param {string} auditDir - Audit directory
    * @returns {Object} Placeholder criteria result
    */
-  createPlaceholderResult(criteriaId, name, auditDir) {
+  createPlaceholderResult(criteriaId, name, _auditDir) {
     return {
       criteria_id: criteriaId,
       name: name,
-      status: "PENDING_IMPLEMENTATION",
+      status: 'PENDING_IMPLEMENTATION',
       priority:
         criteriaId <= 10
-          ? "MANDATORY"
+          ? 'MANDATORY'
           : criteriaId <= 15
-            ? "HIGH"
+            ? 'HIGH'
             : criteriaId <= 20
-              ? "MEDIUM"
-              : "LOW",
+              ? 'MEDIUM'
+              : 'LOW',
       evidence_location: null,
-      details: { note: "Full implementation pending" },
+      details: { note: 'Full implementation pending' },
       failure_reason: null,
       remediation_required: false,
     };
@@ -582,7 +583,7 @@ class AuditReportGenerator {
         const files = await fs.readdir(typeDir);
         evidenceResults.evidence_by_type[evidenceType] = files.length;
         evidenceResults.total_evidence_files += files.length;
-      } catch (error) {
+      } catch {
         evidenceResults.evidence_by_type[evidenceType] = 0;
       }
     }
@@ -605,7 +606,7 @@ class AuditReportGenerator {
     console.log(`📊 Determining audit decision...`);
 
     const decision = {
-      overall_status: "PASSED",
+      overall_status: 'PASSED',
       summary: { passed: 0, failed: 0, pending: 0, total: 25 },
       critical_failures: [],
       requires_remediation: false,
@@ -621,13 +622,13 @@ class AuditReportGenerator {
     ];
 
     for (const result of allResults) {
-      if (result.status === "PASSED") {
+      if (result.status === 'PASSED') {
         decision.summary.passed++;
-      } else if (result.status === "FAILED") {
+      } else if (result.status === 'FAILED') {
         decision.summary.failed++;
-        if (result.priority === "MANDATORY") {
+        if (result.priority === 'MANDATORY') {
           decision.critical_failures.push(result);
-          decision.overall_status = "FAILED";
+          decision.overall_status = 'FAILED';
         }
       } else {
         decision.summary.pending++;
@@ -637,7 +638,7 @@ class AuditReportGenerator {
     // Determine final decision
     decision.requires_remediation = decision.critical_failures.length > 0;
     decision.approval_granted =
-      decision.overall_status === "PASSED" &&
+      decision.overall_status === 'PASSED' &&
       decision.critical_failures.length === 0;
 
     return decision;
@@ -649,7 +650,7 @@ class AuditReportGenerator {
    * @param {string} taskId - Original task ID
    * @returns {Array} Array of remediation task definitions
    */
-  async generateRemediationTasks(criteriaResults, taskId) {
+  generateRemediationTasks(criteriaResults, taskId) {
     console.log(`🔧 Generating remediation tasks...`);
 
     const remediationTasks = [];
@@ -661,11 +662,11 @@ class AuditReportGenerator {
     ];
 
     for (const result of allResults) {
-      if (result.status === "FAILED" && result.remediation_required) {
+      if (result.status === 'FAILED' && result.remediation_required) {
         remediationTasks.push({
           title: `Fix ${result.name} - Audit Failure`,
           description: `Address audit failure for criteria #${result.criteria_id}: ${result.failure_reason}`,
-          category: "error",
+          category: 'error',
           priority: result.priority,
           original_task_id: taskId,
           criteria_id: result.criteria_id,
@@ -683,8 +684,8 @@ class AuditReportGenerator {
    * @param {Object} auditReport - Complete audit report
    */
   async saveAuditReport(auditDir, auditReport) {
-    const reportPath = path.join(auditDir, "audit_report.json");
-    const summaryPath = path.join(auditDir, "audit_summary.md");
+    const reportPath = path.join(auditDir, 'audit_report.json');
+    const summaryPath = path.join(auditDir, 'audit_summary.md');
 
     // Save detailed JSON report
     await fs.writeFile(reportPath, JSON.stringify(auditReport, null, 2));
@@ -703,7 +704,7 @@ class AuditReportGenerator {
    * @returns {string} Markdown formatted summary
    */
   generateAuditSummaryMarkdown(auditReport) {
-    const { audit_metadata, audit_decision, criteria_results } = auditReport;
+    const { audit_metadata, audit_decision, _criteria_results } = auditReport;
 
     return `# Audit Report Summary
 
@@ -713,12 +714,12 @@ class AuditReportGenerator {
 - **Implementer**: ${audit_metadata.implementer_agent}
 - **Auditor**: ${audit_metadata.audit_agent}
 - **Timestamp**: ${audit_metadata.audit_timestamp}
-- **Objectivity Enforced**: ${audit_metadata.objectivity_enforced ? "✅" : "❌"}
+- **Objectivity Enforced**: ${audit_metadata.objectivity_enforced ? '✅' : '❌'}
 
 ## Overall Decision
 - **Status**: ${audit_decision.overall_status}
-- **Approval Granted**: ${audit_decision.approval_granted ? "✅" : "❌"}
-- **Requires Remediation**: ${audit_decision.requires_remediation ? "⚠️ Yes" : "✅ No"}
+- **Approval Granted**: ${audit_decision.approval_granted ? '✅' : '❌'}
+- **Requires Remediation**: ${audit_decision.requires_remediation ? '⚠️ Yes' : '✅ No'}
 
 ## Criteria Summary
 - **Passed**: ${audit_decision.summary.passed}/${audit_decision.summary.total}
@@ -729,16 +730,16 @@ class AuditReportGenerator {
 ${
   audit_decision.critical_failures.length > 0
     ? audit_decision.critical_failures
-        .map((f) => `- **${f.name}**: ${f.failure_reason}`)
-        .join("\n")
-    : "None - All critical criteria passed ✅"
+      .map((f) => `- **${f.name}**: ${f.failure_reason}`)
+      .join('\n')
+    : 'None - All critical criteria passed ✅'
 }
 
 ## Next Steps
 ${
-  audit_decision.overall_status === "PASSED"
-    ? "✅ **APPROVED** - Task implementation meets all mandatory quality standards."
-    : "❌ **REQUIRES REMEDIATION** - Address critical failures before task completion."
+  audit_decision.overall_status === 'PASSED'
+    ? '✅ **APPROVED** - Task implementation meets all mandatory quality standards.'
+    : '❌ **REQUIRES REMEDIATION** - Address critical failures before task completion.'
 }
 
 ---
@@ -757,12 +758,12 @@ if (require.main === module) {
   const auditAgent = process.argv[5];
 
   switch (command) {
-    case "audit":
+    case 'audit':
       if (!taskId || !implementerAgent || !auditAgent) {
         console.error(
-          "Usage: node audit-report-generator.js audit <taskId> <implementerAgent> <auditAgent>",
+          'Usage: node audit-report-generator.js audit <taskId> <implementerAgent> <auditAgent>',
         );
-        throw new Error("Missing required arguments for audit command");
+        throw new Error('Missing required arguments for audit command');
       }
 
       generator
@@ -774,11 +775,11 @@ if (require.main === module) {
         })
         .catch((error) => {
           console.error(`❌ Audit failed: ${error.message}`);
-          throw new Error("Missing required arguments for audit command");
+          throw new Error('Missing required arguments for audit command');
         });
       break;
 
-    case "help":
+    case 'help':
     default:
       console.log(`
 Audit Report Generator - Comprehensive Quality Assessment System
