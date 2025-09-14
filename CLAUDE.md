@@ -249,15 +249,58 @@ git status                                   # Verify clean/up-to-date
 ## 🚨 PREPARATION & CONTEXT
 
 ### 🔴 MANDATORY CONTEXT PROTOCOLS
-**ABSOLUTE REQUIREMENT: READ development/essentials/ EVERY TASK START/CONTINUE**
+**ABSOLUTE REQUIREMENT: COMPREHENSIVE development/ DIRECTORY SCANNING EVERY TASK START/CONTINUE**
 
 **PREPARATION STEPS:**
-1. **READ/REVIEW** all files in `development/essentials/` (critical project constraints)
-2. **SCAN REPORTS** in `development/reports/` and `development/research-reports/`
-3. **ADD TO TASKS** relevant reports as important_files in TODO.json
-4. **LEVERAGE RESEARCH** before implementing
+1. **READ ALL FILES** in `development/essentials/` (critical project constraints) - EVERY FILE MANDATORY
+2. **SCAN ALL DIRECTORIES** in `development/` - Check every folder and file for relevance
+3. **CHECK ERRORS** in `development/errors/` - Review all error tracking files
+4. **SCAN REPORTS** in `development/reports/` and `development/research-reports/`
+5. **ADD TO TASKS** relevant reports as important_files in TODO.json
+6. **LEVERAGE RESEARCH** before implementing
+
+**COMPREHENSIVE DEVELOPMENT SCANNING:**
+- `find development/ -type f -name "*.md" | head -50` - List all documentation
+- `ls -la development/*/` - Check all subdirectories
+- **MANDATORY FOLDERS**: essentials/, errors/, reports/, research-reports/
+- **READ EVERYTHING** in essentials/ - zero exceptions
 
 **RESEARCH TASK CREATION:** Required for external API integrations, database schema changes, auth/security systems, complex architectural decisions
+
+### 🚨 ERRORS DIRECTORY MANAGEMENT PROTOCOL
+**🔴 MANDATORY ERROR TRACKING AND RESOLUTION**
+
+**ERROR DOCUMENTATION STRUCTURE:**
+- **LOCATION**: `development/errors/` - All error tracking files
+- **FORMAT**: `error_[timestamp]_[type]_[identifier].md`
+- **CONTENT**: Error details, investigation notes, resolution steps, prevention measures
+
+**ERROR TRACKING WORKFLOW:**
+```bash
+# Check errors directory before every task
+ls -la development/errors/
+cat development/errors/*.md    # Read all error files
+
+# Create new error file when issues found
+echo "# Error: [Description]
+## Discovered: [timestamp]
+## Investigation: [details]
+## Resolution: [steps taken]
+## Prevention: [measures implemented]" > development/errors/error_$(date +%s)_[type]_[id].md
+```
+
+**ERROR CATEGORIES:**
+- **LINTER**: Code quality violations and fixes
+- **BUILD**: Compilation and build process failures
+- **RUNTIME**: Application execution errors
+- **INTEGRATION**: API and service connection issues
+- **SECURITY**: Vulnerability discoveries and patches
+
+**MANDATORY PROTOCOLS:**
+- **CHECK ERRORS FIRST**: Always review development/errors/ before starting work
+- **UPDATE EXISTING**: Add progress updates to relevant error files  
+- **CREATE NEW**: Document any newly discovered errors immediately
+- **RESOLUTION TRACKING**: Mark resolved errors with timestamps and evidence
 
 ### 📋 REPORTS DIRECTORY MANAGEMENT PROTOCOL
 **🔴 MANDATORY TASK REPORT NAMING CONVENTIONS**
@@ -462,8 +505,11 @@ npm run lint && npm run build && npm test && npm start
 ### 📋 PHASE 1: INITIATION & PREPARATION
 - [ ] **INITIALIZE**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init` (or reinitialize with explicit agent ID)
 - [ ] **CREATE TASK**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"type"}'`
-- [ ] **CONTEXT REVIEW**: Read all files in `development/essentials/`
-- [ ] **RESEARCH INTEGRATION**: Scan `development/reports/` and `development/research-reports/`
+- [ ] **COMPREHENSIVE DEVELOPMENT SCAN**: Check ALL development/ folders and files
+  - [ ] **ESSENTIALS REVIEW**: Read EVERY file in `development/essentials/` - MANDATORY
+  - [ ] **ERRORS CHECK**: Review all files in `development/errors/` for relevant issues
+  - [ ] **REPORTS SCAN**: Review `development/reports/` and `development/research-reports/`
+  - [ ] **COMPLETE INVENTORY**: `find development/ -type f -name "*.md"` - ensure nothing missed
 - [ ] **CLAIM TASK**: Take ownership via API
 
 ### 📋 PHASE 2: IMPLEMENTATION & QUALITY
