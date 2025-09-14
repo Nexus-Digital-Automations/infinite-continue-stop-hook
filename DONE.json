@@ -44063,10 +44063,164 @@
       "updated_at": "2025-09-13T22:34:51.372Z",
       "archived_at": "2025-09-13T22:34:51.382Z",
       "archive_version": "2.0.0"
+    },
+    {
+      "id": "error_1757800314864_j4gbo7qx0",
+      "title": "Test task completion functionality",
+      "description": "Simple test task to verify completion works after fixing null evidence bug",
+      "priority": "medium",
+      "category": "test",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T21:25:14.256Z",
+      "auto_research_created": false,
+      "assigned_agent": "dev_session_1757801837676_1_general_59c818c2",
+      "started_at": "2025-09-13T22:36:03.095Z",
+      "claimed_by": "dev_session_1757801837676_1_general_59c818c2",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1757801837676_1_general_59c818c2",
+          "role": "primary",
+          "assignedAt": "2025-09-13T22:36:03.095Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-13T22:36:31.269Z",
+      "updated_at": "2025-09-13T22:36:31.269Z",
+      "archived_at": "2025-09-13T22:36:31.280Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "id": "error_1757781551849_6pjfgzr19",
+      "title": "Post-Completion Audit: Enhance CLAUDE.md comprehensive logging emphasis for maintainability",
+      "description": "Comprehensive quality audit and review of the completed feature: Enhance CLAUDE.md comprehensive logging emphasis for maintainability\n\nOriginal Description: Modify CLAUDE.md to significantly strengthen emphasis on comprehensive logging practices and their critical importance for code maintainability, debugging, and diagnosing future issues. Add detailed sections on logging standards, examples, and requirements across all development phases.",
+      "category": "audit",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [
+        "Linter perfection achieved (zero warnings/errors)",
+        "Build perfection achieved (clean build)",
+        "All tests pass with full coverage",
+        "Code quality standards met",
+        "Implementation follows architectural patterns",
+        "Security review passed",
+        "Performance standards met",
+        "Documentation is complete and accurate"
+      ],
+      "estimate": "1-2 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T16:38:57.205Z",
+      "created_from_completed_task": "feature_1757781408490_g5ymajjxc",
+      "original_implementer": "development_session_1757781390031_1_general_ee981c91",
+      "prevents_self_review": true,
+      "audit_type": "post_completion",
+      "assigned_agent": "dev_session_1757801837676_1_general_59c818c2",
+      "started_at": "2025-09-13T22:38:36.081Z",
+      "claimed_by": "dev_session_1757801837676_1_general_59c818c2",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1757801837676_1_general_59c818c2",
+          "role": "primary",
+          "assignedAt": "2025-09-13T22:38:36.081Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-13T22:41:17.100Z",
+      "updated_at": "2025-09-13T22:41:17.100Z",
+      "archived_at": "2025-09-13T22:41:17.109Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-14T04:59:37.160Z",
+      "title": "Fix AnkiBrain startup performance - takes too long to load",
+      "description": "Analyze and optimize AnkiBrain addon startup bottlenecks causing slow load times. Check async member initialization, webview loading, and AI engine startup.",
+      "category": "error",
+      "priority": "normal",
+      "id": "error_1757825977160_9elfvvovadj",
+      "assigned_agent": "development_session_1757825960203_1_general_fd560a93",
+      "started_at": "2025-09-14T04:59:53.677Z",
+      "claimed_by": "development_session_1757825960203_1_general_fd560a93",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757825960203_1_general_fd560a93",
+          "role": "primary",
+          "assignedAt": "2025-09-14T04:59:53.677Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-14T05:04:19.738Z",
+      "updated_at": "2025-09-14T05:04:19.738Z",
+      "archived_at": "2025-09-14T05:04:19.748Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-14T05:12:38.570Z",
+      "title": "AnkiBrain still not starting up - investigate comprehensive logs",
+      "description": "AnkiBrain addon is still failing to start properly despite previous optimizations. Need to check system logs, Anki logs, Python console output, and addon-specific logs to identify root cause of startup failure.",
+      "category": "error",
+      "priority": "normal",
+      "id": "error_1757826758570_85deu9mte7c",
+      "assigned_agent": "development_session_1757826505193_1_general_61f0090c",
+      "started_at": "2025-09-14T05:12:57.969Z",
+      "claimed_by": "development_session_1757826505193_1_general_61f0090c",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757826505193_1_general_61f0090c",
+          "role": "primary",
+          "assignedAt": "2025-09-14T05:12:57.969Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-14T05:19:43.953Z",
+      "updated_at": "2025-09-14T05:19:43.954Z",
+      "archived_at": "2025-09-14T05:19:43.976Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-14T05:52:40.676Z",
+      "title": "Add errors directory management protocol to CLAUDE.md",
+      "description": "Add concise sections to CLAUDE.md for: 1) development/errors/ directory with md files tracking errors and updates, 2) agent protocol step to check errors folder, 3) comprehensive development folder/file checking, 4) enhanced essentials directory reading requirements",
+      "category": "feature",
+      "id": "feature_1757829160676_1704949licm",
+      "completed_at": "2025-09-14T05:54:08.621Z",
+      "updated_at": "2025-09-14T05:54:08.621Z",
+      "archived_at": "2025-09-14T05:54:08.638Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-14T05:52:40.676Z",
+      "title": "Add errors directory management protocol to CLAUDE.md",
+      "description": "Add concise sections to CLAUDE.md for: 1) development/errors/ directory with md files tracking errors and updates, 2) agent protocol step to check errors folder, 3) comprehensive development folder/file checking, 4) enhanced essentials directory reading requirements",
+      "category": "feature",
+      "id": "error_1757829268432_gzafeaims",
+      "completed_at": "2025-09-14T05:54:08.621Z",
+      "updated_at": "2025-09-14T05:54:08.621Z",
+      "archived_at": "2025-09-14T05:54:28.501Z",
+      "archive_version": "2.0.0"
     }
   ],
-  "total_completed": 972,
+  "total_completed": 978,
   "last_completion": "2025-09-13T18:24:43.914Z",
   "created_at": "2025-08-07T04:55:03.964Z",
-  "last_archived": "2025-09-13T22:34:51.382Z"
+  "last_archived": "2025-09-14T05:54:28.501Z",
+  "metadata": {
+    "last_bulk_archive": "2025-09-14T05:54:28.501Z",
+    "bulk_archive_count": 2
+  }
 }
