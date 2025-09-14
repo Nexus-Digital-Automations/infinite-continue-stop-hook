@@ -80,27 +80,27 @@
  * @since 2024-01-01
  */
 
-const fs = require('fs');
-const path = require('path');
-const readline = require('readline');
+const fs = require("fs");
+const path = require("path");
+const readline = require("readline");
 
 // Parse command line arguments
 const args = process.argv.slice(2);
 const projectPath =
-  args[0] || '/Users/jeremyparker/Desktop/Claude Coding Projects';
+  args[0] || "/Users/jeremyparker/Desktop/Claude Coding Projects";
 
 // Check for command line flags
 const flags = {
-  noInteractive: args.includes('--no-interactive') || args.includes('--batch'),
-  projectName: getArgValue('--project-name'),
-  task: getArgValue('--task'),
-  mode: getArgValue('--mode') || 'DEVELOPMENT',
-  prompt: getArgValue('--prompt'),
-  dependencies: getArgValue('--dependencies'),
-  importantFiles: getArgValue('--important-files'),
-  requiresResearch: args.includes('--requires-research'),
-  batchMode: args.includes('--batch'),
-  singleProject: args.includes('--single'),
+  noInteractive: args.includes("--no-interactive") || args.includes("--batch"),
+  projectName: getArgValue("--project-name"),
+  task: getArgValue("--task"),
+  mode: getArgValue("--mode") || "DEVELOPMENT",
+  prompt: getArgValue("--prompt"),
+  dependencies: getArgValue("--dependencies"),
+  importantFiles: getArgValue("--important-files"),
+  requiresResearch: args.includes("--requires-research"),
+  batchMode: args.includes("--batch"),
+  singleProject: args.includes("--single"),
 };
 
 function getArgValue(flag) {
@@ -126,12 +126,12 @@ async function _getProjectInfo(targetPath) {
   // Try to detect project name from package.json or directory name
   let detectedName = path.basename(targetPath);
 
-  const packageJsonPath = path.join(targetPath, 'package.json');
+  const packageJsonPath = path.join(targetPath, "package.json");
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
   if (fs.existsSync(packageJsonPath)) {
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script reading package.json from validated project path
-      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
       if (packageJson.name) {
         detectedName = packageJson.name;
       }
@@ -143,17 +143,17 @@ async function _getProjectInfo(targetPath) {
   if (flags.noInteractive) {
     return {
       projectName: flags.projectName || detectedName,
-      taskDescription: flags.task || 'Initial project setup',
+      taskDescription: flags.task || "Initial project setup",
       taskMode: flags.mode.toUpperCase(),
       taskPrompt:
         flags.prompt ||
         flags.task ||
-        'Set up the project according to requirements',
+        "Set up the project according to requirements",
       dependencies: flags.dependencies
-        ? flags.dependencies.split(',').map((d) => d.trim())
+        ? flags.dependencies.split(",").map((d) => d.trim())
         : [],
       importantFiles: flags.importantFiles
-        ? flags.importantFiles.split(',').map((f) => f.trim())
+        ? flags.importantFiles.split(",").map((f) => f.trim())
         : [],
       requiresResearch: flags.requiresResearch,
     };
@@ -161,25 +161,25 @@ async function _getProjectInfo(targetPath) {
 
   // Interactive mode
   // eslint-disable-next-line no-console -- setup script interactive mode requires console output
-  console.log('\n=== Project Configuration ===');
+  console.log("\n=== Project Configuration ===");
   const projectName =
     (await question(`Project name (${detectedName}): `)) || detectedName;
 
   // eslint-disable-next-line no-console -- setup script interactive mode requires console output
-  console.log('\n=== Initial Task Setup ===');
-  const taskDescription = await question('Task description: ');
+  console.log("\n=== Initial Task Setup ===");
+  const taskDescription = await question("Task description: ");
   const taskMode =
     (await question(
-      'Task mode (DEVELOPMENT/REFACTORING/TESTING/RESEARCH) [DEVELOPMENT]: ',
-    )) || 'DEVELOPMENT';
-  const taskPrompt = await question('Detailed task prompt: ');
+      "Task mode (DEVELOPMENT/REFACTORING/TESTING/RESEARCH) [DEVELOPMENT]: ",
+    )) || "DEVELOPMENT";
+  const taskPrompt = await question("Detailed task prompt: ");
   const dependencies = await question(
-    'Dependencies (comma-separated files/dirs, or press Enter to skip): ',
+    "Dependencies (comma-separated files/dirs, or press Enter to skip): ",
   );
   const importantFiles = await question(
-    'Important files to read first (comma-separated, or press Enter to skip): ',
+    "Important files to read first (comma-separated, or press Enter to skip): ",
   );
-  const requiresResearch = await question('Requires research? (y/n) [n]: ');
+  const requiresResearch = await question("Requires research? (y/n) [n]: ");
 
   return {
     projectName,
@@ -187,18 +187,18 @@ async function _getProjectInfo(targetPath) {
     taskMode: taskMode.toUpperCase(),
     taskPrompt,
     dependencies: dependencies
-      ? dependencies.split(',').map((d) => d.trim())
+      ? dependencies.split(",").map((d) => d.trim())
       : [],
     importantFiles: importantFiles
-      ? importantFiles.split(',').map((f) => f.trim())
+      ? importantFiles.split(",").map((f) => f.trim())
       : [],
-    requiresResearch: requiresResearch.toLowerCase() === 'y',
+    requiresResearch: requiresResearch.toLowerCase() === "y",
   };
 }
 
 function createProjectDirectories(targetPath) {
   // Create /development directory
-  const developmentPath = path.join(targetPath, 'development');
+  const developmentPath = path.join(targetPath, "development");
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
   if (!fs.existsSync(developmentPath)) {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script creating validated directory structure
@@ -208,7 +208,7 @@ function createProjectDirectories(targetPath) {
   }
 
   // Create /development/tasks directory
-  const tasksPath = path.join(developmentPath, 'tasks');
+  const tasksPath = path.join(developmentPath, "tasks");
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
   if (!fs.existsSync(tasksPath)) {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script creating validated directory structure
@@ -218,7 +218,7 @@ function createProjectDirectories(targetPath) {
   }
 
   // Create /development/reports directory
-  const reportsPath = path.join(developmentPath, 'reports');
+  const reportsPath = path.join(developmentPath, "reports");
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
   if (!fs.existsSync(reportsPath)) {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script creating validated directory structure
@@ -227,7 +227,17 @@ function createProjectDirectories(targetPath) {
     console.log(`✓ Created /development/reports directory`);
   }
 
-  return { developmentPath, tasksPath, reportsPath };
+  // Create /development/logs directory
+  const logsPath = path.join(developmentPath, "logs");
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
+  if (!fs.existsSync(logsPath)) {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script creating validated directory structure
+    fs.mkdirSync(logsPath, { recursive: true });
+    // eslint-disable-next-line no-console -- setup script progress output
+    console.log(`✓ Created /development/logs directory`);
+  }
+
+  return { developmentPath, tasksPath, reportsPath, logsPath };
 }
 
 // Check if TODO.json needs to be updated to new schema
@@ -239,7 +249,7 @@ function needsTodoUpdate(todoPath) {
 
   try {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script reading TODO.json from validated project path
-    const existing = JSON.parse(fs.readFileSync(todoPath, 'utf8'));
+    const existing = JSON.parse(fs.readFileSync(todoPath, "utf8"));
 
     // Check for old schema indicators
     const hasOldSchema =
@@ -247,7 +257,7 @@ function needsTodoUpdate(todoPath) {
       !existing.current_mode || // Missing new field
       existing.execution_count === undefined || // Missing new field
       (existing.tasks &&
-        existing.tasks.some((t) => t.id && !t.id.includes('_'))) || // Old task ID format
+        existing.tasks.some((t) => t.id && !t.id.includes("_"))) || // Old task ID format
       (existing.tasks && existing.tasks.some((t) => !t.title)); // Missing title field
 
     if (hasOldSchema) {
@@ -273,7 +283,7 @@ function needsTodoUpdate(todoPath) {
 }
 
 function createTodoJson(targetPath, projectInfo) {
-  const todoPath = path.join(targetPath, 'TODO.json');
+  const todoPath = path.join(targetPath, "TODO.json");
 
   // Smart update logic - only update if schema is old or missing
   if (!needsTodoUpdate(todoPath)) {
@@ -302,8 +312,8 @@ function createTodoJson(targetPath, projectInfo) {
   // Add optional quality validation tasks - friendlier approach
   const reviewTasks = [
     {
-      title: 'Build Quality Validation',
-      criteria: 'Optional: Verify project builds successfully',
+      title: "Build Quality Validation",
+      criteria: "Optional: Verify project builds successfully",
       dependencies: [],
       important_files: [],
       friendlyInstructions: `This is an optional quality check to ensure the project builds properly.
@@ -316,8 +326,8 @@ function createTodoJson(targetPath, projectInfo) {
 This validation is designed to be helpful, not blocking.`,
     },
     {
-      title: 'Code Quality Check',
-      criteria: 'Optional: Check for any obvious code quality issues',
+      title: "Code Quality Check",
+      criteria: "Optional: Check for any obvious code quality issues",
       dependencies: [],
       important_files: [],
       friendlyInstructions: `This is an optional code quality review.
@@ -330,8 +340,8 @@ This validation is designed to be helpful, not blocking.`,
 This is meant to be a gentle quality reminder, not a strict requirement.`,
     },
     {
-      title: 'Test Coverage Review',
-      criteria: 'Optional: Review test coverage when convenient',
+      title: "Test Coverage Review",
+      criteria: "Optional: Review test coverage when convenient",
       dependencies: [],
       important_files: [],
       friendlyInstructions: `This is an optional test coverage check for when you have time.
@@ -367,10 +377,10 @@ Only create additional tasks if you identify genuine issues that would benefit t
 - Skip minor style issues unless they're causing real problems
 
 This validation should support your development workflow, not interrupt it.`,
-      task_type: 'test',
-      category: 'quality',
-      priority: 'low',
-      status: 'pending',
+      task_type: "test",
+      category: "quality",
+      priority: "low",
+      status: "pending",
       dependencies: reviewTask.dependencies,
       important_files: reviewTask.important_files,
       requires_research: false,
@@ -411,10 +421,10 @@ function _getProjectDirectories(basePath) {
       // Skip hidden directories and common ignore patterns
       const dirname = path.basename(itemPath);
       if (
-        dirname.startsWith('.') ||
-        dirname === 'node_modules' ||
-        dirname === 'dist' ||
-        dirname === 'build'
+        dirname.startsWith(".") ||
+        dirname === "node_modules" ||
+        dirname === "dist" ||
+        dirname === "build"
       ) {
         return false;
       }
@@ -432,10 +442,10 @@ async function processProject(targetPath) {
     // Get project information for this specific project
     const projectInfo = {
       projectName: projectName,
-      taskDescription: 'Continue development and improvements',
-      taskMode: 'DEVELOPMENT',
+      taskDescription: "Continue development and improvements",
+      taskMode: "DEVELOPMENT",
       taskPrompt:
-        'Continue with the current development tasks, fix any issues, and improve the codebase quality.',
+        "Continue with the current development tasks, fix any issues, and improve the codebase quality.",
       dependencies: [],
       importantFiles: [],
       requiresResearch: false,
@@ -471,7 +481,7 @@ async function processProject(targetPath) {
  * @param {string} targetPath - Target project path
  */
 function migrateToFeatureBasedSystem(targetPath) {
-  const todoPath = path.join(targetPath, 'TODO.json');
+  const todoPath = path.join(targetPath, "TODO.json");
 
   try {
     // eslint-disable-next-line no-console -- setup script progress output
@@ -486,7 +496,7 @@ function migrateToFeatureBasedSystem(targetPath) {
 
     // Read current TODO.json
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script reading TODO.json from validated project path
-    const todoData = JSON.parse(fs.readFileSync(todoPath, 'utf8'));
+    const todoData = JSON.parse(fs.readFileSync(todoPath, "utf8"));
 
     // Check if already feature-based
     if (todoData.features && Array.isArray(todoData.features)) {
@@ -496,7 +506,7 @@ function migrateToFeatureBasedSystem(targetPath) {
     }
 
     // Create backup before migration
-    const backupPath = todoPath + '.pre-feature-migration.backup';
+    const backupPath = todoPath + ".pre-feature-migration.backup";
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
     fs.writeFileSync(backupPath, JSON.stringify(todoData, null, 2));
     // eslint-disable-next-line no-console -- setup script progress output
@@ -522,7 +532,7 @@ function migrateToFeatureBasedSystem(targetPath) {
     );
 
     // Clean up features.json if it exists (eliminating dual system)
-    const featuresJsonPath = path.join(targetPath, 'features.json');
+    const featuresJsonPath = path.join(targetPath, "features.json");
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
     if (fs.existsSync(featuresJsonPath)) {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script removing features.json from validated path
@@ -592,13 +602,13 @@ function extractPhaseFromTitle(title) {
   }
 
   // Use string parsing instead of regex to avoid security warnings
-  const cleanTitle = title.replace(/^Research:\s*/i, '').trim();
-  if (!cleanTitle.toLowerCase().startsWith('phase ')) {
+  const cleanTitle = title.replace(/^Research:\s*/i, "").trim();
+  if (!cleanTitle.toLowerCase().startsWith("phase ")) {
     return null;
   }
 
   const phaseNumberPart = cleanTitle.slice(6).trim(); // Remove "Phase " prefix
-  const versionParts = phaseNumberPart.split('.');
+  const versionParts = phaseNumberPart.split(".");
 
   const major = parseInt(versionParts[0], 10);
   const minor = versionParts.length > 1 ? parseInt(versionParts[1], 10) : 0;
@@ -612,7 +622,7 @@ function extractPhaseFromTitle(title) {
     major: major,
     minor: minor,
     patch: patch,
-    raw: `Phase ${major}${minor > 0 ? `.${minor}` : ''}${patch > 0 ? `.${patch}` : ''}`,
+    raw: `Phase ${major}${minor > 0 ? `.${minor}` : ""}${patch > 0 ? `.${patch}` : ""}`,
   };
 }
 
@@ -627,14 +637,14 @@ function generateFeatureTitle(phaseKey, sampleTitle) {
 
   // Use string parsing instead of regex to avoid security warnings
   const lowerTitle = sampleTitle.toLowerCase();
-  const phaseIndex = lowerTitle.indexOf('phase ');
-  const colonIndex = sampleTitle.indexOf(':', phaseIndex);
+  const phaseIndex = lowerTitle.indexOf("phase ");
+  const colonIndex = sampleTitle.indexOf(":", phaseIndex);
 
   if (phaseIndex >= 0 && colonIndex > phaseIndex) {
     let featureName = sampleTitle.substring(colonIndex + 1).trim();
 
     // Remove "Implementation" suffix if present
-    if (featureName.toLowerCase().endsWith(' implementation')) {
+    if (featureName.toLowerCase().endsWith(" implementation")) {
       featureName = featureName.slice(0, -14).trim();
     }
 
@@ -703,34 +713,34 @@ function createFeatureFromPhaseGroup(group) {
 
   // Determine feature category from phase number
   const categoryMap = {
-    1: 'bytebot',
-    2: 'open_interpreter',
-    3: 'opendia',
-    4: 'huginn',
-    5: 'orchestrator',
+    1: "bytebot",
+    2: "open_interpreter",
+    3: "opendia",
+    4: "huginn",
+    5: "orchestrator",
   };
-  const category = categoryMap[group.phase.major] || 'uncategorized';
+  const category = categoryMap[group.phase.major] || "uncategorized";
 
   // Calculate status based on subtask statuses
   const statuses = group.tasks.map((t) => t.status);
-  let status = 'planned';
-  if (statuses.every((s) => s === 'completed')) {
-    status = 'implemented';
-  } else if (statuses.some((s) => s === 'in_progress')) {
-    status = 'in_progress';
-  } else if (statuses.some((s) => s === 'completed')) {
-    status = 'in_progress';
+  let status = "planned";
+  if (statuses.every((s) => s === "completed")) {
+    status = "implemented";
+  } else if (statuses.some((s) => s === "in_progress")) {
+    status = "in_progress";
+  } else if (statuses.some((s) => s === "completed")) {
+    status = "in_progress";
   }
 
   // Calculate priority from subtask priorities
-  const priorities = group.tasks.map((t) => t.priority || 'medium');
-  let priority = 'medium';
-  if (priorities.includes('critical')) {
-    priority = 'critical';
-  } else if (priorities.includes('high')) {
-    priority = 'high';
-  } else if (priorities.includes('low')) {
-    priority = 'low';
+  const priorities = group.tasks.map((t) => t.priority || "medium");
+  let priority = "medium";
+  if (priorities.includes("critical")) {
+    priority = "critical";
+  } else if (priorities.includes("high")) {
+    priority = "high";
+  } else if (priorities.includes("low")) {
+    priority = "low";
   }
 
   return {
@@ -759,7 +769,7 @@ function createFeatureFromPhaseGroup(group) {
  */
 function generateFeatureDescription(group) {
   if (group.tasks.length === 1) {
-    return group.tasks[0].description || 'Feature description';
+    return group.tasks[0].description || "Feature description";
   }
 
   // Aggregate description from multiple tasks
@@ -780,13 +790,13 @@ function generateFeatureDescription(group) {
  * @returns {number} Completion percentage
  */
 function calculateCompletionPercentage(tasks) {
-  const completed = tasks.filter((t) => t.status === 'completed').length;
+  const completed = tasks.filter((t) => t.status === "completed").length;
   return Math.round((completed / tasks.length) * 100);
 }
 
 async function main() {
   // eslint-disable-next-line no-console -- setup script header output
-  console.log('=== Infinite Continue Stop Hook - Batch TODO.json Setup ===\n');
+  console.log("=== Infinite Continue Stop Hook - Batch TODO.json Setup ===\n");
 
   // Resolve project path
   const targetPath = path.resolve(projectPath);
@@ -810,9 +820,9 @@ async function main() {
   // eslint-disable-next-line no-console -- setup script configuration output
   console.log(`Processing directories in: ${targetPath}`);
   // eslint-disable-next-line no-console -- setup script configuration output
-  console.log(`Batch mode: ${flags.batchMode ? 'ON' : 'OFF'}`);
+  console.log(`Batch mode: ${flags.batchMode ? "ON" : "OFF"}`);
   // eslint-disable-next-line no-console -- setup script configuration output
-  console.log(`Single project mode: ${flags.singleProject ? 'ON' : 'OFF'}`);
+  console.log(`Single project mode: ${flags.singleProject ? "ON" : "OFF"}`);
 
   const results = [];
 
@@ -826,7 +836,7 @@ async function main() {
 
     // Summary
     // eslint-disable-next-line no-console -- setup script summary output
-    console.log('\n=== Summary ===');
+    console.log("\n=== Summary ===");
     const successful = results.filter((r) => r.success).length;
     const failed = results.filter((r) => !r.success).length;
 
@@ -844,42 +854,42 @@ async function main() {
     }
 
     // eslint-disable-next-line no-console -- setup script usage examples output
-    console.log('\n📋 Usage examples:');
+    console.log("\n📋 Usage examples:");
     // eslint-disable-next-line no-console -- setup script usage examples output
-    console.log('# Process all projects in Claude Coding Projects (default):');
+    console.log("# Process all projects in Claude Coding Projects (default):");
     // eslint-disable-next-line no-console -- setup script usage examples output
-    console.log('node setup-infinite-hook.js');
+    console.log("node setup-infinite-hook.js");
     // eslint-disable-next-line no-console -- setup script usage examples output
-    console.log('');
+    console.log("");
     // eslint-disable-next-line no-console -- setup script usage examples output
-    console.log('# Process single project:');
+    console.log("# Process single project:");
     // eslint-disable-next-line no-console -- setup script usage examples output
-    console.log('node setup-infinite-hook.js /path/to/project --single');
+    console.log("node setup-infinite-hook.js /path/to/project --single");
     // eslint-disable-next-line no-console -- setup script usage examples output
-    console.log('');
+    console.log("");
     // eslint-disable-next-line no-console -- setup script usage examples output
-    console.log('# Batch mode with no interaction:');
+    console.log("# Batch mode with no interaction:");
     // eslint-disable-next-line no-console -- setup script usage examples output
-    console.log('node setup-infinite-hook.js --batch');
+    console.log("node setup-infinite-hook.js --batch");
 
     // eslint-disable-next-line no-console -- setup script documentation output
-    console.log('\n📋 Each project now includes:');
+    console.log("\n📋 Each project now includes:");
     // eslint-disable-next-line no-console -- setup script documentation output
-    console.log('   - TODO.json with new multi-agent schema');
+    console.log("   - TODO.json with new multi-agent schema");
     // eslint-disable-next-line no-console -- setup script documentation output
-    console.log('   - Development mode files and directory structure');
+    console.log("   - Development mode files and directory structure");
     // eslint-disable-next-line no-console -- setup script documentation output
-    console.log('');
+    console.log("");
     // eslint-disable-next-line no-console -- setup script documentation output
-    console.log('📋 TaskManager system is centralized at:');
+    console.log("📋 TaskManager system is centralized at:");
     // eslint-disable-next-line no-console -- setup script documentation output
     console.log(
-      '   /Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/',
+      "   /Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/",
     );
     // eslint-disable-next-line no-console -- setup script documentation output
-    console.log('');
+    console.log("");
     // eslint-disable-next-line no-console -- setup script documentation output
-    console.log('📋 Use universal commands to work with any project:');
+    console.log("📋 Use universal commands to work with any project:");
     // eslint-disable-next-line no-console -- setup script documentation output
     console.log(
       '   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project /path/to/project',
@@ -889,10 +899,10 @@ async function main() {
       '   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" api current --project /path/to/project',
     );
     // eslint-disable-next-line no-console -- setup script documentation output
-    console.log('');
+    console.log("");
     // eslint-disable-next-line no-console -- setup script documentation output
     console.log(
-      '📋 Updated hook reference in ~/.claude/settings.json should point to:',
+      "📋 Updated hook reference in ~/.claude/settings.json should point to:",
     );
     // eslint-disable-next-line no-console -- setup script documentation output
     console.log(
@@ -900,7 +910,7 @@ async function main() {
     );
   } catch (error) {
     // eslint-disable-next-line no-console -- setup script error output
-    console.error('\n❌ Batch setup error:', error.message);
+    console.error("\n❌ Batch setup error:", error.message);
     throw error;
   } finally {
     rl.close();

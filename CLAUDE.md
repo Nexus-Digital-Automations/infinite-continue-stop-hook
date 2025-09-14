@@ -255,15 +255,17 @@ git status                                   # Verify clean/up-to-date
 1. **READ ALL FILES** in `development/essentials/` (critical project constraints) - EVERY FILE MANDATORY
 2. **SCAN ALL DIRECTORIES** in `development/` - Check every folder and file for relevance
 3. **CHECK ERRORS** in `development/errors/` - Review all error tracking files
-4. **SCAN REPORTS** in `development/reports/` and `development/research-reports/`
-5. **ADD TO TASKS** relevant reports as important_files in TODO.json
-6. **LEVERAGE RESEARCH** before implementing
+4. **REVIEW LOGS** in `development/logs/` - Check recent system behavior and patterns
+5. **SCAN REPORTS** in `development/reports/` and `development/research-reports/`
+6. **ADD TO TASKS** relevant reports as important_files in TODO.json
+7. **LEVERAGE RESEARCH** before implementing
 
 **COMPREHENSIVE DEVELOPMENT SCANNING:**
 - `find development/ -type f -name "*.md" | head -50` - List all documentation
 - `ls -la development/*/` - Check all subdirectories
-- **MANDATORY FOLDERS**: essentials/, errors/, reports/, research-reports/
+- **MANDATORY FOLDERS**: essentials/, errors/, logs/, reports/, research-reports/
 - **READ EVERYTHING** in essentials/ - zero exceptions
+- **CHECK LOGS** in logs/ for system behavior patterns and issues
 
 **RESEARCH TASK CREATION:** Required for external API integrations, database schema changes, auth/security systems, complex architectural decisions
 
@@ -301,6 +303,39 @@ echo "# Error: [Description]
 - **UPDATE EXISTING**: Add progress updates to relevant error files  
 - **CREATE NEW**: Document any newly discovered errors immediately
 - **RESOLUTION TRACKING**: Mark resolved errors with timestamps and evidence
+
+### 🚨 LOGS DIRECTORY MANAGEMENT PROTOCOL
+**🔴 MANDATORY SYSTEM LOGGING AND MONITORING**
+
+**LOG DOCUMENTATION STRUCTURE:**
+- **LOCATION**: `development/logs/` - All system and application logs
+- **FORMAT**: `[component]_[date]_[type].log` (e.g., `taskmanager_20250914_debug.log`)
+- **STOP HOOK LOGS**: All stop hook logs MUST redirect to `development/logs/`
+
+**LOG CATEGORIES:**
+- **TASKMANAGER**: All TaskManager API operations and responses
+- **BUILD**: Build process outputs and errors
+- **LINTER**: Linting results and violations
+- **SYSTEM**: General system operations and diagnostics
+- **DEBUG**: Debug information and troubleshooting data
+- **PERFORMANCE**: Timing and performance metrics
+
+**LOG MANAGEMENT WORKFLOW:**
+```bash
+# Check logs directory before every task
+ls -la development/logs/
+tail -n 50 development/logs/*.log    # Review recent log entries
+
+# Configure stop hook logging to development/logs
+export LOG_DIR="/Users/jeremyparker/infinite-continue-stop-hook/development/logs"
+mkdir -p "$LOG_DIR"
+```
+
+**MANDATORY PROTOCOLS:**
+- **PRE-TASK LOG REVIEW**: Check development/logs/ for recent system behavior patterns
+- **CENTRALIZED LOGGING**: All system logs MUST go to development/logs/ - no exceptions
+- **LOG RETENTION**: Keep logs organized by date and component
+- **STOP HOOK INTEGRATION**: Configure stop hook to output all logs to development/logs/
 
 ### 📋 REPORTS DIRECTORY MANAGEMENT PROTOCOL
 **🔴 MANDATORY TASK REPORT NAMING CONVENTIONS**
@@ -376,13 +411,13 @@ development/reports/task_1234567890_abcdef123/
 - **DOCUMENTATION**: Move project docs to `docs/` directory if needed
 - **REPORTS**: All reports belong in `development/reports/` or `development/research-reports/`
 - **TEMPORARY FILES**: Remove or organize temporary analysis files
-- **LOGS**: Move debug logs to `development/debug-logs/`
+- **LOGS**: ALL logs must go to `development/logs/` - including stop hook logs
 - **SCRIPTS**: Organize utility scripts in `development/temp-scripts/`
 
 **CLEAN-UP PROCEDURES:**
 - `find . -maxdepth 1 -name "*.md" -not -name "README.md" -not -name "CLAUDE.md"` - Check misplaced files
 - `mv analysis-*.md development/reports/` - Move docs to reports
-- `mv debug-*.log development/debug-logs/` - Move logs to debug
+- `mv *.log development/logs/` - Move ALL logs to development/logs
 - `mv temp-*.js development/temp-scripts/` - Move scripts to temp
 
 **PREVENTION MEASURES:**
@@ -508,6 +543,7 @@ npm run lint && npm run build && npm test && npm start
 - [ ] **COMPREHENSIVE DEVELOPMENT SCAN**: Check ALL development/ folders and files
   - [ ] **ESSENTIALS REVIEW**: Read EVERY file in `development/essentials/` - MANDATORY
   - [ ] **ERRORS CHECK**: Review all files in `development/errors/` for relevant issues
+  - [ ] **LOGS REVIEW**: Check `development/logs/` for recent system behavior and patterns
   - [ ] **REPORTS SCAN**: Review `development/reports/` and `development/research-reports/`
   - [ ] **COMPLETE INVENTORY**: `find development/ -type f -name "*.md"` - ensure nothing missed
 - [ ] **CLAIM TASK**: Take ownership via API
