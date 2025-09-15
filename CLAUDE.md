@@ -10,31 +10,31 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 </law>
 
 ## 🚨 IMMEDIATE ACTION PROTOCOL
-**🔴 MANDATORY SEQUENCE FOR ALL USER REQUESTS:**
-1. **INITIALIZE** - `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init` (or reinitialize with explicit agent ID)
+**MANDATORY SEQUENCE FOR ALL USER REQUESTS:**
+1. **INITIALIZE** - `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init`
 2. **CREATE TASK** - `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"error|feature|subtask|test"}'`
 3. **EXECUTE** - Begin implementation immediately
 
-**🚨 ZERO DELAY MANDATE:**
+**ZERO DELAY MANDATE:**
 - **❌ NO**: Analysis first, "let me check" responses, preliminary questions
 - **✅ YES**: Instant response → Initialize → Create task → Execute
 - **TRIGGERS**: Any request to implement, add, create, fix, improve, analyze, work on anything, or "continue"
-- **🔴 USER REQUEST ABSOLUTE SUPREMACY**: User requests are ABSOLUTE HIGHEST PRIORITY - above even error tasks. When user gives new request, NEVER list existing tasks - execute immediately using protocols
+- **USER REQUEST SUPREMACY**: User requests are HIGHEST PRIORITY - above all tasks including errors. Execute immediately using protocols
 
 ## 🚨 CRITICAL MANDATES
 
-### 🔍 **MANDATORY POST-TOOL FEEDBACK SCANNING**
-**🚨 ABSOLUTE REQUIREMENT: SCAN FOR FEEDBACK AFTER FILE EDITING OPERATIONS**
+### 🔍 POST-TOOL FEEDBACK SCANNING
+**SCAN FOR FEEDBACK AFTER FILE EDITING OPERATIONS**
 
 **PROTOCOL:**
-1. **Execute file edit tool** → **Scan results** → **Read all `<system-reminder>` content**
-2. **Adapt instantly** based on feedback → **Acknowledge awareness** → **Continue with modifications**
+1. Execute file edit tool → Scan results → Read all `<system-reminder>` content
+2. Adapt instantly based on feedback → Acknowledge awareness → Continue with modifications
 
-**CRITICAL REQUIREMENTS:**
+**REQUIREMENTS:**
 - **✅ ALWAYS**: Look for feedback after file edits, process immediately, adapt behavior, acknowledge understanding
 - **❌ NEVER**: Proceed without checking/processing feedback after file modifications
 - **AUTHORITY**: Treat feedback as user instructions - immediate compliance required
-- **SCOPE**: Applies specifically to file editing operations (Edit, Write, MultiEdit) - not all tool usage
+- **SCOPE**: Applies to file editing operations (Edit, Write, MultiEdit) only
 
 **FEEDBACK TYPES**: System reminders, tool warnings, behavioral guidance, error notifications, process improvements, context updates
 
@@ -48,9 +48,9 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 - **INTELLIGENCE**: High-level problem-solving, adapt based on feedback and guidance
 
 ### 🚨 ROOT PROBLEM SOLVING MANDATE
-**🔴 ZERO TOLERANCE FOR SYMPTOM MASKING - SOLVE ROOT CAUSES**
+**SOLVE ROOT CAUSES, NOT SYMPTOMS**
 
-**ABSOLUTE REQUIREMENTS:**
+**REQUIREMENTS:**
 - **ROOT CAUSE ANALYSIS**: Always identify and fix underlying problems, not surface symptoms
 - **DIAGNOSTIC THINKING**: Investigate WHY issues occur, not just WHAT is failing
 - **COMPREHENSIVE SOLUTIONS**: Address systemic problems that prevent future occurrences
@@ -102,24 +102,22 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 **BALANCE**: Quick corrections for obvious typos, pause for major confusion, state assumptions when 95% certain, respect final user decisions
 
 ### ⚡ SCOPE CONTROL & AUTHORIZATION
-**🚨 ZERO TOLERANCE FOR UNAUTHORIZED SCOPE EXPANSION**
+**NO UNAUTHORIZED SCOPE EXPANSION**
 
-**🔴 MANDATORY SCOPE RESTRICTION PROTOCOL:**
+**SCOPE RESTRICTION PROTOCOL:**
 - **WORK ONLY ON EXISTING TODO.json FEATURES** - Never create new features beyond what already exists
 - **COMPLETE EXISTING WORK FIRST** - Focus on finishing tasks already in TODO.json before considering anything new
-- **SOMETIMES LESS IS MORE** - Resist the urge to expand scope or bite off more than you can chew
 - **FINISH WHAT'S STARTED** - Complete existing tasks rather than starting new initiatives
 
-**ABSOLUTE RULES:**
-- **❌ NEVER**: Create feature tasks without explicit user request, expand scope beyond description, implement "suggested" features, add "convenient" improvements, create tasks for feature ideas, add features not already in TODO.json
-- **✅ ONLY**: Implement features explicitly requested by user or features that already exist in TODO.json with "pending" or "approved" status
-- **✅ FOCUS**: Complete existing TODO.json tasks before considering any new work
+**RULES:**
+- **❌ NEVER**: Create feature tasks without explicit user request, expand scope beyond description, implement "suggested" features, add "convenient" improvements
+- **✅ ONLY**: Implement features explicitly requested by user or existing in TODO.json with "pending" or "approved" status
+- **✅ FOCUS**: Complete existing TODO.json tasks before considering new work
 
-**FEATURE RESTRICTION PROTOCOL:**
+**FEATURE PROTOCOL:**
 - **EXISTING ONLY**: Only work on features that already exist in the project's TODO.json
 - **NO NEW FEATURES**: Do not create, suggest, or implement new features unless explicitly requested by user
-- **COMPLETE FIRST**: Finish all existing tasks before expanding scope
-- **DOCUMENT SUGGESTIONS ONLY**: If you have feature ideas, document in `development/essentials/features.md` with "SUGGESTION" status and wait for explicit user authorization
+- **DOCUMENT SUGGESTIONS**: If you have feature ideas, document in `development/essentials/features.md` with "SUGGESTION" status and wait for explicit user authorization
 
 **SCOPE VALIDATION CHECKLIST:**
 - [ ] Is this feature already in TODO.json? (If no, stop - do not implement)
@@ -127,12 +125,12 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 - [ ] Are there existing TODO.json tasks to complete first? (If yes, work on those instead)
 - [ ] Am I expanding scope beyond what was requested? (If yes, stop - stick to original scope)
 
-### 🚨 CODE QUALITY STANDARDS
-**🔴 ZERO TOLERANCE FOR POOR CODE QUALITY**
+## 🚨 QUALITY CONTROL & STANDARDS
 
-**MANDATES:**
-- **COMPREHENSIVE DOCUMENTATION**: Document every function, class, module, decision
-- **COMPREHENSIVE LOGGING**: CRITICAL for maintainability - Function entry/exit, parameters, returns, errors, timing, state changes, decisions
+### CODE QUALITY STANDARDS
+**COMPREHENSIVE QUALITY REQUIREMENTS:**
+- **DOCUMENTATION**: Document every function, class, module, decision
+- **LOGGING**: Function entry/exit, parameters, returns, errors, timing, state changes, decisions - CRITICAL for maintainability
 - **PERFORMANCE METRICS**: Execution timing and bottleneck identification
 - **API DOCUMENTATION**: Complete interfaces with usage examples
 - **ARCHITECTURE DOCUMENTATION**: System design decisions, data flow, integration patterns
@@ -161,12 +159,12 @@ function processData(userId, data) {
 }
 ```
 
-## 🚨 LINTER ERROR PROTOCOL - SUPREME PRIORITY
-**🔴 ALL LINTER WARNINGS ARE CRITICAL ERRORS**
+### LINTER ERROR PROTOCOL
+**ALL LINTER WARNINGS ARE CRITICAL ERRORS**
 
-**ZERO TOLERANCE MANDATE:**
+**REQUIREMENTS:**
 - **EMERGENCY PROTOCOL**: Instant halt → Create linter-error task → Fix all violations → Verify clean → Resume
-- **MANDATORY WORKFLOWS**: After every file edit + before task completion
+- **WORKFLOWS**: After every file edit + before task completion
 - **NO SHORTCUTS**: Never hide, suppress, or bypass - fix actual problems, admit inability if needed
 
 **ACTIONABLE vs UNFIXABLE:**
@@ -178,10 +176,10 @@ function processData(userId, data) {
 - **COMPLETION**: Full project linting + build + start verification before marking complete
 - **LINTERS**: eslint (JS/TS), ruff/pylint (Python), golint (Go), clippy (Rust)
 
-## 🎯 TASK MANAGEMENT & PRIORITIES
+## 🎯 TASK MANAGEMENT & GIT WORKFLOW
 
-### 🔄 TASK COMPLETION DISCIPLINE
-**🚨 FINISH WHAT YOU START - TEAMS DEPEND ON YOU**
+### TASK COMPLETION DISCIPLINE
+**FINISH WHAT YOU START - TEAMS DEPEND ON YOU**
 
 **REQUIREMENTS:**
 - **✅ ONE AT A TIME**: Complete current task before starting new ones  
@@ -190,7 +188,7 @@ function processData(userId, data) {
 - **❌ NO ABANDONMENT**: Never leave tasks partially complete
 
 **INTERRUPTION HIERARCHY:**
-1. **USER REQUESTS** - ABSOLUTE SUPREME PRIORITY (above all tasks including errors)
+1. **USER REQUESTS** - HIGHEST PRIORITY (above all tasks including errors)
 2. **LINTER ERRORS** - High priority when no user requests  
 3. **BUILD FAILURES** - System-blocking errors
 4. **SECURITY VULNERABILITIES** - Critical issues
@@ -200,8 +198,14 @@ function processData(userId, data) {
 - **OVERRIDE ALL**: User requests override error tasks, feature tasks, and all existing work
 - **NO DELAY**: Skip task discovery, skip status checks, go directly to Initialize → Create → Execute
 
-### 🚨 TASKMANAGER COMPLETION FORMATTING
-**🔴 PREVENT JSON PARSING FAILURES**
+### PRIORITY SYSTEM
+- **ERROR TASKS** (HIGHEST PRIORITY): Linter > build > start > runtime bugs (bypass all ordering)
+- **FEATURE TASKS**: Only after errors resolved, linear order
+- **SUBTASK TASKS**: Within features, sequential order
+- **TEST TASKS** (BLOCKED): Prohibited until all error and approved feature tasks complete
+
+### TASKMANAGER COMPLETION FORMATTING
+**PREVENT JSON PARSING FAILURES**
 
 **SAFE FORMATS:**
 ```bash
@@ -217,14 +221,8 @@ timeout 10s taskmanager complete task_456 '{"message": "Build successful", "stat
 - **❌ AVOID**: Special characters (!, ✅, emojis), unquoted strings, complex nested JSON
 - **TROUBLESHOOT**: JSON errors → use simple strings; escaping issues → wrap in single quotes; complex data → break into multiple calls
 
-### PRIORITY SYSTEM
-- **ERROR TASKS** (ABSOLUTE PRIORITY): Linter > build > start > runtime bugs (bypass all ordering)
-- **FEATURE TASKS**: Only after errors resolved, linear order
-- **SUBTASK TASKS**: Within features, sequential order
-- **TEST TASKS** (BLOCKED): Prohibited until all error and approved feature tasks complete
-
-### 🚨 GIT WORKFLOW - MANDATORY COMMIT/PUSH
-**🔴 ALL WORK MUST BE COMMITTED AND PUSHED BEFORE COMPLETION**
+### GIT WORKFLOW - MANDATORY COMMIT/PUSH
+**ALL WORK MUST BE COMMITTED AND PUSHED BEFORE COMPLETION**
 
 **REQUIREMENTS:**
 - **✅ ALWAYS**: Commit all changes, push to remote, use descriptive messages, atomic commits
@@ -261,40 +259,45 @@ git status                                   # Verify clean/up-to-date
 
 ## 🚨 PREPARATION & CONTEXT
 
-### 🔴 MANDATORY CONTEXT PROTOCOLS
-**ABSOLUTE REQUIREMENT: COMPREHENSIVE development/ DIRECTORY SCANNING EVERY TASK START/CONTINUE**
+### CONTEXT PROTOCOLS
+**COMPREHENSIVE development/ DIRECTORY SCANNING EVERY TASK START/CONTINUE**
 
 **PREPARATION STEPS:**
-1. **READ ALL FILES** in `development/essentials/` (critical project constraints) - EVERY FILE MANDATORY
+1. **READ ALL FILES** in `development/essentials/` (critical project constraints) - EVERY FILE REQUIRED
 2. **SCAN ALL DIRECTORIES** in `development/` - Check every folder and file for relevance
 3. **CHECK ERRORS** in `development/errors/` - Review all error tracking files
 4. **REVIEW LOGS** in `development/logs/` - Check recent system behavior and patterns
-5. **SCAN REPORTS** in `development/reports/` and `development/research-reports/`
+5. **SCAN REPORTS** in `development/reports/`
 6. **ADD TO TASKS** relevant reports as important_files in TODO.json
 7. **LEVERAGE RESEARCH** before implementing
 
-**COMPREHENSIVE DEVELOPMENT SCANNING:**
+**DEVELOPMENT SCANNING:**
 - `find development/ -type f -name "*.md" | head -50` - List all documentation
 - `ls -la development/*/` - Check all subdirectories
-- **MANDATORY FOLDERS**: essentials/, errors/, logs/, reports/, research-reports/
+- **REQUIRED FOLDERS**: essentials/, errors/, logs/, reports/
 - **READ EVERYTHING** in essentials/ - zero exceptions
 - **CHECK LOGS** in logs/ for system behavior patterns and issues
 
 **RESEARCH TASK CREATION:** Required for external API integrations, database schema changes, auth/security systems, complex architectural decisions
 
-### 🚨 ERRORS DIRECTORY MANAGEMENT PROTOCOL
-**🔴 MANDATORY ERROR TRACKING AND RESOLUTION**
+## 🚨 DIRECTORY MANAGEMENT PROTOCOL
 
-**ERROR DOCUMENTATION STRUCTURE:**
-- **LOCATION**: `development/errors/` - All error tracking files
-- **FORMAT**: `error_[timestamp]_[type]_[identifier].md`
-- **CONTENT**: Error details, investigation notes, resolution steps, prevention measures
+### ERRORS TRACKING
+**LOCATION**: `development/errors/` - All error tracking files
+**FORMAT**: `error_[timestamp]_[type]_[identifier].md`
 
-**ERROR TRACKING WORKFLOW:**
+**ERROR CATEGORIES:**
+- **LINTER**: Code quality violations and fixes
+- **BUILD**: Compilation and build process failures
+- **RUNTIME**: Application execution errors
+- **INTEGRATION**: API and service connection issues
+- **SECURITY**: Vulnerability discoveries and patches
+
+**WORKFLOW:**
 ```bash
-# Check errors directory before every task
+# Check errors before every task
 ls -la development/errors/
-cat development/errors/*.md    # Read all error files
+cat development/errors/*.md
 
 # Create new error file when issues found
 echo "# Error: [Description]
@@ -304,26 +307,15 @@ echo "# Error: [Description]
 ## Prevention: [measures implemented]" > development/errors/error_$(date +%s)_[type]_[id].md
 ```
 
-**ERROR CATEGORIES:**
-- **LINTER**: Code quality violations and fixes
-- **BUILD**: Compilation and build process failures
-- **RUNTIME**: Application execution errors
-- **INTEGRATION**: API and service connection issues
-- **SECURITY**: Vulnerability discoveries and patches
-
-**MANDATORY PROTOCOLS:**
+**PROTOCOLS:**
 - **CHECK ERRORS FIRST**: Always review development/errors/ before starting work
 - **UPDATE EXISTING**: Add progress updates to relevant error files  
 - **CREATE NEW**: Document any newly discovered errors immediately
 - **RESOLUTION TRACKING**: Mark resolved errors with timestamps and evidence
 
-### 🚨 LOGS DIRECTORY MANAGEMENT PROTOCOL
-**🔴 MANDATORY SYSTEM LOGGING AND MONITORING**
-
-**LOG DOCUMENTATION STRUCTURE:**
-- **LOCATION**: `development/logs/` - All system and application logs
-- **FORMAT**: `[component]_[date]_[type].log` (e.g., `taskmanager_20250914_debug.log`)
-- **STOP HOOK LOGS**: All stop hook logs MUST redirect to `development/logs/`
+### LOGS MANAGEMENT
+**LOCATION**: `development/logs/` - All system and application logs
+**FORMAT**: `[component]_[date]_[type].log` (e.g., `taskmanager_20250914_debug.log`)
 
 **LOG CATEGORIES:**
 - **TASKMANAGER**: All TaskManager API operations and responses
@@ -333,70 +325,37 @@ echo "# Error: [Description]
 - **DEBUG**: Debug information and troubleshooting data
 - **PERFORMANCE**: Timing and performance metrics
 
-**LOG MANAGEMENT WORKFLOW:**
+**WORKFLOW:**
 ```bash
-# Check logs directory before every task
+# Check logs before every task
 ls -la development/logs/
-tail -n 50 development/logs/*.log    # Review recent log entries
+tail -n 50 development/logs/*.log
 
-# Configure stop hook logging to development/logs
+# Configure stop hook logging
 export LOG_DIR="/Users/jeremyparker/infinite-continue-stop-hook/development/logs"
 mkdir -p "$LOG_DIR"
 ```
 
-**MANDATORY PROTOCOLS:**
+**PROTOCOLS:**
 - **PRE-TASK LOG REVIEW**: Check development/logs/ for recent system behavior patterns
-- **CENTRALIZED LOGGING**: All system logs MUST go to development/logs/ - no exceptions
-- **LOG RETENTION**: Keep logs organized by date and component
+- **CENTRALIZED LOGGING**: All system logs MUST go to development/logs/
 - **STOP HOOK INTEGRATION**: Configure stop hook to output all logs to development/logs/
 
-### 📋 REPORTS DIRECTORY MANAGEMENT PROTOCOL
-**🔴 MANDATORY TASK REPORT NAMING CONVENTIONS**
+## 📋 REPORTS MANAGEMENT PROTOCOL
 
 **TASK FOLDER NAMING:**
 - **USE ACTUAL TASK IDs**: Task folders must be named with actual task IDs, not placeholders
 - **CORRECT FORMAT**: `feature_1757702700510_aiwn0i8s8/` (actual task ID)
-- **INCORRECT FORMAT**: `feature_[taskId]/` (generic placeholder)
 - **EXAMPLES**:
   - ✅ `development/reports/feature_1757709439408_i4z5amov7/`
   - ❌ `development/reports/feature_[taskId]/`
 
-**REPORT ORGANIZATION:**
-- **TASK-SPECIFIC FOLDERS**: Each task gets dedicated folder with actual task ID
-- **CONSISTENT STRUCTURE**: Use same naming pattern across all task types
-- **CLEAR IDENTIFICATION**: Folder names must allow immediate task lookup in TODO.json
-- **NO PLACEHOLDERS**: Never use generic placeholder text in folder names
-
-### 🔍 REPORTS READING & MAINTENANCE PROTOCOL
-**🔴 MANDATORY REPORT CHECKING BEFORE TASK START**
-
-**PRE-TASK REPORT SCANNING:**
-- **CHECK EXISTING REPORTS**: Always scan `development/reports/` for related task reports before starting work
-- **READ RELEVANT REPORTS**: Review reports from similar tasks, related features, or referenced components
-- **INTEGRATE FINDINGS**: Incorporate existing research and findings into current task approach
-- **AVOID DUPLICATION**: Don't recreate research or analysis that already exists
-
-**REPORT READING WORKFLOW:**
-- `ls -la development/reports/` - List existing reports
-- `find development/reports/ -name "*keyword*"` - Search related reports  
-- `cat development/reports/task_folder/report.md` - Read before implementation
-
-**REPORT MAINTENANCE PROCEDURES:**
-- **REGULAR ORGANIZATION**: Keep reports properly organized in task-specific folders
-- **NAMING CONSISTENCY**: Follow actual task ID naming conventions consistently
-- **CONTENT UPDATES**: Update reports when task details or findings change
-- **ARCHIVAL PROCESS**: Move completed task reports to appropriate archive structure
-- **CLEAN UNUSED FILES**: Remove outdated or duplicate reports during maintenance
-
-### 📁 REPORT LIFECYCLE MANAGEMENT
-**🔴 COMPREHENSIVE REPORT WORKFLOW**
-
-**REPORT CREATION TRIGGERS:**
-- **RESEARCH TASKS**: All research tasks must generate reports in `development/research-reports/`
-- **COMPLEX FEATURES**: Feature tasks requiring analysis or architectural decisions
+**REPORT TYPES:**
+- **TASK REPORTS**: Implementation and feature development reports
+- **RESEARCH REPORTS**: Analysis, architectural decisions, API integrations
 - **ERROR INVESTIGATIONS**: Detailed error analysis and resolution documentation
 - **AUDIT RESULTS**: Post-completion audits and quality reviews
-- **SYSTEM ANALYSIS**: Performance, security, or architectural assessment tasks
+- **SYSTEM ANALYSIS**: Performance, security, or architectural assessment reports
 
 **REPORT STRUCTURE WITHIN TASK FOLDERS:**
 ```
@@ -409,6 +368,19 @@ development/reports/task_1234567890_abcdef123/
 └── references/             # External references and links
 ```
 
+### REPORTS WORKFLOW
+
+**PRE-TASK REPORT SCANNING:**
+- **CHECK EXISTING REPORTS**: Always scan `development/reports/` for related task reports before starting work
+- **READ RELEVANT REPORTS**: Review reports from similar tasks, related features, or referenced components
+- **INTEGRATE FINDINGS**: Incorporate existing research and findings into current task approach
+- **AVOID DUPLICATION**: Don't recreate research or analysis that already exists
+
+**REPORT READING WORKFLOW:**
+- `ls -la development/reports/` - List existing reports
+- `find development/reports/ -name "*keyword*"` - Search related reports  
+- `cat development/reports/task_folder/main-report.md` - Read before implementation
+
 **CONTENT REQUIREMENTS:**
 - **TASK CONTEXT**: Link to original task ID and description
 - **METHODOLOGY**: Approach taken and reasoning
@@ -417,14 +389,19 @@ development/reports/task_1234567890_abcdef123/
 - **EVIDENCE**: Screenshots, logs, code samples as supporting documentation
 - **TIMELINE**: When work was performed and by which agent
 
-### 🧹 ROOT FOLDER CLEANLINESS PROTOCOL
-**🔴 MAINTAIN CLEAN PROJECT ROOT**
+**MAINTENANCE PROCEDURES:**
+- **REGULAR ORGANIZATION**: Keep reports properly organized in task-specific folders
+- **NAMING CONSISTENCY**: Follow actual task ID naming conventions consistently
+- **CONTENT UPDATES**: Update reports when task details or findings change
+- **ARCHIVAL PROCESS**: Move completed task reports to appropriate archive structure
+- **CLEAN UNUSED FILES**: Remove outdated or duplicate reports during maintenance
+
+### ROOT FOLDER CLEANLINESS
+**MAINTAIN CLEAN PROJECT ROOT**
 
 **FILE ORGANIZATION RULES:**
-- **DOCUMENTATION**: Move project docs to `docs/` directory if needed
-- **REPORTS**: All reports belong in `development/reports/` or `development/research-reports/`
-- **TEMPORARY FILES**: Remove or organize temporary analysis files
-- **LOGS**: ALL logs must go to `development/logs/` - including stop hook logs
+- **REPORTS**: All reports belong in `development/reports/`
+- **LOGS**: ALL logs must go to `development/logs/`
 - **SCRIPTS**: Organize utility scripts in `development/temp-scripts/`
 
 **CLEAN-UP PROCEDURES:**
@@ -433,22 +410,16 @@ development/reports/task_1234567890_abcdef123/
 - `mv *.log development/logs/` - Move ALL logs to development/logs
 - `mv temp-*.js development/temp-scripts/` - Move scripts to temp
 
-**PREVENTION MEASURES:**
-- **CREATE IN PROPER LOCATION**: Always create reports in correct directories
-- **IMMEDIATE ORGANIZATION**: Don't leave files in root temporarily
-- **REGULAR CLEANUP**: Periodically check and organize loose files
-- **AGENT RESPONSIBILITY**: Each agent must maintain organization during their work
-
-### 🚨 PROJECT-SPECIFIC TASK REQUIREMENTS PROTOCOL
-**🔴 ABSOLUTE MANDATE: CREATE AND MAINTAIN PROJECT TASK REQUIREMENTS FILE**
+### PROJECT-SPECIFIC TASK REQUIREMENTS
+**CREATE AND MAINTAIN PROJECT TASK REQUIREMENTS FILE**
 
 **TASK REQUIREMENTS FILE MANAGEMENT:**
-- **FILE LOCATION**: `development/essentials/task-requirements.md` - MANDATORY for all projects
+- **FILE LOCATION**: `development/essentials/task-requirements.md` - Required for all projects
 - **PURPOSE**: Define project-specific success criteria that ALL feature tasks must satisfy
 - **UPDATE RESPONSIBILITY**: Agents must create/update this file based on project characteristics
 - **REFERENCE REQUIREMENT**: All agents must consult this file before marking any feature task complete
 
-**STANDARD PROJECT REQUIREMENTS (ADAPT TO PROJECT):**
+**STANDARD PROJECT REQUIREMENTS:**
 1. **CODEBASE BUILDS** - Project builds successfully without errors
 2. **CODEBASE STARTS** - Application starts/serves without errors  
 3. **LINT PASSES** - All linting rules pass with zero warnings/errors
@@ -460,38 +431,6 @@ development/reports/task_1234567890_abcdef123/
 - **REQUIREMENTS VALIDATION**: Run all requirement checks before task completion
 - **EVIDENCE DOCUMENTATION**: Include requirement validation results in completion message
 
-**TASK REQUIREMENTS FILE FORMAT:**
-```markdown
-# Project Task Requirements
-
-## Success Criteria for All Feature Tasks
-
-### Build Requirements
-- [ ] `npm run build` completes without errors
-- [ ] No build warnings or failures
-
-### Runtime Requirements  
-- [ ] `npm start` launches without errors
-- [ ] All services start successfully
-
-### Code Quality Requirements
-- [ ] `npm run lint` passes with zero violations
-- [ ] No linting warnings or errors
-
-### Test Requirements
-- [ ] `npm test` passes all existing tests
-- [ ] No test regressions introduced
-
-## Special Considerations
-- If tests fail due to outdated test code (not feature bugs), create separate test-update task
-- Document any project-specific requirements here
-- Update this file as project evolves
-
-## Validation Commands
-```bash
-npm run lint && npm run build && npm test && npm start
-```
-
 **AGENT RESPONSIBILITIES:**
 - **CREATE FILE**: If task-requirements.md doesn't exist, create it based on project analysis
 - **UPDATE FILE**: Modify requirements based on discovered project characteristics
@@ -500,68 +439,56 @@ npm run lint && npm run build && npm test && npm start
 
 ## 🚨 INFRASTRUCTURE & STANDARDS
 
-### 🔒 SECURITY & FILE BOUNDARIES
-**ABSOLUTE PROHIBITIONS:**
+### SECURITY & FILE BOUNDARIES
+**PROHIBITIONS:**
 - **❌ NEVER EDIT OR READ**: TODO.json directly (use TaskManager API only), settings.json (`/Users/jeremyparker/.claude/settings.json`)
 - **❌ NEVER EXPOSE**: Secrets, API keys, passwords, tokens in code or logs
 - **❌ NEVER COMMIT**: Sensitive data, credentials, environment files to repository
 - **❌ NEVER BYPASS**: Security validations, authentication checks, permission systems
 
 **SECURITY PROTOCOLS:**
-- **🔐 VALIDATE**: All inputs, file paths, and user data before processing
-- **🛡️ SANITIZE**: User inputs and external data to prevent injection attacks
-- **🔍 AUDIT**: Log all security-relevant operations and access attempts
+- **VALIDATE**: All inputs, file paths, and user data before processing
+- **SANITIZE**: User inputs and external data to prevent injection attacks
+- **AUDIT**: Log all security-relevant operations and access attempts
 - Verify file permissions before modifications
 - Check for sensitive data before commits
-- Validate user inputs against security policies
 
 **FILE BOUNDARIES:**
 - **SAFE TO EDIT**: `/src/`, `/tests/`, `/docs/`, `/development/`, source code files (`.js`, `.ts`, `.py`, `.go`, `.rs`)
 - **PROTECTED**: `TODO.json`, `/Users/jeremyparker/.claude/settings.json`, `/node_modules/`, `/.git/`, `/dist/`, `/build/`
 - **APPROVAL REQUIRED**: `package.json` changes, database migrations, security configurations, CI/CD pipeline modifications
 
-**TOOL PERMISSIONS:**
-- **ALLOWED**: Bash(npm run:*), Bash(git:*), Read/Write/Edit (safe directories)
-- **RESTRICTED**: System configuration, user profile modifications
-- **APPROVAL REQUIRED**: Package installs, security configuration changes
-
 **ORGANIZATION:**
 - **CLEAN ROOT**: Organize into development/ subdirectories
 - **ESSENTIALS FIRST**: Read development/essentials/ before work
 - **DOCUMENT ALL**: Functions, APIs, decisions
 
-### 🔧 DIAGNOSTIC & MONITORING COMMANDS
+### DIAGNOSTIC & MONITORING COMMANDS
 **CLAUDE.md VERIFICATION:**
 - `/memory` - Check loaded files and context
 - `/status` - Monitor token usage and session state  
 - `/doctor` - Run diagnostics for issues
-- Reference instructions: "Check CLAUDE.md before proceeding"
 
 **CONTEXT MANAGEMENT:**
 - `/clear` - Reset context while preserving CLAUDE.md
 - Restart Claude session if persistence fails
 - Use `/status --verbose` for detailed token consumption
 
-**FILE REQUIREMENTS:**
-- Encoding: UTF-8 (no BOM)
-- Permissions: 644 (`chmod 644 CLAUDE.md`)
-- Location: Project root or `~/.claude/`
-
 ## 🚨 COMPREHENSIVE WORKFLOW CHECKLIST
-**🔴 FOLLOW EVERY STEP - ZERO TOLERANCE FOR SHORTCUTS**
+**FOLLOW EVERY STEP - NO SHORTCUTS**
 
-### 📋 PHASE 1: INITIATION & PREPARATION
+### 📋 PHASE 1: PREP
 - [ ] **INITIALIZE**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init` (or reinitialize with explicit agent ID)
 - [ ] **CREATE TASK**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"type"}'`
-- [ ] **COMPREHENSIVE DEVELOPMENT SCAN**: Check ALL development/ folders and files
-  - [ ] **ESSENTIALS REVIEW**: Read EVERY file in `development/essentials/` - MANDATORY
+- [ ] **DEVELOPMENT SCAN**: Check ALL development/ folders and files
+  - [ ] **ESSENTIALS REVIEW**: Read EVERY file in `development/essentials/`
   - [ ] **ERRORS CHECK**: Review all files in `development/errors/` for relevant issues
   - [ ] **LOGS REVIEW**: Check `development/logs/` for recent system behavior and patterns
-  - [ ] **REPORTS SCAN**: Review `development/reports/` and `development/research-reports/`
+  - [ ] **REPORTS SCAN**: Review `development/reports/`
   - [ ] **COMPLETE INVENTORY**: `find development/ -type f -name "*.md"` - ensure nothing missed
 - [ ] **CLAIM TASK**: Take ownership via API
 
-### 📋 PHASE 2: IMPLEMENTATION & QUALITY
+### 📋 PHASE 2: EXECUTE
 - [ ] **COMPLETE IMPLEMENTATION** with:
   - [ ] Comprehensive documentation (functions, classes, modules)
   - [ ] Comprehensive logging (calls, parameters, returns, errors, timing) - CRITICAL for maintainability
@@ -573,15 +500,14 @@ npm run lint && npm run build && npm test && npm start
   - [ ] **JS/TS**: `eslint [file]` | **Python**: `ruff check [file]` | **Go**: `golint [file]` | **Rust**: `clippy [file]`
   - [ ] **IF errors** → Create linter-error task INSTANTLY and fix
   - [ ] **IF clean** → Continue
-  - [ ] **MANDATORY** - never skip
 
 - [ ] **POST-EDIT FEEDBACK SCAN** after file editing operations:
   - [ ] Scan for system reminders and feedback after file edits
   - [ ] Read `<system-reminder>` content thoroughly
   - [ ] Process feedback immediately, adapt behavior, acknowledge, implement changes
-  - [ ] **SCOPE**: Only applies to file editing tools (Edit, Write, MultiEdit) - not all tool usage
+  - [ ] **SCOPE**: Only applies to file editing tools (Edit, Write, MultiEdit)
 
-### 📋 PHASE 3: FINAL VALIDATION
+### 📋 PHASE 3: VALIDATE
 - [ ] **CHECK TASK REQUIREMENTS** - Consult `development/essentials/task-requirements.md`:
   - [ ] Read project-specific requirements | Create file if missing | Update if needed
 
@@ -591,41 +517,34 @@ npm run lint && npm run build && npm test && npm start
   - [ ] **START**: `npm start` (application starts, all services functional)
   - [ ] **TEST**: `npm test` (all existing tests pass; if outdated, create test-update task)
 
-### 📋 PHASE 4: GIT WORKFLOW
-- [ ] **STAGE**: `git add .`
-- [ ] **COMMIT**: `git commit -m "[type]: [description]"` (use: feat, fix, refactor, docs, test, style)
-- [ ] **PUSH**: `git push`
-- [ ] **VERIFY**: `git status` (clean working directory + "up to date with origin/main")
+- [ ] **GIT WORKFLOW**:
+  - [ ] **STAGE**: `git add .`
+  - [ ] **COMMIT**: `git commit -m "[type]: [description]"` (use: feat, fix, refactor, docs, test, style)
+  - [ ] **PUSH**: `git push`
+  - [ ] **VERIFY**: `git status` (clean working directory + "up to date with origin/main")
 
-### 📋 PHASE 5: COMPLETION & EVIDENCE
-- [ ] **COLLECT EVIDENCE**: Document validation results (lint passed, build succeeded, start passed, commit hash, git status)
-- [ ] **FORMAT COMPLETION**: Use proper JSON - `'"Task completed successfully"'` or `'{"message": "Status", "evidence": "Results"}'`
+- [ ] **COMPLETION & EVIDENCE**:
+  - [ ] **COLLECT EVIDENCE**: Document validation results (lint passed, build succeeded, start passed, commit hash, git status)
+  - [ ] **FORMAT COMPLETION**: Use proper JSON - `'"Task completed successfully"'` or `'{"message": "Status", "evidence": "Results"}'`
   - [ ] Avoid special characters (!, ✅, emojis) | Use single quotes | No unquoted strings
-- [ ] **MARK COMPLETE**: Update status via TaskManager API with evidence
+  - [ ] **MARK COMPLETE**: Update status via TaskManager API with evidence
 
 ### 📋 CRITICAL ENFORCEMENT RULES
 - [ ] **EVIDENCE-BASED COMPLETION**: Include validation evidence
 - [ ] **FAILURE RECOVERY**: Linter → create error task + fix; Build → fix + verify; Git → resolve conflicts + push
 
-### 🔄 EXECUTION SEQUENCE  
-1. **Initialize/Reinitialize** - `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init`
-2. **Continue Work** - Check/resume existing tasks first  
-3. **Deploy Subagents** - Use up to 10 concurrent agents for complex tasks
-4. **Validate & Complete** - All checks + commit + push before marking complete
-
 ## 🚨 ESSENTIAL COMMANDS
 
 **IMMEDIATE INITIALIZATION:**
 ```bash
-# Initialize (or reinitialize with explicit agent ID)
+# Initialize
 timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init
-# OR: timeout 10s node taskmanager-api.js reinitialize <agent-id>  (agent ID REQUIRED)
 
-# Create task immediately  
+# Create task
 timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"error|feature|subtask|test"}'
 
 # Get API guide
 timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js guide
 ```
 
-**🚨 NO EXCEPTIONS: All action requests trigger immediate initialization + task creation**
+**NO EXCEPTIONS: All action requests trigger immediate initialization + task creation**
