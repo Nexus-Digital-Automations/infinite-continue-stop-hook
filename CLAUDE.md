@@ -104,15 +104,28 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 ### ⚡ SCOPE CONTROL & AUTHORIZATION
 **🚨 ZERO TOLERANCE FOR UNAUTHORIZED SCOPE EXPANSION**
 
-**ABSOLUTE RULES:**
-- **❌ NEVER**: Create feature tasks without explicit user request, expand scope beyond description, implement "suggested" features, add "convenient" improvements, create tasks for feature ideas
-- **✅ ONLY**: Implement features explicitly requested by user or with "approved"/"planned" status in TODO.json
+**🔴 MANDATORY SCOPE RESTRICTION PROTOCOL:**
+- **WORK ONLY ON EXISTING TODO.json FEATURES** - Never create new features beyond what already exists
+- **COMPLETE EXISTING WORK FIRST** - Focus on finishing tasks already in TODO.json before considering anything new
+- **SOMETIMES LESS IS MORE** - Resist the urge to expand scope or bite off more than you can chew
+- **FINISH WHAT'S STARTED** - Complete existing tasks rather than starting new initiatives
 
-**FEATURE SUGGESTION PROTOCOL:**
-- **DOCUMENT** ideas in `development/essentials/features.md`
-- **MARK** clearly as suggestions using "SUGGESTION" status
-- **WAIT** for explicit user authorization before creating tasks
-- **FORMAT**: "SUGGESTION: Could implement [feature] to [benefit]. This would require [details]."
+**ABSOLUTE RULES:**
+- **❌ NEVER**: Create feature tasks without explicit user request, expand scope beyond description, implement "suggested" features, add "convenient" improvements, create tasks for feature ideas, add features not already in TODO.json
+- **✅ ONLY**: Implement features explicitly requested by user or features that already exist in TODO.json with "pending" or "approved" status
+- **✅ FOCUS**: Complete existing TODO.json tasks before considering any new work
+
+**FEATURE RESTRICTION PROTOCOL:**
+- **EXISTING ONLY**: Only work on features that already exist in the project's TODO.json
+- **NO NEW FEATURES**: Do not create, suggest, or implement new features unless explicitly requested by user
+- **COMPLETE FIRST**: Finish all existing tasks before expanding scope
+- **DOCUMENT SUGGESTIONS ONLY**: If you have feature ideas, document in `development/essentials/features.md` with "SUGGESTION" status and wait for explicit user authorization
+
+**SCOPE VALIDATION CHECKLIST:**
+- [ ] Is this feature already in TODO.json? (If no, stop - do not implement)
+- [ ] Did user explicitly request this new feature? (If no, stop - do not implement) 
+- [ ] Are there existing TODO.json tasks to complete first? (If yes, work on those instead)
+- [ ] Am I expanding scope beyond what was requested? (If yes, stop - stick to original scope)
 
 ### 🚨 CODE QUALITY STANDARDS
 **🔴 ZERO TOLERANCE FOR POOR CODE QUALITY**
