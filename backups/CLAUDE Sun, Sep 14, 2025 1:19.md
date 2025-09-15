@@ -119,34 +119,14 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 
 **MANDATES:**
 - **COMPREHENSIVE DOCUMENTATION**: Document every function, class, module, decision
-- **COMPREHENSIVE LOGGING**: CRITICAL for maintainability - Function entry/exit, parameters, returns, errors, timing, state changes, decisions
-- **PERFORMANCE METRICS**: Execution timing and bottleneck identification
+- **COMPREHENSIVE CODEBASE LOGGING**: ALL logging MUST go to `development/logs/` - Function entry/exit, parameters, returns, errors, timing, state changes, decisions, system behavior, API calls, database operations, security events
+- **HIGHEST QUALITY LOGGING**: Structured logs with timestamps, operation IDs, context, stack traces, performance metrics
+- **CENTRALIZED LOG DESTINATION**: `development/logs/` directory for ALL application, system, and debug logging
+- **PERFORMANCE METRICS**: Execution timing and bottleneck identification - logged to `development/logs/`
 - **API DOCUMENTATION**: Complete interfaces with usage examples
 - **ARCHITECTURE DOCUMENTATION**: System design decisions, data flow, integration patterns
 - **MAINTENANCE**: Keep comments/logs current with code changes
 
-**EXAMPLE PATTERN:**
-```javascript
-/**
- * Module: Data Processing - transformation/validation
- * Usage: processData(userId, rawData) -> Promise<ProcessedData>
- */
-function processData(userId, data) {
-    const logger = getLogger('DataProcessor');
-    const opId = generateOperationId();
-    
-    logger.info(`[${opId}] Starting`, {userId, dataSize: data.length});
-    try {
-        const start = Date.now();
-        const result = transformData(data);
-        logger.info(`[${opId}] Completed in ${Date.now() - start}ms`);
-        return result;
-    } catch (error) {
-        logger.error(`[${opId}] Failed`, {error: error.message});
-        throw error;
-    }
-}
-```
 
 ## 🚨 LINTER ERROR PROTOCOL - SUPREME PRIORITY
 **🔴 ALL LINTER WARNINGS ARE CRITICAL ERRORS**

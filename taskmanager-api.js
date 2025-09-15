@@ -184,6 +184,13 @@ class TaskManagerAPI {
       validateAgentScope: this._validateAgentScope.bind(this),
       broadcastTaskCompletion: this._broadcastTaskCompletion.bind(this),
       broadcastTaskFailed: this._broadcastTaskFailed.bind(this),
+      // Subtasks and Success Criteria validation methods
+      validateSubtaskData: ValidationUtils.validateSubtaskData,
+      validateSuccessCriteria: ValidationUtils.validateSuccessCriteria,
+      validateSubtaskUpdateData: ValidationUtils.validateSubtaskUpdateData,
+      // Specialized broadcasting for subtasks and success criteria
+      broadcastSubtaskUpdate: this._broadcastSubtaskUpdate.bind(this),
+      broadcastCriteriaUpdate: this._broadcastCriteriaUpdate.bind(this),
     };
 
     // Initialize module instances
@@ -241,6 +248,82 @@ class TaskManagerAPI {
 
   async updateTaskProgress(taskId, updateData) {
     return this.taskOperations.updateTaskProgress(taskId, updateData);
+  }
+
+  // Subtasks Management (delegate to TaskOperations module)
+  async createSubtask(taskId, subtaskType, subtaskData = {}) {
+    // Merge type into subtaskData for the TaskOperations method
+    const completeSubtaskData = { ...subtaskData, type: subtaskType };
+    return this.taskOperations.createSubtask(taskId, completeSubtaskData);
+  }
+
+  async listSubtasks(taskId, filter = {}) {
+    return this.taskOperations.getSubtasks(taskId, filter);
+  }
+
+  async updateSubtask(taskId, subtaskId, updateData) {
+    // TaskOperations.updateSubtask only needs subtaskId since it finds the parent task
+    return this.taskOperations.updateSubtask(subtaskId, updateData);
+  }
+
+  async deleteSubtask(taskId, subtaskId) {
+    // TaskOperations.deleteSubtask only needs subtaskId since it finds the parent task
+    return this.taskOperations.deleteSubtask(subtaskId);
+  }
+
+  // Success Criteria Management (delegate to TaskOperations module)
+  async addSuccessCriteria(targetType, targetId, criteriaData) {
+    if (targetType === "task") {
+      return this.taskOperations.addSuccessCriteria(
+        targetId,
+        criteriaData.criteria || criteriaData,
+        criteriaData.options || {},
+      );
+    } else if (targetType === "project") {
+      // For project-wide criteria, use the templates system
+      return this.taskOperations.getProjectWideTemplates();
+    } else {
+      throw new Error('Invalid target type. Must be "task" or "project"');
+    }
+  }
+
+  async getSuccessCriteria(targetType, targetId) {
+    if (targetType === "task") {
+      return this.taskOperations.getSuccessCriteria(targetId);
+    } else if (targetType === "project") {
+      return this.taskOperations.getProjectWideTemplates();
+    } else {
+      throw new Error('Invalid target type. Must be "task" or "project"');
+    }
+  }
+
+  async updateSuccessCriteria(targetType, targetId, updateData) {
+    if (targetType === "task") {
+      return this.taskOperations.updateSuccessCriteria(
+        targetId,
+        updateData.criteria || updateData,
+      );
+    } else {
+      throw new Error(
+        "Project-wide criteria cannot be updated directly. Use task-specific criteria or templates.",
+      );
+    }
+  }
+
+  async deleteSuccessCriterion(taskId, criterionText) {
+    return this.taskOperations.deleteSuccessCriterion(taskId, criterionText);
+  }
+
+  async getProjectWideTemplates() {
+    return this.taskOperations.getProjectWideTemplates();
+  }
+
+  async applyProjectTemplate(taskId, templateName, replace = false) {
+    return this.taskOperations.applyProjectTemplate(
+      taskId,
+      templateName,
+      replace,
+    );
   }
 
   // Agent Management (delegate to AgentManagement module)
@@ -763,6 +846,20 @@ class TaskManagerAPI {
     // Placeholder for task failure broadcasting
     if (this.isWebSocketRunning) {
       this._broadcastToWebSocket("taskFailed", failureEvent);
+    }
+  }
+
+  _broadcastSubtaskUpdate(subtaskEvent) {
+    // Placeholder for subtask update broadcasting
+    if (this.isWebSocketRunning) {
+      this._broadcastToWebSocket("subtaskUpdated", subtaskEvent);
+    }
+  }
+
+  _broadcastCriteriaUpdate(criteriaEvent) {
+    // Placeholder for success criteria update broadcasting
+    if (this.isWebSocketRunning) {
+      this._broadcastToWebSocket("criteriaUpdated", criteriaEvent);
     }
   }
 
