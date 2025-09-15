@@ -1,55 +1,14 @@
 {
   "project": "test-taskmanager-api",
-  "tasks": [
-    {
-      "id": "feature_1757787802292_63ypp1xls",
-      "title": "Test task for claiming",
-      "description": "Task to test claiming functionality",
-      "priority": "medium",
-      "category": "feature",
-      "status": "pending",
-      "dependencies": [],
-      "important_files": [],
-      "success_criteria": [],
-      "estimate": "",
-      "requires_research": false,
-      "subtasks": [
-        {
-          "id": "audit_1757787802293_44df7289",
-          "type": "audit",
-          "title": "Audit: Test task for claiming",
-          "description": "Comprehensive quality audit and review of the completed feature: Test task for claiming\n\nOriginal Description: Task to test claiming functionality",
-          "status": "pending",
-          "estimated_hours": 0.5,
-          "success_criteria": [
-            "Linter Perfection",
-            "Build Success",
-            "Runtime Success",
-            "Test Integrity",
-            "Function Documentation",
-            "Implementation Quality",
-            "Security Standards",
-            "Performance Standards"
-          ],
-          "prevents_completion": true,
-          "original_implementer": null,
-          "prevents_self_review": true,
-          "audit_type": "embedded_quality_gate",
-          "created_at": "2025-09-13T18:23:22.300Z"
-        }
-      ],
-      "created_at": "2025-09-13T18:23:22.300Z",
-      "auto_research_created": false
-    }
-  ],
+  "tasks": [],
   "agents": {
-    "development_session_1757787792035_1_general_aa354dba": {
-      "name": "development Agent",
+    "dev_session_1757909569621_1_general_d18f8a49": {
+      "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-13T18:23:12.036Z",
+      "lastHeartbeat": "2025-09-15T04:12:49.623Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -60,8 +19,8 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-13T18:23:12.036Z",
-      "sessionId": "session_1757787792035",
+      "createdAt": "2025-09-15T04:12:49.623Z",
+      "sessionId": null,
       "metadata": {}
     }
   },
@@ -71,28 +30,9 @@
   "execution_count": 0,
   "review_strikes": 0,
   "strikes_completed_last_run": false,
-  "last_hook_activation": 1757787791920,
+  "last_hook_activation": 1757909569443,
   "settings": {
-    "auto_sort_enabled": true,
-    "sort_criteria": {
-      "primary": "category",
-      "secondary": "created_at"
-    },
-    "priority_values": {
-      "critical": 4,
-      "high": 3,
-      "medium": 2,
-      "low": 1
-    },
-    "category_enabled": true,
-    "category_ranks": {
-      "error": 1,
-      "feature": 2,
-      "subtask": 3,
-      "test": 4,
-      "quality": 5
-    },
     "version": "2.0.0",
-    "created": "2025-09-13T18:23:11.920Z"
+    "created": "2025-09-15T04:12:49.443Z"
   }
 }

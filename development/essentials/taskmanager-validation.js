@@ -3,19 +3,19 @@
  * Prevents common API usage errors before execution
  */
 
-const VALID_CATEGORIES = ["error", "feature", "subtask", "test"];
+const VALID_CATEGORIES = ['error', 'feature', 'subtask', 'test'];
 const VALID_COMMANDS = [
-  "guide",
-  "methods",
-  "status",
-  "init",
-  "reinitialize",
-  "list",
-  "create",
-  "claim",
-  "complete",
+  'guide',
+  'methods',
+  'status',
+  'init',
+  'reinitialize',
+  'list',
+  'create',
+  'claim',
+  'complete',
 ];
-const INVALID_COMMANDS = ["delete", "remove", "destroy"];
+const INVALID_COMMANDS = ['delete', 'remove', 'destroy'];
 
 class TaskManagerValidator {
   constructor() {
@@ -33,13 +33,13 @@ class TaskManagerValidator {
     this.warnings = [];
 
     // Check if taskData is valid JSON object
-    if (!taskData || typeof taskData !== "object") {
-      this.errors.push("Task data must be a valid JSON object");
+    if (!taskData || typeof taskData !== 'object') {
+      this.errors.push('Task data must be a valid JSON object');
       return this.getResult();
     }
 
     // Check required fields
-    const requiredFields = ["title", "description", "category"];
+    const requiredFields = ['title', 'description', 'category'];
     for (const field of requiredFields) {
       if (!taskData[field]) {
         this.errors.push(`Required field '${field}' is missing`);
@@ -49,30 +49,30 @@ class TaskManagerValidator {
     // Validate category value
     if (taskData.category && !VALID_CATEGORIES.includes(taskData.category)) {
       this.errors.push(
-        `Invalid category '${taskData.category}'. Valid categories: ${VALID_CATEGORIES.join(", ")}`,
+        `Invalid category '${taskData.category}'. Valid categories: ${VALID_CATEGORIES.join(', ')}`,
       );
     }
 
     // Check for old task_type field
     if (taskData.task_type) {
       this.errors.push(
-        "Field task_type is no longer valid. Use category instead",
+        'Field task_type is no longer valid. Use category instead',
       );
       this.warnings.push(
-        "Legacy task_type field detected - update to use category field",
+        'Legacy task_type field detected - update to use category field',
       );
     }
 
     // Validate title and description quality
     if (taskData.title && taskData.title.length < 5) {
       this.warnings.push(
-        "Task title should be more descriptive (recommended: 10+ characters)",
+        'Task title should be more descriptive (recommended: 10+ characters)',
       );
     }
 
     if (taskData.description && taskData.description.length < 10) {
       this.warnings.push(
-        "Task description should be more detailed (recommended: 20+ characters)",
+        'Task description should be more detailed (recommended: 20+ characters)',
       );
     }
 
@@ -103,7 +103,7 @@ class TaskManagerValidator {
     // Check for valid commands
     if (!VALID_COMMANDS.includes(command)) {
       this.errors.push(
-        `Unknown command '${command}'. Valid commands: ${VALID_COMMANDS.join(", ")}`,
+        `Unknown command '${command}'. Valid commands: ${VALID_COMMANDS.join(', ')}`,
       );
       this.warnings.push("Run 'guide' command to see all available options");
       return this.getResult();
@@ -111,35 +111,35 @@ class TaskManagerValidator {
 
     // Command-specific validations
     switch (command) {
-      case "create":
+      case 'create':
         if (args.length === 0) {
-          this.errors.push("Create command requires task data parameter");
+          this.errors.push('Create command requires task data parameter');
           this.warnings.push(
             'Format: create \'{"title":"...", "description":"...", "category":"..."}\'',
           );
         }
         break;
 
-      case "claim":
+      case 'claim':
         if (args.length < 2) {
           this.errors.push(
-            "Claim command requires taskId and agentId parameters",
+            'Claim command requires taskId and agentId parameters',
           );
-          this.warnings.push("Format: claim <taskId> <agentId>");
+          this.warnings.push('Format: claim <taskId> <agentId>');
         }
         break;
 
-      case "complete":
+      case 'complete':
         if (args.length < 1) {
-          this.errors.push("Complete command requires taskId parameter");
-          this.warnings.push("Format: complete <taskId> [completionData]");
+          this.errors.push('Complete command requires taskId parameter');
+          this.warnings.push('Format: complete <taskId> [completionData]');
         }
         break;
 
-      case "status":
+      case 'status':
         if (args.length < 1) {
           this.warnings.push(
-            "Status command recommended with agentId parameter for detailed info",
+            'Status command recommended with agentId parameter for detailed info',
           );
         }
         break;
@@ -158,7 +158,7 @@ class TaskManagerValidator {
     this.warnings = [];
 
     // Check for proper timeout usage
-    if (!commandString.includes("timeout 10s")) {
+    if (!commandString.includes('timeout 10s')) {
       this.warnings.push(
         'Recommend using "timeout 10s" for TaskManager API calls',
       );
@@ -166,13 +166,13 @@ class TaskManagerValidator {
 
     // Check for proper path
     const expectedPath =
-      "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js";
+      '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
     if (!commandString.includes(expectedPath)) {
       this.warnings.push(`Ensure using correct path: ${expectedPath}`);
     }
 
     // Check for JSON formatting in create commands
-    if (commandString.includes("create") && commandString.includes("{")) {
+    if (commandString.includes('create') && commandString.includes('{')) {
       // Basic JSON validation
       const jsonMatch = commandString.match(/'{[^}]+}'/);
       if (jsonMatch) {
@@ -183,7 +183,7 @@ class TaskManagerValidator {
           this.errors.push(...validation.errors);
           this.warnings.push(...validation.warnings);
         } catch {
-          this.errors.push("Invalid JSON format in create command");
+          this.errors.push('Invalid JSON format in create command');
         }
       }
     }
@@ -210,28 +210,28 @@ class TaskManagerValidator {
    * @returns {string} Formatted output
    */
   formatResult(result) {
-    let output = "";
+    let output = '';
 
     if (result.errors.length > 0) {
-      output += "❌ ERRORS:\n";
+      output += '❌ ERRORS:\n';
       result.errors.forEach((error) => {
         output += `  - ${error}\n`;
       });
     }
 
     if (result.warnings.length > 0) {
-      output += "⚠️  WARNINGS:\n";
+      output += '⚠️  WARNINGS:\n';
       result.warnings.forEach((warning) => {
         output += `  - ${warning}\n`;
       });
     }
 
     if (result.isValid && result.warnings.length === 0) {
-      output += "✅ Command validation passed\n";
+      output += '✅ Command validation passed\n';
     } else if (result.isValid) {
-      output += "✅ Command is valid but has warnings\n";
+      output += '✅ Command is valid but has warnings\n';
     } else {
-      output += "❌ Command validation failed\n";
+      output += '❌ Command validation failed\n';
     }
 
     return output;
@@ -242,29 +242,29 @@ class TaskManagerValidator {
 if (require.main === module) {
   const validator = new TaskManagerValidator();
 
-  console.log("=== TaskManager API Validation Tool ===\n");
+  console.log('=== TaskManager API Validation Tool ===\n');
 
   // Test cases
   const testCases = [
     {
-      name: "Valid task creation",
+      name: 'Valid task creation',
       data: {
-        title: "Fix authentication bug",
-        description: "Resolve login timeout issue",
-        category: "error",
+        title: 'Fix authentication bug',
+        description: 'Resolve login timeout issue',
+        category: 'error',
       },
     },
     {
-      name: "Missing category field",
-      data: { title: "Add feature", description: "New functionality" },
+      name: 'Missing category field',
+      data: { title: 'Add feature', description: 'New functionality' },
     },
     {
-      name: "Invalid category",
-      data: { title: "Task", description: "Details", category: "bug" },
+      name: 'Invalid category',
+      data: { title: 'Task', description: 'Details', category: 'bug' },
     },
     {
-      name: "Legacy task_type field",
-      data: { title: "Task", description: "Details", task_type: "feature" },
+      name: 'Legacy task_type field',
+      data: { title: 'Task', description: 'Details', task_type: 'feature' },
     },
   ];
 
@@ -277,12 +277,12 @@ if (require.main === module) {
   // Command validation tests
   const commandTests = [
     {
-      name: "Valid create command",
-      command: "create",
+      name: 'Valid create command',
+      command: 'create',
       args: ['{"title":"test","description":"test","category":"error"}'],
     },
-    { name: "Invalid delete command", command: "delete", args: ["task_123"] },
-    { name: "Claim without args", command: "claim", args: [] },
+    { name: 'Invalid delete command', command: 'delete', args: ['task_123'] },
+    { name: 'Claim without args', command: 'claim', args: [] },
   ];
 
   commandTests.forEach((test) => {
