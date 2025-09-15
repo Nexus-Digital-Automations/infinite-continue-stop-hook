@@ -7,7 +7,7 @@
       "description": "Debug test audit task to verify objectivity enforcement",
       "priority": "medium",
       "category": "audit",
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -17,9 +17,9 @@
       "created_at": "2025-09-13T18:05:40.516Z",
       "auto_research_created": false,
       "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
-      "assigned_agent": null,
-      "started_at": null,
-      "claimed_by": null,
+      "assigned_agent": "dev_session_1757907833229_1_general_35e59d8b",
+      "started_at": "2025-09-15T03:50:53.927Z",
+      "claimed_by": "dev_session_1757907833229_1_general_35e59d8b",
       "agent_assignment_history": [
         {
           "agentId": "development_session_1757785266907_1_general_8560e4a6",
@@ -33,6 +33,13 @@
           "action": "auto_reset_stale",
           "timestamp": "2025-09-13T18:25:19.874Z",
           "reason": "Task stale for 20 minutes"
+        },
+        {
+          "agentId": "dev_session_1757907833229_1_general_35e59d8b",
+          "role": "primary",
+          "assignedAt": "2025-09-15T03:50:53.927Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
         }
       ]
     },
@@ -59,7 +66,7 @@
       "description": "Add comprehensive subtasks management (create, read, update, delete) and success criteria endpoints to taskmanager-api.js. Implement research task routing, audit task management, and auto-generation of research/audit subtasks. Maintain backward compatibility while adding POST /api/subtasks/create, GET /api/subtasks/:taskId, PUT /api/subtasks/:subtaskId, DELETE /api/subtasks/:subtaskId, POST /api/success-criteria/task/:taskId, POST /api/success-criteria/project-wide, GET /api/success-criteria/:taskId endpoints.",
       "priority": "medium",
       "category": "feature",
-      "status": "in_progress",
+      "status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -159,9 +166,9 @@
       ],
       "created_at": "2025-09-13T16:32:44.020Z",
       "auto_research_created": false,
-      "assigned_agent": "dev_session_1757884787925_1_general_9ffc1ff7",
-      "started_at": "2025-09-14T21:21:03.704Z",
-      "claimed_by": "dev_session_1757884787925_1_general_9ffc1ff7",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "development_session_1757781146851_1_general_c105fbba",
@@ -215,6 +222,12 @@
           "assignedAt": "2025-09-14T21:21:03.704Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1757884787925_1_general_9ffc1ff7",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-15T03:49:42.350Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
         }
       ]
     },
@@ -2346,57 +2359,6 @@
       "created_at": "2025-09-13T18:08:03.374Z",
       "auto_research_created": false,
       "original_implementer": "development_session_1757785266907_1_general_8560e4a6"
-    },
-    {
-      "status": "completed",
-      "created_at": "2025-09-14T21:07:14.488Z",
-      "title": "Fix 10 critical ESLint errors blocking build in test setup",
-      "description": "Fix 10 critical ESLint errors in src/test/setup.enhanced.ts: 4 no-explicit-any errors (lines 13, 137, 142, 162) and 5 no-console errors (lines 44, 100-103, 107). These errors are preventing the build from completing successfully.",
-      "category": "error",
-      "priority": "high",
-      "important_files": [
-        "src/test/setup.enhanced.ts"
-      ],
-      "success_criteria": [
-        "All ESLint errors resolved in setup.enhanced.ts",
-        "Build passes without linting errors",
-        "Test setup functionality preserved"
-      ],
-      "id": "error_1757884034487_ku1b9eqtrmb",
-      "assigned_agent": "dev_session_1757883983122_1_general_9e371f4f",
-      "started_at": "2025-09-14T21:07:35.399Z",
-      "claimed_by": "dev_session_1757883983122_1_general_9e371f4f",
-      "agent_assignment_history": [
-        {
-          "agentId": "dev_session_1757883983122_1_general_9e371f4f",
-          "role": "primary",
-          "assignedAt": "2025-09-14T21:07:35.399Z",
-          "reassignReason": null,
-          "claimPriority": "normal"
-        }
-      ],
-      "completed_at": "2025-09-14T21:10:44.418Z",
-      "updated_at": "2025-09-14T21:10:44.418Z"
-    },
-    {
-      "status": "in_progress",
-      "created_at": "2025-09-15T03:44:10.163Z",
-      "title": "Fix TaskManager API Usage Errors",
-      "description": "Fix two critical API usage errors: 1) Attempted to use non-existent delete command, 2) Missing required category field in task creation. Implement proper error prevention and API validation.",
-      "category": "error",
-      "id": "error_1757907850162_5v8aj0titcl",
-      "assigned_agent": "dev_session_1757907833229_1_general_35e59d8b",
-      "started_at": "2025-09-15T03:44:33.413Z",
-      "claimed_by": "dev_session_1757907833229_1_general_35e59d8b",
-      "agent_assignment_history": [
-        {
-          "agentId": "dev_session_1757907833229_1_general_35e59d8b",
-          "role": "primary",
-          "assignedAt": "2025-09-15T03:44:33.413Z",
-          "reassignReason": null,
-          "claimPriority": "normal"
-        }
-      ]
     }
   ],
   "current_mode": "DEVELOPMENT",
@@ -2406,107 +2368,13 @@
   "strikes_completed_last_run": false,
   "last_hook_activation": 1757094794402,
   "agents": {
-    "dev_session_1757830577113_1_general_d0efdee9": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-14T06:19:07.675Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-14T06:16:17.116Z",
-      "sessionId": null,
-      "metadata": {
-        "renewedAt": "2025-09-14T06:19:07.675Z",
-        "renewalReason": "Agent reinitialization requested"
-      },
-      "lastRenewal": "2025-09-14T06:19:07.675Z",
-      "renewalCount": 1
-    },
-    "dev_session_1757830914960_1_general_23714a4e": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-14T06:21:54.962Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-14T06:21:54.962Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1757883983122_1_general_9e371f4f": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-14T21:12:22.580Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-14T21:06:23.123Z",
-      "sessionId": null,
-      "metadata": {
-        "renewedAt": "2025-09-14T21:12:22.580Z",
-        "renewalReason": "Agent reinitialization requested"
-      },
-      "lastRenewal": "2025-09-14T21:12:22.580Z",
-      "renewalCount": 1
-    },
-    "dev_session_1757884787925_1_general_9ffc1ff7": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-14T21:19:47.926Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-14T21:19:47.926Z",
-      "sessionId": null,
-      "metadata": {}
-    },
     "dev_session_1757907833229_1_general_35e59d8b": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-15T03:43:53.230Z",
+      "lastHeartbeat": "2025-09-15T03:50:13.180Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2519,7 +2387,12 @@
       "maxConcurrentTasks": 5,
       "createdAt": "2025-09-15T03:43:53.230Z",
       "sessionId": null,
-      "metadata": {}
+      "metadata": {
+        "renewedAt": "2025-09-15T03:50:13.180Z",
+        "renewalReason": "Agent reinitialization requested"
+      },
+      "lastRenewal": "2025-09-15T03:50:13.180Z",
+      "renewalCount": 1
     }
   },
   "features": [
