@@ -2406,7 +2406,7 @@
       "updated_at": "2025-09-15T04:10:08.033Z"
     },
     {
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2025-09-15T03:59:50.283Z",
       "title": "Integrate Success Criteria endpoints into TaskManager API",
       "description": "Add Success Criteria command handlers to taskmanager-api.js with GET/POST success-criteria/:taskId, POST project-wide endpoints. Implement CLI interface commands, error handling, and maintain backward compatibility.",
@@ -2423,10 +2423,12 @@
           "reassignReason": null,
           "claimPriority": "normal"
         }
-      ]
+      ],
+      "completed_at": "2025-09-15T04:13:22.730Z",
+      "updated_at": "2025-09-15T04:13:22.730Z"
     },
     {
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2025-09-15T03:59:50.454Z",
       "title": "Implement automated and manual validation workflows for Success Criteria",
       "description": "Build comprehensive validation engine with automated workflows for all 25 criteria points, manual review processes with agent assignment, evidence collection and storage systems, validation result processing and reporting, integration with existing linter/build/test systems, and background processing for complex validations",
@@ -2443,7 +2445,9 @@
           "reassignReason": null,
           "claimPriority": "normal"
         }
-      ]
+      ],
+      "completed_at": "2025-09-15T04:13:25.779Z",
+      "updated_at": "2025-09-15T04:13:25.779Z"
     },
     {
       "status": "in_progress",

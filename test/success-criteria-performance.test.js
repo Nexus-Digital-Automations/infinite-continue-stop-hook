@@ -10,15 +10,15 @@
  * - Memory leak detection for long-running operations
  */
 
-const { performance } = require("perf_hooks");
-const { spawn } = require("child_process");
-const path = require("path");
-const fs = require("fs").promises;
-const os = require("os");
+const { performance } = require('perf_hooks');
+const { spawn } = require('child_process');
+const path = require('path');
+const fs = require('fs').promises;
+const os = require('os');
 
 // Test configuration
-const API_PATH = path.join(__dirname, "..", "taskmanager-api.js");
-const TEST_PROJECT_DIR = path.join(__dirname, "performance-test-project");
+const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
+const TEST_PROJECT_DIR = path.join(__dirname, 'performance-test-project');
 const PERFORMANCE_TIMEOUT = 35000; // 35 seconds to allow for 30s requirement testing
 const MEMORY_SAMPLING_INTERVAL = 100; // milliseconds
 
@@ -174,7 +174,7 @@ class PerformanceMonitor {
         if (maxTime > 30000) {
           report.performanceViolations.push({
             operation: opType,
-            type: "MAX_TIME_VIOLATION",
+            type: 'MAX_TIME_VIOLATION',
             value: maxTime,
             threshold: 30000,
           });
@@ -182,7 +182,7 @@ class PerformanceMonitor {
         if (avgTime > 30000) {
           report.performanceViolations.push({
             operation: opType,
-            type: "AVG_TIME_VIOLATION",
+            type: 'AVG_TIME_VIOLATION',
             value: avgTime,
             threshold: 30000,
           });
@@ -209,35 +209,35 @@ function execAPIWithMonitoring(
         API_PATH,
         command,
         ...args,
-        "--project-root",
+        '--project-root',
         TEST_PROJECT_DIR,
       ];
       const child = spawn(
-        "timeout",
-        [`${Math.floor(timeout / 1000)}s`, "node", ...allArgs],
+        'timeout',
+        [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs],
         {
-          stdio: ["pipe", "pipe", "pipe"],
-          env: { ...process.env, NODE_ENV: "test" },
+          stdio: ['pipe', 'pipe', 'pipe'],
+          env: { ...process.env, NODE_ENV: 'test' },
         },
       );
 
-      let stdout = "";
-      let stderr = "";
+      let stdout = '';
+      let stderr = '';
 
-      child.stdout.on("data", (data) => {
+      child.stdout.on('data', (data) => {
         stdout += data.toString();
       });
 
-      child.stderr.on("data", (data) => {
+      child.stderr.on('data', (data) => {
         stderr += data.toString();
       });
 
-      child.on("close", (code) => {
+      child.on('close', (code) => {
         if (code === 0) {
           try {
             const result = stdout.trim() ? JSON.parse(stdout) : {};
             resolve(result);
-          } catch (_error) {
+          } catch {
             resolve({ rawOutput: stdout, stderr });
           }
         } else {
@@ -247,7 +247,7 @@ function execAPIWithMonitoring(
         }
       });
 
-      child.on("error", (error) => {
+      child.on('error', (error) => {
         reject(error);
       });
     });
@@ -263,24 +263,24 @@ async function setupPerformanceTestProject() {
 
     // Create package.json
     const packageJson = {
-      name: "performance-test-project",
-      version: "1.0.0",
-      description: "Performance testing project for Success Criteria",
-      main: "index.js",
+      name: 'performance-test-project',
+      version: '1.0.0',
+      description: 'Performance testing project for Success Criteria',
+      main: 'index.js',
       scripts: {
-        test: "jest",
+        test: 'jest',
         build: 'echo "Build complete"',
         lint: 'echo "Lint complete"',
-        start: "node index.js",
+        start: 'node index.js',
       },
       dependencies: {},
       devDependencies: {
-        jest: "^29.0.0",
+        jest: '^29.0.0',
       },
     };
 
     await fs.writeFile(
-      path.join(TEST_PROJECT_DIR, "package.json"),
+      path.join(TEST_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2),
     );
 
@@ -322,7 +322,7 @@ setTimeout(() => {
 }, 1000);
 `;
 
-    await fs.writeFile(path.join(TEST_PROJECT_DIR, "index.js"), indexJs);
+    await fs.writeFile(path.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
 
     // Create test file
     const testJs = `
@@ -338,11 +338,11 @@ describe('Performance Test Suite', () => {
 });
 `;
 
-    await fs.writeFile(path.join(TEST_PROJECT_DIR, "test.js"), testJs);
+    await fs.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
-    console.log("Performance test project setup completed");
+    console.log('Performance test project setup completed');
   } catch (error) {
-    console.error("Failed to setup performance test project:", error);
+    console.error('Failed to setup performance test project:', error);
     throw error;
   }
 }
@@ -350,16 +350,16 @@ describe('Performance Test Suite', () => {
 async function cleanupPerformanceTestProject() {
   try {
     await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
-    console.log("Performance test project cleanup completed");
+    console.log('Performance test project cleanup completed');
   } catch (error) {
-    console.error("Failed to cleanup performance test project:", error);
+    console.error('Failed to cleanup performance test project:', error);
   }
 }
 
 /**
  * Performance Test Suite
  */
-describe("Success Criteria Performance Tests", () => {
+describe('Success Criteria Performance Tests', () => {
   let monitor;
 
   beforeAll(async () => {
@@ -379,13 +379,13 @@ describe("Success Criteria Performance Tests", () => {
     monitor.stopMonitoring();
   });
 
-  describe("API Performance Benchmarks", () => {
+  describe('API Performance Benchmarks', () => {
     test(
-      "should initialize Success Criteria system within performance limits",
+      'should initialize Success Criteria system within performance limits',
       async () => {
         const { result, measurement } = await execAPIWithMonitoring(
           monitor,
-          "success-criteria:init",
+          'success-criteria:init',
         );
 
         expect(measurement.duration).toBeLessThan(30000); // 30 second requirement
@@ -399,36 +399,36 @@ describe("Success Criteria Performance Tests", () => {
     );
 
     test(
-      "should create success criteria template within performance limits",
+      'should create success criteria template within performance limits',
       async () => {
         // Initialize first
-        await execAPIWithMonitoring(monitor, "success-criteria:init");
+        await execAPIWithMonitoring(monitor, 'success-criteria:init');
 
         // Create template
         const templateData = JSON.stringify({
-          name: "Performance Test Template",
+          name: 'Performance Test Template',
           criteria: [
             {
-              id: "perf-1",
-              description: "Performance requirement 1",
-              category: "performance",
+              id: 'perf-1',
+              description: 'Performance requirement 1',
+              category: 'performance',
             },
             {
-              id: "perf-2",
-              description: "Performance requirement 2",
-              category: "performance",
+              id: 'perf-2',
+              description: 'Performance requirement 2',
+              category: 'performance',
             },
             {
-              id: "perf-3",
-              description: "Performance requirement 3",
-              category: "performance",
+              id: 'perf-3',
+              description: 'Performance requirement 3',
+              category: 'performance',
             },
           ],
         });
 
         const { result, measurement } = await execAPIWithMonitoring(
           monitor,
-          "success-criteria:create-template",
+          'success-criteria:create-template',
           [templateData],
         );
 
@@ -443,36 +443,36 @@ describe("Success Criteria Performance Tests", () => {
     );
 
     test(
-      "should validate project criteria within performance limits",
+      'should validate project criteria within performance limits',
       async () => {
         // Setup
-        await execAPIWithMonitoring(monitor, "success-criteria:init");
+        await execAPIWithMonitoring(monitor, 'success-criteria:init');
 
         // Create and apply template
         const templateData = JSON.stringify({
-          name: "Validation Test Template",
+          name: 'Validation Test Template',
           criteria: Array.from({ length: 25 }, (_, i) => ({
             id: `crit-${i + 1}`,
             description: `Validation criterion ${i + 1}`,
-            category: i % 3 === 0 ? "build" : i % 3 === 1 ? "test" : "quality",
+            category: i % 3 === 0 ? 'build' : i % 3 === 1 ? 'test' : 'quality',
           })),
         });
 
         await execAPIWithMonitoring(
           monitor,
-          "success-criteria:create-template",
+          'success-criteria:create-template',
           [templateData],
         );
         await execAPIWithMonitoring(
           monitor,
-          "success-criteria:apply-template",
-          ["Validation Test Template"],
+          'success-criteria:apply-template',
+          ['Validation Test Template'],
         );
 
         // Validate - this is the critical performance test
         const { result, measurement } = await execAPIWithMonitoring(
           monitor,
-          "success-criteria:validate",
+          'success-criteria:validate',
         );
 
         expect(measurement.duration).toBeLessThan(30000); // Critical 30-second requirement
@@ -487,27 +487,27 @@ describe("Success Criteria Performance Tests", () => {
     );
 
     test(
-      "should handle large template operations within performance limits",
+      'should handle large template operations within performance limits',
       async () => {
-        await execAPIWithMonitoring(monitor, "success-criteria:init");
+        await execAPIWithMonitoring(monitor, 'success-criteria:init');
 
         // Create large template with 100 criteria
         const largeTemplateData = JSON.stringify({
-          name: "Large Performance Template",
+          name: 'Large Performance Template',
           criteria: Array.from({ length: 100 }, (_, i) => ({
             id: `large-crit-${i + 1}`,
             description: `Large template criterion ${i + 1} with detailed description and multiple requirements`,
-            category: ["build", "test", "quality", "security", "performance"][
+            category: ['build', 'test', 'quality', 'security', 'performance'][
               i % 5
             ],
-            priority: ["high", "medium", "low"][i % 3],
+            priority: ['high', 'medium', 'low'][i % 3],
             tags: [`tag${i % 10}`, `category${i % 5}`],
           })),
         });
 
         const { result, measurement } = await execAPIWithMonitoring(
           monitor,
-          "success-criteria:create-template",
+          'success-criteria:create-template',
           [largeTemplateData],
         );
 
@@ -522,9 +522,9 @@ describe("Success Criteria Performance Tests", () => {
     );
 
     test(
-      "should perform rapid successive operations within performance limits",
+      'should perform rapid successive operations within performance limits',
       async () => {
-        await execAPIWithMonitoring(monitor, "success-criteria:init");
+        await execAPIWithMonitoring(monitor, 'success-criteria:init');
 
         // Perform 10 rapid operations
         const operations = [];
@@ -535,18 +535,18 @@ describe("Success Criteria Performance Tests", () => {
               {
                 id: `rapid-${i}-1`,
                 description: `Rapid criterion ${i}-1`,
-                category: "test",
+                category: 'test',
               },
               {
                 id: `rapid-${i}-2`,
                 description: `Rapid criterion ${i}-2`,
-                category: "build",
+                category: 'build',
               },
             ],
           });
 
           operations.push(
-            execAPIWithMonitoring(monitor, "success-criteria:create-template", [
+            execAPIWithMonitoring(monitor, 'success-criteria:create-template', [
               templateData,
             ]),
           );
@@ -570,35 +570,35 @@ describe("Success Criteria Performance Tests", () => {
     );
   });
 
-  describe("Memory Usage Analysis", () => {
+  describe('Memory Usage Analysis', () => {
     test(
-      "should not exceed memory limits during validation",
+      'should not exceed memory limits during validation',
       async () => {
         const initialMemory = process.memoryUsage();
 
-        await execAPIWithMonitoring(monitor, "success-criteria:init");
+        await execAPIWithMonitoring(monitor, 'success-criteria:init');
 
         // Create substantial template
         const templateData = JSON.stringify({
-          name: "Memory Test Template",
+          name: 'Memory Test Template',
           criteria: Array.from({ length: 50 }, (_, i) => ({
             id: `mem-crit-${i + 1}`,
-            description: `Memory test criterion ${i + 1} ${"x".repeat(200)}`, // Add some bulk
-            category: "test",
+            description: `Memory test criterion ${i + 1} ${'x'.repeat(200)}`, // Add some bulk
+            category: 'test',
           })),
         });
 
         await execAPIWithMonitoring(
           monitor,
-          "success-criteria:create-template",
+          'success-criteria:create-template',
           [templateData],
         );
         await execAPIWithMonitoring(
           monitor,
-          "success-criteria:apply-template",
-          ["Memory Test Template"],
+          'success-criteria:apply-template',
+          ['Memory Test Template'],
         );
-        await execAPIWithMonitoring(monitor, "success-criteria:validate");
+        await execAPIWithMonitoring(monitor, 'success-criteria:validate');
 
         const finalMemory = process.memoryUsage();
         const memoryIncrease = finalMemory.heapUsed - initialMemory.heapUsed;
@@ -622,7 +622,7 @@ describe("Success Criteria Performance Tests", () => {
     );
 
     test(
-      "should handle garbage collection efficiently",
+      'should handle garbage collection efficiently',
       async () => {
         const gcStats = [];
 
@@ -632,25 +632,25 @@ describe("Success Criteria Performance Tests", () => {
         }
 
         const initialMemory = process.memoryUsage();
-        gcStats.push({ phase: "initial", memory: initialMemory });
+        gcStats.push({ phase: 'initial', memory: initialMemory });
 
         // Perform memory-intensive operations
-        await execAPIWithMonitoring(monitor, "success-criteria:init");
-        gcStats.push({ phase: "post-init", memory: process.memoryUsage() });
+        await execAPIWithMonitoring(monitor, 'success-criteria:init');
+        gcStats.push({ phase: 'post-init', memory: process.memoryUsage() });
 
         for (let i = 0; i < 5; i++) {
           const templateData = JSON.stringify({
             name: `GC Test Template ${i}`,
             criteria: Array.from({ length: 20 }, (_, j) => ({
               id: `gc-${i}-${j}`,
-              description: `GC test ${i}-${j} ${"data".repeat(50)}`,
-              category: "test",
+              description: `GC test ${i}-${j} ${'data'.repeat(50)}`,
+              category: 'test',
             })),
           });
 
           await execAPIWithMonitoring(
             monitor,
-            "success-criteria:create-template",
+            'success-criteria:create-template',
             [templateData],
           );
           gcStats.push({
@@ -662,7 +662,7 @@ describe("Success Criteria Performance Tests", () => {
         // Force GC again if available
         if (global.gc) {
           global.gc();
-          gcStats.push({ phase: "post-gc", memory: process.memoryUsage() });
+          gcStats.push({ phase: 'post-gc', memory: process.memoryUsage() });
         }
 
         // Analyze memory patterns
@@ -672,7 +672,7 @@ describe("Success Criteria Performance Tests", () => {
           heapTotal: stat.memory.heapTotal,
         }));
 
-        console.log("Memory usage pattern:", memoryPattern);
+        console.log('Memory usage pattern:', memoryPattern);
 
         // Memory should not continuously increase
         const finalHeap = gcStats[gcStats.length - 1].memory.heapUsed;
@@ -684,27 +684,27 @@ describe("Success Criteria Performance Tests", () => {
     );
   });
 
-  describe("Performance Degradation Detection", () => {
+  describe('Performance Degradation Detection', () => {
     test(
-      "should maintain consistent performance across multiple runs",
+      'should maintain consistent performance across multiple runs',
       async () => {
         const runTimes = [];
 
         for (let run = 0; run < 5; run++) {
-          await execAPIWithMonitoring(monitor, "success-criteria:init");
+          await execAPIWithMonitoring(monitor, 'success-criteria:init');
 
           const templateData = JSON.stringify({
             name: `Consistency Test Template ${run}`,
             criteria: Array.from({ length: 15 }, (_, i) => ({
               id: `consist-${run}-${i}`,
               description: `Consistency test ${run}-${i}`,
-              category: "test",
+              category: 'test',
             })),
           });
 
           const { measurement } = await execAPIWithMonitoring(
             monitor,
-            "success-criteria:create-template",
+            'success-criteria:create-template',
             [templateData],
           );
 
@@ -742,31 +742,31 @@ describe("Success Criteria Performance Tests", () => {
     );
 
     test(
-      "should detect and report performance violations",
+      'should detect and report performance violations',
       async () => {
         // This test intentionally creates conditions that might cause performance issues
         monitor.startMonitoring();
 
         try {
-          await execAPIWithMonitoring(monitor, "success-criteria:init");
+          await execAPIWithMonitoring(monitor, 'success-criteria:init');
 
           // Create very large template that might cause performance issues
           const massiveTemplateData = JSON.stringify({
-            name: "Performance Stress Template",
+            name: 'Performance Stress Template',
             criteria: Array.from({ length: 200 }, (_, i) => ({
               id: `stress-${i}`,
-              description: `Stress test criterion ${i} with very long description that includes many details and requirements to test how the system handles large amounts of text data and complex criteria definitions ${"x".repeat(500)}`,
+              description: `Stress test criterion ${i} with very long description that includes many details and requirements to test how the system handles large amounts of text data and complex criteria definitions ${'x'.repeat(500)}`,
               category: [
-                "build",
-                "test",
-                "quality",
-                "security",
-                "performance",
-                "documentation",
-                "integration",
-                "deployment",
+                'build',
+                'test',
+                'quality',
+                'security',
+                'performance',
+                'documentation',
+                'integration',
+                'deployment',
               ][i % 8],
-              priority: ["critical", "high", "medium", "low"][i % 4],
+              priority: ['critical', 'high', 'medium', 'low'][i % 4],
               tags: Array.from({ length: 10 }, (_, j) => `tag-${i}-${j}`),
               metadata: {
                 complexity: i % 5,
@@ -781,7 +781,7 @@ describe("Success Criteria Performance Tests", () => {
 
           const { measurement } = await execAPIWithMonitoring(
             monitor,
-            "success-criteria:create-template",
+            'success-criteria:create-template',
             [massiveTemplateData],
           );
 
@@ -789,7 +789,7 @@ describe("Success Criteria Performance Tests", () => {
           const report = monitor.generateReport();
 
           console.log(
-            "Performance stress test report:",
+            'Performance stress test report:',
             JSON.stringify(report, null, 2),
           );
 
@@ -803,14 +803,14 @@ describe("Success Criteria Performance Tests", () => {
         } catch (error) {
           const report = monitor.generateReport();
           console.log(
-            "Performance stress test failed with report:",
+            'Performance stress test failed with report:',
             JSON.stringify(report, null, 2),
           );
 
           // Even if the operation fails, it should fail quickly
-          if (report.operationSummary["api_success-criteria:create-template"]) {
+          if (report.operationSummary['api_success-criteria:create-template']) {
             expect(
-              report.operationSummary["api_success-criteria:create-template"]
+              report.operationSummary['api_success-criteria:create-template']
                 .maxTime,
             ).toBeLessThan(30000);
           }
@@ -822,31 +822,31 @@ describe("Success Criteria Performance Tests", () => {
     );
   });
 
-  describe("Resource Utilization Analysis", () => {
+  describe('Resource Utilization Analysis', () => {
     test(
-      "should provide comprehensive performance metrics",
+      'should provide comprehensive performance metrics',
       async () => {
-        await execAPIWithMonitoring(monitor, "success-criteria:init");
+        await execAPIWithMonitoring(monitor, 'success-criteria:init');
 
         // Perform various operations to gather metrics
         const operations = [
-          ["success-criteria:list-templates"],
+          ['success-criteria:list-templates'],
           [
-            "success-criteria:create-template",
+            'success-criteria:create-template',
             JSON.stringify({
-              name: "Metrics Template",
+              name: 'Metrics Template',
               criteria: [
                 {
-                  id: "metric-1",
-                  description: "Test metric",
-                  category: "test",
+                  id: 'metric-1',
+                  description: 'Test metric',
+                  category: 'test',
                 },
               ],
             }),
           ],
-          ["success-criteria:apply-template", "Metrics Template"],
-          ["success-criteria:validate"],
-          ["success-criteria:status"],
+          ['success-criteria:apply-template', 'Metrics Template'],
+          ['success-criteria:validate'],
+          ['success-criteria:status'],
         ];
 
         for (const [command, ...args] of operations) {
@@ -875,11 +875,11 @@ describe("Success Criteria Performance Tests", () => {
         // Should not have performance violations
         expect(report.performanceViolations).toHaveLength(0);
 
-        console.log("Comprehensive performance metrics:");
+        console.log('Comprehensive performance metrics:');
         console.log(JSON.stringify(report, null, 2));
 
         // Save report for analysis
-        const reportPath = path.join(__dirname, "performance-report.json");
+        const reportPath = path.join(__dirname, 'performance-report.json');
         await fs.writeFile(reportPath, JSON.stringify(report, null, 2));
         console.log(`Performance report saved to: ${reportPath}`);
       },
@@ -887,7 +887,7 @@ describe("Success Criteria Performance Tests", () => {
     );
 
     test(
-      "should benchmark against system capabilities",
+      'should benchmark against system capabilities',
       async () => {
         const systemInfo = {
           platform: os.platform(),
@@ -898,7 +898,7 @@ describe("Success Criteria Performance Tests", () => {
           nodeVersion: process.version,
         };
 
-        console.log("System information:", systemInfo);
+        console.log('System information:', systemInfo);
 
         // CPU benchmark
         const cpuStart = process.hrtime.bigint();
@@ -920,20 +920,20 @@ describe("Success Criteria Performance Tests", () => {
         const memBenchmark = memEnd - memStart;
 
         // Success Criteria benchmark
-        await execAPIWithMonitoring(monitor, "success-criteria:init");
+        await execAPIWithMonitoring(monitor, 'success-criteria:init');
 
         const templateData = JSON.stringify({
-          name: "Benchmark Template",
+          name: 'Benchmark Template',
           criteria: Array.from({ length: 25 }, (_, i) => ({
             id: `bench-${i}`,
             description: `Benchmark criterion ${i}`,
-            category: "test",
+            category: 'test',
           })),
         });
 
         const { measurement } = await execAPIWithMonitoring(
           monitor,
-          "success-criteria:create-template",
+          'success-criteria:create-template',
           [templateData],
         );
 
@@ -947,14 +947,14 @@ describe("Success Criteria Performance Tests", () => {
             (measurement.memoryDelta.heapUsed || 0) / memBenchmark,
         };
 
-        console.log("Benchmark results:", benchmarkResults);
+        console.log('Benchmark results:', benchmarkResults);
 
         // Performance should scale reasonably with system capabilities
         expect(benchmarkResults.successCriteriaBenchmark).toBeLessThan(30000);
         expect(benchmarkResults.performanceRatio).toBeLessThan(100); // Should be efficient relative to CPU
 
         // Save benchmark results
-        const benchmarkPath = path.join(__dirname, "benchmark-results.json");
+        const benchmarkPath = path.join(__dirname, 'benchmark-results.json');
         await fs.writeFile(
           benchmarkPath,
           JSON.stringify(benchmarkResults, null, 2),
