@@ -159,47 +159,6 @@ function processData(userId, data) {
 }
 ```
 
-### STANDARDIZED NAMING CONVENTIONS
-**MANDATORY CONSISTENCY - NO VARIABLE NAME SWITCHING**
-
-**ABSOLUTE REQUIREMENTS:**
-- **CONSISTENCY FIRST**: Once established, NEVER change variable/function names unless functionally necessary
-- **LANGUAGE ADHERENCE**: Follow strict language-specific conventions
-- **READABILITY**: Names must clearly describe purpose and data type
-- **NO ARBITRARY CHANGES**: Prevent agents from switching names for style preferences
-
-**JAVASCRIPT/TYPESCRIPT CONVENTIONS:**
-- **Variables/Functions**: `camelCase` (e.g., `getUserData`, `isValidEmail`, `processRequest`)
-- **Constants**: `UPPER_SNAKE_CASE` (e.g., `MAX_RETRY_COUNT`, `API_BASE_URL`)
-- **Classes/Interfaces**: `PascalCase` (e.g., `UserService`, `ApiResponse`, `DataProcessor`)
-- **Files/Modules**: `kebab-case.js/.ts` (e.g., `user-service.ts`, `api-client.js`)
-- **Private Methods**: `_camelCase` (e.g., `_validateInput`, `_processData`)
-
-**PYTHON CONVENTIONS:**
-- **Variables/Functions**: `snake_case` (e.g., `get_user_data`, `is_valid_email`)
-- **Constants**: `UPPER_SNAKE_CASE` (e.g., `MAX_RETRY_COUNT`, `DEFAULT_TIMEOUT`)
-- **Classes**: `PascalCase` (e.g., `UserService`, `DatabaseManager`)
-- **Files/Modules**: `snake_case.py` (e.g., `user_service.py`, `api_client.py`)
-- **Private Methods**: `_snake_case` (e.g., `_validate_input`, `_process_data`)
-
-**UNIVERSAL PRINCIPLES:**
-- **Descriptive Names**: `userData` not `data`, `isAuthenticated` not `auth`
-- **Boolean Prefixes**: `is`, `has`, `can`, `should` (e.g., `isValid`, `hasPermission`)
-- **Action Verbs**: `get`, `set`, `create`, `update`, `delete`, `process`, `validate`
-- **Avoid Abbreviations**: `authentication` not `auth`, `configuration` not `config`
-- **Context Clarity**: `userEmail` not `email` when multiple email types exist
-
-**FORBIDDEN PRACTICES:**
-- **❌ STYLE SWITCHING**: Changing `userData` to `user_data` or `UserData` arbitrarily
-- **❌ INCONSISTENT PREFIXES**: Using both `get` and `fetch` for similar operations
-- **❌ GENERIC NAMES**: `data`, `info`, `item`, `value` without context
-- **❌ HUNGARIAN NOTATION**: `strName`, `intCount`, `boolIsValid`
-
-**ENFORCEMENT PROTOCOL:**
-- **PRESERVATION**: Keep existing variable names unless changing functionality
-- **VALIDATION**: Check existing codebase patterns before introducing new names
-- **DOCUMENTATION**: Comment rationale for any naming changes in commit messages
-
 ### LINTER ERROR PROTOCOL
 **ALL LINTER WARNINGS ARE CRITICAL ERRORS**
 

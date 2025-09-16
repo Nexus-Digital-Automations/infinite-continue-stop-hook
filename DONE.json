@@ -44706,14 +44706,511 @@
       "updated_at": "2025-09-15T04:16:58.201Z",
       "archived_at": "2025-09-15T11:19:19.247Z",
       "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-15T11:24:59.507Z",
+      "title": "Consolidate CLAUDE.md into concise 3-phase structure",
+      "description": "Reduce CLAUDE.md from 630 lines to ~400 lines by consolidating directory management protocols, merging task management sections, implementing 3-phase workflow (PREP/EXECUTE/VALIDATE), reducing repetitive emphasis, and streamlining examples while preserving all unique information",
+      "category": "feature",
+      "id": "feature_1757935499507_ypnryarzca",
+      "completed_at": "2025-09-15T11:37:12.340Z",
+      "updated_at": "2025-09-15T11:37:12.340Z",
+      "archived_at": "2025-09-15T11:37:12.351Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-15T04:21:24.460Z",
+      "title": "Hunt and eliminate infinite loops in custom hooks and dependency chains",
+      "description": "Comprehensive analysis and fixing of infinite loops caused by custom hooks and their dependency chains. Focus on hooks that create unstable function references, circular hook dependencies, and hook re-initialization patterns. Target areas: src/hooks/ directory, useStore.ts, useChartData.ts, data fetching hooks, and performance monitoring hooks.",
+      "category": "error",
+      "id": "error_1757910084460_2vlpxdnhj05",
+      "assigned_agent": "dev_session_1757936267432_1_general_51295597",
+      "started_at": "2025-09-15T11:38:26.596Z",
+      "claimed_by": "dev_session_1757936267432_1_general_51295597",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1757910064449_1_general_9e7d745b",
+          "role": "primary",
+          "assignedAt": "2025-09-15T04:21:48.264Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1757910064449_1_general_9e7d745b",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-15T11:19:19.228Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agentId": "dev_session_1757936267432_1_general_51295597",
+          "role": "primary",
+          "assignedAt": "2025-09-15T11:38:26.596Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-15T11:45:33.060Z",
+      "updated_at": "2025-09-15T11:45:33.060Z",
+      "archived_at": "2025-09-15T11:45:33.069Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-15T04:21:32.614Z",
+      "title": "CRITICAL: Fix Chart Component Infinite Loops - Maximum Update Depth Exceeded",
+      "description": "Emergency fix for massive infinite loop errors in chart components. Tests show repeated Maximum update depth exceeded errors triggered by 📊 and 🔄 button interactions. Chart components have useEffect dependency issues causing setState loops on every render. IMMEDIATE ROOT CAUSE ANALYSIS AND FIX REQUIRED.",
+      "category": "error",
+      "priority": "normal",
+      "tags": [
+        "infinite-loops",
+        "chart-components",
+        "useEffect",
+        "setState",
+        "critical-error"
+      ],
+      "id": "test_1757935159231_e9s495w6a",
+      "assigned_agent": "dev_session_1757936995116_1_general_78c070fe",
+      "started_at": "2025-09-15T11:50:54.385Z",
+      "claimed_by": "dev_session_1757936995116_1_general_78c070fe",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1757910072785_1_general_f168b462",
+          "role": "primary",
+          "assignedAt": "2025-09-15T04:21:56.145Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1757910072785_1_general_f168b462",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-15T11:19:19.228Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agentId": "dev_session_1757936995116_1_general_78c070fe",
+          "role": "primary",
+          "assignedAt": "2025-09-15T11:50:54.385Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-15T11:58:25.786Z",
+      "updated_at": "2025-09-15T11:58:25.786Z",
+      "archived_at": "2025-09-15T11:58:25.796Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "id": "feature_1757781164006_0nf3nuisr",
+      "title": "Enhance TaskManager API with embedded subtasks and success criteria endpoints",
+      "description": "Add comprehensive subtasks management (create, read, update, delete) and success criteria endpoints to taskmanager-api.js. Implement research task routing, audit task management, and auto-generation of research/audit subtasks. Maintain backward compatibility while adding POST /api/subtasks/create, GET /api/subtasks/:taskId, PUT /api/subtasks/:subtaskId, DELETE /api/subtasks/:subtaskId, POST /api/success-criteria/task/:taskId, POST /api/success-criteria/project-wide, GET /api/success-criteria/:taskId endpoints.",
+      "priority": "medium",
+      "category": "feature",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [
+        {
+          "id": "research_1757781164007_a25b51dc",
+          "type": "research",
+          "title": "Research: Enhance TaskManager API with embedded subtasks and success criteria endpoints",
+          "description": "Comprehensive research for Enhance TaskManager API with embedded subtasks and success criteria endpoints to support implementation",
+          "status": "completed",
+          "estimated_hours": 1,
+          "research_locations": [
+            {
+              "type": "codebase",
+              "paths": [
+                "/api",
+                "/routes",
+                "/controllers"
+              ],
+              "focus": "Existing implementation patterns and architecture"
+            },
+            {
+              "type": "internet",
+              "keywords": [
+                "enhance",
+                "taskmanager",
+                "embedded",
+                "subtasks",
+                "success"
+              ],
+              "focus": "Best practices, industry standards, and technical specifications"
+            },
+            {
+              "type": "documentation",
+              "sources": [
+                "README.md",
+                "docs/",
+                "API documentation",
+                "package.json"
+              ],
+              "focus": "Project configuration and existing documentation"
+            }
+          ],
+          "deliverables": [
+            "Technical analysis report",
+            "Implementation recommendations",
+            "Risk assessment",
+            "Alternative approaches evaluation"
+          ],
+          "prevents_implementation": true,
+          "created_at": "2025-09-13T16:32:44.007Z",
+          "completed_at": "2025-09-14T21:17:44.252Z",
+          "completed_by": "dev_session_1757883983122_1_general_9e371f4f"
+        },
+        {
+          "id": "audit_1757781164007_a25b51dc",
+          "type": "audit",
+          "title": "Audit: Enhance TaskManager API with embedded subtasks and success criteria endpoints",
+          "description": "Comprehensive quality audit and review of the completed feature: Enhance TaskManager API with embedded subtasks and success criteria endpoints\n\nOriginal Description: Add comprehensive subtasks management (create, read, update, delete) and success criteria endpoints to taskmanager-api.js. Implement research task routing, audit task management, and auto-generation of research/audit subtasks. Maintain backward compatibility while adding POST /api/subtasks/create, GET /api/subtasks/:taskId, PUT /api/subtasks/:subtaskId, DELETE /api/subtasks/:subtaskId, POST /api/success-criteria/task/:taskId, POST /api/success-criteria/project-wide, GET /api/success-criteria/:taskId endpoints.",
+          "status": "pending",
+          "estimated_hours": 0.5,
+          "success_criteria": [
+            "Linter Perfection",
+            "Build Success",
+            "Runtime Success",
+            "Test Integrity",
+            "Function Documentation",
+            "API Documentation",
+            "Architecture Documentation",
+            "Decision Rationale",
+            "Error Handling",
+            "Performance Metrics",
+            "Security Review",
+            "Architectural Consistency",
+            "Dependency Validation",
+            "Version Compatibility",
+            "Security Audit",
+            "Cross-Platform",
+            "Environment Variables",
+            "Configuration",
+            "No Credential Exposure",
+            "Input Validation",
+            "Output Encoding",
+            "Authentication/Authorization",
+            "License Compliance",
+            "Data Privacy",
+            "Regulatory Compliance"
+          ],
+          "prevents_completion": true,
+          "original_implementer": null,
+          "prevents_self_review": true,
+          "audit_type": "embedded_quality_gate",
+          "created_at": "2025-09-13T16:32:44.020Z"
+        }
+      ],
+      "created_at": "2025-09-13T16:32:44.020Z",
+      "auto_research_created": false,
+      "assigned_agent": "dev_session_1757936995116_1_general_78c070fe",
+      "started_at": "2025-09-15T12:00:20.680Z",
+      "claimed_by": "dev_session_1757936995116_1_general_78c070fe",
+      "agent_assignment_history": [
+        {
+          "agentId": "development_session_1757781146851_1_general_c105fbba",
+          "role": "primary",
+          "assignedAt": "2025-09-13T16:32:59.833Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "development_session_1757781146851_1_general_c105fbba",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-13T17:05:17.251Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agentId": "development_session_1757786991716_1_general_9f79597d",
+          "role": "primary",
+          "assignedAt": "2025-09-13T18:22:02.614Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "development_session_1757786991716_1_general_9f79597d",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-13T18:25:19.873Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agentId": "dev_session_1757801837676_1_general_59c818c2",
+          "role": "primary",
+          "assignedAt": "2025-09-13T22:43:32.865Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1757801837676_1_general_59c818c2",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-14T05:54:28.410Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agentId": "dev_session_1757883983122_1_general_9e371f4f",
+          "role": "primary",
+          "assignedAt": "2025-09-14T21:14:50.473Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agentId": "dev_session_1757884787925_1_general_9ffc1ff7",
+          "role": "primary",
+          "assignedAt": "2025-09-14T21:21:03.704Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1757884787925_1_general_9ffc1ff7",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-15T03:49:42.350Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agentId": "dev_session_1757907833229_1_general_35e59d8b",
+          "role": "primary",
+          "assignedAt": "2025-09-15T03:57:14.928Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1757907833229_1_general_35e59d8b",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-15T11:19:19.228Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agentId": "dev_session_1757936995116_1_general_78c070fe",
+          "role": "primary",
+          "assignedAt": "2025-09-15T12:00:20.680Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-15T12:04:27.924Z",
+      "updated_at": "2025-09-15T12:04:27.924Z",
+      "archived_at": "2025-09-15T12:04:27.933Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-15T12:55:29.105Z",
+      "title": "LINTER: Fix ESLint errors in Success Criteria test files",
+      "description": "Fix 35 ESLint problems (13 errors, 22 warnings) in Success Criteria test files: unused variables, missing return types, unused parameters. Critical for task completion per CLAUDE.md requirements.",
+      "category": "error",
+      "id": "error_1757940929105_3aaqyfkghwc",
+      "assigned_agent": "dev_session_1757940843660_1_general_6c01fdb8",
+      "started_at": "2025-09-15T12:55:45.165Z",
+      "claimed_by": "dev_session_1757940843660_1_general_6c01fdb8",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1757940843660_1_general_6c01fdb8",
+          "role": "primary",
+          "assignedAt": "2025-09-15T12:55:45.165Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-15T13:07:03.915Z",
+      "updated_at": "2025-09-15T13:07:03.915Z",
+      "archived_at": "2025-09-15T13:07:03.924Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-15T03:59:50.964Z",
+      "title": "Implement comprehensive testing and quality validation for Success Criteria system",
+      "description": "As Testing Agent #6, implement unit tests, integration tests, end-to-end tests, performance tests, validation tests, and regression tests for all Success Criteria modules and components. Extend existing test suite with >90% coverage, API endpoint testing, workflow validation, and performance benchmarking.",
+      "category": "test",
+      "id": "test_1757908790964_sqcwcld4yng",
+      "assigned_agent": "dev_session_1757939485670_1_general_fc2fd3ab",
+      "started_at": "2025-09-15T12:32:14.625Z",
+      "claimed_by": "dev_session_1757939485670_1_general_fc2fd3ab",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1757908772750_1_general_5f1ef880",
+          "role": "primary",
+          "assignedAt": "2025-09-15T04:00:42.574Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1757908772750_1_general_5f1ef880",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-15T11:19:19.228Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agentId": "dev_session_1757939485670_1_general_fc2fd3ab",
+          "role": "primary",
+          "assignedAt": "2025-09-15T12:32:14.625Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-15T13:07:38.089Z",
+      "updated_at": "2025-09-15T13:07:38.089Z",
+      "archived_at": "2025-09-15T13:07:38.097Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-15T13:13:15.019Z",
+      "title": "Research: Create COMPREHENSIVE_FRONTEND_LAYOUT.md documentation",
+      "description": "Create comprehensive documentation of all frontend pages, buttons, features, and UI expectations in development/reports/COMPREHENSIVE_FRONTEND_LAYOUT.md. Document every page, every button, every feature, navigation structure, expected behaviors, visual standards, and interaction patterns. This documentation will guide the comprehensive Puppeteer testing to ensure complete coverage of all functionality. Include: 1) Page inventory with all routes 2) Button/interaction catalog per page 3) Feature descriptions and expected behaviors 4) Visual standards and UI expectations 5) Navigation flow and user journeys 6) Error states and edge cases 7) Professional appearance requirements. PREVENTS comprehensive testing until complete.",
+      "category": "research",
+      "priority": "high",
+      "id": "research_1757941995019_2b5145o20ll",
+      "assigned_agent": "dev_session_1757951966785_1_general_f9d58c83",
+      "started_at": "2025-09-15T16:00:27.843Z",
+      "claimed_by": "dev_session_1757951966785_1_general_f9d58c83",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1757951966785_1_general_f9d58c83",
+          "role": "primary",
+          "assignedAt": "2025-09-15T16:00:27.843Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-15T16:06:17.243Z",
+      "updated_at": "2025-09-15T16:06:17.243Z",
+      "archived_at": "2025-09-15T16:06:17.253Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-15T16:07:26.318Z",
+      "title": "CRITICAL ERROR: Fix React getSnapshot infinite loop errors in authentication pages",
+      "description": "Multiple authentication pages (LoginEnhanced, Register, ForgotPassword) have critical React error: Warning: The result of getSnapshot should be cached to avoid an infinite loop. This causes React Error Boundary cascade failures preventing page access. This violates ABSOLUTE PERFECTION standard and blocks comprehensive testing. IMMEDIATE FIX REQUIRED with higher priority than testing task.",
+      "category": "error",
+      "priority": "normal",
+      "id": "error_1757952446318_epvpu7flvww",
+      "assigned_agent": "dev_session_1757951966785_1_general_f9d58c83",
+      "started_at": "2025-09-15T16:08:49.027Z",
+      "claimed_by": "dev_session_1757951966785_1_general_f9d58c83",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1757951966785_1_general_f9d58c83",
+          "role": "primary",
+          "assignedAt": "2025-09-15T16:08:49.027Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-15T17:27:52.388Z",
+      "updated_at": "2025-09-15T17:27:52.388Z",
+      "archived_at": "2025-09-15T17:27:52.397Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-15T18:24:15.281Z",
+      "title": "Fix deprecated page.waitForTimeout usages",
+      "description": "Replace all deprecated page.waitForTimeout calls with proper alternatives in script and utility files. Create consistent wait helper functions.",
+      "category": "error",
+      "id": "error_1757960655281_gz27cpejmnt",
+      "assigned_agent": "dev_session_1757960619753_1_general_b572e21d",
+      "started_at": "2025-09-15T18:25:19.039Z",
+      "claimed_by": "dev_session_1757960619753_1_general_b572e21d",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1757960619753_1_general_b572e21d",
+          "role": "primary",
+          "assignedAt": "2025-09-15T18:25:19.039Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-15T18:50:47.532Z",
+      "updated_at": "2025-09-15T18:50:47.533Z",
+      "archived_at": "2025-09-15T18:50:47.542Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-15T16:08:14.154Z",
+      "title": "CRITICAL ERROR: Fix Puppeteer test script page.waitForTimeout errors",
+      "description": "Comprehensive Puppeteer test script has critical error: page.waitForTimeout is not a function causing all navigation tests to fail with NAVIGATION FAILED status. This prevents achievement of ABSOLUTE PERFECTION testing standard. Fix Puppeteer API usage to use proper timeout methods. IMMEDIATE FIX REQUIRED to enable comprehensive testing.",
+      "category": "error",
+      "priority": "normal",
+      "id": "error_1757952494154_nux7bfqmnvl",
+      "assigned_agent": "dev_session_1757960222072_1_general_a2d6a801",
+      "started_at": "2025-09-15T18:18:05.555Z",
+      "claimed_by": "dev_session_1757960222072_1_general_a2d6a801",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1757960222072_1_general_a2d6a801",
+          "role": "primary",
+          "assignedAt": "2025-09-15T18:18:05.555Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-15T18:52:32.801Z",
+      "updated_at": "2025-09-15T18:52:32.801Z",
+      "archived_at": "2025-09-15T18:52:32.810Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-15T22:59:36.343Z",
+      "title": "Fix critical ESLint violations in security.e2e-spec.ts",
+      "description": "Fix 14 ESLint violations in bytebotd security test file blocking build pipeline. Target: security.e2e-spec.ts with focus on unused variables, async patterns, type safety issues while preserving test functionality.",
+      "category": "error",
+      "id": "error_1757977176343_yus48p8zj4o",
+      "assigned_agent": "dev_session_1757977154476_1_general_f9bae6b5",
+      "started_at": "2025-09-15T23:00:08.287Z",
+      "claimed_by": "dev_session_1757977154476_1_general_f9bae6b5",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1757977154476_1_general_f9bae6b5",
+          "role": "primary",
+          "assignedAt": "2025-09-15T23:00:08.287Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-15T23:10:41.398Z",
+      "updated_at": "2025-09-15T23:10:41.398Z",
+      "archived_at": "2025-09-15T23:10:41.412Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-16T05:32:28.287Z",
+      "title": "Fix parsing errors in test files causing build failures",
+      "description": "Fix TypeScript syntax and parsing errors in test files causing build blockage",
+      "category": "error",
+      "id": "error_1758000748287_umyl2i4nlmd",
+      "assigned_agent": "dev_session_1758000622543_1_general_fc170207",
+      "started_at": "2025-09-16T05:44:02.176Z",
+      "claimed_by": "dev_session_1758000622543_1_general_fc170207",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758000622543_1_general_fc170207",
+          "role": "primary",
+          "assignedAt": "2025-09-16T05:44:02.176Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-16T06:14:56.900Z",
+      "updated_at": "2025-09-16T06:14:56.900Z",
+      "archived_at": "2025-09-16T06:14:56.913Z",
+      "archive_version": "2.0.0"
     }
   ],
-  "total_completed": 997,
+  "total_completed": 1009,
   "last_completion": "2025-09-13T18:24:43.914Z",
   "created_at": "2025-08-07T04:55:03.964Z",
-  "last_archived": "2025-09-15T11:19:19.247Z",
+  "last_archived": "2025-09-16T06:14:56.913Z",
   "metadata": {
-    "last_bulk_archive": "2025-09-15T11:19:19.247Z",
-    "bulk_archive_count": 6
+    "last_bulk_archive": "2025-09-15T11:46:01.425Z",
+    "bulk_archive_count": 8
   }
 }
