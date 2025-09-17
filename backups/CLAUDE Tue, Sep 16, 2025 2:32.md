@@ -371,6 +371,10 @@ echo "# Error: [Description]
 # Check logs before every task
 ls -la development/logs/
 tail -n 50 development/logs/*.log
+
+# Configure stop hook logging
+export LOG_DIR="/Users/jeremyparker/infinite-continue-stop-hook/development/logs"
+mkdir -p "$LOG_DIR"
 ```
 
 **PROTOCOLS:**
@@ -414,7 +418,9 @@ development/reports/task_1234567890_abcdef123/
 - **AVOID DUPLICATION**: Don't recreate research or analysis that already exists
 
 **REPORT READING WORKFLOW:**
-- Always scan `development/reports/` for related task reports before starting work
+- `ls -la development/reports/` - List existing reports
+- `find development/reports/ -name "*keyword*"` - Search related reports  
+- `cat development/reports/task_folder/main-report.md` - Read before implementation
 
 **CONTENT REQUIREMENTS:**
 - **TASK CONTEXT**: Link to original task ID and description
