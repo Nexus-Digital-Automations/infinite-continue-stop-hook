@@ -309,49 +309,58 @@ function createTodoJson(targetPath, projectInfo) {
     current_task_index: 0,
   };
 
-  // Add optional quality validation tasks - friendlier approach
+  // Add comprehensive validation tasks for professional development
   const reviewTasks = [
     {
-      title: 'Build Quality Validation',
-      criteria: 'Optional: Verify project builds successfully',
+      title: 'Comprehensive Build & Startup Validation',
+      criteria: 'MANDATORY: Verify project builds and starts successfully with log review',
       dependencies: [],
       important_files: [],
-      friendlyInstructions: `This is an optional quality check to ensure the project builds properly.
+      friendlyInstructions: `MANDATORY validation for professional development standards.
 
-✅ If builds are working fine, simply mark this task complete.
-❌ If there are build issues, you can:
-- Create specific error tasks to fix build problems
-- Or skip this validation if not applicable to current work
+Required validation steps:
+- Run 'npm run build' and verify zero errors/warnings
+- Run 'npm start' and verify application starts without errors  
+- Review startup logs for any errors, warnings, or issues
+- Verify all services start correctly and bind to expected ports
+- Test graceful shutdown if applicable
 
-This validation is designed to be helpful, not blocking.`,
+Create error tasks for any issues found - this is not optional.`,
     },
     {
-      title: 'Code Quality Check',
-      criteria: 'Optional: Check for any obvious code quality issues',
+      title: 'Feature Implementation Testing',
+      criteria: 'MANDATORY: Test all implemented features comprehensively',
       dependencies: [],
       important_files: [],
-      friendlyInstructions: `This is an optional code quality review.
+      friendlyInstructions: `MANDATORY feature testing for quality assurance.
 
-✅ If code looks good or linting is clean, mark complete.
-❌ If you notice issues, you can:
-- Create error tasks for critical linting problems
-- Or skip if focusing on feature development
+Required testing approach:
+- For web apps: Use Puppeteer to test every implemented feature
+- For APIs: Test all endpoints with realistic data via direct calls
+- For CLI tools: Test all commands and options with various inputs
+- Verify feature interactions work correctly
+- Test error handling and edge cases
+- Ensure performance is within acceptable limits
 
-This is meant to be a gentle quality reminder, not a strict requirement.`,
+This ensures features work as intended before completion.`,
     },
     {
-      title: 'Test Coverage Review',
-      criteria: 'Optional: Review test coverage when convenient',
+      title: 'Comprehensive System Validation',
+      criteria: 'MANDATORY: End-to-end validation before project completion',
       dependencies: [],
       important_files: [],
-      friendlyInstructions: `This is an optional test coverage check for when you have time.
+      friendlyInstructions: `MANDATORY final validation before authorizing stop.
 
-✅ If tests are reasonable or not the current priority, mark complete.
-❌ If you want to improve testing, you can:
-- Create test tasks for important modules
-- Or defer this until feature work is done
+Complete validation requirements:
+- All linting rules pass without errors or warnings
+- All existing tests pass (create test-update tasks if outdated)
+- Integration testing between all features
+- Security validation (no exposed secrets, proper input validation)
+- Performance validation (no memory leaks, acceptable response times)
+- Documentation completeness check
 
-Testing validation should support development, not interrupt it.`,
+Only when ALL validation passes and ALL user-approved features are complete 
+should stop authorization be considered.`,
     },
   ];
 
@@ -364,22 +373,24 @@ Testing validation should support development, not interrupt it.`,
 
 ${reviewTask.friendlyInstructions}
 
-## FLEXIBLE APPROACH
-This is designed to be a helpful quality check, not a blocker:
-- ✅ If everything looks reasonable, mark complete and continue with your work
-- 🔧 If you spot issues worth fixing, create appropriate error/feature tasks 
-- ⏭️  If not relevant to current work, feel free to skip or defer
+## PROFESSIONAL STANDARDS
+These validation tasks implement enterprise-level quality assurance:
+- ✅ Complete all validation steps before marking task complete
+- 🔧 Create error tasks for any issues found during validation
+- 📋 Document validation results as evidence of completion
 
-## OPTIONAL TASK CREATION
-Only create additional tasks if you identify genuine issues that would benefit the project:
-- Use appropriate categories (error, feature, enhancement, etc.)
-- Focus on high-impact improvements
-- Skip minor style issues unless they're causing real problems
+## MANDATORY VALIDATION CHECKLIST
+Required for professional development standards:
+- Build verification with zero errors/warnings
+- Startup health check with log review
+- Feature testing with realistic scenarios
+- Integration testing between components
+- Performance and security validation
 
-This validation should support your development workflow, not interrupt it.`,
-      task_type: 'test',
-      category: 'quality',
-      priority: 'low',
+This validation ensures professional-grade delivery quality.`,
+      task_type: 'validation',
+      category: 'validation',
+      priority: 'normal',
       status: 'pending',
       dependencies: reviewTask.dependencies,
       important_files: reviewTask.important_files,

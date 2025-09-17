@@ -2,6 +2,26 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
+      "status": "in_progress",
+      "created_at": "2025-09-17T07:46:33.796Z",
+      "title": "Fix TaskManager task ID generation bug - category/prefix mismatch",
+      "description": "Critical bug: Task with category \"subtask\" has \"error_\" prefix instead of \"subtask_\" prefix. Fix TaskManager API to ensure task IDs match their categories for proper priority ranking.",
+      "category": "error",
+      "id": "error_1758095193796_vcffivenzkl",
+      "assigned_agent": "dev_session_1758095175296_1_general_652672e8",
+      "started_at": "2025-09-17T07:46:50.139Z",
+      "claimed_by": "dev_session_1758095175296_1_general_652672e8",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758095175296_1_general_652672e8",
+          "role": "primary",
+          "assignedAt": "2025-09-17T07:46:50.139Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
+    },
+    {
       "id": "feature_1757781331183_9waer1qua",
       "title": "Implement comprehensive security controls and data validation for embedded subtasks system",
       "description": "As Security & Validation Agent #10, implement complete security framework including: 1) Input validation for all new endpoints (sanitization, type checking, boundary validation), 2) Authorization controls for subtask operations (agent-based permissions, role validation), 3) Audit trail for subtask modifications (logging all CRUD operations with timestamps and agent IDs), 4) Data sanitization for research inputs (preventing injection attacks, content filtering), 5) Security documentation and best practices guide. Focus on protecting sensitive research data and ensuring system integrity.",
@@ -2211,15 +2231,15 @@
       ]
     },
     {
-      "status": "in_progress",
+      "status": "pending",
       "created_at": "2025-09-17T07:08:31.109Z",
       "title": "Make CLAUDE.md more concise per user specifications",
       "description": "Remove only basic Unix command examples (report reading and log directory setup) while keeping git examples and all unique information. Ensure log directory requirements remain clear.",
       "category": "feature",
-      "id": "feature_1758092911109_6rf5evgc4rd",
-      "assigned_agent": "dev_session_1758092894218_1_general_320c1bde",
-      "started_at": "2025-09-17T07:09:06.437Z",
-      "claimed_by": "dev_session_1758092894218_1_general_320c1bde",
+      "id": "test_1758095665828_b269iqjss",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "dev_session_1758092894218_1_general_320c1bde",
@@ -2227,26 +2247,12 @@
           "assignedAt": "2025-09-17T07:09:06.437Z",
           "reassignReason": null,
           "claimPriority": "normal"
-        }
-      ]
-    },
-    {
-      "status": "in_progress",
-      "created_at": "2025-09-17T07:46:33.796Z",
-      "title": "Fix TaskManager task ID generation bug - category/prefix mismatch",
-      "description": "Critical bug: Task with category \"subtask\" has \"error_\" prefix instead of \"subtask_\" prefix. Fix TaskManager API to ensure task IDs match their categories for proper priority ranking.",
-      "category": "error",
-      "id": "error_1758095193796_vcffivenzkl",
-      "assigned_agent": "dev_session_1758095175296_1_general_652672e8",
-      "started_at": "2025-09-17T07:46:50.139Z",
-      "claimed_by": "dev_session_1758095175296_1_general_652672e8",
-      "agent_assignment_history": [
+        },
         {
-          "agentId": "dev_session_1758095175296_1_general_652672e8",
-          "role": "primary",
-          "assignedAt": "2025-09-17T07:46:50.139Z",
-          "reassignReason": null,
-          "claimPriority": "normal"
+          "agent": "dev_session_1758092894218_1_general_320c1bde",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-17T07:54:25.817Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
         }
       ]
     },
@@ -2256,7 +2262,15 @@
       "title": "Test subtask with correct command",
       "description": "Testing proper routing",
       "category": "subtask",
-      "id": "subtask_1758095548674_vept664ogpe"
+      "id": "test_1758095665828_ea6da7uk1"
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-17T08:06:28.465Z",
+      "title": "Enhance CLAUDE.md validation with build/startup/feature testing and stop authorization",
+      "description": "Add comprehensive build validation, startup health checks, feature testing protocols, and stop authorization criteria to CLAUDE.md while keeping it concise",
+      "category": "feature",
+      "id": "feature_1758096388464_7eiy6isxcao"
     }
   ],
   "current_mode": "DEVELOPMENT",
@@ -2266,27 +2280,6 @@
   "strikes_completed_last_run": false,
   "last_hook_activation": 1757094794402,
   "agents": {
-    "dev_session_1758092894218_1_general_320c1bde": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-17T07:08:14.219Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-17T07:08:14.219Z",
-      "sessionId": null,
-      "metadata": {}
-    },
     "dev_session_1758095175296_1_general_652672e8": {
       "name": "undefined Agent",
       "role": "development",
@@ -2305,6 +2298,27 @@
       "workload": 0,
       "maxConcurrentTasks": 5,
       "createdAt": "2025-09-17T07:46:15.296Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758096370463_1_general_2ac97482": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-17T08:06:10.464Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-17T08:06:10.464Z",
       "sessionId": null,
       "metadata": {}
     }

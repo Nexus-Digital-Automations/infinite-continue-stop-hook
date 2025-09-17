@@ -550,7 +550,14 @@ development/reports/task_1234567890_abcdef123/
   - [ ] **LINT**: `npm run lint` (zero tolerance - all violations fixed)
   - [ ] **BUILD**: `npm run build` (complete without errors/warnings)
   - [ ] **START**: `npm start` (application starts, all services functional)
+  - [ ] **STARTUP LOGS**: Review startup logs for errors/warnings
   - [ ] **TEST**: `npm test` (all existing tests pass; if outdated, create test-update task)
+
+- [ ] **COMPREHENSIVE FEATURE VALIDATION**:
+  - [ ] **Feature Testing**: Test all implemented features via Puppeteer (web) or API calls (backend)
+  - [ ] **Integration Testing**: Verify feature interactions work correctly
+  - [ ] **Error Handling**: Test edge cases and error scenarios
+  - [ ] **Performance Check**: Ensure features perform within acceptable limits
 
 - [ ] **GIT WORKFLOW**:
   - [ ] **STAGE**: `git add .`
@@ -563,6 +570,10 @@ development/reports/task_1234567890_abcdef123/
   - [ ] **FORMAT COMPLETION**: Use proper JSON - `'"Task completed successfully"'` or `'{"message": "Status", "evidence": "Results"}'`
   - [ ] Avoid special characters (!, ✅, emojis) | Use single quotes | No unquoted strings
   - [ ] **MARK COMPLETE**: Update status via TaskManager API with evidence
+
+- [ ] **STOP AUTHORIZATION** (only when ALL user-approved features complete):
+  - [ ] All feature tasks completed | All error tasks resolved | All validation passed
+  - [ ] **AUTHORIZE STOP**: `timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.authorizeStopHook("AGENT_ID", "All user-approved features completed and validated").then(result => console.log(JSON.stringify(result, null, 2)));'`
 
 ### 📋 CRITICAL ENFORCEMENT RULES
 - [ ] **EVIDENCE-BASED COMPLETION**: Include validation evidence
