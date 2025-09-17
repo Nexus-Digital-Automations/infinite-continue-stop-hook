@@ -2229,6 +2229,34 @@
           "claimPriority": "normal"
         }
       ]
+    },
+    {
+      "status": "in_progress",
+      "created_at": "2025-09-17T07:46:33.796Z",
+      "title": "Fix TaskManager task ID generation bug - category/prefix mismatch",
+      "description": "Critical bug: Task with category \"subtask\" has \"error_\" prefix instead of \"subtask_\" prefix. Fix TaskManager API to ensure task IDs match their categories for proper priority ranking.",
+      "category": "error",
+      "id": "error_1758095193796_vcffivenzkl",
+      "assigned_agent": "dev_session_1758095175296_1_general_652672e8",
+      "started_at": "2025-09-17T07:46:50.139Z",
+      "claimed_by": "dev_session_1758095175296_1_general_652672e8",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758095175296_1_general_652672e8",
+          "role": "primary",
+          "assignedAt": "2025-09-17T07:46:50.139Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-17T07:52:28.675Z",
+      "title": "Test subtask with correct command",
+      "description": "Testing proper routing",
+      "category": "subtask",
+      "id": "subtask_1758095548674_vept664ogpe"
     }
   ],
   "current_mode": "DEVELOPMENT",
@@ -2256,6 +2284,27 @@
       "workload": 0,
       "maxConcurrentTasks": 5,
       "createdAt": "2025-09-17T07:08:14.219Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758095175296_1_general_652672e8": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-17T07:46:15.296Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-17T07:46:15.296Z",
       "sessionId": null,
       "metadata": {}
     }
