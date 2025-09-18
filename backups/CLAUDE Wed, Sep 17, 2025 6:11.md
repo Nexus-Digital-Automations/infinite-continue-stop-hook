@@ -13,11 +13,7 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 **MANDATORY SEQUENCE FOR ALL USER REQUESTS:**
 1. **INITIALIZE** - `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init`
 2. **CREATE TASK** - `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"error|feature|subtask|test"}'`
-3. **AGENT PLANNING** - Think about task complexity and communicate approach to user
-   - **SIMPLE TASKS**: "Handling this solo" for straightforward single-component work
-   - **COMPLEX TASKS**: "Using X concurrent agents" (2-10) for multi-component/complex work
-   - **DECISION CRITERIA**: Multi-file changes, research + implementation, testing + docs = concurrent agents
-4. **EXECUTE** - Begin implementation immediately
+3. **EXECUTE** - Begin implementation immediately
 
 **ZERO DELAY MANDATE:**
 - **❌ NO**: Analysis first, "let me check" responses, preliminary questions
@@ -116,7 +112,6 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 
 **RULES:**
 - **❌ NEVER**: Create feature tasks without explicit user request, expand scope beyond description, implement "suggested" features, add "convenient" improvements
-- **❌ NEVER**: Create error tasks or test tasks for outdated/deprecated materials - remove them instead
 - **✅ ONLY**: Implement features explicitly requested by user or existing in TODO.json with "pending" or "approved" status
 - **✅ FOCUS**: Complete existing TODO.json tasks before considering new work
 
@@ -136,7 +131,6 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 ### CODE QUALITY STANDARDS
 **COMPREHENSIVE QUALITY REQUIREMENTS:**
 - **DOCUMENTATION**: Document every function, class, module, decision
-- **COMPREHENSIVE COMMENTS**: Inline comments explaining logic, decisions, edge cases, and complex operations
 - **LOGGING**: Function entry/exit, parameters, returns, errors, timing, state changes, decisions - CRITICAL for maintainability
 - **PERFORMANCE METRICS**: Execution timing and bottleneck identification
 - **API DOCUMENTATION**: Complete interfaces with usage examples
@@ -214,7 +208,6 @@ function processData(userId, data) {
 
 **REQUIREMENTS:**
 - **EMERGENCY PROTOCOL**: Instant halt → Create linter-error task → Fix all violations → Verify clean → Resume
-- **OUTDATED MATERIAL EXCEPTION**: If errors in outdated/deprecated code → Remove code entirely, no error tasks
 - **WORKFLOWS**: After every file edit + before task completion
 - **NO SHORTCUTS**: Never hide, suppress, or bypass - fix actual problems, admit inability if needed
 
@@ -323,7 +316,6 @@ git status                                   # Verify clean/up-to-date
 5. **SCAN REPORTS** in `development/reports/`
 6. **ADD TO TASKS** relevant reports as important_files in TODO.json
 7. **LEVERAGE RESEARCH** before implementing
-8. **CODEBASE SCAN**: Identify task-relevant files throughout entire project codebase
 
 **DEVELOPMENT SCANNING:**
 - `find development/ -type f -name "*.md" | head -50` - List all documentation
@@ -331,11 +323,6 @@ git status                                   # Verify clean/up-to-date
 - **REQUIRED FOLDERS**: essentials/, errors/, logs/, reports/
 - **READ EVERYTHING** in essentials/ - zero exceptions
 - **CHECK LOGS** in logs/ for system behavior patterns and issues
-
-**CODEBASE SCANNING:**
-- `find . -name "*.js" -o -name "*.ts" -o -name "*.py" -o -name "*.md" | grep -v node_modules | head -50` - Find relevant files
-- `find . -type f -name "*[task-keyword]*" | grep -v node_modules` - Search for task-specific files
-- **TASK-RELEVANT PATTERNS**: Components, services, utilities, configs, tests related to current task
 
 **RESEARCH TASK CREATION:** Required for external API integrations, database schema changes, auth/security systems, complex architectural decisions
 
@@ -452,25 +439,18 @@ development/reports/task_1234567890_abcdef123/
 - **CLEAN UNUSED FILES**: Remove outdated or duplicate reports during maintenance
 
 ### ROOT FOLDER CLEANLINESS
-**MANDATORY: MAINTAIN CLEAN AND ORGANIZED PROJECT ROOT**
-
-**ABSOLUTE REQUIREMENTS:**
-- **ZERO TOLERANCE**: No misplaced files in project root
-- **CONTINUOUS CLEANUP**: Check and organize root directory before every task
-- **PROACTIVE ORGANIZATION**: Move files to appropriate development/ subdirectories immediately
+**MAINTAIN CLEAN PROJECT ROOT**
 
 **FILE ORGANIZATION RULES:**
 - **REPORTS**: All reports belong in `development/reports/`
 - **LOGS**: ALL logs must go to `development/logs/`
 - **SCRIPTS**: Organize utility scripts in `development/temp-scripts/`
-- **DOCUMENTATION**: Keep only README.md and CLAUDE.md in root
 
-**MANDATORY CLEAN-UP PROCEDURES:**
+**CLEAN-UP PROCEDURES:**
 - `find . -maxdepth 1 -name "*.md" -not -name "README.md" -not -name "CLAUDE.md"` - Check misplaced files
 - `mv analysis-*.md development/reports/` - Move docs to reports
 - `mv *.log development/logs/` - Move ALL logs to development/logs
 - `mv temp-*.js development/temp-scripts/` - Move scripts to temp
-- **RUN BEFORE EVERY TASK**: Verify root cleanliness as first step
 
 ### PROJECT-SPECIFIC TASK REQUIREMENTS
 **CREATE AND MAINTAIN PROJECT TASK REQUIREMENTS FILE**
@@ -540,8 +520,6 @@ development/reports/task_1234567890_abcdef123/
 **FOLLOW EVERY STEP - NO SHORTCUTS**
 
 ### 📋 PHASE 1: PREP
-- [ ] **ROOT CLEANUP**: Verify clean project root - move misplaced files to development/ subdirectories
-- [ ] **AGENT PLANNING**: Communicate approach to user ("Handling solo" or "Using X concurrent agents")
 - [ ] **INITIALIZE**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init` (or reinitialize with explicit agent ID)
 - [ ] **CREATE TASK**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"type"}'`
 - [ ] **DEVELOPMENT SCAN**: Check ALL development/ folders and files
@@ -550,15 +528,11 @@ development/reports/task_1234567890_abcdef123/
   - [ ] **LOGS REVIEW**: Check `development/logs/` for recent system behavior and patterns
   - [ ] **REPORTS SCAN**: Review `development/reports/`
   - [ ] **COMPLETE INVENTORY**: `find development/ -type f -name "*.md"` - ensure nothing missed
-- [ ] **CODEBASE SCAN**: Search entire project for task-relevant files
-  - [ ] **FILE DISCOVERY**: `find . -name "*.js" -o -name "*.ts" -o -name "*.py" -o -name "*.md" | grep -v node_modules`
-  - [ ] **TASK-SPECIFIC SEARCH**: Find files matching task keywords and patterns
 - [ ] **CLAIM TASK**: Take ownership via API
 
 ### 📋 PHASE 2: EXECUTE
 - [ ] **COMPLETE IMPLEMENTATION** with:
   - [ ] Comprehensive documentation (functions, classes, modules)
-  - [ ] Comprehensive comments (inline logic, decisions, edge cases, complex operations)
   - [ ] Comprehensive logging (calls, parameters, returns, errors, timing) - CRITICAL for maintainability
   - [ ] Performance metrics and bottleneck identification
   - [ ] API documentation with usage examples
@@ -566,8 +540,7 @@ development/reports/task_1234567890_abcdef123/
 
 - [ ] **POST-EDIT LINTER CHECK** after EVERY file edit:
   - [ ] **JS/TS**: `eslint [file]` | **Python**: `ruff check [file]` | **Go**: `golint [file]` | **Rust**: `clippy [file]`
-  - [ ] **IF errors in outdated code** → Remove code entirely, no error tasks
-  - [ ] **IF errors in current code** → Create linter-error task INSTANTLY and fix
+  - [ ] **IF errors** → Create linter-error task INSTANTLY and fix
   - [ ] **IF clean** → Continue
 
 - [ ] **POST-EDIT FEEDBACK SCAN** after file editing operations:

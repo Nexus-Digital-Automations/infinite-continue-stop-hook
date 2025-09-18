@@ -323,7 +323,6 @@ git status                                   # Verify clean/up-to-date
 5. **SCAN REPORTS** in `development/reports/`
 6. **ADD TO TASKS** relevant reports as important_files in TODO.json
 7. **LEVERAGE RESEARCH** before implementing
-8. **CODEBASE SCAN**: Identify task-relevant files throughout entire project codebase
 
 **DEVELOPMENT SCANNING:**
 - `find development/ -type f -name "*.md" | head -50` - List all documentation
@@ -331,11 +330,6 @@ git status                                   # Verify clean/up-to-date
 - **REQUIRED FOLDERS**: essentials/, errors/, logs/, reports/
 - **READ EVERYTHING** in essentials/ - zero exceptions
 - **CHECK LOGS** in logs/ for system behavior patterns and issues
-
-**CODEBASE SCANNING:**
-- `find . -name "*.js" -o -name "*.ts" -o -name "*.py" -o -name "*.md" | grep -v node_modules | head -50` - Find relevant files
-- `find . -type f -name "*[task-keyword]*" | grep -v node_modules` - Search for task-specific files
-- **TASK-RELEVANT PATTERNS**: Components, services, utilities, configs, tests related to current task
 
 **RESEARCH TASK CREATION:** Required for external API integrations, database schema changes, auth/security systems, complex architectural decisions
 
@@ -550,9 +544,6 @@ development/reports/task_1234567890_abcdef123/
   - [ ] **LOGS REVIEW**: Check `development/logs/` for recent system behavior and patterns
   - [ ] **REPORTS SCAN**: Review `development/reports/`
   - [ ] **COMPLETE INVENTORY**: `find development/ -type f -name "*.md"` - ensure nothing missed
-- [ ] **CODEBASE SCAN**: Search entire project for task-relevant files
-  - [ ] **FILE DISCOVERY**: `find . -name "*.js" -o -name "*.ts" -o -name "*.py" -o -name "*.md" | grep -v node_modules`
-  - [ ] **TASK-SPECIFIC SEARCH**: Find files matching task keywords and patterns
 - [ ] **CLAIM TASK**: Take ownership via API
 
 ### 📋 PHASE 2: EXECUTE

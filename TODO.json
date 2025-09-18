@@ -2,15 +2,15 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2025-09-17T07:46:33.796Z",
       "title": "Fix TaskManager task ID generation bug - category/prefix mismatch",
       "description": "Critical bug: Task with category \"subtask\" has \"error_\" prefix instead of \"subtask_\" prefix. Fix TaskManager API to ensure task IDs match their categories for proper priority ranking.",
       "category": "error",
       "id": "error_1758095193796_vcffivenzkl",
-      "assigned_agent": "dev_session_1758095175296_1_general_652672e8",
-      "started_at": "2025-09-17T07:46:50.139Z",
-      "claimed_by": "dev_session_1758095175296_1_general_652672e8",
+      "assigned_agent": null,
+      "started_at": "2025-09-17T08:11:17.144Z",
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "dev_session_1758095175296_1_general_652672e8",
@@ -18,8 +18,57 @@
           "assignedAt": "2025-09-17T07:46:50.139Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1758095175296_1_general_652672e8",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-17T08:10:23.657Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agentId": "dev_session_1758096370463_1_general_2ac97482",
+          "role": "primary",
+          "assignedAt": "2025-09-17T08:11:17.144Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1758096370463_1_general_2ac97482",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-17T21:05:50.531Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
         }
-      ]
+      ],
+      "completed_at": "2025-09-17T08:12:42.812Z",
+      "updated_at": "2025-09-17T08:12:42.812Z"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-17T12:15:27.605Z",
+      "title": "Fix TypeScript any type violations in orchestrator service files",
+      "description": "Fix all TypeScript any type violations in orchestrator service files including parlant-orchestrator.service.ts (50+ warnings), performance-monitoring.service.ts (10+ warnings), and other service files. Replace any types with proper TypeScript types using existing type definitions.",
+      "category": "error",
+      "id": "error_1758111327605_7ly6s05ooo5",
+      "assigned_agent": null,
+      "started_at": "2025-09-17T12:15:57.560Z",
+      "claimed_by": null,
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758111307273_1_general_35e94d2d",
+          "role": "primary",
+          "assignedAt": "2025-09-17T12:15:57.560Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1758111307273_1_general_35e94d2d",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-17T21:05:50.531Z",
+          "reason": "Agent became stale (inactive >15 minutes)"
+        }
+      ],
+      "completed_at": "2025-09-17T12:26:41.396Z",
+      "updated_at": "2025-09-17T12:26:41.396Z"
     },
     {
       "id": "feature_1757781331183_9waer1qua",
@@ -1019,6 +1068,14 @@
           "reason": "Agent became stale (inactive >15 minutes)"
         }
       ]
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-17T08:15:18.639Z",
+      "title": "Add standardized enum standards and principles to CLAUDE.md naming conventions",
+      "description": "Add comprehensive enum naming standards, principles, and best practices to CLAUDE.md standardized naming conventions section",
+      "category": "feature",
+      "id": "feature_1758096918639_jelqhusb95"
     },
     {
       "id": "test_1757781551850_k12iufq25",
@@ -2227,6 +2284,19 @@
           "action": "auto_unassign_stale",
           "timestamp": "2025-09-16T16:48:04.491Z",
           "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agentId": "dev_session_1758140445874_1_general_5f92f883",
+          "role": "primary",
+          "assignedAt": "2025-09-17T20:22:49.776Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_stale",
+          "timestamp": "2025-09-17T21:05:50.531Z",
+          "reason": "Task stale for 43 minutes"
         }
       ]
     },
@@ -2266,11 +2336,31 @@
     },
     {
       "status": "pending",
-      "created_at": "2025-09-17T08:06:28.465Z",
-      "title": "Enhance CLAUDE.md validation with build/startup/feature testing and stop authorization",
-      "description": "Add comprehensive build validation, startup health checks, feature testing protocols, and stop authorization criteria to CLAUDE.md while keeping it concise",
-      "category": "feature",
-      "id": "feature_1758096388464_7eiy6isxcao"
+      "created_at": "2025-09-17T08:12:02.197Z",
+      "title": "Test subtask with correct command",
+      "description": "Testing proper routing",
+      "category": "subtask",
+      "id": "test_1758143150536_7xjtdyrbt"
+    },
+    {
+      "status": "in_progress",
+      "created_at": "2025-09-18T05:38:52.601Z",
+      "title": "Fix stale agent task unassignment error",
+      "description": "Fix system error where stale agents are not being properly unassigned from in_progress tasks, causing task queue management issues",
+      "category": "error",
+      "id": "error_1758173932601_1cee2xzyggg",
+      "assigned_agent": "dev_session_1758173915497_1_general_517676b7",
+      "started_at": "2025-09-18T05:39:14.302Z",
+      "claimed_by": "dev_session_1758173915497_1_general_517676b7",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758173915497_1_general_517676b7",
+          "role": "primary",
+          "assignedAt": "2025-09-18T05:39:14.302Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
     }
   ],
   "current_mode": "DEVELOPMENT",
@@ -2280,13 +2370,13 @@
   "strikes_completed_last_run": false,
   "last_hook_activation": 1757094794402,
   "agents": {
-    "dev_session_1758095175296_1_general_652672e8": {
+    "dev_session_1758173915497_1_general_517676b7": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-17T07:46:15.296Z",
+      "lastHeartbeat": "2025-09-18T05:38:35.498Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2297,28 +2387,7 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-17T07:46:15.296Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758096370463_1_general_2ac97482": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-17T08:06:10.464Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-17T08:06:10.464Z",
+      "createdAt": "2025-09-18T05:38:35.498Z",
       "sessionId": null,
       "metadata": {}
     }
