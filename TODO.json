@@ -2300,6 +2300,14 @@
       "description": "Modify the LINTER ERROR PROTOCOL section to deploy concurrent agents equal to the number of error categories (not total number of errors) with max 10 agents",
       "category": "feature",
       "id": "feature_1758207904348_qw2lgvzw4g"
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-18T17:00:53.111Z",
+      "title": "Enhance CLAUDE.md with self-learning agent capabilities and lessons storage",
+      "description": "Add comprehensive but concise self-learning emphasis and development directory lessons management to CLAUDE.md",
+      "category": "feature",
+      "id": "feature_1758214853111_6pfx1sd5xg3"
     }
   ],
   "current_mode": "DEVELOPMENT",
@@ -2439,6 +2447,32 @@
       "createdAt": "2025-09-18T15:01:27.290Z",
       "sessionId": null,
       "metadata": {}
+    },
+    "dev_session_1758214590204_1_general_c9c04fc7": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-18T17:02:19.098Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-18T16:56:30.204Z",
+      "sessionId": null,
+      "metadata": {
+        "renewedAt": "2025-09-18T17:02:19.098Z",
+        "renewalReason": "Agent reinitialization requested"
+      },
+      "lastRenewal": "2025-09-18T17:02:19.098Z",
+      "renewalCount": 1
     }
   },
   "features": [
