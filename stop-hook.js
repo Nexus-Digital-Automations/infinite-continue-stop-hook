@@ -74,6 +74,164 @@ function checkStopAllowed(workingDir = process.cwd()) {
 }
 
 /**
+ * Clean up stale agents in a single TODO.json file
+ * @param {string} projectPath - Path to project directory containing TODO.json
+ * @param {Object} logger - Logger instance for output
+ * @returns {Object} Cleanup results
+ */
+async function cleanupStaleAgentsInProject(projectPath, logger) {
+  const todoPath = path.join(projectPath, 'TODO.json');
+  
+  // Check if TODO.json exists in this project
+  if (!fs.existsSync(todoPath)) {
+    logger.addFlow(`No TODO.json found in ${projectPath} - skipping`);
+    return { agentsRemoved: 0, tasksUnassigned: 0, projectPath };
+  }
+
+  let todoData;
+  try {
+    todoData = JSON.parse(fs.readFileSync(todoPath, 'utf8'));
+  } catch (error) {
+    logger.addFlow(`Failed to read TODO.json in ${projectPath}: ${error.message}`);
+    return { agentsRemoved: 0, tasksUnassigned: 0, projectPath, error: error.message };
+  }
+
+  // Get all agents from TODO.json
+  const allAgents = Object.keys(todoData.agents || {});
+  if (allAgents.length === 0) {
+    logger.addFlow(`No agents found in ${projectPath} - skipping`);
+    return { agentsRemoved: 0, tasksUnassigned: 0, projectPath };
+  }
+
+  // Clean up stale agents (older than 30 minutes) and identify active ones
+  const staleAgentTimeout = 1800000; // 30 minutes
+  const staleAgents = [];
+
+  for (const agentId of allAgents) {
+    const agent = todoData.agents[agentId];
+    // Handle both lastHeartbeat (camelCase) and last_heartbeat (snake_case) formats
+    const lastHeartbeat = agent.lastHeartbeat || agent.last_heartbeat;
+    const heartbeatTime = lastHeartbeat ? new Date(lastHeartbeat).getTime() : 0;
+    const timeSinceHeartbeat = Date.now() - heartbeatTime;
+    const isActive = timeSinceHeartbeat < staleAgentTimeout;
+
+    if (!isActive) {
+      staleAgents.push(agentId);
+    }
+  }
+
+  // Remove stale agents from the system AND unassign them from tasks
+  let agentsRemoved = 0;
+  let tasksUnassigned = 0;
+
+  for (const staleAgentId of staleAgents) {
+    delete todoData.agents[staleAgentId];
+    agentsRemoved++;
+    logger.addFlow(`Removed stale agent from ${projectPath}: ${staleAgentId}`);
+
+    // Find all tasks assigned to this stale agent and unassign them
+    for (const task of todoData.tasks || []) {
+      // Skip null/undefined tasks
+      if (!task || typeof task !== 'object') {
+        continue;
+      }
+
+      if (
+        task.assigned_agent === staleAgentId ||
+        task.claimed_by === staleAgentId
+      ) {
+        // Unassign the stale agent from the task
+        task.assigned_agent = null;
+        task.claimed_by = null;
+
+        // Reset task to pending if it was in_progress
+        if (task.status === 'in_progress') {
+          task.status = 'pending';
+          task.started_at = null;
+        }
+
+        // Add assignment history entry
+        if (!task.agent_assignment_history) {
+          task.agent_assignment_history = [];
+        }
+        task.agent_assignment_history.push({
+          agent: staleAgentId,
+          action: 'auto_unassign_stale',
+          timestamp: new Date().toISOString(),
+          reason: 'Agent became stale (inactive >30 minutes)',
+        });
+
+        tasksUnassigned++;
+        logger.addFlow(
+          `Unassigned task in ${projectPath}: "${task.title}" from stale agent: ${staleAgentId}`,
+        );
+      }
+    }
+  }
+
+  // Write back if any changes were made
+  if (agentsRemoved > 0 || tasksUnassigned > 0) {
+    try {
+      fs.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
+      logger.addFlow(`Updated ${projectPath}/TODO.json with cleanup results`);
+    } catch (error) {
+      logger.addFlow(`Failed to write TODO.json in ${projectPath}: ${error.message}`);
+      return { agentsRemoved: 0, tasksUnassigned: 0, projectPath, error: error.message };
+    }
+  }
+
+  return { agentsRemoved, tasksUnassigned, projectPath };
+}
+
+/**
+ * Clean up stale agents across all known projects
+ * @param {Object} logger - Logger instance for output
+ * @returns {Object} Overall cleanup results
+ */
+async function cleanupStaleAgentsAcrossProjects(logger) {
+  // Define known project paths to check for stale agents
+  const knownProjects = [
+    '/Users/jeremyparker/Desktop/Claude Coding Projects/AIgent/bytebot',
+    '/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook',
+    // Add more project paths as needed
+  ];
+
+  const results = {
+    totalAgentsRemoved: 0,
+    totalTasksUnassigned: 0,
+    projectResults: [],
+    errors: []
+  };
+
+  logger.addFlow(`🧹 Starting multi-project stale agent cleanup across ${knownProjects.length} projects...`);
+
+  for (const projectPath of knownProjects) {
+    try {
+      if (fs.existsSync(projectPath)) {
+        const result = await cleanupStaleAgentsInProject(projectPath, logger);
+        results.projectResults.push(result);
+        results.totalAgentsRemoved += result.agentsRemoved;
+        results.totalTasksUnassigned += result.tasksUnassigned;
+        
+        if (result.error) {
+          results.errors.push(`${projectPath}: ${result.error}`);
+        }
+      } else {
+        logger.addFlow(`Project path does not exist: ${projectPath} - skipping`);
+      }
+    } catch (error) {
+      const errorMsg = `Failed to process ${projectPath}: ${error.message}`;
+      logger.addFlow(errorMsg);
+      results.errors.push(errorMsg);
+    }
+  }
+
+  logger.addFlow(`🧹 Multi-project cleanup complete: ${results.totalAgentsRemoved} agents removed, ${results.totalTasksUnassigned} tasks unassigned`);
+  
+  return results;
+}
+
+/**
  * Automatically reclassify test errors and sort tasks according to CLAUDE.md priority rules
  */
 async function autoSortTasksByPriority(taskManager) {
@@ -351,7 +509,7 @@ If validation fails → Create linter-error task IMMEDIATELY, fix before complet
 
 📊 **PROJECT STATUS:** ${taskStatus.pending} pending, ${taskStatus.in_progress} in progress, ${taskStatus.completed} completed
 🔗 **FEATURE SYSTEM:** Complete features in numerical order (Feature 1 → 2 → 3...), subtasks sequentially within features
-⏰ **AUTOMATIC CLEANUP:** Stale tasks (>15 min) reset to pending, stale agents removed automatically
+⏰ **AUTOMATIC CLEANUP:** Stale tasks (>30 min) reset to pending, stale agents removed automatically
 🛑 **STOP AUTHORIZATION:** Only via API endpoint - \`tm.authorizeStopHook(agentId, reason)\` for single-use stop permission
 
 ⚠️ **BASH ESCAPING:** Use single quotes for node -e commands: \`node -e 'code'\` not \`node -e "code"\`
@@ -464,8 +622,43 @@ If you want to enable task management for this project:
     const allAgents = Object.keys(todoData.agents || {});
     logger.addFlow(`Found ${allAgents.length} total agents in TODO.json`);
 
-    // Clean up stale agents (older than 15 minutes) and identify active ones
-    const staleAgentTimeout = 900000; // 15 minutes
+    // ========================================================================
+    // MULTI-PROJECT STALE AGENT CLEANUP
+    // ========================================================================
+    
+    // Clean up stale agents across all known projects first
+    try {
+      const multiProjectResults = await cleanupStaleAgentsAcrossProjects(logger);
+      
+      if (multiProjectResults.totalAgentsRemoved > 0) {
+        logger.addFlow(
+          `✅ Multi-project cleanup: ${multiProjectResults.totalAgentsRemoved} stale agents removed, ${multiProjectResults.totalTasksUnassigned} tasks unassigned across ${multiProjectResults.projectResults.length} projects`
+        );
+        
+        // eslint-disable-next-line no-console -- hook script status reporting to user
+        console.error(`
+🧹 **MULTI-PROJECT STALE AGENT CLEANUP COMPLETED:**
+- Projects processed: ${multiProjectResults.projectResults.length}
+- Total stale agents removed: ${multiProjectResults.totalAgentsRemoved}
+- Total tasks unassigned: ${multiProjectResults.totalTasksUnassigned}
+- Errors: ${multiProjectResults.errors.length > 0 ? multiProjectResults.errors.join(', ') : 'None'}
+`);
+      }
+      
+      if (multiProjectResults.errors.length > 0) {
+        logger.addFlow(`Multi-project cleanup errors: ${multiProjectResults.errors.join('; ')}`);
+      }
+    } catch (multiProjectError) {
+      logger.addFlow(`Multi-project cleanup failed: ${multiProjectError.message}`);
+      // Continue with local cleanup even if multi-project cleanup fails
+    }
+
+    // ========================================================================
+    // LOCAL PROJECT STALE AGENT CLEANUP (for current project specifically)
+    // ========================================================================
+
+    // Clean up stale agents (older than 30 minutes) and identify active ones
+    const staleAgentTimeout = 1800000; // 30 minutes
     const activeAgents = [];
     const staleAgents = [];
 
@@ -530,7 +723,7 @@ If you want to enable task management for this project:
             agent: staleAgentId,
             action: 'auto_unassign_stale',
             timestamp: new Date().toISOString(),
-            reason: 'Agent became stale (inactive >15 minutes)',
+            reason: 'Agent became stale (inactive >30 minutes)',
           });
 
           tasksUnassigned++;
@@ -541,8 +734,8 @@ If you want to enable task management for this project:
       }
     }
 
-    // Check for stale in-progress tasks (stuck for > 15 minutes) and reset them
-    const staleTaskTimeout = 900000; // 15 minutes
+    // Check for stale in-progress tasks (stuck for > 30 minutes) and reset them
+    const staleTaskTimeout = 1800000; // 30 minutes
     let staleTasksReset = 0;
 
     for (const task of todoData.tasks) {
@@ -683,7 +876,7 @@ Stale Agents Removed: ${agentsRemoved}
 Stale Tasks Reset: ${staleTasksReset}
 
 ✅ **AUTOMATIC CLEANUP COMPLETED:**
-- Removed ${agentsRemoved} stale agents (inactive >15 minutes)
+- Removed ${agentsRemoved} stale agents (inactive >30 minutes)
 - Unassigned ${tasksUnassigned} tasks from stale agents
 - Reset ${staleTasksReset} stuck tasks back to pending status
 - Project is now ready for fresh agent initialization
