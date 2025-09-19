@@ -37,8 +37,6 @@
  */
 
 const path = require('path');
-const http = require('http');
-const crypto = require('crypto');
 
 // Parse project root from --project-root flag or use current directory
 const args = process.argv.slice(2);
@@ -205,12 +203,12 @@ class TaskManagerAPI {
   withTimeout(promise, timeoutMs = this.timeout) {
     return Promise.race([
       promise,
-      new Promise((_, reject) =>
+      new Promise((_, reject) => {
         setTimeout(
           () => reject(new Error(`Operation timed out after ${timeoutMs}ms`)),
           timeoutMs,
-        ),
-      ),
+        );
+      }),
     ]);
   }
 
@@ -890,7 +888,7 @@ class TaskManagerAPI {
     this.webSocketClients.forEach((client) => {
       try {
         client.send(message);
-      } catch (error) {
+      } catch (_error) {
         // Remove failed clients
         this.webSocketClients.delete(client);
       }

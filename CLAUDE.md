@@ -163,6 +163,12 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 - **PERFORMANCE**: Execution timing and bottleneck identification
 - **MAINTENANCE**: Keep comments/logs current with code changes
 
+**ENTERPRISE STANDARDS:**
+- **CODE REVIEW**: Mandatory peer review via pull requests with automated checks
+- **TESTING**: Unit tests (>80% coverage), integration tests, E2E for critical paths
+- **SECURITY**: SAST scanning, dependency checks, no hardcoded secrets
+- **CI/CD**: Automated pipelines with quality gates - all checks pass before merge
+
 **NAMING CONVENTIONS:**
 - **CONSISTENCY**: Never change variable/function names unless functionally necessary
 - **JS/TS**: `camelCase` variables, `UPPER_SNAKE_CASE` constants, `PascalCase` classes, `kebab-case.js` files
@@ -228,6 +234,8 @@ function processData(userId, data) {
 **REQUIREMENTS:**
 - **✅ ALWAYS**: Commit all changes, push to remote, use descriptive messages, atomic commits
 - **❌ NEVER**: Leave uncommitted changes or unpushed commits when marking complete
+- **CI/CD PIPELINE**: All commits must pass automated pipeline (lint, test, build, security scans)
+- **BRANCH PROTECTION**: Main branch requires PR approval + status checks passing
 
 **SEQUENCE:**
 ```bash
@@ -409,6 +417,7 @@ echo "# [Type]: [Title]" > development/[category]/[type]_$(date +%s)_[topic].md
 
 ### 📋 VALIDATE
 - [ ] **PROJECT VALIDATION**: `npm run lint && npm run build && npm start && npm test`
+- [ ] **CI/CD PIPELINE**: Verify automated pipeline passes (lint, test, build, security scans)
 - [ ] **FEATURE TESTING**: Test implementation via Puppeteer/API calls
 - [ ] **GIT**: `git add . && git commit -m "[type]: [description]" && git push`
 - [ ] **COMPLETE**: Document evidence, lessons learned, mark complete with proper formatting

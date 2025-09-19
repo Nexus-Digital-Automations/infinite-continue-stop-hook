@@ -81,7 +81,7 @@ function checkStopAllowed(workingDir = process.cwd()) {
  */
 async function cleanupStaleAgentsInProject(projectPath, logger) {
   const todoPath = path.join(projectPath, 'TODO.json');
-  
+
   // Check if TODO.json exists in this project
   if (!fs.existsSync(todoPath)) {
     logger.addFlow(`No TODO.json found in ${projectPath} - skipping`);
@@ -200,7 +200,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
     totalAgentsRemoved: 0,
     totalTasksUnassigned: 0,
     projectResults: [],
-    errors: []
+    errors: [],
   };
 
   logger.addFlow(`🧹 Starting multi-project stale agent cleanup across ${knownProjects.length} projects...`);
@@ -212,7 +212,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
         results.projectResults.push(result);
         results.totalAgentsRemoved += result.agentsRemoved;
         results.totalTasksUnassigned += result.tasksUnassigned;
-        
+
         if (result.error) {
           results.errors.push(`${projectPath}: ${result.error}`);
         }
@@ -227,7 +227,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
   }
 
   logger.addFlow(`🧹 Multi-project cleanup complete: ${results.totalAgentsRemoved} agents removed, ${results.totalTasksUnassigned} tasks unassigned`);
-  
+
   return results;
 }
 
@@ -625,16 +625,16 @@ If you want to enable task management for this project:
     // ========================================================================
     // MULTI-PROJECT STALE AGENT CLEANUP
     // ========================================================================
-    
+
     // Clean up stale agents across all known projects first
     try {
       const multiProjectResults = await cleanupStaleAgentsAcrossProjects(logger);
-      
+
       if (multiProjectResults.totalAgentsRemoved > 0) {
         logger.addFlow(
-          `✅ Multi-project cleanup: ${multiProjectResults.totalAgentsRemoved} stale agents removed, ${multiProjectResults.totalTasksUnassigned} tasks unassigned across ${multiProjectResults.projectResults.length} projects`
+          `✅ Multi-project cleanup: ${multiProjectResults.totalAgentsRemoved} stale agents removed, ${multiProjectResults.totalTasksUnassigned} tasks unassigned across ${multiProjectResults.projectResults.length} projects`,
         );
-        
+
         // eslint-disable-next-line no-console -- hook script status reporting to user
         console.error(`
 🧹 **MULTI-PROJECT STALE AGENT CLEANUP COMPLETED:**
@@ -644,7 +644,7 @@ If you want to enable task management for this project:
 - Errors: ${multiProjectResults.errors.length > 0 ? multiProjectResults.errors.join(', ') : 'None'}
 `);
       }
-      
+
       if (multiProjectResults.errors.length > 0) {
         logger.addFlow(`Multi-project cleanup errors: ${multiProjectResults.errors.join('; ')}`);
       }
