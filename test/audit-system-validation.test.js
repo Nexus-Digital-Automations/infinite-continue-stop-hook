@@ -89,8 +89,8 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
  * Create test environment with comprehensive audit criteria
  */
 function setupAuditTestEnvironment() {
-  if (!fs.existsSync(TEST_PROJECT_DIR)) {
-    fs.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
+  if (!_fs.existsSync(TEST_PROJECT_DIR)) {
+    _fs.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
   }
 
   // Create development/essentials directory
@@ -99,8 +99,8 @@ function setupAuditTestEnvironment() {
     'development',
     'essentials',
   );
-  if (!fs.existsSync(essentialsDir)) {
-    fs.mkdirSync(essentialsDir, { recursive: true });
+  if (!_fs.existsSync(essentialsDir)) {
+    _fs.mkdirSync(essentialsDir, { recursive: true });
   }
 
   // Create comprehensive audit criteria file
@@ -193,7 +193,7 @@ This file defines the standard completion criteria that ALL tasks must satisfy b
 - [ ] **Concurrent Operations**: System handles concurrent agent operations correctly
 `;
 
-  fs.writeFileSync(
+  _fs.writeFileSync(
     _path.join(essentialsDir, 'audit-criteria.md'),
     auditCriteriaContent,
   );
@@ -208,7 +208,7 @@ This file defines the standard completion criteria that ALL tasks must satisfy b
 - [ ] **Test Integrity**: All existing tests pass
 `;
 
-  fs.writeFileSync(
+  _fs.writeFileSync(
     _path.join(essentialsDir, 'minimal-audit-criteria.md'),
     minimalAuditContent,
   );
@@ -231,15 +231,15 @@ This file defines the standard completion criteria that ALL tasks must satisfy b
     },
   };
 
-  fs.writeFileSync(TODO_PATH, JSON.stringify(todoData, null, 2));
+  _fs.writeFileSync(TODO_PATH, JSON.stringify(todoData, null, 2));
 }
 
 /**
  * Cleanup audit test environment
  */
 function cleanupAuditTestEnvironment() {
-  if (fs.existsSync(TEST_PROJECT_DIR)) {
-    fs.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
+  if (_fs.existsSync(TEST_PROJECT_DIR)) {
+    _fs.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
   }
 }
 
@@ -326,8 +326,8 @@ describe('Audit System Validation Tests', () => {
         TEST_PROJECT_DIR,
         'development/essentials/audit-criteria.md',
       );
-      if (fs.existsSync(auditCriteriaPath)) {
-        fs.unlinkSync(auditCriteriaPath);
+      if (_fs.existsSync(auditCriteriaPath)) {
+        _fs.unlinkSync(auditCriteriaPath);
       }
 
       const featureTaskData = {
@@ -856,7 +856,7 @@ describe('Audit System Validation Tests', () => {
         TEST_PROJECT_DIR,
         'development/essentials/audit-criteria.md',
       );
-      fs.writeFileSync(
+      _fs.writeFileSync(
         auditCriteriaPath,
         'Invalid markdown content without proper formatting\n###\n- [ ] Broken',
       );
@@ -894,7 +894,7 @@ describe('Audit System Validation Tests', () => {
         largeContent += `- [ ] **Criterion ${i + 1}**: Detailed criterion description ${i + 1}\n`;
       }
 
-      fs.writeFileSync(auditCriteriaPath, largeContent);
+      _fs.writeFileSync(auditCriteriaPath, largeContent);
 
       const featureTaskData = {
         title: 'Feature with large audit criteria',

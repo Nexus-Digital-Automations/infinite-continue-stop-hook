@@ -110,8 +110,8 @@ function createTestTodoFile() {
     'development',
     'essentials',
   );
-  if (!fs.existsSync(essentialsDir)) {
-    fs.mkdirSync(essentialsDir, { recursive: true });
+  if (!_fs.existsSync(essentialsDir)) {
+    _fs.mkdirSync(essentialsDir, { recursive: true });
   }
 
   // Create audit criteria file for testing
@@ -134,7 +134,7 @@ function createTestTodoFile() {
 - [ ] **Performance Metrics**: Execution timing and bottleneck identification
 `;
 
-  fs.writeFileSync(
+  _fs.writeFileSync(
     _path.join(essentialsDir, 'audit-criteria.md'),
     auditCriteriaContent,
   );
@@ -156,7 +156,7 @@ function createTestTodoFile() {
     },
   };
 
-  fs.writeFileSync(TODO_PATH, JSON.stringify(todoData, null, 2));
+  _fs.writeFileSync(TODO_PATH, JSON.stringify(todoData, null, 2));
   return todoData;
 }
 
@@ -165,8 +165,8 @@ function createTestTodoFile() {
  */
 function setupTestEnvironment() {
   // Create test project directory
-  if (!fs.existsSync(TEST_PROJECT_DIR)) {
-    fs.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
+  if (!_fs.existsSync(TEST_PROJECT_DIR)) {
+    _fs.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
   }
 
   // Create clean TODO.json
@@ -178,8 +178,8 @@ function setupTestEnvironment() {
  */
 function cleanupTestEnvironment() {
   // Remove test project directory and all contents
-  if (fs.existsSync(TEST_PROJECT_DIR)) {
-    fs.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
+  if (_fs.existsSync(TEST_PROJECT_DIR)) {
+    _fs.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
   }
 }
 
@@ -733,8 +733,8 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         TEST_PROJECT_DIR,
         'development/essentials/audit-criteria.md',
       );
-      if (fs.existsSync(auditCriteriaPath)) {
-        fs.unlinkSync(auditCriteriaPath);
+      if (_fs.existsSync(auditCriteriaPath)) {
+        _fs.unlinkSync(auditCriteriaPath);
       }
 
       const featureTaskData = {

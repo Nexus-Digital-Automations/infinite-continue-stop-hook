@@ -54,18 +54,18 @@ class FeatureSuggestionValidator {
         cwd: _path.dirname(this.taskmanagerPath),
         timeout: 10000,
       });
-      const _duration = Date.now() - startTime;
+      const _duration = Date.now() - _startTime;
 
       let _result;
       try {
-        result = JSON.parse(output);
+        _result = JSON.parse(_output);
       } catch {
-        result = { raw_output: output };
+        _result = { raw_output: _output };
       }
 
-      console.log(`✅ [${operationId}] Success (${duration}ms)`);
+      console.log(`✅ [${operationId}] Success (${_duration}ms)`);
       console.log(
-        `   Result: ${JSON.stringify(result.success || result.message || 'OK', null, 2)}`,
+        `   Result: ${JSON.stringify(_result.success || _result.message || 'OK', null, 2)}`,
       );
 
       this.testResults.push({
@@ -73,8 +73,8 @@ class FeatureSuggestionValidator {
         description,
         command,
         success: true,
-        duration,
-        result,
+        duration: _duration,
+        result: _result,
         timestamp: new Date().toISOString(),
       });
 
