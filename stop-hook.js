@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const TaskManager = require('./lib/taskManager');
+const TaskManagerAPI = require('./taskmanager-api.js');
 const Logger = require('./lib/logger');
 
 // ============================================================================
@@ -609,11 +609,7 @@ If you want to enable task management for this project:
 
     // Initialize TaskManager with explicit project root to check agent status
     // Pass the working directory to ensure security validation uses correct project root
-    const taskManager = new TaskManager(todoPath, {
-      projectRoot: workingDir,
-      enableAutoFix: true,
-      validateOnRead: false,
-    });
+    const taskManager = new TaskManagerAPI();
 
     // Check if there are any active agents or if agent initialization is needed
     const todoData = await taskManager.readTodo();

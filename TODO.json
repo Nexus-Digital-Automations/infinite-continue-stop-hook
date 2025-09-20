@@ -78,40 +78,66 @@
       ]
     },
     {
-      "status": "pending",
+      "status": "in_progress",
       "created_at": "2025-09-20T01:47:55.135Z",
       "title": "Implement RAG-based lessons and error database system",
       "description": "Create comprehensive RAG-enabled database system for agent self-learning with new TaskManager API endpoints for storing/retrieving lessons and errors, semantic search capabilities, cross-project knowledge transfer, and integration with existing development/lessons structure",
       "category": "feature",
-      "id": "error_1758333174638_owpou8bkk"
+      "id": "error_1758333174638_owpou8bkk",
+      "assigned_agent": "agent_2_rag_api",
+      "started_at": "2025-09-20T02:17:35.525Z",
+      "claimed_by": "agent_2_rag_api",
+      "agent_assignment_history": [
+        {
+          "agentId": "agent_2_rag_api",
+          "role": "primary",
+          "assignedAt": "2025-09-20T02:17:35.525Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
     },
     {
-      "status": "completed",
-      "created_at": "2025-09-20T01:49:16.398Z",
-      "title": "Create comprehensive RAG system documentation",
-      "description": "Create complete documentation for the RAG-based lessons and error database system including API docs, usage guides, integration documentation, and migration guides",
-      "category": "feature",
-      "id": "error_1758333174638_lule4fkia",
-      "completed_at": "2025-09-20T02:05:13.616Z",
-      "updated_at": "2025-09-20T02:05:13.617Z"
-    },
-    {
-      "status": "completed",
-      "created_at": "2025-09-20T01:49:16.429Z",
-      "title": "Implement RAG-based lessons and error database API endpoints",
-      "description": "Create new REST API endpoints for storing and retrieving lessons/errors with semantic search, analytics, and integration with existing TaskManager",
-      "category": "feature",
-      "id": "error_1758333174638_u7g1jpiy2",
-      "completed_at": "2025-09-20T01:57:51.951Z",
-      "updated_at": "2025-09-20T01:57:51.951Z"
-    },
-    {
-      "status": "pending",
+      "status": "in_progress",
       "created_at": "2025-09-20T01:49:16.705Z",
       "title": "Design RAG Database Architecture for Agent Self-Learning System",
       "description": "Create comprehensive database schema, setup scripts, and optimization for storing lessons, errors, and embeddings to support semantic search and agent learning",
       "category": "feature",
-      "id": "error_1758333174638_m4csm9lkv"
+      "id": "error_1758333174638_m4csm9lkv",
+      "assigned_agent": "dev_session_1758334657932_1_general_d8ee50cf",
+      "started_at": "2025-09-20T02:17:59.968Z",
+      "claimed_by": "dev_session_1758334657932_1_general_d8ee50cf",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758334657932_1_general_d8ee50cf",
+          "role": "primary",
+          "assignedAt": "2025-09-20T02:17:59.968Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T02:07:41.452Z",
+      "title": "Fix incorrect filepath in TaskManager initialization",
+      "description": "Error shows wrong filepath being used: /Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager instead of correct path: /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js. Need to investigate root cause and fix.",
+      "category": "error",
+      "id": "error_1758334061452_jp4n4sqz92",
+      "assigned_agent": "dev_session_1758334391264_1_general_64528361",
+      "started_at": "2025-09-20T02:13:48.857Z",
+      "claimed_by": "dev_session_1758334391264_1_general_64528361",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758334391264_1_general_64528361",
+          "role": "primary",
+          "assignedAt": "2025-09-20T02:13:48.857Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-20T02:15:43.762Z",
+      "updated_at": "2025-09-20T02:15:43.762Z"
     },
     {
       "id": "feature_1757781331183_9waer1qua",
@@ -1135,26 +1161,6 @@
       "description": "Enhance existing sections with essential CI/CD pipeline requirements, code review standards, and quality gates while maintaining conciseness",
       "category": "feature",
       "id": "feature_1758265209541_iolunvi9cye"
-    },
-    {
-      "status": "completed",
-      "created_at": "2025-09-20T01:49:16.826Z",
-      "title": "Implement RAG System with Embedding Generation and Vector Search",
-      "description": "Implement comprehensive RAG functionality including: 1) Embedding generation for technical content, 2) Vector database integration with similarity search, 3) Semantic retrieval engine, 4) Performance optimization for code/technical content, 5) Migration system for existing lessons",
-      "category": "feature",
-      "id": "feature_1758332956826_p1bcyeov8ms",
-      "completed_at": "2025-09-20T02:09:57.591Z",
-      "updated_at": "2025-09-20T02:09:57.591Z"
-    },
-    {
-      "status": "completed",
-      "created_at": "2025-09-20T01:49:19.321Z",
-      "title": "Integrate RAG system with existing development/lessons structure",
-      "description": "Migrate existing development/lessons files to new database structure, update agent protocols to automatically store/retrieve lessons, maintain compatibility with existing file-based lesson structure, and connect TaskManager workflows",
-      "category": "feature",
-      "id": "feature_1758332959320_qkwrhkp5hq",
-      "completed_at": "2025-09-20T02:06:21.322Z",
-      "updated_at": "2025-09-20T02:06:21.322Z"
     },
     {
       "id": "test_1757781551850_k12iufq25",
@@ -2380,90 +2386,6 @@
       "description": "Testing proper routing",
       "category": "subtask",
       "id": "test_1758143150536_7xjtdyrbt"
-    },
-    {
-      "status": "completed",
-      "created_at": "2025-09-20T01:49:16.261Z",
-      "title": "Create comprehensive test suite for RAG-based lessons and error database system",
-      "description": "Develop thorough testing covering API endpoints, database operations, RAG functionality, embedding generation, semantic search, performance benchmarks, load testing, and data integrity validation for the new RAG system",
-      "category": "test",
-      "id": "test_1758332956261_s3d35vyepvr",
-      "assigned_agent": "dev_session_1758332940570_1_general_3043c9ca",
-      "started_at": "2025-09-20T02:02:54.785Z",
-      "claimed_by": "dev_session_1758332940570_1_general_3043c9ca",
-      "agent_assignment_history": [
-        {
-          "agentId": "dev_session_1758332940570_1_general_3043c9ca",
-          "role": "primary",
-          "assignedAt": "2025-09-20T02:02:54.785Z",
-          "reassignReason": null,
-          "claimPriority": "normal"
-        }
-      ],
-      "completed_at": "2025-09-20T02:03:52.013Z",
-      "updated_at": "2025-09-20T02:03:52.013Z"
-    },
-    {
-      "status": "completed",
-      "created_at": "2025-09-20T02:03:01.884Z",
-      "title": "CRITICAL: Fix stale agent removal system - agents not being removed from claimed tasks",
-      "description": "URGENT SYSTEM FAILURE: The stale agent removal system is NOT working. Agent dev_session_1758332940890_1_general_f4582729 claimed task error_1758223935863_kquonzbspt at 01:49:49 and its still holding it at 9PM (over 10+ minutes). The 30-minute stale agent removal is completely broken. Fix this by: 1) Implement automatic stale agent cleanup that runs EVERY TIME the stop hook is called, 2) Force immediate cleanup of stale agents from claimed tasks, 3) Add proper metadata collection and timestamp validation, 4) Ensure no agent can hold a task for more than 30 minutes, 5) Make this run automatically and reliably",
-      "category": "error",
-      "id": "error_1758333781884_2po96d8loe8",
-      "assigned_agent": "dev_session_1758333669246_1_general_76c086cf",
-      "started_at": "2025-09-20T02:03:27.440Z",
-      "claimed_by": "dev_session_1758333669246_1_general_76c086cf",
-      "agent_assignment_history": [
-        {
-          "agentId": "dev_session_1758333669246_1_general_76c086cf",
-          "role": "primary",
-          "assignedAt": "2025-09-20T02:03:27.440Z",
-          "reassignReason": null,
-          "claimPriority": "normal"
-        }
-      ],
-      "completed_at": "2025-09-20T02:06:17.196Z",
-      "updated_at": "2025-09-20T02:06:17.196Z"
-    },
-    {
-      "status": "pending",
-      "created_at": "2025-09-20T02:07:41.452Z",
-      "title": "Fix incorrect filepath in TaskManager initialization",
-      "description": "Error shows wrong filepath being used: /Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/lib/taskManager instead of correct path: /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js. Need to investigate root cause and fix.",
-      "category": "error",
-      "id": "error_1758334061452_jp4n4sqz92"
-    },
-    {
-      "status": "completed",
-      "created_at": "2025-09-20T02:08:27.846Z",
-      "title": "Fix stale agent cleanup: Keep 30min timeout but ensure cleanup runs every stop hook call",
-      "description": "User clarification: Keep the 30-minute stale agent timeout but ensure cleanup runs EVERY TIME the stop hook is called. Revert the 15-minute timeout back to 30 minutes while keeping the every-stop-hook-call functionality.",
-      "category": "error",
-      "id": "error_1758334107846_6ok6a1nm67",
-      "assigned_agent": "dev_session_1758333669246_1_general_76c086cf",
-      "started_at": "2025-09-20T02:08:45.395Z",
-      "claimed_by": "dev_session_1758333669246_1_general_76c086cf",
-      "agent_assignment_history": [
-        {
-          "agentId": "dev_session_1758333669246_1_general_76c086cf",
-          "role": "primary",
-          "assignedAt": "2025-09-20T02:08:45.395Z",
-          "reassignReason": null,
-          "claimPriority": "normal"
-        }
-      ],
-      "completed_at": "2025-09-20T02:11:34.663Z",
-      "updated_at": "2025-09-20T02:11:34.664Z"
-    },
-    {
-      "status": "completed",
-      "created_at": "2025-09-20T02:11:14.352Z",
-      "title": "Add CLAUDE.md protection rule - never edit without user permission",
-      "description": "Add a security rule to CLAUDE.md that explicitly states agents must NEVER EVER EVER EDIT CLAUDE.md without explicit user permission and approval. This prevents unauthorized modifications to critical instruction files.",
-      "category": "feature",
-      "id": "feature_1758334274352_h9exbrwzb3o",
-      "completed_at": "2025-09-20T02:12:48.853Z",
-      "updated_at": "2025-09-20T02:12:48.853Z"
     }
   ],
   "current_mode": "DEVELOPMENT",
@@ -2736,7 +2658,7 @@
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:10:56.221Z",
+      "lastHeartbeat": "2025-09-20T02:14:02.793Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2748,6 +2670,116 @@
       "workload": 0,
       "maxConcurrentTasks": 5,
       "createdAt": "2025-09-20T02:10:56.221Z",
+      "sessionId": null,
+      "metadata": {
+        "renewedAt": "2025-09-20T02:14:02.793Z",
+        "renewalReason": "Agent reinitialization requested"
+      },
+      "lastRenewal": "2025-09-20T02:14:02.793Z",
+      "renewalCount": 1
+    },
+    "dev_session_1758334391264_1_general_64528361": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T02:13:11.265Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T02:13:11.265Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758334652016_1_general_b075bc55": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T02:17:32.025Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T02:17:32.025Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758334654026_1_general_65a6cf2c": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T02:17:34.031Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T02:17:34.032Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758334655425_1_general_601ff074": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T02:17:35.427Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T02:17:35.427Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758334657932_1_general_d8ee50cf": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T02:17:37.940Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T02:17:37.940Z",
       "sessionId": null,
       "metadata": {}
     }
