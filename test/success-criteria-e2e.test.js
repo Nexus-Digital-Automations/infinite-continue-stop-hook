@@ -897,7 +897,7 @@ module.exports = { authenticate };
       expect(completeResult.success).toBe(true);
 
       // Verify evidence files exist
-      const _lintEvidence = await fs.readFile(
+      const lintEvidence = await _fs.readFile(
         _path.join(evidenceDir, 'lint-output.txt'),
         'utf8',
       );
