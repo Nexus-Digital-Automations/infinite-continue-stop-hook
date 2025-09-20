@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /**
  * Script to fix undefined variable violations across all test files
  *
@@ -127,7 +125,9 @@ function main() {
   testFiles.forEach(filePath => {
     const changes = fixTestFile(filePath);
     totalChanges += changes;
-    if (changes > 0) processedFiles++;
+    if (changes > 0) {
+      processedFiles++;
+    }
   });
 
   console.log('\n' + '='*80);

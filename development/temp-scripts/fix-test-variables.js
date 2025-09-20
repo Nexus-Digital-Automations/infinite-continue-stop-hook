@@ -7,7 +7,6 @@
  */
 
 const fs = require('fs');
-const path = require('path');
 
 const TEST_FILE = '/Users/jeremyparker/infinite-continue-stop-hook/test/taskmanager-api-comprehensive.test.js';
 
