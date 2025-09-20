@@ -21,8 +21,8 @@ describe('RAG System Data Migration and Integrity', () => {
     console.log('Setting up data integrity test environment...');
 
     // Setup test migration directory
-    testMigrationPath = _path.join(__dirname, '../../test-data/migration-test');
-    await fs.mkdir(testMigrationPath, { recursive: true });
+    _testMigrationPath = _path.join(__dirname, '../../test-data/migration-test');
+    await _fs.mkdir(_testMigrationPath, { recursive: true });
 
     // Create test development/lessons structure
     await setupTestLessonsStructure();
@@ -31,7 +31,7 @@ describe('RAG System Data Migration and Integrity', () => {
   afterAll(async () => {
     console.log('Cleaning up data integrity test environment...');
     try {
-      await fs.rm(testMigrationPath, { recursive: true, force: true });
+      await _fs.rm(_testMigrationPath, { recursive: true, force: true });
     } catch (error) {
         console.warn('Cleanup warning:', error.message);
     }
