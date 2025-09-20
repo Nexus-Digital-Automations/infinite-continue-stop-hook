@@ -103,8 +103,8 @@ async function cleanupStaleAgentsInProject(projectPath, logger) {
     return { agentsRemoved: 0, tasksUnassigned: 0, projectPath };
   }
 
-  // Clean up stale agents (older than 15 minutes) and identify active ones
-  const staleAgentTimeout = 900000; // 15 minutes (was 30 minutes - made more aggressive per user request)
+  // Clean up stale agents (older than 30 minutes) and identify active ones
+  const staleAgentTimeout = 1800000; // 30 minutes
   const staleAgents = [];
 
   for (const agentId of allAgents) {
@@ -158,7 +158,7 @@ async function cleanupStaleAgentsInProject(projectPath, logger) {
           agent: staleAgentId,
           action: 'auto_unassign_stale',
           timestamp: new Date().toISOString(),
-          reason: 'Agent became stale (inactive >15 minutes)',
+          reason: 'Agent became stale (inactive >30 minutes)',
         });
 
         tasksUnassigned++;
@@ -509,7 +509,7 @@ If validation fails → Create linter-error task IMMEDIATELY, fix before complet
 
 📊 **PROJECT STATUS:** ${taskStatus.pending} pending, ${taskStatus.in_progress} in progress, ${taskStatus.completed} completed
 🔗 **FEATURE SYSTEM:** Complete features in numerical order (Feature 1 → 2 → 3...), subtasks sequentially within features
-⏰ **AUTOMATIC CLEANUP:** Force cleanup (>10 min) + stale tasks (>15 min) reset to pending, stale agents removed automatically
+⏰ **AUTOMATIC CLEANUP:** Stale tasks (>30 min) reset to pending on every stop hook call, stale agents removed automatically
 🛑 **STOP AUTHORIZATION:** Only via API endpoint - \`tm.authorizeStopHook(agentId, reason)\` for single-use stop permission
 
 ⚠️ **BASH ESCAPING:** Use single quotes for node -e commands: \`node -e 'code'\` not \`node -e "code"\`
@@ -653,69 +653,13 @@ If you want to enable task management for this project:
       // Continue with local cleanup even if multi-project cleanup fails
     }
 
-    // ========================================================================
-    // IMMEDIATE FORCE CLEANUP - EVERY STOP HOOK CALL (as requested by user)
-    // ========================================================================
-
-    // Force cleanup any tasks that have been in_progress for more than 10 minutes on EVERY stop hook call
-    let forceCleanupCount = 0;
-    const forceCleanupTimeout = 600000; // 10 minutes for immediate force cleanup
-
-    logger.addFlow('🚨 FORCE CLEANUP: Checking for tasks to immediately clean up (>10 min)');
-
-    for (const task of todoData.tasks) {
-      if (!task || typeof task !== 'object') {continue;}
-
-      if (task.status === 'in_progress' && task.started_at) {
-        const taskStartTime = new Date(task.started_at).getTime();
-        const timeSinceStart = Date.now() - taskStartTime;
-
-        if (timeSinceStart > forceCleanupTimeout) {
-          const agentId = task.assigned_agent || task.claimed_by;
-
-          // Force reset task to pending
-          task.status = 'pending';
-          task.assigned_agent = null;
-          task.claimed_by = null;
-          task.started_at = null;
-
-          // Add force cleanup history entry
-          if (!task.agent_assignment_history) {
-            task.agent_assignment_history = [];
-          }
-          task.agent_assignment_history.push({
-            agent: agentId,
-            action: 'force_unassign_stop_hook',
-            timestamp: new Date().toISOString(),
-            reason: `FORCE CLEANUP: Task stuck for ${Math.round(timeSinceStart / 60000)} minutes - cleaned up on stop hook call`,
-          });
-
-          forceCleanupCount++;
-          logger.addFlow(`🚨 FORCE CLEANUP: Reset stuck task "${task.title}" from agent: ${agentId} (stuck for ${Math.round(timeSinceStart / 60000)} min)`);
-        }
-      }
-    }
-
-    if (forceCleanupCount > 0) {
-      await taskManager.writeTodo(todoData);
-      logger.addFlow(`🚨 FORCE CLEANUP COMPLETED: Reset ${forceCleanupCount} stuck tasks`);
-
-      // eslint-disable-next-line no-console -- hook script force cleanup reporting
-      console.error(`
-🚨 **FORCE CLEANUP COMPLETED:**
-- Tasks force-reset: ${forceCleanupCount}
-- Trigger: Stop hook called (runs every time)
-- Threshold: Tasks stuck >10 minutes are immediately reset
-- This ensures no agent can hold tasks indefinitely
-`);
-    }
 
     // ========================================================================
     // LOCAL PROJECT STALE AGENT CLEANUP (for current project specifically)
     // ========================================================================
 
-    // Clean up stale agents (older than 15 minutes) and identify active ones
-    const staleAgentTimeout = 900000; // 15 minutes (was 30 minutes - made more aggressive per user request)
+    // Clean up stale agents (older than 30 minutes) and identify active ones
+    const staleAgentTimeout = 1800000; // 30 minutes
     const activeAgents = [];
     const staleAgents = [];
 
@@ -780,7 +724,7 @@ If you want to enable task management for this project:
             agent: staleAgentId,
             action: 'auto_unassign_stale',
             timestamp: new Date().toISOString(),
-            reason: 'Agent became stale (inactive >15 minutes)',
+            reason: 'Agent became stale (inactive >30 minutes)',
           });
 
           tasksUnassigned++;
@@ -791,8 +735,8 @@ If you want to enable task management for this project:
       }
     }
 
-    // Check for stale in-progress tasks (stuck for > 15 minutes) and reset them
-    const staleTaskTimeout = 900000; // 15 minutes (was 30 minutes - made more aggressive per user request)
+    // Check for stale in-progress tasks (stuck for > 30 minutes) and reset them
+    const staleTaskTimeout = 1800000; // 30 minutes
     let staleTasksReset = 0;
 
     for (const task of todoData.tasks) {
