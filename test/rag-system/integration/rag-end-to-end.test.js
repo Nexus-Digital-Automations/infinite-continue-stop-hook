@@ -43,8 +43,8 @@ describe('RAG System End-to-End Integration Tests', () => {
   let _testAssertions;
 
   // Test data storage paths
-  const testDataPath = __path.join(__dirname, '../test-data');
-  const ragTestPath = __path.join(testDataPath, 'rag-test');
+  const testDataPath = _path.join(__dirname, '../test-data');
+  const ragTestPath = _path.join(testDataPath, 'rag-test');
 
   beforeAll(async () => {
     // Create test environment
