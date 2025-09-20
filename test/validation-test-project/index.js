@@ -1,3 +1,4 @@
+/* eslint-disable no-console -- Test project requires console output for simulation */
 
 console.log('Validation test application started');
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-console -- Test file requires console output for debugging */
 /**
  * RAG System End-to-End Workflow Integration Tests
  *

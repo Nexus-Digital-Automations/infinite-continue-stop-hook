@@ -1,3 +1,4 @@
+/* eslint-disable no-console -- Test file requires console output for debugging */
 /**
  * Success Criteria Regression Test Suite
  * Testing Agent #6 - Backward Compatibility and Regression Testing

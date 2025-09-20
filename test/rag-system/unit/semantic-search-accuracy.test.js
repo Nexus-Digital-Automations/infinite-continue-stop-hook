@@ -1,3 +1,4 @@
+/* eslint-disable no-console -- Test file requires console output for debugging */
 /**
  * RAG System Semantic Search Accuracy Tests
  *

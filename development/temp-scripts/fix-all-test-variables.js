@@ -36,7 +36,7 @@ function findTestFiles() {
     return output.trim().split('\n').filter(file => file.length > 0);
   } catch (error) {
     // eslint-disable-next-line no-console -- Legitimate script output for debugging
-  console.error('Error finding test files:', error.message);
+    console.error('Error finding test files:', error.message);
     return [];
   }
 }
@@ -113,7 +113,7 @@ function fixTestFile(filePath) {
           content = content.replace(fix.from, fix.to);
           changeCount += matches.length;
           // eslint-disable-next-line no-console -- Legitimate script output for debugging
-  console.log(`  Fixed ${matches.length} instances of ${fix.from.toString()}`);
+          console.log(`  Fixed ${matches.length} instances of ${fix.from.toString()}`);
         }
       } else {
         // Handle function replacement
@@ -125,16 +125,16 @@ function fixTestFile(filePath) {
       // Security: Use already validated path for writing
       fs.writeFileSync(validatedPath, content, 'utf8');
       // eslint-disable-next-line no-console -- Legitimate script output for debugging
-  console.log(`  ✅ Applied ${changeCount} fixes to ${path.basename(filePath)}`);
+      console.log(`  ✅ Applied ${changeCount} fixes to ${path.basename(filePath)}`);
     } else {
       // eslint-disable-next-line no-console -- Legitimate script output for debugging
-  console.log(`  ✓ No changes needed for ${path.basename(filePath)}`);
+      console.log(`  ✓ No changes needed for ${path.basename(filePath)}`);
     }
 
     return changeCount;
   } catch (error) {
     // eslint-disable-next-line no-console -- Legitimate script output for debugging
-  console.error(`  ❌ Error processing ${filePath}:`, error.message);
+    console.error(`  ❌ Error processing ${filePath}:`, error.message);
     return 0;
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-console -- Test file requires console output for debugging */
 
 console.log('Regression test application started');
 

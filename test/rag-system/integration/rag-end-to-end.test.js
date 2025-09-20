@@ -1,3 +1,4 @@
+/* eslint-disable no-console -- Test file requires console output for debugging */
 /**
  * RAG System End-to-End Integration Tests
  *
@@ -493,7 +494,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 
   describe('Analytics and Monitoring', () => {
     test('should provide comprehensive system analytics', async () => {
-      const _analytics = await ragOperations.getAnalytics();
+      const analytics = await ragOperations.getAnalytics();
 
       expect(analytics).toHaveProperty('overview');
       expect(analytics).toHaveProperty('performance');
@@ -521,15 +522,15 @@ describe('RAG System End-to-End Integration Tests', () => {
     });
 
     test('should track performance metrics accurately', async () => {
-      const _initialStats = semanticSearchEngine.getStatistics();
-      const _initialQueries = initialStats.queriesProcessed;
+      const initialStats = semanticSearchEngine.getStatistics();
+      const initialQueries = initialStats.queriesProcessed;
 
       // Perform several search operations
       await ragOperations.searchLessons('JavaScript performance');
       await ragOperations.searchLessons('React error handling');
       await ragOperations.findSimilarErrors('TypeError in component');
 
-      const _finalStats = semanticSearchEngine.getStatistics();
+      const finalStats = semanticSearchEngine.getStatistics();
 
       // Verify metrics were updated
       expect(finalStats.queriesProcessed).toBeGreaterThan(initialQueries);
@@ -545,10 +546,10 @@ describe('RAG System End-to-End Integration Tests', () => {
       await expect(ragOperations.storeLesson({})).rejects.toThrow();
 
       // Test invalid search queries
-      const _emptyResults = await ragOperations.searchLessons('');
+      const emptyResults = await ragOperations.searchLessons('');
       expect(emptyResults).toBeInstanceOf(Array);
 
-      const _nullResults = await ragOperations.searchLessons(null);
+      const nullResults = await ragOperations.searchLessons(null);
       expect(nullResults).toBeInstanceOf(Array);
     });
 
@@ -559,11 +560,11 @@ describe('RAG System End-to-End Integration Tests', () => {
       semanticSearchEngine.clearCache();
 
       // System should continue to function
-      const _lesson = testDataGenerator.generateLessons(1)[0];
+      const lesson = testDataGenerator.generateLessons(1)[0];
       const result = await ragOperations.storeLesson(lesson);
       expect(result.success).toBe(true);
 
-      const _searchResults = await ragOperations.searchLessons(lesson.title);
+      const searchResults = await ragOperations.searchLessons(lesson.title);
       expect(searchResults.length).toBeGreaterThan(0);
     });
   });
@@ -572,7 +573,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 // Performance benchmark tests
 describe('RAG System Performance Benchmarks', () => {
   test('should meet embedding generation performance targets', async () => {
-    const embeddingGenerator = new EmbeddingGenerator({
+    const embeddingGenerator = new _EmbeddingGenerator({
       fallbackModel: 'sentence-transformers/all-MiniLM-L6-v2',
     });
 
@@ -613,7 +614,7 @@ describe('RAG System Performance Benchmarks', () => {
     const startTime = Date.now();
 
     for (let i = 0; i < searchIterations; i++) {
-      const _query = queries[i % queries.length];
+      const query = queries[i % queries.length];
       await ragOps.searchLessons(query, { maxResults: 5 });
     }
 

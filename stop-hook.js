@@ -1,3 +1,4 @@
+/* eslint-disable no-console -- CLI hook requires console output for user feedback */
 const _fs = require('fs');
 const _path = require('path');
 const _TaskManager = require('./lib/taskManager');
