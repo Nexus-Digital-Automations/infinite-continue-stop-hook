@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+/* eslint-disable no-console -- Development/debugging script requires console output */
 
 /**
  * Automated Security Warning Fixer
@@ -24,7 +24,7 @@ function getSecurityWarnings() {
             line: message.line,
             column: message.column,
             message: message.message,
-            ruleId: message.ruleId
+            ruleId: message.ruleId,
           });
         }
       });
@@ -48,7 +48,7 @@ function analyzeWarning(filePath, lineNumber) {
     // Array access with loop variables
     { pattern: /\[\s*[ijk]\s*\]/, comment: '-- loop index is safe numeric value' },
     { pattern: /\[\s*(key|templateName|categoryKey|ruleSetName|method)\s*\]/, comment: '-- variable validated with hasOwnProperty or type check' },
-    { pattern: /\[\s*\w+\s*\]/, comment: '-- variable validated as safe before use' }
+    { pattern: /\[\s*\w+\s*\]/, comment: '-- variable validated as safe before use' },
   ];
 
   for (const { pattern, comment } of patterns) {
@@ -57,7 +57,7 @@ function analyzeWarning(filePath, lineNumber) {
         needsFix: true,
         comment: comment,
         originalLine: targetLine,
-        lineNumber: lineNumber
+        lineNumber: lineNumber,
       };
     }
   }

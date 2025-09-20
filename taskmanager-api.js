@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-console -- CLI API requires console output for user interaction */
 /**
  * TaskManager Node.js API Wrapper - Refactored Modular Version
  *

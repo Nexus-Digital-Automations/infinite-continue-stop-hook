@@ -2,13 +2,13 @@
   "project": "test-taskmanager-api",
   "tasks": [],
   "agents": {
-    "dev_session_1758335238455_1_general_83c7d5b1": {
+    "dev_session_1758349395824_1_general_43bfa665": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:27:18.459Z",
+      "lastHeartbeat": "2025-09-20T06:23:15.824Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -19,7 +19,7 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:27:18.460Z",
+      "createdAt": "2025-09-20T06:23:15.824Z",
       "sessionId": null,
       "metadata": {}
     }
@@ -30,9 +30,9 @@
   "execution_count": 0,
   "review_strikes": 0,
   "strikes_completed_last_run": false,
-  "last_hook_activation": 1758335231669,
+  "last_hook_activation": 1758349394775,
   "settings": {
     "version": "2.0.0",
-    "created": "2025-09-20T02:27:11.669Z"
+    "created": "2025-09-20T06:23:14.775Z"
   }
 }

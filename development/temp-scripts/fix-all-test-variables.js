@@ -29,20 +29,20 @@ const { execSync } = require('child_process');
 const TEST_DIR = '/Users/jeremyparker/infinite-continue-stop-hook/test';
 
 function findTestFiles() {
-  // eslint-disable-next-line no-console -- Legitimate script output for debugging
+
   console.log('Finding test files...');
   try {
     const output = execSync(`find ${TEST_DIR} -name "*.test.js" -not -path "*/node_modules/*"`, { encoding: 'utf8' });
     return output.trim().split('\n').filter(file => file.length > 0);
   } catch (error) {
-    // eslint-disable-next-line no-console -- Legitimate script output for debugging
+
     console.error('Error finding test files:', error.message);
     return [];
   }
 }
 
 function fixTestFile(filePath) {
-  // eslint-disable-next-line no-console -- Legitimate script output for debugging
+
   console.log(`\nProcessing: ${filePath}`);
 
   try {
@@ -112,7 +112,7 @@ function fixTestFile(filePath) {
         if (matches) {
           content = content.replace(fix.from, fix.to);
           changeCount += matches.length;
-          // eslint-disable-next-line no-console -- Legitimate script output for debugging
+
           console.log(`  Fixed ${matches.length} instances of ${fix.from.toString()}`);
         }
       } else {
@@ -124,29 +124,29 @@ function fixTestFile(filePath) {
     if (changeCount > 0) {
       // Security: Use already validated path for writing
       fs.writeFileSync(validatedPath, content, 'utf8');
-      // eslint-disable-next-line no-console -- Legitimate script output for debugging
+
       console.log(`  ✅ Applied ${changeCount} fixes to ${path.basename(filePath)}`);
     } else {
-      // eslint-disable-next-line no-console -- Legitimate script output for debugging
+
       console.log(`  ✓ No changes needed for ${path.basename(filePath)}`);
     }
 
     return changeCount;
   } catch (error) {
-    // eslint-disable-next-line no-console -- Legitimate script output for debugging
+
     console.error(`  ❌ Error processing ${filePath}:`, error.message);
     return 0;
   }
 }
 
 function main() {
-  // eslint-disable-next-line no-console -- Legitimate script output for debugging
+
   console.log('🔧 Test Code Cleanup Specialist - Fixing undefined variables across test files');
-  // eslint-disable-next-line no-console -- Legitimate script output for debugging
+
   console.log('='*80);
 
   const testFiles = findTestFiles();
-  // eslint-disable-next-line no-console -- Legitimate script output for debugging
+
   console.log(`Found ${testFiles.length} test files to process\n`);
 
   let totalChanges = 0;
@@ -160,17 +160,17 @@ function main() {
     }
   });
 
-  // eslint-disable-next-line no-console -- Legitimate script output for debugging
+
   console.log('\n' + '='*80);
-  // eslint-disable-next-line no-console -- Legitimate script output for debugging
+
   console.log(`📊 Summary:`);
-  // eslint-disable-next-line no-console -- Legitimate script output for debugging
+
   console.log(`  • Files processed: ${testFiles.length}`);
-  // eslint-disable-next-line no-console -- Legitimate script output for debugging
+
   console.log(`  • Files modified: ${processedFiles}`);
-  // eslint-disable-next-line no-console -- Legitimate script output for debugging
+
   console.log(`  • Total changes: ${totalChanges}`);
-  // eslint-disable-next-line no-console -- Legitimate script output for debugging
+
   console.log('\n✅ Test variable cleanup completed!');
 }
 
@@ -178,7 +178,7 @@ function main() {
 try {
   main();
 } catch (error) {
-  // eslint-disable-next-line no-console -- Legitimate script output for debugging
+
   console.error('❌ Script failed:', error.message);
   process.exit(1);
 }

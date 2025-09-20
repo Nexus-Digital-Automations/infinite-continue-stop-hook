@@ -1,4 +1,4 @@
-/* eslint-disable no-console -- Test file requires console output for debugging */
+
 /**
  * RAG System End-to-End Workflow Integration Tests
  *
@@ -10,39 +10,39 @@
  */
 
 const _path = require('path');
-const _fs = require('fs').promises;
+const __fs = require('_fs').promises;
 
 describe('RAG System End-to-End Workflows', () => {
   let _taskManagerApi;
-  let _testProjectRoot;
+  let __testProjectRoot;
   let _testAgentId;
 
   beforeAll(async () => {
     console.log('Setting up E2E test environment...');
 
     // Setup test project directory
-    testProjectRoot = _path.join(__dirname, '../../test-projects/rag-e2e-test');
-    await fs.mkdir(testProjectRoot, { recursive: true });
+    __testProjectRoot = _path.join(__dirname, '../../test-projects/rag-e2e-test');
+    await __fs.mkdir(__testProjectRoot, { recursive: true });
 
     // Initialize test TODO.json
     const todoData = {
       tasks: [],
       metadata: { created: new Date().toISOString() },
     };
-    await fs.writeFile(
-      _path.join(testProjectRoot, 'TODO.json'),
+    await __fs.writeFile(
+      _path.join(__testProjectRoot, 'TODO.json'),
       JSON.stringify(todoData, null, 2),
     );
 
     // Placeholder for TaskManager initialization
-    // taskManagerApi = new TaskManagerAPI(testProjectRoot);
+    // taskManagerApi = new TaskManagerAPI(_testProjectRoot);
   });
 
   afterAll(async () => {
     // Cleanup test environment
     console.log('Cleaning up E2E test environment...');
     try {
-      await fs.rm(testProjectRoot, { recursive: true, force: true });
+      await _fs.rm(_testProjectRoot, { recursive: true, force: true });
     } catch (error) {
       console.warn('Cleanup warning:', error.message);
     }
@@ -170,7 +170,7 @@ describe('RAG System End-to-End Workflows', () => {
         title: 'Implement user authentication with JWT',
         description: 'Add JWT-based authentication system with refresh tokens',
         category: 'feature',
-        project: testProjectRoot
+        project: _testProjectRoot
       };
 
       const _taskResponse = await taskManagerApi.createTask(taskData);
@@ -455,8 +455,8 @@ describe('RAG System End-to-End Workflows', () => {
 
       /* Future implementation:
       // Setup: Create mock development/lessons structure
-      const _lessonsDir = _path.join(testProjectRoot, 'development', 'lessons');
-      await fs.mkdir(lessonsDir, { recursive: true });
+      const _lessonsDir = _path.join(_testProjectRoot, 'development', 'lessons');
+      await _fs.mkdir(lessonsDir, { recursive: true });
 
       const _mockLessonFiles = [
         {
@@ -488,7 +488,7 @@ describe('RAG System End-to-End Workflows', () => {
       ];
 
       for (const file of mockLessonFiles) {
-        await fs.writeFile(
+        await _fs.writeFile(
           _path.join(lessonsDir, file.filename),
           file.content
         );
@@ -542,22 +542,22 @@ describe('RAG System End-to-End Workflows', () => {
         title: 'Database Connection Pooling',
         content: 'Implement connection pooling to optimize database performance...',
         category: 'database-optimization',
-        project: testProjectRoot
+        project: _testProjectRoot
       };
 
       const _storeResponse = await taskManagerApi.storeLesson(lessonData);
       expect(storeResponse.success).toBe(true);
 
       // Verify lesson is also accessible via traditional file structure
-      const _lessonsDir = _path.join(testProjectRoot, 'development', 'lessons');
-      const _files = await fs.readdir(lessonsDir);
+      const _lessonsDir = _path.join(_testProjectRoot, 'development', 'lessons');
+      const _files = await _fs.readdir(lessonsDir);
 
       const _dbLessonFile = files.find(file =>
         file.includes('database') && file.includes('connection')
       );
       expect(dbLessonFile).toBeDefined();
 
-      const _fileContent = await fs.readFile(
+      const _fileContent = await _fs.readFile(
         _path.join(lessonsDir, dbLessonFile),
         'utf8'
       );
@@ -569,7 +569,7 @@ describe('RAG System End-to-End Workflows', () => {
         'optimize database performance',
         'optimize database performance and reduce latency'
       );
-      await fs.writeFile(
+      await _fs.writeFile(
         _path.join(lessonsDir, dbLessonFile),
         updatedContent
       );

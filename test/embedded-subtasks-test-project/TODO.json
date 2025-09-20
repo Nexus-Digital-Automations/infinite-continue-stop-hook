@@ -2,13 +2,13 @@
   "project": "embedded-subtasks-test",
   "tasks": [],
   "agents": {
-    "dev_session_1758335239739_1_general_e75e8947": {
+    "dev_session_1758349395745_1_general_d1de058c": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:27:19.744Z",
+      "lastHeartbeat": "2025-09-20T06:23:15.745Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -19,28 +19,7 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:27:19.744Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758335244194_1_general_458461c5": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:27:24.237Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:27:24.238Z",
+      "createdAt": "2025-09-20T06:23:15.745Z",
       "sessionId": null,
       "metadata": {}
     }
@@ -51,9 +30,9 @@
   "execution_count": 0,
   "review_strikes": 0,
   "strikes_completed_last_run": false,
-  "last_hook_activation": 1758335237719,
+  "last_hook_activation": 1758349394833,
   "settings": {
     "version": "2.0.0",
-    "created": "2025-09-20T02:27:17.720Z"
+    "created": "2025-09-20T06:23:14.833Z"
   }
 }

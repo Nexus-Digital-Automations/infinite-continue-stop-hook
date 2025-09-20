@@ -579,7 +579,7 @@ process.stdin.on('end', async () => {
       logger.logExit(2, 'No TODO.json found - continuing infinite mode');
       logger.save();
 
-      // eslint-disable-next-line no-console -- hook script user guidance output
+
       console.error(`
 🚫 NO TASKMANAGER PROJECT DETECTED
 
@@ -606,13 +606,13 @@ If you want to enable task management for this project:
     try {
       const corruptionCheck = await autoFixer.autoFix(todoPath);
       if (corruptionCheck.fixed && corruptionCheck.fixesApplied.length > 0) {
-        // eslint-disable-next-line no-console -- hook script status logging for user awareness
+
         console.log(
           `🔧 STOP HOOK: Automatically fixed TODO.json corruption - ${corruptionCheck.fixesApplied.join(', ')}`,
         );
       }
     } catch (corruptionError) {
-      // eslint-disable-next-line no-console -- hook script error logging for debugging
+
       console.error(
         `⚠️ STOP HOOK: Corruption check failed:`,
         corruptionError.message,
@@ -647,7 +647,7 @@ If you want to enable task management for this project:
           `✅ Multi-project cleanup: ${multiProjectResults.totalAgentsRemoved} stale agents removed, ${multiProjectResults.totalTasksUnassigned} tasks unassigned across ${multiProjectResults.projectResults.length} projects`,
         );
 
-        // eslint-disable-next-line no-console -- hook script status reporting to user
+
         console.error(`
 🧹 **MULTI-PROJECT STALE AGENT CLEANUP COMPLETED:**
 - Projects processed: ${multiProjectResults.projectResults.length}
@@ -818,7 +818,7 @@ If you want to enable task management for this project:
           `Successfully reclassified ${sortResult.tasksMoved} test errors from error section to testing section`,
         );
 
-        // eslint-disable-next-line no-console -- hook script status reporting to user
+
         console.error(`
 ✅ AUTOMATIC TASK SORTING COMPLETED
 
@@ -842,7 +842,7 @@ This ensures proper priority ordering with test tasks only executed after all er
       logger.addFlow(
         `Task sorting encountered an error: ${sortingError.message}`,
       );
-      // eslint-disable-next-line no-console -- hook script warning output for user awareness
+
       console.error(`
 ⚠️ AUTOMATIC TASK SORTING WARNING
 
@@ -877,7 +877,7 @@ Tasks will continue to work but may not be optimally sorted.
         );
         logger.save();
 
-        // eslint-disable-next-line no-console -- hook script status and guidance output
+
         console.error(`
 🔄 STALE AGENTS DETECTED AND CLEANED UP
 
@@ -945,7 +945,7 @@ To recover and continue work from the previous stale agents:
         );
         logger.save();
 
-        // eslint-disable-next-line no-console -- hook script guidance output for project setup
+
         console.error(`
 🤖 NO AGENTS DETECTED - FRESH PROJECT SETUP
 
@@ -1000,7 +1000,7 @@ To start working with this TaskManager project:
       logger.logExit(0, 'Endpoint-triggered stop (single use)');
       logger.save();
 
-      // eslint-disable-next-line no-console -- hook script stop authorization message
+
       console.error(`
 🛑 ENDPOINT-TRIGGERED STOP AUTHORIZED
 
@@ -1063,7 +1063,7 @@ node -e "const _TaskManager = require('/Users/jeremyparker/infinite-continue-sto
           `Successfully archived ${archivalResult.migrated} completed tasks to DONE.json`,
         );
 
-        // eslint-disable-next-line no-console -- hook script archival status reporting
+
         console.error(`
 ✅ AUTOMATIC TASK ARCHIVAL COMPLETED
 
@@ -1078,7 +1078,7 @@ This keeps TODO.json clean and prevents it from becoming crowded with completed 
       }
     } catch (archivalError) {
       logger.addFlow(`Task archival failed: ${archivalError.message}`);
-      // eslint-disable-next-line no-console -- hook script archival warning output
+
       console.error(`
 ⚠️ AUTOMATIC TASK ARCHIVAL WARNING
 
@@ -1096,7 +1096,7 @@ This is non-critical and won't prevent continued operation.
     logger.save();
 
     // Output detailed instructions to Claude
-    // eslint-disable-next-line no-console -- hook script core guidance output to Claude agent
+
     console.error(`
 🔄 INFINITE CONTINUE MODE ACTIVE
 
@@ -1131,7 +1131,7 @@ This system operates in infinite continue mode. To authorize a stop, use:
     );
     logger.save();
 
-    // eslint-disable-next-line no-console -- hook script error handling with user guidance
+
     console.error(`
 ⚠️ STOP HOOK ERROR - CONTINUING ANYWAY
 

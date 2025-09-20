@@ -1,4 +1,4 @@
-/* eslint-disable no-console -- Test file requires console output for debugging */
+
 /**
  * RAG System End-to-End Integration Tests
  *
@@ -601,7 +601,31 @@ describe('RAG System Performance Benchmarks', () => {
 
   test('should meet search performance targets', async () => {
     const searchIterations = 50;
-    const ragOps = ragOperations; // Use existing initialized instance
+
+    // Initialize components for performance testing
+    const embeddingGen = new _EmbeddingGenerator({
+      fallbackModel: 'sentence-transformers/all-MiniLM-L6-v2',
+    });
+    const vectorDB = new _VectorDatabase({
+      indexPath: _path.join(__dirname, '../test-data/perf-test-vector.index'),
+      metadataPath: _path.join(__dirname, '../test-data/perf-test-metadata.db'),
+      embeddingDimension: 384,
+    });
+    const searchEngine = new _SemanticSearchEngine({
+      embeddingGenerator: embeddingGen,
+      vectorDatabase: vectorDB,
+    });
+    const ragOps = new _RAGOperations({
+      projectRoot: _path.join(__dirname, '../test-data'),
+      embeddingGenerator: embeddingGen,
+      vectorDatabase: vectorDB,
+      semanticSearchEngine: searchEngine,
+    });
+
+    await embeddingGen.initialize();
+    await vectorDB.initialize();
+    await searchEngine.initialize();
+    await ragOps.initialize();
 
     const queries = [
       'JavaScript error handling',
@@ -625,5 +649,11 @@ describe('RAG System Performance Benchmarks', () => {
     expect(avgSearchTime).toBeLessThan(1000); // Less than 1 second per search
 
     console.log(`Search performance benchmark: ${avgSearchTime.toFixed(2)}ms average per search`);
+
+    // Cleanup performance test components
+    await ragOps.cleanup();
+    await searchEngine.cleanup();
+    await vectorDB.cleanup();
+    await embeddingGen.cleanup();
   });
 });

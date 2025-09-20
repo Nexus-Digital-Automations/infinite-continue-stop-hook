@@ -1,49 +1,16 @@
 {
   "project": "audit-system-test",
-  "tasks": [
-    {
-      "status": "pending",
-      "created_at": "2025-09-20T02:27:23.949Z",
-      "title": "Feature requiring objective audit",
-      "description": "Test feature to validate self-review prevention",
-      "category": "feature",
-      "priority": "high",
-      "id": "feature_1758335243948_pklrv31rhm"
-    }
-  ],
-  "agents": {
-    "dev_session_1758335240530_1_general_218bf757": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:27:20.532Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:27:20.532Z",
-      "sessionId": null,
-      "metadata": {}
-    }
-  },
+  "tasks": [],
+  "agents": {},
   "features": [],
   "current_mode": "DEVELOPMENT",
   "last_mode": null,
   "execution_count": 0,
   "review_strikes": 0,
   "strikes_completed_last_run": false,
-  "last_hook_activation": 1758335233496,
+  "last_hook_activation": 1758349376863,
   "settings": {
     "version": "2.0.0",
-    "created": "2025-09-20T02:27:13.496Z"
-  },
-  "completed_tasks": []
+    "created": "2025-09-20T06:22:56.863Z"
+  }
 }

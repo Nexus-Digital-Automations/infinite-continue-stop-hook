@@ -1,3 +1,4 @@
+/* eslint-disable no-console -- Test/debugging script requires console output */
 /**
  * Simple test to verify that the audit override fix works
  * Tests the specific scenario described in the bug report

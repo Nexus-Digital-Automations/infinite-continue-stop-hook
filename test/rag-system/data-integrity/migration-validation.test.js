@@ -1,4 +1,4 @@
-/* eslint-disable no-console -- Test file requires console output for debugging */
+
 /**
  * RAG System Data Migration and Integrity Validation Tests
  *
