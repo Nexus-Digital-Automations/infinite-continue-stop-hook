@@ -183,11 +183,11 @@ Before making ANY changes to CLAUDE.md, agents must:
 - **POST-TASK**: Document new discoveries and update existing lessons
 - **CROSS-PROJECT**: Transfer knowledge between similar tasks and projects
 
-### 🧠 RAG-ENHANCED LEARNING PROTOCOLS
-**MANDATORY RAG INTEGRATION FOR INTELLIGENT LESSON MANAGEMENT**
+### 🧠 RAG-FIRST LEARNING PROTOCOLS
+**PRIMARY KNOWLEDGE MANAGEMENT SYSTEM**
 
 **RAG SYSTEM OVERVIEW:**
-The RAG (Retrieval-Augmented Generation) system replaces file-based lesson storage with an intelligent database that provides semantic search, automatic categorization, and cross-project learning capabilities.
+The RAG (Retrieval-Augmented Generation) system is the primary knowledge management system, providing intelligent lesson storage, semantic search, automatic categorization, and cross-project learning capabilities. All knowledge storage and retrieval operations use RAG commands exclusively.
 
 **MANDATORY RAG WORKFLOW INTEGRATION:**
 
@@ -428,52 +428,45 @@ git status                                   # Verify clean/up-to-date
 ## 🚨 PREPARATION & CONTEXT
 
 ### CONTEXT PROTOCOLS
-**RAG-ENHANCED CONTEXT PREPARATION - MANDATORY FOR ALL TASKS**
+**RAG-FIRST CONTEXT PREPARATION - MANDATORY FOR ALL TASKS**
 
 **PREPARATION STEPS:**
 1. **RAG HEALTH CHECK**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-health`
 2. **READ ESSENTIALS**: All files in `development/essentials/` (user-approved = read-only, agent-made = editable)
 3. **RAG LESSON QUERY**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-get-relevant "$(echo $TASK_DESCRIPTION)"`
 4. **RAG ERROR PATTERNS**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-similar-errors "$(echo $ERROR_DESCRIPTION)"` (error tasks only)
-5. **SCAN DEVELOPMENT**: Check `development/{errors,logs,lessons,reports}/` for additional context (legacy fallback)
-6. **CODEBASE SCAN**: Find task-relevant files: `find . -name "*.js" -o -name "*.ts" -o -name "*.py" | grep -v node_modules`
-7. **APPLY RAG INSIGHTS**: Integrate retrieved lessons and patterns into implementation strategy
+5. **CODEBASE SCAN**: Find task-relevant files: `find . -name "*.js" -o -name "*.ts" -o -name "*.py" | grep -v node_modules`
+6. **APPLY RAG INSIGHTS**: Integrate retrieved lessons and patterns into implementation strategy
+
+**RAG KNOWLEDGE SOURCES**: Semantic search for similar implementations, error patterns, optimization techniques, architectural decisions
 
 **RESEARCH REQUIRED FOR**: External APIs, database schemas, auth/security systems, complex architecture
 
-## 🚨 DIRECTORY MANAGEMENT PROTOCOL
+## 🚨 KNOWLEDGE MANAGEMENT PROTOCOL
 
-### DEVELOPMENT DIRECTORY STRUCTURE
-**CENTRALIZED DOCUMENTATION & TRACKING**
+### RAG-BASED KNOWLEDGE SYSTEM
+**INTELLIGENT STORAGE & RETRIEVAL**
 
-**DIRECTORIES:**
-- **`development/errors/`** - Error tracking: `error_[timestamp]_[type]_[id].md`
-- **`development/logs/`** - System logs: `[component]_[date]_[type].log`
-- **`development/lessons/`** - Self-learning insights: `[category]_[timestamp]_[topic].md`
-- **`development/reports/`** - Task reports: `[taskId]/main-report.md`
+**KNOWLEDGE CATEGORIES:**
+- **Errors**: Linter, build, runtime, integration, security solutions
+- **Lessons**: Feature implementations, optimization techniques, decision rationales, patterns
+- **Reports**: Task analysis, research findings, error investigations, system insights
 
-**CATEGORIES:**
-- **Errors**: Linter, build, runtime, integration, security
-- **Logs**: TaskManager, build, linter, system, debug, performance
-- **Lessons**: Errors, features, optimization, decisions, patterns
-- **Reports**: Task reports, research, error investigations, audits, system analysis
-
-**WORKFLOW:**
+**RAG WORKFLOW:**
 ```bash
-# Pre-task review
-ls -la development/{errors,logs,lessons,reports}/
-find development/ -name "*.md" | head -20
-tail -n 50 development/logs/*.log
+# Pre-task knowledge retrieval
+timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-health
+timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-get-relevant "$(echo $TASK_DESCRIPTION)"
 
-# Create documentation
-echo "# [Type]: [Title]" > development/[category]/[type]_$(date +%s)_[topic].md
+# Store discoveries during task
+timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-store-lesson '{"title":"[Discovery]", "content":"[Details]", "category":"[Type]"}'
 ```
 
 **PROTOCOLS:**
-- **PRE-TASK REVIEW**: Check all development/ subdirectories before starting work
-- **CENTRALIZED LOGGING**: All system output goes to development/logs/
-- **PATTERN RECOGNITION**: Reference lessons and reports for similar work
-- **EVIDENCE COLLECTION**: Document discoveries, solutions, and decision rationale
+- **PRE-TASK RETRIEVAL**: Query RAG for relevant lessons before starting work
+- **REAL-TIME STORAGE**: Store insights immediately using RAG commands
+- **PATTERN RECOGNITION**: Leverage RAG semantic search for similar solutions
+- **KNOWLEDGE ACCUMULATION**: Build comprehensive knowledge base through RAG storage
 
 ### ROOT FOLDER CLEANLINESS
 **MANDATORY: MAINTAIN CLEAN AND ORGANIZED PROJECT ROOT**
@@ -481,47 +474,45 @@ echo "# [Type]: [Title]" > development/[category]/[type]_$(date +%s)_[topic].md
 **ABSOLUTE REQUIREMENTS:**
 - **ZERO TOLERANCE**: No misplaced files in project root
 - **CONTINUOUS CLEANUP**: Check and organize root directory before every task
-- **PROACTIVE ORGANIZATION**: Move files to appropriate development/ subdirectories immediately
+- **PROACTIVE ORGANIZATION**: Store insights in RAG database instead of creating files
 
 **FILE ORGANIZATION RULES:**
-- **REPORTS**: All reports belong in `development/reports/`
-- **LOGS**: ALL logs must go to `development/logs/`
-- **SCRIPTS**: Organize utility scripts in `development/temp-scripts/`
+- **KNOWLEDGE**: Store all insights, reports, and lessons in RAG database
+- **SCRIPTS**: Organize utility scripts in `development/temp-scripts/` if needed
 - **DOCUMENTATION**: Keep only README.md and CLAUDE.md in root
+- **ESSENTIALS**: Maintain `development/essentials/` for project-specific guidelines
 
 **MANDATORY CLEAN-UP PROCEDURES:**
 - `find . -maxdepth 1 -name "*.md" -not -name "README.md" -not -name "CLAUDE.md"` - Check misplaced files
-- `mv analysis-*.md development/reports/` - Move docs to reports
-- `mv *.log development/logs/` - Move ALL logs to development/logs
-- `mv temp-*.js development/temp-scripts/` - Move scripts to temp
+- Store any discovered insights in RAG instead of creating files
 - **RUN BEFORE EVERY TASK**: Verify root cleanliness as first step
 
 ### PROJECT-SPECIFIC TASK REQUIREMENTS
-**CREATE AND MAINTAIN PROJECT TASK REQUIREMENTS FILE**
+**RAG-ENHANCED PROJECT REQUIREMENTS MANAGEMENT**
 
-**TASK REQUIREMENTS FILE MANAGEMENT:**
-- **FILE LOCATION**: `development/essentials/task-requirements.md` - Required for all projects
+**REQUIREMENTS MANAGEMENT SYSTEM:**
+- **PRIMARY STORAGE**: RAG database with "project-requirements" category for semantic search
+- **BACKUP FILE**: `development/essentials/task-requirements.md` - Static reference for essential criteria
 - **PURPOSE**: Define project-specific success criteria that ALL feature tasks must satisfy
-- **UPDATE RESPONSIBILITY**: Agents must create/update this file based on project characteristics
-- **REFERENCE REQUIREMENT**: All agents must consult this file before marking any feature task complete
+- **RAG INTEGRATION**: Store evolving requirements and validation patterns in RAG for intelligent retrieval
 
 **STANDARD PROJECT REQUIREMENTS:**
 1. **CODEBASE BUILDS** - Project builds successfully without errors
-2. **CODEBASE STARTS** - Application starts/serves without errors  
+2. **CODEBASE STARTS** - Application starts/serves without errors
 3. **LINT PASSES** - All linting rules pass with zero warnings/errors
 4. **PREEXISTING TESTS PASS** - All existing tests continue to pass
 
-**TASK COMPLETION PROTOCOL:**
-- **FEATURE TASKS**: Must pass ALL requirements in task-requirements.md to be marked complete
-- **OUTDATED TESTS**: If tests fail due to being outdated (not feature bugs), feature task can be completed BUT a separate test-update task must be created immediately
-- **REQUIREMENTS VALIDATION**: Run all requirement checks before task completion
+**RAG-ENHANCED COMPLETION PROTOCOL:**
+- **REQUIREMENTS RETRIEVAL**: Query RAG for project-specific requirements before task completion
+- **FEATURE TASKS**: Must pass ALL requirements to be marked complete
+- **VALIDATION STORAGE**: Store validation results and patterns in RAG for future reference
 - **EVIDENCE DOCUMENTATION**: Include requirement validation results in completion message
 
 **AGENT RESPONSIBILITIES:**
-- **CREATE FILE**: If task-requirements.md doesn't exist, create it based on project analysis
-- **UPDATE FILE**: Modify requirements based on discovered project characteristics
-- **VALIDATE AGAINST FILE**: Check all requirements before completing feature tasks  
-- **MAINTAIN CURRENCY**: Keep file updated as project structure evolves
+- **RAG STORAGE**: Store discovered project characteristics and requirements in RAG database
+- **PATTERN LEARNING**: Use RAG to identify recurring validation patterns across tasks
+- **REQUIREMENTS EVOLUTION**: Update RAG knowledge base as project structure evolves
+- **SEMANTIC RETRIEVAL**: Leverage RAG search for context-aware requirement checking
 
 ## 🚨 INFRASTRUCTURE & STANDARDS
 
@@ -545,9 +536,9 @@ echo "# [Type]: [Title]" > development/[category]/[type]_$(date +%s)_[topic].md
 - **APPROVAL REQUIRED**: `package.json` changes, database migrations, security configurations, CI/CD pipeline modifications
 
 **ORGANIZATION:**
-- **CLEAN ROOT**: Organize into development/ subdirectories
+- **CLEAN ROOT**: Store knowledge in RAG database, maintain minimal file structure
 - **ESSENTIALS FIRST**: Read development/essentials/ before work
-- **DOCUMENT ALL**: Functions, APIs, decisions
+- **DOCUMENT ALL**: Store insights in RAG database for semantic search and pattern recognition
 
 ### DIAGNOSTIC & MONITORING COMMANDS
 **CLAUDE.md VERIFICATION:**
@@ -563,10 +554,10 @@ echo "# [Type]: [Title]" > development/[category]/[type]_$(date +%s)_[topic].md
 ## 🚨 WORKFLOW CHECKLIST
 
 ### 📋 SETUP
-- [ ] **ROOT CLEANUP**: Move misplaced files to development/ subdirectories
+- [ ] **ROOT CLEANUP**: Remove misplaced files, store insights in RAG database
 - [ ] **INITIALIZE**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init`
 - [ ] **CREATE TASK**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"type"}'`
-- [ ] **SCAN**: Read `development/essentials/`, check other development/ folders, find relevant codebase files
+- [ ] **RAG PREPARATION**: RAG health check, query relevant lessons, read `development/essentials/`, scan codebase
 
 ### 📋 EXECUTE
 - [ ] **IMPLEMENT**: Comprehensive documentation, comments, logging, performance metrics
@@ -631,5 +622,5 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
 **RAG INTEGRATION STATUS:**
 ✅ **PROTOCOLS INTEGRATED** - RAG workflows integrated into CLAUDE.md
 ✅ **DOCUMENTATION COMPLETE** - Comprehensive guides available
-🔄 **IMPLEMENTATION PENDING** - RAG system ready for development
-🔄 **MIGRATION PENDING** - File-based lessons ready for database migration
+✅ **IMPLEMENTATION ACTIVE** - RAG system is primary knowledge management
+✅ **MIGRATION COMPLETE** - All knowledge operations use RAG database
