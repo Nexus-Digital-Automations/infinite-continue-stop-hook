@@ -47278,14 +47278,104 @@
       "updated_at": "2025-09-20T17:41:58.262Z",
       "archived_at": "2025-09-20T17:41:58.272Z",
       "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T17:37:44.850Z",
+      "title": "Fix remaining 7 ESLint errors",
+      "description": "Fix the final 7 ESLint errors: 3 require-await errors (async methods with no await) and 4 n/no-process-exit errors (replace process.exit() with throw new Error()). Focus on test files and CLI scripts where these patterns commonly occur.",
+      "category": "error",
+      "id": "test_1758390161632_dsrtfji1i",
+      "assigned_agent": null,
+      "started_at": "2025-09-20T17:38:02.340Z",
+      "claimed_by": null,
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758387761243_1_general_da7b2ca4",
+          "role": "primary",
+          "assignedAt": "2025-09-20T17:38:02.340Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1758387761243_1_general_da7b2ca4",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-20T17:42:41.628Z",
+          "reason": "Agent became stale (inactive >30 minutes)"
+        }
+      ],
+      "completed_at": "2025-09-20T17:41:58.262Z",
+      "updated_at": "2025-09-20T17:41:58.262Z",
+      "archived_at": "2025-09-20T17:42:41.641Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T17:51:04.170Z",
+      "title": "Update CLAUDE.md RAG Integration",
+      "description": "Modernize CLAUDE.md to use RAG mechanisms as primary knowledge system, eliminating dependency on development directories. Replace file-based workflows with RAG database operations.",
+      "category": "feature",
+      "id": "feature_1758390664170_n4mqy8e4ngk",
+      "completed_at": "2025-09-20T17:53:02.927Z",
+      "updated_at": "2025-09-20T17:53:02.927Z",
+      "archived_at": "2025-09-20T17:53:02.937Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T18:06:25.881Z",
+      "title": "Auto-RAG Query on Task Claim",
+      "description": "Automatically query RAG system for relevant lessons and errors when agents claim tasks. Enhance TaskOperations.claimTask method to include RAG suggestions in response without blocking normal task claiming functionality.",
+      "category": "feature",
+      "id": "feature_1758391585881_pqhko37z0eq",
+      "completed_at": "2025-09-20T18:08:25.445Z",
+      "updated_at": "2025-09-20T18:08:25.445Z",
+      "archived_at": "2025-09-20T18:08:25.454Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T18:06:25.881Z",
+      "title": "Auto-RAG Query on Task Claim",
+      "description": "Automatically query RAG system for relevant lessons and errors when agents claim tasks. Enhance TaskOperations.claimTask method to include RAG suggestions in response without blocking normal task claiming functionality.",
+      "category": "feature",
+      "id": "error_1758391759330_t1yigc3mk",
+      "completed_at": "2025-09-20T18:08:25.445Z",
+      "updated_at": "2025-09-20T18:08:25.445Z",
+      "archived_at": "2025-09-20T18:09:19.341Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T22:14:03.304Z",
+      "title": "Fix RAG database FAISS search error - ntotal 0 issue",
+      "description": "Resolve FAISS search error: Invalid the number of k (cannot be given a value greater than ntotal: 0). Error occurs when attempting to search FAISS index with no vectors. Fix involves handling empty index case in searchLessons method in lib/rag-database.js",
+      "category": "error",
+      "id": "error_1758406443304_lacwev7pdp",
+      "assigned_agent": "dev_session_1758406417903_1_general_a3b81b6d",
+      "started_at": "2025-09-20T22:14:27.269Z",
+      "claimed_by": "dev_session_1758406417903_1_general_a3b81b6d",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758406417903_1_general_a3b81b6d",
+          "role": "primary",
+          "assignedAt": "2025-09-20T22:14:27.269Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-20T22:16:33.585Z",
+      "updated_at": "2025-09-20T22:16:33.585Z",
+      "archived_at": "2025-09-20T22:16:33.595Z",
+      "archive_version": "2.0.0"
     }
   ],
-  "total_completed": 1118,
+  "total_completed": 1123,
   "last_completion": "2025-09-13T18:24:43.914Z",
   "created_at": "2025-08-07T04:55:03.964Z",
-  "last_archived": "2025-09-20T17:41:58.272Z",
+  "last_archived": "2025-09-20T22:16:56.638Z",
   "metadata": {
-    "last_bulk_archive": "2025-09-20T17:23:41.171Z",
-    "bulk_archive_count": 29
+    "last_bulk_archive": "2025-09-20T22:16:56.638Z",
+    "bulk_archive_count": 33
   }
 }

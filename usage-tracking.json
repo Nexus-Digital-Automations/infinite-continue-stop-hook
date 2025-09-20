@@ -1,0 +1,144 @@
+{
+  "calls": [
+    {
+      "timestamp": "2025-09-20T18:31:47.360Z",
+      "endpoint": "reinitialize",
+      "agentId": "dev_session_1758392780369_1_general_be8c9e2b",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_1"
+    },
+    {
+      "timestamp": "2025-09-20T18:32:17.881Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758393137880_1_general_8837bdcd",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_1"
+    },
+    {
+      "timestamp": "2025-09-20T18:33:53.788Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758393233787_1_general_11229057",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_1"
+    },
+    {
+      "timestamp": "2025-09-20T18:35:08.917Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758393308914_1_general_f0edd731",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_1"
+    },
+    {
+      "timestamp": "2025-09-20T18:36:51.011Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758393411008_1_general_a2e0b42f",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_1"
+    },
+    {
+      "timestamp": "2025-09-20T18:36:51.454Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758393411452_1_general_9b26f96b",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_1"
+    },
+    {
+      "timestamp": "2025-09-20T18:36:51.532Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758393411530_1_general_5de1a7bc",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_1"
+    },
+    {
+      "timestamp": "2025-09-20T18:36:51.582Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758393411580_1_general_96d29889",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_1"
+    },
+    {
+      "timestamp": "2025-09-20T18:36:51.814Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758393411811_1_general_6a76e5e8",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_1"
+    },
+    {
+      "timestamp": "2025-09-20T18:36:51.903Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758393411900_1_general_a363fbc1",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_1"
+    },
+    {
+      "timestamp": "2025-09-20T22:01:37.707Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758405697704_1_general_c9190ad1",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:10:06.794Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758406206791_1_general_03f5fa32",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:11:00.091Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758406260088_1_general_312dc053",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:12:49.558Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758406369555_1_general_dfae64ad",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:12:49.801Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758406369798_1_general_71a8a90f",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:12:49.876Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758406369873_1_general_d6704cf4",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:12:49.970Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758406369967_1_general_15e6e8b3",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:13:37.905Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758406417903_1_general_a3b81b6d",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:17:26.383Z",
+      "endpoint": "reinitialize",
+      "agentId": "dev_session_1758406417903_1_general_a3b81b6d",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    }
+  ],
+  "metadata": {
+    "created": "2025-09-20T18:31:29.202Z",
+    "version": "1.0.0",
+    "timezone": "CDT",
+    "baseHour": 16,
+    "windowDuration": 5
+  }
+}

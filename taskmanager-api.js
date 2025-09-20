@@ -65,6 +65,9 @@ let cliInterface;
 // Import our new modular components
 let TaskOperations, AgentManagement, TaskOrdering, ValidationUtils, RAGOperations;
 
+// Import usage tracking for analytics
+const UsageTracker = require('./lib/usageTracker');
+
 try {
   // Import TaskManager modules using absolute paths
   TaskManager = require(path.join(TASKMANAGER_ROOT, 'lib', 'taskManager.js'));
@@ -169,6 +172,9 @@ class TaskManagerAPI {
     this._guideCacheTime = 0;
     this._guideCacheDuration = 60000; // 1 minute cache duration
     this._guideGenerationInProgress = false;
+
+    // Initialize usage tracker for analytics
+    this.usageTracker = new UsageTracker();
 
     // Initialize specialized modules with dependencies
     this._initializeModules();
@@ -857,6 +863,27 @@ class TaskManagerAPI {
       return {
         success: false,
         error: error.message,
+      };
+    }
+  }
+
+  /**
+   * Get usage analytics for TaskManager initialization and reinitialization calls
+   * Provides 5-hour window analytics starting from 11:00 AM CDT daily
+   */
+  async getUsageAnalytics(options = {}) {
+    try {
+      const result = await this.withTimeout(
+        this.usageTracker.getAnalytics(options),
+        10000,
+      );
+
+      return result;
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        usageTracking: 'error',
       };
     }
   }

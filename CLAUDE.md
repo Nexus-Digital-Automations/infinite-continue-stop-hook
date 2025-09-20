@@ -84,6 +84,33 @@ Before making ANY changes to CLAUDE.md, agents must:
 - **INCOMPLETE DETECTION**: If task not fully/comprehensively completed, continue working immediately
 - **COMPREHENSIVE COMPLETION**: Ensure all aspects of request fulfilled before stopping
 
+## 🚨 MANDATORY USAGE TRACKING PROTOCOL
+**REINITIALIZE AFTER EVERY USER MESSAGE AND STOP HOOK**
+
+**ABSOLUTE REQUIREMENTS:**
+- **AFTER USER MESSAGE**: Always run reinitialize before starting any work on user requests
+- **AFTER STOP HOOK**: Always run reinitialize before continuing work after stop hook feedback
+- **USAGE TRACKING**: All init/reinitialize calls are automatically tracked in 5-hour windows starting at 11AM CDT
+- **ANALYTICS ACCESS**: Use `usage-analytics` endpoint to monitor usage patterns and compliance
+
+**MANDATORY COMMANDS:**
+```bash
+# Reinitialize with your agent ID (REQUIRED after every user message/stop hook)
+timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js reinitialize <agentId>
+
+# Check usage analytics (optional - for monitoring compliance)
+timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js usage-analytics
+```
+
+**COMPLIANCE TRACKING:**
+- **5-HOUR WINDOWS**: Usage tracked in 5-hour increments: 11am-4pm, 4pm-9pm, 9pm-2am, 2am-7am, 7am-12pm
+- **AUTOMATIC MONITORING**: System automatically counts all initialization calls per window
+- **ANALYTICS REPORTING**: Current and previous window statistics available via usage-analytics command
+- **NON-BLOCKING**: Usage tracking failures do not prevent normal TaskManager operations
+
+**ENFORCEMENT:**
+This protocol ensures consistent agent lifecycle management and provides usage insights for system optimization. All agents must comply with this mandatory reinitialization requirement.
+
 ## 🚨 CRITICAL MANDATES
 
 ### 🧠 MANDATORY PRE-CHANGE ANALYSIS
@@ -554,8 +581,9 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
 ## 🚨 WORKFLOW CHECKLIST
 
 ### 📋 SETUP
+- [ ] **REINITIALIZE**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js reinitialize <agentId>` (MANDATORY after user message/stop hook)
 - [ ] **ROOT CLEANUP**: Remove misplaced files, store insights in RAG database
-- [ ] **INITIALIZE**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init`
+- [ ] **INITIALIZE**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init` (if no existing agent)
 - [ ] **CREATE TASK**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"type"}'`
 - [ ] **RAG PREPARATION**: RAG health check, query relevant lessons, read `development/essentials/`, scan codebase
 
