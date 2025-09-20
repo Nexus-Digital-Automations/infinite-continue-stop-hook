@@ -303,6 +303,8 @@ function processData(userId, data) {
 - **MAXIMUM STRICTNESS**: Use strictest linter configurations with zero tolerance for any violations
 - **EMERGENCY PROTOCOL**: Instant halt → Create linter-error task → Fix all violations → Verify clean → Resume
 - **MAXIMUM CONCURRENT DEPLOYMENT**: MANDATORY for linter errors - deploy concurrent agents equal to number of error categories (max 10)
+- **CATEGORY-BASED CONCURRENT AGENTS**: Deploy agents based on error categories (syntax, style, security, etc.) not total error count for optimal parallel fixing
+- **HIGHEST STRICTNESS ENFORCEMENT**: Maximum strictness configurations with zero tolerance for violations - all linter rules at most restrictive settings
 - **OUTDATED MATERIAL EXCEPTION**: If errors in outdated/deprecated code → Remove code entirely, no error tasks
 - **WORKFLOWS**: After every file edit + before task completion
 - **NO SHORTCUTS**: Never hide, suppress, or bypass - fix actual problems, admit inability if needed
