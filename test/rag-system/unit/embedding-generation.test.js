@@ -15,12 +15,12 @@ describe('Embedding Generation System', () => {
   let _embeddingService;
   let _vectorDatabase;
 
-  beforeAll(async () => {
+  beforeAll(() => {
     // Initialize embedding service when available
     console.log('Setting up embedding generation test environment...');
   });
 
-  afterAll(async () => {
+  afterAll(() => {
     // Cleanup resources
     console.log('Cleaning up embedding test environment...');
   });
@@ -30,7 +30,7 @@ describe('Embedding Generation System', () => {
   });
 
   describe('Text Content Embedding', () => {
-    test('should generate embeddings for technical documentation', async () => {
+    test('should generate embeddings for technical documentation', () => {
       const _technicalContent = `
         When implementing a REST API with Node.js and Express,
         it's important to handle errors properly. Use try-catch blocks
@@ -64,7 +64,7 @@ describe('Embedding Generation System', () => {
       */
     });
 
-    test('should handle code snippets appropriately', async () => {
+    test('should handle code snippets appropriately', () => {
       const _codeSnippet = `
         function calculateUserMetrics(_users) {
           return users.map(user => ({
@@ -92,7 +92,7 @@ describe('Embedding Generation System', () => {
       */
     });
 
-    test('should generate consistent embeddings for identical content', async () => {
+    test('should generate consistent embeddings for identical content', () => {
       const _content = 'Error handling in JavaScript requires proper try-catch implementation.';
 
       // Placeholder for future implementation
@@ -110,7 +110,7 @@ describe('Embedding Generation System', () => {
       */
     });
 
-    test('should handle empty and minimal content gracefully', async () => {
+    test('should handle empty and minimal content gracefully', () => {
       const _testCases = [
         '',
         ' ',
@@ -136,7 +136,7 @@ describe('Embedding Generation System', () => {
       */
     });
 
-    test('should respect timeout requirements', async () => {
+    test('should respect timeout requirements', () => {
       jest.setTimeout(15000);
 
       const _longContent = 'Complex technical explanation. '.repeat(1000);
@@ -171,7 +171,7 @@ describe('Embedding Generation System', () => {
   });
 
   describe('Error Content Embedding', () => {
-    test('should generate embeddings for error messages', async () => {
+    test('should generate embeddings for error messages', () => {
       const _errorContent = {
         message: 'TypeError: Cannot read property "length" of undefined',
         stackTrace: `at validateInput (auth.js:42:15)
@@ -201,7 +201,7 @@ describe('Embedding Generation System', () => {
       */
     });
 
-    test('should handle different error types distinctively', async () => {
+    test('should handle different error types distinctively', () => {
       const _errorTypes = [
         {
           type: 'syntax',
@@ -371,7 +371,7 @@ describe('Embedding Generation System', () => {
   });
 
   describe('Performance and Optimization', () => {
-    test('should cache embeddings for repeated content', async () => {
+    test('should cache embeddings for repeated content', () => {
       const _content = 'This content will be embedded multiple times for caching test';
 
       // Placeholder for future implementation
@@ -393,7 +393,7 @@ describe('Embedding Generation System', () => {
       */
     });
 
-    test('should handle batch embedding generation efficiently', async () => {
+    test('should handle batch embedding generation efficiently', () => {
       const _contents = [
         'First piece of content for batch processing',
         'Second piece of content for batch processing',
@@ -425,7 +425,7 @@ describe('Embedding Generation System', () => {
       */
     });
 
-    test('should monitor memory usage during large batch processing', async () => {
+    test('should monitor memory usage during large batch processing', () => {
       const _largeBatch = Array.from({ length: 100 }, (_, i) =>
         `Content item ${i}: ${'x'.repeat(1000)}`,
       );
@@ -448,7 +448,7 @@ describe('Embedding Generation System', () => {
   });
 
   describe('Error Handling and Resilience', () => {
-    test('should handle embedding service failures gracefully', async () => {
+    test('should handle embedding service failures gracefully', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -468,7 +468,7 @@ describe('Embedding Generation System', () => {
       */
     });
 
-    test('should implement retry logic for transient failures', async () => {
+    test('should implement retry logic for transient failures', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -493,7 +493,7 @@ describe('Embedding Generation System', () => {
       */
     });
 
-    test('should validate embedding outputs', async () => {
+    test('should validate embedding outputs', () => {
       const _content = 'Valid content for embedding generation';
 
       // Placeholder for future implementation

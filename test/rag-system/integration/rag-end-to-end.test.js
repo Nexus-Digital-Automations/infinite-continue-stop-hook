@@ -135,7 +135,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       expect(semanticSearchEngine.config.vectorDatabase).toBe(vectorDatabase);
     });
 
-    test('should provide system statistics', async () => {
+    test('should provide system statistics', () => {
       const _embeddingStats = embeddingGenerator.getStatistics();
       const _vectorStats = vectorDatabase.getStatistics();
       const _searchStats = semanticSearchEngine.getStatistics();

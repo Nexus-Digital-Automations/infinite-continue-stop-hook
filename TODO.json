@@ -2655,7 +2655,7 @@
       "updated_at": "2025-09-20T16:13:36.984Z"
     },
     {
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2025-09-20T16:04:49.445Z",
       "title": "Fix ESLint require-await errors across codebase",
       "description": "Scan for all require-await errors, identify async functions that don't need to be async, remove async keyword or add proper await usage, and verify fixes with ESLint",
@@ -2672,7 +2672,9 @@
           "reassignReason": null,
           "claimPriority": "normal"
         }
-      ]
+      ],
+      "completed_at": "2025-09-20T16:17:14.113Z",
+      "updated_at": "2025-09-20T16:17:14.113Z"
     },
     {
       "status": "pending",
@@ -2683,12 +2685,14 @@
       "id": "error_1758384290191_2sckqmw6vbl"
     },
     {
-      "status": "pending",
+      "status": "completed",
       "created_at": "2025-09-20T16:04:50.686Z",
       "title": "Fix all ESLint no-undef errors across codebase",
       "description": "Scan for all no-undef errors in ESLint output, identify missing variable declarations/imports/scope issues, fix each undefined variable by adding proper declarations or imports, focus on test files with undefined variables like memUsage/endTime/endMemory/measurement/operations/results, handle missing require statements and undeclared test variables",
       "category": "error",
-      "id": "error_1758384290686_zdlyn4qv2yb"
+      "id": "error_1758384290686_zdlyn4qv2yb",
+      "completed_at": "2025-09-20T16:15:49.771Z",
+      "updated_at": "2025-09-20T16:15:49.771Z"
     },
     {
       "status": "completed",
@@ -2787,6 +2791,32 @@
       "description": "Optimize sequential await calls in loops in validation-background-processor.js and rag-integration-test.js using appropriate async patterns",
       "category": "subtask",
       "id": "subtask_1758384380840_79euj9o2agi"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T16:19:38.291Z",
+      "title": "Fix require-await ESLint errors in core system files",
+      "description": "Scan and fix all require-await ESLint violations in core system files (lib/rag/, lib/utils/, lib/api-modules/, etc.) by either removing unnecessary async keywords or adding proper await usage",
+      "category": "error",
+      "id": "error_1758385178291_z81s3o1kmd",
+      "completed_at": "2025-09-20T16:24:37.903Z",
+      "updated_at": "2025-09-20T16:24:37.903Z"
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-20T16:19:38.550Z",
+      "title": "Fix no-return-await and no-promise-executor-return ESLint errors",
+      "description": "Scan and fix all no-return-await and no-promise-executor-return ESLint violations across the codebase",
+      "category": "error",
+      "id": "error_1758385178550_65uvftxtfvt"
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-20T16:19:40.107Z",
+      "title": "Fix all remaining ESLint errors in test files and perform final cleanup",
+      "description": "Comprehensive cleanup of test files focusing on: 1) require-await errors in test files, 2) undefined variable errors, 3) async/await patterns in test cases, 4) missing imports/dependencies. Focus on /test/ directory including rag-system subdirectories. Final validation to achieve zero ESLint errors across entire project.",
+      "category": "error",
+      "id": "error_1758385180107_7cfiwr5gwjf"
     }
   ],
   "current_mode": "DEVELOPMENT",
@@ -3029,6 +3059,69 @@
       "workload": 0,
       "maxConcurrentTasks": 5,
       "createdAt": "2025-09-20T16:04:38.318Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758385163307_1_general_6d9e53d6": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T16:19:23.308Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T16:19:23.308Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758385163656_1_general_5a3e0fb2": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T16:19:23.657Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T16:19:23.657Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758385164189_1_general_3d738081": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T16:19:24.189Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T16:19:24.189Z",
       "sessionId": null,
       "metadata": {}
     }

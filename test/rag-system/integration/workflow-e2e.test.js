@@ -48,13 +48,13 @@ describe('RAG System End-to-End Workflows', () => {
     }
   });
 
-  beforeEach(async () => {
+  beforeEach(() => {
     jest.clearAllMocks();
     // Reset test state for each test
   });
 
   describe('Complete Agent Learning Workflow', () => {
-    test('should handle full cycle: error encounter -> lesson storage -> retrieval -> application', async () => {
+    test('should handle full cycle: error encounter -> lesson storage -> retrieval -> application', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -160,7 +160,7 @@ describe('RAG System End-to-End Workflows', () => {
       */
     });
 
-    test('should handle lesson creation from task completion', async () => {
+    test('should handle lesson creation from task completion', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -227,7 +227,7 @@ describe('RAG System End-to-End Workflows', () => {
   });
 
   describe('Cross-Project Knowledge Transfer', () => {
-    test('should transfer lessons between different project contexts', async () => {
+    test('should transfer lessons between different project contexts', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -284,7 +284,7 @@ describe('RAG System End-to-End Workflows', () => {
       */
     });
 
-    test('should handle project-specific vs universal lessons', async () => {
+    test('should handle project-specific vs universal lessons', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -340,7 +340,7 @@ describe('RAG System End-to-End Workflows', () => {
   });
 
   describe('TaskManager Integration Workflows', () => {
-    test('should integrate lesson storage with task completion flow', async () => {
+    test('should integrate lesson storage with task completion flow', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -400,7 +400,7 @@ describe('RAG System End-to-End Workflows', () => {
       */
     });
 
-    test('should provide contextual lesson suggestions during task execution', async () => {
+    test('should provide contextual lesson suggestions during task execution', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -449,7 +449,7 @@ describe('RAG System End-to-End Workflows', () => {
   });
 
   describe('Data Migration and Legacy Integration', () => {
-    test('should migrate existing development/lessons files to RAG system', async () => {
+    test('should migrate existing development/lessons files to RAG system', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -532,7 +532,7 @@ describe('RAG System End-to-End Workflows', () => {
       */
     });
 
-    test('should maintain backward compatibility with file-based lesson access', async () => {
+    test('should maintain backward compatibility with file-based lesson access', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -590,7 +590,7 @@ describe('RAG System End-to-End Workflows', () => {
   });
 
   describe('Error Handling and System Resilience', () => {
-    test('should handle RAG system failures gracefully', async () => {
+    test('should handle RAG system failures gracefully', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -630,7 +630,7 @@ describe('RAG System End-to-End Workflows', () => {
       */
     });
 
-    test('should handle database corruption and recovery', async () => {
+    test('should handle database corruption and recovery', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 

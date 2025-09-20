@@ -36,7 +36,7 @@ describe('RAG System Performance and Load Testing', () => {
   let _performanceMonitor;
   let _loadGenerator;
 
-  beforeAll(async () => {
+  beforeAll(() => {
     console.log('Setting up performance test environment...');
     jest.setTimeout(300000); // 5 minutes for performance tests
 
@@ -45,18 +45,18 @@ describe('RAG System Performance and Load Testing', () => {
     // loadGenerator = new LoadGenerator();
   });
 
-  afterAll(async () => {
+  afterAll(() => {
     console.log('Cleaning up performance test environment...');
     // await performanceMonitor.generateReport();
   });
 
-  beforeEach(async () => {
+  beforeEach(() => {
     jest.clearAllMocks();
     // await performanceMonitor.resetMetrics();
   });
 
   describe('Search Performance Benchmarks', () => {
-    test('should meet embedding generation speed requirements', async () => {
+    test('should meet embedding generation speed requirements', () => {
       const _testContents = [
         'Short error message',
         'Medium length technical documentation explaining API implementation patterns and best practices for error handling in distributed systems.',
@@ -121,7 +121,7 @@ describe('RAG System Performance and Load Testing', () => {
       */
     });
 
-    test('should meet semantic search response time requirements', async () => {
+    test('should meet semantic search response time requirements', () => {
       // Setup: Create large dataset for realistic testing
       const _largeDataset = [];
       for (let i = 0; i < 1000; i++) {
@@ -197,7 +197,7 @@ describe('RAG System Performance and Load Testing', () => {
       */
     });
 
-    test('should handle batch operations efficiently', async () => {
+    test('should handle batch operations efficiently', () => {
       const _batchSizes = [10, 50, 100, 200];
       const _batchPerformance = [];
 
@@ -255,7 +255,7 @@ describe('RAG System Performance and Load Testing', () => {
   });
 
   describe('Concurrent Access Performance', () => {
-    test('should handle multiple simultaneous users', async () => {
+    test('should handle multiple simultaneous users', () => {
       const _concurrentUsers = 10;
       const _operationsPerUser = 20;
 
@@ -348,7 +348,7 @@ describe('RAG System Performance and Load Testing', () => {
       */
     });
 
-    test('should maintain data consistency under concurrent modifications', async () => {
+    test('should maintain data consistency under concurrent modifications', () => {
       const _sharedLessonId = 'shared-lesson-001';
       const _concurrentModifiers = 5;
 
@@ -417,7 +417,7 @@ describe('RAG System Performance and Load Testing', () => {
   });
 
   describe('Memory and Resource Usage', () => {
-    test('should manage memory efficiently during large operations', async () => {
+    test('should manage memory efficiently during large operations', () => {
       const _initialMemory = process.memoryUsage();
 
       // Placeholder for future implementation
@@ -434,13 +434,13 @@ describe('RAG System Performance and Load Testing', () => {
             const _largeBatch = Array.from({ length: 500 }, (_, i) =>
               generateLargeTechnicalContent(i)
             );
-            return await ragSystem.generateBatchEmbeddings(largeBatch);
+            return ragSystem.generateBatchEmbeddings(largeBatch);
           }
         },
         {
           name: 'Large search result processing',
           operation: async () => {
-            return await ragSystem.searchLessons('comprehensive technical query', {
+            return ragSystem.searchLessons('comprehensive technical query', {
               limit: 1000,
               include_full_content: true,
               include_embeddings: true
@@ -455,7 +455,7 @@ describe('RAG System Performance and Load Testing', () => {
               content: generateLargeTechnicalContent(i),
               metadata: { migration_batch: true }
             }));
-            return await ragSystem.migrateLessons(migrationData);
+            return ragSystem.migrateLessons(migrationData);
           }
         }
       ];
@@ -500,7 +500,7 @@ describe('RAG System Performance and Load Testing', () => {
       */
     });
 
-    test('should handle memory pressure gracefully', async () => {
+    test('should handle memory pressure gracefully', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -554,7 +554,7 @@ describe('RAG System Performance and Load Testing', () => {
   });
 
   describe('Database Performance', () => {
-    test('should optimize database queries for large datasets', async () => {
+    test('should optimize database queries for large datasets', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -623,7 +623,7 @@ describe('RAG System Performance and Load Testing', () => {
       */
     });
 
-    test('should handle database connection pooling efficiently', async () => {
+    test('should handle database connection pooling efficiently', () => {
       const _concurrentQueries = 20;
       const _queriesPerConnection = 10;
 

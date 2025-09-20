@@ -143,7 +143,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
 
     beforeEach(() => {
       mockTaskManager.getTask.mockResolvedValue({
-        id: _testTaskId,
+        id: testTaskId,
         success_criteria: [],
       });
       mockTaskManager.updateTaskSuccessCriteria.mockResolvedValue({
@@ -164,7 +164,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       expect(result.totalCount).toBe(2);
       expect(mockBroadcastCriteriaUpdate).toHaveBeenCalledWith({
         action: 'added',
-        taskId: _testTaskId,
+        taskId: testTaskId,
         criteria: testCriteria,
         addedCriteria: testCriteria,
         template: undefined,
@@ -174,7 +174,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     test('should append to existing criteria by default', async () => {
       const _existingCriteria = ['Existing Criterion'];
       mockTaskManager.getTask.mockResolvedValue({
-        id: _testTaskId,
+        id: testTaskId,
         success_criteria: _existingCriteria,
       });
 
@@ -191,7 +191,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     test('should replace existing criteria when replace option is true', async () => {
       const _existingCriteria = ['Existing Criterion'];
       mockTaskManager.getTask.mockResolvedValue({
-        id: _testTaskId,
+        id: testTaskId,
         success_criteria: _existingCriteria,
       });
 
@@ -207,7 +207,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should apply template when template option is provided', async () => {
-      const result = await successCriteriaManager.addCriteria(_testTaskId, [], {
+      const result = await successCriteriaManager.addCriteria(testTaskId, [], {
         template: 'basic',
       });
 
@@ -227,7 +227,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       const _newCriteria = ['Test Criterion 1', 'Test Criterion 2'];
 
       mockTaskManager.getTask.mockResolvedValue({
-        id: _testTaskId,
+        id: testTaskId,
         success_criteria: _existingCriteria,
       });
 
@@ -357,13 +357,13 @@ describe('SuccessCriteriaManager Unit Tests', () => {
 
     beforeEach(() => {
       mockTaskManager.getTask.mockResolvedValue({
-        id: _testTaskId,
+        id: testTaskId,
         success_criteria: testCriteria,
       });
     });
 
     test('should successfully retrieve criteria for existing task', async () => {
-      const result = await successCriteriaManager.getCriteria(_testTaskId);
+      const result = await successCriteriaManager.getCriteria(testTaskId);
 
       expect(result.success).toBe(true);
       expect(result.taskId).toBe(testTaskId);
@@ -374,11 +374,11 @@ describe('SuccessCriteriaManager Unit Tests', () => {
 
     test('should return empty array for task with no criteria', async () => {
       mockTaskManager.getTask.mockResolvedValue({
-        id: _testTaskId,
+        id: testTaskId,
         success_criteria: undefined,
       });
 
-      const result = await successCriteriaManager.getCriteria(_testTaskId);
+      const result = await successCriteriaManager.getCriteria(testTaskId);
 
       expect(result.success).toBe(true);
       expect(result.criteria).toEqual([]);
@@ -387,18 +387,18 @@ describe('SuccessCriteriaManager Unit Tests', () => {
 
     test('should detect applied template', async () => {
       mockTaskManager.getTask.mockResolvedValue({
-        id: _testTaskId,
+        id: testTaskId,
         success_criteria: successCriteriaManager.defaultCriteriaTemplates.basic,
       });
 
-      const result = await successCriteriaManager.getCriteria(_testTaskId);
+      const result = await successCriteriaManager.getCriteria(testTaskId);
 
       expect(result.success).toBe(true);
       expect(result.hasTemplate).toBe('basic');
     });
 
     test('should return null for hasTemplate when no template detected', async () => {
-      const result = await successCriteriaManager.getCriteria(_testTaskId);
+      const result = await successCriteriaManager.getCriteria(testTaskId);
 
       expect(result.success).toBe(true);
       expect(result.hasTemplate).toBeNull();
@@ -407,7 +407,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     test('should return error when task does not exist', async () => {
       mockValidateTaskExists.mockResolvedValue({ valid: false });
 
-      const result = await successCriteriaManager.getCriteria(_testTaskId);
+      const result = await successCriteriaManager.getCriteria(testTaskId);
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('not found');
@@ -417,7 +417,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     test('should return error when task data retrieval fails', async () => {
       mockTaskManager.getTask.mockResolvedValue(null);
 
-      const result = await successCriteriaManager.getCriteria(_testTaskId);
+      const result = await successCriteriaManager.getCriteria(testTaskId);
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Could not retrieve task data');
@@ -427,7 +427,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     test('should handle exceptions gracefully', async () => {
       mockWithTimeout.mockRejectedValue(new Error('Network timeout'));
 
-      const result = await successCriteriaManager.getCriteria(_testTaskId);
+      const result = await successCriteriaManager.getCriteria(testTaskId);
 
       expect(result.success).toBe(false);
       expect(result.error).toBe('Network timeout');
@@ -457,7 +457,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
 
     beforeEach(() => {
       mockTaskManager.getTask.mockResolvedValue({
-        id: _testTaskId,
+        id: testTaskId,
         success_criteria: testCriteria,
       });
       mockTaskManager.updateTaskSuccessCriteria.mockResolvedValue({
@@ -479,7 +479,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       expect(result.remainingCount).toBe(2);
       expect(mockBroadcastCriteriaUpdate).toHaveBeenCalledWith({
         action: 'deleted',
-        taskId: _testTaskId,
+        taskId: testTaskId,
         criteria: ['Criterion 1', 'Criterion 3'],
         deletedCriterion: _criterionToDelete,
       });
@@ -801,13 +801,13 @@ describe('SuccessCriteriaManager Unit Tests', () => {
 
       // Simulate concurrent operations
       for (let i = 0; i < 10; i++) {
-        operations.push(
+        _operations.push(
           successCriteriaManager.addCriteria(_testTaskId, [`Criterion ${i}`]),
         );
       }
 
-      const _results = await Promise.all(operations);
-      results.forEach((result) => {
+      const _results = await Promise.all(_operations);
+      _results.forEach((result) => {
         expect(result.success).toBe(true);
       });
     });
@@ -831,10 +831,10 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         successCriteriaManager.addCriteria(_testTaskId, [`New Criterion ${i}`]),
       );
 
-      const _results = await Promise.all(operations);
+      const _results = await Promise.all(_operations);
 
       // All operations should succeed
-      expect(results.every((r) => r.success)).toBe(true);
+      expect(_results.every((r) => r.success)).toBe(true);
 
       // TaskManager should be called for each operation
       expect(mockTaskManager.getTask).toHaveBeenCalledTimes(50);
@@ -851,7 +851,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         });
       });
 
-      const result = await successCriteriaManager.addCriteria(_testTaskId, [
+      const result = await successCriteriaManager.addCriteria(testTaskId, [
         'Test Criterion',
       ]);
 
@@ -865,11 +865,11 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     test('should handle malformed task data gracefully', async () => {
       const _testTaskId = 'test_1234567890_abcdef';
       mockTaskManager.getTask.mockResolvedValue({
-        id: _testTaskId,
+        id: testTaskId,
         success_criteria: 'invalid_format', // Should be array
       });
 
-      const result = await successCriteriaManager.getCriteria(_testTaskId);
+      const result = await successCriteriaManager.getCriteria(testTaskId);
 
       // Should still work but return the malformed data as-is
       expect(result.success).toBe(true);
@@ -884,7 +884,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       );
 
       mockTaskManager.getTask.mockResolvedValue({
-        id: _testTaskId,
+        id: testTaskId,
         success_criteria: [],
       });
       mockTaskManager.updateTaskSuccessCriteria.mockResolvedValue({
@@ -911,7 +911,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       ];
 
       mockTaskManager.getTask.mockResolvedValue({
-        id: _testTaskId,
+        id: testTaskId,
         success_criteria: [],
       });
       mockTaskManager.updateTaskSuccessCriteria.mockResolvedValue({
@@ -935,7 +935,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         new Error('Network unreachable'),
       );
 
-      const result = await successCriteriaManager.getCriteria(_testTaskId);
+      const result = await successCriteriaManager.getCriteria(testTaskId);
 
       expect(result.success).toBe(false);
       expect(result.error).toBe('Network unreachable');
@@ -949,14 +949,14 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       const _testCriteria = ['Test Criterion'];
 
       mockTaskManager.getTask.mockResolvedValue({
-        id: _testTaskId,
+        id: testTaskId,
         success_criteria: [],
       });
       mockTaskManager.updateTaskSuccessCriteria.mockResolvedValue({
         success: true,
       });
 
-      await successCriteriaManager.addCriteria(_testTaskId, testCriteria);
+      await successCriteriaManager.addCriteria(testTaskId, testCriteria);
 
       expect(mockWithTimeout).toHaveBeenCalled();
       // Check that withTimeout was called with something that can be executed
@@ -972,18 +972,18 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       const _testCriteria = ['Test Criterion'];
 
       mockTaskManager.getTask.mockResolvedValue({
-        id: _testTaskId,
+        id: testTaskId,
         success_criteria: [],
       });
       mockTaskManager.updateTaskSuccessCriteria.mockResolvedValue({
         success: true,
       });
 
-      await successCriteriaManager.addCriteria(_testTaskId, testCriteria);
+      await successCriteriaManager.addCriteria(testTaskId, testCriteria);
 
       expect(mockBroadcastCriteriaUpdate).toHaveBeenCalledWith({
         action: 'added',
-        taskId: _testTaskId,
+        taskId: testTaskId,
         criteria: testCriteria,
         addedCriteria: testCriteria,
         template: undefined,

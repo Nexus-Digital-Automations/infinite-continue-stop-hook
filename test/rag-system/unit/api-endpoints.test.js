@@ -20,13 +20,13 @@ describe('RAG System API Endpoints', () => {
   let _testLessonId;
   let _testErrorId;
 
-  beforeAll(async () => {
+  beforeAll(() => {
     // Setup test environment
     // Note: This will be implemented when RAG system is available
     console.log('Setting up RAG test environment...');
   });
 
-  afterAll(async () => {
+  afterAll(() => {
     // Cleanup test data
     console.log('Cleaning up RAG test environment...');
   });
@@ -38,7 +38,7 @@ describe('RAG System API Endpoints', () => {
 
   describe('Lesson Storage Endpoints', () => {
     describe('POST /api/lessons', () => {
-      test('should create new lesson with valid data', async () => {
+      test('should create new lesson with valid data', () => {
         const _lessonData = {
           title: 'Test Lesson: API Error Handling',
           content: 'When dealing with API errors, always implement proper retry logic...',
@@ -68,7 +68,7 @@ describe('RAG System API Endpoints', () => {
         */
       });
 
-      test('should validate required fields', async () => {
+      test('should validate required fields', () => {
         const _invalidData = {
           title: '', // Empty title should fail
           content: 'Some content',
@@ -85,7 +85,7 @@ describe('RAG System API Endpoints', () => {
         */
       });
 
-      test('should sanitize input data', async () => {
+      test('should sanitize input data', () => {
         const _maliciousData = {
           title: '<script>alert("xss")</script>Lesson Title',
           content: 'SELECT * FROM users WHERE 1=1',
@@ -106,7 +106,7 @@ describe('RAG System API Endpoints', () => {
         */
       });
 
-      test('should enforce 10-second timeout', async () => {
+      test('should enforce 10-second timeout', () => {
         jest.setTimeout(15000); // Set test timeout to 15 seconds
 
         const _start = Date.now();
@@ -137,7 +137,7 @@ describe('RAG System API Endpoints', () => {
     });
 
     describe('GET /api/lessons/:id', () => {
-      test('should retrieve lesson by ID', async () => {
+      test('should retrieve lesson by ID', () => {
         // Placeholder for future implementation
         expect(true).toBe(true);
 
@@ -153,7 +153,7 @@ describe('RAG System API Endpoints', () => {
         */
       });
 
-      test('should return 404 for non-existent lesson', async () => {
+      test('should return 404 for non-existent lesson', () => {
         // Placeholder for future implementation
         expect(true).toBe(true);
 
@@ -168,7 +168,7 @@ describe('RAG System API Endpoints', () => {
 
   describe('Error Storage Endpoints', () => {
     describe('POST /api/errors', () => {
-      test('should create new error entry with full context', async () => {
+      test('should create new error entry with full context', () => {
         const _errorData = {
           error_type: 'linter_error',
           message: 'Unexpected token in expression',
@@ -201,7 +201,7 @@ describe('RAG System API Endpoints', () => {
         */
       });
 
-      test('should handle error without resolution', async () => {
+      test('should handle error without resolution', () => {
         const _errorData = {
           error_type: 'runtime_error',
           message: 'Cannot read property of undefined',
@@ -228,7 +228,7 @@ describe('RAG System API Endpoints', () => {
     });
 
     describe('PUT /api/errors/:id/resolve', () => {
-      test('should update error with resolution', async () => {
+      test('should update error with resolution', () => {
         const _resolutionData = {
           resolution: 'Added null check before accessing object property',
           resolved_by: 'debug-agent-003',
@@ -253,7 +253,7 @@ describe('RAG System API Endpoints', () => {
 
   describe('Semantic Search Endpoints', () => {
     describe('POST /api/search', () => {
-      test('should perform semantic search across lessons and errors', async () => {
+      test('should perform semantic search across lessons and errors', () => {
         const _searchQuery = {
           query: 'How to handle API timeout errors in Node.js',
           type: 'lessons',
@@ -286,7 +286,7 @@ describe('RAG System API Endpoints', () => {
         */
       });
 
-      test('should handle empty search results', async () => {
+      test('should handle empty search results', () => {
         const _searchQuery = {
           query: 'extremely specific query that should return no results xyz123',
           type: 'lessons',
@@ -306,7 +306,7 @@ describe('RAG System API Endpoints', () => {
         */
       });
 
-      test('should validate search parameters', async () => {
+      test('should validate search parameters', () => {
         const _invalidQuery = {
           query: '', // Empty query
           limit: 1000, // Excessive limit
@@ -325,7 +325,7 @@ describe('RAG System API Endpoints', () => {
     });
 
     describe('GET /api/search/similar/:id', () => {
-      test('should find similar content based on embedding', async () => {
+      test('should find similar content based on embedding', () => {
         // Placeholder for future implementation
         expect(true).toBe(true);
 
@@ -350,7 +350,7 @@ describe('RAG System API Endpoints', () => {
 
   describe('Analytics and Metrics Endpoints', () => {
     describe('GET /api/analytics/usage', () => {
-      test('should provide usage statistics', async () => {
+      test('should provide usage statistics', () => {
         // Placeholder for future implementation
         expect(true).toBe(true);
 
@@ -369,7 +369,7 @@ describe('RAG System API Endpoints', () => {
     });
 
     describe('GET /api/analytics/performance', () => {
-      test('should provide performance metrics', async () => {
+      test('should provide performance metrics', () => {
         // Placeholder for future implementation
         expect(true).toBe(true);
 
@@ -389,7 +389,7 @@ describe('RAG System API Endpoints', () => {
 
   describe('Integration Endpoints', () => {
     describe('POST /api/integration/taskmanager', () => {
-      test('should integrate with TaskManager API workflow', async () => {
+      test('should integrate with TaskManager API workflow', () => {
         const _integrationData = {
           task_id: 'feature_123456789_test',
           lesson_data: {
@@ -415,7 +415,7 @@ describe('RAG System API Endpoints', () => {
     });
 
     describe('POST /api/integration/migrate-lessons', () => {
-      test('should migrate existing development/lessons files', async () => {
+      test('should migrate existing development/lessons files', () => {
         const _migrationRequest = {
           source_path: '/development/lessons',
           preserve_structure: true,
@@ -440,7 +440,7 @@ describe('RAG System API Endpoints', () => {
 
   describe('Health and Status Endpoints', () => {
     describe('GET /api/health', () => {
-      test('should return system health status', async () => {
+      test('should return system health status', () => {
         // Placeholder for future implementation
         expect(true).toBe(true);
 
@@ -456,7 +456,7 @@ describe('RAG System API Endpoints', () => {
         */
       });
 
-      test('should complete health check within timeout', async () => {
+      test('should complete health check within timeout', () => {
         const _start = Date.now();
 
         // Placeholder for future implementation

@@ -106,7 +106,7 @@ describe('RAG System Data Migration and Integrity', () => {
       */
     });
 
-    test('should handle different file formats during migration', async () => {
+    test('should handle different file formats during migration', () => {
       // Create test files in different formats
       const _testFileFormats = [
         {
@@ -210,7 +210,7 @@ Tags: database, performance, connection-pooling`,
       */
     });
 
-    test('should handle migration errors gracefully', async () => {
+    test('should handle migration errors gracefully', () => {
       // Create problematic files for error testing
       const _problematicFiles = [
         {
@@ -285,7 +285,7 @@ Tags: database, performance, connection-pooling`,
   });
 
   describe('Data Integrity Validation', () => {
-    test('should validate data consistency across system components', async () => {
+    test('should validate data consistency across system components', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -354,7 +354,7 @@ Tags: database, performance, connection-pooling`,
       */
     });
 
-    test('should detect and report data corruption', async () => {
+    test('should detect and report data corruption', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -402,7 +402,7 @@ Tags: database, performance, connection-pooling`,
       */
     });
 
-    test('should repair corrupted data automatically', async () => {
+    test('should repair corrupted data automatically', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -471,7 +471,7 @@ Tags: database, performance, connection-pooling`,
   });
 
   describe('Backup and Recovery', () => {
-    test('should create comprehensive system backups', async () => {
+    test('should create comprehensive system backups', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -528,7 +528,7 @@ Tags: database, performance, connection-pooling`,
       */
     });
 
-    test('should restore system from backup accurately', async () => {
+    test('should restore system from backup accurately', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
@@ -617,7 +617,7 @@ Tags: database, performance, connection-pooling`,
       */
     });
 
-    test('should handle incremental backups and point-in-time recovery', async () => {
+    test('should handle incremental backups and point-in-time recovery', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 

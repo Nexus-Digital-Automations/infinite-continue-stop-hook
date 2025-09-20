@@ -16,14 +16,14 @@ describe('Semantic Search Accuracy Validation', () => {
   let _testDataSet;
   let _embeddingService;
 
-  beforeAll(async () => {
+  beforeAll(() => {
     console.log('Setting up semantic search accuracy test environment...');
 
     // Initialize test dataset with known technical content
     _testDataSet = await setupTechnicalTestDataset();
   });
 
-  afterAll(async () => {
+  afterAll(() => {
     console.log('Cleaning up semantic search test environment...');
   });
 
@@ -32,7 +32,7 @@ describe('Semantic Search Accuracy Validation', () => {
   });
 
   describe('Technical Content Search Accuracy', () => {
-    test('should accurately find relevant lessons for JavaScript error handling', async () => {
+    test('should accurately find relevant lessons for JavaScript error handling', () => {
       // Setup: Create diverse JavaScript-related lessons
       const _jsLessons = [
         {
@@ -134,7 +134,7 @@ describe('Semantic Search Accuracy Validation', () => {
       */
     });
 
-    test('should distinguish between different programming languages', async () => {
+    test('should distinguish between different programming languages', () => {
       const _multiLanguageLessons = [
         {
           id: 'py-error-1',
@@ -215,7 +215,7 @@ describe('Semantic Search Accuracy Validation', () => {
       */
     });
 
-    test('should handle code-specific vs documentation searches', async () => {
+    test('should handle code-specific vs documentation searches', () => {
       const _mixedContentLessons = [
         {
           id: 'code-example-1',
@@ -297,7 +297,7 @@ describe('Semantic Search Accuracy Validation', () => {
   });
 
   describe('Error Pattern Recognition', () => {
-    test('should accurately match similar error patterns', async () => {
+    test('should accurately match similar error patterns', () => {
       const _errorPatterns = [
         {
           id: 'error-pattern-1',
@@ -375,7 +375,7 @@ describe('Semantic Search Accuracy Validation', () => {
       */
     });
 
-    test('should recognize error severity and urgency patterns', async () => {
+    test('should recognize error severity and urgency patterns', () => {
       const _severityErrors = [
         {
           id: 'critical-error-1',
@@ -454,7 +454,7 @@ describe('Semantic Search Accuracy Validation', () => {
   });
 
   describe('Context-Aware Search', () => {
-    test('should consider project context in search relevance', async () => {
+    test('should consider project context in search relevance', () => {
       const _contextualLessons = [
         {
           id: 'frontend-lesson-1',
@@ -525,7 +525,7 @@ describe('Semantic Search Accuracy Validation', () => {
       */
     });
 
-    test('should handle temporal context in search relevance', async () => {
+    test('should handle temporal context in search relevance', () => {
       const _temporalLessons = [
         {
           id: 'recent-lesson-1',
@@ -660,7 +660,7 @@ describe('Semantic Search Accuracy Validation', () => {
       */
     });
 
-    test('should maintain consistent ranking quality', async () => {
+    test('should maintain consistent ranking quality', () => {
       // Test ranking consistency across multiple runs
       const _testQuery = 'JavaScript async error handling best practices';
 
@@ -693,7 +693,7 @@ describe('Semantic Search Accuracy Validation', () => {
   });
 
   // Helper functions for future implementation
-  async function setupTechnicalTestDataset() {
+  function setupTechnicalTestDataset() {
     return {
       lessons: [],
       errors: [],
@@ -701,7 +701,7 @@ describe('Semantic Search Accuracy Validation', () => {
     };
   }
 
-  async function createBenchmarkDataset() {
+  function createBenchmarkDataset() {
     return {
       lessons: [],
       queries: [],
