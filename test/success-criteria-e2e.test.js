@@ -749,7 +749,7 @@ module.exports = { authenticate };
       const startTime = Date.now();
 
       // Run performance validation
-      const performanceResult = await execCommand('npm', [
+      const _performanceResult = await execCommand('npm', [
         'run',
         'test:coverage',
       ]);

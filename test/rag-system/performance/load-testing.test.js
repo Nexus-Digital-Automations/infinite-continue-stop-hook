@@ -12,21 +12,21 @@ const _path = require('path');
 const _fs = require('fs').promises;
 
 // Helper functions for test data generation
-function getRandomTechnicalTopic() {
+function _getRandomTechnicalTopic() {
   const topics = ['API Integration', 'Database Optimization', 'React Performance', 'Error Handling', 'Security Patterns'];
   return topics[Math.floor(Math.random() * topics.length)];
 }
 
-function generateRandomTechnicalContent() {
+function _generateRandomTechnicalContent() {
   return 'Sample technical content for testing purposes.';
 }
 
-function getRandomTags() {
+function _getRandomTags() {
   const allTags = ['javascript', 'react', 'database', 'api', 'performance', 'security'];
   return allTags.slice(0, Math.floor(Math.random() * 3) + 1);
 }
 
-function getRandomCategory() {
+function _getRandomCategory() {
   const categories = ['frontend', 'backend', 'database', 'security', 'performance'];
   return categories[Math.floor(Math.random() * categories.length)];
 }

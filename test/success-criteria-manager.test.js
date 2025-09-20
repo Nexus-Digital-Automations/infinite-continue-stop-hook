@@ -579,10 +579,10 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     const testTaskId = 'test_1234567890_abcdef';
 
     test('should apply basic template successfully', async () => {
-      const _addCriteriaSpy = jest.spyOn(successCriteriaManager, 'addCriteria');
+      const addCriteriaSpy = jest.spyOn(successCriteriaManager, 'addCriteria');
       addCriteriaSpy.mockResolvedValue({ success: true });
 
-      const result = await successCriteriaManager.applyProjectTemplate(
+      const _result = await successCriteriaManager.applyProjectTemplate(
         testTaskId,
         'basic',
         false,

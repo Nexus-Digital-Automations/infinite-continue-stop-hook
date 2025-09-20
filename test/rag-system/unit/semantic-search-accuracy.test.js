@@ -708,7 +708,7 @@ describe('Semantic Search Accuracy Validation', () => {
     };
   }
 
-  function _calculateRankingSimilarity(ranking1, _ranking2) {
+  function _calculateRankingSimilarity(_ranking1, _ranking2) {
     // Placeholder for ranking similarity calculation
     return 1.0;
   }

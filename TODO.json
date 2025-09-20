@@ -2679,12 +2679,14 @@
       "updated_at": "2025-09-20T15:24:44.044Z"
     },
     {
-      "status": "pending",
+      "status": "completed",
       "created_at": "2025-09-20T15:14:47.874Z",
       "title": "Fix no-unused-vars ESLint violations across project",
       "description": "Remove unused variables, prefix unused parameters with underscore where needed, and remove unused imports while preserving code functionality. Ensure all declared variables are actually used or properly marked as intentionally unused.",
       "category": "error",
-      "id": "error_1758381287874_w3debt3unz"
+      "id": "error_1758381287874_w3debt3unz",
+      "completed_at": "2025-09-20T15:31:20.931Z",
+      "updated_at": "2025-09-20T15:31:20.931Z"
     },
     {
       "status": "completed",
@@ -2697,20 +2699,24 @@
       "updated_at": "2025-09-20T15:25:40.251Z"
     },
     {
-      "status": "pending",
+      "status": "completed",
       "created_at": "2025-09-20T15:14:48.224Z",
       "title": "Fix all no-undef ESLint violations across the project",
       "description": "Fix undefined variables in test files (describe, it, expect, jest) and development scripts. Add proper imports, variable declarations, global declarations, or remove unused references. Focus on test framework globals configuration and missing variable declarations in development/temp-scripts/ and test/ directories.",
       "category": "error",
-      "id": "error_1758381288224_2r6wojezhwj"
+      "id": "error_1758381288224_2r6wojezhwj",
+      "completed_at": "2025-09-20T15:27:12.058Z",
+      "updated_at": "2025-09-20T15:27:12.058Z"
     },
     {
-      "status": "pending",
+      "status": "completed",
       "created_at": "2025-09-20T15:14:48.791Z",
       "title": "Fix security/detect-possible-timing-attacks and miscellaneous ESLint violations",
       "description": "Address timing attack vulnerabilities by using secure comparison methods and fix any remaining miscellaneous ESLint violations not covered by specialized agents. Ensure comprehensive coverage of all violation types across the project.",
       "category": "error",
-      "id": "error_1758381288791_ihg9288p65"
+      "id": "error_1758381288791_ihg9288p65",
+      "completed_at": "2025-09-20T15:26:42.066Z",
+      "updated_at": "2025-09-20T15:26:42.066Z"
     },
     {
       "status": "completed",
@@ -2801,7 +2807,7 @@
       "updated_at": "2025-09-20T15:25:17.595Z"
     },
     {
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2025-09-20T15:17:21.843Z",
       "title": "Fix no-unused-vars in lib/validation-engine.js",
       "description": "Prefix all unused validationContext, taskRequirements, and implementerAgentId parameters with underscore",
@@ -2818,31 +2824,63 @@
           "reassignReason": null,
           "claimPriority": "normal"
         }
-      ]
+      ],
+      "completed_at": "2025-09-20T15:26:36.792Z",
+      "updated_at": "2025-09-20T15:26:36.792Z"
     },
     {
-      "status": "pending",
+      "status": "completed",
       "created_at": "2025-09-20T15:17:34.217Z",
       "title": "Fix no-unused-vars in lib/validation-integration.js",
       "description": "Prefix unused parameters and remove unused variables: taskRequirements, taskDetails, config, validationResults, featureTaskData",
       "category": "error",
-      "id": "error_1758381454217_2oyclyd8a0k"
+      "id": "error_1758381454217_2oyclyd8a0k",
+      "assigned_agent": "dev_session_1758381273693_1_general_7ea43292",
+      "started_at": "2025-09-20T15:26:55.634Z",
+      "claimed_by": "dev_session_1758381273693_1_general_7ea43292",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758381273693_1_general_7ea43292",
+          "role": "primary",
+          "assignedAt": "2025-09-20T15:26:55.634Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-20T15:27:58.907Z",
+      "updated_at": "2025-09-20T15:27:58.907Z"
     },
     {
-      "status": "pending",
+      "status": "completed",
       "created_at": "2025-09-20T15:17:48.490Z",
       "title": "Fix no-unused-vars in test/embedded-subtasks-integration.test.js",
       "description": "Prefix/remove unused variables in test helper functions",
       "category": "error",
-      "id": "error_1758381468490_s8g63s33vkl"
+      "id": "error_1758381468490_s8g63s33vkl",
+      "completed_at": "2025-09-20T15:30:03.608Z",
+      "updated_at": "2025-09-20T15:30:03.608Z"
     },
     {
-      "status": "pending",
+      "status": "completed",
       "created_at": "2025-09-20T15:18:04.879Z",
       "title": "Fix no-unused-vars in remaining test files",
       "description": "Fix unused variables in rag-system test files and other test files: load-testing.test.js, semantic-search-accuracy.test.js, success-criteria-e2e.test.js, success-criteria-manager.test.js",
       "category": "error",
-      "id": "error_1758381484879_n0q65w2pq3l"
+      "id": "error_1758381484879_n0q65w2pq3l",
+      "assigned_agent": "dev_session_1758381273693_1_general_7ea43292",
+      "started_at": "2025-09-20T15:28:22.393Z",
+      "claimed_by": "dev_session_1758381273693_1_general_7ea43292",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758381273693_1_general_7ea43292",
+          "role": "primary",
+          "assignedAt": "2025-09-20T15:28:22.393Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-20T15:30:35.837Z",
+      "updated_at": "2025-09-20T15:30:35.837Z"
     }
   ],
   "current_mode": "DEVELOPMENT",

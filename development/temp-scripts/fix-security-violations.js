@@ -195,7 +195,7 @@ class SecurityViolationFixer {
   /**
    * Fix a specific filesystem operation
    */
-  fixFsOperation(content, operation, filePath) {
+  fixFsOperation(content, operation, _filePath) {
     const lines = content.split('\n');
     const lineIndex = this.getLineNumber(content, operation.index) - 1;
     const line = lines[lineIndex];
