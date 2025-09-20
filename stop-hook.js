@@ -158,7 +158,7 @@ async function cleanupStaleAgentsInProject(projectPath, logger) {
           agent: staleAgentId,
           action: 'auto_unassign_stale',
           timestamp: new Date().toISOString(),
-          reason: 'Agent became stale (inactive >30 minutes)',
+          reason: 'Agent became stale (inactive >15 minutes)',
         });
 
         tasksUnassigned++;
