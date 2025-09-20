@@ -1,0 +1,38 @@
+{
+  "project": "audit-system-test",
+  "tasks": [],
+  "agents": {
+    "dev_session_1758383410060_1_general_9eb371b4": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T15:50:10.060Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T15:50:10.060Z",
+      "sessionId": null,
+      "metadata": {}
+    }
+  },
+  "features": [],
+  "current_mode": "DEVELOPMENT",
+  "last_mode": null,
+  "execution_count": 0,
+  "review_strikes": 0,
+  "strikes_completed_last_run": false,
+  "last_hook_activation": 1758383409805,
+  "settings": {
+    "version": "2.0.0",
+    "created": "2025-09-20T15:50:09.805Z"
+  }
+}

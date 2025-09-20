@@ -31,5 +31,5 @@ console.log(`Memory allocated: ${memAlloc} arrays`);
 
 setTimeout(() => {
   console.log('Application completed successfully');
-  process.exit(0);
+  // Node.js will naturally exit when there are no more tasks
 }, 1000);

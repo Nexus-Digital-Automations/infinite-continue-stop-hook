@@ -88,7 +88,7 @@ class SecurityViolationFixer {
   /**
    * Process a single file to fix security violations
    */
-  async processFile(filePath) {
+  processFile(filePath) {
     console.log(`🔧 Processing: ${filePath}`);
 
     const content = fs.readFileSync(filePath, 'utf8');
