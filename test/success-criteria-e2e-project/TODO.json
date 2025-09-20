@@ -1,20 +1,20 @@
 {
   "meta": {
-    "created": "2025-09-20T22:28:33.982Z",
-    "updated": "2025-09-20T22:28:33.982Z",
+    "created": "2025-09-20T22:51:30.627Z",
+    "updated": "2025-09-20T22:51:30.627Z",
     "version": "2.0.0",
     "project_root": "/Users/jeremyparker/infinite-continue-stop-hook/test/success-criteria-e2e-project"
   },
   "tasks": [],
   "features": [],
   "agents": {
-    "dev_session_1758407314165_1_general_78ed36b2": {
+    "dev_session_1758408691128_1_general_d4da5170": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T22:28:34.165Z",
+      "lastHeartbeat": "2025-09-20T22:51:31.129Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -25,7 +25,49 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T22:28:34.165Z",
+      "createdAt": "2025-09-20T22:51:31.129Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758408720899_1_general_56f36454": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T22:52:00.899Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T22:52:00.899Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758408750921_1_general_19f74d1b": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T22:52:30.921Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T22:52:30.921Z",
       "sessionId": null,
       "metadata": {}
     }

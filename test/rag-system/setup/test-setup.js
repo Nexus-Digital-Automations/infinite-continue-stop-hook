@@ -177,7 +177,7 @@ global.RAG_TEST_UTILS = {
 
     // Create all files in parallel (after directories exist)
     await Promise.all(
-      files.map(file => _fs.writeFile(file.path, file.content))
+      files.map(file => _fs.writeFile(file.path, file.content)),
     );
   },
 
@@ -247,8 +247,8 @@ afterEach(async () => {
         _fs.rm(_path.join(global.RAG_TEST_CONFIG.tempPath, file), {
           recursive: true,
           force: true,
-        })
-      )
+        }),
+      ),
     );
   } catch {
     // Ignore cleanup errors

@@ -3,22 +3,22 @@
   "tasks": [
     {
       "status": "pending",
-      "created_at": "2025-09-20T22:28:45.983Z",
-      "title": "Feature requiring comprehensive audit",
-      "description": "Test feature to validate comprehensive audit criteria loading",
+      "created_at": "2025-09-20T22:52:18.943Z",
+      "title": "Feature with missing audit criteria",
+      "description": "Test feature to validate fallback audit criteria behavior",
       "category": "feature",
-      "priority": "high",
-      "id": "feature_1758407325983_jwes41n0d1"
+      "priority": "medium",
+      "id": "feature_1758408738942_t4bqifxiunr"
     }
   ],
   "agents": {
-    "dev_session_1758407314058_1_general_8f0c0d8e": {
+    "dev_session_1758408726976_1_general_0a71e50d": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T22:28:34.058Z",
+      "lastHeartbeat": "2025-09-20T22:52:06.976Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -29,7 +29,7 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T22:28:34.058Z",
+      "createdAt": "2025-09-20T22:52:06.976Z",
       "sessionId": null,
       "metadata": {}
     }
@@ -40,10 +40,10 @@
   "execution_count": 0,
   "review_strikes": 0,
   "strikes_completed_last_run": false,
-  "last_hook_activation": 1758407313773,
+  "last_hook_activation": 1758408726782,
   "settings": {
     "version": "2.0.0",
-    "created": "2025-09-20T22:28:33.773Z"
+    "created": "2025-09-20T22:52:06.782Z"
   },
   "completed_tasks": []
 }
