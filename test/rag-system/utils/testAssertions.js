@@ -239,9 +239,9 @@ class TestAssertions {
       const _prevScore = results[i - 1][scoreProperty];
       const _currentScore = results[i][scoreProperty];
 
-      expect(typeof prevScore).toBe('number');
-      expect(typeof currentScore).toBe('number');
-      expect(prevScore).toBeGreaterThanOrEqual(currentScore);
+      expect(typeof _prevScore).toBe('number');
+      expect(typeof _currentScore).toBe('number');
+      expect(_prevScore).toBeGreaterThanOrEqual(_currentScore);
     }
   }
 
@@ -456,7 +456,7 @@ class TestAssertions {
 
     for (let i = 0; i < vector1.length; i++) {
       const _difference = vector1[i] - vector2[i];
-      sumSquaredDifferences += difference * difference;
+      sumSquaredDifferences += _difference * _difference;
     }
 
     return Math.sqrt(sumSquaredDifferences);
@@ -479,7 +479,7 @@ class TestAssertions {
           results[i].title || '',
           results[j].title || '',
         );
-        similarities.push(similarity);
+        similarities.push(_similarity);
       }
     }
 
@@ -516,7 +516,7 @@ class TestAssertions {
         await asyncFunction(invalidInput);
         // If we reach here, the function should have thrown an error
         throw new Error(`Function should have thrown an error for input: ${JSON.stringify(invalidInput)}`);
-      } catch {
+      } catch (error) {
         // This is expected - function should handle invalid input gracefully
         expect(error).toBeInstanceOf(Error);
         expect(error.message).toBeDefined();

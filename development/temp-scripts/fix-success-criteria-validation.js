@@ -1,6 +1,5 @@
 
 const fs = require('fs');
-const path = require('path');
 
 const testFile = '/Users/jeremyparker/infinite-continue-stop-hook/test/success-criteria-validation.test.js';
 

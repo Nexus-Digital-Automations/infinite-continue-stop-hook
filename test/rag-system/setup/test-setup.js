@@ -153,16 +153,16 @@ global.RAG_TEST_UTILS = {
    * Create test directory structure
    */
   createTestDirectory: async (basePath, structure) => {
-    await fs.mkdir(basePath, { recursive: true });
+    await _fs.mkdir(basePath, { recursive: true });
 
     for (const [name, content] of Object.entries(structure)) {
       const _fullPath = _path.join(basePath, name);
 
       if (typeof content === 'object') {
-        await fs.mkdir(fullPath, { recursive: true });
-        await global.RAG_TEST_UTILS.createTestDirectory(fullPath, content);
+        await _fs.mkdir(_fullPath, { recursive: true });
+        await global.RAG_TEST_UTILS.createTestDirectory(_fullPath, content);
       } else {
-        await fs.writeFile(fullPath, content);
+        await _fs.writeFile(_fullPath, content);
       }
     }
   },
@@ -172,8 +172,8 @@ global.RAG_TEST_UTILS = {
    */
   cleanupTestDirectory: async (dirPath) => {
     try {
-      await fs.rm(dirPath, { recursive: true, force: true });
-    } catch {
+      await _fs.rm(dirPath, { recursive: true, force: true });
+    } catch (error) {
       console.warn(`Cleanup warning for ${dirPath}:`, error.message);
     }
   },
@@ -218,17 +218,17 @@ beforeEach(async () => {
   });
 
   // Ensure test directories exist
-  await fs.mkdir(global.RAG_TEST_CONFIG.testDataPath, { recursive: true });
-  await fs.mkdir(global.RAG_TEST_CONFIG.tempPath, { recursive: true });
+  await _fs.mkdir(global.RAG_TEST_CONFIG.testDataPath, { recursive: true });
+  await _fs.mkdir(global.RAG_TEST_CONFIG.tempPath, { recursive: true });
 });
 
 // Global teardown
 afterEach(async () => {
   // Cleanup temporary test data
   try {
-    const tempFiles = await fs.readdir(global.RAG_TEST_CONFIG.tempPath);
+    const tempFiles = await _fs.readdir(global.RAG_TEST_CONFIG.tempPath);
     for (const file of tempFiles) {
-      await fs.rm(_path.join(global.RAG_TEST_CONFIG.tempPath, file), {
+      await _fs.rm(_path.join(global.RAG_TEST_CONFIG.tempPath, file), {
         recursive: true,
         force: true,
       });

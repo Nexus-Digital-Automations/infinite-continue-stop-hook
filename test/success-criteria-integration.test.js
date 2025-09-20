@@ -92,7 +92,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
  */
 async function setupTestProject() {
   try {
-    await fs.mkdir(TEST_PROJECT_DIR, { recursive: true });
+    await _fs.mkdir(TEST_PROJECT_DIR, { recursive: true });
 
     // Create basic TODO.json structure
     const initialTodoData = {
@@ -113,7 +113,7 @@ async function setupTestProject() {
       },
     };
 
-    await fs.writeFile(TODO_PATH, JSON.stringify(initialTodoData, null, 2));
+    await _fs.writeFile(TODO_PATH, JSON.stringify(initialTodoData, null, 2));
 
     // Create package.json for the test project
     const packageJson = {
@@ -127,7 +127,7 @@ async function setupTestProject() {
       },
     };
 
-    await fs.writeFile(
+    await _fs.writeFile(
       _path.join(TEST_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2),
     );
@@ -142,14 +142,14 @@ async function setupTestProject() {
  */
 async function cleanupTestProject() {
   try {
-    await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
+    await _fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
   } catch {
     // Ignore cleanup errors
   }
 }
 
 describe('Success Criteria Integration Tests', () => {
-  let _agentId;
+  let agentId;
 
   beforeAll(async () => {
     await setupTestProject();
@@ -167,7 +167,7 @@ describe('Success Criteria Integration Tests', () => {
   });
 
   describe('Success Criteria API Endpoints', () => {
-    let _taskId;
+    let taskId;
 
     beforeEach(async () => {
       // Create a test task for success criteria operations
@@ -204,7 +204,7 @@ describe('Success Criteria Integration Tests', () => {
       expect(listResult.success).toBe(true);
 
       const _task = listResult.tasks.find((t) => t.id === taskId);
-      expect(task).toBeDefined();
+      expect(_task).toBeDefined();
     });
 
     test('should apply template to task success criteria', async () => {
@@ -259,12 +259,12 @@ describe('Success Criteria Integration Tests', () => {
       const _taskId = createResult.task.id;
 
       // Claim task
-      const claimResult = await execAPI('claim', [taskId, agentId]);
+      const claimResult = await execAPI('claim', [_taskId, agentId]);
       expect(claimResult.success).toBe(true);
 
       // Complete task with criteria validation
       const completeResult = await execAPI('complete', [
-        taskId,
+        _taskId,
         JSON.stringify({
           message: 'Task completed with all success criteria met',
           validation_results: {
@@ -295,7 +295,7 @@ describe('Success Criteria Integration Tests', () => {
       expect(listResult.success).toBe(true);
 
       const _task = listResult.tasks.find((t) => t.id === createResult.task.id);
-      expect(task).toBeDefined();
+      expect(_task).toBeDefined();
     });
 
     test('should validate template application workflow', async () => {
@@ -314,13 +314,13 @@ describe('Success Criteria Integration Tests', () => {
       // Apply template (would be through success criteria API)
       // For now, verify task creation and basic operations
       const listResult = await execAPI('list', [
-        JSON.stringify({ id: taskId }),
+        JSON.stringify({ id: _taskId }),
       ]);
       expect(listResult.success).toBe(true);
 
-      const _task = listResult.tasks.find((t) => t.id === taskId);
-      expect(task).toBeDefined();
-      expect(task.category).toBe('feature');
+      const _task = listResult.tasks.find((t) => t.id === _taskId);
+      expect(_task).toBeDefined();
+      expect(_task.category).toBe('feature');
     });
   });
 
@@ -337,12 +337,12 @@ describe('Success Criteria Integration Tests', () => {
         ]),
       );
 
-      const createResults = await Promise.all(createPromises);
+      const createResults = await Promise.all(_createPromises);
 
       // Verify all tasks were created successfully
       createResults.forEach((result) => {
         expect(result.success).toBe(true);
-        expect(result.task.id).toBeDefined();
+        expect(result._task.id).toBeDefined();
       });
 
       // Verify tasks exist in the system
@@ -371,10 +371,10 @@ describe('Success Criteria Integration Tests', () => {
       ]);
 
       const _endTime = Date.now();
-      const _duration = endTime - startTime;
+      const _duration = _endTime - _startTime;
 
       expect(createResult.success).toBe(true);
-      expect(duration).toBeLessThan(5000); // Should complete within 5 seconds
+      expect(_duration).toBeLessThan(5000); // Should complete within 5 seconds
     });
 
     test('should handle large criteria sets efficiently', async () => {
@@ -391,15 +391,15 @@ describe('Success Criteria Integration Tests', () => {
           title: 'Large criteria set task',
           description: 'Test task with comprehensive criteria set',
           category: 'feature',
-          success_criteria: largeCriteriaSet,
+          success_criteria: _largeCriteriaSet,
         }),
       ]);
 
       const _endTime = Date.now();
-      const _duration = endTime - startTime;
+      const _duration = _endTime - _startTime;
 
       expect(createResult.success).toBe(true);
-      expect(duration).toBeLessThan(10000); // Should complete within 10 seconds
+      expect(_duration).toBeLessThan(10000); // Should complete within 10 seconds
     });
   });
 
@@ -562,8 +562,8 @@ describe('Success Criteria Integration Tests', () => {
       expect(listResult.success).toBe(true);
 
       const _task = listResult.tasks.find((t) => t.id === taskId);
-      expect(task).toBeDefined();
-      expect(task.success_criteria).toBeUndefined();
+      expect(_task).toBeDefined();
+      expect(_task.success_criteria).toBeUndefined();
     });
   });
 
@@ -593,9 +593,9 @@ describe('Success Criteria Integration Tests', () => {
       expect(listResult.success).toBe(true);
 
       const _task = listResult.tasks.find((t) => t.id === taskId);
-      expect(task).toBeDefined();
-      expect(task.status).toBe('in_progress');
-      expect(task.assigned_agent).toBe(agentId);
+      expect(_task).toBeDefined();
+      expect(_task.status).toBe('in_progress');
+      expect(_task.assigned_agent).toBe(agentId);
     });
 
     test('should validate criteria format consistency', async () => {
@@ -618,7 +618,7 @@ describe('Success Criteria Integration Tests', () => {
       expect(listResult.success).toBe(true);
 
       const _task = listResult.tasks.find((t) => t.id === createResult.task.id);
-      expect(task).toBeDefined();
+      expect(_task).toBeDefined();
     });
 
     test('should handle concurrent modifications safely', async () => {

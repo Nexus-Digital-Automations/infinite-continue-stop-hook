@@ -566,7 +566,7 @@ class TaskManagerAPI {
                   usage:
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" status <agentId>',
                   output: 'Agent state, assigned tasks, and system status',
-                  agentIdRequirement: 'Agent ID is REQUIRED - no default or stored agent ID exists'
+                  agentIdRequirement: 'Agent ID is REQUIRED - no default or stored agent ID exists',
                 },
               },
               agentLifecycle: {
@@ -635,7 +635,7 @@ class TaskManagerAPI {
                   agentIdSource: [
                     "Use agent ID from 'init' command output",
                     "Use 'list-agents' to find existing agent IDs",
-                    "Agent IDs are not stored - must be provided with every command"
+                    'Agent IDs are not stored - must be provided with every command',
                   ],
                 },
                 complete: {
@@ -776,14 +776,14 @@ class TaskManagerAPI {
                   keyPoints: [
                     'Agent IDs are NEVER stored automatically',
                     'You MUST provide agent ID with every command',
-                    'No auto-detection, no defaults, no session storage'
+                    'No auto-detection, no defaults, no session storage',
                   ],
                   solutions: [
                     "FIRST TIME: Run 'timeout 10s node taskmanager-api.js init' and COPY the returned agentId",
                     'SAVE AGENT ID: Store the agent ID somewhere you can reference it',
                     'EXISTING AGENT: Always provide your agent ID: claim <taskId> <yourAgentId>',
-                    "FOR REINITIALIZATION: Always include agent ID: reinitialize <yourAgentId>",
-                    "FOR STATUS: Always include agent ID: status <yourAgentId>",
+                    'FOR REINITIALIZATION: Always include agent ID: reinitialize <yourAgentId>',
+                    'FOR STATUS: Always include agent ID: status <yourAgentId>',
                     "FIND EXISTING AGENTS: Use 'list-agents' to see all available agent IDs",
                     "IF LOST AGENT ID: Run 'init' to create new agent OR use 'list-agents' to find existing ones",
                   ],
