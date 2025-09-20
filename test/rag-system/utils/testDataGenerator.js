@@ -55,9 +55,9 @@ class TestDataGenerator {
 
     this.codeExamples = {
       javascript: [
-        'async function fetchData() {\n  try {\n    const response = await fetch("/api/data");\n    return await response.json();\n  } catch (error) {\n    console.error("Fetch failed:", error);\n    throw error;\n  }\n}',
+        'async function fetchData() {\n  try {\n    const response = await fetch("/api/data");\n    return await response.json();\n  } catch {\n    console.error("Fetch failed:", error);\n    throw error;\n  }\n}',
         'const memoizedFunction = useMemo(() => {\n  return expensiveComputation(data);\n}, [data]);',
-        'function debounce(func, wait) {\n  let timeout;\n  return function executedFunction(...args) {\n    const later = () => {\n      clearTimeout(timeout);\n      func(...args);\n    };\n    clearTimeout(timeout);\n    timeout = setTimeout(later, wait);\n  };\n}',
+        'function debounce(_func, wait) {\n  let timeout;\n  return function executedFunction(...args) {\n    const later = () => {\n      clearTimeout(timeout);\n      func(...args);\n    };\n    clearTimeout(timeout);\n    timeout = setTimeout(later, wait);\n  };\n}',
       ],
       react: [
         'function Component({ data }) {\n  const [loading, setLoading] = useState(false);\n  const [error, setError] = useState(null);\n  \n  useEffect(() => {\n    // Effect logic here\n  }, [data]);\n  \n  return <div>{loading ? "Loading..." : data}</div>;\n}',
@@ -113,8 +113,8 @@ class TestDataGenerator {
     const category = options.category || this.getRandomCategory();
 
     for (let i = 0; i < count; i++) {
-      const tech = this.getRandomTechnology();
-      const lesson = this.generateSingleLesson(category, tech, i);
+      const _tech = this.getRandomTechnology();
+      const _lesson = this.generateSingleLesson(category, tech, i);
       lessons.push(lesson);
     }
 
@@ -216,9 +216,9 @@ ${codeExample ? `\`\`\`${tech}\n${codeExample}\n\`\`\`` : 'Implementation detail
     const errors = [];
 
     for (let i = 0; i < count; i++) {
-      const errorType = options.errorType || this.getRandomErrorType();
-      const tech = options.technology || this.getRandomTechnology();
-      const error = this.generateSingleError(errorType, tech, i);
+      const _errorType = options.errorType || this.getRandomErrorType();
+      const _tech = options.technology || this.getRandomTechnology();
+      const _error = this.generateSingleError(errorType, tech, i);
       errors.push(error);
     }
 
@@ -308,9 +308,9 @@ ${this.generatePrevention(errorType, tech)}
     const contexts = [];
 
     for (let i = 0; i < count; i++) {
-      const tech = this.getRandomTechnology();
-      const category = this.getRandomCategory();
-      const feature = this.getRandomFeature(tech);
+      const _tech = this.getRandomTechnology();
+      const _category = this.getRandomCategory();
+      const _feature = this.getRandomFeature(tech);
 
       contexts.push({
         id: `task_${this.counter++}_${Date.now()}`,
@@ -372,12 +372,12 @@ ${this.generatePrevention(errorType, tech)}
     const queries = [];
 
     for (let i = 0; i < count; i++) {
-      const template = queryTemplates[i % queryTemplates.length];
-      const tech = this.getRandomTechnology();
-      const feature = this.getRandomFeature(tech);
-      const errorType = this.getRandomErrorType();
+      const _template = queryTemplates[i % queryTemplates.length];
+      const _tech = this.getRandomTechnology();
+      const _feature = this.getRandomFeature(tech);
+      const _errorType = this.getRandomErrorType();
 
-      const query = this.interpolateTemplate(template, { tech, feature, errorType });
+      const _query = this.interpolateTemplate(template, { tech, feature, errorType });
       queries.push(query);
     }
 
@@ -544,7 +544,7 @@ ${stackLines.join('\n')}`;
     let result = template;
 
     for (const [key, value] of Object.entries(variables)) {
-      const regex = new RegExp(`\\{${key}\\}`, 'g');
+      const _regex = new RegExp(`\\{${key}\\}`, 'g');
       result = result.replace(regex, value);
     }
 

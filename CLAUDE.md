@@ -66,10 +66,11 @@ Before making ANY changes to CLAUDE.md, agents must:
 **MANDATORY SEQUENCE FOR ALL USER REQUESTS:**
 1. **INITIALIZE** - `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init`
 2. **CREATE TASK** - `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"error|feature|subtask|test"}'`
-3. **AGENT PLANNING** - Think about task complexity and communicate approach to user
+3. **AGENT PLANNING** - Think about task complexity and MANDATORY communicate approach to user
    - **SIMPLE TASKS**: "Handling this solo" for straightforward single-component work
    - **COMPLEX TASKS**: "Using X concurrent agents" (2-10) for multi-component/complex work
    - **DECISION CRITERIA**: Multi-file changes, research + implementation, testing + docs = concurrent agents
+   - **MANDATORY COMMUNICATION**: ALWAYS tell user exactly how many subagents will be deployed before starting
 4. **EXECUTE** - Begin implementation immediately
 
 **ZERO DELAY MANDATE:**
@@ -388,10 +389,12 @@ git status                                   # Verify clean/up-to-date
 **🔴 MAXIMIZE DEPLOYMENT (UP TO 10 AGENTS)**
 
 **PROTOCOL:**
-- **DECLARE COUNT**: "Deploying X concurrent agents"
+- **MANDATORY DECLARATION**: ALWAYS tell user "Deploying X concurrent agents" before starting
+- **EXPLICIT COUNT**: State exact number of subagents (e.g., "Using 5 concurrent agents", "Deploying 3 agents")
 - **SIMULTANEOUS START**: All agents via ONE tool call with multiple invokes
 - **STRATEGIC COUNT**: Maximum meaningful number (2-10) for complex tasks
 - **ASSESS ALL TASKS**: Evaluate parallelization potential
+- **USER COMMUNICATION**: NEVER deploy subagents without first informing the user of the count
 
 **USAGE:** Multi-component tasks (research + implementation + testing + docs), large refactoring, multi-file implementations
 

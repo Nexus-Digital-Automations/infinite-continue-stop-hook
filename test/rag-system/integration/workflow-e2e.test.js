@@ -8,13 +8,13 @@
  * @version 1.0.0
  */
 
-const path = require('path');
-const fs = require('fs').promises;
+const _path = require('path');
+const _fs = require('fs').promises;
 
 describe('RAG System End-to-End Workflows', () => {
-  let taskManagerApi;
-  let testProjectRoot;
-  let testAgentId;
+  let _taskManagerApi;
+  let _testProjectRoot;
+  let _testAgentId;
 
   beforeAll(async () => {
     console.log('Setting up E2E test environment...');
@@ -42,7 +42,7 @@ describe('RAG System End-to-End Workflows', () => {
     console.log('Cleaning up E2E test environment...');
     try {
       await fs.rm(testProjectRoot, { recursive: true, force: true });
-    } catch (error) {
+    } catch {
       console.warn('Cleanup warning:', error.message);
     }
   });
@@ -59,7 +59,7 @@ describe('RAG System End-to-End Workflows', () => {
 
       /* Future implementation:
       // Step 1: Agent encounters an error
-      const errorData = {
+      const _errorData = {
         error_type: 'api_timeout',
         message: 'Request timeout after 5000ms',
         file_path: '/src/services/apiClient.js',
@@ -75,12 +75,12 @@ describe('RAG System End-to-End Workflows', () => {
       };
 
       // Step 2: Store error in RAG system
-      const errorResponse = await taskManagerApi.storeError(errorData);
+      const _errorResponse = await taskManagerApi.storeError(errorData);
       expect(errorResponse.success).toBe(true);
       expect(errorResponse.error_id).toBeDefined();
 
       // Step 3: Agent learns resolution
-      const resolutionData = {
+      const _resolutionData = {
         resolution: `Increased timeout to 10000ms and implemented exponential backoff retry strategy.
                     Added request interceptor to handle timeout scenarios gracefully.`,
         code_changes: [
@@ -93,14 +93,14 @@ describe('RAG System End-to-End Workflows', () => {
         resolution_time: new Date().toISOString()
       };
 
-      const resolutionResponse = await taskManagerApi.resolveError(
+      const _resolutionResponse = await taskManagerApi.resolveError(
         errorResponse.error_id,
         resolutionData
       );
       expect(resolutionResponse.success).toBe(true);
 
       // Step 4: Create lesson from resolution
-      const lessonData = {
+      const _lessonData = {
         title: 'API Timeout Handling Best Practices',
         content: `When dealing with API timeouts:
                   1. Set appropriate timeout values (10s+ for external APIs)
@@ -115,12 +115,12 @@ describe('RAG System End-to-End Workflows', () => {
         agent_id: testAgentId
       };
 
-      const lessonResponse = await taskManagerApi.storeLesson(lessonData);
+      const _lessonResponse = await taskManagerApi.storeLesson(lessonData);
       expect(lessonResponse.success).toBe(true);
       expect(lessonResponse.lesson_id).toBeDefined();
 
       // Step 5: Different agent in different project encounters similar issue
-      const similarErrorQuery = {
+      const _similarErrorQuery = {
         query: 'API request fails with timeout error after waiting',
         context: {
           project: 'test-project-beta',
@@ -129,7 +129,7 @@ describe('RAG System End-to-End Workflows', () => {
         }
       };
 
-      const searchResponse = await taskManagerApi.findSimilarErrors(
+      const _searchResponse = await taskManagerApi.findSimilarErrors(
         similarErrorQuery.query,
         similarErrorQuery.context
       );
@@ -140,7 +140,7 @@ describe('RAG System End-to-End Workflows', () => {
       expect(searchResponse.similar_errors[0].similarity_score).toBeGreaterThan(0.8);
 
       // Step 6: Retrieve relevant lessons
-      const lessonSearchResponse = await taskManagerApi.getRelevantLessons(
+      const _lessonSearchResponse = await taskManagerApi.getRelevantLessons(
         similarErrorQuery.context
       );
 
@@ -165,18 +165,18 @@ describe('RAG System End-to-End Workflows', () => {
 
       /* Future implementation:
       // Step 1: Create a feature task
-      const taskData = {
+      const _taskData = {
         title: 'Implement user authentication with JWT',
         description: 'Add JWT-based authentication system with refresh tokens',
         category: 'feature',
         project: testProjectRoot
       };
 
-      const taskResponse = await taskManagerApi.createTask(taskData);
+      const _taskResponse = await taskManagerApi.createTask(taskData);
       expect(taskResponse.success).toBe(true);
 
       // Step 2: Complete the task with lessons learned
-      const completionData = {
+      const _completionData = {
         completion_notes: `Successfully implemented JWT authentication.
                           Key lessons: Always use secure httpOnly cookies for tokens,
                           implement proper token rotation, validate all incoming tokens.`,
@@ -200,7 +200,7 @@ describe('RAG System End-to-End Workflows', () => {
         ]
       };
 
-      const completionResponse = await taskManagerApi.completeTaskWithLessons(
+      const _completionResponse = await taskManagerApi.completeTaskWithLessons(
         taskResponse.task_id,
         completionData
       );
@@ -210,7 +210,7 @@ describe('RAG System End-to-End Workflows', () => {
       expect(completionResponse.lessons_stored[0].lesson_id).toBeDefined();
 
       // Step 3: Verify lesson can be retrieved by other agents
-      const searchResponse = await taskManagerApi.searchLessons(
+      const _searchResponse = await taskManagerApi.searchLessons(
         'how to implement secure JWT authentication',
         { limit: 5 }
       );
@@ -232,7 +232,7 @@ describe('RAG System End-to-End Workflows', () => {
 
       /* Future implementation:
       // Setup: Create lessons in Project A
-      const projectALessons = [
+      const _projectALessons = [
         {
           title: 'React Hook Optimization Patterns',
           content: 'Use useMemo for expensive calculations, useCallback for function props...',
@@ -249,30 +249,30 @@ describe('RAG System End-to-End Workflows', () => {
         }
       ];
 
-      const storedLessons = [];
+      const _storedLessons = [];
       for (const lesson of projectALessons) {
-        const response = await taskManagerApi.storeLesson(lesson);
+        const _response = await taskManagerApi.storeLesson(lesson);
         expect(response.success).toBe(true);
         storedLessons.push(response.lesson_id);
       }
 
       // Test: Agent in Project B searches for relevant knowledge
-      const projectBContext = {
+      const _projectBContext = {
         project: 'project-b-blog-platform',
         current_task: 'optimize page loading performance',
         technology_stack: ['react', 'postgresql', 'node.js']
       };
 
-      const relevantLessons = await taskManagerApi.getRelevantLessons(projectBContext);
+      const _relevantLessons = await taskManagerApi.getRelevantLessons(projectBContext);
 
       expect(relevantLessons.success).toBe(true);
       expect(relevantLessons.lessons).toHaveLength(2);
 
       // Verify cross-project applicability scoring
-      const reactLesson = relevantLessons.lessons.find(l =>
+      const _reactLesson = relevantLessons.lessons.find(l =>
         l.title.includes('React Hook')
       );
-      const dbLesson = relevantLessons.lessons.find(l =>
+      const _dbLesson = relevantLessons.lessons.find(l =>
         l.title.includes('Database Query')
       );
 
@@ -288,7 +288,7 @@ describe('RAG System End-to-End Workflows', () => {
       expect(true).toBe(true);
 
       /* Future implementation:
-      const lessons = [
+      const _lessons = [
         {
           title: 'Project-Specific API Endpoints',
           content: 'This project uses /api/v2/legacy-users endpoint for compatibility...',
@@ -308,27 +308,27 @@ describe('RAG System End-to-End Workflows', () => {
       ];
 
       for (const lesson of lessons) {
-        const response = await taskManagerApi.storeLesson(lesson);
+        const _response = await taskManagerApi.storeLesson(lesson);
         expect(response.success).toBe(true);
       }
 
       // Search from different project context
-      const searchContext = {
+      const _searchContext = {
         project: 'new-microservice-project',
         technology_stack: ['node.js', 'express', 'mongodb']
       };
 
-      const searchResults = await taskManagerApi.getRelevantLessons(searchContext);
+      const _searchResults = await taskManagerApi.getRelevantLessons(searchContext);
 
       // Universal lessons should be included
-      const universalLesson = searchResults.lessons.find(l =>
+      const _universalLesson = searchResults.lessons.find(l =>
         l.title.includes('Universal Error Handling')
       );
       expect(universalLesson).toBeDefined();
       expect(universalLesson.cross_project_applicable).toBe(true);
 
       // Project-specific lessons should be excluded or lower ranked
-      const projectSpecificLesson = searchResults.lessons.find(l =>
+      const _projectSpecificLesson = searchResults.lessons.find(l =>
         l.title.includes('Project-Specific API')
       );
       if (projectSpecificLesson) {
@@ -345,14 +345,14 @@ describe('RAG System End-to-End Workflows', () => {
 
       /* Future implementation:
       // Create and claim a task
-      const taskData = {
+      const _taskData = {
         title: 'Fix memory leak in data processing pipeline',
         description: 'Investigate and resolve memory growth during batch processing',
         category: 'error'
       };
 
-      const createResponse = await taskManagerApi.createTask(taskData);
-      const claimResponse = await taskManagerApi.claimTask(
+      const _createResponse = await taskManagerApi.createTask(taskData);
+      const _claimResponse = await taskManagerApi.claimTask(
         createResponse.task_id,
         testAgentId
       );
@@ -360,7 +360,7 @@ describe('RAG System End-to-End Workflows', () => {
       expect(claimResponse.success).toBe(true);
 
       // Complete task with automatic lesson generation
-      const completionData = {
+      const _completionData = {
         solution: `Memory leak was caused by event listeners not being cleaned up.
                   Fixed by implementing proper cleanup in useEffect return function.`,
         lessons_auto_generate: true,
@@ -373,7 +373,7 @@ describe('RAG System End-to-End Workflows', () => {
         ]
       };
 
-      const completionResponse = await taskManagerApi.completeTask(
+      const _completionResponse = await taskManagerApi.completeTask(
         createResponse.task_id,
         completionData
       );
@@ -387,7 +387,7 @@ describe('RAG System End-to-End Workflows', () => {
       });
 
       // Verify lesson is searchable
-      const searchResponse = await taskManagerApi.searchLessons(
+      const _searchResponse = await taskManagerApi.searchLessons(
         'prevent memory leaks in React hooks'
       );
 
@@ -405,21 +405,21 @@ describe('RAG System End-to-End Workflows', () => {
 
       /* Future implementation:
       // Create a complex task that could benefit from existing lessons
-      const taskData = {
+      const _taskData = {
         title: 'Implement real-time chat with WebSocket authentication',
         description: 'Build WebSocket server with JWT token validation',
         category: 'feature',
         technology_stack: ['websocket', 'jwt', 'authentication']
       };
 
-      const createResponse = await taskManagerApi.createTask(taskData);
-      const claimResponse = await taskManagerApi.claimTask(
+      const _createResponse = await taskManagerApi.createTask(taskData);
+      const _claimResponse = await taskManagerApi.claimTask(
         createResponse.task_id,
         testAgentId
       );
 
       // Request contextual lesson suggestions
-      const suggestionResponse = await taskManagerApi.getTaskContextualLessons(
+      const _suggestionResponse = await taskManagerApi.getTaskContextualLessons(
         createResponse.task_id
       );
 
@@ -428,10 +428,10 @@ describe('RAG System End-to-End Workflows', () => {
       expect(suggestionResponse.suggested_lessons.length).toBeGreaterThan(0);
 
       // Verify suggestions are relevant to task context
-      const hasJWTSuggestion = suggestionResponse.suggested_lessons.some(lesson =>
+      const _hasJWTSuggestion = suggestionResponse.suggested_lessons.some(lesson =>
         lesson.tags.includes('jwt') || lesson.title.toLowerCase().includes('jwt')
       );
-      const hasAuthSuggestion = suggestionResponse.suggested_lessons.some(lesson =>
+      const _hasAuthSuggestion = suggestionResponse.suggested_lessons.some(lesson =>
         lesson.tags.includes('authentication')
       );
 
@@ -454,10 +454,10 @@ describe('RAG System End-to-End Workflows', () => {
 
       /* Future implementation:
       // Setup: Create mock development/lessons structure
-      const lessonsDir = path.join(testProjectRoot, 'development', 'lessons');
+      const _lessonsDir = path.join(testProjectRoot, 'development', 'lessons');
       await fs.mkdir(lessonsDir, { recursive: true });
 
-      const mockLessonFiles = [
+      const _mockLessonFiles = [
         {
           filename: 'error_resolution_api_timeout.md',
           content: `# API Timeout Resolution
@@ -469,7 +469,7 @@ describe('RAG System End-to-End Workflows', () => {
 
                    ## Code Example
                    \`\`\`javascript
-                   const response = await fetch(url, {
+                   const _response = await fetch(url, {
                      timeout: 10000,
                      retry: { attempts: 3 }
                    });
@@ -494,7 +494,7 @@ describe('RAG System End-to-End Workflows', () => {
       }
 
       // Execute migration
-      const migrationResponse = await taskManagerApi.migrateLessonsFromFiles({
+      const _migrationResponse = await taskManagerApi.migrateLessonsFromFiles({
         source_directory: lessonsDir,
         preserve_file_structure: true,
         batch_size: 10
@@ -505,7 +505,7 @@ describe('RAG System End-to-End Workflows', () => {
       expect(migrationResponse.estimated_files).toBe(2);
 
       // Wait for migration completion (or poll status)
-      let migrationStatus;
+      let _migrationStatus;
       let attempts = 0;
       do {
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -520,7 +520,7 @@ describe('RAG System End-to-End Workflows', () => {
       expect(migrationStatus.lessons_created).toBe(2);
 
       // Verify migrated lessons are searchable
-      const searchResponse = await taskManagerApi.searchLessons('API timeout');
+      const _searchResponse = await taskManagerApi.searchLessons('API timeout');
 
       expect(searchResponse.lessons).toContainEqual(
         expect.objectContaining({
@@ -537,26 +537,26 @@ describe('RAG System End-to-End Workflows', () => {
 
       /* Future implementation:
       // Store a lesson in RAG system
-      const lessonData = {
+      const _lessonData = {
         title: 'Database Connection Pooling',
         content: 'Implement connection pooling to optimize database performance...',
         category: 'database-optimization',
         project: testProjectRoot
       };
 
-      const storeResponse = await taskManagerApi.storeLesson(lessonData);
+      const _storeResponse = await taskManagerApi.storeLesson(lessonData);
       expect(storeResponse.success).toBe(true);
 
       // Verify lesson is also accessible via traditional file structure
-      const lessonsDir = path.join(testProjectRoot, 'development', 'lessons');
-      const files = await fs.readdir(lessonsDir);
+      const _lessonsDir = path.join(testProjectRoot, 'development', 'lessons');
+      const _files = await fs.readdir(lessonsDir);
 
-      const dbLessonFile = files.find(file =>
+      const _dbLessonFile = files.find(file =>
         file.includes('database') && file.includes('connection')
       );
       expect(dbLessonFile).toBeDefined();
 
-      const fileContent = await fs.readFile(
+      const _fileContent = await fs.readFile(
         path.join(lessonsDir, dbLessonFile),
         'utf8'
       );
@@ -564,7 +564,7 @@ describe('RAG System End-to-End Workflows', () => {
       expect(fileContent).toContain('connection pooling to optimize');
 
       // Verify file modifications sync back to RAG system
-      const updatedContent = fileContent.replace(
+      const _updatedContent = fileContent.replace(
         'optimize database performance',
         'optimize database performance and reduce latency'
       );
@@ -574,13 +574,13 @@ describe('RAG System End-to-End Workflows', () => {
       );
 
       // Trigger sync or wait for auto-sync
-      const syncResponse = await taskManagerApi.syncLessonsFromFiles({
+      const _syncResponse = await taskManagerApi.syncLessonsFromFiles({
         source_directory: lessonsDir
       });
       expect(syncResponse.success).toBe(true);
 
       // Verify changes are reflected in RAG system
-      const retrieveResponse = await taskManagerApi.getLessonById(
+      const _retrieveResponse = await taskManagerApi.getLessonById(
         storeResponse.lesson_id
       );
       expect(retrieveResponse.lesson.content).toContain('reduce latency');
@@ -595,26 +595,26 @@ describe('RAG System End-to-End Workflows', () => {
 
       /* Future implementation:
       // Simulate RAG system being unavailable
-      const originalRagOperations = taskManagerApi.ragOperations;
+      const _originalRagOperations = taskManagerApi.ragOperations;
       taskManagerApi.ragOperations = null;
 
       // Task operations should continue to work
-      const taskData = {
+      const _taskData = {
         title: 'Test task during RAG system failure',
         description: 'This should work even if RAG is down',
         category: 'feature'
       };
 
-      const createResponse = await taskManagerApi.createTask(taskData);
+      const _createResponse = await taskManagerApi.createTask(taskData);
       expect(createResponse.success).toBe(true);
 
       // Lesson storage should fail gracefully
-      const lessonData = {
+      const _lessonData = {
         title: 'Test lesson during failure',
         content: 'This should be queued for later processing'
       };
 
-      const lessonResponse = await taskManagerApi.storeLesson(lessonData);
+      const _lessonResponse = await taskManagerApi.storeLesson(lessonData);
       expect(lessonResponse.success).toBe(false);
       expect(lessonResponse.error).toContain('RAG system unavailable');
       expect(lessonResponse.queued_for_retry).toBe(true);
@@ -623,7 +623,7 @@ describe('RAG System End-to-End Workflows', () => {
       taskManagerApi.ragOperations = originalRagOperations;
 
       // Process queued lessons
-      const processQueueResponse = await taskManagerApi.processQueuedLessons();
+      const _processQueueResponse = await taskManagerApi.processQueuedLessons();
       expect(processQueueResponse.success).toBe(true);
       expect(processQueueResponse.processed_count).toBe(1);
       */
@@ -635,25 +635,25 @@ describe('RAG System End-to-End Workflows', () => {
 
       /* Future implementation:
       // Create some test data
-      const testLessons = [
+      const _testLessons = [
         { title: 'Lesson 1', content: 'Content 1' },
         { title: 'Lesson 2', content: 'Content 2' },
         { title: 'Lesson 3', content: 'Content 3' }
       ];
 
-      const storedLessons = [];
+      const _storedLessons = [];
       for (const lesson of testLessons) {
-        const response = await taskManagerApi.storeLesson(lesson);
+        const _response = await taskManagerApi.storeLesson(lesson);
         storedLessons.push(response.lesson_id);
       }
 
       // Simulate database corruption check
-      const integrityResponse = await taskManagerApi.checkDataIntegrity();
+      const _integrityResponse = await taskManagerApi.checkDataIntegrity();
       expect(integrityResponse.success).toBe(true);
       expect(integrityResponse.issues_found).toBe(0);
 
       // Simulate backup creation
-      const backupResponse = await taskManagerApi.createBackup({
+      const _backupResponse = await taskManagerApi.createBackup({
         include_embeddings: true,
         compression: true
       });
@@ -661,7 +661,7 @@ describe('RAG System End-to-End Workflows', () => {
       expect(backupResponse.backup_id).toBeDefined();
 
       // Verify backup can be restored
-      const restoreResponse = await taskManagerApi.restoreFromBackup(
+      const _restoreResponse = await taskManagerApi.restoreFromBackup(
         backupResponse.backup_id,
         { verify_integrity: true }
       );

@@ -8,12 +8,12 @@
  * @version 1.0.0
  */
 
-const path = require('path');
+const _path = require('path');
 
 describe('RAG System Performance and Load Testing', () => {
-  let ragSystem;
-  let performanceMonitor;
-  let loadGenerator;
+  let _ragSystem;
+  let _performanceMonitor;
+  let _loadGenerator;
 
   beforeAll(async () => {
     console.log('Setting up performance test environment...');
@@ -36,12 +36,12 @@ describe('RAG System Performance and Load Testing', () => {
 
   describe('Search Performance Benchmarks', () => {
     test('should meet embedding generation speed requirements', async () => {
-      const testContents = [
+      const _testContents = [
         'Short error message',
         'Medium length technical documentation explaining API implementation patterns and best practices for error handling in distributed systems.',
         'Very long technical content: ' + 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '.repeat(100),
         `Code snippet with multiple functions:
-         function complexCalculation(data) {
+         function complexCalculation(_data) {
            return data.map(item => processItem(item))
              .filter(result => result.isValid)
              .reduce((acc, curr) => acc + curr.value, 0);
@@ -60,15 +60,15 @@ describe('RAG System Performance and Load Testing', () => {
       expect(true).toBe(true);
 
       /* Future implementation:
-      const embeddingTimes = [];
+      const _embeddingTimes = [];
 
       for (const content of testContents) {
-        const startTime = process.hrtime.bigint();
+        const _startTime = process.hrtime.bigint();
 
-        const embedding = await ragSystem.generateEmbedding(content);
+        const _embedding = await ragSystem.generateEmbedding(content);
 
-        const endTime = process.hrtime.bigint();
-        const durationMs = Number(endTime - startTime) / 1000000;
+        const _endTime = process.hrtime.bigint();
+        const _durationMs = Number(endTime - startTime) / 1000000;
 
         embeddingTimes.push({
           contentLength: content.length,
@@ -86,8 +86,8 @@ describe('RAG System Performance and Load Testing', () => {
       embeddingTimes.sort((a, b) => a.contentLength - b.contentLength);
 
       // Embedding time should scale reasonably with content length
-      const shortContent = embeddingTimes[0];
-      const longContent = embeddingTimes[embeddingTimes.length - 1];
+      const _shortContent = embeddingTimes[0];
+      const _longContent = embeddingTimes[embeddingTimes.length - 1];
 
       // Long content should not take more than 5x the time of short content
       expect(longContent.embeddingTime).toBeLessThan(shortContent.embeddingTime * 5);
@@ -102,7 +102,7 @@ describe('RAG System Performance and Load Testing', () => {
 
     test('should meet semantic search response time requirements', async () => {
       // Setup: Create large dataset for realistic testing
-      const largeDataset = [];
+      const _largeDataset = [];
       for (let i = 0; i < 1000; i++) {
         largeDataset.push({
           id: `lesson-${i}`,
@@ -119,17 +119,17 @@ describe('RAG System Performance and Load Testing', () => {
       /* Future implementation:
       // Store dataset
       console.log('Storing test dataset...');
-      const storeStartTime = Date.now();
+      const _storeStartTime = Date.now();
 
       for (const lesson of largeDataset) {
         await ragSystem.storeLesson(lesson);
       }
 
-      const storeEndTime = Date.now();
+      const _storeEndTime = Date.now();
       console.log(`Dataset storage completed in ${storeEndTime - storeStartTime}ms`);
 
       // Test various search queries
-      const searchQueries = [
+      const _searchQueries = [
         'JavaScript error handling best practices',
         'API timeout implementation patterns',
         'Database optimization techniques',
@@ -137,18 +137,18 @@ describe('RAG System Performance and Load Testing', () => {
         'Authentication security considerations'
       ];
 
-      const searchTimes = [];
+      const _searchTimes = [];
 
       for (const query of searchQueries) {
-        const startTime = process.hrtime.bigint();
+        const _startTime = process.hrtime.bigint();
 
-        const results = await ragSystem.searchLessons(query, {
+        const _results = await ragSystem.searchLessons(query, {
           limit: 20,
           includeScores: true
         });
 
-        const endTime = process.hrtime.bigint();
-        const durationMs = Number(endTime - startTime) / 1000000;
+        const _endTime = process.hrtime.bigint();
+        const _durationMs = Number(endTime - startTime) / 1000000;
 
         searchTimes.push({
           query: query,
@@ -163,7 +163,7 @@ describe('RAG System Performance and Load Testing', () => {
       }
 
       // Calculate average search time
-      const avgSearchTime = searchTimes.reduce((sum, result) =>
+      const _avgSearchTime = searchTimes.reduce((sum, result) =>
         sum + result.searchTime, 0) / searchTimes.length;
 
       expect(avgSearchTime).toBeLessThan(300); // Average under 300ms
@@ -177,15 +177,15 @@ describe('RAG System Performance and Load Testing', () => {
     });
 
     test('should handle batch operations efficiently', async () => {
-      const batchSizes = [10, 50, 100, 200];
-      const batchPerformance = [];
+      const _batchSizes = [10, 50, 100, 200];
+      const _batchPerformance = [];
 
       // Placeholder for future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
       for (const batchSize of batchSizes) {
-        const batchData = Array.from({ length: batchSize }, (_, i) => ({
+        const _batchData = Array.from({ length: batchSize }, (_, i) => ({
           title: `Batch Lesson ${i}`,
           content: `This is batch lesson content ${i} with technical details...`,
           category: 'batch-test',
@@ -193,18 +193,18 @@ describe('RAG System Performance and Load Testing', () => {
         }));
 
         // Test batch storage
-        const storeStartTime = process.hrtime.bigint();
-        const storeResults = await ragSystem.storeLessonsBatch(batchData);
-        const storeEndTime = process.hrtime.bigint();
-        const storeDurationMs = Number(storeEndTime - storeStartTime) / 1000000;
+        const _storeStartTime = process.hrtime.bigint();
+        const _storeResults = await ragSystem.storeLessonsBatch(batchData);
+        const _storeEndTime = process.hrtime.bigint();
+        const _storeDurationMs = Number(storeEndTime - storeStartTime) / 1000000;
 
         // Test batch retrieval
-        const retrieveStartTime = process.hrtime.bigint();
-        const retrieveResults = await ragSystem.getLessonsBatch(
+        const _retrieveStartTime = process.hrtime.bigint();
+        const _retrieveResults = await ragSystem.getLessonsBatch(
           storeResults.lesson_ids
         );
-        const retrieveEndTime = process.hrtime.bigint();
-        const retrieveDurationMs = Number(retrieveEndTime - retrieveStartTime) / 1000000;
+        const _retrieveEndTime = process.hrtime.bigint();
+        const _retrieveDurationMs = Number(retrieveEndTime - retrieveStartTime) / 1000000;
 
         batchPerformance.push({
           batchSize,
@@ -226,8 +226,8 @@ describe('RAG System Performance and Load Testing', () => {
       });
 
       // Larger batches should have better per-item performance
-      const small = batchPerformance[0];
-      const large = batchPerformance[batchPerformance.length - 1];
+      const _small = batchPerformance[0];
+      const _large = batchPerformance[batchPerformance.length - 1];
       expect(large.storeTimePerItem).toBeLessThan(small.storeTimePerItem * 1.5);
       */
     });
@@ -235,8 +235,8 @@ describe('RAG System Performance and Load Testing', () => {
 
   describe('Concurrent Access Performance', () => {
     test('should handle multiple simultaneous users', async () => {
-      const concurrentUsers = 10;
-      const operationsPerUser = 20;
+      const _concurrentUsers = 10;
+      const _operationsPerUser = 20;
 
       // Placeholder for future implementation
       expect(true).toBe(true);
@@ -244,8 +244,8 @@ describe('RAG System Performance and Load Testing', () => {
       /* Future implementation:
       console.log(`Testing ${concurrentUsers} concurrent users with ${operationsPerUser} operations each`);
 
-      const userPromises = Array.from({ length: concurrentUsers }, async (_, userId) => {
-        const userResults = {
+      const _userPromises = Array.from({ length: concurrentUsers }, async (_, userId) => {
+        const _userResults = {
           userId,
           searchTimes: [],
           storeTimes: [],
@@ -257,27 +257,27 @@ describe('RAG System Performance and Load Testing', () => {
             // Simulate mixed operations
             if (i % 3 === 0) {
               // Store operation
-              const storeStartTime = process.hrtime.bigint();
-              const storeResult = await ragSystem.storeLesson({
+              const _storeStartTime = process.hrtime.bigint();
+              const _storeResult = await ragSystem.storeLesson({
                 title: `User ${userId} Lesson ${i}`,
                 content: `Concurrent test lesson content from user ${userId}`,
                 category: 'concurrent-test',
                 user_id: userId
               });
-              const storeEndTime = process.hrtime.bigint();
-              const storeDuration = Number(storeEndTime - storeStartTime) / 1000000;
+              const _storeEndTime = process.hrtime.bigint();
+              const _storeDuration = Number(storeEndTime - storeStartTime) / 1000000;
               userResults.storeTimes.push(storeDuration);
 
               expect(storeResult.success).toBe(true);
             } else {
               // Search operation
-              const searchStartTime = process.hrtime.bigint();
-              const searchResult = await ragSystem.searchLessons(
+              const _searchStartTime = process.hrtime.bigint();
+              const _searchResult = await ragSystem.searchLessons(
                 `test query from user ${userId} operation ${i}`,
                 { limit: 10 }
               );
-              const searchEndTime = process.hrtime.bigint();
-              const searchDuration = Number(searchEndTime - searchStartTime) / 1000000;
+              const _searchEndTime = process.hrtime.bigint();
+              const _searchDuration = Number(searchEndTime - searchStartTime) / 1000000;
               userResults.searchTimes.push(searchDuration);
 
               expect(searchResult.results).toBeDefined();
@@ -286,7 +286,7 @@ describe('RAG System Performance and Load Testing', () => {
             // Add small random delay to simulate realistic usage
             await new Promise(resolve => setTimeout(resolve, Math.random() * 100));
 
-          } catch (error) {
+          } catch {
             userResults.errors.push(error);
           }
         }
@@ -294,7 +294,7 @@ describe('RAG System Performance and Load Testing', () => {
         return userResults;
       });
 
-      const allResults = await Promise.all(userPromises);
+      const _allResults = await Promise.all(userPromises);
 
       // Analyze concurrent performance
       let totalSearchTime = 0;
@@ -311,8 +311,8 @@ describe('RAG System Performance and Load Testing', () => {
         totalErrors += userResult.errors.length;
       });
 
-      const avgSearchTime = totalSearchTime / totalSearches;
-      const avgStoreTime = totalStoreTime / totalStores;
+      const _avgSearchTime = totalSearchTime / totalSearches;
+      const _avgStoreTime = totalStoreTime / totalStores;
 
       // Performance should not degrade significantly under concurrent load
       expect(avgSearchTime).toBeLessThan(1000); // Under 1 second
@@ -328,15 +328,15 @@ describe('RAG System Performance and Load Testing', () => {
     });
 
     test('should maintain data consistency under concurrent modifications', async () => {
-      const sharedLessonId = 'shared-lesson-001';
-      const concurrentModifiers = 5;
+      const _sharedLessonId = 'shared-lesson-001';
+      const _concurrentModifiers = 5;
 
       // Placeholder for future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
       // Create initial shared lesson
-      const initialLesson = {
+      const _initialLesson = {
         id: sharedLessonId,
         title: 'Shared Lesson for Concurrency Test',
         content: 'Initial content that will be modified concurrently',
@@ -344,14 +344,14 @@ describe('RAG System Performance and Load Testing', () => {
         modification_count: 0
       };
 
-      const createResult = await ragSystem.storeLesson(initialLesson);
+      const _createResult = await ragSystem.storeLesson(initialLesson);
       expect(createResult.success).toBe(true);
 
       // Concurrent modifications
-      const modificationPromises = Array.from({ length: concurrentModifiers },
+      const _modificationPromises = Array.from({ length: concurrentModifiers },
         async (_, modifierId) => {
           try {
-            const updateResult = await ragSystem.updateLesson(sharedLessonId, {
+            const _updateResult = await ragSystem.updateLesson(sharedLessonId, {
               content: `Modified by user ${modifierId} at ${Date.now()}`,
               modifier_id: modifierId,
               increment_modification_count: true
@@ -363,7 +363,7 @@ describe('RAG System Performance and Load Testing', () => {
               version: updateResult.version,
               timestamp: Date.now()
             };
-          } catch (error) {
+          } catch {
             return {
               modifierId,
               success: false,
@@ -373,14 +373,14 @@ describe('RAG System Performance and Load Testing', () => {
         }
       );
 
-      const modificationResults = await Promise.all(modificationPromises);
+      const _modificationResults = await Promise.all(modificationPromises);
 
       // Verify data consistency
-      const finalLesson = await ragSystem.getLessonById(sharedLessonId);
+      const _finalLesson = await ragSystem.getLessonById(sharedLessonId);
       expect(finalLesson.success).toBe(true);
 
       // Check that modification count is consistent
-      const successfulModifications = modificationResults.filter(r => r.success).length;
+      const _successfulModifications = modificationResults.filter(r => r.success).length;
       expect(finalLesson.lesson.modification_count).toBe(successfulModifications);
 
       // Verify no data corruption
@@ -397,7 +397,7 @@ describe('RAG System Performance and Load Testing', () => {
 
   describe('Memory and Resource Usage', () => {
     test('should manage memory efficiently during large operations', async () => {
-      const initialMemory = process.memoryUsage();
+      const _initialMemory = process.memoryUsage();
 
       // Placeholder for future implementation
       expect(true).toBe(true);
@@ -406,11 +406,11 @@ describe('RAG System Performance and Load Testing', () => {
       console.log('Initial memory usage:', formatMemoryUsage(initialMemory));
 
       // Create large dataset to test memory usage
-      const largeOperations = [
+      const _largeOperations = [
         {
           name: 'Large batch embedding generation',
           operation: async () => {
-            const largeBatch = Array.from({ length: 500 }, (_, i) =>
+            const _largeBatch = Array.from({ length: 500 }, (_, i) =>
               generateLargeTechnicalContent(i)
             );
             return await ragSystem.generateBatchEmbeddings(largeBatch);
@@ -429,7 +429,7 @@ describe('RAG System Performance and Load Testing', () => {
         {
           name: 'Large dataset migration',
           operation: async () => {
-            const migrationData = Array.from({ length: 1000 }, (_, i) => ({
+            const _migrationData = Array.from({ length: 1000 }, (_, i) => ({
               title: `Migration Lesson ${i}`,
               content: generateLargeTechnicalContent(i),
               metadata: { migration_batch: true }
@@ -440,19 +440,19 @@ describe('RAG System Performance and Load Testing', () => {
       ];
 
       for (const testOperation of largeOperations) {
-        const preOpMemory = process.memoryUsage();
+        const _preOpMemory = process.memoryUsage();
         console.log(`\nStarting: ${testOperation.name}`);
         console.log('Pre-operation memory:', formatMemoryUsage(preOpMemory));
 
-        const startTime = Date.now();
-        const result = await testOperation.operation();
-        const endTime = Date.now();
+        const _startTime = Date.now();
+        const _result = await testOperation.operation();
+        const _endTime = Date.now();
 
-        const postOpMemory = process.memoryUsage();
+        const _postOpMemory = process.memoryUsage();
         console.log('Post-operation memory:', formatMemoryUsage(postOpMemory));
 
-        const memoryIncrease = postOpMemory.heapUsed - preOpMemory.heapUsed;
-        const durationMs = endTime - startTime;
+        const _memoryIncrease = postOpMemory.heapUsed - preOpMemory.heapUsed;
+        const _durationMs = endTime - startTime;
 
         console.log(`Operation completed in ${durationMs}ms`);
         console.log(`Memory increase: ${formatBytes(memoryIncrease)}`);
@@ -470,11 +470,11 @@ describe('RAG System Performance and Load Testing', () => {
         await new Promise(resolve => setTimeout(resolve, 1000));
       }
 
-      const finalMemory = process.memoryUsage();
+      const _finalMemory = process.memoryUsage();
       console.log('\nFinal memory usage:', formatMemoryUsage(finalMemory));
 
       // Total memory usage should not have increased dramatically
-      const totalIncrease = finalMemory.heapUsed - initialMemory.heapUsed;
+      const _totalIncrease = finalMemory.heapUsed - initialMemory.heapUsed;
       expect(totalIncrease).toBeLessThan(500 * 1024 * 1024); // Less than 500MB total
       */
     });
@@ -485,7 +485,7 @@ describe('RAG System Performance and Load Testing', () => {
 
       /* Future implementation:
       // Simulate memory pressure by creating large objects
-      const memoryPressure = [];
+      const _memoryPressure = [];
 
       try {
         // Gradually increase memory usage
@@ -494,30 +494,30 @@ describe('RAG System Performance and Load Testing', () => {
 
           // Test system operation under pressure
           if (i % 20 === 0) {
-            const searchResult = await ragSystem.searchLessons(
+            const _searchResult = await ragSystem.searchLessons(
               'memory pressure test query',
               { limit: 10 }
             );
 
             expect(searchResult.success).toBe(true);
 
-            const currentMemory = process.memoryUsage();
+            const _currentMemory = process.memoryUsage();
             console.log(`Memory pressure test ${i}: ${formatMemoryUsage(currentMemory)}`);
 
             // System should still respond within reasonable time
-            const startTime = Date.now();
-            const storeResult = await ragSystem.storeLesson({
+            const _startTime = Date.now();
+            const _storeResult = await ragSystem.storeLesson({
               title: `Memory pressure lesson ${i}`,
               content: 'Test content under memory pressure',
               category: 'memory-test'
             });
-            const duration = Date.now() - startTime;
+            const _duration = Date.now() - startTime;
 
             expect(storeResult.success).toBe(true);
             expect(duration).toBeLessThan(5000); // Should complete within 5 seconds
           }
         }
-      } catch (error) {
+      } catch {
         // System should handle memory errors gracefully
         expect(error.message).toContain('memory');
         console.log('Expected memory error handled gracefully:', error.message);
@@ -539,7 +539,7 @@ describe('RAG System Performance and Load Testing', () => {
 
       /* Future implementation:
       // Create dataset with varied complexity
-      const testDatasets = [
+      const _testDatasets = [
         { size: 1000, complexity: 'simple' },
         { size: 5000, complexity: 'medium' },
         { size: 10000, complexity: 'complex' }
@@ -549,20 +549,20 @@ describe('RAG System Performance and Load Testing', () => {
         console.log(`Testing database performance with ${dataset.size} ${dataset.complexity} records`);
 
         // Generate and store test data
-        const testData = generateTestDataset(dataset.size, dataset.complexity);
+        const _testData = generateTestDataset(dataset.size, dataset.complexity);
 
-        const storeStartTime = Date.now();
-        const storeResults = await ragSystem.storeLessonsBatch(testData);
-        const storeEndTime = Date.now();
+        const _storeStartTime = Date.now();
+        const _storeResults = await ragSystem.storeLessonsBatch(testData);
+        const _storeEndTime = Date.now();
 
         expect(storeResults.success).toBe(true);
         expect(storeResults.stored_count).toBe(dataset.size);
 
-        const storeTime = storeEndTime - storeStartTime;
+        const _storeTime = storeEndTime - storeStartTime;
         console.log(`Storage time: ${storeTime}ms (${(storeTime/dataset.size).toFixed(2)}ms per record)`);
 
         // Test various query patterns
-        const queryTests = [
+        const _queryTests = [
           {
             name: 'Simple text search',
             query: () => ragSystem.searchLessons('error handling', { limit: 20 })
@@ -585,11 +585,11 @@ describe('RAG System Performance and Load Testing', () => {
         ];
 
         for (const queryTest of queryTests) {
-          const queryStartTime = Date.now();
-          const result = await queryTest.query();
-          const queryEndTime = Date.now();
+          const _queryStartTime = Date.now();
+          const _result = await queryTest.query();
+          const _queryEndTime = Date.now();
 
-          const queryTime = queryEndTime - queryStartTime;
+          const _queryTime = queryEndTime - queryStartTime;
           console.log(`${queryTest.name}: ${queryTime}ms`);
 
           expect(result.success).toBe(true);
@@ -603,8 +603,8 @@ describe('RAG System Performance and Load Testing', () => {
     });
 
     test('should handle database connection pooling efficiently', async () => {
-      const concurrentQueries = 20;
-      const queriesPerConnection = 10;
+      const _concurrentQueries = 20;
+      const _queriesPerConnection = 10;
 
       // Placeholder for future implementation
       expect(true).toBe(true);
@@ -612,8 +612,8 @@ describe('RAG System Performance and Load Testing', () => {
       /* Future implementation:
       console.log(`Testing connection pooling with ${concurrentQueries} concurrent connections`);
 
-      const connectionTests = Array.from({ length: concurrentQueries }, async (_, connId) => {
-        const connectionResults = {
+      const _connectionTests = Array.from({ length: concurrentQueries }, async (_, connId) => {
+        const _connectionResults = {
           connectionId: connId,
           queryTimes: [],
           errors: []
@@ -621,20 +621,20 @@ describe('RAG System Performance and Load Testing', () => {
 
         for (let i = 0; i < queriesPerConnection; i++) {
           try {
-            const queryStartTime = Date.now();
+            const _queryStartTime = Date.now();
 
-            const result = await ragSystem.searchLessons(
+            const _result = await ragSystem.searchLessons(
               `connection test query ${connId}-${i}`,
               { limit: 5 }
             );
 
-            const queryEndTime = Date.now();
-            const queryTime = queryEndTime - queryStartTime;
+            const _queryEndTime = Date.now();
+            const _queryTime = queryEndTime - queryStartTime;
 
             connectionResults.queryTimes.push(queryTime);
             expect(result.success).toBe(true);
 
-          } catch (error) {
+          } catch {
             connectionResults.errors.push(error);
           }
         }
@@ -642,7 +642,7 @@ describe('RAG System Performance and Load Testing', () => {
         return connectionResults;
       });
 
-      const allConnectionResults = await Promise.all(connectionTests);
+      const _allConnectionResults = await Promise.all(connectionTests);
 
       // Analyze connection performance
       let totalQueries = 0;
@@ -655,8 +655,8 @@ describe('RAG System Performance and Load Testing', () => {
         totalErrors += connResult.errors.length;
       });
 
-      const avgQueryTime = totalQueryTime / totalQueries;
-      const errorRate = (totalErrors / totalQueries) * 100;
+      const _avgQueryTime = totalQueryTime / totalQueries;
+      const _errorRate = (totalErrors / totalQueries) * 100;
 
       console.log(`Connection pooling results:`);
       console.log(`Total queries: ${totalQueries}`);
@@ -671,7 +671,7 @@ describe('RAG System Performance and Load Testing', () => {
   });
 
   // Helper functions for test data generation
-  function getRandomTechnicalTopic() {
+  function _getRandomTechnicalTopic() {
     const topics = [
       'Error Handling',
       'API Design',
@@ -687,7 +687,7 @@ describe('RAG System Performance and Load Testing', () => {
     return topics[Math.floor(Math.random() * topics.length)];
   }
 
-  function generateRandomTechnicalContent() {
+  function _generateRandomTechnicalContent() {
     const templates = [
       'When implementing {topic}, always consider {aspect1} and {aspect2}. Best practices include {practice1} and {practice2}.',
       'Common issues with {topic} include {issue1} and {issue2}. Solutions involve {solution1} and {solution2}.',
@@ -698,18 +698,18 @@ describe('RAG System Performance and Load Testing', () => {
     return template.replace(/\{[^}]+\}/g, () => getRandomTechnicalTopic());
   }
 
-  function getRandomTags() {
+  function _getRandomTags() {
     const tags = ['javascript', 'python', 'api', 'database', 'security', 'performance', 'testing', 'deployment'];
     const count = Math.floor(Math.random() * 4) + 1;
     return tags.sort(() => 0.5 - Math.random()).slice(0, count);
   }
 
-  function getRandomCategory() {
+  function _getRandomCategory() {
     const categories = ['error-handling', 'implementation', 'optimization', 'security', 'testing'];
     return categories[Math.floor(Math.random() * categories.length)];
   }
 
-  function formatMemoryUsage(memUsage) {
+  function _formatMemoryUsage(_memUsage) {
     return {
       rss: formatBytes(memUsage.rss),
       heapTotal: formatBytes(memUsage.heapTotal),
@@ -718,7 +718,7 @@ describe('RAG System Performance and Load Testing', () => {
     };
   }
 
-  function formatBytes(bytes) {
+  function _formatBytes(_bytes) {
     if (bytes === 0) {return '0 Bytes';}
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
@@ -726,7 +726,7 @@ describe('RAG System Performance and Load Testing', () => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }
 
-  function generateLargeTechnicalContent(index) {
+  function _generateLargeTechnicalContent(_index) {
     return `Technical Content ${index}: ${'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '.repeat(50)}`;
   }
 });

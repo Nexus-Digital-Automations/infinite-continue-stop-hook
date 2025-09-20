@@ -236,8 +236,8 @@ class TestAssertions {
     if (results.length <= 1) {return;} // Nothing to rank
 
     for (let i = 1; i < results.length; i++) {
-      const prevScore = results[i - 1][scoreProperty];
-      const currentScore = results[i][scoreProperty];
+      const _prevScore = results[i - 1][scoreProperty];
+      const _currentScore = results[i][scoreProperty];
 
       expect(typeof prevScore).toBe('number');
       expect(typeof currentScore).toBe('number');
@@ -455,7 +455,7 @@ class TestAssertions {
     let sumSquaredDifferences = 0;
 
     for (let i = 0; i < vector1.length; i++) {
-      const difference = vector1[i] - vector2[i];
+      const _difference = vector1[i] - vector2[i];
       sumSquaredDifferences += difference * difference;
     }
 
@@ -475,7 +475,7 @@ class TestAssertions {
     for (let i = 0; i < results.length - 1; i++) {
       for (let j = i + 1; j < results.length; j++) {
         // Simple diversity check using title similarity
-        const similarity = this.calculateStringSimilarity(
+        const _similarity = this.calculateStringSimilarity(
           results[i].title || '',
           results[j].title || '',
         );
@@ -516,7 +516,7 @@ class TestAssertions {
         await asyncFunction(invalidInput);
         // If we reach here, the function should have thrown an error
         throw new Error(`Function should have thrown an error for input: ${JSON.stringify(invalidInput)}`);
-      } catch (error) {
+      } catch {
         // This is expected - function should handle invalid input gracefully
         expect(error).toBeInstanceOf(Error);
         expect(error.message).toBeDefined();

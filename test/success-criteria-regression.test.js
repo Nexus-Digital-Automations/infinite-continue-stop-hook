@@ -11,8 +11,8 @@
  */
 
 const { spawn } = require('child_process');
-const path = require('path');
-const fs = require('fs').promises;
+const _path = require('path');
+const _fs = require('fs').promises;
 
 // Test configuration
 const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
@@ -22,7 +22,7 @@ const TIMEOUT = 30000;
 /**
  * API execution utility
  */
-function execAPI(command, args = [], timeout = TIMEOUT) {
+function execAPI(_command, args = [], timeout = TIMEOUT) {
   return new Promise((resolve, reject) => {
     const allArgs = [
       API_PATH,
@@ -54,7 +54,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
     child.on('close', (code) => {
       if (code === 0) {
         try {
-          const result = stdout.trim() ? JSON.parse(stdout) : {};
+          const _result = stdout.trim() ? JSON.parse(stdout) : {};
           resolve(result);
         } catch {
           resolve({ rawOutput: stdout, stderr });
@@ -219,7 +219,7 @@ describe('Regression Test Suite', () => {
     await fs.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     console.log('Regression test project setup completed');
-  } catch (error) {
+  } catch {
     console.error('Failed to setup regression test project:', error);
     throw error;
   }
@@ -229,7 +229,7 @@ async function cleanupRegressionTestProject() {
   try {
     await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     console.log('Regression test project cleanup completed');
-  } catch (error) {
+  } catch {
     console.error('Failed to cleanup regression test project:', error);
   }
 }
@@ -259,20 +259,20 @@ describe('Success Criteria Regression Tests', () => {
       await execAPI('success-criteria:apply-template', ['Legacy Template']);
 
       // Validate that legacy template is processed correctly
-      const status = await execAPI('success-criteria:status');
+      const _status = await execAPI('success-criteria:status');
 
       expect(status.projectCriteria).toBeDefined();
       expect(status.projectCriteria.length).toBe(2);
 
       // Check legacy criteria are preserved
-      const legacyBuild = status.projectCriteria.find(
+      const _legacyBuild = status.projectCriteria.find(
         (c) => c.id === 'legacy-build',
       );
       expect(legacyBuild).toBeDefined();
       expect(legacyBuild.description).toBe('Legacy build requirement');
       expect(legacyBuild.category).toBe('build');
 
-      const legacyTest = status.projectCriteria.find(
+      const _legacyTest = status.projectCriteria.find(
         (c) => c.id === 'legacy-test',
       );
       expect(legacyTest).toBeDefined();
@@ -291,8 +291,8 @@ describe('Success Criteria Regression Tests', () => {
       await createLegacyTemplate('1.0.0');
       await execAPI('success-criteria:apply-template', ['Legacy Template']);
 
-      const status = await execAPI('success-criteria:status');
-      const legacyBuild = status.projectCriteria.find(
+      const _status = await execAPI('success-criteria:status');
+      const _legacyBuild = status.projectCriteria.find(
         (c) => c.id === 'legacy-build',
       );
 
@@ -316,7 +316,7 @@ describe('Success Criteria Regression Tests', () => {
       await createLegacyTemplate('1.0.0');
 
       // Perform upgrade
-      const upgradeResult = await execAPI('success-criteria:upgrade-template', [
+      const _upgradeResult = await execAPI('success-criteria:upgrade-template', [
         'Legacy Template',
         'current',
       ]);
@@ -329,11 +329,11 @@ describe('Success Criteria Regression Tests', () => {
       await execAPI('success-criteria:apply-template', ['Legacy Template']);
 
       // Validate upgraded template works correctly
-      const status = await execAPI('success-criteria:status');
+      const _status = await execAPI('success-criteria:status');
       expect(status.projectCriteria.length).toBe(2);
 
       // Check that modern features are available
-      const upgradedCriterion = status.projectCriteria[0];
+      const _upgradedCriterion = status.projectCriteria[0];
       expect(upgradedCriterion.id).toBeDefined();
       expect(upgradedCriterion.description).toBeDefined();
       expect(upgradedCriterion.category).toBeDefined();
@@ -345,12 +345,12 @@ describe('Success Criteria Regression Tests', () => {
 
     test('should maintain backward compatibility across API versions', async () => {
       // Test different API versions
-      const apiVersions = ['1.0', '1.1', '2.0'];
+      const _apiVersions = ['1.0', '1.1', '2.0'];
 
       for (const version of apiVersions) {
         try {
           // Create template with version-specific API
-          const versionedTemplate = {
+          const _versionedTemplate = {
             name: `API Version ${version} Template`,
             apiVersion: version,
             criteria: [
@@ -369,9 +369,9 @@ describe('Success Criteria Regression Tests', () => {
             `API Version ${version} Template`,
           ]);
 
-          const status = await execAPI('success-criteria:status');
+          const _status = await execAPI('success-criteria:status');
           expect(status.projectCriteria.length).toBeGreaterThan(0);
-        } catch (error) {
+        } catch {
           // Log version compatibility issues but don't fail test
           console.log(
             `API version ${version} compatibility note:`,
@@ -390,14 +390,14 @@ describe('Success Criteria Regression Tests', () => {
       await createLegacyProjectConfig();
 
       // Initialize with legacy config
-      const initResult = await execAPI('success-criteria:init', [
+      const _initResult = await execAPI('success-criteria:init', [
         '--migrate-legacy',
       ]);
 
       expect(initResult.migrated || initResult.loaded).toBe(true);
 
       // Validate legacy settings are preserved or migrated
-      const status = await execAPI('success-criteria:status');
+      const _status = await execAPI('success-criteria:status');
 
       // Legacy applied template should be recognized
       if (status.appliedTemplate) {
@@ -406,7 +406,7 @@ describe('Success Criteria Regression Tests', () => {
 
       // Legacy custom criteria should be migrated
       if (status.projectCriteria && status.projectCriteria.length > 0) {
-        const legacyCustom = status.projectCriteria.find(
+        const _legacyCustom = status.projectCriteria.find(
           (c) => c.id === 'legacy-custom',
         );
         if (legacyCustom) {
@@ -422,7 +422,7 @@ describe('Success Criteria Regression Tests', () => {
 
     test('should handle deprecated configuration fields gracefully', async () => {
       // Create config with deprecated fields
-      const deprecatedConfig = {
+      const _deprecatedConfig = {
         version: '1.0.0',
         // Deprecated fields that should be handled gracefully
         validation_engine: 'legacy',
@@ -440,14 +440,14 @@ describe('Success Criteria Regression Tests', () => {
         ],
       };
 
-      const configPath = path.join(
+      const _configPath = path.join(
         TEST_PROJECT_DIR,
         '.success-criteria-deprecated.json',
       );
       await fs.writeFile(configPath, JSON.stringify(deprecatedConfig, null, 2));
 
       // Load deprecated config
-      const loadResult = await execAPI('success-criteria:load-config', [
+      const _loadResult = await execAPI('success-criteria:load-config', [
         configPath,
       ]);
 
@@ -459,9 +459,9 @@ describe('Success Criteria Regression Tests', () => {
       }
 
       // Validate field mapping worked
-      const status = await execAPI('success-criteria:status');
+      const _status = await execAPI('success-criteria:status');
       if (status.projectCriteria && status.projectCriteria.length > 0) {
-        const mappedCriterion = status.projectCriteria.find(
+        const _mappedCriterion = status.projectCriteria.find(
           (c) => c.id === 'deprecated-field-test',
         );
         if (mappedCriterion) {
@@ -483,7 +483,7 @@ describe('Success Criteria Regression Tests', () => {
 
     test('should preserve custom extensions in legacy configs', async () => {
       // Create config with custom extensions
-      const extendedConfig = {
+      const _extendedConfig = {
         version: '1.0.0',
         // Custom extension fields that should be preserved
         customExtensions: {
@@ -513,20 +513,20 @@ describe('Success Criteria Regression Tests', () => {
         ],
       };
 
-      const configPath = path.join(
+      const _configPath = path.join(
         TEST_PROJECT_DIR,
         '.success-criteria-extended.json',
       );
       await fs.writeFile(configPath, JSON.stringify(extendedConfig, null, 2));
 
       // Load extended config
-      const loadResult = await execAPI('success-criteria:load-config', [
+      const _loadResult = await execAPI('success-criteria:load-config', [
         configPath,
       ]);
       expect(loadResult.loaded).toBe(true);
 
       // Validate custom extensions are preserved
-      const status = await execAPI('success-criteria:status');
+      const _status = await execAPI('success-criteria:status');
 
       if (status.customExtensions) {
         expect(status.customExtensions.organizationStandards).toBeDefined();
@@ -535,7 +535,7 @@ describe('Success Criteria Regression Tests', () => {
 
       // Validate custom criterion data is preserved
       if (status.projectCriteria && status.projectCriteria.length > 0) {
-        const extendedCriterion = status.projectCriteria.find(
+        const _extendedCriterion = status.projectCriteria.find(
           (c) => c.id === 'extended-criterion',
         );
         if (extendedCriterion && extendedCriterion.customData) {
@@ -553,7 +553,7 @@ describe('Success Criteria Regression Tests', () => {
   describe('Data Format Migration', () => {
     test('should migrate data between format versions', async () => {
       // Create old format data
-      const oldFormatData = {
+      const _oldFormatData = {
         format_version: '1.0',
         templates: [
           {
@@ -572,11 +572,11 @@ describe('Success Criteria Regression Tests', () => {
         ],
       };
 
-      const oldDataPath = path.join(TEST_PROJECT_DIR, 'old-format-data.json');
+      const _oldDataPath = path.join(TEST_PROJECT_DIR, 'old-format-data.json');
       await fs.writeFile(oldDataPath, JSON.stringify(oldFormatData, null, 2));
 
       // Migrate old format data
-      const migrationResult = await execAPI('success-criteria:migrate-data', [
+      const _migrationResult = await execAPI('success-criteria:migrate-data', [
         oldDataPath,
         '2.0',
       ]);
@@ -587,11 +587,11 @@ describe('Success Criteria Regression Tests', () => {
 
       // Validate migrated data is accessible
       if (migrationResult.migratedTemplates) {
-        const migratedTemplate = migrationResult.migratedTemplates[0];
+        const _migratedTemplate = migrationResult.migratedTemplates[0];
         expect(migratedTemplate.name).toBe('Old Format Template'); // template_name -> name
         expect(migratedTemplate.criteria).toBeDefined(); // success_criteria -> criteria
 
-        const migratedCriterion = migratedTemplate.criteria[0];
+        const _migratedCriterion = migratedTemplate.criteria[0];
         expect(migratedCriterion.id).toBe('old-format-1'); // criterion_id -> id
         expect(migratedCriterion.description).toBe('Old format criterion'); // criterion_description -> description
       }
@@ -601,7 +601,7 @@ describe('Success Criteria Regression Tests', () => {
 
     test('should handle schema evolution gracefully', async () => {
       // Test various schema versions
-      const schemaVersions = [
+      const _schemaVersions = [
         {
           version: '1.0',
           data: {
@@ -646,7 +646,7 @@ describe('Success Criteria Regression Tests', () => {
 
       for (const schema of schemaVersions) {
         try {
-          const testTemplate = {
+          const _testTemplate = {
             name: `Schema ${schema.version} Template`,
             schemaVersion: schema.version,
             ...schema.data,
@@ -659,11 +659,11 @@ describe('Success Criteria Regression Tests', () => {
             `Schema ${schema.version} Template`,
           ]);
 
-          const status = await execAPI('success-criteria:status');
+          const _status = await execAPI('success-criteria:status');
           expect(status.projectCriteria.length).toBeGreaterThan(0);
 
           console.log(`Schema ${schema.version} compatibility confirmed`);
-        } catch (error) {
+        } catch {
           console.log(
             `Schema ${schema.version} evolution note:`,
             error.message,
@@ -676,7 +676,7 @@ describe('Success Criteria Regression Tests', () => {
 
     test('should validate data integrity after migration', async () => {
       // Create comprehensive test data
-      const testData = {
+      const _testData = {
         version: '1.0',
         templates: [
           {
@@ -721,11 +721,11 @@ describe('Success Criteria Regression Tests', () => {
         ],
       };
 
-      const dataPath = path.join(TEST_PROJECT_DIR, 'integrity-test-data.json');
+      const _dataPath = path.join(TEST_PROJECT_DIR, 'integrity-test-data.json');
       await fs.writeFile(dataPath, JSON.stringify(testData, null, 2));
 
       // Migrate and validate integrity
-      const migrationResult = await execAPI('success-criteria:migrate-data', [
+      const _migrationResult = await execAPI('success-criteria:migrate-data', [
         dataPath,
         '2.0',
         '--validate-integrity',
@@ -755,7 +755,7 @@ describe('Success Criteria Regression Tests', () => {
   describe('Legacy Feature Support', () => {
     test('should support legacy validation commands', async () => {
       // Create template with legacy validation commands
-      const legacyValidationTemplate = {
+      const _legacyValidationTemplate = {
         name: 'Legacy Validation Template',
         criteria: [
           {
@@ -791,7 +791,7 @@ describe('Success Criteria Regression Tests', () => {
       ]);
 
       // Run validation with legacy commands
-      const validationResult = await execAPI('success-criteria:validate', [
+      const _validationResult = await execAPI('success-criteria:validate', [
         '--legacy-mode',
       ]);
 
@@ -799,14 +799,14 @@ describe('Success Criteria Regression Tests', () => {
       expect(validationResult.results.length).toBe(2);
 
       // Check legacy shell validation result
-      const shellResult = validationResult.results.find(
+      const _shellResult = validationResult.results.find(
         (r) => r.criterionId === 'legacy-shell-validation',
       );
       expect(shellResult).toBeDefined();
       expect(['passed', 'failed', 'error']).toContain(shellResult.status);
 
       // Check legacy file validation result
-      const fileResult = validationResult.results.find(
+      const _fileResult = validationResult.results.find(
         (r) => r.criterionId === 'legacy-file-validation',
       );
       expect(fileResult).toBeDefined();
@@ -817,7 +817,7 @@ describe('Success Criteria Regression Tests', () => {
 
     test('should maintain deprecated API endpoints with warnings', async () => {
       // Test deprecated API endpoints
-      const deprecatedEndpoints = [
+      const _deprecatedEndpoints = [
         'success-criteria:validate-all', // Deprecated in favor of 'validate'
         'success-criteria:list-criteria', // Deprecated in favor of 'status'
         'success-criteria:check-status', // Deprecated in favor of 'status'
@@ -825,7 +825,7 @@ describe('Success Criteria Regression Tests', () => {
 
       for (const endpoint of deprecatedEndpoints) {
         try {
-          const result = await execAPI(endpoint);
+          const _result = await execAPI(endpoint);
 
           // Should work but may include deprecation warnings
           expect(result).toBeDefined();
@@ -836,7 +836,7 @@ describe('Success Criteria Regression Tests', () => {
               result.warning || 'Endpoint is deprecated',
             );
           }
-        } catch (error) {
+        } catch {
           // Some deprecated endpoints might be completely removed
           console.log(
             `Deprecated endpoint ${endpoint} is no longer available:`,
@@ -850,7 +850,7 @@ describe('Success Criteria Regression Tests', () => {
 
     test('should provide graceful degradation for missing features', async () => {
       // Create template that uses newer features
-      const modernTemplate = {
+      const _modernTemplate = {
         name: 'Modern Features Template',
         criteria: [
           {
@@ -880,7 +880,7 @@ describe('Success Criteria Regression Tests', () => {
       ]);
 
       // Run in legacy compatibility mode
-      const legacyResult = await execAPI('success-criteria:validate', [
+      const _legacyResult = await execAPI('success-criteria:validate', [
         '--legacy-mode',
         '--graceful-degradation',
       ]);
@@ -888,7 +888,7 @@ describe('Success Criteria Regression Tests', () => {
       expect(legacyResult.results).toBeDefined();
       expect(legacyResult.results.length).toBeGreaterThan(0);
 
-      const modernResult = legacyResult.results.find(
+      const _modernResult = legacyResult.results.find(
         (r) => r.criterionId === 'modern-feature-test',
       );
       expect(modernResult).toBeDefined();
@@ -917,11 +917,11 @@ describe('Success Criteria Regression Tests', () => {
   describe('Compatibility Validation', () => {
     test('should validate cross-version template compatibility', async () => {
       // Create templates with different versions
-      const versions = ['1.0.0', '1.5.0', '2.0.0'];
-      const templates = [];
+      const _versions = ['1.0.0', '1.5.0', '2.0.0'];
+      const _templates = [];
 
       for (const version of versions) {
-        const template = {
+        const _template = {
           name: `Version ${version} Template`,
           version,
           criteria: [
@@ -943,7 +943,7 @@ describe('Success Criteria Regression Tests', () => {
       for (const template of templates) {
         try {
           await execAPI('success-criteria:apply-template', [template.name]);
-          const status = await execAPI('success-criteria:status');
+          const _status = await execAPI('success-criteria:status');
 
           expect(status.appliedTemplate).toBeDefined();
           expect(status.appliedTemplate.version).toBe(template.version);
@@ -952,7 +952,7 @@ describe('Success Criteria Regression Tests', () => {
           console.log(
             `Template version ${template.version} compatibility confirmed`,
           );
-        } catch (error) {
+        } catch {
           console.log(
             `Template version ${template.version} compatibility issue:`,
             error.message,
@@ -967,7 +967,7 @@ describe('Success Criteria Regression Tests', () => {
 
     test('should handle version conflicts and resolution', async () => {
       // Create conflicting templates
-      const template1 = {
+      const _template1 = {
         name: 'Conflict Template',
         version: '1.0.0',
         criteria: [
@@ -980,7 +980,7 @@ describe('Success Criteria Regression Tests', () => {
         ],
       };
 
-      const template2 = {
+      const _template2 = {
         name: 'Conflict Template',
         version: '2.0.0',
         criteria: [
@@ -1011,7 +1011,7 @@ describe('Success Criteria Regression Tests', () => {
       expect(status.appliedTemplate.version).toBe('1.0.0');
 
       // Upgrade to v2.0.0
-      const upgradeResult = await execAPI('success-criteria:upgrade-template', [
+      const _upgradeResult = await execAPI('success-criteria:upgrade-template', [
         'Conflict Template',
         '2.0.0',
       ]);
@@ -1021,7 +1021,7 @@ describe('Success Criteria Regression Tests', () => {
       status = await execAPI('success-criteria:status');
       expect(status.appliedTemplate.version).toBe('2.0.0');
 
-      const resolvedCriterion = status.projectCriteria.find(
+      const _resolvedCriterion = status.projectCriteria.find(
         (c) => c.id === 'conflict-criterion',
       );
       expect(resolvedCriterion.description).toBe('Version 2.0.0 description');
@@ -1032,7 +1032,7 @@ describe('Success Criteria Regression Tests', () => {
 
     test('should validate system compatibility requirements', async () => {
       // Create template with system requirements
-      const systemTemplate = {
+      const _systemTemplate = {
         name: 'System Requirements Template',
         version: '1.0.0',
         systemRequirements: {
@@ -1055,7 +1055,7 @@ describe('Success Criteria Regression Tests', () => {
       ]);
 
       // Check system compatibility
-      const compatResult = await execAPI(
+      const _compatResult = await execAPI(
         'success-criteria:check-compatibility',
         ['System Requirements Template'],
       );
@@ -1069,7 +1069,7 @@ describe('Success Criteria Regression Tests', () => {
         await execAPI('success-criteria:apply-template', [
           'System Requirements Template',
         ]);
-        const status = await execAPI('success-criteria:status');
+        const _status = await execAPI('success-criteria:status');
         expect(status.projectCriteria.length).toBeGreaterThan(0);
       } else {
         // Should provide clear compatibility errors
@@ -1085,7 +1085,7 @@ describe('Success Criteria Regression Tests', () => {
   describe('Regression Prevention', () => {
     test('should maintain API contract consistency', async () => {
       // Test core API contracts that should remain stable
-      const coreAPIs = [
+      const _coreAPIs = [
         'success-criteria:init',
         'success-criteria:status',
         'success-criteria:validate',
@@ -1099,19 +1099,19 @@ describe('Success Criteria Regression Tests', () => {
           // eslint-disable-next-line security/detect-possible-timing-attacks
           // Safe: Test comparison, not security-sensitive
           if (api === 'success-criteria:init') {
-            const result = await execAPI(api);
+            const _result = await execAPI(api);
             expect(result).toBeDefined();
           // eslint-disable-next-line security/detect-possible-timing-attacks
           // Safe: Test comparison, not security-sensitive
           } else if (api === 'success-criteria:status') {
-            const result = await execAPI(api);
+            const _result = await execAPI(api);
             expect(result).toBeDefined();
             // Status should always have certain fields
             expect(result.projectCriteria !== undefined).toBe(true);
           }
 
           console.log(`API contract for ${api} is stable`);
-        } catch (error) {
+        } catch {
           console.log(`API contract issue for ${api}:`, error.message);
         }
       }
@@ -1121,11 +1121,11 @@ describe('Success Criteria Regression Tests', () => {
 
     test('should preserve essential functionality across updates', async () => {
       // Test essential functionality that must always work
-      const essentialFunctions = [
+      const _essentialFunctions = [
         {
           name: 'Template Creation and Application',
           test: async () => {
-            const template = {
+            const _template = {
               name: 'Essential Function Template',
               criteria: [
                 {
@@ -1143,21 +1143,21 @@ describe('Success Criteria Regression Tests', () => {
               'Essential Function Template',
             ]);
 
-            const status = await execAPI('success-criteria:status');
+            const _status = await execAPI('success-criteria:status');
             return status.projectCriteria.length > 0;
           },
         },
         {
           name: 'Basic Validation',
           test: async () => {
-            const result = await execAPI('success-criteria:validate');
+            const _result = await execAPI('success-criteria:validate');
             return result.results !== undefined;
           },
         },
         {
           name: 'Custom Criteria Addition',
           test: async () => {
-            const criterion = {
+            const _criterion = {
               id: 'essential-custom',
               description: 'Essential custom criterion',
               category: 'custom',
@@ -1166,7 +1166,7 @@ describe('Success Criteria Regression Tests', () => {
             await execAPI('success-criteria:add-criterion', [
               JSON.stringify(criterion),
             ]);
-            const status = await execAPI('success-criteria:status');
+            const _status = await execAPI('success-criteria:status');
             return status.projectCriteria.some(
               (c) => c.id === 'essential-custom',
             );
@@ -1176,10 +1176,10 @@ describe('Success Criteria Regression Tests', () => {
 
       for (const func of essentialFunctions) {
         try {
-          const passed = await func.test();
+          const _passed = await func.test();
           expect(passed).toBe(true);
           console.log(`Essential function '${func.name}' is preserved`);
-        } catch (error) {
+        } catch {
           console.error(
             `Essential function '${func.name}' failed:`,
             error.message,
@@ -1195,13 +1195,13 @@ describe('Success Criteria Regression Tests', () => {
 
     test('should detect and prevent performance regressions', async () => {
       // Baseline performance test
-      const performanceTests = [
+      const _performanceTests = [
         {
           name: 'Template Application Performance',
           test: async () => {
-            const startTime = Date.now();
+            const _startTime = Date.now();
 
-            const template = {
+            const _template = {
               name: 'Performance Test Template',
               criteria: Array.from({ length: 50 }, (_, i) => ({
                 id: `perf-${i}`,
@@ -1217,23 +1217,23 @@ describe('Success Criteria Regression Tests', () => {
               'Performance Test Template',
             ]);
 
-            const duration = Date.now() - startTime;
+            const _duration = Date.now() - startTime;
             return { duration, threshold: 5000 }; // 5 second threshold
           },
         },
         {
           name: 'Validation Performance',
           test: async () => {
-            const startTime = Date.now();
+            const _startTime = Date.now();
             await execAPI('success-criteria:validate');
-            const duration = Date.now() - startTime;
+            const _duration = Date.now() - startTime;
             return { duration, threshold: 10000 }; // 10 second threshold
           },
         },
       ];
 
       for (const test of performanceTests) {
-        const result = await test.test();
+        const _result = await test.test();
         expect(result.duration).toBeLessThan(result.threshold);
 
         console.log(

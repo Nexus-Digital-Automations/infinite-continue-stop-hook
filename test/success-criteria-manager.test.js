@@ -14,18 +14,18 @@
  * @version 1.0.0
  */
 
-const SuccessCriteriaManager = require('../lib/api-modules/core/successCriteriaManager');
+const _SuccessCriteriaManager = require('../lib/api-modules/core/successCriteriaManager');
 
 describe('SuccessCriteriaManager Unit Tests', () => {
-  let successCriteriaManager;
-  let mockDependencies;
-  let mockTaskManager;
-  let mockWithTimeout;
-  let mockGetGuideForError;
-  let mockGetFallbackGuide;
-  let mockValidateCriteria;
-  let mockValidateTaskExists;
-  let mockBroadcastCriteriaUpdate;
+  let _successCriteriaManager;
+  let _mockDependencies;
+  let _mockTaskManager;
+  let _mockWithTimeout;
+  let _mockGetGuideForError;
+  let _mockGetFallbackGuide;
+  let _mockValidateCriteria;
+  let _mockValidateTaskExists;
+  let _mockBroadcastCriteriaUpdate;
 
   beforeEach(() => {
     // Create comprehensive mocks for all dependencies
@@ -84,7 +84,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should use default validators when not provided', () => {
-      const defaultDependencies = {
+      const _defaultDependencies = {
         taskManager: mockTaskManager,
         withTimeout: mockWithTimeout,
         getGuideForError: mockGetGuideForError,
@@ -93,7 +93,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn() },
       };
 
-      const manager = new SuccessCriteriaManager(defaultDependencies);
+      const _manager = new SuccessCriteriaManager(defaultDependencies);
       expect(typeof manager.validateCriteria).toBe('function');
       expect(typeof manager.validateTaskExists).toBe('function');
     });
@@ -152,7 +152,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should successfully add criteria to task with empty criteria', async () => {
-      const result = await successCriteriaManager.addCriteria(
+      const _result = await successCriteriaManager.addCriteria(
         testTaskId,
         testCriteria,
       );
@@ -172,13 +172,13 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should append to existing criteria by default', async () => {
-      const existingCriteria = ['Existing Criterion'];
+      const _existingCriteria = ['Existing Criterion'];
       mockTaskManager.getTask.mockResolvedValue({
         id: testTaskId,
         success_criteria: existingCriteria,
       });
 
-      const result = await successCriteriaManager.addCriteria(
+      const _result = await successCriteriaManager.addCriteria(
         testTaskId,
         testCriteria,
       );
@@ -189,13 +189,13 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should replace existing criteria when replace option is true', async () => {
-      const existingCriteria = ['Existing Criterion'];
+      const _existingCriteria = ['Existing Criterion'];
       mockTaskManager.getTask.mockResolvedValue({
         id: testTaskId,
         success_criteria: existingCriteria,
       });
 
-      const result = await successCriteriaManager.addCriteria(
+      const _result = await successCriteriaManager.addCriteria(
         testTaskId,
         testCriteria,
         { replace: true },
@@ -207,7 +207,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should apply template when template option is provided', async () => {
-      const result = await successCriteriaManager.addCriteria(testTaskId, [], {
+      const _result = await successCriteriaManager.addCriteria(testTaskId, [], {
         template: 'basic',
       });
 
@@ -223,15 +223,15 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should avoid duplicate criteria when appending', async () => {
-      const existingCriteria = ['Test Criterion 1'];
-      const newCriteria = ['Test Criterion 1', 'Test Criterion 2'];
+      const _existingCriteria = ['Test Criterion 1'];
+      const _newCriteria = ['Test Criterion 1', 'Test Criterion 2'];
 
       mockTaskManager.getTask.mockResolvedValue({
         id: testTaskId,
         success_criteria: existingCriteria,
       });
 
-      const result = await successCriteriaManager.addCriteria(
+      const _result = await successCriteriaManager.addCriteria(
         testTaskId,
         newCriteria,
       );
@@ -242,9 +242,9 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should handle single criterion string input', async () => {
-      const singleCriterion = 'Single Test Criterion';
+      const _singleCriterion = 'Single Test Criterion';
 
-      const result = await successCriteriaManager.addCriteria(
+      const _result = await successCriteriaManager.addCriteria(
         testTaskId,
         singleCriterion,
       );
@@ -256,7 +256,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     test('should return error when task does not exist', async () => {
       mockValidateTaskExists.mockResolvedValue({ valid: false });
 
-      const result = await successCriteriaManager.addCriteria(
+      const _result = await successCriteriaManager.addCriteria(
         testTaskId,
         testCriteria,
       );
@@ -272,7 +272,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         errors: ['Criterion too long', 'Empty criterion'],
       });
 
-      const result = await successCriteriaManager.addCriteria(
+      const _result = await successCriteriaManager.addCriteria(
         testTaskId,
         testCriteria,
       );
@@ -285,7 +285,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     test('should return error when task data retrieval fails', async () => {
       mockTaskManager.getTask.mockResolvedValue(null);
 
-      const result = await successCriteriaManager.addCriteria(
+      const _result = await successCriteriaManager.addCriteria(
         testTaskId,
         testCriteria,
       );
@@ -301,7 +301,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         error: 'Update operation failed',
       });
 
-      const result = await successCriteriaManager.addCriteria(
+      const _result = await successCriteriaManager.addCriteria(
         testTaskId,
         testCriteria,
       );
@@ -314,7 +314,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     test('should handle exceptions and return error response', async () => {
       mockWithTimeout.mockRejectedValue(new Error('Timeout occurred'));
 
-      const result = await successCriteriaManager.addCriteria(
+      const _result = await successCriteriaManager.addCriteria(
         testTaskId,
         testCriteria,
       );
@@ -325,7 +325,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should include guide in response', async () => {
-      const result = await successCriteriaManager.addCriteria(
+      const _result = await successCriteriaManager.addCriteria(
         testTaskId,
         testCriteria,
       );
@@ -339,7 +339,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     test('should use fallback guide when guide retrieval fails', async () => {
       mockGetGuideForError.mockRejectedValue(new Error('Guide not found'));
 
-      const result = await successCriteriaManager.addCriteria(
+      const _result = await successCriteriaManager.addCriteria(
         testTaskId,
         testCriteria,
       );
@@ -363,7 +363,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should successfully retrieve criteria for existing task', async () => {
-      const result = await successCriteriaManager.getCriteria(testTaskId);
+      const _result = await successCriteriaManager.getCriteria(testTaskId);
 
       expect(result.success).toBe(true);
       expect(result.taskId).toBe(testTaskId);
@@ -378,7 +378,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         success_criteria: undefined,
       });
 
-      const result = await successCriteriaManager.getCriteria(testTaskId);
+      const _result = await successCriteriaManager.getCriteria(testTaskId);
 
       expect(result.success).toBe(true);
       expect(result.criteria).toEqual([]);
@@ -391,14 +391,14 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         success_criteria: successCriteriaManager.defaultCriteriaTemplates.basic,
       });
 
-      const result = await successCriteriaManager.getCriteria(testTaskId);
+      const _result = await successCriteriaManager.getCriteria(testTaskId);
 
       expect(result.success).toBe(true);
       expect(result.hasTemplate).toBe('basic');
     });
 
     test('should return null for hasTemplate when no template detected', async () => {
-      const result = await successCriteriaManager.getCriteria(testTaskId);
+      const _result = await successCriteriaManager.getCriteria(testTaskId);
 
       expect(result.success).toBe(true);
       expect(result.hasTemplate).toBeNull();
@@ -407,7 +407,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     test('should return error when task does not exist', async () => {
       mockValidateTaskExists.mockResolvedValue({ valid: false });
 
-      const result = await successCriteriaManager.getCriteria(testTaskId);
+      const _result = await successCriteriaManager.getCriteria(testTaskId);
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('not found');
@@ -417,7 +417,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     test('should return error when task data retrieval fails', async () => {
       mockTaskManager.getTask.mockResolvedValue(null);
 
-      const result = await successCriteriaManager.getCriteria(testTaskId);
+      const _result = await successCriteriaManager.getCriteria(testTaskId);
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Could not retrieve task data');
@@ -427,7 +427,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     test('should handle exceptions gracefully', async () => {
       mockWithTimeout.mockRejectedValue(new Error('Network timeout'));
 
-      const result = await successCriteriaManager.getCriteria(testTaskId);
+      const _result = await successCriteriaManager.getCriteria(testTaskId);
 
       expect(result.success).toBe(false);
       expect(result.error).toBe('Network timeout');
@@ -437,10 +437,10 @@ describe('SuccessCriteriaManager Unit Tests', () => {
 
   describe('updateCriteria Method', () => {
     test('should call addCriteria with replace option', async () => {
-      const testTaskId = 'test_1234567890_abcdef';
-      const newCriteria = ['New Criterion 1', 'New Criterion 2'];
+      const _testTaskId = 'test_1234567890_abcdef';
+      const _newCriteria = ['New Criterion 1', 'New Criterion 2'];
 
-      const addCriteriaSpy = jest.spyOn(successCriteriaManager, 'addCriteria');
+      const _addCriteriaSpy = jest.spyOn(successCriteriaManager, 'addCriteria');
       addCriteriaSpy.mockResolvedValue({ success: true });
 
       await successCriteriaManager.updateCriteria(testTaskId, newCriteria);
@@ -466,8 +466,8 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should successfully delete existing criterion', async () => {
-      const criterionToDelete = 'Criterion 2';
-      const result = await successCriteriaManager.deleteCriterion(
+      const _criterionToDelete = 'Criterion 2';
+      const _result = await successCriteriaManager.deleteCriterion(
         testTaskId,
         criterionToDelete,
       );
@@ -486,8 +486,8 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should return error when criterion does not exist', async () => {
-      const nonExistentCriterion = 'Non-existent Criterion';
-      const result = await successCriteriaManager.deleteCriterion(
+      const _nonExistentCriterion = 'Non-existent Criterion';
+      const _result = await successCriteriaManager.deleteCriterion(
         testTaskId,
         nonExistentCriterion,
       );
@@ -500,7 +500,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     test('should return error when task does not exist', async () => {
       mockValidateTaskExists.mockResolvedValue({ valid: false });
 
-      const result = await successCriteriaManager.deleteCriterion(
+      const _result = await successCriteriaManager.deleteCriterion(
         testTaskId,
         'Any Criterion',
       );
@@ -515,7 +515,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         error: 'Database error',
       });
 
-      const result = await successCriteriaManager.deleteCriterion(
+      const _result = await successCriteriaManager.deleteCriterion(
         testTaskId,
         'Criterion 1',
       );
@@ -528,7 +528,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
 
   describe('getProjectWideTemplates Method', () => {
     test('should return all available templates with descriptions', async () => {
-      const result = await successCriteriaManager.getProjectWideTemplates();
+      const _result = await successCriteriaManager.getProjectWideTemplates();
 
       expect(result.success).toBe(true);
       expect(result.templates).toHaveProperty('basic');
@@ -549,7 +549,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should include correct template descriptions', async () => {
-      const result = await successCriteriaManager.getProjectWideTemplates();
+      const _result = await successCriteriaManager.getProjectWideTemplates();
 
       expect(result.templates.basic.description).toContain(
         'Essential success criteria',
@@ -567,7 +567,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         new Error('Template service unavailable'),
       );
 
-      const result = await successCriteriaManager.getProjectWideTemplates();
+      const _result = await successCriteriaManager.getProjectWideTemplates();
 
       expect(result.success).toBe(false);
       expect(result.error).toBe('Template service unavailable');
@@ -579,7 +579,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     const testTaskId = 'test_1234567890_abcdef';
 
     test('should apply basic template successfully', async () => {
-      const addCriteriaSpy = jest.spyOn(successCriteriaManager, 'addCriteria');
+      const _addCriteriaSpy = jest.spyOn(successCriteriaManager, 'addCriteria');
       addCriteriaSpy.mockResolvedValue({ success: true });
 
       const _result = await successCriteriaManager.applyProjectTemplate(
@@ -596,10 +596,10 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should apply template with replace option', async () => {
-      const addCriteriaSpy = jest.spyOn(successCriteriaManager, 'addCriteria');
+      const _addCriteriaSpy = jest.spyOn(successCriteriaManager, 'addCriteria');
       addCriteriaSpy.mockResolvedValue({ success: true });
 
-      const result = await successCriteriaManager.applyProjectTemplate(
+      const _result = await successCriteriaManager.applyProjectTemplate(
         testTaskId,
         'enterprise',
         true,
@@ -614,7 +614,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should return error for unknown template', async () => {
-      const result = await successCriteriaManager.applyProjectTemplate(
+      const _result = await successCriteriaManager.applyProjectTemplate(
         testTaskId,
         'unknown',
         false,
@@ -648,14 +648,14 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       });
 
       test('should return null for custom criteria', () => {
-        const customCriteria = ['Custom Criterion 1', 'Custom Criterion 2'];
+        const _customCriteria = ['Custom Criterion 1', 'Custom Criterion 2'];
         const detected =
           successCriteriaManager._detectAppliedTemplate(customCriteria);
         expect(detected).toBeNull();
       });
 
       test('should return null for partial template match', () => {
-        const partialCriteria = ['Linter Perfection', 'Build Success'];
+        const _partialCriteria = ['Linter Perfection', 'Build Success'];
         const detected =
           successCriteriaManager._detectAppliedTemplate(partialCriteria);
         expect(detected).toBeNull();
@@ -684,7 +684,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
 
     describe('_defaultCriteriaValidator', () => {
       test('should validate correct criteria array', () => {
-        const validCriteria = ['Criterion 1', 'Criterion 2'];
+        const _validCriteria = ['Criterion 1', 'Criterion 2'];
         const result =
           successCriteriaManager._defaultCriteriaValidator(validCriteria);
         expect(result.valid).toBe(true);
@@ -699,7 +699,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       });
 
       test('should reject empty array', () => {
-        const result = successCriteriaManager._defaultCriteriaValidator([]);
+        const _result = successCriteriaManager._defaultCriteriaValidator([]);
         expect(result.valid).toBe(false);
         expect(result.errors).toContain(
           'At least one success criterion is required',
@@ -707,7 +707,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       });
 
       test('should reject non-string criteria', () => {
-        const result = successCriteriaManager._defaultCriteriaValidator([
+        const _result = successCriteriaManager._defaultCriteriaValidator([
           'valid',
           123,
           'also valid',
@@ -719,7 +719,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       });
 
       test('should reject empty string criteria', () => {
-        const result = successCriteriaManager._defaultCriteriaValidator([
+        const _result = successCriteriaManager._defaultCriteriaValidator([
           'valid',
           '',
           'also valid',
@@ -731,8 +731,8 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       });
 
       test('should reject overly long criteria', () => {
-        const longCriterion = 'a'.repeat(201);
-        const result = successCriteriaManager._defaultCriteriaValidator([
+        const _longCriterion = 'a'.repeat(201);
+        const _result = successCriteriaManager._defaultCriteriaValidator([
           longCriterion,
         ]);
         expect(result.valid).toBe(false);
@@ -742,7 +742,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       });
 
       test('should reject duplicate criteria', () => {
-        const result = successCriteriaManager._defaultCriteriaValidator([
+        const _result = successCriteriaManager._defaultCriteriaValidator([
           'Criterion 1',
           'Criterion 2',
           'Criterion 1',
@@ -756,7 +756,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
 
     describe('_defaultTaskExistsValidator', () => {
       test('should validate existing task', async () => {
-        const testTask = { id: 'test_123', title: 'Test Task' };
+        const _testTask = { id: 'test_123', title: 'Test Task' };
         mockTaskManager.getTask.mockResolvedValue(testTask);
 
         const result =
@@ -788,8 +788,8 @@ describe('SuccessCriteriaManager Unit Tests', () => {
 
   describe('Performance and Reliability', () => {
     test('should handle concurrent criteria operations', async () => {
-      const testTaskId = 'test_1234567890_abcdef';
-      const operations = [];
+      const _testTaskId = 'test_1234567890_abcdef';
+      const _operations = [];
 
       mockTaskManager.getTask.mockResolvedValue({
         id: testTaskId,
@@ -806,14 +806,14 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         );
       }
 
-      const results = await Promise.all(operations);
+      const _results = await Promise.all(operations);
       results.forEach((result) => {
         expect(result.success).toBe(true);
       });
     });
 
     test('should maintain consistency under high load', async () => {
-      const testTaskId = 'test_1234567890_abcdef';
+      const _testTaskId = 'test_1234567890_abcdef';
       let callCount = 0;
 
       mockTaskManager.getTask.mockImplementation(() => {
@@ -827,11 +827,11 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         success: true,
       });
 
-      const operations = Array.from({ length: 50 }, (_, i) =>
+      const _operations = Array.from({ length: 50 }, (_, i) =>
         successCriteriaManager.addCriteria(testTaskId, [`New Criterion ${i}`]),
       );
 
-      const results = await Promise.all(operations);
+      const _results = await Promise.all(operations);
 
       // All operations should succeed
       expect(results.every((r) => r.success)).toBe(true);
@@ -844,14 +844,14 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should handle timeout scenarios gracefully', async () => {
-      const testTaskId = 'test_1234567890_abcdef';
+      const _testTaskId = 'test_1234567890_abcdef';
       mockWithTimeout.mockImplementation((_operation) => {
         return new Promise((_, reject) => {
           setTimeout(() => reject(new Error('Operation timeout')), 100);
         });
       });
 
-      const result = await successCriteriaManager.addCriteria(testTaskId, [
+      const _result = await successCriteriaManager.addCriteria(testTaskId, [
         'Test Criterion',
       ]);
 
@@ -863,13 +863,13 @@ describe('SuccessCriteriaManager Unit Tests', () => {
 
   describe('Edge Cases and Error Scenarios', () => {
     test('should handle malformed task data gracefully', async () => {
-      const testTaskId = 'test_1234567890_abcdef';
+      const _testTaskId = 'test_1234567890_abcdef';
       mockTaskManager.getTask.mockResolvedValue({
         id: testTaskId,
         success_criteria: 'invalid_format', // Should be array
       });
 
-      const result = await successCriteriaManager.getCriteria(testTaskId);
+      const _result = await successCriteriaManager.getCriteria(testTaskId);
 
       // Should still work but return the malformed data as-is
       expect(result.success).toBe(true);
@@ -877,8 +877,8 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should handle extremely large criteria arrays', async () => {
-      const testTaskId = 'test_1234567890_abcdef';
-      const largeCriteriaArray = Array.from(
+      const _testTaskId = 'test_1234567890_abcdef';
+      const _largeCriteriaArray = Array.from(
         { length: 1000 },
         (_, i) => `Criterion ${i}`,
       );
@@ -891,7 +891,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         success: true,
       });
 
-      const result = await successCriteriaManager.addCriteria(
+      const _result = await successCriteriaManager.addCriteria(
         testTaskId,
         largeCriteriaArray,
       );
@@ -901,8 +901,8 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should handle special characters in criteria text', async () => {
-      const testTaskId = 'test_1234567890_abcdef';
-      const specialCriteria = [
+      const _testTaskId = 'test_1234567890_abcdef';
+      const _specialCriteria = [
         'Criterion with "quotes"',
         "Criterion with 'single quotes'",
         'Criterion with \n newlines',
@@ -918,7 +918,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         success: true,
       });
 
-      const result = await successCriteriaManager.addCriteria(
+      const _result = await successCriteriaManager.addCriteria(
         testTaskId,
         specialCriteria,
       );
@@ -928,14 +928,14 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should handle network interruption scenarios', async () => {
-      const testTaskId = 'test_1234567890_abcdef';
+      const _testTaskId = 'test_1234567890_abcdef';
 
       // Simulate network failure on task retrieval
       mockTaskManager.getTask.mockRejectedValue(
         new Error('Network unreachable'),
       );
 
-      const result = await successCriteriaManager.getCriteria(testTaskId);
+      const _result = await successCriteriaManager.getCriteria(testTaskId);
 
       expect(result.success).toBe(false);
       expect(result.error).toBe('Network unreachable');
@@ -945,8 +945,8 @@ describe('SuccessCriteriaManager Unit Tests', () => {
 
   describe('Integration Points', () => {
     test('should properly interact with timeout wrapper', async () => {
-      const testTaskId = 'test_1234567890_abcdef';
-      const testCriteria = ['Test Criterion'];
+      const _testTaskId = 'test_1234567890_abcdef';
+      const _testCriteria = ['Test Criterion'];
 
       mockTaskManager.getTask.mockResolvedValue({
         id: testTaskId,
@@ -960,7 +960,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
 
       expect(mockWithTimeout).toHaveBeenCalled();
       // Check that withTimeout was called with something that can be executed
-      const callArg = mockWithTimeout.mock.calls[0][0];
+      const _callArg = mockWithTimeout.mock.calls[0][0];
       expect(
         typeof callArg === 'function' ||
           (callArg && typeof callArg.then === 'function'),
@@ -968,8 +968,8 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should broadcast criteria updates correctly', async () => {
-      const testTaskId = 'test_1234567890_abcdef';
-      const testCriteria = ['Test Criterion'];
+      const _testTaskId = 'test_1234567890_abcdef';
+      const _testCriteria = ['Test Criterion'];
 
       mockTaskManager.getTask.mockResolvedValue({
         id: testTaskId,
@@ -991,16 +991,16 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should use custom validators when provided', async () => {
-      const customValidator = jest
+      const _customValidator = jest
         .fn()
         .mockReturnValue({ valid: true, errors: [] });
 
-      const customDependencies = {
+      const _customDependencies = {
         ...mockDependencies,
         validateCriteria: customValidator,
       };
 
-      const customManager = new SuccessCriteriaManager(customDependencies);
+      const _customManager = new SuccessCriteriaManager(customDependencies);
 
       mockTaskManager.getTask.mockResolvedValue({
         id: 'test_123',

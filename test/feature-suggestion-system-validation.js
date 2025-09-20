@@ -17,8 +17,8 @@
  */
 
 const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+const _fs = require('fs');
+const _path = require('path');
 
 class FeatureSuggestionValidator {
   constructor() {
@@ -48,15 +48,15 @@ class FeatureSuggestionValidator {
     console.log(`   Command: ${command}`);
 
     try {
-      const startTime = Date.now();
-      const output = execSync(command, {
+      const _startTime = Date.now();
+      const _output = execSync(command, {
         encoding: 'utf8',
         cwd: path.dirname(this.taskmanagerPath),
         timeout: 10000,
       });
-      const duration = Date.now() - startTime;
+      const _duration = Date.now() - startTime;
 
-      let result;
+      let _result;
       try {
         result = JSON.parse(output);
       } catch {
@@ -79,7 +79,7 @@ class FeatureSuggestionValidator {
       });
 
       return { success: true, data: result, duration };
-    } catch (error) {
+    } catch {
       console.log(`❌ [${operationId}] Failed: ${error.message}`);
 
       this.testResults.push({
@@ -140,11 +140,11 @@ class FeatureSuggestionValidator {
     );
 
     if (result.success && result.data.features) {
-      const features = result.data.features;
-      const suggestedFeatures = features.filter(
+      const _features = result.data.features;
+      const _suggestedFeatures = features.filter(
         (f) => f.status === 'suggested',
       );
-      const approvedFeatures = features.filter((f) => f.status === 'approved');
+      const _approvedFeatures = features.filter((f) => f.status === 'approved');
 
       console.log(`📊 Total features: ${features.length}`);
       console.log(`💡 Suggested features: ${suggestedFeatures.length}`);
@@ -152,7 +152,7 @@ class FeatureSuggestionValidator {
 
       // Verify our test feature appears in the list
       if (this.testFeatureId) {
-        const testFeature = features.find((f) => f.id === this.testFeatureId);
+        const _testFeature = features.find((f) => f.id === this.testFeatureId);
         if (testFeature) {
           console.log(`🎯 Test feature found in list: ${testFeature.status}`);
           return true;
@@ -180,14 +180,14 @@ class FeatureSuggestionValidator {
 
     if (result.success) {
       // Verify feature status changed to approved
-      const listCommand = `timeout 10s node "${this.taskmanagerPath}" list-features`;
-      const listResult = await this.executeCommand(
+      const _listCommand = `timeout 10s node "${this.taskmanagerPath}" list-features`;
+      const _listResult = await this.executeCommand(
         listCommand,
         'Verify feature approval status',
       );
 
       if (listResult.success && listResult.data.features) {
-        const approvedFeature = listResult.data.features.find(
+        const _approvedFeature = listResult.data.features.find(
           (f) => f.id === this.testFeatureId,
         );
         if (approvedFeature && approvedFeature.status === 'approved') {
@@ -228,8 +228,8 @@ class FeatureSuggestionValidator {
 
     if (createResult.success) {
       // List phases to verify creation
-      const listCommand = `timeout 10s node "${this.taskmanagerPath}" list-phases ${this.testFeatureId}`;
-      const listResult = await this.executeCommand(
+      const _listCommand = `timeout 10s node "${this.taskmanagerPath}" list-phases ${this.testFeatureId}`;
+      const _listResult = await this.executeCommand(
         listCommand,
         'List feature phases',
       );
@@ -268,7 +268,7 @@ class FeatureSuggestionValidator {
     );
 
     if (currentPhaseResult.success) {
-      const phase = currentPhaseResult.data.currentPhase;
+      const _phase = currentPhaseResult.data.currentPhase;
       console.log(
         `📍 Current Phase: ${phase.number} - ${phase.title} (${phase.status})`,
       );
@@ -325,8 +325,8 @@ class FeatureSuggestionValidator {
 
     console.log('📋 Test Results Summary:');
     this.testResults.forEach((result, index) => {
-      const status = result.success ? '✅' : '❌';
-      const duration = result.duration ? `(${result.duration}ms)` : '';
+      const _status = result.success ? '✅' : '❌';
+      const _duration = result.duration ? `(${result.duration}ms)` : '';
       console.log(
         `  ${index + 1}. ${status} ${result.description} ${duration}`,
       );
@@ -372,10 +372,10 @@ class FeatureSuggestionValidator {
 
       // Cleanup and generate report
       await this.cleanup();
-      const report = this.generateReport();
+      const _report = this.generateReport();
 
       // Write detailed report to file
-      const reportPath = path.join(
+      const _reportPath = path.join(
         __dirname,
         '..',
         'development',
@@ -384,7 +384,7 @@ class FeatureSuggestionValidator {
       );
 
       // Ensure directory exists
-      const reportDir = path.dirname(reportPath);
+      const _reportDir = path.dirname(reportPath);
       if (!fs.existsSync(reportDir)) {
         fs.mkdirSync(reportDir, { recursive: true });
       }
@@ -411,7 +411,7 @@ class FeatureSuggestionValidator {
       console.log(`📄 Detailed report saved: ${reportPath}`);
 
       return report;
-    } catch (error) {
+    } catch {
       console.error('💥 Validation failed with error:', error.message);
       return { success: false, error: error.message };
     }

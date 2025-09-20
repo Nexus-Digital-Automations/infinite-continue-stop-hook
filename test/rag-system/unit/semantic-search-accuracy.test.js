@@ -8,18 +8,18 @@
  * @version 1.0.0
  */
 
-const path = require('path');
+const _path = require('path');
 
 describe('Semantic Search Accuracy Validation', () => {
-  let ragSystem;
-  let testDataSet;
-  let embeddingService;
+  let _ragSystem;
+  let _testDataSet;
+  let _embeddingService;
 
   beforeAll(async () => {
     console.log('Setting up semantic search accuracy test environment...');
 
     // Initialize test dataset with known technical content
-    testDataSet = await setupTechnicalTestDataset();
+    _testDataSet = await setupTechnicalTestDataset();
   });
 
   afterAll(async () => {
@@ -33,7 +33,7 @@ describe('Semantic Search Accuracy Validation', () => {
   describe('Technical Content Search Accuracy', () => {
     test('should accurately find relevant lessons for JavaScript error handling', async () => {
       // Setup: Create diverse JavaScript-related lessons
-      const jsLessons = [
+      const _jsLessons = [
         {
           id: 'js-error-1',
           title: 'Promise Rejection Handling',
@@ -82,7 +82,7 @@ describe('Semantic Search Accuracy Validation', () => {
       }
 
       // Test queries with expected results
-      const testQueries = [
+      const _testQueries = [
         {
           query: 'How to handle promise errors in JavaScript?',
           expectedRelevant: ['js-error-1', 'js-error-2'],
@@ -104,21 +104,21 @@ describe('Semantic Search Accuracy Validation', () => {
       ];
 
       for (const testQuery of testQueries) {
-        const searchResults = await ragSystem.searchLessons(testQuery.query, {
+        const _searchResults = await ragSystem.searchLessons(testQuery.query, {
           limit: 10,
           includeScores: true
         });
 
         // Verify relevant lessons are found with high scores
         for (const expectedId of testQuery.expectedRelevant) {
-          const found = searchResults.results.find(r => r.id === expectedId);
+          const _found = searchResults.results.find(r => r.id === expectedId);
           expect(found).toBeDefined();
           expect(found.relevance_score).toBeGreaterThanOrEqual(testQuery.minRelevanceScore);
         }
 
         // Verify irrelevant lessons have lower scores or are not in top results
         for (const irrelevantId of testQuery.expectedIrrelevant) {
-          const found = searchResults.results.find(r => r.id === irrelevantId);
+          const _found = searchResults.results.find(r => r.id === irrelevantId);
           if (found) {
             expect(found.relevance_score).toBeLessThan(testQuery.minRelevanceScore);
           }
@@ -134,7 +134,7 @@ describe('Semantic Search Accuracy Validation', () => {
     });
 
     test('should distinguish between different programming languages', async () => {
-      const multiLanguageLessons = [
+      const _multiLanguageLessons = [
         {
           id: 'py-error-1',
           title: 'Python Exception Handling',
@@ -173,7 +173,7 @@ describe('Semantic Search Accuracy Validation', () => {
       }
 
       // Language-specific queries should prioritize relevant language lessons
-      const languageQueries = [
+      const _languageQueries = [
         {
           query: 'Python error handling best practices',
           expectedLanguage: 'python',
@@ -192,17 +192,17 @@ describe('Semantic Search Accuracy Validation', () => {
       ];
 
       for (const query of languageQueries) {
-        const results = await ragSystem.searchLessons(query.query, { limit: 5 });
+        const _results = await ragSystem.searchLessons(query.query, { limit: 5 });
 
         // Top result should be from the expected language
         expect(results.results[0].id).toBe(query.expectedTop);
         expect(results.results[0].tags).toContain(query.expectedLanguage);
 
         // Verify language-specific boosting
-        const languageResults = results.results.filter(r =>
+        const _languageResults = results.results.filter(r =>
           r.tags.includes(query.expectedLanguage)
         );
-        const nonLanguageResults = results.results.filter(r =>
+        const _nonLanguageResults = results.results.filter(r =>
           !r.tags.includes(query.expectedLanguage)
         );
 
@@ -215,19 +215,19 @@ describe('Semantic Search Accuracy Validation', () => {
     });
 
     test('should handle code-specific vs documentation searches', async () => {
-      const mixedContentLessons = [
+      const _mixedContentLessons = [
         {
           id: 'code-example-1',
           title: 'API Request Implementation',
           content: `
-            async function fetchUserData(userId) {
+            async function fetchUserData(_userId) {
               try {
-                const response = await fetch(\`/api/users/\${userId}\`);
+                const _response = await fetch(\`/api/users/\${userId}\`);
                 if (!response.ok) {
                   throw new Error(\`HTTP \${response.status}: \${response.statusText}\`);
                 }
                 return await response.json();
-              } catch (error) {
+              } catch {
                 console.error('Failed to fetch user:', error);
                 throw error;
               }
@@ -258,7 +258,7 @@ describe('Semantic Search Accuracy Validation', () => {
         await ragSystem.storeLesson(lesson);
       }
 
-      const searchTests = [
+      const _searchTests = [
         {
           query: 'show me code example for API fetch request',
           expectedTop: 'code-example-1',
@@ -277,13 +277,13 @@ describe('Semantic Search Accuracy Validation', () => {
       ];
 
       for (const test of searchTests) {
-        const results = await ragSystem.searchLessons(test.query, { limit: 3 });
+        const _results = await ragSystem.searchLessons(test.query, { limit: 3 });
 
         expect(results.results[0].id).toBe(test.expectedTop);
 
         // Verify content type preference is reflected in scoring
-        const codeResult = results.results.find(r => r.id === 'code-example-1');
-        const docResult = results.results.find(r => r.id === 'doc-concept-1');
+        const _codeResult = results.results.find(r => r.id === 'code-example-1');
+        const _docResult = results.results.find(r => r.id === 'doc-concept-1');
 
         if (test.type === 'code-focused' && codeResult && docResult) {
           expect(codeResult.relevance_score).toBeGreaterThan(docResult.relevance_score);
@@ -297,7 +297,7 @@ describe('Semantic Search Accuracy Validation', () => {
 
   describe('Error Pattern Recognition', () => {
     test('should accurately match similar error patterns', async () => {
-      const errorPatterns = [
+      const _errorPatterns = [
         {
           id: 'error-pattern-1',
           error_type: 'null_pointer',
@@ -332,7 +332,7 @@ describe('Semantic Search Accuracy Validation', () => {
         await ragSystem.storeError(error);
       }
 
-      const errorQueries = [
+      const _errorQueries = [
         {
           query: 'Cannot read property "id" of null',
           expectedSimilar: ['error-pattern-1', 'error-pattern-2'],
@@ -354,18 +354,18 @@ describe('Semantic Search Accuracy Validation', () => {
       ];
 
       for (const query of errorQueries) {
-        const results = await ragSystem.findSimilarErrors(query.query, { limit: 10 });
+        const _results = await ragSystem.findSimilarErrors(query.query, { limit: 10 });
 
         // Check that similar patterns are found with high similarity
         for (const expectedId of query.expectedSimilar) {
-          const found = results.errors.find(e => e.id === expectedId);
+          const _found = results.errors.find(e => e.id === expectedId);
           expect(found).toBeDefined();
           expect(found.similarity_score).toBeGreaterThanOrEqual(query.minSimilarity);
         }
 
         // Check that different patterns have lower similarity
         for (const differentId of query.expectedDifferent) {
-          const found = results.errors.find(e => e.id === differentId);
+          const _found = results.errors.find(e => e.id === differentId);
           if (found) {
             expect(found.similarity_score).toBeLessThan(query.minSimilarity);
           }
@@ -375,7 +375,7 @@ describe('Semantic Search Accuracy Validation', () => {
     });
 
     test('should recognize error severity and urgency patterns', async () => {
-      const severityErrors = [
+      const _severityErrors = [
         {
           id: 'critical-error-1',
           severity: 'critical',
@@ -407,7 +407,7 @@ describe('Semantic Search Accuracy Validation', () => {
         await ragSystem.storeError(error);
       }
 
-      const severityQueries = [
+      const _severityQueries = [
         {
           query: 'application won\'t start database issue',
           expectedSeverity: 'critical',
@@ -426,19 +426,19 @@ describe('Semantic Search Accuracy Validation', () => {
       ];
 
       for (const query of severityQueries) {
-        const results = await ragSystem.findSimilarErrors(query.query, {
+        const _results = await ragSystem.findSimilarErrors(query.query, {
           limit: 5,
           includeSeverity: true
         });
 
-        const topResult = results.errors[0];
+        const _topResult = results.errors[0];
         expect(topResult.id).toBe(query.expectedTop);
         expect(topResult.severity).toBe(query.expectedSeverity);
 
         // Verify severity-appropriate ranking
-        const criticalErrors = results.errors.filter(e => e.severity === 'critical');
-        const warningErrors = results.errors.filter(e => e.severity === 'warning');
-        const infoErrors = results.errors.filter(e => e.severity === 'info');
+        const _criticalErrors = results.errors.filter(e => e.severity === 'critical');
+        const _warningErrors = results.errors.filter(e => e.severity === 'warning');
+        const _infoErrors = results.errors.filter(e => e.severity === 'info');
 
         if (query.expectedSeverity === 'critical' && criticalErrors.length > 0) {
           expect(criticalErrors[0].similarity_score)
@@ -454,7 +454,7 @@ describe('Semantic Search Accuracy Validation', () => {
 
   describe('Context-Aware Search', () => {
     test('should consider project context in search relevance', async () => {
-      const contextualLessons = [
+      const _contextualLessons = [
         {
           id: 'frontend-lesson-1',
           title: 'React State Management',
@@ -486,7 +486,7 @@ describe('Semantic Search Accuracy Validation', () => {
         await ragSystem.storeLesson(lesson);
       }
 
-      const contextualQueries = [
+      const _contextualQueries = [
         {
           query: 'state management best practices',
           context: { project_type: 'frontend', technology: 'react' },
@@ -505,7 +505,7 @@ describe('Semantic Search Accuracy Validation', () => {
       ];
 
       for (const query of contextualQueries) {
-        const results = await ragSystem.searchLessons(query.query, {
+        const _results = await ragSystem.searchLessons(query.query, {
           context: query.context,
           limit: 5
         });
@@ -513,8 +513,8 @@ describe('Semantic Search Accuracy Validation', () => {
         expect(results.results[0].id).toBe(query.expectedTop);
 
         // Verify context boosting affects ranking
-        const contextMatch = results.results[0];
-        const otherResults = results.results.slice(1);
+        const _contextMatch = results.results[0];
+        const _otherResults = results.results.slice(1);
 
         expect(contextMatch.context_relevance_score).toBeGreaterThan(0.8);
         otherResults.forEach(result => {
@@ -525,7 +525,7 @@ describe('Semantic Search Accuracy Validation', () => {
     });
 
     test('should handle temporal context in search relevance', async () => {
-      const temporalLessons = [
+      const _temporalLessons = [
         {
           id: 'recent-lesson-1',
           title: 'Latest React 18 Features',
@@ -552,7 +552,7 @@ describe('Semantic Search Accuracy Validation', () => {
         await ragSystem.storeLesson(lesson);
       }
 
-      const temporalQueries = [
+      const _temporalQueries = [
         {
           query: 'React component best practices',
           temporal_preference: 'recent',
@@ -566,7 +566,7 @@ describe('Semantic Search Accuracy Validation', () => {
       ];
 
       for (const query of temporalQueries) {
-        const results = await ragSystem.searchLessons(query.query, {
+        const _results = await ragSystem.searchLessons(query.query, {
           temporal_preference: query.temporal_preference,
           limit: 5
         });
@@ -577,7 +577,7 @@ describe('Semantic Search Accuracy Validation', () => {
 
         if (query.expectedInclude) {
           for (const expectedId of query.expectedInclude) {
-            const found = results.results.find(r => r.id === expectedId);
+            const _found = results.results.find(r => r.id === expectedId);
             expect(found).toBeDefined();
           }
         }
@@ -596,7 +596,7 @@ describe('Semantic Search Accuracy Validation', () => {
   describe('Search Quality Metrics', () => {
     test('should meet precision and recall benchmarks', async () => {
       // Create comprehensive test dataset with known relevance
-      const benchmarkDataset = await createBenchmarkDataset();
+      const _benchmarkDataset = await createBenchmarkDataset();
 
       // Placeholder for future implementation
       expect(true).toBe(true);
@@ -607,7 +607,7 @@ describe('Semantic Search Accuracy Validation', () => {
         await ragSystem.storeLesson(lesson);
       }
 
-      const qualityMetrics = {
+      const _qualityMetrics = {
         totalQueries: 0,
         precisionSum: 0,
         recallSum: 0,
@@ -616,24 +616,24 @@ describe('Semantic Search Accuracy Validation', () => {
 
       // Run benchmark queries
       for (const benchmark of benchmarkDataset.queries) {
-        const results = await ragSystem.searchLessons(benchmark.query, {
+        const _results = await ragSystem.searchLessons(benchmark.query, {
           limit: 10
         });
 
-        const retrievedIds = results.results.map(r => r.id);
-        const relevantIds = benchmark.relevant_lessons;
+        const _retrievedIds = results.results.map(r => r.id);
+        const _relevantIds = benchmark.relevant_lessons;
 
         // Calculate precision: relevant retrieved / total retrieved
-        const relevantRetrieved = retrievedIds.filter(id =>
+        const _relevantRetrieved = retrievedIds.filter(id =>
           relevantIds.includes(id)
         ).length;
-        const precision = relevantRetrieved / retrievedIds.length;
+        const _precision = relevantRetrieved / retrievedIds.length;
 
         // Calculate recall: relevant retrieved / total relevant
-        const recall = relevantRetrieved / relevantIds.length;
+        const _recall = relevantRetrieved / relevantIds.length;
 
         // Calculate F1 score
-        const f1 = precision + recall > 0
+        const _f1 = precision + recall > 0
           ? (2 * precision * recall) / (precision + recall)
           : 0;
 
@@ -648,9 +648,9 @@ describe('Semantic Search Accuracy Validation', () => {
       }
 
       // Calculate average metrics
-      const avgPrecision = qualityMetrics.precisionSum / qualityMetrics.totalQueries;
-      const avgRecall = qualityMetrics.recallSum / qualityMetrics.totalQueries;
-      const avgF1 = qualityMetrics.f1Sum / qualityMetrics.totalQueries;
+      const _avgPrecision = qualityMetrics.precisionSum / qualityMetrics.totalQueries;
+      const _avgRecall = qualityMetrics.recallSum / qualityMetrics.totalQueries;
+      const _avgF1 = qualityMetrics.f1Sum / qualityMetrics.totalQueries;
 
       // System should meet overall quality benchmarks
       expect(avgPrecision).toBeGreaterThanOrEqual(0.75); // 75% average precision
@@ -661,31 +661,31 @@ describe('Semantic Search Accuracy Validation', () => {
 
     test('should maintain consistent ranking quality', async () => {
       // Test ranking consistency across multiple runs
-      const testQuery = 'JavaScript async error handling best practices';
+      const _testQuery = 'JavaScript async error handling best practices';
 
       // Placeholder for future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
-      const rankings = [];
+      const _rankings = [];
 
       // Run same query multiple times
       for (let i = 0; i < 5; i++) {
-        const results = await ragSystem.searchLessons(testQuery, { limit: 10 });
+        const _results = await ragSystem.searchLessons(testQuery, { limit: 10 });
         rankings.push(results.results.map(r => r.id));
       }
 
       // Calculate ranking similarity (Kendall's tau or similar)
       for (let i = 0; i < rankings.length - 1; i++) {
         for (let j = i + 1; j < rankings.length; j++) {
-          const similarity = calculateRankingSimilarity(rankings[i], rankings[j]);
+          const _similarity = calculateRankingSimilarity(rankings[i], rankings[j]);
           expect(similarity).toBeGreaterThanOrEqual(0.9); // 90% ranking consistency
         }
       }
 
       // Top results should be very stable
-      const topResults = rankings.map(ranking => ranking.slice(0, 3));
-      const topResultsSet = new Set(topResults.flat());
+      const _topResults = rankings.map(ranking => ranking.slice(0, 3));
+      const _topResultsSet = new Set(topResults.flat());
       expect(topResultsSet.size).toBeLessThanOrEqual(5); // Limited variation in top results
       */
     });
@@ -707,7 +707,7 @@ describe('Semantic Search Accuracy Validation', () => {
     };
   }
 
-  function calculateRankingSimilarity(ranking1, ranking2) {
+  function _calculateRankingSimilarity(_ranking1, _ranking2) {
     // Placeholder for ranking similarity calculation
     return 1.0;
   }

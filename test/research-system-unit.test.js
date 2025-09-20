@@ -10,9 +10,9 @@
  * @since 2025-09-13
  */
 
-const path = require('path');
+const _path = require('path');
 const { spawn } = require('child_process');
-const fs = require('fs');
+const _fs = require('fs');
 
 // Test configuration
 const TEST_PROJECT_DIR = path.join(__dirname, 'research-system-test-project');
@@ -23,7 +23,7 @@ const TIMEOUT = 10000; // 10 seconds for research operations
 /**
  * Execute TaskManager API command for research testing
  */
-function execAPI(command, args = [], timeout = TIMEOUT) {
+function execAPI(_command, args = [], timeout = TIMEOUT) {
   return new Promise((resolve, reject) => {
     const allArgs = [
       API_PATH,
@@ -56,15 +56,15 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
     child.on('close', (code) => {
       try {
         let jsonString = stdout.trim();
-        const jsonStart = jsonString.indexOf('{');
+        const _jsonStart = jsonString.indexOf('{');
         if (jsonStart > 0) {
           jsonString = jsonString.substring(jsonStart);
         }
-        const result = JSON.parse(jsonString);
+        const _result = JSON.parse(jsonString);
         resolve(result);
       } catch (parseError) {
         try {
-          const stderrJson = JSON.parse(stderr.trim());
+          const _stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
         } catch {
           reject(
@@ -132,9 +132,9 @@ function setupResearchTestEnvironment() {
     'README.md':
       '# Research Test Project\n\nTest project for research system validation.',
     'src/app.js':
-      '// Main application entry point\nconst express = require("express");',
+      '// Main application entry point\nconst _express = require("express");',
     'models/User.js':
-      '// User model definition\nconst mongoose = require("mongoose");',
+      '// User model definition\nconst _mongoose = require("mongoose");',
     'api/auth.js': '// Authentication API endpoints\nmodule.exports = {};',
     'database/schema.sql':
       '-- Database schema definition\nCREATE TABLE users ();',
@@ -197,12 +197,12 @@ describe('Research System Unit Tests', () => {
 
   describe('Research Location Intelligence', () => {
     beforeEach(async () => {
-      const initResult = await execAPI('init');
+      const _initResult = await execAPI('init');
       _testAgentId = initResult.agentId;
     });
 
     test('should generate database-focused research locations for database tasks', async () => {
-      const databaseTaskData = {
+      const _databaseTaskData = {
         title: 'Design user authentication database schema',
         description:
           'Create comprehensive database schema for user management with relationships and constraints',
@@ -210,14 +210,14 @@ describe('Research System Unit Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(databaseTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const researchSubtask = task.subtasks.find(
+      const _listResult = await execAPI('list');
+      const _task = listResult.tasks.find((t) => t.id === result.taskId);
+      const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
 
@@ -225,7 +225,7 @@ describe('Research System Unit Tests', () => {
       expect(researchSubtask.research_locations).toBeDefined();
 
       // Should prioritize database-related paths
-      const codebaseLocation = researchSubtask.research_locations.find(
+      const _codebaseLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'codebase',
       );
       expect(codebaseLocation.paths).toContain('/models');
@@ -233,7 +233,7 @@ describe('Research System Unit Tests', () => {
       expect(codebaseLocation.paths).toContain('/migrations');
 
       // Should include database-related keywords
-      const internetLocation = researchSubtask.research_locations.find(
+      const _internetLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'internet',
       );
       expect(internetLocation.keywords).toContain('database');
@@ -242,7 +242,7 @@ describe('Research System Unit Tests', () => {
     });
 
     test('should generate API-focused research locations for API tasks', async () => {
-      const apiTaskData = {
+      const _apiTaskData = {
         title: 'Implement REST API authentication endpoints',
         description:
           'Build comprehensive REST API with JWT authentication and rate limiting',
@@ -250,17 +250,17 @@ describe('Research System Unit Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [JSON.stringify(apiTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(apiTaskData)]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const researchSubtask = task.subtasks.find(
+      const _listResult = await execAPI('list');
+      const _task = listResult.tasks.find((t) => t.id === result.taskId);
+      const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
 
       // Should prioritize API-related paths
-      const codebaseLocation = researchSubtask.research_locations.find(
+      const _codebaseLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'codebase',
       );
       expect(codebaseLocation.paths).toContain('/api');
@@ -268,7 +268,7 @@ describe('Research System Unit Tests', () => {
       expect(codebaseLocation.paths).toContain('/controllers');
 
       // Should include API-related keywords
-      const internetLocation = researchSubtask.research_locations.find(
+      const _internetLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'internet',
       );
       expect(internetLocation.keywords).toContain('api');
@@ -277,7 +277,7 @@ describe('Research System Unit Tests', () => {
     });
 
     test('should generate security-focused research locations for security tasks', async () => {
-      const securityTaskData = {
+      const _securityTaskData = {
         title: 'Implement OAuth 2.0 security framework',
         description:
           'Add comprehensive security controls with OAuth 2.0, CSRF protection, and input validation',
@@ -285,19 +285,19 @@ describe('Research System Unit Tests', () => {
         priority: 'critical',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(securityTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const researchSubtask = task.subtasks.find(
+      const _listResult = await execAPI('list');
+      const _task = listResult.tasks.find((t) => t.id === result.taskId);
+      const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
 
       // Should include security-focused keywords
-      const internetLocation = researchSubtask.research_locations.find(
+      const _internetLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'internet',
       );
       expect(internetLocation.keywords).toContain('oauth');
@@ -309,7 +309,7 @@ describe('Research System Unit Tests', () => {
     });
 
     test('should generate performance-focused research locations for optimization tasks', async () => {
-      const performanceTaskData = {
+      const _performanceTaskData = {
         title: 'Optimize database query performance',
         description:
           'Implement caching, indexing, and query optimization strategies for better performance',
@@ -317,19 +317,19 @@ describe('Research System Unit Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(performanceTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const researchSubtask = task.subtasks.find(
+      const _listResult = await execAPI('list');
+      const _task = listResult.tasks.find((t) => t.id === result.taskId);
+      const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
 
       // Should include performance-related keywords
-      const internetLocation = researchSubtask.research_locations.find(
+      const _internetLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'internet',
       );
       expect(internetLocation.keywords).toContain('optimize');
@@ -344,12 +344,12 @@ describe('Research System Unit Tests', () => {
 
   describe('Research Keyword Extraction', () => {
     beforeEach(async () => {
-      const initResult = await execAPI('init');
+      const _initResult = await execAPI('init');
       _testAgentId = initResult.agentId;
     });
 
     test('should extract relevant keywords from task title and description', async () => {
-      const complexTaskData = {
+      const _complexTaskData = {
         title:
           'Implement microservices architecture with Docker containerization',
         description:
@@ -358,16 +358,16 @@ describe('Research System Unit Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [JSON.stringify(complexTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(complexTaskData)]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const researchSubtask = task.subtasks.find(
+      const _listResult = await execAPI('list');
+      const _task = listResult.tasks.find((t) => t.id === result.taskId);
+      const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
 
-      const internetLocation = researchSubtask.research_locations.find(
+      const _internetLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'internet',
       );
 
@@ -377,7 +377,7 @@ describe('Research System Unit Tests', () => {
       expect(internetLocation.keywords).toContain('docker');
 
       // Should handle partial matches or related terms
-      const hasRelatedTerms = internetLocation.keywords.some((keyword) =>
+      const _hasRelatedTerms = internetLocation.keywords.some((keyword) =>
         [
           'containerization',
           'kubernetes',
@@ -389,7 +389,7 @@ describe('Research System Unit Tests', () => {
     });
 
     test('should avoid generic keywords and focus on technical terms', async () => {
-      const taskWithGenericTerms = {
+      const _taskWithGenericTerms = {
         title: 'Create a new system to implement better user experience',
         description:
           'Build a good solution that works well and provides excellent functionality for users',
@@ -397,24 +397,24 @@ describe('Research System Unit Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(taskWithGenericTerms),
       ]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const researchSubtask = task.subtasks.find(
+      const _listResult = await execAPI('list');
+      const _task = listResult.tasks.find((t) => t.id === result.taskId);
+      const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
 
-      const internetLocation = researchSubtask.research_locations.find(
+      const _internetLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'internet',
       );
 
       // Should avoid overly generic terms
-      const genericTerms = ['good', 'better', 'excellent', 'well', 'new'];
-      const hasGenericTerms = internetLocation.keywords.some((keyword) =>
+      const _genericTerms = ['good', 'better', 'excellent', 'well', 'new'];
+      const _hasGenericTerms = internetLocation.keywords.some((keyword) =>
         genericTerms.includes(keyword.toLowerCase()),
       );
       expect(hasGenericTerms).toBe(false);
@@ -426,7 +426,7 @@ describe('Research System Unit Tests', () => {
     });
 
     test('should limit keyword count to reasonable number', async () => {
-      const verboseTaskData = {
+      const _verboseTaskData = {
         title:
           'Comprehensive implementation of advanced authentication authorization security framework',
         description:
@@ -435,16 +435,16 @@ describe('Research System Unit Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [JSON.stringify(verboseTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(verboseTaskData)]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const researchSubtask = task.subtasks.find(
+      const _listResult = await execAPI('list');
+      const _task = listResult.tasks.find((t) => t.id === result.taskId);
+      const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
 
-      const internetLocation = researchSubtask.research_locations.find(
+      const _internetLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'internet',
       );
 
@@ -465,26 +465,26 @@ describe('Research System Unit Tests', () => {
 
   describe('Research Deliverables Generation', () => {
     beforeEach(async () => {
-      const initResult = await execAPI('init');
+      const _initResult = await execAPI('init');
       _testAgentId = initResult.agentId;
     });
 
     test('should generate standard deliverables for all research tasks', async () => {
-      const standardTaskData = {
+      const _standardTaskData = {
         title: 'Standard feature implementation',
         description: 'Regular feature implementation requiring research',
         category: 'feature',
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(standardTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const researchSubtask = task.subtasks.find(
+      const _listResult = await execAPI('list');
+      const _task = listResult.tasks.find((t) => t.id === result.taskId);
+      const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
 
@@ -502,7 +502,7 @@ describe('Research System Unit Tests', () => {
     });
 
     test('should set appropriate estimated hours for research tasks', async () => {
-      const researchTaskData = {
+      const _researchTaskData = {
         title: 'Complex research requiring extensive investigation',
         description:
           'Detailed research task involving multiple technologies and approaches',
@@ -510,14 +510,14 @@ describe('Research System Unit Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(researchTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const researchSubtask = task.subtasks.find(
+      const _listResult = await execAPI('list');
+      const _task = listResult.tasks.find((t) => t.id === result.taskId);
+      const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
 
@@ -528,7 +528,7 @@ describe('Research System Unit Tests', () => {
     });
 
     test('should set prevents_implementation flag correctly', async () => {
-      const implementationTaskData = {
+      const _implementationTaskData = {
         title: 'Critical implementation requiring research',
         description:
           'Implementation that should not start without proper research',
@@ -536,14 +536,14 @@ describe('Research System Unit Tests', () => {
         priority: 'critical',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(implementationTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const researchSubtask = task.subtasks.find(
+      const _listResult = await execAPI('list');
+      const _task = listResult.tasks.find((t) => t.id === result.taskId);
+      const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
 
@@ -558,12 +558,12 @@ describe('Research System Unit Tests', () => {
 
   describe('Research Focus Areas', () => {
     beforeEach(async () => {
-      const initResult = await execAPI('init');
+      const _initResult = await execAPI('init');
       _testAgentId = initResult.agentId;
     });
 
     test('should generate appropriate focus areas for different research types', async () => {
-      const architectureTaskData = {
+      const _architectureTaskData = {
         title: 'Design system architecture',
         description:
           'Create scalable system architecture with proper design patterns',
@@ -571,40 +571,40 @@ describe('Research System Unit Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(architectureTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const researchSubtask = task.subtasks.find(
+      const _listResult = await execAPI('list');
+      const _task = listResult.tasks.find((t) => t.id === result.taskId);
+      const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
 
       // Check codebase research focus
-      const codebaseLocation = researchSubtask.research_locations.find(
+      const _codebaseLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'codebase',
       );
       expect(codebaseLocation.focus).toBeDefined();
       expect(codebaseLocation.focus).toContain('architecture');
 
       // Check internet research focus
-      const internetLocation = researchSubtask.research_locations.find(
+      const _internetLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'internet',
       );
       expect(internetLocation.focus).toBeDefined();
       expect(internetLocation.focus).toContain('practices');
 
       // Check documentation research focus
-      const docsLocation = researchSubtask.research_locations.find(
+      const _docsLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'documentation',
       );
       expect(docsLocation.focus).toBeDefined();
     });
 
     test('should include project-specific documentation sources', async () => {
-      const documentedTaskData = {
+      const _documentedTaskData = {
         title: 'Implement documented API feature',
         description:
           'Feature that should reference existing project documentation',
@@ -612,18 +612,18 @@ describe('Research System Unit Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(documentedTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const researchSubtask = task.subtasks.find(
+      const _listResult = await execAPI('list');
+      const _task = listResult.tasks.find((t) => t.id === result.taskId);
+      const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
 
-      const docsLocation = researchSubtask.research_locations.find(
+      const _docsLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'documentation',
       );
 
@@ -641,28 +641,28 @@ describe('Research System Unit Tests', () => {
 
   describe('Research Task ID Generation', () => {
     beforeEach(async () => {
-      const initResult = await execAPI('init');
+      const _initResult = await execAPI('init');
       _testAgentId = initResult.agentId;
     });
 
     test('should generate unique research subtask IDs', async () => {
-      const taskIds = new Set();
+      const _taskIds = new Set();
 
       // Create multiple tasks to test ID uniqueness
       for (let i = 0; i < 5; i++) {
-        const taskData = {
+        const _taskData = {
           title: `Research task ${i + 1}`,
           description: `Description for research task ${i + 1}`,
           category: 'feature',
           priority: 'medium',
         };
 
-        const result = await execAPI('create', [JSON.stringify(taskData)]);
+        const _result = await execAPI('create', [JSON.stringify(taskData)]);
         expect(result.success).toBe(true);
 
-        const listResult = await execAPI('list');
-        const task = listResult.tasks.find((t) => t.id === result.taskId);
-        const researchSubtask = task.subtasks.find(
+        const _listResult = await execAPI('list');
+        const _task = listResult.tasks.find((t) => t.id === result.taskId);
+        const _researchSubtask = task.subtasks.find(
           (st) => st.type === 'research',
         );
 
@@ -677,29 +677,29 @@ describe('Research System Unit Tests', () => {
     });
 
     test('should create research subtasks with proper timestamps', async () => {
-      const beforeTime = Date.now();
+      const _beforeTime = Date.now();
 
-      const taskData = {
+      const _taskData = {
         title: 'Timestamp test research task',
         description: 'Task to verify research subtask timestamp generation',
         category: 'feature',
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(taskData)]);
+      const _result = await execAPI('create', [JSON.stringify(taskData)]);
       expect(result.success).toBe(true);
 
-      const afterTime = Date.now();
+      const _afterTime = Date.now();
 
-      const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const researchSubtask = task.subtasks.find(
+      const _listResult = await execAPI('list');
+      const _task = listResult.tasks.find((t) => t.id === result.taskId);
+      const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
 
       if (researchSubtask) {
         expect(researchSubtask.created_at).toBeDefined();
-        const createdTime = new Date(researchSubtask.created_at).getTime();
+        const _createdTime = new Date(researchSubtask.created_at).getTime();
         expect(createdTime).toBeGreaterThanOrEqual(beforeTime);
         expect(createdTime).toBeLessThanOrEqual(afterTime);
       }
@@ -712,29 +712,29 @@ describe('Research System Unit Tests', () => {
 
   describe('Research Task Edge Cases', () => {
     beforeEach(async () => {
-      const initResult = await execAPI('init');
+      const _initResult = await execAPI('init');
       _testAgentId = initResult.agentId;
     });
 
     test('should handle tasks with empty or minimal descriptions', async () => {
-      const minimalTaskData = {
+      const _minimalTaskData = {
         title: 'Minimal task',
         description: '',
         category: 'feature',
         priority: 'low',
       };
 
-      const result = await execAPI('create', [JSON.stringify(minimalTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(minimalTaskData)]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
+      const _listResult = await execAPI('list');
+      const _task = listResult.tasks.find((t) => t.id === result.taskId);
 
       // Should still create subtasks even with minimal description
       expect(task.subtasks).toBeDefined();
 
       if (task.subtasks.length > 0) {
-        const researchSubtask = task.subtasks.find(
+        const _researchSubtask = task.subtasks.find(
           (st) => st.type === 'research',
         );
         if (researchSubtask) {
@@ -745,21 +745,21 @@ describe('Research System Unit Tests', () => {
     });
 
     test('should handle tasks with special characters in title', async () => {
-      const specialCharsTaskData = {
+      const _specialCharsTaskData = {
         title: 'API@2.0: Implement REST/GraphQL endpoints (OAuth2.0 + JWT)',
         description: 'Complex task with special characters: @, /, (), +, ., :',
         category: 'feature',
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(specialCharsTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const researchSubtask = task.subtasks.find(
+      const _listResult = await execAPI('list');
+      const _task = listResult.tasks.find((t) => t.id === result.taskId);
+      const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
 
@@ -768,7 +768,7 @@ describe('Research System Unit Tests', () => {
         expect(researchSubtask.id).toMatch(/^research_\d+_[a-f0-9]{8}$/);
 
         // Should extract meaningful keywords despite special characters
-        const internetLocation = researchSubtask.research_locations.find(
+        const _internetLocation = researchSubtask.research_locations.find(
           (loc) => loc.type === 'internet',
         );
         expect(internetLocation.keywords).toContain('api');
@@ -787,7 +787,7 @@ describe('Research System Unit Tests', () => {
           500,
         );
 
-      const longTaskData = {
+      const _longTaskData = {
         title: longTitle,
         description:
           'Task with extremely long title to test research subtask handling',
@@ -795,12 +795,12 @@ describe('Research System Unit Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(longTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(longTaskData)]);
       expect(result.success).toBe(true);
 
-      const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const researchSubtask = task.subtasks.find(
+      const _listResult = await execAPI('list');
+      const _task = listResult.tasks.find((t) => t.id === result.taskId);
+      const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
       );
 
@@ -811,7 +811,7 @@ describe('Research System Unit Tests', () => {
         expect(researchSubtask.research_locations).toBeDefined();
 
         // Should still extract relevant keywords
-        const internetLocation = researchSubtask.research_locations.find(
+        const _internetLocation = researchSubtask.research_locations.find(
           (loc) => loc.type === 'internet',
         );
         expect(internetLocation.keywords).toContain('authentication');

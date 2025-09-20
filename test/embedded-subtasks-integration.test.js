@@ -17,8 +17,8 @@
  * @since 2025-09-13
  */
 
-const fs = require('fs');
-const path = require('path');
+const _fs = require('fs');
+const _path = require('path');
 const { spawn } = require('child_process');
 
 // Test configuration
@@ -34,7 +34,7 @@ const TIMEOUT = 15000; // 15 seconds for API operations
  * @param {number} timeout - Command timeout in milliseconds
  * @returns {Promise<Object>} Parsed JSON response from API
  */
-function execAPI(command, args = [], timeout = TIMEOUT) {
+function execAPI(_command, args = [], timeout = TIMEOUT) {
   return new Promise((resolve, reject) => {
     const allArgs = [
       API_PATH,
@@ -70,18 +70,18 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         let jsonString = stdout.trim();
 
         // Look for JSON object starting with { after any prefix text
-        const jsonStart = jsonString.indexOf('{');
+        const _jsonStart = jsonString.indexOf('{');
         if (jsonStart > 0) {
           jsonString = jsonString.substring(jsonStart);
         }
 
         // Try to parse JSON response
-        const result = JSON.parse(jsonString);
+        const _result = JSON.parse(jsonString);
         resolve(result);
       } catch (parseError) {
         // If JSON parsing fails, check if we can extract JSON from stderr
         try {
-          const stderrJson = JSON.parse(stderr.trim());
+          const _stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
         } catch {
           // If both fail, include raw output for debugging
@@ -203,12 +203,12 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
   describe('Embedded Subtasks Generation', () => {
     beforeEach(async () => {
       // Initialize agent for task operations
-      const initResult = await execAPI('init');
+      const _initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
 
     test('should auto-generate research and audit subtasks for complex feature tasks', async () => {
-      const featureTaskData = {
+      const _featureTaskData = {
         title: 'Implement authentication system with database integration',
         description:
           'Build comprehensive authentication system with security controls and database migration',
@@ -216,7 +216,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(featureTaskData)]);
 
       expect(result.success).toBe(true);
       expect(result.taskId).toBeDefined();
@@ -225,8 +225,8 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
       testFeatureTaskId = result.taskId;
 
       // List tasks to verify subtasks were generated
-      const listResult = await execAPI('list');
-      const createdTask = listResult.tasks.find(
+      const _listResult = await execAPI('list');
+      const _createdTask = listResult.tasks.find(
         (t) => t.id === testFeatureTaskId,
       );
 
@@ -235,7 +235,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
       expect(createdTask.subtasks.length).toBeGreaterThan(0);
 
       // Verify research subtask was created
-      const researchSubtask = createdTask.subtasks.find(
+      const _researchSubtask = createdTask.subtasks.find(
         (st) => st.type === 'research',
       );
       expect(researchSubtask).toBeDefined();
@@ -246,7 +246,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
       expect(researchSubtask.research_locations.length).toBeGreaterThan(0);
 
       // Verify audit subtask was created
-      const auditSubtask = createdTask.subtasks.find(
+      const _auditSubtask = createdTask.subtasks.find(
         (st) => st.type === 'audit',
       );
       expect(auditSubtask).toBeDefined();
@@ -259,7 +259,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     });
 
     test('should generate only audit subtasks for simple feature tasks', async () => {
-      const simpleTaskData = {
+      const _simpleTaskData = {
         title: 'Update button color scheme',
         description:
           'Change primary button colors to match new brand guidelines',
@@ -267,14 +267,14 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(simpleTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(simpleTaskData)]);
 
       expect(result.success).toBe(true);
       testFeatureTaskId = result.taskId;
 
       // List tasks to verify subtasks were generated
-      const listResult = await execAPI('list');
-      const createdTask = listResult.tasks.find(
+      const _listResult = await execAPI('list');
+      const _createdTask = listResult.tasks.find(
         (t) => t.id === testFeatureTaskId,
       );
 
@@ -283,13 +283,13 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
       expect(createdTask.subtasks.length).toBe(1); // Only audit subtask
 
       // Verify no research subtask was created
-      const researchSubtask = createdTask.subtasks.find(
+      const _researchSubtask = createdTask.subtasks.find(
         (st) => st.type === 'research',
       );
       expect(researchSubtask).toBeUndefined();
 
       // Verify audit subtask was created
-      const auditSubtask = createdTask.subtasks.find(
+      const _auditSubtask = createdTask.subtasks.find(
         (st) => st.type === 'audit',
       );
       expect(auditSubtask).toBeDefined();
@@ -297,21 +297,21 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     });
 
     test('should not generate subtasks for non-feature task categories', async () => {
-      const errorTaskData = {
+      const _errorTaskData = {
         title: 'Fix critical ESLint violations',
         description: 'Resolve linting errors in authentication module',
         category: 'error',
         priority: 'critical',
       };
 
-      const result = await execAPI('create', [JSON.stringify(errorTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(errorTaskData)]);
 
       expect(result.success).toBe(true);
       testTaskId = result.taskId;
 
       // List tasks to verify no subtasks were generated
-      const listResult = await execAPI('list');
-      const createdTask = listResult.tasks.find((t) => t.id === testTaskId);
+      const _listResult = await execAPI('list');
+      const _createdTask = listResult.tasks.find((t) => t.id === testTaskId);
 
       expect(createdTask).toBeDefined();
       expect(createdTask.subtasks).toBeDefined();
@@ -319,7 +319,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     });
 
     test('should respect skip_embedded_subtasks flag', async () => {
-      const featureTaskData = {
+      const _featureTaskData = {
         title: 'Implement complex API integration',
         description: 'Build integration with third-party API service',
         category: 'feature',
@@ -327,14 +327,14 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         skip_embedded_subtasks: true,
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(featureTaskData)]);
 
       expect(result.success).toBe(true);
       testFeatureTaskId = result.taskId;
 
       // List tasks to verify no subtasks were generated
-      const listResult = await execAPI('list');
-      const createdTask = listResult.tasks.find(
+      const _listResult = await execAPI('list');
+      const _createdTask = listResult.tasks.find(
         (t) => t.id === testFeatureTaskId,
       );
 
@@ -350,12 +350,12 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
 
   describe('Research System Integration', () => {
     beforeEach(async () => {
-      const initResult = await execAPI('init');
+      const _initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
 
     test('should generate appropriate research locations for different task types', async () => {
-      const databaseTaskData = {
+      const _databaseTaskData = {
         title: 'Design database schema for user management',
         description:
           'Create tables and relationships for user authentication and profiles',
@@ -363,16 +363,16 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(databaseTaskData),
       ]);
       testFeatureTaskId = result.taskId;
 
-      const listResult = await execAPI('list');
-      const createdTask = listResult.tasks.find(
+      const _listResult = await execAPI('list');
+      const _createdTask = listResult.tasks.find(
         (t) => t.id === testFeatureTaskId,
       );
-      const researchSubtask = createdTask.subtasks.find(
+      const _researchSubtask = createdTask.subtasks.find(
         (st) => st.type === 'research',
       );
 
@@ -380,7 +380,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
       expect(researchSubtask.research_locations).toBeDefined();
 
       // Verify codebase research location
-      const codebaseLocation = researchSubtask.research_locations.find(
+      const _codebaseLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'codebase',
       );
       expect(codebaseLocation).toBeDefined();
@@ -388,7 +388,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
       expect(codebaseLocation.paths).toContain('/database');
 
       // Verify internet research location
-      const internetLocation = researchSubtask.research_locations.find(
+      const _internetLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'internet',
       );
       expect(internetLocation).toBeDefined();
@@ -396,7 +396,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
       expect(internetLocation.keywords).toContain('schema');
 
       // Verify documentation research location
-      const docsLocation = researchSubtask.research_locations.find(
+      const _docsLocation = researchSubtask.research_locations.find(
         (loc) => loc.type === 'documentation',
       );
       expect(docsLocation).toBeDefined();
@@ -404,7 +404,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     });
 
     test('should include comprehensive deliverables in research subtasks', async () => {
-      const apiTaskData = {
+      const _apiTaskData = {
         title: 'Implement REST API endpoints',
         description:
           'Create comprehensive API with authentication and validation',
@@ -412,14 +412,14 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [JSON.stringify(apiTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(apiTaskData)]);
       testFeatureTaskId = result.taskId;
 
-      const listResult = await execAPI('list');
-      const createdTask = listResult.tasks.find(
+      const _listResult = await execAPI('list');
+      const _createdTask = listResult.tasks.find(
         (t) => t.id === testFeatureTaskId,
       );
-      const researchSubtask = createdTask.subtasks.find(
+      const _researchSubtask = createdTask.subtasks.find(
         (st) => st.type === 'research',
       );
 
@@ -437,21 +437,21 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     });
 
     test('should set prevents_implementation flag on research subtasks', async () => {
-      const complexTaskData = {
+      const _complexTaskData = {
         title: 'Implement microservices architecture',
         description: 'Refactor monolith into distributed microservices',
         category: 'feature',
         priority: 'high',
       };
 
-      const result = await execAPI('create', [JSON.stringify(complexTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(complexTaskData)]);
       testFeatureTaskId = result.taskId;
 
-      const listResult = await execAPI('list');
-      const createdTask = listResult.tasks.find(
+      const _listResult = await execAPI('list');
+      const _createdTask = listResult.tasks.find(
         (t) => t.id === testFeatureTaskId,
       );
-      const researchSubtask = createdTask.subtasks.find(
+      const _researchSubtask = createdTask.subtasks.find(
         (st) => st.type === 'research',
       );
 
@@ -466,26 +466,26 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
 
   describe('Audit System Validation', () => {
     beforeEach(async () => {
-      const initResult = await execAPI('init');
+      const _initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
 
     test('should load audit criteria from development/essentials/audit-criteria.md', async () => {
-      const featureTaskData = {
+      const _featureTaskData = {
         title: 'Add new feature with audit validation',
         description: 'Feature that should trigger audit subtask generation',
         category: 'feature',
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       testFeatureTaskId = result.taskId;
 
-      const listResult = await execAPI('list');
-      const createdTask = listResult.tasks.find(
+      const _listResult = await execAPI('list');
+      const _createdTask = listResult.tasks.find(
         (t) => t.id === testFeatureTaskId,
       );
-      const auditSubtask = createdTask.subtasks.find(
+      const _auditSubtask = createdTask.subtasks.find(
         (st) => st.type === 'audit',
       );
 
@@ -501,21 +501,21 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     });
 
     test('should set prevents_completion and prevents_self_review flags', async () => {
-      const featureTaskData = {
+      const _featureTaskData = {
         title: 'Feature requiring audit validation',
         description: 'Test feature for audit system validation',
         category: 'feature',
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       testFeatureTaskId = result.taskId;
 
-      const listResult = await execAPI('list');
-      const createdTask = listResult.tasks.find(
+      const _listResult = await execAPI('list');
+      const _createdTask = listResult.tasks.find(
         (t) => t.id === testFeatureTaskId,
       );
-      const auditSubtask = createdTask.subtasks.find(
+      const _auditSubtask = createdTask.subtasks.find(
         (st) => st.type === 'audit',
       );
 
@@ -526,7 +526,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     });
 
     test('should create comprehensive audit description with original task context', async () => {
-      const featureTaskData = {
+      const _featureTaskData = {
         title: 'Complex feature implementation',
         description:
           'Detailed implementation with multiple components and requirements',
@@ -534,14 +534,14 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       testFeatureTaskId = result.taskId;
 
-      const listResult = await execAPI('list');
-      const createdTask = listResult.tasks.find(
+      const _listResult = await execAPI('list');
+      const _createdTask = listResult.tasks.find(
         (t) => t.id === testFeatureTaskId,
       );
-      const auditSubtask = createdTask.subtasks.find(
+      const _auditSubtask = createdTask.subtasks.find(
         (st) => st.type === 'audit',
       );
 
@@ -560,29 +560,29 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
 
   describe('Embedded Subtasks API Endpoints', () => {
     beforeEach(async () => {
-      const initResult = await execAPI('init');
+      const _initResult = await execAPI('init');
       testAgentId = initResult.agentId;
 
       // Create a feature task with embedded subtasks
-      const featureTaskData = {
+      const _featureTaskData = {
         title: 'API endpoint test feature',
         description: 'Feature for testing embedded subtasks API endpoints',
         category: 'feature',
         priority: 'medium',
       };
-      const createResult = await execAPI('create', [
+      const _createResult = await execAPI('create', [
         JSON.stringify(featureTaskData),
       ]);
       testFeatureTaskId = createResult.taskId;
     });
 
     test('should list tasks with embedded subtasks information', async () => {
-      const result = await execAPI('list');
+      const _result = await execAPI('list');
 
       expect(result.success).toBe(true);
       expect(result.tasks.length).toBeGreaterThan(0);
 
-      const featureTask = result.tasks.find((t) => t.id === testFeatureTaskId);
+      const _featureTask = result.tasks.find((t) => t.id === testFeatureTaskId);
       expect(featureTask).toBeDefined();
       expect(featureTask.subtasks).toBeDefined();
       expect(featureTask.subtasks.length).toBeGreaterThan(0);
@@ -599,7 +599,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
 
     test('should filter tasks by subtask properties', async () => {
       // This would test advanced filtering once implemented
-      const result = await execAPI('list', [
+      const _result = await execAPI('list', [
         JSON.stringify({ has_research_subtasks: true }),
       ]);
 
@@ -615,14 +615,14 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     });
 
     test('should provide subtask status in task statistics', async () => {
-      const result = await execAPI('stats');
+      const _result = await execAPI('stats');
 
       expect(result.success).toBe(true);
       expect(result.statistics).toBeDefined();
       expect(result.statistics.tasks).toBeDefined();
 
       // Should include information about embedded subtasks
-      const taskStats = result.statistics.tasks;
+      const _taskStats = result.statistics.tasks;
       expect(taskStats.total).toBeGreaterThan(0);
     });
   });
@@ -633,14 +633,14 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
 
   describe('Embedded Subtasks Performance', () => {
     beforeEach(async () => {
-      const initResult = await execAPI('init');
+      const _initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
 
     test('should create tasks with embedded subtasks within performance thresholds', async () => {
-      const startTime = Date.now();
+      const _startTime = Date.now();
 
-      const featureTaskData = {
+      const _featureTaskData = {
         title: 'Performance test feature with complex requirements',
         description:
           'Complex feature implementation with database, API, and security requirements',
@@ -648,10 +648,10 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(featureTaskData)]);
 
-      const endTime = Date.now();
-      const executionTime = endTime - startTime;
+      const _endTime = Date.now();
+      const _executionTime = endTime - startTime;
 
       expect(result.success).toBe(true);
       expect(executionTime).toBeLessThan(5000); // Should complete within 5 seconds
@@ -660,11 +660,11 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     });
 
     test('should handle multiple concurrent task creations efficiently', async () => {
-      const taskPromises = [];
-      const numTasks = 5;
+      const _taskPromises = [];
+      const _numTasks = 5;
 
       for (let i = 0; i < numTasks; i++) {
-        const taskData = {
+        const _taskData = {
           title: `Concurrent test feature ${i + 1}`,
           description: `Feature ${i + 1} for concurrent creation testing`,
           category: 'feature',
@@ -673,10 +673,10 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         taskPromises.push(execAPI('create', [JSON.stringify(taskData)]));
       }
 
-      const startTime = Date.now();
-      const results = await Promise.all(taskPromises);
-      const endTime = Date.now();
-      const totalTime = endTime - startTime;
+      const _startTime = Date.now();
+      const _results = await Promise.all(taskPromises);
+      const _endTime = Date.now();
+      const _totalTime = endTime - startTime;
 
       results.forEach((result) => {
         expect(result.success).toBe(true);
@@ -690,7 +690,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     test('should efficiently query tasks with complex subtask structures', async () => {
       // Create several feature tasks with embedded subtasks
       for (let i = 0; i < 3; i++) {
-        const taskData = {
+        const _taskData = {
           title: `Query performance test feature ${i + 1}`,
           description: 'Feature with complex subtask structure for query testing',
           category: 'feature',
@@ -699,10 +699,10 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         await execAPI('create', [JSON.stringify(taskData)]);
       }
 
-      const startTime = Date.now();
-      const result = await execAPI('list');
-      const endTime = Date.now();
-      const queryTime = endTime - startTime;
+      const _startTime = Date.now();
+      const _result = await execAPI('list');
+      const _endTime = Date.now();
+      const _queryTime = endTime - startTime;
 
       expect(result.success).toBe(true);
       expect(result.tasks.length).toBeGreaterThanOrEqual(3);
@@ -723,13 +723,13 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
 
   describe('Error Handling and Edge Cases', () => {
     beforeEach(async () => {
-      const initResult = await execAPI('init');
+      const _initResult = await execAPI('init');
       testAgentId = initResult.agentId;
     });
 
     test('should handle missing audit criteria file gracefully', async () => {
       // Remove audit criteria file
-      const auditCriteriaPath = path.join(
+      const _auditCriteriaPath = path.join(
         TEST_PROJECT_DIR,
         'development/essentials/audit-criteria.md',
       );
@@ -737,28 +737,28 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         fs.unlinkSync(auditCriteriaPath);
       }
 
-      const featureTaskData = {
+      const _featureTaskData = {
         title: 'Feature without audit criteria file',
         description: 'Test fallback behavior when audit criteria is missing',
         category: 'feature',
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(featureTaskData)]);
 
       expect(result.success).toBe(true);
       testFeatureTaskId = result.taskId;
 
       // Task should still be created with default audit criteria
-      const listResult = await execAPI('list');
-      const createdTask = listResult.tasks.find(
+      const _listResult = await execAPI('list');
+      const _createdTask = listResult.tasks.find(
         (t) => t.id === testFeatureTaskId,
       );
 
       expect(createdTask).toBeDefined();
       expect(createdTask.subtasks).toBeDefined();
 
-      const auditSubtask = createdTask.subtasks.find(
+      const _auditSubtask = createdTask.subtasks.find(
         (st) => st.type === 'audit',
       );
       expect(auditSubtask).toBeDefined();
@@ -766,7 +766,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     });
 
     test('should handle malformed embedded subtasks data', async () => {
-      const taskDataWithInvalidSubtasks = {
+      const _taskDataWithInvalidSubtasks = {
         title: 'Task with malformed subtasks',
         description: 'Test task with invalid subtasks structure',
         category: 'feature',
@@ -774,7 +774,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         subtasks: 'invalid_subtasks_data', // Should be an array
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(taskDataWithInvalidSubtasks),
       ]);
 
@@ -782,8 +782,8 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
       if (result.success) {
         testFeatureTaskId = result.taskId;
 
-        const listResult = await execAPI('list');
-        const createdTask = listResult.tasks.find(
+        const _listResult = await execAPI('list');
+        const _createdTask = listResult.tasks.find(
           (t) => t.id === testFeatureTaskId,
         );
 
@@ -796,23 +796,23 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     });
 
     test('should handle extremely long task titles and descriptions', async () => {
-      const longTitle = 'A'.repeat(1000); // 1000 character title
-      const longDescription = 'B'.repeat(5000); // 5000 character description
+      const _longTitle = 'A'.repeat(1000); // 1000 character title
+      const _longDescription = 'B'.repeat(5000); // 5000 character description
 
-      const taskData = {
+      const _taskData = {
         title: longTitle,
         description: longDescription,
         category: 'feature',
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(taskData)]);
+      const _result = await execAPI('create', [JSON.stringify(taskData)]);
 
       expect(result.success).toBe(true);
       testFeatureTaskId = result.taskId;
 
-      const listResult = await execAPI('list');
-      const createdTask = listResult.tasks.find(
+      const _listResult = await execAPI('list');
+      const _createdTask = listResult.tasks.find(
         (t) => t.id === testFeatureTaskId,
       );
 
@@ -820,7 +820,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
       expect(createdTask.subtasks).toBeDefined();
 
       // Embedded subtasks should handle long parent task data
-      const auditSubtask = createdTask.subtasks.find(
+      const _auditSubtask = createdTask.subtasks.find(
         (st) => st.type === 'audit',
       );
       expect(auditSubtask).toBeDefined();
@@ -835,12 +835,12 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
   describe('Complete Embedded Subtasks Workflow', () => {
     test('should complete full embedded subtasks lifecycle', async () => {
       // 1. Initialize agent
-      const initResult = await execAPI('init');
+      const _initResult = await execAPI('init');
       testAgentId = initResult.agentId;
       expect(initResult.success).toBe(true);
 
       // 2. Create feature task with embedded subtasks
-      const featureTaskData = {
+      const _featureTaskData = {
         title: 'Complete workflow test feature',
         description:
           'Feature with database integration and API endpoints for full workflow testing',
@@ -849,25 +849,25 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         important_files: ['src/api.js', 'src/database.js', 'docs/api.md'],
       };
 
-      const createResult = await execAPI('create', [
+      const _createResult = await execAPI('create', [
         JSON.stringify(featureTaskData),
       ]);
       testFeatureTaskId = createResult.taskId;
       expect(createResult.success).toBe(true);
 
       // 3. Verify embedded subtasks were created
-      const listResult = await execAPI('list');
-      const featureTask = listResult.tasks.find(
+      const _listResult = await execAPI('list');
+      const _featureTask = listResult.tasks.find(
         (t) => t.id === testFeatureTaskId,
       );
 
       expect(featureTask).toBeDefined();
       expect(featureTask.subtasks.length).toBeGreaterThan(0);
 
-      const researchSubtask = featureTask.subtasks.find(
+      const _researchSubtask = featureTask.subtasks.find(
         (st) => st.type === 'research',
       );
-      const auditSubtask = featureTask.subtasks.find(
+      const _auditSubtask = featureTask.subtasks.find(
         (st) => st.type === 'audit',
       );
 
@@ -884,12 +884,12 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
       expect(auditSubtask.status).toBe('pending');
 
       // 6. Verify task filtering and statistics include subtask information
-      const statsResult = await execAPI('stats');
+      const _statsResult = await execAPI('stats');
       expect(statsResult.success).toBe(true);
       expect(statsResult.statistics.tasks.total).toBeGreaterThan(0);
 
       // 7. Claim the main feature task
-      const claimResult = await execAPI('claim', [
+      const _claimResult = await execAPI('claim', [
         testFeatureTaskId,
         testAgentId,
       ]);
@@ -897,20 +897,20 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
       expect(claimResult.task.status).toBe('in_progress');
 
       // 8. Verify current task shows embedded subtasks
-      const currentResult = await execAPI('current', [testAgentId]);
+      const _currentResult = await execAPI('current', [testAgentId]);
       expect(currentResult.success).toBe(true);
       expect(currentResult.task.id).toBe(testFeatureTaskId);
       expect(currentResult.task.subtasks).toBeDefined();
 
       // 9. Verify agent status reflects task with embedded subtasks
-      const statusResult = await execAPI('status', [testAgentId]);
+      const _statusResult = await execAPI('status', [testAgentId]);
       expect(statusResult.success).toBe(true);
       expect(statusResult.taskCount).toBe(1);
     });
 
     test('should handle multi-agent coordination for embedded subtasks', async () => {
       // Initialize multiple agents for different roles
-      const implementationAgent = (
+      const _implementationAgent = (
         await execAPI('init', [
           JSON.stringify({
             role: 'development',
@@ -919,7 +919,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         ])
       ).agentId;
 
-      const researchAgent = (
+      const _researchAgent = (
         await execAPI('init', [
           JSON.stringify({
             role: 'research',
@@ -928,7 +928,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         ])
       ).agentId;
 
-      const auditAgent = (
+      const _auditAgent = (
         await execAPI('init', [
           JSON.stringify({
             role: 'quality-assurance',
@@ -938,7 +938,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
       ).agentId;
 
       // Create feature task with complex embedded subtasks
-      const featureTaskData = {
+      const _featureTaskData = {
         title: 'Multi-agent coordination test feature',
         description:
           'Complex feature requiring research, implementation, and audit coordination',
@@ -946,31 +946,31 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         priority: 'high',
       };
 
-      const createResult = await execAPI('create', [
+      const _createResult = await execAPI('create', [
         JSON.stringify(featureTaskData),
       ]);
       testFeatureTaskId = createResult.taskId;
 
       // Verify all agents can see the task and its subtasks
       for (const agentId of [implementationAgent, researchAgent, auditAgent]) {
-        const statusResult = await execAPI('status', [agentId]);
+        const _statusResult = await execAPI('status', [agentId]);
         expect(statusResult.success).toBe(true);
 
-        const listResult = await execAPI('list');
-        const task = listResult.tasks.find((t) => t.id === testFeatureTaskId);
+        const _listResult = await execAPI('list');
+        const _task = listResult.tasks.find((t) => t.id === testFeatureTaskId);
         expect(task).toBeDefined();
         expect(task.subtasks).toBeDefined();
       }
 
       // Implementation agent claims main task
-      const claimResult = await execAPI('claim', [
+      const _claimResult = await execAPI('claim', [
         testFeatureTaskId,
         implementationAgent,
       ]);
       expect(claimResult.success).toBe(true);
 
       // Verify task assignment and multi-agent coordination
-      const finalStatusResult = await execAPI('status', [implementationAgent]);
+      const _finalStatusResult = await execAPI('status', [implementationAgent]);
       expect(finalStatusResult.success).toBe(true);
       expect(finalStatusResult.taskCount).toBe(1);
     });

@@ -8,14 +8,14 @@
  * @version 1.0.0
  */
 
-const path = require('path');
-const fs = require('fs').promises;
-const crypto = require('crypto');
+const _path = require('path');
+const _fs = require('fs').promises;
+const _crypto = require('crypto');
 
 describe('RAG System Data Migration and Integrity', () => {
-  let ragSystem;
-  let testMigrationPath;
-  let backupManager;
+  let _ragSystem;
+  let _testMigrationPath;
+  let _backupManager;
 
   beforeAll(async () => {
     console.log('Setting up data integrity test environment...');
@@ -32,7 +32,7 @@ describe('RAG System Data Migration and Integrity', () => {
     console.log('Cleaning up data integrity test environment...');
     try {
       await fs.rm(testMigrationPath, { recursive: true, force: true });
-    } catch (error) {
+    } catch {
       console.warn('Cleanup warning:', error.message);
     }
   });
@@ -48,16 +48,16 @@ describe('RAG System Data Migration and Integrity', () => {
 
       /* Future implementation:
       // Get baseline counts
-      const originalFiles = await getAllLessonFiles(testMigrationPath);
-      const originalCount = originalFiles.length;
+      const _originalFiles = await getAllLessonFiles(testMigrationPath);
+      const _originalCount = originalFiles.length;
 
       expect(originalCount).toBeGreaterThan(0);
 
       // Create checksums for original content
-      const originalChecksums = new Map();
+      const _originalChecksums = new Map();
       for (const file of originalFiles) {
-        const content = await fs.readFile(file.fullPath, 'utf8');
-        const checksum = crypto.createHash('sha256').update(content).digest('hex');
+        const _content = await fs.readFile(file.fullPath, 'utf8');
+        const _checksum = crypto.createHash('sha256').update(content).digest('hex');
         originalChecksums.set(file.relativePath, {
           checksum,
           content,
@@ -66,7 +66,7 @@ describe('RAG System Data Migration and Integrity', () => {
       }
 
       // Execute migration
-      const migrationResult = await ragSystem.migrateLessonsFromDirectory({
+      const _migrationResult = await ragSystem.migrateLessonsFromDirectory({
         sourcePath: testMigrationPath,
         preserveStructure: true,
         validateContent: true,
@@ -79,7 +79,7 @@ describe('RAG System Data Migration and Integrity', () => {
       expect(migrationResult.backupId).toBeDefined();
 
       // Verify all lessons were migrated
-      const migratedLessons = await ragSystem.getLessonsByMigrationId(
+      const _migratedLessons = await ragSystem.getLessonsByMigrationId(
         migrationResult.migrationId
       );
 
@@ -87,7 +87,7 @@ describe('RAG System Data Migration and Integrity', () => {
 
       // Verify content integrity
       for (const lesson of migratedLessons.lessons) {
-        const originalData = originalChecksums.get(lesson.source_file_path);
+        const _originalData = originalChecksums.get(lesson.source_file_path);
         expect(originalData).toBeDefined();
 
         // Content should be preserved
@@ -107,7 +107,7 @@ describe('RAG System Data Migration and Integrity', () => {
 
     test('should handle different file formats during migration', async () => {
       // Create test files in different formats
-      const testFileFormats = [
+      const _testFileFormats = [
         {
           filename: 'markdown_lesson.md',
           content: `# API Error Handling
@@ -120,7 +120,7 @@ This lesson covers proper API error handling techniques.
 try {
   const response = await fetch('/api/data');
   if (!response.ok) throw new Error('API Error');
-} catch (error) {
+} catch {
   console.error(error);
 }
 \`\`\`
@@ -159,7 +159,7 @@ Tags: database, performance, connection-pooling`,
 
       /* Future implementation:
       // Create test files
-      const formatTestPath = path.join(testMigrationPath, 'format-test');
+      const _formatTestPath = path.join(testMigrationPath, 'format-test');
       await fs.mkdir(formatTestPath, { recursive: true });
 
       for (const testFile of testFileFormats) {
@@ -170,7 +170,7 @@ Tags: database, performance, connection-pooling`,
       }
 
       // Migrate different formats
-      const formatMigrationResult = await ragSystem.migrateLessonsFromDirectory({
+      const _formatMigrationResult = await ragSystem.migrateLessonsFromDirectory({
         sourcePath: formatTestPath,
         supportedFormats: ['md', 'txt', 'json'],
         extractMetadata: true
@@ -180,12 +180,12 @@ Tags: database, performance, connection-pooling`,
       expect(formatMigrationResult.filesProcessed).toBe(testFileFormats.length);
 
       // Verify format-specific parsing
-      const migratedFormatLessons = await ragSystem.getLessonsByMigrationId(
+      const _migratedFormatLessons = await ragSystem.getLessonsByMigrationId(
         formatMigrationResult.migrationId
       );
 
       // Markdown file should have extracted title and code blocks
-      const markdownLesson = migratedFormatLessons.lessons.find(l =>
+      const _markdownLesson = migratedFormatLessons.lessons.find(l =>
         l.source_file_path.includes('markdown_lesson.md')
       );
       expect(markdownLesson.title).toBe('API Error Handling');
@@ -193,7 +193,7 @@ Tags: database, performance, connection-pooling`,
       expect(markdownLesson.tags).toContain('api');
 
       // JSON file should have parsed structure
-      const jsonLesson = migratedFormatLessons.lessons.find(l =>
+      const _jsonLesson = migratedFormatLessons.lessons.find(l =>
         l.source_file_path.includes('json_lesson.json')
       );
       expect(jsonLesson.title).toBe('React Hook Optimization');
@@ -201,7 +201,7 @@ Tags: database, performance, connection-pooling`,
       expect(jsonLesson.examples).toBeDefined();
 
       // Text file should have extracted metadata
-      const textLesson = migratedFormatLessons.lessons.find(l =>
+      const _textLesson = migratedFormatLessons.lessons.find(l =>
         l.source_file_path.includes('text_lesson.txt')
       );
       expect(textLesson.title).toBe('Database Connection Pooling');
@@ -211,7 +211,7 @@ Tags: database, performance, connection-pooling`,
 
     test('should handle migration errors gracefully', async () => {
       // Create problematic files for error testing
-      const problematicFiles = [
+      const _problematicFiles = [
         {
           filename: 'empty_file.md',
           content: '',
@@ -234,7 +234,7 @@ Tags: database, performance, connection-pooling`,
       expect(true).toBe(true);
 
       /* Future implementation:
-      const errorTestPath = path.join(testMigrationPath, 'error-test');
+      const _errorTestPath = path.join(testMigrationPath, 'error-test');
       await fs.mkdir(errorTestPath, { recursive: true });
 
       // Create problematic files
@@ -246,7 +246,7 @@ Tags: database, performance, connection-pooling`,
       }
 
       // Attempt migration with error handling
-      const errorMigrationResult = await ragSystem.migrateLessonsFromDirectory({
+      const _errorMigrationResult = await ragSystem.migrateLessonsFromDirectory({
         sourcePath: errorTestPath,
         skipErrors: true,
         validateContent: true,
@@ -260,11 +260,11 @@ Tags: database, performance, connection-pooling`,
       expect(errorMigrationResult.errors.length).toBeGreaterThan(0);
 
       // Verify error details
-      const errors = errorMigrationResult.errors;
-      const emptyFileError = errors.find(e => e.filename.includes('empty_file'));
-      const invalidJsonError = errors.find(e => e.filename.includes('invalid_json'));
-      const binaryFileError = errors.find(e => e.filename.includes('binary_file'));
-      const hugeFilerror = errors.find(e => e.filename.includes('huge_file'));
+      const _errors = errorMigrationResult.errors;
+      const _emptyFileError = errors.find(e => e.filename.includes('empty_file'));
+      const _invalidJsonError = errors.find(e => e.filename.includes('invalid_json'));
+      const _binaryFileError = errors.find(e => e.filename.includes('binary_file'));
+      const _hugeFilerror = errors.find(e => e.filename.includes('huge_file'));
 
       expect(emptyFileError).toBeDefined();
       expect(emptyFileError.error_type).toBe('empty_content');
@@ -290,7 +290,7 @@ Tags: database, performance, connection-pooling`,
 
       /* Future implementation:
       // Create test dataset
-      const testLessons = [
+      const _testLessons = [
         {
           title: 'Consistency Test Lesson 1',
           content: 'Content for consistency validation',
@@ -306,15 +306,15 @@ Tags: database, performance, connection-pooling`,
       ];
 
       // Store lessons
-      const storedLessons = [];
+      const _storedLessons = [];
       for (const lesson of testLessons) {
-        const result = await ragSystem.storeLesson(lesson);
+        const _result = await ragSystem.storeLesson(lesson);
         expect(result.success).toBe(true);
         storedLessons.push(result.lesson_id);
       }
 
       // Run comprehensive integrity check
-      const integrityResult = await ragSystem.validateDataIntegrity({
+      const _integrityResult = await ragSystem.validateDataIntegrity({
         checkEmbeddings: true,
         checkSearchIndex: true,
         checkMetadata: true,
@@ -332,7 +332,7 @@ Tags: database, performance, connection-pooling`,
 
       // Verify stored lessons are findable
       for (const lessonId of storedLessons) {
-        const retrievedLesson = await ragSystem.getLessonById(lessonId);
+        const _retrievedLesson = await ragSystem.getLessonById(lessonId);
         expect(retrievedLesson.success).toBe(true);
         expect(retrievedLesson.lesson).toBeDefined();
 
@@ -341,11 +341,11 @@ Tags: database, performance, connection-pooling`,
         expect(Array.isArray(retrievedLesson.lesson.embedding)).toBe(true);
 
         // Should be findable via search
-        const searchResult = await ragSystem.searchLessons(
+        const _searchResult = await ragSystem.searchLessons(
           retrievedLesson.lesson.title,
           { limit: 5 }
         );
-        const foundInSearch = searchResult.results.some(r => r.id === lessonId);
+        const _foundInSearch = searchResult.results.some(r => r.id === lessonId);
         expect(foundInSearch).toBe(true);
       }
 
@@ -359,14 +359,14 @@ Tags: database, performance, connection-pooling`,
 
       /* Future implementation:
       // Create normal lesson
-      const normalLesson = {
+      const _normalLesson = {
         title: 'Normal Lesson for Corruption Test',
         content: 'This is normal content that should not be corrupted',
         category: 'testing'
       };
 
-      const storeResult = await ragSystem.storeLesson(normalLesson);
-      const lessonId = storeResult.lesson_id;
+      const _storeResult = await ragSystem.storeLesson(normalLesson);
+      const _lessonId = storeResult.lesson_id;
 
       // Simulate data corruption (this would normally be done at database level)
       await ragSystem._simulateDataCorruption(lessonId, {
@@ -376,7 +376,7 @@ Tags: database, performance, connection-pooling`,
       });
 
       // Run corruption detection
-      const corruptionResult = await ragSystem.detectDataCorruption({
+      const _corruptionResult = await ragSystem.detectDataCorruption({
         check_embeddings: true,
         check_content_hashes: true,
         check_metadata_integrity: true
@@ -386,7 +386,7 @@ Tags: database, performance, connection-pooling`,
       expect(corruptionResult.corrupted_items.length).toBeGreaterThan(0);
 
       // Verify corruption details
-      const corruptedLesson = corruptionResult.corrupted_items.find(
+      const _corruptedLesson = corruptionResult.corrupted_items.find(
         item => item.lesson_id === lessonId
       );
       expect(corruptedLesson).toBeDefined();
@@ -407,18 +407,18 @@ Tags: database, performance, connection-pooling`,
 
       /* Future implementation:
       // Create lesson for repair testing
-      const repairTestLesson = {
+      const _repairTestLesson = {
         title: 'Repair Test Lesson',
         content: 'Content for testing automatic repair functionality',
         category: 'testing',
         tags: ['repair', 'automation']
       };
 
-      const storeResult = await ragSystem.storeLesson(repairTestLesson);
-      const lessonId = storeResult.lesson_id;
+      const _storeResult = await ragSystem.storeLesson(repairTestLesson);
+      const _lessonId = storeResult.lesson_id;
 
       // Verify lesson is stored correctly
-      const originalLesson = await ragSystem.getLessonById(lessonId);
+      const _originalLesson = await ragSystem.getLessonById(lessonId);
       expect(originalLesson.success).toBe(true);
 
       // Simulate various types of corruption
@@ -429,11 +429,11 @@ Tags: database, performance, connection-pooling`,
       });
 
       // Verify corruption exists
-      const corruptionCheck = await ragSystem.detectDataCorruption();
+      const _corruptionCheck = await ragSystem.detectDataCorruption();
       expect(corruptionCheck.corrupted_items.length).toBeGreaterThan(0);
 
       // Execute automatic repair
-      const repairResult = await ragSystem.repairCorruptedData({
+      const _repairResult = await ragSystem.repairCorruptedData({
         lesson_ids: [lessonId],
         repair_methods: ['regenerate_embedding', 'rebuild_search_index'],
         create_backup: true
@@ -444,7 +444,7 @@ Tags: database, performance, connection-pooling`,
       expect(repairResult.backup_id).toBeDefined();
 
       // Verify repair was successful
-      const repairedLesson = await ragSystem.getLessonById(lessonId);
+      const _repairedLesson = await ragSystem.getLessonById(lessonId);
       expect(repairedLesson.success).toBe(true);
       expect(repairedLesson.lesson.embedding).toBeDefined();
 
@@ -453,13 +453,13 @@ Tags: database, performance, connection-pooling`,
       expect(repairedLesson.lesson.title).toBe(repairTestLesson.title);
 
       // Should be findable in search again
-      const searchResult = await ragSystem.searchLessons(repairTestLesson.title);
-      const foundInSearch = searchResult.results.some(r => r.id === lessonId);
+      const _searchResult = await ragSystem.searchLessons(repairTestLesson.title);
+      const _foundInSearch = searchResult.results.some(r => r.id === lessonId);
       expect(foundInSearch).toBe(true);
 
       // Re-run corruption check
-      const postRepairCheck = await ragSystem.detectDataCorruption();
-      const stillCorrupted = postRepairCheck.corrupted_items.find(
+      const _postRepairCheck = await ragSystem.detectDataCorruption();
+      const _stillCorrupted = postRepairCheck.corrupted_items.find(
         item => item.lesson_id === lessonId
       );
       expect(stillCorrupted).toBeUndefined();
@@ -476,7 +476,7 @@ Tags: database, performance, connection-pooling`,
 
       /* Future implementation:
       // Create substantial dataset for backup testing
-      const backupTestData = Array.from({ length: 100 }, (_, i) => ({
+      const _backupTestData = Array.from({ length: 100 }, (_, i) => ({
         title: `Backup Test Lesson ${i}`,
         content: `Content for backup testing lesson ${i}. This includes various technical details and code examples.`,
         category: i % 2 === 0 ? 'testing' : 'backup',
@@ -485,14 +485,14 @@ Tags: database, performance, connection-pooling`,
       }));
 
       // Store test data
-      const storedIds = [];
+      const _storedIds = [];
       for (const lesson of backupTestData) {
-        const result = await ragSystem.storeLesson(lesson);
+        const _result = await ragSystem.storeLesson(lesson);
         storedIds.push(result.lesson_id);
       }
 
       // Create full system backup
-      const backupResult = await ragSystem.createBackup({
+      const _backupResult = await ragSystem.createBackup({
         backup_type: 'full',
         include_embeddings: true,
         include_search_indices: true,
@@ -507,7 +507,7 @@ Tags: database, performance, connection-pooling`,
       expect(backupResult.lessons_backed_up).toBe(backupTestData.length);
 
       // Verify backup metadata
-      const backupMetadata = await ragSystem.getBackupMetadata(backupResult.backup_id);
+      const _backupMetadata = await ragSystem.getBackupMetadata(backupResult.backup_id);
       expect(backupMetadata.success).toBe(true);
       expect(backupMetadata.metadata.backup_type).toBe('full');
       expect(backupMetadata.metadata.includes_embeddings).toBe(true);
@@ -516,7 +516,7 @@ Tags: database, performance, connection-pooling`,
       expect(backupMetadata.metadata.creation_timestamp).toBeDefined();
 
       // Verify backup integrity
-      const integrityResult = await ragSystem.validateBackupIntegrity(
+      const _integrityResult = await ragSystem.validateBackupIntegrity(
         backupResult.backup_id
       );
       expect(integrityResult.success).toBe(true);
@@ -533,7 +533,7 @@ Tags: database, performance, connection-pooling`,
 
       /* Future implementation:
       // Create test data for restoration
-      const originalData = [
+      const _originalData = [
         {
           title: 'Original Lesson 1',
           content: 'Content that should be restored exactly',
@@ -549,13 +549,13 @@ Tags: database, performance, connection-pooling`,
       ];
 
       // Store original data and create backup
-      const originalIds = [];
+      const _originalIds = [];
       for (const lesson of originalData) {
-        const result = await ragSystem.storeLesson(lesson);
+        const _result = await ragSystem.storeLesson(lesson);
         originalIds.push(result.lesson_id);
       }
 
-      const backupResult = await ragSystem.createBackup({
+      const _backupResult = await ragSystem.createBackup({
         backup_type: 'full',
         include_embeddings: true
       });
@@ -568,24 +568,24 @@ Tags: database, performance, connection-pooling`,
       await ragSystem.deleteLesson(originalIds[1]);
 
       // Add new data that should be removed during restore
-      const newLesson = await ragSystem.storeLesson({
+      const _newLesson = await ragSystem.storeLesson({
         title: 'New Lesson After Backup',
         content: 'This should not exist after restoration',
         category: 'post-backup'
       });
 
       // Verify changes were made
-      const modifiedLesson = await ragSystem.getLessonById(originalIds[0]);
+      const _modifiedLesson = await ragSystem.getLessonById(originalIds[0]);
       expect(modifiedLesson.lesson.content).toContain('Modified content');
 
-      const deletedLesson = await ragSystem.getLessonById(originalIds[1]);
+      const _deletedLesson = await ragSystem.getLessonById(originalIds[1]);
       expect(deletedLesson.success).toBe(false);
 
-      const addedLesson = await ragSystem.getLessonById(newLesson.lesson_id);
+      const _addedLesson = await ragSystem.getLessonById(newLesson.lesson_id);
       expect(addedLesson.success).toBe(true);
 
       // Perform restoration
-      const restoreResult = await ragSystem.restoreFromBackup(backupResult.backup_id, {
+      const _restoreResult = await ragSystem.restoreFromBackup(backupResult.backup_id, {
         restore_type: 'full',
         verify_integrity: true,
         create_pre_restore_backup: true
@@ -596,20 +596,20 @@ Tags: database, performance, connection-pooling`,
       expect(restoreResult.pre_restore_backup_id).toBeDefined();
 
       // Verify restoration accuracy
-      const restoredLesson1 = await ragSystem.getLessonById(originalIds[0]);
+      const _restoredLesson1 = await ragSystem.getLessonById(originalIds[0]);
       expect(restoredLesson1.success).toBe(true);
       expect(restoredLesson1.lesson.content).toBe(originalData[0].content);
 
-      const restoredLesson2 = await ragSystem.getLessonById(originalIds[1]);
+      const _restoredLesson2 = await ragSystem.getLessonById(originalIds[1]);
       expect(restoredLesson2.success).toBe(true);
       expect(restoredLesson2.lesson.content).toBe(originalData[1].content);
 
       // Post-backup lesson should be removed
-      const removedLesson = await ragSystem.getLessonById(newLesson.lesson_id);
+      const _removedLesson = await ragSystem.getLessonById(newLesson.lesson_id);
       expect(removedLesson.success).toBe(false);
 
       // Verify search functionality is restored
-      const searchResult = await ragSystem.searchLessons('restoration validation');
+      const _searchResult = await ragSystem.searchLessons('restoration validation');
       expect(searchResult.results.length).toBeGreaterThan(0);
 
       console.log(`Restored ${restoreResult.lessons_restored} lessons from backup`);
@@ -622,19 +622,19 @@ Tags: database, performance, connection-pooling`,
 
       /* Future implementation:
       // Create initial dataset
-      const initialLessons = [
+      const _initialLessons = [
         { title: 'Initial Lesson 1', content: 'Initial content 1', version: 1 },
         { title: 'Initial Lesson 2', content: 'Initial content 2', version: 1 }
       ];
 
-      const initialIds = [];
+      const _initialIds = [];
       for (const lesson of initialLessons) {
-        const result = await ragSystem.storeLesson(lesson);
+        const _result = await ragSystem.storeLesson(lesson);
         initialIds.push(result.lesson_id);
       }
 
       // Create initial full backup
-      const fullBackup = await ragSystem.createBackup({
+      const _fullBackup = await ragSystem.createBackup({
         backup_type: 'full',
         checkpoint_name: 'initial_state'
       });
@@ -649,14 +649,14 @@ Tags: database, performance, connection-pooling`,
       });
 
       // Add new lesson
-      const newLesson = await ragSystem.storeLesson({
+      const _newLesson = await ragSystem.storeLesson({
         title: 'Added Later Lesson',
         content: 'This was added after initial backup',
         version: 1
       });
 
       // Create incremental backup
-      const incrementalBackup = await ragSystem.createBackup({
+      const _incrementalBackup = await ragSystem.createBackup({
         backup_type: 'incremental',
         base_backup_id: fullBackup.backup_id,
         checkpoint_name: 'after_changes'
@@ -670,14 +670,14 @@ Tags: database, performance, connection-pooling`,
 
       await ragSystem.deleteLesson(initialIds[1]);
 
-      const anotherNewLesson = await ragSystem.storeLesson({
+      const _anotherNewLesson = await ragSystem.storeLesson({
         title: 'Second Added Lesson',
         content: 'Added after incremental backup',
         version: 1
       });
 
       // Test point-in-time recovery to incremental backup state
-      const pointInTimeRestore = await ragSystem.restoreToPointInTime({
+      const _pointInTimeRestore = await ragSystem.restoreToPointInTime({
         target_backup_id: incrementalBackup.backup_id,
         verify_chain: true
       });
@@ -685,17 +685,17 @@ Tags: database, performance, connection-pooling`,
       expect(pointInTimeRestore.success).toBe(true);
 
       // Verify state matches incremental backup point
-      const restoredLesson1 = await ragSystem.getLessonById(initialIds[0]);
+      const _restoredLesson1 = await ragSystem.getLessonById(initialIds[0]);
       expect(restoredLesson1.lesson.content).toBe('Updated content 1');
       expect(restoredLesson1.lesson.version).toBe(2);
 
-      const restoredLesson2 = await ragSystem.getLessonById(initialIds[1]);
+      const _restoredLesson2 = await ragSystem.getLessonById(initialIds[1]);
       expect(restoredLesson2.success).toBe(true); // Should exist
 
-      const restoredNewLesson = await ragSystem.getLessonById(newLesson.lesson_id);
+      const _restoredNewLesson = await ragSystem.getLessonById(newLesson.lesson_id);
       expect(restoredNewLesson.success).toBe(true); // Should exist
 
-      const nonExistentLesson = await ragSystem.getLessonById(anotherNewLesson.lesson_id);
+      const _nonExistentLesson = await ragSystem.getLessonById(anotherNewLesson.lesson_id);
       expect(nonExistentLesson.success).toBe(false); // Should not exist
 
       console.log('Point-in-time recovery completed successfully');
@@ -791,7 +791,7 @@ Tags: optimization, frontend, backend, caching`,
     };
 
     for (const [category, files] of Object.entries(lessonsStructure)) {
-      const categoryPath = path.join(testMigrationPath, 'development', 'lessons', category);
+      const _categoryPath = path.join(testMigrationPath, 'development', 'lessons', category);
       await fs.mkdir(categoryPath, { recursive: true });
 
       for (const [filename, content] of Object.entries(files)) {
@@ -800,15 +800,15 @@ Tags: optimization, frontend, backend, caching`,
     }
   }
 
-  async function getAllLessonFiles(basePath) {
+  async function _getAllLessonFiles(_basePath) {
     const files = [];
 
-    async function scanDirectory(dirPath, relativePath = '') {
-      const entries = await fs.readdir(dirPath, { withFileTypes: true });
+    async function scanDirectory(_dirPath, relativePath = '') {
+      const _entries = await fs.readdir(dirPath, { withFileTypes: true });
 
       for (const entry of entries) {
-        const fullPath = path.join(dirPath, entry.name);
-        const relPath = path.join(relativePath, entry.name);
+        const _fullPath = path.join(dirPath, entry.name);
+        const _relPath = path.join(relativePath, entry.name);
 
         if (entry.isDirectory()) {
           await scanDirectory(fullPath, relPath);

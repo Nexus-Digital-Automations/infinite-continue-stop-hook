@@ -8,8 +8,8 @@
  * @version 1.0.0
  */
 
-const path = require('path');
-const fs = require('fs').promises;
+const _path = require('path');
+const _fs = require('fs').promises;
 
 // Global test configuration
 global.RAG_TEST_CONFIG = {
@@ -155,7 +155,7 @@ global.RAG_TEST_UTILS = {
     await fs.mkdir(basePath, { recursive: true });
 
     for (const [name, content] of Object.entries(structure)) {
-      const fullPath = path.join(basePath, name);
+      const _fullPath = path.join(basePath, name);
 
       if (typeof content === 'object') {
         await fs.mkdir(fullPath, { recursive: true });
@@ -172,7 +172,7 @@ global.RAG_TEST_UTILS = {
   cleanupTestDirectory: async (dirPath) => {
     try {
       await fs.rm(dirPath, { recursive: true, force: true });
-    } catch (error) {
+    } catch {
       console.warn(`Cleanup warning for ${dirPath}:`, error.message);
     }
   },
@@ -232,7 +232,7 @@ afterEach(async () => {
         force: true,
       });
     }
-  } catch (error) {
+  } catch {
     // Ignore cleanup errors
   }
 });
