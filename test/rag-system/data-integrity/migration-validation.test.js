@@ -32,8 +32,8 @@ describe('RAG System Data Migration and Integrity', () => {
     console.log('Cleaning up data integrity test environment...');
     try {
       await fs.rm(testMigrationPath, { recursive: true, force: true });
-    } catch {
-      console.warn('Cleanup warning:', error.message);
+    } catch (error) {
+        console.warn('Cleanup warning:', error.message);
     }
   });
 
@@ -120,8 +120,8 @@ This lesson covers proper API error handling techniques.
 try {
   const response = await fetch('/api/data');
   if (!response.ok) throw new Error('API Error');
-} catch {
-  console.error(error);
+} catch (error) {
+        console.error(error);
 }
 \`\`\`
 
@@ -308,7 +308,7 @@ Tags: database, performance, connection-pooling`,
       // Store lessons
       const _storedLessons = [];
       for (const lesson of testLessons) {
-        const _result = await ragSystem.storeLesson(lesson);
+        const result = await ragSystem.storeLesson(lesson);
         expect(result.success).toBe(true);
         storedLessons.push(result.lesson_id);
       }
@@ -487,7 +487,7 @@ Tags: database, performance, connection-pooling`,
       // Store test data
       const _storedIds = [];
       for (const lesson of backupTestData) {
-        const _result = await ragSystem.storeLesson(lesson);
+        const result = await ragSystem.storeLesson(lesson);
         storedIds.push(result.lesson_id);
       }
 
@@ -551,7 +551,7 @@ Tags: database, performance, connection-pooling`,
       // Store original data and create backup
       const _originalIds = [];
       for (const lesson of originalData) {
-        const _result = await ragSystem.storeLesson(lesson);
+        const result = await ragSystem.storeLesson(lesson);
         originalIds.push(result.lesson_id);
       }
 
@@ -629,7 +629,7 @@ Tags: database, performance, connection-pooling`,
 
       const _initialIds = [];
       for (const lesson of initialLessons) {
-        const _result = await ragSystem.storeLesson(lesson);
+        const result = await ragSystem.storeLesson(lesson);
         initialIds.push(result.lesson_id);
       }
 
@@ -803,7 +803,7 @@ Tags: optimization, frontend, backend, caching`,
   async function _getAllLessonFiles(_basePath) {
     const files = [];
 
-    async function scanDirectory(_dirPath, relativePath = '') {
+    async function scanDirectory(dirPath, relativePath = '') {
       const _entries = await fs.readdir(dirPath, { withFileTypes: true });
 
       for (const entry of entries) {

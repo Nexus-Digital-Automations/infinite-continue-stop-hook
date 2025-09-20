@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 
 /**
  * Script to fix undefined variable violations in test files

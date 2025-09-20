@@ -35,7 +35,7 @@ const _TIMEOUT = 30000; // 30 seconds for E2E operations
  * @param {Object} options - Execution options
  * @returns {Promise<Object>} Command result
  */
-function execCommand(_command, args = [], options = {}) {
+function execCommand(command, args = [], options = {}) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
       stdio: ['pipe', 'pipe', 'pipe'],
@@ -76,7 +76,7 @@ function execCommand(_command, args = [], options = {}) {
  * @param {string[]} args - Command arguments
  * @returns {Promise<Object>} Parsed API response
  */
-async function execAPI(_command, args = []) {
+async function execAPI(command, args = []) {
   const allArgs = [
     API_PATH,
     command,
@@ -216,8 +216,8 @@ describe('Application Tests', () => {
       _path.join(E2E_PROJECT_DIR, 'development', 'success-criteria-config.json'),
       JSON.stringify(successCriteriaConfig, null, 2),
     );
-  } catch {
-    console.error('Failed to setup E2E project:', error);
+  } catch (error) {
+        console.error('Failed to setup E2E project:', error);
     throw error;
   }
 }
@@ -255,7 +255,7 @@ describe('Success Criteria End-to-End Tests', () => {
   describe('Complete Validation Workflows', () => {
     test('should execute full success criteria validation workflow', async () => {
       // 1. Create task with comprehensive success criteria
-      const _createResult = await execAPI('create', [
+      const createResult = await execAPI('create', [
         JSON.stringify({
           title: 'Full validation workflow task',
           description: 'Complete E2E test for success criteria validation',
@@ -274,7 +274,7 @@ describe('Success Criteria End-to-End Tests', () => {
       const _taskId = createResult.task.id;
 
       // 2. Claim task
-      const _claimResult = await execAPI('claim', [taskId, agentId]);
+      const claimResult = await execAPI('claim', [taskId, agentId]);
       expect(claimResult.success).toBe(true);
 
       // 3. Execute validation steps
@@ -297,7 +297,7 @@ describe('Success Criteria End-to-End Tests', () => {
       validationResults.test = testResult.success ? 'passed' : 'failed';
 
       // 4. Complete task with validation results
-      const _completeResult = await execAPI('complete', [
+      const completeResult = await execAPI('complete', [
         taskId,
         JSON.stringify({
           message: 'Task completed with full validation workflow',
@@ -309,7 +309,7 @@ describe('Success Criteria End-to-End Tests', () => {
       expect(completeResult.success).toBe(true);
 
       // 5. Verify task completion and validation
-      const _listResult = await execAPI('list', [
+      const listResult = await execAPI('list', [
         JSON.stringify({ status: 'completed' }),
       ]);
       expect(listResult.success).toBe(true);
@@ -321,7 +321,7 @@ describe('Success Criteria End-to-End Tests', () => {
 
     test('should handle validation failures gracefully', async () => {
       // Create task that will have validation failures
-      const _createResult = await execAPI('create', [
+      const createResult = await execAPI('create', [
         JSON.stringify({
           title: 'Validation failure handling task',
           description: 'Test task for handling validation failures',
@@ -338,7 +338,7 @@ describe('Success Criteria End-to-End Tests', () => {
       const _taskId = createResult.task.id;
 
       // Claim task
-      const _claimResult = await execAPI('claim', [taskId, agentId]);
+      const claimResult = await execAPI('claim', [taskId, agentId]);
       expect(claimResult.success).toBe(true);
 
       // Simulate validation failures
@@ -353,7 +353,7 @@ describe('Success Criteria End-to-End Tests', () => {
       };
 
       // Complete task with mixed validation results
-      const _completeResult = await execAPI('complete', [
+      const completeResult = await execAPI('complete', [
         taskId,
         JSON.stringify({
           message: 'Task completed with validation failures',
@@ -367,7 +367,7 @@ describe('Success Criteria End-to-End Tests', () => {
 
     test('should validate template inheritance workflow', async () => {
       // Test complete template application and inheritance workflow
-      const _createResult = await execAPI('create', [
+      const createResult = await execAPI('create', [
         JSON.stringify({
           title: 'Template inheritance workflow task',
           description: 'Test task for template inheritance validation',
@@ -380,7 +380,7 @@ describe('Success Criteria End-to-End Tests', () => {
       const _taskId = createResult.task.id;
 
       // Verify task has inherited template criteria
-      const _listResult = await execAPI('list', [
+      const listResult = await execAPI('list', [
         JSON.stringify({ id: taskId }),
       ]);
       expect(listResult.success).toBe(true);
@@ -389,7 +389,7 @@ describe('Success Criteria End-to-End Tests', () => {
       expect(task).toBeDefined();
 
       // Claim and execute validation for inherited criteria
-      const _claimResult = await execAPI('claim', [taskId, agentId]);
+      const claimResult = await execAPI('claim', [taskId, agentId]);
       expect(claimResult.success).toBe(true);
 
       // Execute subset of validations for enterprise template
@@ -403,7 +403,7 @@ describe('Success Criteria End-to-End Tests', () => {
         architecture: 'pending', // Manual validation
       };
 
-      const _completeResult = await execAPI('complete', [
+      const completeResult = await execAPI('complete', [
         taskId,
         JSON.stringify({
           message: 'Template inheritance workflow completed',
@@ -438,13 +438,13 @@ describe('Success Criteria End-to-End Tests', () => {
       ]);
       expect(featureResult.success).toBe(true);
 
-      const _featureTaskId = featureResult.task.id;
+      const featureTaskId = featureResult.task.id;
 
       // 2. Implement feature (simulate code changes)
       await fs.writeFile(
         _path.join(E2E_PROJECT_DIR, 'src', 'auth.js'),
         `// User authentication module
-function authenticate(_username, password) {
+function authenticate(username, password) {
   if (!username || !password) {
     throw new Error('Username and password required');
   }
@@ -462,10 +462,10 @@ module.exports = { authenticate };
       const _testResult = await execCommand('npm', ['run', 'test']);
 
       // 4. Claim and complete feature
-      const _claimResult = await execAPI('claim', [featureTaskId, agentId]);
+      const claimResult = await execAPI('claim', [featureTaskId, agentId]);
       expect(claimResult.success).toBe(true);
 
-      const _completeResult = await execAPI('complete', [
+      const completeResult = await execAPI('complete', [
         featureTaskId,
         JSON.stringify({
           message: 'User authentication feature implemented',
@@ -508,7 +508,7 @@ module.exports = { authenticate };
       await fs.writeFile(
         _path.join(E2E_PROJECT_DIR, 'src', 'auth-fix.js'),
         `// Bug fix for authentication timeout
-function authenticateWithTimeout(_username, password, timeout = 10000) {
+function authenticateWithTimeout(username, password, timeout = 10000) {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
       reject(new Error('Authentication timeout'));
@@ -527,10 +527,10 @@ module.exports = { authenticateWithTimeout };
       );
 
       // Claim and complete bug fix
-      const _claimResult = await execAPI('claim', [bugTaskId, agentId]);
+      const claimResult = await execAPI('claim', [bugTaskId, agentId]);
       expect(claimResult.success).toBe(true);
 
-      const _completeResult = await execAPI('complete', [
+      const completeResult = await execAPI('complete', [
         bugTaskId,
         JSON.stringify({
           message: 'Authentication timeout bug fixed',
@@ -593,7 +593,7 @@ module.exports = { authenticateWithTimeout };
  * @returns {Promise<Object>} Authentication result
  * @throws {Error} When credentials are missing or invalid
  */
-async function authenticate(_username, password, options = {}) {
+async function authenticate(username, password, options = {}) {
   const { timeout = 10000 } = options;
   
   if (!username || !password) {
@@ -623,10 +623,10 @@ module.exports = { authenticate };
       );
 
       // Claim and complete refactoring
-      const _claimResult = await execAPI('claim', [refactorTaskId, agentId]);
+      const claimResult = await execAPI('claim', [refactorTaskId, agentId]);
       expect(claimResult.success).toBe(true);
 
-      const _completeResult = await execAPI('complete', [
+      const completeResult = await execAPI('complete', [
         refactorTaskId,
         JSON.stringify({
           message: 'Authentication module refactored successfully',
@@ -650,7 +650,7 @@ module.exports = { authenticate };
   describe('Multi-Agent Coordination', () => {
     test('should coordinate success criteria validation across multiple agents', async () => {
       // Create task that requires multiple agents for validation
-      const _createResult = await execAPI('create', [
+      const createResult = await execAPI('create', [
         JSON.stringify({
           title: 'Multi-agent validation task',
           description:
@@ -680,7 +680,7 @@ module.exports = { authenticate };
       expect(performanceAgent.success).toBe(true);
 
       // Development agent handles basic validation
-      const _claimResult = await execAPI('claim', [
+      const claimResult = await execAPI('claim', [
         taskId,
         developmentAgent.agentId,
       ]);
@@ -696,7 +696,7 @@ module.exports = { authenticate };
         architecture: 'documented_by_development_agent',
       };
 
-      const _completeResult = await execAPI('complete', [
+      const completeResult = await execAPI('complete', [
         taskId,
         JSON.stringify({
           message: 'Multi-agent validation completed',
@@ -716,7 +716,7 @@ module.exports = { authenticate };
   describe('Performance Validation and Benchmarking', () => {
     test('should validate performance criteria with actual benchmarks', async () => {
       // Create performance-focused task
-      const _createResult = await execAPI('create', [
+      const createResult = await execAPI('create', [
         JSON.stringify({
           title: 'Performance optimization task',
           description:
@@ -740,7 +740,7 @@ module.exports = { authenticate };
       const _taskId = createResult.task.id;
 
       // Claim task
-      const _claimResult = await execAPI('claim', [taskId, agentId]);
+      const claimResult = await execAPI('claim', [taskId, agentId]);
       expect(claimResult.success).toBe(true);
 
       // Simulate performance optimization
@@ -756,7 +756,7 @@ module.exports = { authenticate };
       const _executionTime = endTime - startTime;
 
       // Complete with performance metrics
-      const _completeResult = await execAPI('complete', [
+      const completeResult = await execAPI('complete', [
         taskId,
         JSON.stringify({
           message: 'Performance optimization completed',
@@ -780,7 +780,7 @@ module.exports = { authenticate };
 
     test('should handle performance regression detection', async () => {
       // Test performance regression detection in criteria validation
-      const _createResult = await execAPI('create', [
+      const createResult = await execAPI('create', [
         JSON.stringify({
           title: 'Performance regression detection task',
           description: 'Detect and handle performance regressions',
@@ -797,11 +797,11 @@ module.exports = { authenticate };
       const _taskId = createResult.task.id;
 
       // Claim task
-      const _claimResult = await execAPI('claim', [taskId, agentId]);
+      const claimResult = await execAPI('claim', [taskId, agentId]);
       expect(claimResult.success).toBe(true);
 
       // Simulate performance regression
-      const _completeResult = await execAPI('complete', [
+      const completeResult = await execAPI('complete', [
         taskId,
         JSON.stringify({
           message: 'Performance regression detected and handled',
@@ -826,7 +826,7 @@ module.exports = { authenticate };
   describe('Evidence Collection and Reporting', () => {
     test('should collect and store validation evidence', async () => {
       // Create task with evidence collection requirements
-      const _createResult = await execAPI('create', [
+      const createResult = await execAPI('create', [
         JSON.stringify({
           title: 'Evidence collection validation task',
           description: 'Task requiring comprehensive evidence collection',
@@ -844,7 +844,7 @@ module.exports = { authenticate };
       const _taskId = createResult.task.id;
 
       // Claim task
-      const _claimResult = await execAPI('claim', [taskId, agentId]);
+      const claimResult = await execAPI('claim', [taskId, agentId]);
       expect(claimResult.success).toBe(true);
 
       // Collect evidence during validation
@@ -875,7 +875,7 @@ module.exports = { authenticate };
       );
 
       // Complete with evidence references
-      const _completeResult = await execAPI('complete', [
+      const completeResult = await execAPI('complete', [
         taskId,
         JSON.stringify({
           message: 'Task completed with evidence collection',

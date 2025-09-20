@@ -63,7 +63,7 @@ class PerformanceMonitor {
     const startMemory = process.memoryUsage();
 
     try {
-      const _result = await operation();
+      const result = await operation();
       const _endTime = performance.now();
       const _endMemory = process.memoryUsage();
 
@@ -235,7 +235,7 @@ function execAPIWithMonitoring(
       child.on('close', (code) => {
         if (code === 0) {
           try {
-            const _result = stdout.trim() ? JSON.parse(stdout) : {};
+            const result = stdout.trim() ? JSON.parse(stdout) : {};
             resolve(result);
           } catch {
             resolve({ rawOutput: stdout, stderr });
@@ -341,8 +341,8 @@ describe('Performance Test Suite', () => {
     await fs.writeFile(_path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     console.log('Performance test project setup completed');
-  } catch {
-    console.error('Failed to setup performance test project:', error);
+  } catch (error) {
+        console.error('Failed to setup performance test project:', error);
     throw error;
   }
 }
@@ -351,8 +351,8 @@ async function cleanupPerformanceTestProject() {
   try {
     await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     console.log('Performance test project cleanup completed');
-  } catch {
-    console.error('Failed to cleanup performance test project:', error);
+  } catch (error) {
+        console.error('Failed to cleanup performance test project:', error);
   }
 }
 

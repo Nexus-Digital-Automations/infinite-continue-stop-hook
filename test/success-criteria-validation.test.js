@@ -22,7 +22,7 @@ const TIMEOUT = 30000;
 /**
  * API execution utility
  */
-function execAPI(_command, args = [], timeout = TIMEOUT) {
+function execAPI(command, args = [], timeout = TIMEOUT) {
   return new Promise((resolve, reject) => {
     const allArgs = [
       API_PATH,
@@ -54,7 +54,7 @@ function execAPI(_command, args = [], timeout = TIMEOUT) {
     child.on('close', (code) => {
       if (code === 0) {
         try {
-          const _result = stdout.trim() ? JSON.parse(stdout) : {};
+          const result = stdout.trim() ? JSON.parse(stdout) : {};
           resolve(result);
         } catch {
           resolve({ rawOutput: stdout, stderr });
@@ -154,8 +154,8 @@ describe('Validation Test Suite', () => {
     await fs.writeFile(_path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     console.log('Validation test project setup completed');
-  } catch {
-    console.error('Failed to setup validation test project:', error);
+  } catch (error) {
+        console.error('Failed to setup validation test project:', error);
     throw error;
   }
 }
@@ -164,15 +164,15 @@ async function cleanupValidationTestProject() {
   try {
     await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     console.log('Validation test project cleanup completed');
-  } catch {
-    console.error('Failed to cleanup validation test project:', error);
+  } catch (error) {
+        console.error('Failed to cleanup validation test project:', error);
   }
 }
 
 /**
  * Template management utilities
  */
-function createBaseTemplate(_name, criteria) {
+function createBaseTemplate(name, criteria) {
   const templateData = JSON.stringify({ name, criteria });
   return execAPI('success-criteria:create-template', [templateData]);
 }

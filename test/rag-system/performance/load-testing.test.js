@@ -344,7 +344,7 @@ describe('RAG System Performance and Load Testing', () => {
         modification_count: 0
       };
 
-      const _createResult = await ragSystem.storeLesson(initialLesson);
+      const createResult = await ragSystem.storeLesson(initialLesson);
       expect(createResult.success).toBe(true);
 
       // Concurrent modifications
@@ -445,7 +445,7 @@ describe('RAG System Performance and Load Testing', () => {
         console.log('Pre-operation memory:', formatMemoryUsage(preOpMemory));
 
         const _startTime = Date.now();
-        const _result = await testOperation.operation();
+        const result = await testOperation.operation();
         const _endTime = Date.now();
 
         const _postOpMemory = process.memoryUsage();
@@ -586,7 +586,7 @@ describe('RAG System Performance and Load Testing', () => {
 
         for (const queryTest of queryTests) {
           const _queryStartTime = Date.now();
-          const _result = await queryTest.query();
+          const result = await queryTest.query();
           const _queryEndTime = Date.now();
 
           const _queryTime = queryEndTime - queryStartTime;
@@ -623,7 +623,7 @@ describe('RAG System Performance and Load Testing', () => {
           try {
             const _queryStartTime = Date.now();
 
-            const _result = await ragSystem.searchLessons(
+            const result = await ragSystem.searchLessons(
               `connection test query ${connId}-${i}`,
               { limit: 5 }
             );

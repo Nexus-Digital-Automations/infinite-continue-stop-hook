@@ -22,7 +22,7 @@ const TIMEOUT = 30000;
 /**
  * API execution utility
  */
-function execAPI(_command, args = [], timeout = TIMEOUT) {
+function execAPI(command, args = [], timeout = TIMEOUT) {
   return new Promise((resolve, reject) => {
     const allArgs = [
       API_PATH,
@@ -54,7 +54,7 @@ function execAPI(_command, args = [], timeout = TIMEOUT) {
     child.on('close', (code) => {
       if (code === 0) {
         try {
-          const _result = stdout.trim() ? JSON.parse(stdout) : {};
+          const result = stdout.trim() ? JSON.parse(stdout) : {};
           resolve(result);
         } catch {
           resolve({ rawOutput: stdout, stderr });
@@ -219,8 +219,8 @@ describe('Regression Test Suite', () => {
     await fs.writeFile(_path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     console.log('Regression test project setup completed');
-  } catch {
-    console.error('Failed to setup regression test project:', error);
+  } catch (error) {
+        console.error('Failed to setup regression test project:', error);
     throw error;
   }
 }
@@ -229,8 +229,8 @@ async function cleanupRegressionTestProject() {
   try {
     await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     console.log('Regression test project cleanup completed');
-  } catch {
-    console.error('Failed to cleanup regression test project:', error);
+  } catch (error) {
+        console.error('Failed to cleanup regression test project:', error);
   }
 }
 
@@ -390,7 +390,7 @@ describe('Success Criteria Regression Tests', () => {
       await createLegacyProjectConfig();
 
       // Initialize with legacy config
-      const _initResult = await execAPI('success-criteria:init', [
+      const initResult = await execAPI('success-criteria:init', [
         '--migrate-legacy',
       ]);
 
@@ -663,8 +663,8 @@ describe('Success Criteria Regression Tests', () => {
           expect(status.projectCriteria.length).toBeGreaterThan(0);
 
           console.log(`Schema ${schema.version} compatibility confirmed`);
-        } catch {
-          console.log(
+        } catch (error) {
+        console.log(
             `Schema ${schema.version} evolution note:`,
             error.message,
           );
@@ -825,7 +825,7 @@ describe('Success Criteria Regression Tests', () => {
 
       for (const endpoint of deprecatedEndpoints) {
         try {
-          const _result = await execAPI(endpoint);
+          const result = await execAPI(endpoint);
 
           // Should work but may include deprecation warnings
           expect(result).toBeDefined();
@@ -952,8 +952,8 @@ describe('Success Criteria Regression Tests', () => {
           console.log(
             `Template version ${template.version} compatibility confirmed`,
           );
-        } catch {
-          console.log(
+        } catch (error) {
+        console.log(
             `Template version ${template.version} compatibility issue:`,
             error.message,
           );
@@ -1099,20 +1099,20 @@ describe('Success Criteria Regression Tests', () => {
 
           // Safe: Test comparison, not security-sensitive
           if (api === 'success-criteria:init') {
-            const _result = await execAPI(api);
+            const result = await execAPI(api);
             expect(result).toBeDefined();
 
           // Safe: Test comparison, not security-sensitive
           } else if (api === 'success-criteria:status') {
-            const _result = await execAPI(api);
+            const result = await execAPI(api);
             expect(result).toBeDefined();
             // Status should always have certain fields
             expect(result.projectCriteria !== undefined).toBe(true);
           }
 
           console.log(`API contract for ${api} is stable`);
-        } catch {
-          console.log(`API contract issue for ${api}:`, error.message);
+        } catch (error) {
+        console.log(`API contract issue for ${api}:`, error.message);
         }
       }
 
@@ -1150,7 +1150,7 @@ describe('Success Criteria Regression Tests', () => {
         {
           name: 'Basic Validation',
           test: async () => {
-            const _result = await execAPI('success-criteria:validate');
+            const result = await execAPI('success-criteria:validate');
             return result.results !== undefined;
           },
         },
@@ -1179,8 +1179,8 @@ describe('Success Criteria Regression Tests', () => {
           const _passed = await func.test();
           expect(passed).toBe(true);
           console.log(`Essential function '${func.name}' is preserved`);
-        } catch {
-          console.error(
+        } catch (error) {
+        console.error(
             `Essential function '${func.name}' failed:`,
             error.message,
           );
@@ -1233,7 +1233,7 @@ describe('Success Criteria Regression Tests', () => {
       ];
 
       for (const test of performanceTests) {
-        const _result = await test.test();
+        const result = await test.test();
         expect(result.duration).toBeLessThan(result.threshold);
 
         console.log(

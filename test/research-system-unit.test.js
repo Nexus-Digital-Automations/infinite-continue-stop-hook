@@ -23,7 +23,7 @@ const TIMEOUT = 10000; // 10 seconds for research operations
 /**
  * Execute TaskManager API command for research testing
  */
-function execAPI(_command, args = [], timeout = TIMEOUT) {
+function execAPI(command, args = [], timeout = TIMEOUT) {
   return new Promise((resolve, reject) => {
     const allArgs = [
       API_PATH,
@@ -56,15 +56,15 @@ function execAPI(_command, args = [], timeout = TIMEOUT) {
     child.on('close', (code) => {
       try {
         let jsonString = stdout.trim();
-        const _jsonStart = jsonString.indexOf('{');
+        const jsonStart = jsonString.indexOf('{');
         if (jsonStart > 0) {
           jsonString = jsonString.substring(jsonStart);
         }
-        const _result = JSON.parse(jsonString);
+        const result = JSON.parse(jsonString);
         resolve(result);
       } catch (parseError) {
         try {
-          const _stderrJson = JSON.parse(stderr.trim());
+          const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
         } catch {
           reject(
@@ -197,7 +197,7 @@ describe('Research System Unit Tests', () => {
 
   describe('Research Location Intelligence', () => {
     beforeEach(async () => {
-      const _initResult = await execAPI('init');
+      const initResult = await execAPI('init');
       _testAgentId = initResult.agentId;
     });
 
@@ -210,12 +210,12 @@ describe('Research System Unit Tests', () => {
         priority: 'high',
       };
 
-      const _result = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(databaseTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const _listResult = await execAPI('list');
+      const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
       const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
@@ -250,10 +250,10 @@ describe('Research System Unit Tests', () => {
         priority: 'high',
       };
 
-      const _result = await execAPI('create', [JSON.stringify(apiTaskData)]);
+      const result = await execAPI('create', [JSON.stringify(apiTaskData)]);
       expect(result.success).toBe(true);
 
-      const _listResult = await execAPI('list');
+      const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
       const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
@@ -285,12 +285,12 @@ describe('Research System Unit Tests', () => {
         priority: 'critical',
       };
 
-      const _result = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(securityTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const _listResult = await execAPI('list');
+      const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
       const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
@@ -317,12 +317,12 @@ describe('Research System Unit Tests', () => {
         priority: 'high',
       };
 
-      const _result = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(performanceTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const _listResult = await execAPI('list');
+      const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
       const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
@@ -344,7 +344,7 @@ describe('Research System Unit Tests', () => {
 
   describe('Research Keyword Extraction', () => {
     beforeEach(async () => {
-      const _initResult = await execAPI('init');
+      const initResult = await execAPI('init');
       _testAgentId = initResult.agentId;
     });
 
@@ -358,10 +358,10 @@ describe('Research System Unit Tests', () => {
         priority: 'high',
       };
 
-      const _result = await execAPI('create', [JSON.stringify(complexTaskData)]);
+      const result = await execAPI('create', [JSON.stringify(complexTaskData)]);
       expect(result.success).toBe(true);
 
-      const _listResult = await execAPI('list');
+      const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
       const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
@@ -397,12 +397,12 @@ describe('Research System Unit Tests', () => {
         priority: 'medium',
       };
 
-      const _result = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(taskWithGenericTerms),
       ]);
       expect(result.success).toBe(true);
 
-      const _listResult = await execAPI('list');
+      const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
       const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
@@ -435,10 +435,10 @@ describe('Research System Unit Tests', () => {
         priority: 'high',
       };
 
-      const _result = await execAPI('create', [JSON.stringify(verboseTaskData)]);
+      const result = await execAPI('create', [JSON.stringify(verboseTaskData)]);
       expect(result.success).toBe(true);
 
-      const _listResult = await execAPI('list');
+      const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
       const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
@@ -465,7 +465,7 @@ describe('Research System Unit Tests', () => {
 
   describe('Research Deliverables Generation', () => {
     beforeEach(async () => {
-      const _initResult = await execAPI('init');
+      const initResult = await execAPI('init');
       _testAgentId = initResult.agentId;
     });
 
@@ -477,12 +477,12 @@ describe('Research System Unit Tests', () => {
         priority: 'medium',
       };
 
-      const _result = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(standardTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const _listResult = await execAPI('list');
+      const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
       const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
@@ -510,12 +510,12 @@ describe('Research System Unit Tests', () => {
         priority: 'high',
       };
 
-      const _result = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(researchTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const _listResult = await execAPI('list');
+      const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
       const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
@@ -536,12 +536,12 @@ describe('Research System Unit Tests', () => {
         priority: 'critical',
       };
 
-      const _result = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(implementationTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const _listResult = await execAPI('list');
+      const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
       const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
@@ -558,7 +558,7 @@ describe('Research System Unit Tests', () => {
 
   describe('Research Focus Areas', () => {
     beforeEach(async () => {
-      const _initResult = await execAPI('init');
+      const initResult = await execAPI('init');
       _testAgentId = initResult.agentId;
     });
 
@@ -571,12 +571,12 @@ describe('Research System Unit Tests', () => {
         priority: 'high',
       };
 
-      const _result = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(architectureTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const _listResult = await execAPI('list');
+      const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
       const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
@@ -612,12 +612,12 @@ describe('Research System Unit Tests', () => {
         priority: 'medium',
       };
 
-      const _result = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(documentedTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const _listResult = await execAPI('list');
+      const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
       const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
@@ -641,7 +641,7 @@ describe('Research System Unit Tests', () => {
 
   describe('Research Task ID Generation', () => {
     beforeEach(async () => {
-      const _initResult = await execAPI('init');
+      const initResult = await execAPI('init');
       _testAgentId = initResult.agentId;
     });
 
@@ -650,17 +650,17 @@ describe('Research System Unit Tests', () => {
 
       // Create multiple tasks to test ID uniqueness
       for (let i = 0; i < 5; i++) {
-        const _taskData = {
+        const taskData = {
           title: `Research task ${i + 1}`,
           description: `Description for research task ${i + 1}`,
           category: 'feature',
           priority: 'medium',
         };
 
-        const _result = await execAPI('create', [JSON.stringify(taskData)]);
+        const result = await execAPI('create', [JSON.stringify(taskData)]);
         expect(result.success).toBe(true);
 
-        const _listResult = await execAPI('list');
+        const listResult = await execAPI('list');
         const _task = listResult.tasks.find((t) => t.id === result.taskId);
         const _researchSubtask = task.subtasks.find(
           (st) => st.type === 'research',
@@ -679,19 +679,19 @@ describe('Research System Unit Tests', () => {
     test('should create research subtasks with proper timestamps', async () => {
       const _beforeTime = Date.now();
 
-      const _taskData = {
+      const taskData = {
         title: 'Timestamp test research task',
         description: 'Task to verify research subtask timestamp generation',
         category: 'feature',
         priority: 'medium',
       };
 
-      const _result = await execAPI('create', [JSON.stringify(taskData)]);
+      const result = await execAPI('create', [JSON.stringify(taskData)]);
       expect(result.success).toBe(true);
 
       const _afterTime = Date.now();
 
-      const _listResult = await execAPI('list');
+      const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
       const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
@@ -712,7 +712,7 @@ describe('Research System Unit Tests', () => {
 
   describe('Research Task Edge Cases', () => {
     beforeEach(async () => {
-      const _initResult = await execAPI('init');
+      const initResult = await execAPI('init');
       _testAgentId = initResult.agentId;
     });
 
@@ -724,10 +724,10 @@ describe('Research System Unit Tests', () => {
         priority: 'low',
       };
 
-      const _result = await execAPI('create', [JSON.stringify(minimalTaskData)]);
+      const result = await execAPI('create', [JSON.stringify(minimalTaskData)]);
       expect(result.success).toBe(true);
 
-      const _listResult = await execAPI('list');
+      const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
 
       // Should still create subtasks even with minimal description
@@ -752,12 +752,12 @@ describe('Research System Unit Tests', () => {
         priority: 'medium',
       };
 
-      const _result = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(specialCharsTaskData),
       ]);
       expect(result.success).toBe(true);
 
-      const _listResult = await execAPI('list');
+      const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
       const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',
@@ -795,10 +795,10 @@ describe('Research System Unit Tests', () => {
         priority: 'medium',
       };
 
-      const _result = await execAPI('create', [JSON.stringify(longTaskData)]);
+      const result = await execAPI('create', [JSON.stringify(longTaskData)]);
       expect(result.success).toBe(true);
 
-      const _listResult = await execAPI('list');
+      const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
       const _researchSubtask = task.subtasks.find(
         (st) => st.type === 'research',

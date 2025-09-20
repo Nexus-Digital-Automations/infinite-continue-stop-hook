@@ -47,7 +47,7 @@ describe('Security System', () => {
         },
       };
 
-      const _result = securityValidator.validateInput(
+      const result = securityValidator.validateInput(
         testData,
         'test_endpoint',
         schema,
@@ -70,7 +70,7 @@ describe('Security System', () => {
         },
       };
 
-      const _result = securityValidator.validateInput(
+      const result = securityValidator.validateInput(
         maliciousData,
         'test_endpoint',
         schema,
@@ -84,7 +84,7 @@ describe('Security System', () => {
       const _operation = 'create';
       const _resource = { type: 'task', id: 'test_task' };
 
-      const _result = securityValidator.authorizeOperation(
+      const result = securityValidator.authorizeOperation(
         agentId,
         operation,
         resource,
@@ -98,7 +98,7 @@ describe('Security System', () => {
       const _operation = 'create';
       const _resource = { type: 'task' };
 
-      const _result = securityValidator.authorizeOperation(
+      const result = securityValidator.authorizeOperation(
         invalidAgentId,
         operation,
         resource,
@@ -226,7 +226,7 @@ describe('Security System', () => {
 
     test('should validate complete security workflow', () => {
       const _agentId = 'development_session_1234567890_1_general_abcdef';
-      const _taskData = {
+      const taskData = {
         title: 'Security Test Task',
         description: 'Testing security validation',
         category: 'feature',

@@ -165,7 +165,7 @@ describe('RAG System End-to-End Workflows', () => {
 
       /* Future implementation:
       // Step 1: Create a feature task
-      const _taskData = {
+      const taskData = {
         title: 'Implement user authentication with JWT',
         description: 'Add JWT-based authentication system with refresh tokens',
         category: 'feature',
@@ -176,7 +176,7 @@ describe('RAG System End-to-End Workflows', () => {
       expect(taskResponse.success).toBe(true);
 
       // Step 2: Complete the task with lessons learned
-      const _completionData = {
+      const completionData = {
         completion_notes: `Successfully implemented JWT authentication.
                           Key lessons: Always use secure httpOnly cookies for tokens,
                           implement proper token rotation, validate all incoming tokens.`,
@@ -345,7 +345,7 @@ describe('RAG System End-to-End Workflows', () => {
 
       /* Future implementation:
       // Create and claim a task
-      const _taskData = {
+      const taskData = {
         title: 'Fix memory leak in data processing pipeline',
         description: 'Investigate and resolve memory growth during batch processing',
         category: 'error'
@@ -360,7 +360,7 @@ describe('RAG System End-to-End Workflows', () => {
       expect(claimResponse.success).toBe(true);
 
       // Complete task with automatic lesson generation
-      const _completionData = {
+      const completionData = {
         solution: `Memory leak was caused by event listeners not being cleaned up.
                   Fixed by implementing proper cleanup in useEffect return function.`,
         lessons_auto_generate: true,
@@ -405,7 +405,7 @@ describe('RAG System End-to-End Workflows', () => {
 
       /* Future implementation:
       // Create a complex task that could benefit from existing lessons
-      const _taskData = {
+      const taskData = {
         title: 'Implement real-time chat with WebSocket authentication',
         description: 'Build WebSocket server with JWT token validation',
         category: 'feature',
@@ -599,7 +599,7 @@ describe('RAG System End-to-End Workflows', () => {
       taskManagerApi.ragOperations = null;
 
       // Task operations should continue to work
-      const _taskData = {
+      const taskData = {
         title: 'Test task during RAG system failure',
         description: 'This should work even if RAG is down',
         category: 'feature'

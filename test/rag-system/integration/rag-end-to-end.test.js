@@ -116,8 +116,8 @@ describe('RAG System End-to-End Integration Tests', () => {
     // Clean up test files
     try {
       await fs.rm(testDataPath, { recursive: true, force: true });
-    } catch {
-      console.warn('Failed to clean up test data:', error.message);
+    } catch (error) {
+        console.warn('Failed to clean up test data:', error.message);
     }
   });
 
@@ -156,7 +156,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       const _lessons = testDataGenerator.generateLessons(5);
 
       for (const lesson of lessons) {
-        const _result = await ragOperations.storeLesson(lesson);
+        const result = await ragOperations.storeLesson(lesson);
 
         expect(result).toHaveProperty('success', true);
         expect(result).toHaveProperty('vectorId');
@@ -223,7 +223,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       const _errors = testDataGenerator.generateErrors(5);
 
       for (const error of errors) {
-        const _result = await ragOperations.storeError(error);
+        const result = await ragOperations.storeError(error);
 
         expect(result).toHaveProperty('success', true);
         expect(result).toHaveProperty('vectorId');
@@ -266,7 +266,7 @@ describe('RAG System End-to-End Integration Tests', () => {
         tags: ['system', 'memory', 'distributed', 'cascade'],
       };
 
-      const _result = await ragOperations.storeError(complexError);
+      const result = await ragOperations.storeError(complexError);
       expect(result.success).toBe(true);
 
       // Search for the stored error
@@ -560,7 +560,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // System should continue to function
       const _lesson = testDataGenerator.generateLessons(1)[0];
-      const _result = await ragOperations.storeLesson(lesson);
+      const result = await ragOperations.storeLesson(lesson);
       expect(result.success).toBe(true);
 
       const _searchResults = await ragOperations.searchLessons(lesson.title);

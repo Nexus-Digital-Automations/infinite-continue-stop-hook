@@ -459,7 +459,7 @@ describe('Embedding Generation System', () => {
       try {
         const _embedding = await embeddingService.generateEmbedding('test content');
         expect(embedding).toBeNull(); // Should handle gracefully
-      } catch {
+      } catch (error) {
         expect(error.message).toContain('Embedding service unavailable');
       } finally {
         embeddingService.embeddingClient = originalService;

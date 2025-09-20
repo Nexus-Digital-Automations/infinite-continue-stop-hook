@@ -227,8 +227,8 @@ describe('Semantic Search Accuracy Validation', () => {
                   throw new Error(\`HTTP \${response.status}: \${response.statusText}\`);
                 }
                 return await response.json();
-              } catch {
-                console.error('Failed to fetch user:', error);
+              } catch (error) {
+        console.error('Failed to fetch user:', error);
                 throw error;
               }
             }
@@ -707,7 +707,7 @@ describe('Semantic Search Accuracy Validation', () => {
     };
   }
 
-  function _calculateRankingSimilarity(_ranking1, _ranking2) {
+  function _calculateRankingSimilarity(ranking1, _ranking2) {
     // Placeholder for ranking similarity calculation
     return 1.0;
   }
