@@ -998,7 +998,7 @@ async function main() {
       },
     };
 
-    // eslint-disable-next-line no-console -- CLI API requires console output for error reporting
+
     console.error(JSON.stringify(errorResponse, null, 2));
     throw new Error('TaskManager API execution failed');
   } finally {
@@ -1012,7 +1012,7 @@ module.exports = TaskManagerAPI;
 // Run CLI if called directly (CommonJS equivalent)
 if (require.main === module) {
   main().catch((error) => {
-    // eslint-disable-next-line no-console -- CLI API requires console output for fatal error reporting
+
     console.error('Fatal error:', error.message);
     throw error;
   });

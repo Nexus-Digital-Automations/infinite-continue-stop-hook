@@ -1,4 +1,4 @@
-/* eslint-disable no-console -- Test/debugging script requires console output */
+
 /**
  * Test for the audit task override bug fix
  * This test verifies that agents can now override audit tasks to work on other tasks
