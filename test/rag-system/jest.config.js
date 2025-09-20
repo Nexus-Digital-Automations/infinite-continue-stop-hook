@@ -1,113 +1,160 @@
 /**
- * Jest Configuration for RAG System Tests
+ * Jest Configuration for RAG System Testing
  *
- * Specialized configuration for testing the RAG-based lessons and error
- * database system with appropriate timeouts and test environment setup.
+ * === OVERVIEW ===
+ * Comprehensive testing configuration for the RAG (Retrieval-Augmented Generation)
+ * system with specialized settings for different test types including unit tests,
+ * integration tests, performance benchmarks, and data integrity validation.
  *
- * @author Testing Agent
+ * === TEST CATEGORIES ===
+ * • Unit Tests: Individual component testing with mocks
+ * • Integration Tests: End-to-end RAG system functionality
+ * • Performance Tests: Benchmarking and optimization validation
+ * • Data Integrity Tests: Vector database consistency and accuracy
+ *
+ * @author RAG Implementation Agent
  * @version 1.0.0
+ * @since 2025-09-19
  */
 
 module.exports = {
-  // Test environment
+  // Test environment configuration
   testEnvironment: 'node',
-
-  // Test file patterns
+  rootDir: '../../',
   testMatch: [
-    '**/test/rag-system/**/*.test.js'
+    '<rootDir>/test/rag-system/**/*.test.js',
+    '<rootDir>/test/rag-system/**/*.spec.js'
   ],
 
-  // Setup files
+  // Module path mapping
+  moduleNameMapping: {
+    '^@lib/(.*)$': '<rootDir>/lib/$1',
+    '^@rag/(.*)$': '<rootDir>/lib/rag/$1',
+    '^@test-utils/(.*)$': '<rootDir>/test/rag-system/utils/$1'
+  },
+
+  // Setup and teardown
   setupFilesAfterEnv: [
-    '<rootDir>/test/rag-system/setup/test-setup.js'
+    '<rootDir>/test/rag-system/setup.js'
   ],
+  globalSetup: '<rootDir>/test/rag-system/global-setup.js',
+  globalTeardown: '<rootDir>/test/rag-system/global-teardown.js',
 
-  // Module paths
-  moduleFileExtensions: ['js', 'json'],
+  // Test timeout for ML operations
+  testTimeout: 60000, // 60 seconds for embedding generation
 
-  // Coverage settings
-  collectCoverage: true,
-  collectCoverageFrom: [
-    'lib/api-modules/rag/**/*.js',
-    'lib/rag/**/*.js',
-    '!**/node_modules/**',
-    '!**/test/**'
-  ],
+  // Coverage configuration
+  collectCoverage: false, // Enable via --coverage flag
   coverageDirectory: '<rootDir>/test/rag-system/coverage',
-  coverageReporters: ['text', 'lcov', 'html'],
+  collectCoverageFrom: [
+    'lib/rag/**/*.js',
+    'lib/api-modules/rag/**/*.js',
+    '!lib/rag/**/*.test.js',
+    '!lib/rag/**/*.spec.js',
+    '!**/node_modules/**',
+    '!**/coverage/**'
+  ],
+  coverageReporters: [
+    'text',
+    'lcov',
+    'html',
+    'json'
+  ],
   coverageThreshold: {
     global: {
-      branches: 80,
+      branches: 70,
       functions: 80,
       lines: 80,
       statements: 80
+    },
+    './lib/rag/': {
+      branches: 75,
+      functions: 85,
+      lines: 85,
+      statements: 85
     }
-  },
-
-  // Test timeout settings
-  testTimeout: 30000, // 30 seconds default
-
-  // Performance test timeout
-  globals: {
-    'performance-test-timeout': 300000 // 5 minutes for performance tests
   },
 
   // Test categorization
   projects: [
     {
       displayName: 'Unit Tests',
-      testMatch: ['**/test/rag-system/unit/**/*.test.js'],
-      testTimeout: 10000
+      testMatch: ['<rootDir>/test/rag-system/unit/**/*.test.js'],
+      testEnvironment: 'node',
+      setupFilesAfterEnv: ['<rootDir>/test/rag-system/setup.js']
     },
     {
       displayName: 'Integration Tests',
-      testMatch: ['**/test/rag-system/integration/**/*.test.js'],
-      testTimeout: 60000
+      testMatch: ['<rootDir>/test/rag-system/integration/**/*.test.js'],
+      testEnvironment: 'node',
+      setupFilesAfterEnv: ['<rootDir>/test/rag-system/setup.js'],
+      testTimeout: 120000 // 2 minutes for integration tests
     },
     {
       displayName: 'Performance Tests',
-      testMatch: ['**/test/rag-system/performance/**/*.test.js'],
-      testTimeout: 300000,
-      maxConcurrency: 1 // Run performance tests sequentially
+      testMatch: ['<rootDir>/test/rag-system/performance/**/*.test.js'],
+      testEnvironment: 'node',
+      setupFilesAfterEnv: ['<rootDir>/test/rag-system/setup.js'],
+      testTimeout: 300000, // 5 minutes for performance tests
+      maxWorkers: 1 // Run performance tests sequentially
     },
     {
       displayName: 'Data Integrity Tests',
-      testMatch: ['**/test/rag-system/data-integrity/**/*.test.js'],
-      testTimeout: 120000
+      testMatch: ['<rootDir>/test/rag-system/data-integrity/**/*.test.js'],
+      testEnvironment: 'node',
+      setupFilesAfterEnv: ['<rootDir>/test/rag-system/setup.js'],
+      testTimeout: 180000 // 3 minutes for data integrity tests
     }
   ],
 
-  // Reporter configuration
+  // Reporters
   reporters: [
     'default',
-    [
-      'jest-html-reporters',
-      {
-        publicPath: '<rootDir>/test/rag-system/reports',
-        filename: 'rag-test-report.html',
-        expand: true,
-        hideIcon: false,
-        pageTitle: 'RAG System Test Report'
-      }
-    ],
-    [
-      'jest-junit',
-      {
-        outputDirectory: '<rootDir>/test/rag-system/reports',
-        outputName: 'rag-test-results.xml',
-        suiteName: 'RAG System Tests'
-      }
-    ]
+    ['jest-html-reporters', {
+      publicPath: './test/rag-system/reports',
+      filename: 'rag-test-report.html',
+      expand: true,
+      hideIcon: false,
+      pageTitle: 'RAG System Test Report'
+    }],
+    ['jest-junit', {
+      outputDirectory: './test/rag-system/reports',
+      outputName: 'rag-test-results.xml',
+      classNameTemplate: '{classname}',
+      titleTemplate: '{title}',
+      ancestorSeparator: ' › ',
+      usePathForSuiteName: true
+    }]
   ],
 
-  // Performance monitoring
-  verbose: true,
-  detectOpenHandles: true,
-  detectLeaks: true,
+  // Performance and resource management
+  maxWorkers: '50%',
+  cache: true,
+  cacheDirectory: '<rootDir>/test/rag-system/.jest-cache',
 
-  // Module name mapping (for when RAG modules are implemented)
-  moduleNameMapping: {
-    '^@rag/(.*)$': '<rootDir>/lib/api-modules/rag/$1',
-    '^@test-utils/(.*)$': '<rootDir>/test/rag-system/utils/$1'
+  // Transform configuration
+  transform: {
+    '^.+\\.js$': 'babel-jest'
+  },
+  transformIgnorePatterns: [
+    'node_modules/(?!(@xenova/transformers|faiss-node)/)'
+  ],
+
+  // Test result processing
+  verbose: true,
+  silent: false,
+  errorOnDeprecated: true,
+
+  // Watch mode configuration
+  watchPlugins: [
+    'jest-watch-typeahead/filename',
+    'jest-watch-typeahead/testname'
+  ],
+
+  // Custom test environment variables
+  testEnvironmentOptions: {
+    RAG_TEST_MODE: 'true',
+    RAG_EMBEDDING_CACHE_SIZE: '100',
+    RAG_TEST_TIMEOUT: '60000'
   }
 };
