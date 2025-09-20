@@ -345,6 +345,29 @@ function processData(userId, data) {
 - **COMPLETION**: Full project linting + build + start verification before marking complete
 - **LINTERS**: eslint (JS/TS), ruff/pylint (Python), golint (Go), clippy (Rust)
 
+### SECURITY SCANNING PROTOCOL
+**ALL SECURITY SCANS ARE CRITICAL QUALITY GATES**
+
+**REQUIREMENTS:**
+- **MANDATORY WORKFLOW**: Run security scans after every feature implementation + before task completion
+- **EMERGENCY PROTOCOL**: Instant halt → Create security-error task → Fix all violations → Verify clean → Resume
+- **ZERO TOLERANCE**: No security vulnerabilities, exposed secrets, or injection risks permitted
+
+**CLI SECURITY TOOLS:**
+- **SEMGREP (SAST)**: `semgrep --config=p/security-audit .` - Universal static analysis
+- **BANDIT (Python)**: `bandit -r ./src/` - Python security linting
+- **TRIVY (Dependencies)**: `trivy fs .` - Vulnerability scanning
+- **ESLINT SECURITY**: Integrated via linter protocol (already enforced)
+
+**WORKFLOWS:**
+- **POST-IMPLEMENTATION**: Run focused security scan after file modifications
+- **COMPLETION**: Full security validation before marking complete
+- **EVIDENCE REQUIRED**: Security scan output screenshots for audit trails
+
+**ACTIONABLE vs UNFIXABLE:**
+- **✅ FIX**: Code vulnerabilities, exposed secrets, injection risks, insecure patterns
+- **❌ REPORT**: Infrastructure issues, third-party service vulnerabilities (create infrastructure tasks)
+
 ## 🎯 TASK MANAGEMENT & GIT WORKFLOW
 
 ### TASK WORKFLOW
