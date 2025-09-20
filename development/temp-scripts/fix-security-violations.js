@@ -24,7 +24,7 @@ class SecurityViolationFixer {
       filesProcessed: 0,
       violationsFixed: 0,
       importsAdded: 0,
-      errors: []
+      errors: [],
     };
   }
 
@@ -185,7 +185,7 @@ class SecurityViolationFixer {
       operations.push({
         method: match[1],
         index: match.index,
-        fullMatch: match[0]
+        fullMatch: match[0],
       });
     }
 

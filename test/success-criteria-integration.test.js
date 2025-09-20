@@ -424,7 +424,7 @@ describe('Success Criteria Integration Tests', () => {
       try {
         const result = await execAPI('complete', ['non_existent_task_id']);
         expect(result.success).toBe(false);
-      } catch {
+      } catch (error) {
         // Expected to fail
         expect(error).toBeDefined();
       }
@@ -444,12 +444,12 @@ describe('Success Criteria Integration Tests', () => {
       const _taskId = createResult.task.id;
 
       // Claim task
-      const claimResult = await execAPI('claim', [taskId, agentId]);
+      const claimResult = await execAPI('claim', [_taskId, agentId]);
       expect(claimResult.success).toBe(true);
 
       // Complete task with validation failures
       const completeResult = await execAPI('complete', [
-        taskId,
+        _taskId,
         JSON.stringify({
           message: 'Task completed with validation issues',
           validation_results: {
