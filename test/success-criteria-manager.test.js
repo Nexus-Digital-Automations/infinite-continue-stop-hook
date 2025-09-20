@@ -851,7 +851,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         });
       });
 
-      const result = await successCriteriaManager.addCriteria(testTaskId, [
+      const result = await successCriteriaManager.addCriteria(_testTaskId, [
         'Test Criterion',
       ]);
 
@@ -865,11 +865,11 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     test('should handle malformed task data gracefully', async () => {
       const _testTaskId = 'test_1234567890_abcdef';
       mockTaskManager.getTask.mockResolvedValue({
-        id: testTaskId,
+        id: _testTaskId,
         success_criteria: 'invalid_format', // Should be array
       });
 
-      const result = await successCriteriaManager.getCriteria(testTaskId);
+      const result = await successCriteriaManager.getCriteria(_testTaskId);
 
       // Should still work but return the malformed data as-is
       expect(result.success).toBe(true);
@@ -884,7 +884,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       );
 
       mockTaskManager.getTask.mockResolvedValue({
-        id: testTaskId,
+        id: _testTaskId,
         success_criteria: [],
       });
       mockTaskManager.updateTaskSuccessCriteria.mockResolvedValue({
@@ -892,8 +892,8 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       });
 
       const result = await successCriteriaManager.addCriteria(
-        testTaskId,
-        largeCriteriaArray,
+        _testTaskId,
+        _largeCriteriaArray,
       );
 
       expect(result.success).toBe(true);
@@ -911,7 +911,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       ];
 
       mockTaskManager.getTask.mockResolvedValue({
-        id: testTaskId,
+        id: _testTaskId,
         success_criteria: [],
       });
       mockTaskManager.updateTaskSuccessCriteria.mockResolvedValue({
@@ -919,12 +919,12 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       });
 
       const result = await successCriteriaManager.addCriteria(
-        testTaskId,
-        specialCriteria,
+        _testTaskId,
+        _specialCriteria,
       );
 
       expect(result.success).toBe(true);
-      expect(result.criteria).toEqual(specialCriteria);
+      expect(result.criteria).toEqual(_specialCriteria);
     });
 
     test('should handle network interruption scenarios', async () => {
@@ -935,7 +935,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         new Error('Network unreachable'),
       );
 
-      const result = await successCriteriaManager.getCriteria(testTaskId);
+      const result = await successCriteriaManager.getCriteria(_testTaskId);
 
       expect(result.success).toBe(false);
       expect(result.error).toBe('Network unreachable');
@@ -949,21 +949,21 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       const _testCriteria = ['Test Criterion'];
 
       mockTaskManager.getTask.mockResolvedValue({
-        id: testTaskId,
+        id: _testTaskId,
         success_criteria: [],
       });
       mockTaskManager.updateTaskSuccessCriteria.mockResolvedValue({
         success: true,
       });
 
-      await successCriteriaManager.addCriteria(testTaskId, testCriteria);
+      await successCriteriaManager.addCriteria(_testTaskId, _testCriteria);
 
       expect(mockWithTimeout).toHaveBeenCalled();
       // Check that withTimeout was called with something that can be executed
       const _callArg = mockWithTimeout.mock.calls[0][0];
       expect(
-        typeof callArg === 'function' ||
-          (callArg && typeof callArg.then === 'function'),
+        typeof _callArg === 'function' ||
+          (_callArg && typeof _callArg.then === 'function'),
       ).toBe(true);
     });
 
@@ -972,20 +972,20 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       const _testCriteria = ['Test Criterion'];
 
       mockTaskManager.getTask.mockResolvedValue({
-        id: testTaskId,
+        id: _testTaskId,
         success_criteria: [],
       });
       mockTaskManager.updateTaskSuccessCriteria.mockResolvedValue({
         success: true,
       });
 
-      await successCriteriaManager.addCriteria(testTaskId, testCriteria);
+      await successCriteriaManager.addCriteria(_testTaskId, _testCriteria);
 
       expect(mockBroadcastCriteriaUpdate).toHaveBeenCalledWith({
         action: 'added',
-        taskId: testTaskId,
-        criteria: testCriteria,
-        addedCriteria: testCriteria,
+        taskId: _testTaskId,
+        criteria: _testCriteria,
+        addedCriteria: _testCriteria,
         template: undefined,
       });
     });
@@ -997,7 +997,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
 
       const _customDependencies = {
         ...mockDependencies,
-        validateCriteria: customValidator,
+        validateCriteria: _customValidator,
       };
 
       const _customManager = new _SuccessCriteriaManager(_customDependencies);
@@ -1010,9 +1010,9 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         success: true,
       });
 
-      await customManager.addCriteria('test_123', ['Test Criterion']);
+      await _customManager.addCriteria('test_123', ['Test Criterion']);
 
-      expect(customValidator).toHaveBeenCalledWith(['Test Criterion']);
+      expect(_customValidator).toHaveBeenCalledWith(['Test Criterion']);
     });
   });
 });

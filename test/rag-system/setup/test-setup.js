@@ -127,7 +127,7 @@ global.RAG_TEST_UTILS = {
   /**
    * Wait for specified time
    */
-  wait: (ms) => new Promise(resolve => setTimeout(resolve, ms)),
+  wait: (ms) => new Promise(resolve => { setTimeout(resolve, ms); }),
 
   /**
    * Measure execution time

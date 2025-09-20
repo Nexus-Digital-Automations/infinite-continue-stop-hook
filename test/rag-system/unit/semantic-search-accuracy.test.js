@@ -20,7 +20,7 @@ describe('Semantic Search Accuracy Validation', () => {
     console.log('Setting up semantic search accuracy test environment...');
 
     // Initialize test dataset with known technical content
-    _testDataSet = await setupTechnicalTestDataset();
+    _testDataSet = setupTechnicalTestDataset();
   });
 
   afterAll(() => {
