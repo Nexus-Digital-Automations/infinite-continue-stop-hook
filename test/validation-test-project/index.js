@@ -7,13 +7,13 @@ class ValidationApp {
     this.status = 'initialized';
   }
 
-  async start() {
+  start() {
     this.status = 'running';
     console.log('Application is running');
     return this.status;
   }
 
-  async stop() {
+  stop() {
     this.status = 'stopped';
     console.log('Application stopped');
     return this.status;
@@ -24,6 +24,6 @@ const app = new ValidationApp();
 app.start().then(() => {
   setTimeout(() => {
     app.stop();
-    process.exit(0);
+    // Application will exit naturally when all work is done
   }, 500);
 });

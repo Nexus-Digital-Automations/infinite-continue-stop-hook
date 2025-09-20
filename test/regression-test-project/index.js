@@ -7,7 +7,7 @@ class RegressionApp {
     this.status = 'initialized';
   }
 
-  async start() {
+  start() {
     this.status = 'running';
     console.log('Regression app is running');
     return this.status;
@@ -22,6 +22,6 @@ const app = new RegressionApp();
 app.start().then(() => {
   console.log('App version:', app.getVersion());
   setTimeout(() => {
-    process.exit(0);
+    // Application will exit naturally when all work is done
   }, 200);
 });

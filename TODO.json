@@ -42,12 +42,26 @@
       ]
     },
     {
-      "status": "pending",
+      "status": "completed",
       "created_at": "2025-09-20T03:58:53.403Z",
       "title": "Fix no-unused-vars violations across all project files",
       "description": "Resolve unused variable warnings throughout the codebase by identifying all unused variables, imports, and parameters, removing genuinely unused items, prefixing unused parameters with underscore if needed for API compliance, and optimizing imports to remove unused dependencies",
       "category": "error",
-      "id": "error_1758340733403_zd1gejnrluh"
+      "id": "error_1758340733403_zd1gejnrluh",
+      "assigned_agent": "dev_session_1758387761243_1_general_da7b2ca4",
+      "started_at": "2025-09-20T17:36:50.789Z",
+      "claimed_by": "dev_session_1758387761243_1_general_da7b2ca4",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758387761243_1_general_da7b2ca4",
+          "role": "primary",
+          "assignedAt": "2025-09-20T17:36:50.789Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-20T17:37:16.839Z",
+      "updated_at": "2025-09-20T17:37:16.840Z"
     },
     {
       "status": "completed",
@@ -3180,6 +3194,28 @@
       "id": "error_1758389428693_53kr3bqs6kt",
       "completed_at": "2025-09-20T17:31:59.907Z",
       "updated_at": "2025-09-20T17:31:59.907Z"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T17:37:44.850Z",
+      "title": "Fix remaining 7 ESLint errors",
+      "description": "Fix the final 7 ESLint errors: 3 require-await errors (async methods with no await) and 4 n/no-process-exit errors (replace process.exit() with throw new Error()). Focus on test files and CLI scripts where these patterns commonly occur.",
+      "category": "error",
+      "id": "error_1758389864850_yyyhyven87g",
+      "assigned_agent": "dev_session_1758387761243_1_general_da7b2ca4",
+      "started_at": "2025-09-20T17:38:02.340Z",
+      "claimed_by": "dev_session_1758387761243_1_general_da7b2ca4",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758387761243_1_general_da7b2ca4",
+          "role": "primary",
+          "assignedAt": "2025-09-20T17:38:02.340Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-20T17:41:58.262Z",
+      "updated_at": "2025-09-20T17:41:58.262Z"
     }
   ],
   "current_mode": "DEVELOPMENT",
