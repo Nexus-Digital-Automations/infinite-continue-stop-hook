@@ -170,7 +170,7 @@ global.RAG_TEST_UTILS = {
     }
 
     // Create all directories first (must be sequential for hierarchy)
-    for (const dir of directories) {
+    for await (const dir of directories) {
       await _fs.mkdir(dir.path, { recursive: true });
       await global.RAG_TEST_UTILS.createTestDirectory(dir.path, dir.content);
     }
@@ -241,12 +241,15 @@ afterEach(async () => {
   // Cleanup temporary test data
   try {
     const tempFiles = await _fs.readdir(global.RAG_TEST_CONFIG.tempPath);
-    for (const file of tempFiles) {
-      await _fs.rm(_path.join(global.RAG_TEST_CONFIG.tempPath, file), {
-        recursive: true,
-        force: true,
-      });
-    }
+    // Delete all temporary files in parallel
+    await Promise.all(
+      tempFiles.map(file =>
+        _fs.rm(_path.join(global.RAG_TEST_CONFIG.tempPath, file), {
+          recursive: true,
+          force: true,
+        })
+      )
+    );
   } catch {
     // Ignore cleanup errors
   }

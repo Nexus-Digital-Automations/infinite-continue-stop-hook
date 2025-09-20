@@ -647,7 +647,8 @@ describe('RAG System Performance Benchmarks', () => {
 
     const startTime = Date.now();
 
-    for (let i = 0; i < searchIterations; i++) {
+    // Use for-await-of pattern for sequential performance measurement
+    for await (const i of Array(searchIterations).keys()) {
       const query = queries[i % queries.length];
       await ragOps.searchLessons(query, { maxResults: 5 });
     }

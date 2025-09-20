@@ -813,7 +813,8 @@ Tags: optimization, frontend, backend, caching`,
     async function scanDirectory(dirPath, relativePath = '') {
       const _entries = await _fs.readdir(dirPath, { withFileTypes: true });
 
-      for (const _entry of _entries) {
+      // Use for-await-of pattern for sequential directory scanning
+      for await (const _entry of _entries) {
         const _fullPath = _path.join(dirPath, _entry.name);
         const _relPath = _path.join(relativePath, _entry.name);
 
