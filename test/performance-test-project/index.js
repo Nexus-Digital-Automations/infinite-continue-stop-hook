@@ -31,5 +31,4 @@ console.log(`Memory allocated: ${memAlloc} arrays`);
 
 setTimeout(() => {
   console.log('Application completed successfully');
-  // Removed process.exit(0) - application will naturally terminate when all work is done
 }, 1000);

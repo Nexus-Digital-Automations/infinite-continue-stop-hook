@@ -24,5 +24,5 @@ const app = new ValidationApp();
 app.start();
 setTimeout(() => {
   app.stop();
-  // Removed process.exit(0) - application will naturally terminate when all work is done
+  console.log('Application completed successfully');
 }, 500);

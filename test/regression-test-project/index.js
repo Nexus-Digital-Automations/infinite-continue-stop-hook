@@ -22,5 +22,5 @@ const app = new RegressionApp();
 app.start();
 console.log('App version:', app.getVersion());
 setTimeout(() => {
-  // Removed process.exit(0) - application will naturally terminate when all work is done
+  console.log('Application completed successfully');
 }, 200);
