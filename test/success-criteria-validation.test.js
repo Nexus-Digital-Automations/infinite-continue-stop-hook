@@ -249,15 +249,15 @@ describe('Success Criteria Validation Tests', () => {
       // Validate that both base and child criteria are present
       const status = await execAPI('success-criteria:status');
 
-      expect(status.projectCriteria).toBeDefined();
-      expect(status.projectCriteria.length).toBe(5); // 3 base + 2 child
+      expect(status._projectCriteria).toBeDefined();
+      expect(status._projectCriteria.length).toBe(5); // 3 base + 2 child
 
       // Check for base criteria
       const baseCriteriaIds = _baseCriteria.map((c) => c.id);
       const childCriteriaIds = _childCriteria.map((c) => c.id);
       const allExpectedIds = [...baseCriteriaIds, ...childCriteriaIds];
 
-      const actualIds = status.projectCriteria.map((c) => c.id);
+      const actualIds = status._projectCriteria.map((c) => c.id);
       allExpectedIds.forEach((expectedId) => {
         expect(actualIds).toContain(expectedId);
       });
@@ -319,7 +319,7 @@ describe('Success Criteria Validation Tests', () => {
 
       // Validate overrides were applied
       const status = await execAPI('success-criteria:status');
-      const overriddenCriterion = status.projectCriteria.find(
+      const overriddenCriterion = status._projectCriteria.find(
         (c) => c.id === 'override-test-1',
       );
 
@@ -330,7 +330,7 @@ describe('Success Criteria Validation Tests', () => {
       expect(overriddenCriterion.tags).toContain('critical');
 
       // Validate non-overridden criteria remain unchanged
-      const nonOverriddenCriterion = status.projectCriteria.find(
+      const nonOverriddenCriterion = status._projectCriteria.find(
         (c) => c.id === 'override-test-2',
       );
       expect(nonOverriddenCriterion.description).toBe('Base requirement 2');
@@ -397,11 +397,11 @@ describe('Success Criteria Validation Tests', () => {
 
       // Validate all levels are present
       const status = await execAPI('success-criteria:status');
-      expect(status.projectCriteria.length).toBe(5); // 2 + 2 + 1
+      expect(status._projectCriteria.length).toBe(5); // 2 + 2 + 1
 
       // Check for all criteria IDs
       const expectedIds = ['gp-1', 'gp-2', 'parent-1', 'parent-2', 'child-1'];
-      const actualIds = status.projectCriteria.map((c) => c.id);
+      const actualIds = status._projectCriteria.map((c) => c.id);
 
       expectedIds.forEach((expectedId) => {
         expect(actualIds).toContain(expectedId);
@@ -456,7 +456,7 @@ describe('Success Criteria Validation Tests', () => {
 
       // Validate conflict resolution (child should win)
       const status = await execAPI('success-criteria:status');
-      const conflictCriterion = status.projectCriteria.find(
+      const conflictCriterion = status._projectCriteria.find(
         (c) => c.id === 'conflict-id',
       );
 
@@ -467,10 +467,10 @@ describe('Success Criteria Validation Tests', () => {
 
       // Ensure both unique criteria are present
       expect(
-        status.projectCriteria.find((c) => c.id === 'base-unique'),
+        status._projectCriteria.find((c) => c.id === 'base-unique'),
       ).toBeDefined();
       expect(
-        status.projectCriteria.find((c) => c.id === 'child-unique'),
+        status._projectCriteria.find((c) => c.id === 'child-unique'),
       ).toBeDefined();
 
       console.log(
@@ -521,9 +521,9 @@ describe('Success Criteria Validation Tests', () => {
 
       // Validate custom criteria were added
       const status = await execAPI('success-criteria:status');
-      expect(status.projectCriteria.length).toBe(4); // 2 base + 2 custom
+      expect(status._projectCriteria.length).toBe(4); // 2 base + 2 custom
 
-      const customCriterion1 = status.projectCriteria.find(
+      const customCriterion1 = status._projectCriteria.find(
         (c) => c.id === 'custom-1',
       );
       expect(customCriterion1).toBeDefined();
@@ -531,7 +531,7 @@ describe('Success Criteria Validation Tests', () => {
       expect(customCriterion1.tags).toContain('project-specific');
       expect(customCriterion1.metadata.source).toBe('project-requirements');
 
-      const customCriterion2 = status.projectCriteria.find(
+      const customCriterion2 = status._projectCriteria.find(
         (c) => c.id === 'custom-2',
       );
       expect(customCriterion2).toBeDefined();
@@ -577,7 +577,7 @@ describe('Success Criteria Validation Tests', () => {
 
       // Validate modification
       let status = await execAPI('success-criteria:status');
-      const modified = status.projectCriteria.find(
+      const modified = status._projectCriteria.find(
         (c) => c.id === 'modifiable-custom',
       );
 
@@ -592,9 +592,9 @@ describe('Success Criteria Validation Tests', () => {
       // Validate removal
       status = await execAPI('success-criteria:status');
       expect(
-        status.projectCriteria.find((c) => c.id === 'modifiable-custom'),
+        status._projectCriteria.find((c) => c.id === 'modifiable-custom'),
       ).toBeUndefined();
-      expect(status.projectCriteria.length).toBe(1); // Only base criterion remains
+      expect(status._projectCriteria.length).toBe(1); // Only base criterion remains
 
       console.log(
         'Custom criteria modification and removal validated successfully',
@@ -640,7 +640,7 @@ describe('Success Criteria Validation Tests', () => {
 
       // Validate that custom criterion persisted
       const status = await execAPI('success-criteria:status');
-      const persistentCustom = status.projectCriteria.find(
+      const persistentCustom = status._projectCriteria.find(
         (c) => c.id === 'persistent-custom',
       );
 
@@ -651,15 +651,15 @@ describe('Success Criteria Validation Tests', () => {
 
       // Validate new template criteria are present
       expect(
-        status.projectCriteria.find((c) => c.id === 'new-1'),
+        status._projectCriteria.find((c) => c.id === 'new-1'),
       ).toBeDefined();
       expect(
-        status.projectCriteria.find((c) => c.id === 'new-2'),
+        status._projectCriteria.find((c) => c.id === 'new-2'),
       ).toBeDefined();
 
       // Validate old template criteria are gone
       expect(
-        status.projectCriteria.find((c) => c.id === 'initial-1'),
+        status._projectCriteria.find((c) => c.id === 'initial-1'),
       ).toBeUndefined();
 
       console.log(
@@ -769,17 +769,17 @@ describe('Success Criteria Validation Tests', () => {
       const status = await execAPI('success-criteria:status');
 
       expect(status.appliedTemplate.version).toBe('2.0.0');
-      expect(status.projectCriteria.length).toBe(3);
+      expect(status._projectCriteria.length).toBe(3);
 
       // Check modified criterion
-      const modifiedCriterion = status.projectCriteria.find(
+      const modifiedCriterion = status._projectCriteria.find(
         (c) => c.id === 'upgrade-1',
       );
       expect(modifiedCriterion.description).toBe('V2 updated requirement');
       expect(modifiedCriterion.priority).toBe('high');
 
       // Check new criterion
-      const newCriterion = status.projectCriteria.find(
+      const newCriterion = status._projectCriteria.find(
         (c) => c.id === 'upgrade-3',
       );
       expect(newCriterion).toBeDefined();
@@ -843,22 +843,22 @@ describe('Success Criteria Validation Tests', () => {
 
       // Validate both main and dependency criteria are present
       const status = await execAPI('success-criteria:status');
-      expect(status.projectCriteria.length).toBe(4); // 2 main + 2 dependency
+      expect(status._projectCriteria.length).toBe(4); // 2 main + 2 dependency
 
       // Check for dependency criteria
       expect(
-        status.projectCriteria.find((c) => c.id === 'dep-1'),
+        status._projectCriteria.find((c) => c.id === 'dep-1'),
       ).toBeDefined();
       expect(
-        status.projectCriteria.find((c) => c.id === 'dep-2'),
+        status._projectCriteria.find((c) => c.id === 'dep-2'),
       ).toBeDefined();
 
       // Check for main criteria
       expect(
-        status.projectCriteria.find((c) => c.id === 'main-1'),
+        status._projectCriteria.find((c) => c.id === 'main-1'),
       ).toBeDefined();
       expect(
-        status.projectCriteria.find((c) => c.id === 'main-2'),
+        status._projectCriteria.find((c) => c.id === 'main-2'),
       ).toBeDefined();
 
       // Validate dependency information is tracked
@@ -918,18 +918,18 @@ describe('Success Criteria Validation Tests', () => {
       const status = await execAPI('success-criteria:status');
 
       // In test environment, development criteria should be enabled
-      const devCriterion = status.projectCriteria.find(
+      const _devCriterion = status._projectCriteria.find(
         (c) => c.id === 'dev-specific',
       );
-      expect(devCriterion).toBeDefined();
-      expect(devCriterion.enabled).toBe(true);
+      expect(_devCriterion).toBeDefined();
+      expect(_devCriterion.enabled).toBe(true);
 
       // Production criteria should be disabled in test environment
-      const prodCriterion = status.projectCriteria.find(
+      const _prodCriterion = status._projectCriteria.find(
         (c) => c.id === 'prod-specific',
       );
-      expect(prodCriterion).toBeDefined();
-      expect(prodCriterion.enabled).toBe(false);
+      expect(_prodCriterion).toBeDefined();
+      expect(_prodCriterion.enabled).toBe(false);
 
       console.log(
         'Project environment-specific criteria validated successfully',
@@ -985,17 +985,17 @@ describe('Success Criteria Validation Tests', () => {
       const status = await execAPI('success-criteria:status');
 
       // WebApp criteria should be applicable (we have package.json)
-      const webAppCriterion = status.projectCriteria.find(
+      const _webAppCriterion = status._projectCriteria.find(
         (c) => c.id === 'webapp-specific',
       );
-      expect(webAppCriterion).toBeDefined();
+      expect(_webAppCriterion).toBeDefined();
 
       // API criteria might not be applicable (no Dockerfile in test project)
-      const apiCriterion = status.projectCriteria.find(
+      const _apiCriterion = status._projectCriteria.find(
         (c) => c.id === 'api-specific',
       );
-      if (apiCriterion) {
-        console.log('API criterion evaluation:', apiCriterion.conditions);
+      if (_apiCriterion) {
+        console.log('API criterion evaluation:', _apiCriterion.conditions);
       }
 
       console.log(
@@ -1044,36 +1044,36 @@ describe('Success Criteria Validation Tests', () => {
       ]);
 
       // Test priority-based filtering
-      const criticalAndHigh = await execAPI('success-criteria:filter', [
+      const _criticalAndHigh = await execAPI('success-criteria:filter', [
         'priority',
         'critical,high',
       ]);
-      expect(criticalAndHigh.criteria.length).toBe(3); // 1 critical + 2 high
+      expect(_criticalAndHigh.criteria.length).toBe(3); // 1 critical + 2 high
 
-      const criticalOnly = await execAPI('success-criteria:filter', [
+      const _criticalOnly = await execAPI('success-criteria:filter', [
         'priority',
         'critical',
       ]);
-      expect(criticalOnly.criteria.length).toBe(1);
-      expect(criticalOnly.criteria[0].id).toBe('critical-1');
+      expect(_criticalOnly.criteria.length).toBe(1);
+      expect(_criticalOnly.criteria[0].id).toBe('critical-1');
 
       // Test category-based filtering
-      const securityCriteria = await execAPI('success-criteria:filter', [
+      const _securityCriteria = await execAPI('success-criteria:filter', [
         'category',
         'security',
       ]);
-      expect(securityCriteria.criteria.length).toBe(1);
-      expect(securityCriteria.criteria[0].category).toBe('security');
+      expect(_securityCriteria.criteria.length).toBe(1);
+      expect(_securityCriteria.criteria[0].category).toBe('security');
 
       // Test combined filtering
-      const highPriorityPerformance = await execAPI('success-criteria:filter', [
+      const _highPriorityPerformance = await execAPI('success-criteria:filter', [
         'priority',
         'high',
         'category',
         'performance',
       ]);
-      expect(highPriorityPerformance.criteria.length).toBe(1);
-      expect(highPriorityPerformance.criteria[0].id).toBe('high-1');
+      expect(_highPriorityPerformance.criteria.length).toBe(1);
+      expect(_highPriorityPerformance.criteria[0].id).toBe('high-1');
 
       console.log(
         'Criteria prioritization and filtering validated successfully',
@@ -1156,7 +1156,7 @@ describe('Success Criteria Validation Tests', () => {
 
       // Step 6: Validate complete inheritance chain
       const status = await execAPI('success-criteria:status');
-      expect(status.projectCriteria.length).toBe(6); // 2 org + 2 team + 1 project + 1 custom
+      expect(status._projectCriteria.length).toBe(6); // 2 org + 2 team + 1 project + 1 custom
 
       // Validate all criteria are present
       const expectedIds = [
@@ -1167,7 +1167,7 @@ describe('Success Criteria Validation Tests', () => {
         'project-specific',
         'custom-project',
       ];
-      const actualIds = status.projectCriteria.map((c) => c.id);
+      const actualIds = status._projectCriteria.map((c) => c.id);
 
       expectedIds.forEach((expectedId) => {
         expect(actualIds).toContain(expectedId);
@@ -1215,19 +1215,19 @@ describe('Success Criteria Validation Tests', () => {
       await execAPI('success-criteria:apply-template', ['Validation Template']);
 
       // Run validation on all inherited criteria
-      const validationResult = await execAPI('success-criteria:validate');
+      const _validationResult = await execAPI('success-criteria:validate');
 
-      expect(validationResult.results).toBeDefined();
-      expect(validationResult.results.length).toBe(3);
+      expect(_validationResult.results).toBeDefined();
+      expect(_validationResult.results.length).toBe(3);
 
       // Check that validation attempted all criteria
-      const buildResult = validationResult.results.find(
+      const buildResult = _validationResult.results.find(
         (r) => r.criterionId === 'build-validation',
       );
-      const testResult = validationResult.results.find(
+      const testResult = _validationResult.results.find(
         (r) => r.criterionId === 'test-validation',
       );
-      const lintResult = validationResult.results.find(
+      const lintResult = _validationResult.results.find(
         (r) => r.criterionId === 'lint-validation',
       );
 
@@ -1236,9 +1236,9 @@ describe('Success Criteria Validation Tests', () => {
       expect(lintResult).toBeDefined();
 
       // Validate overall status
-      expect(validationResult.overallStatus).toBeDefined();
+      expect(_validationResult.overallStatus).toBeDefined();
       expect(['passed', 'failed', 'partial']).toContain(
-        validationResult.overallStatus,
+        _validationResult.overallStatus,
       );
 
       console.log(
@@ -1246,7 +1246,7 @@ describe('Success Criteria Validation Tests', () => {
       );
       console.log(
         'Validation results:',
-        validationResult.results.map((r) => ({
+        _validationResult.results.map((r) => ({
           id: r.criterionId,
           status: r.status,
         })),

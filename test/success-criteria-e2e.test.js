@@ -504,7 +504,7 @@ module.exports = { authenticate };
       ]);
       expect(bugFixResult.success).toBe(true);
 
-      const _bugTaskId = bugFixResult.task.id;
+      const bugTaskId = bugFixResult.task.id;
 
       // Implement bug fix
       await _fs.writeFile(
@@ -571,7 +571,7 @@ module.exports = { authenticateWithTimeout };
       ]);
       expect(refactorResult.success).toBe(true);
 
-      const _refactorTaskId = refactorResult.task.id;
+      const refactorTaskId = refactorResult.task.id;
 
       // Perform refactoring
       await _fs.writeFile(
@@ -673,7 +673,7 @@ module.exports = { authenticate };
       const taskId = createResult.task.id;
 
       // Initialize multiple agents for different validation aspects
-      const _developmentAgent = await execAPI('init');
+      const developmentAgent = await execAPI('init');
       const securityAgent = await execAPI('init');
       const performanceAgent = await execAPI('init');
 
@@ -746,7 +746,7 @@ module.exports = { authenticate };
       expect(claimResult.success).toBe(true);
 
       // Simulate performance optimization
-      const _startTime = Date.now();
+      const startTime = Date.now();
 
       // Run performance validation
       const performanceResult = await execCommand('npm', [
@@ -754,8 +754,8 @@ module.exports = { authenticate };
         'test:coverage',
       ]);
 
-      const _endTime = Date.now();
-      const _executionTime = endTime - startTime;
+      const endTime = Date.now();
+      const executionTime = endTime - startTime;
 
       // Complete with performance metrics
       const completeResult = await execAPI('complete', [
@@ -855,7 +855,7 @@ module.exports = { authenticate };
       const testResult = await execCommand('npm', ['run', 'test']);
 
       // Store evidence
-      const _evidenceDir = _path.join(
+      const evidenceDir = _path.join(
         E2E_PROJECT_DIR,
         'development',
         'evidence',

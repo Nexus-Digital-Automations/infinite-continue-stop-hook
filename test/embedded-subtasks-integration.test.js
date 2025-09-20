@@ -208,7 +208,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     });
 
     test('should auto-generate research and audit subtasks for complex feature tasks', async () => {
-      const _featureTaskData = {
+      const featureTaskData = {
         title: 'Implement authentication system with database integration',
         description:
           'Build comprehensive authentication system with security controls and database migration',
@@ -319,7 +319,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     });
 
     test('should respect skip_embedded_subtasks flag', async () => {
-      const _featureTaskData = {
+      const featureTaskData = {
         title: 'Implement complex API integration',
         description: 'Build integration with third-party API service',
         category: 'feature',
@@ -471,7 +471,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     });
 
     test('should load audit criteria from development/essentials/audit-criteria.md', async () => {
-      const _featureTaskData = {
+      const featureTaskData = {
         title: 'Add new feature with audit validation',
         description: 'Feature that should trigger audit subtask generation',
         category: 'feature',
@@ -501,7 +501,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     });
 
     test('should set prevents_completion and prevents_self_review flags', async () => {
-      const _featureTaskData = {
+      const featureTaskData = {
         title: 'Feature requiring audit validation',
         description: 'Test feature for audit system validation',
         category: 'feature',
@@ -526,7 +526,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     });
 
     test('should create comprehensive audit description with original task context', async () => {
-      const _featureTaskData = {
+      const featureTaskData = {
         title: 'Complex feature implementation',
         description:
           'Detailed implementation with multiple components and requirements',
@@ -564,7 +564,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
       testAgentId = initResult.agentId;
 
       // Create a feature task with embedded subtasks
-      const _featureTaskData = {
+      const featureTaskData = {
         title: 'API endpoint test feature',
         description: 'Feature for testing embedded subtasks API endpoints',
         category: 'feature',
@@ -640,7 +640,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     test('should create tasks with embedded subtasks within performance thresholds', async () => {
       const _startTime = Date.now();
 
-      const _featureTaskData = {
+      const featureTaskData = {
         title: 'Performance test feature with complex requirements',
         description:
           'Complex feature implementation with database, API, and security requirements',
@@ -737,7 +737,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         _fs.unlinkSync(_auditCriteriaPath);
       }
 
-      const _featureTaskData = {
+      const featureTaskData = {
         title: 'Feature without audit criteria file',
         description: 'Test fallback behavior when audit criteria is missing',
         category: 'feature',
@@ -840,7 +840,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
       expect(initResult.success).toBe(true);
 
       // 2. Create feature task with embedded subtasks
-      const _featureTaskData = {
+      const featureTaskData = {
         title: 'Complete workflow test feature',
         description:
           'Feature with database integration and API endpoints for full workflow testing',
@@ -938,7 +938,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
       ).agentId;
 
       // Create feature task with complex embedded subtasks
-      const _featureTaskData = {
+      const featureTaskData = {
         title: 'Multi-agent coordination test feature',
         description:
           'Complex feature requiring research, implementation, and audit coordination',

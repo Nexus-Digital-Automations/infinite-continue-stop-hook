@@ -1,24 +1,14 @@
 {
   "project": "embedded-subtasks-test",
-  "tasks": [
-    {
-      "status": "pending",
-      "created_at": "2025-09-20T06:36:06.510Z",
-      "title": "Add new feature with audit validation",
-      "description": "Feature that should trigger audit subtask generation",
-      "category": "feature",
-      "priority": "medium",
-      "id": "feature_1758350166509_vlr7o6l6zn"
-    }
-  ],
+  "tasks": [],
   "agents": {
-    "dev_session_1758350150282_1_general_f7018777": {
+    "dev_session_1758350563071_1_general_20bfed61": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T06:35:50.283Z",
+      "lastHeartbeat": "2025-09-20T06:42:43.072Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -29,7 +19,7 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T06:35:50.283Z",
+      "createdAt": "2025-09-20T06:42:43.072Z",
       "sessionId": null,
       "metadata": {}
     }
@@ -40,10 +30,9 @@
   "execution_count": 0,
   "review_strikes": 0,
   "strikes_completed_last_run": false,
-  "last_hook_activation": 1758350148618,
+  "last_hook_activation": 1758350562612,
   "settings": {
     "version": "2.0.0",
-    "created": "2025-09-20T06:35:48.618Z"
-  },
-  "completed_tasks": []
+    "created": "2025-09-20T06:42:42.612Z"
+  }
 }

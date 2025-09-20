@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 
 const fs = require('fs');
 
@@ -19,7 +18,7 @@ const fixes = [
   { from: /(\w+)\.(\w+) = (\w+)Result\./g, to: '$1.$2 = $3Result.' },
   { from: /expect\(_(\w+)\)/g, to: 'expect($1)' },
   { from: /(\w+)\.find\(\(t\) => t\.id === _(\w+)\)/g, to: '$1.find((t) => t.id === $2)' },
-  { from: /(\w+)\.find\(\(t\) => t\.id === (\w+)\)/g, to: '$1.find((t) => t.id === $2)' }
+  { from: /(\w+)\.find\(\(t\) => t\.id === (\w+)\)/g, to: '$1.find((t) => t.id === $2)' },
 ];
 
 // Apply fixes
