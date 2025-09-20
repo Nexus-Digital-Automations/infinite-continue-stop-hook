@@ -21,9 +21,8 @@ class ValidationApp {
 }
 
 const app = new ValidationApp();
-app.start().then(() => {
-  setTimeout(() => {
-    app.stop();
-    // Application will exit naturally when all work is done
-  }, 500);
-});
+app.start();
+setTimeout(() => {
+  app.stop();
+  // Removed process.exit(0) - application will naturally terminate when all work is done
+}, 500);

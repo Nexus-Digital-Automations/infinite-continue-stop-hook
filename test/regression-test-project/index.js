@@ -19,9 +19,8 @@ class RegressionApp {
 }
 
 const app = new RegressionApp();
-app.start().then(() => {
-  console.log('App version:', app.getVersion());
-  setTimeout(() => {
-    // Application will exit naturally when all work is done
-  }, 200);
-});
+app.start();
+console.log('App version:', app.getVersion());
+setTimeout(() => {
+  // Removed process.exit(0) - application will naturally terminate when all work is done
+}, 200);
