@@ -9,6 +9,27 @@
  */
 
 const _path = require('path');
+const _fs = require('fs').promises;
+
+// Helper functions for test data generation
+function getRandomTechnicalTopic() {
+  const topics = ['API Integration', 'Database Optimization', 'React Performance', 'Error Handling', 'Security Patterns'];
+  return topics[Math.floor(Math.random() * topics.length)];
+}
+
+function generateRandomTechnicalContent() {
+  return 'Sample technical content for testing purposes.';
+}
+
+function getRandomTags() {
+  const allTags = ['javascript', 'react', 'database', 'api', 'performance', 'security'];
+  return allTags.slice(0, Math.floor(Math.random() * 3) + 1);
+}
+
+function getRandomCategory() {
+  const categories = ['frontend', 'backend', 'database', 'security', 'performance'];
+  return categories[Math.floor(Math.random() * categories.length)];
+}
 
 describe('RAG System Performance and Load Testing', () => {
   let _ragSystem;
@@ -68,18 +89,18 @@ describe('RAG System Performance and Load Testing', () => {
         const _embedding = await ragSystem.generateEmbedding(content);
 
         const _endTime = process.hrtime.bigint();
-        const _durationMs = Number(endTime - startTime) / 1000000;
+        const _durationMs = Number(_endTime - _startTime) / 1000000;
 
         embeddingTimes.push({
           contentLength: content.length,
-          embeddingTime: durationMs,
-          embedding: embedding
+          embeddingTime: _durationMs,
+          embedding: _embedding
         });
 
         // Individual embedding should complete within 2 seconds
-        expect(durationMs).toBeLessThan(2000);
-        expect(embedding).toBeDefined();
-        expect(Array.isArray(embedding)).toBe(true);
+        expect(_durationMs).toBeLessThan(2000);
+        expect(_embedding).toBeDefined();
+        expect(Array.isArray(_embedding)).toBe(true);
       }
 
       // Verify performance scaling
@@ -90,7 +111,7 @@ describe('RAG System Performance and Load Testing', () => {
       const _longContent = embeddingTimes[embeddingTimes.length - 1];
 
       // Long content should not take more than 5x the time of short content
-      expect(longContent.embeddingTime).toBeLessThan(shortContent.embeddingTime * 5);
+      expect(_longContent.embeddingTime).toBeLessThan(_shortContent.embeddingTime * 5);
 
       // Log performance metrics
       console.log('Embedding Performance Results:');
@@ -104,7 +125,7 @@ describe('RAG System Performance and Load Testing', () => {
       // Setup: Create large dataset for realistic testing
       const _largeDataset = [];
       for (let i = 0; i < 1000; i++) {
-        largeDataset.push({
+        _largeDataset.push({
           id: `lesson-${i}`,
           title: `Lesson ${i}: ${getRandomTechnicalTopic()}`,
           content: generateRandomTechnicalContent(),
@@ -121,12 +142,12 @@ describe('RAG System Performance and Load Testing', () => {
       console.log('Storing test dataset...');
       const _storeStartTime = Date.now();
 
-      for (const lesson of largeDataset) {
+      for (const lesson of _largeDataset) {
         await ragSystem.storeLesson(lesson);
       }
 
       const _storeEndTime = Date.now();
-      console.log(`Dataset storage completed in ${storeEndTime - storeStartTime}ms`);
+      console.log(`Dataset storage completed in ${_storeEndTime - _storeStartTime}ms`);
 
       // Test various search queries
       const _searchQueries = [
@@ -148,7 +169,7 @@ describe('RAG System Performance and Load Testing', () => {
         });
 
         const _endTime = process.hrtime.bigint();
-        const _durationMs = Number(endTime - startTime) / 1000000;
+        const _durationMs = Number(_endTime - _startTime) / 1000000;
 
         searchTimes.push({
           query: query,
@@ -196,7 +217,7 @@ describe('RAG System Performance and Load Testing', () => {
         const _storeStartTime = process.hrtime.bigint();
         const _storeResults = await ragSystem.storeLessonsBatch(batchData);
         const _storeEndTime = process.hrtime.bigint();
-        const _storeDurationMs = Number(storeEndTime - storeStartTime) / 1000000;
+        const _storeDurationMs = Number(_storeEndTime - _storeStartTime) / 1000000;
 
         // Test batch retrieval
         const _retrieveStartTime = process.hrtime.bigint();
@@ -265,7 +286,7 @@ describe('RAG System Performance and Load Testing', () => {
                 user_id: userId
               });
               const _storeEndTime = process.hrtime.bigint();
-              const _storeDuration = Number(storeEndTime - storeStartTime) / 1000000;
+              const _storeDuration = Number(_storeEndTime - _storeStartTime) / 1000000;
               userResults.storeTimes.push(storeDuration);
 
               expect(storeResult.success).toBe(true);
@@ -455,7 +476,7 @@ describe('RAG System Performance and Load Testing', () => {
         const _durationMs = endTime - startTime;
 
         console.log(`Operation completed in ${durationMs}ms`);
-        console.log(`Memory increase: ${formatBytes(memoryIncrease)}`);
+        console.log(`Memory increase: ${_formatBytes(memoryIncrease)}`);
 
         // Memory increase should be reasonable
         expect(memoryIncrease).toBeLessThan(200 * 1024 * 1024); // Less than 200MB
@@ -558,7 +579,7 @@ describe('RAG System Performance and Load Testing', () => {
         expect(storeResults.success).toBe(true);
         expect(storeResults.stored_count).toBe(dataset.size);
 
-        const _storeTime = storeEndTime - storeStartTime;
+        const _storeTime = _storeEndTime - _storeStartTime;
         console.log(`Storage time: ${storeTime}ms (${(storeTime/dataset.size).toFixed(2)}ms per record)`);
 
         // Test various query patterns
@@ -671,7 +692,7 @@ describe('RAG System Performance and Load Testing', () => {
   });
 
   // Helper functions for test data generation
-  function _getRandomTechnicalTopic() {
+  function getRandomTechnicalTopic() {
     const topics = [
       'Error Handling',
       'API Design',
@@ -687,7 +708,7 @@ describe('RAG System Performance and Load Testing', () => {
     return topics[Math.floor(Math.random() * topics.length)];
   }
 
-  function _generateRandomTechnicalContent() {
+  function generateRandomTechnicalContent() {
     const templates = [
       'When implementing {topic}, always consider {aspect1} and {aspect2}. Best practices include {practice1} and {practice2}.',
       'Common issues with {topic} include {issue1} and {issue2}. Solutions involve {solution1} and {solution2}.',
@@ -698,35 +719,35 @@ describe('RAG System Performance and Load Testing', () => {
     return template.replace(/\{[^}]+\}/g, () => getRandomTechnicalTopic());
   }
 
-  function _getRandomTags() {
+  function getRandomTags() {
     const tags = ['javascript', 'python', 'api', 'database', 'security', 'performance', 'testing', 'deployment'];
     const count = Math.floor(Math.random() * 4) + 1;
     return tags.sort(() => 0.5 - Math.random()).slice(0, count);
   }
 
-  function _getRandomCategory() {
+  function getRandomCategory() {
     const categories = ['error-handling', 'implementation', 'optimization', 'security', 'testing'];
     return categories[Math.floor(Math.random() * categories.length)];
   }
 
   function _formatMemoryUsage(_memUsage) {
     return {
-      rss: formatBytes(memUsage.rss),
-      heapTotal: formatBytes(memUsage.heapTotal),
-      heapUsed: formatBytes(memUsage.heapUsed),
-      external: formatBytes(memUsage.external),
+      rss: _formatBytes(_memUsage.rss),
+      heapTotal: _formatBytes(_memUsage.heapTotal),
+      heapUsed: _formatBytes(_memUsage.heapUsed),
+      external: _formatBytes(_memUsage.external),
     };
   }
 
   function _formatBytes(_bytes) {
-    if (bytes === 0) {return '0 Bytes';}
+    if (_bytes === 0) {return '0 Bytes';}
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    const i = Math.floor(Math.log(_bytes) / Math.log(k));
+    return parseFloat((_bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }
 
   function _generateLargeTechnicalContent(_index) {
-    return `Technical Content ${index}: ${'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '.repeat(50)}`;
+    return `Technical Content ${_index}: ${'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '.repeat(50)}`;
   }
 });

@@ -133,6 +133,16 @@ module.exports = [
     languageOptions: {
       globals: {
         ..._globals.jest,
+        // Additional test globals that may be missing
+        describe: "readonly",
+        it: "readonly",
+        test: "readonly",
+        expect: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly",
+        beforeAll: "readonly",
+        afterAll: "readonly",
+        jest: "readonly",
       },
     },
     rules: {

@@ -4,10 +4,10 @@
  * @returns {string} Processed message
  */
 function processMessage(_message) {
-  if (!message) {
+  if (!_message) {
     throw new Error('Message is required');
   }
-  return message.toUpperCase();
+  return _message.toUpperCase();
 }
 
 module.exports = { processMessage };
