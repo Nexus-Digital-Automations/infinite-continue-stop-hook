@@ -217,7 +217,7 @@ describe('Application Tests', () => {
       JSON.stringify(successCriteriaConfig, null, 2),
     );
   } catch (error) {
-        console.error('Failed to setup E2E project:', error);
+    console.error('Failed to setup E2E project:', error);
     throw error;
   }
 }

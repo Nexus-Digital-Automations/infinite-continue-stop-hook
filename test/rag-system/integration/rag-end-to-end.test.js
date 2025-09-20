@@ -48,22 +48,22 @@ describe('RAG System End-to-End Integration Tests', () => {
 
   beforeAll(async () => {
     // Create test environment
-    await fs.mkdir(ragTestPath, { recursive: true });
-    await fs.mkdir(_path.join(ragTestPath, 'rag'), { recursive: true });
+    await _fs.mkdir(ragTestPath, { recursive: true });
+    await _fs.mkdir(_path.join(ragTestPath, 'rag'), { recursive: true });
 
     // Initialize test utilities
-    testDataGenerator = new TestDataGenerator();
-    testAssertions = new TestAssertions();
+    _testDataGenerator = new _TestDataGenerator();
+    _testAssertions = new _TestAssertions();
 
     // Initialize RAG components with test configuration
-    embeddingGenerator = new EmbeddingGenerator({
+    _embeddingGenerator = new _EmbeddingGenerator({
       fallbackModel: 'sentence-transformers/all-MiniLM-L6-v2', // Use lighter model for tests
       enableCaching: true,
       cacheSize: 100,
       maxTextLength: 256, // Shorter for faster tests
     });
 
-    vectorDatabase = new VectorDatabase({
+    _vectorDatabase = new _VectorDatabase({
       indexPath: _path.join(ragTestPath, 'rag', 'test-vector.index'),
       metadataPath: _path.join(ragTestPath, 'rag', 'test-metadata.db'),
       embeddingDimension: 384, // MiniLM dimension
@@ -71,25 +71,25 @@ describe('RAG System End-to-End Integration Tests', () => {
       contentTypes: ['errors', 'features', 'optimization', 'decisions', 'patterns'],
     });
 
-    semanticSearchEngine = new SemanticSearchEngine({
-      embeddingGenerator,
-      vectorDatabase,
+    _semanticSearchEngine = new _SemanticSearchEngine({
+      embeddingGenerator: _embeddingGenerator,
+      vectorDatabase: _vectorDatabase,
       defaultTopK: 5,
       similarityThreshold: 0.6, // Lower threshold for tests
     });
 
-    ragOperations = new RAGOperations({
+    _ragOperations = new _RAGOperations({
       projectRoot: ragTestPath,
-      embeddingGenerator,
-      vectorDatabase,
-      semanticSearchEngine,
+      embeddingGenerator: _embeddingGenerator,
+      vectorDatabase: _vectorDatabase,
+      semanticSearchEngine: _semanticSearchEngine,
       config: {
         enableAutoStorage: false, // Disable for controlled testing
         maxRecommendations: 5,
       },
     });
 
-    migrationSystem = new MigrationSystem({
+    _migrationSystem = new _MigrationSystem({
       sourcePath: _path.join(ragTestPath, 'development'),
       batchSize: 10, // Smaller batches for tests
       enableBackup: false, // Disable backup for tests
@@ -98,54 +98,54 @@ describe('RAG System End-to-End Integration Tests', () => {
     console.log('Initializing RAG system components...');
 
     // Initialize all components
-    await embeddingGenerator.initialize();
-    await vectorDatabase.initialize();
-    await semanticSearchEngine.initialize();
-    await ragOperations.initialize();
+    await _embeddingGenerator.initialize();
+    await _vectorDatabase.initialize();
+    await _semanticSearchEngine.initialize();
+    await _ragOperations.initialize();
 
     console.log('RAG system initialization completed');
   }, 120000); // 2 minutes timeout for initialization
 
   afterAll(async () => {
     // Cleanup test resources
-    if (embeddingGenerator) {await embeddingGenerator.cleanup();}
-    if (vectorDatabase) {await vectorDatabase.cleanup();}
-    if (semanticSearchEngine) {await semanticSearchEngine.cleanup();}
-    if (ragOperations) {await ragOperations.cleanup();}
+    if (_embeddingGenerator) {await _embeddingGenerator.cleanup();}
+    if (_vectorDatabase) {await _vectorDatabase.cleanup();}
+    if (_semanticSearchEngine) {await _semanticSearchEngine.cleanup();}
+    if (_ragOperations) {await _ragOperations.cleanup();}
 
     // Clean up test files
     try {
-      await fs.rm(testDataPath, { recursive: true, force: true });
+      await _fs.rm(testDataPath, { recursive: true, force: true });
     } catch (error) {
-        console.warn('Failed to clean up test data:', error.message);
+      console.warn('Failed to clean up test data:', error.message);
     }
   });
 
   describe('System Initialization and Health Checks', () => {
     test('should initialize all components successfully', () => {
-      expect(embeddingGenerator.isInitialized).toBe(true);
-      expect(vectorDatabase.isInitialized).toBe(true);
-      expect(semanticSearchEngine.isInitialized).toBe(true);
-      expect(ragOperations.isInitialized).toBe(true);
+      expect(_embeddingGenerator.isInitialized).toBe(true);
+      expect(_vectorDatabase.isInitialized).toBe(true);
+      expect(_semanticSearchEngine.isInitialized).toBe(true);
+      expect(_ragOperations.isInitialized).toBe(true);
     });
 
     test('should have proper component connections', () => {
-      expect(semanticSearchEngine.config.embeddingGenerator).toBe(embeddingGenerator);
-      expect(semanticSearchEngine.config.vectorDatabase).toBe(vectorDatabase);
+      expect(_semanticSearchEngine.config.embeddingGenerator).toBe(_embeddingGenerator);
+      expect(_semanticSearchEngine.config.vectorDatabase).toBe(_vectorDatabase);
     });
 
     test('should provide system statistics', async () => {
-      const _embeddingStats = embeddingGenerator.getStatistics();
-      const _vectorStats = vectorDatabase.getStatistics();
-      const _searchStats = semanticSearchEngine.getStatistics();
+      const _embeddingStats = _embeddingGenerator.getStatistics();
+      const _vectorStats = _vectorDatabase.getStatistics();
+      const _searchStats = _semanticSearchEngine.getStatistics();
 
-      expect(embeddingStats).toHaveProperty('isInitialized', true);
-      expect(vectorStats).toHaveProperty('isInitialized', true);
-      expect(searchStats).toHaveProperty('isInitialized', true);
+      expect(_embeddingStats).toHaveProperty('isInitialized', true);
+      expect(_vectorStats).toHaveProperty('isInitialized', true);
+      expect(_searchStats).toHaveProperty('isInitialized', true);
 
-      expect(embeddingStats).toHaveProperty('embeddingDimension');
-      expect(vectorStats).toHaveProperty('totalVectors');
-      expect(searchStats).toHaveProperty('queriesProcessed');
+      expect(_embeddingStats).toHaveProperty('embeddingDimension');
+      expect(_vectorStats).toHaveProperty('totalVectors');
+      expect(_searchStats).toHaveProperty('queriesProcessed');
     });
   });
 
@@ -153,10 +153,10 @@ describe('RAG System End-to-End Integration Tests', () => {
     const storedLessons = [];
 
     test('should store technical lessons with embeddings', async () => {
-      const _lessons = testDataGenerator.generateLessons(5);
+      const _lessons = _testDataGenerator.generateLessons(5);
 
-      for (const lesson of lessons) {
-        const result = await ragOperations.storeLesson(lesson);
+      for (const lesson of _lessons) {
+        const result = await _ragOperations.storeLesson(lesson);
 
         expect(result).toHaveProperty('success', true);
         expect(result).toHaveProperty('vectorId');
@@ -167,29 +167,29 @@ describe('RAG System End-to-End Integration Tests', () => {
       }
 
       // Verify storage statistics
-      const _vectorStats = vectorDatabase.getStatistics();
-      expect(vectorStats.totalVectors).toBeGreaterThanOrEqual(lessons.length);
+      const _vectorStats = _vectorDatabase.getStatistics();
+      expect(_vectorStats.totalVectors).toBeGreaterThanOrEqual(_lessons.length);
     });
 
     test('should retrieve lessons using semantic search', async () => {
       const _query = 'JavaScript function error handling best practices';
-      const _results = await ragOperations.searchLessons(query, { maxResults: 3 });
+      const _results = await _ragOperations.searchLessons(_query, { maxResults: 3 });
 
-      expect(results).toBeInstanceOf(Array);
-      expect(results.length).toBeGreaterThan(0);
-      expect(results.length).toBeLessThanOrEqual(3);
+      expect(_results).toBeInstanceOf(Array);
+      expect(_results.length).toBeGreaterThan(0);
+      expect(_results.length).toBeLessThanOrEqual(3);
 
       // Verify result structure
-      for (const result of results) {
-        testAssertions.assertValidSearchResult(result);
+      for (const result of _results) {
+        _testAssertions.assertValidSearchResult(result);
         expect(result).toHaveProperty('relevanceScore');
         expect(result).toHaveProperty('lessonType');
         expect(result).toHaveProperty('confidenceLevel');
       }
 
       // Verify relevance ordering
-      for (let i = 1; i < results.length; i++) {
-        expect(results[i - 1].relevanceScore).toBeGreaterThanOrEqual(results[i].relevanceScore);
+      for (let i = 1; i < _results.length; i++) {
+        expect(_results[i - 1].relevanceScore).toBeGreaterThanOrEqual(_results[i].relevanceScore);
       }
     });
 
@@ -202,14 +202,14 @@ describe('RAG System End-to-End Integration Tests', () => {
         tags: ['javascript', 'async', 'error-handling'],
       };
 
-      const _recommendations = await ragOperations.getRelevantLessons(taskContext, { maxResults: 5 });
+      const _recommendations = await _ragOperations.getRelevantLessons(_taskContext, { maxResults: 5 });
 
-      expect(recommendations).toBeInstanceOf(Array);
-      expect(recommendations.length).toBeGreaterThan(0);
+      expect(_recommendations).toBeInstanceOf(Array);
+      expect(_recommendations.length).toBeGreaterThan(0);
 
       // Verify contextual relevance
-      for (const recommendation of recommendations) {
-        testAssertions.assertValidRecommendation(recommendation);
+      for (const recommendation of _recommendations) {
+        _testAssertions.assertValidRecommendation(recommendation);
         expect(recommendation).toHaveProperty('applicableToCurrentTask');
         expect(recommendation).toHaveProperty('contextRelevance');
       }

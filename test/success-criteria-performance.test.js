@@ -342,7 +342,7 @@ describe('Performance Test Suite', () => {
 
     console.log('Performance test project setup completed');
   } catch (error) {
-        console.error('Failed to setup performance test project:', error);
+    console.error('Failed to setup performance test project:', error);
     throw error;
   }
 }
@@ -352,7 +352,7 @@ async function cleanupPerformanceTestProject() {
     await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     console.log('Performance test project cleanup completed');
   } catch (error) {
-        console.error('Failed to cleanup performance test project:', error);
+    console.error('Failed to cleanup performance test project:', error);
   }
 }
 

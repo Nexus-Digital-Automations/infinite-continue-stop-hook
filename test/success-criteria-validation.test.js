@@ -155,7 +155,7 @@ describe('Validation Test Suite', () => {
 
     console.log('Validation test project setup completed');
   } catch (error) {
-        console.error('Failed to setup validation test project:', error);
+    console.error('Failed to setup validation test project:', error);
     throw error;
   }
 }
@@ -165,7 +165,7 @@ async function cleanupValidationTestProject() {
     await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     console.log('Validation test project cleanup completed');
   } catch (error) {
-        console.error('Failed to cleanup validation test project:', error);
+    console.error('Failed to cleanup validation test project:', error);
   }
 }
 

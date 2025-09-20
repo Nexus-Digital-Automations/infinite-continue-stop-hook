@@ -33,7 +33,7 @@ describe('RAG System Data Migration and Integrity', () => {
     try {
       await _fs.rm(_testMigrationPath, { recursive: true, force: true });
     } catch (error) {
-        console.warn('Cleanup warning:', error.message);
+      console.warn('Cleanup warning:', error.message);
     }
   });
 
@@ -57,7 +57,7 @@ describe('RAG System Data Migration and Integrity', () => {
       const _originalChecksums = new Map();
       for (const file of originalFiles) {
         const _content = await fs.readFile(file.fullPath, 'utf8');
-        const _checksum = crypto.createHash('sha256').update(content).digest('hex');
+        const _checksum = _crypto.createHash('sha256').update(content).digest('hex');
         originalChecksums.set(file.relativePath, {
           checksum,
           content,

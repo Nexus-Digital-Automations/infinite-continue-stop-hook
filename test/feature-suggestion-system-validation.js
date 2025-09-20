@@ -78,8 +78,8 @@ class FeatureSuggestionValidator {
         timestamp: new Date().toISOString(),
       });
 
-      return { success: true, data: result, duration };
-    } catch {
+      return { success: true, data: _result, duration: _duration };
+    } catch (error) {
       console.log(`❌ [${operationId}] Failed: ${error.message}`);
 
       this.testResults.push({

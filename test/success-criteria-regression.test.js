@@ -220,7 +220,7 @@ describe('Regression Test Suite', () => {
 
     console.log('Regression test project setup completed');
   } catch (error) {
-        console.error('Failed to setup regression test project:', error);
+    console.error('Failed to setup regression test project:', error);
     throw error;
   }
 }
@@ -230,7 +230,7 @@ async function cleanupRegressionTestProject() {
     await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     console.log('Regression test project cleanup completed');
   } catch (error) {
-        console.error('Failed to cleanup regression test project:', error);
+    console.error('Failed to cleanup regression test project:', error);
   }
 }
 
@@ -664,7 +664,7 @@ describe('Success Criteria Regression Tests', () => {
 
           console.log(`Schema ${schema.version} compatibility confirmed`);
         } catch (error) {
-        console.log(
+          console.log(
             `Schema ${schema.version} evolution note:`,
             error.message,
           );
@@ -953,7 +953,7 @@ describe('Success Criteria Regression Tests', () => {
             `Template version ${template.version} compatibility confirmed`,
           );
         } catch (error) {
-        console.log(
+          console.log(
             `Template version ${template.version} compatibility issue:`,
             error.message,
           );
@@ -1112,7 +1112,7 @@ describe('Success Criteria Regression Tests', () => {
 
           console.log(`API contract for ${api} is stable`);
         } catch (error) {
-        console.log(`API contract issue for ${api}:`, error.message);
+          console.log(`API contract issue for ${api}:`, error.message);
         }
       }
 
@@ -1180,7 +1180,7 @@ describe('Success Criteria Regression Tests', () => {
           expect(passed).toBe(true);
           console.log(`Essential function '${func.name}' is preserved`);
         } catch (error) {
-        console.error(
+          console.error(
             `Essential function '${func.name}' failed:`,
             error.message,
           );

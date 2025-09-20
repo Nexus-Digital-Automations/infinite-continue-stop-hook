@@ -236,8 +236,7 @@ class SuccessCriteriaValidator {
         category: task.category || 'feature',
       };
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(`❌ Failed to get task criteria: ${error.message}`);
+      ValidationLogger.error(`❌ Failed to get task criteria: ${error.message}`);
       throw error;
     }
   }
@@ -280,8 +279,7 @@ class SuccessCriteriaValidator {
         continue;
       }
 
-      // eslint-disable-next-line no-console
-      console.log(`🔍 Validating: ${criterion.name}`);
+      ValidationLogger.log(`🔍 Validating: ${criterion.name}`);
 
       try {
         switch (criterion.name) {
@@ -808,14 +806,12 @@ class SuccessCriteriaValidator {
    * Main validation function
    */
   async validateTask(taskId, options = {}) {
-    // eslint-disable-next-line no-console
-    console.log(`🚀 Starting validation for task: ${taskId}`);
+    ValidationLogger.log(`🚀 Starting validation for task: ${taskId}`);
 
     try {
       // Get task criteria
       const taskInfo = await this.getTaskCriteria(taskId);
-      // eslint-disable-next-line no-console
-      console.log(`📋 Task category: ${taskInfo.category}`);
+      ValidationLogger.log(`📋 Task category: ${taskInfo.category}`);
 
       // Get all applicable criteria
       let allCriteria = [];
@@ -837,12 +833,10 @@ class SuccessCriteriaValidator {
         allCriteria = allCriteria.filter(
           (c) => c.category === options.category,
         );
-        // eslint-disable-next-line no-console
-        console.log(`🔍 Filtering by category: ${options.category}`);
+        ValidationLogger.log(`🔍 Filtering by category: ${options.category}`);
       }
 
-      // eslint-disable-next-line no-console
-      console.log(`📊 Total criteria to validate: ${allCriteria.length}`);
+      ValidationLogger.log(`📊 Total criteria to validate: ${allCriteria.length}`);
 
       // Run automated validation
       const results = await this.runAutomatedValidation(allCriteria);
@@ -851,8 +845,7 @@ class SuccessCriteriaValidator {
       let report = null;
       if (options.report) {
         report = await this.generateReport(taskId, results);
-        // eslint-disable-next-line no-console
-        console.log(
+        ValidationLogger.log(
           `📋 Validation report generated: ${_path.join(this.reportDir, `${taskId}_validation_report.json`)}`,
         );
       }
@@ -862,7 +855,7 @@ class SuccessCriteriaValidator {
 
       return { results, report };
     } catch (error) {
-      console.error(`❌ Validation failed: ${error.message}`);
+      ValidationLogger.error(`❌ Validation failed: ${error.message}`);
       throw error;
     }
   }

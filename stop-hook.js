@@ -441,8 +441,10 @@ async function autoSortTasksByPriority(taskManager) {
       totalTasks: todoData.tasks.length,
     };
   } catch (error) {
-    // eslint-disable-next-line no-console -- hook script error logging for debugging
-    console.error('Error in autoSortTasksByPriority:', error);
+    // Log error through logger for proper tracking
+    const logger = new _Logger(process.cwd());
+    logger.logError(error, 'autoSortTasksByPriority');
+    logger.save();
     return { error: error.message, tasksMoved: 0, tasksUpdated: 0 };
   }
 }
@@ -1021,7 +1023,7 @@ node -e "const _TaskManager = require('/Users/jeremyparker/infinite-continue-sto
     // Check task status to provide appropriate instructions (taskManager already initialized above)
     let _taskStatus;
     try {
-      taskStatus = await taskManager.getTaskStatus();
+      _taskStatus = await taskManager.getTaskStatus();
     } catch (error) {
       // Handle corrupted TODO.json by using autoFixer
       logger.addFlow(
@@ -1029,22 +1031,22 @@ node -e "const _TaskManager = require('/Users/jeremyparker/infinite-continue-sto
       );
       const fixResult = await taskManager.autoFix(todoPath);
       if (fixResult.fixed) {
-        taskStatus = await taskManager.getTaskStatus();
+        _taskStatus = await taskManager.getTaskStatus();
         logger.addFlow(`Auto-fix successful, retrieved task status`);
       } else {
         // Fallback to default status
-        taskStatus = { pending: 0, in_progress: 0, completed: 0 };
+        _taskStatus = { pending: 0, in_progress: 0, completed: 0 };
         logger.addFlow(`Auto-fix failed, using default task status`);
       }
     }
     logger.addFlow(
-      `Task status: ${taskStatus.pending} pending, ${taskStatus.in_progress} in_progress, ${taskStatus.completed} completed`,
+      `Task status: ${_taskStatus.pending} pending, ${_taskStatus.in_progress} in_progress, ${_taskStatus.completed} completed`,
     );
 
     // Provide detailed instructive guidance based on current state
     const instructiveGuidance = provideInstructiveTaskGuidance(
       taskManager,
-      taskStatus,
+      _taskStatus,
     );
 
     // ========================================================================

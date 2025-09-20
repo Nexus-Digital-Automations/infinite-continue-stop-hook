@@ -280,11 +280,11 @@ describe('Audit System Validation Tests', () => {
 
       const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
-      const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
-      expect(auditSubtask).toBeDefined();
-      expect(auditSubtask.success_criteria).toBeDefined();
-      expect(auditSubtask.success_criteria.length).toBeGreaterThan(10);
+      expect(_auditSubtask).toBeDefined();
+      expect(_auditSubtask.success_criteria).toBeDefined();
+      expect(_auditSubtask.success_criteria.length).toBeGreaterThan(10);
 
       // Verify comprehensive criteria are loaded
       const _expectedCriteria = [
@@ -315,8 +315,8 @@ describe('Audit System Validation Tests', () => {
         'Regulatory Compliance',
       ];
 
-      expectedCriteria.forEach((criterion) => {
-        expect(auditSubtask.success_criteria).toContain(criterion);
+      _expectedCriteria.forEach((criterion) => {
+        expect(_auditSubtask.success_criteria).toContain(criterion);
       });
     });
 
@@ -326,8 +326,8 @@ describe('Audit System Validation Tests', () => {
         TEST_PROJECT_DIR,
         'development/essentials/audit-criteria.md',
       );
-      if (_fs.existsSync(auditCriteriaPath)) {
-        _fs.unlinkSync(auditCriteriaPath);
+      if (_fs.existsSync(_auditCriteriaPath)) {
+        _fs.unlinkSync(_auditCriteriaPath);
       }
 
       const featureTaskData = {
@@ -343,11 +343,11 @@ describe('Audit System Validation Tests', () => {
 
       const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
-      const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
-      expect(auditSubtask).toBeDefined();
-      expect(auditSubtask.success_criteria).toBeDefined();
-      expect(auditSubtask.success_criteria.length).toBeGreaterThan(0);
+      expect(_auditSubtask).toBeDefined();
+      expect(_auditSubtask.success_criteria).toBeDefined();
+      expect(_auditSubtask.success_criteria.length).toBeGreaterThan(0);
 
       // Should have basic default criteria
       const _basicCriteria = [
@@ -356,9 +356,9 @@ describe('Audit System Validation Tests', () => {
         'Runtime Success',
         'Test Integrity',
       ];
-      basicCriteria.forEach((criterion) => {
+      _basicCriteria.forEach((criterion) => {
         expect(
-          auditSubtask.success_criteria.some((sc) => sc.includes(criterion)),
+          _auditSubtask.success_criteria.some((sc) => sc.includes(criterion)),
         ).toBe(true);
       });
     });
@@ -377,10 +377,10 @@ describe('Audit System Validation Tests', () => {
 
       const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
-      const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
       // Verify criteria are strings, not markdown checkbox format
-      auditSubtask.success_criteria.forEach((criterion) => {
+      _auditSubtask.success_criteria.forEach((criterion) => {
         expect(typeof criterion).toBe('string');
         expect(criterion.length).toBeGreaterThan(0);
         // Should not contain markdown checkbox syntax
@@ -402,7 +402,7 @@ describe('Audit System Validation Tests', () => {
           specialization: ['feature-implementation'],
         }),
       ]);
-      implementationAgentId = initResult1.agentId;
+      implementationAgentId = _initResult1.agentId;
 
       const _initResult2 = await execAPI('init', [
         JSON.stringify({
@@ -410,7 +410,7 @@ describe('Audit System Validation Tests', () => {
           specialization: ['audit', 'review'],
         }),
       ]);
-      _auditAgentId = initResult2.agentId;
+      _auditAgentId = _initResult2.agentId;
     });
 
     test('should set prevents_self_review flag on audit subtasks', async () => {
@@ -426,12 +426,12 @@ describe('Audit System Validation Tests', () => {
 
       const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
-      const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
-      expect(auditSubtask).toBeDefined();
-      expect(auditSubtask.prevents_self_review).toBe(true);
-      expect(auditSubtask.original_implementer).toBeNull();
-      expect(auditSubtask.audit_type).toBe('embedded_quality_gate');
+      expect(_auditSubtask).toBeDefined();
+      expect(_auditSubtask.prevents_self_review).toBe(true);
+      expect(_auditSubtask.original_implementer).toBeNull();
+      expect(_auditSubtask.audit_type).toBe('embedded_quality_gate');
     });
 
     test('should track original implementer when feature task is assigned', async () => {
@@ -458,10 +458,10 @@ describe('Audit System Validation Tests', () => {
       // Verify audit subtask tracking
       const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === createResult.taskId);
-      const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
-      expect(auditSubtask).toBeDefined();
-      expect(auditSubtask.prevents_self_review).toBe(true);
+      expect(_auditSubtask).toBeDefined();
+      expect(_auditSubtask.prevents_self_review).toBe(true);
 
       // Note: original_implementer tracking may be implemented in task completion phase
       // This test verifies the structure is in place for tracking
@@ -492,11 +492,11 @@ describe('Audit System Validation Tests', () => {
       const _listResult1 = await execAPI('list');
       const _listResult2 = await execAPI('list'); // Same API, different agent would be handled by claiming logic
 
-      const _task = listResult1.tasks.find((t) => t.id === createResult.taskId);
-      const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const _task = _listResult1.tasks.find((t) => t.id === createResult.taskId);
+      const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
-      expect(auditSubtask.prevents_self_review).toBe(true);
-      expect(auditSubtask.prevents_completion).toBe(true);
+      expect(_auditSubtask.prevents_self_review).toBe(true);
+      expect(_auditSubtask.prevents_completion).toBe(true);
     });
   });
 
@@ -520,19 +520,19 @@ describe('Audit System Validation Tests', () => {
       };
 
       const result = await execAPI('create', [
-        JSON.stringify(securityTaskData),
+        JSON.stringify(_securityTaskData),
       ]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
-      const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
       // Should include security-specific criteria
-      expect(auditSubtask.success_criteria).toContain('Security Review');
-      expect(auditSubtask.success_criteria).toContain('No Credential Exposure');
-      expect(auditSubtask.success_criteria).toContain('Input Validation');
-      expect(auditSubtask.success_criteria).toContain(
+      expect(_auditSubtask.success_criteria).toContain('Security Review');
+      expect(_auditSubtask.success_criteria).toContain('No Credential Exposure');
+      expect(_auditSubtask.success_criteria).toContain('Input Validation');
+      expect(_auditSubtask.success_criteria).toContain(
         'Authentication/Authorization',
       );
     });
@@ -547,16 +547,16 @@ describe('Audit System Validation Tests', () => {
       };
 
       const result = await execAPI('create', [
-        JSON.stringify(taskManagerTaskData),
+        JSON.stringify(_taskManagerTaskData),
       ]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
-      const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
       // Should include project-specific criteria if defined in audit-criteria.md
-      const _projectCriteria = auditSubtask.success_criteria.filter(
+      const _projectCriteria = _auditSubtask.success_criteria.filter(
         (criterion) =>
           criterion.includes('TaskManager') ||
           criterion.includes('Agent') ||
@@ -565,7 +565,7 @@ describe('Audit System Validation Tests', () => {
 
       // This test validates that project-specific criteria can be loaded
       // The specific criteria depend on what's defined in the audit-criteria.md file
-      expect(auditSubtask.success_criteria.length).toBeGreaterThan(15);
+      expect(_auditSubtask.success_criteria.length).toBeGreaterThan(15);
     });
 
     test('should set appropriate estimated hours for audit tasks', async () => {
@@ -581,12 +581,12 @@ describe('Audit System Validation Tests', () => {
 
       const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
-      const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
-      expect(auditSubtask.estimated_hours).toBeDefined();
-      expect(typeof auditSubtask.estimated_hours).toBe('number');
-      expect(auditSubtask.estimated_hours).toBeGreaterThan(0);
-      expect(auditSubtask.estimated_hours).toBeLessThanOrEqual(4); // Reasonable upper bound for audit
+      expect(_auditSubtask.estimated_hours).toBeDefined();
+      expect(typeof _auditSubtask.estimated_hours).toBe('number');
+      expect(_auditSubtask.estimated_hours).toBeGreaterThan(0);
+      expect(_auditSubtask.estimated_hours).toBeLessThanOrEqual(4); // Reasonable upper bound for audit
     });
   });
 
@@ -613,10 +613,10 @@ describe('Audit System Validation Tests', () => {
 
       const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
-      const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
-      expect(auditSubtask.prevents_completion).toBe(true);
-      expect(auditSubtask.status).toBe('pending');
+      expect(_auditSubtask.prevents_completion).toBe(true);
+      expect(_auditSubtask.status).toBe('pending');
     });
 
     test('should include comprehensive task context in audit description', async () => {
@@ -630,24 +630,24 @@ describe('Audit System Validation Tests', () => {
       };
 
       const result = await execAPI('create', [
-        JSON.stringify(detailedTaskData),
+        JSON.stringify(_detailedTaskData),
       ]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
-      const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
-      expect(auditSubtask.description).toContain(
+      expect(_auditSubtask.description).toContain(
         'Comprehensive quality audit and review',
       );
-      expect(auditSubtask.description).toContain(detailedTaskData.title);
-      expect(auditSubtask.description).toContain('Original Description:');
-      expect(auditSubtask.description).toContain(detailedTaskData.description);
+      expect(_auditSubtask.description).toContain(_detailedTaskData.title);
+      expect(_auditSubtask.description).toContain('Original Description:');
+      expect(_auditSubtask.description).toContain(_detailedTaskData.description);
 
       // Should reference the task being audited
-      expect(auditSubtask.title).toContain('Audit:');
-      expect(auditSubtask.title).toContain(detailedTaskData.title);
+      expect(_auditSubtask.title).toContain('Audit:');
+      expect(_auditSubtask.title).toContain(_detailedTaskData.title);
     });
 
     test('should generate unique audit subtask IDs', async () => {
@@ -667,16 +667,16 @@ describe('Audit System Validation Tests', () => {
 
         const listResult = await execAPI('list');
         const _task = listResult.tasks.find((t) => t.id === result.taskId);
-        const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+        const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
-        if (auditSubtask) {
-          expect(auditSubtask.id).toMatch(/^audit_\d+_[a-f0-9]{8}$/);
-          expect(auditIds.has(auditSubtask.id)).toBe(false);
-          auditIds.add(auditSubtask.id);
+        if (_auditSubtask) {
+          expect(_auditSubtask.id).toMatch(/^audit_\d+_[a-f0-9]{8}$/);
+          expect(_auditIds.has(_auditSubtask.id)).toBe(false);
+          _auditIds.add(_auditSubtask.id);
         }
       }
 
-      expect(auditIds.size).toBe(3);
+      expect(_auditIds.size).toBe(3);
     });
   });
 
@@ -699,17 +699,17 @@ describe('Audit System Validation Tests', () => {
       };
 
       const result = await execAPI('create', [
-        JSON.stringify(criticalTaskData),
+        JSON.stringify(_criticalTaskData),
       ]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
-      const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
-      expect(auditSubtask.audit_type).toBe('embedded_quality_gate');
-      expect(auditSubtask.prevents_completion).toBe(true);
-      expect(auditSubtask.status).toBe('pending');
+      expect(_auditSubtask.audit_type).toBe('embedded_quality_gate');
+      expect(_auditSubtask.prevents_completion).toBe(true);
+      expect(_auditSubtask.status).toBe('pending');
     });
 
     test('should validate that audit subtasks have proper timestamps', async () => {
@@ -730,12 +730,12 @@ describe('Audit System Validation Tests', () => {
 
       const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
-      const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
-      expect(auditSubtask.created_at).toBeDefined();
-      const _createdTime = new Date(auditSubtask.created_at).getTime();
-      expect(createdTime).toBeGreaterThanOrEqual(beforeTime);
-      expect(createdTime).toBeLessThanOrEqual(afterTime);
+      expect(_auditSubtask.created_at).toBeDefined();
+      const _createdTime = new Date(_auditSubtask.created_at).getTime();
+      expect(_createdTime).toBeGreaterThanOrEqual(_beforeTime);
+      expect(_createdTime).toBeLessThanOrEqual(_afterTime);
     });
 
     test('should handle audit criteria validation for edge cases', async () => {
@@ -747,17 +747,17 @@ describe('Audit System Validation Tests', () => {
         priority: 'low',
       };
 
-      const result = await execAPI('create', [JSON.stringify(minimalTaskData)]);
+      const result = await execAPI('create', [JSON.stringify(_minimalTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
-      const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
-      expect(auditSubtask).toBeDefined();
-      expect(auditSubtask.success_criteria).toBeDefined();
-      expect(auditSubtask.success_criteria.length).toBeGreaterThan(0);
-      expect(auditSubtask.prevents_completion).toBe(true);
+      expect(_auditSubtask).toBeDefined();
+      expect(_auditSubtask.success_criteria).toBeDefined();
+      expect(_auditSubtask.success_criteria.length).toBeGreaterThan(0);
+      expect(_auditSubtask.prevents_completion).toBe(true);
     });
   });
 
@@ -783,47 +783,47 @@ describe('Audit System Validation Tests', () => {
       };
 
       const result = await execAPI('create', [
-        JSON.stringify(performanceTaskData),
+        JSON.stringify(_performanceTaskData),
       ]);
 
       const _endTime = Date.now();
-      const _executionTime = endTime - startTime;
+      const _executionTime = _endTime - _startTime;
 
       expect(result.success).toBe(true);
-      expect(executionTime).toBeLessThan(5000); // Should complete within 5 seconds
+      expect(_executionTime).toBeLessThan(5000); // Should complete within 5 seconds
 
       const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
-      const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
-      expect(auditSubtask).toBeDefined();
-      expect(auditSubtask.success_criteria.length).toBeGreaterThan(15);
+      expect(_auditSubtask).toBeDefined();
+      expect(_auditSubtask.success_criteria.length).toBeGreaterThan(15);
     });
 
     test('should handle multiple concurrent audit subtask creations', async () => {
       const _taskPromises = [];
       const _numTasks = 3;
 
-      for (let i = 0; i < numTasks; i++) {
+      for (let i = 0; i < _numTasks; i++) {
         const taskData = {
           title: `Concurrent audit test feature ${i + 1}`,
           description: `Feature ${i + 1} for concurrent audit creation testing`,
           category: 'feature',
           priority: 'medium',
         };
-        taskPromises.push(execAPI('create', [JSON.stringify(taskData)]));
+        _taskPromises.push(execAPI('create', [JSON.stringify(taskData)]));
       }
 
       const _startTime = Date.now();
-      const _results = await Promise.all(taskPromises);
+      const _results = await Promise.all(_taskPromises);
       const _endTime = Date.now();
-      const _totalTime = endTime - startTime;
+      const _totalTime = _endTime - _startTime;
 
-      results.forEach((result) => {
+      _results.forEach((result) => {
         expect(result.success).toBe(true);
       });
 
-      expect(totalTime).toBeLessThan(10000); // Should complete within 10 seconds
+      expect(_totalTime).toBeLessThan(10000); // Should complete within 10 seconds
 
       // Verify all audit subtasks were created properly
       const listResult = await execAPI('list');
@@ -831,11 +831,11 @@ describe('Audit System Validation Tests', () => {
         (t) => t.category === 'feature',
       );
 
-      expect(featureTasks.length).toBe(numTasks);
-      featureTasks.forEach((task) => {
-        const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
-        expect(auditSubtask).toBeDefined();
-        expect(auditSubtask.success_criteria.length).toBeGreaterThan(0);
+      expect(_featureTasks.length).toBe(_numTasks);
+      _featureTasks.forEach((_task) => {
+        const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
+        expect(_auditSubtask).toBeDefined();
+        expect(_auditSubtask.success_criteria.length).toBeGreaterThan(0);
       });
     });
   });
@@ -857,7 +857,7 @@ describe('Audit System Validation Tests', () => {
         'development/essentials/audit-criteria.md',
       );
       _fs.writeFileSync(
-        auditCriteriaPath,
+        _auditCriteriaPath,
         'Invalid markdown content without proper formatting\n###\n- [ ] Broken',
       );
 
@@ -874,12 +874,12 @@ describe('Audit System Validation Tests', () => {
 
       const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
-      const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
       // Should still create audit subtask with fallback criteria
-      expect(auditSubtask).toBeDefined();
-      expect(auditSubtask.success_criteria).toBeDefined();
-      expect(auditSubtask.success_criteria.length).toBeGreaterThan(0);
+      expect(_auditSubtask).toBeDefined();
+      expect(_auditSubtask.success_criteria).toBeDefined();
+      expect(_auditSubtask.success_criteria.length).toBeGreaterThan(0);
     });
 
     test('should handle extremely large audit criteria files', async () => {
@@ -894,7 +894,7 @@ describe('Audit System Validation Tests', () => {
         largeContent += `- [ ] **Criterion ${i + 1}**: Detailed criterion description ${i + 1}\n`;
       }
 
-      _fs.writeFileSync(auditCriteriaPath, largeContent);
+      _fs.writeFileSync(_auditCriteriaPath, largeContent);
 
       const featureTaskData = {
         title: 'Feature with large audit criteria',
@@ -909,14 +909,14 @@ describe('Audit System Validation Tests', () => {
 
       const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
-      const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
-      expect(auditSubtask).toBeDefined();
-      expect(auditSubtask.success_criteria).toBeDefined();
+      expect(_auditSubtask).toBeDefined();
+      expect(_auditSubtask.success_criteria).toBeDefined();
 
       // Should handle large files but may limit criteria count for performance
-      expect(auditSubtask.success_criteria.length).toBeGreaterThan(10);
-      expect(auditSubtask.success_criteria.length).toBeLessThanOrEqual(50); // Reasonable upper limit
+      expect(_auditSubtask.success_criteria.length).toBeGreaterThan(10);
+      expect(_auditSubtask.success_criteria.length).toBeLessThanOrEqual(50); // Reasonable upper limit
     });
 
     test('should handle special characters in task data for audit descriptions', async () => {
@@ -929,23 +929,23 @@ describe('Audit System Validation Tests', () => {
       };
 
       const result = await execAPI('create', [
-        JSON.stringify(specialCharsTaskData),
+        JSON.stringify(_specialCharsTaskData),
       ]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
       const _task = listResult.tasks.find((t) => t.id === result.taskId);
-      const _auditSubtask = task.subtasks.find((st) => st.type === 'audit');
+      const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
-      expect(auditSubtask).toBeDefined();
-      expect(auditSubtask.title).toContain('Audit:');
-      expect(auditSubtask.description).toContain(specialCharsTaskData.title);
-      expect(auditSubtask.description).toContain(
-        specialCharsTaskData.description,
+      expect(_auditSubtask).toBeDefined();
+      expect(_auditSubtask.title).toContain('Audit:');
+      expect(_auditSubtask.description).toContain(_specialCharsTaskData.title);
+      expect(_auditSubtask.description).toContain(
+        _specialCharsTaskData.description,
       );
 
       // Should generate valid audit subtask ID despite special characters in source
-      expect(auditSubtask.id).toMatch(/^audit_\d+_[a-f0-9]{8}$/);
+      expect(_auditSubtask.id).toMatch(/^audit_\d+_[a-f0-9]{8}$/);
     });
   });
 });

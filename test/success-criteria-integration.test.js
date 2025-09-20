@@ -132,7 +132,7 @@ async function setupTestProject() {
       JSON.stringify(packageJson, null, 2),
     );
   } catch (error) {
-        console.error('Failed to setup test project:', error);
+    console.error('Failed to setup test project:', error);
     throw error;
   }
 }
