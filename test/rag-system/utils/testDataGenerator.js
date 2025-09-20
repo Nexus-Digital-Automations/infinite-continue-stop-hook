@@ -113,8 +113,8 @@ class TestDataGenerator {
     const category = options.category || this.getRandomCategory();
 
     for (let i = 0; i < count; i++) {
-      const _tech = this.getRandomTechnology();
-      const _lesson = this.generateSingleLesson(category, tech, i);
+      const tech = this.getRandomTechnology();
+      const lesson = this.generateSingleLesson(category, tech, i);
       lessons.push(lesson);
     }
 
@@ -216,9 +216,9 @@ ${codeExample ? `\`\`\`${tech}\n${codeExample}\n\`\`\`` : 'Implementation detail
     const errors = [];
 
     for (let i = 0; i < count; i++) {
-      const _errorType = options.errorType || this.getRandomErrorType();
-      const _tech = options.technology || this.getRandomTechnology();
-      const _error = this.generateSingleError(errorType, tech, i);
+      const errorType = options.errorType || this.getRandomErrorType();
+      const tech = options.technology || this.getRandomTechnology();
+      const error = this.generateSingleError(errorType, tech, i);
       errors.push(error);
     }
 
@@ -308,7 +308,7 @@ ${this.generatePrevention(errorType, tech)}
     const contexts = [];
 
     for (let i = 0; i < count; i++) {
-      const _tech = this.getRandomTechnology();
+      const tech = this.getRandomTechnology();
       const _category = this.getRandomCategory();
       const _feature = this.getRandomFeature(tech);
 
@@ -373,9 +373,9 @@ ${this.generatePrevention(errorType, tech)}
 
     for (let i = 0; i < count; i++) {
       const _template = queryTemplates[i % queryTemplates.length];
-      const _tech = this.getRandomTechnology();
+      const tech = this.getRandomTechnology();
       const _feature = this.getRandomFeature(tech);
-      const _errorType = this.getRandomErrorType();
+      const errorType = this.getRandomErrorType();
 
       const _query = this.interpolateTemplate(template, { tech, feature, errorType });
       queries.push(query);
