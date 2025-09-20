@@ -1,0 +1,10 @@
+{
+  "name": "success-criteria-test-project",
+  "version": "1.0.0",
+  "description": "Test project for Success Criteria integration tests",
+  "scripts": {
+    "test": "echo \"Test script\"",
+    "lint": "echo \"Lint script\"",
+    "build": "echo \"Build script\""
+  }
+}

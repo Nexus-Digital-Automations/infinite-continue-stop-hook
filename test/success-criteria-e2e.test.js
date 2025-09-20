@@ -21,12 +21,12 @@ const { spawn } = require('child_process');
 const E2E_PROJECT_DIR = path.join(__dirname, 'success-criteria-e2e-project');
 const TODO_PATH = path.join(E2E_PROJECT_DIR, 'TODO.json');
 const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
-const VALIDATOR_PATH = path.join(
+const _VALIDATOR_PATH = path.join(
   __dirname,
   '..',
   'success-criteria-validator.js',
 );
-const TIMEOUT = 30000; // 30 seconds for E2E operations
+const _TIMEOUT = 30000; // 30 seconds for E2E operations
 
 /**
  * Execute command and return result
@@ -93,7 +93,7 @@ async function execAPI(command, args = []) {
 
   try {
     return JSON.parse(result.stdout);
-  } catch (error) {
+  } catch {
     throw new Error(`Failed to parse API response: ${result.stdout}`);
   }
 }
@@ -228,7 +228,7 @@ describe('Application Tests', () => {
 async function cleanupE2EProject() {
   try {
     await fs.rm(E2E_PROJECT_DIR, { recursive: true, force: true });
-  } catch (error) {
+  } catch {
     // Ignore cleanup errors
   }
 }
@@ -747,7 +747,7 @@ module.exports = { authenticate };
       const startTime = Date.now();
 
       // Run performance validation
-      const performanceResult = await execCommand('npm', [
+      const _performanceResult = await execCommand('npm', [
         'run',
         'test:coverage',
       ]);

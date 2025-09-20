@@ -1,0 +1,165 @@
+{
+  "meta": {
+    "created": "2025-09-20T02:25:29.154Z",
+    "updated": "2025-09-20T02:25:29.355Z",
+    "version": "2.0.0",
+    "project_root": "/Users/jeremyparker/infinite-continue-stop-hook/test/success-criteria-e2e-project"
+  },
+  "tasks": [],
+  "features": [],
+  "agents": {
+    "dev_session_1758335144277_1_general_5e28a9aa": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T02:25:44.304Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T02:25:44.304Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758335144760_1_general_2ac96bc1": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T02:25:44.761Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T02:25:44.761Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758335165195_1_general_8bc4db20": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T02:26:05.201Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T02:26:05.201Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758335167295_1_general_9f444f6d": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T02:26:07.296Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T02:26:07.297Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758335199801_1_general_d349ffd7": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T02:26:39.851Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T02:26:39.851Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758335230483_1_general_164ca062": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T02:27:10.487Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T02:27:10.487Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758335231552_1_general_93a120f3": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T02:27:11.556Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T02:27:11.556Z",
+      "sessionId": null,
+      "metadata": {}
+    }
+  },
+  "statistics": {
+    "total_tasks": 0,
+    "completed_tasks": 0,
+    "pending_tasks": 0,
+    "in_progress_tasks": 0
+  }
+}

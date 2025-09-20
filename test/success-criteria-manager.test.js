@@ -582,7 +582,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       const addCriteriaSpy = jest.spyOn(successCriteriaManager, 'addCriteria');
       addCriteriaSpy.mockResolvedValue({ success: true });
 
-      const result = await successCriteriaManager.applyProjectTemplate(
+      const _result = await successCriteriaManager.applyProjectTemplate(
         testTaskId,
         'basic',
         false,

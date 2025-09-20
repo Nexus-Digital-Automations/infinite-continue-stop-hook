@@ -5,11 +5,14 @@
  */
 
 const fs = require('fs');
+const Logger = require('./lib/logger');
 
 const BYTEBOT_TODO_PATH = '/Users/jeremyparker/Desktop/Claude Coding Projects/AIgent/bytebot/TODO.json';
 const STALE_TIMEOUT = 15 * 60 * 1000; // 15 minutes in milliseconds
 
-console.log('🧹 Starting stale agent cleanup for bytebot project...');
+// Initialize logger
+const logger = new Logger(__dirname);
+logger.addFlow('Starting stale agent cleanup for bytebot project');
 
 try {
   // Read TODO.json
@@ -29,9 +32,9 @@ try {
 
       // If task has been in_progress for more than 15 minutes, it's stale
       if (timeSinceStart > STALE_TIMEOUT) {
-        console.log(`🔄 Cleaning up stale task: ${task.title}`);
-        console.log(`   Agent: ${task.assigned_agent || task.claimed_by}`);
-        console.log(`   Time since start: ${Math.round(timeSinceStart / 60000)} minutes`);
+        logger.addFlow(`Cleaning up stale task: ${task.title}`);
+        logger.addFlow(`Agent: ${task.assigned_agent || task.claimed_by}`);
+        logger.addFlow(`Time since start: ${Math.round(timeSinceStart / 60000)} minutes`);
 
         const staleAgent = task.assigned_agent || task.claimed_by;
 
@@ -61,12 +64,16 @@ try {
   // Write back if any changes were made
   if (cleanupCount > 0) {
     fs.writeFileSync(BYTEBOT_TODO_PATH, JSON.stringify(todoData, null, 2));
-    console.log(`✅ Cleanup complete! Fixed ${cleanupCount} stale tasks.`);
+    logger.addFlow(`Cleanup complete! Fixed ${cleanupCount} stale tasks.`);
   } else {
-    console.log('✅ No stale agents found - all tasks are clean!');
+    logger.addFlow('No stale agents found - all tasks are clean!');
   }
 
 } catch (error) {
-  console.error('❌ Error during cleanup:', error.message);
+  logger.logError(error, 'stale-agent-cleanup');
+  logger.save();
   throw error;
 }
+
+// Save logger at the end
+logger.save();

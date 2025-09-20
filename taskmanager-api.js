@@ -923,7 +923,7 @@ class TaskManagerAPI {
     this.webSocketClients.forEach((client) => {
       try {
         client.send(message);
-      } catch (_error) {
+      } catch {
         // Remove failed clients
         this.webSocketClients.delete(client);
       }

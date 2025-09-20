@@ -17,6 +17,19 @@ const fs = require('fs').promises;
 const path = require('path');
 const { execSync } = require('child_process');
 
+/**
+ * Validation logger to replace console statements
+ */
+class ValidationLogger {
+  static log(message) {
+    process.stdout.write(message + '\n');
+  }
+
+  static error(message) {
+    process.stderr.write(message + '\n');
+  }
+}
+
 class SuccessCriteriaValidator {
   constructor() {
     this.configPath = path.join(
@@ -43,15 +56,11 @@ class SuccessCriteriaValidator {
       // Ensure directories exist
       await this.ensureDirectories();
 
-      // eslint-disable-next-line no-console
-      console.log(`✅ Success Criteria Validator initialized`);
-      // eslint-disable-next-line no-console
-      console.log(`📁 Evidence storage: ${this.evidenceDir}`);
-      // eslint-disable-next-line no-console
-      console.log(`📊 Report storage: ${this.reportDir}`);
+      ValidationLogger.log(`✅ Success Criteria Validator initialized`);
+      ValidationLogger.log(`📁 Evidence storage: ${this.evidenceDir}`);
+      ValidationLogger.log(`📊 Report storage: ${this.reportDir}`);
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(`❌ Failed to initialize validator: ${error.message}`);
+      ValidationLogger.error(`❌ Failed to initialize validator: ${error.message}`);
       throw error;
     }
   }
@@ -64,8 +73,7 @@ class SuccessCriteriaValidator {
       await fs.mkdir(this.evidenceDir, { recursive: true });
       await fs.mkdir(this.reportDir, { recursive: true });
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(`❌ Failed to create directories: ${error.message}`);
+      ValidationLogger.error(`❌ Failed to create directories: ${error.message}`);
       throw error;
     }
   }

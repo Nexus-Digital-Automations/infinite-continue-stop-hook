@@ -1,2 +1,2 @@
 // User model definition
-const mongoose = require('mongoose');
+const _mongoose = require('mongoose');

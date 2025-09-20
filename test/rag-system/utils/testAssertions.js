@@ -165,7 +165,7 @@ class TestAssertions {
     expect(embedding.length).toBeLessThanOrEqual(this.thresholds.quality.maxEmbeddingDimension);
 
     // All elements should be numbers
-    embedding.forEach((value, index) => {
+    embedding.forEach((value) => {
       expect(typeof value).toBe('number');
       expect(value).not.toBeNaN();
       expect(value).toBeFinite();

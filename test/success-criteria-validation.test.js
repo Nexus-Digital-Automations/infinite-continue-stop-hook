@@ -22,7 +22,7 @@ const TIMEOUT = 30000;
 /**
  * API execution utility
  */
-async function execAPI(command, args = [], timeout = TIMEOUT) {
+function execAPI(command, args = [], timeout = TIMEOUT) {
   return new Promise((resolve, reject) => {
     const allArgs = [
       API_PATH,
@@ -172,12 +172,12 @@ async function cleanupValidationTestProject() {
 /**
  * Template management utilities
  */
-async function createBaseTemplate(name, criteria) {
+function createBaseTemplate(name, criteria) {
   const templateData = JSON.stringify({ name, criteria });
-  return await execAPI('success-criteria:create-template', [templateData]);
+  return execAPI('success-criteria:create-template', [templateData]);
 }
 
-async function createChildTemplate(
+function createChildTemplate(
   name,
   parentName,
   additionalCriteria,
@@ -189,7 +189,7 @@ async function createChildTemplate(
     criteria: additionalCriteria,
     overrides,
   });
-  return await execAPI('success-criteria:create-template', [templateData]);
+  return execAPI('success-criteria:create-template', [templateData]);
 }
 
 /**

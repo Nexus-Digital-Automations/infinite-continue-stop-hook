@@ -22,7 +22,7 @@ const TIMEOUT = 30000;
 /**
  * API execution utility
  */
-async function execAPI(command, args = [], timeout = TIMEOUT) {
+function execAPI(command, args = [], timeout = TIMEOUT) {
   return new Promise((resolve, reject) => {
     const allArgs = [
       API_PATH,
@@ -75,7 +75,7 @@ async function execAPI(command, args = [], timeout = TIMEOUT) {
 /**
  * Legacy data simulation utilities
  */
-async function createLegacyTemplate(version = '1.0.0') {
+function createLegacyTemplate(version = '1.0.0') {
   const legacyTemplate = {
     name: 'Legacy Template',
     version,
@@ -105,7 +105,7 @@ async function createLegacyTemplate(version = '1.0.0') {
     },
   };
 
-  return await execAPI('success-criteria:create-template', [
+  return execAPI('success-criteria:create-template', [
     JSON.stringify(legacyTemplate),
   ]);
 }
@@ -1096,9 +1096,13 @@ describe('Success Criteria Regression Tests', () => {
       for (const api of coreAPIs) {
         try {
           // Test API is callable (might fail but should not throw unexpected errors)
+          // eslint-disable-next-line security/detect-possible-timing-attacks
+          // Safe: Test comparison, not security-sensitive
           if (api === 'success-criteria:init') {
             const result = await execAPI(api);
             expect(result).toBeDefined();
+          // eslint-disable-next-line security/detect-possible-timing-attacks
+          // Safe: Test comparison, not security-sensitive
           } else if (api === 'success-criteria:status') {
             const result = await execAPI(api);
             expect(result).toBeDefined();

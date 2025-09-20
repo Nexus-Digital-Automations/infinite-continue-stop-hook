@@ -474,7 +474,7 @@ ${this.generatePrevention(errorType, tech)}
     ];
   }
 
-  generateResolution(errorType, tech) {
+  generateResolution(errorType, _tech) {
     const resolutions = {
       TypeError: [
         'Add null/undefined checks before property access',
@@ -506,7 +506,7 @@ ${this.generatePrevention(errorType, tech)}
     return typeResolutions[Math.floor(Math.random() * typeResolutions.length)];
   }
 
-  generatePrevention(errorType, tech) {
+  generatePrevention(errorType, _tech) {
     const preventions = {
       TypeError: 'Use TypeScript or PropTypes for type checking, implement runtime validation',
       ReferenceError: 'Use ESLint to catch undefined variables, follow consistent naming conventions',

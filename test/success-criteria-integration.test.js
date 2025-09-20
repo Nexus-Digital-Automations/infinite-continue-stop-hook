@@ -143,7 +143,7 @@ async function setupTestProject() {
 async function cleanupTestProject() {
   try {
     await fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
-  } catch (error) {
+  } catch {
     // Ignore cleanup errors
   }
 }
@@ -185,7 +185,7 @@ describe('Success Criteria Integration Tests', () => {
 
     test('should successfully add success criteria to task', async () => {
       // Test adding basic criteria
-      const criteria = ['Linter Perfection', 'Build Success', 'Test Integrity'];
+      const _criteria = ['Linter Perfection', 'Build Success', 'Test Integrity'];
 
       // Note: Success criteria endpoints would be added to TaskManager API
       // For now, we test the underlying functionality through task updates

@@ -22,9 +22,39 @@ const fs = require('fs').promises;
 const path = require('path');
 const { execSync } = require('child_process');
 
+/**
+ * Audit Report logger to replace console statements
+ */
+class AuditReportLogger {
+  constructor() {
+    this.logs = [];
+  }
+
+  log(message) {
+    const logEntry = {
+      timestamp: new Date().toISOString(),
+      level: 'info',
+      message,
+    };
+    this.logs.push(logEntry);
+    process.stdout.write(`[AUDIT REPORT] ${message}\n`);
+  }
+
+  error(message) {
+    const logEntry = {
+      timestamp: new Date().toISOString(),
+      level: 'error',
+      message,
+    };
+    this.logs.push(logEntry);
+    process.stderr.write(`[AUDIT REPORT ERROR] ${message}\n`);
+  }
+}
+
 class AuditReportGenerator {
   constructor() {
     this.auditCriteriaPath = path.join(__dirname, 'audit-criteria.md');
+    this.logger = new AuditReportLogger();
     this.taskRequirementsPath = path.join(__dirname, 'task-requirements.md');
     this.reportsDir = path.join(__dirname, '../reports');
     this.timestamp = new Date().toISOString();
@@ -82,7 +112,7 @@ class AuditReportGenerator {
     auditAgentId,
     taskDetails = {},
   ) {
-    console.log(`🔍 Starting comprehensive 25-point audit for task: ${taskId}`);
+    this.logger.log(`🔍 Starting comprehensive 25-point audit for task: ${taskId}`);
 
     // Enforce objectivity control
     this.enforceObjectivityControl(implementerAgentId, auditAgentId);
@@ -121,8 +151,8 @@ class AuditReportGenerator {
     // Save comprehensive audit report
     await this.saveAuditReport(auditDir, auditReport);
 
-    console.log(`✅ Audit report generated: ${auditDecision.overall_status}`);
-    console.log(
+    this.logger.log(`✅ Audit report generated: ${auditDecision.overall_status}`);
+    this.logger.log(
       `📊 Summary: ${auditDecision.summary.passed}/${auditDecision.summary.total} criteria passed`,
     );
 
@@ -142,7 +172,7 @@ class AuditReportGenerator {
       );
     }
 
-    console.log(
+    this.logger.log(
       `✅ Objectivity control passed: Implementer(${implementerAgentId}) ≠ Auditor(${auditAgentId})`,
     );
   }
@@ -198,10 +228,10 @@ class AuditReportGenerator {
         await fs.mkdir(path.join(auditDir, evidenceType), { recursive: true });
       }
 
-      console.log(`📁 Audit directory created: ${auditDir}`);
+      this.logger.log(`📁 Audit directory created: ${auditDir}`);
       return auditDir;
     } catch (error) {
-      console.error(`❌ Failed to create audit directory: ${error.message}`);
+      this.logger.error(`❌ Failed to create audit directory: ${error.message}`);
       throw error;
     }
   }
@@ -212,7 +242,7 @@ class AuditReportGenerator {
    * @returns {Object} Results for all 25 criteria points
    */
   async evaluate25PointCriteria(auditDir) {
-    console.log(`🔍 Evaluating 25-point criteria...`);
+    this.logger.log(`🔍 Evaluating 25-point criteria...`);
 
     const criteriaResults = {
       critical_gates: {},
@@ -244,7 +274,7 @@ class AuditReportGenerator {
    * @returns {Object} Critical gates evaluation results
    */
   async evaluateCriticalGates(auditDir) {
-    console.log(`🔴 Evaluating Critical Gates (1-10)...`);
+    this.logger.log(`🔴 Evaluating Critical Gates (1-10)...`);
 
     const criticalGates = {
       1: await this.evaluateLinterPerfection(auditDir),
@@ -268,7 +298,7 @@ class AuditReportGenerator {
    * @returns {Object} Linter evaluation result
    */
   async evaluateLinterPerfection(auditDir) {
-    console.log(`  Evaluating: Linter Perfection...`);
+    this.logger.log(`  Evaluating: Linter Perfection...`);
 
     try {
       // Execute linting command and capture output
@@ -324,7 +354,7 @@ class AuditReportGenerator {
    * @returns {Object} Build evaluation result
    */
   async evaluateBuildIntegrity(auditDir) {
-    console.log(`  Evaluating: Build Integrity...`);
+    this.logger.log(`  Evaluating: Build Integrity...`);
 
     try {
       const startTime = Date.now();
@@ -380,7 +410,7 @@ class AuditReportGenerator {
    * @returns {Object} Runtime evaluation result
    */
   async evaluateRuntimeSuccess(auditDir) {
-    console.log(`  Evaluating: Runtime Success...`);
+    this.logger.log(`  Evaluating: Runtime Success...`);
 
     try {
       // Start application in background and test
@@ -486,7 +516,7 @@ class AuditReportGenerator {
    */
 
   evaluateQualityGates(auditDir) {
-    console.log(`🔍 Evaluating Quality Gates (11-15)...`);
+    this.logger.log(`🔍 Evaluating Quality Gates (11-15)...`);
     return {
       11: this.createPlaceholderResult(11, 'Dependency Management', auditDir),
       12: this.createPlaceholderResult(
@@ -501,7 +531,7 @@ class AuditReportGenerator {
   }
 
   evaluateIntegrationGates(auditDir) {
-    console.log(`🚀 Evaluating Integration Gates (16-20)...`);
+    this.logger.log(`🚀 Evaluating Integration Gates (16-20)...`);
     return {
       16: this.createPlaceholderResult(
         16,
@@ -520,7 +550,7 @@ class AuditReportGenerator {
   }
 
   evaluateExcellenceGates(auditDir) {
-    console.log(`🔧 Evaluating Excellence Gates (21-25)...`);
+    this.logger.log(`🔧 Evaluating Excellence Gates (21-25)...`);
     return {
       21: this.createPlaceholderResult(21, 'Monitoring and Alerting', auditDir),
       22: this.createPlaceholderResult(22, 'Disaster Recovery', auditDir),
@@ -567,7 +597,7 @@ class AuditReportGenerator {
    * @returns {Object} Evidence collection results
    */
   async collectAndValidateEvidence(auditDir) {
-    console.log(`📋 Collecting and validating evidence...`);
+    this.logger.log(`📋 Collecting and validating evidence...`);
 
     const evidenceResults = {
       total_evidence_files: 0,
@@ -603,7 +633,7 @@ class AuditReportGenerator {
    * @returns {Object} Final audit decision
    */
   determineAuditDecision(criteriaResults) {
-    console.log(`📊 Determining audit decision...`);
+    this.logger.log(`📊 Determining audit decision...`);
 
     const decision = {
       overall_status: 'PASSED',
@@ -651,7 +681,7 @@ class AuditReportGenerator {
    * @returns {Array} Array of remediation task definitions
    */
   generateRemediationTasks(criteriaResults, taskId) {
-    console.log(`🔧 Generating remediation tasks...`);
+    this.logger.log(`🔧 Generating remediation tasks...`);
 
     const remediationTasks = [];
     const allResults = [
@@ -694,8 +724,8 @@ class AuditReportGenerator {
     const summaryContent = this.generateAuditSummaryMarkdown(auditReport);
     await fs.writeFile(summaryPath, summaryContent);
 
-    console.log(`📝 Audit report saved: ${reportPath}`);
-    console.log(`📋 Audit summary saved: ${summaryPath}`);
+    this.logger.log(`📝 Audit report saved: ${reportPath}`);
+    this.logger.log(`📋 Audit summary saved: ${summaryPath}`);
   }
 
   /**
@@ -760,7 +790,7 @@ if (require.main === module) {
   switch (command) {
     case 'audit':
       if (!taskId || !implementerAgent || !auditAgent) {
-        console.error(
+        this.logger.error(
           'Usage: node audit-report-generator.js audit <taskId> <implementerAgent> <auditAgent>',
         );
         throw new Error('Missing required arguments for audit command');
@@ -769,19 +799,19 @@ if (require.main === module) {
       generator
         .generateAuditReport(taskId, implementerAgent, auditAgent)
         .then((report) => {
-          console.log(`\n🎉 Audit completed for task ${taskId}`);
-          console.log(`Status: ${report.audit_decision.overall_status}`);
-          console.log(`Report location: development/reports/audit_${taskId}/`);
+          this.logger.log(`\n🎉 Audit completed for task ${taskId}`);
+          this.logger.log(`Status: ${report.audit_decision.overall_status}`);
+          this.logger.log(`Report location: development/reports/audit_${taskId}/`);
         })
         .catch((error) => {
-          console.error(`❌ Audit failed: ${error.message}`);
+          this.logger.error(`❌ Audit failed: ${error.message}`);
           throw new Error('Missing required arguments for audit command');
         });
       break;
 
     case 'help':
     default:
-      console.log(`
+      this.logger.log(`
 Audit Report Generator - Comprehensive Quality Assessment System
 
 USAGE:

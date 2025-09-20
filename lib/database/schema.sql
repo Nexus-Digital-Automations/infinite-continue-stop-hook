@@ -32,13 +32,13 @@ CREATE TABLE IF NOT EXISTS projects (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_active BOOLEAN DEFAULT 1,
-    metadata JSON DEFAULT '{}',
-
-    -- Performance indexes
-    INDEX idx_projects_name ON projects(name),
-    INDEX idx_projects_path ON projects(path),
-    INDEX idx_projects_active ON projects(is_active)
+    metadata JSON DEFAULT '{}'
 );
+
+-- Performance indexes for projects table
+CREATE INDEX IF NOT EXISTS idx_projects_name ON projects(name);
+CREATE INDEX IF NOT EXISTS idx_projects_path ON projects(path);
+CREATE INDEX IF NOT EXISTS idx_projects_active ON projects(is_active);
 
 -- Agents table - tracks agent instances and their capabilities
 CREATE TABLE IF NOT EXISTS agents (
@@ -54,15 +54,15 @@ CREATE TABLE IF NOT EXISTS agents (
     status TEXT DEFAULT 'active', -- active, inactive, archived
     performance_metrics JSON DEFAULT '{}',
 
-    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL,
-
-    -- Performance indexes
-    INDEX idx_agents_session ON agents(session_id),
-    INDEX idx_agents_role ON agents(role),
-    INDEX idx_agents_project ON agents(project_id),
-    INDEX idx_agents_status ON agents(status),
-    INDEX idx_agents_last_active ON agents(last_active)
+    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL
 );
+
+-- Performance indexes for agents table
+CREATE INDEX IF NOT EXISTS idx_agents_session ON agents(session_id);
+CREATE INDEX IF NOT EXISTS idx_agents_role ON agents(role);
+CREATE INDEX IF NOT EXISTS idx_agents_project ON agents(project_id);
+CREATE INDEX IF NOT EXISTS idx_agents_status ON agents(status);
+CREATE INDEX IF NOT EXISTS idx_agents_last_active ON agents(last_active);
 
 -- Tasks table - comprehensive task tracking with enhanced metadata
 CREATE TABLE IF NOT EXISTS tasks (
@@ -87,17 +87,17 @@ CREATE TABLE IF NOT EXISTS tasks (
 
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
     FOREIGN KEY (assigned_agent_id) REFERENCES agents(id) ON DELETE SET NULL,
-    FOREIGN KEY (created_by_agent_id) REFERENCES agents(id) ON DELETE SET NULL,
-
-    -- Performance indexes
-    INDEX idx_tasks_category ON tasks(category),
-    INDEX idx_tasks_status ON tasks(status),
-    INDEX idx_tasks_priority ON tasks(priority),
-    INDEX idx_tasks_project ON tasks(project_id),
-    INDEX idx_tasks_assigned_agent ON tasks(assigned_agent_id),
-    INDEX idx_tasks_created_at ON tasks(created_at),
-    INDEX idx_tasks_complexity ON tasks(complexity_score)
+    FOREIGN KEY (created_by_agent_id) REFERENCES agents(id) ON DELETE SET NULL
 );
+
+-- Performance indexes for tasks table
+CREATE INDEX IF NOT EXISTS idx_tasks_category ON tasks(category);
+CREATE INDEX IF NOT EXISTS idx_tasks_status ON tasks(status);
+CREATE INDEX IF NOT EXISTS idx_tasks_priority ON tasks(priority);
+CREATE INDEX IF NOT EXISTS idx_tasks_project ON tasks(project_id);
+CREATE INDEX IF NOT EXISTS idx_tasks_assigned_agent ON tasks(assigned_agent_id);
+CREATE INDEX IF NOT EXISTS idx_tasks_created_at ON tasks(created_at);
+CREATE INDEX IF NOT EXISTS idx_tasks_complexity ON tasks(complexity_score);
 
 -- =====================================================================
 -- LESSONS AND ERRORS STORAGE
@@ -129,19 +129,19 @@ CREATE TABLE IF NOT EXISTS lessons (
 
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
     FOREIGN KEY (agent_id) REFERENCES agents(id) ON DELETE SET NULL,
-    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE SET NULL,
-
-    -- Performance indexes
-    INDEX idx_lessons_category ON lessons(category),
-    INDEX idx_lessons_subcategory ON lessons(subcategory),
-    INDEX idx_lessons_project ON lessons(project_id),
-    INDEX idx_lessons_agent ON lessons(agent_id),
-    INDEX idx_lessons_task ON lessons(task_id),
-    INDEX idx_lessons_created_at ON lessons(created_at),
-    INDEX idx_lessons_confidence ON lessons(confidence_score),
-    INDEX idx_lessons_effectiveness ON lessons(effectiveness_score),
-    INDEX idx_lessons_usage_count ON lessons(usage_count)
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE SET NULL
 );
+
+-- Performance indexes for lessons table
+CREATE INDEX IF NOT EXISTS idx_lessons_category ON lessons(category);
+CREATE INDEX IF NOT EXISTS idx_lessons_subcategory ON lessons(subcategory);
+CREATE INDEX IF NOT EXISTS idx_lessons_project ON lessons(project_id);
+CREATE INDEX IF NOT EXISTS idx_lessons_agent ON lessons(agent_id);
+CREATE INDEX IF NOT EXISTS idx_lessons_task ON lessons(task_id);
+CREATE INDEX IF NOT EXISTS idx_lessons_created_at ON lessons(created_at);
+CREATE INDEX IF NOT EXISTS idx_lessons_confidence ON lessons(confidence_score);
+CREATE INDEX IF NOT EXISTS idx_lessons_effectiveness ON lessons(effectiveness_score);
+CREATE INDEX IF NOT EXISTS idx_lessons_usage_count ON lessons(usage_count);
 
 -- Errors table - comprehensive error tracking and analysis
 CREATE TABLE IF NOT EXISTS errors (
@@ -175,20 +175,20 @@ CREATE TABLE IF NOT EXISTS errors (
 
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
     FOREIGN KEY (agent_id) REFERENCES agents(id) ON DELETE SET NULL,
-    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE SET NULL,
-
-    -- Performance indexes
-    INDEX idx_errors_type ON errors(error_type),
-    INDEX idx_errors_code ON errors(error_code),
-    INDEX idx_errors_project ON errors(project_id),
-    INDEX idx_errors_agent ON errors(agent_id),
-    INDEX idx_errors_task ON errors(task_id),
-    INDEX idx_errors_created_at ON errors(created_at),
-    INDEX idx_errors_resolved ON errors(is_resolved),
-    INDEX idx_errors_severity ON errors(severity),
-    INDEX idx_errors_frequency ON errors(frequency),
-    INDEX idx_errors_file_path ON errors(file_path)
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE SET NULL
 );
+
+-- Performance indexes for errors table
+CREATE INDEX IF NOT EXISTS idx_errors_type ON errors(error_type);
+CREATE INDEX IF NOT EXISTS idx_errors_code ON errors(error_code);
+CREATE INDEX IF NOT EXISTS idx_errors_project ON errors(project_id);
+CREATE INDEX IF NOT EXISTS idx_errors_agent ON errors(agent_id);
+CREATE INDEX IF NOT EXISTS idx_errors_task ON errors(task_id);
+CREATE INDEX IF NOT EXISTS idx_errors_created_at ON errors(created_at);
+CREATE INDEX IF NOT EXISTS idx_errors_resolved ON errors(is_resolved);
+CREATE INDEX IF NOT EXISTS idx_errors_severity ON errors(severity);
+CREATE INDEX IF NOT EXISTS idx_errors_frequency ON errors(frequency);
+CREATE INDEX IF NOT EXISTS idx_errors_file_path ON errors(file_path);
 
 -- =====================================================================
 -- VECTOR EMBEDDINGS STORAGE
@@ -208,14 +208,14 @@ CREATE TABLE IF NOT EXISTS embeddings (
     metadata JSON DEFAULT '{}',
 
     -- Ensure one embedding per entity per model
-    UNIQUE(entity_type, entity_id, embedding_model),
-
-    -- Performance indexes
-    INDEX idx_embeddings_entity ON embeddings(entity_type, entity_id),
-    INDEX idx_embeddings_model ON embeddings(embedding_model),
-    INDEX idx_embeddings_hash ON embeddings(content_hash),
-    INDEX idx_embeddings_dimension ON embeddings(vector_dimension)
+    UNIQUE(entity_type, entity_id, embedding_model)
 );
+
+-- Performance indexes for embeddings table
+CREATE INDEX IF NOT EXISTS idx_embeddings_entity ON embeddings(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_embeddings_model ON embeddings(embedding_model);
+CREATE INDEX IF NOT EXISTS idx_embeddings_hash ON embeddings(content_hash);
+CREATE INDEX IF NOT EXISTS idx_embeddings_dimension ON embeddings(vector_dimension);
 
 -- =====================================================================
 -- RELATIONSHIPS AND ASSOCIATIONS
@@ -236,13 +236,13 @@ CREATE TABLE IF NOT EXISTS lesson_relationships (
     FOREIGN KEY (created_by_agent_id) REFERENCES agents(id) ON DELETE SET NULL,
 
     -- Prevent duplicate relationships
-    UNIQUE(source_lesson_id, target_lesson_id, relationship_type),
-
-    -- Performance indexes
-    INDEX idx_lesson_rel_source ON lesson_relationships(source_lesson_id),
-    INDEX idx_lesson_rel_target ON lesson_relationships(target_lesson_id),
-    INDEX idx_lesson_rel_type ON lesson_relationships(relationship_type)
+    UNIQUE(source_lesson_id, target_lesson_id, relationship_type)
 );
+
+-- Performance indexes for lesson_relationships table
+CREATE INDEX IF NOT EXISTS idx_lesson_rel_source ON lesson_relationships(source_lesson_id);
+CREATE INDEX IF NOT EXISTS idx_lesson_rel_target ON lesson_relationships(target_lesson_id);
+CREATE INDEX IF NOT EXISTS idx_lesson_rel_type ON lesson_relationships(relationship_type);
 
 -- Error-Lesson associations - link errors to lessons that resolve them
 CREATE TABLE IF NOT EXISTS error_lesson_associations (
@@ -261,14 +261,14 @@ CREATE TABLE IF NOT EXISTS error_lesson_associations (
     FOREIGN KEY (created_by_agent_id) REFERENCES agents(id) ON DELETE SET NULL,
 
     -- Prevent duplicate associations
-    UNIQUE(error_id, lesson_id, association_type),
-
-    -- Performance indexes
-    INDEX idx_error_lesson_error ON error_lesson_associations(error_id),
-    INDEX idx_error_lesson_lesson ON error_lesson_associations(lesson_id),
-    INDEX idx_error_lesson_type ON error_lesson_associations(association_type),
-    INDEX idx_error_lesson_effectiveness ON error_lesson_associations(effectiveness_score)
+    UNIQUE(error_id, lesson_id, association_type)
 );
+
+-- Performance indexes for error_lesson_associations table
+CREATE INDEX IF NOT EXISTS idx_error_lesson_error ON error_lesson_associations(error_id);
+CREATE INDEX IF NOT EXISTS idx_error_lesson_lesson ON error_lesson_associations(lesson_id);
+CREATE INDEX IF NOT EXISTS idx_error_lesson_type ON error_lesson_associations(association_type);
+CREATE INDEX IF NOT EXISTS idx_error_lesson_effectiveness ON error_lesson_associations(effectiveness_score);
 
 -- =====================================================================
 -- ANALYTICS AND METRICS
@@ -289,15 +289,15 @@ CREATE TABLE IF NOT EXISTS usage_analytics (
 
     FOREIGN KEY (agent_id) REFERENCES agents(id) ON DELETE SET NULL,
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
-    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE SET NULL,
-
-    -- Performance indexes
-    INDEX idx_analytics_entity ON usage_analytics(entity_type, entity_id),
-    INDEX idx_analytics_action ON usage_analytics(action),
-    INDEX idx_analytics_agent ON usage_analytics(agent_id),
-    INDEX idx_analytics_project ON usage_analytics(project_id),
-    INDEX idx_analytics_created_at ON usage_analytics(created_at)
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE SET NULL
 );
+
+-- Performance indexes for usage_analytics table
+CREATE INDEX IF NOT EXISTS idx_analytics_entity ON usage_analytics(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_analytics_action ON usage_analytics(action);
+CREATE INDEX IF NOT EXISTS idx_analytics_agent ON usage_analytics(agent_id);
+CREATE INDEX IF NOT EXISTS idx_analytics_project ON usage_analytics(project_id);
+CREATE INDEX IF NOT EXISTS idx_analytics_created_at ON usage_analytics(created_at);
 
 -- Performance metrics - track agent and system performance
 CREATE TABLE IF NOT EXISTS performance_metrics (
@@ -314,15 +314,15 @@ CREATE TABLE IF NOT EXISTS performance_metrics (
 
     FOREIGN KEY (agent_id) REFERENCES agents(id) ON DELETE SET NULL,
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
-    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE SET NULL,
-
-    -- Performance indexes
-    INDEX idx_metrics_type ON performance_metrics(metric_type),
-    INDEX idx_metrics_name ON performance_metrics(metric_name),
-    INDEX idx_metrics_agent ON performance_metrics(agent_id),
-    INDEX idx_metrics_project ON performance_metrics(project_id),
-    INDEX idx_metrics_measured_at ON performance_metrics(measured_at)
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE SET NULL
 );
+
+-- Performance indexes for performance_metrics table
+CREATE INDEX IF NOT EXISTS idx_metrics_type ON performance_metrics(metric_type);
+CREATE INDEX IF NOT EXISTS idx_metrics_name ON performance_metrics(metric_name);
+CREATE INDEX IF NOT EXISTS idx_metrics_agent ON performance_metrics(agent_id);
+CREATE INDEX IF NOT EXISTS idx_metrics_project ON performance_metrics(project_id);
+CREATE INDEX IF NOT EXISTS idx_metrics_measured_at ON performance_metrics(measured_at);
 
 -- =====================================================================
 -- SEARCH AND SIMILARITY FUNCTIONS

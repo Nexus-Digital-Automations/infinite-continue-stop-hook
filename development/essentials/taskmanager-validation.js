@@ -3,6 +3,15 @@
  * Prevents common API usage errors before execution
  */
 
+/**
+ * Validation test logger
+ */
+class ValidationTestLogger {
+  static log(message) {
+    process.stdout.write(message + '\n');
+  }
+}
+
 const VALID_CATEGORIES = ['error', 'feature', 'subtask', 'test'];
 const VALID_COMMANDS = [
   'guide',
@@ -41,6 +50,8 @@ class TaskManagerValidator {
     // Check required fields
     const requiredFields = ['title', 'description', 'category'];
     for (const field of requiredFields) {
+      // Safe: field comes from controlled array ['title', 'description', 'category']
+      // eslint-disable-next-line security/detect-object-injection
       if (!taskData[field]) {
         this.errors.push(`Required field '${field}' is missing`);
       }
@@ -242,7 +253,7 @@ class TaskManagerValidator {
 if (require.main === module) {
   const validator = new TaskManagerValidator();
 
-  console.log('=== TaskManager API Validation Tool ===\n');
+  ValidationTestLogger.log('=== TaskManager API Validation Tool ===\n');
 
   // Test cases
   const testCases = [
@@ -269,9 +280,9 @@ if (require.main === module) {
   ];
 
   testCases.forEach((testCase) => {
-    console.log(`Testing: ${testCase.name}`);
+    ValidationTestLogger.log(`Testing: ${testCase.name}`);
     const result = validator.validateTaskCreation(testCase.data);
-    console.log(validator.formatResult(result));
+    ValidationTestLogger.log(validator.formatResult(result));
   });
 
   // Command validation tests
@@ -286,9 +297,9 @@ if (require.main === module) {
   ];
 
   commandTests.forEach((test) => {
-    console.log(`Testing command: ${test.name}`);
+    ValidationTestLogger.log(`Testing command: ${test.name}`);
     const result = validator.validateCommand(test.command, test.args);
-    console.log(validator.formatResult(result));
+    ValidationTestLogger.log(validator.formatResult(result));
   });
 }
 
