@@ -90,14 +90,14 @@ async function cleanupStaleAgentsInProject(projectPath, logger) {
 
   let _todoData;
   try {
-    todoData = JSON.parse(_fs.readFileSync(todoPath, 'utf8'));
+    _todoData = JSON.parse(_fs.readFileSync(todoPath, 'utf8'));
   } catch (error) {
     logger.addFlow(`Failed to read TODO.json in ${projectPath}: ${error.message}`);
     return { agentsRemoved: 0, tasksUnassigned: 0, projectPath, error: error.message };
   }
 
   // Get all agents from TODO.json
-  const allAgents = Object.keys(todoData.agents || {});
+  const allAgents = Object.keys(_todoData.agents || {});
   if (allAgents.length === 0) {
     logger.addFlow(`No agents found in ${projectPath} - skipping`);
     return { agentsRemoved: 0, tasksUnassigned: 0, projectPath };
@@ -108,7 +108,7 @@ async function cleanupStaleAgentsInProject(projectPath, logger) {
   const staleAgents = [];
 
   for (const agentId of allAgents) {
-    const agent = todoData.agents[agentId];
+    const agent = _todoData.agents[agentId];
     // Handle both lastHeartbeat (camelCase) and last_heartbeat (snake_case) formats
     const lastHeartbeat = agent.lastHeartbeat || agent.last_heartbeat;
     const heartbeatTime = lastHeartbeat ? new Date(lastHeartbeat).getTime() : 0;
@@ -125,12 +125,12 @@ async function cleanupStaleAgentsInProject(projectPath, logger) {
   let tasksUnassigned = 0;
 
   for (const staleAgentId of staleAgents) {
-    delete todoData.agents[staleAgentId];
+    delete _todoData.agents[staleAgentId];
     agentsRemoved++;
     logger.addFlow(`Removed stale agent from ${projectPath}: ${staleAgentId}`);
 
     // Find all tasks assigned to this stale agent and unassign them
-    for (const task of todoData.tasks || []) {
+    for (const task of _todoData.tasks || []) {
       // Skip null/undefined tasks
       if (!task || typeof task !== 'object') {
         continue;
@@ -172,7 +172,7 @@ async function cleanupStaleAgentsInProject(projectPath, logger) {
   // Write back if any changes were made
   if (agentsRemoved > 0 || tasksUnassigned > 0) {
     try {
-      _fs.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
+      _fs.writeFileSync(todoPath, JSON.stringify(_todoData, null, 2));
       logger.addFlow(`Updated ${projectPath}/TODO.json with cleanup results`);
     } catch (error) {
       logger.addFlow(`Failed to write TODO.json in ${projectPath}: ${error.message}`);
@@ -205,24 +205,33 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
 
   logger.addFlow(`🧹 Starting multi-project stale agent cleanup across ${knownProjects.length} projects...`);
 
-  for (const projectPath of knownProjects) {
+  // Process projects in parallel for better performance
+  const projectPromises = knownProjects.map(async (projectPath) => {
     try {
       if (_fs.existsSync(projectPath)) {
         const result = await cleanupStaleAgentsInProject(projectPath, logger);
-        results.projectResults.push(result);
-        results.totalAgentsRemoved += result.agentsRemoved;
-        results.totalTasksUnassigned += result.tasksUnassigned;
-
-        if (result.error) {
-          results.errors.push(`${projectPath}: ${result.error}`);
-        }
+        return result;
       } else {
         logger.addFlow(`Project path does not exist: ${projectPath} - skipping`);
+        return { agentsRemoved: 0, tasksUnassigned: 0, projectPath, skipped: true };
       }
     } catch (error) {
       const errorMsg = `Failed to process ${projectPath}: ${error.message}`;
       logger.addFlow(errorMsg);
-      results.errors.push(errorMsg);
+      return { agentsRemoved: 0, tasksUnassigned: 0, projectPath, error: error.message };
+    }
+  });
+
+  const projectResults = await Promise.all(projectPromises);
+
+  // Aggregate results from parallel processing
+  for (const result of projectResults) {
+    results.projectResults.push(result);
+    results.totalAgentsRemoved += result.agentsRemoved;
+    results.totalTasksUnassigned += result.tasksUnassigned;
+
+    if (result.error) {
+      results.errors.push(`${result.projectPath}: ${result.error}`);
     }
   }
 
@@ -348,12 +357,12 @@ async function autoSortTasksByPriority(taskManager) {
     };
 
     // Ensure tasks is an array
-    if (!Array.isArray(todoData.tasks)) {
-      todoData.tasks = [];
+    if (!Array.isArray(_todoData.tasks)) {
+      _todoData.tasks = [];
     }
 
     // Process all tasks for ID-based classification
-    for (const task of todoData.tasks) {
+    for (const task of _todoData.tasks) {
       // Skip null/undefined tasks
       if (!task || typeof task !== 'object') {
         continue;
@@ -381,7 +390,7 @@ async function autoSortTasksByPriority(taskManager) {
     }
 
     // STEP 2: Sort tasks by ID-based priority
-    todoData.tasks.sort((a, b) => {
+    _todoData.tasks.sort((a, b) => {
       // Handle null/undefined tasks - push to end
       if (!a || typeof a !== 'object') {
         return 1;
@@ -405,16 +414,16 @@ async function autoSortTasksByPriority(taskManager) {
     });
 
     // Update TODO.json settings for ID-based classification
-    if (!todoData.settings) {
-      todoData.settings = {};
+    if (!_todoData.settings) {
+      _todoData.settings = {};
     }
-    todoData.settings.id_based_classification = true;
-    todoData.settings.auto_sort_enabled = true;
-    todoData.settings.sort_criteria = {
+    _todoData.settings.id_based_classification = true;
+    _todoData.settings.auto_sort_enabled = true;
+    _todoData.settings.sort_criteria = {
       primary: 'id_prefix',
       secondary: 'created_at',
     };
-    todoData.settings.id_priority_order = {
+    _todoData.settings.id_priority_order = {
       error_: 1,
       feature_: 2,
       subtask_: 3,
@@ -429,7 +438,7 @@ async function autoSortTasksByPriority(taskManager) {
     return {
       tasksMoved,
       tasksUpdated,
-      totalTasks: todoData.tasks.length,
+      totalTasks: _todoData.tasks.length,
     };
   } catch (error) {
     // eslint-disable-next-line no-console -- hook script error logging for debugging
@@ -609,7 +618,7 @@ If you want to enable task management for this project:
 
     // Initialize TaskManager with explicit project root to check agent status
     // Pass the working directory to ensure security validation uses correct project root
-    const taskManager = new TaskManager(todoPath, {
+    const taskManager = new _TaskManager(todoPath, {
       projectRoot: workingDir,
       enableAutoFix: true,
       validateOnRead: false,
@@ -665,7 +674,7 @@ If you want to enable task management for this project:
 
     for (const agentId of allAgents) {
       // eslint-disable-next-line security/detect-object-injection -- validated agent ID from TODO.json structure
-      const agent = todoData.agents[agentId];
+      const agent = _todoData.agents[agentId];
       // Handle both lastHeartbeat (camelCase) and last_heartbeat (snake_case) formats
       const lastHeartbeat = agent.lastHeartbeat || agent.last_heartbeat;
       const heartbeatTime = lastHeartbeat
