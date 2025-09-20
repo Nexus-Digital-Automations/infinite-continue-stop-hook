@@ -638,23 +638,30 @@ describe('Success Criteria Performance Tests', () => {
         await execAPIWithMonitoring(monitor, 'success-criteria:init');
         _gcStats.push({ phase: 'post-init', memory: process.memoryUsage() });
 
+        // Use for-await-of to maintain sequential processing for memory monitoring
+        const templateDataList = [];
         for (let i = 0; i < 5; i++) {
-          const _templateData = JSON.stringify({
-            name: `GC Test Template ${i}`,
-            criteria: Array.from({ length: 20 }, (_, j) => ({
-              id: `gc-${i}-${j}`,
-              description: `GC test ${i}-${j} ${'data'.repeat(50)}`,
-              category: 'test',
-            })),
+          templateDataList.push({
+            index: i,
+            data: JSON.stringify({
+              name: `GC Test Template ${i}`,
+              criteria: Array.from({ length: 20 }, (_, j) => ({
+                id: `gc-${i}-${j}`,
+                description: `GC test ${i}-${j} ${'data'.repeat(50)}`,
+                category: 'test',
+              })),
+            }),
           });
+        }
 
+        for await (const { index, data } of templateDataList) {
           await execAPIWithMonitoring(
             monitor,
             'success-criteria:create-template',
-            [_templateData],
+            [data],
           );
           _gcStats.push({
-            phase: `template-${i}`,
+            phase: `template-${index}`,
             memory: process.memoryUsage(),
           });
         }
@@ -690,22 +697,29 @@ describe('Success Criteria Performance Tests', () => {
       async () => {
         const _runTimes = [];
 
+        // Use for-await-of to maintain sequential processing for consistency measurement
+        const runDataList = [];
         for (let run = 0; run < 5; run++) {
-          await execAPIWithMonitoring(monitor, 'success-criteria:init');
-
-          const _templateData = JSON.stringify({
-            name: `Consistency Test Template ${run}`,
-            criteria: Array.from({ length: 15 }, (_, i) => ({
-              id: `consist-${run}-${i}`,
-              description: `Consistency test ${run}-${i}`,
-              category: 'test',
-            })),
+          runDataList.push({
+            run,
+            templateData: JSON.stringify({
+              name: `Consistency Test Template ${run}`,
+              criteria: Array.from({ length: 15 }, (_, i) => ({
+                id: `consist-${run}-${i}`,
+                description: `Consistency test ${run}-${i}`,
+                category: 'test',
+              })),
+            }),
           });
+        }
+
+        for await (const { templateData } of runDataList) {
+          await execAPIWithMonitoring(monitor, 'success-criteria:init');
 
           const { _measurement } = await execAPIWithMonitoring(
             monitor,
             'success-criteria:create-template',
-            [_templateData],
+            [templateData],
           );
 
           _runTimes.push(_measurement.duration);

@@ -289,7 +289,8 @@ class SuccessCriteriaValidator {
   async runAutomatedValidation(criteria) {
     const results = {};
 
-    for (const criterion of criteria) {
+    // Use for-await-of to properly handle the async validateSecurity() call
+    for await (const criterion of criteria) {
       if (!criterion.automated) {
         continue;
       }

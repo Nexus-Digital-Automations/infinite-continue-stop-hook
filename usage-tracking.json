@@ -132,6 +132,223 @@
       "agentId": "dev_session_1758406417903_1_general_a3b81b6d",
       "sessionId": null,
       "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:21:03.303Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758406863300_1_general_e4b4648c",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:22:17.480Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758406937475_1_general_8606bb22",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:22:46.289Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758406966282_1_general_52f56c0c",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:23:03.595Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758406983591_1_general_a73685bc",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:23:08.997Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758406988991_1_general_3dfb297f",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:25:30.272Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758407130268_1_general_ee8c806d",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:25:40.410Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758407140405_1_general_0e47bb27",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:25:50.549Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758407150544_1_general_6f3abf3f",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:26:00.696Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758407160692_1_general_37aecb04",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:26:10.856Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758407170851_1_general_4a55105c",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:27:09.823Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758407229803_1_general_c6bd9acf",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:27:10.155Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758407230152_1_general_1b613b8f",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:27:10.370Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758407230367_1_general_c1cb3c3e",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:27:10.491Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758407230488_1_general_910c7012",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:27:10.614Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758407230611_1_general_3dd68983",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:28:34.052Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758407314050_1_general_abf54b8c",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:28:34.059Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758407314058_1_general_8f0c0d8e",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:28:34.166Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758407314165_1_general_78ed36b2",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:33:19.725Z",
+      "endpoint": "reinitialize",
+      "agentId": "dev_session_1758406206791_1_general_03f5fa32",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:34:10.936Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758407650933_1_general_21b8a39a",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:41:27.921Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758408087919_1_general_8397f64c",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:42:33.951Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758408153949_1_general_5b25884b",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:42:34.011Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758408154009_1_general_c8981c3b",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:42:34.111Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758408154110_1_general_20199053",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:42:34.340Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758408154337_1_general_bbc7e717",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:44:57.874Z",
+      "endpoint": "reinitialize",
+      "agentId": "dev_session_1758407650933_1_general_21b8a39a",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:46:18.772Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758408378771_1_general_f8a0aae7",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:46:18.922Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758408378921_1_general_4d89f1d7",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:46:19.506Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758408379504_1_general_f68461fd",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:46:19.692Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758408379690_1_general_bd1f3280",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
+    },
+    {
+      "timestamp": "2025-09-20T22:46:19.773Z",
+      "endpoint": "init",
+      "agentId": "dev_session_1758408379771_1_general_c1336051",
+      "sessionId": null,
+      "windowId": "2025-09-20_window_2"
     }
   ],
   "metadata": {

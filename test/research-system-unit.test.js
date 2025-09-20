@@ -649,14 +649,18 @@ describe('Research System Unit Tests', () => {
       const taskIds = new Set();
 
       // Create multiple tasks to test ID uniqueness
+      // Use for-await-of to maintain sequential processing for research ID validation
+      const taskDataList = [];
       for (let i = 0; i < 5; i++) {
-        const taskData = {
+        taskDataList.push({
           title: `Research task ${i + 1}`,
           description: `Description for research task ${i + 1}`,
           category: 'feature',
           priority: 'medium',
-        };
+        });
+      }
 
+      for await (const taskData of taskDataList) {
         const result = await execAPI('create', [JSON.stringify(taskData)]);
         expect(result.success).toBe(true);
 

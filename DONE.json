@@ -47368,12 +47368,244 @@
       "updated_at": "2025-09-20T22:16:33.585Z",
       "archived_at": "2025-09-20T22:16:33.595Z",
       "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T03:58:54.534Z",
+      "title": "Apply eslint --fix and perform final linting verification",
+      "description": "Apply automatic fixes to remaining ESLint violations and verify overall linting compliance. Run eslint --fix on entire project, generate comprehensive fix report, and identify any remaining manual intervention needed.",
+      "category": "error",
+      "id": "error_1758340734534_3y1nmdsndi5",
+      "assigned_agent": "dev_session_1758406417903_1_general_a3b81b6d",
+      "started_at": "2025-09-20T22:18:12.046Z",
+      "claimed_by": "dev_session_1758406417903_1_general_a3b81b6d",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758340719469_1_general_8088b646",
+          "role": "primary",
+          "assignedAt": "2025-09-20T03:59:13.609Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1758340719469_1_general_8088b646",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-20T04:28:39.732Z",
+          "reason": "Agent became stale (inactive >30 minutes)"
+        },
+        {
+          "agentId": "dev_session_1758390207063_1_general_69aa50f9",
+          "role": "primary",
+          "assignedAt": "2025-09-20T17:44:48.453Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1758390207063_1_general_69aa50f9",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-20T18:17:47.333Z",
+          "reason": "Agent became stale (inactive >30 minutes)"
+        },
+        {
+          "agentId": "dev_session_1758406417903_1_general_a3b81b6d",
+          "role": "primary",
+          "assignedAt": "2025-09-20T22:18:12.046Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-20T22:22:01.543Z",
+      "updated_at": "2025-09-20T22:22:01.543Z",
+      "archived_at": "2025-09-20T22:22:01.551Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T03:58:53.238Z",
+      "title": "Fix hashbang/shebang violations across script files",
+      "description": "Resolve n/hashbang errors in executable scripts by removing unnecessary shebangs from non-executable files, adding proper shebangs to executable scripts, ensuring correct shebang format, and fixing file permissions",
+      "category": "error",
+      "id": "error_1758340733237_e6bkq5gjuwv",
+      "assigned_agent": "dev_session_1758406417903_1_general_a3b81b6d",
+      "started_at": "2025-09-20T22:23:02.374Z",
+      "claimed_by": "dev_session_1758406417903_1_general_a3b81b6d",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758387857599_1_general_b8adeb8a",
+          "role": "primary",
+          "assignedAt": "2025-09-20T17:14:42.381Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1758387857599_1_general_b8adeb8a",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-20T17:53:48.906Z",
+          "reason": "Agent became stale (inactive >30 minutes)"
+        },
+        {
+          "agentId": "dev_session_1758406417903_1_general_a3b81b6d",
+          "role": "primary",
+          "assignedAt": "2025-09-20T22:23:02.374Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-20T22:26:16.300Z",
+      "updated_at": "2025-09-20T22:26:16.300Z",
+      "archived_at": "2025-09-20T22:26:16.309Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T03:58:53.344Z",
+      "title": "Fix missing import/require statement errors",
+      "description": "Resolve all missing import and module requirement errors by identifying undefined module references, adding proper require/import statements, fixing module path references, and ensuring all dependencies are properly declared",
+      "category": "error",
+      "id": "error_1758340733344_x63exte723q",
+      "assigned_agent": "dev_session_1758406417903_1_general_a3b81b6d",
+      "started_at": "2025-09-20T22:27:27.574Z",
+      "claimed_by": "dev_session_1758406417903_1_general_a3b81b6d",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758388966402_1_general_3fe353ce",
+          "role": "primary",
+          "assignedAt": "2025-09-20T17:24:39.201Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1758388966402_1_general_3fe353ce",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-20T18:09:19.327Z",
+          "reason": "Agent became stale (inactive >30 minutes)"
+        },
+        {
+          "agentId": "dev_session_1758406417903_1_general_a3b81b6d",
+          "role": "primary",
+          "assignedAt": "2025-09-20T22:27:27.574Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-20T22:31:26.254Z",
+      "updated_at": "2025-09-20T22:31:26.254Z",
+      "archived_at": "2025-09-20T22:31:26.263Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T06:14:11.505Z",
+      "title": "Fix security/detect-non-literal-fs-filename ESLint warnings",
+      "description": "Fix all ESLint warnings for dynamic filesystem paths by implementing proper path validation, using path.resolve/join, and maintaining security",
+      "category": "error",
+      "id": "error_1758348851505_w5xeqhdotd9",
+      "assigned_agent": "dev_session_1758406417903_1_general_a3b81b6d",
+      "started_at": "2025-09-20T22:32:22.461Z",
+      "claimed_by": "dev_session_1758406417903_1_general_a3b81b6d",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758406417903_1_general_a3b81b6d",
+          "role": "primary",
+          "assignedAt": "2025-09-20T22:32:22.461Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-20T22:36:16.993Z",
+      "updated_at": "2025-09-20T22:36:16.993Z",
+      "archived_at": "2025-09-20T22:36:17.003Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T06:14:11.530Z",
+      "title": "Fix security/detect-object-injection ESLint warnings",
+      "description": "Address potential object injection vulnerabilities by validating object keys, using Map/Set for dynamic keys, adding proper input sanitization, using Object.hasOwnProperty checks, and adding justified eslint-disable comments for safe operations",
+      "category": "error",
+      "id": "error_1758348851530_ksfqn9qx8rs",
+      "assigned_agent": "dev_session_1758406417903_1_general_a3b81b6d",
+      "started_at": "2025-09-20T22:37:15.891Z",
+      "claimed_by": "dev_session_1758406417903_1_general_a3b81b6d",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758406417903_1_general_a3b81b6d",
+          "role": "primary",
+          "assignedAt": "2025-09-20T22:37:15.891Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-20T22:40:40.392Z",
+      "updated_at": "2025-09-20T22:40:40.393Z",
+      "archived_at": "2025-09-20T22:40:40.403Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T22:42:49.527Z",
+      "title": "Fix require-await ESLint violations in test project files",
+      "description": "Remove async keyword from functions that don't use await, or add meaningful await operations in test/regression-test-project/index.js:10 and test/validation-test-project/index.js:10,16",
+      "category": "error",
+      "id": "error_1758408169527_6n0g0g9x4rx",
+      "completed_at": "2025-09-20T22:44:00.459Z",
+      "updated_at": "2025-09-20T22:44:00.459Z",
+      "archived_at": "2025-09-20T22:44:00.472Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T22:42:49.186Z",
+      "title": "Fix n/no-process-exit ESLint violations in test project files",
+      "description": "Replace process.exit() calls with proper error throwing patterns in test/performance-test-project/index.js:34, test/regression-test-project/index.js:25, and test/validation-test-project/index.js:27",
+      "category": "error",
+      "id": "error_1758408169186_vdz55rj80k8",
+      "completed_at": "2025-09-20T22:44:17.837Z",
+      "updated_at": "2025-09-20T22:44:17.837Z",
+      "archived_at": "2025-09-20T22:44:17.848Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T22:42:49.948Z",
+      "title": "Fix no-console ESLint violations in agentManagement.js and usageTracker.js",
+      "description": "Replace console statements with proper logging in lib/api-modules/core/agentManagement.js (lines 60,341) and lib/usageTracker.js (line 95). Implement proper logger instances or add justified eslint-disable comments for legitimate debugging.",
+      "category": "error",
+      "id": "error_1758408169948_b9ggkokz808",
+      "completed_at": "2025-09-20T22:44:33.075Z",
+      "updated_at": "2025-09-20T22:44:33.075Z",
+      "archived_at": "2025-09-20T22:44:33.084Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T22:42:48.843Z",
+      "title": "Fix no-undef ESLint violations for undefined message variable",
+      "description": "Fix ESLint no-undef violations in test/success-criteria-e2e-project/src/app.js:7,10 for undefined message variable. Analyze code context and either define missing variables, add proper imports, or remove unused references.",
+      "category": "error",
+      "id": "error_1758408168843_wcbnf1l9n1a",
+      "assigned_agent": "dev_session_1758408154009_1_general_c8981c3b",
+      "started_at": "2025-09-20T22:44:22.639Z",
+      "claimed_by": "dev_session_1758408154009_1_general_c8981c3b",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758408154009_1_general_c8981c3b",
+          "role": "primary",
+          "assignedAt": "2025-09-20T22:44:22.639Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-20T22:45:14.308Z",
+      "updated_at": "2025-09-20T22:45:14.308Z",
+      "archived_at": "2025-09-20T22:45:14.318Z",
+      "archive_version": "2.0.0"
     }
   ],
-  "total_completed": 1123,
+  "total_completed": 1132,
   "last_completion": "2025-09-13T18:24:43.914Z",
   "created_at": "2025-08-07T04:55:03.964Z",
-  "last_archived": "2025-09-20T22:16:56.638Z",
+  "last_archived": "2025-09-20T22:45:14.318Z",
   "metadata": {
     "last_bulk_archive": "2025-09-20T22:16:56.638Z",
     "bulk_archive_count": 33

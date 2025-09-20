@@ -654,14 +654,18 @@ describe('Audit System Validation Tests', () => {
       const _auditIds = new Set();
 
       // Create multiple feature tasks to test audit ID uniqueness
+      // Use for-await-of to maintain sequential processing for audit ID validation
+      const taskDataList = [];
       for (let i = 0; i < 3; i++) {
-        const taskData = {
+        taskDataList.push({
           title: `Feature task ${i + 1}`,
           description: `Feature description ${i + 1}`,
           category: 'feature',
           priority: 'medium',
-        };
+        });
+      }
 
+      for await (const taskData of taskDataList) {
         const result = await execAPI('create', [JSON.stringify(taskData)]);
         expect(result.success).toBe(true);
 

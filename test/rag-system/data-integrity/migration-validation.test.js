@@ -791,14 +791,20 @@ Tags: optimization, frontend, backend, caching`,
       },
     };
 
-    for (const [category, files] of Object.entries(lessonsStructure)) {
-      const _categoryPath = _path.join(_testMigrationPath, 'development', 'lessons', category);
-      await _fs.mkdir(_categoryPath, { recursive: true });
+    // Create directories and files in parallel for each category
+    await Promise.all(
+      Object.entries(lessonsStructure).map(async ([category, files]) => {
+        const _categoryPath = _path.join(_testMigrationPath, 'development', 'lessons', category);
+        await _fs.mkdir(_categoryPath, { recursive: true });
 
-      for (const [filename, content] of Object.entries(files)) {
-        await _fs.writeFile(_path.join(_categoryPath, filename), content);
-      }
-    }
+        // Create all files in this category in parallel
+        await Promise.all(
+          Object.entries(files).map(([filename, content]) =>
+            _fs.writeFile(_path.join(_categoryPath, filename), content),
+          ),
+        );
+      }),
+    );
   }
 
   async function _getAllLessonFiles(_basePath) {

@@ -156,9 +156,13 @@ describe('RAG System End-to-End Integration Tests', () => {
     test('should store technical lessons with embeddings', async () => {
       const _lessons = testDataGenerator.generateLessons(5);
 
-      for (const lesson of _lessons) {
-        const result = await ragOperations.storeLesson(lesson);
+      // Store all lessons in parallel since they are independent operations
+      const results = await Promise.all(
+        _lessons.map(lesson => ragOperations.storeLesson(lesson)),
+      );
 
+      // Validate each result and collect them
+      for (const result of results) {
         expect(result).toHaveProperty('success', true);
         expect(result).toHaveProperty('vectorId');
         expect(result).toHaveProperty('lessonId');
@@ -223,9 +227,13 @@ describe('RAG System End-to-End Integration Tests', () => {
     test('should store error patterns with semantic analysis', async () => {
       const _errors = testDataGenerator.generateErrors(5);
 
-      for (const error of _errors) {
-        const result = await ragOperations.storeError(error);
+      // Store all errors in parallel since they are independent operations
+      const results = await Promise.all(
+        _errors.map(error => ragOperations.storeError(error)),
+      );
 
+      // Validate each result and collect them
+      for (const result of results) {
         expect(result).toHaveProperty('success', true);
         expect(result).toHaveProperty('vectorId');
         expect(result).toHaveProperty('errorId');
@@ -449,9 +457,10 @@ describe('RAG System End-to-End Integration Tests', () => {
         },
       ];
 
-      for (const lesson of sampleLessons) {
-        await _fs.writeFile(lesson.path, lesson.content);
-      }
+      // Write all sample lesson files in parallel
+      await Promise.all(
+        sampleLessons.map(lesson => _fs.writeFile(lesson.path, lesson.content)),
+      );
 
       // Verify files were created
       const featuresFiles = await _fs.readdir(_path.join(testLessonsPath, 'features'));
@@ -584,7 +593,8 @@ describe('RAG System Performance Benchmarks', () => {
 
     const startTime = Date.now();
 
-    for (let i = 0; i < iterations; i++) {
+    // Use for-await-of pattern for sequential performance measurement
+    for await (const _ of Array(iterations).keys()) {
       await embeddingGenerator.generateEmbeddings(testContent);
     }
 

@@ -689,6 +689,8 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
 
     test('should efficiently query tasks with complex subtask structures', async () => {
       // Create several feature tasks with embedded subtasks
+      // Create tasks in parallel for better performance since order doesn't matter for this test
+      const taskCreationPromises = [];
       for (let i = 0; i < 3; i++) {
         const taskData = {
           title: `Query performance test feature ${i + 1}`,
@@ -696,8 +698,9 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
           category: 'feature',
           priority: 'medium',
         };
-        await execAPI('create', [JSON.stringify(taskData)]);
+        taskCreationPromises.push(execAPI('create', [JSON.stringify(taskData)]));
       }
+      await Promise.all(taskCreationPromises);
 
       const _startTime = Date.now();
       const result = await execAPI('list');
@@ -952,7 +955,8 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
       testFeatureTaskId = createResult.taskId;
 
       // Verify all agents can see the task and its subtasks
-      for (const agentId of [_implementationAgent, _researchAgent, _auditAgent]) {
+      // Use for-await-of to ensure sequential validation since these are dependent checks
+      for await (const agentId of [_implementationAgent, _researchAgent, _auditAgent]) {
         const statusResult = await execAPI('status', [agentId]);
         expect(statusResult.success).toBe(true);
 

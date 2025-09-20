@@ -155,16 +155,30 @@ global.RAG_TEST_UTILS = {
   createTestDirectory: async (basePath, structure) => {
     await _fs.mkdir(basePath, { recursive: true });
 
+    // Separate directories and files for optimized parallel processing
+    const directories = [];
+    const files = [];
+
     for (const [name, content] of Object.entries(structure)) {
       const _fullPath = _path.join(basePath, name);
 
       if (typeof content === 'object') {
-        await _fs.mkdir(_fullPath, { recursive: true });
-        await global.RAG_TEST_UTILS.createTestDirectory(_fullPath, content);
+        directories.push({ path: _fullPath, content });
       } else {
-        await _fs.writeFile(_fullPath, content);
+        files.push({ path: _fullPath, content });
       }
     }
+
+    // Create all directories first (must be sequential for hierarchy)
+    for (const dir of directories) {
+      await _fs.mkdir(dir.path, { recursive: true });
+      await global.RAG_TEST_UTILS.createTestDirectory(dir.path, dir.content);
+    }
+
+    // Create all files in parallel (after directories exist)
+    await Promise.all(
+      files.map(file => _fs.writeFile(file.path, file.content))
+    );
   },
 
   /**
