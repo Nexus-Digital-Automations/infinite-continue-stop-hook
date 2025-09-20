@@ -2,16 +2,16 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
-      "status": "in_progress",
+      "status": "pending",
       "created_at": "2025-09-18T19:32:15.863Z",
       "title": "LINTER ERROR: Fix 738 linting violations across project files",
       "description": "Fix all linting errors and warnings found: 223 errors, 515 warnings. Major issues include trailing spaces, unused variables, missing commas, and console statements. Must achieve zero violations before completing any feature tasks.",
       "category": "error",
       "priority": "high",
       "id": "error_1758223935863_kquonzbspt",
-      "assigned_agent": "dev_session_1758348696460_1_general_94734598",
-      "started_at": "2025-09-20T06:28:35.276Z",
-      "claimed_by": "dev_session_1758348696460_1_general_94734598",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "dev_session_1758223743965_1_general_7d87022d",
@@ -71,6 +71,12 @@
           "assignedAt": "2025-09-20T06:28:35.276Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1758348696460_1_general_94734598",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-20T07:04:32.491Z",
+          "reason": "Agent became stale (inactive >30 minutes)"
         }
       ]
     },
@@ -2516,15 +2522,15 @@
       "id": "error_1758348851530_ksfqn9qx8rs"
     },
     {
-      "status": "in_progress",
+      "status": "pending",
       "created_at": "2025-09-20T06:14:11.693Z",
       "title": "Fix all remaining ESLint violations across project",
       "description": "Comprehensive ESLint violation fixes including: missing curly braces, eol-last violations, quote consistency, unused variables, missing semicolons, trailing spaces, and formatting issues. Run full project ESLint check after fixes to ensure zero violations.",
       "category": "error",
       "id": "error_1758348851693_hc5t71d6u6u",
-      "assigned_agent": "dev_session_1758348836775_1_general_755b5541",
-      "started_at": "2025-09-20T06:14:32.549Z",
-      "claimed_by": "dev_session_1758348836775_1_general_755b5541",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "dev_session_1758348836775_1_general_755b5541",
@@ -2532,6 +2538,12 @@
           "assignedAt": "2025-09-20T06:14:32.549Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1758348836775_1_general_755b5541",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-20T07:04:32.491Z",
+          "reason": "Agent became stale (inactive >30 minutes)"
         }
       ]
     },
@@ -2552,15 +2564,15 @@
       "id": "error_1758348852357_b1sku0h50r"
     },
     {
-      "status": "in_progress",
+      "status": "pending",
       "created_at": "2025-09-20T06:14:47.625Z",
       "title": "Fix security warnings in successCriteriaManager.js",
       "description": "Address object injection vulnerabilities in core/successCriteriaManager.js by validating object keys, using proper sanitization, and adding security checks at lines 402, 404, 405, 500, 508, 555, 828, 830, 831",
       "category": "error",
       "id": "error_1758348887625_ugwv50qsbpa",
-      "assigned_agent": "dev_session_1758348836606_1_general_7c912a7f",
-      "started_at": "2025-09-20T06:16:05.849Z",
-      "claimed_by": "dev_session_1758348836606_1_general_7c912a7f",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "dev_session_1758348836606_1_general_7c912a7f",
@@ -2568,6 +2580,12 @@
           "assignedAt": "2025-09-20T06:16:05.849Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1758348836606_1_general_7c912a7f",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-20T07:04:32.491Z",
+          "reason": "Agent became stale (inactive >30 minutes)"
         }
       ]
     },
@@ -2656,15 +2674,15 @@
       "id": "error_1758349823847_ahj48l7hqbu"
     },
     {
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2025-09-20T06:30:24.031Z",
       "title": "Final ESLint Validation and Commit All Fixes",
       "description": "Coordinate comprehensive ESLint validation across entire project, verify zero violations, test build/start functionality, run existing tests, and commit all changes with proper documentation",
       "category": "error",
       "id": "error_1758349824031_vd6ef498bqb",
-      "assigned_agent": "dev_session_1758349809115_1_general_8b5573a5",
+      "assigned_agent": null,
       "started_at": "2025-09-20T06:36:31.161Z",
-      "claimed_by": "dev_session_1758349809115_1_general_8b5573a5",
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "dev_session_1758349809115_1_general_8b5573a5",
@@ -2672,8 +2690,16 @@
           "assignedAt": "2025-09-20T06:36:31.161Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1758349809115_1_general_8b5573a5",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-20T07:04:32.491Z",
+          "reason": "Agent became stale (inactive >30 minutes)"
         }
-      ]
+      ],
+      "completed_at": "2025-09-20T06:43:14.638Z",
+      "updated_at": "2025-09-20T06:43:14.638Z"
     },
     {
       "status": "completed",
@@ -2684,6 +2710,28 @@
       "id": "error_1758349826004_7z2durzmcxe",
       "completed_at": "2025-09-20T06:40:48.875Z",
       "updated_at": "2025-09-20T06:40:48.876Z"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T15:05:16.913Z",
+      "title": "Fix agent ID requirement issue in task claiming",
+      "description": "The TaskManager API is requiring agent ID to be provided when claiming tasks, but agents are not properly initializing before claiming. Need to ensure proper initialization sequence and fix any code that tries to claim tasks without proper agent ID setup.",
+      "category": "error",
+      "id": "error_1758380716913_vevmmw31dr",
+      "assigned_agent": "dev_session_1758380699985_1_general_17570612",
+      "started_at": "2025-09-20T15:05:38.973Z",
+      "claimed_by": "dev_session_1758380699985_1_general_17570612",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758380699985_1_general_17570612",
+          "role": "primary",
+          "assignedAt": "2025-09-20T15:05:38.973Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-20T15:10:42.295Z",
+      "updated_at": "2025-09-20T15:10:42.295Z"
     }
   ],
   "current_mode": "DEVELOPMENT",
@@ -2693,13 +2741,13 @@
   "strikes_completed_last_run": false,
   "last_hook_activation": 1757094794402,
   "agents": {
-    "dev_session_1758348696460_1_general_94734598": {
+    "dev_session_1758380699985_1_general_17570612": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T06:11:36.461Z",
+      "lastHeartbeat": "2025-09-20T15:04:59.986Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2710,301 +2758,7 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T06:11:36.461Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758348836370_1_general_10b6ef7e": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T06:13:56.371Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T06:13:56.371Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758348836536_1_general_dad34461": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T06:13:56.536Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T06:13:56.536Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758348836606_1_general_7c912a7f": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T06:13:56.606Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T06:13:56.606Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758348836775_1_general_755b5541": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T06:13:56.776Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T06:13:56.776Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758348836814_1_general_88899f4f": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T06:13:56.815Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T06:13:56.815Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758348836891_1_general_21628256": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T06:13:56.891Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T06:13:56.891Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758349808821_1_general_e58b64ce": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T06:30:08.822Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T06:30:08.822Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758349808824_1_general_aa36cd04": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T06:30:08.825Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T06:30:08.825Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758349808909_1_general_4a440058": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T06:30:08.909Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T06:30:08.909Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758349808945_1_general_b802cd1c": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T06:30:08.945Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T06:30:08.945Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758349809115_1_general_8b5573a5": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T06:30:09.115Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T06:30:09.115Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758349809146_1_general_c9974e09": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T06:30:09.147Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T06:30:09.147Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758349811173_1_general_bbc8e18a": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T06:30:11.174Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T06:30:11.174Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758350557073_1_general_3d97e05a": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T06:42:37.074Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T06:42:37.074Z",
+      "createdAt": "2025-09-20T15:04:59.986Z",
       "sessionId": null,
       "metadata": {}
     }

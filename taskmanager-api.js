@@ -159,8 +159,7 @@ class TaskManagerAPI {
     // Multi-agent orchestration for concurrent operations
     this.orchestrator = new MultiAgentOrchestrator(TODO_PATH);
 
-    // Session state - current agent ID (null until agent is initialized)
-    this.agentId = null;
+    // Agent ID storage removed - agents must always provide ID explicitly
 
     // Performance configuration - 10 second timeout for all operations
     this.timeout = 10000;
@@ -359,9 +358,6 @@ class TaskManagerAPI {
   // Agent Management (delegate to AgentManagement module)
   async initAgent(config = {}) {
     const result = await this.agentManagement.initAgent(config);
-    if (result.success) {
-      this.agentId = result.agentId; // Store agent ID for session
-    }
     return result;
   }
 
@@ -568,8 +564,9 @@ class TaskManagerAPI {
                 status: {
                   description: 'Get agent status and current tasks',
                   usage:
-                    'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" status [agentId]',
+                    'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" status <agentId>',
                   output: 'Agent state, assigned tasks, and system status',
+                  agentIdRequirement: 'Agent ID is REQUIRED - no default or stored agent ID exists'
                 },
               },
               agentLifecycle: {
@@ -633,8 +630,13 @@ class TaskManagerAPI {
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" claim task_123 agent_456',
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" claim error_789 development_session_123_agent high',
                   ],
-                  notes:
-                    "Agent ID is REQUIRED and must be provided explicitly. Use the agent ID returned from the 'init' command.",
+                  agentIdRequirement:
+                    "Agent ID is ALWAYS REQUIRED and must be provided explicitly. No storage mechanism exists - you must provide the agent ID from the 'init' command output every time.",
+                  agentIdSource: [
+                    "Use agent ID from 'init' command output",
+                    "Use 'list-agents' to find existing agent IDs",
+                    "Agent IDs are not stored - must be provided with every command"
+                  ],
                 },
                 complete: {
                   description:
@@ -770,13 +772,20 @@ class TaskManagerAPI {
                 agentInitialization: {
                   problem: 'Agent ID is required errors',
                   explanation:
-                    'All task operations require explicit agent ID parameter - no auto-detection available',
+                    'ALL task operations ALWAYS require explicit agent ID parameter - NO storage mechanism exists',
+                  keyPoints: [
+                    'Agent IDs are NEVER stored automatically',
+                    'You MUST provide agent ID with every command',
+                    'No auto-detection, no defaults, no session storage'
+                  ],
                   solutions: [
-                    "FIRST TIME: Run 'timeout 10s node taskmanager-api.js init' and SAVE the returned agentId",
-                    'EXISTING AGENT: Use your saved agent ID in all commands: claim <taskId> <agentId>',
-                    "FOR REINITIALIZATION: Use 'timeout 10s node taskmanager-api.js reinitialize <savedAgentId>'",
-                    "FOR STATUS: Use 'timeout 10s node taskmanager-api.js status <savedAgentId>'",
-                    "IF LOST AGENT ID: Run 'init' again to create new agent (old agent will be cleaned up automatically)",
+                    "FIRST TIME: Run 'timeout 10s node taskmanager-api.js init' and COPY the returned agentId",
+                    'SAVE AGENT ID: Store the agent ID somewhere you can reference it',
+                    'EXISTING AGENT: Always provide your agent ID: claim <taskId> <yourAgentId>',
+                    "FOR REINITIALIZATION: Always include agent ID: reinitialize <yourAgentId>",
+                    "FOR STATUS: Always include agent ID: status <yourAgentId>",
+                    "FIND EXISTING AGENTS: Use 'list-agents' to see all available agent IDs",
+                    "IF LOST AGENT ID: Run 'init' to create new agent OR use 'list-agents' to find existing ones",
                   ],
                 },
               },
