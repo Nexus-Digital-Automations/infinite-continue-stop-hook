@@ -36,7 +36,7 @@
  * Usage: node taskmanager-api.js <command> [args...] [--project-root /path/to/project]
  */
 
-const _path = require('path');
+const path = require('path');
 
 // Parse project root from --project-root flag or use current directory
 const args = process.argv.slice(2);
@@ -45,7 +45,7 @@ const PROJECT_ROOT =
   projectRootIndex !== -1 && projectRootIndex + 1 < args.length
     ? args[projectRootIndex + 1]
     : process.cwd();
-const TODO_PATH = _path.join(PROJECT_ROOT, 'TODO.json');
+const TODO_PATH = path.join(PROJECT_ROOT, 'TODO.json');
 
 // Remove --project-root and its value from args for command parsing
 if (projectRootIndex !== -1) {
@@ -59,27 +59,27 @@ const TASKMANAGER_ROOT = __dirname;
 let TaskManager, AgentManager, MultiAgentOrchestrator;
 
 // Import modular API components
-let _cliInterface;
+let cliInterface;
 
 // Import our new modular components
 let TaskOperations, AgentManagement, TaskOrdering, ValidationUtils, RAGOperations;
 
 try {
   // Import TaskManager modules using absolute paths
-  TaskManager = require(_path.join(TASKMANAGER_ROOT, 'lib', 'taskManager.js'));
-  AgentManager = require(_path.join(TASKMANAGER_ROOT, 'lib', 'agentManager.js'));
+  TaskManager = require(path.join(TASKMANAGER_ROOT, 'lib', 'taskManager.js'));
+  AgentManager = require(path.join(TASKMANAGER_ROOT, 'lib', 'agentManager.js'));
   MultiAgentOrchestrator = require(
-    _path.join(TASKMANAGER_ROOT, 'lib', 'multiAgentOrchestrator.js'),
+    path.join(TASKMANAGER_ROOT, 'lib', 'multiAgentOrchestrator.js'),
   );
 
   // Import modular API components
   cliInterface = require(
-    _path.join(TASKMANAGER_ROOT, 'lib', 'api-modules', 'cli', 'cliInterface.js'),
+    path.join(TASKMANAGER_ROOT, 'lib', 'api-modules', 'cli', 'cliInterface.js'),
   );
 
   // Import our refactored modules
   TaskOperations = require(
-    _path.join(
+    path.join(
       TASKMANAGER_ROOT,
       'lib',
       'api-modules',
@@ -88,7 +88,7 @@ try {
     ),
   );
   AgentManagement = require(
-    _path.join(
+    path.join(
       TASKMANAGER_ROOT,
       'lib',
       'api-modules',
@@ -97,7 +97,7 @@ try {
     ),
   );
   TaskOrdering = require(
-    _path.join(
+    path.join(
       TASKMANAGER_ROOT,
       'lib',
       'api-modules',
@@ -106,7 +106,7 @@ try {
     ),
   );
   ValidationUtils = require(
-    _path.join(
+    path.join(
       TASKMANAGER_ROOT,
       'lib',
       'api-modules',
@@ -115,7 +115,7 @@ try {
     ),
   );
   RAGOperations = require(
-    _path.join(
+    path.join(
       TASKMANAGER_ROOT,
       'lib',
       'api-modules',
@@ -953,7 +953,6 @@ async function main() {
     await cliInterface.executeCommand(api, args);
     return; // Early return to skip the rest of the switch logic
   } catch (error) {
-    let _guide;
     let errorContext = 'general';
 
     // Determine error context for better guidance
@@ -972,6 +971,7 @@ async function main() {
     }
 
     // Try to get contextual guide for the error
+    let guide;
     try {
       guide = await api._getGuideForError(errorContext);
     } catch {

@@ -15,9 +15,9 @@ const { spawn } = require('child_process');
 const _fs = require('fs');
 
 // Test configuration
-const TEST_PROJECT_DIR = path.join(__dirname, 'research-system-test-project');
-const TODO_PATH = path.join(TEST_PROJECT_DIR, 'TODO.json');
-const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
+const TEST_PROJECT_DIR = _path.join(__dirname, 'research-system-test-project');
+const TODO_PATH = _path.join(TEST_PROJECT_DIR, 'TODO.json');
+const API_PATH = _path.join(__dirname, '..', 'taskmanager-api.js');
 const TIMEOUT = 10000; // 10 seconds for research operations
 
 /**
@@ -109,7 +109,7 @@ function setupResearchTestEnvironment() {
   ];
 
   directories.forEach((dir) => {
-    const fullPath = path.join(TEST_PROJECT_DIR, dir);
+    const fullPath = _path.join(TEST_PROJECT_DIR, dir);
     if (!fs.existsSync(fullPath)) {
       fs.mkdirSync(fullPath, { recursive: true });
     }
@@ -142,8 +142,8 @@ function setupResearchTestEnvironment() {
   };
 
   Object.entries(mockFiles).forEach(([relativePath, content]) => {
-    const fullPath = path.join(TEST_PROJECT_DIR, relativePath);
-    const dir = path.dirname(fullPath);
+    const fullPath = _path.join(TEST_PROJECT_DIR, relativePath);
+    const dir = _path.dirname(fullPath);
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }

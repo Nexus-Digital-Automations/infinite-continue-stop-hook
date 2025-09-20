@@ -15,8 +15,8 @@ const _path = require('path');
 const _fs = require('fs').promises;
 
 // Test configuration
-const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
-const TEST_PROJECT_DIR = path.join(__dirname, 'regression-test-project');
+const API_PATH = _path.join(__dirname, '..', 'taskmanager-api.js');
+const TEST_PROJECT_DIR = _path.join(__dirname, 'regression-test-project');
 const TIMEOUT = 30000;
 
 /**
@@ -133,7 +133,7 @@ async function createLegacyProjectConfig() {
   };
 
   // Write legacy config file
-  const configPath = path.join(TEST_PROJECT_DIR, '.success-criteria.json');
+  const configPath = _path.join(TEST_PROJECT_DIR, '.success-criteria.json');
   await fs.writeFile(configPath, JSON.stringify(legacyConfig, null, 2));
 
   return configPath;
@@ -166,7 +166,7 @@ async function setupRegressionTestProject() {
     };
 
     await fs.writeFile(
-      path.join(TEST_PROJECT_DIR, 'package.json'),
+      _path.join(TEST_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2),
     );
 
@@ -200,7 +200,7 @@ app.start().then(() => {
 });
 `;
 
-    await fs.writeFile(path.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
+    await fs.writeFile(_path.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
 
     // Create test file
     const testJs = `
@@ -216,7 +216,7 @@ describe('Regression Test Suite', () => {
 });
 `;
 
-    await fs.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
+    await fs.writeFile(_path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     console.log('Regression test project setup completed');
   } catch {
@@ -440,7 +440,7 @@ describe('Success Criteria Regression Tests', () => {
         ],
       };
 
-      const _configPath = path.join(
+      const _configPath = _path.join(
         TEST_PROJECT_DIR,
         '.success-criteria-deprecated.json',
       );
@@ -513,7 +513,7 @@ describe('Success Criteria Regression Tests', () => {
         ],
       };
 
-      const _configPath = path.join(
+      const _configPath = _path.join(
         TEST_PROJECT_DIR,
         '.success-criteria-extended.json',
       );
@@ -572,7 +572,7 @@ describe('Success Criteria Regression Tests', () => {
         ],
       };
 
-      const _oldDataPath = path.join(TEST_PROJECT_DIR, 'old-format-data.json');
+      const _oldDataPath = _path.join(TEST_PROJECT_DIR, 'old-format-data.json');
       await fs.writeFile(oldDataPath, JSON.stringify(oldFormatData, null, 2));
 
       // Migrate old format data
@@ -721,7 +721,7 @@ describe('Success Criteria Regression Tests', () => {
         ],
       };
 
-      const _dataPath = path.join(TEST_PROJECT_DIR, 'integrity-test-data.json');
+      const _dataPath = _path.join(TEST_PROJECT_DIR, 'integrity-test-data.json');
       await fs.writeFile(dataPath, JSON.stringify(testData, null, 2));
 
       // Migrate and validate integrity

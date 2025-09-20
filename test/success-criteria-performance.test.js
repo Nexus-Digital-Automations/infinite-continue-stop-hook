@@ -17,8 +17,8 @@ const _fs = require('fs').promises;
 const _os = require('os');
 
 // Test configuration
-const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
-const TEST_PROJECT_DIR = path.join(__dirname, 'performance-test-project');
+const API_PATH = _path.join(__dirname, '..', 'taskmanager-api.js');
+const TEST_PROJECT_DIR = _path.join(__dirname, 'performance-test-project');
 const PERFORMANCE_TIMEOUT = 35000; // 35 seconds to allow for 30s requirement testing
 const MEMORY_SAMPLING_INTERVAL = 100; // milliseconds
 
@@ -280,7 +280,7 @@ async function setupPerformanceTestProject() {
     };
 
     await fs.writeFile(
-      path.join(TEST_PROJECT_DIR, 'package.json'),
+      _path.join(TEST_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2),
     );
 
@@ -322,7 +322,7 @@ setTimeout(() => {
 }, 1000);
 `;
 
-    await fs.writeFile(path.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
+    await fs.writeFile(_path.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
 
     // Create test file
     const testJs = `
@@ -338,7 +338,7 @@ describe('Performance Test Suite', () => {
 });
 `;
 
-    await fs.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
+    await fs.writeFile(_path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     console.log('Performance test project setup completed');
   } catch {
@@ -879,7 +879,7 @@ describe('Success Criteria Performance Tests', () => {
         console.log(JSON.stringify(report, null, 2));
 
         // Save report for analysis
-        const _reportPath = path.join(__dirname, 'performance-report.json');
+        const _reportPath = _path.join(__dirname, 'performance-report.json');
         await fs.writeFile(reportPath, JSON.stringify(report, null, 2));
         console.log(`Performance report saved to: ${reportPath}`);
       },
@@ -954,7 +954,7 @@ describe('Success Criteria Performance Tests', () => {
         expect(benchmarkResults.performanceRatio).toBeLessThan(100); // Should be efficient relative to CPU
 
         // Save benchmark results
-        const _benchmarkPath = path.join(__dirname, 'benchmark-results.json');
+        const _benchmarkPath = _path.join(__dirname, 'benchmark-results.json');
         await fs.writeFile(
           benchmarkPath,
           JSON.stringify(benchmarkResults, null, 2),

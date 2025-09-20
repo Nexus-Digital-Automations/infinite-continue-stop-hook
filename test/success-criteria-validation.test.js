@@ -15,8 +15,8 @@ const _path = require('path');
 const _fs = require('fs').promises;
 
 // Test configuration
-const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
-const TEST_PROJECT_DIR = path.join(__dirname, 'validation-test-project');
+const API_PATH = _path.join(__dirname, '..', 'taskmanager-api.js');
+const TEST_PROJECT_DIR = _path.join(__dirname, 'validation-test-project');
 const TIMEOUT = 30000;
 
 /**
@@ -99,7 +99,7 @@ async function setupValidationTestProject() {
     };
 
     await fs.writeFile(
-      path.join(TEST_PROJECT_DIR, 'package.json'),
+      _path.join(TEST_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2),
     );
 
@@ -135,7 +135,7 @@ app.start().then(() => {
 });
 `;
 
-    await fs.writeFile(path.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
+    await fs.writeFile(_path.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
 
     // Create test file
     const testJs = `
@@ -151,7 +151,7 @@ describe('Validation Test Suite', () => {
 });
 `;
 
-    await fs.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
+    await fs.writeFile(_path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     console.log('Validation test project setup completed');
   } catch {

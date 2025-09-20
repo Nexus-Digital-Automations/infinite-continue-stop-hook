@@ -23,7 +23,7 @@ const _path = require('path');
 class FeatureSuggestionValidator {
   constructor() {
     this.testResults = [];
-    this.taskmanagerPath = path.join(__dirname, '..', 'taskmanager-api.js');
+    this.taskmanagerPath = _path.join(__dirname, '..', 'taskmanager-api.js');
     this.testFeatureId = null;
     this.startTime = Date.now();
 
@@ -51,7 +51,7 @@ class FeatureSuggestionValidator {
       const _startTime = Date.now();
       const _output = execSync(command, {
         encoding: 'utf8',
-        cwd: path.dirname(this.taskmanagerPath),
+        cwd: _path.dirname(this.taskmanagerPath),
         timeout: 10000,
       });
       const _duration = Date.now() - startTime;
@@ -375,7 +375,7 @@ class FeatureSuggestionValidator {
       const _report = this.generateReport();
 
       // Write detailed report to file
-      const _reportPath = path.join(
+      const _reportPath = _path.join(
         __dirname,
         '..',
         'development',
@@ -384,7 +384,7 @@ class FeatureSuggestionValidator {
       );
 
       // Ensure directory exists
-      const _reportDir = path.dirname(reportPath);
+      const _reportDir = _path.dirname(reportPath);
       if (!fs.existsSync(reportDir)) {
         fs.mkdirSync(reportDir, { recursive: true });
       }

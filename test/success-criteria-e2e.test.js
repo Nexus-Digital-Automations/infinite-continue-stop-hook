@@ -18,10 +18,10 @@ const _path = require('path');
 const { spawn } = require('child_process');
 
 // Test configuration
-const E2E_PROJECT_DIR = path.join(__dirname, 'success-criteria-e2e-project');
-const TODO_PATH = path.join(E2E_PROJECT_DIR, 'TODO.json');
-const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
-const _VALIDATOR_PATH = path.join(
+const E2E_PROJECT_DIR = _path.join(__dirname, 'success-criteria-e2e-project');
+const TODO_PATH = _path.join(E2E_PROJECT_DIR, 'TODO.json');
+const API_PATH = _path.join(__dirname, '..', 'taskmanager-api.js');
+const _VALIDATOR_PATH = _path.join(
   __dirname,
   '..',
   'success-criteria-validator.js',
@@ -105,12 +105,12 @@ async function setupE2EProject() {
   try {
     // Create project directory
     await fs.mkdir(E2E_PROJECT_DIR, { recursive: true });
-    await fs.mkdir(path.join(E2E_PROJECT_DIR, 'src'), { recursive: true });
-    await fs.mkdir(path.join(E2E_PROJECT_DIR, 'test'), { recursive: true });
-    await fs.mkdir(path.join(E2E_PROJECT_DIR, 'development'), {
+    await fs.mkdir(_path.join(E2E_PROJECT_DIR, 'src'), { recursive: true });
+    await fs.mkdir(_path.join(E2E_PROJECT_DIR, 'test'), { recursive: true });
+    await fs.mkdir(_path.join(E2E_PROJECT_DIR, 'development'), {
       recursive: true,
     });
-    await fs.mkdir(path.join(E2E_PROJECT_DIR, 'development', 'evidence'), {
+    await fs.mkdir(_path.join(E2E_PROJECT_DIR, 'development', 'evidence'), {
       recursive: true,
     });
 
@@ -138,7 +138,7 @@ async function setupE2EProject() {
     };
 
     await fs.writeFile(
-      path.join(E2E_PROJECT_DIR, 'package.json'),
+      _path.join(E2E_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2),
     );
 
@@ -158,7 +158,7 @@ function processMessage(_message) {
 module.exports = { processMessage };
 `;
 
-    await fs.writeFile(path.join(E2E_PROJECT_DIR, 'src', 'app.js'), sampleCode);
+    await fs.writeFile(_path.join(E2E_PROJECT_DIR, 'src', 'app.js'), sampleCode);
 
     // Create test files
     const testCode = `const { processMessage } = require('../src/app');
@@ -175,7 +175,7 @@ describe('Application Tests', () => {
 `;
 
     await fs.writeFile(
-      path.join(E2E_PROJECT_DIR, 'test', 'app.test.js'),
+      _path.join(E2E_PROJECT_DIR, 'test', 'app.test.js'),
       testCode,
     );
 
@@ -204,8 +204,8 @@ describe('Application Tests', () => {
     const successCriteriaConfig = {
       default_template: '25_point_standard',
       validation_timeout: 300,
-      evidence_storage: path.join(E2E_PROJECT_DIR, 'development', 'evidence'),
-      report_storage: path.join(E2E_PROJECT_DIR, 'development', 'reports'),
+      evidence_storage: _path.join(E2E_PROJECT_DIR, 'development', 'evidence'),
+      report_storage: _path.join(E2E_PROJECT_DIR, 'development', 'reports'),
       validation_agents: {
         automated: ['linter', 'build', 'test'],
         manual: ['documentation', 'architecture'],
@@ -213,7 +213,7 @@ describe('Application Tests', () => {
     };
 
     await fs.writeFile(
-      path.join(E2E_PROJECT_DIR, 'development', 'success-criteria-config.json'),
+      _path.join(E2E_PROJECT_DIR, 'development', 'success-criteria-config.json'),
       JSON.stringify(successCriteriaConfig, null, 2),
     );
   } catch {
@@ -442,7 +442,7 @@ describe('Success Criteria End-to-End Tests', () => {
 
       // 2. Implement feature (simulate code changes)
       await fs.writeFile(
-        path.join(E2E_PROJECT_DIR, 'src', 'auth.js'),
+        _path.join(E2E_PROJECT_DIR, 'src', 'auth.js'),
         `// User authentication module
 function authenticate(_username, password) {
   if (!username || !password) {
@@ -506,7 +506,7 @@ module.exports = { authenticate };
 
       // Implement bug fix
       await fs.writeFile(
-        path.join(E2E_PROJECT_DIR, 'src', 'auth-fix.js'),
+        _path.join(E2E_PROJECT_DIR, 'src', 'auth-fix.js'),
         `// Bug fix for authentication timeout
 function authenticateWithTimeout(_username, password, timeout = 10000) {
   return new Promise((resolve, reject) => {
@@ -573,7 +573,7 @@ module.exports = { authenticateWithTimeout };
 
       // Perform refactoring
       await fs.writeFile(
-        path.join(E2E_PROJECT_DIR, 'src', 'auth-refactored.js'),
+        _path.join(E2E_PROJECT_DIR, 'src', 'auth-refactored.js'),
         `/**
  * Refactored Authentication Module
  * 
@@ -853,7 +853,7 @@ module.exports = { authenticate };
       const _testResult = await execCommand('npm', ['run', 'test']);
 
       // Store evidence
-      const _evidenceDir = path.join(
+      const _evidenceDir = _path.join(
         E2E_PROJECT_DIR,
         'development',
         'evidence',
@@ -862,15 +862,15 @@ module.exports = { authenticate };
       await fs.mkdir(evidenceDir, { recursive: true });
 
       await fs.writeFile(
-        path.join(evidenceDir, 'lint-output.txt'),
+        _path.join(evidenceDir, 'lint-output.txt'),
         lintResult.stdout,
       );
       await fs.writeFile(
-        path.join(evidenceDir, 'build-output.txt'),
+        _path.join(evidenceDir, 'build-output.txt'),
         buildResult.stdout,
       );
       await fs.writeFile(
-        path.join(evidenceDir, 'test-output.txt'),
+        _path.join(evidenceDir, 'test-output.txt'),
         testResult.stdout,
       );
 
@@ -896,7 +896,7 @@ module.exports = { authenticate };
 
       // Verify evidence files exist
       const _lintEvidence = await fs.readFile(
-        path.join(evidenceDir, 'lint-output.txt'),
+        _path.join(evidenceDir, 'lint-output.txt'),
         'utf8',
       );
       expect(lintEvidence).toContain('Linting passed');

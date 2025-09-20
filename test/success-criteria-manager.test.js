@@ -64,7 +64,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn() },
     };
 
-    successCriteriaManager = new SuccessCriteriaManager(mockDependencies);
+    _successCriteriaManager = new _SuccessCriteriaManager(_mockDependencies);
   });
 
   afterEach(() => {
@@ -93,7 +93,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn() },
       };
 
-      const _manager = new SuccessCriteriaManager(defaultDependencies);
+      const _manager = new _SuccessCriteriaManager(_defaultDependencies);
       expect(typeof manager.validateCriteria).toBe('function');
       expect(typeof manager.validateTaskExists).toBe('function');
     });
@@ -1000,7 +1000,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         validateCriteria: customValidator,
       };
 
-      const _customManager = new SuccessCriteriaManager(customDependencies);
+      const _customManager = new _SuccessCriteriaManager(_customDependencies);
 
       mockTaskManager.getTask.mockResolvedValue({
         id: 'test_123',

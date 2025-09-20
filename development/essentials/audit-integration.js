@@ -21,6 +21,78 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 /**
+ * Security utilities for safe filesystem operations
+ */
+class SecurityUtils {
+  /**
+   * Sanitize and validate file path to prevent directory traversal
+   * @param {string} basePath - Base directory path (trusted)
+   * @param {string} filePath - File path to validate
+   * @returns {string} Safe resolved path
+   * @throws {Error} If path is invalid or outside base directory
+   */
+  static validatePath(basePath, filePath) {
+    if (!filePath || typeof filePath !== 'string') {
+      throw new Error('Invalid file path provided');
+    }
+
+    // Resolve paths to prevent directory traversal
+    const resolvedBase = path.resolve(basePath);
+    const resolvedPath = path.resolve(basePath, path.basename(filePath));
+
+    // Ensure the resolved path is within the base directory
+    if (!resolvedPath.startsWith(resolvedBase + path.sep) && resolvedPath !== resolvedBase) {
+      throw new Error(`Path ${filePath} is outside allowed directory ${basePath}`);
+    }
+
+    return resolvedPath;
+  }
+
+  /**
+   * Safely read file with path validation
+   * @param {string} basePath - Base directory
+   * @param {string} filePath - File to read
+   * @param {string} encoding - File encoding
+   * @returns {Promise<string>} File contents
+   */
+  static safeReadFile(basePath, filePath, encoding = 'utf-8') {
+    const safePath = this.validatePath(basePath, filePath);
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated and sanitized
+    return fs.readFile(safePath, encoding);
+  }
+
+  /**
+   * Safely write file with path validation
+   * @param {string} basePath - Base directory
+   * @param {string} filePath - File to write
+   * @param {string} content - Content to write
+   * @returns {Promise<void>}
+   */
+  static async safeWriteFile(basePath, filePath, content) {
+    const safePath = this.validatePath(basePath, filePath);
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated and sanitized
+    await fs.mkdir(path.dirname(safePath), { recursive: true });
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated and sanitized
+    return fs.writeFile(safePath, content, 'utf-8');
+  }
+
+  /**
+   * Safely append to file with path validation
+   * @param {string} basePath - Base directory
+   * @param {string} filePath - File to append to
+   * @param {string} content - Content to append
+   * @returns {Promise<void>}
+   */
+  static async safeAppendFile(basePath, filePath, content) {
+    const safePath = this.validatePath(basePath, filePath);
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated and sanitized
+    await fs.mkdir(path.dirname(safePath), { recursive: true });
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated and sanitized
+    return fs.appendFile(safePath, content);
+  }
+}
+
+/**
  * Audit logger to replace console statements
  */
 class AuditLogger {
@@ -262,13 +334,12 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
    * @returns {Object} Parsed project success criteria
    */
   async loadProjectSuccessCriteria() {
-    const taskRequirementsPath = path.join(
-      this.essentialsDir,
-      'task-requirements.md',
-    );
-
     try {
-      const content = await fs.readFile(taskRequirementsPath, 'utf-8');
+      // Use safe file reading with path validation
+      const content = await SecurityUtils.safeReadFile(
+        this.essentialsDir,
+        'task-requirements.md',
+      );
 
       // Parse criteria from markdown (simplified extraction)
       const criteria = {
@@ -334,14 +405,15 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
    * @returns {Array} Array of validation command objects
    */
   async generateValidationCommands() {
-    const packageJsonPath = path.join(this.projectRoot, 'package.json');
     let hasPackageJson = false;
 
     try {
+      // Use safe path validation for package.json check
+      const packageJsonPath = SecurityUtils.validatePath(this.projectRoot, 'package.json');
       await fs.access(packageJsonPath);
       hasPackageJson = true;
     } catch {
-      // Package.json not found
+      // Package.json not found or access denied
     }
 
     if (hasPackageJson) {
@@ -478,14 +550,13 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       objectivity_enforced: this.config.objectivityEnforcement,
     };
 
-    const logPath = path.join(
-      this.projectRoot,
-      'development/logs/audit_integration.log',
-    );
-
     try {
-      await fs.mkdir(path.dirname(logPath), { recursive: true });
-      await fs.appendFile(logPath, JSON.stringify(logEntry) + '\n');
+      // Use safe file append with path validation
+      await SecurityUtils.safeAppendFile(
+        this.projectRoot,
+        'development/logs/audit_integration.log',
+        JSON.stringify(logEntry) + '\n',
+      );
     } catch (error) {
       this.logger.log(`⚠️ Failed to log audit task creation: ${error.message}`);
     }

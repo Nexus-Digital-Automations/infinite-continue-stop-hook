@@ -18,9 +18,9 @@ const { spawn } = require('child_process');
 const _fs = require('fs');
 
 // Test configuration
-const TEST_PROJECT_DIR = path.join(__dirname, 'audit-system-test-project');
-const TODO_PATH = path.join(TEST_PROJECT_DIR, 'TODO.json');
-const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
+const TEST_PROJECT_DIR = _path.join(__dirname, 'audit-system-test-project');
+const TODO_PATH = _path.join(TEST_PROJECT_DIR, 'TODO.json');
+const API_PATH = _path.join(__dirname, '..', 'taskmanager-api.js');
 const TIMEOUT = 12000; // 12 seconds for audit operations
 
 /**
@@ -94,7 +94,7 @@ function setupAuditTestEnvironment() {
   }
 
   // Create development/essentials directory
-  const essentialsDir = path.join(
+  const essentialsDir = _path.join(
     TEST_PROJECT_DIR,
     'development',
     'essentials',
@@ -194,7 +194,7 @@ This file defines the standard completion criteria that ALL tasks must satisfy b
 `;
 
   fs.writeFileSync(
-    path.join(essentialsDir, 'audit-criteria.md'),
+    _path.join(essentialsDir, 'audit-criteria.md'),
     auditCriteriaContent,
   );
 
@@ -209,7 +209,7 @@ This file defines the standard completion criteria that ALL tasks must satisfy b
 `;
 
   fs.writeFileSync(
-    path.join(essentialsDir, 'minimal-audit-criteria.md'),
+    _path.join(essentialsDir, 'minimal-audit-criteria.md'),
     minimalAuditContent,
   );
 
@@ -322,7 +322,7 @@ describe('Audit System Validation Tests', () => {
 
     test('should handle missing audit criteria file with default criteria', async () => {
       // Remove audit criteria file
-      const _auditCriteriaPath = path.join(
+      const _auditCriteriaPath = _path.join(
         TEST_PROJECT_DIR,
         'development/essentials/audit-criteria.md',
       );
@@ -852,7 +852,7 @@ describe('Audit System Validation Tests', () => {
 
     test('should handle corrupted audit criteria file gracefully', async () => {
       // Create corrupted audit criteria file
-      const _auditCriteriaPath = path.join(
+      const _auditCriteriaPath = _path.join(
         TEST_PROJECT_DIR,
         'development/essentials/audit-criteria.md',
       );
@@ -884,7 +884,7 @@ describe('Audit System Validation Tests', () => {
 
     test('should handle extremely large audit criteria files', async () => {
       // Create very large audit criteria file
-      const _auditCriteriaPath = path.join(
+      const _auditCriteriaPath = _path.join(
         TEST_PROJECT_DIR,
         'development/essentials/audit-criteria.md',
       );

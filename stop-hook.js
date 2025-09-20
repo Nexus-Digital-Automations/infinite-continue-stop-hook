@@ -357,12 +357,12 @@ async function autoSortTasksByPriority(taskManager) {
     };
 
     // Ensure tasks is an array
-    if (!Array.isArray(_todoData.tasks)) {
-      _todoData.tasks = [];
+    if (!Array.isArray(todoData.tasks)) {
+      todoData.tasks = [];
     }
 
     // Process all tasks for ID-based classification
-    for (const task of _todoData.tasks) {
+    for (const task of todoData.tasks) {
       // Skip null/undefined tasks
       if (!task || typeof task !== 'object') {
         continue;
@@ -390,7 +390,7 @@ async function autoSortTasksByPriority(taskManager) {
     }
 
     // STEP 2: Sort tasks by ID-based priority
-    _todoData.tasks.sort((a, b) => {
+    todoData.tasks.sort((a, b) => {
       // Handle null/undefined tasks - push to end
       if (!a || typeof a !== 'object') {
         return 1;
@@ -414,16 +414,16 @@ async function autoSortTasksByPriority(taskManager) {
     });
 
     // Update TODO.json settings for ID-based classification
-    if (!_todoData.settings) {
-      _todoData.settings = {};
+    if (!todoData.settings) {
+      todoData.settings = {};
     }
-    _todoData.settings.id_based_classification = true;
-    _todoData.settings.auto_sort_enabled = true;
-    _todoData.settings.sort_criteria = {
+    todoData.settings.id_based_classification = true;
+    todoData.settings.auto_sort_enabled = true;
+    todoData.settings.sort_criteria = {
       primary: 'id_prefix',
       secondary: 'created_at',
     };
-    _todoData.settings.id_priority_order = {
+    todoData.settings.id_priority_order = {
       error_: 1,
       feature_: 2,
       subtask_: 3,
@@ -438,7 +438,7 @@ async function autoSortTasksByPriority(taskManager) {
     return {
       tasksMoved,
       tasksUpdated,
-      totalTasks: _todoData.tasks.length,
+      totalTasks: todoData.tasks.length,
     };
   } catch (error) {
     // eslint-disable-next-line no-console -- hook script error logging for debugging
@@ -545,14 +545,14 @@ process.stdin.on('end', async () => {
     if (!inputData || inputData.trim() === '') {
       // No input - probably manual execution, simulate Claude Code input
       logger.addFlow('No input detected - running in manual mode');
-      hookInput = {
+      _hookInput = {
         session_id: 'manual_test',
         transcript_path: '',
         stop_hook_active: true,
         hook_event_name: 'manual_execution',
       };
     } else {
-      hookInput = JSON.parse(inputData);
+      _hookInput = JSON.parse(inputData);
     }
 
     const {
@@ -560,10 +560,10 @@ process.stdin.on('end', async () => {
       transcript_path: _transcript_path,
       stop_hook_active: _stop_hook_active,
       hook_event_name,
-    } = hookInput;
+    } = _hookInput;
 
     // Log input with event details
-    logger.logInput(hookInput);
+    logger.logInput(_hookInput);
     logger.addFlow(
       `Received ${hook_event_name || 'unknown'} event from Claude Code`,
     );
@@ -674,7 +674,7 @@ If you want to enable task management for this project:
 
     for (const agentId of allAgents) {
       // eslint-disable-next-line security/detect-object-injection -- validated agent ID from TODO.json structure
-      const agent = _todoData.agents[agentId];
+      const agent = todoData.agents[agentId];
       // Handle both lastHeartbeat (camelCase) and last_heartbeat (snake_case) formats
       const lastHeartbeat = agent.lastHeartbeat || agent.last_heartbeat;
       const heartbeatTime = lastHeartbeat

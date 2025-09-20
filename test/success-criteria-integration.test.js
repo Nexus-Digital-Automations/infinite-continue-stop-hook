@@ -18,9 +18,9 @@ const _path = require('path');
 const { spawn } = require('child_process');
 
 // Test configuration
-const TEST_PROJECT_DIR = path.join(__dirname, 'success-criteria-test-project');
-const TODO_PATH = path.join(TEST_PROJECT_DIR, 'TODO.json');
-const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
+const TEST_PROJECT_DIR = _path.join(__dirname, 'success-criteria-test-project');
+const TODO_PATH = _path.join(TEST_PROJECT_DIR, 'TODO.json');
+const API_PATH = _path.join(__dirname, '..', 'taskmanager-api.js');
 const TIMEOUT = 15000; // 15 seconds for API operations
 
 /**

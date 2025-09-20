@@ -13,9 +13,9 @@ const _fs = require('fs').promises;
 
 // Global test configuration
 global.RAG_TEST_CONFIG = {
-  testDataPath: path.join(__dirname, '../test-data'),
-  tempPath: path.join(__dirname, '../temp'),
-  mockDataPath: path.join(__dirname, '../mocks'),
+  testDataPath: _path.join(__dirname, '../test-data'),
+  tempPath: _path.join(__dirname, '../temp'),
+  mockDataPath: _path.join(__dirname, '../mocks'),
   performanceThresholds: {
     embeddingGeneration: 2000, // 2 seconds
     semanticSearch: 500, // 500ms
@@ -155,7 +155,7 @@ global.RAG_TEST_UTILS = {
     await fs.mkdir(basePath, { recursive: true });
 
     for (const [name, content] of Object.entries(structure)) {
-      const _fullPath = path.join(basePath, name);
+      const _fullPath = _path.join(basePath, name);
 
       if (typeof content === 'object') {
         await fs.mkdir(fullPath, { recursive: true });
@@ -227,7 +227,7 @@ afterEach(async () => {
   try {
     const tempFiles = await fs.readdir(global.RAG_TEST_CONFIG.tempPath);
     for (const file of tempFiles) {
-      await fs.rm(path.join(global.RAG_TEST_CONFIG.tempPath, file), {
+      await fs.rm(_path.join(global.RAG_TEST_CONFIG.tempPath, file), {
         recursive: true,
         force: true,
       });

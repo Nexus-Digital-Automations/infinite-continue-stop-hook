@@ -43,13 +43,13 @@ describe('RAG System End-to-End Integration Tests', () => {
   let _testAssertions;
 
   // Test data storage paths
-  const testDataPath = path.join(__dirname, '../test-data');
-  const ragTestPath = path.join(testDataPath, 'rag-test');
+  const testDataPath = __path.join(__dirname, '../test-data');
+  const ragTestPath = __path.join(testDataPath, 'rag-test');
 
   beforeAll(async () => {
     // Create test environment
     await fs.mkdir(ragTestPath, { recursive: true });
-    await fs.mkdir(path.join(ragTestPath, 'rag'), { recursive: true });
+    await fs.mkdir(_path.join(ragTestPath, 'rag'), { recursive: true });
 
     // Initialize test utilities
     testDataGenerator = new TestDataGenerator();
@@ -64,8 +64,8 @@ describe('RAG System End-to-End Integration Tests', () => {
     });
 
     vectorDatabase = new VectorDatabase({
-      indexPath: path.join(ragTestPath, 'rag', 'test-vector.index'),
-      metadataPath: path.join(ragTestPath, 'rag', 'test-metadata.db'),
+      indexPath: _path.join(ragTestPath, 'rag', 'test-vector.index'),
+      metadataPath: _path.join(ragTestPath, 'rag', 'test-metadata.db'),
       embeddingDimension: 384, // MiniLM dimension
       enableMultiIndex: true,
       contentTypes: ['errors', 'features', 'optimization', 'decisions', 'patterns'],
@@ -90,7 +90,7 @@ describe('RAG System End-to-End Integration Tests', () => {
     });
 
     migrationSystem = new MigrationSystem({
-      sourcePath: path.join(ragTestPath, 'development'),
+      sourcePath: _path.join(ragTestPath, 'development'),
       batchSize: 10, // Smaller batches for tests
       enableBackup: false, // Disable backup for tests
     });
@@ -432,18 +432,18 @@ describe('RAG System End-to-End Integration Tests', () => {
   describe('Migration System Integration', () => {
     test('should create test content for migration', async () => {
       // Create test lesson files
-      const _testLessonsPath = path.join(ragTestPath, 'development', 'lessons');
-      await fs.mkdir(path.join(testLessonsPath, 'features'), { recursive: true });
-      await fs.mkdir(path.join(testLessonsPath, 'errors'), { recursive: true });
+      const _testLessonsPath = _path.join(ragTestPath, 'development', 'lessons');
+      await fs.mkdir(_path.join(testLessonsPath, 'features'), { recursive: true });
+      await fs.mkdir(_path.join(testLessonsPath, 'errors'), { recursive: true });
 
       // Create sample lesson files
       const _sampleLessons = [
         {
-          path: path.join(testLessonsPath, 'features', 'react-optimization.md'),
+          path: _path.join(testLessonsPath, 'features', 'react-optimization.md'),
           content: '# React Performance Optimization\n\nBest practices for optimizing React applications...',
         },
         {
-          path: path.join(testLessonsPath, 'errors', 'async-errors.md'),
+          path: _path.join(testLessonsPath, 'errors', 'async-errors.md'),
           content: '# Async Function Errors\n\nCommon errors in async functions and how to fix them...',
         },
       ];
@@ -453,8 +453,8 @@ describe('RAG System End-to-End Integration Tests', () => {
       }
 
       // Verify files were created
-      const _featuresFiles = await fs.readdir(path.join(testLessonsPath, 'features'));
-      const _errorsFiles = await fs.readdir(path.join(testLessonsPath, 'errors'));
+      const _featuresFiles = await fs.readdir(_path.join(testLessonsPath, 'features'));
+      const _errorsFiles = await fs.readdir(_path.join(testLessonsPath, 'errors'));
 
       expect(featuresFiles).toContain('react-optimization.md');
       expect(errorsFiles).toContain('async-errors.md');

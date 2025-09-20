@@ -2,16 +2,16 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
-      "status": "in_progress",
+      "status": "pending",
       "created_at": "2025-09-18T19:32:15.863Z",
       "title": "LINTER ERROR: Fix 738 linting violations across project files",
       "description": "Fix all linting errors and warnings found: 223 errors, 515 warnings. Major issues include trailing spaces, unused variables, missing commas, and console statements. Must achieve zero violations before completing any feature tasks.",
       "category": "error",
       "priority": "high",
       "id": "error_1758223935863_kquonzbspt",
-      "assigned_agent": "dev_session_1758334911555_1_general_722e20af",
-      "started_at": "2025-09-20T02:23:45.711Z",
-      "claimed_by": "dev_session_1758334911555_1_general_722e20af",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "dev_session_1758223743965_1_general_7d87022d",
@@ -45,30 +45,14 @@
           "assignedAt": "2025-09-20T02:23:45.711Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1758334911555_1_general_722e20af",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-20T03:14:12.927Z",
+          "reason": "Agent became stale (inactive >30 minutes)"
         }
       ]
-    },
-    {
-      "status": "completed",
-      "created_at": "2025-09-20T02:27:27.167Z",
-      "title": "EMERGENCY LINTER PROTOCOL - Agent #6 Coordination and Final Validation",
-      "description": "Coordinate 6-agent concurrent deployment to fix all linter violations. Monitor progress of Agents #1-5, perform final validation, ensure zero violations achieved.",
-      "category": "error",
-      "id": "error_1758335247167_edf7d8450yc",
-      "assigned_agent": "dev_session_1758335229208_1_general_452b2c6e",
-      "started_at": "2025-09-20T02:27:47.433Z",
-      "claimed_by": "dev_session_1758335229208_1_general_452b2c6e",
-      "agent_assignment_history": [
-        {
-          "agentId": "dev_session_1758335229208_1_general_452b2c6e",
-          "role": "primary",
-          "assignedAt": "2025-09-20T02:27:47.433Z",
-          "reassignReason": null,
-          "claimPriority": "normal"
-        }
-      ],
-      "completed_at": "2025-09-20T02:43:24.614Z",
-      "updated_at": "2025-09-20T02:43:24.615Z"
     },
     {
       "status": "pending",
@@ -77,6 +61,14 @@
       "description": "Systematically fix all no-unused-vars ESLint violations across the project by removing unused variables, prefixing unused parameters with underscore, and removing unused imports while preserving code functionality",
       "category": "error",
       "id": "error_1758335519050_hci1wdgyouu"
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-20T03:26:24.506Z",
+      "title": "Fix all missing require/import statements causing undefined variable errors",
+      "description": "Add missing imports: RAGMigration in ragOperations.js, SecurityValidator/SecurityMiddleware in security/index.js, SecurityValidator in securityMiddleware.js, and all missing imports in success-criteria/index.js",
+      "category": "error",
+      "id": "error_1758338784506_p1hz9i1gbp9"
     },
     {
       "id": "feature_1757781331183_9waer1qua",
@@ -2327,16 +2319,16 @@
       "id": "test_1758143150536_7xjtdyrbt"
     },
     {
-      "status": "in_progress",
+      "status": "pending",
       "created_at": "2025-09-20T02:30:41.517Z",
       "title": "CRITICAL LINTER ERROR: Fix 1,181 violations (439 errors, 742 warnings) across project files",
       "description": "URGENT: Comprehensive linting violations discovered during routine check: 439 critical errors and 742 warnings across multiple files. Major issues include: unused variables (no-unused-vars), console statements (no-console), security violations (detect-non-literal-fs-filename), quote inconsistencies, missing await expressions, and redundant return await. Must achieve zero violations before any feature work can proceed. Priority files include test files, development essentials, and core system components.",
       "category": "error",
       "priority": "normal",
       "id": "test_1758336091786_oa960f9kf",
-      "assigned_agent": "dev_session_1758334391264_1_general_64528361",
-      "started_at": "2025-09-20T02:30:57.378Z",
-      "claimed_by": "dev_session_1758334391264_1_general_64528361",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agentId": "dev_session_1758334391264_1_general_64528361",
@@ -2344,8 +2336,22 @@
           "assignedAt": "2025-09-20T02:30:57.378Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1758334391264_1_general_64528361",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-20T03:14:12.927Z",
+          "reason": "Agent became stale (inactive >30 minutes)"
         }
       ]
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-20T03:26:23.635Z",
+      "title": "Fix undefined variable violations in test files and development scripts",
+      "description": "Clean up massive undefined variable violations in development/temp-scripts/ and test files including result, taskData, createResult, listResult, agent variables",
+      "category": "error",
+      "id": "test_1758338814245_9ke4gmemt"
     }
   ],
   "current_mode": "DEVELOPMENT",
@@ -2355,13 +2361,13 @@
   "strikes_completed_last_run": false,
   "last_hook_activation": 1757094794402,
   "agents": {
-    "dev_session_1758334256220_1_general_b530d8f7": {
+    "dev_session_1758337238840_1_general_35942f76": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:14:02.793Z",
+      "lastHeartbeat": "2025-09-20T03:00:38.841Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2372,69 +2378,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:10:56.221Z",
-      "sessionId": null,
-      "metadata": {
-        "renewedAt": "2025-09-20T02:14:02.793Z",
-        "renewalReason": "Agent reinitialization requested"
-      },
-      "lastRenewal": "2025-09-20T02:14:02.793Z",
-      "renewalCount": 1
-    },
-    "dev_session_1758334391264_1_general_64528361": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:27:19.865Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:13:11.265Z",
-      "sessionId": null,
-      "metadata": {
-        "renewedAt": "2025-09-20T02:27:19.865Z",
-        "renewalReason": "Agent reinitialization requested"
-      },
-      "lastRenewal": "2025-09-20T02:27:19.865Z",
-      "renewalCount": 1
-    },
-    "dev_session_1758334652016_1_general_b075bc55": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:17:32.025Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:17:32.025Z",
+      "createdAt": "2025-09-20T03:00:38.841Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758334654026_1_general_65a6cf2c": {
+    "dev_session_1758337242293_1_general_455063b7": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:17:34.031Z",
+      "lastHeartbeat": "2025-09-20T03:00:42.294Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2445,17 +2399,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:17:34.032Z",
+      "createdAt": "2025-09-20T03:00:42.294Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758334655425_1_general_601ff074": {
+    "dev_session_1758337751046_1_general_450c5d17": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:17:35.427Z",
+      "lastHeartbeat": "2025-09-20T03:09:11.061Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2466,17 +2420,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:17:35.427Z",
+      "createdAt": "2025-09-20T03:09:11.061Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758334657932_1_general_d8ee50cf": {
+    "dev_session_1758337751398_1_general_98b06d77": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:17:37.940Z",
+      "lastHeartbeat": "2025-09-20T03:09:11.399Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2487,17 +2441,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:17:37.940Z",
+      "createdAt": "2025-09-20T03:09:11.400Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758334761629_1_general_8dc518a0": {
+    "dev_session_1758337751915_1_general_1a8a09d8": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:19:21.631Z",
+      "lastHeartbeat": "2025-09-20T03:09:11.921Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2508,17 +2462,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:19:21.631Z",
+      "createdAt": "2025-09-20T03:09:11.921Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758334886480_1_general_3e9ce1b1": {
+    "dev_session_1758337753710_1_general_b37ceb99": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:21:26.482Z",
+      "lastHeartbeat": "2025-09-20T03:09:13.723Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2529,17 +2483,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:21:26.482Z",
+      "createdAt": "2025-09-20T03:09:13.724Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758334911555_1_general_722e20af": {
+    "dev_session_1758337753992_1_general_0f6d4ea7": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:21:51.559Z",
+      "lastHeartbeat": "2025-09-20T03:09:13.993Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2550,17 +2504,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:21:51.559Z",
+      "createdAt": "2025-09-20T03:09:13.993Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758335221401_1_general_06a189cd": {
+    "dev_session_1758337754670_1_general_ed62b665": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:27:01.405Z",
+      "lastHeartbeat": "2025-09-20T03:09:14.689Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2571,17 +2525,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:27:01.405Z",
+      "createdAt": "2025-09-20T03:09:14.696Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758335228994_1_general_83677fc2": {
+    "dev_session_1758337754971_1_general_cccc7787": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:27:09.016Z",
+      "lastHeartbeat": "2025-09-20T03:09:14.978Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2592,17 +2546,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:27:09.016Z",
+      "createdAt": "2025-09-20T03:09:14.978Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758335229208_1_general_452b2c6e": {
+    "dev_session_1758337755800_1_general_687e5b47": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:27:09.286Z",
+      "lastHeartbeat": "2025-09-20T03:09:15.808Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2613,17 +2567,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:27:09.287Z",
+      "createdAt": "2025-09-20T03:09:15.808Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758335231418_1_general_5402f973": {
+    "dev_session_1758337756626_1_general_bd39a57d": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:27:11.419Z",
+      "lastHeartbeat": "2025-09-20T03:09:16.627Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2634,17 +2588,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:27:11.419Z",
+      "createdAt": "2025-09-20T03:09:16.627Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758335264322_1_general_61e94f20": {
+    "dev_session_1758338344584_1_general_ba4d541e": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:27:44.323Z",
+      "lastHeartbeat": "2025-09-20T03:19:04.585Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2655,17 +2609,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:27:44.323Z",
+      "createdAt": "2025-09-20T03:19:04.585Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758335502452_1_general_eb8f30e4": {
+    "dev_session_1758338767547_1_general_892b9b70": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:31:42.453Z",
+      "lastHeartbeat": "2025-09-20T03:26:07.549Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2676,35 +2630,9 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:31:42.453Z",
+      "createdAt": "2025-09-20T03:26:07.549Z",
       "sessionId": null,
       "metadata": {}
-    },
-    "dev_session_1758335813866_1_general_8d236c46": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T02:42:07.994Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T02:36:53.866Z",
-      "sessionId": null,
-      "metadata": {
-        "renewedAt": "2025-09-20T02:42:07.994Z",
-        "renewalReason": "Agent reinitialization requested"
-      },
-      "lastRenewal": "2025-09-20T02:42:07.994Z",
-      "renewalCount": 1
     }
   },
   "features": [

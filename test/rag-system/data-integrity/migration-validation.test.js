@@ -21,7 +21,7 @@ describe('RAG System Data Migration and Integrity', () => {
     console.log('Setting up data integrity test environment...');
 
     // Setup test migration directory
-    testMigrationPath = path.join(__dirname, '../../test-data/migration-test');
+    testMigrationPath = _path.join(__dirname, '../../test-data/migration-test');
     await fs.mkdir(testMigrationPath, { recursive: true });
 
     // Create test development/lessons structure
@@ -159,12 +159,12 @@ Tags: database, performance, connection-pooling`,
 
       /* Future implementation:
       // Create test files
-      const _formatTestPath = path.join(testMigrationPath, 'format-test');
+      const _formatTestPath = _path.join(testMigrationPath, 'format-test');
       await fs.mkdir(formatTestPath, { recursive: true });
 
       for (const testFile of testFileFormats) {
         await fs.writeFile(
-          path.join(formatTestPath, testFile.filename),
+          _path.join(formatTestPath, testFile.filename),
           testFile.content
         );
       }
@@ -234,13 +234,13 @@ Tags: database, performance, connection-pooling`,
       expect(true).toBe(true);
 
       /* Future implementation:
-      const _errorTestPath = path.join(testMigrationPath, 'error-test');
+      const _errorTestPath = _path.join(testMigrationPath, 'error-test');
       await fs.mkdir(errorTestPath, { recursive: true });
 
       // Create problematic files
       for (const problemFile of problematicFiles) {
         await fs.writeFile(
-          path.join(errorTestPath, problemFile.filename),
+          _path.join(errorTestPath, problemFile.filename),
           problemFile.content
         );
       }
@@ -791,11 +791,11 @@ Tags: optimization, frontend, backend, caching`,
     };
 
     for (const [category, files] of Object.entries(lessonsStructure)) {
-      const _categoryPath = path.join(testMigrationPath, 'development', 'lessons', category);
+      const _categoryPath = _path.join(testMigrationPath, 'development', 'lessons', category);
       await fs.mkdir(categoryPath, { recursive: true });
 
       for (const [filename, content] of Object.entries(files)) {
-        await fs.writeFile(path.join(categoryPath, filename), content);
+        await fs.writeFile(_path.join(categoryPath, filename), content);
       }
     }
   }
@@ -807,8 +807,8 @@ Tags: optimization, frontend, backend, caching`,
       const _entries = await fs.readdir(dirPath, { withFileTypes: true });
 
       for (const entry of entries) {
-        const _fullPath = path.join(dirPath, entry.name);
-        const _relPath = path.join(relativePath, entry.name);
+        const _fullPath = _path.join(dirPath, entry.name);
+        const _relPath = _path.join(relativePath, entry.name);
 
         if (entry.isDirectory()) {
           await scanDirectory(fullPath, relPath);
