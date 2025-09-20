@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const TaskManager = require('./lib/taskManager');
-const Logger = require('./lib/logger');
+const _fs = require('fs');
+const _path = require('path');
+const _TaskManager = require('./lib/taskManager');
+const _Logger = require('./lib/logger');
 
 // ============================================================================
 // NEVER-STOP INFINITE CONTINUE HOOK WITH INSTRUCTIVE TASK MANAGEMENT
@@ -14,33 +14,33 @@ function findClaudeProjectRoot(startDir = process.cwd()) {
   let currentDir = startDir;
 
   // Look for "Claude Coding Projects" in the path and check for TODO.json
-  while (currentDir !== path.dirname(currentDir)) {
+  while (currentDir !== _path.dirname(currentDir)) {
     // Not at filesystem root
     // Check if we're in or found "Claude Coding Projects"
     if (currentDir.includes('Claude Coding Projects')) {
       // Look for TODO.json in potential project roots
-      const segments = currentDir.split(path.sep);
+      const segments = currentDir.split(_path.sep);
       const claudeIndex = segments.findIndex((segment) =>
         segment.includes('Claude Coding Projects'),
       );
 
       if (claudeIndex !== -1 && claudeIndex < segments.length - 1) {
         // Try the next directory after "Claude Coding Projects"
-        const projectDir = segments.slice(0, claudeIndex + 2).join(path.sep);
+        const projectDir = segments.slice(0, claudeIndex + 2).join(_path.sep);
         // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script validating project structure with computed paths
-        if (fs.existsSync(path.join(projectDir, 'TODO.json'))) {
+        if (_fs.existsSync(_path.join(projectDir, 'TODO.json'))) {
           return projectDir;
         }
       }
 
       // Also check current directory
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script validating project structure with computed paths
-      if (fs.existsSync(path.join(currentDir, 'TODO.json'))) {
+      if (_fs.existsSync(_path.join(currentDir, 'TODO.json'))) {
         return currentDir;
       }
     }
 
-    currentDir = path.dirname(currentDir);
+    currentDir = _path.dirname(currentDir);
   }
 
   // Fallback to original behavior
@@ -51,21 +51,21 @@ function findClaudeProjectRoot(startDir = process.cwd()) {
  * Check if stop is allowed via endpoint trigger
  */
 function checkStopAllowed(workingDir = process.cwd()) {
-  const stopFlagPath = path.join(workingDir, '.stop-allowed');
+  const stopFlagPath = _path.join(workingDir, '.stop-allowed');
 
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated working directory path
-  if (fs.existsSync(stopFlagPath)) {
+  if (_fs.existsSync(stopFlagPath)) {
     // Read and immediately delete the flag (single-use)
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script reading validated stop flag file
-      const flagData = JSON.parse(fs.readFileSync(stopFlagPath, 'utf8'));
+      const flagData = JSON.parse(_fs.readFileSync(stopFlagPath, 'utf8'));
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
-      fs.unlinkSync(stopFlagPath); // Remove flag after reading
+      _fs.unlinkSync(stopFlagPath); // Remove flag after reading
       return flagData.stop_allowed === true;
     } catch {
       // Invalid flag file, remove it
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
-      fs.unlinkSync(stopFlagPath);
+      _fs.unlinkSync(stopFlagPath);
       return false;
     }
   }
@@ -80,17 +80,17 @@ function checkStopAllowed(workingDir = process.cwd()) {
  * @returns {Object} Cleanup results
  */
 async function cleanupStaleAgentsInProject(projectPath, logger) {
-  const todoPath = path.join(projectPath, 'TODO.json');
+  const todoPath = _path.join(projectPath, 'TODO.json');
 
   // Check if TODO.json exists in this project
-  if (!fs.existsSync(todoPath)) {
+  if (!_fs.existsSync(todoPath)) {
     logger.addFlow(`No TODO.json found in ${projectPath} - skipping`);
     return { agentsRemoved: 0, tasksUnassigned: 0, projectPath };
   }
 
-  let todoData;
+  let _todoData;
   try {
-    todoData = JSON.parse(fs.readFileSync(todoPath, 'utf8'));
+    todoData = JSON.parse(_fs.readFileSync(todoPath, 'utf8'));
   } catch (error) {
     logger.addFlow(`Failed to read TODO.json in ${projectPath}: ${error.message}`);
     return { agentsRemoved: 0, tasksUnassigned: 0, projectPath, error: error.message };
@@ -172,7 +172,7 @@ async function cleanupStaleAgentsInProject(projectPath, logger) {
   // Write back if any changes were made
   if (agentsRemoved > 0 || tasksUnassigned > 0) {
     try {
-      fs.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
+      _fs.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
       logger.addFlow(`Updated ${projectPath}/TODO.json with cleanup results`);
     } catch (error) {
       logger.addFlow(`Failed to write TODO.json in ${projectPath}: ${error.message}`);
@@ -207,7 +207,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
 
   for (const projectPath of knownProjects) {
     try {
-      if (fs.existsSync(projectPath)) {
+      if (_fs.existsSync(projectPath)) {
         const result = await cleanupStaleAgentsInProject(projectPath, logger);
         results.projectResults.push(result);
         results.totalAgentsRemoved += result.agentsRemoved;
@@ -483,17 +483,17 @@ function provideInstructiveTaskGuidance(taskManager, taskStatus) {
    ls development/essentials/ 2>/dev/null && find development/essentials/ -type f -name "*.md" -exec echo "=== {} ===" \\; -exec cat {} \\;
 
    # Check current task status
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTask("[AGENT_ID]").then(task => console.log(task ? JSON.stringify(task, null, 2) : "No active task"));'
+   timeout 10s node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTask("[AGENT_ID]").then(task => console.log(task ? JSON.stringify(task, null, 2) : "No active task"));'
 
 **TASK MANAGEMENT:**
    # Check task status before claiming
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const task = data.tasks.find(t => t.id === "TASK_ID"); console.log("Task status:", { id: task?.id, assigned_agent: task?.assigned_agent, claimed_by: task?.claimed_by, status: task?.status }); });'
+   timeout 10s node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const task = data.tasks.find(t => t.id === "TASK_ID"); console.log("Task status:", { id: task?.id, assigned_agent: task?.assigned_agent, claimed_by: task?.claimed_by, status: task?.status }); });'
 
    # Claim specific task (only if unclaimed)
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.claimTask("TASK_ID", "[AGENT_ID]", "normal").then(result => console.log(JSON.stringify(result, null, 2)));'
+   timeout 10s node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.claimTask("TASK_ID", "[AGENT_ID]", "normal").then(result => console.log(JSON.stringify(result, null, 2)));'
 
    # Mark task completed (AFTER validation)
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTask("[AGENT_ID]").then(async task => { if(task) { await tm.updateTaskStatus(task.id, "completed", "Task completed successfully"); console.log("✅ Task completed:", task.title); } });'
+   timeout 10s node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTask("[AGENT_ID]").then(async task => { if(task) { await tm.updateTaskStatus(task.id, "completed", "Task completed successfully"); console.log("✅ Task completed:", task.title); } });'
 
 **VALIDATION PROTOCOL:**
 ❌ NEVER mark complete without validation → ✅ Always run \`npm run lint\`, \`npm run typecheck\`
@@ -525,14 +525,14 @@ process.stdin.on('data', (chunk) => (inputData += chunk));
 
 process.stdin.on('end', async () => {
   const workingDir = findClaudeProjectRoot();
-  const logger = new Logger(workingDir);
+  const logger = new _Logger(workingDir);
 
   try {
     // Debug logging for input data
     logger.addFlow(`Raw input data: "${inputData}"`);
     logger.addFlow(`Input data length: ${inputData.length}`);
 
-    let hookInput;
+    let _hookInput;
     if (!inputData || inputData.trim() === '') {
       // No input - probably manual execution, simulate Claude Code input
       logger.addFlow('No input detected - running in manual mode');
@@ -560,9 +560,9 @@ process.stdin.on('end', async () => {
     );
 
     // Check if TODO.json exists in current project
-    const todoPath = path.join(workingDir, 'TODO.json');
+    const todoPath = _path.join(workingDir, 'TODO.json');
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated paths from project structure
-    if (!fs.existsSync(todoPath)) {
+    if (!_fs.existsSync(todoPath)) {
       logger.addFlow('No TODO.json found - this is not a TaskManager project');
       logger.logExit(2, 'No TODO.json found - continuing infinite mode');
       logger.save();
@@ -588,7 +588,7 @@ If you want to enable task management for this project:
     }
 
     // CRITICAL: Check for TODO.json corruption before initializing TaskManager
-    const AutoFixer = require('./lib/autoFixer');
+    const _AutoFixer = require('./lib/autoFixer');
     const autoFixer = new AutoFixer();
 
     try {
@@ -916,7 +916,7 @@ To recover and continue work from the previous stale agents:
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID] --project-root "${workingDir}"
 
 2. **Check for unfinished tasks from previous agents:**
-   node -e 'const TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Pending tasks to continue:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
+   node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Pending tasks to continue:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
 
 3. **Continue the most important unfinished work first**
 
@@ -965,7 +965,7 @@ To start working with this TaskManager project:
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID] --project-root "${workingDir}"
 
 2. **Check for any existing tasks to work on:**
-   node -e 'const TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Available tasks:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
+   node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Available tasks:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
 
 3. **Begin working on the highest priority tasks**
 
@@ -999,7 +999,7 @@ This is a single-use authorization.
 ⚡ Future stop hook triggers will return to infinite continue mode.
 
 To trigger another stop, use the TaskManager API:
-node -e "const TaskManager = require('/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => console.log(JSON.stringify(result, null, 2)));"
+node -e "const _TaskManager = require('/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => console.log(JSON.stringify(result, null, 2)));"
 `);
       // eslint-disable-next-line n/no-process-exit
       process.exit(0); // Allow stop only when endpoint triggered
@@ -1010,7 +1010,7 @@ node -e "const TaskManager = require('/Users/jeremyparker/infinite-continue-stop
     // ========================================================================
 
     // Check task status to provide appropriate instructions (taskManager already initialized above)
-    let taskStatus;
+    let _taskStatus;
     try {
       taskStatus = await taskManager.getTaskStatus();
     } catch (error) {
@@ -1104,7 +1104,7 @@ ${instructiveGuidance}
 This system operates in infinite continue mode. To authorize a stop, use:
 
 🛑 AUTHORIZE STOP WITH TASKMANAGER API:
-   timeout 10s node -e 'const TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.authorizeStopHook("agent_id", "Reason for stopping").then(result => console.log(JSON.stringify(result, null, 2)));'
+   timeout 10s node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.authorizeStopHook("agent_id", "Reason for stopping").then(result => console.log(JSON.stringify(result, null, 2)));'
 
 ⚡ CONTINUING OPERATION...
 `);

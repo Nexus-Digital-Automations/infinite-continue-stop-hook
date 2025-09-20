@@ -1,4 +1,4 @@
-const TaskManager = require("./lib/taskManager");
+const _TaskManager = require("./lib/taskManager");
 
 async function testObjectivityEnforcement() {
   const tm = new TaskManager("./TODO.json");

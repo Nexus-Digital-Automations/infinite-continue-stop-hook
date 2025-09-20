@@ -80,9 +80,9 @@
  * @since 2024-01-01
  */
 
-const fs = require('fs');
-const path = require('path');
-const readline = require('readline');
+const _fs = require('fs');
+const _path = require('path');
+const _readline = require('readline');
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -124,13 +124,13 @@ function question(prompt) {
 
 async function _getProjectInfo(targetPath) {
   // Try to detect project name from package.json or directory name
-  let detectedName = path.basename(targetPath);
+  let detectedName = _path.basename(targetPath);
 
-  const packageJsonPath = path.join(targetPath, 'package.json');
-  // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
+  const packageJsonPath = _path.join(targetPath, 'package.json');
+
   if (fs.existsSync(packageJsonPath)) {
     try {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script reading package.json from validated project path
+
       const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
       if (packageJson.name) {
         detectedName = packageJson.name;
@@ -198,40 +198,40 @@ async function _getProjectInfo(targetPath) {
 
 function createProjectDirectories(targetPath) {
   // Create /development directory
-  const developmentPath = path.join(targetPath, 'development');
-  // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
+  const developmentPath = _path.join(targetPath, 'development');
+
   if (!fs.existsSync(developmentPath)) {
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script creating validated directory structure
+
     fs.mkdirSync(developmentPath, { recursive: true });
     // eslint-disable-next-line no-console -- setup script progress output
     console.log(`✓ Created /development directory`);
   }
 
   // Create /development/tasks directory
-  const tasksPath = path.join(developmentPath, 'tasks');
-  // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
+  const tasksPath = _path.join(developmentPath, 'tasks');
+
   if (!fs.existsSync(tasksPath)) {
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script creating validated directory structure
+
     fs.mkdirSync(tasksPath, { recursive: true });
     // eslint-disable-next-line no-console -- setup script progress output
     console.log(`✓ Created /development/tasks directory`);
   }
 
   // Create /development/reports directory
-  const reportsPath = path.join(developmentPath, 'reports');
-  // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
+  const reportsPath = _path.join(developmentPath, 'reports');
+
   if (!fs.existsSync(reportsPath)) {
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script creating validated directory structure
+
     fs.mkdirSync(reportsPath, { recursive: true });
     // eslint-disable-next-line no-console -- setup script progress output
     console.log(`✓ Created /development/reports directory`);
   }
 
   // Create /development/logs directory
-  const logsPath = path.join(developmentPath, 'logs');
-  // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
+  const logsPath = _path.join(developmentPath, 'logs');
+
   if (!fs.existsSync(logsPath)) {
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script creating validated directory structure
+
     fs.mkdirSync(logsPath, { recursive: true });
     // eslint-disable-next-line no-console -- setup script progress output
     console.log(`✓ Created /development/logs directory`);
@@ -242,13 +242,13 @@ function createProjectDirectories(targetPath) {
 
 // Check if TODO.json needs to be updated to new schema
 function needsTodoUpdate(todoPath) {
-  // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
+
   if (!fs.existsSync(todoPath)) {
     return true;
   }
 
   try {
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script reading TODO.json from validated project path
+
     const existing = JSON.parse(fs.readFileSync(todoPath, 'utf8'));
 
     // Check for old schema indicators
@@ -263,27 +263,27 @@ function needsTodoUpdate(todoPath) {
     if (hasOldSchema) {
       // eslint-disable-next-line no-console -- setup script status output
       console.log(
-        `⚠️  ${path.basename(path.dirname(todoPath))} - TODO.json uses old schema, will update`,
+        `⚠️  ${_path.basename(_path.dirname(todoPath))} - TODO.json uses old schema, will update`,
       );
       return true;
     }
 
     // eslint-disable-next-line no-console -- setup script status output
     console.log(
-      `✓ ${path.basename(path.dirname(todoPath))} - TODO.json already up to date`,
+      `✓ ${_path.basename(_path.dirname(todoPath))} - TODO.json already up to date`,
     );
     return false;
   } catch {
     // eslint-disable-next-line no-console -- setup script error output
     console.log(
-      `⚠️  ${path.basename(path.dirname(todoPath))} - TODO.json corrupted, will recreate`,
+      `⚠️  ${_path.basename(_path.dirname(todoPath))} - TODO.json corrupted, will recreate`,
     );
     return true;
   }
 }
 
 function createTodoJson(targetPath, projectInfo) {
-  const todoPath = path.join(targetPath, 'TODO.json');
+  const todoPath = _path.join(targetPath, 'TODO.json');
 
   // Smart update logic - only update if schema is old or missing
   if (!needsTodoUpdate(todoPath)) {
@@ -403,7 +403,7 @@ This validation ensures professional-grade delivery quality.`,
   });
 
   // Write TODO.json
-  // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
+
   fs.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
   // eslint-disable-next-line no-console -- setup script success output
   console.log(`\n✓ TODO.json created at: ${todoPath}`);
@@ -413,24 +413,24 @@ This validation ensures professional-grade delivery quality.`,
 
 // Get all project directories to process
 function _getProjectDirectories(basePath) {
-  // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
+
   if (!fs.existsSync(basePath) || !fs.statSync(basePath).isDirectory()) {
     return [];
   }
 
-  // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated basePath from command line arguments
+
   return fs
 
     .readdirSync(basePath)
-    .map((item) => path.join(basePath, item))
+    .map((item) => _path.join(basePath, item))
     .filter((itemPath) => {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script checking directory status from validated paths
+
       if (!fs.statSync(itemPath).isDirectory()) {
         return false;
       }
 
       // Skip hidden directories and common ignore patterns
-      const dirname = path.basename(itemPath);
+      const dirname = _path.basename(itemPath);
       if (
         dirname.startsWith('.') ||
         dirname === 'node_modules' ||
@@ -445,7 +445,7 @@ function _getProjectDirectories(basePath) {
 }
 
 async function processProject(targetPath) {
-  const projectName = path.basename(targetPath);
+  const projectName = _path.basename(targetPath);
   // eslint-disable-next-line no-console -- setup script progress output
   console.log(`\n=== Processing ${projectName} ===`);
 
@@ -492,13 +492,13 @@ async function processProject(targetPath) {
  * @param {string} targetPath - Target project path
  */
 function migrateToFeatureBasedSystem(targetPath) {
-  const todoPath = path.join(targetPath, 'TODO.json');
+  const todoPath = _path.join(targetPath, 'TODO.json');
 
   try {
     // eslint-disable-next-line no-console -- setup script progress output
     console.log(`   🔄 Checking for feature-based migration...`);
 
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
+
     if (!fs.existsSync(todoPath)) {
       // eslint-disable-next-line no-console -- setup script status output
       console.log(`   ⚠️  No TODO.json found - skipping migration`);
@@ -506,7 +506,7 @@ function migrateToFeatureBasedSystem(targetPath) {
     }
 
     // Read current TODO.json
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script reading TODO.json from validated project path
+
     const todoData = JSON.parse(fs.readFileSync(todoPath, 'utf8'));
 
     // Check if already feature-based
@@ -518,10 +518,10 @@ function migrateToFeatureBasedSystem(targetPath) {
 
     // Create backup before migration
     const backupPath = todoPath + '.pre-feature-migration.backup';
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
+
     fs.writeFileSync(backupPath, JSON.stringify(todoData, null, 2));
     // eslint-disable-next-line no-console -- setup script progress output
-    console.log(`   📋 Created backup: ${path.basename(backupPath)}`);
+    console.log(`   📋 Created backup: ${_path.basename(backupPath)}`);
 
     // Analyze current tasks for feature grouping
     const analysis = analyzeTasksForFeatures(todoData.tasks);
@@ -534,7 +534,7 @@ function migrateToFeatureBasedSystem(targetPath) {
     const migrated = convertToFeatureBasedSchema(todoData, analysis);
 
     // Write migrated structure
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
+
     fs.writeFileSync(todoPath, JSON.stringify(migrated, null, 2));
 
     // eslint-disable-next-line no-console -- setup script success output
@@ -543,10 +543,10 @@ function migrateToFeatureBasedSystem(targetPath) {
     );
 
     // Clean up features.json if it exists (eliminating dual system)
-    const featuresJsonPath = path.join(targetPath, 'features.json');
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
+    const featuresJsonPath = _path.join(targetPath, 'features.json');
+
     if (fs.existsSync(featuresJsonPath)) {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script removing features.json from validated path
+
       fs.unlinkSync(featuresJsonPath);
       // eslint-disable-next-line no-console -- setup script cleanup output
       console.log(`   🗑️  Removed features.json (dual system eliminated)`);
@@ -810,10 +810,10 @@ async function main() {
   console.log('=== Infinite Continue Stop Hook - Batch TODO.json Setup ===\n');
 
   // Resolve project path
-  const targetPath = path.resolve(projectPath);
+  const targetPath = _path.resolve(projectPath);
 
   // Verify project path exists
-  // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script with validated paths from command line arguments
+
   if (!fs.existsSync(targetPath)) {
     // eslint-disable-next-line no-console -- setup script error output
     console.error(`Error: Path does not exist: ${targetPath}`);
@@ -821,7 +821,7 @@ async function main() {
   }
 
   // Verify it's a directory
-  // eslint-disable-next-line security/detect-non-literal-fs-filename -- setup script checking directory status from validated path
+
   if (!fs.statSync(targetPath).isDirectory()) {
     // eslint-disable-next-line no-console -- setup script error output
     console.error(`Error: Path is not a directory: ${targetPath}`);
@@ -841,7 +841,7 @@ async function main() {
     // Always process only the specified directory as a single project
     // This ensures TODO.json is created only in the root of the specified directory
     // eslint-disable-next-line no-console -- setup script progress output
-    console.log(`Processing single project: ${path.basename(targetPath)}`);
+    console.log(`Processing single project: ${_path.basename(targetPath)}`);
     const result = await processProject(targetPath);
     results.push(result);
 

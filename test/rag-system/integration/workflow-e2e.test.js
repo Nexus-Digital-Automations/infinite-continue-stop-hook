@@ -42,7 +42,7 @@ describe('RAG System End-to-End Workflows', () => {
     console.log('Cleaning up E2E test environment...');
     try {
       await fs.rm(testProjectRoot, { recursive: true, force: true });
-    } catch {
+    } catch (error) {
       console.warn('Cleanup warning:', error.message);
     }
   });

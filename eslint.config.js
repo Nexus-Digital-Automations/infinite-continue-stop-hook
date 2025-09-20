@@ -5,35 +5,35 @@
  * Focused on CommonJS patterns, security, and code quality standards.
  */
 
-const js = require("@eslint/js");
-const globals = require("globals");
-const nodePlugin = require("eslint-plugin-n");
-const securityPlugin = require("eslint-plugin-security");
+const _js = require("@eslint/js");
+const _globals = require("globals");
+const _nodePlugin = require("eslint-plugin-n");
+const _securityPlugin = require("eslint-plugin-security");
 
 module.exports = [
   // Base recommended configuration
-  js.configs.recommended,
+  _js.configs.recommended,
 
   // Security plugin recommended rules
-  securityPlugin.configs.recommended,
+  _securityPlugin.configs.recommended,
 
   // Node.js plugin recommended rules
-  nodePlugin.configs["flat/recommended-script"],
+  _nodePlugin.configs["flat/recommended-script"],
 
   {
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "commonjs",
       globals: {
-        ...globals.node,
+        ..._globals.node,
         // Jest globals for test files
-        ...globals.jest,
+        ..._globals.jest,
       },
     },
 
     plugins: {
-      n: nodePlugin,
-      security: securityPlugin,
+      n: _nodePlugin,
+      security: _securityPlugin,
     },
 
     rules: {
@@ -132,7 +132,7 @@ module.exports = [
     files: ["**/*.test.js", "**/*.spec.js", "**/test/**/*.js"],
     languageOptions: {
       globals: {
-        ...globals.jest,
+        ..._globals.jest,
       },
     },
     rules: {

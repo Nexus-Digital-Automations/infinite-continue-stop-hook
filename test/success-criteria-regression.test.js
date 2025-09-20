@@ -1096,12 +1096,12 @@ describe('Success Criteria Regression Tests', () => {
       for (const api of coreAPIs) {
         try {
           // Test API is callable (might fail but should not throw unexpected errors)
-          // eslint-disable-next-line security/detect-possible-timing-attacks
+
           // Safe: Test comparison, not security-sensitive
           if (api === 'success-criteria:init') {
             const _result = await execAPI(api);
             expect(result).toBeDefined();
-          // eslint-disable-next-line security/detect-possible-timing-attacks
+
           // Safe: Test comparison, not security-sensitive
           } else if (api === 'success-criteria:status') {
             const _result = await execAPI(api);

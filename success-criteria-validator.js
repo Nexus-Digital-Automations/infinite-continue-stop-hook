@@ -13,8 +13,8 @@
  * Created: 2025-09-13
  */
 
-const fs = require('fs').promises;
-const path = require('path');
+const _fs = require('fs').promises;
+const _path = require('path');
 const { execSync } = require('child_process');
 
 /**
