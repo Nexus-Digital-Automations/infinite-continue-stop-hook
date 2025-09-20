@@ -589,7 +589,7 @@ If you want to enable task management for this project:
 
     // CRITICAL: Check for TODO.json corruption before initializing TaskManager
     const _AutoFixer = require('./lib/autoFixer');
-    const autoFixer = new AutoFixer();
+    const autoFixer = new _AutoFixer();
 
     try {
       const corruptionCheck = await autoFixer.autoFix(todoPath);
