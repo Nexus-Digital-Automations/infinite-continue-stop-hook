@@ -407,19 +407,19 @@ class TaskManagerAPI {
     return this.ragOperations.storeError(errorData);
   }
 
-  async searchLessons(query, options = {}) {
+  searchLessons(query, options = {}) {
     return this.ragOperations.searchLessons(query, options);
   }
 
-  async findSimilarErrors(errorDescription, options = {}) {
+  findSimilarErrors(errorDescription, options = {}) {
     return this.ragOperations.findSimilarErrors(errorDescription, options);
   }
 
-  async getRelevantLessons(taskContext, options = {}) {
+  getRelevantLessons(taskContext, options = {}) {
     return this.ragOperations.getRelevantLessons(taskContext, options);
   }
 
-  async getRagAnalytics(options = {}) {
+  getRagAnalytics(options = {}) {
     return this.ragOperations.getAnalytics(options);
   }
 
@@ -895,7 +895,7 @@ class TaskManagerAPI {
     };
   }
 
-  async _validateAgentScope(task, agentId) {
+  _validateAgentScope(task, agentId) {
     return this.agentManagement.validateAgentScope(task, agentId);
   }
 
