@@ -227,69 +227,69 @@ class TaskManagerAPI {
 
   // Task Operations (delegate to TaskOperations module)
   async listTasks(filter = {}) {
-    return this.taskOperations.listTasks(filter);
+    return await this.taskOperations.listTasks(filter);
   }
 
   async createTask(taskData) {
-    return this.taskOperations.createTask(taskData);
+    return await this.taskOperations.createTask(taskData);
   }
 
   async createErrorTask(taskData) {
-    return this.taskOperations.createErrorTask(taskData);
+    return await this.taskOperations.createErrorTask(taskData);
   }
 
   async claimTask(taskId, agentId, priority = 'normal') {
-    return this.taskOperations.claimTask(taskId, agentId, priority);
+    return await this.taskOperations.claimTask(taskId, agentId, priority);
   }
 
   async completeTask(taskId, completionData = {}) {
-    return this.taskOperations.completeTask(taskId, completionData);
+    return await this.taskOperations.completeTask(taskId, completionData);
   }
 
   async failTask(taskId, failureData = {}) {
-    return this.taskOperations.failTask(taskId, failureData);
+    return await this.taskOperations.failTask(taskId, failureData);
   }
 
   async deleteTask(taskId) {
-    return this.taskOperations.deleteTask(taskId);
+    return await this.taskOperations.deleteTask(taskId);
   }
 
   async updateTaskProgress(taskId, updateData) {
-    return this.taskOperations.updateTaskProgress(taskId, updateData);
+    return await this.taskOperations.updateTaskProgress(taskId, updateData);
   }
 
   // Subtasks Management (delegate to TaskOperations module)
   async createSubtask(taskId, subtaskType, subtaskData = {}) {
     // Merge type into subtaskData for the TaskOperations method
     const completeSubtaskData = { ...subtaskData, type: subtaskType };
-    return this.taskOperations.createSubtask(taskId, completeSubtaskData);
+    return await this.taskOperations.createSubtask(taskId, completeSubtaskData);
   }
 
   async listSubtasks(taskId, filter = {}) {
-    return this.taskOperations.getSubtasks(taskId, filter);
+    return await this.taskOperations.getSubtasks(taskId, filter);
   }
 
   async updateSubtask(taskId, subtaskId, updateData) {
     // TaskOperations.updateSubtask only needs subtaskId since it finds the parent task
-    return this.taskOperations.updateSubtask(subtaskId, updateData);
+    return await this.taskOperations.updateSubtask(subtaskId, updateData);
   }
 
   async deleteSubtask(taskId, subtaskId) {
     // TaskOperations.deleteSubtask only needs subtaskId since it finds the parent task
-    return this.taskOperations.deleteSubtask(subtaskId);
+    return await this.taskOperations.deleteSubtask(subtaskId);
   }
 
   // Success Criteria Management (delegate to TaskOperations module)
   async addSuccessCriteria(targetType, targetId, criteriaData) {
     if (targetType === 'task') {
-      return this.taskOperations.addSuccessCriteria(
+      return await this.taskOperations.addSuccessCriteria(
         targetId,
         criteriaData.criteria || criteriaData,
         criteriaData.options || {},
       );
     } else if (targetType === 'project') {
       // For project-wide criteria, use the templates system
-      return this.taskOperations.getProjectWideTemplates();
+      return await this.taskOperations.getProjectWideTemplates();
     } else {
       throw new Error('Invalid target type. Must be "task" or "project"');
     }

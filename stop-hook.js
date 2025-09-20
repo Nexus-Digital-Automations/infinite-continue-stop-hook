@@ -80,7 +80,7 @@ function checkStopAllowed(workingDir = process.cwd()) {
  * @param {Object} logger - Logger instance for output
  * @returns {Object} Cleanup results
  */
-async function cleanupStaleAgentsInProject(projectPath, logger) {
+function cleanupStaleAgentsInProject(projectPath, logger) {
   const todoPath = _path.join(projectPath, 'TODO.json');
 
   // Check if TODO.json exists in this project

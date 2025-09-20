@@ -43,7 +43,7 @@ describe('RAG System Data Migration and Integrity', () => {
   });
 
   describe('Existing Lessons Migration', () => {
-    test('should migrate all existing lesson files accurately', async () => {
+    test('should migrate all existing lesson files accurately', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
