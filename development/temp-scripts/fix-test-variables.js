@@ -11,6 +11,7 @@ const fs = require('fs');
 const TEST_FILE = '/Users/jeremyparker/infinite-continue-stop-hook/test/taskmanager-api-comprehensive.test.js';
 
 function fixTestVariables() {
+  // eslint-disable-next-line no-console -- Legitimate script output for debugging
   console.log('Reading test file...');
   let content = fs.readFileSync(TEST_FILE, 'utf8');
 
@@ -73,22 +74,27 @@ function fixTestVariables() {
     if (matches) {
       content = content.replace(fix.from, fix.to);
       changeCount += matches.length;
+      // eslint-disable-next-line no-console -- Legitimate script output for debugging
       console.log(`Fixed ${matches.length} instances of ${fix.from.toString()}`);
     }
   });
 
+  // eslint-disable-next-line no-console -- Legitimate script output for debugging
   console.log(`Total changes made: ${changeCount}`);
 
   // Write back to file
   fs.writeFileSync(TEST_FILE, content, 'utf8');
+  // eslint-disable-next-line no-console -- Legitimate script output for debugging
   console.log('Test file updated successfully');
 }
 
 // Run the fix
 try {
   fixTestVariables();
+  // eslint-disable-next-line no-console -- Legitimate script output for debugging
   console.log('Variable fixing completed successfully');
 } catch (error) {
+  // eslint-disable-next-line no-console -- Legitimate script output for debugging
   console.error('Error fixing variables:', error.message);
   process.exit(1);
 }

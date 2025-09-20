@@ -140,11 +140,11 @@ class FeatureSuggestionValidator {
     );
 
     if (result.success && result.data.features) {
-      const _features = result.data.features;
-      const _suggestedFeatures = features.filter(
+      const features = result.data.features;
+      const suggestedFeatures = features.filter(
         (f) => f.status === 'suggested',
       );
-      const _approvedFeatures = features.filter((f) => f.status === 'approved');
+      const approvedFeatures = features.filter((f) => f.status === 'approved');
 
       console.log(`📊 Total features: ${features.length}`);
       console.log(`💡 Suggested features: ${suggestedFeatures.length}`);
@@ -152,7 +152,7 @@ class FeatureSuggestionValidator {
 
       // Verify our test feature appears in the list
       if (this.testFeatureId) {
-        const _testFeature = features.find((f) => f.id === this.testFeatureId);
+        const testFeature = features.find((f) => f.id === this.testFeatureId);
         if (testFeature) {
           console.log(`🎯 Test feature found in list: ${testFeature.status}`);
           return true;
@@ -180,14 +180,14 @@ class FeatureSuggestionValidator {
 
     if (result.success) {
       // Verify feature status changed to approved
-      const _listCommand = `timeout 10s node "${this.taskmanagerPath}" list-features`;
-      const _listResult = await this.executeCommand(
+      const listCommand = `timeout 10s node "${this.taskmanagerPath}" list-features`;
+      const listResult = await this.executeCommand(
         listCommand,
         'Verify feature approval status',
       );
 
       if (listResult.success && listResult.data.features) {
-        const _approvedFeature = listResult.data.features.find(
+        const approvedFeature = listResult.data.features.find(
           (f) => f.id === this.testFeatureId,
         );
         if (approvedFeature && approvedFeature.status === 'approved') {
@@ -228,8 +228,8 @@ class FeatureSuggestionValidator {
 
     if (createResult.success) {
       // List phases to verify creation
-      const _listCommand = `timeout 10s node "${this.taskmanagerPath}" list-phases ${this.testFeatureId}`;
-      const _listResult = await this.executeCommand(
+      const listCommand = `timeout 10s node "${this.taskmanagerPath}" list-phases ${this.testFeatureId}`;
+      const listResult = await this.executeCommand(
         listCommand,
         'List feature phases',
       );
@@ -268,7 +268,7 @@ class FeatureSuggestionValidator {
     );
 
     if (currentPhaseResult.success) {
-      const _phase = currentPhaseResult.data.currentPhase;
+      const phase = currentPhaseResult.data.currentPhase;
       console.log(
         `📍 Current Phase: ${phase.number} - ${phase.title} (${phase.status})`,
       );
@@ -325,8 +325,8 @@ class FeatureSuggestionValidator {
 
     console.log('📋 Test Results Summary:');
     this.testResults.forEach((result, index) => {
-      const _status = result.success ? '✅' : '❌';
-      const _duration = result.duration ? `(${result.duration}ms)` : '';
+      const status = result.success ? '✅' : '❌';
+      const duration = result.duration ? `(${result.duration}ms)` : '';
       console.log(
         `  ${index + 1}. ${status} ${result.description} ${duration}`,
       );
@@ -372,10 +372,10 @@ class FeatureSuggestionValidator {
 
       // Cleanup and generate report
       await this.cleanup();
-      const _report = this.generateReport();
+      const report = this.generateReport();
 
       // Write detailed report to file
-      const _reportPath = _path.join(
+      const reportPath = _path.join(
         __dirname,
         '..',
         'development',
@@ -384,12 +384,12 @@ class FeatureSuggestionValidator {
       );
 
       // Ensure directory exists
-      const _reportDir = _path.dirname(reportPath);
-      if (!fs.existsSync(reportDir)) {
-        fs.mkdirSync(reportDir, { recursive: true });
+      const reportDir = _path.dirname(reportPath);
+      if (!_fs.existsSync(reportDir)) {
+        _fs.mkdirSync(reportDir, { recursive: true });
       }
 
-      fs.writeFileSync(
+      _fs.writeFileSync(
         reportPath,
         JSON.stringify(
           {
@@ -411,7 +411,7 @@ class FeatureSuggestionValidator {
       console.log(`📄 Detailed report saved: ${reportPath}`);
 
       return report;
-    } catch {
+    } catch (error) {
       console.error('💥 Validation failed with error:', error.message);
       return { success: false, error: error.message };
     }

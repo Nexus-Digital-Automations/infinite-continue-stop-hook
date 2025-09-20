@@ -16,17 +16,28 @@
 const _fs = require('fs').promises;
 const _path = require('path');
 const { execSync } = require('child_process');
+const { createLogger } = require('./lib/utils/logger');
 
 /**
  * Validation logger to replace console statements
  */
 class ValidationLogger {
+  static _logger = createLogger('SuccessCriteriaValidator');
+
   static log(message) {
-    process.stdout.write(message + '\n');
+    this._logger.info(message);
   }
 
   static error(message) {
-    process.stderr.write(message + '\n');
+    this._logger.error(message);
+  }
+
+  static warn(message) {
+    this._logger.warn(message);
+  }
+
+  static debug(message) {
+    this._logger.debug(message);
   }
 }
 
@@ -864,8 +875,8 @@ class SuccessCriteriaValidator {
    * Display validation results
    */
   displayResults(results) {
-    console.log(`\\n📊 VALIDATION RESULTS`);
-    console.log(`========================`);
+    ValidationLogger.log('\n📊 VALIDATION RESULTS');
+    ValidationLogger.log('========================');
 
     let passedCount = 0;
     let failedCount = 0;
@@ -881,7 +892,7 @@ class SuccessCriteriaValidator {
           error: '💥',
         }[result.status] || '❓';
 
-      console.log(`${statusEmoji} ${criterion}: ${result.message}`);
+      ValidationLogger.log(`${statusEmoji} ${criterion}: ${result.message}`);
 
       switch (result.status) {
         case 'passed':
@@ -899,26 +910,26 @@ class SuccessCriteriaValidator {
       }
     }
 
-    console.log(`\\n📈 SUMMARY:`);
-    console.log(`✅ Passed: ${passedCount}`);
-    console.log(`❌ Failed: ${failedCount}`);
-    console.log(`⏳ Pending: ${pendingCount}`);
-    console.log(`💥 Error: ${errorCount}`);
+    ValidationLogger.log('\n📈 SUMMARY:');
+    ValidationLogger.log(`✅ Passed: ${passedCount}`);
+    ValidationLogger.log(`❌ Failed: ${failedCount}`);
+    ValidationLogger.log(`⏳ Pending: ${pendingCount}`);
+    ValidationLogger.log(`💥 Error: ${errorCount}`);
 
     const total = passedCount + failedCount + pendingCount + errorCount;
     const successRate = total > 0 ? Math.round((passedCount / total) * 100) : 0;
-    console.log(`📊 Success Rate: ${successRate}%`);
+    ValidationLogger.log(`📊 Success Rate: ${successRate}%`);
 
     if (failedCount > 0 || errorCount > 0) {
-      console.log(
-        `\\n⚠️  VALIDATION INCOMPLETE - Address failed criteria before task completion`,
+      ValidationLogger.log(
+        '\n⚠️  VALIDATION INCOMPLETE - Address failed criteria before task completion',
       );
     } else if (pendingCount > 0) {
-      console.log(
-        `\\n⏳ VALIDATION PENDING - Manual validation required for some criteria`,
+      ValidationLogger.log(
+        '\n⏳ VALIDATION PENDING - Manual validation required for some criteria',
       );
     } else {
-      console.log(`\\n🎉 VALIDATION COMPLETE - All criteria satisfied`);
+      ValidationLogger.log('\n🎉 VALIDATION COMPLETE - All criteria satisfied');
     }
   }
 }
@@ -928,7 +939,7 @@ async function main() {
   const args = process.argv.slice(2);
 
   if (args.length === 0) {
-    console.log(`
+    ValidationLogger.log(`
 Success Criteria Validator v1.0.0
 
 Usage:
@@ -963,14 +974,13 @@ Examples:
         options.report = true;
         break;
       case '--help':
-        console.log('Help message shown above');
+        ValidationLogger.log('Help message shown above');
         return;
     }
   }
 
   if (!taskId) {
-    // eslint-disable-next-line no-console
-    console.error('❌ Error: --task-id is required');
+    ValidationLogger.error('❌ Error: --task-id is required');
     throw new Error('Missing required --task-id parameter');
   }
 
@@ -979,10 +989,9 @@ Examples:
     await validator.initialize();
     await validator.validateTask(taskId, options);
 
-    console.log(`\\n✅ Validation completed successfully`);
+    ValidationLogger.log('\n✅ Validation completed successfully');
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(`❌ Validation failed: ${error.message}`);
+    ValidationLogger.error(`❌ Validation failed: ${error.message}`);
     throw error;
   }
 }
@@ -990,8 +999,7 @@ Examples:
 // Run if called directly
 if (require.main === module) {
   main().catch((error) => {
-    // eslint-disable-next-line no-console
-    console.error('Fatal error:', error);
+    ValidationLogger.error('Fatal error:', error);
     throw error;
   });
 }
