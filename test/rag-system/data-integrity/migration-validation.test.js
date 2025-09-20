@@ -49,7 +49,7 @@ describe('RAG System Data Migration and Integrity', () => {
 
       /* Future implementation:
       // Get baseline counts
-      const _originalFiles = await getAllLessonFiles(testMigrationPath);
+      const _originalFiles = await getAllLessonFiles(_testMigrationPath);
       const _originalCount = originalFiles.length;
 
       expect(originalCount).toBeGreaterThan(0);
@@ -57,7 +57,7 @@ describe('RAG System Data Migration and Integrity', () => {
       // Create checksums for original content
       const _originalChecksums = new Map();
       for (const file of originalFiles) {
-        const _content = await fs.readFile(file.fullPath, 'utf8');
+        const _content = await _fs.readFile(file.fullPath, 'utf8');
         const _checksum = _crypto.createHash('sha256').update(content).digest('hex');
         originalChecksums.set(file.relativePath, {
           checksum,
@@ -68,7 +68,7 @@ describe('RAG System Data Migration and Integrity', () => {
 
       // Execute migration
       const _migrationResult = await ragSystem.migrateLessonsFromDirectory({
-        sourcePath: testMigrationPath,
+        sourcePath: _testMigrationPath,
         preserveStructure: true,
         validateContent: true,
         generateBackup: true
@@ -160,12 +160,12 @@ Tags: database, performance, connection-pooling`,
 
       /* Future implementation:
       // Create test files
-      const _formatTestPath = _path.join(testMigrationPath, 'format-test');
-      await fs.mkdir(formatTestPath, { recursive: true });
+      const _formatTestPath = _path.join(_testMigrationPath, 'format-test');
+      await _fs.mkdir(_formatTestPath, { recursive: true });
 
       for (const testFile of testFileFormats) {
-        await fs.writeFile(
-          _path.join(formatTestPath, testFile.filename),
+        await _fs.writeFile(
+          _path.join(_formatTestPath, testFile.filename),
           testFile.content
         );
       }
@@ -235,13 +235,13 @@ Tags: database, performance, connection-pooling`,
       expect(true).toBe(true);
 
       /* Future implementation:
-      const _errorTestPath = _path.join(testMigrationPath, 'error-test');
-      await fs.mkdir(errorTestPath, { recursive: true });
+      const _errorTestPath = _path.join(_testMigrationPath, 'error-test');
+      await _fs.mkdir(_errorTestPath, { recursive: true });
 
       // Create problematic files
       for (const problemFile of problematicFiles) {
-        await fs.writeFile(
-          _path.join(errorTestPath, problemFile.filename),
+        await _fs.writeFile(
+          _path.join(_errorTestPath, problemFile.filename),
           problemFile.content
         );
       }
@@ -792,11 +792,11 @@ Tags: optimization, frontend, backend, caching`,
     };
 
     for (const [category, files] of Object.entries(lessonsStructure)) {
-      const _categoryPath = _path.join(testMigrationPath, 'development', 'lessons', category);
-      await fs.mkdir(categoryPath, { recursive: true });
+      const _categoryPath = _path.join(_testMigrationPath, 'development', 'lessons', category);
+      await _fs.mkdir(_categoryPath, { recursive: true });
 
       for (const [filename, content] of Object.entries(files)) {
-        await fs.writeFile(_path.join(categoryPath, filename), content);
+        await _fs.writeFile(_path.join(_categoryPath, filename), content);
       }
     }
   }
@@ -805,25 +805,25 @@ Tags: optimization, frontend, backend, caching`,
     const files = [];
 
     async function scanDirectory(dirPath, relativePath = '') {
-      const _entries = await fs.readdir(dirPath, { withFileTypes: true });
+      const _entries = await _fs.readdir(dirPath, { withFileTypes: true });
 
-      for (const entry of entries) {
-        const _fullPath = _path.join(dirPath, entry.name);
-        const _relPath = _path.join(relativePath, entry.name);
+      for (const _entry of _entries) {
+        const _fullPath = _path.join(dirPath, _entry.name);
+        const _relPath = _path.join(relativePath, _entry.name);
 
-        if (entry.isDirectory()) {
-          await scanDirectory(fullPath, relPath);
-        } else if (entry.isFile() && (entry.name.endsWith('.md') || entry.name.endsWith('.txt'))) {
+        if (_entry.isDirectory()) {
+          await scanDirectory(_fullPath, _relPath);
+        } else if (_entry.isFile() && (_entry.name.endsWith('.md') || _entry.name.endsWith('.txt'))) {
           files.push({
-            filename: entry.name,
-            fullPath: fullPath,
-            relativePath: relPath,
+            filename: _entry.name,
+            fullPath: _fullPath,
+            relativePath: _relPath,
           });
         }
       }
     }
 
-    await scanDirectory(basePath);
+    await scanDirectory(_basePath);
     return files;
   }
 });

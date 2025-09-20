@@ -10,7 +10,7 @@
  */
 
 const _path = require('path');
-const __fs = require('_fs').promises;
+const __fs = require('fs').promises;
 
 describe('RAG System End-to-End Workflows', () => {
   let _taskManagerApi;
@@ -42,7 +42,7 @@ describe('RAG System End-to-End Workflows', () => {
     // Cleanup test environment
     console.log('Cleaning up E2E test environment...');
     try {
-      await _fs.rm(_testProjectRoot, { recursive: true, force: true });
+      await __fs.rm(__testProjectRoot, { recursive: true, force: true });
     } catch (error) {
       console.warn('Cleanup warning:', error.message);
     }

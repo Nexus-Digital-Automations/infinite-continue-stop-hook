@@ -104,13 +104,13 @@ async function execAPI(command, args = []) {
 async function setupE2EProject() {
   try {
     // Create project directory
-    await fs.mkdir(E2E_PROJECT_DIR, { recursive: true });
-    await fs.mkdir(_path.join(E2E_PROJECT_DIR, 'src'), { recursive: true });
-    await fs.mkdir(_path.join(E2E_PROJECT_DIR, 'test'), { recursive: true });
-    await fs.mkdir(_path.join(E2E_PROJECT_DIR, 'development'), {
+    await _fs.mkdir(E2E_PROJECT_DIR, { recursive: true });
+    await _fs.mkdir(_path.join(E2E_PROJECT_DIR, 'src'), { recursive: true });
+    await _fs.mkdir(_path.join(E2E_PROJECT_DIR, 'test'), { recursive: true });
+    await _fs.mkdir(_path.join(E2E_PROJECT_DIR, 'development'), {
       recursive: true,
     });
-    await fs.mkdir(_path.join(E2E_PROJECT_DIR, 'development', 'evidence'), {
+    await _fs.mkdir(_path.join(E2E_PROJECT_DIR, 'development', 'evidence'), {
       recursive: true,
     });
 
@@ -137,7 +137,7 @@ async function setupE2EProject() {
       },
     };
 
-    await fs.writeFile(
+    await _fs.writeFile(
       _path.join(E2E_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2),
     );
@@ -158,7 +158,7 @@ function processMessage(_message) {
 module.exports = { processMessage };
 `;
 
-    await fs.writeFile(_path.join(E2E_PROJECT_DIR, 'src', 'app.js'), sampleCode);
+    await _fs.writeFile(_path.join(E2E_PROJECT_DIR, 'src', 'app.js'), sampleCode);
 
     // Create test files
     const testCode = `const { processMessage } = require('../src/app');
@@ -174,7 +174,7 @@ describe('Application Tests', () => {
 });
 `;
 
-    await fs.writeFile(
+    await _fs.writeFile(
       _path.join(E2E_PROJECT_DIR, 'test', 'app.test.js'),
       testCode,
     );
@@ -198,7 +198,7 @@ describe('Application Tests', () => {
       },
     };
 
-    await fs.writeFile(TODO_PATH, JSON.stringify(initialTodoData, null, 2));
+    await _fs.writeFile(TODO_PATH, JSON.stringify(initialTodoData, null, 2));
 
     // Create success criteria configuration
     const successCriteriaConfig = {
@@ -212,7 +212,7 @@ describe('Application Tests', () => {
       },
     };
 
-    await fs.writeFile(
+    await _fs.writeFile(
       _path.join(E2E_PROJECT_DIR, 'development', 'success-criteria-config.json'),
       JSON.stringify(successCriteriaConfig, null, 2),
     );
@@ -227,7 +227,7 @@ describe('Application Tests', () => {
  */
 async function cleanupE2EProject() {
   try {
-    await fs.rm(E2E_PROJECT_DIR, { recursive: true, force: true });
+    await _fs.rm(E2E_PROJECT_DIR, { recursive: true, force: true });
   } catch {
     // Ignore cleanup errors
   }
@@ -244,6 +244,8 @@ describe('Success Criteria End-to-End Tests', () => {
   afterAll(async () => {
     await cleanupE2EProject();
   });
+
+  let agentId;
 
   beforeEach(async () => {
     // Initialize fresh agent for each test
@@ -271,29 +273,29 @@ describe('Success Criteria End-to-End Tests', () => {
       ]);
       expect(createResult.success).toBe(true);
 
-      const _taskId = createResult.task.id;
+      const taskId = createResult.task.id;
 
       // 2. Claim task
       const claimResult = await execAPI('claim', [taskId, agentId]);
       expect(claimResult.success).toBe(true);
 
       // 3. Execute validation steps
-      const _validationResults = {};
+      const validationResults = {};
 
       // Linter validation
-      const _lintResult = await execCommand('npm', ['run', 'lint']);
+      const lintResult = await execCommand('npm', ['run', 'lint']);
       validationResults.linter = lintResult.success ? 'passed' : 'failed';
 
       // Build validation
-      const _buildResult = await execCommand('npm', ['run', 'build']);
+      const buildResult = await execCommand('npm', ['run', 'build']);
       validationResults.build = buildResult.success ? 'passed' : 'failed';
 
       // Runtime validation
-      const _startResult = await execCommand('npm', ['run', 'start']);
+      const startResult = await execCommand('npm', ['run', 'start']);
       validationResults.runtime = startResult.success ? 'passed' : 'failed';
 
       // Test validation
-      const _testResult = await execCommand('npm', ['run', 'test']);
+      const testResult = await execCommand('npm', ['run', 'test']);
       validationResults.test = testResult.success ? 'passed' : 'failed';
 
       // 4. Complete task with validation results
@@ -314,7 +316,7 @@ describe('Success Criteria End-to-End Tests', () => {
       ]);
       expect(listResult.success).toBe(true);
 
-      const _completedTask = listResult.tasks.find((t) => t.id === taskId);
+      const completedTask = listResult.tasks.find((t) => t.id === taskId);
       expect(completedTask).toBeDefined();
       expect(completedTask.status).toBe('completed');
     }, 45000);
@@ -335,18 +337,18 @@ describe('Success Criteria End-to-End Tests', () => {
       ]);
       expect(createResult.success).toBe(true);
 
-      const _taskId = createResult.task.id;
+      const taskId = createResult.task.id;
 
       // Claim task
       const claimResult = await execAPI('claim', [taskId, agentId]);
       expect(claimResult.success).toBe(true);
 
       // Simulate validation failures
-      const _lintFailResult = await execCommand('npm', ['run', 'lint:fail']);
-      const _buildFailResult = await execCommand('npm', ['run', 'build:fail']);
-      const _testPassResult = await execCommand('npm', ['run', 'test']);
+      const lintFailResult = await execCommand('npm', ['run', 'lint:fail']);
+      const buildFailResult = await execCommand('npm', ['run', 'build:fail']);
+      const testPassResult = await execCommand('npm', ['run', 'test']);
 
-      const _validationResults = {
+      const validationResults = {
         linter: lintFailResult.success ? 'passed' : 'failed',
         build: buildFailResult.success ? 'passed' : 'failed',
         test: testPassResult.success ? 'passed' : 'failed',
@@ -377,7 +379,7 @@ describe('Success Criteria End-to-End Tests', () => {
       ]);
       expect(createResult.success).toBe(true);
 
-      const _taskId = createResult.task.id;
+      const taskId = createResult.task.id;
 
       // Verify task has inherited template criteria
       const listResult = await execAPI('list', [
@@ -385,7 +387,7 @@ describe('Success Criteria End-to-End Tests', () => {
       ]);
       expect(listResult.success).toBe(true);
 
-      const _task = listResult.tasks.find((t) => t.id === taskId);
+      const task = listResult.tasks.find((t) => t.id === taskId);
       expect(task).toBeDefined();
 
       // Claim and execute validation for inherited criteria
@@ -393,7 +395,7 @@ describe('Success Criteria End-to-End Tests', () => {
       expect(claimResult.success).toBe(true);
 
       // Execute subset of validations for enterprise template
-      const _validationResults = {
+      const validationResults = {
         linter: 'passed',
         build: 'passed',
         runtime: 'passed',
@@ -421,7 +423,7 @@ describe('Success Criteria End-to-End Tests', () => {
       // Simulate typical development workflow with success criteria
 
       // 1. Create feature task
-      const _featureResult = await execAPI('create', [
+      const featureResult = await execAPI('create', [
         JSON.stringify({
           title: 'Implement user authentication',
           description: 'Add user login and registration functionality',
@@ -441,7 +443,7 @@ describe('Success Criteria End-to-End Tests', () => {
       const featureTaskId = featureResult.task.id;
 
       // 2. Implement feature (simulate code changes)
-      await fs.writeFile(
+      await _fs.writeFile(
         _path.join(E2E_PROJECT_DIR, 'src', 'auth.js'),
         `// User authentication module
 function authenticate(username, password) {
@@ -457,9 +459,9 @@ module.exports = { authenticate };
       );
 
       // 3. Run validation checks
-      const _lintResult = await execCommand('npm', ['run', 'lint']);
-      const _buildResult = await execCommand('npm', ['run', 'build']);
-      const _testResult = await execCommand('npm', ['run', 'test']);
+      const lintResult = await execCommand('npm', ['run', 'lint']);
+      const buildResult = await execCommand('npm', ['run', 'build']);
+      const testResult = await execCommand('npm', ['run', 'test']);
 
       // 4. Claim and complete feature
       const claimResult = await execAPI('claim', [featureTaskId, agentId]);
@@ -485,7 +487,7 @@ module.exports = { authenticate };
 
     test('should handle bug fix workflow with criteria', async () => {
       // Test bug fix workflow with error-specific criteria
-      const _bugFixResult = await execAPI('create', [
+      const bugFixResult = await execAPI('create', [
         JSON.stringify({
           title: 'Fix authentication timeout issue',
           description:
@@ -505,7 +507,7 @@ module.exports = { authenticate };
       const _bugTaskId = bugFixResult.task.id;
 
       // Implement bug fix
-      await fs.writeFile(
+      await _fs.writeFile(
         _path.join(E2E_PROJECT_DIR, 'src', 'auth-fix.js'),
         `// Bug fix for authentication timeout
 function authenticateWithTimeout(username, password, timeout = 10000) {
@@ -550,7 +552,7 @@ module.exports = { authenticateWithTimeout };
 
     test('should handle refactoring workflow with quality gates', async () => {
       // Test refactoring workflow with quality-focused criteria
-      const _refactorResult = await execAPI('create', [
+      const refactorResult = await execAPI('create', [
         JSON.stringify({
           title: 'Refactor authentication module for better maintainability',
           description:
@@ -572,7 +574,7 @@ module.exports = { authenticateWithTimeout };
       const _refactorTaskId = refactorResult.task.id;
 
       // Perform refactoring
-      await fs.writeFile(
+      await _fs.writeFile(
         _path.join(E2E_PROJECT_DIR, 'src', 'auth-refactored.js'),
         `/**
  * Refactored Authentication Module
@@ -668,12 +670,12 @@ module.exports = { authenticate };
       ]);
       expect(createResult.success).toBe(true);
 
-      const _taskId = createResult.task.id;
+      const taskId = createResult.task.id;
 
       // Initialize multiple agents for different validation aspects
       const _developmentAgent = await execAPI('init');
-      const _securityAgent = await execAPI('init');
-      const _performanceAgent = await execAPI('init');
+      const securityAgent = await execAPI('init');
+      const performanceAgent = await execAPI('init');
 
       expect(developmentAgent.success).toBe(true);
       expect(securityAgent.success).toBe(true);
@@ -687,7 +689,7 @@ module.exports = { authenticate };
       expect(claimResult.success).toBe(true);
 
       // Simulate coordination between agents for different validation aspects
-      const _validationResults = {
+      const validationResults = {
         linter: 'passed',
         build: 'passed',
         test: 'passed',
@@ -737,7 +739,7 @@ module.exports = { authenticate };
       ]);
       expect(createResult.success).toBe(true);
 
-      const _taskId = createResult.task.id;
+      const taskId = createResult.task.id;
 
       // Claim task
       const claimResult = await execAPI('claim', [taskId, agentId]);
@@ -747,7 +749,7 @@ module.exports = { authenticate };
       const _startTime = Date.now();
 
       // Run performance validation
-      const _performanceResult = await execCommand('npm', [
+      const performanceResult = await execCommand('npm', [
         'run',
         'test:coverage',
       ]);
@@ -794,7 +796,7 @@ module.exports = { authenticate };
       ]);
       expect(createResult.success).toBe(true);
 
-      const _taskId = createResult.task.id;
+      const taskId = createResult.task.id;
 
       // Claim task
       const claimResult = await execAPI('claim', [taskId, agentId]);
@@ -841,16 +843,16 @@ module.exports = { authenticate };
       ]);
       expect(createResult.success).toBe(true);
 
-      const _taskId = createResult.task.id;
+      const taskId = createResult.task.id;
 
       // Claim task
       const claimResult = await execAPI('claim', [taskId, agentId]);
       expect(claimResult.success).toBe(true);
 
       // Collect evidence during validation
-      const _lintResult = await execCommand('npm', ['run', 'lint']);
-      const _buildResult = await execCommand('npm', ['run', 'build']);
-      const _testResult = await execCommand('npm', ['run', 'test']);
+      const lintResult = await execCommand('npm', ['run', 'lint']);
+      const buildResult = await execCommand('npm', ['run', 'build']);
+      const testResult = await execCommand('npm', ['run', 'test']);
 
       // Store evidence
       const _evidenceDir = _path.join(
@@ -859,17 +861,17 @@ module.exports = { authenticate };
         'evidence',
         taskId,
       );
-      await fs.mkdir(evidenceDir, { recursive: true });
+      await _fs.mkdir(evidenceDir, { recursive: true });
 
-      await fs.writeFile(
+      await _fs.writeFile(
         _path.join(evidenceDir, 'lint-output.txt'),
         lintResult.stdout,
       );
-      await fs.writeFile(
+      await _fs.writeFile(
         _path.join(evidenceDir, 'build-output.txt'),
         buildResult.stdout,
       );
-      await fs.writeFile(
+      await _fs.writeFile(
         _path.join(evidenceDir, 'test-output.txt'),
         testResult.stdout,
       );

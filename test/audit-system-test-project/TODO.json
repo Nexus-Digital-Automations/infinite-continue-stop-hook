@@ -1,16 +1,49 @@
 {
   "project": "audit-system-test",
-  "tasks": [],
-  "agents": {},
+  "tasks": [
+    {
+      "status": "pending",
+      "created_at": "2025-09-20T06:36:25.786Z",
+      "title": "Standard feature for audit estimation",
+      "description": "Feature to test audit task time estimation",
+      "category": "feature",
+      "priority": "medium",
+      "id": "feature_1758350185785_z6zj1wey1vp"
+    }
+  ],
+  "agents": {
+    "dev_session_1758350174851_1_general_2297e52b": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T06:36:14.852Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T06:36:14.852Z",
+      "sessionId": null,
+      "metadata": {}
+    }
+  },
   "features": [],
   "current_mode": "DEVELOPMENT",
   "last_mode": null,
   "execution_count": 0,
   "review_strikes": 0,
   "strikes_completed_last_run": false,
-  "last_hook_activation": 1758349449009,
+  "last_hook_activation": 1758350172920,
   "settings": {
     "version": "2.0.0",
-    "created": "2025-09-20T06:24:09.009Z"
-  }
+    "created": "2025-09-20T06:36:12.920Z"
+  },
+  "completed_tasks": []
 }
