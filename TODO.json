@@ -51,9 +51,9 @@
       "category": "error",
       "priority": "high",
       "id": "error_1758223935863_kquonzbspt",
-      "assigned_agent": "dev_session_1758223743965_1_general_7d87022d",
-      "started_at": "2025-09-18T19:32:43.941Z",
-      "claimed_by": "dev_session_1758223743965_1_general_7d87022d",
+      "assigned_agent": "dev_session_1758332940890_1_general_f4582729",
+      "started_at": "2025-09-20T01:49:49.944Z",
+      "claimed_by": "dev_session_1758332940890_1_general_f4582729",
       "agent_assignment_history": [
         {
           "agentId": "dev_session_1758223743965_1_general_7d87022d",
@@ -61,8 +61,53 @@
           "assignedAt": "2025-09-18T19:32:43.941Z",
           "reassignReason": null,
           "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1758223743965_1_general_7d87022d",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-20T01:45:41.040Z",
+          "reason": "Agent became stale (inactive >30 minutes)"
+        },
+        {
+          "agentId": "dev_session_1758332940890_1_general_f4582729",
+          "role": "primary",
+          "assignedAt": "2025-09-20T01:49:49.944Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
         }
       ]
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-20T01:47:55.135Z",
+      "title": "Implement RAG-based lessons and error database system",
+      "description": "Create comprehensive RAG-enabled database system for agent self-learning with new TaskManager API endpoints for storing/retrieving lessons and errors, semantic search capabilities, cross-project knowledge transfer, and integration with existing development/lessons structure",
+      "category": "feature",
+      "id": "error_1758333174638_owpou8bkk"
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-20T01:49:16.398Z",
+      "title": "Create comprehensive RAG system documentation",
+      "description": "Create complete documentation for the RAG-based lessons and error database system including API docs, usage guides, integration documentation, and migration guides",
+      "category": "feature",
+      "id": "error_1758333174638_lule4fkia"
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-20T01:49:16.429Z",
+      "title": "Implement RAG-based lessons and error database API endpoints",
+      "description": "Create new REST API endpoints for storing and retrieving lessons/errors with semantic search, analytics, and integration with existing TaskManager",
+      "category": "feature",
+      "id": "error_1758333174638_u7g1jpiy2"
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-20T01:49:16.705Z",
+      "title": "Design RAG Database Architecture for Agent Self-Learning System",
+      "description": "Create comprehensive database schema, setup scripts, and optimization for storing lessons, errors, and embeddings to support semantic search and agent learning",
+      "category": "feature",
+      "id": "error_1758333174638_m4csm9lkv"
     },
     {
       "id": "feature_1757781331183_9waer1qua",
@@ -1078,6 +1123,30 @@
       "description": "Add comprehensive but concise self-learning emphasis and development directory lessons management to CLAUDE.md",
       "category": "feature",
       "id": "feature_1758214853111_6pfx1sd5xg3"
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-19T07:00:09.541Z",
+      "title": "Add concise CI/CD and enterprise development standards to CLAUDE.md",
+      "description": "Enhance existing sections with essential CI/CD pipeline requirements, code review standards, and quality gates while maintaining conciseness",
+      "category": "feature",
+      "id": "feature_1758265209541_iolunvi9cye"
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-20T01:49:16.826Z",
+      "title": "Implement RAG System with Embedding Generation and Vector Search",
+      "description": "Implement comprehensive RAG functionality including: 1) Embedding generation for technical content, 2) Vector database integration with similarity search, 3) Semantic retrieval engine, 4) Performance optimization for code/technical content, 5) Migration system for existing lessons",
+      "category": "feature",
+      "id": "feature_1758332956826_p1bcyeov8ms"
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-20T01:49:19.321Z",
+      "title": "Integrate RAG system with existing development/lessons structure",
+      "description": "Migrate existing development/lessons files to new database structure, update agent protocols to automatically store/retrieve lessons, maintain compatibility with existing file-based lesson structure, and connect TaskManager workflows",
+      "category": "feature",
+      "id": "feature_1758332959320_qkwrhkp5hq"
     },
     {
       "id": "test_1757781551850_k12iufq25",
@@ -2306,11 +2375,31 @@
     },
     {
       "status": "pending",
-      "created_at": "2025-09-19T07:00:09.541Z",
-      "title": "Add concise CI/CD and enterprise development standards to CLAUDE.md",
-      "description": "Enhance existing sections with essential CI/CD pipeline requirements, code review standards, and quality gates while maintaining conciseness",
-      "category": "feature",
-      "id": "feature_1758265209541_iolunvi9cye"
+      "created_at": "2025-09-20T01:49:16.261Z",
+      "title": "Create comprehensive test suite for RAG-based lessons and error database system",
+      "description": "Develop thorough testing covering API endpoints, database operations, RAG functionality, embedding generation, semantic search, performance benchmarks, load testing, and data integrity validation for the new RAG system",
+      "category": "test",
+      "id": "test_1758332956261_s3d35vyepvr"
+    },
+    {
+      "status": "in_progress",
+      "created_at": "2025-09-20T01:54:29.982Z",
+      "title": "Remove incorrect mkdir command from CLAUDE.md and fix agentId documentation",
+      "description": "1. Remove the mkdir -p development/{essentials,errors,logs,lessons/{errors,features,optimization,decisions,patterns},reports} command from CLAUDE.md as it does not serve the agent and is incorrect. 2. Fix taskmanager documentation to clarify that agentId is NOT optional for claim command",
+      "category": "error",
+      "id": "error_1758333269981_awbteudkofg",
+      "assigned_agent": "dev_session_1758333251821_1_general_8e8f4b67",
+      "started_at": "2025-09-20T01:54:48.055Z",
+      "claimed_by": "dev_session_1758333251821_1_general_8e8f4b67",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758333251821_1_general_8e8f4b67",
+          "role": "primary",
+          "assignedAt": "2025-09-20T01:54:48.055Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
     }
   ],
   "current_mode": "DEVELOPMENT",
@@ -2320,13 +2409,13 @@
   "strikes_completed_last_run": false,
   "last_hook_activation": 1757094794402,
   "agents": {
-    "dev_session_1758223157717_1_general_e863e5b9": {
+    "dev_session_1758332748668_1_general_0c089c24": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-18T19:19:17.717Z",
+      "lastHeartbeat": "2025-09-20T01:45:48.669Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2337,17 +2426,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-18T19:19:17.717Z",
+      "createdAt": "2025-09-20T01:45:48.669Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758223743965_1_general_7d87022d": {
+    "dev_session_1758332859167_1_general_674033a9": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-18T19:38:14.600Z",
+      "lastHeartbeat": "2025-09-20T01:47:39.168Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2358,43 +2447,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-18T19:29:03.965Z",
-      "sessionId": null,
-      "metadata": {
-        "renewedAt": "2025-09-18T19:38:14.600Z",
-        "renewalReason": "Agent reinitialization requested"
-      },
-      "lastRenewal": "2025-09-18T19:38:14.600Z",
-      "renewalCount": 2
-    },
-    "dev_session_1758241419646_1_general_861c50ee": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-19T00:23:39.646Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-19T00:23:39.647Z",
+      "createdAt": "2025-09-20T01:47:39.169Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758257517236_1_general_011a9324": {
+    "dev_session_1758332940570_1_general_3043c9ca": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-19T04:51:57.237Z",
+      "lastHeartbeat": "2025-09-20T01:49:00.574Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2405,17 +2468,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-19T04:51:57.237Z",
+      "createdAt": "2025-09-20T01:49:00.574Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758265189994_1_general_3f6ba874": {
+    "dev_session_1758332940735_1_general_ebe58a15": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-19T06:59:49.995Z",
+      "lastHeartbeat": "2025-09-20T01:49:00.739Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2426,7 +2489,112 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-19T06:59:49.995Z",
+      "createdAt": "2025-09-20T01:49:00.739Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758332940798_1_general_6d818113": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T01:49:00.799Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T01:49:00.799Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758332940867_1_general_1f5ffcbc": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T01:49:00.869Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T01:49:00.870Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758332940890_1_general_f4582729": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T01:49:00.892Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T01:49:00.892Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758332943577_1_general_0a78df12": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T01:49:03.578Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T01:49:03.578Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758333251821_1_general_8e8f4b67": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T01:54:11.824Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T01:54:11.824Z",
       "sessionId": null,
       "metadata": {}
     }

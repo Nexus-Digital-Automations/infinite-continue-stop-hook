@@ -1,0 +1,36 @@
+{
+  "total_lessons": 1,
+  "total_errors": 1,
+  "lessons_by_category": {
+    "test": 1
+  },
+  "errors_by_type": {
+    "runtime": 1
+  },
+  "most_accessed_lessons": [
+    {
+      "id": "lesson_1758333309643_cc3ae1ac",
+      "title": "Test Lesson",
+      "access_count": 1,
+      "category": "test"
+    }
+  ],
+  "most_accessed_errors": [
+    {
+      "id": "error_1758333348824_c412a64c",
+      "error_description": "Test error: Cannot read property undefined...",
+      "access_count": 1,
+      "error_type": "runtime"
+    }
+  ],
+  "usage_patterns": {
+    "2025-09-20": {
+      "lesson_created": 1,
+      "lesson_accessed": 1,
+      "error_stored": 1,
+      "error_accessed": 1
+    }
+  },
+  "effectiveness_metrics": {},
+  "last_updated": "2025-09-20T01:56:21.957Z"
+}

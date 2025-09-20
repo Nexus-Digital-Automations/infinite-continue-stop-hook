@@ -298,6 +298,9 @@ git status                                   # Verify clean/up-to-date
 
 **WORKFLOW:**
 ```bash
+# Setup directories
+mkdir -p development/{errors,logs,lessons/{errors,features,optimization,decisions,patterns},reports}
+
 # Pre-task review
 ls -la development/{errors,logs,lessons,reports}/
 find development/ -name "*.md" | head -20
@@ -402,6 +405,7 @@ echo "# [Type]: [Title]" > development/[category]/[type]_$(date +%s)_[topic].md
 
 ### 📋 SETUP
 - [ ] **ROOT CLEANUP**: Move misplaced files to development/ subdirectories
+- [ ] **DIRECTORIES**: `mkdir -p development/{essentials,errors,logs,reports,lessons/{errors,features,optimization,decisions,patterns}}`
 - [ ] **INITIALIZE**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init`
 - [ ] **CREATE TASK**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"type"}'`
 - [ ] **SCAN**: Read `development/essentials/`, check other development/ folders, find relevant codebase files

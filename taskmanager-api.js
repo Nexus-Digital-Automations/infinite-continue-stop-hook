@@ -62,7 +62,7 @@ let TaskManager, AgentManager, MultiAgentOrchestrator;
 let cliInterface;
 
 // Import our new modular components
-let TaskOperations, AgentManagement, TaskOrdering, ValidationUtils;
+let TaskOperations, AgentManagement, TaskOrdering, ValidationUtils, RAGOperations;
 
 try {
   // Import TaskManager modules using absolute paths
@@ -112,6 +112,15 @@ try {
       'api-modules',
       'core',
       'validationUtils.js',
+    ),
+  );
+  RAGOperations = require(
+    path.join(
+      TASKMANAGER_ROOT,
+      'lib',
+      'api-modules',
+      'rag',
+      'ragOperations.js',
     ),
   );
 } catch (error) {
@@ -195,6 +204,7 @@ class TaskManagerAPI {
     this.taskOperations = new TaskOperations(dependencies);
     this.agentManagement = new AgentManagement(dependencies);
     this.taskOrdering = new TaskOrdering(dependencies);
+    this.ragOperations = new RAGOperations(dependencies);
   }
 
   /**
@@ -389,6 +399,31 @@ class TaskManagerAPI {
 
   async moveTaskToBottom(taskId) {
     return this.taskOrdering.moveTaskToBottom(taskId);
+  }
+
+  // RAG Operations (delegate to RAGOperations module)
+  async storeLesson(lessonData) {
+    return this.ragOperations.storeLesson(lessonData);
+  }
+
+  async storeError(errorData) {
+    return this.ragOperations.storeError(errorData);
+  }
+
+  async searchLessons(query, options = {}) {
+    return this.ragOperations.searchLessons(query, options);
+  }
+
+  async findSimilarErrors(errorDescription, options = {}) {
+    return this.ragOperations.findSimilarErrors(errorDescription, options);
+  }
+
+  async getRelevantLessons(taskContext, options = {}) {
+    return this.ragOperations.getRelevantLessons(taskContext, options);
+  }
+
+  async getRagAnalytics(options = {}) {
+    return this.ragOperations.getAnalytics(options);
   }
 
   // =================== REMAINING METHODS ===================
@@ -684,7 +719,7 @@ class TaskManagerAPI {
                 ],
                 taskExecution: [
                   'node taskmanager-api.js list \'{"status":"pending"}\'',
-                  'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" claim <taskId> [agentId]',
+                  'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" claim <taskId> <agentId>',
                   '# ... implement task ...',
                   'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete <taskId>',
                 ],
