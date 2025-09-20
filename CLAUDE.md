@@ -129,6 +129,84 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 - **POST-TASK**: Document new discoveries and update existing lessons
 - **CROSS-PROJECT**: Transfer knowledge between similar tasks and projects
 
+### 🧠 RAG-ENHANCED LEARNING PROTOCOLS
+**MANDATORY RAG INTEGRATION FOR INTELLIGENT LESSON MANAGEMENT**
+
+**RAG SYSTEM OVERVIEW:**
+The RAG (Retrieval-Augmented Generation) system replaces file-based lesson storage with an intelligent database that provides semantic search, automatic categorization, and cross-project learning capabilities.
+
+**MANDATORY RAG WORKFLOW INTEGRATION:**
+
+**PRE-TASK PREPARATION PROTOCOL:**
+```bash
+# 1. RAG Health Check (mandatory before any work)
+timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-health
+
+# 2. Query Relevant Lessons (replaces file scanning)
+timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-get-relevant "$(echo $TASK_DESCRIPTION)"
+
+# 3. Find Similar Errors (for error tasks only)
+timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-similar-errors "$(echo $ERROR_DESCRIPTION)"
+```
+
+**DURING TASK EXECUTION:**
+- **AUTOMATIC LESSON STORAGE**: Store insights immediately when discovered
+- **PATTERN APPLICATION**: Apply retrieved lesson patterns to current implementation
+- **SOLUTION TRACKING**: Document approach reasoning for future reference
+- **ERROR RESOLUTION**: Store error solutions with context for pattern recognition
+
+**REAL-TIME LESSON CAPTURE:**
+```bash
+# Store lesson immediately when solution is found
+timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-store-lesson '{
+  "title": "Solution for specific problem",
+  "content": "Detailed solution explanation",
+  "category": "errors|features|optimization|decisions|patterns",
+  "context": {"taskId": "'$CURRENT_TASK_ID'", "approach": "solution_method"}
+}'
+```
+
+**POST-TASK COMPLETION:**
+```bash
+# Store completion lesson with effectiveness tracking
+timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-store-lesson '{
+  "title": "Task completion: '$TASK_TITLE'",
+  "content": "Approach used, challenges overcome, results achieved",
+  "category": "'$TASK_CATEGORY'",
+  "metadata": {"effectiveness": 1.0, "timeToComplete": "'$DURATION'"}
+}'
+```
+
+**RAG SEARCH STRATEGIES:**
+- **SEMANTIC QUERIES**: Use natural language descriptions of problems
+- **CONTEXTUAL SEARCH**: Include technology stack and project context
+- **SIMILARITY THRESHOLDS**: Adjust for precision (0.8+) vs recall (0.6+)
+- **CATEGORY FILTERING**: Focus on specific lesson types when needed
+
+**LESSON QUALITY STANDARDS:**
+- **SPECIFICITY**: Include exact error messages, file paths, and solutions
+- **CONTEXT**: Store relevant project information and technical details
+- **ACTIONABILITY**: Document clear steps and prevention strategies
+- **EFFECTIVENESS**: Track and update lesson success rates
+
+**CROSS-PROJECT LEARNING:**
+- **UNIVERSAL PATTERNS**: Share solutions applicable across projects
+- **TECHNOLOGY PATTERNS**: Group lessons by tech stack and frameworks
+- **ERROR PATTERNS**: Build comprehensive error resolution database
+- **BEST PRACTICES**: Document proven approaches and architectures
+
+**RAG PERFORMANCE REQUIREMENTS:**
+- **SEARCH SPEED**: Queries must complete within 2 seconds
+- **RELEVANCE**: Minimum 75% similarity threshold for actionable results
+- **AVAILABILITY**: RAG health check must pass before task execution
+- **FALLBACK**: Maintain file-based compatibility during transition
+
+**MIGRATION PROTOCOL:**
+- **AUTOMATIC IMPORT**: Existing lessons migrated to RAG database
+- **DUAL ACCESS**: Support both RAG and file access during transition
+- **VALIDATION**: Verify lesson completeness after migration
+- **CLEANUP**: Archive original files after successful migration
+
 ### ⚡ SCOPE CONTROL & AUTHORIZATION
 **NO UNAUTHORIZED SCOPE EXPANSION**
 
@@ -269,13 +347,16 @@ git status                                   # Verify clean/up-to-date
 ## 🚨 PREPARATION & CONTEXT
 
 ### CONTEXT PROTOCOLS
-**COMPREHENSIVE development/ DIRECTORY SCANNING EVERY TASK START/CONTINUE**
+**RAG-ENHANCED CONTEXT PREPARATION - MANDATORY FOR ALL TASKS**
 
 **PREPARATION STEPS:**
-1. **READ ESSENTIALS**: All files in `development/essentials/` (user-approved = read-only, agent-made = editable)
-2. **SCAN DEVELOPMENT**: Check `development/{errors,logs,lessons,reports}/` for relevant context
-3. **CODEBASE SCAN**: Find task-relevant files: `find . -name "*.js" -o -name "*.ts" -o -name "*.py" | grep -v node_modules`
-4. **LEVERAGE RESEARCH**: Apply lessons and reports before implementing
+1. **RAG HEALTH CHECK**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-health`
+2. **READ ESSENTIALS**: All files in `development/essentials/` (user-approved = read-only, agent-made = editable)
+3. **RAG LESSON QUERY**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-get-relevant "$(echo $TASK_DESCRIPTION)"`
+4. **RAG ERROR PATTERNS**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-similar-errors "$(echo $ERROR_DESCRIPTION)"` (error tasks only)
+5. **SCAN DEVELOPMENT**: Check `development/{errors,logs,lessons,reports}/` for additional context (legacy fallback)
+6. **CODEBASE SCAN**: Find task-relevant files: `find . -name "*.js" -o -name "*.ts" -o -name "*.py" | grep -v node_modules`
+7. **APPLY RAG INSIGHTS**: Integrate retrieved lessons and patterns into implementation strategy
 
 **RESEARCH REQUIRED FOR**: External APIs, database schemas, auth/security systems, complex architecture
 
@@ -433,4 +514,41 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
 timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js guide
 ```
 
+**RAG SYSTEM COMMANDS:**
+```bash
+# RAG health check (mandatory before tasks)
+timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-health
+
+# Search relevant lessons
+timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-search "query description"
+
+# Find similar errors
+timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-similar-errors "error description"
+
+# Store lesson
+timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-store-lesson '{"title":"Title", "content":"Content", "category":"errors|features|optimization|decisions|patterns"}'
+
+# Get relevant lessons for task context
+timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-get-relevant "task description"
+```
+
 **NO EXCEPTIONS: All action requests trigger immediate initialization + task creation**
+
+## 📚 RAG SYSTEM DOCUMENTATION
+
+**COMPREHENSIVE RAG DOCUMENTATION AVAILABLE:**
+- **Overview**: `development/docs/rag-system/README.md`
+- **API Reference**: `development/docs/rag-system/api-reference.md`
+- **Database Architecture**: `development/docs/rag-system/database-architecture.md`
+- **Agent Integration**: `development/docs/rag-system/agent-integration.md`
+- **Setup Instructions**: `development/docs/rag-system/setup-instructions.md`
+- **Migration Guide**: `development/docs/rag-system/migration-guide.md`
+- **Troubleshooting**: `development/docs/rag-system/troubleshooting.md`
+- **Performance Tuning**: `development/docs/rag-system/performance-tuning.md`
+- **Quick Start**: `development/docs/rag-system/quick-start.md`
+
+**RAG INTEGRATION STATUS:**
+✅ **PROTOCOLS INTEGRATED** - RAG workflows integrated into CLAUDE.md
+✅ **DOCUMENTATION COMPLETE** - Comprehensive guides available
+🔄 **IMPLEMENTATION PENDING** - RAG system ready for development
+🔄 **MIGRATION PENDING** - File-based lessons ready for database migration
