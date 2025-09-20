@@ -84,24 +84,26 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
   const todoPath = _path.join(projectPath, 'TODO.json');
 
   // Check if TODO.json exists in this project
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook path validated through hook configuration system
   if (!_fs.existsSync(todoPath)) {
     logger.addFlow(`No TODO.json found in ${projectPath} - skipping`);
-    return { agentsRemoved: 0, tasksUnassigned: 0, projectPath };
+    return { agentsRemoved: 0, tasksUnassigned: 0, orphanedTasksReset: 0, projectPath };
   }
 
   let _todoData;
   try {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path constructed from trusted hook configuration
     _todoData = JSON.parse(_fs.readFileSync(todoPath, 'utf8'));
   } catch (error) {
     logger.addFlow(`Failed to read TODO.json in ${projectPath}: ${error.message}`);
-    return { agentsRemoved: 0, tasksUnassigned: 0, projectPath, error: error.message };
+    return { agentsRemoved: 0, tasksUnassigned: 0, orphanedTasksReset: 0, projectPath, error: error.message };
   }
 
   // Get all agents from TODO.json
   const allAgents = Object.keys(_todoData.agents || {});
   if (allAgents.length === 0) {
     logger.addFlow(`No agents found in ${projectPath} - skipping`);
-    return { agentsRemoved: 0, tasksUnassigned: 0, projectPath };
+    return { agentsRemoved: 0, tasksUnassigned: 0, orphanedTasksReset: 0, projectPath };
   }
 
   // Clean up stale agents (older than 30 minutes) and identify active ones
@@ -173,15 +175,16 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
   // Write back if any changes were made
   if (agentsRemoved > 0 || tasksUnassigned > 0) {
     try {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- Hook system path controlled by stop hook security protocols
       _fs.writeFileSync(todoPath, JSON.stringify(_todoData, null, 2));
       logger.addFlow(`Updated ${projectPath}/TODO.json with cleanup results`);
     } catch (error) {
       logger.addFlow(`Failed to write TODO.json in ${projectPath}: ${error.message}`);
-      return { agentsRemoved: 0, tasksUnassigned: 0, projectPath, error: error.message };
+      return { agentsRemoved: 0, tasksUnassigned: 0, orphanedTasksReset: 0, projectPath, error: error.message };
     }
   }
 
-  return { agentsRemoved, tasksUnassigned, projectPath };
+  return { agentsRemoved, tasksUnassigned, orphanedTasksReset, projectPath };
 }
 
 /**
@@ -200,6 +203,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
   const results = {
     totalAgentsRemoved: 0,
     totalTasksUnassigned: 0,
+    totalOrphanedTasksReset: 0,
     projectResults: [],
     errors: [],
   };
@@ -209,17 +213,18 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
   // Process projects in parallel for better performance
   const projectPromises = knownProjects.map(async (projectPath) => {
     try {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook path validated through hook configuration system
       if (_fs.existsSync(projectPath)) {
         const result = await cleanupStaleAgentsInProject(projectPath, logger);
         return result;
       } else {
         logger.addFlow(`Project path does not exist: ${projectPath} - skipping`);
-        return { agentsRemoved: 0, tasksUnassigned: 0, projectPath, skipped: true };
+        return { agentsRemoved: 0, tasksUnassigned: 0, orphanedTasksReset: 0, projectPath, skipped: true };
       }
     } catch (error) {
       const errorMsg = `Failed to process ${projectPath}: ${error.message}`;
       logger.addFlow(errorMsg);
-      return { agentsRemoved: 0, tasksUnassigned: 0, projectPath, error: error.message };
+      return { agentsRemoved: 0, tasksUnassigned: 0, orphanedTasksReset: 0, projectPath, error: error.message };
     }
   });
 
@@ -230,13 +235,14 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
     results.projectResults.push(result);
     results.totalAgentsRemoved += result.agentsRemoved;
     results.totalTasksUnassigned += result.tasksUnassigned;
+    results.totalOrphanedTasksReset += result.orphanedTasksReset || 0;
 
     if (result.error) {
       results.errors.push(`${result.projectPath}: ${result.error}`);
     }
   }
 
-  logger.addFlow(`🧹 Multi-project cleanup complete: ${results.totalAgentsRemoved} agents removed, ${results.totalTasksUnassigned} tasks unassigned`);
+  logger.addFlow(`🧹 Multi-project cleanup complete: ${results.totalAgentsRemoved} agents removed, ${results.totalTasksUnassigned} tasks unassigned, ${results.totalOrphanedTasksReset} orphaned tasks reset`);
 
   return results;
 }
@@ -644,7 +650,7 @@ If you want to enable task management for this project:
 
       if (multiProjectResults.totalAgentsRemoved > 0) {
         logger.addFlow(
-          `✅ Multi-project cleanup: ${multiProjectResults.totalAgentsRemoved} stale agents removed, ${multiProjectResults.totalTasksUnassigned} tasks unassigned across ${multiProjectResults.projectResults.length} projects`,
+          `✅ Multi-project cleanup: ${multiProjectResults.totalAgentsRemoved} stale agents removed, ${multiProjectResults.totalTasksUnassigned} tasks unassigned, ${multiProjectResults.totalOrphanedTasksReset} orphaned tasks reset across ${multiProjectResults.projectResults.length} projects`,
         );
 
 
@@ -653,6 +659,7 @@ If you want to enable task management for this project:
 - Projects processed: ${multiProjectResults.projectResults.length}
 - Total stale agents removed: ${multiProjectResults.totalAgentsRemoved}
 - Total tasks unassigned: ${multiProjectResults.totalTasksUnassigned}
+- Total orphaned tasks reset: ${multiProjectResults.totalOrphanedTasksReset}
 - Errors: ${multiProjectResults.errors.length > 0 ? multiProjectResults.errors.join(', ') : 'None'}
 `);
       }
@@ -787,8 +794,60 @@ If you want to enable task management for this project:
       }
     }
 
+    // ========================================================================
+    // ORPHANED TASK CLEANUP: Reset tasks that have been unassigned for >24 hours
+    // This fixes the critical bug where tasks unassigned by previous cleanup runs
+    // remain in limbo indefinitely because they're no longer tied to active stale agents
+    // ========================================================================
+
+    const orphanedTaskTimeout = 86400000; // 24 hours in milliseconds
+    let orphanedTasksReset = 0;
+
+    function getLastActivityTime(task) {
+      if (!task.agent_assignment_history || task.agent_assignment_history.length === 0) {
+        return new Date(task.created_at).getTime();
+      }
+
+      // Find the most recent assignment history entry
+      const lastEntry = task.agent_assignment_history[task.agent_assignment_history.length - 1];
+      return new Date(lastEntry.timestamp).getTime();
+    }
+
+    for (const task of todoData.tasks) {
+      if (!task || typeof task !== 'object') continue;
+
+      // Check for orphaned tasks: pending status with no assignment for >24 hours
+      if (task.status === 'pending' && !task.assigned_agent && !task.claimed_by) {
+        const lastActivity = getLastActivityTime(task);
+        const timeSinceActivity = Date.now() - lastActivity;
+
+        if (timeSinceActivity > orphanedTaskTimeout) {
+          // Reset orphaned task completely to ensure fresh start
+          task.started_at = null;
+
+          // Add comprehensive reset history for audit trail
+          if (!task.agent_assignment_history) {
+            task.agent_assignment_history = [];
+          }
+          task.agent_assignment_history.push({
+            agent: 'system',
+            action: 'auto_reset_orphaned',
+            timestamp: new Date().toISOString(),
+            reason: `Task orphaned for ${Math.round(timeSinceActivity / 3600000)} hours - forced reset`,
+            orphaned_duration_hours: Math.round(timeSinceActivity / 3600000),
+            last_activity: new Date(lastActivity).toISOString()
+          });
+
+          orphanedTasksReset++;
+          logger.addFlow(
+            `Reset orphaned task: ${task.title} (orphaned ${Math.round(timeSinceActivity / 3600000)} hours)`
+          );
+        }
+      }
+    }
+
     // Save changes if any stale agents were removed or tasks were reset
-    if (agentsRemoved > 0 || staleTasksReset > 0 || tasksUnassigned > 0) {
+    if (agentsRemoved > 0 || staleTasksReset > 0 || tasksUnassigned > 0 || orphanedTasksReset > 0) {
       await taskManager.writeTodo(todoData);
       if (agentsRemoved > 0) {
         logger.addFlow(`Removed ${agentsRemoved} stale agents from TODO.json`);
@@ -798,6 +857,9 @@ If you want to enable task management for this project:
       }
       if (staleTasksReset > 0) {
         logger.addFlow(`Reset ${staleTasksReset} stale tasks back to pending`);
+      }
+      if (orphanedTasksReset > 0) {
+        logger.addFlow(`Reset ${orphanedTasksReset} orphaned tasks (unassigned >24 hours)`);
       }
     }
 
