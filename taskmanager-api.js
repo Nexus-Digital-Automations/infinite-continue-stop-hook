@@ -226,40 +226,40 @@ class TaskManagerAPI {
   // All methods now delegate to specialized modules
 
   // Task Operations (delegate to TaskOperations module)
-  async listTasks(filter = {}) {
-    return await this.taskOperations.listTasks(filter);
+  listTasks(filter = {}) {
+    return this.taskOperations.listTasks(filter);
   }
 
-  async createTask(taskData) {
-    return await this.taskOperations.createTask(taskData);
+  createTask(taskData) {
+    return this.taskOperations.createTask(taskData);
   }
 
-  async createErrorTask(taskData) {
-    return await this.taskOperations.createErrorTask(taskData);
+  createErrorTask(taskData) {
+    return this.taskOperations.createErrorTask(taskData);
   }
 
-  async claimTask(taskId, agentId, priority = 'normal') {
-    return await this.taskOperations.claimTask(taskId, agentId, priority);
+  claimTask(taskId, agentId, priority = 'normal') {
+    return this.taskOperations.claimTask(taskId, agentId, priority);
   }
 
-  async completeTask(taskId, completionData = {}) {
+  completeTask(taskId, completionData = {}) {
     return this.taskOperations.completeTask(taskId, completionData);
   }
 
-  async failTask(taskId, failureData = {}) {
+  failTask(taskId, failureData = {}) {
     return this.taskOperations.failTask(taskId, failureData);
   }
 
-  async deleteTask(taskId) {
+  deleteTask(taskId) {
     return this.taskOperations.deleteTask(taskId);
   }
 
-  async updateTaskProgress(taskId, updateData) {
+  updateTaskProgress(taskId, updateData) {
     return this.taskOperations.updateTaskProgress(taskId, updateData);
   }
 
   // Subtasks Management (delegate to TaskOperations module)
-  async createSubtask(taskId, subtaskType, subtaskData = {}) {
+  createSubtask(taskId, subtaskType, subtaskData = {}) {
     // Merge type into subtaskData for the TaskOperations method
     const completeSubtaskData = { ...subtaskData, type: subtaskType };
     return this.taskOperations.createSubtask(taskId, completeSubtaskData);
@@ -361,49 +361,49 @@ class TaskManagerAPI {
     return result;
   }
 
-  async getCurrentTask(agentId) {
+  getCurrentTask(agentId) {
     return this.agentManagement.getCurrentTask(agentId);
   }
 
-  async getAgentStatus(agentId) {
+  getAgentStatus(agentId) {
     return this.agentManagement.getAgentStatus(agentId);
   }
 
-  async reinitializeAgent(agentId, config = {}) {
+  reinitializeAgent(agentId, config = {}) {
     return this.agentManagement.reinitializeAgent(agentId, config);
   }
 
-  async smartReinitializeAgent(agentId, config = {}) {
+  smartReinitializeAgent(agentId, config = {}) {
     return this.agentManagement.smartReinitializeAgent(agentId, config);
   }
 
-  async listAgents() {
+  listAgents() {
     return this.agentManagement.listAgents();
   }
 
   // Task Ordering (delegate to TaskOrdering module)
-  async moveTaskToTop(taskId) {
+  moveTaskToTop(taskId) {
     return this.taskOrdering.moveTaskToTop(taskId);
   }
 
-  async moveTaskUp(taskId) {
+  moveTaskUp(taskId) {
     return this.taskOrdering.moveTaskUp(taskId);
   }
 
-  async moveTaskDown(taskId) {
+  moveTaskDown(taskId) {
     return this.taskOrdering.moveTaskDown(taskId);
   }
 
-  async moveTaskToBottom(taskId) {
+  moveTaskToBottom(taskId) {
     return this.taskOrdering.moveTaskToBottom(taskId);
   }
 
   // RAG Operations (delegate to RAGOperations module)
-  async storeLesson(lessonData) {
+  storeLesson(lessonData) {
     return this.ragOperations.storeLesson(lessonData);
   }
 
-  async storeError(errorData) {
+  storeError(errorData) {
     return this.ragOperations.storeError(errorData);
   }
 
