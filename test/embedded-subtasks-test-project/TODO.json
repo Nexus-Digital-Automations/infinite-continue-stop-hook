@@ -2,13 +2,13 @@
   "project": "embedded-subtasks-test",
   "tasks": [],
   "agents": {
-    "dev_session_1758383410362_1_general_b996a53a": {
+    "dev_session_1758383455386_1_general_66f5046b": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T15:50:10.362Z",
+      "lastHeartbeat": "2025-09-20T15:50:55.386Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -19,7 +19,7 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T15:50:10.362Z",
+      "createdAt": "2025-09-20T15:50:55.386Z",
       "sessionId": null,
       "metadata": {}
     }
@@ -30,9 +30,9 @@
   "execution_count": 0,
   "review_strikes": 0,
   "strikes_completed_last_run": false,
-  "last_hook_activation": 1758383410175,
+  "last_hook_activation": 1758383455221,
   "settings": {
     "version": "2.0.0",
-    "created": "2025-09-20T15:50:10.175Z"
+    "created": "2025-09-20T15:50:55.221Z"
   }
 }

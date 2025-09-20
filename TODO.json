@@ -2603,12 +2603,14 @@
       ]
     },
     {
-      "status": "pending",
+      "status": "completed",
       "created_at": "2025-09-20T15:47:41.863Z",
       "title": "Fix no-missing-require ESLint violations",
       "description": "Add missing require/import statements for modules that are used but not properly imported, focusing on test files that reference external testing libraries like supertest",
       "category": "error",
-      "id": "error_1758383261863_qfjvly5posj"
+      "id": "error_1758383261863_qfjvly5posj",
+      "completed_at": "2025-09-20T15:50:36.965Z",
+      "updated_at": "2025-09-20T15:50:36.965Z"
     },
     {
       "status": "pending",

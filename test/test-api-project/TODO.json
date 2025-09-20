@@ -1,16 +1,38 @@
 {
   "project": "test-taskmanager-api",
   "tasks": [],
-  "agents": {},
+  "agents": {
+    "dev_session_1758383470104_1_general_f4751198": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T15:51:10.104Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T15:51:10.104Z",
+      "sessionId": null,
+      "metadata": {}
+    }
+  },
   "features": [],
   "current_mode": "DEVELOPMENT",
   "last_mode": null,
   "execution_count": 0,
   "review_strikes": 0,
   "strikes_completed_last_run": false,
-  "last_hook_activation": 1758383409842,
+  "last_hook_activation": 1758383469918,
   "settings": {
     "version": "2.0.0",
-    "created": "2025-09-20T15:50:09.842Z"
+    "created": "2025-09-20T15:51:09.918Z"
   }
 }

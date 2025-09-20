@@ -24,6 +24,6 @@ const app = new ValidationApp();
 app.start().then(() => {
   setTimeout(() => {
     app.stop();
-    process.exit(0);
+    // Node.js will naturally exit when there are no more tasks
   }, 500);
 });

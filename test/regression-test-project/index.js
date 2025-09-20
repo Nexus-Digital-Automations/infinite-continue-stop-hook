@@ -22,6 +22,6 @@ const app = new RegressionApp();
 app.start().then(() => {
   console.log('App version:', app.getVersion());
   setTimeout(() => {
-    process.exit(0);
+    // Node.js will naturally exit when there are no more tasks
   }, 200);
 });
