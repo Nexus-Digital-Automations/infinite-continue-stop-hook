@@ -2434,7 +2434,7 @@
       "id": "error_1758334061452_jp4n4sqz92"
     },
     {
-      "status": "in_progress",
+      "status": "completed",
       "created_at": "2025-09-20T02:08:27.846Z",
       "title": "Fix stale agent cleanup: Keep 30min timeout but ensure cleanup runs every stop hook call",
       "description": "User clarification: Keep the 30-minute stale agent timeout but ensure cleanup runs EVERY TIME the stop hook is called. Revert the 15-minute timeout back to 30 minutes while keeping the every-stop-hook-call functionality.",
@@ -2451,15 +2451,19 @@
           "reassignReason": null,
           "claimPriority": "normal"
         }
-      ]
+      ],
+      "completed_at": "2025-09-20T02:11:34.663Z",
+      "updated_at": "2025-09-20T02:11:34.664Z"
     },
     {
-      "status": "pending",
+      "status": "completed",
       "created_at": "2025-09-20T02:11:14.352Z",
       "title": "Add CLAUDE.md protection rule - never edit without user permission",
       "description": "Add a security rule to CLAUDE.md that explicitly states agents must NEVER EVER EVER EDIT CLAUDE.md without explicit user permission and approval. This prevents unauthorized modifications to critical instruction files.",
       "category": "feature",
-      "id": "feature_1758334274352_h9exbrwzb3o"
+      "id": "feature_1758334274352_h9exbrwzb3o",
+      "completed_at": "2025-09-20T02:12:48.853Z",
+      "updated_at": "2025-09-20T02:12:48.853Z"
     }
   ],
   "current_mode": "DEVELOPMENT",

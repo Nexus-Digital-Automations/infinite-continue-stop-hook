@@ -45708,12 +45708,48 @@
       "updated_at": "2025-09-20T02:09:57.591Z",
       "archived_at": "2025-09-20T02:09:57.602Z",
       "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T02:08:27.846Z",
+      "title": "Fix stale agent cleanup: Keep 30min timeout but ensure cleanup runs every stop hook call",
+      "description": "User clarification: Keep the 30-minute stale agent timeout but ensure cleanup runs EVERY TIME the stop hook is called. Revert the 15-minute timeout back to 30 minutes while keeping the every-stop-hook-call functionality.",
+      "category": "error",
+      "id": "error_1758334107846_6ok6a1nm67",
+      "assigned_agent": "dev_session_1758333669246_1_general_76c086cf",
+      "started_at": "2025-09-20T02:08:45.395Z",
+      "claimed_by": "dev_session_1758333669246_1_general_76c086cf",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758333669246_1_general_76c086cf",
+          "role": "primary",
+          "assignedAt": "2025-09-20T02:08:45.395Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-20T02:11:34.663Z",
+      "updated_at": "2025-09-20T02:11:34.664Z",
+      "archived_at": "2025-09-20T02:11:34.697Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T02:11:14.352Z",
+      "title": "Add CLAUDE.md protection rule - never edit without user permission",
+      "description": "Add a security rule to CLAUDE.md that explicitly states agents must NEVER EVER EVER EDIT CLAUDE.md without explicit user permission and approval. This prevents unauthorized modifications to critical instruction files.",
+      "category": "feature",
+      "id": "feature_1758334274352_h9exbrwzb3o",
+      "completed_at": "2025-09-20T02:12:48.853Z",
+      "updated_at": "2025-09-20T02:12:48.853Z",
+      "archived_at": "2025-09-20T02:12:48.870Z",
+      "archive_version": "2.0.0"
     }
   ],
-  "total_completed": 1030,
+  "total_completed": 1032,
   "last_completion": "2025-09-13T18:24:43.914Z",
   "created_at": "2025-08-07T04:55:03.964Z",
-  "last_archived": "2025-09-20T02:09:57.602Z",
+  "last_archived": "2025-09-20T02:12:48.870Z",
   "metadata": {
     "last_bulk_archive": "2025-09-20T01:57:36.774Z",
     "bulk_archive_count": 14

@@ -3,11 +3,38 @@
 <law>
 CORE OPERATION PRINCIPLES (Display at start of every response):
 1. ABSOLUTE HONESTY - Never skip, ignore, or hide ANY issues, errors, or failures
-2. ROOT PROBLEM SOLVING - Fix underlying causes, not symptoms  
+2. ROOT PROBLEM SOLVING - Fix underlying causes, not symptoms
 3. IMMEDIATE TASK EXECUTION - Initialize → Create → Execute (no delays)
 4. TASKMANAGER API EXCLUSIVE - Never read TODO.json directly
 5. COMPLETE EVERY TASK - One at a time, commit and push before completion
+6. CLAUDE.md PROTECTION - NEVER EVER EVER EDIT CLAUDE.md WITHOUT EXPLICIT USER PERMISSION
 </law>
+
+## 🔒 CRITICAL SECURITY MANDATE - CLAUDE.md PROTECTION
+
+**🚨 ABSOLUTE PROHIBITION - NEVER EDIT CLAUDE.md WITHOUT USER PERMISSION:**
+
+**MANDATORY SECURITY RULE:**
+- **❌ NEVER EVER EVER** edit, modify, or change CLAUDE.md without explicit user permission and approval
+- **❌ NEVER** suggest changes to CLAUDE.md unless specifically asked by the user
+- **❌ NEVER** make "improvements" or "optimizations" to CLAUDE.md on your own initiative
+- **❌ NEVER** add, remove, or modify any sections of CLAUDE.md without direct user instruction
+
+**ONLY AUTHORIZED ACTIONS:**
+- **✅ READ** CLAUDE.md to understand and follow instructions
+- **✅ REFERENCE** CLAUDE.md content in responses when relevant
+- **✅ EXPLAIN** CLAUDE.md rules when asked by user
+- **✅ EDIT** CLAUDE.md ONLY when user explicitly requests specific changes
+
+**VIOLATION CONSEQUENCES:**
+Any unauthorized modification of CLAUDE.md is considered a critical security violation and undermines the entire project instruction system.
+
+**USER PERMISSION REQUIRED:**
+Before making ANY changes to CLAUDE.md, agents must:
+1. Receive explicit user request to modify CLAUDE.md
+2. Confirm the specific changes requested
+3. Get user approval before implementing changes
+4. Document the user authorization in commit messages
 
 ## 🚨 IMMEDIATE ACTION PROTOCOL
 **MANDATORY SEQUENCE FOR ALL USER REQUESTS:**
