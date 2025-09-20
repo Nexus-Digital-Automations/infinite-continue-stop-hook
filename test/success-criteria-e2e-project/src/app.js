@@ -3,11 +3,11 @@
  * @param {string} message - Message to process
  * @returns {string} Processed message
  */
-function processMessage(_message) {
-  if (!_message) {
+function processMessage(message) {
+  if (!message) {
     throw new Error('Message is required');
   }
-  return _message.toUpperCase();
+  return message.toUpperCase();
 }
 
 module.exports = { processMessage };
