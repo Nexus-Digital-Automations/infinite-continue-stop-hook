@@ -41,7 +41,7 @@ describe('Semantic Search Accuracy Validation', () => {
                    Unhandled promise rejections can crash Node.js applications.
                    Use Promise.allSettled() for multiple promises where some might fail.`,
           tags: ['javascript', 'promises', 'error-handling', 'async'],
-          category: 'error-handling'
+          category: 'error-handling',
         },
         {
           id: 'js-error-2',
@@ -50,7 +50,7 @@ describe('Semantic Search Accuracy Validation', () => {
                    Always log errors with context. Avoid catching and ignoring errors.
                    Consider using error boundaries in React applications.`,
           tags: ['javascript', 'try-catch', 'error-handling', 'debugging'],
-          category: 'error-handling'
+          category: 'error-handling',
         },
         {
           id: 'js-perf-1',
@@ -59,7 +59,7 @@ describe('Semantic Search Accuracy Validation', () => {
                    Consider using Web Workers for CPU-intensive tasks.
                    Profile performance with browser dev tools.`,
           tags: ['javascript', 'performance', 'optimization'],
-          category: 'performance'
+          category: 'performance',
         },
         {
           id: 'react-error-1',
@@ -68,8 +68,8 @@ describe('Semantic Search Accuracy Validation', () => {
                    Use componentDidCatch or static getDerivedStateFromError.
                    Error boundaries don't catch errors in event handlers.`,
           tags: ['react', 'error-boundaries', 'error-handling'],
-          category: 'react'
-        }
+          category: 'react',
+        },
       ];
 
       // Placeholder for future implementation
@@ -142,7 +142,7 @@ describe('Semantic Search Accuracy Validation', () => {
                    Always use finally for cleanup. Consider using context managers.
                    Log exceptions with traceback for debugging.`,
           tags: ['python', 'exceptions', 'error-handling'],
-          category: 'python'
+          category: 'python',
         },
         {
           id: 'js-error-3',
@@ -151,7 +151,7 @@ describe('Semantic Search Accuracy Validation', () => {
                    Use Error.stack for debugging. Consider error codes for APIs.
                    Throw specific error types for different scenarios.`,
           tags: ['javascript', 'errors', 'debugging'],
-          category: 'javascript'
+          category: 'javascript',
         },
         {
           id: 'go-error-1',
@@ -160,8 +160,8 @@ describe('Semantic Search Accuracy Validation', () => {
                    Use errors.Wrap for context. Consider custom error types.
                    Don't panic in library code.`,
           tags: ['go', 'errors', 'patterns'],
-          category: 'go'
-        }
+          category: 'go',
+        },
       ];
 
       // Placeholder for future implementation
@@ -234,7 +234,7 @@ describe('Semantic Search Accuracy Validation', () => {
             }
           `,
           tags: ['javascript', 'api', 'fetch', 'code-example'],
-          category: 'implementation'
+          category: 'implementation',
         },
         {
           id: 'doc-concept-1',
@@ -246,8 +246,8 @@ describe('Semantic Search Accuracy Validation', () => {
                    4. Include comprehensive error messages
                    5. Version your APIs appropriately`,
           tags: ['api', 'design', 'rest', 'principles'],
-          category: 'documentation'
-        }
+          category: 'documentation',
+        },
       ];
 
       // Placeholder for future implementation
@@ -304,7 +304,7 @@ describe('Semantic Search Accuracy Validation', () => {
           message: 'Cannot read property "name" of null',
           resolution: 'Add null checks before accessing object properties',
           context: 'User profile rendering',
-          tags: ['null-check', 'javascript', 'defensive-programming']
+          tags: ['null-check', 'javascript', 'defensive-programming'],
         },
         {
           id: 'error-pattern-2',
@@ -312,7 +312,7 @@ describe('Semantic Search Accuracy Validation', () => {
           message: 'Cannot read property "length" of undefined',
           resolution: 'Validate array exists before accessing length property',
           context: 'Data processing',
-          tags: ['undefined-check', 'javascript', 'array-validation']
+          tags: ['undefined-check', 'javascript', 'array-validation'],
         },
         {
           id: 'error-pattern-3',
@@ -320,8 +320,8 @@ describe('Semantic Search Accuracy Validation', () => {
           message: 'TypeError: callback is not a function',
           resolution: 'Validate function parameters and provide default callbacks',
           context: 'Event handling',
-          tags: ['type-checking', 'javascript', 'function-validation']
-        }
+          tags: ['type-checking', 'javascript', 'function-validation'],
+        },
       ];
 
       // Placeholder for future implementation
@@ -381,22 +381,22 @@ describe('Semantic Search Accuracy Validation', () => {
           severity: 'critical',
           message: 'Database connection failed - application cannot start',
           impact: 'complete_system_failure',
-          tags: ['critical', 'database', 'startup-failure']
+          tags: ['critical', 'database', 'startup-failure'],
         },
         {
           id: 'warning-error-1',
           severity: 'warning',
           message: 'Deprecated API method used - will be removed in v2.0',
           impact: 'future_compatibility',
-          tags: ['warning', 'deprecation', 'api']
+          tags: ['warning', 'deprecation', 'api'],
         },
         {
           id: 'info-error-1',
           severity: 'info',
           message: 'Request took longer than expected (1.2s)',
           impact: 'performance_degradation',
-          tags: ['info', 'performance', 'latency']
-        }
+          tags: ['info', 'performance', 'latency'],
+        },
       ];
 
       // Placeholder for future implementation
@@ -460,22 +460,22 @@ describe('Semantic Search Accuracy Validation', () => {
           title: 'React State Management',
           content: 'Use useState for local state, useContext for shared state...',
           project_context: ['frontend', 'react', 'spa'],
-          tags: ['react', 'state', 'frontend']
+          tags: ['react', 'state', 'frontend'],
         },
         {
           id: 'backend-lesson-1',
           title: 'Node.js State Management',
           content: 'Use in-memory cache for session state, Redis for distributed state...',
           project_context: ['backend', 'node.js', 'server'],
-          tags: ['nodejs', 'state', 'backend']
+          tags: ['nodejs', 'state', 'backend'],
         },
         {
           id: 'mobile-lesson-1',
           title: 'React Native State Management',
           content: 'Use Redux for complex state, AsyncStorage for persistence...',
           project_context: ['mobile', 'react-native', 'app'],
-          tags: ['react-native', 'state', 'mobile']
-        }
+          tags: ['react-native', 'state', 'mobile'],
+        },
       ];
 
       // Placeholder for future implementation
@@ -532,7 +532,7 @@ describe('Semantic Search Accuracy Validation', () => {
           content: 'Use concurrent features, automatic batching, new hooks...',
           created_date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 1 week ago
           technology_version: 'react@18.0',
-          tags: ['react', 'recent', 'features']
+          tags: ['react', 'recent', 'features'],
         },
         {
           id: 'older-lesson-1',
@@ -540,8 +540,8 @@ describe('Semantic Search Accuracy Validation', () => {
           content: 'Use componentDidMount, componentWillUnmount for lifecycle...',
           created_date: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), // 1 year ago
           technology_version: 'react@16.8',
-          tags: ['react', 'legacy', 'class-components']
-        }
+          tags: ['react', 'legacy', 'class-components'],
+        },
       ];
 
       // Placeholder for future implementation
@@ -696,14 +696,14 @@ describe('Semantic Search Accuracy Validation', () => {
     return {
       lessons: [],
       errors: [],
-      benchmarkQueries: []
+      benchmarkQueries: [],
     };
   }
 
   async function createBenchmarkDataset() {
     return {
       lessons: [],
-      queries: []
+      queries: [],
     };
   }
 

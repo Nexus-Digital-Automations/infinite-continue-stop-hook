@@ -115,7 +115,7 @@ describe('Embedding Generation System', () => {
         ' ',
         'a',
         'Error',
-        'TODO: Fix this bug'
+        'TODO: Fix this bug',
       ];
 
       // Placeholder for future implementation
@@ -176,7 +176,7 @@ describe('Embedding Generation System', () => {
         stackTrace: `at validateInput (auth.js:42:15)
                      at processLogin (auth.js:78:23)
                      at Object.login (index.js:156:34)`,
-        context: 'User authentication validation'
+        context: 'User authentication validation',
       };
 
       // Placeholder for future implementation
@@ -205,18 +205,18 @@ describe('Embedding Generation System', () => {
         {
           type: 'syntax',
           message: 'SyntaxError: Unexpected token }',
-          context: 'JavaScript parsing'
+          context: 'JavaScript parsing',
         },
         {
           type: 'network',
           message: 'Error: Network request failed - timeout',
-          context: 'API communication'
+          context: 'API communication',
         },
         {
           type: 'validation',
           message: 'ValidationError: Email format is invalid',
-          context: 'User input validation'
-        }
+          context: 'User input validation',
+        },
       ];
 
       // Placeholder for future implementation
@@ -266,7 +266,7 @@ describe('Embedding Generation System', () => {
       const testCases = [
         { vec1: [0, 0, 0], vec2: [1, 1, 1], expected: 0 }, // Zero vector
         { vec1: [1, 1, 1], vec2: [1, 1, 1], expected: 1 }, // Identical
-        { vec1: [1, 2, 3], vec2: [-1, -2, -3], expected: -1 } // Opposite
+        { vec1: [1, 2, 3], vec2: [-1, -2, -3], expected: -1 }, // Opposite
       ];
 
       // Placeholder for future implementation
@@ -398,7 +398,7 @@ describe('Embedding Generation System', () => {
         'Second piece of content for batch processing',
         'Third piece of content for batch processing',
         'Fourth piece of content for batch processing',
-        'Fifth piece of content for batch processing'
+        'Fifth piece of content for batch processing',
       ];
 
       // Placeholder for future implementation
@@ -426,7 +426,7 @@ describe('Embedding Generation System', () => {
 
     test('should monitor memory usage during large batch processing', async () => {
       const largeBatch = Array.from({ length: 100 }, (_, i) =>
-        `Content item ${i}: ${'x'.repeat(1000)}`
+        `Content item ${i}: ${'x'.repeat(1000)}`,
       );
 
       // Placeholder for future implementation

@@ -20,8 +20,8 @@ global.RAG_TEST_CONFIG = {
     embeddingGeneration: 2000, // 2 seconds
     semanticSearch: 500, // 500ms
     batchOperations: 100, // 100ms per item
-    databaseQueries: 1000 // 1 second
-  }
+    databaseQueries: 1000, // 1 second
+  },
 };
 
 // Mock implementations for when RAG system is not yet available
@@ -29,22 +29,22 @@ global.RAG_MOCKS = {
   embeddingService: {
     generateEmbedding: jest.fn().mockResolvedValue([0.1, 0.2, 0.3]),
     generateBatchEmbeddings: jest.fn().mockResolvedValue([[0.1, 0.2, 0.3]]),
-    calculateSimilarity: jest.fn().mockReturnValue(0.85)
+    calculateSimilarity: jest.fn().mockReturnValue(0.85),
   },
 
   vectorDatabase: {
     store: jest.fn().mockResolvedValue({ success: true, id: 'mock-id' }),
     search: jest.fn().mockResolvedValue({
-      results: [{ id: 'mock-id', score: 0.9, content: 'mock content' }]
+      results: [{ id: 'mock-id', score: 0.9, content: 'mock content' }],
     }),
-    delete: jest.fn().mockResolvedValue({ success: true })
+    delete: jest.fn().mockResolvedValue({ success: true }),
   },
 
   ragSystem: {
     storeLesson: jest.fn().mockResolvedValue({
       success: true,
       lesson_id: 'mock-lesson-id',
-      embedding: [0.1, 0.2, 0.3]
+      embedding: [0.1, 0.2, 0.3],
     }),
 
     searchLessons: jest.fn().mockResolvedValue({
@@ -54,14 +54,14 @@ global.RAG_MOCKS = {
           id: 'mock-lesson-1',
           title: 'Mock Lesson',
           content: 'Mock lesson content',
-          relevance_score: 0.9
-        }
-      ]
+          relevance_score: 0.9,
+        },
+      ],
     }),
 
     storeError: jest.fn().mockResolvedValue({
       success: true,
-      error_id: 'mock-error-id'
+      error_id: 'mock-error-id',
     }),
 
     findSimilarErrors: jest.fn().mockResolvedValue({
@@ -70,11 +70,11 @@ global.RAG_MOCKS = {
         {
           id: 'mock-error-1',
           message: 'Mock error message',
-          similarity_score: 0.85
-        }
-      ]
-    })
-  }
+          similarity_score: 0.85,
+        },
+      ],
+    }),
+  },
 };
 
 // Test utilities
@@ -87,7 +87,7 @@ global.RAG_TEST_UTILS = {
     content: `This is test lesson content ${index} for testing purposes.`,
     category: 'test',
     tags: ['test', `lesson-${index}`],
-    created_at: new Date().toISOString()
+    created_at: new Date().toISOString(),
   }),
 
   /**
@@ -98,7 +98,7 @@ global.RAG_TEST_UTILS = {
     message: `Test error message ${index}`,
     file_path: `/test/file${index}.js`,
     line_number: index * 10,
-    context: { test_context: true, index }
+    context: { test_context: true, index },
   }),
 
   /**
@@ -109,7 +109,7 @@ global.RAG_TEST_UTILS = {
       general: 'Technical content about {topic} including best practices and implementation details.',
       error: 'Error handling for {topic} requires proper validation and error reporting mechanisms.',
       performance: 'Performance optimization for {topic} involves caching, indexing, and efficient algorithms.',
-      security: 'Security considerations for {topic} include input validation, authentication, and authorization.'
+      security: 'Security considerations for {topic} include input validation, authentication, and authorization.',
     };
 
     const template = templates[topic] || templates.general;
@@ -202,7 +202,7 @@ global.RAG_TEST_UTILS = {
 
       return result;
     };
-  }
+  },
 };
 
 // Global setup
@@ -229,7 +229,7 @@ afterEach(async () => {
     for (const file of tempFiles) {
       await fs.rm(path.join(global.RAG_TEST_CONFIG.tempPath, file), {
         recursive: true,
-        force: true
+        force: true,
       });
     }
   } catch (error) {
@@ -289,7 +289,7 @@ expect.extend({
         pass: false,
       };
     }
-  }
+  },
 });
 
 console.log('RAG System test environment initialized');

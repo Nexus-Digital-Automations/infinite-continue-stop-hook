@@ -53,7 +53,7 @@ describe('RAG System Performance and Load Testing', () => {
          ## Implementation
          Always use try-catch blocks...
          ## Examples
-         Here are several examples...`
+         Here are several examples...`,
       ];
 
       // Placeholder for future implementation
@@ -109,7 +109,7 @@ describe('RAG System Performance and Load Testing', () => {
           title: `Lesson ${i}: ${getRandomTechnicalTopic()}`,
           content: generateRandomTechnicalContent(),
           tags: getRandomTags(),
-          category: getRandomCategory()
+          category: getRandomCategory(),
         });
       }
 
@@ -682,7 +682,7 @@ describe('RAG System Performance and Load Testing', () => {
       'Code Review',
       'Testing Strategies',
       'Deployment Automation',
-      'Monitoring and Logging'
+      'Monitoring and Logging',
     ];
     return topics[Math.floor(Math.random() * topics.length)];
   }
@@ -691,7 +691,7 @@ describe('RAG System Performance and Load Testing', () => {
     const templates = [
       'When implementing {topic}, always consider {aspect1} and {aspect2}. Best practices include {practice1} and {practice2}.',
       'Common issues with {topic} include {issue1} and {issue2}. Solutions involve {solution1} and {solution2}.',
-      'To optimize {topic}, focus on {optimization1} and {optimization2}. Monitor {metric1} and {metric2}.'
+      'To optimize {topic}, focus on {optimization1} and {optimization2}. Monitor {metric1} and {metric2}.',
     ];
 
     const template = templates[Math.floor(Math.random() * templates.length)];
@@ -714,12 +714,12 @@ describe('RAG System Performance and Load Testing', () => {
       rss: formatBytes(memUsage.rss),
       heapTotal: formatBytes(memUsage.heapTotal),
       heapUsed: formatBytes(memUsage.heapUsed),
-      external: formatBytes(memUsage.external)
+      external: formatBytes(memUsage.external),
     };
   }
 
   function formatBytes(bytes) {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) {return '0 Bytes';}
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));

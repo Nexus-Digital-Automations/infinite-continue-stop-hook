@@ -26,11 +26,11 @@ describe('RAG System End-to-End Workflows', () => {
     // Initialize test TODO.json
     const todoData = {
       tasks: [],
-      metadata: { created: new Date().toISOString() }
+      metadata: { created: new Date().toISOString() },
     };
     await fs.writeFile(
       path.join(testProjectRoot, 'TODO.json'),
-      JSON.stringify(todoData, null, 2)
+      JSON.stringify(todoData, null, 2),
     );
 
     // Placeholder for TaskManager initialization

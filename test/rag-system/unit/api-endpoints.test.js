@@ -47,8 +47,8 @@ describe('RAG System API Endpoints', () => {
           metadata: {
             agent_id: 'test-agent-001',
             session_id: 'session-123',
-            timestamp: new Date().toISOString()
-          }
+            timestamp: new Date().toISOString(),
+          },
         };
 
         // This test will be implemented when RAG endpoints are available
@@ -70,7 +70,7 @@ describe('RAG System API Endpoints', () => {
       test('should validate required fields', async () => {
         const invalidData = {
           title: '', // Empty title should fail
-          content: 'Some content'
+          content: 'Some content',
         };
 
         // Placeholder for future implementation
@@ -88,7 +88,7 @@ describe('RAG System API Endpoints', () => {
         const maliciousData = {
           title: '<script>alert("xss")</script>Lesson Title',
           content: 'SELECT * FROM users WHERE 1=1',
-          category: '../../../etc/passwd'
+          category: '../../../etc/passwd',
         };
 
         // Placeholder for future implementation
@@ -179,9 +179,9 @@ describe('RAG System API Endpoints', () => {
             project: 'user-management-system',
             agent_id: 'linter-agent-001',
             timestamp: new Date().toISOString(),
-            code_snippet: 'const user = getCurrentUser()\nconst isValid = validateUser(user)'
+            code_snippet: 'const user = getCurrentUser()\nconst isValid = validateUser(user)',
           },
-          tags: ['linter', 'syntax', 'javascript']
+          tags: ['linter', 'syntax', 'javascript'],
         };
 
         // Placeholder for future implementation
@@ -207,8 +207,8 @@ describe('RAG System API Endpoints', () => {
           file_path: '/src/utils/dataProcessor.js',
           context: {
             project: 'data-analysis',
-            agent_id: 'runtime-agent-002'
-          }
+            agent_id: 'runtime-agent-002',
+          },
         };
 
         // Placeholder for future implementation
@@ -231,7 +231,7 @@ describe('RAG System API Endpoints', () => {
         const resolutionData = {
           resolution: 'Added null check before accessing object property',
           resolved_by: 'debug-agent-003',
-          resolution_time: new Date().toISOString()
+          resolution_time: new Date().toISOString(),
         };
 
         // Placeholder for future implementation
@@ -259,8 +259,8 @@ describe('RAG System API Endpoints', () => {
           limit: 10,
           filters: {
             category: ['api-errors', 'timeout'],
-            project: 'current'
-          }
+            project: 'current',
+          },
         };
 
         // Placeholder for future implementation
@@ -288,7 +288,7 @@ describe('RAG System API Endpoints', () => {
       test('should handle empty search results', async () => {
         const searchQuery = {
           query: 'extremely specific query that should return no results xyz123',
-          type: 'lessons'
+          type: 'lessons',
         };
 
         // Placeholder for future implementation
@@ -308,7 +308,7 @@ describe('RAG System API Endpoints', () => {
       test('should validate search parameters', async () => {
         const invalidQuery = {
           query: '', // Empty query
-          limit: 1000 // Excessive limit
+          limit: 1000, // Excessive limit
         };
 
         // Placeholder for future implementation
@@ -394,8 +394,8 @@ describe('RAG System API Endpoints', () => {
           lesson_data: {
             title: 'Feature Implementation Best Practices',
             content: 'When implementing new features, always start with comprehensive testing...',
-            learned_from: 'task_completion'
-          }
+            learned_from: 'task_completion',
+          },
         };
 
         // Placeholder for future implementation
@@ -418,7 +418,7 @@ describe('RAG System API Endpoints', () => {
         const migrationRequest = {
           source_path: '/development/lessons',
           preserve_structure: true,
-          batch_size: 100
+          batch_size: 100,
         };
 
         // Placeholder for future implementation

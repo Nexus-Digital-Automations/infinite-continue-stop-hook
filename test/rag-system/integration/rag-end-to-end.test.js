@@ -60,7 +60,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       fallbackModel: 'sentence-transformers/all-MiniLM-L6-v2', // Use lighter model for tests
       enableCaching: true,
       cacheSize: 100,
-      maxTextLength: 256 // Shorter for faster tests
+      maxTextLength: 256, // Shorter for faster tests
     });
 
     vectorDatabase = new VectorDatabase({
@@ -68,14 +68,14 @@ describe('RAG System End-to-End Integration Tests', () => {
       metadataPath: path.join(ragTestPath, 'rag', 'test-metadata.db'),
       embeddingDimension: 384, // MiniLM dimension
       enableMultiIndex: true,
-      contentTypes: ['errors', 'features', 'optimization', 'decisions', 'patterns']
+      contentTypes: ['errors', 'features', 'optimization', 'decisions', 'patterns'],
     });
 
     semanticSearchEngine = new SemanticSearchEngine({
       embeddingGenerator,
       vectorDatabase,
       defaultTopK: 5,
-      similarityThreshold: 0.6 // Lower threshold for tests
+      similarityThreshold: 0.6, // Lower threshold for tests
     });
 
     ragOperations = new RAGOperations({
@@ -85,14 +85,14 @@ describe('RAG System End-to-End Integration Tests', () => {
       semanticSearchEngine,
       config: {
         enableAutoStorage: false, // Disable for controlled testing
-        maxRecommendations: 5
-      }
+        maxRecommendations: 5,
+      },
     });
 
     migrationSystem = new MigrationSystem({
       sourcePath: path.join(ragTestPath, 'development'),
       batchSize: 10, // Smaller batches for tests
-      enableBackup: false // Disable backup for tests
+      enableBackup: false, // Disable backup for tests
     });
 
     console.log('Initializing RAG system components...');
@@ -108,10 +108,10 @@ describe('RAG System End-to-End Integration Tests', () => {
 
   afterAll(async () => {
     // Cleanup test resources
-    if (embeddingGenerator) await embeddingGenerator.cleanup();
-    if (vectorDatabase) await vectorDatabase.cleanup();
-    if (semanticSearchEngine) await semanticSearchEngine.cleanup();
-    if (ragOperations) await ragOperations.cleanup();
+    if (embeddingGenerator) {await embeddingGenerator.cleanup();}
+    if (vectorDatabase) {await vectorDatabase.cleanup();}
+    if (semanticSearchEngine) {await semanticSearchEngine.cleanup();}
+    if (ragOperations) {await ragOperations.cleanup();}
 
     // Clean up test files
     try {
@@ -150,7 +150,7 @@ describe('RAG System End-to-End Integration Tests', () => {
   });
 
   describe('Lesson Storage and Retrieval Workflow', () => {
-    let storedLessons = [];
+    const storedLessons = [];
 
     test('should store technical lessons with embeddings', async () => {
       const lessons = testDataGenerator.generateLessons(5);
@@ -199,7 +199,7 @@ describe('RAG System End-to-End Integration Tests', () => {
         title: 'Fix async function error handling',
         description: 'Need to improve error handling in async JavaScript functions',
         category: 'feature',
-        tags: ['javascript', 'async', 'error-handling']
+        tags: ['javascript', 'async', 'error-handling'],
       };
 
       const recommendations = await ragOperations.getRelevantLessons(taskContext, { maxResults: 5 });
@@ -217,7 +217,7 @@ describe('RAG System End-to-End Integration Tests', () => {
   });
 
   describe('Error Storage and Pattern Recognition', () => {
-    let storedErrors = [];
+    const storedErrors = [];
 
     test('should store error patterns with semantic analysis', async () => {
       const errors = testDataGenerator.generateErrors(5);
@@ -263,7 +263,7 @@ describe('RAG System End-to-End Integration Tests', () => {
         description: 'Complex system error affecting multiple services',
         resolution: '', // No resolution to test complexity assessment
         stackTrace: 'Very long stack trace indicating system-level issues...',
-        tags: ['system', 'memory', 'distributed', 'cascade']
+        tags: ['system', 'memory', 'distributed', 'cascade'],
       };
 
       const result = await ragOperations.storeError(complexError);
@@ -288,7 +288,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Store lessons in batch
       const results = await Promise.all(
-        lessons.map(lesson => ragOperations.storeLesson(lesson))
+        lessons.map(lesson => ragOperations.storeLesson(lesson)),
       );
 
       const endTime = Date.now();
@@ -313,7 +313,7 @@ describe('RAG System End-to-End Integration Tests', () => {
         'React component optimization',
         'Database query performance',
         'API endpoint security',
-        'Frontend build optimization'
+        'Frontend build optimization',
       ];
 
       const searchPromises = [];
@@ -440,12 +440,12 @@ describe('RAG System End-to-End Integration Tests', () => {
       const sampleLessons = [
         {
           path: path.join(testLessonsPath, 'features', 'react-optimization.md'),
-          content: '# React Performance Optimization\n\nBest practices for optimizing React applications...'
+          content: '# React Performance Optimization\n\nBest practices for optimizing React applications...',
         },
         {
           path: path.join(testLessonsPath, 'errors', 'async-errors.md'),
-          content: '# Async Function Errors\n\nCommon errors in async functions and how to fix them...'
-        }
+          content: '# Async Function Errors\n\nCommon errors in async functions and how to fix them...',
+        },
       ];
 
       for (const lesson of sampleLessons) {
@@ -464,7 +464,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       const migrationComponents = {
         embeddingGenerator,
         vectorDatabase,
-        ragOperations
+        ragOperations,
       };
 
       // Get initial vector count
@@ -573,7 +573,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 describe('RAG System Performance Benchmarks', () => {
   test('should meet embedding generation performance targets', async () => {
     const embeddingGenerator = new EmbeddingGenerator({
-      fallbackModel: 'sentence-transformers/all-MiniLM-L6-v2'
+      fallbackModel: 'sentence-transformers/all-MiniLM-L6-v2',
     });
 
     await embeddingGenerator.initialize();
@@ -607,7 +607,7 @@ describe('RAG System Performance Benchmarks', () => {
       'React performance optimization',
       'API security best practices',
       'Database query optimization',
-      'Frontend build tools'
+      'Frontend build tools',
     ];
 
     const startTime = Date.now();

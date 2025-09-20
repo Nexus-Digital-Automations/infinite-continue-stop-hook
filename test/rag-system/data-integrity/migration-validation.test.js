@@ -128,7 +128,7 @@ try {
 ## Tags
 - api
 - error-handling
-- javascript`
+- javascript`,
         },
         {
           filename: 'text_lesson.txt',
@@ -138,7 +138,7 @@ When working with databases, implement connection pooling to optimize performanc
 Use libraries like pg-pool for PostgreSQL or mysql2 for MySQL.
 
 Category: database-optimization
-Tags: database, performance, connection-pooling`
+Tags: database, performance, connection-pooling`,
         },
         {
           filename: 'json_lesson.json',
@@ -148,10 +148,10 @@ Tags: database, performance, connection-pooling`
             category: 'frontend-optimization',
             tags: ['react', 'hooks', 'performance'],
             examples: [
-              'const memoizedValue = useMemo(() => expensiveCalculation(a, b), [a, b]);'
-            ]
-          }, null, 2)
-        }
+              'const memoizedValue = useMemo(() => expensiveCalculation(a, b), [a, b]);',
+            ],
+          }, null, 2),
+        },
       ];
 
       // Placeholder for future implementation
@@ -214,20 +214,20 @@ Tags: database, performance, connection-pooling`
       const problematicFiles = [
         {
           filename: 'empty_file.md',
-          content: ''
+          content: '',
         },
         {
           filename: 'invalid_json.json',
-          content: '{ "title": "Invalid JSON", invalid syntax }'
+          content: '{ "title": "Invalid JSON", invalid syntax }',
         },
         {
           filename: 'binary_file.bin',
-          content: Buffer.from([0x00, 0x01, 0x02, 0x03])
+          content: Buffer.from([0x00, 0x01, 0x02, 0x03]),
         },
         {
           filename: 'huge_file.md',
-          content: '# Huge File\n' + 'x'.repeat(10 * 1024 * 1024) // 10MB
-        }
+          content: '# Huge File\n' + 'x'.repeat(10 * 1024 * 1024), // 10MB
+        },
       ];
 
       // Placeholder for future implementation
@@ -737,7 +737,7 @@ Tags: api, errors, timeout, authentication`,
 - Monitor slow queries
 
 Category: database
-Tags: database, errors, optimization, performance`
+Tags: database, errors, optimization, performance`,
       },
 
       'features': {
@@ -769,7 +769,7 @@ Tags: jwt, sessions, security`,
 - Include metadata
 
 Category: api-design
-Tags: rest, api, design, http`
+Tags: rest, api, design, http`,
       },
 
       'optimization': {
@@ -786,8 +786,8 @@ Tags: rest, api, design, http`
 - Implement compression
 
 Category: performance
-Tags: optimization, frontend, backend, caching`
-      }
+Tags: optimization, frontend, backend, caching`,
+      },
     };
 
     for (const [category, files] of Object.entries(lessonsStructure)) {
@@ -816,7 +816,7 @@ Tags: optimization, frontend, backend, caching`
           files.push({
             filename: entry.name,
             fullPath: fullPath,
-            relativePath: relPath
+            relativePath: relPath,
           });
         }
       }
