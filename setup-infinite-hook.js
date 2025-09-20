@@ -82,7 +82,7 @@
 
 const _fs = require('fs');
 const _path = require('path');
-const _readline = require('readline');
+const readline = require('readline');
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -128,10 +128,10 @@ async function _getProjectInfo(targetPath) {
 
   const packageJsonPath = _path.join(targetPath, 'package.json');
 
-  if (fs.existsSync(packageJsonPath)) {
+  if (_fs.existsSync(packageJsonPath)) {
     try {
 
-      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+      const packageJson = JSON.parse(_fs.readFileSync(packageJsonPath, 'utf8'));
       if (packageJson.name) {
         detectedName = packageJson.name;
       }
@@ -200,9 +200,9 @@ function createProjectDirectories(targetPath) {
   // Create /development directory
   const developmentPath = _path.join(targetPath, 'development');
 
-  if (!fs.existsSync(developmentPath)) {
+  if (!_fs.existsSync(developmentPath)) {
 
-    fs.mkdirSync(developmentPath, { recursive: true });
+    _fs.mkdirSync(developmentPath, { recursive: true });
     // eslint-disable-next-line no-console -- setup script progress output
     console.log(`✓ Created /development directory`);
   }
@@ -210,9 +210,9 @@ function createProjectDirectories(targetPath) {
   // Create /development/tasks directory
   const tasksPath = _path.join(developmentPath, 'tasks');
 
-  if (!fs.existsSync(tasksPath)) {
+  if (!_fs.existsSync(tasksPath)) {
 
-    fs.mkdirSync(tasksPath, { recursive: true });
+    _fs.mkdirSync(tasksPath, { recursive: true });
     // eslint-disable-next-line no-console -- setup script progress output
     console.log(`✓ Created /development/tasks directory`);
   }
@@ -220,9 +220,9 @@ function createProjectDirectories(targetPath) {
   // Create /development/reports directory
   const reportsPath = _path.join(developmentPath, 'reports');
 
-  if (!fs.existsSync(reportsPath)) {
+  if (!_fs.existsSync(reportsPath)) {
 
-    fs.mkdirSync(reportsPath, { recursive: true });
+    _fs.mkdirSync(reportsPath, { recursive: true });
     // eslint-disable-next-line no-console -- setup script progress output
     console.log(`✓ Created /development/reports directory`);
   }
@@ -230,9 +230,9 @@ function createProjectDirectories(targetPath) {
   // Create /development/logs directory
   const logsPath = _path.join(developmentPath, 'logs');
 
-  if (!fs.existsSync(logsPath)) {
+  if (!_fs.existsSync(logsPath)) {
 
-    fs.mkdirSync(logsPath, { recursive: true });
+    _fs.mkdirSync(logsPath, { recursive: true });
     // eslint-disable-next-line no-console -- setup script progress output
     console.log(`✓ Created /development/logs directory`);
   }
@@ -243,13 +243,13 @@ function createProjectDirectories(targetPath) {
 // Check if TODO.json needs to be updated to new schema
 function needsTodoUpdate(todoPath) {
 
-  if (!fs.existsSync(todoPath)) {
+  if (!_fs.existsSync(todoPath)) {
     return true;
   }
 
   try {
 
-    const existing = JSON.parse(fs.readFileSync(todoPath, 'utf8'));
+    const existing = JSON.parse(_fs.readFileSync(todoPath, 'utf8'));
 
     // Check for old schema indicators
     const hasOldSchema =
@@ -404,7 +404,7 @@ This validation ensures professional-grade delivery quality.`,
 
   // Write TODO.json
 
-  fs.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
+  _fs.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
   // eslint-disable-next-line no-console -- setup script success output
   console.log(`\n✓ TODO.json created at: ${todoPath}`);
 
@@ -414,18 +414,18 @@ This validation ensures professional-grade delivery quality.`,
 // Get all project directories to process
 function _getProjectDirectories(basePath) {
 
-  if (!fs.existsSync(basePath) || !fs.statSync(basePath).isDirectory()) {
+  if (!_fs.existsSync(basePath) || !_fs.statSync(basePath).isDirectory()) {
     return [];
   }
 
 
-  return fs
+  return _fs
 
     .readdirSync(basePath)
     .map((item) => _path.join(basePath, item))
     .filter((itemPath) => {
 
-      if (!fs.statSync(itemPath).isDirectory()) {
+      if (!_fs.statSync(itemPath).isDirectory()) {
         return false;
       }
 
@@ -499,7 +499,7 @@ function migrateToFeatureBasedSystem(targetPath) {
     console.log(`   🔄 Checking for feature-based migration...`);
 
 
-    if (!fs.existsSync(todoPath)) {
+    if (!_fs.existsSync(todoPath)) {
       // eslint-disable-next-line no-console -- setup script status output
       console.log(`   ⚠️  No TODO.json found - skipping migration`);
       return;
@@ -507,7 +507,7 @@ function migrateToFeatureBasedSystem(targetPath) {
 
     // Read current TODO.json
 
-    const todoData = JSON.parse(fs.readFileSync(todoPath, 'utf8'));
+    const todoData = JSON.parse(_fs.readFileSync(todoPath, 'utf8'));
 
     // Check if already feature-based
     if (todoData.features && Array.isArray(todoData.features)) {
@@ -519,7 +519,7 @@ function migrateToFeatureBasedSystem(targetPath) {
     // Create backup before migration
     const backupPath = todoPath + '.pre-feature-migration.backup';
 
-    fs.writeFileSync(backupPath, JSON.stringify(todoData, null, 2));
+    _fs.writeFileSync(backupPath, JSON.stringify(todoData, null, 2));
     // eslint-disable-next-line no-console -- setup script progress output
     console.log(`   📋 Created backup: ${_path.basename(backupPath)}`);
 
@@ -535,7 +535,7 @@ function migrateToFeatureBasedSystem(targetPath) {
 
     // Write migrated structure
 
-    fs.writeFileSync(todoPath, JSON.stringify(migrated, null, 2));
+    _fs.writeFileSync(todoPath, JSON.stringify(migrated, null, 2));
 
     // eslint-disable-next-line no-console -- setup script success output
     console.log(
@@ -545,9 +545,9 @@ function migrateToFeatureBasedSystem(targetPath) {
     // Clean up features.json if it exists (eliminating dual system)
     const featuresJsonPath = _path.join(targetPath, 'features.json');
 
-    if (fs.existsSync(featuresJsonPath)) {
+    if (_fs.existsSync(featuresJsonPath)) {
 
-      fs.unlinkSync(featuresJsonPath);
+      _fs.unlinkSync(featuresJsonPath);
       // eslint-disable-next-line no-console -- setup script cleanup output
       console.log(`   🗑️  Removed features.json (dual system eliminated)`);
     }
@@ -814,7 +814,7 @@ async function main() {
 
   // Verify project path exists
 
-  if (!fs.existsSync(targetPath)) {
+  if (!_fs.existsSync(targetPath)) {
     // eslint-disable-next-line no-console -- setup script error output
     console.error(`Error: Path does not exist: ${targetPath}`);
     throw new Error(`Invalid path: ${targetPath}`);
@@ -822,7 +822,7 @@ async function main() {
 
   // Verify it's a directory
 
-  if (!fs.statSync(targetPath).isDirectory()) {
+  if (!_fs.statSync(targetPath).isDirectory()) {
     // eslint-disable-next-line no-console -- setup script error output
     console.error(`Error: Path is not a directory: ${targetPath}`);
     throw new Error(`Path is not a directory: ${targetPath}`);

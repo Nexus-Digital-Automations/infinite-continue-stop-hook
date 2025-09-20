@@ -32,7 +32,7 @@ class ValidationLogger {
 
 class SuccessCriteriaValidator {
   constructor() {
-    this.configPath = path.join(
+    this.configPath = _path.join(
       __dirname,
       'development/essentials/success-criteria-config.json',
     );
@@ -47,11 +47,11 @@ class SuccessCriteriaValidator {
    */
   async initialize() {
     try {
-      const configData = await fs.readFile(this.configPath, 'utf8');
+      const configData = await _fs.readFile(this.configPath, 'utf8');
       this.config = JSON.parse(configData);
 
-      this.evidenceDir = path.join(__dirname, this.config.evidence_storage);
-      this.reportDir = path.join(__dirname, this.config.report_storage);
+      this.evidenceDir = _path.join(__dirname, this.config.evidence_storage);
+      this.reportDir = _path.join(__dirname, this.config.report_storage);
 
       // Ensure directories exist
       await this.ensureDirectories();
@@ -70,8 +70,8 @@ class SuccessCriteriaValidator {
    */
   async ensureDirectories() {
     try {
-      await fs.mkdir(this.evidenceDir, { recursive: true });
-      await fs.mkdir(this.reportDir, { recursive: true });
+      await _fs.mkdir(this.evidenceDir, { recursive: true });
+      await _fs.mkdir(this.reportDir, { recursive: true });
     } catch (error) {
       ValidationLogger.error(`❌ Failed to create directories: ${error.message}`);
       throw error;
@@ -221,8 +221,8 @@ class SuccessCriteriaValidator {
    */
   async getTaskCriteria(taskId) {
     try {
-      const todoPath = path.join(__dirname, 'TODO.json');
-      const todoData = await fs.readFile(todoPath, 'utf8');
+      const todoPath = _path.join(__dirname, 'TODO.json');
+      const todoData = await _fs.readFile(todoPath, 'utf8');
       const todo = JSON.parse(todoData);
 
       const task = todo.tasks.find((t) => t.id === taskId);
@@ -535,8 +535,24 @@ class SuccessCriteriaValidator {
     try {
       // Check for potential credential exposure
       const files = await this.getAllSourceFiles();
-      for (const file of files) {
-        const content = await fs.readFile(file, 'utf8');
+
+      // Parallel file reading for performance optimization
+      const fileContentPromises = files.map(async (file) => {
+        try {
+          const content = await _fs.readFile(file, 'utf8');
+          return { file, content };
+        } catch (error) {
+          // Skip files that can't be read
+          return { file, content: null, error };
+        }
+      });
+
+      const fileContents = await Promise.all(fileContentPromises);
+
+      for (const { file, content, error } of fileContents) {
+        if (error || !content) {
+          continue; // Skip files with read errors
+        }
         if (this.containsCredentials(content)) {
           securityIssues.push(`Potential credentials found in ${file}`);
         }
@@ -679,21 +695,34 @@ class SuccessCriteriaValidator {
   async getAllSourceFiles() {
     const sourceFiles = [];
     const walkDir = async (dir) => {
-      const files = await fs.readdir(dir, { withFileTypes: true });
+      const files = await _fs.readdir(dir, { withFileTypes: true });
+
+      // Separate directories and files for parallel processing
+      const directories = [];
+      const jsFiles = [];
+
       for (const file of files) {
-        const filePath = path.join(dir, file.name);
+        const filePath = _path.join(dir, file.name);
         if (
           file.isDirectory() &&
           !file.name.startsWith('.') &&
           file.name !== 'node_modules'
         ) {
-          await walkDir(filePath);
+          directories.push(filePath);
         } else if (
           file.isFile() &&
           (file.name.endsWith('.js') || file.name.endsWith('.json'))
         ) {
-          sourceFiles.push(filePath);
+          jsFiles.push(filePath);
         }
+      }
+
+      // Add current directory's files immediately
+      sourceFiles.push(...jsFiles);
+
+      // Process subdirectories in parallel for performance optimization
+      if (directories.length > 0) {
+        await Promise.all(directories.map(dirPath => walkDir(dirPath)));
       }
     };
 
@@ -727,11 +756,11 @@ class SuccessCriteriaValidator {
     };
 
     // Save report to file
-    const reportPath = path.join(
+    const reportPath = _path.join(
       this.reportDir,
       `${taskId}_validation_report.json`,
     );
-    await fs.writeFile(reportPath, JSON.stringify(report, null, 2));
+    await _fs.writeFile(reportPath, JSON.stringify(report, null, 2));
 
     return report;
   }
@@ -824,7 +853,7 @@ class SuccessCriteriaValidator {
         report = await this.generateReport(taskId, results);
         // eslint-disable-next-line no-console
         console.log(
-          `📋 Validation report generated: ${path.join(this.reportDir, `${taskId}_validation_report.json`)}`,
+          `📋 Validation report generated: ${_path.join(this.reportDir, `${taskId}_validation_report.json`)}`,
         );
       }
 
