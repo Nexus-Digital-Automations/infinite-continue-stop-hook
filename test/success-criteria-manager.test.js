@@ -17,15 +17,15 @@
 const _SuccessCriteriaManager = require('../lib/api-modules/core/successCriteriaManager');
 
 describe('SuccessCriteriaManager Unit Tests', () => {
-  let _successCriteriaManager;
-  let _mockDependencies;
-  let _mockTaskManager;
-  let _mockWithTimeout;
-  let _mockGetGuideForError;
-  let _mockGetFallbackGuide;
-  let _mockValidateCriteria;
-  let _mockValidateTaskExists;
-  let _mockBroadcastCriteriaUpdate;
+  let successCriteriaManager;
+  let mockDependencies;
+  let mockTaskManager;
+  let mockWithTimeout;
+  let mockGetGuideForError;
+  let mockGetFallbackGuide;
+  let mockValidateCriteria;
+  let mockValidateTaskExists;
+  let mockBroadcastCriteriaUpdate;
 
   beforeEach(() => {
     // Create comprehensive mocks for all dependencies
@@ -84,7 +84,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     });
 
     test('should use default validators when not provided', () => {
-      const _defaultDependencies = {
+      const defaultDependencies = {
         taskManager: mockTaskManager,
         withTimeout: mockWithTimeout,
         getGuideForError: mockGetGuideForError,
@@ -93,7 +93,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn() },
       };
 
-      const _manager = new _SuccessCriteriaManager(_defaultDependencies);
+      const manager = new _SuccessCriteriaManager(defaultDependencies);
       expect(typeof manager.validateCriteria).toBe('function');
       expect(typeof manager.validateTaskExists).toBe('function');
     });

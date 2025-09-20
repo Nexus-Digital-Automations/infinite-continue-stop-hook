@@ -46256,12 +46256,48 @@
       "updated_at": "2025-09-20T15:24:44.044Z",
       "archived_at": "2025-09-20T15:24:44.056Z",
       "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T15:17:08.603Z",
+      "title": "Fix no-unused-vars in lib/utils/logger.js and lib/utils/secureFileSystem.js",
+      "description": "Remove unused error and accessError variables",
+      "category": "error",
+      "id": "error_1758381428603_djr5cs645a",
+      "assigned_agent": "dev_session_1758381273693_1_general_7ea43292",
+      "started_at": "2025-09-20T15:23:59.366Z",
+      "claimed_by": "dev_session_1758381273693_1_general_7ea43292",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758381273693_1_general_7ea43292",
+          "role": "primary",
+          "assignedAt": "2025-09-20T15:23:59.366Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-20T15:25:17.595Z",
+      "updated_at": "2025-09-20T15:25:17.595Z",
+      "archived_at": "2025-09-20T15:25:17.603Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T15:14:48.204Z",
+      "title": "Fix no-await-in-loop ESLint violations",
+      "description": "Replace await inside loops with Promise.all() or other appropriate async patterns. Address performance and potential issues with sequential async operations in loops.",
+      "category": "error",
+      "id": "error_1758381288204_ipgkp9updzn",
+      "completed_at": "2025-09-20T15:25:40.251Z",
+      "updated_at": "2025-09-20T15:25:40.251Z",
+      "archived_at": "2025-09-20T15:25:40.271Z",
+      "archive_version": "2.0.0"
     }
   ],
-  "total_completed": 1059,
+  "total_completed": 1061,
   "last_completion": "2025-09-13T18:24:43.914Z",
   "created_at": "2025-08-07T04:55:03.964Z",
-  "last_archived": "2025-09-20T15:24:44.056Z",
+  "last_archived": "2025-09-20T15:25:40.271Z",
   "metadata": {
     "last_bulk_archive": "2025-09-20T15:11:18.145Z",
     "bulk_archive_count": 23
