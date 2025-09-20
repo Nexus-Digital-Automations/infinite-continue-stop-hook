@@ -99,20 +99,20 @@ describe('RAG System End-to-End Integration Tests', () => {
     console.log('Initializing RAG system components...');
 
     // Initialize all components
-    await _embeddingGenerator.initialize();
-    await _vectorDatabase.initialize();
-    await _semanticSearchEngine.initialize();
-    await _ragOperations.initialize();
+    await embeddingGenerator.initialize();
+    await vectorDatabase.initialize();
+    await semanticSearchEngine.initialize();
+    await ragOperations.initialize();
 
     console.log('RAG system initialization completed');
   }, 120000); // 2 minutes timeout for initialization
 
   afterAll(async () => {
     // Cleanup test resources
-    if (_embeddingGenerator) {await _embeddingGenerator.cleanup();}
-    if (_vectorDatabase) {await _vectorDatabase.cleanup();}
-    if (_semanticSearchEngine) {await _semanticSearchEngine.cleanup();}
-    if (_ragOperations) {await _ragOperations.cleanup();}
+    if (embeddingGenerator) {await embeddingGenerator.cleanup();}
+    if (vectorDatabase) {await vectorDatabase.cleanup();}
+    if (semanticSearchEngine) {await semanticSearchEngine.cleanup();}
+    if (ragOperations) {await ragOperations.cleanup();}
 
     // Clean up test files
     try {
@@ -124,21 +124,21 @@ describe('RAG System End-to-End Integration Tests', () => {
 
   describe('System Initialization and Health Checks', () => {
     test('should initialize all components successfully', () => {
-      expect(_embeddingGenerator.isInitialized).toBe(true);
-      expect(_vectorDatabase.isInitialized).toBe(true);
-      expect(_semanticSearchEngine.isInitialized).toBe(true);
-      expect(_ragOperations.isInitialized).toBe(true);
+      expect(embeddingGenerator.isInitialized).toBe(true);
+      expect(vectorDatabase.isInitialized).toBe(true);
+      expect(semanticSearchEngine.isInitialized).toBe(true);
+      expect(ragOperations.isInitialized).toBe(true);
     });
 
     test('should have proper component connections', () => {
-      expect(_semanticSearchEngine.config.embeddingGenerator).toBe(_embeddingGenerator);
-      expect(_semanticSearchEngine.config.vectorDatabase).toBe(_vectorDatabase);
+      expect(semanticSearchEngine.config.embeddingGenerator).toBe(embeddingGenerator);
+      expect(semanticSearchEngine.config.vectorDatabase).toBe(vectorDatabase);
     });
 
     test('should provide system statistics', async () => {
-      const _embeddingStats = _embeddingGenerator.getStatistics();
-      const _vectorStats = _vectorDatabase.getStatistics();
-      const _searchStats = _semanticSearchEngine.getStatistics();
+      const _embeddingStats = embeddingGenerator.getStatistics();
+      const _vectorStats = vectorDatabase.getStatistics();
+      const _searchStats = semanticSearchEngine.getStatistics();
 
       expect(_embeddingStats).toHaveProperty('isInitialized', true);
       expect(_vectorStats).toHaveProperty('isInitialized', true);
@@ -154,10 +154,10 @@ describe('RAG System End-to-End Integration Tests', () => {
     const storedLessons = [];
 
     test('should store technical lessons with embeddings', async () => {
-      const _lessons = _testDataGenerator.generateLessons(5);
+      const _lessons = testDataGenerator.generateLessons(5);
 
       for (const lesson of _lessons) {
-        const result = await _ragOperations.storeLesson(lesson);
+        const result = await ragOperations.storeLesson(lesson);
 
         expect(result).toHaveProperty('success', true);
         expect(result).toHaveProperty('vectorId');
@@ -168,13 +168,13 @@ describe('RAG System End-to-End Integration Tests', () => {
       }
 
       // Verify storage statistics
-      const _vectorStats = _vectorDatabase.getStatistics();
+      const _vectorStats = vectorDatabase.getStatistics();
       expect(_vectorStats.totalVectors).toBeGreaterThanOrEqual(_lessons.length);
     });
 
     test('should retrieve lessons using semantic search', async () => {
       const _query = 'JavaScript function error handling best practices';
-      const _results = await _ragOperations.searchLessons(_query, { maxResults: 3 });
+      const _results = await ragOperations.searchLessons(_query, { maxResults: 3 });
 
       expect(_results).toBeInstanceOf(Array);
       expect(_results.length).toBeGreaterThan(0);
@@ -182,7 +182,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Verify result structure
       for (const result of _results) {
-        _testAssertions.assertValidSearchResult(result);
+        testAssertions.assertValidSearchResult(result);
         expect(result).toHaveProperty('relevanceScore');
         expect(result).toHaveProperty('lessonType');
         expect(result).toHaveProperty('confidenceLevel');
@@ -203,14 +203,14 @@ describe('RAG System End-to-End Integration Tests', () => {
         tags: ['javascript', 'async', 'error-handling'],
       };
 
-      const _recommendations = await _ragOperations.getRelevantLessons(_taskContext, { maxResults: 5 });
+      const _recommendations = await ragOperations.getRelevantLessons(_taskContext, { maxResults: 5 });
 
       expect(_recommendations).toBeInstanceOf(Array);
       expect(_recommendations.length).toBeGreaterThan(0);
 
       // Verify contextual relevance
       for (const recommendation of _recommendations) {
-        _testAssertions.assertValidRecommendation(recommendation);
+        testAssertions.assertValidRecommendation(recommendation);
         expect(recommendation).toHaveProperty('applicableToCurrentTask');
         expect(recommendation).toHaveProperty('contextRelevance');
       }
@@ -221,10 +221,10 @@ describe('RAG System End-to-End Integration Tests', () => {
     const storedErrors = [];
 
     test('should store error patterns with semantic analysis', async () => {
-      const _errors = _testDataGenerator.generateErrors(5);
+      const _errors = testDataGenerator.generateErrors(5);
 
       for (const error of _errors) {
-        const result = await _ragOperations.storeError(error);
+        const result = await ragOperations.storeError(error);
 
         expect(result).toHaveProperty('success', true);
         expect(result).toHaveProperty('vectorId');
@@ -236,12 +236,12 @@ describe('RAG System End-to-End Integration Tests', () => {
 
     test('should find similar errors using pattern matching', async () => {
       const _errorDescription = 'TypeError: Cannot read property of undefined in async function';
-      const _similarErrors = await _ragOperations.findSimilarErrors(_errorDescription, { maxResults: 3 });
+      const _similarErrors = await ragOperations.findSimilarErrors(_errorDescription, { maxResults: 3 });
 
       expect(_similarErrors).toBeInstanceOf(Array);
 
       for (const error of _similarErrors) {
-        _testAssertions.assertValidErrorResult(error);
+        testAssertions.assertValidErrorResult(error);
         expect(error).toHaveProperty('similarityScore');
         expect(error).toHaveProperty('errorPattern');
         expect(error).toHaveProperty('hasResolution');
@@ -267,11 +267,11 @@ describe('RAG System End-to-End Integration Tests', () => {
         tags: ['system', 'memory', 'distributed', 'cascade'],
       };
 
-      const result = await _ragOperations.storeError(_complexError);
+      const result = await ragOperations.storeError(_complexError);
       expect(result.success).toBe(true);
 
       // Search for the stored error
-      const _searchResults = await _ragOperations.findSimilarErrors(_complexError.message);
+      const _searchResults = await ragOperations.findSimilarErrors(_complexError.message);
       const _foundError = _searchResults.find(e => e.error_type === _complexError.type);
 
       expect(_foundError).toBeDefined();
@@ -283,13 +283,13 @@ describe('RAG System End-to-End Integration Tests', () => {
   describe('Performance and Scalability Tests', () => {
     test('should handle batch operations efficiently', async () => {
       const _batchSize = 20;
-      const _lessons = _testDataGenerator.generateLessons(_batchSize);
+      const _lessons = testDataGenerator.generateLessons(_batchSize);
 
       const _startTime = Date.now();
 
       // Store lessons in batch
       const _results = await Promise.all(
-        _lessons.map(lesson => _ragOperations.storeLesson(lesson)),
+        _lessons.map(lesson => ragOperations.storeLesson(lesson)),
       );
 
       const _endTime = Date.now();
