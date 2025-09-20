@@ -200,11 +200,16 @@ class TaskManagerAPI {
       broadcastCriteriaUpdate: this._broadcastCriteriaUpdate.bind(this),
     };
 
-    // Initialize module instances
+    // Initialize RAG operations first
+    this.ragOperations = new RAGOperations(dependencies);
+
+    // Add RAG operations to dependencies for TaskOperations
+    dependencies.ragOperations = this.ragOperations;
+
+    // Initialize other module instances with enhanced dependencies
     this.taskOperations = new TaskOperations(dependencies);
     this.agentManagement = new AgentManagement(dependencies);
     this.taskOrdering = new TaskOrdering(dependencies);
-    this.ragOperations = new RAGOperations(dependencies);
   }
 
   /**
