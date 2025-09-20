@@ -45588,14 +45588,50 @@
       "updated_at": "2025-09-18T19:33:22.983Z",
       "archived_at": "2025-09-18T19:33:22.994Z",
       "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T01:54:29.982Z",
+      "title": "Remove incorrect mkdir command from CLAUDE.md and fix agentId documentation",
+      "description": "1. Remove the mkdir -p development/{essentials,errors,logs,lessons/{errors,features,optimization,decisions,patterns},reports} command from CLAUDE.md as it does not serve the agent and is incorrect. 2. Fix taskmanager documentation to clarify that agentId is NOT optional for claim command",
+      "category": "error",
+      "id": "error_1758333269981_awbteudkofg",
+      "assigned_agent": "dev_session_1758333251821_1_general_8e8f4b67",
+      "started_at": "2025-09-20T01:54:48.055Z",
+      "claimed_by": "dev_session_1758333251821_1_general_8e8f4b67",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758333251821_1_general_8e8f4b67",
+          "role": "primary",
+          "assignedAt": "2025-09-20T01:54:48.055Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-20T01:57:13.423Z",
+      "updated_at": "2025-09-20T01:57:13.424Z",
+      "archived_at": "2025-09-20T01:57:13.451Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-20T01:49:16.429Z",
+      "title": "Implement RAG-based lessons and error database API endpoints",
+      "description": "Create new REST API endpoints for storing and retrieving lessons/errors with semantic search, analytics, and integration with existing TaskManager",
+      "category": "feature",
+      "id": "error_1758333174638_u7g1jpiy2",
+      "completed_at": "2025-09-20T01:57:51.951Z",
+      "updated_at": "2025-09-20T01:57:51.951Z",
+      "archived_at": "2025-09-20T01:57:51.970Z",
+      "archive_version": "2.0.0"
     }
   ],
-  "total_completed": 1023,
+  "total_completed": 1025,
   "last_completion": "2025-09-13T18:24:43.914Z",
   "created_at": "2025-08-07T04:55:03.964Z",
-  "last_archived": "2025-09-18T19:37:30.997Z",
+  "last_archived": "2025-09-20T01:57:51.970Z",
   "metadata": {
-    "last_bulk_archive": "2025-09-18T19:37:30.997Z",
-    "bulk_archive_count": 13
+    "last_bulk_archive": "2025-09-20T01:57:36.774Z",
+    "bulk_archive_count": 14
   }
 }
