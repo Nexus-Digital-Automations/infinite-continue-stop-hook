@@ -1,0 +1,952 @@
+
+/Users/jeremyparker/infinite-continue-stop-hook/development/temp-scripts/fix-all-test-variables.js
+   51:19  warning  Found readFileSync from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  126:7   warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/jeremyparker/infinite-continue-stop-hook/development/temp-scripts/fix-security-violations.js
+   44:11  warning  Unexpected `await` inside a loop                                            no-await-in-loop
+   94:21  warning  Found readFileSync from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  119:7   warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  149:20  warning  Generic Object Injection Sink                                               security/detect-object-injection
+  200:18  warning  Variable Assigned to Object Injection Sink                                  security/detect-object-injection
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/api-modules/core/validationUtils.js
+  204:27  warning  Variable Assigned to Object Injection Sink  security/detect-object-injection
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/api-modules/security/FilePathSecurityValidator.js
+  343:28  warning  Found realpathSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  371:29  warning  Generic Object Injection Sink                                              security/detect-object-injection
+  398:16  warning  Found existsSync from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  461:26  warning  Found realpathSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  484:14  warning  Found existsSync from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  484:38  warning  Found statSync from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  509:7   warning  Function Call Object Injection Sink                                        security/detect-object-injection
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/api-modules/success-criteria/reportGenerator.js
+  468:38  warning  Found readFile from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  579:13  warning  Found writeFile from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  602:27  warning  Found readdir from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  746:27  warning  Found readdir from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  752:30  warning  Found readFile from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/api-modules/success-criteria/templateManager.js
+  645:11  warning  Generic Object Injection Sink  security/detect-object-injection
+  676:13  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/api-modules/success-criteria/utils/criteriaUtils.js
+  190:26  warning  Generic Object Injection Sink  security/detect-object-injection
+  243:9   warning  Generic Object Injection Sink  security/detect-object-injection
+  256:9   warning  Generic Object Injection Sink  security/detect-object-injection
+  257:14  warning  Generic Object Injection Sink  security/detect-object-injection
+  436:23  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/api-modules/success-criteria/utils/validationUtils.js
+  443:11  warning  Found mkdir from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  466:11  warning  Found writeFile from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  471:13  warning  Found writeFile from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  542:10  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  543:7   warning  Generic Object Injection Sink                                           security/detect-object-injection
+  545:5   warning  Generic Object Injection Sink                                           security/detect-object-injection
+  547:7   warning  Generic Object Injection Sink                                           security/detect-object-injection
+  608:10  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  646:10  warning  Generic Object Injection Sink                                           security/detect-object-injection
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/api-modules/success-criteria/validationEngine.js
+  111:13  warning  Found mkdir from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  112:13  warning  Found mkdir from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  162:9   warning  Generic Object Injection Sink                                           security/detect-object-injection
+  251:31  warning  Variable Assigned to Object Injection Sink                              security/detect-object-injection
+  535:13  warning  Found writeFile from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  552:13  warning  Found writeFile from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  563:3   error    Async method 'validateCriteriaStructure' has no 'await' expression      require-await
+  599:41  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  612:20  warning  Variable Assigned to Object Injection Sink                              security/detect-object-injection
+  638:12  warning  Generic Object Injection Sink                                           security/detect-object-injection
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/database/DatabaseManager.js
+  413:13  warning  Found mkdir from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  483:7   warning  Function Call Object Injection Sink                                 security/detect-object-injection
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/database/VectorEmbeddingManager.js
+  173:13  warning  Found mkdir from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  283:11  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  300:21  warning  Variable Assigned to Object Injection Sink                              security/detect-object-injection
+  311:26  warning  Variable Assigned to Object Injection Sink                              security/detect-object-injection
+  316:23  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  390:12  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  391:9   warning  Generic Object Injection Sink                                           security/detect-object-injection
+  396:7   warning  Generic Object Injection Sink                                           security/detect-object-injection
+  401:9   warning  Generic Object Injection Sink                                           security/detect-object-injection
+  424:11  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  473:21  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  473:31  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  474:16  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  474:26  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  475:16  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  475:26  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  512:27  warning  Found stat from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+  516:15  warning  Found unlink from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  520:39  warning  Found readFile from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  544:13  warning  Found writeFile from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  562:12  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  570:12  error    Redundant use of `await` on a return value                              no-return-await
+  604:36  warning  Found readdir from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  625:32  warning  Found readdir from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  632:31  warning  Found stat from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+  636:19  warning  Found unlink from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  667:11  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  678:13  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  684:13  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  710:5   warning  Function Call Object Injection Sink                                     security/detect-object-injection
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/database/setup.js
+  365:7  warning  Unexpected console statement  no-console
+  383:5  warning  Unexpected console statement  no-console
+  384:5  warning  Unexpected console statement  no-console
+  387:5  warning  Unexpected console statement  no-console
+  388:5  warning  Unexpected console statement  no-console
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/database/test-rag-system.js
+  478:15  warning  Found unlink from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/intelligentResearchSystem.js
+   139:11  warning  Generic Object Injection Sink                                           security/detect-object-injection
+   220:9   warning  Generic Object Injection Sink                                           security/detect-object-injection
+   541:30  warning  Unexpected `await` inside a loop                                        no-await-in-loop
+   606:27  warning  Found stat from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+   643:29  warning  Found readdir from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+   657:32  warning  Unexpected `await` inside a loop                                        no-await-in-loop
+   660:34  warning  Unexpected `await` inside a loop                                        no-await-in-loop
+   685:29  warning  Found readFile from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  1009:12  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  1010:9   warning  Generic Object Injection Sink                                           security/detect-object-injection
+  1019:7   warning  Generic Object Injection Sink                                           security/detect-object-injection
+  1020:7   warning  Generic Object Injection Sink                                           security/detect-object-injection
+  1021:7   warning  Generic Object Injection Sink                                           security/detect-object-injection
+  1021:48  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  1135:3   error    Async method 'generateRecommendations' has no 'await' expression        require-await
+  1245:32  warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  1338:25  warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  1338:31  warning  Found readFile from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  1455:3   error    Async method 'extractAPISpecifications' has no 'await' expression       require-await
+  1481:27  warning  Found stat from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+  1484:29  warning  Found readdir from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  1490:27  warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  1490:33  warning  Found readFile from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  1682:3   error    Async method 'performSearch' has no 'await' expression                  require-await
+  1832:3   error    Async method 'extractContent' has no 'await' expression                 require-await
+  1911:3   error    Async method 'analyzeContent' has no 'await' expression                 require-await
+  2446:9   warning  Generic Object Injection Sink                                           security/detect-object-injection
+  2446:33  warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  2498:3   error    Async method 'generateSection' has no 'await' expression                require-await
+  3052:13  warning  Found mkdir from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  3055:13  warning  Found writeFile from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  3090:30  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  3091:57  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  3206:28  warning  Unexpected `await` inside a loop                                        no-await-in-loop
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/logger.js
+  57:10  warning  Found existsSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  58:7   warning  Found mkdirSync from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/modules/TaskPerformance.js
+  347:7  warning  Generic Object Injection Sink  security/detect-object-injection
+  416:7  warning  Generic Object Injection Sink  security/detect-object-injection
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/modules/TaskStorage.js
+   57:10  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+   86:10  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+   93:23  warning  Found statSync from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+  103:22  warning  Found readFileSync from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  128:10  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  184:26  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  194:7   warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  195:7   warning  Found renameSync from package "fs" with non literal argument at index 0,1   security/detect-non-literal-fs-filename
+  202:23  warning  Found statSync from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+  215:25  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  227:25  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  229:11  warning  Found unlinkSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  246:10  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  286:21  warning  Found readdirSync from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  291:25  warning  Found statSync from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+  342:11  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  395:9   warning  Found unlinkSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  454:11  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  456:31  warning  Found readFileSync from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  518:7   warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  519:7   warning  Found renameSync from package "fs" with non literal argument at index 0,1   security/detect-non-literal-fs-filename
+  569:11  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  570:29  warning  Found readFileSync from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  593:7   warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  640:10  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  644:9   warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  653:20  warning  Found readFileSync from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  676:19  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  677:19  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  683:21  warning  Found statSync from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+  689:21  warning  Found statSync from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/modules/TaskValidation.js
+   385:11  warning  Generic Object Injection Sink                                            security/detect-object-injection
+   386:9   warning  Generic Object Injection Sink                                            security/detect-object-injection
+   386:28  warning  Generic Object Injection Sink                                            security/detect-object-injection
+   495:12  warning  Generic Object Injection Sink                                            security/detect-object-injection
+   541:11  warning  Generic Object Injection Sink                                            security/detect-object-injection
+   541:41  warning  Function Call Object Injection Sink                                      security/detect-object-injection
+   546:21  warning  Generic Object Injection Sink                                            security/detect-object-injection
+   547:35  warning  Function Call Object Injection Sink                                      security/detect-object-injection
+   547:50  warning  Generic Object Injection Sink                                            security/detect-object-injection
+   547:65  warning  Generic Object Injection Sink                                            security/detect-object-injection
+   555:11  warning  Generic Object Injection Sink                                            security/detect-object-injection
+   555:33  warning  Generic Object Injection Sink                                            security/detect-object-injection
+   556:31  warning  Generic Object Injection Sink                                            security/detect-object-injection
+   729:23  warning  Variable Assigned to Object Injection Sink                               security/detect-object-injection
+   766:25  warning  Variable Assigned to Object Injection Sink                               security/detect-object-injection
+   801:12  warning  Generic Object Injection Sink                                            security/detect-object-injection
+   804:33  warning  Function Call Object Injection Sink                                      security/detect-object-injection
+   889:23  warning  Variable Assigned to Object Injection Sink                               security/detect-object-injection
+  1071:14  warning  Found existsSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/rag-database.js
+   24:10  warning  Found existsSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+   25:7   warning  Found mkdirSync from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+   76:3   error    Async method 'createTables' has no 'await' expression                    require-await
+  159:3   error    Async method 'initializeVectorIndex' has no 'await' expression           require-await
+  324:3   error    Async method 'storeEmbedding' has no 'await' expression                  require-await
+  354:32  warning  Variable Assigned to Object Injection Sink                               security/detect-object-injection
+  357:21  warning  Generic Object Injection Sink                                            security/detect-object-injection
+  418:32  warning  Variable Assigned to Object Injection Sink                               security/detect-object-injection
+  421:21  warning  Generic Object Injection Sink                                            security/detect-object-injection
+  466:3   error    Async method 'getLessonsByIds' has no 'await' expression                 require-await
+  480:3   error    Async method 'getErrorsByIds' has no 'await' expression                  require-await
+  494:3   error    Async method 'saveIndex' has no 'await' expression                       require-await
+  563:21  warning  Generic Object Injection Sink                                            security/detect-object-injection
+  563:28  warning  Generic Object Injection Sink                                            security/detect-object-injection
+  564:16  warning  Generic Object Injection Sink                                            security/detect-object-injection
+  564:23  warning  Generic Object Injection Sink                                            security/detect-object-injection
+  565:16  warning  Generic Object Injection Sink                                            security/detect-object-injection
+  565:23  warning  Generic Object Injection Sink                                            security/detect-object-injection
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/rag-integration-test.js
+   43:24  warning  Unexpected `await` inside a loop                                            no-await-in-loop
+  217:5   warning  Found mkdirSync from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  218:5   warning  Found mkdirSync from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  241:5   warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  242:5   warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  319:32  warning  Generic Object Injection Sink                                               security/detect-object-injection
+  347:3   error    Async method 'testCLICommands' has no 'await' expression                    require-await
+  354:26  warning  Found readFileSync from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  411:22  warning  Unexpected `await` inside a loop                                            no-await-in-loop
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/rag-migration.js
+   61:10  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+   74:11  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+   75:33  warning  Unexpected `await` inside a loop                                            no-await-in-loop
+   94:21  warning  Found readdirSync from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  104:15  warning  Unexpected `await` inside a loop                                            no-await-in-loop
+  111:30  warning  Unexpected `await` inside a loop                                            no-await-in-loop
+  112:35  warning  Unexpected `await` inside a loop                                            no-await-in-loop
+  115:13  warning  Unexpected `await` inside a loop                                            no-await-in-loop
+  140:3   error    Async method 'parseLessonFile' has no 'await' expression                    require-await
+  141:21  warning  Found readFileSync from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  174:10  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  182:21  warning  Found readdirSync from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  192:15  warning  Unexpected `await` inside a loop                                            no-await-in-loop
+  199:29  warning  Unexpected `await` inside a loop                                            no-await-in-loop
+  200:35  warning  Unexpected `await` inside a loop                                            no-await-in-loop
+  203:13  warning  Unexpected `await` inside a loop                                            no-await-in-loop
+  228:3   error    Async method 'parseErrorFile' has no 'await' expression                     require-await
+  229:21  warning  Found readFileSync from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  357:3   error    Async method 'isFileMigrated' has no 'await' expression                     require-await
+  369:3   error    Async method 'markFileMigrated' has no 'await' expression                   require-await
+  409:3   error    Async method 'createBackwardCompatibilityBridge' has no 'await' expression  require-await
+  438:5   warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/rag-workflow-integration.js
+   36:10  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+   37:7   warning  Unexpected console statement                                                no-console
+   42:30  warning  Found readFileSync from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+   55:7   warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+   58:7   warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+   60:7   warning  Unexpected console statement                                                no-console
+   68:7   warning  Unexpected console statement                                                no-console
+   82:10  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+   83:7   warning  Found mkdirSync from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+   87:7   warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+   88:7   warning  Unexpected console statement                                                no-console
+   97:7   warning  Unexpected console statement                                                no-console
+  105:3   error    Async method 'createPreTaskPreparationScript' has no 'await' expression     require-await
+  111:10  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  112:7   warning  Found mkdirSync from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  116:7   warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  117:7   warning  Unexpected console statement                                                no-console
+  126:7   warning  Unexpected console statement                                                no-console
+  134:3   error    Async method 'integrateWithTaskManager' has no 'await' expression           require-await
+  140:10  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  145:23  warning  Found readFileSync from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  151:9   warning  Unexpected console statement                                                no-console
+  166:7   warning  Unexpected console statement                                                no-console
+  175:5   warning  Unexpected console statement                                                no-console
+  188:5   warning  Unexpected console statement                                                no-console
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/rag/embeddingGenerator.js
+  242:12  error  Redundant use of `await` on a return value  no-return-await
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/rag/migrationSystem.js
+  216:12  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  220:12  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  232:34  warning  Found readFile from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  257:13  warning  Found mkdir from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  266:13  warning  Found writeFile from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  282:13  warning  Found mkdir from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  320:13  warning  Found mkdir from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  321:27  warning  Found readdir from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  327:22  warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  327:28  warning  Found stat from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+  330:11  warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  332:11  warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  356:21  warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  388:29  warning  Found readdir from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  400:28  warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  444:25  warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  444:31  warning  Found readFile from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  566:11  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  574:20  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  715:13  warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  717:13  warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  746:9   warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  750:7   warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  750:36  error    Return values from promise executor functions cannot be read            no-promise-executor-return
+  963:15  warning  Found unlink from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/rag/semanticSearchEngine.js
+  382:25  warning  Variable Assigned to Object Injection Sink  security/detect-object-injection
+  397:11  warning  Generic Object Injection Sink               security/detect-object-injection
+  399:30  warning  Generic Object Injection Sink               security/detect-object-injection
+  907:12  warning  Generic Object Injection Sink               security/detect-object-injection
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/rag/vectorDatabase.js
+  140:9   warning  Unexpected `await` inside a loop                                    no-await-in-loop
+  140:15  warning  Found mkdir from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  206:7   warning  Unexpected `await` inside a loop                                    no-await-in-loop
+  222:9   warning  Unexpected `await` inside a loop                                    no-await-in-loop
+  274:9   warning  Unexpected `await` inside a loop                                    no-await-in-loop
+  327:21  warning  Unexpected `await` inside a loop                                    no-await-in-loop
+  354:27  warning  Generic Object Injection Sink                                       security/detect-object-injection
+  360:45  warning  Function Call Object Injection Sink                                 security/detect-object-injection
+  361:46  warning  Function Call Object Injection Sink                                 security/detect-object-injection
+  395:9   warning  Unexpected `await` inside a loop                                    no-await-in-loop
+  395:46  warning  Function Call Object Injection Sink                                 security/detect-object-injection
+  485:25  warning  Unexpected `await` inside a loop                                    no-await-in-loop
+  544:26  warning  Variable Assigned to Object Injection Sink                          security/detect-object-injection
+  545:28  warning  Variable Assigned to Object Injection Sink                          security/detect-object-injection
+  548:28  warning  Unexpected `await` inside a loop                                    no-await-in-loop
+  635:13  warning  Generic Object Injection Sink                                       security/detect-object-injection
+  764:13  warning  Found mkdir from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  771:11  warning  Unexpected `await` inside a loop                                    no-await-in-loop
+  797:7   warning  Generic Object Injection Sink                                       security/detect-object-injection
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/systemHealthMonitor.js
+   196:12  warning  Found existsSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+   353:31  warning  Found stat from package "fs" with non literal argument at index 0        security/detect-non-literal-fs-filename
+   371:37  warning  Found readFile from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+   419:31  warning  Found stat from package "fs" with non literal argument at index 0        security/detect-non-literal-fs-filename
+  1362:35  warning  Found readFile from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  1378:19  warning  Found existsSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  1523:33  warning  Found readdir from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  1546:41  warning  Found readFile from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  1878:15  warning  Found mkdir from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+  1887:13  warning  Found writeFile from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager.js
+  846:18  warning  Variable Assigned to Object Injection Sink  security/detect-object-injection
+  855:5   warning  Generic Object Injection Sink               security/detect-object-injection
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/utils/logger.js
+   49:13  warning  Found mkdir from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+   60:22  warning  Variable Assigned to Object Injection Sink                               security/detect-object-injection
+   78:13  warning  Found appendFile from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+   99:11  warning  Unexpected console statement                                             no-console
+  102:11  warning  Unexpected console statement                                             no-console
+  105:11  warning  Unexpected console statement                                             no-console
+  108:11  warning  Unexpected console statement                                             no-console
+  111:11  warning  Unexpected console statement                                             no-console
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/utils/secureFileSystem.js
+  112:12  error    Redundant use of `await` on a return value                                  no-return-await
+  112:18  warning  Found readFile from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+  127:12  warning  Found readFileSync from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  145:11  warning  Found mkdir from package "fs" with non literal argument at index 0          security/detect-non-literal-fs-filename
+  147:12  warning  Found writeFile from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  164:5   warning  Found mkdirSync from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  166:12  warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  181:12  error    Redundant use of `await` on a return value                                  no-return-await
+  181:18  warning  Found readdir from package "fs" with non literal argument at index 0        security/detect-non-literal-fs-filename
+  196:12  warning  Found readdirSync from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  211:12  error    Redundant use of `await` on a return value                                  no-return-await
+  211:18  warning  Found mkdir from package "fs" with non literal argument at index 0          security/detect-non-literal-fs-filename
+  225:12  warning  Found mkdirSync from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  239:12  error    Redundant use of `await` on a return value                                  no-return-await
+  239:18  warning  Found stat from package "fs" with non literal argument at index 0           security/detect-non-literal-fs-filename
+  253:12  warning  Found statSync from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+  268:12  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  282:12  error    Redundant use of `await` on a return value                                  no-return-await
+  282:18  warning  Found unlink from package "fs" with non literal argument at index 0         security/detect-non-literal-fs-filename
+  295:12  warning  Found unlinkSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  315:12  error    Redundant use of `await` on a return value                                  no-return-await
+  315:18  warning  Found rename from package "fs" with non literal argument at index 0,1       security/detect-non-literal-fs-filename
+  334:12  warning  Found renameSync from package "fs" with non literal argument at index 0,1   security/detect-non-literal-fs-filename
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-background-processor.js
+   63:7   warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  251:11  warning  Found writeFile from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  260:3   error    Async method 'queueValidation' has no 'await' expression                require-await
+  320:7   warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  323:7   warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  323:36  error    Return values from promise executor functions cannot be read            no-promise-executor-return
+  341:7   warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  356:3   error    Async method 'assignTaskToWorker' has no 'await' expression             require-await
+  741:7   warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  741:36  error    Return values from promise executor functions cannot be read            no-promise-executor-return
+  747:9   warning  Unexpected `await` inside a loop                                        no-await-in-loop
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-engine.js
+    83:9   warning  Unexpected `await` inside a loop                                           no-await-in-loop
+    83:15  warning  Found mkdir from package "fs" with non literal argument at index 0         security/detect-non-literal-fs-filename
+   280:13  warning  Generic Object Injection Sink                                              security/detect-object-injection
+   281:13  warning  Generic Object Injection Sink                                              security/detect-object-injection
+   293:13  warning  Generic Object Injection Sink                                              security/detect-object-injection
+   311:26  warning  Unexpected `await` inside a loop                                           no-await-in-loop
+   312:11  warning  Generic Object Injection Sink                                              security/detect-object-injection
+   313:11  warning  Generic Object Injection Sink                                              security/detect-object-injection
+   325:11  warning  Generic Object Injection Sink                                              security/detect-object-injection
+   397:28  warning  Unexpected `await` inside a loop                                           no-await-in-loop
+   406:26  warning  Unexpected `await` inside a loop                                           no-await-in-loop
+   553:3   error    Async method 'validateLinterPerfection' has no 'await' expression          require-await
+   648:3   error    Async method 'validateRuntimeSuccess' has no 'await' expression            require-await
+   771:3   error    Async method 'validateGitIntegration' has no 'await' expression            require-await
+   836:15  warning  Found non-literal argument in require                                      security/detect-non-literal-require
+   837:15  warning  Found readdir from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+   844:9   warning  Unexpected `await` inside a loop                                           no-await-in-loop
+   892:3   error    Async method 'validateSecurityReview' has no 'await' expression            require-await
+   965:44  warning  Found readFile from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  1012:11  warning  Unexpected `await` inside a loop                                           no-await-in-loop
+  1061:30  warning  Found readdir from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+  1144:3   error    Async method 'validateEnvironmentCompatibility' has no 'await' expression  require-await
+  1195:11  warning  Unexpected `await` inside a loop                                           no-await-in-loop
+  1259:35  warning  Found readFile from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  1277:29  warning  Found readFile from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  1292:3   error    Async method 'generate25PointCriteria' has no 'await' expression           require-await
+  1318:13  warning  Found writeFile from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  1479:13  warning  Found writeFile from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  1492:3   error    Async method 'generateValidationReport' has no 'await' expression          require-await
+  1518:3   error    Async method 'getCurrentAgentId' has no 'await' expression                 require-await
+  1529:3   error    Async method 'findQualifiedReviewAgent' has no 'await' expression          require-await
+  1558:3   error    Async method 'getReviewGuidelines' has no 'await' expression               require-await
+  1594:34  error    Return values from promise executor functions cannot be read               no-promise-executor-return
+  1622:27  warning  Found readdir from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+  1657:3   error    Async method 'countFilesByExtension' has no 'await' expression             require-await
+  1679:11  warning  Unexpected `await` inside a loop                                           no-await-in-loop
+
+/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-integration.js
+  299:31  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  353:11  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  354:9   warning  Generic Object Injection Sink                                           security/detect-object-injection
+  354:38  warning  Generic Object Injection Sink                                           security/detect-object-injection
+  448:13  warning  Found mkdir from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  449:13  warning  Found writeFile from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  466:13  warning  Found mkdir from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  467:13  warning  Found writeFile from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  609:13  warning  Found mkdir from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  610:13  warning  Found writeFile from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  640:35  warning  Found readFile from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  658:29  warning  Found readFile from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+
+/Users/jeremyparker/infinite-continue-stop-hook/setup-infinite-hook.js
+  132:7   warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  135:38  warning  Found readFileSync from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  204:8   warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  206:5   warning  Found mkdirSync from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  214:8   warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  216:5   warning  Found mkdirSync from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  224:8   warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  226:5   warning  Found mkdirSync from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  234:8   warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  236:5   warning  Found mkdirSync from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  247:8   warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  253:33  warning  Found readFileSync from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  408:3   warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  418:8   warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  418:37  warning  Found statSync from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+  423:10  warning  Found readdirSync from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  429:12  warning  Found statSync from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+  503:10  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  511:33  warning  Found readFileSync from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  523:5   warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  539:5   warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  549:9   warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  551:7   warning  Found unlinkSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  818:8   warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+  826:8   warning  Found statSync from package "fs" with non literal argument at index 0       security/detect-non-literal-fs-filename
+
+/Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js
+   87:8   warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+   94:28  warning  Found readFileSync from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  112:19  warning  Variable Assigned to Object Injection Sink                                  security/detect-object-injection
+  129:12  warning  Generic Object Injection Sink                                               security/detect-object-injection
+  176:7   warning  Found writeFileSync from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  212:11  warning  Found existsSync from package "fs" with non literal argument at index 0     security/detect-non-literal-fs-filename
+
+/Users/jeremyparker/infinite-continue-stop-hook/success-criteria-validator.js
+   61:32  warning  Found readFile from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+   84:13  warning  Found mkdir from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+   85:13  warning  Found mkdir from package "fs" with non literal argument at index 0      security/detect-non-literal-fs-filename
+  266:24  warning  Variable Assigned to Object Injection Sink                              security/detect-object-injection
+  313:39  warning  Unexpected `await` inside a loop                                        no-await-in-loop
+  551:33  warning  Found readFile from package "fs" with non literal argument at index 0   security/detect-non-literal-fs-filename
+  707:27  warning  Found readdir from package "fs" with non literal argument at index 0    security/detect-non-literal-fs-filename
+  772:11  warning  Found writeFile from package "fs" with non literal argument at index 0  security/detect-non-literal-fs-filename
+  966:13  warning  Generic Object Injection Sink                                           security/detect-object-injection
+
+/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js
+  230:12  error    Redundant use of `await` on a return value                        no-return-await
+  234:12  error    Redundant use of `await` on a return value                        no-return-await
+  238:12  error    Redundant use of `await` on a return value                        no-return-await
+  242:12  error    Redundant use of `await` on a return value                        no-return-await
+  246:12  error    Redundant use of `await` on a return value                        no-return-await
+  250:12  error    Redundant use of `await` on a return value                        no-return-await
+  254:12  error    Redundant use of `await` on a return value                        no-return-await
+  258:12  error    Redundant use of `await` on a return value                        no-return-await
+  265:12  error    Redundant use of `await` on a return value                        no-return-await
+  269:12  error    Redundant use of `await` on a return value                        no-return-await
+  274:12  error    Redundant use of `await` on a return value                        no-return-await
+  279:12  error    Redundant use of `await` on a return value                        no-return-await
+  285:14  error    Redundant use of `await` on a return value                        no-return-await
+  292:14  error    Redundant use of `await` on a return value                        no-return-await
+  298:3   error    Async method 'getSuccessCriteria' has no 'await' expression       require-await
+  308:3   error    Async method 'updateSuccessCriteria' has no 'await' expression    require-await
+  321:3   error    Async method 'deleteSuccessCriterion' has no 'await' expression   require-await
+  325:3   error    Async method 'getProjectWideTemplates' has no 'await' expression  require-await
+  329:3   error    Async method 'applyProjectTemplate' has no 'await' expression     require-await
+  337:3   error    Async method 'setProjectCriteria' has no 'await' expression       require-await
+  344:3   error    Async method 'validateCriteria' has no 'await' expression         require-await
+  351:3   error    Async method 'getCriteriaReport' has no 'await' expression        require-await
+  364:3   error    Async method 'getCurrentTask' has no 'await' expression           require-await
+  368:3   error    Async method 'getAgentStatus' has no 'await' expression           require-await
+  372:3   error    Async method 'reinitializeAgent' has no 'await' expression        require-await
+  376:3   error    Async method 'smartReinitializeAgent' has no 'await' expression   require-await
+  380:3   error    Async method 'listAgents' has no 'await' expression               require-await
+  385:3   error    Async method 'moveTaskToTop' has no 'await' expression            require-await
+  389:3   error    Async method 'moveTaskUp' has no 'await' expression               require-await
+  393:3   error    Async method 'moveTaskDown' has no 'await' expression             require-await
+  397:3   error    Async method 'moveTaskToBottom' has no 'await' expression         require-await
+  402:3   error    Async method 'storeLesson' has no 'await' expression              require-await
+  406:3   error    Async method 'storeError' has no 'await' expression               require-await
+  410:3   error    Async method 'searchLessons' has no 'await' expression            require-await
+  414:3   error    Async method 'findSimilarErrors' has no 'await' expression        require-await
+  418:3   error    Async method 'getRelevantLessons' has no 'await' expression       require-await
+  422:3   error    Async method 'getRagAnalytics' has no 'await' expression          require-await
+  865:7   warning  Generic Object Injection Sink                                     security/detect-object-injection
+  865:25  warning  Generic Object Injection Sink                                     security/detect-object-injection
+  874:7   warning  Generic Object Injection Sink                                     security/detect-object-injection
+  874:27  warning  Generic Object Injection Sink                                     security/detect-object-injection
+  879:3   error    Async method '_getGuideForError' has no 'await' expression        require-await
+  898:3   error    Async method '_validateAgentScope' has no 'await' expression      require-await
+  943:3   error    Async method 'cleanup' has no 'await' expression                  require-await
+
+/Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js
+  665:24  warning  Unexpected `await` inside a loop  no-await-in-loop
+  668:28  warning  Unexpected `await` inside a loop  no-await-in-loop
+
+/Users/jeremyparker/infinite-continue-stop-hook/test/embedded-subtasks-integration.test.js
+  699:9   warning  Unexpected `await` inside a loop  no-await-in-loop
+  956:30  warning  Unexpected `await` inside a loop  no-await-in-loop
+  959:28  warning  Unexpected `await` inside a loop  no-await-in-loop
+
+/Users/jeremyparker/infinite-continue-stop-hook/test/rag-system/data-integrity/migration-validation.test.js
+  109:76  error    Async arrow function has no 'await' expression  require-await
+  213:64  error    Async arrow function has no 'await' expression  require-await
+  288:80  error    Async arrow function has no 'await' expression  require-await
+  357:63  error    Async arrow function has no 'await' expression  require-await
+  405:65  error    Async arrow function has no 'await' expression  require-await
+  474:65  error    Async arrow function has no 'await' expression  require-await
+  531:67  error    Async arrow function has no 'await' expression  require-await
+  620:83  error    Async arrow function has no 'await' expression  require-await
+  796:7   warning  Unexpected `await` inside a loop                no-await-in-loop
+  799:9   warning  Unexpected `await` inside a loop                no-await-in-loop
+  815:11  warning  Unexpected `await` inside a loop                no-await-in-loop
+
+/Users/jeremyparker/infinite-continue-stop-hook/test/rag-system/integration/rag-end-to-end.test.js
+  138:55  error    Async arrow function has no 'await' expression  require-await
+  160:24  warning  Unexpected `await` inside a loop                no-await-in-loop
+  227:24  warning  Unexpected `await` inside a loop                no-await-in-loop
+  453:9   warning  Unexpected `await` inside a loop                no-await-in-loop
+  588:7   warning  Unexpected `await` inside a loop                no-await-in-loop
+  642:7   warning  Unexpected `await` inside a loop                no-await-in-loop
+
+/Users/jeremyparker/infinite-continue-stop-hook/test/rag-system/integration/workflow-e2e.test.js
+   51:23   error  Async arrow function has no 'await' expression  require-await
+   57:110  error  Async arrow function has no 'await' expression  require-await
+  163:73   error  Async arrow function has no 'await' expression  require-await
+  230:81   error  Async arrow function has no 'await' expression  require-await
+  287:74   error  Async arrow function has no 'await' expression  require-await
+  343:80   error  Async arrow function has no 'await' expression  require-await
+  403:89   error  Async arrow function has no 'await' expression  require-await
+  452:86   error  Async arrow function has no 'await' expression  require-await
+  535:91   error  Async arrow function has no 'await' expression  require-await
+  593:67   error  Async arrow function has no 'await' expression  require-await
+  633:69   error  Async arrow function has no 'await' expression  require-await
+
+/Users/jeremyparker/infinite-continue-stop-hook/test/rag-system/performance/load-testing.test.js
+   39:22  error  Async arrow function has no 'await' expression  require-await
+   48:21  error  Async arrow function has no 'await' expression  require-await
+   53:23  error  Async arrow function has no 'await' expression  require-await
+   59:74  error  Async arrow function has no 'await' expression  require-await
+  124:77  error  Async arrow function has no 'await' expression  require-await
+  200:65  error  Async arrow function has no 'await' expression  require-await
+  258:64  error  Async arrow function has no 'await' expression  require-await
+  351:86  error  Async arrow function has no 'await' expression  require-await
+  420:79  error  Async arrow function has no 'await' expression  require-await
+  503:63  error  Async arrow function has no 'await' expression  require-await
+  557:74  error  Async arrow function has no 'await' expression  require-await
+  626:76  error  Async arrow function has no 'await' expression  require-await
+
+/Users/jeremyparker/infinite-continue-stop-hook/test/rag-system/setup/test-setup.js
+  130:40  error    Return values from promise executor functions cannot be read  no-promise-executor-return
+  162:9   warning  Unexpected `await` inside a loop                              no-await-in-loop
+  163:9   warning  Unexpected `await` inside a loop                              no-await-in-loop
+  165:9   warning  Unexpected `await` inside a loop                              no-await-in-loop
+  231:7   warning  Unexpected `await` inside a loop                              no-await-in-loop
+
+/Users/jeremyparker/infinite-continue-stop-hook/test/rag-system/unit/api-endpoints.test.js
+   23:22  error  Async arrow function has no 'await' expression  require-await
+   29:21  error  Async arrow function has no 'await' expression  require-await
+   41:65  error  Async arrow function has no 'await' expression  require-await
+   71:56  error  Async arrow function has no 'await' expression  require-await
+   88:51  error  Async arrow function has no 'await' expression  require-await
+  109:57  error  Async arrow function has no 'await' expression  require-await
+  140:53  error  Async arrow function has no 'await' expression  require-await
+  156:66  error  Async arrow function has no 'await' expression  require-await
+  171:72  error  Async arrow function has no 'await' expression  require-await
+  204:63  error  Async arrow function has no 'await' expression  require-await
+  231:60  error  Async arrow function has no 'await' expression  require-await
+  256:81  error  Async arrow function has no 'await' expression  require-await
+  289:59  error  Async arrow function has no 'await' expression  require-await
+  309:58  error  Async arrow function has no 'await' expression  require-await
+  328:71  error  Async arrow function has no 'await' expression  require-await
+  353:56  error  Async arrow function has no 'await' expression  require-await
+  372:59  error  Async arrow function has no 'await' expression  require-await
+  392:71  error  Async arrow function has no 'await' expression  require-await
+  418:74  error  Async arrow function has no 'await' expression  require-await
+  443:59  error  Async arrow function has no 'await' expression  require-await
+  459:68  error  Async arrow function has no 'await' expression  require-await
+
+/Users/jeremyparker/infinite-continue-stop-hook/test/rag-system/unit/embedding-generation.test.js
+   18:22  error  Async arrow function has no 'await' expression  require-await
+   23:21  error  Async arrow function has no 'await' expression  require-await
+   33:77  error  Async arrow function has no 'await' expression  require-await
+   67:64  error  Async arrow function has no 'await' expression  require-await
+   95:82  error  Async arrow function has no 'await' expression  require-await
+  113:73  error  Async arrow function has no 'await' expression  require-await
+  139:58  error  Async arrow function has no 'await' expression  require-await
+  174:68  error  Async arrow function has no 'await' expression  require-await
+  204:72  error  Async arrow function has no 'await' expression  require-await
+  374:67  error  Async arrow function has no 'await' expression  require-await
+  396:75  error  Async arrow function has no 'await' expression  require-await
+  428:80  error  Async arrow function has no 'await' expression  require-await
+  451:74  error  Async arrow function has no 'await' expression  require-await
+  471:74  error  Async arrow function has no 'await' expression  require-await
+  496:56  error  Async arrow function has no 'await' expression  require-await
+
+/Users/jeremyparker/infinite-continue-stop-hook/test/rag-system/unit/semantic-search-accuracy.test.js
+   26:21  error  Async arrow function has no 'await' expression                        require-await
+   35:92  error  Async arrow function has no 'await' expression                        require-await
+  137:81  error  Async arrow function has no 'await' expression                        require-await
+  218:76  error  Async arrow function has no 'await' expression                        require-await
+  300:69  error  Async arrow function has no 'await' expression                        require-await
+  378:75  error  Async arrow function has no 'await' expression                        require-await
+  457:74  error  Async arrow function has no 'await' expression                        require-await
+  528:73  error  Async arrow function has no 'await' expression                        require-await
+  663:65  error  Async arrow function has no 'await' expression                        require-await
+  696:3   error  Async function 'setupTechnicalTestDataset' has no 'await' expression  require-await
+  704:3   error  Async function 'createBenchmarkDataset' has no 'await' expression     require-await
+
+/Users/jeremyparker/infinite-continue-stop-hook/test/rag-system/utils/testAssertions.js
+  516:9  warning  Unexpected `await` inside a loop  no-await-in-loop
+
+/Users/jeremyparker/infinite-continue-stop-hook/test/research-system-unit.test.js
+  660:24  warning  Unexpected `await` inside a loop  no-await-in-loop
+  663:28  warning  Unexpected `await` inside a loop  no-await-in-loop
+
+/Users/jeremyparker/infinite-continue-stop-hook/test/success-criteria-integration.test.js
+  483:30  error  'taskId' is not defined          no-undef
+  504:51  error  'taskId' is not defined          no-undef
+  507:57  error  'taskId' is not defined          no-undef
+  537:42  error  'createPromises' is not defined  no-undef
+  540:7   error  'results' is not defined         no-undef
+  560:30  error  'taskId' is not defined          no-undef
+  564:59  error  'taskId' is not defined          no-undef
+  586:51  error  'taskId' is not defined          no-undef
+  591:30  error  'taskId' is not defined          no-undef
+  595:59  error  'taskId' is not defined          no-undef
+  638:53  error  'taskId' is not defined          no-undef
+  639:14  error  'claimResult1' is not defined    no-undef
+  642:53  error  'taskId' is not defined          no-undef
+  643:14  error  'claimResult2' is not defined    no-undef
+
+/Users/jeremyparker/infinite-continue-stop-hook/test/success-criteria-manager.test.js
+    67:5   error  '_successCriteriaManager' is not defined  no-undef
+    67:59  error  '_mockDependencies' is not defined        no-undef
+   178:27  error  'existingCriteria' is not defined         no-undef
+   187:43  error  'existingCriteria' is not defined         no-undef
+   195:27  error  'existingCriteria' is not defined         no-undef
+   231:27  error  'existingCriteria' is not defined         no-undef
+   236:9   error  'newCriteria' is not defined              no-undef
+   249:9   error  'singleCriterion' is not defined          no-undef
+   253:40  error  'singleCriterion' is not defined          no-undef
+   444:7   error  'addCriteriaSpy' is not defined           no-undef
+   446:51  error  'testTaskId' is not defined               no-undef
+   446:63  error  'newCriteria' is not defined              no-undef
+   448:14  error  'addCriteriaSpy' is not defined           no-undef
+   448:51  error  'testTaskId' is not defined               no-undef
+   448:63  error  'newCriteria' is not defined              no-undef
+   472:9   error  'criterionToDelete' is not defined        no-undef
+   477:44  error  'criterionToDelete' is not defined        no-undef
+   484:27  error  'criterionToDelete' is not defined        no-undef
+   492:9   error  'nonExistentCriterion' is not defined     no-undef
+   600:7   error  'addCriteriaSpy' is not defined           no-undef
+   609:14  error  'addCriteriaSpy' is not defined           no-undef
+   653:57  error  'customCriteria' is not defined           no-undef
+   660:57  error  'partialCriteria' is not defined          no-undef
+   689:60  error  'validCriteria' is not defined            no-undef
+   736:11  error  'longCriterion' is not defined            no-undef
+   760:51  error  'testTask' is not defined                 no-undef
+   765:34  error  'testTask' is not defined                 no-undef
+   795:13  error  'testTaskId' is not defined               no-undef
+   804:9   error  'operations' is not defined               no-undef
+   805:46  error  'testTaskId' is not defined               no-undef
+   809:42  error  'operations' is not defined               no-undef
+   810:7   error  'results' is not defined                  no-undef
+   822:15  error  'testTaskId' is not defined               no-undef
+   831:44  error  'testTaskId' is not defined               no-undef
+   834:42  error  'operations' is not defined               no-undef
+   837:14  error  'results' is not defined                  no-undef
+   854:63  error  'testTaskId' is not defined               no-undef
+   868:13  error  'testTaskId' is not defined               no-undef
+   872:63  error  'testTaskId' is not defined               no-undef
+   887:13  error  'testTaskId' is not defined               no-undef
+   895:9   error  'testTaskId' is not defined               no-undef
+   896:9   error  'largeCriteriaArray' is not defined       no-undef
+   914:13  error  'testTaskId' is not defined               no-undef
+   922:9   error  'testTaskId' is not defined               no-undef
+   923:9   error  'specialCriteria' is not defined          no-undef
+   927:39  error  'specialCriteria' is not defined          no-undef
+   938:63  error  'testTaskId' is not defined               no-undef
+   952:13  error  'testTaskId' is not defined               no-undef
+   959:48  error  'testTaskId' is not defined               no-undef
+   959:60  error  'testCriteria' is not defined             no-undef
+   966:12  error  'callArg' is not defined                  no-undef
+   966:30  error  'callArg' is not defined                  no-undef
+   975:13  error  'testTaskId' is not defined               no-undef
+   982:48  error  'testTaskId' is not defined               no-undef
+   982:60  error  'testCriteria' is not defined             no-undef
+   986:17  error  'testTaskId' is not defined               no-undef
+   987:19  error  'testCriteria' is not defined             no-undef
+   988:24  error  'testCriteria' is not defined             no-undef
+  1000:27  error  'customValidator' is not defined          no-undef
+  1013:13  error  'customManager' is not defined            no-undef
+  1015:14  error  'customValidator' is not defined          no-undef
+
+/Users/jeremyparker/infinite-continue-stop-hook/test/success-criteria-performance.test.js
+   44:21  error    'memUsage' is not defined             no-undef
+   45:22  error    'memUsage' is not defined             no-undef
+   46:21  error    'memUsage' is not defined             no-undef
+   47:16  error    'memUsage' is not defined             no-undef
+   72:19  error    'endTime' is not defined              no-undef
+   74:21  error    'endMemory' is not defined            no-undef
+   75:22  error    'endMemory' is not defined            no-undef
+   76:21  error    'endMemory' is not defined            no-undef
+   77:16  error    'endMemory' is not defined            no-undef
+   80:9   error    'endMemory' is not defined            no-undef
+   84:30  error    'measurement' is not defined          no-undef
+   85:24  error    'measurement' is not defined          no-undef
+   90:19  error    'endTime' is not defined              no-undef
+   91:16  error    'error' is not defined                no-undef
+   94:30  error    'measurement' is not defined          no-undef
+   95:13  error    'error' is not defined                no-undef
+  159:11  error    'ops' is not defined                  no-undef
+  161:38  error    'ops' is not defined                  no-undef
+  162:38  error    'ops' is not defined                  no-undef
+  165:33  error    'ops' is not defined                  no-undef
+  166:29  error    'errors' is not defined               no-undef
+  167:24  error    'avgTime' is not defined              no-undef
+  168:11  error    'maxTime' is not defined              no-undef
+  169:11  error    'minTime' is not defined              no-undef
+  170:23  error    'maxTime' is not defined              no-undef
+  170:42  error    'avgTime' is not defined              no-undef
+  174:13  error    'maxTime' is not defined              no-undef
+  178:20  error    'maxTime' is not defined              no-undef
+  182:13  error    'avgTime' is not defined              no-undef
+  186:20  error    'avgTime' is not defined              no-undef
+  217:55  error    'allArgs' is not defined              no-undef
+  227:7   error    'child' is not defined                no-undef
+  231:7   error    'child' is not defined                no-undef
+  235:7   error    'child' is not defined                no-undef
+  250:7   error    'child' is not defined                no-undef
+  262:11  error    'fs' is not defined                   no-undef
+  282:11  error    'fs' is not defined                   no-undef
+  325:11  error    'fs' is not defined                   no-undef
+  341:11  error    'fs' is not defined                   no-undef
+  352:11  error    'fs' is not defined                   no-undef
+  374:5   error    'monitor' is not defined              no-undef
+  375:5   error    'monitor' is not defined              no-undef
+  379:5   error    'monitor' is not defined              no-undef
+  387:11  error    'monitor' is not defined              no-undef
+  405:37  error    'monitor' is not defined              no-undef
+  430:11  error    'monitor' is not defined              no-undef
+  432:12  error    'templateData' is not defined         no-undef
+  449:37  error    'monitor' is not defined              no-undef
+  462:11  error    'monitor' is not defined              no-undef
+  464:12  error    'templateData' is not defined         no-undef
+  467:11  error    'monitor' is not defined              no-undef
+  474:11  error    'monitor' is not defined              no-undef
+  492:37  error    'monitor' is not defined              no-undef
+  509:11  error    'monitor' is not defined              no-undef
+  511:12  error    'largeTemplateData' is not defined    no-undef
+  527:37  error    'monitor' is not defined              no-undef
+  548:11  error    'operations' is not defined           no-undef
+  549:35  error    'monitor' is not defined              no-undef
+  550:15  error    'templateData' is not defined         no-undef
+  556:44  error    'operations' is not defined           no-undef
+  557:48  error    'startTime' is not defined            no-undef
+  559:16  error    'totalTime' is not defined            no-undef
+  560:16  error    'results' is not defined              no-undef
+  562:9   error    'results' is not defined              no-undef
+  566:53  error    'totalTime' is not defined            no-undef
+  567:48  error    'totalTime' is not defined            no-undef
+  579:37  error    'monitor' is not defined              no-undef
+  592:11  error    'monitor' is not defined              no-undef
+  594:12  error    'templateData' is not defined         no-undef
+  597:11  error    'monitor' is not defined              no-undef
+  601:37  error    'monitor' is not defined              no-undef
+  604:33  error    'finalMemory' is not defined          no-undef
+  604:56  error    'initialMemory' is not defined        no-undef
+  605:28  error    'monitor' is not defined              no-undef
+  608:16  error    'memoryIncrease' is not defined       no-undef
+  611:16  error    'peakUsage' is not defined            no-undef
+  614:16  error    'monitor' is not defined              no-undef
+  617:32  error    'memoryIncrease' is not defined       no-undef
+  619:37  error    'peakUsage' is not defined            no-undef
+  635:9   error    'gcStats' is not defined              no-undef
+  635:50  error    'initialMemory' is not defined        no-undef
+  638:37  error    'monitor' is not defined              no-undef
+  639:9   error    'gcStats' is not defined              no-undef
+  651:11  warning  Unexpected `await` inside a loop      no-await-in-loop
+  652:13  error    'monitor' is not defined              no-undef
+  654:14  error    'templateData' is not defined         no-undef
+  656:11  error    'gcStats' is not defined              no-undef
+  665:11  error    'gcStats' is not defined              no-undef
+  669:32  error    'gcStats' is not defined              no-undef
+  675:46  error    'memoryPattern' is not defined        no-undef
+  678:28  error    'gcStats' is not defined              no-undef
+  678:36  error    'gcStats' is not defined              no-undef
+  679:38  error    'gcStats' is not defined              no-undef
+  681:16  error    'finalHeap' is not defined            no-undef
+  681:40  error    'maxHeap' is not defined              no-undef
+  694:11  warning  Unexpected `await` inside a loop      no-await-in-loop
+  694:39  error    'monitor' is not defined              no-undef
+  705:35  warning  Unexpected `await` inside a loop      no-await-in-loop
+  706:13  error    'monitor' is not defined              no-undef
+  708:14  error    'templateData' is not defined         no-undef
+  711:11  error    'runTimes' is not defined             no-undef
+  714:11  warning  Unexpected `await` inside a loop      no-await-in-loop
+  720:11  error    'runTimes' is not defined             no-undef
+  720:59  error    'runTimes' is not defined             no-undef
+  721:38  error    'runTimes' is not defined             no-undef
+  722:38  error    'runTimes' is not defined             no-undef
+  724:11  error    'runTimes' is not defined             no-undef
+  725:11  error    'runTimes' is not defined             no-undef
+  729:16  error    'stdDev' is not defined               no-undef
+  730:16  error    'maxTime' is not defined              no-undef
+  734:31  error    'minTime' is not defined              no-undef
+  735:31  error    'maxTime' is not defined              no-undef
+  736:35  error    'stdDev' is not defined               no-undef
+  738:44  error    'stdDev' is not defined               no-undef
+  748:9   error    'monitor' is not defined              no-undef
+  751:39  error    'monitor' is not defined              no-undef
+  783:13  error    'monitor' is not defined              no-undef
+  785:14  error    'massiveTemplateData' is not defined  no-undef
+  789:27  error    'monitor' is not defined              no-undef
+  793:28  error    'report' is not defined               no-undef
+  800:18  error    'report' is not defined               no-undef
+  801:18  error    'report' is not defined               no-undef
+  802:18  error    'report' is not defined               no-undef
+  804:27  error    'monitor' is not defined              no-undef
+  807:28  error    'report' is not defined               no-undef
+  811:15  error    'report' is not defined               no-undef
+  813:15  error    'report' is not defined               no-undef
+  818:17  error    'error' is not defined                no-undef
+  829:37  error    'monitor' is not defined              no-undef
+  852:42  error    'operations' is not defined           no-undef
+  853:11  warning  Unexpected `await` inside a loop      no-await-in-loop
+  853:39  error    'monitor' is not defined              no-undef
+  855:11  warning  Unexpected `await` inside a loop      no-await-in-loop
+  860:25  error    'monitor' is not defined              no-undef
+  863:16  error    'report' is not defined               no-undef
+  864:16  error    'report' is not defined               no-undef
+  865:16  error    'report' is not defined               no-undef
+  866:16  error    'report' is not defined               no-undef
+  869:23  error    'report' is not defined               no-undef
+  876:16  error    'report' is not defined               no-undef
+  879:36  error    'report' is not defined               no-undef
+  883:15  error    'fs' is not defined                   no-undef
+  883:28  error    'reportPath' is not defined           no-undef
+  883:55  error    'report' is not defined               no-undef
+  884:53  error    'reportPath' is not defined           no-undef
+  893:21  error    'os' is not defined                   no-undef
+  894:17  error    'os' is not defined                   no-undef
+  895:17  error    'os' is not defined                   no-undef
+  896:24  error    'os' is not defined                   no-undef
+  897:23  error    'os' is not defined                   no-undef
+  901:44  error    'systemInfo' is not defined           no-undef
+  906:49  error    'cpuStart' is not defined             no-undef
+  917:11  error    'memArrays' is not defined            no-undef
+  920:31  error    'memEnd' is not defined               no-undef
+  920:40  error    'memStart' is not defined             no-undef
+  923:37  error    'monitor' is not defined              no-undef
+  935:11  error    'monitor' is not defined              no-undef
+  937:12  error    'templateData' is not defined         no-undef
+  941:11  error    'systemInfo' is not defined           no-undef
+  942:11  error    'cpuBenchmark' is not defined         no-undef
+  943:25  error    'memBenchmark' is not defined         no-undef
+  945:52  error    'cpuBenchmark' is not defined         no-undef
+  947:55  error    'memBenchmark' is not defined         no-undef
+  950:43  error    'benchmarkResults' is not defined     no-undef
+  953:16  error    'benchmarkResults' is not defined     no-undef
+  954:16  error    'benchmarkResults' is not defined     no-undef
+  958:15  error    'fs' is not defined                   no-undef
+  959:11  error    'benchmarkPath' is not defined        no-undef
+  960:26  error    'benchmarkResults' is not defined     no-undef
+  962:52  error    'benchmarkPath' is not defined        no-undef
+
+/Users/jeremyparker/infinite-continue-stop-hook/test/success-criteria-regression.test.js
+   366:11  warning  Unexpected `await` inside a loop  no-await-in-loop
+   369:11  warning  Unexpected `await` inside a loop  no-await-in-loop
+   373:27  warning  Unexpected `await` inside a loop  no-await-in-loop
+   656:11  warning  Unexpected `await` inside a loop  no-await-in-loop
+   659:11  warning  Unexpected `await` inside a loop  no-await-in-loop
+   663:27  warning  Unexpected `await` inside a loop  no-await-in-loop
+   829:26  warning  Unexpected `await` inside a loop  no-await-in-loop
+   937:9   warning  Unexpected `await` inside a loop  no-await-in-loop
+   946:11  warning  Unexpected `await` inside a loop  no-await-in-loop
+   947:27  warning  Unexpected `await` inside a loop  no-await-in-loop
+  1104:28  warning  Unexpected `await` inside a loop  no-await-in-loop
+  1110:28  warning  Unexpected `await` inside a loop  no-await-in-loop
+  1182:27  warning  Unexpected `await` inside a loop  no-await-in-loop
+  1239:24  warning  Unexpected `await` inside a loop  no-await-in-loop
+
+/Users/jeremyparker/infinite-continue-stop-hook/test/success-criteria-validation.test.js
+  517:9  warning  Unexpected `await` inside a loop  no-await-in-loop
+
+✖ 841 problems (405 errors, 436 warnings)
+

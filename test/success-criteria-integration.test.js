@@ -480,7 +480,7 @@ describe('Success Criteria Integration Tests', () => {
 
       // Verify task exists and can be operated on
       const listResult = await execAPI('list', [
-        JSON.stringify({ id: taskId }),
+        JSON.stringify({ id: _taskId }),
       ]);
       expect(listResult.success).toBe(true);
     });
@@ -501,10 +501,10 @@ describe('Success Criteria Integration Tests', () => {
       const _taskId = createResult.task.id;
 
       // Should work with normal task operations
-      const claimResult = await execAPI('claim', [taskId, agentId]);
+      const claimResult = await execAPI('claim', [_taskId, agentId]);
       expect(claimResult.success).toBe(true);
 
-      const completeResult = await execAPI('complete', [taskId]);
+      const completeResult = await execAPI('complete', [_taskId]);
       expect(completeResult.success).toBe(true);
     });
 
@@ -534,10 +534,10 @@ describe('Success Criteria Integration Tests', () => {
         execAPI('create', [JSON.stringify(task)]),
       );
 
-      const _results = await Promise.all(createPromises);
+      const _results = await Promise.all(_createPromises);
 
       // All should succeed
-      results.forEach((result) => {
+      _results.forEach((result) => {
         expect(result.success).toBe(true);
       });
     });
@@ -557,11 +557,11 @@ describe('Success Criteria Integration Tests', () => {
 
       // Verify task creation without criteria
       const listResult = await execAPI('list', [
-        JSON.stringify({ id: taskId }),
+        JSON.stringify({ id: _taskId }),
       ]);
       expect(listResult.success).toBe(true);
 
-      const _task = listResult.tasks.find((t) => t.id === taskId);
+      const _task = listResult.tasks.find((t) => t.id === _taskId);
       expect(_task).toBeDefined();
       expect(_task.success_criteria).toBeUndefined();
     });
@@ -583,16 +583,16 @@ describe('Success Criteria Integration Tests', () => {
       const _taskId = createResult.task.id;
 
       // Perform sequence of operations
-      const claimResult = await execAPI('claim', [taskId, agentId]);
+      const claimResult = await execAPI('claim', [_taskId, agentId]);
       expect(claimResult.success).toBe(true);
 
       // Verify data consistency
       const listResult = await execAPI('list', [
-        JSON.stringify({ id: taskId }),
+        JSON.stringify({ id: _taskId }),
       ]);
       expect(listResult.success).toBe(true);
 
-      const _task = listResult.tasks.find((t) => t.id === taskId);
+      const _task = listResult.tasks.find((t) => t.id === _taskId);
       expect(_task).toBeDefined();
       expect(_task.status).toBe('in_progress');
       expect(_task.assigned_agent).toBe(agentId);
@@ -635,12 +635,12 @@ describe('Success Criteria Integration Tests', () => {
       const _taskId = createResult.task.id;
 
       // Perform concurrent operations (claim by same agent should work)
-      const _claimResult1 = await execAPI('claim', [taskId, agentId]);
-      expect(claimResult1.success).toBe(true);
+      const _claimResult1 = await execAPI('claim', [_taskId, agentId]);
+      expect(_claimResult1.success).toBe(true);
 
       // Second claim by same agent should indicate already claimed
-      const _claimResult2 = await execAPI('claim', [taskId, agentId]);
-      expect(claimResult2.success).toBe(true); // Should handle gracefully
+      const _claimResult2 = await execAPI('claim', [_taskId, agentId]);
+      expect(_claimResult2.success).toBe(true); // Should handle gracefully
     });
   });
 });

@@ -64,7 +64,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn() },
     };
 
-    _successCriteriaManager = new _SuccessCriteriaManager(_mockDependencies);
+    successCriteriaManager = new _SuccessCriteriaManager(mockDependencies);
   });
 
   afterEach(() => {
@@ -175,7 +175,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       const _existingCriteria = ['Existing Criterion'];
       mockTaskManager.getTask.mockResolvedValue({
         id: testTaskId,
-        success_criteria: existingCriteria,
+        success_criteria: _existingCriteria,
       });
 
       const result = await successCriteriaManager.addCriteria(
@@ -184,7 +184,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       );
 
       expect(result.success).toBe(true);
-      expect(result.criteria).toEqual([...existingCriteria, ...testCriteria]);
+      expect(result.criteria).toEqual([..._existingCriteria, ...testCriteria]);
       expect(result.totalCount).toBe(3);
     });
 
@@ -192,7 +192,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       const _existingCriteria = ['Existing Criterion'];
       mockTaskManager.getTask.mockResolvedValue({
         id: testTaskId,
-        success_criteria: existingCriteria,
+        success_criteria: _existingCriteria,
       });
 
       const result = await successCriteriaManager.addCriteria(
@@ -228,12 +228,12 @@ describe('SuccessCriteriaManager Unit Tests', () => {
 
       mockTaskManager.getTask.mockResolvedValue({
         id: testTaskId,
-        success_criteria: existingCriteria,
+        success_criteria: _existingCriteria,
       });
 
       const result = await successCriteriaManager.addCriteria(
         testTaskId,
-        newCriteria,
+        _newCriteria,
       );
 
       expect(result.success).toBe(true);
@@ -246,11 +246,11 @@ describe('SuccessCriteriaManager Unit Tests', () => {
 
       const result = await successCriteriaManager.addCriteria(
         testTaskId,
-        singleCriterion,
+        _singleCriterion,
       );
 
       expect(result.success).toBe(true);
-      expect(result.criteria).toEqual([singleCriterion]);
+      expect(result.criteria).toEqual([_singleCriterion]);
     });
 
     test('should return error when task does not exist', async () => {
@@ -441,11 +441,11 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       const _newCriteria = ['New Criterion 1', 'New Criterion 2'];
 
       const _addCriteriaSpy = jest.spyOn(successCriteriaManager, 'addCriteria');
-      addCriteriaSpy.mockResolvedValue({ success: true });
+      _addCriteriaSpy.mockResolvedValue({ success: true });
 
-      await successCriteriaManager.updateCriteria(testTaskId, newCriteria);
+      await successCriteriaManager.updateCriteria(_testTaskId, _newCriteria);
 
-      expect(addCriteriaSpy).toHaveBeenCalledWith(testTaskId, newCriteria, {
+      expect(_addCriteriaSpy).toHaveBeenCalledWith(_testTaskId, _newCriteria, {
         replace: true,
       });
     });
@@ -469,19 +469,19 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       const _criterionToDelete = 'Criterion 2';
       const result = await successCriteriaManager.deleteCriterion(
         testTaskId,
-        criterionToDelete,
+        _criterionToDelete,
       );
 
       expect(result.success).toBe(true);
       expect(result.taskId).toBe(testTaskId);
-      expect(result.deletedCriterion).toBe(criterionToDelete);
+      expect(result.deletedCriterion).toBe(_criterionToDelete);
       expect(result.remainingCriteria).toEqual(['Criterion 1', 'Criterion 3']);
       expect(result.remainingCount).toBe(2);
       expect(mockBroadcastCriteriaUpdate).toHaveBeenCalledWith({
         action: 'deleted',
         taskId: testTaskId,
         criteria: ['Criterion 1', 'Criterion 3'],
-        deletedCriterion: criterionToDelete,
+        deletedCriterion: _criterionToDelete,
       });
     });
 
@@ -489,7 +489,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       const _nonExistentCriterion = 'Non-existent Criterion';
       const result = await successCriteriaManager.deleteCriterion(
         testTaskId,
-        nonExistentCriterion,
+        _nonExistentCriterion,
       );
 
       expect(result.success).toBe(false);
@@ -579,8 +579,8 @@ describe('SuccessCriteriaManager Unit Tests', () => {
     const testTaskId = 'test_1234567890_abcdef';
 
     test('should apply basic template successfully', async () => {
-      const addCriteriaSpy = jest.spyOn(successCriteriaManager, 'addCriteria');
-      addCriteriaSpy.mockResolvedValue({ success: true });
+      const _addCriteriaSpy = jest.spyOn(successCriteriaManager, 'addCriteria');
+      _addCriteriaSpy.mockResolvedValue({ success: true });
 
       const _result = await successCriteriaManager.applyProjectTemplate(
         testTaskId,
@@ -588,7 +588,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
         false,
       );
 
-      expect(addCriteriaSpy).toHaveBeenCalledWith(
+      expect(_addCriteriaSpy).toHaveBeenCalledWith(
         testTaskId,
         successCriteriaManager.defaultCriteriaTemplates.basic,
         { replace: false, template: 'basic' },
@@ -597,7 +597,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
 
     test('should apply template with replace option', async () => {
       const _addCriteriaSpy = jest.spyOn(successCriteriaManager, 'addCriteria');
-      addCriteriaSpy.mockResolvedValue({ success: true });
+      _addCriteriaSpy.mockResolvedValue({ success: true });
 
       const result = await successCriteriaManager.applyProjectTemplate(
         testTaskId,
@@ -606,7 +606,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       );
 
       expect(result.success).toBe(true);
-      expect(addCriteriaSpy).toHaveBeenCalledWith(
+      expect(_addCriteriaSpy).toHaveBeenCalledWith(
         testTaskId,
         successCriteriaManager.defaultCriteriaTemplates.enterprise,
         { replace: true, template: 'enterprise' },
@@ -650,14 +650,14 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       test('should return null for custom criteria', () => {
         const _customCriteria = ['Custom Criterion 1', 'Custom Criterion 2'];
         const detected =
-          successCriteriaManager._detectAppliedTemplate(customCriteria);
+          successCriteriaManager._detectAppliedTemplate(_customCriteria);
         expect(detected).toBeNull();
       });
 
       test('should return null for partial template match', () => {
         const _partialCriteria = ['Linter Perfection', 'Build Success'];
         const detected =
-          successCriteriaManager._detectAppliedTemplate(partialCriteria);
+          successCriteriaManager._detectAppliedTemplate(_partialCriteria);
         expect(detected).toBeNull();
       });
     });
@@ -686,7 +686,7 @@ describe('SuccessCriteriaManager Unit Tests', () => {
       test('should validate correct criteria array', () => {
         const _validCriteria = ['Criterion 1', 'Criterion 2'];
         const result =
-          successCriteriaManager._defaultCriteriaValidator(validCriteria);
+          successCriteriaManager._defaultCriteriaValidator(_validCriteria);
         expect(result.valid).toBe(true);
         expect(result.errors).toHaveLength(0);
       });
