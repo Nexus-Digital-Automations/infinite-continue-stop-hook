@@ -1,0 +1,16 @@
+{
+  "name": "validation-test-project",
+  "version": "1.0.0",
+  "description": "Validation testing project for Success Criteria template inheritance",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "echo \"Build complete\"",
+    "lint": "echo \"Lint complete\"",
+    "start": "node index.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^29.0.0"
+  }
+}

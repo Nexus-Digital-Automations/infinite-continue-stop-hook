@@ -2,70 +2,44 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
-      "status": "completed",
-      "created_at": "2025-09-20T02:31:59.050Z",
-      "title": "Fix all no-unused-vars ESLint violations",
-      "description": "Systematically fix all no-unused-vars ESLint violations across the project by removing unused variables, prefixing unused parameters with underscore, and removing unused imports while preserving code functionality",
-      "category": "error",
-      "id": "error_1758335519050_hci1wdgyouu",
-      "assigned_agent": "dev_session_1758386256738_1_general_1a259331",
-      "started_at": "2025-09-20T16:38:36.509Z",
-      "claimed_by": "dev_session_1758386256738_1_general_1a259331",
-      "agent_assignment_history": [
-        {
-          "agentId": "dev_session_1758386256738_1_general_1a259331",
-          "role": "primary",
-          "assignedAt": "2025-09-20T16:38:36.509Z",
-          "reassignReason": null,
-          "claimPriority": "normal"
-        }
-      ],
-      "completed_at": "2025-09-20T16:40:27.927Z",
-      "updated_at": "2025-09-20T16:40:27.927Z"
-    },
-    {
       "status": "in_progress",
-      "created_at": "2025-09-20T03:58:52.856Z",
-      "title": "Fix security/detect-non-literal-fs-filename warnings",
-      "description": "Resolve all security warnings related to non-literal filesystem access by adding validation or making paths literal",
+      "created_at": "2025-09-20T03:58:53.238Z",
+      "title": "Fix hashbang/shebang violations across script files",
+      "description": "Resolve n/hashbang errors in executable scripts by removing unnecessary shebangs from non-executable files, adding proper shebangs to executable scripts, ensuring correct shebang format, and fixing file permissions",
       "category": "error",
-      "id": "error_1758340732856_9lm4uaotgh",
-      "assigned_agent": "dev_session_1758386256738_1_general_1a259331",
-      "started_at": "2025-09-20T16:41:00.441Z",
-      "claimed_by": "dev_session_1758386256738_1_general_1a259331",
+      "id": "error_1758340733237_e6bkq5gjuwv",
+      "assigned_agent": "dev_session_1758387857599_1_general_b8adeb8a",
+      "started_at": "2025-09-20T17:14:42.381Z",
+      "claimed_by": "dev_session_1758387857599_1_general_b8adeb8a",
       "agent_assignment_history": [
         {
-          "agentId": "dev_session_1758386256738_1_general_1a259331",
+          "agentId": "dev_session_1758387857599_1_general_b8adeb8a",
           "role": "primary",
-          "assignedAt": "2025-09-20T16:41:00.441Z",
+          "assignedAt": "2025-09-20T17:14:42.381Z",
           "reassignReason": null,
           "claimPriority": "normal"
         }
       ]
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-20T03:58:53.083Z",
-      "title": "Fix curly brace and code formatting violations",
-      "description": "Resolve curly brace requirements and formatting issues by adding braces around if/else statements, fixing eol-last errors, and applying auto-fix formatting",
-      "category": "error",
-      "id": "error_1758340733083_3a5d73kksh8"
-    },
-    {
-      "status": "pending",
-      "created_at": "2025-09-20T03:58:53.238Z",
-      "title": "Fix hashbang/shebang violations across script files",
-      "description": "Resolve n/hashbang errors in executable scripts by removing unnecessary shebangs from non-executable files, adding proper shebangs to executable scripts, ensuring correct shebang format, and fixing file permissions",
-      "category": "error",
-      "id": "error_1758340733237_e6bkq5gjuwv"
-    },
-    {
-      "status": "pending",
+      "status": "in_progress",
       "created_at": "2025-09-20T03:58:53.344Z",
       "title": "Fix missing import/require statement errors",
       "description": "Resolve all missing import and module requirement errors by identifying undefined module references, adding proper require/import statements, fixing module path references, and ensuring all dependencies are properly declared",
       "category": "error",
-      "id": "error_1758340733344_x63exte723q"
+      "id": "error_1758340733344_x63exte723q",
+      "assigned_agent": "dev_session_1758388966402_1_general_3fe353ce",
+      "started_at": "2025-09-20T17:24:39.201Z",
+      "claimed_by": "dev_session_1758388966402_1_general_3fe353ce",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758388966402_1_general_3fe353ce",
+          "role": "primary",
+          "assignedAt": "2025-09-20T17:24:39.201Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
     },
     {
       "status": "pending",
@@ -76,15 +50,15 @@
       "id": "error_1758340733403_zd1gejnrluh"
     },
     {
-      "status": "pending",
+      "status": "completed",
       "created_at": "2025-09-20T03:58:53.705Z",
       "title": "Fix security/detect-object-injection warnings in API modules",
       "description": "Resolve object injection security warnings in lib/api-modules/ by reviewing all object property access using variables, adding proper validation for dynamic object access, using safe object access patterns or Map objects where appropriate, while maintaining functionality",
       "category": "error",
       "id": "error_1758340733705_i1ar4ra9ng",
-      "assigned_agent": null,
-      "started_at": null,
-      "claimed_by": null,
+      "assigned_agent": "dev_session_1758387761243_1_general_da7b2ca4",
+      "started_at": "2025-09-20T17:05:04.117Z",
+      "claimed_by": "dev_session_1758387761243_1_general_da7b2ca4",
       "agent_assignment_history": [
         {
           "agentId": "dev_session_1758340718794_1_general_7681ad58",
@@ -98,8 +72,17 @@
           "action": "auto_unassign_stale",
           "timestamp": "2025-09-20T04:28:39.092Z",
           "reason": "Agent became stale (inactive >30 minutes)"
+        },
+        {
+          "agentId": "dev_session_1758387761243_1_general_da7b2ca4",
+          "role": "primary",
+          "assignedAt": "2025-09-20T17:05:04.117Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
         }
-      ]
+      ],
+      "completed_at": "2025-09-20T17:26:54.309Z",
+      "updated_at": "2025-09-20T17:26:54.309Z"
     },
     {
       "status": "pending",
@@ -348,6 +331,36 @@
       "id": "error_1758386215879_9d4puenmk"
     },
     {
+      "status": "completed",
+      "created_at": "2025-09-20T17:16:55.758Z",
+      "title": "Fix remaining security/detect-object-injection warnings",
+      "description": "Systematically identify and fix all remaining object injection warnings beyond those already being handled by other agents",
+      "category": "error",
+      "id": "error_1758388615758_s2i8wft159",
+      "assigned_agent": "dev_session_1758388686730_1_general_6cd6735f",
+      "started_at": "2025-09-20T17:18:23.452Z",
+      "claimed_by": "dev_session_1758388686730_1_general_6cd6735f",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758388686730_1_general_6cd6735f",
+          "role": "primary",
+          "assignedAt": "2025-09-20T17:18:23.452Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-20T17:25:42.901Z",
+      "updated_at": "2025-09-20T17:25:42.901Z"
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-20T17:23:03.075Z",
+      "title": "Fix stale agent unassignment - tasks should remain pending",
+      "description": "CLARIFICATION: Stop hook should remove stale agent claims from tasks but keep tasks in TODO.json as pending status for new agents to claim. Current issue is stale agents holding tasks for 11-14 days without being unassigned. Need to analyze why very old stale agents arent being detected and unassigned from tasks.",
+      "category": "error",
+      "id": "error_1758388983075_g889lqihkio"
+    },
+    {
       "id": "feature_1757781331183_9waer1qua",
       "title": "Implement comprehensive security controls and data validation for embedded subtasks system",
       "description": "As Security & Validation Agent #10, implement complete security framework including: 1) Input validation for all new endpoints (sanitization, type checking, boundary validation), 2) Authorization controls for subtask operations (agent-based permissions, role validation), 3) Audit trail for subtask modifications (logging all CRUD operations with timestamps and agent IDs), 4) Data sanitization for research inputs (preventing injection attacks, content filtering), 5) Security documentation and best practices guide. Focus on protecting sensitive research data and ensuring system integrity.",
@@ -493,6 +506,14 @@
           "action": "auto_unassign_stale",
           "timestamp": "2025-09-16T16:48:04.491Z",
           "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 96 hours - forced reset",
+          "orphaned_duration_hours": 96,
+          "last_activity": "2025-09-16T16:48:04.491Z"
         }
       ]
     },
@@ -542,7 +563,18 @@
         }
       ],
       "created_at": "2025-09-13T16:40:10.627Z",
-      "auto_research_created": false
+      "auto_research_created": false,
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 169 hours - forced reset",
+          "orphaned_duration_hours": 169,
+          "last_activity": "2025-09-13T16:40:10.627Z"
+        }
+      ]
     },
     {
       "id": "feature_1757783117257_91uslns1t",
@@ -570,7 +602,18 @@
       "created_from_completed_task": "feature_1757781330452_329fpngra",
       "original_implementer": "development_session_1757781310277_1_general_dbc9a9fe",
       "prevents_self_review": true,
-      "audit_type": "post_completion"
+      "audit_type": "post_completion",
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 168 hours - forced reset",
+          "orphaned_duration_hours": 168,
+          "last_activity": "2025-09-13T16:43:52.301Z"
+        }
+      ]
     },
     {
       "id": "feature_1757783117257_trtucsuvh",
@@ -598,7 +641,18 @@
       "created_from_completed_task": "feature_1757781329361_q7yfdrtmd",
       "original_implementer": "development_session_1757781312214_1_general_31127812",
       "prevents_self_review": true,
-      "audit_type": "post_completion"
+      "audit_type": "post_completion",
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 168 hours - forced reset",
+          "orphaned_duration_hours": 168,
+          "last_activity": "2025-09-13T16:46:30.425Z"
+        }
+      ]
     },
     {
       "id": "feature_1757783117257_volxw3tet",
@@ -625,7 +679,18 @@
       "created_at": "2025-09-13T16:46:47.957Z",
       "created_from_completed_task": "feature_1757781329223_duv9nwbbv",
       "prevents_self_review": true,
-      "audit_type": "post_completion"
+      "audit_type": "post_completion",
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 168 hours - forced reset",
+          "orphaned_duration_hours": 168,
+          "last_activity": "2025-09-13T16:46:47.957Z"
+        }
+      ]
     },
     {
       "id": "feature_1757783117257_3t91xg6ug",
@@ -652,7 +717,18 @@
       "created_at": "2025-09-13T16:47:14.550Z",
       "created_from_completed_task": "feature_1757781327236_z2jfk60en",
       "prevents_self_review": true,
-      "audit_type": "post_completion"
+      "audit_type": "post_completion",
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 168 hours - forced reset",
+          "orphaned_duration_hours": 168,
+          "last_activity": "2025-09-13T16:47:14.550Z"
+        }
+      ]
     },
     {
       "id": "feature_1757784268797_9ctymf9jo",
@@ -748,7 +824,18 @@
         }
       ],
       "created_at": "2025-09-13T17:24:28.805Z",
-      "auto_research_created": false
+      "auto_research_created": false,
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 168 hours - forced reset",
+          "orphaned_duration_hours": 168,
+          "last_activity": "2025-09-13T17:24:28.805Z"
+        }
+      ]
     },
     {
       "id": "feature_1757784270426_uiv0b0d6o",
@@ -846,7 +933,18 @@
         }
       ],
       "created_at": "2025-09-13T17:24:30.430Z",
-      "auto_research_created": false
+      "auto_research_created": false,
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 168 hours - forced reset",
+          "orphaned_duration_hours": 168,
+          "last_activity": "2025-09-13T17:24:30.430Z"
+        }
+      ]
     },
     {
       "id": "feature_1757784273281_nd0h8edtf",
@@ -942,7 +1040,18 @@
         }
       ],
       "created_at": "2025-09-13T17:24:33.287Z",
-      "auto_research_created": false
+      "auto_research_created": false,
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 168 hours - forced reset",
+          "orphaned_duration_hours": 168,
+          "last_activity": "2025-09-13T17:24:33.287Z"
+        }
+      ]
     },
     {
       "id": "feature_1757784274883_a4x75edot",
@@ -1038,7 +1147,18 @@
         }
       ],
       "created_at": "2025-09-13T17:24:34.890Z",
-      "auto_research_created": false
+      "auto_research_created": false,
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 168 hours - forced reset",
+          "orphaned_duration_hours": 168,
+          "last_activity": "2025-09-13T17:24:34.890Z"
+        }
+      ]
     },
     {
       "id": "feature_1757784274901_rna89cnkn",
@@ -1134,7 +1254,18 @@
         }
       ],
       "created_at": "2025-09-13T17:24:34.908Z",
-      "auto_research_created": false
+      "auto_research_created": false,
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 168 hours - forced reset",
+          "orphaned_duration_hours": 168,
+          "last_activity": "2025-09-13T17:24:34.908Z"
+        }
+      ]
     },
     {
       "id": "feature_1757786989566_lpq9evcay",
@@ -1230,7 +1361,18 @@
         }
       ],
       "created_at": "2025-09-13T18:09:49.572Z",
-      "auto_research_created": false
+      "auto_research_created": false,
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 167 hours - forced reset",
+          "orphaned_duration_hours": 167,
+          "last_activity": "2025-09-13T18:09:49.572Z"
+        }
+      ]
     },
     {
       "id": "feature_1757787855001_bznwkscje",
@@ -1343,6 +1485,14 @@
           "action": "auto_unassign_stale",
           "timestamp": "2025-09-13T18:25:19.873Z",
           "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 167 hours - forced reset",
+          "orphaned_duration_hours": 167,
+          "last_activity": "2025-09-13T18:25:19.873Z"
         }
       ]
     },
@@ -1352,7 +1502,18 @@
       "title": "Add standardized enum standards and principles to CLAUDE.md naming conventions",
       "description": "Add comprehensive enum naming standards, principles, and best practices to CLAUDE.md standardized naming conventions section",
       "category": "feature",
-      "id": "feature_1758096918639_jelqhusb95"
+      "id": "feature_1758096918639_jelqhusb95",
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 81 hours - forced reset",
+          "orphaned_duration_hours": 81,
+          "last_activity": "2025-09-17T08:15:18.639Z"
+        }
+      ]
     },
     {
       "status": "pending",
@@ -1360,7 +1521,18 @@
       "title": "Enhance CLAUDE.md with self-learning agent capabilities and lessons storage",
       "description": "Add comprehensive but concise self-learning emphasis and development directory lessons management to CLAUDE.md",
       "category": "feature",
-      "id": "feature_1758214853111_6pfx1sd5xg3"
+      "id": "feature_1758214853111_6pfx1sd5xg3",
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 48 hours - forced reset",
+          "orphaned_duration_hours": 48,
+          "last_activity": "2025-09-18T17:00:53.111Z"
+        }
+      ]
     },
     {
       "status": "pending",
@@ -1368,7 +1540,18 @@
       "title": "Add concise CI/CD and enterprise development standards to CLAUDE.md",
       "description": "Enhance existing sections with essential CI/CD pipeline requirements, code review standards, and quality gates while maintaining conciseness",
       "category": "feature",
-      "id": "feature_1758265209541_iolunvi9cye"
+      "id": "feature_1758265209541_iolunvi9cye",
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 34 hours - forced reset",
+          "orphaned_duration_hours": 34,
+          "last_activity": "2025-09-19T07:00:09.541Z"
+        }
+      ]
     },
     {
       "id": "test_1757781551850_k12iufq25",
@@ -1473,7 +1656,18 @@
         }
       ],
       "created_at": "2025-09-13T16:35:27.690Z",
-      "auto_research_created": false
+      "auto_research_created": false,
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 169 hours - forced reset",
+          "orphaned_duration_hours": 169,
+          "last_activity": "2025-09-13T16:35:27.690Z"
+        }
+      ]
     },
     {
       "id": "test_1757781551850_osl6mt542",
@@ -1578,7 +1772,18 @@
         }
       ],
       "created_at": "2025-09-13T16:35:28.229Z",
-      "auto_research_created": false
+      "auto_research_created": false,
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 169 hours - forced reset",
+          "orphaned_duration_hours": 169,
+          "last_activity": "2025-09-13T16:35:28.229Z"
+        }
+      ]
     },
     {
       "id": "test_1757781551850_2ely5i4hs",
@@ -1683,7 +1888,18 @@
         }
       ],
       "created_at": "2025-09-13T16:35:28.619Z",
-      "auto_research_created": false
+      "auto_research_created": false,
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 169 hours - forced reset",
+          "orphaned_duration_hours": 169,
+          "last_activity": "2025-09-13T16:35:28.619Z"
+        }
+      ]
     },
     {
       "id": "test_1757781329787_p7p52un3r",
@@ -1716,6 +1932,14 @@
           "action": "auto_unassign_stale",
           "timestamp": "2025-09-13T17:05:17.251Z",
           "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 168 hours - forced reset",
+          "orphaned_duration_hours": 168,
+          "last_activity": "2025-09-13T17:05:17.251Z"
         }
       ]
     },
@@ -1816,7 +2040,18 @@
         }
       ],
       "created_at": "2025-09-13T17:24:34.703Z",
-      "auto_research_created": false
+      "auto_research_created": false,
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 168 hours - forced reset",
+          "orphaned_duration_hours": 168,
+          "last_activity": "2025-09-13T17:24:34.703Z"
+        }
+      ]
     },
     {
       "id": "test_1757785927236_p3wxl22d7",
@@ -1915,7 +2150,18 @@
         }
       ],
       "created_at": "2025-09-13T17:24:38.143Z",
-      "auto_research_created": false
+      "auto_research_created": false,
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 168 hours - forced reset",
+          "orphaned_duration_hours": 168,
+          "last_activity": "2025-09-13T17:24:38.143Z"
+        }
+      ]
     },
     {
       "id": "test_1757785927193_rtzdxyixh",
@@ -1985,6 +2231,14 @@
           "action": "auto_unassign_stale",
           "timestamp": "2025-09-13T21:11:29.949Z",
           "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 164 hours - forced reset",
+          "orphaned_duration_hours": 164,
+          "last_activity": "2025-09-13T21:11:29.949Z"
         }
       ]
     },
@@ -2080,7 +2334,18 @@
         }
       ],
       "created_at": "2025-09-13T17:49:40.070Z",
-      "auto_research_created": false
+      "auto_research_created": false,
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 167 hours - forced reset",
+          "orphaned_duration_hours": 167,
+          "last_activity": "2025-09-13T17:49:40.070Z"
+        }
+      ]
     },
     {
       "id": "test_1757785927236_0qrm4m2um",
@@ -2096,7 +2361,18 @@
       "requires_research": false,
       "subtasks": [],
       "created_at": "2025-09-13T17:50:42.344Z",
-      "auto_research_created": false
+      "auto_research_created": false,
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 167 hours - forced reset",
+          "orphaned_duration_hours": 167,
+          "last_activity": "2025-09-13T17:50:42.344Z"
+        }
+      ]
     },
     {
       "id": "test_1757786325601_x7086383x",
@@ -2129,6 +2405,14 @@
           "action": "auto_unassign_stale",
           "timestamp": "2025-09-13T17:58:45.591Z",
           "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 167 hours - forced reset",
+          "orphaned_duration_hours": 167,
+          "last_activity": "2025-09-13T17:58:45.591Z"
         }
       ]
     },
@@ -2164,6 +2448,14 @@
           "action": "auto_unassign_stale",
           "timestamp": "2025-09-13T17:58:45.591Z",
           "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 167 hours - forced reset",
+          "orphaned_duration_hours": 167,
+          "last_activity": "2025-09-13T17:58:45.591Z"
         }
       ]
     },
@@ -2199,6 +2491,14 @@
           "action": "auto_unassign_stale",
           "timestamp": "2025-09-13T17:58:45.591Z",
           "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 167 hours - forced reset",
+          "orphaned_duration_hours": 167,
+          "last_activity": "2025-09-13T17:58:45.591Z"
         }
       ]
     },
@@ -2234,6 +2534,14 @@
           "action": "auto_unassign_stale",
           "timestamp": "2025-09-13T17:58:45.591Z",
           "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 167 hours - forced reset",
+          "orphaned_duration_hours": 167,
+          "last_activity": "2025-09-13T17:58:45.591Z"
         }
       ]
     },
@@ -2269,6 +2577,14 @@
           "action": "auto_reset_stale",
           "timestamp": "2025-09-13T18:18:13.484Z",
           "reason": "Task stale for 19 minutes"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 167 hours - forced reset",
+          "orphaned_duration_hours": 167,
+          "last_activity": "2025-09-13T18:18:13.484Z"
         }
       ]
     },
@@ -2304,6 +2620,14 @@
           "action": "auto_reset_stale",
           "timestamp": "2025-09-13T18:25:19.874Z",
           "reason": "Task stale for 21 minutes"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 167 hours - forced reset",
+          "orphaned_duration_hours": 167,
+          "last_activity": "2025-09-13T18:25:19.874Z"
         }
       ]
     },
@@ -2353,7 +2677,18 @@
         }
       ],
       "created_at": "2025-09-13T18:05:15.057Z",
-      "auto_research_created": false
+      "auto_research_created": false,
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 167 hours - forced reset",
+          "orphaned_duration_hours": 167,
+          "last_activity": "2025-09-13T18:05:15.057Z"
+        }
+      ]
     },
     {
       "id": "test_1757786940145_nbjh8bxym",
@@ -2370,7 +2705,18 @@
       "subtasks": [],
       "created_at": "2025-09-13T18:06:12.232Z",
       "auto_research_created": false,
-      "original_implementer": "test_agent_123"
+      "original_implementer": "test_agent_123",
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 167 hours - forced reset",
+          "orphaned_duration_hours": 167,
+          "last_activity": "2025-09-13T18:06:12.232Z"
+        }
+      ]
     },
     {
       "id": "test_1757786940145_zvztjm3un",
@@ -2387,7 +2733,18 @@
       "subtasks": [],
       "created_at": "2025-09-13T18:08:03.328Z",
       "auto_research_created": false,
-      "original_implementer": "development_session_1757785266907_1_general_8560e4a6"
+      "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 167 hours - forced reset",
+          "orphaned_duration_hours": 167,
+          "last_activity": "2025-09-13T18:08:03.328Z"
+        }
+      ]
     },
     {
       "id": "test_1757786940145_3b944cc47",
@@ -2421,6 +2778,14 @@
           "action": "auto_reset_stale",
           "timestamp": "2025-09-13T18:25:19.874Z",
           "reason": "Task stale for 17 minutes"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 167 hours - forced reset",
+          "orphaned_duration_hours": 167,
+          "last_activity": "2025-09-13T18:25:19.874Z"
         }
       ]
     },
@@ -2487,6 +2852,14 @@
           "action": "auto_reset_stale",
           "timestamp": "2025-09-13T18:25:19.874Z",
           "reason": "Task stale for 17 minutes"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 167 hours - forced reset",
+          "orphaned_duration_hours": 167,
+          "last_activity": "2025-09-13T18:25:19.874Z"
         }
       ]
     },
@@ -2507,7 +2880,18 @@
       "auto_research_created": false,
       "audit_metadata": {
         "original_implementer": "development_session_1757785266907_1_general_8560e4a6"
-      }
+      },
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 167 hours - forced reset",
+          "orphaned_duration_hours": 167,
+          "last_activity": "2025-09-13T18:08:03.368Z"
+        }
+      ]
     },
     {
       "id": "test_1757786940145_k7ffm0fzz",
@@ -2524,7 +2908,18 @@
       "subtasks": [],
       "created_at": "2025-09-13T18:08:03.374Z",
       "auto_research_created": false,
-      "original_implementer": "development_session_1757785266907_1_general_8560e4a6"
+      "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 167 hours - forced reset",
+          "orphaned_duration_hours": 167,
+          "last_activity": "2025-09-13T18:08:03.374Z"
+        }
+      ]
     },
     {
       "status": "pending",
@@ -2550,6 +2945,14 @@
           "action": "auto_unassign_stale",
           "timestamp": "2025-09-16T16:48:04.491Z",
           "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 96 hours - forced reset",
+          "orphaned_duration_hours": 96,
+          "last_activity": "2025-09-16T16:48:04.491Z"
         }
       ]
     },
@@ -2576,6 +2979,14 @@
           "action": "auto_unassign_stale",
           "timestamp": "2025-09-17T07:54:25.817Z",
           "reason": "Agent became stale (inactive >15 minutes)"
+        },
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 81 hours - forced reset",
+          "orphaned_duration_hours": 81,
+          "last_activity": "2025-09-17T07:54:25.817Z"
         }
       ]
     },
@@ -2585,7 +2996,18 @@
       "title": "Test subtask with correct command",
       "description": "Testing proper routing",
       "category": "subtask",
-      "id": "test_1758095665828_ea6da7uk1"
+      "id": "test_1758095665828_ea6da7uk1",
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 81 hours - forced reset",
+          "orphaned_duration_hours": 81,
+          "last_activity": "2025-09-17T07:52:28.675Z"
+        }
+      ]
     },
     {
       "status": "pending",
@@ -2593,7 +3015,18 @@
       "title": "Test subtask with correct command",
       "description": "Testing proper routing",
       "category": "subtask",
-      "id": "test_1758143150536_7xjtdyrbt"
+      "id": "test_1758143150536_7xjtdyrbt",
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 81 hours - forced reset",
+          "orphaned_duration_hours": 81,
+          "last_activity": "2025-09-17T08:12:02.197Z"
+        }
+      ]
     },
     {
       "status": "pending",
@@ -2740,23 +3173,13 @@
     },
     {
       "status": "completed",
-      "created_at": "2025-09-20T16:43:21.500Z",
-      "title": "Fix security/detect-non-literal-fs-filename warnings in setup-infinite-hook.js",
-      "description": "Fix 25 security/detect-non-literal-fs-filename ESLint violations by adding eslint-disable-next-line comments with security justifications for each filesystem operation",
+      "created_at": "2025-09-20T17:30:28.694Z",
+      "title": "Fix no-console warnings in RAG workflow integration files",
+      "description": "Add appropriate eslint-disable-next-line comments for console statements in lib/rag-workflow-integration.js (11 warnings) and lib/utils/logger.js (5 warnings) with contextual justifications",
       "category": "error",
-      "id": "error_1758386601500_c8pro996zi9",
-      "completed_at": "2025-09-20T16:44:59.000Z",
-      "updated_at": "2025-09-20T16:44:59.000Z"
-    },
-    {
-      "status": "completed",
-      "created_at": "2025-09-20T16:43:22.873Z",
-      "title": "Fix security/detect-non-literal-fs-filename ESLint warnings in high-priority files",
-      "description": "Fix ESLint security violations in secureFileSystem.js (17), rag-workflow-integration.js (12), systemHealthMonitor.js (10), and migrationSystem.js (10) by adding appropriate eslint-disable-next-line comments with security justifications",
-      "category": "error",
-      "id": "error_1758386602873_usnhc7hefmc",
-      "completed_at": "2025-09-20T16:46:39.098Z",
-      "updated_at": "2025-09-20T16:46:39.098Z"
+      "id": "error_1758389428693_53kr3bqs6kt",
+      "completed_at": "2025-09-20T17:31:59.907Z",
+      "updated_at": "2025-09-20T17:31:59.907Z"
     }
   ],
   "current_mode": "DEVELOPMENT",
@@ -2766,13 +3189,13 @@
   "strikes_completed_last_run": false,
   "last_hook_activation": 1757094794402,
   "agents": {
-    "dev_session_1758385163307_1_general_6d9e53d6": {
+    "dev_session_1758387502496_1_general_afd98267": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T16:19:23.308Z",
+      "lastHeartbeat": "2025-09-20T16:58:22.497Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2783,17 +3206,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T16:19:23.308Z",
+      "createdAt": "2025-09-20T16:58:22.497Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758385163656_1_general_5a3e0fb2": {
+    "dev_session_1758387502543_1_general_3090d19f": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T16:19:23.657Z",
+      "lastHeartbeat": "2025-09-20T16:58:22.543Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2804,17 +3227,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T16:19:23.657Z",
+      "createdAt": "2025-09-20T16:58:22.543Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758385164189_1_general_3d738081": {
+    "dev_session_1758387502725_1_general_31b1c089": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T16:19:24.189Z",
+      "lastHeartbeat": "2025-09-20T16:58:22.725Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2825,17 +3248,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T16:19:24.189Z",
+      "createdAt": "2025-09-20T16:58:22.725Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758386256738_1_general_1a259331": {
+    "dev_session_1758387544367_1_general_f297febc": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T16:37:36.738Z",
+      "lastHeartbeat": "2025-09-20T16:59:04.368Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2846,17 +3269,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T16:37:36.738Z",
+      "createdAt": "2025-09-20T16:59:04.368Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758386586752_1_general_fce29b51": {
+    "dev_session_1758387761243_1_general_da7b2ca4": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T16:43:06.753Z",
+      "lastHeartbeat": "2025-09-20T17:02:41.243Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2867,17 +3290,17 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T16:43:06.753Z",
+      "createdAt": "2025-09-20T17:02:41.243Z",
       "sessionId": null,
       "metadata": {}
     },
-    "dev_session_1758386587323_1_general_a72981ff": {
+    "dev_session_1758387857599_1_general_b8adeb8a": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-20T16:43:07.323Z",
+      "lastHeartbeat": "2025-09-20T17:13:43.447Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2888,7 +3311,206 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-20T16:43:07.323Z",
+      "createdAt": "2025-09-20T17:04:17.599Z",
+      "sessionId": null,
+      "metadata": {
+        "renewedAt": "2025-09-20T17:13:43.447Z",
+        "renewalReason": "Agent reinitialization requested"
+      },
+      "lastRenewal": "2025-09-20T17:13:43.447Z",
+      "renewalCount": 1
+    },
+    "dev_session_1758387938125_1_general_550d7784": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T17:05:38.126Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T17:05:38.126Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758387938302_1_general_fd0540ea": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T17:05:38.302Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T17:05:38.302Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758387938624_1_general_70e9be09": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T17:05:38.625Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T17:05:38.625Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758388599128_1_general_ce79a845": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T17:16:39.129Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T17:16:39.129Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758388600129_1_general_bb90a68f": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T17:16:40.129Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T17:16:40.129Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758388600371_1_general_4e9d9285": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T17:16:40.371Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T17:16:40.371Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758388686730_1_general_6cd6735f": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T17:18:06.730Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T17:18:06.730Z",
+      "sessionId": null,
+      "metadata": {}
+    },
+    "dev_session_1758388966402_1_general_3fe353ce": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T17:24:03.743Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T17:22:46.403Z",
+      "sessionId": null,
+      "metadata": {
+        "renewedAt": "2025-09-20T17:24:03.743Z",
+        "renewalReason": "Agent reinitialization requested"
+      },
+      "lastRenewal": "2025-09-20T17:24:03.743Z",
+      "renewalCount": 1
+    },
+    "dev_session_1758389413173_1_general_da6ae403": {
+      "name": "undefined Agent",
+      "role": "development",
+      "specialization": [],
+      "status": "active",
+      "assignedTasks": [],
+      "lastHeartbeat": "2025-09-20T17:30:13.174Z",
+      "parentAgentId": null,
+      "capabilities": [
+        "file-operations",
+        "linting",
+        "testing",
+        "build-fixes",
+        "refactoring"
+      ],
+      "workload": 0,
+      "maxConcurrentTasks": 5,
+      "createdAt": "2025-09-20T17:30:13.174Z",
       "sessionId": null,
       "metadata": {}
     }

@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /* eslint-disable no-console -- Setup script requires console output for user feedback */
 /**
  * Infinite Continue Hook Setup and Project Initialization System

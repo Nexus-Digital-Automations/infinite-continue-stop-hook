@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /* eslint-disable no-console -- CLI hook requires console output for user feedback */
 const _fs = require('fs');
 const _path = require('path');
@@ -111,6 +112,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
   const staleAgents = [];
 
   for (const agentId of allAgents) {
+    // eslint-disable-next-line security/detect-object-injection -- Agent ID validated through Object.keys() iteration from TODO.json structure
     const agent = _todoData.agents[agentId];
     // Handle both lastHeartbeat (camelCase) and last_heartbeat (snake_case) formats
     const lastHeartbeat = agent.lastHeartbeat || agent.last_heartbeat;
@@ -126,8 +128,10 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
   // Remove stale agents from the system AND unassign them from tasks
   let agentsRemoved = 0;
   let tasksUnassigned = 0;
+  const orphanedTasksReset = 0;
 
   for (const staleAgentId of staleAgents) {
+    // eslint-disable-next-line security/detect-object-injection -- Stale agent ID validated through timeout calculation and cleanup process
     delete _todoData.agents[staleAgentId];
     agentsRemoved++;
     logger.addFlow(`Removed stale agent from ${projectPath}: ${staleAgentId}`);
@@ -814,7 +818,9 @@ If you want to enable task management for this project:
     }
 
     for (const task of todoData.tasks) {
-      if (!task || typeof task !== 'object') continue;
+      if (!task || typeof task !== 'object') {
+        continue;
+      }
 
       // Check for orphaned tasks: pending status with no assignment for >24 hours
       if (task.status === 'pending' && !task.assigned_agent && !task.claimed_by) {
@@ -835,12 +841,12 @@ If you want to enable task management for this project:
             timestamp: new Date().toISOString(),
             reason: `Task orphaned for ${Math.round(timeSinceActivity / 3600000)} hours - forced reset`,
             orphaned_duration_hours: Math.round(timeSinceActivity / 3600000),
-            last_activity: new Date(lastActivity).toISOString()
+            last_activity: new Date(lastActivity).toISOString(),
           });
 
           orphanedTasksReset++;
           logger.addFlow(
-            `Reset orphaned task: ${task.title} (orphaned ${Math.round(timeSinceActivity / 3600000)} hours)`
+            `Reset orphaned task: ${task.title} (orphaned ${Math.round(timeSinceActivity / 3600000)} hours)`,
           );
         }
       }

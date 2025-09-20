@@ -849,7 +849,7 @@ describe('Success Criteria Performance Tests', () => {
           ['success-criteria:status'],
         ];
 
-        for (const [command, ...args] of operations) {
+        for (const [command, ...args] of _operations) {
           await execAPIWithMonitoring(monitor, command, args);
           // Small delay between operations
           await new Promise((resolve) => {
@@ -860,28 +860,28 @@ describe('Success Criteria Performance Tests', () => {
         const _report = monitor.generateReport();
 
         // Validate comprehensive metrics
-        expect(report.totalOperations).toBeGreaterThan(5);
-        expect(report.operationSummary).toBeDefined();
-        expect(report.memoryAnalysis).toBeDefined();
-        expect(report.performanceViolations).toBeDefined();
+        expect(_report.totalOperations).toBeGreaterThan(5);
+        expect(_report.operationSummary).toBeDefined();
+        expect(_report.memoryAnalysis).toBeDefined();
+        expect(_report.performanceViolations).toBeDefined();
 
         // Check that all operations are within performance limits
-        Object.values(report.operationSummary).forEach((opSummary) => {
+        Object.values(_report.operationSummary).forEach((opSummary) => {
           expect(opSummary.exceeds30s).toBe(false);
           expect(opSummary.averageTime).toBeLessThan(30000);
           expect(opSummary.maxTime).toBeLessThan(30000);
         });
 
         // Should not have performance violations
-        expect(report.performanceViolations).toHaveLength(0);
+        expect(_report.performanceViolations).toHaveLength(0);
 
         console.log('Comprehensive performance metrics:');
-        console.log(JSON.stringify(report, null, 2));
+        console.log(JSON.stringify(_report, null, 2));
 
         // Save report for analysis
         const _reportPath = _path.join(__dirname, 'performance-report.json');
-        await fs.writeFile(reportPath, JSON.stringify(report, null, 2));
-        console.log(`Performance report saved to: ${reportPath}`);
+        await _fs.writeFile(_reportPath, JSON.stringify(_report, null, 2));
+        console.log(`Performance report saved to: ${_reportPath}`);
       },
       PERFORMANCE_TIMEOUT,
     );
@@ -890,20 +890,20 @@ describe('Success Criteria Performance Tests', () => {
       'should benchmark against system capabilities',
       async () => {
         const _systemInfo = {
-          platform: os.platform(),
-          arch: os.arch(),
-          cpus: os.cpus().length,
-          totalMemory: os.totalmem(),
-          freeMemory: os.freemem(),
+          platform: _os.platform(),
+          arch: _os.arch(),
+          cpus: _os.cpus().length,
+          totalMemory: _os.totalmem(),
+          freeMemory: _os.freemem(),
           nodeVersion: process.version,
         };
 
-        console.log('System information:', systemInfo);
+        console.log('System information:', _systemInfo);
 
         // CPU benchmark
         const _cpuStart = process.hrtime.bigint();
         let iterations = 0;
-        while (Number(process.hrtime.bigint() - cpuStart) / 1000000 < 100) {
+        while (Number(process.hrtime.bigint() - _cpuStart) / 1000000 < 100) {
           // 100ms of CPU work
           iterations++;
           Math.sqrt(iterations);
@@ -914,10 +914,10 @@ describe('Success Criteria Performance Tests', () => {
         const _memArrays = [];
         const _memStart = process.memoryUsage().heapUsed;
         for (let i = 0; i < 1000; i++) {
-          memArrays.push(new Array(1000).fill(i));
+          _memArrays.push(new Array(1000).fill(i));
         }
         const _memEnd = process.memoryUsage().heapUsed;
-        const _memBenchmark = memEnd - memStart;
+        const _memBenchmark = _memEnd - _memStart;
 
         // Success Criteria benchmark
         await execAPIWithMonitoring(monitor, 'success-criteria:init');
@@ -934,32 +934,32 @@ describe('Success Criteria Performance Tests', () => {
         const { measurement } = await execAPIWithMonitoring(
           monitor,
           'success-criteria:create-template',
-          [templateData],
+          [_templateData],
         );
 
         const _benchmarkResults = {
-          systemInfo,
-          cpuBenchmark,
-          memBenchmark: memBenchmark / 1024 / 1024, // MB
+          _systemInfo,
+          _cpuBenchmark,
+          memBenchmark: _memBenchmark / 1024 / 1024, // MB
           successCriteriaBenchmark: measurement.duration,
-          performanceRatio: measurement.duration / cpuBenchmark,
+          performanceRatio: measurement.duration / _cpuBenchmark,
           memoryEfficiency:
-            (measurement.memoryDelta.heapUsed || 0) / memBenchmark,
+            (measurement.memoryDelta.heapUsed || 0) / _memBenchmark,
         };
 
-        console.log('Benchmark results:', benchmarkResults);
+        console.log('Benchmark results:', _benchmarkResults);
 
         // Performance should scale reasonably with system capabilities
-        expect(benchmarkResults.successCriteriaBenchmark).toBeLessThan(30000);
-        expect(benchmarkResults.performanceRatio).toBeLessThan(100); // Should be efficient relative to CPU
+        expect(_benchmarkResults.successCriteriaBenchmark).toBeLessThan(30000);
+        expect(_benchmarkResults.performanceRatio).toBeLessThan(100); // Should be efficient relative to CPU
 
         // Save benchmark results
         const _benchmarkPath = _path.join(__dirname, 'benchmark-results.json');
-        await fs.writeFile(
-          benchmarkPath,
-          JSON.stringify(benchmarkResults, null, 2),
+        await _fs.writeFile(
+          _benchmarkPath,
+          JSON.stringify(_benchmarkResults, null, 2),
         );
-        console.log(`Benchmark results saved to: ${benchmarkPath}`);
+        console.log(`Benchmark results saved to: ${_benchmarkPath}`);
       },
       PERFORMANCE_TIMEOUT,
     );

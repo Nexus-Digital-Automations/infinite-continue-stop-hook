@@ -5,7 +5,9 @@
   "main": "taskmanager-api.js",
   "type": "commonjs",
   "bin": {
-    "taskmanager": "./taskmanager-api.js"
+    "taskmanager": "./taskmanager-api.js",
+    "setup-infinite-hook": "./setup-infinite-hook.js",
+    "stop-hook": "./stop-hook.js"
   },
   "scripts": {
     "start": "node taskmanager-api.js",
