@@ -513,7 +513,8 @@ describe('Success Criteria Validation Tests', () => {
         },
       ];
 
-      for (const criterion of _customCriteria) {
+      // Use for-await-of to maintain sequential processing for criteria addition
+      for await (const criterion of _customCriteria) {
         await execAPI('success-criteria:add-criterion', [
           JSON.stringify(criterion),
         ]);

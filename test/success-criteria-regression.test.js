@@ -348,7 +348,8 @@ describe('Success Criteria Regression Tests', () => {
       // Test different API versions
       const _apiVersions = ['1.0', '1.1', '2.0'];
 
-      for (const version of _apiVersions) {
+      // Use for-await-of to maintain sequential processing for version compatibility testing
+      for await (const version of _apiVersions) {
         try {
           // Create template with version-specific API
           const _versionedTemplate = {
@@ -645,7 +646,8 @@ describe('Success Criteria Regression Tests', () => {
         },
       ];
 
-      for (const schema of _schemaVersions) {
+      // Use for-await-of to maintain sequential processing for schema evolution testing
+      for await (const schema of _schemaVersions) {
         try {
           const _testTemplate = {
             name: `Schema ${schema.version} Template`,
@@ -824,7 +826,8 @@ describe('Success Criteria Regression Tests', () => {
         'success-criteria:check-status', // Deprecated in favor of 'status'
       ];
 
-      for (const endpoint of _deprecatedEndpoints) {
+      // Use for-await-of to maintain sequential processing for deprecated endpoint testing
+      for await (const endpoint of _deprecatedEndpoints) {
         try {
           const result = await execAPI(endpoint);
 
@@ -921,7 +924,8 @@ describe('Success Criteria Regression Tests', () => {
       const _versions = ['1.0.0', '1.5.0', '2.0.0'];
       const _templates = [];
 
-      for (const version of _versions) {
+      // Use for-await-of to maintain sequential processing for template creation
+      for await (const version of _versions) {
         const _template = {
           name: `Version ${version} Template`,
           version,
@@ -941,7 +945,8 @@ describe('Success Criteria Regression Tests', () => {
       }
 
       // Test applying different version templates
-      for (const template of _templates) {
+      // Use for-await-of to maintain sequential processing for template application
+      for await (const template of _templates) {
         try {
           await execAPI('success-criteria:apply-template', [template.name]);
           const _status = await execAPI('success-criteria:status');
@@ -1094,7 +1099,8 @@ describe('Success Criteria Regression Tests', () => {
         'success-criteria:apply-template',
       ];
 
-      for (const api of _coreAPIs) {
+      // Use for-await-of to maintain sequential processing for API contract testing
+      for await (const api of _coreAPIs) {
         try {
           // Test API is callable (might fail but should not throw unexpected errors)
 
@@ -1177,7 +1183,8 @@ describe('Success Criteria Regression Tests', () => {
         },
       ];
 
-      for (const func of _essentialFunctions) {
+      // Use for-await-of to maintain sequential processing for essential function testing
+      for await (const func of _essentialFunctions) {
         try {
           const _passed = await func.test();
           expect(_passed).toBe(true);
@@ -1235,7 +1242,8 @@ describe('Success Criteria Regression Tests', () => {
         },
       ];
 
-      for (const test of _performanceTests) {
+      // Use for-await-of to maintain sequential processing for performance testing
+      for await (const test of _performanceTests) {
         const result = await test.test();
         expect(result.duration).toBeLessThan(result.threshold);
 

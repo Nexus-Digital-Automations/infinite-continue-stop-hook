@@ -863,7 +863,8 @@ describe('Success Criteria Performance Tests', () => {
           ['success-criteria:status'],
         ];
 
-        for (const [command, ...args] of _operations) {
+        // Use for-await-of to maintain sequential processing for monitoring operations
+        for await (const [command, ...args] of _operations) {
           await execAPIWithMonitoring(monitor, command, args);
           // Small delay between operations
           await new Promise((resolve) => {
