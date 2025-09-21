@@ -1,4 +1,5 @@
 
+
 console.log('Regression test application started');
 
 class RegressionApp {
