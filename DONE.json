@@ -48746,14 +48746,90 @@
       "updated_at": "2025-09-21T05:20:13.459Z",
       "archived_at": "2025-09-21T05:20:13.470Z",
       "archive_version": "2.0.0"
+    },
+    {
+      "status": "completed",
+      "created_at": "2025-09-21T06:25:16.725Z",
+      "title": "Fix TaskManager API guide and method endpoints to be up-to-date",
+      "description": "Update the TaskManager API guide and method endpoints so they accurately reflect the actual available methods. Ensure that when agents are initialized or reinitialized, they receive the comprehensive and accurate TaskManager API guide and methods endpoints.",
+      "category": "error",
+      "id": "error_1758435916725_8q809me64v8",
+      "assigned_agent": "dev_session_1758435899024_1_general_75cf41e8",
+      "started_at": "2025-09-21T06:25:34.264Z",
+      "claimed_by": "dev_session_1758435899024_1_general_75cf41e8",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758435899024_1_general_75cf41e8",
+          "role": "primary",
+          "assignedAt": "2025-09-21T06:25:34.264Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "completed_at": "2025-09-21T06:31:58.980Z",
+      "updated_at": "2025-09-21T06:31:58.980Z",
+      "archived_at": "2025-09-21T06:31:58.988Z",
+      "archive_version": "2.0.0"
+    },
+    {
+      "id": "feature_1757783117257_91uslns1t",
+      "title": "Post-Completion Audit: Configuration Agent #8: Create development/essentials configuration files and project setup",
+      "description": "Comprehensive quality audit and review of the completed feature: Configuration Agent #8: Create development/essentials configuration files and project setup\n\nOriginal Description: Create comprehensive configuration files for the embedded subtasks system: 1) task-requirements.md with standard completion requirements, 2) success-criteria.md with templates and definitions, 3) research-guidelines.md with research task configuration, 4) audit-standards.md with objectivity rules and standards, 5) Set up proper project directory structure for development/essentials/",
+      "category": "audit",
+      "priority": "high",
+      "status": "completed",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [
+        "Linter perfection achieved (zero warnings/errors)",
+        "Build perfection achieved (clean build)",
+        "All tests pass with full coverage",
+        "Code quality standards met",
+        "Implementation follows architectural patterns",
+        "Security review passed",
+        "Performance standards met",
+        "Documentation is complete and accurate"
+      ],
+      "estimate": "1-2 hours",
+      "requires_research": false,
+      "subtasks": [],
+      "created_at": "2025-09-13T16:43:52.301Z",
+      "created_from_completed_task": "feature_1757781330452_329fpngra",
+      "original_implementer": "development_session_1757781310277_1_general_dbc9a9fe",
+      "prevents_self_review": true,
+      "audit_type": "post_completion",
+      "started_at": "2025-09-21T06:35:46.286Z",
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-20T17:11:08.665Z",
+          "reason": "Task orphaned for 168 hours - forced reset",
+          "orphaned_duration_hours": 168,
+          "last_activity": "2025-09-13T16:43:52.301Z"
+        },
+        {
+          "agentId": "dev_session_1758435899024_1_general_75cf41e8",
+          "role": "primary",
+          "assignedAt": "2025-09-21T06:35:46.286Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ],
+      "assigned_agent": "dev_session_1758435899024_1_general_75cf41e8",
+      "claimed_by": "dev_session_1758435899024_1_general_75cf41e8",
+      "completed_at": "2025-09-21T06:43:26.364Z",
+      "updated_at": "2025-09-21T06:43:26.364Z",
+      "archived_at": "2025-09-21T06:43:26.373Z",
+      "archive_version": "2.0.0"
     }
   ],
-  "total_completed": 1182,
+  "total_completed": 1184,
   "last_completion": "2025-09-13T18:24:43.914Z",
   "created_at": "2025-08-07T04:55:03.964Z",
-  "last_archived": "2025-09-21T05:21:28.580Z",
+  "last_archived": "2025-09-21T06:43:26.373Z",
   "metadata": {
-    "last_bulk_archive": "2025-09-21T05:21:28.580Z",
-    "bulk_archive_count": 39
+    "last_bulk_archive": "2025-09-21T06:32:29.765Z",
+    "bulk_archive_count": 40
   }
 }

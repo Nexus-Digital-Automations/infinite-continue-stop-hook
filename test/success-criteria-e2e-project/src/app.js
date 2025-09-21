@@ -3,7 +3,7 @@
  * @param {string} message - Message to process
  * @returns {string} Processed message
  */
-function processMessage(message) {
+function processMessage(_message) {
   if (!message) {
     throw new Error('Message is required');
   }
