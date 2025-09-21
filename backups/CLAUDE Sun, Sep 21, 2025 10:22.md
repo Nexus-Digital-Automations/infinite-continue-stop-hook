@@ -79,12 +79,6 @@ Before making ANY changes to CLAUDE.md, agents must:
 - **TRIGGERS**: Any request to implement, add, create, fix, improve, analyze, work on anything, or "continue"
 - **USER REQUEST SUPREMACY**: User requests are HIGHEST PRIORITY - above all tasks including errors. Execute immediately using protocols
 
-**MANDATORY TASK CREATION FOR NON-SIMPLE PROBLEMS:**
-- **IMMEDIATE TASK CREATION**: For ANY non-simple basic problem, create a task IMMEDIATELY without delay
-- **NO ANALYSIS PARALYSIS**: Never spend time analyzing whether something needs a task - if it's not trivial, create the task
-- **PROBLEM COMPLEXITY THRESHOLD**: Multi-step solutions, file modifications, research requirements, or any work beyond simple commands = create task immediately
-- **TASK-FIRST APPROACH**: Create task first, then work on the problem - ensures proper tracking and accountability
-
 **STOP HOOK FEEDBACK EVALUATION:**
 - **AFTER STOP HOOK FEEDBACK**: Think and evaluate whether task was fully and comprehensively completed
 - **INCOMPLETE DETECTION**: If task not fully/comprehensively completed, continue working immediately

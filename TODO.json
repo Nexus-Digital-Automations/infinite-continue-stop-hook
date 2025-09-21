@@ -218,106 +218,6 @@
       ]
     },
     {
-      "id": "feature_1757783117257_91uslns1t",
-      "title": "Post-Completion Audit: Configuration Agent #8: Create development/essentials configuration files and project setup",
-      "description": "Comprehensive quality audit and review of the completed feature: Configuration Agent #8: Create development/essentials configuration files and project setup\n\nOriginal Description: Create comprehensive configuration files for the embedded subtasks system: 1) task-requirements.md with standard completion requirements, 2) success-criteria.md with templates and definitions, 3) research-guidelines.md with research task configuration, 4) audit-standards.md with objectivity rules and standards, 5) Set up proper project directory structure for development/essentials/",
-      "category": "audit",
-      "priority": "high",
-      "status": "completed",
-      "dependencies": [],
-      "important_files": [],
-      "success_criteria": [
-        "Linter perfection achieved (zero warnings/errors)",
-        "Build perfection achieved (clean build)",
-        "All tests pass with full coverage",
-        "Code quality standards met",
-        "Implementation follows architectural patterns",
-        "Security review passed",
-        "Performance standards met",
-        "Documentation is complete and accurate"
-      ],
-      "estimate": "1-2 hours",
-      "requires_research": false,
-      "subtasks": [],
-      "created_at": "2025-09-13T16:43:52.301Z",
-      "created_from_completed_task": "feature_1757781330452_329fpngra",
-      "original_implementer": "development_session_1757781310277_1_general_dbc9a9fe",
-      "prevents_self_review": true,
-      "audit_type": "post_completion",
-      "started_at": "2025-09-21T06:35:46.286Z",
-      "agent_assignment_history": [
-        {
-          "agent": "system",
-          "action": "auto_reset_orphaned",
-          "timestamp": "2025-09-20T17:11:08.665Z",
-          "reason": "Task orphaned for 168 hours - forced reset",
-          "orphaned_duration_hours": 168,
-          "last_activity": "2025-09-13T16:43:52.301Z"
-        },
-        {
-          "agentId": "dev_session_1758435899024_1_general_75cf41e8",
-          "role": "primary",
-          "assignedAt": "2025-09-21T06:35:46.286Z",
-          "reassignReason": null,
-          "claimPriority": "normal"
-        }
-      ],
-      "assigned_agent": "dev_session_1758435899024_1_general_75cf41e8",
-      "claimed_by": "dev_session_1758435899024_1_general_75cf41e8",
-      "completed_at": "2025-09-21T06:43:26.364Z",
-      "updated_at": "2025-09-21T06:43:26.364Z"
-    },
-    {
-      "id": "feature_1757783117257_trtucsuvh",
-      "title": "Post-Completion Audit: Create comprehensive API documentation for embedded subtasks and success criteria endpoints",
-      "description": "Comprehensive quality audit and review of the completed feature: Create comprehensive API documentation for embedded subtasks and success criteria endpoints\n\nOriginal Description: Document all new embedded subtasks functionality, research task configuration, audit system workflows, endpoint references with examples, integration guides, and troubleshooting documentation for the TaskManager API",
-      "category": "audit",
-      "priority": "high",
-      "status": "completed",
-      "dependencies": [],
-      "important_files": [],
-      "success_criteria": [
-        "Linter perfection achieved (zero warnings/errors)",
-        "Build perfection achieved (clean build)",
-        "All tests pass with full coverage",
-        "Code quality standards met",
-        "Implementation follows architectural patterns",
-        "Security review passed",
-        "Performance standards met",
-        "Documentation is complete and accurate"
-      ],
-      "estimate": "1-2 hours",
-      "requires_research": false,
-      "subtasks": [],
-      "created_at": "2025-09-13T16:46:30.425Z",
-      "created_from_completed_task": "feature_1757781329361_q7yfdrtmd",
-      "original_implementer": "development_session_1757781312214_1_general_31127812",
-      "prevents_self_review": true,
-      "audit_type": "post_completion",
-      "started_at": "2025-09-21T06:44:42.690Z",
-      "agent_assignment_history": [
-        {
-          "agent": "system",
-          "action": "auto_reset_orphaned",
-          "timestamp": "2025-09-20T17:11:08.665Z",
-          "reason": "Task orphaned for 168 hours - forced reset",
-          "orphaned_duration_hours": 168,
-          "last_activity": "2025-09-13T16:46:30.425Z"
-        },
-        {
-          "agentId": "dev_session_1758435899024_1_general_75cf41e8",
-          "role": "primary",
-          "assignedAt": "2025-09-21T06:44:42.690Z",
-          "reassignReason": null,
-          "claimPriority": "normal"
-        }
-      ],
-      "assigned_agent": "dev_session_1758435899024_1_general_75cf41e8",
-      "claimed_by": "dev_session_1758435899024_1_general_75cf41e8",
-      "completed_at": "2025-09-21T06:51:19.588Z",
-      "updated_at": "2025-09-21T06:51:19.588Z"
-    },
-    {
       "id": "feature_1757783117257_volxw3tet",
       "title": "Post-Completion Audit: Implement comprehensive audit system with objectivity controls and completion criteria",
       "description": "Comprehensive quality audit and review of the completed feature: Implement comprehensive audit system with objectivity controls and completion criteria\n\nOriginal Description: Design and implement complete audit system: 1) Agent objectivity enforcement (no self-review) 2) 25-point standard completion criteria 3) Audit workflow and validation 4) Audit reporting and evidence collection 5) Create development/essentials audit criteria files 6) Integration with project-wide success criteria",
@@ -352,8 +252,23 @@
           "reason": "Task orphaned for 168 hours - forced reset",
           "orphaned_duration_hours": 168,
           "last_activity": "2025-09-13T16:46:47.957Z"
+        },
+        {
+          "agentId": "dev_session_1758437382181_1_general_b4ade21b",
+          "role": "primary",
+          "assignedAt": "2025-09-21T06:52:39.350Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1758437382181_1_general_b4ade21b",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-21T07:19:43.437Z",
+          "reason": "Agent became stale (inactive >30 minutes)"
         }
-      ]
+      ],
+      "assigned_agent": null,
+      "claimed_by": null
     },
     {
       "id": "feature_1757783117257_3t91xg6ug",
@@ -2705,7 +2620,27 @@
       "title": "Test task for subtasks audit",
       "description": "Testing embedded subtasks functionality",
       "category": "feature",
-      "id": "feature_1758437401392_m435g2wrr8"
+      "id": "test_1758437599543_b0w7rqtag"
+    },
+    {
+      "status": "in_progress",
+      "created_at": "2025-09-21T16:17:05.317Z",
+      "title": "Update CLAUDE.md to mandate immediate task creation for non-simple problems",
+      "description": "Add explicit mandate to CLAUDE.md requiring agents to immediately create tasks for any non-simple basic problems. User explicitly requested this modification to ensure agents create tasks for complex problems immediately rather than delaying.",
+      "category": "feature",
+      "id": "feature_1758471425316_9przlebgujp",
+      "assigned_agent": "dev_session_1758471405806_1_general_a5bc4daf",
+      "started_at": "2025-09-21T16:17:26.244Z",
+      "claimed_by": "dev_session_1758471405806_1_general_a5bc4daf",
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758471405806_1_general_a5bc4daf",
+          "role": "primary",
+          "assignedAt": "2025-09-21T16:17:26.244Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        }
+      ]
     }
   ],
   "current_mode": "DEVELOPMENT",
@@ -2715,13 +2650,13 @@
   "strikes_completed_last_run": false,
   "last_hook_activation": 1757094794402,
   "agents": {
-    "dev_session_1758435899024_1_general_75cf41e8": {
+    "dev_session_1758471405806_1_general_a5bc4daf": {
       "name": "undefined Agent",
       "role": "development",
       "specialization": [],
       "status": "active",
       "assignedTasks": [],
-      "lastHeartbeat": "2025-09-21T06:32:56.553Z",
+      "lastHeartbeat": "2025-09-21T16:16:45.807Z",
       "parentAgentId": null,
       "capabilities": [
         "file-operations",
@@ -2732,122 +2667,7 @@
       ],
       "workload": 0,
       "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-21T06:24:59.025Z",
-      "sessionId": null,
-      "metadata": {
-        "renewedAt": "2025-09-21T06:32:56.553Z",
-        "renewalReason": "Agent reinitialization requested"
-      },
-      "lastRenewal": "2025-09-21T06:32:56.553Z",
-      "renewalCount": 1
-    },
-    "dev_session_1758436166668_1_general_f94da9c9": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-21T06:29:26.668Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-21T06:29:26.668Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758436182563_1_general_7d4555fb": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-21T06:29:42.563Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-21T06:29:42.563Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758436197258_1_general_7bdf1866": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-21T06:30:30.296Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-21T06:29:57.258Z",
-      "sessionId": null,
-      "metadata": {
-        "renewedAt": "2025-09-21T06:30:30.296Z",
-        "renewalReason": "Agent reinitialization requested"
-      },
-      "lastRenewal": "2025-09-21T06:30:30.296Z",
-      "renewalCount": 1
-    },
-    "dev_session_1758436289336_1_general_275e602b": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-21T06:31:29.336Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-21T06:31:29.336Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758437382181_1_general_b4ade21b": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-21T06:49:42.182Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-21T06:49:42.182Z",
+      "createdAt": "2025-09-21T16:16:45.807Z",
       "sessionId": null,
       "metadata": {}
     }
