@@ -3471,6 +3471,13 @@
       "agentId": "dev_session_1758477020936_1_general_b4d93dfe",
       "sessionId": null,
       "windowId": "2025-09-21_window_1"
+    },
+    {
+      "timestamp": "2025-09-21T17:57:39.675Z",
+      "endpoint": "reinitialize",
+      "agentId": "dev_session_1758476770768_1_general_68977131",
+      "sessionId": null,
+      "windowId": "2025-09-21_window_1"
     }
   ],
   "metadata": {
