@@ -1,13 +1,24 @@
 {
+  "schema_version": "1.0.0",
+  "migration_info": {
+    "migrated_from": "TODO.json",
+    "migration_date": "2025-09-22T06:21:54.863Z",
+    "original_file_backup": "/Users/jeremyparker/infinite-continue-stop-hook/TODO.json.backup.2025-09-22T06-21-54-857Z",
+    "migration_script_version": "1.0.0"
+  },
   "project": "infinite-continue-stop-hook",
-  "tasks": [
+  "features": [
     {
       "id": "feature_1757784273281_nd0h8edtf",
       "title": "Performance Analysis: Embedded Subtasks and Success Criteria Impact",
       "description": "Comprehensive performance research analyzing the impact of embedded subtasks and success criteria endpoints on TaskManager system performance, including query performance, memory usage, API response times, concurrent access patterns, and optimization strategies",
-      "priority": "medium",
-      "category": "feature",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T17:24:33.287Z",
+      "approved_at": "2025-09-13T17:24:33.287Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -94,9 +105,8 @@
           "created_at": "2025-09-13T17:24:33.287Z"
         }
       ],
-      "created_at": "2025-09-13T17:24:33.287Z",
-      "auto_research_created": false,
-      "started_at": null,
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -128,16 +138,27 @@
           "reason": "Agent became stale (inactive >30 minutes)"
         }
       ],
-      "assigned_agent": null,
-      "claimed_by": null
+      "created_at": "2025-09-13T17:24:33.287Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "feature_1757784273281_nd0h8edtf",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "feature_1757784274883_a4x75edot",
       "title": "Analyze and design intelligent research system routing improvements",
       "description": "Comprehensive analysis of existing lib/intelligentResearchSystem.js implementation, research task routing mechanisms, auto-generation logic, deliverable validation, and integration patterns. Focus on improving research subtask auto-creation algorithms, research routing decision trees, quality validation for research outputs, and integration with TaskManager API workflows.",
-      "priority": "medium",
-      "category": "feature",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T17:24:34.890Z",
+      "approved_at": "2025-09-13T17:24:34.890Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -224,9 +245,8 @@
           "created_at": "2025-09-13T17:24:34.890Z"
         }
       ],
-      "created_at": "2025-09-13T17:24:34.890Z",
-      "auto_research_created": false,
-      "started_at": null,
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -244,15 +264,28 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T17:24:34.890Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "feature_1757784274883_a4x75edot",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "feature_1757784274901_rna89cnkn",
       "title": "API Compatibility Analysis for Embedded Subtasks and Success Criteria",
       "description": "Conduct comprehensive backward compatibility analysis for adding embedded subtasks array and success criteria endpoints to TaskManager API. Analyze existing API contracts, assess data structure changes impact, evaluate client consumption patterns, design safe migration strategies, and provide risk assessment with mitigation recommendations.",
-      "priority": "medium",
-      "category": "feature",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T17:24:34.908Z",
+      "approved_at": "2025-09-13T17:24:34.908Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -339,9 +372,8 @@
           "created_at": "2025-09-13T17:24:34.908Z"
         }
       ],
-      "created_at": "2025-09-13T17:24:34.908Z",
-      "auto_research_created": false,
-      "started_at": null,
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -359,15 +391,28 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T17:24:34.908Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "feature_1757784274901_rna89cnkn",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "feature_1757786989566_lpq9evcay",
       "title": "Continue with TaskManager API enhancement work",
       "description": "User requested to continue with existing work. Focus on enhancing TaskManager API with embedded subtasks and success criteria endpoints as per feature_1757781164006_0nf3nuisr requirements.",
-      "priority": "medium",
-      "category": "feature",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T18:09:49.572Z",
+      "approved_at": "2025-09-13T18:09:49.572Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -454,9 +499,8 @@
           "created_at": "2025-09-13T18:09:49.572Z"
         }
       ],
-      "created_at": "2025-09-13T18:09:49.572Z",
-      "auto_research_created": false,
-      "started_at": null,
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -474,15 +518,28 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T18:09:49.572Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "feature_1757786989566_lpq9evcay",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "feature_1757787855001_bznwkscje",
       "title": "Refactor taskmanager-api.js - Split large monolithic file",
       "description": "The taskmanager-api.js file is ridiculously large at over 6000 lines. Split it into smaller, more manageable modules while maintaining all functionality. Create separate modules for CLI interface, API methods, agent management, task operations, and other logical groupings. Ensure all imports and exports work correctly and maintain backward compatibility.",
-      "priority": "medium",
-      "category": "feature",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T18:24:15.008Z",
+      "approved_at": "2025-09-13T18:24:15.008Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -569,10 +626,7 @@
           "created_at": "2025-09-13T18:24:15.008Z"
         }
       ],
-      "created_at": "2025-09-13T18:24:15.008Z",
-      "auto_research_created": false,
       "assigned_agent": null,
-      "started_at": null,
       "claimed_by": null,
       "agent_assignment_history": [
         {
@@ -604,16 +658,36 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T18:24:15.008Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "feature_1757787855001_bznwkscje",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-17T08:15:18.639Z",
+      "id": "feature_1758096918639_jelqhusb95",
       "title": "Add standardized enum standards and principles to CLAUDE.md naming conventions",
       "description": "Add comprehensive enum naming standards, principles, and best practices to CLAUDE.md standardized naming conventions section",
-      "category": "feature",
-      "id": "feature_1758096918639_jelqhusb95",
-      "started_at": null,
+      "status": "approved",
+      "suggested_at": "2025-09-17T08:15:18.639Z",
+      "approved_at": "2025-09-17T08:15:18.639Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -631,16 +705,36 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-17T08:15:18.639Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "feature_1758096918639_jelqhusb95",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-18T17:00:53.111Z",
+      "id": "feature_1758214853111_6pfx1sd5xg3",
       "title": "Enhance CLAUDE.md with self-learning agent capabilities and lessons storage",
       "description": "Add comprehensive but concise self-learning emphasis and development directory lessons management to CLAUDE.md",
-      "category": "feature",
-      "id": "feature_1758214853111_6pfx1sd5xg3",
-      "started_at": null,
+      "status": "approved",
+      "suggested_at": "2025-09-18T17:00:53.111Z",
+      "approved_at": "2025-09-18T17:00:53.111Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -658,16 +752,36 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-18T17:00:53.111Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "feature_1758214853111_6pfx1sd5xg3",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-19T07:00:09.541Z",
+      "id": "feature_1758265209541_iolunvi9cye",
       "title": "Add concise CI/CD and enterprise development standards to CLAUDE.md",
       "description": "Enhance existing sections with essential CI/CD pipeline requirements, code review standards, and quality gates while maintaining conciseness",
-      "category": "feature",
-      "id": "feature_1758265209541_iolunvi9cye",
-      "started_at": null,
+      "status": "approved",
+      "suggested_at": "2025-09-19T07:00:09.541Z",
+      "approved_at": "2025-09-19T07:00:09.541Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -685,16 +799,36 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-19T07:00:09.541Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "feature_1758265209541_iolunvi9cye",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-20T18:26:45.685Z",
+      "id": "feature_1758392805685_8n0blcpb4uj",
       "title": "Usage Tracking with 5-Hour Window Analytics",
       "description": "Implement comprehensive usage tracking for TaskManager init/reinitialize endpoints with 5-hour window analytics. Track calls in time windows starting from 11am daily. Create analytics endpoint and update CLAUDE.md with mandatory reinitialize protocols.",
-      "category": "feature",
-      "id": "feature_1758392805685_8n0blcpb4uj",
-      "started_at": null,
+      "status": "approved",
+      "suggested_at": "2025-09-20T18:26:45.685Z",
+      "approved_at": "2025-09-20T18:26:45.685Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -704,17 +838,35 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T18:26:45.685Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-20T18:26:45.685Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "feature_1758392805685_8n0blcpb4uj",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:26:50.089Z",
+      "id": "feature_1758479210089_3t1cr37aa4g",
       "title": "Performance Research Agent #5: Comprehensive Scalability Assessment & Optimization Strategy",
       "description": "Conduct comprehensive scalability assessment analyzing volume scaling (100s-1000s tasks), complexity scaling (deep nesting), agent concurrency (10-50+ agents), data growth impact, and enterprise readiness. Develop strategic optimization roadmap with capacity planning, future-proofing recommendations, and actionable implementation strategy for TaskManager system evolution.",
-      "category": "feature",
-      "id": "feature_1758479210089_3t1cr37aa4g",
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:26:50.089Z",
+      "approved_at": "2025-09-21T18:26:50.089Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
       "assigned_agent": null,
-      "started_at": null,
       "claimed_by": null,
       "agent_assignment_history": [
         {
@@ -730,17 +882,35 @@
           "timestamp": "2025-09-21T18:56:37.962Z",
           "reason": "Agent became stale (inactive >30 minutes)"
         }
-      ]
+      ],
+      "created_at": "2025-09-21T18:26:50.089Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "feature_1758479210089_3t1cr37aa4g",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:27:01.015Z",
+      "id": "feature_1758479221014_uzed9j4czhk",
       "title": "Performance Research Agent #1: Comprehensive TaskManager Benchmarking",
       "description": "Conduct comprehensive performance benchmarking of embedded subtasks and success criteria endpoints within TaskManager system. Analyze API response times, memory usage patterns, database query performance, concurrent agent access, and success criteria validation speed. Deliver detailed performance metrics, memory analysis, optimization recommendations, and system bottleneck identification for enhanced TaskManager ecosystem performance.",
-      "category": "feature",
-      "id": "feature_1758479221014_uzed9j4czhk",
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:27:01.015Z",
+      "approved_at": "2025-09-21T18:27:01.015Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
       "assigned_agent": null,
-      "started_at": null,
       "claimed_by": null,
       "agent_assignment_history": [
         {
@@ -756,15 +926,28 @@
           "timestamp": "2025-09-21T18:56:28.931Z",
           "reason": "Agent became stale (inactive >30 minutes)"
         }
-      ]
+      ],
+      "created_at": "2025-09-21T18:27:01.015Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "feature_1758479221014_uzed9j4czhk",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757781551850_k12iufq25",
       "title": "Design database schema for embedded subtasks and success criteria systems",
       "description": "Design and implement comprehensive database schema changes to support embedded subtasks system with proper relationships, success criteria tracking, research guidance, and audit requirements. Include subtasks table with foreign keys to main tasks, success_criteria tables (task-specific and project-wide), research_locations table, audit_criteria table, agent assignment tracking, and performance-optimized indexes.",
-      "priority": "medium",
-      "category": "feature",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T16:35:27.690Z",
+      "approved_at": "2025-09-13T16:35:27.690Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -860,9 +1043,8 @@
           "created_at": "2025-09-13T16:35:27.690Z"
         }
       ],
-      "created_at": "2025-09-13T16:35:27.690Z",
-      "auto_research_created": false,
-      "started_at": null,
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -880,15 +1062,28 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T16:35:27.690Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757781551850_k12iufq25",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757781551850_osl6mt542",
       "title": "Enhance taskmanager-api.js with embedded subtasks and success criteria endpoints",
       "description": "Add comprehensive embedded subtasks API endpoints (create, read, update, delete) and success criteria management (task-specific and project-wide). Implement research task routing and audit task management with specialized agent assignment logic.",
-      "priority": "medium",
-      "category": "feature",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T16:35:28.229Z",
+      "approved_at": "2025-09-13T16:35:28.229Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -984,9 +1179,8 @@
           "created_at": "2025-09-13T16:35:28.229Z"
         }
       ],
-      "created_at": "2025-09-13T16:35:28.229Z",
-      "auto_research_created": false,
-      "started_at": null,
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -1004,15 +1198,28 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T16:35:28.229Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757781551850_osl6mt542",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757781551850_2ely5i4hs",
       "title": "Implement Success Criteria Management System",
       "description": "Create comprehensive success criteria management system with 25-point audit template, task-specific criteria assignment, project-wide inheritance, validation logic, and reporting dashboard as Success Criteria Agent #6",
-      "priority": "medium",
-      "category": "feature",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T16:35:28.619Z",
+      "approved_at": "2025-09-13T16:35:28.619Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -1108,9 +1315,8 @@
           "created_at": "2025-09-13T16:35:28.619Z"
         }
       ],
-      "created_at": "2025-09-13T16:35:28.619Z",
-      "auto_research_created": false,
-      "started_at": null,
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -1128,25 +1334,35 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T16:35:28.619Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757781551850_2ely5i4hs",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757781329787_p7p52un3r",
       "title": "Create comprehensive integration test suite for embedded subtasks system",
       "description": "Create comprehensive test suites covering: 1) Unit tests for all new API endpoints, 2) Integration tests for subtasks workflow, 3) Tests for research system functionality, 4) Tests for audit system validation, 5) Performance tests for embedded queries. Focus on complete test coverage and system validation.",
-      "priority": "medium",
-      "category": "test",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T16:35:29.787Z",
+      "approved_at": "2025-09-13T16:35:29.787Z",
+      "implemented_at": null,
+      "original_category": "test",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-09-13T16:35:29.787Z",
-      "auto_research_created": false,
       "assigned_agent": null,
-      "started_at": null,
       "claimed_by": null,
       "agent_assignment_history": [
         {
@@ -1178,15 +1394,28 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T16:35:29.787Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757781329787_p7p52un3r",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757785927236_qpt5xy0aw",
       "title": "Comprehensive API Security and Data Validation Research for Enhanced TaskManager",
       "description": "Research security considerations and validation patterns for enhanced TaskManager API including: 1) Input validation for subtasks/success criteria, 2) Authorization patterns for subtask operations, 3) Data sanitization for nested structures, 4) Agent verification security, 5) Audit trail security. Analyze existing security modules in lib/api-modules/security/ and deliver security analysis report, validation framework spec, threat model with mitigations, and security testing recommendations.",
-      "priority": "medium",
-      "category": "feature",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T17:24:34.703Z",
+      "approved_at": "2025-09-13T17:24:34.703Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -1276,9 +1505,8 @@
           "created_at": "2025-09-13T17:24:34.703Z"
         }
       ],
-      "created_at": "2025-09-13T17:24:34.703Z",
-      "auto_research_created": false,
-      "started_at": null,
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -1296,15 +1524,28 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T17:24:34.703Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757785927236_qpt5xy0aw",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757785927236_p3wxl22d7",
       "title": "Research success criteria endpoints integration for quality management systems",
       "description": "Research and design success criteria endpoints integration for task quality management. Research areas: 1) Quality Gate Systems - how modern systems implement quality criteria, 2) Success Criteria Templates - 25-point audit system integration patterns, 3) Project-Wide Inheritance - how global criteria propagate to individual tasks, 4) Validation Workflows - automated vs manual criteria validation patterns, 5) Reporting Dashboard - success criteria tracking and reporting mechanisms. API Design Focus: POST /api/success-criteria/task/:taskId endpoint design, POST /api/success-criteria/project-wide endpoint patterns, GET /api/success-criteria/:taskId response structures, Integration with existing audit workflow. Deliverables: Success criteria API specification, Integration workflow design, Validation pattern recommendations, Dashboard data requirements.",
-      "priority": "medium",
-      "category": "feature",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T17:24:38.143Z",
+      "approved_at": "2025-09-13T17:24:38.143Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -1394,9 +1635,8 @@
           "created_at": "2025-09-13T17:24:38.143Z"
         }
       ],
-      "created_at": "2025-09-13T17:24:38.143Z",
-      "auto_research_created": false,
-      "started_at": null,
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -1414,15 +1654,28 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T17:24:38.143Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757785927236_p3wxl22d7",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757785927193_rtzdxyixh",
       "title": "Post-Completion Audit: Design comprehensive testing strategy for TaskManager API enhancements",
       "description": "Comprehensive quality audit and review of the completed feature: Design comprehensive testing strategy for TaskManager API enhancements\n\nOriginal Description: Design and implement comprehensive testing strategy covering integration testing for subtask/success criteria endpoints, API contract testing for backward compatibility, performance testing for enhanced endpoints, security testing for authentication patterns, and end-to-end testing for full workflows. Include automation framework recommendations, CI/CD integration, and quality gate implementation.",
-      "category": "audit",
-      "priority": "high",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T17:35:04.885Z",
+      "approved_at": "2025-09-13T17:35:04.885Z",
+      "implemented_at": null,
+      "original_category": "audit",
+      "original_priority": "high",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [
@@ -1438,12 +1691,7 @@
       "estimate": "1-2 hours",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-09-13T17:35:04.885Z",
-      "created_from_completed_task": "feature_1757784276376_2xkwch91a",
-      "prevents_self_review": true,
-      "audit_type": "post_completion",
       "assigned_agent": null,
-      "started_at": null,
       "claimed_by": null,
       "agent_assignment_history": [
         {
@@ -1501,15 +1749,28 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T17:35:04.885Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757785927193_rtzdxyixh",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757785927236_8w1j7jd05",
       "title": "Test Feature Implementation",
       "description": "A test feature to validate audit objectivity",
-      "priority": "medium",
-      "category": "feature",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T17:49:40.070Z",
+      "approved_at": "2025-09-13T17:49:40.070Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -1594,9 +1855,8 @@
           "created_at": "2025-09-13T17:49:40.070Z"
         }
       ],
-      "created_at": "2025-09-13T17:49:40.070Z",
-      "auto_research_created": false,
-      "started_at": null,
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -1614,24 +1874,36 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T17:49:40.070Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757785927236_8w1j7jd05",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757785927236_0qrm4m2um",
       "title": "Test Audit Task",
       "description": "A test audit task with original implementer set",
-      "priority": "medium",
-      "category": "audit",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T17:50:42.344Z",
+      "approved_at": "2025-09-13T17:50:42.344Z",
+      "implemented_at": null,
+      "original_category": "audit",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-09-13T17:50:42.344Z",
-      "auto_research_created": false,
-      "started_at": null,
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -1649,25 +1921,35 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T17:50:42.344Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757785927236_0qrm4m2um",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757786325601_x7086383x",
       "title": "Test Objectivity Audit Task",
       "description": "Test audit task to verify objectivity enforcement",
-      "priority": "medium",
-      "category": "audit",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T17:54:28.332Z",
+      "approved_at": "2025-09-13T17:54:28.332Z",
+      "implemented_at": null,
+      "original_category": "audit",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-09-13T17:54:28.332Z",
-      "auto_research_created": false,
       "assigned_agent": null,
-      "started_at": null,
       "claimed_by": null,
       "agent_assignment_history": [
         {
@@ -1699,26 +1981,35 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T17:54:28.332Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757786325601_x7086383x",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757786325601_1zauvv5ee",
       "title": "Test Objectivity Audit Task",
       "description": "Test audit task to verify objectivity enforcement",
-      "priority": "medium",
-      "category": "audit",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T17:56:24.036Z",
+      "approved_at": "2025-09-13T17:56:24.036Z",
+      "implemented_at": null,
+      "original_category": "audit",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-09-13T17:56:24.036Z",
-      "auto_research_created": false,
-      "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
       "assigned_agent": null,
-      "started_at": null,
       "claimed_by": null,
       "agent_assignment_history": [
         {
@@ -1750,26 +2041,35 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T17:56:24.036Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757786325601_1zauvv5ee",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757786325601_3s379qvdm",
       "title": "Test Objectivity Audit Task",
       "description": "Test audit task to verify objectivity enforcement",
-      "priority": "medium",
-      "category": "audit",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T17:57:52.997Z",
+      "approved_at": "2025-09-13T17:57:52.997Z",
+      "implemented_at": null,
+      "original_category": "audit",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-09-13T17:57:52.997Z",
-      "auto_research_created": false,
-      "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
       "assigned_agent": null,
-      "started_at": null,
       "claimed_by": null,
       "agent_assignment_history": [
         {
@@ -1801,26 +2101,35 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T17:57:52.997Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757786325601_3s379qvdm",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757786325601_coqdusswz",
       "title": "Test Objectivity Audit Task",
       "description": "Test audit task to verify objectivity enforcement",
-      "priority": "medium",
-      "category": "audit",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T17:58:35.475Z",
+      "approved_at": "2025-09-13T17:58:35.475Z",
+      "implemented_at": null,
+      "original_category": "audit",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-09-13T17:58:35.475Z",
-      "auto_research_created": false,
-      "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
       "assigned_agent": null,
-      "started_at": null,
       "claimed_by": null,
       "agent_assignment_history": [
         {
@@ -1852,26 +2161,35 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T17:58:35.475Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757786325601_coqdusswz",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757786940145_hiozxxkhx",
       "title": "Test Objectivity Audit Task",
       "description": "Test audit task to verify objectivity enforcement",
-      "priority": "medium",
-      "category": "audit",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T17:59:40.710Z",
+      "approved_at": "2025-09-13T17:59:40.710Z",
+      "implemented_at": null,
+      "original_category": "audit",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-09-13T17:59:40.710Z",
-      "auto_research_created": false,
-      "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
       "assigned_agent": null,
-      "started_at": null,
       "claimed_by": null,
       "agent_assignment_history": [
         {
@@ -1903,26 +2221,35 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T17:59:40.710Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757786940145_hiozxxkhx",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757786940145_ayqfuy88b",
       "title": "Test Objectivity Audit Task",
       "description": "Test audit task to verify objectivity enforcement",
-      "priority": "medium",
-      "category": "audit",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T18:03:55.622Z",
+      "approved_at": "2025-09-13T18:03:55.622Z",
+      "implemented_at": null,
+      "original_category": "audit",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-09-13T18:03:55.622Z",
-      "auto_research_created": false,
-      "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
       "assigned_agent": null,
-      "started_at": null,
       "claimed_by": null,
       "agent_assignment_history": [
         {
@@ -1954,15 +2281,28 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T18:03:55.622Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757786940145_ayqfuy88b",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757786940145_00g2srn69",
       "title": "Test Feature Task",
       "description": "A simple test feature",
-      "priority": "medium",
-      "category": "feature",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T18:05:15.057Z",
+      "approved_at": "2025-09-13T18:05:15.057Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -2001,9 +2341,8 @@
           "created_at": "2025-09-13T18:05:15.056Z"
         }
       ],
-      "created_at": "2025-09-13T18:05:15.057Z",
-      "auto_research_created": false,
-      "started_at": null,
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -2021,25 +2360,36 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T18:05:15.057Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757786940145_00g2srn69",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757786940145_nbjh8bxym",
       "title": "AUDIT: Test Audit Override",
       "description": "Test audit task for override functionality",
-      "priority": "medium",
-      "category": "audit",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T18:06:12.232Z",
+      "approved_at": "2025-09-13T18:06:12.232Z",
+      "implemented_at": null,
+      "original_category": "audit",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-09-13T18:06:12.232Z",
-      "auto_research_created": false,
-      "original_implementer": "test_agent_123",
-      "started_at": null,
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -2057,25 +2407,36 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T18:06:12.232Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757786940145_nbjh8bxym",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757786940145_zvztjm3un",
       "title": "Test 1 - Same Agent Audit Task",
       "description": "Test audit task for same agent blocking",
-      "priority": "medium",
-      "category": "audit",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T18:08:03.328Z",
+      "approved_at": "2025-09-13T18:08:03.328Z",
+      "implemented_at": null,
+      "original_category": "audit",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-09-13T18:08:03.328Z",
-      "auto_research_created": false,
-      "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
-      "started_at": null,
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -2093,26 +2454,35 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T18:08:03.328Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757786940145_zvztjm3un",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757786940145_3b944cc47",
       "title": "Test 2 - Different Agent Audit Task",
       "description": "Test audit task for different agent allowing",
-      "priority": "medium",
-      "category": "audit",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T18:08:03.346Z",
+      "approved_at": "2025-09-13T18:08:03.346Z",
+      "implemented_at": null,
+      "original_category": "audit",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-09-13T18:08:03.346Z",
-      "auto_research_created": false,
-      "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
       "assigned_agent": null,
-      "started_at": null,
       "claimed_by": null,
       "agent_assignment_history": [
         {
@@ -2144,15 +2514,28 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T18:08:03.346Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757786940145_3b944cc47",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757786940145_35rn7yq9l",
       "title": "Test 3 - Feature Task",
       "description": "Test feature task - should work normally",
-      "priority": "medium",
-      "category": "feature",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T18:08:03.357Z",
+      "approved_at": "2025-09-13T18:08:03.357Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
@@ -2191,10 +2574,7 @@
           "created_at": "2025-09-13T18:08:03.357Z"
         }
       ],
-      "created_at": "2025-09-13T18:08:03.357Z",
-      "auto_research_created": false,
       "assigned_agent": null,
-      "started_at": null,
       "claimed_by": null,
       "agent_assignment_history": [
         {
@@ -2226,27 +2606,36 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T18:08:03.357Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757786940145_35rn7yq9l",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757786940145_13gdpw1dr",
       "title": "Test 4 - Audit Metadata Task",
       "description": "Test audit task with audit_metadata",
-      "priority": "medium",
-      "category": "audit",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T18:08:03.368Z",
+      "approved_at": "2025-09-13T18:08:03.368Z",
+      "implemented_at": null,
+      "original_category": "audit",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-09-13T18:08:03.368Z",
-      "auto_research_created": false,
-      "audit_metadata": {
-        "original_implementer": "development_session_1757785266907_1_general_8560e4a6"
-      },
-      "started_at": null,
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -2264,25 +2653,36 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T18:08:03.368Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757786940145_13gdpw1dr",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
       "id": "test_1757786940145_k7ffm0fzz",
       "title": "Test 5 - No Allow Out Of Order",
       "description": "Test audit task without allowOutOfOrder",
-      "priority": "medium",
-      "category": "audit",
-      "status": "pending",
+      "status": "approved",
+      "suggested_at": "2025-09-13T18:08:03.374Z",
+      "approved_at": "2025-09-13T18:08:03.374Z",
+      "implemented_at": null,
+      "original_category": "audit",
+      "original_priority": "medium",
+      "original_status": "pending",
       "dependencies": [],
       "important_files": [],
       "success_criteria": [],
       "estimate": "",
       "requires_research": false,
       "subtasks": [],
-      "created_at": "2025-09-13T18:08:03.374Z",
-      "auto_research_created": false,
-      "original_implementer": "development_session_1757785266907_1_general_8560e4a6",
-      "started_at": null,
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -2300,18 +2700,35 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-13T18:08:03.374Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757786940145_k7ffm0fzz",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-15T13:12:53.024Z",
+      "id": "test_1757941973023_5ze6akbvo4k",
       "title": "CRITICAL: Comprehensive Puppeteer Testing - Absolute Perfection Required",
       "description": "Comprehensive testing of the entire codebase using Puppeteer with persistent single tab on single browser. ULTIMATE TESTING MANDATE: Test EVERY page, click EVERY button, use EVERY feature with authentic user simulation including realistic pauses between interactions. PERFECTION STANDARD: Everything must work, look professional and modern with unified color scheme. CRITICAL REQUIREMENTS: 1) Screenshot documentation at EVERY step - before/after each action 2) Console log capture and analysis for ALL interactions 3) Professional UI validation - NO white text on white background, text must be black/visible/clear, backgrounds lighter colored 4) Error Protocol: If ANY errors found, create new tasks with HIGHER PRIORITY to fix immediately 5) Authentic user behavior with pauses between page transitions and clicks 6) Use existing Puppeteer tests if available, do not create new ones 7) Visual quality assurance - unified color scheme, professional appearance 8) ONLY ABSOLUTE COMPLETION PERFECTION ACCEPTED. Quality Requirements: Professional, slick, modern appearance with clear visibility. Focus: Puppeteer tests are PRIMARY FOCUS until perfection achieved.",
-      "category": "test",
-      "priority": "high",
-      "id": "test_1757941973023_5ze6akbvo4k",
+      "status": "approved",
+      "suggested_at": "2025-09-15T13:12:53.024Z",
+      "approved_at": "2025-09-15T13:12:53.024Z",
+      "implemented_at": null,
+      "original_category": "test",
+      "original_priority": "high",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
       "assigned_agent": null,
-      "started_at": null,
       "claimed_by": null,
       "agent_assignment_history": [
         {
@@ -2343,17 +2760,35 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-15T13:12:53.024Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1757941973023_5ze6akbvo4k",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-17T07:08:31.109Z",
+      "id": "test_1758095665828_b269iqjss",
       "title": "Make CLAUDE.md more concise per user specifications",
       "description": "Remove only basic Unix command examples (report reading and log directory setup) while keeping git examples and all unique information. Ensure log directory requirements remain clear.",
-      "category": "feature",
-      "id": "test_1758095665828_b269iqjss",
+      "status": "approved",
+      "suggested_at": "2025-09-17T07:08:31.109Z",
+      "approved_at": "2025-09-17T07:08:31.109Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
       "assigned_agent": null,
-      "started_at": null,
       "claimed_by": null,
       "agent_assignment_history": [
         {
@@ -2385,16 +2820,36 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-17T07:08:31.109Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758095665828_b269iqjss",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-17T07:52:28.675Z",
+      "id": "test_1758095665828_ea6da7uk1",
       "title": "Test subtask with correct command",
       "description": "Testing proper routing",
-      "category": "subtask",
-      "id": "test_1758095665828_ea6da7uk1",
-      "started_at": null,
+      "status": "approved",
+      "suggested_at": "2025-09-17T07:52:28.675Z",
+      "approved_at": "2025-09-17T07:52:28.675Z",
+      "implemented_at": null,
+      "original_category": "subtask",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -2412,16 +2867,36 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-17T07:52:28.675Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758095665828_ea6da7uk1",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-17T08:12:02.197Z",
+      "id": "test_1758143150536_7xjtdyrbt",
       "title": "Test subtask with correct command",
       "description": "Testing proper routing",
-      "category": "subtask",
-      "id": "test_1758143150536_7xjtdyrbt",
-      "started_at": null,
+      "status": "approved",
+      "suggested_at": "2025-09-17T08:12:02.197Z",
+      "approved_at": "2025-09-17T08:12:02.197Z",
+      "implemented_at": null,
+      "original_category": "subtask",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
       "agent_assignment_history": [
         {
           "agent": "system",
@@ -2439,25 +2914,65 @@
           "orphaned_duration_hours": 24,
           "last_activity": "2025-09-20T17:11:08.665Z"
         }
-      ]
+      ],
+      "created_at": "2025-09-17T08:12:02.197Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758143150536_7xjtdyrbt",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T06:50:01.392Z",
+      "id": "test_1758437599543_b0w7rqtag",
       "title": "Test task for subtasks audit",
       "description": "Testing embedded subtasks functionality",
-      "category": "feature",
-      "id": "test_1758437599543_b0w7rqtag"
+      "status": "approved",
+      "suggested_at": "2025-09-21T06:50:01.392Z",
+      "approved_at": "2025-09-21T06:50:01.392Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T06:50:01.392Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758437599543_b0w7rqtag",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:26:32.234Z",
+      "id": "test_1758479800565_m6hk7s1ou",
       "title": "API Response Time & Endpoint Optimization Analysis for Embedded Subtasks System",
       "description": "Comprehensive performance analysis of TaskManager API endpoints focusing on response times, optimization opportunities for embedded subtask operations, success criteria validation performance, and critical path bottleneck identification. Includes load testing, caching analysis, and production-ready optimization strategies.",
-      "category": "research",
-      "id": "test_1758479800565_m6hk7s1ou",
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:26:32.234Z",
+      "approved_at": "2025-09-21T18:26:32.234Z",
+      "implemented_at": null,
+      "original_category": "research",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
       "assigned_agent": null,
-      "started_at": null,
       "claimed_by": null,
       "agent_assignment_history": [
         {
@@ -2473,425 +2988,1565 @@
           "timestamp": "2025-09-21T18:56:14.816Z",
           "reason": "Agent became stale (inactive >30 minutes)"
         }
-      ]
+      ],
+      "created_at": "2025-09-21T18:26:32.234Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_m6hk7s1ou",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:29:14.781Z",
+      "id": "test_1758479800565_o0rpr3dwo",
       "title": "Memory Test Task 1",
       "description": "Task for memory analysis with embedded subtasks - iteration 1",
-      "category": "feature",
-      "id": "test_1758479800565_o0rpr3dwo"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:29:14.781Z",
+      "approved_at": "2025-09-21T18:29:14.781Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:29:14.781Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_o0rpr3dwo",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:29:14.784Z",
+      "id": "test_1758479800565_i2avja410",
       "title": "Memory Test Task 2",
       "description": "Task for memory analysis with embedded subtasks - iteration 2",
-      "category": "feature",
-      "id": "test_1758479800565_i2avja410"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:29:14.784Z",
+      "approved_at": "2025-09-21T18:29:14.784Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:29:14.784Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_i2avja410",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:29:14.787Z",
+      "id": "test_1758479800565_6tgtml8vo",
       "title": "Memory Test Task 3",
       "description": "Task for memory analysis with embedded subtasks - iteration 3",
-      "category": "feature",
-      "id": "test_1758479800565_6tgtml8vo"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:29:14.787Z",
+      "approved_at": "2025-09-21T18:29:14.787Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:29:14.787Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_6tgtml8vo",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:29:14.788Z",
+      "id": "test_1758479800565_ev6cnhw5n",
       "title": "Memory Test Task 4",
       "description": "Task for memory analysis with embedded subtasks - iteration 4",
-      "category": "feature",
-      "id": "test_1758479800565_ev6cnhw5n"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:29:14.788Z",
+      "approved_at": "2025-09-21T18:29:14.788Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:29:14.788Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_ev6cnhw5n",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:29:14.789Z",
+      "id": "test_1758479800565_7ariz1myc",
       "title": "Memory Test Task 5",
       "description": "Task for memory analysis with embedded subtasks - iteration 5",
-      "category": "feature",
-      "id": "test_1758479800565_7ariz1myc"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:29:14.789Z",
+      "approved_at": "2025-09-21T18:29:14.789Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:29:14.789Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_7ariz1myc",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.913Z",
+      "id": "test_1758479800565_lif1qo67x",
       "title": "Small Scale Task 1",
       "description": "Scalability test task for Small Scale analysis",
-      "category": "feature",
-      "id": "test_1758479800565_lif1qo67x"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.913Z",
+      "approved_at": "2025-09-21T18:30:44.913Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.913Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_lif1qo67x",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.916Z",
+      "id": "test_1758479800565_w8cu6qqlh",
       "title": "Small Scale Task 2",
       "description": "Scalability test task for Small Scale analysis",
-      "category": "feature",
-      "id": "test_1758479800565_w8cu6qqlh"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.916Z",
+      "approved_at": "2025-09-21T18:30:44.916Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.916Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_w8cu6qqlh",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.921Z",
+      "id": "test_1758479800565_al8witb42",
       "title": "Medium Scale Task 1",
       "description": "Scalability test task for Medium Scale analysis",
-      "category": "feature",
-      "id": "test_1758479800565_al8witb42"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.921Z",
+      "approved_at": "2025-09-21T18:30:44.921Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.921Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_al8witb42",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.922Z",
+      "id": "test_1758479800565_gtnxacc8u",
       "title": "Medium Scale Task 2",
       "description": "Scalability test task for Medium Scale analysis",
-      "category": "feature",
-      "id": "test_1758479800565_gtnxacc8u"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.922Z",
+      "approved_at": "2025-09-21T18:30:44.922Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.922Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_gtnxacc8u",
+        "migration_date": "2025-09-22T06:21:54.863Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.923Z",
+      "id": "test_1758479800565_a8db5ateu",
       "title": "Medium Scale Task 3",
       "description": "Scalability test task for Medium Scale analysis",
-      "category": "feature",
-      "id": "test_1758479800565_a8db5ateu"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.923Z",
+      "approved_at": "2025-09-21T18:30:44.923Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.923Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_a8db5ateu",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.924Z",
+      "id": "test_1758479800565_11hluc17z",
       "title": "Medium Scale Task 4",
       "description": "Scalability test task for Medium Scale analysis",
-      "category": "feature",
-      "id": "test_1758479800565_11hluc17z"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.924Z",
+      "approved_at": "2025-09-21T18:30:44.924Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.924Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_11hluc17z",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.925Z",
+      "id": "test_1758479800565_kzqq274re",
       "title": "Medium Scale Task 5",
       "description": "Scalability test task for Medium Scale analysis",
-      "category": "feature",
-      "id": "test_1758479800565_kzqq274re"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.925Z",
+      "approved_at": "2025-09-21T18:30:44.925Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.925Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_kzqq274re",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.930Z",
+      "id": "test_1758479800565_vsevpizq6",
       "title": "Large Task Count Task 1",
       "description": "Scalability test task for Large Task Count analysis",
-      "category": "feature",
-      "id": "test_1758479800565_vsevpizq6"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.930Z",
+      "approved_at": "2025-09-21T18:30:44.930Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.930Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_vsevpizq6",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.931Z",
+      "id": "test_1758479800565_wllhsjv34",
       "title": "Large Task Count Task 2",
       "description": "Scalability test task for Large Task Count analysis",
-      "category": "feature",
-      "id": "test_1758479800565_wllhsjv34"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.931Z",
+      "approved_at": "2025-09-21T18:30:44.931Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.931Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_wllhsjv34",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.932Z",
+      "id": "test_1758479800565_vfcb32ndl",
       "title": "Large Task Count Task 3",
       "description": "Scalability test task for Large Task Count analysis",
-      "category": "feature",
-      "id": "test_1758479800565_vfcb32ndl"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.932Z",
+      "approved_at": "2025-09-21T18:30:44.932Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.932Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_vfcb32ndl",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.933Z",
+      "id": "test_1758479800565_gg5ifcyks",
       "title": "Large Task Count Task 4",
       "description": "Scalability test task for Large Task Count analysis",
-      "category": "feature",
-      "id": "test_1758479800565_gg5ifcyks"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.933Z",
+      "approved_at": "2025-09-21T18:30:44.933Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.933Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_gg5ifcyks",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.934Z",
+      "id": "test_1758479800565_9sse9ml4c",
       "title": "Large Task Count Task 5",
       "description": "Scalability test task for Large Task Count analysis",
-      "category": "feature",
-      "id": "test_1758479800565_9sse9ml4c"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.934Z",
+      "approved_at": "2025-09-21T18:30:44.934Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.934Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_9sse9ml4c",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.934Z",
+      "id": "test_1758479800565_rf0nqr1bp",
       "title": "Large Task Count Task 6",
       "description": "Scalability test task for Large Task Count analysis",
-      "category": "feature",
-      "id": "test_1758479800565_rf0nqr1bp"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.934Z",
+      "approved_at": "2025-09-21T18:30:44.934Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.934Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_rf0nqr1bp",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.935Z",
+      "id": "test_1758479800565_65qxgxfzo",
       "title": "Large Task Count Task 7",
       "description": "Scalability test task for Large Task Count analysis",
-      "category": "feature",
-      "id": "test_1758479800565_65qxgxfzo"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.935Z",
+      "approved_at": "2025-09-21T18:30:44.935Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.935Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_65qxgxfzo",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.936Z",
+      "id": "test_1758479800565_xfj4n0s9s",
       "title": "Large Task Count Task 8",
       "description": "Scalability test task for Large Task Count analysis",
-      "category": "feature",
-      "id": "test_1758479800565_xfj4n0s9s"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.936Z",
+      "approved_at": "2025-09-21T18:30:44.936Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.936Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_xfj4n0s9s",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.937Z",
+      "id": "test_1758479800565_3ra3wzhtv",
       "title": "Large Task Count Task 9",
       "description": "Scalability test task for Large Task Count analysis",
-      "category": "feature",
-      "id": "test_1758479800565_3ra3wzhtv"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.937Z",
+      "approved_at": "2025-09-21T18:30:44.937Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.937Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_3ra3wzhtv",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.938Z",
+      "id": "test_1758479800565_dfaayqehh",
       "title": "Large Task Count Task 10",
       "description": "Scalability test task for Large Task Count analysis",
-      "category": "feature",
-      "id": "test_1758479800565_dfaayqehh"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.938Z",
+      "approved_at": "2025-09-21T18:30:44.938Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.938Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_dfaayqehh",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.942Z",
+      "id": "test_1758479800565_felxip898",
       "title": "High Subtask Density Task 1",
       "description": "Scalability test task for High Subtask Density analysis",
-      "category": "feature",
-      "id": "test_1758479800565_felxip898"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.942Z",
+      "approved_at": "2025-09-21T18:30:44.942Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.942Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_felxip898",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.944Z",
+      "id": "test_1758479800565_jbk5gs02g",
       "title": "High Subtask Density Task 2",
       "description": "Scalability test task for High Subtask Density analysis",
-      "category": "feature",
-      "id": "test_1758479800565_jbk5gs02g"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.944Z",
+      "approved_at": "2025-09-21T18:30:44.944Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.944Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_jbk5gs02g",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.945Z",
+      "id": "test_1758479800565_58vnn3ioi",
       "title": "High Subtask Density Task 3",
       "description": "Scalability test task for High Subtask Density analysis",
-      "category": "feature",
-      "id": "test_1758479800565_58vnn3ioi"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.945Z",
+      "approved_at": "2025-09-21T18:30:44.945Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.945Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_58vnn3ioi",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.950Z",
+      "id": "test_1758479800565_jrd81ujwp",
       "title": "Leak Test Task 1",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_jrd81ujwp"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.950Z",
+      "approved_at": "2025-09-21T18:30:44.950Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.950Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_jrd81ujwp",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.954Z",
+      "id": "test_1758479800565_7rvuft2lg",
       "title": "Leak Test Task 2",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_7rvuft2lg"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.954Z",
+      "approved_at": "2025-09-21T18:30:44.954Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.954Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_7rvuft2lg",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.956Z",
+      "id": "test_1758479800565_j4ptcvp2m",
       "title": "Leak Test Task 3",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_j4ptcvp2m"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.956Z",
+      "approved_at": "2025-09-21T18:30:44.956Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.956Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_j4ptcvp2m",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.957Z",
+      "id": "test_1758479800565_7yvo8vjhj",
       "title": "Leak Test Task 4",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_7yvo8vjhj"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.957Z",
+      "approved_at": "2025-09-21T18:30:44.957Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.957Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_7yvo8vjhj",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.958Z",
+      "id": "test_1758479800565_vta35igrq",
       "title": "Leak Test Task 5",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_vta35igrq"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.958Z",
+      "approved_at": "2025-09-21T18:30:44.958Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.958Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_vta35igrq",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.959Z",
+      "id": "test_1758479800565_hk53qzdnj",
       "title": "Leak Test Task 6",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_hk53qzdnj"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.959Z",
+      "approved_at": "2025-09-21T18:30:44.959Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.959Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_hk53qzdnj",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.963Z",
+      "id": "test_1758479800565_3p9fp2x1p",
       "title": "Leak Test Task 7",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_3p9fp2x1p"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.963Z",
+      "approved_at": "2025-09-21T18:30:44.963Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.963Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_3p9fp2x1p",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.965Z",
+      "id": "test_1758479800565_utzj1psmb",
       "title": "Leak Test Task 8",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_utzj1psmb"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.965Z",
+      "approved_at": "2025-09-21T18:30:44.965Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.965Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_utzj1psmb",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.966Z",
+      "id": "test_1758479800565_qkb9d8ve0",
       "title": "Leak Test Task 9",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_qkb9d8ve0"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.966Z",
+      "approved_at": "2025-09-21T18:30:44.966Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.966Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_qkb9d8ve0",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.967Z",
+      "id": "test_1758479800565_a8techhz3",
       "title": "Leak Test Task 10",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_a8techhz3"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.967Z",
+      "approved_at": "2025-09-21T18:30:44.967Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.967Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_a8techhz3",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.968Z",
+      "id": "test_1758479800565_0gbugma1q",
       "title": "Leak Test Task 11",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_0gbugma1q"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.968Z",
+      "approved_at": "2025-09-21T18:30:44.968Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.968Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_0gbugma1q",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.973Z",
+      "id": "test_1758479800565_hozsjz6nc",
       "title": "Leak Test Task 12",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_hozsjz6nc"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.973Z",
+      "approved_at": "2025-09-21T18:30:44.973Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.973Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_hozsjz6nc",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.975Z",
+      "id": "test_1758479800565_u0uvurl55",
       "title": "Leak Test Task 13",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_u0uvurl55"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.975Z",
+      "approved_at": "2025-09-21T18:30:44.975Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.975Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_u0uvurl55",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.976Z",
+      "id": "test_1758479800565_9m2zgow57",
       "title": "Leak Test Task 14",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_9m2zgow57"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.976Z",
+      "approved_at": "2025-09-21T18:30:44.976Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.976Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_9m2zgow57",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.977Z",
+      "id": "test_1758479800565_sfyh7woye",
       "title": "Leak Test Task 15",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_sfyh7woye"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.977Z",
+      "approved_at": "2025-09-21T18:30:44.977Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.977Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_sfyh7woye",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.978Z",
+      "id": "test_1758479800565_qumcdi4n5",
       "title": "Leak Test Task 16",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_qumcdi4n5"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.978Z",
+      "approved_at": "2025-09-21T18:30:44.978Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.978Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_qumcdi4n5",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.982Z",
+      "id": "test_1758479800565_3kic4qihn",
       "title": "Leak Test Task 17",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_3kic4qihn"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.982Z",
+      "approved_at": "2025-09-21T18:30:44.982Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.982Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_3kic4qihn",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.983Z",
+      "id": "test_1758479800565_axnnswqtc",
       "title": "Leak Test Task 18",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_axnnswqtc"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.983Z",
+      "approved_at": "2025-09-21T18:30:44.983Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.983Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_axnnswqtc",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.984Z",
+      "id": "test_1758479800565_oqaxs1fgo",
       "title": "Leak Test Task 19",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_oqaxs1fgo"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.984Z",
+      "approved_at": "2025-09-21T18:30:44.984Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.984Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_oqaxs1fgo",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-21T18:30:44.985Z",
+      "id": "test_1758479800565_1l6br9yy5",
       "title": "Leak Test Task 20",
       "description": "Memory leak detection task",
-      "category": "feature",
-      "id": "test_1758479800565_1l6br9yy5"
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:30:44.985Z",
+      "approved_at": "2025-09-21T18:30:44.985Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-21T18:30:44.985Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479800565_1l6br9yy5",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
+      "id": "test_1758479498234_waf6tdeetwk",
+      "title": "Performance Test Task",
+      "description": "Test task for performance benchmarking",
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:31:38.234Z",
+      "approved_at": "2025-09-21T18:31:38.234Z",
+      "implemented_at": null,
+      "original_category": "test",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
       "created_at": "2025-09-21T18:31:38.234Z",
-      "title": "Performance Test Task",
-      "description": "Test task for performance benchmarking",
-      "category": "test",
-      "id": "test_1758479498234_waf6tdeetwk"
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479498234_waf6tdeetwk",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
+      "id": "test_1758479508254_8asmh4f56vo",
+      "title": "Performance Test Task",
+      "description": "Test task for performance benchmarking",
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:31:48.254Z",
+      "approved_at": "2025-09-21T18:31:48.254Z",
+      "implemented_at": null,
+      "original_category": "test",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
       "created_at": "2025-09-21T18:31:48.254Z",
-      "title": "Performance Test Task",
-      "description": "Test task for performance benchmarking",
-      "category": "test",
-      "id": "test_1758479508254_8asmh4f56vo"
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479508254_8asmh4f56vo",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
+      "id": "test_1758479518369_p80o5pqvjn",
+      "title": "Performance Test Task",
+      "description": "Test task for performance benchmarking",
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:31:58.369Z",
+      "approved_at": "2025-09-21T18:31:58.369Z",
+      "implemented_at": null,
+      "original_category": "test",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
       "created_at": "2025-09-21T18:31:58.369Z",
-      "title": "Performance Test Task",
-      "description": "Test task for performance benchmarking",
-      "category": "test",
-      "id": "test_1758479518369_p80o5pqvjn"
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479518369_p80o5pqvjn",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
+      "id": "test_1758479528637_xo4m05w7g2",
+      "title": "Performance Test Task",
+      "description": "Test task for performance benchmarking",
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:32:08.637Z",
+      "approved_at": "2025-09-21T18:32:08.637Z",
+      "implemented_at": null,
+      "original_category": "test",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
       "created_at": "2025-09-21T18:32:08.637Z",
-      "title": "Performance Test Task",
-      "description": "Test task for performance benchmarking",
-      "category": "test",
-      "id": "test_1758479528637_xo4m05w7g2"
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479528637_xo4m05w7g2",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
+      "id": "test_1758479538617_hv3hp3vjo2q",
+      "title": "Performance Test Task",
+      "description": "Test task for performance benchmarking",
+      "status": "approved",
+      "suggested_at": "2025-09-21T18:32:18.617Z",
+      "approved_at": "2025-09-21T18:32:18.617Z",
+      "implemented_at": null,
+      "original_category": "test",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
       "created_at": "2025-09-21T18:32:18.617Z",
-      "title": "Performance Test Task",
-      "description": "Test task for performance benchmarking",
-      "category": "test",
-      "id": "test_1758479538617_hv3hp3vjo2q"
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "test_1758479538617_hv3hp3vjo2q",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-22T06:17:51.780Z",
+      "id": "feature_1758521871780_y1svy3e0h3",
       "title": "Implement CLAUDE.md Simplification & FEATURES.json Migration Plan",
       "description": "Complete system overhaul: 1) Simplify CLAUDE.md from 800+ to ~300 lines removing complex protocols, 2) Rename TODO.json to FEATURES.json with approval workflow, 3) Update stop-hook.js references, 4) Refactor taskmanager API for feature management only, 5) Integrate native TodoWrite as primary task management, 6) Maintain quality standards without over-engineering. Deploy 6 concurrent agents for multi-component implementation.",
-      "category": "feature",
-      "id": "feature_1758521871780_y1svy3e0h3"
+      "status": "approved",
+      "suggested_at": "2025-09-22T06:17:51.780Z",
+      "approved_at": "2025-09-22T06:17:51.780Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-22T06:17:51.780Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "feature_1758521871780_y1svy3e0h3",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "in_progress",
-      "created_at": "2025-09-22T06:19:16.772Z",
+      "id": "feature_1758521956772_1047hm0bk9o",
       "title": "Simplify CLAUDE.md from 800+ lines to streamlined 300 lines",
       "description": "Remove complex protocols while maintaining essential quality standards. Remove: mandatory taskmanager initialization, RAG-first workflows, complex preparation checklists. Preserve: linter protocols, git workflow, security scanning, code quality standards",
-      "category": "feature",
-      "id": "feature_1758521956772_1047hm0bk9o",
+      "status": "approved",
+      "suggested_at": "2025-09-22T06:19:16.772Z",
+      "approved_at": "2025-09-22T06:19:16.772Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "in_progress",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
       "assigned_agent": "dev_session_1758521939358_1_general_bf47d955",
-      "started_at": "2025-09-22T06:19:35.262Z",
       "claimed_by": "dev_session_1758521939358_1_general_bf47d955",
       "agent_assignment_history": [
         {
@@ -2901,41 +4556,125 @@
           "reassignReason": null,
           "claimPriority": "normal"
         }
-      ]
+      ],
+      "created_at": "2025-09-22T06:19:16.772Z",
+      "started_at": "2025-09-22T06:19:35.262Z",
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "feature_1758521956772_1047hm0bk9o",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-22T06:19:30.568Z",
+      "id": "feature_1758521970568_6j53t1arqc7",
       "title": "Refactor taskmanager-api.js to feature-only management system",
       "description": "Transform taskmanager-api.js from task management to exclusive feature management with strict approval workflow. Remove all task management endpoints (init, create, complete, claim). Implement feature lifecycle: suggest-feature, approve-feature, reject-feature, list-features, feature-stats. Replace TODO.json with FEATURES.json. Enforce suggested → approved → implemented status flow.",
-      "category": "feature",
-      "id": "feature_1758521970568_6j53t1arqc7"
+      "status": "approved",
+      "suggested_at": "2025-09-22T06:19:30.568Z",
+      "approved_at": "2025-09-22T06:19:30.568Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-22T06:19:30.568Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "feature_1758521970568_6j53t1arqc7",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-22T06:19:30.955Z",
+      "id": "feature_1758521970955_l3375l5vl29",
       "title": "Preserve quality standards while simplifying CLAUDE.md",
       "description": "Analyze current CLAUDE.md file and streamline it while preserving essential quality standards including linter protocols, security scanning, git workflows, code quality standards, professional practices, and concurrent deployment capabilities. Remove over-engineered preparation protocols and complex workflow checklists.",
-      "category": "feature",
-      "id": "feature_1758521970955_l3375l5vl29"
+      "status": "approved",
+      "suggested_at": "2025-09-22T06:19:30.955Z",
+      "approved_at": "2025-09-22T06:19:30.955Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-22T06:19:30.955Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "feature_1758521970955_l3375l5vl29",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "pending",
-      "created_at": "2025-09-22T06:19:30.965Z",
+      "id": "feature_1758521970964_0mzzcda39fdp",
       "title": "Execute TODO.json to FEATURES.json migration with new approval workflow schema",
       "description": "Migrate TODO.json to FEATURES.json with new schema supporting suggested/approved/implemented status workflow. Create backup, transform data structure, validate migration success.",
-      "category": "feature",
-      "id": "feature_1758521970964_0mzzcda39fdp"
+      "status": "approved",
+      "suggested_at": "2025-09-22T06:19:30.965Z",
+      "approved_at": "2025-09-22T06:19:30.965Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "pending",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
+      "assigned_agent": null,
+      "claimed_by": null,
+      "agent_assignment_history": [],
+      "created_at": "2025-09-22T06:19:30.965Z",
+      "started_at": null,
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "feature_1758521970964_0mzzcda39fdp",
+        "migration_date": "2025-09-22T06:21:54.864Z"
+      },
+      "auto_research_created": false,
+      "phases": []
     },
     {
-      "status": "in_progress",
-      "created_at": "2025-09-22T06:19:35.193Z",
+      "id": "feature_1758521975193_qyr7izlkbsj",
       "title": "Update stop-hook.js to reference FEATURES.json instead of TODO.json",
       "description": "Systematically update all references in stop-hook.js from TODO.json to FEATURES.json. This includes: file path constants, validation checks, cleanup functions, console messages, error handling, and any hardcoded strings. Ensure full compatibility with new file structure while maintaining system functionality.",
-      "category": "feature",
-      "id": "feature_1758521975193_qyr7izlkbsj",
+      "status": "approved",
+      "suggested_at": "2025-09-22T06:19:35.193Z",
+      "approved_at": "2025-09-22T06:19:35.193Z",
+      "implemented_at": null,
+      "original_category": "feature",
+      "original_priority": "medium",
+      "original_status": "in_progress",
+      "dependencies": [],
+      "important_files": [],
+      "success_criteria": [],
+      "estimate": "",
+      "requires_research": false,
+      "subtasks": [],
       "assigned_agent": "dev_session_1758521958245_1_general_fc96b7a9",
-      "started_at": "2025-09-22T06:19:54.200Z",
       "claimed_by": "dev_session_1758521958245_1_general_fc96b7a9",
       "agent_assignment_history": [
         {
@@ -2945,274 +4684,18 @@
           "reassignReason": null,
           "claimPriority": "normal"
         }
-      ]
-    }
-  ],
-  "current_mode": "DEVELOPMENT",
-  "last_mode": null,
-  "execution_count": 0,
-  "review_strikes": 0,
-  "strikes_completed_last_run": false,
-  "last_hook_activation": 1757094794402,
-  "agents": {
-    "dev_session_1758521848943_1_general_650eaf98": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-22T06:17:28.943Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
       ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-22T06:17:28.943Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758521939358_1_general_bf47d955": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-22T06:18:59.358Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-22T06:18:59.358Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758521952849_1_general_6d633192": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-22T06:19:12.850Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-22T06:19:12.850Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758521953438_1_general_edae37bd": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-22T06:19:13.438Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-22T06:19:13.438Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758521953769_1_general_d982c05f": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-22T06:19:13.769Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-22T06:19:13.769Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758521958245_1_general_fc96b7a9": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-22T06:19:18.245Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-22T06:19:18.245Z",
-      "sessionId": null,
-      "metadata": {}
-    }
-  },
-  "features": [
-    {
-      "id": "feature_suggested_1757095650796_wpub5ogu3",
-      "title": "Test Feature Suggestion",
-      "description": "Testing the new feature suggestion system",
-      "rationale": "Validate that agents can suggest features without authorization",
-      "status": "approved",
-      "category": "test",
-      "priority": "medium",
-      "created_at": "2025-09-05T18:07:30.796Z",
-      "updated_at": "2025-09-10T01:08:14.863Z",
-      "suggested_by": "agent_test_001",
-      "subtasks": [
-        "task_1757098457009_kkad01wly"
-      ],
-      "dependencies": [],
-      "success_criteria": [],
-      "metadata": {
-        "estimated_effort": "low",
-        "completion_percentage": 0
+      "created_at": "2025-09-22T06:19:35.193Z",
+      "started_at": "2025-09-22T06:19:54.200Z",
+      "migration_info": {
+        "migrated_from_todo": true,
+        "original_task_id": "feature_1758521975193_qyr7izlkbsj",
+        "migration_date": "2025-09-22T06:21:54.864Z"
       },
-      "approved_by": "user",
-      "approved_at": "2025-09-05T18:07:41.695Z",
-      "phases": [
-        {
-          "number": 1,
-          "title": "Planning & Requirements",
-          "description": "Gather requirements and validate feature approach",
-          "status": "completed",
-          "created_at": "2025-09-09T20:04:42.196Z",
-          "updated_at": "2025-09-09T20:05:48.624Z",
-          "completed_at": "2025-09-09T20:05:48.624Z"
-        },
-        {
-          "number": 2,
-          "title": "Implementation & Development",
-          "description": "Core development and implementation work",
-          "status": "completed",
-          "created_at": "2025-09-09T20:05:43.330Z",
-          "updated_at": "2025-09-10T01:08:14.863Z",
-          "started_at": "2025-09-09T20:05:48.624Z",
-          "completed_at": "2025-09-10T01:08:14.863Z"
-        }
-      ]
-    },
-    {
-      "id": "feature_suggested_1757117669066_asve2tx1j",
-      "title": "Real-time Log Streaming",
-      "description": "Implement live log monitoring and streaming capabilities for real-time system observability",
-      "rationale": "Enhanced debugging and monitoring capabilities would greatly improve development experience and system observability",
-      "status": "suggested",
-      "category": "enhancement",
-      "priority": "medium",
-      "created_at": "2025-09-06T00:14:29.066Z",
-      "updated_at": "2025-09-06T00:14:29.066Z",
-      "suggested_by": "development_session_1757117467248_1_general_f80ab5ef",
-      "subtasks": [],
-      "dependencies": [],
-      "success_criteria": [],
-      "metadata": {
-        "estimated_effort": "medium",
-        "completion_percentage": 0,
-        "requires_user_approval": true
-      },
-      "phases": []
-    },
-    {
-      "id": "feature_suggested_1757117685345_9fu9fv1f6",
-      "title": "API Documentation Generator",
-      "description": "Automatic API documentation generation from code comments and endpoint definitions",
-      "rationale": "Automated documentation ensures API docs stay current and reduces manual maintenance overhead",
-      "status": "suggested",
-      "category": "documentation",
-      "priority": "medium",
-      "created_at": "2025-09-06T00:14:45.345Z",
-      "updated_at": "2025-09-06T00:14:45.345Z",
-      "suggested_by": "development_session_1757117467248_1_general_f80ab5ef",
-      "subtasks": [],
-      "dependencies": [],
-      "success_criteria": [],
-      "metadata": {
-        "estimated_effort": "medium",
-        "completion_percentage": 0,
-        "requires_user_approval": true
-      },
-      "phases": []
-    },
-    {
-      "id": "feature_suggested_1757273888595_ilqjkp7pv",
-      "title": "Test Feature Suggestion",
-      "description": "Testing if the suggest-feature method works correctly",
-      "rationale": "Verifying the feature suggestion workflow is functional",
-      "status": "suggested",
-      "category": "enhancement",
-      "priority": "medium",
-      "created_at": "2025-09-07T19:38:08.595Z",
-      "updated_at": "2025-09-07T19:38:08.595Z",
-      "suggested_by": "development_session_1757265067097_1_general_18be5d85",
-      "subtasks": [],
-      "dependencies": [],
-      "success_criteria": [],
-      "metadata": {
-        "estimated_effort": "medium",
-        "completion_percentage": 0,
-        "requires_user_approval": true
-      },
-      "phases": []
-    },
-    {
-      "id": "feature_suggested_1757466217678_2j5v0aivn",
-      "title": "Test Validation Feature",
-      "description": "A test feature to validate the suggestion system works correctly",
-      "rationale": "Testing is essential for ensuring system reliability and functionality",
-      "status": "suggested",
-      "category": "test",
-      "priority": "medium",
-      "created_at": "2025-09-10T01:03:37.678Z",
-      "updated_at": "2025-09-10T01:03:37.678Z",
-      "suggested_by": "agent_unknown",
-      "subtasks": [],
-      "dependencies": [],
-      "success_criteria": [],
-      "metadata": {
-        "estimated_effort": "medium",
-        "completion_percentage": 0,
-        "requires_user_approval": true
-      },
+      "auto_research_created": false,
       "phases": []
     }
   ],
-  "current_task_index": 0,
   "settings": {
     "auto_sort_enabled": true,
     "sort_criteria": {
@@ -3253,7 +4736,69 @@
       "feature_": 2,
       "subtask_": 3,
       "test_": 4
+    },
+    "approval_workflow": {
+      "enabled": true,
+      "default_status": "suggested",
+      "require_approval_for_implementation": true,
+      "auto_approve_critical_features": false
+    },
+    "feature_statuses": {
+      "suggested": {
+        "description": "Feature suggested but not yet approved",
+        "next_status": [
+          "approved",
+          "rejected"
+        ],
+        "allow_implementation": false
+      },
+      "approved": {
+        "description": "Feature approved for implementation",
+        "next_status": [
+          "implemented",
+          "cancelled"
+        ],
+        "allow_implementation": true
+      },
+      "implemented": {
+        "description": "Feature successfully implemented",
+        "next_status": [
+          "enhanced",
+          "deprecated"
+        ],
+        "allow_implementation": false
+      },
+      "rejected": {
+        "description": "Feature rejected and will not be implemented",
+        "next_status": [
+          "suggested"
+        ],
+        "allow_implementation": false
+      },
+      "cancelled": {
+        "description": "Feature cancelled after approval",
+        "next_status": [
+          "suggested"
+        ],
+        "allow_implementation": false
+      },
+      "deprecated": {
+        "description": "Feature implemented but now deprecated",
+        "next_status": [
+          "enhanced",
+          "removed"
+        ],
+        "allow_implementation": false
+      }
     }
   },
-  "completed_tasks": []
+  "completed_features": [],
+  "migration_stats": {
+    "startTime": "2025-09-22T06:21:54.857Z",
+    "totalTasks": 95,
+    "migratedFeatures": 95,
+    "preservedTasks": 0,
+    "errors": [],
+    "warnings": []
+  }
 }

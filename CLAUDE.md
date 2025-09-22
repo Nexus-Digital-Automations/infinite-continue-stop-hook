@@ -4,8 +4,8 @@
 CORE OPERATION PRINCIPLES (Display at start of every response):
 1. ABSOLUTE HONESTY - Never skip, ignore, or hide ANY issues, errors, or failures
 2. ROOT PROBLEM SOLVING - Fix underlying causes, not symptoms
-3. IMMEDIATE TASK EXECUTION - Initialize → Create → Execute (no delays)
-4. TASKMANAGER API EXCLUSIVE - Never read TODO.json directly
+3. IMMEDIATE TASK EXECUTION - Plan → Execute → Document (no delays)
+4. TODOWRITE TASK MANAGEMENT - Use TodoWrite for task planning and tracking
 5. COMPLETE EVERY TASK - One at a time, commit and push before completion
 6. CLAUDE.md PROTECTION - NEVER EVER EVER EDIT CLAUDE.md WITHOUT EXPLICIT USER PERMISSION
 7. ABSOLUTE CLAUDE.md COMPLIANCE - It is an ABSOLUTE MANDATE to follow ALL CLAUDE.md instructions
@@ -64,58 +64,51 @@ Before making ANY changes to CLAUDE.md, agents must:
 
 ## 🚨 IMMEDIATE ACTION PROTOCOL
 **MANDATORY SEQUENCE FOR ALL USER REQUESTS:**
-1. **INITIALIZE** - `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init`
-2. **CREATE TASK** - `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"error|feature|subtask|test"}'`
-3. **AGENT PLANNING** - Think about task complexity and MANDATORY communicate approach to user
+1. **PLAN TASKS** - Use TodoWrite to create task breakdown for complex requests
+2. **AGENT PLANNING** - Think about task complexity and MANDATORY communicate approach to user
    - **SIMPLE TASKS**: "Handling this solo" for straightforward single-component work
    - **COMPLEX TASKS**: "Using X concurrent agents" (2-10) for multi-component/complex work
    - **DECISION CRITERIA**: Multi-file changes, research + implementation, testing + docs = concurrent agents
    - **MANDATORY COMMUNICATION**: ALWAYS tell user exactly how many subagents will be deployed before starting
-4. **EXECUTE** - Begin implementation immediately
+3. **EXECUTE** - Begin implementation immediately with TodoWrite task tracking
 
 **ZERO DELAY MANDATE:**
 - **❌ NO**: Analysis first, "let me check" responses, preliminary questions
-- **✅ YES**: Instant response → Initialize → Create task → Execute
+- **✅ YES**: Instant response → Plan with TodoWrite → Execute
 - **TRIGGERS**: Any request to implement, add, create, fix, improve, analyze, work on anything, or "continue"
 - **USER REQUEST SUPREMACY**: User requests are HIGHEST PRIORITY - above all tasks including errors. Execute immediately using protocols
 
-**MANDATORY TASK CREATION FOR NON-SIMPLE PROBLEMS:**
-- **IMMEDIATE TASK CREATION**: For ANY non-simple basic problem, create a task IMMEDIATELY without delay
-- **NO ANALYSIS PARALYSIS**: Never spend time analyzing whether something needs a task - if it's not trivial, create the task
-- **PROBLEM COMPLEXITY THRESHOLD**: Multi-step solutions, file modifications, research requirements, or any work beyond simple commands = create task immediately
-- **TASK-FIRST APPROACH**: Create task first, then work on the problem - ensures proper tracking and accountability
+**MANDATORY TODOWRITE PLANNING FOR NON-SIMPLE PROBLEMS:**
+- **IMMEDIATE TASK PLANNING**: For ANY non-simple basic problem, use TodoWrite IMMEDIATELY without delay
+- **NO ANALYSIS PARALYSIS**: Never spend time analyzing whether something needs TodoWrite - if it's not trivial, create the task breakdown
+- **PROBLEM COMPLEXITY THRESHOLD**: Multi-step solutions, file modifications, research requirements, or any work beyond simple commands = use TodoWrite immediately
+- **TODOWRITE-FIRST APPROACH**: Plan with TodoWrite first, then work on the problem - ensures proper tracking and accountability
 
 **STOP HOOK FEEDBACK EVALUATION:**
 - **AFTER STOP HOOK FEEDBACK**: Think and evaluate whether task was fully and comprehensively completed
 - **INCOMPLETE DETECTION**: If task not fully/comprehensively completed, continue working immediately
 - **COMPREHENSIVE COMPLETION**: Ensure all aspects of request fulfilled before stopping
 
-## 🚨 MANDATORY USAGE TRACKING PROTOCOL
-**REINITIALIZE AFTER EVERY USER MESSAGE AND STOP HOOK**
+## 🚨 SIMPLIFIED TODOWRITE WORKFLOW
+**STREAMLINED TASK MANAGEMENT WITH TODOWRITE**
 
-**ABSOLUTE REQUIREMENTS:**
-- **AFTER USER MESSAGE**: Always run reinitialize before starting any work on user requests
-- **AFTER STOP HOOK**: Always run reinitialize before continuing work after stop hook feedback
-- **USAGE TRACKING**: All init/reinitialize calls are automatically tracked in 5-hour windows starting at 11AM CDT
-- **ANALYTICS ACCESS**: Use `usage-analytics` endpoint to monitor usage patterns and compliance
+**TODOWRITE PRINCIPLES:**
+- **NATIVE TASK MANAGEMENT**: Use TodoWrite as primary task planning system
+- **NO INITIALIZATION REQUIRED**: TodoWrite works autonomously without setup protocols
+- **IMMEDIATE PLANNING**: For complex tasks, create TodoWrite breakdown immediately
+- **AUTONOMOUS OPERATION**: Agents manage their own task planning independently
 
-**MANDATORY COMMANDS:**
-```bash
-# Reinitialize with your agent ID (REQUIRED after every user message/stop hook)
-timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js reinitialize <agentId>
+**TODOWRITE USAGE PATTERNS:**
+- **SIMPLE TASKS**: Direct execution without TodoWrite overhead
+- **COMPLEX TASKS**: Immediate TodoWrite breakdown before execution
+- **MULTI-STEP WORK**: Track progress through TodoWrite status updates
+- **COORDINATION**: Multiple agents can use TodoWrite independently
 
-# Check usage analytics (optional - for monitoring compliance)
-timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js usage-analytics
-```
-
-**COMPLIANCE TRACKING:**
-- **5-HOUR WINDOWS**: Usage tracked in 5-hour increments: 11am-4pm, 4pm-9pm, 9pm-2am, 2am-7am, 7am-12pm
-- **AUTOMATIC MONITORING**: System automatically counts all initialization calls per window
-- **ANALYTICS REPORTING**: Current and previous window statistics available via usage-analytics command
-- **NON-BLOCKING**: Usage tracking failures do not prevent normal TaskManager operations
-
-**ENFORCEMENT:**
-This protocol ensures consistent agent lifecycle management and provides usage insights for system optimization. All agents must comply with this mandatory reinitialization requirement.
+**NO MANDATORY INITIALIZATION:**
+- **REMOVED REQUIREMENT**: No forced initialization or reinitialization
+- **AUTONOMOUS AGENTS**: Agents operate independently with TodoWrite
+- **SIMPLIFIED LIFECYCLE**: Focus on work execution rather than lifecycle management
+- **USER-FOCUSED**: Direct response to user requests without ceremony
 
 ## 🚨 CRITICAL MANDATES
 
@@ -601,17 +594,16 @@ git status                                   # Verify clean/up-to-date
 ## 🚨 PREPARATION & CONTEXT
 
 ### CONTEXT PROTOCOLS
-**RAG-FIRST CONTEXT PREPARATION - MANDATORY FOR ALL TASKS**
+**TODOWRITE-ENHANCED CONTEXT PREPARATION**
 
 **PREPARATION STEPS:**
-1. **RAG HEALTH CHECK**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-health`
+1. **TODOWRITE PLANNING**: Create task breakdown for complex work
 2. **READ ESSENTIALS**: All files in `development/essentials/` (user-approved = read-only, agent-made = editable)
-3. **RAG LESSON QUERY**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-get-relevant "$(echo $TASK_DESCRIPTION)"`
-4. **RAG ERROR PATTERNS**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-similar-errors "$(echo $ERROR_DESCRIPTION)"` (error tasks only)
-5. **CODEBASE SCAN**: Find task-relevant files: `find . -name "*.js" -o -name "*.ts" -o -name "*.py" | grep -v node_modules`
-6. **APPLY RAG INSIGHTS**: Integrate retrieved lessons and patterns into implementation strategy
+3. **CODEBASE SCAN**: Find task-relevant files: `find . -name "*.js" -o -name "*.ts" -o -name "*.py" | grep -v node_modules`
+4. **PATTERN RECOGNITION**: Apply learned patterns and best practices
+5. **TASK TRACKING**: Update TodoWrite status as work progresses
 
-**RAG KNOWLEDGE SOURCES**: Semantic search for similar implementations, error patterns, optimization techniques, architectural decisions
+**KNOWLEDGE SOURCES**: Documentation, code patterns, architectural decisions, and accumulated experience
 
 **RESEARCH REQUIRED FOR**: External APIs, database schemas, auth/security systems, complex architecture
 
@@ -727,11 +719,10 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
 ## 🚨 WORKFLOW CHECKLIST
 
 ### 📋 SETUP
-- [ ] **REINITIALIZE**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js reinitialize <agentId>` (MANDATORY after user message/stop hook)
-- [ ] **ROOT CLEANUP**: Remove misplaced files, store insights in RAG database
-- [ ] **INITIALIZE**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init` (if no existing agent)
-- [ ] **CREATE TASK**: `timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"type"}'`
-- [ ] **RAG PREPARATION**: RAG health check, query relevant lessons, read `development/essentials/`, scan codebase
+- [ ] **TODOWRITE PLANNING**: Create TodoWrite breakdown for complex tasks
+- [ ] **ROOT CLEANUP**: Remove misplaced files, maintain clean project structure
+- [ ] **CONTEXT PREPARATION**: Read `development/essentials/`, scan codebase for relevant files
+- [ ] **TASK EXECUTION**: Begin implementation with TodoWrite status tracking
 
 ### 📋 EXECUTE
 - [ ] **IMPLEMENT**: Comprehensive documentation, comments, logging, performance metrics
@@ -748,53 +739,40 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
 
 ## 🚨 ESSENTIAL COMMANDS
 
-**IMMEDIATE INITIALIZATION:**
-```bash
-# Initialize
-timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js init
-
-# Create task
-timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"[Request]", "description":"[Details]", "category":"error|feature|subtask|test"}'
-
-# Get API guide
-timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js guide
+**IMMEDIATE TODOWRITE USAGE:**
+```javascript
+// For complex tasks, create TodoWrite breakdown immediately
+TodoWrite([
+  {"content": "Analyze user request", "status": "pending", "activeForm": "Analyzing user request"},
+  {"content": "Plan implementation approach", "status": "pending", "activeForm": "Planning implementation approach"},
+  {"content": "Execute implementation", "status": "pending", "activeForm": "Executing implementation"}
+]);
 ```
 
-**RAG SYSTEM COMMANDS:**
-```bash
-# RAG health check (mandatory before tasks)
-timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-health
-
-# Search relevant lessons
-timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-search "query description"
-
-# Find similar errors
-timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-similar-errors "error description"
-
-# Store lesson
-timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-store-lesson '{"title":"Title", "content":"Content", "category":"errors|features|optimization|decisions|patterns"}'
-
-# Get relevant lessons for task context
-timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-get-relevant "task description"
+**TODOWRITE TASK MANAGEMENT:**
+```javascript
+// Update TodoWrite status as work progresses
+TodoWrite([
+  {"content": "Analyze user request", "status": "completed", "activeForm": "Completed analyzing user request"},
+  {"content": "Plan implementation approach", "status": "in_progress", "activeForm": "Planning implementation approach"},
+  {"content": "Execute implementation", "status": "pending", "activeForm": "Executing implementation"}
+]);
 ```
 
-**NO EXCEPTIONS: All action requests trigger immediate initialization + task creation**
+**NO EXCEPTIONS: Complex requests trigger immediate TodoWrite planning and execution
 
-## 📚 RAG SYSTEM DOCUMENTATION
+## 🚀 TODOWRITE INTEGRATION STATUS
 
-**COMPREHENSIVE RAG DOCUMENTATION AVAILABLE:**
-- **Overview**: `development/docs/rag-system/README.md`
-- **API Reference**: `development/docs/rag-system/api-reference.md`
-- **Database Architecture**: `development/docs/rag-system/database-architecture.md`
-- **Agent Integration**: `development/docs/rag-system/agent-integration.md`
-- **Setup Instructions**: `development/docs/rag-system/setup-instructions.md`
-- **Migration Guide**: `development/docs/rag-system/migration-guide.md`
-- **Troubleshooting**: `development/docs/rag-system/troubleshooting.md`
-- **Performance Tuning**: `development/docs/rag-system/performance-tuning.md`
-- **Quick Start**: `development/docs/rag-system/quick-start.md`
+**TODOWRITE WORKFLOW MIGRATION:**
+✅ **PROTOCOL UPDATES** - TodoWrite established as primary task management
+✅ **DOCUMENTATION UPDATED** - Instructions emphasize TodoWrite autonomy
+✅ **WORKFLOW SIMPLIFIED** - Removed mandatory initialization requirements
+✅ **AGENT AUTONOMY** - Agents use TodoWrite independently for complex work
+✅ **FEATURE SEPARATION** - Clear separation between TodoWrite tasks and FEATURES.json features
 
-**RAG INTEGRATION STATUS:**
-✅ **PROTOCOLS INTEGRATED** - RAG workflows integrated into CLAUDE.md
-✅ **DOCUMENTATION COMPLETE** - Comprehensive guides available
-✅ **IMPLEMENTATION ACTIVE** - RAG system is primary knowledge management
-✅ **MIGRATION COMPLETE** - All knowledge operations use RAG database
+**TODOWRITE BENEFITS:**
+- **NATIVE INTEGRATION** - Built into Claude Code environment
+- **NO SETUP REQUIRED** - Works immediately without initialization
+- **AUTONOMOUS OPERATION** - Agents manage tasks independently
+- **STREAMLINED WORKFLOW** - Focus on execution rather than ceremony
+- **REAL-TIME TRACKING** - Immediate task status updates

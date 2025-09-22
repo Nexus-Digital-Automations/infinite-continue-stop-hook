@@ -1,43 +1,38 @@
 #!/usr/bin/env node
 /* eslint-disable no-console -- CLI API requires console output for user interaction */
 /**
- * TaskManager Node.js API Wrapper - Refactored Modular Version
+ * Feature Management API - Streamlined Feature Lifecycle Management
  *
  * === OVERVIEW ===
- * Universal command-line interface for the TaskManager system that provides
- * comprehensive task management capabilities for any project. This API acts as
- * a centralized gateway to all TaskManager functionality including agent
- * management, task operations, dependency handling, and orchestration.
+ * Focused API for feature lifecycle management with strict approval workflow.
+ * This system manages feature suggestions, approvals, and implementation tracking
+ * with complete audit trails and governance controls.
  *
  * === KEY FEATURES ===
- * • Universal project support - works with any codebase containing TODO.json
- * • Agent lifecycle management - initialization, heartbeat renewal, status tracking
- * • Task operations - create, claim, complete, list, filter, reorder
- * • Dependency system - automatic dependency detection and guidance
- * • Research workflow integration - intelligent research task suggestions
- * • Multi-agent orchestration - coordinates multiple concurrent agents
- * • Performance optimized - 10-second timeouts, lazy loading, caching
- * • Error recovery - robust error handling with detailed feedback
- * • Modular architecture - functionality split into focused modules
+ * • Feature suggestion and approval workflow
+ * • Strict status transitions: suggested → approved → implemented
+ * • Complete audit trail for all feature lifecycle changes
+ * • FEATURES.json-based persistence
+ * • Business value tracking and validation
+ * • Implementation status monitoring
  *
- * === REFACTORED ARCHITECTURE ===
- * Main Coordinator (this file) delegates to specialized modules:
- * • TaskOperations - Create, claim, complete, fail, delete, list tasks
- * • AgentManagement - Initialize, status, reinitialize, list agents
- * • TaskOrdering - Move tasks up/down/top/bottom priority
- * • ValidationUtils - All validation logic
- * • GuideManager - API guides and documentation
- * • WebSocketManager - Real-time communication
- * • StatisticsManager - Analytics and reporting
+ * === FEATURE WORKFLOW ===
+ * 1. suggest-feature - Create new feature suggestion
+ * 2. approve-feature - Approve suggested feature for implementation
+ * 3. reject-feature - Reject feature suggestion with reason
+ * 4. Implementation tracking for approved features
+ * 5. Complete lifecycle analytics and reporting
  *
- * @author TaskManager System
- * @version 2.0.0
- * @since 2024-01-01
+ * @author Feature Management System
+ * @version 3.0.0
+ * @since 2025-09-22
  *
  * Usage: node taskmanager-api.js <command> [args...] [--project-root /path/to/project]
  */
 
 const path = require('path');
+const fs = require('fs').promises;
+const crypto = require('crypto');
 
 // Parse project root from --project-root flag or use current directory
 const args = process.argv.slice(2);
@@ -46,176 +41,69 @@ const PROJECT_ROOT =
   projectRootIndex !== -1 && projectRootIndex + 1 < args.length
     ? args[projectRootIndex + 1]
     : process.cwd();
-const TODO_PATH = path.join(PROJECT_ROOT, 'TODO.json');
+const FEATURES_PATH = path.join(PROJECT_ROOT, 'FEATURES.json');
 
 // Remove --project-root and its value from args for command parsing
 if (projectRootIndex !== -1) {
   args.splice(projectRootIndex, 2);
 }
 
-// Absolute path to the infinite-continue-stop-hook directory (where TaskManager system lives)
-const TASKMANAGER_ROOT = __dirname;
-
-// Import TaskManager modules using absolute paths
-let TaskManager, AgentManager, MultiAgentOrchestrator;
-
-// Import modular API components
-let cliInterface;
-
-// Import our new modular components
-let TaskOperations, AgentManagement, TaskOrdering, ValidationUtils, RAGOperations;
-
-// Import usage tracking for analytics
-const UsageTracker = require('./lib/usageTracker');
-
-try {
-  // Import TaskManager modules using absolute paths
-  TaskManager = require(path.join(TASKMANAGER_ROOT, 'lib', 'taskManager.js'));
-  AgentManager = require(path.join(TASKMANAGER_ROOT, 'lib', 'agentManager.js'));
-  MultiAgentOrchestrator = require(
-    path.join(TASKMANAGER_ROOT, 'lib', 'multiAgentOrchestrator.js'),
-  );
-
-  // Import modular API components
-  cliInterface = require(
-    path.join(TASKMANAGER_ROOT, 'lib', 'api-modules', 'cli', 'cliInterface.js'),
-  );
-
-  // Import our refactored modules
-  TaskOperations = require(
-    path.join(
-      TASKMANAGER_ROOT,
-      'lib',
-      'api-modules',
-      'core',
-      'taskOperations.js',
-    ),
-  );
-  AgentManagement = require(
-    path.join(
-      TASKMANAGER_ROOT,
-      'lib',
-      'api-modules',
-      'core',
-      'agentManagement.js',
-    ),
-  );
-  TaskOrdering = require(
-    path.join(
-      TASKMANAGER_ROOT,
-      'lib',
-      'api-modules',
-      'core',
-      'taskOrdering.js',
-    ),
-  );
-  ValidationUtils = require(
-    path.join(
-      TASKMANAGER_ROOT,
-      'lib',
-      'api-modules',
-      'core',
-      'validationUtils.js',
-    ),
-  );
-  RAGOperations = require(
-    path.join(
-      TASKMANAGER_ROOT,
-      'lib',
-      'api-modules',
-      'rag',
-      'ragOperations.js',
-    ),
-  );
-} catch (error) {
-  const loadError = new Error(
-    `Failed to load TaskManager modules: ${error.message}`,
-  );
-  loadError.originalError = error;
-  throw loadError;
-}
+// Feature validation schemas
+const FEATURE_STATUSES = ['suggested', 'approved', 'rejected', 'implemented'];
+const FEATURE_CATEGORIES = ['enhancement', 'bug-fix', 'new-feature', 'performance', 'security', 'documentation'];
+const REQUIRED_FEATURE_FIELDS = ['title', 'description', 'business_value', 'category'];
 
 /**
- * Refactored TaskManagerAPI - Slim coordinator class
+ * FeatureManagerAPI - Feature lifecycle management system
  *
- * This class now acts as a facade that delegates to specialized modules
- * while maintaining the exact same API surface for backward compatibility.
+ * Manages feature suggestions, approvals, and implementation tracking
+ * with strict approval workflow and complete audit trails.
  */
-class TaskManagerAPI {
+class FeatureManagerAPI {
   constructor() {
-    // Core TaskManager for TODO.json operations and task management
-    this.taskManager = new TaskManager(TODO_PATH, {
-      enableMultiAgent: true, // Enable multi-agent coordination features
-      enableAutoFix: false, // Disable auto-fix for better performance
-      validateOnRead: false, // Disable validation for better performance
-    });
-
-    // Agent management for registration, heartbeat, and lifecycle
-    this.agentManager = new AgentManager(TODO_PATH);
-
-    // WebSocket server for real-time communication
-    this.webSocketServer = null;
-    this.httpServer = null;
-    this.webSocketClients = new Set();
-    this.isWebSocketRunning = false;
-
-    // Multi-agent orchestration for concurrent operations
-    this.orchestrator = new MultiAgentOrchestrator(TODO_PATH);
-
-    // Agent ID storage removed - agents must always provide ID explicitly
+    // Core feature data persistence
+    this.featuresPath = FEATURES_PATH;
 
     // Performance configuration - 10 second timeout for all operations
     this.timeout = 10000;
 
-    // Guide caching system for performance optimization
-    this._cachedGuide = null;
-    this._guideCacheTime = 0;
-    this._guideCacheDuration = 60000; // 1 minute cache duration
-    this._guideGenerationInProgress = false;
+    // Feature validation configuration
+    this.validStatuses = FEATURE_STATUSES;
+    this.validCategories = FEATURE_CATEGORIES;
+    this.requiredFields = REQUIRED_FEATURE_FIELDS;
 
-    // Initialize usage tracker for analytics
-    this.usageTracker = new UsageTracker();
-
-    // Initialize specialized modules with dependencies
-    this._initializeModules();
+    // Initialize features file if it doesn't exist
+    this._ensureFeaturesFile();
   }
 
   /**
-   * Initialize specialized modules with required dependencies
+   * Ensure FEATURES.json exists with proper structure
    */
-  _initializeModules() {
-    const dependencies = {
-      taskManager: this.taskManager,
-      agentManager: this.agentManager,
-      withTimeout: this.withTimeout.bind(this),
-      getGuideForError: this._getGuideForError.bind(this),
-      getFallbackGuide: this._getFallbackGuide.bind(this),
-      validateScopeRestrictions: ValidationUtils.validateScopeRestrictions,
-      validateCompletionData: ValidationUtils.validateCompletionData,
-      validateFailureData: ValidationUtils.validateFailureData,
-      validateTaskEvidence: ValidationUtils.validateTaskEvidence,
-      validateAgentScope: this._validateAgentScope.bind(this),
-      broadcastTaskCompletion: this._broadcastTaskCompletion.bind(this),
-      broadcastTaskFailed: this._broadcastTaskFailed.bind(this),
-      // Subtasks and Success Criteria validation methods
-      validateSubtaskData: ValidationUtils.validateSubtaskData,
-      validateSuccessCriteria: ValidationUtils.validateSuccessCriteria,
-      validateSubtaskUpdateData: ValidationUtils.validateSubtaskUpdateData,
-      // Specialized broadcasting for subtasks and success criteria
-      broadcastSubtaskUpdate: this._broadcastSubtaskUpdate.bind(this),
-      broadcastCriteriaUpdate: this._broadcastCriteriaUpdate.bind(this),
-    };
+  async _ensureFeaturesFile() {
+    try {
+      await fs.access(this.featuresPath);
+    } catch {
+      // File doesn't exist, create it
+      const initialStructure = {
+        project: path.basename(PROJECT_ROOT),
+        features: [],
+        metadata: {
+          version: '1.0.0',
+          created: new Date().toISOString(),
+          updated: new Date().toISOString(),
+          total_features: 0,
+          approval_history: []
+        },
+        workflow_config: {
+          require_approval: true,
+          auto_reject_timeout_hours: 168,
+          allowed_statuses: this.validStatuses,
+          required_fields: this.requiredFields
+        }
+      };
 
-    // Initialize RAG operations first
-    this.ragOperations = new RAGOperations(dependencies);
-
-    // Add RAG operations to dependencies for TaskOperations
-    dependencies.ragOperations = this.ragOperations;
-
-    // Initialize other module instances with enhanced dependencies
-    this.taskOperations = new TaskOperations(dependencies);
-    this.agentManagement = new AgentManagement(dependencies);
-    this.taskOrdering = new TaskOrdering(dependencies);
+      await fs.writeFile(this.featuresPath, JSON.stringify(initialStructure, null, 2));
+    }
   }
 
   /**
@@ -233,206 +121,221 @@ class TaskManagerAPI {
     ]);
   }
 
-  // =================== DELEGATED METHODS ===================
-  // All methods now delegate to specialized modules
+  // =================== FEATURE MANAGEMENT METHODS ===================
+  // Core feature lifecycle management operations
 
-  // Task Operations (delegate to TaskOperations module)
-  listTasks(filter = {}) {
-    return this.taskOperations.listTasks(filter);
-  }
+  /**
+   * Suggest a new feature for approval
+   */
+  async suggestFeature(featureData) {
+    try {
+      // Validate required fields
+      this._validateFeatureData(featureData);
 
-  createTask(taskData) {
-    return this.taskOperations.createTask(taskData);
-  }
+      const feature = {
+        id: this._generateFeatureId(),
+        title: featureData.title,
+        description: featureData.description,
+        business_value: featureData.business_value,
+        category: featureData.category,
+        status: 'suggested',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        suggested_by: featureData.suggested_by || 'system',
+        metadata: featureData.metadata || {}
+      };
 
-  createErrorTask(taskData) {
-    return this.taskOperations.createErrorTask(taskData);
-  }
+      const features = await this._loadFeatures();
+      features.features.push(feature);
+      features.metadata.total_features = features.features.length;
+      features.metadata.updated = new Date().toISOString();
 
-  claimTask(taskId, agentId, priority = 'normal') {
-    return this.taskOperations.claimTask(taskId, agentId, priority);
-  }
+      await this._saveFeatures(features);
 
-  completeTask(taskId, completionData = {}) {
-    return this.taskOperations.completeTask(taskId, completionData);
-  }
-
-  failTask(taskId, failureData = {}) {
-    return this.taskOperations.failTask(taskId, failureData);
-  }
-
-  deleteTask(taskId) {
-    return this.taskOperations.deleteTask(taskId);
-  }
-
-  updateTaskProgress(taskId, updateData) {
-    return this.taskOperations.updateTaskProgress(taskId, updateData);
-  }
-
-  // Subtasks Management (delegate to TaskOperations module)
-  createSubtask(taskId, subtaskType, subtaskData = {}) {
-    // Merge type into subtaskData for the TaskOperations method
-    const completeSubtaskData = { ...subtaskData, type: subtaskType };
-    return this.taskOperations.createSubtask(taskId, completeSubtaskData);
-  }
-
-  listSubtasks(taskId, filter = {}) {
-    return this.taskOperations.getSubtasks(taskId, filter);
-  }
-
-  updateSubtask(taskId, subtaskId, updateData) {
-    // TaskOperations.updateSubtask only needs subtaskId since it finds the parent task
-    return this.taskOperations.updateSubtask(subtaskId, updateData);
-  }
-
-  deleteSubtask(taskId, subtaskId) {
-    // TaskOperations.deleteSubtask only needs subtaskId since it finds the parent task
-    return this.taskOperations.deleteSubtask(subtaskId);
-  }
-
-  // Success Criteria Management (delegate to TaskOperations module)
-  addSuccessCriteria(targetType, targetId, criteriaData) {
-    if (targetType === 'task') {
-      return this.taskOperations.addSuccessCriteria(
-        targetId,
-        criteriaData.criteria || criteriaData,
-        criteriaData.options || {},
-      );
-    } else if (targetType === 'project') {
-      // For project-wide criteria, use the templates system
-      return this.taskOperations.getProjectWideTemplates();
-    } else {
-      throw new Error('Invalid target type. Must be "task" or "project"');
+      return {
+        success: true,
+        feature,
+        message: 'Feature suggestion created successfully'
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message
+      };
     }
   }
 
-  getSuccessCriteria(targetType, targetId) {
-    if (targetType === 'task') {
-      return this.taskOperations.getSuccessCriteria(targetId);
-    } else if (targetType === 'project') {
-      return this.taskOperations.getProjectWideTemplates();
-    } else {
-      throw new Error('Invalid target type. Must be "task" or "project"');
+  /**
+   * Approve a suggested feature for implementation
+   */
+  async approveFeature(featureId, approvalData = {}) {
+    try {
+      const features = await this._loadFeatures();
+      const feature = features.features.find(f => f.id === featureId);
+
+      if (!feature) {
+        throw new Error(`Feature with ID ${featureId} not found`);
+      }
+
+      if (feature.status !== 'suggested') {
+        throw new Error(`Feature must be in 'suggested' status to approve. Current status: ${feature.status}`);
+      }
+
+      feature.status = 'approved';
+      feature.updated_at = new Date().toISOString();
+      feature.approved_by = approvalData.approved_by || 'system';
+      feature.approval_date = new Date().toISOString();
+      feature.approval_notes = approvalData.notes || '';
+
+      // Add to approval history
+      features.metadata.approval_history.push({
+        feature_id: featureId,
+        action: 'approved',
+        timestamp: new Date().toISOString(),
+        approved_by: feature.approved_by,
+        notes: feature.approval_notes
+      });
+
+      features.metadata.updated = new Date().toISOString();
+      await this._saveFeatures(features);
+
+      return {
+        success: true,
+        feature,
+        message: 'Feature approved successfully'
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message
+      };
     }
   }
 
-  updateSuccessCriteria(targetType, targetId, updateData) {
-    if (targetType === 'task') {
-      return this.taskOperations.updateSuccessCriteria(
-        targetId,
-        updateData.criteria || updateData,
-      );
-    } else {
-      throw new Error(
-        'Project-wide criteria cannot be updated directly. Use task-specific criteria or templates.',
-      );
+  /**
+   * Reject a suggested feature
+   */
+  async rejectFeature(featureId, rejectionData = {}) {
+    try {
+      const features = await this._loadFeatures();
+      const feature = features.features.find(f => f.id === featureId);
+
+      if (!feature) {
+        throw new Error(`Feature with ID ${featureId} not found`);
+      }
+
+      if (feature.status !== 'suggested') {
+        throw new Error(`Feature must be in 'suggested' status to reject. Current status: ${feature.status}`);
+      }
+
+      feature.status = 'rejected';
+      feature.updated_at = new Date().toISOString();
+      feature.rejected_by = rejectionData.rejected_by || 'system';
+      feature.rejection_date = new Date().toISOString();
+      feature.rejection_reason = rejectionData.reason || 'No reason provided';
+
+      // Add to approval history
+      features.metadata.approval_history.push({
+        feature_id: featureId,
+        action: 'rejected',
+        timestamp: new Date().toISOString(),
+        rejected_by: feature.rejected_by,
+        reason: feature.rejection_reason
+      });
+
+      features.metadata.updated = new Date().toISOString();
+      await this._saveFeatures(features);
+
+      return {
+        success: true,
+        feature,
+        message: 'Feature rejected successfully'
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message
+      };
     }
   }
 
-  deleteSuccessCriterion(taskId, criterionText) {
-    return this.taskOperations.deleteSuccessCriterion(taskId, criterionText);
+  /**
+   * List features with optional filtering
+   */
+  async listFeatures(filter = {}) {
+    try {
+      const features = await this._loadFeatures();
+      let filteredFeatures = features.features;
+
+      // Apply status filter
+      if (filter.status) {
+        filteredFeatures = filteredFeatures.filter(f => f.status === filter.status);
+      }
+
+      // Apply category filter
+      if (filter.category) {
+        filteredFeatures = filteredFeatures.filter(f => f.category === filter.category);
+      }
+
+      return {
+        success: true,
+        features: filteredFeatures,
+        total: filteredFeatures.length,
+        metadata: features.metadata
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message
+      };
+    }
   }
 
-  getProjectWideTemplates() {
-    return this.taskOperations.getProjectWideTemplates();
+  /**
+   * Get feature statistics and analytics
+   */
+  async getFeatureStats() {
+    try {
+      const features = await this._loadFeatures();
+      const stats = {
+        total: features.features.length,
+        by_status: {},
+        by_category: {},
+        recent_activity: []
+      };
+
+      // Count by status
+      features.features.forEach(feature => {
+        stats.by_status[feature.status] = (stats.by_status[feature.status] || 0) + 1;
+      });
+
+      // Count by category
+      features.features.forEach(feature => {
+        stats.by_category[feature.category] = (stats.by_category[feature.category] || 0) + 1;
+      });
+
+      // Recent activity from approval history
+      stats.recent_activity = features.metadata.approval_history
+        .slice(-10)
+        .reverse();
+
+      return {
+        success: true,
+        stats,
+        metadata: features.metadata
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message
+      };
+    }
   }
 
-  applyProjectTemplate(taskId, templateName, replace = false) {
-    return this.taskOperations.applyProjectTemplate(
-      taskId,
-      templateName,
-      replace,
-    );
-  }
 
-  setProjectCriteria(criteriaData) {
-    return this.withTimeout(
-      this.taskOperations.setProjectCriteria(criteriaData),
-      10000,
-    );
-  }
 
-  validateCriteria(taskId, validationType = 'full', evidence = {}) {
-    return this.withTimeout(
-      this.taskOperations.validateCriteria(taskId, validationType, evidence),
-      10000,
-    );
-  }
 
-  getCriteriaReport(taskId) {
-    return this.withTimeout(
-      this.taskOperations.getCriteriaReport(taskId),
-      10000,
-    );
-  }
 
-  // Agent Management (delegate to AgentManagement module)
-  async initAgent(config = {}) {
-    const result = await this.agentManagement.initAgent(config);
-    return result;
-  }
-
-  getCurrentTask(agentId) {
-    return this.agentManagement.getCurrentTask(agentId);
-  }
-
-  getAgentStatus(agentId) {
-    return this.agentManagement.getAgentStatus(agentId);
-  }
-
-  reinitializeAgent(agentId, config = {}) {
-    return this.agentManagement.reinitializeAgent(agentId, config);
-  }
-
-  smartReinitializeAgent(agentId, config = {}) {
-    return this.agentManagement.smartReinitializeAgent(agentId, config);
-  }
-
-  listAgents() {
-    return this.agentManagement.listAgents();
-  }
-
-  // Task Ordering (delegate to TaskOrdering module)
-  moveTaskToTop(taskId) {
-    return this.taskOrdering.moveTaskToTop(taskId);
-  }
-
-  moveTaskUp(taskId) {
-    return this.taskOrdering.moveTaskUp(taskId);
-  }
-
-  moveTaskDown(taskId) {
-    return this.taskOrdering.moveTaskDown(taskId);
-  }
-
-  moveTaskToBottom(taskId) {
-    return this.taskOrdering.moveTaskToBottom(taskId);
-  }
-
-  // RAG Operations (delegate to RAGOperations module)
-  storeLesson(lessonData) {
-    return this.ragOperations.storeLesson(lessonData);
-  }
-
-  storeError(errorData) {
-    return this.ragOperations.storeError(errorData);
-  }
-
-  searchLessons(query, options = {}) {
-    return this.ragOperations.searchLessons(query, options);
-  }
-
-  findSimilarErrors(errorDescription, options = {}) {
-    return this.ragOperations.findSimilarErrors(errorDescription, options);
-  }
-
-  getRelevantLessons(taskContext, options = {}) {
-    return this.ragOperations.getRelevantLessons(taskContext, options);
-  }
-
-  getRagAnalytics(options = {}) {
-    return this.ragOperations.getAnalytics(options);
-  }
 
   // =================== REMAINING METHODS ===================
   // Methods that haven't been extracted yet
