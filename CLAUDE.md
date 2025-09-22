@@ -34,20 +34,22 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 ## 🚨 AGENT WORKFLOW MANDATES
 **MANDATORY AGENT LIFECYCLE:**
 1. **INITIALIZE AGENT** - Start fresh agent or reinitialize existing agent for session
-2. **CLAIM FEATURE OR REVIEW** - Either claim approved feature tasks OR focus on codebase review
-3. **TODOWRITE EXECUTION** - Use TodoWrite for task management and infinite continuation
-4. **VALIDATION CYCLE** - Continuously ensure: linter passes, builds succeed, runs/starts properly, unit tests pass with adequate coverage
-5. **STOP ONLY WHEN PERFECT** - Only stop when all TodoWrite tasks complete AND project achieves perfection
+2. **WORK ONE FEATURE AT A TIME** - Complete exactly 1 approved feature, then move to next approved feature
+3. **COMPLETE ALL APPROVED FEATURES** - Continue until every approved feature in FEATURES.json is implemented
+4. **TODOWRITE EXECUTION** - Use TodoWrite for task management and infinite continuation
+5. **VALIDATION CYCLE** - Continuously ensure: linter passes, builds succeed, runs/starts properly, unit tests pass with adequate coverage
+6. **STOP ONLY WHEN ALL APPROVED FEATURES DONE** - Only stop when ALL approved features complete AND project achieves perfection
 
 ## 🛑 SELF-AUTHORIZATION STOP PROTOCOL
 **AGENTS CAN AUTHORIZE THEIR OWN STOP WHEN ALL CONDITIONS MET:**
 
 **MANDATORY COMPLETION CRITERIA (ADAPT TO CODEBASE):**
-1. **ALL TODOWRITE TASKS COMPLETE** - Every task in TodoWrite marked as completed
-2. **LINTER PERFECTION** - `npm run lint` passes with zero warnings/errors (if linting exists)
-3. **BUILD SUCCESS** - `npm run build` completes successfully (if build script exists)
-4. **RUN/START SUCCESS** - `npm run start` works without errors (if start script exists)
-5. **TEST PERFECTION** - All unit tests pass with adequate coverage (if tests exist)
+1. **ALL APPROVED FEATURES COMPLETE** - Every approved feature in FEATURES.json implemented
+2. **ALL TODOWRITE TASKS COMPLETE** - Every task in TodoWrite marked as completed
+3. **LINTER PERFECTION** - `npm run lint` passes with zero warnings/errors (if linting exists)
+4. **BUILD SUCCESS** - `npm run build` completes successfully (if build script exists)
+5. **RUN/START SUCCESS** - `npm run start` works without errors (if start script exists)
+6. **TEST PERFECTION** - All unit tests pass with adequate coverage (if tests exist)
 
 **CODEBASE ADAPTATION NOTE:**
 Only apply criteria that exist in the specific codebase. Some projects may not have build scripts, start scripts, or tests. Verify what scripts exist in package.json and adapt criteria accordingly.
@@ -59,6 +61,7 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 ```
 
 **FORBIDDEN SCENARIOS:**
+- ❌ ANY approved features incomplete
 - ❌ ANY TodoWrite tasks incomplete
 - ❌ ANY linter warnings/errors (if linting configured)
 - ❌ ANY build failures (if build script exists)
@@ -275,27 +278,25 @@ function processData(userId, data) {
 }
 ```
 
-### LINTER ERROR PROTOCOL
-**ALL LINTER WARNINGS ARE CRITICAL ERRORS**
+### OPTIMAL CI/CD PIPELINE PROTOCOL
+**AUTOMATED QUALITY GATES ARE PRIMARY VALIDATION**
 
-**REQUIREMENTS:**
-- **MAXIMUM STRICTNESS**: Use strictest linter configurations with zero tolerance for any violations
-- **EMERGENCY PROTOCOL**: Instant halt → Create linter-error task → Fix all violations → Verify clean → Resume
-- **MAXIMUM CONCURRENT DEPLOYMENT**: MANDATORY for linter errors - deploy concurrent agents equal to number of error categories (max 10)
-- **CATEGORY-BASED CONCURRENT AGENTS**: Deploy agents based on error categories (syntax, style, security, etc.) not total error count for optimal parallel fixing
-- **HIGHEST STRICTNESS ENFORCEMENT**: Maximum strictness configurations with zero tolerance for violations - all linter rules at most restrictive settings
-- **OUTDATED MATERIAL EXCEPTION**: If errors in outdated/deprecated code → Remove code entirely, no error tasks
-- **WORKFLOWS**: After every file edit + before task completion
-- **NO SHORTCUTS**: Never hide, suppress, or bypass - fix actual problems, admit inability if needed
+**CI/CD PIPELINE REQUIREMENTS:**
+- **AUTOMATED LINTING**: Pre-commit hooks and CI pipelines handle all linting automatically
+- **QUALITY GATES**: GitHub Actions, GitLab CI, Jenkins enforce standards before merge
+- **ZERO MANUAL CHECKS**: CI/CD catches issues consistently without developer intervention
+- **AUTOMATED SECURITY**: SAST scanning, dependency checks integrated in pipeline
+- **FAIL-FAST FEEDBACK**: Immediate notification on commit/PR for fast developer response
 
-**ACTIONABLE vs UNFIXABLE:**
-- **✅ FIX**: Code files (.js, .ts, .py), resolvable config issues
-- **❌ IGNORE**: Project-specific settings (tsconfig.json, eslint.config.js), manual dependencies, environment configs
+**BACKUP PROTOCOLS (CI/CD UNAVAILABLE):**
+- **EMERGENCY ONLY**: Manual linting only when CI/CD pipeline temporarily offline
+- **LOCAL VALIDATION**: Pre-push checks for experimental branches outside CI coverage
+- **PIPELINE RECOVERY**: Restore automated validation as soon as CI/CD is operational
 
-**WORKFLOWS:**
-- **POST-EDIT**: Run focused linter immediately after file modifications
-- **COMPLETION**: Full project linting + build + start verification before marking complete
-- **LINTERS**: eslint (JS/TS), ruff/pylint (Python), golint (Go), clippy (Rust)
+**OPTIMAL WORKFLOW:**
+- **AUTOMATED**: All quality checks run in CI/CD without manual intervention
+- **INTEGRATED**: Linting, testing, security scanning in unified pipeline
+- **RELIABLE**: Consistent enforcement across all contributors and branches
 
 ### SECURITY SCANNING PROTOCOL
 **ALL SECURITY SCANS ARE CRITICAL QUALITY GATES**
@@ -416,11 +417,12 @@ git status                                   # Verify clean/up-to-date
 
 ### EXECUTE
 - [ ] **IMPLEMENT**: Comprehensive documentation, comments, logging
-- [ ] **LINTER CHECK**: After every file edit - fix violations immediately
+- [ ] **CI/CD RELIANCE**: Trust automated pipeline for quality validation
 
 ### VALIDATE
-- [ ] **PROJECT VALIDATION**: Run available scripts - `npm run lint` (if exists) && `npm run build` (if exists) && `npm run start` (if exists) && `npm test` (if exists)
+- [ ] **CI/CD PIPELINE**: Automated validation via GitHub Actions/CI system
 - [ ] **GIT**: `git add . && git commit -m "[type]: [description]" && git push`
+- [ ] **PIPELINE VERIFICATION**: Confirm CI/CD passes all automated quality gates
 - [ ] **COMPLETE**: Document results with clear completion message
 
 ## ESSENTIAL COMMANDS

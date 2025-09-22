@@ -286,30 +286,11 @@
   "completed_tasks": [],
   "agents": {
     "claude-agent-main": {
-      "lastHeartbeat": "2025-09-22T07:54:29.228Z",
+      "lastHeartbeat": "2025-09-22T16:52:04.370Z",
       "status": "active",
-      "reinitialized": "2025-09-22T07:54:29.228Z",
-      "sessionId": "b4f1275de995acc3",
+      "reinitialized": "2025-09-22T16:52:04.370Z",
+      "sessionId": "318bb578782b8ba8",
       "previousSessions": []
-    },
-    "e2e-test-fixer": {
-      "lastHeartbeat": "2025-09-22T07:59:40.218Z",
-      "status": "active",
-      "reinitialized": "2025-09-22T07:59:40.218Z",
-      "sessionId": "dbcc460d74cd86cc",
-      "previousSessions": []
-    },
-    "main-agent": {
-      "lastHeartbeat": "2025-09-22T07:59:54.871Z",
-      "status": "active",
-      "initialized": "2025-09-22T07:59:54.871Z",
-      "sessionId": "714fbcb408dec29e"
-    },
-    "agent_cicd_integration": {
-      "lastHeartbeat": "2025-09-22T07:59:55.684Z",
-      "status": "active",
-      "initialized": "2025-09-22T07:59:55.684Z",
-      "sessionId": "245a543dcc4494af"
     }
   }
 }
