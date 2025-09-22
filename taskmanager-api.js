@@ -91,14 +91,14 @@ class FeatureManagerAPI {
           created: new Date().toISOString(),
           updated: new Date().toISOString(),
           total_features: 0,
-          approval_history: []
+          approval_history: [],
         },
         workflow_config: {
           require_approval: true,
           auto_reject_timeout_hours: 168,
           allowed_statuses: this.validStatuses,
-          required_fields: this.requiredFields
-        }
+          required_fields: this.requiredFields,
+        },
       };
 
       await fs.writeFile(this.featuresPath, JSON.stringify(initialStructure, null, 2));
@@ -144,7 +144,7 @@ class FeatureManagerAPI {
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
         suggested_by: featureData.suggested_by || 'system',
-        metadata: featureData.metadata || {}
+        metadata: featureData.metadata || {},
       };
 
       const features = await this._loadFeatures();
@@ -157,12 +157,12 @@ class FeatureManagerAPI {
       return {
         success: true,
         feature,
-        message: 'Feature suggestion created successfully'
+        message: 'Feature suggestion created successfully',
       };
     } catch (error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -192,13 +192,27 @@ class FeatureManagerAPI {
       feature.approval_date = new Date().toISOString();
       feature.approval_notes = approvalData.notes || '';
 
+      // Ensure metadata structure exists (defensive programming)
+      if (!features.metadata) {
+        features.metadata = {
+          version: '1.0.0',
+          created: new Date().toISOString(),
+          updated: new Date().toISOString(),
+          total_features: features.features.length,
+          approval_history: [],
+        };
+      }
+      if (!features.metadata.approval_history) {
+        features.metadata.approval_history = [];
+      }
+
       // Add to approval history
       features.metadata.approval_history.push({
         feature_id: featureId,
         action: 'approved',
         timestamp: new Date().toISOString(),
         approved_by: feature.approved_by,
-        notes: feature.approval_notes
+        notes: feature.approval_notes,
       });
 
       features.metadata.updated = new Date().toISOString();
@@ -207,12 +221,12 @@ class FeatureManagerAPI {
       return {
         success: true,
         feature,
-        message: 'Feature approved successfully'
+        message: 'Feature approved successfully',
       };
     } catch (error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -242,13 +256,27 @@ class FeatureManagerAPI {
       feature.rejection_date = new Date().toISOString();
       feature.rejection_reason = rejectionData.reason || 'No reason provided';
 
+      // Ensure metadata structure exists (defensive programming)
+      if (!features.metadata) {
+        features.metadata = {
+          version: '1.0.0',
+          created: new Date().toISOString(),
+          updated: new Date().toISOString(),
+          total_features: features.features.length,
+          approval_history: [],
+        };
+      }
+      if (!features.metadata.approval_history) {
+        features.metadata.approval_history = [];
+      }
+
       // Add to approval history
       features.metadata.approval_history.push({
         feature_id: featureId,
         action: 'rejected',
         timestamp: new Date().toISOString(),
         rejected_by: feature.rejected_by,
-        reason: feature.rejection_reason
+        reason: feature.rejection_reason,
       });
 
       features.metadata.updated = new Date().toISOString();
@@ -257,12 +285,98 @@ class FeatureManagerAPI {
       return {
         success: true,
         feature,
-        message: 'Feature rejected successfully'
+        message: 'Feature rejected successfully',
       };
     } catch (error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
+      };
+    }
+  }
+
+  /**
+   * Bulk approve multiple features at once
+   */
+  async bulkApproveFeatures(featureIds, approvalData = {}) {
+    try {
+      await this._ensureFeaturesFile();
+
+      const features = await this._loadFeatures();
+      const results = [];
+      const errors = [];
+
+      for (const featureId of featureIds) {
+        try {
+          const feature = features.features.find(f => f.id === featureId);
+
+          if (!feature) {
+            errors.push(`Feature with ID ${featureId} not found`);
+            continue;
+          }
+
+          if (feature.status !== 'suggested') {
+            errors.push(`Feature ${featureId} must be in 'suggested' status to approve. Current status: ${feature.status}`);
+            continue;
+          }
+
+          feature.status = 'approved';
+          feature.updated_at = new Date().toISOString();
+          feature.approved_by = approvalData.approved_by || 'system';
+          feature.approval_date = new Date().toISOString();
+          feature.approval_notes = approvalData.notes || '';
+
+          // Ensure metadata structure exists (defensive programming)
+          if (!features.metadata) {
+            features.metadata = {
+              version: '1.0.0',
+              created: new Date().toISOString(),
+              updated: new Date().toISOString(),
+              total_features: features.features.length,
+              approval_history: [],
+            };
+          }
+          if (!features.metadata.approval_history) {
+            features.metadata.approval_history = [];
+          }
+
+          // Add to approval history
+          features.metadata.approval_history.push({
+            feature_id: featureId,
+            action: 'approved',
+            timestamp: new Date().toISOString(),
+            approved_by: feature.approved_by,
+            notes: feature.approval_notes,
+          });
+
+          results.push({
+            feature_id: featureId,
+            title: feature.title,
+            status: 'approved',
+            success: true
+          });
+
+        } catch (error) {
+          errors.push(`Error approving ${featureId}: ${error.message}`);
+        }
+      }
+
+      features.metadata.updated = new Date().toISOString();
+      await this._saveFeatures(features);
+
+      return {
+        success: true,
+        approved_count: results.length,
+        error_count: errors.length,
+        approved_features: results,
+        errors: errors,
+        message: `Bulk approval completed: ${results.length} approved, ${errors.length} errors`
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
       };
     }
   }
@@ -292,12 +406,12 @@ class FeatureManagerAPI {
         success: true,
         features: filteredFeatures,
         total: filteredFeatures.length,
-        metadata: features.metadata
+        metadata: features.metadata,
       };
     } catch (error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -315,7 +429,7 @@ class FeatureManagerAPI {
         total: features.features.length,
         by_status: {},
         by_category: {},
-        recent_activity: []
+        recent_activity: [],
       };
 
       // Count by status
@@ -336,12 +450,135 @@ class FeatureManagerAPI {
       return {
         success: true,
         stats,
-        metadata: features.metadata
+        metadata: features.metadata,
       };
     } catch (error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
+      };
+    }
+  }
+
+  async initializeAgent(agentId) {
+    try {
+      const features = await this._loadFeatures();
+
+      // Initialize agents section if it doesn't exist
+      if (!features.agents) {
+        features.agents = {};
+      }
+
+      const timestamp = new Date().toISOString();
+
+      // Create or update agent entry
+      features.agents[agentId] = {
+        lastHeartbeat: timestamp,
+        status: 'active',
+        initialized: timestamp,
+        sessionId: crypto.randomBytes(8).toString('hex'),
+      };
+
+      await this._saveFeatures(features);
+
+      return {
+        success: true,
+        agent: {
+          id: agentId,
+          status: 'initialized',
+          sessionId: features.agents[agentId].sessionId,
+          timestamp,
+        },
+        message: `Agent ${agentId} successfully initialized`,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: `Failed to initialize agent: ${error.message}`,
+        timestamp: new Date().toISOString(),
+      };
+    }
+  }
+
+  async reinitializeAgent(agentId) {
+    try {
+      const features = await this._loadFeatures();
+
+      // Initialize agents section if it doesn't exist
+      if (!features.agents) {
+        features.agents = {};
+      }
+
+      const timestamp = new Date().toISOString();
+      const existingAgent = features.agents[agentId];
+
+      // Update or create agent entry (reinitialize preserves some data)
+      features.agents[agentId] = {
+        ...existingAgent,
+        lastHeartbeat: timestamp,
+        status: 'active',
+        reinitialized: timestamp,
+        sessionId: crypto.randomBytes(8).toString('hex'),
+        previousSessions: existingAgent?.sessionId ? [
+          ...(existingAgent.previousSessions || []),
+          existingAgent.sessionId,
+        ] : [],
+      };
+
+      await this._saveFeatures(features);
+
+      return {
+        success: true,
+        agent: {
+          id: agentId,
+          status: 'reinitialized',
+          sessionId: features.agents[agentId].sessionId,
+          timestamp,
+          previousSessions: features.agents[agentId].previousSessions?.length || 0,
+        },
+        message: `Agent ${agentId} successfully reinitialized`,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: `Failed to reinitialize agent: ${error.message}`,
+        timestamp: new Date().toISOString(),
+      };
+    }
+  }
+
+  async authorizeStop(agentId, reason) {
+    try {
+      const fs = require('fs').promises;
+      const path = require('path');
+
+      // Create stop authorization flag
+      const stopFlagPath = path.join(PROJECT_ROOT, '.stop-allowed');
+      const stopData = {
+        stop_allowed: true,
+        authorized_by: agentId,
+        reason: reason || 'Agent authorized stop after completing all tasks and achieving project perfection',
+        timestamp: new Date().toISOString(),
+        session_type: 'self_authorized',
+      };
+
+      await fs.writeFile(stopFlagPath, JSON.stringify(stopData, null, 2));
+
+      return {
+        success: true,
+        authorization: {
+          authorized_by: agentId,
+          reason: stopData.reason,
+          timestamp: stopData.timestamp,
+          stop_flag_created: true,
+        },
+        message: `Stop authorized by agent ${agentId} - stop hook will allow termination on next trigger`,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: `Failed to authorize stop: ${error.message}`,
+        timestamp: new Date().toISOString(),
       };
     }
   }
@@ -422,7 +659,7 @@ class FeatureManagerAPI {
     }
   }
 
-  async getApiMethods() {
+  getApiMethods() {
     return {
       success: true,
       message: 'Feature Management API - Feature lifecycle operations',
@@ -466,13 +703,13 @@ class FeatureManagerAPI {
                 suggested: 'Initial feature suggestion - requires approval',
                 approved: 'Feature approved for implementation',
                 rejected: 'Feature rejected with reason',
-                implemented: 'Feature successfully implemented'
+                implemented: 'Feature successfully implemented',
               },
               transitions: {
                 'suggested → approved': 'Via approve-feature command',
                 'suggested → rejected': 'Via reject-feature command',
-                'approved → implemented': 'Manual status update after implementation'
-              }
+                'approved → implemented': 'Manual status update after implementation',
+              },
             },
             coreCommands: {
               discovery: {
@@ -529,6 +766,31 @@ class FeatureManagerAPI {
                   output: 'Feature counts by status, category, and recent activity',
                 },
               },
+              agentManagement: {
+                'initialize': {
+                  description: 'Initialize a new agent session',
+                  usage:
+                    'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" initialize <agentId>',
+                  required_parameters: ['agentId'],
+                  output: 'Agent initialization confirmation with session details',
+                },
+                'reinitialize': {
+                  description: 'Reinitialize existing agent session',
+                  usage:
+                    'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize <agentId>',
+                  required_parameters: ['agentId'],
+                  output: 'Agent reinitialization confirmation with new session details',
+                },
+                'authorize-stop': {
+                  description: 'Self-authorize stop when all TodoWrite tasks complete and project is perfect',
+                  usage:
+                    'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop <agentId> [reason]',
+                  required_parameters: ['agentId'],
+                  optional_parameters: ['reason'],
+                  output: 'Stop authorization confirmation - creates .stop-allowed flag',
+                  requirements: ['All TodoWrite tasks completed', 'Linter passes', 'Build succeeds', 'Start works', 'Tests pass'],
+                },
+              },
             },
             workflows: {
               featureLifecycle: [
@@ -542,6 +804,13 @@ class FeatureManagerAPI {
                 "2. Use 'approve-feature' to approve for implementation",
                 "3. Use 'reject-feature' to reject with reason",
                 '4. Only approved features should be implemented',
+              ],
+              agentLifecycle: [
+                "1. Initialize agent with 'initialize' command",
+                '2. Agent claims features or focuses on codebase review',
+                '3. Complete all TodoWrite tasks with validation cycles',
+                "4. Self-authorize stop with 'authorize-stop' when project perfect",
+                "5. Use 'reinitialize' to restart existing agent sessions",
               ],
             },
             examples: {
@@ -629,38 +898,71 @@ async function main() {
         result = await api.getComprehensiveGuide();
         break;
       case 'methods':
-        result = await api.getApiMethods();
+        result = api.getApiMethods();
         break;
-      case 'suggest-feature':
+      case 'suggest-feature': {
         if (!args[1]) {
           throw new Error('Feature data required. Usage: suggest-feature \'{"title":"...", "description":"...", "business_value":"...", "category":"..."}\'');
         }
         const featureData = JSON.parse(args[1]);
         result = await api.suggestFeature(featureData);
         break;
-      case 'approve-feature':
+      }
+      case 'approve-feature': {
         if (!args[1]) {
           throw new Error('Feature ID required. Usage: approve-feature <featureId> [approvalData]');
         }
         const approvalData = args[2] ? JSON.parse(args[2]) : {};
         result = await api.approveFeature(args[1], approvalData);
         break;
-      case 'reject-feature':
+      }
+      case 'bulk-approve-features': {
+        if (!args[1]) {
+          throw new Error('Feature IDs required. Usage: bulk-approve-features \'["id1","id2","id3"]\' [approvalData]');
+        }
+        const featureIds = JSON.parse(args[1]);
+        const approvalData = args[2] ? JSON.parse(args[2]) : {};
+        result = await api.bulkApproveFeatures(featureIds, approvalData);
+        break;
+      }
+      case 'reject-feature': {
         if (!args[1]) {
           throw new Error('Feature ID required. Usage: reject-feature <featureId> [rejectionData]');
         }
         const rejectionData = args[2] ? JSON.parse(args[2]) : {};
         result = await api.rejectFeature(args[1], rejectionData);
         break;
-      case 'list-features':
+      }
+      case 'list-features': {
         const filter = args[1] ? JSON.parse(args[1]) : {};
         result = await api.listFeatures(filter);
         break;
+      }
       case 'feature-stats':
         result = await api.getFeatureStats();
         break;
+      case 'initialize':
+        if (!args[1]) {
+          throw new Error('Agent ID required. Usage: initialize <agentId>');
+        }
+        result = await api.initializeAgent(args[1]);
+        break;
+      case 'reinitialize':
+        if (!args[1]) {
+          throw new Error('Agent ID required. Usage: reinitialize <agentId>');
+        }
+        result = await api.reinitializeAgent(args[1]);
+        break;
+      case 'authorize-stop': {
+        if (!args[1]) {
+          throw new Error('Agent ID required. Usage: authorize-stop <agentId> [reason]');
+        }
+        const stopReason = args[2] || 'Agent authorized stop after completing all tasks and achieving project perfection';
+        result = await api.authorizeStop(args[1], stopReason);
+        break;
+      }
       default:
-        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, reject-feature, list-features, feature-stats`);
+        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, initialize, reinitialize, authorize-stop`);
     }
 
     console.log(JSON.stringify(result, null, 2));
