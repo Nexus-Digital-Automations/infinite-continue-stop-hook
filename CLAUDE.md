@@ -5,7 +5,7 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 1. ABSOLUTE HONESTY - Never skip, ignore, or hide ANY issues, errors, or failures
 2. ROOT PROBLEM SOLVING - Fix underlying causes, not symptoms
 3. IMMEDIATE TASK EXECUTION - Plan → Execute → Document (no delays)
-4. TODOWRITE TASK MANAGEMENT - Use TodoWrite for task planning and tracking
+4. TODOWRITE TASK MANAGEMENT - Use TodoWrite for complex task planning and tracking
 5. COMPLETE EVERY TASK - One at a time, commit and push before completion
 6. CLAUDE.md PROTECTION - NEVER EVER EVER EDIT CLAUDE.md WITHOUT EXPLICIT USER PERMISSION
 7. ABSOLUTE CLAUDE.md COMPLIANCE - It is an ABSOLUTE MANDATE to follow ALL CLAUDE.md instructions
@@ -776,3 +776,76 @@ TodoWrite([
 - **AUTONOMOUS OPERATION** - Agents manage tasks independently
 - **STREAMLINED WORKFLOW** - Focus on execution rather than ceremony
 - **REAL-TIME TRACKING** - Immediate task status updates
+
+## 🎯 TODOWRITE vs FEATURES.json SEPARATION
+**CLEAR DISTINCTION BETWEEN TASK MANAGEMENT AND FEATURE APPROVAL**
+
+**TODOWRITE USAGE (Task Management):**
+- **IMMEDIATE WORK BREAKDOWN** - Break down complex user requests into trackable tasks
+- **EXECUTION TRACKING** - Monitor progress of current implementation work
+- **COORDINATION** - Track multiple agents working on different aspects
+- **DOCUMENTATION** - Record approach and completion status
+- **TEMPORARY PLANNING** - Short-term task organization for current work session
+
+**FEATURES.json USAGE (Feature Approval):**
+- **LONG-TERM FEATURE PROPOSALS** - Suggest new features for user approval
+- **APPROVAL WORKFLOW** - Track feature suggestions through approval process
+- **BUSINESS VALUE** - Document business justification for proposed features
+- **FEATURE LIFECYCLE** - Manage features from suggestion to implementation
+- **PERSISTENT RECORDS** - Permanent feature management and audit trail
+
+**INTEGRATION PRINCIPLES:**
+- **TODOWRITE FOR EXECUTION** - Use TodoWrite to implement approved FEATURES.json features
+- **FEATURES.json FOR PROPOSALS** - Use FEATURES.json for new feature suggestions requiring approval
+- **NO OVERLAP** - TodoWrite tasks are temporary; FEATURES.json features are permanent
+- **USER APPROVAL BOUNDARY** - TodoWrite for immediate work; FEATURES.json for new feature approval
+
+**PRACTICAL WORKFLOW:**
+1. **User Request Immediate Work** → Use TodoWrite to break down and execute
+2. **Agent Suggests New Feature** → Use FEATURES.json suggestion workflow
+3. **Feature Gets Approved** → Use TodoWrite to track implementation of approved feature
+4. **Complex Implementation** → Use TodoWrite for task breakdown regardless of feature source
+
+**AUTONOMY LEVELS:**
+- **TODOWRITE** - Full agent autonomy for immediate work breakdown
+- **FEATURES.json** - Requires user approval for new feature suggestions
+
+## 🤖 SIMPLIFIED AGENT LIFECYCLE MANAGEMENT
+**STREAMLINED AGENT OPERATIONS WITHOUT CEREMONY**
+
+**AUTONOMOUS AGENT PRINCIPLES:**
+- **NO MANDATORY INITIALIZATION** - Agents operate immediately without setup protocols
+- **TODOWRITE SELF-MANAGEMENT** - Agents plan and track their own work autonomously
+- **DIRECT EXECUTION** - Focus on solving user problems rather than lifecycle management
+- **MINIMAL OVERHEAD** - Eliminate unnecessary bureaucratic processes
+
+**AGENT OPERATION PATTERNS:**
+- **SIMPLE REQUESTS** - Direct execution without TodoWrite overhead
+- **COMPLEX REQUESTS** - Immediate TodoWrite breakdown followed by execution
+- **USER COMMUNICATION** - Always inform user of approach before starting
+- **PROGRESS TRACKING** - Use TodoWrite status updates for transparency
+
+**LIFECYCLE SIMPLIFICATION:**
+- **REMOVED**: Mandatory initialization, reinitialization protocols, agent ID management
+- **REMOVED**: Usage tracking, analytics requirements, heartbeat systems
+- **REMOVED**: Complex setup procedures, ceremonial workflows
+- **ADDED**: TodoWrite-driven task planning, autonomous decision-making, streamlined execution
+
+**AGENT COMMUNICATION:**
+- **DEPLOYMENT DECLARATION** - "Handling this solo" or "Using X concurrent agents"
+- **APPROACH EXPLANATION** - Brief explanation of chosen approach
+- **PROGRESS UPDATES** - TodoWrite status changes for complex work
+- **COMPLETION DOCUMENTATION** - Clear completion messages with results
+
+**COORDINATION PATTERNS:**
+- **SINGLE AGENT** - Simple tasks handled directly without coordination overhead
+- **MULTIPLE AGENTS** - Deploy 2-10 concurrent agents with specialized roles for complex work
+- **TODOWRITE COORDINATION** - Each agent maintains independent TodoWrite task lists
+- **RESULTS INTEGRATION** - Agents coordinate through shared codebase and git workflow
+
+**DECISION AUTONOMY:**
+- **TECHNICAL DECISIONS** - Full autonomy over implementation details
+- **APPROACH SELECTION** - Choose optimal patterns and architectures
+- **TOOL SELECTION** - Select appropriate tools and libraries
+- **QUALITY STANDARDS** - Maintain high code quality and documentation
+- **SCOPE MANAGEMENT** - Work within user-defined boundaries

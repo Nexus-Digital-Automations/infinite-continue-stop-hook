@@ -256,7 +256,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
  */
 async function autoSortTasksByPriority(taskManager) {
   try {
-    const featuresData = await taskManager.readFeatures();
+    const featuresData = await taskManager.readTodo();
     let tasksMoved = 0;
     let tasksUpdated = 0;
 
@@ -443,7 +443,7 @@ async function autoSortTasksByPriority(taskManager) {
 
     // Save the updated FEATURES.json
     if (tasksMoved > 0 || tasksUpdated > 0) {
-      await taskManager.writeFeatures(featuresData);
+      await taskManager.writeTodo(featuresData);
     }
 
     return {
@@ -606,7 +606,7 @@ If you want to enable task management for this project:
 ⚡ CONTINUING OPERATION...
 `);
       // eslint-disable-next-line n/no-process-exit
-      process.exit(2); // Never allow stops even without TODO.json
+      process.exit(2); // Never allow stops even without FEATURES.json
     }
 
     // CRITICAL: Check for FEATURES.json corruption before initializing TaskManager
@@ -638,7 +638,7 @@ If you want to enable task management for this project:
     });
 
     // Check if there are any active agents or if agent initialization is needed
-    const featuresData = await taskManager.readFeatures();
+    const featuresData = await taskManager.readTodo();
 
     // Debug logging for agent detection
     const allAgents = Object.keys(featuresData.agents || {});
@@ -854,9 +854,9 @@ If you want to enable task management for this project:
 
     // Save changes if any stale agents were removed or tasks were reset
     if (agentsRemoved > 0 || staleTasksReset > 0 || tasksUnassigned > 0 || orphanedTasksReset > 0) {
-      await taskManager.writeFeatures(featuresData);
+      await taskManager.writeTodo(featuresData);
       if (agentsRemoved > 0) {
-        logger.addFlow(`Removed ${agentsRemoved} stale agents from TODO.json`);
+        logger.addFlow(`Removed ${agentsRemoved} stale agents from FEATURES.json`);
       }
       if (tasksUnassigned > 0) {
         logger.addFlow(`Unassigned ${tasksUnassigned} tasks from stale agents`);
@@ -1079,7 +1079,7 @@ This is a single-use authorization.
 ⚡ Future stop hook triggers will return to infinite continue mode.
 
 To trigger another stop, use the TaskManager API:
-node -e "const _TaskManager = require('/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => console.log(JSON.stringify(result, null, 2)));"
+node -e "const _TaskManager = require('/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./FEATURES.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => console.log(JSON.stringify(result, null, 2)));"
 `);
       // eslint-disable-next-line n/no-process-exit
       process.exit(0); // Allow stop only when endpoint triggered
@@ -1094,7 +1094,7 @@ node -e "const _TaskManager = require('/Users/jeremyparker/infinite-continue-sto
     try {
       _taskStatus = await taskManager.getTaskStatus();
     } catch (error) {
-      // Handle corrupted TODO.json by using autoFixer
+      // Handle corrupted FEATURES.json by using autoFixer
       logger.addFlow(
         `Task status failed, attempting auto-fix: ${error.message}`,
       );
@@ -1139,7 +1139,7 @@ node -e "const _TaskManager = require('/Users/jeremyparker/infinite-continue-sto
 📊 Total found: ${archivalResult.total || 'N/A'}
 📋 Skipped: ${archivalResult.skipped || 0}
 
-This keeps TODO.json clean and prevents it from becoming crowded with completed work.
+This keeps FEATURES.json clean and prevents it from becoming crowded with completed work.
         `);
       } else {
         logger.addFlow('No completed tasks found to archive');
