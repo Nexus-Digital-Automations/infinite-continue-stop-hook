@@ -1,0 +1,162 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔄 Running pre-commit hooks..."
+
+# Check if this is a merge commit (skip hooks for merge commits)
+if git rev-parse -q --verify MERGE_HEAD; then
+  echo "⚠️ Merge commit detected, skipping pre-commit hooks"
+  exit 0
+fi
+
+# Function to run command with timeout and proper error handling
+run_with_timeout() {
+  local timeout_duration="$1"
+  local command="$2"
+  local description="$3"
+
+  echo "🔍 $description..."
+
+  if timeout "$timeout_duration" $command; then
+    echo "✅ $description completed successfully"
+    return 0
+  else
+    echo "❌ $description failed or timed out"
+    return 1
+  fi
+}
+
+# Function to check if staged files include specific patterns
+has_staged_files() {
+  local pattern="$1"
+  git diff --cached --name-only | grep -E "$pattern" > /dev/null
+}
+
+# Stage 1: Quick syntax and format checks
+echo "📋 Stage 1: Quick validation checks"
+
+# Check package.json syntax
+if has_staged_files "package\.json$"; then
+  echo "🔍 Validating package.json syntax..."
+  if ! node -e "JSON.parse(require('fs').readFileSync('package.json'))"; then
+    echo "❌ package.json syntax error detected"
+    exit 1
+  fi
+  echo "✅ package.json syntax is valid"
+fi
+
+# Quick lint check on staged files only
+if has_staged_files "\.(js|ts|json)$"; then
+  echo "🔍 Running lint check on staged files..."
+  staged_files=$(git diff --cached --name-only --diff-filter=ACMR | grep -E "\.(js|ts)$" | tr '\n' ' ')
+
+  if [ -n "$staged_files" ]; then
+    if ! npx eslint $staged_files; then
+      echo "❌ ESLint found issues in staged files"
+      echo "💡 Tip: Run 'npm run lint:fix' to auto-fix issues"
+      exit 1
+    fi
+    echo "✅ All staged files pass linting"
+  fi
+fi
+
+# Stage 2: Test execution (only if test files or source code changed)
+echo "📋 Stage 2: Test execution"
+
+if has_staged_files "\.(js|ts)$" || has_staged_files "test/.*\.(js|ts)$" || has_staged_files "package\.json$"; then
+
+  # Run quick test suite (API tests only)
+  if ! run_with_timeout "60s" "npm run test:api" "API test suite"; then
+    echo "❌ API tests failed"
+    echo "💡 Tip: Run 'npm test' locally to debug failing tests"
+    exit 1
+  fi
+
+  # Run critical unit tests only
+  if ! run_with_timeout "45s" "npm run test:rag:unit" "RAG unit tests"; then
+    echo "⚠️ RAG unit tests failed (allowing commit but requiring follow-up)"
+    echo "📝 Please run 'npm run test:rag' locally and fix any issues"
+    # Don't exit - allow commit but warn
+  fi
+
+else
+  echo "ℹ️ No source code changes detected, skipping tests"
+fi
+
+# Stage 3: Security and dependency checks
+echo "📋 Stage 3: Security validation"
+
+if has_staged_files "package\.json$" || has_staged_files "package-lock\.json$"; then
+  echo "🔒 Running security audit on dependencies..."
+
+  # Check for high/critical vulnerabilities
+  if ! npm audit --audit-level=high --production > /dev/null; then
+    echo "⚠️ High/critical security vulnerabilities detected"
+    echo "🔧 Please run 'npm audit fix' to resolve security issues"
+    echo "📋 To see details: npm audit"
+    # Allow commit but warn (don't block development)
+  else
+    echo "✅ No high/critical security vulnerabilities found"
+  fi
+fi
+
+# Stage 4: Coverage validation (only on significant changes)
+echo "📋 Stage 4: Coverage validation"
+
+# Check if this is a significant source code change
+significant_changes=$(git diff --cached --name-only | grep -E "^(lib/|taskmanager-api\.js|.*\.js)$" | wc -l)
+
+if [ "$significant_changes" -gt 2 ]; then
+  echo "🔍 Significant changes detected, validating coverage..."
+
+  if ! run_with_timeout "30s" "npm run coverage:check" "Coverage threshold validation"; then
+    echo "⚠️ Coverage thresholds not met"
+    echo "📊 Current coverage may be below required thresholds"
+    echo "💡 Tip: Add tests for new code or run 'npm run coverage:report' to see details"
+
+    # Ask user if they want to proceed
+    echo "❓ Do you want to proceed with commit anyway? (y/N)"
+    read -r response
+    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+      echo "❌ Commit aborted by user"
+      exit 1
+    fi
+  fi
+else
+  echo "ℹ️ Minor changes detected, skipping coverage validation"
+fi
+
+# Stage 5: Final validation
+echo "📋 Stage 5: Final checks"
+
+# Ensure no large files are being committed
+large_files=$(git diff --cached --name-only | xargs ls -la 2>/dev/null | awk '{if($5 > 1048576) print $9 " (" $5 " bytes)"}')
+if [ -n "$large_files" ]; then
+  echo "⚠️ Large files detected in commit:"
+  echo "$large_files"
+  echo "❓ Are you sure you want to commit large files? (y/N)"
+  read -r response
+  if [[ ! "$response" =~ ^[Yy]$ ]]; then
+    echo "❌ Commit aborted due to large files"
+    exit 1
+  fi
+fi
+
+# Check for debugging code
+debugging_patterns="console\.log\|debugger\|TODO\|FIXME\|XXX"
+if git diff --cached | grep -E "$debugging_patterns" > /dev/null; then
+  echo "⚠️ Potential debugging code or TODO items found in staged changes"
+  echo "🔍 Found patterns: console.log, debugger, TODO, FIXME, XXX"
+  echo "❓ Do you want to proceed anyway? (y/N)"
+  read -r response
+  if [[ ! "$response" =~ ^[Yy]$ ]]; then
+    echo "❌ Commit aborted - please review debugging code"
+    exit 1
+  fi
+fi
+
+echo ""
+echo "🎉 All pre-commit checks passed!"
+echo "✅ Code is ready for commit"
+echo "📝 Remember to run the full test suite after commit: npm test"
+echo ""

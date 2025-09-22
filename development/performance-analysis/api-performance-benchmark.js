@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * TaskManager API Performance Benchmark Suite
  *
@@ -20,18 +19,18 @@ class APIPerformanceBenchmark {
       endpoints: {},
       summary: {},
       recommendations: [],
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
     this.testData = {
       taskId: null,
       agentId: null,
-      sampleTasks: []
+      sampleTasks: [],
     };
     this.metrics = {
       responseTime: [],
       throughput: [],
       errorRates: [],
-      memoryUsage: []
+      memoryUsage: [],
     };
   }
 
@@ -59,7 +58,7 @@ class APIPerformanceBenchmark {
           memoryDelta,
           success: result.success,
           errorDetails: result.error || null,
-          outputSize: JSON.stringify(result).length
+          outputSize: JSON.stringify(result).length,
         });
 
         // Small delay between iterations
@@ -71,7 +70,7 @@ class APIPerformanceBenchmark {
           memoryDelta: -1,
           success: false,
           errorDetails: error.message,
-          outputSize: 0
+          outputSize: 0,
         });
       }
     }
@@ -86,7 +85,7 @@ class APIPerformanceBenchmark {
     return new Promise((resolve, reject) => {
       const fullArgs = [this.apiPath, command, ...args];
       const child = spawn('timeout', ['10s', 'node', ...fullArgs], {
-        stdio: ['pipe', 'pipe', 'pipe']
+        stdio: ['pipe', 'pipe', 'pipe'],
       });
 
       let stdout = '';
@@ -108,7 +107,7 @@ class APIPerformanceBenchmark {
           resolve({
             ...result,
             exitCode: code,
-            stderr: stderr
+            stderr: stderr,
           });
         } catch (error) {
           resolve({
@@ -116,7 +115,7 @@ class APIPerformanceBenchmark {
             error: `Parse error: ${error.message}`,
             stdout,
             stderr,
-            exitCode: code
+            exitCode: code,
           });
         }
       });
@@ -139,7 +138,7 @@ class APIPerformanceBenchmark {
       return {
         success: false,
         errorRate: 100,
-        totalFailures: results.length
+        totalFailures: results.length,
       };
     }
 
@@ -155,7 +154,7 @@ class APIPerformanceBenchmark {
       errorRate: ((results.length - successfulResults.length) / results.length) * 100,
       throughput: 1000 / (responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length), // requests per second
       iterations: results.length,
-      rawResults: results
+      rawResults: results,
     };
   }
 
@@ -194,8 +193,8 @@ class APIPerformanceBenchmark {
       JSON.stringify({
         title: 'Performance Test Task',
         description: 'Test task for performance benchmarking',
-        category: 'test'
-      })
+        category: 'test',
+      }),
     ]);
     this.results.endpoints.createTask = createTaskResult;
 
@@ -210,12 +209,12 @@ class APIPerformanceBenchmark {
         if (this.testData.agentId) {
           this.results.endpoints.claimTask = await this.executeCommand('claim', [
             this.testData.taskId,
-            this.testData.agentId
+            this.testData.agentId,
           ]);
 
           this.results.endpoints.completeTask = await this.executeCommand('complete', [
             this.testData.taskId,
-            '"Performance test completed"'
+            '"Performance test completed"',
           ]);
         }
       }
@@ -231,8 +230,8 @@ class APIPerformanceBenchmark {
           parentTaskId: this.testData.taskId,
           title: 'Performance Test Subtask',
           description: 'Subtask for performance testing',
-          type: 'implementation'
-        })
+          type: 'implementation',
+        }),
       ]);
     }
 
@@ -264,7 +263,7 @@ class APIPerformanceBenchmark {
       fastestEndpoints: [],
       errorProneEndpoints: [],
       highMemoryEndpoints: [],
-      optimizationOpportunities: []
+      optimizationOpportunities: [],
     };
 
     // Analyze each endpoint
@@ -276,7 +275,7 @@ class APIPerformanceBenchmark {
           p95ResponseTime: metrics.p95ResponseTime,
           successRate: metrics.successRate,
           averageMemoryDelta: metrics.averageMemoryDelta,
-          throughput: metrics.throughput
+          throughput: metrics.throughput,
         };
 
         // Categorize endpoints
@@ -323,8 +322,8 @@ class APIPerformanceBenchmark {
           'Implement response caching for read operations',
           'Optimize JSON parsing and serialization',
           'Add connection pooling for file operations',
-          'Implement lazy loading for non-critical data'
-        ]
+          'Implement lazy loading for non-critical data',
+        ],
       });
     }
 
@@ -339,8 +338,8 @@ class APIPerformanceBenchmark {
           'Implement streaming for large data operations',
           'Add garbage collection optimization',
           'Use memory-efficient data structures',
-          'Implement data pagination'
-        ]
+          'Implement data pagination',
+        ],
       });
     }
 
@@ -355,8 +354,8 @@ class APIPerformanceBenchmark {
           'Add retry mechanisms for transient failures',
           'Implement circuit breaker patterns',
           'Enhance input validation',
-          'Add better error recovery'
-        ]
+          'Add better error recovery',
+        ],
       });
     }
 
@@ -370,8 +369,8 @@ class APIPerformanceBenchmark {
         'Cache task lists and agent status',
         'Implement time-based cache invalidation',
         'Add in-memory caching for hot data',
-        'Use file-based caching for expensive operations'
-      ]
+        'Use file-based caching for expensive operations',
+      ],
     });
 
     return recommendations;
@@ -384,7 +383,6 @@ class APIPerformanceBenchmark {
     console.log(`🔥 Starting load test: ${endpoint} (${concurrency} concurrent, ${duration}s)`);
 
     const startTime = Date.now();
-    const results = [];
     const promises = [];
 
     for (let i = 0; i < concurrency; i++) {
@@ -404,7 +402,7 @@ class APIPerformanceBenchmark {
       averageResponseTime: allResults.reduce((sum, r) => sum + r.responseTime, 0) / allResults.length,
       requestsPerSecond: allResults.length / duration,
       p95ResponseTime: this.percentile(allResults.map(r => r.responseTime), 95),
-      errorRate: (allResults.filter(r => !r.success).length / allResults.length) * 100
+      errorRate: (allResults.filter(r => !r.success).length / allResults.length) * 100,
     };
   }
 
@@ -427,7 +425,7 @@ class APIPerformanceBenchmark {
           requestCount: ++requestCount,
           responseTime,
           success: result.success,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         });
       } catch (error) {
         results.push({
@@ -436,7 +434,7 @@ class APIPerformanceBenchmark {
           responseTime: -1,
           success: false,
           error: error.message,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         });
       }
 
@@ -456,7 +454,7 @@ class APIPerformanceBenchmark {
         testDate: this.results.timestamp,
         testDuration: 'Variable per endpoint',
         testConfiguration: 'Default 5 iterations per endpoint',
-        tester: 'Performance Research Agent #4'
+        tester: 'Performance Research Agent #4',
       },
       executiveSummary: this.generateExecutiveSummary(),
       detailedResults: this.results.endpoints,
@@ -464,7 +462,7 @@ class APIPerformanceBenchmark {
       recommendations: this.results.analysis?.optimizationOpportunities || [],
       criticalPathAnalysis: this.analyzeCriticalPath(),
       cachingAnalysis: this.analyzeCachingOpportunities(),
-      scalabilityAssessment: this.assessScalability()
+      scalabilityAssessment: this.assessScalability(),
     };
 
     return report;
@@ -486,7 +484,7 @@ class APIPerformanceBenchmark {
       overallSuccessRate: (successfulEndpoints / endpoints) * 100,
       averageSystemResponseTime: averageResponseTime,
       primaryBottlenecks: this.results.analysis?.slowestEndpoints?.slice(0, 3).map(e => e.endpoint) || [],
-      criticalRecommendations: this.results.analysis?.optimizationOpportunities?.filter(r => r.priority === 'High').length || 0
+      criticalRecommendations: this.results.analysis?.optimizationOpportunities?.filter(r => r.priority === 'High').length || 0,
     };
   }
 
@@ -499,7 +497,7 @@ class APIPerformanceBenchmark {
       'createTask',
       'claimTask',
       'completeTask',
-      'listTasks'
+      'listTasks',
     ];
 
     const criticalPathMetrics = criticalOperations.map(op => {
@@ -508,7 +506,7 @@ class APIPerformanceBenchmark {
         operation: op,
         averageResponseTime: metrics?.averageResponseTime || -1,
         successRate: metrics?.successRate || 0,
-        criticality: 'High'
+        criticality: 'High',
       };
     });
 
@@ -516,7 +514,7 @@ class APIPerformanceBenchmark {
       operations: criticalPathMetrics,
       totalCriticalPathTime: criticalPathMetrics.reduce((sum, op) =>
         sum + (op.averageResponseTime > 0 ? op.averageResponseTime : 0), 0),
-      bottlenecks: criticalPathMetrics.filter(op => op.averageResponseTime > 500)
+      bottlenecks: criticalPathMetrics.filter(op => op.averageResponseTime > 500),
     };
   }
 
@@ -529,21 +527,21 @@ class APIPerformanceBenchmark {
       'listAgents',
       'status',
       'getSuccessCriteria',
-      'ragHealth'
+      'ragHealth',
     ];
 
     return {
       cacheableOperations: readOperations.map(op => ({
         operation: op,
         averageResponseTime: this.results.endpoints[op]?.averageResponseTime || -1,
-        cacheValue: this.results.endpoints[op]?.averageResponseTime > 100 ? 'High' : 'Medium'
+        cacheValue: this.results.endpoints[op]?.averageResponseTime > 100 ? 'High' : 'Medium',
       })),
       recommendations: [
         'Implement in-memory caching for frequently accessed task lists',
         'Add file-based caching for agent status information',
         'Use time-based cache invalidation for dynamic data',
-        'Implement request deduplication for concurrent operations'
-      ]
+        'Implement request deduplication for concurrent operations',
+      ],
     };
   }
 
@@ -561,14 +559,14 @@ class APIPerformanceBenchmark {
       scalabilityBottlenecks: [
         'File-based JSON operations may become bottleneck under high load',
         'Synchronous operations limit concurrent request handling',
-        'Memory usage grows with task and agent count'
+        'Memory usage grows with task and agent count',
       ],
       recommendations: [
         'Implement asynchronous I/O for all file operations',
         'Add connection pooling and request queuing',
         'Consider database backend for high-scale deployments',
-        'Implement horizontal scaling capabilities'
-      ]
+        'Implement horizontal scaling capabilities',
+      ],
     };
   }
 
@@ -592,7 +590,7 @@ class APIPerformanceBenchmark {
   /**
    * Save results to file
    */
-  async saveResults(report) {
+  saveResults(report) {
     const outputDir = '/Users/jeremyparker/infinite-continue-stop-hook/development/performance-analysis';
     const outputFile = path.join(outputDir, `api-performance-report-${Date.now()}.json`);
 
@@ -644,7 +642,7 @@ async function main() {
 
   } catch (error) {
     console.error('❌ Benchmark failed:', error);
-    process.exit(1);
+    throw error;
   }
 }
 

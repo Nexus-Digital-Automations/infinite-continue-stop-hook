@@ -80,7 +80,7 @@ node setup-infinite-hook.js /path/to/your/project
 # Navigate to your project
 cd /path/to/your/project
 
-# Initialize TaskManager (creates TODO.json)
+# Initialize TaskManager (creates FEATURES.json)
 node /path/to/infinite-continue-stop-hook/taskmanager-api.js init
 
 # Verify setup
@@ -91,7 +91,7 @@ node /path/to/infinite-continue-stop-hook/taskmanager-api.js status
 
 ```bash
 # Create your first task
-node taskmanager-api.js create '{"title":"Implement user authentication", "description":"Add OAuth2 login system", "category":"feature"}'
+node taskmanager-api.js suggest-feature '{"title":"Implement user authentication", "description":"Add OAuth2 login system", "business_value":"Enhanced security and user management", "category":"new-feature"}'
 
 # Let the system guide your development
 # Claude Code will now operate infinitely with intelligent task management
@@ -206,7 +206,7 @@ npm run test
 infinite-continue-stop-hook/
 ├── 📄 README.md                    # This comprehensive guide
 ├── 📄 package.json                 # Node.js configuration
-├── 📄 TODO.json                    # Active task management
+├── 📄 FEATURES.json                # Feature approval workflow
 ├── 📄 CLAUDE.md                    # Agent configuration and protocols
 │
 ├── 🔧 Core System/
@@ -298,7 +298,7 @@ node setup-infinite-hook.js $PROJECT_ROOT --batch --no-interactive --project-nam
 - Custom task categories
 - Local development preferences
 
-✅ **Task Management** (`TODO.json`)
+✅ **Feature Management** (`FEATURES.json`)
 - Feature-based development system
 - Priority queue implementation
 - Multi-agent coordination setup
@@ -312,11 +312,11 @@ node setup-infinite-hook.js $PROJECT_ROOT --batch --no-interactive --project-nam
 | Command | Purpose | Example |
 |---------|---------|---------|
 | `init` | Initialize TaskManager | `node taskmanager-api.js init` |
-| `create` | Create new task | `node taskmanager-api.js create '{...}'` |
+| `suggest-feature` | Suggest new feature | `node taskmanager-api.js suggest-feature '{...}'` |
 | `list` | Show all tasks | `node taskmanager-api.js list` |
-| `claim` | Claim task for agent | `node taskmanager-api.js claim [taskId] [agentId]` |
+| `approve-feature` | Approve feature | `node taskmanager-api.js approve-feature [featureId]` |
 | `status` | System status | `node taskmanager-api.js status` |
-| `complete` | Mark task complete | `node taskmanager-api.js complete [taskId]` |
+| `list-features` | List all features | `node taskmanager-api.js list-features` |
 
 ### **Advanced Commands**
 
@@ -527,7 +527,7 @@ node taskmanager-api.js init --force
 node taskmanager-api.js autofix
 
 # Manual recovery
-cp TODO.json.backup TODO.json
+cp FEATURES.json.backup FEATURES.json
 ```
 
 #### **Issue: Multi-Agent Conflicts**

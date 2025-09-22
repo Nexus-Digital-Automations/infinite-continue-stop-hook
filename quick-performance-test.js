@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * Quick TaskManager Performance Test
  * Focused performance analysis with faster execution
@@ -20,7 +19,7 @@ class QuickPerformanceTest {
     return new Promise((resolve) => {
       const cmdArgs = [this.taskManagerPath, command, ...args];
       const childProcess = spawn('node', cmdArgs, {
-        stdio: ['pipe', 'pipe', 'pipe']
+        stdio: ['pipe', 'pipe', 'pipe'],
       });
 
       let stdout = '';
@@ -35,7 +34,7 @@ class QuickPerformanceTest {
             duration: performance.now() - startTime,
             success: false,
             error: 'timeout',
-            timeout: true
+            timeout: true,
           });
         }
       }, timeout);
@@ -74,7 +73,7 @@ class QuickPerformanceTest {
             response,
             stdout: stdout.length > 500 ? stdout.substring(0, 500) + '...' : stdout,
             stderr: stderr.length > 200 ? stderr.substring(0, 200) + '...' : stderr,
-            memoryUsed: process.memoryUsage().heapUsed - startMemory.heapUsed
+            memoryUsed: process.memoryUsage().heapUsed - startMemory.heapUsed,
           });
         }
       });
@@ -92,7 +91,7 @@ class QuickPerformanceTest {
       { name: 'System Statistics', command: 'stats' },
       { name: 'RAG Health Check', command: 'rag-health' },
       { name: 'API Guide', command: 'guide' },
-      { name: 'Usage Analytics', command: 'usage-analytics' }
+      { name: 'Usage Analytics', command: 'usage-analytics' },
     ];
 
     for (const test of tests) {
@@ -101,7 +100,7 @@ class QuickPerformanceTest {
 
       this.results.push({
         testName: test.name,
-        ...result
+        ...result,
       });
 
       const status = result.success ? '✅' : '❌';
@@ -195,14 +194,14 @@ class QuickPerformanceTest {
         failed: failed.length,
         avgResponseTime: successful.length > 0 ? successful.reduce((sum, r) => sum + r.duration, 0) / successful.length : 0,
         totalMemoryUsed: totalMemoryUsed,
-        avgMemoryPerOp: avgMemoryPerOp
+        avgMemoryPerOp: avgMemoryPerOp,
       },
       details: this.results,
       performance: {
         fastOperations: fastOperations.map(op => ({ name: op.testName, time: op.duration })),
         slowOperations: slowOperations.map(op => ({ name: op.testName, time: op.duration })),
-        failedOperations: failed.map(op => ({ name: op.testName, error: op.error || 'Unknown' }))
-      }
+        failedOperations: failed.map(op => ({ name: op.testName, error: op.error || 'Unknown' })),
+      },
     };
 
     console.log(`\n🎯 Performance Score: ${this.calculatePerformanceScore(report)}/100`);

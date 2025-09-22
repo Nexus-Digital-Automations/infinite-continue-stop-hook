@@ -2,6 +2,58 @@
   "project": "infinite-continue-stop-hook",
   "tasks": [
     {
+      "status": "pending",
+      "created_at": "2025-09-22T06:19:16.772Z",
+      "title": "Simplify CLAUDE.md from 800+ lines to streamlined 300 lines",
+      "description": "Remove complex protocols while maintaining essential quality standards. Remove: mandatory taskmanager initialization, RAG-first workflows, complex preparation checklists. Preserve: linter protocols, git workflow, security scanning, code quality standards",
+      "category": "feature",
+      "id": "error_1758522784372_avsmkh1jz",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758521939358_1_general_bf47d955",
+          "role": "primary",
+          "assignedAt": "2025-09-22T06:19:35.262Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1758521939358_1_general_bf47d955",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-22T06:49:40.331Z",
+          "reason": "Agent became stale (inactive >30 minutes)"
+        }
+      ]
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-22T06:19:35.193Z",
+      "title": "Update stop-hook.js to reference FEATURES.json instead of TODO.json",
+      "description": "Systematically update all references in stop-hook.js from TODO.json to FEATURES.json. This includes: file path constants, validation checks, cleanup functions, console messages, error handling, and any hardcoded strings. Ensure full compatibility with new file structure while maintaining system functionality.",
+      "category": "feature",
+      "id": "error_1758522784372_843skbezk",
+      "assigned_agent": null,
+      "started_at": null,
+      "claimed_by": null,
+      "agent_assignment_history": [
+        {
+          "agentId": "dev_session_1758521958245_1_general_fc96b7a9",
+          "role": "primary",
+          "assignedAt": "2025-09-22T06:19:54.200Z",
+          "reassignReason": null,
+          "claimPriority": "normal"
+        },
+        {
+          "agent": "dev_session_1758521958245_1_general_fc96b7a9",
+          "action": "auto_unassign_stale",
+          "timestamp": "2025-09-22T06:49:40.331Z",
+          "reason": "Agent became stale (inactive >30 minutes)"
+        }
+      ]
+    },
+    {
       "id": "feature_1757784273281_nd0h8edtf",
       "title": "Performance Analysis: Embedded Subtasks and Success Criteria Impact",
       "description": "Comprehensive performance research analyzing the impact of embedded subtasks and success criteria endpoints on TaskManager system performance, including query performance, memory usage, API response times, concurrent access patterns, and optimization strategies",
@@ -757,6 +809,30 @@
           "reason": "Agent became stale (inactive >30 minutes)"
         }
       ]
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-22T06:17:51.780Z",
+      "title": "Implement CLAUDE.md Simplification & FEATURES.json Migration Plan",
+      "description": "Complete system overhaul: 1) Simplify CLAUDE.md from 800+ to ~300 lines removing complex protocols, 2) Rename TODO.json to FEATURES.json with approval workflow, 3) Update stop-hook.js references, 4) Refactor taskmanager API for feature management only, 5) Integrate native TodoWrite as primary task management, 6) Maintain quality standards without over-engineering. Deploy 6 concurrent agents for multi-component implementation.",
+      "category": "feature",
+      "id": "feature_1758521871780_y1svy3e0h3"
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-22T06:19:30.568Z",
+      "title": "Refactor taskmanager-api.js to feature-only management system",
+      "description": "Transform taskmanager-api.js from task management to exclusive feature management with strict approval workflow. Remove all task management endpoints (init, create, complete, claim). Implement feature lifecycle: suggest-feature, approve-feature, reject-feature, list-features, feature-stats. Replace TODO.json with FEATURES.json. Enforce suggested → approved → implemented status flow.",
+      "category": "feature",
+      "id": "feature_1758521970568_6j53t1arqc7"
+    },
+    {
+      "status": "pending",
+      "created_at": "2025-09-22T06:19:30.965Z",
+      "title": "Execute TODO.json to FEATURES.json migration with new approval workflow schema",
+      "description": "Migrate TODO.json to FEATURES.json with new schema supporting suggested/approved/implemented status workflow. Create backup, transform data structure, validate migration success.",
+      "category": "feature",
+      "id": "feature_1758521970964_0mzzcda39fdp"
     },
     {
       "id": "test_1757781551850_k12iufq25",
@@ -2447,7 +2523,18 @@
       "title": "Test task for subtasks audit",
       "description": "Testing embedded subtasks functionality",
       "category": "feature",
-      "id": "test_1758437599543_b0w7rqtag"
+      "id": "test_1758437599543_b0w7rqtag",
+      "started_at": null,
+      "agent_assignment_history": [
+        {
+          "agent": "system",
+          "action": "auto_reset_orphaned",
+          "timestamp": "2025-09-22T06:50:17.474Z",
+          "reason": "Item orphaned for 24 hours - forced reset",
+          "orphaned_duration_hours": 24,
+          "last_activity": "2025-09-21T06:50:01.392Z"
+        }
+      ]
     },
     {
       "status": "pending",
@@ -2874,78 +2961,6 @@
       "description": "Test task for performance benchmarking",
       "category": "test",
       "id": "test_1758479538617_hv3hp3vjo2q"
-    },
-    {
-      "status": "pending",
-      "created_at": "2025-09-22T06:17:51.780Z",
-      "title": "Implement CLAUDE.md Simplification & FEATURES.json Migration Plan",
-      "description": "Complete system overhaul: 1) Simplify CLAUDE.md from 800+ to ~300 lines removing complex protocols, 2) Rename TODO.json to FEATURES.json with approval workflow, 3) Update stop-hook.js references, 4) Refactor taskmanager API for feature management only, 5) Integrate native TodoWrite as primary task management, 6) Maintain quality standards without over-engineering. Deploy 6 concurrent agents for multi-component implementation.",
-      "category": "feature",
-      "id": "feature_1758521871780_y1svy3e0h3"
-    },
-    {
-      "status": "in_progress",
-      "created_at": "2025-09-22T06:19:16.772Z",
-      "title": "Simplify CLAUDE.md from 800+ lines to streamlined 300 lines",
-      "description": "Remove complex protocols while maintaining essential quality standards. Remove: mandatory taskmanager initialization, RAG-first workflows, complex preparation checklists. Preserve: linter protocols, git workflow, security scanning, code quality standards",
-      "category": "feature",
-      "id": "feature_1758521956772_1047hm0bk9o",
-      "assigned_agent": "dev_session_1758521939358_1_general_bf47d955",
-      "started_at": "2025-09-22T06:19:35.262Z",
-      "claimed_by": "dev_session_1758521939358_1_general_bf47d955",
-      "agent_assignment_history": [
-        {
-          "agentId": "dev_session_1758521939358_1_general_bf47d955",
-          "role": "primary",
-          "assignedAt": "2025-09-22T06:19:35.262Z",
-          "reassignReason": null,
-          "claimPriority": "normal"
-        }
-      ]
-    },
-    {
-      "status": "pending",
-      "created_at": "2025-09-22T06:19:30.568Z",
-      "title": "Refactor taskmanager-api.js to feature-only management system",
-      "description": "Transform taskmanager-api.js from task management to exclusive feature management with strict approval workflow. Remove all task management endpoints (init, create, complete, claim). Implement feature lifecycle: suggest-feature, approve-feature, reject-feature, list-features, feature-stats. Replace TODO.json with FEATURES.json. Enforce suggested → approved → implemented status flow.",
-      "category": "feature",
-      "id": "feature_1758521970568_6j53t1arqc7"
-    },
-    {
-      "status": "pending",
-      "created_at": "2025-09-22T06:19:30.955Z",
-      "title": "Preserve quality standards while simplifying CLAUDE.md",
-      "description": "Analyze current CLAUDE.md file and streamline it while preserving essential quality standards including linter protocols, security scanning, git workflows, code quality standards, professional practices, and concurrent deployment capabilities. Remove over-engineered preparation protocols and complex workflow checklists.",
-      "category": "feature",
-      "id": "feature_1758521970955_l3375l5vl29"
-    },
-    {
-      "status": "pending",
-      "created_at": "2025-09-22T06:19:30.965Z",
-      "title": "Execute TODO.json to FEATURES.json migration with new approval workflow schema",
-      "description": "Migrate TODO.json to FEATURES.json with new schema supporting suggested/approved/implemented status workflow. Create backup, transform data structure, validate migration success.",
-      "category": "feature",
-      "id": "feature_1758521970964_0mzzcda39fdp"
-    },
-    {
-      "status": "in_progress",
-      "created_at": "2025-09-22T06:19:35.193Z",
-      "title": "Update stop-hook.js to reference FEATURES.json instead of TODO.json",
-      "description": "Systematically update all references in stop-hook.js from TODO.json to FEATURES.json. This includes: file path constants, validation checks, cleanup functions, console messages, error handling, and any hardcoded strings. Ensure full compatibility with new file structure while maintaining system functionality.",
-      "category": "feature",
-      "id": "feature_1758521975193_qyr7izlkbsj",
-      "assigned_agent": "dev_session_1758521958245_1_general_fc96b7a9",
-      "started_at": "2025-09-22T06:19:54.200Z",
-      "claimed_by": "dev_session_1758521958245_1_general_fc96b7a9",
-      "agent_assignment_history": [
-        {
-          "agentId": "dev_session_1758521958245_1_general_fc96b7a9",
-          "role": "primary",
-          "assignedAt": "2025-09-22T06:19:54.200Z",
-          "reassignReason": null,
-          "claimPriority": "normal"
-        }
-      ]
     }
   ],
   "current_mode": "DEVELOPMENT",
@@ -2954,134 +2969,7 @@
   "review_strikes": 0,
   "strikes_completed_last_run": false,
   "last_hook_activation": 1757094794402,
-  "agents": {
-    "dev_session_1758521848943_1_general_650eaf98": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-22T06:17:28.943Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-22T06:17:28.943Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758521939358_1_general_bf47d955": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-22T06:18:59.358Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-22T06:18:59.358Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758521952849_1_general_6d633192": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-22T06:19:12.850Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-22T06:19:12.850Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758521953438_1_general_edae37bd": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-22T06:19:13.438Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-22T06:19:13.438Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758521953769_1_general_d982c05f": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-22T06:19:13.769Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-22T06:19:13.769Z",
-      "sessionId": null,
-      "metadata": {}
-    },
-    "dev_session_1758521958245_1_general_fc96b7a9": {
-      "name": "undefined Agent",
-      "role": "development",
-      "specialization": [],
-      "status": "active",
-      "assignedTasks": [],
-      "lastHeartbeat": "2025-09-22T06:19:18.245Z",
-      "parentAgentId": null,
-      "capabilities": [
-        "file-operations",
-        "linting",
-        "testing",
-        "build-fixes",
-        "refactoring"
-      ],
-      "workload": 0,
-      "maxConcurrentTasks": 5,
-      "createdAt": "2025-09-22T06:19:18.245Z",
-      "sessionId": null,
-      "metadata": {}
-    }
-  },
+  "agents": {},
   "features": [
     {
       "id": "feature_suggested_1757095650796_wpub5ogu3",

@@ -231,17 +231,17 @@ class SuccessCriteriaValidator {
   }
 
   /**
-   * Get task-specific success criteria from TODO.json
+   * Get task-specific success criteria from FEATURES.json
    */
   async getTaskCriteria(taskId) {
     try {
-      const todoPath = _path.join(__dirname, 'TODO.json');
+      const todoPath = _path.join(__dirname, 'FEATURES.json');
       const todoData = await _fs.readFile(todoPath, 'utf8');
       const todo = JSON.parse(todoData);
 
       const task = todo.tasks.find((t) => t.id === taskId);
       if (!task) {
-        throw new Error(`Task ${taskId} not found in TODO.json`);
+        throw new Error(`Task ${taskId} not found in FEATURES.json`);
       }
 
       return {

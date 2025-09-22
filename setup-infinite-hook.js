@@ -247,15 +247,15 @@ function createProjectDirectories(targetPath) {
   return { developmentPath, tasksPath, reportsPath, logsPath };
 }
 
-// Check if TODO.json needs to be updated to new schema
+// Check if FEATURES.json needs to be updated to new schema
 function needsTodoUpdate(todoPath) {
-  // eslint-disable-next-line security/detect-non-literal-fs-filename -- TODO.json path constructed from trusted setup directory
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- FEATURES.json path constructed from trusted setup directory
   if (!_fs.existsSync(todoPath)) {
     return true;
   }
 
   try {
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- TODO.json path validated through setup process
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- FEATURES.json path validated through setup process
     const existing = JSON.parse(_fs.readFileSync(todoPath, 'utf8'));
 
     // Check for old schema indicators
@@ -270,27 +270,27 @@ function needsTodoUpdate(todoPath) {
     if (hasOldSchema) {
 
       console.log(
-        `⚠️  ${_path.basename(_path.dirname(todoPath))} - TODO.json uses old schema, will update`,
+        `⚠️  ${_path.basename(_path.dirname(todoPath))} - FEATURES.json uses old schema, will update`,
       );
       return true;
     }
 
 
     console.log(
-      `✓ ${_path.basename(_path.dirname(todoPath))} - TODO.json already up to date`,
+      `✓ ${_path.basename(_path.dirname(todoPath))} - FEATURES.json already up to date`,
     );
     return false;
   } catch {
 
     console.log(
-      `⚠️  ${_path.basename(_path.dirname(todoPath))} - TODO.json corrupted, will recreate`,
+      `⚠️  ${_path.basename(_path.dirname(todoPath))} - FEATURES.json corrupted, will recreate`,
     );
     return true;
   }
 }
 
 function createTodoJson(targetPath, projectInfo) {
-  const todoPath = _path.join(targetPath, 'TODO.json');
+  const todoPath = _path.join(targetPath, 'FEATURES.json');
 
   // Smart update logic - only update if schema is old or missing
   if (!needsTodoUpdate(todoPath)) {
@@ -409,11 +409,11 @@ This validation ensures professional-grade delivery quality.`,
     });
   });
 
-  // Write TODO.json
+  // Write FEATURES.json
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- TODO.json path validated through setup process
   _fs.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
 
-  console.log(`\n✓ TODO.json created at: ${todoPath}`);
+  console.log(`\n✓ FEATURES.json created at: ${todoPath}`);
 
   return true;
 }
@@ -471,7 +471,7 @@ async function processProject(targetPath) {
     // Create project directories and copy mode files if needed
     await createProjectDirectories(targetPath);
 
-    // Create/update TODO.json if needed
+    // Create/update FEATURES.json if needed
     const success = await createTodoJson(targetPath, projectInfo);
 
     // Migrate to feature-based system (replaces features.json)
@@ -494,24 +494,24 @@ async function processProject(targetPath) {
 }
 
 /**
- * Migrate TODO.json to feature-based system (replaces dual features.json system)
+ * Migrate FEATURES.json to feature-based system (replaces dual features.json system)
  * @param {string} targetPath - Target project path
  */
 function migrateToFeatureBasedSystem(targetPath) {
-  const todoPath = _path.join(targetPath, 'TODO.json');
+  const todoPath = _path.join(targetPath, 'FEATURES.json');
 
   try {
 
     console.log(`   🔄 Checking for feature-based migration...`);
 
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- TODO.json path constructed from trusted project directory
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- FEATURES.json path constructed from trusted project directory
     if (!_fs.existsSync(todoPath)) {
-      console.log(`   ⚠️  No TODO.json found - skipping migration`);
+      console.log(`   ⚠️  No FEATURES.json found - skipping migration`);
       return;
     }
 
-    // Read current TODO.json
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- TODO.json path validated through setup process
+    // Read current FEATURES.json
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- FEATURES.json path validated through setup process
     const todoData = JSON.parse(_fs.readFileSync(todoPath, 'utf8'));
 
     // Check if already feature-based
@@ -523,7 +523,7 @@ function migrateToFeatureBasedSystem(targetPath) {
 
     // Create backup before migration
     const backupPath = todoPath + '.pre-feature-migration.backup';
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- Backup path constructed from validated TODO.json path
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- Backup path constructed from validated FEATURES.json path
     _fs.writeFileSync(backupPath, JSON.stringify(todoData, null, 2));
 
     console.log(`   📋 Created backup: ${_path.basename(backupPath)}`);
@@ -539,7 +539,7 @@ function migrateToFeatureBasedSystem(targetPath) {
     const migrated = convertToFeatureBasedSchema(todoData, analysis);
 
     // Write migrated structure
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- TODO.json path validated through setup process
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- FEATURES.json path validated through setup process
     _fs.writeFileSync(todoPath, JSON.stringify(migrated, null, 2));
 
 
@@ -674,10 +674,10 @@ function generateFeatureTitle(phaseKey, sampleTitle) {
 }
 
 /**
- * Convert TODO.json to feature-based structure
- * @param {Object} todoData - Current TODO.json data
+ * Convert FEATURES.json to feature-based structure
+ * @param {Object} todoData - Current FEATURES.json data
  * @param {Object} analysis - Task analysis results
- * @returns {Object} Migrated TODO.json structure
+ * @returns {Object} Migrated FEATURES.json structure
  */
 function convertToFeatureBasedSchema(todoData, analysis) {
   const migrated = {
@@ -812,7 +812,7 @@ function calculateCompletionPercentage(tasks) {
 
 async function main() {
 
-  console.log('=== Infinite Continue Stop Hook - Batch TODO.json Setup ===\n');
+  console.log('=== Infinite Continue Stop Hook - Batch FEATURES.json Setup ===\n');
 
   // Resolve project path
   const targetPath = _path.resolve(projectPath);
@@ -890,7 +890,7 @@ async function main() {
 
     console.log('\n📋 Each project now includes:');
 
-    console.log('   - TODO.json with new multi-agent schema');
+    console.log('   - FEATURES.json with new feature approval workflow');
 
     console.log('   - Development mode files and directory structure');
 

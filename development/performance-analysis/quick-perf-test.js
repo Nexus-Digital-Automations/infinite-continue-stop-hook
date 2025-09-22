@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * Quick Performance Test for Critical TaskManager API Endpoints
  * Focused on measuring response times for core operations
@@ -17,7 +16,7 @@ class QuickPerfTest {
     console.log(`Testing ${command}...`);
     const times = [];
     let successCount = 0;
-    let errors = [];
+    const errors = [];
 
     for (let i = 0; i < iterations; i++) {
       try {
@@ -52,11 +51,11 @@ class QuickPerfTest {
       minResponseTime: validTimes.length > 0 ? Math.min(...validTimes) : 0,
       maxResponseTime: validTimes.length > 0 ? Math.max(...validTimes) : 0,
       errors: errors,
-      rawTimes: times
+      rawTimes: times,
     };
   }
 
-  async runCriticalPathTest() {
+  runCriticalPathTest() {
     console.log('🚀 Running Critical Path Performance Test\n');
 
     // Test core endpoints individually
@@ -68,7 +67,7 @@ class QuickPerfTest {
       { cmd: 'stats', args: [], description: 'System Statistics' },
       { cmd: 'rag-health', args: [], description: 'RAG System Health' },
       { cmd: 'usage-analytics', args: [], description: 'Usage Analytics' },
-      { cmd: 'guide', args: [], description: 'API Guide' }
+      { cmd: 'guide', args: [], description: 'API Guide' },
     ];
 
     for (const endpoint of endpoints) {
@@ -97,10 +96,10 @@ class QuickPerfTest {
         averageResponseTime: 0,
         fastestEndpoint: null,
         slowestEndpoint: null,
-        errorProneEndpoints: []
+        errorProneEndpoints: [],
       },
       detailed: this.results,
-      recommendations: []
+      recommendations: [],
     };
 
     // Calculate summary metrics
@@ -127,7 +126,7 @@ class QuickPerfTest {
         priority: 'High',
         category: 'Performance',
         issue: `Slow response time for ${report.summary.slowestEndpoint.command}`,
-        recommendation: 'Investigate bottlenecks in slowest endpoint'
+        recommendation: 'Investigate bottlenecks in slowest endpoint',
       });
     }
 
@@ -136,7 +135,7 @@ class QuickPerfTest {
         priority: 'High',
         category: 'Reliability',
         issue: 'Endpoints with reliability issues detected',
-        recommendation: 'Improve error handling and validation'
+        recommendation: 'Improve error handling and validation',
       });
     }
 
@@ -145,7 +144,7 @@ class QuickPerfTest {
         priority: 'Medium',
         category: 'Performance',
         issue: 'High average response time across endpoints',
-        recommendation: 'Implement caching and optimize critical path'
+        recommendation: 'Implement caching and optimize critical path',
       });
     }
 
@@ -169,7 +168,7 @@ async function main() {
   const tester = new QuickPerfTest();
 
   try {
-    const results = await tester.runCriticalPathTest();
+    tester.runCriticalPathTest();
     const report = tester.generateQuickReport();
     const outputFile = tester.saveReport(report);
 
@@ -198,7 +197,7 @@ async function main() {
 
   } catch (error) {
     console.error('❌ Performance test failed:', error);
-    process.exit(1);
+    throw error;
   }
 }
 

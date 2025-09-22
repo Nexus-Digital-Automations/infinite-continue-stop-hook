@@ -485,11 +485,18 @@ function provideInstructiveTaskGuidance(taskManager, taskStatus) {
   return `
 📋 CLAUDE CODE AGENT TASK CONTINUATION PROTOCOL
 
-🚨 **CRITICAL AGENT PROTOCOL:**
+🚨 **AGENT WORKFLOW MANDATES:**
+**MANDATORY AGENT LIFECYCLE:**
+1. **INITIALIZE AGENT** - Start fresh or reinitialize existing agent for session
+2. **CLAIM FEATURE OR REVIEW** - Either claim approved feature tasks OR focus on codebase review
+3. **TODOWRITE EXECUTION** - Use TodoWrite for task management and infinite continuation
+4. **VALIDATION CYCLE** - Continuously ensure: linter passes, builds succeed, runs/starts properly, unit tests pass with adequate coverage
+5. **STOP ONLY WHEN PERFECT** - Only stop when all validation passes and codebase is perfect
+
 **ULTRATHINK - MANDATORY SEQUENCE:**
 1. **READ/REVIEW development/essentials/** directory - MANDATORY EVERY TIME
-2. **REINITIALIZE AGENT** to continue existing work or init new agent
-3. **CHECK CURRENT TASK** status - complete unfinished work first
+2. **CHECK APPROVED FEATURES** - list features ready for implementation
+3. **WORK ONLY ON APPROVED** - never implement unapproved features
 4. **DEPLOY CONCURRENT SUBAGENTS** - use up to 10 for complex tasks
 5. **VALIDATE BEFORE COMPLETION** - run all checks (lint, typecheck, tests) before marking complete
 6. **MAXIMUM LOGGING & DOCUMENTATION** - comprehensive logging and documentation in all code
@@ -498,7 +505,7 @@ function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 **FINISH CURRENT TASKS BEFORE STARTING NEW ONES - PROFESSIONAL DEVELOPERS COMPLETE THEIR WORK**
 
 **CONTINUATION PROTOCOL:**
-✅ **CHECK AGENT STATUS** → Always use reinitialize (works for both fresh and existing agents)
+✅ **CHECK FEATURE STATUS** → Use list-features to check current features and their approval status
 ✅ **COMPLETE CURRENT WORK** → Never abandon unfinished tasks - teams depend on you
 ✅ **PRESERVE CONTEXT** → Build upon existing work, maintain implementation approach
 ✅ **VALIDATE THOROUGHLY** → Run all checks before completion
@@ -507,7 +514,7 @@ function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 ❌ **NO SHORTCUTS** → Fix problems directly, never hide or mask issues
 
 **MANDATORY RULES:**
-• **FEATURES**: Only implement "approved" status features in TODO.json
+• **FEATURES**: Only implement "approved" status features in FEATURES.json
 • **SCOPE CONTROL**: Write feature suggestions in development/essentials/features.md only
 • **TASK CLAIMING**: Verify tasks not already claimed before claiming
 • **DEVELOPMENT ESSENTIALS**: Read all files before any work
@@ -516,8 +523,12 @@ function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 🎯 **ESSENTIAL COMMANDS:**
 
 **CORE WORKFLOW:**
-   # Reinitialize agent (works for fresh and existing agents)
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID] --project-root "/Users/jeremyparker/infinite-continue-stop-hook"
+   # Initialize or reinitialize agent
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID]
+
+   # Check current feature status and available commands
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" guide
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" list-features
 
    # Read development/essentials/ files
    ls development/essentials/ 2>/dev/null && find development/essentials/ -type f -name "*.md" -exec echo "=== {} ===" \\; -exec cat {} \\;
@@ -539,6 +550,11 @@ function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 ❌ NEVER mark complete without validation → ✅ Always run \`npm run lint\`, \`npm run typecheck\`
 If validation fails → Create linter-error task IMMEDIATELY, fix before completion
 
+**SELF-AUTHORIZATION STOP (WHEN PROJECT PERFECT):**
+   # ONLY when ALL applicable criteria met: TodoWrite tasks✅ + available scripts (linter✅ build✅ start✅ tests✅)
+   # NOTE: Only check scripts that exist in package.json - not all codebases have all scripts
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop [AGENT_ID] "All TodoWrite tasks complete and project perfect: [list applicable criteria]"
+
 **GIT WORKFLOW (AFTER TASK COMPLETION):**
    git add -A
    git commit -m "feat: [description]
@@ -550,7 +566,7 @@ If validation fails → Create linter-error task IMMEDIATELY, fix before complet
 📊 **PROJECT STATUS:** ${taskStatus.pending} pending, ${taskStatus.in_progress} in progress, ${taskStatus.completed} completed
 🔗 **FEATURE SYSTEM:** Complete features in numerical order (Feature 1 → 2 → 3...), subtasks sequentially within features
 ⏰ **AUTOMATIC CLEANUP:** Stale tasks (>30 min) reset to pending on every stop hook call, stale agents removed automatically
-🛑 **STOP AUTHORIZATION:** Only via API endpoint - \`tm.authorizeStopHook(agentId, reason)\` for single-use stop permission
+🛑 **SELF-AUTHORIZATION STOP:** Agents can authorize their own stop when ALL TodoWrite tasks complete AND project achieves perfection (check only scripts that exist: linter✅ build✅ start✅ tests✅)
 
 ⚠️ **BASH ESCAPING:** Use single quotes for node -e commands: \`node -e 'code'\` not \`node -e "code"\`
 Avoid ! operator - use \`(variable === undefined || variable === null)\` instead of \`!variable\`
@@ -599,8 +615,8 @@ process.stdin.on('end', async () => {
       `Received ${hook_event_name || 'unknown'} event from Claude Code`,
     );
 
-    // Check if TODO.json exists in current project
-    const todoPath = _path.join(workingDir, 'TODO.json');
+    // Check if FEATURES.json exists in current project
+    const todoPath = _path.join(workingDir, 'FEATURES.json');
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated paths from project structure
     if (!_fs.existsSync(todoPath)) {
       logger.addFlow('No TODO.json found - this is not a TaskManager project');
@@ -618,8 +634,8 @@ The stop hook will continue infinitely to prevent accidental termination.
 
 💡 TO SET UP TASKMANAGER:
 If you want to enable task management for this project:
-1. Run: timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID] --project-root "${workingDir}"
-2. This will create TODO.json and reinitialize your agent
+1. Run: timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID]
+2. This will reinitialize your agent and prepare the FEATURES.json system
 
 ⚡ CONTINUING OPERATION...
 `);
@@ -1019,7 +1035,7 @@ Initialize a new agent and continue where they left off.
 To recover and continue work from the previous stale agents:
 
 1. **Reinitialize your recovery agent:**
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID] --project-root "${workingDir}"
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID]
 
 2. **Check for unfinished tasks from previous agents:**
    node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Pending tasks to continue:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
@@ -1067,8 +1083,8 @@ TaskManager project exists but no agents have been registered yet.
 💡 **FRESH PROJECT AGENT SETUP:**
 To start working with this TaskManager project:
 
-1. **Reinitialize agent for fresh start:**
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID] --project-root "${workingDir}"
+1. **Initialize agent for fresh start:**
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" initialize [AGENT_ID]
 
 2. **Check for any existing tasks to work on:**
    node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Available tasks:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
@@ -1105,7 +1121,7 @@ This is a single-use authorization.
 ⚡ Future stop hook triggers will return to infinite continue mode.
 
 To trigger another stop, use the TaskManager API:
-node -e "const _TaskManager = require('/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TODO.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => console.log(JSON.stringify(result, null, 2)));"
+node -e "const _TaskManager = require('/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./FEATURES.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => console.log(JSON.stringify(result, null, 2)));"
 `);
       // eslint-disable-next-line n/no-process-exit
       process.exit(0); // Allow stop only when endpoint triggered
@@ -1120,7 +1136,7 @@ node -e "const _TaskManager = require('/Users/jeremyparker/infinite-continue-sto
     try {
       _taskStatus = await taskManager.getTaskStatus();
     } catch (error) {
-      // Handle corrupted TODO.json by using autoFixer
+      // Handle corrupted FEATURES.json by using autoFixer
       logger.addFlow(
         `Task status failed, attempting auto-fix: ${error.message}`,
       );
@@ -1165,7 +1181,7 @@ node -e "const _TaskManager = require('/Users/jeremyparker/infinite-continue-sto
 📊 Total found: ${archivalResult.total || 'N/A'}
 📋 Skipped: ${archivalResult.skipped || 0}
 
-This keeps TODO.json clean and prevents it from becoming crowded with completed work.
+This keeps FEATURES.json clean and prevents it from becoming crowded with completed work.
         `);
       } else {
         logger.addFlow('No completed tasks found to archive');
@@ -1194,10 +1210,17 @@ This is non-critical and won't prevent continued operation.
     console.error(`
 🔄 INFINITE CONTINUE MODE ACTIVE
 
-🚨 **CLAUDE CODE AGENT - PROFESSIONAL DEVELOPER PROTOCOL:**
+🚨 **AGENT WORKFLOW MANDATES - PROFESSIONAL DEVELOPER PROTOCOL:**
+**MANDATORY AGENT LIFECYCLE:**
+• **INITIALIZE AGENT** - Start fresh or reinitialize existing agent for session
+• **CLAIM FEATURE OR REVIEW** - Either claim approved feature tasks OR focus on codebase review
+• **TODOWRITE EXECUTION** - Use TodoWrite for task management and infinite continuation
+• **VALIDATION CYCLE** - Continuously ensure: linter passes, builds succeed, runs/starts properly, unit tests pass with adequate coverage
+• **STOP ONLY WHEN PERFECT** - Only stop when all validation passes and codebase is perfect
+
 **ULTRATHINK - MANDATORY REQUIREMENTS:**
 • **READ development/essentials/ FILES FIRST** - Every task/session start
-• **REINITIALIZE/INIT AGENT** - Continue existing work or start fresh
+• **CHECK APPROVED FEATURES** - Only work on user-approved features
 • **COMPLETE UNFINISHED TASKS** - Never abandon work, finish what you start
 • **DEPLOY CONCURRENT SUBAGENTS** - Use up to 10 for complex tasks
 • **COMPREHENSIVE LOGGING** - Document all functions and decisions
@@ -1209,8 +1232,9 @@ ${instructiveGuidance}
 🚫 STOP NOT ALLOWED
 This system operates in infinite continue mode. To authorize a stop, use:
 
-🛑 AUTHORIZE STOP WITH TASKMANAGER API:
-   timeout 10s node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.authorizeStopHook("agent_id", "Reason for stopping").then(result => console.log(JSON.stringify(result, null, 2)));'
+🛑 SELF-AUTHORIZE STOP WHEN PROJECT PERFECT:
+   # When ALL TodoWrite tasks complete AND project perfect (linter✅ build✅ start✅ tests✅)
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop [AGENT_ID] "All TodoWrite tasks complete and project perfect: linter✅ build✅ start✅ tests✅"
 
 ⚡ CONTINUING OPERATION...
 `);
@@ -1235,7 +1259,7 @@ Error encountered: ${error.message}
 Even with errors, the system continues to prevent accidental termination.
 
 💡 CHECK YOUR TASKMANAGER SETUP:
-- Ensure TODO.json is properly formatted
+- Ensure FEATURES.json is properly formatted
 - Verify TaskManager library is accessible
 - Check file permissions
 

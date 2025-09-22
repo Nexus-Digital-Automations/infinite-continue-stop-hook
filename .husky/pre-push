@@ -1,0 +1,127 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🚀 Running pre-push hooks..."
+
+# Function to run command with timeout
+run_with_timeout() {
+  local timeout_duration="$1"
+  local command="$2"
+  local description="$3"
+
+  echo "🔍 $description..."
+
+  if timeout "$timeout_duration" $command; then
+    echo "✅ $description completed successfully"
+    return 0
+  else
+    echo "❌ $description failed or timed out"
+    return 1
+  fi
+}
+
+# Get the remote and branch being pushed to
+remote="$1"
+url="$2"
+
+# Read from stdin to get the refs being pushed
+while read local_ref local_sha remote_ref remote_sha; do
+  if [ "$local_sha" = "0000000000000000000000000000000000000000" ]; then
+    echo "ℹ️ Deleting branch $remote_ref, skipping pre-push hooks"
+    continue
+  fi
+
+  if [ "$remote_sha" = "0000000000000000000000000000000000000000" ]; then
+    echo "📝 Creating new branch $remote_ref"
+  else
+    echo "📝 Updating branch $remote_ref"
+  fi
+
+  # Stage 1: Run comprehensive test suite
+  echo "📋 Stage 1: Comprehensive testing"
+
+  if ! run_with_timeout "120s" "npm test" "Full test suite"; then
+    echo "❌ Test suite failed - push aborted"
+    echo "💡 Fix failing tests before pushing"
+    exit 1
+  fi
+
+  # Stage 2: Run all RAG system tests
+  echo "📋 Stage 2: RAG system validation"
+
+  if ! run_with_timeout "90s" "npm run test:rag" "RAG system tests"; then
+    echo "⚠️ RAG tests failed"
+    echo "❓ Do you want to continue anyway? (y/N)"
+    read -r response
+    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+      echo "❌ Push aborted due to RAG test failures"
+      exit 1
+    fi
+  fi
+
+  # Stage 3: Lint validation
+  echo "📋 Stage 3: Code quality validation"
+
+  if ! run_with_timeout "30s" "npm run lint" "ESLint validation"; then
+    echo "❌ Linting failed - push aborted"
+    echo "💡 Run 'npm run lint:fix' to fix issues"
+    exit 1
+  fi
+
+  # Stage 4: Coverage validation
+  echo "📋 Stage 4: Coverage validation"
+
+  if ! run_with_timeout "45s" "npm run coverage:check" "Coverage threshold check"; then
+    echo "⚠️ Coverage thresholds not met"
+    echo "❓ Do you want to continue push anyway? (y/N)"
+    read -r response
+    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+      echo "❌ Push aborted due to coverage requirements"
+      exit 1
+    fi
+  fi
+
+  # Stage 5: Security audit
+  echo "📋 Stage 5: Security validation"
+
+  if ! npm audit --audit-level=high --production > /dev/null; then
+    echo "⚠️ Security vulnerabilities detected"
+    echo "🔧 Run 'npm audit fix' to resolve issues"
+    echo "❓ Do you want to continue push anyway? (y/N)"
+    read -r response
+    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+      echo "❌ Push aborted due to security concerns"
+      exit 1
+    fi
+  fi
+
+  # Stage 6: Build validation
+  echo "📋 Stage 6: Build validation"
+
+  # Check if project can start (quick validation)
+  if command -v timeout > /dev/null; then
+    echo "🚀 Validating application startup..."
+    if timeout 30s npm start &>/dev/null &
+    then
+      START_PID=$!
+      sleep 10
+      if kill -0 $START_PID 2>/dev/null; then
+        echo "✅ Application startup validation passed"
+        kill $START_PID 2>/dev/null
+        wait $START_PID 2>/dev/null || true
+      else
+        echo "❌ Application failed to start"
+        exit 1
+      fi
+    else
+      echo "⚠️ Could not validate application startup"
+    fi
+  fi
+
+done
+
+echo ""
+echo "🎉 All pre-push checks passed!"
+echo "✅ Code is ready for remote repository"
+echo "🚀 Pushing to $remote..."
+echo ""

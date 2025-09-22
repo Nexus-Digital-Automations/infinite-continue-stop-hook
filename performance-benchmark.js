@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * TaskManager Performance Benchmarking Suite
  *
@@ -25,7 +24,7 @@ class TaskManagerPerformanceBenchmark {
       subtaskOperations: [],
       successCriteriaValidation: [],
       systemBottlenecks: [],
-      recommendations: []
+      recommendations: [],
     };
     this.taskManagerPath = '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
     this.testStartTime = Date.now();
@@ -45,7 +44,7 @@ class TaskManagerPerformanceBenchmark {
     return new Promise((resolve) => {
       const cmdArgs = [this.taskManagerPath, command, ...args];
       const childProcess = spawn('timeout', ['10s', 'node', ...cmdArgs], {
-        stdio: ['pipe', 'pipe', 'pipe']
+        stdio: ['pipe', 'pipe', 'pipe'],
       });
 
       let stdout = '';
@@ -89,8 +88,8 @@ class TaskManagerPerformanceBenchmark {
             heapUsed: endMemory.heapUsed - startMemory.heapUsed,
             heapTotal: endMemory.heapTotal - startMemory.heapTotal,
             external: endMemory.external - startMemory.external,
-            rss: endMemory.rss - startMemory.rss
-          }
+            rss: endMemory.rss - startMemory.rss,
+          },
         });
       });
     });
@@ -111,7 +110,7 @@ class TaskManagerPerformanceBenchmark {
       ['guide'],
       ['methods'],
       ['rag-health'],
-      ['list-agents']
+      ['list-agents'],
     ];
 
     for (const endpoint of endpoints) {
@@ -123,7 +122,7 @@ class TaskManagerPerformanceBenchmark {
         this.results.apiResponses.push({
           endpoint: endpoint[0],
           iteration: i + 1,
-          ...result
+          ...result,
         });
 
         // Brief pause between requests
@@ -158,13 +157,13 @@ class TaskManagerPerformanceBenchmark {
       const taskData = {
         title: 'Performance Test Task',
         description: 'Task for performance testing embedded subtasks',
-        category: 'feature'
+        category: 'feature',
       };
 
       const createResult = await this.executeTimedCommand('create', [JSON.stringify(taskData)]);
       this.results.subtaskOperations.push({
         operation: 'create_task',
-        ...createResult
+        ...createResult,
       });
 
       if (!createResult.success || !createResult.response?.task?.id) {
@@ -183,20 +182,20 @@ class TaskManagerPerformanceBenchmark {
           title: `Performance Test Subtask ${i + 1}`,
           description: `Research subtask for performance testing iteration ${i + 1}`,
           estimated_hours: 1,
-          prevents_implementation: false
+          prevents_implementation: false,
         };
 
         const result = await this.executeTimedCommand('create-subtask', [
           taskId,
           JSON.stringify(subtaskData),
-          agentId
+          agentId,
         ]);
 
         this.results.subtaskOperations.push({
           operation: 'create_subtask',
           iteration: i + 1,
           taskId,
-          ...result
+          ...result,
         });
       }
 
@@ -206,7 +205,7 @@ class TaskManagerPerformanceBenchmark {
       this.results.subtaskOperations.push({
         operation: 'list_subtasks',
         taskId,
-        ...listResult
+        ...listResult,
       });
 
     } catch (error) {
@@ -227,10 +226,10 @@ class TaskManagerPerformanceBenchmark {
           buildSucceeds: { weight: 0.3, description: 'Project builds successfully' },
           testsPass: { weight: 0.3, description: 'All tests pass' },
           lintPasses: { weight: 0.2, description: 'Linting passes' },
-          startSucceeds: { weight: 0.2, description: 'Application starts successfully' }
+          startSucceeds: { weight: 0.2, description: 'Application starts successfully' },
         })],
         ['criteria-report'],
-        ['validate-criteria', 'feature_test_criteria']
+        ['validate-criteria', 'feature_test_criteria'],
       ];
 
       for (const [command, ...args] of operations) {
@@ -238,7 +237,7 @@ class TaskManagerPerformanceBenchmark {
         const result = await this.executeTimedCommand(command, args);
         this.results.successCriteriaValidation.push({
           operation: command,
-          ...result
+          ...result,
         });
       }
     } catch (error) {
@@ -261,8 +260,8 @@ class TaskManagerPerformanceBenchmark {
         this.executeTimedCommand('init').then(result => ({
           agentIndex: i,
           operation: 'concurrent_init',
-          ...result
-        }))
+          ...result,
+        })),
       );
     }
 
@@ -277,8 +276,8 @@ class TaskManagerPerformanceBenchmark {
           this.executeTimedCommand('list').then(result => ({
             agentIndex: i,
             operation: 'concurrent_list',
-            ...result
-          }))
+            ...result,
+          })),
         );
       }
 
@@ -304,7 +303,7 @@ class TaskManagerPerformanceBenchmark {
       const snapshot = {
         timestamp: Date.now(),
         iteration: i,
-        ...process.memoryUsage()
+        ...process.memoryUsage(),
       };
       memorySnapshots.push(snapshot);
 
@@ -318,7 +317,7 @@ class TaskManagerPerformanceBenchmark {
     this.results.memoryUsage = {
       startMemory,
       snapshots: memorySnapshots,
-      endMemory: process.memoryUsage()
+      endMemory: process.memoryUsage(),
     };
   }
 
@@ -332,7 +331,7 @@ class TaskManagerPerformanceBenchmark {
 
     // Analyze API response times
     const apiTimes = this.results.apiResponses.reduce((acc, result) => {
-      if (!acc[result.endpoint]) acc[result.endpoint] = [];
+      if (!acc[result.endpoint]) {acc[result.endpoint] = [];}
       acc[result.endpoint].push(result.duration);
       return acc;
     }, {});
@@ -347,7 +346,7 @@ class TaskManagerPerformanceBenchmark {
           endpoint,
           avgTime: avgTime.toFixed(2),
           maxTime: maxTime.toFixed(2),
-          severity: avgTime > 3000 ? 'high' : 'medium'
+          severity: avgTime > 3000 ? 'high' : 'medium',
         });
       }
     }
@@ -355,7 +354,7 @@ class TaskManagerPerformanceBenchmark {
     // Analyze memory usage patterns
     if (this.results.memoryUsage.snapshots) {
       const memoryGrowth = this.results.memoryUsage.snapshots.map((snapshot, i) => {
-        if (i === 0) return 0;
+        if (i === 0) {return 0;}
         return snapshot.heapUsed - this.results.memoryUsage.snapshots[0].heapUsed;
       });
 
@@ -364,7 +363,7 @@ class TaskManagerPerformanceBenchmark {
         bottlenecks.push({
           type: 'memory_growth',
           maxGrowthMB: (maxMemoryGrowth / (1024 * 1024)).toFixed(2),
-          severity: maxMemoryGrowth > 100 * 1024 * 1024 ? 'high' : 'medium'
+          severity: maxMemoryGrowth > 100 * 1024 * 1024 ? 'high' : 'medium',
         });
       }
     }
@@ -377,7 +376,7 @@ class TaskManagerPerformanceBenchmark {
         bottlenecks.push({
           type: 'slow_concurrent_access',
           avgTime: avgConcurrentTime.toFixed(2),
-          severity: 'medium'
+          severity: 'medium',
         });
       }
     }
@@ -401,7 +400,7 @@ class TaskManagerPerformanceBenchmark {
             priority: bottleneck.severity,
             issue: `${bottleneck.endpoint} endpoint averaging ${bottleneck.avgTime}ms`,
             recommendation: `Optimize ${bottleneck.endpoint} endpoint with caching, database indexing, or query optimization`,
-            impact: 'Improved API responsiveness and user experience'
+            impact: 'Improved API responsiveness and user experience',
           });
           break;
 
@@ -411,7 +410,7 @@ class TaskManagerPerformanceBenchmark {
             priority: bottleneck.severity,
             issue: `Memory growth of ${bottleneck.maxGrowthMB}MB during operations`,
             recommendation: 'Implement memory cleanup, object pooling, or garbage collection optimization',
-            impact: 'Reduced memory footprint and improved system stability'
+            impact: 'Reduced memory footprint and improved system stability',
           });
           break;
 
@@ -421,7 +420,7 @@ class TaskManagerPerformanceBenchmark {
             priority: bottleneck.severity,
             issue: `Concurrent operations averaging ${bottleneck.avgTime}ms`,
             recommendation: 'Implement connection pooling, reduce lock contention, or optimize concurrent access patterns',
-            impact: 'Better multi-agent performance and system scalability'
+            impact: 'Better multi-agent performance and system scalability',
           });
           break;
       }
@@ -433,7 +432,7 @@ class TaskManagerPerformanceBenchmark {
       priority: 'low',
       issue: 'TaskManager system analysis complete',
       recommendation: 'Consider implementing response caching, database connection pooling, and lazy loading for large datasets',
-      impact: 'Overall system performance improvement and resource efficiency'
+      impact: 'Overall system performance improvement and resource efficiency',
     });
 
     this.results.recommendations = recommendations;
@@ -451,26 +450,26 @@ class TaskManagerPerformanceBenchmark {
         testDuration: Date.now() - this.testStartTime,
         nodeVersion: process.version,
         platform: process.platform,
-        arch: process.arch
+        arch: process.arch,
       },
       summary: {
         totalApiTests: this.results.apiResponses.length,
         totalSubtaskTests: this.results.subtaskOperations.length,
         totalConcurrentTests: this.results.concurrentAccess.length,
         totalBottlenecks: this.results.systemBottlenecks.length,
-        totalRecommendations: this.results.recommendations.length
+        totalRecommendations: this.results.recommendations.length,
       },
       performance: {
         apiEndpoints: this.summarizeApiPerformance(),
         subtaskOperations: this.summarizeSubtaskPerformance(),
         concurrentAccess: this.summarizeConcurrentPerformance(),
-        memoryUsage: this.summarizeMemoryUsage()
+        memoryUsage: this.summarizeMemoryUsage(),
       },
       analysis: {
         bottlenecks: this.results.systemBottlenecks,
-        recommendations: this.results.recommendations
+        recommendations: this.results.recommendations,
       },
-      rawData: this.results
+      rawData: this.results,
     };
 
     // Save report to file
@@ -491,7 +490,7 @@ class TaskManagerPerformanceBenchmark {
           totalTime: 0,
           minTime: Infinity,
           maxTime: 0,
-          errors: 0
+          errors: 0,
         };
       }
 
@@ -500,7 +499,7 @@ class TaskManagerPerformanceBenchmark {
       ep.totalTime += result.duration;
       ep.minTime = Math.min(ep.minTime, result.duration);
       ep.maxTime = Math.max(ep.maxTime, result.duration);
-      if (!result.success) ep.errors++;
+      if (!result.success) {ep.errors++;}
     });
 
     Object.keys(endpoints).forEach(ep => {
@@ -521,7 +520,7 @@ class TaskManagerPerformanceBenchmark {
           totalTime: 0,
           minTime: Infinity,
           maxTime: 0,
-          errors: 0
+          errors: 0,
         };
       }
 
@@ -530,7 +529,7 @@ class TaskManagerPerformanceBenchmark {
       op.totalTime += result.duration;
       op.minTime = Math.min(op.minTime, result.duration);
       op.maxTime = Math.max(op.maxTime, result.duration);
-      if (!result.success) op.errors++;
+      if (!result.success) {op.errors++;}
     });
 
     Object.keys(operations).forEach(op => {
@@ -544,7 +543,7 @@ class TaskManagerPerformanceBenchmark {
   summarizeConcurrentPerformance() {
     const concurrent = {
       init: this.results.concurrentAccess.filter(r => r.operation === 'concurrent_init'),
-      list: this.results.concurrentAccess.filter(r => r.operation === 'concurrent_list')
+      list: this.results.concurrentAccess.filter(r => r.operation === 'concurrent_list'),
     };
 
     const summary = {};
@@ -557,7 +556,7 @@ class TaskManagerPerformanceBenchmark {
           avgTime: times.reduce((sum, time) => sum + time, 0) / times.length,
           minTime: Math.min(...times),
           maxTime: Math.max(...times),
-          successRate: (results.filter(r => r.success).length / results.length) * 100
+          successRate: (results.filter(r => r.success).length / results.length) * 100,
         };
       }
     });
@@ -578,7 +577,7 @@ class TaskManagerPerformanceBenchmark {
       final: this.results.memoryUsage.endMemory,
       peak: Math.max(...heapUsages),
       average: heapUsages.reduce((sum, usage) => sum + usage, 0) / heapUsages.length,
-      samples: snapshots.length
+      samples: snapshots.length,
     };
   }
 
