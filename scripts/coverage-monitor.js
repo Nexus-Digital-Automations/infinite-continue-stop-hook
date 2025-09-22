@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 
 /**
  * Coverage Monitoring Script
@@ -20,21 +19,21 @@ const CONFIG = {
     statements: 70,
     branches: 75,
     functions: 70,
-    lines: 70
+    lines: 70,
   },
   critical_thresholds: {
     statements: 60,
     branches: 65,
     functions: 60,
-    lines: 60
+    lines: 60,
   },
   paths: {
     coverage: path.join(process.cwd(), 'coverage'),
     reports: path.join(process.cwd(), 'coverage', 'reports'),
     summary: path.join(process.cwd(), 'coverage', 'coverage-summary.json'),
     trends: path.join(process.cwd(), 'coverage', 'reports', 'coverage-trends.json'),
-    validation: path.join(process.cwd(), 'coverage', 'reports', 'coverage-validation.json')
-  }
+    validation: path.join(process.cwd(), 'coverage', 'reports', 'coverage-validation.json'),
+  },
 };
 
 /**
@@ -74,7 +73,7 @@ class CoverageMonitor {
       passed: true,
       failures: [],
       warnings: [],
-      summary: null
+      summary: null,
     };
   }
 
@@ -131,7 +130,7 @@ class CoverageMonitor {
       // Run Jest with coverage
       execSync('npm run coverage:ci', {
         stdio: 'inherit',
-        timeout: 120000 // 2 minutes timeout
+        timeout: 120000, // 2 minutes timeout
       });
 
       Logger.success('Coverage analysis completed');
@@ -229,15 +228,15 @@ class CoverageMonitor {
         environment: {
           CI: process.env.CI,
           NODE_ENV: process.env.NODE_ENV,
-          GITHUB_ACTIONS: process.env.GITHUB_ACTIONS
-        }
-      }
+          GITHUB_ACTIONS: process.env.GITHUB_ACTIONS,
+        },
+      },
     };
 
     // Write validation report
     fs.writeFileSync(
       CONFIG.paths.validation,
-      JSON.stringify(reportData, null, 2)
+      JSON.stringify(reportData, null, 2),
     );
 
     Logger.success('Coverage reports generated');
@@ -265,7 +264,7 @@ class CoverageMonitor {
       timestamp: new Date().toISOString(),
       commit: this.getGitInfo().commit,
       coverage: this.validation.summary,
-      passed: this.validation.passed
+      passed: this.validation.passed,
     };
 
     trends.push(currentEntry);
@@ -329,7 +328,7 @@ class CoverageMonitor {
         commit: execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
         branch: execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim(),
         author: execSync('git log -1 --format="%an"', { encoding: 'utf8' }).trim(),
-        message: execSync('git log -1 --format="%s"', { encoding: 'utf8' }).trim()
+        message: execSync('git log -1 --format="%s"', { encoding: 'utf8' }).trim(),
       };
     } catch (error) {
       Logger.debug('Could not get Git information');
@@ -337,7 +336,7 @@ class CoverageMonitor {
         commit: 'unknown',
         branch: 'unknown',
         author: 'unknown',
-        message: 'unknown'
+        message: 'unknown',
       };
     }
   }

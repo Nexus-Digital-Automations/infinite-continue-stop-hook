@@ -353,7 +353,7 @@ class FeatureManagerAPI {
             feature_id: featureId,
             title: feature.title,
             status: 'approved',
-            success: true
+            success: true,
           });
 
         } catch (error) {
@@ -370,7 +370,7 @@ class FeatureManagerAPI {
         error_count: errors.length,
         approved_features: results,
         errors: errors,
-        message: `Bulk approval completed: ${results.length} approved, ${errors.length} errors`
+        message: `Bulk approval completed: ${results.length} approved, ${errors.length} errors`,
       };
 
     } catch (error) {
