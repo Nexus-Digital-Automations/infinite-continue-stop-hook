@@ -509,7 +509,7 @@ function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 
 **TASK MANAGEMENT:**
    # Check task status before claiming
-   timeout 10s node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./FEATURES.json"); tm.readFeatures().then(data => { const task = data.tasks.find(t => t.id === "TASK_ID"); console.log("Task status:", { id: task?.id, assigned_agent: task?.assigned_agent, claimed_by: task?.claimed_by, status: task?.status }); });'
+   timeout 10s node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./FEATURES.json"); tm.readTodo().then(data => { const task = data.tasks.find(t => t.id === "TASK_ID"); console.log("Task status:", { id: task?.id, assigned_agent: task?.assigned_agent, claimed_by: task?.claimed_by, status: task?.status }); });'
 
    # Claim specific task (only if unclaimed)
    timeout 10s node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./FEATURES.json"); tm.claimTask("TASK_ID", "[AGENT_ID]", "normal").then(result => console.log(JSON.stringify(result, null, 2)));'
@@ -996,7 +996,7 @@ To recover and continue work from the previous stale agents:
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID] --project-root "${workingDir}"
 
 2. **Check for unfinished tasks from previous agents:**
-   node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./FEATURES.json"); tm.readFeatures().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Pending tasks to continue:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
+   node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./FEATURES.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Pending tasks to continue:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
 
 3. **Continue the most important unfinished work first**
 
@@ -1045,7 +1045,7 @@ To start working with this TaskManager project:
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID] --project-root "${workingDir}"
 
 2. **Check for any existing tasks to work on:**
-   node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./FEATURES.json"); tm.readFeatures().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Available tasks:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
+   node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./FEATURES.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Available tasks:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
 
 3. **Begin working on the highest priority tasks**
 
