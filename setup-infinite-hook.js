@@ -6,12 +6,12 @@
  * === OVERVIEW ===
  * Comprehensive project setup utility that initializes TaskManager system
  * integration across development projects. This script creates the necessary
- * directory structures, configuration files, and TODO.json schemas required
+ * directory structures, configuration files, and FEATURES.json schemas required
  * for the infinite continue hook system to function properly.
  *
  * === KEY FEATURES ===
  * • Automated project directory structure creation
- * • TODO.json schema initialization with multi-agent support
+ * • FEATURES.json schema initialization with feature approval workflow
  * • Development mode files and guidelines setup
  * • Interactive and batch mode operations
  * • Project validation and compatibility checking
@@ -21,11 +21,11 @@
  * • /development - Core development documentation directory
  * • /development/tasks - Task-specific documentation
  * • /development/reports - Development reports and analysis
- * • TODO.json - Multi-agent task management schema
+ * • FEATURES.json - Feature approval workflow schema
  * • Agent registry integration for multi-agent coordination
  *
- * === TODO.JSON SCHEMA ===
- * Creates modern multi-agent compatible TODO.json structure:
+ * === FEATURES.JSON SCHEMA ===
+ * Creates modern feature management compatible FEATURES.json structure:
  * • Task management with unique IDs and timestamps
  * • Dependency system for complex workflows
  * • Agent coordination and multi-agent support
