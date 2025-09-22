@@ -10,17 +10,17 @@ const _Logger = require('./lib/logger');
 // ============================================================================
 
 /**
- * Find the root "Claude Coding Projects" directory containing TODO.json
+ * Find the root "Claude Coding Projects" directory containing FEATURES.json
  */
 function findClaudeProjectRoot(startDir = process.cwd()) {
   let currentDir = startDir;
 
-  // Look for "Claude Coding Projects" in the path and check for TODO.json
+  // Look for "Claude Coding Projects" in the path and check for FEATURES.json
   while (currentDir !== _path.dirname(currentDir)) {
     // Not at filesystem root
     // Check if we're in or found "Claude Coding Projects"
     if (currentDir.includes('Claude Coding Projects')) {
-      // Look for TODO.json in potential project roots
+      // Look for FEATURES.json in potential project roots
       const segments = currentDir.split(_path.sep);
       const claudeIndex = segments.findIndex((segment) =>
         segment.includes('Claude Coding Projects'),
@@ -30,14 +30,14 @@ function findClaudeProjectRoot(startDir = process.cwd()) {
         // Try the next directory after "Claude Coding Projects"
         const projectDir = segments.slice(0, claudeIndex + 2).join(_path.sep);
         // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script validating project structure with computed paths
-        if (_fs.existsSync(_path.join(projectDir, 'TODO.json'))) {
+        if (_fs.existsSync(_path.join(projectDir, 'FEATURES.json'))) {
           return projectDir;
         }
       }
 
       // Also check current directory
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script validating project structure with computed paths
-      if (_fs.existsSync(_path.join(currentDir, 'TODO.json'))) {
+      if (_fs.existsSync(_path.join(currentDir, 'FEATURES.json'))) {
         return currentDir;
       }
     }
@@ -76,18 +76,18 @@ function checkStopAllowed(workingDir = process.cwd()) {
 }
 
 /**
- * Clean up stale agents in a single TODO.json file
- * @param {string} projectPath - Path to project directory containing TODO.json
+ * Clean up stale agents in a single FEATURES.json file
+ * @param {string} projectPath - Path to project directory containing FEATURES.json
  * @param {Object} logger - Logger instance for output
  * @returns {Object} Cleanup results
  */
 function cleanupStaleAgentsInProject(projectPath, logger) {
-  const todoPath = _path.join(projectPath, 'TODO.json');
+  const todoPath = _path.join(projectPath, 'FEATURES.json');
 
-  // Check if TODO.json exists in this project
+  // Check if FEATURES.json exists in this project
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook path validated through hook configuration system
   if (!_fs.existsSync(todoPath)) {
-    logger.addFlow(`No TODO.json found in ${projectPath} - skipping`);
+    logger.addFlow(`No FEATURES.json found in ${projectPath} - skipping`);
     return { agentsRemoved: 0, tasksUnassigned: 0, orphanedTasksReset: 0, projectPath };
   }
 
@@ -96,11 +96,16 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path constructed from trusted hook configuration
     _todoData = JSON.parse(_fs.readFileSync(todoPath, 'utf8'));
   } catch (error) {
-    logger.addFlow(`Failed to read TODO.json in ${projectPath}: ${error.message}`);
+    logger.addFlow(`Failed to read FEATURES.json in ${projectPath}: ${error.message}`);
     return { agentsRemoved: 0, tasksUnassigned: 0, orphanedTasksReset: 0, projectPath, error: error.message };
   }
 
-  // Get all agents from TODO.json
+  // Initialize agents object if it doesn't exist (FEATURES.json may not have agents)
+  if (!_todoData.agents) {
+    _todoData.agents = {};
+  }
+
+  // Get all agents from FEATURES.json
   const allAgents = Object.keys(_todoData.agents || {});
   if (allAgents.length === 0) {
     logger.addFlow(`No agents found in ${projectPath} - skipping`);
@@ -112,7 +117,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
   const staleAgents = [];
 
   for (const agentId of allAgents) {
-    // eslint-disable-next-line security/detect-object-injection -- Agent ID validated through Object.keys() iteration from TODO.json structure
+    // eslint-disable-next-line security/detect-object-injection -- Agent ID validated through Object.keys() iteration from FEATURES.json structure
     const agent = _todoData.agents[agentId];
     // Handle both lastHeartbeat (camelCase) and last_heartbeat (snake_case) formats
     const lastHeartbeat = agent.lastHeartbeat || agent.last_heartbeat;
@@ -136,32 +141,33 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
     agentsRemoved++;
     logger.addFlow(`Removed stale agent from ${projectPath}: ${staleAgentId}`);
 
-    // Find all tasks assigned to this stale agent and unassign them
-    for (const task of _todoData.tasks || []) {
-      // Skip null/undefined tasks
-      if (!task || typeof task !== 'object') {
+    // Find all features assigned to this stale agent and unassign them (if tasks field exists)
+    const tasksOrFeatures = _todoData.tasks || _todoData.features || [];
+    for (const item of tasksOrFeatures) {
+      // Skip null/undefined items
+      if (!item || typeof item !== 'object') {
         continue;
       }
 
       if (
-        task.assigned_agent === staleAgentId ||
-        task.claimed_by === staleAgentId
+        item.assigned_agent === staleAgentId ||
+        item.claimed_by === staleAgentId
       ) {
-        // Unassign the stale agent from the task
-        task.assigned_agent = null;
-        task.claimed_by = null;
+        // Unassign the stale agent from the item
+        item.assigned_agent = null;
+        item.claimed_by = null;
 
-        // Reset task to pending if it was in_progress
-        if (task.status === 'in_progress') {
-          task.status = 'pending';
-          task.started_at = null;
+        // Reset item to pending if it was in_progress
+        if (item.status === 'in_progress') {
+          item.status = 'pending';
+          item.started_at = null;
         }
 
         // Add assignment history entry
-        if (!task.agent_assignment_history) {
-          task.agent_assignment_history = [];
+        if (!item.agent_assignment_history) {
+          item.agent_assignment_history = [];
         }
-        task.agent_assignment_history.push({
+        item.agent_assignment_history.push({
           agent: staleAgentId,
           action: 'auto_unassign_stale',
           timestamp: new Date().toISOString(),
@@ -170,7 +176,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
 
         tasksUnassigned++;
         logger.addFlow(
-          `Unassigned task in ${projectPath}: "${task.title}" from stale agent: ${staleAgentId}`,
+          `Unassigned item in ${projectPath}: "${item.title}" from stale agent: ${staleAgentId}`,
         );
       }
     }
@@ -181,9 +187,9 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Hook system path controlled by stop hook security protocols
       _fs.writeFileSync(todoPath, JSON.stringify(_todoData, null, 2));
-      logger.addFlow(`Updated ${projectPath}/TODO.json with cleanup results`);
+      logger.addFlow(`Updated ${projectPath}/FEATURES.json with cleanup results`);
     } catch (error) {
-      logger.addFlow(`Failed to write TODO.json in ${projectPath}: ${error.message}`);
+      logger.addFlow(`Failed to write FEATURES.json in ${projectPath}: ${error.message}`);
       return { agentsRemoved: 0, tasksUnassigned: 0, orphanedTasksReset: 0, projectPath, error: error.message };
     }
   }
@@ -367,13 +373,18 @@ async function autoSortTasksByPriority(taskManager) {
       return 5; // Fallback for old tasks
     };
 
-    // Ensure tasks is an array
-    if (!Array.isArray(todoData.tasks)) {
-      todoData.tasks = [];
+    // Ensure tasks/features is an array
+    const tasksOrFeatures = todoData.tasks || todoData.features || [];
+    if (!Array.isArray(tasksOrFeatures)) {
+      if (todoData.tasks) {
+        todoData.tasks = [];
+      } else {
+        todoData.features = [];
+      }
     }
 
-    // Process all tasks for ID-based classification
-    for (const task of todoData.tasks) {
+    // Process all items for ID-based classification
+    for (const task of tasksOrFeatures) {
       // Skip null/undefined tasks
       if (!task || typeof task !== 'object') {
         continue;
@@ -400,8 +411,8 @@ async function autoSortTasksByPriority(taskManager) {
       }
     }
 
-    // STEP 2: Sort tasks by ID-based priority
-    todoData.tasks.sort((a, b) => {
+    // STEP 2: Sort items by ID-based priority
+    tasksOrFeatures.sort((a, b) => {
       // Handle null/undefined tasks - push to end
       if (!a || typeof a !== 'object') {
         return 1;
@@ -441,6 +452,13 @@ async function autoSortTasksByPriority(taskManager) {
       test_: 4,
     };
 
+    // Update the appropriate array in the data structure
+    if (todoData.tasks) {
+      todoData.tasks = tasksOrFeatures;
+    } else {
+      todoData.features = tasksOrFeatures;
+    }
+
     // Save the updated TODO.json
     if (tasksMoved > 0 || tasksUpdated > 0) {
       await taskManager.writeTodo(todoData);
@@ -449,7 +467,7 @@ async function autoSortTasksByPriority(taskManager) {
     return {
       tasksMoved,
       tasksUpdated,
-      totalTasks: todoData.tasks.length,
+      totalTasks: tasksOrFeatures.length,
     };
   } catch (error) {
     // Log error through logger for proper tracking
@@ -504,18 +522,18 @@ function provideInstructiveTaskGuidance(taskManager, taskStatus) {
    # Read development/essentials/ files
    ls development/essentials/ 2>/dev/null && find development/essentials/ -type f -name "*.md" -exec echo "=== {} ===" \\; -exec cat {} \\;
 
-   # Check current task status
-   timeout 10s node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTask("[AGENT_ID]").then(task => console.log(task ? JSON.stringify(task, null, 2) : "No active task"));'
+   # Check current feature status
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" list-features
 
-**TASK MANAGEMENT:**
-   # Check task status before claiming
-   timeout 10s node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const task = data.tasks.find(t => t.id === "TASK_ID"); console.log("Task status:", { id: task?.id, assigned_agent: task?.assigned_agent, claimed_by: task?.claimed_by, status: task?.status }); });'
+**FEATURE MANAGEMENT:**
+   # Suggest new feature
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" suggest-feature '{"title":"Feature name", "description":"Feature details", "business_value":"Value proposition", "category":"enhancement"}'
 
-   # Claim specific task (only if unclaimed)
-   timeout 10s node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.claimTask("TASK_ID", "[AGENT_ID]", "normal").then(result => console.log(JSON.stringify(result, null, 2)));'
+   # Approve suggested feature (user-only)
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" approve-feature [FEATURE_ID] '{"approved_by":"user", "notes":"Approval reason"}'
 
-   # Mark task completed (AFTER validation)
-   timeout 10s node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.getCurrentTask("[AGENT_ID]").then(async task => { if(task) { await tm.updateTaskStatus(task.id, "completed", "Task completed successfully"); console.log("✅ Task completed:", task.title); } });'
+   # Check feature status and approval history
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" feature-stats
 
 **VALIDATION PROTOCOL:**
 ❌ NEVER mark complete without validation → ✅ Always run \`npm run lint\`, \`npm run typecheck\`
@@ -640,6 +658,11 @@ If you want to enable task management for this project:
     // Check if there are any active agents or if agent initialization is needed
     const todoData = await taskManager.readTodo();
 
+    // Initialize agents object if it doesn't exist in TODO.json
+    if (!todoData.agents) {
+      todoData.agents = {};
+    }
+
     // Debug logging for agent detection
     const allAgents = Object.keys(todoData.agents || {});
     logger.addFlow(`Found ${allAgents.length} total agents in TODO.json`);
@@ -718,32 +741,33 @@ If you want to enable task management for this project:
       agentsRemoved++;
       logger.addFlow(`Removed stale agent: ${staleAgentId}`);
 
-      // Find all tasks assigned to this stale agent and unassign them
-      for (const task of todoData.tasks) {
-        // Skip null/undefined tasks
-        if (!task || typeof task !== 'object') {
+      // Find all items assigned to this stale agent and unassign them
+      const itemsArray = todoData.tasks || todoData.features || [];
+      for (const item of itemsArray) {
+        // Skip null/undefined items
+        if (!item || typeof item !== 'object') {
           continue;
         }
 
         if (
-          task.assigned_agent === staleAgentId ||
-          task.claimed_by === staleAgentId
+          item.assigned_agent === staleAgentId ||
+          item.claimed_by === staleAgentId
         ) {
-          // Unassign the stale agent from the task
-          task.assigned_agent = null;
-          task.claimed_by = null;
+          // Unassign the stale agent from the item
+          item.assigned_agent = null;
+          item.claimed_by = null;
 
-          // Reset task to pending if it was in_progress
-          if (task.status === 'in_progress') {
-            task.status = 'pending';
-            task.started_at = null;
+          // Reset item to pending if it was in_progress
+          if (item.status === 'in_progress') {
+            item.status = 'pending';
+            item.started_at = null;
           }
 
           // Add assignment history entry
-          if (!task.agent_assignment_history) {
-            task.agent_assignment_history = [];
+          if (!item.agent_assignment_history) {
+            item.agent_assignment_history = [];
           }
-          task.agent_assignment_history.push({
+          item.agent_assignment_history.push({
             agent: staleAgentId,
             action: 'auto_unassign_stale',
             timestamp: new Date().toISOString(),
@@ -752,7 +776,7 @@ If you want to enable task management for this project:
 
           tasksUnassigned++;
           logger.addFlow(
-            `Unassigned task "${task.title}" from stale agent: ${staleAgentId}`,
+            `Unassigned item "${item.title}" from stale agent: ${staleAgentId}`,
           );
         }
       }
@@ -762,37 +786,38 @@ If you want to enable task management for this project:
     const staleTaskTimeout = 1800000; // 30 minutes
     let staleTasksReset = 0;
 
-    for (const task of todoData.tasks) {
-      // Skip null/undefined tasks
-      if (!task || typeof task !== 'object') {
+    const staleItemsArray = todoData.tasks || todoData.features || [];
+    for (const item of staleItemsArray) {
+      // Skip null/undefined items
+      if (!item || typeof item !== 'object') {
         continue;
       }
 
-      if (task.status === 'in_progress' && task.started_at) {
-        const taskStartTime = new Date(task.started_at).getTime();
-        const timeSinceStart = Date.now() - taskStartTime;
+      if (item.status === 'in_progress' && item.started_at) {
+        const itemStartTime = new Date(item.started_at).getTime();
+        const timeSinceStart = Date.now() - itemStartTime;
 
         if (timeSinceStart > staleTaskTimeout) {
-          // Reset stale task back to pending
-          task.status = 'pending';
-          task.assigned_agent = null;
-          task.claimed_by = null;
-          task.started_at = null;
+          // Reset stale item back to pending
+          item.status = 'pending';
+          item.assigned_agent = null;
+          item.claimed_by = null;
+          item.started_at = null;
 
           // Add reset history entry
-          if (!task.agent_assignment_history) {
-            task.agent_assignment_history = [];
+          if (!item.agent_assignment_history) {
+            item.agent_assignment_history = [];
           }
-          task.agent_assignment_history.push({
-            agent: task.assigned_agent || 'system',
+          item.agent_assignment_history.push({
+            agent: item.assigned_agent || 'system',
             action: 'auto_reset_stale',
             timestamp: new Date().toISOString(),
-            reason: `Task stale for ${Math.round(timeSinceStart / 60000)} minutes`,
+            reason: `Item stale for ${Math.round(timeSinceStart / 60000)} minutes`,
           });
 
           staleTasksReset++;
           logger.addFlow(
-            `Reset stale task: ${task.title} (${Math.round(timeSinceStart / 60000)} min)`,
+            `Reset stale item: ${item.title} (${Math.round(timeSinceStart / 60000)} min)`,
           );
         }
       }
@@ -807,46 +832,47 @@ If you want to enable task management for this project:
     const orphanedTaskTimeout = 86400000; // 24 hours in milliseconds
     let orphanedTasksReset = 0;
 
-    function getLastActivityTime(task) {
-      if (!task.agent_assignment_history || task.agent_assignment_history.length === 0) {
-        return new Date(task.created_at).getTime();
+    function getLastActivityTime(item) {
+      if (!item.agent_assignment_history || item.agent_assignment_history.length === 0) {
+        return new Date(item.created_at).getTime();
       }
 
       // Find the most recent assignment history entry
-      const lastEntry = task.agent_assignment_history[task.agent_assignment_history.length - 1];
+      const lastEntry = item.agent_assignment_history[item.agent_assignment_history.length - 1];
       return new Date(lastEntry.timestamp).getTime();
     }
 
-    for (const task of todoData.tasks) {
-      if (!task || typeof task !== 'object') {
+    const orphanedItemsArray = todoData.tasks || todoData.features || [];
+    for (const item of orphanedItemsArray) {
+      if (!item || typeof item !== 'object') {
         continue;
       }
 
-      // Check for orphaned tasks: pending status with no assignment for >24 hours
-      if (task.status === 'pending' && !task.assigned_agent && !task.claimed_by) {
-        const lastActivity = getLastActivityTime(task);
+      // Check for orphaned items: pending status with no assignment for >24 hours
+      if (item.status === 'pending' && !item.assigned_agent && !item.claimed_by) {
+        const lastActivity = getLastActivityTime(item);
         const timeSinceActivity = Date.now() - lastActivity;
 
         if (timeSinceActivity > orphanedTaskTimeout) {
-          // Reset orphaned task completely to ensure fresh start
-          task.started_at = null;
+          // Reset orphaned item completely to ensure fresh start
+          item.started_at = null;
 
           // Add comprehensive reset history for audit trail
-          if (!task.agent_assignment_history) {
-            task.agent_assignment_history = [];
+          if (!item.agent_assignment_history) {
+            item.agent_assignment_history = [];
           }
-          task.agent_assignment_history.push({
+          item.agent_assignment_history.push({
             agent: 'system',
             action: 'auto_reset_orphaned',
             timestamp: new Date().toISOString(),
-            reason: `Task orphaned for ${Math.round(timeSinceActivity / 3600000)} hours - forced reset`,
+            reason: `Item orphaned for ${Math.round(timeSinceActivity / 3600000)} hours - forced reset`,
             orphaned_duration_hours: Math.round(timeSinceActivity / 3600000),
             last_activity: new Date(lastActivity).toISOString(),
           });
 
           orphanedTasksReset++;
           logger.addFlow(
-            `Reset orphaned task: ${task.title} (orphaned ${Math.round(timeSinceActivity / 3600000)} hours)`,
+            `Reset orphaned item: ${item.title} (orphaned ${Math.round(timeSinceActivity / 3600000)} hours)`,
           );
         }
       }
