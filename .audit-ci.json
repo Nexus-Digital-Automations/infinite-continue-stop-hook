@@ -1,0 +1,18 @@
+{
+  "low": true,
+  "moderate": true,
+  "high": true,
+  "critical": true,
+  "report-type": "json",
+  "allowlist": [
+  ],
+  "skip-dev": false,
+  "summary": true,
+  "advisories": [],
+  "registry": "https://registry.npmjs.org/",
+  "retry": {
+    "count": 3,
+    "delay": 1000
+  },
+  "timeout": 60000
+}

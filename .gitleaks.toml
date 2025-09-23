@@ -1,0 +1,83 @@
+# Gitleaks configuration for secret scanning
+title = "Gitleaks Configuration for infinite-continue-stop-hook"
+
+[extend]
+# Use built-in rules
+useDefault = true
+
+[[rules]]
+description = "AWS Access Key ID"
+id = "aws-access-key-id"
+regex = '''AKIA[0-9A-Z]{16}'''
+tags = ["key", "AWS"]
+
+[[rules]]
+description = "AWS Secret Access Key"
+id = "aws-secret-access-key"
+regex = '''[A-Za-z0-9/+=]{40}'''
+tags = ["key", "AWS"]
+
+[[rules]]
+description = "GitHub Personal Access Token"
+id = "github-pat"
+regex = '''ghp_[0-9a-zA-Z]{36}'''
+tags = ["key", "GitHub"]
+
+[[rules]]
+description = "GitHub OAuth Token"
+id = "github-oauth"
+regex = '''gho_[0-9a-zA-Z]{36}'''
+tags = ["key", "GitHub"]
+
+[[rules]]
+description = "GitHub App Token"
+id = "github-app-token"
+regex = '''(ghu|ghs)_[0-9a-zA-Z]{36}'''
+tags = ["key", "GitHub"]
+
+[[rules]]
+description = "Generic API Key"
+id = "generic-api-key"
+regex = '''(?i)(api_key|apikey|secret_key|secret)['"\s]*[:=]\s*['"][0-9a-z]{32,}['"]'''
+tags = ["key", "generic"]
+
+[[rules]]
+description = "JWT Token"
+id = "jwt-token"
+regex = '''eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9._-]{10,}\.[A-Za-z0-9._-]{10,}'''
+tags = ["key", "JWT"]
+
+[[rules]]
+description = "Private Key"
+id = "private-key"
+regex = '''-----BEGIN (RSA |EC |DSA )?PRIVATE KEY-----'''
+tags = ["key", "private"]
+
+[[rules]]
+description = "Database Connection String"
+id = "database-url"
+regex = '''(?i)(database_url|db_url|connection_string)['"\s]*[:=]\s*['"][^'"]*://[^'"]*['"]'''
+tags = ["key", "database"]
+
+# Allowlist for false positives
+[allowlist]
+description = "Allowlist for known false positives"
+files = [
+  ".gitleaks.toml",
+  "test/**/*",
+  "**/*.test.js",
+  "**/*.spec.js",
+  "**/test-fixtures/**/*",
+  "**/mock-data/**/*"
+]
+
+regexes = [
+  '''example\.com''',
+  '''localhost''',
+  '''127\.0\.0\.1''',
+  '''test_key_[0-9]+''',
+  '''mock_secret''',
+  '''dummy_token''',
+  '''fake_api_key''',
+  '''sample_password'''
+]

@@ -1,0 +1,46 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Validating commit message..."
+
+# Check if commitlint is available
+if command -v npx > /dev/null && [ -f "commitlint.config.js" ]; then
+  # Validate commit message format
+  if ! npx commitlint --edit "$1"; then
+    echo ""
+    echo "❌ Commit message format is invalid!"
+    echo ""
+    echo "📝 Commit message should follow conventional commit format:"
+    echo "   <type>[optional scope]: <description>"
+    echo ""
+    echo "🎯 Valid types:"
+    echo "   feat:     New feature"
+    echo "   fix:      Bug fix"
+    echo "   docs:     Documentation changes"
+    echo "   style:    Code style changes (formatting, etc.)"
+    echo "   refactor: Code refactoring"
+    echo "   test:     Adding or modifying tests"
+    echo "   chore:    Maintenance tasks"
+    echo "   perf:     Performance improvements"
+    echo "   ci:       CI/CD configuration changes"
+    echo "   security: Security improvements"
+    echo ""
+    echo "✅ Examples:"
+    echo "   feat: add user authentication"
+    echo "   fix: resolve memory leak in data processing"
+    echo "   docs: update API documentation"
+    echo "   test(auth): add login validation tests"
+    echo ""
+    echo "📏 Requirements:"
+    echo "   - Header max 72 characters"
+    echo "   - Subject should be sentence case"
+    echo "   - No period at the end of subject"
+    echo ""
+    exit 1
+  fi
+  echo "✅ Commit message format is valid"
+else
+  echo "ℹ️ Commitlint not configured, skipping validation"
+fi
+
+echo ""

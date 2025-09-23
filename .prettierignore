@@ -1,0 +1,14 @@
+node_modules/
+coverage/
+dist/
+build/
+*.min.js
+*.min.css
+.husky/
+logs/
+development/reports/
+development/research-reports/
+**/*.json.backup*
+.git/
+.github/
+*.log

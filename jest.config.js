@@ -191,7 +191,7 @@ module.exports = {
   notify: false,
   notifyMode: "failure-change",
 
-  // Test results and coverage processors
+  // Enhanced test results and coverage processors for CI/CD integration
   reporters: [
     "default",
     ["jest-html-reporters", {
@@ -201,15 +201,50 @@ module.exports = {
       hideIcon: false,
       pageTitle: "TaskManager Test Coverage Report",
       includeFailureMsg: true,
-      includeSuiteFailure: true
+      includeSuiteFailure: true,
+      customInfos: [
+        {
+          title: "CI/CD Pipeline",
+          value: process.env.CI ? "✅ Running in CI" : "🏠 Local Development"
+        },
+        {
+          title: "Build Number",
+          value: process.env.GITHUB_RUN_NUMBER || process.env.BUILD_NUMBER || "N/A"
+        },
+        {
+          title: "Git Branch",
+          value: process.env.GITHUB_REF_NAME || "unknown"
+        }
+      ]
     }],
     ["jest-junit", {
-      outputDirectory: "./coverage",
+      outputDirectory: "./coverage/reports",
       outputName: "junit.xml",
       classNameTemplate: "{classname}",
       titleTemplate: "{title}",
       ancestorSeparator: " › ",
-      usePathForSuiteName: true
+      usePathForSuiteName: true,
+      addFileAttribute: true,
+      includeConsoleOutput: true,
+      includeShortConsoleOutput: false,
+      suiteNameTemplate: "{filepath}",
+      testCasePropertiesDirectory: "./coverage/reports/test-case-properties"
+    }],
+    // JSON reporter for machine-readable results
+    ["<rootDir>/scripts/jest-json-reporter.js", {
+      outputPath: "./coverage/reports/test-results.json",
+      includeTestCases: true,
+      includeAssertionResults: true,
+      includeConsoleOutput: true
+    }],
+    // Custom CI/CD reporter for enhanced pipeline integration
+    ["<rootDir>/scripts/jest-cicd-reporter.js", {
+      outputPath: "./coverage/reports/ci-cd-results.json",
+      includeGitInfo: true,
+      includeEnvironmentInfo: true,
+      includeTimingData: true,
+      slackWebhook: process.env.SLACK_WEBHOOK_URL,
+      teamsWebhook: process.env.TEAMS_WEBHOOK_URL
     }]
   ],
 };

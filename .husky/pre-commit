@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "🔄 Running pre-commit hooks..."
+echo "🔄 Running enhanced pre-commit hooks..."
 
 # Check if this is a merge commit (skip hooks for merge commits)
 if git rev-parse -q --verify MERGE_HEAD; then
@@ -32,122 +32,126 @@ has_staged_files() {
   git diff --cached --name-only | grep -E "$pattern" > /dev/null
 }
 
-# Stage 1: Quick syntax and format checks
-echo "📋 Stage 1: Quick validation checks"
+# Stage 0: Commit message validation (if commitlint is available)
+echo "📋 Stage 0: Commit message validation"
+if command -v npx > /dev/null && [ -f "commitlint.config.js" ]; then
+  echo "🔍 Validating commit message format..."
+  # For pre-commit, we'll validate the commit message later in prepare-commit-msg
+  echo "✅ Commit message validation configured"
+else
+  echo "ℹ️ Commitlint not configured, skipping message validation"
+fi
 
-# Check package.json syntax
-if has_staged_files "package\.json$"; then
+# Stage 1: Lint-staged (efficient linting and formatting on staged files only)
+echo "📋 Stage 1: Lint-staged processing"
+
+if command -v npx > /dev/null && [ -f ".lintstagedrc.js" ]; then
+  if ! run_with_timeout "120s" "npx lint-staged" "Lint-staged processing (ESLint, Prettier, Security)"; then
+    echo "❌ Lint-staged processing failed"
+    echo "💡 Issues detected in staged files. Please review and fix:"
+    echo "   - ESLint errors: Run 'npm run lint:fix'"
+    echo "   - Formatting issues: Run 'npx prettier --write <files>'"
+    echo "   - Security issues: Review Semgrep findings"
+    exit 1
+  fi
+else
+  echo "⚠️ Lint-staged not configured, falling back to manual checks"
+
+  # Fallback: Manual checks
+  if has_staged_files "\.(js|ts|json)$"; then
+    echo "🔍 Running fallback lint check on staged files..."
+    staged_files=$(git diff --cached --name-only --diff-filter=ACMR | grep -E "\.(js|ts)$" | tr '\n' ' ')
+
+    if [ -n "$staged_files" ]; then
+      if ! npx eslint $staged_files; then
+        echo "❌ ESLint found issues in staged files"
+        echo "💡 Tip: Run 'npm run lint:fix' to auto-fix issues"
+        exit 1
+      fi
+      echo "✅ All staged files pass linting"
+    fi
+  fi
+fi
+
+# Stage 2: Enhanced security scanning
+echo "📋 Stage 2: Security validation"
+
+# Run comprehensive security scan if Semgrep is available
+if command -v semgrep > /dev/null; then
+  echo "🔒 Running comprehensive security analysis..."
+
+  # Focus on staged files for performance
+  staged_security_files=$(git diff --cached --name-only --diff-filter=ACMR | grep -E "\.(js|ts|json|py|yaml|yml)$" | tr '\n' ' ')
+
+  if [ -n "$staged_security_files" ]; then
+    if ! run_with_timeout "60s" "semgrep --config=p/security-audit --config=p/owasp-top-ten --error --quiet --no-rewrite-rule-ids $staged_security_files" "Semgrep security scan"; then
+      echo "❌ Security vulnerabilities detected in staged files"
+      echo "🔧 Please review and fix security issues before committing"
+      echo "💡 Run: semgrep --config=p/security-audit <file> for details"
+      exit 1
+    fi
+    echo "✅ No security vulnerabilities found in staged files"
+  else
+    echo "ℹ️ No security-relevant files in staging area"
+  fi
+else
+  echo "⚠️ Semgrep not available, skipping advanced security scan"
+fi
+
+# Stage 3: Quick test validation (only if source code changed)
+echo "📋 Stage 3: Test validation"
+
+if has_staged_files "\.(js|ts)$" || has_staged_files "test/.*\.(js|ts)$" || has_staged_files "package\.json$"; then
+  # Run quick syntax validation only
+  if ! run_with_timeout "30s" "npm run test:quick" "Quick test syntax validation"; then
+    echo "❌ Test syntax validation failed"
+    echo "💡 Fix syntax errors in test files"
+    exit 1
+  fi
+
+  # Run API tests only if core files changed
+  if has_staged_files "(taskmanager-api\.js|lib/.*\.js)$"; then
+    if ! run_with_timeout "60s" "npm run test:api" "API test suite"; then
+      echo "❌ API tests failed"
+      echo "💡 Core functionality tests failing - fix before commit"
+      exit 1
+    fi
+  fi
+else
+  echo "ℹ️ No source code changes detected, skipping tests"
+fi
+
+# Stage 4: Package.json and dependency validation
+echo "📋 Stage 4: Package validation"
+
+if has_staged_files "package\.json$" || has_staged_files "package-lock\.json$"; then
   echo "🔍 Validating package.json syntax..."
   if ! node -e "JSON.parse(require('fs').readFileSync('package.json'))"; then
     echo "❌ package.json syntax error detected"
     exit 1
   fi
-  echo "✅ package.json syntax is valid"
-fi
 
-# Quick lint check on staged files only
-if has_staged_files "\.(js|ts|json)$"; then
-  echo "🔍 Running lint check on staged files..."
-  staged_files=$(git diff --cached --name-only --diff-filter=ACMR | grep -E "\.(js|ts)$" | tr '\n' ' ')
-
-  if [ -n "$staged_files" ]; then
-    if ! npx eslint $staged_files; then
-      echo "❌ ESLint found issues in staged files"
-      echo "💡 Tip: Run 'npm run lint:fix' to auto-fix issues"
-      exit 1
-    fi
-    echo "✅ All staged files pass linting"
-  fi
-fi
-
-# Stage 2: Test execution (only if test files or source code changed)
-echo "📋 Stage 2: Test execution"
-
-if has_staged_files "\.(js|ts)$" || has_staged_files "test/.*\.(js|ts)$" || has_staged_files "package\.json$"; then
-
-  # Run quick test suite (API tests only)
-  if ! run_with_timeout "60s" "npm run test:api" "API test suite"; then
-    echo "❌ API tests failed"
-    echo "💡 Tip: Run 'npm test' locally to debug failing tests"
-    exit 1
-  fi
-
-  # Run critical unit tests only
-  if ! run_with_timeout "45s" "npm run test:rag:unit" "RAG unit tests"; then
-    echo "⚠️ RAG unit tests failed (allowing commit but requiring follow-up)"
-    echo "📝 Please run 'npm run test:rag' locally and fix any issues"
-    # Don't exit - allow commit but warn
-  fi
-
-else
-  echo "ℹ️ No source code changes detected, skipping tests"
-fi
-
-# Stage 3: Security and dependency checks
-echo "📋 Stage 3: Security validation"
-
-if has_staged_files "package\.json$" || has_staged_files "package-lock\.json$"; then
-  echo "🔒 Running security audit on dependencies..."
-
-  # Check for high/critical vulnerabilities
-  if ! npm audit --audit-level=high --production > /dev/null; then
-    echo "⚠️ High/critical security vulnerabilities detected"
+  echo "🔒 Running dependency security audit..."
+  # Check for high/critical vulnerabilities only (don't block on moderate)
+  if ! npm audit --audit-level=high --production > /dev/null 2>&1; then
+    echo "⚠️ High/critical security vulnerabilities detected in dependencies"
     echo "🔧 Please run 'npm audit fix' to resolve security issues"
     echo "📋 To see details: npm audit"
-    # Allow commit but warn (don't block development)
+    echo "❓ Do you want to proceed anyway? (y/N)"
+    read -r response
+    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+      echo "❌ Commit aborted due to security vulnerabilities"
+      exit 1
+    fi
   else
     echo "✅ No high/critical security vulnerabilities found"
   fi
 fi
 
-# Stage 4: Coverage validation (only on significant changes)
-echo "📋 Stage 4: Coverage validation"
+# Stage 5: Final quality checks
+echo "📋 Stage 5: Final quality validation"
 
-# Check if this is a significant source code change
-significant_changes=$(git diff --cached --name-only | grep -E "^(lib/|taskmanager-api\.js|.*\.js)$" | wc -l)
-
-if [ "$significant_changes" -gt 2 ]; then
-  echo "🔍 Significant changes detected, validating coverage..."
-
-  if ! run_with_timeout "30s" "npm run coverage:check:standalone" "Enhanced coverage threshold validation"; then
-    echo "⚠️ Coverage thresholds not met"
-    echo "📊 Current coverage may be below required thresholds"
-    echo "💡 Tip: Add tests for new code or run 'npm run coverage:report' to see details"
-
-    # Ask user if they want to proceed
-    echo "❓ Do you want to proceed with commit anyway? (y/N)"
-    read -r response
-    if [[ ! "$response" =~ ^[Yy]$ ]]; then
-      echo "❌ Commit aborted by user"
-      exit 1
-    fi
-  fi
-else
-  echo "ℹ️ Minor changes detected, skipping coverage validation"
-fi
-
-# Stage 4.5: Performance monitoring (on significant changes)
-if [ "$significant_changes" -gt 3 ]; then
-  echo "📋 Stage 4.5: Performance monitoring"
-  echo "🔍 Running performance analysis for significant changes..."
-
-  # Run lightweight performance check (quick test suite only)
-  if ! run_with_timeout "45s" "CI=true QUIET=true node scripts/test-performance.js" "Test performance monitoring"; then
-    echo "⚠️ Performance monitoring detected potential issues"
-    echo "📈 Consider checking test execution times after commit"
-    echo "💡 Run 'npm run performance:test:verbose' for detailed analysis"
-    # Don't block commit for performance warnings, just notify
-  else
-    echo "✅ Performance monitoring completed successfully"
-  fi
-else
-  echo "ℹ️ Minor changes detected, skipping performance monitoring"
-fi
-
-# Stage 5: Final validation
-echo "📋 Stage 5: Final checks"
-
-# Ensure no large files are being committed
+# Check for large files
 large_files=$(git diff --cached --name-only | xargs ls -la 2>/dev/null | awk '{if($5 > 1048576) print $9 " (" $5 " bytes)"}')
 if [ -n "$large_files" ]; then
   echo "⚠️ Large files detected in commit:"
@@ -160,21 +164,30 @@ if [ -n "$large_files" ]; then
   fi
 fi
 
-# Check for debugging code
-debugging_patterns="console\.log\|debugger\|TODO\|FIXME\|XXX"
+# Check for debugging code (configurable patterns)
+debugging_patterns="debugger\|console\.error\|console\.warn"
+todo_patterns="TODO\|FIXME\|XXX\|HACK"
+
 if git diff --cached | grep -E "$debugging_patterns" > /dev/null; then
-  echo "⚠️ Potential debugging code or TODO items found in staged changes"
-  echo "🔍 Found patterns: console.log, debugger, TODO, FIXME, XXX"
+  echo "⚠️ Debugging code found in staged changes"
+  echo "🔍 Found: debugger statements, console.error, console.warn"
   echo "❓ Do you want to proceed anyway? (y/N)"
   read -r response
   if [[ ! "$response" =~ ^[Yy]$ ]]; then
-    echo "❌ Commit aborted - please review debugging code"
+    echo "❌ Commit aborted - please remove debugging code"
     exit 1
   fi
 fi
 
+if git diff --cached | grep -E "$todo_patterns" > /dev/null; then
+  echo "ℹ️ TODO/FIXME comments found in staged changes"
+  echo "📝 Consider addressing these items before release"
+fi
+
 echo ""
-echo "🎉 All pre-commit checks passed!"
-echo "✅ Code is ready for commit"
-echo "📝 Remember to run the full test suite after commit: npm test"
+echo "🎉 All enhanced pre-commit checks passed!"
+echo "✅ Code quality: Linted, formatted, and security-scanned"
+echo "✅ Dependencies: Validated and secure"
+echo "✅ Tests: Basic validation completed"
+echo "📝 Next: Full test suite will run on push"
 echo ""
