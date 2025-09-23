@@ -92,9 +92,10 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
    - **PURPOSE**: Track all user interactions and agent sessions in initialization statistics
 2. **PLAN TASKS** - Use TodoWrite to create task breakdown for complex requests
 3. **AGENT PLANNING** - Think about task complexity and MANDATORY communicate approach to user
-   - **SIMPLE TASKS**: "Handling this solo" for straightforward single-component work
-   - **COMPLEX TASKS**: "Using X concurrent agents" (2-10) for multi-component/complex work
-   - **DECISION CRITERIA**: Multi-file changes, research + implementation, testing + docs = concurrent agents
+   - **SINGLE AGENT ONLY**: Basic status checks, single-file reads, trivial commands
+   - **DEFAULT MULTI-AGENT**: "Deploying X concurrent agents" (3-10) for virtually all implementation work
+   - **DECISION CRITERIA**: ANY multi-step task, multiple files, research + implementation, testing + docs = 3+ concurrent agents
+   - **MAXIMUM DEPLOYMENT**: 5-10 agents for complex features, large analysis, comprehensive reviews
    - **MANDATORY COMMUNICATION**: ALWAYS tell user exactly how many subagents will be deployed before starting
 4. **EXECUTE** - Begin implementation immediately with TodoWrite task tracking
 
@@ -385,21 +386,26 @@ git status                                   # Verify clean/up-to-date
 **TROUBLESHOOTING:** Conflicts → resolve + commit + push; Rejected → pull + merge + push; Untracked → add important files; Large files → use git LFS
 
 ## 🚨 CONCURRENT SUBAGENT DEPLOYMENT
-**🔴 MAXIMIZE DEPLOYMENT (UP TO 10 AGENTS)**
+**🔴 MANDATORY MAXIMUM DEPLOYMENT (DEFAULT: 3-10 AGENTS)**
 
-**PROTOCOL:**
+**AGGRESSIVE DEPLOYMENT PROTOCOL:**
+- **DEFAULT MULTI-AGENT**: Use 3+ agents for ANY non-trivial task (reading multiple files, implementation + testing, research + docs)
+- **MAXIMUM UTILIZATION**: Deploy 5-10 agents for complex tasks (multi-component projects, large features, comprehensive analysis)
+- **SINGLE AGENT ONLY FOR**: Simple single-file reads, basic status checks, trivial one-command operations
 - **MANDATORY DECLARATION**: ALWAYS tell user "Deploying X concurrent agents" before starting
-- **EXPLICIT COUNT**: State exact number of subagents (e.g., "Using 5 concurrent agents", "Deploying 3 agents")
 - **SIMULTANEOUS START**: All agents via ONE tool call with multiple invokes
-- **STRATEGIC COUNT**: Maximum meaningful number (2-10) for complex tasks
-- **ASSESS ALL TASKS**: Evaluate parallelization potential
-- **USER COMMUNICATION**: NEVER deploy subagents without first informing the user of the count
 
-**USAGE:** Multi-component tasks (research + implementation + testing + docs), large refactoring, multi-file implementations
+**DEPLOYMENT TRIGGERS - USE MULTIPLE AGENTS FOR:**
+- File analysis (2+ files) → 2-4 agents
+- Feature implementation → 3-6 agents (development + testing + docs + validation)
+- Code reviews → 4-8 agents (security + performance + architecture + quality)
+- Research tasks → 3-5 agents (technology + documentation + examples + comparison)
+- Bug investigations → 2-4 agents (analysis + reproduction + fix + testing)
+- Refactoring → 4-8 agents (analysis + implementation + testing + documentation + validation)
 
 **SPECIALIZATIONS:** Development (Frontend/Backend/Database/DevOps/Security/Performance/Documentation), Testing (Unit/Integration/E2E/Performance/Security/Accessibility), Research (Technology/API/Performance/Security/Architecture)
 
-**AVOID:** Single agent fallback when multiple supported, sequential deployment instead of concurrent
+**FORBIDDEN:** Single agent for multi-step tasks, sequential when concurrent possible
 
 ## PREPARATION & CONTEXT
 
