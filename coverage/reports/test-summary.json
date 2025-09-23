@@ -1,0 +1,10 @@
+{
+  "timestamp": "2025-09-23T18:56:13.953Z",
+  "success": false,
+  "total_tests": 13,
+  "passed_tests": 8,
+  "failed_tests": 5,
+  "duration_ms": 22602,
+  "test_suites": 1,
+  "failed_suites": 1
+}

@@ -329,13 +329,5 @@
   },
   "tasks": [],
   "completed_tasks": [],
-  "agents": {
-    "comprehensive-coverage-agent": {
-      "lastHeartbeat": "2025-09-23T18:24:20.753Z",
-      "status": "active",
-      "reinitialized": "2025-09-23T18:24:20.753Z",
-      "sessionId": "ad374dceaab39308",
-      "previousSessions": []
-    }
-  }
+  "agents": {}
 }

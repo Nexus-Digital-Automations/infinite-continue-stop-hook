@@ -1,0 +1,177 @@
+{
+  "pipeline": {
+    "id": "local",
+    "number": "0",
+    "url": null,
+    "trigger": {
+      "type": "local",
+      "ref": null,
+      "ref_name": null,
+      "head_ref": null
+    },
+    "actor": "unknown"
+  },
+  "results": {
+    "success": false,
+    "summary": {
+      "total": {
+        "testSuites": 1,
+        "tests": 13
+      },
+      "passed": {
+        "testSuites": 0,
+        "tests": 8
+      },
+      "failed": {
+        "testSuites": 1,
+        "tests": 5
+      },
+      "pending": {
+        "testSuites": 0,
+        "tests": 0
+      },
+      "todo": {
+        "tests": 0
+      },
+      "success_rate": {
+        "testSuites": 0,
+        "tests": 62
+      }
+    },
+    "timing": {
+      "start": 1758653751351,
+      "end": 1758653773954,
+      "duration": 22603,
+      "testRuntime": 22603
+    },
+    "quality": {
+      "status": "poor",
+      "score": 30,
+      "factors": {
+        "test_success": {
+          "rate": 0.6153846153846154,
+          "weight": 0.4,
+          "score": 61.53846153846154
+        },
+        "coverage": {
+          "rate": 0,
+          "weight": 0.3,
+          "score": 0
+        },
+        "performance": {
+          "avg_test_time_ms": 1738.6923076923076,
+          "weight": 0.2,
+          "score": 0
+        },
+        "stability": {
+          "rate": 0.5,
+          "weight": 0.1,
+          "score": 50
+        }
+      }
+    }
+  },
+  "environment": {
+    "node": {
+      "version": "v22.19.0",
+      "platform": "darwin",
+      "arch": "arm64",
+      "memory": {
+        "heap_used": 33,
+        "heap_total": 37,
+        "external": 5
+      }
+    },
+    "system": {
+      "hostname": "MacBook-Air-2.local",
+      "cpu_count": 8,
+      "total_memory_gb": 24,
+      "load_average": [
+        14.19970703125,
+        25.72607421875,
+        26.08154296875
+      ],
+      "uptime": 150055
+    },
+    "ci": {
+      "is_ci": false,
+      "provider": "unknown",
+      "runner": "unknown"
+    },
+    "environment_variables": {
+      "npm_package_bin_stop-hook": "stop-hook.js",
+      "npm_config_global_prefix": "/opt/homebrew",
+      "NODE_OPTIONS": "--max-old-space-size=8192",
+      "npm_config_noproxy": "",
+      "npm_config_fetch_retries": "5",
+      "npm_config_local_prefix": "/Users/jeremyparker/infinite-continue-stop-hook",
+      "npm_config_globalconfig": "/opt/homebrew/etc/npmrc",
+      "npm_package_bin_setup-infinite-hook": "setup-infinite-hook.js",
+      "npm_config_prefer_online": "true",
+      "npm_execpath": "/opt/homebrew/Cellar/node@22/22.19.0/lib/node_modules/npm/bin/npm-cli.js",
+      "npm_package_json": "/Users/jeremyparker/infinite-continue-stop-hook/package.json",
+      "npm_config_userconfig": "/Users/jeremyparker/.npmrc",
+      "npm_config_init_module": "/Users/jeremyparker/.npm-init.js",
+      "npm_command": "run-script",
+      "npm_lifecycle_event": "test:integration:files",
+      "npm_package_name": "claude-taskmanager",
+      "npm_config_npm_version": "10.9.3",
+      "npm_package_engines_node": ">=18.0.0",
+      "npm_config_node_gyp": "/opt/homebrew/Cellar/node@22/22.19.0/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js",
+      "npm_package_version": "1.0.0",
+      "npm_config_cache": "/Users/jeremyparker/.npm",
+      "npm_lifecycle_script": "jest test/integration/file-operations.test.js --testTimeout=45000 --verbose",
+      "npm_config_user_agent": "npm/10.9.3 node/v22.19.0 darwin arm64 workspaces/false",
+      "npm_package_bin_taskmanager": "taskmanager-api.js",
+      "npm_node_execpath": "/opt/homebrew/Cellar/node@22/22.19.0/bin/node",
+      "npm_config_prefix": "/opt/homebrew",
+      "NODE_ENV": "test"
+    }
+  },
+  "git": {
+    "commit": {
+      "sha": "c350f4861ca82f9830ad10a1633358cb1c6be710",
+      "short_sha": "c350f48",
+      "message": "fix: correct syntax error in stress-and-recovery test and format configurations",
+      "author": "Claude",
+      "author_email": "claude@anthropic.com",
+      "date": "2025-09-23 13:55:35 -0500"
+    },
+    "branch": {
+      "current": "main",
+      "remote": [
+        "origin",
+        "main"
+      ]
+    },
+    "repository": {
+      "remote_url": "https://github.com/Nexus-Digital-Automations/infinite-continue-stop-hook.git",
+      "is_dirty": true,
+      "tag": null
+    }
+  },
+  "coverage": null,
+  "artifacts": [
+    {
+      "type": "coverage",
+      "path": "./coverage",
+      "description": "Test coverage reports (HTML, LCOV, JSON)"
+    },
+    {
+      "type": "test_results",
+      "path": "./coverage/reports",
+      "description": "Test execution reports (JUnit, JSON)"
+    },
+    {
+      "type": "performance",
+      "path": "./test-performance",
+      "description": "Performance test results and analysis"
+    }
+  ],
+  "metadata": {
+    "generator": "Jest CI/CD Reporter v2.0.0",
+    "timestamp": "2025-09-23T18:56:14.039Z",
+    "timezone": "America/Chicago",
+    "locale": "en-US"
+  }
+}
