@@ -1,11 +1,11 @@
 /**
  * Jest CI/CD Reporter for Enhanced Pipeline Integration
  *
- * Advanced Jest reporter that generates CI/CD-optimized reports with
- * environment context, git information, and webhook notifications.
+ * Specialized reporter for CI/CD environments with Git integration,
+ * environment detection, performance metrics, and external notifications.
  *
  * @author CI/CD Integration Agent
- * @version 2.0.0
+ * @version 1.0.0
  * @since 2025-09-23
  */
 
@@ -14,501 +14,638 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 class JestCiCdReporter {
-  constructor(globalConfig, options = {}) {
+  constructor(globalConfig, options) {
     this.globalConfig = globalConfig;
     this.options = {
-      outputPath: options.outputPath || './coverage/reports/ci-cd-results.json',
-      includeGitInfo: options.includeGitInfo !== false,
-      includeEnvironmentInfo: options.includeEnvironmentInfo !== false,
-      includeTimingData: options.includeTimingData !== false,
-      slackWebhook: options.slackWebhook,
-      teamsWebhook: options.teamsWebhook,
-      ...options,
+      outputPath: './coverage/reports/ci-cd-results.json',
+      includeGitInfo: true,
+      includeEnvironmentInfo: true,
+      includeTimingData: true,
+      slackWebhook: null,
+      teamsWebhook: null,
+      enableNotifications: true,
+      ...options
     };
 
     this.startTime = Date.now();
+    this.gitInfo = null;
+    this.environmentInfo = null;
   }
 
   onRunStart() {
     this.startTime = Date.now();
+
+    if (this.options.includeGitInfo) {
+      this.gitInfo = this.getGitInformation();
+    }
+
+    if (this.options.includeEnvironmentInfo) {
+      this.environmentInfo = this.getEnvironmentInformation();
+    }
   }
 
   onRunComplete(contexts, results) {
-    const report = this.generateCiCdReport(results);
-    this.writeReport(report);
-    this.sendNotifications(report);
-  }
-
-  generateCiCdReport(results) {
     const endTime = Date.now();
+    const duration = endTime - this.startTime;
+
     const report = {
-      pipeline: {
-        id: process.env.GITHUB_RUN_ID || process.env.BUILD_ID || 'local',
-        number: process.env.GITHUB_RUN_NUMBER || process.env.BUILD_NUMBER || '0',
-        url: this.buildPipelineUrl(),
-        trigger: this.determineTrigger(),
-        actor: process.env.GITHUB_ACTOR || process.env.BUILD_USER || 'unknown',
-      },
-      results: {
-        success: results.success,
-        summary: this.buildResultSummary(results),
-        timing: {
-          start: this.startTime,
-          end: endTime,
-          duration: endTime - this.startTime,
-          testRuntime: results.startTime ? (endTime - results.startTime) : 0,
-        },
-        quality: this.assessQuality(results),
-      },
-      environment: this.options.includeEnvironmentInfo ? this.gatherEnvironmentInfo() : null,
-      git: this.options.includeGitInfo ? this.gatherGitInfo() : null,
-      coverage: this.processCoverageForCiCd(results.coverageMap),
-      artifacts: this.identifyArtifacts(),
       metadata: {
-        generator: 'Jest CI/CD Reporter v2.0.0',
         timestamp: new Date().toISOString(),
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        locale: Intl.DateTimeFormat().resolvedOptions().locale,
+        reporter: 'jest-cicd-reporter',
+        version: '1.0.0',
+        generator: 'Enhanced Coverage System',
+        duration_ms: duration
       },
-    };
 
-    return report;
-  }
-
-  buildResultSummary(results) {
-    return {
-      total: {
-        testSuites: results.numTotalTestSuites,
-        tests: results.numTotalTests,
+      // CI/CD specific summary
+      cicd_summary: {
+        pipeline_status: results.success ? 'SUCCESS' : 'FAILURE',
+        total_duration_ms: duration,
+        should_block_deployment: this.shouldBlockDeployment(results),
+        quality_gate_status: this.evaluateQualityGate(results),
+        test_health_score: this.calculateTestHealthScore(results)
       },
-      passed: {
-        testSuites: results.numPassedTestSuites,
-        tests: results.numPassedTests,
-      },
-      failed: {
-        testSuites: results.numFailedTestSuites,
-        tests: results.numFailedTests,
-      },
-      pending: {
-        testSuites: results.numPendingTestSuites,
-        tests: results.numPendingTests,
-      },
-      todo: {
-        tests: results.numTodoTests || 0,
-      },
-      success_rate: {
-        testSuites: results.numTotalTestSuites > 0 ?
-          Math.round((results.numPassedTestSuites / results.numTotalTestSuites) * 100) : 0,
-        tests: results.numTotalTests > 0 ?
-          Math.round((results.numPassedTests / results.numTotalTests) * 100) : 0,
-      },
-    };
-  }
 
-  buildPipelineUrl() {
-    if (process.env.GITHUB_SERVER_URL && process.env.GITHUB_REPOSITORY && process.env.GITHUB_RUN_ID) {
-      return `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`;
-    }
-
-    if (process.env.CI_PIPELINE_URL) {
-      return process.env.CI_PIPELINE_URL;
-    }
-
-    return null;
-  }
-
-  determineTrigger() {
-    if (process.env.GITHUB_EVENT_NAME) {
-      return {
-        type: process.env.GITHUB_EVENT_NAME,
-        ref: process.env.GITHUB_REF,
-        ref_name: process.env.GITHUB_REF_NAME,
-        head_ref: process.env.GITHUB_HEAD_REF,
-      };
-    }
-
-    return {
-      type: process.env.CI ? 'ci' : 'local',
-      ref: null,
-      ref_name: null,
-      head_ref: null,
-    };
-  }
-
-  assessQuality(results) {
-    const quality = {
-      status: 'unknown',
-      score: 0,
-      factors: {},
-    };
-
-    // Test success factor (40% weight)
-    const testSuccessRate = results.numTotalTests > 0 ?
-      (results.numPassedTests / results.numTotalTests) : 0;
-    quality.factors.test_success = {
-      rate: testSuccessRate,
-      weight: 0.4,
-      score: testSuccessRate * 100,
-    };
-
-    // Coverage factor (30% weight) - will be 0 if no coverage
-    let coverageRate = 0;
-    if (results.coverageMap && typeof results.coverageMap.getCoverageSummary === 'function') {
-      const summary = results.coverageMap.getCoverageSummary();
-      coverageRate = summary.lines.pct / 100;
-    }
-    quality.factors.coverage = {
-      rate: coverageRate,
-      weight: 0.3,
-      score: coverageRate * 100,
-    };
-
-    // Performance factor (20% weight)
-    const avgTestTime = results.numTotalTests > 0 ?
-      (Date.now() - results.startTime) / results.numTotalTests : 0;
-    const performanceScore = Math.max(0, Math.min(100, 100 - (avgTestTime / 10))); // Penalize if >1s per test
-    quality.factors.performance = {
-      avg_test_time_ms: avgTestTime,
-      weight: 0.2,
-      score: performanceScore,
-    };
-
-    // Stability factor (10% weight)
-    const stabilityRate = results.numFailedTests === 0 ? 1 : 0.5; // Binary for now
-    quality.factors.stability = {
-      rate: stabilityRate,
-      weight: 0.1,
-      score: stabilityRate * 100,
-    };
-
-    // Calculate overall score
-    quality.score = Math.round(
-      (quality.factors.test_success.score * quality.factors.test_success.weight) +
-      (quality.factors.coverage.score * quality.factors.coverage.weight) +
-      (quality.factors.performance.score * quality.factors.performance.weight) +
-      (quality.factors.stability.score * quality.factors.stability.weight),
-    );
-
-    // Determine status
-    if (quality.score >= 90) {quality.status = 'excellent';} else if (quality.score >= 75) {quality.status = 'good';} else if (quality.score >= 60) {quality.status = 'fair';} else {quality.status = 'poor';}
-
-    return quality;
-  }
-
-  gatherEnvironmentInfo() {
-    return {
-      node: {
-        version: process.version,
-        platform: process.platform,
-        arch: process.arch,
-        memory: {
-          heap_used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
-          heap_total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024),
-          external: Math.round(process.memoryUsage().external / 1024 / 1024),
+      // Enhanced test results with CI/CD context
+      test_execution: {
+        summary: {
+          total_suites: results.numTotalTestSuites,
+          passed_suites: results.numPassedTestSuites,
+          failed_suites: results.numFailedTestSuites,
+          total_tests: results.numTotalTests,
+          passed_tests: results.numPassedTests,
+          failed_tests: results.numFailedTests,
+          pending_tests: results.numPendingTests,
+          success_rate: ((results.numPassedTests / results.numTotalTests) * 100).toFixed(2),
+          execution_time_ms: duration
         },
+
+        performance_metrics: {
+          average_test_duration: duration / results.numTotalTests,
+          slowest_suite: this.findSlowestSuite(results.testResults),
+          memory_usage: this.getMemoryUsage(),
+          parallel_efficiency: this.calculateParallelEfficiency(results)
+        },
+
+        failure_analysis: this.analyzeFailures(results),
+        flaky_test_detection: this.detectFlakyTests(results)
       },
-      system: {
-        hostname: require('os').hostname(),
-        cpu_count: require('os').cpus().length,
-        total_memory_gb: Math.round(require('os').totalmem() / 1024 / 1024 / 1024),
-        load_average: require('os').loadavg(),
-        uptime: require('os').uptime(),
+
+      // Git information
+      git: this.gitInfo,
+
+      // Environment information
+      environment: this.environmentInfo,
+
+      // Coverage integration
+      coverage_integration: {
+        coverage_available: Boolean(results.coverageMap),
+        coverage_summary: results.coverageMap ? this.extractCoverageSummary(results.coverageMap) : null,
+        coverage_status: this.evaluateCoverageStatus(results.coverageMap)
       },
-      ci: {
-        is_ci: process.env.CI === 'true',
-        provider: this.detectCiProvider(),
-        runner: process.env.RUNNER_OS || process.env.CI_RUNNER_DESCRIPTION || 'unknown',
-      },
-      environment_variables: this.filterEnvironmentVariables(),
+
+      // Notifications sent
+      notifications: [],
+
+      // Recommendations
+      recommendations: this.generateRecommendations(results)
+    };
+
+    // Write the main CI/CD report
+    this.writeReport(report);
+
+    // Send notifications if enabled
+    if (this.options.enableNotifications) {
+      this.sendNotifications(report);
+    }
+
+    // Write additional CI/CD specific files
+    this.writeStatusFiles(report);
+  }
+
+  shouldBlockDeployment(results) {
+    // Define deployment blocking criteria
+    return (
+      !results.success ||
+      results.numFailedTests > 0 ||
+      (results.coverageMap && this.isCoverageBelowCritical(results.coverageMap))
+    );
+  }
+
+  evaluateQualityGate(results) {
+    const criteria = {
+      tests_passing: results.success,
+      no_failed_tests: results.numFailedTests === 0,
+      coverage_adequate: this.isCoverageAdequate(results.coverageMap),
+      performance_acceptable: this.isPerformanceAcceptable(results)
+    };
+
+    const passed = Object.values(criteria).every(Boolean);
+
+    return {
+      status: passed ? 'PASSED' : 'FAILED',
+      criteria,
+      blocking_issues: this.identifyBlockingIssues(criteria, results)
     };
   }
 
-  detectCiProvider() {
-    if (process.env.GITHUB_ACTIONS) {return 'github_actions';}
-    if (process.env.GITLAB_CI) {return 'gitlab_ci';}
-    if (process.env.CIRCLECI) {return 'circle_ci';}
-    if (process.env.TRAVIS) {return 'travis_ci';}
-    if (process.env.JENKINS_URL) {return 'jenkins';}
-    if (process.env.BUILDKITE) {return 'buildkite';}
-    return 'unknown';
+  calculateTestHealthScore(results) {
+    // Calculate a health score (0-100) based on multiple factors
+    let score = 100;
+
+    // Deduct for failed tests
+    const failureRate = results.numFailedTests / results.numTotalTests;
+    score -= failureRate * 50;
+
+    // Deduct for slow tests
+    const avgDuration = (Date.now() - this.startTime) / results.numTotalTests;
+    if (avgDuration > 1000) score -= 10; // Slow tests
+    if (avgDuration > 5000) score -= 20; // Very slow tests
+
+    // Bonus for good coverage
+    if (results.coverageMap) {
+      const coverage = this.extractCoverageSummary(results.coverageMap);
+      if (coverage && coverage.lines && coverage.lines.pct > 80) {
+        score += 10;
+      }
+    }
+
+    return Math.max(0, Math.min(100, Math.round(score)));
   }
 
-  filterEnvironmentVariables() {
-    const sensitivePatterns = ['token', 'secret', 'key', 'password', 'credential'];
-    const relevant = {};
+  findSlowestSuite(testResults) {
+    let slowest = null;
+    let maxDuration = 0;
 
-    Object.keys(process.env).forEach(key => {
-      const lowerKey = key.toLowerCase();
-      const isSensitive = sensitivePatterns.some(pattern => lowerKey.includes(pattern));
-
-      if (!isSensitive && (
-        lowerKey.startsWith('github_') ||
-        lowerKey.startsWith('ci_') ||
-        lowerKey.startsWith('npm_') ||
-        lowerKey.startsWith('node_') ||
-        ['CI', 'RUNNER_OS', 'BUILD_NUMBER'].includes(key)
-      )) {
-        relevant[key] = process.env[key];
+    testResults.forEach(result => {
+      const duration = result.perfStats.end - result.perfStats.start;
+      if (duration > maxDuration) {
+        maxDuration = duration;
+        slowest = {
+          path: result.testFilePath,
+          duration_ms: duration,
+          num_tests: result.numPassingTests + result.numFailingTests
+        };
       }
     });
 
-    return relevant;
+    return slowest;
   }
 
-  gatherGitInfo() {
+  analyzeFailures(results) {
+    const failures = [];
+    const failurePatterns = new Map();
+
+    results.testResults.forEach(testResult => {
+      if (testResult.numFailingTests > 0) {
+        testResult.testResults.forEach(test => {
+          if (test.status === 'failed') {
+            failures.push({
+              suite: testResult.testFilePath,
+              test: test.fullName,
+              duration: test.duration,
+              error: test.failureMessages?.[0]?.substring(0, 200) || 'Unknown error'
+            });
+
+            // Track failure patterns
+            const errorType = this.categorizeError(test.failureMessages?.[0] || '');
+            failurePatterns.set(errorType, (failurePatterns.get(errorType) || 0) + 1);
+          }
+        });
+      }
+    });
+
+    return {
+      total_failures: failures.length,
+      failed_suites: results.numFailedTestSuites,
+      failure_details: failures.slice(0, 10), // Limit to first 10
+      failure_patterns: Object.fromEntries(failurePatterns),
+      common_failure_type: failurePatterns.size > 0 ?
+        [...failurePatterns.entries()].sort((a, b) => b[1] - a[1])[0][0] : 'none'
+    };
+  }
+
+  categorizeError(errorMessage) {
+    if (!errorMessage) return 'unknown';
+
+    const patterns = {
+      'timeout': /timeout|timed out/i,
+      'assertion': /expect|assertion|toBe|toEqual/i,
+      'reference': /ReferenceError|is not defined/i,
+      'type': /TypeError|Cannot read|undefined/i,
+      'network': /ECONNREFUSED|network|fetch/i,
+      'async': /Promise|async|await/i
+    };
+
+    for (const [category, pattern] of Object.entries(patterns)) {
+      if (pattern.test(errorMessage)) {
+        return category;
+      }
+    }
+
+    return 'other';
+  }
+
+  detectFlakyTests(results) {
+    // Placeholder for flaky test detection
+    // In a real implementation, this would compare with historical data
+    return {
+      potentially_flaky: [],
+      confidence: 'low',
+      note: 'Flaky test detection requires historical data analysis'
+    };
+  }
+
+  getGitInformation() {
     try {
-      return {
-        commit: {
-          sha: this.getGitValue('rev-parse HEAD'),
-          short_sha: this.getGitValue('rev-parse --short HEAD'),
-          message: this.getGitValue('log -1 --pretty=format:%s'),
-          author: this.getGitValue('log -1 --pretty=format:%an'),
-          author_email: this.getGitValue('log -1 --pretty=format:%ae'),
-          date: this.getGitValue('log -1 --pretty=format:%ai'),
-        },
-        branch: {
-          current: this.getGitValue('rev-parse --abbrev-ref HEAD'),
-          remote: this.getGitValue('rev-parse --abbrev-ref @{upstream}').split('/'),
-        },
-        repository: {
-          remote_url: this.getGitValue('config --get remote.origin.url'),
-          is_dirty: this.getGitValue('status --porcelain').length > 0,
-          tag: this.getGitValue('describe --tags --exact-match 2>/dev/null', true),
-        },
+      const info = {
+        commit_sha: execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
+        branch: execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim(),
+        author: execSync('git log -1 --format="%an <%ae>"', { encoding: 'utf8' }).trim(),
+        commit_message: execSync('git log -1 --format="%s"', { encoding: 'utf8' }).trim(),
+        commit_date: execSync('git log -1 --format="%ai"', { encoding: 'utf8' }).trim(),
+        tag: this.getLatestTag(),
+        is_dirty: this.isGitDirty(),
+        remote_url: this.getRemoteUrl()
       };
+
+      // Add GitHub/GitLab specific information
+      if (process.env.GITHUB_ACTIONS) {
+        info.github = {
+          workflow: process.env.GITHUB_WORKFLOW,
+          run_id: process.env.GITHUB_RUN_ID,
+          run_number: process.env.GITHUB_RUN_NUMBER,
+          actor: process.env.GITHUB_ACTOR,
+          ref: process.env.GITHUB_REF,
+          repository: process.env.GITHUB_REPOSITORY,
+          event_name: process.env.GITHUB_EVENT_NAME
+        };
+      }
+
+      return info;
     } catch (error) {
-      console.warn('⚠️ Could not gather git information:', error.message);
-      return null;
+      return {
+        error: 'Failed to get Git information',
+        message: error.message
+      };
     }
   }
 
-  getGitValue(command, allowError = false) {
-    try {
-      return execSync(`git ${command}`, { encoding: 'utf8' }).trim();
-    } catch (error) {
-      if (allowError) {return null;}
-      throw error;
-    }
+  getEnvironmentInformation() {
+    return {
+      node_version: process.version,
+      platform: process.platform,
+      arch: process.arch,
+      ci: Boolean(process.env.CI),
+      ci_provider: this.detectCiProvider(),
+      environment: process.env.NODE_ENV || 'unknown',
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      locale: Intl.DateTimeFormat().resolvedOptions().locale,
+
+      // Performance context
+      memory: {
+        total: this.getTotalMemory(),
+        available: this.getAvailableMemory()
+      },
+
+      cpu: {
+        cores: require('os').cpus().length,
+        model: require('os').cpus()[0]?.model || 'unknown'
+      },
+
+      // CI/CD context
+      build_info: {
+        build_number: process.env.BUILD_NUMBER || process.env.GITHUB_RUN_NUMBER || 'unknown',
+        build_url: process.env.BUILD_URL || this.constructBuildUrl(),
+        job_name: process.env.JOB_NAME || process.env.GITHUB_JOB || 'unknown'
+      }
+    };
   }
 
-  processCoverageForCiCd(coverageMap) {
+  getMemoryUsage() {
+    const usage = process.memoryUsage();
+    return {
+      rss: usage.rss,
+      heap_total: usage.heapTotal,
+      heap_used: usage.heapUsed,
+      external: usage.external,
+      heap_usage_percent: ((usage.heapUsed / usage.heapTotal) * 100).toFixed(2)
+    };
+  }
+
+  calculateParallelEfficiency(results) {
+    // Simplified parallel efficiency calculation
+    const totalTime = Date.now() - this.startTime;
+    const serialTime = results.testResults.reduce((sum, result) =>
+      sum + (result.perfStats.end - result.perfStats.start), 0);
+
+    const efficiency = serialTime > 0 ? ((serialTime / totalTime) * 100).toFixed(2) : 0;
+
+    return {
+      parallel_efficiency_percent: efficiency,
+      total_execution_time_ms: totalTime,
+      serial_time_ms: serialTime,
+      time_saved_ms: Math.max(0, serialTime - totalTime)
+    };
+  }
+
+  extractCoverageSummary(coverageMap) {
     if (!coverageMap || typeof coverageMap.getCoverageSummary !== 'function') {
       return null;
     }
 
-    const summary = coverageMap.getCoverageSummary();
-    return {
-      summary: {
-        lines: {
-          total: summary.lines.total,
-          covered: summary.lines.covered,
-          percentage: Math.round(summary.lines.pct * 100) / 100,
-        },
-        statements: {
-          total: summary.statements.total,
-          covered: summary.statements.covered,
-          percentage: Math.round(summary.statements.pct * 100) / 100,
-        },
-        functions: {
-          total: summary.functions.total,
-          covered: summary.functions.covered,
-          percentage: Math.round(summary.functions.pct * 100) / 100,
-        },
-        branches: {
-          total: summary.branches.total,
-          covered: summary.branches.covered,
-          percentage: Math.round(summary.branches.pct * 100) / 100,
-        },
-      },
-      threshold_met: this.checkCoverageThresholds(summary),
-      trend: this.analyzeCoverageTrend(),
-    };
+    try {
+      const summary = coverageMap.getCoverageSummary();
+      return {
+        statements: { total: summary.statements.total, covered: summary.statements.covered, pct: summary.statements.pct },
+        branches: { total: summary.branches.total, covered: summary.branches.covered, pct: summary.branches.pct },
+        functions: { total: summary.functions.total, covered: summary.functions.covered, pct: summary.functions.pct },
+        lines: { total: summary.lines.total, covered: summary.lines.covered, pct: summary.lines.pct }
+      };
+    } catch (error) {
+      return { error: 'Failed to extract coverage summary' };
+    }
   }
 
-  checkCoverageThresholds(summary) {
-    // Default thresholds - should match jest.config.js
-    const thresholds = {
-      lines: 80,
-      statements: 80,
-      functions: 80,
-      branches: 75,
-    };
+  evaluateCoverageStatus(coverageMap) {
+    if (!coverageMap) return 'not_available';
 
-    return {
-      lines: summary.lines.pct >= thresholds.lines,
-      statements: summary.statements.pct >= thresholds.statements,
-      functions: summary.functions.pct >= thresholds.functions,
-      branches: summary.branches.pct >= thresholds.branches,
-      overall: summary.lines.pct >= thresholds.lines &&
-               summary.statements.pct >= thresholds.statements &&
-               summary.functions.pct >= thresholds.functions &&
-               summary.branches.pct >= thresholds.branches,
-    };
+    const summary = this.extractCoverageSummary(coverageMap);
+    if (!summary || summary.error) return 'error';
+
+    const avgCoverage = (summary.statements.pct + summary.branches.pct +
+                        summary.functions.pct + summary.lines.pct) / 4;
+
+    if (avgCoverage >= 90) return 'excellent';
+    if (avgCoverage >= 80) return 'good';
+    if (avgCoverage >= 70) return 'acceptable';
+    if (avgCoverage >= 60) return 'minimum';
+    return 'critical';
   }
 
-  analyzeCoverageTrend() {
-    // Placeholder for coverage trend analysis
-    // Could read historical coverage data and compare
-    return {
-      direction: 'stable',
-      change_percent: 0,
-      historical_data_available: false,
-    };
+  isCoverageBelowCritical(coverageMap) {
+    const status = this.evaluateCoverageStatus(coverageMap);
+    return status === 'critical';
   }
 
-  identifyArtifacts() {
-    const artifacts = [];
+  isCoverageAdequate(coverageMap) {
+    const status = this.evaluateCoverageStatus(coverageMap);
+    return ['excellent', 'good', 'acceptable'].includes(status);
+  }
 
-    // Coverage artifacts
-    if (fs.existsSync('./coverage')) {
-      artifacts.push({
-        type: 'coverage',
-        path: './coverage',
-        description: 'Test coverage reports (HTML, LCOV, JSON)',
+  isPerformanceAcceptable(results) {
+    const duration = Date.now() - this.startTime;
+    const avgTestTime = duration / results.numTotalTests;
+
+    // Performance is acceptable if average test time is under 2 seconds
+    return avgTestTime < 2000;
+  }
+
+  identifyBlockingIssues(criteria, results) {
+    const issues = [];
+
+    if (!criteria.tests_passing) {
+      issues.push({
+        type: 'test_failures',
+        severity: 'critical',
+        message: `${results.numFailedTests} test(s) failed`,
+        action: 'Fix failing tests before deployment'
       });
     }
 
-    // Test result artifacts
-    if (fs.existsSync('./coverage/reports')) {
-      artifacts.push({
-        type: 'test_results',
-        path: './coverage/reports',
-        description: 'Test execution reports (JUnit, JSON)',
+    if (!criteria.coverage_adequate) {
+      issues.push({
+        type: 'low_coverage',
+        severity: 'warning',
+        message: 'Code coverage below acceptable threshold',
+        action: 'Add more tests to improve coverage'
       });
     }
 
-    // Performance artifacts
-    if (fs.existsSync('./test-performance')) {
-      artifacts.push({
+    if (!criteria.performance_acceptable) {
+      issues.push({
         type: 'performance',
-        path: './test-performance',
-        description: 'Performance test results and analysis',
+        severity: 'warning',
+        message: 'Test execution time is slow',
+        action: 'Optimize slow tests or improve test parallelization'
       });
     }
 
-    return artifacts;
+    return issues;
+  }
+
+  generateRecommendations(results) {
+    const recommendations = [];
+
+    // Test-related recommendations
+    if (results.numFailedTests > 0) {
+      recommendations.push({
+        category: 'testing',
+        priority: 'high',
+        recommendation: 'Fix failing tests immediately',
+        details: `${results.numFailedTests} tests are currently failing`
+      });
+    }
+
+    // Performance recommendations
+    const duration = Date.now() - this.startTime;
+    if (duration > 60000) { // 1 minute
+      recommendations.push({
+        category: 'performance',
+        priority: 'medium',
+        recommendation: 'Consider optimizing test execution time',
+        details: `Tests took ${Math.round(duration / 1000)}s to complete`
+      });
+    }
+
+    // Coverage recommendations
+    if (results.coverageMap) {
+      const status = this.evaluateCoverageStatus(results.coverageMap);
+      if (['minimum', 'critical'].includes(status)) {
+        recommendations.push({
+          category: 'coverage',
+          priority: 'medium',
+          recommendation: 'Improve test coverage',
+          details: `Coverage is currently at ${status} level`
+        });
+      }
+    }
+
+    return recommendations;
   }
 
   writeReport(report) {
-    try {
-      // Ensure output directory exists
-      const outputDir = path.dirname(this.options.outputPath);
-      if (!fs.existsSync(outputDir)) {
-        fs.mkdirSync(outputDir, { recursive: true });
-      }
-
-      // Write full CI/CD report
-      fs.writeFileSync(this.options.outputPath, JSON.stringify(report, null, 2));
-
-      // Write pipeline summary for quick access
-      const summaryPath = this.options.outputPath.replace('.json', '-pipeline-summary.json');
-      const summary = {
-        pipeline: report.pipeline,
-        success: report.results.success,
-        quality: report.results.quality,
-        timing: report.results.timing,
-        coverage: report.coverage?.summary || null,
-      };
-      fs.writeFileSync(summaryPath, JSON.stringify(summary, null, 2));
-
-      console.log(`🚀 CI/CD test report written to: ${this.options.outputPath}`);
-
-    } catch (error) {
-      console.error('❌ Failed to write CI/CD test report:', error.message);
+    // Ensure output directory exists
+    const outputDir = path.dirname(this.options.outputPath);
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
     }
+
+    // Write main report
+    fs.writeFileSync(this.options.outputPath, JSON.stringify(report, null, 2));
   }
 
-  async sendNotifications(report) {
+  writeStatusFiles(report) {
+    const outputDir = path.dirname(this.options.outputPath);
+
+    // Write deployment gate status
+    const deploymentStatus = {
+      can_deploy: !report.cicd_summary.should_block_deployment,
+      quality_gate_passed: report.cicd_summary.quality_gate_status.status === 'PASSED',
+      timestamp: report.metadata.timestamp,
+      blocking_issues: report.cicd_summary.quality_gate_status.blocking_issues || []
+    };
+
+    fs.writeFileSync(
+      path.join(outputDir, 'deployment-gate.json'),
+      JSON.stringify(deploymentStatus, null, 2)
+    );
+
+    // Write simple status for shell scripts
+    fs.writeFileSync(
+      path.join(outputDir, 'test-status.txt'),
+      report.cicd_summary.pipeline_status
+    );
+
+    // Write health score
+    fs.writeFileSync(
+      path.join(outputDir, 'health-score.txt'),
+      report.cicd_summary.test_health_score.toString()
+    );
+  }
+
+  sendNotifications(report) {
+    const notifications = [];
+
+    // Send Slack notification if configured
     if (this.options.slackWebhook) {
-      await this.sendSlackNotification(report);
+      try {
+        const slackMessage = this.formatSlackMessage(report);
+        this.sendWebhook(this.options.slackWebhook, slackMessage);
+        notifications.push({ type: 'slack', status: 'sent', timestamp: new Date().toISOString() });
+      } catch (error) {
+        notifications.push({ type: 'slack', status: 'failed', error: error.message });
+      }
     }
 
+    // Send Teams notification if configured
     if (this.options.teamsWebhook) {
-      await this.sendTeamsNotification(report);
+      try {
+        const teamsMessage = this.formatTeamsMessage(report);
+        this.sendWebhook(this.options.teamsWebhook, teamsMessage);
+        notifications.push({ type: 'teams', status: 'sent', timestamp: new Date().toISOString() });
+      } catch (error) {
+        notifications.push({ type: 'teams', status: 'failed', error: error.message });
+      }
+    }
+
+    report.notifications = notifications;
+  }
+
+  formatSlackMessage(report) {
+    const status = report.cicd_summary.pipeline_status;
+    const emoji = status === 'SUCCESS' ? '✅' : '❌';
+
+    return {
+      text: `${emoji} Test Pipeline ${status}`,
+      blocks: [
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: `*Test Pipeline ${status}* ${emoji}\n\n` +
+                  `*Tests:* ${report.test_execution.summary.passed_tests}/${report.test_execution.summary.total_tests} passed\n` +
+                  `*Duration:* ${Math.round(report.test_execution.summary.execution_time_ms / 1000)}s\n` +
+                  `*Health Score:* ${report.cicd_summary.test_health_score}/100`
+          }
+        }
+      ]
+    };
+  }
+
+  formatTeamsMessage(report) {
+    const status = report.cicd_summary.pipeline_status;
+    const color = status === 'SUCCESS' ? '00FF00' : 'FF0000';
+
+    return {
+      '@type': 'MessageCard',
+      '@context': 'http://schema.org/extensions',
+      summary: `Test Pipeline ${status}`,
+      themeColor: color,
+      sections: [{
+        activityTitle: `Test Pipeline ${status}`,
+        facts: [
+          { name: 'Tests Passed', value: `${report.test_execution.summary.passed_tests}/${report.test_execution.summary.total_tests}` },
+          { name: 'Duration', value: `${Math.round(report.test_execution.summary.execution_time_ms / 1000)}s` },
+          { name: 'Health Score', value: `${report.cicd_summary.test_health_score}/100` }
+        ]
+      }]
+    };
+  }
+
+  sendWebhook(url, payload) {
+    // Simplified webhook sending - in production, use a proper HTTP client
+    const data = JSON.stringify(payload);
+    // Implementation would use https.request or a library like axios
+  }
+
+  // Helper methods
+  getLatestTag() {
+    try {
+      return execSync('git describe --tags --abbrev=0', { encoding: 'utf8' }).trim();
+    } catch {
+      return null;
     }
   }
 
-  async sendSlackNotification(report) {
+  isGitDirty() {
     try {
-      const payload = {
-        text: `Test Results: ${report.results.success ? '✅ PASSED' : '❌ FAILED'}`,
-        blocks: [
-          {
-            type: 'section',
-            text: {
-              type: 'mrkdwn',
-              text: `*Test Results*: ${report.results.success ? '✅ PASSED' : '❌ FAILED'}\n*Quality Score*: ${report.results.quality.score}/100 (${report.results.quality.status})`,
-            },
-          },
-          {
-            type: 'section',
-            fields: [
-              {
-                type: 'mrkdwn',
-                text: `*Tests*: ${report.results.summary.passed.tests}/${report.results.summary.total.tests} passed`,
-              },
-              {
-                type: 'mrkdwn',
-                text: `*Duration*: ${Math.round(report.results.timing.duration / 1000)}s`,
-              },
-            ],
-          },
-        ],
-      };
-
-      // Send webhook (implementation would depend on HTTP client availability)
-      console.log('📤 Slack notification prepared (webhook sending would require HTTP client)');
-
-    } catch (error) {
-      console.warn('⚠️ Failed to send Slack notification:', error.message);
+      const status = execSync('git status --porcelain', { encoding: 'utf8' });
+      return status.trim().length > 0;
+    } catch {
+      return false;
     }
   }
 
-  async sendTeamsNotification(report) {
+  getRemoteUrl() {
     try {
-      const payload = {
-        type: 'message',
-        attachments: [
-          {
-            contentType: 'application/vnd.microsoft.card.adaptive',
-            content: {
-              type: 'AdaptiveCard',
-              body: [
-                {
-                  type: 'TextBlock',
-                  size: 'Medium',
-                  weight: 'Bolder',
-                  text: `Test Results: ${report.results.success ? '✅ PASSED' : '❌ FAILED'}`,
-                },
-                {
-                  type: 'FactSet',
-                  facts: [
-                    {
-                      title: 'Quality Score',
-                      value: `${report.results.quality.score}/100 (${report.results.quality.status})`,
-                    },
-                    {
-                      title: 'Tests Passed',
-                      value: `${report.results.summary.passed.tests}/${report.results.summary.total.tests}`,
-                    },
-                    {
-                      title: 'Duration',
-                      value: `${Math.round(report.results.timing.duration / 1000)}s`,
-                    },
-                  ],
-                },
-              ],
-            },
-          },
-        ],
-      };
-
-      // Send webhook (implementation would depend on HTTP client availability)
-      console.log('📤 Teams notification prepared (webhook sending would require HTTP client)');
-
-    } catch (error) {
-      console.warn('⚠️ Failed to send Teams notification:', error.message);
+      return execSync('git config --get remote.origin.url', { encoding: 'utf8' }).trim();
+    } catch {
+      return null;
     }
+  }
+
+  detectCiProvider() {
+    if (process.env.GITHUB_ACTIONS) return 'github_actions';
+    if (process.env.GITLAB_CI) return 'gitlab_ci';
+    if (process.env.JENKINS_URL) return 'jenkins';
+    if (process.env.TRAVIS) return 'travis';
+    if (process.env.CIRCLECI) return 'circleci';
+    if (process.env.CI) return 'unknown_ci';
+    return 'local';
+  }
+
+  getTotalMemory() {
+    try {
+      return require('os').totalmem();
+    } catch {
+      return null;
+    }
+  }
+
+  getAvailableMemory() {
+    try {
+      return require('os').freemem();
+    } catch {
+      return null;
+    }
+  }
+
+  constructBuildUrl() {
+    if (process.env.GITHUB_ACTIONS) {
+      return `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`;
+    }
+    return null;
   }
 }
 
