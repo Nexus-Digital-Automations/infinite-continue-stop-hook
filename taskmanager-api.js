@@ -623,6 +623,10 @@ class FeatureManagerAPI {
       // Track initialization usage in time buckets (separate atomic operation)
       await this._updateTimeBucketStats('init');
 
+      // Include comprehensive guide in initialization response
+      const guideData = await this.getComprehensiveGuide();
+      result.comprehensiveGuide = guideData;
+
       return result;
     } catch (error) {
       return {
@@ -672,6 +676,10 @@ class FeatureManagerAPI {
 
       // Track reinitialization usage in time buckets (separate atomic operation)
       await this._updateTimeBucketStats('reinit');
+
+      // Include comprehensive guide in reinitialization response
+      const guideData = await this.getComprehensiveGuide();
+      result.comprehensiveGuide = guideData;
 
       return result;
     } catch (error) {
