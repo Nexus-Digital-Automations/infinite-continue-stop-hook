@@ -1,9 +1,60 @@
-# Test Execution Guide
+# Comprehensive Test Execution and Troubleshooting Guide
 
 **Project:** Infinite Continue Stop Hook TaskManager
-**Version:** 1.0.0
-**Last Updated:** 2025-09-22
-**Created By:** main-agent
+**Version:** 2.0.0
+**Last Updated:** 2025-09-23
+**Created By:** Testing Infrastructure Agent
+
+**Comprehensive guide for running, debugging, and troubleshooting tests in the infinite-continue-stop-hook project.**
+
+---
+
+## 📋 Table of Contents
+
+1. [Test Framework Overview](#test-framework-overview)
+2. [Quick Start](#quick-start)
+3. [Test Execution Guide](#test-execution-guide)
+4. [Debugging Tests](#debugging-tests)
+5. [Common Troubleshooting](#common-troubleshooting)
+6. [CI/CD Integration](#cicd-integration)
+7. [Performance Testing](#performance-testing)
+8. [Coverage Analysis](#coverage-analysis)
+9. [Best Practices](#best-practices)
+
+---
+
+## 🧪 Test Framework Overview
+
+### Framework Stack
+- **Testing Framework**: Jest 30.1.3
+- **Test Environment**: Node.js
+- **Coverage Provider**: V8 (faster than babel)
+- **Assertion Library**: Jest built-in with custom matchers
+- **Test Types**: Unit, Integration, E2E, RAG System, Performance
+
+### Project Structure
+```
+test/
+├── setup.js                    # Global test setup
+├── utils/                      # Test utilities and helpers
+│   ├── testUtils.js            # Core testing utilities
+│   └── ...
+├── mocks/                      # Mock implementations
+├── unit/                       # Unit tests
+├── integration/                # Integration tests
+├── e2e/                        # End-to-end tests
+├── rag-system/                 # RAG system specific tests
+│   ├── unit/
+│   ├── integration/
+│   └── performance/
+└── fixtures/                   # Test data and fixtures
+```
+
+### Configuration Files
+- `jest.config.js` - Main Jest configuration with projects
+- `test/rag-system/jest.config.js` - RAG system specific config
+- `test/e2e/jest.config.js` - E2E test configuration
+- `test/setup.js` - Global test setup and utilities
 
 ---
 
@@ -30,7 +81,9 @@ npm test
 npm run test:quick
 ```
 
-## 📋 Test Suite Commands
+---
+
+## 🚀 Test Execution Guide
 
 ### Core Test Commands
 ```bash
@@ -45,6 +98,80 @@ npm test -- test/taskmanager-api-comprehensive.test.js
 
 # Run tests matching pattern
 npm test -- --testPathPattern="security"
+```
+
+#### Unit Tests
+```bash
+# All unit tests
+npm run test:unit
+
+# Specific unit test files
+npm run test:unit:taskmanager
+npm run test:unit:features
+npm run test:unit:agents
+npm run test:unit:stats
+
+# Unit tests with coverage
+npm run test:unit:coverage
+
+# Watch mode for development
+npm run test:unit:watch
+```
+
+#### Integration Tests
+```bash
+# All integration tests
+npm run test:integration
+
+# Specific integration test suites
+npm run test:integration:api
+npm run test:integration:files
+npm run test:integration:cli
+npm run test:integration:features
+npm run test:integration:agents
+
+# Stress and recovery tests (single worker)
+npm run test:integration:stress
+
+# Integration tests with coverage
+npm run test:integration:coverage
+
+# Watch mode
+npm run test:integration:watch
+```
+
+#### E2E Tests
+```bash
+# All E2E tests
+npm run test:e2e
+
+# Specific E2E workflows
+npm run test:e2e:complete-workflows
+npm run test:e2e:multi-agent
+npm run test:e2e:feature-management
+npm run test:e2e:stop-hook
+npm run test:e2e:performance
+
+# E2E watch mode
+npm run test:e2e:watch
+```
+
+#### RAG System Tests
+```bash
+# All RAG tests
+npm run test:rag
+
+# RAG test categories
+npm run test:rag:unit
+npm run test:rag:integration
+npm run test:rag:performance
+npm run test:rag:integrity
+
+# RAG tests with coverage
+npm run test:rag:coverage
+
+# RAG watch mode
+npm run test:rag:watch
 ```
 
 ### Coverage Commands
@@ -82,271 +209,292 @@ npm run coverage:badge
 npm run coverage:threshold-check
 ```
 
-## 🧪 Test Categories
+### Advanced Test Execution
 
-### 1. Unit Tests
+#### Environment Variables
 ```bash
-# Run all unit tests
-npm test -- --testPathPattern="unit"
+# Debug mode
+TEST_DEBUG=true npm test
 
-# Run specific unit test suite
-npm test -- test/rag-system/unit/api-endpoints.test.js
+# Monitor test performance
+MONITOR_TEST_PERFORMANCE=true npm test
 
-# Watch mode for unit tests
-npm test -- --testPathPattern="unit" --watch
-```
+# Custom timeout
+JEST_TIMEOUT=60000 npm test
 
-### 2. Integration Tests
-```bash
-# Run all integration tests
-npm test -- --testPathPattern="integration"
-
-# Run API integration tests
-npm run test:api
-
-# Run database integration tests
-npm test -- --testPathPattern="integration.*database"
-```
-
-### 3. End-to-End Tests
-```bash
-# Run E2E tests
-npm test -- --testPathPattern="e2e"
-
-# Run specific E2E workflow
-npm test -- test/success-criteria-e2e.test.js
-
-# E2E with extended timeout
-npm test -- --testPathPattern="e2e" --testTimeout=120000
-```
-
-### 4. RAG System Tests
-```bash
-# Complete RAG test suite
-npm run test:rag
-
-# RAG unit tests only
-npm run test:rag:unit
-
-# RAG integration tests
-npm run test:rag:integration
-
-# RAG performance tests (sequential execution)
-npm run test:rag:performance
-
-# RAG data integrity tests
-npm run test:rag:integrity
-
-# RAG tests with coverage
-npm run test:rag:coverage
-
-# RAG tests in watch mode
-npm run test:rag:watch
-```
-
-### 5. Performance Tests
-```bash
-# Run performance benchmarks
-npm run test:rag:performance
-
-# Performance tests with detailed output
-npm test -- --testPathPattern="performance" --verbose
-
-# Memory usage tests
-npm test -- --testPathPattern="performance.*memory"
-```
-
-### 6. Security Tests
-```bash
-# Security validation tests
-npm test -- test/security-system.test.js
-
-# Input validation tests
-npm test -- --testPathPattern="security.*validation"
-
-# Authentication tests
-npm test -- --testPathPattern="security.*auth"
-```
-
-## ⚙️ Test Configuration
-
-### Environment Variables
-```bash
-# Test environment settings
-export NODE_ENV=test
-export TEST_TIMEOUT=30000
-export TEST_DATABASE_URL="sqlite::memory:"
-
-# RAG system test settings
-export RAG_TEST_MODE=true
-export RAG_EMBEDDING_CACHE_SIZE=100
-
-# Run tests with custom environment
-NODE_ENV=test npm test
-```
-
-### Jest Configuration Options
-```bash
-# Verbose output with test details
+# Verbose output
 npm test -- --verbose
 
-# Silent mode (minimal output)
-npm test -- --silent
+# Run tests matching pattern
+npm test -- --testNamePattern="API"
 
-# Run tests with specific configuration
-npm test -- --config=jest.config.js
-
-# RAG-specific configuration
-npm test -- --config=test/rag-system/jest.config.js
+# Run specific test file
+npm test test/unit/taskmanager-api.test.js
 ```
 
-## 🔍 Test Filtering & Selection
-
-### Pattern Matching
+#### Jest CLI Options
 ```bash
-# Run tests by filename pattern
-npm test -- --testPathPattern="task.*api"
+# Run tests and exit
+npm test -- --passWithNoTests
 
-# Run tests by test name pattern
-npm test -- --testNamePattern="should create task"
+# Force exit after tests
+npm test -- --forceExit
 
-# Run tests in specific directory
-npm test -- test/rag-system/
+# Run tests in band (sequential)
+npm test -- --runInBand
 
-# Exclude specific tests
-npm test -- --testPathIgnorePatterns="performance"
-```
+# Update snapshots
+npm test -- --updateSnapshot
 
-### Test Selection Strategies
-```bash
-# Run only changed tests (with git)
+# Only run tests related to changed files
 npm test -- --onlyChanged
 
-# Run tests related to changed files
-npm test -- --changedFilesWithAncestor
-
-# Run failed tests from last run
-npm test -- --onlyFailures
-
-# Run tests by tag/category
-npm test -- --testNamePattern="@unit"
+# Run tests with specific number of workers
+npm test -- --maxWorkers=4
 ```
 
-## 📊 Test Output & Reporting
+---
 
-### Output Formats
-```bash
-# Default Jest output
-npm test
-
-# JSON output for CI/CD
-npm test -- --json
-
-# JUnit XML for CI integration
-npm test -- --outputFile=test-results.xml
-
-# Custom reporter
-npm test -- --reporters=default --reporters=jest-html-reporters
-```
-
-### Coverage Reports
-```bash
-# Text coverage summary
-npm run coverage
-
-# HTML interactive report
-npm run coverage:html
-# Opens: coverage/lcov-report/index.html
-
-# JSON data for automation
-npm run coverage:json
-# Generates: coverage/coverage-final.json
-
-# LCOV format for external tools
-npm run coverage:lcov
-# Generates: coverage/lcov.info
-```
-
-## 🔄 Watch Mode & Development
-
-### Watch Mode Commands
-```bash
-# Watch all tests
-npm test -- --watch
-
-# Watch with coverage
-npm run coverage:watch
-
-# RAG tests in watch mode
-npm run test:rag:watch
-
-# Watch specific test pattern
-npm test -- --watch --testPathPattern="api"
-```
-
-### Watch Mode Options
-```bash
-# Watch mode with additional options
-npm test -- --watch --verbose --silent=false
-
-# Watch mode with coverage threshold checking
-npm test -- --watch --coverage --coverageThreshold
-
-# Interactive watch mode
-npm test -- --watchAll
-```
-
-### Development Workflow
-```bash
-# 1. Start watch mode for current work
-npm test -- --watch --testPathPattern="current-feature"
-
-# 2. Run specific test file during development
-npm test -- test/current-feature.test.js --watch
-
-# 3. Quick validation before commit
-npm run coverage:check
-```
-
-## 🚨 Debugging Tests
-
-### Debug Mode
-```bash
-# Debug specific test
-node --inspect-brk node_modules/.bin/jest test/specific.test.js
-
-# Debug with Chrome DevTools
-npm test -- --runInBand --detectOpenHandles
-
-# Verbose debugging output
-npm test -- --verbose --no-cache --detectOpenHandles
-```
+## 🔍 Debugging Tests
 
 ### Debug Configuration
+
+#### 1. Enable Debug Mode
 ```bash
-# Clear Jest cache
-npm test -- --clearCache
+# Set debug environment variable
+export TEST_DEBUG=true
+npm test
 
-# Run tests without cache
-npm test -- --no-cache
-
-# Detect resource leaks
-npm test -- --detectOpenHandles --detectLeaks
+# Or inline
+TEST_DEBUG=true npm run test:unit:taskmanager
 ```
 
-### Common Debug Scenarios
+#### 2. Node.js Inspector
 ```bash
-# Tests hanging
-npm test -- --detectOpenHandles --forceExit
+# Run tests with Node.js debugger
+node --inspect-brk node_modules/.bin/jest --runInBand
 
-# Memory leaks
-npm test -- --detectLeaks --logHeapUsage
-
-# Flaky tests
-npm test -- --runInBand --verbose
+# Run specific test with debugger
+node --inspect-brk node_modules/.bin/jest test/unit/taskmanager-api.test.js --runInBand
 ```
 
-## 🏗️ CI/CD Integration
+#### 3. VS Code Debug Configuration
+```json
+{
+  "name": "Debug Jest Tests",
+  "type": "node",
+  "request": "launch",
+  "program": "${workspaceFolder}/node_modules/.bin/jest",
+  "args": ["--runInBand"],
+  "console": "integratedTerminal",
+  "internalConsoleOptions": "neverOpen",
+  "env": {
+    "TEST_DEBUG": "true"
+  }
+}
+```
+
+### Debugging Techniques
+
+#### 1. Test Utilities Debugging
+```javascript
+// Use global test utilities
+global.testUtils.delay(1000); // Add delays
+console.log(global.testUtils.getTestType()); // Check test type
+
+// Use test logger
+const { TestLogger } = require('../utils/testUtils');
+TestLogger.debug('Debug message', { data: 'example' });
+```
+
+#### 2. API Debugging
+```javascript
+// Enable verbose API execution
+const result = await APIExecutor.execAPI('command', ['args'], {
+  silent: false,  // Shows command output
+  timeout: 30000  // Increase timeout
+});
+```
+
+#### 3. Memory and Performance Debugging
+```javascript
+// Measure test performance
+const { PerformanceUtils } = require('../utils/testUtils');
+
+const { result, duration } = await PerformanceUtils.measureTime(async () => {
+  // Your test code here
+});
+
+console.log(`Test took ${duration}ms`);
+```
+
+#### 4. Custom Assertions
+```javascript
+// Use custom matchers for better error messages
+expect(apiResponse).toBeSuccessfulAPIResponse();
+expect(feature).toBeValidFeature();
+expect(errorResponse).toBeErrorAPIResponse();
+```
+
+---
+
+## 🔧 Common Troubleshooting
+
+### Test Failures
+
+#### 1. Timeout Issues
+```bash
+# Common timeout error
+Error: Test timed out after 30000ms
+
+# Solutions:
+# Increase timeout globally
+JEST_TIMEOUT=60000 npm test
+
+# Increase timeout for specific test
+jest.setTimeout(60000);
+
+# Increase timeout in test
+test('long running test', async () => {
+  // test code
+}, 60000);
+```
+
+#### 2. Memory Issues
+```bash
+# Memory leak errors
+Error: JavaScript heap out of memory
+
+# Solutions:
+# Increase Node.js memory
+NODE_OPTIONS='--max-old-space-size=4096' npm test
+
+# Run tests sequentially
+npm test -- --runInBand
+
+# Reduce test parallelism
+npm test -- --maxWorkers=2
+```
+
+#### 3. Port Conflicts
+```bash
+# Port already in use errors
+Error: EADDRINUSE: address already in use :::3000
+
+# Solutions:
+# Find and kill process using port
+lsof -ti:3000 | xargs kill -9
+
+# Use different port for tests
+PORT=3001 npm test
+
+# Wait for port to be free in tests
+await global.testUtils.expectEventually(() => {
+  // Check if port is available
+});
+```
+
+#### 4. File System Issues
+```bash
+# Permission errors
+Error: EACCES: permission denied
+
+# Solutions:
+# Check file permissions
+chmod 755 test/
+
+# Clean test artifacts
+rm -rf coverage/ .jest-cache/
+
+# Use absolute paths
+const testPath = path.join(__dirname, 'fixtures');
+```
+
+### Configuration Issues
+
+#### 1. Module Resolution
+```bash
+# Cannot resolve module errors
+Error: Cannot find module '@test/utils'
+
+# Solutions:
+# Check moduleNameMapper in jest.config.js
+"moduleNameMapper": {
+  "^@test/(.*)$": "<rootDir>/test/$1"
+}
+
+# Use relative imports as fallback
+const utils = require('../utils/testUtils');
+```
+
+#### 2. Transform Issues
+```bash
+# Unexpected token errors
+Error: Unexpected token 'export'
+
+# Solutions:
+# Check transform configuration
+"transform": {
+  "^.+\.js$": ["babel-jest", { "presets": ["@babel/preset-env"] }]
+}
+
+# Ensure babel configuration
+// babel.config.js
+module.exports = {
+  presets: ['@babel/preset-env']
+};
+```
+
+#### 3. Setup Issues
+```bash
+# Setup file not found
+Error: Cannot find module '<rootDir>/test/setup.js'
+
+# Solutions:
+# Verify setup file exists
+ls -la test/setup.js
+
+# Check setupFilesAfterEnv in jest.config.js
+"setupFilesAfterEnv": ["<rootDir>/test/setup.js"]
+```
+
+### Environment Issues
+
+#### 1. Dependencies
+```bash
+# Missing dependencies
+Error: Cannot find module 'some-package'
+
+# Solutions:
+# Install missing dependencies
+npm install
+
+# Clear node_modules and reinstall
+rm -rf node_modules/ package-lock.json
+npm install
+
+# Check for peer dependencies
+npm ls
+```
+
+#### 2. Node.js Version
+```bash
+# Node.js version incompatibility
+Error: Unsupported Node.js version
+
+# Solutions:
+# Check Node.js version requirement in package.json
+"engines": {
+  "node": ">=18.0.0"
+}
+
+# Use correct Node.js version
+nvm use 20
+```
+
+---
+
+## 🔄 CI/CD Integration
 
 ### Continuous Integration Commands
 ```bash

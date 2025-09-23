@@ -1,9 +1,32 @@
 # Testing Best Practices Guide
 
 **Project:** Infinite Continue Stop Hook TaskManager
-**Version:** 1.0.0
-**Last Updated:** 2025-09-22
+**Version:** 2.0.0
+**Last Updated:** 2025-09-23
 **Created By:** main-agent
+**Enhanced By:** Testing Infrastructure Agent
+
+---
+
+## Table of Contents
+
+1. [Core Testing Principles](#core-testing-principles)
+2. [Testing Framework Setup](#testing-framework-setup)
+3. [Test Naming Conventions](#test-naming-conventions)
+4. [Test Organization](#test-organization)
+5. [Test Types & Strategies](#test-types--strategies)
+6. [Mock Framework Integration](#mock-framework-integration)
+7. [Test Data Management](#test-data-management)
+8. [Assertion Best Practices](#assertion-best-practices)
+9. [Performance Testing Guidelines](#performance-testing-guidelines)
+10. [Security Testing Best Practices](#security-testing-best-practices)
+11. [Coverage Standards](#coverage-standards)
+12. [Continuous Integration Best Practices](#continuous-integration-best-practices)
+13. [Testing Tools & Libraries](#testing-tools--libraries)
+14. [Advanced Testing Patterns](#advanced-testing-patterns)
+15. [Documentation Standards](#documentation-standards)
+16. [Common Anti-Patterns to Avoid](#common-anti-patterns-to-avoid)
+17. [Learning Resources](#learning-resources)
 
 ---
 
@@ -105,6 +128,75 @@ describe('TaskManager Service', () => {
 });
 ```
 
+## 🔧 Testing Framework Setup
+
+### Jest Configuration Architecture
+The project uses Jest v30.1.3 with a comprehensive multi-project configuration:
+
+```javascript
+// jest.config.js - Enhanced configuration
+module.exports = {
+  testEnvironment: "node",
+  projects: [
+    {
+      displayName: "unit",
+      testMatch: ["<rootDir>/test/unit/**/*.test.js"],
+      testTimeout: 30000,
+      setupFilesAfterEnv: ["<rootDir>/test/setup.js"]
+    },
+    {
+      displayName: "integration",
+      testMatch: ["<rootDir>/test/integration/**/*.test.js"],
+      testTimeout: 45000,
+      setupFilesAfterEnv: ["<rootDir>/test/setup.js"]
+    },
+    {
+      displayName: "e2e",
+      testMatch: ["<rootDir>/test/e2e/**/*.test.js"],
+      testTimeout: 60000,
+      setupFilesAfterEnv: ["<rootDir>/test/setup.js"]
+    }
+  ],
+  coverageThreshold: {
+    global: {
+      branches: 75,
+      functions: 80,
+      lines: 80,
+      statements: 80
+    }
+  }
+};
+```
+
+### Module Path Mapping
+Simplify imports with module path mapping:
+
+```javascript
+moduleNameMapper: {
+  "^@test/(.*)$": "<rootDir>/test/$1",
+  "^@utils/(.*)$": "<rootDir>/test/utils/$1",
+  "^@mocks/(.*)$": "<rootDir>/test/mocks/$1",
+  "^@fixtures/(.*)$": "<rootDir>/test/fixtures/$1",
+  "^@lib/(.*)$": "<rootDir>/lib/$1",
+  "^@root/(.*)$": "<rootDir>/$1"
+}
+```
+
+### Test Scripts Configuration
+Comprehensive test execution scripts:
+
+```json
+{
+  "test": "jest",
+  "test:unit": "jest test/unit --testTimeout=30000",
+  "test:integration": "jest test/integration --testTimeout=45000",
+  "test:e2e": "jest --config test/e2e/jest.config.js test/e2e --verbose",
+  "test:rag": "jest --config test/rag-system/jest.config.js",
+  "coverage": "jest --coverage",
+  "coverage:check": "jest --coverage --passWithNoTests && npm run coverage:threshold-check"
+}
+```
+
 ## 🧪 Test Types & Strategies
 
 ### 1. **Unit Tests**
@@ -178,6 +270,195 @@ describe('Task Management Workflow', () => {
     expect(finalTask.body.status).toBe('completed');
   });
 });
+```
+
+## 🎭 Mock Framework Integration
+
+### Comprehensive Mock Setup
+The project includes a sophisticated mock framework for consistent testing:
+
+```javascript
+const {
+  setupMocks,
+  resetMocks,
+  restoreMocks,
+  getMockManager,
+  expectFeatureCreated,
+  expectAgentInitialized,
+} = require('../mocks/mockSetup');
+
+describe('Example Test with Mock Framework', () => {
+  let mockManager;
+
+  beforeAll(() => {
+    mockManager = setupMocks();
+    TestLogger.info('Mock framework initialized for test suite');
+  });
+
+  afterAll(() => {
+    restoreMocks();
+    TestLogger.info('Mock framework restored');
+  });
+
+  beforeEach(() => {
+    resetMocks();
+    // Create fresh test environment
+    const testName = expect.getState().currentTestName || 'unknown-test';
+    testEnvironment = new TestEnvironment(testName);
+    testEnvironment.setup();
+  });
+});
+```
+
+### Mock Validation Helpers
+Use custom validation helpers for common scenarios:
+
+```javascript
+// Verify agent initialization
+expectAgentInitialized(agentId);
+
+// Verify feature creation with specific data
+expectFeatureCreated(featureData);
+
+// Access mock manager for advanced scenarios
+const mocks = mockManager.getMocks();
+expect(mocks.taskManagerAPI).toBeDefined();
+expect(mocks.fileSystem.existsSync).toHaveBeenCalledWith(expectedPath);
+```
+
+### Test Environment Management
+Isolated test environments for each test case:
+
+```javascript
+class TestEnvironment {
+  constructor(testName) {
+    this.testName = testName;
+    this.testDir = `/test-project-${testName}`;
+    this.featuresPath = `${this.testDir}/FEATURES.json`;
+    this.packagePath = `${this.testDir}/package.json`;
+  }
+
+  setup() {
+    // Create isolated directory structure
+    if (!fs.existsSync(this.testDir)) {
+      fs.mkdirSync(this.testDir, { recursive: true });
+    }
+
+    // Initialize FEATURES.json with proper structure
+    const featuresData = {
+      features: [],
+      metadata: {
+        version: '3.0.0',
+        created: new Date().toISOString(),
+        last_modified: new Date().toISOString(),
+        project: this.testName,
+      },
+    };
+    fs.writeFileSync(this.featuresPath, JSON.stringify(featuresData, null, 2));
+  }
+}
+```
+
+## 🗂️ Test Data Management
+
+### Test Data Factory Pattern
+Use factory pattern for consistent, configurable test data:
+
+```javascript
+class TestDataFactory {
+  static createFeatureData(overrides = {}) {
+    return {
+      title: `Test Feature ${Date.now()}`,
+      description: 'A comprehensive test feature for validation',
+      business_value: 'Ensures system reliability and testing coverage',
+      category: 'enhancement',
+      estimated_hours: 8,
+      priority: 'medium',
+      tags: ['testing', 'validation'],
+      ...overrides,
+    };
+  }
+
+  static createUserData(overrides = {}) {
+    return {
+      id: TestIdGenerator.generateAgentId(),
+      name: `Test User ${Date.now()}`,
+      email: `test-${Date.now()}@example.com`,
+      role: 'tester',
+      ...overrides,
+    };
+  }
+
+  static createProjectData(overrides = {}) {
+    return {
+      name: TestIdGenerator.generateProjectId(),
+      description: 'Test project for automated testing',
+      version: '1.0.0',
+      type: 'testing',
+      ...overrides,
+    };
+  }
+}
+```
+
+### Sample Data Collections
+Organize domain-specific sample data:
+
+```javascript
+const SAMPLE_FEATURES = {
+  enhancement: {
+    title: 'Add dark mode toggle',
+    description: 'Implement theme switching functionality with persistent user preference storage',
+    business_value: 'Improves user experience and accessibility for users in low-light environments',
+    category: 'enhancement',
+    estimated_hours: 8,
+    priority: 'medium',
+    tags: ['ui', 'accessibility', 'preferences'],
+  },
+
+  bugFix: {
+    title: 'Fix login form validation',
+    description: 'Resolve email validation issues and improve error handling for edge cases',
+    business_value: 'Prevents user frustration and reduces support tickets by 30%',
+    category: 'bug-fix',
+    estimated_hours: 4,
+    priority: 'high',
+    tags: ['validation', 'forms', 'frontend'],
+  },
+
+  performance: {
+    title: 'Optimize database queries',
+    description: 'Implement query optimization and caching to improve response times',
+    business_value: 'Reduces page load times by 50% and improves user satisfaction',
+    category: 'performance',
+    estimated_hours: 16,
+    priority: 'medium',
+    tags: ['database', 'optimization', 'caching'],
+  },
+};
+```
+
+### Test ID Generation
+Generate unique identifiers for test isolation:
+
+```javascript
+class TestIdGenerator {
+  static generateProjectId() {
+    return `test-project-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+  }
+
+  static generateAgentId() {
+    return `test-agent-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+  }
+
+  static generateFeatureId() {
+    return `feature-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+  }
+
+  static generateTaskId() {
+    return `task-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+  }
+}
 ```
 
 ## 🎭 Mocking & Stubbing Best Practices
@@ -312,33 +593,152 @@ it('should create high priority task', () => {
 
 ## 📊 Performance Testing Guidelines
 
-### Execution Time Monitoring
+### Performance Measurement Utilities
+Use built-in performance utilities for consistent measurements:
+
 ```javascript
-describe('Performance Tests', () => {
-  it('should process large dataset within time limit', async () => {
-    const startTime = Date.now();
-    const largeDataset = generateTestData(10000);
+const { PerformanceUtils } = require('../utils/testUtils');
 
-    await processData(largeDataset);
+describe('Performance Validation', () => {
+  test('should measure execution time accurately', async () => {
+    const { result, duration } = await PerformanceUtils.measureTime(async () => {
+      // Simulate work
+      await new Promise(resolve => setTimeout(resolve, 100));
+      return 'test-result';
+    });
 
-    const executionTime = Date.now() - startTime;
-    expect(executionTime).toBeLessThan(5000); // 5 seconds max
+    expect(result).toBe('test-result');
+    expect(duration).toBeGreaterThan(90); // Should be around 100ms
+    expect(duration).toBeLessThan(200); // Allow variance
+  });
+
+  test('should measure memory usage during operations', async () => {
+    const { result, memoryDelta } = await PerformanceUtils.measureMemory(async () => {
+      // Create memory-intensive objects
+      const data = new Array(1000).fill(0).map((_, i) => ({
+        id: i,
+        data: `item-${i}`
+      }));
+      return data.length;
+    });
+
+    expect(result).toBe(1000);
+    expect(memoryDelta).toBeDefined();
+    expect(typeof memoryDelta.heapUsed).toBe('number');
+    expect(memoryDelta.heapUsed).toBeLessThan(50 * 1024 * 1024); // 50MB limit
   });
 });
 ```
 
-### Memory Usage Testing
+### Bulk Operations Performance
+Test performance of bulk operations with realistic data sizes:
+
 ```javascript
-it('should not exceed memory limits during processing', async () => {
-  const initialMemory = process.memoryUsage().heapUsed;
+describe('Bulk Feature Operations Performance', () => {
+  test('should complete bulk approval within time limits', async () => {
+    // Create multiple features
+    const featureIds = [];
+    for (let i = 0; i < 10; i++) {
+      const feature = TestDataFactory.createFeatureData({
+        title: `Bulk Feature ${i}`
+      });
+      const result = await execAPI('suggest-feature', [JSON.stringify(feature)]);
+      featureIds.push(result.feature.id);
+    }
 
-  await processLargeFile('test-data/large-file.json');
+    // Measure bulk approval performance
+    const { result, duration } = await PerformanceUtils.measureTime(async () => {
+      return await execAPI('bulk-approve-features', [
+        JSON.stringify(featureIds),
+        JSON.stringify({ approved_by: 'performance-tester' })
+      ]);
+    });
 
-  const finalMemory = process.memoryUsage().heapUsed;
-  const memoryIncrease = finalMemory - initialMemory;
+    // Performance assertions
+    expect(result.success).toBe(true);
+    expect(result.approved_count).toBe(10);
+    expect(duration).toBeLessThan(5000); // Should complete in under 5 seconds
+  });
+});
+```
 
-  // Memory increase should be reasonable (< 100MB)
-  expect(memoryIncrease).toBeLessThan(100 * 1024 * 1024);
+### Timeout and Retry Patterns
+Test resilience with timeout and retry utilities:
+
+```javascript
+const { TestExecution } = require('../utils/testUtils');
+
+describe('Resilience Testing', () => {
+  test('should handle timeouts appropriately', async () => {
+    await expect(
+      TestExecution.withTimeout(
+        new Promise(resolve => setTimeout(resolve, 2000)), // 2 second delay
+        1000 // 1 second timeout
+      )
+    ).rejects.toThrow('Test timed out after 1000ms');
+  });
+
+  test('should retry failed operations with exponential backoff', async () => {
+    let attempts = 0;
+
+    const result = await TestExecution.retry(async () => {
+      attempts++;
+      if (attempts < 3) {
+        throw new Error('Temporary failure');
+      }
+      return 'success';
+    }, 5, 100); // 5 retries, 100ms delay
+
+    expect(result).toBe('success');
+    expect(attempts).toBe(3);
+  });
+
+  test('should execute parallel operations with concurrency control', async () => {
+    const promises = Array.from({ length: 10 }, (_, i) =>
+      Promise.resolve(i * 2)
+    );
+
+    const results = await TestExecution.parallel(promises, 3); // Max 3 concurrent
+
+    expect(results).toHaveLength(10);
+    expect(results).toEqual([0, 2, 4, 6, 8, 10, 12, 14, 16, 18]);
+  });
+});
+```
+
+### API Performance Benchmarks
+Set and validate API performance benchmarks:
+
+```javascript
+describe('API Performance Benchmarks', () => {
+  const PERFORMANCE_THRESHOLDS = {
+    feature_creation: 1000,    // 1 second
+    feature_listing: 500,      // 500ms
+    bulk_operations: 5000,     // 5 seconds
+    initialization: 2000,      // 2 seconds
+  };
+
+  test('should meet feature creation performance requirements', async () => {
+    const featureData = TestDataFactory.createFeatureData();
+
+    const { result, duration } = await PerformanceUtils.measureTime(async () => {
+      return await execAPI('suggest-feature', [JSON.stringify(featureData)]);
+    });
+
+    expect(result.success).toBe(true);
+    expect(duration).toBeLessThan(PERFORMANCE_THRESHOLDS.feature_creation);
+  });
+
+  test('should meet agent initialization performance requirements', async () => {
+    const agentId = TestIdGenerator.generateAgentId();
+
+    const { result, duration } = await PerformanceUtils.measureTime(async () => {
+      return await execAPI('initialize', [agentId]);
+    });
+
+    expect(result.success).toBe(true);
+    expect(duration).toBeLessThan(PERFORMANCE_THRESHOLDS.initialization);
+  });
 });
 ```
 
