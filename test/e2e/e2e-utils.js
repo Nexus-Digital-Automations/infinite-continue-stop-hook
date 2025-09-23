@@ -181,7 +181,17 @@ class CommandExecutor {
       const startTime = Date.now();
       let isResolved = false;
 
-      const child = spawn(command, args, {
+      // For shell commands, we need to properly escape arguments
+      // Especially JSON strings that contain special characters
+      const escapedArgs = args.map(arg => {
+        // If argument contains JSON (starts with { and ends with }), wrap in single quotes
+        if (typeof arg === 'string' && arg.startsWith('{') && arg.endsWith('}')) {
+          return `'${arg}'`;
+        }
+        return arg;
+      });
+
+      const child = spawn(command, escapedArgs, {
         stdio: ['pipe', 'pipe', 'pipe'],
         env: { ...env, NODE_ENV: 'test' },
         cwd,
@@ -313,8 +323,8 @@ class FeatureTestHelpers {
   static createFeatureData(overrides = {}) {
     return {
       title: `Test Feature ${Date.now()}`,
-      description: 'Test feature for E2E validation',
-      business_value: 'Validates E2E testing functionality',
+      description: 'This is a comprehensive test feature designed for E2E validation purposes. It includes detailed information to meet validation requirements and ensure proper testing of all system components and workflows.',
+      business_value: 'Validates E2E testing functionality by providing comprehensive test coverage and ensuring all system components work correctly together in realistic scenarios',
       category: 'enhancement',
       ...overrides
     };
@@ -326,9 +336,17 @@ class FeatureTestHelpers {
   static async suggestFeature(environment, featureData) {
     const data = this.createFeatureData(featureData);
 
+    // Format as JSON for the API
+    const jsonData = JSON.stringify({
+      title: data.title,
+      description: data.description,
+      business_value: data.business_value,
+      category: data.category
+    });
+
     const result = await CommandExecutor.executeAPI(
       'suggest-feature',
-      [data.title, data.description, data.business_value, data.category],
+      [jsonData],
       { projectRoot: environment.testDir }
     );
 
@@ -339,9 +357,14 @@ class FeatureTestHelpers {
    * Approve a feature via API
    */
   static async approveFeature(environment, featureId, approver = 'e2e-test', notes = 'E2E test approval') {
+    const approvalData = JSON.stringify({
+      approved_by: approver,
+      notes: notes
+    });
+
     return CommandExecutor.executeAPI(
       'approve-feature',
-      [featureId, approver, notes],
+      [featureId, approvalData],
       { projectRoot: environment.testDir }
     );
   }
@@ -350,9 +373,14 @@ class FeatureTestHelpers {
    * Reject a feature via API
    */
   static async rejectFeature(environment, featureId, rejector = 'e2e-test', reason = 'E2E test rejection') {
+    const rejectionData = JSON.stringify({
+      rejected_by: rejector,
+      reason: reason
+    });
+
     return CommandExecutor.executeAPI(
       'reject-feature',
-      [featureId, rejector, reason],
+      [featureId, rejectionData],
       { projectRoot: environment.testDir }
     );
   }
@@ -551,6 +579,21 @@ class E2EAssertions {
   static assertFeatureCount(features, expectedCount, message = '') {
     if (features.features.length !== expectedCount) {
       throw new Error(`Expected ${expectedCount} features but got ${features.features.length} ${message}`);
+    }
+  }
+
+  /**
+   * Extract feature ID from API response
+   */
+  static extractFeatureId(commandResult) {
+    try {
+      const responseJson = JSON.parse(commandResult.stdout);
+      if (responseJson.feature && responseJson.feature.id) {
+        return responseJson.feature.id;
+      }
+      throw new Error('No feature ID found in response');
+    } catch (error) {
+      throw new Error(`Failed to extract feature ID: ${error.message}\nResponse: ${commandResult.stdout}`);
     }
   }
 }

@@ -16,7 +16,16 @@ const path = require('path');
 const crypto = require('crypto');
 const { MockFileSystem, TEST_FIXTURES, TimeTestUtils, testHelpers } = require('./test-utilities');
 
-// Import the FeatureManagerAPI class
+// Mock the fs module before importing the main module
+jest.mock('fs', () => ({
+  promises: {
+    access: jest.fn(),
+    readFile: jest.fn(),
+    writeFile: jest.fn()
+  }
+}));
+
+// Import the FeatureManagerAPI class AFTER mocking fs
 const FeatureManagerAPI = require('../../taskmanager-api.js');
 
 // Test constants
@@ -27,7 +36,6 @@ describe('FeatureManagerAPI', () => {
   let api;
   let mockFs;
   let timeUtils;
-  let originalFs;
 
   beforeAll(() => {
     timeUtils = new TimeTestUtils();
@@ -35,23 +43,29 @@ describe('FeatureManagerAPI', () => {
 
   beforeEach(() => {
     // Create fresh instances for each test
-    api = new FeatureManagerAPI();
     mockFs = new MockFileSystem();
+
+    // Get the mocked fs module and connect it to our MockFileSystem
+    const fs = require('fs');
+    fs.promises.access.mockImplementation((...args) => mockFs.access(...args));
+    fs.promises.readFile.mockImplementation((...args) => mockFs.readFile(...args));
+    fs.promises.writeFile.mockImplementation((...args) => mockFs.writeFile(...args));
+
+    // Create API instance
+    api = new FeatureManagerAPI();
 
     // Override the features path for testing
     api.featuresPath = TEST_FEATURES_PATH;
 
-    // Mock the fs module
-    originalFs = require('fs').promises;
-    const fs = require('fs');
-    fs.promises = mockFs;
-
     // Reset time mocking
     timeUtils.restoreTime();
 
-    // Mock crypto for deterministic testing
+    // Mock crypto for deterministic testing with incrementing values
+    let cryptoCounter = 0;
     jest.spyOn(crypto, 'randomBytes').mockImplementation((size) => {
-      return Buffer.from('a'.repeat(size * 2), 'hex');
+      const char = String.fromCharCode(97 + (cryptoCounter % 26)); // a, b, c, etc.
+      cryptoCounter++;
+      return Buffer.from(char.repeat(size * 2), 'hex');
     });
 
     // Mock Date.now for deterministic timestamps
@@ -59,10 +73,6 @@ describe('FeatureManagerAPI', () => {
   });
 
   afterEach(() => {
-    // Restore original file system
-    const fs = require('fs');
-    fs.promises = originalFs;
-
     // Clear all mocks
     jest.clearAllMocks();
     mockFs.clearAll();
@@ -108,19 +118,21 @@ describe('FeatureManagerAPI', () => {
         expect(mockFs.hasFile(TEST_FEATURES_PATH)).toBe(true);
         const fileContent = JSON.parse(mockFs.getFile(TEST_FEATURES_PATH));
         testHelpers.validateFeaturesFileStructure(fileContent);
-        expect(fileContent.project).toBe('project');
+        expect(fileContent.project).toBe('infinite-continue-stop-hook');
         expect(fileContent.features).toEqual([]);
       });
 
       test('should not overwrite existing FEATURES.json', async () => {
         // Set up existing file
-        mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(TEST_FIXTURES.featuresWithData));
+        const originalData = testHelpers.deepClone(TEST_FIXTURES.featuresWithData);
+        mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(originalData));
 
         await api._ensureFeaturesFile();
 
         const fileContent = JSON.parse(mockFs.getFile(TEST_FEATURES_PATH));
         expect(fileContent.features).toHaveLength(3);
-        expect(fileContent.project).toBe('test-project');
+        expect(fileContent.project).toBe('test-project'); // Should preserve original project name
+        expect(fileContent).toEqual(originalData); // Should not change anything
       });
     });
 
@@ -670,7 +682,7 @@ describe('FeatureManagerAPI', () => {
       const result = await api.suggestFeature(TEST_FIXTURES.validFeature);
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain('Failed to save features');
+      expect(result.error).toContain('Permission denied');
     });
 
     test('should handle unexpected errors in operations', async () => {

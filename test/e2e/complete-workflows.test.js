@@ -46,12 +46,13 @@ describe('Complete System Workflows E2E', () => {
 
       const suggestionResult = await FeatureTestHelpers.suggestFeature(environment, featureData);
       E2EAssertions.assertCommandSuccess(suggestionResult.result, 'Feature suggestion');
-      E2EAssertions.assertOutputContains(suggestionResult.result, 'Feature suggested successfully');
+      E2EAssertions.assertOutputContains(suggestionResult.result, 'Feature suggestion created successfully');
 
-      // Extract feature ID from output
-      const featureIdMatch = suggestionResult.result.stdout.match(/Feature ID: (\w+)/);
-      expect(featureIdMatch).toBeTruthy();
-      const featureId = featureIdMatch[1];
+      // Extract feature ID from JSON response
+      const responseJson = JSON.parse(suggestionResult.result.stdout);
+      expect(responseJson.feature).toBeTruthy();
+      expect(responseJson.feature.id).toBeTruthy();
+      const featureId = responseJson.feature.id;
 
       // Step 2: Validate feature is in 'suggested' status
       let feature = await FeatureTestHelpers.validateFeatureStatus(environment, featureId, 'suggested');
@@ -68,7 +69,7 @@ describe('Complete System Workflows E2E', () => {
         'Approved for complete workflow testing'
       );
       E2EAssertions.assertCommandSuccess(approvalResult, 'Feature approval');
-      E2EAssertions.assertOutputContains(approvalResult, 'Feature approved successfully');
+      E2EAssertions.assertOutputContains(approvalResult, 'approved successfully');
 
       // Step 4: Validate feature is in 'approved' status
       feature = await FeatureTestHelpers.validateFeatureStatus(environment, featureId, 'approved');
@@ -107,8 +108,7 @@ describe('Complete System Workflows E2E', () => {
         category: 'new-feature'
       });
 
-      const featureIdMatch = result.stdout.match(/Feature ID: (\w+)/);
-      const featureId = featureIdMatch[1];
+      const featureId = E2EAssertions.extractFeatureId(result);
 
       // Step 2: Reject the feature
       const rejectionResult = await FeatureTestHelpers.rejectFeature(
@@ -152,10 +152,9 @@ describe('Complete System Workflows E2E', () => {
       }
 
       const featureResults = await Promise.all(featurePromises);
-      const featureIds = featureResults.map(result => {
-        const match = result.result.stdout.match(/Feature ID: (\w+)/);
-        return match[1];
-      });
+      const featureIds = featureResults.map(result =>
+        E2EAssertions.extractFeatureId(result.result)
+      );
 
       // Step 3: Batch approve features
       const approvalPromises = featureIds.map(id =>
@@ -253,8 +252,7 @@ describe('Complete System Workflows E2E', () => {
       const suggestionResult = await FeatureTestHelpers.suggestFeature(environment, userFeature);
       E2EAssertions.assertCommandSuccess(suggestionResult.result);
 
-      const featureIdMatch = suggestionResult.result.stdout.match(/Feature ID: (\w+)/);
-      const featureId = featureIdMatch[1];
+      const featureId = E2EAssertions.extractFeatureId(suggestionResult.result);
 
       // Step 2: Review process - check feature details
       const detailsResult = await CommandExecutor.executeAPI(
@@ -312,7 +310,7 @@ describe('Complete System Workflows E2E', () => {
         category: 'performance'
       });
 
-      const techFeatureId = techResult.stdout.match(/Feature ID: (\w+)/)[1];
+      const techFeatureId = E2EAssertions.extractFeatureId(techResult);
 
       // Step 2: Business team suggests different feature
       const { result: bizResult } = await FeatureTestHelpers.suggestFeature(environment, {
@@ -322,7 +320,7 @@ describe('Complete System Workflows E2E', () => {
         category: 'new-feature'
       });
 
-      const bizFeatureId = bizResult.stdout.match(/Feature ID: (\w+)/)[1];
+      const bizFeatureId = E2EAssertions.extractFeatureId(bizResult);
 
       // Step 3: Different approvers for different features
       await FeatureTestHelpers.approveFeature(

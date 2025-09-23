@@ -1,0 +1,138 @@
+{
+  "project": "utils",
+  "features": [
+    {
+      "id": "feature_1758640235616_7bac2812df3e",
+      "title": "Test Feature with Mocks",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-23T15:10:35.616Z",
+      "updated_at": "2025-09-23T15:10:35.617Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758640235684_8e9f356f578e",
+      "title": "Invalid Feature",
+      "description": "This is a test feature for automated testing",
+      "business_value": "Validates testing infrastructure",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-23T15:10:35.684Z",
+      "updated_at": "2025-09-23T15:10:35.685Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758640235751_4a236fd1fd2f",
+      "title": "Test Feature 1758640235723",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-23T15:10:35.751Z",
+      "updated_at": "2025-09-23T15:10:35.752Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758640235783_38de2bafb89b",
+      "title": "Test Feature 1758640235756",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "bug-fix",
+      "status": "suggested",
+      "created_at": "2025-09-23T15:10:35.783Z",
+      "updated_at": "2025-09-23T15:10:35.784Z",
+      "suggested_by": "system",
+      "metadata": {}
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-09-23T15:10:35.544Z",
+    "updated": "2025-09-23T15:10:35.784Z",
+    "total_features": 4,
+    "approval_history": [],
+    "initialization_stats": {
+      "total_initializations": 5,
+      "total_reinitializations": 0,
+      "current_day": "2025-09-23",
+      "time_buckets": {
+        "07:00-11:59": {
+          "init": 5,
+          "reinit": 0
+        },
+        "12:00-16:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "17:00-21:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "22:00-02:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "03:00-06:59": {
+          "init": 0,
+          "reinit": 0
+        }
+      },
+      "daily_history": [],
+      "last_reset": "2025-09-23T15:10:35.545Z",
+      "last_updated": "2025-09-23T15:10:37.046Z"
+    }
+  },
+  "workflow_config": {
+    "require_approval": true,
+    "auto_reject_timeout_hours": 168,
+    "allowed_statuses": [
+      "suggested",
+      "approved",
+      "rejected",
+      "implemented"
+    ],
+    "required_fields": [
+      "title",
+      "description",
+      "business_value",
+      "category"
+    ]
+  },
+  "agents": {
+    "test-agent-1758640235514-klwep6": {
+      "lastHeartbeat": "2025-09-23T15:10:35.545Z",
+      "status": "active",
+      "initialized": "2025-09-23T15:10:35.545Z",
+      "sessionId": "fd2a0e3f98c6afd4"
+    },
+    "test-agent-1758640235555-ekuzos": {
+      "lastHeartbeat": "2025-09-23T15:10:35.583Z",
+      "status": "active",
+      "initialized": "2025-09-23T15:10:35.583Z",
+      "sessionId": "6f1311a7e0208e3a"
+    },
+    "test-agent-1758640235622-y16vtl": {
+      "lastHeartbeat": "2025-09-23T15:10:35.651Z",
+      "status": "active",
+      "initialized": "2025-09-23T15:10:35.651Z",
+      "sessionId": "5320441afb39d8b1"
+    },
+    "test-agent-1758640235690-wh7rf": {
+      "lastHeartbeat": "2025-09-23T15:10:35.719Z",
+      "status": "active",
+      "initialized": "2025-09-23T15:10:35.719Z",
+      "sessionId": "8a072d053194f600"
+    },
+    "test-agent-1758640237014-m5btqj": {
+      "lastHeartbeat": "2025-09-23T15:10:37.044Z",
+      "status": "active",
+      "initialized": "2025-09-23T15:10:37.044Z",
+      "sessionId": "a0c6c434fb2c95a8"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "project": "debug-test",
+  "features": [
+    {
+      "id": "feature_1758639969272_4e41da4dbb31",
+      "title": "E2E Test Feature - Complete Workflow",
+      "description": "Test feature for validating complete workflow from suggestion to implementation",
+      "business_value": "Validates end-to-end feature management system",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-23T15:06:09.272Z",
+      "updated_at": "2025-09-23T15:06:09.272Z",
+      "suggested_by": "system",
+      "metadata": {}
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-09-23T15:06:09.271Z",
+    "updated": "2025-09-23T15:06:09.272Z",
+    "total_features": 1,
+    "approval_history": []
+  },
+  "workflow_config": {
+    "require_approval": true,
+    "auto_reject_timeout_hours": 168,
+    "allowed_statuses": [
+      "suggested",
+      "approved",
+      "rejected",
+      "implemented"
+    ],
+    "required_fields": [
+      "title",
+      "description",
+      "business_value",
+      "category"
+    ]
+  }
+}
