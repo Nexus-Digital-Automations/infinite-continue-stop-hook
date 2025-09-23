@@ -460,6 +460,89 @@ class FeatureManagerAPI {
     }
   }
 
+  /**
+   * Get initialization usage statistics organized by 5-hour time buckets
+   */
+  async getInitializationStats() {
+    try {
+      // Ensure features file exists
+      await this._ensureFeaturesFile();
+
+      const features = await this._loadFeatures();
+      await this._ensureInitializationStatsStructure(features);
+      await this._resetDailyBucketsIfNeeded(features);
+
+      const stats = features.metadata.initialization_stats;
+      const currentBucket = this._getCurrentTimeBucket();
+
+      // Calculate today's totals
+      const todayTotal = Object.values(stats.time_buckets).reduce(
+        (acc, bucket) => ({
+          init: acc.init + bucket.init,
+          reinit: acc.reinit + bucket.reinit,
+        }),
+        { init: 0, reinit: 0 }
+      );
+
+      // Get recent activity (last 7 days from history)
+      const recentActivity = stats.daily_history.slice(-7);
+
+      const response = {
+        success: true,
+        stats: {
+          total_initializations: stats.total_initializations,
+          total_reinitializations: stats.total_reinitializations,
+          current_day: stats.current_day,
+          current_bucket: currentBucket,
+          today_totals: {
+            initializations: todayTotal.init,
+            reinitializations: todayTotal.reinit,
+            combined: todayTotal.init + todayTotal.reinit,
+          },
+          time_buckets: {
+            '07:00-11:59': {
+              initializations: stats.time_buckets['07:00-11:59'].init,
+              reinitializations: stats.time_buckets['07:00-11:59'].reinit,
+              total: stats.time_buckets['07:00-11:59'].init + stats.time_buckets['07:00-11:59'].reinit,
+            },
+            '12:00-16:59': {
+              initializations: stats.time_buckets['12:00-16:59'].init,
+              reinitializations: stats.time_buckets['12:00-16:59'].reinit,
+              total: stats.time_buckets['12:00-16:59'].init + stats.time_buckets['12:00-16:59'].reinit,
+            },
+            '17:00-21:59': {
+              initializations: stats.time_buckets['17:00-21:59'].init,
+              reinitializations: stats.time_buckets['17:00-21:59'].reinit,
+              total: stats.time_buckets['17:00-21:59'].init + stats.time_buckets['17:00-21:59'].reinit,
+            },
+            '22:00-02:59': {
+              initializations: stats.time_buckets['22:00-02:59'].init,
+              reinitializations: stats.time_buckets['22:00-02:59'].reinit,
+              total: stats.time_buckets['22:00-02:59'].init + stats.time_buckets['22:00-02:59'].reinit,
+            },
+            '03:00-06:59': {
+              initializations: stats.time_buckets['03:00-06:59'].init,
+              reinitializations: stats.time_buckets['03:00-06:59'].reinit,
+              total: stats.time_buckets['03:00-06:59'].init + stats.time_buckets['03:00-06:59'].reinit,
+            },
+          },
+          recent_activity: recentActivity,
+          last_updated: stats.last_updated,
+          last_reset: stats.last_reset,
+        },
+        message: 'Initialization statistics retrieved successfully',
+      };
+
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        timestamp: new Date().toISOString(),
+      };
+    }
+  }
+
   async initializeAgent(agentId) {
     try {
       const features = await this._loadFeatures();
@@ -480,6 +563,9 @@ class FeatureManagerAPI {
       };
 
       await this._saveFeatures(features);
+
+      // Track initialization usage in time buckets
+      await this._updateTimeBucketStats('init');
 
       return {
         success: true,
@@ -526,6 +612,9 @@ class FeatureManagerAPI {
       };
 
       await this._saveFeatures(features);
+
+      // Track reinitialization usage in time buckets
+      await this._updateTimeBucketStats('reinit');
 
       return {
         success: true,
@@ -674,13 +763,14 @@ class FeatureManagerAPI {
         'reject-feature': 'rejectFeature',
         'list-features': 'listFeatures',
         'feature-stats': 'getFeatureStats',
+        'get-initialization-stats': 'getInitializationStats',
       },
       availableCommands: [
         // Discovery Commands
         'guide', 'methods',
 
         // Feature Management
-        'suggest-feature', 'approve-feature', 'reject-feature', 'list-features', 'feature-stats',
+        'suggest-feature', 'approve-feature', 'reject-feature', 'list-features', 'feature-stats', 'get-initialization-stats',
       ],
       guide: this._getFallbackGuide('api-methods'),
     };
@@ -765,6 +855,14 @@ class FeatureManagerAPI {
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" feature-stats',
                   output: 'Feature counts by status, category, and recent activity',
                 },
+                'get-initialization-stats': {
+                  description: 'Get initialization usage statistics organized by 5-hour time buckets starting at 7am',
+                  usage:
+                    'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-initialization-stats',
+                  output: 'Initialization and reinitialization counts by time buckets, daily totals, and recent activity',
+                  time_buckets: ['07:00-11:59', '12:00-16:59', '17:00-21:59', '22:00-02:59', '03:00-06:59'],
+                  features: ['General usage tracking', 'Daily reset at 7am', 'Historical data (30 days)', 'Current bucket indication'],
+                },
               },
               agentManagement: {
                 'initialize': {
@@ -832,6 +930,26 @@ class FeatureManagerAPI {
                   'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reject-feature feature_456 \'{"rejected_by":"architect", "reason":"Technical complexity too high"}\'',
                 ],
               },
+              initializationTracking: {
+                getStats: 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-initialization-stats',
+                description: 'Retrieve initialization usage statistics organized by 5-hour time buckets starting at 7am',
+                sampleOutput: {
+                  success: true,
+                  stats: {
+                    total_initializations: 45,
+                    total_reinitializations: 23,
+                    current_day: '2025-09-23',
+                    current_bucket: '12:00-16:59',
+                    time_buckets: {
+                      '07:00-11:59': { initializations: 5, reinitializations: 2, total: 7 },
+                      '12:00-16:59': { initializations: 8, reinitializations: 1, total: 9 },
+                      '17:00-21:59': { initializations: 3, reinitializations: 4, total: 7 },
+                      '22:00-02:59': { initializations: 1, reinitializations: 0, total: 1 },
+                      '03:00-06:59': { initializations: 0, reinitializations: 1, total: 1 }
+                    }
+                  }
+                }
+              },
             },
             requirements: {
               mandatory: [
@@ -859,6 +977,141 @@ class FeatureManagerAPI {
     }
   }
 
+  // =================== INITIALIZATION TRACKING METHODS ===================
+
+  /**
+   * Get current 5-hour time bucket starting from 7am
+   * Time buckets: 07:00-11:59, 12:00-16:59, 17:00-21:59, 22:00-02:59, 03:00-06:59
+   */
+  _getCurrentTimeBucket() {
+    const now = new Date();
+    const hour = now.getHours();
+
+    if (hour >= 7 && hour < 12) {
+      return '07:00-11:59';
+    } else if (hour >= 12 && hour < 17) {
+      return '12:00-16:59';
+    } else if (hour >= 17 && hour < 22) {
+      return '17:00-21:59';
+    } else if (hour >= 22 || hour < 3) {
+      return '22:00-02:59';
+    } else {
+      return '03:00-06:59';
+    }
+  }
+
+  /**
+   * Ensure initialization stats structure exists in features data
+   */
+  async _ensureInitializationStatsStructure(features) {
+    if (!features.metadata) {
+      features.metadata = {
+        version: '1.0.0',
+        created: new Date().toISOString(),
+        updated: new Date().toISOString(),
+        total_features: features.features ? features.features.length : 0,
+        approval_history: [],
+      };
+    }
+
+    if (!features.metadata.initialization_stats) {
+      features.metadata.initialization_stats = {
+        total_initializations: 0,
+        total_reinitializations: 0,
+        current_day: new Date().toISOString().split('T')[0],
+        time_buckets: {
+          '07:00-11:59': { init: 0, reinit: 0 },
+          '12:00-16:59': { init: 0, reinit: 0 },
+          '17:00-21:59': { init: 0, reinit: 0 },
+          '22:00-02:59': { init: 0, reinit: 0 },
+          '03:00-06:59': { init: 0, reinit: 0 },
+        },
+        daily_history: [],
+        last_reset: new Date().toISOString(),
+        last_updated: new Date().toISOString(),
+      };
+    }
+
+    return features;
+  }
+
+  /**
+   * Update time bucket statistics for initialization or reinitialization
+   */
+  async _updateTimeBucketStats(type) {
+    try {
+      const features = await this._loadFeatures();
+      await this._ensureInitializationStatsStructure(features);
+      await this._resetDailyBucketsIfNeeded(features);
+
+      const currentBucket = this._getCurrentTimeBucket();
+      const stats = features.metadata.initialization_stats;
+
+      // Update counters
+      if (type === 'init') {
+        stats.total_initializations++;
+        stats.time_buckets[currentBucket].init++;
+      } else if (type === 'reinit') {
+        stats.total_reinitializations++;
+        stats.time_buckets[currentBucket].reinit++;
+      }
+
+      stats.last_updated = new Date().toISOString();
+      await this._saveFeatures(features);
+
+      return true;
+    } catch (error) {
+      console.error('Failed to update time bucket stats:', error.message);
+      return false;
+    }
+  }
+
+  /**
+   * Reset daily buckets if we've crossed 7am
+   */
+  async _resetDailyBucketsIfNeeded(features) {
+    const now = new Date();
+    const currentDay = now.toISOString().split('T')[0];
+    const stats = features.metadata.initialization_stats;
+
+    // Check if we need to reset (new day and past 7am, or last reset was yesterday)
+    const lastResetDate = new Date(stats.last_reset);
+    const lastResetDay = lastResetDate.toISOString().split('T')[0];
+
+    if (currentDay !== stats.current_day && currentDay !== lastResetDay) {
+      // Save yesterday's data to history
+      const yesterdayTotal = Object.values(stats.time_buckets).reduce(
+        (acc, bucket) => ({
+          init: acc.init + bucket.init,
+          reinit: acc.reinit + bucket.reinit,
+        }),
+        { init: 0, reinit: 0 }
+      );
+
+      if (yesterdayTotal.init > 0 || yesterdayTotal.reinit > 0) {
+        stats.daily_history.push({
+          date: stats.current_day,
+          total_init: yesterdayTotal.init,
+          total_reinit: yesterdayTotal.reinit,
+          buckets: { ...stats.time_buckets },
+        });
+
+        // Keep only last 30 days of history
+        if (stats.daily_history.length > 30) {
+          stats.daily_history = stats.daily_history.slice(-30);
+        }
+      }
+
+      // Reset buckets for new day
+      Object.keys(stats.time_buckets).forEach(bucket => {
+        stats.time_buckets[bucket] = { init: 0, reinit: 0 };
+      });
+
+      stats.current_day = currentDay;
+      stats.last_reset = now.toISOString();
+    }
+  }
+
   // =================== HELPER METHODS ===================
 
   _getFallbackGuide(context = 'general') {
@@ -873,6 +1126,7 @@ class FeatureManagerAPI {
         'reject-feature - Reject feature',
         'list-features - List features',
         'feature-stats - Get feature statistics',
+        'get-initialization-stats - Get initialization usage statistics by time buckets',
       ],
     };
   }
@@ -941,6 +1195,9 @@ async function main() {
       case 'feature-stats':
         result = await api.getFeatureStats();
         break;
+      case 'get-initialization-stats':
+        result = await api.getInitializationStats();
+        break;
       case 'initialize':
         if (!args[1]) {
           throw new Error('Agent ID required. Usage: initialize <agentId>');
@@ -962,7 +1219,7 @@ async function main() {
         break;
       }
       default:
-        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, initialize, reinitialize, authorize-stop`);
+        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, authorize-stop`);
     }
 
     console.log(JSON.stringify(result, null, 2));
