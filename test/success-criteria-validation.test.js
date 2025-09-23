@@ -1,14 +1,15 @@
 
 /**
- * Success Criteria Validation Test Suite
- * Testing Agent #6 - Template Inheritance and Custom Criteria Validation
+ * FEATURES.json System Validation Test Suite
+ * Testing FeatureManager API - Feature Lifecycle and Management Validation
  *
- * Purpose: Validate template inheritance behavior and custom criteria functionality
+ * Purpose: Validate FEATURES.json feature management system functionality
  * Key Requirements:
- * - Template inheritance and override behavior
- * - Custom criteria validation and merging
- * - Project-specific criteria customization
- * - Template versioning and compatibility
+ * - Feature suggestion, approval, and rejection workflow
+ * - Feature lifecycle management (suggested → approved → implemented)
+ * - Agent initialization and session management
+ * - Feature filtering and statistics
+ * - Feature data validation and persistence
  */
 
 const { spawn } = require('child_process');
@@ -17,26 +18,23 @@ const _fs = require('fs').promises;
 
 // Test configuration
 const API_PATH = _path.join(__dirname, '..', 'taskmanager-api.js');
-const TEST_PROJECT_DIR = _path.join(__dirname, 'validation-test-project');
-const TIMEOUT = 30000;
+const TEST_PROJECT_DIR = _path.join(__dirname, 'features-test-project');
+const FEATURES_PATH = _path.join(TEST_PROJECT_DIR, 'FEATURES.json');
+const TIMEOUT = 15000;
 
 /**
- * API execution utility
+ * API execution utility for FeatureManager API
  */
 function execAPI(command, args = [], timeout = TIMEOUT) {
   return new Promise((resolve, reject) => {
-    const allArgs = [
-      API_PATH,
-      command,
-      ...args,
-      '--project-root',
-      TEST_PROJECT_DIR,
-    ];
+    // Change working directory to test project for API execution
+    const allArgs = [API_PATH, command, ...args];
     const child = spawn(
       'timeout',
       [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs],
       {
         stdio: ['pipe', 'pipe', 'pipe'],
+        cwd: TEST_PROJECT_DIR, // Execute from test project directory
         env: { ...process.env, NODE_ENV: 'test' },
       },
     );
@@ -74,18 +72,17 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
 }
 
 /**
- * Test project setup utilities
+ * Test project setup utilities for FEATURES.json system
  */
-async function setupValidationTestProject() {
+async function setupFeaturesTestProject() {
   try {
     await _fs.mkdir(TEST_PROJECT_DIR, { recursive: true });
 
-    // Create package.json
+    // Create package.json for the test project
     const packageJson = {
-      name: 'validation-test-project',
+      name: 'features-test-project',
       version: '1.0.0',
-      description:
-        'Validation testing project for Success Criteria template inheritance',
+      description: 'Test project for FEATURES.json system validation',
       main: 'index.js',
       scripts: {
         test: 'jest',
@@ -106,28 +103,34 @@ async function setupValidationTestProject() {
 
     // Create main application file
     const indexJs = `
-console.log('Validation test application started');
+console.log('Features test application started');
 
-// Simulate a simple application
-class ValidationApp {
+// Simulate a test application for feature validation
+class FeaturesTestApp {
   constructor() {
     this.status = 'initialized';
+    this.features = [];
   }
-  
+
   async start() {
     this.status = 'running';
-    console.log('Application is running');
+    console.log('Features application is running');
     return this.status;
   }
-  
+
+  addFeature(feature) {
+    this.features.push(feature);
+    console.log(\`Feature added: \${feature.title}\`);
+  }
+
   async stop() {
     this.status = 'stopped';
-    console.log('Application stopped');
+    console.log('Features application stopped');
     return this.status;
   }
 }
 
-const app = new ValidationApp();
+const app = new FeaturesTestApp();
 app.start().then(() => {
   setTimeout(() => {
     app.stop();
@@ -138,132 +141,149 @@ app.start().then(() => {
 
     await _fs.writeFile(_path.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
 
-    // Create test file
-    const testJs = `
-describe('Validation Test Suite', () => {
-  test('should validate basic functionality', () => {
-    expect(true).toBe(true);
-  });
-  
-  test('should validate complex objects', () => {
-    const obj = { a: 1, b: { c: 2 } };
-    expect(obj.b.c).toBe(2);
-  });
-});
-`;
+    // Initialize empty FEATURES.json file - the API will populate it
+    const initialFeatures = {
+      project: 'features-test-project',
+      features: [],
+      metadata: {
+        version: '1.0.0',
+        created: new Date().toISOString(),
+        updated: new Date().toISOString(),
+        total_features: 0,
+        approval_history: [],
+      },
+      workflow_config: {
+        require_approval: true,
+        auto_reject_timeout_hours: 168,
+        allowed_statuses: ['suggested', 'approved', 'rejected', 'implemented'],
+        required_fields: ['title', 'description', 'business_value', 'category'],
+      },
+      tasks: [],
+      completed_tasks: [],
+      agents: {},
+    };
 
-    await _fs.writeFile(_path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
+    await _fs.writeFile(
+      FEATURES_PATH,
+      JSON.stringify(initialFeatures, null, 2),
+    );
 
-    console.log('Validation test project setup completed');
+    console.log('Features test project setup completed');
   } catch (error) {
-    console.error('Failed to setup validation test project:', error);
+    console.error('Failed to setup features test project:', error);
     throw error;
   }
 }
 
-async function cleanupValidationTestProject() {
+async function cleanupFeaturesTestProject() {
   try {
     await _fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
-    console.log('Validation test project cleanup completed');
+    console.log('Features test project cleanup completed');
   } catch (error) {
-    console.error('Failed to cleanup validation test project:', error);
+    console.error('Failed to cleanup features test project:', error);
   }
 }
 
 /**
- * Template management utilities
+ * Feature management utilities for FeatureManager API
  */
-function createBaseTemplate(name, criteria) {
-  const templateData = JSON.stringify({ name, criteria });
-  return execAPI('success-criteria:create-template', [templateData]);
+async function createFeature(featureData) {
+  const feature = {
+    title: featureData.title,
+    description: featureData.description,
+    business_value: featureData.business_value,
+    category: featureData.category || 'enhancement',
+    ...featureData,
+  };
+  return execAPI('suggest-feature', [JSON.stringify(feature)]);
 }
 
-function createChildTemplate(
-  name,
-  parentName,
-  additionalCriteria,
-  overrides = {},
-) {
-  const templateData = JSON.stringify({
-    name,
-    parentTemplate: parentName,
-    criteria: additionalCriteria,
-    overrides,
-  });
-  return execAPI('success-criteria:create-template', [templateData]);
+async function approveFeature(featureId, approvalData = {}) {
+  const approval = {
+    approved_by: 'test-agent',
+    approval_notes: 'Test approval',
+    ...approvalData,
+  };
+  return execAPI('approve-feature', [featureId, JSON.stringify(approval)]);
+}
+
+async function rejectFeature(featureId, rejectionData = {}) {
+  const rejection = {
+    rejected_by: 'test-agent',
+    rejection_reason: 'Test rejection',
+    ...rejectionData,
+  };
+  return execAPI('reject-feature', [featureId, JSON.stringify(rejection)]);
+}
+
+async function initializeAgent(agentId = 'test-agent') {
+  return execAPI('initialize', [agentId]);
 }
 
 /**
- * Validation Test Suite
+ * FEATURES.json System Test Suite
  */
-describe('Success Criteria Validation Tests', () => {
+describe('FEATURES.json System Validation Tests', () => {
   beforeAll(async () => {
-    await setupValidationTestProject();
+    await setupFeaturesTestProject();
   }, 30000);
 
   afterAll(async () => {
-    await cleanupValidationTestProject();
+    await cleanupFeaturesTestProject();
   });
 
   beforeEach(async () => {
-    await execAPI('success-criteria:init');
+    // Initialize agent session for each test
+    await initializeAgent('test-agent');
   });
 
-  describe('Template Inheritance Validation', () => {
-    test('should validate basic template inheritance structure', async () => {
-      // Create base template
-      const _baseCriteria = [
-        { id: 'base-1', description: 'Base requirement 1', category: 'build' },
-        { id: 'base-2', description: 'Base requirement 2', category: 'test' },
+  describe('Feature Lifecycle Management', () => {
+    test('should create and manage feature suggestions correctly', async () => {
+      // Create multiple feature suggestions with different categories
+      const features = [
         {
-          id: 'base-3',
-          description: 'Base requirement 3',
-          category: 'quality',
-        },
-      ];
-
-      await createBaseTemplate('Base Template', _baseCriteria);
-
-      // Create child template that inherits from base
-      const _childCriteria = [
-        {
-          id: 'child-1',
-          description: 'Child requirement 1',
-          category: 'security',
+          title: 'Add user authentication',
+          description: 'Implement login/logout functionality with JWT tokens',
+          business_value: 'Enables user-specific features and security',
+          category: 'new-feature',
         },
         {
-          id: 'child-2',
-          description: 'Child requirement 2',
+          title: 'Fix responsive design issues',
+          description: 'Resolve layout problems on mobile devices',
+          business_value: 'Improves user experience across all devices',
+          category: 'bug-fix',
+        },
+        {
+          title: 'Optimize database queries',
+          description: 'Add indexes and optimize slow queries',
+          business_value: 'Improves application performance and user satisfaction',
           category: 'performance',
         },
       ];
 
-      await createChildTemplate(
-        'Child Template',
-        'Base Template',
-        _childCriteria,
-      );
+      const createdFeatures = [];
+      for (const feature of features) {
+        const result = await createFeature(feature);
+        expect(result.success).toBe(true);
+        expect(result.feature).toBeDefined();
+        expect(result.feature.status).toBe('suggested');
+        createdFeatures.push(result.feature);
+      }
 
-      // Apply child template to project
-      await execAPI('success-criteria:apply-template', ['Child Template']);
+      // Verify features were created correctly
+      const listResult = await execAPI('list-features');
+      expect(listResult.success).toBe(true);
+      expect(listResult.features.length).toBeGreaterThanOrEqual(3);
 
-      // Validate that both base and child criteria are present
-      const status = await execAPI('success-criteria:status');
+      // Check that all our test features are present
+      for (const feature of features) {
+        const found = listResult.features.find((f) => f.title === feature.title);
+        expect(found).toBeDefined();
+        expect(found.status).toBe('suggested');
+        expect(found.category).toBe(feature.category);
+      }
 
-      expect(status._projectCriteria).toBeDefined();
-      expect(status._projectCriteria.length).toBe(5); // 3 base + 2 child
-
-      // Check for base criteria
-      const baseCriteriaIds = _baseCriteria.map((c) => c.id);
-      const childCriteriaIds = _childCriteria.map((c) => c.id);
-      const allExpectedIds = [...baseCriteriaIds, ...childCriteriaIds];
-
-      const actualIds = status._projectCriteria.map((c) => c.id);
-      allExpectedIds.forEach((expectedId) => {
-        expect(actualIds).toContain(expectedId);
-      });
-
-      console.log('Template inheritance structure validated successfully');
+      console.log('Feature creation and listing validated successfully');
     });
 
     test('should validate template override behavior', async () => {

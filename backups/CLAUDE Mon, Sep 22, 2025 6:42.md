@@ -7,9 +7,8 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 3. IMMEDIATE TASK EXECUTION - Plan → Execute → Document (no delays)
 4. TODOWRITE TASK MANAGEMENT - Use TodoWrite for complex task planning and tracking
 5. COMPLETE EVERY TASK - One at a time, commit and push before completion
-6. 🚨 ONE FEATURE AT A TIME - Work on EXACTLY ONE feature from FEATURES.json, complete it fully, then move to next
-7. CLAUDE.md PROTECTION - NEVER EVER EVER EDIT CLAUDE.md WITHOUT EXPLICIT USER PERMISSION
-8. ABSOLUTE CLAUDE.md COMPLIANCE - It is an ABSOLUTE MANDATE to follow ALL CLAUDE.md instructions
+6. CLAUDE.md PROTECTION - NEVER EVER EVER EDIT CLAUDE.md WITHOUT EXPLICIT USER PERMISSION
+7. ABSOLUTE CLAUDE.md COMPLIANCE - It is an ABSOLUTE MANDATE to follow ALL CLAUDE.md instructions
 </law>
 
 ## CLAUDE.md COMPLIANCE
@@ -35,25 +34,11 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 ## 🚨 AGENT WORKFLOW MANDATES
 **MANDATORY AGENT LIFECYCLE:**
 1. **INITIALIZE AGENT** - Start fresh agent or reinitialize existing agent for session
-2. **🔴 WORK EXACTLY ONE FEATURE AT A TIME** - Complete EXACTLY 1 approved feature from FEATURES.json fully and completely, then move to next approved feature. NEVER work on multiple features simultaneously.
+2. **WORK ONE FEATURE AT A TIME** - Complete exactly 1 approved feature, then move to next approved feature
 3. **COMPLETE ALL APPROVED FEATURES** - Continue until every approved feature in FEATURES.json is implemented
 4. **TODOWRITE EXECUTION** - Use TodoWrite for task management and infinite continuation
 5. **VALIDATION CYCLE** - Continuously ensure: linter passes, builds succeed, runs/starts properly, unit tests pass with adequate coverage
 6. **STOP ONLY WHEN ALL APPROVED FEATURES DONE** - Only stop when ALL approved features complete AND project achieves perfection
-
-## 🔴 MANDATORY: ONE FEATURE AT A TIME PROTOCOL
-**ABSOLUTE REQUIREMENT - NEVER VIOLATE:**
-- **🚨 EXACTLY ONE FEATURE** - Work on ONE and ONLY ONE feature from FEATURES.json at any given time
-- **🚨 COMPLETE BEFORE NEXT** - Finish current feature 100% completely before even looking at next feature
-- **🚨 NO MULTI-FEATURE WORK** - Never work on multiple features simultaneously, even if they seem related
-- **🚨 SEQUENTIAL PROCESSING** - Process features in order, one after another, never in parallel
-- **🚨 FULL COMPLETION** - Each feature must be fully implemented, tested, documented, and working before moving on
-
-**ENFORCEMENT PROTOCOL:**
-- Before starting any work: Identify EXACTLY which ONE feature you're working on
-- During work: Focus ONLY on that single feature, ignore all others
-- Before completion: Verify that ONLY that one feature was implemented
-- After completion: Mark feature complete, then select next single feature
 
 ## 🛑 SELF-AUTHORIZATION STOP PROTOCOL
 **AGENTS CAN AUTHORIZE THEIR OWN STOP WHEN ALL CONDITIONS MET:**
@@ -205,7 +190,6 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 **AUTONOMOUS JUDGMENT WITHIN DEFINED BOUNDARIES**
 
 **PRINCIPLE-BASED SCOPE MANAGEMENT:**
-- **🔴 ONE FEATURE AT A TIME FROM FEATURES.json** - Work on EXACTLY ONE feature from FEATURES.json at a time, never multiple
 - **WORK ONLY ON EXISTING FEATURES.json FEATURES** - Never create new features beyond what already exists
 - **COMPLETE EXISTING WORK FIRST** - Focus on finishing tasks already in FEATURES.json before considering anything new
 - **FINISH WHAT'S STARTED** - Complete existing tasks rather than starting new initiatives
@@ -226,7 +210,6 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - **✅ ONLY IMPLEMENT**: Features explicitly requested by user or existing in FEATURES.json with "suggested" or "approved" status
 
 **INTELLIGENT FEATURE PROTOCOL:**
-- **🔴 SINGLE FEATURE FOCUS**: Work on EXACTLY ONE feature from FEATURES.json at a time - never multiple features
 - **EXISTING ONLY**: Only work on features that already exist in the project's FEATURES.json
 - **NO NEW FEATURES**: Do not create, suggest, or implement new features unless explicitly requested by user
 - **PROFESSIONAL COMPLETION**: Implement approved features with senior developer thoroughness and quality
@@ -295,25 +278,27 @@ function processData(userId, data) {
 }
 ```
 
-### OPTIMAL CI/CD PIPELINE PROTOCOL
-**AUTOMATED QUALITY GATES ARE PRIMARY VALIDATION**
+### LINTER ERROR PROTOCOL
+**ALL LINTER WARNINGS ARE CRITICAL ERRORS**
 
-**CI/CD PIPELINE REQUIREMENTS:**
-- **AUTOMATED LINTING**: Pre-commit hooks and CI pipelines handle all linting automatically
-- **QUALITY GATES**: GitHub Actions, GitLab CI, Jenkins enforce standards before merge
-- **ZERO MANUAL CHECKS**: CI/CD catches issues consistently without developer intervention
-- **AUTOMATED SECURITY**: SAST scanning, dependency checks integrated in pipeline
-- **FAIL-FAST FEEDBACK**: Immediate notification on commit/PR for fast developer response
+**REQUIREMENTS:**
+- **MAXIMUM STRICTNESS**: Use strictest linter configurations with zero tolerance for any violations
+- **EMERGENCY PROTOCOL**: Instant halt → Create linter-error task → Fix all violations → Verify clean → Resume
+- **MAXIMUM CONCURRENT DEPLOYMENT**: MANDATORY for linter errors - deploy concurrent agents equal to number of error categories (max 10)
+- **CATEGORY-BASED CONCURRENT AGENTS**: Deploy agents based on error categories (syntax, style, security, etc.) not total error count for optimal parallel fixing
+- **HIGHEST STRICTNESS ENFORCEMENT**: Maximum strictness configurations with zero tolerance for violations - all linter rules at most restrictive settings
+- **OUTDATED MATERIAL EXCEPTION**: If errors in outdated/deprecated code → Remove code entirely, no error tasks
+- **WORKFLOWS**: After every file edit + before task completion
+- **NO SHORTCUTS**: Never hide, suppress, or bypass - fix actual problems, admit inability if needed
 
-**BACKUP PROTOCOLS (CI/CD UNAVAILABLE):**
-- **EMERGENCY ONLY**: Manual linting only when CI/CD pipeline temporarily offline
-- **LOCAL VALIDATION**: Pre-push checks for experimental branches outside CI coverage
-- **PIPELINE RECOVERY**: Restore automated validation as soon as CI/CD is operational
+**ACTIONABLE vs UNFIXABLE:**
+- **✅ FIX**: Code files (.js, .ts, .py), resolvable config issues
+- **❌ IGNORE**: Project-specific settings (tsconfig.json, eslint.config.js), manual dependencies, environment configs
 
-**OPTIMAL WORKFLOW:**
-- **AUTOMATED**: All quality checks run in CI/CD without manual intervention
-- **INTEGRATED**: Linting, testing, security scanning in unified pipeline
-- **RELIABLE**: Consistent enforcement across all contributors and branches
+**WORKFLOWS:**
+- **POST-EDIT**: Run focused linter immediately after file modifications
+- **COMPLETION**: Full project linting + build + start verification before marking complete
+- **LINTERS**: eslint (JS/TS), ruff/pylint (Python), golint (Go), clippy (Rust)
 
 ### SECURITY SCANNING PROTOCOL
 **ALL SECURITY SCANS ARE CRITICAL QUALITY GATES**
@@ -434,12 +419,11 @@ git status                                   # Verify clean/up-to-date
 
 ### EXECUTE
 - [ ] **IMPLEMENT**: Comprehensive documentation, comments, logging
-- [ ] **CI/CD RELIANCE**: Trust automated pipeline for quality validation
+- [ ] **LINTER CHECK**: After every file edit - fix violations immediately
 
 ### VALIDATE
-- [ ] **CI/CD PIPELINE**: Automated validation via GitHub Actions/CI system
+- [ ] **PROJECT VALIDATION**: Run available scripts - `npm run lint` (if exists) && `npm run build` (if exists) && `npm run start` (if exists) && `npm test` (if exists)
 - [ ] **GIT**: `git add . && git commit -m "[type]: [description]" && git push`
-- [ ] **PIPELINE VERIFICATION**: Confirm CI/CD passes all automated quality gates
 - [ ] **COMPLETE**: Document results with clear completion message
 
 ## ESSENTIAL COMMANDS

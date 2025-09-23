@@ -284,13 +284,5 @@
   },
   "tasks": [],
   "completed_tasks": [],
-  "agents": {
-    "claude-agent-main": {
-      "lastHeartbeat": "2025-09-22T16:52:04.370Z",
-      "status": "active",
-      "reinitialized": "2025-09-22T16:52:04.370Z",
-      "sessionId": "318bb578782b8ba8",
-      "previousSessions": []
-    }
-  }
+  "agents": {}
 }
