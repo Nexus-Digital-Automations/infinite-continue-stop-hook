@@ -489,26 +489,65 @@ createTaskData(overrides)      # Task test data
 - Concurrent operation handling
 - Resource cleanup and leak detection
 
-## 🚀 Test Automation Integration
+## ⚡ Performance and Optimization
 
-### Continuous Integration
-- **Pre-commit Hooks**: Linting and basic tests
-- **Pull Request Validation**: Full test suite execution
-- **Deployment Gates**: Coverage and performance thresholds
-- **Automated Reporting**: Test results and metrics
+### Test Execution Optimization
 
-### Test Categorization Scripts
+**Worker Configuration:**
+- **Unit tests**: 50% of available CPU cores for parallel execution
+- **Integration tests**: 50% of available CPU cores with timeout management
+- **E2E tests**: 1 worker (sequential execution) to prevent resource conflicts
+- **Performance tests**: 1 worker to avoid interference and ensure accurate benchmarks
+
+**Caching Strategy:**
+- **Jest cache enabled** with custom cache directory (`.jest-cache`)
+- **Module transformation caching** for faster subsequent runs
+- **Coverage data caching** between test executions
+- **Transform ignore patterns** for ML libraries optimization
+
+**Memory Management:**
+- **Garbage collection** in CI environments (`global.gc && global.gc()`)
+- **Memory leak detection** for long-running tests
+- **Performance monitoring** with configurable thresholds
+- **Resource cleanup automation** after test completion
+
+### Test Performance Monitoring
+
+**Performance Thresholds:**
+- Tests using >50MB memory trigger warnings
+- Duration >5 seconds triggers performance alerts
+- Memory delta tracking between test start/end
+- Resource usage reporting for optimization
+
+**Performance Scripts:**
 ```bash
-# Full test suite
-npm test
+npm run performance:test        # Basic performance validation
+npm run performance:monitor     # Continuous monitoring
+npm run ci:quality-check       # Full quality validation pipeline
+```
 
-# Specific test categories
-npm run test:api          # API-focused tests
-npm run test:rag          # RAG system tests
-npm run test:rag:unit     # RAG unit tests only
-npm run test:rag:integration  # RAG integration tests
-npm run test:rag:performance  # RAG performance tests
-npm run test:rag:coverage    # RAG with coverage
+### CI/CD Integration
+
+**Automated Test Execution:**
+```bash
+# Comprehensive test suite execution
+npm test                        # Full test suite
+npm run test:unit              # Unit tests with 30s timeout
+npm run test:integration       # Integration tests with 45s timeout
+npm run test:e2e               # E2E tests with 60s timeout
+
+# RAG system testing
+npm run test:rag               # All RAG tests
+npm run test:rag:unit          # RAG unit tests
+npm run test:rag:integration   # RAG integration tests
+npm run test:rag:performance   # RAG performance benchmarks
+npm run test:rag:coverage      # RAG coverage analysis
+
+# Coverage and quality
+npm run coverage               # Basic coverage report
+npm run coverage:ci            # CI-optimized coverage
+npm run coverage:check         # Threshold validation
+npm run ci:full-validation     # Complete quality pipeline
 ```
 
 ## 🔍 Test Monitoring & Analytics
