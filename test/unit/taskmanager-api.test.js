@@ -503,7 +503,8 @@ describe('FeatureManagerAPI', () => {
         expect(result.error_count).toBe(1);
         expect(result.approved_features).toHaveLength(2);
         expect(result.errors).toHaveLength(1);
-        expect(result.errors[0]).toContain("Feature must be in 'suggested' status to approve");
+        expect(result.errors[0]).toContain("must be in 'suggested' status to approve");
+        expect(result.errors[0]).toContain("Current status: approved");
       });
 
       test('should handle non-existent feature IDs', async () => {
