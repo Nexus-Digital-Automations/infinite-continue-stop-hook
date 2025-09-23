@@ -127,7 +127,7 @@ describe('File Operations Integration Tests', () => {
         generateTestFeature({
           title: `Concurrent Feature ${i + 1}`,
           category: 'enhancement',
-        })
+        }),
       );
 
       const concurrentCommands = features.map(featureData => ({
@@ -279,7 +279,7 @@ describe('File Operations Integration Tests', () => {
           description: 'A'.repeat(1000), // 1KB description
           business_value: 'B'.repeat(500), // 500B business value
           category: 'enhancement',
-        })
+        }),
       );
 
       // 2. Add features in batches to test large file handling
@@ -323,7 +323,7 @@ describe('File Operations Integration Tests', () => {
         });
 
         operations.push(
-          execAPI('suggest-feature', [JSON.stringify(featureData)], { projectRoot: testDir })
+          execAPI('suggest-feature', [JSON.stringify(featureData)], { projectRoot: testDir }),
         );
       }
 
@@ -355,7 +355,7 @@ describe('File Operations Integration Tests', () => {
         generateTestFeature({
           title: `Initial Feature ${i + 1}`,
           category: 'enhancement',
-        })
+        }),
       );
 
       const initialCommands = initialFeatures.map(featureData => ({
@@ -377,11 +377,11 @@ describe('File Operations Integration Tests', () => {
         // Write operations (approvals)
         execAPI('approve-feature', [
           initialResults[0].feature.id,
-          JSON.stringify({ approved_by: 'mixed-ops-test' })
+          JSON.stringify({ approved_by: 'mixed-ops-test' }),
         ], { projectRoot: testDir }),
         execAPI('approve-feature', [
           initialResults[1].feature.id,
-          JSON.stringify({ approved_by: 'mixed-ops-test' })
+          JSON.stringify({ approved_by: 'mixed-ops-test' }),
         ], { projectRoot: testDir }),
 
         // More read operations

@@ -22,8 +22,8 @@ jest.mock('fs', () => ({
   promises: {
     access: jest.fn(),
     readFile: jest.fn(),
-    writeFile: jest.fn()
-  }
+    writeFile: jest.fn(),
+  },
 }));
 
 // Mock crypto for deterministic ID generation
@@ -33,7 +33,7 @@ jest.mock('crypto', () => ({
     global.cryptoCounter = (global.cryptoCounter || 0) + 1;
     const counterStr = global.cryptoCounter.toString().padStart(12, '0');
     return Buffer.from(counterStr, 'ascii');
-  })
+  }),
 }));
 
 // Import the FeatureManagerAPI class AFTER mocking fs
@@ -92,8 +92,8 @@ describe('Feature Management Lifecycle', () => {
           metadata: {
             priority: 'high',
             estimated_effort: 'large',
-            dependencies: ['database-setup', 'security-framework']
-          }
+            dependencies: ['database-setup', 'security-framework'],
+          },
         };
 
         const result = await api.suggestFeature(featureData);
@@ -118,7 +118,7 @@ describe('Feature Management Lifecycle', () => {
           const featureData = {
             ...TEST_FIXTURES.validFeature,
             title: `${category} Feature Test`,
-            category: category
+            category: category,
           };
 
           const result = await api.suggestFeature(featureData);
@@ -140,7 +140,7 @@ describe('Feature Management Lifecycle', () => {
         for (let i = 0; i < numFeatures; i++) {
           const featureData = {
             ...TEST_FIXTURES.validFeature,
-            title: `Test Feature Number ${i + 1} Implementation`
+            title: `Test Feature Number ${i + 1} Implementation`,
           };
 
           const result = await api.suggestFeature(featureData);
@@ -164,12 +164,12 @@ describe('Feature Management Lifecycle', () => {
           estimated_effort: 'small',
           stakeholders: ['product-owner', 'ux-designer'],
           deadline: '2025-12-31',
-          tags: ['mvp', 'user-facing', 'high-impact']
+          tags: ['mvp', 'user-facing', 'high-impact'],
         };
 
         const featureData = {
           ...TEST_FIXTURES.validFeature,
-          metadata: customMetadata
+          metadata: customMetadata,
         };
 
         const result = await api.suggestFeature(featureData);
@@ -185,7 +185,7 @@ describe('Feature Management Lifecycle', () => {
       test('should enforce minimum title length requirements', async () => {
         const invalidFeature = {
           ...TEST_FIXTURES.validFeature,
-          title: 'Short'  // Only 5 characters, minimum is 10
+          title: 'Short',  // Only 5 characters, minimum is 10
         };
 
         const result = await api.suggestFeature(invalidFeature);
@@ -197,7 +197,7 @@ describe('Feature Management Lifecycle', () => {
       test('should enforce maximum title length requirements', async () => {
         const invalidFeature = {
           ...TEST_FIXTURES.validFeature,
-          title: 'A'.repeat(201)  // 201 characters, maximum is 200
+          title: 'A'.repeat(201),  // 201 characters, maximum is 200
         };
 
         const result = await api.suggestFeature(invalidFeature);
@@ -209,7 +209,7 @@ describe('Feature Management Lifecycle', () => {
       test('should enforce minimum description length requirements', async () => {
         const invalidFeature = {
           ...TEST_FIXTURES.validFeature,
-          description: 'Too short'  // Only 9 characters, minimum is 20
+          description: 'Too short',  // Only 9 characters, minimum is 20
         };
 
         const result = await api.suggestFeature(invalidFeature);
@@ -221,7 +221,7 @@ describe('Feature Management Lifecycle', () => {
       test('should enforce maximum description length requirements', async () => {
         const invalidFeature = {
           ...TEST_FIXTURES.validFeature,
-          description: 'A'.repeat(2001)  // 2001 characters, maximum is 2000
+          description: 'A'.repeat(2001),  // 2001 characters, maximum is 2000
         };
 
         const result = await api.suggestFeature(invalidFeature);
@@ -252,7 +252,7 @@ describe('Feature Management Lifecycle', () => {
       test('should validate category field against allowed values', async () => {
         const invalidFeature = {
           ...TEST_FIXTURES.validFeature,
-          category: 'invalid-category'
+          category: 'invalid-category',
         };
 
         const result = await api.suggestFeature(invalidFeature);
@@ -300,13 +300,13 @@ describe('Feature Management Lifecycle', () => {
         // Add first feature
         const firstResult = await api.suggestFeature({
           ...TEST_FIXTURES.validFeature,
-          title: 'First Feature Suggestion'
+          title: 'First Feature Suggestion',
         });
 
         // Add second feature
         const secondResult = await api.suggestFeature({
           ...TEST_FIXTURES.validFeature,
-          title: 'Second Feature Suggestion'
+          title: 'Second Feature Suggestion',
         });
 
         expect(firstResult.success).toBe(true);
@@ -337,7 +337,7 @@ describe('Feature Management Lifecycle', () => {
       test('should approve suggested feature with full approval data', async () => {
         const approvalData = {
           approved_by: 'product-manager',
-          notes: 'Feature aligns with Q4 roadmap and provides significant user value. Approved for implementation in next sprint.'
+          notes: 'Feature aligns with Q4 roadmap and provides significant user value. Approved for implementation in next sprint.',
         };
 
         const result = await api.approveFeature(suggestedFeatureId, approvalData);
@@ -384,7 +384,7 @@ describe('Feature Management Lifecycle', () => {
       test('should add approval entry to history', async () => {
         const approvalData = {
           approved_by: 'lead-architect',
-          notes: 'Technical review complete. Architecture approved.'
+          notes: 'Technical review complete. Architecture approved.',
         };
 
         const result = await api.approveFeature(suggestedFeatureId, approvalData);
@@ -405,11 +405,11 @@ describe('Feature Management Lifecycle', () => {
         // Create and approve multiple features
         const feature1Result = await api.suggestFeature({
           ...TEST_FIXTURES.validFeature,
-          title: 'First Feature for History Test'
+          title: 'First Feature for History Test',
         });
         const feature2Result = await api.suggestFeature({
           ...TEST_FIXTURES.validFeature,
-          title: 'Second Feature for History Test'
+          title: 'Second Feature for History Test',
         });
 
         await api.approveFeature(feature1Result.feature.id, { approved_by: 'approver-1' });
@@ -430,8 +430,8 @@ describe('Feature Management Lifecycle', () => {
           features: [{
             id: suggestedFeatureId,
             status: 'suggested',
-            title: 'Test Feature'
-          }]
+            title: 'Test Feature',
+          }],
         };
         mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(invalidFeatures));
 
@@ -468,7 +468,7 @@ describe('Feature Management Lifecycle', () => {
 
         expect(secondResult.success).toBe(false);
         expect(secondResult.error).toContain("Feature must be in 'suggested' status to approve");
-        expect(secondResult.error).toContain("Current status: approved");
+        expect(secondResult.error).toContain('Current status: approved');
       });
 
       test('should reject approval of rejected feature', async () => {
@@ -481,7 +481,7 @@ describe('Feature Management Lifecycle', () => {
 
         expect(approveResult.success).toBe(false);
         expect(approveResult.error).toContain("Feature must be in 'suggested' status to approve");
-        expect(approveResult.error).toContain("Current status: rejected");
+        expect(approveResult.error).toContain('Current status: rejected');
       });
     });
   });
@@ -503,7 +503,7 @@ describe('Feature Management Lifecycle', () => {
       test('should reject suggested feature with full rejection data', async () => {
         const rejectionData = {
           rejected_by: 'technical-lead',
-          reason: 'Feature complexity exceeds current team capacity and conflicts with architectural decisions made in Q3 planning.'
+          reason: 'Feature complexity exceeds current team capacity and conflicts with architectural decisions made in Q3 planning.',
         };
 
         const result = await api.rejectFeature(suggestedFeatureId, rejectionData);
@@ -539,7 +539,7 @@ describe('Feature Management Lifecycle', () => {
       test('should add rejection entry to approval history', async () => {
         const rejectionData = {
           rejected_by: 'product-owner',
-          reason: 'Feature does not align with current product strategy and user research findings.'
+          reason: 'Feature does not align with current product strategy and user research findings.',
         };
 
         const result = await api.rejectFeature(suggestedFeatureId, rejectionData);
@@ -577,7 +577,7 @@ describe('Feature Management Lifecycle', () => {
 
         expect(rejectResult.success).toBe(false);
         expect(rejectResult.error).toContain("Feature must be in 'suggested' status to reject");
-        expect(rejectResult.error).toContain("Current status: approved");
+        expect(rejectResult.error).toContain('Current status: approved');
       });
 
       test('should reject rejection of already rejected feature', async () => {
@@ -590,7 +590,7 @@ describe('Feature Management Lifecycle', () => {
 
         expect(secondResult.success).toBe(false);
         expect(secondResult.error).toContain("Feature must be in 'suggested' status to reject");
-        expect(secondResult.error).toContain("Current status: rejected");
+        expect(secondResult.error).toContain('Current status: rejected');
       });
     });
   });
@@ -610,13 +610,13 @@ describe('Feature Management Lifecycle', () => {
         'Bulk Operation Feature 2',
         'Bulk Operation Feature 3',
         'Bulk Operation Feature 4',
-        'Bulk Operation Feature 5'
+        'Bulk Operation Feature 5',
       ];
 
       for (const title of featureTitles) {
         const result = await api.suggestFeature({
           ...TEST_FIXTURES.validFeature,
-          title: title
+          title: title,
         });
         suggestedFeatureIds.push(result.feature.id);
       }
@@ -626,7 +626,7 @@ describe('Feature Management Lifecycle', () => {
       test('should approve all features in bulk successfully', async () => {
         const approvalData = {
           approved_by: 'batch-approver',
-          notes: 'Batch approval for sprint planning session'
+          notes: 'Batch approval for sprint planning session',
         };
 
         const result = await api.bulkApproveFeatures(suggestedFeatureIds, approvalData);
@@ -659,7 +659,7 @@ describe('Feature Management Lifecycle', () => {
 
         // Check error message
         expect(result.errors[0]).toContain("must be in 'suggested' status to approve");
-        expect(result.errors[0]).toContain("Current status: approved");
+        expect(result.errors[0]).toContain('Current status: approved');
         expect(result.errors[0]).toContain(suggestedFeatureIds[2]);
       });
 
@@ -776,7 +776,7 @@ describe('Feature Management Lifecycle', () => {
         // This would require features that match both criteria
         const result = await api.listFeatures({
           status: 'approved',
-          category: 'new-feature'
+          category: 'new-feature',
         });
 
         expect(result.success).toBe(true);
@@ -807,12 +807,12 @@ describe('Feature Management Lifecycle', () => {
         expect(stats.by_status).toEqual({
           suggested: 1,
           approved: 1,
-          rejected: 1
+          rejected: 1,
         });
         expect(stats.by_category).toEqual({
           enhancement: 1,
           'new-feature': 1,
-          documentation: 1
+          documentation: 1,
         });
       });
 
@@ -852,13 +852,13 @@ describe('Feature Management Lifecycle', () => {
           {
             ...TEST_FIXTURES.validFeature,
             title: 'Additional Enhancement Feature',
-            category: 'enhancement'
+            category: 'enhancement',
           },
           {
             ...TEST_FIXTURES.validFeature,
             title: 'Another Enhancement Feature',
-            category: 'enhancement'
-          }
+            category: 'enhancement',
+          },
         ];
 
         // Add features to existing data

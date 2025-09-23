@@ -22,8 +22,8 @@ jest.mock('fs', () => ({
   promises: {
     access: jest.fn(),
     readFile: jest.fn(),
-    writeFile: jest.fn()
-  }
+    writeFile: jest.fn(),
+  },
 }));
 
 // Mock crypto for deterministic ID generation
@@ -33,7 +33,7 @@ jest.mock('crypto', () => ({
     global.cryptoCounter = (global.cryptoCounter || 0) + 1;
     const counterStr = global.cryptoCounter.toString().padStart(12, '0');
     return Buffer.from(counterStr, 'ascii');
-  })
+  }),
 }));
 
 // Import the FeatureManagerAPI class AFTER mocking fs
@@ -144,7 +144,7 @@ describe('Agent Management', () => {
           'agent-with-dashes',
           'agent_with_underscores',
           'agent.with.dots',
-          'agent123with456numbers'
+          'agent123with456numbers',
         ];
 
         for (const agentId of specialAgentIds) {
@@ -199,7 +199,7 @@ describe('Agent Management', () => {
       test('should initialize agents section if it does not exist', async () => {
         // Start with features file without agents section
         const featuresWithoutAgents = {
-          ...TEST_FIXTURES.emptyFeaturesFile
+          ...TEST_FIXTURES.emptyFeaturesFile,
         };
         delete featuresWithoutAgents.agents;
         mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(featuresWithoutAgents));
@@ -354,7 +354,7 @@ describe('Agent Management', () => {
         const features = await api._loadFeatures();
         features.agents['incomplete-agent'] = {
           status: 'active',
-          lastHeartbeat: '2025-09-23T11:00:00.000Z'
+          lastHeartbeat: '2025-09-23T11:00:00.000Z',
           // Missing sessionId and other data
         };
         await api._saveFeatures(features);
@@ -451,7 +451,7 @@ describe('Agent Management', () => {
           authorized_by: agentId,
           reason: reason,
           timestamp: '2025-09-23T12:00:00.000Z',
-          session_type: 'self_authorized'
+          session_type: 'self_authorized',
         });
       });
     });
@@ -617,7 +617,7 @@ describe('Agent Management', () => {
         // Perform feature operations
         const suggestResult = await api.suggestFeature({
           ...TEST_FIXTURES.validFeature,
-          suggested_by: agentId
+          suggested_by: agentId,
         });
         expect(suggestResult.success).toBe(true);
 
@@ -645,10 +645,10 @@ describe('Agent Management', () => {
           ...TEST_FIXTURES.emptyFeaturesFile,
           agents: {
             'partial-agent': {
-              status: 'active'
+              status: 'active',
               // Missing other required fields
-            }
-          }
+            },
+          },
         };
         mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(partialAgentData));
 
@@ -666,7 +666,7 @@ describe('Agent Management', () => {
         // Create features file with malformed agent data
         const malformedData = {
           ...TEST_FIXTURES.emptyFeaturesFile,
-          agents: 'not an object'
+          agents: 'not an object',
         };
         mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(malformedData));
 

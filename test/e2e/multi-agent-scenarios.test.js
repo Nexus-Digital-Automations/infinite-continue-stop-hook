@@ -16,7 +16,7 @@ const {
   MultiAgentTestHelpers,
   StopHookTestHelpers,
   E2EAssertions,
-  E2E_TIMEOUT
+  E2E_TIMEOUT,
 } = require('./e2e-utils');
 
 describe('Multi-Agent Scenarios E2E', () => {
@@ -51,17 +51,17 @@ describe('Multi-Agent Scenarios E2E', () => {
             title: `Agent ${i} Feature ${j} - Concurrent Test`,
             description: `Feature ${j} suggested by agent ${i} for concurrent testing`,
             business_value: `Validates concurrent operations for agent ${i}, feature ${j}`,
-            category: 'enhancement'
+            category: 'enhancement',
           });
 
           agentOperations.push(
-            FeatureTestHelpers.suggestFeature(environment, featureData)
+            FeatureTestHelpers.suggestFeature(environment, featureData),
           );
         }
 
         agentPromises.push({
           agentId,
-          operations: Promise.all(agentOperations)
+          operations: Promise.all(agentOperations),
         });
       }
 
@@ -69,8 +69,8 @@ describe('Multi-Agent Scenarios E2E', () => {
       const startTime = Date.now();
       const results = await Promise.all(
         agentPromises.map(agent =>
-          agent.operations.then(ops => ({ agentId: agent.agentId, operations: ops }))
-        )
+          agent.operations.then(ops => ({ agentId: agent.agentId, operations: ops })),
+        ),
       );
       const duration = Date.now() - startTime;
 
@@ -79,11 +79,11 @@ describe('Multi-Agent Scenarios E2E', () => {
         operations.forEach((operation, index) => {
           E2EAssertions.assertCommandSuccess(
             operation.result,
-            `Agent ${agentId} operation ${index}`
+            `Agent ${agentId} operation ${index}`,
           );
           E2EAssertions.assertOutputContains(
             operation.result,
-            'Feature suggested successfully'
+            'Feature suggested successfully',
           );
         });
       });
@@ -118,8 +118,8 @@ describe('Multi-Agent Scenarios E2E', () => {
             title: `Approval Test Feature ${i}`,
             description: `Feature ${i} for concurrent approval testing`,
             business_value: `Test concurrent approvals - feature ${i}`,
-            category: 'enhancement'
-          })
+            category: 'enhancement',
+          }),
         );
       }
 
@@ -135,8 +135,8 @@ describe('Multi-Agent Scenarios E2E', () => {
           environment,
           id,
           `approver-${index}`,
-          `Concurrent approval by approver ${index}`
-        )
+          `Concurrent approval by approver ${index}`,
+        ),
       );
 
       // Step 3: Concurrent rejection operations
@@ -145,14 +145,14 @@ describe('Multi-Agent Scenarios E2E', () => {
           environment,
           id,
           `rejector-${index}`,
-          `Concurrent rejection by rejector ${index}`
-        )
+          `Concurrent rejection by rejector ${index}`,
+        ),
       );
 
       // Step 4: Execute all concurrent operations
       const [approvalResults, rejectionResults] = await Promise.all([
         Promise.all(approvalPromises),
-        Promise.all(rejectionPromises)
+        Promise.all(rejectionPromises),
       ]);
 
       // Validate all operations succeeded
@@ -188,7 +188,7 @@ describe('Multi-Agent Scenarios E2E', () => {
       const { agents, results } = await MultiAgentTestHelpers.simulateConcurrentAgents(
         environment,
         8, // 8 concurrent agents
-        3  // 3 operations per agent
+        3,  // 3 operations per agent
       );
 
       // Validate all agents completed successfully
@@ -204,7 +204,7 @@ describe('Multi-Agent Scenarios E2E', () => {
         result.forEach((operation, opIndex) => {
           E2EAssertions.assertCommandSuccess(
             operation.result,
-            `Agent ${agents[index].id} operation ${opIndex}`
+            `Agent ${agents[index].id} operation ${opIndex}`,
           );
         });
       });
@@ -231,7 +231,7 @@ describe('Multi-Agent Scenarios E2E', () => {
         title: 'Conflict Resolution Test Feature',
         description: 'Feature to test agent conflict resolution',
         business_value: 'Validates system conflict handling',
-        category: 'enhancement'
+        category: 'enhancement',
       });
 
       const featureId = result.stdout.match(/Feature ID: (\w+)/)[1];
@@ -240,7 +240,7 @@ describe('Multi-Agent Scenarios E2E', () => {
       const conflictPromises = [
         FeatureTestHelpers.approveFeature(environment, featureId, 'agent-1', 'First approval attempt'),
         FeatureTestHelpers.approveFeature(environment, featureId, 'agent-2', 'Second approval attempt'),
-        FeatureTestHelpers.approveFeature(environment, featureId, 'agent-3', 'Third approval attempt')
+        FeatureTestHelpers.approveFeature(environment, featureId, 'agent-3', 'Third approval attempt'),
       ];
 
       // Execute concurrent operations
@@ -270,13 +270,13 @@ describe('Multi-Agent Scenarios E2E', () => {
         CommandExecutor.executeAPI(
           'reject-feature',
           [featureId, 'conflict-agent-1', 'Trying to reject approved feature'],
-          { projectRoot: environment.testDir, expectSuccess: false }
+          { projectRoot: environment.testDir, expectSuccess: false },
         ),
         CommandExecutor.executeAPI(
           'reject-feature',
           [featureId, 'conflict-agent-2', 'Another rejection attempt'],
-          { projectRoot: environment.testDir, expectSuccess: false }
-        )
+          { projectRoot: environment.testDir, expectSuccess: false },
+        ),
       ]);
 
       // Both rejection attempts should fail
@@ -305,7 +305,7 @@ describe('Multi-Agent Scenarios E2E', () => {
         agents.push({
           id: `stop-hook-agent-${i}`,
           duration: 200 + (i * 100), // Varying execution times
-          operations: []
+          operations: [],
         });
       }
 
@@ -314,8 +314,8 @@ describe('Multi-Agent Scenarios E2E', () => {
         StopHookTestHelpers.simulateAgentExecution(
           environment,
           agent.id,
-          agent.duration
-        )
+          agent.duration,
+        ),
       );
 
       const stopResults = await Promise.allSettled(agentPromises);
@@ -341,8 +341,8 @@ describe('Multi-Agent Scenarios E2E', () => {
           title: `Stop Hook Feature - ${agent.id}`,
           description: `Feature with stop hook integration by ${agent.id}`,
           business_value: `Validates stop hook integration for ${agent.id}`,
-          category: 'enhancement'
-        })
+          category: 'enhancement',
+        }),
       );
 
       const featureResults = await Promise.all(featureOperationPromises);
@@ -351,7 +351,7 @@ describe('Multi-Agent Scenarios E2E', () => {
       featureResults.forEach((result, index) => {
         E2EAssertions.assertCommandSuccess(
           result.result,
-          `Feature operation by ${agents[index].id}`
+          `Feature operation by ${agents[index].id}`,
         );
       });
 
@@ -365,7 +365,7 @@ describe('Multi-Agent Scenarios E2E', () => {
       const longRunningPromises = [
         StopHookTestHelpers.testInfiniteContinue(environment, 5),
         StopHookTestHelpers.testInfiniteContinue(environment, 5),
-        StopHookTestHelpers.testInfiniteContinue(environment, 5)
+        StopHookTestHelpers.testInfiniteContinue(environment, 5),
       ];
 
       // Step 2: Execute all operations
@@ -404,8 +404,8 @@ describe('Multi-Agent Scenarios E2E', () => {
             title: `Contention Test Feature ${i}`,
             description: `Feature ${i} to test file system contention handling`,
             business_value: `Validates concurrent file access pattern ${i}`,
-            category: 'enhancement'
-          })
+            category: 'enhancement',
+          }),
         );
       }
 

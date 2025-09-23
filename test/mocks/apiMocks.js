@@ -22,12 +22,12 @@ class TaskManagerAPIMock {
       total_initializations: 0,
       total_reinitializations: 0,
       time_buckets: {
-        "07:00-11:59": { initializations: 5, reinitializations: 2, total: 7 },
-        "12:00-16:59": { initializations: 8, reinitializations: 1, total: 9 },
-        "17:00-21:59": { initializations: 3, reinitializations: 4, total: 7 },
-        "22:00-02:59": { initializations: 1, reinitializations: 0, total: 1 },
-        "03:00-06:59": { initializations: 0, reinitializations: 1, total: 1 }
-      }
+        '07:00-11:59': { initializations: 5, reinitializations: 2, total: 7 },
+        '12:00-16:59': { initializations: 8, reinitializations: 1, total: 9 },
+        '17:00-21:59': { initializations: 3, reinitializations: 4, total: 7 },
+        '22:00-02:59': { initializations: 1, reinitializations: 0, total: 1 },
+        '03:00-06:59': { initializations: 0, reinitializations: 1, total: 1 },
+      },
     };
   }
 
@@ -38,7 +38,7 @@ class TaskManagerAPIMock {
     const agent = {
       id: agentId,
       initialized: new Date().toISOString(),
-      status: 'active'
+      status: 'active',
     };
 
     this.agents.set(agentId, agent);
@@ -47,7 +47,7 @@ class TaskManagerAPIMock {
     return {
       success: true,
       agent,
-      message: `Agent ${agentId} initialized successfully`
+      message: `Agent ${agentId} initialized successfully`,
     };
   }
 
@@ -63,14 +63,14 @@ class TaskManagerAPIMock {
       return {
         success: true,
         agent,
-        message: `Agent ${agentId} reinitialized successfully`
+        message: `Agent ${agentId} reinitialized successfully`,
       };
     }
 
     return {
       success: false,
       error: `Agent ${agentId} not found`,
-      message: 'Cannot reinitialize non-existent agent'
+      message: 'Cannot reinitialize non-existent agent',
     };
   }
 
@@ -86,7 +86,7 @@ class TaskManagerAPIMock {
       return {
         success: false,
         error: `Missing required fields: ${missing.join(', ')}`,
-        message: 'Feature validation failed'
+        message: 'Feature validation failed',
       };
     }
 
@@ -96,7 +96,7 @@ class TaskManagerAPIMock {
       return {
         success: false,
         error: `Invalid category: ${featureData.category}. Valid categories: ${validCategories.join(', ')}`,
-        message: 'Category validation failed'
+        message: 'Category validation failed',
       };
     }
 
@@ -105,7 +105,7 @@ class TaskManagerAPIMock {
       ...featureData,
       status: 'suggested',
       created: new Date().toISOString(),
-      updated: new Date().toISOString()
+      updated: new Date().toISOString(),
     };
 
     this.features.set(feature.id, feature);
@@ -113,7 +113,7 @@ class TaskManagerAPIMock {
     return {
       success: true,
       feature,
-      message: 'Feature suggested successfully'
+      message: 'Feature suggested successfully',
     };
   }
 
@@ -136,7 +136,7 @@ class TaskManagerAPIMock {
       success: true,
       features,
       count: features.length,
-      filter
+      filter,
     };
   }
 
@@ -148,7 +148,7 @@ class TaskManagerAPIMock {
       return {
         success: false,
         error: `Feature ${featureId} not found`,
-        message: 'Cannot approve non-existent feature'
+        message: 'Cannot approve non-existent feature',
       };
     }
 
@@ -161,7 +161,7 @@ class TaskManagerAPIMock {
     return {
       success: true,
       feature,
-      message: `Feature ${featureId} approved successfully`
+      message: `Feature ${featureId} approved successfully`,
     };
   }
 
@@ -173,7 +173,7 @@ class TaskManagerAPIMock {
       return {
         success: false,
         error: `Feature ${featureId} not found`,
-        message: 'Cannot reject non-existent feature'
+        message: 'Cannot reject non-existent feature',
       };
     }
 
@@ -186,7 +186,7 @@ class TaskManagerAPIMock {
     return {
       success: true,
       feature,
-      message: `Feature ${featureId} rejected successfully`
+      message: `Feature ${featureId} rejected successfully`,
     };
   }
 
@@ -211,11 +211,11 @@ class TaskManagerAPIMock {
           suggested: byStatus.suggested || 0,
           approved: byStatus.approved || 0,
           rejected: byStatus.rejected || 0,
-          implemented: byStatus.implemented || 0
+          implemented: byStatus.implemented || 0,
         },
         by_category: byCategory,
-        last_updated: new Date().toISOString()
-      }
+        last_updated: new Date().toISOString(),
+      },
     };
   }
 
@@ -228,8 +228,8 @@ class TaskManagerAPIMock {
       stats: {
         ...this.initializationStats,
         current_day: new Date().toISOString().split('T')[0],
-        current_bucket: this.getCurrentTimeBucket()
-      }
+        current_bucket: this.getCurrentTimeBucket(),
+      },
     };
   }
 
@@ -240,22 +240,22 @@ class TaskManagerAPIMock {
     return {
       success: true,
       featureManager: {
-        version: "3.0.0",
-        description: "Feature lifecycle management system with strict approval workflow"
+        version: '3.0.0',
+        description: 'Feature lifecycle management system with strict approval workflow',
       },
       coreCommands: {
         discovery: {
-          guide: { description: "Get comprehensive guide" },
-          methods: { description: "List all available API methods" }
+          guide: { description: 'Get comprehensive guide' },
+          methods: { description: 'List all available API methods' },
         },
         featureManagement: {
-          "suggest-feature": { description: "Create new feature suggestion" },
-          "approve-feature": { description: "Approve suggested feature" },
-          "reject-feature": { description: "Reject suggested feature" },
-          "list-features": { description: "List features with filtering" },
-          "feature-stats": { description: "Get feature statistics" }
-        }
-      }
+          'suggest-feature': { description: 'Create new feature suggestion' },
+          'approve-feature': { description: 'Approve suggested feature' },
+          'reject-feature': { description: 'Reject suggested feature' },
+          'list-features': { description: 'List features with filtering' },
+          'feature-stats': { description: 'Get feature statistics' },
+        },
+      },
     };
   }
 
@@ -268,9 +268,9 @@ class TaskManagerAPIMock {
       methods: [
         'guide', 'methods', 'initialize', 'reinitialize',
         'suggest-feature', 'approve-feature', 'reject-feature',
-        'list-features', 'feature-stats', 'get-initialization-stats'
+        'list-features', 'feature-stats', 'get-initialization-stats',
       ],
-      message: 'Available API methods'
+      message: 'Available API methods',
     };
   }
 
@@ -279,11 +279,11 @@ class TaskManagerAPIMock {
    */
   getCurrentTimeBucket() {
     const hour = new Date().getHours();
-    if (hour >= 7 && hour < 12) return "07:00-11:59";
-    if (hour >= 12 && hour < 17) return "12:00-16:59";
-    if (hour >= 17 && hour < 22) return "17:00-21:59";
-    if (hour >= 22 || hour < 3) return "22:00-02:59";
-    return "03:00-06:59";
+    if (hour >= 7 && hour < 12) {return '07:00-11:59';}
+    if (hour >= 12 && hour < 17) {return '12:00-16:59';}
+    if (hour >= 17 && hour < 22) {return '17:00-21:59';}
+    if (hour >= 22 || hour < 3) {return '22:00-02:59';}
+    return '03:00-06:59';
   }
 
   /**
@@ -405,7 +405,7 @@ class HTTPClientMock {
     return {
       status: 200,
       data: { message: 'Mock response' },
-      headers: { 'content-type': 'application/json' }
+      headers: { 'content-type': 'application/json' },
     };
   }
 
@@ -419,7 +419,7 @@ class HTTPClientMock {
     return {
       status: 201,
       data: { message: 'Mock response', created: data },
-      headers: { 'content-type': 'application/json' }
+      headers: { 'content-type': 'application/json' },
     };
   }
 
@@ -502,5 +502,5 @@ module.exports = {
   TaskManagerAPIMock,
   FileSystemMock,
   HTTPClientMock,
-  DatabaseMock
+  DatabaseMock,
 };

@@ -61,7 +61,7 @@ describe('Feature Lifecycle Integration Tests', () => {
           description: `Comprehensive test for ${category} category feature lifecycle`,
           business_value: `Validates ${category} workflow functionality`,
           category,
-        })
+        }),
       );
 
       // 2. Suggest all features
@@ -90,7 +90,7 @@ describe('Feature Lifecycle Integration Tests', () => {
       // 4. Test filtering by category
       for (const category of categories) {
         const categoryResult = await execAPI('list-features', [
-          JSON.stringify({ category })
+          JSON.stringify({ category }),
         ], { projectRoot: testDir });
 
         expect(categoryResult.success).toBe(true);
@@ -186,7 +186,7 @@ describe('Feature Lifecycle Integration Tests', () => {
           description: `Testing concurrent suggestion number ${i + 1}`,
           business_value: `Validates concurrent processing capability ${i + 1}`,
           category: ['enhancement', 'bug-fix', 'new-feature', 'performance'][i % 4],
-        })
+        }),
       );
 
       const commands = features.map(featureData => ({
@@ -273,7 +273,7 @@ describe('Feature Lifecycle Integration Tests', () => {
 
       // 4. Test filtering approved features
       const approvedResult = await execAPI('list-features', [
-        JSON.stringify({ status: 'approved' })
+        JSON.stringify({ status: 'approved' }),
       ], { projectRoot: testDir });
 
       expect(approvedResult.success).toBe(true);
@@ -293,7 +293,7 @@ describe('Feature Lifecycle Integration Tests', () => {
         generateTestFeature({
           title: `Bulk Approval Feature ${i + 1}`,
           category: ['enhancement', 'bug-fix', 'performance'][i % 3],
-        })
+        }),
       );
 
       const featureIds = [];
@@ -324,7 +324,7 @@ describe('Feature Lifecycle Integration Tests', () => {
 
       // 3. Verify individual approvals from bulk operation
       const listApprovedResult = await execAPI('list-features', [
-        JSON.stringify({ status: 'approved' })
+        JSON.stringify({ status: 'approved' }),
       ], { projectRoot: testDir });
 
       expect(listApprovedResult.success).toBe(true);
@@ -346,7 +346,7 @@ describe('Feature Lifecycle Integration Tests', () => {
 
       // 5. Verify all features are now approved
       const finalListResult = await execAPI('list-features', [
-        JSON.stringify({ status: 'approved' })
+        JSON.stringify({ status: 'approved' }),
       ], { projectRoot: testDir });
 
       expect(finalListResult.success).toBe(true);
@@ -445,7 +445,7 @@ describe('Feature Lifecycle Integration Tests', () => {
 
       // 4. Test filtering rejected features
       const rejectedResult = await execAPI('list-features', [
-        JSON.stringify({ status: 'rejected' })
+        JSON.stringify({ status: 'rejected' }),
       ], { projectRoot: testDir });
 
       expect(rejectedResult.success).toBe(true);
@@ -534,7 +534,7 @@ describe('Feature Lifecycle Integration Tests', () => {
     test('should filter features by status', async () => {
       // 1. Test suggested filter
       const suggestedResult = await execAPI('list-features', [
-        JSON.stringify({ status: 'suggested' })
+        JSON.stringify({ status: 'suggested' }),
       ], { projectRoot: testDir });
 
       expect(suggestedResult.success).toBe(true);
@@ -543,7 +543,7 @@ describe('Feature Lifecycle Integration Tests', () => {
 
       // 2. Test approved filter
       const approvedResult = await execAPI('list-features', [
-        JSON.stringify({ status: 'approved' })
+        JSON.stringify({ status: 'approved' }),
       ], { projectRoot: testDir });
 
       expect(approvedResult.success).toBe(true);
@@ -552,7 +552,7 @@ describe('Feature Lifecycle Integration Tests', () => {
 
       // 3. Test rejected filter
       const rejectedResult = await execAPI('list-features', [
-        JSON.stringify({ status: 'rejected' })
+        JSON.stringify({ status: 'rejected' }),
       ], { projectRoot: testDir });
 
       expect(rejectedResult.success).toBe(true);
@@ -565,7 +565,7 @@ describe('Feature Lifecycle Integration Tests', () => {
 
       for (const category of categories) {
         const categoryResult = await execAPI('list-features', [
-          JSON.stringify({ category })
+          JSON.stringify({ category }),
         ], { projectRoot: testDir });
 
         expect(categoryResult.success).toBe(true);
@@ -577,19 +577,19 @@ describe('Feature Lifecycle Integration Tests', () => {
     test('should handle combined filters', async () => {
       // 1. Test status + category combination
       const enhancementApprovedResult = await execAPI('list-features', [
-        JSON.stringify({ status: 'approved', category: 'enhancement' })
+        JSON.stringify({ status: 'approved', category: 'enhancement' }),
       ], { projectRoot: testDir });
 
       expect(enhancementApprovedResult.success).toBe(true);
       if (enhancementApprovedResult.features.length > 0) {
         expect(enhancementApprovedResult.features.every(f =>
-          f.status === 'approved' && f.category === 'enhancement'
+          f.status === 'approved' && f.category === 'enhancement',
         )).toBe(true);
       }
 
       // 2. Test empty result filters
       const nonExistentResult = await execAPI('list-features', [
-        JSON.stringify({ status: 'implemented', category: 'non-existent' })
+        JSON.stringify({ status: 'implemented', category: 'non-existent' }),
       ], { projectRoot: testDir });
 
       expect(nonExistentResult.success).toBe(true);
@@ -651,7 +651,7 @@ describe('Feature Lifecycle Integration Tests', () => {
 
       // 5. Filter approved features for development
       const approvedResult = await execAPI('list-features', [
-        JSON.stringify({ status: 'approved' })
+        JSON.stringify({ status: 'approved' }),
       ], { projectRoot: testDir });
 
       expect(approvedResult.success).toBe(true);
@@ -679,7 +679,7 @@ describe('Feature Lifecycle Integration Tests', () => {
         generateTestFeature({
           title: `Complex Workflow Feature ${i + 1}`,
           category: ['enhancement', 'bug-fix', 'new-feature', 'performance', 'security'][i % 5],
-        })
+        }),
       );
 
       // 2. Suggest all features

@@ -15,7 +15,7 @@ const {
   restoreMocks,
   getMockManager,
   expectFeatureCreated,
-  expectAgentInitialized
+  expectAgentInitialized,
 } = require('../mocks/mockSetup');
 
 const {
@@ -25,13 +25,13 @@ const {
   TestDataFactory,
   TestExecution,
   PerformanceUtils,
-  TestLogger
+  TestLogger,
 } = require('../utils/testUtils');
 
 const {
   SAMPLE_FEATURES,
   SAMPLE_AGENTS,
-  TEST_CONFIGURATIONS
+  TEST_CONFIGURATIONS,
 } = require('../fixtures/sampleData');
 
 describe('Example Test with Mock Framework', () => {
@@ -121,7 +121,7 @@ describe('Example Test with Mock Framework', () => {
 
       const featureData = TestDataFactory.createFeatureData({
         title: 'Test Feature with Mocks',
-        category: 'enhancement'
+        category: 'enhancement',
       });
 
       const result = await APIExecutor.createTestFeature(featureData);
@@ -190,7 +190,7 @@ describe('Example Test with Mock Framework', () => {
       // Update features data
       const updatedData = {
         ...featuresData,
-        features: [{ id: 'test-feature', title: 'Test Feature' }]
+        features: [{ id: 'test-feature', title: 'Test Feature' }],
       };
 
       testEnvironment.writeFeatures(updatedData);
@@ -232,8 +232,8 @@ describe('Example Test with Mock Framework', () => {
       await expect(
         TestExecution.withTimeout(
           new Promise(resolve => setTimeout(resolve, 2000)),
-          1000
-        )
+          1000,
+        ),
       ).rejects.toThrow('Test timed out after 1000ms');
     });
 
@@ -254,7 +254,7 @@ describe('Example Test with Mock Framework', () => {
 
     test('should execute promises in parallel with concurrency control', async () => {
       const promises = Array.from({ length: 10 }, (_, i) =>
-        Promise.resolve(i * 2)
+        Promise.resolve(i * 2),
       );
 
       const results = await TestExecution.parallel(promises, 3);
@@ -275,7 +275,7 @@ describe('Example Test with Mock Framework', () => {
 
       const customFeature = TestDataFactory.createFeatureData({
         category: 'bug-fix',
-        priority: 'high'
+        priority: 'high',
       });
 
       expect(customFeature.category).toBe('bug-fix');

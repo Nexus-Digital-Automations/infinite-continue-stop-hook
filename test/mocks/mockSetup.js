@@ -108,10 +108,10 @@ class MockManager {
           if (event === 'data') {
             setTimeout(() => callback(JSON.stringify(result)), 10);
           }
-        })
+        }),
       },
       stderr: {
-        on: jest.fn()
+        on: jest.fn(),
       },
       on: jest.fn((event, callback) => {
         if (event === 'close') {
@@ -119,7 +119,7 @@ class MockManager {
         } else if (event === 'error') {
           // Don't call error callback for successful mocks
         }
-      })
+      }),
     };
 
     return mockProcess;
@@ -205,7 +205,7 @@ class MockManager {
             ok: response.status < 400,
             status: response.status,
             json: async () => response.data,
-            text: async () => JSON.stringify(response.data)
+            text: async () => JSON.stringify(response.data),
           };
         }
 
@@ -213,7 +213,7 @@ class MockManager {
           ok: true,
           status: 200,
           json: async () => ({ message: 'Mock response' }),
-          text: async () => '{"message":"Mock response"}'
+          text: async () => '{"message":"Mock response"}',
         };
       });
     }
@@ -245,11 +245,11 @@ class MockManager {
     this.fileSystem.mkdirSync('/test-project', { recursive: true });
     this.fileSystem.writeFileSync('/test-project/package.json', JSON.stringify({
       name: 'test-project',
-      version: '1.0.0'
+      version: '1.0.0',
     }));
     this.fileSystem.writeFileSync('/test-project/FEATURES.json', JSON.stringify({
       features: [],
-      metadata: { version: '3.0.0' }
+      metadata: { version: '3.0.0' },
     }));
   }
 
@@ -297,7 +297,7 @@ class MockManager {
       taskManagerAPI: this.taskManagerAPI,
       fileSystem: this.fileSystem,
       httpClient: this.httpClient,
-      database: this.database
+      database: this.database,
     };
   }
 }
@@ -360,7 +360,7 @@ function getAPICallHistory() {
       features: Array.from(mockManager.taskManagerAPI.features.values()),
       agents: Array.from(mockManager.taskManagerAPI.agents.values()),
       httpRequests: mockManager.httpClient.getRequests(),
-      dbQueries: mockManager.database.getQueries()
+      dbQueries: mockManager.database.getQueries(),
     };
   }
   return null;
@@ -409,5 +409,5 @@ module.exports = {
   getAPICallHistory,
   expectAPICall,
   expectFeatureCreated,
-  expectAgentInitialized
+  expectAgentInitialized,
 };

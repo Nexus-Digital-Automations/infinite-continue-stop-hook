@@ -96,8 +96,8 @@ function setupFeatureTestEnvironment() {
       version: '3.0.0',
       created: new Date().toISOString(),
       last_modified: new Date().toISOString(),
-      project: 'feature-test-project'
-    }
+      project: 'feature-test-project',
+    },
   };
 
   _fs.writeFileSync(FEATURES_PATH, JSON.stringify(featuresData, null, 2));
@@ -108,13 +108,13 @@ function setupFeatureTestEnvironment() {
     version: '1.0.0',
     description: 'Test project for feature management system validation',
     dependencies: {
-      express: '^4.18.0'
-    }
+      express: '^4.18.0',
+    },
   };
 
   _fs.writeFileSync(
     _path.join(TEST_PROJECT_DIR, 'package.json'),
-    JSON.stringify(packageData, null, 2)
+    JSON.stringify(packageData, null, 2),
   );
 }
 
@@ -178,7 +178,7 @@ describe('Feature Management System Unit Tests', () => {
         title: 'Add dark mode toggle',
         description: 'Implement theme switching functionality with persistent user preference storage',
         business_value: 'Improves user experience and accessibility for users in low-light environments',
-        category: 'enhancement'
+        category: 'enhancement',
       };
 
       const result = await execAPI('suggest-feature', [JSON.stringify(featureData)]);
@@ -193,7 +193,7 @@ describe('Feature Management System Unit Tests', () => {
         title: 'User authentication system',
         description: 'Complete login/logout functionality with JWT tokens and session management',
         business_value: 'Enables user-specific features and enhances security',
-        category: 'new-feature'
+        category: 'new-feature',
       };
 
       const result = await execAPI('suggest-feature', [JSON.stringify(featureData)]);
@@ -208,7 +208,7 @@ describe('Feature Management System Unit Tests', () => {
         title: 'Fix login form validation',
         description: 'Resolve email validation issues and improve error handling',
         business_value: 'Prevents user frustration and reduces support tickets',
-        category: 'bug-fix'
+        category: 'bug-fix',
       };
 
       const result = await execAPI('suggest-feature', [JSON.stringify(featureData)]);
@@ -243,7 +243,7 @@ describe('Feature Management System Unit Tests', () => {
         title: 'Feature with invalid category',
         description: 'This feature has an invalid category',
         business_value: 'Should be validated',
-        category: 'invalid-category'
+        category: 'invalid-category',
       };
 
       try {
@@ -285,7 +285,7 @@ describe('Feature Management System Unit Tests', () => {
         title: 'Test feature for filtering',
         description: 'This feature will be used to test filtering',
         business_value: 'Validates filtering functionality',
-        category: 'enhancement'
+        category: 'enhancement',
       };
 
       await execAPI('suggest-feature', [JSON.stringify(featureData)]);
@@ -309,14 +309,14 @@ describe('Feature Management System Unit Tests', () => {
         title: 'Enhancement feature',
         description: 'This is an enhancement',
         business_value: 'Improves existing functionality',
-        category: 'enhancement'
+        category: 'enhancement',
       };
 
       const bugFixFeature = {
         title: 'Bug fix feature',
         description: 'This fixes a bug',
         business_value: 'Resolves user issues',
-        category: 'bug-fix'
+        category: 'bug-fix',
       };
 
       await execAPI('suggest-feature', [JSON.stringify(enhancementFeature)]);
@@ -353,7 +353,7 @@ describe('Feature Management System Unit Tests', () => {
         title: 'Feature for approval testing',
         description: 'This feature will be used to test approval workflow',
         business_value: 'Validates approval functionality',
-        category: 'enhancement'
+        category: 'enhancement',
       };
 
       const createResult = await execAPI('suggest-feature', [JSON.stringify(featureData)]);
@@ -364,7 +364,7 @@ describe('Feature Management System Unit Tests', () => {
     test('should approve feature successfully', async () => {
       const approvalData = {
         approved_by: 'test-approver',
-        notes: 'Feature approved for implementation'
+        notes: 'Feature approved for implementation',
       };
 
       const result = await execAPI('approve-feature', [_createdFeatureId, JSON.stringify(approvalData)]);
@@ -375,7 +375,7 @@ describe('Feature Management System Unit Tests', () => {
     test('should reject feature successfully', async () => {
       const rejectionData = {
         rejected_by: 'test-reviewer',
-        reason: 'Feature requires more specification'
+        reason: 'Feature requires more specification',
       };
 
       const result = await execAPI('reject-feature', [_createdFeatureId, JSON.stringify(rejectionData)]);

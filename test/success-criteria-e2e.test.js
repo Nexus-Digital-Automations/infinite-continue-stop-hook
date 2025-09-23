@@ -254,8 +254,8 @@ describe('Success Criteria End-to-End Tests', () => {
 
   beforeAll(async () => {
     await setupE2EProject();
-    jest.setTimeout(60000); // 60 seconds for E2E tests
-  }, 60000);
+    jest.setTimeout(30000); // 30 seconds for E2E tests
+  }, 30000);
 
   afterAll(async () => {
     await cleanupE2EProject();

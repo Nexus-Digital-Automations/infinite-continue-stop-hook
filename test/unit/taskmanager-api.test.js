@@ -21,8 +21,8 @@ jest.mock('fs', () => ({
   promises: {
     access: jest.fn(),
     readFile: jest.fn(),
-    writeFile: jest.fn()
-  }
+    writeFile: jest.fn(),
+  },
 }));
 
 // Import the FeatureManagerAPI class AFTER mocking fs
@@ -385,8 +385,8 @@ describe('FeatureManagerAPI', () => {
           features: [{
             id: testFeatureId,
             status: 'suggested',
-            title: 'Test'
-          }]
+            title: 'Test',
+          }],
         };
         mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(invalidFeatures));
 
@@ -466,7 +466,7 @@ describe('FeatureManagerAPI', () => {
         const features = [
           { ...TEST_FIXTURES.validFeature, title: 'Feature 1 for bulk approval' },
           { ...TEST_FIXTURES.validFeature, title: 'Feature 2 for bulk approval' },
-          { ...TEST_FIXTURES.validFeature, title: 'Feature 3 for bulk approval' }
+          { ...TEST_FIXTURES.validFeature, title: 'Feature 3 for bulk approval' },
         ];
 
         suggestedFeatureIds = [];
@@ -504,7 +504,7 @@ describe('FeatureManagerAPI', () => {
         expect(result.approved_features).toHaveLength(2);
         expect(result.errors).toHaveLength(1);
         expect(result.errors[0]).toContain("must be in 'suggested' status to approve");
-        expect(result.errors[0]).toContain("Current status: approved");
+        expect(result.errors[0]).toContain('Current status: approved');
       });
 
       test('should handle non-existent feature IDs', async () => {

@@ -14,13 +14,13 @@ const {
   TestDataFactory,
   TestExecution,
   PerformanceUtils,
-  TestLogger
+  TestLogger,
 } = require('../utils/testUtils');
 
 const {
   SAMPLE_FEATURES,
   SAMPLE_AGENTS,
-  TEST_CONFIGURATIONS
+  TEST_CONFIGURATIONS,
 } = require('../fixtures/sampleData');
 
 describe('Basic Testing Infrastructure', () => {
@@ -76,7 +76,7 @@ describe('Basic Testing Infrastructure', () => {
       const feature = TestDataFactory.createFeatureData({
         category: 'bug-fix',
         priority: 'high',
-        title: 'Custom Title'
+        title: 'Custom Title',
       });
 
       expect(feature.category).toBe('bug-fix');
@@ -177,7 +177,7 @@ describe('Basic Testing Infrastructure', () => {
         const largeArray = new Array(1000).fill(0).map((_, i) => ({
           id: i,
           data: `test-data-${i}`,
-          nested: { value: i * 2 }
+          nested: { value: i * 2 },
         }));
         return largeArray.length;
       });
@@ -195,7 +195,7 @@ describe('Basic Testing Infrastructure', () => {
       const timeout = 100; // 100ms timeout
 
       await expect(
-        TestExecution.withTimeout(promise, timeout)
+        TestExecution.withTimeout(promise, timeout),
       ).rejects.toThrow('Test timed out after 100ms');
     });
 
@@ -229,7 +229,7 @@ describe('Basic Testing Infrastructure', () => {
         TestExecution.retry(async () => {
           attempts++;
           throw new Error('Persistent failure');
-        }, 3, 10) // 3 max retries, 10ms delay
+        }, 3, 10), // 3 max retries, 10ms delay
       ).rejects.toThrow('Persistent failure');
 
       expect(attempts).toBe(3);
@@ -237,7 +237,7 @@ describe('Basic Testing Infrastructure', () => {
 
     test('should execute promises in parallel with concurrency control', async () => {
       const promises = Array.from({ length: 8 }, (_, i) =>
-        new Promise(resolve => setTimeout(() => resolve(i * 2), 10))
+        new Promise(resolve => setTimeout(() => resolve(i * 2), 10)),
       );
 
       const results = await TestExecution.parallel(promises, 3); // Max 3 concurrent

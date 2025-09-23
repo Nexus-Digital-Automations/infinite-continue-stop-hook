@@ -20,7 +20,7 @@ const SAMPLE_FEATURES = {
     category: 'enhancement',
     estimated_hours: 8,
     priority: 'medium',
-    tags: ['ui', 'accessibility', 'preferences']
+    tags: ['ui', 'accessibility', 'preferences'],
   },
 
   newFeature: {
@@ -30,7 +30,7 @@ const SAMPLE_FEATURES = {
     category: 'new-feature',
     estimated_hours: 40,
     priority: 'high',
-    tags: ['security', 'authentication', 'backend']
+    tags: ['security', 'authentication', 'backend'],
   },
 
   bugFix: {
@@ -40,7 +40,7 @@ const SAMPLE_FEATURES = {
     category: 'bug-fix',
     estimated_hours: 4,
     priority: 'high',
-    tags: ['validation', 'forms', 'frontend']
+    tags: ['validation', 'forms', 'frontend'],
   },
 
   performance: {
@@ -50,7 +50,7 @@ const SAMPLE_FEATURES = {
     category: 'performance',
     estimated_hours: 16,
     priority: 'medium',
-    tags: ['database', 'optimization', 'caching']
+    tags: ['database', 'optimization', 'caching'],
   },
 
   security: {
@@ -60,7 +60,7 @@ const SAMPLE_FEATURES = {
     category: 'security',
     estimated_hours: 6,
     priority: 'high',
-    tags: ['security', 'headers', 'compliance']
+    tags: ['security', 'headers', 'compliance'],
   },
 
   documentation: {
@@ -70,8 +70,8 @@ const SAMPLE_FEATURES = {
     category: 'documentation',
     estimated_hours: 12,
     priority: 'low',
-    tags: ['documentation', 'api', 'developer-experience']
-  }
+    tags: ['documentation', 'api', 'developer-experience'],
+  },
 };
 
 /**
@@ -84,7 +84,7 @@ const SAMPLE_AGENTS = {
     type: 'development',
     specialization: 'frontend',
     skills: ['react', 'typescript', 'css', 'testing'],
-    status: 'active'
+    status: 'active',
   },
 
   backendAgent: {
@@ -93,7 +93,7 @@ const SAMPLE_AGENTS = {
     type: 'development',
     specialization: 'backend',
     skills: ['node.js', 'databases', 'apis', 'security'],
-    status: 'active'
+    status: 'active',
   },
 
   testingAgent: {
@@ -102,7 +102,7 @@ const SAMPLE_AGENTS = {
     type: 'quality',
     specialization: 'testing',
     skills: ['jest', 'cypress', 'unit-testing', 'integration-testing'],
-    status: 'active'
+    status: 'active',
   },
 
   securityAgent: {
@@ -111,8 +111,8 @@ const SAMPLE_AGENTS = {
     type: 'security',
     specialization: 'security',
     skills: ['penetration-testing', 'vulnerability-assessment', 'compliance'],
-    status: 'active'
-  }
+    status: 'active',
+  },
 };
 
 /**
@@ -127,7 +127,7 @@ const SAMPLE_PROJECTS = {
     database: 'postgresql',
     testing: 'jest',
     features: ['authentication', 'dashboard', 'user-management'],
-    complexity: 'medium'
+    complexity: 'medium',
   },
 
   mobileApp: {
@@ -138,7 +138,7 @@ const SAMPLE_PROJECTS = {
     database: 'mongodb',
     testing: 'detox',
     features: ['offline-sync', 'push-notifications', 'geolocation'],
-    complexity: 'high'
+    complexity: 'high',
   },
 
   apiService: {
@@ -148,7 +148,7 @@ const SAMPLE_PROJECTS = {
     database: 'mysql',
     testing: 'mocha',
     features: ['rest-api', 'authentication', 'rate-limiting'],
-    complexity: 'low'
+    complexity: 'low',
   },
 
   dataProcessing: {
@@ -158,8 +158,8 @@ const SAMPLE_PROJECTS = {
     database: 'postgresql',
     testing: 'pytest',
     features: ['etl', 'data-validation', 'monitoring'],
-    complexity: 'high'
-  }
+    complexity: 'high',
+  },
 };
 
 /**
@@ -175,7 +175,7 @@ const SAMPLE_TASKS = {
     status: 'pending',
     estimated_hours: 6,
     dependencies: [],
-    assignee: 'frontend-agent-001'
+    assignee: 'frontend-agent-001',
   },
 
   backend: {
@@ -187,7 +187,7 @@ const SAMPLE_TASKS = {
     status: 'in-progress',
     estimated_hours: 12,
     dependencies: [],
-    assignee: 'backend-agent-001'
+    assignee: 'backend-agent-001',
   },
 
   database: {
@@ -199,7 +199,7 @@ const SAMPLE_TASKS = {
     status: 'completed',
     estimated_hours: 8,
     dependencies: [],
-    assignee: 'backend-agent-001'
+    assignee: 'backend-agent-001',
   },
 
   testing: {
@@ -211,8 +211,8 @@ const SAMPLE_TASKS = {
     status: 'in-progress',
     estimated_hours: 16,
     dependencies: [],
-    assignee: 'testing-agent-001'
-  }
+    assignee: 'testing-agent-001',
+  },
 };
 
 /**
@@ -229,15 +229,15 @@ const SAMPLE_API_RESPONSES = {
       category: 'enhancement',
       status: 'suggested',
       created: '2025-09-23T14:30:00.000Z',
-      updated: '2025-09-23T14:30:00.000Z'
+      updated: '2025-09-23T14:30:00.000Z',
     },
-    message: 'Feature suggested successfully'
+    message: 'Feature suggested successfully',
   },
 
   featureValidationError: {
     success: false,
     error: 'Missing required fields: description, business_value',
-    message: 'Feature validation failed'
+    message: 'Feature validation failed',
   },
 
   featureListResponse: {
@@ -247,17 +247,17 @@ const SAMPLE_API_RESPONSES = {
         id: 'feature-1',
         title: 'Feature 1',
         status: 'suggested',
-        category: 'enhancement'
+        category: 'enhancement',
       },
       {
         id: 'feature-2',
         title: 'Feature 2',
         status: 'approved',
-        category: 'bug-fix'
-      }
+        category: 'bug-fix',
+      },
     ],
     count: 2,
-    filter: {}
+    filter: {},
   },
 
   initializationSuccess: {
@@ -265,10 +265,10 @@ const SAMPLE_API_RESPONSES = {
     agent: {
       id: 'test-agent-123',
       initialized: '2025-09-23T14:30:00.000Z',
-      status: 'active'
+      status: 'active',
     },
-    message: 'Agent test-agent-123 initialized successfully'
-  }
+    message: 'Agent test-agent-123 initialized successfully',
+  },
 };
 
 /**
@@ -283,9 +283,9 @@ const TEST_CONFIGURATIONS = {
         functions: 80,
         branches: 75,
         lines: 80,
-        statements: 80
-      }
-    }
+        statements: 80,
+      },
+    },
   },
 
   integration: {
@@ -294,8 +294,8 @@ const TEST_CONFIGURATIONS = {
     setup: {
       database: true,
       api: true,
-      cleanup: true
-    }
+      cleanup: true,
+    },
   },
 
   e2e: {
@@ -303,8 +303,8 @@ const TEST_CONFIGURATIONS = {
     retries: 1,
     browser: {
       headless: true,
-      viewport: { width: 1280, height: 720 }
-    }
+      viewport: { width: 1280, height: 720 },
+    },
   },
 
   performance: {
@@ -312,9 +312,9 @@ const TEST_CONFIGURATIONS = {
     metrics: {
       responseTime: 1000,
       memoryUsage: 100 * 1024 * 1024, // 100MB
-      cpuUsage: 70
-    }
-  }
+      cpuUsage: 70,
+    },
+  },
 };
 
 /**
@@ -324,33 +324,33 @@ const ERROR_SCENARIOS = {
   networkTimeout: {
     type: 'network',
     message: 'Request timeout after 10000ms',
-    code: 'ETIMEDOUT'
+    code: 'ETIMEDOUT',
   },
 
   validationError: {
     type: 'validation',
     message: 'Invalid input data',
-    details: ['Field "email" is required', 'Field "password" must be at least 8 characters']
+    details: ['Field "email" is required', 'Field "password" must be at least 8 characters'],
   },
 
   authenticationError: {
     type: 'authentication',
     message: 'Invalid credentials',
-    code: 401
+    code: 401,
   },
 
   serverError: {
     type: 'server',
     message: 'Internal server error',
-    code: 500
+    code: 500,
   },
 
   rateLimitError: {
     type: 'rateLimit',
     message: 'Too many requests',
     code: 429,
-    retryAfter: 60
-  }
+    retryAfter: 60,
+  },
 };
 
 /**
@@ -363,8 +363,8 @@ const TEST_SCENARIOS = {
       { action: 'suggest-feature', data: SAMPLE_FEATURES.enhancement },
       { action: 'list-features', filter: { status: 'suggested' } },
       { action: 'approve-feature', approvalData: { approved_by: 'product-manager' } },
-      { action: 'list-features', filter: { status: 'approved' } }
-    ]
+      { action: 'list-features', filter: { status: 'approved' } },
+    ],
   },
 
   multiAgentWorkflow: {
@@ -373,8 +373,8 @@ const TEST_SCENARIOS = {
     tasks: [
       { agent: 'backend-agent-001', task: SAMPLE_TASKS.backend },
       { agent: 'frontend-agent-001', task: SAMPLE_TASKS.frontend },
-      { agent: 'testing-agent-001', task: SAMPLE_TASKS.testing }
-    ]
+      { agent: 'testing-agent-001', task: SAMPLE_TASKS.testing },
+    ],
   },
 
   errorRecovery: {
@@ -382,9 +382,9 @@ const TEST_SCENARIOS = {
     scenarios: [
       { error: ERROR_SCENARIOS.networkTimeout, recovery: 'retry' },
       { error: ERROR_SCENARIOS.validationError, recovery: 'fix-data' },
-      { error: ERROR_SCENARIOS.serverError, recovery: 'fallback' }
-    ]
-  }
+      { error: ERROR_SCENARIOS.serverError, recovery: 'fallback' },
+    ],
+  },
 };
 
 module.exports = {
@@ -395,5 +395,5 @@ module.exports = {
   SAMPLE_API_RESPONSES,
   TEST_CONFIGURATIONS,
   ERROR_SCENARIOS,
-  TEST_SCENARIOS
+  TEST_SCENARIOS,
 };

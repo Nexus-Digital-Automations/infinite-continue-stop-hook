@@ -15,7 +15,7 @@ const {
   StopHookTestHelpers,
   FeatureTestHelpers,
   E2EAssertions,
-  E2E_TIMEOUT
+  E2E_TIMEOUT,
 } = require('./e2e-utils');
 
 describe('Stop Hook Integration E2E', () => {
@@ -43,7 +43,7 @@ describe('Stop Hook Integration E2E', () => {
       const stopResult = await StopHookTestHelpers.simulateAgentExecution(
         environment,
         agentId,
-        1000 // 1 second of simulated work
+        1000, // 1 second of simulated work
       );
 
       // Step 2: Validate stop hook response
@@ -53,7 +53,7 @@ describe('Stop Hook Integration E2E', () => {
       // Step 3: Test stop hook command directly
       const directStopResult = await CommandExecutor.executeStopHook(
         ['authorize-stop', agentId, stopReason],
-        { projectRoot: environment.testDir, expectSuccess: false } // May succeed or fail based on conditions
+        { projectRoot: environment.testDir, expectSuccess: false }, // May succeed or fail based on conditions
       );
 
       // Validate that stop hook processed the request
@@ -72,7 +72,7 @@ describe('Stop Hook Integration E2E', () => {
         title: 'Stop Hook Integration Feature',
         description: 'Feature created during stop hook integration testing',
         business_value: 'Validates stop hook with concurrent feature operations',
-        category: 'enhancement'
+        category: 'enhancement',
       });
 
       E2EAssertions.assertCommandSuccess(featureResult.result, 'Feature creation during stop hook test');
@@ -83,14 +83,14 @@ describe('Stop Hook Integration E2E', () => {
         environment,
         featureId,
         agentId,
-        'Feature approved during stop hook integration'
+        'Feature approved during stop hook integration',
       );
 
       // Step 3: Request stop authorization after completing work
       const stopResult = await StopHookTestHelpers.simulateAgentExecution(
         environment,
         agentId,
-        500
+        500,
       );
 
       // Step 4: Validate both feature operation and stop hook succeeded
@@ -112,7 +112,7 @@ describe('Stop Hook Integration E2E', () => {
       const maxIterations = 3;
       const continueResults = await StopHookTestHelpers.testInfiniteContinue(
         environment,
-        maxIterations
+        maxIterations,
       );
 
       // Validate continue iterations
@@ -144,7 +144,7 @@ describe('Stop Hook Integration E2E', () => {
       const concurrentStreams = [];
       for (let i = 0; i < streamCount; i++) {
         concurrentStreams.push(
-          StopHookTestHelpers.testInfiniteContinue(environment, maxIterationsPerStream)
+          StopHookTestHelpers.testInfiniteContinue(environment, maxIterationsPerStream),
         );
       }
 
@@ -176,7 +176,7 @@ describe('Stop Hook Integration E2E', () => {
         title: 'Pending Task Feature',
         description: 'Feature that represents pending work',
         business_value: 'Represents incomplete work that should affect stop conditions',
-        category: 'enhancement'
+        category: 'enhancement',
       });
 
       const featureId = pendingTasksResult.result.stdout.match(/Feature ID: (\w+)/)[1];
@@ -186,8 +186,8 @@ describe('Stop Hook Integration E2E', () => {
         ['authorize-stop', agentId, 'Attempting stop with pending tasks'],
         {
           projectRoot: environment.testDir,
-          expectSuccess: false // May fail due to pending tasks
-        }
+          expectSuccess: false, // May fail due to pending tasks
+        },
       );
 
       // Step 2: Complete tasks and test stop authorization
@@ -195,7 +195,7 @@ describe('Stop Hook Integration E2E', () => {
         environment,
         featureId,
         agentId,
-        'Completing pending task for stop condition test'
+        'Completing pending task for stop condition test',
       );
 
       // Try to stop after completing tasks
@@ -203,8 +203,8 @@ describe('Stop Hook Integration E2E', () => {
         ['authorize-stop', agentId, 'All tasks completed - requesting stop'],
         {
           projectRoot: environment.testDir,
-          expectSuccess: false // May succeed now
-        }
+          expectSuccess: false, // May succeed now
+        },
       );
 
       // Step 3: Validate system state awareness
@@ -223,16 +223,16 @@ describe('Stop Hook Integration E2E', () => {
       const invalidStopResults = await Promise.allSettled([
         CommandExecutor.executeStopHook(
           ['authorize-stop'], // Missing agent ID
-          { projectRoot: environment.testDir, expectSuccess: false }
+          { projectRoot: environment.testDir, expectSuccess: false },
         ),
         CommandExecutor.executeStopHook(
           ['authorize-stop', '', 'Empty agent ID'],
-          { projectRoot: environment.testDir, expectSuccess: false }
+          { projectRoot: environment.testDir, expectSuccess: false },
         ),
         CommandExecutor.executeStopHook(
           ['invalid-command', agentId, 'Invalid command'],
-          { projectRoot: environment.testDir, expectSuccess: false }
-        )
+          { projectRoot: environment.testDir, expectSuccess: false },
+        ),
       ]);
 
       // All invalid calls should fail gracefully
@@ -246,7 +246,7 @@ describe('Stop Hook Integration E2E', () => {
       const validStopResult = await StopHookTestHelpers.simulateAgentExecution(
         environment,
         agentId,
-        300
+        300,
       );
 
       // Should work despite previous errors
@@ -267,7 +267,7 @@ describe('Stop Hook Integration E2E', () => {
         title: 'Lifecycle Integration Test Feature',
         description: 'Feature for testing complete lifecycle with stop hook integration',
         business_value: 'Validates stop hook integration throughout feature management',
-        category: 'enhancement'
+        category: 'enhancement',
       });
 
       const featureId = initialFeature.result.stdout.match(/Feature ID: (\w+)/)[1];
@@ -277,8 +277,8 @@ describe('Stop Hook Integration E2E', () => {
         ['check-stop-conditions', agentId],
         {
           projectRoot: environment.testDir,
-          expectSuccess: false // May succeed or fail based on system state
-        }
+          expectSuccess: false, // May succeed or fail based on system state
+        },
       );
 
       // Step 3: Approve feature and test stop hook at approval phase
@@ -286,15 +286,15 @@ describe('Stop Hook Integration E2E', () => {
         environment,
         featureId,
         agentId,
-        'Feature approved - checking stop conditions'
+        'Feature approved - checking stop conditions',
       );
 
       stopResult = await CommandExecutor.executeStopHook(
         ['check-stop-conditions', agentId],
         {
           projectRoot: environment.testDir,
-          expectSuccess: false
-        }
+          expectSuccess: false,
+        },
       );
 
       // Step 4: Final stop authorization
@@ -302,8 +302,8 @@ describe('Stop Hook Integration E2E', () => {
         ['authorize-stop', agentId, 'Feature lifecycle completed successfully'],
         {
           projectRoot: environment.testDir,
-          expectSuccess: false
-        }
+          expectSuccess: false,
+        },
       );
 
       // Step 5: Validate complete integration
@@ -329,9 +329,9 @@ describe('Stop Hook Integration E2E', () => {
             {
               projectRoot: environment.testDir,
               expectSuccess: false,
-              timeout: 5000 // Shorter timeout for performance test
-            }
-          )
+              timeout: 5000, // Shorter timeout for performance test
+            },
+          ),
         );
       }
 
@@ -366,7 +366,7 @@ describe('Stop Hook Integration E2E', () => {
         title: 'Pre-Failure Feature',
         description: 'Feature created before failure simulation',
         business_value: 'Establishes system state before recovery test',
-        category: 'enhancement'
+        category: 'enhancement',
       });
 
       const preFailureId = preFailureFeature.result.stdout.match(/Feature ID: (\w+)/)[1];
@@ -378,16 +378,16 @@ describe('Stop Hook Integration E2E', () => {
           {
             projectRoot: '/nonexistent/path', // Invalid path
             expectSuccess: false,
-            timeout: 2000
-          }
+            timeout: 2000,
+          },
         ),
         CommandExecutor.executeStopHook(
           ['authorize-stop', agentId, 'test'],
           {
             projectRoot: environment.testDir,
-            timeout: 1 // Extremely short timeout to force timeout
-          }
-        )
+            timeout: 1, // Extremely short timeout to force timeout
+          },
+        ),
       ]);
 
       // Step 3: Test system recovery
@@ -395,7 +395,7 @@ describe('Stop Hook Integration E2E', () => {
         title: 'Post-Recovery Feature',
         description: 'Feature created after recovery simulation',
         business_value: 'Validates system recovery capabilities',
-        category: 'enhancement'
+        category: 'enhancement',
       });
 
       const postRecoveryId = recoveryFeature.result.stdout.match(/Feature ID: (\w+)/)[1];
@@ -404,7 +404,7 @@ describe('Stop Hook Integration E2E', () => {
       const recoveryStopResult = await StopHookTestHelpers.simulateAgentExecution(
         environment,
         agentId,
-        500
+        500,
       );
 
       // Step 5: Validate system integrity after recovery

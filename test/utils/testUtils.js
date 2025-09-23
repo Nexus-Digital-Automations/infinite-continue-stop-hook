@@ -88,8 +88,8 @@ class APIExecutor {
         if (!silent) {
           console.log(`Command: ${command} ${args.join(' ')}`);
           console.log(`Exit code: ${code}`);
-          if (stdout) console.log(`Stdout: ${stdout.substring(0, 500)}...`);
-          if (stderr) console.log(`Stderr: ${stderr.substring(0, 500)}...`);
+          if (stdout) {console.log(`Stdout: ${stdout.substring(0, 500)}...`);}
+          if (stderr) {console.log(`Stderr: ${stderr.substring(0, 500)}...`);}
         }
 
         try {
@@ -137,7 +137,7 @@ class APIExecutor {
       title: 'Test Feature',
       description: 'This is a test feature for automated testing',
       business_value: 'Validates testing infrastructure',
-      category: 'enhancement'
+      category: 'enhancement',
     };
 
     const feature = { ...defaultFeature, ...featureData };
@@ -176,8 +176,8 @@ class TestEnvironment {
         version: '3.0.0',
         created: new Date().toISOString(),
         last_modified: new Date().toISOString(),
-        project: this.testName
-      }
+        project: this.testName,
+      },
     };
 
     _fs.writeFileSync(this.featuresPath, JSON.stringify(featuresData, null, 2));
@@ -187,7 +187,7 @@ class TestEnvironment {
       name: this.testName,
       version: '1.0.0',
       description: `Test project for ${this.testName}`,
-      dependencies: {}
+      dependencies: {},
     };
 
     _fs.writeFileSync(this.packagePath, JSON.stringify(packageData, null, 2));
@@ -223,7 +223,7 @@ class TestDataFactory {
       description: 'A comprehensive test feature for validation',
       business_value: 'Ensures system reliability and testing coverage',
       category: 'enhancement',
-      ...overrides
+      ...overrides,
     };
   }
 
@@ -233,7 +233,7 @@ class TestDataFactory {
       name: `Test User ${Date.now()}`,
       email: `test-${Date.now()}@example.com`,
       role: 'tester',
-      ...overrides
+      ...overrides,
     };
   }
 
@@ -243,7 +243,7 @@ class TestDataFactory {
       description: 'Test project for automated testing',
       version: '1.0.0',
       type: 'testing',
-      ...overrides
+      ...overrides,
     };
   }
 
@@ -255,7 +255,7 @@ class TestDataFactory {
       status: 'pending',
       priority: 'medium',
       category: 'test',
-      ...overrides
+      ...overrides,
     };
   }
 }
@@ -316,7 +316,7 @@ const customMatchers = {
           : `Expected ${JSON.stringify(received)} to be a valid feature`,
       pass,
     };
-  }
+  },
 };
 
 /**
@@ -327,8 +327,8 @@ class TestExecution {
     return Promise.race([
       promise,
       new Promise((_, reject) =>
-        setTimeout(() => reject(new Error(`Test timed out after ${timeout}ms`)), timeout)
-      )
+        setTimeout(() => reject(new Error(`Test timed out after ${timeout}ms`)), timeout),
+      ),
     ]);
   }
 
@@ -384,7 +384,7 @@ class PerformanceUtils {
       rss: after.rss - before.rss,
       heapTotal: after.heapTotal - before.heapTotal,
       heapUsed: after.heapUsed - before.heapUsed,
-      external: after.external - before.external
+      external: after.external - before.external,
     };
 
     return { result, memoryDelta };
@@ -423,5 +423,5 @@ module.exports = {
   customMatchers,
   TestExecution,
   PerformanceUtils,
-  TestLogger
+  TestLogger,
 };

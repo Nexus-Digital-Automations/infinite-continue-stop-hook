@@ -63,7 +63,7 @@ describe('Initialization Statistics', () => {
         const morningTimes = [
           '2025-09-23T07:00:00.000Z',
           '2025-09-23T09:30:00.000Z',
-          '2025-09-23T11:59:59.999Z'
+          '2025-09-23T11:59:59.999Z',
         ];
 
         morningTimes.forEach(timeStr => {
@@ -77,7 +77,7 @@ describe('Initialization Statistics', () => {
         const afternoonTimes = [
           '2025-09-23T12:00:00.000Z',
           '2025-09-23T14:30:00.000Z',
-          '2025-09-23T16:59:59.999Z'
+          '2025-09-23T16:59:59.999Z',
         ];
 
         afternoonTimes.forEach(timeStr => {
@@ -91,7 +91,7 @@ describe('Initialization Statistics', () => {
         const eveningTimes = [
           '2025-09-23T17:00:00.000Z',
           '2025-09-23T19:45:00.000Z',
-          '2025-09-23T21:59:59.999Z'
+          '2025-09-23T21:59:59.999Z',
         ];
 
         eveningTimes.forEach(timeStr => {
@@ -106,7 +106,7 @@ describe('Initialization Statistics', () => {
           '2025-09-23T22:00:00.000Z',
           '2025-09-23T23:30:00.000Z',
           '2025-09-24T00:30:00.000Z',
-          '2025-09-24T02:59:59.999Z'
+          '2025-09-24T02:59:59.999Z',
         ];
 
         lateNightTimes.forEach(timeStr => {
@@ -120,7 +120,7 @@ describe('Initialization Statistics', () => {
         const earlyMorningTimes = [
           '2025-09-23T03:00:00.000Z',
           '2025-09-23T05:15:00.000Z',
-          '2025-09-23T06:59:59.999Z'
+          '2025-09-23T06:59:59.999Z',
         ];
 
         earlyMorningTimes.forEach(timeStr => {
@@ -137,7 +137,7 @@ describe('Initialization Statistics', () => {
           { time: '2025-09-23T16:59:59.999Z', expected: '12:00-16:59' },
           { time: '2025-09-23T17:00:00.000Z', expected: '17:00-21:59' },
           { time: '2025-09-23T21:59:59.999Z', expected: '17:00-21:59' },
-          { time: '2025-09-23T22:00:00.000Z', expected: '22:00-02:59' }
+          { time: '2025-09-23T22:00:00.000Z', expected: '22:00-02:59' },
         ];
 
         edgeCases.forEach(({ time, expected }) => {
@@ -427,7 +427,7 @@ describe('Initialization Statistics', () => {
         // Should not contain very old entries
         const oldestEntry = stats.daily_history[0];
         expect(new Date(oldestEntry.date).getTime()).toBeGreaterThan(
-          new Date('2025-09-05').getTime()
+          new Date('2025-09-05').getTime(),
         );
       });
     });
@@ -475,7 +475,7 @@ describe('Initialization Statistics', () => {
           expect(buckets[bucketName]).toHaveProperty('reinitializations');
           expect(buckets[bucketName]).toHaveProperty('total');
           expect(buckets[bucketName].total).toBe(
-            buckets[bucketName].initializations + buckets[bucketName].reinitializations
+            buckets[bucketName].initializations + buckets[bucketName].reinitializations,
           );
         });
       });
@@ -532,13 +532,13 @@ describe('Initialization Statistics', () => {
         const updatedStats = await api.getInitializationStats();
 
         expect(updatedStats.stats.total_initializations).toBeGreaterThan(
-          initialStats.stats.total_initializations
+          initialStats.stats.total_initializations,
         );
         expect(updatedStats.stats.total_reinitializations).toBeGreaterThan(
-          initialStats.stats.total_reinitializations
+          initialStats.stats.total_reinitializations,
         );
         expect(updatedStats.stats.time_buckets['12:00-16:59'].total).toBeGreaterThan(
-          initialStats.stats.time_buckets['12:00-16:59'].total
+          initialStats.stats.time_buckets['12:00-16:59'].total,
         );
       });
 
@@ -596,7 +596,7 @@ describe('Initialization Statistics', () => {
       test('should recover from missing metadata structure', async () => {
         const corruptedFeatures = {
           project: 'test',
-          features: []
+          features: [],
           // Missing metadata
         };
         mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(corruptedFeatures));
@@ -612,7 +612,7 @@ describe('Initialization Statistics', () => {
         const features = testHelpers.deepClone(TEST_FIXTURES.emptyFeaturesFile);
         features.metadata.initialization_stats = {
           total_initializations: 'not a number',
-          time_buckets: 'not an object'
+          time_buckets: 'not an object',
         };
         mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(features));
 
@@ -652,7 +652,7 @@ describe('Initialization Statistics', () => {
           '2025-03-09T06:59:59.999Z', // Before DST
           '2025-03-09T07:00:00.000Z', // DST begins
           '2025-11-02T06:59:59.999Z', // Before DST ends
-          '2025-11-02T07:00:00.000Z'  // DST ends
+          '2025-11-02T07:00:00.000Z',  // DST ends
         ];
 
         dstTimes.forEach(timeStr => {

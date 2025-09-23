@@ -16,7 +16,7 @@ const crypto = require('crypto');
 // Test configuration constants
 const PROJECT_ROOT = path.join(__dirname, '..', '..');
 const TEST_DATA_DIR = path.join(__dirname, '..', 'test-data');
-const E2E_TIMEOUT = 60000; // 60 seconds for E2E operations
+const E2E_TIMEOUT = 30000; // 30 seconds for E2E operations
 const API_TIMEOUT = 10000; // 10 seconds for API calls (matching system design)
 
 /**
@@ -65,14 +65,14 @@ class E2EEnvironment {
         created: new Date().toISOString(),
         updated: new Date().toISOString(),
         total_features: 0,
-        approval_history: []
+        approval_history: [],
       },
       workflow_config: {
         require_approval: true,
         auto_reject_timeout_hours: 168,
         allowed_statuses: ['suggested', 'approved', 'rejected', 'implemented'],
-        required_fields: ['title', 'description', 'business_value', 'category']
-      }
+        required_fields: ['title', 'description', 'business_value', 'category'],
+      },
     };
 
     await fs.writeFile(this.featuresPath, JSON.stringify(initialFeatures, null, 2));
@@ -90,16 +90,16 @@ class E2EEnvironment {
         start: 'echo "Test project started"',
         build: 'echo "Test project built"',
         test: 'jest',
-        lint: 'echo "Linting passed"'
+        lint: 'echo "Linting passed"',
       },
       devDependencies: {
-        jest: '^30.1.3'
-      }
+        jest: '^30.1.3',
+      },
     };
 
     await fs.writeFile(
       path.join(this.testDir, 'package.json'),
-      JSON.stringify(packageJson, null, 2)
+      JSON.stringify(packageJson, null, 2),
     );
   }
 
@@ -125,7 +125,7 @@ class E2EEnvironment {
       if (stats.isDirectory()) {
         const files = await fs.readdir(dirPath);
         await Promise.all(
-          files.map(file => this.removeDirectory(path.join(dirPath, file)))
+          files.map(file => this.removeDirectory(path.join(dirPath, file))),
         );
         await fs.rmdir(dirPath);
       } else {
@@ -174,7 +174,7 @@ class CommandExecutor {
       cwd = process.cwd(),
       timeout = E2E_TIMEOUT,
       env = process.env,
-      expectSuccess = true
+      expectSuccess = true,
     } = options;
 
     return new Promise((resolve, reject) => {
@@ -195,7 +195,7 @@ class CommandExecutor {
         stdio: ['pipe', 'pipe', 'pipe'],
         env: { ...env, NODE_ENV: 'test' },
         cwd,
-        shell: true
+        shell: true,
       });
 
       let stdout = '';
@@ -216,7 +216,7 @@ class CommandExecutor {
 
       // Handle completion
       child.on('close', (code) => {
-        if (isResolved) return;
+        if (isResolved) {return;}
         isResolved = true;
 
         const result = {
@@ -225,7 +225,7 @@ class CommandExecutor {
           stderr: stderr.trim(),
           duration: Date.now() - startTime,
           success: code === 0,
-          command: `${command} ${args.join(' ')}`.trim()
+          command: `${command} ${args.join(' ')}`.trim(),
         };
 
         if (expectSuccess && code !== 0) {
@@ -238,7 +238,7 @@ class CommandExecutor {
       });
 
       child.on('error', (error) => {
-        if (isResolved) return;
+        if (isResolved) {return;}
         isResolved = true;
 
         error.result = {
@@ -247,7 +247,7 @@ class CommandExecutor {
           stderr: stderr.trim(),
           duration: Date.now() - startTime,
           success: false,
-          command: `${command} ${args.join(' ')}`.trim()
+          command: `${command} ${args.join(' ')}`.trim(),
         };
 
         reject(error);
@@ -255,7 +255,7 @@ class CommandExecutor {
 
       // Handle timeout
       const timeoutId = setTimeout(() => {
-        if (isResolved) return;
+        if (isResolved) {return;}
         isResolved = true;
 
         child.kill('SIGKILL');
@@ -268,7 +268,7 @@ class CommandExecutor {
           duration: timeout,
           success: false,
           command: `${command} ${args.join(' ')}`.trim(),
-          timeout: true
+          timeout: true,
         };
 
         reject(error);
@@ -289,13 +289,16 @@ class CommandExecutor {
       PROJECT_ROOT + '/taskmanager-api.js',
       command,
       ...args,
-      '--project-root',
-      options.projectRoot || process.cwd()
     ];
 
-    return this.execute('node', apiArgs, {
+    // Add project root if specified
+    if (options.projectRoot) {
+      apiArgs.push('--project-root', options.projectRoot);
+    }
+
+    return this.execute('timeout', [`${API_TIMEOUT/1000}s`, 'node', ...apiArgs], {
       ...options,
-      timeout: options.timeout || API_TIMEOUT
+      timeout: options.timeout || API_TIMEOUT,
     });
   }
 
@@ -307,7 +310,7 @@ class CommandExecutor {
 
     return this.execute('node', hookArgs, {
       ...options,
-      timeout: options.timeout || API_TIMEOUT
+      timeout: options.timeout || API_TIMEOUT,
     });
   }
 }
@@ -326,7 +329,7 @@ class FeatureTestHelpers {
       description: 'This is a comprehensive test feature designed for E2E validation purposes. It includes detailed information to meet validation requirements and ensure proper testing of all system components and workflows.',
       business_value: 'Validates E2E testing functionality by providing comprehensive test coverage and ensuring all system components work correctly together in realistic scenarios',
       category: 'enhancement',
-      ...overrides
+      ...overrides,
     };
   }
 
@@ -341,13 +344,13 @@ class FeatureTestHelpers {
       title: data.title,
       description: data.description,
       business_value: data.business_value,
-      category: data.category
+      category: data.category,
     });
 
     const result = await CommandExecutor.executeAPI(
       'suggest-feature',
       [jsonData],
-      { projectRoot: environment.testDir }
+      { projectRoot: environment.testDir },
     );
 
     return { result, featureData: data };
@@ -359,13 +362,13 @@ class FeatureTestHelpers {
   static async approveFeature(environment, featureId, approver = 'e2e-test', notes = 'E2E test approval') {
     const approvalData = JSON.stringify({
       approved_by: approver,
-      notes: notes
+      notes: notes,
     });
 
     return CommandExecutor.executeAPI(
       'approve-feature',
       [featureId, approvalData],
-      { projectRoot: environment.testDir }
+      { projectRoot: environment.testDir },
     );
   }
 
@@ -375,13 +378,37 @@ class FeatureTestHelpers {
   static async rejectFeature(environment, featureId, rejector = 'e2e-test', reason = 'E2E test rejection') {
     const rejectionData = JSON.stringify({
       rejected_by: rejector,
-      reason: reason
+      reason: reason,
     });
 
     return CommandExecutor.executeAPI(
       'reject-feature',
       [featureId, rejectionData],
-      { projectRoot: environment.testDir }
+      { projectRoot: environment.testDir },
+    );
+  }
+
+  /**
+   * List features with filtering
+   */
+  static async listFeatures(environment, filter = {}) {
+    const args = Object.keys(filter).length > 0 ? [JSON.stringify(filter)] : [];
+
+    return CommandExecutor.executeAPI(
+      'list-features',
+      args,
+      { projectRoot: environment.testDir },
+    );
+  }
+
+  /**
+   * Get feature statistics
+   */
+  static async getFeatureStats(environment) {
+    return CommandExecutor.executeAPI(
+      'feature-stats',
+      [],
+      { projectRoot: environment.testDir },
     );
   }
 
@@ -419,7 +446,7 @@ class StopHookTestHelpers {
     // Test stop hook authorization
     return CommandExecutor.executeStopHook(
       ['authorize-stop', agentId, 'E2E test completion'],
-      { projectRoot: environment.testDir }
+      { projectRoot: environment.testDir },
     );
   }
 
@@ -434,8 +461,8 @@ class StopHookTestHelpers {
         ['continue-iteration', `e2e-iteration-${i}`],
         {
           projectRoot: environment.testDir,
-          expectSuccess: false // May fail when stop is authorized
-        }
+          expectSuccess: false, // May fail when stop is authorized
+        },
       );
 
       iterations.push(result);
@@ -472,7 +499,7 @@ class PerformanceTestHelpers {
       min: Math.min(...results),
       max: Math.max(...results),
       avg: results.reduce((sum, time) => sum + time, 0) / results.length,
-      results
+      results,
     };
   }
 
@@ -517,23 +544,23 @@ class MultiAgentTestHelpers {
       for (let j = 0; j < operationsPerAgent; j++) {
         const featureData = FeatureTestHelpers.createFeatureData({
           title: `Agent ${i} Feature ${j}`,
-          description: `Feature created by agent ${i}, operation ${j}`
+          description: `Feature created by agent ${i}, operation ${j}`,
         });
 
         operations.push(
-          FeatureTestHelpers.suggestFeature(environment, featureData)
+          FeatureTestHelpers.suggestFeature(environment, featureData),
         );
       }
 
       agents.push({
         id: agentId,
-        operations: Promise.all(operations)
+        operations: Promise.all(operations),
       });
     }
 
     // Wait for all agents to complete
     const results = await Promise.all(
-      agents.map(agent => agent.operations.catch(error => ({ error, agentId: agent.id })))
+      agents.map(agent => agent.operations.catch(error => ({ error, agentId: agent.id }))),
     );
 
     return { agents, results };
@@ -564,12 +591,28 @@ class E2EAssertions {
   }
 
   /**
-   * Assert output contains text
+   * Assert output contains text (handles both JSON and text responses)
    */
   static assertOutputContains(result, expectedText, message = '') {
     const fullOutput = `${result.stdout} ${result.stderr}`.toLowerCase();
     if (!fullOutput.includes(expectedText.toLowerCase())) {
       throw new Error(`Output does not contain "${expectedText}" ${message}\nActual output: ${fullOutput}`);
+    }
+  }
+
+  /**
+   * Assert JSON response contains expected message
+   */
+  static assertJsonContains(result, expectedText, message = '') {
+    try {
+      const parsed = JSON.parse(result.stdout);
+      const responseText = JSON.stringify(parsed).toLowerCase();
+      if (!responseText.includes(expectedText.toLowerCase())) {
+        throw new Error(`JSON response does not contain "${expectedText}" ${message}\nActual response: ${responseText}`);
+      }
+    } catch (error) {
+      // Fall back to text search if not JSON
+      this.assertOutputContains(result, expectedText, message);
     }
   }
 
@@ -596,6 +639,34 @@ class E2EAssertions {
       throw new Error(`Failed to extract feature ID: ${error.message}\nResponse: ${commandResult.stdout}`);
     }
   }
+
+  /**
+   * Assert JSON response contains expected fields
+   */
+  static assertJsonResponse(result, expectedFields = []) {
+    let parsed;
+    try {
+      parsed = JSON.parse(result.stdout);
+    } catch (error) {
+      throw new Error(`Response is not valid JSON: ${result.stdout}`);
+    }
+
+    expectedFields.forEach(field => {
+      if (!(field in parsed)) {
+        throw new Error(`Response missing expected field '${field}': ${result.stdout}`);
+      }
+    });
+
+    return parsed;
+  }
+
+  /**
+   * Assert command succeeded with JSON response
+   */
+  static assertCommandSuccessWithJson(result, message = '') {
+    this.assertCommandSuccess(result, message);
+    return this.assertJsonResponse(result, ['success']);
+  }
 }
 
 module.exports = {
@@ -609,5 +680,5 @@ module.exports = {
   PROJECT_ROOT,
   TEST_DATA_DIR,
   E2E_TIMEOUT,
-  API_TIMEOUT
+  API_TIMEOUT,
 };

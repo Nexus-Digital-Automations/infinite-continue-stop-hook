@@ -357,7 +357,7 @@ describe('CLI Commands Integration Tests', () => {
         generateTestFeature({
           title: `Bulk CLI Feature ${i + 1}`,
           category: 'enhancement',
-        })
+        }),
       );
 
       const featureIds = [];

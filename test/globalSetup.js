@@ -29,7 +29,7 @@ module.exports = async () => {
     'test/temp/projects',
     'test/temp/data',
     'coverage',
-    '.jest-cache'
+    '.jest-cache',
   ];
 
   testDirs.forEach(dir => {
@@ -75,8 +75,8 @@ module.exports = async () => {
       UNIT: 5000,
       INTEGRATION: 15000,
       E2E: 30000,
-      PERFORMANCE: 60000
-    }
+      PERFORMANCE: 60000,
+    },
   };
 
   // Performance monitoring setup
@@ -85,7 +85,7 @@ module.exports = async () => {
     global.testPerformanceData = {
       suites: [],
       slowTests: [],
-      memoryUsage: []
+      memoryUsage: [],
     };
   }
 
@@ -150,7 +150,7 @@ module.exports = async () => {
     ENABLE_LOGGING: process.env.TEST_DEBUG === 'true',
     ENABLE_PERFORMANCE_MONITORING: process.env.MONITOR_TEST_PERFORMANCE === 'true',
     ENABLE_COVERAGE: process.env.COVERAGE === 'true',
-    STRICT_MODE: process.env.STRICT_TEST_MODE === 'true'
+    STRICT_MODE: process.env.STRICT_TEST_MODE === 'true',
   };
 
   // Test utilities global registration
@@ -174,7 +174,7 @@ module.exports = async () => {
         fs.rmSync(tempDir, { recursive: true, force: true });
         fs.mkdirSync(tempDir, { recursive: true });
       }
-    }
+    },
   };
 
   console.log('✅ Jest global setup completed successfully');

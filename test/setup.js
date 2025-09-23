@@ -55,12 +55,12 @@ global.testUtils = {
   getTestType: () => {
     if (expect.getState().currentTestName) {
       const testPath = expect.getState().testPath;
-      if (testPath.includes('/unit/')) return 'unit';
-      if (testPath.includes('/integration/')) return 'integration';
-      if (testPath.includes('/e2e/')) return 'e2e';
+      if (testPath.includes('/unit/')) {return 'unit';}
+      if (testPath.includes('/integration/')) {return 'integration';}
+      if (testPath.includes('/e2e/')) {return 'e2e';}
     }
     return 'unknown';
-  }
+  },
 };
 
 // Global error handling
@@ -80,7 +80,7 @@ beforeAll(() => {
     nodeVersion: process.version,
     platform: process.platform,
     testTimeout: testTimeout,
-    testType: global.testUtils.getTestType()
+    testType: global.testUtils.getTestType(),
   });
 });
 
@@ -154,7 +154,7 @@ if (process.env.MONITOR_TEST_PERFORMANCE === 'true') {
       TestLogger.warn('Slow or memory-intensive test detected', {
         test: expect.getState().currentTestName,
         duration: `${duration}ms`,
-        memoryDelta: `${Math.round(memoryDelta / 1024 / 1024)}MB`
+        memoryDelta: `${Math.round(memoryDelta / 1024 / 1024)}MB`,
       });
     }
   });
@@ -163,5 +163,5 @@ if (process.env.MONITOR_TEST_PERFORMANCE === 'true') {
 // Export setup configuration for other modules
 module.exports = {
   testTimeout,
-  testUtils: global.testUtils
+  testUtils: global.testUtils,
 };

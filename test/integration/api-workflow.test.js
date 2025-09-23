@@ -121,7 +121,7 @@ describe('API Workflow Integration Tests', () => {
 
       // 8. Test filtering by status
       const approvedFeaturesResult = await execAPI('list-features', [
-        JSON.stringify({ status: 'approved' })
+        JSON.stringify({ status: 'approved' }),
       ], { projectRoot: testDir });
 
       expect(approvedFeaturesResult.success).toBe(true);
@@ -183,7 +183,7 @@ describe('API Workflow Integration Tests', () => {
       ];
 
       const suggestPromises = features.map(featureData =>
-        execAPI('suggest-feature', [JSON.stringify(featureData)], { projectRoot: testDir })
+        execAPI('suggest-feature', [JSON.stringify(featureData)], { projectRoot: testDir }),
       );
 
       const suggestResults = await Promise.all(suggestPromises);
@@ -211,7 +211,7 @@ describe('API Workflow Integration Tests', () => {
 
       // 3. Verify all features are approved
       const listResult = await execAPI('list-features', [
-        JSON.stringify({ status: 'approved' })
+        JSON.stringify({ status: 'approved' }),
       ], { projectRoot: testDir });
 
       expect(listResult.success).toBe(true);
@@ -300,7 +300,7 @@ describe('API Workflow Integration Tests', () => {
       // 1. Initialize multiple agents concurrently
       const agentIds = ['agent-001', 'agent-002', 'agent-003'];
       const initPromises = agentIds.map(agentId =>
-        execAPI('initialize', [agentId], { projectRoot: testDir })
+        execAPI('initialize', [agentId], { projectRoot: testDir }),
       );
 
       const initResults = await Promise.all(initPromises);
@@ -321,7 +321,7 @@ describe('API Workflow Integration Tests', () => {
 
       // 3. Reinitialize all agents concurrently
       const reinitPromises = agentIds.map(agentId =>
-        execAPI('reinitialize', [agentId], { projectRoot: testDir })
+        execAPI('reinitialize', [agentId], { projectRoot: testDir }),
       );
 
       const reinitResults = await Promise.all(reinitPromises);
@@ -448,7 +448,7 @@ describe('API Workflow Integration Tests', () => {
 
           case 'suggest':
             const suggestResult = await execAPI('suggest-feature', [
-              JSON.stringify(operation.feature)
+              JSON.stringify(operation.feature),
             ], { projectRoot: testDir });
             expect(suggestResult.success).toBe(true);
             suggestedFeatures.push(suggestResult.feature.id);

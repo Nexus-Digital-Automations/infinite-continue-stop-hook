@@ -18,7 +18,7 @@ const {
   StopHookTestHelpers,
   E2EAssertions,
   E2E_TIMEOUT,
-  API_TIMEOUT
+  API_TIMEOUT,
 } = require('./e2e-utils');
 
 describe('Performance Validation E2E', () => {
@@ -43,7 +43,7 @@ describe('Performance Validation E2E', () => {
         title: `Performance Test Feature ${Date.now()}`,
         description: 'Feature created for performance testing',
         business_value: 'Validates API performance under load',
-        category: 'enhancement'
+        category: 'enhancement',
       });
 
       // Measure performance over multiple iterations
@@ -52,7 +52,7 @@ describe('Performance Validation E2E', () => {
       // Validate performance thresholds
       const thresholds = {
         maxAvg: API_TIMEOUT * 0.5, // Average should be less than 50% of timeout
-        maxMax: API_TIMEOUT * 0.8   // Maximum should be less than 80% of timeout
+        maxMax: API_TIMEOUT * 0.8,   // Maximum should be less than 80% of timeout
       };
 
       try {
@@ -82,8 +82,8 @@ describe('Performance Validation E2E', () => {
             title: `Approval Performance Test Feature ${i}`,
             description: `Feature ${i} for approval performance testing`,
             business_value: 'Validates approval API performance',
-            category: 'enhancement'
-          })
+            category: 'enhancement',
+          }),
         );
       }
 
@@ -101,7 +101,7 @@ describe('Performance Validation E2E', () => {
           environment,
           id,
           `performance-tester-${approvalIndex}`,
-          `Performance test approval ${approvalIndex}`
+          `Performance test approval ${approvalIndex}`,
         );
         approvalIndex++;
         return result;
@@ -112,7 +112,7 @@ describe('Performance Validation E2E', () => {
       // Validate approval performance
       const approvalThresholds = {
         maxAvg: API_TIMEOUT * 0.6, // Approval may be slightly slower than suggestion
-        maxMax: API_TIMEOUT * 0.9
+        maxMax: API_TIMEOUT * 0.9,
       };
 
       try {
@@ -137,8 +137,8 @@ describe('Performance Validation E2E', () => {
             title: `Bulk Performance Test Feature ${i}`,
             description: `Feature ${i} for bulk operation performance testing`,
             business_value: 'Validates bulk operation performance',
-            category: 'enhancement'
-          })
+            category: 'enhancement',
+          }),
         );
       }
 
@@ -156,7 +156,7 @@ describe('Performance Validation E2E', () => {
         return CommandExecutor.executeAPI(
           'bulk-approve',
           [...bulkFeatureIds, 'bulk-performance-tester', 'Bulk performance test approval'],
-          { projectRoot: environment.testDir }
+          { projectRoot: environment.testDir },
         );
       };
 
@@ -187,7 +187,7 @@ describe('Performance Validation E2E', () => {
       const { agents, results } = await MultiAgentTestHelpers.simulateConcurrentAgents(
         environment,
         concurrentAgents,
-        operationsPerAgent
+        operationsPerAgent,
       );
       const totalTime = Date.now() - startTime;
 
@@ -220,8 +220,8 @@ describe('Performance Validation E2E', () => {
             title: `Contention Performance Feature ${i}`,
             description: `Feature ${i} for testing performance under resource contention`,
             business_value: 'Validates performance during concurrent file access',
-            category: 'enhancement'
-          })
+            category: 'enhancement',
+          }),
         );
       }
 
@@ -231,7 +231,7 @@ describe('Performance Validation E2E', () => {
 
       // Analyze contention results
       const successfulOperations = contentionResults.filter(
-        result => result.status === 'fulfilled' && result.value.result.success
+        result => result.status === 'fulfilled' && result.value.result.success,
       ).length;
 
       const contentionThroughput = successfulOperations / (contentionTime / 1000); // operations per second
@@ -255,7 +255,7 @@ describe('Performance Validation E2E', () => {
         return StopHookTestHelpers.simulateAgentExecution(
           environment,
           'performance-stop-agent',
-          100 // Short execution time for performance testing
+          100, // Short execution time for performance testing
         );
       };
 
@@ -264,7 +264,7 @@ describe('Performance Validation E2E', () => {
       // Validate stop hook performance
       const stopHookThresholds = {
         maxAvg: API_TIMEOUT, // Stop hooks should complete within API timeout
-        maxMax: API_TIMEOUT * 1.5
+        maxMax: API_TIMEOUT * 1.5,
       };
 
       try {
@@ -295,7 +295,7 @@ describe('Performance Validation E2E', () => {
         return {
           results,
           duration: endTime - startTime,
-          totalIterations: results.reduce((sum, stream) => sum + stream.length, 0)
+          totalIterations: results.reduce((sum, stream) => sum + stream.length, 0),
         };
       };
 
@@ -314,7 +314,7 @@ describe('Performance Validation E2E', () => {
       const scalabilityTests = [
         { featureCount: 10, expectedMaxTime: API_TIMEOUT * 0.5 },
         { featureCount: 25, expectedMaxTime: API_TIMEOUT * 0.7 },
-        { featureCount: 50, expectedMaxTime: API_TIMEOUT }
+        { featureCount: 50, expectedMaxTime: API_TIMEOUT },
       ];
 
       for (const test of scalabilityTests) {
@@ -326,8 +326,8 @@ describe('Performance Validation E2E', () => {
               title: `Scalability Test Feature ${i}`,
               description: `Feature ${i} for scalability validation with ${test.featureCount} features`,
               business_value: `Tests system performance with ${test.featureCount} total features`,
-              category: 'enhancement'
-            })
+              category: 'enhancement',
+            }),
           );
         }
 
@@ -361,8 +361,8 @@ describe('Performance Validation E2E', () => {
               title: `Memory Test Feature ${i}`,
               description: `Feature ${i} for memory usage validation - contains detailed description with comprehensive business value analysis and implementation considerations that help validate memory efficiency during large-scale operations across the entire system infrastructure`,
               business_value: `Comprehensive business value analysis for feature ${i} including detailed ROI calculations, user impact assessments, technical debt reduction metrics, and long-term strategic alignment with organizational objectives and performance benchmarks`,
-              category: 'enhancement'
-            })
+              category: 'enhancement',
+            }),
           );
         }
 
@@ -397,9 +397,9 @@ describe('Performance Validation E2E', () => {
             title: 'Baseline Suggestion Test',
             description: 'Feature for baseline performance measurement',
             business_value: 'Establishes performance baseline',
-            category: 'enhancement'
+            category: 'enhancement',
           }),
-          expectedMaxTime: API_TIMEOUT * 0.5
+          expectedMaxTime: API_TIMEOUT * 0.5,
         },
         {
           name: 'Feature Approval',
@@ -408,18 +408,18 @@ describe('Performance Validation E2E', () => {
               title: 'Baseline Approval Test',
               description: 'Feature for baseline approval measurement',
               business_value: 'Establishes approval performance baseline',
-              category: 'enhancement'
+              category: 'enhancement',
             });
             const featureId = result.stdout.match(/Feature ID: (\w+)/)[1];
             return FeatureTestHelpers.approveFeature(environment, featureId, 'baseline-tester', 'Baseline test');
           },
-          expectedMaxTime: API_TIMEOUT * 0.7
+          expectedMaxTime: API_TIMEOUT * 0.7,
         },
         {
           name: 'Feature Listing',
           test: () => CommandExecutor.executeAPI('list-features', [], { projectRoot: environment.testDir }),
-          expectedMaxTime: API_TIMEOUT * 0.3
-        }
+          expectedMaxTime: API_TIMEOUT * 0.3,
+        },
       ];
 
       for (const baselineTest of baselineTests) {
@@ -446,7 +446,7 @@ describe('Performance Validation E2E', () => {
           title: 'E2E Workflow Performance Test',
           description: 'Complete workflow for performance validation',
           business_value: 'Validates end-to-end performance',
-          category: 'enhancement'
+          category: 'enhancement',
         });
 
         const featureId = result.stdout.match(/Feature ID: (\w+)/)[1];

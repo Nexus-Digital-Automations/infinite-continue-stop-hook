@@ -15,7 +15,7 @@ const {
   FeatureTestHelpers,
   StopHookTestHelpers,
   E2EAssertions,
-  E2E_TIMEOUT
+  E2E_TIMEOUT,
 } = require('./e2e-utils');
 
 describe('Complete System Workflows E2E', () => {
@@ -41,7 +41,7 @@ describe('Complete System Workflows E2E', () => {
         title: 'E2E Test Feature - Complete Workflow',
         description: 'Test feature for validating complete workflow from suggestion to implementation',
         business_value: 'Validates end-to-end feature management system',
-        category: 'enhancement'
+        category: 'enhancement',
       });
 
       const suggestionResult = await FeatureTestHelpers.suggestFeature(environment, featureData);
@@ -66,7 +66,7 @@ describe('Complete System Workflows E2E', () => {
         environment,
         featureId,
         'e2e-workflow-tester',
-        'Approved for complete workflow testing'
+        'Approved for complete workflow testing',
       );
       E2EAssertions.assertCommandSuccess(approvalResult, 'Feature approval');
       E2EAssertions.assertOutputContains(approvalResult, 'approved successfully');
@@ -81,7 +81,7 @@ describe('Complete System Workflows E2E', () => {
       const listResult = await CommandExecutor.executeAPI(
         'list-features',
         [],
-        { projectRoot: environment.testDir }
+        { projectRoot: environment.testDir },
       );
       E2EAssertions.assertCommandSuccess(listResult, 'Feature listing');
       E2EAssertions.assertOutputContains(listResult, featureData.title);
@@ -105,7 +105,7 @@ describe('Complete System Workflows E2E', () => {
         title: 'E2E Rejection Test Feature',
         description: 'Feature to test rejection workflow',
         business_value: 'Validates rejection handling',
-        category: 'new-feature'
+        category: 'new-feature',
       });
 
       const featureId = E2EAssertions.extractFeatureId(result);
@@ -115,7 +115,7 @@ describe('Complete System Workflows E2E', () => {
         environment,
         featureId,
         'e2e-workflow-tester',
-        'Not aligned with testing priorities'
+        'Not aligned with testing priorities',
       );
       E2EAssertions.assertCommandSuccess(rejectionResult, 'Feature rejection');
       E2EAssertions.assertOutputContains(rejectionResult, 'Feature rejected successfully');
@@ -146,19 +146,19 @@ describe('Complete System Workflows E2E', () => {
             title: `System Integration Feature ${i + 1}`,
             description: `Feature ${i + 1} for system integration testing`,
             business_value: `Validates system scalability aspect ${i + 1}`,
-            category: 'enhancement'
-          })
+            category: 'enhancement',
+          }),
         );
       }
 
       const featureResults = await Promise.all(featurePromises);
       const featureIds = featureResults.map(result =>
-        E2EAssertions.extractFeatureId(result.result)
+        E2EAssertions.extractFeatureId(result.result),
       );
 
       // Step 3: Batch approve features
       const approvalPromises = featureIds.map(id =>
-        FeatureTestHelpers.approveFeature(environment, id, 'system-integrator', 'Batch approved for testing')
+        FeatureTestHelpers.approveFeature(environment, id, 'system-integrator', 'Batch approved for testing'),
       );
       await Promise.all(approvalPromises);
 
@@ -172,7 +172,7 @@ describe('Complete System Workflows E2E', () => {
       const statusResult = await CommandExecutor.executeAPI(
         'status',
         [],
-        { projectRoot: environment.testDir }
+        { projectRoot: environment.testDir },
       );
       E2EAssertions.assertCommandSuccess(statusResult, 'System status');
       E2EAssertions.assertOutputContains(statusResult, 'approved: 3');
@@ -181,7 +181,7 @@ describe('Complete System Workflows E2E', () => {
       const stopResult = await StopHookTestHelpers.simulateAgentExecution(
         environment,
         'system-integration-agent',
-        500
+        500,
       );
 
       // Verify stop hook handled properly (may succeed or fail based on conditions)
@@ -199,8 +199,8 @@ describe('Complete System Workflows E2E', () => {
         ['', '', '', 'invalid-category'], // Invalid inputs
         {
           projectRoot: environment.testDir,
-          expectSuccess: false
-        }
+          expectSuccess: false,
+        },
       );
       E2EAssertions.assertCommandFailure(invalidResult, 'Invalid feature suggestion');
 
@@ -213,7 +213,7 @@ describe('Complete System Workflows E2E', () => {
         title: 'Recovery Test Feature',
         description: 'Feature to test error recovery',
         business_value: 'Validates system resilience',
-        category: 'enhancement'
+        category: 'enhancement',
       });
       E2EAssertions.assertCommandSuccess(validResult, 'Feature suggestion after error');
 
@@ -223,8 +223,8 @@ describe('Complete System Workflows E2E', () => {
         ['non-existent-id', 'tester', 'test'],
         {
           projectRoot: environment.testDir,
-          expectSuccess: false
-        }
+          expectSuccess: false,
+        },
       );
       E2EAssertions.assertCommandFailure(nonExistentResult, 'Non-existent feature approval');
 
@@ -246,7 +246,7 @@ describe('Complete System Workflows E2E', () => {
         title: 'User-Requested Dashboard Enhancement',
         description: 'Add real-time metrics display to improve monitoring capabilities',
         business_value: 'Reduces time to detect issues by 50% and improves operational efficiency',
-        category: 'enhancement'
+        category: 'enhancement',
       });
 
       const suggestionResult = await FeatureTestHelpers.suggestFeature(environment, userFeature);
@@ -258,7 +258,7 @@ describe('Complete System Workflows E2E', () => {
       const detailsResult = await CommandExecutor.executeAPI(
         'feature-details',
         [featureId],
-        { projectRoot: environment.testDir }
+        { projectRoot: environment.testDir },
       );
       E2EAssertions.assertCommandSuccess(detailsResult, 'Feature details retrieval');
       E2EAssertions.assertOutputContains(detailsResult, userFeature.title);
@@ -268,7 +268,7 @@ describe('Complete System Workflows E2E', () => {
         environment,
         featureId,
         'product-manager',
-        'Approved based on strong ROI metrics and user feedback'
+        'Approved based on strong ROI metrics and user feedback',
       );
       E2EAssertions.assertCommandSuccess(approvalResult);
 
@@ -277,7 +277,7 @@ describe('Complete System Workflows E2E', () => {
       const trackingResult = await CommandExecutor.executeAPI(
         'list-features',
         ['--status', 'approved'],
-        { projectRoot: environment.testDir }
+        { projectRoot: environment.testDir },
       );
       E2EAssertions.assertCommandSuccess(trackingResult);
       E2EAssertions.assertOutputContains(trackingResult, userFeature.title);
@@ -307,7 +307,7 @@ describe('Complete System Workflows E2E', () => {
         title: 'API Performance Optimization',
         description: 'Implement caching layer to improve API response times',
         business_value: 'Reduces server load by 40% and improves user experience',
-        category: 'performance'
+        category: 'performance',
       });
 
       const techFeatureId = E2EAssertions.extractFeatureId(techResult);
@@ -317,7 +317,7 @@ describe('Complete System Workflows E2E', () => {
         title: 'Customer Analytics Dashboard',
         description: 'Add comprehensive customer behavior analytics',
         business_value: 'Enables data-driven decisions and increases customer satisfaction',
-        category: 'new-feature'
+        category: 'new-feature',
       });
 
       const bizFeatureId = E2EAssertions.extractFeatureId(bizResult);
@@ -327,14 +327,14 @@ describe('Complete System Workflows E2E', () => {
         environment,
         techFeatureId,
         'tech-lead',
-        'Critical for system scalability'
+        'Critical for system scalability',
       );
 
       await FeatureTestHelpers.approveFeature(
         environment,
         bizFeatureId,
         'business-analyst',
-        'Aligns with customer success metrics'
+        'Aligns with customer success metrics',
       );
 
       // Step 4: Validate multi-stakeholder state

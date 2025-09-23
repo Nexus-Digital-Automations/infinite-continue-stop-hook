@@ -96,8 +96,8 @@ function setupFeatureTestEnvironment() {
       version: '3.0.0',
       created: new Date().toISOString(),
       last_modified: new Date().toISOString(),
-      project: 'feature-test-project'
-    }
+      project: 'feature-test-project',
+    },
   };
 
   _fs.writeFileSync(FEATURES_PATH, JSON.stringify(featuresData, null, 2));
@@ -108,13 +108,13 @@ function setupFeatureTestEnvironment() {
     version: '1.0.0',
     description: 'Test project for feature management system validation',
     dependencies: {
-      express: '^4.18.0'
-    }
+      express: '^4.18.0',
+    },
   };
 
   _fs.writeFileSync(
     _path.join(TEST_PROJECT_DIR, 'package.json'),
-    JSON.stringify(packageData, null, 2)
+    JSON.stringify(packageData, null, 2),
   );
 }
 
@@ -174,7 +174,7 @@ describe('Feature Management System Unit Tests', () => {
         title: 'Add dark mode toggle',
         description: 'Implement theme switching functionality with persistent user preference storage',
         business_value: 'Improves user experience and accessibility for users in low-light environments',
-        category: 'enhancement'
+        category: 'enhancement',
       };
 
       const result = await execAPI('suggest-feature', [JSON.stringify(featureData)]);

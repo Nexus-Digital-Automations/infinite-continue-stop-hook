@@ -112,8 +112,8 @@ const TEST_FIXTURES = {
     suggested_by: 'test-agent',
     metadata: {
       priority: 'high',
-      estimated_effort: 'medium'
-    }
+      estimated_effort: 'medium',
+    },
   },
 
   // Invalid feature data for validation testing
@@ -121,71 +121,71 @@ const TEST_FIXTURES = {
     missingTitle: {
       description: 'Feature without title',
       business_value: 'Some business value',
-      category: 'enhancement'
+      category: 'enhancement',
     },
     emptyTitle: {
       title: '',
       description: 'Feature with empty title',
       business_value: 'Some business value',
-      category: 'enhancement'
+      category: 'enhancement',
     },
     shortTitle: {
       title: 'Short',
       description: 'Feature with title too short',
       business_value: 'Some business value',
-      category: 'enhancement'
+      category: 'enhancement',
     },
     longTitle: {
       title: 'A'.repeat(201),
       description: 'Feature with title too long',
       business_value: 'Some business value',
-      category: 'enhancement'
+      category: 'enhancement',
     },
     missingDescription: {
       title: 'Feature without description',
       business_value: 'Some business value',
-      category: 'enhancement'
+      category: 'enhancement',
     },
     shortDescription: {
       title: 'Valid Feature Title',
       description: 'Too short',
       business_value: 'Some business value',
-      category: 'enhancement'
+      category: 'enhancement',
     },
     longDescription: {
       title: 'Valid Feature Title',
       description: 'A'.repeat(2001),
       business_value: 'Some business value',
-      category: 'enhancement'
+      category: 'enhancement',
     },
     missingBusinessValue: {
       title: 'Feature without business value',
       description: 'A feature description that meets minimum length requirements for testing',
-      category: 'enhancement'
+      category: 'enhancement',
     },
     shortBusinessValue: {
       title: 'Valid Feature Title',
       description: 'A feature description that meets minimum length requirements for testing',
       business_value: 'Too short',
-      category: 'enhancement'
+      category: 'enhancement',
     },
     longBusinessValue: {
       title: 'Valid Feature Title',
       description: 'A feature description that meets minimum length requirements for testing',
       business_value: 'A'.repeat(1001),
-      category: 'enhancement'
+      category: 'enhancement',
     },
     missingCategory: {
       title: 'Feature without category',
       description: 'A feature description that meets minimum length requirements for testing',
-      business_value: 'Some business value'
+      business_value: 'Some business value',
     },
     invalidCategory: {
       title: 'Feature with invalid category',
       description: 'A feature description that meets minimum length requirements for testing',
       business_value: 'Some business value',
-      category: 'invalid-category'
-    }
+      category: 'invalid-category',
+    },
   },
 
   // Empty FEATURES.json structure
@@ -197,14 +197,14 @@ const TEST_FIXTURES = {
       created: '2025-09-23T12:00:00.000Z',
       updated: '2025-09-23T12:00:00.000Z',
       total_features: 0,
-      approval_history: []
+      approval_history: [],
     },
     workflow_config: {
       require_approval: true,
       auto_reject_timeout_hours: 168,
       allowed_statuses: ['suggested', 'approved', 'rejected', 'implemented'],
-      required_fields: ['title', 'description', 'business_value', 'category']
-    }
+      required_fields: ['title', 'description', 'business_value', 'category'],
+    },
   },
 
   // Features file with sample data
@@ -221,7 +221,7 @@ const TEST_FIXTURES = {
         created_at: '2025-09-23T10:00:00.000Z',
         updated_at: '2025-09-23T10:00:00.000Z',
         suggested_by: 'test-agent',
-        metadata: {}
+        metadata: {},
       },
       {
         id: 'feature_1695123456790_def456',
@@ -236,7 +236,7 @@ const TEST_FIXTURES = {
         approved_by: 'test-approver',
         approval_date: '2025-09-23T11:00:00.000Z',
         approval_notes: 'Approved for implementation',
-        metadata: {}
+        metadata: {},
       },
       {
         id: 'feature_1695123456791_ghi789',
@@ -251,8 +251,8 @@ const TEST_FIXTURES = {
         rejected_by: 'test-rejector',
         rejection_date: '2025-09-23T09:30:00.000Z',
         rejection_reason: 'Not aligned with project goals',
-        metadata: {}
-      }
+        metadata: {},
+      },
     ],
     metadata: {
       version: '1.0.0',
@@ -265,15 +265,15 @@ const TEST_FIXTURES = {
           action: 'approved',
           timestamp: '2025-09-23T11:00:00.000Z',
           approved_by: 'test-approver',
-          notes: 'Approved for implementation'
+          notes: 'Approved for implementation',
         },
         {
           feature_id: 'feature_1695123456791_ghi789',
           action: 'rejected',
           timestamp: '2025-09-23T09:30:00.000Z',
           rejected_by: 'test-rejector',
-          reason: 'Not aligned with project goals'
-        }
+          reason: 'Not aligned with project goals',
+        },
       ],
       initialization_stats: {
         total_initializations: 15,
@@ -284,7 +284,7 @@ const TEST_FIXTURES = {
           '12:00-16:59': { init: 5, reinit: 2 },
           '17:00-21:59': { init: 4, reinit: 3 },
           '22:00-02:59': { init: 2, reinit: 1 },
-          '03:00-06:59': { init: 1, reinit: 1 }
+          '03:00-06:59': { init: 1, reinit: 1 },
         },
         daily_history: [
           {
@@ -296,26 +296,26 @@ const TEST_FIXTURES = {
               '12:00-16:59': { init: 3, reinit: 1 },
               '17:00-21:59': { init: 2, reinit: 2 },
               '22:00-02:59': { init: 1, reinit: 0 },
-              '03:00-06:59': { init: 0, reinit: 0 }
-            }
-          }
+              '03:00-06:59': { init: 0, reinit: 0 },
+            },
+          },
         ],
         last_reset: '2025-09-23T07:00:00.000Z',
-        last_updated: '2025-09-23T12:00:00.000Z'
-      }
+        last_updated: '2025-09-23T12:00:00.000Z',
+      },
     },
     workflow_config: {
       require_approval: true,
       auto_reject_timeout_hours: 168,
       allowed_statuses: ['suggested', 'approved', 'rejected', 'implemented'],
-      required_fields: ['title', 'description', 'business_value', 'category']
+      required_fields: ['title', 'description', 'business_value', 'category'],
     },
     agents: {
       'agent-123': {
         lastHeartbeat: '2025-09-23T12:00:00.000Z',
         status: 'active',
         initialized: '2025-09-23T10:00:00.000Z',
-        sessionId: 'session123'
+        sessionId: 'session123',
       },
       'agent-456': {
         lastHeartbeat: '2025-09-23T11:30:00.000Z',
@@ -323,21 +323,21 @@ const TEST_FIXTURES = {
         initialized: '2025-09-23T09:00:00.000Z',
         reinitialized: '2025-09-23T11:30:00.000Z',
         sessionId: 'session456',
-        previousSessions: ['session789']
-      }
-    }
+        previousSessions: ['session789'],
+      },
+    },
   },
 
   // Valid approval data
   validApprovalData: {
     approved_by: 'test-approver',
-    notes: 'Feature approved after thorough review and meets all requirements'
+    notes: 'Feature approved after thorough review and meets all requirements',
   },
 
   // Valid rejection data
   validRejectionData: {
     rejected_by: 'test-rejector',
-    reason: 'Feature does not align with current project priorities and roadmap'
+    reason: 'Feature does not align with current project priorities and roadmap',
   },
 
   // Agent IDs for testing
@@ -345,8 +345,8 @@ const TEST_FIXTURES = {
     primary: 'test-agent-primary',
     secondary: 'test-agent-secondary',
     invalid: 'invalid-agent-id',
-    empty: ''
-  }
+    empty: '',
+  },
 };
 
 /**
@@ -397,7 +397,7 @@ class TimeTestUtils {
       '12:00-16:59': '2025-09-23T14:30:00.000Z',
       '17:00-21:59': '2025-09-23T19:30:00.000Z',
       '22:00-02:59': '2025-09-23T23:30:00.000Z',
-      '03:00-06:59': '2025-09-23T05:30:00.000Z'
+      '03:00-06:59': '2025-09-23T05:30:00.000Z',
     };
 
     if (!timeBuckets[bucketName]) {
@@ -514,14 +514,14 @@ const testHelpers = {
       log: console.log,
       error: console.error,
       warn: console.warn,
-      info: console.info
+      info: console.info,
     };
 
     const mockConsole = {
       log: jest.fn(),
       error: jest.fn(),
       warn: jest.fn(),
-      info: jest.fn()
+      info: jest.fn(),
     };
 
     // Replace console methods
@@ -537,14 +537,14 @@ const testHelpers = {
         console.error = originalConsole.error;
         console.warn = originalConsole.warn;
         console.info = originalConsole.info;
-      }
+      },
     };
-  }
+  },
 };
 
 module.exports = {
   MockFileSystem,
   TEST_FIXTURES,
   TimeTestUtils,
-  testHelpers
+  testHelpers,
 };

@@ -515,7 +515,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       expect(updatedStats.today_totals.initializations).toBeGreaterThan(0);
       expect(updatedStats.today_totals.reinitializations).toBeGreaterThan(0);
       expect(updatedStats.today_totals.combined).toBe(
-        updatedStats.today_totals.initializations + updatedStats.today_totals.reinitializations
+        updatedStats.today_totals.initializations + updatedStats.today_totals.reinitializations,
       );
     });
 
