@@ -1,0 +1,92 @@
+{
+  "timestamp": "2025-09-23T15:02:26.050Z",
+  "validation": {
+    "passed": false,
+    "strict_mode": false,
+    "failures": [
+      {
+        "metric": "statements",
+        "actual": 0,
+        "required": 60,
+        "severity": "critical",
+        "message": "statements coverage 0.00% is below critical threshold 60%"
+      },
+      {
+        "metric": "branches",
+        "actual": 0,
+        "required": 60,
+        "severity": "critical",
+        "message": "branches coverage 0.00% is below critical threshold 60%"
+      },
+      {
+        "metric": "functions",
+        "actual": 0,
+        "required": 60,
+        "severity": "critical",
+        "message": "functions coverage 0.00% is below critical threshold 60%"
+      },
+      {
+        "metric": "lines",
+        "actual": 0,
+        "required": 60,
+        "severity": "critical",
+        "message": "lines coverage 0.00% is below critical threshold 60%"
+      }
+    ],
+    "warnings": []
+  },
+  "coverage": {
+    "lines": {
+      "total": 14592,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 0
+    },
+    "statements": {
+      "total": 15155,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 0
+    },
+    "functions": {
+      "total": 2471,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 0
+    },
+    "branches": {
+      "total": 8470,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 0
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "thresholds": {
+    "statements": 80,
+    "branches": 75,
+    "functions": 80,
+    "lines": 80
+  },
+  "critical_thresholds": {
+    "statements": 60,
+    "branches": 60,
+    "functions": 60,
+    "lines": 60
+  },
+  "badge": null,
+  "git": {
+    "commit": "0a2217c74f03b67e0996b445bc88384042dc92a5",
+    "branch": "main"
+  },
+  "environment": {
+    "node_version": "v22.19.0",
+    "ci": true,
+    "strict_mode": false
+  }
+}

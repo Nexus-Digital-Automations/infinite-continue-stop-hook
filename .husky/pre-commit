@@ -109,7 +109,7 @@ significant_changes=$(git diff --cached --name-only | grep -E "^(lib/|taskmanage
 if [ "$significant_changes" -gt 2 ]; then
   echo "🔍 Significant changes detected, validating coverage..."
 
-  if ! run_with_timeout "30s" "npm run coverage:check" "Coverage threshold validation"; then
+  if ! run_with_timeout "30s" "npm run coverage:check:standalone" "Enhanced coverage threshold validation"; then
     echo "⚠️ Coverage thresholds not met"
     echo "📊 Current coverage may be below required thresholds"
     echo "💡 Tip: Add tests for new code or run 'npm run coverage:report' to see details"
@@ -124,6 +124,24 @@ if [ "$significant_changes" -gt 2 ]; then
   fi
 else
   echo "ℹ️ Minor changes detected, skipping coverage validation"
+fi
+
+# Stage 4.5: Performance monitoring (on significant changes)
+if [ "$significant_changes" -gt 3 ]; then
+  echo "📋 Stage 4.5: Performance monitoring"
+  echo "🔍 Running performance analysis for significant changes..."
+
+  # Run lightweight performance check (quick test suite only)
+  if ! run_with_timeout "45s" "CI=true QUIET=true node scripts/test-performance.js" "Test performance monitoring"; then
+    echo "⚠️ Performance monitoring detected potential issues"
+    echo "📈 Consider checking test execution times after commit"
+    echo "💡 Run 'npm run performance:test:verbose' for detailed analysis"
+    # Don't block commit for performance warnings, just notify
+  else
+    echo "✅ Performance monitoring completed successfully"
+  fi
+else
+  echo "ℹ️ Minor changes detected, skipping performance monitoring"
 fi
 
 # Stage 5: Final validation

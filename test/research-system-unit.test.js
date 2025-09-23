@@ -1,13 +1,12 @@
 /**
- * Research System Unit Tests
+ * Feature Management System Unit Tests
  *
- * Comprehensive unit tests for the research task generation and management system.
- * Tests the intelligent research location targeting, keyword extraction, and
- * deliverable generation logic in isolation.
+ * Comprehensive unit tests for the feature management API system.
+ * Tests feature suggestion, approval, rejection, and listing functionality.
  *
- * @author Integration Testing Agent #7
- * @version 1.0.0
- * @since 2025-09-13
+ * @author Testing Infrastructure Agent
+ * @version 2.0.0
+ * @since 2025-09-23
  */
 
 const _path = require('path');
@@ -15,13 +14,13 @@ const { spawn } = require('child_process');
 const _fs = require('fs');
 
 // Test configuration
-const TEST_PROJECT_DIR = _path.join(__dirname, 'research-system-test-project');
-const TODO_PATH = _path.join(TEST_PROJECT_DIR, 'TODO.json');
+const TEST_PROJECT_DIR = _path.join(__dirname, 'feature-management-test-project');
+const FEATURES_PATH = _path.join(TEST_PROJECT_DIR, 'FEATURES.json');
 const API_PATH = _path.join(__dirname, '..', 'taskmanager-api.js');
-const TIMEOUT = 10000; // 10 seconds for research operations
+const TIMEOUT = 10000; // 10 seconds for feature management operations
 
 /**
- * Execute TaskManager API command for research testing
+ * Execute TaskManager API command for feature management testing
  */
 function execAPI(command, args = [], timeout = TIMEOUT) {
   return new Promise((resolve, reject) => {
@@ -83,162 +82,106 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
 }
 
 /**
- * Create test environment for research system testing
+ * Create test environment for feature management testing
  */
-function setupResearchTestEnvironment() {
+function setupFeatureTestEnvironment() {
   if (!_fs.existsSync(TEST_PROJECT_DIR)) {
     _fs.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
   }
 
-  // Create mock project structure
-  const directories = [
-    'src',
-    'lib',
-    'api',
-    'models',
-    'database',
-    'migrations',
-    'routes',
-    'controllers',
-    'services',
-    'utils',
-    'config',
-    'docs',
-    'tests',
-    'development/essentials',
-  ];
-
-  directories.forEach((dir) => {
-    const fullPath = _path.join(TEST_PROJECT_DIR, dir);
-    if (!_fs.existsSync(fullPath)) {
-      _fs.mkdirSync(fullPath, { recursive: true });
-    }
-  });
-
-  // Create mock files to simulate a real project
-  const mockFiles = {
-    'package.json': JSON.stringify(
-      {
-        name: 'research-test-project',
-        version: '1.0.0',
-        dependencies: {
-          express: '^4.18.0',
-          mongoose: '^6.0.0',
-        },
-      },
-      null,
-      2,
-    ),
-    'README.md':
-      '# Research Test Project\n\nTest project for research system validation.',
-    'src/app.js':
-      '// Main application entry point\nconst express = require("express");',
-    'models/User.js':
-      '// User model definition\nconst mongoose = require("mongoose");',
-    'api/auth.js': '// Authentication API endpoints\nmodule.exports = {};',
-    'database/schema.sql':
-      '-- Database schema definition\nCREATE TABLE users ();',
-    'docs/api-guide.md': '# API Documentation\n\nComprehensive API guide.',
-  };
-
-  Object.entries(mockFiles).forEach(([relativePath, content]) => {
-    const fullPath = _path.join(TEST_PROJECT_DIR, relativePath);
-    const dir = _path.dirname(fullPath);
-    if (!_fs.existsSync(dir)) {
-      _fs.mkdirSync(dir, { recursive: true });
-    }
-    _fs.writeFileSync(fullPath, content);
-  });
-
-  // Create TODO.json
-  const todoData = {
-    project: 'research-system-test',
-    tasks: [],
-    agents: {},
+  // Create FEATURES.json for feature management testing
+  const featuresData = {
     features: [],
-    current_mode: 'DEVELOPMENT',
-    last_mode: null,
-    execution_count: 0,
-    review_strikes: 0,
-    strikes_completed_last_run: false,
-    last_hook_activation: Date.now(),
-    settings: {
-      version: '2.0.0',
+    metadata: {
+      version: '3.0.0',
       created: new Date().toISOString(),
-    },
+      last_modified: new Date().toISOString(),
+      project: 'feature-test-project'
+    }
   };
 
-  _fs.writeFileSync(TODO_PATH, JSON.stringify(todoData, null, 2));
+  _fs.writeFileSync(FEATURES_PATH, JSON.stringify(featuresData, null, 2));
+
+  // Create basic project structure for testing
+  const packageData = {
+    name: 'feature-test-project',
+    version: '1.0.0',
+    description: 'Test project for feature management system validation',
+    dependencies: {
+      express: '^4.18.0'
+    }
+  };
+
+  _fs.writeFileSync(
+    _path.join(TEST_PROJECT_DIR, 'package.json'),
+    JSON.stringify(packageData, null, 2)
+  );
 }
 
 /**
  * Cleanup test environment
  */
-function cleanupResearchTestEnvironment() {
+function cleanupFeatureTestEnvironment() {
   if (_fs.existsSync(TEST_PROJECT_DIR)) {
     _fs.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
   }
 }
 
-describe('Research System Unit Tests', () => {
+describe('Feature Management System Unit Tests', () => {
   let _testAgentId = null;
 
   beforeEach(() => {
-    setupResearchTestEnvironment();
+    setupFeatureTestEnvironment();
   });
 
   afterEach(() => {
-    cleanupResearchTestEnvironment();
+    cleanupFeatureTestEnvironment();
   });
 
   // ========================================
-  // RESEARCH LOCATION DETECTION TESTS
+  // FEATURE MANAGEMENT TESTS
   // ========================================
 
-  describe('Research Location Intelligence', () => {
-    beforeEach(async () => {
-      const initResult = await execAPI('init');
-      _testAgentId = initResult.agentId;
+  describe('Agent Initialization', () => {
+    test('should initialize agent successfully', async () => {
+      _testAgentId = 'test-agent-' + Date.now();
+      const initResult = await execAPI('initialize', [_testAgentId]);
+      expect(initResult.success).toBe(true);
     });
 
-    test('should generate database-focused research locations for database tasks', async () => {
-      const databaseTaskData = {
-        title: 'Design user authentication database schema',
-        description:
-          'Create comprehensive database schema for user management with relationships and constraints',
-        category: 'feature',
-        priority: 'high',
+    test('should reinitialize existing agent successfully', async () => {
+      _testAgentId = 'test-agent-' + Date.now();
+
+      // First initialize
+      const initResult = await execAPI('initialize', [_testAgentId]);
+      expect(initResult.success).toBe(true);
+
+      // Then reinitialize
+      const reinitResult = await execAPI('reinitialize', [_testAgentId]);
+      expect(reinitResult.success).toBe(true);
+    });
+  });
+
+  describe('Feature Suggestion', () => {
+    beforeEach(async () => {
+      _testAgentId = 'feature-test-agent-' + Date.now();
+      const initResult = await execAPI('initialize', [_testAgentId]);
+      expect(initResult.success).toBe(true);
+    });
+
+    test('should create feature suggestion with enhancement category', async () => {
+      const featureData = {
+        title: 'Add dark mode toggle',
+        description: 'Implement theme switching functionality with persistent user preference storage',
+        business_value: 'Improves user experience and accessibility for users in low-light environments',
+        category: 'enhancement'
       };
 
-      const result = await execAPI('create', [
-        JSON.stringify(databaseTaskData),
-      ]);
+      const result = await execAPI('suggest-feature', [JSON.stringify(featureData)]);
       expect(result.success).toBe(true);
-
-      const listResult = await execAPI('list');
-      const task = listResult.tasks.find((t) => t.id === result.taskId);
-      const researchSubtask = task.subtasks.find(
-        (st) => st.type === 'research',
-      );
-
-      expect(researchSubtask).toBeDefined();
-      expect(researchSubtask.research_locations).toBeDefined();
-
-      // Should prioritize database-related paths
-      const codebaseLocation = researchSubtask.research_locations.find(
-        (loc) => loc.type === 'codebase',
-      );
-      expect(codebaseLocation.paths).toContain('/models');
-      expect(codebaseLocation.paths).toContain('/database');
-      expect(codebaseLocation.paths).toContain('/migrations');
-
-      // Should include database-related keywords
-      const internetLocation = researchSubtask.research_locations.find(
-        (loc) => loc.type === 'internet',
-      );
-      expect(internetLocation.keywords).toContain('database');
-      expect(internetLocation.keywords).toContain('schema');
-      expect(internetLocation.keywords).toContain('authentication');
+      expect(result.feature).toBeDefined();
+      expect(result.feature.title).toBe(featureData.title);
+      expect(result.feature.status).toBe('suggested');
     });
 
     test('should generate API-focused research locations for API tasks', async () => {

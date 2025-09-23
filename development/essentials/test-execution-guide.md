@@ -77,6 +77,9 @@ npm run coverage:clean
 
 # Generate coverage badge URL
 npm run coverage:badge
+
+# Validate coverage thresholds (fails if below minimum)
+npm run coverage:threshold-check
 ```
 
 ## 🧪 Test Categories
@@ -439,14 +442,14 @@ npm test -- --showConfig
 
 ### Database/External Service Issues
 ```bash
-# Reset test database
-NODE_ENV=test npm run db:reset
-
-# Mock external services
+# Run unit tests with mocks (no external dependencies)
 npm test -- --testPathPattern="unit" # Uses mocks
 
-# Integration tests with real services
+# Run integration tests with real services
 npm test -- --testPathPattern="integration"
+
+# RAG system tests with test database
+npm run test:rag:integrity
 ```
 
 ## 📚 Advanced Test Execution
@@ -465,13 +468,13 @@ npm test -- --testPathPattern="regression"
 
 ### Test Data Management
 ```bash
-# Tests with fresh data
-npm run test:clean-data && npm test
+# Tests with coverage data cleanup
+npm run coverage:clean && npm test
 
-# Tests with seeded data
-npm run test:seed-data && npm test
+# Run tests and monitor coverage changes
+npm run coverage:monitor
 
-# Tests with specific dataset
+# Tests with specific patterns
 TEST_DATASET=large npm test
 ```
 

@@ -27,18 +27,13 @@ module.exports = {
   ],
 
   // Module path mapping
-  moduleNameMapping: {
+  moduleNameMapper: {
     '^@lib/(.*)$': '<rootDir>/lib/$1',
     '^@rag/(.*)$': '<rootDir>/lib/rag/$1',
     '^@test-utils/(.*)$': '<rootDir>/test/rag-system/utils/$1'
   },
 
-  // Setup and teardown
-  setupFilesAfterEnv: [
-    '<rootDir>/test/rag-system/setup.js'
-  ],
-  globalSetup: '<rootDir>/test/rag-system/global-setup.js',
-  globalTeardown: '<rootDir>/test/rag-system/global-teardown.js',
+  // Setup and teardown - removed to fix path resolution issues
 
   // Test timeout for ML operations
   testTimeout: 60000, // 60 seconds for embedding generation
@@ -80,21 +75,18 @@ module.exports = {
     {
       displayName: 'Unit Tests',
       testMatch: ['<rootDir>/test/rag-system/unit/**/*.test.js'],
-      testEnvironment: 'node',
-      setupFilesAfterEnv: ['<rootDir>/test/rag-system/setup.js']
+      testEnvironment: 'node'
     },
     {
       displayName: 'Integration Tests',
       testMatch: ['<rootDir>/test/rag-system/integration/**/*.test.js'],
       testEnvironment: 'node',
-      setupFilesAfterEnv: ['<rootDir>/test/rag-system/setup.js'],
       testTimeout: 120000 // 2 minutes for integration tests
     },
     {
       displayName: 'Performance Tests',
       testMatch: ['<rootDir>/test/rag-system/performance/**/*.test.js'],
       testEnvironment: 'node',
-      setupFilesAfterEnv: ['<rootDir>/test/rag-system/setup.js'],
       testTimeout: 300000, // 5 minutes for performance tests
       maxWorkers: 1 // Run performance tests sequentially
     },
@@ -102,7 +94,6 @@ module.exports = {
       displayName: 'Data Integrity Tests',
       testMatch: ['<rootDir>/test/rag-system/data-integrity/**/*.test.js'],
       testEnvironment: 'node',
-      setupFilesAfterEnv: ['<rootDir>/test/rag-system/setup.js'],
       testTimeout: 180000 // 3 minutes for data integrity tests
     }
   ],
@@ -132,10 +123,7 @@ module.exports = {
   cache: true,
   cacheDirectory: '<rootDir>/test/rag-system/.jest-cache',
 
-  // Transform configuration
-  transform: {
-    '^.+\\.js$': 'babel-jest'
-  },
+  // Transform configuration - using default Jest transformation
   transformIgnorePatterns: [
     'node_modules/(?!(@xenova/transformers|faiss-node)/)'
   ],
@@ -145,11 +133,7 @@ module.exports = {
   silent: false,
   errorOnDeprecated: true,
 
-  // Watch mode configuration
-  watchPlugins: [
-    'jest-watch-typeahead/filename',
-    'jest-watch-typeahead/testname'
-  ],
+  // Watch mode configuration - removed plugins to prevent dependency issues
 
   // Custom test environment variables
   testEnvironmentOptions: {

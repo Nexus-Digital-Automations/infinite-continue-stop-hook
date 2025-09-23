@@ -353,6 +353,79 @@ npm start                     # Application startup test
 
 ---
 
+## 🧪 Testing & Quality Assurance
+
+### **Comprehensive Test Suite**
+
+The project includes a robust testing framework with multiple test categories and comprehensive coverage reporting:
+
+```bash
+# Run complete test suite with coverage
+npm test
+
+# Run specific test categories
+npm run test:api          # API-focused tests
+npm run test:rag          # RAG system tests
+npm run test:rag:unit     # RAG unit tests only
+npm run test:rag:integration  # RAG integration tests
+npm run test:rag:performance  # Performance benchmarks
+```
+
+### **Test Categories**
+
+| Test Type | Purpose | Location | Execution Time |
+|-----------|---------|----------|----------------|
+| **Unit Tests** | Component isolation testing | `test/rag-system/unit/` | < 1 second |
+| **Integration Tests** | Module interaction validation | `test/rag-system/integration/` | 1-30 seconds |
+| **End-to-End Tests** | Complete workflow testing | `test/*-e2e.test.js` | 30 seconds - 5 minutes |
+| **Performance Tests** | Benchmark and load testing | `test/rag-system/performance/` | Variable |
+| **Security Tests** | Security validation | `test/security-system.test.js` | < 30 seconds |
+
+### **Coverage Standards**
+
+```bash
+# Generate coverage reports
+npm run coverage          # Standard coverage report
+npm run coverage:html     # Interactive HTML report
+npm run coverage:check    # Validate coverage thresholds
+
+# Coverage targets:
+# - Unit Tests: 90%+ code coverage
+# - Integration Tests: 80%+ feature coverage
+# - Critical Paths: 90%+ coverage
+# - Overall Project: 80%+ minimum
+```
+
+### **Quality Control Integration**
+
+```bash
+# Automated quality pipeline
+npm run lint              # Code quality validation
+npm test                  # Full test suite execution
+npm run build             # Production build verification
+npm run coverage:check    # Coverage threshold validation
+```
+
+### **Testing Documentation**
+
+For detailed testing information, see our comprehensive testing guides:
+
+- **[Testing Architecture](development/essentials/testing-architecture.md)** - Overall testing strategy and framework
+- **[Testing Best Practices](development/essentials/testing-best-practices.md)** - Writing effective tests
+- **[Test Execution Guide](development/essentials/test-execution-guide.md)** - Running and managing tests
+- **[Test Writing Examples](development/essentials/test-writing-examples.md)** - Practical test examples
+- **[Testing Troubleshooting](development/essentials/testing-troubleshooting.md)** - Common issues and solutions
+
+### **Continuous Integration**
+
+Tests are automatically executed in our CI/CD pipeline with:
+- Pre-commit hooks for immediate feedback
+- Pull request validation with full test suite
+- Coverage reporting and threshold enforcement
+- Performance regression detection
+
+---
+
 ## 🏗️ Architecture Deep Dive
 
 ### **System Components**
