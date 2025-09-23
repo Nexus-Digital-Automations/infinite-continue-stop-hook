@@ -17,20 +17,41 @@ const path = require('path');
 const crypto = require('crypto');
 const { MockFileSystem, TEST_FIXTURES, TimeTestUtils, testHelpers } = require('./test-utilities');
 
-// Import the FeatureManagerAPI class
+// Mock the fs module before importing the main module
+jest.mock('fs', () => ({
+  promises: {
+    access: jest.fn(),
+    readFile: jest.fn(),
+    writeFile: jest.fn()
+  }
+}));
+
+// Mock crypto for deterministic ID generation
+jest.mock('crypto', () => ({
+  randomBytes: jest.fn(() => {
+    // Generate incrementing values to ensure uniqueness
+    global.cryptoCounter = (global.cryptoCounter || 0) + 1;
+    const counterStr = global.cryptoCounter.toString().padStart(12, '0');
+    return Buffer.from(counterStr, 'ascii');
+  })
+}));
+
+// Import the FeatureManagerAPI class AFTER mocking fs
 const FeatureManagerAPI = require('../../taskmanager-api.js');
 
 describe('Agent Management', () => {
   let api;
   let mockFs;
   let timeUtils;
-  let originalFs;
 
   const TEST_PROJECT_ROOT = '/test/agent-project';
   const TEST_FEATURES_PATH = path.join(TEST_PROJECT_ROOT, 'FEATURES.json');
   const TEST_STOP_FLAG_PATH = path.join(TEST_PROJECT_ROOT, '.stop-allowed');
 
   beforeEach(() => {
+    // Reset the crypto counter for deterministic ID generation
+    global.cryptoCounter = 0;
+
     api = new FeatureManagerAPI();
     mockFs = new MockFileSystem();
     timeUtils = new TimeTestUtils();
@@ -40,28 +61,20 @@ describe('Agent Management', () => {
     process.env.PROJECT_ROOT = TEST_PROJECT_ROOT;
     api.featuresPath = TEST_FEATURES_PATH;
 
-    // Mock the fs module
-    originalFs = require('fs').promises;
+    // Connect jest mocks to MockFileSystem instance
     const fs = require('fs');
-    fs.promises = mockFs;
+    fs.promises.access.mockImplementation((...args) => mockFs.access(...args));
+    fs.promises.readFile.mockImplementation((...args) => mockFs.readFile(...args));
+    fs.promises.writeFile.mockImplementation((...args) => mockFs.writeFile(...args));
 
     // Mock time for consistent testing
     timeUtils.mockCurrentTimeISO('2025-09-23T12:00:00.000Z');
-
-    // Mock crypto for deterministic testing
-    jest.spyOn(crypto, 'randomBytes').mockImplementation((size) => {
-      return Buffer.from('b'.repeat(size * 2), 'hex');
-    });
 
     // Setup initial features file
     mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(TEST_FIXTURES.emptyFeaturesFile));
   });
 
   afterEach(() => {
-    // Restore original file system
-    const fs = require('fs');
-    fs.promises = originalFs;
-
     jest.clearAllMocks();
     mockFs.clearAll();
     timeUtils.restoreTime();

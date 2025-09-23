@@ -17,19 +17,40 @@
 const path = require('path');
 const { MockFileSystem, TEST_FIXTURES, TimeTestUtils, testHelpers } = require('./test-utilities');
 
-// Import the FeatureManagerAPI class
+// Mock the fs module before importing the main module
+jest.mock('fs', () => ({
+  promises: {
+    access: jest.fn(),
+    readFile: jest.fn(),
+    writeFile: jest.fn()
+  }
+}));
+
+// Mock crypto for deterministic ID generation
+jest.mock('crypto', () => ({
+  randomBytes: jest.fn(() => {
+    // Generate incrementing values to ensure uniqueness
+    global.cryptoCounter = (global.cryptoCounter || 0) + 1;
+    const counterStr = global.cryptoCounter.toString().padStart(12, '0');
+    return Buffer.from(counterStr, 'ascii');
+  })
+}));
+
+// Import the FeatureManagerAPI class AFTER mocking fs
 const FeatureManagerAPI = require('../../taskmanager-api.js');
 
 describe('Feature Management Lifecycle', () => {
   let api;
   let mockFs;
   let timeUtils;
-  let originalFs;
 
   const TEST_PROJECT_ROOT = '/test/feature-project';
   const TEST_FEATURES_PATH = path.join(TEST_PROJECT_ROOT, 'FEATURES.json');
 
   beforeEach(() => {
+    // Reset the crypto counter for deterministic ID generation
+    global.cryptoCounter = 0;
+
     api = new FeatureManagerAPI();
     mockFs = new MockFileSystem();
     timeUtils = new TimeTestUtils();
@@ -37,20 +58,17 @@ describe('Feature Management Lifecycle', () => {
     // Override the features path for testing
     api.featuresPath = TEST_FEATURES_PATH;
 
-    // Mock the fs module
-    originalFs = require('fs').promises;
+    // Connect jest mocks to MockFileSystem instance
     const fs = require('fs');
-    fs.promises = mockFs;
+    fs.promises.access.mockImplementation((...args) => mockFs.access(...args));
+    fs.promises.readFile.mockImplementation((...args) => mockFs.readFile(...args));
+    fs.promises.writeFile.mockImplementation((...args) => mockFs.writeFile(...args));
 
     // Mock time for consistent testing
     timeUtils.mockCurrentTimeISO('2025-09-23T12:00:00.000Z');
   });
 
   afterEach(() => {
-    // Restore original file system
-    const fs = require('fs');
-    fs.promises = originalFs;
-
     jest.clearAllMocks();
     mockFs.clearAll();
     timeUtils.restoreTime();
@@ -122,7 +140,7 @@ describe('Feature Management Lifecycle', () => {
         for (let i = 0; i < numFeatures; i++) {
           const featureData = {
             ...TEST_FIXTURES.validFeature,
-            title: `Feature ${i + 1}`
+            title: `Test Feature Number ${i + 1} Implementation`
           };
 
           const result = await api.suggestFeature(featureData);
@@ -216,7 +234,6 @@ describe('Feature Management Lifecycle', () => {
         const invalidFeatures = [
           { ...TEST_FIXTURES.validFeature, business_value: 'Short' },  // Too short
           { ...TEST_FIXTURES.validFeature, business_value: 'A'.repeat(1001) },  // Too long
-          { ...TEST_FIXTURES.validFeature, business_value: '' },  // Empty
         ];
 
         for (const invalidFeature of invalidFeatures) {
@@ -224,6 +241,12 @@ describe('Feature Management Lifecycle', () => {
           expect(result.success).toBe(false);
           expect(result.error).toContain('Business value must be between 10 and 1000 characters');
         }
+
+        // Test empty business value separately with different error message
+        const emptyBusinessValueFeature = { ...TEST_FIXTURES.validFeature, business_value: '' };
+        const result = await api.suggestFeature(emptyBusinessValueFeature);
+        expect(result.success).toBe(false);
+        expect(result.error).toContain("Required field 'business_value' is missing or empty");
       });
 
       test('should validate category field against allowed values', async () => {
@@ -635,7 +658,8 @@ describe('Feature Management Lifecycle', () => {
         expect(result.errors).toHaveLength(1);
 
         // Check error message
-        expect(result.errors[0]).toContain("Feature must be in 'suggested' status to approve");
+        expect(result.errors[0]).toContain("must be in 'suggested' status to approve");
+        expect(result.errors[0]).toContain("Current status: approved");
         expect(result.errors[0]).toContain(suggestedFeatureIds[2]);
       });
 

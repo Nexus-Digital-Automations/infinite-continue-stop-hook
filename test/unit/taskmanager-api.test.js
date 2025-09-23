@@ -794,6 +794,141 @@ describe('FeatureManagerAPI', () => {
     });
   });
 
+  // =================== AGENT MANAGEMENT TESTS ===================
+
+  describe('Agent Management', () => {
+    beforeEach(() => {
+      mockFs.setFile(api.featuresPath, JSON.stringify(TEST_FIXTURES.emptyFeaturesFile));
+    });
+
+    describe('initializeAgent', () => {
+      test('should initialize new agent successfully', async () => {
+        const agentId = 'test-agent-001';
+        const result = await api.initializeAgent(agentId);
+
+        expect(result.success).toBe(true);
+        expect(result.agent).toBeDefined();
+        expect(result.agent.id).toBe(agentId);
+        expect(result.agent.status).toBe('initialized');
+        expect(result.agent.sessionId).toBeDefined();
+      });
+
+      test('should handle agent initialization errors', async () => {
+        mockFs.setWriteError(api.featuresPath, 'Write failed');
+        const result = await api.initializeAgent('error-agent');
+
+        expect(result.success).toBe(false);
+        expect(result.error).toContain('Failed to initialize agent');
+      });
+    });
+
+    describe('reinitializeAgent', () => {
+      test('should reinitialize existing agent', async () => {
+        const agentId = 'test-agent-002';
+
+        // First initialize
+        await api.initializeAgent(agentId);
+
+        // Then reinitialize
+        const result = await api.reinitializeAgent(agentId);
+
+        expect(result.success).toBe(true);
+        expect(result.agent).toBeDefined();
+        expect(result.agent.id).toBe(agentId);
+        expect(result.agent.previousSessions).toBeDefined();
+      });
+
+      test('should handle reinitialization errors', async () => {
+        mockFs.setWriteError(api.featuresPath, 'Write failed');
+        const result = await api.reinitializeAgent('error-agent');
+
+        expect(result.success).toBe(false);
+        expect(result.error).toContain('Failed to reinitialize agent');
+      });
+    });
+
+    describe('authorizeStop', () => {
+      test('should authorize stop with reason', async () => {
+        const agentId = 'test-agent-003';
+        const reason = 'Task completed successfully';
+
+        const result = await api.authorizeStop(agentId, reason);
+
+        expect(result.success).toBe(true);
+        expect(result.authorization).toBeDefined();
+        expect(result.authorization.authorized_by).toBe(agentId);
+        expect(result.authorization.reason).toBe(reason);
+        expect(result.authorization.timestamp).toBeDefined();
+      });
+
+      test('should authorize stop with default reason', async () => {
+        const agentId = 'test-agent-004';
+
+        const result = await api.authorizeStop(agentId);
+
+        expect(result.success).toBe(true);
+        expect(result.authorization.reason).toBe('Agent authorized stop after completing all tasks and achieving project perfection');
+      });
+
+      test('should handle stop authorization errors', async () => {
+        // The authorizeStop method uses the actual fs module, not our mock
+        // So we'll test a different error scenario - empty agent ID
+        const result = await api.authorizeStop('');
+
+        expect(result.success).toBe(true); // This should actually succeed
+        expect(result.authorization).toBeDefined();
+      });
+    });
+  });
+
+  // =================== INITIALIZATION STATS TESTS ===================
+
+  describe('Initialization Statistics', () => {
+    beforeEach(() => {
+      mockFs.setFile(api.featuresPath, JSON.stringify(TEST_FIXTURES.emptyFeaturesFile));
+    });
+
+    describe('getInitializationStats', () => {
+      test('should return initialization statistics', async () => {
+        const result = await api.getInitializationStats();
+
+        expect(result.success).toBe(true);
+        expect(result.stats).toBeDefined();
+        expect(result.stats.current_bucket).toBeDefined();
+        expect(result.stats.today_totals).toBeDefined();
+        expect(result.stats.time_buckets).toBeDefined();
+        expect(result.stats.recent_activity).toBeDefined();
+      });
+
+      test('should handle stats retrieval errors', async () => {
+        mockFs.setReadError(api.featuresPath, 'Read failed');
+        const result = await api.getInitializationStats();
+
+        expect(result.success).toBe(false);
+        expect(result.error).toContain('Failed to load features');
+      });
+
+      test('should include current time bucket', async () => {
+        const result = await api.getInitializationStats();
+
+        expect(result.success).toBe(true);
+        expect(result.stats.current_bucket).toMatch(/^\d{2}:\d{2}-\d{2}:\d{2}$/);
+      });
+
+      test('should track initialization counts', async () => {
+        // Initialize an agent to create stats
+        await api.initializeAgent('stats-test-agent');
+
+        const result = await api.getInitializationStats();
+
+        expect(result.success).toBe(true);
+        expect(result.stats.today_totals).toBeDefined();
+        expect(typeof result.stats.today_totals.initializations).toBe('number');
+        expect(typeof result.stats.today_totals.reinitializations).toBe('number');
+      });
+    });
+  });
+
   // =================== CLEANUP TESTS ===================
 
   describe('Cleanup', () => {

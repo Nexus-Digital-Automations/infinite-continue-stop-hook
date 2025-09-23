@@ -34,6 +34,70 @@ const path = require('path');
 const fs = require('fs').promises;
 const crypto = require('crypto');
 
+// File locking mechanism to prevent race conditions across processes
+class FileLock {
+  constructor() {
+    this.maxRetries = 200;
+    this.retryDelay = 5; // milliseconds
+  }
+
+  async acquire(filePath) {
+    const lockPath = `${filePath}.lock`;
+
+    for (let attempt = 0; attempt < this.maxRetries; attempt++) {
+      try {
+        // Try to create lock file exclusively
+        await fs.writeFile(lockPath, process.pid.toString(), { flag: 'wx' });
+
+        // Successfully acquired lock
+        return async () => {
+          try {
+            await fs.unlink(lockPath);
+          } catch (error) {
+            // Lock file already removed or doesn't exist
+          }
+        };
+      } catch (error) {
+        if (error.code === 'EEXIST') {
+          // Lock file exists, check if process is still alive
+          try {
+            const lockContent = await fs.readFile(lockPath, 'utf8');
+            const lockPid = parseInt(lockContent);
+
+            // Check if process is still running
+            try {
+              process.kill(lockPid, 0); // Signal 0 just checks if process exists
+              // Process exists, wait and retry
+              await new Promise(resolve => setTimeout(resolve, this.retryDelay));
+              continue;
+            } catch (killError) {
+              // Process doesn't exist, remove stale lock
+              try {
+                await fs.unlink(lockPath);
+              } catch (unlinkError) {
+                // Someone else removed it
+              }
+              continue;
+            }
+          } catch (readError) {
+            // Can't read lock file, wait and retry
+            await new Promise(resolve => setTimeout(resolve, this.retryDelay));
+            continue;
+          }
+        } else {
+          // Other error, wait and retry
+          await new Promise(resolve => setTimeout(resolve, this.retryDelay));
+          continue;
+        }
+      }
+    }
+
+    throw new Error(`Could not acquire lock for ${filePath} after ${this.maxRetries} attempts`);
+  }
+}
+
+const fileLock = new FileLock();
+
 // Parse project root from --project-root flag or use current directory
 const args = process.argv.slice(2);
 const projectRootIndex = args.indexOf('--project-root');
@@ -128,37 +192,35 @@ class FeatureManagerAPI {
    */
   async suggestFeature(featureData) {
     try {
-      // Ensure features file exists
-      await this._ensureFeaturesFile();
-
-      // Validate required fields
+      // Validate required fields before atomic operation
       this._validateFeatureData(featureData);
 
-      const feature = {
-        id: this._generateFeatureId(),
-        title: featureData.title,
-        description: featureData.description,
-        business_value: featureData.business_value,
-        category: featureData.category,
-        status: 'suggested',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        suggested_by: featureData.suggested_by || 'system',
-        metadata: featureData.metadata || {},
-      };
+      const result = await this._atomicFeatureOperation((features) => {
+        const feature = {
+          id: this._generateFeatureId(),
+          title: featureData.title,
+          description: featureData.description,
+          business_value: featureData.business_value,
+          category: featureData.category,
+          status: 'suggested',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          suggested_by: featureData.suggested_by || 'system',
+          metadata: featureData.metadata || {},
+        };
 
-      const features = await this._loadFeatures();
-      features.features.push(feature);
-      features.metadata.total_features = features.features.length;
-      features.metadata.updated = new Date().toISOString();
+        features.features.push(feature);
+        features.metadata.total_features = features.features.length;
+        features.metadata.updated = new Date().toISOString();
 
-      await this._saveFeatures(features);
+        return {
+          success: true,
+          feature,
+          message: 'Feature suggestion created successfully',
+        };
+      });
 
-      return {
-        success: true,
-        feature,
-        message: 'Feature suggestion created successfully',
-      };
+      return result;
     } catch (error) {
       return {
         success: false,
@@ -487,6 +549,17 @@ class FeatureManagerAPI {
       // Get recent activity (last 7 days from history)
       const recentActivity = stats.daily_history.slice(-7);
 
+      // Build dynamic time buckets response
+      const timeBucketsResponse = {};
+      Object.keys(stats.time_buckets).forEach(bucket => {
+        const bucketData = stats.time_buckets[bucket];
+        timeBucketsResponse[bucket] = {
+          initializations: bucketData.init,
+          reinitializations: bucketData.reinit,
+          total: bucketData.init + bucketData.reinit,
+        };
+      });
+
       const response = {
         success: true,
         stats: {
@@ -499,33 +572,7 @@ class FeatureManagerAPI {
             reinitializations: todayTotal.reinit,
             combined: todayTotal.init + todayTotal.reinit,
           },
-          time_buckets: {
-            '07:00-11:59': {
-              initializations: stats.time_buckets['07:00-11:59'].init,
-              reinitializations: stats.time_buckets['07:00-11:59'].reinit,
-              total: stats.time_buckets['07:00-11:59'].init + stats.time_buckets['07:00-11:59'].reinit,
-            },
-            '12:00-16:59': {
-              initializations: stats.time_buckets['12:00-16:59'].init,
-              reinitializations: stats.time_buckets['12:00-16:59'].reinit,
-              total: stats.time_buckets['12:00-16:59'].init + stats.time_buckets['12:00-16:59'].reinit,
-            },
-            '17:00-21:59': {
-              initializations: stats.time_buckets['17:00-21:59'].init,
-              reinitializations: stats.time_buckets['17:00-21:59'].reinit,
-              total: stats.time_buckets['17:00-21:59'].init + stats.time_buckets['17:00-21:59'].reinit,
-            },
-            '22:00-02:59': {
-              initializations: stats.time_buckets['22:00-02:59'].init,
-              reinitializations: stats.time_buckets['22:00-02:59'].reinit,
-              total: stats.time_buckets['22:00-02:59'].init + stats.time_buckets['22:00-02:59'].reinit,
-            },
-            '03:00-06:59': {
-              initializations: stats.time_buckets['03:00-06:59'].init,
-              reinitializations: stats.time_buckets['03:00-06:59'].reinit,
-              total: stats.time_buckets['03:00-06:59'].init + stats.time_buckets['03:00-06:59'].reinit,
-            },
-          },
+          time_buckets: timeBucketsResponse,
           recent_activity: recentActivity,
           last_updated: stats.last_updated,
           last_reset: stats.last_reset,
@@ -545,38 +592,38 @@ class FeatureManagerAPI {
 
   async initializeAgent(agentId) {
     try {
-      const features = await this._loadFeatures();
+      const result = await this._atomicFeatureOperation((features) => {
+        // Initialize agents section if it doesn't exist
+        if (!features.agents) {
+          features.agents = {};
+        }
 
-      // Initialize agents section if it doesn't exist
-      if (!features.agents) {
-        features.agents = {};
-      }
+        const timestamp = new Date().toISOString();
 
-      const timestamp = new Date().toISOString();
+        // Create or update agent entry
+        features.agents[agentId] = {
+          lastHeartbeat: timestamp,
+          status: 'active',
+          initialized: timestamp,
+          sessionId: crypto.randomBytes(8).toString('hex'),
+        };
 
-      // Create or update agent entry
-      features.agents[agentId] = {
-        lastHeartbeat: timestamp,
-        status: 'active',
-        initialized: timestamp,
-        sessionId: crypto.randomBytes(8).toString('hex'),
-      };
+        return {
+          success: true,
+          agent: {
+            id: agentId,
+            status: 'initialized',
+            sessionId: features.agents[agentId].sessionId,
+            timestamp,
+          },
+          message: `Agent ${agentId} successfully initialized`,
+        };
+      });
 
-      await this._saveFeatures(features);
-
-      // Track initialization usage in time buckets
+      // Track initialization usage in time buckets (separate atomic operation)
       await this._updateTimeBucketStats('init');
 
-      return {
-        success: true,
-        agent: {
-          id: agentId,
-          status: 'initialized',
-          sessionId: features.agents[agentId].sessionId,
-          timestamp,
-        },
-        message: `Agent ${agentId} successfully initialized`,
-      };
+      return result;
     } catch (error) {
       return {
         success: false,
@@ -588,45 +635,45 @@ class FeatureManagerAPI {
 
   async reinitializeAgent(agentId) {
     try {
-      const features = await this._loadFeatures();
+      const result = await this._atomicFeatureOperation((features) => {
+        // Initialize agents section if it doesn't exist
+        if (!features.agents) {
+          features.agents = {};
+        }
 
-      // Initialize agents section if it doesn't exist
-      if (!features.agents) {
-        features.agents = {};
-      }
+        const timestamp = new Date().toISOString();
+        const existingAgent = features.agents[agentId];
 
-      const timestamp = new Date().toISOString();
-      const existingAgent = features.agents[agentId];
+        // Update or create agent entry (reinitialize preserves some data)
+        features.agents[agentId] = {
+          ...existingAgent,
+          lastHeartbeat: timestamp,
+          status: 'active',
+          reinitialized: timestamp,
+          sessionId: crypto.randomBytes(8).toString('hex'),
+          previousSessions: existingAgent?.sessionId ? [
+            ...(existingAgent.previousSessions || []),
+            existingAgent.sessionId,
+          ] : [],
+        };
 
-      // Update or create agent entry (reinitialize preserves some data)
-      features.agents[agentId] = {
-        ...existingAgent,
-        lastHeartbeat: timestamp,
-        status: 'active',
-        reinitialized: timestamp,
-        sessionId: crypto.randomBytes(8).toString('hex'),
-        previousSessions: existingAgent?.sessionId ? [
-          ...(existingAgent.previousSessions || []),
-          existingAgent.sessionId,
-        ] : [],
-      };
+        return {
+          success: true,
+          agent: {
+            id: agentId,
+            status: 'reinitialized',
+            sessionId: features.agents[agentId].sessionId,
+            timestamp,
+            previousSessions: features.agents[agentId].previousSessions?.length || 0,
+          },
+          message: `Agent ${agentId} successfully reinitialized`,
+        };
+      });
 
-      await this._saveFeatures(features);
-
-      // Track reinitialization usage in time buckets
+      // Track reinitialization usage in time buckets (separate atomic operation)
       await this._updateTimeBucketStats('reinit');
 
-      return {
-        success: true,
-        agent: {
-          id: agentId,
-          status: 'reinitialized',
-          sessionId: features.agents[agentId].sessionId,
-          timestamp,
-          previousSessions: features.agents[agentId].previousSessions?.length || 0,
-        },
-        message: `Agent ${agentId} successfully reinitialized`,
-      };
+      return result;
     } catch (error) {
       return {
         success: false,
@@ -748,6 +795,25 @@ class FeatureManagerAPI {
     }
   }
 
+  /**
+   * Atomic operation: Load, modify, and save features with file locking
+   * @param {Function} modifier - Function that modifies the features object
+   * @returns {Promise<Object>} Result from the modifier function
+   */
+  async _atomicFeatureOperation(modifier) {
+    const releaseLock = await fileLock.acquire(this.featuresPath);
+
+    try {
+      await this._ensureFeaturesFile();
+      const features = await this._loadFeatures();
+      const result = await modifier(features);
+      await this._saveFeatures(features);
+      return result;
+    } finally {
+      releaseLock();
+    }
+  }
+
   getApiMethods() {
     return {
       success: true,
@@ -856,12 +922,12 @@ class FeatureManagerAPI {
                   output: 'Feature counts by status, category, and recent activity',
                 },
                 'get-initialization-stats': {
-                  description: 'Get initialization usage statistics organized by 5-hour time buckets starting at 7am',
+                  description: 'Get initialization usage statistics organized by 5-hour time buckets with daily advancing start times',
                   usage:
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-initialization-stats',
                   output: 'Initialization and reinitialization counts by time buckets, daily totals, and recent activity',
-                  time_buckets: ['07:00-11:59', '12:00-16:59', '17:00-21:59', '22:00-02:59', '03:00-06:59'],
-                  features: ['General usage tracking', 'Daily reset at 7am', 'Historical data (30 days)', 'Current bucket indication'],
+                  time_buckets_info: 'Start time advances by 1 hour daily - Today starts at 7am, tomorrow at 8am, etc.',
+                  features: ['General usage tracking', 'Daily advancing time buckets', 'Historical data (30 days)', 'Current bucket indication'],
                 },
               },
               agentManagement: {
@@ -932,14 +998,15 @@ class FeatureManagerAPI {
               },
               initializationTracking: {
                 getStats: 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-initialization-stats',
-                description: 'Retrieve initialization usage statistics organized by 5-hour time buckets starting at 7am',
+                description: 'Retrieve initialization usage statistics organized by 5-hour time buckets with daily advancing start times',
+                timeBucketInfo: 'Start time advances by 1 hour each day - Today: 7am start, Tomorrow: 8am start, etc.',
                 sampleOutput: {
                   success: true,
                   stats: {
                     total_initializations: 45,
                     total_reinitializations: 23,
                     current_day: '2025-09-23',
-                    current_bucket: '12:00-16:59',
+                    current_bucket: '07:00-11:59',
                     time_buckets: {
                       '07:00-11:59': { initializations: 5, reinitializations: 2, total: 7 },
                       '12:00-16:59': { initializations: 8, reinitializations: 1, total: 9 },
@@ -980,24 +1047,59 @@ class FeatureManagerAPI {
   // =================== INITIALIZATION TRACKING METHODS ===================
 
   /**
-   * Get current 5-hour time bucket starting from 7am
-   * Time buckets: 07:00-11:59, 12:00-16:59, 17:00-21:59, 22:00-02:59, 03:00-06:59
+   * Get current 5-hour time bucket with daily advancing start time
+   * Today starts at 7am, tomorrow at 8am, day after at 9am, etc.
    */
   _getCurrentTimeBucket() {
     const now = new Date();
-    const hour = now.getHours();
+    const currentHour = now.getHours();
 
-    if (hour >= 7 && hour < 12) {
-      return '07:00-11:59';
-    } else if (hour >= 12 && hour < 17) {
-      return '12:00-16:59';
-    } else if (hour >= 17 && hour < 22) {
-      return '17:00-21:59';
-    } else if (hour >= 22 || hour < 3) {
-      return '22:00-02:59';
-    } else {
-      return '03:00-06:59';
+    // Calculate days since epoch (Jan 1, 1970) to determine daily offset
+    const daysSinceEpoch = Math.floor(now.getTime() / (1000 * 60 * 60 * 24));
+
+    // Starting hour advances by 1 each day, starting from 7am on day 0
+    const todayStartHour = (7 + daysSinceEpoch) % 24;
+
+    // Calculate which 5-hour bucket we're in (0-4)
+    let hourOffset = (currentHour - todayStartHour + 24) % 24;
+    const bucketIndex = Math.floor(hourOffset / 5);
+
+    // Generate bucket label based on today's start hour
+    const bucketStartHours = [];
+    for (let i = 0; i < 5; i++) {
+      bucketStartHours.push((todayStartHour + (i * 5)) % 24);
     }
+
+    const startHour = bucketStartHours[bucketIndex];
+    const endHour = (startHour + 4) % 24;
+
+    // Format hours as HH:MM
+    const formatHour = (h) => h.toString().padStart(2, '0') + ':00';
+    const formatEndHour = (h) => h.toString().padStart(2, '0') + ':59';
+
+    return `${formatHour(startHour)}-${formatEndHour(endHour)}`;
+  }
+
+  /**
+   * Get all 5-hour time bucket labels for the current day
+   */
+  _getTodayTimeBuckets() {
+    const now = new Date();
+    const daysSinceEpoch = Math.floor(now.getTime() / (1000 * 60 * 60 * 24));
+    const todayStartHour = (7 + daysSinceEpoch) % 24;
+
+    const buckets = [];
+    for (let i = 0; i < 5; i++) {
+      const startHour = (todayStartHour + (i * 5)) % 24;
+      const endHour = (startHour + 4) % 24;
+
+      const formatHour = (h) => h.toString().padStart(2, '0') + ':00';
+      const formatEndHour = (h) => h.toString().padStart(2, '0') + ':59';
+
+      buckets.push(`${formatHour(startHour)}-${formatEndHour(endHour)}`);
+    }
+
+    return buckets;
   }
 
   /**
@@ -1015,21 +1117,72 @@ class FeatureManagerAPI {
     }
 
     if (!features.metadata.initialization_stats) {
+      // Generate today's time buckets dynamically
+      const todayBuckets = this._getTodayTimeBuckets();
+      const timeBuckets = {};
+      todayBuckets.forEach(bucket => {
+        timeBuckets[bucket] = { init: 0, reinit: 0 };
+      });
+
       features.metadata.initialization_stats = {
         total_initializations: 0,
         total_reinitializations: 0,
         current_day: new Date().toISOString().split('T')[0],
-        time_buckets: {
-          '07:00-11:59': { init: 0, reinit: 0 },
-          '12:00-16:59': { init: 0, reinit: 0 },
-          '17:00-21:59': { init: 0, reinit: 0 },
-          '22:00-02:59': { init: 0, reinit: 0 },
-          '03:00-06:59': { init: 0, reinit: 0 },
-        },
+        time_buckets: timeBuckets,
         daily_history: [],
         last_reset: new Date().toISOString(),
         last_updated: new Date().toISOString(),
       };
+    } else {
+      // Check if we need to update bucket labels for today
+      const todayBuckets = this._getTodayTimeBuckets();
+      const currentBuckets = Object.keys(features.metadata.initialization_stats.time_buckets);
+
+      // If bucket labels don't match today's labels, we need to migrate
+      const bucketsMatch = todayBuckets.every(bucket => currentBuckets.includes(bucket)) &&
+                          currentBuckets.every(bucket => todayBuckets.includes(bucket));
+
+      if (!bucketsMatch) {
+        // Migrate existing data to new bucket structure if possible
+        const stats = features.metadata.initialization_stats;
+        const newTimeBuckets = {};
+
+        todayBuckets.forEach(bucket => {
+          newTimeBuckets[bucket] = { init: 0, reinit: 0 };
+        });
+
+        // If this is a day change, preserve the data in history but reset buckets
+        const currentDay = new Date().toISOString().split('T')[0];
+        if (stats.current_day !== currentDay) {
+          // Save old data to history before resetting
+          const oldTotal = Object.values(stats.time_buckets).reduce(
+            (acc, bucket) => ({
+              init: acc.init + bucket.init,
+              reinit: acc.reinit + bucket.reinit,
+            }),
+            { init: 0, reinit: 0 }
+          );
+
+          if (oldTotal.init > 0 || oldTotal.reinit > 0) {
+            stats.daily_history.push({
+              date: stats.current_day,
+              total_init: oldTotal.init,
+              total_reinit: oldTotal.reinit,
+              buckets: { ...stats.time_buckets },
+            });
+
+            // Keep only last 30 days of history
+            if (stats.daily_history.length > 30) {
+              stats.daily_history = stats.daily_history.slice(-30);
+            }
+          }
+
+          stats.current_day = currentDay;
+        }
+
+        stats.time_buckets = newTimeBuckets;
+        stats.last_reset = new Date().toISOString();
+      }
     }
 
     return features;
@@ -1040,24 +1193,25 @@ class FeatureManagerAPI {
    */
   async _updateTimeBucketStats(type) {
     try {
-      const features = await this._loadFeatures();
-      await this._ensureInitializationStatsStructure(features);
-      await this._resetDailyBucketsIfNeeded(features);
+      await this._atomicFeatureOperation((features) => {
+        this._ensureInitializationStatsStructure(features);
+        this._resetDailyBucketsIfNeeded(features);
 
-      const currentBucket = this._getCurrentTimeBucket();
-      const stats = features.metadata.initialization_stats;
+        const currentBucket = this._getCurrentTimeBucket();
+        const stats = features.metadata.initialization_stats;
 
-      // Update counters
-      if (type === 'init') {
-        stats.total_initializations++;
-        stats.time_buckets[currentBucket].init++;
-      } else if (type === 'reinit') {
-        stats.total_reinitializations++;
-        stats.time_buckets[currentBucket].reinit++;
-      }
+        // Update counters
+        if (type === 'init') {
+          stats.total_initializations++;
+          stats.time_buckets[currentBucket].init++;
+        } else if (type === 'reinit') {
+          stats.total_reinitializations++;
+          stats.time_buckets[currentBucket].reinit++;
+        }
 
-      stats.last_updated = new Date().toISOString();
-      await this._saveFeatures(features);
+        stats.last_updated = new Date().toISOString();
+        return true;
+      });
 
       return true;
     } catch (error) {
@@ -1102,11 +1256,14 @@ class FeatureManagerAPI {
         }
       }
 
-      // Reset buckets for new day
-      Object.keys(stats.time_buckets).forEach(bucket => {
-        stats.time_buckets[bucket] = { init: 0, reinit: 0 };
+      // Reset buckets for new day with updated bucket labels
+      const newBuckets = this._getTodayTimeBuckets();
+      const newTimeBuckets = {};
+      newBuckets.forEach(bucket => {
+        newTimeBuckets[bucket] = { init: 0, reinit: 0 };
       });
 
+      stats.time_buckets = newTimeBuckets;
       stats.current_day = currentDay;
       stats.last_reset = now.toISOString();
     }
