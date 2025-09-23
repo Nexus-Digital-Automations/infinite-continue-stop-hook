@@ -66,7 +66,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
           description: `Testing concurrent operations with feature number ${i + 1}`,
           business_value: `Validates system performance under load ${i + 1}`,
           category: ['enhancement', 'bug-fix', 'new-feature', 'performance', 'security'][i % 5],
-        })
+        }),
       );
 
       const commands = features.map(featureData => ({
@@ -103,11 +103,11 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
 
     test('should handle mixed concurrent operations without conflicts', async () => {
       // 1. Create initial features for mixed operations
-      const initialFeatures = Array.from({ length, 20 }, (_, i) =>
+      const initialFeatures = Array.from({ length: 20 }, (_, i) =>
         generateTestFeature({
           title: `Mixed Ops Feature ${i + 1}`,
           category: 'enhancement',
-        })
+        }),
       );
 
       const featureIds = [];
@@ -185,7 +185,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         generateTestFeature({
           title: `Bulk Race Test Feature ${i + 1}`,
           category: 'enhancement',
-        })
+        }),
       );
 
       const featureIds = [];
@@ -310,7 +310,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         generateTestFeature({
           title: `Pre-Corruption Feature ${i + 1}`,
           category: 'enhancement',
-        })
+        }),
       );
 
       for (const featureData of validFeatures) {
@@ -421,7 +421,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         generateTestFeature({
           title: `Partial Write Test ${i + 1}`,
           category: 'enhancement',
-        })
+        }),
       );
 
       for (const featureData of features) {
@@ -509,7 +509,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
           description: 'A'.repeat(500), // Larger description
           business_value: 'B'.repeat(200), // Larger business value
           category: ['enhancement', 'bug-fix', 'new-feature', 'performance', 'security'][i % 5],
-        })
+        }),
       );
 
       // 2. Add features in batches to measure performance
@@ -638,7 +638,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
 
       // 2. Execute mixed load pattern
       const startTime = Date.now();
-      let featureIds = [];
+      const featureIds = [];
 
       for (const operation of mixedOperations) {
         let result;

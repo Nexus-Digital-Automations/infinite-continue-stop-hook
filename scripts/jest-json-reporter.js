@@ -1,11 +1,11 @@
 /**
- * Jest JSON Reporter for CI/CD Integration
+ * Jest JSON Reporter for Enhanced CI/CD Integration
  *
- * Custom Jest reporter that generates machine-readable JSON test results
- * for CI/CD pipeline analysis and reporting.
+ * Generates machine-readable test results in JSON format for CI/CD pipeline processing.
+ * Includes detailed test case information, assertion results, and console output.
  *
- * @author Testing Infrastructure Agent
- * @version 2.0.0
+ * @author CI/CD Integration Agent
+ * @version 1.0.0
  * @since 2025-09-23
  */
 
@@ -13,114 +13,131 @@ const fs = require('fs');
 const path = require('path');
 
 class JestJsonReporter {
-  constructor(globalConfig, options = {}) {
+  constructor(globalConfig, options) {
     this.globalConfig = globalConfig;
     this.options = {
-      outputPath: options.outputPath || './coverage/reports/test-results.json',
-      includeTestCases: options.includeTestCases !== false,
-      includeAssertionResults: options.includeAssertionResults !== false,
-      includeConsoleOutput: options.includeConsoleOutput !== false,
-      ...options
+      outputPath: './coverage/reports/test-results.json',
+      includeTestCases: true,
+      includeAssertionResults: true,
+      includeConsoleOutput: true,
+      ...options,
     };
   }
 
   onRunComplete(contexts, results) {
-    const report = this.generateReport(results);
-    this.writeReport(report);
-  }
-
-  generateReport(results) {
     const report = {
       metadata: {
-        generator: 'Jest JSON Reporter v2.0.0',
         timestamp: new Date().toISOString(),
-        node_version: process.version,
-        jest_version: require('jest/package.json').version,
-        environment: {
-          ci: process.env.CI === 'true',
-          platform: process.platform,
-          arch: process.arch
-        }
+        reporter: 'jest-json-reporter',
+        version: '1.0.0',
+        generator: 'Enhanced Coverage System',
       },
       summary: {
-        success: results.success,
+        numTotalTestSuites: results.numTotalTestSuites,
+        numPassedTestSuites: results.numPassedTestSuites,
+        numFailedTestSuites: results.numFailedTestSuites,
+        numPendingTestSuites: results.numPendingTestSuites,
         numTotalTests: results.numTotalTests,
         numPassedTests: results.numPassedTests,
         numFailedTests: results.numFailedTests,
         numPendingTests: results.numPendingTests,
         numTodoTests: results.numTodoTests,
-        numTotalTestSuites: results.numTotalTestSuites,
-        numPassedTestSuites: results.numPassedTestSuites,
-        numFailedTestSuites: results.numFailedTestSuites,
-        numPendingTestSuites: results.numPendingTestSuites,
         startTime: results.startTime,
-        runtime: Date.now() - results.startTime,
-        coverageMap: results.coverageMap ? this.processCoverageMap(results.coverageMap) : null
+        endTime: Date.now(),
+        duration: Date.now() - results.startTime,
+        success: results.success,
       },
-      testResults: this.processTestResults(results.testResults)
+      testResults: this.processTestResults(results.testResults),
+      coverageMap: results.coverageMap ? this.processCoverageMap(results.coverageMap) : null,
+      environment: {
+        node_version: process.version,
+        platform: process.platform,
+        ci: Boolean(process.env.CI),
+        github_actions: Boolean(process.env.GITHUB_ACTIONS),
+        github_ref: process.env.GITHUB_REF || null,
+        github_sha: process.env.GITHUB_SHA || null,
+        github_run_id: process.env.GITHUB_RUN_ID || null,
+      },
     };
 
-    return report;
+    // Ensure output directory exists
+    const outputDir = path.dirname(this.options.outputPath);
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+
+    // Write JSON report
+    fs.writeFileSync(this.options.outputPath, JSON.stringify(report, null, 2));
+
+    // Also write a summary file for quick access
+    const summaryPath = path.join(outputDir, 'test-summary.json');
+    fs.writeFileSync(summaryPath, JSON.stringify({
+      timestamp: report.metadata.timestamp,
+      success: report.summary.success,
+      total_tests: report.summary.numTotalTests,
+      passed_tests: report.summary.numPassedTests,
+      failed_tests: report.summary.numFailedTests,
+      duration_ms: report.summary.duration,
+      test_suites: report.summary.numTotalTestSuites,
+      failed_suites: report.summary.numFailedTestSuites,
+    }, null, 2));
   }
 
   processTestResults(testResults) {
-    return testResults.map(result => {
-      const processedResult = {
-        filePath: result.testFilePath,
-        relativePath: path.relative(process.cwd(), result.testFilePath),
-        success: result.numFailingTests === 0 && !result.skipped,
-        skipped: result.skipped,
-        numTests: result.numPassingTests + result.numFailingTests + result.numPendingTests,
-        numPassingTests: result.numPassingTests,
-        numFailingTests: result.numFailingTests,
-        numPendingTests: result.numPendingTests,
-        perfStats: {
-          start: result.perfStats.start,
-          end: result.perfStats.end,
-          runtime: result.perfStats.runtime || (result.perfStats.end - result.perfStats.start)
+    return testResults.map(testResult => {
+      const result = {
+        testFilePath: testResult.testFilePath,
+        displayName: testResult.displayName,
+        status: testResult.numFailingTests > 0 ? 'failed' : 'passed',
+        startTime: testResult.perfStats.start,
+        endTime: testResult.perfStats.end,
+        duration: testResult.perfStats.end - testResult.perfStats.start,
+        numTests: testResult.numPassingTests + testResult.numFailingTests + testResult.numPendingTests,
+        numPassingTests: testResult.numPassingTests,
+        numFailingTests: testResult.numFailingTests,
+        numPendingTests: testResult.numPendingTests,
+        snapshot: {
+          added: testResult.snapshot.added,
+          matched: testResult.snapshot.matched,
+          unmatched: testResult.snapshot.unmatched,
+          updated: testResult.snapshot.updated,
+          unchecked: testResult.snapshot.unchecked,
         },
-        coverage: result.coverage ? this.processCoverage(result.coverage) : null
       };
 
       if (this.options.includeTestCases) {
-        processedResult.testCases = this.processAssertionResults(result.assertionResults);
-      }
-
-      if (this.options.includeConsoleOutput && result.console) {
-        processedResult.console = result.console.map(entry => ({
-          type: entry.type,
-          message: entry.message,
-          origin: entry.origin
+        result.testCases = testResult.testResults.map(testCase => ({
+          ancestorTitles: testCase.ancestorTitles,
+          title: testCase.title,
+          fullName: testCase.fullName,
+          status: testCase.status,
+          duration: testCase.duration || 0,
+          numPassingAsserts: testCase.numPassingAsserts || 0,
+          location: testCase.location,
         }));
       }
 
-      if (result.failureMessage) {
-        processedResult.failureMessage = result.failureMessage;
+      if (this.options.includeAssertionResults && testResult.testResults) {
+        result.failureDetails = testResult.testResults
+          .filter(testCase => testCase.status === 'failed')
+          .map(testCase => ({
+            title: testCase.title,
+            fullName: testCase.fullName,
+            failureMessages: testCase.failureMessages,
+            failureDetails: testCase.failureDetails,
+          }));
       }
 
-      return processedResult;
+      if (this.options.includeConsoleOutput && testResult.console && testResult.console.length > 0) {
+        result.consoleOutput = testResult.console.map(log => ({
+          type: log.type,
+          message: log.message,
+          origin: log.origin,
+        }));
+      }
+
+      return result;
     });
-  }
-
-  processAssertionResults(assertionResults) {
-    if (!this.options.includeAssertionResults) {
-      return assertionResults.map(result => ({
-        title: result.title,
-        status: result.status,
-        duration: result.duration
-      }));
-    }
-
-    return assertionResults.map(result => ({
-      ancestorTitles: result.ancestorTitles,
-      title: result.title,
-      fullName: result.fullName,
-      status: result.status,
-      duration: result.duration,
-      failureMessages: result.failureMessages,
-      location: result.location,
-      invocations: result.invocations
-    }));
   }
 
   processCoverageMap(coverageMap) {
@@ -128,66 +145,36 @@ class JestJsonReporter {
       return null;
     }
 
-    const summary = coverageMap.getCoverageSummary();
-    return {
-      lines: {
-        total: summary.lines.total,
-        covered: summary.lines.covered,
-        percentage: summary.lines.pct
-      },
-      statements: {
-        total: summary.statements.total,
-        covered: summary.statements.covered,
-        percentage: summary.statements.pct
-      },
-      functions: {
-        total: summary.functions.total,
-        covered: summary.functions.covered,
-        percentage: summary.functions.pct
-      },
-      branches: {
-        total: summary.branches.total,
-        covered: summary.branches.covered,
-        percentage: summary.branches.pct
-      }
-    };
-  }
-
-  processCoverage(coverage) {
-    if (!coverage) return null;
-
-    return Object.keys(coverage).reduce((acc, filePath) => {
-      const fileCoverage = coverage[filePath];
-      acc[filePath] = {
-        path: filePath,
-        lines: fileCoverage.getLineCoverage ? fileCoverage.getLineCoverage() : null,
-        functions: fileCoverage.getFunctionCoverage ? fileCoverage.getFunctionCoverage() : null,
-        branches: fileCoverage.getBranchCoverage ? fileCoverage.getBranchCoverage() : null,
-        statements: fileCoverage.getStatementCoverage ? fileCoverage.getStatementCoverage() : null
-      };
-      return acc;
-    }, {});
-  }
-
-  writeReport(report) {
     try {
-      // Ensure output directory exists
-      const outputDir = path.dirname(this.options.outputPath);
-      if (!fs.existsSync(outputDir)) {
-        fs.mkdirSync(outputDir, { recursive: true });
-      }
-
-      // Write JSON report
-      fs.writeFileSync(this.options.outputPath, JSON.stringify(report, null, 2));
-
-      // Also write a summary file for quick access
-      const summaryPath = this.options.outputPath.replace('.json', '-summary.json');
-      fs.writeFileSync(summaryPath, JSON.stringify(report.summary, null, 2));
-
-      console.log(`📊 JSON test report written to: ${this.options.outputPath}`);
-
+      const summary = coverageMap.getCoverageSummary();
+      return {
+        statements: {
+          total: summary.statements.total,
+          covered: summary.statements.covered,
+          skipped: summary.statements.skipped,
+          pct: summary.statements.pct,
+        },
+        branches: {
+          total: summary.branches.total,
+          covered: summary.branches.covered,
+          skipped: summary.branches.skipped,
+          pct: summary.branches.pct,
+        },
+        functions: {
+          total: summary.functions.total,
+          covered: summary.functions.covered,
+          skipped: summary.functions.skipped,
+          pct: summary.functions.pct,
+        },
+        lines: {
+          total: summary.lines.total,
+          covered: summary.lines.covered,
+          skipped: summary.lines.skipped,
+          pct: summary.lines.pct,
+        },
+      };
     } catch (error) {
-      console.error('❌ Failed to write JSON test report:', error.message);
+      return { error: 'Failed to process coverage map', message: error.message };
     }
   }
 }

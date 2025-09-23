@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 
 /**
  * Parallel Test Execution Optimizer
@@ -23,14 +22,14 @@ class ParallelTestOptimizer {
       testSuites: this.discoverTestSuites(),
       nodeVersions: ['18.x', '20.x', '22.x'],
       platforms: ['ubuntu-latest', 'windows-latest', 'macos-latest'],
-      executionStrategy: 'adaptive'
+      executionStrategy: 'adaptive',
     };
 
     this.executionPlan = {
       critical_path: [],
       parallel_groups: [],
       optimization_metrics: {},
-      estimated_time_savings: 0
+      estimated_time_savings: 0,
     };
 
     this.outputDir = path.join(process.cwd(), 'test-performance');
@@ -104,7 +103,7 @@ class ParallelTestOptimizer {
       estimatedDuration: this.estimateTestDuration(name),
       resourceRequirements: this.estimateResourceRequirements(name),
       dependencies: this.identifyTestDependencies(name),
-      parallelizable: this.isParallelizable(name, command)
+      parallelizable: this.isParallelizable(name, command),
     };
 
     return suite;
@@ -114,12 +113,12 @@ class ParallelTestOptimizer {
    * Classify test suite type based on name patterns
    */
   classifyTestSuite(name) {
-    if (name.includes('unit')) return 'unit';
-    if (name.includes('integration')) return 'integration';
-    if (name.includes('e2e')) return 'e2e';
-    if (name.includes('performance')) return 'performance';
-    if (name.includes('rag')) return 'rag';
-    if (name.includes('api')) return 'api';
+    if (name.includes('unit')) {return 'unit';}
+    if (name.includes('integration')) {return 'integration';}
+    if (name.includes('e2e')) {return 'e2e';}
+    if (name.includes('performance')) {return 'performance';}
+    if (name.includes('rag')) {return 'rag';}
+    if (name.includes('api')) {return 'api';}
     return 'general';
   }
 
@@ -135,16 +134,16 @@ class ParallelTestOptimizer {
       'performance': 120,
       'rag': 60,
       'api': 45,
-      'general': 60
+      'general': 60,
     };
 
     const type = this.classifyTestSuite(testName);
     let baseDuration = durationMap[type] || 60;
 
     // Adjust based on specific patterns
-    if (testName.includes('stress')) baseDuration *= 2;
-    if (testName.includes('coverage')) baseDuration *= 1.5;
-    if (testName.includes('quick')) baseDuration *= 0.5;
+    if (testName.includes('stress')) {baseDuration *= 2;}
+    if (testName.includes('coverage')) {baseDuration *= 1.5;}
+    if (testName.includes('quick')) {baseDuration *= 0.5;}
 
     return baseDuration;
   }
@@ -162,7 +161,7 @@ class ParallelTestOptimizer {
       'performance': { memory: 1536, cpu: 2.0, io: 'medium' },
       'rag': { memory: 2048, cpu: 1.5, io: 'high' },
       'api': { memory: 1024, cpu: 1.0, io: 'medium' },
-      'general': { memory: 1024, cpu: 1.0, io: 'medium' }
+      'general': { memory: 1024, cpu: 1.0, io: 'medium' },
     };
 
     return resourceMap[type] || resourceMap['general'];
@@ -207,7 +206,7 @@ class ParallelTestOptimizer {
       'performance',
       'server',
       'port',
-      'singleton'
+      'singleton',
     ];
 
     for (const pattern of nonParallelizable) {
@@ -270,7 +269,7 @@ class ParallelTestOptimizer {
         const group = {
           tests: tests.slice(i, i + maxGroupSize),
           estimated_duration: Math.max(...tests.slice(i, i + maxGroupSize).map(t => t.estimatedDuration)),
-          resource_profile: tests[0].resourceRequirements
+          resource_profile: tests[0].resourceRequirements,
         };
         groups.push(group);
       }
@@ -286,7 +285,7 @@ class ParallelTestOptimizer {
     const groups = {
       low_resource: [],
       medium_resource: [],
-      high_resource: []
+      high_resource: [],
     };
 
     tests.forEach(test => {
@@ -323,7 +322,7 @@ class ParallelTestOptimizer {
     return {
       total_estimated_duration: totalDuration,
       bottlenecks: this.identifyBottlenecks(),
-      optimization_opportunities: this.identifyOptimizationOpportunities()
+      optimization_opportunities: this.identifyOptimizationOpportunities(),
     };
   }
 
@@ -340,7 +339,7 @@ class ParallelTestOptimizer {
           type: 'long_sequential_test',
           test: test.name,
           duration: test.estimatedDuration,
-          suggestion: 'Consider splitting into smaller, parallelizable tests'
+          suggestion: 'Consider splitting into smaller, parallelizable tests',
         });
       }
     });
@@ -353,7 +352,7 @@ class ParallelTestOptimizer {
           group: index,
           test: group.tests[0].name,
           duration: group.estimated_duration,
-          suggestion: 'Consider running with other compatible tests'
+          suggestion: 'Consider running with other compatible tests',
         });
       }
     });
@@ -374,7 +373,7 @@ class ParallelTestOptimizer {
         type: 'underutilized_parallelism',
         current_avg: avgGroupSize.toFixed(1),
         potential: this.config.maxParallelJobs,
-        suggestion: 'Increase parallel test execution or review test dependencies'
+        suggestion: 'Increase parallel test execution or review test dependencies',
       });
     }
 
@@ -385,7 +384,7 @@ class ParallelTestOptimizer {
         type: 'memory_optimization',
         current_requirement: `${(totalResourceRequirement.memory / 1024).toFixed(1)}GB`,
         available: `${(os.totalmem() / 1024 / 1024 / 1024).toFixed(1)}GB`,
-        suggestion: 'Consider memory-efficient test execution patterns'
+        suggestion: 'Consider memory-efficient test execution patterns',
       });
     }
 
@@ -415,7 +414,7 @@ class ParallelTestOptimizer {
     const sequentialTime = this.config.testSuites.reduce((sum, test) => sum + test.estimatedDuration, 0);
     const parallelTime = this.executionPlan.critical_path.total_estimated_duration;
 
-    if (sequentialTime === 0) return 0;
+    if (sequentialTime === 0) {return 0;}
 
     const savings = ((sequentialTime - parallelTime) / sequentialTime) * 100;
     return Math.max(0, Math.round(savings));
@@ -429,14 +428,14 @@ class ParallelTestOptimizer {
       strategy: {
         'fail-fast': false,
         matrix: {
-          include: []
-        }
+          include: [],
+        },
       },
       optimization: {
         parallel_groups: this.executionPlan.parallel_groups.length,
         max_parallelism: this.config.maxParallelJobs,
-        estimated_savings: this.executionPlan.estimated_time_savings
-      }
+        estimated_savings: this.executionPlan.estimated_time_savings,
+      },
     };
 
     // Generate matrix combinations based on optimization strategy
@@ -449,7 +448,7 @@ class ParallelTestOptimizer {
             'os': platform,
             'test-strategy': this.determineTestStrategy(nodeVersion, platform),
             'parallel-jobs': this.determineParallelJobs(platform),
-            'resource-class': this.determineResourceClass(platform)
+            'resource-class': this.determineResourceClass(platform),
           });
         }
       });
@@ -497,7 +496,7 @@ class ParallelTestOptimizer {
     const platformLimits = {
       'ubuntu-latest': this.config.maxParallelJobs,
       'windows-latest': Math.max(2, Math.floor(this.config.maxParallelJobs * 0.75)),
-      'macos-latest': Math.max(2, Math.floor(this.config.maxParallelJobs * 0.5))
+      'macos-latest': Math.max(2, Math.floor(this.config.maxParallelJobs * 0.5)),
     };
 
     return platformLimits[platform] || 2;
@@ -510,7 +509,7 @@ class ParallelTestOptimizer {
     const resourceClasses = {
       'ubuntu-latest': 'standard',
       'windows-latest': 'standard',
-      'macos-latest': 'large' // macOS typically needs more resources
+      'macos-latest': 'large', // macOS typically needs more resources
     };
 
     return resourceClasses[platform] || 'standard';
@@ -528,7 +527,7 @@ class ParallelTestOptimizer {
       config: this.config,
       execution_plan: this.executionPlan,
       github_actions_matrix: this.generateGitHubActionsMatrix(),
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     fs.writeFileSync(analysisFile, JSON.stringify(analysis, null, 2));
@@ -567,26 +566,26 @@ class ParallelTestOptimizer {
 
 ### Parallelizable Tests
 ${analysis.execution_plan.parallel_groups.map((group, i) =>
-  `#### Group ${i + 1}
+    `#### Group ${i + 1}
   - **Tests**: ${group.tests.map(t => t.name).join(', ')}
   - **Estimated Duration**: ${group.estimated_duration}s
-  - **Resource Profile**: ${group.resource_profile.memory}MB RAM, ${group.resource_profile.cpu} CPU cores`
-).join('\n\n')}
+  - **Resource Profile**: ${group.resource_profile.memory}MB RAM, ${group.resource_profile.cpu} CPU cores`,
+  ).join('\n\n')}
 
 ### Sequential Tests
 ${analysis.execution_plan.sequential_tests?.map(test =>
-  `- **${test.name}**: ${test.estimatedDuration}s (${test.dependencies.join(', ')})`
-).join('\n') || 'None'}
+    `- **${test.name}**: ${test.estimatedDuration}s (${test.dependencies.join(', ')})`,
+  ).join('\n') || 'None'}
 
 ## Bottlenecks
 ${analysis.execution_plan.critical_path.bottlenecks?.map(b =>
-  `- **${b.type}**: ${b.test || 'N/A'} (${b.duration}s) - ${b.suggestion}`
-).join('\n') || 'None identified'}
+    `- **${b.type}**: ${b.test || 'N/A'} (${b.duration}s) - ${b.suggestion}`,
+  ).join('\n') || 'None identified'}
 
 ## Optimization Opportunities
 ${analysis.execution_plan.critical_path.optimization_opportunities?.map(o =>
-  `- **${o.type}**: ${o.suggestion}`
-).join('\n') || 'None identified'}
+    `- **${o.type}**: ${o.suggestion}`,
+  ).join('\n') || 'None identified'}
 
 ## GitHub Actions Matrix Configuration
 
@@ -596,11 +595,11 @@ strategy:
   matrix:
     include:
 ${analysis.github_actions_matrix.strategy.matrix.include.map(item =>
-  `      - node-version: "${item['node-version']}"
+    `      - node-version: "${item['node-version']}"
         os: ${item.os}
         test-strategy: ${item['test-strategy']}
-        parallel-jobs: ${item['parallel-jobs']}`
-).join('\n')}
+        parallel-jobs: ${item['parallel-jobs']}`,
+  ).join('\n')}
 \`\`\`
 
 ## Recommendations

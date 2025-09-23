@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 
 /**
  * Node.js Version Performance Benchmarking Script
@@ -25,11 +24,11 @@ class NodeVersionPerformanceBenchmark {
         arch: process.arch,
         cpu_count: os.cpus().length,
         total_memory: Math.round(os.totalmem() / 1024 / 1024 / 1024) + 'GB',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
       benchmarks: {},
       performance_analysis: {},
-      recommendations: []
+      recommendations: [],
     };
 
     this.outputDir = path.join(process.cwd(), 'test-performance');
@@ -64,7 +63,7 @@ class NodeVersionPerformanceBenchmark {
       iterations,
       duration_ms: duration,
       operations_per_second: Math.round(iterations / (duration / 1000)),
-      result_hash: Math.round(result % 1000000)
+      result_hash: Math.round(result % 1000000),
     };
 
     console.log(`✅ CPU benchmark completed: ${duration.toFixed(2)}ms`);
@@ -88,7 +87,7 @@ class NodeVersionPerformanceBenchmark {
     // JSON serialization/deserialization
     const testObject = {
       data: arrays.slice(0, 100),
-      metadata: { timestamp: Date.now(), iteration: 0 }
+      metadata: { timestamp: Date.now(), iteration: 0 },
     };
 
     for (let i = 0; i < 100; i++) {
@@ -115,7 +114,7 @@ class NodeVersionPerformanceBenchmark {
       final_memory_mb: Math.round(finalMemory.heapUsed / 1024 / 1024),
       memory_delta_mb: Math.round((finalMemory.heapUsed - initialMemory.heapUsed) / 1024 / 1024),
       arrays_created: arrays.length,
-      json_operations: 100
+      json_operations: 100,
     };
 
     console.log(`✅ Memory benchmark completed: ${duration.toFixed(2)}ms`);
@@ -135,7 +134,7 @@ class NodeVersionPerformanceBenchmark {
       promises.push(
         new Promise(resolve => {
           setImmediate(() => resolve(i * 2));
-        })
+        }),
       );
     }
 
@@ -146,7 +145,7 @@ class NodeVersionPerformanceBenchmark {
       const results = [];
       for (let i = 0; i < count; i++) {
         const result = await new Promise(resolve =>
-          process.nextTick(() => resolve(i))
+          process.nextTick(() => resolve(i)),
         );
         results.push(result);
       }
@@ -162,7 +161,7 @@ class NodeVersionPerformanceBenchmark {
       duration_ms: duration,
       promise_count: promises.length,
       async_operations: asyncResults.length,
-      total_operations: promises.length + asyncResults.length
+      total_operations: promises.length + asyncResults.length,
     };
 
     console.log(`✅ Async benchmark completed: ${duration.toFixed(2)}ms`);
@@ -188,11 +187,11 @@ class NodeVersionPerformanceBenchmark {
       const data = JSON.stringify({
         id: i,
         data: new Array(100).fill(i),
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
 
       writePromises.push(
-        fs.promises.writeFile(filePath, data, 'utf8')
+        fs.promises.writeFile(filePath, data, 'utf8'),
       );
     }
 
@@ -201,7 +200,7 @@ class NodeVersionPerformanceBenchmark {
     // File read operations
     const files = fs.readdirSync(tempDir);
     const readPromises = files.map(file =>
-      fs.promises.readFile(path.join(tempDir, file), 'utf8')
+      fs.promises.readFile(path.join(tempDir, file), 'utf8'),
     );
 
     const fileContents = await Promise.all(readPromises);
@@ -219,7 +218,7 @@ class NodeVersionPerformanceBenchmark {
       duration_ms: duration,
       files_written: writePromises.length,
       files_read: fileContents.length,
-      total_file_operations: writePromises.length + fileContents.length
+      total_file_operations: writePromises.length + fileContents.length,
     };
 
     console.log(`✅ File operations benchmark completed: ${duration.toFixed(2)}ms`);
@@ -257,7 +256,7 @@ class NodeVersionPerformanceBenchmark {
         duration_ms: duration,
         crypto_operations: hashes.length,
         buffer_operations: buffers.length,
-        status: 'success'
+        status: 'success',
       };
 
       console.log(`✅ Native modules benchmark completed: ${duration.toFixed(2)}ms`);
@@ -266,7 +265,7 @@ class NodeVersionPerformanceBenchmark {
       this.results.benchmarks.native_modules = {
         duration_ms: 0,
         status: 'failed',
-        error: error.message
+        error: error.message,
       };
 
       console.log(`❌ Native modules benchmark failed: ${error.message}`);
@@ -288,7 +287,7 @@ class NodeVersionPerformanceBenchmark {
       node_version: process.version,
       performance_score: this.calculatePerformanceScore(),
       bottlenecks: this.identifyBottlenecks(),
-      optimization_opportunities: this.identifyOptimizations()
+      optimization_opportunities: this.identifyOptimizations(),
     };
 
     this.generateRecommendations();
@@ -335,7 +334,7 @@ class NodeVersionPerformanceBenchmark {
       bottlenecks.push({
         category: 'cpu',
         severity: 'high',
-        message: 'CPU-intensive operations are slower than expected'
+        message: 'CPU-intensive operations are slower than expected',
       });
     }
 
@@ -343,7 +342,7 @@ class NodeVersionPerformanceBenchmark {
       bottlenecks.push({
         category: 'memory',
         severity: 'medium',
-        message: 'High memory allocation detected'
+        message: 'High memory allocation detected',
       });
     }
 
@@ -351,7 +350,7 @@ class NodeVersionPerformanceBenchmark {
       bottlenecks.push({
         category: 'async',
         severity: 'medium',
-        message: 'Async operations are slower than optimal'
+        message: 'Async operations are slower than optimal',
       });
     }
 
@@ -359,7 +358,7 @@ class NodeVersionPerformanceBenchmark {
       bottlenecks.push({
         category: 'native',
         severity: 'high',
-        message: 'Native module operations failed'
+        message: 'Native module operations failed',
       });
     }
 

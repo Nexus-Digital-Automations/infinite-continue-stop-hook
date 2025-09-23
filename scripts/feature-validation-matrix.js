@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 
 /**
  * Feature Validation Matrix Tester
@@ -22,7 +21,7 @@ class FeatureValidationMatrix {
       node_version: process.version,
       platform: process.platform,
       arch: process.arch,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     this.features = this.discoverFeatures();
@@ -31,7 +30,7 @@ class FeatureValidationMatrix {
       feature_tests: {},
       compatibility_matrix: {},
       issues_found: [],
-      overall_status: 'unknown'
+      overall_status: 'unknown',
     };
 
     this.outputDir = path.join(process.cwd(), 'test-performance');
@@ -56,7 +55,7 @@ class FeatureValidationMatrix {
       type: 'api',
       testFunction: this.validateTaskManagerAPI.bind(this),
       critical: true,
-      description: 'Core TaskManager API functionality'
+      description: 'Core TaskManager API functionality',
     });
 
     // RAG System features
@@ -66,7 +65,7 @@ class FeatureValidationMatrix {
         type: 'rag',
         testFunction: this.validateRAGSystem.bind(this),
         critical: true,
-        description: 'RAG system functionality and data processing'
+        description: 'RAG system functionality and data processing',
       });
     }
 
@@ -76,7 +75,7 @@ class FeatureValidationMatrix {
       type: 'file',
       testFunction: this.validateFileOperations.bind(this),
       critical: false,
-      description: 'File system operations and data persistence'
+      description: 'File system operations and data persistence',
     });
 
     // Agent Management
@@ -85,7 +84,7 @@ class FeatureValidationMatrix {
       type: 'agent',
       testFunction: this.validateAgentManagement.bind(this),
       critical: true,
-      description: 'Multi-agent coordination and lifecycle management'
+      description: 'Multi-agent coordination and lifecycle management',
     });
 
     // Performance Monitoring
@@ -94,7 +93,7 @@ class FeatureValidationMatrix {
       type: 'performance',
       testFunction: this.validatePerformanceMonitoring.bind(this),
       critical: false,
-      description: 'Performance tracking and monitoring systems'
+      description: 'Performance tracking and monitoring systems',
     });
 
     // Native Dependencies
@@ -103,7 +102,7 @@ class FeatureValidationMatrix {
       type: 'native',
       testFunction: this.validateNativeDependencies.bind(this),
       critical: true,
-      description: 'Native module functionality (SQLite, FAISS, etc.)'
+      description: 'Native module functionality (SQLite, FAISS, etc.)',
     });
 
     return features;
@@ -117,7 +116,7 @@ class FeatureValidationMatrix {
       name: 'TaskManager API',
       status: 'unknown',
       details: {},
-      errors: []
+      errors: [],
     };
 
     try {
@@ -128,7 +127,7 @@ class FeatureValidationMatrix {
       result.details.startup = {
         success: startTest.success,
         output: startTest.output.substring(0, 200) + '...',
-        duration: startTest.duration
+        duration: startTest.duration,
       };
 
       // Test API endpoints if available
@@ -160,7 +159,7 @@ class FeatureValidationMatrix {
       name: 'RAG System',
       status: 'unknown',
       details: {},
-      errors: []
+      errors: [],
     };
 
     try {
@@ -183,7 +182,7 @@ class FeatureValidationMatrix {
         const ragTest = await this.testCommand('npm run test:rag:unit', 30000);
         result.details.unit_tests = {
           success: ragTest.success,
-          duration: ragTest.duration
+          duration: ragTest.duration,
         };
 
         if (!ragTest.success) {
@@ -196,7 +195,7 @@ class FeatureValidationMatrix {
         const libFiles = fs.readdirSync('lib');
         result.details.library_files = libFiles.length;
         result.details.has_rag_components = libFiles.some(file =>
-          file.includes('rag') || file.includes('vector') || file.includes('embeddings')
+          file.includes('rag') || file.includes('vector') || file.includes('embeddings'),
         );
       }
 
@@ -218,7 +217,7 @@ class FeatureValidationMatrix {
       name: 'File Operations',
       status: 'unknown',
       details: {},
-      errors: []
+      errors: [],
     };
 
     try {
@@ -254,7 +253,7 @@ class FeatureValidationMatrix {
         const fileTest = await this.testCommand('npm run test:integration:files', 30000);
         result.details.integration_tests = {
           success: fileTest.success,
-          duration: fileTest.duration
+          duration: fileTest.duration,
         };
 
         if (!fileTest.success) {
@@ -280,7 +279,7 @@ class FeatureValidationMatrix {
       name: 'Agent Management',
       status: 'unknown',
       details: {},
-      errors: []
+      errors: [],
     };
 
     try {
@@ -291,7 +290,7 @@ class FeatureValidationMatrix {
         const agentTest = await this.testCommand('npm run test:integration:agents', 30000);
         result.details.lifecycle_tests = {
           success: agentTest.success,
-          duration: agentTest.duration
+          duration: agentTest.duration,
         };
 
         if (!agentTest.success) {
@@ -304,7 +303,7 @@ class FeatureValidationMatrix {
         const multiAgentTest = await this.testCommand('npm run test:e2e:multi-agent', 45000);
         result.details.multi_agent_tests = {
           success: multiAgentTest.success,
-          duration: multiAgentTest.duration
+          duration: multiAgentTest.duration,
         };
 
         if (!multiAgentTest.success) {
@@ -337,7 +336,7 @@ class FeatureValidationMatrix {
       name: 'Performance Monitoring',
       status: 'unknown',
       details: {},
-      errors: []
+      errors: [],
     };
 
     try {
@@ -348,7 +347,7 @@ class FeatureValidationMatrix {
         const perfTest = await this.testCommand('npm run performance:test', 30000);
         result.details.performance_script = {
           success: perfTest.success,
-          duration: perfTest.duration
+          duration: perfTest.duration,
         };
 
         if (!perfTest.success) {
@@ -361,7 +360,7 @@ class FeatureValidationMatrix {
         const ragPerfTest = await this.testCommand('npm run test:rag:performance', 45000);
         result.details.rag_performance_tests = {
           success: ragPerfTest.success,
-          duration: ragPerfTest.duration
+          duration: ragPerfTest.duration,
         };
 
         if (!ragPerfTest.success) {
@@ -373,7 +372,7 @@ class FeatureValidationMatrix {
       result.details.system_info = {
         memory_usage: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
         cpu_usage: process.cpuUsage(),
-        uptime: process.uptime()
+        uptime: process.uptime(),
       };
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
@@ -394,7 +393,7 @@ class FeatureValidationMatrix {
       name: 'Native Dependencies',
       status: 'unknown',
       details: {},
-      errors: []
+      errors: [],
     };
 
     try {
@@ -403,7 +402,7 @@ class FeatureValidationMatrix {
       // Test critical native dependencies
       const nativeDeps = [
         { name: 'sqlite3', test: () => require('sqlite3') },
-        { name: 'faiss-node', test: () => require('faiss-node') }
+        { name: 'faiss-node', test: () => require('faiss-node') },
       ];
 
       for (const dep of nativeDeps) {
@@ -450,21 +449,21 @@ class FeatureValidationMatrix {
         const output = execSync(command, {
           timeout,
           encoding: 'utf8',
-          stdio: 'pipe'
+          stdio: 'pipe',
         });
 
         resolve({
           success: true,
           output,
           duration: Date.now() - start,
-          error: null
+          error: null,
         });
       } catch (error) {
         resolve({
           success: false,
           output: error.stdout || '',
           duration: Date.now() - start,
-          error: error.message
+          error: error.message,
         });
       }
     });
@@ -489,7 +488,7 @@ class FeatureValidationMatrix {
           this.validationResults.issues_found.push({
             feature: feature.name,
             type: 'critical',
-            errors: result.errors
+            errors: result.errors,
           });
         }
 
@@ -498,14 +497,14 @@ class FeatureValidationMatrix {
         this.validationResults.feature_tests[feature.name] = {
           name: feature.name,
           status: 'failed',
-          errors: [`Validation error: ${error.message}`]
+          errors: [`Validation error: ${error.message}`],
         };
 
         if (feature.critical) {
           this.validationResults.issues_found.push({
             feature: feature.name,
             type: 'critical',
-            errors: [`Validation error: ${error.message}`]
+            errors: [`Validation error: ${error.message}`],
           });
         }
       }
@@ -522,7 +521,7 @@ class FeatureValidationMatrix {
       node_version: this.environment.node_version,
       platform: this.environment.platform,
       arch: this.environment.arch,
-      features: {}
+      features: {},
     };
 
     // Analyze feature test results
@@ -530,7 +529,7 @@ class FeatureValidationMatrix {
       matrix.features[test.name] = {
         status: test.status,
         errors: test.errors.length,
-        critical_issues: test.errors.filter(e => e.includes('critical')).length
+        critical_issues: test.errors.filter(e => e.includes('critical')).length,
       };
     });
 
@@ -597,19 +596,19 @@ class FeatureValidationMatrix {
 | Feature | Status | Errors | Details |
 |---------|--------|--------|---------|
 ${Object.values(this.validationResults.feature_tests).map(test => {
-  const status = test.status === 'passed' ? '✅ Passed' : '❌ Failed';
-  const errorCount = test.errors.length;
-  const details = test.details ? Object.keys(test.details).length + ' checks' : 'N/A';
-  return `| ${test.name} | ${status} | ${errorCount} | ${details} |`;
-}).join('\n')}
+    const status = test.status === 'passed' ? '✅ Passed' : '❌ Failed';
+    const errorCount = test.errors.length;
+    const details = test.details ? Object.keys(test.details).length + ' checks' : 'N/A';
+    return `| ${test.name} | ${status} | ${errorCount} | ${details} |`;
+  }).join('\n')}
 
 ## Critical Issues
 ${this.validationResults.issues_found.length > 0 ?
-  this.validationResults.issues_found.map(issue =>
-    `### ${issue.feature}
+    this.validationResults.issues_found.map(issue =>
+      `### ${issue.feature}
 - **Type**: ${issue.type}
-- **Errors**: ${issue.errors.join(', ')}`
-  ).join('\n\n') : 'None identified ✅'}
+- **Errors**: ${issue.errors.join(', ')}`,
+    ).join('\n\n') : 'None identified ✅'}
 
 ## Feature Details
 
@@ -623,12 +622,12 @@ ${test.details ? Object.entries(test.details).map(([key, value]) => `- **${key}*
 ## Recommendations
 
 ${this.validationResults.overall_status === 'excellent' ?
-  '🏆 All features validated successfully! This Node.js version is optimal for production.' :
-  this.validationResults.overall_status === 'good' ?
-  '✅ Most features working well. Minor issues detected but not blocking.' :
-  this.validationResults.overall_status === 'fair' ?
-  '⚠️ Some compatibility issues detected. Review and address before production use.' :
-  '❌ Significant compatibility issues detected. Investigation required before use.'}
+    '🏆 All features validated successfully! This Node.js version is optimal for production.' :
+    this.validationResults.overall_status === 'good' ?
+      '✅ Most features working well. Minor issues detected but not blocking.' :
+      this.validationResults.overall_status === 'fair' ?
+        '⚠️ Some compatibility issues detected. Review and address before production use.' :
+        '❌ Significant compatibility issues detected. Investigation required before use.'}
 
 ---
 *Generated by Feature Validation Matrix v2.0.0*
