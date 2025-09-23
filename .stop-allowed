@@ -1,7 +1,0 @@
-{
-  "stop_allowed": true,
-  "authorized_by": "test-agent-1",
-  "reason": "Test stop reason",
-  "timestamp": "2025-09-23T15:17:04.202Z",
-  "session_type": "self_authorized"
-}

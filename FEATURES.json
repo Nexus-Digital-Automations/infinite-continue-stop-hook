@@ -265,7 +265,7 @@
     ],
     "initialization_stats": {
       "total_initializations": 4,
-      "total_reinitializations": 3,
+      "total_reinitializations": 4,
       "current_day": "2025-09-23",
       "time_buckets": {
         "07:00-11:59": {
@@ -274,7 +274,7 @@
         },
         "12:00-16:59": {
           "init": 0,
-          "reinit": 0
+          "reinit": 1
         },
         "17:00-21:59": {
           "init": 0,
@@ -291,7 +291,7 @@
       },
       "daily_history": [],
       "last_reset": "2025-09-23T15:27:17.247Z",
-      "last_updated": "2025-09-23T15:27:17.247Z"
+      "last_updated": "2025-09-23T17:49:32.610Z"
     }
   },
   "workflow_config": {
@@ -327,27 +327,12 @@
   "tasks": [],
   "completed_tasks": [],
   "agents": {
-    "test-agent-1": {
-      "lastHeartbeat": "2025-09-23T15:16:59.245Z",
+    "claude-interaction-tracker": {
+      "lastHeartbeat": "2025-09-23T17:49:32.609Z",
       "status": "active",
-      "initialized": "2025-09-23T15:16:55.247Z",
-      "sessionId": "13ba5969264bd549",
-      "reinitialized": "2025-09-23T15:16:59.245Z",
-      "previousSessions": [
-        "a0d4a952ce449069"
-      ]
-    },
-    "test-bucket-verification": {
-      "lastHeartbeat": "2025-09-23T15:25:23.302Z",
-      "status": "active",
-      "initialized": "2025-09-23T15:25:23.302Z",
-      "sessionId": "7506bfbcd6d5b419"
-    },
-    "test-corrected-buckets": {
-      "lastHeartbeat": "2025-09-23T15:27:17.245Z",
-      "status": "active",
-      "initialized": "2025-09-23T15:27:17.245Z",
-      "sessionId": "f98d4d3588028f0b"
+      "reinitialized": "2025-09-23T17:49:32.609Z",
+      "sessionId": "1082a62a29efe40b",
+      "previousSessions": []
     }
   }
 }
