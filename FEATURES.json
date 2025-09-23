@@ -264,34 +264,34 @@
       }
     ],
     "initialization_stats": {
-      "total_initializations": 3,
+      "total_initializations": 4,
       "total_reinitializations": 3,
       "current_day": "2025-09-23",
       "time_buckets": {
-        "09:00-13:59": {
+        "07:00-11:59": {
           "init": 1,
           "reinit": 0
         },
-        "14:00-18:59": {
+        "12:00-16:59": {
           "init": 0,
           "reinit": 0
         },
-        "19:00-23:59": {
+        "17:00-21:59": {
           "init": 0,
           "reinit": 0
         },
-        "00:00-04:59": {
+        "22:00-02:59": {
           "init": 0,
           "reinit": 0
         },
-        "05:00-09:59": {
+        "03:00-07:59": {
           "init": 0,
           "reinit": 0
         }
       },
       "daily_history": [],
-      "last_reset": "2025-09-23T15:25:23.304Z",
-      "last_updated": "2025-09-23T15:25:23.304Z"
+      "last_reset": "2025-09-23T15:27:17.247Z",
+      "last_updated": "2025-09-23T15:27:17.247Z"
     }
   },
   "workflow_config": {
@@ -327,23 +327,6 @@
   "tasks": [],
   "completed_tasks": [],
   "agents": {
-    "test-agent-123": {
-      "lastHeartbeat": "2025-09-23T14:52:55.793Z",
-      "status": "active",
-      "initialized": "2025-09-23T14:52:42.154Z",
-      "sessionId": "0b15d5e45787c277",
-      "reinitialized": "2025-09-23T14:52:55.793Z",
-      "previousSessions": [
-        "551a3ad17a364ffa"
-      ]
-    },
-    "main-continuation-agent": {
-      "lastHeartbeat": "2025-09-23T14:54:13.622Z",
-      "status": "active",
-      "reinitialized": "2025-09-23T14:54:13.622Z",
-      "sessionId": "c209c85bc1f1f2d1",
-      "previousSessions": []
-    },
     "test-agent-1": {
       "lastHeartbeat": "2025-09-23T15:16:59.245Z",
       "status": "active",
@@ -359,6 +342,12 @@
       "status": "active",
       "initialized": "2025-09-23T15:25:23.302Z",
       "sessionId": "7506bfbcd6d5b419"
+    },
+    "test-corrected-buckets": {
+      "lastHeartbeat": "2025-09-23T15:27:17.245Z",
+      "status": "active",
+      "initialized": "2025-09-23T15:27:17.245Z",
+      "sessionId": "f98d4d3588028f0b"
     }
   }
 }

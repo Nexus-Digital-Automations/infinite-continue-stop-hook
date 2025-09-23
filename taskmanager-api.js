@@ -1054,11 +1054,15 @@ class FeatureManagerAPI {
     const now = new Date();
     const currentHour = now.getHours();
 
-    // Calculate days since epoch (Jan 1, 1970) to determine daily offset
-    const daysSinceEpoch = Math.floor(now.getTime() / (1000 * 60 * 60 * 24));
+    // Use September 23, 2025 as reference date when start time was 7am
+    const referenceDate = new Date('2025-09-23');
+    const currentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-    // Starting hour advances by 1 each day, starting from 7am on day 0
-    const todayStartHour = (7 + daysSinceEpoch) % 24;
+    // Calculate days since reference date
+    const daysSinceReference = Math.floor((currentDate.getTime() - referenceDate.getTime()) / (1000 * 60 * 60 * 24));
+
+    // Starting hour advances by 1 each day, starting from 7am on reference date
+    const todayStartHour = (7 + daysSinceReference) % 24;
 
     // Calculate which 5-hour bucket we're in (0-4)
     let hourOffset = (currentHour - todayStartHour + 24) % 24;
@@ -1085,8 +1089,16 @@ class FeatureManagerAPI {
    */
   _getTodayTimeBuckets() {
     const now = new Date();
-    const daysSinceEpoch = Math.floor(now.getTime() / (1000 * 60 * 60 * 24));
-    const todayStartHour = (7 + daysSinceEpoch) % 24;
+
+    // Use September 23, 2025 as reference date when start time was 7am
+    const referenceDate = new Date('2025-09-23');
+    const currentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    // Calculate days since reference date
+    const daysSinceReference = Math.floor((currentDate.getTime() - referenceDate.getTime()) / (1000 * 60 * 60 * 24));
+
+    // Starting hour advances by 1 each day, starting from 7am on reference date
+    const todayStartHour = (7 + daysSinceReference) % 24;
 
     const buckets = [];
     for (let i = 0; i < 5; i++) {
