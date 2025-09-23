@@ -496,171 +496,372 @@ nvm use 20
 
 ## 🔄 CI/CD Integration
 
-### Continuous Integration Commands
+### GitHub Actions Workflow
+
+The project uses a comprehensive CI/CD pipeline in `.github/workflows/ci-cd-pipeline.yml`:
+
+#### Pipeline Stages
+1. **Quick Validation** (5 minutes)
+   - Linting
+   - Package validation
+   - Security audit
+
+2. **Test Matrix** (20 minutes)
+   - Tests across Node.js 18.x, 20.x, 22.x
+   - Tests on Ubuntu, Windows, macOS
+   - Unit, integration, and RAG tests
+
+3. **Code Quality** (10 minutes)
+   - Comprehensive linting
+   - Security analysis
+   - Dependency analysis
+
+4. **Performance Testing** (15 minutes)
+   - Performance monitoring
+   - Memory analysis
+   - Trend analysis
+
+5. **Coverage Analysis** (10 minutes)
+   - Coverage report generation
+   - Threshold validation
+   - Report merging
+
+6. **Build Validation** (10 minutes)
+   - Application startup validation
+   - Integration smoke tests
+   - API endpoint validation
+
+7. **Quality Gate** (2 minutes)
+   - Final validation
+   - Status aggregation
+   - Deployment readiness
+
+#### Local CI Simulation
 ```bash
-# CI-optimized test run
-npm run coverage:ci
+# Run complete quality check
+npm run ci:quality-check
 
-# Parallel test execution
-npm test -- --maxWorkers=4
+# Run full validation suite
+npm run ci:full-validation
 
-# CI with timeout and error handling
-timeout 300 npm run coverage:ci || exit 1
+# Individual CI steps
+npm run lint
+npm run coverage:check:standalone
+npm run performance:test
 ```
 
-### GitHub Actions Integration
-```yaml
-# .github/workflows/test.yml
-- name: Run Tests
-  run: |
-    npm ci
-    npm run coverage:ci
-    npm run coverage:check
+### Coverage Monitoring
 
-- name: Upload Coverage
-  uses: codecov/codecov-action@v3
-  with:
-    file: ./coverage/lcov.info
+#### Coverage Scripts
+```bash
+# Generate coverage reports
+npm run coverage
+
+# Generate HTML coverage report
+npm run coverage:html
+
+# Check coverage thresholds
+npm run coverage:check
+
+# Monitor coverage trends
+npm run coverage:monitor
 ```
 
-### Quality Gates
-```bash
-# Validate all quality requirements
-npm run coverage:check && \
-npm run lint && \
-npm test -- --passWithNoTests
-
-# Pre-commit validation
-npm run test:quick && npm run lint:fix
+#### Coverage Thresholds
+```javascript
+// jest.config.js
+coverageThreshold: {
+  global: {
+    branches: 75,
+    functions: 80,
+    lines: 80,
+    statements: 80
+  }
+}
 ```
 
-## 📈 Performance Monitoring
+#### Coverage Reports
+- **HTML**: `coverage/lcov-report/index.html`
+- **JSON**: `coverage/coverage-summary.json`
+- **LCOV**: `coverage/lcov.info`
+- **Text**: Console output
 
-### Execution Time Monitoring
+---
+
+## ⚡ Performance Testing
+
+### Performance Scripts
 ```bash
-# Run tests with timing information
-npm test -- --verbose --detectOpenHandles
+# Run performance tests
+npm run performance:test
 
-# Performance tests with benchmarking
+# Verbose performance output
+npm run performance:test:verbose
+
+# JSON performance output
+npm run performance:test:json
+
+# Monitor performance
+npm run performance:monitor
+```
+
+### Performance Monitoring
+The project includes comprehensive performance monitoring:
+
+#### Features
+- Test execution timing
+- Memory usage analysis
+- Parallelization recommendations
+- Performance trend tracking
+- Bottleneck identification
+
+#### Performance Reports
+```bash
+# View latest performance report
+cat test-performance/latest-report.json
+
+# View performance trends
+cat test-performance/trends.json
+```
+
+#### Performance Thresholds
+- Test duration warnings: > 5 seconds
+- Memory usage warnings: > 50MB delta
+- Automatic parallelization analysis
+- CI/CD performance validation
+
+### RAG System Performance
+```bash
+# RAG performance tests
 npm run test:rag:performance
 
-# Memory usage monitoring
-npm test -- --logHeapUsage
+# Performance with specific workers
+npm test -- --maxWorkers=1 test/rag-system/performance
 ```
 
-### Test Performance Optimization
+---
+
+## 📊 Coverage Analysis
+
+### Coverage Commands
 ```bash
-# Parallel execution (default)
-npm test -- --maxWorkers=50%
+# Basic coverage
+npm run coverage
 
-# Sequential execution (for debugging)
-npm test -- --runInBand
+# Coverage with different reporters
+npm run coverage:report  # HTML + text summary
+npm run coverage:html    # HTML only
+npm run coverage:json    # JSON only
+npm run coverage:lcov    # LCOV only
 
-# Reduced workers for memory-intensive tests
-npm test -- --maxWorkers=2
+# Coverage validation
+npm run coverage:check
+npm run coverage:threshold-check
 ```
 
-## 🛠️ Troubleshooting Common Issues
-
-### Test Failures
-```bash
-# Re-run failed tests only
-npm test -- --onlyFailures
-
-# Run with detailed error output
-npm test -- --verbose --errorOnDeprecated
-
-# Clear cache and retry
-npm test -- --clearCache && npm test
+### Coverage Configuration
+```javascript
+// jest.config.js
+collectCoverageFrom: [
+  "*.js",
+  "lib/**/*.js",
+  "development/essentials/*.js",
+  "scripts/**/*.js",
+  // Exclusions
+  "!test/**",
+  "!coverage/**",
+  "!node_modules/**"
+],
+coverageThreshold: {
+  global: {
+    branches: 75,
+    functions: 80,
+    lines: 80,
+    statements: 80
+  }
+}
 ```
 
-### Environment Issues
+### Coverage Analysis Tools
 ```bash
-# Reset test environment
-rm -rf node_modules coverage .jest-cache
-npm install
-npm test
+# Standalone coverage checker
+npm run coverage:check:standalone
 
-# Verify Jest installation
-npx jest --version
+# Strict coverage validation
+npm run coverage:check:strict
 
-# Check test configuration
-npm test -- --showConfig
+# Coverage monitoring
+npm run coverage:monitor
 ```
 
-### Database/External Service Issues
-```bash
-# Run unit tests with mocks (no external dependencies)
-npm test -- --testPathPattern="unit" # Uses mocks
+---
 
-# Run integration tests with real services
-npm test -- --testPathPattern="integration"
+## 📝 Best Practices
 
-# RAG system tests with test database
-npm run test:rag:integrity
+### Test Organization
+
+#### 1. File Naming
+```
+test/
+├── unit/
+│   ├── feature-name.test.js     # Unit tests
+│   └── component-name.test.js
+├── integration/
+│   ├── workflow-name.test.js    # Integration tests
+│   └── api-endpoints.test.js
+└── e2e/
+    ├── user-journey.test.js     # E2E tests
+    └── complete-flow.test.js
 ```
 
-## 📚 Advanced Test Execution
+#### 2. Test Structure
+```javascript
+describe('Feature Name', () => {
+  beforeAll(async () => {
+    // Setup for all tests
+  });
 
-### Custom Test Scripts
-```bash
-# Run smoke tests
-npm test -- --testNamePattern="smoke"
+  afterAll(async () => {
+    // Cleanup for all tests
+  });
 
-# Run critical path tests
-npm test -- --testNamePattern="critical"
+  beforeEach(async () => {
+    // Setup for each test
+  });
 
-# Regression testing
-npm test -- --testPathPattern="regression"
+  afterEach(async () => {
+    // Cleanup for each test
+  });
+
+  describe('when condition', () => {
+    test('should do something', async () => {
+      // Arrange
+      const testData = TestDataFactory.createFeatureData();
+
+      // Act
+      const result = await APIExecutor.execAPI('command', [testData]);
+
+      // Assert
+      expect(result).toBeSuccessfulAPIResponse();
+    });
+  });
+});
 ```
 
 ### Test Data Management
-```bash
-# Tests with coverage data cleanup
-npm run coverage:clean && npm test
 
-# Run tests and monitor coverage changes
-npm run coverage:monitor
+#### 1. Use Test Factories
+```javascript
+const { TestDataFactory } = require('../utils/testUtils');
 
-# Tests with specific patterns
-TEST_DATASET=large npm test
+const featureData = TestDataFactory.createFeatureData({
+  title: 'Custom Feature Title'
+});
 ```
 
-### Multi-Environment Testing
-```bash
-# Test against different Node versions
-nvm use 18 && npm test
-nvm use 20 && npm test
+#### 2. Use Test Environment
+```javascript
+const { TestEnvironment } = require('../utils/testUtils');
 
-# Test with different configurations
-NODE_ENV=development npm test
-NODE_ENV=production npm test
+const testEnv = new TestEnvironment('my-test');
+const testDir = testEnv.setup();
+// Run tests
+testEnv.cleanup();
 ```
 
-## 📋 Test Execution Checklist
+### Error Handling
 
-### Before Running Tests
-- [ ] Dependencies installed (`npm install`)
-- [ ] Environment variables set
-- [ ] Test database available (if needed)
-- [ ] External services mocked/available
+#### 1. Proper Error Testing
+```javascript
+test('should handle errors gracefully', async () => {
+  await expect(
+    APIExecutor.execAPI('invalid-command')
+  ).rejects.toThrow('Command failed');
+});
+```
 
-### During Development
-- [ ] Run related tests (`npm test -- --testPathPattern="feature"`)
-- [ ] Watch mode active (`npm test -- --watch`)
-- [ ] Coverage monitoring (`npm run coverage:watch`)
+#### 2. Timeout Handling
+```javascript
+test('should handle timeouts', async () => {
+  const promise = longRunningOperation();
+  const result = await TestExecution.withTimeout(promise, 5000);
+  expect(result).toBeDefined();
+});
+```
 
-### Before Commit
-- [ ] All tests pass (`npm test`)
-- [ ] Coverage thresholds met (`npm run coverage:check`)
-- [ ] Linting passes (`npm run lint`)
-- [ ] No test warnings or deprecations
+### Performance Considerations
 
-### For CI/CD
-- [ ] CI-optimized execution (`npm run coverage:ci`)
-- [ ] Parallel execution configured
-- [ ] Quality gates enforced
-- [ ] Reports generated and uploaded
+#### 1. Parallel Test Execution
+```javascript
+test('should handle parallel operations', async () => {
+  const promises = Array.from({ length: 10 }, () =>
+    APIExecutor.execAPI('command')
+  );
+
+  const results = await TestExecution.parallel(promises, 3);
+  expect(results).toHaveLength(10);
+});
+```
+
+#### 2. Resource Cleanup
+```javascript
+afterEach(async () => {
+  // Clean up test resources
+  await APIExecutor.cleanup(testData);
+});
+```
+
+### CI/CD Optimization
+
+#### 1. Test Categorization
+```bash
+# Run only fast tests in pre-commit
+npm run test:unit
+
+# Run comprehensive tests in CI
+npm run test:integration
+```
+
+#### 2. Conditional Test Execution
+```javascript
+describe.skipIf(process.env.CI === 'true')('Local only tests', () => {
+  // Tests that only run locally
+});
+```
+
+---
+
+## 🎯 Summary
+
+This guide provides comprehensive coverage for test execution and troubleshooting in the infinite-continue-stop-hook project. Key takeaways:
+
+### Test Execution
+- Use appropriate test commands for different test types
+- Leverage environment variables for configuration
+- Use watch mode for development
+
+### Debugging
+- Enable debug mode for detailed output
+- Use Node.js inspector for step-through debugging
+- Leverage test utilities for better debugging
+
+### Troubleshooting
+- Check timeouts, memory, and configuration issues
+- Use proper error handling and cleanup
+- Monitor performance and coverage
+
+### CI/CD Integration
+- Comprehensive pipeline with quality gates
+- Performance and coverage monitoring
+- Multi-platform testing support
+
+### Best Practices
+- Organize tests logically
+- Use test utilities and factories
+- Handle errors and timeouts properly
+- Optimize for CI/CD execution
+
+For specific issues not covered in this guide, check the project's test files for examples and consult the Jest documentation for advanced configuration options.
 
 ---
 
@@ -673,6 +874,6 @@ NODE_ENV=production npm test
 
 ---
 
-**Execution Guide Reviewed By:** Senior Developer Standards
+**Guide Updated By:** Testing Infrastructure Agent
 **Compliance:** Enterprise Testing Standards
 **Next Review:** Quarterly or upon major tooling changes
