@@ -144,25 +144,97 @@
       "updated_at": "2025-09-23T15:15:08.264Z",
       "suggested_by": "system",
       "metadata": {}
+    },
+    {
+      "id": "feature_1758650890403_ecf2e293528b",
+      "title": "Test Feature with Mocks",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-23T18:08:10.403Z",
+      "updated_at": "2025-09-23T18:08:10.404Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758650900460_253d23e06f9d",
+      "title": "Invalid Feature",
+      "description": "This is a test feature for automated testing",
+      "business_value": "Validates testing infrastructure",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-23T18:08:20.460Z",
+      "updated_at": "2025-09-23T18:08:20.461Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758650910531_297672f39572",
+      "title": "Test Feature 1758650910481",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-23T18:08:30.531Z",
+      "updated_at": "2025-09-23T18:08:30.532Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758650910569_199e1106d365",
+      "title": "Test Feature 1758650910538",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "bug-fix",
+      "status": "suggested",
+      "created_at": "2025-09-23T18:08:30.569Z",
+      "updated_at": "2025-09-23T18:08:30.570Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758650970033_fe26940d4cbb",
+      "title": "Test Feature with Mocks",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-23T18:09:30.034Z",
+      "updated_at": "2025-09-23T18:09:30.034Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758651307591_f5f33bbf71d6",
+      "title": "Test Feature with Mocks",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-23T18:15:07.591Z",
+      "updated_at": "2025-09-23T18:15:07.592Z",
+      "suggested_by": "system",
+      "metadata": {}
     }
   ],
   "metadata": {
     "version": "1.0.0",
     "created": "2025-09-23T15:10:35.544Z",
-    "updated": "2025-09-23T15:15:08.265Z",
-    "total_features": 12,
+    "updated": "2025-09-23T18:15:07.592Z",
+    "total_features": 18,
     "approval_history": [],
     "initialization_stats": {
-      "total_initializations": 15,
+      "total_initializations": 27,
       "total_reinitializations": 0,
       "current_day": "2025-09-23",
       "time_buckets": {
         "07:00-11:59": {
-          "init": 15,
+          "init": 0,
           "reinit": 0
         },
         "12:00-16:59": {
-          "init": 0,
+          "init": 12,
           "reinit": 0
         },
         "17:00-21:59": {
@@ -173,14 +245,14 @@
           "init": 0,
           "reinit": 0
         },
-        "03:00-06:59": {
+        "03:00-07:59": {
           "init": 0,
           "reinit": 0
         }
       },
       "daily_history": [],
-      "last_reset": "2025-09-23T15:10:35.545Z",
-      "last_updated": "2025-09-23T15:15:09.516Z"
+      "last_reset": "2025-09-23T18:07:50.536Z",
+      "last_updated": "2025-09-23T18:15:07.631Z"
     }
   },
   "workflow_config": {
@@ -289,6 +361,78 @@
       "status": "active",
       "initialized": "2025-09-23T15:15:09.514Z",
       "sessionId": "a4dc47a6f2e4990a"
+    },
+    "test-agent-1758650870286-ezkf0j": {
+      "lastHeartbeat": "2025-09-23T18:07:50.517Z",
+      "status": "active",
+      "initialized": "2025-09-23T18:07:50.517Z",
+      "sessionId": "4bc56f4560081d1d"
+    },
+    "test-agent-1758650880333-8pklbt": {
+      "lastHeartbeat": "2025-09-23T18:08:00.385Z",
+      "status": "active",
+      "initialized": "2025-09-23T18:08:00.385Z",
+      "sessionId": "6490416a39d1bb79"
+    },
+    "test-agent-1758650890412-yrjn38": {
+      "lastHeartbeat": "2025-09-23T18:08:10.460Z",
+      "status": "active",
+      "initialized": "2025-09-23T18:08:10.460Z",
+      "sessionId": "bc38bad50801e5e0"
+    },
+    "test-agent-1758650900470-rvze7": {
+      "lastHeartbeat": "2025-09-23T18:08:20.502Z",
+      "status": "active",
+      "initialized": "2025-09-23T18:08:20.502Z",
+      "sessionId": "16a641b537b5c97e"
+    },
+    "test-agent-1758650911835-lsuyi": {
+      "lastHeartbeat": "2025-09-23T18:08:31.870Z",
+      "status": "active",
+      "initialized": "2025-09-23T18:08:31.870Z",
+      "sessionId": "06c026a252380722"
+    },
+    "test-agent-1758650949918-tt2t6b": {
+      "lastHeartbeat": "2025-09-23T18:09:09.951Z",
+      "status": "active",
+      "initialized": "2025-09-23T18:09:09.951Z",
+      "sessionId": "21789fd0bc33f3ab"
+    },
+    "test-agent-1758650959958-h6mxx": {
+      "lastHeartbeat": "2025-09-23T18:09:19.997Z",
+      "status": "active",
+      "initialized": "2025-09-23T18:09:19.997Z",
+      "sessionId": "97ac0ceaf644543e"
+    },
+    "test-agent-1758650970041-2wn6bq": {
+      "lastHeartbeat": "2025-09-23T18:09:30.072Z",
+      "status": "active",
+      "initialized": "2025-09-23T18:09:30.072Z",
+      "sessionId": "1f07bdf772e60cdf"
+    },
+    "test-agent-1758650986039-e5iupl": {
+      "lastHeartbeat": "2025-09-23T18:09:46.068Z",
+      "status": "active",
+      "initialized": "2025-09-23T18:09:46.068Z",
+      "sessionId": "c75dabdb2f817bf1"
+    },
+    "test-agent-1758651287509-11mtci": {
+      "lastHeartbeat": "2025-09-23T18:14:47.547Z",
+      "status": "active",
+      "initialized": "2025-09-23T18:14:47.547Z",
+      "sessionId": "ebca6d632ea79fc8"
+    },
+    "test-agent-1758651297548-h377f": {
+      "lastHeartbeat": "2025-09-23T18:14:57.592Z",
+      "status": "active",
+      "initialized": "2025-09-23T18:14:57.592Z",
+      "sessionId": "47bee968b525853c"
+    },
+    "test-agent-1758651307598-kby4vm": {
+      "lastHeartbeat": "2025-09-23T18:15:07.629Z",
+      "status": "active",
+      "initialized": "2025-09-23T18:15:07.629Z",
+      "sessionId": "7d27710e22059d10"
     }
   }
 }

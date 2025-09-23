@@ -1,15 +1,15 @@
 {
-  "project": "test",
+  "project": "test-cli-commands-1758651307947-848192cd",
   "features": [],
   "metadata": {
     "version": "1.0.0",
-    "created": "2025-09-23T18:01:39.675Z",
-    "updated": "2025-09-23T18:01:39.676Z",
+    "created": "2025-09-23T18:15:07.947Z",
+    "updated": "2025-09-23T18:15:07.947Z",
     "total_features": 0,
     "approval_history": [],
     "initialization_stats": {
-      "total_initializations": 0,
-      "total_reinitializations": 1,
+      "total_initializations": 1,
+      "total_reinitializations": 0,
       "current_day": "2025-09-23",
       "time_buckets": {
         "07:00-11:59": {
@@ -17,8 +17,8 @@
           "reinit": 0
         },
         "12:00-16:59": {
-          "init": 0,
-          "reinit": 1
+          "init": 1,
+          "reinit": 0
         },
         "17:00-21:59": {
           "init": 0,
@@ -34,8 +34,8 @@
         }
       },
       "daily_history": [],
-      "last_reset": "2025-09-23T18:04:20.175Z",
-      "last_updated": "2025-09-23T18:04:20.175Z"
+      "last_reset": "2025-09-23T18:15:07.976Z",
+      "last_updated": "2025-09-23T18:15:07.976Z"
     }
   },
   "workflow_config": {
@@ -55,12 +55,11 @@
     ]
   },
   "agents": {
-    "claude-code-main-agent": {
-      "lastHeartbeat": "2025-09-23T18:04:20.173Z",
+    "cli-test-agent": {
+      "lastHeartbeat": "2025-09-23T18:15:07.975Z",
       "status": "active",
-      "reinitialized": "2025-09-23T18:04:20.173Z",
-      "sessionId": "77958f6b288c26ab",
-      "previousSessions": []
+      "initialized": "2025-09-23T18:15:07.975Z",
+      "sessionId": "a58b65216d056668"
     }
   }
 }

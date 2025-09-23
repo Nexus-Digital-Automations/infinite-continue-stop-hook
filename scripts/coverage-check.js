@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 
 /**
  * Standalone Coverage Threshold Enforcement Script
@@ -69,7 +68,7 @@ class CoverageLogger {
   static table(headers, rows) {
     // Simple table formatter
     const maxLengths = headers.map((header, i) =>
-      Math.max(header.length, ...rows.map(row => String(row[i] || '').length))
+      Math.max(header.length, ...rows.map(row => String(row[i] || '').length)),
     );
 
     const separator = '─'.repeat(maxLengths.reduce((sum, len) => sum + len + 3, 1));
@@ -202,7 +201,7 @@ class CoverageThresholdChecker {
           actual,
           required: critical,
           severity: 'critical',
-          message: `${metric} coverage ${actual.toFixed(2)}% is below critical threshold ${critical}%`
+          message: `${metric} coverage ${actual.toFixed(2)}% is below critical threshold ${critical}%`,
         });
       } else if (actual < threshold) {
         warnings.push({
@@ -210,7 +209,7 @@ class CoverageThresholdChecker {
           actual,
           required: threshold,
           severity: 'warning',
-          message: `${metric} coverage ${actual.toFixed(2)}% is below target threshold ${threshold}%`
+          message: `${metric} coverage ${actual.toFixed(2)}% is below target threshold ${threshold}%`,
         });
       }
     }
@@ -256,7 +255,7 @@ class CoverageThresholdChecker {
 
     fs.writeFileSync(
       path.join(badgeDir, 'data.json'),
-      JSON.stringify(badgeData, null, 2)
+      JSON.stringify(badgeData, null, 2),
     );
 
     CoverageLogger.success(`Coverage badge generated: ${overallCoverage}%`);
@@ -266,11 +265,11 @@ class CoverageThresholdChecker {
    * Get badge color based on coverage percentage
    */
   getBadgeColor(percentage) {
-    if (percentage >= 90) return 'brightgreen';
-    if (percentage >= 80) return 'green';
-    if (percentage >= 70) return 'yellowgreen';
-    if (percentage >= 60) return 'yellow';
-    if (percentage >= 50) return 'orange';
+    if (percentage >= 90) {return 'brightgreen';}
+    if (percentage >= 80) {return 'green';}
+    if (percentage >= 70) {return 'yellowgreen';}
+    if (percentage >= 60) {return 'yellow';}
+    if (percentage >= 50) {return 'orange';}
     return 'red';
   }
 
@@ -298,14 +297,14 @@ class CoverageThresholdChecker {
           this.results.summary.branches.pct +
           this.results.summary.functions.pct +
           this.results.summary.lines.pct
-        ) / 4)
+        ) / 4),
       } : null,
       git: this.getGitInfo(),
       environment: {
         node_version: process.version,
         ci: Boolean(process.env.CI),
         strict_mode: this.config.strict_mode,
-      }
+      },
     };
 
     // Ensure coverage directory exists
@@ -346,7 +345,7 @@ class CoverageThresholdChecker {
         `${actual.toFixed(2)}%`,
         `${threshold}%`,
         `${critical}%`,
-        status
+        status,
       ];
     });
 
@@ -451,7 +450,7 @@ Examples:
     process.exit(0);
   }
 
-  let config = { ...DEFAULT_CONFIG };
+  const config = { ...DEFAULT_CONFIG };
 
   // Parse command line arguments
   if (args.includes('--strict')) {

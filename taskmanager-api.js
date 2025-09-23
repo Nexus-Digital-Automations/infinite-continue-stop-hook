@@ -53,7 +53,7 @@ class FileLock {
         return async () => {
           try {
             await fs.unlink(lockPath);
-          } catch (error) {
+          } catch {
             // Lock file already removed or doesn't exist
           }
         };
@@ -68,25 +68,31 @@ class FileLock {
             try {
               process.kill(lockPid, 0); // Signal 0 just checks if process exists
               // Process exists, wait and retry
-              await new Promise(resolve => setTimeout(resolve, this.retryDelay));
+              await new Promise(resolve => {
+                setTimeout(resolve, this.retryDelay);
+              });
               continue;
-            } catch (killError) {
+            } catch {
               // Process doesn't exist, remove stale lock
               try {
                 await fs.unlink(lockPath);
-              } catch (unlinkError) {
+              } catch {
                 // Someone else removed it
               }
               continue;
             }
-          } catch (readError) {
+          } catch {
             // Can't read lock file, wait and retry
-            await new Promise(resolve => setTimeout(resolve, this.retryDelay));
+            await new Promise(resolve => {
+              setTimeout(resolve, this.retryDelay);
+            });
             continue;
           }
         } else {
           // Other error, wait and retry
-          await new Promise(resolve => setTimeout(resolve, this.retryDelay));
+          await new Promise(resolve => {
+            setTimeout(resolve, this.retryDelay);
+          });
           continue;
         }
       }
@@ -543,7 +549,7 @@ class FeatureManagerAPI {
           init: acc.init + bucket.init,
           reinit: acc.reinit + bucket.reinit,
         }),
-        { init: 0, reinit: 0 }
+        { init: 0, reinit: 0 },
       );
 
       // Get recent activity (last 7 days from history)
@@ -1020,10 +1026,10 @@ class FeatureManagerAPI {
                       '12:00-16:59': { initializations: 8, reinitializations: 1, total: 9 },
                       '17:00-21:59': { initializations: 3, reinitializations: 4, total: 7 },
                       '22:00-02:59': { initializations: 1, reinitializations: 0, total: 1 },
-                      '03:00-06:59': { initializations: 0, reinitializations: 1, total: 1 }
-                    }
-                  }
-                }
+                      '03:00-06:59': { initializations: 0, reinitializations: 1, total: 1 },
+                    },
+                  },
+                },
               },
             },
             requirements: {
@@ -1073,7 +1079,7 @@ class FeatureManagerAPI {
     const todayStartHour = (7 + daysSinceReference) % 24;
 
     // Calculate which 5-hour bucket we're in (0-4)
-    let hourOffset = (currentHour - todayStartHour + 24) % 24;
+    const hourOffset = (currentHour - todayStartHour + 24) % 24;
     const bucketIndex = Math.floor(hourOffset / 5);
 
     // Generate bucket label based on today's start hour
@@ -1125,7 +1131,7 @@ class FeatureManagerAPI {
   /**
    * Ensure initialization stats structure exists in features data
    */
-  async _ensureInitializationStatsStructure(features) {
+  _ensureInitializationStatsStructure(features) {
     if (!features.metadata) {
       features.metadata = {
         version: '1.0.0',
@@ -1180,7 +1186,7 @@ class FeatureManagerAPI {
               init: acc.init + bucket.init,
               reinit: acc.reinit + bucket.reinit,
             }),
-            { init: 0, reinit: 0 }
+            { init: 0, reinit: 0 },
           );
 
           if (oldTotal.init > 0 || oldTotal.reinit > 0) {
@@ -1243,7 +1249,7 @@ class FeatureManagerAPI {
   /**
    * Reset daily buckets if we've crossed 7am
    */
-  async _resetDailyBucketsIfNeeded(features) {
+  _resetDailyBucketsIfNeeded(features) {
     const now = new Date();
     const currentDay = now.toISOString().split('T')[0];
     const stats = features.metadata.initialization_stats;
@@ -1259,7 +1265,7 @@ class FeatureManagerAPI {
           init: acc.init + bucket.init,
           reinit: acc.reinit + bucket.reinit,
         }),
-        { init: 0, reinit: 0 }
+        { init: 0, reinit: 0 },
       );
 
       if (yesterdayTotal.init > 0 || yesterdayTotal.reinit > 0) {

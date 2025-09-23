@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 
 /**
  * Test Performance Monitoring Script
@@ -38,7 +37,7 @@ const CONFIG = {
     verbose: process.env.VERBOSE === 'true',
     json_output: process.env.JSON_OUTPUT === 'true',
     ci_mode: process.env.CI === 'true',
-  }
+  },
 };
 
 /**
@@ -136,7 +135,7 @@ class ResourceMonitor {
    * Get peak memory usage
    */
   getPeakMemoryUsage() {
-    if (this.measurements.length === 0) return this.startMemory;
+    if (this.measurements.length === 0) {return this.startMemory;}
 
     return this.measurements.reduce((peak, current) => {
       if (current.memory.rss > peak.rss) {
@@ -150,7 +149,7 @@ class ResourceMonitor {
    * Get average memory usage
    */
   getAverageMemoryUsage() {
-    if (this.measurements.length === 0) return this.startMemory;
+    if (this.measurements.length === 0) {return this.startMemory;}
 
     const totals = this.measurements.reduce((sum, measurement) => ({
       rss: sum.rss + measurement.memory.rss,
@@ -273,7 +272,7 @@ class TestPerformanceMonitor {
           delta: {
             rss: endMemory.rss - suiteStartMemory.rss,
             heapUsed: endMemory.heapUsed - suiteStartMemory.heapUsed,
-          }
+          },
         },
         output: result.output,
         timestamp: new Date().toISOString(),
@@ -309,7 +308,7 @@ class TestPerformanceMonitor {
 
       const child = spawn('npm', testSuite.command.split(' ').slice(1), {
         stdio: ['pipe', 'pipe', 'pipe'],
-        env: { ...process.env, NODE_OPTIONS: '--max-old-space-size=4096' }
+        env: { ...process.env, NODE_OPTIONS: '--max-old-space-size=4096' },
       });
 
       child.stdout.on('data', (data) => {
@@ -403,7 +402,7 @@ class TestPerformanceMonitor {
       performance_issues: {
         errors: this.errors.filter(e => e.type === 'performance'),
         warnings: this.warnings.filter(w => w.type === 'performance'),
-      }
+      },
     };
 
     PerformanceLogger.debug('Performance analysis completed');
@@ -424,7 +423,7 @@ class TestPerformanceMonitor {
       heap_utilization: {
         start: ((memory.start.heapUsed / memory.start.heapTotal) * 100).toFixed(1) + '%',
         end: ((memory.end.heapUsed / memory.end.heapTotal) * 100).toFixed(1) + '%',
-      }
+      },
     };
   }
 
@@ -472,7 +471,7 @@ class TestPerformanceMonitor {
         arch: process.arch,
         ci: process.env.CI || false,
         max_old_space_size: process.env.NODE_OPTIONS?.includes('max-old-space-size') || 'default',
-      }
+      },
     };
 
     // Write detailed report
@@ -482,7 +481,7 @@ class TestPerformanceMonitor {
     for (const suiteResult of this.suiteResults) {
       const suiteFile = path.join(
         CONFIG.paths.results,
-        `${suiteResult.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.json`
+        `${suiteResult.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.json`,
       );
       fs.writeFileSync(suiteFile, JSON.stringify(suiteResult, null, 2));
     }
@@ -605,8 +604,8 @@ class TestPerformanceMonitor {
    * Format duration in human readable format
    */
   formatDuration(ms) {
-    if (ms < 1000) return `${ms}ms`;
-    if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
+    if (ms < 1000) {return `${ms}ms`;}
+    if (ms < 60000) {return `${(ms / 1000).toFixed(1)}s`;}
     return `${(ms / 60000).toFixed(1)}m`;
   }
 
@@ -615,7 +614,7 @@ class TestPerformanceMonitor {
    */
   formatBytes(bytes) {
     const sizes = ['B', 'KB', 'MB', 'GB'];
-    if (bytes === 0) return '0B';
+    if (bytes === 0) {return '0B';}
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
     return `${(bytes / Math.pow(1024, i)).toFixed(1)}${sizes[i]}`;
   }

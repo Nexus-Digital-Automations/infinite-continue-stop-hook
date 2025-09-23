@@ -1,70 +1,41 @@
 {
-  "timestamp": "2025-09-23T15:02:26.050Z",
+  "timestamp": "2025-09-23T18:14:45.694Z",
   "validation": {
-    "passed": false,
+    "passed": true,
     "strict_mode": false,
-    "failures": [
-      {
-        "metric": "statements",
-        "actual": 0,
-        "required": 60,
-        "severity": "critical",
-        "message": "statements coverage 0.00% is below critical threshold 60%"
-      },
-      {
-        "metric": "branches",
-        "actual": 0,
-        "required": 60,
-        "severity": "critical",
-        "message": "branches coverage 0.00% is below critical threshold 60%"
-      },
-      {
-        "metric": "functions",
-        "actual": 0,
-        "required": 60,
-        "severity": "critical",
-        "message": "functions coverage 0.00% is below critical threshold 60%"
-      },
-      {
-        "metric": "lines",
-        "actual": 0,
-        "required": 60,
-        "severity": "critical",
-        "message": "lines coverage 0.00% is below critical threshold 60%"
-      }
-    ],
+    "failures": [],
     "warnings": []
   },
   "coverage": {
     "lines": {
-      "total": 14592,
-      "covered": 0,
+      "total": 1297,
+      "covered": 1099,
       "skipped": 0,
-      "pct": 0
+      "pct": 84.73
     },
     "statements": {
-      "total": 15155,
-      "covered": 0,
+      "total": 1297,
+      "covered": 1099,
       "skipped": 0,
-      "pct": 0
+      "pct": 84.73
     },
     "functions": {
-      "total": 2471,
-      "covered": 0,
+      "total": 31,
+      "covered": 29,
       "skipped": 0,
-      "pct": 0
+      "pct": 93.54
     },
     "branches": {
-      "total": 8470,
-      "covered": 0,
+      "total": 146,
+      "covered": 126,
       "skipped": 0,
-      "pct": 0
+      "pct": 86.3
     },
     "branchesTrue": {
       "total": 0,
       "covered": 0,
       "skipped": 0,
-      "pct": 100
+      "pct": "Unknown"
     }
   },
   "thresholds": {
@@ -79,14 +50,17 @@
     "functions": 60,
     "lines": 60
   },
-  "badge": null,
+  "badge": {
+    "url": "https://img.shields.io/badge/coverage-87%25-green",
+    "coverage_percentage": 87
+  },
   "git": {
-    "commit": "0a2217c74f03b67e0996b445bc88384042dc92a5",
+    "commit": "db51826008b36ae20e021f35f8258d1d9de0b42a",
     "branch": "main"
   },
   "environment": {
     "node_version": "v22.19.0",
-    "ci": true,
+    "ci": false,
     "strict_mode": false
   }
 }
