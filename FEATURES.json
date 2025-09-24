@@ -268,33 +268,61 @@
     ],
     "initialization_stats": {
       "total_initializations": 5,
-      "total_reinitializations": 8,
-      "current_day": "2025-09-23",
+      "total_reinitializations": 9,
+      "current_day": "2025-09-24",
       "time_buckets": {
-        "07:00-11:59": {
-          "init": 1,
-          "reinit": 0
+        "08:00-12:59": {
+          "init": 0,
+          "reinit": 1
         },
-        "12:00-16:59": {
-          "init": 1,
-          "reinit": 5
-        },
-        "17:00-21:59": {
+        "13:00-17:59": {
           "init": 0,
           "reinit": 0
         },
-        "22:00-02:59": {
+        "18:00-22:59": {
           "init": 0,
           "reinit": 0
         },
-        "03:00-07:59": {
+        "23:00-03:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "04:00-08:59": {
           "init": 0,
           "reinit": 0
         }
       },
-      "daily_history": [],
-      "last_reset": "2025-09-23T15:27:17.247Z",
-      "last_updated": "2025-09-23T18:24:20.755Z"
+      "daily_history": [
+        {
+          "date": "2025-09-23",
+          "total_init": 2,
+          "total_reinit": 5,
+          "buckets": {
+            "07:00-11:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "12:00-16:59": {
+              "init": 1,
+              "reinit": 5
+            },
+            "17:00-21:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "22:00-02:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "03:00-07:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        }
+      ],
+      "last_reset": "2025-09-24T16:05:50.295Z",
+      "last_updated": "2025-09-24T16:05:50.295Z"
     }
   },
   "workflow_config": {
@@ -329,5 +357,13 @@
   },
   "tasks": [],
   "completed_tasks": [],
-  "agents": {}
+  "agents": {
+    "claude-enhance-agent": {
+      "lastHeartbeat": "2025-09-24T16:05:50.278Z",
+      "status": "active",
+      "reinitialized": "2025-09-24T16:05:50.278Z",
+      "sessionId": "2a10e8e8c3cf17ef",
+      "previousSessions": []
+    }
+  }
 }
