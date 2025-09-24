@@ -71,110 +71,20 @@ CORE OPERATION PRINCIPLES (Display at start of every response):
 **CODEBASE ADAPTATION NOTE:**
 Only apply criteria that exist in the specific codebase. Some projects may not have build scripts, start scripts, or tests. Verify what scripts exist in package.json and adapt criteria accordingly.
 
-**VALIDATION REQUIREMENTS BEFORE AUTHORIZATION:**
-Before using authorize-stop, agent MUST verify:
-- [ ] Run `npm run lint` - confirms zero errors/warnings (if script exists)
-- [ ] Run `npm run typecheck` - confirms all types valid (if script exists)
-- [ ] Run `npm run build` - confirms successful build (if script exists)
-- [ ] Run `npm run start` - confirms application starts (if script exists)
-- [ ] Run `npm test` - confirms all tests pass (if script exists)
-- [ ] Check TodoWrite - confirms all tasks marked completed
-- [ ] Check FEATURES.json - confirms all approved features implemented
-- [ ] Manual verification - codebase functions as expected
-
 **SELF-AUTHORIZATION COMMAND:**
 When ALL criteria met, agent MUST authorize stop using:
 ```bash
 timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop [AGENT_ID] "All TodoWrite tasks complete and project perfect: linter✅ build✅ start✅ tests✅"
 ```
 
-**AUTHORIZATION EXAMPLES:**
-```bash
-# When all validation passes
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop claude-dev-agent "Project perfection achieved: TodoWrite(✅) linter(✅) build(✅) start(✅) tests(✅) features(✅)"
+**VALIDATION BEFORE AUTHORIZATION:**
+- Run all available scripts: `npm run lint`, `npm run typecheck`, `npm run build`, `npm run start`, `npm test`
+- Verify TodoWrite tasks completed and FEATURES.json approved features implemented
+- Confirm codebase functions as expected
 
-# For projects without build/start scripts
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop claude-dev-agent "Simple project perfection: TodoWrite(✅) linter(✅) tests(✅) features(✅)"
-
-# For projects with only linting
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop claude-dev-agent "Basic project perfection: TodoWrite(✅) linter(✅) features(✅)"
-```
-
-**STOP HOOK FEEDBACK INSTRUCTIONS:**
-After using authorize-stop command:
-1. **IMMEDIATE EFFECT** - Creates `.stop-allowed` file for single-use authorization
-2. **STOP HOOK BEHAVIOR** - Next stop hook trigger will allow termination (exit 0)
-3. **SINGLE USE ONLY** - Authorization consumed after first use, returns to infinite mode
-4. **FEEDBACK LOOP** - Stop hook provides confirmation message about authorization
-5. **RESET BEHAVIOR** - All future stops require new authorization until next authorize-stop
-
-**COMPREHENSIVE STOP AUTHORIZATION SCENARIOS:**
-
-**SCENARIO 1: Full-Stack Web Application (Complete Validation)**
-```bash
-# Step 1: Verify all validation passes
-npm run lint && npm run typecheck && npm run build && npm run test
-npm run start # Test in separate terminal, confirm startup success
-
-# Step 2: Verify TodoWrite completion
-# Check that all TodoWrite tasks show "completed" status
-
-# Step 3: Verify FEATURES.json completion
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" list-features
-# Confirm all approved features show "implemented" status
-
-# Step 4: Self-authorize stop
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop claude-agent "Full-stack project perfection: TodoWrite(✅) lint(✅) typecheck(✅) build(✅) start(✅) test(✅) features(✅)"
-```
-
-**SCENARIO 2: Node.js Library Project (No Start Script)**
-```bash
-# Step 1: Verify available validation passes
-npm run lint && npm run test && npm run build
-
-# Step 2: Verify TodoWrite and FEATURES.json completion
-
-# Step 3: Self-authorize stop
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop claude-agent "Library project perfection: TodoWrite(✅) lint(✅) test(✅) build(✅) features(✅)"
-```
-
-**SCENARIO 3: Simple Script Project (Minimal Validation)**
-```bash
-# Step 1: Verify available validation passes
-npm run lint # Only linting available
-
-# Step 2: Manual verification - test scripts work as expected
-
-# Step 3: Verify TodoWrite and FEATURES.json completion
-
-# Step 4: Self-authorize stop
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop claude-agent "Simple project perfection: TodoWrite(✅) lint(✅) manual-testing(✅) features(✅)"
-```
-
-**SCENARIO 4: Legacy Project Without Package.json Scripts**
-```bash
-# Step 1: Manual validation only (no npm scripts available)
-# - Code review for quality and completeness
-# - Manual testing of functionality
-# - Verify no obvious errors or issues
-
-# Step 2: Verify TodoWrite and FEATURES.json completion
-
-# Step 3: Self-authorize stop
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop claude-agent "Legacy project perfection: TodoWrite(✅) manual-validation(✅) features(✅)"
-```
-
-**PRE-AUTHORIZATION VALIDATION CHECKLIST:**
-- [ ] **TodoWrite Status**: All tasks marked as "completed"
-- [ ] **FEATURES.json Status**: All approved features implemented
-- [ ] **Linting**: `npm run lint` passes (if script exists)
-- [ ] **Type Checking**: `npm run typecheck` passes (if script exists)
-- [ ] **Build Process**: `npm run build` succeeds (if script exists)
-- [ ] **Application Start**: `npm run start` works (if script exists)
-- [ ] **Test Suite**: `npm test` passes (if script exists)
-- [ ] **Manual Verification**: Core functionality works as expected
-- [ ] **Documentation**: All code properly documented and commented
-- [ ] **Git Status**: All changes committed and pushed
+**STOP AUTHORIZATION EFFECTS:**
+- Creates `.stop-allowed` file for single-use authorization
+- Next stop hook trigger allows termination, then returns to infinite mode
 
 **FORBIDDEN SCENARIOS:**
 - ❌ ANY approved features incomplete
