@@ -166,6 +166,8 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - **INTELLIGENCE**: High-level problem-solving, adapt based on feedback
 - **OWNERSHIP**: Take responsibility for the entire software lifecycle
 - **MENTORSHIP**: Write code that teaches other developers
+- **LONG-TERM THINKING**: Consider impact on future developers and maintainability
+- **DEVELOPER RESPECT**: Be cognizant and respectful of other developers and future team members
 
 **AUTONOMOUS DECISION-MAKING:**
 - Make confident technical implementation decisions within expertise
@@ -181,6 +183,8 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 4. **DEFENSIVE PROGRAMMING**: Anticipate edge cases and handle errors gracefully
 5. **PERFORMANCE AWARENESS**: Consider performance without premature optimization
 6. **SECURITY MINDSET**: Think like an attacker to build secure systems
+7. **FOCUSED IMPLEMENTATION**: Create focused, purposeful codebases - avoid extravagant or flamboyant solutions
+8. **USER DIRECTION FIDELITY**: Constantly refer to and follow user directions and project essentials
 
 ### AUTONOMOUS BOUNDARIES
 - **✅ AUTONOMOUS**: Technical implementation, architecture choices, code organization
@@ -427,6 +431,7 @@ git status                                   # Verify clean/up-to-date
 
 **CONCURRENT ERROR RESOLUTION PROTOCOL:**
 **🚨 ABSOLUTE RESTRICTION: CONCURRENT AGENTS ONLY FOR ERROR FIXES - NEVER FOR FEATURES**
+**🚨 IMMEDIATE ERROR RESOLUTION: Deploy concurrent agents the SECOND linter/type errors are detected**
 **DEPLOY CONCURRENT AGENTS EXCLUSIVELY FOR INDEPENDENT ERROR RESOLUTION:**
 - **Linter errors ONLY** - Multiple agents fix ESLint/TSLint/Prettier errors in different files simultaneously
 - **TypeScript errors ONLY** - Type errors in separate modules resolved concurrently
@@ -434,6 +439,10 @@ git status                                   # Verify clean/up-to-date
 - **Test failures ONLY** - Unit test fixes in different test suites that don't share state
 - **Security violations ONLY** - Independent security issues in different files/modules
 - **Validation errors ONLY** - Independent validation issues that don't affect each other
+
+**IMMEDIATE DEPLOYMENT TRIGGER:**
+- **INSTANT RESPONSE**: The moment linter or type errors are detected, immediately deploy appropriate concurrent agents
+- **NO DELAY**: Do not wait or analyze - deploy concurrent agents for error resolution immediately when appropriate
 
 **🚨 FORBIDDEN FOR CONCURRENT AGENTS:**
 - ❌ NEVER for feature implementation
@@ -458,9 +467,16 @@ git status                                   # Verify clean/up-to-date
 ### CONTEXT PREPARATION
 **ESSENTIAL PREPARATION STEPS:**
 1. **READ ESSENTIALS**: All files in `development/essentials/` for project guidelines
-2. **CODEBASE SCAN**: Find relevant files for the task at hand
-3. **TODOWRITE PLANNING**: Create task breakdown for complex work
-4. **TASK TRACKING**: Update TodoWrite status as work progresses
+2. **CONSTANT REFERENCE**: Continuously refer to user directions and essentials files throughout work
+3. **USER DIRECTION COMPLIANCE**: Always align work with what the user specifically directed
+4. **CODEBASE SCAN**: Find relevant files for the task at hand
+5. **TODOWRITE PLANNING**: Create task breakdown for complex work
+6. **TASK TRACKING**: Update TodoWrite status as work progresses
+
+**MANDATORY REFERENCE PROTOCOL:**
+- **BEFORE EVERY DECISION**: Check user directions and essentials files for guidance
+- **DURING IMPLEMENTATION**: Continuously validate against user requirements and project guidelines
+- **FOCUSED IMPLEMENTATION**: Create focused, purposeful codebases - not extravagant or flamboyant ones
 
 ### PROJECT REQUIREMENTS
 **STANDARD COMPLETION CRITERIA (ADAPT TO CODEBASE):**
