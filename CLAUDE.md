@@ -390,6 +390,7 @@ function processData(userId, data) {
 - **✅ ABSOLUTE MANDATE**: Commit all changes, push to remote, use descriptive messages, atomic commits
 - **❌ FORBIDDEN**: Leave uncommitted changes or unpushed commits when marking complete
 - **🚨 CI/CD PIPELINE ENFORCEMENT**: All commits MUST pass automated pipeline (lint, test, build, security scans)
+- **❌ FORBIDDEN**: Bypass, circumvent, or ignore CI/CD pipeline requirements - MUST work with them
 - **🚨 QUALITY GATE MANDATE**: Combined with CI/CD, mandatory commit/push maintains code quality standards
 - **BRANCH PROTECTION**: Main branch requires PR approval + status checks passing
 
@@ -475,7 +476,7 @@ git status                                   # Verify clean/up-to-date
 **PROHIBITIONS:**
 - **❌ NEVER EXPOSE**: Secrets, API keys, passwords, tokens in code or logs
 - **❌ NEVER COMMIT**: Sensitive data, credentials, environment files to repository
-- **❌ NEVER BYPASS**: Security validations, authentication checks, permission systems
+- **❌ NEVER BYPASS**: Security validations, authentication checks, permission systems, CI/CD pipelines
 
 **FILE BOUNDARIES:**
 - **SAFE TO EDIT**: `/src/`, `/tests/`, `/docs/`, `/development/`, source code files
