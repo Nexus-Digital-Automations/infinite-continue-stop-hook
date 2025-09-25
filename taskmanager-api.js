@@ -1,31 +1,32 @@
 #!/usr/bin/env node
 /* eslint-disable no-console -- CLI API requires console output for user interaction */
 /**
- * Feature Management API - Streamlined Feature Lifecycle Management
+ * Autonomous Task Management API - Advanced Feature Lifecycle & Task Orchestration
  *
  * === OVERVIEW ===
- * Focused API for feature lifecycle management with strict approval workflow.
- * This system manages feature suggestions, approvals, and implementation tracking
- * with complete audit trails and governance controls.
+ * Comprehensive API combining feature lifecycle management with autonomous task orchestration.
+ * This system manages feature suggestions, approvals, implementation tracking, autonomous task
+ * queues, multi-agent coordination, cross-session persistence, and real-time status updates.
  *
  * === KEY FEATURES ===
  * • Feature suggestion and approval workflow
- * • Strict status transitions: suggested → approved → implemented
- * • Complete audit trail for all feature lifecycle changes
- * • FEATURES.json-based persistence
- * • Business value tracking and validation
- * • Implementation status monitoring
+ * • Autonomous task queue with priority scheduling
+ * • Multi-agent coordination and workload balancing
+ * • Cross-session task persistence and resumption
+ * • Real-time task status monitoring and updates
+ * • Intelligent task breakdown and dependency management
+ * • Agent capability matching and task assignment
+ * • Complete audit trails and analytics
  *
- * === FEATURE WORKFLOW ===
- * 1. suggest-feature - Create new feature suggestion
- * 2. approve-feature - Approve suggested feature for implementation
- * 3. reject-feature - Reject feature suggestion with reason
- * 4. Implementation tracking for approved features
- * 5. Complete lifecycle analytics and reporting
+ * === WORKFLOWS ===
+ * 1. Feature Management: suggest → approve → implement → track
+ * 2. Autonomous Tasks: create → queue → assign → execute → validate → complete
+ * 3. Agent Coordination: initialize → register capabilities → receive assignments → report progress
+ * 4. Cross-Session: persist state → resume on reconnect → maintain continuity
  *
- * @author Feature Management System
- * @version 3.0.0
- * @since 2025-09-22
+ * @author Autonomous Task Management System
+ * @version 4.0.0
+ * @since 2025-09-25
  *
  * Usage: node taskmanager-api.js <command> [args...] [--project-root /path/to/project]
  */
@@ -123,15 +124,22 @@ const FEATURE_STATUSES = ['suggested', 'approved', 'rejected', 'implemented'];
 const FEATURE_CATEGORIES = ['enhancement', 'bug-fix', 'new-feature', 'performance', 'security', 'documentation'];
 const REQUIRED_FEATURE_FIELDS = ['title', 'description', 'business_value', 'category'];
 
+// Task management schemas
+const TASK_STATUSES = ['queued', 'assigned', 'in_progress', 'blocked', 'completed', 'failed', 'cancelled'];
+const TASK_PRIORITIES = ['critical', 'high', 'normal', 'low'];
+const TASK_TYPES = ['implementation', 'testing', 'documentation', 'validation', 'deployment', 'analysis'];
+const AGENT_CAPABILITIES = ['frontend', 'backend', 'testing', 'documentation', 'security', 'performance', 'analysis', 'validation'];
+
 /**
- * FeatureManagerAPI - Feature lifecycle management system
+ * AutonomousTaskManagerAPI - Advanced Feature & Task Management System
  *
- * Manages feature suggestions, approvals, and implementation tracking
- * with strict approval workflow and complete audit trails.
+ * Comprehensive system managing feature lifecycle, autonomous task orchestration,
+ * multi-agent coordination, cross-session persistence, and real-time monitoring.
+ * Integrates FEATURES.json workflow with autonomous task queue management.
  */
-class FeatureManagerAPI {
+class AutonomousTaskManagerAPI {
   constructor() {
-    // Core feature data persistence
+    // Core data persistence paths
     this.featuresPath = FEATURES_PATH;
 
     // Performance configuration - 10 second timeout for all operations
@@ -142,7 +150,19 @@ class FeatureManagerAPI {
     this.validCategories = FEATURE_CATEGORIES;
     this.requiredFields = REQUIRED_FEATURE_FIELDS;
 
-    // Initialize features file if it doesn't exist (call async init later)
+    // Task management configuration
+    this.validTaskStatuses = TASK_STATUSES;
+    this.validTaskPriorities = TASK_PRIORITIES;
+    this.validTaskTypes = TASK_TYPES;
+    this.validAgentCapabilities = AGENT_CAPABILITIES;
+
+    // Task queue and agent management state
+    this.taskQueue = [];
+    this.activeAgents = new Map();
+    this.taskAssignments = new Map();
+    this.taskDependencies = new Map();
+
+    // Initialize features file and task structures if they don't exist
   }
 
   /**
@@ -733,8 +753,1125 @@ class FeatureManagerAPI {
     }
   }
 
+  // =================== AUTONOMOUS TASK MANAGEMENT METHODS ===================
+  // Core autonomous task orchestration and management operations
+
+  /**
+   * Create autonomous task from approved feature
+   */
+  async createTaskFromFeature(featureId, taskOptions = {}) {
+    try {
+      const result = await this._atomicFeatureOperation((features) => {
+        const feature = features.features.find(f => f.id === featureId);
+
+        if (!feature) {
+          throw new Error(`Feature with ID ${featureId} not found`);
+        }
+
+        if (feature.status !== 'approved') {
+          throw new Error(`Feature must be approved to create tasks. Current status: ${feature.status}`);
+        }
+
+        // Initialize tasks array if it doesn't exist
+        if (!features.tasks) {
+          features.tasks = [];
+        }
+
+        const task = {
+          id: this._generateTaskId(),
+          feature_id: featureId,
+          title: taskOptions.title || `Implement: ${feature.title}`,
+          description: taskOptions.description || feature.description,
+          type: taskOptions.type || this._inferTaskType(feature),
+          priority: taskOptions.priority || this._inferTaskPriority(feature),
+          status: 'queued',
+          dependencies: taskOptions.dependencies || [],
+          estimated_effort: taskOptions.estimated_effort || this._estimateEffort(feature),
+          required_capabilities: taskOptions.required_capabilities || this._inferCapabilities(feature),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          created_by: taskOptions.created_by || 'autonomous_system',
+          metadata: {
+            auto_generated: true,
+            feature_category: feature.category,
+            business_value: feature.business_value,
+            ...taskOptions.metadata
+          }
+        };
+
+        features.tasks.push(task);
+        features.metadata.updated = new Date().toISOString();
+
+        return {
+          success: true,
+          task,
+          message: 'Autonomous task created successfully from approved feature'
+        };
+      });
+
+      return result;
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  /**
+   * Auto-generate tasks from all approved features
+   */
+  async generateTasksFromApprovedFeatures(options = {}) {
+    try {
+      const result = await this._atomicFeatureOperation((features) => {
+        const approvedFeatures = features.features.filter(f => f.status === 'approved');
+
+        if (approvedFeatures.length === 0) {
+          return {
+            success: true,
+            generated_tasks: [],
+            message: 'No approved features found to generate tasks'
+          };
+        }
+
+        // Initialize tasks array if it doesn't exist
+        if (!features.tasks) {
+          features.tasks = [];
+        }
+
+        const generatedTasks = [];
+
+        for (const feature of approvedFeatures) {
+          // Check if tasks already exist for this feature
+          const existingTasks = features.tasks.filter(t => t.feature_id === feature.id);
+          if (existingTasks.length > 0 && !options.force) {
+            continue;
+          }
+
+          // Generate main implementation task
+          const mainTask = {
+            id: this._generateTaskId(),
+            feature_id: feature.id,
+            title: `Implement: ${feature.title}`,
+            description: feature.description,
+            type: this._inferTaskType(feature),
+            priority: this._inferTaskPriority(feature),
+            status: 'queued',
+            dependencies: [],
+            estimated_effort: this._estimateEffort(feature),
+            required_capabilities: this._inferCapabilities(feature),
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            created_by: 'autonomous_system',
+            metadata: {
+              auto_generated: true,
+              feature_category: feature.category,
+              business_value: feature.business_value,
+              generation_batch: new Date().toISOString()
+            }
+          };
+
+          features.tasks.push(mainTask);
+          generatedTasks.push(mainTask);
+
+          // Generate supporting tasks based on feature complexity
+          if (this._isComplexFeature(feature)) {
+            const supportingTasks = this._generateSupportingTasks(feature, mainTask.id);
+            for (const supportingTask of supportingTasks) {
+              features.tasks.push(supportingTask);
+              generatedTasks.push(supportingTask);
+            }
+          }
+        }
+
+        features.metadata.updated = new Date().toISOString();
+
+        return {
+          success: true,
+          generated_tasks: generatedTasks,
+          approved_features_processed: approvedFeatures.length,
+          message: `Generated ${generatedTasks.length} tasks from ${approvedFeatures.length} approved features`
+        };
+      });
+
+      return result;
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  /**
+   * Get task queue with filtering and sorting
+   */
+  async getTaskQueue(filters = {}) {
+    try {
+      await this._ensureFeaturesFile();
+      const features = await this._loadFeatures();
+
+      if (!features.tasks) {
+        return {
+          success: true,
+          tasks: [],
+          total: 0,
+          message: 'No tasks in queue'
+        };
+      }
+
+      let tasks = features.tasks;
+
+      // Apply filters
+      if (filters.status) {
+        tasks = tasks.filter(task => task.status === filters.status);
+      }
+
+      if (filters.assigned_to) {
+        tasks = tasks.filter(task => task.assigned_to === filters.assigned_to);
+      }
+
+      if (filters.priority) {
+        tasks = tasks.filter(task => task.priority === filters.priority);
+      }
+
+      if (filters.type) {
+        tasks = tasks.filter(task => task.type === filters.type);
+      }
+
+      if (filters.feature_id) {
+        tasks = tasks.filter(task => task.feature_id === filters.feature_id);
+      }
+
+      // Sort by priority (critical > high > normal > low) and created date
+      const priorityOrder = { 'critical': 4, 'high': 3, 'normal': 2, 'low': 1 };
+      tasks.sort((a, b) => {
+        const priorityDiff = (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0);
+        if (priorityDiff !== 0) return priorityDiff;
+        return new Date(a.created_at) - new Date(b.created_at);
+      });
+
+      return {
+        success: true,
+        tasks,
+        total: tasks.length,
+        filters_applied: filters,
+        message: `Retrieved ${tasks.length} tasks from queue`
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  /**
+   * Assign task to agent based on capabilities
+   */
+  async assignTask(taskId, agentId, assignmentOptions = {}) {
+    try {
+      const result = await this._atomicFeatureOperation((features) => {
+        if (!features.tasks) {
+          throw new Error('No tasks exist in the system');
+        }
+
+        const task = features.tasks.find(t => t.id === taskId);
+        if (!task) {
+          throw new Error(`Task with ID ${taskId} not found`);
+        }
+
+        if (!features.agents || !features.agents[agentId]) {
+          throw new Error(`Agent ${agentId} not found or not initialized`);
+        }
+
+        if (!['queued', 'assigned'].includes(task.status)) {
+          throw new Error(`Task must be queued or assigned to reassign. Current status: ${task.status}`);
+        }
+
+        // Check if agent capabilities match task requirements
+        const agent = features.agents[agentId];
+        const agentCapabilities = agent.capabilities || [];
+        const requiredCapabilities = task.required_capabilities || [];
+
+        const hasRequiredCapabilities = requiredCapabilities.every(cap =>
+          agentCapabilities.includes(cap) || agentCapabilities.includes('general')
+        );
+
+        if (!hasRequiredCapabilities && !assignmentOptions.force) {
+          return {
+            success: false,
+            error: `Agent ${agentId} lacks required capabilities: ${requiredCapabilities.join(', ')}`,
+            agent_capabilities: agentCapabilities,
+            required_capabilities: requiredCapabilities
+          };
+        }
+
+        // Assign task
+        task.assigned_to = agentId;
+        task.status = 'assigned';
+        task.assigned_at = new Date().toISOString();
+        task.updated_at = new Date().toISOString();
+        task.assignment_metadata = {
+          forced: assignmentOptions.force || false,
+          assignment_reason: assignmentOptions.reason || 'capability_match',
+          ...assignmentOptions.metadata
+        };
+
+        // Update agent assignment count
+        if (!agent.assigned_tasks) {
+          agent.assigned_tasks = [];
+        }
+        agent.assigned_tasks.push(taskId);
+        agent.lastHeartbeat = new Date().toISOString();
+
+        features.metadata.updated = new Date().toISOString();
+
+        return {
+          success: true,
+          task,
+          agent: { id: agentId, capabilities: agentCapabilities },
+          message: `Task ${taskId} successfully assigned to agent ${agentId}`
+        };
+      });
+
+      return result;
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  /**
+   * Update task progress and status
+   */
+  async updateTaskProgress(taskId, progressUpdate) {
+    try {
+      const result = await this._atomicFeatureOperation((features) => {
+        if (!features.tasks) {
+          throw new Error('No tasks exist in the system');
+        }
+
+        const task = features.tasks.find(t => t.id === taskId);
+        if (!task) {
+          throw new Error(`Task with ID ${taskId} not found`);
+        }
+
+        // Initialize progress tracking if it doesn't exist
+        if (!task.progress_history) {
+          task.progress_history = [];
+        }
+
+        // Add progress entry
+        const progressEntry = {
+          timestamp: new Date().toISOString(),
+          status: progressUpdate.status || task.status,
+          progress_percentage: progressUpdate.progress_percentage || 0,
+          notes: progressUpdate.notes || '',
+          updated_by: progressUpdate.updated_by || 'autonomous_system',
+          metadata: progressUpdate.metadata || {}
+        };
+
+        task.progress_history.push(progressEntry);
+
+        // Update task status if provided
+        if (progressUpdate.status && this.validTaskStatuses.includes(progressUpdate.status)) {
+          task.status = progressUpdate.status;
+        }
+
+        // Update completion fields if task is completed
+        if (progressUpdate.status === 'completed') {
+          task.completed_at = new Date().toISOString();
+          task.progress_percentage = 100;
+
+          // Move to completed_tasks if it doesn't exist there
+          if (!features.completed_tasks) {
+            features.completed_tasks = [];
+          }
+
+          // Add reference to completed tasks
+          features.completed_tasks.push({
+            task_id: taskId,
+            completed_at: task.completed_at,
+            assigned_to: task.assigned_to,
+            feature_id: task.feature_id
+          });
+        }
+
+        task.updated_at = new Date().toISOString();
+        features.metadata.updated = new Date().toISOString();
+
+        return {
+          success: true,
+          task,
+          progress_entry: progressEntry,
+          message: 'Task progress updated successfully'
+        };
+      });
+
+      return result;
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  /**
+   * Register agent capabilities for task matching
+   */
+  async registerAgentCapabilities(agentId, capabilities) {
+    try {
+      const result = await this._atomicFeatureOperation((features) => {
+        if (!features.agents) {
+          features.agents = {};
+        }
+
+        if (!features.agents[agentId]) {
+          throw new Error(`Agent ${agentId} not found. Initialize agent first.`);
+        }
+
+        // Validate capabilities
+        const validCapabilities = capabilities.filter(cap =>
+          this.validAgentCapabilities.includes(cap) || cap === 'general'
+        );
+
+        if (validCapabilities.length !== capabilities.length) {
+          const invalidCaps = capabilities.filter(cap => !validCapabilities.includes(cap));
+          return {
+            success: false,
+            error: `Invalid capabilities: ${invalidCaps.join(', ')}`,
+            valid_capabilities: this.validAgentCapabilities
+          };
+        }
+
+        features.agents[agentId].capabilities = capabilities;
+        features.agents[agentId].capabilities_registered_at = new Date().toISOString();
+        features.agents[agentId].lastHeartbeat = new Date().toISOString();
+
+        features.metadata.updated = new Date().toISOString();
+
+        return {
+          success: true,
+          agent_id: agentId,
+          capabilities,
+          message: `Capabilities registered for agent ${agentId}`
+        };
+      });
+
+      return result;
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  // =================== DIRECT TASK MANAGEMENT METHODS ===================
+
+  /**
+   * Create a new task directly (not from feature)
+   */
+  async createTask(taskData) {
+    try {
+      const result = await this._atomicFeatureOperation((features) => {
+        // Initialize tasks array if it doesn't exist
+        if (!features.tasks) {
+          features.tasks = [];
+        }
+
+        // Validate required task fields
+        if (!taskData.title || !taskData.description) {
+          throw new Error('Task title and description are required');
+        }
+
+        const task = {
+          id: this._generateTaskId(),
+          feature_id: taskData.feature_id || null,
+          title: taskData.title,
+          description: taskData.description,
+          type: taskData.type || 'implementation',
+          priority: taskData.priority || 'normal',
+          status: 'queued',
+          dependencies: taskData.dependencies || [],
+          estimated_effort: taskData.estimated_effort || 5,
+          required_capabilities: taskData.required_capabilities || ['general'],
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          created_by: taskData.created_by || 'manual_creation',
+          metadata: {
+            auto_generated: false,
+            ...taskData.metadata
+          }
+        };
+
+        features.tasks.push(task);
+        features.metadata.updated = new Date().toISOString();
+
+        return {
+          success: true,
+          task,
+          message: 'Task created successfully'
+        };
+      });
+
+      return result;
+    } catch (error) {
+      throw new Error(`Failed to create task: ${error.message}`);
+    }
+  }
+
+  /**
+   * Get a specific task by ID
+   */
+  async getTask(taskId) {
+    try {
+      const features = await this._loadFeatures();
+
+      if (!features.tasks) {
+        throw new Error('No tasks exist in the system');
+      }
+
+      const task = features.tasks.find(t => t.id === taskId);
+      if (!task) {
+        throw new Error(`Task with ID ${taskId} not found`);
+      }
+
+      return {
+        success: true,
+        task,
+        message: 'Task retrieved successfully'
+      };
+    } catch (error) {
+      throw new Error(`Failed to get task: ${error.message}`);
+    }
+  }
+
+  /**
+   * Update a task
+   */
+  async updateTask(taskId, updates) {
+    try {
+      const result = await this._atomicFeatureOperation((features) => {
+        if (!features.tasks) {
+          throw new Error('No tasks exist in the system');
+        }
+
+        const task = features.tasks.find(t => t.id === taskId);
+        if (!task) {
+          throw new Error(`Task with ID ${taskId} not found`);
+        }
+
+        // Update allowed fields
+        const allowedFields = ['title', 'description', 'status', 'priority', 'progress_percentage', 'metadata'];
+        for (const field of allowedFields) {
+          if (updates[field] !== undefined) {
+            task[field] = updates[field];
+          }
+        }
+
+        task.updated_at = new Date().toISOString();
+        if (updates.updated_by) {
+          task.updated_by = updates.updated_by;
+        }
+
+        // Handle status changes
+        if (updates.status === 'completed' && !task.completed_at) {
+          task.completed_at = new Date().toISOString();
+          task.progress_percentage = 100;
+        }
+
+        features.metadata.updated = new Date().toISOString();
+
+        return {
+          success: true,
+          task,
+          message: 'Task updated successfully'
+        };
+      });
+
+      return result;
+    } catch (error) {
+      throw new Error(`Failed to update task: ${error.message}`);
+    }
+  }
+
+  /**
+   * Complete a task with result data
+   */
+  async completeTask(taskId, resultData) {
+    try {
+      const result = await this._atomicFeatureOperation((features) => {
+        if (!features.tasks) {
+          throw new Error('No tasks exist in the system');
+        }
+
+        const task = features.tasks.find(t => t.id === taskId);
+        if (!task) {
+          throw new Error(`Task with ID ${taskId} not found`);
+        }
+
+        if (task.status === 'completed') {
+          return {
+            success: true,
+            task,
+            message: 'Task was already completed'
+          };
+        }
+
+        // Update task completion fields
+        task.status = 'completed';
+        task.completed_at = new Date().toISOString();
+        task.progress_percentage = 100;
+        task.result = resultData;
+        task.updated_at = new Date().toISOString();
+
+        // Initialize completed_tasks if it doesn't exist
+        if (!features.completed_tasks) {
+          features.completed_tasks = [];
+        }
+
+        // Add to completed tasks
+        features.completed_tasks.push({
+          task_id: taskId,
+          completed_at: task.completed_at,
+          assigned_to: task.assigned_to,
+          feature_id: task.feature_id,
+          result: resultData
+        });
+
+        features.metadata.updated = new Date().toISOString();
+
+        return {
+          success: true,
+          task,
+          message: 'Task completed successfully'
+        };
+      });
+
+      return result;
+    } catch (error) {
+      throw new Error(`Failed to complete task: ${error.message}`);
+    }
+  }
+
+  /**
+   * Get tasks assigned to a specific agent
+   */
+  async getAgentTasks(agentId) {
+    try {
+      const features = await this._loadFeatures();
+
+      if (!features.tasks) {
+        return {
+          success: true,
+          tasks: [],
+          message: 'No tasks exist in the system'
+        };
+      }
+
+      const agentTasks = features.tasks.filter(t => t.assigned_to === agentId);
+
+      return {
+        success: true,
+        tasks: agentTasks,
+        count: agentTasks.length,
+        message: `Found ${agentTasks.length} tasks for agent ${agentId}`
+      };
+    } catch (error) {
+      throw new Error(`Failed to get agent tasks: ${error.message}`);
+    }
+  }
+
+  /**
+   * Get tasks by status
+   */
+  async getTasksByStatus(status) {
+    try {
+      const features = await this._loadFeatures();
+
+      if (!features.tasks) {
+        return {
+          success: true,
+          tasks: [],
+          message: 'No tasks exist in the system'
+        };
+      }
+
+      const statusTasks = features.tasks.filter(t => t.status === status);
+
+      return {
+        success: true,
+        tasks: statusTasks,
+        count: statusTasks.length,
+        message: `Found ${statusTasks.length} tasks with status '${status}'`
+      };
+    } catch (error) {
+      throw new Error(`Failed to get tasks by status: ${error.message}`);
+    }
+  }
+
+  /**
+   * Get tasks by priority
+   */
+  async getTasksByPriority(priority) {
+    try {
+      const features = await this._loadFeatures();
+
+      if (!features.tasks) {
+        return {
+          success: true,
+          tasks: [],
+          message: 'No tasks exist in the system'
+        };
+      }
+
+      const priorityTasks = features.tasks.filter(t => t.priority === priority);
+
+      return {
+        success: true,
+        tasks: priorityTasks,
+        count: priorityTasks.length,
+        message: `Found ${priorityTasks.length} tasks with priority '${priority}'`
+      };
+    } catch (error) {
+      throw new Error(`Failed to get tasks by priority: ${error.message}`);
+    }
+  }
+
+  /**
+   * Get available tasks for an agent based on capabilities
+   */
+  async getAvailableTasksForAgent(agentId) {
+    try {
+      const features = await this._loadFeatures();
+
+      if (!features.tasks || !features.agents) {
+        return {
+          success: true,
+          tasks: [],
+          message: 'No tasks or agents exist in the system'
+        };
+      }
+
+      const agent = features.agents[agentId];
+      if (!agent) {
+        throw new Error(`Agent ${agentId} not found`);
+      }
+
+      // Find unassigned tasks that match agent capabilities
+      const availableTasks = features.tasks.filter(task => {
+        if (task.status !== 'queued') return false;
+        if (task.assigned_to) return false;
+
+        // Check if agent has required capabilities
+        const hasCapabilities = task.required_capabilities.every(cap =>
+          agent.capabilities.includes(cap) || agent.capabilities.includes('general')
+        );
+
+        return hasCapabilities;
+      });
+
+      return {
+        success: true,
+        tasks: availableTasks,
+        count: availableTasks.length,
+        message: `Found ${availableTasks.length} available tasks for agent ${agentId}`
+      };
+    } catch (error) {
+      throw new Error(`Failed to get available tasks: ${error.message}`);
+    }
+  }
+
+  /**
+   * Get task statistics
+   */
+  async getTaskStatistics() {
+    try {
+      const features = await this._loadFeatures();
+
+      if (!features.tasks) {
+        return {
+          success: true,
+          statistics: {
+            total_tasks: 0,
+            by_status: {},
+            by_priority: {},
+            by_type: {},
+            completion_rate: 0
+          },
+          message: 'No tasks exist in the system'
+        };
+      }
+
+      const stats = {
+        total_tasks: features.tasks.length,
+        by_status: {},
+        by_priority: {},
+        by_type: {},
+        by_agent: {},
+        completion_rate: 0
+      };
+
+      // Calculate statistics
+      features.tasks.forEach(task => {
+        // Status statistics
+        stats.by_status[task.status] = (stats.by_status[task.status] || 0) + 1;
+
+        // Priority statistics
+        stats.by_priority[task.priority] = (stats.by_priority[task.priority] || 0) + 1;
+
+        // Type statistics
+        stats.by_type[task.type] = (stats.by_type[task.type] || 0) + 1;
+
+        // Agent statistics
+        if (task.assigned_to) {
+          stats.by_agent[task.assigned_to] = (stats.by_agent[task.assigned_to] || 0) + 1;
+        }
+      });
+
+      // Calculate completion rate
+      const completedTasks = stats.by_status.completed || 0;
+      stats.completion_rate = features.tasks.length > 0
+        ? Math.round((completedTasks / features.tasks.length) * 100)
+        : 0;
+
+      return {
+        success: true,
+        statistics: stats,
+        message: 'Task statistics calculated successfully'
+      };
+    } catch (error) {
+      throw new Error(`Failed to get task statistics: ${error.message}`);
+    }
+  }
+
+  /**
+   * Create tasks from all approved features
+   */
+  async createTasksFromApprovedFeatures(options = {}) {
+    try {
+      const result = await this._atomicFeatureOperation((features) => {
+        const approvedFeatures = features.features.filter(f => f.status === 'approved');
+
+        if (approvedFeatures.length === 0) {
+          return {
+            success: true,
+            created_tasks: [],
+            message: 'No approved features found to create tasks from'
+          };
+        }
+
+        // Initialize tasks array if it doesn't exist
+        if (!features.tasks) {
+          features.tasks = [];
+        }
+
+        const createdTasks = [];
+
+        approvedFeatures.forEach(feature => {
+          // Skip if task already exists for this feature (unless force option is set)
+          const existingTask = features.tasks.find(t => t.feature_id === feature.id);
+          if (existingTask && !options.force) {
+            return;
+          }
+
+          const mainTask = {
+            id: this._generateTaskId(),
+            feature_id: feature.id,
+            title: `Implement: ${feature.title}`,
+            description: feature.description,
+            type: this._inferTaskType(feature),
+            priority: this._inferTaskPriority(feature),
+            status: 'queued',
+            dependencies: [],
+            estimated_effort: this._estimateEffort(feature),
+            required_capabilities: this._inferCapabilities(feature),
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            created_by: 'autonomous_system',
+            metadata: {
+              auto_generated: true,
+              feature_category: feature.category,
+              business_value: feature.business_value
+            }
+          };
+
+          features.tasks.push(mainTask);
+          createdTasks.push(mainTask);
+
+          // Create supporting tasks if this is a complex feature
+          if (this._isComplexFeature(feature)) {
+            const supportingTasks = this._generateSupportingTasks(feature, mainTask.id);
+            features.tasks.push(...supportingTasks);
+            createdTasks.push(...supportingTasks);
+          }
+        });
+
+        features.metadata.updated = new Date().toISOString();
+
+        return {
+          success: true,
+          created_tasks: createdTasks,
+          message: `Created ${createdTasks.length} tasks from ${approvedFeatures.length} approved features`
+        };
+      });
+
+      return result;
+    } catch (error) {
+      throw new Error(`Failed to create tasks from features: ${error.message}`);
+    }
+  }
+
+  /**
+   * Optimize task assignments based on agent capabilities and workload
+   */
+  async optimizeTaskAssignments() {
+    try {
+      const result = await this._atomicFeatureOperation((features) => {
+        if (!features.tasks || !features.agents) {
+          return {
+            success: true,
+            assignments: [],
+            message: 'No tasks or agents available for optimization'
+          };
+        }
+
+        const assignments = [];
+        const unassignedTasks = features.tasks.filter(t =>
+          t.status === 'queued' && !t.assigned_to
+        );
+
+        const activeAgents = Object.keys(features.agents).map(agentId => ({
+          id: agentId,
+          ...features.agents[agentId],
+          workload: features.tasks.filter(t =>
+            t.assigned_to === agentId && ['queued', 'in_progress'].includes(t.status)
+          ).length
+        }));
+
+        // Sort agents by workload (least busy first)
+        activeAgents.sort((a, b) => a.workload - b.workload);
+
+        // Assign tasks to agents based on capabilities and workload
+        unassignedTasks.forEach(task => {
+          const suitableAgent = activeAgents.find(agent =>
+            task.required_capabilities.every(cap =>
+              agent.capabilities.includes(cap) || agent.capabilities.includes('general')
+            )
+          );
+
+          if (suitableAgent) {
+            task.assigned_to = suitableAgent.id;
+            task.assigned_at = new Date().toISOString();
+            task.status = 'assigned';
+            task.updated_at = new Date().toISOString();
+
+            suitableAgent.workload += 1;
+            assignments.push({
+              task_id: task.id,
+              agent_id: suitableAgent.id,
+              task_title: task.title,
+              reason: 'capability_match_and_workload_balance'
+            });
+          }
+        });
+
+        features.metadata.updated = new Date().toISOString();
+
+        return {
+          success: true,
+          assignments,
+          message: `Optimized assignments for ${assignments.length} tasks`
+        };
+      });
+
+      return result;
+    } catch (error) {
+      throw new Error(`Failed to optimize task assignments: ${error.message}`);
+    }
+  }
+
+  /**
+   * Register agent with capabilities
+   */
+  async registerAgent(agentId, capabilities) {
+    try {
+      const result = await this._atomicFeatureOperation((features) => {
+        if (!features.agents) {
+          features.agents = {};
+        }
+
+        features.agents[agentId] = {
+          id: agentId,
+          capabilities: Array.isArray(capabilities) ? capabilities : [capabilities],
+          registered_at: new Date().toISOString(),
+          last_seen: new Date().toISOString(),
+          status: 'active'
+        };
+
+        features.metadata.updated = new Date().toISOString();
+
+        return {
+          success: true,
+          agent: features.agents[agentId],
+          message: `Agent ${agentId} registered successfully with capabilities: ${capabilities.join(', ')}`
+        };
+      });
+
+      return result;
+    } catch (error) {
+      throw new Error(`Failed to register agent: ${error.message}`);
+    }
+  }
+
+  /**
+   * Unregister agent
+   */
+  async unregisterAgent(agentId) {
+    try {
+      const result = await this._atomicFeatureOperation((features) => {
+        if (!features.agents || !features.agents[agentId]) {
+          throw new Error(`Agent ${agentId} not found`);
+        }
+
+        delete features.agents[agentId];
+
+        // Unassign any tasks assigned to this agent
+        if (features.tasks) {
+          features.tasks.forEach(task => {
+            if (task.assigned_to === agentId) {
+              task.assigned_to = null;
+              task.status = 'queued';
+              task.updated_at = new Date().toISOString();
+            }
+          });
+        }
+
+        features.metadata.updated = new Date().toISOString();
+
+        return {
+          success: true,
+          message: `Agent ${agentId} unregistered successfully`
+        };
+      });
+
+      return result;
+    } catch (error) {
+      throw new Error(`Failed to unregister agent: ${error.message}`);
+    }
+  }
+
+  /**
+   * Get active agents
+   */
+  async getActiveAgents() {
+    try {
+      const features = await this._loadFeatures();
+
+      if (!features.agents) {
+        return {
+          success: true,
+          agents: [],
+          message: 'No agents registered in the system'
+        };
+      }
+
+      const agents = Object.values(features.agents);
+
+      return {
+        success: true,
+        agents,
+        count: agents.length,
+        message: `Found ${agents.length} registered agents`
+      };
+    } catch (error) {
+      throw new Error(`Failed to get active agents: ${error.message}`);
+    }
+  }
+
+  /**
+   * Start WebSocket server for real-time updates
+   */
+  async startWebSocketServer(port = 8080) {
+    try {
+      if (this.wss) {
+        return {
+          success: true,
+          message: 'WebSocket server is already running',
+          port: this.wsPort
+        };
+      }
+
+      const WebSocket = require('ws');
+      this.wss = new WebSocket.Server({ port });
+      this.wsPort = port;
+
+      this.wss.on('connection', (ws) => {
+        console.log('New WebSocket client connected');
+
+        // Send initial status
+        ws.send(JSON.stringify({
+          type: 'connection_established',
+          timestamp: new Date().toISOString(),
+          message: 'Connected to TaskManager WebSocket server'
+        }));
+
+        ws.on('close', () => {
+          console.log('WebSocket client disconnected');
+        });
+      });
+
+      // Set up periodic status updates
+      this.statusUpdateInterval = setInterval(() => {
+        this._broadcastStatusUpdate();
+      }, 30000); // Every 30 seconds
+
+      return {
+        success: true,
+        message: `WebSocket server started on port ${port}`,
+        port,
+        endpoint: `ws://localhost:${port}`
+      };
+    } catch (error) {
+      throw new Error(`Failed to start WebSocket server: ${error.message}`);
+    }
+  }
+
+  /**
+   * Broadcast status update to all connected WebSocket clients
+   */
+  async _broadcastStatusUpdate() {
+    if (!this.wss) return;
+
+    try {
+      const stats = await this.getTaskStatistics();
+      const agents = await this.getActiveAgents();
+
+      const statusUpdate = {
+        type: 'status_update',
+        timestamp: new Date().toISOString(),
+        task_statistics: stats.statistics,
+        active_agents: agents.count,
+        system_status: 'operational'
+      };
+
+      this.wss.clients.forEach((client) => {
+        if (client.readyState === 1) { // WebSocket.OPEN
+          client.send(JSON.stringify(statusUpdate));
+        }
+      });
+    } catch (error) {
+      console.error('Failed to broadcast status update:', error);
+    }
+  }
+
   // =================== UTILITY METHODS ===================
-  // Helper methods for feature management
+  // Helper methods for feature management and task orchestration
 
   /**
    * Validate feature data structure and required fields
@@ -1314,9 +2451,163 @@ class FeatureManagerAPI {
     };
   }
 
+/**
+ * Generate unique task ID
+ */
+_generateTaskId() {
+  const timestamp = Date.now();
+  const randomString = crypto.randomBytes(6).toString('hex');
+  return `task_${timestamp}_${randomString}`;
+}
+
+/**
+ * Infer task type from feature characteristics
+ */
+_inferTaskType(feature) {
+  if (feature.category === 'bug-fix') return 'implementation';
+  if (feature.category === 'security') return 'analysis';
+  if (feature.category === 'performance') return 'analysis';
+  if (feature.category === 'documentation') return 'documentation';
+  return 'implementation';
+}
+
+/**
+ * Infer task priority from feature characteristics
+ */
+_inferTaskPriority(feature) {
+  if (feature.category === 'security') return 'critical';
+  if (feature.category === 'bug-fix') return 'high';
+  if (feature.category === 'performance') return 'high';
+  if (feature.business_value && feature.business_value.toLowerCase().includes('critical')) return 'critical';
+  if (feature.business_value && feature.business_value.toLowerCase().includes('essential')) return 'high';
+  return 'normal';
+}
+
+/**
+ * Estimate effort required for feature implementation
+ */
+_estimateEffort(feature) {
+  let baseEffort = 5; // Base effort in hours
+
+  // Adjust based on category
+  if (feature.category === 'new-feature') baseEffort *= 2;
+  if (feature.category === 'enhancement') baseEffort *= 1.5;
+  if (feature.category === 'security') baseEffort *= 1.8;
+
+  // Adjust based on description length (complexity indicator)
+  const complexityMultiplier = Math.min(feature.description.length / 500, 3);
+  baseEffort *= (1 + complexityMultiplier);
+
+  return Math.ceil(baseEffort);
+}
+
+/**
+ * Infer required capabilities from feature characteristics
+ */
+_inferCapabilities(feature) {
+  const capabilities = [];
+
+  if (feature.category === 'security') capabilities.push('security');
+  if (feature.category === 'performance') capabilities.push('performance');
+  if (feature.category === 'documentation') capabilities.push('documentation');
+  if (feature.category === 'bug-fix') capabilities.push('analysis');
+
+  // Check description for technology hints
+  const description = feature.description.toLowerCase();
+  if (description.includes('frontend') || description.includes('ui') || description.includes('interface')) {
+    capabilities.push('frontend');
+  }
+  if (description.includes('backend') || description.includes('api') || description.includes('server')) {
+    capabilities.push('backend');
+  }
+  if (description.includes('test') || description.includes('testing')) {
+    capabilities.push('testing');
+  }
+
+  return capabilities.length > 0 ? capabilities : ['general'];
+}
+
+/**
+ * Determine if feature is complex enough to warrant supporting tasks
+ */
+_isComplexFeature(feature) {
+  return feature.category === 'new-feature' ||
+         feature.description.length > 800 ||
+         feature.business_value.toLowerCase().includes('comprehensive');
+}
+
+/**
+ * Generate supporting tasks for complex features
+ */
+_generateSupportingTasks(feature, mainTaskId) {
+  const supportingTasks = [];
+
+  // Always add testing task for complex features
+  supportingTasks.push({
+    id: this._generateTaskId(),
+    feature_id: feature.id,
+    title: `Test: ${feature.title}`,
+    description: `Comprehensive testing for ${feature.title}`,
+    type: 'testing',
+    priority: this._inferTaskPriority(feature),
+    status: 'queued',
+    dependencies: [mainTaskId],
+    estimated_effort: Math.ceil(this._estimateEffort(feature) * 0.6),
+    required_capabilities: ['testing'],
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    created_by: 'autonomous_system',
+    metadata: {
+      auto_generated: true,
+      supporting_task: true,
+      main_task_id: mainTaskId
+    }
+  });
+
+  // Add documentation task for new features
+  if (feature.category === 'new-feature') {
+    supportingTasks.push({
+      id: this._generateTaskId(),
+      feature_id: feature.id,
+      title: `Document: ${feature.title}`,
+      description: `Documentation for ${feature.title}`,
+      type: 'documentation',
+      priority: 'normal',
+      status: 'queued',
+      dependencies: [mainTaskId],
+      estimated_effort: Math.ceil(this._estimateEffort(feature) * 0.3),
+      required_capabilities: ['documentation'],
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      created_by: 'autonomous_system',
+      metadata: {
+        auto_generated: true,
+        supporting_task: true,
+        main_task_id: mainTaskId
+      }
+    });
+  }
+
+  return supportingTasks;
+}
+
+  /**
+   * Cleanup resources and connections
+   */
   cleanup() {
-    // Cleanup resources if needed
-    // No active connections to clean up in this simplified version
+    if (this.wss) {
+      this.wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.close();
+        }
+      });
+      this.wss.close();
+    }
+
+    // Clear any intervals or timers
+    if (this.statusUpdateInterval) {
+      clearInterval(this.statusUpdateInterval);
+    }
   }
 }
 
@@ -1324,7 +2615,7 @@ class FeatureManagerAPI {
 async function main() {
   // Use the already parsed args (with --project-root removed)
   const command = args[0];
-  const api = new FeatureManagerAPI();
+  const api = new AutonomousTaskManagerAPI();
 
   try {
     let result;
@@ -1401,8 +2692,128 @@ async function main() {
         result = await api.authorizeStop(args[1], stopReason);
         break;
       }
+
+      // New autonomous task management commands
+      case 'create-task': {
+        if (!args[1]) {
+          throw new Error('Task data required. Usage: create-task \'{"title":"...", "description":"...", "type":"...", "priority":"..."}\'');
+        }
+        const taskData = JSON.parse(args[1]);
+        result = await api.createTask(taskData);
+        break;
+      }
+      case 'get-task': {
+        if (!args[1]) {
+          throw new Error('Task ID required. Usage: get-task <taskId>');
+        }
+        result = await api.getTask(args[1]);
+        break;
+      }
+      case 'update-task': {
+        if (!args[1] || !args[2]) {
+          throw new Error('Task ID and updates required. Usage: update-task <taskId> \'{"status":"...", "progress":"..."}\'');
+        }
+        const updates = JSON.parse(args[2]);
+        result = await api.updateTask(args[1], updates);
+        break;
+      }
+      case 'assign-task': {
+        if (!args[1] || !args[2]) {
+          throw new Error('Task ID and Agent ID required. Usage: assign-task <taskId> <agentId>');
+        }
+        result = await api.assignTask(args[1], args[2]);
+        break;
+      }
+      case 'complete-task': {
+        if (!args[1] || !args[2]) {
+          throw new Error('Task ID and result data required. Usage: complete-task <taskId> \'{"result":"...", "output":"..."}\'');
+        }
+        const resultData = JSON.parse(args[2]);
+        result = await api.completeTask(args[1], resultData);
+        break;
+      }
+      case 'get-agent-tasks': {
+        if (!args[1]) {
+          throw new Error('Agent ID required. Usage: get-agent-tasks <agentId>');
+        }
+        result = await api.getAgentTasks(args[1]);
+        break;
+      }
+      case 'get-tasks-by-status': {
+        if (!args[1]) {
+          throw new Error('Status required. Usage: get-tasks-by-status <status>');
+        }
+        result = await api.getTasksByStatus(args[1]);
+        break;
+      }
+      case 'get-tasks-by-priority': {
+        if (!args[1]) {
+          throw new Error('Priority required. Usage: get-tasks-by-priority <priority>');
+        }
+        result = await api.getTasksByPriority(args[1]);
+        break;
+      }
+      case 'get-available-tasks': {
+        if (!args[1]) {
+          throw new Error('Agent ID required. Usage: get-available-tasks <agentId>');
+        }
+        result = await api.getAvailableTasksForAgent(args[1]);
+        break;
+      }
+      case 'create-tasks-from-features': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.createTasksFromApprovedFeatures(options);
+        break;
+      }
+      case 'get-task-queue': {
+        const filters = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.getTaskQueue(filters);
+        break;
+      }
+      case 'get-task-stats':
+        result = await api.getTaskStatistics();
+        break;
+      case 'optimize-assignments':
+        result = await api.optimizeTaskAssignments();
+        break;
+      case 'start-websocket': {
+        if (!args[1]) {
+          throw new Error('Port required. Usage: start-websocket <port>');
+        }
+        const port = parseInt(args[1]);
+        result = await api.startWebSocketServer(port);
+        // Keep process alive for WebSocket server
+        console.log(JSON.stringify(result, null, 2));
+        console.log('WebSocket server running. Press Ctrl+C to stop.');
+        process.on('SIGINT', () => {
+          console.log('\nShutting down WebSocket server...');
+          api.cleanup();
+          process.exit(0);
+        });
+        // Don't exit for WebSocket server
+        return;
+      }
+      case 'register-agent': {
+        if (!args[1] || !args[2]) {
+          throw new Error('Agent ID and capabilities required. Usage: register-agent <agentId> \'["capability1","capability2"]\'');
+        }
+        const capabilities = JSON.parse(args[2]);
+        result = await api.registerAgent(args[1], capabilities);
+        break;
+      }
+      case 'unregister-agent': {
+        if (!args[1]) {
+          throw new Error('Agent ID required. Usage: unregister-agent <agentId>');
+        }
+        result = await api.unregisterAgent(args[1]);
+        break;
+      }
+      case 'get-active-agents':
+        result = await api.getActiveAgents();
+        break;
+
       default:
-        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, authorize-stop`);
+        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, authorize-stop, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents`);
     }
 
     console.log(JSON.stringify(result, null, 2));
@@ -1412,18 +2823,18 @@ async function main() {
       error: error.message,
       command,
       timestamp: new Date().toISOString(),
-      guide: api._getFallbackGuide('feature-management'),
+      guide: api._getFallbackGuide('autonomous-task-management'),
     };
 
     console.error(JSON.stringify(errorResponse, null, 2));
-    throw new Error('Feature Management API execution failed');
+    throw new Error('Autonomous Task Management API execution failed');
   } finally {
     await api.cleanup();
   }
 }
 
 // Export for programmatic use
-module.exports = FeatureManagerAPI;
+module.exports = AutonomousTaskManagerAPI;
 
 // Run CLI if called directly (CommonJS equivalent)
 if (require.main === module) {
