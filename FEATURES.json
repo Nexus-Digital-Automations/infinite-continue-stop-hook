@@ -619,34 +619,6 @@
   ],
   "completed_tasks": [],
   "agents": {
-    "claude-test-gate-enhancement": {
-      "lastHeartbeat": "2025-09-26T15:56:35.536Z",
-      "status": "active",
-      "reinitialized": "2025-09-26T15:56:35.536Z",
-      "sessionId": "a0ca0e9297860557",
-      "previousSessions": []
-    },
-    "claude-continuation-agent": {
-      "lastHeartbeat": "2025-09-26T15:59:37.607Z",
-      "status": "active",
-      "reinitialized": "2025-09-26T15:59:37.607Z",
-      "sessionId": "e59b090495d27c4a",
-      "previousSessions": []
-    },
-    "claude-main-agent": {
-      "lastHeartbeat": "2025-09-26T16:10:12.381Z",
-      "status": "active",
-      "reinitialized": "2025-09-26T16:10:12.381Z",
-      "sessionId": "9f307af3a473ddc6",
-      "previousSessions": []
-    },
-    "claude-concise-plan": {
-      "lastHeartbeat": "2025-09-26T16:13:28.285Z",
-      "status": "active",
-      "reinitialized": "2025-09-26T16:13:28.285Z",
-      "sessionId": "48264b883899b74d",
-      "previousSessions": []
-    },
     "claude-concise-implementation": {
       "lastHeartbeat": "2025-09-26T16:15:54.370Z",
       "status": "active",
