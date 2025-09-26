@@ -268,7 +268,7 @@
     ],
     "initialization_stats": {
       "total_initializations": 6,
-      "total_reinitializations": 13,
+      "total_reinitializations": 15,
       "current_day": "2025-09-26",
       "time_buckets": {
         "10:00-14:59": {
@@ -285,11 +285,11 @@
         },
         "01:00-05:59": {
           "init": 0,
-          "reinit": 1
+          "reinit": 2
         },
         "06:00-10:59": {
           "init": 0,
-          "reinit": 0
+          "reinit": 1
         }
       },
       "daily_history": [
@@ -376,7 +376,7 @@
         }
       ],
       "last_reset": "2025-09-26T08:30:54.708Z",
-      "last_updated": "2025-09-26T08:30:54.708Z"
+      "last_updated": "2025-09-26T11:00:45.580Z"
     }
   },
   "workflow_config": {
@@ -618,5 +618,20 @@
     }
   ],
   "completed_tasks": [],
-  "agents": {}
+  "agents": {
+    "claude-agent-main": {
+      "lastHeartbeat": "2025-09-26T10:47:31.904Z",
+      "status": "active",
+      "reinitialized": "2025-09-26T10:47:31.904Z",
+      "sessionId": "e4769903026cceed",
+      "previousSessions": []
+    },
+    "agent-consolidation-phase3": {
+      "lastHeartbeat": "2025-09-26T11:00:45.575Z",
+      "status": "active",
+      "reinitialized": "2025-09-26T11:00:45.575Z",
+      "sessionId": "0a5adfc515f021f6",
+      "previousSessions": []
+    }
+  }
 }

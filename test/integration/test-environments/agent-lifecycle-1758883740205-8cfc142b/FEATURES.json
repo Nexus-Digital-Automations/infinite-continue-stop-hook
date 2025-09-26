@@ -1,41 +1,41 @@
 {
-  "project": "test-agent-lifecycle-1758821686321-5b6f26ff",
+  "project": "test-agent-lifecycle-1758883740205-8cfc142b",
   "features": [],
   "metadata": {
     "version": "1.0.0",
-    "created": "2025-09-25T17:34:46.321Z",
-    "updated": "2025-09-25T17:34:46.321Z",
+    "created": "2025-09-26T10:49:00.206Z",
+    "updated": "2025-09-26T10:49:00.207Z",
     "total_features": 0,
     "approval_history": [],
     "initialization_stats": {
-      "total_initializations": 2,
+      "total_initializations": 1,
       "total_reinitializations": 0,
-      "current_day": "2025-09-25",
+      "current_day": "2025-09-26",
       "time_buckets": {
-        "09:00-13:59": {
-          "init": 2,
-          "reinit": 0
-        },
-        "14:00-18:59": {
+        "10:00-14:59": {
           "init": 0,
           "reinit": 0
         },
-        "19:00-23:59": {
+        "15:00-19:59": {
           "init": 0,
           "reinit": 0
         },
-        "00:00-04:59": {
+        "20:00-00:59": {
           "init": 0,
           "reinit": 0
         },
-        "05:00-09:59": {
+        "01:00-05:59": {
+          "init": 1,
+          "reinit": 0
+        },
+        "06:00-10:59": {
           "init": 0,
           "reinit": 0
         }
       },
       "daily_history": [],
-      "last_reset": "2025-09-25T17:34:46.357Z",
-      "last_updated": "2025-09-25T17:34:56.467Z"
+      "last_reset": "2025-09-26T10:49:00.263Z",
+      "last_updated": "2025-09-26T10:49:00.264Z"
     }
   },
   "workflow_config": {
@@ -55,17 +55,11 @@
     ]
   },
   "agents": {
-    "lead-agent": {
-      "lastHeartbeat": "2025-09-25T17:34:46.355Z",
+    "test-agent-001": {
+      "lastHeartbeat": "2025-09-26T10:49:00.261Z",
       "status": "active",
-      "initialized": "2025-09-25T17:34:46.355Z",
-      "sessionId": "f8058156d75b2d90"
-    },
-    "dev-agent-frontend": {
-      "lastHeartbeat": "2025-09-25T17:34:56.465Z",
-      "status": "active",
-      "initialized": "2025-09-25T17:34:56.465Z",
-      "sessionId": "19f195ff59e599f9"
+      "initialized": "2025-09-26T10:49:00.261Z",
+      "sessionId": "91cd17aab799bb76"
     }
   }
 }
