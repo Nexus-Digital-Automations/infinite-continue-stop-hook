@@ -550,32 +550,41 @@ function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 ❌ NEVER mark complete without validation → ✅ Always run \`npm run lint\`, \`npm run typecheck\`
 If validation fails → Create linter-error task IMMEDIATELY, fix before completion
 
-**SELF-AUTHORIZATION STOP PROTOCOL (WHEN PROJECT PERFECT):**
-When ALL TodoWrite tasks are complete and project achieves perfection, agents can authorize their own stop:
+**MULTI-STEP AUTHORIZATION PROTOCOL (LANGUAGE-AGNOSTIC):**
+When ALL TodoWrite tasks are complete and project achieves perfection, agents must complete multi-step authorization:
 
-**VALIDATION REQUIREMENTS BEFORE AUTHORIZATION:**
-- [ ] Run \`npm run lint\` - confirms zero errors/warnings (if script exists)
-- [ ] Run \`npm run typecheck\` - confirms all types valid (if script exists)
-- [ ] Run \`npm run build\` - confirms successful build (if script exists)
-- [ ] Run \`npm run start\` - confirms application starts (if script exists)
-- [ ] Run \`npm test\` - confirms all tests pass (if script exists)
-- [ ] Check TodoWrite - confirms all tasks marked completed
-- [ ] Check FEATURES.json - confirms all approved features implemented
-- [ ] Manual verification - codebase functions as expected
+**STEP 1: START AUTHORIZATION**
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" start-authorization [AGENT_ID]
 
-**SELF-AUTHORIZATION COMMAND:**
-   # ONLY when ALL applicable criteria met
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop [AGENT_ID] "All TodoWrite tasks complete and project perfect: [list applicable criteria]"
+**STEP 2: VALIDATE EACH CRITERION SEQUENTIALLY (CANNOT SKIP STEPS)**
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] focused-codebase
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] security-validation
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] linter-validation
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] type-validation
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] build-validation
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] start-validation
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] test-validation
 
-**AUTHORIZATION EXAMPLES:**
-   # For full-stack projects with all scripts
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop claude-agent "Project perfection: TodoWrite(✅) lint(✅) typecheck(✅) build(✅) start(✅) test(✅) features(✅)"
+**STEP 3: COMPLETE AUTHORIZATION**
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization [AUTH_KEY]
 
-   # For simple projects with limited scripts
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop claude-agent "Simple project perfection: TodoWrite(✅) lint(✅) features(✅)"
+**LANGUAGE-AGNOSTIC VALIDATION CRITERIA:**
+1. **focused-codebase**: Validates only user-outlined features exist in FEATURES.json
+2. **security-validation**: Runs language-appropriate security tools (semgrep, bandit, trivy, npm audit, etc.)
+3. **linter-validation**: Attempts language-appropriate linting (eslint, pylint, rubocop, go fmt, etc.)
+4. **type-validation**: Runs language-appropriate type checking (tsc, mypy, go build, cargo check, etc.)
+5. **build-validation**: Attempts language-appropriate builds (npm/yarn build, make, cargo build, etc.)
+6. **start-validation**: Tests application start commands with timeout
+7. **test-validation**: Runs language-appropriate tests (npm test, pytest, go test, etc.)
+
+**SHORTCUT PREVENTION:**
+- Each validation step must be completed sequentially - cannot skip or reorder
+- Authorization key expires after 30 minutes or completion
+- Previous step completion verified before allowing next step
+- Direct \`authorize-stop\` command disabled - returns error with multi-step instructions
 
 **STOP AUTHORIZATION EFFECTS:**
-- Creates .stop-allowed file for single-use authorization
+- Creates .stop-allowed file ONLY after all 7 validations pass
 - Next stop hook trigger will allow termination (exit 0)
 - Authorization consumed after first use, returns to infinite mode
 
@@ -1066,32 +1075,41 @@ To recover and continue work from the previous stale agents:
 
 3. **Continue the most important unfinished work first**
 
-🛑 **SELF-AUTHORIZATION STOP PROTOCOL (WHEN ALL WORK COMPLETE):**
-When ALL TodoWrite tasks are complete and project achieves perfection, agents can authorize their own stop:
+🛑 **MULTI-STEP AUTHORIZATION PROTOCOL (LANGUAGE-AGNOSTIC):**
+When ALL TodoWrite tasks are complete and project achieves perfection, agents must complete multi-step authorization:
 
-**VALIDATION REQUIREMENTS BEFORE AUTHORIZATION:**
-- [ ] Run \`npm run lint\` - confirms zero errors/warnings (if script exists)
-- [ ] Run \`npm run typecheck\` - confirms all types valid (if script exists)
-- [ ] Run \`npm run build\` - confirms successful build (if script exists)
-- [ ] Run \`npm run start\` - confirms application starts (if script exists)
-- [ ] Run \`npm test\` - confirms all tests pass (if script exists)
-- [ ] Check TodoWrite - confirms all tasks marked completed
-- [ ] Check FEATURES.json - confirms all approved features implemented
-- [ ] Manual verification - codebase functions as expected
+**STEP 1: START AUTHORIZATION**
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" start-authorization [AGENT_ID]
 
-**SELF-AUTHORIZATION COMMAND:**
-   # ONLY when ALL applicable criteria met
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop [AGENT_ID] "All TodoWrite tasks complete and project perfect: [list applicable criteria]"
+**STEP 2: VALIDATE EACH CRITERION SEQUENTIALLY (CANNOT SKIP STEPS)**
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] focused-codebase
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] security-validation
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] linter-validation
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] type-validation
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] build-validation
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] start-validation
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] test-validation
 
-**AUTHORIZATION EXAMPLES:**
-   # For full-stack projects with all scripts
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop claude-agent "Project perfection: TodoWrite(✅) lint(✅) typecheck(✅) build(✅) start(✅) test(✅) features(✅)"
+**STEP 3: COMPLETE AUTHORIZATION**
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization [AUTH_KEY]
 
-   # For simple projects with limited scripts
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop claude-agent "Simple project perfection: TodoWrite(✅) lint(✅) features(✅)"
+**LANGUAGE-AGNOSTIC VALIDATION CRITERIA:**
+1. **focused-codebase**: Validates only user-outlined features exist in FEATURES.json
+2. **security-validation**: Runs language-appropriate security tools (semgrep, bandit, trivy, npm audit, etc.)
+3. **linter-validation**: Attempts language-appropriate linting (eslint, pylint, rubocop, go fmt, etc.)
+4. **type-validation**: Runs language-appropriate type checking (tsc, mypy, go build, cargo check, etc.)
+5. **build-validation**: Attempts language-appropriate builds (npm/yarn build, make, cargo build, etc.)
+6. **start-validation**: Tests application start commands with timeout
+7. **test-validation**: Runs language-appropriate tests (npm test, pytest, go test, etc.)
+
+**SHORTCUT PREVENTION:**
+- Each validation step must be completed sequentially - cannot skip or reorder
+- Authorization key expires after 30 minutes or completion
+- Previous step completion verified before allowing next step
+- Direct \`authorize-stop\` command disabled - returns error with multi-step instructions
 
 **STOP AUTHORIZATION EFFECTS:**
-- Creates .stop-allowed file for single-use authorization
+- Creates .stop-allowed file ONLY after all 7 validations pass
 - Next stop hook trigger will allow termination (exit 0)
 - Authorization consumed after first use, returns to infinite mode
 - All future stops require new authorization
@@ -1145,32 +1163,41 @@ To start working with this TaskManager project:
 
 3. **Begin working on the highest priority tasks**
 
-🛑 **SELF-AUTHORIZATION STOP PROTOCOL (WHEN ALL WORK COMPLETE):**
-When ALL TodoWrite tasks are complete and project achieves perfection, agents can authorize their own stop:
+🛑 **MULTI-STEP AUTHORIZATION PROTOCOL (LANGUAGE-AGNOSTIC):**
+When ALL TodoWrite tasks are complete and project achieves perfection, agents must complete multi-step authorization:
 
-**VALIDATION REQUIREMENTS BEFORE AUTHORIZATION:**
-- [ ] Run \`npm run lint\` - confirms zero errors/warnings (if script exists)
-- [ ] Run \`npm run typecheck\` - confirms all types valid (if script exists)
-- [ ] Run \`npm run build\` - confirms successful build (if script exists)
-- [ ] Run \`npm run start\` - confirms application starts (if script exists)
-- [ ] Run \`npm test\` - confirms all tests pass (if script exists)
-- [ ] Check TodoWrite - confirms all tasks marked completed
-- [ ] Check FEATURES.json - confirms all approved features implemented
-- [ ] Manual verification - codebase functions as expected
+**STEP 1: START AUTHORIZATION**
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" start-authorization [AGENT_ID]
 
-**SELF-AUTHORIZATION COMMAND:**
-   # ONLY when ALL applicable criteria met
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop [AGENT_ID] "All TodoWrite tasks complete and project perfect: [list applicable criteria]"
+**STEP 2: VALIDATE EACH CRITERION SEQUENTIALLY (CANNOT SKIP STEPS)**
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] focused-codebase
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] security-validation
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] linter-validation
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] type-validation
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] build-validation
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] start-validation
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] test-validation
 
-**AUTHORIZATION EXAMPLES:**
-   # For full-stack projects with all scripts
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop claude-agent "Project perfection: TodoWrite(✅) lint(✅) typecheck(✅) build(✅) start(✅) test(✅) features(✅)"
+**STEP 3: COMPLETE AUTHORIZATION**
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization [AUTH_KEY]
 
-   # For simple projects with limited scripts
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop claude-agent "Simple project perfection: TodoWrite(✅) lint(✅) features(✅)"
+**LANGUAGE-AGNOSTIC VALIDATION CRITERIA:**
+1. **focused-codebase**: Validates only user-outlined features exist in FEATURES.json
+2. **security-validation**: Runs language-appropriate security tools (semgrep, bandit, trivy, npm audit, etc.)
+3. **linter-validation**: Attempts language-appropriate linting (eslint, pylint, rubocop, go fmt, etc.)
+4. **type-validation**: Runs language-appropriate type checking (tsc, mypy, go build, cargo check, etc.)
+5. **build-validation**: Attempts language-appropriate builds (npm/yarn build, make, cargo build, etc.)
+6. **start-validation**: Tests application start commands with timeout
+7. **test-validation**: Runs language-appropriate tests (npm test, pytest, go test, etc.)
+
+**SHORTCUT PREVENTION:**
+- Each validation step must be completed sequentially - cannot skip or reorder
+- Authorization key expires after 30 minutes or completion
+- Previous step completion verified before allowing next step
+- Direct \`authorize-stop\` command disabled - returns error with multi-step instructions
 
 **STOP AUTHORIZATION EFFECTS:**
-- Creates .stop-allowed file for single-use authorization
+- Creates .stop-allowed file ONLY after all 7 validations pass
 - Next stop hook trigger will allow termination (exit 0)
 - Authorization consumed after first use, returns to infinite mode
 - All future stops require new authorization
@@ -1316,9 +1343,11 @@ ${instructiveGuidance}
 🚫 STOP NOT ALLOWED
 This system operates in infinite continue mode. To authorize a stop, use:
 
-🛑 SELF-AUTHORIZE STOP WHEN PROJECT PERFECT:
-   # When ALL TodoWrite tasks complete AND project perfect (linter✅ build✅ start✅ tests✅)
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop [AGENT_ID] "All TodoWrite tasks complete and project perfect: linter✅ build✅ start✅ tests✅"
+🛑 MULTI-STEP AUTHORIZATION WHEN PROJECT PERFECT:
+   # When ALL TodoWrite tasks complete AND project perfect, use 3-step process:
+   # 1. Start: timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" start-authorization [AGENT_ID]
+   # 2. Validate all 7 criteria sequentially with validate-criterion [AUTH_KEY] [criterion]
+   # 3. Complete: timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization [AUTH_KEY]
 
 ⚡ CONTINUING OPERATION...
 `);

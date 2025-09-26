@@ -1,0 +1,1185 @@
+{
+  "project": "infinite-continue-stop-hook",
+  "schema_version": "2.0.0",
+  "migrated_from": "FEATURES.json",
+  "migration_date": "2025-09-26T21:10:05.180Z",
+  "tasks": [
+    {
+      "id": "task_1758921005181_s4gleloz",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Add comprehensive testing framework",
+      "description": "Implement automated testing framework with unit, integration, and end-to-end testing capabilities to improve code quality and reduce bugs",
+      "business_value": "Reduces development time, prevents regressions, and increases confidence in deployments",
+      "category": "enhancement",
+      "status": "approved",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-22T06:28:03.405Z",
+      "updated_at": "2025-09-22T06:28:11.853Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "task_1758921005182_rz4kky8t",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Add blockchain integration",
+      "description": "Integrate blockchain technology for data verification",
+      "business_value": "Provides enhanced security and decentralization",
+      "category": "new-feature",
+      "status": "rejected",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "frontend",
+        "backend"
+      ],
+      "created_at": "2025-09-22T06:28:27.223Z",
+      "updated_at": "2025-09-22T06:28:32.284Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "task_1758921005183_err8rjqq",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Test migration feature",
+      "description": "Test feature to verify migration system works correctly",
+      "business_value": "Validates that the new FEATURES.json system is fully operational",
+      "category": "enhancement",
+      "status": "approved",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-22T06:32:17.567Z",
+      "updated_at": "2025-09-22T06:32:24.169Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "task_1758921005184_d4vnerwo",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Test approval fix",
+      "description": "Test feature to verify approval mechanism works",
+      "business_value": "Validates approval system fix",
+      "category": "enhancement",
+      "status": "approved",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-22T07:56:06.743Z",
+      "updated_at": "2025-09-22T07:56:14.693Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "task_1758921005185_y8y3l8th",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Bulk test feature 1",
+      "description": "First test feature for bulk approval",
+      "business_value": "Testing bulk functionality",
+      "category": "enhancement",
+      "status": "approved",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-22T07:58:05.463Z",
+      "updated_at": "2025-09-22T07:58:15.474Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "task_1758921005186_3fn72rwa",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Bulk test feature 2",
+      "description": "Second test feature for bulk approval",
+      "business_value": "Testing bulk functionality",
+      "category": "enhancement",
+      "status": "approved",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-22T07:58:06.514Z",
+      "updated_at": "2025-09-22T07:58:15.474Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "task_1758921005187_47zjr8ew",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Bulk test feature 3",
+      "description": "Third test feature for bulk approval",
+      "business_value": "Testing bulk functionality",
+      "category": "enhancement",
+      "status": "approved",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-22T07:58:07.672Z",
+      "updated_at": "2025-09-22T07:58:15.474Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "task_1758921005188_t0ssrq0d",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Fix failing E2E tests for FEATURES.json migration",
+      "description": "Examine and fix failing E2E tests in test/ directory (success-criteria-e2e.test.js, etc.) - Update test configuration for FEATURES.json structure - Fix timeout issues and API connection problems - Ensure tests work with new FeatureManagerAPI instead of old TaskManager - Update test data and mock structures for new schema - Verify all E2E tests pass with new system",
+      "business_value": "Ensures test suite reliability and prevents regression bugs in the new FEATURES.json system",
+      "category": "bug-fix",
+      "status": "approved",
+      "priority": "high",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-22T08:00:05.044Z",
+      "updated_at": "2025-09-22T08:00:09.598Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "task_1758921005189_pxxrn7yv",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Implement comprehensive test coverage reporting",
+      "description": "Configure Jest coverage reporting with detailed metrics, coverage thresholds for quality gates, multiple report formats (HTML, JSON, text), coverage collection for all source files, coverage scripts in package.json, and coverage reporting documentation",
+      "business_value": "Provides essential code quality metrics, enables automated quality gates, helps identify untested code areas, and supports continuous integration workflows for maintaining high code quality standards",
+      "category": "enhancement",
+      "status": "approved",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-22T08:00:05.910Z",
+      "updated_at": "2025-09-22T08:00:10.935Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "task_1758921005190_wruzyl3p",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Create comprehensive testing documentation and best practices guide",
+      "description": "Document testing architecture, best practices, test suite execution, troubleshooting, FEATURES.json testing approach, and provide examples for effective test writing",
+      "business_value": "Enables developers to effectively use and contribute to test suite, improving code quality and development velocity",
+      "category": "documentation",
+      "status": "implemented",
+      "priority": "low",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "documentation"
+      ],
+      "created_at": "2025-09-22T08:00:07.451Z",
+      "updated_at": "2025-09-23T18:25:00.000Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": "2025-09-23T18:25:00.000Z",
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "task_1758921005191_9hcszek5",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Integrate CI/CD Pipeline with Automated Testing Framework",
+      "description": "Create comprehensive CI/CD pipeline with GitHub Actions workflow, test matrix for multiple Node.js versions, automated test reporting, pre-commit hooks, coverage reporting, and quality gates to prevent merging failing tests.",
+      "business_value": "Ensures code quality through automated testing, reduces manual testing overhead, prevents bugs from reaching production, and maintains consistent quality standards across all code changes.",
+      "category": "enhancement",
+      "status": "approved",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-22T08:00:12.320Z",
+      "updated_at": "2025-09-22T08:00:16.332Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "task_1758921005192_j74gv2h2",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Test Feature 12345",
+      "description": "This is a comprehensive test feature designed for E2E validation purposes. It includes detailed information to meet validation requirements and ensure proper testing of all system components and workflows.",
+      "business_value": "Validates E2E testing functionality by providing comprehensive test coverage and ensuring all system components work correctly together in realistic scenarios",
+      "category": "enhancement",
+      "status": "suggested",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-23T15:05:53.379Z",
+      "updated_at": "2025-09-23T15:05:53.380Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "task_1758761214871_a75897353ea4",
+      "type": "feature",
+      "parent_id": "error_1758523829033_pyogectd0",
+      "linked_tasks": [],
+      "title": "Implement: Add comprehensive testing framework",
+      "description": "Implement automated testing framework with unit, integration, and end-to-end testing capabilities to improve code quality and reduce bugs",
+      "business_value": "Reduces development time, prevents regressions, and increases confidence in deployments",
+      "category": "enhancement",
+      "status": "approved",
+      "priority": "normal",
+      "auto_generated": true,
+      "auto_generation_rules": {
+        "generate_test_task": false,
+        "generate_audit_task": false,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 10,
+      "required_capabilities": [
+        "testing"
+      ],
+      "created_at": "2025-09-25T00:46:54.871Z",
+      "updated_at": "2025-09-25T00:47:16.600Z",
+      "created_by": "autonomous_system",
+      "assigned_to": "test_agent_1",
+      "assigned_at": "2025-09-25T00:47:16.599Z",
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": false,
+        "test_coverage": false,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {
+        "auto_generated": true,
+        "feature_category": "enhancement",
+        "business_value": "Reduces development time, prevents regressions, and increases confidence in deployments"
+      }
+    },
+    {
+      "id": "task_1758761214872_65f5a2101cbd",
+      "type": "feature",
+      "parent_id": "test_1758523829033_6dqlydklq",
+      "linked_tasks": [],
+      "title": "Implement: Test migration feature",
+      "description": "Test feature to verify migration system works correctly",
+      "business_value": "Validates that the new FEATURES.json system is fully operational",
+      "category": "enhancement",
+      "status": "suggested",
+      "priority": "normal",
+      "auto_generated": true,
+      "auto_generation_rules": {
+        "generate_test_task": false,
+        "generate_audit_task": false,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 9,
+      "required_capabilities": [
+        "testing"
+      ],
+      "created_at": "2025-09-25T00:46:54.872Z",
+      "updated_at": "2025-09-25T00:46:54.872Z",
+      "created_by": "autonomous_system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": false,
+        "test_coverage": false,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {
+        "auto_generated": true,
+        "feature_category": "enhancement",
+        "business_value": "Validates that the new FEATURES.json system is fully operational"
+      }
+    },
+    {
+      "id": "task_1758761214872_280bf5b461fb",
+      "type": "feature",
+      "parent_id": "feature_1758527766743_b3680c00fcad",
+      "linked_tasks": [],
+      "title": "Implement: Test approval fix",
+      "description": "Test feature to verify approval mechanism works",
+      "business_value": "Validates approval system fix",
+      "category": "enhancement",
+      "status": "suggested",
+      "priority": "normal",
+      "auto_generated": true,
+      "auto_generation_rules": {
+        "generate_test_task": false,
+        "generate_audit_task": false,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 9,
+      "required_capabilities": [
+        "testing"
+      ],
+      "created_at": "2025-09-25T00:46:54.872Z",
+      "updated_at": "2025-09-25T00:46:54.872Z",
+      "created_by": "autonomous_system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": false,
+        "test_coverage": false,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {
+        "auto_generated": true,
+        "feature_category": "enhancement",
+        "business_value": "Validates approval system fix"
+      }
+    },
+    {
+      "id": "task_1758761214872_65aafaa7df9a",
+      "type": "feature",
+      "parent_id": "feature_1758527885463_0c143572d602",
+      "linked_tasks": [],
+      "title": "Implement: Bulk test feature 1",
+      "description": "First test feature for bulk approval",
+      "business_value": "Testing bulk functionality",
+      "category": "enhancement",
+      "status": "suggested",
+      "priority": "normal",
+      "auto_generated": true,
+      "auto_generation_rules": {
+        "generate_test_task": false,
+        "generate_audit_task": false,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 9,
+      "required_capabilities": [
+        "testing"
+      ],
+      "created_at": "2025-09-25T00:46:54.872Z",
+      "updated_at": "2025-09-25T00:46:54.872Z",
+      "created_by": "autonomous_system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": false,
+        "test_coverage": false,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {
+        "auto_generated": true,
+        "feature_category": "enhancement",
+        "business_value": "Testing bulk functionality"
+      }
+    },
+    {
+      "id": "task_1758761214872_2f5f3339ce54",
+      "type": "feature",
+      "parent_id": "feature_1758527886514_8e4f49ca0293",
+      "linked_tasks": [],
+      "title": "Implement: Bulk test feature 2",
+      "description": "Second test feature for bulk approval",
+      "business_value": "Testing bulk functionality",
+      "category": "enhancement",
+      "status": "suggested",
+      "priority": "normal",
+      "auto_generated": true,
+      "auto_generation_rules": {
+        "generate_test_task": false,
+        "generate_audit_task": false,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 9,
+      "required_capabilities": [
+        "testing"
+      ],
+      "created_at": "2025-09-25T00:46:54.872Z",
+      "updated_at": "2025-09-25T00:46:54.872Z",
+      "created_by": "autonomous_system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": false,
+        "test_coverage": false,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {
+        "auto_generated": true,
+        "feature_category": "enhancement",
+        "business_value": "Testing bulk functionality"
+      }
+    },
+    {
+      "id": "task_1758761214872_8dca0fed5c3d",
+      "type": "feature",
+      "parent_id": "feature_1758527887671_e982a3e20cf3",
+      "linked_tasks": [],
+      "title": "Implement: Bulk test feature 3",
+      "description": "Third test feature for bulk approval",
+      "business_value": "Testing bulk functionality",
+      "category": "enhancement",
+      "status": "suggested",
+      "priority": "normal",
+      "auto_generated": true,
+      "auto_generation_rules": {
+        "generate_test_task": false,
+        "generate_audit_task": false,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 9,
+      "required_capabilities": [
+        "testing"
+      ],
+      "created_at": "2025-09-25T00:46:54.872Z",
+      "updated_at": "2025-09-25T00:46:54.872Z",
+      "created_by": "autonomous_system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": false,
+        "test_coverage": false,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {
+        "auto_generated": true,
+        "feature_category": "enhancement",
+        "business_value": "Testing bulk functionality"
+      }
+    },
+    {
+      "id": "task_1758761214872_46f209689151",
+      "type": "feature",
+      "parent_id": "feature_1758528005044_426c5b4657e3",
+      "linked_tasks": [],
+      "title": "Implement: Fix failing E2E tests for FEATURES.json migration",
+      "description": "Examine and fix failing E2E tests in test/ directory (success-criteria-e2e.test.js, etc.) - Update test configuration for FEATURES.json structure - Fix timeout issues and API connection problems - Ensure tests work with new FeatureManagerAPI instead of old TaskManager - Update test data and mock structures for new schema - Verify all E2E tests pass with new system",
+      "business_value": "Ensures test suite reliability and prevents regression bugs in the new FEATURES.json system",
+      "category": "bug-fix",
+      "status": "suggested",
+      "priority": "high",
+      "auto_generated": true,
+      "auto_generation_rules": {
+        "generate_test_task": false,
+        "generate_audit_task": false,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 9,
+      "required_capabilities": [
+        "analysis",
+        "backend",
+        "testing"
+      ],
+      "created_at": "2025-09-25T00:46:54.872Z",
+      "updated_at": "2025-09-25T00:46:54.872Z",
+      "created_by": "autonomous_system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": false,
+        "test_coverage": false,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {
+        "auto_generated": true,
+        "feature_category": "bug-fix",
+        "business_value": "Ensures test suite reliability and prevents regression bugs in the new FEATURES.json system"
+      }
+    },
+    {
+      "id": "task_1758761214872_9e1868e3abdf",
+      "type": "feature",
+      "parent_id": "feature_1758528005910_37e646aa5f68",
+      "linked_tasks": [],
+      "title": "Implement: Implement comprehensive test coverage reporting",
+      "description": "Configure Jest coverage reporting with detailed metrics, coverage thresholds for quality gates, multiple report formats (HTML, JSON, text), coverage collection for all source files, coverage scripts in package.json, and coverage reporting documentation",
+      "business_value": "Provides essential code quality metrics, enables automated quality gates, helps identify untested code areas, and supports continuous integration workflows for maintaining high code quality standards",
+      "category": "enhancement",
+      "status": "suggested",
+      "priority": "high",
+      "auto_generated": true,
+      "auto_generation_rules": {
+        "generate_test_task": false,
+        "generate_audit_task": false,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 12,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-25T00:46:54.872Z",
+      "updated_at": "2025-09-25T00:46:54.872Z",
+      "created_by": "autonomous_system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": false,
+        "test_coverage": false,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {
+        "auto_generated": true,
+        "feature_category": "enhancement",
+        "business_value": "Provides essential code quality metrics, enables automated quality gates, helps identify untested code areas, and supports continuous integration workflows for maintaining high code quality standards"
+      }
+    },
+    {
+      "id": "task_1758761214872_f3f02b3b1f59",
+      "type": "feature",
+      "parent_id": "feature_1758528012320_8607ead852e1",
+      "linked_tasks": [],
+      "title": "Implement: Integrate CI/CD Pipeline with Automated Testing Framework",
+      "description": "Create comprehensive CI/CD pipeline with GitHub Actions workflow, test matrix for multiple Node.js versions, automated test reporting, pre-commit hooks, coverage reporting, and quality gates to prevent merging failing tests.",
+      "business_value": "Ensures code quality through automated testing, reduces manual testing overhead, prevents bugs from reaching production, and maintains consistent quality standards across all code changes.",
+      "category": "enhancement",
+      "status": "suggested",
+      "priority": "normal",
+      "auto_generated": true,
+      "auto_generation_rules": {
+        "generate_test_task": false,
+        "generate_audit_task": false,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 11,
+      "required_capabilities": [
+        "testing"
+      ],
+      "created_at": "2025-09-25T00:46:54.872Z",
+      "updated_at": "2025-09-25T00:46:54.872Z",
+      "created_by": "autonomous_system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": false,
+        "test_coverage": false,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {
+        "auto_generated": true,
+        "feature_category": "enhancement",
+        "business_value": "Ensures code quality through automated testing, reduces manual testing overhead, prevents bugs from reaching production, and maintains consistent quality standards across all code changes."
+      }
+    }
+  ],
+  "completed_tasks": [],
+  "task_relationships": {
+    "task_1758921005181_s4gleloz": {
+      "auto_generated_test": null,
+      "auto_generated_audit": null,
+      "dependencies": [],
+      "dependents": []
+    },
+    "task_1758921005183_err8rjqq": {
+      "auto_generated_test": null,
+      "auto_generated_audit": null,
+      "dependencies": [],
+      "dependents": []
+    },
+    "task_1758921005184_d4vnerwo": {
+      "auto_generated_test": null,
+      "auto_generated_audit": null,
+      "dependencies": [],
+      "dependents": []
+    },
+    "task_1758921005185_y8y3l8th": {
+      "auto_generated_test": null,
+      "auto_generated_audit": null,
+      "dependencies": [],
+      "dependents": []
+    },
+    "task_1758921005186_3fn72rwa": {
+      "auto_generated_test": null,
+      "auto_generated_audit": null,
+      "dependencies": [],
+      "dependents": []
+    },
+    "task_1758921005187_47zjr8ew": {
+      "auto_generated_test": null,
+      "auto_generated_audit": null,
+      "dependencies": [],
+      "dependents": []
+    },
+    "task_1758921005188_t0ssrq0d": {
+      "auto_generated_test": null,
+      "auto_generated_audit": null,
+      "dependencies": [],
+      "dependents": []
+    },
+    "task_1758921005189_pxxrn7yv": {
+      "auto_generated_test": null,
+      "auto_generated_audit": null,
+      "dependencies": [],
+      "dependents": []
+    },
+    "task_1758921005191_9hcszek5": {
+      "auto_generated_test": null,
+      "auto_generated_audit": null,
+      "dependencies": [],
+      "dependents": []
+    }
+  },
+  "workflow_config": {
+    "require_approval": true,
+    "auto_reject_timeout_hours": 168,
+    "allowed_statuses": [
+      "suggested",
+      "approved",
+      "in-progress",
+      "completed",
+      "blocked",
+      "rejected"
+    ],
+    "allowed_task_types": [
+      "error",
+      "feature",
+      "test",
+      "audit"
+    ],
+    "required_fields": [
+      "title",
+      "description",
+      "business_value",
+      "category",
+      "type"
+    ],
+    "auto_generation_enabled": true,
+    "mandatory_test_gate": true,
+    "security_validation_required": true
+  },
+  "auto_generation_config": {
+    "test_task_template": {
+      "title_pattern": "Implement comprehensive tests for {feature_title}",
+      "description_pattern": "Create unit tests, integration tests, and E2E tests to achieve >{coverage}% coverage for {feature_title}. Must validate all functionality, edge cases, and error conditions.",
+      "priority": "high",
+      "required_capabilities": [
+        "testing"
+      ],
+      "validation_requirements": {
+        "test_coverage": true,
+        "linter_pass": true
+      }
+    },
+    "audit_task_template": {
+      "title_pattern": "Security and quality audit for {feature_title}",
+      "description_pattern": "Run semgrep security scan, dependency vulnerability check, code quality analysis, and compliance validation for {feature_title}. Zero tolerance for security vulnerabilities.",
+      "priority": "high",
+      "required_capabilities": [
+        "security",
+        "analysis"
+      ],
+      "validation_requirements": {
+        "security_scan": true,
+        "linter_pass": true,
+        "type_check": true
+      }
+    }
+  },
+  "priority_system": {
+    "order": [
+      "USER_REQUESTS",
+      "ERROR",
+      "AUDIT",
+      "FEATURE",
+      "TEST"
+    ],
+    "error_priorities": {
+      "critical": [
+        "build-breaking",
+        "security-vulnerability",
+        "production-down"
+      ],
+      "high": [
+        "linter-errors",
+        "type-errors",
+        "test-failures"
+      ],
+      "normal": [
+        "warnings",
+        "optimization-opportunities"
+      ],
+      "low": [
+        "documentation-improvements",
+        "code-style"
+      ]
+    }
+  },
+  "metadata": {
+    "version": "2.0.0",
+    "created": "2025-09-22T06:19:00.000Z",
+    "updated": "2025-09-26T21:10:05.180Z",
+    "total_tasks": 21,
+    "tasks_by_type": {
+      "error": 0,
+      "feature": 21,
+      "test": 0,
+      "audit": 0
+    },
+    "approval_history": [
+      {
+        "feature_id": "feature_1758522483405_ca02a61775a8",
+        "action": "approved",
+        "timestamp": "2025-09-22T06:28:11.854Z",
+        "approved_by": "taskmanager-refactor-agent",
+        "notes": "Essential for code quality and CI/CD pipeline"
+      },
+      {
+        "feature_id": "feature_1758522507223_c698ce556ea8",
+        "action": "rejected",
+        "timestamp": "2025-09-22T06:28:32.284Z",
+        "rejected_by": "product-owner",
+        "reason": "Not aligned with current product roadmap and technical priorities"
+      },
+      {
+        "feature_id": "feature_1758522737566_15c76fb7f0bc",
+        "action": "approved",
+        "timestamp": "2025-09-22T06:32:24.170Z",
+        "approved_by": "migration-test-agent",
+        "notes": "Migration system validation successful"
+      },
+      {
+        "feature_id": "feature_1758527766743_b3680c00fcad",
+        "action": "approved",
+        "timestamp": "2025-09-22T07:56:14.693Z",
+        "approved_by": "user",
+        "notes": "Testing fixed approval mechanism"
+      },
+      {
+        "feature_id": "feature_1758527885463_0c143572d602",
+        "action": "approved",
+        "timestamp": "2025-09-22T07:58:15.474Z",
+        "approved_by": "user",
+        "notes": "Bulk approval test successful"
+      },
+      {
+        "feature_id": "feature_1758527886514_8e4f49ca0293",
+        "action": "approved",
+        "timestamp": "2025-09-22T07:58:15.474Z",
+        "approved_by": "user",
+        "notes": "Bulk approval test successful"
+      },
+      {
+        "feature_id": "feature_1758527887671_e982a3e20cf3",
+        "action": "approved",
+        "timestamp": "2025-09-22T07:58:15.474Z",
+        "approved_by": "user",
+        "notes": "Bulk approval test successful"
+      },
+      {
+        "feature_id": "feature_1758528005044_426c5b4657e3",
+        "action": "approved",
+        "timestamp": "2025-09-22T08:00:09.598Z",
+        "approved_by": "system",
+        "notes": ""
+      },
+      {
+        "feature_id": "feature_1758528005910_37e646aa5f68",
+        "action": "approved",
+        "timestamp": "2025-09-22T08:00:10.936Z",
+        "approved_by": "main-agent",
+        "notes": "User-requested feature for comprehensive test coverage reporting implementation"
+      },
+      {
+        "feature_id": "feature_1758528007451_d15844fdedbb",
+        "action": "approved",
+        "timestamp": "2025-09-22T08:00:11.528Z",
+        "approved_by": "system",
+        "notes": ""
+      },
+      {
+        "feature_id": "feature_1758528012320_8607ead852e1",
+        "action": "approved",
+        "timestamp": "2025-09-22T08:00:16.332Z",
+        "approved_by": "system",
+        "notes": ""
+      }
+    ],
+    "migration_stats": {
+      "features_migrated": 12,
+      "tasks_created": 9,
+      "auto_generated_tasks": 0
+    },
+    "initialization_stats": {
+      "total_initializations": 6,
+      "total_reinitializations": 26,
+      "current_day": "2025-09-26",
+      "time_buckets": {
+        "10:00-14:59": {
+          "init": 0,
+          "reinit": 9
+        },
+        "15:00-19:59": {
+          "init": 0,
+          "reinit": 2
+        },
+        "20:00-00:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "01:00-05:59": {
+          "init": 0,
+          "reinit": 2
+        },
+        "06:00-10:59": {
+          "init": 0,
+          "reinit": 1
+        }
+      },
+      "daily_history": [
+        {
+          "date": "2025-09-23",
+          "total_init": 2,
+          "total_reinit": 5,
+          "buckets": {
+            "07:00-11:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "12:00-16:59": {
+              "init": 1,
+              "reinit": 5
+            },
+            "17:00-21:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "22:00-02:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "03:00-07:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-09-24",
+          "total_init": 0,
+          "total_reinit": 1,
+          "buckets": {
+            "08:00-12:59": {
+              "init": 0,
+              "reinit": 1
+            },
+            "13:00-17:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "18:00-22:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "23:00-03:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "04:00-08:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-09-25",
+          "total_init": 1,
+          "total_reinit": 3,
+          "buckets": {
+            "09:00-13:59": {
+              "init": 1,
+              "reinit": 1
+            },
+            "14:00-18:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "19:00-23:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "00:00-04:59": {
+              "init": 0,
+              "reinit": 1
+            },
+            "05:00-09:59": {
+              "init": 0,
+              "reinit": 1
+            }
+          }
+        }
+      ],
+      "last_reset": "2025-09-26T08:30:54.708Z",
+      "last_updated": "2025-09-26T21:06:30.828Z"
+    }
+  },
+  "agents": {
+    "claude-multistep-auth-agent": {
+      "lastHeartbeat": "2025-09-26T21:06:30.825Z",
+      "status": "active",
+      "reinitialized": "2025-09-26T21:06:30.825Z",
+      "sessionId": "7bbcf4277b2d3b62",
+      "previousSessions": [
+        "ef080ffcecff780f"
+      ]
+    }
+  }
+}

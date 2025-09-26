@@ -2510,8 +2510,10 @@ class AutonomousTaskManagerAPI {
                 "1. Initialize agent with 'initialize' command",
                 '2. Agent claims features or focuses on codebase review',
                 '3. Complete all TodoWrite tasks with validation cycles',
-                "4. Self-authorize stop with 'authorize-stop' when project perfect",
-                "5. Use 'reinitialize' to restart existing agent sessions",
+                "4. Begin multi-step authorization with 'start-authorization' when project perfect",
+                "5. Validate all 7 criteria sequentially with 'validate-criterion' (cannot skip steps)",
+                "6. Complete authorization with 'complete-authorization' after all validations pass",
+                "7. Use 'reinitialize' to restart existing agent sessions",
               ],
             },
             examples: {
