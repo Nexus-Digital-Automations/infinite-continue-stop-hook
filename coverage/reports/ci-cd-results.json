@@ -1,28 +1,28 @@
 {
   "metadata": {
-    "timestamp": "2025-09-26T21:17:29.972Z",
+    "timestamp": "2025-09-26T21:28:19.944Z",
     "reporter": "jest-cicd-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System",
-    "duration_ms": 76
+    "duration_ms": 404
   },
   "cicd_summary": {
     "pipeline_status": "FAILURE",
-    "total_duration_ms": 76,
+    "total_duration_ms": 404,
     "should_block_deployment": true,
     "quality_gate_status": {
       "status": "FAILED",
       "criteria": {
         "tests_passing": false,
-        "no_failed_tests": true,
+        "no_failed_tests": false,
         "coverage_adequate": false,
-        "performance_acceptable": false
+        "performance_acceptable": true
       },
       "blocking_issues": [
         {
           "type": "test_failures",
           "severity": "critical",
-          "message": "0 test(s) failed",
+          "message": "14 test(s) failed",
           "action": "Fix failing tests before deployment"
         },
         {
@@ -30,52 +30,114 @@
           "severity": "warning",
           "message": "Code coverage below acceptable threshold",
           "action": "Add more tests to improve coverage"
-        },
-        {
-          "type": "performance",
-          "severity": "warning",
-          "message": "Test execution time is slow",
-          "action": "Optimize slow tests or improve test parallelization"
         }
       ]
     },
-    "test_health_score": null
+    "test_health_score": 81
   },
   "test_execution": {
     "summary": {
-      "total_suites": 0,
+      "total_suites": 1,
       "passed_suites": 0,
-      "failed_suites": 0,
-      "total_tests": 0,
-      "passed_tests": 0,
-      "failed_tests": 0,
+      "failed_suites": 1,
+      "total_tests": 36,
+      "passed_tests": 22,
+      "failed_tests": 14,
       "pending_tests": 0,
-      "success_rate": "NaN",
-      "execution_time_ms": 76
+      "success_rate": "61.11",
+      "execution_time_ms": 404
     },
     "performance_metrics": {
-      "average_test_duration": null,
-      "slowest_suite": null,
+      "average_test_duration": 11.222222222222221,
+      "slowest_suite": {
+        "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
+        "duration_ms": 263,
+        "num_tests": 36
+      },
       "memory_usage": {
-        "rss": 105824256,
-        "heap_total": 56639488,
-        "heap_used": 30206792,
-        "external": 2202542,
-        "heap_usage_percent": "53.33"
+        "rss": 179077120,
+        "heap_total": 99500032,
+        "heap_used": 65127160,
+        "external": 4910455,
+        "heap_usage_percent": "65.45"
       },
       "parallel_efficiency": {
-        "parallel_efficiency_percent": 0,
-        "total_execution_time_ms": 76,
-        "serial_time_ms": 0,
+        "parallel_efficiency_percent": "65.10",
+        "total_execution_time_ms": 404,
+        "serial_time_ms": 263,
         "time_saved_ms": 0
       }
     },
     "failure_analysis": {
-      "total_failures": 0,
-      "failed_suites": 0,
-      "failure_details": [],
-      "failure_patterns": {},
-      "common_failure_type": "none"
+      "total_failures": 14,
+      "failed_suites": 1,
+      "failure_details": [
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
+          "test": "Agent Management Agent Initialization Initialization Error Handling should handle file write errors during initialization",
+          "duration": 3,
+          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: false\nReceived: true\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:224:"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
+          "test": "Agent Management Agent Initialization Initialization Error Handling should handle corrupted features file during initialization",
+          "duration": 1,
+          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: false\nReceived: true\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:234:"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
+          "test": "Agent Management Agent Reinitialization Reinitialization Error Handling should handle file write errors during reinitialization",
+          "duration": 0,
+          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: false\nReceived: true\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:379:"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
+          "test": "Agent Management Agent Reinitialization Reinitialization Error Handling should handle corrupted features file during reinitialization",
+          "duration": 0,
+          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: false\nReceived: true\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:389:"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
+          "test": "Agent Management Stop Authorization Basic Stop Authorization should create .stop-allowed flag file",
+          "duration": 0,
+          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:431:"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
+          "test": "Agent Management Stop Authorization Basic Stop Authorization should include comprehensive stop data in flag file",
+          "duration": 0,
+          "error": "SyntaxError: \"undefined\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at Object.parse (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:447:34)"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
+          "test": "Agent Management Stop Authorization Stop Authorization Edge Cases should handle empty agent ID",
+          "duration": 0,
+          "error": "SyntaxError: \"undefined\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at Object.parse (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:466:34)"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
+          "test": "Agent Management Stop Authorization Stop Authorization Edge Cases should handle very long reasons",
+          "duration": 1,
+          "error": "SyntaxError: \"undefined\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at Object.parse (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:479:34)"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
+          "test": "Agent Management Stop Authorization Stop Authorization Edge Cases should overwrite existing stop flag",
+          "duration": 0,
+          "error": "SyntaxError: \"undefined\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at Object.parse (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:509:34)"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
+          "test": "Agent Management Stop Authorization Stop Authorization Error Handling should handle file write errors during stop authorization",
+          "duration": 0,
+          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: false\nReceived: true\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:522:"
+        }
+      ],
+      "failure_patterns": {
+        "assertion": 9,
+        "type": 5
+      },
+      "common_failure_type": "assertion"
     },
     "flaky_test_detection": {
       "potentially_flaky": [],
@@ -84,11 +146,11 @@
     }
   },
   "git": {
-    "commit_sha": "bad11dbab31672c5f39f91c529ecb9b763f7ce13",
+    "commit_sha": "cbcebfdd2f387fd887cbc9fb8f40026801cd53c4",
     "branch": "main",
     "author": "Claude <claude@anthropic.com>",
-    "commit_message": "feat: migrate FEATURES.json to TASKS.json with enhanced task management system",
-    "commit_date": "2025-09-26 16:16:08 -0500",
+    "commit_message": "update: E2E test execution metadata in FEATURES.json",
+    "commit_date": "2025-09-26 16:22:17 -0500",
     "tag": null,
     "is_dirty": true,
     "remote_url": "https://github.com/Nexus-Digital-Automations/infinite-continue-stop-hook.git"
@@ -104,7 +166,7 @@
     "locale": "en-US",
     "memory": {
       "total": 25769803776,
-      "available": 819757056
+      "available": 84787200
     },
     "cpu": {
       "cores": 8,
@@ -122,5 +184,12 @@
     "coverage_status": "not_available"
   },
   "notifications": [],
-  "recommendations": []
+  "recommendations": [
+    {
+      "category": "testing",
+      "priority": "high",
+      "recommendation": "Fix failing tests immediately",
+      "details": "14 tests are currently failing"
+    }
+  ]
 }

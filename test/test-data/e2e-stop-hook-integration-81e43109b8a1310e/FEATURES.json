@@ -1,0 +1,27 @@
+{
+  "project": "e2e-test-stop-hook-integration",
+  "features": [],
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-09-26T21:24:20.363Z",
+    "updated": "2025-09-26T21:24:20.363Z",
+    "total_features": 0,
+    "approval_history": []
+  },
+  "workflow_config": {
+    "require_approval": true,
+    "auto_reject_timeout_hours": 168,
+    "allowed_statuses": [
+      "suggested",
+      "approved",
+      "rejected",
+      "implemented"
+    ],
+    "required_fields": [
+      "title",
+      "description",
+      "business_value",
+      "category"
+    ]
+  }
+}

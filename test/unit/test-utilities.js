@@ -188,23 +188,39 @@ const TEST_FIXTURES = {
     },
   },
 
-  // Empty FEATURES.json structure
+  // Empty TASKS.json structure
   emptyFeaturesFile: {
     project: 'test-project',
-    features: [],
-    metadata: {
-      version: '1.0.0',
-      created: '2025-09-23T12:00:00.000Z',
-      updated: '2025-09-23T12:00:00.000Z',
-      total_features: 0,
-      approval_history: [],
-    },
+    schema_version: '2.0.0',
+    migrated_from: 'test-initialization',
+    migration_date: '2025-09-23T12:00:00.000Z',
+    tasks: [],
+    completed_tasks: [],
+    task_relationships: {},
     workflow_config: {
       require_approval: true,
       auto_reject_timeout_hours: 168,
       allowed_statuses: ['suggested', 'approved', 'rejected', 'implemented'],
-      required_fields: ['title', 'description', 'business_value', 'category'],
+      allowed_task_types: ['error', 'feature', 'test', 'audit'],
+      auto_generation_enabled: true,
+      mandatory_test_gate: true,
+      security_validation_required: true,
+      required_fields: ['title', 'description', 'business_value', 'category', 'type'],
     },
+    metadata: {
+      version: '2.0.0',
+      created: '2025-09-23T12:00:00.000Z',
+      updated: '2025-09-23T12:00:00.000Z',
+      total_tasks: 0,
+      tasks_by_type: {
+        error: 0,
+        feature: 0,
+        test: 0,
+        audit: 0
+      },
+      approval_history: [],
+    },
+    agents: {}
   },
 
   // Features file with sample data
