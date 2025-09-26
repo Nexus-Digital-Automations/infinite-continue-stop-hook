@@ -223,68 +223,160 @@ const TEST_FIXTURES = {
     agents: {}
   },
 
-  // Features file with sample data
+  // Tasks file with sample data
   featuresWithData: {
     project: 'test-project',
-    features: [
+    schema_version: '2.0.0',
+    migrated_from: 'test-initialization',
+    migration_date: '2025-09-23T08:00:00.000Z',
+    tasks: [
       {
         id: 'feature_1695123456789_abc123',
+        type: 'feature',
+        parent_id: null,
+        linked_tasks: [],
         title: 'Existing Suggested Feature',
         description: 'A feature that exists in suggested status for testing purposes',
         business_value: 'Provides testing capabilities for the feature management system',
         category: 'enhancement',
         status: 'suggested',
+        priority: 'normal',
+        auto_generated: false,
+        auto_generation_rules: {
+          generate_test_task: true,
+          generate_audit_task: true,
+          test_coverage_requirement: 80
+        },
+        dependencies: [],
+        estimated_effort: 5,
+        required_capabilities: ['general'],
         created_at: '2025-09-23T10:00:00.000Z',
         updated_at: '2025-09-23T10:00:00.000Z',
-        suggested_by: 'test-agent',
+        created_by: 'test-agent',
+        assigned_to: null,
+        assigned_at: null,
+        completed_at: null,
+        validation_requirements: {
+          security_scan: true,
+          test_coverage: true,
+          linter_pass: true,
+          type_check: true,
+          build_success: true
+        },
         metadata: {},
       },
       {
         id: 'feature_1695123456790_def456',
+        type: 'feature',
+        parent_id: null,
+        linked_tasks: [],
         title: 'Existing Approved Feature',
         description: 'A feature that exists in approved status for testing purposes',
         business_value: 'Provides testing capabilities for the feature management system',
         category: 'new-feature',
         status: 'approved',
+        priority: 'normal',
+        auto_generated: false,
+        auto_generation_rules: {
+          generate_test_task: true,
+          generate_audit_task: true,
+          test_coverage_requirement: 80
+        },
+        dependencies: [],
+        estimated_effort: 5,
+        required_capabilities: ['frontend', 'backend'],
         created_at: '2025-09-23T09:00:00.000Z',
         updated_at: '2025-09-23T11:00:00.000Z',
-        suggested_by: 'test-agent',
-        approved_by: 'test-approver',
-        approval_date: '2025-09-23T11:00:00.000Z',
-        approval_notes: 'Approved for implementation',
-        metadata: {},
+        created_by: 'test-agent',
+        assigned_to: null,
+        assigned_at: null,
+        completed_at: null,
+        validation_requirements: {
+          security_scan: true,
+          test_coverage: true,
+          linter_pass: true,
+          type_check: true,
+          build_success: true
+        },
+        metadata: {
+          approved_by: 'test-approver',
+          approval_date: '2025-09-23T11:00:00.000Z',
+          approval_notes: 'Approved for implementation'
+        },
       },
       {
         id: 'feature_1695123456791_ghi789',
+        type: 'feature',
+        parent_id: null,
+        linked_tasks: [],
         title: 'Existing Rejected Feature',
         description: 'A feature that exists in rejected status for testing purposes',
         business_value: 'Would have provided testing capabilities but was rejected',
         category: 'documentation',
         status: 'rejected',
+        priority: 'low',
+        auto_generated: false,
+        auto_generation_rules: {
+          generate_test_task: false,
+          generate_audit_task: false,
+          test_coverage_requirement: 80
+        },
+        dependencies: [],
+        estimated_effort: 2,
+        required_capabilities: ['documentation'],
         created_at: '2025-09-23T08:00:00.000Z',
         updated_at: '2025-09-23T09:30:00.000Z',
-        suggested_by: 'test-agent',
-        rejected_by: 'test-rejector',
-        rejection_date: '2025-09-23T09:30:00.000Z',
-        rejection_reason: 'Not aligned with project goals',
-        metadata: {},
+        created_by: 'test-agent',
+        assigned_to: null,
+        assigned_at: null,
+        completed_at: null,
+        validation_requirements: {
+          security_scan: false,
+          test_coverage: false,
+          linter_pass: true,
+          type_check: true,
+          build_success: true
+        },
+        metadata: {
+          rejected_by: 'test-rejector',
+          rejection_date: '2025-09-23T09:30:00.000Z',
+          rejection_reason: 'Not aligned with project goals'
+        },
       },
     ],
+    completed_tasks: [],
+    task_relationships: {},
+    workflow_config: {
+      require_approval: true,
+      auto_reject_timeout_hours: 168,
+      allowed_statuses: ['suggested', 'approved', 'rejected', 'implemented'],
+      allowed_task_types: ['error', 'feature', 'test', 'audit'],
+      auto_generation_enabled: true,
+      mandatory_test_gate: true,
+      security_validation_required: true,
+      required_fields: ['title', 'description', 'business_value', 'category', 'type'],
+    },
     metadata: {
-      version: '1.0.0',
+      version: '2.0.0',
       created: '2025-09-23T08:00:00.000Z',
       updated: '2025-09-23T11:00:00.000Z',
-      total_features: 3,
+      total_tasks: 3,
+      tasks_by_type: {
+        error: 0,
+        feature: 3,
+        test: 0,
+        audit: 0
+      },
       approval_history: [
         {
-          feature_id: 'feature_1695123456790_def456',
+          task_id: 'feature_1695123456790_def456',
           action: 'approved',
           timestamp: '2025-09-23T11:00:00.000Z',
           approved_by: 'test-approver',
           notes: 'Approved for implementation',
         },
         {
-          feature_id: 'feature_1695123456791_ghi789',
+          task_id: 'feature_1695123456791_ghi789',
           action: 'rejected',
           timestamp: '2025-09-23T09:30:00.000Z',
           rejected_by: 'test-rejector',
@@ -319,12 +411,6 @@ const TEST_FIXTURES = {
         last_reset: '2025-09-23T07:00:00.000Z',
         last_updated: '2025-09-23T12:00:00.000Z',
       },
-    },
-    workflow_config: {
-      require_approval: true,
-      auto_reject_timeout_hours: 168,
-      allowed_statuses: ['suggested', 'approved', 'rejected', 'implemented'],
-      required_fields: ['title', 'description', 'business_value', 'category'],
     },
     agents: {
       'agent-123': {

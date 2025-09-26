@@ -1,14 +1,14 @@
 {
   "metadata": {
-    "timestamp": "2025-09-26T21:28:19.944Z",
+    "timestamp": "2025-09-26T21:29:21.894Z",
     "reporter": "jest-cicd-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System",
-    "duration_ms": 404
+    "duration_ms": 721
   },
   "cicd_summary": {
     "pipeline_status": "FAILURE",
-    "total_duration_ms": 404,
+    "total_duration_ms": 721,
     "should_block_deployment": true,
     "quality_gate_status": {
       "status": "FAILED",
@@ -22,7 +22,7 @@
         {
           "type": "test_failures",
           "severity": "critical",
-          "message": "14 test(s) failed",
+          "message": "41 test(s) failed",
           "action": "Fix failing tests before deployment"
         },
         {
@@ -33,111 +33,111 @@
         }
       ]
     },
-    "test_health_score": 81
+    "test_health_score": 95
   },
   "test_execution": {
     "summary": {
-      "total_suites": 1,
+      "total_suites": 18,
       "passed_suites": 0,
       "failed_suites": 1,
-      "total_tests": 36,
-      "passed_tests": 22,
-      "failed_tests": 14,
-      "pending_tests": 0,
-      "success_rate": "61.11",
-      "execution_time_ms": 404
+      "total_tests": 397,
+      "passed_tests": 10,
+      "failed_tests": 41,
+      "pending_tests": 346,
+      "success_rate": "2.52",
+      "execution_time_ms": 721
     },
     "performance_metrics": {
-      "average_test_duration": 11.222222222222221,
+      "average_test_duration": 1.8161209068010076,
       "slowest_suite": {
-        "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
-        "duration_ms": 263,
-        "num_tests": 36
+        "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
+        "duration_ms": 385,
+        "num_tests": 0
       },
       "memory_usage": {
-        "rss": 179077120,
-        "heap_total": 99500032,
-        "heap_used": 65127160,
-        "external": 4910455,
-        "heap_usage_percent": "65.45"
+        "rss": 106872832,
+        "heap_total": 42860544,
+        "heap_used": 28411896,
+        "external": 2218045,
+        "heap_usage_percent": "66.29"
       },
       "parallel_efficiency": {
-        "parallel_efficiency_percent": "65.10",
-        "total_execution_time_ms": 404,
-        "serial_time_ms": 263,
-        "time_saved_ms": 0
+        "parallel_efficiency_percent": "247.71",
+        "total_execution_time_ms": 721,
+        "serial_time_ms": 1786,
+        "time_saved_ms": 1065
       }
     },
     "failure_analysis": {
-      "total_failures": 14,
+      "total_failures": 41,
       "failed_suites": 1,
       "failure_details": [
         {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
-          "test": "Agent Management Agent Initialization Initialization Error Handling should handle file write errors during initialization",
-          "duration": 3,
-          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: false\nReceived: true\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:224:"
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
+          "test": "Feature Management Lifecycle Feature Suggestion Lifecycle Basic Feature Suggestion should create feature suggestion with all required fields",
+          "duration": 5,
+          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:10"
         },
         {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
-          "test": "Agent Management Agent Initialization Initialization Error Handling should handle corrupted features file during initialization",
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
+          "test": "Feature Management Lifecycle Feature Suggestion Lifecycle Basic Feature Suggestion should handle different feature categories correctly",
           "duration": 1,
-          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: false\nReceived: true\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:234:"
+          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:12"
         },
         {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
-          "test": "Agent Management Agent Reinitialization Reinitialization Error Handling should handle file write errors during reinitialization",
-          "duration": 0,
-          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: false\nReceived: true\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:379:"
-        },
-        {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
-          "test": "Agent Management Agent Reinitialization Reinitialization Error Handling should handle corrupted features file during reinitialization",
-          "duration": 0,
-          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: false\nReceived: true\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:389:"
-        },
-        {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
-          "test": "Agent Management Stop Authorization Basic Stop Authorization should create .stop-allowed flag file",
-          "duration": 0,
-          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:431:"
-        },
-        {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
-          "test": "Agent Management Stop Authorization Basic Stop Authorization should include comprehensive stop data in flag file",
-          "duration": 0,
-          "error": "SyntaxError: \"undefined\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at Object.parse (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:447:34)"
-        },
-        {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
-          "test": "Agent Management Stop Authorization Stop Authorization Edge Cases should handle empty agent ID",
-          "duration": 0,
-          "error": "SyntaxError: \"undefined\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at Object.parse (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:466:34)"
-        },
-        {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
-          "test": "Agent Management Stop Authorization Stop Authorization Edge Cases should handle very long reasons",
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
+          "test": "Feature Management Lifecycle Feature Suggestion Lifecycle Basic Feature Suggestion should auto-generate unique feature IDs",
           "duration": 1,
-          "error": "SyntaxError: \"undefined\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at Object.parse (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:479:34)"
+          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:14"
         },
         {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
-          "test": "Agent Management Stop Authorization Stop Authorization Edge Cases should overwrite existing stop flag",
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
+          "test": "Feature Management Lifecycle Feature Suggestion Lifecycle Basic Feature Suggestion should preserve custom metadata in feature suggestions",
           "duration": 0,
-          "error": "SyntaxError: \"undefined\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at Object.parse (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:509:34)"
+          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:17"
         },
         {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js",
-          "test": "Agent Management Stop Authorization Stop Authorization Error Handling should handle file write errors during stop authorization",
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
+          "test": "Feature Management Lifecycle Feature Suggestion Lifecycle Feature Suggestion Metadata Management should update total feature count after suggestion",
           "duration": 0,
-          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: false\nReceived: true\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/agent-management.test.js:522:"
+          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: 0\nReceived: undefined\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:2"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
+          "test": "Feature Management Lifecycle Feature Suggestion Lifecycle Feature Suggestion Metadata Management should update last modified timestamp",
+          "duration": 0,
+          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:29"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
+          "test": "Feature Management Lifecycle Feature Suggestion Lifecycle Feature Suggestion Metadata Management should preserve existing features when adding new ones",
+          "duration": 0,
+          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:31"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
+          "test": "Feature Management Lifecycle Feature Approval Lifecycle Basic Feature Approval should approve suggested feature with full approval data",
+          "duration": 0,
+          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:333:50)\n    at processTicksAndRejec"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
+          "test": "Feature Management Lifecycle Feature Approval Lifecycle Basic Feature Approval should approve feature with minimal approval data",
+          "duration": 0,
+          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:333:50)\n    at processTicksAndRejec"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
+          "test": "Feature Management Lifecycle Feature Approval Lifecycle Basic Feature Approval should update feature timestamps on approval",
+          "duration": 0,
+          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:333:50)\n    at processTicksAndRejec"
         }
       ],
       "failure_patterns": {
-        "assertion": 9,
-        "type": 5
+        "assertion": 19,
+        "type": 22
       },
-      "common_failure_type": "assertion"
+      "common_failure_type": "type"
     },
     "flaky_test_detection": {
       "potentially_flaky": [],
@@ -146,11 +146,11 @@
     }
   },
   "git": {
-    "commit_sha": "cbcebfdd2f387fd887cbc9fb8f40026801cd53c4",
+    "commit_sha": "639d74634b90b1709f0bcd86cc7f624f0048a61d",
     "branch": "main",
     "author": "Claude <claude@anthropic.com>",
-    "commit_message": "update: E2E test execution metadata in FEATURES.json",
-    "commit_date": "2025-09-26 16:22:17 -0500",
+    "commit_message": "feat: implement comprehensive testing framework fixes and authorization compatibility",
+    "commit_date": "2025-09-26 16:28:55 -0500",
     "tag": null,
     "is_dirty": true,
     "remote_url": "https://github.com/Nexus-Digital-Automations/infinite-continue-stop-hook.git"
@@ -166,7 +166,7 @@
     "locale": "en-US",
     "memory": {
       "total": 25769803776,
-      "available": 84787200
+      "available": 179568640
     },
     "cpu": {
       "cores": 8,
@@ -189,7 +189,7 @@
       "category": "testing",
       "priority": "high",
       "recommendation": "Fix failing tests immediately",
-      "details": "14 tests are currently failing"
+      "details": "41 tests are currently failing"
     }
   ]
 }
