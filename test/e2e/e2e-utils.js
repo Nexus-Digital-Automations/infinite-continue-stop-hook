@@ -28,7 +28,7 @@ class E2EEnvironment {
     this.testName = testName;
     this.testId = crypto.randomBytes(8).toString('hex');
     this.testDir = path.join(TEST_DATA_DIR, `e2e-${testName}-${this.testId}`);
-    this.tasksPath = path.join(this.testDir, 'TASKS.json');
+    this.featuresPath = path.join(this.testDir, 'FEATURES.json');
     this.apiPath = path.join(PROJECT_ROOT, 'taskmanager-api.js');
     this.stopHookPath = path.join(PROJECT_ROOT, 'stop-hook.js');
     this.cleanupTasks = [];
@@ -42,7 +42,7 @@ class E2EEnvironment {
     await fs.mkdir(this.testDir, { recursive: true });
 
     // Create basic FEATURES.json structure
-    await this.createTasksFile();
+    await this.createFeaturesFile();
 
     // Create package.json for realistic project simulation
     await this.createPackageJson();
@@ -54,22 +54,22 @@ class E2EEnvironment {
   }
 
   /**
-   * Create initial TASKS.json file
+   * Create initial FEATURES.json file
    */
-  async createTasksFile() {
-    const initialTasks = {
+  async createFeaturesFile() {
+    const initialFeatures = {
       project: `e2e-test-${this.testName}`,
       schema_version: "2.0.0",
       migrated_from: "test-initialization",
       migration_date: new Date().toISOString(),
-      tasks: [],
-      completed_tasks: [],
-      task_relationships: {},
+      features: [],
+      completed_features: [],
+      feature_relationships: {},
       workflow_config: {
         require_approval: true,
         auto_reject_timeout_hours: 168,
         allowed_statuses: ['suggested', 'approved', 'rejected', 'implemented'],
-        allowed_task_types: ['error', 'feature', 'test', 'audit'],
+        allowed_feature_types: ['error', 'feature', 'test', 'audit'],
         auto_generation_enabled: true,
         mandatory_test_gate: true,
         security_validation_required: true,
@@ -79,8 +79,8 @@ class E2EEnvironment {
         version: '2.0.0',
         created: new Date().toISOString(),
         updated: new Date().toISOString(),
-        total_tasks: 0,
-        tasks_by_type: {
+        total_features: 0,
+        features_by_type: {
           error: 0,
           feature: 0,
           test: 0,
@@ -91,7 +91,7 @@ class E2EEnvironment {
       agents: {}
     };
 
-    await fs.writeFile(this.tasksPath, JSON.stringify(initialTasks, null, 2));
+    await fs.writeFile(this.featuresPath, JSON.stringify(initialFeatures, null, 2));
   }
 
   /**
@@ -157,9 +157,9 @@ class E2EEnvironment {
   /**
    * Get current FEATURES.json content
    */
-  async getTasks() {
+  async getFeatures() {
     try {
-      const content = await fs.readFile(this.tasksPath, 'utf8');
+      const content = await fs.readFile(this.featuresPath, 'utf8');
       return JSON.parse(content);
     } catch (error) {
       throw new Error(`Failed to read FEATURES.json: ${error.message}`);
@@ -169,8 +169,8 @@ class E2EEnvironment {
   /**
    * Update FEATURES.json content
    */
-  async updateTasks(features) {
-    await fs.writeFile(this.tasksPath, JSON.stringify(features, null, 2));
+  async updateFeatures(features) {
+    await fs.writeFile(this.featuresPath, JSON.stringify(features, null, 2));
   }
 }
 
@@ -407,7 +407,7 @@ class FeatureTestHelpers {
   /**
    * List features with filtering
    */
-  static async listTasks(environment, filter = {}) {
+  static async listFeatures(environment, filter = {}) {
     const args = Object.keys(filter).length > 0 ? [JSON.stringify(filter)] : [];
 
     return CommandExecutor.executeAPI(
@@ -432,7 +432,7 @@ class FeatureTestHelpers {
    * Validate feature status in FEATURES.json
    */
   static async validateFeatureStatus(environment, featureId, expectedStatus) {
-    const features = await environment.getTasks();
+    const features = await environment.getFeatures();
     const feature = features.features.find(f => f.id === featureId);
 
     if (!feature) {

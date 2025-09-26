@@ -35,6 +35,9 @@ const path = require('path');
 const fs = require('fs').promises;
 const crypto = require('crypto');
 
+// Import RAG operations for self-learning capabilities
+const RAGOperations = require('./lib/api-modules/rag/ragOperations');
+
 // File locking mechanism to prevent race conditions across processes
 class FileLock {
   constructor() {
@@ -169,6 +172,13 @@ class AutonomousTaskManagerAPI {
     this.activeAgents = new Map();
     this.taskAssignments = new Map();
     this.taskDependencies = new Map();
+
+    // Initialize RAG operations for self-learning capabilities
+    this.ragOps = new RAGOperations({
+      taskManager: this,
+      agentManager: this,
+      withTimeout: this.withTimeout.bind(this)
+    });
 
     // Initialize features file and task structures if they don't exist
   }
@@ -2506,7 +2516,7 @@ class AutonomousTaskManagerAPI {
   getApiMethods() {
     return {
       success: true,
-      message: 'Feature Management API - Feature lifecycle operations',
+      message: 'Feature Management API - Feature lifecycle operations with self-learning capabilities',
       cliMapping: {
         // Discovery Commands
         guide: 'getComprehensiveGuide',
@@ -2519,6 +2529,14 @@ class AutonomousTaskManagerAPI {
         'list-features': 'listFeatures',
         'feature-stats': 'getFeatureStats',
         'get-initialization-stats': 'getInitializationStats',
+
+        // RAG Self-Learning
+        'store-lesson': 'storeLesson',
+        'search-lessons': 'searchLessons',
+        'store-error': 'storeError',
+        'find-similar-errors': 'findSimilarErrors',
+        'get-relevant-lessons': 'getRelevantLessons',
+        'rag-analytics': 'getRagAnalytics',
       },
       availableCommands: [
         // Discovery Commands
@@ -2526,6 +2544,9 @@ class AutonomousTaskManagerAPI {
 
         // Feature Management
         'suggest-feature', 'approve-feature', 'reject-feature', 'list-features', 'feature-stats', 'get-initialization-stats',
+
+        // RAG Self-Learning
+        'store-lesson', 'search-lessons', 'store-error', 'find-similar-errors', 'get-relevant-lessons', 'rag-analytics',
       ],
       guide: this._getFallbackGuide('api-methods'),
     };
@@ -3156,6 +3177,117 @@ _generateSupportingTasks(feature, mainTaskId) {
   return supportingTasks;
 }
 
+  // =================== RAG SELF-LEARNING METHODS ===================
+  // Intelligent learning and knowledge management operations
+
+  /**
+   * Store a lesson in the RAG database for future learning
+   */
+  async storeLesson(lessonData) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.storeLesson(lessonData),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
+  /**
+   * Search for relevant lessons using semantic search
+   */
+  async searchLessons(query, options = {}) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.searchLessons(query, options),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
+  /**
+   * Store an error pattern in the RAG database
+   */
+  async storeError(errorData) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.storeError(errorData),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
+  /**
+   * Find similar errors using semantic search
+   */
+  async findSimilarErrors(errorDescription, options = {}) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.findSimilarErrors(errorDescription, options),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
+  /**
+   * Get lessons relevant to a specific task
+   */
+  async getRelevantLessons(taskId, options = {}) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.getRelevantLessons(taskId, options),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
+  /**
+   * Get RAG system analytics and statistics
+   */
+  async getRagAnalytics() {
+    try {
+      return await this.withTimeout(
+        this.ragOps.getAnalytics(),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
   /**
    * Cleanup resources and connections
    */
@@ -3398,8 +3530,53 @@ async function main() {
         result = await api.getActiveAgents();
         break;
 
+      // RAG self-learning commands
+      case 'store-lesson': {
+        if (!args[1]) {
+          throw new Error('Lesson data required. Usage: store-lesson \'{"title":"...", "category":"...", "content":"...", "context":"..."}\'');
+        }
+        const lessonData = JSON.parse(args[1]);
+        result = await api.storeLesson(lessonData);
+        break;
+      }
+      case 'search-lessons': {
+        if (!args[1]) {
+          throw new Error('Search query required. Usage: search-lessons "query text" [options]');
+        }
+        const options = args[2] ? JSON.parse(args[2]) : {};
+        result = await api.searchLessons(args[1], options);
+        break;
+      }
+      case 'store-error': {
+        if (!args[1]) {
+          throw new Error('Error data required. Usage: store-error \'{"title":"...", "error_type":"...", "message":"...", "resolution_method":"..."}\'');
+        }
+        const errorData = JSON.parse(args[1]);
+        result = await api.storeError(errorData);
+        break;
+      }
+      case 'find-similar-errors': {
+        if (!args[1]) {
+          throw new Error('Error description required. Usage: find-similar-errors "error description" [options]');
+        }
+        const options = args[2] ? JSON.parse(args[2]) : {};
+        result = await api.findSimilarErrors(args[1], options);
+        break;
+      }
+      case 'get-relevant-lessons': {
+        if (!args[1]) {
+          throw new Error('Task ID required. Usage: get-relevant-lessons <taskId> [options]');
+        }
+        const options = args[2] ? JSON.parse(args[2]) : {};
+        result = await api.getRelevantLessons(args[1], options);
+        break;
+      }
+      case 'rag-analytics':
+        result = await api.getRagAnalytics();
+        break;
+
       default:
-        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, start-authorization, validate-criterion, complete-authorization, authorize-stop, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents`);
+        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, start-authorization, validate-criterion, complete-authorization, authorize-stop, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents, store-lesson, search-lessons, store-error, find-similar-errors, get-relevant-lessons, rag-analytics`);
     }
 
     console.log(JSON.stringify(result, null, 2));

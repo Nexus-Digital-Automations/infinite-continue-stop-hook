@@ -104,7 +104,7 @@
     },
     "approval_history": [],
     "initialization_stats": {
-      "total_initializations": 9,
+      "total_initializations": 17,
       "total_reinitializations": 0,
       "current_day": "2025-09-26",
       "time_buckets": {
@@ -113,7 +113,7 @@
           "reinit": 0
         },
         "15:00-19:59": {
-          "init": 9,
+          "init": 17,
           "reinit": 0
         },
         "20:00-00:59": {
@@ -131,7 +131,7 @@
       },
       "daily_history": [],
       "last_reset": "2025-09-26T21:19:59.338Z",
-      "last_updated": "2025-09-26T21:25:56.343Z"
+      "last_updated": "2025-09-26T21:33:07.192Z"
     }
   },
   "agents": {
@@ -188,6 +188,54 @@
       "status": "active",
       "initialized": "2025-09-26T21:25:56.335Z",
       "sessionId": "ae5118a9b123bfb6"
+    },
+    "test-agent-1758922295233-3li2ol": {
+      "lastHeartbeat": "2025-09-26T21:31:35.287Z",
+      "status": "active",
+      "initialized": "2025-09-26T21:31:35.287Z",
+      "sessionId": "9c7133167a5ed193"
+    },
+    "test-agent-1758922305270-qincz8": {
+      "lastHeartbeat": "2025-09-26T21:31:45.351Z",
+      "status": "active",
+      "initialized": "2025-09-26T21:31:45.351Z",
+      "sessionId": "96c19a5031e62cbb"
+    },
+    "test-agent-1758922315406-u36lsu": {
+      "lastHeartbeat": "2025-09-26T21:31:55.464Z",
+      "status": "active",
+      "initialized": "2025-09-26T21:31:55.464Z",
+      "sessionId": "3232c72550a14fa0"
+    },
+    "test-agent-1758922345563-cl9s1": {
+      "lastHeartbeat": "2025-09-26T21:32:25.608Z",
+      "status": "active",
+      "initialized": "2025-09-26T21:32:25.608Z",
+      "sessionId": "259ecbeee91aab39"
+    },
+    "test-agent-1758922355599-yzpa8g": {
+      "lastHeartbeat": "2025-09-26T21:32:35.670Z",
+      "status": "active",
+      "initialized": "2025-09-26T21:32:35.670Z",
+      "sessionId": "4b0a9740c7a54cbc"
+    },
+    "test-agent-1758922365743-do9bik": {
+      "lastHeartbeat": "2025-09-26T21:32:45.821Z",
+      "status": "active",
+      "initialized": "2025-09-26T21:32:45.821Z",
+      "sessionId": "59e86ed799f09a50"
+    },
+    "test-agent-1758922375817-xcbs7r": {
+      "lastHeartbeat": "2025-09-26T21:32:55.856Z",
+      "status": "active",
+      "initialized": "2025-09-26T21:32:55.856Z",
+      "sessionId": "144611df430fc548"
+    },
+    "test-agent-1758922387157-aeddd": {
+      "lastHeartbeat": "2025-09-26T21:33:07.190Z",
+      "status": "active",
+      "initialized": "2025-09-26T21:33:07.190Z",
+      "sessionId": "9540da0125d6f1fc"
     }
   }
 }

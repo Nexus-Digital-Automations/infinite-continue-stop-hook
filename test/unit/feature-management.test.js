@@ -45,7 +45,7 @@ describe('Feature Management Lifecycle', () => {
   let timeUtils;
 
   const TEST_PROJECT_ROOT = '/test/feature-project';
-  const TEST_TASKS_PATH = path.join(TEST_PROJECT_ROOT, 'TASKS.json');
+  const TEST_FEATURES_PATH = path.join(TEST_PROJECT_ROOT, 'FEATURES.json');
 
   beforeEach(() => {
     // Reset the crypto counter for deterministic ID generation
@@ -56,7 +56,7 @@ describe('Feature Management Lifecycle', () => {
     timeUtils = new TimeTestUtils();
 
     // Override the tasks path for testing
-    api.tasksPath = TEST_TASKS_PATH;
+    api.featuresPath = TEST_FEATURES_PATH;
 
     // Connect jest mocks to MockFileSystem instance
     const fs = require('fs');
@@ -78,7 +78,7 @@ describe('Feature Management Lifecycle', () => {
 
   describe('Feature Suggestion Lifecycle', () => {
     beforeEach(() => {
-      mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(TEST_FIXTURES.emptyFeaturesFile));
+      mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(TEST_FIXTURES.emptyFeaturesFile));
     });
 
     describe('Basic Feature Suggestion', () => {
@@ -326,7 +326,7 @@ describe('Feature Management Lifecycle', () => {
     let suggestedFeatureId;
 
     beforeEach(async () => {
-      mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(TEST_FIXTURES.emptyFeaturesFile));
+      mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(TEST_FIXTURES.emptyFeaturesFile));
 
       // Create a suggested feature for approval tests
       const suggestResult = await api.suggestFeature(TEST_FIXTURES.validFeature);
@@ -433,7 +433,7 @@ describe('Feature Management Lifecycle', () => {
             title: 'Test Feature',
           }],
         };
-        mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(invalidFeatures));
+        mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(invalidFeatures));
 
         const result = await api.approveFeature(suggestedFeatureId);
 
@@ -492,7 +492,7 @@ describe('Feature Management Lifecycle', () => {
     let suggestedFeatureId;
 
     beforeEach(async () => {
-      mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(TEST_FIXTURES.emptyFeaturesFile));
+      mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(TEST_FIXTURES.emptyFeaturesFile));
 
       // Create a suggested feature for rejection tests
       const suggestResult = await api.suggestFeature(TEST_FIXTURES.validFeature);
@@ -601,7 +601,7 @@ describe('Feature Management Lifecycle', () => {
     let suggestedFeatureIds;
 
     beforeEach(async () => {
-      mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(TEST_FIXTURES.emptyFeaturesFile));
+      mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(TEST_FIXTURES.emptyFeaturesFile));
 
       // Create multiple suggested features for bulk operations
       suggestedFeatureIds = [];
@@ -709,7 +709,7 @@ describe('Feature Management Lifecycle', () => {
   describe('Feature Listing and Filtering', () => {
     beforeEach(async () => {
       // Use features file with diverse test data
-      mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(TEST_FIXTURES.featuresWithData));
+      mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(TEST_FIXTURES.featuresWithData));
     });
 
     describe('Basic Feature Listing', () => {
@@ -791,7 +791,7 @@ describe('Feature Management Lifecycle', () => {
 
   describe('Feature Statistics and Analytics', () => {
     beforeEach(async () => {
-      mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(TEST_FIXTURES.featuresWithData));
+      mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(TEST_FIXTURES.featuresWithData));
     });
 
     describe('Basic Statistics', () => {
@@ -833,7 +833,7 @@ describe('Feature Management Lifecycle', () => {
       });
 
       test('should handle empty features file for statistics', async () => {
-        mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(TEST_FIXTURES.emptyFeaturesFile));
+        mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(TEST_FIXTURES.emptyFeaturesFile));
 
         const result = await api.getFeatureStats();
 
@@ -888,7 +888,7 @@ describe('Feature Management Lifecycle', () => {
   describe('Error Scenarios and Edge Cases', () => {
     describe('File System Error Handling', () => {
       test('should handle file read errors in feature listing', async () => {
-        mockFs.setReadError(TEST_TASKS_PATH, 'Permission denied');
+        mockFs.setReadError(TEST_FEATURES_PATH, 'Permission denied');
 
         const result = await api.listFeatures();
 
@@ -897,8 +897,8 @@ describe('Feature Management Lifecycle', () => {
       });
 
       test('should handle file write errors in feature suggestion', async () => {
-        mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(TEST_FIXTURES.emptyFeaturesFile));
-        mockFs.setWriteError(TEST_TASKS_PATH, 'Disk full');
+        mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(TEST_FIXTURES.emptyFeaturesFile));
+        mockFs.setWriteError(TEST_FEATURES_PATH, 'Disk full');
 
         const result = await api.suggestFeature(TEST_FIXTURES.validFeature);
 
@@ -909,7 +909,7 @@ describe('Feature Management Lifecycle', () => {
 
     describe('Data Corruption Handling', () => {
       test('should handle corrupted JSON gracefully', async () => {
-        mockFs.setFile(TEST_TASKS_PATH, '{ invalid json structure }');
+        mockFs.setFile(TEST_FEATURES_PATH, '{ invalid json structure }');
 
         const result = await api.suggestFeature(TEST_FIXTURES.validFeature);
 
@@ -922,7 +922,7 @@ describe('Feature Management Lifecycle', () => {
         const result = await api.suggestFeature(TEST_FIXTURES.validFeature);
 
         expect(result.success).toBe(true);
-        expect(mockFs.hasFile(TEST_TASKS_PATH)).toBe(true);
+        expect(mockFs.hasFile(TEST_FEATURES_PATH)).toBe(true);
       });
     });
   });

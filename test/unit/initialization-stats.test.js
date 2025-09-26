@@ -26,23 +26,23 @@ describe('Initialization Statistics', () => {
   let originalFs;
 
   const TEST_PROJECT_ROOT = '/test/stats-project';
-  const TEST_FEATURES_PATH = path.join(TEST_PROJECT_ROOT, 'FEATURES.json');
+  const TEST_TASKS_PATH = path.join(TEST_PROJECT_ROOT, 'TASKS.json');
 
   beforeEach(() => {
     api = new FeatureManagerAPI();
     mockFs = new MockFileSystem();
     timeUtils = new TimeTestUtils();
 
-    // Override the features path for testing
-    api.featuresPath = TEST_FEATURES_PATH;
+    // Override the tasks path for testing
+    api.tasksPath = TEST_TASKS_PATH;
 
     // Mock the fs module
     originalFs = require('fs').promises;
     const fs = require('fs');
     fs.promises = mockFs;
 
-    // Setup initial features file
-    mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(TEST_FIXTURES.emptyFeaturesFile));
+    // Setup initial tasks file
+    mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(TEST_FIXTURES.emptyFeaturesFile));
   });
 
   afterEach(() => {
@@ -438,7 +438,7 @@ describe('Initialization Statistics', () => {
   describe('Statistics Retrieval', () => {
     beforeEach(async () => {
       // Setup some test data
-      mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(TEST_FIXTURES.featuresWithData));
+      mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(TEST_FIXTURES.featuresWithData));
     });
 
     describe('Basic Statistics Retrieval', () => {
@@ -506,7 +506,7 @@ describe('Initialization Statistics', () => {
         // Remove initialization stats from features
         const features = testHelpers.deepClone(TEST_FIXTURES.emptyFeaturesFile);
         delete features.metadata.initialization_stats;
-        mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(features));
+        mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(features));
 
         const result = await api.getInitializationStats();
 
@@ -565,7 +565,7 @@ describe('Initialization Statistics', () => {
   describe('Error Handling', () => {
     describe('File System Errors', () => {
       test('should handle file read errors in getInitializationStats', async () => {
-        mockFs.setReadError(TEST_FEATURES_PATH, 'Permission denied');
+        mockFs.setReadError(TEST_TASKS_PATH, 'Permission denied');
 
         const result = await api.getInitializationStats();
 
@@ -575,7 +575,7 @@ describe('Initialization Statistics', () => {
       });
 
       test('should handle file write errors in _updateTimeBucketStats', async () => {
-        mockFs.setWriteError(TEST_FEATURES_PATH, 'Disk full');
+        mockFs.setWriteError(TEST_TASKS_PATH, 'Disk full');
 
         const result = await api._updateTimeBucketStats('init');
 
@@ -583,7 +583,7 @@ describe('Initialization Statistics', () => {
       });
 
       test('should handle corrupted features file', async () => {
-        mockFs.setFile(TEST_FEATURES_PATH, '{ invalid json }');
+        mockFs.setFile(TEST_TASKS_PATH, '{ invalid json }');
 
         const result = await api.getInitializationStats();
 
@@ -599,7 +599,7 @@ describe('Initialization Statistics', () => {
           features: [],
           // Missing metadata
         };
-        mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(corruptedFeatures));
+        mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(corruptedFeatures));
 
         const result = await api.getInitializationStats();
 
@@ -614,7 +614,7 @@ describe('Initialization Statistics', () => {
           total_initializations: 'not a number',
           time_buckets: 'not an object',
         };
-        mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(features));
+        mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(features));
 
         await api._updateTimeBucketStats('init');
 
