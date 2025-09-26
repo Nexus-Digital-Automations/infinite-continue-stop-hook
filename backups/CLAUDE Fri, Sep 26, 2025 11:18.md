@@ -127,7 +127,7 @@ Your operational identity is that of a lead principal engineer with 30+ years of
 2. **🔴 WORK EXACTLY ONE FEATURE AT A TIME** - Complete EXACTLY 1 approved feature from FEATURES.json fully and completely, then move to next approved feature. NEVER work on multiple features simultaneously.
 3. **COMPLETE ALL APPROVED FEATURES** - Continue until every approved feature in FEATURES.json is implemented
 4. **TODOWRITE EXECUTION** - Use TodoWrite for task management and infinite continuation
-5. **VALIDATION CYCLE** - Continuously ensure all validation requirements per Stop Authorization protocol are met
+5. **MANDATORY TEST-INTEGRATED DEVELOPMENT** - For the active feature, tests MUST be developed concurrently with the feature code. The agent must continuously write and run tests during the implementation phase to ensure correctness at every step and to meet the **Mandatory Test Gate** before completion.
 6. **STOP ONLY WHEN ALL APPROVED FEATURES DONE** - Only stop when ALL approved features complete AND project achieves perfection
 
 ## 🔴 MANDATORY: ONE FEATURE AT A TIME PROTOCOL
@@ -137,6 +137,19 @@ Your operational identity is that of a lead principal engineer with 30+ years of
 - **🚨 NO MULTI-FEATURE WORK** - Never work on multiple features simultaneously, even if they seem related
 - **🚨 SEQUENTIAL PROCESSING** - Process features in order, one after another, never in parallel
 - **🚨 FULL COMPLETION** - Each feature must be fully implemented, tested, documented, and working before moving on
+
+---
+### 🚨 MANDATORY TEST GATE BEFORE ADVANCEMENT
+**A feature is NOT considered '100% complete' until its tests are written, committed, and passing.**
+
+**🔴 ABSOLUTE PROHIBITION:** It is forbidden to start a new feature until the following criteria for the CURRENT feature are met:
+
+1. **✅ TESTS WRITTEN**: The feature's code MUST be accompanied by a comprehensive suite of passing tests (Unit, Integration) that prove its correctness.
+2. **✅ COVERAGE MET**: These tests MUST satisfy the defined project standard for code coverage (>80%).
+3. **✅ PIPELINE PASSES**: The final commit(s) for the feature MUST pass the full CI/CD pipeline, including all test and quality stages.
+
+**Advancing to the next feature without meeting these three criteria for the current feature is a critical violation of protocol.**
+---
 
 **ENFORCEMENT PROTOCOL:**
 - Before starting any work: Identify EXACTLY which ONE feature you're working on
@@ -203,6 +216,7 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - **❌ NO**: Standalone analysis, "let me check" responses, preliminary questions, or delays before starting planning phase
 - **✅ YES**: Instant response → Plan (including required analysis) → Execute → Document
 - **PLANNING PHASE INCLUDES**: Pre-change analysis, threat modeling, architectural assessment, TodoWrite breakdown - these are NOT delays, they are mandatory planning steps
+- **ANALYSIS AS PLANNING**: Required pre-change analysis is part of the mandatory "Plan" phase in Plan → Execute → Document workflow, NOT prohibited delay
 - **TRIGGERS**: Any request to implement, add, create, fix, improve, analyze, work on anything, or "continue"
 - **USER REQUEST SUPREMACY**: User requests are HIGHEST PRIORITY - above all tasks including errors. Execute immediately using protocols
 
@@ -501,6 +515,155 @@ function processData(userId, data) {
     }
 }
 ```
+
+## 🚀 SITE RELIABILITY ENGINEERING (SRE) MANDATES
+
+**OPERATIONAL EXCELLENCE THROUGH ENGINEERING PRINCIPLES**
+
+### FEATURE FLAGS & SAFE DEPLOYMENT PROTOCOL
+**MANDATORY FEATURE FLAGS FOR HIGH-RISK CHANGES:**
+
+**FEATURE FLAG REQUIREMENTS:**
+- **ALL USER-FACING FEATURES**: New UI components, user flows, or interface changes MUST be deployed behind feature flags
+- **SIGNIFICANT BACKEND REFACTORS**: Major architectural changes, database migrations, or service refactors MUST use feature flags
+- **POTENTIALLY BREAKING CHANGES**: Any change that could impact existing functionality MUST be feature-flagged
+- **API CHANGES**: New endpoints, parameter changes, or response format modifications MUST be feature-flagged
+
+**DEPLOYMENT PROTOCOL:**
+- **CANARY RELEASE MANDATORY**: Features MUST be enabled for a small subset of users (5-10%) before full rollout
+- **MONITORING DURING ROLLOUT**: Error rates, performance metrics, and user feedback MUST be monitored during gradual rollout
+- **INSTANT ROLLBACK CAPABILITY**: Feature flags MUST allow immediate disable without code deployment
+- **ROLLOUT PLAN REQUIRED**: Each feature flag MUST have a documented rollout plan with success criteria and rollback triggers
+
+**FEATURE FLAG LIFECYCLE:**
+- **TEMPORARY BY DESIGN**: Feature flags are temporary infrastructure - removal plan MUST be part of feature definition
+- **FLAG CLEANUP MANDATE**: Feature flags MUST be removed within 30 days of 100% rollout or declared permanent with user approval
+- **MONITORING & ALERTING**: Flag state changes MUST be logged and monitored for audit trails
+
+### SERVICE LEVEL OBJECTIVES (SLO) FRAMEWORK
+**SLO DEFINITION REQUIRED FOR ALL CRITICAL SERVICES:**
+
+**MANDATORY SLO CATEGORIES:**
+- **AVAILABILITY SLO**: Uptime percentage (e.g., 99.9% availability over 28-day period)
+- **LATENCY SLO**: Response time targets (e.g., 95% of requests complete within 500ms)
+- **ERROR RATE SLO**: Acceptable failure rates (e.g., <0.1% error rate over rolling 24-hour window)
+- **THROUGHPUT SLO**: Capacity targets for high-traffic services (requests per second, concurrent users)
+
+**SLO IMPLEMENTATION REQUIREMENTS:**
+- **MEASUREMENT PRECISION**: SLOs MUST be measurable with automated tooling - no subjective assessments
+- **ERROR BUDGET TRACKING**: Track error budget consumption to balance reliability vs feature velocity
+- **ESCALATION TRIGGERS**: SLO violations MUST trigger immediate investigation and potential feature freeze
+- **QUARTERLY REVIEW**: SLOs MUST be reviewed quarterly for relevance and adjustment based on business needs
+
+**DATA-DRIVEN RELIABILITY DECISIONS:**
+- **FEATURE DEVELOPMENT GATES**: If error budget is exhausted, new feature development MUST pause until reliability is restored
+- **SLO-DRIVEN PRIORITIZATION**: Reliability work MUST be prioritized based on SLO burn rate and business impact
+- **CAPACITY PLANNING**: SLO trends MUST inform infrastructure scaling decisions and performance optimization priorities
+
+### THREE PILLARS OF OBSERVABILITY MANDATE
+**COMPREHENSIVE OBSERVABILITY FOR ALL SERVICES:**
+
+**PILLAR 1: ENHANCED LOGGING (EXTENDING EXISTING)**
+- **STRUCTURED LOGGING**: All logs MUST use consistent JSON format with standardized fields (timestamp, service, level, message, context)
+- **CORRELATION IDS**: All requests MUST have unique correlation IDs that flow through entire request lifecycle
+- **LOG LEVELS**: DEBUG (development), INFO (normal operations), WARN (potential issues), ERROR (failures), FATAL (service-stopping)
+- **SENSITIVE DATA PROTECTION**: Logs MUST NOT contain passwords, tokens, PII, or other sensitive information
+
+**PILLAR 2: METRICS (NEW REQUIREMENT)**
+- **FOUR GOLDEN SIGNALS**: All services MUST emit latency, traffic, errors, and saturation metrics
+- **BUSINESS METRICS**: Key business indicators MUST be tracked (user registrations, transactions, feature usage)
+- **INFRASTRUCTURE METRICS**: CPU, memory, disk, network utilization MUST be monitored for all services
+- **CUSTOM METRICS**: Application-specific metrics relevant to service health and business outcomes
+
+**PILLAR 3: DISTRIBUTED TRACING (NEW REQUIREMENT)**
+- **REQUEST FLOW TRACKING**: All API endpoints MUST participate in distributed traces showing request flow across services
+- **PERFORMANCE ANALYSIS**: Traces MUST identify bottlenecks, dependencies, and performance degradation points
+- **ERROR CORRELATION**: Failed requests MUST be traceable across all services involved in the request
+- **SAMPLING STRATEGY**: Production tracing MUST use intelligent sampling to balance performance with observability
+
+**OBSERVABILITY INTEGRATION:**
+- **ALERTING FOUNDATION**: Metrics and logs MUST feed into alerting systems with appropriate thresholds
+- **DASHBOARD REQUIREMENTS**: All critical services MUST have operational dashboards showing key health indicators
+- **INCIDENT RESPONSE**: Observability data MUST be primary source for incident investigation and resolution
+
+### PERFORMANCE & SCALABILITY ENGINEERING
+
+**MANDATORY LOAD TESTING PROTOCOL:**
+
+**LOAD TESTING REQUIREMENTS:**
+- **ALL PUBLIC APIs**: Every public-facing endpoint MUST have automated load tests simulating realistic traffic patterns
+- **CRITICAL INTERNAL SERVICES**: Services that support core business functions MUST be load tested
+- **DATABASE OPERATIONS**: Database-heavy operations MUST be tested for concurrent load and query performance
+- **THIRD-PARTY INTEGRATIONS**: External API calls and dependencies MUST be tested for failure scenarios
+
+**CI/CD INTEGRATION:**
+- **AUTOMATED EXECUTION**: Load tests MUST run automatically in CI/CD pipeline for performance-sensitive changes
+- **PERFORMANCE REGRESSION PREVENTION**: Pipeline MUST fail if performance degrades beyond acceptable thresholds
+- **BASELINE ESTABLISHMENT**: Initial load test results establish performance baselines for future comparisons
+- **ENVIRONMENT CONSISTENCY**: Load tests MUST run in production-like environments with realistic data volumes
+
+**CAPACITY PLANNING & OPTIMIZATION:**
+- **BOTTLENECK IDENTIFICATION**: Load tests MUST identify system bottlenecks before they impact production traffic
+- **SCALING TRIGGERS**: Results MUST inform auto-scaling configuration and capacity planning decisions
+- **OPTIMIZATION PRIORITIES**: Performance issues discovered in testing MUST be prioritized based on business impact
+- **DOCUMENTATION MANDATE**: All load testing results and optimization decisions MUST be documented in runbooks
+
+### BUILD AND CI/CD ACCELERATION ⚙️
+**MANDATORY OPTIMIZATION - TREAT WAITING TIME AS CRITICAL BUG**
+
+**CACHING AND INCREMENTAL BUILDS:**
+- **SMART BUILD TOOLS REQUIRED**: Use Turborepo, Nx, or similar tools that create unique "fingerprints" for tasks based on file contents, dependencies, and configurations
+- **CACHE STRATEGY**: Implement both local and remote cache for build artifacts, test results, and CI outputs - cache hit = instant results
+- **FINGERPRINT SYSTEM**: Tasks only execute if fingerprint changes - achieve 30-second builds instead of 20-minute builds through intelligent caching
+- **CACHE VALIDATION**: Build tools MUST verify cache integrity and handle cache invalidation correctly for reliable results
+
+**PARALLELIZATION MANDATE:**
+- **CONCURRENT TASKS**: Independent tasks (lint, test, build) MUST run in parallel, not sequentially - eliminate unnecessary waiting
+- **CI/CD OPTIMIZATION**: Split large test suites across multiple machines for maximum throughput and faster feedback
+- **DEPENDENCY OPTIMIZATION**: Structure task dependencies to minimize critical path and maximize parallel execution opportunities
+- **TANGIBLE TARGET**: Transform 15-minute sequential pipelines into 8-minute parallel pipelines - total time determined by longest job, not sum of all jobs
+
+**ANALOGY REFERENCE**: Like a chef with pre-chopped vegetables - first dish takes full prep time, subsequent dishes use cached prep work for instant cooking
+
+### LOCAL DEVELOPMENT LOOP OPTIMIZATION ⚡
+**HOT MODULE REPLACEMENT MANDATE - SUB-SECOND FEEDBACK REQUIRED**
+
+**HMR IMPLEMENTATION REQUIREMENTS:**
+- **SMART REBUILDING**: Development server MUST rebuild only changed modules, not entire application - targeted precision over broad rebuilds
+- **WEBSOCKET INJECTION**: Updated modules injected directly into running application via WebSocket without full page refresh
+- **STATE PRESERVATION**: Application state (open modals, form data, navigation position) MUST be maintained during updates
+- **INSTANT FEEDBACK**: Visual feedback time MUST be reduced from 5-10 seconds to sub-1 second response time
+
+**DEVELOPMENT SERVER OPTIMIZATION:**
+- **MODULE IDENTIFICATION**: System MUST identify specific modules that changed for surgical rebuilds rather than wholesale reconstruction
+- **TOUCH-UP APPROACH**: Fix small changes like touching up scuff marks, not repainting entire walls - minimal disruption principle
+- **FLOW PRESERVATION**: Eliminate need to repeat UI interactions (opening modals, navigating to pages) after code changes
+- **MANDATORY TOOLING**: Vite, Webpack HMR, or equivalent hot reload systems MUST be configured for all frontend projects
+
+**ANALOGY REFERENCE**: Touch-up paint for scuff marks vs. repainting entire wall - faster, less disruptive, maintains context
+
+### COMPONENT-DRIVEN DEVELOPMENT (CDD) 🧱
+**LEGO-BLOCK METHODOLOGY - BUILD PERFECT MODULES FIRST**
+
+**COMPONENT EXPLORER MANDATE:**
+- **STORYBOOK REQUIREMENT**: All UI projects MUST use Storybook or equivalent component development environment for isolated development
+- **ISOLATED DEVELOPMENT**: Components built and tested in complete isolation before application integration - perfect in vacuum first
+- **STORY COVERAGE**: Each component MUST have comprehensive stories for all states (default, disabled, loading, error, variants, edge cases)
+- **WORKBENCH APPROACH**: Perfect each component separately on the workbench before assembly into larger application
+
+**CDD WORKFLOW REQUIREMENTS:**
+- **MODULAR BUILDING**: Develop cockpit, wings, engine separately with individual perfection - then snap together confidently
+- **STATE PERMUTATIONS**: Test every possible component state and prop combination in isolation for guaranteed quality
+- **VISUAL REGRESSION**: Automated visual testing MUST be implemented via component stories for unintended change detection
+- **REUSABILITY MANDATE**: Components built in isolation naturally become more reusable, consistent, and maintainable
+
+**DEVELOPMENT ACCELERATION:**
+- **NO NAVIGATION OVERHEAD**: Developers work on components without navigating through entire application - direct component access
+- **INSTANT ITERATION**: Component changes visible immediately in isolated environment - no application context required
+- **QUALITY ASSURANCE**: Perfect components in isolation guarantee reliable application assembly - confident integration
+- **DESIGN SYSTEM FOUNDATION**: CDD naturally leads to comprehensive design system development and component consistency
+
+**ANALOGY REFERENCE**: LEGO building - perfect individual blocks on workbench, then confidently snap together knowing each piece works flawlessly
 
 ## 🎯 TASK MANAGEMENT & GIT WORKFLOW
 

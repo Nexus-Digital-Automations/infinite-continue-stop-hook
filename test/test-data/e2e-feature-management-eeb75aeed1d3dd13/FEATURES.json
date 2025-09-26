@@ -1,23 +1,23 @@
 {
-  "project": "test-feature-lifecycle-1758883743541-6cff6a02",
+  "project": "e2e-test-feature-management",
   "features": [
     {
-      "id": "feature_1758883743577_6895b7f717b9",
-      "title": "Feature to Reject",
-      "description": "This is a test feature for integration testing purposes",
-      "business_value": "Validates that the feature management system works correctly",
+      "id": "feature_1758903165157_fa747fe218d6",
+      "title": "Status Transition Test Feature",
+      "description": "Feature for testing status transition rules",
+      "business_value": "Validates workflow state management",
       "category": "enhancement",
       "status": "suggested",
-      "created_at": "2025-09-26T10:49:03.577Z",
-      "updated_at": "2025-09-26T10:49:03.577Z",
+      "created_at": "2025-09-26T16:12:45.157Z",
+      "updated_at": "2025-09-26T16:12:45.158Z",
       "suggested_by": "system",
       "metadata": {}
     }
   ],
   "metadata": {
     "version": "1.0.0",
-    "created": "2025-09-26T10:49:03.541Z",
-    "updated": "2025-09-26T10:49:03.577Z",
+    "created": "2025-09-26T16:12:45.119Z",
+    "updated": "2025-09-26T16:12:45.158Z",
     "total_features": 1,
     "approval_history": []
   },
@@ -36,6 +36,5 @@
       "business_value",
       "category"
     ]
-  },
-  "agents": {}
+  }
 }

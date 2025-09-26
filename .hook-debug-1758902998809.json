@@ -1,0 +1,112 @@
+{
+  "execution": {
+    "timestamp": "2025-09-26T16:09:58.802Z",
+    "projectRoot": "/Users/jeremyparker/infinite-continue-stop-hook",
+    "hookVersion": "1.0.0",
+    "nodeVersion": "v22.20.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "pid": 2168,
+    "cwd": "/Users/jeremyparker/infinite-continue-stop-hook",
+    "endTimestamp": "2025-09-26T16:09:58.808Z",
+    "durationMs": 6
+  },
+  "input": {
+    "sessionId": "62731343-0193-46cf-8c05-fcf5e9fba73f",
+    "transcriptPath": "/Users/jeremyparker/.claude/projects/-Users-jeremyparker-infinite-continue-stop-hook/62731343-0193-46cf-8c05-fcf5e9fba73f.jsonl",
+    "stopHookActive": false,
+    "rawInput": {
+      "session_id": "62731343-0193-46cf-8c05-fcf5e9fba73f",
+      "transcript_path": "/Users/jeremyparker/.claude/projects/-Users-jeremyparker-infinite-continue-stop-hook/62731343-0193-46cf-8c05-fcf5e9fba73f.jsonl",
+      "cwd": "/Users/jeremyparker/infinite-continue-stop-hook",
+      "permission_mode": "acceptEdits",
+      "hook_event_name": "Stop",
+      "stop_hook_active": false
+    }
+  },
+  "projectState": {},
+  "decisions": [],
+  "flow": [
+    {
+      "timestamp": "2025-09-26T16:09:58.803Z",
+      "message": "Raw input data: \"{\"session_id\":\"62731343-0193-46cf-8c05-fcf5e9fba73f\",\"transcript_path\":\"/Users/jeremyparker/.claude/projects/-Users-jeremyparker-infinite-continue-stop-hook/62731343-0193-46cf-8c05-fcf5e9fba73f.jsonl\",\"cwd\":\"/Users/jeremyparker/infinite-continue-stop-hook\",\"permission_mode\":\"acceptEdits\",\"hook_event_name\":\"Stop\",\"stop_hook_active\":false}\""
+    },
+    {
+      "timestamp": "2025-09-26T16:09:58.803Z",
+      "message": "Input data length: 339"
+    },
+    {
+      "timestamp": "2025-09-26T16:09:58.803Z",
+      "message": "Received input from Claude Code"
+    },
+    {
+      "timestamp": "2025-09-26T16:09:58.803Z",
+      "message": "Received Stop event from Claude Code"
+    },
+    {
+      "timestamp": "2025-09-26T16:09:58.806Z",
+      "message": "Found 3 total agents in TODO.json"
+    },
+    {
+      "timestamp": "2025-09-26T16:09:58.806Z",
+      "message": "🧹 Starting multi-project stale agent cleanup across 2 projects..."
+    },
+    {
+      "timestamp": "2025-09-26T16:09:58.806Z",
+      "message": "No FEATURES.json found in /Users/jeremyparker/Desktop/Claude Coding Projects/AIgent/bytebot - skipping"
+    },
+    {
+      "timestamp": "2025-09-26T16:09:58.807Z",
+      "message": "Removed stale agent from /Users/jeremyparker/infinite-continue-stop-hook: claude-sre-enhancement"
+    },
+    {
+      "timestamp": "2025-09-26T16:09:58.807Z",
+      "message": "Updated /Users/jeremyparker/infinite-continue-stop-hook/FEATURES.json with cleanup results"
+    },
+    {
+      "timestamp": "2025-09-26T16:09:58.807Z",
+      "message": "🧹 Multi-project cleanup complete: 1 agents removed, 0 tasks unassigned, 0 orphaned tasks reset"
+    },
+    {
+      "timestamp": "2025-09-26T16:09:58.807Z",
+      "message": "✅ Multi-project cleanup: 1 stale agents removed, 0 tasks unassigned, 0 orphaned tasks reset across 2 projects"
+    },
+    {
+      "timestamp": "2025-09-26T16:09:58.808Z",
+      "message": "Agent claude-sre-enhancement: heartbeat=2025-09-26T15:34:49.894Z, timeSince=2109s, isActive=false"
+    },
+    {
+      "timestamp": "2025-09-26T16:09:58.808Z",
+      "message": "Agent claude-test-gate-enhancement: heartbeat=2025-09-26T15:56:35.536Z, timeSince=803s, isActive=true"
+    },
+    {
+      "timestamp": "2025-09-26T16:09:58.808Z",
+      "message": "Agent claude-continuation-agent: heartbeat=2025-09-26T15:59:37.607Z, timeSince=621s, isActive=true"
+    },
+    {
+      "timestamp": "2025-09-26T16:09:58.808Z",
+      "message": "Removed stale agent: claude-sre-enhancement"
+    },
+    {
+      "timestamp": "2025-09-26T16:09:58.808Z",
+      "message": "ERROR in stop-hook-main: Validation failed: Task task_1758761214871_a75897353ea4: Required field 'category' is missing, Task task_1758761214872_65f5a2101cbd: Required field 'category' is missing, Task task_1758761214872_280bf5b461fb: Required field 'category' is missing, Task task_1758761214872_65aafaa7df9a: Required field 'category' is missing, Task task_1758761214872_2f5f3339ce54: Required field 'category' is missing, Task task_1758761214872_8dca0fed5c3d: Required field 'category' is missing, Task task_1758761214872_46f209689151: Required field 'category' is missing, Task task_1758761214872_9e1868e3abdf: Required field 'category' is missing, Task task_1758761214872_f3f02b3b1f59: Required field 'category' is missing"
+    },
+    {
+      "timestamp": "2025-09-26T16:09:58.808Z",
+      "message": "Exiting with code 2: Error handled - continuing infinite mode: Validation failed: Task task_1758761214871_a75897353ea4: Required field 'category' is missing, Task task_1758761214872_65f5a2101cbd: Required field 'category' is missing, Task task_1758761214872_280bf5b461fb: Required field 'category' is missing, Task task_1758761214872_65aafaa7df9a: Required field 'category' is missing, Task task_1758761214872_2f5f3339ce54: Required field 'category' is missing, Task task_1758761214872_8dca0fed5c3d: Required field 'category' is missing, Task task_1758761214872_46f209689151: Required field 'category' is missing, Task task_1758761214872_9e1868e3abdf: Required field 'category' is missing, Task task_1758761214872_f3f02b3b1f59: Required field 'category' is missing"
+    }
+  ],
+  "output": {
+    "exitCode": 2,
+    "exitReason": "Error handled - continuing infinite mode: Validation failed: Task task_1758761214871_a75897353ea4: Required field 'category' is missing, Task task_1758761214872_65f5a2101cbd: Required field 'category' is missing, Task task_1758761214872_280bf5b461fb: Required field 'category' is missing, Task task_1758761214872_65aafaa7df9a: Required field 'category' is missing, Task task_1758761214872_2f5f3339ce54: Required field 'category' is missing, Task task_1758761214872_8dca0fed5c3d: Required field 'category' is missing, Task task_1758761214872_46f209689151: Required field 'category' is missing, Task task_1758761214872_9e1868e3abdf: Required field 'category' is missing, Task task_1758761214872_f3f02b3b1f59: Required field 'category' is missing"
+  },
+  "errors": [
+    {
+      "timestamp": "2025-09-26T16:09:58.808Z",
+      "context": "stop-hook-main",
+      "message": "Validation failed: Task task_1758761214871_a75897353ea4: Required field 'category' is missing, Task task_1758761214872_65f5a2101cbd: Required field 'category' is missing, Task task_1758761214872_280bf5b461fb: Required field 'category' is missing, Task task_1758761214872_65aafaa7df9a: Required field 'category' is missing, Task task_1758761214872_2f5f3339ce54: Required field 'category' is missing, Task task_1758761214872_8dca0fed5c3d: Required field 'category' is missing, Task task_1758761214872_46f209689151: Required field 'category' is missing, Task task_1758761214872_9e1868e3abdf: Required field 'category' is missing, Task task_1758761214872_f3f02b3b1f59: Required field 'category' is missing",
+      "stack": "Error: Validation failed: Task task_1758761214871_a75897353ea4: Required field 'category' is missing, Task task_1758761214872_65f5a2101cbd: Required field 'category' is missing, Task task_1758761214872_280bf5b461fb: Required field 'category' is missing, Task task_1758761214872_65aafaa7df9a: Required field 'category' is missing, Task task_1758761214872_2f5f3339ce54: Required field 'category' is missing, Task task_1758761214872_8dca0fed5c3d: Required field 'category' is missing, Task task_1758761214872_46f209689151: Required field 'category' is missing, Task task_1758761214872_9e1868e3abdf: Required field 'category' is missing, Task task_1758761214872_f3f02b3b1f59: Required field 'category' is missing\n    at TaskManager.writeTodo (/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager.js:211:17)\n    at Socket.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js:923:25)",
+      "name": "Error"
+    }
+  ]
+}

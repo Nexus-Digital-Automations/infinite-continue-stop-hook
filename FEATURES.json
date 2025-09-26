@@ -268,12 +268,12 @@
     ],
     "initialization_stats": {
       "total_initializations": 6,
-      "total_reinitializations": 18,
+      "total_reinitializations": 23,
       "current_day": "2025-09-26",
       "time_buckets": {
         "10:00-14:59": {
           "init": 0,
-          "reinit": 3
+          "reinit": 8
         },
         "15:00-19:59": {
           "init": 0,
@@ -376,7 +376,7 @@
         }
       ],
       "last_reset": "2025-09-26T08:30:54.708Z",
-      "last_updated": "2025-09-26T15:59:37.609Z"
+      "last_updated": "2025-09-26T16:19:37.856Z"
     }
   },
   "workflow_config": {
@@ -619,13 +619,6 @@
   ],
   "completed_tasks": [],
   "agents": {
-    "claude-sre-enhancement": {
-      "lastHeartbeat": "2025-09-26T15:34:49.894Z",
-      "status": "active",
-      "reinitialized": "2025-09-26T15:34:49.894Z",
-      "sessionId": "7c35ceb39cc4b1f1",
-      "previousSessions": []
-    },
     "claude-test-gate-enhancement": {
       "lastHeartbeat": "2025-09-26T15:56:35.536Z",
       "status": "active",
@@ -638,6 +631,41 @@
       "status": "active",
       "reinitialized": "2025-09-26T15:59:37.607Z",
       "sessionId": "e59b090495d27c4a",
+      "previousSessions": []
+    },
+    "claude-main-agent": {
+      "lastHeartbeat": "2025-09-26T16:10:12.381Z",
+      "status": "active",
+      "reinitialized": "2025-09-26T16:10:12.381Z",
+      "sessionId": "9f307af3a473ddc6",
+      "previousSessions": []
+    },
+    "claude-concise-plan": {
+      "lastHeartbeat": "2025-09-26T16:13:28.285Z",
+      "status": "active",
+      "reinitialized": "2025-09-26T16:13:28.285Z",
+      "sessionId": "48264b883899b74d",
+      "previousSessions": []
+    },
+    "claude-concise-implementation": {
+      "lastHeartbeat": "2025-09-26T16:15:54.370Z",
+      "status": "active",
+      "reinitialized": "2025-09-26T16:15:54.370Z",
+      "sessionId": "5d7315a893d776f1",
+      "previousSessions": []
+    },
+    "claude-infinite-continue": {
+      "lastHeartbeat": "2025-09-26T16:17:17.437Z",
+      "status": "active",
+      "reinitialized": "2025-09-26T16:17:17.437Z",
+      "sessionId": "2809e4ca2e888aa6",
+      "previousSessions": []
+    },
+    "claude-restore-backup": {
+      "lastHeartbeat": "2025-09-26T16:19:37.848Z",
+      "status": "active",
+      "reinitialized": "2025-09-26T16:19:37.848Z",
+      "sessionId": "c8d0a2c8d5d0f942",
       "previousSessions": []
     }
   }
