@@ -569,7 +569,7 @@ class AutonomousTaskManagerAPI {
   async listFeatures(filter = {}) {
     try {
       // Ensure features file exists
-      await this._ensureTasksFile();
+      await this._ensureFeaturesFile();
 
       const features = await this._loadFeatures();
       let filteredFeatures = features.features;
@@ -2337,15 +2337,15 @@ class AutonomousTaskManagerAPI {
     }
 
     // Check required fields
-    for (const field of this.requiredFields) {
+    for (const field of this.requiredFeatureFields) {
       if (!featureData[field] || (typeof featureData[field] === 'string' && featureData[field].trim() === '')) {
         throw new Error(`Required field '${field}' is missing or empty`);
       }
     }
 
     // Validate category
-    if (!this.validCategories.includes(featureData.category)) {
-      throw new Error(`Invalid category '${featureData.category}'. Must be one of: ${this.validCategories.join(', ')}`);
+    if (!this.validFeatureCategories.includes(featureData.category)) {
+      throw new Error(`Invalid category '${featureData.category}'. Must be one of: ${this.validFeatureCategories.join(', ')}`);
     }
 
     // Validate title length
@@ -2401,13 +2401,32 @@ class AutonomousTaskManagerAPI {
     }
   }
 
-  // Legacy methods for backward compatibility during transition
+  /**
+   * Load features from FEATURES.json
+   */
   async _loadFeatures() {
-    return this._loadTasks();
+    try {
+      const data = await fs.readFile(this.featuresPath, 'utf8');
+      return JSON.parse(data);
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        // File doesn't exist, create it
+        await this._ensureFeaturesFile();
+        return this._loadFeatures();
+      }
+      throw new Error(`Failed to load features: ${error.message}`);
+    }
   }
 
-  async _saveFeatures(data) {
-    return this._saveTasks(data);
+  /**
+   * Save features to FEATURES.json
+   */
+  async _saveFeatures(features) {
+    try {
+      await fs.writeFile(this.featuresPath, JSON.stringify(features, null, 2));
+    } catch (error) {
+      throw new Error(`Failed to save features: ${error.message}`);
+    }
   }
 
   /**
@@ -2430,8 +2449,23 @@ class AutonomousTaskManagerAPI {
   }
 
   // Legacy method for backward compatibility during transition
+  /**
+   * Atomic operation: Load, modify, and save features with file locking
+   * @param {Function} modifier - Function that modifies the features object
+   * @returns {Promise<Object>} Result from the modifier function
+   */
   async _atomicFeatureOperation(modifier) {
-    return this._atomicTaskOperation(modifier);
+    const releaseLock = await fileLock.acquire(this.featuresPath);
+
+    try {
+      await this._ensureFeaturesFile();
+      const features = await this._loadFeatures();
+      const result = await modifier(features);
+      await this._saveFeatures(features);
+      return result;
+    } finally {
+      releaseLock();
+    }
   }
 
   getApiMethods() {

@@ -1,0 +1,163 @@
+{
+  "project": "utils",
+  "schema_version": "2.0.0",
+  "migrated_from": "new_installation",
+  "migration_date": "2025-09-26T21:19:59.336Z",
+  "tasks": [],
+  "completed_tasks": [],
+  "task_relationships": {},
+  "workflow_config": {
+    "require_approval": true,
+    "auto_reject_timeout_hours": 168,
+    "allowed_statuses": [
+      "suggested",
+      "approved",
+      "in-progress",
+      "completed",
+      "blocked",
+      "rejected"
+    ],
+    "allowed_task_types": [
+      "error",
+      "feature",
+      "test",
+      "audit"
+    ],
+    "required_fields": [
+      "title",
+      "description",
+      "business_value",
+      "category",
+      "type"
+    ],
+    "auto_generation_enabled": true,
+    "mandatory_test_gate": true,
+    "security_validation_required": true
+  },
+  "auto_generation_config": {
+    "test_task_template": {
+      "title_pattern": "Implement comprehensive tests for {feature_title}",
+      "description_pattern": "Create unit tests, integration tests, and E2E tests to achieve >{coverage}% coverage for {feature_title}. Must validate all functionality, edge cases, and error conditions.",
+      "priority": "high",
+      "required_capabilities": [
+        "testing"
+      ],
+      "validation_requirements": {
+        "test_coverage": true,
+        "linter_pass": true
+      }
+    },
+    "audit_task_template": {
+      "title_pattern": "Security and quality audit for {feature_title}",
+      "description_pattern": "Run semgrep security scan, dependency vulnerability check, code quality analysis, and compliance validation for {feature_title}. Zero tolerance for security vulnerabilities.",
+      "priority": "high",
+      "required_capabilities": [
+        "security",
+        "analysis"
+      ],
+      "validation_requirements": {
+        "security_scan": true,
+        "linter_pass": true,
+        "type_check": true
+      }
+    }
+  },
+  "priority_system": {
+    "order": [
+      "USER_REQUESTS",
+      "ERROR",
+      "AUDIT",
+      "FEATURE",
+      "TEST"
+    ],
+    "error_priorities": {
+      "critical": [
+        "build-breaking",
+        "security-vulnerability",
+        "production-down"
+      ],
+      "high": [
+        "linter-errors",
+        "type-errors",
+        "test-failures"
+      ],
+      "normal": [
+        "warnings",
+        "optimization-opportunities"
+      ],
+      "low": [
+        "documentation-improvements",
+        "code-style"
+      ]
+    }
+  },
+  "metadata": {
+    "version": "2.0.0",
+    "created": "2025-09-26T21:19:59.336Z",
+    "updated": "2025-09-26T21:19:59.336Z",
+    "total_tasks": 0,
+    "tasks_by_type": {
+      "error": 0,
+      "feature": 0,
+      "test": 0,
+      "audit": 0
+    },
+    "approval_history": [],
+    "initialization_stats": {
+      "total_initializations": 4,
+      "total_reinitializations": 0,
+      "current_day": "2025-09-26",
+      "time_buckets": {
+        "10:00-14:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "15:00-19:59": {
+          "init": 4,
+          "reinit": 0
+        },
+        "20:00-00:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "01:00-05:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "06:00-10:59": {
+          "init": 0,
+          "reinit": 0
+        }
+      },
+      "daily_history": [],
+      "last_reset": "2025-09-26T21:19:59.338Z",
+      "last_updated": "2025-09-26T21:20:29.492Z"
+    }
+  },
+  "agents": {
+    "test-agent-1758921599298-qrp26": {
+      "lastHeartbeat": "2025-09-26T21:19:59.337Z",
+      "status": "active",
+      "initialized": "2025-09-26T21:19:59.337Z",
+      "sessionId": "e9547d43312b051d"
+    },
+    "test-agent-1758921609327-ffr48": {
+      "lastHeartbeat": "2025-09-26T21:20:09.368Z",
+      "status": "active",
+      "initialized": "2025-09-26T21:20:09.368Z",
+      "sessionId": "66b4680e57a79f48"
+    },
+    "test-agent-1758921619382-3wn5sk": {
+      "lastHeartbeat": "2025-09-26T21:20:19.418Z",
+      "status": "active",
+      "initialized": "2025-09-26T21:20:19.418Z",
+      "sessionId": "6d7a0e49e7cf85c8"
+    },
+    "test-agent-1758921629456-x6gohh": {
+      "lastHeartbeat": "2025-09-26T21:20:29.490Z",
+      "status": "active",
+      "initialized": "2025-09-26T21:20:29.490Z",
+      "sessionId": "0a8cd4f17e7d2434"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "can_deploy": false,
+  "quality_gate_passed": false,
+  "timestamp": "2025-09-26T21:17:29.972Z",
+  "blocking_issues": [
+    {
+      "type": "test_failures",
+      "severity": "critical",
+      "message": "0 test(s) failed",
+      "action": "Fix failing tests before deployment"
+    },
+    {
+      "type": "low_coverage",
+      "severity": "warning",
+      "message": "Code coverage below acceptable threshold",
+      "action": "Add more tests to improve coverage"
+    },
+    {
+      "type": "performance",
+      "severity": "warning",
+      "message": "Test execution time is slow",
+      "action": "Optimize slow tests or improve test parallelization"
+    }
+  ]
+}

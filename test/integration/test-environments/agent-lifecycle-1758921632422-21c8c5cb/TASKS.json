@@ -1,0 +1,145 @@
+{
+  "project": "agent-lifecycle-1758921632422-21c8c5cb",
+  "schema_version": "2.0.0",
+  "migrated_from": "new_installation",
+  "migration_date": "2025-09-26T21:20:32.467Z",
+  "tasks": [],
+  "completed_tasks": [],
+  "task_relationships": {},
+  "workflow_config": {
+    "require_approval": true,
+    "auto_reject_timeout_hours": 168,
+    "allowed_statuses": [
+      "suggested",
+      "approved",
+      "in-progress",
+      "completed",
+      "blocked",
+      "rejected"
+    ],
+    "allowed_task_types": [
+      "error",
+      "feature",
+      "test",
+      "audit"
+    ],
+    "required_fields": [
+      "title",
+      "description",
+      "business_value",
+      "category",
+      "type"
+    ],
+    "auto_generation_enabled": true,
+    "mandatory_test_gate": true,
+    "security_validation_required": true
+  },
+  "auto_generation_config": {
+    "test_task_template": {
+      "title_pattern": "Implement comprehensive tests for {feature_title}",
+      "description_pattern": "Create unit tests, integration tests, and E2E tests to achieve >{coverage}% coverage for {feature_title}. Must validate all functionality, edge cases, and error conditions.",
+      "priority": "high",
+      "required_capabilities": [
+        "testing"
+      ],
+      "validation_requirements": {
+        "test_coverage": true,
+        "linter_pass": true
+      }
+    },
+    "audit_task_template": {
+      "title_pattern": "Security and quality audit for {feature_title}",
+      "description_pattern": "Run semgrep security scan, dependency vulnerability check, code quality analysis, and compliance validation for {feature_title}. Zero tolerance for security vulnerabilities.",
+      "priority": "high",
+      "required_capabilities": [
+        "security",
+        "analysis"
+      ],
+      "validation_requirements": {
+        "security_scan": true,
+        "linter_pass": true,
+        "type_check": true
+      }
+    }
+  },
+  "priority_system": {
+    "order": [
+      "USER_REQUESTS",
+      "ERROR",
+      "AUDIT",
+      "FEATURE",
+      "TEST"
+    ],
+    "error_priorities": {
+      "critical": [
+        "build-breaking",
+        "security-vulnerability",
+        "production-down"
+      ],
+      "high": [
+        "linter-errors",
+        "type-errors",
+        "test-failures"
+      ],
+      "normal": [
+        "warnings",
+        "optimization-opportunities"
+      ],
+      "low": [
+        "documentation-improvements",
+        "code-style"
+      ]
+    }
+  },
+  "metadata": {
+    "version": "2.0.0",
+    "created": "2025-09-26T21:20:32.467Z",
+    "updated": "2025-09-26T21:20:32.467Z",
+    "total_tasks": 0,
+    "tasks_by_type": {
+      "error": 0,
+      "feature": 0,
+      "test": 0,
+      "audit": 0
+    },
+    "approval_history": [],
+    "initialization_stats": {
+      "total_initializations": 1,
+      "total_reinitializations": 0,
+      "current_day": "2025-09-26",
+      "time_buckets": {
+        "10:00-14:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "15:00-19:59": {
+          "init": 1,
+          "reinit": 0
+        },
+        "20:00-00:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "01:00-05:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "06:00-10:59": {
+          "init": 0,
+          "reinit": 0
+        }
+      },
+      "daily_history": [],
+      "last_reset": "2025-09-26T21:20:32.468Z",
+      "last_updated": "2025-09-26T21:20:32.468Z"
+    }
+  },
+  "agents": {
+    "concurrent-reinit-1": {
+      "lastHeartbeat": "2025-09-26T21:20:32.468Z",
+      "status": "active",
+      "initialized": "2025-09-26T21:20:32.468Z",
+      "sessionId": "ca16cc4834d9fa11"
+    }
+  }
+}
