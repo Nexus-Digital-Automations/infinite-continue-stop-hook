@@ -1,0 +1,33 @@
+{
+  "execution": {
+    "timestamp": "2025-09-25T17:39:58.020Z",
+    "projectRoot": "/Users/jeremyparker/infinite-continue-stop-hook",
+    "hookVersion": "1.0.0",
+    "nodeVersion": "v22.20.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "pid": 52019,
+    "cwd": "/Users/jeremyparker/infinite-continue-stop-hook",
+    "endTimestamp": "2025-09-25T17:39:58.020Z",
+    "durationMs": 0
+  },
+  "input": {},
+  "projectState": {},
+  "decisions": [],
+  "flow": [
+    {
+      "timestamp": "2025-09-25T17:39:58.020Z",
+      "message": "ERROR in autoSortTasksByPriority: Validation failed: Task error_1758821998018_jcg63hsvx: Required field 'category' is missing, Task error_1758821998018_chnqyg5xl: Required field 'category' is missing, Task test_1758821998018_p7kjdxnib: Required field 'category' is missing, Task test_1758821998019_qsmhoox0s: Required field 'category' is missing, Task test_1758821998019_95tb125nb: Required field 'category' is missing, Task test_1758821998019_njm41ua75: Required field 'category' is missing, Task test_1758821998019_qri4g63uv: Required field 'category' is missing, Task test_1758821998019_msmgh4224: Required field 'category' is missing, Task test_1758821998019_rpsv323qs: Required field 'category' is missing"
+    }
+  ],
+  "output": {},
+  "errors": [
+    {
+      "timestamp": "2025-09-25T17:39:58.020Z",
+      "context": "autoSortTasksByPriority",
+      "message": "Validation failed: Task error_1758821998018_jcg63hsvx: Required field 'category' is missing, Task error_1758821998018_chnqyg5xl: Required field 'category' is missing, Task test_1758821998018_p7kjdxnib: Required field 'category' is missing, Task test_1758821998019_qsmhoox0s: Required field 'category' is missing, Task test_1758821998019_95tb125nb: Required field 'category' is missing, Task test_1758821998019_njm41ua75: Required field 'category' is missing, Task test_1758821998019_qri4g63uv: Required field 'category' is missing, Task test_1758821998019_msmgh4224: Required field 'category' is missing, Task test_1758821998019_rpsv323qs: Required field 'category' is missing",
+      "stack": "Error: Validation failed: Task error_1758821998018_jcg63hsvx: Required field 'category' is missing, Task error_1758821998018_chnqyg5xl: Required field 'category' is missing, Task test_1758821998018_p7kjdxnib: Required field 'category' is missing, Task test_1758821998019_qsmhoox0s: Required field 'category' is missing, Task test_1758821998019_95tb125nb: Required field 'category' is missing, Task test_1758821998019_njm41ua75: Required field 'category' is missing, Task test_1758821998019_qri4g63uv: Required field 'category' is missing, Task test_1758821998019_msmgh4224: Required field 'category' is missing, Task test_1758821998019_rpsv323qs: Required field 'category' is missing\n    at TaskManager.writeTodo (/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager.js:211:17)\n    at autoSortTasksByPriority (/Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js:464:25)\n    at async Socket.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js:946:26)",
+      "name": "Error"
+    }
+  ]
+}

@@ -216,43 +216,119 @@
       "updated_at": "2025-09-23T18:15:07.592Z",
       "suggested_by": "system",
       "metadata": {}
+    },
+    {
+      "id": "feature_1758821576415_79d0a36787a8",
+      "title": "Test Feature with Mocks",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-25T17:32:56.415Z",
+      "updated_at": "2025-09-25T17:32:56.416Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758821586478_db5a0568da17",
+      "title": "Invalid Feature",
+      "description": "This is a test feature for automated testing",
+      "business_value": "Validates testing infrastructure",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-25T17:33:06.478Z",
+      "updated_at": "2025-09-25T17:33:06.479Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758821596594_10280fb288df",
+      "title": "Test Feature 1758821596508",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-25T17:33:16.595Z",
+      "updated_at": "2025-09-25T17:33:16.597Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758821596665_d0b1a3c8fbe5",
+      "title": "Test Feature 1758821596614",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "bug-fix",
+      "status": "suggested",
+      "created_at": "2025-09-25T17:33:16.665Z",
+      "updated_at": "2025-09-25T17:33:16.666Z",
+      "suggested_by": "system",
+      "metadata": {}
     }
   ],
   "metadata": {
     "version": "1.0.0",
     "created": "2025-09-23T15:10:35.544Z",
-    "updated": "2025-09-23T18:15:07.592Z",
-    "total_features": 18,
+    "updated": "2025-09-25T17:33:16.666Z",
+    "total_features": 22,
     "approval_history": [],
     "initialization_stats": {
-      "total_initializations": 27,
+      "total_initializations": 32,
       "total_reinitializations": 0,
-      "current_day": "2025-09-23",
+      "current_day": "2025-09-25",
       "time_buckets": {
-        "07:00-11:59": {
+        "09:00-13:59": {
+          "init": 5,
+          "reinit": 0
+        },
+        "14:00-18:59": {
           "init": 0,
           "reinit": 0
         },
-        "12:00-16:59": {
-          "init": 12,
-          "reinit": 0
-        },
-        "17:00-21:59": {
+        "19:00-23:59": {
           "init": 0,
           "reinit": 0
         },
-        "22:00-02:59": {
+        "00:00-04:59": {
           "init": 0,
           "reinit": 0
         },
-        "03:00-07:59": {
+        "05:00-09:59": {
           "init": 0,
           "reinit": 0
         }
       },
-      "daily_history": [],
-      "last_reset": "2025-09-23T18:07:50.536Z",
-      "last_updated": "2025-09-23T18:15:07.631Z"
+      "daily_history": [
+        {
+          "date": "2025-09-23",
+          "total_init": 12,
+          "total_reinit": 0,
+          "buckets": {
+            "07:00-11:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "12:00-16:59": {
+              "init": 12,
+              "reinit": 0
+            },
+            "17:00-21:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "22:00-02:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "03:00-07:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        }
+      ],
+      "last_reset": "2025-09-25T17:32:36.413Z",
+      "last_updated": "2025-09-25T17:33:17.974Z"
     }
   },
   "workflow_config": {
@@ -433,6 +509,36 @@
       "status": "active",
       "initialized": "2025-09-23T18:15:07.629Z",
       "sessionId": "7d27710e22059d10"
+    },
+    "test-agent-1758821556312-19ytq": {
+      "lastHeartbeat": "2025-09-25T17:32:36.401Z",
+      "status": "active",
+      "initialized": "2025-09-25T17:32:36.401Z",
+      "sessionId": "ea06787358cf35e4"
+    },
+    "test-agent-1758821566349-7r8udv": {
+      "lastHeartbeat": "2025-09-25T17:32:46.434Z",
+      "status": "active",
+      "initialized": "2025-09-25T17:32:46.434Z",
+      "sessionId": "5ca1bf9139839d3b"
+    },
+    "test-agent-1758821576431-165hy": {
+      "lastHeartbeat": "2025-09-25T17:32:56.490Z",
+      "status": "active",
+      "initialized": "2025-09-25T17:32:56.490Z",
+      "sessionId": "72afc40f774eb7d6"
+    },
+    "test-agent-1758821586486-5osu2": {
+      "lastHeartbeat": "2025-09-25T17:33:06.523Z",
+      "status": "active",
+      "initialized": "2025-09-25T17:33:06.523Z",
+      "sessionId": "5b8144d1c4e197a0"
+    },
+    "test-agent-1758821597938-05vrh": {
+      "lastHeartbeat": "2025-09-25T17:33:17.973Z",
+      "status": "active",
+      "initialized": "2025-09-25T17:33:17.973Z",
+      "sessionId": "96174ccee5a2c83a"
     }
   }
 }
