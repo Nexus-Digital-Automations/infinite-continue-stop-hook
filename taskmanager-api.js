@@ -112,6 +112,7 @@ const PROJECT_ROOT =
   projectRootIndex !== -1 && projectRootIndex + 1 < args.length
     ? args[projectRootIndex + 1]
     : process.cwd();
+const TASKS_PATH = path.join(PROJECT_ROOT, 'TASKS.json');
 const FEATURES_PATH = path.join(PROJECT_ROOT, 'FEATURES.json');
 
 // Remove --project-root and its value from args for command parsing
@@ -124,11 +125,16 @@ const FEATURE_STATUSES = ['suggested', 'approved', 'rejected', 'implemented'];
 const FEATURE_CATEGORIES = ['enhancement', 'bug-fix', 'new-feature', 'performance', 'security', 'documentation'];
 const REQUIRED_FEATURE_FIELDS = ['title', 'description', 'business_value', 'category'];
 
-// Task management schemas
-const TASK_STATUSES = ['queued', 'assigned', 'in_progress', 'blocked', 'completed', 'failed', 'cancelled'];
+// Task validation schemas (unified system)
+const TASK_STATUSES = ['suggested', 'approved', 'in-progress', 'completed', 'blocked', 'rejected'];
+const TASK_TYPES = ['error', 'feature', 'test', 'audit'];
+const TASK_CATEGORIES = ['enhancement', 'bug-fix', 'new-feature', 'performance', 'security', 'documentation'];
 const TASK_PRIORITIES = ['critical', 'high', 'normal', 'low'];
-const TASK_TYPES = ['implementation', 'testing', 'documentation', 'validation', 'deployment', 'analysis'];
-const AGENT_CAPABILITIES = ['frontend', 'backend', 'testing', 'documentation', 'security', 'performance', 'analysis', 'validation'];
+const REQUIRED_TASK_FIELDS = ['title', 'description', 'business_value', 'category', 'type'];
+const AGENT_CAPABILITIES = ['frontend', 'backend', 'testing', 'documentation', 'security', 'performance', 'analysis', 'validation', 'general'];
+
+// Priority system order (CLAUDE.md compliant)
+const PRIORITY_ORDER = ['USER_REQUESTS', 'ERROR', 'AUDIT', 'FEATURE', 'TEST'];
 
 /**
  * AutonomousTaskManagerAPI - Advanced Feature & Task Management System
@@ -140,21 +146,25 @@ const AGENT_CAPABILITIES = ['frontend', 'backend', 'testing', 'documentation', '
 class AutonomousTaskManagerAPI {
   constructor() {
     // Core data persistence paths
+    this.tasksPath = TASKS_PATH;
     this.featuresPath = FEATURES_PATH;
 
     // Performance configuration - 10 second timeout for all operations
     this.timeout = 10000;
 
     // Feature validation configuration
-    this.validStatuses = FEATURE_STATUSES;
-    this.validCategories = FEATURE_CATEGORIES;
-    this.requiredFields = REQUIRED_FEATURE_FIELDS;
+    this.validFeatureStatuses = FEATURE_STATUSES;
+    this.validFeatureCategories = FEATURE_CATEGORIES;
+    this.requiredFeatureFields = REQUIRED_FEATURE_FIELDS;
 
-    // Task management configuration
-    this.validTaskStatuses = TASK_STATUSES;
-    this.validTaskPriorities = TASK_PRIORITIES;
-    this.validTaskTypes = TASK_TYPES;
+    // Task validation configuration (unified system)
+    this.validStatuses = TASK_STATUSES;
+    this.validTypes = TASK_TYPES;
+    this.validCategories = TASK_CATEGORIES;
+    this.validPriorities = TASK_PRIORITIES;
+    this.requiredFields = REQUIRED_TASK_FIELDS;
     this.validAgentCapabilities = AGENT_CAPABILITIES;
+    this.priorityOrder = PRIORITY_ORDER;
 
     // Task queue and agent management state
     this.taskQueue = [];
@@ -186,12 +196,96 @@ class AutonomousTaskManagerAPI {
         workflow_config: {
           require_approval: true,
           auto_reject_timeout_hours: 168,
-          allowed_statuses: this.validStatuses,
-          required_fields: this.requiredFields,
+          allowed_statuses: this.validFeatureStatuses,
+          required_fields: this.requiredFeatureFields,
         },
       };
 
       await fs.writeFile(this.featuresPath, JSON.stringify(initialStructure, null, 2));
+    }
+  }
+
+  /**
+   * Ensure TASKS.json exists with proper structure
+   */
+  async _ensureTasksFile() {
+    try {
+      await fs.access(this.tasksPath);
+    } catch {
+      // File doesn't exist, create it with new TASKS.json schema
+      const initialStructure = {
+        project: path.basename(PROJECT_ROOT),
+        schema_version: "2.0.0",
+        migrated_from: "new_installation",
+        migration_date: new Date().toISOString(),
+
+        tasks: [],
+        completed_tasks: [],
+        task_relationships: {},
+
+        workflow_config: {
+          require_approval: true,
+          auto_reject_timeout_hours: 168,
+          allowed_statuses: this.validStatuses,
+          allowed_task_types: this.validTypes,
+          required_fields: this.requiredFields,
+          auto_generation_enabled: true,
+          mandatory_test_gate: true,
+          security_validation_required: true
+        },
+
+        auto_generation_config: {
+          test_task_template: {
+            title_pattern: "Implement comprehensive tests for {feature_title}",
+            description_pattern: "Create unit tests, integration tests, and E2E tests to achieve >{coverage}% coverage for {feature_title}. Must validate all functionality, edge cases, and error conditions.",
+            priority: "high",
+            required_capabilities: ["testing"],
+            validation_requirements: {
+              test_coverage: true,
+              linter_pass: true
+            }
+          },
+          audit_task_template: {
+            title_pattern: "Security and quality audit for {feature_title}",
+            description_pattern: "Run semgrep security scan, dependency vulnerability check, code quality analysis, and compliance validation for {feature_title}. Zero tolerance for security vulnerabilities.",
+            priority: "high",
+            required_capabilities: ["security", "analysis"],
+            validation_requirements: {
+              security_scan: true,
+              linter_pass: true,
+              type_check: true
+            }
+          }
+        },
+
+        priority_system: {
+          order: this.priorityOrder,
+          error_priorities: {
+            critical: ["build-breaking", "security-vulnerability", "production-down"],
+            high: ["linter-errors", "type-errors", "test-failures"],
+            normal: ["warnings", "optimization-opportunities"],
+            low: ["documentation-improvements", "code-style"]
+          }
+        },
+
+        metadata: {
+          version: '2.0.0',
+          created: new Date().toISOString(),
+          updated: new Date().toISOString(),
+          total_tasks: 0,
+          tasks_by_type: {
+            error: 0,
+            feature: 0,
+            test: 0,
+            audit: 0
+          },
+          approval_history: []
+        },
+
+        agents: {}
+      };
+
+      await fs.writeFile(this.tasksPath, JSON.stringify(initialStructure, null, 2));
     }
   }
 
@@ -261,7 +355,7 @@ class AutonomousTaskManagerAPI {
   async approveFeature(featureId, approvalData = {}) {
     try {
       // Ensure features file exists
-      await this._ensureFeaturesFile();
+      await this._ensureTasksFile();
 
       const features = await this._loadFeatures();
       const feature = features.features.find(f => f.id === featureId);
@@ -325,7 +419,7 @@ class AutonomousTaskManagerAPI {
   async rejectFeature(featureId, rejectionData = {}) {
     try {
       // Ensure features file exists
-      await this._ensureFeaturesFile();
+      await this._ensureTasksFile();
 
       const features = await this._loadFeatures();
       const feature = features.features.find(f => f.id === featureId);
@@ -388,7 +482,7 @@ class AutonomousTaskManagerAPI {
    */
   async bulkApproveFeatures(featureIds, approvalData = {}) {
     try {
-      await this._ensureFeaturesFile();
+      await this._ensureTasksFile();
 
       const features = await this._loadFeatures();
       const results = [];
@@ -475,7 +569,7 @@ class AutonomousTaskManagerAPI {
   async listFeatures(filter = {}) {
     try {
       // Ensure features file exists
-      await this._ensureFeaturesFile();
+      await this._ensureTasksFile();
 
       const features = await this._loadFeatures();
       let filteredFeatures = features.features;
@@ -510,7 +604,7 @@ class AutonomousTaskManagerAPI {
   async getFeatureStats() {
     try {
       // Ensure features file exists
-      await this._ensureFeaturesFile();
+      await this._ensureTasksFile();
 
       const features = await this._loadFeatures();
       const stats = {
@@ -554,7 +648,7 @@ class AutonomousTaskManagerAPI {
   async getInitializationStats() {
     try {
       // Ensure features file exists
-      await this._ensureFeaturesFile();
+      await this._ensureTasksFile();
 
       const features = await this._loadFeatures();
       await this._ensureInitializationStatsStructure(features);
@@ -1269,7 +1363,7 @@ class AutonomousTaskManagerAPI {
    */
   async getTaskQueue(filters = {}) {
     try {
-      await this._ensureFeaturesFile();
+      await this._ensureTasksFile();
       const features = await this._loadFeatures();
 
       if (!features.tasks) {
@@ -2280,50 +2374,64 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
-   * Load features from FEATURES.json
+   * Load tasks from TASKS.json
    */
-  async _loadFeatures() {
+  async _loadTasks() {
     try {
-      const data = await fs.readFile(this.featuresPath, 'utf8');
+      const data = await fs.readFile(this.tasksPath, 'utf8');
       return JSON.parse(data);
     } catch (error) {
       if (error.code === 'ENOENT') {
         // File doesn't exist, create it
-        await this._ensureFeaturesFile();
-        return this._loadFeatures();
+        await this._ensureTasksFile();
+        return this._loadTasks();
       }
-      throw new Error(`Failed to load features: ${error.message}`);
+      throw new Error(`Failed to load tasks: ${error.message}`);
     }
   }
 
   /**
-   * Save features to FEATURES.json
+   * Save tasks to TASKS.json
    */
-  async _saveFeatures(features) {
+  async _saveTasks(tasks) {
     try {
-      await fs.writeFile(this.featuresPath, JSON.stringify(features, null, 2));
+      await fs.writeFile(this.tasksPath, JSON.stringify(tasks, null, 2));
     } catch (error) {
-      throw new Error(`Failed to save features: ${error.message}`);
+      throw new Error(`Failed to save tasks: ${error.message}`);
     }
   }
 
+  // Legacy methods for backward compatibility during transition
+  async _loadFeatures() {
+    return this._loadTasks();
+  }
+
+  async _saveFeatures(data) {
+    return this._saveTasks(data);
+  }
+
   /**
-   * Atomic operation: Load, modify, and save features with file locking
-   * @param {Function} modifier - Function that modifies the features object
+   * Atomic operation: Load, modify, and save tasks with file locking
+   * @param {Function} modifier - Function that modifies the tasks object
    * @returns {Promise<Object>} Result from the modifier function
    */
-  async _atomicFeatureOperation(modifier) {
-    const releaseLock = await fileLock.acquire(this.featuresPath);
+  async _atomicTaskOperation(modifier) {
+    const releaseLock = await fileLock.acquire(this.tasksPath);
 
     try {
-      await this._ensureFeaturesFile();
-      const features = await this._loadFeatures();
-      const result = await modifier(features);
-      await this._saveFeatures(features);
+      await this._ensureTasksFile();
+      const tasks = await this._loadTasks();
+      const result = await modifier(tasks);
+      await this._saveTasks(tasks);
       return result;
     } finally {
       releaseLock();
     }
+  }
+
+  // Legacy method for backward compatibility during transition
+  async _atomicFeatureOperation(modifier) {
+    return this._atomicTaskOperation(modifier);
   }
 
   getApiMethods() {
