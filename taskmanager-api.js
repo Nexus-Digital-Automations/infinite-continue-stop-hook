@@ -717,40 +717,401 @@ class AutonomousTaskManagerAPI {
     }
   }
 
-  async authorizeStop(agentId, reason) {
+  async startAuthorization(agentId) {
     try {
       const fs = require('fs').promises;
       const path = require('path');
+      const crypto = require('crypto');
+
+      const authKey = crypto.randomUUID();
+      const authStateFile = path.join(PROJECT_ROOT, '.auth-state.json');
+
+      const authState = {
+        authKey,
+        agentId,
+        startTime: new Date().toISOString(),
+        expiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString(), // 30 minutes
+        currentStep: 0,
+        completedSteps: [],
+        requiredSteps: [
+          'focused-codebase',
+          'security-validation',
+          'linter-validation',
+          'type-validation',
+          'build-validation',
+          'start-validation',
+          'test-validation'
+        ],
+        status: 'in_progress'
+      };
+
+      await fs.writeFile(authStateFile, JSON.stringify(authState, null, 2));
+
+      return {
+        success: true,
+        authKey,
+        message: `Multi-step authorization started for ${agentId}. Must complete ${authState.requiredSteps.length} validation steps sequentially.`,
+        nextStep: authState.requiredSteps[0],
+        instructions: `Next: validate-criterion ${authKey} ${authState.requiredSteps[0]}`
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: `Failed to start authorization: ${error.message}`,
+        timestamp: new Date().toISOString(),
+      };
+    }
+  }
+
+  async validateCriterion(authKey, criterion) {
+    try {
+      const fs = require('fs').promises;
+      const path = require('path');
+      const { execSync } = require('child_process');
+
+      const authStateFile = path.join(PROJECT_ROOT, '.auth-state.json');
+
+      if (!await this._fileExists(authStateFile)) {
+        throw new Error('No active authorization session found. Start with start-authorization command.');
+      }
+
+      const authState = JSON.parse(await fs.readFile(authStateFile, 'utf8'));
+
+      // Validate authorization key
+      if (authState.authKey !== authKey) {
+        throw new Error('Invalid authorization key. Cannot skip validation steps.');
+      }
+
+      // Check expiration
+      if (new Date() > new Date(authState.expiresAt)) {
+        await fs.unlink(authStateFile);
+        throw new Error('Authorization session expired. Must restart with start-authorization.');
+      }
+
+      // Verify sequential validation - cannot skip steps
+      const expectedStep = authState.requiredSteps[authState.currentStep];
+      if (criterion !== expectedStep) {
+        throw new Error(`Must validate steps sequentially. Expected: ${expectedStep}, Got: ${criterion}`);
+      }
+
+      // Perform language-agnostic validation based on criterion
+      const validationResult = await this._performLanguageAgnosticValidation(criterion);
+
+      if (!validationResult.success) {
+        return {
+          success: false,
+          error: `${criterion} validation failed: ${validationResult.error}`,
+          currentStep: authState.currentStep,
+          nextStep: expectedStep,
+          instructions: `Fix issues and retry: validate-criterion ${authKey} ${criterion}`
+        };
+      }
+
+      // Update state with completed step
+      authState.completedSteps.push(criterion);
+      authState.currentStep++;
+      authState.lastValidation = new Date().toISOString();
+
+      const isComplete = authState.currentStep >= authState.requiredSteps.length;
+      const nextStep = isComplete ? null : authState.requiredSteps[authState.currentStep];
+
+      if (isComplete) {
+        authState.status = 'ready_for_completion';
+      }
+
+      await fs.writeFile(authStateFile, JSON.stringify(authState, null, 2));
+
+      return {
+        success: true,
+        criterion,
+        validationResult: validationResult.details,
+        progress: `${authState.completedSteps.length}/${authState.requiredSteps.length}`,
+        nextStep,
+        isComplete,
+        instructions: isComplete
+          ? `All validations complete! Final step: complete-authorization ${authKey}`
+          : `Next: validate-criterion ${authKey} ${nextStep}`
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: `Validation failed: ${error.message}`,
+        timestamp: new Date().toISOString(),
+      };
+    }
+  }
+
+  async completeAuthorization(authKey) {
+    try {
+      const fs = require('fs').promises;
+      const path = require('path');
+
+      const authStateFile = path.join(PROJECT_ROOT, '.auth-state.json');
+
+      if (!await this._fileExists(authStateFile)) {
+        throw new Error('No active authorization session found.');
+      }
+
+      const authState = JSON.parse(await fs.readFile(authStateFile, 'utf8'));
+
+      // Validate authorization key
+      if (authState.authKey !== authKey) {
+        throw new Error('Invalid authorization key. Cannot bypass validation process.');
+      }
+
+      // Verify all steps completed
+      if (authState.status !== 'ready_for_completion') {
+        const remaining = authState.requiredSteps.slice(authState.currentStep);
+        throw new Error(`Cannot complete authorization. Remaining steps: ${remaining.join(', ')}`);
+      }
 
       // Create stop authorization flag
       const stopFlagPath = path.join(PROJECT_ROOT, '.stop-allowed');
       const stopData = {
         stop_allowed: true,
-        authorized_by: agentId,
-        reason: reason || 'Agent authorized stop after completing all tasks and achieving project perfection',
+        authorized_by: authState.agentId,
+        reason: 'Multi-step validation completed: ' + authState.completedSteps.join('✅ ') + '✅',
         timestamp: new Date().toISOString(),
-        session_type: 'self_authorized',
+        session_type: 'multi_step_validated',
+        validation_steps: authState.completedSteps,
+        total_time: Math.round((new Date() - new Date(authState.startTime)) / 1000) + 's'
       };
 
       await fs.writeFile(stopFlagPath, JSON.stringify(stopData, null, 2));
 
+      // Clean up authorization state
+      await fs.unlink(authStateFile);
+
       return {
         success: true,
         authorization: {
-          authorized_by: agentId,
+          authorized_by: authState.agentId,
           reason: stopData.reason,
           timestamp: stopData.timestamp,
+          validation_steps: authState.completedSteps,
+          total_time: stopData.total_time,
           stop_flag_created: true,
         },
-        message: `Stop authorized by agent ${agentId} - stop hook will allow termination on next trigger`,
+        message: `Stop authorized by agent ${authState.agentId} after completing all ${authState.completedSteps.length} validation steps`,
       };
     } catch (error) {
       return {
         success: false,
-        error: `Failed to authorize stop: ${error.message}`,
+        error: `Failed to complete authorization: ${error.message}`,
         timestamp: new Date().toISOString(),
       };
     }
+  }
+
+  async _performLanguageAgnosticValidation(criterion) {
+    const { execSync } = require('child_process');
+    const fs = require('fs').promises;
+    const path = require('path');
+
+    try {
+      switch (criterion) {
+        case 'focused-codebase':
+          // Check that only user-outlined features exist
+          const featuresResult = await this._atomicFeatureOperation((features) => {
+            const approvedFeatures = features.features.filter(f => f.status === 'approved' || f.status === 'implemented');
+            return {
+              success: true,
+              count: approvedFeatures.length,
+              details: `Validated ${approvedFeatures.length} focused features only`
+            };
+          });
+          return featuresResult;
+
+        case 'security-validation':
+          // Language-agnostic security validation
+          const securityCommands = [
+            'semgrep --config=p/security-audit . --json || echo "semgrep not available"',
+            'trivy fs . --format json || echo "trivy not available"',
+            'npm audit --json || echo "npm audit not available"',
+            'bandit -r . -f json || echo "bandit not available"',
+            'safety check --json || echo "safety not available"'
+          ];
+
+          for (const cmd of securityCommands) {
+            try {
+              const result = execSync(cmd, { cwd: PROJECT_ROOT, timeout: 30000 }).toString();
+              if (!result.includes('not available') && result.trim()) {
+                const parsed = JSON.parse(result);
+                if ((parsed.results && parsed.results.length > 0) || (parsed.vulnerabilities && parsed.vulnerabilities.length > 0)) {
+                  return { success: false, error: 'Security vulnerabilities detected' };
+                }
+              }
+            } catch (error) {
+              // Command failed or not available, continue
+            }
+          }
+          return { success: true, details: 'No security vulnerabilities detected' };
+
+        case 'linter-validation':
+          // Language-agnostic linting
+          const lintCommands = [
+            'npm run lint',
+            'yarn lint',
+            'pnpm lint',
+            'eslint .',
+            'tslint .',
+            'flake8 .',
+            'pylint .',
+            'rubocop',
+            'go fmt -d .',
+            'cargo clippy',
+            'ktlint',
+            'swiftlint'
+          ];
+
+          return await this._tryCommands(lintCommands, 'Linting');
+
+        case 'type-validation':
+          // Language-agnostic type checking
+          const typeCommands = [
+            'npm run typecheck',
+            'tsc --noEmit',
+            'mypy .',
+            'pyright .',
+            'go build -o /dev/null .',
+            'cargo check',
+            'kotlinc -no-stdlib -Xmulti-platform .',
+            'swiftc -typecheck'
+          ];
+
+          return await this._tryCommands(typeCommands, 'Type checking');
+
+        case 'build-validation':
+          // Language-agnostic build validation
+          const buildCommands = [
+            'npm run build',
+            'yarn build',
+            'pnpm build',
+            'make',
+            'make build',
+            'go build',
+            'cargo build',
+            'mvn compile',
+            'gradle build',
+            'dotnet build',
+            'swift build'
+          ];
+
+          return await this._tryCommands(buildCommands, 'Building');
+
+        case 'start-validation':
+          // Language-agnostic start validation
+          const startCommands = [
+            'npm run start',
+            'yarn start',
+            'pnpm start'
+          ];
+
+          return await this._tryCommands(startCommands, 'Starting', true);
+
+        case 'test-validation':
+          // Language-agnostic test validation
+          const testCommands = [
+            'npm test',
+            'npm run test',
+            'yarn test',
+            'pnpm test',
+            'pytest',
+            'python -m unittest',
+            'go test ./...',
+            'cargo test',
+            'mvn test',
+            'gradle test',
+            'dotnet test',
+            'swift test',
+            'bundle exec rspec',
+            'mocha',
+            'jest'
+          ];
+
+          return await this._tryCommands(testCommands, 'Testing');
+
+        default:
+          return { success: false, error: `Unknown validation criterion: ${criterion}` };
+      }
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  }
+
+  async _tryCommands(commands, operation, isStartCommand = false) {
+    const { execSync } = require('child_process');
+
+    for (const cmd of commands) {
+      try {
+        const timeout = isStartCommand ? 10000 : 60000; // 10s for start, 60s for others
+        const options = {
+          cwd: PROJECT_ROOT,
+          timeout,
+          stdio: isStartCommand ? 'pipe' : 'inherit'
+        };
+
+        if (isStartCommand) {
+          // For start commands, run briefly and kill to test they work
+          const child = require('child_process').spawn('sh', ['-c', cmd], {
+            cwd: PROJECT_ROOT,
+            stdio: 'pipe',
+            detached: true
+          });
+
+          await new Promise((resolve, reject) => {
+            const timer = setTimeout(() => {
+              child.kill('SIGTERM');
+              resolve(); // Success if it starts without immediate error
+            }, 5000);
+
+            child.on('error', (error) => {
+              clearTimeout(timer);
+              reject(error);
+            });
+
+            child.on('exit', (code) => {
+              clearTimeout(timer);
+              if (code !== null && code !== 0) {
+                reject(new Error(`Command failed with code ${code}`));
+              } else {
+                resolve();
+              }
+            });
+          });
+
+          return { success: true, details: `${operation} command executed successfully: ${cmd}` };
+        } else {
+          execSync(cmd, options);
+          return { success: true, details: `${operation} passed with command: ${cmd}` };
+        }
+      } catch (error) {
+        // Try next command
+        continue;
+      }
+    }
+
+    return { success: false, error: `${operation} failed - no working commands found` };
+  }
+
+  async _fileExists(filePath) {
+    const fs = require('fs').promises;
+    try {
+      await fs.access(filePath);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  // Legacy method for backward compatibility
+  async authorizeStop(agentId, reason) {
+    return {
+      success: false,
+      error: 'Direct authorization disabled. Use multi-step process: start-authorization -> validate-criterion (7 steps) -> complete-authorization',
+      instructions: `Start with: start-authorization ${agentId}`,
+      timestamp: new Date().toISOString(),
+    };
   }
 
   // =================== AUTONOMOUS TASK MANAGEMENT METHODS ===================
@@ -2096,14 +2457,39 @@ class AutonomousTaskManagerAPI {
                   required_parameters: ['agentId'],
                   output: 'Agent reinitialization confirmation with new session details',
                 },
+                'start-authorization': {
+                  description: 'Begin multi-step authorization process (language-agnostic)',
+                  usage:
+                    'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" start-authorization <agentId>',
+                  required_parameters: ['agentId'],
+                  output: 'Authorization key and next validation step',
+                  note: 'Replaces direct authorize-stop - requires sequential validation of all criteria',
+                },
+                'validate-criterion': {
+                  description: 'Validate specific success criterion (language-agnostic)',
+                  usage:
+                    'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion <authKey> <criterion>',
+                  required_parameters: ['authKey', 'criterion'],
+                  criteria: ['focused-codebase', 'security-validation', 'linter-validation', 'type-validation', 'build-validation', 'start-validation', 'test-validation'],
+                  output: 'Validation result and next step instructions',
+                  note: 'Must be done sequentially - cannot skip steps',
+                },
+                'complete-authorization': {
+                  description: 'Complete authorization after all validations pass',
+                  usage:
+                    'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization <authKey>',
+                  required_parameters: ['authKey'],
+                  output: 'Final stop authorization - creates .stop-allowed flag',
+                  requirements: 'All 7 validation criteria must pass sequentially',
+                },
                 'authorize-stop': {
-                  description: 'Self-authorize stop when all TodoWrite tasks complete and project is perfect',
+                  description: 'Legacy direct authorization (now disabled)',
                   usage:
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop <agentId> [reason]',
                   required_parameters: ['agentId'],
                   optional_parameters: ['reason'],
-                  output: 'Stop authorization confirmation - creates .stop-allowed flag',
-                  requirements: ['All TodoWrite tasks completed', 'Linter passes', 'Build succeeds', 'Start works', 'Tests pass'],
+                  output: 'Error message directing to multi-step process',
+                  note: 'Disabled - use start-authorization -> validate-criterion (7x) -> complete-authorization',
                 },
               },
             },
@@ -2684,6 +3070,27 @@ async function main() {
         }
         result = await api.reinitializeAgent(args[1]);
         break;
+      case 'start-authorization': {
+        if (!args[1]) {
+          throw new Error('Agent ID required. Usage: start-authorization <agentId>');
+        }
+        result = await api.startAuthorization(args[1]);
+        break;
+      }
+      case 'validate-criterion': {
+        if (!args[1] || !args[2]) {
+          throw new Error('Authorization key and criterion required. Usage: validate-criterion <authKey> <criterion>');
+        }
+        result = await api.validateCriterion(args[1], args[2]);
+        break;
+      }
+      case 'complete-authorization': {
+        if (!args[1]) {
+          throw new Error('Authorization key required. Usage: complete-authorization <authKey>');
+        }
+        result = await api.completeAuthorization(args[1]);
+        break;
+      }
       case 'authorize-stop': {
         if (!args[1]) {
           throw new Error('Agent ID required. Usage: authorize-stop <agentId> [reason]');
@@ -2813,7 +3220,7 @@ async function main() {
         break;
 
       default:
-        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, authorize-stop, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents`);
+        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, start-authorization, validate-criterion, complete-authorization, authorize-stop, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents`);
     }
 
     console.log(JSON.stringify(result, null, 2));

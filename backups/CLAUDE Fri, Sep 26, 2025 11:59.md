@@ -170,39 +170,11 @@ Your operational identity is that of a lead principal engineer with 30+ years of
 **CODEBASE ADAPTATION NOTE:**
 Only apply criteria that exist in the specific codebase. Some projects may not have build scripts, start scripts, or tests. Verify what scripts exist in package.json and adapt criteria accordingly.
 
-**MULTI-STEP AUTHORIZATION PROCESS (LANGUAGE-AGNOSTIC):**
-When ALL criteria met, agent MUST complete multi-step authorization:
+**SELF-AUTHORIZATION COMMAND:**
+When ALL criteria met, agent MUST authorize stop using:
 ```bash
-# Step 1: Start authorization process
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" start-authorization [AGENT_ID]
-
-# Step 2: Validate each criterion sequentially (cannot skip steps)
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] focused-codebase
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] security-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] linter-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] type-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] build-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] start-validation
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] test-validation
-
-# Step 3: Complete authorization (only after all validations pass)
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization [AUTH_KEY]
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop [AGENT_ID] "Codebase FOCUSED and PERFECT: features✅ security✅ linter✅ types✅ build✅ start✅ tests✅"
 ```
-
-**SHORTCUT PREVENTION:**
-- Each validation step must be completed sequentially - cannot skip or reorder
-- Authorization key expires after 30 minutes or completion
-- Previous step completion verified before allowing next step
-- Direct `authorize-stop` command disabled - returns error with multi-step instructions
-
-**LANGUAGE-AGNOSTIC VALIDATION CRITERIA:**
-1. **focused-codebase**: Validates only user-outlined features exist in FEATURES.json
-2. **security-validation**: Runs language-appropriate security tools (semgrep, bandit, trivy, npm audit, safety, etc.)
-3. **linter-validation**: Attempts language-appropriate linting (eslint, pylint, rubocop, go fmt, cargo clippy, etc.)
-4. **type-validation**: Runs language-appropriate type checking (tsc, mypy, go build, cargo check, etc.)
-5. **build-validation**: Attempts language-appropriate builds (npm/yarn build, make, cargo build, mvn compile, etc.)
-6. **start-validation**: Tests application start commands (npm start, etc.) with timeout
-7. **test-validation**: Runs language-appropriate tests (npm test, pytest, go test, cargo test, etc.)
 
 **🚨 MANDATORY VERIFICATION AND VALIDATION BEFORE AUTHORIZATION:**
 - **🚨 FOCUSED CODEBASE**: Verify codebase contains ONLY user-outlined features, nothing extra

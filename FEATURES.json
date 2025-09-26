@@ -268,12 +268,12 @@
     ],
     "initialization_stats": {
       "total_initializations": 6,
-      "total_reinitializations": 23,
+      "total_reinitializations": 24,
       "current_day": "2025-09-26",
       "time_buckets": {
         "10:00-14:59": {
           "init": 0,
-          "reinit": 8
+          "reinit": 9
         },
         "15:00-19:59": {
           "init": 0,
@@ -376,7 +376,7 @@
         }
       ],
       "last_reset": "2025-09-26T08:30:54.708Z",
-      "last_updated": "2025-09-26T16:19:37.856Z"
+      "last_updated": "2025-09-26T16:58:15.113Z"
     }
   },
   "workflow_config": {
@@ -618,27 +618,5 @@
     }
   ],
   "completed_tasks": [],
-  "agents": {
-    "claude-concise-implementation": {
-      "lastHeartbeat": "2025-09-26T16:15:54.370Z",
-      "status": "active",
-      "reinitialized": "2025-09-26T16:15:54.370Z",
-      "sessionId": "5d7315a893d776f1",
-      "previousSessions": []
-    },
-    "claude-infinite-continue": {
-      "lastHeartbeat": "2025-09-26T16:17:17.437Z",
-      "status": "active",
-      "reinitialized": "2025-09-26T16:17:17.437Z",
-      "sessionId": "2809e4ca2e888aa6",
-      "previousSessions": []
-    },
-    "claude-restore-backup": {
-      "lastHeartbeat": "2025-09-26T16:19:37.848Z",
-      "status": "active",
-      "reinitialized": "2025-09-26T16:19:37.848Z",
-      "sessionId": "c8d0a2c8d5d0f942",
-      "previousSessions": []
-    }
-  }
+  "agents": {}
 }

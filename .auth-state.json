@@ -1,0 +1,21 @@
+{
+  "authKey": "282109f1-edb2-41a2-82ee-bc98ef0ad028",
+  "agentId": "test-agent-123",
+  "startTime": "2025-09-26T20:48:33.790Z",
+  "expiresAt": "2025-09-26T21:18:33.792Z",
+  "currentStep": 1,
+  "completedSteps": [
+    "focused-codebase"
+  ],
+  "requiredSteps": [
+    "focused-codebase",
+    "security-validation",
+    "linter-validation",
+    "type-validation",
+    "build-validation",
+    "start-validation",
+    "test-validation"
+  ],
+  "status": "in_progress",
+  "lastValidation": "2025-09-26T20:49:21.396Z"
+}
