@@ -52,6 +52,85 @@ function findClaudeProjectRoot(startDir = process.cwd()) {
 /**
  * Check if stop is allowed via endpoint trigger
  */
+/**
+ * Feature 1: Validation Progress Reporting
+ * Enhanced stop authorization checking with comprehensive validation progress reporting
+ * Provides real-time visibility into validation progress, completion percentage, and detailed status
+ */
+function generateValidationProgressReport(flagData, logger) {
+  const progressReport = {
+    totalValidations: 7,
+    completedValidations: 0,
+    failedValidations: 0,
+    validationDetails: [],
+    overallProgress: 0,
+    estimatedTimeRemaining: 0,
+    lastValidationTime: new Date().toISOString()
+  };
+
+  // Standard validation criteria with progress tracking
+  const validationCriteria = [
+    'focused-codebase',
+    'security-validation',
+    'linter-validation',
+    'type-validation',
+    'build-validation',
+    'start-validation',
+    'test-validation'
+  ];
+
+  // Process validation results from flag data
+  if (flagData.validation_results) {
+    for (const criteria of validationCriteria) {
+      const result = flagData.validation_results[criteria];
+      if (result) {
+        progressReport.validationDetails.push({
+          criterion: criteria,
+          status: result.status || 'pending',
+          duration: result.duration || 0,
+          message: result.message || 'No details available',
+          timestamp: result.timestamp || new Date().toISOString(),
+          progress: result.status === 'completed' ? 100 : result.status === 'failed' ? 0 : 50
+        });
+
+        if (result.status === 'completed') {
+          progressReport.completedValidations++;
+        } else if (result.status === 'failed') {
+          progressReport.failedValidations++;
+        }
+      } else {
+        progressReport.validationDetails.push({
+          criterion: criteria,
+          status: 'pending',
+          duration: 0,
+          message: 'Validation not yet started',
+          timestamp: new Date().toISOString(),
+          progress: 0
+        });
+      }
+    }
+  }
+
+  // Calculate overall progress percentage
+  progressReport.overallProgress = Math.round((progressReport.completedValidations / progressReport.totalValidations) * 100);
+
+  // Estimate remaining time based on average validation duration
+  const avgDuration = progressReport.validationDetails
+    .filter(v => v.duration > 0)
+    .reduce((sum, v) => sum + v.duration, 0) / Math.max(progressReport.completedValidations, 1);
+
+  const remainingValidations = progressReport.totalValidations - progressReport.completedValidations;
+  progressReport.estimatedTimeRemaining = Math.round(avgDuration * remainingValidations);
+
+  logger.addFlow(`Validation progress: ${progressReport.overallProgress}% complete (${progressReport.completedValidations}/${progressReport.totalValidations})`);
+
+  return progressReport;
+}
+
+/**
+ * Enhanced stop authorization checking with validation progress reporting
+ * Provides comprehensive visibility into validation progress and status
+ */
 function checkStopAllowed(workingDir = process.cwd()) {
   const stopFlagPath = _path.join(workingDir, '.stop-allowed');
 
@@ -61,16 +140,64 @@ function checkStopAllowed(workingDir = process.cwd()) {
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script reading validated stop flag file
       const flagData = JSON.parse(_fs.readFileSync(stopFlagPath, 'utf8'));
+
+      // Generate comprehensive validation progress report
+      const logger = new _Logger(workingDir);
+      const progressReport = generateValidationProgressReport(flagData, logger);
+
+      // Display detailed validation progress
+      console.error(`
+🔍 **VALIDATION PROGRESS REPORT - STOP AUTHORIZATION**
+
+📊 **OVERALL PROGRESS:** ${progressReport.overallProgress}% Complete
+✅ **COMPLETED:** ${progressReport.completedValidations}/${progressReport.totalValidations} validations
+❌ **FAILED:** ${progressReport.failedValidations} validations
+⏱️  **ESTIMATED TIME REMAINING:** ${progressReport.estimatedTimeRemaining}s
+
+📋 **DETAILED VALIDATION STATUS:**
+${progressReport.validationDetails.map(v =>
+  `${v.status === 'completed' ? '✅' : v.status === 'failed' ? '❌' : '⏳'} ${v.criterion}: ${v.status.toUpperCase()} (${v.progress}%)
+   Duration: ${v.duration}s | ${v.message}`
+).join('\n')}
+
+🕐 **LAST UPDATE:** ${progressReport.lastValidationTime}
+🎯 **AUTHORIZATION STATUS:** ${flagData.stop_allowed ? 'APPROVED' : 'PENDING'}
+      `);
+
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
       _fs.unlinkSync(stopFlagPath); // Remove flag after reading
       return flagData.stop_allowed === true;
-    } catch {
+    } catch (error) {
       // Invalid flag file, remove it
+      console.error(`⚠️ Invalid validation progress file detected - cleaning up. Error: ${error.message}`);
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
       _fs.unlinkSync(stopFlagPath);
       return false;
     }
   }
+
+  // No authorization found - provide progress guidance
+  console.error(`
+🔍 **VALIDATION PROGRESS MONITORING**
+
+📊 **STATUS:** No active validation process detected
+🛑 **AUTHORIZATION:** None found - stop hook will continue infinite mode
+
+💡 **TO VIEW VALIDATION PROGRESS:**
+When running the multi-step authorization protocol, progress will be displayed here including:
+- Real-time completion percentage
+- Individual validation status (✅/❌/⏳)
+- Estimated time remaining
+- Detailed error messages and timing metrics
+
+📋 **AUTHORIZATION WORKFLOW:**
+1. Complete all TodoWrite tasks
+2. Run multi-step authorization: start-authorization → validate-criterion (×7) → complete-authorization
+3. Monitor progress through this enhanced reporting system
+4. Receive detailed completion status and approval confirmation
+
+⚡ **CONTINUING INFINITE MODE** - No stop authorization detected
+  `);
 
   return false; // Default: never allow stops
 }

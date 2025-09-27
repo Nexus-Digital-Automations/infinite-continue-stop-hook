@@ -1,14 +1,14 @@
 {
   "metadata": {
-    "timestamp": "2025-09-26T21:29:21.894Z",
+    "timestamp": "2025-09-26T21:50:47.796Z",
     "reporter": "jest-cicd-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System",
-    "duration_ms": 721
+    "duration_ms": 66018
   },
   "cicd_summary": {
     "pipeline_status": "FAILURE",
-    "total_duration_ms": 721,
+    "total_duration_ms": 66018,
     "should_block_deployment": true,
     "quality_gate_status": {
       "status": "FAILED",
@@ -22,7 +22,7 @@
         {
           "type": "test_failures",
           "severity": "critical",
-          "message": "41 test(s) failed",
+          "message": "36 test(s) failed",
           "action": "Fix failing tests before deployment"
         },
         {
@@ -33,111 +33,113 @@
         }
       ]
     },
-    "test_health_score": 95
+    "test_health_score": 46
   },
   "test_execution": {
     "summary": {
-      "total_suites": 18,
+      "total_suites": 5,
       "passed_suites": 0,
-      "failed_suites": 1,
-      "total_tests": 397,
-      "passed_tests": 10,
-      "failed_tests": 41,
-      "pending_tests": 346,
-      "success_rate": "2.52",
-      "execution_time_ms": 721
+      "failed_suites": 5,
+      "total_tests": 41,
+      "passed_tests": 5,
+      "failed_tests": 36,
+      "pending_tests": 0,
+      "success_rate": "12.20",
+      "execution_time_ms": 66018
     },
     "performance_metrics": {
-      "average_test_duration": 1.8161209068010076,
+      "average_test_duration": 1610.1951219512196,
       "slowest_suite": {
-        "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js",
-        "duration_ms": 385,
-        "num_tests": 0
+        "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/stop-hook-integration.test.js",
+        "duration_ms": 65639,
+        "num_tests": 9
       },
       "memory_usage": {
-        "rss": 106872832,
-        "heap_total": 42860544,
-        "heap_used": 28411896,
+        "rss": 39469056,
+        "heap_total": 24133632,
+        "heap_used": 22418264,
         "external": 2218045,
-        "heap_usage_percent": "66.29"
+        "heap_usage_percent": "92.89"
       },
       "parallel_efficiency": {
-        "parallel_efficiency_percent": "247.71",
-        "total_execution_time_ms": 721,
-        "serial_time_ms": 1786,
-        "time_saved_ms": 1065
+        "parallel_efficiency_percent": "239.07",
+        "total_execution_time_ms": 66018,
+        "serial_time_ms": 157832,
+        "time_saved_ms": 91814
       }
     },
     "failure_analysis": {
-      "total_failures": 41,
-      "failed_suites": 1,
+      "total_failures": 36,
+      "failed_suites": 5,
       "failure_details": [
         {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
-          "test": "Feature Management Lifecycle Feature Suggestion Lifecycle Basic Feature Suggestion should create feature suggestion with all required fields",
-          "duration": 5,
-          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:10"
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/complete-workflows.test.js",
+          "test": "Complete System Workflows E2E Feature Lifecycle Workflow Complete feature suggestion to implementation workflow",
+          "duration": 1213,
+          "error": "Error: Feature feature_1758923383614_a269e6b9a565 not found\n    at Function.validateFeatureStatus (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:439:13)\n    at Object.<anonymou"
         },
         {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
-          "test": "Feature Management Lifecycle Feature Suggestion Lifecycle Basic Feature Suggestion should handle different feature categories correctly",
-          "duration": 1,
-          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:12"
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/complete-workflows.test.js",
+          "test": "Complete System Workflows E2E Feature Lifecycle Workflow Feature rejection workflow",
+          "duration": 2487,
+          "error": "Error: Feature feature_1758923384219_efa09b6d5641 not found\n    at Function.validateFeatureStatus (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:439:13)\n    at Object.<anonymou"
         },
         {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
-          "test": "Feature Management Lifecycle Feature Suggestion Lifecycle Basic Feature Suggestion should auto-generate unique feature IDs",
-          "duration": 1,
-          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:14"
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/complete-workflows.test.js",
+          "test": "Complete System Workflows E2E System Integration Workflow Complete system startup to shutdown workflow",
+          "duration": 1075,
+          "error": "Error: Expected 3 features but got 0 \n    at Function.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:640:13)\n    at Object.assertFeatureCount (/Users/jeremyp"
         },
         {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
-          "test": "Feature Management Lifecycle Feature Suggestion Lifecycle Basic Feature Suggestion should preserve custom metadata in feature suggestions",
-          "duration": 0,
-          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:17"
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/complete-workflows.test.js",
+          "test": "Complete System Workflows E2E System Integration Workflow Error recovery workflow",
+          "duration": 1642,
+          "error": "Error: Expected 1 features but got 0 \n    at Function.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:640:13)\n    at Object.assertFeatureCount (/Users/jeremyp"
         },
         {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
-          "test": "Feature Management Lifecycle Feature Suggestion Lifecycle Feature Suggestion Metadata Management should update total feature count after suggestion",
-          "duration": 0,
-          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: 0\nReceived: undefined\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:2"
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/complete-workflows.test.js",
+          "test": "Complete System Workflows E2E User Experience Workflow Complete user journey from discovery to completion",
+          "duration": 837,
+          "error": "Error: Command failed: timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js feature-details feature_1758923389455_acf73e44cbfe --project-root /Users/jeremyparker/infinit"
         },
         {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
-          "test": "Feature Management Lifecycle Feature Suggestion Lifecycle Feature Suggestion Metadata Management should update last modified timestamp",
-          "duration": 0,
-          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:29"
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/complete-workflows.test.js",
+          "test": "Complete System Workflows E2E User Experience Workflow Multi-stakeholder approval workflow",
+          "duration": 854,
+          "error": "Error: Expected 2 features but got 0 \n    at Function.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:640:13)\n    at Object.assertFeatureCount (/Users/jeremyp"
         },
         {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
-          "test": "Feature Management Lifecycle Feature Suggestion Lifecycle Feature Suggestion Metadata Management should preserve existing features when adding new ones",
-          "duration": 0,
-          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:31"
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/feature-management-e2e.test.js",
+          "test": "Feature Management System E2E Feature Suggestion Workflows Comprehensive feature suggestion with all categories",
+          "duration": 427,
+          "error": "Error: Expected 6 features but got 0 \n    at Function.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:640:13)\n    at Object.assertFeatureCount (/Users/jeremyp"
         },
         {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
-          "test": "Feature Management Lifecycle Feature Approval Lifecycle Basic Feature Approval should approve suggested feature with full approval data",
-          "duration": 0,
-          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:333:50)\n    at processTicksAndRejec"
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/feature-management-e2e.test.js",
+          "test": "Feature Management System E2E Feature Suggestion Workflows Feature suggestion validation and error handling",
+          "duration": 667,
+          "error": "Error: Expected 1 features but got 0 \n    at Function.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:640:13)\n    at Object.assertFeatureCount (/Users/jeremyp"
         },
         {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
-          "test": "Feature Management Lifecycle Feature Approval Lifecycle Basic Feature Approval should approve feature with minimal approval data",
-          "duration": 0,
-          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:333:50)\n    at processTicksAndRejec"
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/feature-management-e2e.test.js",
+          "test": "Feature Management System E2E Feature Approval Workflows Comprehensive approval process with audit trail",
+          "duration": 527,
+          "error": "Error: expect(received).toHaveLength(expected)\n\nExpected length: 3\nReceived length: 0\nReceived array:  []\n    at Object.toHaveLength (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/feature-m"
         },
         {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js",
-          "test": "Feature Management Lifecycle Feature Approval Lifecycle Basic Feature Approval should update feature timestamps on approval",
-          "duration": 0,
-          "error": "TypeError: Cannot read properties of undefined (reading 'id')\n    at Object.id (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js:333:50)\n    at processTicksAndRejec"
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/feature-management-e2e.test.js",
+          "test": "Feature Management System E2E Feature Approval Workflows Bulk approval operations",
+          "duration": 549,
+          "error": "Error: Expected 5 features but got 0 \n    at Function.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:640:13)\n    at Object.assertFeatureCount (/Users/jeremyp"
         }
       ],
       "failure_patterns": {
-        "assertion": 19,
-        "type": 22
+        "other": 4,
+        "assertion": 14,
+        "timeout": 8,
+        "type": 10
       },
-      "common_failure_type": "type"
+      "common_failure_type": "assertion"
     },
     "flaky_test_detection": {
       "potentially_flaky": [],
@@ -146,11 +148,11 @@
     }
   },
   "git": {
-    "commit_sha": "639d74634b90b1709f0bcd86cc7f624f0048a61d",
+    "commit_sha": "e291b4832df44aca78c12c1513260c51d7bc38f4",
     "branch": "main",
     "author": "Claude <claude@anthropic.com>",
-    "commit_message": "feat: implement comprehensive testing framework fixes and authorization compatibility",
-    "commit_date": "2025-09-26 16:28:55 -0500",
+    "commit_message": "feat: implement comprehensive self-learning system with RAG integration",
+    "commit_date": "2025-09-26 16:46:04 -0500",
     "tag": null,
     "is_dirty": true,
     "remote_url": "https://github.com/Nexus-Digital-Automations/infinite-continue-stop-hook.git"
@@ -166,7 +168,7 @@
     "locale": "en-US",
     "memory": {
       "total": 25769803776,
-      "available": 179568640
+      "available": 150470656
     },
     "cpu": {
       "cores": 8,
@@ -189,7 +191,13 @@
       "category": "testing",
       "priority": "high",
       "recommendation": "Fix failing tests immediately",
-      "details": "41 tests are currently failing"
+      "details": "36 tests are currently failing"
+    },
+    {
+      "category": "performance",
+      "priority": "medium",
+      "recommendation": "Consider optimizing test execution time",
+      "details": "Tests took 66s to complete"
     }
   ]
 }

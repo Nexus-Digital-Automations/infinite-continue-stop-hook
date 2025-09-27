@@ -104,7 +104,7 @@
     },
     "approval_history": [],
     "initialization_stats": {
-      "total_initializations": 17,
+      "total_initializations": 22,
       "total_reinitializations": 0,
       "current_day": "2025-09-26",
       "time_buckets": {
@@ -113,7 +113,7 @@
           "reinit": 0
         },
         "15:00-19:59": {
-          "init": 17,
+          "init": 22,
           "reinit": 0
         },
         "20:00-00:59": {
@@ -131,7 +131,7 @@
       },
       "daily_history": [],
       "last_reset": "2025-09-26T21:19:59.338Z",
-      "last_updated": "2025-09-26T21:33:07.192Z"
+      "last_updated": "2025-09-26T21:49:44.412Z"
     }
   },
   "agents": {
@@ -236,6 +236,36 @@
       "status": "active",
       "initialized": "2025-09-26T21:33:07.190Z",
       "sessionId": "9540da0125d6f1fc"
+    },
+    "test-agent-1758923337679-951uez": {
+      "lastHeartbeat": "2025-09-26T21:48:58.499Z",
+      "status": "active",
+      "initialized": "2025-09-26T21:48:58.499Z",
+      "sessionId": "9e6f046a5934f182"
+    },
+    "test-agent-1758923347734-fxjc0b": {
+      "lastHeartbeat": "2025-09-26T21:49:08.008Z",
+      "status": "active",
+      "initialized": "2025-09-26T21:49:08.008Z",
+      "sessionId": "218b66366461cab0"
+    },
+    "test-agent-1758923358926-ewlrxn": {
+      "lastHeartbeat": "2025-09-26T21:49:19.889Z",
+      "status": "active",
+      "initialized": "2025-09-26T21:49:19.889Z",
+      "sessionId": "a24b2e606b26aa88"
+    },
+    "test-agent-1758923370347-4ah30k": {
+      "lastHeartbeat": "2025-09-26T21:49:31.378Z",
+      "status": "active",
+      "initialized": "2025-09-26T21:49:31.378Z",
+      "sessionId": "1c6eb7fd9f2f3b59"
+    },
+    "test-agent-1758923383726-etnajh": {
+      "lastHeartbeat": "2025-09-26T21:49:44.337Z",
+      "status": "active",
+      "initialized": "2025-09-26T21:49:44.337Z",
+      "sessionId": "43b291b6140f8d6f"
     }
   }
 }

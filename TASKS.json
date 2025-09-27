@@ -1060,8 +1060,8 @@
     },
     "initialization_stats": {
       "total_initializations": 3195,
-      "total_reinitializations": 61,
-      "current_day": "2025-09-26",
+      "total_reinitializations": 76,
+      "current_day": "2025-09-27",
       "time_buckets": {
         "10:00-14:59": {
           "init": 0,
@@ -1069,11 +1069,11 @@
         },
         "15:00-19:59": {
           "init": 0,
-          "reinit": 1
+          "reinit": 0
         },
         "20:00-00:59": {
           "init": 0,
-          "reinit": 0
+          "reinit": 14
         },
         "01:00-05:59": {
           "init": 0,
@@ -1085,33 +1085,6 @@
         }
       },
       "daily_history": [
-        {
-          "date": "2025-01-02",
-          "total_init": 1,
-          "total_reinit": 0,
-          "buckets": {
-            "-17:00--13:59": {
-              "init": 0,
-              "reinit": 0
-            },
-            "-12:00--8:59": {
-              "init": 0,
-              "reinit": 0
-            },
-            "-7:00--3:59": {
-              "init": 0,
-              "reinit": 0
-            },
-            "-2:00-02:59": {
-              "init": 0,
-              "reinit": 0
-            },
-            "03:00-07:59": {
-              "init": 1,
-              "reinit": 0
-            }
-          }
-        },
         {
           "date": "2025-01-03",
           "total_init": 1,
@@ -1894,10 +1867,37 @@
               "reinit": 0
             }
           }
+        },
+        {
+          "date": "2025-09-26",
+          "total_init": 0,
+          "total_reinit": 2,
+          "buckets": {
+            "10:00-14:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "15:00-19:59": {
+              "init": 0,
+              "reinit": 2
+            },
+            "20:00-00:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "01:00-05:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "06:00-10:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
         }
       ],
-      "last_reset": "2025-09-26T21:33:38.902Z",
-      "last_updated": "2025-09-26T21:33:38.902Z"
+      "last_reset": "2025-09-27T03:18:03.073Z",
+      "last_updated": "2025-09-27T04:02:22.406Z"
     }
   },
   "agents": {
@@ -1967,6 +1967,106 @@
       "status": "active",
       "reinitialized": "2025-09-26T21:33:38.900Z",
       "sessionId": "c8e28d460dc4974d",
+      "previousSessions": []
+    },
+    "agent_infinite_continue_workflow": {
+      "lastHeartbeat": "2025-09-26T21:46:55.216Z",
+      "status": "active",
+      "reinitialized": "2025-09-26T21:46:55.216Z",
+      "sessionId": "69baa6d2cbdd72c1",
+      "previousSessions": []
+    },
+    "agent_session_1758943082": {
+      "lastHeartbeat": "2025-09-27T03:18:03.072Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T03:18:03.072Z",
+      "sessionId": "fafaf16c81f96b40",
+      "previousSessions": []
+    },
+    "agent_analysis_1758943779": {
+      "lastHeartbeat": "2025-09-27T03:29:39.720Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T03:29:39.720Z",
+      "sessionId": "6c439cdeb1c7620f",
+      "previousSessions": []
+    },
+    "agent_continuing_1758943907": {
+      "lastHeartbeat": "2025-09-27T03:31:47.984Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T03:31:47.984Z",
+      "sessionId": "c412f93f69608449",
+      "previousSessions": []
+    },
+    "agent_stop_hook_features_1758943955": {
+      "lastHeartbeat": "2025-09-27T03:32:35.514Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T03:32:35.514Z",
+      "sessionId": "3869774f6a2943f4",
+      "previousSessions": []
+    },
+    "claude_main_agent": {
+      "lastHeartbeat": "2025-09-27T03:33:43.182Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T03:33:43.182Z",
+      "sessionId": "5afe6357dc2527f6",
+      "previousSessions": []
+    },
+    "agent_continue_stop_hook_1758944487": {
+      "lastHeartbeat": "2025-09-27T03:41:27.943Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T03:41:27.943Z",
+      "sessionId": "b0ffbf7e43458a8b",
+      "previousSessions": []
+    },
+    "agent_stop_hook_features": {
+      "lastHeartbeat": "2025-09-27T03:53:23.009Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T03:53:23.009Z",
+      "sessionId": "3d9494101256e8aa",
+      "previousSessions": [
+        "53c07f960c026040"
+      ]
+    },
+    "claude_learning_agent": {
+      "lastHeartbeat": "2025-09-27T03:47:27.961Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T03:47:27.961Z",
+      "sessionId": "87b5241c4b82d6db",
+      "previousSessions": []
+    },
+    "quality_test_agent": {
+      "lastHeartbeat": "2025-09-27T03:54:04.950Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T03:54:04.950Z",
+      "sessionId": "455894b7d7b64ccc",
+      "previousSessions": []
+    },
+    "feature_migration_agent": {
+      "lastHeartbeat": "2025-09-27T03:57:17.788Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T03:57:17.788Z",
+      "sessionId": "3c8d60e5a3aa6ff4",
+      "previousSessions": []
+    },
+    "migration_agent_001": {
+      "lastHeartbeat": "2025-09-27T03:57:47.991Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T03:57:47.991Z",
+      "sessionId": "676cb32294b2bca9",
+      "previousSessions": []
+    },
+    "agent_learning_system": {
+      "lastHeartbeat": "2025-09-27T03:58:34.286Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T03:58:34.286Z",
+      "sessionId": "359b2328d1ba3e13",
+      "previousSessions": []
+    },
+    "agent_1758945742": {
+      "lastHeartbeat": "2025-09-27T04:02:22.404Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T04:02:22.404Z",
+      "sessionId": "fb0d9c81f17d526b",
       "previousSessions": []
     }
   }
