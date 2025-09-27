@@ -68,8 +68,36 @@ function generateValidationProgressReport(flagData, logger) {
     lastValidationTime: new Date().toISOString()
   };
 
+  // Load custom validation rules from project configuration
+  function loadCustomValidationRules(projectRoot) {
+    const customRulesPath = _path.join(projectRoot, '.claude-validation.json');
+    let customRules = [];
+
+    try {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- loading project-specific validation config
+      if (_fs.existsSync(customRulesPath)) {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- loading project-specific validation config
+        const configData = _fs.readFileSync(customRulesPath, 'utf8');
+        const config = JSON.parse(configData);
+
+        if (config.customValidationRules && Array.isArray(config.customValidationRules)) {
+          customRules = config.customValidationRules.filter(rule =>
+            rule.id &&
+            rule.name &&
+            rule.command &&
+            rule.enabled !== false
+          );
+        }
+      }
+    } catch (error) {
+      logger.warn(`Failed to load custom validation rules: ${error.message}`);
+    }
+
+    return customRules;
+  }
+
   // Standard validation criteria with progress tracking
-  const validationCriteria = [
+  const standardValidationCriteria = [
     'focused-codebase',
     'security-validation',
     'linter-validation',
@@ -78,6 +106,11 @@ function generateValidationProgressReport(flagData, logger) {
     'start-validation',
     'test-validation'
   ];
+
+  // Load and merge custom validation rules
+  const customRules = loadCustomValidationRules(projectRoot);
+  const customCriteriaIds = customRules.map(rule => rule.id);
+  const validationCriteria = [...standardValidationCriteria, ...customCriteriaIds];
 
   // Process validation results from flag data
   if (flagData.validation_results) {

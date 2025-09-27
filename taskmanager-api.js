@@ -1495,6 +1495,36 @@ class AutonomousTaskManagerAPI {
   /**
    * Core validation logic (extracted from original _performLanguageAgnosticValidation)
    */
+  /**
+   * Load custom validation rules from project configuration
+   */
+  async _loadCustomValidationRules() {
+    const fs = require('fs').promises;
+    const path = require('path');
+
+    const customRulesPath = path.join(PROJECT_ROOT, '.claude-validation.json');
+
+    try {
+      if (await this._fileExists(customRulesPath)) {
+        const configData = await fs.readFile(customRulesPath, 'utf8');
+        const config = JSON.parse(configData);
+
+        if (config.customValidationRules && Array.isArray(config.customValidationRules)) {
+          return config.customValidationRules.filter(rule =>
+            rule.id &&
+            rule.name &&
+            rule.command &&
+            rule.enabled !== false
+          );
+        }
+      }
+    } catch (error) {
+      // Silently fail for missing or invalid custom rules
+    }
+
+    return [];
+  }
+
   async _performLanguageAgnosticValidationCore(criterion) {
     const { execSync } = require('child_process');
     const fs = require('fs').promises;
@@ -1624,6 +1654,60 @@ class AutonomousTaskManagerAPI {
           return await this._tryCommands(testCommands, 'Testing');
 
         default:
+          // Check if this is a custom validation rule
+          const customRules = await this._loadCustomValidationRules();
+          const customRule = customRules.find(rule => rule.id === criterion);
+
+          if (customRule) {
+            try {
+              const timeout = customRule.timeout || 60000; // Default 60s timeout
+              const options = {
+                cwd: PROJECT_ROOT,
+                timeout,
+                stdio: 'pipe'
+              };
+
+              let command = customRule.command;
+
+              // Support environment variable substitution
+              if (customRule.environment) {
+                Object.keys(customRule.environment).forEach(key => {
+                  process.env[key] = customRule.environment[key];
+                });
+              }
+
+              const result = execSync(command, options).toString();
+
+              // Check success criteria
+              if (customRule.successCriteria) {
+                const { exitCode, outputContains, outputNotContains } = customRule.successCriteria;
+
+                if (exitCode !== undefined && exitCode !== 0) {
+                  return { success: false, error: `Custom validation '${customRule.name}' failed: non-zero exit code` };
+                }
+
+                if (outputContains && !result.includes(outputContains)) {
+                  return { success: false, error: `Custom validation '${customRule.name}' failed: expected output not found` };
+                }
+
+                if (outputNotContains && result.includes(outputNotContains)) {
+                  return { success: false, error: `Custom validation '${customRule.name}' failed: forbidden output detected` };
+                }
+              }
+
+              return {
+                success: true,
+                details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`
+              };
+
+            } catch (error) {
+              return {
+                success: false,
+                error: `Custom validation '${customRule.name}' failed: ${error.message}`
+              };
+            }
+          }
+
           return { success: false, error: `Unknown validation criterion: ${criterion}` };
       }
     } catch (error) {
@@ -3729,6 +3813,14 @@ class AutonomousTaskManagerAPI {
         'update-project': 'updateProject',
         'get-project': 'getProject',
         'list-projects': 'listProjects',
+
+        // RAG Lesson Deprecation commands
+        'deprecate-lesson': 'deprecateLesson',
+        'restore-lesson': 'restoreLesson',
+        'get-lesson-deprecation-status': 'getLessonDeprecationStatus',
+        'get-deprecated-lessons': 'getDeprecatedLessons',
+        'cleanup-obsolete-lessons': 'cleanupObsoleteLessons',
+        'get-deprecation-analytics': 'getDeprecationAnalytics',
       },
       availableCommands: [
         // Discovery Commands
@@ -3748,6 +3840,9 @@ class AutonomousTaskManagerAPI {
 
         // RAG Cross-Project Sharing
         'register-project', 'share-lesson-cross-project', 'calculate-project-relevance', 'get-shared-lessons', 'get-project-recommendations', 'record-lesson-application', 'get-cross-project-analytics', 'update-project', 'get-project', 'list-projects',
+
+        // RAG Lesson Deprecation
+        'deprecate-lesson', 'restore-lesson', 'get-lesson-deprecation-status', 'get-deprecated-lessons', 'cleanup-obsolete-lessons', 'get-deprecation-analytics',
       ],
       guide: this._getFallbackGuide('api-methods'),
     };
@@ -4938,6 +5033,116 @@ _generateSupportingTasks(feature, mainTaskId) {
     }
   }
 
+  // ===== LESSON DEPRECATION API METHODS =====
+
+  /**
+   * Deprecate a lesson with reason and optional replacement
+   */
+  async deprecateLesson(lessonId, deprecationData = {}) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.deprecateLesson(lessonId, deprecationData),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
+  /**
+   * Restore a deprecated lesson to active status
+   */
+  async restoreLesson(lessonId, restorationData = {}) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.restoreLesson(lessonId, restorationData),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
+  /**
+   * Get deprecation status and history for a lesson
+   */
+  async getLessonDeprecationStatus(lessonId) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.getLessonDeprecationStatus(lessonId),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
+  /**
+   * Get all deprecated lessons with filtering options
+   */
+  async getDeprecatedLessons(options = {}) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.getDeprecatedLessons(options),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
+  /**
+   * Clean up obsolete lessons (permanent removal)
+   */
+  async cleanupObsoleteLessons(options = {}) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.cleanupObsoleteLessons(options),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
+  /**
+   * Get deprecation analytics and statistics
+   */
+  async getDeprecationAnalytics(options = {}) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.getDeprecationAnalytics(options),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
   /**
    * Cleanup resources and connections
    */
@@ -5569,8 +5774,48 @@ async function main() {
         break;
       }
 
+      // RAG lesson deprecation commands
+      case 'deprecate-lesson': {
+        if (!args[1]) {
+          throw new Error('Lesson ID required. Usage: deprecate-lesson <lessonId> [deprecationData]');
+        }
+        const deprecationData = args[2] ? JSON.parse(args[2]) : {};
+        result = await api.deprecateLesson(parseInt(args[1]), deprecationData);
+        break;
+      }
+      case 'restore-lesson': {
+        if (!args[1]) {
+          throw new Error('Lesson ID required. Usage: restore-lesson <lessonId> [restorationData]');
+        }
+        const restorationData = args[2] ? JSON.parse(args[2]) : {};
+        result = await api.restoreLesson(parseInt(args[1]), restorationData);
+        break;
+      }
+      case 'get-lesson-deprecation-status': {
+        if (!args[1]) {
+          throw new Error('Lesson ID required. Usage: get-lesson-deprecation-status <lessonId>');
+        }
+        result = await api.getLessonDeprecationStatus(parseInt(args[1]));
+        break;
+      }
+      case 'get-deprecated-lessons': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.getDeprecatedLessons(options);
+        break;
+      }
+      case 'cleanup-obsolete-lessons': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.cleanupObsoleteLessons(options);
+        break;
+      }
+      case 'get-deprecation-analytics': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.getDeprecationAnalytics(options);
+        break;
+      }
+
       default:
-        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, start-authorization, validate-criterion, validate-criteria-parallel, complete-authorization, authorize-stop, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents, store-lesson, search-lessons, store-error, find-similar-errors, get-relevant-lessons, rag-analytics, lesson-version-history, compare-lesson-versions, rollback-lesson-version, lesson-version-analytics, store-lesson-versioned, search-lessons-versioned, record-lesson-usage, record-lesson-feedback, record-lesson-outcome, get-lesson-quality-score, get-quality-analytics, get-quality-recommendations, search-lessons-quality, update-lesson-quality, register-project, share-lesson-cross-project, calculate-project-relevance, get-shared-lessons, get-project-recommendations, record-lesson-application, get-cross-project-analytics, update-project, get-project, list-projects`);
+        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, start-authorization, validate-criterion, validate-criteria-parallel, complete-authorization, authorize-stop, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents, store-lesson, search-lessons, store-error, find-similar-errors, get-relevant-lessons, rag-analytics, lesson-version-history, compare-lesson-versions, rollback-lesson-version, lesson-version-analytics, store-lesson-versioned, search-lessons-versioned, record-lesson-usage, record-lesson-feedback, record-lesson-outcome, get-lesson-quality-score, get-quality-analytics, get-quality-recommendations, search-lessons-quality, update-lesson-quality, register-project, share-lesson-cross-project, calculate-project-relevance, get-shared-lessons, get-project-recommendations, record-lesson-application, get-cross-project-analytics, update-project, get-project, list-projects, deprecate-lesson, restore-lesson, get-lesson-deprecation-status, get-deprecated-lessons, cleanup-obsolete-lessons, get-deprecation-analytics`);
     }
 
     console.log(JSON.stringify(result, null, 2));
