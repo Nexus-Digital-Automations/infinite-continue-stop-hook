@@ -8,6 +8,9 @@
  * @date 2025-09-21
  */
 
+/* eslint-disable no-console */
+// Console output is intentional for this development/analysis tool
+
 const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
@@ -592,13 +595,32 @@ class APIPerformanceBenchmark {
    */
   saveResults(report) {
     const outputDir = '/Users/jeremyparker/infinite-continue-stop-hook/development/performance-analysis';
-    const outputFile = path.join(outputDir, `api-performance-report-${Date.now()}.json`);
+
+    // Validate and sanitize filename components
+    const timestamp = Date.now();
+    const filename = `api-performance-report-${timestamp}.json`;
+
+    // Ensure filename contains only safe characters (alphanumeric, dash, dot)
+    if (!/^[a-zA-Z0-9\-.]+$/.test(filename)) {
+      throw new Error('Invalid filename detected - potential security risk');
+    }
+
+    // Use path.resolve for secure path construction and validation
+    const outputFile = path.resolve(outputDir, filename);
+
+    // Validate that resolved path is still within intended directory
+    if (!outputFile.startsWith(path.resolve(outputDir))) {
+      throw new Error('Path traversal attempt detected - security violation');
+    }
 
     // Ensure output directory exists
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
 
+    // ESLint: security/detect-non-literal-fs-filename disabled for this line
+    // Justification: Filename is validated with regex and path traversal protection above
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     fs.writeFileSync(outputFile, JSON.stringify(report, null, 2));
     console.log(`📊 Performance report saved to: ${outputFile}`);
 
