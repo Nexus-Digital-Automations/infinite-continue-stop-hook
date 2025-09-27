@@ -44,6 +44,15 @@ const { ValidationDependencyManager, DEPENDENCY_TYPES } = require('./lib/validat
 // Import custom validation rules management system
 const { CustomValidationRulesManager, VALIDATION_RULE_TYPES } = require('./lib/custom-validation-rules-manager');
 
+// Import validation audit trail management system
+const ValidationAuditTrailManager = require('./lib/validation-audit-trail-manager');
+
+// Import enhanced performance metrics collector
+const EnhancedPerformanceCollector = require('./lib/enhanced-performance-collector');
+
+// Import timing reports generator
+const TimingReportsGenerator = require('./lib/timing-reports-generator');
+
 // File locking mechanism to prevent race conditions across processes
 class FileLock {
   constructor() {
@@ -195,6 +204,9 @@ class AutonomousTaskManagerAPI {
     this.customValidationManager = new CustomValidationRulesManager({
       projectRoot: PROJECT_ROOT,
     });
+
+    // Initialize validation audit trail management system
+    this.auditTrailManager = new ValidationAuditTrailManager(PROJECT_ROOT);
 
     // Initialize features file and task structures if they don't exist
   }
@@ -2817,6 +2829,120 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
+   * 🚨 FEATURE 3: ENHANCED TIMING REPORTS
+   * Generate comprehensive timing reports using TimingReportsGenerator
+   */
+
+  /**
+   * Generate comprehensive timing report for all validation criteria
+   */
+  async getComprehensiveTimingReport(options = {}) {
+    try {
+      const timingReportsGenerator = new TimingReportsGenerator(PROJECT_ROOT);
+      const result = await timingReportsGenerator.generateComprehensiveTimingReport(options);
+
+      return {
+        success: result.success,
+        report: result.report,
+        error: result.error,
+        featureId: 'feature_1758946499841_performance_metrics',
+        generatedAt: new Date().toISOString(),
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        report: null,
+      };
+    }
+  }
+
+  /**
+   * Generate timing report for a specific validation criterion
+   */
+  async getCriterionTimingReport(criterion, options = {}) {
+    try {
+      if (!criterion) {
+        return {
+          success: false,
+          error: 'Criterion parameter is required',
+        };
+      }
+
+      const timingReportsGenerator = new TimingReportsGenerator(PROJECT_ROOT);
+      const result = await timingReportsGenerator.generateCriterionTimingReport(criterion, options);
+
+      return {
+        success: result.success,
+        report: result.report,
+        error: result.error,
+        criterion,
+        featureId: 'feature_1758946499841_performance_metrics',
+        generatedAt: new Date().toISOString(),
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        report: null,
+        criterion,
+      };
+    }
+  }
+
+  /**
+   * Generate performance comparison report between multiple criteria
+   */
+  async getPerformanceComparisonReport(criteria = [], options = {}) {
+    try {
+      const timingReportsGenerator = new TimingReportsGenerator(PROJECT_ROOT);
+      const result = await timingReportsGenerator.generatePerformanceComparison(criteria, options);
+
+      return {
+        success: result.success,
+        report: result.report,
+        error: result.error,
+        criteria,
+        featureId: 'feature_1758946499841_performance_metrics',
+        generatedAt: new Date().toISOString(),
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        report: null,
+        criteria,
+      };
+    }
+  }
+
+  /**
+   * Get available validation criteria for timing analysis
+   */
+  async getAvailableValidationCriteria() {
+    try {
+      const timingReportsGenerator = new TimingReportsGenerator(PROJECT_ROOT);
+      const metricsData = await timingReportsGenerator._loadMetricsData();
+
+      const criteria = [...new Set(metricsData.map(m => m.criterion || m.criterion))].filter(Boolean);
+
+      return {
+        success: true,
+        criteria,
+        count: criteria.length,
+        availableMetrics: metricsData.length,
+        featureId: 'feature_1758946499841_performance_metrics',
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        criteria: [],
+      };
+    }
+  }
+
+  /**
    * Analyze resource usage patterns
    */
   _analyzeResourceUsagePatterns(metrics, options) {
@@ -4512,6 +4638,60 @@ class AutonomousTaskManagerAPI {
       return true;
     } catch {
       return false;
+    }
+  }
+
+  /**
+   * Helper method to detect project type for enhanced performance metrics
+   */
+  async _detectProjectType() {
+    try {
+      const path = require('path');
+      const fs = require('fs').promises;
+
+      // Check for various project indicators
+      const indicators = {
+        frontend: ['webpack.config.js', 'vite.config.js', 'rollup.config.js', 'src/index.html'],
+        backend: ['server.js', 'app.js', 'index.js', 'src/server.js', 'src/app.js'],
+        library: ['lib/', 'dist/', 'index.d.ts'],
+        testing: ['jest.config.js', 'vitest.config.js', 'cypress.json'],
+        infrastructure: ['Dockerfile', 'docker-compose.yml', 'terraform/', 'infrastructure/'],
+      };
+
+      for (const [type, files] of Object.entries(indicators)) {
+        for (const file of files) {
+          const filePath = path.join(PROJECT_ROOT, file);
+          if (await this._fileExists(filePath)) {
+            return type;
+          }
+        }
+      }
+
+      // Check package.json for additional clues
+      const packageJsonPath = path.join(PROJECT_ROOT, 'package.json');
+      if (await this._fileExists(packageJsonPath)) {
+        try {
+          const packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf8'));
+
+          // Check scripts for type indicators
+          const scripts = packageJson.scripts || {};
+          if (scripts.build && scripts.start) {
+            return 'frontend';
+          }
+          if (scripts.server || scripts['start:server']) {
+            return 'backend';
+          }
+          if (scripts.test && Object.keys(scripts).length <= 3) {
+            return 'library';
+          }
+        } catch (error) {
+          // Ignore JSON parsing errors
+        }
+      }
+
+      return 'generic';
+    } catch (error) {
+      return 'unknown';
     }
   }
 
@@ -6567,6 +6747,20 @@ class AutonomousTaskManagerAPI {
         'search-similar-patterns': 'searchSimilarPatterns',
         'generate-pattern-insights': 'generatePatternInsights',
         'update-pattern-config': 'updatePatternDetectionConfig',
+
+        // Validation Audit Trail & History commands
+        'start-audit-session': 'startAuditSession',
+        'track-validation-step': 'trackValidationStep',
+        'complete-audit-session': 'completeAuditSession',
+        'search-audit-trail': 'searchAuditTrail',
+        'get-validation-history': 'getValidationHistory',
+        'generate-compliance-report': 'generateComplianceReport',
+        'export-audit-data': 'exportAuditData',
+        'get-validation-trends': 'getValidationTrends',
+        'analyze-failure-patterns': 'analyzeFailurePatterns',
+        'get-agent-audit-summary': 'getAgentAuditSummary',
+        'get-audit-trail-stats': 'getAuditTrailStats',
+        'cleanup-audit-data': 'cleanupAuditData',
       },
       availableCommands: [
         // Discovery Commands
@@ -6592,6 +6786,9 @@ class AutonomousTaskManagerAPI {
 
         // RAG Learning Pattern Detection
         'detect-patterns', 'analyze-pattern-evolution', 'get-pattern-suggestions', 'analyze-lesson-patterns', 'get-pattern-analytics', 'cluster-patterns', 'search-similar-patterns', 'generate-pattern-insights', 'update-pattern-config',
+
+        // Validation Audit Trail & History
+        'start-audit-session', 'track-validation-step', 'complete-audit-session', 'search-audit-trail', 'get-validation-history', 'generate-compliance-report', 'export-audit-data', 'get-validation-trends', 'analyze-failure-patterns', 'get-agent-audit-summary', 'get-audit-trail-stats', 'cleanup-audit-data',
       ],
       guide: this._getFallbackGuide('api-methods'),
     };
@@ -9056,8 +9253,125 @@ async function main() {
         break;
       }
 
+      // 🔍 FEATURE 5: VALIDATION AUDIT TRAIL & HISTORY ENDPOINTS
+      case 'start-audit-session': {
+        if (!args[1] || !args[2]) {
+          throw new Error('Agent ID and authorization key required. Usage: start-audit-session <agentId> <authKey> [requiredSteps]');
+        }
+        const requiredSteps = args[3] ? JSON.parse(args[3]) : [];
+        result = api.auditTrailManager.startAuthorizationSession(args[1], args[2], requiredSteps);
+        break;
+      }
+      case 'track-validation-step': {
+        if (!args[1] || !args[2] || !args[3] || !args[4]) {
+          throw new Error('Session ID, criterion, result, and duration required. Usage: track-validation-step <sessionId> <criterion> <result> <duration> [error] [metadata]');
+        }
+        const error = args[5] || null;
+        const metadata = args[6] ? JSON.parse(args[6]) : {};
+        result = api.auditTrailManager.trackValidationStep(
+          args[1], args[2], args[3] === 'true', parseInt(args[4]), error, metadata
+        );
+        break;
+      }
+      case 'complete-audit-session': {
+        if (!args[1]) {
+          throw new Error('Session ID required. Usage: complete-audit-session <sessionId> [finalStatus]');
+        }
+        const finalStatus = args[2] || 'completed';
+        result = api.auditTrailManager.completeAuthorizationSession(args[1], finalStatus);
+        break;
+      }
+      case 'search-audit-trail': {
+        const searchCriteria = args[1] ? JSON.parse(args[1]) : {};
+        result = api.auditTrailManager.searchAuditTrail(searchCriteria);
+        break;
+      }
+      case 'get-validation-history': {
+        const sessionId = args[1] || null;
+        if (sessionId) {
+          const session = api.auditTrailManager._findSession(sessionId);
+          result = session ? { success: true, session } : { success: false, error: 'Session not found' };
+        } else {
+          result = {
+            success: true,
+            sessions: api.auditTrailManager.auditTrail.sessions,
+            totalSessions: api.auditTrailManager.auditTrail.sessions.length
+          };
+        }
+        break;
+      }
+      case 'generate-compliance-report': {
+        const date = args[1] || new Date().toISOString().split('T')[0];
+        result = api.auditTrailManager.generateComplianceReport(date);
+        break;
+      }
+      case 'export-audit-data': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = api.auditTrailManager.exportAuditData(options);
+        break;
+      }
+      case 'get-validation-trends': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = api.auditTrailManager.getValidationTrends(options);
+        break;
+      }
+      case 'analyze-failure-patterns': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = api.auditTrailManager.analyzeFailurePatterns(options);
+        break;
+      }
+      case 'get-agent-audit-summary': {
+        if (!args[1]) {
+          throw new Error('Agent ID required. Usage: get-agent-audit-summary <agentId>');
+        }
+        result = api.auditTrailManager.getAgentAuditSummary(args[1]);
+        break;
+      }
+      case 'get-audit-trail-stats': {
+        const totalSessions = api.auditTrailManager.auditTrail.sessions.length;
+        const successfulSessions = api.auditTrailManager.auditTrail.sessions.filter(s => s.status === 'completed').length;
+        const failedSessions = api.auditTrailManager.auditTrail.sessions.filter(s => s.status === 'failed').length;
+
+        result = {
+          success: true,
+          stats: {
+            totalSessions,
+            successfulSessions,
+            failedSessions,
+            successRate: totalSessions > 0 ? (successfulSessions / totalSessions) * 100 : 0,
+            totalValidations: api.auditTrailManager.auditTrail.sessions.reduce((sum, s) => sum + s.validationSteps.length, 0),
+            criteriaStats: api.auditTrailManager.criteriaHistory.statistics
+          }
+        };
+        break;
+      }
+      case 'cleanup-audit-data': {
+        const retentionDays = args[1] ? parseInt(args[1]) : api.auditTrailManager.config.dataRetentionDays;
+        const cutoffDate = new Date();
+        cutoffDate.setDate(cutoffDate.getDate() - retentionDays);
+
+        const expiredSessions = api.auditTrailManager.auditTrail.sessions.filter(session =>
+          new Date(session.startTime) < cutoffDate
+        );
+
+        // Remove expired sessions
+        api.auditTrailManager.auditTrail.sessions = api.auditTrailManager.auditTrail.sessions.filter(session =>
+          new Date(session.startTime) >= cutoffDate
+        );
+
+        api.auditTrailManager._saveAuditTrail();
+
+        result = {
+          success: true,
+          removed: expiredSessions.length,
+          retentionDays,
+          message: `Cleaned up ${expiredSessions.length} expired audit sessions`
+        };
+        break;
+      }
+
       default:
-        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, start-authorization, validate-criterion, validate-criteria-parallel, complete-authorization, authorize-stop, validate-feature-tests, confirm-test-coverage, confirm-pipeline-passes, advance-to-next-feature, get-feature-test-status, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents, store-lesson, search-lessons, store-error, find-similar-errors, get-relevant-lessons, rag-analytics, lesson-version-history, compare-lesson-versions, rollback-lesson-version, lesson-version-analytics, store-lesson-versioned, search-lessons-versioned, record-lesson-usage, record-lesson-feedback, record-lesson-outcome, get-lesson-quality-score, get-quality-analytics, get-quality-recommendations, search-lessons-quality, update-lesson-quality, register-project, share-lesson-cross-project, calculate-project-relevance, get-shared-lessons, get-project-recommendations, record-lesson-application, get-cross-project-analytics, update-project, get-project, list-projects, deprecate-lesson, restore-lesson, get-lesson-deprecation-status, get-deprecated-lessons, cleanup-obsolete-lessons, get-deprecation-analytics, detect-patterns, analyze-pattern-evolution, get-pattern-suggestions, analyze-lesson-patterns, get-pattern-analytics, cluster-patterns, search-similar-patterns, generate-pattern-insights, update-pattern-config, get-validation-performance-metrics, get-performance-trends, identify-performance-bottlenecks, get-detailed-timing-report, analyze-resource-usage, get-performance-benchmarks, create-validation-state-snapshot, perform-rollback, get-available-rollback-snapshots, get-rollback-history, cleanup-old-rollback-snapshots, get-dependency-graph, validate-dependency-graph, get-execution-order, generate-parallel-execution-plan, get-dependency-visualization, add-dependency, remove-dependency, get-dependency, save-dependency-config, load-dependency-config, get-execution-analytics, generate-adaptive-execution-plan, load-custom-validation-rules, get-custom-validation-rules, execute-custom-validation-rule, execute-all-custom-validation-rules, generate-custom-validation-config, get-custom-validation-analytics`);
+        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, start-authorization, validate-criterion, validate-criteria-parallel, complete-authorization, authorize-stop, validate-feature-tests, confirm-test-coverage, confirm-pipeline-passes, advance-to-next-feature, get-feature-test-status, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents, store-lesson, search-lessons, store-error, find-similar-errors, get-relevant-lessons, rag-analytics, lesson-version-history, compare-lesson-versions, rollback-lesson-version, lesson-version-analytics, store-lesson-versioned, search-lessons-versioned, record-lesson-usage, record-lesson-feedback, record-lesson-outcome, get-lesson-quality-score, get-quality-analytics, get-quality-recommendations, search-lessons-quality, update-lesson-quality, register-project, share-lesson-cross-project, calculate-project-relevance, get-shared-lessons, get-project-recommendations, record-lesson-application, get-cross-project-analytics, update-project, get-project, list-projects, deprecate-lesson, restore-lesson, get-lesson-deprecation-status, get-deprecated-lessons, cleanup-obsolete-lessons, get-deprecation-analytics, detect-patterns, analyze-pattern-evolution, get-pattern-suggestions, analyze-lesson-patterns, get-pattern-analytics, cluster-patterns, search-similar-patterns, generate-pattern-insights, update-pattern-config, get-validation-performance-metrics, get-performance-trends, identify-performance-bottlenecks, get-detailed-timing-report, analyze-resource-usage, get-performance-benchmarks, create-validation-state-snapshot, perform-rollback, get-available-rollback-snapshots, get-rollback-history, cleanup-old-rollback-snapshots, get-dependency-graph, validate-dependency-graph, get-execution-order, generate-parallel-execution-plan, get-dependency-visualization, add-dependency, remove-dependency, get-dependency, save-dependency-config, load-dependency-config, get-execution-analytics, generate-adaptive-execution-plan, load-custom-validation-rules, get-custom-validation-rules, execute-custom-validation-rule, execute-all-custom-validation-rules, generate-custom-validation-config, get-custom-validation-analytics, start-audit-session, track-validation-step, complete-audit-session, search-audit-trail, get-validation-history, generate-compliance-report, export-audit-data, get-validation-trends, analyze-failure-patterns, get-agent-audit-summary, get-audit-trail-stats, cleanup-audit-data`);
     }
 
     console.log(JSON.stringify(result, null, 2));

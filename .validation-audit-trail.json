@@ -1,0 +1,93 @@
+{
+  "version": "1.0.0",
+  "created": "2025-09-27T05:25:11.677Z",
+  "sessions": [
+    {
+      "sessionId": "audit_1758950718168_bdc39fa6",
+      "agentId": "agent_test",
+      "authorizationKey": "06510bec68277740",
+      "startTime": "2025-09-27T05:25:18.238Z",
+      "endTime": "2025-09-27T05:25:33.914Z",
+      "status": "failed",
+      "totalSteps": 3,
+      "completedSteps": 1,
+      "failedSteps": 1,
+      "requiredSteps": [
+        "focused-codebase",
+        "security-validation",
+        "linter-validation"
+      ],
+      "validationSteps": [
+        {
+          "criterion": "focused-codebase",
+          "startTime": "2025-09-27T05:25:21.615Z",
+          "endTime": "2025-09-27T05:25:23.115Z",
+          "durationMs": 1500,
+          "result": "passed",
+          "error": null,
+          "memoryUsage": {
+            "rss": 104513536,
+            "heapTotal": 20791296,
+            "heapUsed": 14132224,
+            "external": 2425841,
+            "arrayBuffers": 321744
+          },
+          "metadata": {
+            "retryCount": 0,
+            "stepIndex": 0
+          }
+        },
+        {
+          "criterion": "security-validation",
+          "startTime": "2025-09-27T05:25:25.266Z",
+          "endTime": "2025-09-27T05:25:28.266Z",
+          "durationMs": 3000,
+          "result": "failed",
+          "error": "Security scan failed",
+          "memoryUsage": {
+            "rss": 101171200,
+            "heapTotal": 20791296,
+            "heapUsed": 14136768,
+            "external": 2425841,
+            "arrayBuffers": 321744
+          },
+          "metadata": {
+            "retryCount": 0,
+            "stepIndex": 1
+          }
+        }
+      ],
+      "projectState": {
+        "gitCommit": "1bf6cb09ebb4e5fd516c0f240391de3d1f2fe125",
+        "branch": "main",
+        "workingTreeClean": false,
+        "lastModified": "2025-09-27 00:15:43 -0500",
+        "capturedAt": "2025-09-27T05:25:18.238Z"
+      },
+      "complianceFlags": {
+        "dataRetention": true,
+        "accessLogged": true,
+        "sensitiveDataHandled": false
+      },
+      "metadata": {
+        "userAgent": "TaskManager-API",
+        "nodeVersion": "v22.20.0",
+        "platform": "darwin",
+        "workingDirectory": "/Users/jeremyparker/infinite-continue-stop-hook"
+      },
+      "totalDurationMs": 15676
+    }
+  ],
+  "metadata": {
+    "totalSessions": 1,
+    "totalValidations": 0,
+    "retentionPolicy": 2555,
+    "complianceStandards": [
+      "SOX",
+      "GDPR",
+      "ISO27001",
+      "HIPAA"
+    ],
+    "lastUpdated": "2025-09-27T05:25:33.957Z"
+  }
+}

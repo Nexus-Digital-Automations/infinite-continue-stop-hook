@@ -1,0 +1,39 @@
+{
+  "version": "1.0.0",
+  "created": "2025-09-27T05:25:11.677Z",
+  "criteria": {
+    "focused-codebase": {
+      "totalAttempts": 1,
+      "successfulAttempts": 1,
+      "totalDuration": 1500,
+      "averageDuration": 1500,
+      "successRate": 100,
+      "errorMessages": {},
+      "lastUpdate": "2025-09-27T05:25:23.115Z"
+    },
+    "security-validation": {
+      "totalAttempts": 1,
+      "successfulAttempts": 0,
+      "totalDuration": 3000,
+      "averageDuration": 3000,
+      "successRate": 0,
+      "errorMessages": {
+        "Security scan failed": 1
+      },
+      "lastUpdate": "2025-09-27T05:25:28.266Z"
+    }
+  },
+  "statistics": {
+    "totalValidations": 2,
+    "criteriaSuccessRates": {
+      "focused-codebase": 100,
+      "security-validation": 0
+    },
+    "averageDurations": {
+      "focused-codebase": 1500,
+      "security-validation": 3000
+    },
+    "failurePatterns": [],
+    "lastUpdated": "2025-09-27T05:25:28.304Z"
+  }
+}

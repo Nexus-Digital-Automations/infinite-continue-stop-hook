@@ -1095,7 +1095,7 @@
     },
     "initialization_stats": {
       "total_initializations": 3195,
-      "total_reinitializations": 91,
+      "total_reinitializations": 95,
       "current_day": "2025-09-27",
       "time_buckets": {
         "11:00-15:59": {
@@ -1108,7 +1108,7 @@
         },
         "21:00-01:59": {
           "init": 0,
-          "reinit": 4
+          "reinit": 8
         },
         "02:00-06:59": {
           "init": 0,
@@ -1932,39 +1932,34 @@
         }
       ],
       "last_reset": "2025-09-27T05:00:07.916Z",
-      "last_updated": "2025-09-27T05:15:25.752Z"
+      "last_updated": "2025-09-27T05:30:05.849Z"
     },
     "total_features": 5
   },
   "agents": {
-    "agent_1758946487032": {
-      "lastHeartbeat": "2025-09-27T04:33:20.730Z",
-      "status": "active",
-      "reinitialized": "2025-09-27T04:33:20.730Z",
-      "sessionId": "3e08f326c3825357",
-      "previousSessions": [
-        "76ed4e5a497f4fc1"
-      ]
-    },
     "CLAUDE_AGENT_001": {
-      "lastHeartbeat": "2025-09-27T05:02:03.798Z",
+      "lastHeartbeat": "2025-09-27T05:18:12.981Z",
       "status": "active",
-      "reinitialized": "2025-09-27T05:02:03.798Z",
-      "sessionId": "13dbb634ed752cf3",
+      "reinitialized": "2025-09-27T05:18:12.981Z",
+      "sessionId": "1ab27a2f9fcb5ec3",
       "previousSessions": [
         "3dd0737f270b11a3",
         "fc8ea0d614adca6f",
-        "086f3fefbd2ecf10"
+        "086f3fefbd2ecf10",
+        "13dbb634ed752cf3",
+        "64183ed60046d789"
       ]
     },
     "agent_1758958399822": {
-      "lastHeartbeat": "2025-09-27T05:15:25.749Z",
+      "lastHeartbeat": "2025-09-27T05:30:05.848Z",
       "status": "active",
-      "reinitialized": "2025-09-27T05:15:25.749Z",
-      "sessionId": "51ec74e2fbb026e9",
+      "reinitialized": "2025-09-27T05:30:05.848Z",
+      "sessionId": "17963189822cbfd9",
       "previousSessions": [
         "95b7b2136ef0192f",
-        "7b2a9c12a86ec1d0"
+        "7b2a9c12a86ec1d0",
+        "51ec74e2fbb026e9",
+        "d2b8e28df522a5dd"
       ]
     }
   },
