@@ -645,13 +645,17 @@ describe('FeatureManagerAPI', () => {
       });
 
       test('should timeout slow operations with custom timeout', async () => {
-        const slowPromise = new Promise(resolve => setTimeout(() => resolve('slow'), 200));
+        const slowPromise = new Promise(resolve => {
+          setTimeout(() => resolve('slow'), 200);
+        });
 
         await expect(api.withTimeout(slowPromise, 50)).rejects.toThrow('Operation timed out after 50ms');
       });
 
       test('should use default timeout when not specified', async () => {
-        const slowPromise = new Promise(resolve => setTimeout(() => resolve('slow'), 15000));
+        const slowPromise = new Promise(resolve => {
+          setTimeout(() => resolve('slow'), 15000);
+        });
 
         await expect(api.withTimeout(slowPromise)).rejects.toThrow('Operation timed out after 10000ms');
       });

@@ -540,7 +540,7 @@ describe('ValidationDependencyManager', () => {
 
     test('should load configuration from file', async () => {
       // Save current configuration
-      const configPath = await manager.saveDependencyConfig();
+      const _configPath = await manager.saveDependencyConfig();
 
       // Create new manager and load configuration
       const newManager = new ValidationDependencyManager({ projectRoot: tempDir });

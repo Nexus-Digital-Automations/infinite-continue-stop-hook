@@ -125,6 +125,7 @@ class E2EEnvironment {
   async cleanup() {
     for (const task of this.cleanupTasks.reverse()) {
       try {
+        // eslint-disable-next-line no-await-in-loop -- Sequential cleanup required for proper teardown order
         await task();
       } catch (error) {
         console.warn(`Cleanup task failed: ${error.message}`);

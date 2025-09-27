@@ -337,10 +337,12 @@ class TestExecution {
 
     for (let i = 0; i < maxRetries; i++) {
       try {
+        // eslint-disable-next-line no-await-in-loop -- Sequential retry with delay required
         return await fn();
       } catch (error) {
         lastError = error;
         if (i < maxRetries - 1) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential delay required between retry attempts
           await new Promise(resolve => setTimeout(resolve, delay));
         }
       }

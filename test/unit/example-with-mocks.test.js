@@ -205,7 +205,9 @@ describe('Example Test with Mock Framework', () => {
     test('should measure execution time', async () => {
       const { result, duration } = await PerformanceUtils.measureTime(async () => {
         // Simulate some work
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => {
+          setTimeout(resolve, 100);
+        });
         return 'test-result';
       });
 
@@ -231,7 +233,9 @@ describe('Example Test with Mock Framework', () => {
     test('should handle timeouts', async () => {
       await expect(
         TestExecution.withTimeout(
-          new Promise(resolve => setTimeout(resolve, 2000)),
+          new Promise(resolve => {
+            setTimeout(resolve, 2000);
+          }),
           1000,
         ),
       ).rejects.toThrow('Test timed out after 1000ms');
