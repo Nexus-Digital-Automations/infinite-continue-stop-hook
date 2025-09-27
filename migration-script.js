@@ -12,7 +12,6 @@
  */
 
 const fs = require('fs');
-const _path = require('path');
 
 class FeaturesMigration {
   constructor() {

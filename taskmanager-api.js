@@ -50,20 +50,15 @@ const RAGOperations = require('./lib/api-modules/rag/ragOperations');
 // Import validation dependency management system
 const {
   ValidationDependencyManager,
-  DEPENDENCY_TYPES: _DEPENDENCY_TYPES,
 } = require('./lib/validation-dependency-manager');
 
 // Import custom validation rules management system
 const {
   CustomValidationRulesManager,
-  VALIDATION_RULE_TYPES: _VALIDATION_RULE_TYPES,
 } = require('./lib/custom-validation-rules-manager');
 
 // Import validation audit trail management system
 const ValidationAuditTrailManager = require('./lib/validation-audit-trail-manager');
-
-// Import enhanced performance metrics collector
-const _EnhancedPerformanceCollector = require('./lib/enhanced-performance-collector');
 
 // Import timing reports generator
 const TimingReportsGenerator = require('./lib/timing-reports-generator');
@@ -8822,41 +8817,68 @@ class AutonomousTaskManagerAPI {
               ],
             },
             taskManagement: {
-              description: 'Single endpoint task creation system supporting all task types',
+              description:
+                'Single endpoint task creation system supporting all task types',
               types: ['error', 'feature', 'test', 'audit'],
               priorities: ['low', 'normal', 'high', 'urgent'],
-              statuses: ['queued', 'assigned', 'in-progress', 'completed', 'blocked', 'rejected'],
+              statuses: [
+                'queued',
+                'assigned',
+                'in-progress',
+                'completed',
+                'blocked',
+                'rejected',
+              ],
               'create-task': {
                 description: 'Create tasks of any type with unified endpoint',
-                usage: 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task \'{"title":"Task title", "description":"Details", "type":"error|feature|test|audit", "priority":"low|normal|high|urgent"}\'',
+                usage:
+                  'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task \'{"title":"Task title", "description":"Details", "type":"error|feature|test|audit", "priority":"low|normal|high|urgent"}\'',
                 required_fields: ['title', 'description'],
-                optional_fields: ['type', 'priority', 'feature_id', 'dependencies', 'estimated_effort', 'required_capabilities', 'metadata'],
+                optional_fields: [
+                  'type',
+                  'priority',
+                  'feature_id',
+                  'dependencies',
+                  'estimated_effort',
+                  'required_capabilities',
+                  'metadata',
+                ],
                 examples: {
                   errorTask: {
-                    linterError: 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task \'{"title":"Fix ESLint errors in auth.js", "description":"Resolve 5 ESLint violations: unused imports, missing semicolons, inconsistent quotes", "type":"error", "priority":"high"}\'',
-                    buildError: 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task \'{"title":"Fix TypeScript compilation errors", "description":"Resolve type errors in UserService.ts and AuthManager.ts", "type":"error", "priority":"high"}\'',
-                    runtimeError: 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task \'{"title":"Fix null pointer exception in login", "description":"Handle undefined user object in authentication flow", "type":"error", "priority":"urgent"}\'',
+                    linterError:
+                      'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task \'{"title":"Fix ESLint errors in auth.js", "description":"Resolve 5 ESLint violations: unused imports, missing semicolons, inconsistent quotes", "type":"error", "priority":"high"}\'',
+                    buildError:
+                      'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task \'{"title":"Fix TypeScript compilation errors", "description":"Resolve type errors in UserService.ts and AuthManager.ts", "type":"error", "priority":"high"}\'',
+                    runtimeError:
+                      'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task \'{"title":"Fix null pointer exception in login", "description":"Handle undefined user object in authentication flow", "type":"error", "priority":"urgent"}\'',
                   },
-                  featureTask: 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task \'{"title":"Implement user registration", "description":"Create user registration form with validation", "type":"feature", "priority":"normal"}\'',
-                  testTask: 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task \'{"title":"Add unit tests for auth module", "description":"Create comprehensive test coverage for authentication functions", "type":"test", "priority":"normal"}\'',
-                  auditTask: 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task \'{"title":"Security audit for payment processing", "description":"Review payment flow for security vulnerabilities", "type":"audit", "priority":"high"}\'',
+                  featureTask:
+                    'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task \'{"title":"Implement user registration", "description":"Create user registration form with validation", "type":"feature", "priority":"normal"}\'',
+                  testTask:
+                    'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task \'{"title":"Add unit tests for auth module", "description":"Create comprehensive test coverage for authentication functions", "type":"test", "priority":"normal"}\'',
+                  auditTask:
+                    'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task \'{"title":"Security audit for payment processing", "description":"Review payment flow for security vulnerabilities", "type":"audit", "priority":"high"}\'',
                 },
               },
               'get-task': {
                 description: 'Retrieve specific task by ID',
-                usage: 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-task <taskId>',
+                usage:
+                  'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-task <taskId>',
               },
               'update-task': {
                 description: 'Update task status, progress, or metadata',
-                usage: 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" update-task <taskId> \'{"status":"in-progress", "progress_percentage":50}\'',
+                usage:
+                  'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" update-task <taskId> \'{"status":"in-progress", "progress_percentage":50}\'',
               },
               'get-tasks-by-status': {
                 description: 'Get all tasks with specific status',
-                usage: 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-tasks-by-status queued',
+                usage:
+                  'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-tasks-by-status queued',
               },
               'get-tasks-by-priority': {
                 description: 'Get all tasks with specific priority',
-                usage: 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-tasks-by-priority high',
+                usage:
+                  'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-tasks-by-priority high',
               },
             },
           };
