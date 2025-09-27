@@ -2299,15 +2299,15 @@ class AutonomousTaskManagerAPI {
 
       // Apply filtering options
       let filteredMetrics = metricsData.metrics || [];
-      if (_options.timeRange) {
-        const cutoffTime = new Date(Date.now() - _options.timeRange * 24 * 60 * 60 * 1000);
+      if (options.timeRange) {
+        const cutoffTime = new Date(Date.now() - options.timeRange * 24 * 60 * 60 * 1000);
         filteredMetrics = filteredMetrics.filter(m => new Date(m.startTime) >= cutoffTime);
       }
-      if (_options.criterion) {
-        filteredMetrics = filteredMetrics.filter(m => m.criterion === _options.criterion);
+      if (options.criterion) {
+        filteredMetrics = filteredMetrics.filter(m => m.criterion === options.criterion);
       }
-      if (_options.successOnly !== undefined) {
-        filteredMetrics = filteredMetrics.filter(m => m.success === _options.successOnly);
+      if (options.successOnly !== undefined) {
+        filteredMetrics = filteredMetrics.filter(m => m.success === options.successOnly);
       }
 
       // Calculate enhanced statistics
@@ -2315,7 +2315,7 @@ class AutonomousTaskManagerAPI {
 
       return {
         success: true,
-        metrics: _options.limit ? filteredMetrics.slice(-_options.limit) : filteredMetrics,
+        metrics: options.limit ? filteredMetrics.slice(-options.limit) : filteredMetrics,
         statistics: enhancedStats,
         filtering: {
           applied: _options,
@@ -2338,7 +2338,7 @@ class AutonomousTaskManagerAPI {
   /**
    * Analyze performance trends over time periods
    */
-  async getPerformanceTrends(_options = {}) {
+  async getPerformanceTrends(options = {}) {
     try {
       const _fs = require('fs').promises;
       const _path = require('path');
@@ -2385,7 +2385,7 @@ class AutonomousTaskManagerAPI {
   /**
    * Identify performance bottlenecks and slow validation criteria
    */
-  async identifyPerformanceBottlenecks(_options = {}) {
+  async identifyPerformanceBottlenecks(options = {}) {
     try {
       const _fs = require('fs').promises;
       const _path = require('path');
@@ -2404,7 +2404,7 @@ class AutonomousTaskManagerAPI {
       const metrics = metricsData.metrics || [];
 
       // Analyze bottlenecks by criterion
-      const bottleneckAnalysis = this._analyzeBottlenecks(metrics, _options);
+      const bottleneckAnalysis = this._analyzeBottlenecks(metrics, options);
 
       return {
         success: true,
@@ -2435,7 +2435,7 @@ class AutonomousTaskManagerAPI {
   /**
    * Generate detailed timing report for specific validation runs
    */
-  async getDetailedTimingReport(_options = {}) {
+  async getDetailedTimingReport(options = {}) {
     try {
       const _fs = require('fs').promises;
       const _path = require('path');
@@ -2454,7 +2454,7 @@ class AutonomousTaskManagerAPI {
       const metrics = metricsData.metrics || [];
 
       // Generate detailed timing breakdown
-      const timingReport = this._generateDetailedTimingReport(metrics, _options);
+      const timingReport = this._generateDetailedTimingReport(metrics, options);
 
       return {
         success: true,
@@ -2480,7 +2480,7 @@ class AutonomousTaskManagerAPI {
   /**
    * Analyze resource usage during validation processes
    */
-  async analyzeResourceUsage(_options = {}) {
+  async analyzeResourceUsage(options = {}) {
     try {
       const _fs = require('fs').promises;
       const _path = require('path');
@@ -2499,7 +2499,7 @@ class AutonomousTaskManagerAPI {
       const metrics = metricsData.metrics || [];
 
       // Analyze memory usage patterns
-      const resourceAnalysis = this._analyzeResourceUsagePatterns(metrics, _options);
+      const resourceAnalysis = this._analyzeResourceUsagePatterns(metrics, options);
 
       return {
         success: true,
@@ -2525,7 +2525,7 @@ class AutonomousTaskManagerAPI {
   /**
    * Get performance benchmarks and comparisons
    */
-  async getPerformanceBenchmarks(_options = {}) {
+  async getPerformanceBenchmarks(options = {}) {
     try {
       const _fs = require('fs').promises;
       const _path = require('path');
@@ -2544,7 +2544,7 @@ class AutonomousTaskManagerAPI {
       const metrics = metricsData.metrics || [];
 
       // Calculate benchmarks
-      const benchmarks = this._calculatePerformanceBenchmarks(metrics, _options);
+      const benchmarks = this._calculatePerformanceBenchmarks(metrics, options);
 
       return {
         success: true,
@@ -2970,7 +2970,7 @@ class AutonomousTaskManagerAPI {
   /**
    * Analyze performance bottlenecks
    */
-  _analyzeBottlenecks(metrics, _options) {
+  _analyzeBottlenecks(metrics, options) {
     const slowThreshold = options.slowThreshold || 5000;
     const criticalThreshold = options.criticalThreshold || 10000;
 
@@ -3454,7 +3454,7 @@ class AutonomousTaskManagerAPI {
   /**
    * Calculate performance benchmarks
    */
-  _calculatePerformanceBenchmarks(metrics, _options) {
+  _calculatePerformanceBenchmarks(metrics, options) {
     const byCriterion = this._groupMetricsByCriteria(metrics);
     const timeRange = options.timeRange || 30; // days
     const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
@@ -9474,7 +9474,7 @@ async function main() {
       }
       case 'create-tasks-from-features': {
         const options = args[1] ? JSON.parse(args[1]) : {};
-        result = await api.createTasksFromApprovedFeatures(_options);
+        result = await api.createTasksFromApprovedFeatures(options);
         break;
       }
       case 'get-task-queue': {
@@ -9538,7 +9538,7 @@ async function main() {
           throw new Error('Search query required. Usage: search-lessons "query text" [_options]');
         }
         const options = args[2] ? JSON.parse(args[2]) : {};
-        result = await api.searchLessons(args[1], _options);
+        result = await api.searchLessons(args[1], options);
         break;
       }
       case 'store-error': {
@@ -9554,7 +9554,7 @@ async function main() {
           throw new Error('Error description required. Usage: find-similar-errors "error description" [_options]');
         }
         const options = args[2] ? JSON.parse(args[2]) : {};
-        result = await api.findSimilarErrors(args[1], _options);
+        result = await api.findSimilarErrors(args[1], options);
         break;
       }
       case 'get-relevant-lessons': {
@@ -9562,7 +9562,7 @@ async function main() {
           throw new Error('Task ID required. Usage: get-relevant-lessons <taskId> [_options]');
         }
         const options = args[2] ? JSON.parse(args[2]) : {};
-        result = await api.getRelevantLessons(args[1], _options);
+        result = await api.getRelevantLessons(args[1], options);
         break;
       }
       case 'rag-analytics':
@@ -9613,7 +9613,7 @@ async function main() {
         }
         const query = args[1];
         const options = args[2] ? JSON.parse(args[2]) : {};
-        result = await api.searchLessonsWithVersioning(query, _options);
+        result = await api.searchLessonsWithVersioning(query, options);
         break;
       }
 
@@ -9906,22 +9906,22 @@ async function main() {
       }
       case 'identify-performance-bottlenecks': {
         const options = args[1] ? JSON.parse(args[1]) : {};
-        result = await api.identifyPerformanceBottlenecks(_options);
+        result = await api.identifyPerformanceBottlenecks(options);
         break;
       }
       case 'get-detailed-timing-report': {
         const options = args[1] ? JSON.parse(args[1]) : {};
-        result = await api.getDetailedTimingReport(_options);
+        result = await api.getDetailedTimingReport(options);
         break;
       }
       case 'analyze-resource-usage': {
         const options = args[1] ? JSON.parse(args[1]) : {};
-        result = await api.analyzeResourceUsage(_options);
+        result = await api.analyzeResourceUsage(options);
         break;
       }
       case 'get-performance-benchmarks': {
         const options = args[1] ? JSON.parse(args[1]) : {};
-        result = await api.getPerformanceBenchmarks(_options);
+        result = await api.getPerformanceBenchmarks(options);
         break;
       }
 
