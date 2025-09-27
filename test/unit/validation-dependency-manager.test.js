@@ -58,7 +58,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
     test('should have proper metadata for each criterion', () => {
       const dependencies = dependencyManager.getAllDependencies();
 
-      for (const [criterion, config] of Object.entries(dependencies)) {
+      for (const [_criterion, config] of Object.entries(dependencies)) {
         expect(config.metadata).toHaveProperty('description');
         expect(config.metadata).toHaveProperty('estimatedDuration');
         expect(config.metadata).toHaveProperty('parallelizable');

@@ -57,7 +57,7 @@ function findClaudeProjectRoot(startDir = process.cwd()) {
  * Enhanced stop authorization checking with comprehensive validation progress reporting
  * Provides real-time visibility into validation progress, completion percentage, and detailed status
  */
-function generateValidationProgressReport(flagData, logger) {
+function generateValidationProgressReport(flagData, logger, workingDir) {
   const progressReport = {
     totalValidations: 7,
     completedValidations: 0,
@@ -108,7 +108,7 @@ function generateValidationProgressReport(flagData, logger) {
   ];
 
   // Load and merge custom validation rules
-  const customRules = loadCustomValidationRules(projectRoot);
+  const customRules = loadCustomValidationRules(workingDir);
   const customCriteriaIds = customRules.map(rule => rule.id);
   const validationCriteria = [...standardValidationCriteria, ...customCriteriaIds];
 
@@ -176,7 +176,7 @@ function checkStopAllowed(workingDir = process.cwd()) {
 
       // Generate comprehensive validation progress report
       const logger = new _Logger(workingDir);
-      const progressReport = generateValidationProgressReport(flagData, logger);
+      const progressReport = generateValidationProgressReport(flagData, logger, workingDir);
 
       // Display detailed validation progress
       console.error(`

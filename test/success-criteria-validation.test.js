@@ -187,7 +187,7 @@ async function cleanupFeaturesTestProject() {
 /**
  * Feature management utilities for FeatureManager API
  */
-async function createFeature(featureData) {
+function createFeature(featureData) {
   const feature = {
     title: featureData.title,
     description: featureData.description,
@@ -198,7 +198,7 @@ async function createFeature(featureData) {
   return execAPI('suggest-feature', [JSON.stringify(feature)]);
 }
 
-async function approveFeature(featureId, approvalData = {}) {
+function _approveFeature(featureId, approvalData = {}) {
   const approval = {
     approved_by: 'test-agent',
     approval_notes: 'Test approval',
@@ -207,7 +207,7 @@ async function approveFeature(featureId, approvalData = {}) {
   return execAPI('approve-feature', [featureId, JSON.stringify(approval)]);
 }
 
-async function rejectFeature(featureId, rejectionData = {}) {
+function _rejectFeature(featureId, rejectionData = {}) {
   const rejection = {
     rejected_by: 'test-agent',
     rejection_reason: 'Test rejection',
@@ -216,8 +216,16 @@ async function rejectFeature(featureId, rejectionData = {}) {
   return execAPI('reject-feature', [featureId, JSON.stringify(rejection)]);
 }
 
-async function initializeAgent(agentId = 'test-agent') {
+function initializeAgent(agentId = 'test-agent') {
   return execAPI('initialize', [agentId]);
+}
+
+function createBaseTemplate(templateName, criteria) {
+  return execAPI('success-criteria:create-base-template', [templateName, JSON.stringify(criteria)]);
+}
+
+function createChildTemplate(templateName, parentTemplateName, criteria) {
+  return execAPI('success-criteria:create-child-template', [templateName, parentTemplateName, JSON.stringify(criteria)]);
 }
 
 /**

@@ -121,15 +121,15 @@ describe('Stop Hook Integration E2E', () => {
       expect(continueResults.length).toBeLessThanOrEqual(maxIterations);
 
       // Check for proper termination
-      let foundStop = false;
-      continueResults.forEach((result, index) => {
+      let _foundStop = false;
+      continueResults.forEach((result, _index) => {
         expect(result).toBeTruthy();
 
         if (result.stdout && result.stdout.includes('STOP_AUTHORIZED')) {
-          foundStop = true;
+          _foundStop = true;
         }
 
-        console.log(`Continue iteration ${index}: ${result.success ? 'SUCCESS' : 'STOPPED'}`);
+        console.log(`Continue iteration ${_index}: ${result.success ? 'SUCCESS' : 'STOPPED'}`);
       });
 
       console.log(`✅ Infinite continue mode test completed with ${continueResults.length} iterations`);
@@ -182,7 +182,7 @@ describe('Stop Hook Integration E2E', () => {
       const featureId = pendingTasksResult.result.stdout.match(/Feature ID: (\w+)/)[1];
 
       // Try to stop with pending tasks
-      const stopWithPendingResult = await CommandExecutor.executeStopHook(
+      const _stopWithPendingResult = await CommandExecutor.executeStopHook(
         ['authorize-stop', agentId, 'Attempting stop with pending tasks'],
         {
           projectRoot: environment.testDir,
@@ -199,7 +199,7 @@ describe('Stop Hook Integration E2E', () => {
       );
 
       // Try to stop after completing tasks
-      const stopAfterCompletionResult = await CommandExecutor.executeStopHook(
+      const _stopAfterCompletionResult = await CommandExecutor.executeStopHook(
         ['authorize-stop', agentId, 'All tasks completed - requesting stop'],
         {
           projectRoot: environment.testDir,
@@ -273,7 +273,7 @@ describe('Stop Hook Integration E2E', () => {
       const featureId = initialFeature.result.stdout.match(/Feature ID: (\w+)/)[1];
 
       // Step 2: Test stop hook at suggestion phase
-      let stopResult = await CommandExecutor.executeStopHook(
+      const _stopResult2 = await CommandExecutor.executeStopHook(
         ['check-stop-conditions', agentId],
         {
           projectRoot: environment.testDir,
@@ -289,7 +289,7 @@ describe('Stop Hook Integration E2E', () => {
         'Feature approved - checking stop conditions',
       );
 
-      stopResult = await CommandExecutor.executeStopHook(
+      const _stopResult = await CommandExecutor.executeStopHook(
         ['check-stop-conditions', agentId],
         {
           projectRoot: environment.testDir,
@@ -298,7 +298,7 @@ describe('Stop Hook Integration E2E', () => {
       );
 
       // Step 4: Final stop authorization
-      const finalStopResult = await CommandExecutor.executeStopHook(
+      const _finalStopResult = await CommandExecutor.executeStopHook(
         ['authorize-stop', agentId, 'Feature lifecycle completed successfully'],
         {
           projectRoot: environment.testDir,
@@ -341,7 +341,7 @@ describe('Stop Hook Integration E2E', () => {
 
       // Step 2: Analyze performance results
       let successfulRequests = 0;
-      rapidResults.forEach((result, index) => {
+      rapidResults.forEach((result, _index) => {
         if (result.status === 'fulfilled') {
           successfulRequests++;
         }
@@ -372,7 +372,7 @@ describe('Stop Hook Integration E2E', () => {
       const preFailureId = preFailureFeature.result.stdout.match(/Feature ID: (\w+)/)[1];
 
       // Step 2: Simulate failure conditions
-      const failureSimulationResults = await Promise.allSettled([
+      const _failureSimulationResults = await Promise.allSettled([
         CommandExecutor.executeStopHook(
           ['authorize-stop', agentId],
           {
@@ -401,7 +401,7 @@ describe('Stop Hook Integration E2E', () => {
       const postRecoveryId = recoveryFeature.result.stdout.match(/Feature ID: (\w+)/)[1];
 
       // Step 4: Test normal stop hook after recovery
-      const recoveryStopResult = await StopHookTestHelpers.simulateAgentExecution(
+      const _recoveryStopResult = await StopHookTestHelpers.simulateAgentExecution(
         environment,
         agentId,
         500,

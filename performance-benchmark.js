@@ -13,7 +13,7 @@
 const { performance } = require('perf_hooks');
 const { spawn } = require('child_process');
 const fs = require('fs').promises;
-const path = require('path');
+const _path = require('path');
 
 class TaskManagerPerformanceBenchmark {
   constructor() {
@@ -37,7 +37,7 @@ class TaskManagerPerformanceBenchmark {
    * @param {Array} args - Command arguments
    * @returns {Object} Result with timing and response data
    */
-  async executeTimedCommand(command, args = []) {
+  executeTimedCommand(command, args = []) {
     const startTime = performance.now();
     const startMemory = process.memoryUsage();
 
@@ -70,7 +70,7 @@ class TaskManagerPerformanceBenchmark {
           if (jsonMatch) {
             response = JSON.parse(jsonMatch[0]);
           }
-        } catch (e) {
+        } catch {
           // Response is not JSON - keep as string
           response = stdout;
         }
@@ -584,7 +584,7 @@ class TaskManagerPerformanceBenchmark {
   /**
    * Utility method to sleep for specified milliseconds
    */
-  async sleep(ms) {
+  sleep(ms) {
     return new Promise(resolve => {
       setTimeout(resolve, ms);
     });
@@ -633,11 +633,11 @@ if (require.main === module) {
   benchmark.runCompleteBenchmark()
     .then(() => {
       console.log('\n🎉 All benchmarks completed successfully!');
-      process.exit(0);
+      throw new Error('Benchmark completed successfully');
     })
     .catch((error) => {
       console.error('\n❌ Benchmark suite failed:', error.message);
-      process.exit(1);
+      throw error;
     });
 }
 

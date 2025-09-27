@@ -48,7 +48,7 @@ class TestIdGenerator {
  * Enhanced API executor with better error handling and logging
  */
 class APIExecutor {
-  static async execAPI(command, args = [], options = {}) {
+  static execAPI(command, args = [], options = {}) {
     const timeout = options.timeout || TEST_CONFIG.DEFAULT_TIMEOUT;
     const projectRoot = options.projectRoot || null;
     const silent = options.silent || false;
@@ -132,7 +132,7 @@ class APIExecutor {
   /**
    * Create a test feature
    */
-  static async createTestFeature(featureData, options = {}) {
+  static createTestFeature(featureData, options = {}) {
     const defaultFeature = {
       title: 'Test Feature',
       description: 'This is a test feature for automated testing',
@@ -149,6 +149,9 @@ class APIExecutor {
    */
   static async cleanup(testData) {
     // Future implementation for cleanup
+    await new Promise(resolve => {
+      setTimeout(resolve, 0);
+    });
     console.log(`Cleaning up test data: ${JSON.stringify(testData)}`);
   }
 }
@@ -323,7 +326,7 @@ const customMatchers = {
  * Test execution utilities
  */
 class TestExecution {
-  static async withTimeout(promise, timeout = TEST_CONFIG.DEFAULT_TIMEOUT) {
+  static withTimeout(promise, timeout = TEST_CONFIG.DEFAULT_TIMEOUT) {
     return Promise.race([
       promise,
       new Promise((_, reject) => {
@@ -337,8 +340,8 @@ class TestExecution {
 
     for (let i = 0; i < maxRetries; i++) {
       try {
-
-        return fn();
+        // eslint-disable-next-line no-await-in-loop -- Sequential retry attempts required
+        return await fn();
       } catch (error) {
         lastError = error;
         if (i < maxRetries - 1) {
@@ -358,6 +361,7 @@ class TestExecution {
 
     for (let i = 0; i < promises.length; i += maxConcurrency) {
       const batch = promises.slice(i, i + maxConcurrency);
+      // eslint-disable-next-line no-await-in-loop -- Controlled batching required for concurrency management
       const batchResults = await Promise.all(batch);
       results.push(...batchResults);
     }

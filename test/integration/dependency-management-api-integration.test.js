@@ -31,7 +31,7 @@ describe('Dependency Management API Integration Tests', () => {
       if (error.stdout) {
         try {
           return JSON.parse(error.stdout.trim());
-        } catch {
+        } catch (error) {
           throw new Error(`Command failed: ${error.message}, Output: ${error.stdout || error.stderr}`);
         }
       }
@@ -489,7 +489,7 @@ describe('Dependency Management API Integration Tests', () => {
     });
 
     test('should handle multiple rapid API calls', () => {
-      const promises = [];
+      const _promises = [];
       const startTime = Date.now();
 
       // Execute multiple API calls concurrently

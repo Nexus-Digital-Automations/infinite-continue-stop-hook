@@ -36,7 +36,7 @@ describe('Feature Management System E2E', () => {
       // Test feature suggestion across all supported categories
 
       const categories = ['enhancement', 'bug-fix', 'new-feature', 'performance', 'security', 'documentation'];
-      const suggestionPromises = categories.map((category, index) =>
+      const suggestionPromises = categories.map((category, _index) =>
         FeatureTestHelpers.suggestFeature(environment, {
           title: `${category.charAt(0).toUpperCase() + category.slice(1)} Test Feature`,
           description: `Comprehensive test feature for ${category} category validation`,
@@ -114,13 +114,13 @@ describe('Feature Management System E2E', () => {
       ]);
 
       // All should return error responses (but the commands succeed in returning those errors)
-      missingFieldResults.forEach((result, index) => {
+      missingFieldResults.forEach((result, _index) => {
         if (result.status === 'fulfilled') {
           try {
             const response = JSON.parse(result.value.stdout);
             expect(response.success).toBe(false);
             expect(response.error).toContain('missing');
-          } catch (error) {
+          } catch {
             // If we can't parse JSON, the command itself may have failed which is also valid
             expect(result.value.success).toBe(false);
           }
@@ -182,7 +182,7 @@ describe('Feature Management System E2E', () => {
         try {
           const response = JSON.parse(result.result.stdout);
           return response.feature?.id;
-        } catch (error) {
+        } catch {
           throw new Error(`Failed to extract feature ID from: ${result.result.stdout}`);
         }
       });
@@ -265,7 +265,7 @@ describe('Feature Management System E2E', () => {
         try {
           const response = JSON.parse(result.result.stdout);
           return response.feature?.id;
-        } catch (error) {
+        } catch {
           throw new Error(`Failed to extract feature ID from: ${result.result.stdout}`);
         }
       });
@@ -325,7 +325,7 @@ describe('Feature Management System E2E', () => {
         try {
           const response = JSON.parse(result.stdout);
           return response.feature?.id;
-        } catch (error) {
+        } catch {
           throw new Error(`Failed to extract feature ID from: ${result.stdout}`);
         }
       })();
@@ -341,7 +341,7 @@ describe('Feature Management System E2E', () => {
       E2EAssertions.assertCommandSuccess(validApproval, 'Valid approval');
 
       // Try to suggest already approved feature (should fail)
-      const invalidSuggestion = await CommandExecutor.executeAPI(
+      const _invalidSuggestion = await CommandExecutor.executeAPI(
         'suggest-feature',
         ['Duplicate Title', 'Description', 'Value', 'enhancement'],
         {
@@ -400,7 +400,7 @@ describe('Feature Management System E2E', () => {
         try {
           const response = JSON.parse(result.result.stdout);
           return response.feature?.id;
-        } catch (error) {
+        } catch {
           throw new Error(`Failed to extract feature ID from: ${result.result.stdout}`);
         }
       });
@@ -484,7 +484,7 @@ describe('Feature Management System E2E', () => {
         try {
           const response = JSON.parse(result.result.stdout);
           return response.feature?.id;
-        } catch (error) {
+        } catch {
           throw new Error(`Failed to extract feature ID from: ${result.result.stdout}`);
         }
       });
@@ -548,7 +548,7 @@ describe('Feature Management System E2E', () => {
         try {
           const response = JSON.parse(result.result.stdout);
           return response.feature?.id;
-        } catch (error) {
+        } catch {
           throw new Error(`Failed to extract feature ID from: ${result.result.stdout}`);
         }
       });

@@ -19,11 +19,11 @@ const {
   cleanupTestEnvironment,
   readFeaturesFile,
   generateTestFeature,
-  generateTestAgentConfig,
+  _generateTestAgentConfig,
   validateFeaturesStructure,
   setupGlobalCleanup,
   teardownGlobalCleanup,
-  delay,
+  _delay,
 } = require('./test-utils');
 
 describe('API Workflow Integration Tests', () => {
@@ -438,37 +438,41 @@ describe('API Workflow Integration Tests', () => {
 
       for (const operation of operations) {
         switch (operation.type) {
-          case 'init':
+          case 'init': {
             const initResult = await execAPI('initialize', [operation.agentId], {
               projectRoot: testDir,
             });
             expect(initResult.success).toBe(true);
             agents.push(operation.agentId);
             break;
+          }
 
-          case 'suggest':
+          case 'suggest': {
             const suggestResult = await execAPI('suggest-feature', [
               JSON.stringify(operation.feature),
             ], { projectRoot: testDir });
             expect(suggestResult.success).toBe(true);
             suggestedFeatures.push(suggestResult.feature.id);
             break;
+          }
 
-          case 'approve':
+          case 'approve': {
             const approveResult = await execAPI('approve-feature', [
               suggestedFeatures[operation.index],
               JSON.stringify({ approved_by: operation.agentId }),
             ], { projectRoot: testDir });
             expect(approveResult.success).toBe(true);
             break;
+          }
 
-          case 'reject':
+          case 'reject': {
             const rejectResult = await execAPI('reject-feature', [
               suggestedFeatures[operation.index],
               JSON.stringify({ rejected_by: operation.agentId, reason: 'Consistency test rejection' }),
             ], { projectRoot: testDir });
             expect(rejectResult.success).toBe(true);
             break;
+          }
         }
 
         // Verify data consistency after each operation

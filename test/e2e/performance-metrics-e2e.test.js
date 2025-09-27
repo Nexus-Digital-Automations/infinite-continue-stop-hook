@@ -46,7 +46,7 @@ describe('Performance Metrics System E2E Tests', () => {
       if (error.stdout) {
         try {
           return JSON.parse(error.stdout.trim());
-        } catch (parseError) {
+        } catch {
           return { success: false, error: error.message, stdout: error.stdout };
         }
       }
@@ -352,7 +352,7 @@ describe('Performance Metrics System E2E Tests', () => {
       });
 
       // All requests should succeed
-      results.forEach((result, index) => {
+      results.forEach((result, _index) => {
         expect(result.success).toBe(true);
       });
     });
@@ -501,7 +501,7 @@ describe('Performance Metrics System E2E Tests', () => {
       let result = executeTaskManagerCommand('analyze-criterion-trend', 'build-validation');
       expect(result.success).toBe(true);
 
-      const weeklyTrendStrength = result.analysis.trend.strength;
+      const _weeklyTrendStrength = result.analysis.trend.strength;
 
       // Test with 3 weeks of data (more data points)
       simulateValidationExecutions(); // Creates 3 weeks of data
@@ -509,7 +509,7 @@ describe('Performance Metrics System E2E Tests', () => {
       result = executeTaskManagerCommand('analyze-criterion-trend', 'build-validation');
       expect(result.success).toBe(true);
 
-      const monthlyTrendStrength = result.analysis.trend.strength;
+      const _monthlyTrendStrength = result.analysis.trend.strength;
 
       // More data should generally provide more reliable trend detection
       expect(result.analysis.metadata.totalMetrics).toBeGreaterThan(weekData.metrics.length);

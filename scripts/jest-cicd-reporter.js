@@ -246,7 +246,7 @@ class JestCiCdReporter {
     return 'other';
   }
 
-  detectFlakyTests(results) {
+  detectFlakyTests(_results) {
     // Placeholder for flaky test detection
     // In a real implementation, this would compare with historical data
     return {
@@ -362,7 +362,7 @@ class JestCiCdReporter {
         functions: { total: summary.functions.total, covered: summary.functions.covered, pct: summary.functions.pct },
         lines: { total: summary.lines.total, covered: summary.lines.covered, pct: summary.lines.pct },
       };
-    } catch (error) {
+    } catch {
       return { error: 'Failed to extract coverage summary' };
     }
   }
@@ -585,7 +585,7 @@ class JestCiCdReporter {
 
   sendWebhook(url, payload) {
     // Simplified webhook sending - in production, use a proper HTTP client
-    const data = JSON.stringify(payload);
+    const _data = JSON.stringify(payload);
     // Implementation would use https.request or a library like axios
   }
 

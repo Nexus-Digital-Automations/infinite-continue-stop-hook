@@ -120,7 +120,15 @@ This lesson covers proper API error handling techniques.
 ## Implementation
 \`\`\`javascript
 try {
-  const response = await fetch('/api/data');
+  const https = require('https');
+  const response = await new Promise((resolve, reject) => {
+    const req = https.get('/api/data', (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => resolve({ ok: res.statusCode === 200, json: () => JSON.parse(data) }));
+    });
+    req.on('error', reject);
+  });
   if (!response.ok) throw new Error('API Error');
 } catch (error) {
         console.error(error);

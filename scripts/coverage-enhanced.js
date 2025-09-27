@@ -20,7 +20,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync, spawn } = require('child_process');
+const { execSync, _spawn } = require('child_process');
 
 // Enhanced Configuration
 const ENHANCED_CONFIG = {
@@ -205,37 +205,39 @@ class EnhancedCoverageSystem {
   /**
    * Main execution pipeline
    */
-  async run() {
+  run() {
     try {
       this.logger.info('🚀 Starting Enhanced Coverage Analysis Pipeline');
 
-      await this.setupEnvironment();
-      await this.executeCoverageAnalysis();
-      await this.loadCoverageData();
-      await this.performTrendAnalysis();
-      await this.executeQualityGates();
-      await this.generateAllReports();
-      await this.generateBadges();
-      await this.updateIntegrations();
-      await this.generateSummary();
+      this.setupEnvironment();
+      this.executeCoverageAnalysis();
+      this.loadCoverageData();
+      this.performTrendAnalysis();
+      this.executeQualityGates();
+      this.generateAllReports();
+      this.generateBadges();
+      this.updateIntegrations();
+      this.generateSummary();
 
       const duration = Date.now() - this.startTime;
       this.logger.success(`Coverage pipeline completed successfully in ${duration}ms`);
 
-      // Exit with appropriate status
+      // Check for failures
       const hasFailures = this.results.validation?.blocking_failures?.length > 0;
-      process.exit(hasFailures ? 1 : 0);
+      if (hasFailures) {
+        throw new Error('Coverage validation failed with blocking failures');
+      }
 
     } catch (error) {
       this.logger.error('Coverage pipeline failed', { error: error.message, stack: error.stack });
-      process.exit(1);
+      throw error;
     }
   }
 
   /**
    * Setup directory structure and environment
    */
-  async setupEnvironment() {
+  setupEnvironment() {
     this.logger.info('Setting up coverage environment');
 
     // Create all required directories
@@ -248,14 +250,14 @@ class EnhancedCoverageSystem {
 
     // Archive previous reports if enabled
     if (this.config.reports.archive_reports) {
-      await this.archivePreviousReports();
+      this.archivePreviousReports();
     }
   }
 
   /**
    * Archive previous coverage reports
    */
-  async archivePreviousReports() {
+  archivePreviousReports() {
     const archiveDir = path.join(this.config.paths.archive, new Date().toISOString().split('T')[0]);
 
     if (fs.existsSync(this.config.paths.reports)) {
@@ -278,13 +280,13 @@ class EnhancedCoverageSystem {
     }
 
     // Clean old archives
-    await this.cleanOldArchives();
+    this.cleanOldArchives();
   }
 
   /**
    * Clean old archived reports
    */
-  async cleanOldArchives() {
+  cleanOldArchives() {
     if (!fs.existsSync(this.config.paths.archive)) {return;}
 
     const archives = fs.readdirSync(this.config.paths.archive)
@@ -307,7 +309,7 @@ class EnhancedCoverageSystem {
   /**
    * Execute Jest coverage analysis with performance monitoring
    */
-  async executeCoverageAnalysis() {
+  executeCoverageAnalysis() {
     this.logger.info('Executing coverage analysis with performance monitoring');
 
     const perfStart = process.hrtime.bigint();
@@ -363,7 +365,7 @@ class EnhancedCoverageSystem {
   /**
    * Load and validate coverage data
    */
-  async loadCoverageData() {
+  loadCoverageData() {
     this.logger.info('Loading coverage data');
 
     const summaryPath = path.join(this.config.paths.coverage, 'coverage-summary.json');
@@ -397,7 +399,7 @@ class EnhancedCoverageSystem {
   /**
    * Perform trend analysis and regression detection
    */
-  async performTrendAnalysis() {
+  performTrendAnalysis() {
     this.logger.info('Performing trend analysis');
 
     const trendsPath = path.join(this.config.paths.trends, 'coverage-trends.json');
@@ -407,7 +409,7 @@ class EnhancedCoverageSystem {
     if (fs.existsSync(trendsPath)) {
       try {
         trends = JSON.parse(fs.readFileSync(trendsPath, 'utf8'));
-      } catch (error) {
+      } catch {
         this.logger.warning('Could not load existing trends');
       }
     }
@@ -528,7 +530,7 @@ class EnhancedCoverageSystem {
   /**
    * Execute quality gates with enhanced validation
    */
-  async executeQualityGates() {
+  executeQualityGates() {
     this.logger.info('Executing quality gates');
 
     const coverage = this.results.coverage.summary;
@@ -669,7 +671,7 @@ class EnhancedCoverageSystem {
   /**
    * Generate all coverage reports in multiple formats
    */
-  async generateAllReports() {
+  generateAllReports() {
     this.logger.info('Generating comprehensive coverage reports');
 
     const reportsDir = this.config.paths.reports;
@@ -678,20 +680,20 @@ class EnhancedCoverageSystem {
     }
 
     // Generate executive summary report
-    await this.generateExecutiveSummary();
+    this.generateExecutiveSummary();
 
     // Generate technical detailed report
-    await this.generateTechnicalReport();
+    this.generateTechnicalReport();
 
     // Generate CI/CD integration report
-    await this.generateCiCdReport();
+    this.generateCiCdReport();
 
     // Generate trend analysis report
-    await this.generateTrendReport();
+    this.generateTrendReport();
 
     // Generate performance report
     if (this.config.performance.generate_performance_report) {
-      await this.generatePerformanceReport();
+      this.generatePerformanceReport();
     }
 
     this.logger.success('All coverage reports generated');
@@ -700,7 +702,7 @@ class EnhancedCoverageSystem {
   /**
    * Generate executive summary report
    */
-  async generateExecutiveSummary() {
+  generateExecutiveSummary() {
     const summary = {
       timestamp: new Date().toISOString(),
       overall_status: this.results.validation.passed ? 'PASSED' : 'FAILED',
@@ -736,7 +738,7 @@ class EnhancedCoverageSystem {
   /**
    * Generate technical detailed report
    */
-  async generateTechnicalReport() {
+  generateTechnicalReport() {
     const technical = {
       timestamp: new Date().toISOString(),
       git_info: this.results.coverage.git_info,
@@ -766,7 +768,7 @@ class EnhancedCoverageSystem {
   /**
    * Generate CI/CD integration report
    */
-  async generateCiCdReport() {
+  generateCiCdReport() {
     const cicd = {
       status: this.results.validation.passed ? 'success' : 'failure',
       coverage_percentage: Math.round((
@@ -793,7 +795,7 @@ class EnhancedCoverageSystem {
   /**
    * Generate trend analysis report
    */
-  async generateTrendReport() {
+  generateTrendReport() {
     if (!this.results.trends) {
       this.logger.warning('No trend data available');
       return;
@@ -816,7 +818,7 @@ class EnhancedCoverageSystem {
   /**
    * Generate performance analysis report
    */
-  async generatePerformanceReport() {
+  generatePerformanceReport() {
     if (!this.results.performance) {
       this.logger.warning('No performance data available');
       return;
@@ -842,7 +844,7 @@ class EnhancedCoverageSystem {
   /**
    * Generate coverage badges for different styles and metrics
    */
-  async generateBadges() {
+  generateBadges() {
     if (!this.config.badges.enabled) {
       this.logger.info('Badge generation disabled');
       return;
@@ -978,18 +980,18 @@ Last updated: ${new Date().toISOString()}
   /**
    * Update integrations (GitHub, Slack, etc.)
    */
-  async updateIntegrations() {
+  updateIntegrations() {
     this.logger.info('Updating integrations');
 
     try {
       // GitHub integration
       if (this.config.integrations.github.enable_pr_comments && process.env.GITHUB_TOKEN) {
-        await this.updateGitHubPR();
+        this.updateGitHubPR();
       }
 
       // Slack integration
       if (this.config.integrations.slack.webhook_url) {
-        await this.sendSlackNotification();
+        this.sendSlackNotification();
       }
 
       this.logger.success('Integrations updated');
@@ -1001,7 +1003,7 @@ Last updated: ${new Date().toISOString()}
   /**
    * Generate final summary output
    */
-  async generateSummary() {
+  generateSummary() {
     const coverage = this.results.coverage.summary;
     const validation = this.results.validation;
 
@@ -1256,12 +1258,12 @@ Last updated: ${new Date().toISOString()}
 
   // Integration methods (placeholders for full implementation)
 
-  async updateGitHubPR() {
+  updateGitHubPR() {
     // Placeholder for GitHub PR comment integration
     this.logger.debug('GitHub PR integration placeholder');
   }
 
-  async sendSlackNotification() {
+  sendSlackNotification() {
     // Placeholder for Slack notification integration
     this.logger.debug('Slack notification integration placeholder');
   }
@@ -1301,7 +1303,7 @@ Examples:
   STRUCTURED_LOGS=true node coverage-enhanced.js
   node coverage-enhanced.js --config=custom-config.json
     `);
-    process.exit(0);
+    return;
   }
 
   // Parse command line options
@@ -1315,7 +1317,7 @@ Examples:
       Object.assign(options, customConfig);
     } catch (error) {
       console.error(`❌ Failed to load config: ${error.message}`);
-      process.exit(1);
+      throw error;
     }
   }
 
@@ -1341,16 +1343,18 @@ Examples:
       };
     } else {
       console.error(`❌ Invalid threshold level: ${level}`);
-      process.exit(1);
+      throw new Error(`Invalid threshold level: ${level}`);
     }
   }
 
   // Initialize and run the enhanced coverage system
   const system = new EnhancedCoverageSystem(options);
-  system.run().catch(error => {
+  try {
+    system.run();
+  } catch (error) {
     console.error('❌ Enhanced coverage system failed:', error.message);
-    process.exit(1);
-  });
+    throw error;
+  }
 }
 
 module.exports = EnhancedCoverageSystem;

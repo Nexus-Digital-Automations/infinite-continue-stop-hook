@@ -62,44 +62,44 @@ class TestNotificationSystem {
       if (process.env.DEBUG) {
         console.error(error.stack);
       }
-      process.exit(1);
+      throw new Error(`Failed to process notifications: ${error.message}`);
     }
   }
 
   /**
    * Analyze test results and generate appropriate notifications
    */
-  async analyzeAndGenerateNotifications(testResults, coverageData, cicdData) {
+  analyzeAndGenerateNotifications(testResults, coverageData, cicdData) {
     const notifications = [];
 
     // Test failure notifications
     if (testResults && testResults.summary.numFailedTests > this.options.testFailureThreshold) {
-      notifications.push(await this.createTestFailureNotification(testResults));
+      notifications.push(this.createTestFailureNotification(testResults));
     }
 
     // Coverage threshold notifications
     if (coverageData && this.isCoverageBelowThreshold(coverageData)) {
-      notifications.push(await this.createCoverageThresholdNotification(coverageData));
+      notifications.push(this.createCoverageThresholdNotification(coverageData));
     }
 
     // Coverage drop notifications
     if (coverageData && this.lastRun && this.isCoverageDropSignificant(coverageData)) {
-      notifications.push(await this.createCoverageDropNotification(coverageData));
+      notifications.push(this.createCoverageDropNotification(coverageData));
     }
 
     // Quality gate failure notifications
     if (cicdData && cicdData.cicd_summary && cicdData.cicd_summary.should_block_deployment) {
-      notifications.push(await this.createQualityGateNotification(cicdData));
+      notifications.push(this.createQualityGateNotification(cicdData));
     }
 
     // Performance degradation notifications
     if (testResults && this.isPerformanceDegraded(testResults)) {
-      notifications.push(await this.createPerformanceNotification(testResults));
+      notifications.push(this.createPerformanceNotification(testResults));
     }
 
     // Flaky test notifications
     if (cicdData && this.hasFlakyTests(cicdData)) {
-      notifications.push(await this.createFlakyTestNotification(cicdData));
+      notifications.push(this.createFlakyTestNotification(cicdData));
     }
 
     return notifications.filter(n => n !== null);
@@ -108,7 +108,7 @@ class TestNotificationSystem {
   /**
    * Create test failure notification
    */
-  async createTestFailureNotification(testResults) {
+  createTestFailureNotification(testResults) {
     const failedTests = testResults.summary.numFailedTests;
     const totalTests = testResults.summary.numTotalTests;
     const failureRate = ((failedTests / totalTests) * 100).toFixed(1);
@@ -137,7 +137,7 @@ class TestNotificationSystem {
   /**
    * Create coverage threshold notification
    */
-  async createCoverageThresholdNotification(coverageData) {
+  createCoverageThresholdNotification(coverageData) {
     const currentCoverage = coverageData.total.lines.pct;
     const threshold = this.options.coverageThreshold;
     const gap = (threshold - currentCoverage).toFixed(1);
@@ -168,7 +168,7 @@ class TestNotificationSystem {
   /**
    * Create coverage drop notification
    */
-  async createCoverageDropNotification(coverageData) {
+  createCoverageDropNotification(coverageData) {
     const currentCoverage = coverageData.total.lines.pct;
     const previousCoverage = this.lastRun.coverage_percentage || 0;
     const drop = (previousCoverage - currentCoverage).toFixed(1);
@@ -196,7 +196,7 @@ class TestNotificationSystem {
   /**
    * Create quality gate notification
    */
-  async createQualityGateNotification(cicdData) {
+  createQualityGateNotification(cicdData) {
     const qualityGate = cicdData.cicd_summary.quality_gate_status;
     const blockingIssues = qualityGate.blocking_issues || [];
 
@@ -223,7 +223,7 @@ class TestNotificationSystem {
   /**
    * Create performance notification
    */
-  async createPerformanceNotification(testResults) {
+  createPerformanceNotification(testResults) {
     const duration = testResults.summary.duration;
     const threshold = 300000; // 5 minutes
     const overTime = ((duration - threshold) / 1000).toFixed(0);
@@ -251,7 +251,7 @@ class TestNotificationSystem {
   /**
    * Create flaky test notification
    */
-  async createFlakyTestNotification(cicdData) {
+  createFlakyTestNotification(cicdData) {
     const flakyTests = cicdData.test_execution?.flaky_test_detection?.potentially_flaky || [];
 
     if (flakyTests.length === 0) {return null;}
@@ -304,7 +304,7 @@ class TestNotificationSystem {
   /**
    * Send Slack notification
    */
-  async sendSlackNotification(notification) {
+  sendSlackNotification(notification) {
     const payload = {
       text: notification.title,
       attachments: [{
@@ -343,7 +343,7 @@ class TestNotificationSystem {
   /**
    * Send Teams notification
    */
-  async sendTeamsNotification(notification) {
+  sendTeamsNotification(notification) {
     const payload = {
       '@type': 'MessageCard',
       '@context': 'http://schema.org/extensions',
@@ -370,7 +370,7 @@ class TestNotificationSystem {
   /**
    * Send Discord notification
    */
-  async sendDiscordNotification(notification) {
+  sendDiscordNotification(notification) {
     const payload = {
       embeds: [{
         title: notification.title,
@@ -400,7 +400,7 @@ class TestNotificationSystem {
   /**
    * Send webhook request
    */
-  async sendWebhook(url, payload) {
+  sendWebhook(url, payload) {
     return new Promise((resolve, reject) => {
       const data = JSON.stringify(payload);
       const options = {
@@ -459,7 +459,7 @@ class TestNotificationSystem {
     return cicdData.test_execution?.flaky_test_detection?.potentially_flaky?.length > 0;
   }
 
-  async loadTestResults() {
+  loadTestResults() {
     try {
       const path = './coverage/reports/test-results.json';
       if (fs.existsSync(path)) {
@@ -471,7 +471,7 @@ class TestNotificationSystem {
     return null;
   }
 
-  async loadCoverageData() {
+  loadCoverageData() {
     try {
       const path = './coverage/coverage-summary.json';
       if (fs.existsSync(path)) {
@@ -483,7 +483,7 @@ class TestNotificationSystem {
     return null;
   }
 
-  async loadCICDData() {
+  loadCICDData() {
     try {
       const path = './coverage/reports/ci-cd-results.json';
       if (fs.existsSync(path)) {
@@ -546,7 +546,7 @@ class TestNotificationSystem {
   getGitCommit() {
     try {
       return execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
-    } catch (error) {
+    } catch {
       return 'unknown';
     }
   }
@@ -592,7 +592,7 @@ Examples:
   node test-notification-system.js --level=critical-only
   node test-notification-system.js --coverage=85 --drop=3
     `);
-    process.exit(0);
+    return;
   }
 
   const options = {};
@@ -611,7 +611,7 @@ Examples:
   const notificationSystem = new TestNotificationSystem(options);
   notificationSystem.processNotifications().catch(error => {
     console.error('❌ Fatal error:', error.message);
-    process.exit(1);
+    throw new Error(`Fatal error: ${error.message}`);
   });
 }
 

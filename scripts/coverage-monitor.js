@@ -80,35 +80,37 @@ class CoverageMonitor {
   /**
    * Main execution method
    */
-  async run() {
+  run() {
     try {
       Logger.info('Starting coverage monitoring...');
 
-      await this.setupDirectories();
-      await this.runCoverageAnalysis();
-      await this.loadCoverageData();
-      await this.validateThresholds();
-      await this.generateReports();
-      await this.updateTrends();
-      await this.generateSummary();
+      this.setupDirectories();
+      this.runCoverageAnalysis();
+      this.loadCoverageData();
+      this.validateThresholds();
+      this.generateReports();
+      this.updateTrends();
+      this.generateSummary();
 
       const duration = Date.now() - this.startTime;
       Logger.success(`Coverage monitoring completed in ${duration}ms`);
 
-      // Exit with appropriate code
-      process.exit(this.validation.passed ? 0 : 1);
+      // Check for failures
+      if (!this.validation.passed) {
+        throw new Error('Coverage validation failed');
+      }
 
     } catch (error) {
       Logger.error(`Coverage monitoring failed: ${error.message}`);
       Logger.debug(error.stack);
-      process.exit(1);
+      throw error;
     }
   }
 
   /**
    * Setup required directories
    */
-  async setupDirectories() {
+  setupDirectories() {
     Logger.info('Setting up directories...');
 
     const dirs = [CONFIG.paths.coverage, CONFIG.paths.reports];
@@ -123,7 +125,7 @@ class CoverageMonitor {
   /**
    * Run Jest coverage analysis
    */
-  async runCoverageAnalysis() {
+  runCoverageAnalysis() {
     Logger.info('Running coverage analysis...');
 
     try {
@@ -148,7 +150,7 @@ class CoverageMonitor {
   /**
    * Load coverage data from Jest output
    */
-  async loadCoverageData() {
+  loadCoverageData() {
     Logger.info('Loading coverage data...');
 
     if (!fs.existsSync(CONFIG.paths.summary)) {
@@ -170,7 +172,7 @@ class CoverageMonitor {
   /**
    * Validate coverage against thresholds
    */
-  async validateThresholds() {
+  validateThresholds() {
     Logger.info('Validating coverage thresholds...');
 
     const { summary } = this.validation;
@@ -212,7 +214,7 @@ class CoverageMonitor {
   /**
    * Generate detailed coverage reports
    */
-  async generateReports() {
+  generateReports() {
     Logger.info('Generating coverage reports...');
 
     const reportData = {
@@ -245,7 +247,7 @@ class CoverageMonitor {
   /**
    * Update coverage trends
    */
-  async updateTrends() {
+  updateTrends() {
     Logger.info('Updating coverage trends...');
 
     let trends = [];
@@ -254,7 +256,7 @@ class CoverageMonitor {
     if (fs.existsSync(CONFIG.paths.trends)) {
       try {
         trends = JSON.parse(fs.readFileSync(CONFIG.paths.trends, 'utf8'));
-      } catch (error) {
+      } catch {
         Logger.warning('Could not load existing trends, starting fresh');
       }
     }
@@ -283,7 +285,7 @@ class CoverageMonitor {
   /**
    * Generate final summary
    */
-  async generateSummary() {
+  generateSummary() {
     Logger.info('Generating final summary...');
 
     const { summary } = this.validation;
@@ -330,7 +332,7 @@ class CoverageMonitor {
         author: execSync('git log -1 --format="%an"', { encoding: 'utf8' }).trim(),
         message: execSync('git log -1 --format="%s"', { encoding: 'utf8' }).trim(),
       };
-    } catch (error) {
+    } catch {
       Logger.debug('Could not get Git information');
       return {
         commit: 'unknown',
@@ -345,10 +347,12 @@ class CoverageMonitor {
 // Run coverage monitoring if called directly
 if (require.main === module) {
   const monitor = new CoverageMonitor();
-  monitor.run().catch(error => {
+  try {
+    monitor.run();
+  } catch (error) {
     Logger.error(`Fatal error: ${error.message}`);
-    process.exit(1);
-  });
+    throw error;
+  }
 }
 
 module.exports = CoverageMonitor;

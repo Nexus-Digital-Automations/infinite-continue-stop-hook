@@ -12,7 +12,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync, spawn } = require('child_process');
+const { _execSync, _spawn } = require('child_process');
 const os = require('os');
 
 class NodeVersionPerformanceBenchmark {
@@ -138,7 +138,7 @@ class NodeVersionPerformanceBenchmark {
       );
     }
 
-    const results = await Promise.all(promises);
+    const _results = await Promise.all(promises);
 
     // Async/await operations
     const asyncOperations = async (count) => {
@@ -543,7 +543,7 @@ ${this.results.recommendations?.map(r => `- ${r}`).join('\n')}
 
     } catch (error) {
       console.error('❌ Benchmark suite failed:', error.message);
-      process.exit(1);
+      throw new Error(`Benchmark suite failed: ${error.message}`);
     }
   }
 }

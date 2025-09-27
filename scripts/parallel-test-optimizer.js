@@ -12,7 +12,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync, spawn } = require('child_process');
+const { _execSync, _spawn } = require('child_process');
 const os = require('os');
 
 class ParallelTestOptimizer {
@@ -306,7 +306,7 @@ class ParallelTestOptimizer {
    * Calculate critical path through test execution
    */
   calculateCriticalPath() {
-    const allGroups = [...this.executionPlan.parallel_groups, ...this.executionPlan.sequential_tests];
+    const _allGroups = [...this.executionPlan.parallel_groups, ...this.executionPlan.sequential_tests];
     let totalDuration = 0;
 
     // Parallel groups run concurrently, so take the maximum duration
@@ -657,7 +657,7 @@ ${analysis.github_actions_matrix.strategy.matrix.include.map(item =>
 
     } catch (error) {
       console.error('❌ Optimization analysis failed:', error.message);
-      process.exit(1);
+      throw error;
     }
   }
 }

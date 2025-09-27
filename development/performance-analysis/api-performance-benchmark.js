@@ -508,6 +508,7 @@ class APIPerformanceBenchmark {
     ];
 
     const criticalPathMetrics = criticalOperations.map(op => {
+      // eslint-disable-next-line security/detect-object-injection
       const metrics = this.results.endpoints[op];
       return {
         operation: op,
@@ -540,7 +541,9 @@ class APIPerformanceBenchmark {
     return {
       cacheableOperations: readOperations.map(op => ({
         operation: op,
+        // eslint-disable-next-line security/detect-object-injection
         averageResponseTime: this.results.endpoints[op]?.averageResponseTime || -1,
+        // eslint-disable-next-line security/detect-object-injection
         cacheValue: this.results.endpoints[op]?.averageResponseTime > 100 ? 'High' : 'Medium',
       })),
       recommendations: [
@@ -581,6 +584,7 @@ class APIPerformanceBenchmark {
   median(arr) {
     const sorted = [...arr].sort((a, b) => a - b);
     const mid = Math.floor(sorted.length / 2);
+    // eslint-disable-next-line security/detect-object-injection
     return sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
   }
 

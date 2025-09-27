@@ -24,7 +24,7 @@ const {
   validateFeaturesStructure,
   setupGlobalCleanup,
   teardownGlobalCleanup,
-  delay,
+  _delay,
   execAPIConcurrently,
 } = require('./test-utils');
 

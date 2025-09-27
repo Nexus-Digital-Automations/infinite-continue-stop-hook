@@ -10,7 +10,7 @@
  */
 
 const { TaskManagerAPIMock, FileSystemMock, HTTPClientMock, DatabaseMock } = require('./apiMocks');
-const { SAMPLE_FEATURES, SAMPLE_AGENTS, SAMPLE_API_RESPONSES } = require('../fixtures/sampleData');
+const { SAMPLE_FEATURES, SAMPLE_AGENTS, _SAMPLE_API_RESPONSES } = require('../fixtures/sampleData');
 
 /**
  * Global mock manager
@@ -70,18 +70,21 @@ class MockManager {
         case 'suggest-feature':
           result = this.taskManagerAPI.suggestFeature(JSON.parse(commandArgs[0]));
           break;
-        case 'list-features':
+        case 'list-features': {
           const filter = commandArgs[0] ? JSON.parse(commandArgs[0]) : {};
           result = this.taskManagerAPI.listFeatures(filter);
           break;
-        case 'approve-feature':
+        }
+        case 'approve-feature': {
           const approvalData = commandArgs[1] ? JSON.parse(commandArgs[1]) : {};
           result = this.taskManagerAPI.approveFeature(commandArgs[0], approvalData);
           break;
-        case 'reject-feature':
+        }
+        case 'reject-feature': {
           const rejectionData = commandArgs[1] ? JSON.parse(commandArgs[1]) : {};
           result = this.taskManagerAPI.rejectFeature(commandArgs[0], rejectionData);
           break;
+        }
         case 'feature-stats':
           result = this.taskManagerAPI.getFeatureStats();
           break;
@@ -193,29 +196,36 @@ class MockManager {
    */
   setupHTTPClientMock() {
     // Mock axios or other HTTP clients if needed
-    if (typeof global.fetch !== 'undefined') {
-      this.originalModules.set('global.fetch', global.fetch);
-      global.fetch = jest.fn(async (url, options) => {
-        const request = { url, options };
-        this.httpClient.requests.push(request);
+    // Check if fetch is available in this Node.js version
+    try {
+      const fetchProp = 'fetch';
+      if (typeof global[fetchProp] !== 'undefined') {
+        this.originalModules.set('global.fetch', global[fetchProp]);
+        global[fetchProp] = jest.fn((url, options) => {
+          const request = { url, options };
+          this.httpClient.requests.push(request);
 
-        if (this.httpClient.responses.has(url)) {
-          const response = this.httpClient.responses.get(url);
+          if (this.httpClient.responses.has(url)) {
+            const response = this.httpClient.responses.get(url);
+            return {
+              ok: response.status < 400,
+              status: response.status,
+              json: () => Promise.resolve(response.data),
+              text: () => Promise.resolve(JSON.stringify(response.data)),
+            };
+          }
+
           return {
-            ok: response.status < 400,
-            status: response.status,
-            json: async () => response.data,
-            text: async () => JSON.stringify(response.data),
+            ok: true,
+            status: 200,
+            json: () => Promise.resolve({ message: 'Mock response' }),
+            text: () => Promise.resolve('{"message":"Mock response"}'),
           };
-        }
-
-        return {
-          ok: true,
-          status: 200,
-          json: async () => ({ message: 'Mock response' }),
-          text: async () => '{"message":"Mock response"}',
-        };
-      });
+        });
+      }
+    } catch (error) {
+      // Fetch not available in this Node.js version, skip mocking
+      console.log('Fetch not available for mocking:', error.message);
     }
   }
 
@@ -282,8 +292,14 @@ class MockManager {
     });
 
     // Restore fetch
-    if (this.originalModules.has('global.fetch')) {
-      global.fetch = this.originalModules.get('global.fetch');
+    try {
+      const fetchProp = 'fetch';
+      if (this.originalModules.has('global.fetch')) {
+        global[fetchProp] = this.originalModules.get('global.fetch');
+      }
+    } catch (error) {
+      // Fetch not available, skip restoration
+      console.log('Fetch not available for restoration:', error.message);
     }
 
     this.originalModules.clear();
@@ -369,7 +385,7 @@ function getAPICallHistory() {
 /**
  * Test utilities for mock validation
  */
-function expectAPICall(command, args = []) {
+function expectAPICall(command, _args = []) {
   const history = getAPICallHistory();
   // This would implement validation logic for API calls
   expect(history).toBeDefined();

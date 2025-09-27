@@ -16,7 +16,7 @@
 
 const fs = require('fs').promises;
 const path = require('path');
-const { execSync } = require('child_process');
+const { execSync: _execSync } = require('child_process');
 const { CustomValidationRulesManager, VALIDATION_RULE_TYPES, TECH_STACK_PATTERNS } = require('../lib/custom-validation-rules-manager');
 
 describe('CustomValidationRulesManager', () => {
@@ -55,7 +55,7 @@ describe('CustomValidationRulesManager', () => {
       for (const file of files) {
         await fs.rm(path.join(testProjectRoot, file), { recursive: true, force: true });
       }
-    } catch (error) {
+    } catch {
       // Ignore cleanup errors
     }
   });

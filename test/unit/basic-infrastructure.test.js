@@ -174,7 +174,7 @@ describe('Basic Testing Infrastructure', () => {
     });
 
     test('should measure memory usage', async () => {
-      const { result, memoryDelta } = await PerformanceUtils.measureMemory(async () => {
+      const { result, memoryDelta } = await PerformanceUtils.measureMemory(() => {
         // Create some data to use memory
         const largeArray = new Array(1000).fill(0).map((_, i) => ({
           id: i,
@@ -216,7 +216,7 @@ describe('Basic Testing Infrastructure', () => {
     test('should retry failed operations', async () => {
       let attempts = 0;
 
-      const result = await TestExecution.retry(async () => {
+      const result = await TestExecution.retry(() => {
         attempts++;
         if (attempts < 3) {
           throw new Error('Temporary failure');
@@ -232,7 +232,7 @@ describe('Basic Testing Infrastructure', () => {
       let attempts = 0;
 
       await expect(
-        TestExecution.retry(async () => {
+        TestExecution.retry(() => {
           attempts++;
           throw new Error('Persistent failure');
         }, 3, 10), // 3 max retries, 10ms delay

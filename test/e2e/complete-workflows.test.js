@@ -101,7 +101,7 @@ describe('Complete System Workflows E2E', () => {
       // Test feature rejection workflow
 
       // Step 1: Suggest a feature
-      const { result, featureData } = await FeatureTestHelpers.suggestFeature(environment, {
+      const { result, featureData: _featureData } = await FeatureTestHelpers.suggestFeature(environment, {
         title: 'E2E Rejection Test Feature',
         description: 'Feature to test rejection workflow',
         business_value: 'Validates rejection handling',

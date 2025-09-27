@@ -436,7 +436,7 @@ describe('Initialization Statistics', () => {
   // =================== STATISTICS RETRIEVAL TESTS ===================
 
   describe('Statistics Retrieval', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       // Setup some test data
       mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(TEST_FIXTURES.featuresWithData));
     });
@@ -646,7 +646,7 @@ describe('Initialization Statistics', () => {
         expect(stats.time_buckets['22:00-02:59'].reinit).toBe(1);
       });
 
-      test('should handle daylight saving time transitions', async () => {
+      test('should handle daylight saving time transitions', () => {
         // This test ensures our time calculations are robust
         const dstTimes = [
           '2025-03-09T06:59:59.999Z', // Before DST

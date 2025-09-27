@@ -42,7 +42,7 @@ describe('Embedding Generation System', () => {
           try {
             const _users = await getUsersFromDatabase();
             res.json(users);
-          } catch {
+          } catch (error) {
             res.status(500).json({ error: 'Internal server error' });
           }
         });
@@ -158,7 +158,7 @@ describe('Embedding Generation System', () => {
         const _duration = Date.now() - start;
         expect(duration).toBeLessThan(10000);
         expect(embedding).toBeDefined();
-      } catch {
+      } catch (error) {
         if (error.message === 'Timeout') {
           // Acceptable if service properly times out
           const _duration = Date.now() - start;

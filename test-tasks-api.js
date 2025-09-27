@@ -113,11 +113,11 @@ if (require.main === module) {
   testTasksApi()
     .then(result => {
       console.log('\n✅ Test results:', JSON.stringify(result, null, 2));
-      process.exit(0);
+      return result;
     })
     .catch(error => {
       console.error('\n❌ Test failed:', error.message);
-      process.exit(1);
+      throw error;
     });
 }
 

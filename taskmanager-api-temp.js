@@ -1897,7 +1897,7 @@ class AutonomousTaskManagerAPI {
   cleanup() {
     if (this.wss) {
       this.wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
+        if (client.readyState === 1) { // WebSocket.OPEN
           client.close();
         }
       });
@@ -2088,7 +2088,7 @@ async function main() {
         process.on('SIGINT', () => {
           console.log('\nShutting down WebSocket server...');
           api.cleanup();
-          process.exit(0);
+          throw new Error('WebSocket server shutdown');
         });
         // Don't exit for WebSocket server
         return;

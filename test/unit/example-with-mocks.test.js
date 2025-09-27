@@ -13,7 +13,7 @@ const {
   setupMocks,
   resetMocks,
   restoreMocks,
-  getMockManager,
+  _getMockManager,
   expectFeatureCreated,
   expectAgentInitialized,
 } = require('../mocks/mockSetup');
@@ -31,7 +31,7 @@ const {
 const {
   SAMPLE_FEATURES,
   SAMPLE_AGENTS,
-  TEST_CONFIGURATIONS,
+  _TEST_CONFIGURATIONS,
 } = require('../fixtures/sampleData');
 
 describe('Example Test with Mock Framework', () => {
@@ -217,7 +217,7 @@ describe('Example Test with Mock Framework', () => {
     });
 
     test('should measure memory usage', async () => {
-      const { result, memoryDelta } = await PerformanceUtils.measureMemory(async () => {
+      const { result, memoryDelta } = await PerformanceUtils.measureMemory(() => {
         // Create some objects to use memory
         const data = new Array(1000).fill(0).map((_, i) => ({ id: i, data: `item-${i}` }));
         return data.length;
@@ -244,7 +244,7 @@ describe('Example Test with Mock Framework', () => {
     test('should retry failed operations', async () => {
       let attempts = 0;
 
-      const result = await TestExecution.retry(async () => {
+      const result = await TestExecution.retry(() => {
         attempts++;
         if (attempts < 3) {
           throw new Error('Temporary failure');
@@ -301,7 +301,7 @@ describe('Example Test with Mock Framework', () => {
     test('should handle API errors gracefully', async () => {
       try {
         await APIExecutor.execAPI('invalid-command');
-        fail('Should have thrown an error');
+        expect.fail('Should have thrown an error');
       } catch (error) {
         expect(error.message).toBeDefined();
         TestLogger.debug('Handled expected error', { error: error.message });

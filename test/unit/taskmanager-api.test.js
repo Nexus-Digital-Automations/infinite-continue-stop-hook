@@ -533,7 +533,7 @@ describe('FeatureManagerAPI', () => {
     });
 
     describe('listFeatures', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         // Use features file with test data
         mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(TEST_FIXTURES.featuresWithData));
       });
@@ -589,7 +589,7 @@ describe('FeatureManagerAPI', () => {
     });
 
     describe('getFeatureStats', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(TEST_FIXTURES.featuresWithData));
       });
 

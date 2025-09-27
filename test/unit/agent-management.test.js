@@ -14,8 +14,8 @@
  */
 
 const path = require('path');
-const crypto = require('crypto');
-const { MockFileSystem, TEST_FIXTURES, TimeTestUtils, testHelpers } = require('./test-utilities');
+const _crypto = require('crypto');
+const { MockFileSystem, TEST_FIXTURES, TimeTestUtils, _testHelpers } = require('./test-utilities');
 
 // Mock the fs module before importing the main module
 jest.mock('fs', () => ({
@@ -57,7 +57,7 @@ describe('Agent Management', () => {
     timeUtils = new TimeTestUtils();
 
     // Override the project root and features path for testing
-    const originalProject = process.env.PROJECT_ROOT;
+    const _originalProject = process.env.PROJECT_ROOT;
     process.env.PROJECT_ROOT = TEST_PROJECT_ROOT;
     api.featuresPath = TEST_FEATURES_PATH;
 
@@ -526,7 +526,7 @@ describe('Agent Management', () => {
 
       test('should handle file system errors gracefully', async () => {
         // Mock require to throw an error
-        const originalRequire = require;
+        const _originalRequire = require;
         jest.doMock('fs', () => {
           throw new Error('File system unavailable');
         });

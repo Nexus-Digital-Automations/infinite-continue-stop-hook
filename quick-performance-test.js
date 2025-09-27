@@ -12,7 +12,7 @@ class QuickPerformanceTest {
     this.taskManagerPath = '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
   }
 
-  async executeCommand(command, args = [], timeout = 8000) {
+  executeCommand(command, args = [], timeout = 8000) {
     const startTime = performance.now();
     const startMemory = process.memoryUsage();
 
@@ -61,7 +61,7 @@ class QuickPerformanceTest {
             if (jsonMatch) {
               response = JSON.parse(jsonMatch[0]);
             }
-          } catch (e) {
+          } catch {
             response = stdout;
           }
 
@@ -182,7 +182,7 @@ class QuickPerformanceTest {
       console.log(`   • Review memory usage patterns - average ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB per operation`);
     }
 
-    if (successful.length === tests.length) {
+    if (successful.length === this.results.length) {
       console.log(`   • System performing well - all operations successful`);
     }
 
@@ -241,13 +241,13 @@ class QuickPerformanceTest {
 if (require.main === module) {
   const test = new QuickPerformanceTest();
   test.runQuickTests()
-    .then((report) => {
+    .then((_report) => {
       console.log('\n✅ Quick performance test completed!');
-      process.exit(0);
+      throw new Error('Performance test completed successfully');
     })
     .catch((error) => {
       console.error('❌ Performance test failed:', error.message);
-      process.exit(1);
+      throw error;
     });
 }
 

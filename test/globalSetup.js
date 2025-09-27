@@ -15,7 +15,7 @@ const fs = require('fs');
 /**
  * Global setup function - runs once before all tests
  */
-module.exports = async () => {
+module.exports = () => {
   console.log('🚀 Initializing Jest testing environment...');
 
   // Set up test environment variables
@@ -133,7 +133,7 @@ module.exports = async () => {
     global.SAMPLE_DATA = sampleData;
   } catch (error) {
     console.error('❌ Failed to load test fixtures:', error.message);
-    process.exit(1);
+    throw new Error('Failed to load test fixtures');
   }
 
   // Database setup for integration tests

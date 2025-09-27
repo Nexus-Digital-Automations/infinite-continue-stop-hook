@@ -69,7 +69,7 @@ class TaskMigrator {
     try {
       await fs.access(this.featuresPath);
       console.log('✓ Source FEATURES.json found');
-    } catch (error) {
+    } catch {
       throw new Error(`FEATURES.json not found at ${this.featuresPath}`);
     }
   }
@@ -103,7 +103,7 @@ class TaskMigrator {
   /**
    * Transform FEATURES.json data to new TASKS.json schema
    */
-  async transformToTasksSchema(featuresData) {
+  transformToTasksSchema(featuresData) {
     console.log('🔄 Transforming to TASKS.json schema...');
 
     const migrationDate = new Date().toISOString();
@@ -249,8 +249,8 @@ class TaskMigrator {
 
     // Transform existing tasks to implementation tasks or appropriate types
     if (featuresData.tasks && Array.isArray(featuresData.tasks)) {
-      for (const [index, task] of featuresData.tasks.entries()) {
-        const taskId = task.id || `task_${taskIdCounter + 1000 + index}_${this.generateHash()}`;
+      for (const [_index, task] of featuresData.tasks.entries()) {
+        const taskId = task.id || `task_${taskIdCounter + 1000 + _index}_${this.generateHash()}`;
 
         const migratedTask = {
           id: taskId,
@@ -305,13 +305,13 @@ class TaskMigrator {
   /**
    * Generate auto-tasks for approved features
    */
-  async generateAutoTasks(tasksData) {
+  generateAutoTasks(tasksData) {
     console.log('🔄 Generating auto-tasks for approved features...');
 
     let autoTasksGenerated = 0;
     const autoTaskIdCounter = Date.now() + 10000;
 
-    for (const [index, task] of tasksData.tasks.entries()) {
+    for (const [_index, task] of tasksData.tasks.entries()) {
       if (task.type === 'feature' && task.status === 'approved') {
         const testTaskId = `task_${autoTaskIdCounter + autoTasksGenerated * 2}_${this.generateHash()}`;
         const auditTaskId = `task_${autoTaskIdCounter + autoTasksGenerated * 2 + 1}_${this.generateHash()}`;
@@ -432,7 +432,7 @@ class TaskMigrator {
   /**
    * Validate the transformed data structure
    */
-  async validateTransformedData(tasksData) {
+  validateTransformedData(tasksData) {
     console.log('🔍 Validating transformed data...');
 
     // Check required fields
@@ -469,7 +469,7 @@ class TaskMigrator {
   /**
    * Get migration statistics
    */
-  async getMigrationStats(tasksData) {
+  getMigrationStats(tasksData) {
     return {
       totalTasks: tasksData.metadata.total_tasks,
       tasksByType: tasksData.metadata.tasks_by_type,
@@ -538,11 +538,11 @@ if (require.main === module) {
     .then(result => {
       console.log('\n📊 Migration Summary:');
       console.log(JSON.stringify(result.stats, null, 2));
-      process.exit(0);
+      throw new Error('Migration completed successfully');
     })
     .catch(error => {
       console.error('\n❌ Migration failed:', error.message);
-      process.exit(1);
+      throw error;
     });
 }
 

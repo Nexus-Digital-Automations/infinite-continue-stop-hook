@@ -21,7 +21,7 @@ const os = require('os');
 
 describe('Validation Dependency Management End-to-End Tests', () => {
   let manager;
-  let api;
+  let _api;
   let tempDir;
 
   beforeAll(async () => {
@@ -48,7 +48,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
     // Initialize managers
     manager = new ValidationDependencyManager({ projectRoot: tempDir });
-    api = new TaskManagerAPI();
+    _api = new TaskManagerAPI();
   });
 
   afterAll(async () => {
@@ -226,7 +226,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
   });
 
   describe('Performance and Stress Testing', () => {
-    test('should handle large dependency graphs efficiently', async () => {
+    test('should handle large dependency graphs efficiently', () => {
       const startTime = Date.now();
 
       // Create large dependency graph (100 nodes)
@@ -371,7 +371,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
       // Override execution method to simulate failure
       const originalExecuteCriterion = manager._executeCriterion;
-      manager._executeCriterion = async (criterion) => {
+      manager._executeCriterion = (criterion) => {
         if (criterion === 'failing-validation') {
           throw new Error('Simulated validation failure');
         }
@@ -394,7 +394,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       manager._executeCriterion = originalExecuteCriterion;
     });
 
-    test('should handle circular dependency detection and resolution', async () => {
+    test('should handle circular dependency detection and resolution', () => {
       // Create circular dependency
       manager.addDependency('circular-a', {
         dependencies: [{ criterion: 'circular-c', type: DEPENDENCY_TYPES.STRICT }],
@@ -424,7 +424,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       expect(executionPlan.plan.length).toBeGreaterThan(0);
 
       // Should include forced executions
-      const forcedExecutions = executionPlan.plan.some(wave =>
+      const _forcedExecutions = executionPlan.plan.some(wave =>
         wave.criteria.some(criterion => criterion.forced),
       );
 
@@ -435,7 +435,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
   });
 
   describe('Integration with Adaptive Planning', () => {
-    test('should generate optimal plans for different system configurations', async () => {
+    test('should generate optimal plans for different system configurations', () => {
       const systemConfigurations = [
         {
           name: 'high-performance',
@@ -493,7 +493,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       }
     });
 
-    test('should provide actionable optimization recommendations', async () => {
+    test('should provide actionable optimization recommendations', () => {
       // Create suboptimal dependency structure for testing recommendations
       manager.addDependency('long-running-task', {
         dependencies: [],
@@ -536,7 +536,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
   });
 
   describe('Visualization Quality and Completeness', () => {
-    test('should generate complete and accurate visualizations', async () => {
+    test('should generate complete and accurate visualizations', () => {
       // Test all visualization formats
       const formats = ['mermaid', 'graphviz', 'json', 'ascii'];
 
@@ -571,7 +571,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       }
     });
 
-    test('should maintain visualization consistency across multiple generations', async () => {
+    test('should maintain visualization consistency across multiple generations', () => {
       // Generate multiple visualizations of the same data
       const visualizations = [];
 

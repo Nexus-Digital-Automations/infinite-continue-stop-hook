@@ -248,13 +248,13 @@ describe('Multi-Agent Scenarios E2E', () => {
 
       // Step 3: Analyze results - at least one should succeed
       let successCount = 0;
-      let failureCount = 0;
+      let _failureCount = 0;
 
-      conflictResults.forEach((result, index) => {
+      conflictResults.forEach((result, _index) => {
         if (result.status === 'fulfilled' && result.value.success) {
           successCount++;
         } else {
-          failureCount++;
+          _failureCount++;
         }
       });
 
@@ -321,14 +321,14 @@ describe('Multi-Agent Scenarios E2E', () => {
       const stopResults = await Promise.allSettled(agentPromises);
 
       // Step 3: Validate stop hook behavior
-      let authorizedStops = 0;
+      let _authorizedStops = 0;
       let completedAgents = 0;
 
-      stopResults.forEach((result, index) => {
+      stopResults.forEach((result, _index) => {
         if (result.status === 'fulfilled') {
           completedAgents++;
           if (result.value.stdout.includes('STOP_AUTHORIZED')) {
-            authorizedStops++;
+            _authorizedStops++;
           }
         }
       });
@@ -372,7 +372,7 @@ describe('Multi-Agent Scenarios E2E', () => {
       const [result1, result2, result3] = await Promise.all(longRunningPromises);
 
       // Step 3: Validate that stop hook integration works across multiple streams
-      [result1, result2, result3].forEach((result, index) => {
+      [result1, result2, result3].forEach((result, _index) => {
         expect(Array.isArray(result)).toBe(true);
         expect(result.length).toBeGreaterThan(0);
 

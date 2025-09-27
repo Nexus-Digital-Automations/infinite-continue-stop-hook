@@ -909,7 +909,7 @@
   "metadata": {
     "version": "2.0.0",
     "created": "2025-09-27T10:26:47.292Z",
-    "updated": "2025-09-27T10:26:47.292Z",
+    "updated": "2025-09-27T11:48:26.442Z",
     "total_tasks": 22,
     "tasks_by_type": {
       "error": 0,
@@ -922,9 +922,155 @@
       "features_migrated": 22,
       "tasks_created": 22,
       "auto_generated_tasks": 0
+    },
+    "initialization_stats": {
+      "total_initializations": 19,
+      "total_reinitializations": 0,
+      "current_day": "2025-09-27",
+      "time_buckets": {
+        "11:00-15:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "16:00-20:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "21:00-01:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "02:00-06:59": {
+          "init": 19,
+          "reinit": 0
+        },
+        "07:00-11:59": {
+          "init": 0,
+          "reinit": 0
+        }
+      },
+      "daily_history": [],
+      "last_reset": "2025-09-27T10:37:41.495Z",
+      "last_updated": "2025-09-27T11:48:28.088Z"
+    },
+    "total_features": 35
+  },
+  "agents": {
+    "test-agent-1758969461167-qrqi67": {
+      "lastHeartbeat": "2025-09-27T10:37:41.494Z",
+      "status": "active",
+      "initialized": "2025-09-27T10:37:41.494Z",
+      "sessionId": "57123b70e0f67199"
+    },
+    "test-agent-1758969471209-atsfxy": {
+      "lastHeartbeat": "2025-09-27T10:37:51.371Z",
+      "status": "active",
+      "initialized": "2025-09-27T10:37:51.371Z",
+      "sessionId": "4fe0013eee67ef3d"
+    },
+    "test-agent-1758969481399-u640bd": {
+      "lastHeartbeat": "2025-09-27T10:38:01.552Z",
+      "status": "active",
+      "initialized": "2025-09-27T10:38:01.552Z",
+      "sessionId": "1c06811cd2a2d5d7"
+    },
+    "test-agent-1758969491591-lutgh": {
+      "lastHeartbeat": "2025-09-27T10:38:11.745Z",
+      "status": "active",
+      "initialized": "2025-09-27T10:38:11.745Z",
+      "sessionId": "4205502c024ccacc"
+    },
+    "test-agent-1758969503638-a8hm9s": {
+      "lastHeartbeat": "2025-09-27T10:38:23.791Z",
+      "status": "active",
+      "initialized": "2025-09-27T10:38:23.791Z",
+      "sessionId": "b9d4adbdbef4721a"
+    },
+    "test-agent-1758973268976-w0s0kg": {
+      "lastHeartbeat": "2025-09-27T11:41:09.160Z",
+      "status": "active",
+      "initialized": "2025-09-27T11:41:09.160Z",
+      "sessionId": "3a15c677f2d02461"
+    },
+    "test-agent-1758973287240-f91ko": {
+      "lastHeartbeat": "2025-09-27T11:41:27.419Z",
+      "status": "active",
+      "initialized": "2025-09-27T11:41:27.419Z",
+      "sessionId": "d5d7a6decf36db61"
+    },
+    "test-agent-1758973297268-g8xkxk": {
+      "lastHeartbeat": "2025-09-27T11:41:37.440Z",
+      "status": "active",
+      "initialized": "2025-09-27T11:41:37.440Z",
+      "sessionId": "bd37d90b508db890"
+    },
+    "test-agent-1758973307471-mok9olh": {
+      "lastHeartbeat": "2025-09-27T11:41:47.627Z",
+      "status": "active",
+      "initialized": "2025-09-27T11:41:47.627Z",
+      "sessionId": "bf6cf79d810d1fdc"
+    },
+    "test-agent-1758973337813-y41t": {
+      "lastHeartbeat": "2025-09-27T11:42:17.978Z",
+      "status": "active",
+      "initialized": "2025-09-27T11:42:17.978Z",
+      "sessionId": "971281b670aac539"
+    },
+    "test-agent-1758973347856-w0oj6": {
+      "lastHeartbeat": "2025-09-27T11:42:28.030Z",
+      "status": "active",
+      "initialized": "2025-09-27T11:42:28.030Z",
+      "sessionId": "9339b973d85c3eb0"
+    },
+    "test-agent-1758973358053-x9r67c": {
+      "lastHeartbeat": "2025-09-27T11:42:38.207Z",
+      "status": "active",
+      "initialized": "2025-09-27T11:42:38.207Z",
+      "sessionId": "e641a0a6b03fe37f"
+    },
+    "test-agent-1758973368246-e71vxg": {
+      "lastHeartbeat": "2025-09-27T11:42:48.401Z",
+      "status": "active",
+      "initialized": "2025-09-27T11:42:48.401Z",
+      "sessionId": "c3e8d8194aaf28cd"
+    },
+    "test-agent-1758973380253-srnovp": {
+      "lastHeartbeat": "2025-09-27T11:43:00.408Z",
+      "status": "active",
+      "initialized": "2025-09-27T11:43:00.408Z",
+      "sessionId": "bf279953883522f8"
+    },
+    "test-agent-1758973665434-lkde4e": {
+      "lastHeartbeat": "2025-09-27T11:47:45.630Z",
+      "status": "active",
+      "initialized": "2025-09-27T11:47:45.630Z",
+      "sessionId": "47aab8a8282f1946"
+    },
+    "test-agent-1758973675473-6fkjde": {
+      "lastHeartbeat": "2025-09-27T11:47:55.640Z",
+      "status": "active",
+      "initialized": "2025-09-27T11:47:55.640Z",
+      "sessionId": "8f78b11261bf3eec"
+    },
+    "test-agent-1758973685687-lk5lckj": {
+      "lastHeartbeat": "2025-09-27T11:48:05.842Z",
+      "status": "active",
+      "initialized": "2025-09-27T11:48:05.842Z",
+      "sessionId": "f3259c852b22d98b"
+    },
+    "test-agent-1758973695886-yav87s": {
+      "lastHeartbeat": "2025-09-27T11:48:16.044Z",
+      "status": "active",
+      "initialized": "2025-09-27T11:48:16.044Z",
+      "sessionId": "bcd63db3cb1a4c8e"
+    },
+    "test-agent-1758973707936-0z6w55": {
+      "lastHeartbeat": "2025-09-27T11:48:28.087Z",
+      "status": "active",
+      "initialized": "2025-09-27T11:48:28.087Z",
+      "sessionId": "bff256fe0a7777d6"
     }
   },
-  "agents": {},
   "features": [
     {
       "id": "feature_1758640235616_7bac2812df3e",
@@ -1187,6 +1333,162 @@
       "status": "suggested",
       "created_at": "2025-09-25T17:33:16.665Z",
       "updated_at": "2025-09-25T17:33:16.666Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758969481393_4ebf5673f18b",
+      "title": "Test Feature with Mocks",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-27T10:38:01.393Z",
+      "updated_at": "2025-09-27T10:38:01.393Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758969491583_ea1a0d89362c",
+      "title": "Invalid Feature",
+      "description": "This is a test feature for automated testing",
+      "business_value": "Validates testing infrastructure",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-27T10:38:11.584Z",
+      "updated_at": "2025-09-27T10:38:11.584Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758969502000_878c1e63077e",
+      "title": "Test Feature 1758969501607",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-27T10:38:22.001Z",
+      "updated_at": "2025-09-27T10:38:22.001Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758969502179_f1075da309db",
+      "title": "Test Feature 1758969502013",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "bug-fix",
+      "status": "suggested",
+      "created_at": "2025-09-27T10:38:22.179Z",
+      "updated_at": "2025-09-27T10:38:22.179Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758973307464_4498439b00e2",
+      "title": "Test Feature with Mocks",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-27T11:41:47.464Z",
+      "updated_at": "2025-09-27T11:41:47.464Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758973358047_5ec1c5c6695a",
+      "title": "Test Feature with Mocks",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-27T11:42:38.047Z",
+      "updated_at": "2025-09-27T11:42:38.047Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758973368240_87d3ea59bb5d",
+      "title": "Invalid Feature",
+      "description": "This is a test feature for automated testing",
+      "business_value": "Validates testing infrastructure",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-27T11:42:48.240Z",
+      "updated_at": "2025-09-27T11:42:48.240Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758973378601_b9b24af771d3",
+      "title": "Test Feature 1758973378263",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-27T11:42:58.601Z",
+      "updated_at": "2025-09-27T11:42:58.601Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758973378776_f6c0e8d003a8",
+      "title": "Test Feature 1758973378614",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "bug-fix",
+      "status": "suggested",
+      "created_at": "2025-09-27T11:42:58.776Z",
+      "updated_at": "2025-09-27T11:42:58.776Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758973685681_aa21969813fd",
+      "title": "Test Feature with Mocks",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-27T11:48:05.681Z",
+      "updated_at": "2025-09-27T11:48:05.681Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758973695880_d329a311ffda",
+      "title": "Invalid Feature",
+      "description": "This is a test feature for automated testing",
+      "business_value": "Validates testing infrastructure",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-27T11:48:15.880Z",
+      "updated_at": "2025-09-27T11:48:15.880Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758973706242_ab013c92a0e7",
+      "title": "Test Feature 1758973705907",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-27T11:48:26.242Z",
+      "updated_at": "2025-09-27T11:48:26.242Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758973706442_3f01fea52867",
+      "title": "Test Feature 1758973706248",
+      "description": "A comprehensive test feature for validation",
+      "business_value": "Ensures system reliability and testing coverage",
+      "category": "bug-fix",
+      "status": "suggested",
+      "created_at": "2025-09-27T11:48:26.442Z",
+      "updated_at": "2025-09-27T11:48:26.442Z",
       "suggested_by": "system",
       "metadata": {}
     }

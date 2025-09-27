@@ -22,11 +22,11 @@ const {
   createTestEnvironment,
   cleanupTestEnvironment,
   readFeaturesFile,
-  generateTestAgentConfig,
+  _generateTestAgentConfig,
   validateFeaturesStructure,
   setupGlobalCleanup,
   teardownGlobalCleanup,
-  delay,
+  _delay,
   execAPIConcurrently,
 } = require('./test-utils');
 

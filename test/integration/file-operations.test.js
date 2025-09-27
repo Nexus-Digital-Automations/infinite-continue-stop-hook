@@ -27,7 +27,7 @@ const {
   validateFeaturesStructure,
   setupGlobalCleanup,
   teardownGlobalCleanup,
-  delay,
+  _delay,
   execAPIConcurrently,
 } = require('./test-utils');
 
@@ -228,7 +228,7 @@ describe('File Operations Integration Tests', () => {
 
     test('should handle corrupted FEATURES.json file', async () => {
       // 1. Create backup of good file
-      const backupPath = await createFeaturesBackup(testDir);
+      const _backupPath = await createFeaturesBackup(testDir);
 
       // 2. Add some valid data first
       const featureData = generateTestFeature({
@@ -576,7 +576,7 @@ describe('File Operations Integration Tests', () => {
 
       try {
         // 1. Try to make file read-only (this may not work in all environments)
-        const featuresPath = path.join(testDir, 'FEATURES.json');
+        const _featuresPath = path.join(testDir, 'FEATURES.json');
 
         // Create initial content
         const featureData = generateTestFeature({

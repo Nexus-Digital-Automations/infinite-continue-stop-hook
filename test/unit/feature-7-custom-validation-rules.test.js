@@ -181,7 +181,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             );
           }
           return [];
-        } catch (error) {
+        } catch {
           return [];
         }
       };
@@ -207,13 +207,13 @@ describe('Feature 7: Custom Project Validation Rules', () => {
       // Mock validation execution
       const executeCustomValidation = (rule) => {
         try {
-          const result = execSync(rule.command, {
+          const _result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
             encoding: 'utf8',
           });
 
           if (rule.successCriteria) {
-            const { exitCode, outputContains, outputNotContains } = rule.successCriteria;
+            const { _exitCode, outputContains, outputNotContains } = rule.successCriteria;
 
             if (outputContains && !result.includes(outputContains)) {
               return { success: false, error: 'Expected output not found' };
@@ -256,13 +256,13 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const executeCustomValidation = (rule) => {
         try {
-          const result = execSync(rule.command, {
+          const _result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
             encoding: 'utf8',
           });
 
           if (rule.successCriteria) {
-            const { exitCode, outputContains, outputNotContains } = rule.successCriteria;
+            const { _exitCode, outputContains, outputNotContains } = rule.successCriteria;
 
             if (outputContains && !result.includes(outputContains)) {
               return { success: false, error: 'Expected output not found' };
@@ -305,13 +305,13 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const executeCustomValidation = (rule) => {
         try {
-          const result = execSync(rule.command, {
+          const _result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
             encoding: 'utf8',
           });
 
           if (rule.successCriteria) {
-            const { exitCode, outputContains, outputNotContains } = rule.successCriteria;
+            const { _exitCode, outputContains, outputNotContains } = rule.successCriteria;
 
             if (outputContains && !result.includes(outputContains)) {
               return { success: false, error: 'Expected output not found' };
@@ -350,7 +350,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const executeCustomValidation = (rule) => {
         try {
-          const result = execSync(rule.command, {
+          const _result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
             encoding: 'utf8',
           });
@@ -397,7 +397,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             });
           }
 
-          const result = execSync(rule.command, {
+          const _result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
             encoding: 'utf8',
             env: { ...process.env, ...rule.environment },
@@ -536,7 +536,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const executeCustomValidation = (rule) => {
         try {
-          const result = execSync(rule.command, {
+          const _result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
             encoding: 'utf8',
           });
@@ -573,7 +573,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             }
           }
           return [];
-        } catch (error) {
+        } catch {
           return [];
         }
       };

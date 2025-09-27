@@ -12,8 +12,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync, spawn } = require('child_process');
-const os = require('os');
+const { execSync, spawn: _spawn } = require('child_process');
+const _os = require('os');
 
 class FeatureValidationMatrix {
   constructor() {
@@ -171,7 +171,7 @@ class FeatureValidationMatrix {
         try {
           require(dep);
           result.details[`${dep}_available`] = true;
-        } catch (error) {
+        } catch {
           result.details[`${dep}_available`] = false;
           result.errors.push(`RAG dependency missing: ${dep}`);
         }
@@ -441,7 +441,7 @@ class FeatureValidationMatrix {
   /**
    * Test command execution with timeout
    */
-  async testCommand(command, timeout = 30000) {
+  testCommand(command, timeout = 30000) {
     return new Promise((resolve) => {
       const start = Date.now();
 
@@ -676,7 +676,7 @@ ${this.validationResults.overall_status === 'excellent' ?
 
     } catch (error) {
       console.error('❌ Feature validation failed:', error.message);
-      process.exit(1);
+      throw error;
     }
   }
 }

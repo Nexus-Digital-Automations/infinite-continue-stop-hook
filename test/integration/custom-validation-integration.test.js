@@ -42,7 +42,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       for (const file of files) {
         await fs.rm(path.join(testProjectRoot, file), { recursive: true, force: true });
       }
-    } catch (error) {
+    } catch {
       // Ignore cleanup errors
     }
   });
@@ -184,7 +184,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       expect(output.results).toHaveLength(2);
     });
 
-    test('should generate custom validation config via CLI', async () => {
+    test('should generate custom validation config via CLI', () => {
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" generate-custom-validation-config`,
         { encoding: 'utf8' },
@@ -629,7 +629,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
   });
 
   describe('Integration with Existing Validation System', () => {
-    test('should maintain compatibility with existing validation commands', async () => {
+    test('should maintain compatibility with existing validation commands', () => {
       // Test that existing validation commands still work
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" get-validation-dependencies`,
@@ -643,7 +643,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       expect(output.validation).toBeDefined();
     });
 
-    test('should not interfere with dependency management', async () => {
+    test('should not interfere with dependency management', () => {
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" validate-dependency-graph`,
         { encoding: 'utf8' },
@@ -655,7 +655,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       expect(output.validation.valid).toBe(true);
     });
 
-    test('should work alongside parallel execution planning', async () => {
+    test('should work alongside parallel execution planning', () => {
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" generate-validation-execution-plan null 4`,
         { encoding: 'utf8' },

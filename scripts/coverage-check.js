@@ -103,40 +103,42 @@ class CoverageThresholdChecker {
   /**
    * Main execution method
    */
-  async run() {
+  run() {
     try {
       CoverageLogger.info('Starting coverage threshold validation...');
 
-      await this.loadCoverageData();
-      await this.validateThresholds();
+      this.loadCoverageData();
+      this.validateThresholds();
 
       if (this.config.generate_badge) {
-        await this.generateBadge();
+        this.generateBadge();
       }
 
-      await this.generateReport();
-      await this.displayResults();
+      this.generateReport();
+      this.displayResults();
 
-      // Exit with appropriate code
+      // Check for failures
       const hasFailures = this.results.failures.length > 0;
       const hasWarnings = this.results.warnings.length > 0;
       const shouldFail = hasFailures || (this.config.strict_mode && hasWarnings);
 
-      process.exit(shouldFail ? 1 : 0);
+      if (shouldFail) {
+        throw new Error('Coverage validation failed');
+      }
 
     } catch (error) {
       CoverageLogger.error(`Coverage validation failed: ${error.message}`);
       if (process.env.DEBUG) {
         console.error(error.stack);
       }
-      process.exit(1);
+      throw error;
     }
   }
 
   /**
    * Load coverage data from Jest output
    */
-  async loadCoverageData() {
+  loadCoverageData() {
     CoverageLogger.info('Loading coverage data...');
 
     const summaryPath = path.resolve(this.config.paths.summary);
@@ -146,7 +148,7 @@ class CoverageThresholdChecker {
       CoverageLogger.info('Coverage data not found, attempting to generate...');
       try {
         execSync('npm run coverage:ci', { stdio: 'inherit', timeout: 120000 });
-      } catch (error) {
+      } catch {
         throw new Error('Failed to generate coverage data. Run tests with coverage first.');
       }
     }
@@ -179,7 +181,7 @@ class CoverageThresholdChecker {
   /**
    * Validate coverage against thresholds
    */
-  async validateThresholds() {
+  validateThresholds() {
     CoverageLogger.info('Validating coverage thresholds...');
 
     const { summary } = this.results;
@@ -224,7 +226,7 @@ class CoverageThresholdChecker {
   /**
    * Generate coverage badge
    */
-  async generateBadge() {
+  generateBadge() {
     CoverageLogger.info('Generating coverage badge...');
 
     const { summary } = this.results;
@@ -276,7 +278,7 @@ class CoverageThresholdChecker {
   /**
    * Generate validation report
    */
-  async generateReport() {
+  generateReport() {
     CoverageLogger.info('Generating validation report...');
 
     const report = {
@@ -320,7 +322,7 @@ class CoverageThresholdChecker {
   /**
    * Display validation results
    */
-  async displayResults() {
+  displayResults() {
     const { summary, failures, warnings, passed } = this.results;
 
     console.log('\n📊 Coverage Threshold Validation Results:');
@@ -412,7 +414,7 @@ class CoverageThresholdChecker {
         commit: execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
         branch: execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim(),
       };
-    } catch (error) {
+    } catch {
       return { commit: 'unknown', branch: 'unknown' };
     }
   }
@@ -447,7 +449,7 @@ Examples:
   node coverage-check.js --thresholds='{"lines":85,"functions":85}'
   QUIET=true node coverage-check.js
     `);
-    process.exit(0);
+    return;
   }
 
   const config = { ...DEFAULT_CONFIG };
@@ -473,15 +475,17 @@ Examples:
       config.thresholds = { ...config.thresholds, ...customThresholds };
     } catch (error) {
       console.error('❌ Invalid thresholds JSON:', error.message);
-      process.exit(1);
+      throw error;
     }
   }
 
   const checker = new CoverageThresholdChecker(config);
-  checker.run().catch(error => {
+  try {
+    checker.run();
+  } catch (error) {
     console.error('❌ Fatal error:', error.message);
-    process.exit(1);
-  });
+    throw error;
+  }
 }
 
 module.exports = CoverageThresholdChecker;

@@ -13,7 +13,7 @@
  */
 
 const fs = require('fs');
-const path = require('path');
+const _path = require('path');
 
 class FeaturesMigration {
   constructor() {
@@ -33,7 +33,7 @@ class FeaturesMigration {
   /**
      * Main migration method
      */
-  async migrate() {
+  migrate() {
     try {
       console.log('🚀 Starting TODO.json → FEATURES.json migration...');
 
@@ -347,7 +347,7 @@ class FeaturesMigration {
 
       // Validate schema structure
       const requiredFields = ['schema_version', 'project', 'features', 'settings'];
-      const missingFields = requiredFields.filter(field => !featuresData.hasOwnProperty(field));
+      const missingFields = requiredFields.filter(field => !Object.prototype.hasOwnProperty.call(featuresData, field));
 
       if (missingFields.length > 0) {
         throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
@@ -376,14 +376,17 @@ if (require.main === module) {
     .then((success) => {
       if (success) {
         const validationPassed = migration.validateMigration();
-        process.exit(validationPassed ? 0 : 1);
+        if (!validationPassed) {
+          throw new Error('Migration validation failed');
+        }
+        return success;
       } else {
-        process.exit(1);
+        throw new Error('Migration failed');
       }
     })
     .catch((error) => {
       console.error('💥 Unexpected error:', error);
-      process.exit(1);
+      throw error;
     });
 }
 

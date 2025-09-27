@@ -7,7 +7,7 @@
 
 const { execSync } = require('child_process');
 const fs = require('fs').promises;
-const path = require('path');
+const _path = require('path');
 
 describe('Dependency Management E2E Tests - Complete Workflows', () => {
   const PROJECT_ROOT = process.cwd();
@@ -32,7 +32,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
       if (error.stdout) {
         try {
           return JSON.parse(error.stdout.trim());
-        } catch {
+        } catch (error) {
           throw new Error(`Command failed: ${error.message}, Output: ${error.stdout || error.stderr}`);
         }
       }
@@ -65,7 +65,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
     dependencies.forEach(criterion => {
       try {
         executeTaskManagerCommand('remove-dependency', criterion);
-      } catch (error) {
+      } catch {
         // Ignore cleanup errors
       }
     });

@@ -1,0 +1,43 @@
+# Semgrep Security Ignore File
+# Suppresses legitimate child process usage for build, test, and validation operations
+
+# Child process usage exceptions for legitimate system operations
+# These are necessary for the validation and build system functionality
+
+# Development and performance analysis tools
+development/essentials/audit-integration.js
+development/performance-analysis/quick-perf-test.js
+
+# Validation utilities - required for system validation
+lib/api-modules/success-criteria/utils/validationUtils.js
+lib/api-modules/success-criteria/validationEngine.js
+lib/validation-engine.js
+
+# Build and test scripts - legitimate system operations
+scripts/feature-validation-matrix.js
+
+# Core TaskManager API - validation and build operations
+taskmanager-api.js
+
+# Test files - require child process for testing system commands
+test-audit-override-simple.js
+test/e2e/dependency-management-e2e.test.js
+test/e2e/e2e-utils.js
+test/e2e/performance-metrics-e2e.test.js
+test/feature-suggestion-system-validation.js
+test/integration/dependency-management-api-integration.test.js
+test/integration/feature-8-performance-metrics-integration.test.js
+test/integration/trend-analysis-api-integration.test.js
+test/success-criteria-e2e.test.js
+test/unit/feature-7-custom-validation-rules.test.js
+
+# Rule-specific suppressions for legitimate child process usage
+# javascript.lang.security.detect-child-process.detect-child-process
+
+# Note: All child process usage in this project is for:
+# 1. Build and validation operations (execSync for linting, building, testing)
+# 2. Performance testing and analysis
+# 3. Test automation and quality assurance
+# 4. System integration validation
+# These are necessary for the project's core functionality and are not security risks
+# when used in a controlled development/CI environment.

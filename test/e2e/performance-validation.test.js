@@ -16,7 +16,7 @@ const {
   PerformanceTestHelpers,
   MultiAgentTestHelpers,
   StopHookTestHelpers,
-  E2EAssertions,
+  _E2EAssertions,
   E2E_TIMEOUT,
   API_TIMEOUT,
 } = require('./e2e-utils');
@@ -152,7 +152,7 @@ describe('Performance Validation E2E', () => {
       });
 
       // Step 2: Test bulk approval performance
-      const bulkApprovalTest = async () => {
+      const bulkApprovalTest = () => {
         return CommandExecutor.executeAPI(
           'bulk-approve',
           [...bulkFeatureIds, 'bulk-performance-tester', 'Bulk performance test approval'],
@@ -184,7 +184,7 @@ describe('Performance Validation E2E', () => {
       const operationsPerAgent = 2;
 
       const startTime = Date.now();
-      const { agents, results } = await MultiAgentTestHelpers.simulateConcurrentAgents(
+      const { agents: _agents, results } = await MultiAgentTestHelpers.simulateConcurrentAgents(
         environment,
         concurrentAgents,
         operationsPerAgent,
@@ -251,7 +251,7 @@ describe('Performance Validation E2E', () => {
     test('Stop hook response time benchmarks', async () => {
       // Test stop hook performance and response times
 
-      const stopHookTest = async () => {
+      const stopHookTest = () => {
         return StopHookTestHelpers.simulateAgentExecution(
           environment,
           'performance-stop-agent',

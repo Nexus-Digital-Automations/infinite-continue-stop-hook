@@ -114,7 +114,7 @@ describe('Feature Management Lifecycle', () => {
         const categories = ['enhancement', 'bug-fix', 'new-feature', 'performance', 'security', 'documentation'];
 
         // Create features in parallel for better test performance
-        const results = await Promise.all(
+        const _results = await Promise.all(
           categories.map(async category => {
             const featureData = {
               ...TEST_FIXTURES.validFeature,
@@ -717,7 +717,7 @@ describe('Feature Management Lifecycle', () => {
   // =================== FEATURE LISTING AND FILTERING ===================
 
   describe('Feature Listing and Filtering', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       // Use features file with diverse test data
       mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(TEST_FIXTURES.featuresWithData));
     });
@@ -800,7 +800,7 @@ describe('Feature Management Lifecycle', () => {
   // =================== FEATURE STATISTICS ===================
 
   describe('Feature Statistics and Analytics', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(TEST_FIXTURES.featuresWithData));
     });
 

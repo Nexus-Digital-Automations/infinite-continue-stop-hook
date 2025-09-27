@@ -224,12 +224,20 @@ describe('Semantic Search Accuracy Validation', () => {
           content: `
             async function fetchUserData(_userId) {
               try {
-                const _response = await fetch(\`/api/users/\${userId}\`);
+                const https = require('https');
+                const _response = await new Promise((resolve, reject) => {
+                  const req = https.get(\`/api/users/\${userId}\`, (res) => {
+                    let data = '';
+                    res.on('data', chunk => data += chunk);
+                    res.on('end', () => resolve({ ok: res.statusCode === 200, json: () => JSON.parse(data) }));
+                  });
+                  req.on('error', reject);
+                });
                 if (!response.ok) {
                   throw new Error(\`HTTP \${response.status}: \${response.statusText}\`);
                 }
                 return await response.json();
-              } catch (error) {
+              } catch {
         console.error('Failed to fetch user:', error);
                 throw error;
               }

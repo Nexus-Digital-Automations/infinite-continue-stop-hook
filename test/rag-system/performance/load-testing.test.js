@@ -308,7 +308,7 @@ describe('RAG System Performance and Load Testing', () => {
             // Add small random delay to simulate realistic usage
             await new Promise(resolve => setTimeout(resolve, Math.random() * 100));
 
-          } catch {
+          } catch (error) {
             userResults.errors.push(error);
           }
         }
@@ -385,7 +385,7 @@ describe('RAG System Performance and Load Testing', () => {
               version: updateResult.version,
               timestamp: Date.now()
             };
-          } catch {
+          } catch (error) {
             return {
               modifierId,
               success: false,
@@ -539,7 +539,7 @@ describe('RAG System Performance and Load Testing', () => {
             expect(duration).toBeLessThan(5000); // Should complete within 5 seconds
           }
         }
-      } catch {
+      } catch (error) {
         // System should handle memory errors gracefully
         expect(error.message).toContain('memory');
         console.log('Expected memory error handled gracefully:', error.message);
@@ -656,7 +656,7 @@ describe('RAG System Performance and Load Testing', () => {
             connectionResults.queryTimes.push(queryTime);
             expect(result.success).toBe(true);
 
-          } catch {
+          } catch (error) {
             connectionResults.errors.push(error);
           }
         }

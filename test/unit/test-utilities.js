@@ -5,8 +5,8 @@
  * unit testing of the FeatureManagerAPI class.
  */
 
-const fs = require('fs').promises;
-const path = require('path');
+const _fs = require('fs').promises;
+const _path = require('path');
 const crypto = require('crypto');
 
 /**
@@ -23,6 +23,9 @@ class MockFileSystem {
 
   // Mock fs.access
   async access(filePath) {
+    await new Promise(resolve => {
+      setTimeout(resolve, 0);
+    });
     if (this.accessErrors.has(filePath)) {
       const error = new Error(this.accessErrors.get(filePath));
       error.code = 'ENOENT';
@@ -36,7 +39,10 @@ class MockFileSystem {
   }
 
   // Mock fs.readFile
-  async readFile(filePath, encoding = 'utf8') {
+  async readFile(filePath, _encoding = 'utf8') {
+    await new Promise(resolve => {
+      setTimeout(resolve, 0);
+    });
     if (this.readErrors.has(filePath)) {
       const error = new Error(this.readErrors.get(filePath));
       error.code = this.readErrors.get(filePath) === 'File not found' ? 'ENOENT' : 'EIO';
@@ -52,6 +58,9 @@ class MockFileSystem {
 
   // Mock fs.writeFile
   async writeFile(filePath, data) {
+    await new Promise(resolve => {
+      setTimeout(resolve, 0);
+    });
     if (this.writeErrors.has(filePath)) {
       throw new Error(this.writeErrors.get(filePath));
     }
@@ -549,7 +558,7 @@ const testHelpers = {
   /**
    * Wait for a specified time (for testing async operations)
    */
-  async wait(ms) {
+  wait(ms) {
     return new Promise(resolve => {
       setTimeout(resolve, ms);
     });

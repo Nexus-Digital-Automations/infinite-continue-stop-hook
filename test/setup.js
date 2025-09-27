@@ -44,7 +44,7 @@ global.testUtils = {
       try {
         await fn();
         return;
-      } catch (error) {
+      } catch {
         await new Promise(resolve => {
           setTimeout(resolve, interval);
         });
@@ -68,7 +68,7 @@ global.testUtils = {
 };
 
 // Global error handling
-process.on('unhandledRejection', (reason, promise) => {
+process.on('unhandledRejection', (reason, _promise) => {
   TestLogger.error('Unhandled Promise Rejection:', reason);
   // Don't exit the process during tests
 });

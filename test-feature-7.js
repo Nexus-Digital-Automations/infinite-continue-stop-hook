@@ -12,7 +12,7 @@ async function testAdaptiveLearningPaths() {
     const ragOps = new RAGOperations({
       taskManager: null,
       agentManager: null,
-      withTimeout: async (promise, timeout) => promise,
+      withTimeout: (promise, _timeout) => promise,
     });
 
     // Test user profile

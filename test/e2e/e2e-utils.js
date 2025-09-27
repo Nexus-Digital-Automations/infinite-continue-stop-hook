@@ -186,7 +186,7 @@ class CommandExecutor {
    * @param {string[]} args - Command arguments
    * @param {Object} options - Execution options
    */
-  static async execute(command, args = [], options = {}) {
+  static execute(command, args = [], options = {}) {
     const {
       cwd = process.cwd(),
       timeout = E2E_TIMEOUT,
@@ -301,7 +301,7 @@ class CommandExecutor {
   /**
    * Execute TaskManager API command
    */
-  static async executeAPI(command, args = [], options = {}) {
+  static executeAPI(command, args = [], options = {}) {
     const apiArgs = [
       PROJECT_ROOT + '/taskmanager-api.js',
       command,
@@ -322,7 +322,7 @@ class CommandExecutor {
   /**
    * Execute stop hook command
    */
-  static async executeStopHook(args = [], options = {}) {
+  static executeStopHook(args = [], options = {}) {
     const hookArgs = [PROJECT_ROOT + '/stop-hook.js', ...args];
 
     return this.execute('node', hookArgs, {
@@ -376,7 +376,7 @@ class FeatureTestHelpers {
   /**
    * Approve a feature via API
    */
-  static async approveFeature(environment, featureId, approver = 'e2e-test', notes = 'E2E test approval') {
+  static approveFeature(environment, featureId, approver = 'e2e-test', notes = 'E2E test approval') {
     const approvalData = JSON.stringify({
       approved_by: approver,
       notes: notes,
@@ -392,7 +392,7 @@ class FeatureTestHelpers {
   /**
    * Reject a feature via API
    */
-  static async rejectFeature(environment, featureId, rejector = 'e2e-test', reason = 'E2E test rejection') {
+  static rejectFeature(environment, featureId, rejector = 'e2e-test', reason = 'E2E test rejection') {
     const rejectionData = JSON.stringify({
       rejected_by: rejector,
       reason: reason,
@@ -408,7 +408,7 @@ class FeatureTestHelpers {
   /**
    * List features with filtering
    */
-  static async listFeatures(environment, filter = {}) {
+  static listFeatures(environment, filter = {}) {
     const args = Object.keys(filter).length > 0 ? [JSON.stringify(filter)] : [];
 
     return CommandExecutor.executeAPI(
@@ -421,7 +421,7 @@ class FeatureTestHelpers {
   /**
    * Get feature statistics
    */
-  static async getFeatureStats(environment) {
+  static getFeatureStats(environment) {
     return CommandExecutor.executeAPI(
       'feature-stats',
       [],
@@ -629,7 +629,7 @@ class E2EAssertions {
       if (!responseText.includes(expectedText.toLowerCase())) {
         throw new Error(`JSON response does not contain "${expectedText}" ${message}\nActual response: ${responseText}`);
       }
-    } catch (error) {
+    } catch {
       // Fall back to text search if not JSON
       this.assertOutputContains(result, expectedText, message);
     }
@@ -666,7 +666,7 @@ class E2EAssertions {
     let parsed;
     try {
       parsed = JSON.parse(result.stdout);
-    } catch (error) {
+    } catch {
       throw new Error(`Response is not valid JSON: ${result.stdout}`);
     }
 

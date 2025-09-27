@@ -471,9 +471,15 @@ describe('RAG System End-to-End Workflows', () => {
 
                    ## Code Example
                    \`\`\`javascript
-                   const _response = await fetch(url, {
-                     timeout: 10000,
-                     retry: { attempts: 3 }
+                   const https = require('https');
+                   const _response = await new Promise((resolve, reject) => {
+                     const req = https.get(url, (res) => {
+                       let data = '';
+                       res.on('data', chunk => data += chunk);
+                       res.on('end', () => resolve({ ok: res.statusCode === 200, json: () => JSON.parse(data) }));
+                     });
+                     req.setTimeout(10000);
+                     req.on('error', reject);
                    });
                    \`\`\``
         },

@@ -9,7 +9,7 @@
  * @since 2025-09-23
  */
 
-const { TestDataFactory, TestIdGenerator } = require('../utils/testUtils');
+const { _TestDataFactory, TestIdGenerator } = require('../utils/testUtils');
 
 /**
  * Mock TaskManager API responses
@@ -310,7 +310,7 @@ class FileSystemMock {
     return this.files.has(path) || this.directories.has(path);
   }
 
-  readFileSync(path, encoding = 'utf8') {
+  readFileSync(path, _encoding = 'utf8') {
     if (!this.files.has(path)) {
       throw new Error(`ENOENT: no such file or directory, open '${path}'`);
     }
@@ -395,7 +395,7 @@ class HTTPClientMock {
     this.responses.set(url, response);
   }
 
-  async get(url, options = {}) {
+  get(url, options = {}) {
     this.requests.push({ method: 'GET', url, options });
 
     if (this.responses.has(url)) {
@@ -409,7 +409,7 @@ class HTTPClientMock {
     };
   }
 
-  async post(url, data, options = {}) {
+  post(url, data, options = {}) {
     this.requests.push({ method: 'POST', url, data, options });
 
     if (this.responses.has(url)) {

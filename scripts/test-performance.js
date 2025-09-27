@@ -188,35 +188,37 @@ class TestPerformanceMonitor {
     try {
       PerformanceLogger.info('Starting test performance monitoring...');
 
-      await this.setupDirectories();
+      this.setupDirectories();
       this.resourceMonitor.startMonitoring();
 
       await this.runTestSuites();
 
       const resourceData = this.resourceMonitor.stopMonitoring();
-      await this.analyzeResults(resourceData);
-      await this.generateReports();
-      await this.updateTrends();
-      await this.generateSummary();
+      this.analyzeResults(resourceData);
+      this.generateReports();
+      this.updateTrends();
+      this.generateSummary();
 
       const duration = Date.now() - this.startTime;
       PerformanceLogger.success(`Test performance monitoring completed in ${duration}ms`);
 
       // Exit with appropriate code
       const hasErrors = this.errors.length > 0;
-      process.exit(hasErrors ? 1 : 0);
+      if (hasErrors) {
+        throw new Error('Test performance monitoring completed with errors');
+      }
 
     } catch (error) {
       PerformanceLogger.error(`Test performance monitoring failed: ${error.message}`);
       PerformanceLogger.debug(error.stack);
-      process.exit(1);
+      throw error;
     }
   }
 
   /**
    * Setup required directories
    */
-  async setupDirectories() {
+  setupDirectories() {
     PerformanceLogger.debug('Setting up directories...');
 
     const dirs = [CONFIG.paths.reports, CONFIG.paths.results];
@@ -301,7 +303,7 @@ class TestPerformanceMonitor {
   /**
    * Execute test command with timeout and performance monitoring
    */
-  async executeTestCommand(testSuite) {
+  executeTestCommand(testSuite) {
     return new Promise((resolve, reject) => {
       const startTime = Date.now();
       let output = '';
@@ -375,7 +377,7 @@ class TestPerformanceMonitor {
   /**
    * Analyze test results and identify performance issues
    */
-  async analyzeResults(resourceData) {
+  analyzeResults(resourceData) {
     PerformanceLogger.info('Analyzing test performance results...');
 
     // Calculate total test time
@@ -449,7 +451,7 @@ class TestPerformanceMonitor {
   /**
    * Generate comprehensive performance reports
    */
-  async generateReports() {
+  generateReports() {
     PerformanceLogger.info('Generating performance reports...');
 
     const report = {
@@ -492,7 +494,7 @@ class TestPerformanceMonitor {
   /**
    * Update performance trends
    */
-  async updateTrends() {
+  updateTrends() {
     PerformanceLogger.info('Updating performance trends...');
 
     let trends = [];
@@ -500,7 +502,7 @@ class TestPerformanceMonitor {
     if (fs.existsSync(CONFIG.paths.trends)) {
       try {
         trends = JSON.parse(fs.readFileSync(CONFIG.paths.trends, 'utf8'));
-      } catch (error) {
+      } catch {
         PerformanceLogger.warning('Could not load existing trends, starting fresh');
       }
     }
@@ -534,7 +536,7 @@ class TestPerformanceMonitor {
   /**
    * Generate performance summary
    */
-  async generateSummary() {
+  generateSummary() {
     PerformanceLogger.info('Generating performance summary...');
 
     const totalDuration = Date.now() - this.startTime;
@@ -629,7 +631,7 @@ class TestPerformanceMonitor {
         branch: execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim(),
         author: execSync('git log -1 --format="%an"', { encoding: 'utf8' }).trim(),
       };
-    } catch (error) {
+    } catch {
       return { commit: 'unknown', branch: 'unknown', author: 'unknown' };
     }
   }
@@ -660,7 +662,7 @@ Examples:
   VERBOSE=true node test-performance.js
   JSON_OUTPUT=true node test-performance.js > performance-report.json
     `);
-    process.exit(0);
+    return;
   }
 
   if (args.includes('--verbose') || args.includes('-v')) {
@@ -674,7 +676,7 @@ Examples:
   const monitor = new TestPerformanceMonitor();
   monitor.run().catch(error => {
     PerformanceLogger.error(`Fatal error: ${error.message}`);
-    process.exit(1);
+    throw error;
   });
 }
 

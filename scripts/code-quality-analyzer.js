@@ -22,7 +22,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { execSync: _execSync } = require('child_process');
 
 // Quality metrics configuration
 const QUALITY_CONFIG = {
@@ -142,21 +142,21 @@ class CodeQualityAnalyzer {
   /**
    * Main analysis pipeline
    */
-  async analyze() {
+  analyze() {
     try {
       this.logger.info('🚀 Starting comprehensive code quality analysis');
 
-      await this.discoverSourceFiles();
-      await this.analyzeComplexity();
-      await this.analyzeSizeMetrics();
-      await this.analyzeDuplication();
-      await this.analyzeSecurityVulnerabilities();
-      await this.analyzeMaintainability();
-      await this.detectCodeSmells();
-      await this.analyzeArchitecture();
-      await this.calculateOverallQuality();
-      await this.generateRecommendations();
-      await this.generateReport();
+      this.discoverSourceFiles();
+      this.analyzeComplexity();
+      this.analyzeSizeMetrics();
+      this.analyzeDuplication();
+      this.analyzeSecurityVulnerabilities();
+      this.analyzeMaintainability();
+      this.detectCodeSmells();
+      this.analyzeArchitecture();
+      this.calculateOverallQuality();
+      this.generateRecommendations();
+      this.generateReport();
 
       this.logger.success('Code quality analysis completed');
 
@@ -177,7 +177,7 @@ class CodeQualityAnalyzer {
   /**
    * Discover source files to analyze
    */
-  async discoverSourceFiles() {
+  discoverSourceFiles() {
     this.logger.info('Discovering source files...');
 
     const glob = require('glob');
@@ -202,7 +202,7 @@ class CodeQualityAnalyzer {
   /**
    * Analyze code complexity metrics
    */
-  async analyzeComplexity() {
+  analyzeComplexity() {
     this.logger.info('Analyzing code complexity...');
 
     const complexityData = {
@@ -214,7 +214,7 @@ class CodeQualityAnalyzer {
 
     for (const filePath of this.sourceFiles) {
       try {
-        const fileComplexity = await this.analyzeFileComplexity(filePath);
+        const fileComplexity = this.analyzeFileComplexity(filePath);
 
         // Aggregate cyclomatic complexity
         complexityData.cyclomatic.files[filePath] = fileComplexity.cyclomatic;
@@ -259,7 +259,7 @@ class CodeQualityAnalyzer {
   /**
    * Analyze complexity for a single file
    */
-  async analyzeFileComplexity(filePath) {
+  analyzeFileComplexity(filePath) {
     try {
       const content = fs.readFileSync(filePath, 'utf8');
 
@@ -300,7 +300,7 @@ class CodeQualityAnalyzer {
         line_count: lines.length,
       };
 
-    } catch (error) {
+    } catch {
       return { cyclomatic: 0, cognitive: 0, function_count: 0, complex_functions: 0, line_count: 0 };
     }
   }
@@ -317,7 +317,7 @@ class CodeQualityAnalyzer {
   /**
    * Analyze size metrics
    */
-  async analyzeSizeMetrics() {
+  analyzeSizeMetrics() {
     this.logger.info('Analyzing size metrics...');
 
     const sizeData = {
@@ -366,7 +366,7 @@ class CodeQualityAnalyzer {
   /**
    * Analyze code duplication
    */
-  async analyzeDuplication() {
+  analyzeDuplication() {
     this.logger.info('Analyzing code duplication...');
 
     const duplicationData = {
@@ -416,13 +416,13 @@ class CodeQualityAnalyzer {
     }
 
     // Count duplications
-    for (const [hash, occurrences] of lineHashes) {
+    for (const [_hash, occurrences] of lineHashes) {
       if (occurrences.length > 1) {
         duplicationData.duplicate_lines += occurrences.length - 1;
       }
     }
 
-    for (const [hash, occurrences] of blockHashes) {
+    for (const [_hash, occurrences] of blockHashes) {
       if (occurrences.length > 1) {
         duplicationData.duplicate_blocks += occurrences.length - 1;
       }
@@ -462,7 +462,7 @@ class CodeQualityAnalyzer {
   /**
    * Analyze security vulnerabilities
    */
-  async analyzeSecurityVulnerabilities() {
+  analyzeSecurityVulnerabilities() {
     this.logger.info('Analyzing security vulnerabilities...');
 
     const securityData = {
@@ -540,7 +540,7 @@ class CodeQualityAnalyzer {
   /**
    * Analyze maintainability metrics
    */
-  async analyzeMaintainability() {
+  analyzeMaintainability() {
     this.logger.info('Analyzing maintainability...');
 
     const maintainabilityData = {
@@ -554,7 +554,7 @@ class CodeQualityAnalyzer {
     // Calculate maintainability index (simplified Halstead-based)
     const totalComplexity = this.metrics.complexity.cyclomatic.total;
     const totalLines = this.metrics.size.total_lines;
-    const totalDuplication = this.metrics.duplication.duplicate_lines;
+    const _totalDuplication = this.metrics.duplication.duplicate_lines;
 
     // Simplified maintainability index calculation
     if (totalLines > 0) {
@@ -585,7 +585,7 @@ class CodeQualityAnalyzer {
   /**
    * Detect code smells
    */
-  async detectCodeSmells() {
+  detectCodeSmells() {
     this.logger.info('Detecting code smells...');
 
     const smellsData = {
@@ -616,9 +616,8 @@ class CodeQualityAnalyzer {
             inFunction = true;
             functionLineCount = 1;
             functionName = this.extractFunctionName(line);
-          }
+          } else if (inFunction && line === '}' && functionLineCount > 1) {
           // End of function (simplified)
-          else if (inFunction && line === '}' && functionLineCount > 1) {
             if (functionLineCount > this.config.size.lines_per_function.warning) {
               smellsData.long_methods++;
 
@@ -667,7 +666,7 @@ class CodeQualityAnalyzer {
   /**
    * Analyze architecture quality
    */
-  async analyzeArchitecture() {
+  analyzeArchitecture() {
     this.logger.info('Analyzing architecture quality...');
 
     const architectureData = {
@@ -698,7 +697,7 @@ class CodeQualityAnalyzer {
           }
 
           // Track exports
-          if (/export\s+(default\s+)?(class|function|const|let|var)/.test(line)) {
+          if (line.includes('export') && (line.includes('class') || line.includes('function') || line.includes('const') || line.includes('let') || line.includes('var'))) {
             fileExports.push(line.trim());
           }
         }
@@ -737,7 +736,7 @@ class CodeQualityAnalyzer {
   /**
    * Calculate overall quality score
    */
-  async calculateOverallQuality() {
+  calculateOverallQuality() {
     this.logger.info('Calculating overall quality score...');
 
     const weights = {
@@ -793,12 +792,12 @@ class CodeQualityAnalyzer {
   /**
    * Generate improvement recommendations
    */
-  async generateRecommendations() {
+  generateRecommendations() {
     this.logger.info('Generating improvement recommendations...');
 
     // Sort issues by severity and impact
     const criticalIssues = this.issues.filter(i => i.severity === 'critical');
-    const warningIssues = this.issues.filter(i => i.severity === 'warning');
+    const _warningIssues = this.issues.filter(i => i.severity === 'warning');
 
     // Generate specific recommendations based on analysis
     if (criticalIssues.length > 0) {
@@ -873,7 +872,7 @@ class CodeQualityAnalyzer {
   /**
    * Generate comprehensive quality report
    */
-  async generateReport() {
+  generateReport() {
     this.logger.info('Generating quality report...');
 
     const report = {
@@ -984,7 +983,7 @@ Examples:
   node code-quality-analyzer.js --config=custom-config.json
   STRUCTURED_LOGS=true node code-quality-analyzer.js
     `);
-    process.exit(0);
+    return;
   }
 
   // Parse options
@@ -1002,26 +1001,26 @@ Examples:
       options.config = customConfig;
     } catch (error) {
       console.error(`❌ Failed to load config: ${error.message}`);
-      process.exit(1);
+      throw error;
     }
   }
 
   // Run analysis
   const analyzer = new CodeQualityAnalyzer(options);
-  analyzer.analyze()
-    .then(result => {
-      console.log(`\n📊 Code Quality Analysis Complete:`);
-      console.log(`   Overall Score: ${result.overall_score}/100 (${result.quality_level})`);
-      console.log(`   Issues Found: ${result.issues.length}`);
-      console.log(`   Recommendations: ${result.recommendations.length}`);
+  try {
+    const result = analyzer.analyze();
+    console.log(`\n📊 Code Quality Analysis Complete:`);
+    console.log(`   Overall Score: ${result.overall_score}/100 (${result.quality_level})`);
+    console.log(`   Issues Found: ${result.issues.length}`);
+    console.log(`   Recommendations: ${result.recommendations.length}`);
 
-      const exitCode = result.overall_score >= 70 ? 0 : 1;
-      process.exit(exitCode);
-    })
-    .catch(error => {
-      console.error('❌ Code quality analysis failed:', error.message);
-      process.exit(1);
-    });
+    if (result.overall_score < 70) {
+      throw new Error('Code quality score below threshold');
+    }
+  } catch (error) {
+    console.error('❌ Code quality analysis failed:', error.message);
+    throw error;
+  }
 }
 
 module.exports = CodeQualityAnalyzer;

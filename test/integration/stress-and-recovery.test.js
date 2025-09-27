@@ -745,7 +745,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         category: 'bug-fix',
       });
 
-      const errorResult = await execAPI('suggest-feature', [JSON.stringify(errorTestFeature)], {
+      const _errorResult = await execAPI('suggest-feature', [JSON.stringify(errorTestFeature)], {
         projectRoot: testDir,
       });
 

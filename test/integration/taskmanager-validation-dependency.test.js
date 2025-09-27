@@ -217,7 +217,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
           try {
             const result = JSON.parse(stdout);
             resolve({ code, result, stderr });
-          } catch (error) {
+          } catch {
             reject(new Error(`Failed to parse JSON: ${stdout}\nStderr: ${stderr}`));
           }
         });

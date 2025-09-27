@@ -210,7 +210,7 @@ function delay(ms) {
  * @param {Array<{command: string, args: string[], options: Object}>} commands - Commands to execute
  * @returns {Promise<Array<Object>>} Array of results from all commands
  */
-async function execAPIConcurrently(commands) {
+function execAPIConcurrently(commands) {
   const promises = commands.map(({ command, args, options }) =>
     execAPI(command, args, options),
   );

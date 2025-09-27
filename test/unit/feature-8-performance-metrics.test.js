@@ -13,10 +13,10 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       this.PROJECT_ROOT = mockProjectRoot;
     }
 
-    async _fileExists(filePath) {
+    _fileExists(filePath) {
       try {
         return fs.existsSync(filePath);
-      } catch (error) {
+      } catch {
         return false;
       }
     }

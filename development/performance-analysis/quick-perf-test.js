@@ -6,7 +6,7 @@
 /* eslint-disable no-console */
 // Console output is intentional for this development/analysis tool
 
-const { execFileSync } = require('child_process');
+const { execSync } = require('child_process');
 const fs = require('fs');
 
 class QuickPerfTest {
@@ -20,7 +20,7 @@ class QuickPerfTest {
       'usage-analytics', 'guide', 'reinitialize', 'search-lessons',
       'store-lesson', 'store-error', 'start-authorization', 'validate-criterion',
       'complete-authorization', 'rag-analytics', 'find-similar-errors',
-      'get-relevant-lessons'
+      'get-relevant-lessons',
     ]);
   }
 
@@ -52,7 +52,7 @@ class QuickPerfTest {
       if (arg.startsWith('{') || arg.startsWith('[')) {
         try {
           JSON.parse(arg);
-        } catch (e) {
+        } catch {
           throw new Error(`Invalid JSON argument: ${arg}`);
         }
       } else {
