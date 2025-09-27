@@ -140,10 +140,11 @@ describe('Example Test with Mock Framework', () => {
 
       const invalidFeatureData = {
         title: 'Invalid Feature',
-        // Missing required fields
+        // Missing required fields: description, business_value, category
       };
 
-      const result = await APIExecutor.createTestFeature(invalidFeatureData);
+      // Call API directly without defaults to test validation
+      const result = await APIExecutor.execAPI('suggest-feature', [JSON.stringify(invalidFeatureData)], { silent: true });
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Missing required fields');

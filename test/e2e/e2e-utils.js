@@ -163,7 +163,7 @@ class E2EEnvironment {
       const result = await CommandExecutor.executeAPI(
         'list-features',
         [],
-        { projectRoot: this.testDir }
+        { projectRoot: this.testDir },
       );
 
       // Parse the JSON response from stdout
@@ -475,17 +475,22 @@ class StopHookTestHelpers {
   /**
    * Simulate agent execution with stop hook
    */
-  static async simulateAgentExecution(environment, agentId = 'e2e-test-agent', duration = 1000) {
+  static async simulateAgentExecution(environment, _agentId = 'e2e-test-agent', duration = 1000) {
     // Simulate some work
     await new Promise(resolve => {
       setTimeout(resolve, duration);
     });
 
-    // Test stop hook authorization
-    return CommandExecutor.executeStopHook(
-      ['authorize-stop', agentId, 'E2E test completion'],
-      { projectRoot: environment.testDir },
+    // Test stop hook without authorization first (should block)
+    const blockResult = await CommandExecutor.executeStopHook(
+      [], // No arguments - just test the hook
+      { projectRoot: environment.testDir, expectSuccess: false },
     );
+
+    return {
+      blocked: blockResult.code === 2,
+      result: blockResult,
+    };
   }
 
   /**
@@ -495,20 +500,24 @@ class StopHookTestHelpers {
     const iterations = [];
 
     for (let i = 0; i < maxIterations; i++) {
+      // Test the stop hook - should always block (exit code 2) in infinite mode
       const result = await CommandExecutor.executeStopHook(
-        ['continue-iteration', `e2e-iteration-${i}`],
+        [], // No arguments - just test the hook
         {
           projectRoot: environment.testDir,
-          expectSuccess: false, // May fail when stop is authorized
+          expectSuccess: false, // Expect blocking behavior
         },
       );
 
-      iterations.push(result);
+      iterations.push({
+        iteration: i,
+        blocked: result.code === 2,
+        result: result,
+        success: result.code === 2, // Success means it properly blocked
+      });
 
-      // Break if stop is authorized
-      if (result.stdout.includes('STOP_AUTHORIZED')) {
-        break;
-      }
+      // Always blocks in infinite mode unless proper authorization exists
+      // This simulates the infinite continue behavior
     }
 
     return iterations;

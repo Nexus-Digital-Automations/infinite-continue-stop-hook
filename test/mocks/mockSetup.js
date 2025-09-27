@@ -44,7 +44,7 @@ class MockManager {
     this.originalModules.set('child_process.spawn', originalSpawn);
 
     require('child_process').spawn = jest.fn((command, args, options) => {
-      if (args && args.includes('taskmanager-api.js')) {
+      if (args && args.some(arg => arg.includes('taskmanager-api.js'))) {
         return this.createMockProcess(args);
       }
       return originalSpawn(command, args, options);

@@ -11,7 +11,7 @@
 
 const _path = require('path');
 const _fs = require('fs');
-const { spawn } = require('child_process');
+const childProcess = require('child_process');
 
 /**
  * Test configuration constants
@@ -64,7 +64,7 @@ class APIExecutor {
         allArgs.push('--project-root', projectRoot);
       }
 
-      const child = spawn(
+      const child = childProcess.spawn(
         'timeout',
         [`${Math.floor(timeout / 1000)}s`, 'node', ...allArgs],
         {
@@ -222,7 +222,7 @@ class TestEnvironment {
 class TestDataFactory {
   static createFeatureData(overrides = {}) {
     return {
-      title: `Test Feature ${Date.now()}`,
+      title: `Test Feature ${Date.now()}_${Math.random().toString(36).substring(7)}`,
       description: 'A comprehensive test feature for validation',
       business_value: 'Ensures system reliability and testing coverage',
       category: 'enhancement',

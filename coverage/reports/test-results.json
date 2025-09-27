@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "timestamp": "2025-09-27T10:29:27.117Z",
+    "timestamp": "2025-09-27T13:42:19.026Z",
     "reporter": "jest-json-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System"
@@ -10,29 +10,29 @@
     "numPassedTestSuites": 1,
     "numFailedTestSuites": 0,
     "numPendingTestSuites": 0,
-    "numTotalTests": 34,
-    "numPassedTests": 34,
+    "numTotalTests": 15,
+    "numPassedTests": 15,
     "numFailedTests": 0,
     "numPendingTests": 0,
     "numTodoTests": 0,
-    "startTime": 1758968966853,
-    "endTime": 1758968967117,
-    "duration": 264,
+    "startTime": 1758980537745,
+    "endTime": 1758980539026,
+    "duration": 1281,
     "success": false
   },
   "testResults": [
     {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/validation-dependency-manager.test.js",
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-7-custom-validation-rules.test.js",
       "displayName": {
         "color": "white",
         "name": "unit"
       },
       "status": "passed",
-      "startTime": 1758968966945,
-      "endTime": 1758968967110,
-      "duration": 165,
-      "numTests": 34,
-      "numPassingTests": 34,
+      "startTime": 1758980537852,
+      "endTime": 1758980539007,
+      "duration": 1155,
+      "numTests": 15,
+      "numPassingTests": 15,
       "numFailingTests": 0,
       "numPendingTests": 0,
       "snapshot": {
@@ -45,155 +45,23 @@
       "testCases": [
         {
           "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Initialization and Default Dependencies"
+            "Feature 7: Custom Project Validation Rules",
+            "Custom Validation Configuration Loading"
           ],
-          "title": "should initialize with default validation criteria",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Initialization and Default Dependencies should initialize with default validation criteria",
+          "title": "should load valid custom validation rules from .claude-validation.json",
+          "fullName": "Feature 7: Custom Project Validation Rules Custom Validation Configuration Loading should load valid custom validation rules from .claude-validation.json",
           "status": "passed",
           "duration": 1,
-          "numPassingAsserts": 8,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Initialization and Default Dependencies"
-          ],
-          "title": "should have proper default dependency relationships",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Initialization and Default Dependencies should have proper default dependency relationships",
-          "status": "passed",
-          "duration": 1,
-          "numPassingAsserts": 8,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Initialization and Default Dependencies"
-          ],
-          "title": "should have proper metadata for each criterion",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Initialization and Default Dependencies should have proper metadata for each criterion",
-          "status": "passed",
-          "duration": 2,
-          "numPassingAsserts": 56,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Dependency Management Operations"
-          ],
-          "title": "should add new dependency configuration correctly",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Dependency Management Operations should add new dependency configuration correctly",
-          "status": "passed",
-          "duration": 1,
-          "numPassingAsserts": 3,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Dependency Management Operations"
-          ],
-          "title": "should remove dependency configuration correctly",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Dependency Management Operations should remove dependency configuration correctly",
-          "status": "passed",
-          "duration": 0,
-          "numPassingAsserts": 3,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Dependency Management Operations"
-          ],
-          "title": "should get specific dependency configuration",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Dependency Management Operations should get specific dependency configuration",
-          "status": "passed",
-          "duration": 0,
-          "numPassingAsserts": 4,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Dependency Management Operations"
-          ],
-          "title": "should handle invalid dependency types",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Dependency Management Operations should handle invalid dependency types",
-          "status": "passed",
-          "duration": 19,
-          "numPassingAsserts": 1,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Dependency Management Operations"
-          ],
-          "title": "should handle missing criterion parameter",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Dependency Management Operations should handle missing criterion parameter",
-          "status": "passed",
-          "duration": 0,
-          "numPassingAsserts": 1,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Dependency Graph Validation"
-          ],
-          "title": "should validate clean dependency graph",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Dependency Graph Validation should validate clean dependency graph",
-          "status": "passed",
-          "duration": 1,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Dependency Graph Validation"
-          ],
-          "title": "should detect circular dependencies",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Dependency Graph Validation should detect circular dependencies",
-          "status": "passed",
-          "duration": 0,
-          "numPassingAsserts": 4,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Dependency Graph Validation"
-          ],
-          "title": "should detect missing dependency references",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Dependency Graph Validation should detect missing dependency references",
-          "status": "passed",
-          "duration": 0,
           "numPassingAsserts": 5,
           "location": null
         },
         {
           "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Execution Order Optimization"
+            "Feature 7: Custom Project Validation Rules",
+            "Custom Validation Configuration Loading"
           ],
-          "title": "should generate correct execution order respecting dependencies",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Execution Order Optimization should generate correct execution order respecting dependencies",
-          "status": "passed",
-          "duration": 1,
-          "numPassingAsserts": 6,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Execution Order Optimization"
-          ],
-          "title": "should handle forced execution when weak dependencies create deadlocks",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Execution Order Optimization should handle forced execution when weak dependencies create deadlocks",
+          "title": "should filter out invalid rules missing required fields",
+          "fullName": "Feature 7: Custom Project Validation Rules Custom Validation Configuration Loading should filter out invalid rules missing required fields",
           "status": "passed",
           "duration": 0,
           "numPassingAsserts": 2,
@@ -201,83 +69,23 @@
         },
         {
           "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Parallel Execution Planning"
+            "Feature 7: Custom Project Validation Rules",
+            "Custom Validation Configuration Loading"
           ],
-          "title": "should generate efficient parallel execution plan",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Parallel Execution Planning should generate efficient parallel execution plan",
+          "title": "should exclude disabled rules",
+          "fullName": "Feature 7: Custom Project Validation Rules Custom Validation Configuration Loading should exclude disabled rules",
           "status": "passed",
           "duration": 1,
-          "numPassingAsserts": 10,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Parallel Execution Planning"
-          ],
-          "title": "should respect dependency constraints in parallel planning",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Parallel Execution Planning should respect dependency constraints in parallel planning",
-          "status": "passed",
-          "duration": 0,
           "numPassingAsserts": 2,
           "location": null
         },
         {
           "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Parallel Execution Planning"
+            "Feature 7: Custom Project Validation Rules",
+            "Custom Validation Configuration Loading"
           ],
-          "title": "should optimize resource allocation in parallel execution",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Parallel Execution Planning should optimize resource allocation in parallel execution",
-          "status": "passed",
-          "duration": 0,
-          "numPassingAsserts": 5,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Parallel Execution Planning"
-          ],
-          "title": "should handle resource conflicts appropriately",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Parallel Execution Planning should handle resource conflicts appropriately",
-          "status": "passed",
-          "duration": 0,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Advanced Analytics and Optimization"
-          ],
-          "title": "should generate dependency visualization data",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Advanced Analytics and Optimization should generate dependency visualization data",
-          "status": "passed",
-          "duration": 0,
-          "numPassingAsserts": 11,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Advanced Analytics and Optimization"
-          ],
-          "title": "should generate interactive visualization formats",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Advanced Analytics and Optimization should generate interactive visualization formats",
-          "status": "passed",
-          "duration": 1,
-          "numPassingAsserts": 10,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Advanced Analytics and Optimization"
-          ],
-          "title": "should handle unsupported visualization formats",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Advanced Analytics and Optimization should handle unsupported visualization formats",
+          "title": "should return empty array when no config file exists",
+          "fullName": "Feature 7: Custom Project Validation Rules Custom Validation Configuration Loading should return empty array when no config file exists",
           "status": "passed",
           "duration": 0,
           "numPassingAsserts": 1,
@@ -285,23 +93,11 @@
         },
         {
           "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Advanced Analytics and Optimization"
+            "Feature 7: Custom Project Validation Rules",
+            "Custom Validation Configuration Loading"
           ],
-          "title": "should record and analyze execution history",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Advanced Analytics and Optimization should record and analyze execution history",
-          "status": "passed",
-          "duration": 0,
-          "numPassingAsserts": 9,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Advanced Analytics and Optimization"
-          ],
-          "title": "should handle empty execution history gracefully",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Advanced Analytics and Optimization should handle empty execution history gracefully",
+          "title": "should handle malformed JSON gracefully",
+          "fullName": "Feature 7: Custom Project Validation Rules Custom Validation Configuration Loading should handle malformed JSON gracefully",
           "status": "passed",
           "duration": 0,
           "numPassingAsserts": 1,
@@ -309,35 +105,95 @@
         },
         {
           "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Configuration Persistence"
+            "Feature 7: Custom Project Validation Rules",
+            "Custom Validation Execution"
           ],
-          "title": "should save dependency configuration to file",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Configuration Persistence should save dependency configuration to file",
+          "title": "should execute custom validation rule with success criteria",
+          "fullName": "Feature 7: Custom Project Validation Rules Custom Validation Execution should execute custom validation rule with success criteria",
+          "status": "passed",
+          "duration": 4,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 7: Custom Project Validation Rules",
+            "Custom Validation Execution"
+          ],
+          "title": "should fail when output does not contain required text",
+          "fullName": "Feature 7: Custom Project Validation Rules Custom Validation Execution should fail when output does not contain required text",
           "status": "passed",
           "duration": 2,
-          "numPassingAsserts": 6,
+          "numPassingAsserts": 2,
           "location": null
         },
         {
           "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Configuration Persistence"
+            "Feature 7: Custom Project Validation Rules",
+            "Custom Validation Execution"
           ],
-          "title": "should load dependency configuration from file",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Configuration Persistence should load dependency configuration from file",
+          "title": "should fail when output contains forbidden text",
+          "fullName": "Feature 7: Custom Project Validation Rules Custom Validation Execution should fail when output contains forbidden text",
           "status": "passed",
-          "duration": 1,
+          "duration": 3,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 7: Custom Project Validation Rules",
+            "Custom Validation Execution"
+          ],
+          "title": "should handle command execution failures",
+          "fullName": "Feature 7: Custom Project Validation Rules Custom Validation Execution should handle command execution failures",
+          "status": "passed",
+          "duration": 3,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 7: Custom Project Validation Rules",
+            "Environment Variable Support"
+          ],
+          "title": "should support environment variable substitution",
+          "fullName": "Feature 7: Custom Project Validation Rules Environment Variable Support should support environment variable substitution",
+          "status": "passed",
+          "duration": 3,
+          "numPassingAsserts": 1,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 7: Custom Project Validation Rules",
+            "Stop Hook Integration"
+          ],
+          "title": "should merge custom criteria with standard validation criteria",
+          "fullName": "Feature 7: Custom Project Validation Rules Stop Hook Integration should merge custom criteria with standard validation criteria",
+          "status": "passed",
+          "duration": 0,
           "numPassingAsserts": 4,
           "location": null
         },
         {
           "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Configuration Persistence"
+            "Feature 7: Custom Project Validation Rules",
+            "Stop Hook Integration"
           ],
-          "title": "should handle missing configuration file gracefully",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Configuration Persistence should handle missing configuration file gracefully",
+          "title": "should add custom validation criteria to progress tracking",
+          "fullName": "Feature 7: Custom Project Validation Rules Stop Hook Integration should add custom validation criteria to progress tracking",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 4,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 7: Custom Project Validation Rules",
+            "Configuration Schema Validation"
+          ],
+          "title": "should validate complete configuration schema",
+          "fullName": "Feature 7: Custom Project Validation Rules Configuration Schema Validation should validate complete configuration schema",
           "status": "passed",
           "duration": 0,
           "numPassingAsserts": 1,
@@ -345,107 +201,23 @@
         },
         {
           "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Adaptive Execution Planning"
+            "Feature 7: Custom Project Validation Rules",
+            "Error Handling and Edge Cases"
           ],
-          "title": "should generate adaptive execution plan based on system resources",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Adaptive Execution Planning should generate adaptive execution plan based on system resources",
+          "title": "should handle timeout errors gracefully",
+          "fullName": "Feature 7: Custom Project Validation Rules Error Handling and Edge Cases should handle timeout errors gracefully",
           "status": "passed",
-          "duration": 0,
-          "numPassingAsserts": 8,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Adaptive Execution Planning"
-          ],
-          "title": "should adapt to constrained system resources",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Adaptive Execution Planning should adapt to constrained system resources",
-          "status": "passed",
-          "duration": 0,
+          "duration": 1004,
           "numPassingAsserts": 2,
           "location": null
         },
         {
           "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Complex Workflow Scenarios"
-          ],
-          "title": "should handle large dependency graphs efficiently",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Complex Workflow Scenarios should handle large dependency graphs efficiently",
-          "status": "passed",
-          "duration": 1,
-          "numPassingAsserts": 3,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Complex Workflow Scenarios"
-          ],
-          "title": "should provide comprehensive debugging information",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Complex Workflow Scenarios should provide comprehensive debugging information",
-          "status": "passed",
-          "duration": 1,
-          "numPassingAsserts": 8,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Complex Workflow Scenarios"
-          ],
-          "title": "should handle mixed dependency types correctly",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Complex Workflow Scenarios should handle mixed dependency types correctly",
-          "status": "passed",
-          "duration": 0,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Feature 7: Custom Project Validation Rules",
             "Error Handling and Edge Cases"
           ],
-          "title": "should handle empty criteria lists",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Error Handling and Edge Cases should handle empty criteria lists",
-          "status": "passed",
-          "duration": 0,
-          "numPassingAsserts": 3,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Error Handling and Edge Cases"
-          ],
-          "title": "should handle single criterion execution",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Error Handling and Edge Cases should handle single criterion execution",
-          "status": "passed",
-          "duration": 0,
-          "numPassingAsserts": 4,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Error Handling and Edge Cases"
-          ],
-          "title": "should handle unknown criteria gracefully",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Error Handling and Edge Cases should handle unknown criteria gracefully",
-          "status": "passed",
-          "duration": 0,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "ValidationDependencyManager - Comprehensive Unit Tests",
-            "Error Handling and Edge Cases"
-          ],
-          "title": "should maintain execution history limits",
-          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Error Handling and Edge Cases should maintain execution history limits",
+          "title": "should handle missing config file without crashing",
+          "fullName": "Feature 7: Custom Project Validation Rules Error Handling and Edge Cases should handle missing config file without crashing",
           "status": "passed",
           "duration": 1,
           "numPassingAsserts": 1,

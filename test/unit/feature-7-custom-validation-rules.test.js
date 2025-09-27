@@ -207,7 +207,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
       // Mock validation execution
       const executeCustomValidation = (rule) => {
         try {
-          const _result = execSync(rule.command, {
+          const result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
             encoding: 'utf8',
           });
@@ -256,7 +256,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const executeCustomValidation = (rule) => {
         try {
-          const _result = execSync(rule.command, {
+          const result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
             encoding: 'utf8',
           });
@@ -305,7 +305,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const executeCustomValidation = (rule) => {
         try {
-          const _result = execSync(rule.command, {
+          const result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
             encoding: 'utf8',
           });
@@ -397,7 +397,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             });
           }
 
-          const _result = execSync(rule.command, {
+          const result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
             encoding: 'utf8',
             env: { ...process.env, ...rule.environment },

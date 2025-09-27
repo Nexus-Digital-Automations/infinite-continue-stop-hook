@@ -1,0 +1,194 @@
+{
+  "metadata": {
+    "timestamp": "2025-09-27T12:25:50.164Z",
+    "reporter": "jest-cicd-reporter",
+    "version": "1.0.0",
+    "generator": "Enhanced Coverage System",
+    "duration_ms": 52988
+  },
+  "cicd_summary": {
+    "pipeline_status": "FAILURE",
+    "total_duration_ms": 52988,
+    "should_block_deployment": true,
+    "quality_gate_status": {
+      "status": "FAILED",
+      "criteria": {
+        "tests_passing": false,
+        "no_failed_tests": false,
+        "coverage_adequate": false,
+        "performance_acceptable": true
+      },
+      "blocking_issues": [
+        {
+          "type": "test_failures",
+          "severity": "critical",
+          "message": "28 test(s) failed",
+          "action": "Fix failing tests before deployment"
+        },
+        {
+          "type": "low_coverage",
+          "severity": "warning",
+          "message": "Code coverage below acceptable threshold",
+          "action": "Add more tests to improve coverage"
+        }
+      ]
+    },
+    "test_health_score": 91
+  },
+  "test_execution": {
+    "summary": {
+      "total_suites": 11,
+      "passed_suites": 3,
+      "failed_suites": 8,
+      "total_tests": 156,
+      "passed_tests": 128,
+      "failed_tests": 28,
+      "pending_tests": 0,
+      "success_rate": "82.05",
+      "execution_time_ms": 52988
+    },
+    "performance_metrics": {
+      "average_test_duration": 339.6666666666667,
+      "slowest_suite": {
+        "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/example-with-mocks.test.js",
+        "duration_ms": 52796,
+        "num_tests": 18
+      },
+      "memory_usage": {
+        "rss": 86360064,
+        "heap_total": 25427968,
+        "heap_used": 22420080,
+        "external": 2218045,
+        "heap_usage_percent": "88.17"
+      },
+      "parallel_efficiency": {
+        "parallel_efficiency_percent": "105.60",
+        "total_execution_time_ms": 52988,
+        "serial_time_ms": 55956,
+        "time_saved_ms": 2968
+      }
+    },
+    "failure_analysis": {
+      "total_failures": 28,
+      "failed_suites": 8,
+      "failure_details": [
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/trend-analyzer.test.js",
+          "test": "TrendAnalyzer - Historical Performance Trend Analysis generateHealthScoreTrends should calculate health trend direction",
+          "duration": 4,
+          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: \"number\"\nReceived: \"undefined\"\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/trend-analyzer.test"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/trend-analyzer.test.js",
+          "test": "TrendAnalyzer - Historical Performance Trend Analysis comparePerformancePeriods should return insufficient data for small periods",
+          "duration": 2,
+          "error": "Error: expect(received).toContain(expected) // indexOf\n\nExpected substring: \"Insufficient data\"\nReceived string:    \"Performance comparison completed\"\n    at Object.toContain (/Users/jeremyparker/infi"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management-system.test.js",
+          "test": "Feature Management System Unit Tests Agent Initialization should initialize agent successfully",
+          "duration": 67,
+          "error": "Error: Command failed (code 1): node:internal/modules/cjs/loader:1386\n  throw err;\n  ^\n\nError: Cannot find module '/Users/jeremyparker/infinite-continue-stop-hook/test/taskmanager-api.js'\n    at Funct"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management-system.test.js",
+          "test": "Feature Management System Unit Tests Agent Initialization should reinitialize existing agent successfully",
+          "duration": 32,
+          "error": "Error: Command failed (code 1): node:internal/modules/cjs/loader:1386\n  throw err;\n  ^\n\nError: Cannot find module '/Users/jeremyparker/infinite-continue-stop-hook/test/taskmanager-api.js'\n    at Funct"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management-system.test.js",
+          "test": "Feature Management System Unit Tests Feature Suggestion should create feature suggestion with enhancement category",
+          "duration": 44,
+          "error": "Error: Command failed (code 1): node:internal/modules/cjs/loader:1386\n  throw err;\n  ^\n\nError: Cannot find module '/Users/jeremyparker/infinite-continue-stop-hook/test/taskmanager-api.js'\n    at Funct"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management-system.test.js",
+          "test": "Feature Management System Unit Tests Feature Suggestion should create feature suggestion with new-feature category",
+          "duration": 35,
+          "error": "Error: Command failed (code 1): node:internal/modules/cjs/loader:1386\n  throw err;\n  ^\n\nError: Cannot find module '/Users/jeremyparker/infinite-continue-stop-hook/test/taskmanager-api.js'\n    at Funct"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management-system.test.js",
+          "test": "Feature Management System Unit Tests Feature Suggestion should create feature suggestion with bug-fix category",
+          "duration": 32,
+          "error": "Error: Command failed (code 1): node:internal/modules/cjs/loader:1386\n  throw err;\n  ^\n\nError: Cannot find module '/Users/jeremyparker/infinite-continue-stop-hook/test/taskmanager-api.js'\n    at Funct"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management-system.test.js",
+          "test": "Feature Management System Unit Tests Feature Suggestion should handle incomplete feature data appropriately",
+          "duration": 30,
+          "error": "Error: Command failed (code 1): node:internal/modules/cjs/loader:1386\n  throw err;\n  ^\n\nError: Cannot find module '/Users/jeremyparker/infinite-continue-stop-hook/test/taskmanager-api.js'\n    at Funct"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management-system.test.js",
+          "test": "Feature Management System Unit Tests Feature Suggestion should handle invalid category appropriately",
+          "duration": 29,
+          "error": "Error: Command failed (code 1): node:internal/modules/cjs/loader:1386\n  throw err;\n  ^\n\nError: Cannot find module '/Users/jeremyparker/infinite-continue-stop-hook/test/taskmanager-api.js'\n    at Funct"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management-system.test.js",
+          "test": "Feature Management System Unit Tests Feature Listing should list all features",
+          "duration": 28,
+          "error": "Error: Command failed (code 1): node:internal/modules/cjs/loader:1386\n  throw err;\n  ^\n\nError: Cannot find module '/Users/jeremyparker/infinite-continue-stop-hook/test/taskmanager-api.js'\n    at Funct"
+        }
+      ],
+      "failure_patterns": {
+        "assertion": 28
+      },
+      "common_failure_type": "assertion"
+    },
+    "flaky_test_detection": {
+      "potentially_flaky": [],
+      "confidence": "low",
+      "note": "Flaky test detection requires historical data analysis"
+    }
+  },
+  "git": {
+    "commit_sha": "abfa70d58aa4bc0f8c805f6d4b9850a11fdf9c6b",
+    "branch": "main",
+    "author": "Claude <claude@anthropic.com>",
+    "commit_message": "fix: update E2E tests for FEATURES.json migration compatibility",
+    "commit_date": "2025-09-27 07:18:46 -0500",
+    "tag": null,
+    "is_dirty": true,
+    "remote_url": "https://github.com/Nexus-Digital-Automations/infinite-continue-stop-hook.git"
+  },
+  "environment": {
+    "node_version": "v22.20.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "ci": false,
+    "ci_provider": "local",
+    "environment": "test",
+    "timezone": "America/Chicago",
+    "locale": "en-US",
+    "memory": {
+      "total": 25769803776,
+      "available": 3429777408
+    },
+    "cpu": {
+      "cores": 8,
+      "model": "Apple M3"
+    },
+    "build_info": {
+      "build_number": "unknown",
+      "build_url": null,
+      "job_name": "unknown"
+    }
+  },
+  "coverage_integration": {
+    "coverage_available": false,
+    "coverage_summary": null,
+    "coverage_status": "not_available"
+  },
+  "notifications": [],
+  "recommendations": [
+    {
+      "category": "testing",
+      "priority": "high",
+      "recommendation": "Fix failing tests immediately",
+      "details": "28 tests are currently failing"
+    }
+  ]
+}

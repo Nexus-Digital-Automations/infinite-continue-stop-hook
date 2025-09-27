@@ -1,0 +1,160 @@
+{
+  "project": "stress-recovery-1758980171357-83598f31",
+  "features": [
+    {
+      "id": "feature_1758980171523_fed02851606f",
+      "title": "Interruption Test 1",
+      "description": "This is a test feature for integration testing purposes",
+      "business_value": "Validates that the feature management system works correctly",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-27T13:36:11.523Z",
+      "updated_at": "2025-09-27T13:36:11.523Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758980171745_4d4474facd8b",
+      "title": "Interruption Test 2",
+      "description": "This is a test feature for integration testing purposes",
+      "business_value": "Validates that the feature management system works correctly",
+      "category": "bug-fix",
+      "status": "suggested",
+      "created_at": "2025-09-27T13:36:11.745Z",
+      "updated_at": "2025-09-27T13:36:11.745Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758980171967_db8ba7ffe539",
+      "title": "Interruption Test 3",
+      "description": "This is a test feature for integration testing purposes",
+      "business_value": "Validates that the feature management system works correctly",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-27T13:36:11.967Z",
+      "updated_at": "2025-09-27T13:36:11.967Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758980172195_2847f2d2e915",
+      "title": "Interruption Test 4",
+      "description": "This is a test feature for integration testing purposes",
+      "business_value": "Validates that the feature management system works correctly",
+      "category": "bug-fix",
+      "status": "suggested",
+      "created_at": "2025-09-27T13:36:12.195Z",
+      "updated_at": "2025-09-27T13:36:12.195Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758980172410_ef101f5a6efe",
+      "title": "Interruption Test 5",
+      "description": "This is a test feature for integration testing purposes",
+      "business_value": "Validates that the feature management system works correctly",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-27T13:36:12.410Z",
+      "updated_at": "2025-09-27T13:36:12.410Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758980172622_7a32a3293555",
+      "title": "Interruption Test 6",
+      "description": "This is a test feature for integration testing purposes",
+      "business_value": "Validates that the feature management system works correctly",
+      "category": "bug-fix",
+      "status": "suggested",
+      "created_at": "2025-09-27T13:36:12.622Z",
+      "updated_at": "2025-09-27T13:36:12.622Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758980172834_51f24af40a8e",
+      "title": "Interruption Test 7",
+      "description": "This is a test feature for integration testing purposes",
+      "business_value": "Validates that the feature management system works correctly",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-27T13:36:12.834Z",
+      "updated_at": "2025-09-27T13:36:12.834Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758980173047_a566c14ea665",
+      "title": "Interruption Test 8",
+      "description": "This is a test feature for integration testing purposes",
+      "business_value": "Validates that the feature management system works correctly",
+      "category": "bug-fix",
+      "status": "suggested",
+      "created_at": "2025-09-27T13:36:13.047Z",
+      "updated_at": "2025-09-27T13:36:13.047Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758980173259_12e9bdbe896e",
+      "title": "Interruption Test 9",
+      "description": "This is a test feature for integration testing purposes",
+      "business_value": "Validates that the feature management system works correctly",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-27T13:36:13.259Z",
+      "updated_at": "2025-09-27T13:36:13.259Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758980173471_3774690b456d",
+      "title": "Interruption Test 10",
+      "description": "This is a test feature for integration testing purposes",
+      "business_value": "Validates that the feature management system works correctly",
+      "category": "bug-fix",
+      "status": "suggested",
+      "created_at": "2025-09-27T13:36:13.471Z",
+      "updated_at": "2025-09-27T13:36:13.471Z",
+      "suggested_by": "system",
+      "metadata": {}
+    },
+    {
+      "id": "feature_1758980173684_b667e8a95c43",
+      "title": "Interruption Test 11",
+      "description": "This is a test feature for integration testing purposes",
+      "business_value": "Validates that the feature management system works correctly",
+      "category": "enhancement",
+      "status": "suggested",
+      "created_at": "2025-09-27T13:36:13.684Z",
+      "updated_at": "2025-09-27T13:36:13.684Z",
+      "suggested_by": "system",
+      "metadata": {}
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-09-27T13:36:11.522Z",
+    "updated": "2025-09-27T13:36:13.684Z",
+    "total_features": 11,
+    "approval_history": []
+  },
+  "workflow_config": {
+    "require_approval": true,
+    "auto_reject_timeout_hours": 168,
+    "allowed_statuses": [
+      "suggested",
+      "approved",
+      "rejected",
+      "implemented"
+    ],
+    "required_fields": [
+      "title",
+      "description",
+      "business_value",
+      "category"
+    ]
+  }
+}
