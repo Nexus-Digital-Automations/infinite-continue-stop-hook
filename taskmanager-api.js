@@ -53,6 +53,12 @@ const EnhancedPerformanceCollector = require('./lib/enhanced-performance-collect
 // Import timing reports generator
 const TimingReportsGenerator = require('./lib/timing-reports-generator');
 
+// Import bottleneck analyzer
+const BottleneckAnalyzer = require('./lib/bottleneck-analyzer');
+
+// Import trend analyzer for historical performance tracking
+const TrendAnalyzer = require('./lib/trend-analyzer');
+
 // File locking mechanism to prevent race conditions across processes
 class FileLock {
   constructor() {
@@ -207,6 +213,9 @@ class AutonomousTaskManagerAPI {
 
     // Initialize validation audit trail management system
     this.auditTrailManager = new ValidationAuditTrailManager(PROJECT_ROOT);
+
+    // Initialize trend analyzer for historical performance tracking
+    this.trendAnalyzer = new TrendAnalyzer(PROJECT_ROOT);
 
     // Initialize features file and task structures if they don't exist
   }
@@ -1135,7 +1144,7 @@ class AutonomousTaskManagerAPI {
 
       const rulesData = this.customValidationManager.getCustomRules();
       const enabledRuleIds = Object.keys(rulesData.rules).filter(ruleId =>
-        rulesData.rules[ruleId].enabled
+        rulesData.rules[ruleId].enabled,
       );
 
       if (enabledRuleIds.length === 0) {
@@ -2551,6 +2560,279 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
+   * Analyze comprehensive performance trends
+   */
+  async analyzePerformanceTrends(options = {}) {
+    try {
+      return await this.trendAnalyzer.analyzeTrends(options);
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  /**
+   * Analyze trends for a specific validation criterion
+   */
+  async analyzeCriterionTrend(criterion, options = {}) {
+    try {
+      return await this.trendAnalyzer.analyzeCriterionTrend(criterion, options);
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  /**
+   * Generate performance health score trends
+   */
+  async generateHealthScoreTrends(options = {}) {
+    try {
+      return await this.trendAnalyzer.generateHealthScoreTrends(options);
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  /**
+   * Compare performance across different time periods
+   */
+  async comparePerformancePeriods(periodA, periodB, options = {}) {
+    try {
+      return await this.trendAnalyzer.comparePerformancePeriods(periodA, periodB, options);
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  /**
+   * Get performance forecasts based on historical trends
+   */
+  async getPerformanceForecasts(options = {}) {
+    try {
+      const timeRange = options.timeRange || 90;
+      const granularity = options.granularity || 'daily';
+
+      const analysisResult = await this.trendAnalyzer.analyzeTrends({
+        timeRange,
+        granularity,
+        includeForecast: true,
+        includeBaselines: false,
+      });
+
+      if (!analysisResult.success) {
+        return analysisResult;
+      }
+
+      return {
+        success: true,
+        forecasts: analysisResult.analysis.forecasts || {},
+        timeRange,
+        granularity,
+        metadata: {
+          generatedAt: new Date().toISOString(),
+          analysisScope: 'performance_forecasting',
+        },
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  /**
+   * Analyze performance volatility patterns
+   */
+  async analyzePerformanceVolatility(options = {}) {
+    try {
+      const timeRange = options.timeRange || 90;
+
+      const analysisResult = await this.trendAnalyzer.analyzeTrends({
+        timeRange,
+        granularity: options.granularity || 'daily',
+        includeForecast: false,
+        includeBaselines: false,
+      });
+
+      if (!analysisResult.success) {
+        return analysisResult;
+      }
+
+      return {
+        success: true,
+        volatility: analysisResult.analysis.volatility || {},
+        timeRange,
+        metadata: {
+          generatedAt: new Date().toISOString(),
+          analysisScope: 'volatility_analysis',
+        },
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  /**
+   * Detect performance anomalies in historical data
+   */
+  async detectPerformanceAnomalies(options = {}) {
+    try {
+      const timeRange = options.timeRange || 30;
+      const criteria = options.criteria || null;
+
+      // Get analysis for all criteria or specific criterion
+      if (criteria) {
+        const result = await this.trendAnalyzer.analyzeCriterionTrend(criteria, {
+          timeRange,
+          granularity: options.granularity || 'daily',
+        });
+
+        if (!result.success) {
+          return result;
+        }
+
+        return {
+          success: true,
+          anomalies: result.analysis.anomalies || [],
+          criterion: criteria,
+          timeRange,
+          metadata: {
+            generatedAt: new Date().toISOString(),
+            analysisScope: 'anomaly_detection',
+          },
+        };
+      } else {
+        const analysisResult = await this.trendAnalyzer.analyzeTrends({
+          timeRange,
+          granularity: options.granularity || 'daily',
+          includeForecast: false,
+          includeBaselines: false,
+        });
+
+        if (!analysisResult.success) {
+          return analysisResult;
+        }
+
+        // Extract anomalies from criterion trends
+        const allAnomalies = [];
+        const criterionTrends = analysisResult.analysis.byCriterion || {};
+
+        Object.entries(criterionTrends).forEach(([criterion, trendData]) => {
+          if (trendData.anomalies) {
+            trendData.anomalies.forEach(anomaly => {
+              allAnomalies.push({
+                criterion,
+                ...anomaly,
+              });
+            });
+          }
+        });
+
+        return {
+          success: true,
+          anomalies: allAnomalies,
+          timeRange,
+          metadata: {
+            generatedAt: new Date().toISOString(),
+            analysisScope: 'comprehensive_anomaly_detection',
+          },
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  /**
+   * Analyze seasonality patterns in performance data
+   */
+  async analyzeSeasonalityPatterns(options = {}) {
+    try {
+      const timeRange = options.timeRange || 90;
+
+      const analysisResult = await this.trendAnalyzer.analyzeTrends({
+        timeRange,
+        granularity: options.granularity || 'daily',
+        includeForecast: false,
+        includeBaselines: false,
+      });
+
+      if (!analysisResult.success) {
+        return analysisResult;
+      }
+
+      return {
+        success: true,
+        seasonality: analysisResult.analysis.decomposition || {},
+        patterns: analysisResult.analysis.patterns || {},
+        timeRange,
+        metadata: {
+          generatedAt: new Date().toISOString(),
+          analysisScope: 'seasonality_analysis',
+        },
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  /**
+   * Compare current performance with established baselines
+   */
+  async compareWithBaselines(options = {}) {
+    try {
+      const timeRange = options.timeRange || 30;
+
+      const analysisResult = await this.trendAnalyzer.analyzeTrends({
+        timeRange,
+        granularity: options.granularity || 'daily',
+        includeForecast: false,
+        includeBaselines: true,
+      });
+
+      if (!analysisResult.success) {
+        return analysisResult;
+      }
+
+      return {
+        success: true,
+        baselines: analysisResult.analysis.baselines || {},
+        timeRange,
+        metadata: {
+          generatedAt: new Date().toISOString(),
+          analysisScope: 'baseline_comparison',
+        },
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  /**
    * Calculate enhanced performance statistics
    */
   _calculateEnhancedPerformanceStatistics(metrics) {
@@ -2938,6 +3220,145 @@ class AutonomousTaskManagerAPI {
         success: false,
         error: error.message,
         criteria: [],
+      };
+    }
+  }
+
+  /**
+   * 🚨 FEATURE 3: BOTTLENECK IDENTIFICATION AND ANALYSIS
+   * Comprehensive bottleneck analysis using BottleneckAnalyzer
+   */
+
+  /**
+   * Perform comprehensive bottleneck analysis
+   */
+  async analyzeBottlenecks(options = {}) {
+    try {
+      const bottleneckAnalyzer = new BottleneckAnalyzer(PROJECT_ROOT);
+      const result = await bottleneckAnalyzer.analyzeBottlenecks(options);
+
+      return {
+        success: result.success,
+        analysis: result.analysis,
+        error: result.error,
+        options,
+        featureId: 'feature_1758946499841_performance_metrics',
+        generatedAt: new Date().toISOString(),
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        analysis: null,
+      };
+    }
+  }
+
+  /**
+   * Analyze bottlenecks for a specific validation criterion
+   */
+  async analyzeCriterionBottlenecks(criterion, options = {}) {
+    try {
+      if (!criterion) {
+        return {
+          success: false,
+          error: 'Criterion parameter is required',
+        };
+      }
+
+      const bottleneckAnalyzer = new BottleneckAnalyzer(PROJECT_ROOT);
+      const result = await bottleneckAnalyzer.analyzeCriterionBottlenecks(criterion, options);
+
+      return {
+        success: result.success,
+        analysis: result.analysis,
+        error: result.error,
+        criterion,
+        options,
+        featureId: 'feature_1758946499841_performance_metrics',
+        generatedAt: new Date().toISOString(),
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        analysis: null,
+        criterion,
+      };
+    }
+  }
+
+  /**
+   * Detect performance regressions
+   */
+  async detectPerformanceRegressions(options = {}) {
+    try {
+      const bottleneckAnalyzer = new BottleneckAnalyzer(PROJECT_ROOT);
+      const result = await bottleneckAnalyzer.detectRegressions(options);
+
+      return {
+        success: result.success,
+        regressions: result.regressions,
+        error: result.error,
+        options,
+        featureId: 'feature_1758946499841_performance_metrics',
+        generatedAt: new Date().toISOString(),
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        regressions: null,
+      };
+    }
+  }
+
+  /**
+   * Get performance bottleneck summary
+   */
+  async getBottleneckSummary(options = {}) {
+    try {
+      // Use shorter time range for quick summary
+      const summaryOptions = {
+        timeRange: options.timeRange || 7, // Last 7 days
+        includeRecommendations: true,
+        minConfidence: options.minConfidence || 0.8,
+      };
+
+      const bottleneckAnalyzer = new BottleneckAnalyzer(PROJECT_ROOT);
+      const result = await bottleneckAnalyzer.analyzeBottlenecks(summaryOptions);
+
+      if (!result.success) {
+        return result;
+      }
+
+      // Extract summary information
+      const summary = {
+        totalBottlenecks: result.analysis.summary ? result.analysis.summary.totalBottlenecks : 0,
+        criticalIssues: result.analysis.summary ? result.analysis.summary.criticalIssues.length : 0,
+        regressions: result.analysis.regressions ? result.analysis.regressions.detected : 0,
+        recommendations: result.analysis.recommendations ? result.analysis.recommendations.length : 0,
+        dataQuality: {
+          totalMetrics: result.analysis.metadata.totalMetrics,
+          timeRange: result.analysis.metadata.timeRange,
+          sufficient: result.analysis.metadata.totalMetrics >= 10,
+        },
+      };
+
+      return {
+        success: true,
+        summary,
+        topIssues: result.analysis.summary ? result.analysis.summary.criticalIssues.slice(0, 5) : [],
+        topRecommendations: result.analysis.recommendations ? result.analysis.recommendations.slice(0, 3) : [],
+        featureId: 'feature_1758946499841_performance_metrics',
+        generatedAt: new Date().toISOString(),
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        summary: null,
       };
     }
   }
@@ -3977,7 +4398,7 @@ class AutonomousTaskManagerAPI {
 
         if (config.customValidationRules && Array.isArray(config.customValidationRules)) {
           const enabledRules = config.customValidationRules.filter(rule =>
-            rule.enabled !== false && this._validateCustomRule(rule)
+            rule.enabled !== false && this._validateCustomRule(rule),
           );
 
           // Filter rules based on conditions
@@ -4142,7 +4563,7 @@ class AutonomousTaskManagerAPI {
           const { execSync } = require('child_process');
           const currentBranch = execSync('git rev-parse --abbrev-ref HEAD', {
             cwd: PROJECT_ROOT,
-            encoding: 'utf8'
+            encoding: 'utf8',
           }).trim();
           if (!rule.conditions.gitBranch.includes(currentBranch)) {
             return false;
@@ -4221,8 +4642,8 @@ class AutonomousTaskManagerAPI {
           ...rule,
           failureHandling: {
             ...rule.failureHandling,
-            retryCount: rule.failureHandling.retryCount - 1
-          }
+            retryCount: rule.failureHandling.retryCount - 1,
+          },
         };
         return await this._executeCustomRule(retryRule);
       }
@@ -9093,6 +9514,61 @@ async function main() {
         break;
       }
 
+      // 🚀 FEATURE 8B: HISTORICAL TREND ANALYSIS ENDPOINTS (Extended Performance Metrics)
+      case 'analyze-performance-trends': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.analyzePerformanceTrends(options);
+        break;
+      }
+      case 'analyze-criterion-trend': {
+        if (!args[1]) {
+          throw new Error('Criterion required. Usage: analyze-criterion-trend <criterion> [options]');
+        }
+        const options = args[2] ? JSON.parse(args[2]) : {};
+        result = await api.analyzeCriterionTrend(args[1], options);
+        break;
+      }
+      case 'generate-health-score-trends': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.generateHealthScoreTrends(options);
+        break;
+      }
+      case 'compare-performance-periods': {
+        if (!args[1] || !args[2]) {
+          throw new Error('Two periods required. Usage: compare-performance-periods <periodA> <periodB> [options]');
+        }
+        const periodA = JSON.parse(args[1]);
+        const periodB = JSON.parse(args[2]);
+        const options = args[3] ? JSON.parse(args[3]) : {};
+        result = await api.comparePerformancePeriods(periodA, periodB, options);
+        break;
+      }
+      case 'get-performance-forecasts': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.getPerformanceForecasts(options);
+        break;
+      }
+      case 'analyze-performance-volatility': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.analyzePerformanceVolatility(options);
+        break;
+      }
+      case 'detect-performance-anomalies': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.detectPerformanceAnomalies(options);
+        break;
+      }
+      case 'analyze-seasonality-patterns': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.analyzeSeasonalityPatterns(options);
+        break;
+      }
+      case 'compare-with-baselines': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.compareWithBaselines(options);
+        break;
+      }
+
       // 🚀 FEATURE 9: ROLLBACK CAPABILITIES ENDPOINTS (Stop Hook Rollback Management)
       case 'create-validation-state-snapshot': {
         const options = args[1] ? JSON.parse(args[1]) : {};
@@ -9269,7 +9745,7 @@ async function main() {
         const error = args[5] || null;
         const metadata = args[6] ? JSON.parse(args[6]) : {};
         result = api.auditTrailManager.trackValidationStep(
-          args[1], args[2], args[3] === 'true', parseInt(args[4]), error, metadata
+          args[1], args[2], args[3] === 'true', parseInt(args[4]), error, metadata,
         );
         break;
       }
@@ -9295,7 +9771,7 @@ async function main() {
           result = {
             success: true,
             sessions: api.auditTrailManager.auditTrail.sessions,
-            totalSessions: api.auditTrailManager.auditTrail.sessions.length
+            totalSessions: api.auditTrailManager.auditTrail.sessions.length,
           };
         }
         break;
@@ -9340,8 +9816,8 @@ async function main() {
             failedSessions,
             successRate: totalSessions > 0 ? (successfulSessions / totalSessions) * 100 : 0,
             totalValidations: api.auditTrailManager.auditTrail.sessions.reduce((sum, s) => sum + s.validationSteps.length, 0),
-            criteriaStats: api.auditTrailManager.criteriaHistory.statistics
-          }
+            criteriaStats: api.auditTrailManager.criteriaHistory.statistics,
+          },
         };
         break;
       }
@@ -9351,12 +9827,12 @@ async function main() {
         cutoffDate.setDate(cutoffDate.getDate() - retentionDays);
 
         const expiredSessions = api.auditTrailManager.auditTrail.sessions.filter(session =>
-          new Date(session.startTime) < cutoffDate
+          new Date(session.startTime) < cutoffDate,
         );
 
         // Remove expired sessions
         api.auditTrailManager.auditTrail.sessions = api.auditTrailManager.auditTrail.sessions.filter(session =>
-          new Date(session.startTime) >= cutoffDate
+          new Date(session.startTime) >= cutoffDate,
         );
 
         api.auditTrailManager._saveAuditTrail();
@@ -9365,13 +9841,13 @@ async function main() {
           success: true,
           removed: expiredSessions.length,
           retentionDays,
-          message: `Cleaned up ${expiredSessions.length} expired audit sessions`
+          message: `Cleaned up ${expiredSessions.length} expired audit sessions`,
         };
         break;
       }
 
       default:
-        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, start-authorization, validate-criterion, validate-criteria-parallel, complete-authorization, authorize-stop, validate-feature-tests, confirm-test-coverage, confirm-pipeline-passes, advance-to-next-feature, get-feature-test-status, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents, store-lesson, search-lessons, store-error, find-similar-errors, get-relevant-lessons, rag-analytics, lesson-version-history, compare-lesson-versions, rollback-lesson-version, lesson-version-analytics, store-lesson-versioned, search-lessons-versioned, record-lesson-usage, record-lesson-feedback, record-lesson-outcome, get-lesson-quality-score, get-quality-analytics, get-quality-recommendations, search-lessons-quality, update-lesson-quality, register-project, share-lesson-cross-project, calculate-project-relevance, get-shared-lessons, get-project-recommendations, record-lesson-application, get-cross-project-analytics, update-project, get-project, list-projects, deprecate-lesson, restore-lesson, get-lesson-deprecation-status, get-deprecated-lessons, cleanup-obsolete-lessons, get-deprecation-analytics, detect-patterns, analyze-pattern-evolution, get-pattern-suggestions, analyze-lesson-patterns, get-pattern-analytics, cluster-patterns, search-similar-patterns, generate-pattern-insights, update-pattern-config, get-validation-performance-metrics, get-performance-trends, identify-performance-bottlenecks, get-detailed-timing-report, analyze-resource-usage, get-performance-benchmarks, create-validation-state-snapshot, perform-rollback, get-available-rollback-snapshots, get-rollback-history, cleanup-old-rollback-snapshots, get-dependency-graph, validate-dependency-graph, get-execution-order, generate-parallel-execution-plan, get-dependency-visualization, add-dependency, remove-dependency, get-dependency, save-dependency-config, load-dependency-config, get-execution-analytics, generate-adaptive-execution-plan, load-custom-validation-rules, get-custom-validation-rules, execute-custom-validation-rule, execute-all-custom-validation-rules, generate-custom-validation-config, get-custom-validation-analytics, start-audit-session, track-validation-step, complete-audit-session, search-audit-trail, get-validation-history, generate-compliance-report, export-audit-data, get-validation-trends, analyze-failure-patterns, get-agent-audit-summary, get-audit-trail-stats, cleanup-audit-data`);
+        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, start-authorization, validate-criterion, validate-criteria-parallel, complete-authorization, authorize-stop, validate-feature-tests, confirm-test-coverage, confirm-pipeline-passes, advance-to-next-feature, get-feature-test-status, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents, store-lesson, search-lessons, store-error, find-similar-errors, get-relevant-lessons, rag-analytics, lesson-version-history, compare-lesson-versions, rollback-lesson-version, lesson-version-analytics, store-lesson-versioned, search-lessons-versioned, record-lesson-usage, record-lesson-feedback, record-lesson-outcome, get-lesson-quality-score, get-quality-analytics, get-quality-recommendations, search-lessons-quality, update-lesson-quality, register-project, share-lesson-cross-project, calculate-project-relevance, get-shared-lessons, get-project-recommendations, record-lesson-application, get-cross-project-analytics, update-project, get-project, list-projects, deprecate-lesson, restore-lesson, get-lesson-deprecation-status, get-deprecated-lessons, cleanup-obsolete-lessons, get-deprecation-analytics, detect-patterns, analyze-pattern-evolution, get-pattern-suggestions, analyze-lesson-patterns, get-pattern-analytics, cluster-patterns, search-similar-patterns, generate-pattern-insights, update-pattern-config, get-validation-performance-metrics, get-performance-trends, identify-performance-bottlenecks, get-detailed-timing-report, analyze-resource-usage, get-performance-benchmarks, analyze-performance-trends, analyze-criterion-trend, generate-health-score-trends, compare-performance-periods, get-performance-forecasts, analyze-performance-volatility, detect-performance-anomalies, analyze-seasonality-patterns, compare-with-baselines, create-validation-state-snapshot, perform-rollback, get-available-rollback-snapshots, get-rollback-history, cleanup-old-rollback-snapshots, get-dependency-graph, validate-dependency-graph, get-execution-order, generate-parallel-execution-plan, get-dependency-visualization, add-dependency, remove-dependency, get-dependency, save-dependency-config, load-dependency-config, get-execution-analytics, generate-adaptive-execution-plan, load-custom-validation-rules, get-custom-validation-rules, execute-custom-validation-rule, execute-all-custom-validation-rules, generate-custom-validation-config, get-custom-validation-analytics, start-audit-session, track-validation-step, complete-audit-session, search-audit-trail, get-validation-history, generate-compliance-report, export-audit-data, get-validation-trends, analyze-failure-patterns, get-agent-audit-summary, get-audit-trail-stats, cleanup-audit-data`);
     }
 
     console.log(JSON.stringify(result, null, 2));

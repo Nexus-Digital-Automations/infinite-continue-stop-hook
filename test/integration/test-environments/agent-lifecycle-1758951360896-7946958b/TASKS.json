@@ -1,0 +1,82 @@
+{
+  "project": "agent-lifecycle-1758951360896-7946958b",
+  "features": [],
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-09-27T05:36:01.062Z",
+    "updated": "2025-09-27T05:36:01.062Z",
+    "total_features": 0,
+    "approval_history": [],
+    "initialization_stats": {
+      "total_initializations": 2,
+      "total_reinitializations": 2,
+      "current_day": "2025-09-27",
+      "time_buckets": {
+        "11:00-15:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "16:00-20:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "21:00-01:59": {
+          "init": 2,
+          "reinit": 2
+        },
+        "02:00-06:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "07:00-11:59": {
+          "init": 0,
+          "reinit": 0
+        }
+      },
+      "daily_history": [],
+      "last_reset": "2025-09-27T05:36:01.063Z",
+      "last_updated": "2025-09-27T05:36:21.391Z"
+    }
+  },
+  "workflow_config": {
+    "require_approval": true,
+    "auto_reject_timeout_hours": 168,
+    "allowed_statuses": [
+      "suggested",
+      "approved",
+      "rejected",
+      "implemented"
+    ],
+    "required_fields": [
+      "title",
+      "description",
+      "business_value",
+      "category"
+    ]
+  },
+  "agents": {
+    "persist-agent-1": {
+      "lastHeartbeat": "2025-09-27T05:36:11.230Z",
+      "status": "active",
+      "initialized": "2025-09-27T05:36:01.063Z",
+      "sessionId": "386bc1b059198fa2",
+      "reinitialized": "2025-09-27T05:36:11.230Z",
+      "previousSessions": [
+        "b18623c995da2088"
+      ]
+    },
+    "stats-test-agent": {
+      "lastHeartbeat": "2025-09-27T05:36:01.745Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T05:36:01.745Z",
+      "sessionId": "c35853e9f3e30397",
+      "previousSessions": []
+    },
+    "persist-agent-2": {
+      "lastHeartbeat": "2025-09-27T05:36:21.391Z",
+      "status": "active",
+      "initialized": "2025-09-27T05:36:21.391Z",
+      "sessionId": "4f83ef81ad039a93"
+    }
+  }
+}
