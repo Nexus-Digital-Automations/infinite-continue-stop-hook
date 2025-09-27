@@ -3808,7 +3808,7 @@ class AutonomousTaskManagerAPI {
       snapshots.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
       // Apply limit if specified
-      const limit = options.limit || snapshots.length;
+      const limit = _options.limit || snapshots.length;
       const limitedSnapshots = snapshots.slice(0, limit);
 
       return {
@@ -3821,7 +3821,7 @@ class AutonomousTaskManagerAPI {
     } catch (_error) {
       return {
         success: false,
-        error: `Failed to get available snapshots: ${error.message}`,
+        error: `Failed to get available snapshots: ${_error.message}`,
       };
     }
   }
@@ -9683,30 +9683,30 @@ async function main() {
       // 🚀 FEATURE 9: ROLLBACK CAPABILITIES ENDPOINTS (Stop Hook Rollback Management)
       case 'create-validation-state-snapshot': {
         const options = args[1] ? JSON.parse(args[1]) : {};
-        result = await api.createValidationStateSnapshot(_options);
+        result = await api.createValidationStateSnapshot(options);
         break;
       }
       case 'perform-rollback': {
         if (!args[1]) {
-          throw new Error('Snapshot ID required. Usage: perform-rollback <snapshotId> [_options]');
+          throw new Error('Snapshot ID required. Usage: perform-rollback <snapshotId> [options]');
         }
         const options = args[2] ? JSON.parse(args[2]) : {};
-        result = await api.performRollback(args[1], _options);
+        result = await api.performRollback(args[1], options);
         break;
       }
       case 'get-available-rollback-snapshots': {
         const options = args[1] ? JSON.parse(args[1]) : {};
-        result = await api.getAvailableRollbackSnapshots(_options);
+        result = await api.getAvailableRollbackSnapshots(options);
         break;
       }
       case 'get-rollback-history': {
         const options = args[1] ? JSON.parse(args[1]) : {};
-        result = await api.getRollbackHistory(_options);
+        result = await api.getRollbackHistory(options);
         break;
       }
       case 'cleanup-old-rollback-snapshots': {
         const options = args[1] ? JSON.parse(args[1]) : {};
-        result = await api.cleanupOldRollbackSnapshots(_options);
+        result = await api.cleanupOldRollbackSnapshots(options);
         break;
       }
 
