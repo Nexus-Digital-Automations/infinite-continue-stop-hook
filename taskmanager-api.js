@@ -4645,7 +4645,7 @@ class AutonomousTaskManagerAPI {
             retryCount: rule.failureHandling.retryCount - 1,
           },
         };
-        return await this._executeCustomRule(retryRule);
+        return this._executeCustomRule(retryRule);
       }
 
       return {

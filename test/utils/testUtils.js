@@ -141,7 +141,7 @@ class APIExecutor {
     };
 
     const feature = { ...defaultFeature, ...featureData };
-    return await this.execAPI('suggest-feature', [JSON.stringify(feature)], options);
+    return this.execAPI('suggest-feature', [JSON.stringify(feature)], options);
   }
 
   /**

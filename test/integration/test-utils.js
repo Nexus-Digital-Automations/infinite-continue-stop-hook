@@ -200,7 +200,9 @@ async function corruptFeaturesFile(testDir) {
  * @returns {Promise<void>}
  */
 function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise(resolve => {
+    setTimeout(resolve, ms);
+  });
 }
 
 /**

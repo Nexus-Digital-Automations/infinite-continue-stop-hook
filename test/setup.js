@@ -28,7 +28,9 @@ expect.extend(customMatchers);
 // Global test utilities
 global.testUtils = {
   // Test timing helpers
-  delay: (ms) => new Promise(resolve => setTimeout(resolve, ms)),
+  delay: (ms) => new Promise(resolve => {
+    setTimeout(resolve, ms);
+  }),
 
   // Test data generators
   randomString: (length = 8) => Math.random().toString(36).substring(2, length + 2),
@@ -43,7 +45,9 @@ global.testUtils = {
         await fn();
         return;
       } catch (error) {
-        await new Promise(resolve => setTimeout(resolve, interval));
+        await new Promise(resolve => {
+          setTimeout(resolve, interval);
+        });
       }
     }
     throw new Error(`Assertion failed within ${timeout}ms`);

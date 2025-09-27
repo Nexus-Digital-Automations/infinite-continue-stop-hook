@@ -162,7 +162,9 @@ describe('Basic Testing Infrastructure', () => {
       const delay = 50; // 50ms delay
 
       const { result, duration } = await PerformanceUtils.measureTime(async () => {
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise(resolve => {
+          setTimeout(resolve, delay);
+        });
         return 'test-complete';
       });
 
@@ -191,7 +193,9 @@ describe('Basic Testing Infrastructure', () => {
 
   describe('Test Execution Utilities', () => {
     test('should enforce timeouts', async () => {
-      const promise = new Promise(resolve => setTimeout(resolve, 200)); // 200ms
+      const promise = new Promise(resolve => {
+        setTimeout(resolve, 200);
+      }); // 200ms
       const timeout = 100; // 100ms timeout
 
       await expect(
@@ -200,7 +204,9 @@ describe('Basic Testing Infrastructure', () => {
     });
 
     test('should allow operations within timeout', async () => {
-      const promise = new Promise(resolve => setTimeout(() => resolve('success'), 50)); // 50ms
+      const promise = new Promise(resolve => {
+        setTimeout(() => resolve('success'), 50);
+      }); // 50ms
       const timeout = 100; // 100ms timeout
 
       const result = await TestExecution.withTimeout(promise, timeout);
@@ -237,7 +243,9 @@ describe('Basic Testing Infrastructure', () => {
 
     test('should execute promises in parallel with concurrency control', async () => {
       const promises = Array.from({ length: 8 }, (_, i) =>
-        new Promise(resolve => setTimeout(() => resolve(i * 2), 10)),
+        new Promise(resolve => {
+          setTimeout(() => resolve(i * 2), 10);
+        }),
       );
 
       const results = await TestExecution.parallel(promises, 3); // Max 3 concurrent

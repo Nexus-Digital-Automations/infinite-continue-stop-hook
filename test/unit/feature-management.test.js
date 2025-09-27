@@ -112,21 +112,24 @@ describe('Feature Management Lifecycle', () => {
 
       test('should handle different feature categories correctly', async () => {
         const categories = ['enhancement', 'bug-fix', 'new-feature', 'performance', 'security', 'documentation'];
-        const results = [];
 
-        for (const category of categories) {
-          const featureData = {
-            ...TEST_FIXTURES.validFeature,
-            title: `${category} Feature Test`,
-            category: category,
-          };
+        // Create features in parallel for better test performance
+        const results = await Promise.all(
+          categories.map(async category => {
+            const featureData = {
+              ...TEST_FIXTURES.validFeature,
+              title: `${category} Feature Test`,
+              category: category,
+            };
 
-          const result = await api.suggestFeature(featureData);
-          results.push(result);
+            const result = await api.suggestFeature(featureData);
 
-          expect(result.success).toBe(true);
-          expect(result.feature.category).toBe(category);
-        }
+            expect(result.success).toBe(true);
+            expect(result.feature.category).toBe(category);
+
+            return result;
+          }),
+        );
 
         // Verify all features were created
         const features = await api._loadFeatures();
@@ -134,20 +137,27 @@ describe('Feature Management Lifecycle', () => {
       });
 
       test('should auto-generate unique feature IDs', async () => {
-        const featureIds = new Set();
         const numFeatures = 5;
 
-        for (let i = 0; i < numFeatures; i++) {
-          const featureData = {
-            ...TEST_FIXTURES.validFeature,
-            title: `Test Feature Number ${i + 1} Implementation`,
-          };
+        // Create features in parallel for better test performance
+        const results = await Promise.all(
+          Array.from({ length: numFeatures }, (_, i) => {
+            const featureData = {
+              ...TEST_FIXTURES.validFeature,
+              title: `Test Feature Number ${i + 1} Implementation`,
+            };
 
-          const result = await api.suggestFeature(featureData);
+            return api.suggestFeature(featureData);
+          }),
+        );
+
+        // Verify all features were created successfully
+        results.forEach(result => {
           expect(result.success).toBe(true);
+        });
 
-          featureIds.add(result.feature.id);
-        }
+        // Extract feature IDs
+        const featureIds = new Set(results.map(result => result.feature.id));
 
         // All IDs should be unique
         expect(featureIds.size).toBe(numFeatures);
