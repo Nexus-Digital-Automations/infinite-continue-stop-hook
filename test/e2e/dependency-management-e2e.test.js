@@ -24,7 +24,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         encoding: 'utf8',
         timeout: timeout,
         stdio: 'pipe',
-        ...options
+        ...options,
       });
 
       return JSON.parse(output.trim());
@@ -49,7 +49,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         description: `E2E test dependency ${i}`,
         estimatedDuration: 5000 + (i * 2000),
         parallelizable: i % 2 === 0,
-        resourceRequirements: i % 3 === 0 ? ['network', 'cpu'] : ['filesystem']
+        resourceRequirements: i % 3 === 0 ? ['network', 'cpu'] : ['filesystem'],
       };
 
       const result = executeTaskManagerCommand('add-dependency', `'e2e-test-${i}' '${JSON.stringify(config)}'`);
@@ -81,7 +81,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           description: 'Microservice validation',
           estimatedDuration: 20000,
           parallelizable: true,
-          resourceRequirements: ['network', 'cpu']
+          resourceRequirements: ['network', 'cpu'],
         };
 
         const databaseConfig = {
@@ -89,18 +89,18 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           description: 'Database migration validation',
           estimatedDuration: 15000,
           parallelizable: false,
-          resourceRequirements: ['network', 'memory']
+          resourceRequirements: ['network', 'memory'],
         };
 
         const integrationConfig = {
           dependencies: [
             { criterion: 'microservice-validation', type: 'strict' },
-            { criterion: 'database-validation', type: 'weak' }
+            { criterion: 'database-validation', type: 'weak' },
           ],
           description: 'Integration testing validation',
           estimatedDuration: 30000,
           parallelizable: true,
-          resourceRequirements: ['network', 'cpu', 'memory']
+          resourceRequirements: ['network', 'cpu', 'memory'],
         };
 
         // Add dependencies
@@ -138,9 +138,9 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
         parallelResult.plan.forEach((wave, index) => {
           const criteriaInWave = wave.criteria.map(c => c.criterion);
-          if (criteriaInWave.includes('microservice-validation')) microserviceWave = index;
-          if (criteriaInWave.includes('database-validation')) databaseWave = index;
-          if (criteriaInWave.includes('integration-validation')) integrationWave = index;
+          if (criteriaInWave.includes('microservice-validation')) {microserviceWave = index;}
+          if (criteriaInWave.includes('database-validation')) {databaseWave = index;}
+          if (criteriaInWave.includes('integration-validation')) {integrationWave = index;}
         });
 
         expect(databaseWave).toBeGreaterThan(microserviceWave);
@@ -151,7 +151,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           availableCPUs: 4,
           availableMemory: 8 * 1024 * 1024 * 1024,
           networkLatency: 30,
-          diskIOLoad: 0.6
+          diskIOLoad: 0.6,
         };
 
         const adaptiveResult = executeTaskManagerCommand('generate-adaptive-execution-plan', `'${JSON.stringify(systemInfo)}'`);
@@ -195,12 +195,12 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         const modificationConfig = {
           dependencies: [
             { criterion: 'e2e-test-0', type: 'weak' },
-            { criterion: 'e2e-test-2', type: 'optional' }
+            { criterion: 'e2e-test-2', type: 'optional' },
           ],
           description: 'Modified cross-dependency test',
           estimatedDuration: 12000,
           parallelizable: true,
-          resourceRequirements: ['cpu']
+          resourceRequirements: ['cpu'],
         };
 
         const modifyResult = executeTaskManagerCommand('add-dependency', `'e2e-test-4' '${JSON.stringify(modificationConfig)}'`);
@@ -227,7 +227,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         // Note: Validation might show missing dependency issue for e2e-test-4 -> e2e-test-2
         if (!validationResult.validation.valid) {
           expect(validationResult.validation.issues.some(issue =>
-            issue.type === 'missing_dependency' && issue.missingDependency === 'e2e-test-2'
+            issue.type === 'missing_dependency' && issue.missingDependency === 'e2e-test-2',
           )).toBe(true);
         }
 
@@ -250,8 +250,8 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
               description: 'CPU intensive compilation task',
               estimatedDuration: 45000,
               parallelizable: false,
-              resourceRequirements: ['cpu', 'memory']
-            }
+              resourceRequirements: ['cpu', 'memory'],
+            },
           },
           {
             name: 'cpu-heavy-2',
@@ -259,8 +259,8 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
               description: 'CPU intensive analysis task',
               estimatedDuration: 35000,
               parallelizable: true,
-              resourceRequirements: ['cpu']
-            }
+              resourceRequirements: ['cpu'],
+            },
           },
           {
             name: 'cpu-light-1',
@@ -269,9 +269,9 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
               description: 'Light filesystem task',
               estimatedDuration: 8000,
               parallelizable: true,
-              resourceRequirements: ['filesystem']
-            }
-          }
+              resourceRequirements: ['filesystem'],
+            },
+          },
         ];
 
         // Add dependencies
@@ -286,7 +286,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           availableCPUs: 16,
           availableMemory: 32 * 1024 * 1024 * 1024,
           networkLatency: 10,
-          diskIOLoad: 0.2
+          diskIOLoad: 0.2,
         };
 
         const adaptiveResult = executeTaskManagerCommand('generate-adaptive-execution-plan', `'${JSON.stringify(highCpuSystem)}'`);
@@ -320,8 +320,8 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
               description: 'Download external dependencies',
               estimatedDuration: 25000,
               parallelizable: true,
-              resourceRequirements: ['network']
-            }
+              resourceRequirements: ['network'],
+            },
           },
           {
             name: 'network-upload',
@@ -329,8 +329,8 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
               description: 'Upload validation results',
               estimatedDuration: 20000,
               parallelizable: true,
-              resourceRequirements: ['network']
-            }
+              resourceRequirements: ['network'],
+            },
           },
           {
             name: 'network-api-check',
@@ -339,9 +339,9 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
               description: 'API connectivity validation',
               estimatedDuration: 15000,
               parallelizable: true,
-              resourceRequirements: ['network', 'cpu']
-            }
-          }
+              resourceRequirements: ['network', 'cpu'],
+            },
+          },
         ];
 
         // Add dependencies
@@ -356,7 +356,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           availableCPUs: 8,
           availableMemory: 16 * 1024 * 1024 * 1024,
           networkLatency: 200,
-          diskIOLoad: 0.3
+          diskIOLoad: 0.3,
         };
 
         const adaptiveResult = executeTaskManagerCommand('generate-adaptive-execution-plan', `'${JSON.stringify(constrainedNetwork)}'`);
@@ -383,8 +383,8 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
               description: 'Memory intensive processing',
               estimatedDuration: 40000,
               parallelizable: true,
-              resourceRequirements: ['memory', 'cpu']
-            }
+              resourceRequirements: ['memory', 'cpu'],
+            },
           },
           {
             name: 'memory-heavy-2',
@@ -392,8 +392,8 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
               description: 'Memory intensive analysis',
               estimatedDuration: 35000,
               parallelizable: true,
-              resourceRequirements: ['memory', 'cpu']
-            }
+              resourceRequirements: ['memory', 'cpu'],
+            },
           },
           {
             name: 'disk-heavy-1',
@@ -401,8 +401,8 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
               description: 'Large file processing',
               estimatedDuration: 30000,
               parallelizable: false,
-              resourceRequirements: ['filesystem', 'memory']
-            }
+              resourceRequirements: ['filesystem', 'memory'],
+            },
           },
           {
             name: 'disk-heavy-2',
@@ -410,9 +410,9 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
               description: 'Database operations',
               estimatedDuration: 25000,
               parallelizable: false,
-              resourceRequirements: ['filesystem', 'memory']
-            }
-          }
+              resourceRequirements: ['filesystem', 'memory'],
+            },
+          },
         ];
 
         // Add dependencies
@@ -457,7 +457,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
             description: `${service} service validation`,
             estimatedDuration: 15000 + (index * 3000),
             parallelizable: true,
-            resourceRequirements: ['network', 'cpu']
+            resourceRequirements: ['network', 'cpu'],
           };
           microserviceConfigs.push({ name: serviceName, config });
         });
@@ -469,13 +469,13 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
             config: {
               dependencies: [
                 { criterion: 'auth-service-validation', type: 'strict' },
-                { criterion: 'user-service-validation', type: 'strict' }
+                { criterion: 'user-service-validation', type: 'strict' },
               ],
               description: 'Auth-User integration validation',
               estimatedDuration: 20000,
               parallelizable: true,
-              resourceRequirements: ['network', 'cpu']
-            }
+              resourceRequirements: ['network', 'cpu'],
+            },
           },
           {
             name: 'payment-integration',
@@ -483,13 +483,13 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
               dependencies: [
                 { criterion: 'auth-service-validation', type: 'strict' },
                 { criterion: 'user-service-validation', type: 'strict' },
-                { criterion: 'payment-service-validation', type: 'strict' }
+                { criterion: 'payment-service-validation', type: 'strict' },
               ],
               description: 'Payment system integration validation',
               estimatedDuration: 35000,
               parallelizable: false,
-              resourceRequirements: ['network', 'cpu', 'memory']
-            }
+              resourceRequirements: ['network', 'cpu', 'memory'],
+            },
           },
           {
             name: 'end-to-end-validation',
@@ -498,14 +498,14 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
                 { criterion: 'auth-user-integration', type: 'strict' },
                 { criterion: 'payment-integration', type: 'strict' },
                 { criterion: 'notification-service-validation', type: 'weak' },
-                { criterion: 'analytics-service-validation', type: 'optional' }
+                { criterion: 'analytics-service-validation', type: 'optional' },
               ],
               description: 'Complete end-to-end system validation',
               estimatedDuration: 60000,
               parallelizable: false,
-              resourceRequirements: ['network', 'cpu', 'memory']
-            }
-          }
+              resourceRequirements: ['network', 'cpu', 'memory'],
+            },
+          },
         ];
 
         // Add all configurations
@@ -562,8 +562,8 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
               description: 'Circular test A',
               estimatedDuration: 10000,
               parallelizable: true,
-              resourceRequirements: ['cpu']
-            }
+              resourceRequirements: ['cpu'],
+            },
           },
           {
             name: 'circular-test-b',
@@ -572,8 +572,8 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
               description: 'Circular test B',
               estimatedDuration: 12000,
               parallelizable: true,
-              resourceRequirements: ['cpu']
-            }
+              resourceRequirements: ['cpu'],
+            },
           },
           {
             name: 'circular-test-c',
@@ -582,9 +582,9 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
               description: 'Circular test C',
               estimatedDuration: 8000,
               parallelizable: true,
-              resourceRequirements: ['cpu']
-            }
-          }
+              resourceRequirements: ['cpu'],
+            },
+          },
         ];
 
         // Add circular dependencies
@@ -627,12 +627,12 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         const incompleteConfig = {
           dependencies: [
             { criterion: 'linter-validation', type: 'strict' },
-            { criterion: 'missing-dependency', type: 'weak' }
+            { criterion: 'missing-dependency', type: 'weak' },
           ],
           description: 'Dependency with missing reference',
           estimatedDuration: 15000,
           parallelizable: true,
-          resourceRequirements: ['filesystem']
+          resourceRequirements: ['filesystem'],
         };
 
         const result = executeTaskManagerCommand('add-dependency', `'incomplete-dependency' '${JSON.stringify(incompleteConfig)}'`);
@@ -644,7 +644,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         expect(validationResult.success).toBe(true);
         expect(validationResult.validation.valid).toBe(false);
         expect(validationResult.validation.issues.some(issue =>
-          issue.type === 'missing_dependency' && issue.missingDependency === 'missing-dependency'
+          issue.type === 'missing_dependency' && issue.missingDependency === 'missing-dependency',
         )).toBe(true);
 
         // Add the missing dependency
@@ -652,7 +652,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           description: 'Previously missing dependency',
           estimatedDuration: 8000,
           parallelizable: true,
-          resourceRequirements: ['filesystem']
+          resourceRequirements: ['filesystem'],
         };
 
         const addResult = executeTaskManagerCommand('add-dependency', `'missing-dependency' '${JSON.stringify(missingConfig)}'`);
@@ -686,12 +686,12 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           const config = {
             dependencies: i > 0 ? [
               { criterion: `scale-test-${i - 1}`, type: 'weak' },
-              ...(i > 10 && i % 5 === 0 ? [{ criterion: `scale-test-${i - 5}`, type: 'optional' }] : [])
+              ...(i > 10 && i % 5 === 0 ? [{ criterion: `scale-test-${i - 5}`, type: 'optional' }] : []),
             ] : [],
             description: `Scale test criterion ${i}`,
             estimatedDuration: 3000 + (i * 100),
             parallelizable: i % 3 !== 0,
-            resourceRequirements: i % 4 === 0 ? ['network', 'cpu'] : ['filesystem']
+            resourceRequirements: i % 4 === 0 ? ['network', 'cpu'] : ['filesystem'],
           };
 
           const result = executeTaskManagerCommand('add-dependency', `'scale-test-${i}' '${JSON.stringify(config)}'`);
@@ -758,8 +758,8 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
               description: `Parallel task ${i}`,
               estimatedDuration: 5000 + (i * 500),
               parallelizable: true,
-              resourceRequirements: ['cpu']
-            }
+              resourceRequirements: ['cpu'],
+            },
           });
         }
 
@@ -771,8 +771,8 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
             description: 'First convergence point',
             estimatedDuration: 15000,
             parallelizable: false,
-            resourceRequirements: ['cpu', 'memory']
-          }
+            resourceRequirements: ['cpu', 'memory'],
+          },
         });
 
         highConcurrencyConfigs.push({
@@ -782,8 +782,8 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
             description: 'Second convergence point',
             estimatedDuration: 12000,
             parallelizable: false,
-            resourceRequirements: ['cpu', 'memory']
-          }
+            resourceRequirements: ['cpu', 'memory'],
+          },
         });
 
         highConcurrencyConfigs.push({
@@ -791,13 +791,13 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           config: {
             dependencies: [
               { criterion: 'convergence-point-1', type: 'strict' },
-              { criterion: 'convergence-point-2', type: 'strict' }
+              { criterion: 'convergence-point-2', type: 'strict' },
             ],
             description: 'Final integration test',
             estimatedDuration: 25000,
             parallelizable: false,
-            resourceRequirements: ['cpu', 'memory', 'network']
-          }
+            resourceRequirements: ['cpu', 'memory', 'network'],
+          },
         });
 
         // Add all configurations
@@ -821,7 +821,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           availableCPUs: 32,
           availableMemory: 64 * 1024 * 1024 * 1024,
           networkLatency: 5,
-          diskIOLoad: 0.1
+          diskIOLoad: 0.1,
         };
 
         const adaptiveResult = executeTaskManagerCommand('generate-adaptive-execution-plan', `'${JSON.stringify(highConcurrencySystem)}'`);
@@ -847,7 +847,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         'type-validation',
         'build-validation',
         'start-validation',
-        'test-validation'
+        'test-validation',
       ];
 
       // Verify all standard criteria have proper configurations
@@ -886,8 +886,8 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
               description: 'Very slow sequential task',
               estimatedDuration: 120000, // 2 minutes
               parallelizable: false,
-              resourceRequirements: ['cpu', 'memory']
-            }
+              resourceRequirements: ['cpu', 'memory'],
+            },
           },
           {
             name: 'dependent-task-1',
@@ -896,8 +896,8 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
               description: 'Task dependent on slow task',
               estimatedDuration: 10000,
               parallelizable: true,
-              resourceRequirements: ['filesystem']
-            }
+              resourceRequirements: ['filesystem'],
+            },
           },
           {
             name: 'dependent-task-2',
@@ -906,9 +906,9 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
               description: 'Another task dependent on slow task',
               estimatedDuration: 15000,
               parallelizable: true,
-              resourceRequirements: ['filesystem']
-            }
-          }
+              resourceRequirements: ['filesystem'],
+            },
+          },
         ];
 
         // Add optimization scenario
@@ -949,7 +949,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           description: 'Persistence test dependency',
           estimatedDuration: 18000,
           parallelizable: true,
-          resourceRequirements: ['network']
+          resourceRequirements: ['network'],
         };
 
         const addResult = executeTaskManagerCommand('add-dependency', `'persistence-test' '${JSON.stringify(persistenceConfig)}'`);

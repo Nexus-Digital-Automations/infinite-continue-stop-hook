@@ -23,7 +23,7 @@ describe('Dependency Management API Integration Tests', () => {
         cwd: PROJECT_ROOT,
         encoding: 'utf8',
         timeout: timeout,
-        ...options
+        ...options,
       });
 
       return JSON.parse(output.trim());
@@ -192,7 +192,7 @@ describe('Dependency Management API Integration Tests', () => {
         availableCPUs: 8,
         availableMemory: 16 * 1024 * 1024 * 1024,
         networkLatency: 25,
-        diskIOLoad: 0.4
+        diskIOLoad: 0.4,
       };
 
       const result = executeTaskManagerCommand('generate-adaptive-execution-plan', `'${JSON.stringify(systemInfo)}'`);
@@ -219,12 +219,12 @@ describe('Dependency Management API Integration Tests', () => {
     test('add-dependency should create new dependency configuration', () => {
       const dependencyConfig = {
         dependencies: [
-          { criterion: 'linter-validation', type: 'strict' }
+          { criterion: 'linter-validation', type: 'strict' },
         ],
         description: 'Integration test custom validation',
         estimatedDuration: 15000,
         parallelizable: true,
-        resourceRequirements: ['filesystem']
+        resourceRequirements: ['filesystem'],
       };
 
       const result = executeTaskManagerCommand('add-dependency', `'integration-test-validation' '${JSON.stringify(dependencyConfig)}'`);
@@ -267,7 +267,7 @@ describe('Dependency Management API Integration Tests', () => {
         description: 'Temporary test dependency',
         estimatedDuration: 5000,
         parallelizable: true,
-        resourceRequirements: ['filesystem']
+        resourceRequirements: ['filesystem'],
       };
 
       executeTaskManagerCommand('add-dependency', `'temp-test-dependency' '${JSON.stringify(dependencyConfig)}'`);
@@ -398,9 +398,9 @@ describe('Dependency Management API Integration Tests', () => {
     test('should handle invalid dependency types in add-dependency', () => {
       const invalidConfig = {
         dependencies: [
-          { criterion: 'linter-validation', type: 'invalid-type' }
+          { criterion: 'linter-validation', type: 'invalid-type' },
         ],
-        description: 'Test with invalid dependency type'
+        description: 'Test with invalid dependency type',
       };
 
       const result = executeTaskManagerCommand('add-dependency', `'invalid-test' '${JSON.stringify(invalidConfig)}'`);
@@ -413,15 +413,15 @@ describe('Dependency Management API Integration Tests', () => {
       // Create a circular dependency scenario
       const configA = {
         dependencies: [{ criterion: 'circular-b', type: 'strict' }],
-        description: 'Circular test A'
+        description: 'Circular test A',
       };
       const configB = {
         dependencies: [{ criterion: 'circular-c', type: 'strict' }],
-        description: 'Circular test B'
+        description: 'Circular test B',
       };
       const configC = {
         dependencies: [{ criterion: 'circular-a', type: 'strict' }],
-        description: 'Circular test C'
+        description: 'Circular test C',
       };
 
       // Add the circular dependencies
@@ -510,7 +510,7 @@ describe('Dependency Management API Integration Tests', () => {
           description: `Scale test criterion ${i}`,
           estimatedDuration: 5000,
           parallelizable: true,
-          resourceRequirements: ['filesystem']
+          resourceRequirements: ['filesystem'],
         };
         executeTaskManagerCommand('add-dependency', `'scale-test-${i}' '${JSON.stringify(config)}'`);
       }
@@ -541,7 +541,7 @@ describe('Dependency Management API Integration Tests', () => {
         'type-validation',
         'build-validation',
         'start-validation',
-        'test-validation'
+        'test-validation',
       ];
 
       // All standard validation criteria should have dependency configurations
@@ -570,10 +570,10 @@ describe('Dependency Management API Integration Tests', () => {
 
       planResult.plan.forEach((wave, waveIndex) => {
         const criteriaInWave = wave.criteria.map(c => c.criterion);
-        if (criteriaInWave.includes('build-validation')) buildWave = waveIndex;
-        if (criteriaInWave.includes('linter-validation')) linterWave = waveIndex;
-        if (criteriaInWave.includes('type-validation')) typeWave = waveIndex;
-        if (criteriaInWave.includes('start-validation')) startWave = waveIndex;
+        if (criteriaInWave.includes('build-validation')) {buildWave = waveIndex;}
+        if (criteriaInWave.includes('linter-validation')) {linterWave = waveIndex;}
+        if (criteriaInWave.includes('type-validation')) {typeWave = waveIndex;}
+        if (criteriaInWave.includes('start-validation')) {startWave = waveIndex;}
       });
 
       // Verify dependency constraints

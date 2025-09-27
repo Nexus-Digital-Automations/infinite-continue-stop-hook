@@ -1,82 +1,128 @@
 {
-  "project": "agent-lifecycle-1758951360896-7946958b",
-  "features": [],
-  "metadata": {
-    "version": "1.0.0",
-    "created": "2025-09-27T05:36:01.062Z",
-    "updated": "2025-09-27T05:36:01.062Z",
-    "total_features": 0,
-    "approval_history": [],
-    "initialization_stats": {
-      "total_initializations": 2,
-      "total_reinitializations": 2,
-      "current_day": "2025-09-27",
-      "time_buckets": {
-        "11:00-15:59": {
-          "init": 0,
-          "reinit": 0
-        },
-        "16:00-20:59": {
-          "init": 0,
-          "reinit": 0
-        },
-        "21:00-01:59": {
-          "init": 2,
-          "reinit": 2
-        },
-        "02:00-06:59": {
-          "init": 0,
-          "reinit": 0
-        },
-        "07:00-11:59": {
-          "init": 0,
-          "reinit": 0
-        }
-      },
-      "daily_history": [],
-      "last_reset": "2025-09-27T05:36:01.063Z",
-      "last_updated": "2025-09-27T05:36:21.391Z"
-    }
-  },
+  "project": "test-agent-lifecycle-1758951360896-7946958b",
+  "schema_version": "2.0.0",
+  "migrated_from": "FEATURES.json",
+  "migration_date": "2025-09-27T10:26:47.296Z",
+  "tasks": [],
+  "completed_tasks": [],
+  "task_relationships": {},
   "workflow_config": {
     "require_approval": true,
     "auto_reject_timeout_hours": 168,
     "allowed_statuses": [
       "suggested",
       "approved",
-      "rejected",
-      "implemented"
+      "in-progress",
+      "completed",
+      "blocked",
+      "rejected"
+    ],
+    "allowed_task_types": [
+      "error",
+      "feature",
+      "test",
+      "audit"
     ],
     "required_fields": [
       "title",
       "description",
       "business_value",
-      "category"
-    ]
+      "category",
+      "type"
+    ],
+    "auto_generation_enabled": true,
+    "mandatory_test_gate": true,
+    "security_validation_required": true
   },
-  "agents": {
-    "persist-agent-1": {
-      "lastHeartbeat": "2025-09-27T05:36:11.230Z",
-      "status": "active",
-      "initialized": "2025-09-27T05:36:01.063Z",
-      "sessionId": "386bc1b059198fa2",
-      "reinitialized": "2025-09-27T05:36:11.230Z",
-      "previousSessions": [
-        "b18623c995da2088"
+  "auto_generation_config": {
+    "test_task_template": {
+      "title_pattern": "Implement comprehensive tests for {feature_title}",
+      "description_pattern": "Create unit tests, integration tests, and E2E tests to achieve >{coverage}% coverage for {feature_title}. Must validate all functionality, edge cases, and error conditions.",
+      "priority": "high",
+      "required_capabilities": [
+        "testing"
+      ],
+      "validation_requirements": {
+        "test_coverage": true,
+        "linter_pass": true
+      }
+    },
+    "audit_task_template": {
+      "title_pattern": "Security and quality audit for {feature_title}",
+      "description_pattern": "Run semgrep security scan, dependency vulnerability check, code quality analysis, and compliance validation for {feature_title}. Zero tolerance for security vulnerabilities.",
+      "priority": "high",
+      "required_capabilities": [
+        "security",
+        "analysis"
+      ],
+      "validation_requirements": {
+        "security_scan": true,
+        "linter_pass": true,
+        "type_check": true
+      }
+    }
+  },
+  "priority_system": {
+    "order": [
+      "USER_REQUESTS",
+      "ERROR",
+      "AUDIT",
+      "FEATURE",
+      "TEST"
+    ],
+    "error_priorities": {
+      "critical": [
+        "build-breaking",
+        "security-vulnerability",
+        "production-down"
+      ],
+      "high": [
+        "linter-errors",
+        "type-errors",
+        "test-failures"
+      ],
+      "normal": [
+        "warnings",
+        "optimization-opportunities"
+      ],
+      "low": [
+        "documentation-improvements",
+        "code-style"
       ]
+    }
+  },
+  "metadata": {
+    "version": "2.0.0",
+    "created": "2025-09-27T10:26:47.296Z",
+    "updated": "2025-09-27T10:26:47.296Z",
+    "total_tasks": 0,
+    "tasks_by_type": {
+      "error": 0,
+      "feature": 0,
+      "test": 0,
+      "audit": 0
     },
-    "stats-test-agent": {
-      "lastHeartbeat": "2025-09-27T05:36:01.745Z",
-      "status": "active",
-      "reinitialized": "2025-09-27T05:36:01.745Z",
-      "sessionId": "c35853e9f3e30397",
-      "previousSessions": []
+    "approval_history": [],
+    "migration_stats": {
+      "features_migrated": 0,
+      "tasks_created": 0,
+      "auto_generated_tasks": 0
+    }
+  },
+  "agents": {},
+  "features": [],
+  "settings": {
+    "id_based_classification": true,
+    "auto_sort_enabled": true,
+    "sort_criteria": {
+      "primary": "id_prefix",
+      "secondary": "created_at"
     },
-    "persist-agent-2": {
-      "lastHeartbeat": "2025-09-27T05:36:21.391Z",
-      "status": "active",
-      "initialized": "2025-09-27T05:36:21.391Z",
-      "sessionId": "4f83ef81ad039a93"
+    "id_priority_order": {
+      "error_": 1,
+      "feature_": 2,
+      "subtask_": 3,
+      "test_": 4
     }
   }
 }

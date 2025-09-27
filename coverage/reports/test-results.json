@@ -1,26 +1,460 @@
 {
   "metadata": {
-    "timestamp": "2025-09-27T05:01:10.227Z",
+    "timestamp": "2025-09-27T10:29:27.117Z",
     "reporter": "jest-json-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System"
   },
   "summary": {
-    "numTotalTestSuites": 0,
-    "numPassedTestSuites": 0,
+    "numTotalTestSuites": 1,
+    "numPassedTestSuites": 1,
     "numFailedTestSuites": 0,
     "numPendingTestSuites": 0,
-    "numTotalTests": 0,
-    "numPassedTests": 0,
+    "numTotalTests": 34,
+    "numPassedTests": 34,
     "numFailedTests": 0,
     "numPendingTests": 0,
     "numTodoTests": 0,
-    "startTime": 1758949270027,
-    "endTime": 1758949270227,
-    "duration": 200,
+    "startTime": 1758968966853,
+    "endTime": 1758968967117,
+    "duration": 264,
     "success": false
   },
-  "testResults": [],
+  "testResults": [
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/validation-dependency-manager.test.js",
+      "displayName": {
+        "color": "white",
+        "name": "unit"
+      },
+      "status": "passed",
+      "startTime": 1758968966945,
+      "endTime": 1758968967110,
+      "duration": 165,
+      "numTests": 34,
+      "numPassingTests": 34,
+      "numFailingTests": 0,
+      "numPendingTests": 0,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Initialization and Default Dependencies"
+          ],
+          "title": "should initialize with default validation criteria",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Initialization and Default Dependencies should initialize with default validation criteria",
+          "status": "passed",
+          "duration": 1,
+          "numPassingAsserts": 8,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Initialization and Default Dependencies"
+          ],
+          "title": "should have proper default dependency relationships",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Initialization and Default Dependencies should have proper default dependency relationships",
+          "status": "passed",
+          "duration": 1,
+          "numPassingAsserts": 8,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Initialization and Default Dependencies"
+          ],
+          "title": "should have proper metadata for each criterion",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Initialization and Default Dependencies should have proper metadata for each criterion",
+          "status": "passed",
+          "duration": 2,
+          "numPassingAsserts": 56,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Dependency Management Operations"
+          ],
+          "title": "should add new dependency configuration correctly",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Dependency Management Operations should add new dependency configuration correctly",
+          "status": "passed",
+          "duration": 1,
+          "numPassingAsserts": 3,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Dependency Management Operations"
+          ],
+          "title": "should remove dependency configuration correctly",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Dependency Management Operations should remove dependency configuration correctly",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 3,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Dependency Management Operations"
+          ],
+          "title": "should get specific dependency configuration",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Dependency Management Operations should get specific dependency configuration",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 4,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Dependency Management Operations"
+          ],
+          "title": "should handle invalid dependency types",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Dependency Management Operations should handle invalid dependency types",
+          "status": "passed",
+          "duration": 19,
+          "numPassingAsserts": 1,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Dependency Management Operations"
+          ],
+          "title": "should handle missing criterion parameter",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Dependency Management Operations should handle missing criterion parameter",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 1,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Dependency Graph Validation"
+          ],
+          "title": "should validate clean dependency graph",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Dependency Graph Validation should validate clean dependency graph",
+          "status": "passed",
+          "duration": 1,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Dependency Graph Validation"
+          ],
+          "title": "should detect circular dependencies",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Dependency Graph Validation should detect circular dependencies",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 4,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Dependency Graph Validation"
+          ],
+          "title": "should detect missing dependency references",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Dependency Graph Validation should detect missing dependency references",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 5,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Execution Order Optimization"
+          ],
+          "title": "should generate correct execution order respecting dependencies",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Execution Order Optimization should generate correct execution order respecting dependencies",
+          "status": "passed",
+          "duration": 1,
+          "numPassingAsserts": 6,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Execution Order Optimization"
+          ],
+          "title": "should handle forced execution when weak dependencies create deadlocks",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Execution Order Optimization should handle forced execution when weak dependencies create deadlocks",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Parallel Execution Planning"
+          ],
+          "title": "should generate efficient parallel execution plan",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Parallel Execution Planning should generate efficient parallel execution plan",
+          "status": "passed",
+          "duration": 1,
+          "numPassingAsserts": 10,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Parallel Execution Planning"
+          ],
+          "title": "should respect dependency constraints in parallel planning",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Parallel Execution Planning should respect dependency constraints in parallel planning",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Parallel Execution Planning"
+          ],
+          "title": "should optimize resource allocation in parallel execution",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Parallel Execution Planning should optimize resource allocation in parallel execution",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 5,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Parallel Execution Planning"
+          ],
+          "title": "should handle resource conflicts appropriately",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Parallel Execution Planning should handle resource conflicts appropriately",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Advanced Analytics and Optimization"
+          ],
+          "title": "should generate dependency visualization data",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Advanced Analytics and Optimization should generate dependency visualization data",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 11,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Advanced Analytics and Optimization"
+          ],
+          "title": "should generate interactive visualization formats",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Advanced Analytics and Optimization should generate interactive visualization formats",
+          "status": "passed",
+          "duration": 1,
+          "numPassingAsserts": 10,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Advanced Analytics and Optimization"
+          ],
+          "title": "should handle unsupported visualization formats",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Advanced Analytics and Optimization should handle unsupported visualization formats",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 1,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Advanced Analytics and Optimization"
+          ],
+          "title": "should record and analyze execution history",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Advanced Analytics and Optimization should record and analyze execution history",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 9,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Advanced Analytics and Optimization"
+          ],
+          "title": "should handle empty execution history gracefully",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Advanced Analytics and Optimization should handle empty execution history gracefully",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 1,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Configuration Persistence"
+          ],
+          "title": "should save dependency configuration to file",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Configuration Persistence should save dependency configuration to file",
+          "status": "passed",
+          "duration": 2,
+          "numPassingAsserts": 6,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Configuration Persistence"
+          ],
+          "title": "should load dependency configuration from file",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Configuration Persistence should load dependency configuration from file",
+          "status": "passed",
+          "duration": 1,
+          "numPassingAsserts": 4,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Configuration Persistence"
+          ],
+          "title": "should handle missing configuration file gracefully",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Configuration Persistence should handle missing configuration file gracefully",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 1,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Adaptive Execution Planning"
+          ],
+          "title": "should generate adaptive execution plan based on system resources",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Adaptive Execution Planning should generate adaptive execution plan based on system resources",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 8,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Adaptive Execution Planning"
+          ],
+          "title": "should adapt to constrained system resources",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Adaptive Execution Planning should adapt to constrained system resources",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Complex Workflow Scenarios"
+          ],
+          "title": "should handle large dependency graphs efficiently",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Complex Workflow Scenarios should handle large dependency graphs efficiently",
+          "status": "passed",
+          "duration": 1,
+          "numPassingAsserts": 3,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Complex Workflow Scenarios"
+          ],
+          "title": "should provide comprehensive debugging information",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Complex Workflow Scenarios should provide comprehensive debugging information",
+          "status": "passed",
+          "duration": 1,
+          "numPassingAsserts": 8,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Complex Workflow Scenarios"
+          ],
+          "title": "should handle mixed dependency types correctly",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Complex Workflow Scenarios should handle mixed dependency types correctly",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Error Handling and Edge Cases"
+          ],
+          "title": "should handle empty criteria lists",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Error Handling and Edge Cases should handle empty criteria lists",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 3,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Error Handling and Edge Cases"
+          ],
+          "title": "should handle single criterion execution",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Error Handling and Edge Cases should handle single criterion execution",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 4,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Error Handling and Edge Cases"
+          ],
+          "title": "should handle unknown criteria gracefully",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Error Handling and Edge Cases should handle unknown criteria gracefully",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "ValidationDependencyManager - Comprehensive Unit Tests",
+            "Error Handling and Edge Cases"
+          ],
+          "title": "should maintain execution history limits",
+          "fullName": "ValidationDependencyManager - Comprehensive Unit Tests Error Handling and Edge Cases should maintain execution history limits",
+          "status": "passed",
+          "duration": 1,
+          "numPassingAsserts": 1,
+          "location": null
+        }
+      ],
+      "failureDetails": []
+    }
+  ],
   "coverageMap": null,
   "environment": {
     "node_version": "v22.20.0",

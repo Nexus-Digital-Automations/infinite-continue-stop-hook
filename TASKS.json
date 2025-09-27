@@ -1095,7 +1095,7 @@
     },
     "initialization_stats": {
       "total_initializations": 3195,
-      "total_reinitializations": 106,
+      "total_reinitializations": 114,
       "current_day": "2025-09-27",
       "time_buckets": {
         "11:00-15:59": {
@@ -1108,11 +1108,11 @@
         },
         "21:00-01:59": {
           "init": 0,
-          "reinit": 19
+          "reinit": 26
         },
         "02:00-06:59": {
           "init": 0,
-          "reinit": 0
+          "reinit": 1
         },
         "07:00-11:59": {
           "init": 0,
@@ -1932,75 +1932,16 @@
         }
       ],
       "last_reset": "2025-09-27T05:00:07.916Z",
-      "last_updated": "2025-09-27T06:06:10.547Z"
+      "last_updated": "2025-09-27T10:27:06.887Z"
     },
     "total_features": 5
   },
   "agents": {
-    "CLAUDE_AGENT_001": {
-      "lastHeartbeat": "2025-09-27T06:06:10.530Z",
+    "conversion-completion-agent": {
+      "lastHeartbeat": "2025-09-27T10:27:06.885Z",
       "status": "active",
-      "reinitialized": "2025-09-27T06:06:10.530Z",
-      "sessionId": "af451c6395731def",
-      "previousSessions": [
-        "3dd0737f270b11a3",
-        "fc8ea0d614adca6f",
-        "086f3fefbd2ecf10",
-        "13dbb634ed752cf3",
-        "64183ed60046d789",
-        "1ab27a2f9fcb5ec3",
-        "9a8a8d9556eb26e1",
-        "5f090fa2890709d3",
-        "eea1cd96cba104ec"
-      ]
-    },
-    "AGENT_1": {
-      "lastHeartbeat": "2025-09-27T05:39:30.909Z",
-      "status": "active",
-      "reinitialized": "2025-09-27T05:39:30.909Z",
-      "sessionId": "869773525225024a",
-      "previousSessions": []
-    },
-    "AGENT_4": {
-      "lastHeartbeat": "2025-09-27T05:39:31.807Z",
-      "status": "active",
-      "reinitialized": "2025-09-27T05:39:31.807Z",
-      "sessionId": "785cb2939d7b8934",
-      "previousSessions": []
-    },
-    "agent-5-console-warnings": {
-      "lastHeartbeat": "2025-09-27T05:39:32.623Z",
-      "status": "active",
-      "reinitialized": "2025-09-27T05:39:32.623Z",
-      "sessionId": "457fe24e5b1b49e1",
-      "previousSessions": []
-    },
-    "agent_3": {
-      "lastHeartbeat": "2025-09-27T05:39:33.409Z",
-      "status": "active",
-      "reinitialized": "2025-09-27T05:39:33.409Z",
-      "sessionId": "876830cff4507120",
-      "previousSessions": []
-    },
-    "AGENT_6": {
-      "lastHeartbeat": "2025-09-27T05:39:33.760Z",
-      "status": "active",
-      "reinitialized": "2025-09-27T05:39:33.760Z",
-      "sessionId": "12abf8c74cc4bfd8",
-      "previousSessions": []
-    },
-    "agent_8": {
-      "lastHeartbeat": "2025-09-27T05:39:34.358Z",
-      "status": "active",
-      "reinitialized": "2025-09-27T05:39:34.358Z",
-      "sessionId": "70173c0a4d6df9d7",
-      "previousSessions": []
-    },
-    "AGENT_7": {
-      "lastHeartbeat": "2025-09-27T05:39:34.437Z",
-      "status": "active",
-      "reinitialized": "2025-09-27T05:39:34.437Z",
-      "sessionId": "bbf1149f8e435642",
+      "reinitialized": "2025-09-27T10:27:06.885Z",
+      "sessionId": "940efa786f3c50f1",
       "previousSessions": []
     }
   },

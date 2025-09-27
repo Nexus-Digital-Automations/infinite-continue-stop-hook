@@ -1,14 +1,14 @@
 {
   "metadata": {
-    "timestamp": "2025-09-27T05:01:10.227Z",
+    "timestamp": "2025-09-27T10:29:27.117Z",
     "reporter": "jest-cicd-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System",
-    "duration_ms": 197
+    "duration_ms": 264
   },
   "cicd_summary": {
     "pipeline_status": "FAILURE",
-    "total_duration_ms": 197,
+    "total_duration_ms": 264,
     "should_block_deployment": true,
     "quality_gate_status": {
       "status": "FAILED",
@@ -16,7 +16,7 @@
         "tests_passing": false,
         "no_failed_tests": true,
         "coverage_adequate": false,
-        "performance_acceptable": false
+        "performance_acceptable": true
       },
       "blocking_issues": [
         {
@@ -30,43 +30,41 @@
           "severity": "warning",
           "message": "Code coverage below acceptable threshold",
           "action": "Add more tests to improve coverage"
-        },
-        {
-          "type": "performance",
-          "severity": "warning",
-          "message": "Test execution time is slow",
-          "action": "Optimize slow tests or improve test parallelization"
         }
       ]
     },
-    "test_health_score": null
+    "test_health_score": 100
   },
   "test_execution": {
     "summary": {
-      "total_suites": 0,
-      "passed_suites": 0,
+      "total_suites": 1,
+      "passed_suites": 1,
       "failed_suites": 0,
-      "total_tests": 0,
-      "passed_tests": 0,
+      "total_tests": 34,
+      "passed_tests": 34,
       "failed_tests": 0,
       "pending_tests": 0,
-      "success_rate": "NaN",
-      "execution_time_ms": 197
+      "success_rate": "100.00",
+      "execution_time_ms": 264
     },
     "performance_metrics": {
-      "average_test_duration": null,
-      "slowest_suite": null,
+      "average_test_duration": 7.764705882352941,
+      "slowest_suite": {
+        "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/validation-dependency-manager.test.js",
+        "duration_ms": 165,
+        "num_tests": 34
+      },
       "memory_usage": {
-        "rss": 105021440,
-        "heap_total": 39600128,
-        "heap_used": 22108008,
-        "external": 2201919,
-        "heap_usage_percent": "55.83"
+        "rss": 163758080,
+        "heap_total": 85671936,
+        "heap_used": 60192968,
+        "external": 4851070,
+        "heap_usage_percent": "70.26"
       },
       "parallel_efficiency": {
-        "parallel_efficiency_percent": 0,
-        "total_execution_time_ms": 198,
-        "serial_time_ms": 0,
+        "parallel_efficiency_percent": "62.26",
+        "total_execution_time_ms": 265,
+        "serial_time_ms": 165,
         "time_saved_ms": 0
       }
     },
@@ -84,11 +82,11 @@
     }
   },
   "git": {
-    "commit_sha": "488804ad687b4e4a1622432d2d38339b55b0d72f",
+    "commit_sha": "c67167351adfd1cb1e915c468eaec44b9917370c",
     "branch": "main",
     "author": "Claude <claude@anthropic.com>",
-    "commit_message": "feat: complete Feature 1 - Stop Hook Validation Dependency Management integration",
-    "commit_date": "2025-09-27 00:00:50 -0500",
+    "commit_message": "feat: comprehensive analysis and validation of all 5 approved Stop Hook features",
+    "commit_date": "2025-09-27 01:12:09 -0500",
     "tag": null,
     "is_dirty": true,
     "remote_url": "https://github.com/Nexus-Digital-Automations/infinite-continue-stop-hook.git"
@@ -104,7 +102,7 @@
     "locale": "en-US",
     "memory": {
       "total": 25769803776,
-      "available": 428179456
+      "available": 411303936
     },
     "cpu": {
       "cores": 8,

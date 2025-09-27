@@ -6,13 +6,66 @@
 /* eslint-disable no-console */
 // Console output is intentional for this development/analysis tool
 
-const { execSync } = require('child_process');
+const { execFileSync } = require('child_process');
 const fs = require('fs');
 
 class QuickPerfTest {
   constructor() {
     this.apiPath = '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
     this.results = {};
+
+    // Whitelist of allowed commands to prevent command injection
+    this.allowedCommands = new Set([
+      'init', 'list', 'list-agents', 'status', 'stats', 'rag-health',
+      'usage-analytics', 'guide', 'reinitialize', 'search-lessons',
+      'store-lesson', 'store-error', 'start-authorization', 'validate-criterion',
+      'complete-authorization', 'rag-analytics', 'find-similar-errors',
+      'get-relevant-lessons'
+    ]);
+  }
+
+  /**
+   * Validates and sanitizes command input to prevent injection attacks
+   * @param {string} command - The command to validate
+   * @param {Array} args - The arguments to validate
+   * @throws {Error} If command or args contain unsafe characters
+   * @returns {Object} Validated command and args
+   */
+  validateAndSanitizeInput(command, args = []) {
+    // Validate command is in whitelist
+    if (!this.allowedCommands.has(command)) {
+      throw new Error(`Invalid command: ${command}. Only whitelisted commands are allowed.`);
+    }
+
+    // Validate command contains only alphanumeric, hyphens, and underscores
+    if (!/^[a-zA-Z0-9_-]+$/.test(command)) {
+      throw new Error(`Command contains invalid characters: ${command}`);
+    }
+
+    // Validate and sanitize arguments
+    const sanitizedArgs = args.map(arg => {
+      if (typeof arg !== 'string') {
+        throw new Error(`All arguments must be strings. Received: ${typeof arg}`);
+      }
+
+      // For JSON arguments, validate they are properly formatted
+      if (arg.startsWith('{') || arg.startsWith('[')) {
+        try {
+          JSON.parse(arg);
+        } catch (e) {
+          throw new Error(`Invalid JSON argument: ${arg}`);
+        }
+      } else {
+        // For non-JSON args, only allow safe characters
+        if (!/^[a-zA-Z0-9_.-]+$/.test(arg)) {
+          throw new Error(`Argument contains unsafe characters: ${arg}`);
+        }
+      }
+
+      return arg;
+    });
+
+    return { command, args: sanitizedArgs };
   }
 
   measureEndpoint(command, args = [], iterations = 3) {

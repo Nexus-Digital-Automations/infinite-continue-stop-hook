@@ -337,7 +337,7 @@ class TestExecution {
 
     for (let i = 0; i < maxRetries; i++) {
       try {
-        // eslint-disable-next-line no-await-in-loop -- Sequential retry with delay required
+
         return fn();
       } catch (error) {
         lastError = error;
