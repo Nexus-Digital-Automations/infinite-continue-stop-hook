@@ -475,7 +475,8 @@ describe('Performance Validation E2E', () => {
           category: 'enhancement',
         });
 
-        const featureId = result.stdout.match(/Feature ID: (\w+)/)[1];
+        const response = JSON.parse(result.stdout);
+        const featureId = response.feature.id;
 
         await FeatureTestHelpers.approveFeature(environment, featureId, 'e2e-tester', 'E2E workflow test');
 

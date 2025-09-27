@@ -166,10 +166,14 @@ class E2EEnvironment {
         { projectRoot: this.testDir }
       );
 
-      if (result.result.success) {
+      // Handle different response structures
+      if (result.result && result.result.success) {
         return result.result;
+      } else if (result.success) {
+        return result;
       } else {
-        throw new Error(`TaskManager API error: ${result.result.error}`);
+        const errorMsg = (result.result && result.result.error) || result.error || 'Unknown API error';
+        throw new Error(`TaskManager API error: ${errorMsg}`);
       }
     } catch (error) {
       throw new Error(`Failed to get features from TaskManager API: ${error.message}`);
