@@ -10,17 +10,17 @@ const _Logger = require('./lib/logger');
 // ============================================================================
 
 /**
- * Find the root "Claude Coding Projects" directory containing FEATURES.json
+ * Find the root "Claude Coding Projects" directory containing TASKS.json
  */
 function findClaudeProjectRoot(startDir = process.cwd()) {
   let currentDir = startDir;
 
-  // Look for "Claude Coding Projects" in the path and check for FEATURES.json
+  // Look for "Claude Coding Projects" in the path and check for TASKS.json
   while (currentDir !== _path.dirname(currentDir)) {
     // Not at filesystem root
     // Check if we're in or found "Claude Coding Projects"
     if (currentDir.includes('Claude Coding Projects')) {
-      // Look for FEATURES.json in potential project roots
+      // Look for TASKS.json in potential project roots
       const segments = currentDir.split(_path.sep);
       const claudeIndex = segments.findIndex((segment) =>
         segment.includes('Claude Coding Projects'),
@@ -30,14 +30,14 @@ function findClaudeProjectRoot(startDir = process.cwd()) {
         // Try the next directory after "Claude Coding Projects"
         const projectDir = segments.slice(0, claudeIndex + 2).join(_path.sep);
         // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script validating project structure with computed paths
-        if (_fs.existsSync(_path.join(projectDir, 'FEATURES.json'))) {
+        if (_fs.existsSync(_path.join(projectDir, 'TASKS.json'))) {
           return projectDir;
         }
       }
 
       // Also check current directory
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script validating project structure with computed paths
-      if (_fs.existsSync(_path.join(currentDir, 'FEATURES.json'))) {
+      if (_fs.existsSync(_path.join(currentDir, 'TASKS.json'))) {
         return currentDir;
       }
     }
@@ -203,18 +203,18 @@ When running the multi-step authorization protocol, progress will be displayed h
 }
 
 /**
- * Clean up stale agents in a single FEATURES.json file
- * @param {string} projectPath - Path to project directory containing FEATURES.json
+ * Clean up stale agents in a single TASKS.json file
+ * @param {string} projectPath - Path to project directory containing TASKS.json
  * @param {Object} logger - Logger instance for output
  * @returns {Object} Cleanup results
  */
 function cleanupStaleAgentsInProject(projectPath, logger) {
-  const todoPath = _path.join(projectPath, 'FEATURES.json');
+  const todoPath = _path.join(projectPath, 'TASKS.json');
 
-  // Check if FEATURES.json exists in this project
+  // Check if TASKS.json exists in this project
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook path validated through hook configuration system
   if (!_fs.existsSync(todoPath)) {
-    logger.addFlow(`No FEATURES.json found in ${projectPath} - skipping`);
+    logger.addFlow(`No TASKS.json found in ${projectPath} - skipping`);
     return { agentsRemoved: 0, tasksUnassigned: 0, orphanedTasksReset: 0, projectPath };
   }
 
@@ -223,16 +223,16 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path constructed from trusted hook configuration
     _todoData = JSON.parse(_fs.readFileSync(todoPath, 'utf8'));
   } catch (error) {
-    logger.addFlow(`Failed to read FEATURES.json in ${projectPath}: ${error.message}`);
+    logger.addFlow(`Failed to read TASKS.json in ${projectPath}: ${error.message}`);
     return { agentsRemoved: 0, tasksUnassigned: 0, orphanedTasksReset: 0, projectPath, error: error.message };
   }
 
-  // Initialize agents object if it doesn't exist (FEATURES.json may not have agents)
+  // Initialize agents object if it doesn't exist (TASKS.json may not have agents)
   if (!_todoData.agents) {
     _todoData.agents = {};
   }
 
-  // Get all agents from FEATURES.json
+  // Get all agents from TASKS.json
   const allAgents = Object.keys(_todoData.agents || {});
   if (allAgents.length === 0) {
     logger.addFlow(`No agents found in ${projectPath} - skipping`);
@@ -244,7 +244,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
   const staleAgents = [];
 
   for (const agentId of allAgents) {
-    // eslint-disable-next-line security/detect-object-injection -- Agent ID validated through Object.keys() iteration from FEATURES.json structure
+    // eslint-disable-next-line security/detect-object-injection -- Agent ID validated through Object.keys() iteration from TASKS.json structure
     const agent = _todoData.agents[agentId];
     // Handle both lastHeartbeat (camelCase) and last_heartbeat (snake_case) formats
     const lastHeartbeat = agent.lastHeartbeat || agent.last_heartbeat;
@@ -314,9 +314,9 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Hook system path controlled by stop hook security protocols
       _fs.writeFileSync(todoPath, JSON.stringify(_todoData, null, 2));
-      logger.addFlow(`Updated ${projectPath}/FEATURES.json with cleanup results`);
+      logger.addFlow(`Updated ${projectPath}/TASKS.json with cleanup results`);
     } catch (error) {
-      logger.addFlow(`Failed to write FEATURES.json in ${projectPath}: ${error.message}`);
+      logger.addFlow(`Failed to write TASKS.json in ${projectPath}: ${error.message}`);
       return { agentsRemoved: 0, tasksUnassigned: 0, orphanedTasksReset: 0, projectPath, error: error.message };
     }
   }
@@ -562,7 +562,7 @@ async function autoSortTasksByPriority(taskManager) {
       return aTime - bTime;
     });
 
-    // Update TODO.json settings for ID-based classification
+    // Update TASKS.json settings for ID-based classification
     if (!todoData.settings) {
       todoData.settings = {};
     }
@@ -586,7 +586,7 @@ async function autoSortTasksByPriority(taskManager) {
       todoData.features = tasksOrFeatures;
     }
 
-    // Save the updated TODO.json
+    // Save the updated TASKS.json
     if (tasksMoved > 0 || tasksUpdated > 0) {
       await taskManager.writeTodo(todoData);
     }
@@ -641,7 +641,7 @@ function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 ❌ **NO SHORTCUTS** → Fix problems directly, never hide or mask issues
 
 **MANDATORY RULES:**
-• **FEATURES**: Only implement "approved" status features in FEATURES.json
+• **FEATURES**: Only implement "approved" status features in TASKS.json
 • **SCOPE CONTROL**: Write feature suggestions in development/essentials/features.md only
 • **TASK CLAIMING**: Verify tasks not already claimed before claiming
 • **DEVELOPMENT ESSENTIALS**: Read all files before any work
@@ -696,7 +696,7 @@ When ALL TodoWrite tasks are complete and project achieves perfection, agents mu
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization [AUTH_KEY]
 
 **LANGUAGE-AGNOSTIC VALIDATION CRITERIA:**
-1. **focused-codebase**: Validates only user-outlined features exist in FEATURES.json
+1. **focused-codebase**: Validates only user-outlined features exist in TASKS.json
 2. **security-validation**: Runs language-appropriate security tools (semgrep, bandit, trivy, npm audit, etc.)
 3. **linter-validation**: Attempts language-appropriate linting (eslint, pylint, rubocop, go fmt, etc.)
 4. **type-validation**: Runs language-appropriate type checking (tsc, mypy, go build, cargo check, etc.)
@@ -775,19 +775,19 @@ process.stdin.on('end', async () => {
       `Received ${hook_event_name || 'unknown'} event from Claude Code`,
     );
 
-    // Check if FEATURES.json exists in current project
-    const todoPath = _path.join(workingDir, 'FEATURES.json');
+    // Check if TASKS.json exists in current project
+    const todoPath = _path.join(workingDir, 'TASKS.json');
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated paths from project structure
     if (!_fs.existsSync(todoPath)) {
-      logger.addFlow('No TODO.json found - this is not a TaskManager project');
-      logger.logExit(2, 'No TODO.json found - continuing infinite mode');
+      logger.addFlow('No TASKS.json found - this is not a TaskManager project');
+      logger.logExit(2, 'No TASKS.json found - continuing infinite mode');
       logger.save();
 
 
       console.error(`
 🚫 NO TASKMANAGER PROJECT DETECTED
 
-This directory does not contain a TODO.json file, which means it's not a TaskManager project.
+This directory does not contain a TASKS.json file, which means it's not a TaskManager project.
 
 🔄 INFINITE CONTINUE MODE ACTIVE
 The stop hook will continue infinitely to prevent accidental termination.
@@ -795,15 +795,15 @@ The stop hook will continue infinitely to prevent accidental termination.
 💡 TO SET UP TASKMANAGER:
 If you want to enable task management for this project:
 1. Run: timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID]
-2. This will reinitialize your agent and prepare the FEATURES.json system
+2. This will reinitialize your agent and prepare the TASKS.json system
 
 ⚡ CONTINUING OPERATION...
 `);
       // eslint-disable-next-line n/no-process-exit
-      process.exit(2); // Never allow stops even without TODO.json
+      process.exit(2); // Never allow stops even without TASKS.json
     }
 
-    // CRITICAL: Check for TODO.json corruption before initializing TaskManager
+    // CRITICAL: Check for TASKS.json corruption before initializing TaskManager
     const _AutoFixer = require('./lib/autoFixer');
     const autoFixer = new _AutoFixer();
 
@@ -812,7 +812,7 @@ If you want to enable task management for this project:
       if (corruptionCheck.fixed && corruptionCheck.fixesApplied.length > 0) {
 
         console.log(
-          `🔧 STOP HOOK: Automatically fixed TODO.json corruption - ${corruptionCheck.fixesApplied.join(', ')}`,
+          `🔧 STOP HOOK: Automatically fixed TASKS.json corruption - ${corruptionCheck.fixesApplied.join(', ')}`,
         );
       }
     } catch (corruptionError) {
@@ -834,14 +834,14 @@ If you want to enable task management for this project:
     // Check if there are any active agents or if agent initialization is needed
     const todoData = await taskManager.readTodo();
 
-    // Initialize agents object if it doesn't exist in TODO.json
+    // Initialize agents object if it doesn't exist in TASKS.json
     if (!todoData.agents) {
       todoData.agents = {};
     }
 
     // Debug logging for agent detection
     const allAgents = Object.keys(todoData.agents || {});
-    logger.addFlow(`Found ${allAgents.length} total agents in TODO.json`);
+    logger.addFlow(`Found ${allAgents.length} total agents in TASKS.json`);
 
     // ========================================================================
     // MULTI-PROJECT STALE AGENT CLEANUP
@@ -886,7 +886,7 @@ If you want to enable task management for this project:
     const staleAgents = [];
 
     for (const agentId of allAgents) {
-      // eslint-disable-next-line security/detect-object-injection -- validated agent ID from TODO.json structure
+      // eslint-disable-next-line security/detect-object-injection -- validated agent ID from TASKS.json structure
       const agent = todoData.agents[agentId];
       // Handle both lastHeartbeat (camelCase) and last_heartbeat (snake_case) formats
       const lastHeartbeat = agent.lastHeartbeat || agent.last_heartbeat;
@@ -1058,7 +1058,7 @@ If you want to enable task management for this project:
     if (agentsRemoved > 0 || staleTasksReset > 0 || tasksUnassigned > 0 || orphanedTasksReset > 0) {
       await taskManager.writeTodo(todoData);
       if (agentsRemoved > 0) {
-        logger.addFlow(`Removed ${agentsRemoved} stale agents from TODO.json`);
+        logger.addFlow(`Removed ${agentsRemoved} stale agents from TASKS.json`);
       }
       if (tasksUnassigned > 0) {
         logger.addFlow(`Unassigned ${tasksUnassigned} tasks from stale agents`);
@@ -1152,7 +1152,7 @@ Tasks will continue to work but may not be optimally sorted.
 🔄 STALE AGENTS DETECTED AND CLEANED UP
 
 Working Directory: ${workingDir}
-TODO.json Path: ${todoPath}
+TASKS.json Path: ${todoPath}
 Total Agents Found: ${totalAgentsBeforeCleanup}
 Active Agents Found: ${activeAgents.length}
 Stale Agents Removed: ${agentsRemoved}
@@ -1198,7 +1198,7 @@ To recover and continue work from the previous stale agents:
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID]
 
 2. **Check for unfinished tasks from previous agents:**
-   node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Pending tasks to continue:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
+   node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TASKS.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Pending tasks to continue:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
 
 3. **Continue the most important unfinished work first**
 
@@ -1221,7 +1221,7 @@ When ALL TodoWrite tasks are complete and project achieves perfection, agents mu
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization [AUTH_KEY]
 
 **LANGUAGE-AGNOSTIC VALIDATION CRITERIA:**
-1. **focused-codebase**: Validates only user-outlined features exist in FEATURES.json
+1. **focused-codebase**: Validates only user-outlined features exist in TASKS.json
 2. **security-validation**: Runs language-appropriate security tools (semgrep, bandit, trivy, npm audit, etc.)
 3. **linter-validation**: Attempts language-appropriate linting (eslint, pylint, rubocop, go fmt, etc.)
 4. **type-validation**: Runs language-appropriate type checking (tsc, mypy, go build, cargo check, etc.)
@@ -1259,7 +1259,7 @@ When ALL TodoWrite tasks are complete and project achieves perfection, agents mu
 🤖 NO AGENTS DETECTED - FRESH PROJECT SETUP
 
 Working Directory: ${workingDir}
-TODO.json Path: ${todoPath}
+TASKS.json Path: ${todoPath}
 Total Agents Found: ${allAgents.length}
 Active Agents Found: ${activeAgents.length}
 Stale Agents Removed: ${agentsRemoved}
@@ -1286,7 +1286,7 @@ To start working with this TaskManager project:
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" initialize [AGENT_ID]
 
 2. **Check for any existing tasks to work on:**
-   node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TODO.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Available tasks:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
+   node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TASKS.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Available tasks:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
 
 3. **Begin working on the highest priority tasks**
 
@@ -1309,7 +1309,7 @@ When ALL TodoWrite tasks are complete and project achieves perfection, agents mu
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization [AUTH_KEY]
 
 **LANGUAGE-AGNOSTIC VALIDATION CRITERIA:**
-1. **focused-codebase**: Validates only user-outlined features exist in FEATURES.json
+1. **focused-codebase**: Validates only user-outlined features exist in TASKS.json
 2. **security-validation**: Runs language-appropriate security tools (semgrep, bandit, trivy, npm audit, etc.)
 3. **linter-validation**: Attempts language-appropriate linting (eslint, pylint, rubocop, go fmt, etc.)
 4. **type-validation**: Runs language-appropriate type checking (tsc, mypy, go build, cargo check, etc.)
@@ -1359,7 +1359,7 @@ This is a single-use authorization.
 ⚡ Future stop hook triggers will return to infinite continue mode.
 
 To trigger another stop, use the TaskManager API:
-node -e "const _TaskManager = require('/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./FEATURES.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => console.log(JSON.stringify(result, null, 2)));"
+node -e "const _TaskManager = require('/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TASKS.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => console.log(JSON.stringify(result, null, 2)));"
 `);
       // eslint-disable-next-line n/no-process-exit
       process.exit(0); // Allow stop only when endpoint triggered
@@ -1374,7 +1374,7 @@ node -e "const _TaskManager = require('/Users/jeremyparker/infinite-continue-sto
     try {
       _taskStatus = await taskManager.getTaskStatus();
     } catch (error) {
-      // Handle corrupted FEATURES.json by using autoFixer
+      // Handle corrupted TASKS.json by using autoFixer
       logger.addFlow(
         `Task status failed, attempting auto-fix: ${error.message}`,
       );
@@ -1419,7 +1419,7 @@ node -e "const _TaskManager = require('/Users/jeremyparker/infinite-continue-sto
 📊 Total found: ${archivalResult.total || 'N/A'}
 📋 Skipped: ${archivalResult.skipped || 0}
 
-This keeps FEATURES.json clean and prevents it from becoming crowded with completed work.
+This keeps TASKS.json clean and prevents it from becoming crowded with completed work.
         `);
       } else {
         logger.addFlow('No completed tasks found to archive');
@@ -1499,7 +1499,7 @@ Error encountered: ${error.message}
 Even with errors, the system continues to prevent accidental termination.
 
 💡 CHECK YOUR TASKMANAGER SETUP:
-- Ensure FEATURES.json is properly formatted
+- Ensure TASKS.json is properly formatted
 - Verify TaskManager library is accessible
 - Check file permissions
 
