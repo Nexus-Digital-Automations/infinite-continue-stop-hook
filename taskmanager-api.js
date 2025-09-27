@@ -866,6 +866,19 @@ class AutonomousTaskManagerAPI {
   }
 
   async validateCriterion(authKey, criterion) {
+    const startTime = Date.now();
+    let validationResult = null;
+    let performanceMetrics = {
+      criterion,
+      startTime: new Date().toISOString(),
+      endTime: null,
+      durationMs: 0,
+      memoryUsageBefore: process.memoryUsage(),
+      memoryUsageAfter: null,
+      success: false,
+      error: null
+    };
+
     try {
       const fs = require('fs').promises;
       const path = require('path');
@@ -932,6 +945,15 @@ class AutonomousTaskManagerAPI {
 
       await fs.writeFile(authStateFile, JSON.stringify(authState, null, 2));
 
+      // Capture final performance metrics
+      performanceMetrics.endTime = new Date().toISOString();
+      performanceMetrics.durationMs = Date.now() - startTime;
+      performanceMetrics.memoryUsageAfter = process.memoryUsage();
+      performanceMetrics.success = true;
+
+      // Store performance metrics
+      await this._storeValidationPerformanceMetrics(performanceMetrics);
+
       return {
         success: true,
         criterion,
@@ -939,15 +961,43 @@ class AutonomousTaskManagerAPI {
         progress: `${authState.completedSteps.length}/${authState.requiredSteps.length}`,
         nextStep,
         isComplete,
+        performanceMetrics: {
+          durationMs: performanceMetrics.durationMs,
+          memoryDelta: {
+            rss: performanceMetrics.memoryUsageAfter.rss - performanceMetrics.memoryUsageBefore.rss,
+            heapUsed: performanceMetrics.memoryUsageAfter.heapUsed - performanceMetrics.memoryUsageBefore.heapUsed
+          }
+        },
         instructions: isComplete
           ? `All validations complete! Final step: complete-authorization ${authKey}`
           : `Next: validate-criterion ${authKey} ${nextStep}`
       };
     } catch (error) {
+      // Capture performance metrics for failed validation
+      performanceMetrics.endTime = new Date().toISOString();
+      performanceMetrics.durationMs = Date.now() - startTime;
+      performanceMetrics.memoryUsageAfter = process.memoryUsage();
+      performanceMetrics.success = false;
+      performanceMetrics.error = error.message;
+
+      // Store performance metrics even for failures
+      try {
+        await this._storeValidationPerformanceMetrics(performanceMetrics);
+      } catch (metricsError) {
+        // Don't fail the response due to metrics storage issues
+      }
+
       return {
         success: false,
         error: `Validation failed: ${error.message}`,
         timestamp: new Date().toISOString(),
+        performanceMetrics: {
+          durationMs: performanceMetrics.durationMs,
+          memoryDelta: performanceMetrics.memoryUsageAfter ? {
+            rss: performanceMetrics.memoryUsageAfter.rss - performanceMetrics.memoryUsageBefore.rss,
+            heapUsed: performanceMetrics.memoryUsageAfter.heapUsed - performanceMetrics.memoryUsageBefore.heapUsed
+          } : null
+        }
       };
     }
   }
@@ -1233,6 +1283,467 @@ class AutonomousTaskManagerAPI {
         success: false,
         error: `Failed to complete authorization: ${error.message}`,
         timestamp: new Date().toISOString(),
+      };
+    }
+  }
+
+  /**
+   * 🚨 FEATURE TEST GATE VALIDATION METHODS (CLAUDE.md Enforcement)
+   * These methods enforce the mandatory test requirements before feature advancement
+   */
+
+  async validateFeatureTests(featureId) {
+    try {
+      const fs = require('fs').promises;
+      const path = require('path');
+
+      // Load feature data
+      const featureData = await this._atomicFeatureOperation((features) => {
+        const feature = features.features.find(f => f.id === featureId);
+        if (!feature) {
+          throw new Error(`Feature ${featureId} not found`);
+        }
+        return feature;
+      });
+
+      // Check if feature has test files
+      const testPatterns = [
+        `**/*${featureId}*.test.js`,
+        `**/*${featureId}*.spec.js`,
+        `**/test*${featureId}*`,
+        `**/spec*${featureId}*`,
+        `**/${featureId}*.test.*`,
+        `**/${featureId}*.spec.*`
+      ];
+
+      let testsFound = false;
+      let testFiles = [];
+
+      for (const pattern of testPatterns) {
+        try {
+          const glob = require('glob');
+          const matches = glob.sync(pattern, { cwd: PROJECT_ROOT });
+          if (matches.length > 0) {
+            testsFound = true;
+            testFiles.push(...matches);
+          }
+        } catch (error) {
+          // Continue with next pattern
+        }
+      }
+
+      // Also check for generic test content mentioning the feature
+      if (!testsFound) {
+        const testDirs = ['test', 'tests', '__tests__', 'spec', 'specs'];
+        for (const testDir of testDirs) {
+          const testDirPath = path.join(PROJECT_ROOT, testDir);
+          try {
+            if (await this._fileExists(testDirPath)) {
+              const { execSync } = require('child_process');
+              const grepResult = execSync(
+                `find "${testDirPath}" -name "*.js" -o -name "*.ts" -o -name "*.jsx" -o -name "*.tsx" | xargs grep -l "${featureId}" 2>/dev/null || true`,
+                { cwd: PROJECT_ROOT }
+              ).toString();
+
+              if (grepResult.trim()) {
+                testsFound = true;
+                testFiles.push(...grepResult.trim().split('\n'));
+              }
+            }
+          } catch (error) {
+            // Continue checking
+          }
+        }
+      }
+
+      if (!testsFound) {
+        return {
+          success: false,
+          featureId,
+          testsFound: false,
+          error: 'CLAUDE.md VIOLATION: No tests found for this feature. Tests are MANDATORY before advancing to next feature.',
+          instructions: [
+            '1. Write comprehensive unit tests for this feature',
+            '2. Write integration tests if applicable',
+            '3. Ensure test coverage >80%',
+            '4. Run tests to verify they pass',
+            '5. Then retry this validation'
+          ],
+          blockingAdvancement: true
+        };
+      }
+
+      return {
+        success: true,
+        featureId,
+        testsFound: true,
+        testFiles,
+        message: 'Tests found for feature - proceeding to coverage validation',
+        nextStep: `confirm-test-coverage ${featureId}`
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: `Test validation failed: ${error.message}`,
+        featureId
+      };
+    }
+  }
+
+  async confirmTestCoverage(featureId) {
+    try {
+      const { execSync } = require('child_process');
+
+      // Try to run coverage commands
+      const coverageCommands = [
+        'npm run test:coverage',
+        'npm run coverage',
+        'jest --coverage',
+        'npm test -- --coverage',
+        'yarn test --coverage'
+      ];
+
+      let coverageResult = null;
+      let coveragePercentage = 0;
+
+      for (const cmd of coverageCommands) {
+        try {
+          const result = execSync(cmd, {
+            cwd: PROJECT_ROOT,
+            timeout: 120000,
+            stdio: 'pipe'
+          }).toString();
+
+          // Parse coverage percentage from common formats
+          const coverageMatch = result.match(/All files.*?(\d+(?:\.\d+)?)\s*%/i) ||
+                               result.match(/Statements.*?(\d+(?:\.\d+)?)\s*%/i) ||
+                               result.match(/Lines.*?(\d+(?:\.\d+)?)\s*%/i) ||
+                               result.match(/Coverage.*?(\d+(?:\.\d+)?)\s*%/i);
+
+          if (coverageMatch) {
+            coveragePercentage = parseFloat(coverageMatch[1]);
+            coverageResult = result;
+            break;
+          }
+        } catch (error) {
+          // Try next command
+        }
+      }
+
+      const minimumCoverage = 80; // From CLAUDE.md requirement
+
+      if (coveragePercentage < minimumCoverage) {
+        return {
+          success: false,
+          featureId,
+          coveragePercentage,
+          minimumRequired: minimumCoverage,
+          error: `CLAUDE.md VIOLATION: Test coverage ${coveragePercentage}% is below required ${minimumCoverage}%`,
+          instructions: [
+            '1. Add more comprehensive tests to increase coverage',
+            '2. Test edge cases and error conditions',
+            '3. Ensure all code paths are tested',
+            '4. Re-run coverage validation'
+          ],
+          blockingAdvancement: true
+        };
+      }
+
+      return {
+        success: true,
+        featureId,
+        coveragePercentage,
+        minimumRequired: minimumCoverage,
+        message: `Test coverage ${coveragePercentage}% meets requirement - proceeding to pipeline validation`,
+        nextStep: `confirm-pipeline-passes ${featureId}`
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: `Coverage validation failed: ${error.message}`,
+        featureId,
+        fallbackInstructions: [
+          'If no coverage tools available, manually verify comprehensive test suite',
+          'Ensure all feature functionality is tested',
+          'Consider adding jest --coverage or similar to package.json'
+        ]
+      };
+    }
+  }
+
+  async confirmPipelinePasses(featureId) {
+    try {
+      const { execSync } = require('child_process');
+
+      // Run validation pipeline commands
+      const pipelineCommands = [
+        { name: 'linting', cmd: 'npm run lint', timeout: 60000 },
+        { name: 'type checking', cmd: 'npm run typecheck', timeout: 60000 },
+        { name: 'build', cmd: 'npm run build', timeout: 120000 },
+        { name: 'tests', cmd: 'npm test', timeout: 180000 }
+      ];
+
+      const results = [];
+      let allPassed = true;
+
+      for (const step of pipelineCommands) {
+        try {
+          const result = execSync(step.cmd, {
+            cwd: PROJECT_ROOT,
+            timeout: step.timeout,
+            stdio: 'pipe'
+          });
+
+          results.push({
+            step: step.name,
+            status: 'passed',
+            command: step.cmd
+          });
+        } catch (error) {
+          allPassed = false;
+          results.push({
+            step: step.name,
+            status: 'failed',
+            command: step.cmd,
+            error: error.message
+          });
+        }
+      }
+
+      if (!allPassed) {
+        return {
+          success: false,
+          featureId,
+          pipelineResults: results,
+          error: 'CLAUDE.md VIOLATION: Pipeline validation failed - feature cannot advance',
+          instructions: [
+            '1. Fix all linting errors',
+            '2. Resolve type checking issues',
+            '3. Ensure build succeeds',
+            '4. Make sure all tests pass',
+            '5. Re-run pipeline validation'
+          ],
+          blockingAdvancement: true
+        };
+      }
+
+      return {
+        success: true,
+        featureId,
+        pipelineResults: results,
+        message: 'All pipeline validations passed - feature ready for advancement',
+        nextStep: `advance-to-next-feature ${featureId}`
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: `Pipeline validation failed: ${error.message}`,
+        featureId
+      };
+    }
+  }
+
+  async advanceToNextFeature(currentFeatureId) {
+    try {
+      // Verify all gates have been passed
+      const testValidation = await this.validateFeatureTests(currentFeatureId);
+      if (!testValidation.success) {
+        return {
+          success: false,
+          error: 'Cannot advance: Feature tests validation failed',
+          blockingValidation: testValidation,
+          requiredStep: `validate-feature-tests ${currentFeatureId}`
+        };
+      }
+
+      const coverageValidation = await this.confirmTestCoverage(currentFeatureId);
+      if (!coverageValidation.success) {
+        return {
+          success: false,
+          error: 'Cannot advance: Test coverage validation failed',
+          blockingValidation: coverageValidation,
+          requiredStep: `confirm-test-coverage ${currentFeatureId}`
+        };
+      }
+
+      const pipelineValidation = await this.confirmPipelinePasses(currentFeatureId);
+      if (!pipelineValidation.success) {
+        return {
+          success: false,
+          error: 'Cannot advance: Pipeline validation failed',
+          blockingValidation: pipelineValidation,
+          requiredStep: `confirm-pipeline-passes ${currentFeatureId}`
+        };
+      }
+
+      // Mark current feature as implemented
+      await this._atomicFeatureOperation((features) => {
+        const feature = features.features.find(f => f.id === currentFeatureId);
+        if (feature) {
+          feature.status = 'implemented';
+          feature.implemented_at = new Date().toISOString();
+          feature.test_validated = true;
+          feature.pipeline_validated = true;
+        }
+        return { success: true, message: 'Feature marked as implemented' };
+      });
+
+      // Find next approved feature
+      const nextFeature = await this._atomicFeatureOperation((features) => {
+        const nextFeature = features.features.find(f =>
+          f.status === 'approved' &&
+          f.id !== currentFeatureId
+        );
+        return nextFeature;
+      });
+
+      return {
+        success: true,
+        currentFeatureId,
+        currentFeatureStatus: 'implemented',
+        nextFeature: nextFeature ? {
+          id: nextFeature.id,
+          title: nextFeature.title,
+          description: nextFeature.description
+        } : null,
+        message: nextFeature
+          ? `✅ Feature ${currentFeatureId} complete! Next feature: ${nextFeature.id}`
+          : `✅ Feature ${currentFeatureId} complete! No more approved features.`,
+        testGatesPassed: {
+          tests: true,
+          coverage: true,
+          pipeline: true
+        }
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: `Failed to advance to next feature: ${error.message}`,
+        currentFeatureId
+      };
+    }
+  }
+
+  async getFeatureTestStatus(featureId) {
+    try {
+      const testValidation = await this.validateFeatureTests(featureId);
+      const coverageValidation = await this.confirmTestCoverage(featureId);
+      const pipelineValidation = await this.confirmPipelinePasses(featureId);
+
+      return {
+        success: true,
+        featureId,
+        testGates: {
+          tests: testValidation.success,
+          coverage: coverageValidation.success,
+          pipeline: pipelineValidation.success
+        },
+        allGatesPassed: testValidation.success && coverageValidation.success && pipelineValidation.success,
+        canAdvance: testValidation.success && coverageValidation.success && pipelineValidation.success,
+        details: {
+          testValidation,
+          coverageValidation,
+          pipelineValidation
+        },
+        nextRequiredStep: !testValidation.success ? `validate-feature-tests ${featureId}` :
+                         !coverageValidation.success ? `confirm-test-coverage ${featureId}` :
+                         !pipelineValidation.success ? `confirm-pipeline-passes ${featureId}` :
+                         `advance-to-next-feature ${featureId}`
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: `Failed to get feature test status: ${error.message}`,
+        featureId
+      };
+    }
+  }
+
+  /**
+   * 🚨 FEATURE 8: VALIDATION PERFORMANCE METRICS
+   * Store and analyze validation performance data
+   */
+  async _storeValidationPerformanceMetrics(performanceMetrics) {
+    try {
+      const fs = require('fs').promises;
+      const path = require('path');
+
+      const metricsFile = path.join(PROJECT_ROOT, '.validation-performance.json');
+      let existingMetrics = { metrics: [] };
+
+      // Load existing metrics
+      try {
+        if (await this._fileExists(metricsFile)) {
+          const data = await fs.readFile(metricsFile, 'utf8');
+          existingMetrics = JSON.parse(data);
+        }
+      } catch (error) {
+        // Start fresh if file is corrupted
+        existingMetrics = { metrics: [] };
+      }
+
+      // Add new metrics
+      existingMetrics.metrics.push(performanceMetrics);
+
+      // Keep only last 1000 entries to prevent file growth
+      if (existingMetrics.metrics.length > 1000) {
+        existingMetrics.metrics = existingMetrics.metrics.slice(-1000);
+      }
+
+      // Calculate performance statistics
+      existingMetrics.statistics = {
+        lastUpdated: new Date().toISOString(),
+        totalMeasurements: existingMetrics.metrics.length,
+        averageDurationMs: existingMetrics.metrics.reduce((sum, m) => sum + m.durationMs, 0) / existingMetrics.metrics.length,
+        successRate: (existingMetrics.metrics.filter(m => m.success).length / existingMetrics.metrics.length) * 100,
+        bycriterion: {}
+      };
+
+      // Group by criterion
+      const byCriterion = {};
+      existingMetrics.metrics.forEach(metric => {
+        if (!byCriterion[metric.criterion]) {
+          byCriterion[metric.criterion] = {
+            count: 0,
+            totalDuration: 0,
+            successCount: 0,
+            avgDuration: 0,
+            successRate: 0
+          };
+        }
+        const criterionStats = byCriterion[metric.criterion];
+        criterionStats.count++;
+        criterionStats.totalDuration += metric.durationMs;
+        if (metric.success) criterionStats.successCount++;
+      });
+
+      // Calculate averages
+      Object.keys(byCriterion).forEach(criterion => {
+        const stats = byCriterion[criterion];
+        stats.avgDuration = stats.totalDuration / stats.count;
+        stats.successRate = (stats.successCount / stats.count) * 100;
+        existingMetrics.statistics.bycriterion[criterion] = stats;
+      });
+
+      await fs.writeFile(metricsFile, JSON.stringify(existingMetrics, null, 2));
+
+      return {
+        success: true,
+        stored: true,
+        metricsFile
+      };
+
+    } catch (error) {
+      // Don't fail validation due to metrics storage issues
+      return {
+        success: false,
+        error: error.message,
+        stored: false
       };
     }
   }
@@ -3821,6 +4332,17 @@ class AutonomousTaskManagerAPI {
         'get-deprecated-lessons': 'getDeprecatedLessons',
         'cleanup-obsolete-lessons': 'cleanupObsoleteLessons',
         'get-deprecation-analytics': 'getDeprecationAnalytics',
+
+        // RAG Learning Pattern Detection commands
+        'detect-patterns': 'detectLearningPatterns',
+        'analyze-pattern-evolution': 'analyzePatternEvolution',
+        'get-pattern-suggestions': 'getPatternBasedSuggestions',
+        'analyze-lesson-patterns': 'analyzeLessonPatterns',
+        'get-pattern-analytics': 'getPatternAnalytics',
+        'cluster-patterns': 'clusterPatterns',
+        'search-similar-patterns': 'searchSimilarPatterns',
+        'generate-pattern-insights': 'generatePatternInsights',
+        'update-pattern-config': 'updatePatternDetectionConfig',
       },
       availableCommands: [
         // Discovery Commands
@@ -3843,6 +4365,9 @@ class AutonomousTaskManagerAPI {
 
         // RAG Lesson Deprecation
         'deprecate-lesson', 'restore-lesson', 'get-lesson-deprecation-status', 'get-deprecated-lessons', 'cleanup-obsolete-lessons', 'get-deprecation-analytics',
+
+        // RAG Learning Pattern Detection
+        'detect-patterns', 'analyze-pattern-evolution', 'get-pattern-suggestions', 'analyze-lesson-patterns', 'get-pattern-analytics', 'cluster-patterns', 'search-similar-patterns', 'generate-pattern-insights', 'update-pattern-config',
       ],
       guide: this._getFallbackGuide('api-methods'),
     };
@@ -5143,6 +5668,170 @@ _generateSupportingTasks(feature, mainTaskId) {
     }
   }
 
+  // ===== LEARNING PATTERN DETECTION API METHODS =====
+
+  /**
+   * Detect patterns in stored lessons and generate insights
+   */
+  async detectLearningPatterns(options = {}) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.detectLearningPatterns(options),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
+  /**
+   * Analyze pattern evolution over time for specific categories
+   */
+  async analyzePatternEvolution(category, options = {}) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.analyzePatternEvolution(category, options),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
+  /**
+   * Get lesson suggestions based on detected patterns
+   */
+  async getPatternBasedSuggestions(context, options = {}) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.getPatternBasedSuggestions(context, options),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
+  /**
+   * Analyze patterns within a specific lesson
+   */
+  async analyzeLessonPatterns(lessonId, options = {}) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.analyzeLessonPatterns(lessonId, options),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
+  /**
+   * Get pattern analytics and insights for the learning system
+   */
+  async getPatternAnalytics(options = {}) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.getPatternAnalytics(options),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
+  /**
+   * Cluster similar patterns and find pattern relationships
+   */
+  async clusterPatterns(options = {}) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.clusterPatterns(options),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
+  /**
+   * Search for patterns similar to a given query or example
+   */
+  async searchSimilarPatterns(query, options = {}) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.searchSimilarPatterns(query, options),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
+  /**
+   * Generate insights from detected patterns for system improvement
+   */
+  async generatePatternInsights(options = {}) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.generatePatternInsights(options),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
+  /**
+   * Update pattern detection configuration and thresholds
+   */
+  async updatePatternDetectionConfig(configUpdates) {
+    try {
+      return await this.withTimeout(
+        this.ragOps.updatePatternDetectionConfig(configUpdates),
+        this.timeout
+      );
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ragSystem: 'error'
+      };
+    }
+  }
+
   /**
    * Cleanup resources and connections
    */
@@ -5814,8 +6503,109 @@ async function main() {
         break;
       }
 
+      // RAG learning pattern detection commands
+      case 'detect-patterns': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.detectLearningPatterns(options);
+        break;
+      }
+      case 'analyze-pattern-evolution': {
+        if (!args[1]) {
+          throw new Error('Category required. Usage: analyze-pattern-evolution <category> [options]');
+        }
+        const options = args[2] ? JSON.parse(args[2]) : {};
+        result = await api.analyzePatternEvolution(args[1], options);
+        break;
+      }
+      case 'get-pattern-suggestions': {
+        if (!args[1]) {
+          throw new Error('Context required. Usage: get-pattern-suggestions <context> [options]');
+        }
+        const context = args[1];
+        const options = args[2] ? JSON.parse(args[2]) : {};
+        result = await api.getPatternBasedSuggestions(context, options);
+        break;
+      }
+      case 'analyze-lesson-patterns': {
+        if (!args[1]) {
+          throw new Error('Lesson ID required. Usage: analyze-lesson-patterns <lessonId> [options]');
+        }
+        const options = args[2] ? JSON.parse(args[2]) : {};
+        result = await api.analyzeLessonPatterns(parseInt(args[1]), options);
+        break;
+      }
+      case 'get-pattern-analytics': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.getPatternAnalytics(options);
+        break;
+      }
+      case 'cluster-patterns': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.clusterPatterns(options);
+        break;
+      }
+      case 'search-similar-patterns': {
+        if (!args[1]) {
+          throw new Error('Query required. Usage: search-similar-patterns <query> [options]');
+        }
+        const query = args[1];
+        const options = args[2] ? JSON.parse(args[2]) : {};
+        result = await api.searchSimilarPatterns(query, options);
+        break;
+      }
+      case 'generate-pattern-insights': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.generatePatternInsights(options);
+        break;
+      }
+      case 'update-pattern-config': {
+        if (!args[1]) {
+          throw new Error('Config updates required. Usage: update-pattern-config <configUpdates>');
+        }
+        const configUpdates = JSON.parse(args[1]);
+        result = await api.updatePatternDetectionConfig(configUpdates);
+        break;
+      }
+
+      // 🚨 FEATURE TEST GATE VALIDATION ENDPOINTS (CLAUDE.md Enforcement)
+      case 'validate-feature-tests': {
+        if (!args[1]) {
+          throw new Error('Feature ID required. Usage: validate-feature-tests <featureId>');
+        }
+        result = await api.validateFeatureTests(args[1]);
+        break;
+      }
+      case 'confirm-test-coverage': {
+        if (!args[1]) {
+          throw new Error('Feature ID required. Usage: confirm-test-coverage <featureId>');
+        }
+        result = await api.confirmTestCoverage(args[1]);
+        break;
+      }
+      case 'confirm-pipeline-passes': {
+        if (!args[1]) {
+          throw new Error('Feature ID required. Usage: confirm-pipeline-passes <featureId>');
+        }
+        result = await api.confirmPipelinePasses(args[1]);
+        break;
+      }
+      case 'advance-to-next-feature': {
+        if (!args[1]) {
+          throw new Error('Current feature ID required. Usage: advance-to-next-feature <currentFeatureId>');
+        }
+        result = await api.advanceToNextFeature(args[1]);
+        break;
+      }
+      case 'get-feature-test-status': {
+        if (!args[1]) {
+          throw new Error('Feature ID required. Usage: get-feature-test-status <featureId>');
+        }
+        result = await api.getFeatureTestStatus(args[1]);
+        break;
+      }
+
       default:
-        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, start-authorization, validate-criterion, validate-criteria-parallel, complete-authorization, authorize-stop, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents, store-lesson, search-lessons, store-error, find-similar-errors, get-relevant-lessons, rag-analytics, lesson-version-history, compare-lesson-versions, rollback-lesson-version, lesson-version-analytics, store-lesson-versioned, search-lessons-versioned, record-lesson-usage, record-lesson-feedback, record-lesson-outcome, get-lesson-quality-score, get-quality-analytics, get-quality-recommendations, search-lessons-quality, update-lesson-quality, register-project, share-lesson-cross-project, calculate-project-relevance, get-shared-lessons, get-project-recommendations, record-lesson-application, get-cross-project-analytics, update-project, get-project, list-projects, deprecate-lesson, restore-lesson, get-lesson-deprecation-status, get-deprecated-lessons, cleanup-obsolete-lessons, get-deprecation-analytics`);
+        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, start-authorization, validate-criterion, validate-criteria-parallel, complete-authorization, authorize-stop, validate-feature-tests, confirm-test-coverage, confirm-pipeline-passes, advance-to-next-feature, get-feature-test-status, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents, store-lesson, search-lessons, store-error, find-similar-errors, get-relevant-lessons, rag-analytics, lesson-version-history, compare-lesson-versions, rollback-lesson-version, lesson-version-analytics, store-lesson-versioned, search-lessons-versioned, record-lesson-usage, record-lesson-feedback, record-lesson-outcome, get-lesson-quality-score, get-quality-analytics, get-quality-recommendations, search-lessons-quality, update-lesson-quality, register-project, share-lesson-cross-project, calculate-project-relevance, get-shared-lessons, get-project-recommendations, record-lesson-application, get-cross-project-analytics, update-project, get-project, list-projects, deprecate-lesson, restore-lesson, get-lesson-deprecation-status, get-deprecated-lessons, cleanup-obsolete-lessons, get-deprecation-analytics, detect-patterns, analyze-pattern-evolution, get-pattern-suggestions, analyze-lesson-patterns, get-pattern-analytics, cluster-patterns, search-similar-patterns, generate-pattern-insights, update-pattern-config`);
     }
 
     console.log(JSON.stringify(result, null, 2));
