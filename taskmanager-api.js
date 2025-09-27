@@ -2299,14 +2299,14 @@ class AutonomousTaskManagerAPI {
 
       // Apply filtering options
       let filteredMetrics = metricsData.metrics || [];
-      if (options.timeRange) {
-        const cutoffTime = new Date(Date.now() - options.timeRange * 24 * 60 * 60 * 1000);
+      if (_options.timeRange) {
+        const cutoffTime = new Date(Date.now() - _options.timeRange * 24 * 60 * 60 * 1000);
         filteredMetrics = filteredMetrics.filter(m => new Date(m.startTime) >= cutoffTime);
       }
-      if (options.criterion) {
+      if (_options.criterion) {
         filteredMetrics = filteredMetrics.filter(m => m.criterion === _options.criterion);
       }
-      if (options.successOnly !== undefined) {
+      if (_options.successOnly !== undefined) {
         filteredMetrics = filteredMetrics.filter(m => m.success === _options.successOnly);
       }
 
@@ -4895,7 +4895,7 @@ class AutonomousTaskManagerAPI {
               const result = execSync(`find . -name "${pattern}" -not -path "./node_modules/*" | head -1`, {
                 cwd: PROJECT_ROOT,
                 encoding: 'utf8',
-                timeout: 5000
+                timeout: 5000,
               });
               if (result.trim()) {
                 hasTypeCheckableFiles = true;
@@ -4937,7 +4937,7 @@ class AutonomousTaskManagerAPI {
               if (scripts.start && !scripts.build) {
                 return {
                   success: true,
-                  details: 'Script-only project - no build required (has start script, no build script)'
+                  details: 'Script-only project - no build required (has start script, no build script)',
                 };
               }
             }
@@ -4976,7 +4976,7 @@ class AutonomousTaskManagerAPI {
                   packageJson.name === 'claude-taskmanager') {
                 return {
                   success: true,
-                  details: 'Self-validation: TaskManager API is currently running and operational'
+                  details: 'Self-validation: TaskManager API is currently running and operational',
                 };
               }
             }
@@ -5007,7 +5007,7 @@ class AutonomousTaskManagerAPI {
                   packageJson.name === 'claude-taskmanager') {
                 return {
                   success: true,
-                  details: 'Self-validation: Test infrastructure verified (concurrent execution scenario handled)'
+                  details: 'Self-validation: Test infrastructure verified (concurrent execution scenario handled)',
                 };
               }
             }
@@ -9596,12 +9596,12 @@ async function main() {
       // 🚀 FEATURE 8: PERFORMANCE METRICS ENDPOINTS (Stop Hook Validation Performance Tracking)
       case 'get-validation-performance-metrics': {
         const options = args[1] ? JSON.parse(args[1]) : {};
-        result = await api.getValidationPerformanceMetrics(_options);
+        result = await api.getValidationPerformanceMetrics(options);
         break;
       }
       case 'get-performance-trends': {
         const options = args[1] ? JSON.parse(args[1]) : {};
-        result = await api.getPerformanceTrends(_options);
+        result = await api.getPerformanceTrends(options);
         break;
       }
       case 'identify-performance-bottlenecks': {
