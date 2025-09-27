@@ -4635,7 +4635,9 @@ class AutonomousTaskManagerAPI {
       // Handle retries if configured
       if (rule.failureHandling && rule.failureHandling.retryCount > 0) {
         console.log(`🔄 Retrying custom rule ${rule.name} (${rule.failureHandling.retryCount} retries remaining)`);
-        await new Promise(resolve => setTimeout(resolve, rule.failureHandling.retryDelay || 5000));
+        await new Promise(resolve => {
+          setTimeout(resolve, rule.failureHandling.retryDelay || 5000);
+        });
 
         // Recursively retry with decremented retry count
         const retryRule = {

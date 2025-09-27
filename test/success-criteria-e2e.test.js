@@ -755,7 +755,9 @@ module.exports = { authenticate };
 
       // Simulate performance regression detection workflow
       const baselineTime = Date.now();
-      await new Promise(resolve => setTimeout(resolve, 100)); // Simulate processing time
+      await new Promise(resolve => {
+        setTimeout(resolve, 100);
+      }); // Simulate processing time
       const regressionTime = Date.now();
 
       const processingTime = regressionTime - baselineTime;
