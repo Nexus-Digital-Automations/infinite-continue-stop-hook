@@ -482,7 +482,7 @@ describe('Performance Validation E2E', () => {
 
         await CommandExecutor.executeAPI('list-features', [], { projectRoot: environment.testDir });
 
-        await CommandExecutor.executeAPI('feature-details', [featureId], { projectRoot: environment.testDir });
+        await CommandExecutor.executeAPI('feature-stats', [], { projectRoot: environment.testDir });
 
         return Date.now() - startTime;
       };

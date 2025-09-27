@@ -166,14 +166,20 @@ class E2EEnvironment {
         { projectRoot: this.testDir }
       );
 
-      // Handle different response structures
-      if (result.result && result.result.success) {
-        return result.result;
-      } else if (result.success) {
-        return result;
+      // Parse the JSON response from stdout
+      let apiResponse;
+      if (result.result && result.result.stdout) {
+        apiResponse = JSON.parse(result.result.stdout);
+      } else if (result.stdout) {
+        apiResponse = JSON.parse(result.stdout);
       } else {
-        const errorMsg = (result.result && result.result.error) || result.error || 'Unknown API error';
-        throw new Error(`TaskManager API error: ${errorMsg}`);
+        throw new Error('No stdout in API response');
+      }
+
+      if (apiResponse.success) {
+        return apiResponse; // This has structure: { success: true, features: [...], total: N }
+      } else {
+        throw new Error(`TaskManager API error: ${apiResponse.error}`);
       }
     } catch (error) {
       throw new Error(`Failed to get features from TaskManager API: ${error.message}`);
