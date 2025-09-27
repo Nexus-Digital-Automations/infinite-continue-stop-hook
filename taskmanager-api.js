@@ -2791,6 +2791,574 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
+   * 🚀 Feature 9: Stop Hook Rollback Capabilities
+   * Comprehensive rollback system for safe validation failure recovery
+   * Provides snapshot management, git state restoration, and file system rollback
+   */
+
+  async createValidationStateSnapshot(options = {}) {
+    try {
+      const snapshotId = `snapshot_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const snapshotDir = path.join(PROJECT_ROOT, '.validation-snapshots', snapshotId);
+      const fs = require('fs').promises;
+      const { execSync } = require('child_process');
+
+      // Create snapshot directory
+      await fs.mkdir(snapshotDir, { recursive: true });
+
+      // Capture current git state
+      const gitState = await this._captureGitState();
+
+      // Create git stash if there are uncommitted changes
+      let stashCreated = false;
+      try {
+        const statusOutput = execSync('git status --porcelain', {
+          cwd: PROJECT_ROOT,
+          timeout: 10000,
+          encoding: 'utf8'
+        });
+
+        if (statusOutput.trim()) {
+          const stashMessage = `validation-snapshot-${snapshotId}`;
+          execSync(`git stash push -m "${stashMessage}"`, {
+            cwd: PROJECT_ROOT,
+            timeout: 10000
+          });
+          stashCreated = true;
+          gitState.stashMessage = stashMessage;
+        }
+      } catch (error) {
+        console.warn('Warning: Could not create git stash:', error.message);
+      }
+
+      // Backup critical files
+      const criticalFiles = [
+        'package.json',
+        'package-lock.json',
+        'yarn.lock',
+        'FEATURES.json',
+        'TASKS.json',
+        '.env',
+        '.env.local'
+      ];
+
+      const backupPromises = criticalFiles.map(async (file) => {
+        const filePath = path.join(PROJECT_ROOT, file);
+        try {
+          await fs.access(filePath);
+          const backupPath = path.join(snapshotDir, file);
+          await fs.mkdir(path.dirname(backupPath), { recursive: true });
+          await fs.copyFile(filePath, backupPath);
+        } catch (error) {
+          // File doesn't exist, skip backup
+        }
+      });
+
+      await Promise.all(backupPromises);
+
+      // Create snapshot metadata
+      const snapshotData = {
+        id: snapshotId,
+        timestamp: new Date().toISOString(),
+        description: options.description || 'Validation state snapshot',
+        gitState: gitState,
+        stashCreated: stashCreated,
+        criticalFiles: criticalFiles,
+        validationAttempt: options.validationAttempt || 'unknown',
+        projectRoot: PROJECT_ROOT
+      };
+
+      await fs.writeFile(
+        path.join(snapshotDir, 'snapshot-metadata.json'),
+        JSON.stringify(snapshotData, null, 2)
+      );
+
+      // Update snapshot history
+      await this._updateSnapshotHistory(snapshotData);
+
+      return {
+        success: true,
+        snapshotId: snapshotId,
+        timestamp: snapshotData.timestamp,
+        description: snapshotData.description,
+        gitCommit: gitState.commitHash,
+        stashCreated: stashCreated,
+        message: 'Validation state snapshot created successfully'
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: `Failed to create validation state snapshot: ${error.message}`
+      };
+    }
+  }
+
+  async performRollback(snapshotId, options = {}) {
+    try {
+      const snapshotDir = path.join(PROJECT_ROOT, '.validation-snapshots', snapshotId);
+      const fs = require('fs').promises;
+      const { execSync } = require('child_process');
+
+      // Verify snapshot exists
+      const metadataPath = path.join(snapshotDir, 'snapshot-metadata.json');
+      const snapshotData = JSON.parse(await fs.readFile(metadataPath, 'utf8'));
+
+      // Rollback git state
+      if (snapshotData.gitState) {
+        try {
+          // Reset to snapshot commit if specified
+          if (snapshotData.gitState.commitHash) {
+            execSync(`git reset --hard ${snapshotData.gitState.commitHash}`, {
+              cwd: PROJECT_ROOT,
+              timeout: 10000
+            });
+          }
+
+          // Restore stash if it was created
+          if (snapshotData.stashCreated && snapshotData.gitState.stashMessage) {
+            const stashList = execSync('git stash list', {
+              cwd: PROJECT_ROOT,
+              timeout: 10000,
+              encoding: 'utf8'
+            });
+
+            if (stashList.includes(snapshotData.gitState.stashMessage)) {
+              // Find stash index
+              const stashLines = stashList.split('\n');
+              const stashLine = stashLines.find(line =>
+                line.includes(snapshotData.gitState.stashMessage)
+              );
+
+              if (stashLine) {
+                const stashIndex = stashLine.match(/stash@\{(\d+)\}/)?.[1];
+                if (stashIndex) {
+                  execSync(`git stash pop stash@{${stashIndex}}`, {
+                    cwd: PROJECT_ROOT,
+                    timeout: 10000
+                  });
+                }
+              }
+            }
+          }
+        } catch (error) {
+          console.warn('Warning: Git rollback encountered issues:', error.message);
+        }
+      }
+
+      // Restore critical files
+      const restorePromises = snapshotData.criticalFiles.map(async (file) => {
+        const backupPath = path.join(snapshotDir, file);
+        const targetPath = path.join(PROJECT_ROOT, file);
+
+        try {
+          await fs.access(backupPath);
+          await fs.copyFile(backupPath, targetPath);
+        } catch (error) {
+          // Backup file doesn't exist, skip restore
+        }
+      });
+
+      await Promise.all(restorePromises);
+
+      // Log rollback event
+      await this._logRollbackEvent({
+        snapshotId: snapshotId,
+        timestamp: new Date().toISOString(),
+        reason: options.reason || 'Manual rollback requested',
+        success: true
+      });
+
+      return {
+        success: true,
+        snapshotId: snapshotId,
+        restoredAt: new Date().toISOString(),
+        gitCommit: snapshotData.gitState.commitHash,
+        filesRestored: snapshotData.criticalFiles.length,
+        message: 'Rollback completed successfully'
+      };
+
+    } catch (error) {
+      await this._logRollbackEvent({
+        snapshotId: snapshotId,
+        timestamp: new Date().toISOString(),
+        reason: options.reason || 'Manual rollback requested',
+        success: false,
+        error: error.message
+      });
+
+      return {
+        success: false,
+        error: `Failed to perform rollback: ${error.message}`
+      };
+    }
+  }
+
+  async getAvailableRollbackSnapshots(options = {}) {
+    try {
+      const snapshotsDir = path.join(PROJECT_ROOT, '.validation-snapshots');
+      const fs = require('fs').promises;
+
+      try {
+        await fs.access(snapshotsDir);
+      } catch (error) {
+        return {
+          success: true,
+          snapshots: [],
+          message: 'No snapshots directory found'
+        };
+      }
+
+      const entries = await fs.readdir(snapshotsDir);
+      const snapshots = [];
+
+      for (const entry of entries) {
+        const snapshotDir = path.join(snapshotsDir, entry);
+        const metadataPath = path.join(snapshotDir, 'snapshot-metadata.json');
+
+        try {
+          const stats = await fs.stat(snapshotDir);
+          if (stats.isDirectory()) {
+            const metadata = JSON.parse(await fs.readFile(metadataPath, 'utf8'));
+            snapshots.push({
+              id: metadata.id,
+              timestamp: metadata.timestamp,
+              description: metadata.description,
+              gitCommit: metadata.gitState?.commitHash?.substr(0, 8) || 'unknown',
+              validationAttempt: metadata.validationAttempt,
+              stashCreated: metadata.stashCreated,
+              age: this._calculateSnapshotAge(metadata.timestamp)
+            });
+          }
+        } catch (error) {
+          // Skip invalid snapshots
+          console.warn(`Skipping invalid snapshot: ${entry}`);
+        }
+      }
+
+      // Sort by timestamp (newest first)
+      snapshots.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+      // Apply limit if specified
+      const limit = options.limit || snapshots.length;
+      const limitedSnapshots = snapshots.slice(0, limit);
+
+      return {
+        success: true,
+        snapshots: limitedSnapshots,
+        total: snapshots.length,
+        showing: limitedSnapshots.length
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: `Failed to get available snapshots: ${error.message}`
+      };
+    }
+  }
+
+  async getRollbackHistory(options = {}) {
+    try {
+      const historyFile = path.join(PROJECT_ROOT, '.validation-snapshots', 'rollback-history.json');
+      const fs = require('fs').promises;
+
+      try {
+        const historyData = JSON.parse(await fs.readFile(historyFile, 'utf8'));
+
+        // Apply filters
+        let events = historyData.events || [];
+
+        if (options.limit) {
+          events = events.slice(0, options.limit);
+        }
+
+        if (options.since) {
+          const sinceDate = new Date(options.since);
+          events = events.filter(event => new Date(event.timestamp) >= sinceDate);
+        }
+
+        return {
+          success: true,
+          history: events,
+          total: historyData.events?.length || 0,
+          showing: events.length
+        };
+
+      } catch (error) {
+        return {
+          success: true,
+          history: [],
+          total: 0,
+          showing: 0,
+          message: 'No rollback history found'
+        };
+      }
+
+    } catch (error) {
+      return {
+        success: false,
+        error: `Failed to get rollback history: ${error.message}`
+      };
+    }
+  }
+
+  async cleanupOldRollbackSnapshots(options = {}) {
+    try {
+      const snapshotsDir = path.join(PROJECT_ROOT, '.validation-snapshots');
+      const fs = require('fs').promises;
+      const maxAge = options.maxAgeHours || 24; // Default: 24 hours
+      const maxCount = options.maxCount || 10; // Default: keep 10 snapshots
+
+      try {
+        await fs.access(snapshotsDir);
+      } catch (error) {
+        return {
+          success: true,
+          cleaned: 0,
+          message: 'No snapshots directory found'
+        };
+      }
+
+      const entries = await fs.readdir(snapshotsDir);
+      const snapshots = [];
+
+      // Collect all valid snapshots with metadata
+      for (const entry of entries) {
+        if (entry === 'rollback-history.json') continue;
+
+        const snapshotDir = path.join(snapshotsDir, entry);
+        const metadataPath = path.join(snapshotDir, 'snapshot-metadata.json');
+
+        try {
+          const stats = await fs.stat(snapshotDir);
+          if (stats.isDirectory()) {
+            const metadata = JSON.parse(await fs.readFile(metadataPath, 'utf8'));
+            snapshots.push({
+              ...metadata,
+              directory: snapshotDir
+            });
+          }
+        } catch (error) {
+          // Invalid snapshot, mark for cleanup
+          snapshots.push({
+            id: entry,
+            timestamp: '1970-01-01T00:00:00.000Z',
+            directory: snapshotDir,
+            invalid: true
+          });
+        }
+      }
+
+      // Sort by timestamp (oldest first for cleanup)
+      snapshots.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+      const now = new Date();
+      const cutoffTime = new Date(now.getTime() - (maxAge * 60 * 60 * 1000));
+      let cleanedCount = 0;
+
+      // Remove old snapshots
+      for (const snapshot of snapshots) {
+        const snapshotTime = new Date(snapshot.timestamp);
+        const shouldCleanup = snapshot.invalid ||
+                            snapshotTime < cutoffTime ||
+                            (snapshots.length - cleanedCount > maxCount);
+
+        if (shouldCleanup) {
+          try {
+            await this._removeDirectory(snapshot.directory);
+            cleanedCount++;
+          } catch (error) {
+            console.warn(`Failed to cleanup snapshot ${snapshot.id}:`, error.message);
+          }
+        }
+      }
+
+      return {
+        success: true,
+        cleaned: cleanedCount,
+        remaining: snapshots.length - cleanedCount,
+        maxAge: maxAge,
+        maxCount: maxCount
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: `Failed to cleanup old snapshots: ${error.message}`
+      };
+    }
+  }
+
+  // Helper methods for Feature 9
+
+  async _captureGitState() {
+    const { execSync } = require('child_process');
+
+    try {
+      const gitState = {
+        commitHash: null,
+        branch: null,
+        hasUncommittedChanges: false,
+        stashCount: 0
+      };
+
+      try {
+        gitState.commitHash = execSync('git rev-parse HEAD', {
+          cwd: PROJECT_ROOT,
+          timeout: 5000,
+          encoding: 'utf8'
+        }).trim();
+      } catch (error) {
+        console.warn('Could not get git commit hash:', error.message);
+      }
+
+      try {
+        gitState.branch = execSync('git branch --show-current', {
+          cwd: PROJECT_ROOT,
+          timeout: 5000,
+          encoding: 'utf8'
+        }).trim();
+      } catch (error) {
+        console.warn('Could not get git branch:', error.message);
+      }
+
+      try {
+        const statusOutput = execSync('git status --porcelain', {
+          cwd: PROJECT_ROOT,
+          timeout: 5000,
+          encoding: 'utf8'
+        });
+        gitState.hasUncommittedChanges = statusOutput.trim().length > 0;
+      } catch (error) {
+        console.warn('Could not check git status:', error.message);
+      }
+
+      try {
+        const stashOutput = execSync('git stash list', {
+          cwd: PROJECT_ROOT,
+          timeout: 5000,
+          encoding: 'utf8'
+        });
+        gitState.stashCount = stashOutput.split('\n').filter(line => line.trim()).length;
+      } catch (error) {
+        console.warn('Could not get stash count:', error.message);
+      }
+
+      return gitState;
+
+    } catch (error) {
+      return {
+        commitHash: null,
+        branch: null,
+        hasUncommittedChanges: false,
+        stashCount: 0,
+        error: error.message
+      };
+    }
+  }
+
+  async _updateSnapshotHistory(snapshotData) {
+    try {
+      const historyFile = path.join(PROJECT_ROOT, '.validation-snapshots', 'snapshot-history.json');
+      const fs = require('fs').promises;
+
+      let history = { snapshots: [] };
+
+      try {
+        const existing = await fs.readFile(historyFile, 'utf8');
+        history = JSON.parse(existing);
+      } catch (error) {
+        // History file doesn't exist yet
+      }
+
+      history.snapshots = history.snapshots || [];
+      history.snapshots.unshift({
+        id: snapshotData.id,
+        timestamp: snapshotData.timestamp,
+        description: snapshotData.description,
+        gitCommit: snapshotData.gitState?.commitHash?.substr(0, 8) || 'unknown',
+        validationAttempt: snapshotData.validationAttempt
+      });
+
+      // Keep only last 50 entries
+      history.snapshots = history.snapshots.slice(0, 50);
+
+      await fs.writeFile(historyFile, JSON.stringify(history, null, 2));
+
+    } catch (error) {
+      console.warn('Failed to update snapshot history:', error.message);
+    }
+  }
+
+  async _logRollbackEvent(eventData) {
+    try {
+      const historyFile = path.join(PROJECT_ROOT, '.validation-snapshots', 'rollback-history.json');
+      const fs = require('fs').promises;
+
+      let history = { events: [] };
+
+      try {
+        const existing = await fs.readFile(historyFile, 'utf8');
+        history = JSON.parse(existing);
+      } catch (error) {
+        // History file doesn't exist yet
+      }
+
+      history.events = history.events || [];
+      history.events.unshift(eventData);
+
+      // Keep only last 100 events
+      history.events = history.events.slice(0, 100);
+
+      await fs.writeFile(historyFile, JSON.stringify(history, null, 2));
+
+    } catch (error) {
+      console.warn('Failed to log rollback event:', error.message);
+    }
+  }
+
+  _calculateSnapshotAge(timestamp) {
+    const now = new Date();
+    const snapshotTime = new Date(timestamp);
+    const diffMs = now - snapshotTime;
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+    if (diffHours > 0) {
+      return `${diffHours}h ${diffMinutes}m ago`;
+    } else {
+      return `${diffMinutes}m ago`;
+    }
+  }
+
+  async _removeDirectory(dirPath) {
+    const fs = require('fs').promises;
+
+    try {
+      const stats = await fs.stat(dirPath);
+      if (stats.isDirectory()) {
+        const entries = await fs.readdir(dirPath);
+
+        await Promise.all(entries.map(async (entry) => {
+          const entryPath = path.join(dirPath, entry);
+          const entryStats = await fs.stat(entryPath);
+
+          if (entryStats.isDirectory()) {
+            await this._removeDirectory(entryPath);
+          } else {
+            await fs.unlink(entryPath);
+          }
+        }));
+
+        await fs.rmdir(dirPath);
+      }
+    } catch (error) {
+      throw new Error(`Failed to remove directory ${dirPath}: ${error.message}`);
+    }
+  }
+
+  /**
    * Feature 3: Validation Caching
    * Intelligent caching system for expensive validation results with smart cache invalidation
    * Provides massive time savings on repeated authorization attempts
@@ -7714,8 +8282,38 @@ async function main() {
         break;
       }
 
+      // 🚀 FEATURE 9: ROLLBACK CAPABILITIES ENDPOINTS (Stop Hook Rollback Management)
+      case 'create-validation-state-snapshot': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.createValidationStateSnapshot(options);
+        break;
+      }
+      case 'perform-rollback': {
+        if (!args[1]) {
+          throw new Error('Snapshot ID required. Usage: perform-rollback <snapshotId> [options]');
+        }
+        const options = args[2] ? JSON.parse(args[2]) : {};
+        result = await api.performRollback(args[1], options);
+        break;
+      }
+      case 'get-available-rollback-snapshots': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.getAvailableRollbackSnapshots(options);
+        break;
+      }
+      case 'get-rollback-history': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.getRollbackHistory(options);
+        break;
+      }
+      case 'cleanup-old-rollback-snapshots': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.cleanupOldRollbackSnapshots(options);
+        break;
+      }
+
       default:
-        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, start-authorization, validate-criterion, validate-criteria-parallel, complete-authorization, authorize-stop, validate-feature-tests, confirm-test-coverage, confirm-pipeline-passes, advance-to-next-feature, get-feature-test-status, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents, store-lesson, search-lessons, store-error, find-similar-errors, get-relevant-lessons, rag-analytics, lesson-version-history, compare-lesson-versions, rollback-lesson-version, lesson-version-analytics, store-lesson-versioned, search-lessons-versioned, record-lesson-usage, record-lesson-feedback, record-lesson-outcome, get-lesson-quality-score, get-quality-analytics, get-quality-recommendations, search-lessons-quality, update-lesson-quality, register-project, share-lesson-cross-project, calculate-project-relevance, get-shared-lessons, get-project-recommendations, record-lesson-application, get-cross-project-analytics, update-project, get-project, list-projects, deprecate-lesson, restore-lesson, get-lesson-deprecation-status, get-deprecated-lessons, cleanup-obsolete-lessons, get-deprecation-analytics, detect-patterns, analyze-pattern-evolution, get-pattern-suggestions, analyze-lesson-patterns, get-pattern-analytics, cluster-patterns, search-similar-patterns, generate-pattern-insights, update-pattern-config`);
+        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, start-authorization, validate-criterion, validate-criteria-parallel, complete-authorization, authorize-stop, validate-feature-tests, confirm-test-coverage, confirm-pipeline-passes, advance-to-next-feature, get-feature-test-status, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents, store-lesson, search-lessons, store-error, find-similar-errors, get-relevant-lessons, rag-analytics, lesson-version-history, compare-lesson-versions, rollback-lesson-version, lesson-version-analytics, store-lesson-versioned, search-lessons-versioned, record-lesson-usage, record-lesson-feedback, record-lesson-outcome, get-lesson-quality-score, get-quality-analytics, get-quality-recommendations, search-lessons-quality, update-lesson-quality, register-project, share-lesson-cross-project, calculate-project-relevance, get-shared-lessons, get-project-recommendations, record-lesson-application, get-cross-project-analytics, update-project, get-project, list-projects, deprecate-lesson, restore-lesson, get-lesson-deprecation-status, get-deprecated-lessons, cleanup-obsolete-lessons, get-deprecation-analytics, detect-patterns, analyze-pattern-evolution, get-pattern-suggestions, analyze-lesson-patterns, get-pattern-analytics, cluster-patterns, search-similar-patterns, generate-pattern-insights, update-pattern-config, get-validation-performance-metrics, get-performance-trends, identify-performance-bottlenecks, get-detailed-timing-report, analyze-resource-usage, get-performance-benchmarks, create-validation-state-snapshot, perform-rollback, get-available-rollback-snapshots, get-rollback-history, cleanup-old-rollback-snapshots`);
     }
 
     console.log(JSON.stringify(result, null, 2));

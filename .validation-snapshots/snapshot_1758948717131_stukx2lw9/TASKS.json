@@ -1,0 +1,2094 @@
+{
+  "project": "infinite-continue-stop-hook",
+  "schema_version": "2.0.0",
+  "migrated_from": "FEATURES.json",
+  "migration_date": "2025-09-26T21:10:05.180Z",
+  "tasks": [
+    {
+      "id": "error_1758946224547_842ptfvlc",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Add comprehensive testing framework",
+      "description": "Implement automated testing framework with unit, integration, and end-to-end testing capabilities to improve code quality and reduce bugs",
+      "business_value": "Reduces development time, prevents regressions, and increases confidence in deployments",
+      "category": "enhancement",
+      "status": "approved",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-22T06:28:03.405Z",
+      "updated_at": "2025-09-22T06:28:11.853Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "error_1758946224547_7tchl0dkm",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Test approval fix",
+      "description": "Test feature to verify approval mechanism works",
+      "business_value": "Validates approval system fix",
+      "category": "enhancement",
+      "status": "approved",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-22T07:56:06.743Z",
+      "updated_at": "2025-09-22T07:56:14.693Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "error_1758946224547_lrnbb2b8w",
+      "type": "feature",
+      "parent_id": "error_1758523829033_pyogectd0",
+      "linked_tasks": [],
+      "title": "Implement: Add comprehensive testing framework",
+      "description": "Implement automated testing framework with unit, integration, and end-to-end testing capabilities to improve code quality and reduce bugs",
+      "business_value": "Reduces development time, prevents regressions, and increases confidence in deployments",
+      "category": "enhancement",
+      "status": "approved",
+      "priority": "normal",
+      "auto_generated": true,
+      "auto_generation_rules": {
+        "generate_test_task": false,
+        "generate_audit_task": false,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 10,
+      "required_capabilities": [
+        "testing"
+      ],
+      "created_at": "2025-09-25T00:46:54.871Z",
+      "updated_at": "2025-09-25T00:47:16.600Z",
+      "created_by": "autonomous_system",
+      "assigned_to": "test_agent_1",
+      "assigned_at": "2025-09-25T00:47:16.599Z",
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": false,
+        "test_coverage": false,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {
+        "auto_generated": true,
+        "feature_category": "enhancement",
+        "business_value": "Reduces development time, prevents regressions, and increases confidence in deployments"
+      }
+    },
+    {
+      "id": "error_1758946224547_zqhl0qxo7",
+      "type": "feature",
+      "parent_id": "feature_1758527766743_b3680c00fcad",
+      "linked_tasks": [],
+      "title": "Implement: Test approval fix",
+      "description": "Test feature to verify approval mechanism works",
+      "business_value": "Validates approval system fix",
+      "category": "enhancement",
+      "status": "suggested",
+      "priority": "normal",
+      "auto_generated": true,
+      "auto_generation_rules": {
+        "generate_test_task": false,
+        "generate_audit_task": false,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 9,
+      "required_capabilities": [
+        "testing"
+      ],
+      "created_at": "2025-09-25T00:46:54.872Z",
+      "updated_at": "2025-09-25T00:46:54.872Z",
+      "created_by": "autonomous_system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": false,
+        "test_coverage": false,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {
+        "auto_generated": true,
+        "feature_category": "enhancement",
+        "business_value": "Validates approval system fix"
+      }
+    },
+    {
+      "id": "feature_1758946224547_sja09htgb",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Add blockchain integration",
+      "description": "Integrate blockchain technology for data verification",
+      "business_value": "Provides enhanced security and decentralization",
+      "category": "new-feature",
+      "status": "rejected",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "frontend",
+        "backend"
+      ],
+      "created_at": "2025-09-22T06:28:27.223Z",
+      "updated_at": "2025-09-22T06:28:32.284Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "test_1758946224547_csll7clzx",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Test migration feature",
+      "description": "Test feature to verify migration system works correctly",
+      "business_value": "Validates that the new FEATURES.json system is fully operational",
+      "category": "enhancement",
+      "status": "approved",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-22T06:32:17.567Z",
+      "updated_at": "2025-09-22T06:32:24.169Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "test_1758946224547_hes1ljhoj",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Bulk test feature 1",
+      "description": "First test feature for bulk approval",
+      "business_value": "Testing bulk functionality",
+      "category": "enhancement",
+      "status": "approved",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-22T07:58:05.463Z",
+      "updated_at": "2025-09-22T07:58:15.474Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "test_1758946224547_s22zdjchg",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Bulk test feature 2",
+      "description": "Second test feature for bulk approval",
+      "business_value": "Testing bulk functionality",
+      "category": "enhancement",
+      "status": "approved",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-22T07:58:06.514Z",
+      "updated_at": "2025-09-22T07:58:15.474Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "test_1758946224547_s7t4j0nba",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Bulk test feature 3",
+      "description": "Third test feature for bulk approval",
+      "business_value": "Testing bulk functionality",
+      "category": "enhancement",
+      "status": "approved",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-22T07:58:07.672Z",
+      "updated_at": "2025-09-22T07:58:15.474Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "test_1758946224547_24pxqswfj",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Fix failing E2E tests for FEATURES.json migration",
+      "description": "Examine and fix failing E2E tests in test/ directory (success-criteria-e2e.test.js, etc.) - Update test configuration for FEATURES.json structure - Fix timeout issues and API connection problems - Ensure tests work with new FeatureManagerAPI instead of old TaskManager - Update test data and mock structures for new schema - Verify all E2E tests pass with new system",
+      "business_value": "Ensures test suite reliability and prevents regression bugs in the new FEATURES.json system",
+      "category": "bug-fix",
+      "status": "approved",
+      "priority": "high",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-22T08:00:05.044Z",
+      "updated_at": "2025-09-22T08:00:09.598Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "test_1758946224547_c3xqxoxt9",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Implement comprehensive test coverage reporting",
+      "description": "Configure Jest coverage reporting with detailed metrics, coverage thresholds for quality gates, multiple report formats (HTML, JSON, text), coverage collection for all source files, coverage scripts in package.json, and coverage reporting documentation",
+      "business_value": "Provides essential code quality metrics, enables automated quality gates, helps identify untested code areas, and supports continuous integration workflows for maintaining high code quality standards",
+      "category": "enhancement",
+      "status": "approved",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-22T08:00:05.910Z",
+      "updated_at": "2025-09-22T08:00:10.935Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "test_1758946224547_v9jyylnim",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Create comprehensive testing documentation and best practices guide",
+      "description": "Document testing architecture, best practices, test suite execution, troubleshooting, FEATURES.json testing approach, and provide examples for effective test writing",
+      "business_value": "Enables developers to effectively use and contribute to test suite, improving code quality and development velocity",
+      "category": "documentation",
+      "status": "implemented",
+      "priority": "low",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "documentation"
+      ],
+      "created_at": "2025-09-22T08:00:07.451Z",
+      "updated_at": "2025-09-23T18:25:00.000Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": "2025-09-23T18:25:00.000Z",
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "test_1758946224547_2s91nthtw",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Integrate CI/CD Pipeline with Automated Testing Framework",
+      "description": "Create comprehensive CI/CD pipeline with GitHub Actions workflow, test matrix for multiple Node.js versions, automated test reporting, pre-commit hooks, coverage reporting, and quality gates to prevent merging failing tests.",
+      "business_value": "Ensures code quality through automated testing, reduces manual testing overhead, prevents bugs from reaching production, and maintains consistent quality standards across all code changes.",
+      "category": "enhancement",
+      "status": "approved",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-22T08:00:12.320Z",
+      "updated_at": "2025-09-22T08:00:16.332Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "test_1758946224547_nwwywm7xm",
+      "type": "feature",
+      "parent_id": null,
+      "linked_tasks": [],
+      "title": "Test Feature 12345",
+      "description": "This is a comprehensive test feature designed for E2E validation purposes. It includes detailed information to meet validation requirements and ensure proper testing of all system components and workflows.",
+      "business_value": "Validates E2E testing functionality by providing comprehensive test coverage and ensuring all system components work correctly together in realistic scenarios",
+      "category": "enhancement",
+      "status": "suggested",
+      "priority": "normal",
+      "auto_generated": false,
+      "auto_generation_rules": {
+        "generate_test_task": true,
+        "generate_audit_task": true,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 5,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-23T15:05:53.379Z",
+      "updated_at": "2025-09-23T15:05:53.380Z",
+      "created_by": "system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": true,
+        "test_coverage": true,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {}
+    },
+    {
+      "id": "test_1758946224547_z5v7b83mh",
+      "type": "feature",
+      "parent_id": "test_1758523829033_6dqlydklq",
+      "linked_tasks": [],
+      "title": "Implement: Test migration feature",
+      "description": "Test feature to verify migration system works correctly",
+      "business_value": "Validates that the new FEATURES.json system is fully operational",
+      "category": "enhancement",
+      "status": "suggested",
+      "priority": "normal",
+      "auto_generated": true,
+      "auto_generation_rules": {
+        "generate_test_task": false,
+        "generate_audit_task": false,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 9,
+      "required_capabilities": [
+        "testing"
+      ],
+      "created_at": "2025-09-25T00:46:54.872Z",
+      "updated_at": "2025-09-25T00:46:54.872Z",
+      "created_by": "autonomous_system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": false,
+        "test_coverage": false,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {
+        "auto_generated": true,
+        "feature_category": "enhancement",
+        "business_value": "Validates that the new FEATURES.json system is fully operational"
+      }
+    },
+    {
+      "id": "test_1758946224547_5ygmbjvg3",
+      "type": "feature",
+      "parent_id": "feature_1758527885463_0c143572d602",
+      "linked_tasks": [],
+      "title": "Implement: Bulk test feature 1",
+      "description": "First test feature for bulk approval",
+      "business_value": "Testing bulk functionality",
+      "category": "enhancement",
+      "status": "suggested",
+      "priority": "normal",
+      "auto_generated": true,
+      "auto_generation_rules": {
+        "generate_test_task": false,
+        "generate_audit_task": false,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 9,
+      "required_capabilities": [
+        "testing"
+      ],
+      "created_at": "2025-09-25T00:46:54.872Z",
+      "updated_at": "2025-09-25T00:46:54.872Z",
+      "created_by": "autonomous_system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": false,
+        "test_coverage": false,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {
+        "auto_generated": true,
+        "feature_category": "enhancement",
+        "business_value": "Testing bulk functionality"
+      }
+    },
+    {
+      "id": "test_1758946224547_0i8jmk7qz",
+      "type": "feature",
+      "parent_id": "feature_1758527886514_8e4f49ca0293",
+      "linked_tasks": [],
+      "title": "Implement: Bulk test feature 2",
+      "description": "Second test feature for bulk approval",
+      "business_value": "Testing bulk functionality",
+      "category": "enhancement",
+      "status": "suggested",
+      "priority": "normal",
+      "auto_generated": true,
+      "auto_generation_rules": {
+        "generate_test_task": false,
+        "generate_audit_task": false,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 9,
+      "required_capabilities": [
+        "testing"
+      ],
+      "created_at": "2025-09-25T00:46:54.872Z",
+      "updated_at": "2025-09-25T00:46:54.872Z",
+      "created_by": "autonomous_system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": false,
+        "test_coverage": false,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {
+        "auto_generated": true,
+        "feature_category": "enhancement",
+        "business_value": "Testing bulk functionality"
+      }
+    },
+    {
+      "id": "test_1758946224547_8m6h7qgv8",
+      "type": "feature",
+      "parent_id": "feature_1758527887671_e982a3e20cf3",
+      "linked_tasks": [],
+      "title": "Implement: Bulk test feature 3",
+      "description": "Third test feature for bulk approval",
+      "business_value": "Testing bulk functionality",
+      "category": "enhancement",
+      "status": "suggested",
+      "priority": "normal",
+      "auto_generated": true,
+      "auto_generation_rules": {
+        "generate_test_task": false,
+        "generate_audit_task": false,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 9,
+      "required_capabilities": [
+        "testing"
+      ],
+      "created_at": "2025-09-25T00:46:54.872Z",
+      "updated_at": "2025-09-25T00:46:54.872Z",
+      "created_by": "autonomous_system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": false,
+        "test_coverage": false,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {
+        "auto_generated": true,
+        "feature_category": "enhancement",
+        "business_value": "Testing bulk functionality"
+      }
+    },
+    {
+      "id": "test_1758946224547_1yu96tgun",
+      "type": "feature",
+      "parent_id": "feature_1758528005044_426c5b4657e3",
+      "linked_tasks": [],
+      "title": "Implement: Fix failing E2E tests for FEATURES.json migration",
+      "description": "Examine and fix failing E2E tests in test/ directory (success-criteria-e2e.test.js, etc.) - Update test configuration for FEATURES.json structure - Fix timeout issues and API connection problems - Ensure tests work with new FeatureManagerAPI instead of old TaskManager - Update test data and mock structures for new schema - Verify all E2E tests pass with new system",
+      "business_value": "Ensures test suite reliability and prevents regression bugs in the new FEATURES.json system",
+      "category": "bug-fix",
+      "status": "suggested",
+      "priority": "high",
+      "auto_generated": true,
+      "auto_generation_rules": {
+        "generate_test_task": false,
+        "generate_audit_task": false,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 9,
+      "required_capabilities": [
+        "analysis",
+        "backend",
+        "testing"
+      ],
+      "created_at": "2025-09-25T00:46:54.872Z",
+      "updated_at": "2025-09-25T00:46:54.872Z",
+      "created_by": "autonomous_system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": false,
+        "test_coverage": false,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {
+        "auto_generated": true,
+        "feature_category": "bug-fix",
+        "business_value": "Ensures test suite reliability and prevents regression bugs in the new FEATURES.json system"
+      }
+    },
+    {
+      "id": "test_1758946224547_tl2imbquq",
+      "type": "feature",
+      "parent_id": "feature_1758528005910_37e646aa5f68",
+      "linked_tasks": [],
+      "title": "Implement: Implement comprehensive test coverage reporting",
+      "description": "Configure Jest coverage reporting with detailed metrics, coverage thresholds for quality gates, multiple report formats (HTML, JSON, text), coverage collection for all source files, coverage scripts in package.json, and coverage reporting documentation",
+      "business_value": "Provides essential code quality metrics, enables automated quality gates, helps identify untested code areas, and supports continuous integration workflows for maintaining high code quality standards",
+      "category": "enhancement",
+      "status": "suggested",
+      "priority": "high",
+      "auto_generated": true,
+      "auto_generation_rules": {
+        "generate_test_task": false,
+        "generate_audit_task": false,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 12,
+      "required_capabilities": [
+        "general"
+      ],
+      "created_at": "2025-09-25T00:46:54.872Z",
+      "updated_at": "2025-09-25T00:46:54.872Z",
+      "created_by": "autonomous_system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": false,
+        "test_coverage": false,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {
+        "auto_generated": true,
+        "feature_category": "enhancement",
+        "business_value": "Provides essential code quality metrics, enables automated quality gates, helps identify untested code areas, and supports continuous integration workflows for maintaining high code quality standards"
+      }
+    },
+    {
+      "id": "test_1758946224548_xm3h9qp5o",
+      "type": "feature",
+      "parent_id": "feature_1758528012320_8607ead852e1",
+      "linked_tasks": [],
+      "title": "Implement: Integrate CI/CD Pipeline with Automated Testing Framework",
+      "description": "Create comprehensive CI/CD pipeline with GitHub Actions workflow, test matrix for multiple Node.js versions, automated test reporting, pre-commit hooks, coverage reporting, and quality gates to prevent merging failing tests.",
+      "business_value": "Ensures code quality through automated testing, reduces manual testing overhead, prevents bugs from reaching production, and maintains consistent quality standards across all code changes.",
+      "category": "enhancement",
+      "status": "suggested",
+      "priority": "normal",
+      "auto_generated": true,
+      "auto_generation_rules": {
+        "generate_test_task": false,
+        "generate_audit_task": false,
+        "test_coverage_requirement": 80
+      },
+      "dependencies": [],
+      "estimated_effort": 11,
+      "required_capabilities": [
+        "testing"
+      ],
+      "created_at": "2025-09-25T00:46:54.872Z",
+      "updated_at": "2025-09-25T00:46:54.872Z",
+      "created_by": "autonomous_system",
+      "assigned_to": null,
+      "assigned_at": null,
+      "completed_at": null,
+      "validation_requirements": {
+        "security_scan": false,
+        "test_coverage": false,
+        "linter_pass": true,
+        "type_check": true,
+        "build_success": true
+      },
+      "metadata": {
+        "auto_generated": true,
+        "feature_category": "enhancement",
+        "business_value": "Ensures code quality through automated testing, reduces manual testing overhead, prevents bugs from reaching production, and maintains consistent quality standards across all code changes."
+      }
+    }
+  ],
+  "completed_tasks": [],
+  "task_relationships": {
+    "task_1758921005181_s4gleloz": {
+      "auto_generated_test": null,
+      "auto_generated_audit": null,
+      "dependencies": [],
+      "dependents": []
+    },
+    "task_1758921005183_err8rjqq": {
+      "auto_generated_test": null,
+      "auto_generated_audit": null,
+      "dependencies": [],
+      "dependents": []
+    },
+    "task_1758921005184_d4vnerwo": {
+      "auto_generated_test": null,
+      "auto_generated_audit": null,
+      "dependencies": [],
+      "dependents": []
+    },
+    "task_1758921005185_y8y3l8th": {
+      "auto_generated_test": null,
+      "auto_generated_audit": null,
+      "dependencies": [],
+      "dependents": []
+    },
+    "task_1758921005186_3fn72rwa": {
+      "auto_generated_test": null,
+      "auto_generated_audit": null,
+      "dependencies": [],
+      "dependents": []
+    },
+    "task_1758921005187_47zjr8ew": {
+      "auto_generated_test": null,
+      "auto_generated_audit": null,
+      "dependencies": [],
+      "dependents": []
+    },
+    "task_1758921005188_t0ssrq0d": {
+      "auto_generated_test": null,
+      "auto_generated_audit": null,
+      "dependencies": [],
+      "dependents": []
+    },
+    "task_1758921005189_pxxrn7yv": {
+      "auto_generated_test": null,
+      "auto_generated_audit": null,
+      "dependencies": [],
+      "dependents": []
+    },
+    "task_1758921005191_9hcszek5": {
+      "auto_generated_test": null,
+      "auto_generated_audit": null,
+      "dependencies": [],
+      "dependents": []
+    }
+  },
+  "workflow_config": {
+    "require_approval": true,
+    "auto_reject_timeout_hours": 168,
+    "allowed_statuses": [
+      "suggested",
+      "approved",
+      "in-progress",
+      "completed",
+      "blocked",
+      "rejected"
+    ],
+    "allowed_task_types": [
+      "error",
+      "feature",
+      "test",
+      "audit"
+    ],
+    "required_fields": [
+      "title",
+      "description",
+      "business_value",
+      "category",
+      "type"
+    ],
+    "auto_generation_enabled": true,
+    "mandatory_test_gate": true,
+    "security_validation_required": true
+  },
+  "auto_generation_config": {
+    "test_task_template": {
+      "title_pattern": "Implement comprehensive tests for {feature_title}",
+      "description_pattern": "Create unit tests, integration tests, and E2E tests to achieve >{coverage}% coverage for {feature_title}. Must validate all functionality, edge cases, and error conditions.",
+      "priority": "high",
+      "required_capabilities": [
+        "testing"
+      ],
+      "validation_requirements": {
+        "test_coverage": true,
+        "linter_pass": true
+      }
+    },
+    "audit_task_template": {
+      "title_pattern": "Security and quality audit for {feature_title}",
+      "description_pattern": "Run semgrep security scan, dependency vulnerability check, code quality analysis, and compliance validation for {feature_title}. Zero tolerance for security vulnerabilities.",
+      "priority": "high",
+      "required_capabilities": [
+        "security",
+        "analysis"
+      ],
+      "validation_requirements": {
+        "security_scan": true,
+        "linter_pass": true,
+        "type_check": true
+      }
+    }
+  },
+  "priority_system": {
+    "order": [
+      "USER_REQUESTS",
+      "ERROR",
+      "AUDIT",
+      "FEATURE",
+      "TEST"
+    ],
+    "error_priorities": {
+      "critical": [
+        "build-breaking",
+        "security-vulnerability",
+        "production-down"
+      ],
+      "high": [
+        "linter-errors",
+        "type-errors",
+        "test-failures"
+      ],
+      "normal": [
+        "warnings",
+        "optimization-opportunities"
+      ],
+      "low": [
+        "documentation-improvements",
+        "code-style"
+      ]
+    }
+  },
+  "metadata": {
+    "version": "2.0.0",
+    "created": "2025-09-22T06:19:00.000Z",
+    "updated": "2025-09-27T04:15:39.297Z",
+    "total_tasks": 21,
+    "tasks_by_type": {
+      "error": 0,
+      "feature": 21,
+      "test": 0,
+      "audit": 0
+    },
+    "approval_history": [
+      {
+        "feature_id": "feature_1758522483405_ca02a61775a8",
+        "action": "approved",
+        "timestamp": "2025-09-22T06:28:11.854Z",
+        "approved_by": "taskmanager-refactor-agent",
+        "notes": "Essential for code quality and CI/CD pipeline"
+      },
+      {
+        "feature_id": "feature_1758522507223_c698ce556ea8",
+        "action": "rejected",
+        "timestamp": "2025-09-22T06:28:32.284Z",
+        "rejected_by": "product-owner",
+        "reason": "Not aligned with current product roadmap and technical priorities"
+      },
+      {
+        "feature_id": "feature_1758522737566_15c76fb7f0bc",
+        "action": "approved",
+        "timestamp": "2025-09-22T06:32:24.170Z",
+        "approved_by": "migration-test-agent",
+        "notes": "Migration system validation successful"
+      },
+      {
+        "feature_id": "feature_1758527766743_b3680c00fcad",
+        "action": "approved",
+        "timestamp": "2025-09-22T07:56:14.693Z",
+        "approved_by": "user",
+        "notes": "Testing fixed approval mechanism"
+      },
+      {
+        "feature_id": "feature_1758527885463_0c143572d602",
+        "action": "approved",
+        "timestamp": "2025-09-22T07:58:15.474Z",
+        "approved_by": "user",
+        "notes": "Bulk approval test successful"
+      },
+      {
+        "feature_id": "feature_1758527886514_8e4f49ca0293",
+        "action": "approved",
+        "timestamp": "2025-09-22T07:58:15.474Z",
+        "approved_by": "user",
+        "notes": "Bulk approval test successful"
+      },
+      {
+        "feature_id": "feature_1758527887671_e982a3e20cf3",
+        "action": "approved",
+        "timestamp": "2025-09-22T07:58:15.474Z",
+        "approved_by": "user",
+        "notes": "Bulk approval test successful"
+      },
+      {
+        "feature_id": "feature_1758528005044_426c5b4657e3",
+        "action": "approved",
+        "timestamp": "2025-09-22T08:00:09.598Z",
+        "approved_by": "system",
+        "notes": ""
+      },
+      {
+        "feature_id": "feature_1758528005910_37e646aa5f68",
+        "action": "approved",
+        "timestamp": "2025-09-22T08:00:10.936Z",
+        "approved_by": "main-agent",
+        "notes": "User-requested feature for comprehensive test coverage reporting implementation"
+      },
+      {
+        "feature_id": "feature_1758528007451_d15844fdedbb",
+        "action": "approved",
+        "timestamp": "2025-09-22T08:00:11.528Z",
+        "approved_by": "system",
+        "notes": ""
+      },
+      {
+        "feature_id": "feature_1758528012320_8607ead852e1",
+        "action": "approved",
+        "timestamp": "2025-09-22T08:00:16.332Z",
+        "approved_by": "system",
+        "notes": ""
+      },
+      {
+        "feature_id": "feature_1758946372889_4bc64043b483",
+        "action": "approved",
+        "timestamp": "2025-09-27T04:13:05.296Z",
+        "approved_by": "system",
+        "notes": ""
+      },
+      {
+        "feature_id": "feature_1758946487032_0f9c9de60c88",
+        "action": "approved",
+        "timestamp": "2025-09-27T04:14:53.350Z",
+        "approved_by": "system",
+        "notes": ""
+      },
+      {
+        "feature_id": "feature_1758946499841_cd5eba625370",
+        "action": "approved",
+        "timestamp": "2025-09-27T04:15:04.506Z",
+        "approved_by": "system",
+        "notes": ""
+      },
+      {
+        "feature_id": "feature_1758946522321_07fe2cc3b8f5",
+        "action": "approved",
+        "timestamp": "2025-09-27T04:15:27.321Z",
+        "approved_by": "system",
+        "notes": ""
+      },
+      {
+        "feature_id": "feature_1758946534712_9d8329eb5565",
+        "action": "approved",
+        "timestamp": "2025-09-27T04:15:39.297Z",
+        "approved_by": "system",
+        "notes": ""
+      }
+    ],
+    "migration_stats": {
+      "features_migrated": 12,
+      "tasks_created": 9,
+      "auto_generated_tasks": 0
+    },
+    "initialization_stats": {
+      "total_initializations": 3195,
+      "total_reinitializations": 86,
+      "current_day": "2025-09-27",
+      "time_buckets": {
+        "10:00-14:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "15:00-19:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "20:00-00:59": {
+          "init": 0,
+          "reinit": 24
+        },
+        "01:00-05:59": {
+          "init": 0,
+          "reinit": 0
+        },
+        "06:00-10:59": {
+          "init": 0,
+          "reinit": 0
+        }
+      },
+      "daily_history": [
+        {
+          "date": "2025-01-03",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-16:00--12:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-11:00--7:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-6:00--2:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-1:00-03:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "04:00-08:59": {
+              "init": 1,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-04",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-15:00--11:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-10:00--6:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-5:00--1:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "00:00-04:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "05:00-09:59": {
+              "init": 1,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-05",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-14:00--10:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-9:00--5:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-4:00-00:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "01:00-05:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "06:00-10:59": {
+              "init": 1,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-06",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-13:00--9:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-8:00--4:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-3:00-01:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "02:00-06:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "07:00-11:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-07",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-12:00--8:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-7:00--3:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-2:00-02:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "03:00-07:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "08:00-12:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-08",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-11:00--7:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-6:00--2:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-1:00-03:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "04:00-08:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "09:00-13:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-09",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-10:00--6:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-5:00--1:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "00:00-04:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "05:00-09:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "10:00-14:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-10",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-9:00--5:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-4:00-00:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "01:00-05:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "06:00-10:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "11:00-15:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-11",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-8:00--4:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-3:00-01:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "02:00-06:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "07:00-11:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "12:00-16:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-12",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-7:00--3:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-2:00-02:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "03:00-07:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "08:00-12:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "13:00-17:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-13",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-6:00--2:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-1:00-03:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "04:00-08:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "09:00-13:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "14:00-18:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-14",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-5:00--1:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "00:00-04:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "05:00-09:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "10:00-14:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "15:00-19:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-15",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-4:00-00:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "01:00-05:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "06:00-10:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "11:00-15:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "16:00-20:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-16",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-3:00-01:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "02:00-06:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "07:00-11:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "12:00-16:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "17:00-21:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-17",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-2:00-02:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "03:00-07:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "08:00-12:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "13:00-17:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "18:00-22:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-18",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-1:00-03:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "04:00-08:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "09:00-13:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "14:00-18:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "19:00-23:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-19",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "00:00-04:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "05:00-09:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "10:00-14:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "15:00-19:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "20:00-00:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-20",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-23:00--19:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-18:00--14:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "-13:00--9:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-8:00--4:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-3:00-01:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-21",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-22:00--18:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "-17:00--13:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-12:00--8:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-7:00--3:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-2:00-02:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-22",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-21:00--17:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "-16:00--12:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-11:00--7:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-6:00--2:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-1:00-03:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-23",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-20:00--16:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "-15:00--11:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-10:00--6:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-5:00--1:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "00:00-04:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-24",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-19:00--15:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "-14:00--10:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-9:00--5:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-4:00-00:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "01:00-05:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-25",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-18:00--14:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "-13:00--9:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-8:00--4:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-3:00-01:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "02:00-06:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-26",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-17:00--13:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-12:00--8:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-7:00--3:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-2:00-02:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "03:00-07:59": {
+              "init": 1,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-27",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-16:00--12:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-11:00--7:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-6:00--2:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-1:00-03:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "04:00-08:59": {
+              "init": 1,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-28",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-15:00--11:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-10:00--6:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-5:00--1:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "00:00-04:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "05:00-09:59": {
+              "init": 1,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-29",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-14:00--10:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-9:00--5:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-4:00-00:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "01:00-05:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "06:00-10:59": {
+              "init": 1,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-30",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-13:00--9:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-8:00--4:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-3:00-01:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "02:00-06:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "07:00-11:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-01-31",
+          "total_init": 1,
+          "total_reinit": 0,
+          "buckets": {
+            "-12:00--8:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-7:00--3:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "-2:00-02:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "03:00-07:59": {
+              "init": 1,
+              "reinit": 0
+            },
+            "08:00-12:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        },
+        {
+          "date": "2025-09-26",
+          "total_init": 0,
+          "total_reinit": 2,
+          "buckets": {
+            "10:00-14:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "15:00-19:59": {
+              "init": 0,
+              "reinit": 2
+            },
+            "20:00-00:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "01:00-05:59": {
+              "init": 0,
+              "reinit": 0
+            },
+            "06:00-10:59": {
+              "init": 0,
+              "reinit": 0
+            }
+          }
+        }
+      ],
+      "last_reset": "2025-09-27T03:18:03.073Z",
+      "last_updated": "2025-09-27T04:42:10.445Z"
+    },
+    "total_features": 5
+  },
+  "agents": {
+    "agent_learning_system": {
+      "lastHeartbeat": "2025-09-27T04:13:57.909Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T04:13:57.909Z",
+      "sessionId": "6898526173f7c258",
+      "previousSessions": [
+        "359b2328d1ba3e13"
+      ]
+    },
+    "agent_consolidation_1758946098": {
+      "lastHeartbeat": "2025-09-27T04:08:18.679Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T04:08:18.679Z",
+      "sessionId": "34a9522eb8e1b85e",
+      "previousSessions": []
+    },
+    "continue_migration_work": {
+      "lastHeartbeat": "2025-09-27T04:11:41.798Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T04:11:41.798Z",
+      "sessionId": "319297a8780fe7e3",
+      "previousSessions": []
+    },
+    "agent_1758946372889": {
+      "lastHeartbeat": "2025-09-27T04:14:25.143Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T04:14:25.143Z",
+      "sessionId": "d512ebeed804b970",
+      "previousSessions": []
+    },
+    "agent_learning_system_5": {
+      "lastHeartbeat": "2025-09-27T04:16:48.824Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T04:16:48.824Z",
+      "sessionId": "1c2381a26b32815a",
+      "previousSessions": []
+    },
+    "agent_learning_system_6": {
+      "lastHeartbeat": "2025-09-27T04:23:04.293Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T04:23:04.293Z",
+      "sessionId": "3a35e99d164f95b1",
+      "previousSessions": []
+    },
+    "agent_1758946487032": {
+      "lastHeartbeat": "2025-09-27T04:33:20.730Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T04:33:20.730Z",
+      "sessionId": "3e08f326c3825357",
+      "previousSessions": [
+        "76ed4e5a497f4fc1"
+      ]
+    },
+    "CLAUDE_AGENT_001": {
+      "lastHeartbeat": "2025-09-27T04:42:10.444Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T04:42:10.444Z",
+      "sessionId": "fc8ea0d614adca6f",
+      "previousSessions": [
+        "3dd0737f270b11a3"
+      ]
+    }
+  },
+  "features": [
+    {
+      "id": "feature_1758946372889_4bc64043b483",
+      "title": "Stop Hook Validation Dependency Management",
+      "description": "Implement validation dependency specification and management system that defines prerequisite relationships between validation steps. Ensures proper execution order and enables intelligent parallel execution planning.",
+      "business_value": "Prevents validation failures due to incorrect execution order, enables optimal parallelization strategies, improves validation reliability, and provides clear dependency visualization for debugging",
+      "category": "enhancement",
+      "status": "approved",
+      "created_at": "2025-09-27T04:12:52.889Z",
+      "updated_at": "2025-09-27T04:13:05.296Z",
+      "suggested_by": "system",
+      "metadata": {},
+      "approved_by": "system",
+      "approval_date": "2025-09-27T04:13:05.296Z",
+      "approval_notes": ""
+    },
+    {
+      "id": "feature_1758946487032_0f9c9de60c88",
+      "title": "Stop Hook Custom Project Validation Rules",
+      "description": "Allow projects to define custom validation rules through configuration files. Enable project-specific criteria beyond standard validation (linter, build, test). Support custom commands, file checks, and conditional validation rules based on project type and technology stack.",
+      "business_value": "Provides flexibility for diverse project types and specific validation requirements. Enables projects to enforce custom quality gates and project-specific standards while maintaining stop hook compatibility.",
+      "category": "enhancement",
+      "status": "approved",
+      "created_at": "2025-09-27T04:14:47.033Z",
+      "updated_at": "2025-09-27T04:14:53.350Z",
+      "suggested_by": "system",
+      "metadata": {},
+      "approved_by": "system",
+      "approval_date": "2025-09-27T04:14:53.350Z",
+      "approval_notes": ""
+    },
+    {
+      "id": "feature_1758946499841_cd5eba625370",
+      "title": "Stop Hook Validation Performance Metrics",
+      "description": "Track and analyze validation performance metrics including execution times, failure rates, resource usage, and bottleneck identification. Provide detailed timing reports for each validation criterion and historical trend analysis to optimize validation processes.",
+      "business_value": "Enables data-driven optimization of validation processes, identifies performance bottlenecks, and provides insights for improving CI/CD pipeline efficiency. Helps teams understand validation costs and optimize for faster feedback loops.",
+      "category": "performance",
+      "status": "approved",
+      "created_at": "2025-09-27T04:14:59.841Z",
+      "updated_at": "2025-09-27T04:15:04.506Z",
+      "suggested_by": "system",
+      "metadata": {},
+      "approved_by": "system",
+      "approval_date": "2025-09-27T04:15:04.506Z",
+      "approval_notes": ""
+    },
+    {
+      "id": "feature_1758946522321_07fe2cc3b8f5",
+      "title": "Stop Hook Rollback Capabilities",
+      "description": "Implement safe rollback mechanisms when validation failures occur during stop authorization process. Create automated git state restoration, undo file changes, and restore previous working states. Include rollback history tracking and selective rollback options for specific validation criteria.",
+      "business_value": "Provides safety net during validation failures, prevents leaving codebase in broken state, and enables quick recovery from validation-induced issues. Reduces risk of stop hook validation process causing permanent damage or requiring manual cleanup.",
+      "category": "enhancement",
+      "status": "approved",
+      "created_at": "2025-09-27T04:15:22.321Z",
+      "updated_at": "2025-09-27T04:15:27.321Z",
+      "suggested_by": "system",
+      "metadata": {},
+      "approved_by": "system",
+      "approval_date": "2025-09-27T04:15:27.321Z",
+      "approval_notes": ""
+    },
+    {
+      "id": "feature_1758946534712_9d8329eb5565",
+      "title": "Stop Hook Validation History & Audit Trail",
+      "description": "Maintain comprehensive audit trail of all validation attempts, results, and authorization processes. Track validation history with timestamps, criteria results, failure reasons, and user actions. Provide searchable validation logs and historical trend analysis for compliance and debugging purposes.",
+      "business_value": "Enables compliance tracking, debugging of validation issues, and historical analysis of project quality trends. Provides audit trail for regulatory requirements and helps teams understand validation patterns and failure modes over time.",
+      "category": "enhancement",
+      "status": "approved",
+      "created_at": "2025-09-27T04:15:34.712Z",
+      "updated_at": "2025-09-27T04:15:39.297Z",
+      "suggested_by": "system",
+      "metadata": {},
+      "approved_by": "system",
+      "approval_date": "2025-09-27T04:15:39.297Z",
+      "approval_notes": ""
+    }
+  ],
+  "settings": {
+    "id_based_classification": true,
+    "auto_sort_enabled": true,
+    "sort_criteria": {
+      "primary": "id_prefix",
+      "secondary": "created_at"
+    },
+    "id_priority_order": {
+      "error_": 1,
+      "feature_": 2,
+      "subtask_": 3,
+      "test_": 4
+    }
+  }
+}
