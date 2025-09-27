@@ -550,7 +550,9 @@ const testHelpers = {
    * Wait for a specified time (for testing async operations)
    */
   async wait(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise(resolve => {
+      setTimeout(resolve, ms);
+    });
   },
 
   /**
