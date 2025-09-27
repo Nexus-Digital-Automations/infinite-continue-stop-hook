@@ -1,113 +1,83 @@
-# Stop Hook Custom Project Validation Rules
+# Custom Project Validation Rules System
 
 ## Overview
 
-Feature 2 enables projects to define custom validation rules through configuration files, extending beyond standard validation criteria (linter, build, test). This provides flexibility for diverse project types and specific validation requirements.
+The Custom Project Validation Rules system allows projects to define project-specific validation criteria beyond the standard stop-hook validation (linter, build, test). This powerful system supports custom commands, file checks, and conditional validation rules based on project type and technology stack.
 
-## Configuration File: `.claude-validation.json`
+## Features
+
+- **Flexible Rule Types**: Command execution, file existence, file content validation, conditional rules, and composite rules
+- **Technology Stack Detection**: Automatic detection of project technologies (Node.js, Python, Go, Rust, Docker, etc.)
+- **Project Type Inference**: Automatic classification (frontend, backend, infrastructure, generic)
+- **Conditional Execution**: Rules that execute based on project state or environment
+- **Parallel Execution**: Optimize validation performance with intelligent parallel execution
+- **Analytics and Monitoring**: Track rule execution performance and success rates
+- **Integration**: Seamless integration with existing stop-hook validation system
+
+## Configuration File: `.validation-rules.json`
 
 Place this file in your project root to define custom validation rules:
 
 ```json
 {
-  "version": "1.0.0",
-  "projectType": "web-application",
-  "customValidationRules": [
-    {
-      "id": "docker-security-scan",
-      "name": "Docker Security Scan",
-      "description": "Scan Docker images for vulnerabilities",
-      "command": "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image my-app:latest",
-      "enabled": true,
-      "timeout": 60000,
-      "category": "security",
-      "conditions": {
-        "fileExists": ["Dockerfile", "docker-compose.yml"],
-        "envVars": ["DOCKER_SCAN_ENABLED"],
-        "projectType": ["web-application", "microservice"]
-      },
-      "successCriteria": {
-        "exitCode": 0,
-        "outputContains": ["No vulnerabilities found"],
-        "outputNotContains": ["CRITICAL", "HIGH"]
-      },
-      "failureHandling": {
-        "retryCount": 2,
-        "retryDelay": 5000,
-        "continueOnFailure": false
-      }
+  "project_type": "backend",
+  "global_settings": {
+    "timeout_default": 30000,
+    "allow_failures": false,
+    "parallel_execution": true
+  },
+  "custom_rules": {
+    "security_audit": {
+      "type": "command",
+      "description": "Run comprehensive security audit",
+      "command": "npm audit --audit-level=high",
+      "priority": "high",
+      "requires_tech_stack": "nodejs",
+      "category": "security"
     },
-    {
-      "id": "api-documentation-check",
-      "name": "API Documentation Validation",
-      "description": "Ensure all API endpoints are documented",
-      "command": "npm run docs:validate",
-      "enabled": true,
-      "timeout": 30000,
-      "category": "documentation",
-      "conditions": {
-        "fileExists": ["package.json"],
-        "scriptExists": ["docs:validate"],
-        "directoryExists": ["src/api", "routes"]
-      },
-      "successCriteria": {
-        "exitCode": 0,
-        "outputContains": ["All endpoints documented"]
-      }
+    "documentation_check": {
+      "type": "file_exists",
+      "description": "Ensure required documentation exists",
+      "files": ["README.md", "CHANGELOG.md", "docs/api.md"],
+      "priority": "normal"
     },
-    {
-      "id": "performance-benchmarks",
-      "name": "Performance Benchmark Tests",
-      "description": "Run performance tests and validate benchmarks",
-      "command": "npm run test:performance",
-      "enabled": true,
-      "timeout": 120000,
-      "category": "performance",
-      "conditions": {
-        "environmentVar": "RUN_PERFORMANCE_TESTS",
-        "fileExists": ["performance/benchmarks.js"]
-      },
-      "successCriteria": {
-        "exitCode": 0,
-        "outputMatches": ["Response time: \\d+ms < 500ms"]
-      }
+    "no_debug_code": {
+      "type": "file_content",
+      "description": "Ensure no debug statements in production code",
+      "file": "src/**/*.js",
+      "pattern": "(console\\.log|debugger;)",
+      "should_match": false
     },
-    {
-      "id": "license-compliance",
-      "name": "License Compliance Check",
-      "description": "Verify all dependencies have compatible licenses",
-      "command": "npx license-checker --onlyAllow 'MIT;Apache-2.0;BSD-2-Clause;BSD-3-Clause'",
-      "enabled": true,
-      "timeout": 45000,
-      "category": "compliance",
-      "conditions": {
-        "fileExists": ["package.json"]
+    "environment_specific": {
+      "type": "conditional",
+      "description": "Run additional checks for production environment",
+      "condition": {
+        "type": "environment_var",
+        "variable": "NODE_ENV",
+        "value": "production"
       },
-      "successCriteria": {
-        "exitCode": 0
-      }
+      "rules": [
+        {
+          "type": "command",
+          "command": "npm audit --production --audit-level=high"
+        }
+      ]
+    },
+    "comprehensive_checks": {
+      "type": "composite",
+      "description": "Run multiple code quality checks",
+      "operator": "and",
+      "rules": [
+        {
+          "type": "command",
+          "command": "npm run lint"
+        },
+        {
+          "type": "command",
+          "command": "npm run test:coverage"
+        }
+      ]
     }
-  ],
-  "validationGroups": [
-    {
-      "name": "Security Validation",
-      "rules": ["docker-security-scan", "license-compliance"],
-      "runInParallel": true,
-      "description": "Security-related validation rules"
-    },
-    {
-      "name": "Quality Assurance",
-      "rules": ["api-documentation-check", "performance-benchmarks"],
-      "runInParallel": false,
-      "description": "Quality and performance validation rules"
-    }
-  ],
-  "globalSettings": {
-    "maxConcurrentRules": 3,
-    "defaultTimeout": 60000,
-    "enableCaching": true,
-    "cacheExpiryMinutes": 30,
-    "logLevel": "info"
   }
 }
 ```
@@ -201,39 +171,31 @@ Predefined project types for conditional rule execution:
 
 ## CLI Commands
 
-### Manage Custom Validation Rules
+### Load and Manage Custom Rules
 
 ```bash
-# List all custom validation rules
-timeout 10s node taskmanager-api.js list-custom-rules
+# Load custom validation rules from configuration
+timeout 10s node "/path/to/taskmanager-api.js" load-custom-validation-rules
 
-# Get specific custom rule details
-timeout 10s node taskmanager-api.js get-custom-rule <ruleId>
+# Get all custom validation rules with status
+timeout 10s node "/path/to/taskmanager-api.js" get-custom-validation-rules
 
-# Test custom rule execution
-timeout 10s node taskmanager-api.js test-custom-rule <ruleId>
+# Execute specific custom validation rule
+timeout 10s node "/path/to/taskmanager-api.js" execute-custom-validation-rule <ruleId>
 
-# Validate custom rules configuration
-timeout 10s node taskmanager-api.js validate-custom-config
+# Execute all enabled custom validation rules
+timeout 10s node "/path/to/taskmanager-api.js" execute-all-custom-validation-rules
 
-# Run all custom rules
-timeout 10s node taskmanager-api.js run-custom-rules
+# Generate example configuration file
+timeout 10s node "/path/to/taskmanager-api.js" generate-custom-validation-config
 
-# Run specific custom rule group
-timeout 10s node taskmanager-api.js run-custom-group <groupName>
+# Get execution analytics and performance metrics
+timeout 10s node "/path/to/taskmanager-api.js" get-custom-validation-analytics
 ```
 
 ### Integration with Stop Hook Validation
 
-Custom rules are automatically integrated into the stop hook validation process:
-
-```bash
-# Custom rules are included in standard validation
-timeout 10s node taskmanager-api.js validate-criterion <authKey> custom-validation
-
-# Or run custom rules as part of parallel validation
-timeout 10s node taskmanager-api.js validate-criteria-parallel <authKey>
-```
+Custom rules integrate seamlessly with the existing stop-hook validation system and can be executed alongside standard validation criteria.
 
 ## Examples
 
@@ -241,32 +203,29 @@ timeout 10s node taskmanager-api.js validate-criteria-parallel <authKey>
 
 ```json
 {
-  "projectType": "web-application",
-  "customValidationRules": [
-    {
-      "id": "bundle-size-check",
-      "name": "Bundle Size Validation",
+  "project_type": "frontend",
+  "custom_rules": {
+    "bundle_size_check": {
+      "type": "command",
+      "description": "Validate bundle size is under limit",
       "command": "npm run analyze:bundle",
-      "conditions": {
-        "fileExists": ["webpack.config.js", "package.json"]
-      },
-      "successCriteria": {
-        "outputMatches": ["Bundle size: \\d+KB < 500KB"]
-      }
+      "requires_tech_stack": ["nodejs", "frontend"],
+      "category": "performance"
     },
-    {
-      "id": "accessibility-audit",
-      "name": "Accessibility Compliance",
+    "accessibility_audit": {
+      "type": "command",
+      "description": "Run accessibility compliance tests",
       "command": "npm run test:a11y",
-      "conditions": {
-        "scriptExists": ["test:a11y"]
-      },
-      "successCriteria": {
-        "exitCode": 0,
-        "outputContains": ["0 accessibility violations"]
-      }
+      "requires_tech_stack": "nodejs",
+      "category": "quality"
+    },
+    "webpack_config_check": {
+      "type": "file_exists",
+      "description": "Ensure webpack configuration exists",
+      "files": ["webpack.config.js", "src/index.js"],
+      "requires_tech_stack": "frontend"
     }
-  ]
+  }
 }
 ```
 
@@ -274,65 +233,132 @@ timeout 10s node taskmanager-api.js validate-criteria-parallel <authKey>
 
 ```json
 {
-  "projectType": "api-server",
-  "customValidationRules": [
-    {
-      "id": "api-health-check",
-      "name": "API Health Validation",
-      "command": "curl -f http://localhost:3000/health",
-      "conditions": {
-        "envVars": ["PORT"]
-      },
-      "successCriteria": {
-        "exitCode": 0,
-        "outputContains": ["\"status\":\"healthy\""]
-      }
+  "project_type": "backend",
+  "custom_rules": {
+    "security_audit": {
+      "type": "command",
+      "description": "Run security audit on dependencies",
+      "command": "npm audit --audit-level=high",
+      "requires_tech_stack": "nodejs",
+      "category": "security"
     },
-    {
-      "id": "database-migration-check",
-      "name": "Database Migration Validation",
+    "database_migration_check": {
+      "type": "command",
+      "description": "Validate database migrations",
       "command": "npm run db:validate",
-      "conditions": {
-        "fileExists": ["migrations/", "knexfile.js"]
+      "requires_tech_stack": "nodejs"
+    },
+    "api_documentation": {
+      "type": "file_exists",
+      "description": "Ensure API documentation exists",
+      "files": ["docs/api.md", "swagger.json"],
+      "category": "documentation"
+    },
+    "production_config": {
+      "type": "conditional",
+      "description": "Production-specific validations",
+      "condition": {
+        "type": "environment_var",
+        "variable": "NODE_ENV",
+        "value": "production"
       },
-      "successCriteria": {
-        "exitCode": 0,
-        "outputContains": ["All migrations applied"]
-      }
+      "rules": [
+        {
+          "type": "file_exists",
+          "files": [".env.production"]
+        },
+        {
+          "type": "command",
+          "command": "npm run build"
+        }
+      ]
     }
-  ]
+  }
 }
 ```
 
-## Integration with Validation Dependency System
+## Rule Types Reference
 
-Custom rules integrate with Feature 1's dependency management:
+### 1. Command Rules (`type: "command"`)
+Execute shell commands and validate their success.
 
-- Custom rules can declare dependencies on standard validation criteria
-- Custom rules can be grouped and executed in parallel where appropriate
-- Resource conflict detection prevents resource-intensive custom rules from running simultaneously
+**Options:**
+- `command`: Shell command to execute
+- `working_directory`: Directory to execute command in
+- `environment`: Additional environment variables
+- `allow_failure`: Whether to continue if command fails
 
-## Security Considerations
+### 2. File Existence Rules (`type: "file_exists"`)
+Validate that required files exist.
 
-- Commands are executed in sandboxed environment
-- Environment variable access is controlled
-- File system access is limited to project directory
-- Network access can be restricted via configuration
-- All command execution is logged for audit purposes
+**Options:**
+- `files`: Array of file paths (supports glob patterns)
+- `allow_failure`: Whether to continue if files are missing
 
-## Performance Optimization
+### 3. File Content Rules (`type: "file_content"`)
+Validate file contents against patterns.
 
-- Rule execution is cached based on file changes
-- Conditional execution prevents unnecessary rule runs
-- Parallel execution groups optimize total validation time
-- Resource usage monitoring prevents system overload
+**Options:**
+- `file`: File path to check
+- `pattern`: Regular expression pattern
+- `should_match`: Whether pattern should be found (true) or absent (false)
+- `flags`: Regex flags (i, g, m, etc.)
 
-## Error Handling and Debugging
+### 4. Conditional Rules (`type: "conditional"`)
+Execute rules based on conditions.
 
-- Detailed logging of rule execution
-- Failure reason categorization
-- Retry mechanisms for transient failures
-- Integration with validation audit trail (Feature 5)
-- Performance metrics tracking (Feature 3)
+**Condition Types:**
+- `tech_stack`: Check if technology is detected
+- `project_type`: Check project type
+- `file_exists`: Check if file exists
+- `environment_var`: Check environment variable
+- `command_succeeds`: Check if command succeeds
+
+### 5. Composite Rules (`type: "composite"`)
+Combine multiple rules with logical operators.
+
+**Options:**
+- `operator`: "and" (all must pass) or "or" (any can pass)
+- `rules`: Array of sub-rules to execute
+
+## Technology Stack Detection
+
+The system automatically detects technologies based on file patterns:
+
+| Technology | Detection Files |
+|------------|----------------|
+| Node.js | `package.json`, `npm-shrinkwrap.json`, `yarn.lock` |
+| Python | `requirements.txt`, `setup.py`, `pyproject.toml` |
+| Go | `go.mod`, `go.sum` |
+| Rust | `Cargo.toml`, `Cargo.lock` |
+| Docker | `Dockerfile`, `docker-compose.yml` |
+| Frontend | `webpack.config.js`, `vite.config.js` |
+
+## Integration with Existing System
+
+The Custom Validation Rules system integrates seamlessly with the existing stop-hook validation infrastructure:
+
+- **CLI Integration**: All commands available through TaskManager API
+- **Dependency Management**: Works with existing ValidationDependencyManager
+- **Parallel Execution**: Supports intelligent parallel execution planning
+- **Analytics**: Comprehensive execution tracking and performance metrics
+- **Error Handling**: Consistent error reporting and logging
+
+## Best Practices
+
+1. **Use Technology Stack Requirements**: Ensure rules only run on appropriate projects
+2. **Set Reasonable Timeouts**: Balance thoroughness with performance
+3. **Enable Parallelization**: Mark independent rules as parallelizable
+4. **Provide Clear Descriptions**: Help developers understand rule purposes
+5. **Test Rule Configurations**: Validate rules work in different environments
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Rules Not Loading**: Check JSON syntax and file permissions
+2. **Rules Not Executing**: Verify technology stack and project type requirements
+3. **Command Failures**: Check command syntax and system permissions
+4. **Performance Issues**: Enable parallelization and optimize command execution
 
 This comprehensive custom validation system provides the flexibility needed for diverse project types while maintaining security and performance standards.

@@ -1,0 +1,24 @@
+{
+  "id": "snapshot_1758949943125_m8jkl5bnj",
+  "timestamp": "2025-09-27T05:12:23.241Z",
+  "description": "Validation state snapshot",
+  "gitState": {
+    "commitHash": "5356de315b38fff815ef223f7a2b48a7d880baeb",
+    "branch": "main",
+    "hasUncommittedChanges": true,
+    "stashCount": 1,
+    "stashMessage": "validation-snapshot-snapshot_1758949943125_m8jkl5bnj"
+  },
+  "stashCreated": true,
+  "criticalFiles": [
+    "package.json",
+    "package-lock.json",
+    "yarn.lock",
+    "FEATURES.json",
+    "TASKS.json",
+    ".env",
+    ".env.local"
+  ],
+  "validationAttempt": "unknown",
+  "projectRoot": "/Users/jeremyparker/infinite-continue-stop-hook"
+}
