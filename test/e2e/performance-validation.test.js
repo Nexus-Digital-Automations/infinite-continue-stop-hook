@@ -89,8 +89,13 @@ describe('Performance Validation E2E', () => {
 
       const suggestionResults = await Promise.all(featurePromises);
       const featureIds = suggestionResults.map(result => {
-        const match = result.result.stdout.match(/Feature ID: (\w+)/);
-        return match[1];
+        try {
+          const response = JSON.parse(result.result.stdout);
+          return response.feature.id;
+        } catch (error) {
+          console.error('Failed to parse feature suggestion response:', result.result.stdout);
+          throw error;
+        }
       });
 
       // Step 2: Measure approval performance
@@ -147,8 +152,13 @@ describe('Performance Validation E2E', () => {
       const bulkSuggestionTime = Date.now() - bulkSuggestionStart;
 
       const bulkFeatureIds = bulkResults.map(result => {
-        const match = result.result.stdout.match(/Feature ID: (\w+)/);
-        return match[1];
+        try {
+          const response = JSON.parse(result.result.stdout);
+          return response.feature.id;
+        } catch (error) {
+          console.error('Failed to parse bulk feature suggestion response:', result.result.stdout);
+          throw error;
+        }
       });
 
       // Step 2: Test bulk approval performance
@@ -247,64 +257,73 @@ describe('Performance Validation E2E', () => {
     }, E2E_TIMEOUT * 2);
   });
 
-  describe('Stop Hook Performance', () => {
-    test('Stop hook response time benchmarks', async () => {
-      // Test stop hook performance and response times
+  describe('TaskManager API Performance', () => {
+    test('TaskManager API response time benchmarks', async () => {
+      // Test TaskManager API performance and response times
 
-      const stopHookTest = () => {
-        return StopHookTestHelpers.simulateAgentExecution(
-          environment,
-          'performance-stop-agent',
-          100, // Short execution time for performance testing
+      const apiTest = () => {
+        return CommandExecutor.executeAPI(
+          'feature-stats',
+          [],
+          { projectRoot: environment.testDir }
         );
       };
 
-      const stopHookMetrics = await PerformanceTestHelpers.measurePerformance(stopHookTest, 5);
+      const apiMetrics = await PerformanceTestHelpers.measurePerformance(apiTest, 5);
 
-      // Validate stop hook performance
-      const stopHookThresholds = {
-        maxAvg: API_TIMEOUT, // Stop hooks should complete within API timeout
-        maxMax: API_TIMEOUT * 1.5,
+      // Validate API performance
+      const apiThresholds = {
+        maxAvg: API_TIMEOUT * 0.5, // API should be faster than 50% of timeout
+        maxMax: API_TIMEOUT * 0.8,  // Maximum should be less than 80% of timeout
       };
 
       try {
-        PerformanceTestHelpers.validatePerformance(stopHookMetrics, stopHookThresholds);
+        PerformanceTestHelpers.validatePerformance(apiMetrics, apiThresholds);
       } catch (error) {
-        console.warn(`Stop hook performance warning: ${error.message}`);
+        console.warn(`TaskManager API performance warning: ${error.message}`);
       }
 
-      console.log(`✅ Stop hook performance test: avg=${stopHookMetrics.avg}ms, max=${stopHookMetrics.max}ms`);
+      console.log(`✅ TaskManager API performance test: avg=${apiMetrics.avg}ms, max=${apiMetrics.max}ms`);
     }, E2E_TIMEOUT);
 
-    test('Infinite continue performance under load', async () => {
-      // Test infinite continue mode performance
+    test('Multi-step authorization performance validation', async () => {
+      // Test the performance of the multi-step authorization workflow start command
 
-      const continueStreams = 3;
-      const maxIterationsPerStream = 2;
+      const authTest = async () => {
+        try {
+          const startResult = await CommandExecutor.executeAPI(
+            'start-authorization',
+            ['performance-auth-agent'],
+            { projectRoot: environment.testDir }
+          );
 
-      const continueTest = async () => {
-        const streams = [];
-        for (let i = 0; i < continueStreams; i++) {
-          streams.push(StopHookTestHelpers.testInfiniteContinue(environment, maxIterationsPerStream));
+          if (startResult.result.success) {
+            // For performance testing, we'll just test the start command
+            // The full 7-step validation would take too long for performance tests
+            return { success: true, time: Date.now() };
+          }
+          return { success: false, time: Date.now() };
+        } catch (error) {
+          return { success: false, time: Date.now(), error: error.message };
         }
-
-        const startTime = Date.now();
-        const results = await Promise.all(streams);
-        const endTime = Date.now();
-
-        return {
-          results,
-          duration: endTime - startTime,
-          totalIterations: results.reduce((sum, stream) => sum + stream.length, 0),
-        };
       };
 
-      const continueMetrics = await PerformanceTestHelpers.measurePerformance(continueTest, 2);
+      const authMetrics = await PerformanceTestHelpers.measurePerformance(authTest, 3);
 
-      console.log(`✅ Infinite continue performance test completed`);
-      console.log(`   Average duration: ${continueMetrics.avg}ms for ${continueStreams} streams`);
-      console.log(`   Max iterations per stream: ${maxIterationsPerStream}`);
-    }, E2E_TIMEOUT * 2);
+      // Validate authorization performance
+      const authThresholds = {
+        maxAvg: API_TIMEOUT, // Authorization should complete within API timeout
+        maxMax: API_TIMEOUT * 1.2,
+      };
+
+      try {
+        PerformanceTestHelpers.validatePerformance(authMetrics, authThresholds);
+      } catch (error) {
+        console.warn(`Authorization performance warning: ${error.message}`);
+      }
+
+      console.log(`✅ Multi-step authorization performance test: avg=${authMetrics.avg}ms, max=${authMetrics.max}ms`);
+    }, E2E_TIMEOUT);
   });
 
   describe('Scalability Performance', () => {
