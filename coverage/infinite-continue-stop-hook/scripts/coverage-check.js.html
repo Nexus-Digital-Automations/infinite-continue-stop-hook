@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/488</span>
+                <span class='fraction'>0/487</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/488</span>
+                <span class='fraction'>0/487</span>
             </div>
         
             
@@ -1037,8 +1037,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >#!/usr/bin/env node</span></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >/**</span>
 <span class="cstat-no" title="statement not covered" > * Standalone Coverage Threshold Enforcement Script</span>
 <span class="cstat-no" title="statement not covered" > *</span>
@@ -1108,7 +1107,7 @@
 <span class="cstat-no" title="statement not covered" >  static table(headers, rows) {</span>
 <span class="cstat-no" title="statement not covered" >    // Simple table formatter</span>
 <span class="cstat-no" title="statement not covered" >    const maxLengths = headers.map((header, i) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >      Math.max(header.length, ...rows.map(row =&gt; String(row[i] || '').length))</span>
+<span class="cstat-no" title="statement not covered" >      Math.max(header.length, ...rows.map(row =&gt; String(row[i] || '').length)),</span>
 <span class="cstat-no" title="statement not covered" >    );</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    const separator = '─'.repeat(maxLengths.reduce((sum, len) =&gt; sum + len + 3, 1));</span>
@@ -1241,7 +1240,7 @@
 <span class="cstat-no" title="statement not covered" >          actual,</span>
 <span class="cstat-no" title="statement not covered" >          required: critical,</span>
 <span class="cstat-no" title="statement not covered" >          severity: 'critical',</span>
-<span class="cstat-no" title="statement not covered" >          message: `${metric} coverage ${actual.toFixed(2)}% is below critical threshold ${critical}%`</span>
+<span class="cstat-no" title="statement not covered" >          message: `${metric} coverage ${actual.toFixed(2)}% is below critical threshold ${critical}%`,</span>
 <span class="cstat-no" title="statement not covered" >        });</span>
 <span class="cstat-no" title="statement not covered" >      } else if (actual &lt; threshold) {</span>
 <span class="cstat-no" title="statement not covered" >        warnings.push({</span>
@@ -1249,7 +1248,7 @@
 <span class="cstat-no" title="statement not covered" >          actual,</span>
 <span class="cstat-no" title="statement not covered" >          required: threshold,</span>
 <span class="cstat-no" title="statement not covered" >          severity: 'warning',</span>
-<span class="cstat-no" title="statement not covered" >          message: `${metric} coverage ${actual.toFixed(2)}% is below target threshold ${threshold}%`</span>
+<span class="cstat-no" title="statement not covered" >          message: `${metric} coverage ${actual.toFixed(2)}% is below target threshold ${threshold}%`,</span>
 <span class="cstat-no" title="statement not covered" >        });</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
@@ -1295,7 +1294,7 @@
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    fs.writeFileSync(</span>
 <span class="cstat-no" title="statement not covered" >      path.join(badgeDir, 'data.json'),</span>
-<span class="cstat-no" title="statement not covered" >      JSON.stringify(badgeData, null, 2)</span>
+<span class="cstat-no" title="statement not covered" >      JSON.stringify(badgeData, null, 2),</span>
 <span class="cstat-no" title="statement not covered" >    );</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    CoverageLogger.success(`Coverage badge generated: ${overallCoverage}%`);</span>
@@ -1305,11 +1304,11 @@
 <span class="cstat-no" title="statement not covered" >   * Get badge color based on coverage percentage</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  getBadgeColor(percentage) {</span>
-<span class="cstat-no" title="statement not covered" >    if (percentage &gt;= 90) return 'brightgreen';</span>
-<span class="cstat-no" title="statement not covered" >    if (percentage &gt;= 80) return 'green';</span>
-<span class="cstat-no" title="statement not covered" >    if (percentage &gt;= 70) return 'yellowgreen';</span>
-<span class="cstat-no" title="statement not covered" >    if (percentage &gt;= 60) return 'yellow';</span>
-<span class="cstat-no" title="statement not covered" >    if (percentage &gt;= 50) return 'orange';</span>
+<span class="cstat-no" title="statement not covered" >    if (percentage &gt;= 90) {return 'brightgreen';}</span>
+<span class="cstat-no" title="statement not covered" >    if (percentage &gt;= 80) {return 'green';}</span>
+<span class="cstat-no" title="statement not covered" >    if (percentage &gt;= 70) {return 'yellowgreen';}</span>
+<span class="cstat-no" title="statement not covered" >    if (percentage &gt;= 60) {return 'yellow';}</span>
+<span class="cstat-no" title="statement not covered" >    if (percentage &gt;= 50) {return 'orange';}</span>
 <span class="cstat-no" title="statement not covered" >    return 'red';</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -1337,14 +1336,14 @@
 <span class="cstat-no" title="statement not covered" >          this.results.summary.branches.pct +</span>
 <span class="cstat-no" title="statement not covered" >          this.results.summary.functions.pct +</span>
 <span class="cstat-no" title="statement not covered" >          this.results.summary.lines.pct</span>
-<span class="cstat-no" title="statement not covered" >        ) / 4)</span>
+<span class="cstat-no" title="statement not covered" >        ) / 4),</span>
 <span class="cstat-no" title="statement not covered" >      } : null,</span>
 <span class="cstat-no" title="statement not covered" >      git: this.getGitInfo(),</span>
 <span class="cstat-no" title="statement not covered" >      environment: {</span>
 <span class="cstat-no" title="statement not covered" >        node_version: process.version,</span>
 <span class="cstat-no" title="statement not covered" >        ci: Boolean(process.env.CI),</span>
 <span class="cstat-no" title="statement not covered" >        strict_mode: this.config.strict_mode,</span>
-<span class="cstat-no" title="statement not covered" >      }</span>
+<span class="cstat-no" title="statement not covered" >      },</span>
 <span class="cstat-no" title="statement not covered" >    };</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    // Ensure coverage directory exists</span>
@@ -1385,7 +1384,7 @@
 <span class="cstat-no" title="statement not covered" >        `${actual.toFixed(2)}%`,</span>
 <span class="cstat-no" title="statement not covered" >        `${threshold}%`,</span>
 <span class="cstat-no" title="statement not covered" >        `${critical}%`,</span>
-<span class="cstat-no" title="statement not covered" >        status</span>
+<span class="cstat-no" title="statement not covered" >        status,</span>
 <span class="cstat-no" title="statement not covered" >      ];</span>
 <span class="cstat-no" title="statement not covered" >    });</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -1490,7 +1489,7 @@
 <span class="cstat-no" title="statement not covered" >    process.exit(0);</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  let config = { ...DEFAULT_CONFIG };</span>
+<span class="cstat-no" title="statement not covered" >  const config = { ...DEFAULT_CONFIG };</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  // Parse command line arguments</span>
 <span class="cstat-no" title="statement not covered" >  if (args.includes('--strict')) {</span>
@@ -1524,14 +1523,15 @@
 <span class="cstat-no" title="statement not covered" >  });</span>
 <span class="cstat-no" title="statement not covered" >}</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >module.exports = CoverageThresholdChecker;</span></pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >module.exports = CoverageThresholdChecker;</span>
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-23T15:15:18.905Z
+                at 2025-09-27T04:32:17.212Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

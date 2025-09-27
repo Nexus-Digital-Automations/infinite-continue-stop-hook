@@ -1,40 +1,40 @@
 {
   "metadata": {
-    "timestamp": "2025-09-26T21:50:47.795Z",
+    "timestamp": "2025-09-27T04:32:17.059Z",
     "reporter": "jest-json-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System"
   },
   "summary": {
-    "numTotalTestSuites": 5,
+    "numTotalTestSuites": 7,
     "numPassedTestSuites": 0,
-    "numFailedTestSuites": 5,
-    "numPendingTestSuites": 0,
-    "numTotalTests": 41,
-    "numPassedTests": 5,
-    "numFailedTests": 36,
-    "numPendingTests": 0,
+    "numFailedTestSuites": 1,
+    "numPendingTestSuites": 6,
+    "numTotalTests": 102,
+    "numPassedTests": 9,
+    "numFailedTests": 1,
+    "numPendingTests": 92,
     "numTodoTests": 0,
-    "startTime": 1758923381777,
-    "endTime": 1758923447795,
-    "duration": 66018,
+    "startTime": 1758947536503,
+    "endTime": 1758947537059,
+    "duration": 556,
     "success": false
   },
   "testResults": [
     {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/complete-workflows.test.js",
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/stress-and-recovery.test.js",
       "displayName": {
         "color": "white",
-        "name": "e2e"
+        "name": "integration"
       },
-      "status": "failed",
-      "startTime": 1758923382132,
-      "endTime": 1758923390555,
-      "duration": 8423,
-      "numTests": 6,
+      "status": "passed",
+      "startTime": 1758947536667,
+      "endTime": 1758947536798,
+      "duration": 131,
+      "numTests": 14,
       "numPassingTests": 0,
-      "numFailingTests": 6,
-      "numPendingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 14,
       "snapshot": {
         "added": 0,
         "matched": 0,
@@ -45,162 +45,1249 @@
       "testCases": [
         {
           "ancestorTitles": [
-            "Complete System Workflows E2E",
-            "Feature Lifecycle Workflow"
+            "Stress Testing and Error Recovery Integration Tests",
+            "Concurrent Operations Testing"
           ],
-          "title": "Complete feature suggestion to implementation workflow",
-          "fullName": "Complete System Workflows E2E Feature Lifecycle Workflow Complete feature suggestion to implementation workflow",
-          "status": "failed",
-          "duration": 1213,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Complete System Workflows E2E",
-            "Feature Lifecycle Workflow"
-          ],
-          "title": "Feature rejection workflow",
-          "fullName": "Complete System Workflows E2E Feature Lifecycle Workflow Feature rejection workflow",
-          "status": "failed",
-          "duration": 2487,
+          "title": "should handle massive concurrent feature suggestions",
+          "fullName": "Stress Testing and Error Recovery Integration Tests Concurrent Operations Testing should handle massive concurrent feature suggestions",
+          "status": "pending",
+          "duration": 0,
           "numPassingAsserts": 0,
           "location": null
         },
         {
           "ancestorTitles": [
-            "Complete System Workflows E2E",
-            "System Integration Workflow"
+            "Stress Testing and Error Recovery Integration Tests",
+            "Concurrent Operations Testing"
           ],
-          "title": "Complete system startup to shutdown workflow",
-          "fullName": "Complete System Workflows E2E System Integration Workflow Complete system startup to shutdown workflow",
-          "status": "failed",
-          "duration": 1075,
-          "numPassingAsserts": 1,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Complete System Workflows E2E",
-            "System Integration Workflow"
-          ],
-          "title": "Error recovery workflow",
-          "fullName": "Complete System Workflows E2E System Integration Workflow Error recovery workflow",
-          "status": "failed",
-          "duration": 1642,
+          "title": "should handle mixed concurrent operations without conflicts",
+          "fullName": "Stress Testing and Error Recovery Integration Tests Concurrent Operations Testing should handle mixed concurrent operations without conflicts",
+          "status": "pending",
+          "duration": 0,
           "numPassingAsserts": 0,
           "location": null
         },
         {
           "ancestorTitles": [
-            "Complete System Workflows E2E",
-            "User Experience Workflow"
+            "Stress Testing and Error Recovery Integration Tests",
+            "Concurrent Operations Testing"
           ],
-          "title": "Complete user journey from discovery to completion",
-          "fullName": "Complete System Workflows E2E User Experience Workflow Complete user journey from discovery to completion",
-          "status": "failed",
-          "duration": 837,
+          "title": "should prevent race conditions in bulk operations",
+          "fullName": "Stress Testing and Error Recovery Integration Tests Concurrent Operations Testing should prevent race conditions in bulk operations",
+          "status": "pending",
+          "duration": 0,
           "numPassingAsserts": 0,
           "location": null
         },
         {
           "ancestorTitles": [
-            "Complete System Workflows E2E",
-            "User Experience Workflow"
+            "Stress Testing and Error Recovery Integration Tests",
+            "Concurrent Operations Testing"
           ],
-          "title": "Multi-stakeholder approval workflow",
-          "fullName": "Complete System Workflows E2E User Experience Workflow Multi-stakeholder approval workflow",
-          "status": "failed",
-          "duration": 854,
+          "title": "should handle concurrent agent operations safely",
+          "fullName": "Stress Testing and Error Recovery Integration Tests Concurrent Operations Testing should handle concurrent agent operations safely",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Stress Testing and Error Recovery Integration Tests",
+            "Error Recovery Testing"
+          ],
+          "title": "should recover from corrupted FEATURES.json file",
+          "fullName": "Stress Testing and Error Recovery Integration Tests Error Recovery Testing should recover from corrupted FEATURES.json file",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Stress Testing and Error Recovery Integration Tests",
+            "Error Recovery Testing"
+          ],
+          "title": "should handle sudden file deletion during operations",
+          "fullName": "Stress Testing and Error Recovery Integration Tests Error Recovery Testing should handle sudden file deletion during operations",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Stress Testing and Error Recovery Integration Tests",
+            "Error Recovery Testing"
+          ],
+          "title": "should handle invalid JSON structure gracefully",
+          "fullName": "Stress Testing and Error Recovery Integration Tests Error Recovery Testing should handle invalid JSON structure gracefully",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Stress Testing and Error Recovery Integration Tests",
+            "Error Recovery Testing"
+          ],
+          "title": "should handle partial write failures and data corruption",
+          "fullName": "Stress Testing and Error Recovery Integration Tests Error Recovery Testing should handle partial write failures and data corruption",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Stress Testing and Error Recovery Integration Tests",
+            "Error Recovery Testing"
+          ],
+          "title": "should maintain consistency during system interruption simulation",
+          "fullName": "Stress Testing and Error Recovery Integration Tests Error Recovery Testing should maintain consistency during system interruption simulation",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Stress Testing and Error Recovery Integration Tests",
+            "Performance Stress Testing"
+          ],
+          "title": "should handle large dataset operations efficiently",
+          "fullName": "Stress Testing and Error Recovery Integration Tests Performance Stress Testing should handle large dataset operations efficiently",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Stress Testing and Error Recovery Integration Tests",
+            "Performance Stress Testing"
+          ],
+          "title": "should handle rapid sequential operations without degradation",
+          "fullName": "Stress Testing and Error Recovery Integration Tests Performance Stress Testing should handle rapid sequential operations without degradation",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Stress Testing and Error Recovery Integration Tests",
+            "Performance Stress Testing"
+          ],
+          "title": "should maintain performance under mixed load patterns",
+          "fullName": "Stress Testing and Error Recovery Integration Tests Performance Stress Testing should maintain performance under mixed load patterns",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Stress Testing and Error Recovery Integration Tests",
+            "Resource Cleanup and Memory Testing"
+          ],
+          "title": "should properly clean up resources after operations",
+          "fullName": "Stress Testing and Error Recovery Integration Tests Resource Cleanup and Memory Testing should properly clean up resources after operations",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Stress Testing and Error Recovery Integration Tests",
+            "Resource Cleanup and Memory Testing"
+          ],
+          "title": "should handle cleanup after error scenarios",
+          "fullName": "Stress Testing and Error Recovery Integration Tests Resource Cleanup and Memory Testing should handle cleanup after error scenarios",
+          "status": "pending",
+          "duration": 0,
           "numPassingAsserts": 0,
           "location": null
         }
       ],
-      "failureDetails": [
-        {
-          "title": "Complete feature suggestion to implementation workflow",
-          "fullName": "Complete System Workflows E2E Feature Lifecycle Workflow Complete feature suggestion to implementation workflow",
-          "failureMessages": [
-            "Error: Feature feature_1758923383614_a269e6b9a565 not found\n    at Function.validateFeatureStatus (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:439:13)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/complete-workflows.test.js:58:21)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "Feature rejection workflow",
-          "fullName": "Complete System Workflows E2E Feature Lifecycle Workflow Feature rejection workflow",
-          "failureMessages": [
-            "Error: Feature feature_1758923384219_efa09b6d5641 not found\n    at Function.validateFeatureStatus (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:439:13)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/complete-workflows.test.js:124:23)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "Complete system startup to shutdown workflow",
-          "fullName": "Complete System Workflows E2E System Integration Workflow Complete system startup to shutdown workflow",
-          "failureMessages": [
-            "Error: Expected 3 features but got 0 \n    at Function.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:640:13)\n    at Object.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/complete-workflows.test.js:167:21)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "Error recovery workflow",
-          "fullName": "Complete System Workflows E2E System Integration Workflow Error recovery workflow",
-          "failureMessages": [
-            "Error: Expected 1 features but got 0 \n    at Function.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:640:13)\n    at Object.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/complete-workflows.test.js:233:21)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "Complete user journey from discovery to completion",
-          "fullName": "Complete System Workflows E2E User Experience Workflow Complete user journey from discovery to completion",
-          "failureMessages": [
-            "Error: Command failed: timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js feature-details feature_1758923389455_acf73e44cbfe --project-root /Users/jeremyparker/infinite-continue-stop-hook/test/test-data/e2e-complete-workflows-551b622340f64c44\n    at ChildProcess.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:248:25)\n    at ChildProcess.emit (node:events:531:35)\n    at maybeClose (node:internal/child_process:1101:16)\n    at Process.ChildProcess._handle.onexit (node:internal/child_process:304:5)"
-          ],
-          "failureDetails": [
-            {
-              "result": {
-                "code": 1,
-                "stdout": "",
-                "stderr": "{\n  \"success\": false,\n  \"error\": \"Unknown command: feature-details. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, start-authorization, validate-criterion, complete-authorization, authorize-stop, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents, store-lesson, search-lessons, store-error, find-similar-errors, get-relevant-lessons, rag-analytics\",\n  \"command\": \"feature-details\",\n  \"timestamp\": \"2025-09-26T21:49:49.685Z\",\n  \"guide\": {\n    \"message\": \"Feature Management API Guide - autonomous-task-management\",\n    \"helpText\": \"For complete API usage guidance, run the guide command\",\n    \"commands\": [\n      \"guide - Get comprehensive guide\",\n      \"methods - List available methods\",\n      \"suggest-feature - Create feature suggestion\",\n      \"approve-feature - Approve feature\",\n      \"reject-feature - Reject feature\",\n      \"list-features - List features\",\n      \"feature-stats - Get feature statistics\",\n      \"get-initialization-stats - Get initialization usage statistics by time buckets\"\n    ]\n  }\n}\nFatal error: Autonomous Task Management API execution failed\n/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js:3593\n    throw new Error('Autonomous Task Management API execution failed');\n          ^\n\nError: Autonomous Task Management API execution failed\n    at main (/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js:3593:11)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js:3604:3)\n    at Module._compile (node:internal/modules/cjs/loader:1706:14)\n    at Object..js (node:internal/modules/cjs/loader:1839:10)\n    at Module.load (node:internal/modules/cjs/loader:1441:32)\n    at Function._load (node:internal/modules/cjs/loader:1263:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n    at node:internal/main/run_main_module:36:49\n\nNode.js v22.20.0",
-                "duration": 227,
-                "success": false,
-                "command": "timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js feature-details feature_1758923389455_acf73e44cbfe --project-root /Users/jeremyparker/infinite-continue-stop-hook/test/test-data/e2e-complete-workflows-551b622340f64c44"
-              }
-            }
-          ]
-        },
-        {
-          "title": "Multi-stakeholder approval workflow",
-          "fullName": "Complete System Workflows E2E User Experience Workflow Multi-stakeholder approval workflow",
-          "failureMessages": [
-            "Error: Expected 2 features but got 0 \n    at Function.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:640:13)\n    at Object.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/complete-workflows.test.js:342:21)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        }
-      ]
+      "failureDetails": []
     },
     {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/feature-management-e2e.test.js",
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/feature-lifecycle.test.js",
       "displayName": {
         "color": "white",
-        "name": "e2e"
+        "name": "integration"
+      },
+      "status": "passed",
+      "startTime": 1758947536668,
+      "endTime": 1758947536812,
+      "duration": 144,
+      "numTests": 13,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 13,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [
+        {
+          "ancestorTitles": [
+            "Feature Lifecycle Integration Tests",
+            "Feature Suggestion Workflow"
+          ],
+          "title": "should handle complete feature suggestion process",
+          "fullName": "Feature Lifecycle Integration Tests Feature Suggestion Workflow should handle complete feature suggestion process",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature Lifecycle Integration Tests",
+            "Feature Suggestion Workflow"
+          ],
+          "title": "should validate feature data requirements",
+          "fullName": "Feature Lifecycle Integration Tests Feature Suggestion Workflow should validate feature data requirements",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature Lifecycle Integration Tests",
+            "Feature Suggestion Workflow"
+          ],
+          "title": "should handle concurrent feature suggestions",
+          "fullName": "Feature Lifecycle Integration Tests Feature Suggestion Workflow should handle concurrent feature suggestions",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature Lifecycle Integration Tests",
+            "Feature Approval Workflow"
+          ],
+          "title": "should handle individual feature approval process",
+          "fullName": "Feature Lifecycle Integration Tests Feature Approval Workflow should handle individual feature approval process",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature Lifecycle Integration Tests",
+            "Feature Approval Workflow"
+          ],
+          "title": "should handle bulk feature approval process",
+          "fullName": "Feature Lifecycle Integration Tests Feature Approval Workflow should handle bulk feature approval process",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature Lifecycle Integration Tests",
+            "Feature Approval Workflow"
+          ],
+          "title": "should prevent invalid approval transitions",
+          "fullName": "Feature Lifecycle Integration Tests Feature Approval Workflow should prevent invalid approval transitions",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature Lifecycle Integration Tests",
+            "Feature Rejection Workflow"
+          ],
+          "title": "should handle feature rejection process",
+          "fullName": "Feature Lifecycle Integration Tests Feature Rejection Workflow should handle feature rejection process",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature Lifecycle Integration Tests",
+            "Feature Rejection Workflow"
+          ],
+          "title": "should prevent operations on rejected features",
+          "fullName": "Feature Lifecycle Integration Tests Feature Rejection Workflow should prevent operations on rejected features",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature Lifecycle Integration Tests",
+            "Feature Filtering and Search"
+          ],
+          "title": "should filter features by status",
+          "fullName": "Feature Lifecycle Integration Tests Feature Filtering and Search should filter features by status",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature Lifecycle Integration Tests",
+            "Feature Filtering and Search"
+          ],
+          "title": "should filter features by category",
+          "fullName": "Feature Lifecycle Integration Tests Feature Filtering and Search should filter features by category",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature Lifecycle Integration Tests",
+            "Feature Filtering and Search"
+          ],
+          "title": "should handle combined filters",
+          "fullName": "Feature Lifecycle Integration Tests Feature Filtering and Search should handle combined filters",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature Lifecycle Integration Tests",
+            "Complete Lifecycle Scenarios"
+          ],
+          "title": "should handle realistic product development workflow",
+          "fullName": "Feature Lifecycle Integration Tests Complete Lifecycle Scenarios should handle realistic product development workflow",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature Lifecycle Integration Tests",
+            "Complete Lifecycle Scenarios"
+          ],
+          "title": "should maintain data integrity throughout complex workflows",
+          "fullName": "Feature Lifecycle Integration Tests Complete Lifecycle Scenarios should maintain data integrity throughout complex workflows",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        }
+      ],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/api-workflow.test.js",
+      "displayName": {
+        "color": "white",
+        "name": "integration"
+      },
+      "status": "passed",
+      "startTime": 1758947536675,
+      "endTime": 1758947536830,
+      "duration": 155,
+      "numTests": 13,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 13,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [
+        {
+          "ancestorTitles": [
+            "API Workflow Integration Tests",
+            "Complete Feature Lifecycle Workflow"
+          ],
+          "title": "should execute complete feature lifecycle: suggest → approve → track implementation",
+          "fullName": "API Workflow Integration Tests Complete Feature Lifecycle Workflow should execute complete feature lifecycle: suggest → approve → track implementation",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "API Workflow Integration Tests",
+            "Complete Feature Lifecycle Workflow"
+          ],
+          "title": "should handle feature rejection workflow",
+          "fullName": "API Workflow Integration Tests Complete Feature Lifecycle Workflow should handle feature rejection workflow",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "API Workflow Integration Tests",
+            "Complete Feature Lifecycle Workflow"
+          ],
+          "title": "should handle bulk feature approval workflow",
+          "fullName": "API Workflow Integration Tests Complete Feature Lifecycle Workflow should handle bulk feature approval workflow",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "API Workflow Integration Tests",
+            "Complete Agent Lifecycle Workflow"
+          ],
+          "title": "should execute complete agent lifecycle: initialize → reinitialize → stop authorization",
+          "fullName": "API Workflow Integration Tests Complete Agent Lifecycle Workflow should execute complete agent lifecycle: initialize → reinitialize → stop authorization",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "API Workflow Integration Tests",
+            "Complete Agent Lifecycle Workflow"
+          ],
+          "title": "should handle multiple concurrent agent operations",
+          "fullName": "API Workflow Integration Tests Complete Agent Lifecycle Workflow should handle multiple concurrent agent operations",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "API Workflow Integration Tests",
+            "Cross-Component Integration"
+          ],
+          "title": "should handle mixed feature and agent operations",
+          "fullName": "API Workflow Integration Tests Cross-Component Integration should handle mixed feature and agent operations",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "API Workflow Integration Tests",
+            "Cross-Component Integration"
+          ],
+          "title": "should maintain data consistency across multiple operations",
+          "fullName": "API Workflow Integration Tests Cross-Component Integration should maintain data consistency across multiple operations",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "API Workflow Integration Tests",
+            "API Discovery and Methods"
+          ],
+          "title": "should provide comprehensive API documentation",
+          "fullName": "API Workflow Integration Tests API Discovery and Methods should provide comprehensive API documentation",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "API Workflow Integration Tests",
+            "API Discovery and Methods"
+          ],
+          "title": "should list all available API methods",
+          "fullName": "API Workflow Integration Tests API Discovery and Methods should list all available API methods",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "API Workflow Integration Tests",
+            "API Error Handling"
+          ],
+          "title": "should handle invalid command gracefully",
+          "fullName": "API Workflow Integration Tests API Error Handling should handle invalid command gracefully",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "API Workflow Integration Tests",
+            "API Error Handling"
+          ],
+          "title": "should handle malformed JSON in feature suggestion",
+          "fullName": "API Workflow Integration Tests API Error Handling should handle malformed JSON in feature suggestion",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "API Workflow Integration Tests",
+            "API Error Handling"
+          ],
+          "title": "should handle operations on non-existent features",
+          "fullName": "API Workflow Integration Tests API Error Handling should handle operations on non-existent features",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "API Workflow Integration Tests",
+            "API Error Handling"
+          ],
+          "title": "should handle invalid status transitions",
+          "fullName": "API Workflow Integration Tests API Error Handling should handle invalid status transitions",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        }
+      ],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/agent-lifecycle.test.js",
+      "displayName": {
+        "color": "white",
+        "name": "integration"
+      },
+      "status": "passed",
+      "startTime": 1758947536673,
+      "endTime": 1758947536837,
+      "duration": 164,
+      "numTests": 19,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 19,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [
+        {
+          "ancestorTitles": [
+            "Agent Lifecycle Integration Tests",
+            "Agent Initialization Workflow"
+          ],
+          "title": "should handle single agent initialization process",
+          "fullName": "Agent Lifecycle Integration Tests Agent Initialization Workflow should handle single agent initialization process",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Agent Lifecycle Integration Tests",
+            "Agent Initialization Workflow"
+          ],
+          "title": "should handle multiple agent initialization",
+          "fullName": "Agent Lifecycle Integration Tests Agent Initialization Workflow should handle multiple agent initialization",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Agent Lifecycle Integration Tests",
+            "Agent Initialization Workflow"
+          ],
+          "title": "should handle concurrent agent initialization",
+          "fullName": "Agent Lifecycle Integration Tests Agent Initialization Workflow should handle concurrent agent initialization",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Agent Lifecycle Integration Tests",
+            "Agent Initialization Workflow"
+          ],
+          "title": "should prevent duplicate agent initialization",
+          "fullName": "Agent Lifecycle Integration Tests Agent Initialization Workflow should prevent duplicate agent initialization",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Agent Lifecycle Integration Tests",
+            "Agent Reinitialization Workflow"
+          ],
+          "title": "should handle agent reinitialization process",
+          "fullName": "Agent Lifecycle Integration Tests Agent Reinitialization Workflow should handle agent reinitialization process",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Agent Lifecycle Integration Tests",
+            "Agent Reinitialization Workflow"
+          ],
+          "title": "should handle multiple reinitializations of same agent",
+          "fullName": "Agent Lifecycle Integration Tests Agent Reinitialization Workflow should handle multiple reinitializations of same agent",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Agent Lifecycle Integration Tests",
+            "Agent Reinitialization Workflow"
+          ],
+          "title": "should handle reinitialization of non-existent agent",
+          "fullName": "Agent Lifecycle Integration Tests Agent Reinitialization Workflow should handle reinitialization of non-existent agent",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Agent Lifecycle Integration Tests",
+            "Agent Reinitialization Workflow"
+          ],
+          "title": "should handle concurrent reinitializations",
+          "fullName": "Agent Lifecycle Integration Tests Agent Reinitialization Workflow should handle concurrent reinitializations",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Agent Lifecycle Integration Tests",
+            "Stop Authorization Workflow"
+          ],
+          "title": "should handle agent stop authorization process",
+          "fullName": "Agent Lifecycle Integration Tests Stop Authorization Workflow should handle agent stop authorization process",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Agent Lifecycle Integration Tests",
+            "Stop Authorization Workflow"
+          ],
+          "title": "should handle stop authorization with different reasons",
+          "fullName": "Agent Lifecycle Integration Tests Stop Authorization Workflow should handle stop authorization with different reasons",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Agent Lifecycle Integration Tests",
+            "Stop Authorization Workflow"
+          ],
+          "title": "should handle stop authorization without reason",
+          "fullName": "Agent Lifecycle Integration Tests Stop Authorization Workflow should handle stop authorization without reason",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Agent Lifecycle Integration Tests",
+            "Stop Authorization Workflow"
+          ],
+          "title": "should handle stop authorization by non-existent agent",
+          "fullName": "Agent Lifecycle Integration Tests Stop Authorization Workflow should handle stop authorization by non-existent agent",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Agent Lifecycle Integration Tests",
+            "Stop Authorization Workflow"
+          ],
+          "title": "should handle multiple stop authorizations",
+          "fullName": "Agent Lifecycle Integration Tests Stop Authorization Workflow should handle multiple stop authorizations",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Agent Lifecycle Integration Tests",
+            "Initialization Statistics Tracking"
+          ],
+          "title": "should track initialization statistics accurately",
+          "fullName": "Agent Lifecycle Integration Tests Initialization Statistics Tracking should track initialization statistics accurately",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Agent Lifecycle Integration Tests",
+            "Initialization Statistics Tracking"
+          ],
+          "title": "should maintain statistics persistence across operations",
+          "fullName": "Agent Lifecycle Integration Tests Initialization Statistics Tracking should maintain statistics persistence across operations",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Agent Lifecycle Integration Tests",
+            "Initialization Statistics Tracking"
+          ],
+          "title": "should handle time bucket boundaries correctly",
+          "fullName": "Agent Lifecycle Integration Tests Initialization Statistics Tracking should handle time bucket boundaries correctly",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Agent Lifecycle Integration Tests",
+            "Complete Agent Lifecycle Scenarios"
+          ],
+          "title": "should handle complete agent workflow from initialization to stop",
+          "fullName": "Agent Lifecycle Integration Tests Complete Agent Lifecycle Scenarios should handle complete agent workflow from initialization to stop",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Agent Lifecycle Integration Tests",
+            "Complete Agent Lifecycle Scenarios"
+          ],
+          "title": "should handle multi-agent collaborative workflow",
+          "fullName": "Agent Lifecycle Integration Tests Complete Agent Lifecycle Scenarios should handle multi-agent collaborative workflow",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Agent Lifecycle Integration Tests",
+            "Complete Agent Lifecycle Scenarios"
+          ],
+          "title": "should handle agent workflow error recovery",
+          "fullName": "Agent Lifecycle Integration Tests Complete Agent Lifecycle Scenarios should handle agent workflow error recovery",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        }
+      ],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/cli-commands.test.js",
+      "displayName": {
+        "color": "white",
+        "name": "integration"
+      },
+      "status": "passed",
+      "startTime": 1758947536818,
+      "endTime": 1758947536872,
+      "duration": 54,
+      "numTests": 20,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 20,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "Command Argument Parsing"
+          ],
+          "title": "should handle project-root parameter correctly",
+          "fullName": "CLI Commands Integration Tests Command Argument Parsing should handle project-root parameter correctly",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "Command Argument Parsing"
+          ],
+          "title": "should handle missing arguments gracefully",
+          "fullName": "CLI Commands Integration Tests Command Argument Parsing should handle missing arguments gracefully",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "Command Argument Parsing"
+          ],
+          "title": "should handle malformed JSON arguments",
+          "fullName": "CLI Commands Integration Tests Command Argument Parsing should handle malformed JSON arguments",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "Command Argument Parsing"
+          ],
+          "title": "should handle unknown commands",
+          "fullName": "CLI Commands Integration Tests Command Argument Parsing should handle unknown commands",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "Core Command Execution"
+          ],
+          "title": "should execute guide command successfully",
+          "fullName": "CLI Commands Integration Tests Core Command Execution should execute guide command successfully",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "Core Command Execution"
+          ],
+          "title": "should execute methods command successfully",
+          "fullName": "CLI Commands Integration Tests Core Command Execution should execute methods command successfully",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "Core Command Execution"
+          ],
+          "title": "should execute feature management commands",
+          "fullName": "CLI Commands Integration Tests Core Command Execution should execute feature management commands",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "Core Command Execution"
+          ],
+          "title": "should execute agent management commands",
+          "fullName": "CLI Commands Integration Tests Core Command Execution should execute agent management commands",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "Core Command Execution"
+          ],
+          "title": "should execute bulk operations",
+          "fullName": "CLI Commands Integration Tests Core Command Execution should execute bulk operations",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "Output Formatting and Validation"
+          ],
+          "title": "should produce valid JSON output for all commands",
+          "fullName": "CLI Commands Integration Tests Output Formatting and Validation should produce valid JSON output for all commands",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "Output Formatting and Validation"
+          ],
+          "title": "should include proper error information in failed commands",
+          "fullName": "CLI Commands Integration Tests Output Formatting and Validation should include proper error information in failed commands",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "Output Formatting and Validation"
+          ],
+          "title": "should handle output with special characters correctly",
+          "fullName": "CLI Commands Integration Tests Output Formatting and Validation should handle output with special characters correctly",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "Timeout and Performance"
+          ],
+          "title": "should complete basic commands within reasonable time",
+          "fullName": "CLI Commands Integration Tests Timeout and Performance should complete basic commands within reasonable time",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "Timeout and Performance"
+          ],
+          "title": "should handle timeout scenarios gracefully",
+          "fullName": "CLI Commands Integration Tests Timeout and Performance should handle timeout scenarios gracefully",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "Timeout and Performance"
+          ],
+          "title": "should handle multiple rapid CLI invocations",
+          "fullName": "CLI Commands Integration Tests Timeout and Performance should handle multiple rapid CLI invocations",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "CLI Workflow Integration"
+          ],
+          "title": "should execute complete feature workflow via CLI",
+          "fullName": "CLI Commands Integration Tests CLI Workflow Integration should execute complete feature workflow via CLI",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "CLI Workflow Integration"
+          ],
+          "title": "should execute complete agent workflow via CLI",
+          "fullName": "CLI Commands Integration Tests CLI Workflow Integration should execute complete agent workflow via CLI",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "Error Recovery and Edge Cases"
+          ],
+          "title": "should handle corrupted project directory gracefully",
+          "fullName": "CLI Commands Integration Tests Error Recovery and Edge Cases should handle corrupted project directory gracefully",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "Error Recovery and Edge Cases"
+          ],
+          "title": "should handle invalid project root paths",
+          "fullName": "CLI Commands Integration Tests Error Recovery and Edge Cases should handle invalid project root paths",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "CLI Commands Integration Tests",
+            "Error Recovery and Edge Cases"
+          ],
+          "title": "should handle concurrent CLI executions safely",
+          "fullName": "CLI Commands Integration Tests Error Recovery and Edge Cases should handle concurrent CLI executions safely",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        }
+      ],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/file-operations.test.js",
+      "displayName": {
+        "color": "white",
+        "name": "integration"
+      },
+      "status": "passed",
+      "startTime": 1758947536848,
+      "endTime": 1758947536884,
+      "duration": 36,
+      "numTests": 13,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
+      "numPendingTests": 13,
+      "snapshot": {
+        "added": 0,
+        "matched": 0,
+        "unmatched": 0,
+        "updated": 0,
+        "unchecked": 0
+      },
+      "testCases": [
+        {
+          "ancestorTitles": [
+            "File Operations Integration Tests",
+            "File Persistence and Data Integrity"
+          ],
+          "title": "should maintain FEATURES.json structure integrity across operations",
+          "fullName": "File Operations Integration Tests File Persistence and Data Integrity should maintain FEATURES.json structure integrity across operations",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "File Operations Integration Tests",
+            "File Persistence and Data Integrity"
+          ],
+          "title": "should handle concurrent file operations safely",
+          "fullName": "File Operations Integration Tests File Persistence and Data Integrity should handle concurrent file operations safely",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "File Operations Integration Tests",
+            "File Persistence and Data Integrity"
+          ],
+          "title": "should preserve file permissions and ownership",
+          "fullName": "File Operations Integration Tests File Persistence and Data Integrity should preserve file permissions and ownership",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "File Operations Integration Tests",
+            "Backup and Recovery Scenarios"
+          ],
+          "title": "should handle missing FEATURES.json file gracefully",
+          "fullName": "File Operations Integration Tests Backup and Recovery Scenarios should handle missing FEATURES.json file gracefully",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "File Operations Integration Tests",
+            "Backup and Recovery Scenarios"
+          ],
+          "title": "should handle corrupted FEATURES.json file",
+          "fullName": "File Operations Integration Tests Backup and Recovery Scenarios should handle corrupted FEATURES.json file",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "File Operations Integration Tests",
+            "Backup and Recovery Scenarios"
+          ],
+          "title": "should handle disk space and I/O errors gracefully",
+          "fullName": "File Operations Integration Tests Backup and Recovery Scenarios should handle disk space and I/O errors gracefully",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "File Operations Integration Tests",
+            "File Locking and Race Conditions"
+          ],
+          "title": "should handle rapid sequential operations correctly",
+          "fullName": "File Operations Integration Tests File Locking and Race Conditions should handle rapid sequential operations correctly",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "File Operations Integration Tests",
+            "File Locking and Race Conditions"
+          ],
+          "title": "should handle mixed read/write operations correctly",
+          "fullName": "File Operations Integration Tests File Locking and Race Conditions should handle mixed read/write operations correctly",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "File Operations Integration Tests",
+            "Data Migration and Upgrades"
+          ],
+          "title": "should handle missing metadata fields gracefully",
+          "fullName": "File Operations Integration Tests Data Migration and Upgrades should handle missing metadata fields gracefully",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "File Operations Integration Tests",
+            "Data Migration and Upgrades"
+          ],
+          "title": "should handle missing workflow_config gracefully",
+          "fullName": "File Operations Integration Tests Data Migration and Upgrades should handle missing workflow_config gracefully",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "File Operations Integration Tests",
+            "Data Migration and Upgrades"
+          ],
+          "title": "should preserve existing data during upgrades",
+          "fullName": "File Operations Integration Tests Data Migration and Upgrades should preserve existing data during upgrades",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "File Operations Integration Tests",
+            "File Validation and Error Recovery"
+          ],
+          "title": "should validate file structure before operations",
+          "fullName": "File Operations Integration Tests File Validation and Error Recovery should validate file structure before operations",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "File Operations Integration Tests",
+            "File Validation and Error Recovery"
+          ],
+          "title": "should handle file read/write permissions errors",
+          "fullName": "File Operations Integration Tests File Validation and Error Recovery should handle file read/write permissions errors",
+          "status": "pending",
+          "duration": 0,
+          "numPassingAsserts": 0,
+          "location": null
+        }
+      ],
+      "failureDetails": []
+    },
+    {
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/feature-7-taskmanager-integration.test.js",
+      "displayName": {
+        "color": "white",
+        "name": "integration"
       },
       "status": "failed",
-      "startTime": 1758923390564,
-      "endTime": 1758923396886,
-      "duration": 6322,
-      "numTests": 8,
-      "numPassingTests": 3,
-      "numFailingTests": 5,
+      "startTime": 1758947536855,
+      "endTime": 1758947537040,
+      "duration": 185,
+      "numTests": 10,
+      "numPassingTests": 9,
+      "numFailingTests": 1,
       "numPendingTests": 0,
       "snapshot": {
         "added": 0,
@@ -212,919 +1299,142 @@
       "testCases": [
         {
           "ancestorTitles": [
-            "Feature Management System E2E",
-            "Feature Suggestion Workflows"
+            "Feature 7: TaskManager API Integration - Custom Validation Rules",
+            "TaskManager _loadCustomValidationRules Method"
           ],
-          "title": "Comprehensive feature suggestion with all categories",
-          "fullName": "Feature Management System E2E Feature Suggestion Workflows Comprehensive feature suggestion with all categories",
-          "status": "failed",
-          "duration": 427,
-          "numPassingAsserts": 18,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature Management System E2E",
-            "Feature Suggestion Workflows"
-          ],
-          "title": "Feature suggestion validation and error handling",
-          "fullName": "Feature Management System E2E Feature Suggestion Workflows Feature suggestion validation and error handling",
-          "status": "failed",
-          "duration": 667,
-          "numPassingAsserts": 8,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature Management System E2E",
-            "Feature Approval Workflows"
-          ],
-          "title": "Comprehensive approval process with audit trail",
-          "fullName": "Feature Management System E2E Feature Approval Workflows Comprehensive approval process with audit trail",
-          "status": "failed",
-          "duration": 527,
+          "title": "should load custom validation rules asynchronously",
+          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules TaskManager _loadCustomValidationRules Method should load custom validation rules asynchronously",
+          "status": "passed",
+          "duration": 3,
           "numPassingAsserts": 3,
           "location": null
         },
         {
           "ancestorTitles": [
-            "Feature Management System E2E",
-            "Feature Approval Workflows"
+            "Feature 7: TaskManager API Integration - Custom Validation Rules",
+            "TaskManager _loadCustomValidationRules Method"
           ],
-          "title": "Bulk approval operations",
-          "fullName": "Feature Management System E2E Feature Approval Workflows Bulk approval operations",
-          "status": "failed",
-          "duration": 549,
-          "numPassingAsserts": 5,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature Management System E2E",
-            "Feature Status Management"
-          ],
-          "title": "Status transition validation and constraints",
-          "fullName": "Feature Management System E2E Feature Status Management Status transition validation and constraints",
-          "status": "failed",
-          "duration": 708,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature Management System E2E",
-            "Feature Status Management"
-          ],
-          "title": "Feature listing and filtering",
-          "fullName": "Feature Management System E2E Feature Status Management Feature listing and filtering",
+          "title": "should return empty array for missing config file",
+          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules TaskManager _loadCustomValidationRules Method should return empty array for missing config file",
           "status": "passed",
-          "duration": 1764,
-          "numPassingAsserts": 5,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature Management System E2E",
-            "Advanced Feature Management"
-          ],
-          "title": "Feature search and analytics",
-          "fullName": "Feature Management System E2E Advanced Feature Management Feature search and analytics",
-          "status": "passed",
-          "duration": 1041,
-          "numPassingAsserts": 6,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature Management System E2E",
-            "Advanced Feature Management"
-          ],
-          "title": "Feature export and import workflows",
-          "fullName": "Feature Management System E2E Advanced Feature Management Feature export and import workflows",
-          "status": "passed",
-          "duration": 605,
-          "numPassingAsserts": 5,
-          "location": null
-        }
-      ],
-      "failureDetails": [
-        {
-          "title": "Comprehensive feature suggestion with all categories",
-          "fullName": "Feature Management System E2E Feature Suggestion Workflows Comprehensive feature suggestion with all categories",
-          "failureMessages": [
-            "Error: Expected 6 features but got 0 \n    at Function.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:640:13)\n    at Object.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/feature-management-e2e.test.js:61:21)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "Feature suggestion validation and error handling",
-          "fullName": "Feature Management System E2E Feature Suggestion Workflows Feature suggestion validation and error handling",
-          "failureMessages": [
-            "Error: Expected 1 features but got 0 \n    at Function.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:640:13)\n    at Object.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/feature-management-e2e.test.js:141:21)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "Comprehensive approval process with audit trail",
-          "fullName": "Feature Management System E2E Feature Approval Workflows Comprehensive approval process with audit trail",
-          "failureMessages": [
-            "Error: expect(received).toHaveLength(expected)\n\nExpected length: 3\nReceived length: 0\nReceived array:  []\n    at Object.toHaveLength (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/feature-management-e2e.test.js:213:50)"
-          ],
-          "failureDetails": [
-            {
-              "matcherResult": {
-                "message": "expect(received).toHaveLength(expected)\n\nExpected length: 3\nReceived length: 0\nReceived array:  []",
-                "pass": false
-              }
-            }
-          ]
-        },
-        {
-          "title": "Bulk approval operations",
-          "fullName": "Feature Management System E2E Feature Approval Workflows Bulk approval operations",
-          "failureMessages": [
-            "Error: Expected 5 features but got 0 \n    at Function.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:640:13)\n    at Object.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/feature-management-e2e.test.js:287:21)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "Status transition validation and constraints",
-          "fullName": "Feature Management System E2E Feature Status Management Status transition validation and constraints",
-          "failureMessages": [
-            "Error: Feature feature_1758923392931_66d8ab5871f5 not found\n    at Function.validateFeatureStatus (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:439:13)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/feature-management-e2e.test.js:366:23)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        }
-      ]
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/multi-agent-scenarios.test.js",
-      "displayName": {
-        "color": "white",
-        "name": "e2e"
-      },
-      "status": "failed",
-      "startTime": 1758923382132,
-      "endTime": 1758923408600,
-      "duration": 26468,
-      "numTests": 7,
-      "numPassingTests": 0,
-      "numFailingTests": 7,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [
-        {
-          "ancestorTitles": [
-            "Multi-Agent Scenarios E2E",
-            "Concurrent Feature Operations"
-          ],
-          "title": "Multiple agents suggesting features simultaneously",
-          "fullName": "Multi-Agent Scenarios E2E Concurrent Feature Operations Multiple agents suggesting features simultaneously",
-          "status": "failed",
-          "duration": 1230,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Multi-Agent Scenarios E2E",
-            "Concurrent Feature Operations"
-          ],
-          "title": "Concurrent approval/rejection operations",
-          "fullName": "Multi-Agent Scenarios E2E Concurrent Feature Operations Concurrent approval/rejection operations",
-          "status": "failed",
-          "duration": 622,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Multi-Agent Scenarios E2E",
-            "Multi-Agent Coordination"
-          ],
-          "title": "Agent coordination during high-load scenarios",
-          "fullName": "Multi-Agent Scenarios E2E Multi-Agent Coordination Agent coordination during high-load scenarios",
-          "status": "failed",
-          "duration": 2388,
-          "numPassingAsserts": 16,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Multi-Agent Scenarios E2E",
-            "Multi-Agent Coordination"
-          ],
-          "title": "Agent conflict resolution",
-          "fullName": "Multi-Agent Scenarios E2E Multi-Agent Coordination Agent conflict resolution",
-          "status": "failed",
-          "duration": 358,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Multi-Agent Scenarios E2E",
-            "Stop Hook Multi-Agent Integration"
-          ],
-          "title": "Multiple agents with coordinated stop hooks",
-          "fullName": "Multi-Agent Scenarios E2E Stop Hook Multi-Agent Integration Multiple agents with coordinated stop hooks",
-          "status": "failed",
-          "duration": 10518,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Multi-Agent Scenarios E2E",
-            "Stop Hook Multi-Agent Integration"
-          ],
-          "title": "Stop hook authorization cascading",
-          "fullName": "Multi-Agent Scenarios E2E Stop Hook Multi-Agent Integration Stop hook authorization cascading",
-          "status": "failed",
-          "duration": 10007,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Multi-Agent Scenarios E2E",
-            "Resource Contention Scenarios"
-          ],
-          "title": "File system contention handling",
-          "fullName": "Multi-Agent Scenarios E2E Resource Contention Scenarios File system contention handling",
-          "status": "failed",
-          "duration": 1014,
+          "duration": 0,
           "numPassingAsserts": 1,
           "location": null
-        }
-      ],
-      "failureDetails": [
-        {
-          "title": "Multiple agents suggesting features simultaneously",
-          "fullName": "Multi-Agent Scenarios E2E Concurrent Feature Operations Multiple agents suggesting features simultaneously",
-          "failureMessages": [
-            "Error: Output does not contain \"Feature suggested successfully\" \nActual output: {\n  \"success\": true,\n  \"feature\": {\n    \"id\": \"feature_1758923383583_b43f69c6e40e\",\n    \"title\": \"agent 0 feature 0 - concurrent test\",\n    \"description\": \"feature 0 suggested by agent 0 for concurrent testing\",\n    \"business_value\": \"validates concurrent operations for agent 0, feature 0\",\n    \"category\": \"enhancement\",\n    \"status\": \"suggested\",\n    \"created_at\": \"2025-09-26t21:49:43.583z\",\n    \"updated_at\": \"2025-09-26t21:49:43.583z\",\n    \"suggested_by\": \"system\",\n    \"metadata\": {}\n  },\n  \"message\": \"feature suggestion created successfully\"\n} \n    at Function.assertOutputContains (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:615:13)\n    at assertOutputContains (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/multi-agent-scenarios.test.js:84:25)\n    at Array.forEach (<anonymous>)\n    at forEach (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/multi-agent-scenarios.test.js:79:20)\n    at Array.forEach (<anonymous>)\n    at Object.forEach (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/multi-agent-scenarios.test.js:78:15)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "Concurrent approval/rejection operations",
-          "fullName": "Multi-Agent Scenarios E2E Concurrent Feature Operations Concurrent approval/rejection operations",
-          "failureMessages": [
-            "TypeError: Cannot read properties of null (reading '1')\n    at /Users/jeremyparker/infinite-continue-stop-hook/test/e2e/multi-agent-scenarios.test.js:129:21\n    at Array.map (<anonymous>)\n    at Object.map (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/multi-agent-scenarios.test.js:127:41)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "Agent coordination during high-load scenarios",
-          "fullName": "Multi-Agent Scenarios E2E Multi-Agent Coordination Agent coordination during high-load scenarios",
-          "failureMessages": [
-            "Error: Expected 24 features but got 0 \n    at Function.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:640:13)\n    at Object.assertFeatureCount (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/multi-agent-scenarios.test.js:214:21)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "Agent conflict resolution",
-          "fullName": "Multi-Agent Scenarios E2E Multi-Agent Coordination Agent conflict resolution",
-          "failureMessages": [
-            "TypeError: Cannot read properties of null (reading '1')\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/multi-agent-scenarios.test.js:237:65)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "Multiple agents with coordinated stop hooks",
-          "fullName": "Multi-Agent Scenarios E2E Stop Hook Multi-Agent Integration Multiple agents with coordinated stop hooks",
-          "failureMessages": [
-            "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: 4\nReceived: 0\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/multi-agent-scenarios.test.js:336:31)"
-          ],
-          "failureDetails": [
-            {
-              "matcherResult": {
-                "actual": 0,
-                "expected": 4,
-                "message": "expect(received).toBe(expected) // Object.is equality\n\nExpected: 4\nReceived: 0",
-                "name": "toBe",
-                "pass": false
-              }
-            }
-          ]
-        },
-        {
-          "title": "Stop hook authorization cascading",
-          "fullName": "Multi-Agent Scenarios E2E Stop Hook Multi-Agent Integration Stop hook authorization cascading",
-          "failureMessages": [
-            "Error: Command timed out after 10000ms: node /Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js continue-iteration e2e-iteration-0\n    at Timeout._onTimeout (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:279:23)\n    at listOnTimeout (node:internal/timers:588:17)\n    at processTimers (node:internal/timers:523:7)"
-          ],
-          "failureDetails": [
-            {
-              "result": {
-                "code": -1,
-                "stdout": "",
-                "stderr": "",
-                "duration": 10000,
-                "success": false,
-                "command": "node /Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js continue-iteration e2e-iteration-0",
-                "timeout": true
-              }
-            }
-          ]
-        },
-        {
-          "title": "File system contention handling",
-          "fullName": "Multi-Agent Scenarios E2E Resource Contention Scenarios File system contention handling",
-          "failureMessages": [
-            "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: 10\nReceived: 0\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/multi-agent-scenarios.test.js:435:40)"
-          ],
-          "failureDetails": [
-            {
-              "matcherResult": {
-                "actual": 0,
-                "expected": 10,
-                "message": "expect(received).toBe(expected) // Object.is equality\n\nExpected: 10\nReceived: 0",
-                "name": "toBe",
-                "pass": false
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js",
-      "displayName": {
-        "color": "white",
-        "name": "e2e"
-      },
-      "status": "failed",
-      "startTime": 1758923382132,
-      "endTime": 1758923433112,
-      "duration": 50980,
-      "numTests": 11,
-      "numPassingTests": 2,
-      "numFailingTests": 9,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [
-        {
-          "ancestorTitles": [
-            "Performance Validation E2E",
-            "API Performance Benchmarks"
-          ],
-          "title": "Feature suggestion performance under load",
-          "fullName": "Performance Validation E2E API Performance Benchmarks Feature suggestion performance under load",
-          "status": "failed",
-          "duration": 4703,
-          "numPassingAsserts": 0,
-          "location": null
         },
         {
           "ancestorTitles": [
-            "Performance Validation E2E",
-            "API Performance Benchmarks"
+            "Feature 7: TaskManager API Integration - Custom Validation Rules",
+            "TaskManager _performLanguageAgnosticValidation with Custom Rules"
           ],
-          "title": "Feature approval performance benchmarks",
-          "fullName": "Performance Validation E2E API Performance Benchmarks Feature approval performance benchmarks",
-          "status": "failed",
-          "duration": 345,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Performance Validation E2E",
-            "API Performance Benchmarks"
-          ],
-          "title": "Bulk operation performance validation",
-          "fullName": "Performance Validation E2E API Performance Benchmarks Bulk operation performance validation",
-          "status": "failed",
-          "duration": 442,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Performance Validation E2E",
-            "Concurrent Load Performance"
-          ],
-          "title": "High concurrency performance validation",
-          "fullName": "Performance Validation E2E Concurrent Load Performance High concurrency performance validation",
-          "status": "failed",
-          "duration": 896,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Performance Validation E2E",
-            "Concurrent Load Performance"
-          ],
-          "title": "Resource contention performance impact",
-          "fullName": "Performance Validation E2E Concurrent Load Performance Resource contention performance impact",
+          "title": "should execute custom validation rule in default case",
+          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules TaskManager _performLanguageAgnosticValidation with Custom Rules should execute custom validation rule in default case",
           "status": "passed",
-          "duration": 630,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Performance Validation E2E",
-            "Stop Hook Performance"
-          ],
-          "title": "Stop hook response time benchmarks",
-          "fullName": "Performance Validation E2E Stop Hook Performance Stop hook response time benchmarks",
-          "status": "failed",
-          "duration": 10106,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Performance Validation E2E",
-            "Stop Hook Performance"
-          ],
-          "title": "Infinite continue performance under load",
-          "fullName": "Performance Validation E2E Stop Hook Performance Infinite continue performance under load",
-          "status": "failed",
-          "duration": 10013,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Performance Validation E2E",
-            "Scalability Performance"
-          ],
-          "title": "Feature storage scalability validation",
-          "fullName": "Performance Validation E2E Scalability Performance Feature storage scalability validation",
-          "status": "passed",
-          "duration": 12937,
+          "duration": 5,
           "numPassingAsserts": 3,
           "location": null
         },
         {
           "ancestorTitles": [
-            "Performance Validation E2E",
-            "Scalability Performance"
+            "Feature 7: TaskManager API Integration - Custom Validation Rules",
+            "TaskManager _performLanguageAgnosticValidation with Custom Rules"
           ],
-          "title": "Memory usage validation under load",
-          "fullName": "Performance Validation E2E Scalability Performance Memory usage validation under load",
+          "title": "should fail unknown custom validation criterion",
+          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules TaskManager _performLanguageAgnosticValidation with Custom Rules should fail unknown custom validation criterion",
+          "status": "passed",
+          "duration": 0,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 7: TaskManager API Integration - Custom Validation Rules",
+            "TaskManager _performLanguageAgnosticValidation with Custom Rules"
+          ],
+          "title": "should handle custom rule execution failure",
+          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules TaskManager _performLanguageAgnosticValidation with Custom Rules should handle custom rule execution failure",
+          "status": "passed",
+          "duration": 3,
+          "numPassingAsserts": 3,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 7: TaskManager API Integration - Custom Validation Rules",
+            "Environment Variable Integration"
+          ],
+          "title": "should support environment variables in custom rules",
+          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules Environment Variable Integration should support environment variables in custom rules",
           "status": "failed",
-          "duration": 9104,
+          "duration": 4,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 7: TaskManager API Integration - Custom Validation Rules",
+            "Success Criteria Validation"
+          ],
+          "title": "should validate exitCode success criteria",
+          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules Success Criteria Validation should validate exitCode success criteria",
+          "status": "passed",
+          "duration": 4,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 7: TaskManager API Integration - Custom Validation Rules",
+            "Success Criteria Validation"
+          ],
+          "title": "should handle multiple success criteria",
+          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules Success Criteria Validation should handle multiple success criteria",
+          "status": "passed",
+          "duration": 4,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 7: TaskManager API Integration - Custom Validation Rules",
+            "Configuration File Edge Cases"
+          ],
+          "title": "should handle empty customValidationRules array",
+          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules Configuration File Edge Cases should handle empty customValidationRules array",
+          "status": "passed",
+          "duration": 1,
           "numPassingAsserts": 1,
           "location": null
         },
         {
           "ancestorTitles": [
-            "Performance Validation E2E",
-            "Performance Regression Detection"
+            "Feature 7: TaskManager API Integration - Custom Validation Rules",
+            "Configuration File Edge Cases"
           ],
-          "title": "Baseline performance regression checks",
-          "fullName": "Performance Validation E2E Performance Regression Detection Baseline performance regression checks",
-          "status": "failed",
-          "duration": 1269,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Performance Validation E2E",
-            "Performance Regression Detection"
-          ],
-          "title": "End-to-end workflow performance validation",
-          "fullName": "Performance Validation E2E Performance Regression Detection End-to-end workflow performance validation",
-          "status": "failed",
-          "duration": 225,
-          "numPassingAsserts": 0,
-          "location": null
-        }
-      ],
-      "failureDetails": [
-        {
-          "title": "Feature suggestion performance under load",
-          "fullName": "Performance Validation E2E API Performance Benchmarks Feature suggestion performance under load",
-          "failureMessages": [
-            "Error: expect(received).toBeGreaterThanOrEqual(expected)\n\nExpected: >= 5\nReceived:    0\n    at Object.toBeGreaterThanOrEqual (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:67:40)"
-          ],
-          "failureDetails": [
-            {
-              "matcherResult": {
-                "message": "expect(received).toBeGreaterThanOrEqual(expected)\n\nExpected: >= 5\nReceived:    0",
-                "pass": false
-              }
-            }
-          ]
-        },
-        {
-          "title": "Feature approval performance benchmarks",
-          "fullName": "Performance Validation E2E API Performance Benchmarks Feature approval performance benchmarks",
-          "failureMessages": [
-            "TypeError: Cannot read properties of null (reading '1')\n    at /Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:93:21\n    at Array.map (<anonymous>)\n    at Object.map (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:91:44)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "Bulk operation performance validation",
-          "fullName": "Performance Validation E2E API Performance Benchmarks Bulk operation performance validation",
-          "failureMessages": [
-            "TypeError: Cannot read properties of null (reading '1')\n    at /Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:151:21\n    at Array.map (<anonymous>)\n    at Object.map (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:149:42)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "High concurrency performance validation",
-          "fullName": "Performance Validation E2E Concurrent Load Performance High concurrency performance validation",
-          "failureMessages": [
-            "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: 12\nReceived: 0\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:203:40)"
-          ],
-          "failureDetails": [
-            {
-              "matcherResult": {
-                "actual": 0,
-                "expected": 12,
-                "message": "expect(received).toBe(expected) // Object.is equality\n\nExpected: 12\nReceived: 0",
-                "name": "toBe",
-                "pass": false
-              }
-            }
-          ]
-        },
-        {
-          "title": "Stop hook response time benchmarks",
-          "fullName": "Performance Validation E2E Stop Hook Performance Stop hook response time benchmarks",
-          "failureMessages": [
-            "Error: Command timed out after 10000ms: node /Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js authorize-stop performance-stop-agent E2E test completion\n    at Timeout._onTimeout (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:279:23)\n    at listOnTimeout (node:internal/timers:588:17)\n    at processTimers (node:internal/timers:523:7)"
-          ],
-          "failureDetails": [
-            {
-              "result": {
-                "code": -1,
-                "stdout": "",
-                "stderr": "",
-                "duration": 10000,
-                "success": false,
-                "command": "node /Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js authorize-stop performance-stop-agent E2E test completion",
-                "timeout": true
-              }
-            }
-          ]
-        },
-        {
-          "title": "Infinite continue performance under load",
-          "fullName": "Performance Validation E2E Stop Hook Performance Infinite continue performance under load",
-          "failureMessages": [
-            "Error: Command timed out after 10000ms: node /Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js continue-iteration e2e-iteration-0\n    at Timeout.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:279:23)\n    at listOnTimeout (node:internal/timers:588:17)\n    at processTimers (node:internal/timers:523:7)"
-          ],
-          "failureDetails": [
-            {
-              "result": {
-                "code": -1,
-                "stdout": "",
-                "stderr": "",
-                "duration": 10000,
-                "success": false,
-                "command": "node /Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js continue-iteration e2e-iteration-0",
-                "timeout": true
-              }
-            }
-          ]
-        },
-        {
-          "title": "Memory usage validation under load",
-          "fullName": "Performance Validation E2E Scalability Performance Memory usage validation under load",
-          "failureMessages": [
-            "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: 40\nReceived: 0\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:383:40)"
-          ],
-          "failureDetails": [
-            {
-              "matcherResult": {
-                "actual": 0,
-                "expected": 40,
-                "message": "expect(received).toBe(expected) // Object.is equality\n\nExpected: 40\nReceived: 0",
-                "name": "toBe",
-                "pass": false
-              }
-            }
-          ]
-        },
-        {
-          "title": "Baseline performance regression checks",
-          "fullName": "Performance Validation E2E Performance Regression Detection Baseline performance regression checks",
-          "failureMessages": [
-            "TypeError: Cannot read properties of null (reading '1')\n    at test (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:413:71)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at Function.measurePerformance (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:509:7)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:426:25)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "End-to-end workflow performance validation",
-          "fullName": "Performance Validation E2E Performance Regression Detection End-to-end workflow performance validation",
-          "failureMessages": [
-            "TypeError: Cannot read properties of null (reading '1')\n    at e2eWorkflowTest (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:452:67)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at Function.measurePerformance (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:509:7)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/performance-validation.test.js:463:26)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        }
-      ]
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/stop-hook-integration.test.js",
-      "displayName": {
-        "color": "white",
-        "name": "e2e"
-      },
-      "status": "failed",
-      "startTime": 1758923382132,
-      "endTime": 1758923447771,
-      "duration": 65639,
-      "numTests": 9,
-      "numPassingTests": 0,
-      "numFailingTests": 9,
-      "numPendingTests": 0,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [
-        {
-          "ancestorTitles": [
-            "Stop Hook Integration E2E",
-            "Basic Stop Hook Functionality"
-          ],
-          "title": "Agent stop authorization workflow",
-          "fullName": "Stop Hook Integration E2E Basic Stop Hook Functionality Agent stop authorization workflow",
-          "status": "failed",
-          "duration": 11015,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stop Hook Integration E2E",
-            "Basic Stop Hook Functionality"
-          ],
-          "title": "Stop hook with feature operations integration",
-          "fullName": "Stop Hook Integration E2E Basic Stop Hook Functionality Stop hook with feature operations integration",
-          "status": "failed",
-          "duration": 450,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stop Hook Integration E2E",
-            "Infinite Continue Mode"
-          ],
-          "title": "Infinite continue loop with controlled termination",
-          "fullName": "Stop Hook Integration E2E Infinite Continue Mode Infinite continue loop with controlled termination",
-          "status": "failed",
-          "duration": 10008,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stop Hook Integration E2E",
-            "Infinite Continue Mode"
-          ],
-          "title": "Multiple concurrent infinite continue streams",
-          "fullName": "Stop Hook Integration E2E Infinite Continue Mode Multiple concurrent infinite continue streams",
-          "status": "failed",
-          "duration": 10691,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stop Hook Integration E2E",
-            "Stop Hook Conditions and Logic"
-          ],
-          "title": "Conditional stop authorization based on system state",
-          "fullName": "Stop Hook Integration E2E Stop Hook Conditions and Logic Conditional stop authorization based on system state",
-          "status": "failed",
-          "duration": 7272,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stop Hook Integration E2E",
-            "Stop Hook Conditions and Logic"
-          ],
-          "title": "Stop hook error recovery scenarios",
-          "fullName": "Stop Hook Integration E2E Stop Hook Conditions and Logic Stop hook error recovery scenarios",
-          "status": "failed",
-          "duration": 20321,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stop Hook Integration E2E",
-            "Advanced Stop Hook Integration"
-          ],
-          "title": "Stop hook with feature lifecycle integration",
-          "fullName": "Stop Hook Integration E2E Advanced Stop Hook Integration Stop hook with feature lifecycle integration",
-          "status": "failed",
-          "duration": 248,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stop Hook Integration E2E",
-            "Advanced Stop Hook Integration"
-          ],
-          "title": "Stop hook performance under load",
-          "fullName": "Stop Hook Integration E2E Advanced Stop Hook Integration Stop hook performance under load",
-          "status": "failed",
-          "duration": 5020,
+          "title": "should handle config without customValidationRules property",
+          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules Configuration File Edge Cases should handle config without customValidationRules property",
+          "status": "passed",
+          "duration": 0,
           "numPassingAsserts": 1,
           "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stop Hook Integration E2E",
-            "Advanced Stop Hook Integration"
-          ],
-          "title": "Stop hook system recovery after failure",
-          "fullName": "Stop Hook Integration E2E Advanced Stop Hook Integration Stop hook system recovery after failure",
-          "status": "failed",
-          "duration": 296,
-          "numPassingAsserts": 0,
-          "location": null
         }
       ],
       "failureDetails": [
         {
-          "title": "Agent stop authorization workflow",
-          "fullName": "Stop Hook Integration E2E Basic Stop Hook Functionality Agent stop authorization workflow",
+          "title": "should support environment variables in custom rules",
+          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules Environment Variable Integration should support environment variables in custom rules",
           "failureMessages": [
-            "Error: Command timed out after 10000ms: node /Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js authorize-stop e2e-stop-test-agent E2E test completion\n    at Timeout._onTimeout (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:279:23)\n    at listOnTimeout (node:internal/timers:588:17)\n    at processTimers (node:internal/timers:523:7)"
-          ],
-          "failureDetails": [
-            {
-              "result": {
-                "code": -1,
-                "stdout": "",
-                "stderr": "",
-                "duration": 10000,
-                "success": false,
-                "command": "node /Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js authorize-stop e2e-stop-test-agent E2E test completion",
-                "timeout": true
-              }
-            }
-          ]
-        },
-        {
-          "title": "Stop hook with feature operations integration",
-          "fullName": "Stop Hook Integration E2E Basic Stop Hook Functionality Stop hook with feature operations integration",
-          "failureMessages": [
-            "TypeError: Cannot read properties of null (reading '1')\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/stop-hook-integration.test.js:79:79)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "Infinite continue loop with controlled termination",
-          "fullName": "Stop Hook Integration E2E Infinite Continue Mode Infinite continue loop with controlled termination",
-          "failureMessages": [
-            "Error: Command timed out after 10000ms: node /Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js continue-iteration e2e-iteration-0\n    at Timeout.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:279:23)\n    at listOnTimeout (node:internal/timers:588:17)\n    at processTimers (node:internal/timers:523:7)"
-          ],
-          "failureDetails": [
-            {
-              "result": {
-                "code": -1,
-                "stdout": "",
-                "stderr": "",
-                "duration": 10000,
-                "success": false,
-                "command": "node /Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js continue-iteration e2e-iteration-0",
-                "timeout": true
-              }
-            }
-          ]
-        },
-        {
-          "title": "Multiple concurrent infinite continue streams",
-          "fullName": "Stop Hook Integration E2E Infinite Continue Mode Multiple concurrent infinite continue streams",
-          "failureMessages": [
-            "Error: Command timed out after 10000ms: node /Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js continue-iteration e2e-iteration-0\n    at Timeout.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:279:23)\n    at listOnTimeout (node:internal/timers:588:17)\n    at processTimers (node:internal/timers:523:7)"
-          ],
-          "failureDetails": [
-            {
-              "result": {
-                "code": -1,
-                "stdout": "",
-                "stderr": "",
-                "duration": 10000,
-                "success": false,
-                "command": "node /Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js continue-iteration e2e-iteration-0",
-                "timeout": true
-              }
-            }
-          ]
-        },
-        {
-          "title": "Conditional stop authorization based on system state",
-          "fullName": "Stop Hook Integration E2E Stop Hook Conditions and Logic Conditional stop authorization based on system state",
-          "failureMessages": [
-            "TypeError: Cannot read properties of null (reading '1')\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/stop-hook-integration.test.js:182:84)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "Stop hook error recovery scenarios",
-          "fullName": "Stop Hook Integration E2E Stop Hook Conditions and Logic Stop hook error recovery scenarios",
-          "failureMessages": [
-            "Error: Command timed out after 10000ms: node /Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js authorize-stop error-recovery-agent E2E test completion\n    at Timeout.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/e2e-utils.js:279:23)\n    at listOnTimeout (node:internal/timers:588:17)\n    at processTimers (node:internal/timers:523:7)"
-          ],
-          "failureDetails": [
-            {
-              "result": {
-                "code": -1,
-                "stdout": "",
-                "stderr": "",
-                "duration": 10000,
-                "success": false,
-                "command": "node /Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js authorize-stop error-recovery-agent E2E test completion",
-                "timeout": true
-              }
-            }
-          ]
-        },
-        {
-          "title": "Stop hook with feature lifecycle integration",
-          "fullName": "Stop Hook Integration E2E Advanced Stop Hook Integration Stop hook with feature lifecycle integration",
-          "failureMessages": [
-            "TypeError: Cannot read properties of null (reading '1')\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/stop-hook-integration.test.js:273:80)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "Stop hook performance under load",
-          "fullName": "Stop Hook Integration E2E Advanced Stop Hook Integration Stop hook performance under load",
-          "failureMessages": [
-            "Error: expect(received).toBeGreaterThan(expected)\n\nExpected: > 8\nReceived:   0\n    at Object.toBeGreaterThan (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/stop-hook-integration.test.js:354:34)"
+            "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/integration/feature-7-taskmanager-integration.test.js:461:30)"
           ],
           "failureDetails": [
             {
               "matcherResult": {
-                "message": "expect(received).toBeGreaterThan(expected)\n\nExpected: > 8\nReceived:   0",
+                "actual": false,
+                "expected": true,
+                "message": "expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false",
+                "name": "toBe",
                 "pass": false
               }
             }
-          ]
-        },
-        {
-          "title": "Stop hook system recovery after failure",
-          "fullName": "Stop Hook Integration E2E Advanced Stop Hook Integration Stop hook system recovery after failure",
-          "failureMessages": [
-            "TypeError: Cannot read properties of null (reading '1')\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/e2e/stop-hook-integration.test.js:372:86)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)"
-          ],
-          "failureDetails": [
-            {}
           ]
         }
       ]

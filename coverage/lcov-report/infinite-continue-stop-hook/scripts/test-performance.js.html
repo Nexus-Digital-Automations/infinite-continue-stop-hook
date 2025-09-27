@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/682</span>
+                <span class='fraction'>0/681</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/682</span>
+                <span class='fraction'>0/681</span>
             </div>
         
             
@@ -1425,8 +1425,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >#!/usr/bin/env node</span></span></span>
-<span class="cstat-no" title="statement not covered" ></span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
 <span class="cstat-no" title="statement not covered" >/**</span>
 <span class="cstat-no" title="statement not covered" > * Test Performance Monitoring Script</span>
 <span class="cstat-no" title="statement not covered" > *</span>
@@ -1465,7 +1464,7 @@
 <span class="cstat-no" title="statement not covered" >    verbose: process.env.VERBOSE === 'true',</span>
 <span class="cstat-no" title="statement not covered" >    json_output: process.env.JSON_OUTPUT === 'true',</span>
 <span class="cstat-no" title="statement not covered" >    ci_mode: process.env.CI === 'true',</span>
-<span class="cstat-no" title="statement not covered" >  }</span>
+<span class="cstat-no" title="statement not covered" >  },</span>
 <span class="cstat-no" title="statement not covered" >};</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >/**</span>
@@ -1563,7 +1562,7 @@
 <span class="cstat-no" title="statement not covered" >   * Get peak memory usage</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  getPeakMemoryUsage() {</span>
-<span class="cstat-no" title="statement not covered" >    if (this.measurements.length === 0) return this.startMemory;</span>
+<span class="cstat-no" title="statement not covered" >    if (this.measurements.length === 0) {return this.startMemory;}</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    return this.measurements.reduce((peak, current) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (current.memory.rss &gt; peak.rss) {</span>
@@ -1577,7 +1576,7 @@
 <span class="cstat-no" title="statement not covered" >   * Get average memory usage</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  getAverageMemoryUsage() {</span>
-<span class="cstat-no" title="statement not covered" >    if (this.measurements.length === 0) return this.startMemory;</span>
+<span class="cstat-no" title="statement not covered" >    if (this.measurements.length === 0) {return this.startMemory;}</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    const totals = this.measurements.reduce((sum, measurement) =&gt; ({</span>
 <span class="cstat-no" title="statement not covered" >      rss: sum.rss + measurement.memory.rss,</span>
@@ -1700,7 +1699,7 @@
 <span class="cstat-no" title="statement not covered" >          delta: {</span>
 <span class="cstat-no" title="statement not covered" >            rss: endMemory.rss - suiteStartMemory.rss,</span>
 <span class="cstat-no" title="statement not covered" >            heapUsed: endMemory.heapUsed - suiteStartMemory.heapUsed,</span>
-<span class="cstat-no" title="statement not covered" >          }</span>
+<span class="cstat-no" title="statement not covered" >          },</span>
 <span class="cstat-no" title="statement not covered" >        },</span>
 <span class="cstat-no" title="statement not covered" >        output: result.output,</span>
 <span class="cstat-no" title="statement not covered" >        timestamp: new Date().toISOString(),</span>
@@ -1736,7 +1735,7 @@
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >      const child = spawn('npm', testSuite.command.split(' ').slice(1), {</span>
 <span class="cstat-no" title="statement not covered" >        stdio: ['pipe', 'pipe', 'pipe'],</span>
-<span class="cstat-no" title="statement not covered" >        env: { ...process.env, NODE_OPTIONS: '--max-old-space-size=4096' }</span>
+<span class="cstat-no" title="statement not covered" >        env: { ...process.env, NODE_OPTIONS: '--max-old-space-size=4096' },</span>
 <span class="cstat-no" title="statement not covered" >      });</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >      child.stdout.on('data', (data) =&gt; {</span>
@@ -1830,7 +1829,7 @@
 <span class="cstat-no" title="statement not covered" >      performance_issues: {</span>
 <span class="cstat-no" title="statement not covered" >        errors: this.errors.filter(e =&gt; e.type === 'performance'),</span>
 <span class="cstat-no" title="statement not covered" >        warnings: this.warnings.filter(w =&gt; w.type === 'performance'),</span>
-<span class="cstat-no" title="statement not covered" >      }</span>
+<span class="cstat-no" title="statement not covered" >      },</span>
 <span class="cstat-no" title="statement not covered" >    };</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    PerformanceLogger.debug('Performance analysis completed');</span>
@@ -1851,7 +1850,7 @@
 <span class="cstat-no" title="statement not covered" >      heap_utilization: {</span>
 <span class="cstat-no" title="statement not covered" >        start: ((memory.start.heapUsed / memory.start.heapTotal) * 100).toFixed(1) + '%',</span>
 <span class="cstat-no" title="statement not covered" >        end: ((memory.end.heapUsed / memory.end.heapTotal) * 100).toFixed(1) + '%',</span>
-<span class="cstat-no" title="statement not covered" >      }</span>
+<span class="cstat-no" title="statement not covered" >      },</span>
 <span class="cstat-no" title="statement not covered" >    };</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -1899,7 +1898,7 @@
 <span class="cstat-no" title="statement not covered" >        arch: process.arch,</span>
 <span class="cstat-no" title="statement not covered" >        ci: process.env.CI || false,</span>
 <span class="cstat-no" title="statement not covered" >        max_old_space_size: process.env.NODE_OPTIONS?.includes('max-old-space-size') || 'default',</span>
-<span class="cstat-no" title="statement not covered" >      }</span>
+<span class="cstat-no" title="statement not covered" >      },</span>
 <span class="cstat-no" title="statement not covered" >    };</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >    // Write detailed report</span>
@@ -1909,7 +1908,7 @@
 <span class="cstat-no" title="statement not covered" >    for (const suiteResult of this.suiteResults) {</span>
 <span class="cstat-no" title="statement not covered" >      const suiteFile = path.join(</span>
 <span class="cstat-no" title="statement not covered" >        CONFIG.paths.results,</span>
-<span class="cstat-no" title="statement not covered" >        `${suiteResult.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.json`</span>
+<span class="cstat-no" title="statement not covered" >        `${suiteResult.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.json`,</span>
 <span class="cstat-no" title="statement not covered" >      );</span>
 <span class="cstat-no" title="statement not covered" >      fs.writeFileSync(suiteFile, JSON.stringify(suiteResult, null, 2));</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
@@ -2032,8 +2031,8 @@
 <span class="cstat-no" title="statement not covered" >   * Format duration in human readable format</span>
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  formatDuration(ms) {</span>
-<span class="cstat-no" title="statement not covered" >    if (ms &lt; 1000) return `${ms}ms`;</span>
-<span class="cstat-no" title="statement not covered" >    if (ms &lt; 60000) return `${(ms / 1000).toFixed(1)}s`;</span>
+<span class="cstat-no" title="statement not covered" >    if (ms &lt; 1000) {return `${ms}ms`;}</span>
+<span class="cstat-no" title="statement not covered" >    if (ms &lt; 60000) {return `${(ms / 1000).toFixed(1)}s`;}</span>
 <span class="cstat-no" title="statement not covered" >    return `${(ms / 60000).toFixed(1)}m`;</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -2042,7 +2041,7 @@
 <span class="cstat-no" title="statement not covered" >   */</span>
 <span class="cstat-no" title="statement not covered" >  formatBytes(bytes) {</span>
 <span class="cstat-no" title="statement not covered" >    const sizes = ['B', 'KB', 'MB', 'GB'];</span>
-<span class="cstat-no" title="statement not covered" >    if (bytes === 0) return '0B';</span>
+<span class="cstat-no" title="statement not covered" >    if (bytes === 0) {return '0B';}</span>
 <span class="cstat-no" title="statement not covered" >    const i = Math.floor(Math.log(bytes) / Math.log(1024));</span>
 <span class="cstat-no" title="statement not covered" >    return `${(bytes / Math.pow(1024, i)).toFixed(1)}${sizes[i]}`;</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
@@ -2106,14 +2105,15 @@
 <span class="cstat-no" title="statement not covered" >  });</span>
 <span class="cstat-no" title="statement not covered" >}</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >module.exports = TestPerformanceMonitor;</span></pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >module.exports = TestPerformanceMonitor;</span>
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-23T15:15:19.170Z
+                at 2025-09-27T04:32:17.378Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -38,6 +38,9 @@ const crypto = require('crypto');
 // Import RAG operations for self-learning capabilities
 const RAGOperations = require('./lib/api-modules/rag/ragOperations');
 
+// Import validation dependency management system
+const { ValidationDependencyManager, DEPENDENCY_TYPES } = require('./lib/validation-dependency-manager');
+
 // File locking mechanism to prevent race conditions across processes
 class FileLock {
   constructor() {
@@ -178,6 +181,11 @@ class AutonomousTaskManagerAPI {
       taskManager: this,
       agentManager: this,
       withTimeout: this.withTimeout.bind(this)
+    });
+
+    // Initialize validation dependency management system
+    this.dependencyManager = new ValidationDependencyManager({
+      projectRoot: PROJECT_ROOT
     });
 
     // Initialize features file and task structures if they don't exist
@@ -1746,6 +1754,767 @@ class AutonomousTaskManagerAPI {
         stored: false
       };
     }
+  }
+
+  /**
+   * 🚀 FEATURE 8: COMPREHENSIVE PERFORMANCE METRICS ANALYSIS
+   * Get comprehensive validation performance metrics with filtering and analysis
+   */
+  async getValidationPerformanceMetrics(options = {}) {
+    try {
+      const fs = require('fs').promises;
+      const path = require('path');
+      const metricsFile = path.join(PROJECT_ROOT, '.validation-performance.json');
+
+      if (!await this._fileExists(metricsFile)) {
+        return {
+          success: true,
+          metrics: [],
+          statistics: null,
+          message: 'No performance metrics available yet'
+        };
+      }
+
+      const data = await fs.readFile(metricsFile, 'utf8');
+      const metricsData = JSON.parse(data);
+
+      // Apply filtering options
+      let filteredMetrics = metricsData.metrics || [];
+      if (options.timeRange) {
+        const cutoffTime = new Date(Date.now() - options.timeRange * 24 * 60 * 60 * 1000);
+        filteredMetrics = filteredMetrics.filter(m => new Date(m.startTime) >= cutoffTime);
+      }
+      if (options.criterion) {
+        filteredMetrics = filteredMetrics.filter(m => m.criterion === options.criterion);
+      }
+      if (options.successOnly !== undefined) {
+        filteredMetrics = filteredMetrics.filter(m => m.success === options.successOnly);
+      }
+
+      // Calculate enhanced statistics
+      const enhancedStats = this._calculateEnhancedPerformanceStatistics(filteredMetrics);
+
+      return {
+        success: true,
+        metrics: options.limit ? filteredMetrics.slice(-options.limit) : filteredMetrics,
+        statistics: enhancedStats,
+        filtering: {
+          applied: options,
+          totalRecords: metricsData.metrics?.length || 0,
+          filteredRecords: filteredMetrics.length
+        },
+        featureId: 'feature_1758946499841_cd5eba625370' // Feature 8 ID
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        metrics: [],
+        statistics: null
+      };
+    }
+  }
+
+  /**
+   * Analyze performance trends over time periods
+   */
+  async getPerformanceTrends(options = {}) {
+    try {
+      const fs = require('fs').promises;
+      const path = require('path');
+      const metricsFile = path.join(PROJECT_ROOT, '.validation-performance.json');
+
+      if (!await this._fileExists(metricsFile)) {
+        return {
+          success: true,
+          trends: [],
+          message: 'No performance data available for trend analysis'
+        };
+      }
+
+      const data = await fs.readFile(metricsFile, 'utf8');
+      const metricsData = JSON.parse(data);
+      const metrics = metricsData.metrics || [];
+
+      // Group metrics by time periods (default: daily)
+      const timeGrouping = options.groupBy || 'daily'; // daily, hourly, weekly
+      const trendData = this._groupMetricsByTimePeriod(metrics, timeGrouping);
+
+      // Calculate trend analysis
+      const trends = this._analyzeTrends(trendData);
+
+      return {
+        success: true,
+        trends,
+        timeGrouping,
+        totalDataPoints: metrics.length,
+        analysisWindow: options.timeRange || 'all',
+        insights: this._generateTrendInsights(trends),
+        featureId: 'feature_1758946499841_cd5eba625370'
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        trends: []
+      };
+    }
+  }
+
+  /**
+   * Identify performance bottlenecks and slow validation criteria
+   */
+  async identifyPerformanceBottlenecks(options = {}) {
+    try {
+      const fs = require('fs').promises;
+      const path = require('path');
+      const metricsFile = path.join(PROJECT_ROOT, '.validation-performance.json');
+
+      if (!await this._fileExists(metricsFile)) {
+        return {
+          success: true,
+          bottlenecks: [],
+          message: 'No performance data available for bottleneck analysis'
+        };
+      }
+
+      const data = await fs.readFile(metricsFile, 'utf8');
+      const metricsData = JSON.parse(data);
+      const metrics = metricsData.metrics || [];
+
+      // Analyze bottlenecks by criterion
+      const bottleneckAnalysis = this._analyzeBottlenecks(metrics, options);
+
+      return {
+        success: true,
+        bottlenecks: bottleneckAnalysis.bottlenecks,
+        recommendations: bottleneckAnalysis.recommendations,
+        analysis: {
+          totalCriteria: bottleneckAnalysis.totalCriteria,
+          averageExecutionTime: bottleneckAnalysis.averageExecutionTime,
+          slowestCriterion: bottleneckAnalysis.slowestCriterion,
+          fastestCriterion: bottleneckAnalysis.fastestCriterion
+        },
+        thresholds: {
+          slowThreshold: options.slowThreshold || 5000, // ms
+          criticalThreshold: options.criticalThreshold || 10000 // ms
+        },
+        featureId: 'feature_1758946499841_cd5eba625370'
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        bottlenecks: []
+      };
+    }
+  }
+
+  /**
+   * Generate detailed timing report for specific validation runs
+   */
+  async getDetailedTimingReport(options = {}) {
+    try {
+      const fs = require('fs').promises;
+      const path = require('path');
+      const metricsFile = path.join(PROJECT_ROOT, '.validation-performance.json');
+
+      if (!await this._fileExists(metricsFile)) {
+        return {
+          success: true,
+          report: null,
+          message: 'No timing data available for detailed report'
+        };
+      }
+
+      const data = await fs.readFile(metricsFile, 'utf8');
+      const metricsData = JSON.parse(data);
+      const metrics = metricsData.metrics || [];
+
+      // Generate detailed timing breakdown
+      const timingReport = this._generateDetailedTimingReport(metrics, options);
+
+      return {
+        success: true,
+        report: timingReport,
+        generatedAt: new Date().toISOString(),
+        dataRange: {
+          from: metrics.length > 0 ? metrics[0].startTime : null,
+          to: metrics.length > 0 ? metrics[metrics.length - 1].startTime : null,
+          totalRecords: metrics.length
+        },
+        featureId: 'feature_1758946499841_cd5eba625370'
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        report: null
+      };
+    }
+  }
+
+  /**
+   * Analyze resource usage during validation processes
+   */
+  async analyzeResourceUsage(options = {}) {
+    try {
+      const fs = require('fs').promises;
+      const path = require('path');
+      const metricsFile = path.join(PROJECT_ROOT, '.validation-performance.json');
+
+      if (!await this._fileExists(metricsFile)) {
+        return {
+          success: true,
+          resourceAnalysis: null,
+          message: 'No resource usage data available'
+        };
+      }
+
+      const data = await fs.readFile(metricsFile, 'utf8');
+      const metricsData = JSON.parse(data);
+      const metrics = metricsData.metrics || [];
+
+      // Analyze memory usage patterns
+      const resourceAnalysis = this._analyzeResourceUsagePatterns(metrics, options);
+
+      return {
+        success: true,
+        resourceAnalysis,
+        currentSystemResources: {
+          memory: process.memoryUsage(),
+          uptime: process.uptime(),
+          cpuUsage: process.cpuUsage()
+        },
+        analysisType: options.analysisType || 'comprehensive',
+        featureId: 'feature_1758946499841_cd5eba625370'
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        resourceAnalysis: null
+      };
+    }
+  }
+
+  /**
+   * Get performance benchmarks and comparisons
+   */
+  async getPerformanceBenchmarks(options = {}) {
+    try {
+      const fs = require('fs').promises;
+      const path = require('path');
+      const metricsFile = path.join(PROJECT_ROOT, '.validation-performance.json');
+
+      if (!await this._fileExists(metricsFile)) {
+        return {
+          success: true,
+          benchmarks: null,
+          message: 'No performance data available for benchmarking'
+        };
+      }
+
+      const data = await fs.readFile(metricsFile, 'utf8');
+      const metricsData = JSON.parse(data);
+      const metrics = metricsData.metrics || [];
+
+      // Calculate benchmarks
+      const benchmarks = this._calculatePerformanceBenchmarks(metrics, options);
+
+      return {
+        success: true,
+        benchmarks,
+        industry_standards: {
+          linter_validation: { target: '< 2000ms', acceptable: '< 5000ms' },
+          type_validation: { target: '< 3000ms', acceptable: '< 8000ms' },
+          build_validation: { target: '< 30000ms', acceptable: '< 60000ms' },
+          test_validation: { target: '< 10000ms', acceptable: '< 30000ms' }
+        },
+        recommendations: this._generateBenchmarkRecommendations(benchmarks),
+        featureId: 'feature_1758946499841_cd5eba625370'
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        benchmarks: null
+      };
+    }
+  }
+
+  /**
+   * Calculate enhanced performance statistics
+   */
+  _calculateEnhancedPerformanceStatistics(metrics) {
+    if (!metrics || metrics.length === 0) {
+      return null;
+    }
+
+    const durations = metrics.map(m => m.durationMs);
+    const successRate = (metrics.filter(m => m.success).length / metrics.length) * 100;
+
+    // Calculate percentiles
+    const sortedDurations = durations.slice().sort((a, b) => a - b);
+    const p50 = sortedDurations[Math.floor(sortedDurations.length * 0.5)];
+    const p90 = sortedDurations[Math.floor(sortedDurations.length * 0.9)];
+    const p95 = sortedDurations[Math.floor(sortedDurations.length * 0.95)];
+    const p99 = sortedDurations[Math.floor(sortedDurations.length * 0.99)];
+
+    return {
+      totalMeasurements: metrics.length,
+      successRate: Math.round(successRate * 100) / 100,
+      timing: {
+        average: Math.round(durations.reduce((sum, d) => sum + d, 0) / durations.length),
+        median: p50,
+        min: Math.min(...durations),
+        max: Math.max(...durations),
+        percentiles: { p50, p90, p95, p99 }
+      },
+      criteriaBreakdown: this._groupMetricsByCriteria(metrics),
+      timeRange: {
+        from: metrics[0]?.startTime,
+        to: metrics[metrics.length - 1]?.startTime
+      }
+    };
+  }
+
+  /**
+   * Group metrics by time period for trend analysis
+   */
+  _groupMetricsByTimePeriod(metrics, groupBy) {
+    const groups = {};
+
+    metrics.forEach(metric => {
+      const date = new Date(metric.startTime);
+      let key;
+
+      switch (groupBy) {
+        case 'hourly':
+          key = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}`;
+          break;
+        case 'weekly':
+          const weekNumber = Math.floor(date.getTime() / (7 * 24 * 60 * 60 * 1000));
+          key = `week-${weekNumber}`;
+          break;
+        case 'daily':
+        default:
+          key = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+          break;
+      }
+
+      if (!groups[key]) {
+        groups[key] = [];
+      }
+      groups[key].push(metric);
+    });
+
+    return groups;
+  }
+
+  /**
+   * Analyze performance trends
+   */
+  _analyzeTrends(trendData) {
+    const trends = [];
+    const periods = Object.keys(trendData).sort();
+
+    periods.forEach(period => {
+      const periodMetrics = trendData[period];
+      const avgDuration = periodMetrics.reduce((sum, m) => sum + m.durationMs, 0) / periodMetrics.length;
+      const successRate = (periodMetrics.filter(m => m.success).length / periodMetrics.length) * 100;
+
+      trends.push({
+        period,
+        metrics: periodMetrics.length,
+        averageDuration: Math.round(avgDuration),
+        successRate: Math.round(successRate * 100) / 100,
+        criteria: [...new Set(periodMetrics.map(m => m.criterion))]
+      });
+    });
+
+    return trends;
+  }
+
+  /**
+   * Generate trend insights
+   */
+  _generateTrendInsights(trends) {
+    if (trends.length < 2) return [];
+
+    const insights = [];
+    const recent = trends[trends.length - 1];
+    const previous = trends[trends.length - 2];
+
+    // Duration trend
+    const durationChange = ((recent.averageDuration - previous.averageDuration) / previous.averageDuration) * 100;
+    if (Math.abs(durationChange) > 10) {
+      insights.push({
+        type: durationChange > 0 ? 'performance_degradation' : 'performance_improvement',
+        message: `Validation performance ${durationChange > 0 ? 'degraded' : 'improved'} by ${Math.abs(durationChange).toFixed(1)}%`,
+        impact: Math.abs(durationChange) > 25 ? 'high' : 'medium'
+      });
+    }
+
+    // Success rate trend
+    const successRateChange = recent.successRate - previous.successRate;
+    if (Math.abs(successRateChange) > 5) {
+      insights.push({
+        type: successRateChange > 0 ? 'reliability_improvement' : 'reliability_concern',
+        message: `Success rate ${successRateChange > 0 ? 'improved' : 'decreased'} by ${Math.abs(successRateChange).toFixed(1)}%`,
+        impact: Math.abs(successRateChange) > 10 ? 'high' : 'medium'
+      });
+    }
+
+    return insights;
+  }
+
+  /**
+   * Analyze performance bottlenecks
+   */
+  _analyzeBottlenecks(metrics, options) {
+    const slowThreshold = options.slowThreshold || 5000;
+    const criticalThreshold = options.criticalThreshold || 10000;
+
+    // Group by criterion
+    const byCriterion = this._groupMetricsByCriteria(metrics);
+    const bottlenecks = [];
+    const recommendations = [];
+
+    Object.entries(byCriterion).forEach(([criterion, stats]) => {
+      if (stats.avgDuration > slowThreshold) {
+        const severity = stats.avgDuration > criticalThreshold ? 'critical' : 'moderate';
+
+        bottlenecks.push({
+          criterion,
+          severity,
+          avgDuration: Math.round(stats.avgDuration),
+          maxDuration: Math.round(stats.maxDuration),
+          frequency: stats.count,
+          failureRate: Math.round((1 - stats.successRate / 100) * 100)
+        });
+
+        // Generate recommendations
+        if (criterion.includes('build')) {
+          recommendations.push(`Consider implementing incremental builds for ${criterion}`);
+        } else if (criterion.includes('test')) {
+          recommendations.push(`Optimize test suite for ${criterion} - consider parallel execution`);
+        } else if (criterion.includes('linter')) {
+          recommendations.push(`Review linter configuration for ${criterion} - disable non-critical rules`);
+        }
+      }
+    });
+
+    // Sort bottlenecks by severity and duration
+    bottlenecks.sort((a, b) => {
+      if (a.severity !== b.severity) {
+        return a.severity === 'critical' ? -1 : 1;
+      }
+      return b.avgDuration - a.avgDuration;
+    });
+
+    return {
+      bottlenecks,
+      recommendations,
+      totalCriteria: Object.keys(byCriterion).length,
+      averageExecutionTime: Math.round(metrics.reduce((sum, m) => sum + m.durationMs, 0) / metrics.length),
+      slowestCriterion: bottlenecks[0] || null,
+      fastestCriterion: Object.entries(byCriterion).sort((a, b) => a[1].avgDuration - b[1].avgDuration)[0]
+    };
+  }
+
+  /**
+   * Group metrics by criteria
+   */
+  _groupMetricsByCriteria(metrics) {
+    const byCriterion = {};
+
+    metrics.forEach(metric => {
+      if (!byCriterion[metric.criterion]) {
+        byCriterion[metric.criterion] = {
+          count: 0,
+          totalDuration: 0,
+          maxDuration: 0,
+          successCount: 0,
+          avgDuration: 0,
+          successRate: 0
+        };
+      }
+
+      const stats = byCriterion[metric.criterion];
+      stats.count++;
+      stats.totalDuration += metric.durationMs;
+      stats.maxDuration = Math.max(stats.maxDuration, metric.durationMs);
+      if (metric.success) stats.successCount++;
+    });
+
+    // Calculate averages
+    Object.keys(byCriterion).forEach(criterion => {
+      const stats = byCriterion[criterion];
+      stats.avgDuration = stats.totalDuration / stats.count;
+      stats.successRate = (stats.successCount / stats.count) * 100;
+    });
+
+    return byCriterion;
+  }
+
+  /**
+   * Generate detailed timing report
+   */
+  _generateDetailedTimingReport(metrics, options) {
+    const byCriterion = this._groupMetricsByCriteria(metrics);
+    const recentMetrics = options.recent ? metrics.slice(-options.recent) : metrics;
+
+    return {
+      summary: {
+        totalValidations: metrics.length,
+        recentValidations: recentMetrics.length,
+        overallSuccessRate: Math.round((metrics.filter(m => m.success).length / metrics.length) * 100),
+        totalExecutionTime: Math.round(metrics.reduce((sum, m) => sum + m.durationMs, 0))
+      },
+      criteriaBreakdown: Object.entries(byCriterion).map(([criterion, stats]) => ({
+        criterion,
+        executions: stats.count,
+        avgDuration: Math.round(stats.avgDuration),
+        maxDuration: Math.round(stats.maxDuration),
+        successRate: Math.round(stats.successRate),
+        performance_grade: this._getPerformanceGrade(stats.avgDuration)
+      })),
+      recentActivity: recentMetrics.slice(-10).map(m => ({
+        criterion: m.criterion,
+        duration: m.durationMs,
+        success: m.success,
+        timestamp: m.startTime
+      })),
+      performanceDistribution: this._calculatePerformanceDistribution(metrics)
+    };
+  }
+
+  /**
+   * Get performance grade based on duration
+   */
+  _getPerformanceGrade(avgDuration) {
+    if (avgDuration < 1000) return 'A';
+    if (avgDuration < 2000) return 'B';
+    if (avgDuration < 5000) return 'C';
+    if (avgDuration < 10000) return 'D';
+    return 'F';
+  }
+
+  /**
+   * Calculate performance distribution
+   */
+  _calculatePerformanceDistribution(metrics) {
+    const durations = metrics.map(m => m.durationMs);
+    const ranges = [
+      { label: '< 1s', count: 0 },
+      { label: '1-2s', count: 0 },
+      { label: '2-5s', count: 0 },
+      { label: '5-10s', count: 0 },
+      { label: '> 10s', count: 0 }
+    ];
+
+    durations.forEach(duration => {
+      if (duration < 1000) ranges[0].count++;
+      else if (duration < 2000) ranges[1].count++;
+      else if (duration < 5000) ranges[2].count++;
+      else if (duration < 10000) ranges[3].count++;
+      else ranges[4].count++;
+    });
+
+    return ranges;
+  }
+
+  /**
+   * Analyze resource usage patterns
+   */
+  _analyzeResourceUsagePatterns(metrics, options) {
+    const memoryMetrics = metrics.filter(m => m.memoryUsageBefore && m.memoryUsageAfter);
+
+    if (memoryMetrics.length === 0) {
+      return {
+        memory: { available: false, message: 'No memory usage data available' },
+        recommendations: ['Enable memory monitoring for resource analysis']
+      };
+    }
+
+    const memoryDeltas = memoryMetrics.map(m => ({
+      criterion: m.criterion,
+      rssChange: m.memoryUsageAfter.rss - m.memoryUsageBefore.rss,
+      heapChange: m.memoryUsageAfter.heapUsed - m.memoryUsageBefore.heapUsed
+    }));
+
+    return {
+      memory: {
+        available: true,
+        avgRssChange: Math.round(memoryDeltas.reduce((sum, d) => sum + d.rssChange, 0) / memoryDeltas.length),
+        avgHeapChange: Math.round(memoryDeltas.reduce((sum, d) => sum + d.heapChange, 0) / memoryDeltas.length),
+        highestMemoryUsage: Math.max(...memoryDeltas.map(d => d.rssChange)),
+        byCriterion: this._groupMemoryUsageByCriterion(memoryDeltas)
+      },
+      recommendations: this._generateResourceRecommendations(memoryDeltas)
+    };
+  }
+
+  /**
+   * Group memory usage by criterion
+   */
+  _groupMemoryUsageByCriterion(memoryDeltas) {
+    const grouped = {};
+
+    memoryDeltas.forEach(delta => {
+      if (!grouped[delta.criterion]) {
+        grouped[delta.criterion] = {
+          count: 0,
+          totalRssChange: 0,
+          totalHeapChange: 0
+        };
+      }
+
+      grouped[delta.criterion].count++;
+      grouped[delta.criterion].totalRssChange += delta.rssChange;
+      grouped[delta.criterion].totalHeapChange += delta.heapChange;
+    });
+
+    Object.keys(grouped).forEach(criterion => {
+      const stats = grouped[criterion];
+      stats.avgRssChange = Math.round(stats.totalRssChange / stats.count);
+      stats.avgHeapChange = Math.round(stats.totalHeapChange / stats.count);
+    });
+
+    return grouped;
+  }
+
+  /**
+   * Generate resource usage recommendations
+   */
+  _generateResourceRecommendations(memoryDeltas) {
+    const recommendations = [];
+    const highMemoryUsage = memoryDeltas.filter(d => d.rssChange > 50 * 1024 * 1024); // 50MB
+
+    if (highMemoryUsage.length > 0) {
+      recommendations.push('Consider optimizing memory usage for high-consumption validation criteria');
+
+      const highUsageCriteria = [...new Set(highMemoryUsage.map(d => d.criterion))];
+      highUsageCriteria.forEach(criterion => {
+        recommendations.push(`Review ${criterion} validation for memory optimization opportunities`);
+      });
+    }
+
+    return recommendations;
+  }
+
+  /**
+   * Calculate performance benchmarks
+   */
+  _calculatePerformanceBenchmarks(metrics, options) {
+    const byCriterion = this._groupMetricsByCriteria(metrics);
+    const timeRange = options.timeRange || 30; // days
+    const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
+    const recentMetrics = metrics.filter(m => new Date(m.startTime) >= cutoffDate);
+
+    return {
+      overall: {
+        current_avg: Math.round(recentMetrics.reduce((sum, m) => sum + m.durationMs, 0) / recentMetrics.length),
+        historical_avg: Math.round(metrics.reduce((sum, m) => sum + m.durationMs, 0) / metrics.length),
+        improvement_percentage: this._calculateImprovementPercentage(metrics, recentMetrics)
+      },
+      by_criterion: Object.entries(byCriterion).map(([criterion, stats]) => ({
+        criterion,
+        benchmark: Math.round(stats.avgDuration),
+        grade: this._getPerformanceGrade(stats.avgDuration),
+        meets_target: this._meetsPerformanceTarget(criterion, stats.avgDuration)
+      })),
+      comparison_period: `${timeRange} days`,
+      data_quality: {
+        total_data_points: metrics.length,
+        recent_data_points: recentMetrics.length,
+        data_completeness: Math.round((recentMetrics.length / Math.min(metrics.length, 100)) * 100)
+      }
+    };
+  }
+
+  /**
+   * Calculate improvement percentage
+   */
+  _calculateImprovementPercentage(allMetrics, recentMetrics) {
+    if (allMetrics.length < 10 || recentMetrics.length < 5) return null;
+
+    const oldAvg = allMetrics.slice(0, Math.floor(allMetrics.length / 2))
+      .reduce((sum, m) => sum + m.durationMs, 0) / Math.floor(allMetrics.length / 2);
+    const newAvg = recentMetrics.reduce((sum, m) => sum + m.durationMs, 0) / recentMetrics.length;
+
+    return Math.round(((oldAvg - newAvg) / oldAvg) * 100);
+  }
+
+  /**
+   * Check if criterion meets performance target
+   */
+  _meetsPerformanceTarget(criterion, avgDuration) {
+    const targets = {
+      'linter-validation': 2000,
+      'type-validation': 3000,
+      'build-validation': 30000,
+      'test-validation': 10000,
+      'security-validation': 5000
+    };
+
+    const target = targets[criterion] || 5000;
+    return avgDuration <= target;
+  }
+
+  /**
+   * Generate benchmark recommendations
+   */
+  _generateBenchmarkRecommendations(benchmarks) {
+    const recommendations = [];
+
+    benchmarks.by_criterion.forEach(criterion => {
+      if (!criterion.meets_target) {
+        recommendations.push({
+          criterion: criterion.criterion,
+          current: `${criterion.benchmark}ms`,
+          target: `< ${this._getTargetForCriterion(criterion.criterion)}ms`,
+          suggestion: this._getSuggestionForCriterion(criterion.criterion)
+        });
+      }
+    });
+
+    return recommendations;
+  }
+
+  /**
+   * Get performance target for criterion
+   */
+  _getTargetForCriterion(criterion) {
+    const targets = {
+      'linter-validation': 2000,
+      'type-validation': 3000,
+      'build-validation': 30000,
+      'test-validation': 10000,
+      'security-validation': 5000
+    };
+    return targets[criterion] || 5000;
+  }
+
+  /**
+   * Get optimization suggestion for criterion
+   */
+  _getSuggestionForCriterion(criterion) {
+    const suggestions = {
+      'linter-validation': 'Consider using faster linters or reducing rule complexity',
+      'type-validation': 'Implement incremental type checking or optimize tsconfig',
+      'build-validation': 'Enable build caching and incremental compilation',
+      'test-validation': 'Implement parallel test execution and optimize test suite',
+      'security-validation': 'Cache security scan results and use incremental scanning'
+    };
+    return suggestions[criterion] || 'Review and optimize validation implementation';
   }
 
   /**
@@ -6601,6 +7370,38 @@ async function main() {
           throw new Error('Feature ID required. Usage: get-feature-test-status <featureId>');
         }
         result = await api.getFeatureTestStatus(args[1]);
+        break;
+      }
+
+      // 🚀 FEATURE 8: PERFORMANCE METRICS ENDPOINTS (Stop Hook Validation Performance Tracking)
+      case 'get-validation-performance-metrics': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.getValidationPerformanceMetrics(options);
+        break;
+      }
+      case 'get-performance-trends': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.getPerformanceTrends(options);
+        break;
+      }
+      case 'identify-performance-bottlenecks': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.identifyPerformanceBottlenecks(options);
+        break;
+      }
+      case 'get-detailed-timing-report': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.getDetailedTimingReport(options);
+        break;
+      }
+      case 'analyze-resource-usage': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.analyzeResourceUsage(options);
+        break;
+      }
+      case 'get-performance-benchmarks': {
+        const options = args[1] ? JSON.parse(args[1]) : {};
+        result = await api.getPerformanceBenchmarks(options);
         break;
       }
 
