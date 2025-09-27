@@ -48,6 +48,7 @@ class APIPerformanceBenchmark {
       const startMemory = process.memoryUsage();
 
       try {
+        // eslint-disable-next-line no-await-in-loop -- Sequential execution required for accurate performance measurement
         const result = await this.runCommand(command, args);
         const endTime = process.hrtime.bigint();
         const endMemory = process.memoryUsage();
@@ -65,6 +66,7 @@ class APIPerformanceBenchmark {
         });
 
         // Small delay between iterations
+        // eslint-disable-next-line no-await-in-loop -- Sequential delay required for benchmark accuracy
         await this.sleep(100);
       } catch (error) {
         results.push({
@@ -420,6 +422,7 @@ class APIPerformanceBenchmark {
       const startTime = process.hrtime.bigint();
 
       try {
+        // eslint-disable-next-line no-await-in-loop -- Sequential load testing requires controlled timing
         const result = await this.runCommand(endpoint);
         const responseTime = Number(process.hrtime.bigint() - startTime) / 1000000;
 
@@ -442,6 +445,7 @@ class APIPerformanceBenchmark {
       }
 
       // Small delay to prevent overwhelming the system
+      // eslint-disable-next-line no-await-in-loop -- Sequential delay required for controlled load testing
       await this.sleep(10);
     }
 
