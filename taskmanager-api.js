@@ -827,6 +827,244 @@ class AutonomousTaskManagerAPI {
     }
   }
 
+  // ========================================================================
+  // VALIDATION DEPENDENCY MANAGEMENT METHODS
+  // ========================================================================
+
+  /**
+   * Get current validation dependency configuration
+   */
+  async getValidationDependencies() {
+    try {
+      await this.dependencyManager.loadDependencyConfig();
+
+      const dependencies = this.dependencyManager.getAllDependencies();
+      const validation = this.dependencyManager.validateDependencyGraph();
+      const visualization = this.dependencyManager.getDependencyVisualization();
+      const analytics = this.dependencyManager.getExecutionAnalytics();
+
+      return {
+        success: true,
+        dependencies,
+        validation,
+        visualization,
+        analytics,
+        message: 'Validation dependency configuration retrieved successfully'
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Failed to get validation dependencies'
+      };
+    }
+  }
+
+  /**
+   * Update validation dependency configuration
+   */
+  async updateValidationDependency(criterion, dependencyConfig) {
+    try {
+      this.dependencyManager.addDependency(criterion, dependencyConfig);
+
+      // Validate the updated configuration
+      const validation = this.dependencyManager.validateDependencyGraph();
+      if (!validation.valid) {
+        throw new Error(`Dependency configuration invalid: ${validation.issues.map(i => i.description).join(', ')}`);
+      }
+
+      // Save configuration to file
+      const configPath = await this.dependencyManager.saveDependencyConfig();
+
+      return {
+        success: true,
+        criterion,
+        dependencyConfig,
+        configPath,
+        validation,
+        message: `Validation dependency for '${criterion}' updated successfully`
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: `Failed to update validation dependency for '${criterion}'`
+      };
+    }
+  }
+
+  /**
+   * Generate optimized validation execution plan
+   */
+  async generateValidationExecutionPlan(criteria = null, maxConcurrency = 4) {
+    try {
+      await this.dependencyManager.loadDependencyConfig();
+
+      const executionOrder = this.dependencyManager.getExecutionOrder(criteria);
+      const parallelPlan = this.dependencyManager.generateParallelExecutionPlan(criteria, maxConcurrency);
+      const visualization = this.dependencyManager.getDependencyVisualization();
+
+      return {
+        success: true,
+        executionOrder,
+        parallelPlan,
+        visualization,
+        recommendations: {
+          optimalConcurrency: maxConcurrency,
+          estimatedTimeReduction: `${Math.round(parallelPlan.parallelizationGain)}%`,
+          totalWaves: parallelPlan.totalWaves,
+          criticalPath: this._identifyCriticalPath(executionOrder)
+        },
+        message: 'Validation execution plan generated successfully'
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Failed to generate validation execution plan'
+      };
+    }
+  }
+
+  /**
+   * Validate dependency graph and detect issues
+   */
+  async validateDependencyGraph() {
+    try {
+      await this.dependencyManager.loadDependencyConfig();
+
+      const validation = this.dependencyManager.validateDependencyGraph();
+      const dependencies = this.dependencyManager.getAllDependencies();
+
+      return {
+        success: true,
+        validation,
+        totalCriteria: Object.keys(dependencies).length,
+        totalDependencies: Object.values(dependencies).reduce((sum, dep) => sum + dep.dependencies.length, 0),
+        recommendations: validation.valid ?
+          ['Dependency graph is valid and cycle-free'] :
+          validation.issues.map(issue => `Fix ${issue.type}: ${issue.description}`),
+        message: validation.valid ?
+          'Dependency graph validation passed' :
+          'Dependency graph validation failed - issues detected'
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Failed to validate dependency graph'
+      };
+    }
+  }
+
+  /**
+   * Get dependency visualization data for debugging
+   */
+  async getDependencyVisualization() {
+    try {
+      await this.dependencyManager.loadDependencyConfig();
+
+      const visualization = this.dependencyManager.getDependencyVisualization();
+      const analytics = this.dependencyManager.getExecutionAnalytics();
+
+      return {
+        success: true,
+        visualization,
+        analytics,
+        debugInfo: {
+          nodeCount: visualization.nodes.length,
+          edgeCount: visualization.edges.length,
+          levelCount: visualization.levels,
+          complexityScore: this._calculateComplexityScore(visualization)
+        },
+        message: 'Dependency visualization data generated successfully'
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Failed to generate dependency visualization'
+      };
+    }
+  }
+
+  /**
+   * Record validation execution result for analytics
+   */
+  async recordValidationExecution(criterion, result, duration, metadata = {}) {
+    try {
+      this.dependencyManager.recordExecution(criterion, result, duration, metadata);
+
+      return {
+        success: true,
+        criterion,
+        result,
+        duration,
+        message: 'Validation execution recorded successfully'
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Failed to record validation execution'
+      };
+    }
+  }
+
+  /**
+   * Helper method to identify critical path in execution order
+   */
+  _identifyCriticalPath(executionOrder) {
+    // Find the longest dependency chain
+    const chains = [];
+
+    for (const step of executionOrder) {
+      const criterion = step.criterion;
+      const deps = this.dependencyManager.getDependency(criterion);
+
+      if (deps && deps.dependencies.length > 0) {
+        chains.push({
+          criterion,
+          depth: this._calculateDepth(criterion, new Set()),
+          estimatedDuration: deps.metadata.estimatedDuration || 10000
+        });
+      }
+    }
+
+    return chains.sort((a, b) => (b.depth + b.estimatedDuration) - (a.depth + a.estimatedDuration))[0] || null;
+  }
+
+  /**
+   * Helper method to calculate dependency depth
+   */
+  _calculateDepth(criterion, visited = new Set()) {
+    if (visited.has(criterion)) return 0;
+
+    visited.add(criterion);
+    const deps = this.dependencyManager.getDependency(criterion);
+
+    if (!deps || deps.dependencies.length === 0) return 0;
+
+    let maxDepth = 0;
+    for (const dep of deps.dependencies) {
+      maxDepth = Math.max(maxDepth, this._calculateDepth(dep.criterion, visited));
+    }
+
+    return maxDepth + 1;
+  }
+
+  /**
+   * Helper method to calculate complexity score
+   */
+  _calculateComplexityScore(visualization) {
+    const nodes = visualization.nodes.length;
+    const edges = visualization.edges.length;
+    const levels = visualization.levels;
+
+    // Complexity factors: node count, edge density, level depth
+    return Math.round((nodes * 10) + (edges / nodes * 100) + (levels * 20));
+  }
+
   async startAuthorization(agentId) {
     try {
       const fs = require('fs').promises;
@@ -1210,27 +1448,62 @@ class AutonomousTaskManagerAPI {
    * Define validation dependency groups for parallel execution
    * Groups independent validations that can run simultaneously
    */
+  /**
+   * Get validation dependency groups using the advanced dependency management system
+   */
   _getValidationDependencyGroups() {
-    return [
-      {
-        name: "Independent Code Quality Checks",
-        criteria: ['focused-codebase', 'security-validation', 'linter-validation', 'type-validation'],
-        dependencies: [],
-        description: "Code quality validations that don't depend on build or runtime"
-      },
-      {
-        name: "Build and Runtime Validation",
-        criteria: ['build-validation', 'start-validation'],
-        dependencies: ['focused-codebase', 'linter-validation', 'type-validation'],
-        description: "Build and startup validations that require clean code"
-      },
-      {
-        name: "Test Execution",
-        criteria: ['test-validation'],
-        dependencies: ['build-validation'],
-        description: "Test execution that requires successful build"
+    try {
+      // Load any custom dependency configuration
+      this.dependencyManager.loadDependencyConfig().catch(() => {
+        // Ignore errors - use defaults if config doesn't exist
+      });
+
+      // Validate dependency graph
+      const validation = this.dependencyManager.validateDependencyGraph();
+      if (!validation.valid) {
+        console.error('⚠️ Dependency validation issues detected:', validation.issues);
       }
-    ];
+
+      // Generate parallel execution plan
+      const parallelPlan = this.dependencyManager.generateParallelExecutionPlan();
+
+      // Convert parallel execution plan to legacy group format for backward compatibility
+      const groups = parallelPlan.plan.map((wave, index) => ({
+        name: `Execution Wave ${index + 1}`,
+        criteria: wave.criteria.map(c => c.criterion),
+        dependencies: index > 0 ? parallelPlan.plan[index - 1].criteria.map(c => c.criterion) : [],
+        description: `Wave ${index + 1}: ${wave.criteria.length} criteria (${Math.round(wave.estimatedDuration / 1000)}s estimated)`,
+        estimatedDuration: wave.estimatedDuration,
+        concurrency: wave.concurrency,
+        parallelizable: wave.criteria.every(c => c.parallelizable)
+      }));
+
+      return groups;
+    } catch (error) {
+      console.error('⚠️ Failed to generate dependency groups, falling back to defaults:', error.message);
+
+      // Fallback to original hardcoded groups if dependency manager fails
+      return [
+        {
+          name: "Independent Code Quality Checks",
+          criteria: ['focused-codebase', 'security-validation', 'linter-validation', 'type-validation'],
+          dependencies: [],
+          description: "Code quality validations that don't depend on build or runtime"
+        },
+        {
+          name: "Build and Runtime Validation",
+          criteria: ['build-validation', 'start-validation'],
+          dependencies: ['focused-codebase', 'linter-validation', 'type-validation'],
+          description: "Build and startup validations that require clean code"
+        },
+        {
+          name: "Test Execution",
+          criteria: ['test-validation'],
+          dependencies: ['build-validation'],
+          description: "Test execution that requires successful build"
+        }
+      ];
+    }
   }
 
   async completeAuthorization(authKey) {
@@ -6694,6 +6967,42 @@ async function main() {
         }
         result = await api.reinitializeAgent(args[1]);
         break;
+      // Validation Dependency Management Commands
+      case 'get-validation-dependencies': {
+        result = await api.getValidationDependencies();
+        break;
+      }
+      case 'update-validation-dependency': {
+        if (!args[1] || !args[2]) {
+          throw new Error('Criterion and dependency config required. Usage: update-validation-dependency <criterion> \'{"dependencies":[...], "description":"...", "estimatedDuration":10000}\'');
+        }
+        const dependencyConfig = JSON.parse(args[2]);
+        result = await api.updateValidationDependency(args[1], dependencyConfig);
+        break;
+      }
+      case 'generate-validation-execution-plan': {
+        const criteria = args[1] ? JSON.parse(args[1]) : null;
+        const maxConcurrency = args[2] ? parseInt(args[2]) : 4;
+        result = await api.generateValidationExecutionPlan(criteria, maxConcurrency);
+        break;
+      }
+      case 'validate-dependency-graph': {
+        result = await api.validateDependencyGraph();
+        break;
+      }
+      case 'get-dependency-visualization': {
+        result = await api.getDependencyVisualization();
+        break;
+      }
+      case 'record-validation-execution': {
+        if (!args[1] || !args[2] || !args[3]) {
+          throw new Error('Criterion, result, and duration required. Usage: record-validation-execution <criterion> <result> <duration> [metadata]');
+        }
+        const metadata = args[4] ? JSON.parse(args[4]) : {};
+        result = await api.recordValidationExecution(args[1], args[2], parseInt(args[3]), metadata);
+        break;
+      }
+
       case 'start-authorization': {
         if (!args[1]) {
           throw new Error('Agent ID required. Usage: start-authorization <agentId>');

@@ -1,1293 +1,39 @@
 {
   "metadata": {
-    "timestamp": "2025-09-27T04:32:17.059Z",
+    "timestamp": "2025-09-27T04:44:09.265Z",
     "reporter": "jest-json-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System"
   },
   "summary": {
-    "numTotalTestSuites": 7,
-    "numPassedTestSuites": 0,
-    "numFailedTestSuites": 1,
-    "numPendingTestSuites": 6,
-    "numTotalTests": 102,
-    "numPassedTests": 9,
-    "numFailedTests": 1,
-    "numPendingTests": 92,
+    "numTotalTestSuites": 1,
+    "numPassedTestSuites": 1,
+    "numFailedTestSuites": 0,
+    "numPendingTestSuites": 0,
+    "numTotalTests": 31,
+    "numPassedTests": 31,
+    "numFailedTests": 0,
+    "numPendingTests": 0,
     "numTodoTests": 0,
-    "startTime": 1758947536503,
-    "endTime": 1758947537059,
-    "duration": 556,
+    "startTime": 1758948243239,
+    "endTime": 1758948249265,
+    "duration": 6026,
     "success": false
   },
   "testResults": [
     {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/stress-and-recovery.test.js",
+      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/feature-8-performance-metrics-integration.test.js",
       "displayName": {
         "color": "white",
         "name": "integration"
       },
       "status": "passed",
-      "startTime": 1758947536667,
-      "endTime": 1758947536798,
-      "duration": 131,
-      "numTests": 14,
-      "numPassingTests": 0,
+      "startTime": 1758948243355,
+      "endTime": 1758948249254,
+      "duration": 5899,
+      "numTests": 31,
+      "numPassingTests": 31,
       "numFailingTests": 0,
-      "numPendingTests": 14,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [
-        {
-          "ancestorTitles": [
-            "Stress Testing and Error Recovery Integration Tests",
-            "Concurrent Operations Testing"
-          ],
-          "title": "should handle massive concurrent feature suggestions",
-          "fullName": "Stress Testing and Error Recovery Integration Tests Concurrent Operations Testing should handle massive concurrent feature suggestions",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stress Testing and Error Recovery Integration Tests",
-            "Concurrent Operations Testing"
-          ],
-          "title": "should handle mixed concurrent operations without conflicts",
-          "fullName": "Stress Testing and Error Recovery Integration Tests Concurrent Operations Testing should handle mixed concurrent operations without conflicts",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stress Testing and Error Recovery Integration Tests",
-            "Concurrent Operations Testing"
-          ],
-          "title": "should prevent race conditions in bulk operations",
-          "fullName": "Stress Testing and Error Recovery Integration Tests Concurrent Operations Testing should prevent race conditions in bulk operations",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stress Testing and Error Recovery Integration Tests",
-            "Concurrent Operations Testing"
-          ],
-          "title": "should handle concurrent agent operations safely",
-          "fullName": "Stress Testing and Error Recovery Integration Tests Concurrent Operations Testing should handle concurrent agent operations safely",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stress Testing and Error Recovery Integration Tests",
-            "Error Recovery Testing"
-          ],
-          "title": "should recover from corrupted FEATURES.json file",
-          "fullName": "Stress Testing and Error Recovery Integration Tests Error Recovery Testing should recover from corrupted FEATURES.json file",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stress Testing and Error Recovery Integration Tests",
-            "Error Recovery Testing"
-          ],
-          "title": "should handle sudden file deletion during operations",
-          "fullName": "Stress Testing and Error Recovery Integration Tests Error Recovery Testing should handle sudden file deletion during operations",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stress Testing and Error Recovery Integration Tests",
-            "Error Recovery Testing"
-          ],
-          "title": "should handle invalid JSON structure gracefully",
-          "fullName": "Stress Testing and Error Recovery Integration Tests Error Recovery Testing should handle invalid JSON structure gracefully",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stress Testing and Error Recovery Integration Tests",
-            "Error Recovery Testing"
-          ],
-          "title": "should handle partial write failures and data corruption",
-          "fullName": "Stress Testing and Error Recovery Integration Tests Error Recovery Testing should handle partial write failures and data corruption",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stress Testing and Error Recovery Integration Tests",
-            "Error Recovery Testing"
-          ],
-          "title": "should maintain consistency during system interruption simulation",
-          "fullName": "Stress Testing and Error Recovery Integration Tests Error Recovery Testing should maintain consistency during system interruption simulation",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stress Testing and Error Recovery Integration Tests",
-            "Performance Stress Testing"
-          ],
-          "title": "should handle large dataset operations efficiently",
-          "fullName": "Stress Testing and Error Recovery Integration Tests Performance Stress Testing should handle large dataset operations efficiently",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stress Testing and Error Recovery Integration Tests",
-            "Performance Stress Testing"
-          ],
-          "title": "should handle rapid sequential operations without degradation",
-          "fullName": "Stress Testing and Error Recovery Integration Tests Performance Stress Testing should handle rapid sequential operations without degradation",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stress Testing and Error Recovery Integration Tests",
-            "Performance Stress Testing"
-          ],
-          "title": "should maintain performance under mixed load patterns",
-          "fullName": "Stress Testing and Error Recovery Integration Tests Performance Stress Testing should maintain performance under mixed load patterns",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stress Testing and Error Recovery Integration Tests",
-            "Resource Cleanup and Memory Testing"
-          ],
-          "title": "should properly clean up resources after operations",
-          "fullName": "Stress Testing and Error Recovery Integration Tests Resource Cleanup and Memory Testing should properly clean up resources after operations",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Stress Testing and Error Recovery Integration Tests",
-            "Resource Cleanup and Memory Testing"
-          ],
-          "title": "should handle cleanup after error scenarios",
-          "fullName": "Stress Testing and Error Recovery Integration Tests Resource Cleanup and Memory Testing should handle cleanup after error scenarios",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        }
-      ],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/feature-lifecycle.test.js",
-      "displayName": {
-        "color": "white",
-        "name": "integration"
-      },
-      "status": "passed",
-      "startTime": 1758947536668,
-      "endTime": 1758947536812,
-      "duration": 144,
-      "numTests": 13,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 13,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [
-        {
-          "ancestorTitles": [
-            "Feature Lifecycle Integration Tests",
-            "Feature Suggestion Workflow"
-          ],
-          "title": "should handle complete feature suggestion process",
-          "fullName": "Feature Lifecycle Integration Tests Feature Suggestion Workflow should handle complete feature suggestion process",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature Lifecycle Integration Tests",
-            "Feature Suggestion Workflow"
-          ],
-          "title": "should validate feature data requirements",
-          "fullName": "Feature Lifecycle Integration Tests Feature Suggestion Workflow should validate feature data requirements",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature Lifecycle Integration Tests",
-            "Feature Suggestion Workflow"
-          ],
-          "title": "should handle concurrent feature suggestions",
-          "fullName": "Feature Lifecycle Integration Tests Feature Suggestion Workflow should handle concurrent feature suggestions",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature Lifecycle Integration Tests",
-            "Feature Approval Workflow"
-          ],
-          "title": "should handle individual feature approval process",
-          "fullName": "Feature Lifecycle Integration Tests Feature Approval Workflow should handle individual feature approval process",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature Lifecycle Integration Tests",
-            "Feature Approval Workflow"
-          ],
-          "title": "should handle bulk feature approval process",
-          "fullName": "Feature Lifecycle Integration Tests Feature Approval Workflow should handle bulk feature approval process",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature Lifecycle Integration Tests",
-            "Feature Approval Workflow"
-          ],
-          "title": "should prevent invalid approval transitions",
-          "fullName": "Feature Lifecycle Integration Tests Feature Approval Workflow should prevent invalid approval transitions",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature Lifecycle Integration Tests",
-            "Feature Rejection Workflow"
-          ],
-          "title": "should handle feature rejection process",
-          "fullName": "Feature Lifecycle Integration Tests Feature Rejection Workflow should handle feature rejection process",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature Lifecycle Integration Tests",
-            "Feature Rejection Workflow"
-          ],
-          "title": "should prevent operations on rejected features",
-          "fullName": "Feature Lifecycle Integration Tests Feature Rejection Workflow should prevent operations on rejected features",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature Lifecycle Integration Tests",
-            "Feature Filtering and Search"
-          ],
-          "title": "should filter features by status",
-          "fullName": "Feature Lifecycle Integration Tests Feature Filtering and Search should filter features by status",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature Lifecycle Integration Tests",
-            "Feature Filtering and Search"
-          ],
-          "title": "should filter features by category",
-          "fullName": "Feature Lifecycle Integration Tests Feature Filtering and Search should filter features by category",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature Lifecycle Integration Tests",
-            "Feature Filtering and Search"
-          ],
-          "title": "should handle combined filters",
-          "fullName": "Feature Lifecycle Integration Tests Feature Filtering and Search should handle combined filters",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature Lifecycle Integration Tests",
-            "Complete Lifecycle Scenarios"
-          ],
-          "title": "should handle realistic product development workflow",
-          "fullName": "Feature Lifecycle Integration Tests Complete Lifecycle Scenarios should handle realistic product development workflow",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature Lifecycle Integration Tests",
-            "Complete Lifecycle Scenarios"
-          ],
-          "title": "should maintain data integrity throughout complex workflows",
-          "fullName": "Feature Lifecycle Integration Tests Complete Lifecycle Scenarios should maintain data integrity throughout complex workflows",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        }
-      ],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/api-workflow.test.js",
-      "displayName": {
-        "color": "white",
-        "name": "integration"
-      },
-      "status": "passed",
-      "startTime": 1758947536675,
-      "endTime": 1758947536830,
-      "duration": 155,
-      "numTests": 13,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 13,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [
-        {
-          "ancestorTitles": [
-            "API Workflow Integration Tests",
-            "Complete Feature Lifecycle Workflow"
-          ],
-          "title": "should execute complete feature lifecycle: suggest → approve → track implementation",
-          "fullName": "API Workflow Integration Tests Complete Feature Lifecycle Workflow should execute complete feature lifecycle: suggest → approve → track implementation",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "API Workflow Integration Tests",
-            "Complete Feature Lifecycle Workflow"
-          ],
-          "title": "should handle feature rejection workflow",
-          "fullName": "API Workflow Integration Tests Complete Feature Lifecycle Workflow should handle feature rejection workflow",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "API Workflow Integration Tests",
-            "Complete Feature Lifecycle Workflow"
-          ],
-          "title": "should handle bulk feature approval workflow",
-          "fullName": "API Workflow Integration Tests Complete Feature Lifecycle Workflow should handle bulk feature approval workflow",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "API Workflow Integration Tests",
-            "Complete Agent Lifecycle Workflow"
-          ],
-          "title": "should execute complete agent lifecycle: initialize → reinitialize → stop authorization",
-          "fullName": "API Workflow Integration Tests Complete Agent Lifecycle Workflow should execute complete agent lifecycle: initialize → reinitialize → stop authorization",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "API Workflow Integration Tests",
-            "Complete Agent Lifecycle Workflow"
-          ],
-          "title": "should handle multiple concurrent agent operations",
-          "fullName": "API Workflow Integration Tests Complete Agent Lifecycle Workflow should handle multiple concurrent agent operations",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "API Workflow Integration Tests",
-            "Cross-Component Integration"
-          ],
-          "title": "should handle mixed feature and agent operations",
-          "fullName": "API Workflow Integration Tests Cross-Component Integration should handle mixed feature and agent operations",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "API Workflow Integration Tests",
-            "Cross-Component Integration"
-          ],
-          "title": "should maintain data consistency across multiple operations",
-          "fullName": "API Workflow Integration Tests Cross-Component Integration should maintain data consistency across multiple operations",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "API Workflow Integration Tests",
-            "API Discovery and Methods"
-          ],
-          "title": "should provide comprehensive API documentation",
-          "fullName": "API Workflow Integration Tests API Discovery and Methods should provide comprehensive API documentation",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "API Workflow Integration Tests",
-            "API Discovery and Methods"
-          ],
-          "title": "should list all available API methods",
-          "fullName": "API Workflow Integration Tests API Discovery and Methods should list all available API methods",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "API Workflow Integration Tests",
-            "API Error Handling"
-          ],
-          "title": "should handle invalid command gracefully",
-          "fullName": "API Workflow Integration Tests API Error Handling should handle invalid command gracefully",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "API Workflow Integration Tests",
-            "API Error Handling"
-          ],
-          "title": "should handle malformed JSON in feature suggestion",
-          "fullName": "API Workflow Integration Tests API Error Handling should handle malformed JSON in feature suggestion",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "API Workflow Integration Tests",
-            "API Error Handling"
-          ],
-          "title": "should handle operations on non-existent features",
-          "fullName": "API Workflow Integration Tests API Error Handling should handle operations on non-existent features",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "API Workflow Integration Tests",
-            "API Error Handling"
-          ],
-          "title": "should handle invalid status transitions",
-          "fullName": "API Workflow Integration Tests API Error Handling should handle invalid status transitions",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        }
-      ],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/agent-lifecycle.test.js",
-      "displayName": {
-        "color": "white",
-        "name": "integration"
-      },
-      "status": "passed",
-      "startTime": 1758947536673,
-      "endTime": 1758947536837,
-      "duration": 164,
-      "numTests": 19,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 19,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [
-        {
-          "ancestorTitles": [
-            "Agent Lifecycle Integration Tests",
-            "Agent Initialization Workflow"
-          ],
-          "title": "should handle single agent initialization process",
-          "fullName": "Agent Lifecycle Integration Tests Agent Initialization Workflow should handle single agent initialization process",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Agent Lifecycle Integration Tests",
-            "Agent Initialization Workflow"
-          ],
-          "title": "should handle multiple agent initialization",
-          "fullName": "Agent Lifecycle Integration Tests Agent Initialization Workflow should handle multiple agent initialization",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Agent Lifecycle Integration Tests",
-            "Agent Initialization Workflow"
-          ],
-          "title": "should handle concurrent agent initialization",
-          "fullName": "Agent Lifecycle Integration Tests Agent Initialization Workflow should handle concurrent agent initialization",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Agent Lifecycle Integration Tests",
-            "Agent Initialization Workflow"
-          ],
-          "title": "should prevent duplicate agent initialization",
-          "fullName": "Agent Lifecycle Integration Tests Agent Initialization Workflow should prevent duplicate agent initialization",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Agent Lifecycle Integration Tests",
-            "Agent Reinitialization Workflow"
-          ],
-          "title": "should handle agent reinitialization process",
-          "fullName": "Agent Lifecycle Integration Tests Agent Reinitialization Workflow should handle agent reinitialization process",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Agent Lifecycle Integration Tests",
-            "Agent Reinitialization Workflow"
-          ],
-          "title": "should handle multiple reinitializations of same agent",
-          "fullName": "Agent Lifecycle Integration Tests Agent Reinitialization Workflow should handle multiple reinitializations of same agent",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Agent Lifecycle Integration Tests",
-            "Agent Reinitialization Workflow"
-          ],
-          "title": "should handle reinitialization of non-existent agent",
-          "fullName": "Agent Lifecycle Integration Tests Agent Reinitialization Workflow should handle reinitialization of non-existent agent",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Agent Lifecycle Integration Tests",
-            "Agent Reinitialization Workflow"
-          ],
-          "title": "should handle concurrent reinitializations",
-          "fullName": "Agent Lifecycle Integration Tests Agent Reinitialization Workflow should handle concurrent reinitializations",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Agent Lifecycle Integration Tests",
-            "Stop Authorization Workflow"
-          ],
-          "title": "should handle agent stop authorization process",
-          "fullName": "Agent Lifecycle Integration Tests Stop Authorization Workflow should handle agent stop authorization process",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Agent Lifecycle Integration Tests",
-            "Stop Authorization Workflow"
-          ],
-          "title": "should handle stop authorization with different reasons",
-          "fullName": "Agent Lifecycle Integration Tests Stop Authorization Workflow should handle stop authorization with different reasons",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Agent Lifecycle Integration Tests",
-            "Stop Authorization Workflow"
-          ],
-          "title": "should handle stop authorization without reason",
-          "fullName": "Agent Lifecycle Integration Tests Stop Authorization Workflow should handle stop authorization without reason",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Agent Lifecycle Integration Tests",
-            "Stop Authorization Workflow"
-          ],
-          "title": "should handle stop authorization by non-existent agent",
-          "fullName": "Agent Lifecycle Integration Tests Stop Authorization Workflow should handle stop authorization by non-existent agent",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Agent Lifecycle Integration Tests",
-            "Stop Authorization Workflow"
-          ],
-          "title": "should handle multiple stop authorizations",
-          "fullName": "Agent Lifecycle Integration Tests Stop Authorization Workflow should handle multiple stop authorizations",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Agent Lifecycle Integration Tests",
-            "Initialization Statistics Tracking"
-          ],
-          "title": "should track initialization statistics accurately",
-          "fullName": "Agent Lifecycle Integration Tests Initialization Statistics Tracking should track initialization statistics accurately",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Agent Lifecycle Integration Tests",
-            "Initialization Statistics Tracking"
-          ],
-          "title": "should maintain statistics persistence across operations",
-          "fullName": "Agent Lifecycle Integration Tests Initialization Statistics Tracking should maintain statistics persistence across operations",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Agent Lifecycle Integration Tests",
-            "Initialization Statistics Tracking"
-          ],
-          "title": "should handle time bucket boundaries correctly",
-          "fullName": "Agent Lifecycle Integration Tests Initialization Statistics Tracking should handle time bucket boundaries correctly",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Agent Lifecycle Integration Tests",
-            "Complete Agent Lifecycle Scenarios"
-          ],
-          "title": "should handle complete agent workflow from initialization to stop",
-          "fullName": "Agent Lifecycle Integration Tests Complete Agent Lifecycle Scenarios should handle complete agent workflow from initialization to stop",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Agent Lifecycle Integration Tests",
-            "Complete Agent Lifecycle Scenarios"
-          ],
-          "title": "should handle multi-agent collaborative workflow",
-          "fullName": "Agent Lifecycle Integration Tests Complete Agent Lifecycle Scenarios should handle multi-agent collaborative workflow",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Agent Lifecycle Integration Tests",
-            "Complete Agent Lifecycle Scenarios"
-          ],
-          "title": "should handle agent workflow error recovery",
-          "fullName": "Agent Lifecycle Integration Tests Complete Agent Lifecycle Scenarios should handle agent workflow error recovery",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        }
-      ],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/cli-commands.test.js",
-      "displayName": {
-        "color": "white",
-        "name": "integration"
-      },
-      "status": "passed",
-      "startTime": 1758947536818,
-      "endTime": 1758947536872,
-      "duration": 54,
-      "numTests": 20,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 20,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "Command Argument Parsing"
-          ],
-          "title": "should handle project-root parameter correctly",
-          "fullName": "CLI Commands Integration Tests Command Argument Parsing should handle project-root parameter correctly",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "Command Argument Parsing"
-          ],
-          "title": "should handle missing arguments gracefully",
-          "fullName": "CLI Commands Integration Tests Command Argument Parsing should handle missing arguments gracefully",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "Command Argument Parsing"
-          ],
-          "title": "should handle malformed JSON arguments",
-          "fullName": "CLI Commands Integration Tests Command Argument Parsing should handle malformed JSON arguments",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "Command Argument Parsing"
-          ],
-          "title": "should handle unknown commands",
-          "fullName": "CLI Commands Integration Tests Command Argument Parsing should handle unknown commands",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "Core Command Execution"
-          ],
-          "title": "should execute guide command successfully",
-          "fullName": "CLI Commands Integration Tests Core Command Execution should execute guide command successfully",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "Core Command Execution"
-          ],
-          "title": "should execute methods command successfully",
-          "fullName": "CLI Commands Integration Tests Core Command Execution should execute methods command successfully",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "Core Command Execution"
-          ],
-          "title": "should execute feature management commands",
-          "fullName": "CLI Commands Integration Tests Core Command Execution should execute feature management commands",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "Core Command Execution"
-          ],
-          "title": "should execute agent management commands",
-          "fullName": "CLI Commands Integration Tests Core Command Execution should execute agent management commands",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "Core Command Execution"
-          ],
-          "title": "should execute bulk operations",
-          "fullName": "CLI Commands Integration Tests Core Command Execution should execute bulk operations",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "Output Formatting and Validation"
-          ],
-          "title": "should produce valid JSON output for all commands",
-          "fullName": "CLI Commands Integration Tests Output Formatting and Validation should produce valid JSON output for all commands",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "Output Formatting and Validation"
-          ],
-          "title": "should include proper error information in failed commands",
-          "fullName": "CLI Commands Integration Tests Output Formatting and Validation should include proper error information in failed commands",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "Output Formatting and Validation"
-          ],
-          "title": "should handle output with special characters correctly",
-          "fullName": "CLI Commands Integration Tests Output Formatting and Validation should handle output with special characters correctly",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "Timeout and Performance"
-          ],
-          "title": "should complete basic commands within reasonable time",
-          "fullName": "CLI Commands Integration Tests Timeout and Performance should complete basic commands within reasonable time",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "Timeout and Performance"
-          ],
-          "title": "should handle timeout scenarios gracefully",
-          "fullName": "CLI Commands Integration Tests Timeout and Performance should handle timeout scenarios gracefully",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "Timeout and Performance"
-          ],
-          "title": "should handle multiple rapid CLI invocations",
-          "fullName": "CLI Commands Integration Tests Timeout and Performance should handle multiple rapid CLI invocations",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "CLI Workflow Integration"
-          ],
-          "title": "should execute complete feature workflow via CLI",
-          "fullName": "CLI Commands Integration Tests CLI Workflow Integration should execute complete feature workflow via CLI",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "CLI Workflow Integration"
-          ],
-          "title": "should execute complete agent workflow via CLI",
-          "fullName": "CLI Commands Integration Tests CLI Workflow Integration should execute complete agent workflow via CLI",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "Error Recovery and Edge Cases"
-          ],
-          "title": "should handle corrupted project directory gracefully",
-          "fullName": "CLI Commands Integration Tests Error Recovery and Edge Cases should handle corrupted project directory gracefully",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "Error Recovery and Edge Cases"
-          ],
-          "title": "should handle invalid project root paths",
-          "fullName": "CLI Commands Integration Tests Error Recovery and Edge Cases should handle invalid project root paths",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "CLI Commands Integration Tests",
-            "Error Recovery and Edge Cases"
-          ],
-          "title": "should handle concurrent CLI executions safely",
-          "fullName": "CLI Commands Integration Tests Error Recovery and Edge Cases should handle concurrent CLI executions safely",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        }
-      ],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/file-operations.test.js",
-      "displayName": {
-        "color": "white",
-        "name": "integration"
-      },
-      "status": "passed",
-      "startTime": 1758947536848,
-      "endTime": 1758947536884,
-      "duration": 36,
-      "numTests": 13,
-      "numPassingTests": 0,
-      "numFailingTests": 0,
-      "numPendingTests": 13,
-      "snapshot": {
-        "added": 0,
-        "matched": 0,
-        "unmatched": 0,
-        "updated": 0,
-        "unchecked": 0
-      },
-      "testCases": [
-        {
-          "ancestorTitles": [
-            "File Operations Integration Tests",
-            "File Persistence and Data Integrity"
-          ],
-          "title": "should maintain FEATURES.json structure integrity across operations",
-          "fullName": "File Operations Integration Tests File Persistence and Data Integrity should maintain FEATURES.json structure integrity across operations",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "File Operations Integration Tests",
-            "File Persistence and Data Integrity"
-          ],
-          "title": "should handle concurrent file operations safely",
-          "fullName": "File Operations Integration Tests File Persistence and Data Integrity should handle concurrent file operations safely",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "File Operations Integration Tests",
-            "File Persistence and Data Integrity"
-          ],
-          "title": "should preserve file permissions and ownership",
-          "fullName": "File Operations Integration Tests File Persistence and Data Integrity should preserve file permissions and ownership",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "File Operations Integration Tests",
-            "Backup and Recovery Scenarios"
-          ],
-          "title": "should handle missing FEATURES.json file gracefully",
-          "fullName": "File Operations Integration Tests Backup and Recovery Scenarios should handle missing FEATURES.json file gracefully",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "File Operations Integration Tests",
-            "Backup and Recovery Scenarios"
-          ],
-          "title": "should handle corrupted FEATURES.json file",
-          "fullName": "File Operations Integration Tests Backup and Recovery Scenarios should handle corrupted FEATURES.json file",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "File Operations Integration Tests",
-            "Backup and Recovery Scenarios"
-          ],
-          "title": "should handle disk space and I/O errors gracefully",
-          "fullName": "File Operations Integration Tests Backup and Recovery Scenarios should handle disk space and I/O errors gracefully",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "File Operations Integration Tests",
-            "File Locking and Race Conditions"
-          ],
-          "title": "should handle rapid sequential operations correctly",
-          "fullName": "File Operations Integration Tests File Locking and Race Conditions should handle rapid sequential operations correctly",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "File Operations Integration Tests",
-            "File Locking and Race Conditions"
-          ],
-          "title": "should handle mixed read/write operations correctly",
-          "fullName": "File Operations Integration Tests File Locking and Race Conditions should handle mixed read/write operations correctly",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "File Operations Integration Tests",
-            "Data Migration and Upgrades"
-          ],
-          "title": "should handle missing metadata fields gracefully",
-          "fullName": "File Operations Integration Tests Data Migration and Upgrades should handle missing metadata fields gracefully",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "File Operations Integration Tests",
-            "Data Migration and Upgrades"
-          ],
-          "title": "should handle missing workflow_config gracefully",
-          "fullName": "File Operations Integration Tests Data Migration and Upgrades should handle missing workflow_config gracefully",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "File Operations Integration Tests",
-            "Data Migration and Upgrades"
-          ],
-          "title": "should preserve existing data during upgrades",
-          "fullName": "File Operations Integration Tests Data Migration and Upgrades should preserve existing data during upgrades",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "File Operations Integration Tests",
-            "File Validation and Error Recovery"
-          ],
-          "title": "should validate file structure before operations",
-          "fullName": "File Operations Integration Tests File Validation and Error Recovery should validate file structure before operations",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "File Operations Integration Tests",
-            "File Validation and Error Recovery"
-          ],
-          "title": "should handle file read/write permissions errors",
-          "fullName": "File Operations Integration Tests File Validation and Error Recovery should handle file read/write permissions errors",
-          "status": "pending",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        }
-      ],
-      "failureDetails": []
-    },
-    {
-      "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/feature-7-taskmanager-integration.test.js",
-      "displayName": {
-        "color": "white",
-        "name": "integration"
-      },
-      "status": "failed",
-      "startTime": 1758947536855,
-      "endTime": 1758947537040,
-      "duration": 185,
-      "numTests": 10,
-      "numPassingTests": 9,
-      "numFailingTests": 1,
       "numPendingTests": 0,
       "snapshot": {
         "added": 0,
@@ -1299,23 +45,359 @@
       "testCases": [
         {
           "ancestorTitles": [
-            "Feature 7: TaskManager API Integration - Custom Validation Rules",
-            "TaskManager _loadCustomValidationRules Method"
+            "Feature 8: Performance Metrics API Integration Tests",
+            "get-validation-performance-metrics endpoint"
           ],
-          "title": "should load custom validation rules asynchronously",
-          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules TaskManager _loadCustomValidationRules Method should load custom validation rules asynchronously",
+          "title": "should return empty metrics when no data available",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests get-validation-performance-metrics endpoint should return empty metrics when no data available",
           "status": "passed",
-          "duration": 3,
+          "duration": 301,
+          "numPassingAsserts": 4,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "get-validation-performance-metrics endpoint"
+          ],
+          "title": "should return all metrics without filtering",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests get-validation-performance-metrics endpoint should return all metrics without filtering",
+          "status": "passed",
+          "duration": 158,
+          "numPassingAsserts": 6,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "get-validation-performance-metrics endpoint"
+          ],
+          "title": "should filter metrics by criterion",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests get-validation-performance-metrics endpoint should filter metrics by criterion",
+          "status": "passed",
+          "duration": 155,
+          "numPassingAsserts": 5,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "get-validation-performance-metrics endpoint"
+          ],
+          "title": "should filter metrics by success status",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests get-validation-performance-metrics endpoint should filter metrics by success status",
+          "status": "passed",
+          "duration": 158,
+          "numPassingAsserts": 4,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "get-validation-performance-metrics endpoint"
+          ],
+          "title": "should limit returned metrics",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests get-validation-performance-metrics endpoint should limit returned metrics",
+          "status": "passed",
+          "duration": 158,
           "numPassingAsserts": 3,
           "location": null
         },
         {
           "ancestorTitles": [
-            "Feature 7: TaskManager API Integration - Custom Validation Rules",
-            "TaskManager _loadCustomValidationRules Method"
+            "Feature 8: Performance Metrics API Integration Tests",
+            "get-validation-performance-metrics endpoint"
           ],
-          "title": "should return empty array for missing config file",
-          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules TaskManager _loadCustomValidationRules Method should return empty array for missing config file",
+          "title": "should calculate percentiles correctly",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests get-validation-performance-metrics endpoint should calculate percentiles correctly",
+          "status": "passed",
+          "duration": 158,
+          "numPassingAsserts": 7,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "identify-performance-bottlenecks endpoint"
+          ],
+          "title": "should return empty bottlenecks when no data available",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests identify-performance-bottlenecks endpoint should return empty bottlenecks when no data available",
+          "status": "passed",
+          "duration": 156,
+          "numPassingAsserts": 3,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "identify-performance-bottlenecks endpoint"
+          ],
+          "title": "should identify bottlenecks with default thresholds",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests identify-performance-bottlenecks endpoint should identify bottlenecks with default thresholds",
+          "status": "passed",
+          "duration": 159,
+          "numPassingAsserts": 10,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "identify-performance-bottlenecks endpoint"
+          ],
+          "title": "should respect custom thresholds",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests identify-performance-bottlenecks endpoint should respect custom thresholds",
+          "status": "passed",
+          "duration": 168,
+          "numPassingAsserts": 5,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "identify-performance-bottlenecks endpoint"
+          ],
+          "title": "should generate appropriate recommendations",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests identify-performance-bottlenecks endpoint should generate appropriate recommendations",
+          "status": "passed",
+          "duration": 178,
+          "numPassingAsserts": 4,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "get-performance-trends endpoint"
+          ],
+          "title": "should return empty trends when no data available",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests get-performance-trends endpoint should return empty trends when no data available",
+          "status": "passed",
+          "duration": 156,
+          "numPassingAsserts": 3,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "get-performance-trends endpoint"
+          ],
+          "title": "should analyze daily trends by default",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests get-performance-trends endpoint should analyze daily trends by default",
+          "status": "passed",
+          "duration": 156,
+          "numPassingAsserts": 5,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "get-performance-trends endpoint"
+          ],
+          "title": "should support different time groupings",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests get-performance-trends endpoint should support different time groupings",
+          "status": "passed",
+          "duration": 158,
+          "numPassingAsserts": 3,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "get-performance-trends endpoint"
+          ],
+          "title": "should generate insights for trends",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests get-performance-trends endpoint should generate insights for trends",
+          "status": "passed",
+          "duration": 159,
+          "numPassingAsserts": 3,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "get-detailed-timing-report endpoint"
+          ],
+          "title": "should return null report when no data available",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests get-detailed-timing-report endpoint should return null report when no data available",
+          "status": "passed",
+          "duration": 157,
+          "numPassingAsserts": 3,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "get-detailed-timing-report endpoint"
+          ],
+          "title": "should generate comprehensive timing report",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests get-detailed-timing-report endpoint should generate comprehensive timing report",
+          "status": "passed",
+          "duration": 164,
+          "numPassingAsserts": 12,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "get-detailed-timing-report endpoint"
+          ],
+          "title": "should respect recent activity limit",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests get-detailed-timing-report endpoint should respect recent activity limit",
+          "status": "passed",
+          "duration": 157,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "get-detailed-timing-report endpoint"
+          ],
+          "title": "should calculate performance distribution correctly",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests get-detailed-timing-report endpoint should calculate performance distribution correctly",
+          "status": "passed",
+          "duration": 184,
+          "numPassingAsserts": 4,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "analyze-resource-usage endpoint"
+          ],
+          "title": "should return null analysis when no data available",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests analyze-resource-usage endpoint should return null analysis when no data available",
+          "status": "passed",
+          "duration": 167,
+          "numPassingAsserts": 3,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "analyze-resource-usage endpoint"
+          ],
+          "title": "should analyze memory usage patterns",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests analyze-resource-usage endpoint should analyze memory usage patterns",
+          "status": "passed",
+          "duration": 160,
+          "numPassingAsserts": 10,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "analyze-resource-usage endpoint"
+          ],
+          "title": "should generate resource recommendations",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests analyze-resource-usage endpoint should generate resource recommendations",
+          "status": "passed",
+          "duration": 160,
+          "numPassingAsserts": 3,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "analyze-resource-usage endpoint"
+          ],
+          "title": "should support different analysis types",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests analyze-resource-usage endpoint should support different analysis types",
+          "status": "passed",
+          "duration": 159,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "get-performance-benchmarks endpoint"
+          ],
+          "title": "should return null benchmarks when no data available",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests get-performance-benchmarks endpoint should return null benchmarks when no data available",
+          "status": "passed",
+          "duration": 160,
+          "numPassingAsserts": 3,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "get-performance-benchmarks endpoint"
+          ],
+          "title": "should calculate comprehensive benchmarks",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests get-performance-benchmarks endpoint should calculate comprehensive benchmarks",
+          "status": "passed",
+          "duration": 159,
+          "numPassingAsserts": 9,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "get-performance-benchmarks endpoint"
+          ],
+          "title": "should identify targets that are not met",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests get-performance-benchmarks endpoint should identify targets that are not met",
+          "status": "passed",
+          "duration": 158,
+          "numPassingAsserts": 5,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "get-performance-benchmarks endpoint"
+          ],
+          "title": "should generate optimization recommendations",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests get-performance-benchmarks endpoint should generate optimization recommendations",
+          "status": "passed",
+          "duration": 160,
+          "numPassingAsserts": 3,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "get-performance-benchmarks endpoint"
+          ],
+          "title": "should support custom time ranges",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests get-performance-benchmarks endpoint should support custom time ranges",
+          "status": "passed",
+          "duration": 168,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "API Error Handling"
+          ],
+          "title": "should handle invalid JSON options gracefully",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests API Error Handling should handle invalid JSON options gracefully",
+          "status": "passed",
+          "duration": 161,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "API Error Handling"
+          ],
+          "title": "should handle corrupted metrics file",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests API Error Handling should handle corrupted metrics file",
+          "status": "passed",
+          "duration": 155,
+          "numPassingAsserts": 2,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Feature 8: Performance Metrics API Integration Tests",
+            "API Error Handling"
+          ],
+          "title": "should handle missing PROJECT_ROOT environment",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests API Error Handling should handle missing PROJECT_ROOT environment",
           "status": "passed",
           "duration": 0,
           "numPassingAsserts": 1,
@@ -1323,121 +405,18 @@
         },
         {
           "ancestorTitles": [
-            "Feature 7: TaskManager API Integration - Custom Validation Rules",
-            "TaskManager _performLanguageAgnosticValidation with Custom Rules"
+            "Feature 8: Performance Metrics API Integration Tests",
+            "Feature ID Validation"
           ],
-          "title": "should execute custom validation rule in default case",
-          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules TaskManager _performLanguageAgnosticValidation with Custom Rules should execute custom validation rule in default case",
+          "title": "all endpoints should return correct Feature 8 ID",
+          "fullName": "Feature 8: Performance Metrics API Integration Tests Feature ID Validation all endpoints should return correct Feature 8 ID",
           "status": "passed",
-          "duration": 5,
-          "numPassingAsserts": 3,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature 7: TaskManager API Integration - Custom Validation Rules",
-            "TaskManager _performLanguageAgnosticValidation with Custom Rules"
-          ],
-          "title": "should fail unknown custom validation criterion",
-          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules TaskManager _performLanguageAgnosticValidation with Custom Rules should fail unknown custom validation criterion",
-          "status": "passed",
-          "duration": 0,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature 7: TaskManager API Integration - Custom Validation Rules",
-            "TaskManager _performLanguageAgnosticValidation with Custom Rules"
-          ],
-          "title": "should handle custom rule execution failure",
-          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules TaskManager _performLanguageAgnosticValidation with Custom Rules should handle custom rule execution failure",
-          "status": "passed",
-          "duration": 3,
-          "numPassingAsserts": 3,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature 7: TaskManager API Integration - Custom Validation Rules",
-            "Environment Variable Integration"
-          ],
-          "title": "should support environment variables in custom rules",
-          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules Environment Variable Integration should support environment variables in custom rules",
-          "status": "failed",
-          "duration": 4,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature 7: TaskManager API Integration - Custom Validation Rules",
-            "Success Criteria Validation"
-          ],
-          "title": "should validate exitCode success criteria",
-          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules Success Criteria Validation should validate exitCode success criteria",
-          "status": "passed",
-          "duration": 4,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature 7: TaskManager API Integration - Custom Validation Rules",
-            "Success Criteria Validation"
-          ],
-          "title": "should handle multiple success criteria",
-          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules Success Criteria Validation should handle multiple success criteria",
-          "status": "passed",
-          "duration": 4,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature 7: TaskManager API Integration - Custom Validation Rules",
-            "Configuration File Edge Cases"
-          ],
-          "title": "should handle empty customValidationRules array",
-          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules Configuration File Edge Cases should handle empty customValidationRules array",
-          "status": "passed",
-          "duration": 1,
-          "numPassingAsserts": 1,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Feature 7: TaskManager API Integration - Custom Validation Rules",
-            "Configuration File Edge Cases"
-          ],
-          "title": "should handle config without customValidationRules property",
-          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules Configuration File Edge Cases should handle config without customValidationRules property",
-          "status": "passed",
-          "duration": 0,
-          "numPassingAsserts": 1,
+          "duration": 928,
+          "numPassingAsserts": 12,
           "location": null
         }
       ],
-      "failureDetails": [
-        {
-          "title": "should support environment variables in custom rules",
-          "fullName": "Feature 7: TaskManager API Integration - Custom Validation Rules Environment Variable Integration should support environment variables in custom rules",
-          "failureMessages": [
-            "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/integration/feature-7-taskmanager-integration.test.js:461:30)"
-          ],
-          "failureDetails": [
-            {
-              "matcherResult": {
-                "actual": false,
-                "expected": true,
-                "message": "expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false",
-                "name": "toBe",
-                "pass": false
-              }
-            }
-          ]
-        }
-      ]
+      "failureDetails": []
     }
   ],
   "coverageMap": null,

@@ -1,20 +1,20 @@
 {
   "metadata": {
-    "timestamp": "2025-09-27T04:32:17.060Z",
+    "timestamp": "2025-09-27T04:44:09.265Z",
     "reporter": "jest-cicd-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System",
-    "duration_ms": 556
+    "duration_ms": 6026
   },
   "cicd_summary": {
     "pipeline_status": "FAILURE",
-    "total_duration_ms": 556,
+    "total_duration_ms": 6026,
     "should_block_deployment": true,
     "quality_gate_status": {
       "status": "FAILED",
       "criteria": {
         "tests_passing": false,
-        "no_failed_tests": false,
+        "no_failed_tests": true,
         "coverage_adequate": false,
         "performance_acceptable": true
       },
@@ -22,7 +22,7 @@
         {
           "type": "test_failures",
           "severity": "critical",
-          "message": "1 test(s) failed",
+          "message": "0 test(s) failed",
           "action": "Fix failing tests before deployment"
         },
         {
@@ -37,52 +37,43 @@
   },
   "test_execution": {
     "summary": {
-      "total_suites": 7,
-      "passed_suites": 0,
-      "failed_suites": 1,
-      "total_tests": 102,
-      "passed_tests": 9,
-      "failed_tests": 1,
-      "pending_tests": 92,
-      "success_rate": "8.82",
-      "execution_time_ms": 556
+      "total_suites": 1,
+      "passed_suites": 1,
+      "failed_suites": 0,
+      "total_tests": 31,
+      "passed_tests": 31,
+      "failed_tests": 0,
+      "pending_tests": 0,
+      "success_rate": "100.00",
+      "execution_time_ms": 6026
     },
     "performance_metrics": {
-      "average_test_duration": 5.450980392156863,
+      "average_test_duration": 194.38709677419354,
       "slowest_suite": {
-        "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/feature-7-taskmanager-integration.test.js",
-        "duration_ms": 185,
-        "num_tests": 10
+        "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/feature-8-performance-metrics-integration.test.js",
+        "duration_ms": 5899,
+        "num_tests": 31
       },
       "memory_usage": {
-        "rss": 111198208,
-        "heap_total": 57163776,
-        "heap_used": 28602120,
-        "external": 2291922,
-        "heap_usage_percent": "50.04"
+        "rss": 157990912,
+        "heap_total": 82198528,
+        "heap_used": 52592288,
+        "external": 4789784,
+        "heap_usage_percent": "63.98"
       },
       "parallel_efficiency": {
-        "parallel_efficiency_percent": "156.29",
-        "total_execution_time_ms": 556,
-        "serial_time_ms": 869,
-        "time_saved_ms": 313
+        "parallel_efficiency_percent": "97.88",
+        "total_execution_time_ms": 6027,
+        "serial_time_ms": 5899,
+        "time_saved_ms": 0
       }
     },
     "failure_analysis": {
-      "total_failures": 1,
-      "failed_suites": 1,
-      "failure_details": [
-        {
-          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/integration/feature-7-taskmanager-integration.test.js",
-          "test": "Feature 7: TaskManager API Integration - Custom Validation Rules Environment Variable Integration should support environment variables in custom rules",
-          "duration": 4,
-          "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.toBe (/Users/jeremyparker/infinite-continue-stop-hook/test/integration/feature-7-taskmanager-"
-        }
-      ],
-      "failure_patterns": {
-        "assertion": 1
-      },
-      "common_failure_type": "assertion"
+      "total_failures": 0,
+      "failed_suites": 0,
+      "failure_details": [],
+      "failure_patterns": {},
+      "common_failure_type": "none"
     },
     "flaky_test_detection": {
       "potentially_flaky": [],
@@ -91,11 +82,11 @@
     }
   },
   "git": {
-    "commit_sha": "0260999bccab61237963269cb20e4c679039e776",
+    "commit_sha": "4841855e47cae14bc4339837d96fd3a1f4d40c5f",
     "branch": "main",
     "author": "Claude <claude@anthropic.com>",
-    "commit_message": "feat: implement hardcoded test gate validation endpoints in TaskManager API",
-    "commit_date": "2025-09-26 23:26:40 -0500",
+    "commit_message": "feat: implement Feature 8 - Stop Hook Validation Performance Metrics",
+    "commit_date": "2025-09-26 23:40:04 -0500",
     "tag": null,
     "is_dirty": true,
     "remote_url": "https://github.com/Nexus-Digital-Automations/infinite-continue-stop-hook.git"
@@ -111,7 +102,7 @@
     "locale": "en-US",
     "memory": {
       "total": 25769803776,
-      "available": 510459904
+      "available": 90275840
     },
     "cpu": {
       "cores": 8,
@@ -129,12 +120,5 @@
     "coverage_status": "not_available"
   },
   "notifications": [],
-  "recommendations": [
-    {
-      "category": "testing",
-      "priority": "high",
-      "recommendation": "Fix failing tests immediately",
-      "details": "1 tests are currently failing"
-    }
-  ]
+  "recommendations": []
 }
