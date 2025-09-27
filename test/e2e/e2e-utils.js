@@ -458,7 +458,9 @@ class StopHookTestHelpers {
    */
   static async simulateAgentExecution(environment, agentId = 'e2e-test-agent', duration = 1000) {
     // Simulate some work
-    await new Promise(resolve => setTimeout(resolve, duration));
+    await new Promise(resolve => {
+      setTimeout(resolve, duration);
+    });
 
     // Test stop hook authorization
     return CommandExecutor.executeStopHook(

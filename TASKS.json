@@ -1095,7 +1095,7 @@
     },
     "initialization_stats": {
       "total_initializations": 3195,
-      "total_reinitializations": 105,
+      "total_reinitializations": 106,
       "current_day": "2025-09-27",
       "time_buckets": {
         "11:00-15:59": {
@@ -1108,7 +1108,7 @@
         },
         "21:00-01:59": {
           "init": 0,
-          "reinit": 18
+          "reinit": 19
         },
         "02:00-06:59": {
           "init": 0,
@@ -1932,16 +1932,16 @@
         }
       ],
       "last_reset": "2025-09-27T05:00:07.916Z",
-      "last_updated": "2025-09-27T05:49:14.089Z"
+      "last_updated": "2025-09-27T06:06:10.547Z"
     },
     "total_features": 5
   },
   "agents": {
     "CLAUDE_AGENT_001": {
-      "lastHeartbeat": "2025-09-27T05:49:14.085Z",
+      "lastHeartbeat": "2025-09-27T06:06:10.530Z",
       "status": "active",
-      "reinitialized": "2025-09-27T05:49:14.085Z",
-      "sessionId": "eea1cd96cba104ec",
+      "reinitialized": "2025-09-27T06:06:10.530Z",
+      "sessionId": "af451c6395731def",
       "previousSessions": [
         "3dd0737f270b11a3",
         "fc8ea0d614adca6f",
@@ -1950,19 +1950,8 @@
         "64183ed60046d789",
         "1ab27a2f9fcb5ec3",
         "9a8a8d9556eb26e1",
-        "5f090fa2890709d3"
-      ]
-    },
-    "agent_1758958399822": {
-      "lastHeartbeat": "2025-09-27T05:30:05.848Z",
-      "status": "active",
-      "reinitialized": "2025-09-27T05:30:05.848Z",
-      "sessionId": "17963189822cbfd9",
-      "previousSessions": [
-        "95b7b2136ef0192f",
-        "7b2a9c12a86ec1d0",
-        "51ec74e2fbb026e9",
-        "d2b8e28df522a5dd"
+        "5f090fa2890709d3",
+        "eea1cd96cba104ec"
       ]
     },
     "AGENT_1": {

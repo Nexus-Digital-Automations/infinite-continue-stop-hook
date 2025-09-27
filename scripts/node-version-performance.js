@@ -144,9 +144,9 @@ class NodeVersionPerformanceBenchmark {
     const asyncOperations = async (count) => {
       const results = [];
       for (let i = 0; i < count; i++) {
-        const result = await new Promise(resolve =>
-          process.nextTick(() => resolve(i)),
-        );
+        const result = await new Promise(resolve => {
+          process.nextTick(() => resolve(i));
+        });
         results.push(result);
       }
       return results;

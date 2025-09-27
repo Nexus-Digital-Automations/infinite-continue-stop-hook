@@ -585,7 +585,9 @@ class TaskManagerPerformanceBenchmark {
    * Utility method to sleep for specified milliseconds
    */
   async sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise(resolve => {
+      setTimeout(resolve, ms);
+    });
   }
 
   /**
