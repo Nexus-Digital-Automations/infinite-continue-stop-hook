@@ -161,13 +161,19 @@ describe('Performance Validation E2E', () => {
         }
       });
 
-      // Step 2: Test bulk approval performance
-      const bulkApprovalTest = () => {
-        return CommandExecutor.executeAPI(
-          'bulk-approve',
-          [...bulkFeatureIds, 'bulk-performance-tester', 'Bulk performance test approval'],
-          { projectRoot: environment.testDir },
+      // Step 2: Test individual approval performance (since bulk-approve doesn't exist)
+      const bulkApprovalTest = async () => {
+        const approvalPromises = bulkFeatureIds.map(featureId =>
+          CommandExecutor.executeAPI(
+            'approve-feature',
+            [featureId, '{"approved_by":"bulk-performance-tester","notes":"Bulk performance test approval"}'],
+            { projectRoot: environment.testDir }
+          )
         );
+
+        const startTime = Date.now();
+        await Promise.all(approvalPromises);
+        return Date.now() - startTime;
       };
 
       const bulkApprovalMetrics = await PerformanceTestHelpers.measurePerformance(bulkApprovalTest, 1);
@@ -429,7 +435,8 @@ describe('Performance Validation E2E', () => {
               business_value: 'Establishes approval performance baseline',
               category: 'enhancement',
             });
-            const featureId = result.stdout.match(/Feature ID: (\w+)/)[1];
+            const response = JSON.parse(result.stdout);
+            const featureId = response.feature.id;
             return FeatureTestHelpers.approveFeature(environment, featureId, 'baseline-tester', 'Baseline test');
           },
           expectedMaxTime: API_TIMEOUT * 0.7,

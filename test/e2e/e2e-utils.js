@@ -156,14 +156,23 @@ class E2EEnvironment {
   }
 
   /**
-   * Get current FEATURES.json content
+   * Get current features using TaskManager API
    */
   async getFeatures() {
     try {
-      const content = await fs.readFile(this.featuresPath, 'utf8');
-      return JSON.parse(content);
+      const result = await CommandExecutor.executeAPI(
+        'list-features',
+        [],
+        { projectRoot: this.testDir }
+      );
+
+      if (result.result.success) {
+        return result.result;
+      } else {
+        throw new Error(`TaskManager API error: ${result.result.error}`);
+      }
     } catch (error) {
-      throw new Error(`Failed to read FEATURES.json: ${error.message}`);
+      throw new Error(`Failed to get features from TaskManager API: ${error.message}`);
     }
   }
 
