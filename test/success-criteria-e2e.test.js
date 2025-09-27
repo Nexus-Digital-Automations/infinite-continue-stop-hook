@@ -89,7 +89,7 @@ async function execAPI(command, args = []) {
   try {
     return JSON.parse(result.stdout);
   } catch (parseError) {
-    console.error('Failed to parse API response:', result.stdout);
+    console.error('Failed to parse API response:', result.stdout, 'Error:', parseError.message);
     // Some commands return plain text, not JSON
     return { success: true, output: result.stdout, raw: true };
   }
@@ -193,7 +193,7 @@ describe('Application Tests', () => {
         required_fields: ['title', 'description', 'business_value', 'category', 'type'],
         auto_generation_enabled: true,
         mandatory_test_gate: true,
-        security_validation_required: true
+        security_validation_required: true,
       },
       metadata: {
         version: '2.0.0',
@@ -204,10 +204,10 @@ describe('Application Tests', () => {
           error: 0,
           feature: 0,
           test: 0,
-          audit: 0
+          audit: 0,
         },
         approval_history: [],
-        total_features: 0
+        total_features: 0,
       },
       agents: {},
       features: [],
@@ -216,15 +216,15 @@ describe('Application Tests', () => {
         auto_sort_enabled: true,
         sort_criteria: {
           primary: 'id_prefix',
-          secondary: 'created_at'
+          secondary: 'created_at',
         },
         id_priority_order: {
           'error_': 1,
           'feature_': 2,
           'subtask_': 3,
-          'test_': 4
-        }
-      }
+          'test_': 4,
+        },
+      },
     };
 
     await _fs.writeFile(TASKS_PATH, JSON.stringify(initialTasksData, null, 2));
