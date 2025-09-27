@@ -1,0 +1,45 @@
+{
+  "project_type": "python",
+  "global_settings": {
+    "strict_mode": false,
+    "timeout_ms": 45000,
+    "parallel_execution": true
+  },
+  "custom_rules": {
+    "requirements_check": {
+      "type": "file_exists",
+      "description": "Verify requirements file exists",
+      "files": ["requirements.txt", "pyproject.toml"],
+      "required": false,
+      "technology_stack": ["python"],
+      "severity": "warning"
+    },
+    "python_version_check": {
+      "type": "command",
+      "description": "Check Python version availability",
+      "command": "python --version",
+      "enabled": true,
+      "technology_stack": ["python"],
+      "severity": "info",
+      "timeout": 5000,
+      "allow_failure": true
+    },
+    "python_syntax_check": {
+      "type": "conditional",
+      "description": "Basic Python syntax validation",
+      "condition": {
+        "files_exist": ["*.py"]
+      },
+      "rules": [
+        {
+          "type": "command",
+          "command": "python -m py_compile *.py",
+          "timeout": 10000,
+          "allow_failure": true
+        }
+      ],
+      "technology_stack": ["python"],
+      "severity": "error"
+    }
+  }
+}

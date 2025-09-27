@@ -1,0 +1,59 @@
+{
+  "project_type": "nodejs",
+  "global_settings": {
+    "strict_mode": true,
+    "timeout_ms": 30000,
+    "parallel_execution": true
+  },
+  "custom_rules": {
+    "package_json_validation": {
+      "type": "file_content",
+      "description": "Validate package.json has required fields",
+      "file": "package.json",
+      "pattern": "\"name\":",
+      "enabled": true,
+      "technology_stack": ["nodejs"],
+      "severity": "error"
+    },
+    "npm_security_audit": {
+      "type": "command",
+      "description": "Run npm audit for security vulnerabilities",
+      "command": "npm audit --audit-level moderate",
+      "enabled": true,
+      "technology_stack": ["nodejs"],
+      "severity": "warning",
+      "timeout": 15000
+    },
+    "test_coverage_check": {
+      "type": "command",
+      "description": "Ensure test coverage meets minimum threshold",
+      "command": "npm run coverage:check",
+      "enabled": true,
+      "technology_stack": ["nodejs"],
+      "severity": "error",
+      "conditions": {
+        "files_exist": ["package.json"],
+        "has_script": "coverage:check"
+      }
+    },
+    "docker_security": {
+      "type": "composite",
+      "description": "Docker security validation",
+      "enabled": true,
+      "technology_stack": ["docker"],
+      "rules": [
+        {
+          "type": "file_exists",
+          "files": ["Dockerfile"],
+          "required": true
+        },
+        {
+          "type": "file_content",
+          "file": "Dockerfile",
+          "pattern": "USER ",
+          "description": "Dockerfile should use non-root user"
+        }
+      ]
+    }
+  }
+}
