@@ -41,6 +41,9 @@ const RAGOperations = require('./lib/api-modules/rag/ragOperations');
 // Import validation dependency management system
 const { ValidationDependencyManager, DEPENDENCY_TYPES } = require('./lib/validation-dependency-manager');
 
+// Import custom validation rules management system
+const { CustomValidationRulesManager, VALIDATION_RULE_TYPES } = require('./lib/custom-validation-rules-manager');
+
 // File locking mechanism to prevent race conditions across processes
 class FileLock {
   constructor() {
@@ -185,6 +188,11 @@ class AutonomousTaskManagerAPI {
 
     // Initialize validation dependency management system
     this.dependencyManager = new ValidationDependencyManager({
+      projectRoot: PROJECT_ROOT,
+    });
+
+    // Initialize custom validation rules management system
+    this.customValidationManager = new CustomValidationRulesManager({
       projectRoot: PROJECT_ROOT,
     });
 
@@ -1007,6 +1015,204 @@ class AutonomousTaskManagerAPI {
         success: false,
         error: error.message,
         message: 'Failed to record validation execution',
+      };
+    }
+  }
+
+  // ========================================================================
+  // CUSTOM VALIDATION RULES MANAGEMENT METHODS
+  // ========================================================================
+
+  /**
+   * Load custom validation rules from configuration file
+   */
+  async loadCustomValidationRules() {
+    try {
+      const result = await this.customValidationManager.loadCustomRules();
+
+      return {
+        success: result.success,
+        rulesLoaded: result.rulesLoaded || 0,
+        detectedTechStack: result.detectedTechStack || [],
+        projectType: result.projectType || 'generic',
+        enabledRules: result.enabledRules || [],
+        error: result.error,
+        message: result.message || 'Custom validation rules loaded successfully',
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Failed to load custom validation rules',
+      };
+    }
+  }
+
+  /**
+   * Get all custom validation rules with their status
+   */
+  async getCustomValidationRules() {
+    try {
+      // Ensure rules are loaded
+      await this.customValidationManager.loadCustomRules();
+
+      const rulesData = this.customValidationManager.getCustomRules();
+      const analytics = this.customValidationManager.getExecutionAnalytics();
+
+      return {
+        success: true,
+        rules: rulesData.rules,
+        totalRules: rulesData.totalRules,
+        enabledRules: rulesData.enabledRules,
+        detectedTechStack: rulesData.detectedTechStack,
+        projectType: rulesData.projectType,
+        analytics,
+        message: `Found ${rulesData.totalRules} custom validation rules (${rulesData.enabledRules} enabled)`,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Failed to get custom validation rules',
+      };
+    }
+  }
+
+  /**
+   * Execute specific custom validation rule
+   */
+  async executeCustomValidationRule(ruleId) {
+    try {
+      // Ensure rules are loaded
+      await this.customValidationManager.loadCustomRules();
+
+      const result = await this.customValidationManager.executeRule(ruleId);
+
+      return {
+        success: result.success,
+        ruleId: result.ruleId,
+        duration: result.duration,
+        details: result.details,
+        output: result.output,
+        error: result.error,
+        metadata: result.metadata,
+        message: result.success ?
+          `Custom validation rule '${ruleId}' executed successfully` :
+          `Custom validation rule '${ruleId}' failed: ${result.error}`,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        ruleId,
+        message: `Failed to execute custom validation rule '${ruleId}': ${error.message}`,
+      };
+    }
+  }
+
+  /**
+   * Execute all enabled custom validation rules
+   */
+  async executeAllCustomValidationRules() {
+    try {
+      // Load custom rules
+      const loadResult = await this.customValidationManager.loadCustomRules();
+      if (!loadResult.success) {
+        throw new Error(`Failed to load custom rules: ${loadResult.error}`);
+      }
+
+      const rulesData = this.customValidationManager.getCustomRules();
+      const enabledRuleIds = Object.keys(rulesData.rules).filter(ruleId =>
+        rulesData.rules[ruleId].enabled
+      );
+
+      if (enabledRuleIds.length === 0) {
+        return {
+          success: true,
+          executedRules: 0,
+          results: [],
+          message: 'No custom validation rules enabled for execution',
+        };
+      }
+
+      const results = [];
+      const startTime = Date.now();
+
+      console.log(`🚀 Executing ${enabledRuleIds.length} custom validation rules...`);
+
+      for (const ruleId of enabledRuleIds) {
+        console.log(`  📋 Executing rule: ${ruleId}`);
+        const result = await this.customValidationManager.executeRule(ruleId);
+        results.push(result);
+
+        if (!result.success) {
+          console.log(`  ❌ Rule failed: ${ruleId} - ${result.error}`);
+        } else {
+          console.log(`  ✅ Rule passed: ${ruleId}`);
+        }
+      }
+
+      const totalDuration = Date.now() - startTime;
+      const successfulRules = results.filter(r => r.success).length;
+      const failedRules = results.filter(r => !r.success).length;
+
+      return {
+        success: failedRules === 0,
+        executedRules: results.length,
+        successfulRules,
+        failedRules,
+        totalDuration,
+        results,
+        message: `Custom validation completed: ${successfulRules}/${results.length} rules passed`,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Failed to execute custom validation rules',
+      };
+    }
+  }
+
+  /**
+   * Generate example custom validation rules configuration
+   */
+  async generateCustomValidationConfig() {
+    try {
+      const exampleConfig = this.customValidationManager.generateExampleConfig();
+
+      return {
+        success: true,
+        config: exampleConfig,
+        configFile: '.validation-rules.json',
+        message: 'Example custom validation configuration generated successfully',
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Failed to generate example configuration',
+      };
+    }
+  }
+
+  /**
+   * Get custom validation rules execution analytics
+   */
+  async getCustomValidationAnalytics() {
+    try {
+      const analytics = this.customValidationManager.getExecutionAnalytics();
+
+      return {
+        success: true,
+        analytics,
+        message: 'Custom validation analytics retrieved successfully',
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Failed to get custom validation analytics',
       };
     }
   }
@@ -3623,7 +3829,8 @@ class AutonomousTaskManagerAPI {
    * Core validation logic (extracted from original _performLanguageAgnosticValidation)
    */
   /**
-   * Load custom validation rules from project configuration
+   * Load and validate custom validation rules from project configuration
+   * Feature 2: Stop Hook Custom Project Validation Rules
    */
   async _loadCustomValidationRules() {
     const fs = require('fs').promises;
@@ -3636,20 +3843,417 @@ class AutonomousTaskManagerAPI {
         const configData = await fs.readFile(customRulesPath, 'utf8');
         const config = JSON.parse(configData);
 
+        // Validate configuration schema
+        if (!this._validateCustomValidationConfig(config)) {
+          console.warn('⚠️ Invalid custom validation configuration, skipping custom rules');
+          return [];
+        }
+
         if (config.customValidationRules && Array.isArray(config.customValidationRules)) {
-          return config.customValidationRules.filter(rule =>
-            rule.id &&
-            rule.name &&
-            rule.command &&
-            rule.enabled !== false,
+          const enabledRules = config.customValidationRules.filter(rule =>
+            rule.enabled !== false && this._validateCustomRule(rule)
           );
+
+          // Filter rules based on conditions
+          const applicableRules = [];
+          for (const rule of enabledRules) {
+            if (await this._evaluateRuleConditions(rule)) {
+              applicableRules.push(rule);
+            }
+          }
+
+          console.log(`📋 Loaded ${applicableRules.length} applicable custom validation rules`);
+          return applicableRules;
         }
       }
     } catch (error) {
-      // Silently fail for missing or invalid custom rules
+      console.warn(`⚠️ Failed to load custom validation rules: ${error.message}`);
     }
 
     return [];
+  }
+
+  /**
+   * Validate custom validation configuration schema
+   */
+  _validateCustomValidationConfig(config) {
+    if (!config || typeof config !== 'object') {
+      return false;
+    }
+
+    // Check required fields
+    if (!config.customValidationRules || !Array.isArray(config.customValidationRules)) {
+      return false;
+    }
+
+    // Validate version if present
+    if (config.version && typeof config.version !== 'string') {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Validate individual custom rule schema
+   */
+  _validateCustomRule(rule) {
+    if (!rule || typeof rule !== 'object') {
+      return false;
+    }
+
+    // Required fields
+    const requiredFields = ['id', 'name', 'command'];
+    for (const field of requiredFields) {
+      if (!rule[field] || typeof rule[field] !== 'string') {
+        console.warn(`⚠️ Custom rule missing required field: ${field}`);
+        return false;
+      }
+    }
+
+    // Validate timeout
+    if (rule.timeout && (typeof rule.timeout !== 'number' || rule.timeout <= 0)) {
+      console.warn(`⚠️ Custom rule ${rule.id} has invalid timeout`);
+      return false;
+    }
+
+    // Validate category
+    const validCategories = ['security', 'performance', 'compliance', 'documentation', 'quality'];
+    if (rule.category && !validCategories.includes(rule.category)) {
+      console.warn(`⚠️ Custom rule ${rule.id} has invalid category: ${rule.category}`);
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Evaluate whether a custom rule should be executed based on its conditions
+   */
+  async _evaluateRuleConditions(rule) {
+    if (!rule.conditions) {
+      return true; // No conditions means always applicable
+    }
+
+    const fs = require('fs').promises;
+    const path = require('path');
+
+    try {
+      // Check file existence conditions
+      if (rule.conditions.fileExists) {
+        for (const file of rule.conditions.fileExists) {
+          const filePath = path.join(PROJECT_ROOT, file);
+          if (!await this._fileExists(filePath)) {
+            return false;
+          }
+        }
+      }
+
+      // Check directory existence conditions
+      if (rule.conditions.directoryExists) {
+        for (const dir of rule.conditions.directoryExists) {
+          const dirPath = path.join(PROJECT_ROOT, dir);
+          try {
+            const stat = await fs.stat(dirPath);
+            if (!stat.isDirectory()) {
+              return false;
+            }
+          } catch {
+            return false;
+          }
+        }
+      }
+
+      // Check package.json script existence
+      if (rule.conditions.scriptExists) {
+        const packageJsonPath = path.join(PROJECT_ROOT, 'package.json');
+        if (await this._fileExists(packageJsonPath)) {
+          const packageData = JSON.parse(await fs.readFile(packageJsonPath, 'utf8'));
+          if (packageData.scripts) {
+            for (const script of rule.conditions.scriptExists) {
+              if (!packageData.scripts[script]) {
+                return false;
+              }
+            }
+          } else {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      }
+
+      // Check environment variables
+      if (rule.conditions.envVars) {
+        for (const envVar of rule.conditions.envVars) {
+          if (!process.env[envVar]) {
+            return false;
+          }
+        }
+      }
+
+      // Check specific environment variable value
+      if (rule.conditions.environmentVar) {
+        if (!process.env[rule.conditions.environmentVar]) {
+          return false;
+        }
+      }
+
+      // Check project type (if specified in config)
+      if (rule.conditions.projectType) {
+        const configPath = path.join(PROJECT_ROOT, '.claude-validation.json');
+        if (await this._fileExists(configPath)) {
+          const config = JSON.parse(await fs.readFile(configPath, 'utf8'));
+          if (config.projectType && !rule.conditions.projectType.includes(config.projectType)) {
+            return false;
+          }
+        }
+      }
+
+      // Check git branch
+      if (rule.conditions.gitBranch) {
+        try {
+          const { execSync } = require('child_process');
+          const currentBranch = execSync('git rev-parse --abbrev-ref HEAD', {
+            cwd: PROJECT_ROOT,
+            encoding: 'utf8'
+          }).trim();
+          if (!rule.conditions.gitBranch.includes(currentBranch)) {
+            return false;
+          }
+        } catch {
+          return false;
+        }
+      }
+
+      // Check file contents
+      if (rule.conditions.fileContains) {
+        for (const [filePath, patterns] of Object.entries(rule.conditions.fileContains)) {
+          const fullPath = path.join(PROJECT_ROOT, filePath);
+          if (await this._fileExists(fullPath)) {
+            const content = await fs.readFile(fullPath, 'utf8');
+            for (const pattern of patterns) {
+              if (!content.includes(pattern)) {
+                return false;
+              }
+            }
+          } else {
+            return false;
+          }
+        }
+      }
+
+      return true;
+    } catch (error) {
+      console.warn(`⚠️ Error evaluating conditions for rule ${rule.id}: ${error.message}`);
+      return false;
+    }
+  }
+
+  /**
+   * Execute a custom validation rule
+   */
+  async _executeCustomRule(rule) {
+    const { execSync } = require('child_process');
+    const startTime = Date.now();
+
+    try {
+      console.log(`🔄 Executing custom rule: ${rule.name}`);
+
+      const timeout = rule.timeout || 60000; // Default 60 seconds
+      const result = execSync(rule.command, {
+        cwd: PROJECT_ROOT,
+        encoding: 'utf8',
+        timeout: timeout,
+        maxBuffer: 1024 * 1024 * 10, // 10MB buffer
+      });
+
+      const duration = Date.now() - startTime;
+
+      // Evaluate success criteria
+      const success = this._evaluateSuccessCriteria(rule, result, 0);
+
+      return {
+        success,
+        ruleId: rule.id,
+        ruleName: rule.name,
+        duration,
+        output: result,
+        details: success ? `Custom rule '${rule.name}' passed` : `Custom rule '${rule.name}' failed success criteria`,
+      };
+
+    } catch (error) {
+      const duration = Date.now() - startTime;
+
+      // Handle retries if configured
+      if (rule.failureHandling && rule.failureHandling.retryCount > 0) {
+        console.log(`🔄 Retrying custom rule ${rule.name} (${rule.failureHandling.retryCount} retries remaining)`);
+        await new Promise(resolve => setTimeout(resolve, rule.failureHandling.retryDelay || 5000));
+
+        // Recursively retry with decremented retry count
+        const retryRule = {
+          ...rule,
+          failureHandling: {
+            ...rule.failureHandling,
+            retryCount: rule.failureHandling.retryCount - 1
+          }
+        };
+        return await this._executeCustomRule(retryRule);
+      }
+
+      return {
+        success: false,
+        ruleId: rule.id,
+        ruleName: rule.name,
+        duration: Date.now() - startTime,
+        error: error.message,
+        details: `Custom rule '${rule.name}' execution failed: ${error.message}`,
+      };
+    }
+  }
+
+  /**
+   * Evaluate success criteria for a custom rule
+   */
+  _evaluateSuccessCriteria(rule, output, exitCode) {
+    if (!rule.successCriteria) {
+      // If no success criteria defined, success is based on exit code 0
+      return exitCode === 0;
+    }
+
+    const criteria = rule.successCriteria;
+
+    // Check exit code
+    if (criteria.exitCode !== undefined && exitCode !== criteria.exitCode) {
+      return false;
+    }
+
+    // Check output contains patterns
+    if (criteria.outputContains) {
+      for (const pattern of criteria.outputContains) {
+        if (!output.includes(pattern)) {
+          return false;
+        }
+      }
+    }
+
+    // Check output does not contain patterns
+    if (criteria.outputNotContains) {
+      for (const pattern of criteria.outputNotContains) {
+        if (output.includes(pattern)) {
+          return false;
+        }
+      }
+    }
+
+    // Check output matches regex patterns
+    if (criteria.outputMatches) {
+      for (const pattern of criteria.outputMatches) {
+        const regex = new RegExp(pattern);
+        if (!regex.test(output)) {
+          return false;
+        }
+      }
+    }
+
+    // Check file existence (post-execution)
+    if (criteria.fileExists) {
+      const fs = require('fs');
+      const path = require('path');
+      for (const file of criteria.fileExists) {
+        const filePath = path.join(PROJECT_ROOT, file);
+        if (!fs.existsSync(filePath)) {
+          return false;
+        }
+      }
+    }
+
+    // Check file contents (post-execution)
+    if (criteria.fileContains) {
+      const fs = require('fs');
+      const path = require('path');
+      for (const [filePath, patterns] of Object.entries(criteria.fileContains)) {
+        const fullPath = path.join(PROJECT_ROOT, filePath);
+        if (fs.existsSync(fullPath)) {
+          const content = fs.readFileSync(fullPath, 'utf8');
+          for (const pattern of patterns) {
+            if (!content.includes(pattern)) {
+              return false;
+            }
+          }
+        } else {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * Execute all applicable custom validation rules
+   */
+  async _executeAllCustomRules() {
+    try {
+      const customRules = await this._loadCustomValidationRules();
+
+      if (customRules.length === 0) {
+        return {
+          success: true,
+          details: 'No custom validation rules configured or applicable',
+          executedRules: 0,
+        };
+      }
+
+      console.log(`🔄 Executing ${customRules.length} custom validation rules`);
+
+      const results = [];
+      let allSuccessful = true;
+
+      // Execute rules sequentially to avoid resource conflicts
+      for (const rule of customRules) {
+        const result = await this._executeCustomRule(rule);
+        results.push(result);
+
+        if (!result.success) {
+          allSuccessful = false;
+
+          // Check if we should continue on failure
+          if (rule.failureHandling && rule.failureHandling.continueOnFailure === false) {
+            console.error(`❌ Custom rule '${rule.name}' failed, stopping execution`);
+            break;
+          }
+        }
+      }
+
+      const successCount = results.filter(r => r.success).length;
+      const failureCount = results.filter(r => !r.success).length;
+
+      return {
+        success: allSuccessful,
+        details: allSuccessful
+          ? `All ${customRules.length} custom validation rules passed`
+          : `${failureCount} of ${customRules.length} custom validation rules failed`,
+        executedRules: results.length,
+        successfulRules: successCount,
+        failedRules: failureCount,
+        results: results,
+        summary: {
+          total: customRules.length,
+          executed: results.length,
+          successful: successCount,
+          failed: failureCount,
+          skipped: customRules.length - results.length,
+        },
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: `Failed to execute custom validation rules: ${error.message}`,
+        details: 'Custom validation execution encountered an error',
+      };
+    }
   }
 
   async _performLanguageAgnosticValidationCore(criterion) {
@@ -3779,6 +4383,10 @@ class AutonomousTaskManagerAPI {
           ];
 
           return await this._tryCommands(testCommands, 'Testing');
+
+        case 'custom-validation':
+          // Execute all applicable custom validation rules
+          return await this._executeAllCustomRules();
 
         default:
           // Check if this is a custom validation rule
@@ -8419,8 +9027,37 @@ async function main() {
         break;
       }
 
+      // Custom Validation Rules Management Commands
+      case 'load-custom-validation-rules': {
+        result = await api.loadCustomValidationRules();
+        break;
+      }
+      case 'get-custom-validation-rules': {
+        result = await api.getCustomValidationRules();
+        break;
+      }
+      case 'execute-custom-validation-rule': {
+        if (!args[1]) {
+          throw new Error('Rule ID required. Usage: execute-custom-validation-rule <ruleId>');
+        }
+        result = await api.executeCustomValidationRule(args[1]);
+        break;
+      }
+      case 'execute-all-custom-validation-rules': {
+        result = await api.executeAllCustomValidationRules();
+        break;
+      }
+      case 'generate-custom-validation-config': {
+        result = await api.generateCustomValidationConfig();
+        break;
+      }
+      case 'get-custom-validation-analytics': {
+        result = await api.getCustomValidationAnalytics();
+        break;
+      }
+
       default:
-        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, start-authorization, validate-criterion, validate-criteria-parallel, complete-authorization, authorize-stop, validate-feature-tests, confirm-test-coverage, confirm-pipeline-passes, advance-to-next-feature, get-feature-test-status, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents, store-lesson, search-lessons, store-error, find-similar-errors, get-relevant-lessons, rag-analytics, lesson-version-history, compare-lesson-versions, rollback-lesson-version, lesson-version-analytics, store-lesson-versioned, search-lessons-versioned, record-lesson-usage, record-lesson-feedback, record-lesson-outcome, get-lesson-quality-score, get-quality-analytics, get-quality-recommendations, search-lessons-quality, update-lesson-quality, register-project, share-lesson-cross-project, calculate-project-relevance, get-shared-lessons, get-project-recommendations, record-lesson-application, get-cross-project-analytics, update-project, get-project, list-projects, deprecate-lesson, restore-lesson, get-lesson-deprecation-status, get-deprecated-lessons, cleanup-obsolete-lessons, get-deprecation-analytics, detect-patterns, analyze-pattern-evolution, get-pattern-suggestions, analyze-lesson-patterns, get-pattern-analytics, cluster-patterns, search-similar-patterns, generate-pattern-insights, update-pattern-config, get-validation-performance-metrics, get-performance-trends, identify-performance-bottlenecks, get-detailed-timing-report, analyze-resource-usage, get-performance-benchmarks, create-validation-state-snapshot, perform-rollback, get-available-rollback-snapshots, get-rollback-history, cleanup-old-rollback-snapshots, get-dependency-graph, validate-dependency-graph, get-execution-order, generate-parallel-execution-plan, get-dependency-visualization, add-dependency, remove-dependency, get-dependency, save-dependency-config, load-dependency-config, get-execution-analytics, generate-adaptive-execution-plan`);
+        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, start-authorization, validate-criterion, validate-criteria-parallel, complete-authorization, authorize-stop, validate-feature-tests, confirm-test-coverage, confirm-pipeline-passes, advance-to-next-feature, get-feature-test-status, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents, store-lesson, search-lessons, store-error, find-similar-errors, get-relevant-lessons, rag-analytics, lesson-version-history, compare-lesson-versions, rollback-lesson-version, lesson-version-analytics, store-lesson-versioned, search-lessons-versioned, record-lesson-usage, record-lesson-feedback, record-lesson-outcome, get-lesson-quality-score, get-quality-analytics, get-quality-recommendations, search-lessons-quality, update-lesson-quality, register-project, share-lesson-cross-project, calculate-project-relevance, get-shared-lessons, get-project-recommendations, record-lesson-application, get-cross-project-analytics, update-project, get-project, list-projects, deprecate-lesson, restore-lesson, get-lesson-deprecation-status, get-deprecated-lessons, cleanup-obsolete-lessons, get-deprecation-analytics, detect-patterns, analyze-pattern-evolution, get-pattern-suggestions, analyze-lesson-patterns, get-pattern-analytics, cluster-patterns, search-similar-patterns, generate-pattern-insights, update-pattern-config, get-validation-performance-metrics, get-performance-trends, identify-performance-bottlenecks, get-detailed-timing-report, analyze-resource-usage, get-performance-benchmarks, create-validation-state-snapshot, perform-rollback, get-available-rollback-snapshots, get-rollback-history, cleanup-old-rollback-snapshots, get-dependency-graph, validate-dependency-graph, get-execution-order, generate-parallel-execution-plan, get-dependency-visualization, add-dependency, remove-dependency, get-dependency, save-dependency-config, load-dependency-config, get-execution-analytics, generate-adaptive-execution-plan, load-custom-validation-rules, get-custom-validation-rules, execute-custom-validation-rule, execute-all-custom-validation-rules, generate-custom-validation-config, get-custom-validation-analytics`);
     }
 
     console.log(JSON.stringify(result, null, 2));
