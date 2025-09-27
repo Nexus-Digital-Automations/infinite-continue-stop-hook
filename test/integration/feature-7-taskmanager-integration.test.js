@@ -44,19 +44,26 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
         async _loadCustomValidationRules() {
           const fs = require('fs').promises;
-          const configPath = path.join(mockProjectRoot, '.claude-validation.json');
+          const configPath = path.join(
+            mockProjectRoot,
+            '.claude-validation.json'
+          );
 
           try {
             if (await this._fileExists(configPath)) {
               const configData = await fs.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
-              if (config.customValidationRules && Array.isArray(config.customValidationRules)) {
-                return config.customValidationRules.filter(rule =>
-                  rule.id &&
-                  rule.name &&
-                  rule.command &&
-                  rule.enabled !== false,
+              if (
+                config.customValidationRules &&
+                Array.isArray(config.customValidationRules)
+              ) {
+                return config.customValidationRules.filter(
+                  (rule) =>
+                    rule.id &&
+                    rule.name &&
+                    rule.command &&
+                    rule.enabled !== false
                 );
               }
             }
@@ -83,19 +90,26 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
         async _loadCustomValidationRules() {
           const fs = require('fs').promises;
-          const configPath = path.join('/nonexistent', '.claude-validation.json');
+          const configPath = path.join(
+            '/nonexistent',
+            '.claude-validation.json'
+          );
 
           try {
             if (await this._fileExists(configPath)) {
               const configData = await fs.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
-              if (config.customValidationRules && Array.isArray(config.customValidationRules)) {
-                return config.customValidationRules.filter(rule =>
-                  rule.id &&
-                  rule.name &&
-                  rule.command &&
-                  rule.enabled !== false,
+              if (
+                config.customValidationRules &&
+                Array.isArray(config.customValidationRules)
+              ) {
+                return config.customValidationRules.filter(
+                  (rule) =>
+                    rule.id &&
+                    rule.name &&
+                    rule.command &&
+                    rule.enabled !== false
                 );
               }
             }
@@ -141,19 +155,26 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
         async _loadCustomValidationRules() {
           const fs = require('fs').promises;
-          const configPath = path.join(mockProjectRoot, '.claude-validation.json');
+          const configPath = path.join(
+            mockProjectRoot,
+            '.claude-validation.json'
+          );
 
           try {
             if (await this._fileExists(configPath)) {
               const configData = await fs.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
-              if (config.customValidationRules && Array.isArray(config.customValidationRules)) {
-                return config.customValidationRules.filter(rule =>
-                  rule.id &&
-                  rule.name &&
-                  rule.command &&
-                  rule.enabled !== false,
+              if (
+                config.customValidationRules &&
+                Array.isArray(config.customValidationRules)
+              ) {
+                return config.customValidationRules.filter(
+                  (rule) =>
+                    rule.id &&
+                    rule.name &&
+                    rule.command &&
+                    rule.enabled !== false
                 );
               }
             }
@@ -177,7 +198,9 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               default: {
                 // Check if this is a custom validation rule
                 const customRules = await this._loadCustomValidationRules();
-                const customRule = customRules.find(rule => rule.id === criterion);
+                const customRule = customRules.find(
+                  (rule) => rule.id === criterion
+                );
 
                 if (customRule) {
                   try {
@@ -190,14 +213,24 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
                     // Check success criteria
                     if (customRule.successCriteria) {
-                      const { outputContains, outputNotContains } = customRule.successCriteria;
+                      const { outputContains, outputNotContains } =
+                        customRule.successCriteria;
 
                       if (outputContains && !result.includes(outputContains)) {
-                        return { success: false, error: `Custom validation '${customRule.name}' failed: expected output not found` };
+                        return {
+                          success: false,
+                          error: `Custom validation '${customRule.name}' failed: expected output not found`,
+                        };
                       }
 
-                      if (outputNotContains && result.includes(outputNotContains)) {
-                        return { success: false, error: `Custom validation '${customRule.name}' failed: forbidden output detected` };
+                      if (
+                        outputNotContains &&
+                        result.includes(outputNotContains)
+                      ) {
+                        return {
+                          success: false,
+                          error: `Custom validation '${customRule.name}' failed: forbidden output detected`,
+                        };
                       }
                     }
 
@@ -205,7 +238,6 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                       success: true,
                       details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                     };
-
                   } catch (error) {
                     return {
                       success: false,
@@ -214,7 +246,10 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   }
                 }
 
-                return { success: false, error: `Unknown validation criterion: ${criterion}` };
+                return {
+                  success: false,
+                  error: `Unknown validation criterion: ${criterion}`,
+                };
               }
             }
           } catch (error) {
@@ -223,7 +258,10 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         },
       };
 
-      const result = await mockTaskManager._performLanguageAgnosticValidationCore('custom-api-tests');
+      const result =
+        await mockTaskManager._performLanguageAgnosticValidationCore(
+          'custom-api-tests'
+        );
 
       expect(result.success).toBe(true);
       expect(result.details).toContain('API Integration Tests');
@@ -245,13 +283,18 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
               default: {
                 const customRules = this._loadCustomValidationRules();
-                const customRule = customRules.find(rule => rule.id === criterion);
+                const customRule = customRules.find(
+                  (rule) => rule.id === criterion
+                );
 
                 if (customRule) {
                   return { success: true, details: 'Custom rule found' };
                 }
 
-                return { success: false, error: `Unknown validation criterion: ${criterion}` };
+                return {
+                  success: false,
+                  error: `Unknown validation criterion: ${criterion}`,
+                };
               }
             }
           } catch (error) {
@@ -260,10 +303,15 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         },
       };
 
-      const result = await mockTaskManager._performLanguageAgnosticValidationCore('nonexistent-rule');
+      const result =
+        await mockTaskManager._performLanguageAgnosticValidationCore(
+          'nonexistent-rule'
+        );
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain('Unknown validation criterion: nonexistent-rule');
+      expect(result.error).toContain(
+        'Unknown validation criterion: nonexistent-rule'
+      );
     });
 
     test('should handle custom rule execution failure', async () => {
@@ -287,19 +335,26 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
         async _loadCustomValidationRules() {
           const fs = require('fs').promises;
-          const configPath = path.join(mockProjectRoot, '.claude-validation.json');
+          const configPath = path.join(
+            mockProjectRoot,
+            '.claude-validation.json'
+          );
 
           try {
             if (await this._fileExists(configPath)) {
               const configData = await fs.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
-              if (config.customValidationRules && Array.isArray(config.customValidationRules)) {
-                return config.customValidationRules.filter(rule =>
-                  rule.id &&
-                  rule.name &&
-                  rule.command &&
-                  rule.enabled !== false,
+              if (
+                config.customValidationRules &&
+                Array.isArray(config.customValidationRules)
+              ) {
+                return config.customValidationRules.filter(
+                  (rule) =>
+                    rule.id &&
+                    rule.name &&
+                    rule.command &&
+                    rule.enabled !== false
                 );
               }
             }
@@ -315,7 +370,9 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
           try {
             const customRules = await this._loadCustomValidationRules();
-            const customRule = customRules.find(rule => rule.id === criterion);
+            const customRule = customRules.find(
+              (rule) => rule.id === criterion
+            );
 
             if (customRule) {
               try {
@@ -330,7 +387,6 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   success: true,
                   details: `Custom validation '${customRule.name}' passed`,
                 };
-
               } catch (error) {
                 return {
                   success: false,
@@ -339,14 +395,20 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               }
             }
 
-            return { success: false, error: `Unknown validation criterion: ${criterion}` };
+            return {
+              success: false,
+              error: `Unknown validation criterion: ${criterion}`,
+            };
           } catch (error) {
             return { success: false, error: error.message };
           }
         },
       };
 
-      const result = await mockTaskManager._performLanguageAgnosticValidationCore('failing-rule');
+      const result =
+        await mockTaskManager._performLanguageAgnosticValidationCore(
+          'failing-rule'
+        );
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Failing Rule');
@@ -381,19 +443,26 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
         async _loadCustomValidationRules() {
           const fs = require('fs').promises;
-          const configPath = path.join(mockProjectRoot, '.claude-validation.json');
+          const configPath = path.join(
+            mockProjectRoot,
+            '.claude-validation.json'
+          );
 
           try {
             if (await this._fileExists(configPath)) {
               const configData = await fs.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
-              if (config.customValidationRules && Array.isArray(config.customValidationRules)) {
-                return config.customValidationRules.filter(rule =>
-                  rule.id &&
-                  rule.name &&
-                  rule.command &&
-                  rule.enabled !== false,
+              if (
+                config.customValidationRules &&
+                Array.isArray(config.customValidationRules)
+              ) {
+                return config.customValidationRules.filter(
+                  (rule) =>
+                    rule.id &&
+                    rule.name &&
+                    rule.command &&
+                    rule.enabled !== false
                 );
               }
             }
@@ -409,7 +478,9 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
           try {
             const customRules = await this._loadCustomValidationRules();
-            const customRule = customRules.find(rule => rule.id === criterion);
+            const customRule = customRules.find(
+              (rule) => rule.id === criterion
+            );
 
             if (customRule) {
               try {
@@ -417,7 +488,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
                 // Support environment variable substitution
                 if (customRule.environment) {
-                  Object.keys(customRule.environment).forEach(key => {
+                  Object.keys(customRule.environment).forEach((key) => {
                     process.env[key] = customRule.environment[key];
                   });
                 }
@@ -430,14 +501,21 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
                 // Check success criteria
                 if (customRule.successCriteria) {
-                  const { outputContains, outputNotContains } = customRule.successCriteria;
+                  const { outputContains, outputNotContains } =
+                    customRule.successCriteria;
 
                   if (outputContains && !result.includes(outputContains)) {
-                    return { success: false, error: `Custom validation '${customRule.name}' failed: expected output not found` };
+                    return {
+                      success: false,
+                      error: `Custom validation '${customRule.name}' failed: expected output not found`,
+                    };
                   }
 
                   if (outputNotContains && result.includes(outputNotContains)) {
-                    return { success: false, error: `Custom validation '${customRule.name}' failed: forbidden output detected` };
+                    return {
+                      success: false,
+                      error: `Custom validation '${customRule.name}' failed: forbidden output detected`,
+                    };
                   }
                 }
 
@@ -445,7 +523,6 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   success: true,
                   details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                 };
-
               } catch (error) {
                 return {
                   success: false,
@@ -454,14 +531,20 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               }
             }
 
-            return { success: false, error: `Unknown validation criterion: ${criterion}` };
+            return {
+              success: false,
+              error: `Unknown validation criterion: ${criterion}`,
+            };
           } catch (error) {
             return { success: false, error: error.message };
           }
         },
       };
 
-      const result = await mockTaskManager._performLanguageAgnosticValidationCore('env-rule');
+      const result =
+        await mockTaskManager._performLanguageAgnosticValidationCore(
+          'env-rule'
+        );
 
       expect(result.success).toBe(true);
       expect(result.details).toContain('Environment Rule');
@@ -492,19 +575,26 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
         async _loadCustomValidationRules() {
           const fs = require('fs').promises;
-          const configPath = path.join(mockProjectRoot, '.claude-validation.json');
+          const configPath = path.join(
+            mockProjectRoot,
+            '.claude-validation.json'
+          );
 
           try {
             if (await this._fileExists(configPath)) {
               const configData = await fs.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
-              if (config.customValidationRules && Array.isArray(config.customValidationRules)) {
-                return config.customValidationRules.filter(rule =>
-                  rule.id &&
-                  rule.name &&
-                  rule.command &&
-                  rule.enabled !== false,
+              if (
+                config.customValidationRules &&
+                Array.isArray(config.customValidationRules)
+              ) {
+                return config.customValidationRules.filter(
+                  (rule) =>
+                    rule.id &&
+                    rule.name &&
+                    rule.command &&
+                    rule.enabled !== false
                 );
               }
             }
@@ -520,7 +610,9 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
           try {
             const customRules = await this._loadCustomValidationRules();
-            const customRule = customRules.find(rule => rule.id === criterion);
+            const customRule = customRules.find(
+              (rule) => rule.id === criterion
+            );
 
             if (customRule) {
               try {
@@ -533,18 +625,28 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
                 // Check success criteria
                 if (customRule.successCriteria) {
-                  const { exitCode, outputContains, outputNotContains } = customRule.successCriteria;
+                  const { exitCode, outputContains, outputNotContains } =
+                    customRule.successCriteria;
 
                   if (exitCode !== undefined && exitCode !== 0) {
-                    return { success: false, error: `Custom validation '${customRule.name}' failed: non-zero exit code` };
+                    return {
+                      success: false,
+                      error: `Custom validation '${customRule.name}' failed: non-zero exit code`,
+                    };
                   }
 
                   if (outputContains && !result.includes(outputContains)) {
-                    return { success: false, error: `Custom validation '${customRule.name}' failed: expected output not found` };
+                    return {
+                      success: false,
+                      error: `Custom validation '${customRule.name}' failed: expected output not found`,
+                    };
                   }
 
                   if (outputNotContains && result.includes(outputNotContains)) {
-                    return { success: false, error: `Custom validation '${customRule.name}' failed: forbidden output detected` };
+                    return {
+                      success: false,
+                      error: `Custom validation '${customRule.name}' failed: forbidden output detected`,
+                    };
                   }
                 }
 
@@ -552,7 +654,6 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   success: true,
                   details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                 };
-
               } catch (error) {
                 return {
                   success: false,
@@ -561,14 +662,20 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               }
             }
 
-            return { success: false, error: `Unknown validation criterion: ${criterion}` };
+            return {
+              success: false,
+              error: `Unknown validation criterion: ${criterion}`,
+            };
           } catch (error) {
             return { success: false, error: error.message };
           }
         },
       };
 
-      const result = await mockTaskManager._performLanguageAgnosticValidationCore('exit-code-rule');
+      const result =
+        await mockTaskManager._performLanguageAgnosticValidationCore(
+          'exit-code-rule'
+        );
 
       expect(result.success).toBe(true);
       expect(result.details).toContain('Exit Code Rule');
@@ -599,19 +706,26 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
         async _loadCustomValidationRules() {
           const fs = require('fs').promises;
-          const configPath = path.join(mockProjectRoot, '.claude-validation.json');
+          const configPath = path.join(
+            mockProjectRoot,
+            '.claude-validation.json'
+          );
 
           try {
             if (await this._fileExists(configPath)) {
               const configData = await fs.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
-              if (config.customValidationRules && Array.isArray(config.customValidationRules)) {
-                return config.customValidationRules.filter(rule =>
-                  rule.id &&
-                  rule.name &&
-                  rule.command &&
-                  rule.enabled !== false,
+              if (
+                config.customValidationRules &&
+                Array.isArray(config.customValidationRules)
+              ) {
+                return config.customValidationRules.filter(
+                  (rule) =>
+                    rule.id &&
+                    rule.name &&
+                    rule.command &&
+                    rule.enabled !== false
                 );
               }
             }
@@ -627,7 +741,9 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
           try {
             const customRules = await this._loadCustomValidationRules();
-            const customRule = customRules.find(rule => rule.id === criterion);
+            const customRule = customRules.find(
+              (rule) => rule.id === criterion
+            );
 
             if (customRule) {
               try {
@@ -640,18 +756,28 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
                 // Check success criteria
                 if (customRule.successCriteria) {
-                  const { exitCode, outputContains, outputNotContains } = customRule.successCriteria;
+                  const { exitCode, outputContains, outputNotContains } =
+                    customRule.successCriteria;
 
                   if (exitCode !== undefined && exitCode !== 0) {
-                    return { success: false, error: `Custom validation '${customRule.name}' failed: non-zero exit code` };
+                    return {
+                      success: false,
+                      error: `Custom validation '${customRule.name}' failed: non-zero exit code`,
+                    };
                   }
 
                   if (outputContains && !result.includes(outputContains)) {
-                    return { success: false, error: `Custom validation '${customRule.name}' failed: expected output not found` };
+                    return {
+                      success: false,
+                      error: `Custom validation '${customRule.name}' failed: expected output not found`,
+                    };
                   }
 
                   if (outputNotContains && result.includes(outputNotContains)) {
-                    return { success: false, error: `Custom validation '${customRule.name}' failed: forbidden output detected` };
+                    return {
+                      success: false,
+                      error: `Custom validation '${customRule.name}' failed: forbidden output detected`,
+                    };
                   }
                 }
 
@@ -659,7 +785,6 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   success: true,
                   details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                 };
-
               } catch (error) {
                 return {
                   success: false,
@@ -668,14 +793,20 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               }
             }
 
-            return { success: false, error: `Unknown validation criterion: ${criterion}` };
+            return {
+              success: false,
+              error: `Unknown validation criterion: ${criterion}`,
+            };
           } catch (error) {
             return { success: false, error: error.message };
           }
         },
       };
 
-      const result = await mockTaskManager._performLanguageAgnosticValidationCore('multi-criteria-rule');
+      const result =
+        await mockTaskManager._performLanguageAgnosticValidationCore(
+          'multi-criteria-rule'
+        );
 
       expect(result.success).toBe(true);
       expect(result.details).toContain('Multi Criteria Rule');
@@ -697,19 +828,26 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
         async _loadCustomValidationRules() {
           const fs = require('fs').promises;
-          const configPath = path.join(mockProjectRoot, '.claude-validation.json');
+          const configPath = path.join(
+            mockProjectRoot,
+            '.claude-validation.json'
+          );
 
           try {
             if (await this._fileExists(configPath)) {
               const configData = await fs.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
-              if (config.customValidationRules && Array.isArray(config.customValidationRules)) {
-                return config.customValidationRules.filter(rule =>
-                  rule.id &&
-                  rule.name &&
-                  rule.command &&
-                  rule.enabled !== false,
+              if (
+                config.customValidationRules &&
+                Array.isArray(config.customValidationRules)
+              ) {
+                return config.customValidationRules.filter(
+                  (rule) =>
+                    rule.id &&
+                    rule.name &&
+                    rule.command &&
+                    rule.enabled !== false
                 );
               }
             }
@@ -739,19 +877,26 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
         async _loadCustomValidationRules() {
           const fs = require('fs').promises;
-          const configPath = path.join(mockProjectRoot, '.claude-validation.json');
+          const configPath = path.join(
+            mockProjectRoot,
+            '.claude-validation.json'
+          );
 
           try {
             if (await this._fileExists(configPath)) {
               const configData = await fs.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
-              if (config.customValidationRules && Array.isArray(config.customValidationRules)) {
-                return config.customValidationRules.filter(rule =>
-                  rule.id &&
-                  rule.name &&
-                  rule.command &&
-                  rule.enabled !== false,
+              if (
+                config.customValidationRules &&
+                Array.isArray(config.customValidationRules)
+              ) {
+                return config.customValidationRules.filter(
+                  (rule) =>
+                    rule.id &&
+                    rule.name &&
+                    rule.command &&
+                    rule.enabled !== false
                 );
               }
             }

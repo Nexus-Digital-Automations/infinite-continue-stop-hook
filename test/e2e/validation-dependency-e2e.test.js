@@ -13,7 +13,10 @@
  * @since 2025-09-27
  */
 
-const { ValidationDependencyManager, DEPENDENCY_TYPES } = require('../../lib/validation-dependency-manager');
+const {
+  ValidationDependencyManager,
+  DEPENDENCY_TYPES,
+} = require('../../lib/validation-dependency-manager');
 const { TaskManagerAPI } = require('../../taskmanager-api');
 const fs = require('fs').promises;
 const path = require('path');
@@ -43,7 +46,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
     await fs.writeFile(
       path.join(tempDir, 'package.json'),
-      JSON.stringify(packageJson, null, 2),
+      JSON.stringify(packageJson, null, 2)
     );
 
     // Initialize managers
@@ -98,7 +101,10 @@ describe('Validation Dependency Management End-to-End Tests', () => {
           name: 'integration-build',
           config: {
             dependencies: [
-              { criterion: 'code-quality-check', type: DEPENDENCY_TYPES.STRICT },
+              {
+                criterion: 'code-quality-check',
+                type: DEPENDENCY_TYPES.STRICT,
+              },
               { criterion: 'security-audit', type: DEPENDENCY_TYPES.WEAK },
             ],
             description: 'Build and integration tests',
@@ -133,15 +139,17 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
       // 4. Generate execution plan
       const executionPlan = manager.generateParallelExecutionPlan(
-        customPipeline.map(step => step.name),
-        3, // Max concurrency
+        customPipeline.map((step) => step.name),
+        3 // Max concurrency
       );
 
       expect(executionPlan.plan.length).toBeGreaterThan(0);
       expect(executionPlan.parallelizationGain).toBeGreaterThan(0);
 
       // 5. Verify dependency ordering
-      const executionOrder = manager.getExecutionOrder(customPipeline.map(step => step.name));
+      const executionOrder = manager.getExecutionOrder(
+        customPipeline.map((step) => step.name)
+      );
 
       const stepPositions = new Map();
       executionOrder.forEach((step, index) => {
@@ -149,10 +157,18 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       });
 
       // Verify critical dependencies
-      expect(stepPositions.get('environment-setup')).toBeLessThan(stepPositions.get('code-quality-check'));
-      expect(stepPositions.get('environment-setup')).toBeLessThan(stepPositions.get('security-audit'));
-      expect(stepPositions.get('code-quality-check')).toBeLessThan(stepPositions.get('integration-build'));
-      expect(stepPositions.get('integration-build')).toBeLessThan(stepPositions.get('deployment-validation'));
+      expect(stepPositions.get('environment-setup')).toBeLessThan(
+        stepPositions.get('code-quality-check')
+      );
+      expect(stepPositions.get('environment-setup')).toBeLessThan(
+        stepPositions.get('security-audit')
+      );
+      expect(stepPositions.get('code-quality-check')).toBeLessThan(
+        stepPositions.get('integration-build')
+      );
+      expect(stepPositions.get('integration-build')).toBeLessThan(
+        stepPositions.get('deployment-validation')
+      );
 
       // 6. Generate comprehensive analysis
       const analysis = manager.generateInteractiveVisualization('json');
@@ -163,7 +179,9 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       const configPath = await manager.saveDependencyConfig();
       expect(configPath).toBeDefined();
 
-      const newManager = new ValidationDependencyManager({ projectRoot: tempDir });
+      const newManager = new ValidationDependencyManager({
+        projectRoot: tempDir,
+      });
       const reloadedConfig = await newManager.loadDependencyConfig();
       expect(reloadedConfig).toBeDefined();
 
@@ -203,15 +221,19 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       // Execute parallel validation (simulated)
       const executionResult = await manager.executeParallelValidationPlan(
         executionPlan,
-        monitoringOptions,
+        monitoringOptions
       );
 
       expect(executionResult).toBeDefined();
       expect(executionEvents.length).toBeGreaterThan(0);
 
       // Verify event sequence
-      const waveStartEvents = executionEvents.filter(e => e.type === 'wave_start');
-      const waveCompleteEvents = executionEvents.filter(e => e.type === 'wave_complete');
+      const waveStartEvents = executionEvents.filter(
+        (e) => e.type === 'wave_start'
+      );
+      const waveCompleteEvents = executionEvents.filter(
+        (e) => e.type === 'wave_complete'
+      );
 
       expect(waveStartEvents.length).toBeGreaterThan(0);
       expect(waveCompleteEvents.length).toBeGreaterThan(0);
@@ -220,7 +242,9 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       // Check execution state
       if (executionResult.success) {
         expect(executionResult.summary.totalCriteria).toBeGreaterThan(0);
-        expect(executionResult.summary.parallelizationGain).toBeGreaterThanOrEqual(0);
+        expect(
+          executionResult.summary.parallelizationGain
+        ).toBeGreaterThanOrEqual(0);
       }
     });
   });
@@ -256,7 +280,10 @@ describe('Validation Dependency Management End-to-End Tests', () => {
             description: `Large pipeline step ${i}`,
             estimatedDuration: Math.random() * 15000 + 5000,
             parallelizable: Math.random() > 0.3,
-            resourceRequirements: ['filesystem', ...(Math.random() > 0.5 ? ['cpu'] : [])],
+            resourceRequirements: [
+              'filesystem',
+              ...(Math.random() > 0.5 ? ['cpu'] : []),
+            ],
           },
         });
       }
@@ -280,8 +307,8 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       // Test execution planning performance
       const planStart = Date.now();
       const executionPlan = manager.generateParallelExecutionPlan(
-        largePipeline.map(step => step.name),
-        8,
+        largePipeline.map((step) => step.name),
+        8
       );
       const planTime = Date.now() - planStart;
 
@@ -295,7 +322,9 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       const vizTime = Date.now() - vizStart;
 
       expect(vizTime).toBeLessThan(10000); // Should complete within 10 seconds
-      expect(visualization.debugInfo.dependencyChains.length).toBeGreaterThan(0);
+      expect(visualization.debugInfo.dependencyChains.length).toBeGreaterThan(
+        0
+      );
     });
 
     test('should handle concurrent access safely', async () => {
@@ -307,25 +336,29 @@ describe('Validation Dependency Management End-to-End Tests', () => {
         () => manager.getDependencyVisualization(),
         () => manager.generateInteractiveVisualization('ascii'),
         () => manager.getExecutionAnalytics(),
-        () => manager.addDependency('concurrent-test-1', {
-          dependencies: [],
-          description: 'Concurrent test 1',
-        }),
-        () => manager.addDependency('concurrent-test-2', {
-          dependencies: [{ criterion: 'concurrent-test-1', type: DEPENDENCY_TYPES.WEAK }],
-          description: 'Concurrent test 2',
-        }),
+        () =>
+          manager.addDependency('concurrent-test-1', {
+            dependencies: [],
+            description: 'Concurrent test 1',
+          }),
+        () =>
+          manager.addDependency('concurrent-test-2', {
+            dependencies: [
+              { criterion: 'concurrent-test-1', type: DEPENDENCY_TYPES.WEAK },
+            ],
+            description: 'Concurrent test 2',
+          }),
         () => manager.recordExecution('test-criterion', 'success', 5000),
         () => manager.saveDependencyConfig(),
       ];
 
       // Execute all operations concurrently
       const results = await Promise.allSettled(
-        concurrentOperations.map(op => op()),
+        concurrentOperations.map((op) => op())
       );
 
       // All operations should complete without throwing
-      const failures = results.filter(result => result.status === 'rejected');
+      const failures = results.filter((result) => result.status === 'rejected');
       expect(failures.length).toBe(0);
 
       // System should remain in consistent state
@@ -344,7 +377,9 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       await fs.writeFile(validConfigPath, '{ invalid json }');
 
       // Create new manager instance
-      const corruptedManager = new ValidationDependencyManager({ projectRoot: tempDir });
+      const corruptedManager = new ValidationDependencyManager({
+        projectRoot: tempDir,
+      });
 
       // Should handle corruption gracefully and fall back to defaults
       const loadResult = await corruptedManager.loadDependencyConfig();
@@ -378,17 +413,21 @@ describe('Validation Dependency Management End-to-End Tests', () => {
         return originalExecuteCriterion.call(manager, criterion);
       };
 
-      const executionPlan = manager.generateParallelExecutionPlan(['failing-validation']);
+      const executionPlan = manager.generateParallelExecutionPlan([
+        'failing-validation',
+      ]);
 
       const executionResult = await manager.executeParallelValidationPlan(
         executionPlan,
-        { timeout: 10000, maxRetries: 1 },
+        { timeout: 10000, maxRetries: 1 }
       );
 
       // Should handle failure gracefully
       expect(executionResult).toBeDefined();
       expect(executionResult.success).toBe(false);
-      expect(executionResult.executionState.failedCriteria.has('failing-validation')).toBe(true);
+      expect(
+        executionResult.executionState.failedCriteria.has('failing-validation')
+      ).toBe(true);
 
       // Restore original method
       manager._executeCriterion = originalExecuteCriterion;
@@ -397,35 +436,45 @@ describe('Validation Dependency Management End-to-End Tests', () => {
     test('should handle circular dependency detection and resolution', () => {
       // Create circular dependency
       manager.addDependency('circular-a', {
-        dependencies: [{ criterion: 'circular-c', type: DEPENDENCY_TYPES.STRICT }],
+        dependencies: [
+          { criterion: 'circular-c', type: DEPENDENCY_TYPES.STRICT },
+        ],
         description: 'Part of circular dependency',
       });
 
       manager.addDependency('circular-b', {
-        dependencies: [{ criterion: 'circular-a', type: DEPENDENCY_TYPES.STRICT }],
+        dependencies: [
+          { criterion: 'circular-a', type: DEPENDENCY_TYPES.STRICT },
+        ],
         description: 'Part of circular dependency',
       });
 
       manager.addDependency('circular-c', {
-        dependencies: [{ criterion: 'circular-b', type: DEPENDENCY_TYPES.STRICT }],
+        dependencies: [
+          { criterion: 'circular-b', type: DEPENDENCY_TYPES.STRICT },
+        ],
         description: 'Part of circular dependency',
       });
 
       // Should detect circular dependency
       const validation = manager.validateDependencyGraph();
       expect(validation.valid).toBe(false);
-      expect(validation.issues.some(issue => issue.type === 'cycle')).toBe(true);
+      expect(validation.issues.some((issue) => issue.type === 'cycle')).toBe(
+        true
+      );
 
       // Should still be able to generate execution plan (with forced execution)
       const executionPlan = manager.generateParallelExecutionPlan([
-        'circular-a', 'circular-b', 'circular-c',
+        'circular-a',
+        'circular-b',
+        'circular-c',
       ]);
 
       expect(executionPlan.plan.length).toBeGreaterThan(0);
 
       // Should include forced executions
-      const _forcedExecutions = executionPlan.plan.some(wave =>
-        wave.criteria.some(criterion => criterion.forced),
+      const _forcedExecutions = executionPlan.plan.some((wave) =>
+        wave.criteria.some((criterion) => criterion.forced)
       );
 
       // May or may not have forced executions depending on implementation
@@ -467,7 +516,10 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       ];
 
       for (const systemConfig of systemConfigurations) {
-        const adaptivePlan = manager.generateAdaptiveExecutionPlan(null, systemConfig.config);
+        const adaptivePlan = manager.generateAdaptiveExecutionPlan(
+          null,
+          systemConfig.config
+        );
 
         expect(adaptivePlan.adaptiveOptimizations).toBeDefined();
         expect(adaptivePlan.adaptiveOptimizations.systemAware).toBeDefined();
@@ -487,8 +539,11 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
         // Network-limited system should have network optimizations
         if (systemConfig.name === 'network-limited') {
-          const resourceOpts = adaptivePlan.adaptiveOptimizations.resourceScheduling;
-          expect(resourceOpts.some(opt => opt.type === 'network_prioritization')).toBe(true);
+          const resourceOpts =
+            adaptivePlan.adaptiveOptimizations.resourceScheduling;
+          expect(
+            resourceOpts.some((opt) => opt.type === 'network_prioritization')
+          ).toBe(true);
         }
       }
     });
@@ -504,7 +559,9 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       });
 
       manager.addDependency('dependent-task-1', {
-        dependencies: [{ criterion: 'long-running-task', type: DEPENDENCY_TYPES.STRICT }],
+        dependencies: [
+          { criterion: 'long-running-task', type: DEPENDENCY_TYPES.STRICT },
+        ],
         description: 'Task dependent on long runner',
         estimatedDuration: 5000,
         parallelizable: true,
@@ -512,7 +569,9 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       });
 
       manager.addDependency('dependent-task-2', {
-        dependencies: [{ criterion: 'long-running-task', type: DEPENDENCY_TYPES.STRICT }],
+        dependencies: [
+          { criterion: 'long-running-task', type: DEPENDENCY_TYPES.STRICT },
+        ],
         description: 'Another task dependent on long runner',
         estimatedDuration: 8000,
         parallelizable: true,
@@ -525,7 +584,9 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       expect(suggestions.length).toBeGreaterThan(0);
 
       // Should identify long dependency chain as an issue
-      const chainOptimization = suggestions.find(s => s.type === 'dependency_optimization');
+      const chainOptimization = suggestions.find(
+        (s) => s.type === 'dependency_optimization'
+      );
       expect(chainOptimization).toBeDefined();
 
       // Should provide specific recommendations
@@ -587,8 +648,8 @@ describe('Validation Dependency Management End-to-End Tests', () => {
         expect(visualizations[i].levels).toBe(firstViz.levels);
 
         // Node IDs should be consistent
-        const firstNodeIds = firstViz.nodes.map(n => n.id).sort();
-        const currentNodeIds = visualizations[i].nodes.map(n => n.id).sort();
+        const firstNodeIds = firstViz.nodes.map((n) => n.id).sort();
+        const currentNodeIds = visualizations[i].nodes.map((n) => n.id).sort();
         expect(currentNodeIds).toEqual(firstNodeIds);
       }
     });

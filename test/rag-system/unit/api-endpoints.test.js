@@ -1,5 +1,3 @@
-
-
 /**
  * RAG System API Endpoints Unit Tests
  *
@@ -14,7 +12,8 @@ const _request = require('supertest');
 const _path = require('path');
 
 // Import TaskManager API - will be updated when RAG endpoints are implemented
-const _API_BASE = '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
+const _API_BASE =
+  '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
 
 describe('RAG System API Endpoints', () => {
   let _app;
@@ -42,7 +41,8 @@ describe('RAG System API Endpoints', () => {
       test('should create new lesson with valid data', () => {
         const _lessonData = {
           title: 'Test Lesson: API Error Handling',
-          content: 'When dealing with API errors, always implement proper retry logic...',
+          content:
+            'When dealing with API errors, always implement proper retry logic...',
           category: 'api-errors',
           project: 'test-project',
           tags: ['api', 'error-handling', 'retry'],
@@ -181,7 +181,8 @@ describe('RAG System API Endpoints', () => {
             project: 'user-management-system',
             agent_id: 'linter-agent-001',
             timestamp: new Date().toISOString(),
-            code_snippet: 'const user = getCurrentUser()\nconst isValid = validateUser(user)',
+            code_snippet:
+              'const user = getCurrentUser()\nconst isValid = validateUser(user)',
           },
           tags: ['linter', 'syntax', 'javascript'],
         };
@@ -289,7 +290,8 @@ describe('RAG System API Endpoints', () => {
 
       test('should handle empty search results', () => {
         const _searchQuery = {
-          query: 'extremely specific query that should return no results xyz123',
+          query:
+            'extremely specific query that should return no results xyz123',
           type: 'lessons',
         };
 
@@ -395,7 +397,8 @@ describe('RAG System API Endpoints', () => {
           task_id: 'feature_123456789_test',
           lesson_data: {
             title: 'Feature Implementation Best Practices',
-            content: 'When implementing new features, always start with comprehensive testing...',
+            content:
+              'When implementing new features, always start with comprehensive testing...',
             learned_from: 'task_completion',
           },
         };

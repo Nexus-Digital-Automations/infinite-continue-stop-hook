@@ -1,4 +1,3 @@
-
 /**
  * Test Performance Monitoring Script
  *
@@ -16,8 +15,8 @@ const { execSync, spawn } = require('child_process');
 // Configuration
 const CONFIG = {
   performance_thresholds: {
-    slow_test_warning: 5000,    // 5 seconds
-    slow_test_critical: 10000,  // 10 seconds
+    slow_test_warning: 5000, // 5 seconds
+    slow_test_critical: 10000, // 10 seconds
     total_suite_warning: 60000, // 1 minute
     total_suite_critical: 180000, // 3 minutes
   },
@@ -87,7 +86,10 @@ class ResourceMonitor {
    * Start monitoring system resources
    */
   startMonitoring() {
-    if (!CONFIG.monitoring.collect_memory_usage && !CONFIG.monitoring.collect_cpu_usage) {
+    if (
+      !CONFIG.monitoring.collect_memory_usage &&
+      !CONFIG.monitoring.collect_cpu_usage
+    ) {
       return;
     }
 
@@ -135,7 +137,9 @@ class ResourceMonitor {
    * Get peak memory usage
    */
   getPeakMemoryUsage() {
-    if (this.measurements.length === 0) {return this.startMemory;}
+    if (this.measurements.length === 0) {
+      return this.startMemory;
+    }
 
     return this.measurements.reduce((peak, current) => {
       if (current.memory.rss > peak.rss) {
@@ -149,14 +153,19 @@ class ResourceMonitor {
    * Get average memory usage
    */
   getAverageMemoryUsage() {
-    if (this.measurements.length === 0) {return this.startMemory;}
+    if (this.measurements.length === 0) {
+      return this.startMemory;
+    }
 
-    const totals = this.measurements.reduce((sum, measurement) => ({
-      rss: sum.rss + measurement.memory.rss,
-      heapUsed: sum.heapUsed + measurement.memory.heapUsed,
-      heapTotal: sum.heapTotal + measurement.memory.heapTotal,
-      external: sum.external + measurement.memory.external,
-    }), { rss: 0, heapUsed: 0, heapTotal: 0, external: 0 });
+    const totals = this.measurements.reduce(
+      (sum, measurement) => ({
+        rss: sum.rss + measurement.memory.rss,
+        heapUsed: sum.heapUsed + measurement.memory.heapUsed,
+        heapTotal: sum.heapTotal + measurement.memory.heapTotal,
+        external: sum.external + measurement.memory.external,
+      }),
+      { rss: 0, heapUsed: 0, heapTotal: 0, external: 0 }
+    );
 
     const count = this.measurements.length;
     return {
@@ -200,16 +209,19 @@ class TestPerformanceMonitor {
       this.generateSummary();
 
       const duration = Date.now() - this.startTime;
-      PerformanceLogger.success(`Test performance monitoring completed in ${duration}ms`);
+      PerformanceLogger.success(
+        `Test performance monitoring completed in ${duration}ms`
+      );
 
       // Exit with appropriate code
       const hasErrors = this.errors.length > 0;
       if (hasErrors) {
         throw new Error('Test performance monitoring completed with errors');
       }
-
     } catch (error) {
-      PerformanceLogger.error(`Test performance monitoring failed: ${error.message}`);
+      PerformanceLogger.error(
+        `Test performance monitoring failed: ${error.message}`
+      );
       PerformanceLogger.debug(error.stack);
       throw error;
     }
@@ -234,13 +246,27 @@ class TestPerformanceMonitor {
    * Run test suites and collect performance data
    */
   async runTestSuites() {
-    PerformanceLogger.info('Running test suites with performance monitoring...');
+    PerformanceLogger.info(
+      'Running test suites with performance monitoring...'
+    );
 
     const testCommands = [
       { name: 'API Tests', command: 'npm run test:api', timeout: 60000 },
-      { name: 'RAG Unit Tests', command: 'npm run test:rag:unit', timeout: 45000 },
-      { name: 'RAG Integration Tests', command: 'npm run test:rag:integration', timeout: 120000 },
-      { name: 'RAG Performance Tests', command: 'npm run test:rag:performance', timeout: 300000 },
+      {
+        name: 'RAG Unit Tests',
+        command: 'npm run test:rag:unit',
+        timeout: 45000,
+      },
+      {
+        name: 'RAG Integration Tests',
+        command: 'npm run test:rag:integration',
+        timeout: 120000,
+      },
+      {
+        name: 'RAG Performance Tests',
+        command: 'npm run test:rag:performance',
+        timeout: 300000,
+      },
       { name: 'Full Test Suite', command: 'npm test', timeout: 180000 },
     ];
 
@@ -286,10 +312,11 @@ class TestPerformanceMonitor {
       this.checkSuitePerformance(suiteResult);
 
       PerformanceLogger.success(`${testSuite.name} completed in ${duration}ms`);
-
     } catch (error) {
       const duration = Date.now() - suiteStartTime;
-      PerformanceLogger.error(`${testSuite.name} failed after ${duration}ms: ${error.message}`);
+      PerformanceLogger.error(
+        `${testSuite.name} failed after ${duration}ms: ${error.message}`
+      );
 
       this.errors.push({
         suite: testSuite.name,
@@ -381,11 +408,14 @@ class TestPerformanceMonitor {
     PerformanceLogger.info('Analyzing test performance results...');
 
     // Calculate total test time
-    const totalTestTime = this.suiteResults.reduce((sum, result) => sum + result.duration, 0);
+    const totalTestTime = this.suiteResults.reduce(
+      (sum, result) => sum + result.duration,
+      0
+    );
 
     // Identify slowest tests
     const slowestTests = this.suiteResults
-      .filter(result => result.success)
+      .filter((result) => result.success)
       .sort((a, b) => b.duration - a.duration)
       .slice(0, 5);
 
@@ -402,8 +432,8 @@ class TestPerformanceMonitor {
       parallelizationAnalysis,
       resourceData,
       performance_issues: {
-        errors: this.errors.filter(e => e.type === 'performance'),
-        warnings: this.warnings.filter(w => w.type === 'performance'),
+        errors: this.errors.filter((e) => e.type === 'performance'),
+        warnings: this.warnings.filter((w) => w.type === 'performance'),
       },
     };
 
@@ -423,8 +453,11 @@ class TestPerformanceMonitor {
       average_memory: this.formatBytes(memory.average.rss),
       memory_growth: this.formatBytes(memory.end.rss - memory.start.rss),
       heap_utilization: {
-        start: ((memory.start.heapUsed / memory.start.heapTotal) * 100).toFixed(1) + '%',
-        end: ((memory.end.heapUsed / memory.end.heapTotal) * 100).toFixed(1) + '%',
+        start:
+          ((memory.start.heapUsed / memory.start.heapTotal) * 100).toFixed(1) +
+          '%',
+        end:
+          ((memory.end.heapUsed / memory.end.heapTotal) * 100).toFixed(1) + '%',
       },
     };
   }
@@ -433,18 +466,23 @@ class TestPerformanceMonitor {
    * Analyze test parallelization opportunities
    */
   analyzeParallelizationOpportunities() {
-    const serialTime = this.suiteResults.reduce((sum, result) => sum + result.duration, 0);
-    const longestSuite = Math.max(...this.suiteResults.map(r => r.duration));
+    const serialTime = this.suiteResults.reduce(
+      (sum, result) => sum + result.duration,
+      0
+    );
+    const longestSuite = Math.max(...this.suiteResults.map((r) => r.duration));
 
-    const potentialSpeedup = serialTime > 0 ? (serialTime / longestSuite).toFixed(2) : 1;
+    const potentialSpeedup =
+      serialTime > 0 ? (serialTime / longestSuite).toFixed(2) : 1;
 
     return {
       current_serial_time: serialTime,
       longest_suite_time: longestSuite,
       potential_speedup: `${potentialSpeedup}x`,
-      recommendation: potentialSpeedup > 2 ?
-        'Consider running test suites in parallel to reduce total execution time' :
-        'Current test execution is reasonably optimized',
+      recommendation:
+        potentialSpeedup > 2
+          ? 'Consider running test suites in parallel to reduce total execution time'
+          : 'Current test execution is reasonably optimized',
     };
   }
 
@@ -460,8 +498,8 @@ class TestPerformanceMonitor {
       execution_summary: {
         total_duration: Date.now() - this.startTime,
         test_suites_run: this.suiteResults.length,
-        successful_suites: this.suiteResults.filter(r => r.success).length,
-        failed_suites: this.suiteResults.filter(r => !r.success).length,
+        successful_suites: this.suiteResults.filter((r) => r.success).length,
+        failed_suites: this.suiteResults.filter((r) => !r.success).length,
       },
       performance_analysis: this.analysis,
       suite_results: this.suiteResults,
@@ -472,7 +510,8 @@ class TestPerformanceMonitor {
         platform: process.platform,
         arch: process.arch,
         ci: process.env.CI || false,
-        max_old_space_size: process.env.NODE_OPTIONS?.includes('max-old-space-size') || 'default',
+        max_old_space_size:
+          process.env.NODE_OPTIONS?.includes('max-old-space-size') || 'default',
       },
     };
 
@@ -483,7 +522,7 @@ class TestPerformanceMonitor {
     for (const suiteResult of this.suiteResults) {
       const suiteFile = path.join(
         CONFIG.paths.results,
-        `${suiteResult.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.json`,
+        `${suiteResult.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.json`
       );
       fs.writeFileSync(suiteFile, JSON.stringify(suiteResult, null, 2));
     }
@@ -503,7 +542,9 @@ class TestPerformanceMonitor {
       try {
         trends = JSON.parse(fs.readFileSync(CONFIG.paths.trends, 'utf8'));
       } catch {
-        PerformanceLogger.warning('Could not load existing trends, starting fresh');
+        PerformanceLogger.warning(
+          'Could not load existing trends, starting fresh'
+        );
       }
     }
 
@@ -511,7 +552,7 @@ class TestPerformanceMonitor {
       timestamp: new Date().toISOString(),
       commit: this.getGitInfo().commit,
       total_duration: Date.now() - this.startTime,
-      suite_performance: this.suiteResults.map(r => ({
+      suite_performance: this.suiteResults.map((r) => ({
         name: r.name,
         duration: r.duration,
         success: r.success,
@@ -540,8 +581,8 @@ class TestPerformanceMonitor {
     PerformanceLogger.info('Generating performance summary...');
 
     const totalDuration = Date.now() - this.startTime;
-    const successfulSuites = this.suiteResults.filter(r => r.success).length;
-    const failedSuites = this.suiteResults.filter(r => !r.success).length;
+    const successfulSuites = this.suiteResults.filter((r) => r.success).length;
+    const failedSuites = this.suiteResults.filter((r) => !r.success).length;
 
     console.log('\n⚡ Test Performance Summary:');
     console.log('┌─────────────────────────┬──────────────────┬──────────┐');
@@ -549,14 +590,26 @@ class TestPerformanceMonitor {
     console.log('├─────────────────────────┼──────────────────┼──────────┤');
 
     // Overall metrics
-    console.log(`│ Total Execution Time    │ ${this.formatDuration(totalDuration).padEnd(14)} │ ${this.getTimeStatus(totalDuration).padEnd(8)} │`);
-    console.log(`│ Test Suites Run         │ ${this.suiteResults.length.toString().padEnd(14)} │ ${'ℹ️ Info'.padEnd(8)} │`);
-    console.log(`│ Successful Suites       │ ${successfulSuites.toString().padEnd(14)} │ ${successfulSuites === this.suiteResults.length ? '✅ Good' : '⚠️ Check'} │`);
-    console.log(`│ Failed Suites           │ ${failedSuites.toString().padEnd(14)} │ ${failedSuites === 0 ? '✅ Good' : '❌ Bad'} │`);
+    console.log(
+      `│ Total Execution Time    │ ${this.formatDuration(totalDuration).padEnd(14)} │ ${this.getTimeStatus(totalDuration).padEnd(8)} │`
+    );
+    console.log(
+      `│ Test Suites Run         │ ${this.suiteResults.length.toString().padEnd(14)} │ ${'ℹ️ Info'.padEnd(8)} │`
+    );
+    console.log(
+      `│ Successful Suites       │ ${successfulSuites.toString().padEnd(14)} │ ${successfulSuites === this.suiteResults.length ? '✅ Good' : '⚠️ Check'} │`
+    );
+    console.log(
+      `│ Failed Suites           │ ${failedSuites.toString().padEnd(14)} │ ${failedSuites === 0 ? '✅ Good' : '❌ Bad'} │`
+    );
 
     if (this.analysis) {
-      console.log(`│ Peak Memory Usage       │ ${this.analysis.memoryAnalysis.peak_memory.padEnd(14)} │ ${'📊 Info'.padEnd(8)} │`);
-      console.log(`│ Potential Speedup       │ ${this.analysis.parallelizationAnalysis.potential_speedup.padEnd(14)} │ ${'🚀 Info'.padEnd(8)} │`);
+      console.log(
+        `│ Peak Memory Usage       │ ${this.analysis.memoryAnalysis.peak_memory.padEnd(14)} │ ${'📊 Info'.padEnd(8)} │`
+      );
+      console.log(
+        `│ Potential Speedup       │ ${this.analysis.parallelizationAnalysis.potential_speedup.padEnd(14)} │ ${'🚀 Info'.padEnd(8)} │`
+      );
     }
 
     console.log('└─────────────────────────┴──────────────────┴──────────┘');
@@ -565,7 +618,9 @@ class TestPerformanceMonitor {
     if (this.analysis?.slowestTests?.length > 0) {
       console.log('\n🐌 Slowest Test Suites:');
       this.analysis.slowestTests.forEach((test, index) => {
-        console.log(`${index + 1}. ${test.name}: ${this.formatDuration(test.duration)}`);
+        console.log(
+          `${index + 1}. ${test.name}: ${this.formatDuration(test.duration)}`
+        );
       });
     }
 
@@ -576,14 +631,16 @@ class TestPerformanceMonitor {
 
     if (this.errors.length > 0) {
       console.log(`\n❌ Performance Errors: ${this.errors.length}`);
-      this.errors.forEach(error => {
+      this.errors.forEach((error) => {
         console.log(`   - ${error.message || error.error}`);
       });
     }
 
     // Recommendations
     if (this.analysis?.parallelizationAnalysis?.recommendation) {
-      console.log(`\n💡 Recommendation: ${this.analysis.parallelizationAnalysis.recommendation}`);
+      console.log(
+        `\n💡 Recommendation: ${this.analysis.parallelizationAnalysis.recommendation}`
+      );
     }
 
     console.log(`\n📁 Detailed reports available in: ${CONFIG.paths.reports}`);
@@ -606,8 +663,12 @@ class TestPerformanceMonitor {
    * Format duration in human readable format
    */
   formatDuration(ms) {
-    if (ms < 1000) {return `${ms}ms`;}
-    if (ms < 60000) {return `${(ms / 1000).toFixed(1)}s`;}
+    if (ms < 1000) {
+      return `${ms}ms`;
+    }
+    if (ms < 60000) {
+      return `${(ms / 1000).toFixed(1)}s`;
+    }
     return `${(ms / 60000).toFixed(1)}m`;
   }
 
@@ -616,7 +677,9 @@ class TestPerformanceMonitor {
    */
   formatBytes(bytes) {
     const sizes = ['B', 'KB', 'MB', 'GB'];
-    if (bytes === 0) {return '0B';}
+    if (bytes === 0) {
+      return '0B';
+    }
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
     return `${(bytes / Math.pow(1024, i)).toFixed(1)}${sizes[i]}`;
   }
@@ -628,8 +691,12 @@ class TestPerformanceMonitor {
     try {
       return {
         commit: execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
-        branch: execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim(),
-        author: execSync('git log -1 --format="%an"', { encoding: 'utf8' }).trim(),
+        branch: execSync('git rev-parse --abbrev-ref HEAD', {
+          encoding: 'utf8',
+        }).trim(),
+        author: execSync('git log -1 --format="%an"', {
+          encoding: 'utf8',
+        }).trim(),
       };
     } catch {
       return { commit: 'unknown', branch: 'unknown', author: 'unknown' };
@@ -674,7 +741,7 @@ Examples:
   }
 
   const monitor = new TestPerformanceMonitor();
-  monitor.run().catch(error => {
+  monitor.run().catch((error) => {
     PerformanceLogger.error(`Fatal error: ${error.message}`);
     throw error;
   });

@@ -1,4 +1,3 @@
-
 /**
  * Standalone Coverage Threshold Enforcement Script
  *
@@ -68,17 +67,23 @@ class CoverageLogger {
   static table(headers, rows) {
     // Simple table formatter
     const maxLengths = headers.map((header, i) =>
-      Math.max(header.length, ...rows.map(row => String(row[i] || '').length)),
+      Math.max(header.length, ...rows.map((row) => String(row[i] || '').length))
     );
 
-    const separator = '─'.repeat(maxLengths.reduce((sum, len) => sum + len + 3, 1));
+    const separator = '─'.repeat(
+      maxLengths.reduce((sum, len) => sum + len + 3, 1)
+    );
 
     console.log(`┌${separator}┐`);
-    console.log(`│ ${headers.map((h, i) => h.padEnd(maxLengths[i])).join(' │ ')} │`);
+    console.log(
+      `│ ${headers.map((h, i) => h.padEnd(maxLengths[i])).join(' │ ')} │`
+    );
     console.log(`├${separator}┤`);
 
-    rows.forEach(row => {
-      console.log(`│ ${row.map((cell, i) => String(cell || '').padEnd(maxLengths[i])).join(' │ ')} │`);
+    rows.forEach((row) => {
+      console.log(
+        `│ ${row.map((cell, i) => String(cell || '').padEnd(maxLengths[i])).join(' │ ')} │`
+      );
     });
 
     console.log(`└${separator}┘`);
@@ -120,12 +125,12 @@ class CoverageThresholdChecker {
       // Check for failures
       const hasFailures = this.results.failures.length > 0;
       const hasWarnings = this.results.warnings.length > 0;
-      const shouldFail = hasFailures || (this.config.strict_mode && hasWarnings);
+      const shouldFail =
+        hasFailures || (this.config.strict_mode && hasWarnings);
 
       if (shouldFail) {
         throw new Error('Coverage validation failed');
       }
-
     } catch (error) {
       CoverageLogger.error(`Coverage validation failed: ${error.message}`);
       if (process.env.DEBUG) {
@@ -149,7 +154,9 @@ class CoverageThresholdChecker {
       try {
         execSync('npm run coverage:ci', { stdio: 'inherit', timeout: 120000 });
       } catch {
-        throw new Error('Failed to generate coverage data. Run tests with coverage first.');
+        throw new Error(
+          'Failed to generate coverage data. Run tests with coverage first.'
+        );
       }
     }
 
@@ -166,10 +173,11 @@ class CoverageThresholdChecker {
 
       this.results.summary = coverageData.total;
       CoverageLogger.success('Coverage data loaded successfully');
-      CoverageLogger.debug(`Coverage summary: ${JSON.stringify(coverageData.total, null, 2)}`);
+      CoverageLogger.debug(
+        `Coverage summary: ${JSON.stringify(coverageData.total, null, 2)}`
+      );
 
       return coverageData;
-
     } catch (error) {
       if (error.message.includes('Invalid coverage')) {
         throw error;
@@ -218,9 +226,13 @@ class CoverageThresholdChecker {
 
     this.results.failures = failures;
     this.results.warnings = warnings;
-    this.results.passed = failures.length === 0 && (!this.config.strict_mode || warnings.length === 0);
+    this.results.passed =
+      failures.length === 0 &&
+      (!this.config.strict_mode || warnings.length === 0);
 
-    CoverageLogger.debug(`Validation complete. Failures: ${failures.length}, Warnings: ${warnings.length}`);
+    CoverageLogger.debug(
+      `Validation complete. Failures: ${failures.length}, Warnings: ${warnings.length}`
+    );
   }
 
   /**
@@ -230,12 +242,13 @@ class CoverageThresholdChecker {
     CoverageLogger.info('Generating coverage badge...');
 
     const { summary } = this.results;
-    const overallCoverage = Math.round((
-      summary.statements.pct +
-      summary.branches.pct +
-      summary.functions.pct +
-      summary.lines.pct
-    ) / 4);
+    const overallCoverage = Math.round(
+      (summary.statements.pct +
+        summary.branches.pct +
+        summary.functions.pct +
+        summary.lines.pct) /
+        4
+    );
 
     const color = this.getBadgeColor(overallCoverage);
     const badgeUrl = `https://img.shields.io/badge/coverage-${overallCoverage}%25-${color}`;
@@ -257,7 +270,7 @@ class CoverageThresholdChecker {
 
     fs.writeFileSync(
       path.join(badgeDir, 'data.json'),
-      JSON.stringify(badgeData, null, 2),
+      JSON.stringify(badgeData, null, 2)
     );
 
     CoverageLogger.success(`Coverage badge generated: ${overallCoverage}%`);
@@ -267,11 +280,21 @@ class CoverageThresholdChecker {
    * Get badge color based on coverage percentage
    */
   getBadgeColor(percentage) {
-    if (percentage >= 90) {return 'brightgreen';}
-    if (percentage >= 80) {return 'green';}
-    if (percentage >= 70) {return 'yellowgreen';}
-    if (percentage >= 60) {return 'yellow';}
-    if (percentage >= 50) {return 'orange';}
+    if (percentage >= 90) {
+      return 'brightgreen';
+    }
+    if (percentage >= 80) {
+      return 'green';
+    }
+    if (percentage >= 70) {
+      return 'yellowgreen';
+    }
+    if (percentage >= 60) {
+      return 'yellow';
+    }
+    if (percentage >= 50) {
+      return 'orange';
+    }
     return 'red';
   }
 
@@ -292,15 +315,18 @@ class CoverageThresholdChecker {
       coverage: this.results.summary,
       thresholds: this.config.thresholds,
       critical_thresholds: this.config.critical_thresholds,
-      badge: this.results.badge_url ? {
-        url: this.results.badge_url,
-        coverage_percentage: Math.round((
-          this.results.summary.statements.pct +
-          this.results.summary.branches.pct +
-          this.results.summary.functions.pct +
-          this.results.summary.lines.pct
-        ) / 4),
-      } : null,
+      badge: this.results.badge_url
+        ? {
+            url: this.results.badge_url,
+            coverage_percentage: Math.round(
+              (this.results.summary.statements.pct +
+                this.results.summary.branches.pct +
+                this.results.summary.functions.pct +
+                this.results.summary.lines.pct) /
+                4
+            ),
+          }
+        : null,
       git: this.getGitInfo(),
       environment: {
         node_version: process.version,
@@ -314,7 +340,10 @@ class CoverageThresholdChecker {
       fs.mkdirSync('coverage', { recursive: true });
     }
 
-    fs.writeFileSync('coverage/threshold-validation.json', JSON.stringify(report, null, 2));
+    fs.writeFileSync(
+      'coverage/threshold-validation.json',
+      JSON.stringify(report, null, 2)
+    );
 
     CoverageLogger.success('Validation report generated');
   }
@@ -329,27 +358,29 @@ class CoverageThresholdChecker {
 
     // Coverage table
     const tableHeaders = ['Metric', 'Coverage', 'Target', 'Critical', 'Status'];
-    const tableRows = Object.entries(this.config.thresholds).map(([metric, threshold]) => {
-      const actual = summary[metric]?.pct || 0;
-      const critical = this.config.critical_thresholds[metric];
-      let status;
+    const tableRows = Object.entries(this.config.thresholds).map(
+      ([metric, threshold]) => {
+        const actual = summary[metric]?.pct || 0;
+        const critical = this.config.critical_thresholds[metric];
+        let status;
 
-      if (actual < critical) {
-        status = '❌ Critical';
-      } else if (actual < threshold) {
-        status = '⚠️  Warning';
-      } else {
-        status = '✅ Pass';
+        if (actual < critical) {
+          status = '❌ Critical';
+        } else if (actual < threshold) {
+          status = '⚠️  Warning';
+        } else {
+          status = '✅ Pass';
+        }
+
+        return [
+          metric.charAt(0).toUpperCase() + metric.slice(1),
+          `${actual.toFixed(2)}%`,
+          `${threshold}%`,
+          `${critical}%`,
+          status,
+        ];
       }
-
-      return [
-        metric.charAt(0).toUpperCase() + metric.slice(1),
-        `${actual.toFixed(2)}%`,
-        `${threshold}%`,
-        `${critical}%`,
-        status,
-      ];
-    });
+    );
 
     CoverageLogger.table(tableHeaders, tableRows);
 
@@ -379,12 +410,13 @@ class CoverageThresholdChecker {
 
     // Badge information
     if (this.results.badge_url) {
-      const overallCoverage = Math.round((
-        summary.statements.pct +
-        summary.branches.pct +
-        summary.functions.pct +
-        summary.lines.pct
-      ) / 4);
+      const overallCoverage = Math.round(
+        (summary.statements.pct +
+          summary.branches.pct +
+          summary.functions.pct +
+          summary.lines.pct) /
+          4
+      );
       console.log(`\n🏷️  Coverage Badge: ${overallCoverage}%`);
       console.log(`   URL: ${this.results.badge_url}`);
     }
@@ -412,7 +444,9 @@ class CoverageThresholdChecker {
     try {
       return {
         commit: execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
-        branch: execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim(),
+        branch: execSync('git rev-parse --abbrev-ref HEAD', {
+          encoding: 'utf8',
+        }).trim(),
       };
     } catch {
       return { commit: 'unknown', branch: 'unknown' };
@@ -468,7 +502,7 @@ Examples:
   }
 
   // Custom thresholds
-  const thresholdArg = args.find(arg => arg.startsWith('--thresholds='));
+  const thresholdArg = args.find((arg) => arg.startsWith('--thresholds='));
   if (thresholdArg) {
     try {
       const customThresholds = JSON.parse(thresholdArg.split('=')[1]);

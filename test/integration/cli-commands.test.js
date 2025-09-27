@@ -98,11 +98,7 @@ describe('CLI Commands Integration Tests', () => {
   describe('Command Argument Parsing', () => {
     test('should handle project-root parameter correctly', async () => {
       // 1. Test with explicit --project-root
-      const result1 = await execCLIDirect([
-        'guide',
-        '--project-root',
-        testDir,
-      ]);
+      const result1 = await execCLIDirect(['guide', '--project-root', testDir]);
 
       expect(result1.code).toBe(0);
       expect(result1.stdout).toContain('featureManager');
@@ -166,7 +162,8 @@ describe('CLI Commands Integration Tests', () => {
       ]);
 
       expect(result1.code).not.toBe(0);
-      expect(result1.stderr).toContain('JSON') || expect(result1.stderr).toContain('parse');
+      expect(result1.stderr).toContain('JSON') ||
+        expect(result1.stderr).toContain('parse');
 
       // 2. Test approve-feature with invalid JSON
       const result2 = await execCLIDirect([
@@ -178,7 +175,8 @@ describe('CLI Commands Integration Tests', () => {
       ]);
 
       expect(result2.code).not.toBe(0);
-      expect(result2.stderr).toContain('JSON') || expect(result2.stderr).toContain('parse');
+      expect(result2.stderr).toContain('JSON') ||
+        expect(result2.stderr).toContain('parse');
     });
 
     test('should handle unknown commands', async () => {
@@ -189,7 +187,8 @@ describe('CLI Commands Integration Tests', () => {
       ]);
 
       expect(result.code).not.toBe(0);
-      expect(result.stderr).toContain('Unknown command') || expect(result.stderr).toContain('unknown-command');
+      expect(result.stderr).toContain('Unknown command') ||
+        expect(result.stderr).toContain('unknown-command');
     });
   });
 
@@ -199,11 +198,7 @@ describe('CLI Commands Integration Tests', () => {
 
   describe('Core Command Execution', () => {
     test('should execute guide command successfully', async () => {
-      const result = await execCLIDirect([
-        'guide',
-        '--project-root',
-        testDir,
-      ]);
+      const result = await execCLIDirect(['guide', '--project-root', testDir]);
 
       expect(result.code).toBe(0);
       expect(result.stdout).not.toBe('');
@@ -357,7 +352,7 @@ describe('CLI Commands Integration Tests', () => {
         generateTestFeature({
           title: `Bulk CLI Feature ${i + 1}`,
           category: 'enhancement',
-        }),
+        })
       );
 
       const featureIds = [];
@@ -378,7 +373,10 @@ describe('CLI Commands Integration Tests', () => {
       const bulkApproveResult = await execCLIDirect([
         'bulk-approve-features',
         JSON.stringify(featureIds),
-        JSON.stringify({ approved_by: 'bulk-cli-test', notes: 'Bulk CLI test' }),
+        JSON.stringify({
+          approved_by: 'bulk-cli-test',
+          notes: 'Bulk CLI test',
+        }),
         '--project-root',
         testDir,
       ]);
@@ -442,8 +440,8 @@ describe('CLI Commands Integration Tests', () => {
       } catch {
         // If not JSON, should still contain error information
         expect(result1.stderr).toContain('required') ||
-        expect(result1.stderr).toContain('Error') ||
-        expect(result1.stderr).toContain('Usage');
+          expect(result1.stderr).toContain('Error') ||
+          expect(result1.stderr).toContain('Usage');
       }
 
       // 2. Test operation on non-existent feature
@@ -463,7 +461,8 @@ describe('CLI Commands Integration Tests', () => {
       const specialFeatureData = generateTestFeature({
         title: 'Feature with "quotes" and \\ backslashes & ampersands',
         description: 'Testing special characters: <>&"\'\n\t',
-        business_value: 'Ensures CLI handles special characters correctly: 中文 😀',
+        business_value:
+          'Ensures CLI handles special characters correctly: 中文 😀',
         category: 'enhancement',
       });
 
@@ -479,7 +478,9 @@ describe('CLI Commands Integration Tests', () => {
       expect(output.success).toBe(true);
       expect(output.feature.title).toBe(specialFeatureData.title);
       expect(output.feature.description).toBe(specialFeatureData.description);
-      expect(output.feature.business_value).toBe(specialFeatureData.business_value);
+      expect(output.feature.business_value).toBe(
+        specialFeatureData.business_value
+      );
     });
   });
 
@@ -491,11 +492,9 @@ describe('CLI Commands Integration Tests', () => {
     test('should complete basic commands within reasonable time', async () => {
       const startTime = Date.now();
 
-      const result = await execCLIDirect([
-        'guide',
-        '--project-root',
-        testDir,
-      ], { timeout: 5000 }); // 5 second timeout
+      const result = await execCLIDirect(['guide', '--project-root', testDir], {
+        timeout: 5000,
+      }); // 5 second timeout
 
       const endTime = Date.now();
       const duration = endTime - startTime;
@@ -509,11 +508,9 @@ describe('CLI Commands Integration Tests', () => {
       // rather than actually timing out commands (which should be fast)
 
       try {
-        await execCLIDirect([
-          'guide',
-          '--project-root',
-          testDir,
-        ], { timeout: 1 }); // Very short timeout
+        await execCLIDirect(['guide', '--project-root', testDir], {
+          timeout: 1,
+        }); // Very short timeout
 
         // If it doesn't timeout, that's fine too (command was very fast)
       } catch (error) {
@@ -529,14 +526,14 @@ describe('CLI Commands Integration Tests', () => {
         testDir,
       ]);
 
-      const promises = commands.map(command => execCLIDirect(command));
+      const promises = commands.map((command) => execCLIDirect(command));
       const results = await Promise.all(promises);
 
       // 2. All should succeed
-      expect(results.every(result => result.code === 0)).toBe(true);
+      expect(results.every((result) => result.code === 0)).toBe(true);
 
       // 3. All should produce valid JSON
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(() => JSON.parse(result.stdout)).not.toThrow();
         const output = JSON.parse(result.stdout);
         expect(output.success).toBe(true);
@@ -674,7 +671,9 @@ describe('CLI Commands Integration Tests', () => {
 
       expect(updatedStatsResult.code).toBe(0);
       const updatedStatsOutput = JSON.parse(updatedStatsResult.stdout);
-      expect(updatedStatsOutput.stats.total_reinitializations).toBeGreaterThan(0);
+      expect(updatedStatsOutput.stats.total_reinitializations).toBeGreaterThan(
+        0
+      );
 
       // 5. Authorize stop
       const stopResult = await execCLIDirect([
@@ -739,19 +738,21 @@ describe('CLI Commands Integration Tests', () => {
       // 1. Create multiple concurrent CLI executions
       const commands = Array.from({ length: 5 }, (_, i) => [
         'suggest-feature',
-        JSON.stringify(generateTestFeature({
-          title: `Concurrent CLI Feature ${i + 1}`,
-          category: 'enhancement',
-        })),
+        JSON.stringify(
+          generateTestFeature({
+            title: `Concurrent CLI Feature ${i + 1}`,
+            category: 'enhancement',
+          })
+        ),
         '--project-root',
         testDir,
       ]);
 
-      const promises = commands.map(command => execCLIDirect(command));
+      const promises = commands.map((command) => execCLIDirect(command));
       const results = await Promise.all(promises);
 
       // 2. All should succeed
-      expect(results.every(result => result.code === 0)).toBe(true);
+      expect(results.every((result) => result.code === 0)).toBe(true);
 
       // 3. Verify all features were created
       const listResult = await execCLIDirect([

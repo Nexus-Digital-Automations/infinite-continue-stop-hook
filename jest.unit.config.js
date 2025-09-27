@@ -4,11 +4,11 @@
  */
 
 module.exports = {
-  testEnvironment: "node",
-  testMatch: ["**/test/unit/**/*.test.js"],
+  testEnvironment: 'node',
+  testMatch: ['**/test/unit/**/*.test.js'],
   testTimeout: 30000,
-  setupFilesAfterEnv: ["<rootDir>/test/setup.js"],
+  setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
   collectCoverage: false,
   clearMocks: true,
-  verbose: true
+  verbose: true,
 };

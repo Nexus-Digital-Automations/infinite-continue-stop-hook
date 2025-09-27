@@ -7,11 +7,7 @@
 
 module.exports = {
   // JavaScript and CommonJS files
-  '*.{js,cjs}': [
-    'eslint --fix',
-    'prettier --write',
-    'git add',
-  ],
+  '*.{js,cjs}': ['eslint --fix', 'prettier --write', 'git add'],
 
   // TypeScript files (if any)
   '*.{ts,tsx}': [
@@ -22,20 +18,14 @@ module.exports = {
   ],
 
   // JSON files
-  '*.json': [
-    'prettier --write',
-    'git add',
-  ],
+  '*.json': ['prettier --write', 'git add'],
 
   // Markdown files
-  '*.md': [
-    'prettier --write',
-    'git add',
-  ],
+  '*.md': ['prettier --write', 'git add'],
 
   // Package.json - special validation
   'package.json': [
-    () => 'node -e "JSON.parse(require(\'fs\').readFileSync(\'package.json\'))"',
+    () => "node -e \"JSON.parse(require('fs').readFileSync('package.json'))\"",
     'prettier --write',
     'git add',
   ],
@@ -49,14 +39,11 @@ module.exports = {
   ],
 
   // Configuration files
-  '*.config.{js,ts}': [
-    'eslint --fix',
-    'prettier --write',
-    'git add',
-  ],
+  '*.config.{js,ts}': ['eslint --fix', 'prettier --write', 'git add'],
 
   // Security scanning for source files
   '*.{js,ts,json}': [
-    () => 'semgrep --config=p/security-audit --error --quiet --no-rewrite-rule-ids',
+    () =>
+      'semgrep --config=p/security-audit --error --quiet --no-rewrite-rule-ids',
   ],
 };

@@ -168,19 +168,18 @@ async function _getProjectInfo(targetPath) {
   const projectName =
     (await question(`Project name (${detectedName}): `)) || detectedName;
 
-
   console.log('\n=== Initial Task Setup ===');
   const taskDescription = await question('Task description: ');
   const taskMode =
     (await question(
-      'Task mode (DEVELOPMENT/REFACTORING/TESTING/RESEARCH) [DEVELOPMENT]: ',
+      'Task mode (DEVELOPMENT/REFACTORING/TESTING/RESEARCH) [DEVELOPMENT]: '
     )) || 'DEVELOPMENT';
   const taskPrompt = await question('Detailed task prompt: ');
   const dependencies = await question(
-    'Dependencies (comma-separated files/dirs, or press Enter to skip): ',
+    'Dependencies (comma-separated files/dirs, or press Enter to skip): '
   );
   const importantFiles = await question(
-    'Important files to read first (comma-separated, or press Enter to skip): ',
+    'Important files to read first (comma-separated, or press Enter to skip): '
   );
   const requiresResearch = await question('Requires research? (y/n) [n]: ');
 
@@ -268,22 +267,19 @@ function needsTodoUpdate(todoPath) {
       (existing.tasks && existing.tasks.some((t) => !t.title)); // Missing title field
 
     if (hasOldSchema) {
-
       console.log(
-        `⚠️  ${_path.basename(_path.dirname(todoPath))} - FEATURES.json uses old schema, will update`,
+        `⚠️  ${_path.basename(_path.dirname(todoPath))} - FEATURES.json uses old schema, will update`
       );
       return true;
     }
 
-
     console.log(
-      `✓ ${_path.basename(_path.dirname(todoPath))} - FEATURES.json already up to date`,
+      `✓ ${_path.basename(_path.dirname(todoPath))} - FEATURES.json already up to date`
     );
     return false;
   } catch {
-
     console.log(
-      `⚠️  ${_path.basename(_path.dirname(todoPath))} - FEATURES.json corrupted, will recreate`,
+      `⚠️  ${_path.basename(_path.dirname(todoPath))} - FEATURES.json corrupted, will recreate`
     );
     return true;
   }
@@ -320,7 +316,8 @@ function createTodoJson(targetPath, projectInfo) {
   const reviewTasks = [
     {
       title: 'Comprehensive Build & Startup Validation',
-      criteria: 'MANDATORY: Verify project builds and starts successfully with log review',
+      criteria:
+        'MANDATORY: Verify project builds and starts successfully with log review',
       dependencies: [],
       important_files: [],
       friendlyInstructions: `MANDATORY validation for professional development standards.
@@ -478,16 +475,13 @@ async function processProject(targetPath) {
     migrateToFeatureBasedSystem(targetPath);
 
     if (success) {
-
       console.log(`✅ ${projectName} - Setup complete`);
     } else {
-
       console.log(`⏭️  ${projectName} - Skipped (already up to date)`);
     }
 
     return { success: true, project: projectName };
   } catch (error) {
-
     console.error(`❌ ${projectName} - Error:`, error.message);
     return { success: false, project: projectName, error: error.message };
   }
@@ -501,7 +495,6 @@ function migrateToFeatureBasedSystem(targetPath) {
   const todoPath = _path.join(targetPath, 'FEATURES.json');
 
   try {
-
     console.log(`   🔄 Checking for feature-based migration...`);
 
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- FEATURES.json path constructed from trusted project directory
@@ -516,7 +509,6 @@ function migrateToFeatureBasedSystem(targetPath) {
 
     // Check if already feature-based
     if (todoData.features && Array.isArray(todoData.features)) {
-
       console.log(`   ✅ Already feature-based - skipping migration`);
       return;
     }
@@ -532,7 +524,7 @@ function migrateToFeatureBasedSystem(targetPath) {
     const analysis = analyzeTasksForFeatures(todoData.tasks);
 
     console.log(
-      `   📊 Analysis: ${analysis.summary.phased_tasks} phased tasks, ${analysis.summary.non_phased_tasks} independent tasks`,
+      `   📊 Analysis: ${analysis.summary.phased_tasks} phased tasks, ${analysis.summary.non_phased_tasks} independent tasks`
     );
 
     // Convert to feature-based structure
@@ -542,9 +534,8 @@ function migrateToFeatureBasedSystem(targetPath) {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- FEATURES.json path validated through setup process
     _fs.writeFileSync(todoPath, JSON.stringify(migrated, null, 2));
 
-
     console.log(
-      `   ✅ Migration completed: ${migrated.features.length} features, ${migrated.tasks.length} tasks`,
+      `   ✅ Migration completed: ${migrated.features.length} features, ${migrated.tasks.length} tasks`
     );
 
     // Clean up features.json if it exists (eliminating dual system)
@@ -557,7 +548,6 @@ function migrateToFeatureBasedSystem(targetPath) {
       console.log(`   🗑️  Removed features.json (dual system eliminated)`);
     }
   } catch (error) {
-
     console.log(`   ❌ Feature migration failed: ${error.message}`);
     // Don't fail the entire setup for migration issues
   }
@@ -811,8 +801,9 @@ function calculateCompletionPercentage(tasks) {
 }
 
 async function main() {
-
-  console.log('=== Infinite Continue Stop Hook - Batch FEATURES.json Setup ===\n');
+  console.log(
+    '=== Infinite Continue Stop Hook - Batch FEATURES.json Setup ===\n'
+  );
 
   // Resolve project path
   const targetPath = _path.resolve(projectPath);
@@ -827,11 +818,9 @@ async function main() {
   // Verify it's a directory
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- Target path validated to exist and be trusted
   if (!_fs.statSync(targetPath).isDirectory()) {
-
     console.error(`Error: Path is not a directory: ${targetPath}`);
     throw new Error(`Path is not a directory: ${targetPath}`);
   }
-
 
   console.log(`Processing directories in: ${targetPath}`);
 
@@ -855,19 +844,15 @@ async function main() {
     const successful = results.filter((r) => r.success).length;
     const failed = results.filter((r) => !r.success).length;
 
-
     console.log(`✅ Successfully processed: ${successful} projects`);
     if (failed > 0) {
-
       console.log(`❌ Failed: ${failed} projects`);
       results
         .filter((r) => !r.success)
         .forEach((r) => {
-
           console.log(`   - ${r.project}: ${r.error}`);
         });
     }
-
 
     console.log('\n📋 Usage examples:');
 
@@ -887,7 +872,6 @@ async function main() {
 
     console.log('node setup-infinite-hook.js --batch');
 
-
     console.log('\n📋 Each project now includes:');
 
     console.log('   - FEATURES.json with new feature approval workflow');
@@ -899,7 +883,7 @@ async function main() {
     console.log('📋 TaskManager system is centralized at:');
 
     console.log(
-      '   /Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/',
+      '   /Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/'
     );
 
     console.log('');
@@ -907,24 +891,23 @@ async function main() {
     console.log('📋 Use universal commands to work with any project:');
 
     console.log(
-      '   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project /path/to/project',
+      '   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project /path/to/project'
     );
 
     console.log(
-      '   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" api current --project /path/to/project',
+      '   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" api current --project /path/to/project'
     );
 
     console.log('');
 
     console.log(
-      '📋 Updated hook reference in ~/.claude/settings.json should point to:',
+      '📋 Updated hook reference in ~/.claude/settings.json should point to:'
     );
 
     console.log(
-      'node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js"',
+      'node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js"'
     );
   } catch (error) {
-
     console.error('\n❌ Batch setup error:', error.message);
     throw error;
   } finally {

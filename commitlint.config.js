@@ -12,19 +12,19 @@ module.exports = {
       2,
       'always',
       [
-        'feat',     // New feature
-        'fix',      // Bug fix
-        'docs',     // Documentation changes
-        'style',    // Code style changes (formatting, etc.)
+        'feat', // New feature
+        'fix', // Bug fix
+        'docs', // Documentation changes
+        'style', // Code style changes (formatting, etc.)
         'refactor', // Code refactoring
-        'test',     // Adding or modifying tests
-        'chore',    // Maintenance tasks
-        'perf',     // Performance improvements
-        'ci',       // CI/CD configuration changes
-        'build',    // Build system changes
-        'revert',   // Reverting previous commits
+        'test', // Adding or modifying tests
+        'chore', // Maintenance tasks
+        'perf', // Performance improvements
+        'ci', // CI/CD configuration changes
+        'build', // Build system changes
+        'revert', // Reverting previous commits
         'security', // Security improvements
-        'deps',     // Dependency updates
+        'deps', // Dependency updates
       ],
     ],
     'type-case': [2, 'always', 'lower-case'],
@@ -39,5 +39,6 @@ module.exports = {
     'footer-leading-blank': [2, 'always'],
     'footer-max-line-length': [2, 'always', 100],
   },
-  helpUrl: 'https://github.com/conventional-changelog/commitlint/#what-is-commitlint',
+  helpUrl:
+    'https://github.com/conventional-changelog/commitlint/#what-is-commitlint',
 };

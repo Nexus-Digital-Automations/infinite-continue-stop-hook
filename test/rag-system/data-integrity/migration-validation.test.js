@@ -1,5 +1,3 @@
-
-
 /**
  * RAG System Data Migration and Integrity Validation Tests
  *
@@ -23,7 +21,10 @@ describe('RAG System Data Migration and Integrity', () => {
     console.log('Setting up data integrity test environment...');
 
     // Setup test migration directory
-    _testMigrationPath = _path.join(__dirname, '../../test-data/migration-test');
+    _testMigrationPath = _path.join(
+      __dirname,
+      '../../test-data/migration-test'
+    );
     await _fs.mkdir(_testMigrationPath, { recursive: true });
 
     // Create test development/lessons structure
@@ -152,15 +153,20 @@ Tags: database, performance, connection-pooling`,
         },
         {
           filename: 'json_lesson.json',
-          content: JSON.stringify({
-            title: 'React Hook Optimization',
-            content: 'Use useMemo and useCallback to optimize React hook performance',
-            category: 'frontend-optimization',
-            tags: ['react', 'hooks', 'performance'],
-            examples: [
-              'const memoizedValue = useMemo(() => expensiveCalculation(a, b), [a, b]);',
-            ],
-          }, null, 2),
+          content: JSON.stringify(
+            {
+              title: 'React Hook Optimization',
+              content:
+                'Use useMemo and useCallback to optimize React hook performance',
+              category: 'frontend-optimization',
+              tags: ['react', 'hooks', 'performance'],
+              examples: [
+                'const memoizedValue = useMemo(() => expensiveCalculation(a, b), [a, b]);',
+              ],
+            },
+            null,
+            2
+          ),
         },
       ];
 
@@ -716,7 +722,7 @@ Tags: database, performance, connection-pooling`,
   // Helper function to setup test lessons structure
   async function setupTestLessonsStructure() {
     const lessonsStructure = {
-      'errors': {
+      errors: {
         'api_errors.md': `# API Error Handling
 
 ## Common API Errors
@@ -750,7 +756,7 @@ Category: database
 Tags: database, errors, optimization, performance`,
       },
 
-      'features': {
+      features: {
         'authentication.md': `# Authentication Implementation
 
 ## JWT Authentication
@@ -782,7 +788,7 @@ Category: api-design
 Tags: rest, api, design, http`,
       },
 
-      'optimization': {
+      optimization: {
         'performance.md': `# Performance Optimization
 
 ## Frontend Optimization
@@ -803,16 +809,21 @@ Tags: optimization, frontend, backend, caching`,
     // Create directories and files in parallel for each category
     await Promise.all(
       Object.entries(lessonsStructure).map(async ([category, files]) => {
-        const _categoryPath = _path.join(_testMigrationPath, 'development', 'lessons', category);
+        const _categoryPath = _path.join(
+          _testMigrationPath,
+          'development',
+          'lessons',
+          category
+        );
         await _fs.mkdir(_categoryPath, { recursive: true });
 
         // Create all files in this category in parallel
         await Promise.all(
           Object.entries(files).map(([filename, content]) =>
-            _fs.writeFile(_path.join(_categoryPath, filename), content),
-          ),
+            _fs.writeFile(_path.join(_categoryPath, filename), content)
+          )
         );
-      }),
+      })
     );
   }
 
@@ -829,7 +840,10 @@ Tags: optimization, frontend, backend, caching`,
 
         if (_entry.isDirectory()) {
           await scanDirectory(_fullPath, _relPath);
-        } else if (_entry.isFile() && (_entry.name.endsWith('.md') || _entry.name.endsWith('.txt'))) {
+        } else if (
+          _entry.isFile() &&
+          (_entry.name.endsWith('.md') || _entry.name.endsWith('.txt'))
+        ) {
           files.push({
             filename: _entry.name,
             fullPath: _fullPath,

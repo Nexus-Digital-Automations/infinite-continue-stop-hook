@@ -34,10 +34,13 @@ async function testLearningRecommendationEngine() {
 
     // Test 1: Generate learning recommendations
     console.log('\n1. Testing generateLearningRecommendations...');
-    const recommendations = await ragOps.generateLearningRecommendations(userContext, {
-      strategy: 'hybrid',
-      limit: 5,
-    });
+    const recommendations = await ragOps.generateLearningRecommendations(
+      userContext,
+      {
+        strategy: 'hybrid',
+        limit: 5,
+      }
+    );
     console.log('Recommendations result:', {
       success: recommendations.success,
       count: recommendations.count,
@@ -80,8 +83,9 @@ async function testLearningRecommendationEngine() {
       message: analytics.message,
     });
 
-    console.log('\n✅ Feature 6: Learning Recommendation Engine integration test completed successfully!');
-
+    console.log(
+      '\n✅ Feature 6: Learning Recommendation Engine integration test completed successfully!'
+    );
   } catch (error) {
     console.error('❌ Feature 6 test failed:', error.message);
     console.error('Stack:', error.stack);

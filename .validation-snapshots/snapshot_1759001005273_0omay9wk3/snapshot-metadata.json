@@ -1,0 +1,24 @@
+{
+  "id": "snapshot_1759001005273_0omay9wk3",
+  "timestamp": "2025-09-27T19:23:25.385Z",
+  "description": "Testing rollback history tracking",
+  "gitState": {
+    "commitHash": "03156bd4093b1fe8d1b283bad122b02d4e51c202",
+    "branch": "main",
+    "hasUncommittedChanges": true,
+    "stashCount": 9,
+    "stashMessage": "validation-snapshot-snapshot_1759001005273_0omay9wk3"
+  },
+  "stashCreated": true,
+  "criticalFiles": [
+    "package.json",
+    "package-lock.json",
+    "yarn.lock",
+    "FEATURES.json",
+    "TASKS.json",
+    ".env",
+    ".env.local"
+  ],
+  "validationAttempt": "history_test",
+  "projectRoot": "/Users/jeremyparker/infinite-continue-stop-hook"
+}

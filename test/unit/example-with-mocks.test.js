@@ -144,7 +144,11 @@ describe('Example Test with Mock Framework', () => {
       };
 
       // Call API directly without defaults to test validation
-      const result = await APIExecutor.execAPI('suggest-feature', [JSON.stringify(invalidFeatureData)], { silent: true });
+      const result = await APIExecutor.execAPI(
+        'suggest-feature',
+        [JSON.stringify(invalidFeatureData)],
+        { silent: true }
+      );
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Missing required fields');
@@ -155,17 +159,23 @@ describe('Example Test with Mock Framework', () => {
       await APIExecutor.initializeTestAgent(agentId);
 
       // Create multiple features
-      await APIExecutor.createTestFeature(TestDataFactory.createFeatureData({ category: 'enhancement' }));
-      await APIExecutor.createTestFeature(TestDataFactory.createFeatureData({ category: 'bug-fix' }));
+      await APIExecutor.createTestFeature(
+        TestDataFactory.createFeatureData({ category: 'enhancement' })
+      );
+      await APIExecutor.createTestFeature(
+        TestDataFactory.createFeatureData({ category: 'bug-fix' })
+      );
 
-      const result = await APIExecutor.execAPI('list-features', [JSON.stringify({ category: 'enhancement' })]);
+      const result = await APIExecutor.execAPI('list-features', [
+        JSON.stringify({ category: 'enhancement' }),
+      ]);
 
       expect(result.success).toBe(true);
       expect(result.features).toBeDefined();
       expect(result.features.length).toBeGreaterThan(0);
 
       // All features should be enhancement category
-      result.features.forEach(feature => {
+      result.features.forEach((feature) => {
         expect(feature.category).toBe('enhancement');
       });
     });
@@ -178,8 +188,12 @@ describe('Example Test with Mock Framework', () => {
 
       // Verify environment files exist in mock filesystem
       const mocks = mockManager.getMocks();
-      expect(mocks.fileSystem.existsSync(testEnvironment.featuresPath)).toBe(true);
-      expect(mocks.fileSystem.existsSync(testEnvironment.packagePath)).toBe(true);
+      expect(mocks.fileSystem.existsSync(testEnvironment.featuresPath)).toBe(
+        true
+      );
+      expect(mocks.fileSystem.existsSync(testEnvironment.packagePath)).toBe(
+        true
+      );
     });
 
     test('should read and write features data', () => {
@@ -204,13 +218,15 @@ describe('Example Test with Mock Framework', () => {
 
   describe('Performance Testing Utilities', () => {
     test('should measure execution time', async () => {
-      const { result, duration } = await PerformanceUtils.measureTime(async () => {
-        // Simulate some work
-        await new Promise(resolve => {
-          setTimeout(resolve, 100);
-        });
-        return 'test-result';
-      });
+      const { result, duration } = await PerformanceUtils.measureTime(
+        async () => {
+          // Simulate some work
+          await new Promise((resolve) => {
+            setTimeout(resolve, 100);
+          });
+          return 'test-result';
+        }
+      );
 
       expect(result).toBe('test-result');
       expect(duration).toBeGreaterThan(90); // Should be around 100ms
@@ -218,11 +234,15 @@ describe('Example Test with Mock Framework', () => {
     });
 
     test('should measure memory usage', async () => {
-      const { result, memoryDelta } = await PerformanceUtils.measureMemory(() => {
-        // Create some objects to use memory
-        const data = new Array(1000).fill(0).map((_, i) => ({ id: i, data: `item-${i}` }));
-        return data.length;
-      });
+      const { result, memoryDelta } = await PerformanceUtils.measureMemory(
+        () => {
+          // Create some objects to use memory
+          const data = new Array(1000)
+            .fill(0)
+            .map((_, i) => ({ id: i, data: `item-${i}` }));
+          return data.length;
+        }
+      );
 
       expect(result).toBe(1000);
       expect(memoryDelta).toBeDefined();
@@ -234,24 +254,28 @@ describe('Example Test with Mock Framework', () => {
     test('should handle timeouts', async () => {
       await expect(
         TestExecution.withTimeout(
-          new Promise(resolve => {
+          new Promise((resolve) => {
             setTimeout(resolve, 2000);
           }),
-          1000,
-        ),
+          1000
+        )
       ).rejects.toThrow('Test timed out after 1000ms');
     });
 
     test('should retry failed operations', async () => {
       let attempts = 0;
 
-      const result = await TestExecution.retry(() => {
-        attempts++;
-        if (attempts < 3) {
-          throw new Error('Temporary failure');
-        }
-        return 'success';
-      }, 5, 10);
+      const result = await TestExecution.retry(
+        () => {
+          attempts++;
+          if (attempts < 3) {
+            throw new Error('Temporary failure');
+          }
+          return 'success';
+        },
+        5,
+        10
+      );
 
       expect(result).toBe('success');
       expect(attempts).toBe(3);
@@ -259,7 +283,7 @@ describe('Example Test with Mock Framework', () => {
 
     test('should execute promises in parallel with concurrency control', async () => {
       const promises = Array.from({ length: 10 }, (_, i) =>
-        Promise.resolve(i * 2),
+        Promise.resolve(i * 2)
       );
 
       const results = await TestExecution.parallel(promises, 3);
@@ -313,7 +337,9 @@ describe('Example Test with Mock Framework', () => {
       const agentId = TestIdGenerator.generateAgentId();
       await APIExecutor.initializeTestAgent(agentId);
 
-      const result = await APIExecutor.execAPI('approve-feature', ['non-existent-feature']);
+      const result = await APIExecutor.execAPI('approve-feature', [
+        'non-existent-feature',
+      ]);
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('not found');

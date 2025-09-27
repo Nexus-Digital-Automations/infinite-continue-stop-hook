@@ -68,7 +68,7 @@ class FileLock {
             try {
               process.kill(lockPid, 0); // Signal 0 just checks if process exists
               // Process exists, wait and retry
-              await new Promise(resolve => {
+              await new Promise((resolve) => {
                 setTimeout(resolve, this.retryDelay);
               });
               continue;
@@ -83,14 +83,14 @@ class FileLock {
             }
           } catch {
             // Can't read lock file, wait and retry
-            await new Promise(resolve => {
+            await new Promise((resolve) => {
               setTimeout(resolve, this.retryDelay);
             });
             continue;
           }
         } else {
           // Other error, wait and retry
-          await new Promise(resolve => {
+          await new Promise((resolve) => {
             setTimeout(resolve, this.retryDelay);
           });
           continue;
@@ -98,7 +98,9 @@ class FileLock {
       }
     }
 
-    throw new Error(`Could not acquire lock for ${filePath} after ${this.maxRetries} attempts`);
+    throw new Error(
+      `Could not acquire lock for ${filePath} after ${this.maxRetries} attempts`
+    );
   }
 }
 
@@ -120,14 +122,50 @@ if (projectRootIndex !== -1) {
 
 // Feature validation schemas
 const FEATURE_STATUSES = ['suggested', 'approved', 'rejected', 'implemented'];
-const FEATURE_CATEGORIES = ['enhancement', 'bug-fix', 'new-feature', 'performance', 'security', 'documentation'];
-const REQUIRED_FEATURE_FIELDS = ['title', 'description', 'business_value', 'category'];
+const FEATURE_CATEGORIES = [
+  'enhancement',
+  'bug-fix',
+  'new-feature',
+  'performance',
+  'security',
+  'documentation',
+];
+const REQUIRED_FEATURE_FIELDS = [
+  'title',
+  'description',
+  'business_value',
+  'category',
+];
 
 // Task management schemas
-const TASK_STATUSES = ['queued', 'assigned', 'in_progress', 'blocked', 'completed', 'failed', 'cancelled'];
+const TASK_STATUSES = [
+  'queued',
+  'assigned',
+  'in_progress',
+  'blocked',
+  'completed',
+  'failed',
+  'cancelled',
+];
 const TASK_PRIORITIES = ['critical', 'high', 'normal', 'low'];
-const TASK_TYPES = ['implementation', 'testing', 'documentation', 'validation', 'deployment', 'analysis'];
-const AGENT_CAPABILITIES = ['frontend', 'backend', 'testing', 'documentation', 'security', 'performance', 'analysis', 'validation'];
+const TASK_TYPES = [
+  'implementation',
+  'testing',
+  'documentation',
+  'validation',
+  'deployment',
+  'analysis',
+];
+const AGENT_CAPABILITIES = [
+  'frontend',
+  'backend',
+  'testing',
+  'documentation',
+  'security',
+  'performance',
+  'analysis',
+  'validation',
+];
 
 /**
  * AutonomousTaskManagerAPI - Advanced Feature & Task Management System
@@ -190,7 +228,10 @@ class AutonomousTaskManagerAPI {
         },
       };
 
-      await fs.writeFile(this.featuresPath, JSON.stringify(initialStructure, null, 2));
+      await fs.writeFile(
+        this.featuresPath,
+        JSON.stringify(initialStructure, null, 2)
+      );
     }
   }
 
@@ -203,7 +244,7 @@ class AutonomousTaskManagerAPI {
       new Promise((_, reject) => {
         setTimeout(
           () => reject(new Error(`Operation timed out after ${timeoutMs}ms`)),
-          timeoutMs,
+          timeoutMs
         );
       }),
     ]);
@@ -263,14 +304,16 @@ class AutonomousTaskManagerAPI {
       await this._ensureFeaturesFile();
 
       const features = await this._loadFeatures();
-      const feature = features.features.find(f => f.id === featureId);
+      const feature = features.features.find((f) => f.id === featureId);
 
       if (!feature) {
         throw new Error(`Feature with ID ${featureId} not found`);
       }
 
       if (feature.status !== 'suggested') {
-        throw new Error(`Feature must be in 'suggested' status to approve. Current status: ${feature.status}`);
+        throw new Error(
+          `Feature must be in 'suggested' status to approve. Current status: ${feature.status}`
+        );
       }
 
       feature.status = 'approved';
@@ -327,14 +370,16 @@ class AutonomousTaskManagerAPI {
       await this._ensureFeaturesFile();
 
       const features = await this._loadFeatures();
-      const feature = features.features.find(f => f.id === featureId);
+      const feature = features.features.find((f) => f.id === featureId);
 
       if (!feature) {
         throw new Error(`Feature with ID ${featureId} not found`);
       }
 
       if (feature.status !== 'suggested') {
-        throw new Error(`Feature must be in 'suggested' status to reject. Current status: ${feature.status}`);
+        throw new Error(
+          `Feature must be in 'suggested' status to reject. Current status: ${feature.status}`
+        );
       }
 
       feature.status = 'rejected';
@@ -395,7 +440,7 @@ class AutonomousTaskManagerAPI {
 
       for (const featureId of featureIds) {
         try {
-          const feature = features.features.find(f => f.id === featureId);
+          const feature = features.features.find((f) => f.id === featureId);
 
           if (!feature) {
             errors.push(`Feature with ID ${featureId} not found`);
@@ -403,7 +448,9 @@ class AutonomousTaskManagerAPI {
           }
 
           if (feature.status !== 'suggested') {
-            errors.push(`Feature ${featureId} must be in 'suggested' status to approve. Current status: ${feature.status}`);
+            errors.push(
+              `Feature ${featureId} must be in 'suggested' status to approve. Current status: ${feature.status}`
+            );
             continue;
           }
 
@@ -442,7 +489,6 @@ class AutonomousTaskManagerAPI {
             status: 'approved',
             success: true,
           });
-
         } catch (error) {
           errors.push(`Error approving ${featureId}: ${error.message}`);
         }
@@ -459,7 +505,6 @@ class AutonomousTaskManagerAPI {
         errors: errors,
         message: `Bulk approval completed: ${results.length} approved, ${errors.length} errors`,
       };
-
     } catch (error) {
       return {
         success: false,
@@ -481,12 +526,16 @@ class AutonomousTaskManagerAPI {
 
       // Apply status filter
       if (filter.status) {
-        filteredFeatures = filteredFeatures.filter(f => f.status === filter.status);
+        filteredFeatures = filteredFeatures.filter(
+          (f) => f.status === filter.status
+        );
       }
 
       // Apply category filter
       if (filter.category) {
-        filteredFeatures = filteredFeatures.filter(f => f.category === filter.category);
+        filteredFeatures = filteredFeatures.filter(
+          (f) => f.category === filter.category
+        );
       }
 
       return {
@@ -520,13 +569,15 @@ class AutonomousTaskManagerAPI {
       };
 
       // Count by status
-      features.features.forEach(feature => {
-        stats.by_status[feature.status] = (stats.by_status[feature.status] || 0) + 1;
+      features.features.forEach((feature) => {
+        stats.by_status[feature.status] =
+          (stats.by_status[feature.status] || 0) + 1;
       });
 
       // Count by category
-      features.features.forEach(feature => {
-        stats.by_category[feature.category] = (stats.by_category[feature.category] || 0) + 1;
+      features.features.forEach((feature) => {
+        stats.by_category[feature.category] =
+          (stats.by_category[feature.category] || 0) + 1;
       });
 
       // Recent activity from approval history
@@ -568,7 +619,7 @@ class AutonomousTaskManagerAPI {
           init: acc.init + bucket.init,
           reinit: acc.reinit + bucket.reinit,
         }),
-        { init: 0, reinit: 0 },
+        { init: 0, reinit: 0 }
       );
 
       // Get recent activity (last 7 days from history)
@@ -576,7 +627,7 @@ class AutonomousTaskManagerAPI {
 
       // Build dynamic time buckets response
       const timeBucketsResponse = {};
-      Object.keys(stats.time_buckets).forEach(bucket => {
+      Object.keys(stats.time_buckets).forEach((bucket) => {
         const bucketData = stats.time_buckets[bucket];
         timeBucketsResponse[bucket] = {
           initializations: bucketData.init,
@@ -680,10 +731,12 @@ class AutonomousTaskManagerAPI {
           status: 'active',
           reinitialized: timestamp,
           sessionId: crypto.randomBytes(8).toString('hex'),
-          previousSessions: existingAgent?.sessionId ? [
-            ...(existingAgent.previousSessions || []),
-            existingAgent.sessionId,
-          ] : [],
+          previousSessions: existingAgent?.sessionId
+            ? [
+                ...(existingAgent.previousSessions || []),
+                existingAgent.sessionId,
+              ]
+            : [],
         };
 
         return {
@@ -693,7 +746,8 @@ class AutonomousTaskManagerAPI {
             status: 'reinitialized',
             sessionId: features.agents[agentId].sessionId,
             timestamp,
-            previousSessions: features.agents[agentId].previousSessions?.length || 0,
+            previousSessions:
+              features.agents[agentId].previousSessions?.length || 0,
           },
           message: `Agent ${agentId} successfully reinitialized`,
         };
@@ -726,7 +780,9 @@ class AutonomousTaskManagerAPI {
       const stopData = {
         stop_allowed: true,
         authorized_by: agentId,
-        reason: reason || 'Agent authorized stop after completing all tasks and achieving project perfection',
+        reason:
+          reason ||
+          'Agent authorized stop after completing all tasks and achieving project perfection',
         timestamp: new Date().toISOString(),
         session_type: 'self_authorized',
       };
@@ -761,14 +817,16 @@ class AutonomousTaskManagerAPI {
   async createTaskFromFeature(featureId, taskOptions = {}) {
     try {
       const result = await this._atomicFeatureOperation((features) => {
-        const feature = features.features.find(f => f.id === featureId);
+        const feature = features.features.find((f) => f.id === featureId);
 
         if (!feature) {
           throw new Error(`Feature with ID ${featureId} not found`);
         }
 
         if (feature.status !== 'approved') {
-          throw new Error(`Feature must be approved to create tasks. Current status: ${feature.status}`);
+          throw new Error(
+            `Feature must be approved to create tasks. Current status: ${feature.status}`
+          );
         }
 
         // Initialize tasks array if it doesn't exist
@@ -785,8 +843,11 @@ class AutonomousTaskManagerAPI {
           priority: taskOptions.priority || this._inferTaskPriority(feature),
           status: 'queued',
           dependencies: taskOptions.dependencies || [],
-          estimated_effort: taskOptions.estimated_effort || this._estimateEffort(feature),
-          required_capabilities: taskOptions.required_capabilities || this._inferCapabilities(feature),
+          estimated_effort:
+            taskOptions.estimated_effort || this._estimateEffort(feature),
+          required_capabilities:
+            taskOptions.required_capabilities ||
+            this._inferCapabilities(feature),
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
           created_by: taskOptions.created_by || 'autonomous_system',
@@ -823,7 +884,9 @@ class AutonomousTaskManagerAPI {
   async generateTasksFromApprovedFeatures(options = {}) {
     try {
       const result = await this._atomicFeatureOperation((features) => {
-        const approvedFeatures = features.features.filter(f => f.status === 'approved');
+        const approvedFeatures = features.features.filter(
+          (f) => f.status === 'approved'
+        );
 
         if (approvedFeatures.length === 0) {
           return {
@@ -842,7 +905,9 @@ class AutonomousTaskManagerAPI {
 
         for (const feature of approvedFeatures) {
           // Check if tasks already exist for this feature
-          const existingTasks = features.tasks.filter(t => t.feature_id === feature.id);
+          const existingTasks = features.tasks.filter(
+            (t) => t.feature_id === feature.id
+          );
           if (existingTasks.length > 0 && !options.force) {
             continue;
           }
@@ -875,7 +940,10 @@ class AutonomousTaskManagerAPI {
 
           // Generate supporting tasks based on feature complexity
           if (this._isComplexFeature(feature)) {
-            const supportingTasks = this._generateSupportingTasks(feature, mainTask.id);
+            const supportingTasks = this._generateSupportingTasks(
+              feature,
+              mainTask.id
+            );
             for (const supportingTask of supportingTasks) {
               features.tasks.push(supportingTask);
               generatedTasks.push(supportingTask);
@@ -923,30 +991,35 @@ class AutonomousTaskManagerAPI {
 
       // Apply filters
       if (filters.status) {
-        tasks = tasks.filter(task => task.status === filters.status);
+        tasks = tasks.filter((task) => task.status === filters.status);
       }
 
       if (filters.assigned_to) {
-        tasks = tasks.filter(task => task.assigned_to === filters.assigned_to);
+        tasks = tasks.filter(
+          (task) => task.assigned_to === filters.assigned_to
+        );
       }
 
       if (filters.priority) {
-        tasks = tasks.filter(task => task.priority === filters.priority);
+        tasks = tasks.filter((task) => task.priority === filters.priority);
       }
 
       if (filters.type) {
-        tasks = tasks.filter(task => task.type === filters.type);
+        tasks = tasks.filter((task) => task.type === filters.type);
       }
 
       if (filters.feature_id) {
-        tasks = tasks.filter(task => task.feature_id === filters.feature_id);
+        tasks = tasks.filter((task) => task.feature_id === filters.feature_id);
       }
 
       // Sort by priority (critical > high > normal > low) and created date
-      const priorityOrder = { 'critical': 4, 'high': 3, 'normal': 2, 'low': 1 };
+      const priorityOrder = { critical: 4, high: 3, normal: 2, low: 1 };
       tasks.sort((a, b) => {
-        const priorityDiff = (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0);
-        if (priorityDiff !== 0) {return priorityDiff;}
+        const priorityDiff =
+          (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0);
+        if (priorityDiff !== 0) {
+          return priorityDiff;
+        }
         return new Date(a.created_at) - new Date(b.created_at);
       });
 
@@ -975,7 +1048,7 @@ class AutonomousTaskManagerAPI {
           throw new Error('No tasks exist in the system');
         }
 
-        const task = features.tasks.find(t => t.id === taskId);
+        const task = features.tasks.find((t) => t.id === taskId);
         if (!task) {
           throw new Error(`Task with ID ${taskId} not found`);
         }
@@ -985,7 +1058,9 @@ class AutonomousTaskManagerAPI {
         }
 
         if (!['queued', 'assigned'].includes(task.status)) {
-          throw new Error(`Task must be queued or assigned to reassign. Current status: ${task.status}`);
+          throw new Error(
+            `Task must be queued or assigned to reassign. Current status: ${task.status}`
+          );
         }
 
         // Check if agent capabilities match task requirements
@@ -993,8 +1068,10 @@ class AutonomousTaskManagerAPI {
         const agentCapabilities = agent.capabilities || [];
         const requiredCapabilities = task.required_capabilities || [];
 
-        const hasRequiredCapabilities = requiredCapabilities.every(cap =>
-          agentCapabilities.includes(cap) || agentCapabilities.includes('general'),
+        const hasRequiredCapabilities = requiredCapabilities.every(
+          (cap) =>
+            agentCapabilities.includes(cap) ||
+            agentCapabilities.includes('general')
         );
 
         if (!hasRequiredCapabilities && !assignmentOptions.force) {
@@ -1053,7 +1130,7 @@ class AutonomousTaskManagerAPI {
           throw new Error('No tasks exist in the system');
         }
 
-        const task = features.tasks.find(t => t.id === taskId);
+        const task = features.tasks.find((t) => t.id === taskId);
         if (!task) {
           throw new Error(`Task with ID ${taskId} not found`);
         }
@@ -1076,7 +1153,10 @@ class AutonomousTaskManagerAPI {
         task.progress_history.push(progressEntry);
 
         // Update task status if provided
-        if (progressUpdate.status && this.validTaskStatuses.includes(progressUpdate.status)) {
+        if (
+          progressUpdate.status &&
+          this.validTaskStatuses.includes(progressUpdate.status)
+        ) {
           task.status = progressUpdate.status;
         }
 
@@ -1130,16 +1210,21 @@ class AutonomousTaskManagerAPI {
         }
 
         if (!features.agents[agentId]) {
-          throw new Error(`Agent ${agentId} not found. Initialize agent first.`);
+          throw new Error(
+            `Agent ${agentId} not found. Initialize agent first.`
+          );
         }
 
         // Validate capabilities
-        const validCapabilities = capabilities.filter(cap =>
-          this.validAgentCapabilities.includes(cap) || cap === 'general',
+        const validCapabilities = capabilities.filter(
+          (cap) =>
+            this.validAgentCapabilities.includes(cap) || cap === 'general'
         );
 
         if (validCapabilities.length !== capabilities.length) {
-          const invalidCaps = capabilities.filter(cap => !validCapabilities.includes(cap));
+          const invalidCaps = capabilities.filter(
+            (cap) => !validCapabilities.includes(cap)
+          );
           return {
             success: false,
             error: `Invalid capabilities: ${invalidCaps.join(', ')}`,
@@ -1148,7 +1233,8 @@ class AutonomousTaskManagerAPI {
         }
 
         features.agents[agentId].capabilities = capabilities;
-        features.agents[agentId].capabilities_registered_at = new Date().toISOString();
+        features.agents[agentId].capabilities_registered_at =
+          new Date().toISOString();
         features.agents[agentId].lastHeartbeat = new Date().toISOString();
 
         features.metadata.updated = new Date().toISOString();
@@ -1183,14 +1269,20 @@ class AutonomousTaskManagerAPI {
 
     // Check required fields
     for (const field of this.requiredFields) {
-      if (!featureData[field] || (typeof featureData[field] === 'string' && featureData[field].trim() === '')) {
+      if (
+        !featureData[field] ||
+        (typeof featureData[field] === 'string' &&
+          featureData[field].trim() === '')
+      ) {
         throw new Error(`Required field '${field}' is missing or empty`);
       }
     }
 
     // Validate category
     if (!this.validCategories.includes(featureData.category)) {
-      throw new Error(`Invalid category '${featureData.category}'. Must be one of: ${this.validCategories.join(', ')}`);
+      throw new Error(
+        `Invalid category '${featureData.category}'. Must be one of: ${this.validCategories.join(', ')}`
+      );
     }
 
     // Validate title length
@@ -1199,12 +1291,20 @@ class AutonomousTaskManagerAPI {
     }
 
     // Validate description length
-    if (featureData.description.length < 20 || featureData.description.length > 2000) {
-      throw new Error('Feature description must be between 20 and 2000 characters');
+    if (
+      featureData.description.length < 20 ||
+      featureData.description.length > 2000
+    ) {
+      throw new Error(
+        'Feature description must be between 20 and 2000 characters'
+      );
     }
 
     // Validate business value length
-    if (featureData.business_value.length < 10 || featureData.business_value.length > 1000) {
+    if (
+      featureData.business_value.length < 10 ||
+      featureData.business_value.length > 1000
+    ) {
       throw new Error('Business value must be between 10 and 1000 characters');
     }
   }
@@ -1284,10 +1384,16 @@ class AutonomousTaskManagerAPI {
       },
       availableCommands: [
         // Discovery Commands
-        'guide', 'methods',
+        'guide',
+        'methods',
 
         // Feature Management
-        'suggest-feature', 'approve-feature', 'reject-feature', 'list-features', 'feature-stats', 'get-initialization-stats',
+        'suggest-feature',
+        'approve-feature',
+        'reject-feature',
+        'list-features',
+        'feature-stats',
+        'get-initialization-stats',
       ],
       guide: this._getFallbackGuide('api-methods'),
     };
@@ -1305,7 +1411,8 @@ class AutonomousTaskManagerAPI {
                 'Feature lifecycle management system with strict approval workflow',
             },
             featureWorkflow: {
-              description: 'Strict feature approval and implementation workflow',
+              description:
+                'Strict feature approval and implementation workflow',
               statuses: {
                 suggested: 'Initial feature suggestion - requires approval',
                 approved: 'Feature approved for implementation',
@@ -1315,7 +1422,8 @@ class AutonomousTaskManagerAPI {
               transitions: {
                 'suggested → approved': 'Via approve-feature command',
                 'suggested → rejected': 'Via reject-feature command',
-                'approved → implemented': 'Manual status update after implementation',
+                'approved → implemented':
+                  'Manual status update after implementation',
               },
             },
             coreCommands: {
@@ -1338,8 +1446,14 @@ class AutonomousTaskManagerAPI {
                   description: 'Create new feature suggestion',
                   usage:
                     'node taskmanager-api.js suggest-feature \'{"title":"Feature name", "description":"Details", "business_value":"Value proposition", "category":"enhancement|bug-fix|new-feature|performance|security|documentation"}\'',
-                  required_fields: ['title', 'description', 'business_value', 'category'],
-                  validation: 'All required fields must be provided with proper lengths',
+                  required_fields: [
+                    'title',
+                    'description',
+                    'business_value',
+                    'category',
+                  ],
+                  validation:
+                    'All required fields must be provided with proper lengths',
                 },
                 'approve-feature': {
                   description: 'Approve suggested feature for implementation',
@@ -1370,40 +1484,59 @@ class AutonomousTaskManagerAPI {
                   description: 'Get feature statistics and analytics',
                   usage:
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" feature-stats',
-                  output: 'Feature counts by status, category, and recent activity',
+                  output:
+                    'Feature counts by status, category, and recent activity',
                 },
                 'get-initialization-stats': {
-                  description: 'Get initialization usage statistics organized by 5-hour time buckets with daily advancing start times',
+                  description:
+                    'Get initialization usage statistics organized by 5-hour time buckets with daily advancing start times',
                   usage:
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-initialization-stats',
-                  output: 'Initialization and reinitialization counts by time buckets, daily totals, and recent activity',
-                  time_buckets_info: 'Start time advances by 1 hour daily - Today starts at 7am, tomorrow at 8am, etc.',
-                  features: ['General usage tracking', 'Daily advancing time buckets', 'Historical data (30 days)', 'Current bucket indication'],
+                  output:
+                    'Initialization and reinitialization counts by time buckets, daily totals, and recent activity',
+                  time_buckets_info:
+                    'Start time advances by 1 hour daily - Today starts at 7am, tomorrow at 8am, etc.',
+                  features: [
+                    'General usage tracking',
+                    'Daily advancing time buckets',
+                    'Historical data (30 days)',
+                    'Current bucket indication',
+                  ],
                 },
               },
               agentManagement: {
-                'initialize': {
+                initialize: {
                   description: 'Initialize a new agent session',
                   usage:
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" initialize <agentId>',
                   required_parameters: ['agentId'],
-                  output: 'Agent initialization confirmation with session details',
+                  output:
+                    'Agent initialization confirmation with session details',
                 },
-                'reinitialize': {
+                reinitialize: {
                   description: 'Reinitialize existing agent session',
                   usage:
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize <agentId>',
                   required_parameters: ['agentId'],
-                  output: 'Agent reinitialization confirmation with new session details',
+                  output:
+                    'Agent reinitialization confirmation with new session details',
                 },
                 'authorize-stop': {
-                  description: 'Self-authorize stop when all TodoWrite tasks complete and project is perfect',
+                  description:
+                    'Self-authorize stop when all TodoWrite tasks complete and project is perfect',
                   usage:
                     'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" authorize-stop <agentId> [reason]',
                   required_parameters: ['agentId'],
                   optional_parameters: ['reason'],
-                  output: 'Stop authorization confirmation - creates .stop-allowed flag',
-                  requirements: ['All TodoWrite tasks completed', 'Linter passes', 'Build succeeds', 'Start works', 'Tests pass'],
+                  output:
+                    'Stop authorization confirmation - creates .stop-allowed flag',
+                  requirements: [
+                    'All TodoWrite tasks completed',
+                    'Linter passes',
+                    'Build succeeds',
+                    'Start works',
+                    'Tests pass',
+                  ],
                 },
               },
             },
@@ -1448,9 +1581,12 @@ class AutonomousTaskManagerAPI {
                 ],
               },
               initializationTracking: {
-                getStats: 'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-initialization-stats',
-                description: 'Retrieve initialization usage statistics organized by 5-hour time buckets with daily advancing start times',
-                timeBucketInfo: 'Start time advances by 1 hour each day - Today: 7am start, Tomorrow: 8am start, etc.',
+                getStats:
+                  'timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-initialization-stats',
+                description:
+                  'Retrieve initialization usage statistics organized by 5-hour time buckets with daily advancing start times',
+                timeBucketInfo:
+                  'Start time advances by 1 hour each day - Today: 7am start, Tomorrow: 8am start, etc.',
                 sampleOutput: {
                   success: true,
                   stats: {
@@ -1459,11 +1595,31 @@ class AutonomousTaskManagerAPI {
                     current_day: '2025-09-23',
                     current_bucket: '07:00-11:59',
                     time_buckets: {
-                      '07:00-11:59': { initializations: 5, reinitializations: 2, total: 7 },
-                      '12:00-16:59': { initializations: 8, reinitializations: 1, total: 9 },
-                      '17:00-21:59': { initializations: 3, reinitializations: 4, total: 7 },
-                      '22:00-02:59': { initializations: 1, reinitializations: 0, total: 1 },
-                      '03:00-06:59': { initializations: 0, reinitializations: 1, total: 1 },
+                      '07:00-11:59': {
+                        initializations: 5,
+                        reinitializations: 2,
+                        total: 7,
+                      },
+                      '12:00-16:59': {
+                        initializations: 8,
+                        reinitializations: 1,
+                        total: 9,
+                      },
+                      '17:00-21:59': {
+                        initializations: 3,
+                        reinitializations: 4,
+                        total: 7,
+                      },
+                      '22:00-02:59': {
+                        initializations: 1,
+                        reinitializations: 0,
+                        total: 1,
+                      },
+                      '03:00-06:59': {
+                        initializations: 0,
+                        reinitializations: 1,
+                        total: 1,
+                      },
                     },
                   },
                 },
@@ -1484,7 +1640,7 @@ class AutonomousTaskManagerAPI {
               ],
             },
           };
-        })(),
+        })()
       );
     } catch (error) {
       return {
@@ -1507,10 +1663,16 @@ class AutonomousTaskManagerAPI {
 
     // Use September 23, 2025 as reference date when start time was 7am
     const referenceDate = new Date('2025-09-23');
-    const currentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const currentDate = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
 
     // Calculate days since reference date
-    const daysSinceReference = Math.floor((currentDate.getTime() - referenceDate.getTime()) / (1000 * 60 * 60 * 24));
+    const daysSinceReference = Math.floor(
+      (currentDate.getTime() - referenceDate.getTime()) / (1000 * 60 * 60 * 24)
+    );
 
     // Starting hour advances by 1 each day, starting from 7am on reference date
     const todayStartHour = (7 + daysSinceReference) % 24;
@@ -1522,7 +1684,7 @@ class AutonomousTaskManagerAPI {
     // Generate bucket label based on today's start hour
     const bucketStartHours = [];
     for (let i = 0; i < 5; i++) {
-      bucketStartHours.push((todayStartHour + (i * 5)) % 24);
+      bucketStartHours.push((todayStartHour + i * 5) % 24);
     }
 
     const startHour = bucketStartHours[bucketIndex];
@@ -1543,17 +1705,23 @@ class AutonomousTaskManagerAPI {
 
     // Use September 23, 2025 as reference date when start time was 7am
     const referenceDate = new Date('2025-09-23');
-    const currentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const currentDate = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
 
     // Calculate days since reference date
-    const daysSinceReference = Math.floor((currentDate.getTime() - referenceDate.getTime()) / (1000 * 60 * 60 * 24));
+    const daysSinceReference = Math.floor(
+      (currentDate.getTime() - referenceDate.getTime()) / (1000 * 60 * 60 * 24)
+    );
 
     // Starting hour advances by 1 each day, starting from 7am on reference date
     const todayStartHour = (7 + daysSinceReference) % 24;
 
     const buckets = [];
     for (let i = 0; i < 5; i++) {
-      const startHour = (todayStartHour + (i * 5)) % 24;
+      const startHour = (todayStartHour + i * 5) % 24;
       const endHour = (startHour + 4) % 24;
 
       const formatHour = (h) => h.toString().padStart(2, '0') + ':00';
@@ -1583,7 +1751,7 @@ class AutonomousTaskManagerAPI {
       // Generate today's time buckets dynamically
       const todayBuckets = this._getTodayTimeBuckets();
       const timeBuckets = {};
-      todayBuckets.forEach(bucket => {
+      todayBuckets.forEach((bucket) => {
         timeBuckets[bucket] = { init: 0, reinit: 0 };
       });
 
@@ -1599,18 +1767,21 @@ class AutonomousTaskManagerAPI {
     } else {
       // Check if we need to update bucket labels for today
       const todayBuckets = this._getTodayTimeBuckets();
-      const currentBuckets = Object.keys(features.metadata.initialization_stats.time_buckets);
+      const currentBuckets = Object.keys(
+        features.metadata.initialization_stats.time_buckets
+      );
 
       // If bucket labels don't match today's labels, we need to migrate
-      const bucketsMatch = todayBuckets.every(bucket => currentBuckets.includes(bucket)) &&
-                          currentBuckets.every(bucket => todayBuckets.includes(bucket));
+      const bucketsMatch =
+        todayBuckets.every((bucket) => currentBuckets.includes(bucket)) &&
+        currentBuckets.every((bucket) => todayBuckets.includes(bucket));
 
       if (!bucketsMatch) {
         // Migrate existing data to new bucket structure if possible
         const stats = features.metadata.initialization_stats;
         const newTimeBuckets = {};
 
-        todayBuckets.forEach(bucket => {
+        todayBuckets.forEach((bucket) => {
           newTimeBuckets[bucket] = { init: 0, reinit: 0 };
         });
 
@@ -1623,7 +1794,7 @@ class AutonomousTaskManagerAPI {
               init: acc.init + bucket.init,
               reinit: acc.reinit + bucket.reinit,
             }),
-            { init: 0, reinit: 0 },
+            { init: 0, reinit: 0 }
           );
 
           if (oldTotal.init > 0 || oldTotal.reinit > 0) {
@@ -1702,7 +1873,7 @@ class AutonomousTaskManagerAPI {
           init: acc.init + bucket.init,
           reinit: acc.reinit + bucket.reinit,
         }),
-        { init: 0, reinit: 0 },
+        { init: 0, reinit: 0 }
       );
 
       if (yesterdayTotal.init > 0 || yesterdayTotal.reinit > 0) {
@@ -1722,7 +1893,7 @@ class AutonomousTaskManagerAPI {
       // Reset buckets for new day with updated bucket labels
       const newBuckets = this._getTodayTimeBuckets();
       const newTimeBuckets = {};
-      newBuckets.forEach(bucket => {
+      newBuckets.forEach((bucket) => {
         newTimeBuckets[bucket] = { init: 0, reinit: 0 };
       });
 
@@ -1752,8 +1923,8 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
- * Generate unique task ID
- */
+   * Generate unique task ID
+   */
   _generateTaskId() {
     const timestamp = Date.now();
     const randomString = crypto.randomBytes(6).toString('hex');
@@ -1761,63 +1932,109 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
- * Infer task type from feature characteristics
- */
+   * Infer task type from feature characteristics
+   */
   _inferTaskType(feature) {
-    if (feature.category === 'bug-fix') {return 'implementation';}
-    if (feature.category === 'security') {return 'analysis';}
-    if (feature.category === 'performance') {return 'analysis';}
-    if (feature.category === 'documentation') {return 'documentation';}
+    if (feature.category === 'bug-fix') {
+      return 'implementation';
+    }
+    if (feature.category === 'security') {
+      return 'analysis';
+    }
+    if (feature.category === 'performance') {
+      return 'analysis';
+    }
+    if (feature.category === 'documentation') {
+      return 'documentation';
+    }
     return 'implementation';
   }
 
   /**
- * Infer task priority from feature characteristics
- */
+   * Infer task priority from feature characteristics
+   */
   _inferTaskPriority(feature) {
-    if (feature.category === 'security') {return 'critical';}
-    if (feature.category === 'bug-fix') {return 'high';}
-    if (feature.category === 'performance') {return 'high';}
-    if (feature.business_value && feature.business_value.toLowerCase().includes('critical')) {return 'critical';}
-    if (feature.business_value && feature.business_value.toLowerCase().includes('essential')) {return 'high';}
+    if (feature.category === 'security') {
+      return 'critical';
+    }
+    if (feature.category === 'bug-fix') {
+      return 'high';
+    }
+    if (feature.category === 'performance') {
+      return 'high';
+    }
+    if (
+      feature.business_value &&
+      feature.business_value.toLowerCase().includes('critical')
+    ) {
+      return 'critical';
+    }
+    if (
+      feature.business_value &&
+      feature.business_value.toLowerCase().includes('essential')
+    ) {
+      return 'high';
+    }
     return 'normal';
   }
 
   /**
- * Estimate effort required for feature implementation
- */
+   * Estimate effort required for feature implementation
+   */
   _estimateEffort(feature) {
     let baseEffort = 5; // Base effort in hours
 
     // Adjust based on category
-    if (feature.category === 'new-feature') {baseEffort *= 2;}
-    if (feature.category === 'enhancement') {baseEffort *= 1.5;}
-    if (feature.category === 'security') {baseEffort *= 1.8;}
+    if (feature.category === 'new-feature') {
+      baseEffort *= 2;
+    }
+    if (feature.category === 'enhancement') {
+      baseEffort *= 1.5;
+    }
+    if (feature.category === 'security') {
+      baseEffort *= 1.8;
+    }
 
     // Adjust based on description length (complexity indicator)
     const complexityMultiplier = Math.min(feature.description.length / 500, 3);
-    baseEffort *= (1 + complexityMultiplier);
+    baseEffort *= 1 + complexityMultiplier;
 
     return Math.ceil(baseEffort);
   }
 
   /**
- * Infer required capabilities from feature characteristics
- */
+   * Infer required capabilities from feature characteristics
+   */
   _inferCapabilities(feature) {
     const capabilities = [];
 
-    if (feature.category === 'security') {capabilities.push('security');}
-    if (feature.category === 'performance') {capabilities.push('performance');}
-    if (feature.category === 'documentation') {capabilities.push('documentation');}
-    if (feature.category === 'bug-fix') {capabilities.push('analysis');}
+    if (feature.category === 'security') {
+      capabilities.push('security');
+    }
+    if (feature.category === 'performance') {
+      capabilities.push('performance');
+    }
+    if (feature.category === 'documentation') {
+      capabilities.push('documentation');
+    }
+    if (feature.category === 'bug-fix') {
+      capabilities.push('analysis');
+    }
 
     // Check description for technology hints
     const description = feature.description.toLowerCase();
-    if (description.includes('frontend') || description.includes('ui') || description.includes('interface')) {
+    if (
+      description.includes('frontend') ||
+      description.includes('ui') ||
+      description.includes('interface')
+    ) {
       capabilities.push('frontend');
     }
-    if (description.includes('backend') || description.includes('api') || description.includes('server')) {
+    if (
+      description.includes('backend') ||
+      description.includes('api') ||
+      description.includes('server')
+    ) {
       capabilities.push('backend');
     }
     if (description.includes('test') || description.includes('testing')) {
@@ -1828,17 +2045,19 @@ class AutonomousTaskManagerAPI {
   }
 
   /**
- * Determine if feature is complex enough to warrant supporting tasks
- */
+   * Determine if feature is complex enough to warrant supporting tasks
+   */
   _isComplexFeature(feature) {
-    return feature.category === 'new-feature' ||
-         feature.description.length > 800 ||
-         feature.business_value.toLowerCase().includes('comprehensive');
+    return (
+      feature.category === 'new-feature' ||
+      feature.description.length > 800 ||
+      feature.business_value.toLowerCase().includes('comprehensive')
+    );
   }
 
   /**
- * Generate supporting tasks for complex features
- */
+   * Generate supporting tasks for complex features
+   */
   _generateSupportingTasks(feature, mainTaskId) {
     const supportingTasks = [];
 
@@ -1897,7 +2116,8 @@ class AutonomousTaskManagerAPI {
   cleanup() {
     if (this.wss) {
       this.wss.clients.forEach((client) => {
-        if (client.readyState === 1) { // WebSocket.OPEN
+        if (client.readyState === 1) {
+          // WebSocket.OPEN
           client.close();
         }
       });
@@ -1930,7 +2150,9 @@ async function main() {
         break;
       case 'suggest-feature': {
         if (!args[1]) {
-          throw new Error('Feature data required. Usage: suggest-feature \'{"title":"...", "description":"...", "business_value":"...", "category":"..."}\'');
+          throw new Error(
+            'Feature data required. Usage: suggest-feature \'{"title":"...", "description":"...", "business_value":"...", "category":"..."}\''
+          );
         }
         const featureData = JSON.parse(args[1]);
         result = await api.suggestFeature(featureData);
@@ -1938,7 +2160,9 @@ async function main() {
       }
       case 'approve-feature': {
         if (!args[1]) {
-          throw new Error('Feature ID required. Usage: approve-feature <featureId> [approvalData]');
+          throw new Error(
+            'Feature ID required. Usage: approve-feature <featureId> [approvalData]'
+          );
         }
         const approvalData = args[2] ? JSON.parse(args[2]) : {};
         result = await api.approveFeature(args[1], approvalData);
@@ -1946,7 +2170,9 @@ async function main() {
       }
       case 'bulk-approve-features': {
         if (!args[1]) {
-          throw new Error('Feature IDs required. Usage: bulk-approve-features \'["id1","id2","id3"]\' [approvalData]');
+          throw new Error(
+            'Feature IDs required. Usage: bulk-approve-features \'["id1","id2","id3"]\' [approvalData]'
+          );
         }
         const featureIds = JSON.parse(args[1]);
         const approvalData = args[2] ? JSON.parse(args[2]) : {};
@@ -1955,7 +2181,9 @@ async function main() {
       }
       case 'reject-feature': {
         if (!args[1]) {
-          throw new Error('Feature ID required. Usage: reject-feature <featureId> [rejectionData]');
+          throw new Error(
+            'Feature ID required. Usage: reject-feature <featureId> [rejectionData]'
+          );
         }
         const rejectionData = args[2] ? JSON.parse(args[2]) : {};
         result = await api.rejectFeature(args[1], rejectionData);
@@ -1986,9 +2214,13 @@ async function main() {
         break;
       case 'authorize-stop': {
         if (!args[1]) {
-          throw new Error('Agent ID required. Usage: authorize-stop <agentId> [reason]');
+          throw new Error(
+            'Agent ID required. Usage: authorize-stop <agentId> [reason]'
+          );
         }
-        const stopReason = args[2] || 'Agent authorized stop after completing all tasks and achieving project perfection';
+        const stopReason =
+          args[2] ||
+          'Agent authorized stop after completing all tasks and achieving project perfection';
         result = await api.authorizeStop(args[1], stopReason);
         break;
       }
@@ -1996,7 +2228,9 @@ async function main() {
       // New autonomous task management commands
       case 'create-task': {
         if (!args[1]) {
-          throw new Error('Task data required. Usage: create-task \'{"title":"...", "description":"...", "type":"...", "priority":"..."}\'');
+          throw new Error(
+            'Task data required. Usage: create-task \'{"title":"...", "description":"...", "type":"...", "priority":"..."}\''
+          );
         }
         const taskData = JSON.parse(args[1]);
         result = await api.createTask(taskData);
@@ -2011,7 +2245,9 @@ async function main() {
       }
       case 'update-task': {
         if (!args[1] || !args[2]) {
-          throw new Error('Task ID and updates required. Usage: update-task <taskId> \'{"status":"...", "progress":"..."}\'');
+          throw new Error(
+            'Task ID and updates required. Usage: update-task <taskId> \'{"status":"...", "progress":"..."}\''
+          );
         }
         const updates = JSON.parse(args[2]);
         result = await api.updateTask(args[1], updates);
@@ -2019,14 +2255,18 @@ async function main() {
       }
       case 'assign-task': {
         if (!args[1] || !args[2]) {
-          throw new Error('Task ID and Agent ID required. Usage: assign-task <taskId> <agentId>');
+          throw new Error(
+            'Task ID and Agent ID required. Usage: assign-task <taskId> <agentId>'
+          );
         }
         result = await api.assignTask(args[1], args[2]);
         break;
       }
       case 'complete-task': {
         if (!args[1] || !args[2]) {
-          throw new Error('Task ID and result data required. Usage: complete-task <taskId> \'{"result":"...", "output":"..."}\'');
+          throw new Error(
+            'Task ID and result data required. Usage: complete-task <taskId> \'{"result":"...", "output":"..."}\''
+          );
         }
         const resultData = JSON.parse(args[2]);
         result = await api.completeTask(args[1], resultData);
@@ -2034,28 +2274,36 @@ async function main() {
       }
       case 'get-agent-tasks': {
         if (!args[1]) {
-          throw new Error('Agent ID required. Usage: get-agent-tasks <agentId>');
+          throw new Error(
+            'Agent ID required. Usage: get-agent-tasks <agentId>'
+          );
         }
         result = await api.getAgentTasks(args[1]);
         break;
       }
       case 'get-tasks-by-status': {
         if (!args[1]) {
-          throw new Error('Status required. Usage: get-tasks-by-status <status>');
+          throw new Error(
+            'Status required. Usage: get-tasks-by-status <status>'
+          );
         }
         result = await api.getTasksByStatus(args[1]);
         break;
       }
       case 'get-tasks-by-priority': {
         if (!args[1]) {
-          throw new Error('Priority required. Usage: get-tasks-by-priority <priority>');
+          throw new Error(
+            'Priority required. Usage: get-tasks-by-priority <priority>'
+          );
         }
         result = await api.getTasksByPriority(args[1]);
         break;
       }
       case 'get-available-tasks': {
         if (!args[1]) {
-          throw new Error('Agent ID required. Usage: get-available-tasks <agentId>');
+          throw new Error(
+            'Agent ID required. Usage: get-available-tasks <agentId>'
+          );
         }
         result = await api.getAvailableTasksForAgent(args[1]);
         break;
@@ -2095,7 +2343,9 @@ async function main() {
       }
       case 'register-agent': {
         if (!args[1] || !args[2]) {
-          throw new Error('Agent ID and capabilities required. Usage: register-agent <agentId> \'["capability1","capability2"]\'');
+          throw new Error(
+            'Agent ID and capabilities required. Usage: register-agent <agentId> \'["capability1","capability2"]\''
+          );
         }
         const capabilities = JSON.parse(args[2]);
         result = await api.registerAgent(args[1], capabilities);
@@ -2103,7 +2353,9 @@ async function main() {
       }
       case 'unregister-agent': {
         if (!args[1]) {
-          throw new Error('Agent ID required. Usage: unregister-agent <agentId>');
+          throw new Error(
+            'Agent ID required. Usage: unregister-agent <agentId>'
+          );
         }
         result = await api.unregisterAgent(args[1]);
         break;
@@ -2113,7 +2365,9 @@ async function main() {
         break;
 
       default:
-        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, authorize-stop, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents`);
+        throw new Error(
+          `Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, authorize-stop, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents`
+        );
     }
 
     console.log(JSON.stringify(result, null, 2));

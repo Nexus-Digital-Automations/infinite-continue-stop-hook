@@ -1,4 +1,3 @@
-
 /**
  * Node.js Version Performance Benchmarking Script
  *
@@ -112,7 +111,9 @@ class NodeVersionPerformanceBenchmark {
       duration_ms: duration,
       initial_memory_mb: Math.round(initialMemory.heapUsed / 1024 / 1024),
       final_memory_mb: Math.round(finalMemory.heapUsed / 1024 / 1024),
-      memory_delta_mb: Math.round((finalMemory.heapUsed - initialMemory.heapUsed) / 1024 / 1024),
+      memory_delta_mb: Math.round(
+        (finalMemory.heapUsed - initialMemory.heapUsed) / 1024 / 1024
+      ),
       arrays_created: arrays.length,
       json_operations: 100,
     };
@@ -132,9 +133,9 @@ class NodeVersionPerformanceBenchmark {
     const promises = [];
     for (let i = 0; i < 1000; i++) {
       promises.push(
-        new Promise(resolve => {
+        new Promise((resolve) => {
           setImmediate(() => resolve(i * 2));
-        }),
+        })
       );
     }
 
@@ -144,7 +145,7 @@ class NodeVersionPerformanceBenchmark {
     const asyncOperations = async (count) => {
       const results = [];
       for (let i = 0; i < count; i++) {
-        const result = await new Promise(resolve => {
+        const result = await new Promise((resolve) => {
           process.nextTick(() => resolve(i));
         });
         results.push(result);
@@ -190,17 +191,15 @@ class NodeVersionPerformanceBenchmark {
         timestamp: Date.now(),
       });
 
-      writePromises.push(
-        fs.promises.writeFile(filePath, data, 'utf8'),
-      );
+      writePromises.push(fs.promises.writeFile(filePath, data, 'utf8'));
     }
 
     await Promise.all(writePromises);
 
     // File read operations
     const files = fs.readdirSync(tempDir);
-    const readPromises = files.map(file =>
-      fs.promises.readFile(path.join(tempDir, file), 'utf8'),
+    const readPromises = files.map((file) =>
+      fs.promises.readFile(path.join(tempDir, file), 'utf8')
     );
 
     const fileContents = await Promise.all(readPromises);
@@ -221,7 +220,9 @@ class NodeVersionPerformanceBenchmark {
       total_file_operations: writePromises.length + fileContents.length,
     };
 
-    console.log(`✅ File operations benchmark completed: ${duration.toFixed(2)}ms`);
+    console.log(
+      `✅ File operations benchmark completed: ${duration.toFixed(2)}ms`
+    );
   }
 
   /**
@@ -259,8 +260,9 @@ class NodeVersionPerformanceBenchmark {
         status: 'success',
       };
 
-      console.log(`✅ Native modules benchmark completed: ${duration.toFixed(2)}ms`);
-
+      console.log(
+        `✅ Native modules benchmark completed: ${duration.toFixed(2)}ms`
+      );
     } catch (error) {
       this.results.benchmarks.native_modules = {
         duration_ms: 0,
@@ -279,7 +281,7 @@ class NodeVersionPerformanceBenchmark {
     console.log('📊 Analyzing performance results...');
 
     const totalBenchmarkTime = Object.values(this.results.benchmarks)
-      .filter(b => b.duration_ms)
+      .filter((b) => b.duration_ms)
       .reduce((sum, b) => sum + b.duration_ms, 0);
 
     this.results.performance_analysis = {
@@ -301,23 +303,47 @@ class NodeVersionPerformanceBenchmark {
     let score = 100;
 
     // Penalize slow CPU operations (baseline: <1000ms)
-    if (benchmarks.cpu_intensive && benchmarks.cpu_intensive.duration_ms > 1000) {
-      score -= Math.min(20, (benchmarks.cpu_intensive.duration_ms - 1000) / 100);
+    if (
+      benchmarks.cpu_intensive &&
+      benchmarks.cpu_intensive.duration_ms > 1000
+    ) {
+      score -= Math.min(
+        20,
+        (benchmarks.cpu_intensive.duration_ms - 1000) / 100
+      );
     }
 
     // Penalize excessive memory usage
-    if (benchmarks.memory_operations && benchmarks.memory_operations.memory_delta_mb > 100) {
-      score -= Math.min(15, (benchmarks.memory_operations.memory_delta_mb - 100) / 10);
+    if (
+      benchmarks.memory_operations &&
+      benchmarks.memory_operations.memory_delta_mb > 100
+    ) {
+      score -= Math.min(
+        15,
+        (benchmarks.memory_operations.memory_delta_mb - 100) / 10
+      );
     }
 
     // Penalize slow async operations (baseline: <500ms)
-    if (benchmarks.async_operations && benchmarks.async_operations.duration_ms > 500) {
-      score -= Math.min(15, (benchmarks.async_operations.duration_ms - 500) / 50);
+    if (
+      benchmarks.async_operations &&
+      benchmarks.async_operations.duration_ms > 500
+    ) {
+      score -= Math.min(
+        15,
+        (benchmarks.async_operations.duration_ms - 500) / 50
+      );
     }
 
     // Penalize slow file operations (baseline: <1000ms)
-    if (benchmarks.file_operations && benchmarks.file_operations.duration_ms > 1000) {
-      score -= Math.min(10, (benchmarks.file_operations.duration_ms - 1000) / 100);
+    if (
+      benchmarks.file_operations &&
+      benchmarks.file_operations.duration_ms > 1000
+    ) {
+      score -= Math.min(
+        10,
+        (benchmarks.file_operations.duration_ms - 1000) / 100
+      );
     }
 
     return Math.max(0, Math.round(score));
@@ -373,15 +399,21 @@ class NodeVersionPerformanceBenchmark {
     const benchmarks = this.results.benchmarks;
 
     if (benchmarks.cpu_intensive?.operations_per_second < 50000) {
-      optimizations.push('Consider upgrading to newer Node.js version for V8 improvements');
+      optimizations.push(
+        'Consider upgrading to newer Node.js version for V8 improvements'
+      );
     }
 
     if (benchmarks.memory_operations?.memory_delta_mb > 100) {
-      optimizations.push('Implement memory pooling or streaming for large data operations');
+      optimizations.push(
+        'Implement memory pooling or streaming for large data operations'
+      );
     }
 
     if (benchmarks.async_operations?.duration_ms > 750) {
-      optimizations.push('Optimize async operation patterns and reduce Promise overhead');
+      optimizations.push(
+        'Optimize async operation patterns and reduce Promise overhead'
+      );
     }
 
     if (benchmarks.file_operations?.duration_ms > 1200) {
@@ -399,24 +431,40 @@ class NodeVersionPerformanceBenchmark {
     const majorVersion = parseInt(nodeVersion.match(/v(\d+)/)[1]);
 
     if (majorVersion < 18) {
-      this.results.recommendations.push('⚠️ Node.js version below minimum requirement (18.x)');
+      this.results.recommendations.push(
+        '⚠️ Node.js version below minimum requirement (18.x)'
+      );
     } else if (majorVersion === 18) {
-      this.results.recommendations.push('✅ Node.js 18.x - Good for production stability');
+      this.results.recommendations.push(
+        '✅ Node.js 18.x - Good for production stability'
+      );
     } else if (majorVersion === 20) {
-      this.results.recommendations.push('🚀 Node.js 20.x LTS - Recommended for production');
+      this.results.recommendations.push(
+        '🚀 Node.js 20.x LTS - Recommended for production'
+      );
     } else if (majorVersion >= 22) {
-      this.results.recommendations.push('⚡ Node.js 22.x+ - Latest features and performance');
+      this.results.recommendations.push(
+        '⚡ Node.js 22.x+ - Latest features and performance'
+      );
     }
 
     const score = this.results.performance_analysis.performance_score;
     if (score >= 90) {
-      this.results.recommendations.push('🏆 Excellent performance - optimal for production');
+      this.results.recommendations.push(
+        '🏆 Excellent performance - optimal for production'
+      );
     } else if (score >= 75) {
-      this.results.recommendations.push('✅ Good performance - suitable for production');
+      this.results.recommendations.push(
+        '✅ Good performance - suitable for production'
+      );
     } else if (score >= 60) {
-      this.results.recommendations.push('⚠️ Fair performance - consider optimizations');
+      this.results.recommendations.push(
+        '⚠️ Fair performance - consider optimizations'
+      );
     } else {
-      this.results.recommendations.push('❌ Poor performance - requires investigation');
+      this.results.recommendations.push(
+        '❌ Poor performance - requires investigation'
+      );
     }
   }
 
@@ -425,8 +473,14 @@ class NodeVersionPerformanceBenchmark {
    */
   saveResults() {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const resultsFile = path.join(this.outputDir, `node-performance-${timestamp}.json`);
-    const latestFile = path.join(this.outputDir, 'latest-node-performance.json');
+    const resultsFile = path.join(
+      this.outputDir,
+      `node-performance-${timestamp}.json`
+    );
+    const latestFile = path.join(
+      this.outputDir,
+      'latest-node-performance.json'
+    );
 
     // Save detailed results
     fs.writeFileSync(resultsFile, JSON.stringify(this.results, null, 2));
@@ -486,13 +540,13 @@ class NodeVersionPerformanceBenchmark {
 ## Performance Analysis
 
 ### Bottlenecks
-${analysis.bottlenecks?.map(b => `- **${b.category}** (${b.severity}): ${b.message}`).join('\n') || 'None identified'}
+${analysis.bottlenecks?.map((b) => `- **${b.category}** (${b.severity}): ${b.message}`).join('\n') || 'None identified'}
 
 ### Optimization Opportunities
-${analysis.optimization_opportunities?.map(o => `- ${o}`).join('\n') || 'None identified'}
+${analysis.optimization_opportunities?.map((o) => `- ${o}`).join('\n') || 'None identified'}
 
 ## Recommendations
-${this.results.recommendations?.map(r => `- ${r}`).join('\n')}
+${this.results.recommendations?.map((r) => `- ${r}`).join('\n')}
 
 ---
 *Generated by Node.js Performance Benchmark v2.0.0*
@@ -507,7 +561,9 @@ ${this.results.recommendations?.map(r => `- ${r}`).join('\n')}
     console.log('================================');
     console.log(`Node.js Version: ${this.results.environment.node_version}`);
     console.log(`Platform: ${this.results.environment.platform}`);
-    console.log(`Performance Score: ${this.results.performance_analysis.performance_score}/100`);
+    console.log(
+      `Performance Score: ${this.results.performance_analysis.performance_score}/100`
+    );
 
     console.log('\n🏃 Benchmark Results:');
     Object.entries(this.results.benchmarks).forEach(([name, data]) => {
@@ -517,7 +573,7 @@ ${this.results.recommendations?.map(r => `- ${r}`).join('\n')}
     });
 
     console.log('\n💡 Recommendations:');
-    this.results.recommendations.forEach(rec => {
+    this.results.recommendations.forEach((rec) => {
       console.log(`  ${rec}`);
     });
   }
@@ -540,7 +596,6 @@ ${this.results.recommendations?.map(r => `- ${r}`).join('\n')}
       this.displaySummary();
 
       console.log('\n✅ Benchmark suite completed successfully!');
-
     } catch (error) {
       console.error('❌ Benchmark suite failed:', error.message);
       throw new Error(`Benchmark suite failed: ${error.message}`);

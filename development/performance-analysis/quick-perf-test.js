@@ -11,15 +11,29 @@ const fs = require('fs');
 
 class QuickPerfTest {
   constructor() {
-    this.apiPath = '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
+    this.apiPath =
+      '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
     this.results = {};
 
     // Whitelist of allowed commands to prevent command injection
     this.allowedCommands = new Set([
-      'init', 'list', 'list-agents', 'status', 'stats', 'rag-health',
-      'usage-analytics', 'guide', 'reinitialize', 'search-lessons',
-      'store-lesson', 'store-error', 'start-authorization', 'validate-criterion',
-      'complete-authorization', 'rag-analytics', 'find-similar-errors',
+      'init',
+      'list',
+      'list-agents',
+      'status',
+      'stats',
+      'rag-health',
+      'usage-analytics',
+      'guide',
+      'reinitialize',
+      'search-lessons',
+      'store-lesson',
+      'store-error',
+      'start-authorization',
+      'validate-criterion',
+      'complete-authorization',
+      'rag-analytics',
+      'find-similar-errors',
       'get-relevant-lessons',
     ]);
   }
@@ -34,7 +48,9 @@ class QuickPerfTest {
   validateAndSanitizeInput(command, args = []) {
     // Validate command is in whitelist
     if (!this.allowedCommands.has(command)) {
-      throw new Error(`Invalid command: ${command}. Only whitelisted commands are allowed.`);
+      throw new Error(
+        `Invalid command: ${command}. Only whitelisted commands are allowed.`
+      );
     }
 
     // Validate command contains only alphanumeric, hyphens, and underscores
@@ -43,9 +59,11 @@ class QuickPerfTest {
     }
 
     // Validate and sanitize arguments
-    const sanitizedArgs = args.map(arg => {
+    const sanitizedArgs = args.map((arg) => {
       if (typeof arg !== 'string') {
-        throw new Error(`All arguments must be strings. Received: ${typeof arg}`);
+        throw new Error(
+          `All arguments must be strings. Received: ${typeof arg}`
+        );
       }
 
       // For JSON arguments, validate they are properly formatted
@@ -95,8 +113,11 @@ class QuickPerfTest {
       }
     }
 
-    const validTimes = times.filter(t => t > 0);
-    const avgTime = validTimes.length > 0 ? validTimes.reduce((a, b) => a + b, 0) / validTimes.length : 0;
+    const validTimes = times.filter((t) => t > 0);
+    const avgTime =
+      validTimes.length > 0
+        ? validTimes.reduce((a, b) => a + b, 0) / validTimes.length
+        : 0;
 
     return {
       command,
@@ -128,12 +149,19 @@ class QuickPerfTest {
 
     for (const endpoint of endpoints) {
       console.log(`\n📊 Testing: ${endpoint.description}`);
-      this.results[endpoint.cmd] = this.measureEndpoint(endpoint.cmd, endpoint.args);
+      this.results[endpoint.cmd] = this.measureEndpoint(
+        endpoint.cmd,
+        endpoint.args
+      );
 
       const result = this.results[endpoint.cmd];
       console.log(`  ✅ Success Rate: ${result.successRate.toFixed(1)}%`);
-      console.log(`  ⏱️  Avg Response: ${result.averageResponseTime.toFixed(2)}ms`);
-      console.log(`  📈 Range: ${result.minResponseTime.toFixed(2)} - ${result.maxResponseTime.toFixed(2)}ms`);
+      console.log(
+        `  ⏱️  Avg Response: ${result.averageResponseTime.toFixed(2)}ms`
+      );
+      console.log(
+        `  📈 Range: ${result.minResponseTime.toFixed(2)} - ${result.maxResponseTime.toFixed(2)}ms`
+      );
 
       if (result.errors.length > 0) {
         console.log(`  ❌ Errors: ${result.errors.length}`);
@@ -159,25 +187,42 @@ class QuickPerfTest {
     };
 
     // Calculate summary metrics
-    const validResults = Object.values(this.results).filter(r => r.successRate > 0);
+    const validResults = Object.values(this.results).filter(
+      (r) => r.successRate > 0
+    );
 
     if (validResults.length > 0) {
-      report.summary.overallSuccessRate = validResults.reduce((sum, r) => sum + r.successRate, 0) / validResults.length;
-      report.summary.averageResponseTime = validResults.reduce((sum, r) => sum + r.averageResponseTime, 0) / validResults.length;
+      report.summary.overallSuccessRate =
+        validResults.reduce((sum, r) => sum + r.successRate, 0) /
+        validResults.length;
+      report.summary.averageResponseTime =
+        validResults.reduce((sum, r) => sum + r.averageResponseTime, 0) /
+        validResults.length;
 
       // Find fastest and slowest
-      const sorted = validResults.sort((a, b) => a.averageResponseTime - b.averageResponseTime);
-      report.summary.fastestEndpoint = { command: sorted[0].command, time: sorted[0].averageResponseTime };
-      report.summary.slowestEndpoint = { command: sorted[sorted.length - 1].command, time: sorted[sorted.length - 1].averageResponseTime };
+      const sorted = validResults.sort(
+        (a, b) => a.averageResponseTime - b.averageResponseTime
+      );
+      report.summary.fastestEndpoint = {
+        command: sorted[0].command,
+        time: sorted[0].averageResponseTime,
+      };
+      report.summary.slowestEndpoint = {
+        command: sorted[sorted.length - 1].command,
+        time: sorted[sorted.length - 1].averageResponseTime,
+      };
 
       // Find error-prone endpoints
       report.summary.errorProneEndpoints = Object.values(this.results)
-        .filter(r => r.successRate < 100)
-        .map(r => ({ command: r.command, successRate: r.successRate }));
+        .filter((r) => r.successRate < 100)
+        .map((r) => ({ command: r.command, successRate: r.successRate }));
     }
 
     // Generate recommendations
-    if (report.summary.slowestEndpoint && report.summary.slowestEndpoint.time > 1000) {
+    if (
+      report.summary.slowestEndpoint &&
+      report.summary.slowestEndpoint.time > 1000
+    ) {
       report.recommendations.push({
         priority: 'High',
         category: 'Performance',
@@ -209,7 +254,8 @@ class QuickPerfTest {
 
   saveReport(report) {
     const path = require('path');
-    const outputDir = '/Users/jeremyparker/infinite-continue-stop-hook/development/performance-analysis';
+    const outputDir =
+      '/Users/jeremyparker/infinite-continue-stop-hook/development/performance-analysis';
 
     // Validate and sanitize filename components
     const timestamp = Date.now();
@@ -251,15 +297,23 @@ function main() {
     console.log('\n\n📊 QUICK PERFORMANCE TEST RESULTS');
     console.log('===================================');
     console.log(`Total Endpoints Tested: ${report.summary.totalEndpoints}`);
-    console.log(`Overall Success Rate: ${report.summary.overallSuccessRate.toFixed(2)}%`);
-    console.log(`Average Response Time: ${report.summary.averageResponseTime.toFixed(2)}ms`);
+    console.log(
+      `Overall Success Rate: ${report.summary.overallSuccessRate.toFixed(2)}%`
+    );
+    console.log(
+      `Average Response Time: ${report.summary.averageResponseTime.toFixed(2)}ms`
+    );
 
     if (report.summary.fastestEndpoint) {
-      console.log(`Fastest Endpoint: ${report.summary.fastestEndpoint.command} (${report.summary.fastestEndpoint.time.toFixed(2)}ms)`);
+      console.log(
+        `Fastest Endpoint: ${report.summary.fastestEndpoint.command} (${report.summary.fastestEndpoint.time.toFixed(2)}ms)`
+      );
     }
 
     if (report.summary.slowestEndpoint) {
-      console.log(`Slowest Endpoint: ${report.summary.slowestEndpoint.command} (${report.summary.slowestEndpoint.time.toFixed(2)}ms)`);
+      console.log(
+        `Slowest Endpoint: ${report.summary.slowestEndpoint.command} (${report.summary.slowestEndpoint.time.toFixed(2)}ms)`
+      );
     }
 
     if (report.recommendations.length > 0) {
@@ -270,7 +324,6 @@ function main() {
     }
 
     console.log(`\n📄 Full report saved to: ${outputFile}`);
-
   } catch (error) {
     console.error('❌ Performance test failed:', error);
     throw error;

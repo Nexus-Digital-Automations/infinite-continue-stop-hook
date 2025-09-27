@@ -1,4 +1,3 @@
-
 /**
  * Test Assertions for RAG System
  *
@@ -68,8 +67,14 @@ class TestAssertions {
 
     if (result.content_type) {
       expect(typeof result.content_type).toBe('string');
-      expect(['error', 'features', 'optimization', 'decisions', 'patterns', 'general'])
-        .toContain(result.content_type);
+      expect([
+        'error',
+        'features',
+        'optimization',
+        'decisions',
+        'patterns',
+        'general',
+      ]).toContain(result.content_type);
     }
 
     if (result.tags) {
@@ -103,7 +108,9 @@ class TestAssertions {
     }
 
     if (recommendation.confidenceLevel) {
-      expect(['high', 'medium', 'low', 'very-low']).toContain(recommendation.confidenceLevel);
+      expect(['high', 'medium', 'low', 'very-low']).toContain(
+        recommendation.confidenceLevel
+      );
     }
 
     if (recommendation.contextRelevance !== undefined) {
@@ -146,12 +153,21 @@ class TestAssertions {
       expect(errorResult.errorPattern).toBeInstanceOf(Object);
 
       if (errorResult.errorPattern.complexity) {
-        expect(['trivial', 'low', 'medium', 'high']).toContain(errorResult.errorPattern.complexity);
+        expect(['trivial', 'low', 'medium', 'high']).toContain(
+          errorResult.errorPattern.complexity
+        );
       }
 
       if (errorResult.errorPattern.category) {
-        expect(['syntax', 'type', 'reference', 'runtime', 'network', 'permission', 'unknown'])
-          .toContain(errorResult.errorPattern.category);
+        expect([
+          'syntax',
+          'type',
+          'reference',
+          'runtime',
+          'network',
+          'permission',
+          'unknown',
+        ]).toContain(errorResult.errorPattern.category);
       }
     }
   }
@@ -162,8 +178,12 @@ class TestAssertions {
    */
   assertValidEmbedding(embedding) {
     expect(embedding).toBeInstanceOf(Array);
-    expect(embedding.length).toBeGreaterThanOrEqual(this.thresholds.quality.minEmbeddingDimension);
-    expect(embedding.length).toBeLessThanOrEqual(this.thresholds.quality.maxEmbeddingDimension);
+    expect(embedding.length).toBeGreaterThanOrEqual(
+      this.thresholds.quality.minEmbeddingDimension
+    );
+    expect(embedding.length).toBeLessThanOrEqual(
+      this.thresholds.quality.maxEmbeddingDimension
+    );
 
     // All elements should be numbers
     embedding.forEach((value) => {
@@ -173,7 +193,9 @@ class TestAssertions {
     });
 
     // Vector should be normalized (for most embedding models)
-    const magnitude = Math.sqrt(embedding.reduce((sum, val) => sum + val * val, 0));
+    const magnitude = Math.sqrt(
+      embedding.reduce((sum, val) => sum + val * val, 0)
+    );
     expect(magnitude).toBeGreaterThan(0.5); // Should have reasonable magnitude
     expect(magnitude).toBeLessThan(2.0); // Should be reasonably normalized
   }
@@ -222,7 +244,9 @@ class TestAssertions {
     if (threshold) {
       expect(actualTime).toBeLessThan(threshold);
     } else {
-      console.warn(`No performance threshold defined for operation: ${operation}`);
+      console.warn(
+        `No performance threshold defined for operation: ${operation}`
+      );
     }
   }
 
@@ -234,7 +258,9 @@ class TestAssertions {
   assertProperRanking(results, scoreProperty = 'similarity') {
     expect(results).toBeInstanceOf(Array);
 
-    if (results.length <= 1) {return;} // Nothing to rank
+    if (results.length <= 1) {
+      return;
+    } // Nothing to rank
 
     for (let i = 1; i < results.length; i++) {
       const _prevScore = results[i - 1][scoreProperty];
@@ -335,7 +361,9 @@ class TestAssertions {
     expect(typeof summary.failedMigrations).toBe('number');
 
     expect(summary.totalFiles).toBeGreaterThanOrEqual(summary.processedFiles);
-    expect(summary.processedFiles).toBe(summary.successfulMigrations + summary.failedMigrations);
+    expect(summary.processedFiles).toBe(
+      summary.successfulMigrations + summary.failedMigrations
+    );
 
     // Performance validation
     const performance = migrationResult.performance;
@@ -359,14 +387,18 @@ class TestAssertions {
     expect(content).toHaveProperty('description');
 
     expect(typeof content.title).toBe('string');
-    expect(content.title.length).toBeGreaterThan(this.thresholds.quality.minContentLength);
+    expect(content.title.length).toBeGreaterThan(
+      this.thresholds.quality.minContentLength
+    );
 
     expect(typeof content.description).toBe('string');
-    expect(content.description.length).toBeGreaterThan(this.thresholds.quality.minContentLength);
+    expect(content.description.length).toBeGreaterThan(
+      this.thresholds.quality.minContentLength
+    );
 
     if (content.tags) {
       expect(content.tags).toBeInstanceOf(Array);
-      content.tags.forEach(tag => {
+      content.tags.forEach((tag) => {
         expect(typeof tag).toBe('string');
         expect(tag.length).toBeGreaterThan(0);
       });
@@ -374,7 +406,9 @@ class TestAssertions {
 
     if (content.content) {
       expect(typeof content.content).toBe('string');
-      expect(content.content.length).toBeGreaterThan(content.description.length);
+      expect(content.content.length).toBeGreaterThan(
+        content.description.length
+      );
     }
 
     // Type-specific validation
@@ -388,8 +422,14 @@ class TestAssertions {
     if (type === 'lesson') {
       expect(content).toHaveProperty('category');
       expect(typeof content.category).toBe('string');
-      expect(['features', 'errors', 'optimization', 'decisions', 'patterns', 'general'])
-        .toContain(content.category);
+      expect([
+        'features',
+        'errors',
+        'optimization',
+        'decisions',
+        'patterns',
+        'general',
+      ]).toContain(content.category);
     }
   }
 
@@ -408,7 +448,9 @@ class TestAssertions {
     const improvementRatio = cachedTime / firstTime;
     expect(improvementRatio).toBeLessThan(improvementThreshold);
 
-    console.log(`Cache improvement: ${((1 - improvementRatio) * 100).toFixed(1)}% faster`);
+    console.log(
+      `Cache improvement: ${((1 - improvementRatio) * 100).toFixed(1)}% faster`
+    );
   }
 
   /**
@@ -469,7 +511,9 @@ class TestAssertions {
    * @param {number} minDiversityThreshold - Minimum diversity threshold (default: 0.7)
    */
   assertSearchDiversity(results, minDiversityThreshold = 0.7) {
-    if (results.length <= 1) {return;} // Can't measure diversity with one result
+    if (results.length <= 1) {
+      return;
+    } // Can't measure diversity with one result
 
     const similarities = [];
 
@@ -478,13 +522,14 @@ class TestAssertions {
         // Simple diversity check using title similarity
         const _similarity = this.calculateStringSimilarity(
           results[i].title || '',
-          results[j].title || '',
+          results[j].title || ''
         );
         similarities.push(_similarity);
       }
     }
 
-    const avgSimilarity = similarities.reduce((sum, sim) => sum + sim, 0) / similarities.length;
+    const avgSimilarity =
+      similarities.reduce((sum, sim) => sum + sim, 0) / similarities.length;
     expect(avgSimilarity).toBeLessThan(minDiversityThreshold);
   }
 
@@ -495,12 +540,16 @@ class TestAssertions {
    * @returns {number} Similarity score (0-1)
    */
   calculateStringSimilarity(str1, str2) {
-    if (!str1 || !str2) {return 0;}
+    if (!str1 || !str2) {
+      return 0;
+    }
 
     const words1 = new Set(str1.toLowerCase().split(/\s+/));
     const words2 = new Set(str2.toLowerCase().split(/\s+/));
 
-    const intersection = new Set([...words1].filter(word => words2.has(word)));
+    const intersection = new Set(
+      [...words1].filter((word) => words2.has(word))
+    );
     const union = new Set([...words1, ...words2]);
 
     return intersection.size / union.size;
@@ -517,7 +566,9 @@ class TestAssertions {
       try {
         await asyncFunction(invalidInput);
         // If we reach here, the function should have thrown an error
-        throw new Error(`Function should have thrown an error for input: ${JSON.stringify(invalidInput)}`);
+        throw new Error(
+          `Function should have thrown an error for input: ${JSON.stringify(invalidInput)}`
+        );
       } catch (error) {
         // This is expected - function should handle invalid input gracefully
         expect(error).toBeInstanceOf(Error);

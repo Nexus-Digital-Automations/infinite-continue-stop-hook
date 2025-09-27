@@ -1,6 +1,13 @@
 {
   "snapshots": [
     {
+      "id": "snapshot_1759001387760_dxso1f9hl",
+      "timestamp": "2025-09-27T19:29:47.870Z",
+      "description": "Before stop authorization test",
+      "gitCommit": "03156bd4",
+      "validationAttempt": "stop_auth_integration"
+    },
+    {
       "id": "snapshot_1758969293541_b304sw23v",
       "timestamp": "2025-09-27T10:34:53.647Z",
       "description": "Validation state snapshot",

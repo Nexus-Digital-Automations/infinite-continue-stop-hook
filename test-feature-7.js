@@ -19,8 +19,8 @@ async function testAdaptiveLearningPaths() {
     const userProfile = {
       userId: 'test_user',
       skillLevels: {
-        'javascript': 'intermediate',
-        'nodejs': 'beginner',
+        javascript: 'intermediate',
+        nodejs: 'beginner',
       },
       strengthAreas: ['javascript', 'frontend'],
       weaknessAreas: ['backend', 'databases'],
@@ -40,12 +40,16 @@ async function testAdaptiveLearningPaths() {
 
     // Test 1: Generate adaptive learning path
     console.log('\n1. Testing generateAdaptiveLearningPath...');
-    const learningPath = await ragOps.generateAdaptiveLearningPath(userProfile, learningGoals, {
-      pathType: 'adaptive',
-      maxLength: 10,
-      includeBranching: true,
-      includeAssessments: true,
-    });
+    const learningPath = await ragOps.generateAdaptiveLearningPath(
+      userProfile,
+      learningGoals,
+      {
+        pathType: 'adaptive',
+        maxLength: 10,
+        includeBranching: true,
+        includeAssessments: true,
+      }
+    );
     console.log('Learning path result:', {
       success: learningPath.success,
       pathType: learningPath.pathType,
@@ -56,10 +60,14 @@ async function testAdaptiveLearningPaths() {
 
     // Test 2: Get learning path recommendations
     console.log('\n2. Testing getLearningPathRecommendations...');
-    const pathRecommendations = await ragOps.getLearningPathRecommendations(userProfile, ['nodejs', 'express'], {
-      includeAlternatives: true,
-      maxRecommendations: 3,
-    });
+    const pathRecommendations = await ragOps.getLearningPathRecommendations(
+      userProfile,
+      ['nodejs', 'express'],
+      {
+        includeAlternatives: true,
+        maxRecommendations: 3,
+      }
+    );
     console.log('Path recommendations result:', {
       success: pathRecommendations.success,
       count: pathRecommendations.count,
@@ -76,10 +84,14 @@ async function testAdaptiveLearningPaths() {
       strugglingAreas: ['databases'],
       strongAreas: ['javascript'],
     };
-    const progressTracking = await ragOps.trackLearningPathProgress('path_123', userProgress, {
-      includeDetailedAnalysis: true,
-      checkAdaptationTriggers: true,
-    });
+    const progressTracking = await ragOps.trackLearningPathProgress(
+      'path_123',
+      userProgress,
+      {
+        includeDetailedAnalysis: true,
+        checkAdaptationTriggers: true,
+      }
+    );
     console.log('Progress tracking result:', {
       success: progressTracking.success,
       completionPercentage: progressTracking.completionPercentage,
@@ -100,17 +112,22 @@ async function testAdaptiveLearningPaths() {
 
     // Test 5: Adapt learning path (simulate adaptation)
     console.log('\n5. Testing adaptLearningPath...');
-    const pathAdaptation = await ragOps.adaptLearningPath('path_123', userProgress, {
-      adaptationTrigger: 'performance_drop',
-      preserveProgress: true,
-    });
+    const pathAdaptation = await ragOps.adaptLearningPath(
+      'path_123',
+      userProgress,
+      {
+        adaptationTrigger: 'performance_drop',
+        preserveProgress: true,
+      }
+    );
     console.log('Path adaptation result:', {
       success: pathAdaptation.success,
       message: pathAdaptation.message,
     });
 
-    console.log('\n✅ Feature 7: Adaptive Learning Paths System integration test completed successfully!');
-
+    console.log(
+      '\n✅ Feature 7: Adaptive Learning Paths System integration test completed successfully!'
+    );
   } catch (error) {
     console.error('❌ Feature 7 test failed:', error.message);
     console.error('Stack:', error.stack);

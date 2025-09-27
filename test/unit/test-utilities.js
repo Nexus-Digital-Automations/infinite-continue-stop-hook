@@ -23,7 +23,7 @@ class MockFileSystem {
 
   // Mock fs.access
   async access(filePath) {
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
     if (this.accessErrors.has(filePath)) {
@@ -40,12 +40,13 @@ class MockFileSystem {
 
   // Mock fs.readFile
   async readFile(filePath, _encoding = 'utf8') {
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
     if (this.readErrors.has(filePath)) {
       const error = new Error(this.readErrors.get(filePath));
-      error.code = this.readErrors.get(filePath) === 'File not found' ? 'ENOENT' : 'EIO';
+      error.code =
+        this.readErrors.get(filePath) === 'File not found' ? 'ENOENT' : 'EIO';
       throw error;
     }
     if (!this.files.has(filePath)) {
@@ -58,7 +59,7 @@ class MockFileSystem {
 
   // Mock fs.writeFile
   async writeFile(filePath, data) {
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
     if (this.writeErrors.has(filePath)) {
@@ -115,8 +116,10 @@ const TEST_FIXTURES = {
   // Valid feature data
   validFeature: {
     title: 'Test Feature Implementation',
-    description: 'A comprehensive test feature for unit testing purposes with detailed implementation requirements',
-    business_value: 'Provides significant value to users by improving system functionality and user experience',
+    description:
+      'A comprehensive test feature for unit testing purposes with detailed implementation requirements',
+    business_value:
+      'Provides significant value to users by improving system functionality and user experience',
     category: 'enhancement',
     suggested_by: 'test-agent',
     metadata: {
@@ -169,29 +172,34 @@ const TEST_FIXTURES = {
     },
     missingBusinessValue: {
       title: 'Feature without business value',
-      description: 'A feature description that meets minimum length requirements for testing',
+      description:
+        'A feature description that meets minimum length requirements for testing',
       category: 'enhancement',
     },
     shortBusinessValue: {
       title: 'Valid Feature Title',
-      description: 'A feature description that meets minimum length requirements for testing',
+      description:
+        'A feature description that meets minimum length requirements for testing',
       business_value: 'Too short',
       category: 'enhancement',
     },
     longBusinessValue: {
       title: 'Valid Feature Title',
-      description: 'A feature description that meets minimum length requirements for testing',
+      description:
+        'A feature description that meets minimum length requirements for testing',
       business_value: 'A'.repeat(1001),
       category: 'enhancement',
     },
     missingCategory: {
       title: 'Feature without category',
-      description: 'A feature description that meets minimum length requirements for testing',
+      description:
+        'A feature description that meets minimum length requirements for testing',
       business_value: 'Some business value',
     },
     invalidCategory: {
       title: 'Feature with invalid category',
-      description: 'A feature description that meets minimum length requirements for testing',
+      description:
+        'A feature description that meets minimum length requirements for testing',
       business_value: 'Some business value',
       category: 'invalid-category',
     },
@@ -214,7 +222,13 @@ const TEST_FIXTURES = {
       auto_generation_enabled: true,
       mandatory_test_gate: true,
       security_validation_required: true,
-      required_fields: ['title', 'description', 'business_value', 'category', 'type'],
+      required_fields: [
+        'title',
+        'description',
+        'business_value',
+        'category',
+        'type',
+      ],
     },
     metadata: {
       version: '2.0.0',
@@ -245,8 +259,10 @@ const TEST_FIXTURES = {
         parent_id: null,
         linked_tasks: [],
         title: 'Existing Suggested Feature',
-        description: 'A feature that exists in suggested status for testing purposes',
-        business_value: 'Provides testing capabilities for the feature management system',
+        description:
+          'A feature that exists in suggested status for testing purposes',
+        business_value:
+          'Provides testing capabilities for the feature management system',
         category: 'enhancement',
         status: 'suggested',
         priority: 'normal',
@@ -280,8 +296,10 @@ const TEST_FIXTURES = {
         parent_id: null,
         linked_tasks: [],
         title: 'Existing Approved Feature',
-        description: 'A feature that exists in approved status for testing purposes',
-        business_value: 'Provides testing capabilities for the feature management system',
+        description:
+          'A feature that exists in approved status for testing purposes',
+        business_value:
+          'Provides testing capabilities for the feature management system',
         category: 'new-feature',
         status: 'approved',
         priority: 'normal',
@@ -319,8 +337,10 @@ const TEST_FIXTURES = {
         parent_id: null,
         linked_tasks: [],
         title: 'Existing Rejected Feature',
-        description: 'A feature that exists in rejected status for testing purposes',
-        business_value: 'Would have provided testing capabilities but was rejected',
+        description:
+          'A feature that exists in rejected status for testing purposes',
+        business_value:
+          'Would have provided testing capabilities but was rejected',
         category: 'documentation',
         status: 'rejected',
         priority: 'low',
@@ -363,7 +383,13 @@ const TEST_FIXTURES = {
       auto_generation_enabled: true,
       mandatory_test_gate: true,
       security_validation_required: true,
-      required_fields: ['title', 'description', 'business_value', 'category', 'type'],
+      required_fields: [
+        'title',
+        'description',
+        'business_value',
+        'category',
+        'type',
+      ],
     },
     metadata: {
       version: '2.0.0',
@@ -448,7 +474,8 @@ const TEST_FIXTURES = {
   // Valid rejection data
   validRejectionData: {
     rejected_by: 'test-rejector',
-    reason: 'Feature does not align with current project priorities and roadmap',
+    reason:
+      'Feature does not align with current project priorities and roadmap',
   },
 
   // Agent IDs for testing
@@ -559,7 +586,7 @@ const testHelpers = {
    * Wait for a specified time (for testing async operations)
    */
   wait(ms) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
   },
@@ -599,7 +626,9 @@ const testHelpers = {
     expect(new Date(feature.updated_at).toISOString()).toBe(feature.updated_at);
 
     // Validate status is one of allowed values
-    expect(['suggested', 'approved', 'rejected', 'implemented']).toContain(feature.status);
+    expect(['suggested', 'approved', 'rejected', 'implemented']).toContain(
+      feature.status
+    );
   },
 
   /**

@@ -31,11 +31,7 @@ function execAPI(command, args = [], options = {}) {
   const { timeout = DEFAULT_TIMEOUT, projectRoot } = options;
 
   return new Promise((resolve, reject) => {
-    const allArgs = [
-      API_PATH,
-      command,
-      ...args,
-    ];
+    const allArgs = [API_PATH, command, ...args];
 
     // Add project root if specified
     if (projectRoot) {
@@ -49,7 +45,7 @@ function execAPI(command, args = [], options = {}) {
         cwd: __dirname,
         stdio: ['pipe', 'pipe', 'pipe'],
         env: { ...process.env, NODE_ENV: 'test' },
-      },
+      }
     );
 
     let stdout = '';
@@ -86,8 +82,8 @@ function execAPI(command, args = [], options = {}) {
           // If both fail, include raw output for debugging
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
-            ),
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`
+            )
           );
         }
       }
@@ -200,7 +196,7 @@ async function corruptFeaturesFile(testDir) {
  * @returns {Promise<void>}
  */
 function delay(ms) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 }
@@ -212,7 +208,7 @@ function delay(ms) {
  */
 function execAPIConcurrently(commands) {
   const promises = commands.map(({ command, args, options }) =>
-    execAPI(command, args, options),
+    execAPI(command, args, options)
   );
   return Promise.all(promises);
 }
@@ -226,7 +222,8 @@ function generateTestFeature(overrides = {}) {
   return {
     title: 'Test Feature Integration',
     description: 'This is a test feature for integration testing purposes',
-    business_value: 'Validates that the feature management system works correctly',
+    business_value:
+      'Validates that the feature management system works correctly',
     category: 'enhancement',
     ...overrides,
   };
@@ -283,7 +280,7 @@ async function setupGlobalCleanup() {
   // Clean up any leftover test environments from previous runs
   try {
     const entries = await fs.readdir(BASE_TEST_DIR);
-    const cleanupPromises = entries.map(entry => {
+    const cleanupPromises = entries.map((entry) => {
       const fullPath = path.join(BASE_TEST_DIR, entry);
       return fs.rm(fullPath, { recursive: true, force: true });
     });

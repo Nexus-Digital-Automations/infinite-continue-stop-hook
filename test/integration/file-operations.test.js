@@ -72,12 +72,20 @@ describe('File Operations Integration Tests', () => {
         category: 'bug-fix',
       });
 
-      const suggest1Result = await execAPI('suggest-feature', [JSON.stringify(featureData1)], {
-        projectRoot: testDir,
-      });
-      const suggest2Result = await execAPI('suggest-feature', [JSON.stringify(featureData2)], {
-        projectRoot: testDir,
-      });
+      const suggest1Result = await execAPI(
+        'suggest-feature',
+        [JSON.stringify(featureData1)],
+        {
+          projectRoot: testDir,
+        }
+      );
+      const suggest2Result = await execAPI(
+        'suggest-feature',
+        [JSON.stringify(featureData2)],
+        {
+          projectRoot: testDir,
+        }
+      );
 
       expect(suggest1Result.success && suggest2Result.success).toBe(true);
 
@@ -88,20 +96,31 @@ describe('File Operations Integration Tests', () => {
       expect(featuresData.metadata.total_features).toBe(2);
 
       // 4. Approve one feature and verify structure
-      const approveResult = await execAPI('approve-feature', [
-        suggest1Result.feature.id,
-        JSON.stringify({ approved_by: 'persistence-test', notes: 'Testing persistence' }),
-      ], { projectRoot: testDir });
+      const approveResult = await execAPI(
+        'approve-feature',
+        [
+          suggest1Result.feature.id,
+          JSON.stringify({
+            approved_by: 'persistence-test',
+            notes: 'Testing persistence',
+          }),
+        ],
+        { projectRoot: testDir }
+      );
 
       expect(approveResult.success).toBe(true);
 
       featuresData = await readFeaturesFile(testDir);
       validateFeaturesStructure(featuresData);
       expect(featuresData.metadata.approval_history).toHaveLength(1);
-      expect(featuresData.metadata.approval_history[0].feature_id).toBe(suggest1Result.feature.id);
+      expect(featuresData.metadata.approval_history[0].feature_id).toBe(
+        suggest1Result.feature.id
+      );
 
       // 5. Initialize agent and verify structure
-      const initResult = await execAPI('initialize', ['persistence-agent'], { projectRoot: testDir });
+      const initResult = await execAPI('initialize', ['persistence-agent'], {
+        projectRoot: testDir,
+      });
       expect(initResult.success).toBe(true);
 
       featuresData = await readFeaturesFile(testDir);
@@ -127,10 +146,10 @@ describe('File Operations Integration Tests', () => {
         generateTestFeature({
           title: `Concurrent Feature ${i + 1}`,
           category: 'enhancement',
-        }),
+        })
       );
 
-      const concurrentCommands = features.map(featureData => ({
+      const concurrentCommands = features.map((featureData) => ({
         command: 'suggest-feature',
         args: [JSON.stringify(featureData)],
         options: { projectRoot: testDir },
@@ -139,7 +158,7 @@ describe('File Operations Integration Tests', () => {
       const results = await execAPIConcurrently(concurrentCommands);
 
       // 2. Verify all operations succeeded
-      expect(results.every(result => result.success)).toBe(true);
+      expect(results.every((result) => result.success)).toBe(true);
 
       // 3. Verify file integrity after concurrent operations
       const featuresData = await readFeaturesFile(testDir);
@@ -148,19 +167,22 @@ describe('File Operations Integration Tests', () => {
       expect(featuresData.metadata.total_features).toBe(5);
 
       // 4. Verify all features have unique IDs
-      const featureIds = featuresData.features.map(f => f.id);
+      const featureIds = featuresData.features.map((f) => f.id);
       const uniqueIds = new Set(featureIds);
       expect(uniqueIds.size).toBe(5);
 
       // 5. Perform concurrent approvals
-      const approvalCommands = results.slice(0, 3).map(result => ({
+      const approvalCommands = results.slice(0, 3).map((result) => ({
         command: 'approve-feature',
-        args: [result.feature.id, JSON.stringify({ approved_by: 'concurrent-test' })],
+        args: [
+          result.feature.id,
+          JSON.stringify({ approved_by: 'concurrent-test' }),
+        ],
         options: { projectRoot: testDir },
       }));
 
       const approvalResults = await execAPIConcurrently(approvalCommands);
-      expect(approvalResults.every(result => result.success)).toBe(true);
+      expect(approvalResults.every((result) => result.success)).toBe(true);
 
       // 6. Verify final file integrity
       const finalFeaturesData = await readFeaturesFile(testDir);
@@ -179,9 +201,13 @@ describe('File Operations Integration Tests', () => {
         category: 'enhancement',
       });
 
-      const suggestResult = await execAPI('suggest-feature', [JSON.stringify(featureData)], {
-        projectRoot: testDir,
-      });
+      const suggestResult = await execAPI(
+        'suggest-feature',
+        [JSON.stringify(featureData)],
+        {
+          projectRoot: testDir,
+        }
+      );
       expect(suggestResult.success).toBe(true);
 
       // 3. Check file stats after operations
@@ -213,9 +239,13 @@ describe('File Operations Integration Tests', () => {
         category: 'enhancement',
       });
 
-      const suggestResult = await execAPI('suggest-feature', [JSON.stringify(featureData)], {
-        projectRoot: testDir,
-      });
+      const suggestResult = await execAPI(
+        'suggest-feature',
+        [JSON.stringify(featureData)],
+        {
+          projectRoot: testDir,
+        }
+      );
 
       expect(suggestResult.success).toBe(true);
 
@@ -236,9 +266,13 @@ describe('File Operations Integration Tests', () => {
         category: 'enhancement',
       });
 
-      const suggestResult = await execAPI('suggest-feature', [JSON.stringify(featureData)], {
-        projectRoot: testDir,
-      });
+      const suggestResult = await execAPI(
+        'suggest-feature',
+        [JSON.stringify(featureData)],
+        {
+          projectRoot: testDir,
+        }
+      );
       expect(suggestResult.success).toBe(true);
 
       // 3. Create another backup after adding data
@@ -253,9 +287,13 @@ describe('File Operations Integration Tests', () => {
         category: 'bug-fix',
       });
 
-      const postCorruptionResult = await execAPI('suggest-feature', [JSON.stringify(newFeatureData)], {
-        projectRoot: testDir,
-      });
+      const postCorruptionResult = await execAPI(
+        'suggest-feature',
+        [JSON.stringify(newFeatureData)],
+        {
+          projectRoot: testDir,
+        }
+      );
 
       // The API should either:
       // a) Fail gracefully with proper error message, or
@@ -279,20 +317,20 @@ describe('File Operations Integration Tests', () => {
           description: 'A'.repeat(1000), // 1KB description
           business_value: 'B'.repeat(500), // 500B business value
           category: 'enhancement',
-        }),
+        })
       );
 
       // 2. Add features in batches to test large file handling
       for (let i = 0; i < largeFeatures.length; i += 10) {
         const batch = largeFeatures.slice(i, i + 10);
-        const batchCommands = batch.map(featureData => ({
+        const batchCommands = batch.map((featureData) => ({
           command: 'suggest-feature',
           args: [JSON.stringify(featureData)],
           options: { projectRoot: testDir },
         }));
 
         const batchResults = await execAPIConcurrently(batchCommands);
-        expect(batchResults.every(result => result.success)).toBe(true);
+        expect(batchResults.every((result) => result.success)).toBe(true);
       }
 
       // 3. Verify file integrity with large dataset
@@ -323,7 +361,9 @@ describe('File Operations Integration Tests', () => {
         });
 
         operations.push(
-          execAPI('suggest-feature', [JSON.stringify(featureData)], { projectRoot: testDir }),
+          execAPI('suggest-feature', [JSON.stringify(featureData)], {
+            projectRoot: testDir,
+          })
         );
       }
 
@@ -331,7 +371,7 @@ describe('File Operations Integration Tests', () => {
       const results = await Promise.all(operations);
 
       // 3. Verify all operations succeeded
-      expect(results.every(result => result.success)).toBe(true);
+      expect(results.every((result) => result.success)).toBe(true);
 
       // 4. Verify final file integrity
       const featuresData = await readFeaturesFile(testDir);
@@ -340,11 +380,11 @@ describe('File Operations Integration Tests', () => {
       expect(featuresData.metadata.total_features).toBe(20);
 
       // 5. Verify all features have unique IDs and timestamps
-      const featureIds = featuresData.features.map(f => f.id);
+      const featureIds = featuresData.features.map((f) => f.id);
       const uniqueIds = new Set(featureIds);
       expect(uniqueIds.size).toBe(20);
 
-      const timestamps = featuresData.features.map(f => f.created_at);
+      const timestamps = featuresData.features.map((f) => f.created_at);
       const uniqueTimestamps = new Set(timestamps);
       expect(uniqueTimestamps.size).toBeGreaterThan(1); // Should have different timestamps
     });
@@ -355,34 +395,44 @@ describe('File Operations Integration Tests', () => {
         generateTestFeature({
           title: `Initial Feature ${i + 1}`,
           category: 'enhancement',
-        }),
+        })
       );
 
-      const initialCommands = initialFeatures.map(featureData => ({
+      const initialCommands = initialFeatures.map((featureData) => ({
         command: 'suggest-feature',
         args: [JSON.stringify(featureData)],
         options: { projectRoot: testDir },
       }));
 
       const initialResults = await execAPIConcurrently(initialCommands);
-      expect(initialResults.every(result => result.success)).toBe(true);
+      expect(initialResults.every((result) => result.success)).toBe(true);
 
       // 2. Mix read and write operations
       const mixedOperations = [
         // Read operations
         execAPI('list-features', [], { projectRoot: testDir }),
         execAPI('feature-stats', [], { projectRoot: testDir }),
-        execAPI('list-features', [JSON.stringify({ status: 'suggested' })], { projectRoot: testDir }),
+        execAPI('list-features', [JSON.stringify({ status: 'suggested' })], {
+          projectRoot: testDir,
+        }),
 
         // Write operations (approvals)
-        execAPI('approve-feature', [
-          initialResults[0].feature.id,
-          JSON.stringify({ approved_by: 'mixed-ops-test' }),
-        ], { projectRoot: testDir }),
-        execAPI('approve-feature', [
-          initialResults[1].feature.id,
-          JSON.stringify({ approved_by: 'mixed-ops-test' }),
-        ], { projectRoot: testDir }),
+        execAPI(
+          'approve-feature',
+          [
+            initialResults[0].feature.id,
+            JSON.stringify({ approved_by: 'mixed-ops-test' }),
+          ],
+          { projectRoot: testDir }
+        ),
+        execAPI(
+          'approve-feature',
+          [
+            initialResults[1].feature.id,
+            JSON.stringify({ approved_by: 'mixed-ops-test' }),
+          ],
+          { projectRoot: testDir }
+        ),
 
         // More read operations
         execAPI('list-features', [], { projectRoot: testDir }),
@@ -397,7 +447,7 @@ describe('File Operations Integration Tests', () => {
       const mixedResults = await Promise.all(mixedOperations);
 
       // 4. Verify all operations succeeded
-      expect(mixedResults.every(result => result.success)).toBe(true);
+      expect(mixedResults.every((result) => result.success)).toBe(true);
 
       // 5. Verify final file integrity
       const featuresData = await readFeaturesFile(testDir);
@@ -428,9 +478,13 @@ describe('File Operations Integration Tests', () => {
         category: 'enhancement',
       });
 
-      const suggestResult = await execAPI('suggest-feature', [JSON.stringify(featureData)], {
-        projectRoot: testDir,
-      });
+      const suggestResult = await execAPI(
+        'suggest-feature',
+        [JSON.stringify(featureData)],
+        {
+          projectRoot: testDir,
+        }
+      );
 
       expect(suggestResult.success).toBe(true);
 
@@ -464,9 +518,13 @@ describe('File Operations Integration Tests', () => {
         category: 'enhancement',
       });
 
-      const suggestResult = await execAPI('suggest-feature', [JSON.stringify(featureData)], {
-        projectRoot: testDir,
-      });
+      const suggestResult = await execAPI(
+        'suggest-feature',
+        [JSON.stringify(featureData)],
+        {
+          projectRoot: testDir,
+        }
+      );
 
       expect(suggestResult.success).toBe(true);
 
@@ -512,9 +570,13 @@ describe('File Operations Integration Tests', () => {
         category: 'bug-fix',
       });
 
-      const suggestResult = await execAPI('suggest-feature', [JSON.stringify(newFeatureData)], {
-        projectRoot: testDir,
-      });
+      const suggestResult = await execAPI(
+        'suggest-feature',
+        [JSON.stringify(newFeatureData)],
+        {
+          projectRoot: testDir,
+        }
+      );
 
       expect(suggestResult.success).toBe(true);
 
@@ -522,13 +584,17 @@ describe('File Operations Integration Tests', () => {
       const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.features).toHaveLength(2);
 
-      const legacyFeature = featuresData.features.find(f => f.id === 'legacy_feature_001');
+      const legacyFeature = featuresData.features.find(
+        (f) => f.id === 'legacy_feature_001'
+      );
       expect(legacyFeature).toBeDefined();
       expect(legacyFeature.title).toBe('Legacy Feature');
       expect(legacyFeature.status).toBe('approved');
 
       // 4. Verify new feature was added correctly
-      const newFeature = featuresData.features.find(f => f.title === 'New Feature After Upgrade');
+      const newFeature = featuresData.features.find(
+        (f) => f.title === 'New Feature After Upgrade'
+      );
       expect(newFeature).toBeDefined();
       expect(newFeature.status).toBe('suggested');
     });
@@ -555,9 +621,13 @@ describe('File Operations Integration Tests', () => {
         category: 'enhancement',
       });
 
-      const suggestResult = await execAPI('suggest-feature', [JSON.stringify(featureData)], {
-        projectRoot: testDir,
-      });
+      const suggestResult = await execAPI(
+        'suggest-feature',
+        [JSON.stringify(featureData)],
+        {
+          projectRoot: testDir,
+        }
+      );
 
       // 3. Should either fail gracefully or fix the structure
       if (suggestResult.success) {
@@ -584,9 +654,13 @@ describe('File Operations Integration Tests', () => {
           category: 'enhancement',
         });
 
-        const initialResult = await execAPI('suggest-feature', [JSON.stringify(featureData)], {
-          projectRoot: testDir,
-        });
+        const initialResult = await execAPI(
+          'suggest-feature',
+          [JSON.stringify(featureData)],
+          {
+            projectRoot: testDir,
+          }
+        );
         expect(initialResult.success).toBe(true);
 
         // 2. Try to perform another operation
@@ -595,9 +669,13 @@ describe('File Operations Integration Tests', () => {
           category: 'bug-fix',
         });
 
-        const secondResult = await execAPI('suggest-feature', [JSON.stringify(secondFeatureData)], {
-          projectRoot: testDir,
-        });
+        const secondResult = await execAPI(
+          'suggest-feature',
+          [JSON.stringify(secondFeatureData)],
+          {
+            projectRoot: testDir,
+          }
+        );
 
         // Should either succeed or fail gracefully
         if (!secondResult.success) {
@@ -605,7 +683,10 @@ describe('File Operations Integration Tests', () => {
         }
       } catch (error) {
         // If permission operations fail, skip this test
-        console.warn('Permission test skipped due to system limitations:', error.message);
+        console.warn(
+          'Permission test skipped due to system limitations:',
+          error.message
+        );
       }
     });
   });

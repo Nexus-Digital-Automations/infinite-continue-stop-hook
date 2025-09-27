@@ -5,7 +5,10 @@
  * dependency graph creation, validation, parallel execution planning, and optimization.
  */
 
-const { ValidationDependencyManager, DEPENDENCY_TYPES } = require('../../lib/validation-dependency-manager');
+const {
+  ValidationDependencyManager,
+  DEPENDENCY_TYPES,
+} = require('../../lib/validation-dependency-manager');
 
 describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
   let dependencyManager;
@@ -90,7 +93,9 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       const dependencies = dependencyManager.getAllDependencies();
       expect(dependencies).toHaveProperty(newCriterion);
       expect(dependencies[newCriterion].dependencies).toHaveLength(1);
-      expect(dependencies[newCriterion].metadata.description).toBe('Custom validation check');
+      expect(dependencies[newCriterion].metadata.description).toBe(
+        'Custom validation check'
+      );
     });
 
     test('should remove dependency configuration correctly', () => {
@@ -108,7 +113,9 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(config).toBeTruthy();
       expect(config.criterion).toBe('build-validation');
       expect(config.dependencies).toHaveLength(2);
-      expect(config.metadata.description).toBe('Tests application build process');
+      expect(config.metadata.description).toBe(
+        'Tests application build process'
+      );
     });
 
     test('should handle invalid dependency types', () => {
@@ -139,13 +146,19 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
     test('should detect circular dependencies', () => {
       // Create circular dependency: A -> B -> C -> A
       dependencyManager.addDependency('criterion-a', {
-        dependencies: [{ criterion: 'criterion-b', type: DEPENDENCY_TYPES.STRICT }],
+        dependencies: [
+          { criterion: 'criterion-b', type: DEPENDENCY_TYPES.STRICT },
+        ],
       });
       dependencyManager.addDependency('criterion-b', {
-        dependencies: [{ criterion: 'criterion-c', type: DEPENDENCY_TYPES.STRICT }],
+        dependencies: [
+          { criterion: 'criterion-c', type: DEPENDENCY_TYPES.STRICT },
+        ],
       });
       dependencyManager.addDependency('criterion-c', {
-        dependencies: [{ criterion: 'criterion-a', type: DEPENDENCY_TYPES.STRICT }],
+        dependencies: [
+          { criterion: 'criterion-a', type: DEPENDENCY_TYPES.STRICT },
+        ],
       });
 
       const validation = dependencyManager.validateDependencyGraph();
@@ -158,7 +171,12 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
 
     test('should detect missing dependency references', () => {
       dependencyManager.addDependency('incomplete-criterion', {
-        dependencies: [{ criterion: 'non-existent-criterion', type: DEPENDENCY_TYPES.STRICT }],
+        dependencies: [
+          {
+            criterion: 'non-existent-criterion',
+            type: DEPENDENCY_TYPES.STRICT,
+          },
+        ],
       });
 
       const validation = dependencyManager.validateDependencyGraph();
@@ -167,7 +185,9 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(validation.issues).toHaveLength(1);
       expect(validation.issues[0].type).toBe('missing_dependency');
       expect(validation.issues[0].criterion).toBe('incomplete-criterion');
-      expect(validation.issues[0].missingDependency).toBe('non-existent-criterion');
+      expect(validation.issues[0].missingDependency).toBe(
+        'non-existent-criterion'
+      );
     });
   });
 
@@ -179,7 +199,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(executionOrder.length).toBe(7);
 
       // Extract criteria names for easier testing
-      const criteriaOrder = executionOrder.map(item => item.criterion);
+      const criteriaOrder = executionOrder.map((item) => item.criterion);
 
       // Verify dependency constraints
       const linterIndex = criteriaOrder.indexOf('linter-validation');
@@ -202,18 +222,25 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
     test('should handle forced execution when weak dependencies create deadlocks', () => {
       // Create a scenario where strict dependencies block execution
       dependencyManager.addDependency('blocked-test-1', {
-        dependencies: [{ criterion: 'missing-dependency', type: DEPENDENCY_TYPES.STRICT }],
+        dependencies: [
+          { criterion: 'missing-dependency', type: DEPENDENCY_TYPES.STRICT },
+        ],
         estimatedDuration: 10000,
         parallelizable: true,
       });
       dependencyManager.addDependency('blocked-test-2', {
-        dependencies: [{ criterion: 'another-missing', type: DEPENDENCY_TYPES.STRICT }],
+        dependencies: [
+          { criterion: 'another-missing', type: DEPENDENCY_TYPES.STRICT },
+        ],
         estimatedDuration: 15000,
         parallelizable: true,
       });
 
       // Get execution order for criteria with missing dependencies
-      const executionOrder = dependencyManager.getExecutionOrder(['blocked-test-1', 'blocked-test-2']);
+      const executionOrder = dependencyManager.getExecutionOrder([
+        'blocked-test-1',
+        'blocked-test-2',
+      ]);
 
       // Should complete without infinite loop
       expect(executionOrder.length).toBe(2);
@@ -221,7 +248,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       // Note: Current implementation only forces execution when no ready criteria exist
       // and there are still blocked criteria. Since weak dependencies don't block
       // execution, we test the completion instead
-      expect(executionOrder.every(item => item.criterion)).toBe(true);
+      expect(executionOrder.every((item) => item.criterion)).toBe(true);
     });
   });
 
@@ -251,10 +278,16 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       let typeWave = null;
 
       for (const wave of plan.plan) {
-        const criteriaNames = wave.criteria.map(c => c.criterion);
-        if (criteriaNames.includes('build-validation')) {buildWave = wave.wave;}
-        if (criteriaNames.includes('linter-validation')) {linterWave = wave.wave;}
-        if (criteriaNames.includes('type-validation')) {typeWave = wave.wave;}
+        const criteriaNames = wave.criteria.map((c) => c.criterion);
+        if (criteriaNames.includes('build-validation')) {
+          buildWave = wave.wave;
+        }
+        if (criteriaNames.includes('linter-validation')) {
+          linterWave = wave.wave;
+        }
+        if (criteriaNames.includes('type-validation')) {
+          typeWave = wave.wave;
+        }
       }
 
       // Build validation should come after linter and type validation
@@ -322,21 +355,25 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
     });
 
     test('should generate interactive visualization formats', () => {
-      const mermaidViz = dependencyManager.generateInteractiveVisualization('mermaid');
+      const mermaidViz =
+        dependencyManager.generateInteractiveVisualization('mermaid');
       expect(mermaidViz.format).toBe('mermaid');
       expect(mermaidViz.diagram).toContain('graph TD');
       expect(mermaidViz.instructions).toContain('mermaid.live');
 
-      const graphvizViz = dependencyManager.generateInteractiveVisualization('graphviz');
+      const graphvizViz =
+        dependencyManager.generateInteractiveVisualization('graphviz');
       expect(graphvizViz.format).toBe('graphviz');
       expect(graphvizViz.diagram).toContain('digraph ValidationDependencies');
 
-      const jsonViz = dependencyManager.generateInteractiveVisualization('json');
+      const jsonViz =
+        dependencyManager.generateInteractiveVisualization('json');
       expect(jsonViz.format).toBe('json');
       expect(jsonViz).toHaveProperty('visualization');
       expect(jsonViz).toHaveProperty('debugInfo');
 
-      const asciiViz = dependencyManager.generateInteractiveVisualization('ascii');
+      const asciiViz =
+        dependencyManager.generateInteractiveVisualization('ascii');
       expect(asciiViz.format).toBe('ascii');
       expect(asciiViz.diagram).toContain('Validation Dependency Diagram');
     });
@@ -349,10 +386,18 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
 
     test('should record and analyze execution history', () => {
       // Record some execution history
-      dependencyManager.recordExecution('linter-validation', 'success', 12000, { environment: 'test' });
-      dependencyManager.recordExecution('type-validation', 'success', 18000, { environment: 'test' });
-      dependencyManager.recordExecution('build-validation', 'failed', 35000, { error: 'compilation error' });
-      dependencyManager.recordExecution('linter-validation', 'success', 11500, { environment: 'test' });
+      dependencyManager.recordExecution('linter-validation', 'success', 12000, {
+        environment: 'test',
+      });
+      dependencyManager.recordExecution('type-validation', 'success', 18000, {
+        environment: 'test',
+      });
+      dependencyManager.recordExecution('build-validation', 'failed', 35000, {
+        error: 'compilation error',
+      });
+      dependencyManager.recordExecution('linter-validation', 'success', 11500, {
+        environment: 'test',
+      });
 
       const analytics = dependencyManager.getExecutionAnalytics();
 
@@ -365,7 +410,9 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(analytics.successRate).toBe(75); // 3 out of 4 successful
       expect(analytics.criteriaStats).toHaveProperty('linter-validation');
       expect(analytics.criteriaStats['linter-validation'].executions).toBe(2);
-      expect(analytics.criteriaStats['linter-validation'].successRate).toBe(100);
+      expect(analytics.criteriaStats['linter-validation'].successRate).toBe(
+        100
+      );
     });
 
     test('should handle empty execution history gracefully', () => {
@@ -410,7 +457,9 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       const originalDeps = dependencyManager.getAllDependencies();
       const loadedDeps = newManager.getAllDependencies();
 
-      expect(Object.keys(loadedDeps)).toHaveLength(Object.keys(originalDeps).length);
+      expect(Object.keys(loadedDeps)).toHaveLength(
+        Object.keys(originalDeps).length
+      );
       expect(loadedDeps).toHaveProperty('build-validation');
 
       // Cleanup
@@ -419,7 +468,9 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
     });
 
     test('should handle missing configuration file gracefully', async () => {
-      const result = await dependencyManager.loadDependencyConfig('/non/existent/path.json');
+      const result = await dependencyManager.loadDependencyConfig(
+        '/non/existent/path.json'
+      );
       expect(result).toBeNull();
     });
   });
@@ -433,13 +484,20 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
         diskIOLoad: 0.3,
       };
 
-      const adaptivePlan = dependencyManager.generateAdaptiveExecutionPlan(null, systemInfo);
+      const adaptivePlan = dependencyManager.generateAdaptiveExecutionPlan(
+        null,
+        systemInfo
+      );
 
       expect(adaptivePlan).toHaveProperty('plan');
       expect(adaptivePlan).toHaveProperty('adaptiveOptimizations');
       expect(adaptivePlan.adaptiveOptimizations).toHaveProperty('systemAware');
-      expect(adaptivePlan.adaptiveOptimizations).toHaveProperty('resourceScheduling');
-      expect(adaptivePlan.adaptiveOptimizations).toHaveProperty('executionTiming');
+      expect(adaptivePlan.adaptiveOptimizations).toHaveProperty(
+        'resourceScheduling'
+      );
+      expect(adaptivePlan.adaptiveOptimizations).toHaveProperty(
+        'executionTiming'
+      );
 
       const systemAware = adaptivePlan.adaptiveOptimizations.systemAware;
       expect(systemAware.recommendedConcurrency).toBeGreaterThan(0);
@@ -455,14 +513,20 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
         diskIOLoad: 0.8,
       };
 
-      const adaptivePlan = dependencyManager.generateAdaptiveExecutionPlan(null, constrainedSystem);
+      const adaptivePlan = dependencyManager.generateAdaptiveExecutionPlan(
+        null,
+        constrainedSystem
+      );
 
       // Should recommend lower concurrency for constrained system
-      const recommendedConcurrency = adaptivePlan.adaptiveOptimizations.systemAware.recommendedConcurrency;
+      const recommendedConcurrency =
+        adaptivePlan.adaptiveOptimizations.systemAware.recommendedConcurrency;
       expect(recommendedConcurrency).toBeLessThanOrEqual(4);
 
       // Should include optimization recommendations
-      expect(adaptivePlan.adaptiveOptimizations.resourceScheduling.length).toBeGreaterThan(0);
+      expect(
+        adaptivePlan.adaptiveOptimizations.resourceScheduling.length
+      ).toBeGreaterThan(0);
     });
   });
 
@@ -471,9 +535,17 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       // Add many custom criteria to test scalability
       for (let i = 0; i < 20; i++) {
         dependencyManager.addDependency(`custom-criterion-${i}`, {
-          dependencies: i > 0 ? [{ criterion: `custom-criterion-${i - 1}`, type: DEPENDENCY_TYPES.WEAK }] : [],
+          dependencies:
+            i > 0
+              ? [
+                  {
+                    criterion: `custom-criterion-${i - 1}`,
+                    type: DEPENDENCY_TYPES.WEAK,
+                  },
+                ]
+              : [],
           description: `Custom validation criterion ${i}`,
-          estimatedDuration: 5000 + (i * 1000),
+          estimatedDuration: 5000 + i * 1000,
           parallelizable: i % 2 === 0,
           resourceRequirements: ['filesystem'],
         });
@@ -488,7 +560,8 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
     });
 
     test('should provide comprehensive debugging information', () => {
-      const jsonViz = dependencyManager.generateInteractiveVisualization('json');
+      const jsonViz =
+        dependencyManager.generateInteractiveVisualization('json');
 
       expect(jsonViz.debugInfo).toHaveProperty('dependencyChains');
       expect(jsonViz.debugInfo).toHaveProperty('resourceConflicts');
@@ -518,7 +591,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(validation.valid).toBe(true);
 
       const executionOrder = dependencyManager.getExecutionOrder();
-      const criteriaOrder = executionOrder.map(item => item.criterion);
+      const criteriaOrder = executionOrder.map((item) => item.criterion);
 
       const linterIndex = criteriaOrder.indexOf('linter-validation');
       const mixedTestIndex = criteriaOrder.indexOf('mixed-test');
@@ -539,17 +612,23 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
     });
 
     test('should handle single criterion execution', () => {
-      const executionOrder = dependencyManager.getExecutionOrder(['focused-codebase']);
+      const executionOrder = dependencyManager.getExecutionOrder([
+        'focused-codebase',
+      ]);
       expect(executionOrder).toHaveLength(1);
       expect(executionOrder[0].criterion).toBe('focused-codebase');
 
-      const parallelPlan = dependencyManager.generateParallelExecutionPlan(['focused-codebase']);
+      const parallelPlan = dependencyManager.generateParallelExecutionPlan([
+        'focused-codebase',
+      ]);
       expect(parallelPlan.plan).toHaveLength(1);
       expect(parallelPlan.plan[0].criteria).toHaveLength(1);
     });
 
     test('should handle unknown criteria gracefully', () => {
-      const executionOrder = dependencyManager.getExecutionOrder(['unknown-criterion']);
+      const executionOrder = dependencyManager.getExecutionOrder([
+        'unknown-criterion',
+      ]);
       expect(executionOrder).toHaveLength(1);
       expect(executionOrder[0].criterion).toBe('unknown-criterion');
     });
@@ -557,7 +636,9 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
     test('should maintain execution history limits', () => {
       // Add more than 1000 execution records
       for (let i = 0; i < 1100; i++) {
-        dependencyManager.recordExecution('test-criterion', 'success', 1000, { iteration: i });
+        dependencyManager.recordExecution('test-criterion', 'success', 1000, {
+          iteration: i,
+        });
       }
 
       const analytics = dependencyManager.getExecutionAnalytics();

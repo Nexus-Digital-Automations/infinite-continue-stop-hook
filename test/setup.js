@@ -28,14 +28,20 @@ expect.extend(customMatchers);
 // Global test utilities
 global.testUtils = {
   // Test timing helpers
-  delay: (ms) => new Promise(resolve => {
-    setTimeout(resolve, ms);
-  }),
+  delay: (ms) =>
+    new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    }),
 
   // Test data generators
-  randomString: (length = 8) => Math.random().toString(36).substring(2, length + 2),
-  randomNumber: (min = 0, max = 1000) => Math.floor(Math.random() * (max - min + 1)) + min,
-  randomEmail: () => `test-${Math.random().toString(36).substring(7)}@example.com`,
+  randomString: (length = 8) =>
+    Math.random()
+      .toString(36)
+      .substring(2, length + 2),
+  randomNumber: (min = 0, max = 1000) =>
+    Math.floor(Math.random() * (max - min + 1)) + min,
+  randomEmail: () =>
+    `test-${Math.random().toString(36).substring(7)}@example.com`,
 
   // Test assertions
   expectEventually: async (fn, timeout = 5000, interval = 100) => {
@@ -45,7 +51,7 @@ global.testUtils = {
         await fn();
         return;
       } catch {
-        await new Promise(resolve => {
+        await new Promise((resolve) => {
           setTimeout(resolve, interval);
         });
       }
@@ -59,9 +65,15 @@ global.testUtils = {
   getTestType: () => {
     if (expect.getState().currentTestName) {
       const testPath = expect.getState().testPath;
-      if (testPath.includes('/unit/')) {return 'unit';}
-      if (testPath.includes('/integration/')) {return 'integration';}
-      if (testPath.includes('/e2e/')) {return 'e2e';}
+      if (testPath.includes('/unit/')) {
+        return 'unit';
+      }
+      if (testPath.includes('/integration/')) {
+        return 'integration';
+      }
+      if (testPath.includes('/e2e/')) {
+        return 'e2e';
+      }
     }
     return 'unknown';
   },
@@ -113,9 +125,13 @@ console.error = (...args) => {
   const message = args[0];
   if (typeof message === 'string') {
     // Suppress known test warnings
-    if (message.includes('Warning: ReactDOM.render is deprecated') ||
-        message.includes('Jest did not exit one second after the test run completed') ||
-        message.includes('A worker process has failed to exit gracefully')) {
+    if (
+      message.includes('Warning: ReactDOM.render is deprecated') ||
+      message.includes(
+        'Jest did not exit one second after the test run completed'
+      ) ||
+      message.includes('A worker process has failed to exit gracefully')
+    ) {
       return;
     }
   }
@@ -127,8 +143,10 @@ console.warn = (...args) => {
   const message = args[0];
   if (typeof message === 'string') {
     // Suppress known test warnings
-    if (message.includes('Deprecation warning') ||
-        message.includes('ExperimentalWarning')) {
+    if (
+      message.includes('Deprecation warning') ||
+      message.includes('ExperimentalWarning')
+    ) {
       return;
     }
   }
@@ -154,7 +172,8 @@ if (process.env.MONITOR_TEST_PERFORMANCE === 'true') {
     const memoryAfter = process.memoryUsage();
     const memoryDelta = memoryAfter.heapUsed - global.testStartMemory.heapUsed;
 
-    if (duration > 5000 || memoryDelta > 50 * 1024 * 1024) { // 5s or 50MB
+    if (duration > 5000 || memoryDelta > 50 * 1024 * 1024) {
+      // 5s or 50MB
       TestLogger.warn('Slow or memory-intensive test detected', {
         test: expect.getState().currentTestName,
         duration: `${duration}ms`,

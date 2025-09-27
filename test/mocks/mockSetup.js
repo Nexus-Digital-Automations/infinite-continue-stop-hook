@@ -9,8 +9,17 @@
  * @since 2025-09-23
  */
 
-const { TaskManagerAPIMock, FileSystemMock, HTTPClientMock, DatabaseMock } = require('./apiMocks');
-const { SAMPLE_FEATURES, SAMPLE_AGENTS, _SAMPLE_API_RESPONSES } = require('../fixtures/sampleData');
+const {
+  TaskManagerAPIMock,
+  FileSystemMock,
+  HTTPClientMock,
+  DatabaseMock,
+} = require('./apiMocks');
+const {
+  SAMPLE_FEATURES,
+  SAMPLE_AGENTS,
+  _SAMPLE_API_RESPONSES,
+} = require('../fixtures/sampleData');
 
 /**
  * Global mock manager
@@ -44,7 +53,7 @@ class MockManager {
     this.originalModules.set('child_process.spawn', originalSpawn);
 
     require('child_process').spawn = jest.fn((command, args, options) => {
-      if (args && args.some(arg => arg.includes('taskmanager-api.js'))) {
+      if (args && args.some((arg) => arg.includes('taskmanager-api.js'))) {
         return this.createMockProcess(args);
       }
       return originalSpawn(command, args, options);
@@ -55,7 +64,20 @@ class MockManager {
    * Create mock child process for API calls
    */
   createMockProcess(args) {
-    const apiCommand = args.find(arg => ['initialize', 'reinitialize', 'suggest-feature', 'list-features', 'approve-feature', 'reject-feature', 'feature-stats', 'get-initialization-stats', 'guide', 'methods'].includes(arg));
+    const apiCommand = args.find((arg) =>
+      [
+        'initialize',
+        'reinitialize',
+        'suggest-feature',
+        'list-features',
+        'approve-feature',
+        'reject-feature',
+        'feature-stats',
+        'get-initialization-stats',
+        'guide',
+        'methods',
+      ].includes(arg)
+    );
     const commandArgs = args.slice(args.indexOf(apiCommand) + 1);
 
     let result;
@@ -68,7 +90,9 @@ class MockManager {
           result = this.taskManagerAPI.reinitialize(commandArgs[0]);
           break;
         case 'suggest-feature':
-          result = this.taskManagerAPI.suggestFeature(JSON.parse(commandArgs[0]));
+          result = this.taskManagerAPI.suggestFeature(
+            JSON.parse(commandArgs[0])
+          );
           break;
         case 'list-features': {
           const filter = commandArgs[0] ? JSON.parse(commandArgs[0]) : {};
@@ -77,12 +101,20 @@ class MockManager {
         }
         case 'approve-feature': {
           const approvalData = commandArgs[1] ? JSON.parse(commandArgs[1]) : {};
-          result = this.taskManagerAPI.approveFeature(commandArgs[0], approvalData);
+          result = this.taskManagerAPI.approveFeature(
+            commandArgs[0],
+            approvalData
+          );
           break;
         }
         case 'reject-feature': {
-          const rejectionData = commandArgs[1] ? JSON.parse(commandArgs[1]) : {};
-          result = this.taskManagerAPI.rejectFeature(commandArgs[0], rejectionData);
+          const rejectionData = commandArgs[1]
+            ? JSON.parse(commandArgs[1])
+            : {};
+          result = this.taskManagerAPI.rejectFeature(
+            commandArgs[0],
+            rejectionData
+          );
           break;
         }
         case 'feature-stats':
@@ -147,11 +179,12 @@ class MockManager {
 
     // Only mock test-related paths
     const isTestPath = (path) => {
-      return path && (
-        path.includes('/test/') ||
-        path.includes('test-project') ||
-        path.includes('FEATURES.json') ||
-        path.includes('TODO.json')
+      return (
+        path &&
+        (path.includes('/test/') ||
+          path.includes('test-project') ||
+          path.includes('FEATURES.json') ||
+          path.includes('TODO.json'))
       );
     };
 
@@ -242,25 +275,31 @@ class MockManager {
    */
   seedTestData() {
     // Add sample features to the mock API
-    Object.values(SAMPLE_FEATURES).forEach(feature => {
+    Object.values(SAMPLE_FEATURES).forEach((feature) => {
       this.taskManagerAPI.suggestFeature(feature);
     });
 
     // Add sample agents
-    Object.values(SAMPLE_AGENTS).forEach(agent => {
+    Object.values(SAMPLE_AGENTS).forEach((agent) => {
       this.taskManagerAPI.initialize(agent.id);
     });
 
     // Setup file system with sample files
     this.fileSystem.mkdirSync('/test-project', { recursive: true });
-    this.fileSystem.writeFileSync('/test-project/package.json', JSON.stringify({
-      name: 'test-project',
-      version: '1.0.0',
-    }));
-    this.fileSystem.writeFileSync('/test-project/FEATURES.json', JSON.stringify({
-      features: [],
-      metadata: { version: '3.0.0' },
-    }));
+    this.fileSystem.writeFileSync(
+      '/test-project/package.json',
+      JSON.stringify({
+        name: 'test-project',
+        version: '1.0.0',
+      })
+    );
+    this.fileSystem.writeFileSync(
+      '/test-project/FEATURES.json',
+      JSON.stringify({
+        features: [],
+        metadata: { version: '3.0.0' },
+      })
+    );
   }
 
   /**
@@ -280,12 +319,20 @@ class MockManager {
   restoreAll() {
     // Restore child_process.spawn
     if (this.originalModules.has('child_process.spawn')) {
-      require('child_process').spawn = this.originalModules.get('child_process.spawn');
+      require('child_process').spawn = this.originalModules.get(
+        'child_process.spawn'
+      );
     }
 
     // Restore fs methods
     const fs = require('fs');
-    ['existsSync', 'readFileSync', 'writeFileSync', 'mkdirSync', 'rmSync'].forEach(method => {
+    [
+      'existsSync',
+      'readFileSync',
+      'writeFileSync',
+      'mkdirSync',
+      'rmSync',
+    ].forEach((method) => {
       if (this.originalModules.has(`fs.${method}`)) {
         fs[method] = this.originalModules.get(`fs.${method}`);
       }
@@ -395,7 +442,7 @@ function expectFeatureCreated(featureData) {
   const mockManager = getMockManager();
   if (mockManager) {
     const features = Array.from(mockManager.taskManagerAPI.features.values());
-    const feature = features.find(f => f.title === featureData.title);
+    const feature = features.find((f) => f.title === featureData.title);
     expect(feature).toBeDefined();
     expect(feature.title).toBe(featureData.title);
     return feature;

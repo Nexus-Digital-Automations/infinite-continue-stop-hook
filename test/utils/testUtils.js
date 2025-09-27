@@ -54,11 +54,7 @@ class APIExecutor {
     const silent = options.silent || false;
 
     return new Promise((resolve, reject) => {
-      const allArgs = [
-        TEST_CONFIG.API_PATH,
-        command,
-        ...args,
-      ];
+      const allArgs = [TEST_CONFIG.API_PATH, command, ...args];
 
       if (projectRoot) {
         allArgs.push('--project-root', projectRoot);
@@ -70,7 +66,7 @@ class APIExecutor {
         {
           cwd: options.cwd || __dirname,
           stdio: ['pipe', 'pipe', 'pipe'],
-        },
+        }
       );
 
       let stdout = '';
@@ -88,8 +84,12 @@ class APIExecutor {
         if (!silent) {
           console.log(`Command: ${command} ${args.join(' ')}`);
           console.log(`Exit code: ${code}`);
-          if (stdout) {console.log(`Stdout: ${stdout.substring(0, 500)}...`);}
-          if (stderr) {console.log(`Stderr: ${stderr.substring(0, 500)}...`);}
+          if (stdout) {
+            console.log(`Stdout: ${stdout.substring(0, 500)}...`);
+          }
+          if (stderr) {
+            console.log(`Stderr: ${stderr.substring(0, 500)}...`);
+          }
         }
 
         try {
@@ -107,8 +107,8 @@ class APIExecutor {
           } catch {
             reject(
               new Error(
-                `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
-              ),
+                `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`
+              )
             );
           }
         }
@@ -125,7 +125,9 @@ class APIExecutor {
    */
   static async initializeTestAgent(agentId = null) {
     const testAgentId = agentId || TestIdGenerator.generateAgentId();
-    const result = await this.execAPI('initialize', [testAgentId], { silent: true });
+    const result = await this.execAPI('initialize', [testAgentId], {
+      silent: true,
+    });
     return { agentId: testAgentId, result };
   }
 
@@ -149,7 +151,7 @@ class APIExecutor {
    */
   static async cleanup(testData) {
     // Future implementation for cleanup
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
     console.log(`Cleaning up test data: ${JSON.stringify(testData)}`);
@@ -271,9 +273,8 @@ const customMatchers = {
    * Check if API response has success structure
    */
   toBeSuccessfulAPIResponse(received) {
-    const pass = received &&
-                 typeof received === 'object' &&
-                 received.success === true;
+    const pass =
+      received && typeof received === 'object' && received.success === true;
 
     return {
       message: () =>
@@ -288,9 +289,10 @@ const customMatchers = {
    * Check if API response has error structure
    */
   toBeErrorAPIResponse(received) {
-    const pass = received &&
-                 typeof received === 'object' &&
-                 (received.success === false || received.error || received.message);
+    const pass =
+      received &&
+      typeof received === 'object' &&
+      (received.success === false || received.error || received.message);
 
     return {
       message: () =>
@@ -305,12 +307,13 @@ const customMatchers = {
    * Check if feature has required structure
    */
   toBeValidFeature(received) {
-    const pass = received &&
-                 typeof received === 'object' &&
-                 received.title &&
-                 received.description &&
-                 received.business_value &&
-                 received.category;
+    const pass =
+      received &&
+      typeof received === 'object' &&
+      received.title &&
+      received.description &&
+      received.business_value &&
+      received.category;
 
     return {
       message: () =>
@@ -330,7 +333,10 @@ class TestExecution {
     return Promise.race([
       promise,
       new Promise((_, reject) => {
-        setTimeout(() => reject(new Error(`Test timed out after ${timeout}ms`)), timeout);
+        setTimeout(
+          () => reject(new Error(`Test timed out after ${timeout}ms`)),
+          timeout
+        );
       }),
     ]);
   }
@@ -346,7 +352,7 @@ class TestExecution {
         lastError = error;
         if (i < maxRetries - 1) {
           // eslint-disable-next-line no-await-in-loop -- Sequential delay required between retry attempts
-          await new Promise(resolve => {
+          await new Promise((resolve) => {
             setTimeout(resolve, delay);
           });
         }
@@ -404,20 +410,32 @@ class PerformanceUtils {
  */
 class TestLogger {
   static info(message, data = null) {
-    console.log(`[TEST INFO] ${message}`, data ? JSON.stringify(data, null, 2) : '');
+    console.log(
+      `[TEST INFO] ${message}`,
+      data ? JSON.stringify(data, null, 2) : ''
+    );
   }
 
   static warn(message, data = null) {
-    console.warn(`[TEST WARN] ${message}`, data ? JSON.stringify(data, null, 2) : '');
+    console.warn(
+      `[TEST WARN] ${message}`,
+      data ? JSON.stringify(data, null, 2) : ''
+    );
   }
 
   static error(message, data = null) {
-    console.error(`[TEST ERROR] ${message}`, data ? JSON.stringify(data, null, 2) : '');
+    console.error(
+      `[TEST ERROR] ${message}`,
+      data ? JSON.stringify(data, null, 2) : ''
+    );
   }
 
   static debug(message, data = null) {
     if (process.env.TEST_DEBUG) {
-      console.log(`[TEST DEBUG] ${message}`, data ? JSON.stringify(data, null, 2) : '');
+      console.log(
+        `[TEST DEBUG] ${message}`,
+        data ? JSON.stringify(data, null, 2) : ''
+      );
     }
   }
 }

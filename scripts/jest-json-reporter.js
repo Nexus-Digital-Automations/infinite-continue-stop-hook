@@ -48,7 +48,9 @@ class JestJsonReporter {
         success: results.success,
       },
       testResults: this.processTestResults(results.testResults),
-      coverageMap: results.coverageMap ? this.processCoverageMap(results.coverageMap) : null,
+      coverageMap: results.coverageMap
+        ? this.processCoverageMap(results.coverageMap)
+        : null,
       environment: {
         node_version: process.version,
         platform: process.platform,
@@ -71,20 +73,27 @@ class JestJsonReporter {
 
     // Also write a summary file for quick access
     const summaryPath = path.join(outputDir, 'test-summary.json');
-    fs.writeFileSync(summaryPath, JSON.stringify({
-      timestamp: report.metadata.timestamp,
-      success: report.summary.success,
-      total_tests: report.summary.numTotalTests,
-      passed_tests: report.summary.numPassedTests,
-      failed_tests: report.summary.numFailedTests,
-      duration_ms: report.summary.duration,
-      test_suites: report.summary.numTotalTestSuites,
-      failed_suites: report.summary.numFailedTestSuites,
-    }, null, 2));
+    fs.writeFileSync(
+      summaryPath,
+      JSON.stringify(
+        {
+          timestamp: report.metadata.timestamp,
+          success: report.summary.success,
+          total_tests: report.summary.numTotalTests,
+          passed_tests: report.summary.numPassedTests,
+          failed_tests: report.summary.numFailedTests,
+          duration_ms: report.summary.duration,
+          test_suites: report.summary.numTotalTestSuites,
+          failed_suites: report.summary.numFailedTestSuites,
+        },
+        null,
+        2
+      )
+    );
   }
 
   processTestResults(testResults) {
-    return testResults.map(testResult => {
+    return testResults.map((testResult) => {
       const result = {
         testFilePath: testResult.testFilePath,
         displayName: testResult.displayName,
@@ -92,7 +101,10 @@ class JestJsonReporter {
         startTime: testResult.perfStats.start,
         endTime: testResult.perfStats.end,
         duration: testResult.perfStats.end - testResult.perfStats.start,
-        numTests: testResult.numPassingTests + testResult.numFailingTests + testResult.numPendingTests,
+        numTests:
+          testResult.numPassingTests +
+          testResult.numFailingTests +
+          testResult.numPendingTests,
         numPassingTests: testResult.numPassingTests,
         numFailingTests: testResult.numFailingTests,
         numPendingTests: testResult.numPendingTests,
@@ -106,7 +118,7 @@ class JestJsonReporter {
       };
 
       if (this.options.includeTestCases) {
-        result.testCases = testResult.testResults.map(testCase => ({
+        result.testCases = testResult.testResults.map((testCase) => ({
           ancestorTitles: testCase.ancestorTitles,
           title: testCase.title,
           fullName: testCase.fullName,
@@ -119,8 +131,8 @@ class JestJsonReporter {
 
       if (this.options.includeAssertionResults && testResult.testResults) {
         result.failureDetails = testResult.testResults
-          .filter(testCase => testCase.status === 'failed')
-          .map(testCase => ({
+          .filter((testCase) => testCase.status === 'failed')
+          .map((testCase) => ({
             title: testCase.title,
             fullName: testCase.fullName,
             failureMessages: testCase.failureMessages,
@@ -128,8 +140,12 @@ class JestJsonReporter {
           }));
       }
 
-      if (this.options.includeConsoleOutput && testResult.console && testResult.console.length > 0) {
-        result.consoleOutput = testResult.console.map(log => ({
+      if (
+        this.options.includeConsoleOutput &&
+        testResult.console &&
+        testResult.console.length > 0
+      ) {
+        result.consoleOutput = testResult.console.map((log) => ({
           type: log.type,
           message: log.message,
           origin: log.origin,
@@ -174,7 +190,10 @@ class JestJsonReporter {
         },
       };
     } catch (error) {
-      return { error: 'Failed to process coverage map', message: error.message };
+      return {
+        error: 'Failed to process coverage map',
+        message: error.message,
+      };
     }
   }
 }

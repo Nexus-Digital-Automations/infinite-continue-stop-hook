@@ -20,34 +20,58 @@
 
 class TestDataGenerator {
   constructor() {
-    this.categories = ['features', 'errors', 'optimization', 'decisions', 'patterns'];
-    this.technologies = ['javascript', 'react', 'node', 'python', 'api', 'database', 'security'];
-    this.errorTypes = ['TypeError', 'ReferenceError', 'SyntaxError', 'NetworkError', 'ValidationError'];
+    this.categories = [
+      'features',
+      'errors',
+      'optimization',
+      'decisions',
+      'patterns',
+    ];
+    this.technologies = [
+      'javascript',
+      'react',
+      'node',
+      'python',
+      'api',
+      'database',
+      'security',
+    ];
+    this.errorTypes = [
+      'TypeError',
+      'ReferenceError',
+      'SyntaxError',
+      'NetworkError',
+      'ValidationError',
+    ];
 
     this.lessonTemplates = {
       features: [
         {
           title: 'Implementing {tech} {feature} with Best Practices',
-          description: 'Comprehensive guide for implementing {feature} functionality using {tech} with industry best practices and error handling.',
+          description:
+            'Comprehensive guide for implementing {feature} functionality using {tech} with industry best practices and error handling.',
           tags: ['{tech}', '{feature}', 'best-practices', 'implementation'],
         },
         {
           title: '{tech} {feature} Performance Optimization',
-          description: 'Advanced techniques for optimizing {feature} performance in {tech} applications including caching and async patterns.',
+          description:
+            'Advanced techniques for optimizing {feature} performance in {tech} applications including caching and async patterns.',
           tags: ['{tech}', 'performance', 'optimization', '{feature}'],
         },
       ],
       errors: [
         {
           title: 'Resolving {errorType} in {tech} Applications',
-          description: 'Common causes and solutions for {errorType} when working with {tech} including prevention strategies.',
+          description:
+            'Common causes and solutions for {errorType} when working with {tech} including prevention strategies.',
           tags: ['{tech}', 'error-handling', '{errorType}', 'debugging'],
         },
       ],
       optimization: [
         {
           title: '{tech} Performance Optimization Strategies',
-          description: 'Comprehensive optimization techniques for {tech} applications including memory management and execution speed.',
+          description:
+            'Comprehensive optimization techniques for {tech} applications including memory management and execution speed.',
           tags: ['{tech}', 'performance', 'optimization', 'memory'],
         },
       ],
@@ -130,23 +154,35 @@ class TestDataGenerator {
    * @private
    */
   generateSingleLesson(category, tech, index) {
-    const templates = this.lessonTemplates[category] || this.lessonTemplates.features;
+    const templates =
+      this.lessonTemplates[category] || this.lessonTemplates.features;
     const template = templates[index % templates.length];
 
     const feature = this.getRandomFeature(tech);
     const title = this.interpolateTemplate(template.title, { tech, feature });
-    const description = this.interpolateTemplate(template.description, { tech, feature });
-    const tags = template.tags.map(tag => this.interpolateTemplate(tag, { tech, feature }));
+    const description = this.interpolateTemplate(template.description, {
+      tech,
+      feature,
+    });
+    const tags = template.tags.map((tag) =>
+      this.interpolateTemplate(tag, { tech, feature })
+    );
 
-    const codeExample = this.codeExamples[tech] ?
-      this.codeExamples[tech][index % this.codeExamples[tech].length] : '';
+    const codeExample = this.codeExamples[tech]
+      ? this.codeExamples[tech][index % this.codeExamples[tech].length]
+      : '';
 
     return {
       id: `lesson_${this.counter++}_${Date.now()}`,
       title,
       description,
       category,
-      content: this.generateLessonContent(title, description, codeExample, tech),
+      content: this.generateLessonContent(
+        title,
+        description,
+        codeExample,
+        tech
+      ),
       tags,
       timestamp: new Date().toISOString(),
       type: 'lesson',
@@ -234,7 +270,9 @@ ${codeExample ? `\`\`\`${tech}\n${codeExample}\n\`\`\`` : 'Implementation detail
    * @private
    */
   generateSingleError(errorType, tech, index) {
-    const messages = this.errorMessages[errorType] || ['Unknown error occurred'];
+    const messages = this.errorMessages[errorType] || [
+      'Unknown error occurred',
+    ];
     const message = messages[index % messages.length];
 
     return {
@@ -377,7 +415,11 @@ ${this.generatePrevention(errorType, tech)}
       const feature = this.getRandomFeature(tech);
       const errorType = this.getRandomErrorType();
 
-      const query = this.interpolateTemplate(template, { tech, feature, errorType });
+      const query = this.interpolateTemplate(template, {
+        tech,
+        feature,
+        errorType,
+      });
       queries.push(query);
     }
 
@@ -391,7 +433,9 @@ ${this.generatePrevention(errorType, tech)}
   }
 
   getRandomTechnology() {
-    return this.technologies[Math.floor(Math.random() * this.technologies.length)];
+    return this.technologies[
+      Math.floor(Math.random() * this.technologies.length)
+    ];
   }
 
   getRandomErrorType() {
@@ -400,16 +444,64 @@ ${this.generatePrevention(errorType, tech)}
 
   getRandomFeature(tech) {
     const features = {
-      javascript: ['async functions', 'promise handling', 'event listeners', 'data validation', 'error handling'],
-      react: ['component state', 'effect hooks', 'context API', 'performance optimization', 'error boundaries'],
-      node: ['HTTP servers', 'file operations', 'stream processing', 'middleware', 'error handling'],
-      python: ['data processing', 'async operations', 'decorators', 'context managers', 'exception handling'],
-      api: ['REST endpoints', 'authentication', 'rate limiting', 'data validation', 'error responses'],
-      database: ['query optimization', 'indexing', 'transactions', 'connection pooling', 'data validation'],
-      security: ['authentication', 'authorization', 'data encryption', 'input validation', 'session management'],
+      javascript: [
+        'async functions',
+        'promise handling',
+        'event listeners',
+        'data validation',
+        'error handling',
+      ],
+      react: [
+        'component state',
+        'effect hooks',
+        'context API',
+        'performance optimization',
+        'error boundaries',
+      ],
+      node: [
+        'HTTP servers',
+        'file operations',
+        'stream processing',
+        'middleware',
+        'error handling',
+      ],
+      python: [
+        'data processing',
+        'async operations',
+        'decorators',
+        'context managers',
+        'exception handling',
+      ],
+      api: [
+        'REST endpoints',
+        'authentication',
+        'rate limiting',
+        'data validation',
+        'error responses',
+      ],
+      database: [
+        'query optimization',
+        'indexing',
+        'transactions',
+        'connection pooling',
+        'data validation',
+      ],
+      security: [
+        'authentication',
+        'authorization',
+        'data encryption',
+        'input validation',
+        'session management',
+      ],
     };
 
-    const techFeatures = features[tech] || ['implementation', 'optimization', 'validation', 'testing', 'deployment'];
+    const techFeatures = features[tech] || [
+      'implementation',
+      'optimization',
+      'validation',
+      'testing',
+      'deployment',
+    ];
     return techFeatures[Math.floor(Math.random() * techFeatures.length)];
   }
 
@@ -425,13 +517,33 @@ ${this.generatePrevention(errorType, tech)}
 
   generateFilePath(tech) {
     const paths = {
-      javascript: ['src/utils/helpers.js', 'src/components/App.js', 'src/services/api.js'],
-      react: ['src/components/UserProfile.jsx', 'src/hooks/useData.js', 'src/pages/Dashboard.jsx'],
-      node: ['server/routes/api.js', 'lib/middleware.js', 'controllers/user.js'],
-      python: ['src/models/user.py', 'services/data_processor.py', 'utils/helpers.py'],
+      javascript: [
+        'src/utils/helpers.js',
+        'src/components/App.js',
+        'src/services/api.js',
+      ],
+      react: [
+        'src/components/UserProfile.jsx',
+        'src/hooks/useData.js',
+        'src/pages/Dashboard.jsx',
+      ],
+      node: [
+        'server/routes/api.js',
+        'lib/middleware.js',
+        'controllers/user.js',
+      ],
+      python: [
+        'src/models/user.py',
+        'services/data_processor.py',
+        'utils/helpers.py',
+      ],
     };
 
-    const techPaths = paths[tech] || ['src/main.js', 'lib/utils.js', 'config/app.js'];
+    const techPaths = paths[tech] || [
+      'src/main.js',
+      'lib/utils.js',
+      'config/app.js',
+    ];
     return techPaths[Math.floor(Math.random() * techPaths.length)];
   }
 
@@ -508,13 +620,20 @@ ${this.generatePrevention(errorType, tech)}
 
   generatePrevention(errorType, _tech) {
     const preventions = {
-      TypeError: 'Use TypeScript or PropTypes for type checking, implement runtime validation',
-      ReferenceError: 'Use ESLint to catch undefined variables, follow consistent naming conventions',
-      SyntaxError: 'Use code formatters and linters, implement pre-commit hooks',
-      NetworkError: 'Implement robust error handling, use monitoring and alerting',
+      TypeError:
+        'Use TypeScript or PropTypes for type checking, implement runtime validation',
+      ReferenceError:
+        'Use ESLint to catch undefined variables, follow consistent naming conventions',
+      SyntaxError:
+        'Use code formatters and linters, implement pre-commit hooks',
+      NetworkError:
+        'Implement robust error handling, use monitoring and alerting',
     };
 
-    return preventions[errorType] || 'Follow best practices and implement comprehensive testing';
+    return (
+      preventions[errorType] ||
+      'Follow best practices and implement comprehensive testing'
+    );
   }
 
   generateStackTrace(errorType, tech) {

@@ -45,7 +45,7 @@ class SuccessCriteriaValidator {
   constructor() {
     this.configPath = _path.join(
       __dirname,
-      'development/essentials/success-criteria-config.json',
+      'development/essentials/success-criteria-config.json'
     );
     this.config = null;
     this.validationResults = {};
@@ -72,7 +72,9 @@ class SuccessCriteriaValidator {
       ValidationLogger.log(`📁 Evidence storage: ${this.evidenceDir}`);
       ValidationLogger.log(`📊 Report storage: ${this.reportDir}`);
     } catch (error) {
-      ValidationLogger.error(`❌ Failed to initialize validator: ${error.message}`);
+      ValidationLogger.error(
+        `❌ Failed to initialize validator: ${error.message}`
+      );
       throw error;
     }
   }
@@ -87,7 +89,9 @@ class SuccessCriteriaValidator {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Validation path controlled by success criteria security protocols
       await _fs.mkdir(this.reportDir, { recursive: true });
     } catch (error) {
-      ValidationLogger.error(`❌ Failed to create directories: ${error.message}`);
+      ValidationLogger.error(
+        `❌ Failed to create directories: ${error.message}`
+      );
       throw error;
     }
   }
@@ -250,7 +254,9 @@ class SuccessCriteriaValidator {
         category: task.category || 'feature',
       };
     } catch (error) {
-      ValidationLogger.error(`❌ Failed to get task criteria: ${error.message}`);
+      ValidationLogger.error(
+        `❌ Failed to get task criteria: ${error.message}`
+      );
       throw error;
     }
   }
@@ -275,7 +281,7 @@ class SuccessCriteriaValidator {
             category: criteriaSet,
             mandatory: criteria.mandatory,
             validation_method: criteria.validation_method,
-          })),
+          }))
         );
       }
     }
@@ -738,7 +744,7 @@ class SuccessCriteriaValidator {
 
       // Process subdirectories in parallel for performance optimization
       if (directories.length > 0) {
-        await Promise.all(directories.map(dirPath => walkDir(dirPath)));
+        await Promise.all(directories.map((dirPath) => walkDir(dirPath)));
       }
     };
 
@@ -774,7 +780,7 @@ class SuccessCriteriaValidator {
     // Save report to file
     const reportPath = _path.join(
       this.reportDir,
-      `${taskId}_validation_report.json`,
+      `${taskId}_validation_report.json`
     );
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- Success criteria path validated through validator configuration
     await _fs.writeFile(reportPath, JSON.stringify(report, null, 2));
@@ -799,16 +805,16 @@ class SuccessCriteriaValidator {
   generateCriteriaSummary(results) {
     const total = Object.keys(results).length;
     const passed = Object.values(results).filter(
-      (r) => r.status === 'passed',
+      (r) => r.status === 'passed'
     ).length;
     const failed = Object.values(results).filter(
-      (r) => r.status === 'failed',
+      (r) => r.status === 'failed'
     ).length;
     const pending = Object.values(results).filter(
-      (r) => r.status === 'pending',
+      (r) => r.status === 'pending'
     ).length;
     const error = Object.values(results).filter(
-      (r) => r.status === 'error',
+      (r) => r.status === 'error'
     ).length;
 
     return {
@@ -850,12 +856,14 @@ class SuccessCriteriaValidator {
       // Filter by category if specified
       if (options.category) {
         allCriteria = allCriteria.filter(
-          (c) => c.category === options.category,
+          (c) => c.category === options.category
         );
         ValidationLogger.log(`🔍 Filtering by category: ${options.category}`);
       }
 
-      ValidationLogger.log(`📊 Total criteria to validate: ${allCriteria.length}`);
+      ValidationLogger.log(
+        `📊 Total criteria to validate: ${allCriteria.length}`
+      );
 
       // Run automated validation
       const results = await this.runAutomatedValidation(allCriteria);
@@ -865,7 +873,7 @@ class SuccessCriteriaValidator {
       if (options.report) {
         report = await this.generateReport(taskId, results);
         ValidationLogger.log(
-          `📋 Validation report generated: ${_path.join(this.reportDir, `${taskId}_validation_report.json`)}`,
+          `📋 Validation report generated: ${_path.join(this.reportDir, `${taskId}_validation_report.json`)}`
         );
       }
 
@@ -930,11 +938,11 @@ class SuccessCriteriaValidator {
 
     if (failedCount > 0 || errorCount > 0) {
       ValidationLogger.log(
-        '\n⚠️  VALIDATION INCOMPLETE - Address failed criteria before task completion',
+        '\n⚠️  VALIDATION INCOMPLETE - Address failed criteria before task completion'
       );
     } else if (pendingCount > 0) {
       ValidationLogger.log(
-        '\n⏳ VALIDATION PENDING - Manual validation required for some criteria',
+        '\n⏳ VALIDATION PENDING - Manual validation required for some criteria'
       );
     } else {
       ValidationLogger.log('\n🎉 VALIDATION COMPLETE - All criteria satisfied');

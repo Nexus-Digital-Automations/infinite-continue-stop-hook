@@ -1,0 +1,22 @@
+{
+  "events": [
+    {
+      "snapshotId": "snapshot_1759001282899_28740llhd",
+      "timestamp": "2025-09-27T19:28:30.183Z",
+      "reason": "E2E Test: Testing complete rollback workflow",
+      "success": true
+    },
+    {
+      "snapshotId": "snapshot_1759001005273_0omay9wk3",
+      "timestamp": "2025-09-27T19:23:51.818Z",
+      "reason": "Testing history tracking functionality",
+      "success": true
+    },
+    {
+      "snapshotId": "snapshot_1758999256361_lluqvvski",
+      "timestamp": "2025-09-27T19:20:06.822Z",
+      "reason": "Testing rollback functionality after bug fixes",
+      "success": true
+    }
+  ]
+}

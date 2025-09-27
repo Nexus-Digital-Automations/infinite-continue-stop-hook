@@ -6,8 +6,14 @@ const { execSync } = require('child_process');
 // Tests the new trend analysis endpoints added to Feature 8
 describe('Trend Analysis API Integration Tests', () => {
   const mockProjectRoot = '/tmp/test-trend-analysis-api';
-  const mockEnhancedMetricsFile = path.join(mockProjectRoot, '.validation-performance-enhanced.json');
-  const mockLegacyMetricsFile = path.join(mockProjectRoot, '.validation-performance.json');
+  const mockEnhancedMetricsFile = path.join(
+    mockProjectRoot,
+    '.validation-performance-enhanced.json'
+  );
+  const mockLegacyMetricsFile = path.join(
+    mockProjectRoot,
+    '.validation-performance.json'
+  );
   const taskManagerPath = path.resolve(__dirname, '../../taskmanager-api.js');
 
   beforeEach(() => {
@@ -17,7 +23,7 @@ describe('Trend Analysis API Integration Tests', () => {
     }
 
     // Clean up previous test data
-    [mockEnhancedMetricsFile, mockLegacyMetricsFile].forEach(file => {
+    [mockEnhancedMetricsFile, mockLegacyMetricsFile].forEach((file) => {
       if (fs.existsSync(file)) {
         fs.unlinkSync(file);
       }
@@ -36,8 +42,14 @@ describe('Trend Analysis API Integration Tests', () => {
     const metrics = [];
 
     for (let day = 0; day < daysBack; day++) {
-      const dayTimestamp = now - (day * 24 * 60 * 60 * 1000);
-      const criteria = ['linter-validation', 'type-validation', 'build-validation', 'test-validation', 'security-validation'];
+      const dayTimestamp = now - day * 24 * 60 * 60 * 1000;
+      const criteria = [
+        'linter-validation',
+        'type-validation',
+        'build-validation',
+        'test-validation',
+        'security-validation',
+      ];
 
       criteria.forEach((criterion, index) => {
         const baseDuration = {
@@ -49,18 +61,21 @@ describe('Trend Analysis API Integration Tests', () => {
         }[criterion];
 
         // Add trends: build validation degrades over time
-        const trendFactor = criterion === 'build-validation' ? (1 + (day * 0.03)) : (1 + (day * 0.01));
+        const trendFactor =
+          criterion === 'build-validation' ? 1 + day * 0.03 : 1 + day * 0.01;
 
         // Add hourly variation for seasonality detection
         const hourOfDay = (index * 2) % 24;
-        const seasonalFactor = 1 + (Math.sin(hourOfDay * Math.PI / 12) * 0.2);
+        const seasonalFactor = 1 + Math.sin((hourOfDay * Math.PI) / 12) * 0.2;
 
         // Add random variation
-        const randomVariation = 0.7 + (Math.random() * 0.6);
+        const randomVariation = 0.7 + Math.random() * 0.6;
 
-        const duration = Math.round(baseDuration * trendFactor * seasonalFactor * randomVariation);
+        const duration = Math.round(
+          baseDuration * trendFactor * seasonalFactor * randomVariation
+        );
 
-        const timestamp = new Date(dayTimestamp + (hourOfDay * 60 * 60 * 1000));
+        const timestamp = new Date(dayTimestamp + hourOfDay * 60 * 60 * 1000);
 
         metrics.push({
           criterion,
@@ -70,16 +85,17 @@ describe('Trend Analysis API Integration Tests', () => {
             durationMs: duration,
           },
           execution: {
-            success: Math.random() > (criterion === 'build-validation' ? 0.2 : 0.1), // Build validation more failure-prone
+            success:
+              Math.random() > (criterion === 'build-validation' ? 0.2 : 0.1), // Build validation more failure-prone
           },
           resources: {
             memoryUsageBefore: {
-              rss: 50000000 + (day * 100000),
-              heapUsed: 30000000 + (day * 50000),
+              rss: 50000000 + day * 100000,
+              heapUsed: 30000000 + day * 50000,
             },
             memoryUsageAfter: {
-              rss: 52000000 + (day * 100000) + (duration / 10),
-              heapUsed: 31000000 + (day * 50000) + (duration / 20),
+              rss: 52000000 + day * 100000 + duration / 10,
+              heapUsed: 31000000 + day * 50000 + duration / 20,
             },
           },
           // Add anomaly data points occasionally
@@ -94,9 +110,11 @@ describe('Trend Analysis API Integration Tests', () => {
     }
 
     // Apply anomalies
-    metrics.forEach(metric => {
+    metrics.forEach((metric) => {
       if (metric.anomaly) {
-        metric.timing.durationMs = Math.round(metric.timing.durationMs * metric.anomaly.factor);
+        metric.timing.durationMs = Math.round(
+          metric.timing.durationMs * metric.anomaly.factor
+        );
         delete metric.anomaly; // Remove from final data
       }
     });
@@ -107,7 +125,10 @@ describe('Trend Analysis API Integration Tests', () => {
       metrics: metrics.reverse(), // Most recent first
     };
 
-    fs.writeFileSync(mockEnhancedMetricsFile, JSON.stringify(metricsData, null, 2));
+    fs.writeFileSync(
+      mockEnhancedMetricsFile,
+      JSON.stringify(metricsData, null, 2)
+    );
     return metricsData;
   }
 
@@ -145,7 +166,10 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should analyze comprehensive performance trends', () => {
       createComprehensiveMockData(30);
 
-      const result = executeTaskManagerCommand('analyze-performance-trends', '\'{"timeRange":30,"granularity":"daily"}\'');
+      const result = executeTaskManagerCommand(
+        'analyze-performance-trends',
+        '\'{"timeRange":30,"granularity":"daily"}\''
+      );
 
       expect(result.success).toBe(true);
       expect(result.analysis).toBeDefined();
@@ -165,11 +189,11 @@ describe('Trend Analysis API Integration Tests', () => {
 
       const hourlyResult = executeTaskManagerCommand(
         'analyze-performance-trends',
-        '\'{"timeRange":7,"granularity":"hourly"}\'',
+        '\'{"timeRange":7,"granularity":"hourly"}\''
       );
       const dailyResult = executeTaskManagerCommand(
         'analyze-performance-trends',
-        '\'{"timeRange":7,"granularity":"daily"}\'',
+        '\'{"timeRange":7,"granularity":"daily"}\''
       );
 
       expect(hourlyResult.success).toBe(true);
@@ -183,7 +207,7 @@ describe('Trend Analysis API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'analyze-performance-trends',
-        '\'{"timeRange":20,"includeForecast":true}\'',
+        '\'{"timeRange":20,"includeForecast":true}\''
       );
 
       expect(result.success).toBe(true);
@@ -195,7 +219,7 @@ describe('Trend Analysis API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'analyze-performance-trends',
-        '\'{"timeRange":20,"includeBaselines":true}\'',
+        '\'{"timeRange":20,"includeBaselines":true}\''
       );
 
       expect(result.success).toBe(true);
@@ -214,7 +238,10 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should return insufficient data for non-existent criterion', () => {
       createComprehensiveMockData(10);
 
-      const result = executeTaskManagerCommand('analyze-criterion-trend', 'non-existent-criterion');
+      const result = executeTaskManagerCommand(
+        'analyze-criterion-trend',
+        'non-existent-criterion'
+      );
 
       expect(result.success).toBe(true);
       expect(result.analysis.summary).toContain('Insufficient data');
@@ -225,7 +252,7 @@ describe('Trend Analysis API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'analyze-criterion-trend',
-        'build-validation \'{"timeRange":15,"granularity":"daily"}\'',
+        'build-validation \'{"timeRange":15,"granularity":"daily"}\''
       );
 
       expect(result.success).toBe(true);
@@ -243,7 +270,10 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should detect performance regressions', () => {
       createComprehensiveMockData(20); // Creates degrading build performance
 
-      const result = executeTaskManagerCommand('analyze-criterion-trend', 'build-validation');
+      const result = executeTaskManagerCommand(
+        'analyze-criterion-trend',
+        'build-validation'
+      );
 
       expect(result.success).toBe(true);
       expect(result.analysis.regressions).toBeDefined();
@@ -257,7 +287,7 @@ describe('Trend Analysis API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'generate-health-score-trends',
-        '\'{"timeRange":20,"granularity":"daily"}\'',
+        '\'{"timeRange":20,"granularity":"daily"}\''
       );
 
       expect(result.success).toBe(true);
@@ -266,9 +296,15 @@ describe('Trend Analysis API Integration Tests', () => {
       expect(Array.isArray(result.healthTrends.data)).toBe(true);
       expect(result.healthTrends.analysis).toBeDefined();
       expect(result.healthTrends.summary).toBeDefined();
-      expect(result.healthTrends.summary.currentHealth).toBeGreaterThanOrEqual(0);
-      expect(result.healthTrends.summary.currentHealth).toBeLessThanOrEqual(100);
-      expect(result.healthTrends.summary.healthTrend).toMatch(/increasing|decreasing|stable/);
+      expect(result.healthTrends.summary.currentHealth).toBeGreaterThanOrEqual(
+        0
+      );
+      expect(result.healthTrends.summary.currentHealth).toBeLessThanOrEqual(
+        100
+      );
+      expect(result.healthTrends.summary.healthTrend).toMatch(
+        /increasing|decreasing|stable/
+      );
     });
 
     test('should provide health trend recommendations', () => {
@@ -307,7 +343,7 @@ describe('Trend Analysis API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'compare-performance-periods',
-        `'${periodA}' '${periodB}'`,
+        `'${periodA}' '${periodB}'`
       );
 
       expect(result.success).toBe(true);
@@ -331,7 +367,7 @@ describe('Trend Analysis API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'compare-performance-periods',
-        `'${periodA}' '${periodB}'`,
+        `'${periodA}' '${periodB}'`
       );
 
       expect(result.success).toBe(true);
@@ -353,7 +389,7 @@ describe('Trend Analysis API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'get-performance-forecasts',
-        '\'{"timeRange":30,"granularity":"daily"}\'',
+        '\'{"timeRange":30,"granularity":"daily"}\''
       );
 
       expect(result.success).toBe(true);
@@ -381,7 +417,7 @@ describe('Trend Analysis API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'analyze-performance-volatility',
-        '\'{"timeRange":25,"granularity":"daily"}\'',
+        '\'{"timeRange":25,"granularity":"daily"}\''
       );
 
       expect(result.success).toBe(true);
@@ -396,7 +432,7 @@ describe('Trend Analysis API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'analyze-performance-volatility',
-        '\'{"granularity":"hourly"}\'',
+        '\'{"granularity":"hourly"}\''
       );
 
       expect(result.success).toBe(true);
@@ -414,7 +450,9 @@ describe('Trend Analysis API Integration Tests', () => {
       expect(result.anomalies).toBeDefined();
       expect(Array.isArray(result.anomalies)).toBe(true);
       expect(result.metadata).toBeDefined();
-      expect(result.metadata.analysisScope).toBe('comprehensive_anomaly_detection');
+      expect(result.metadata.analysisScope).toBe(
+        'comprehensive_anomaly_detection'
+      );
     });
 
     test('should detect anomalies for specific criterion', () => {
@@ -422,7 +460,7 @@ describe('Trend Analysis API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'detect-performance-anomalies',
-        '\'{"criteria":"build-validation","timeRange":15}\'',
+        '\'{"criteria":"build-validation","timeRange":15}\''
       );
 
       expect(result.success).toBe(true);
@@ -436,7 +474,7 @@ describe('Trend Analysis API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'detect-performance-anomalies',
-        '\'{"granularity":"hourly"}\'',
+        '\'{"granularity":"hourly"}\''
       );
 
       expect(result.success).toBe(true);
@@ -450,7 +488,7 @@ describe('Trend Analysis API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'analyze-seasonality-patterns',
-        '\'{"timeRange":30,"granularity":"daily"}\'',
+        '\'{"timeRange":30,"granularity":"daily"}\''
       );
 
       expect(result.success).toBe(true);
@@ -477,7 +515,7 @@ describe('Trend Analysis API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'compare-with-baselines',
-        '\'{"timeRange":20,"granularity":"daily"}\'',
+        '\'{"timeRange":20,"granularity":"daily"}\''
       );
 
       expect(result.success).toBe(true);
@@ -504,7 +542,7 @@ describe('Trend Analysis API Integration Tests', () => {
       const result = executeTaskManagerCommand(
         'analyze-performance-trends',
         'invalid-json',
-        { stdio: 'pipe' },
+        { stdio: 'pipe' }
       );
 
       expect(result.success).toBe(false);
@@ -573,8 +611,14 @@ describe('Trend Analysis API Integration Tests', () => {
         ],
       };
 
-      fs.writeFileSync(mockEnhancedMetricsFile, JSON.stringify(enhancedData, null, 2));
-      fs.writeFileSync(mockLegacyMetricsFile, JSON.stringify(legacyData, null, 2));
+      fs.writeFileSync(
+        mockEnhancedMetricsFile,
+        JSON.stringify(enhancedData, null, 2)
+      );
+      fs.writeFileSync(
+        mockLegacyMetricsFile,
+        JSON.stringify(legacyData, null, 2)
+      );
 
       const result = executeTaskManagerCommand('analyze-performance-trends');
 
@@ -607,7 +651,10 @@ describe('Trend Analysis API Integration Tests', () => {
         ],
       };
 
-      fs.writeFileSync(mockEnhancedMetricsFile, JSON.stringify(mixedQualityData, null, 2));
+      fs.writeFileSync(
+        mockEnhancedMetricsFile,
+        JSON.stringify(mixedQualityData, null, 2)
+      );
 
       const result = executeTaskManagerCommand('analyze-performance-trends');
 
@@ -623,7 +670,7 @@ describe('Trend Analysis API Integration Tests', () => {
       const startTime = Date.now();
       const result = executeTaskManagerCommand(
         'analyze-performance-trends',
-        '\'{"timeRange":90}\'',
+        '\'{"timeRange":90}\''
       );
       const endTime = Date.now();
 
@@ -637,7 +684,7 @@ describe('Trend Analysis API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'analyze-performance-trends',
-        '\'{"timeRange":30}\'', // Limit to 30 days
+        '\'{"timeRange":30}\'' // Limit to 30 days
       );
 
       expect(result.success).toBe(true);

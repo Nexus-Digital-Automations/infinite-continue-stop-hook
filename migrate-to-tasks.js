@@ -1,4 +1,3 @@
-
 /**
  * FEATURES.json to TASKS.json Migration Script
  *
@@ -14,7 +13,10 @@ class TaskMigrator {
     this.projectRoot = projectRoot;
     this.featuresPath = path.join(projectRoot, 'FEATURES.json');
     this.tasksPath = path.join(projectRoot, 'TASKS.json');
-    this.backupPath = path.join(projectRoot, `FEATURES.json.backup.${Date.now()}`);
+    this.backupPath = path.join(
+      projectRoot,
+      `FEATURES.json.backup.${Date.now()}`
+    );
   }
 
   /**
@@ -55,7 +57,6 @@ class TaskMigrator {
         newFile: this.tasksPath,
         stats: await this.getMigrationStats(tasksData),
       };
-
     } catch (error) {
       console.error('❌ Migration failed:', error.message);
       throw error;
@@ -122,11 +123,26 @@ class TaskMigrator {
       task_relationships: {},
 
       workflow_config: {
-        require_approval: featuresData.workflow_config?.require_approval ?? true,
-        auto_reject_timeout_hours: featuresData.workflow_config?.auto_reject_timeout_hours ?? 168,
-        allowed_statuses: ['suggested', 'approved', 'in-progress', 'completed', 'blocked', 'rejected'],
+        require_approval:
+          featuresData.workflow_config?.require_approval ?? true,
+        auto_reject_timeout_hours:
+          featuresData.workflow_config?.auto_reject_timeout_hours ?? 168,
+        allowed_statuses: [
+          'suggested',
+          'approved',
+          'in-progress',
+          'completed',
+          'blocked',
+          'rejected',
+        ],
         allowed_task_types: ['error', 'feature', 'test', 'audit'],
-        required_fields: ['title', 'description', 'business_value', 'category', 'type'],
+        required_fields: [
+          'title',
+          'description',
+          'business_value',
+          'category',
+          'type',
+        ],
         auto_generation_enabled: true,
         mandatory_test_gate: true,
         security_validation_required: true,
@@ -135,7 +151,8 @@ class TaskMigrator {
       auto_generation_config: {
         test_task_template: {
           title_pattern: 'Implement comprehensive tests for {feature_title}',
-          description_pattern: 'Create unit tests, integration tests, and E2E tests to achieve >{coverage}% coverage for {feature_title}. Must validate all functionality, edge cases, and error conditions.',
+          description_pattern:
+            'Create unit tests, integration tests, and E2E tests to achieve >{coverage}% coverage for {feature_title}. Must validate all functionality, edge cases, and error conditions.',
           priority: 'high',
           required_capabilities: ['testing'],
           validation_requirements: {
@@ -145,7 +162,8 @@ class TaskMigrator {
         },
         audit_task_template: {
           title_pattern: 'Security and quality audit for {feature_title}',
-          description_pattern: 'Run semgrep security scan, dependency vulnerability check, code quality analysis, and compliance validation for {feature_title}. Zero tolerance for security vulnerabilities.',
+          description_pattern:
+            'Run semgrep security scan, dependency vulnerability check, code quality analysis, and compliance validation for {feature_title}. Zero tolerance for security vulnerabilities.',
           priority: 'high',
           required_capabilities: ['security', 'analysis'],
           validation_requirements: {
@@ -159,7 +177,11 @@ class TaskMigrator {
       priority_system: {
         order: ['USER_REQUESTS', 'ERROR', 'AUDIT', 'FEATURE', 'TEST'],
         error_priorities: {
-          critical: ['build-breaking', 'security-vulnerability', 'production-down'],
+          critical: [
+            'build-breaking',
+            'security-vulnerability',
+            'production-down',
+          ],
           high: ['linter-errors', 'type-errors', 'test-failures'],
           normal: ['warnings', 'optimization-opportunities'],
           low: ['documentation-improvements', 'code-style'],
@@ -213,13 +235,16 @@ class TaskMigrator {
           },
           dependencies: [],
           estimated_effort: 5, // Default value
-          required_capabilities: this.inferCapabilitiesFromCategory(feature.category),
+          required_capabilities: this.inferCapabilitiesFromCategory(
+            feature.category
+          ),
           created_at: feature.created_at,
           updated_at: feature.updated_at,
           created_by: feature.suggested_by || 'system',
           assigned_to: null,
           assigned_at: null,
-          completed_at: feature.status === 'implemented' ? feature.updated_at : null,
+          completed_at:
+            feature.status === 'implemented' ? feature.updated_at : null,
           validation_requirements: {
             security_scan: true,
             test_coverage: true,
@@ -244,13 +269,16 @@ class TaskMigrator {
         }
       }
 
-      tasksData.metadata.migration_stats.features_migrated = featuresData.features.length;
+      tasksData.metadata.migration_stats.features_migrated =
+        featuresData.features.length;
     }
 
     // Transform existing tasks to implementation tasks or appropriate types
     if (featuresData.tasks && Array.isArray(featuresData.tasks)) {
       for (const [_index, task] of featuresData.tasks.entries()) {
-        const taskId = task.id || `task_${taskIdCounter + 1000 + _index}_${this.generateHash()}`;
+        const taskId =
+          task.id ||
+          `task_${taskIdCounter + 1000 + _index}_${this.generateHash()}`;
 
         const migratedTask = {
           id: taskId,
@@ -259,7 +287,9 @@ class TaskMigrator {
           linked_tasks: [],
           title: task.title,
           description: task.description,
-          business_value: task.metadata?.business_value || 'Implementation of approved feature',
+          business_value:
+            task.metadata?.business_value ||
+            'Implementation of approved feature',
           category: task.metadata?.feature_category || 'enhancement',
           status: this.mapTaskStatus(task.status),
           priority: task.priority || 'normal',
@@ -293,7 +323,8 @@ class TaskMigrator {
         tasksData.metadata.tasks_by_type[taskType]++;
       }
 
-      tasksData.metadata.migration_stats.tasks_created = featuresData.tasks.length;
+      tasksData.metadata.migration_stats.tasks_created =
+        featuresData.tasks.length;
     }
 
     tasksData.metadata.total_tasks = tasksData.tasks.length;
@@ -410,8 +441,12 @@ class TaskMigrator {
         }
 
         tasksData.task_relationships[task.id].auto_generated_test = testTaskId;
-        tasksData.task_relationships[task.id].auto_generated_audit = auditTaskId;
-        tasksData.task_relationships[task.id].dependents = [testTaskId, auditTaskId];
+        tasksData.task_relationships[task.id].auto_generated_audit =
+          auditTaskId;
+        tasksData.task_relationships[task.id].dependents = [
+          testTaskId,
+          auditTaskId,
+        ];
 
         // Update linked tasks for feature
         task.linked_tasks = [testTaskId, auditTaskId];
@@ -424,9 +459,12 @@ class TaskMigrator {
     }
 
     tasksData.metadata.total_tasks = tasksData.tasks.length;
-    tasksData.metadata.migration_stats.auto_generated_tasks = autoTasksGenerated * 2;
+    tasksData.metadata.migration_stats.auto_generated_tasks =
+      autoTasksGenerated * 2;
 
-    console.log(`✓ Generated ${autoTasksGenerated * 2} auto-tasks (${autoTasksGenerated} test + ${autoTasksGenerated} audit)`);
+    console.log(
+      `✓ Generated ${autoTasksGenerated * 2} auto-tasks (${autoTasksGenerated} test + ${autoTasksGenerated} audit)`
+    );
   }
 
   /**
@@ -436,16 +474,30 @@ class TaskMigrator {
     console.log('🔍 Validating transformed data...');
 
     // Check required fields
-    if (!tasksData.project) {throw new Error('Missing project name');}
-    if (!tasksData.schema_version) {throw new Error('Missing schema version');}
-    if (!Array.isArray(tasksData.tasks)) {throw new Error('Tasks must be an array');}
+    if (!tasksData.project) {
+      throw new Error('Missing project name');
+    }
+    if (!tasksData.schema_version) {
+      throw new Error('Missing schema version');
+    }
+    if (!Array.isArray(tasksData.tasks)) {
+      throw new Error('Tasks must be an array');
+    }
 
     // Validate each task
     for (const [index, task] of tasksData.tasks.entries()) {
-      if (!task.id) {throw new Error(`Task ${index} missing ID`);}
-      if (!task.type) {throw new Error(`Task ${task.id} missing type`);}
-      if (!task.title) {throw new Error(`Task ${task.id} missing title`);}
-      if (!task.description) {throw new Error(`Task ${task.id} missing description`);}
+      if (!task.id) {
+        throw new Error(`Task ${index} missing ID`);
+      }
+      if (!task.type) {
+        throw new Error(`Task ${task.id} missing type`);
+      }
+      if (!task.title) {
+        throw new Error(`Task ${task.id} missing title`);
+      }
+      if (!task.description) {
+        throw new Error(`Task ${task.id} missing description`);
+      }
       if (!['error', 'feature', 'test', 'audit'].includes(task.type)) {
         throw new Error(`Task ${task.id} has invalid type: ${task.type}`);
       }
@@ -486,44 +538,50 @@ class TaskMigrator {
 
   mapPriorityFromCategory(category) {
     const priorityMap = {
-      'security': 'high',
+      security: 'high',
       'bug-fix': 'high',
-      'performance': 'normal',
-      'enhancement': 'normal',
+      performance: 'normal',
+      enhancement: 'normal',
       'new-feature': 'normal',
-      'documentation': 'low',
+      documentation: 'low',
     };
     return priorityMap[category] || 'normal';
   }
 
   inferCapabilitiesFromCategory(category) {
     const capabilityMap = {
-      'security': ['security', 'backend'],
+      security: ['security', 'backend'],
       'bug-fix': ['general'],
-      'performance': ['performance', 'analysis'],
-      'enhancement': ['general'],
+      performance: ['performance', 'analysis'],
+      enhancement: ['general'],
       'new-feature': ['frontend', 'backend'],
-      'documentation': ['documentation'],
+      documentation: ['documentation'],
     };
     return capabilityMap[category] || ['general'];
   }
 
   inferTaskTypeFromExisting(task) {
-    if (task.type === 'testing') {return 'test';}
-    if (task.type === 'validation') {return 'audit';}
-    if (task.type === 'analysis') {return 'audit';}
+    if (task.type === 'testing') {
+      return 'test';
+    }
+    if (task.type === 'validation') {
+      return 'audit';
+    }
+    if (task.type === 'analysis') {
+      return 'audit';
+    }
     return 'feature'; // Default for implementation tasks
   }
 
   mapTaskStatus(status) {
     const statusMap = {
-      'queued': 'suggested',
-      'assigned': 'approved',
-      'in_progress': 'in-progress',
-      'blocked': 'blocked',
-      'completed': 'completed',
-      'failed': 'blocked',
-      'cancelled': 'rejected',
+      queued: 'suggested',
+      assigned: 'approved',
+      in_progress: 'in-progress',
+      blocked: 'blocked',
+      completed: 'completed',
+      failed: 'blocked',
+      cancelled: 'rejected',
     };
     return statusMap[status] || status;
   }
@@ -534,13 +592,14 @@ if (require.main === module) {
   const projectRoot = process.argv[2] || process.cwd();
   const migrator = new TaskMigrator(projectRoot);
 
-  migrator.migrate()
-    .then(result => {
+  migrator
+    .migrate()
+    .then((result) => {
       console.log('\n📊 Migration Summary:');
       console.log(JSON.stringify(result.stats, null, 2));
       throw new Error('Migration completed successfully');
     })
-    .catch(error => {
+    .catch((error) => {
       console.error('\n❌ Migration failed:', error.message);
       throw error;
     });

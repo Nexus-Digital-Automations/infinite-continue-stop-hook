@@ -161,12 +161,14 @@ describe('Basic Testing Infrastructure', () => {
     test('should measure execution time accurately', async () => {
       const delay = 50; // 50ms delay
 
-      const { result, duration } = await PerformanceUtils.measureTime(async () => {
-        await new Promise(resolve => {
-          setTimeout(resolve, delay);
-        });
-        return 'test-complete';
-      });
+      const { result, duration } = await PerformanceUtils.measureTime(
+        async () => {
+          await new Promise((resolve) => {
+            setTimeout(resolve, delay);
+          });
+          return 'test-complete';
+        }
+      );
 
       expect(result).toBe('test-complete');
       expect(duration).toBeGreaterThan(delay - 10); // Allow some variance
@@ -174,15 +176,17 @@ describe('Basic Testing Infrastructure', () => {
     });
 
     test('should measure memory usage', async () => {
-      const { result, memoryDelta } = await PerformanceUtils.measureMemory(() => {
-        // Create some data to use memory
-        const largeArray = new Array(1000).fill(0).map((_, i) => ({
-          id: i,
-          data: `test-data-${i}`,
-          nested: { value: i * 2 },
-        }));
-        return largeArray.length;
-      });
+      const { result, memoryDelta } = await PerformanceUtils.measureMemory(
+        () => {
+          // Create some data to use memory
+          const largeArray = new Array(1000).fill(0).map((_, i) => ({
+            id: i,
+            data: `test-data-${i}`,
+            nested: { value: i * 2 },
+          }));
+          return largeArray.length;
+        }
+      );
 
       expect(result).toBe(1000);
       expect(memoryDelta).toBeDefined();
@@ -193,18 +197,18 @@ describe('Basic Testing Infrastructure', () => {
 
   describe('Test Execution Utilities', () => {
     test('should enforce timeouts', async () => {
-      const promise = new Promise(resolve => {
+      const promise = new Promise((resolve) => {
         setTimeout(resolve, 200);
       }); // 200ms
       const timeout = 100; // 100ms timeout
 
-      await expect(
-        TestExecution.withTimeout(promise, timeout),
-      ).rejects.toThrow('Test timed out after 100ms');
+      await expect(TestExecution.withTimeout(promise, timeout)).rejects.toThrow(
+        'Test timed out after 100ms'
+      );
     });
 
     test('should allow operations within timeout', async () => {
-      const promise = new Promise(resolve => {
+      const promise = new Promise((resolve) => {
         setTimeout(() => resolve('success'), 50);
       }); // 50ms
       const timeout = 100; // 100ms timeout
@@ -216,13 +220,17 @@ describe('Basic Testing Infrastructure', () => {
     test('should retry failed operations', async () => {
       let attempts = 0;
 
-      const result = await TestExecution.retry(() => {
-        attempts++;
-        if (attempts < 3) {
-          throw new Error('Temporary failure');
-        }
-        return 'success-after-retries';
-      }, 5, 10); // 5 max retries, 10ms delay
+      const result = await TestExecution.retry(
+        () => {
+          attempts++;
+          if (attempts < 3) {
+            throw new Error('Temporary failure');
+          }
+          return 'success-after-retries';
+        },
+        5,
+        10
+      ); // 5 max retries, 10ms delay
 
       expect(result).toBe('success-after-retries');
       expect(attempts).toBe(3);
@@ -232,26 +240,34 @@ describe('Basic Testing Infrastructure', () => {
       let attempts = 0;
 
       await expect(
-        TestExecution.retry(() => {
-          attempts++;
-          throw new Error('Persistent failure');
-        }, 3, 10), // 3 max retries, 10ms delay
+        TestExecution.retry(
+          () => {
+            attempts++;
+            throw new Error('Persistent failure');
+          },
+          3,
+          10
+        ) // 3 max retries, 10ms delay
       ).rejects.toThrow('Persistent failure');
 
       expect(attempts).toBe(3);
     });
 
     test('should execute promises in parallel with concurrency control', async () => {
-      const promises = Array.from({ length: 8 }, (_, i) =>
-        new Promise(resolve => {
-          setTimeout(() => resolve(i * 2), 10);
-        }),
+      const promises = Array.from(
+        { length: 8 },
+        (_, i) =>
+          new Promise((resolve) => {
+            setTimeout(() => resolve(i * 2), 10);
+          })
       );
 
       const results = await TestExecution.parallel(promises, 3); // Max 3 concurrent
 
       expect(results).toHaveLength(8);
-      expect(results.sort((a, b) => a - b)).toEqual([0, 2, 4, 6, 8, 10, 12, 14]);
+      expect(results.sort((a, b) => a - b)).toEqual([
+        0, 2, 4, 6, 8, 10, 12, 14,
+      ]);
     });
   });
 
@@ -285,7 +301,14 @@ describe('Basic Testing Infrastructure', () => {
       expect(validFeature.category).toBeDefined();
 
       // Valid category
-      const validCategories = ['enhancement', 'bug-fix', 'new-feature', 'performance', 'security', 'documentation'];
+      const validCategories = [
+        'enhancement',
+        'bug-fix',
+        'new-feature',
+        'performance',
+        'security',
+        'documentation',
+      ];
       expect(validCategories).toContain(validFeature.category);
     });
 

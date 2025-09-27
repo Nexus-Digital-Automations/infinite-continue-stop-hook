@@ -49,8 +49,9 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         if (fs.existsSync(configPath)) {
           const configData = fs.readFileSync(configPath, 'utf8');
           const config = JSON.parse(configData);
-          return config.customValidationRules.filter(rule =>
-            rule.id && rule.name && rule.command && rule.enabled !== false,
+          return config.customValidationRules.filter(
+            (rule) =>
+              rule.id && rule.name && rule.command && rule.enabled !== false
           );
         }
         return [];
@@ -99,8 +100,9 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         if (fs.existsSync(configPath)) {
           const configData = fs.readFileSync(configPath, 'utf8');
           const config = JSON.parse(configData);
-          return config.customValidationRules.filter(rule =>
-            rule.id && rule.name && rule.command && rule.enabled !== false,
+          return config.customValidationRules.filter(
+            (rule) =>
+              rule.id && rule.name && rule.command && rule.enabled !== false
           );
         }
         return [];
@@ -137,8 +139,9 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         if (fs.existsSync(configPath)) {
           const configData = fs.readFileSync(configPath, 'utf8');
           const config = JSON.parse(configData);
-          return config.customValidationRules.filter(rule =>
-            rule.id && rule.name && rule.command && rule.enabled !== false,
+          return config.customValidationRules.filter(
+            (rule) =>
+              rule.id && rule.name && rule.command && rule.enabled !== false
           );
         }
         return [];
@@ -156,8 +159,9 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         if (fs.existsSync(configPath)) {
           const configData = fs.readFileSync(configPath, 'utf8');
           const config = JSON.parse(configData);
-          return config.customValidationRules.filter(rule =>
-            rule.id && rule.name && rule.command && rule.enabled !== false,
+          return config.customValidationRules.filter(
+            (rule) =>
+              rule.id && rule.name && rule.command && rule.enabled !== false
           );
         }
         return [];
@@ -176,8 +180,9 @@ describe('Feature 7: Custom Project Validation Rules', () => {
           if (fs.existsSync(configPath)) {
             const configData = fs.readFileSync(configPath, 'utf8');
             const config = JSON.parse(configData);
-            return config.customValidationRules.filter(rule =>
-              rule.id && rule.name && rule.command && rule.enabled !== false,
+            return config.customValidationRules.filter(
+              (rule) =>
+                rule.id && rule.name && rule.command && rule.enabled !== false
             );
           }
           return [];
@@ -213,7 +218,8 @@ describe('Feature 7: Custom Project Validation Rules', () => {
           });
 
           if (rule.successCriteria) {
-            const { _exitCode, outputContains, outputNotContains } = rule.successCriteria;
+            const { _exitCode, outputContains, outputNotContains } =
+              rule.successCriteria;
 
             if (outputContains && !result.includes(outputContains)) {
               return { success: false, error: 'Expected output not found' };
@@ -262,7 +268,8 @@ describe('Feature 7: Custom Project Validation Rules', () => {
           });
 
           if (rule.successCriteria) {
-            const { _exitCode, outputContains, outputNotContains } = rule.successCriteria;
+            const { _exitCode, outputContains, outputNotContains } =
+              rule.successCriteria;
 
             if (outputContains && !result.includes(outputContains)) {
               return { success: false, error: 'Expected output not found' };
@@ -311,7 +318,8 @@ describe('Feature 7: Custom Project Validation Rules', () => {
           });
 
           if (rule.successCriteria) {
-            const { _exitCode, outputContains, outputNotContains } = rule.successCriteria;
+            const { _exitCode, outputContains, outputNotContains } =
+              rule.successCriteria;
 
             if (outputContains && !result.includes(outputContains)) {
               return { success: false, error: 'Expected output not found' };
@@ -392,7 +400,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         try {
           // Set environment variables
           if (rule.environment) {
-            Object.keys(rule.environment).forEach(key => {
+            Object.keys(rule.environment).forEach((key) => {
               process.env[key] = rule.environment[key];
             });
           }
@@ -444,7 +452,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         { id: 'custom-rule-2', name: 'Custom Rule 2', command: 'echo test' },
       ];
 
-      const customCriteriaIds = customRules.map(rule => rule.id);
+      const customCriteriaIds = customRules.map((rule) => rule.id);
       const allCriteria = [...standardCriteria, ...customCriteriaIds];
 
       expect(allCriteria).toHaveLength(9);
@@ -468,7 +476,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
       };
 
       // Simulate processing validation results
-      mockValidationCriteria.forEach(criteria => {
+      mockValidationCriteria.forEach((criteria) => {
         progressReport.validationDetails.push({
           criterion: criteria,
           status: 'pending',
@@ -477,8 +485,16 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       expect(progressReport.totalValidations).toBe(4);
       expect(progressReport.validationDetails).toHaveLength(4);
-      expect(progressReport.validationDetails.some(v => v.criterion === 'custom-api-test')).toBe(true);
-      expect(progressReport.validationDetails.some(v => v.criterion === 'custom-performance-check')).toBe(true);
+      expect(
+        progressReport.validationDetails.some(
+          (v) => v.criterion === 'custom-api-test'
+        )
+      ).toBe(true);
+      expect(
+        progressReport.validationDetails.some(
+          (v) => v.criterion === 'custom-performance-check'
+        )
+      ).toBe(true);
     });
   });
 
@@ -509,14 +525,20 @@ describe('Feature 7: Custom Project Validation Rules', () => {
       // Validate schema
       const isValidRule = (rule) => {
         return (
-          typeof rule.id === 'string' && rule.id.length > 0 &&
-          typeof rule.name === 'string' && rule.name.length > 0 &&
-          typeof rule.command === 'string' && rule.command.length > 0 &&
+          typeof rule.id === 'string' &&
+          rule.id.length > 0 &&
+          typeof rule.name === 'string' &&
+          rule.name.length > 0 &&
+          typeof rule.command === 'string' &&
+          rule.command.length > 0 &&
           (rule.timeout === undefined || typeof rule.timeout === 'number') &&
           (rule.enabled === undefined || typeof rule.enabled === 'boolean') &&
-          (rule.description === undefined || typeof rule.description === 'string') &&
-          (rule.environment === undefined || typeof rule.environment === 'object') &&
-          (rule.successCriteria === undefined || typeof rule.successCriteria === 'object')
+          (rule.description === undefined ||
+            typeof rule.description === 'string') &&
+          (rule.environment === undefined ||
+            typeof rule.environment === 'object') &&
+          (rule.successCriteria === undefined ||
+            typeof rule.successCriteria === 'object')
         );
       };
 
@@ -566,9 +588,13 @@ describe('Feature 7: Custom Project Validation Rules', () => {
           if (fs.existsSync(configPath)) {
             const configData = fs.readFileSync(configPath, 'utf8');
             const config = JSON.parse(configData);
-            if (config.customValidationRules && Array.isArray(config.customValidationRules)) {
-              return config.customValidationRules.filter(rule =>
-                rule.id && rule.name && rule.command && rule.enabled !== false,
+            if (
+              config.customValidationRules &&
+              Array.isArray(config.customValidationRules)
+            ) {
+              return config.customValidationRules.filter(
+                (rule) =>
+                  rule.id && rule.name && rule.command && rule.enabled !== false
               );
             }
           }

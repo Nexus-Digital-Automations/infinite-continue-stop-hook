@@ -1,5 +1,3 @@
-
-
 /**
  * RAG System End-to-End Integration Tests
  *
@@ -70,7 +68,13 @@ describe('RAG System End-to-End Integration Tests', () => {
       metadataPath: _path.join(ragTestPath, 'rag', 'test-metadata.db'),
       embeddingDimension: 384, // MiniLM dimension
       enableMultiIndex: true,
-      contentTypes: ['errors', 'features', 'optimization', 'decisions', 'patterns'],
+      contentTypes: [
+        'errors',
+        'features',
+        'optimization',
+        'decisions',
+        'patterns',
+      ],
     });
 
     semanticSearchEngine = new _SemanticSearchEngine({
@@ -110,10 +114,18 @@ describe('RAG System End-to-End Integration Tests', () => {
 
   afterAll(async () => {
     // Cleanup test resources
-    if (embeddingGenerator) {await embeddingGenerator.cleanup();}
-    if (vectorDatabase) {await vectorDatabase.cleanup();}
-    if (semanticSearchEngine) {await semanticSearchEngine.cleanup();}
-    if (ragOperations) {await ragOperations.cleanup();}
+    if (embeddingGenerator) {
+      await embeddingGenerator.cleanup();
+    }
+    if (vectorDatabase) {
+      await vectorDatabase.cleanup();
+    }
+    if (semanticSearchEngine) {
+      await semanticSearchEngine.cleanup();
+    }
+    if (ragOperations) {
+      await ragOperations.cleanup();
+    }
 
     // Clean up test files
     try {
@@ -132,7 +144,9 @@ describe('RAG System End-to-End Integration Tests', () => {
     });
 
     test('should have proper component connections', () => {
-      expect(semanticSearchEngine.config.embeddingGenerator).toBe(embeddingGenerator);
+      expect(semanticSearchEngine.config.embeddingGenerator).toBe(
+        embeddingGenerator
+      );
       expect(semanticSearchEngine.config.vectorDatabase).toBe(vectorDatabase);
     });
 
@@ -159,7 +173,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Store all lessons in parallel since they are independent operations
       const results = await Promise.all(
-        _lessons.map(lesson => ragOperations.storeLesson(lesson)),
+        _lessons.map((lesson) => ragOperations.storeLesson(lesson))
       );
 
       // Validate each result and collect them
@@ -179,7 +193,9 @@ describe('RAG System End-to-End Integration Tests', () => {
 
     test('should retrieve lessons using semantic search', async () => {
       const _query = 'JavaScript function error handling best practices';
-      const _results = await ragOperations.searchLessons(_query, { maxResults: 3 });
+      const _results = await ragOperations.searchLessons(_query, {
+        maxResults: 3,
+      });
 
       expect(_results).toBeInstanceOf(Array);
       expect(_results.length).toBeGreaterThan(0);
@@ -195,7 +211,9 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Verify relevance ordering
       for (let i = 1; i < _results.length; i++) {
-        expect(_results[i - 1].relevanceScore).toBeGreaterThanOrEqual(_results[i].relevanceScore);
+        expect(_results[i - 1].relevanceScore).toBeGreaterThanOrEqual(
+          _results[i].relevanceScore
+        );
       }
     });
 
@@ -203,12 +221,16 @@ describe('RAG System End-to-End Integration Tests', () => {
       const _taskContext = {
         id: 'test-task-1',
         title: 'Fix async function error handling',
-        description: 'Need to improve error handling in async JavaScript functions',
+        description:
+          'Need to improve error handling in async JavaScript functions',
         category: 'feature',
         tags: ['javascript', 'async', 'error-handling'],
       };
 
-      const _recommendations = await ragOperations.getRelevantLessons(_taskContext, { maxResults: 5 });
+      const _recommendations = await ragOperations.getRelevantLessons(
+        _taskContext,
+        { maxResults: 5 }
+      );
 
       expect(_recommendations).toBeInstanceOf(Array);
       expect(_recommendations.length).toBeGreaterThan(0);
@@ -230,7 +252,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Store all errors in parallel since they are independent operations
       const results = await Promise.all(
-        _errors.map(error => ragOperations.storeError(error)),
+        _errors.map((error) => ragOperations.storeError(error))
       );
 
       // Validate each result and collect them
@@ -244,8 +266,12 @@ describe('RAG System End-to-End Integration Tests', () => {
     });
 
     test('should find similar errors using pattern matching', async () => {
-      const _errorDescription = 'TypeError: Cannot read property of undefined in async function';
-      const _similarErrors = await ragOperations.findSimilarErrors(_errorDescription, { maxResults: 3 });
+      const _errorDescription =
+        'TypeError: Cannot read property of undefined in async function';
+      const _similarErrors = await ragOperations.findSimilarErrors(
+        _errorDescription,
+        { maxResults: 3 }
+      );
 
       expect(_similarErrors).toBeInstanceOf(Array);
 
@@ -257,19 +283,28 @@ describe('RAG System End-to-End Integration Tests', () => {
       }
 
       // Verify errors with resolutions are ranked higher
-      const _errorsWithResolutions = _similarErrors.filter(e => e.hasResolution);
-      const _errorsWithoutResolutions = _similarErrors.filter(e => !e.hasResolution);
+      const _errorsWithResolutions = _similarErrors.filter(
+        (e) => e.hasResolution
+      );
+      const _errorsWithoutResolutions = _similarErrors.filter(
+        (e) => !e.hasResolution
+      );
 
-      if (_errorsWithResolutions.length > 0 && _errorsWithoutResolutions.length > 0) {
-        expect(_errorsWithResolutions[0].similarityScore)
-          .toBeGreaterThanOrEqual(_errorsWithoutResolutions[0].similarityScore);
+      if (
+        _errorsWithResolutions.length > 0 &&
+        _errorsWithoutResolutions.length > 0
+      ) {
+        expect(
+          _errorsWithResolutions[0].similarityScore
+        ).toBeGreaterThanOrEqual(_errorsWithoutResolutions[0].similarityScore);
       }
     });
 
     test('should categorize and analyze error complexity', async () => {
       const _complexError = {
         type: 'SystemError',
-        message: 'Multiple cascade failures in distributed system with memory leak',
+        message:
+          'Multiple cascade failures in distributed system with memory leak',
         description: 'Complex system error affecting multiple services',
         resolution: '', // No resolution to test complexity assessment
         stackTrace: 'Very long stack trace indicating system-level issues...',
@@ -280,12 +315,18 @@ describe('RAG System End-to-End Integration Tests', () => {
       expect(result.success).toBe(true);
 
       // Search for the stored error
-      const _searchResults = await ragOperations.findSimilarErrors(_complexError.message);
-      const _foundError = _searchResults.find(e => e.error_type === _complexError.type);
+      const _searchResults = await ragOperations.findSimilarErrors(
+        _complexError.message
+      );
+      const _foundError = _searchResults.find(
+        (e) => e.error_type === _complexError.type
+      );
 
       expect(_foundError).toBeDefined();
       expect(_foundError.errorPattern).toHaveProperty('complexity');
-      expect(['high', 'medium', 'low', 'trivial']).toContain(_foundError.errorPattern.complexity);
+      expect(['high', 'medium', 'low', 'trivial']).toContain(
+        _foundError.errorPattern.complexity
+      );
     });
   });
 
@@ -298,7 +339,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Store lessons in batch
       const _results = await Promise.all(
-        _lessons.map(lesson => ragOperations.storeLesson(lesson)),
+        _lessons.map((lesson) => ragOperations.storeLesson(lesson))
       );
 
       const _endTime = Date.now();
@@ -306,7 +347,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Verify all operations succeeded
       expect(_results).toHaveLength(_batchSize);
-      _results.forEach(result => {
+      _results.forEach((result) => {
         expect(result.success).toBe(true);
       });
 
@@ -314,7 +355,9 @@ describe('RAG System End-to-End Integration Tests', () => {
       const _avgTimePerLesson = _processingTime / _batchSize;
       expect(_avgTimePerLesson).toBeLessThan(5000); // Less than 5 seconds per lesson
 
-      console.log(`Batch processing: ${_batchSize} lessons in ${_processingTime}ms (avg: ${_avgTimePerLesson.toFixed(2)}ms/lesson)`);
+      console.log(
+        `Batch processing: ${_batchSize} lessons in ${_processingTime}ms (avg: ${_avgTimePerLesson.toFixed(2)}ms/lesson)`
+      );
     });
 
     test('should maintain search performance under load', async () => {
@@ -331,7 +374,9 @@ describe('RAG System End-to-End Integration Tests', () => {
       // Create concurrent search requests
       for (let i = 0; i < 10; i++) {
         for (const query of queries) {
-          searchPromises.push(ragOperations.searchLessons(query, { maxResults: 5 }));
+          searchPromises.push(
+            ragOperations.searchLessons(query, { maxResults: 5 })
+          );
         }
       }
 
@@ -345,14 +390,16 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Verify all searches completed successfully
       expect(results).toHaveLength(totalQueries);
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toBeInstanceOf(Array);
       });
 
       // Performance assertions
       expect(avgTimePerQuery).toBeLessThan(2000); // Less than 2 seconds per query
 
-      console.log(`Concurrent search performance: ${totalQueries} queries in ${totalTime}ms (avg: ${avgTimePerQuery.toFixed(2)}ms/query)`);
+      console.log(
+        `Concurrent search performance: ${totalQueries} queries in ${totalTime}ms (avg: ${avgTimePerQuery.toFixed(2)}ms/query)`
+      );
     });
 
     test('should optimize cache performance', async () => {
@@ -374,7 +421,9 @@ describe('RAG System End-to-End Integration Tests', () => {
       // Cache should significantly improve performance
       expect(time2).toBeLessThan(time1 * 0.5); // At least 50% faster
 
-      console.log(`Cache performance: First search ${time1}ms, cached search ${time2}ms (${((1 - time2/time1) * 100).toFixed(1)}% improvement)`);
+      console.log(
+        `Cache performance: First search ${time1}ms, cached search ${time2}ms (${((1 - time2 / time1) * 100).toFixed(1)}% improvement)`
+      );
     });
   });
 
@@ -395,7 +444,9 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Search should not return excessive duplicates
       const searchResults = await ragOperations.searchLessons(lesson.title);
-      const duplicateResults = searchResults.filter(r => r.title === lesson.title);
+      const duplicateResults = searchResults.filter(
+        (r) => r.title === lesson.title
+      );
 
       // Should have reasonable duplicate handling
       expect(duplicateResults.length).toBeLessThanOrEqual(3);
@@ -411,7 +462,10 @@ describe('RAG System End-to-End Integration Tests', () => {
       expect(embedding1).toHaveLength(embedding2.length);
 
       // Embeddings should be identical for identical content
-      const similarity = testAssertions.calculateCosineSimilarity(embedding1, embedding2);
+      const similarity = testAssertions.calculateCosineSimilarity(
+        embedding1,
+        embedding2
+      );
       expect(similarity).toBeGreaterThan(0.99); // Very high similarity for identical content
     });
 
@@ -423,13 +477,16 @@ describe('RAG System End-to-End Integration Tests', () => {
       expect(vectorStats.isInitialized).toBe(true);
 
       // Test search functionality
-      const testEmbedding = await embeddingGenerator.generateEmbeddings('test query');
-      const searchResults = await vectorDatabase.search(testEmbedding, { topK: 5 });
+      const testEmbedding =
+        await embeddingGenerator.generateEmbeddings('test query');
+      const searchResults = await vectorDatabase.search(testEmbedding, {
+        topK: 5,
+      });
 
       expect(searchResults).toBeInstanceOf(Array);
 
       // Each result should have required properties
-      searchResults.forEach(result => {
+      searchResults.forEach((result) => {
         expect(result).toHaveProperty('vectorId');
         expect(result).toHaveProperty('similarity');
         expect(typeof result.similarity).toBe('number');
@@ -443,29 +500,45 @@ describe('RAG System End-to-End Integration Tests', () => {
     test('should create test content for migration', async () => {
       // Create test lesson files
       const testLessonsPath = _path.join(ragTestPath, 'development', 'lessons');
-      await _fs.mkdir(_path.join(testLessonsPath, 'features'), { recursive: true });
-      await _fs.mkdir(_path.join(testLessonsPath, 'errors'), { recursive: true });
+      await _fs.mkdir(_path.join(testLessonsPath, 'features'), {
+        recursive: true,
+      });
+      await _fs.mkdir(_path.join(testLessonsPath, 'errors'), {
+        recursive: true,
+      });
 
       // Create sample lesson files
       const sampleLessons = [
         {
-          path: _path.join(testLessonsPath, 'features', 'react-optimization.md'),
-          content: '# React Performance Optimization\n\nBest practices for optimizing React applications...',
+          path: _path.join(
+            testLessonsPath,
+            'features',
+            'react-optimization.md'
+          ),
+          content:
+            '# React Performance Optimization\n\nBest practices for optimizing React applications...',
         },
         {
           path: _path.join(testLessonsPath, 'errors', 'async-errors.md'),
-          content: '# Async Function Errors\n\nCommon errors in async functions and how to fix them...',
+          content:
+            '# Async Function Errors\n\nCommon errors in async functions and how to fix them...',
         },
       ];
 
       // Write all sample lesson files in parallel
       await Promise.all(
-        sampleLessons.map(lesson => _fs.writeFile(lesson.path, lesson.content)),
+        sampleLessons.map((lesson) =>
+          _fs.writeFile(lesson.path, lesson.content)
+        )
       );
 
       // Verify files were created
-      const featuresFiles = await _fs.readdir(_path.join(testLessonsPath, 'features'));
-      const errorsFiles = await _fs.readdir(_path.join(testLessonsPath, 'errors'));
+      const featuresFiles = await _fs.readdir(
+        _path.join(testLessonsPath, 'features')
+      );
+      const errorsFiles = await _fs.readdir(
+        _path.join(testLessonsPath, 'errors')
+      );
 
       expect(featuresFiles).toContain('react-optimization.md');
       expect(errorsFiles).toContain('async-errors.md');
@@ -483,7 +556,8 @@ describe('RAG System End-to-End Integration Tests', () => {
       const initialVectorCount = initialStats.totalVectors;
 
       // Perform migration
-      const migrationResult = await migrationSystem.migrate(migrationComponents);
+      const migrationResult =
+        await migrationSystem.migrate(migrationComponents);
 
       expect(migrationResult.success).toBe(true);
       expect(migrationResult.summary).toHaveProperty('successfulMigrations');
@@ -494,10 +568,11 @@ describe('RAG System End-to-End Integration Tests', () => {
       expect(finalStats.totalVectors).toBeGreaterThan(initialVectorCount);
 
       // Test that migrated content is searchable
-      const searchResults = await ragOperations.searchLessons('React optimization');
+      const searchResults =
+        await ragOperations.searchLessons('React optimization');
       expect(searchResults.length).toBeGreaterThan(0);
 
-      const reactResult = searchResults.find(r => r.title?.includes('React'));
+      const reactResult = searchResults.find((r) => r.title?.includes('React'));
       expect(reactResult).toBeDefined();
     });
   });
@@ -589,7 +664,8 @@ describe('RAG System Performance Benchmarks', () => {
 
     await embeddingGenerator.initialize();
 
-    const testContent = 'JavaScript async function error handling best practices';
+    const testContent =
+      'JavaScript async function error handling best practices';
     const iterations = 10;
 
     const startTime = Date.now();
@@ -605,7 +681,9 @@ describe('RAG System Performance Benchmarks', () => {
     // Should generate embeddings in reasonable time
     expect(avgTime).toBeLessThan(3000); // Less than 3 seconds per embedding
 
-    console.log(`Embedding generation benchmark: ${avgTime.toFixed(2)}ms average per embedding`);
+    console.log(
+      `Embedding generation benchmark: ${avgTime.toFixed(2)}ms average per embedding`
+    );
 
     await embeddingGenerator.cleanup();
   });
@@ -660,7 +738,9 @@ describe('RAG System Performance Benchmarks', () => {
     // Should search in reasonable time
     expect(avgSearchTime).toBeLessThan(1000); // Less than 1 second per search
 
-    console.log(`Search performance benchmark: ${avgSearchTime.toFixed(2)}ms average per search`);
+    console.log(
+      `Search performance benchmark: ${avgSearchTime.toFixed(2)}ms average per search`
+    );
 
     // Cleanup performance test components
     await ragOps.cleanup();

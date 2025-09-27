@@ -33,7 +33,9 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         try {
           return JSON.parse(error.stdout.trim());
         } catch (error) {
-          throw new Error(`Command failed: ${error.message}, Output: ${error.stdout || error.stderr}`);
+          throw new Error(
+            `Command failed: ${error.message}, Output: ${error.stdout || error.stderr}`
+          );
         }
       }
       throw error;
@@ -45,14 +47,18 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
     const dependencies = [];
     for (let i = 0; i < count; i++) {
       const config = {
-        dependencies: i > 0 ? [{ criterion: `e2e-test-${i - 1}`, type: 'weak' }] : [],
+        dependencies:
+          i > 0 ? [{ criterion: `e2e-test-${i - 1}`, type: 'weak' }] : [],
         description: `E2E test dependency ${i}`,
-        estimatedDuration: 5000 + (i * 2000),
+        estimatedDuration: 5000 + i * 2000,
         parallelizable: i % 2 === 0,
         resourceRequirements: i % 3 === 0 ? ['network', 'cpu'] : ['filesystem'],
       };
 
-      const result = executeTaskManagerCommand('add-dependency', `'e2e-test-${i}' '${JSON.stringify(config)}'`);
+      const result = executeTaskManagerCommand(
+        'add-dependency',
+        `'e2e-test-${i}' '${JSON.stringify(config)}'`
+      );
       if (result.success) {
         dependencies.push(`e2e-test-${i}`);
       }
@@ -62,7 +68,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
   // Helper function to cleanup test dependencies
   const cleanupTestDependencies = (dependencies) => {
-    dependencies.forEach(criterion => {
+    dependencies.forEach((criterion) => {
       try {
         executeTaskManagerCommand('remove-dependency', criterion);
       } catch {
@@ -85,7 +91,9 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         };
 
         const databaseConfig = {
-          dependencies: [{ criterion: 'microservice-validation', type: 'strict' }],
+          dependencies: [
+            { criterion: 'microservice-validation', type: 'strict' },
+          ],
           description: 'Database migration validation',
           estimatedDuration: 15000,
           parallelizable: false,
@@ -104,30 +112,48 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         };
 
         // Add dependencies
-        let result = executeTaskManagerCommand('add-dependency', `'microservice-validation' '${JSON.stringify(microserviceConfig)}'`);
+        let result = executeTaskManagerCommand(
+          'add-dependency',
+          `'microservice-validation' '${JSON.stringify(microserviceConfig)}'`
+        );
         expect(result.success).toBe(true);
         testDependencies.push('microservice-validation');
 
-        result = executeTaskManagerCommand('add-dependency', `'database-validation' '${JSON.stringify(databaseConfig)}'`);
+        result = executeTaskManagerCommand(
+          'add-dependency',
+          `'database-validation' '${JSON.stringify(databaseConfig)}'`
+        );
         expect(result.success).toBe(true);
         testDependencies.push('database-validation');
 
-        result = executeTaskManagerCommand('add-dependency', `'integration-validation' '${JSON.stringify(integrationConfig)}'`);
+        result = executeTaskManagerCommand(
+          'add-dependency',
+          `'integration-validation' '${JSON.stringify(integrationConfig)}'`
+        );
         expect(result.success).toBe(true);
         testDependencies.push('integration-validation');
 
         // Step 2: Validate the dependency graph
-        const validationResult = executeTaskManagerCommand('validate-dependency-graph');
+        const validationResult = executeTaskManagerCommand(
+          'validate-dependency-graph'
+        );
         expect(validationResult.success).toBe(true);
         expect(validationResult.validation.valid).toBe(true);
 
         // Step 3: Generate execution order
-        const executionResult = executeTaskManagerCommand('generate-validation-execution-plan');
+        const executionResult = executeTaskManagerCommand(
+          'generate-validation-execution-plan'
+        );
         expect(executionResult.success).toBe(true);
-        expect(executionResult.executionOrder.length).toBeGreaterThanOrEqual(10); // 7 default + 3 custom
+        expect(executionResult.executionOrder.length).toBeGreaterThanOrEqual(
+          10
+        ); // 7 default + 3 custom
 
         // Step 4: Generate parallel execution plan
-        const parallelResult = executeTaskManagerCommand('generate-parallel-execution-plan', 'null 4');
+        const parallelResult = executeTaskManagerCommand(
+          'generate-parallel-execution-plan',
+          'null 4'
+        );
         expect(parallelResult.success).toBe(true);
         expect(parallelResult.parallelizationGain).toBeGreaterThan(0);
 
@@ -137,10 +163,16 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         let integrationWave = -1;
 
         parallelResult.plan.forEach((wave, index) => {
-          const criteriaInWave = wave.criteria.map(c => c.criterion);
-          if (criteriaInWave.includes('microservice-validation')) {microserviceWave = index;}
-          if (criteriaInWave.includes('database-validation')) {databaseWave = index;}
-          if (criteriaInWave.includes('integration-validation')) {integrationWave = index;}
+          const criteriaInWave = wave.criteria.map((c) => c.criterion);
+          if (criteriaInWave.includes('microservice-validation')) {
+            microserviceWave = index;
+          }
+          if (criteriaInWave.includes('database-validation')) {
+            databaseWave = index;
+          }
+          if (criteriaInWave.includes('integration-validation')) {
+            integrationWave = index;
+          }
         });
 
         expect(databaseWave).toBeGreaterThan(microserviceWave);
@@ -154,7 +186,10 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           diskIOLoad: 0.6,
         };
 
-        const adaptiveResult = executeTaskManagerCommand('generate-adaptive-execution-plan', `'${JSON.stringify(systemInfo)}'`);
+        const adaptiveResult = executeTaskManagerCommand(
+          'generate-adaptive-execution-plan',
+          `'${JSON.stringify(systemInfo)}'`
+        );
         expect(adaptiveResult.success).toBe(true);
         expect(adaptiveResult.adaptiveOptimizations).toBeTruthy();
 
@@ -162,17 +197,21 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         const saveResult = executeTaskManagerCommand('save-dependency-config');
         expect(saveResult.success).toBe(true);
 
-        const loadResult = executeTaskManagerCommand('load-dependency-config', `'${saveResult.configPath}'`);
+        const loadResult = executeTaskManagerCommand(
+          'load-dependency-config',
+          `'${saveResult.configPath}'`
+        );
         expect(loadResult.success).toBe(true);
 
         // Step 8: Verify dependencies still exist after reload
-        const finalValidation = executeTaskManagerCommand('validate-dependency-graph');
+        const finalValidation = executeTaskManagerCommand(
+          'validate-dependency-graph'
+        );
         expect(finalValidation.success).toBe(true);
         expect(finalValidation.validation.valid).toBe(true);
 
         // Cleanup config file
         await fs.unlink(saveResult.configPath);
-
       } finally {
         cleanupTestDependencies(testDependencies);
       }
@@ -187,7 +226,9 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         testDependencies.push(...dependencies);
 
         // Verify initial state
-        let validationResult = executeTaskManagerCommand('validate-dependency-graph');
+        let validationResult = executeTaskManagerCommand(
+          'validate-dependency-graph'
+        );
         expect(validationResult.success).toBe(true);
         expect(validationResult.validation.valid).toBe(true);
 
@@ -203,34 +244,49 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           resourceRequirements: ['cpu'],
         };
 
-        const modifyResult = executeTaskManagerCommand('add-dependency', `'e2e-test-4' '${JSON.stringify(modificationConfig)}'`);
+        const modifyResult = executeTaskManagerCommand(
+          'add-dependency',
+          `'e2e-test-4' '${JSON.stringify(modificationConfig)}'`
+        );
         expect(modifyResult.success).toBe(true);
 
         // Verify modification doesn't break graph
-        validationResult = executeTaskManagerCommand('validate-dependency-graph');
+        validationResult = executeTaskManagerCommand(
+          'validate-dependency-graph'
+        );
         expect(validationResult.success).toBe(true);
         expect(validationResult.validation.valid).toBe(true);
 
         // Generate new execution plan and verify optimization
-        const planResult = executeTaskManagerCommand('generate-parallel-execution-plan');
+        const planResult = executeTaskManagerCommand(
+          'generate-parallel-execution-plan'
+        );
         expect(planResult.success).toBe(true);
         expect(planResult.plan.length).toBeGreaterThan(0);
 
         // Remove a dependency to test cleanup
-        const removeResult = executeTaskManagerCommand('remove-dependency', 'e2e-test-2');
+        const removeResult = executeTaskManagerCommand(
+          'remove-dependency',
+          'e2e-test-2'
+        );
         expect(removeResult.success).toBe(true);
 
         // Verify graph is still valid after removal
-        validationResult = executeTaskManagerCommand('validate-dependency-graph');
+        validationResult = executeTaskManagerCommand(
+          'validate-dependency-graph'
+        );
         expect(validationResult.success).toBe(true);
 
         // Note: Validation might show missing dependency issue for e2e-test-4 -> e2e-test-2
         if (!validationResult.validation.valid) {
-          expect(validationResult.validation.issues.some(issue =>
-            issue.type === 'missing_dependency' && issue.missingDependency === 'e2e-test-2',
-          )).toBe(true);
+          expect(
+            validationResult.validation.issues.some(
+              (issue) =>
+                issue.type === 'missing_dependency' &&
+                issue.missingDependency === 'e2e-test-2'
+            )
+          ).toBe(true);
         }
-
       } finally {
         cleanupTestDependencies(testDependencies);
       }
@@ -276,7 +332,10 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
         // Add dependencies
         cpuIntensiveConfigs.forEach(({ name, config }) => {
-          const result = executeTaskManagerCommand('add-dependency', `'${name}' '${JSON.stringify(config)}'`);
+          const result = executeTaskManagerCommand(
+            'add-dependency',
+            `'${name}' '${JSON.stringify(config)}'`
+          );
           expect(result.success).toBe(true);
           testDependencies.push(name);
         });
@@ -289,20 +348,27 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           diskIOLoad: 0.2,
         };
 
-        const adaptiveResult = executeTaskManagerCommand('generate-adaptive-execution-plan', `'${JSON.stringify(highCpuSystem)}'`);
+        const adaptiveResult = executeTaskManagerCommand(
+          'generate-adaptive-execution-plan',
+          `'${JSON.stringify(highCpuSystem)}'`
+        );
         expect(adaptiveResult.success).toBe(true);
 
         const optimizations = adaptiveResult.adaptiveOptimizations;
-        expect(optimizations.systemAware.recommendedConcurrency).toBeGreaterThan(4);
+        expect(
+          optimizations.systemAware.recommendedConcurrency
+        ).toBeGreaterThan(4);
 
         // Generate standard parallel plan for comparison
-        const standardResult = executeTaskManagerCommand('generate-parallel-execution-plan', 'null 8');
+        const standardResult = executeTaskManagerCommand(
+          'generate-parallel-execution-plan',
+          'null 8'
+        );
         expect(standardResult.success).toBe(true);
 
         // Verify both plans handle CPU constraints appropriately
         expect(adaptiveResult.parallelizationGain).toBeGreaterThan(0);
         expect(standardResult.parallelizationGain).toBeGreaterThan(0);
-
       } finally {
         cleanupTestDependencies(testDependencies);
       }
@@ -346,7 +412,10 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
         // Add dependencies
         networkConfigs.forEach(({ name, config }) => {
-          const result = executeTaskManagerCommand('add-dependency', `'${name}' '${JSON.stringify(config)}'`);
+          const result = executeTaskManagerCommand(
+            'add-dependency',
+            `'${name}' '${JSON.stringify(config)}'`
+          );
           expect(result.success).toBe(true);
           testDependencies.push(name);
         });
@@ -359,13 +428,20 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           diskIOLoad: 0.3,
         };
 
-        const adaptiveResult = executeTaskManagerCommand('generate-adaptive-execution-plan', `'${JSON.stringify(constrainedNetwork)}'`);
+        const adaptiveResult = executeTaskManagerCommand(
+          'generate-adaptive-execution-plan',
+          `'${JSON.stringify(constrainedNetwork)}'`
+        );
         expect(adaptiveResult.success).toBe(true);
 
         // Should include network optimization recommendations
-        const resourceScheduling = adaptiveResult.adaptiveOptimizations.resourceScheduling;
-        expect(resourceScheduling.some(opt => opt.type === 'network_prioritization')).toBe(true);
-
+        const resourceScheduling =
+          adaptiveResult.adaptiveOptimizations.resourceScheduling;
+        expect(
+          resourceScheduling.some(
+            (opt) => opt.type === 'network_prioritization'
+          )
+        ).toBe(true);
       } finally {
         cleanupTestDependencies(testDependencies);
       }
@@ -417,24 +493,35 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
         // Add dependencies
         contentionConfigs.forEach(({ name, config }) => {
-          const result = executeTaskManagerCommand('add-dependency', `'${name}' '${JSON.stringify(config)}'`);
+          const result = executeTaskManagerCommand(
+            'add-dependency',
+            `'${name}' '${JSON.stringify(config)}'`
+          );
           expect(result.success).toBe(true);
           testDependencies.push(name);
         });
 
         // Generate execution plan with resource contention
-        const planResult = executeTaskManagerCommand('generate-parallel-execution-plan', 'null 6');
+        const planResult = executeTaskManagerCommand(
+          'generate-parallel-execution-plan',
+          'null 6'
+        );
         expect(planResult.success).toBe(true);
 
         // Should include resource contention recommendations
         const recommendations = planResult.recommendations;
-        expect(recommendations.some(rec => rec.type === 'resource_contention')).toBe(true);
+        expect(
+          recommendations.some((rec) => rec.type === 'resource_contention')
+        ).toBe(true);
 
         // Generate visualization to understand resource allocation
-        const vizResult = executeTaskManagerCommand('get-dependency-visualization');
+        const vizResult = executeTaskManagerCommand(
+          'get-dependency-visualization'
+        );
         expect(vizResult.success).toBe(true);
-        expect(vizResult.visualization.statistics.totalCriteria).toBeGreaterThanOrEqual(11); // 7 default + 4 custom
-
+        expect(
+          vizResult.visualization.statistics.totalCriteria
+        ).toBeGreaterThanOrEqual(11); // 7 default + 4 custom
       } finally {
         cleanupTestDependencies(testDependencies);
       }
@@ -447,7 +534,13 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
       try {
         // Create microservices dependency scenario
-        const services = ['auth', 'user', 'payment', 'notification', 'analytics'];
+        const services = [
+          'auth',
+          'user',
+          'payment',
+          'notification',
+          'analytics',
+        ];
         const microserviceConfigs = [];
 
         // Create service validations
@@ -455,7 +548,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           const serviceName = `${service}-service-validation`;
           const config = {
             description: `${service} service validation`,
-            estimatedDuration: 15000 + (index * 3000),
+            estimatedDuration: 15000 + index * 3000,
             parallelizable: true,
             resourceRequirements: ['network', 'cpu'],
           };
@@ -509,41 +602,62 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         ];
 
         // Add all configurations
-        [...microserviceConfigs, ...integrationConfigs].forEach(({ name, config }) => {
-          const result = executeTaskManagerCommand('add-dependency', `'${name}' '${JSON.stringify(config)}'`);
-          expect(result.success).toBe(true);
-          testDependencies.push(name);
-        });
+        [...microserviceConfigs, ...integrationConfigs].forEach(
+          ({ name, config }) => {
+            const result = executeTaskManagerCommand(
+              'add-dependency',
+              `'${name}' '${JSON.stringify(config)}'`
+            );
+            expect(result.success).toBe(true);
+            testDependencies.push(name);
+          }
+        );
 
         // Validate complex dependency graph
-        const validationResult = executeTaskManagerCommand('validate-dependency-graph');
+        const validationResult = executeTaskManagerCommand(
+          'validate-dependency-graph'
+        );
         expect(validationResult.success).toBe(true);
         expect(validationResult.validation.valid).toBe(true);
 
         // Generate execution order for microservices
-        const executionResult = executeTaskManagerCommand('generate-validation-execution-plan');
+        const executionResult = executeTaskManagerCommand(
+          'generate-validation-execution-plan'
+        );
         expect(executionResult.success).toBe(true);
-        expect(executionResult.executionOrder.length).toBeGreaterThanOrEqual(15); // 7 default + 8 custom
+        expect(executionResult.executionOrder.length).toBeGreaterThanOrEqual(
+          15
+        ); // 7 default + 8 custom
 
         // Generate optimized parallel execution plan
-        const parallelResult = executeTaskManagerCommand('generate-parallel-execution-plan', 'null 6');
+        const parallelResult = executeTaskManagerCommand(
+          'generate-parallel-execution-plan',
+          'null 6'
+        );
         expect(parallelResult.success).toBe(true);
         expect(parallelResult.parallelizationGain).toBeGreaterThan(50); // Should achieve significant optimization
 
         // Verify microservices can run in parallel (first wave)
         const firstWave = parallelResult.plan[0];
-        const firstWaveCriteria = firstWave.criteria.map(c => c.criterion);
-        const serviceValidations = services.map(s => `${s}-service-validation`);
+        const firstWaveCriteria = firstWave.criteria.map((c) => c.criterion);
+        const serviceValidations = services.map(
+          (s) => `${s}-service-validation`
+        );
 
         // At least some service validations should be in the first wave
-        const servicesInFirstWave = serviceValidations.filter(service => firstWaveCriteria.includes(service));
+        const servicesInFirstWave = serviceValidations.filter((service) =>
+          firstWaveCriteria.includes(service)
+        );
         expect(servicesInFirstWave.length).toBeGreaterThan(1);
 
         // Generate debugging visualization
-        const debugResult = executeTaskManagerCommand('get-dependency-visualization');
+        const debugResult = executeTaskManagerCommand(
+          'get-dependency-visualization'
+        );
         expect(debugResult.success).toBe(true);
-        expect(debugResult.visualization.statistics.totalCriteria).toBeGreaterThanOrEqual(15);
-
+        expect(
+          debugResult.visualization.statistics.totalCriteria
+        ).toBeGreaterThanOrEqual(15);
       } finally {
         cleanupTestDependencies(testDependencies);
       }
@@ -589,31 +703,47 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
         // Add circular dependencies
         complexConfigs.forEach(({ name, config }) => {
-          const result = executeTaskManagerCommand('add-dependency', `'${name}' '${JSON.stringify(config)}'`);
+          const result = executeTaskManagerCommand(
+            'add-dependency',
+            `'${name}' '${JSON.stringify(config)}'`
+          );
           expect(result.success).toBe(true);
           testDependencies.push(name);
         });
 
         // Validate should detect circular dependencies
-        const validationResult = executeTaskManagerCommand('validate-dependency-graph');
+        const validationResult = executeTaskManagerCommand(
+          'validate-dependency-graph'
+        );
         expect(validationResult.success).toBe(true);
         expect(validationResult.validation.valid).toBe(false);
-        expect(validationResult.validation.issues.some(issue => issue.type === 'cycle')).toBe(true);
+        expect(
+          validationResult.validation.issues.some(
+            (issue) => issue.type === 'cycle'
+          )
+        ).toBe(true);
 
         // Execution order should still work with forced execution
-        const executionResult = executeTaskManagerCommand('generate-validation-execution-plan');
+        const executionResult = executeTaskManagerCommand(
+          'generate-validation-execution-plan'
+        );
         expect(executionResult.success).toBe(true);
-        expect(executionResult.executionOrder.length).toBeGreaterThanOrEqual(10); // Should include all criteria
+        expect(executionResult.executionOrder.length).toBeGreaterThanOrEqual(
+          10
+        ); // Should include all criteria
 
         // Should include forced execution items
-        const forcedExecutions = executionResult.executionOrder.filter(item => item.forced);
+        const forcedExecutions = executionResult.executionOrder.filter(
+          (item) => item.forced
+        );
         expect(forcedExecutions.length).toBeGreaterThan(0);
 
         // Parallel execution should handle weak dependencies gracefully
-        const parallelResult = executeTaskManagerCommand('generate-parallel-execution-plan');
+        const parallelResult = executeTaskManagerCommand(
+          'generate-parallel-execution-plan'
+        );
         expect(parallelResult.success).toBe(true);
         expect(parallelResult.plan.length).toBeGreaterThan(0);
-
       } finally {
         cleanupTestDependencies(testDependencies);
       }
@@ -635,17 +765,26 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           resourceRequirements: ['filesystem'],
         };
 
-        const result = executeTaskManagerCommand('add-dependency', `'incomplete-dependency' '${JSON.stringify(incompleteConfig)}'`);
+        const result = executeTaskManagerCommand(
+          'add-dependency',
+          `'incomplete-dependency' '${JSON.stringify(incompleteConfig)}'`
+        );
         expect(result.success).toBe(true);
         testDependencies.push('incomplete-dependency');
 
         // Validation should detect missing dependency
-        const validationResult = executeTaskManagerCommand('validate-dependency-graph');
+        const validationResult = executeTaskManagerCommand(
+          'validate-dependency-graph'
+        );
         expect(validationResult.success).toBe(true);
         expect(validationResult.validation.valid).toBe(false);
-        expect(validationResult.validation.issues.some(issue =>
-          issue.type === 'missing_dependency' && issue.missingDependency === 'missing-dependency',
-        )).toBe(true);
+        expect(
+          validationResult.validation.issues.some(
+            (issue) =>
+              issue.type === 'missing_dependency' &&
+              issue.missingDependency === 'missing-dependency'
+          )
+        ).toBe(true);
 
         // Add the missing dependency
         const missingConfig = {
@@ -655,20 +794,26 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           resourceRequirements: ['filesystem'],
         };
 
-        const addResult = executeTaskManagerCommand('add-dependency', `'missing-dependency' '${JSON.stringify(missingConfig)}'`);
+        const addResult = executeTaskManagerCommand(
+          'add-dependency',
+          `'missing-dependency' '${JSON.stringify(missingConfig)}'`
+        );
         expect(addResult.success).toBe(true);
         testDependencies.push('missing-dependency');
 
         // Validation should now pass
-        const fixedValidationResult = executeTaskManagerCommand('validate-dependency-graph');
+        const fixedValidationResult = executeTaskManagerCommand(
+          'validate-dependency-graph'
+        );
         expect(fixedValidationResult.success).toBe(true);
         expect(fixedValidationResult.validation.valid).toBe(true);
 
         // Execution planning should work correctly
-        const planResult = executeTaskManagerCommand('generate-parallel-execution-plan');
+        const planResult = executeTaskManagerCommand(
+          'generate-parallel-execution-plan'
+        );
         expect(planResult.success).toBe(true);
         expect(planResult.plan.length).toBeGreaterThan(0);
-
       } finally {
         cleanupTestDependencies(testDependencies);
       }
@@ -684,17 +829,26 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         // Create large dependency graph (50 criteria)
         for (let i = 0; i < 50; i++) {
           const config = {
-            dependencies: i > 0 ? [
-              { criterion: `scale-test-${i - 1}`, type: 'weak' },
-              ...(i > 10 && i % 5 === 0 ? [{ criterion: `scale-test-${i - 5}`, type: 'optional' }] : []),
-            ] : [],
+            dependencies:
+              i > 0
+                ? [
+                    { criterion: `scale-test-${i - 1}`, type: 'weak' },
+                    ...(i > 10 && i % 5 === 0
+                      ? [{ criterion: `scale-test-${i - 5}`, type: 'optional' }]
+                      : []),
+                  ]
+                : [],
             description: `Scale test criterion ${i}`,
-            estimatedDuration: 3000 + (i * 100),
+            estimatedDuration: 3000 + i * 100,
             parallelizable: i % 3 !== 0,
-            resourceRequirements: i % 4 === 0 ? ['network', 'cpu'] : ['filesystem'],
+            resourceRequirements:
+              i % 4 === 0 ? ['network', 'cpu'] : ['filesystem'],
           };
 
-          const result = executeTaskManagerCommand('add-dependency', `'scale-test-${i}' '${JSON.stringify(config)}'`);
+          const result = executeTaskManagerCommand(
+            'add-dependency',
+            `'scale-test-${i}' '${JSON.stringify(config)}'`
+          );
           expect(result.success).toBe(true);
           testDependencies.push(`scale-test-${i}`);
         }
@@ -704,7 +858,9 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
         // Validate large graph
         const validationStart = Date.now();
-        const validationResult = executeTaskManagerCommand('validate-dependency-graph');
+        const validationResult = executeTaskManagerCommand(
+          'validate-dependency-graph'
+        );
         const validationTime = Date.now() - validationStart;
 
         expect(validationResult.success).toBe(true);
@@ -713,7 +869,9 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
         // Generate execution order efficiently
         const executionStart = Date.now();
-        const executionResult = executeTaskManagerCommand('generate-validation-execution-plan');
+        const executionResult = executeTaskManagerCommand(
+          'generate-validation-execution-plan'
+        );
         const executionTime = Date.now() - executionStart;
 
         expect(executionResult.success).toBe(true);
@@ -722,7 +880,10 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
         // Generate parallel execution plan
         const parallelStart = Date.now();
-        const parallelResult = executeTaskManagerCommand('generate-parallel-execution-plan', 'null 8');
+        const parallelResult = executeTaskManagerCommand(
+          'generate-parallel-execution-plan',
+          'null 8'
+        );
         const parallelTime = Date.now() - parallelStart;
 
         expect(parallelResult.success).toBe(true);
@@ -731,13 +892,14 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
         // Generate visualization for large graph
         const vizStart = Date.now();
-        const vizResult = executeTaskManagerCommand('get-dependency-visualization');
+        const vizResult = executeTaskManagerCommand(
+          'get-dependency-visualization'
+        );
         const vizTime = Date.now() - vizStart;
 
         expect(vizResult.success).toBe(true);
         expect(vizResult.visualization.statistics.totalCriteria).toBe(57);
         expect(vizTime).toBeLessThan(10000); // Visualization should be fast
-
       } finally {
         cleanupTestDependencies(testDependencies);
       }
@@ -756,7 +918,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
             name: `parallel-task-${i}`,
             config: {
               description: `Parallel task ${i}`,
-              estimatedDuration: 5000 + (i * 500),
+              estimatedDuration: 5000 + i * 500,
               parallelizable: true,
               resourceRequirements: ['cpu'],
             },
@@ -767,7 +929,10 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         highConcurrencyConfigs.push({
           name: 'convergence-point-1',
           config: {
-            dependencies: Array.from({ length: 10 }, (_, i) => ({ criterion: `parallel-task-${i}`, type: 'strict' })),
+            dependencies: Array.from({ length: 10 }, (_, i) => ({
+              criterion: `parallel-task-${i}`,
+              type: 'strict',
+            })),
             description: 'First convergence point',
             estimatedDuration: 15000,
             parallelizable: false,
@@ -778,7 +943,10 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         highConcurrencyConfigs.push({
           name: 'convergence-point-2',
           config: {
-            dependencies: Array.from({ length: 10 }, (_, i) => ({ criterion: `parallel-task-${i + 10}`, type: 'strict' })),
+            dependencies: Array.from({ length: 10 }, (_, i) => ({
+              criterion: `parallel-task-${i + 10}`,
+              type: 'strict',
+            })),
             description: 'Second convergence point',
             estimatedDuration: 12000,
             parallelizable: false,
@@ -802,13 +970,19 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
         // Add all configurations
         highConcurrencyConfigs.forEach(({ name, config }) => {
-          const result = executeTaskManagerCommand('add-dependency', `'${name}' '${JSON.stringify(config)}'`);
+          const result = executeTaskManagerCommand(
+            'add-dependency',
+            `'${name}' '${JSON.stringify(config)}'`
+          );
           expect(result.success).toBe(true);
           testDependencies.push(name);
         });
 
         // Test with very high concurrency
-        const highConcurrencyResult = executeTaskManagerCommand('generate-parallel-execution-plan', 'null 20');
+        const highConcurrencyResult = executeTaskManagerCommand(
+          'generate-parallel-execution-plan',
+          'null 20'
+        );
         expect(highConcurrencyResult.success).toBe(true);
         expect(highConcurrencyResult.parallelizationGain).toBeGreaterThan(80); // Should achieve very high optimization
 
@@ -824,10 +998,15 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           diskIOLoad: 0.1,
         };
 
-        const adaptiveResult = executeTaskManagerCommand('generate-adaptive-execution-plan', `'${JSON.stringify(highConcurrencySystem)}'`);
+        const adaptiveResult = executeTaskManagerCommand(
+          'generate-adaptive-execution-plan',
+          `'${JSON.stringify(highConcurrencySystem)}'`
+        );
         expect(adaptiveResult.success).toBe(true);
-        expect(adaptiveResult.adaptiveOptimizations.systemAware.recommendedConcurrency).toBeGreaterThan(8);
-
+        expect(
+          adaptiveResult.adaptiveOptimizations.systemAware
+            .recommendedConcurrency
+        ).toBeGreaterThan(8);
       } finally {
         cleanupTestDependencies(testDependencies);
       }
@@ -851,7 +1030,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
       ];
 
       // Verify all standard criteria have proper configurations
-      standardCriteria.forEach(criterion => {
+      standardCriteria.forEach((criterion) => {
         expect(result.dependencyGraph).toHaveProperty(criterion);
         const config = result.dependencyGraph[criterion];
         expect(config.metadata.description).toBeTruthy();
@@ -859,10 +1038,14 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
       });
 
       // Verify execution order respects actual validation dependencies
-      const executionResult = executeTaskManagerCommand('generate-validation-execution-plan');
+      const executionResult = executeTaskManagerCommand(
+        'generate-validation-execution-plan'
+      );
       expect(executionResult.success).toBe(true);
 
-      const criteriaOrder = executionResult.executionOrder.map(item => item.criterion);
+      const criteriaOrder = executionResult.executionOrder.map(
+        (item) => item.criterion
+      );
       const buildIndex = criteriaOrder.indexOf('build-validation');
       const linterIndex = criteriaOrder.indexOf('linter-validation');
       const typeIndex = criteriaOrder.indexOf('type-validation');
@@ -892,7 +1075,9 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           {
             name: 'dependent-task-1',
             config: {
-              dependencies: [{ criterion: 'slow-sequential-task', type: 'strict' }],
+              dependencies: [
+                { criterion: 'slow-sequential-task', type: 'strict' },
+              ],
               description: 'Task dependent on slow task',
               estimatedDuration: 10000,
               parallelizable: true,
@@ -902,7 +1087,9 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           {
             name: 'dependent-task-2',
             config: {
-              dependencies: [{ criterion: 'slow-sequential-task', type: 'strict' }],
+              dependencies: [
+                { criterion: 'slow-sequential-task', type: 'strict' },
+              ],
               description: 'Another task dependent on slow task',
               estimatedDuration: 15000,
               parallelizable: true,
@@ -913,13 +1100,18 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
         // Add optimization scenario
         optimizationConfigs.forEach(({ name, config }) => {
-          const result = executeTaskManagerCommand('add-dependency', `'${name}' '${JSON.stringify(config)}'`);
+          const result = executeTaskManagerCommand(
+            'add-dependency',
+            `'${name}' '${JSON.stringify(config)}'`
+          );
           expect(result.success).toBe(true);
           testDependencies.push(name);
         });
 
         // Generate parallel execution plan
-        const planResult = executeTaskManagerCommand('generate-parallel-execution-plan');
+        const planResult = executeTaskManagerCommand(
+          'generate-parallel-execution-plan'
+        );
         expect(planResult.success).toBe(true);
 
         // Should include optimization recommendations
@@ -927,13 +1119,16 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         expect(planResult.recommendations.length).toBeGreaterThan(0);
 
         // Should identify load balance issues due to slow sequential task
-        const loadBalanceIssues = planResult.recommendations.filter(rec => rec.type === 'load_balance');
+        const loadBalanceIssues = planResult.recommendations.filter(
+          (rec) => rec.type === 'load_balance'
+        );
         expect(loadBalanceIssues.length).toBeGreaterThan(0);
 
         // Generate debugging visualization
-        const debugResult = executeTaskManagerCommand('get-dependency-visualization');
+        const debugResult = executeTaskManagerCommand(
+          'get-dependency-visualization'
+        );
         expect(debugResult.success).toBe(true);
-
       } finally {
         cleanupTestDependencies(testDependencies);
       }
@@ -952,7 +1147,10 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
           resourceRequirements: ['network'],
         };
 
-        const addResult = executeTaskManagerCommand('add-dependency', `'persistence-test' '${JSON.stringify(persistenceConfig)}'`);
+        const addResult = executeTaskManagerCommand(
+          'add-dependency',
+          `'persistence-test' '${JSON.stringify(persistenceConfig)}'`
+        );
         expect(addResult.success).toBe(true);
         testDependencies.push('persistence-test');
 
@@ -968,22 +1166,35 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         expect(config.dependencies).toHaveProperty('persistence-test');
 
         // Remove the dependency to simulate "restart"
-        const removeResult = executeTaskManagerCommand('remove-dependency', 'persistence-test');
+        const removeResult = executeTaskManagerCommand(
+          'remove-dependency',
+          'persistence-test'
+        );
         expect(removeResult.success).toBe(true);
 
         // Verify dependency is gone
-        const getResult = executeTaskManagerCommand('get-dependency', 'persistence-test');
+        const getResult = executeTaskManagerCommand(
+          'get-dependency',
+          'persistence-test'
+        );
         expect(getResult.success).toBe(false);
 
         // Reload configuration
-        const loadResult = executeTaskManagerCommand('load-dependency-config', `'${configPath}'`);
+        const loadResult = executeTaskManagerCommand(
+          'load-dependency-config',
+          `'${configPath}'`
+        );
         expect(loadResult.success).toBe(true);
 
         // Verify dependency is restored
-        const restoredResult = executeTaskManagerCommand('get-dependency', 'persistence-test');
+        const restoredResult = executeTaskManagerCommand(
+          'get-dependency',
+          'persistence-test'
+        );
         expect(restoredResult.success).toBe(true);
-        expect(restoredResult.dependency.metadata.description).toBe('Persistence test dependency');
-
+        expect(restoredResult.dependency.metadata.description).toBe(
+          'Persistence test dependency'
+        );
       } finally {
         cleanupTestDependencies(testDependencies);
         if (configPath) {

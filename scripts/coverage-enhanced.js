@@ -1,4 +1,3 @@
-
 /**
  * Enhanced Coverage Pipeline Integration System
  *
@@ -49,7 +48,15 @@ const ENHANCED_CONFIG = {
 
   // Report generation settings
   reports: {
-    formats: ['html', 'json', 'lcov', 'xml', 'text', 'json-summary', 'cobertura'],
+    formats: [
+      'html',
+      'json',
+      'lcov',
+      'xml',
+      'text',
+      'json-summary',
+      'cobertura',
+    ],
     stakeholder_reports: {
       executive: { format: 'summary', include_trends: true },
       technical: { format: 'detailed', include_files: true },
@@ -114,33 +121,39 @@ class EnhancedLogger {
   constructor(options = {}) {
     this.silent = options.silent || process.env.SILENT === 'true';
     this.verbose = options.verbose || process.env.VERBOSE === 'true';
-    this.structured = options.structured || process.env.STRUCTURED_LOGS === 'true';
+    this.structured =
+      options.structured || process.env.STRUCTURED_LOGS === 'true';
     this.startTime = Date.now();
   }
 
   _log(level, message, data = {}) {
-    if (this.silent && level !== 'error') {return;}
+    if (this.silent && level !== 'error') {
+      return;
+    }
 
     const timestamp = new Date().toISOString();
     const elapsed = Date.now() - this.startTime;
 
     if (this.structured) {
-      console.log(JSON.stringify({
-        timestamp,
-        level,
-        message,
-        elapsed_ms: elapsed,
-        ...data,
-      }));
+      console.log(
+        JSON.stringify({
+          timestamp,
+          level,
+          message,
+          elapsed_ms: elapsed,
+          ...data,
+        })
+      );
     } else {
-      const emoji = {
-        info: 'ℹ️',
-        success: '✅',
-        warning: '⚠️',
-        error: '❌',
-        debug: '🐛',
-        performance: '⚡',
-      }[level] || 'ℹ️';
+      const emoji =
+        {
+          info: 'ℹ️',
+          success: '✅',
+          warning: '⚠️',
+          error: '❌',
+          debug: '🐛',
+          performance: '⚡',
+        }[level] || 'ℹ️';
 
       const prefix = `${emoji} [${elapsed}ms]`;
       console.log(`${prefix} ${message}`);
@@ -151,33 +164,53 @@ class EnhancedLogger {
     }
   }
 
-  info(message, data) { this._log('info', message, data); }
-  success(message, data) { this._log('success', message, data); }
-  warning(message, data) { this._log('warning', message, data); }
-  error(message, data) { this._log('error', message, data); }
-  debug(message, data) { this._log('debug', message, data); }
-  performance(message, data) { this._log('performance', message, data); }
+  info(message, data) {
+    this._log('info', message, data);
+  }
+  success(message, data) {
+    this._log('success', message, data);
+  }
+  warning(message, data) {
+    this._log('warning', message, data);
+  }
+  error(message, data) {
+    this._log('error', message, data);
+  }
+  debug(message, data) {
+    this._log('debug', message, data);
+  }
+  performance(message, data) {
+    this._log('performance', message, data);
+  }
 
   table(headers, rows, title = '') {
-    if (this.silent) {return;}
+    if (this.silent) {
+      return;
+    }
 
-    if (title) {console.log(`\n📊 ${title}`);}
+    if (title) {
+      console.log(`\n📊 ${title}`);
+    }
 
     const maxLengths = headers.map((header, i) =>
-      Math.max(header.length, ...rows.map(row => String(row[i] || '').length)),
+      Math.max(header.length, ...rows.map((row) => String(row[i] || '').length))
     );
 
-    const separator = maxLengths.map(len => '─'.repeat(len + 2)).join('┼');
+    const separator = maxLengths.map((len) => '─'.repeat(len + 2)).join('┼');
     const topBorder = `┌${separator.replace(/┼/g, '┬')}┐`;
     const middleBorder = `├${separator}┤`;
     const bottomBorder = `└${separator.replace(/┼/g, '┴')}┘`;
 
     console.log(topBorder);
-    console.log(`│ ${headers.map((h, i) => h.padEnd(maxLengths[i])).join(' │ ')} │`);
+    console.log(
+      `│ ${headers.map((h, i) => h.padEnd(maxLengths[i])).join(' │ ')} │`
+    );
     console.log(middleBorder);
 
-    rows.forEach(row => {
-      console.log(`│ ${row.map((cell, i) => String(cell || '').padEnd(maxLengths[i])).join(' │ ')} │`);
+    rows.forEach((row) => {
+      console.log(
+        `│ ${row.map((cell, i) => String(cell || '').padEnd(maxLengths[i])).join(' │ ')} │`
+      );
     });
 
     console.log(bottomBorder);
@@ -220,16 +253,21 @@ class EnhancedCoverageSystem {
       this.generateSummary();
 
       const duration = Date.now() - this.startTime;
-      this.logger.success(`Coverage pipeline completed successfully in ${duration}ms`);
+      this.logger.success(
+        `Coverage pipeline completed successfully in ${duration}ms`
+      );
 
       // Check for failures
-      const hasFailures = this.results.validation?.blocking_failures?.length > 0;
+      const hasFailures =
+        this.results.validation?.blocking_failures?.length > 0;
       if (hasFailures) {
         throw new Error('Coverage validation failed with blocking failures');
       }
-
     } catch (error) {
-      this.logger.error('Coverage pipeline failed', { error: error.message, stack: error.stack });
+      this.logger.error('Coverage pipeline failed', {
+        error: error.message,
+        stack: error.stack,
+      });
       throw error;
     }
   }
@@ -241,7 +279,7 @@ class EnhancedCoverageSystem {
     this.logger.info('Setting up coverage environment');
 
     // Create all required directories
-    Object.values(this.config.paths).forEach(dir => {
+    Object.values(this.config.paths).forEach((dir) => {
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
         this.logger.debug(`Created directory: ${dir}`);
@@ -258,7 +296,10 @@ class EnhancedCoverageSystem {
    * Archive previous coverage reports
    */
   archivePreviousReports() {
-    const archiveDir = path.join(this.config.paths.archive, new Date().toISOString().split('T')[0]);
+    const archiveDir = path.join(
+      this.config.paths.archive,
+      new Date().toISOString().split('T')[0]
+    );
 
     if (fs.existsSync(this.config.paths.reports)) {
       if (!fs.existsSync(archiveDir)) {
@@ -267,7 +308,7 @@ class EnhancedCoverageSystem {
 
       // Copy previous reports to archive
       const files = fs.readdirSync(this.config.paths.reports);
-      files.forEach(file => {
+      files.forEach((file) => {
         const source = path.join(this.config.paths.reports, file);
         const dest = path.join(archiveDir, file);
 
@@ -287,17 +328,20 @@ class EnhancedCoverageSystem {
    * Clean old archived reports
    */
   cleanOldArchives() {
-    if (!fs.existsSync(this.config.paths.archive)) {return;}
+    if (!fs.existsSync(this.config.paths.archive)) {
+      return;
+    }
 
-    const archives = fs.readdirSync(this.config.paths.archive)
-      .filter(name => /^\d{4}-\d{2}-\d{2}$/.test(name))
+    const archives = fs
+      .readdirSync(this.config.paths.archive)
+      .filter((name) => /^\d{4}-\d{2}-\d{2}$/.test(name))
       .sort()
       .reverse();
 
     if (archives.length > this.config.reports.max_archived_reports) {
       const toDelete = archives.slice(this.config.reports.max_archived_reports);
 
-      toDelete.forEach(archive => {
+      toDelete.forEach((archive) => {
         const archivePath = path.join(this.config.paths.archive, archive);
         fs.rmSync(archivePath, { recursive: true, force: true });
       });
@@ -318,13 +362,16 @@ class EnhancedCoverageSystem {
     try {
       // Execute coverage with all report formats
       const coverageCommand = [
-        'npx', 'jest',
+        'npx',
+        'jest',
         '--coverage',
         '--ci',
         '--watchAll=false',
         '--passWithNoTests',
         '--silent',
-        ...this.config.reports.formats.map(format => `--coverageReporters=${format}`),
+        ...this.config.reports.formats.map(
+          (format) => `--coverageReporters=${format}`
+        ),
       ];
 
       this.logger.debug(`Executing: ${coverageCommand.join(' ')}`);
@@ -350,11 +397,17 @@ class EnhancedCoverageSystem {
         timestamp: new Date().toISOString(),
       };
 
-      this.logger.performance('Coverage analysis completed', this.results.performance);
-
+      this.logger.performance(
+        'Coverage analysis completed',
+        this.results.performance
+      );
     } catch (error) {
       // Check if coverage data was generated despite test failures
-      if (fs.existsSync(path.join(this.config.paths.coverage, 'coverage-summary.json'))) {
+      if (
+        fs.existsSync(
+          path.join(this.config.paths.coverage, 'coverage-summary.json')
+        )
+      ) {
         this.logger.warning('Tests failed but coverage data was generated');
       } else {
         throw new Error(`Coverage analysis failed: ${error.message}`);
@@ -368,7 +421,10 @@ class EnhancedCoverageSystem {
   loadCoverageData() {
     this.logger.info('Loading coverage data');
 
-    const summaryPath = path.join(this.config.paths.coverage, 'coverage-summary.json');
+    const summaryPath = path.join(
+      this.config.paths.coverage,
+      'coverage-summary.json'
+    );
 
     if (!fs.existsSync(summaryPath)) {
       throw new Error('Coverage summary not found');
@@ -390,7 +446,6 @@ class EnhancedCoverageSystem {
 
       this.logger.success('Coverage data loaded successfully');
       this.logger.debug('Coverage summary', this.results.coverage.summary);
-
     } catch (error) {
       throw new Error(`Failed to load coverage data: ${error.message}`);
     }
@@ -402,7 +457,10 @@ class EnhancedCoverageSystem {
   performTrendAnalysis() {
     this.logger.info('Performing trend analysis');
 
-    const trendsPath = path.join(this.config.paths.trends, 'coverage-trends.json');
+    const trendsPath = path.join(
+      this.config.paths.trends,
+      'coverage-trends.json'
+    );
     let trends = [];
 
     // Load existing trends
@@ -445,7 +503,9 @@ class EnhancedCoverageSystem {
     }
     fs.writeFileSync(trendsPath, JSON.stringify(trends, null, 2));
 
-    this.logger.success(`Trend analysis completed (${trends.length} data points)`);
+    this.logger.success(
+      `Trend analysis completed (${trends.length} data points)`
+    );
   }
 
   /**
@@ -475,7 +535,7 @@ class EnhancedCoverageSystem {
     };
 
     // Check for regressions/improvements in each metric
-    ['statements', 'branches', 'functions', 'lines'].forEach(metric => {
+    ['statements', 'branches', 'functions', 'lines'].forEach((metric) => {
       const currentPct = current.coverage[metric].pct;
       const previousPct = previous.coverage[metric].pct;
       const delta = currentPct - previousPct;
@@ -516,12 +576,18 @@ class EnhancedCoverageSystem {
 
     // Generate recommendations
     if (analysis.regression_detected) {
-      analysis.recommendations.push('⚠️ Coverage regression detected - review recent changes');
-      analysis.recommendations.push('📝 Add tests for newly added or modified code');
+      analysis.recommendations.push(
+        '⚠️ Coverage regression detected - review recent changes'
+      );
+      analysis.recommendations.push(
+        '📝 Add tests for newly added or modified code'
+      );
     }
 
     if (analysis.trend_direction === 'declining') {
-      analysis.recommendations.push('📉 Overall coverage trend is declining - prioritize test coverage');
+      analysis.recommendations.push(
+        '📉 Overall coverage trend is declining - prioritize test coverage'
+      );
     }
 
     return analysis;
@@ -546,8 +612,9 @@ class EnhancedCoverageSystem {
     validation.quality_level = this.determineQualityLevel(coverage);
 
     // Check blocking thresholds
-    const blockingThresholds = this.config.thresholds[this.config.quality_gates.blocking_threshold];
-    ['statements', 'branches', 'functions', 'lines'].forEach(metric => {
+    const blockingThresholds =
+      this.config.thresholds[this.config.quality_gates.blocking_threshold];
+    ['statements', 'branches', 'functions', 'lines'].forEach((metric) => {
       const actual = coverage[metric].pct;
       const required = blockingThresholds[metric];
 
@@ -564,12 +631,16 @@ class EnhancedCoverageSystem {
     });
 
     // Check warning thresholds
-    const warningThresholds = this.config.thresholds[this.config.quality_gates.warning_threshold];
-    ['statements', 'branches', 'functions', 'lines'].forEach(metric => {
+    const warningThresholds =
+      this.config.thresholds[this.config.quality_gates.warning_threshold];
+    ['statements', 'branches', 'functions', 'lines'].forEach((metric) => {
       const actual = coverage[metric].pct;
       const required = warningThresholds[metric];
 
-      if (actual < required && !validation.blocking_failures.some(f => f.metric === metric)) {
+      if (
+        actual < required &&
+        !validation.blocking_failures.some((f) => f.metric === metric)
+      ) {
         validation.warnings.push({
           metric,
           actual: actual.toFixed(2),
@@ -590,14 +661,21 @@ class EnhancedCoverageSystem {
     }
 
     // Generate recommendations
-    validation.recommendations = this.generateQualityRecommendations(validation, coverage);
+    validation.recommendations = this.generateQualityRecommendations(
+      validation,
+      coverage
+    );
 
     this.results.validation = validation;
 
-    this.logger.success(`Quality gates executed - Level: ${validation.quality_level}`);
+    this.logger.success(
+      `Quality gates executed - Level: ${validation.quality_level}`
+    );
 
     if (validation.blocking_failures.length > 0) {
-      this.logger.error(`${validation.blocking_failures.length} blocking failures detected`);
+      this.logger.error(
+        `${validation.blocking_failures.length} blocking failures detected`
+      );
     }
 
     if (validation.warnings.length > 0) {
@@ -613,8 +691,9 @@ class EnhancedCoverageSystem {
 
     for (const level of levels) {
       const thresholds = this.config.thresholds[level];
-      const meetsLevel = ['statements', 'branches', 'functions', 'lines']
-        .every(metric => coverage[metric].pct >= thresholds[metric]);
+      const meetsLevel = ['statements', 'branches', 'functions', 'lines'].every(
+        (metric) => coverage[metric].pct >= thresholds[metric]
+      );
 
       if (meetsLevel) {
         return level;
@@ -632,36 +711,56 @@ class EnhancedCoverageSystem {
 
     // Coverage-specific recommendations
     if (coverage.branches.pct < 80) {
-      recommendations.push('🌿 Improve branch coverage by adding tests for conditional logic');
+      recommendations.push(
+        '🌿 Improve branch coverage by adding tests for conditional logic'
+      );
     }
 
     if (coverage.functions.pct < 85) {
-      recommendations.push('🔧 Increase function coverage by testing all exported functions');
+      recommendations.push(
+        '🔧 Increase function coverage by testing all exported functions'
+      );
     }
 
     if (coverage.statements.pct < 85) {
-      recommendations.push('📝 Add more comprehensive test cases to improve statement coverage');
+      recommendations.push(
+        '📝 Add more comprehensive test cases to improve statement coverage'
+      );
     }
 
     // Quality level recommendations
     switch (validation.quality_level) {
       case 'critical':
       case 'below_critical':
-        recommendations.push('🚨 URGENT: Coverage is critically low - immediate action required');
-        recommendations.push('📚 Focus on testing core business logic and high-risk areas');
+        recommendations.push(
+          '🚨 URGENT: Coverage is critically low - immediate action required'
+        );
+        recommendations.push(
+          '📚 Focus on testing core business logic and high-risk areas'
+        );
         break;
       case 'minimum':
-        recommendations.push('⚠️ Coverage meets minimum requirements but needs improvement');
-        recommendations.push('🎯 Target 85%+ coverage for production readiness');
+        recommendations.push(
+          '⚠️ Coverage meets minimum requirements but needs improvement'
+        );
+        recommendations.push(
+          '🎯 Target 85%+ coverage for production readiness'
+        );
         break;
       case 'acceptable':
-        recommendations.push('👍 Coverage is acceptable - work towards "good" level (85%+)');
+        recommendations.push(
+          '👍 Coverage is acceptable - work towards "good" level (85%+)'
+        );
         break;
       case 'good':
-        recommendations.push('🎉 Good coverage! Consider pushing towards excellent (95%+)');
+        recommendations.push(
+          '🎉 Good coverage! Consider pushing towards excellent (95%+)'
+        );
         break;
       case 'excellent':
-        recommendations.push('🌟 Excellent coverage! Maintain this level going forward');
+        recommendations.push(
+          '🌟 Excellent coverage! Maintain this level going forward'
+        );
         break;
     }
 
@@ -708,18 +807,21 @@ class EnhancedCoverageSystem {
       overall_status: this.results.validation.passed ? 'PASSED' : 'FAILED',
       quality_level: this.results.validation.quality_level,
       coverage_summary: {
-        overall_percentage: Math.round((
-          this.results.coverage.summary.statements.pct +
-          this.results.coverage.summary.branches.pct +
-          this.results.coverage.summary.functions.pct +
-          this.results.coverage.summary.lines.pct
-        ) / 4),
+        overall_percentage: Math.round(
+          (this.results.coverage.summary.statements.pct +
+            this.results.coverage.summary.branches.pct +
+            this.results.coverage.summary.functions.pct +
+            this.results.coverage.summary.lines.pct) /
+            4
+        ),
         metrics: this.results.coverage.summary,
       },
       trend_analysis: {
         direction: this.results.trends?.analysis?.trend_direction || 'unknown',
-        regression_detected: this.results.trends?.analysis?.regression_detected || false,
-        improvement_detected: this.results.trends?.analysis?.improvement_detected || false,
+        regression_detected:
+          this.results.trends?.analysis?.regression_detected || false,
+        improvement_detected:
+          this.results.trends?.analysis?.improvement_detected || false,
       },
       quality_gates: {
         blocking_failures: this.results.validation.blocking_failures.length,
@@ -729,7 +831,10 @@ class EnhancedCoverageSystem {
       next_actions: this.generateNextActions(),
     };
 
-    const reportPath = path.join(this.config.paths.reports, 'executive-summary.json');
+    const reportPath = path.join(
+      this.config.paths.reports,
+      'executive-summary.json'
+    );
     fs.writeFileSync(reportPath, JSON.stringify(summary, null, 2));
 
     this.results.reports.executive = reportPath;
@@ -759,7 +864,10 @@ class EnhancedCoverageSystem {
       },
     };
 
-    const reportPath = path.join(this.config.paths.reports, 'technical-report.json');
+    const reportPath = path.join(
+      this.config.paths.reports,
+      'technical-report.json'
+    );
     fs.writeFileSync(reportPath, JSON.stringify(technical, null, 2));
 
     this.results.reports.technical = reportPath;
@@ -771,22 +879,27 @@ class EnhancedCoverageSystem {
   generateCiCdReport() {
     const cicd = {
       status: this.results.validation.passed ? 'success' : 'failure',
-      coverage_percentage: Math.round((
-        this.results.coverage.summary.statements.pct +
-        this.results.coverage.summary.branches.pct +
-        this.results.coverage.summary.functions.pct +
-        this.results.coverage.summary.lines.pct
-      ) / 4),
+      coverage_percentage: Math.round(
+        (this.results.coverage.summary.statements.pct +
+          this.results.coverage.summary.branches.pct +
+          this.results.coverage.summary.functions.pct +
+          this.results.coverage.summary.lines.pct) /
+          4
+      ),
       quality_level: this.results.validation.quality_level,
       blocking_failures: this.results.validation.blocking_failures,
       warnings: this.results.validation.warnings,
       badges: [], // Will be populated by generateBadges()
       performance_metrics: this.results.performance,
-      should_block_deployment: this.results.validation.blocking_failures.length > 0,
+      should_block_deployment:
+        this.results.validation.blocking_failures.length > 0,
       timestamp: new Date().toISOString(),
     };
 
-    const reportPath = path.join(this.config.paths.reports, 'ci-cd-report.json');
+    const reportPath = path.join(
+      this.config.paths.reports,
+      'ci-cd-report.json'
+    );
     fs.writeFileSync(reportPath, JSON.stringify(cicd, null, 2));
 
     this.results.reports.cicd = reportPath;
@@ -809,7 +922,10 @@ class EnhancedCoverageSystem {
       recommendations: this.results.trends.analysis.recommendations || [],
     };
 
-    const reportPath = path.join(this.config.paths.reports, 'trend-analysis.json');
+    const reportPath = path.join(
+      this.config.paths.reports,
+      'trend-analysis.json'
+    );
     fs.writeFileSync(reportPath, JSON.stringify(trendReport, null, 2));
 
     this.results.reports.trends = reportPath;
@@ -835,7 +951,10 @@ class EnhancedCoverageSystem {
       historical_performance: this.extractPerformanceHistory(),
     };
 
-    const reportPath = path.join(this.config.paths.reports, 'performance-report.json');
+    const reportPath = path.join(
+      this.config.paths.reports,
+      'performance-report.json'
+    );
     fs.writeFileSync(reportPath, JSON.stringify(perfReport, null, 2));
 
     this.results.reports.performance = reportPath;
@@ -863,10 +982,13 @@ class EnhancedCoverageSystem {
     const color = this.config.badges.colors[qualityLevel] || 'red';
 
     // Overall coverage badge
-    const overallPct = Math.round((
-      coverage.statements.pct + coverage.branches.pct +
-      coverage.functions.pct + coverage.lines.pct
-    ) / 4);
+    const overallPct = Math.round(
+      (coverage.statements.pct +
+        coverage.branches.pct +
+        coverage.functions.pct +
+        coverage.lines.pct) /
+        4
+    );
 
     badges.push({
       name: 'coverage-overall',
@@ -879,7 +1001,7 @@ class EnhancedCoverageSystem {
     });
 
     // Individual metric badges
-    ['statements', 'branches', 'functions', 'lines'].forEach(metric => {
+    ['statements', 'branches', 'functions', 'lines'].forEach((metric) => {
       const pct = Math.round(coverage[metric].pct);
       const metricColor = this.getBadgeColorForPercentage(pct);
 
@@ -916,23 +1038,25 @@ class EnhancedCoverageSystem {
 
     fs.writeFileSync(
       path.join(badgesDir, 'badges.json'),
-      JSON.stringify(badgesData, null, 2),
+      JSON.stringify(badgesData, null, 2)
     );
 
     // Generate README snippet
     const readmeSnippet = this.generateReadmeSnippet(badges);
-    fs.writeFileSync(
-      path.join(badgesDir, 'README-snippet.md'),
-      readmeSnippet,
-    );
+    fs.writeFileSync(path.join(badgesDir, 'README-snippet.md'), readmeSnippet);
 
     this.results.badges = badges;
 
     // Update CI/CD report with badge data
     if (this.results.reports.cicd) {
-      const cicdReport = JSON.parse(fs.readFileSync(this.results.reports.cicd, 'utf8'));
+      const cicdReport = JSON.parse(
+        fs.readFileSync(this.results.reports.cicd, 'utf8')
+      );
       cicdReport.badges = badges;
-      fs.writeFileSync(this.results.reports.cicd, JSON.stringify(cicdReport, null, 2));
+      fs.writeFileSync(
+        this.results.reports.cicd,
+        JSON.stringify(cicdReport, null, 2)
+      );
     }
 
     this.logger.success(`Generated ${badges.length} coverage badges`);
@@ -942,11 +1066,21 @@ class EnhancedCoverageSystem {
    * Get badge color based on percentage
    */
   getBadgeColorForPercentage(percentage) {
-    if (percentage >= 95) {return 'brightgreen';}
-    if (percentage >= 85) {return 'green';}
-    if (percentage >= 80) {return 'yellowgreen';}
-    if (percentage >= 70) {return 'yellow';}
-    if (percentage >= 60) {return 'orange';}
+    if (percentage >= 95) {
+      return 'brightgreen';
+    }
+    if (percentage >= 85) {
+      return 'green';
+    }
+    if (percentage >= 80) {
+      return 'yellowgreen';
+    }
+    if (percentage >= 70) {
+      return 'yellow';
+    }
+    if (percentage >= 60) {
+      return 'orange';
+    }
     return 'red';
   }
 
@@ -954,8 +1088,8 @@ class EnhancedCoverageSystem {
    * Generate README snippet with coverage badges
    */
   generateReadmeSnippet(badges) {
-    const overall = badges.find(b => b.name === 'coverage-overall');
-    const quality = badges.find(b => b.name === 'quality-level');
+    const overall = badges.find((b) => b.name === 'coverage-overall');
+    const quality = badges.find((b) => b.name === 'quality-level');
 
     return `
 ## Coverage Status
@@ -967,9 +1101,13 @@ ${quality ? quality.markdown : ''}
 
 | Metric | Coverage | Badge |
 |--------|----------|-------|
-${badges.filter(b => b.metric).map(badge =>
-    `| ${badge.metric.charAt(0).toUpperCase() + badge.metric.slice(1)} | ${badge.percentage}% | ${badge.markdown} |`,
-  ).join('\n')}
+${badges
+  .filter((b) => b.metric)
+  .map(
+    (badge) =>
+      `| ${badge.metric.charAt(0).toUpperCase() + badge.metric.slice(1)} | ${badge.percentage}% | ${badge.markdown} |`
+  )
+  .join('\n')}
 
 Last updated: ${new Date().toISOString()}
 
@@ -985,7 +1123,10 @@ Last updated: ${new Date().toISOString()}
 
     try {
       // GitHub integration
-      if (this.config.integrations.github.enable_pr_comments && process.env.GITHUB_TOKEN) {
+      if (
+        this.config.integrations.github.enable_pr_comments &&
+        process.env.GITHUB_TOKEN
+      ) {
         this.updateGitHubPR();
       }
 
@@ -1009,26 +1150,38 @@ Last updated: ${new Date().toISOString()}
 
     // Display coverage table
     const tableHeaders = ['Metric', 'Coverage', 'Target', 'Status'];
-    const tableRows = ['statements', 'branches', 'functions', 'lines'].map(metric => {
-      const actual = coverage[metric].pct;
-      const target = this.config.thresholds[this.config.quality_gates.target_threshold][metric];
-      const status = actual >= target ? '✅ Target Met' :
-        validation.blocking_failures.some(f => f.metric === metric) ? '❌ Blocking' :
-          validation.warnings.some(w => w.metric === metric) ? '⚠️ Warning' : '✅ Pass';
+    const tableRows = ['statements', 'branches', 'functions', 'lines'].map(
+      (metric) => {
+        const actual = coverage[metric].pct;
+        const target =
+          this.config.thresholds[this.config.quality_gates.target_threshold][
+            metric
+          ];
+        const status =
+          actual >= target
+            ? '✅ Target Met'
+            : validation.blocking_failures.some((f) => f.metric === metric)
+              ? '❌ Blocking'
+              : validation.warnings.some((w) => w.metric === metric)
+                ? '⚠️ Warning'
+                : '✅ Pass';
 
-      return [
-        metric.charAt(0).toUpperCase() + metric.slice(1),
-        `${actual.toFixed(2)}%`,
-        `${target}%`,
-        status,
-      ];
-    });
+        return [
+          metric.charAt(0).toUpperCase() + metric.slice(1),
+          `${actual.toFixed(2)}%`,
+          `${target}%`,
+          status,
+        ];
+      }
+    );
 
     this.logger.table(tableHeaders, tableRows, 'Coverage Summary');
 
     // Overall status
     const overallStatus = validation.passed ? '✅ PASSED' : '❌ FAILED';
-    const qualityLevel = validation.quality_level.toUpperCase().replace('_', ' ');
+    const qualityLevel = validation.quality_level
+      .toUpperCase()
+      .replace('_', ' ');
 
     console.log(`\n🎯 Overall Status: ${overallStatus}`);
     console.log(`📊 Quality Level: ${qualityLevel}`);
@@ -1037,15 +1190,21 @@ Last updated: ${new Date().toISOString()}
     if (this.results.trends?.analysis) {
       const trend = this.results.trends.analysis;
       if (trend.regression_detected) {
-        console.log('📉 Regression Detected: Coverage has decreased significantly');
+        console.log(
+          '📉 Regression Detected: Coverage has decreased significantly'
+        );
       } else if (trend.improvement_detected) {
-        console.log('📈 Improvement Detected: Coverage has increased significantly');
+        console.log(
+          '📈 Improvement Detected: Coverage has increased significantly'
+        );
       }
     }
 
     // Issues summary
     if (validation.blocking_failures.length > 0) {
-      console.log(`\n❌ Blocking Issues: ${validation.blocking_failures.length}`);
+      console.log(
+        `\n❌ Blocking Issues: ${validation.blocking_failures.length}`
+      );
       validation.blocking_failures.forEach((failure, i) => {
         console.log(`   ${i + 1}. ${failure.message}`);
       });
@@ -1082,8 +1241,12 @@ Last updated: ${new Date().toISOString()}
     });
 
     if (this.results.badges) {
-      console.log(`\n🏷️ Coverage Badges: ${this.config.paths.badges}/badges.json`);
-      console.log(`   README snippet: ${this.config.paths.badges}/README-snippet.md`);
+      console.log(
+        `\n🏷️ Coverage Badges: ${this.config.paths.badges}/badges.json`
+      );
+      console.log(
+        `   README snippet: ${this.config.paths.badges}/README-snippet.md`
+      );
     }
   }
 
@@ -1111,17 +1274,29 @@ Last updated: ${new Date().toISOString()}
 
     // Strategic recommendations based on current state
     if (coverage.branches.pct < 85) {
-      recommendations.push('📋 Implement property-based testing to improve branch coverage');
-      recommendations.push('🔄 Add integration tests for complex business logic flows');
+      recommendations.push(
+        '📋 Implement property-based testing to improve branch coverage'
+      );
+      recommendations.push(
+        '🔄 Add integration tests for complex business logic flows'
+      );
     }
 
     if (this.results.validation.quality_level === 'minimum') {
-      recommendations.push('📚 Establish testing guidelines and code review standards');
-      recommendations.push('🎯 Set team coverage goals and track progress weekly');
+      recommendations.push(
+        '📚 Establish testing guidelines and code review standards'
+      );
+      recommendations.push(
+        '🎯 Set team coverage goals and track progress weekly'
+      );
     }
 
-    recommendations.push('🔧 Consider implementing mutation testing for quality validation');
-    recommendations.push('📊 Set up coverage monitoring dashboards for continuous visibility');
+    recommendations.push(
+      '🔧 Consider implementing mutation testing for quality validation'
+    );
+    recommendations.push(
+      '📊 Set up coverage monitoring dashboards for continuous visibility'
+    );
 
     return recommendations;
   }
@@ -1134,7 +1309,9 @@ Last updated: ${new Date().toISOString()}
     const validation = this.results.validation;
 
     if (validation.blocking_failures.length > 0) {
-      actions.push('🚨 URGENT: Fix blocking coverage failures before deployment');
+      actions.push(
+        '🚨 URGENT: Fix blocking coverage failures before deployment'
+      );
       actions.push('📝 Add tests for uncovered critical code paths');
     }
 
@@ -1142,7 +1319,10 @@ Last updated: ${new Date().toISOString()}
       actions.push('🔍 Investigate recent changes causing coverage regression');
     }
 
-    if (validation.quality_level === 'acceptable' || validation.quality_level === 'minimum') {
+    if (
+      validation.quality_level === 'acceptable' ||
+      validation.quality_level === 'minimum'
+    ) {
       actions.push('🎯 Plan coverage improvement sprint');
       actions.push('📚 Focus on testing high-risk and business-critical code');
     }
@@ -1166,13 +1346,21 @@ Last updated: ${new Date().toISOString()}
    * Analyze execution time performance
    */
   analyzeExecutionTime() {
-    if (!this.results.performance) {return 'unknown';}
+    if (!this.results.performance) {
+      return 'unknown';
+    }
 
     const execTime = this.results.performance.execution_time_ms;
 
-    if (execTime < 30000) {return 'excellent';}
-    if (execTime < 60000) {return 'good';}
-    if (execTime < 120000) {return 'acceptable';}
+    if (execTime < 30000) {
+      return 'excellent';
+    }
+    if (execTime < 60000) {
+      return 'good';
+    }
+    if (execTime < 120000) {
+      return 'acceptable';
+    }
     return 'slow';
   }
 
@@ -1180,13 +1368,21 @@ Last updated: ${new Date().toISOString()}
    * Analyze memory usage
    */
   analyzeMemoryUsage() {
-    if (!this.results.performance?.memory_delta) {return 'unknown';}
+    if (!this.results.performance?.memory_delta) {
+      return 'unknown';
+    }
 
     const heapUsed = this.results.performance.memory_delta.heapUsed;
 
-    if (heapUsed < 50 * 1024 * 1024) {return 'excellent';} // < 50MB
-    if (heapUsed < 100 * 1024 * 1024) {return 'good';}     // < 100MB
-    if (heapUsed < 200 * 1024 * 1024) {return 'acceptable';} // < 200MB
+    if (heapUsed < 50 * 1024 * 1024) {
+      return 'excellent';
+    } // < 50MB
+    if (heapUsed < 100 * 1024 * 1024) {
+      return 'good';
+    } // < 100MB
+    if (heapUsed < 200 * 1024 * 1024) {
+      return 'acceptable';
+    } // < 200MB
     return 'high';
   }
 
@@ -1220,15 +1416,18 @@ Last updated: ${new Date().toISOString()}
    * Extract performance history from trends
    */
   extractPerformanceHistory() {
-    if (!this.results.trends?.data) {return [];}
+    if (!this.results.trends?.data) {
+      return [];
+    }
 
     return this.results.trends.data
-      .filter(point => point.performance)
+      .filter((point) => point.performance)
       .slice(-10) // Last 10 data points
-      .map(point => ({
+      .map((point) => ({
         timestamp: point.timestamp,
         execution_time_ms: point.performance.execution_time_ms,
-        memory_usage_mb: point.performance.memory_delta?.heapUsed / (1024 * 1024) || 0,
+        memory_usage_mb:
+          point.performance.memory_delta?.heapUsed / (1024 * 1024) || 0,
       }));
   }
 
@@ -1239,13 +1438,23 @@ Last updated: ${new Date().toISOString()}
     try {
       return {
         commit: execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
-        branch: execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim(),
-        author: execSync('git log -1 --format="%an <%ae>"', { encoding: 'utf8' }).trim(),
-        message: execSync('git log -1 --format="%s"', { encoding: 'utf8' }).trim(),
-        timestamp: execSync('git log -1 --format="%ai"', { encoding: 'utf8' }).trim(),
+        branch: execSync('git rev-parse --abbrev-ref HEAD', {
+          encoding: 'utf8',
+        }).trim(),
+        author: execSync('git log -1 --format="%an <%ae>"', {
+          encoding: 'utf8',
+        }).trim(),
+        message: execSync('git log -1 --format="%s"', {
+          encoding: 'utf8',
+        }).trim(),
+        timestamp: execSync('git log -1 --format="%ai"', {
+          encoding: 'utf8',
+        }).trim(),
       };
     } catch (error) {
-      this.logger.debug('Could not get Git information', { error: error.message });
+      this.logger.debug('Could not get Git information', {
+        error: error.message,
+      });
       return {
         commit: 'unknown',
         branch: 'unknown',
@@ -1309,7 +1518,7 @@ Examples:
   // Parse command line options
   const options = {};
 
-  const configArg = args.find(arg => arg.startsWith('--config='));
+  const configArg = args.find((arg) => arg.startsWith('--config='));
   if (configArg) {
     const configPath = configArg.split('=')[1];
     try {
@@ -1330,10 +1539,13 @@ Examples:
   }
 
   if (args.includes('--no-performance')) {
-    options.performance = { ...ENHANCED_CONFIG.performance, generate_performance_report: false };
+    options.performance = {
+      ...ENHANCED_CONFIG.performance,
+      generate_performance_report: false,
+    };
   }
 
-  const thresholdArg = args.find(arg => arg.startsWith('--threshold='));
+  const thresholdArg = args.find((arg) => arg.startsWith('--threshold='));
   if (thresholdArg) {
     const level = thresholdArg.split('=')[1];
     if (ENHANCED_CONFIG.thresholds[level]) {

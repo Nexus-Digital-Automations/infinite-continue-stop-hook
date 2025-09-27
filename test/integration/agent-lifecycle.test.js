@@ -57,7 +57,9 @@ describe('Agent Lifecycle Integration Tests', () => {
     test('should handle single agent initialization process', async () => {
       // 1. Initialize agent
       const agentId = 'test-agent-001';
-      const initResult = await execAPI('initialize', [agentId], { projectRoot: testDir });
+      const initResult = await execAPI('initialize', [agentId], {
+        projectRoot: testDir,
+      });
 
       expect(initResult.success).toBe(true);
       expect(initResult.agent.id).toBe(agentId);
@@ -70,12 +72,16 @@ describe('Agent Lifecycle Integration Tests', () => {
       const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.agents[agentId]).toBeDefined();
       expect(featuresData.agents[agentId].status).toBe('active');
-      expect(featuresData.agents[agentId].sessionId).toBe(initResult.agent.sessionId);
+      expect(featuresData.agents[agentId].sessionId).toBe(
+        initResult.agent.sessionId
+      );
       expect(featuresData.agents[agentId].initialized).toBeDefined();
       expect(featuresData.agents[agentId].lastHeartbeat).toBeDefined();
 
       // 3. Verify initialization statistics
-      const statsResult = await execAPI('get-initialization-stats', [], { projectRoot: testDir });
+      const statsResult = await execAPI('get-initialization-stats', [], {
+        projectRoot: testDir,
+      });
       expect(statsResult.success).toBe(true);
       expect(statsResult.stats.total_initializations).toBeGreaterThan(0);
       expect(statsResult.stats.today_totals.initializations).toBeGreaterThan(0);
@@ -83,11 +89,20 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       // Verify time bucket structure
       const buckets = Object.keys(statsResult.stats.time_buckets);
-      expect(buckets).toEqual(['07:00-11:59', '12:00-16:59', '17:00-21:59', '22:00-02:59', '03:00-06:59']);
+      expect(buckets).toEqual([
+        '07:00-11:59',
+        '12:00-16:59',
+        '17:00-21:59',
+        '22:00-02:59',
+        '03:00-06:59',
+      ]);
 
       // At least one bucket should have initialization count > 0
       const bucketValues = Object.values(statsResult.stats.time_buckets);
-      const totalInits = bucketValues.reduce((sum, bucket) => sum + bucket.initializations, 0);
+      const totalInits = bucketValues.reduce(
+        (sum, bucket) => sum + bucket.initializations,
+        0
+      );
       expect(totalInits).toBeGreaterThan(0);
     });
 
@@ -103,34 +118,43 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       const initResults = [];
       for (const agentId of agentIds) {
-        const result = await execAPI('initialize', [agentId], { projectRoot: testDir });
+        const result = await execAPI('initialize', [agentId], {
+          projectRoot: testDir,
+        });
         expect(result.success).toBe(true);
         initResults.push(result);
       }
 
       // 2. Verify all agents have unique session IDs
-      const sessionIds = initResults.map(result => result.agent.sessionId);
+      const sessionIds = initResults.map((result) => result.agent.sessionId);
       const uniqueSessionIds = new Set(sessionIds);
       expect(uniqueSessionIds.size).toBe(agentIds.length);
 
       // 3. Verify all agents are recorded
       const featuresData = await readFeaturesFile(testDir);
-      agentIds.forEach(agentId => {
+      agentIds.forEach((agentId) => {
         expect(featuresData.agents[agentId]).toBeDefined();
         expect(featuresData.agents[agentId].status).toBe('active');
       });
 
       // 4. Verify initialization statistics reflect multiple agents
-      const statsResult = await execAPI('get-initialization-stats', [], { projectRoot: testDir });
+      const statsResult = await execAPI('get-initialization-stats', [], {
+        projectRoot: testDir,
+      });
       expect(statsResult.success).toBe(true);
-      expect(statsResult.stats.total_initializations).toBeGreaterThanOrEqual(agentIds.length);
+      expect(statsResult.stats.total_initializations).toBeGreaterThanOrEqual(
+        agentIds.length
+      );
     });
 
     test('should handle concurrent agent initialization', async () => {
       // 1. Create multiple agents concurrently
-      const agentIds = Array.from({ length: 10 }, (_, i) => `concurrent-agent-${i + 1}`);
+      const agentIds = Array.from(
+        { length: 10 },
+        (_, i) => `concurrent-agent-${i + 1}`
+      );
 
-      const concurrentCommands = agentIds.map(agentId => ({
+      const concurrentCommands = agentIds.map((agentId) => ({
         command: 'initialize',
         args: [agentId],
         options: { projectRoot: testDir },
@@ -139,10 +163,10 @@ describe('Agent Lifecycle Integration Tests', () => {
       const results = await execAPIConcurrently(concurrentCommands);
 
       // 2. Verify all initializations succeeded
-      expect(results.every(result => result.success)).toBe(true);
+      expect(results.every((result) => result.success)).toBe(true);
 
       // 3. Verify all agents have unique session IDs
-      const sessionIds = results.map(result => result.agent.sessionId);
+      const sessionIds = results.map((result) => result.agent.sessionId);
       const uniqueSessionIds = new Set(sessionIds);
       expect(uniqueSessionIds.size).toBe(agentIds.length);
 
@@ -150,27 +174,35 @@ describe('Agent Lifecycle Integration Tests', () => {
       const featuresData = await readFeaturesFile(testDir);
       validateFeaturesStructure(featuresData);
 
-      agentIds.forEach(agentId => {
+      agentIds.forEach((agentId) => {
         expect(featuresData.agents[agentId]).toBeDefined();
         expect(featuresData.agents[agentId].status).toBe('active');
       });
 
       // 5. Verify statistics accuracy
-      const statsResult = await execAPI('get-initialization-stats', [], { projectRoot: testDir });
+      const statsResult = await execAPI('get-initialization-stats', [], {
+        projectRoot: testDir,
+      });
       expect(statsResult.success).toBe(true);
-      expect(statsResult.stats.total_initializations).toBeGreaterThanOrEqual(agentIds.length);
+      expect(statsResult.stats.total_initializations).toBeGreaterThanOrEqual(
+        agentIds.length
+      );
     });
 
     test('should prevent duplicate agent initialization', async () => {
       // 1. Initialize an agent
       const agentId = 'duplicate-test-agent';
-      const firstInitResult = await execAPI('initialize', [agentId], { projectRoot: testDir });
+      const firstInitResult = await execAPI('initialize', [agentId], {
+        projectRoot: testDir,
+      });
       expect(firstInitResult.success).toBe(true);
 
       const firstSessionId = firstInitResult.agent.sessionId;
 
       // 2. Try to initialize the same agent again
-      const secondInitResult = await execAPI('initialize', [agentId], { projectRoot: testDir });
+      const secondInitResult = await execAPI('initialize', [agentId], {
+        projectRoot: testDir,
+      });
       expect(secondInitResult.success).toBe(true);
 
       // Should create a new session (reinitialization behavior)
@@ -192,13 +224,17 @@ describe('Agent Lifecycle Integration Tests', () => {
     test('should handle agent reinitialization process', async () => {
       // 1. Initialize agent first
       const agentId = 'reinit-test-agent';
-      const initResult = await execAPI('initialize', [agentId], { projectRoot: testDir });
+      const initResult = await execAPI('initialize', [agentId], {
+        projectRoot: testDir,
+      });
       expect(initResult.success).toBe(true);
 
       const originalSessionId = initResult.agent.sessionId;
 
       // 2. Reinitialize agent
-      const reinitResult = await execAPI('reinitialize', [agentId], { projectRoot: testDir });
+      const reinitResult = await execAPI('reinitialize', [agentId], {
+        projectRoot: testDir,
+      });
 
       expect(reinitResult.success).toBe(true);
       expect(reinitResult.agent.id).toBe(agentId);
@@ -210,27 +246,40 @@ describe('Agent Lifecycle Integration Tests', () => {
       // 3. Verify agent state in file
       const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.agents[agentId]).toBeDefined();
-      expect(featuresData.agents[agentId].sessionId).toBe(reinitResult.agent.sessionId);
+      expect(featuresData.agents[agentId].sessionId).toBe(
+        reinitResult.agent.sessionId
+      );
       expect(featuresData.agents[agentId].previousSessions).toHaveLength(1);
-      expect(featuresData.agents[agentId].previousSessions[0]).toBe(originalSessionId);
+      expect(featuresData.agents[agentId].previousSessions[0]).toBe(
+        originalSessionId
+      );
       expect(featuresData.agents[agentId].reinitialized).toBeDefined();
 
       // 4. Verify reinitialization statistics
-      const statsResult = await execAPI('get-initialization-stats', [], { projectRoot: testDir });
+      const statsResult = await execAPI('get-initialization-stats', [], {
+        projectRoot: testDir,
+      });
       expect(statsResult.success).toBe(true);
       expect(statsResult.stats.total_reinitializations).toBeGreaterThan(0);
-      expect(statsResult.stats.today_totals.reinitializations).toBeGreaterThan(0);
+      expect(statsResult.stats.today_totals.reinitializations).toBeGreaterThan(
+        0
+      );
 
       // Check that reinitialization is tracked in time buckets
       const bucketValues = Object.values(statsResult.stats.time_buckets);
-      const totalReinits = bucketValues.reduce((sum, bucket) => sum + bucket.reinitializations, 0);
+      const totalReinits = bucketValues.reduce(
+        (sum, bucket) => sum + bucket.reinitializations,
+        0
+      );
       expect(totalReinits).toBeGreaterThan(0);
     });
 
     test('should handle multiple reinitializations of same agent', async () => {
       // 1. Initialize agent
       const agentId = 'multi-reinit-agent';
-      const initResult = await execAPI('initialize', [agentId], { projectRoot: testDir });
+      const initResult = await execAPI('initialize', [agentId], {
+        projectRoot: testDir,
+      });
       expect(initResult.success).toBe(true);
 
       const sessionIds = [initResult.agent.sessionId];
@@ -238,7 +287,9 @@ describe('Agent Lifecycle Integration Tests', () => {
       // 2. Perform multiple reinitializations
       const reinitCount = 5;
       for (let i = 0; i < reinitCount; i++) {
-        const reinitResult = await execAPI('reinitialize', [agentId], { projectRoot: testDir });
+        const reinitResult = await execAPI('reinitialize', [agentId], {
+          projectRoot: testDir,
+        });
         expect(reinitResult.success).toBe(true);
         sessionIds.push(reinitResult.agent.sessionId);
       }
@@ -249,19 +300,29 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       // 4. Verify final agent state
       const featuresData = await readFeaturesFile(testDir);
-      expect(featuresData.agents[agentId].previousSessions).toHaveLength(reinitCount);
-      expect(featuresData.agents[agentId].previousSessions).toEqual(sessionIds.slice(0, -1));
+      expect(featuresData.agents[agentId].previousSessions).toHaveLength(
+        reinitCount
+      );
+      expect(featuresData.agents[agentId].previousSessions).toEqual(
+        sessionIds.slice(0, -1)
+      );
 
       // 5. Verify statistics
-      const statsResult = await execAPI('get-initialization-stats', [], { projectRoot: testDir });
+      const statsResult = await execAPI('get-initialization-stats', [], {
+        projectRoot: testDir,
+      });
       expect(statsResult.success).toBe(true);
-      expect(statsResult.stats.total_reinitializations).toBeGreaterThanOrEqual(reinitCount);
+      expect(statsResult.stats.total_reinitializations).toBeGreaterThanOrEqual(
+        reinitCount
+      );
     });
 
     test('should handle reinitialization of non-existent agent', async () => {
       // 1. Try to reinitialize agent that doesn't exist
       const agentId = 'non-existent-agent';
-      const reinitResult = await execAPI('reinitialize', [agentId], { projectRoot: testDir });
+      const reinitResult = await execAPI('reinitialize', [agentId], {
+        projectRoot: testDir,
+      });
 
       // Should succeed (creates new agent)
       expect(reinitResult.success).toBe(true);
@@ -275,15 +336,21 @@ describe('Agent Lifecycle Integration Tests', () => {
 
     test('should handle concurrent reinitializations', async () => {
       // 1. Initialize multiple agents
-      const agentIds = ['concurrent-reinit-1', 'concurrent-reinit-2', 'concurrent-reinit-3'];
+      const agentIds = [
+        'concurrent-reinit-1',
+        'concurrent-reinit-2',
+        'concurrent-reinit-3',
+      ];
 
       for (const agentId of agentIds) {
-        const initResult = await execAPI('initialize', [agentId], { projectRoot: testDir });
+        const initResult = await execAPI('initialize', [agentId], {
+          projectRoot: testDir,
+        });
         expect(initResult.success).toBe(true);
       }
 
       // 2. Reinitialize all agents concurrently
-      const reinitCommands = agentIds.map(agentId => ({
+      const reinitCommands = agentIds.map((agentId) => ({
         command: 'reinitialize',
         args: [agentId],
         options: { projectRoot: testDir },
@@ -292,10 +359,10 @@ describe('Agent Lifecycle Integration Tests', () => {
       const reinitResults = await execAPIConcurrently(reinitCommands);
 
       // 3. Verify all reinitializations succeeded
-      expect(reinitResults.every(result => result.success)).toBe(true);
+      expect(reinitResults.every((result) => result.success)).toBe(true);
 
       // 4. Verify unique session IDs
-      const sessionIds = reinitResults.map(result => result.agent.sessionId);
+      const sessionIds = reinitResults.map((result) => result.agent.sessionId);
       const uniqueSessionIds = new Set(sessionIds);
       expect(uniqueSessionIds.size).toBe(agentIds.length);
 
@@ -303,7 +370,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       const featuresData = await readFeaturesFile(testDir);
       validateFeaturesStructure(featuresData);
 
-      agentIds.forEach(agentId => {
+      agentIds.forEach((agentId) => {
         expect(featuresData.agents[agentId]).toBeDefined();
         expect(featuresData.agents[agentId].previousSessions).toHaveLength(1);
       });
@@ -318,14 +385,21 @@ describe('Agent Lifecycle Integration Tests', () => {
     test('should handle agent stop authorization process', async () => {
       // 1. Initialize agent
       const agentId = 'stop-auth-agent';
-      const initResult = await execAPI('initialize', [agentId], { projectRoot: testDir });
+      const initResult = await execAPI('initialize', [agentId], {
+        projectRoot: testDir,
+      });
       expect(initResult.success).toBe(true);
 
       // 2. Authorize stop
-      const stopReason = 'Integration test completed - all tasks finished and project perfect';
-      const stopResult = await execAPI('authorize-stop', [agentId, stopReason], {
-        projectRoot: testDir,
-      });
+      const stopReason =
+        'Integration test completed - all tasks finished and project perfect';
+      const stopResult = await execAPI(
+        'authorize-stop',
+        [agentId, stopReason],
+        {
+          projectRoot: testDir,
+        }
+      );
 
       expect(stopResult.success).toBe(true);
       expect(stopResult.authorization.authorized_by).toBe(agentId);
@@ -335,7 +409,10 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       // 3. Verify stop flag file creation
       const stopFlagPath = path.join(testDir, '.stop-allowed');
-      const stopFlagExists = await fs.access(stopFlagPath).then(() => true).catch(() => false);
+      const stopFlagExists = await fs
+        .access(stopFlagPath)
+        .then(() => true)
+        .catch(() => false);
       expect(stopFlagExists).toBe(true);
 
       // 4. Verify stop flag content
@@ -368,13 +445,19 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       for (const testCase of testCases) {
         // Initialize agent
-        const initResult = await execAPI('initialize', [testCase.agentId], { projectRoot: testDir });
+        const initResult = await execAPI('initialize', [testCase.agentId], {
+          projectRoot: testDir,
+        });
         expect(initResult.success).toBe(true);
 
         // Authorize stop
-        const stopResult = await execAPI('authorize-stop', [testCase.agentId, testCase.reason], {
-          projectRoot: testDir,
-        });
+        const stopResult = await execAPI(
+          'authorize-stop',
+          [testCase.agentId, testCase.reason],
+          {
+            projectRoot: testDir,
+          }
+        );
 
         expect(stopResult.success).toBe(true);
         expect(stopResult.authorization.reason).toBe(testCase.reason);
@@ -392,11 +475,15 @@ describe('Agent Lifecycle Integration Tests', () => {
     test('should handle stop authorization without reason', async () => {
       // 1. Initialize agent
       const agentId = 'no-reason-agent';
-      const initResult = await execAPI('initialize', [agentId], { projectRoot: testDir });
+      const initResult = await execAPI('initialize', [agentId], {
+        projectRoot: testDir,
+      });
       expect(initResult.success).toBe(true);
 
       // 2. Authorize stop without reason
-      const stopResult = await execAPI('authorize-stop', [agentId], { projectRoot: testDir });
+      const stopResult = await execAPI('authorize-stop', [agentId], {
+        projectRoot: testDir,
+      });
 
       expect(stopResult.success).toBe(true);
       expect(stopResult.authorization.authorized_by).toBe(agentId);
@@ -416,9 +503,13 @@ describe('Agent Lifecycle Integration Tests', () => {
       const agentId = 'non-existent-stop-agent';
       const stopReason = 'Testing stop authorization by non-existent agent';
 
-      const stopResult = await execAPI('authorize-stop', [agentId, stopReason], {
-        projectRoot: testDir,
-      });
+      const stopResult = await execAPI(
+        'authorize-stop',
+        [agentId, stopReason],
+        {
+          projectRoot: testDir,
+        }
+      );
 
       // Should succeed (doesn't require agent to exist first)
       expect(stopResult.success).toBe(true);
@@ -426,7 +517,10 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       // 2. Verify stop flag creation
       const stopFlagPath = path.join(testDir, '.stop-allowed');
-      const stopFlagExists = await fs.access(stopFlagPath).then(() => true).catch(() => false);
+      const stopFlagExists = await fs
+        .access(stopFlagPath)
+        .then(() => true)
+        .catch(() => false);
       expect(stopFlagExists).toBe(true);
     });
 
@@ -435,16 +529,19 @@ describe('Agent Lifecycle Integration Tests', () => {
       const agentIds = ['multi-stop-1', 'multi-stop-2', 'multi-stop-3'];
 
       for (const agentId of agentIds) {
-        const initResult = await execAPI('initialize', [agentId], { projectRoot: testDir });
+        const initResult = await execAPI('initialize', [agentId], {
+          projectRoot: testDir,
+        });
         expect(initResult.success).toBe(true);
       }
 
       // 2. Each agent authorizes stop (last one wins)
       for (const agentId of agentIds) {
-        const stopResult = await execAPI('authorize-stop', [
-          agentId,
-          `Stop authorized by ${agentId}`,
-        ], { projectRoot: testDir });
+        const stopResult = await execAPI(
+          'authorize-stop',
+          [agentId, `Stop authorized by ${agentId}`],
+          { projectRoot: testDir }
+        );
 
         expect(stopResult.success).toBe(true);
       }
@@ -455,7 +552,9 @@ describe('Agent Lifecycle Integration Tests', () => {
       const stopFlagData = JSON.parse(stopFlagContent);
 
       expect(stopFlagData.authorized_by).toBe(agentIds[agentIds.length - 1]);
-      expect(stopFlagData.reason).toBe(`Stop authorized by ${agentIds[agentIds.length - 1]}`);
+      expect(stopFlagData.reason).toBe(
+        `Stop authorized by ${agentIds[agentIds.length - 1]}`
+      );
     });
   });
 
@@ -466,7 +565,9 @@ describe('Agent Lifecycle Integration Tests', () => {
   describe('Initialization Statistics Tracking', () => {
     test('should track initialization statistics accurately', async () => {
       // 1. Get initial stats
-      const initialStatsResult = await execAPI('get-initialization-stats', [], { projectRoot: testDir });
+      const initialStatsResult = await execAPI('get-initialization-stats', [], {
+        projectRoot: testDir,
+      });
       expect(initialStatsResult.success).toBe(true);
 
       const initialStats = initialStatsResult.stats;
@@ -477,17 +578,23 @@ describe('Agent Lifecycle Integration Tests', () => {
       const agentId = 'stats-test-agent';
 
       // Initialize
-      const initResult = await execAPI('initialize', [agentId], { projectRoot: testDir });
+      const initResult = await execAPI('initialize', [agentId], {
+        projectRoot: testDir,
+      });
       expect(initResult.success).toBe(true);
 
       // Reinitialize multiple times
       for (let i = 0; i < 3; i++) {
-        const reinitResult = await execAPI('reinitialize', [agentId], { projectRoot: testDir });
+        const reinitResult = await execAPI('reinitialize', [agentId], {
+          projectRoot: testDir,
+        });
         expect(reinitResult.success).toBe(true);
       }
 
       // 3. Get updated stats
-      const updatedStatsResult = await execAPI('get-initialization-stats', [], { projectRoot: testDir });
+      const updatedStatsResult = await execAPI('get-initialization-stats', [], {
+        projectRoot: testDir,
+      });
       expect(updatedStatsResult.success).toBe(true);
 
       const updatedStats = updatedStatsResult.stats;
@@ -505,8 +612,14 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       // At least one bucket should have counts > 0
       const bucketValues = Object.values(updatedStats.time_buckets);
-      const totalBucketInits = bucketValues.reduce((sum, bucket) => sum + bucket.initializations, 0);
-      const totalBucketReinits = bucketValues.reduce((sum, bucket) => sum + bucket.reinitializations, 0);
+      const totalBucketInits = bucketValues.reduce(
+        (sum, bucket) => sum + bucket.initializations,
+        0
+      );
+      const totalBucketReinits = bucketValues.reduce(
+        (sum, bucket) => sum + bucket.reinitializations,
+        0
+      );
 
       expect(totalBucketInits).toBeGreaterThan(0);
       expect(totalBucketReinits).toBeGreaterThan(0);
@@ -515,7 +628,8 @@ describe('Agent Lifecycle Integration Tests', () => {
       expect(updatedStats.today_totals.initializations).toBeGreaterThan(0);
       expect(updatedStats.today_totals.reinitializations).toBeGreaterThan(0);
       expect(updatedStats.today_totals.combined).toBe(
-        updatedStats.today_totals.initializations + updatedStats.today_totals.reinitializations,
+        updatedStats.today_totals.initializations +
+          updatedStats.today_totals.reinitializations
       );
     });
 
@@ -529,43 +643,69 @@ describe('Agent Lifecycle Integration Tests', () => {
       }
 
       // 2. Get stats after operations
-      const statsResult1 = await execAPI('get-initialization-stats', [], { projectRoot: testDir });
+      const statsResult1 = await execAPI('get-initialization-stats', [], {
+        projectRoot: testDir,
+      });
       expect(statsResult1.success).toBe(true);
 
       // 3. Perform more operations
-      await execAPI('initialize', ['persist-agent-3'], { projectRoot: testDir });
+      await execAPI('initialize', ['persist-agent-3'], {
+        projectRoot: testDir,
+      });
 
       // 4. Get stats again
-      const statsResult2 = await execAPI('get-initialization-stats', [], { projectRoot: testDir });
+      const statsResult2 = await execAPI('get-initialization-stats', [], {
+        projectRoot: testDir,
+      });
       expect(statsResult2.success).toBe(true);
 
       // 5. Verify cumulative tracking
-      expect(statsResult2.stats.total_initializations).toBeGreaterThan(statsResult1.stats.total_initializations);
-      expect(statsResult2.stats.total_reinitializations).toBeGreaterThanOrEqual(statsResult1.stats.total_reinitializations);
+      expect(statsResult2.stats.total_initializations).toBeGreaterThan(
+        statsResult1.stats.total_initializations
+      );
+      expect(statsResult2.stats.total_reinitializations).toBeGreaterThanOrEqual(
+        statsResult1.stats.total_reinitializations
+      );
 
       // 6. Verify file persistence
       const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.metadata.initialization_stats).toBeDefined();
-      expect(featuresData.metadata.initialization_stats.total_initializations).toBe(statsResult2.stats.total_initializations);
-      expect(featuresData.metadata.initialization_stats.total_reinitializations).toBe(statsResult2.stats.total_reinitializations);
+      expect(
+        featuresData.metadata.initialization_stats.total_initializations
+      ).toBe(statsResult2.stats.total_initializations);
+      expect(
+        featuresData.metadata.initialization_stats.total_reinitializations
+      ).toBe(statsResult2.stats.total_reinitializations);
     });
 
     test('should handle time bucket boundaries correctly', async () => {
       // 1. Get current stats to understand time bucket
-      const statsResult = await execAPI('get-initialization-stats', [], { projectRoot: testDir });
+      const statsResult = await execAPI('get-initialization-stats', [], {
+        projectRoot: testDir,
+      });
       expect(statsResult.success).toBe(true);
 
       const currentBucket = statsResult.stats.current_bucket;
       expect(currentBucket).toBeDefined();
 
       // 2. Verify bucket is one of the expected values
-      const expectedBuckets = ['07:00-11:59', '12:00-16:59', '17:00-21:59', '22:00-02:59', '03:00-06:59'];
+      const expectedBuckets = [
+        '07:00-11:59',
+        '12:00-16:59',
+        '17:00-21:59',
+        '22:00-02:59',
+        '03:00-06:59',
+      ];
       expect(expectedBuckets).toContain(currentBucket);
 
       // 3. Perform operation and verify it's tracked in correct bucket
-      await execAPI('initialize', ['bucket-test-agent'], { projectRoot: testDir });
+      await execAPI('initialize', ['bucket-test-agent'], {
+        projectRoot: testDir,
+      });
 
-      const updatedStatsResult = await execAPI('get-initialization-stats', [], { projectRoot: testDir });
+      const updatedStatsResult = await execAPI('get-initialization-stats', [], {
+        projectRoot: testDir,
+      });
       expect(updatedStatsResult.success).toBe(true);
 
       const bucketData = updatedStatsResult.stats.time_buckets[currentBucket];
@@ -581,7 +721,9 @@ describe('Agent Lifecycle Integration Tests', () => {
     test('should handle complete agent workflow from initialization to stop', async () => {
       // 1. Initialize agent
       const agentId = 'complete-lifecycle-agent';
-      const initResult = await execAPI('initialize', [agentId], { projectRoot: testDir });
+      const initResult = await execAPI('initialize', [agentId], {
+        projectRoot: testDir,
+      });
 
       expect(initResult.success).toBe(true);
       expect(initResult.agent.status).toBe('initialized');
@@ -592,7 +734,9 @@ describe('Agent Lifecycle Integration Tests', () => {
       expect(featuresData.agents[agentId].initialized).toBeDefined();
 
       // 3. Reinitialize agent (simulating restart)
-      const reinitResult = await execAPI('reinitialize', [agentId], { projectRoot: testDir });
+      const reinitResult = await execAPI('reinitialize', [agentId], {
+        projectRoot: testDir,
+      });
 
       expect(reinitResult.success).toBe(true);
       expect(reinitResult.agent.status).toBe('reinitialized');
@@ -604,17 +748,25 @@ describe('Agent Lifecycle Integration Tests', () => {
       expect(featuresData.agents[agentId].reinitialized).toBeDefined();
 
       // 5. Authorize stop (simulating task completion)
-      const stopReason = 'Complete lifecycle test finished - all objectives achieved';
-      const stopResult = await execAPI('authorize-stop', [agentId, stopReason], {
-        projectRoot: testDir,
-      });
+      const stopReason =
+        'Complete lifecycle test finished - all objectives achieved';
+      const stopResult = await execAPI(
+        'authorize-stop',
+        [agentId, stopReason],
+        {
+          projectRoot: testDir,
+        }
+      );
 
       expect(stopResult.success).toBe(true);
       expect(stopResult.authorization.stop_flag_created).toBe(true);
 
       // 6. Verify stop flag
       const stopFlagPath = path.join(testDir, '.stop-allowed');
-      const stopFlagExists = await fs.access(stopFlagPath).then(() => true).catch(() => false);
+      const stopFlagExists = await fs
+        .access(stopFlagPath)
+        .then(() => true)
+        .catch(() => false);
       expect(stopFlagExists).toBe(true);
 
       const stopFlagContent = await fs.readFile(stopFlagPath, 'utf8');
@@ -623,7 +775,9 @@ describe('Agent Lifecycle Integration Tests', () => {
       expect(stopFlagData.reason).toBe(stopReason);
 
       // 7. Verify final statistics
-      const finalStatsResult = await execAPI('get-initialization-stats', [], { projectRoot: testDir });
+      const finalStatsResult = await execAPI('get-initialization-stats', [], {
+        projectRoot: testDir,
+      });
       expect(finalStatsResult.success).toBe(true);
       expect(finalStatsResult.stats.total_initializations).toBeGreaterThan(0);
       expect(finalStatsResult.stats.total_reinitializations).toBeGreaterThan(0);
@@ -641,7 +795,9 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       const initResults = [];
       for (const agentId of agentTeam) {
-        const result = await execAPI('initialize', [agentId], { projectRoot: testDir });
+        const result = await execAPI('initialize', [agentId], {
+          projectRoot: testDir,
+        });
         expect(result.success).toBe(true);
         initResults.push(result);
       }
@@ -649,30 +805,42 @@ describe('Agent Lifecycle Integration Tests', () => {
       // 2. Simulate collaborative work with reinitializations
       for (const agentId of agentTeam.slice(1, 4)) {
         // Some agents reinitialize during work
-        const reinitResult = await execAPI('reinitialize', [agentId], { projectRoot: testDir });
+        const reinitResult = await execAPI('reinitialize', [agentId], {
+          projectRoot: testDir,
+        });
         expect(reinitResult.success).toBe(true);
       }
 
       // 3. Verify all agents are tracked
       const featuresData = await readFeaturesFile(testDir);
-      agentTeam.forEach(agentId => {
+      agentTeam.forEach((agentId) => {
         expect(featuresData.agents[agentId]).toBeDefined();
         expect(featuresData.agents[agentId].status).toBe('active');
       });
 
       // 4. Lead agent authorizes stop after team completion
-      const stopResult = await execAPI('authorize-stop', [
-        'lead-agent',
-        'Team collaboration completed - all agents finished their tasks successfully',
-      ], { projectRoot: testDir });
+      const stopResult = await execAPI(
+        'authorize-stop',
+        [
+          'lead-agent',
+          'Team collaboration completed - all agents finished their tasks successfully',
+        ],
+        { projectRoot: testDir }
+      );
 
       expect(stopResult.success).toBe(true);
 
       // 5. Verify statistics reflect team activity
-      const statsResult = await execAPI('get-initialization-stats', [], { projectRoot: testDir });
+      const statsResult = await execAPI('get-initialization-stats', [], {
+        projectRoot: testDir,
+      });
       expect(statsResult.success).toBe(true);
-      expect(statsResult.stats.total_initializations).toBeGreaterThanOrEqual(agentTeam.length);
-      expect(statsResult.stats.total_reinitializations).toBeGreaterThanOrEqual(3);
+      expect(statsResult.stats.total_initializations).toBeGreaterThanOrEqual(
+        agentTeam.length
+      );
+      expect(statsResult.stats.total_reinitializations).toBeGreaterThanOrEqual(
+        3
+      );
 
       // 6. Verify file integrity after complex operations
       validateFeaturesStructure(featuresData);
@@ -681,32 +849,43 @@ describe('Agent Lifecycle Integration Tests', () => {
     test('should handle agent workflow error recovery', async () => {
       // 1. Initialize agent
       const agentId = 'error-recovery-agent';
-      const initResult = await execAPI('initialize', [agentId], { projectRoot: testDir });
+      const initResult = await execAPI('initialize', [agentId], {
+        projectRoot: testDir,
+      });
       expect(initResult.success).toBe(true);
 
       // 2. Simulate multiple reinitializations (recovery scenarios)
       const recoveryCount = 7;
       for (let i = 0; i < recoveryCount; i++) {
-        const reinitResult = await execAPI('reinitialize', [agentId], { projectRoot: testDir });
+        const reinitResult = await execAPI('reinitialize', [agentId], {
+          projectRoot: testDir,
+        });
         expect(reinitResult.success).toBe(true);
       }
 
       // 3. Verify recovery state
       const featuresData = await readFeaturesFile(testDir);
-      expect(featuresData.agents[agentId].previousSessions).toHaveLength(recoveryCount);
+      expect(featuresData.agents[agentId].previousSessions).toHaveLength(
+        recoveryCount
+      );
 
       // 4. Final authorization after recovery
-      const stopResult = await execAPI('authorize-stop', [
-        agentId,
-        'Recovery testing completed - system resilience validated',
-      ], { projectRoot: testDir });
+      const stopResult = await execAPI(
+        'authorize-stop',
+        [agentId, 'Recovery testing completed - system resilience validated'],
+        { projectRoot: testDir }
+      );
 
       expect(stopResult.success).toBe(true);
 
       // 5. Verify statistics include recovery operations
-      const statsResult = await execAPI('get-initialization-stats', [], { projectRoot: testDir });
+      const statsResult = await execAPI('get-initialization-stats', [], {
+        projectRoot: testDir,
+      });
       expect(statsResult.success).toBe(true);
-      expect(statsResult.stats.total_reinitializations).toBeGreaterThanOrEqual(recoveryCount);
+      expect(statsResult.stats.total_reinitializations).toBeGreaterThanOrEqual(
+        recoveryCount
+      );
     });
   });
 });

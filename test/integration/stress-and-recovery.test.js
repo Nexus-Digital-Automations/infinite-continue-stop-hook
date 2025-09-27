@@ -65,11 +65,17 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
           title: `Concurrent Feature ${i + 1}`,
           description: `Testing concurrent operations with feature number ${i + 1}`,
           business_value: `Validates system performance under load ${i + 1}`,
-          category: ['enhancement', 'bug-fix', 'new-feature', 'performance', 'security'][i % 5],
-        }),
+          category: [
+            'enhancement',
+            'bug-fix',
+            'new-feature',
+            'performance',
+            'security',
+          ][i % 5],
+        })
       );
 
-      const commands = features.map(featureData => ({
+      const commands = features.map((featureData) => ({
         command: 'suggest-feature',
         args: [JSON.stringify(featureData)],
         options: { projectRoot: testDir },
@@ -81,10 +87,10 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
       const endTime = Date.now();
 
       // 3. Verify all operations succeeded
-      expect(results.every(result => result.success)).toBe(true);
+      expect(results.every((result) => result.success)).toBe(true);
 
       // 4. Verify unique feature IDs (no race conditions in ID generation)
-      const featureIds = results.map(result => result.feature.id);
+      const featureIds = results.map((result) => result.feature.id);
       const uniqueIds = new Set(featureIds);
       expect(uniqueIds.size).toBe(concurrentCount);
 
@@ -107,14 +113,18 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         generateTestFeature({
           title: `Mixed Ops Feature ${i + 1}`,
           category: 'enhancement',
-        }),
+        })
       );
 
       const featureIds = [];
       for (const featureData of initialFeatures) {
-        const result = await execAPI('suggest-feature', [JSON.stringify(featureData)], {
-          projectRoot: testDir,
-        });
+        const result = await execAPI(
+          'suggest-feature',
+          [JSON.stringify(featureData)],
+          {
+            projectRoot: testDir,
+          }
+        );
         expect(result.success).toBe(true);
         featureIds.push(result.feature.id);
       }
@@ -124,24 +134,34 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         // More feature suggestions
         ...Array.from({ length: 10 }, (_, i) => ({
           command: 'suggest-feature',
-          args: [JSON.stringify(generateTestFeature({
-            title: `Concurrent New Feature ${i + 1}`,
-            category: 'new-feature',
-          }))],
+          args: [
+            JSON.stringify(
+              generateTestFeature({
+                title: `Concurrent New Feature ${i + 1}`,
+                category: 'new-feature',
+              })
+            ),
+          ],
           options: { projectRoot: testDir },
         })),
 
         // Feature approvals
-        ...featureIds.slice(0, 5).map(featureId => ({
+        ...featureIds.slice(0, 5).map((featureId) => ({
           command: 'approve-feature',
           args: [featureId, JSON.stringify({ approved_by: 'concurrent-test' })],
           options: { projectRoot: testDir },
         })),
 
         // Feature rejections
-        ...featureIds.slice(5, 10).map(featureId => ({
+        ...featureIds.slice(5, 10).map((featureId) => ({
           command: 'reject-feature',
-          args: [featureId, JSON.stringify({ rejected_by: 'concurrent-test', reason: 'Testing concurrent rejection' })],
+          args: [
+            featureId,
+            JSON.stringify({
+              rejected_by: 'concurrent-test',
+              reason: 'Testing concurrent rejection',
+            }),
+          ],
           options: { projectRoot: testDir },
         })),
 
@@ -153,17 +173,33 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         })),
 
         // Statistics queries
-        { command: 'feature-stats', args: [], options: { projectRoot: testDir } },
-        { command: 'get-initialization-stats', args: [], options: { projectRoot: testDir } },
-        { command: 'list-features', args: [], options: { projectRoot: testDir } },
-        { command: 'list-features', args: [JSON.stringify({ status: 'suggested' })], options: { projectRoot: testDir } },
+        {
+          command: 'feature-stats',
+          args: [],
+          options: { projectRoot: testDir },
+        },
+        {
+          command: 'get-initialization-stats',
+          args: [],
+          options: { projectRoot: testDir },
+        },
+        {
+          command: 'list-features',
+          args: [],
+          options: { projectRoot: testDir },
+        },
+        {
+          command: 'list-features',
+          args: [JSON.stringify({ status: 'suggested' })],
+          options: { projectRoot: testDir },
+        },
       ];
 
       // 3. Execute all mixed operations concurrently
       const results = await execAPIConcurrently(mixedCommands);
 
       // 4. Verify all operations succeeded
-      expect(results.every(result => result.success)).toBe(true);
+      expect(results.every((result) => result.success)).toBe(true);
 
       // 5. Verify final data consistency
       const finalFeaturesData = await readFeaturesFile(testDir);
@@ -173,10 +209,14 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
       expect(finalFeaturesData.features.length).toBeGreaterThanOrEqual(30);
 
       // Verify approval history contains expected number of entries
-      expect(finalFeaturesData.metadata.approval_history.length).toBeGreaterThanOrEqual(10);
+      expect(
+        finalFeaturesData.metadata.approval_history.length
+      ).toBeGreaterThanOrEqual(10);
 
       // Verify agents were created
-      expect(Object.keys(finalFeaturesData.agents).length).toBeGreaterThanOrEqual(5);
+      expect(
+        Object.keys(finalFeaturesData.agents).length
+      ).toBeGreaterThanOrEqual(5);
     });
 
     test('should prevent race conditions in bulk operations', async () => {
@@ -185,14 +225,18 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         generateTestFeature({
           title: `Bulk Race Test Feature ${i + 1}`,
           category: 'enhancement',
-        }),
+        })
       );
 
       const featureIds = [];
       for (const featureData of bulkFeatures) {
-        const result = await execAPI('suggest-feature', [JSON.stringify(featureData)], {
-          projectRoot: testDir,
-        });
+        const result = await execAPI(
+          'suggest-feature',
+          [JSON.stringify(featureData)],
+          {
+            projectRoot: testDir,
+          }
+        );
         expect(result.success).toBe(true);
         featureIds.push(result.feature.id);
       }
@@ -228,7 +272,9 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
       const bulkResults = await execAPIConcurrently(bulkCommands);
 
       // 3. Analyze results (some may succeed, some may fail due to status conflicts)
-      const successCount = bulkResults.filter(result => result.success).length;
+      const successCount = bulkResults.filter(
+        (result) => result.success
+      ).length;
       expect(successCount).toBeGreaterThan(0); // At least one should succeed
 
       // 4. Verify final state consistency
@@ -236,66 +282,85 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
       validateFeaturesStructure(finalFeaturesData);
 
       // Count approved features
-      const approvedFeatures = finalFeaturesData.features.filter(f => f.status === 'approved');
+      const approvedFeatures = finalFeaturesData.features.filter(
+        (f) => f.status === 'approved'
+      );
       expect(approvedFeatures.length).toBeGreaterThan(0);
 
       // Verify no duplicate approvals in history
-      const approvalIds = finalFeaturesData.metadata.approval_history.map(h => h.feature_id);
+      const approvalIds = finalFeaturesData.metadata.approval_history.map(
+        (h) => h.feature_id
+      );
       const uniqueApprovalIds = new Set(approvalIds);
       expect(uniqueApprovalIds.size).toBe(approvalIds.length);
     });
 
     test('should handle concurrent agent operations safely', async () => {
       // 1. Create concurrent agent operations
-      const agentIds = Array.from({ length: 15 }, (_, i) => `stress-agent-${i + 1}`);
+      const agentIds = Array.from(
+        { length: 15 },
+        (_, i) => `stress-agent-${i + 1}`
+      );
 
       const agentCommands = [
         // Initialize all agents
-        ...agentIds.map(agentId => ({
+        ...agentIds.map((agentId) => ({
           command: 'initialize',
           args: [agentId],
           options: { projectRoot: testDir },
         })),
 
         // Reinitialize some agents
-        ...agentIds.slice(0, 5).map(agentId => ({
+        ...agentIds.slice(0, 5).map((agentId) => ({
           command: 'reinitialize',
           args: [agentId],
           options: { projectRoot: testDir },
         })),
 
         // More initializations (duplicates)
-        ...agentIds.slice(5, 10).map(agentId => ({
+        ...agentIds.slice(5, 10).map((agentId) => ({
           command: 'initialize',
           args: [agentId],
           options: { projectRoot: testDir },
         })),
 
         // Statistics queries during operations
-        { command: 'get-initialization-stats', args: [], options: { projectRoot: testDir } },
-        { command: 'get-initialization-stats', args: [], options: { projectRoot: testDir } },
+        {
+          command: 'get-initialization-stats',
+          args: [],
+          options: { projectRoot: testDir },
+        },
+        {
+          command: 'get-initialization-stats',
+          args: [],
+          options: { projectRoot: testDir },
+        },
       ];
 
       // 2. Execute all agent operations concurrently
       const results = await execAPIConcurrently(agentCommands);
 
       // 3. Verify all operations succeeded
-      expect(results.every(result => result.success)).toBe(true);
+      expect(results.every((result) => result.success)).toBe(true);
 
       // 4. Verify agent state consistency
       const featuresData = await readFeaturesFile(testDir);
       validateFeaturesStructure(featuresData);
 
       // All agents should be present
-      agentIds.forEach(agentId => {
+      agentIds.forEach((agentId) => {
         expect(featuresData.agents[agentId]).toBeDefined();
         expect(featuresData.agents[agentId].status).toBe('active');
       });
 
       // 5. Verify statistics consistency
-      const statsResult = await execAPI('get-initialization-stats', [], { projectRoot: testDir });
+      const statsResult = await execAPI('get-initialization-stats', [], {
+        projectRoot: testDir,
+      });
       expect(statsResult.success).toBe(true);
-      expect(statsResult.stats.total_initializations).toBeGreaterThanOrEqual(agentIds.length);
+      expect(statsResult.stats.total_initializations).toBeGreaterThanOrEqual(
+        agentIds.length
+      );
     });
   });
 
@@ -310,13 +375,17 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         generateTestFeature({
           title: `Pre-Corruption Feature ${i + 1}`,
           category: 'enhancement',
-        }),
+        })
       );
 
       for (const featureData of validFeatures) {
-        const result = await execAPI('suggest-feature', [JSON.stringify(featureData)], {
-          projectRoot: testDir,
-        });
+        const result = await execAPI(
+          'suggest-feature',
+          [JSON.stringify(featureData)],
+          {
+            projectRoot: testDir,
+          }
+        );
         expect(result.success).toBe(true);
       }
 
@@ -332,9 +401,13 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         category: 'bug-fix',
       });
 
-      const recoveryResult = await execAPI('suggest-feature', [JSON.stringify(recoveryFeature)], {
-        projectRoot: testDir,
-      });
+      const recoveryResult = await execAPI(
+        'suggest-feature',
+        [JSON.stringify(recoveryFeature)],
+        {
+          projectRoot: testDir,
+        }
+      );
 
       // 5. Verify recovery behavior
       if (recoveryResult.success) {
@@ -354,9 +427,13 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         category: 'enhancement',
       });
 
-      const initialResult = await execAPI('suggest-feature', [JSON.stringify(feature)], {
-        projectRoot: testDir,
-      });
+      const initialResult = await execAPI(
+        'suggest-feature',
+        [JSON.stringify(feature)],
+        {
+          projectRoot: testDir,
+        }
+      );
       expect(initialResult.success).toBe(true);
 
       // 2. Delete FEATURES.json file
@@ -369,9 +446,13 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         category: 'bug-fix',
       });
 
-      const recoveryResult = await execAPI('suggest-feature', [JSON.stringify(recoveryFeature)], {
-        projectRoot: testDir,
-      });
+      const recoveryResult = await execAPI(
+        'suggest-feature',
+        [JSON.stringify(recoveryFeature)],
+        {
+          projectRoot: testDir,
+        }
+      );
 
       expect(recoveryResult.success).toBe(true);
 
@@ -401,9 +482,13 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
           category: 'enhancement',
         });
 
-        const result = await execAPI('suggest-feature', [JSON.stringify(testFeature)], {
-          projectRoot: testDir,
-        });
+        const result = await execAPI(
+          'suggest-feature',
+          [JSON.stringify(testFeature)],
+          {
+            projectRoot: testDir,
+          }
+        );
 
         // Should either succeed (with recovery) or fail gracefully
         if (result.success) {
@@ -421,20 +506,27 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         generateTestFeature({
           title: `Partial Write Test ${i + 1}`,
           category: 'enhancement',
-        }),
+        })
       );
 
       for (const featureData of features) {
-        const result = await execAPI('suggest-feature', [JSON.stringify(featureData)], {
-          projectRoot: testDir,
-        });
+        const result = await execAPI(
+          'suggest-feature',
+          [JSON.stringify(featureData)],
+          {
+            projectRoot: testDir,
+          }
+        );
         expect(result.success).toBe(true);
       }
 
       // 2. Simulate partial write by creating truncated file
       const featuresPath = path.join(testDir, 'FEATURES.json');
       const originalContent = await fs.readFile(featuresPath, 'utf8');
-      const truncatedContent = originalContent.substring(0, originalContent.length / 2);
+      const truncatedContent = originalContent.substring(
+        0,
+        originalContent.length / 2
+      );
       await fs.writeFile(featuresPath, truncatedContent);
 
       // 3. Try to perform operations
@@ -443,9 +535,13 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         category: 'bug-fix',
       });
 
-      const result = await execAPI('suggest-feature', [JSON.stringify(recoveryFeature)], {
-        projectRoot: testDir,
-      });
+      const result = await execAPI(
+        'suggest-feature',
+        [JSON.stringify(recoveryFeature)],
+        {
+          projectRoot: testDir,
+        }
+      );
 
       // 4. Verify recovery behavior
       if (result.success) {
@@ -473,9 +569,13 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
           await corruptFeaturesFile(testDir);
         }
 
-        const result = await execAPI('suggest-feature', [JSON.stringify(feature)], {
-          projectRoot: testDir,
-        });
+        const result = await execAPI(
+          'suggest-feature',
+          [JSON.stringify(feature)],
+          {
+            projectRoot: testDir,
+          }
+        );
 
         if (result.success) {
           successCount++;
@@ -508,8 +608,14 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
           title: `Large Dataset Feature ${i + 1}`,
           description: 'A'.repeat(500), // Larger description
           business_value: 'B'.repeat(200), // Larger business value
-          category: ['enhancement', 'bug-fix', 'new-feature', 'performance', 'security'][i % 5],
-        }),
+          category: [
+            'enhancement',
+            'bug-fix',
+            'new-feature',
+            'performance',
+            'security',
+          ][i % 5],
+        })
       );
 
       // 2. Add features in batches to measure performance
@@ -518,7 +624,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
 
       for (let i = 0; i < largeFeatures.length; i += batchSize) {
         const batch = largeFeatures.slice(i, i + batchSize);
-        const batchCommands = batch.map(featureData => ({
+        const batchCommands = batch.map((featureData) => ({
           command: 'suggest-feature',
           args: [JSON.stringify(featureData)],
           options: { projectRoot: testDir },
@@ -528,7 +634,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         const results = await execAPIConcurrently(batchCommands);
         const endTime = Date.now();
 
-        expect(results.every(result => result.success)).toBe(true);
+        expect(results.every((result) => result.success)).toBe(true);
 
         performanceData.push({
           batchNumber: Math.floor(i / batchSize) + 1,
@@ -539,7 +645,8 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
 
       // 3. Verify performance doesn't degrade significantly
       const firstBatchTime = performanceData[0].duration;
-      const lastBatchTime = performanceData[performanceData.length - 1].duration;
+      const lastBatchTime =
+        performanceData[performanceData.length - 1].duration;
 
       // Last batch shouldn't be more than 3x slower than first batch
       expect(lastBatchTime).toBeLessThan(firstBatchTime * 3);
@@ -551,7 +658,9 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
 
       // 5. Test operations on large dataset
       const statsStartTime = Date.now();
-      const statsResult = await execAPI('feature-stats', [], { projectRoot: testDir });
+      const statsResult = await execAPI('feature-stats', [], {
+        projectRoot: testDir,
+      });
       const statsEndTime = Date.now();
 
       expect(statsResult.success).toBe(true);
@@ -560,7 +669,9 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
       // Statistics should be fast even with large dataset
       expect(statsEndTime - statsStartTime).toBeLessThan(5000); // Under 5 seconds
 
-      console.log(`Performance test completed: ${largeDatasetSize} features, stats in ${statsEndTime - statsStartTime}ms`);
+      console.log(
+        `Performance test completed: ${largeDatasetSize} features, stats in ${statsEndTime - statsStartTime}ms`
+      );
     });
 
     test('should handle rapid sequential operations without degradation', async () => {
@@ -575,9 +686,13 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         });
 
         const startTime = Date.now();
-        const result = await execAPI('suggest-feature', [JSON.stringify(feature)], {
-          projectRoot: testDir,
-        });
+        const result = await execAPI(
+          'suggest-feature',
+          [JSON.stringify(feature)],
+          {
+            projectRoot: testDir,
+          }
+        );
         const endTime = Date.now();
 
         expect(result.success).toBe(true);
@@ -588,8 +703,10 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
       const firstHalf = operationTimes.slice(0, rapidOperationCount / 2);
       const secondHalf = operationTimes.slice(rapidOperationCount / 2);
 
-      const firstHalfAvg = firstHalf.reduce((sum, time) => sum + time, 0) / firstHalf.length;
-      const secondHalfAvg = secondHalf.reduce((sum, time) => sum + time, 0) / secondHalf.length;
+      const firstHalfAvg =
+        firstHalf.reduce((sum, time) => sum + time, 0) / firstHalf.length;
+      const secondHalfAvg =
+        secondHalf.reduce((sum, time) => sum + time, 0) / secondHalf.length;
 
       // Performance shouldn't degrade significantly
       expect(secondHalfAvg).toBeLessThan(firstHalfAvg * 2);
@@ -599,7 +716,9 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
       validateFeaturesStructure(featuresData);
       expect(featuresData.features).toHaveLength(rapidOperationCount);
 
-      console.log(`Rapid operations: First half avg: ${firstHalfAvg}ms, Second half avg: ${secondHalfAvg}ms`);
+      console.log(
+        `Rapid operations: First half avg: ${firstHalfAvg}ms, Second half avg: ${secondHalfAvg}ms`
+      );
     });
 
     test('should maintain performance under mixed load patterns', async () => {
@@ -633,7 +752,10 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
       // Shuffle operations for mixed pattern
       for (let i = mixedOperations.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [mixedOperations[i], mixedOperations[j]] = [mixedOperations[j], mixedOperations[i]];
+        [mixedOperations[i], mixedOperations[j]] = [
+          mixedOperations[j],
+          mixedOperations[i],
+        ];
       }
 
       // 2. Execute mixed load pattern
@@ -645,9 +767,13 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
 
         switch (operation.type) {
           case 'suggest':
-            result = await execAPI('suggest-feature', [JSON.stringify(operation.data)], {
-              projectRoot: testDir,
-            });
+            result = await execAPI(
+              'suggest-feature',
+              [JSON.stringify(operation.data)],
+              {
+                projectRoot: testDir,
+              }
+            );
             if (result.success) {
               featureIds.push(result.feature.id);
             }
@@ -660,7 +786,9 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
             break;
 
           case 'stats':
-            result = await execAPI('feature-stats', [], { projectRoot: testDir });
+            result = await execAPI('feature-stats', [], {
+              projectRoot: testDir,
+            });
             break;
         }
 
@@ -675,10 +803,14 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
 
       // 4. Perform approvals on some features
       const approvalIds = featureIds.slice(0, 10);
-      const bulkApproveResult = await execAPI('bulk-approve-features', [
-        JSON.stringify(approvalIds),
-        JSON.stringify({ approved_by: 'mixed-load-test' }),
-      ], { projectRoot: testDir });
+      const bulkApproveResult = await execAPI(
+        'bulk-approve-features',
+        [
+          JSON.stringify(approvalIds),
+          JSON.stringify({ approved_by: 'mixed-load-test' }),
+        ],
+        { projectRoot: testDir }
+      );
 
       expect(bulkApproveResult.success).toBe(true);
       expect(bulkApproveResult.approved_count).toBe(10);
@@ -687,7 +819,9 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
       const finalFeaturesData = await readFeaturesFile(testDir);
       validateFeaturesStructure(finalFeaturesData);
 
-      console.log(`Mixed load test completed in ${totalTime}ms with ${mixedOperations.length} operations`);
+      console.log(
+        `Mixed load test completed in ${totalTime}ms with ${mixedOperations.length} operations`
+      );
     });
   });
 
@@ -700,18 +834,22 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
       // 1. Perform resource-intensive operations
       const intensiveOperations = Array.from({ length: 50 }, (_, i) => ({
         command: 'suggest-feature',
-        args: [JSON.stringify(generateTestFeature({
-          title: `Resource Test Feature ${i + 1}`,
-          description: 'X'.repeat(1000), // Large description
-          business_value: 'Y'.repeat(500), // Large business value
-          category: 'enhancement',
-        }))],
+        args: [
+          JSON.stringify(
+            generateTestFeature({
+              title: `Resource Test Feature ${i + 1}`,
+              description: 'X'.repeat(1000), // Large description
+              business_value: 'Y'.repeat(500), // Large business value
+              category: 'enhancement',
+            })
+          ),
+        ],
         options: { projectRoot: testDir },
       }));
 
       // 2. Execute operations
       const results = await execAPIConcurrently(intensiveOperations);
-      expect(results.every(result => result.success)).toBe(true);
+      expect(results.every((result) => result.success)).toBe(true);
 
       // 3. Verify file size is reasonable (not excessive)
       const featuresPath = path.join(testDir, 'FEATURES.json');
@@ -731,9 +869,13 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         category: 'enhancement',
       });
 
-      const initialResult = await execAPI('suggest-feature', [JSON.stringify(feature)], {
-        projectRoot: testDir,
-      });
+      const initialResult = await execAPI(
+        'suggest-feature',
+        [JSON.stringify(feature)],
+        {
+          projectRoot: testDir,
+        }
+      );
       expect(initialResult.success).toBe(true);
 
       // 2. Simulate various error scenarios
@@ -745,9 +887,13 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         category: 'bug-fix',
       });
 
-      const _errorResult = await execAPI('suggest-feature', [JSON.stringify(errorTestFeature)], {
-        projectRoot: testDir,
-      });
+      const _errorResult = await execAPI(
+        'suggest-feature',
+        [JSON.stringify(errorTestFeature)],
+        {
+          projectRoot: testDir,
+        }
+      );
 
       // 3. Verify system can still operate after errors
       const recoveryFeature = generateTestFeature({
@@ -755,9 +901,13 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         category: 'enhancement',
       });
 
-      const recoveryResult = await execAPI('suggest-feature', [JSON.stringify(recoveryFeature)], {
-        projectRoot: testDir,
-      });
+      const recoveryResult = await execAPI(
+        'suggest-feature',
+        [JSON.stringify(recoveryFeature)],
+        {
+          projectRoot: testDir,
+        }
+      );
 
       // At least recovery should work
       if (recoveryResult.success) {

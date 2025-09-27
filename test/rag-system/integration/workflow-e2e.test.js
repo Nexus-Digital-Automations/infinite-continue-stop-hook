@@ -1,5 +1,3 @@
-
-
 /**
  * RAG System End-to-End Workflow Integration Tests
  *
@@ -22,7 +20,10 @@ describe('RAG System End-to-End Workflows', () => {
     console.log('Setting up E2E test environment...');
 
     // Setup test project directory
-    __testProjectRoot = _path.join(__dirname, '../../test-projects/rag-e2e-test');
+    __testProjectRoot = _path.join(
+      __dirname,
+      '../../test-projects/rag-e2e-test'
+    );
     await __fs.mkdir(__testProjectRoot, { recursive: true });
 
     // Initialize test TODO.json
@@ -32,7 +33,7 @@ describe('RAG System End-to-End Workflows', () => {
     };
     await __fs.writeFile(
       _path.join(__testProjectRoot, 'TODO.json'),
-      JSON.stringify(todoData, null, 2),
+      JSON.stringify(todoData, null, 2)
     );
 
     // Placeholder for TaskManager initialization

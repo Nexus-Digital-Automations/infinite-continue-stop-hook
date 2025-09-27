@@ -17,10 +17,18 @@ class UtilityMethods {
    * Infer task type from feature characteristics
    */
   _inferTaskType(feature) {
-    if (feature.category === 'bug-fix') {return 'implementation';}
-    if (feature.category === 'security') {return 'analysis';}
-    if (feature.category === 'performance') {return 'analysis';}
-    if (feature.category === 'documentation') {return 'documentation';}
+    if (feature.category === 'bug-fix') {
+      return 'implementation';
+    }
+    if (feature.category === 'security') {
+      return 'analysis';
+    }
+    if (feature.category === 'performance') {
+      return 'analysis';
+    }
+    if (feature.category === 'documentation') {
+      return 'documentation';
+    }
     return 'implementation';
   }
 
@@ -28,11 +36,27 @@ class UtilityMethods {
    * Infer task priority from feature characteristics
    */
   _inferTaskPriority(feature) {
-    if (feature.category === 'security') {return 'critical';}
-    if (feature.category === 'bug-fix') {return 'high';}
-    if (feature.category === 'performance') {return 'high';}
-    if (feature.business_value && feature.business_value.toLowerCase().includes('critical')) {return 'critical';}
-    if (feature.business_value && feature.business_value.toLowerCase().includes('essential')) {return 'high';}
+    if (feature.category === 'security') {
+      return 'critical';
+    }
+    if (feature.category === 'bug-fix') {
+      return 'high';
+    }
+    if (feature.category === 'performance') {
+      return 'high';
+    }
+    if (
+      feature.business_value &&
+      feature.business_value.toLowerCase().includes('critical')
+    ) {
+      return 'critical';
+    }
+    if (
+      feature.business_value &&
+      feature.business_value.toLowerCase().includes('essential')
+    ) {
+      return 'high';
+    }
     return 'normal';
   }
 
@@ -43,13 +67,19 @@ class UtilityMethods {
     let baseEffort = 5; // Base effort in hours
 
     // Adjust based on category
-    if (feature.category === 'new-feature') {baseEffort *= 2;}
-    if (feature.category === 'enhancement') {baseEffort *= 1.5;}
-    if (feature.category === 'security') {baseEffort *= 1.8;}
+    if (feature.category === 'new-feature') {
+      baseEffort *= 2;
+    }
+    if (feature.category === 'enhancement') {
+      baseEffort *= 1.5;
+    }
+    if (feature.category === 'security') {
+      baseEffort *= 1.8;
+    }
 
     // Adjust based on description length (complexity indicator)
     const complexityMultiplier = Math.min(feature.description.length / 500, 3);
-    baseEffort *= (1 + complexityMultiplier);
+    baseEffort *= 1 + complexityMultiplier;
 
     return Math.ceil(baseEffort);
   }
@@ -60,17 +90,33 @@ class UtilityMethods {
   _inferCapabilities(feature) {
     const capabilities = [];
 
-    if (feature.category === 'security') {capabilities.push('security');}
-    if (feature.category === 'performance') {capabilities.push('performance');}
-    if (feature.category === 'documentation') {capabilities.push('documentation');}
-    if (feature.category === 'bug-fix') {capabilities.push('analysis');}
+    if (feature.category === 'security') {
+      capabilities.push('security');
+    }
+    if (feature.category === 'performance') {
+      capabilities.push('performance');
+    }
+    if (feature.category === 'documentation') {
+      capabilities.push('documentation');
+    }
+    if (feature.category === 'bug-fix') {
+      capabilities.push('analysis');
+    }
 
     // Check description for technology hints
     const description = feature.description.toLowerCase();
-    if (description.includes('frontend') || description.includes('ui') || description.includes('interface')) {
+    if (
+      description.includes('frontend') ||
+      description.includes('ui') ||
+      description.includes('interface')
+    ) {
       capabilities.push('frontend');
     }
-    if (description.includes('backend') || description.includes('api') || description.includes('server')) {
+    if (
+      description.includes('backend') ||
+      description.includes('api') ||
+      description.includes('server')
+    ) {
       capabilities.push('backend');
     }
     if (description.includes('test') || description.includes('testing')) {
@@ -84,9 +130,11 @@ class UtilityMethods {
    * Determine if feature is complex enough to warrant supporting tasks
    */
   _isComplexFeature(feature) {
-    return feature.category === 'new-feature' ||
-           feature.description.length > 800 ||
-           feature.business_value.toLowerCase().includes('comprehensive');
+    return (
+      feature.category === 'new-feature' ||
+      feature.description.length > 800 ||
+      feature.business_value.toLowerCase().includes('comprehensive')
+    );
   }
 
   /**

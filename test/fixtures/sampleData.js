@@ -15,8 +15,10 @@
 const SAMPLE_FEATURES = {
   enhancement: {
     title: 'Add dark mode toggle',
-    description: 'Implement theme switching functionality with persistent user preference storage and smooth transitions',
-    business_value: 'Improves user experience and accessibility for users in low-light environments, reducing eye strain',
+    description:
+      'Implement theme switching functionality with persistent user preference storage and smooth transitions',
+    business_value:
+      'Improves user experience and accessibility for users in low-light environments, reducing eye strain',
     category: 'enhancement',
     estimated_hours: 8,
     priority: 'medium',
@@ -25,8 +27,10 @@ const SAMPLE_FEATURES = {
 
   newFeature: {
     title: 'User authentication system',
-    description: 'Complete login/logout functionality with JWT tokens, session management, and password reset',
-    business_value: 'Enables user-specific features and enhances security with proper authentication mechanisms',
+    description:
+      'Complete login/logout functionality with JWT tokens, session management, and password reset',
+    business_value:
+      'Enables user-specific features and enhances security with proper authentication mechanisms',
     category: 'new-feature',
     estimated_hours: 40,
     priority: 'high',
@@ -35,8 +39,10 @@ const SAMPLE_FEATURES = {
 
   bugFix: {
     title: 'Fix login form validation',
-    description: 'Resolve email validation issues and improve error handling for edge cases',
-    business_value: 'Prevents user frustration and reduces support tickets by 30%',
+    description:
+      'Resolve email validation issues and improve error handling for edge cases',
+    business_value:
+      'Prevents user frustration and reduces support tickets by 30%',
     category: 'bug-fix',
     estimated_hours: 4,
     priority: 'high',
@@ -45,8 +51,10 @@ const SAMPLE_FEATURES = {
 
   performance: {
     title: 'Optimize database queries',
-    description: 'Implement query optimization and caching to improve response times',
-    business_value: 'Reduces page load times by 50% and improves user satisfaction',
+    description:
+      'Implement query optimization and caching to improve response times',
+    business_value:
+      'Reduces page load times by 50% and improves user satisfaction',
     category: 'performance',
     estimated_hours: 16,
     priority: 'medium',
@@ -55,8 +63,10 @@ const SAMPLE_FEATURES = {
 
   security: {
     title: 'Implement security headers',
-    description: 'Add comprehensive security headers including CSP, HSTS, and XSS protection',
-    business_value: 'Improves application security and reduces vulnerability to common attacks',
+    description:
+      'Add comprehensive security headers including CSP, HSTS, and XSS protection',
+    business_value:
+      'Improves application security and reduces vulnerability to common attacks',
     category: 'security',
     estimated_hours: 6,
     priority: 'high',
@@ -66,7 +76,8 @@ const SAMPLE_FEATURES = {
   documentation: {
     title: 'API documentation update',
     description: 'Update API documentation with latest endpoints and examples',
-    business_value: 'Improves developer experience and reduces integration time',
+    business_value:
+      'Improves developer experience and reduces integration time',
     category: 'documentation',
     estimated_hours: 12,
     priority: 'low',
@@ -169,7 +180,8 @@ const SAMPLE_TASKS = {
   frontend: {
     id: 'task-frontend-001',
     title: 'Implement responsive navigation component',
-    description: 'Create a mobile-friendly navigation component with hamburger menu',
+    description:
+      'Create a mobile-friendly navigation component with hamburger menu',
     category: 'frontend',
     priority: 'medium',
     status: 'pending',
@@ -181,7 +193,8 @@ const SAMPLE_TASKS = {
   backend: {
     id: 'task-backend-001',
     title: 'Design user authentication API',
-    description: 'Create REST endpoints for user registration, login, and token refresh',
+    description:
+      'Create REST endpoints for user registration, login, and token refresh',
     category: 'backend',
     priority: 'high',
     status: 'in-progress',
@@ -193,7 +206,8 @@ const SAMPLE_TASKS = {
   database: {
     id: 'task-database-001',
     title: 'Design user database schema',
-    description: 'Create normalized database schema for user management with proper relationships',
+    description:
+      'Create normalized database schema for user management with proper relationships',
     category: 'database',
     priority: 'high',
     status: 'completed',
@@ -205,7 +219,8 @@ const SAMPLE_TASKS = {
   testing: {
     id: 'task-testing-001',
     title: 'Set up comprehensive testing framework',
-    description: 'Configure Jest, create test utilities, and establish testing best practices',
+    description:
+      'Configure Jest, create test utilities, and establish testing best practices',
     category: 'testing',
     priority: 'high',
     status: 'in-progress',
@@ -330,7 +345,10 @@ const ERROR_SCENARIOS = {
   validationError: {
     type: 'validation',
     message: 'Invalid input data',
-    details: ['Field "email" is required', 'Field "password" must be at least 8 characters'],
+    details: [
+      'Field "email" is required',
+      'Field "password" must be at least 8 characters',
+    ],
   },
 
   authenticationError: {
@@ -362,7 +380,10 @@ const TEST_SCENARIOS = {
     steps: [
       { action: 'suggest-feature', data: SAMPLE_FEATURES.enhancement },
       { action: 'list-features', filter: { status: 'suggested' } },
-      { action: 'approve-feature', approvalData: { approved_by: 'product-manager' } },
+      {
+        action: 'approve-feature',
+        approvalData: { approved_by: 'product-manager' },
+      },
       { action: 'list-features', filter: { status: 'approved' } },
     ],
   },

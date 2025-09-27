@@ -1,5 +1,3 @@
-
-
 /**
  * RAG System Semantic Search Accuracy Tests
  *
@@ -328,7 +326,8 @@ describe('Semantic Search Accuracy Validation', () => {
           id: 'error-pattern-3',
           error_type: 'type_error',
           message: 'TypeError: callback is not a function',
-          resolution: 'Validate function parameters and provide default callbacks',
+          resolution:
+            'Validate function parameters and provide default callbacks',
           context: 'Event handling',
           tags: ['type-checking', 'javascript', 'function-validation'],
         },
@@ -468,21 +467,24 @@ describe('Semantic Search Accuracy Validation', () => {
         {
           id: 'frontend-lesson-1',
           title: 'React State Management',
-          content: 'Use useState for local state, useContext for shared state...',
+          content:
+            'Use useState for local state, useContext for shared state...',
           project_context: ['frontend', 'react', 'spa'],
           tags: ['react', 'state', 'frontend'],
         },
         {
           id: 'backend-lesson-1',
           title: 'Node.js State Management',
-          content: 'Use in-memory cache for session state, Redis for distributed state...',
+          content:
+            'Use in-memory cache for session state, Redis for distributed state...',
           project_context: ['backend', 'node.js', 'server'],
           tags: ['nodejs', 'state', 'backend'],
         },
         {
           id: 'mobile-lesson-1',
           title: 'React Native State Management',
-          content: 'Use Redux for complex state, AsyncStorage for persistence...',
+          content:
+            'Use Redux for complex state, AsyncStorage for persistence...',
           project_context: ['mobile', 'react-native', 'app'],
           tags: ['react-native', 'state', 'mobile'],
         },
@@ -547,7 +549,8 @@ describe('Semantic Search Accuracy Validation', () => {
         {
           id: 'older-lesson-1',
           title: 'React Class Components',
-          content: 'Use componentDidMount, componentWillUnmount for lifecycle...',
+          content:
+            'Use componentDidMount, componentWillUnmount for lifecycle...',
           created_date: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), // 1 year ago
           technology_version: 'react@16.8',
           tags: ['react', 'legacy', 'class-components'],

@@ -80,7 +80,7 @@ class TaskManagerAPIMock {
   suggestFeature(featureData) {
     // Validate required fields
     const required = ['title', 'description', 'business_value', 'category'];
-    const missing = required.filter(field => !featureData[field]);
+    const missing = required.filter((field) => !featureData[field]);
 
     if (missing.length > 0) {
       return {
@@ -91,7 +91,14 @@ class TaskManagerAPIMock {
     }
 
     // Validate category
-    const validCategories = ['enhancement', 'bug-fix', 'new-feature', 'performance', 'security', 'documentation'];
+    const validCategories = [
+      'enhancement',
+      'bug-fix',
+      'new-feature',
+      'performance',
+      'security',
+      'documentation',
+    ];
     if (!validCategories.includes(featureData.category)) {
       return {
         success: false,
@@ -125,11 +132,11 @@ class TaskManagerAPIMock {
 
     // Apply filters
     if (filter.status) {
-      features = features.filter(f => f.status === filter.status);
+      features = features.filter((f) => f.status === filter.status);
     }
 
     if (filter.category) {
-      features = features.filter(f => f.category === filter.category);
+      features = features.filter((f) => f.category === filter.category);
     }
 
     return {
@@ -198,7 +205,7 @@ class TaskManagerAPIMock {
     const byStatus = {};
     const byCategory = {};
 
-    features.forEach(feature => {
+    features.forEach((feature) => {
       byStatus[feature.status] = (byStatus[feature.status] || 0) + 1;
       byCategory[feature.category] = (byCategory[feature.category] || 0) + 1;
     });
@@ -241,7 +248,8 @@ class TaskManagerAPIMock {
       success: true,
       featureManager: {
         version: '3.0.0',
-        description: 'Feature lifecycle management system with strict approval workflow',
+        description:
+          'Feature lifecycle management system with strict approval workflow',
       },
       coreCommands: {
         discovery: {
@@ -266,9 +274,16 @@ class TaskManagerAPIMock {
     return {
       success: true,
       methods: [
-        'guide', 'methods', 'initialize', 'reinitialize',
-        'suggest-feature', 'approve-feature', 'reject-feature',
-        'list-features', 'feature-stats', 'get-initialization-stats',
+        'guide',
+        'methods',
+        'initialize',
+        'reinitialize',
+        'suggest-feature',
+        'approve-feature',
+        'reject-feature',
+        'list-features',
+        'feature-stats',
+        'get-initialization-stats',
       ],
       message: 'Available API methods',
     };
@@ -279,10 +294,18 @@ class TaskManagerAPIMock {
    */
   getCurrentTimeBucket() {
     const hour = new Date().getHours();
-    if (hour >= 7 && hour < 12) {return '07:00-11:59';}
-    if (hour >= 12 && hour < 17) {return '12:00-16:59';}
-    if (hour >= 17 && hour < 22) {return '17:00-21:59';}
-    if (hour >= 22 || hour < 3) {return '22:00-02:59';}
+    if (hour >= 7 && hour < 12) {
+      return '07:00-11:59';
+    }
+    if (hour >= 12 && hour < 17) {
+      return '12:00-16:59';
+    }
+    if (hour >= 17 && hour < 22) {
+      return '17:00-21:59';
+    }
+    if (hour >= 22 || hour < 3) {
+      return '22:00-02:59';
+    }
     return '03:00-06:59';
   }
 
@@ -361,14 +384,20 @@ class FileSystemMock {
 
     // Find files in this directory
     for (const [filePath] of this.files) {
-      if (filePath.startsWith(path + '/') && !filePath.substring(path.length + 1).includes('/')) {
+      if (
+        filePath.startsWith(path + '/') &&
+        !filePath.substring(path.length + 1).includes('/')
+      ) {
         entries.push(filePath.substring(path.length + 1));
       }
     }
 
     // Find subdirectories
     for (const dirPath of this.directories) {
-      if (dirPath.startsWith(path + '/') && !dirPath.substring(path.length + 1).includes('/')) {
+      if (
+        dirPath.startsWith(path + '/') &&
+        !dirPath.substring(path.length + 1).includes('/')
+      ) {
         entries.push(dirPath.substring(path.length + 1));
       }
     }
@@ -463,8 +492,10 @@ class DatabaseMock {
     this.queries.push({ operation: 'find', collection, query });
 
     // Simple query filtering
-    return records.filter(record => {
-      return Object.entries(query).every(([key, value]) => record[key] === value);
+    return records.filter((record) => {
+      return Object.entries(query).every(
+        ([key, value]) => record[key] === value
+      );
     });
   }
 
@@ -472,7 +503,11 @@ class DatabaseMock {
     this.createCollection(collection);
     const records = this.collections.get(collection);
     if (records.has(id)) {
-      const record = { ...records.get(id), ...updates, updated: new Date().toISOString() };
+      const record = {
+        ...records.get(id),
+        ...updates,
+        updated: new Date().toISOString(),
+      };
       records.set(id, record);
       this.queries.push({ operation: 'update', collection, id, updates });
       return record;

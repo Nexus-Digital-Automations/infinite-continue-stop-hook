@@ -17,7 +17,11 @@
 const fs = require('fs').promises;
 const path = require('path');
 const { execSync: _execSync } = require('child_process');
-const { CustomValidationRulesManager, VALIDATION_RULE_TYPES, TECH_STACK_PATTERNS } = require('../lib/custom-validation-rules-manager');
+const {
+  CustomValidationRulesManager,
+  VALIDATION_RULE_TYPES,
+  TECH_STACK_PATTERNS,
+} = require('../lib/custom-validation-rules-manager');
 
 describe('CustomValidationRulesManager', () => {
   let manager;
@@ -27,7 +31,11 @@ describe('CustomValidationRulesManager', () => {
   beforeAll(async () => {
     originalCwd = process.cwd();
     // Create temporary test directory
-    testProjectRoot = path.join(__dirname, 'test-data', 'custom-validation-test');
+    testProjectRoot = path.join(
+      __dirname,
+      'test-data',
+      'custom-validation-test'
+    );
     await fs.mkdir(testProjectRoot, { recursive: true });
   });
 
@@ -53,7 +61,10 @@ describe('CustomValidationRulesManager', () => {
     try {
       const files = await fs.readdir(testProjectRoot);
       for (const file of files) {
-        await fs.rm(path.join(testProjectRoot, file), { recursive: true, force: true });
+        await fs.rm(path.join(testProjectRoot, file), {
+          recursive: true,
+          force: true,
+        });
       }
     } catch {
       // Ignore cleanup errors
@@ -84,7 +95,7 @@ describe('CustomValidationRulesManager', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2),
+        JSON.stringify(config, null, 2)
       );
 
       const result = await manager.loadCustomRules();
@@ -107,7 +118,7 @@ describe('CustomValidationRulesManager', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(invalidConfig, null, 2),
+        JSON.stringify(invalidConfig, null, 2)
       );
 
       const result = await manager.loadCustomRules();
@@ -147,7 +158,10 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should detect Python project', async () => {
-      await fs.writeFile(path.join(testProjectRoot, 'requirements.txt'), 'requests==2.25.1');
+      await fs.writeFile(
+        path.join(testProjectRoot, 'requirements.txt'),
+        'requests==2.25.1'
+      );
 
       await manager._detectTechnologyStack();
 
@@ -156,7 +170,10 @@ describe('CustomValidationRulesManager', () => {
 
     test('should detect multiple technologies', async () => {
       await fs.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
-      await fs.writeFile(path.join(testProjectRoot, 'Dockerfile'), 'FROM node:14');
+      await fs.writeFile(
+        path.join(testProjectRoot, 'Dockerfile'),
+        'FROM node:14'
+      );
 
       await manager._detectTechnologyStack();
 
@@ -254,7 +271,10 @@ describe('CustomValidationRulesManager', () => {
 
   describe('Rule Execution - File Exists Type', () => {
     test('should detect existing files', async () => {
-      await fs.writeFile(path.join(testProjectRoot, 'test.txt'), 'test content');
+      await fs.writeFile(
+        path.join(testProjectRoot, 'test.txt'),
+        'test content'
+      );
 
       const rule = {
         id: 'file_check',
@@ -282,7 +302,9 @@ describe('CustomValidationRulesManager', () => {
         },
       };
 
-      await expect(manager._executeFileExistsRule(rule)).rejects.toThrow('Missing required files');
+      await expect(manager._executeFileExistsRule(rule)).rejects.toThrow(
+        'Missing required files'
+      );
     });
 
     test('should handle mixed existing and missing files', async () => {
@@ -327,7 +349,10 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should fail when pattern not found', async () => {
-      await fs.writeFile(path.join(testProjectRoot, 'content.txt'), 'No matching content');
+      await fs.writeFile(
+        path.join(testProjectRoot, 'content.txt'),
+        'No matching content'
+      );
 
       const rule = {
         id: 'no_match',
@@ -342,7 +367,10 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should validate pattern absence when should_match is false', async () => {
-      await fs.writeFile(path.join(testProjectRoot, 'clean.txt'), 'Clean content without debug');
+      await fs.writeFile(
+        path.join(testProjectRoot, 'clean.txt'),
+        'Clean content without debug'
+      );
 
       const rule = {
         id: 'no_debug',
@@ -361,7 +389,10 @@ describe('CustomValidationRulesManager', () => {
     });
 
     test('should fail when unwanted pattern is found', async () => {
-      await fs.writeFile(path.join(testProjectRoot, 'debug.txt'), 'console.log("debug")');
+      await fs.writeFile(
+        path.join(testProjectRoot, 'debug.txt'),
+        'console.log("debug")'
+      );
 
       const rule = {
         id: 'debug_check',
@@ -440,7 +471,9 @@ describe('CustomValidationRulesManager', () => {
       expect(await manager._evaluateCondition(fileCondition)).toBe(true);
 
       const missingFileCondition = { type: 'file_exists', file: 'missing.txt' };
-      expect(await manager._evaluateCondition(missingFileCondition)).toBe(false);
+      expect(await manager._evaluateCondition(missingFileCondition)).toBe(
+        false
+      );
 
       // Test environment_var condition
       process.env.TEST_VAR = 'test_value';
@@ -615,7 +648,7 @@ describe('CustomValidationRulesManager', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2),
+        JSON.stringify(config, null, 2)
       );
 
       await fs.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
@@ -664,7 +697,9 @@ describe('CustomValidationRulesManager', () => {
       expect(exampleConfig).toHaveProperty('global_settings');
       expect(exampleConfig).toHaveProperty('custom_rules');
       expect(exampleConfig.custom_rules).toHaveProperty('security_audit');
-      expect(exampleConfig.custom_rules).toHaveProperty('documentation_completeness');
+      expect(exampleConfig.custom_rules).toHaveProperty(
+        'documentation_completeness'
+      );
       expect(exampleConfig.custom_rules).toHaveProperty('environment_specific');
     });
 
@@ -672,7 +707,7 @@ describe('CustomValidationRulesManager', () => {
       const exampleConfig = manager.generateExampleConfig();
       const rules = exampleConfig.custom_rules;
 
-      const ruleTypes = Object.values(rules).map(rule => rule.type);
+      const ruleTypes = Object.values(rules).map((rule) => rule.type);
 
       expect(ruleTypes).toContain('command');
       expect(ruleTypes).toContain('file_exists');
@@ -686,7 +721,7 @@ describe('CustomValidationRulesManager', () => {
     test('should handle malformed JSON configuration', async () => {
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        'invalid json content',
+        'invalid json content'
       );
 
       const result = await manager.loadCustomRules();
@@ -729,7 +764,7 @@ describe('CustomValidationRulesManager', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2),
+        JSON.stringify(config, null, 2)
       );
 
       const result = await manager.loadCustomRules();
@@ -764,7 +799,7 @@ describe('CustomValidationRulesManager', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2),
+        JSON.stringify(config, null, 2)
       );
 
       await manager.loadCustomRules();
@@ -800,7 +835,7 @@ describe('CustomValidationRulesManager', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2),
+        JSON.stringify(config, null, 2)
       );
 
       await manager.loadCustomRules();
@@ -814,7 +849,7 @@ describe('CustomValidationRulesManager', () => {
       const results = await Promise.all(promises);
 
       expect(results).toHaveLength(10);
-      expect(results.every(r => r.success)).toBe(true);
+      expect(results.every((r) => r.success)).toBe(true);
     });
 
     test('should limit execution history to prevent memory leaks', async () => {
@@ -830,7 +865,7 @@ describe('CustomValidationRulesManager', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2),
+        JSON.stringify(config, null, 2)
       );
 
       await manager.loadCustomRules();

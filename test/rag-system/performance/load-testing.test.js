@@ -1,4 +1,3 @@
-
 /**
  * RAG System Performance and Load Testing
  *
@@ -14,7 +13,13 @@ const _fs = require('fs').promises;
 
 // Helper functions for test data generation
 function _getRandomTechnicalTopic() {
-  const topics = ['API Integration', 'Database Optimization', 'React Performance', 'Error Handling', 'Security Patterns'];
+  const topics = [
+    'API Integration',
+    'Database Optimization',
+    'React Performance',
+    'Error Handling',
+    'Security Patterns',
+  ];
   return topics[Math.floor(Math.random() * topics.length)];
 }
 
@@ -23,12 +28,25 @@ function _generateRandomTechnicalContent() {
 }
 
 function _getRandomTags() {
-  const allTags = ['javascript', 'react', 'database', 'api', 'performance', 'security'];
+  const allTags = [
+    'javascript',
+    'react',
+    'database',
+    'api',
+    'performance',
+    'security',
+  ];
   return allTags.slice(0, Math.floor(Math.random() * 3) + 1);
 }
 
 function _getRandomCategory() {
-  const categories = ['frontend', 'backend', 'database', 'security', 'performance'];
+  const categories = [
+    'frontend',
+    'backend',
+    'database',
+    'security',
+    'performance',
+  ];
   return categories[Math.floor(Math.random() * categories.length)];
 }
 
@@ -61,7 +79,10 @@ describe('RAG System Performance and Load Testing', () => {
       const _testContents = [
         'Short error message',
         'Medium length technical documentation explaining API implementation patterns and best practices for error handling in distributed systems.',
-        'Very long technical content: ' + 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '.repeat(100),
+        'Very long technical content: ' +
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '.repeat(
+            100
+          ),
         `Code snippet with multiple functions:
          function complexCalculation(_data) {
            return data.map(item => processItem(item))
@@ -721,13 +742,28 @@ describe('RAG System Performance and Load Testing', () => {
   }
 
   function getRandomTags() {
-    const tags = ['javascript', 'python', 'api', 'database', 'security', 'performance', 'testing', 'deployment'];
+    const tags = [
+      'javascript',
+      'python',
+      'api',
+      'database',
+      'security',
+      'performance',
+      'testing',
+      'deployment',
+    ];
     const count = Math.floor(Math.random() * 4) + 1;
     return tags.sort(() => 0.5 - Math.random()).slice(0, count);
   }
 
   function getRandomCategory() {
-    const categories = ['error-handling', 'implementation', 'optimization', 'security', 'testing'];
+    const categories = [
+      'error-handling',
+      'implementation',
+      'optimization',
+      'security',
+      'testing',
+    ];
     return categories[Math.floor(Math.random() * categories.length)];
   }
 
@@ -741,7 +777,9 @@ describe('RAG System Performance and Load Testing', () => {
   }
 
   function _formatBytes(_bytes) {
-    if (_bytes === 0) {return '0 Bytes';}
+    if (_bytes === 0) {
+      return '0 Bytes';
+    }
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(_bytes) / Math.log(k));

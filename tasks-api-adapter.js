@@ -51,11 +51,13 @@ class TasksApiAdapter {
           // Add approval/rejection fields based on status
           if (task.status === 'approved') {
             feature.approved_by = task.metadata?.approved_by || 'system';
-            feature.approval_date = task.metadata?.approval_date || task.updated_at;
+            feature.approval_date =
+              task.metadata?.approval_date || task.updated_at;
             feature.approval_notes = task.metadata?.approval_notes || '';
           } else if (task.status === 'rejected') {
             feature.rejected_by = task.metadata?.rejected_by || 'system';
-            feature.rejection_date = task.metadata?.rejection_date || task.updated_at;
+            feature.rejection_date =
+              task.metadata?.rejection_date || task.updated_at;
             feature.rejection_reason = task.metadata?.rejection_reason || '';
           }
 
@@ -96,7 +98,9 @@ class TasksApiAdapter {
       },
       dependencies: [],
       estimated_effort: 5,
-      required_capabilities: this.inferCapabilitiesFromCategory(featureData.category),
+      required_capabilities: this.inferCapabilitiesFromCategory(
+        featureData.category
+      ),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       created_by: 'user',
@@ -222,9 +226,12 @@ class TasksApiAdapter {
     // Update metadata
     if (tasksData.metadata) {
       tasksData.metadata.tasks_by_type = tasksData.metadata.tasks_by_type || {};
-      tasksData.metadata.tasks_by_type.test = (tasksData.metadata.tasks_by_type.test || 0) + 1;
-      tasksData.metadata.tasks_by_type.audit = (tasksData.metadata.tasks_by_type.audit || 0) + 1;
-      tasksData.metadata.total_tasks = (tasksData.metadata.total_tasks || 0) + 2;
+      tasksData.metadata.tasks_by_type.test =
+        (tasksData.metadata.tasks_by_type.test || 0) + 1;
+      tasksData.metadata.tasks_by_type.audit =
+        (tasksData.metadata.tasks_by_type.audit || 0) + 1;
+      tasksData.metadata.total_tasks =
+        (tasksData.metadata.total_tasks || 0) + 2;
       tasksData.metadata.updated = new Date().toISOString();
     }
 
@@ -236,18 +243,18 @@ class TasksApiAdapter {
    */
   sortTasksByPriority(tasks) {
     const priorityOrder = {
-      'USER_REQUESTS': 0,
-      'error': 1,
-      'audit': 2,
-      'feature': 3,
-      'test': 4,
+      USER_REQUESTS: 0,
+      error: 1,
+      audit: 2,
+      feature: 3,
+      test: 4,
     };
 
     const priorityWeight = {
-      'critical': 0,
-      'high': 1,
-      'normal': 2,
-      'low': 3,
+      critical: 0,
+      high: 1,
+      normal: 2,
+      low: 3,
     };
 
     return tasks.sort((a, b) => {
@@ -279,24 +286,24 @@ class TasksApiAdapter {
 
   mapPriorityFromCategory(category) {
     const priorityMap = {
-      'security': 'high',
+      security: 'high',
       'bug-fix': 'high',
-      'performance': 'normal',
-      'enhancement': 'normal',
+      performance: 'normal',
+      enhancement: 'normal',
       'new-feature': 'normal',
-      'documentation': 'low',
+      documentation: 'low',
     };
     return priorityMap[category] || 'normal';
   }
 
   inferCapabilitiesFromCategory(category) {
     const capabilityMap = {
-      'security': ['security', 'backend'],
+      security: ['security', 'backend'],
       'bug-fix': ['general'],
-      'performance': ['performance', 'analysis'],
-      'enhancement': ['general'],
+      performance: ['performance', 'analysis'],
+      enhancement: ['general'],
       'new-feature': ['frontend', 'backend'],
-      'documentation': ['documentation'],
+      documentation: ['documentation'],
     };
     return capabilityMap[category] || ['general'];
   }

@@ -1,4 +1,3 @@
-
 /**
  * Coverage Monitoring Script
  *
@@ -31,8 +30,18 @@ const CONFIG = {
     coverage: path.join(process.cwd(), 'coverage'),
     reports: path.join(process.cwd(), 'coverage', 'reports'),
     summary: path.join(process.cwd(), 'coverage', 'coverage-summary.json'),
-    trends: path.join(process.cwd(), 'coverage', 'reports', 'coverage-trends.json'),
-    validation: path.join(process.cwd(), 'coverage', 'reports', 'coverage-validation.json'),
+    trends: path.join(
+      process.cwd(),
+      'coverage',
+      'reports',
+      'coverage-trends.json'
+    ),
+    validation: path.join(
+      process.cwd(),
+      'coverage',
+      'reports',
+      'coverage-validation.json'
+    ),
   },
 };
 
@@ -99,7 +108,6 @@ class CoverageMonitor {
       if (!this.validation.passed) {
         throw new Error('Coverage validation failed');
       }
-
     } catch (error) {
       Logger.error(`Coverage monitoring failed: ${error.message}`);
       Logger.debug(error.stack);
@@ -140,7 +148,9 @@ class CoverageMonitor {
       // Check if it's just a test failure but coverage was generated
       if (fs.existsSync(CONFIG.paths.summary)) {
         Logger.warning('Tests failed but coverage data was generated');
-        this.validation.warnings.push('Some tests failed during coverage analysis');
+        this.validation.warnings.push(
+          'Some tests failed during coverage analysis'
+        );
       } else {
         throw new Error(`Coverage analysis failed: ${error.message}`);
       }
@@ -158,12 +168,16 @@ class CoverageMonitor {
     }
 
     try {
-      const coverageData = JSON.parse(fs.readFileSync(CONFIG.paths.summary, 'utf8'));
+      const coverageData = JSON.parse(
+        fs.readFileSync(CONFIG.paths.summary, 'utf8')
+      );
       this.coverageData = coverageData;
       this.validation.summary = coverageData.total;
 
       Logger.success('Coverage data loaded successfully');
-      Logger.debug(`Total coverage: ${JSON.stringify(coverageData.total, null, 2)}`);
+      Logger.debug(
+        `Total coverage: ${JSON.stringify(coverageData.total, null, 2)}`
+      );
     } catch (error) {
       throw new Error(`Failed to parse coverage data: ${error.message}`);
     }
@@ -185,10 +199,14 @@ class CoverageMonitor {
       const critical = CONFIG.critical_thresholds[metric];
 
       if (actual < critical) {
-        failures.push(`Critical failure: ${metric} coverage ${actual.toFixed(2)}% < ${critical}% (critical threshold)`);
+        failures.push(
+          `Critical failure: ${metric} coverage ${actual.toFixed(2)}% < ${critical}% (critical threshold)`
+        );
         this.validation.passed = false;
       } else if (actual < threshold) {
-        warnings.push(`Warning: ${metric} coverage ${actual.toFixed(2)}% < ${threshold}% (target threshold)`);
+        warnings.push(
+          `Warning: ${metric} coverage ${actual.toFixed(2)}% < ${threshold}% (target threshold)`
+        );
       }
     }
 
@@ -197,13 +215,15 @@ class CoverageMonitor {
 
     // Log results
     if (failures.length > 0) {
-      Logger.error(`Coverage validation failed with ${failures.length} critical issues`);
-      failures.forEach(failure => Logger.error(failure));
+      Logger.error(
+        `Coverage validation failed with ${failures.length} critical issues`
+      );
+      failures.forEach((failure) => Logger.error(failure));
     }
 
     if (warnings.length > 0) {
       Logger.warning(`Coverage validation has ${warnings.length} warnings`);
-      warnings.forEach(warning => Logger.warning(warning));
+      warnings.forEach((warning) => Logger.warning(warning));
     }
 
     if (failures.length === 0 && warnings.length === 0) {
@@ -238,7 +258,7 @@ class CoverageMonitor {
     // Write validation report
     fs.writeFileSync(
       CONFIG.paths.validation,
-      JSON.stringify(reportData, null, 2),
+      JSON.stringify(reportData, null, 2)
     );
 
     Logger.success('Coverage reports generated');
@@ -300,7 +320,9 @@ class CoverageMonitor {
       const status = actual >= threshold ? '✅ Pass' : '❌ Fail';
       const metricName = metric.charAt(0).toUpperCase() + metric.slice(1);
 
-      console.log(`│ ${metricName.padEnd(12)} │ ${actual.toFixed(2).padStart(6)}%  │ ${threshold.toString().padStart(7)}%  │ ${status.padEnd(6)} │`);
+      console.log(
+        `│ ${metricName.padEnd(12)} │ ${actual.toFixed(2).padStart(6)}%  │ ${threshold.toString().padStart(7)}%  │ ${status.padEnd(6)} │`
+      );
     }
 
     console.log('└──────────────┴──────────┴───────────┴────────┘');
@@ -328,9 +350,15 @@ class CoverageMonitor {
     try {
       return {
         commit: execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
-        branch: execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim(),
-        author: execSync('git log -1 --format="%an"', { encoding: 'utf8' }).trim(),
-        message: execSync('git log -1 --format="%s"', { encoding: 'utf8' }).trim(),
+        branch: execSync('git rev-parse --abbrev-ref HEAD', {
+          encoding: 'utf8',
+        }).trim(),
+        author: execSync('git log -1 --format="%an"', {
+          encoding: 'utf8',
+        }).trim(),
+        message: execSync('git log -1 --format="%s"', {
+          encoding: 'utf8',
+        }).trim(),
       };
     } catch {
       Logger.debug('Could not get Git information');

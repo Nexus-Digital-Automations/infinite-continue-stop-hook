@@ -4,8 +4,14 @@ const TrendAnalyzer = require('../../lib/trend-analyzer');
 
 describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
   const mockProjectRoot = '/tmp/test-trend-analyzer';
-  const mockEnhancedMetricsFile = path.join(mockProjectRoot, '.validation-performance-enhanced.json');
-  const mockLegacyMetricsFile = path.join(mockProjectRoot, '.validation-performance.json');
+  const mockEnhancedMetricsFile = path.join(
+    mockProjectRoot,
+    '.validation-performance-enhanced.json'
+  );
+  const mockLegacyMetricsFile = path.join(
+    mockProjectRoot,
+    '.validation-performance.json'
+  );
   const mockTrendsFile = path.join(mockProjectRoot, '.validation-trends.json');
 
   let trendAnalyzer;
@@ -17,11 +23,13 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
     }
 
     // Clean up previous test data
-    [mockEnhancedMetricsFile, mockLegacyMetricsFile, mockTrendsFile].forEach(file => {
-      if (fs.existsSync(file)) {
-        fs.unlinkSync(file);
+    [mockEnhancedMetricsFile, mockLegacyMetricsFile, mockTrendsFile].forEach(
+      (file) => {
+        if (fs.existsSync(file)) {
+          fs.unlinkSync(file);
+        }
       }
-    });
+    );
 
     trendAnalyzer = new TrendAnalyzer(mockProjectRoot);
   });
@@ -39,10 +47,16 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
 
     // Generate test data over specified days
     for (let day = 0; day < daysBack; day++) {
-      const dayTimestamp = now - (day * 24 * 60 * 60 * 1000);
+      const dayTimestamp = now - day * 24 * 60 * 60 * 1000;
 
       // Add metrics for each validation criterion per day
-      const criteria = ['linter-validation', 'type-validation', 'build-validation', 'test-validation', 'security-validation'];
+      const criteria = [
+        'linter-validation',
+        'type-validation',
+        'build-validation',
+        'test-validation',
+        'security-validation',
+      ];
 
       criteria.forEach((criterion, index) => {
         // Add some variation and trends
@@ -55,15 +69,22 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
         }[criterion];
 
         // Add trend: performance degradation over time for some criteria
-        const trendFactor = criterion === 'build-validation' ? (1 + (day * 0.02)) : 1;
-        const randomVariation = 0.8 + (Math.random() * 0.4); // ±20% variation
-        const duration = Math.round(baseDuration * trendFactor * randomVariation);
+        const trendFactor =
+          criterion === 'build-validation' ? 1 + day * 0.02 : 1;
+        const randomVariation = 0.8 + Math.random() * 0.4; // ±20% variation
+        const duration = Math.round(
+          baseDuration * trendFactor * randomVariation
+        );
 
         metrics.push({
           criterion,
           timing: {
-            startTime: new Date(dayTimestamp + (index * 60 * 60 * 1000)).toISOString(),
-            endTime: new Date(dayTimestamp + (index * 60 * 60 * 1000) + duration).toISOString(),
+            startTime: new Date(
+              dayTimestamp + index * 60 * 60 * 1000
+            ).toISOString(),
+            endTime: new Date(
+              dayTimestamp + index * 60 * 60 * 1000 + duration
+            ).toISOString(),
             durationMs: duration,
           },
           execution: {
@@ -71,7 +92,10 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
           },
           resources: {
             memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
-            memoryUsageAfter: { rss: 52000000 + (duration / 10), heapUsed: 31000000 + (duration / 20) },
+            memoryUsageAfter: {
+              rss: 52000000 + duration / 10,
+              heapUsed: 31000000 + duration / 20,
+            },
           },
         });
       });
@@ -83,7 +107,10 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
       metrics: metrics.reverse(), // Most recent first
     };
 
-    fs.writeFileSync(mockEnhancedMetricsFile, JSON.stringify(metricsData, null, 2));
+    fs.writeFileSync(
+      mockEnhancedMetricsFile,
+      JSON.stringify(metricsData, null, 2)
+    );
     return metricsData;
   }
 
@@ -162,7 +189,8 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
 
   describe('analyzeCriterionTrend', () => {
     test('should return insufficient data for single criterion', async () => {
-      const result = await trendAnalyzer.analyzeCriterionTrend('linter-validation');
+      const result =
+        await trendAnalyzer.analyzeCriterionTrend('linter-validation');
 
       expect(result.success).toBe(true);
       expect(result.analysis.summary).toContain('Insufficient data');
@@ -171,10 +199,13 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
     test('should analyze specific criterion trends', async () => {
       createMockMetricsData(15);
 
-      const result = await trendAnalyzer.analyzeCriterionTrend('build-validation', {
-        timeRange: 15,
-        granularity: 'daily',
-      });
+      const result = await trendAnalyzer.analyzeCriterionTrend(
+        'build-validation',
+        {
+          timeRange: 15,
+          granularity: 'daily',
+        }
+      );
 
       expect(result.success).toBe(true);
       expect(result.analysis.criterion).toBe('build-validation');
@@ -191,11 +222,14 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
     test('should calculate trend characteristics correctly', async () => {
       createMockMetricsData(20);
 
-      const result = await trendAnalyzer.analyzeCriterionTrend('build-validation');
+      const result =
+        await trendAnalyzer.analyzeCriterionTrend('build-validation');
 
       expect(result.success).toBe(true);
       expect(result.analysis.trend).toBeDefined();
-      expect(result.analysis.trend.direction).toMatch(/increasing|decreasing|stable/);
+      expect(result.analysis.trend.direction).toMatch(
+        /increasing|decreasing|stable/
+      );
       expect(result.analysis.trend.strength).toBeGreaterThanOrEqual(0);
       expect(result.analysis.trend.strength).toBeLessThanOrEqual(1);
       expect(typeof result.analysis.trend.slope).toBe('number');
@@ -217,8 +251,12 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
       expect(Array.isArray(result.healthTrends.data)).toBe(true);
       expect(result.healthTrends.analysis).toBeDefined();
       expect(result.healthTrends.summary).toBeDefined();
-      expect(result.healthTrends.summary.currentHealth).toBeGreaterThanOrEqual(0);
-      expect(result.healthTrends.summary.currentHealth).toBeLessThanOrEqual(100);
+      expect(result.healthTrends.summary.currentHealth).toBeGreaterThanOrEqual(
+        0
+      );
+      expect(result.healthTrends.summary.currentHealth).toBeLessThanOrEqual(
+        100
+      );
     });
 
     test('should calculate health trend direction', async () => {
@@ -227,7 +265,9 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
       const result = await trendAnalyzer.generateHealthScoreTrends();
 
       expect(result.success).toBe(true);
-      expect(result.healthTrends.summary.healthTrend).toMatch(/increasing|decreasing|stable/);
+      expect(result.healthTrends.summary.healthTrend).toMatch(
+        /increasing|decreasing|stable/
+      );
       expect(typeof result.healthTrends.summary.volatility).toBe('number');
       expect(result.healthTrends.summary.recommendation).toBeDefined();
     });
@@ -249,7 +289,10 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
         label: 'This Week',
       };
 
-      const result = await trendAnalyzer.comparePerformancePeriods(periodA, periodB);
+      const result = await trendAnalyzer.comparePerformancePeriods(
+        periodA,
+        periodB
+      );
 
       expect(result.success).toBe(true);
       expect(result.comparison.summary).toContain('Insufficient data');
@@ -270,7 +313,10 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
         label: 'Last Two Weeks',
       };
 
-      const result = await trendAnalyzer.comparePerformancePeriods(periodA, periodB);
+      const result = await trendAnalyzer.comparePerformancePeriods(
+        periodA,
+        periodB
+      );
 
       expect(result.success).toBe(true);
       expect(result.comparison).toBeDefined();
@@ -288,25 +334,58 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
   describe('Helper Methods', () => {
     test('should load metrics from both enhanced and legacy files', async () => {
       // Create both enhanced and legacy data
-      const enhancedData = { metrics: [{ criterion: 'test1', timing: { startTime: '2025-09-27T01:00:00.000Z', durationMs: 1000 } }] };
-      const legacyData = { metrics: [{ criterion: 'test2', startTime: '2025-09-27T02:00:00.000Z', durationMs: 2000 }] };
+      const enhancedData = {
+        metrics: [
+          {
+            criterion: 'test1',
+            timing: { startTime: '2025-09-27T01:00:00.000Z', durationMs: 1000 },
+          },
+        ],
+      };
+      const legacyData = {
+        metrics: [
+          {
+            criterion: 'test2',
+            startTime: '2025-09-27T02:00:00.000Z',
+            durationMs: 2000,
+          },
+        ],
+      };
 
-      fs.writeFileSync(mockEnhancedMetricsFile, JSON.stringify(enhancedData, null, 2));
-      fs.writeFileSync(mockLegacyMetricsFile, JSON.stringify(legacyData, null, 2));
+      fs.writeFileSync(
+        mockEnhancedMetricsFile,
+        JSON.stringify(enhancedData, null, 2)
+      );
+      fs.writeFileSync(
+        mockLegacyMetricsFile,
+        JSON.stringify(legacyData, null, 2)
+      );
 
       const metrics = await trendAnalyzer._loadMetricsData();
 
       expect(metrics).toHaveLength(2);
-      expect(metrics.some(m => m.criterion === 'test1')).toBe(true);
-      expect(metrics.some(m => m.criterion === 'test2')).toBe(true);
+      expect(metrics.some((m) => m.criterion === 'test1')).toBe(true);
+      expect(metrics.some((m) => m.criterion === 'test2')).toBe(true);
     });
 
     test('should filter metrics by time range correctly', () => {
       const now = Date.now();
       const metrics = [
-        { timing: { startTime: new Date(now - 10 * 24 * 60 * 60 * 1000).toISOString() } }, // 10 days ago
-        { timing: { startTime: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString() } },  // 5 days ago
-        { timing: { startTime: new Date(now - 1 * 24 * 60 * 60 * 1000).toISOString() } },  // 1 day ago
+        {
+          timing: {
+            startTime: new Date(now - 10 * 24 * 60 * 60 * 1000).toISOString(),
+          },
+        }, // 10 days ago
+        {
+          timing: {
+            startTime: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString(),
+          },
+        }, // 5 days ago
+        {
+          timing: {
+            startTime: new Date(now - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          },
+        }, // 1 day ago
       ];
 
       const filtered = trendAnalyzer._filterMetricsByTimeRange(metrics, 7);
@@ -330,13 +409,15 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
     test('should calculate trend direction correctly', () => {
       // Increasing trend
       const increasingValues = [1, 2, 3, 4, 5];
-      const increasingTrend = trendAnalyzer._calculateTrendDirection(increasingValues);
+      const increasingTrend =
+        trendAnalyzer._calculateTrendDirection(increasingValues);
       expect(increasingTrend.direction).toBe('increasing');
       expect(increasingTrend.slope).toBeGreaterThan(0);
 
       // Decreasing trend
       const decreasingValues = [5, 4, 3, 2, 1];
-      const decreasingTrend = trendAnalyzer._calculateTrendDirection(decreasingValues);
+      const decreasingTrend =
+        trendAnalyzer._calculateTrendDirection(decreasingValues);
       expect(decreasingTrend.direction).toBe('decreasing');
       expect(decreasingTrend.slope).toBeLessThan(0);
 
@@ -351,8 +432,10 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
       const lowVolatilityValues = [10, 11, 9, 10, 11];
       const highVolatilityValues = [10, 50, 5, 40, 15];
 
-      const lowVolatility = trendAnalyzer._calculateVolatility(lowVolatilityValues);
-      const highVolatility = trendAnalyzer._calculateVolatility(highVolatilityValues);
+      const lowVolatility =
+        trendAnalyzer._calculateVolatility(lowVolatilityValues);
+      const highVolatility =
+        trendAnalyzer._calculateVolatility(highVolatilityValues);
 
       expect(lowVolatility).toBeLessThan(highVolatility);
       expect(lowVolatility).toBeGreaterThanOrEqual(0);
@@ -399,17 +482,22 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
       const values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
       expect(trendAnalyzer._calculatePercentile(values, 0.5)).toBe(5.5); // 50th percentile (median)
       expect(trendAnalyzer._calculatePercentile(values, 0.9)).toBe(9.1); // 90th percentile
-      expect(trendAnalyzer._calculatePercentile(values, 0.0)).toBe(1);   // 0th percentile (min)
-      expect(trendAnalyzer._calculatePercentile(values, 1.0)).toBe(10);  // 100th percentile (max)
+      expect(trendAnalyzer._calculatePercentile(values, 0.0)).toBe(1); // 0th percentile (min)
+      expect(trendAnalyzer._calculatePercentile(values, 1.0)).toBe(10); // 100th percentile (max)
     });
   });
 
   describe('Pattern Detection', () => {
     test('should detect cyclical patterns', () => {
       const durations = [10, 20, 15, 25, 12, 22, 14, 24]; // High variance
-      const timestamps = durations.map((_, i) => new Date(Date.now() + i * 60 * 60 * 1000));
+      const timestamps = durations.map(
+        (_, i) => new Date(Date.now() + i * 60 * 60 * 1000)
+      );
 
-      const pattern = trendAnalyzer._detectCyclicalPattern(durations, timestamps);
+      const pattern = trendAnalyzer._detectCyclicalPattern(
+        durations,
+        timestamps
+      );
 
       expect(pattern.detected).toBe(true);
       expect(pattern.variance).toBeGreaterThan(0);
@@ -424,7 +512,10 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
         return date;
       });
 
-      const pattern = trendAnalyzer._detectSeasonalPattern(durations, timestamps);
+      const pattern = trendAnalyzer._detectSeasonalPattern(
+        durations,
+        timestamps
+      );
 
       expect(pattern.detected).toBeDefined();
       expect(pattern.variance).toBeGreaterThanOrEqual(0);
@@ -433,9 +524,14 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
 
     test('should detect trending patterns', () => {
       const increasingDurations = [10, 12, 14, 16, 18, 20, 22, 24];
-      const timestamps = increasingDurations.map((_, i) => new Date(Date.now() + i * 60 * 60 * 1000));
+      const timestamps = increasingDurations.map(
+        (_, i) => new Date(Date.now() + i * 60 * 60 * 1000)
+      );
 
-      const pattern = trendAnalyzer._detectTrendingPattern(increasingDurations, timestamps);
+      const pattern = trendAnalyzer._detectTrendingPattern(
+        increasingDurations,
+        timestamps
+      );
 
       expect(pattern.detected).toBe(true);
       expect(pattern.direction).toBe('increasing');
@@ -463,7 +559,10 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
 
     test('should handle empty metrics arrays', async () => {
       const emptyData = { metrics: [] };
-      fs.writeFileSync(mockEnhancedMetricsFile, JSON.stringify(emptyData, null, 2));
+      fs.writeFileSync(
+        mockEnhancedMetricsFile,
+        JSON.stringify(emptyData, null, 2)
+      );
 
       const result = await trendAnalyzer.analyzeTrends();
 

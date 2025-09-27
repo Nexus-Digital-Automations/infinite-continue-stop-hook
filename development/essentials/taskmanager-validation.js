@@ -60,30 +60,30 @@ class TaskManagerValidator {
     // Validate category value
     if (taskData.category && !VALID_CATEGORIES.includes(taskData.category)) {
       this.errors.push(
-        `Invalid category '${taskData.category}'. Valid categories: ${VALID_CATEGORIES.join(', ')}`,
+        `Invalid category '${taskData.category}'. Valid categories: ${VALID_CATEGORIES.join(', ')}`
       );
     }
 
     // Check for old task_type field
     if (taskData.task_type) {
       this.errors.push(
-        'Field task_type is no longer valid. Use category instead',
+        'Field task_type is no longer valid. Use category instead'
       );
       this.warnings.push(
-        'Legacy task_type field detected - update to use category field',
+        'Legacy task_type field detected - update to use category field'
       );
     }
 
     // Validate title and description quality
     if (taskData.title && taskData.title.length < 5) {
       this.warnings.push(
-        'Task title should be more descriptive (recommended: 10+ characters)',
+        'Task title should be more descriptive (recommended: 10+ characters)'
       );
     }
 
     if (taskData.description && taskData.description.length < 10) {
       this.warnings.push(
-        'Task description should be more detailed (recommended: 20+ characters)',
+        'Task description should be more detailed (recommended: 20+ characters)'
       );
     }
 
@@ -103,10 +103,10 @@ class TaskManagerValidator {
     // Check for invalid commands
     if (INVALID_COMMANDS.includes(command)) {
       this.errors.push(
-        `Command '${command}' is not available in TaskManager API CLI`,
+        `Command '${command}' is not available in TaskManager API CLI`
       );
       this.warnings.push(
-        `Use 'complete' command instead of '${command}' for task lifecycle management`,
+        `Use 'complete' command instead of '${command}' for task lifecycle management`
       );
       return this.getResult();
     }
@@ -114,7 +114,7 @@ class TaskManagerValidator {
     // Check for valid commands
     if (!VALID_COMMANDS.includes(command)) {
       this.errors.push(
-        `Unknown command '${command}'. Valid commands: ${VALID_COMMANDS.join(', ')}`,
+        `Unknown command '${command}'. Valid commands: ${VALID_COMMANDS.join(', ')}`
       );
       this.warnings.push("Run 'guide' command to see all available options");
       return this.getResult();
@@ -126,7 +126,7 @@ class TaskManagerValidator {
         if (args.length === 0) {
           this.errors.push('Create command requires task data parameter');
           this.warnings.push(
-            'Format: create \'{"title":"...", "description":"...", "category":"..."}\'',
+            'Format: create \'{"title":"...", "description":"...", "category":"..."}\''
           );
         }
         break;
@@ -134,7 +134,7 @@ class TaskManagerValidator {
       case 'claim':
         if (args.length < 2) {
           this.errors.push(
-            'Claim command requires taskId and agentId parameters',
+            'Claim command requires taskId and agentId parameters'
           );
           this.warnings.push('Format: claim <taskId> <agentId>');
         }
@@ -150,7 +150,7 @@ class TaskManagerValidator {
       case 'status':
         if (args.length < 1) {
           this.warnings.push(
-            'Status command recommended with agentId parameter for detailed info',
+            'Status command recommended with agentId parameter for detailed info'
           );
         }
         break;
@@ -171,7 +171,7 @@ class TaskManagerValidator {
     // Check for proper timeout usage
     if (!commandString.includes('timeout 10s')) {
       this.warnings.push(
-        'Recommend using "timeout 10s" for TaskManager API calls',
+        'Recommend using "timeout 10s" for TaskManager API calls'
       );
     }
 

@@ -1,5 +1,3 @@
-
-
 /**
  * RAG System Embedding Generation Unit Tests
  *
@@ -94,7 +92,8 @@ describe('Embedding Generation System', () => {
     });
 
     test('should generate consistent embeddings for identical content', () => {
-      const _content = 'Error handling in JavaScript requires proper try-catch implementation.';
+      const _content =
+        'Error handling in JavaScript requires proper try-catch implementation.';
 
       // Placeholder for future implementation
       expect(true).toBe(true);
@@ -112,13 +111,7 @@ describe('Embedding Generation System', () => {
     });
 
     test('should handle empty and minimal content gracefully', () => {
-      const _testCases = [
-        '',
-        ' ',
-        'a',
-        'Error',
-        'TODO: Fix this bug',
-      ];
+      const _testCases = ['', ' ', 'a', 'Error', 'TODO: Fix this bug'];
 
       // Placeholder for future implementation
       expect(true).toBe(true);
@@ -373,7 +366,8 @@ describe('Embedding Generation System', () => {
 
   describe('Performance and Optimization', () => {
     test('should cache embeddings for repeated content', () => {
-      const _content = 'This content will be embedded multiple times for caching test';
+      const _content =
+        'This content will be embedded multiple times for caching test';
 
       // Placeholder for future implementation
       expect(true).toBe(true);
@@ -427,8 +421,9 @@ describe('Embedding Generation System', () => {
     });
 
     test('should monitor memory usage during large batch processing', () => {
-      const _largeBatch = Array.from({ length: 100 }, (_, i) =>
-        `Content item ${i}: ${'x'.repeat(1000)}`,
+      const _largeBatch = Array.from(
+        { length: 100 },
+        (_, i) => `Content item ${i}: ${'x'.repeat(1000)}`
       );
 
       // Placeholder for future implementation

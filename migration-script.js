@@ -1,4 +1,3 @@
-
 /**
  * TODO.json to FEATURES.json Migration Script
  *
@@ -18,8 +17,12 @@ const _path = require('path');
 class FeaturesMigration {
   constructor() {
     this.todoPath = '/Users/jeremyparker/infinite-continue-stop-hook/TODO.json';
-    this.featuresPath = '/Users/jeremyparker/infinite-continue-stop-hook/FEATURES.json';
-    this.backupPath = this.todoPath + '.backup.' + new Date().toISOString().replace(/[:.]/g, '-');
+    this.featuresPath =
+      '/Users/jeremyparker/infinite-continue-stop-hook/FEATURES.json';
+    this.backupPath =
+      this.todoPath +
+      '.backup.' +
+      new Date().toISOString().replace(/[:.]/g, '-');
     this.migrationReport = {
       startTime: new Date().toISOString(),
       totalTasks: 0,
@@ -31,8 +34,8 @@ class FeaturesMigration {
   }
 
   /**
-     * Main migration method
-     */
+   * Main migration method
+   */
   migrate() {
     try {
       console.log('🚀 Starting TODO.json → FEATURES.json migration...');
@@ -57,7 +60,6 @@ class FeaturesMigration {
 
       console.log('✅ Migration completed successfully!');
       return true;
-
     } catch (error) {
       console.error('❌ Migration failed:', error.message);
       this.migrationReport.errors.push(error.message);
@@ -66,8 +68,8 @@ class FeaturesMigration {
   }
 
   /**
-     * Load and validate TODO.json data
-     */
+   * Load and validate TODO.json data
+   */
   loadTodoData() {
     console.log('📖 Loading TODO.json data...');
 
@@ -78,15 +80,17 @@ class FeaturesMigration {
     const todoContent = fs.readFileSync(this.todoPath, 'utf8');
     const todoData = JSON.parse(todoContent);
 
-    this.migrationReport.totalTasks = todoData.tasks ? todoData.tasks.length : 0;
+    this.migrationReport.totalTasks = todoData.tasks
+      ? todoData.tasks.length
+      : 0;
 
     console.log(`📊 Found ${this.migrationReport.totalTasks} tasks to migrate`);
     return todoData;
   }
 
   /**
-     * Create backup with timestamp
-     */
+   * Create backup with timestamp
+   */
   createBackup(todoData) {
     console.log('💾 Creating backup...');
 
@@ -95,8 +99,8 @@ class FeaturesMigration {
   }
 
   /**
-     * Create new FEATURES.json schema structure
-     */
+   * Create new FEATURES.json schema structure
+   */
   createFeaturesSchema(todoData) {
     console.log('🏗️  Designing FEATURES.json schema...');
 
@@ -131,32 +135,32 @@ class FeaturesMigration {
 
         // Feature status definitions
         feature_statuses: {
-          'suggested': {
+          suggested: {
             description: 'Feature suggested but not yet approved',
             next_status: ['approved', 'rejected'],
             allow_implementation: false,
           },
-          'approved': {
+          approved: {
             description: 'Feature approved for implementation',
             next_status: ['implemented', 'cancelled'],
             allow_implementation: true,
           },
-          'implemented': {
+          implemented: {
             description: 'Feature successfully implemented',
             next_status: ['enhanced', 'deprecated'],
             allow_implementation: false,
           },
-          'rejected': {
+          rejected: {
             description: 'Feature rejected and will not be implemented',
             next_status: ['suggested'],
             allow_implementation: false,
           },
-          'cancelled': {
+          cancelled: {
             description: 'Feature cancelled after approval',
             next_status: ['suggested'],
             allow_implementation: false,
           },
-          'deprecated': {
+          deprecated: {
             description: 'Feature implemented but now deprecated',
             next_status: ['enhanced', 'removed'],
             allow_implementation: false,
@@ -173,8 +177,8 @@ class FeaturesMigration {
   }
 
   /**
-     * Transform TODO.json data to FEATURES.json format
-     */
+   * Transform TODO.json data to FEATURES.json format
+   */
   transformData(todoData, featuresSchema) {
     console.log('🔄 Transforming data to new format...');
 
@@ -188,8 +192,12 @@ class FeaturesMigration {
           transformedData.features.push(transformedFeature);
           this.migrationReport.migratedFeatures++;
         } catch (error) {
-          this.migrationReport.errors.push(`Failed to transform task ${task.id || index}: ${error.message}`);
-          console.warn(`⚠️  Warning: Failed to transform task ${task.id || index}`);
+          this.migrationReport.errors.push(
+            `Failed to transform task ${task.id || index}: ${error.message}`
+          );
+          console.warn(
+            `⚠️  Warning: Failed to transform task ${task.id || index}`
+          );
         }
       });
     }
@@ -201,7 +209,9 @@ class FeaturesMigration {
           const transformedFeature = this.transformTask(task, true);
           transformedData.completed_features.push(transformedFeature);
         } catch (error) {
-          this.migrationReport.errors.push(`Failed to transform completed task ${task.id || index}: ${error.message}`);
+          this.migrationReport.errors.push(
+            `Failed to transform completed task ${task.id || index}: ${error.message}`
+          );
         }
       });
     }
@@ -209,13 +219,15 @@ class FeaturesMigration {
     // Update migration stats
     transformedData.migration_stats = this.migrationReport;
 
-    console.log(`✅ Transformed ${this.migrationReport.migratedFeatures} features`);
+    console.log(
+      `✅ Transformed ${this.migrationReport.migratedFeatures} features`
+    );
     return transformedData;
   }
 
   /**
-     * Transform individual task to feature format
-     */
+   * Transform individual task to feature format
+   */
   transformTask(task, isCompleted = false) {
     // Determine appropriate status based on original task data
     let status = 'suggested'; // default
@@ -232,7 +244,9 @@ class FeaturesMigration {
     // Build the new feature object
     const feature = {
       // Core identification
-      id: task.id || `migrated_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id:
+        task.id ||
+        `migrated_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
 
       // Basic information
       title: task.title || 'Untitled Feature',
@@ -243,8 +257,14 @@ class FeaturesMigration {
 
       // Approval workflow timestamps
       suggested_at: task.created_at || new Date().toISOString(),
-      approved_at: status === 'approved' || status === 'implemented' ? task.created_at || new Date().toISOString() : null,
-      implemented_at: status === 'implemented' ? task.started_at || task.created_at || new Date().toISOString() : null,
+      approved_at:
+        status === 'approved' || status === 'implemented'
+          ? task.created_at || new Date().toISOString()
+          : null,
+      implemented_at:
+        status === 'implemented'
+          ? task.started_at || task.created_at || new Date().toISOString()
+          : null,
 
       // Preserved original fields
       original_category: task.category || 'feature',
@@ -286,8 +306,8 @@ class FeaturesMigration {
   }
 
   /**
-     * Write the new FEATURES.json file
-     */
+   * Write the new FEATURES.json file
+   */
   writeFeaturesFile(transformedData) {
     console.log('💾 Writing FEATURES.json...');
 
@@ -295,15 +315,19 @@ class FeaturesMigration {
     fs.writeFileSync(this.featuresPath, featuresContent);
 
     console.log(`✅ FEATURES.json created: ${this.featuresPath}`);
-    console.log(`📊 File size: ${Math.round(featuresContent.length / 1024)} KB`);
+    console.log(
+      `📊 File size: ${Math.round(featuresContent.length / 1024)} KB`
+    );
   }
 
   /**
-     * Generate comprehensive migration report
-     */
+   * Generate comprehensive migration report
+   */
   generateMigrationReport() {
     this.migrationReport.endTime = new Date().toISOString();
-    this.migrationReport.duration = new Date(this.migrationReport.endTime) - new Date(this.migrationReport.startTime);
+    this.migrationReport.duration =
+      new Date(this.migrationReport.endTime) -
+      new Date(this.migrationReport.startTime);
 
     console.log('\n📋 Migration Report:');
     console.log('===================');
@@ -311,7 +335,9 @@ class FeaturesMigration {
     console.log(`📅 End Time: ${this.migrationReport.endTime}`);
     console.log(`⏱️  Duration: ${this.migrationReport.duration}ms`);
     console.log(`📝 Total Tasks: ${this.migrationReport.totalTasks}`);
-    console.log(`✅ Migrated Features: ${this.migrationReport.migratedFeatures}`);
+    console.log(
+      `✅ Migrated Features: ${this.migrationReport.migratedFeatures}`
+    );
     console.log(`⚠️  Errors: ${this.migrationReport.errors.length}`);
     console.log(`🔶 Warnings: ${this.migrationReport.warnings.length}`);
 
@@ -331,8 +357,8 @@ class FeaturesMigration {
   }
 
   /**
-     * Validate migration results
-     */
+   * Validate migration results
+   */
   validateMigration() {
     console.log('🔍 Validating migration results...');
 
@@ -346,8 +372,15 @@ class FeaturesMigration {
       const featuresData = JSON.parse(featuresContent);
 
       // Validate schema structure
-      const requiredFields = ['schema_version', 'project', 'features', 'settings'];
-      const missingFields = requiredFields.filter(field => !Object.prototype.hasOwnProperty.call(featuresData, field));
+      const requiredFields = [
+        'schema_version',
+        'project',
+        'features',
+        'settings',
+      ];
+      const missingFields = requiredFields.filter(
+        (field) => !Object.prototype.hasOwnProperty.call(featuresData, field)
+      );
 
       if (missingFields.length > 0) {
         throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
@@ -360,7 +393,6 @@ class FeaturesMigration {
 
       console.log('✅ Migration validation passed');
       return true;
-
     } catch (error) {
       console.error('❌ Migration validation failed:', error.message);
       return false;
@@ -372,7 +404,8 @@ class FeaturesMigration {
 if (require.main === module) {
   const migration = new FeaturesMigration();
 
-  migration.migrate()
+  migration
+    .migrate()
     .then((success) => {
       if (success) {
         const validationPassed = migration.validateMigration();

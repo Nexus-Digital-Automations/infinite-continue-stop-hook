@@ -9,7 +9,8 @@ const { spawn } = require('child_process');
 class QuickPerformanceTest {
   constructor() {
     this.results = [];
-    this.taskManagerPath = '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
+    this.taskManagerPath =
+      '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
   }
 
   executeCommand(command, args = [], timeout = 8000) {
@@ -71,8 +72,10 @@ class QuickPerformanceTest {
             duration,
             success: code === 0,
             response,
-            stdout: stdout.length > 500 ? stdout.substring(0, 500) + '...' : stdout,
-            stderr: stderr.length > 200 ? stderr.substring(0, 200) + '...' : stderr,
+            stdout:
+              stdout.length > 500 ? stdout.substring(0, 500) + '...' : stdout,
+            stderr:
+              stderr.length > 200 ? stderr.substring(0, 200) + '...' : stderr,
             memoryUsed: process.memoryUsage().heapUsed - startMemory.heapUsed,
           });
         }
@@ -121,13 +124,14 @@ class QuickPerformanceTest {
     console.log('\n📋 Performance Analysis');
     console.log('=======================');
 
-    const successful = this.results.filter(r => r.success);
-    const failed = this.results.filter(r => !r.success);
+    const successful = this.results.filter((r) => r.success);
+    const failed = this.results.filter((r) => !r.success);
 
     if (successful.length > 0) {
-      const avgTime = successful.reduce((sum, r) => sum + r.duration, 0) / successful.length;
-      const maxTime = Math.max(...successful.map(r => r.duration));
-      const minTime = Math.min(...successful.map(r => r.duration));
+      const avgTime =
+        successful.reduce((sum, r) => sum + r.duration, 0) / successful.length;
+      const maxTime = Math.max(...successful.map((r) => r.duration));
+      const minTime = Math.min(...successful.map((r) => r.duration));
 
       console.log(`\n📊 Response Time Metrics:`);
       console.log(`   Average: ${avgTime.toFixed(2)}ms`);
@@ -137,49 +141,61 @@ class QuickPerformanceTest {
 
     if (failed.length > 0) {
       console.log(`\n❌ Failed Operations: ${failed.length}`);
-      failed.forEach(f => {
+      failed.forEach((f) => {
         console.log(`   • ${f.testName}: ${f.error || 'Unknown error'}`);
       });
     }
 
     // Performance analysis
-    const slowOperations = successful.filter(r => r.duration > 2000);
+    const slowOperations = successful.filter((r) => r.duration > 2000);
     if (slowOperations.length > 0) {
       console.log(`\n⚠️  Slow Operations (>2s):`);
-      slowOperations.forEach(op => {
+      slowOperations.forEach((op) => {
         console.log(`   • ${op.testName}: ${op.duration.toFixed(2)}ms`);
       });
     }
 
-    const fastOperations = successful.filter(r => r.duration < 500);
+    const fastOperations = successful.filter((r) => r.duration < 500);
     if (fastOperations.length > 0) {
       console.log(`\n⚡ Fast Operations (<500ms):`);
-      fastOperations.forEach(op => {
+      fastOperations.forEach((op) => {
         console.log(`   • ${op.testName}: ${op.duration.toFixed(2)}ms`);
       });
     }
 
     // Memory analysis
-    const totalMemoryUsed = this.results.reduce((sum, r) => sum + (r.memoryUsed || 0), 0);
+    const totalMemoryUsed = this.results.reduce(
+      (sum, r) => sum + (r.memoryUsed || 0),
+      0
+    );
     const avgMemoryPerOp = totalMemoryUsed / this.results.length;
 
     console.log(`\n💾 Memory Usage:`);
     console.log(`   Total: ${(totalMemoryUsed / (1024 * 1024)).toFixed(2)}MB`);
-    console.log(`   Average per operation: ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB`);
+    console.log(
+      `   Average per operation: ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB`
+    );
 
     // Recommendations
     console.log(`\n💡 Performance Recommendations:`);
 
     if (slowOperations.length > 0) {
-      console.log(`   • Investigate and optimize ${slowOperations.length} slow operations`);
+      console.log(
+        `   • Investigate and optimize ${slowOperations.length} slow operations`
+      );
     }
 
     if (failed.length > 0) {
-      console.log(`   • Address ${failed.length} failing operations for system reliability`);
+      console.log(
+        `   • Address ${failed.length} failing operations for system reliability`
+      );
     }
 
-    if (avgMemoryPerOp > 10 * 1024 * 1024) { // 10MB per operation
-      console.log(`   • Review memory usage patterns - average ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB per operation`);
+    if (avgMemoryPerOp > 10 * 1024 * 1024) {
+      // 10MB per operation
+      console.log(
+        `   • Review memory usage patterns - average ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB per operation`
+      );
     }
 
     if (successful.length === this.results.length) {
@@ -192,19 +208,34 @@ class QuickPerformanceTest {
         totalTests: this.results.length,
         successful: successful.length,
         failed: failed.length,
-        avgResponseTime: successful.length > 0 ? successful.reduce((sum, r) => sum + r.duration, 0) / successful.length : 0,
+        avgResponseTime:
+          successful.length > 0
+            ? successful.reduce((sum, r) => sum + r.duration, 0) /
+              successful.length
+            : 0,
         totalMemoryUsed: totalMemoryUsed,
         avgMemoryPerOp: avgMemoryPerOp,
       },
       details: this.results,
       performance: {
-        fastOperations: fastOperations.map(op => ({ name: op.testName, time: op.duration })),
-        slowOperations: slowOperations.map(op => ({ name: op.testName, time: op.duration })),
-        failedOperations: failed.map(op => ({ name: op.testName, error: op.error || 'Unknown' })),
+        fastOperations: fastOperations.map((op) => ({
+          name: op.testName,
+          time: op.duration,
+        })),
+        slowOperations: slowOperations.map((op) => ({
+          name: op.testName,
+          time: op.duration,
+        })),
+        failedOperations: failed.map((op) => ({
+          name: op.testName,
+          error: op.error || 'Unknown',
+        })),
       },
     };
 
-    console.log(`\n🎯 Performance Score: ${this.calculatePerformanceScore(report)}/100`);
+    console.log(
+      `\n🎯 Performance Score: ${this.calculatePerformanceScore(report)}/100`
+    );
 
     return report;
   }
@@ -213,11 +244,11 @@ class QuickPerformanceTest {
     let score = 100;
 
     // Deduct points for failed operations
-    score -= (report.summary.failed * 15);
+    score -= report.summary.failed * 15;
 
     // Deduct points for slow operations
     const slowOps = report.performance.slowOperations.length;
-    score -= (slowOps * 10);
+    score -= slowOps * 10;
 
     // Deduct points for high average response time
     if (report.summary.avgResponseTime > 3000) {
@@ -227,9 +258,11 @@ class QuickPerformanceTest {
     }
 
     // Deduct points for high memory usage
-    if (report.summary.avgMemoryPerOp > 20 * 1024 * 1024) { // 20MB
+    if (report.summary.avgMemoryPerOp > 20 * 1024 * 1024) {
+      // 20MB
       score -= 15;
-    } else if (report.summary.avgMemoryPerOp > 10 * 1024 * 1024) { // 10MB
+    } else if (report.summary.avgMemoryPerOp > 10 * 1024 * 1024) {
+      // 10MB
       score -= 8;
     }
 
@@ -240,7 +273,8 @@ class QuickPerformanceTest {
 // Run test if executed directly
 if (require.main === module) {
   const test = new QuickPerformanceTest();
-  test.runQuickTests()
+  test
+    .runQuickTests()
     .then((_report) => {
       console.log('\n✅ Quick performance test completed!');
       throw new Error('Performance test completed successfully');

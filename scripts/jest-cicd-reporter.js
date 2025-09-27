@@ -76,7 +76,10 @@ class JestCiCdReporter {
           passed_tests: results.numPassedTests,
           failed_tests: results.numFailedTests,
           pending_tests: results.numPendingTests,
-          success_rate: ((results.numPassedTests / results.numTotalTests) * 100).toFixed(2),
+          success_rate: (
+            (results.numPassedTests / results.numTotalTests) *
+            100
+          ).toFixed(2),
           execution_time_ms: duration,
         },
 
@@ -100,7 +103,9 @@ class JestCiCdReporter {
       // Coverage integration
       coverage_integration: {
         coverage_available: Boolean(results.coverageMap),
-        coverage_summary: results.coverageMap ? this.extractCoverageSummary(results.coverageMap) : null,
+        coverage_summary: results.coverageMap
+          ? this.extractCoverageSummary(results.coverageMap)
+          : null,
         coverage_status: this.evaluateCoverageStatus(results.coverageMap),
       },
 
@@ -159,8 +164,12 @@ class JestCiCdReporter {
 
     // Deduct for slow tests
     const avgDuration = (Date.now() - this.startTime) / results.numTotalTests;
-    if (avgDuration > 1000) {score -= 10;} // Slow tests
-    if (avgDuration > 5000) {score -= 20;} // Very slow tests
+    if (avgDuration > 1000) {
+      score -= 10;
+    } // Slow tests
+    if (avgDuration > 5000) {
+      score -= 20;
+    } // Very slow tests
 
     // Bonus for good coverage
     if (results.coverageMap) {
@@ -177,7 +186,7 @@ class JestCiCdReporter {
     let slowest = null;
     let maxDuration = 0;
 
-    testResults.forEach(result => {
+    testResults.forEach((result) => {
       const duration = result.perfStats.end - result.perfStats.start;
       if (duration > maxDuration) {
         maxDuration = duration;
@@ -196,20 +205,26 @@ class JestCiCdReporter {
     const failures = [];
     const failurePatterns = new Map();
 
-    results.testResults.forEach(testResult => {
+    results.testResults.forEach((testResult) => {
       if (testResult.numFailingTests > 0) {
-        testResult.testResults.forEach(test => {
+        testResult.testResults.forEach((test) => {
           if (test.status === 'failed') {
             failures.push({
               suite: testResult.testFilePath,
               test: test.fullName,
               duration: test.duration,
-              error: test.failureMessages?.[0]?.substring(0, 200) || 'Unknown error',
+              error:
+                test.failureMessages?.[0]?.substring(0, 200) || 'Unknown error',
             });
 
             // Track failure patterns
-            const errorType = this.categorizeError(test.failureMessages?.[0] || '');
-            failurePatterns.set(errorType, (failurePatterns.get(errorType) || 0) + 1);
+            const errorType = this.categorizeError(
+              test.failureMessages?.[0] || ''
+            );
+            failurePatterns.set(
+              errorType,
+              (failurePatterns.get(errorType) || 0) + 1
+            );
           }
         });
       }
@@ -220,21 +235,25 @@ class JestCiCdReporter {
       failed_suites: results.numFailedTestSuites,
       failure_details: failures.slice(0, 10), // Limit to first 10
       failure_patterns: Object.fromEntries(failurePatterns),
-      common_failure_type: failurePatterns.size > 0 ?
-        [...failurePatterns.entries()].sort((a, b) => b[1] - a[1])[0][0] : 'none',
+      common_failure_type:
+        failurePatterns.size > 0
+          ? [...failurePatterns.entries()].sort((a, b) => b[1] - a[1])[0][0]
+          : 'none',
     };
   }
 
   categorizeError(errorMessage) {
-    if (!errorMessage) {return 'unknown';}
+    if (!errorMessage) {
+      return 'unknown';
+    }
 
     const patterns = {
-      'timeout': /timeout|timed out/i,
-      'assertion': /expect|assertion|toBe|toEqual/i,
-      'reference': /ReferenceError|is not defined/i,
-      'type': /TypeError|Cannot read|undefined/i,
-      'network': /ECONNREFUSED|network|fetch/i,
-      'async': /Promise|async|await/i,
+      timeout: /timeout|timed out/i,
+      assertion: /expect|assertion|toBe|toEqual/i,
+      reference: /ReferenceError|is not defined/i,
+      type: /TypeError|Cannot read|undefined/i,
+      network: /ECONNREFUSED|network|fetch/i,
+      async: /Promise|async|await/i,
     };
 
     for (const [category, pattern] of Object.entries(patterns)) {
@@ -260,10 +279,18 @@ class JestCiCdReporter {
     try {
       const info = {
         commit_sha: execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
-        branch: execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim(),
-        author: execSync('git log -1 --format="%an <%ae>"', { encoding: 'utf8' }).trim(),
-        commit_message: execSync('git log -1 --format="%s"', { encoding: 'utf8' }).trim(),
-        commit_date: execSync('git log -1 --format="%ai"', { encoding: 'utf8' }).trim(),
+        branch: execSync('git rev-parse --abbrev-ref HEAD', {
+          encoding: 'utf8',
+        }).trim(),
+        author: execSync('git log -1 --format="%an <%ae>"', {
+          encoding: 'utf8',
+        }).trim(),
+        commit_message: execSync('git log -1 --format="%s"', {
+          encoding: 'utf8',
+        }).trim(),
+        commit_date: execSync('git log -1 --format="%ai"', {
+          encoding: 'utf8',
+        }).trim(),
         tag: this.getLatestTag(),
         is_dirty: this.isGitDirty(),
         remote_url: this.getRemoteUrl(),
@@ -315,7 +342,10 @@ class JestCiCdReporter {
 
       // CI/CD context
       build_info: {
-        build_number: process.env.BUILD_NUMBER || process.env.GITHUB_RUN_NUMBER || 'unknown',
+        build_number:
+          process.env.BUILD_NUMBER ||
+          process.env.GITHUB_RUN_NUMBER ||
+          'unknown',
         build_url: process.env.BUILD_URL || this.constructBuildUrl(),
         job_name: process.env.JOB_NAME || process.env.GITHUB_JOB || 'unknown',
       },
@@ -336,10 +366,13 @@ class JestCiCdReporter {
   calculateParallelEfficiency(results) {
     // Simplified parallel efficiency calculation
     const totalTime = Date.now() - this.startTime;
-    const serialTime = results.testResults.reduce((sum, result) =>
-      sum + (result.perfStats.end - result.perfStats.start), 0);
+    const serialTime = results.testResults.reduce(
+      (sum, result) => sum + (result.perfStats.end - result.perfStats.start),
+      0
+    );
 
-    const efficiency = serialTime > 0 ? ((serialTime / totalTime) * 100).toFixed(2) : 0;
+    const efficiency =
+      serialTime > 0 ? ((serialTime / totalTime) * 100).toFixed(2) : 0;
 
     return {
       parallel_efficiency_percent: efficiency,
@@ -357,10 +390,26 @@ class JestCiCdReporter {
     try {
       const summary = coverageMap.getCoverageSummary();
       return {
-        statements: { total: summary.statements.total, covered: summary.statements.covered, pct: summary.statements.pct },
-        branches: { total: summary.branches.total, covered: summary.branches.covered, pct: summary.branches.pct },
-        functions: { total: summary.functions.total, covered: summary.functions.covered, pct: summary.functions.pct },
-        lines: { total: summary.lines.total, covered: summary.lines.covered, pct: summary.lines.pct },
+        statements: {
+          total: summary.statements.total,
+          covered: summary.statements.covered,
+          pct: summary.statements.pct,
+        },
+        branches: {
+          total: summary.branches.total,
+          covered: summary.branches.covered,
+          pct: summary.branches.pct,
+        },
+        functions: {
+          total: summary.functions.total,
+          covered: summary.functions.covered,
+          pct: summary.functions.pct,
+        },
+        lines: {
+          total: summary.lines.total,
+          covered: summary.lines.covered,
+          pct: summary.lines.pct,
+        },
       };
     } catch {
       return { error: 'Failed to extract coverage summary' };
@@ -368,18 +417,34 @@ class JestCiCdReporter {
   }
 
   evaluateCoverageStatus(coverageMap) {
-    if (!coverageMap) {return 'not_available';}
+    if (!coverageMap) {
+      return 'not_available';
+    }
 
     const summary = this.extractCoverageSummary(coverageMap);
-    if (!summary || summary.error) {return 'error';}
+    if (!summary || summary.error) {
+      return 'error';
+    }
 
-    const avgCoverage = (summary.statements.pct + summary.branches.pct +
-                        summary.functions.pct + summary.lines.pct) / 4;
+    const avgCoverage =
+      (summary.statements.pct +
+        summary.branches.pct +
+        summary.functions.pct +
+        summary.lines.pct) /
+      4;
 
-    if (avgCoverage >= 90) {return 'excellent';}
-    if (avgCoverage >= 80) {return 'good';}
-    if (avgCoverage >= 70) {return 'acceptable';}
-    if (avgCoverage >= 60) {return 'minimum';}
+    if (avgCoverage >= 90) {
+      return 'excellent';
+    }
+    if (avgCoverage >= 80) {
+      return 'good';
+    }
+    if (avgCoverage >= 70) {
+      return 'acceptable';
+    }
+    if (avgCoverage >= 60) {
+      return 'minimum';
+    }
     return 'critical';
   }
 
@@ -449,7 +514,8 @@ class JestCiCdReporter {
 
     // Performance recommendations
     const duration = Date.now() - this.startTime;
-    if (duration > 60000) { // 1 minute
+    if (duration > 60000) {
+      // 1 minute
       recommendations.push({
         category: 'performance',
         priority: 'medium',
@@ -491,26 +557,28 @@ class JestCiCdReporter {
     // Write deployment gate status
     const deploymentStatus = {
       can_deploy: !report.cicd_summary.should_block_deployment,
-      quality_gate_passed: report.cicd_summary.quality_gate_status.status === 'PASSED',
+      quality_gate_passed:
+        report.cicd_summary.quality_gate_status.status === 'PASSED',
       timestamp: report.metadata.timestamp,
-      blocking_issues: report.cicd_summary.quality_gate_status.blocking_issues || [],
+      blocking_issues:
+        report.cicd_summary.quality_gate_status.blocking_issues || [],
     };
 
     fs.writeFileSync(
       path.join(outputDir, 'deployment-gate.json'),
-      JSON.stringify(deploymentStatus, null, 2),
+      JSON.stringify(deploymentStatus, null, 2)
     );
 
     // Write simple status for shell scripts
     fs.writeFileSync(
       path.join(outputDir, 'test-status.txt'),
-      report.cicd_summary.pipeline_status,
+      report.cicd_summary.pipeline_status
     );
 
     // Write health score
     fs.writeFileSync(
       path.join(outputDir, 'health-score.txt'),
-      report.cicd_summary.test_health_score.toString(),
+      report.cicd_summary.test_health_score.toString()
     );
   }
 
@@ -522,9 +590,17 @@ class JestCiCdReporter {
       try {
         const slackMessage = this.formatSlackMessage(report);
         this.sendWebhook(this.options.slackWebhook, slackMessage);
-        notifications.push({ type: 'slack', status: 'sent', timestamp: new Date().toISOString() });
+        notifications.push({
+          type: 'slack',
+          status: 'sent',
+          timestamp: new Date().toISOString(),
+        });
       } catch (error) {
-        notifications.push({ type: 'slack', status: 'failed', error: error.message });
+        notifications.push({
+          type: 'slack',
+          status: 'failed',
+          error: error.message,
+        });
       }
     }
 
@@ -533,9 +609,17 @@ class JestCiCdReporter {
       try {
         const teamsMessage = this.formatTeamsMessage(report);
         this.sendWebhook(this.options.teamsWebhook, teamsMessage);
-        notifications.push({ type: 'teams', status: 'sent', timestamp: new Date().toISOString() });
+        notifications.push({
+          type: 'teams',
+          status: 'sent',
+          timestamp: new Date().toISOString(),
+        });
       } catch (error) {
-        notifications.push({ type: 'teams', status: 'failed', error: error.message });
+        notifications.push({
+          type: 'teams',
+          status: 'failed',
+          error: error.message,
+        });
       }
     }
 
@@ -553,10 +637,11 @@ class JestCiCdReporter {
           type: 'section',
           text: {
             type: 'mrkdwn',
-            text: `*Test Pipeline ${status}* ${emoji}\n\n` +
-                  `*Tests:* ${report.test_execution.summary.passed_tests}/${report.test_execution.summary.total_tests} passed\n` +
-                  `*Duration:* ${Math.round(report.test_execution.summary.execution_time_ms / 1000)}s\n` +
-                  `*Health Score:* ${report.cicd_summary.test_health_score}/100`,
+            text:
+              `*Test Pipeline ${status}* ${emoji}\n\n` +
+              `*Tests:* ${report.test_execution.summary.passed_tests}/${report.test_execution.summary.total_tests} passed\n` +
+              `*Duration:* ${Math.round(report.test_execution.summary.execution_time_ms / 1000)}s\n` +
+              `*Health Score:* ${report.cicd_summary.test_health_score}/100`,
           },
         },
       ],
@@ -572,14 +657,25 @@ class JestCiCdReporter {
       '@context': 'http://schema.org/extensions',
       summary: `Test Pipeline ${status}`,
       themeColor: color,
-      sections: [{
-        activityTitle: `Test Pipeline ${status}`,
-        facts: [
-          { name: 'Tests Passed', value: `${report.test_execution.summary.passed_tests}/${report.test_execution.summary.total_tests}` },
-          { name: 'Duration', value: `${Math.round(report.test_execution.summary.execution_time_ms / 1000)}s` },
-          { name: 'Health Score', value: `${report.cicd_summary.test_health_score}/100` },
-        ],
-      }],
+      sections: [
+        {
+          activityTitle: `Test Pipeline ${status}`,
+          facts: [
+            {
+              name: 'Tests Passed',
+              value: `${report.test_execution.summary.passed_tests}/${report.test_execution.summary.total_tests}`,
+            },
+            {
+              name: 'Duration',
+              value: `${Math.round(report.test_execution.summary.execution_time_ms / 1000)}s`,
+            },
+            {
+              name: 'Health Score',
+              value: `${report.cicd_summary.test_health_score}/100`,
+            },
+          ],
+        },
+      ],
     };
   }
 
@@ -592,7 +688,9 @@ class JestCiCdReporter {
   // Helper methods
   getLatestTag() {
     try {
-      return execSync('git describe --tags --abbrev=0', { encoding: 'utf8' }).trim();
+      return execSync('git describe --tags --abbrev=0', {
+        encoding: 'utf8',
+      }).trim();
     } catch {
       return null;
     }
@@ -609,19 +707,33 @@ class JestCiCdReporter {
 
   getRemoteUrl() {
     try {
-      return execSync('git config --get remote.origin.url', { encoding: 'utf8' }).trim();
+      return execSync('git config --get remote.origin.url', {
+        encoding: 'utf8',
+      }).trim();
     } catch {
       return null;
     }
   }
 
   detectCiProvider() {
-    if (process.env.GITHUB_ACTIONS) {return 'github_actions';}
-    if (process.env.GITLAB_CI) {return 'gitlab_ci';}
-    if (process.env.JENKINS_URL) {return 'jenkins';}
-    if (process.env.TRAVIS) {return 'travis';}
-    if (process.env.CIRCLECI) {return 'circleci';}
-    if (process.env.CI) {return 'unknown_ci';}
+    if (process.env.GITHUB_ACTIONS) {
+      return 'github_actions';
+    }
+    if (process.env.GITLAB_CI) {
+      return 'gitlab_ci';
+    }
+    if (process.env.JENKINS_URL) {
+      return 'jenkins';
+    }
+    if (process.env.TRAVIS) {
+      return 'travis';
+    }
+    if (process.env.CIRCLECI) {
+      return 'circleci';
+    }
+    if (process.env.CI) {
+      return 'unknown_ci';
+    }
     return 'local';
   }
 

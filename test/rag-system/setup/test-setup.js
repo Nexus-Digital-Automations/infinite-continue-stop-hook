@@ -1,5 +1,3 @@
-
-
 /**
  * RAG System Test Setup
  *
@@ -108,10 +106,14 @@ global.RAG_TEST_UTILS = {
    */
   generateTechnicalContent: (topic = 'general') => {
     const templates = {
-      general: 'Technical content about {topic} including best practices and implementation details.',
-      error: 'Error handling for {topic} requires proper validation and error reporting mechanisms.',
-      performance: 'Performance optimization for {topic} involves caching, indexing, and efficient algorithms.',
-      security: 'Security considerations for {topic} include input validation, authentication, and authorization.',
+      general:
+        'Technical content about {topic} including best practices and implementation details.',
+      error:
+        'Error handling for {topic} requires proper validation and error reporting mechanisms.',
+      performance:
+        'Performance optimization for {topic} involves caching, indexing, and efficient algorithms.',
+      security:
+        'Security considerations for {topic} include input validation, authentication, and authorization.',
     };
 
     const template = templates[topic] || templates.general;
@@ -128,7 +130,10 @@ global.RAG_TEST_UTILS = {
   /**
    * Wait for specified time
    */
-  wait: (ms) => new Promise(resolve => { setTimeout(resolve, ms); }),
+  wait: (ms) =>
+    new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    }),
 
   /**
    * Measure execution time
@@ -146,7 +151,9 @@ global.RAG_TEST_UTILS = {
    */
   assertPerformance: (duration, threshold, operation) => {
     if (duration > threshold) {
-      throw new Error(`Performance threshold exceeded for ${operation}: ${duration}ms > ${threshold}ms`);
+      throw new Error(
+        `Performance threshold exceeded for ${operation}: ${duration}ms > ${threshold}ms`
+      );
     }
   },
 
@@ -178,7 +185,7 @@ global.RAG_TEST_UTILS = {
 
     // Create all files in parallel (after directories exist)
     await Promise.all(
-      files.map(file => _fs.writeFile(file.path, file.content)),
+      files.map((file) => _fs.writeFile(file.path, file.content))
     );
   },
 
@@ -201,7 +208,7 @@ global.RAG_TEST_UTILS = {
     expect(typeof response).toBe('object');
     expect(response.success).toBeDefined();
 
-    expectedFields.forEach(field => {
+    expectedFields.forEach((field) => {
       expect(response).toHaveProperty(field);
     });
   },
@@ -211,7 +218,8 @@ global.RAG_TEST_UTILS = {
    */
   createPerformanceTest: (name, operation, threshold) => {
     return async () => {
-      const { result, duration } = await global.RAG_TEST_UTILS.measureTime(operation);
+      const { result, duration } =
+        await global.RAG_TEST_UTILS.measureTime(operation);
 
       console.log(`${name} completed in ${duration.toFixed(2)}ms`);
       global.RAG_TEST_UTILS.assertPerformance(duration, threshold, name);
@@ -224,8 +232,8 @@ global.RAG_TEST_UTILS = {
 // Global setup
 beforeEach(async () => {
   // Reset all mocks
-  Object.values(global.RAG_MOCKS).forEach(mockObject => {
-    Object.values(mockObject).forEach(mockFn => {
+  Object.values(global.RAG_MOCKS).forEach((mockObject) => {
+    Object.values(mockObject).forEach((mockFn) => {
       if (jest.isMockFunction(mockFn)) {
         mockFn.mockClear();
       }
@@ -244,12 +252,12 @@ afterEach(async () => {
     const tempFiles = await _fs.readdir(global.RAG_TEST_CONFIG.tempPath);
     // Delete all temporary files in parallel
     await Promise.all(
-      tempFiles.map(file =>
+      tempFiles.map((file) =>
         _fs.rm(_path.join(global.RAG_TEST_CONFIG.tempPath, file), {
           recursive: true,
           force: true,
-        }),
-      ),
+        })
+      )
     );
   } catch {
     // Ignore cleanup errors
@@ -259,9 +267,10 @@ afterEach(async () => {
 // Extend Jest matchers for RAG-specific assertions
 expect.extend({
   toBeValidEmbedding(received) {
-    const pass = Array.isArray(received) &&
-                 received.length > 0 &&
-                 received.every(val => typeof val === 'number' && !isNaN(val));
+    const pass =
+      Array.isArray(received) &&
+      received.length > 0 &&
+      received.every((val) => typeof val === 'number' && !isNaN(val));
 
     if (pass) {
       return {
@@ -270,25 +279,27 @@ expect.extend({
       };
     } else {
       return {
-        message: () => `expected ${received} to be a valid embedding (array of numbers)`,
+        message: () =>
+          `expected ${received} to be a valid embedding (array of numbers)`,
         pass: false,
       };
     }
   },
 
   toHaveHighSimilarity(received, expected, threshold = 0.7) {
-    const pass = typeof received === 'number' &&
-                 received >= threshold &&
-                 received <= 1;
+    const pass =
+      typeof received === 'number' && received >= threshold && received <= 1;
 
     if (pass) {
       return {
-        message: () => `expected ${received} not to have high similarity (>= ${threshold})`,
+        message: () =>
+          `expected ${received} not to have high similarity (>= ${threshold})`,
         pass: true,
       };
     } else {
       return {
-        message: () => `expected ${received} to have high similarity (>= ${threshold})`,
+        message: () =>
+          `expected ${received} to have high similarity (>= ${threshold})`,
         pass: false,
       };
     }
@@ -299,12 +310,14 @@ expect.extend({
 
     if (pass) {
       return {
-        message: () => `expected ${received}ms not to meet performance threshold of ${threshold}ms`,
+        message: () =>
+          `expected ${received}ms not to meet performance threshold of ${threshold}ms`,
         pass: true,
       };
     } else {
       return {
-        message: () => `expected ${received}ms to meet performance threshold of ${threshold}ms`,
+        message: () =>
+          `expected ${received}ms to meet performance threshold of ${threshold}ms`,
         pass: false,
       };
     }
@@ -313,4 +326,7 @@ expect.extend({
 
 console.log('RAG System test environment initialized');
 console.log('Test data path:', global.RAG_TEST_CONFIG.testDataPath);
-console.log('Performance thresholds:', global.RAG_TEST_CONFIG.performanceThresholds);
+console.log(
+  'Performance thresholds:',
+  global.RAG_TEST_CONFIG.performanceThresholds
+);

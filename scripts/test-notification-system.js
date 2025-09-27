@@ -23,7 +23,9 @@ class TestNotificationSystem {
       enableEmail: process.env.EMAIL_NOTIFICATIONS === 'true',
       coverageThreshold: parseFloat(process.env.COVERAGE_THRESHOLD || '80'),
       testFailureThreshold: parseInt(process.env.TEST_FAILURE_THRESHOLD || '0'),
-      coverageDropThreshold: parseFloat(process.env.COVERAGE_DROP_THRESHOLD || '5'),
+      coverageDropThreshold: parseFloat(
+        process.env.COVERAGE_DROP_THRESHOLD || '5'
+      ),
       notificationLevel: process.env.NOTIFICATION_LEVEL || 'all', // all, failures-only, critical-only
       historyFile: './coverage/notifications/history.json',
       configFile: './coverage/notifications/config.json',
@@ -45,7 +47,11 @@ class TestNotificationSystem {
       const coverageData = await this.loadCoverageData();
       const cicdData = await this.loadCICDData();
 
-      const notifications = await this.analyzeAndGenerateNotifications(testResults, coverageData, cicdData);
+      const notifications = await this.analyzeAndGenerateNotifications(
+        testResults,
+        coverageData,
+        cicdData
+      );
 
       if (notifications.length === 0) {
         console.log('✅ No notifications needed - all quality gates passed');
@@ -56,7 +62,6 @@ class TestNotificationSystem {
       await this.updateNotificationHistory(notifications);
 
       console.log(`📤 Sent ${notifications.length} notification(s)`);
-
     } catch (error) {
       console.error('❌ Failed to process notifications:', error.message);
       if (process.env.DEBUG) {
@@ -73,22 +78,35 @@ class TestNotificationSystem {
     const notifications = [];
 
     // Test failure notifications
-    if (testResults && testResults.summary.numFailedTests > this.options.testFailureThreshold) {
+    if (
+      testResults &&
+      testResults.summary.numFailedTests > this.options.testFailureThreshold
+    ) {
       notifications.push(this.createTestFailureNotification(testResults));
     }
 
     // Coverage threshold notifications
     if (coverageData && this.isCoverageBelowThreshold(coverageData)) {
-      notifications.push(this.createCoverageThresholdNotification(coverageData));
+      notifications.push(
+        this.createCoverageThresholdNotification(coverageData)
+      );
     }
 
     // Coverage drop notifications
-    if (coverageData && this.lastRun && this.isCoverageDropSignificant(coverageData)) {
+    if (
+      coverageData &&
+      this.lastRun &&
+      this.isCoverageDropSignificant(coverageData)
+    ) {
       notifications.push(this.createCoverageDropNotification(coverageData));
     }
 
     // Quality gate failure notifications
-    if (cicdData && cicdData.cicd_summary && cicdData.cicd_summary.should_block_deployment) {
+    if (
+      cicdData &&
+      cicdData.cicd_summary &&
+      cicdData.cicd_summary.should_block_deployment
+    ) {
       notifications.push(this.createQualityGateNotification(cicdData));
     }
 
@@ -102,7 +120,7 @@ class TestNotificationSystem {
       notifications.push(this.createFlakyTestNotification(cicdData));
     }
 
-    return notifications.filter(n => n !== null);
+    return notifications.filter((n) => n !== null);
   }
 
   /**
@@ -144,7 +162,7 @@ class TestNotificationSystem {
 
     return {
       type: 'coverage_threshold',
-      priority: currentCoverage < (threshold - 10) ? 'critical' : 'medium',
+      priority: currentCoverage < threshold - 10 ? 'critical' : 'medium',
       title: 'Coverage Below Threshold',
       message: `Code coverage is ${currentCoverage.toFixed(1)}%, which is ${gap}% below the ${threshold}% threshold`,
       details: {
@@ -208,7 +226,7 @@ class TestNotificationSystem {
       details: {
         status: qualityGate.status,
         health_score: cicdData.cicd_summary.test_health_score,
-        blocking_issues: blockingIssues.map(issue => issue.message),
+        blocking_issues: blockingIssues.map((issue) => issue.message),
       },
       actions: [
         'Review and resolve blocking issues',
@@ -252,9 +270,12 @@ class TestNotificationSystem {
    * Create flaky test notification
    */
   createFlakyTestNotification(cicdData) {
-    const flakyTests = cicdData.test_execution?.flaky_test_detection?.potentially_flaky || [];
+    const flakyTests =
+      cicdData.test_execution?.flaky_test_detection?.potentially_flaky || [];
 
-    if (flakyTests.length === 0) {return null;}
+    if (flakyTests.length === 0) {
+      return null;
+    }
 
     return {
       type: 'flaky_tests',
@@ -283,15 +304,24 @@ class TestNotificationSystem {
 
     for (const notification of notifications) {
       if (this.shouldSendNotification(notification)) {
-        if (notification.channels.includes('slack') && this.options.enableSlack) {
+        if (
+          notification.channels.includes('slack') &&
+          this.options.enableSlack
+        ) {
           promises.push(this.sendSlackNotification(notification));
         }
 
-        if (notification.channels.includes('teams') && this.options.enableTeams) {
+        if (
+          notification.channels.includes('teams') &&
+          this.options.enableTeams
+        ) {
           promises.push(this.sendTeamsNotification(notification));
         }
 
-        if (notification.channels.includes('discord') && this.options.enableDiscord) {
+        if (
+          notification.channels.includes('discord') &&
+          this.options.enableDiscord
+        ) {
           promises.push(this.sendDiscordNotification(notification));
         }
       }
@@ -307,32 +337,34 @@ class TestNotificationSystem {
   sendSlackNotification(notification) {
     const payload = {
       text: notification.title,
-      attachments: [{
-        color: notification.color,
-        title: notification.title,
-        text: notification.message,
-        fields: [
-          {
-            title: 'Priority',
-            value: notification.priority.toUpperCase(),
-            short: true,
-          },
-          {
-            title: 'Type',
-            value: notification.type.replace('_', ' '),
-            short: true,
-          },
-        ],
-        footer: 'Test Notification System',
-        ts: Math.floor(Date.now() / 1000),
-      }],
+      attachments: [
+        {
+          color: notification.color,
+          title: notification.title,
+          text: notification.message,
+          fields: [
+            {
+              title: 'Priority',
+              value: notification.priority.toUpperCase(),
+              short: true,
+            },
+            {
+              title: 'Type',
+              value: notification.type.replace('_', ' '),
+              short: true,
+            },
+          ],
+          footer: 'Test Notification System',
+          ts: Math.floor(Date.now() / 1000),
+        },
+      ],
     };
 
     // Add actions as fields
     if (notification.actions && notification.actions.length > 0) {
       payload.attachments[0].fields.push({
         title: 'Recommended Actions',
-        value: notification.actions.map(action => `• ${action}`).join('\n'),
+        value: notification.actions.map((action) => `• ${action}`).join('\n'),
         short: false,
       });
     }
@@ -349,19 +381,23 @@ class TestNotificationSystem {
       '@context': 'http://schema.org/extensions',
       summary: notification.title,
       themeColor: notification.color.replace('#', ''),
-      sections: [{
-        activityTitle: notification.title,
-        activitySubtitle: notification.message,
-        facts: [
-          { name: 'Priority', value: notification.priority.toUpperCase() },
-          { name: 'Type', value: notification.type.replace('_', ' ') },
-        ],
-      }],
+      sections: [
+        {
+          activityTitle: notification.title,
+          activitySubtitle: notification.message,
+          facts: [
+            { name: 'Priority', value: notification.priority.toUpperCase() },
+            { name: 'Type', value: notification.type.replace('_', ' ') },
+          ],
+        },
+      ],
     };
 
     // Add actions
     if (notification.actions && notification.actions.length > 0) {
-      payload.sections[0].text = notification.actions.map(action => `• ${action}`).join('  \n');
+      payload.sections[0].text = notification.actions
+        .map((action) => `• ${action}`)
+        .join('  \n');
     }
 
     return this.sendWebhook(this.options.enableTeams, payload);
@@ -372,24 +408,34 @@ class TestNotificationSystem {
    */
   sendDiscordNotification(notification) {
     const payload = {
-      embeds: [{
-        title: notification.title,
-        description: notification.message,
-        color: parseInt(notification.color.replace('#', ''), 16),
-        fields: [
-          { name: 'Priority', value: notification.priority.toUpperCase(), inline: true },
-          { name: 'Type', value: notification.type.replace('_', ' '), inline: true },
-        ],
-        footer: { text: 'Test Notification System' },
-        timestamp: new Date().toISOString(),
-      }],
+      embeds: [
+        {
+          title: notification.title,
+          description: notification.message,
+          color: parseInt(notification.color.replace('#', ''), 16),
+          fields: [
+            {
+              name: 'Priority',
+              value: notification.priority.toUpperCase(),
+              inline: true,
+            },
+            {
+              name: 'Type',
+              value: notification.type.replace('_', ' '),
+              inline: true,
+            },
+          ],
+          footer: { text: 'Test Notification System' },
+          timestamp: new Date().toISOString(),
+        },
+      ],
     };
 
     // Add actions
     if (notification.actions && notification.actions.length > 0) {
       payload.embeds[0].fields.push({
         name: 'Recommended Actions',
-        value: notification.actions.map(action => `• ${action}`).join('\n'),
+        value: notification.actions.map((action) => `• ${action}`).join('\n'),
         inline: false,
       });
     }
@@ -445,8 +491,11 @@ class TestNotificationSystem {
   }
 
   isCoverageDropSignificant(coverageData) {
-    if (!this.lastRun || !this.lastRun.coverage_percentage) {return false;}
-    const drop = this.lastRun.coverage_percentage - coverageData.total.lines.pct;
+    if (!this.lastRun || !this.lastRun.coverage_percentage) {
+      return false;
+    }
+    const drop =
+      this.lastRun.coverage_percentage - coverageData.total.lines.pct;
     return drop >= this.options.coverageDropThreshold;
   }
 
@@ -456,7 +505,10 @@ class TestNotificationSystem {
   }
 
   hasFlakyTests(cicdData) {
-    return cicdData.test_execution?.flaky_test_detection?.potentially_flaky?.length > 0;
+    return (
+      cicdData.test_execution?.flaky_test_detection?.potentially_flaky?.length >
+      0
+    );
   }
 
   loadTestResults() {
@@ -520,8 +572,9 @@ class TestNotificationSystem {
         timestamp: new Date().toISOString(),
         git_commit: this.getGitCommit(),
         notifications_sent: notifications.length,
-        notification_types: notifications.map(n => n.type),
-        coverage_percentage: (await this.loadCoverageData())?.total?.lines?.pct || 0,
+        notification_types: notifications.map((n) => n.type),
+        coverage_percentage:
+          (await this.loadCoverageData())?.total?.lines?.pct || 0,
       };
 
       this.notificationHistory.push(entry);
@@ -537,7 +590,10 @@ class TestNotificationSystem {
         fs.mkdirSync(dir, { recursive: true });
       }
 
-      fs.writeFileSync(this.options.historyFile, JSON.stringify(this.notificationHistory, null, 2));
+      fs.writeFileSync(
+        this.options.historyFile,
+        JSON.stringify(this.notificationHistory, null, 2)
+      );
     } catch (error) {
       console.warn('⚠️ Could not update notification history:', error.message);
     }
@@ -556,7 +612,10 @@ class TestNotificationSystem {
       if (result.status === 'fulfilled') {
         console.log(`✅ Notification ${index + 1} sent successfully`);
       } else {
-        console.log(`❌ Notification ${index + 1} failed:`, result.reason.message);
+        console.log(
+          `❌ Notification ${index + 1} failed:`,
+          result.reason.message
+        );
       }
     });
   }
@@ -598,7 +657,7 @@ Examples:
   const options = {};
 
   // Parse command line arguments
-  args.forEach(arg => {
+  args.forEach((arg) => {
     if (arg.startsWith('--level=')) {
       options.notificationLevel = arg.split('=')[1];
     } else if (arg.startsWith('--coverage=')) {
@@ -609,7 +668,7 @@ Examples:
   });
 
   const notificationSystem = new TestNotificationSystem(options);
-  notificationSystem.processNotifications().catch(error => {
+  notificationSystem.processNotifications().catch((error) => {
     console.error('❌ Fatal error:', error.message);
     throw new Error(`Fatal error: ${error.message}`);
   });

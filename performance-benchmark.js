@@ -26,7 +26,8 @@ class TaskManagerPerformanceBenchmark {
       systemBottlenecks: [],
       recommendations: [],
     };
-    this.taskManagerPath = '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
+    this.taskManagerPath =
+      '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
     this.testStartTime = Date.now();
     this.testAgents = [];
   }
@@ -118,7 +119,10 @@ class TaskManagerPerformanceBenchmark {
 
       // Run each endpoint multiple times for statistical significance
       for (let i = 0; i < 5; i++) {
-        const result = await this.executeTimedCommand(endpoint[0], endpoint.slice(1));
+        const result = await this.executeTimedCommand(
+          endpoint[0],
+          endpoint.slice(1)
+        );
         this.results.apiResponses.push({
           endpoint: endpoint[0],
           iteration: i + 1,
@@ -160,7 +164,9 @@ class TaskManagerPerformanceBenchmark {
         category: 'feature',
       };
 
-      const createResult = await this.executeTimedCommand('create', [JSON.stringify(taskData)]);
+      const createResult = await this.executeTimedCommand('create', [
+        JSON.stringify(taskData),
+      ]);
       this.results.subtaskOperations.push({
         operation: 'create_task',
         ...createResult,
@@ -201,13 +207,14 @@ class TaskManagerPerformanceBenchmark {
 
       // Test subtask listing performance
       console.log('   Testing subtask listing...');
-      const listResult = await this.executeTimedCommand('list-subtasks', [taskId]);
+      const listResult = await this.executeTimedCommand('list-subtasks', [
+        taskId,
+      ]);
       this.results.subtaskOperations.push({
         operation: 'list_subtasks',
         taskId,
         ...listResult,
       });
-
     } catch (error) {
       console.log(`   ❌ Error in subtask benchmarking: ${error.message}`);
     }
@@ -222,12 +229,21 @@ class TaskManagerPerformanceBenchmark {
     try {
       // Test basic criteria operations
       const operations = [
-        ['set-project-criteria', JSON.stringify({
-          buildSucceeds: { weight: 0.3, description: 'Project builds successfully' },
-          testsPass: { weight: 0.3, description: 'All tests pass' },
-          lintPasses: { weight: 0.2, description: 'Linting passes' },
-          startSucceeds: { weight: 0.2, description: 'Application starts successfully' },
-        })],
+        [
+          'set-project-criteria',
+          JSON.stringify({
+            buildSucceeds: {
+              weight: 0.3,
+              description: 'Project builds successfully',
+            },
+            testsPass: { weight: 0.3, description: 'All tests pass' },
+            lintPasses: { weight: 0.2, description: 'Linting passes' },
+            startSucceeds: {
+              weight: 0.2,
+              description: 'Application starts successfully',
+            },
+          }),
+        ],
         ['criteria-report'],
         ['validate-criteria', 'feature_test_criteria'],
       ];
@@ -241,7 +257,9 @@ class TaskManagerPerformanceBenchmark {
         });
       }
     } catch (error) {
-      console.log(`   ❌ Error in success criteria benchmarking: ${error.message}`);
+      console.log(
+        `   ❌ Error in success criteria benchmarking: ${error.message}`
+      );
     }
   }
 
@@ -257,11 +275,11 @@ class TaskManagerPerformanceBenchmark {
     // Create multiple concurrent init operations
     for (let i = 0; i < numConcurrentAgents; i++) {
       concurrentOperations.push(
-        this.executeTimedCommand('init').then(result => ({
+        this.executeTimedCommand('init').then((result) => ({
           agentIndex: i,
           operation: 'concurrent_init',
           ...result,
-        })),
+        }))
       );
     }
 
@@ -273,19 +291,20 @@ class TaskManagerPerformanceBenchmark {
       const listOperations = [];
       for (let i = 0; i < numConcurrentAgents; i++) {
         listOperations.push(
-          this.executeTimedCommand('list').then(result => ({
+          this.executeTimedCommand('list').then((result) => ({
             agentIndex: i,
             operation: 'concurrent_list',
             ...result,
-          })),
+          }))
         );
       }
 
       const listResults = await Promise.all(listOperations);
       this.results.concurrentAccess.push(...listResults);
-
     } catch (error) {
-      console.log(`   ❌ Error in concurrent access benchmarking: ${error.message}`);
+      console.log(
+        `   ❌ Error in concurrent access benchmarking: ${error.message}`
+      );
     }
   }
 
@@ -331,7 +350,9 @@ class TaskManagerPerformanceBenchmark {
 
     // Analyze API response times
     const apiTimes = this.results.apiResponses.reduce((acc, result) => {
-      if (!acc[result.endpoint]) {acc[result.endpoint] = [];}
+      if (!acc[result.endpoint]) {
+        acc[result.endpoint] = [];
+      }
       acc[result.endpoint].push(result.duration);
       return acc;
     }, {});
@@ -340,7 +361,8 @@ class TaskManagerPerformanceBenchmark {
       const avgTime = times.reduce((sum, time) => sum + time, 0) / times.length;
       const maxTime = Math.max(...times);
 
-      if (avgTime > 1000) { // Slower than 1 second
+      if (avgTime > 1000) {
+        // Slower than 1 second
         bottlenecks.push({
           type: 'slow_api_endpoint',
           endpoint,
@@ -353,13 +375,20 @@ class TaskManagerPerformanceBenchmark {
 
     // Analyze memory usage patterns
     if (this.results.memoryUsage.snapshots) {
-      const memoryGrowth = this.results.memoryUsage.snapshots.map((snapshot, i) => {
-        if (i === 0) {return 0;}
-        return snapshot.heapUsed - this.results.memoryUsage.snapshots[0].heapUsed;
-      });
+      const memoryGrowth = this.results.memoryUsage.snapshots.map(
+        (snapshot, i) => {
+          if (i === 0) {
+            return 0;
+          }
+          return (
+            snapshot.heapUsed - this.results.memoryUsage.snapshots[0].heapUsed
+          );
+        }
+      );
 
       const maxMemoryGrowth = Math.max(...memoryGrowth);
-      if (maxMemoryGrowth > 50 * 1024 * 1024) { // 50MB growth
+      if (maxMemoryGrowth > 50 * 1024 * 1024) {
+        // 50MB growth
         bottlenecks.push({
           type: 'memory_growth',
           maxGrowthMB: (maxMemoryGrowth / (1024 * 1024)).toFixed(2),
@@ -369,9 +398,13 @@ class TaskManagerPerformanceBenchmark {
     }
 
     // Analyze concurrent access performance
-    const concurrentInits = this.results.concurrentAccess.filter(r => r.operation === 'concurrent_init');
+    const concurrentInits = this.results.concurrentAccess.filter(
+      (r) => r.operation === 'concurrent_init'
+    );
     if (concurrentInits.length > 0) {
-      const avgConcurrentTime = concurrentInits.reduce((sum, r) => sum + r.duration, 0) / concurrentInits.length;
+      const avgConcurrentTime =
+        concurrentInits.reduce((sum, r) => sum + r.duration, 0) /
+        concurrentInits.length;
       if (avgConcurrentTime > 2000) {
         bottlenecks.push({
           type: 'slow_concurrent_access',
@@ -392,7 +425,7 @@ class TaskManagerPerformanceBenchmark {
 
     const recommendations = [];
 
-    this.results.systemBottlenecks.forEach(bottleneck => {
+    this.results.systemBottlenecks.forEach((bottleneck) => {
       switch (bottleneck.type) {
         case 'slow_api_endpoint':
           recommendations.push({
@@ -409,7 +442,8 @@ class TaskManagerPerformanceBenchmark {
             category: 'Memory Management',
             priority: bottleneck.severity,
             issue: `Memory growth of ${bottleneck.maxGrowthMB}MB during operations`,
-            recommendation: 'Implement memory cleanup, object pooling, or garbage collection optimization',
+            recommendation:
+              'Implement memory cleanup, object pooling, or garbage collection optimization',
             impact: 'Reduced memory footprint and improved system stability',
           });
           break;
@@ -419,7 +453,8 @@ class TaskManagerPerformanceBenchmark {
             category: 'Concurrency',
             priority: bottleneck.severity,
             issue: `Concurrent operations averaging ${bottleneck.avgTime}ms`,
-            recommendation: 'Implement connection pooling, reduce lock contention, or optimize concurrent access patterns',
+            recommendation:
+              'Implement connection pooling, reduce lock contention, or optimize concurrent access patterns',
             impact: 'Better multi-agent performance and system scalability',
           });
           break;
@@ -431,7 +466,8 @@ class TaskManagerPerformanceBenchmark {
       category: 'System Architecture',
       priority: 'low',
       issue: 'TaskManager system analysis complete',
-      recommendation: 'Consider implementing response caching, database connection pooling, and lazy loading for large datasets',
+      recommendation:
+        'Consider implementing response caching, database connection pooling, and lazy loading for large datasets',
       impact: 'Overall system performance improvement and resource efficiency',
     });
 
@@ -483,7 +519,7 @@ class TaskManagerPerformanceBenchmark {
   summarizeApiPerformance() {
     const endpoints = {};
 
-    this.results.apiResponses.forEach(result => {
+    this.results.apiResponses.forEach((result) => {
       if (!endpoints[result.endpoint]) {
         endpoints[result.endpoint] = {
           count: 0,
@@ -499,12 +535,16 @@ class TaskManagerPerformanceBenchmark {
       ep.totalTime += result.duration;
       ep.minTime = Math.min(ep.minTime, result.duration);
       ep.maxTime = Math.max(ep.maxTime, result.duration);
-      if (!result.success) {ep.errors++;}
+      if (!result.success) {
+        ep.errors++;
+      }
     });
 
-    Object.keys(endpoints).forEach(ep => {
+    Object.keys(endpoints).forEach((ep) => {
       endpoints[ep].avgTime = endpoints[ep].totalTime / endpoints[ep].count;
-      endpoints[ep].successRate = ((endpoints[ep].count - endpoints[ep].errors) / endpoints[ep].count) * 100;
+      endpoints[ep].successRate =
+        ((endpoints[ep].count - endpoints[ep].errors) / endpoints[ep].count) *
+        100;
     });
 
     return endpoints;
@@ -513,7 +553,7 @@ class TaskManagerPerformanceBenchmark {
   summarizeSubtaskPerformance() {
     const operations = {};
 
-    this.results.subtaskOperations.forEach(result => {
+    this.results.subtaskOperations.forEach((result) => {
       if (!operations[result.operation]) {
         operations[result.operation] = {
           count: 0,
@@ -529,12 +569,17 @@ class TaskManagerPerformanceBenchmark {
       op.totalTime += result.duration;
       op.minTime = Math.min(op.minTime, result.duration);
       op.maxTime = Math.max(op.maxTime, result.duration);
-      if (!result.success) {op.errors++;}
+      if (!result.success) {
+        op.errors++;
+      }
     });
 
-    Object.keys(operations).forEach(op => {
+    Object.keys(operations).forEach((op) => {
       operations[op].avgTime = operations[op].totalTime / operations[op].count;
-      operations[op].successRate = ((operations[op].count - operations[op].errors) / operations[op].count) * 100;
+      operations[op].successRate =
+        ((operations[op].count - operations[op].errors) /
+          operations[op].count) *
+        100;
     });
 
     return operations;
@@ -542,21 +587,26 @@ class TaskManagerPerformanceBenchmark {
 
   summarizeConcurrentPerformance() {
     const concurrent = {
-      init: this.results.concurrentAccess.filter(r => r.operation === 'concurrent_init'),
-      list: this.results.concurrentAccess.filter(r => r.operation === 'concurrent_list'),
+      init: this.results.concurrentAccess.filter(
+        (r) => r.operation === 'concurrent_init'
+      ),
+      list: this.results.concurrentAccess.filter(
+        (r) => r.operation === 'concurrent_list'
+      ),
     };
 
     const summary = {};
-    Object.keys(concurrent).forEach(op => {
+    Object.keys(concurrent).forEach((op) => {
       const results = concurrent[op];
       if (results.length > 0) {
-        const times = results.map(r => r.duration);
+        const times = results.map((r) => r.duration);
         summary[op] = {
           count: results.length,
           avgTime: times.reduce((sum, time) => sum + time, 0) / times.length,
           minTime: Math.min(...times),
           maxTime: Math.max(...times),
-          successRate: (results.filter(r => r.success).length / results.length) * 100,
+          successRate:
+            (results.filter((r) => r.success).length / results.length) * 100,
         };
       }
     });
@@ -565,18 +615,22 @@ class TaskManagerPerformanceBenchmark {
   }
 
   summarizeMemoryUsage() {
-    if (!this.results.memoryUsage.snapshots || this.results.memoryUsage.snapshots.length === 0) {
+    if (
+      !this.results.memoryUsage.snapshots ||
+      this.results.memoryUsage.snapshots.length === 0
+    ) {
       return { noData: true };
     }
 
     const snapshots = this.results.memoryUsage.snapshots;
-    const heapUsages = snapshots.map(s => s.heapUsed);
+    const heapUsages = snapshots.map((s) => s.heapUsed);
 
     return {
       initial: this.results.memoryUsage.startMemory,
       final: this.results.memoryUsage.endMemory,
       peak: Math.max(...heapUsages),
-      average: heapUsages.reduce((sum, usage) => sum + usage, 0) / heapUsages.length,
+      average:
+        heapUsages.reduce((sum, usage) => sum + usage, 0) / heapUsages.length,
       samples: snapshots.length,
     };
   }
@@ -585,7 +639,7 @@ class TaskManagerPerformanceBenchmark {
    * Utility method to sleep for specified milliseconds
    */
   sleep(ms) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
   }
@@ -612,13 +666,20 @@ class TaskManagerPerformanceBenchmark {
       console.log('\n✅ Performance Benchmark Suite Completed Successfully!');
       console.log(`\n📈 Summary:`);
       console.log(`   • API Endpoints Tested: ${report.summary.totalApiTests}`);
-      console.log(`   • Subtask Operations: ${report.summary.totalSubtaskTests}`);
-      console.log(`   • Concurrent Tests: ${report.summary.totalConcurrentTests}`);
-      console.log(`   • Bottlenecks Identified: ${report.summary.totalBottlenecks}`);
-      console.log(`   • Recommendations Generated: ${report.summary.totalRecommendations}`);
+      console.log(
+        `   • Subtask Operations: ${report.summary.totalSubtaskTests}`
+      );
+      console.log(
+        `   • Concurrent Tests: ${report.summary.totalConcurrentTests}`
+      );
+      console.log(
+        `   • Bottlenecks Identified: ${report.summary.totalBottlenecks}`
+      );
+      console.log(
+        `   • Recommendations Generated: ${report.summary.totalRecommendations}`
+      );
 
       return report;
-
     } catch (error) {
       console.error(`❌ Benchmark suite failed: ${error.message}`);
       console.error(error.stack);
@@ -630,7 +691,8 @@ class TaskManagerPerformanceBenchmark {
 // Run benchmark if this file is executed directly
 if (require.main === module) {
   const benchmark = new TaskManagerPerformanceBenchmark();
-  benchmark.runCompleteBenchmark()
+  benchmark
+    .runCompleteBenchmark()
     .then(() => {
       console.log('\n🎉 All benchmarks completed successfully!');
       throw new Error('Benchmark completed successfully');

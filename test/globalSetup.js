@@ -32,7 +32,7 @@ module.exports = () => {
     '.jest-cache',
   ];
 
-  testDirs.forEach(dir => {
+  testDirs.forEach((dir) => {
     const fullPath = path.join(process.cwd(), dir);
     if (!fs.existsSync(fullPath)) {
       fs.mkdirSync(fullPath, { recursive: true });
@@ -49,7 +49,7 @@ module.exports = () => {
       const stat = fs.statSync(entryPath);
 
       // Remove files/directories older than 1 hour
-      const oneHourAgo = Date.now() - (60 * 60 * 1000);
+      const oneHourAgo = Date.now() - 60 * 60 * 1000;
       if (stat.mtime.getTime() < oneHourAgo) {
         try {
           if (stat.isDirectory()) {
@@ -101,12 +101,15 @@ module.exports = () => {
     }
 
     // Set memory limits
-    process.env.NODE_OPTIONS = (process.env.NODE_OPTIONS || '') + ' --max-old-space-size=2048';
+    process.env.NODE_OPTIONS =
+      (process.env.NODE_OPTIONS || '') + ' --max-old-space-size=2048';
   }
 
   // Test reporting setup
   console.log('📋 Test reporting configuration:');
-  console.log(`   • Coverage: ${process.env.COVERAGE ? 'enabled' : 'disabled'}`);
+  console.log(
+    `   • Coverage: ${process.env.COVERAGE ? 'enabled' : 'disabled'}`
+  );
   console.log(`   • Verbose: ${process.env.VERBOSE ? 'enabled' : 'disabled'}`);
   console.log(`   • Watch mode: ${process.env.WATCH ? 'enabled' : 'disabled'}`);
   console.log(`   • Max workers: ${process.env.MAX_WORKERS || 'auto'}`);
@@ -141,14 +144,16 @@ module.exports = () => {
     console.log('🗄️  Test database setup...');
     // This would initialize test database connections
     // For now, we'll just set up the environment
-    process.env.DATABASE_URL = process.env.TEST_DATABASE_URL || 'sqlite::memory:';
+    process.env.DATABASE_URL =
+      process.env.TEST_DATABASE_URL || 'sqlite::memory:';
   }
 
   // Feature flag setup for different test environments
   global.FEATURE_FLAGS = {
     ENABLE_MOCKS: process.env.ENABLE_MOCKS !== 'false',
     ENABLE_LOGGING: process.env.TEST_DEBUG === 'true',
-    ENABLE_PERFORMANCE_MONITORING: process.env.MONITOR_TEST_PERFORMANCE === 'true',
+    ENABLE_PERFORMANCE_MONITORING:
+      process.env.MONITOR_TEST_PERFORMANCE === 'true',
     ENABLE_COVERAGE: process.env.COVERAGE === 'true',
     STRICT_MODE: process.env.STRICT_TEST_MODE === 'true',
   };

@@ -5,12 +5,12 @@
  */
 
 module.exports = {
-  testEnvironment: "node",
-  testMatch: ["<rootDir>/**/*.test.js"],
+  testEnvironment: 'node',
+  testMatch: ['<rootDir>/**/*.test.js'],
   testTimeout: 60000,
   verbose: true,
   forceExit: true,
   detectOpenHandles: false,
   collectCoverage: false,
-  maxWorkers: 1 // Run E2E tests sequentially to avoid conflicts
+  maxWorkers: 1, // Run E2E tests sequentially to avoid conflicts
 };
