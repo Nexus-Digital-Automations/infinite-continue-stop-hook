@@ -24,7 +24,7 @@ class JestCiCdReporter {
       slackWebhook: null,
       teamsWebhook: null,
       enableNotifications: true,
-      ...options
+      ...options,
     };
 
     this.startTime = Date.now();
@@ -54,7 +54,7 @@ class JestCiCdReporter {
         reporter: 'jest-cicd-reporter',
         version: '1.0.0',
         generator: 'Enhanced Coverage System',
-        duration_ms: duration
+        duration_ms: duration,
       },
 
       // CI/CD specific summary
@@ -63,7 +63,7 @@ class JestCiCdReporter {
         total_duration_ms: duration,
         should_block_deployment: this.shouldBlockDeployment(results),
         quality_gate_status: this.evaluateQualityGate(results),
-        test_health_score: this.calculateTestHealthScore(results)
+        test_health_score: this.calculateTestHealthScore(results),
       },
 
       // Enhanced test results with CI/CD context
@@ -77,18 +77,18 @@ class JestCiCdReporter {
           failed_tests: results.numFailedTests,
           pending_tests: results.numPendingTests,
           success_rate: ((results.numPassedTests / results.numTotalTests) * 100).toFixed(2),
-          execution_time_ms: duration
+          execution_time_ms: duration,
         },
 
         performance_metrics: {
           average_test_duration: duration / results.numTotalTests,
           slowest_suite: this.findSlowestSuite(results.testResults),
           memory_usage: this.getMemoryUsage(),
-          parallel_efficiency: this.calculateParallelEfficiency(results)
+          parallel_efficiency: this.calculateParallelEfficiency(results),
         },
 
         failure_analysis: this.analyzeFailures(results),
-        flaky_test_detection: this.detectFlakyTests(results)
+        flaky_test_detection: this.detectFlakyTests(results),
       },
 
       // Git information
@@ -101,14 +101,14 @@ class JestCiCdReporter {
       coverage_integration: {
         coverage_available: Boolean(results.coverageMap),
         coverage_summary: results.coverageMap ? this.extractCoverageSummary(results.coverageMap) : null,
-        coverage_status: this.evaluateCoverageStatus(results.coverageMap)
+        coverage_status: this.evaluateCoverageStatus(results.coverageMap),
       },
 
       // Notifications sent
       notifications: [],
 
       // Recommendations
-      recommendations: this.generateRecommendations(results)
+      recommendations: this.generateRecommendations(results),
     };
 
     // Write the main CI/CD report
@@ -137,7 +137,7 @@ class JestCiCdReporter {
       tests_passing: results.success,
       no_failed_tests: results.numFailedTests === 0,
       coverage_adequate: this.isCoverageAdequate(results.coverageMap),
-      performance_acceptable: this.isPerformanceAcceptable(results)
+      performance_acceptable: this.isPerformanceAcceptable(results),
     };
 
     const passed = Object.values(criteria).every(Boolean);
@@ -145,7 +145,7 @@ class JestCiCdReporter {
     return {
       status: passed ? 'PASSED' : 'FAILED',
       criteria,
-      blocking_issues: this.identifyBlockingIssues(criteria, results)
+      blocking_issues: this.identifyBlockingIssues(criteria, results),
     };
   }
 
@@ -159,8 +159,8 @@ class JestCiCdReporter {
 
     // Deduct for slow tests
     const avgDuration = (Date.now() - this.startTime) / results.numTotalTests;
-    if (avgDuration > 1000) score -= 10; // Slow tests
-    if (avgDuration > 5000) score -= 20; // Very slow tests
+    if (avgDuration > 1000) {score -= 10;} // Slow tests
+    if (avgDuration > 5000) {score -= 20;} // Very slow tests
 
     // Bonus for good coverage
     if (results.coverageMap) {
@@ -184,7 +184,7 @@ class JestCiCdReporter {
         slowest = {
           path: result.testFilePath,
           duration_ms: duration,
-          num_tests: result.numPassingTests + result.numFailingTests
+          num_tests: result.numPassingTests + result.numFailingTests,
         };
       }
     });
@@ -204,7 +204,7 @@ class JestCiCdReporter {
               suite: testResult.testFilePath,
               test: test.fullName,
               duration: test.duration,
-              error: test.failureMessages?.[0]?.substring(0, 200) || 'Unknown error'
+              error: test.failureMessages?.[0]?.substring(0, 200) || 'Unknown error',
             });
 
             // Track failure patterns
@@ -221,12 +221,12 @@ class JestCiCdReporter {
       failure_details: failures.slice(0, 10), // Limit to first 10
       failure_patterns: Object.fromEntries(failurePatterns),
       common_failure_type: failurePatterns.size > 0 ?
-        [...failurePatterns.entries()].sort((a, b) => b[1] - a[1])[0][0] : 'none'
+        [...failurePatterns.entries()].sort((a, b) => b[1] - a[1])[0][0] : 'none',
     };
   }
 
   categorizeError(errorMessage) {
-    if (!errorMessage) return 'unknown';
+    if (!errorMessage) {return 'unknown';}
 
     const patterns = {
       'timeout': /timeout|timed out/i,
@@ -234,7 +234,7 @@ class JestCiCdReporter {
       'reference': /ReferenceError|is not defined/i,
       'type': /TypeError|Cannot read|undefined/i,
       'network': /ECONNREFUSED|network|fetch/i,
-      'async': /Promise|async|await/i
+      'async': /Promise|async|await/i,
     };
 
     for (const [category, pattern] of Object.entries(patterns)) {
@@ -252,7 +252,7 @@ class JestCiCdReporter {
     return {
       potentially_flaky: [],
       confidence: 'low',
-      note: 'Flaky test detection requires historical data analysis'
+      note: 'Flaky test detection requires historical data analysis',
     };
   }
 
@@ -266,7 +266,7 @@ class JestCiCdReporter {
         commit_date: execSync('git log -1 --format="%ai"', { encoding: 'utf8' }).trim(),
         tag: this.getLatestTag(),
         is_dirty: this.isGitDirty(),
-        remote_url: this.getRemoteUrl()
+        remote_url: this.getRemoteUrl(),
       };
 
       // Add GitHub/GitLab specific information
@@ -278,7 +278,7 @@ class JestCiCdReporter {
           actor: process.env.GITHUB_ACTOR,
           ref: process.env.GITHUB_REF,
           repository: process.env.GITHUB_REPOSITORY,
-          event_name: process.env.GITHUB_EVENT_NAME
+          event_name: process.env.GITHUB_EVENT_NAME,
         };
       }
 
@@ -286,7 +286,7 @@ class JestCiCdReporter {
     } catch (error) {
       return {
         error: 'Failed to get Git information',
-        message: error.message
+        message: error.message,
       };
     }
   }
@@ -305,20 +305,20 @@ class JestCiCdReporter {
       // Performance context
       memory: {
         total: this.getTotalMemory(),
-        available: this.getAvailableMemory()
+        available: this.getAvailableMemory(),
       },
 
       cpu: {
         cores: require('os').cpus().length,
-        model: require('os').cpus()[0]?.model || 'unknown'
+        model: require('os').cpus()[0]?.model || 'unknown',
       },
 
       // CI/CD context
       build_info: {
         build_number: process.env.BUILD_NUMBER || process.env.GITHUB_RUN_NUMBER || 'unknown',
         build_url: process.env.BUILD_URL || this.constructBuildUrl(),
-        job_name: process.env.JOB_NAME || process.env.GITHUB_JOB || 'unknown'
-      }
+        job_name: process.env.JOB_NAME || process.env.GITHUB_JOB || 'unknown',
+      },
     };
   }
 
@@ -329,7 +329,7 @@ class JestCiCdReporter {
       heap_total: usage.heapTotal,
       heap_used: usage.heapUsed,
       external: usage.external,
-      heap_usage_percent: ((usage.heapUsed / usage.heapTotal) * 100).toFixed(2)
+      heap_usage_percent: ((usage.heapUsed / usage.heapTotal) * 100).toFixed(2),
     };
   }
 
@@ -345,7 +345,7 @@ class JestCiCdReporter {
       parallel_efficiency_percent: efficiency,
       total_execution_time_ms: totalTime,
       serial_time_ms: serialTime,
-      time_saved_ms: Math.max(0, serialTime - totalTime)
+      time_saved_ms: Math.max(0, serialTime - totalTime),
     };
   }
 
@@ -360,7 +360,7 @@ class JestCiCdReporter {
         statements: { total: summary.statements.total, covered: summary.statements.covered, pct: summary.statements.pct },
         branches: { total: summary.branches.total, covered: summary.branches.covered, pct: summary.branches.pct },
         functions: { total: summary.functions.total, covered: summary.functions.covered, pct: summary.functions.pct },
-        lines: { total: summary.lines.total, covered: summary.lines.covered, pct: summary.lines.pct }
+        lines: { total: summary.lines.total, covered: summary.lines.covered, pct: summary.lines.pct },
       };
     } catch (error) {
       return { error: 'Failed to extract coverage summary' };
@@ -368,18 +368,18 @@ class JestCiCdReporter {
   }
 
   evaluateCoverageStatus(coverageMap) {
-    if (!coverageMap) return 'not_available';
+    if (!coverageMap) {return 'not_available';}
 
     const summary = this.extractCoverageSummary(coverageMap);
-    if (!summary || summary.error) return 'error';
+    if (!summary || summary.error) {return 'error';}
 
     const avgCoverage = (summary.statements.pct + summary.branches.pct +
                         summary.functions.pct + summary.lines.pct) / 4;
 
-    if (avgCoverage >= 90) return 'excellent';
-    if (avgCoverage >= 80) return 'good';
-    if (avgCoverage >= 70) return 'acceptable';
-    if (avgCoverage >= 60) return 'minimum';
+    if (avgCoverage >= 90) {return 'excellent';}
+    if (avgCoverage >= 80) {return 'good';}
+    if (avgCoverage >= 70) {return 'acceptable';}
+    if (avgCoverage >= 60) {return 'minimum';}
     return 'critical';
   }
 
@@ -409,7 +409,7 @@ class JestCiCdReporter {
         type: 'test_failures',
         severity: 'critical',
         message: `${results.numFailedTests} test(s) failed`,
-        action: 'Fix failing tests before deployment'
+        action: 'Fix failing tests before deployment',
       });
     }
 
@@ -418,7 +418,7 @@ class JestCiCdReporter {
         type: 'low_coverage',
         severity: 'warning',
         message: 'Code coverage below acceptable threshold',
-        action: 'Add more tests to improve coverage'
+        action: 'Add more tests to improve coverage',
       });
     }
 
@@ -427,7 +427,7 @@ class JestCiCdReporter {
         type: 'performance',
         severity: 'warning',
         message: 'Test execution time is slow',
-        action: 'Optimize slow tests or improve test parallelization'
+        action: 'Optimize slow tests or improve test parallelization',
       });
     }
 
@@ -443,7 +443,7 @@ class JestCiCdReporter {
         category: 'testing',
         priority: 'high',
         recommendation: 'Fix failing tests immediately',
-        details: `${results.numFailedTests} tests are currently failing`
+        details: `${results.numFailedTests} tests are currently failing`,
       });
     }
 
@@ -454,7 +454,7 @@ class JestCiCdReporter {
         category: 'performance',
         priority: 'medium',
         recommendation: 'Consider optimizing test execution time',
-        details: `Tests took ${Math.round(duration / 1000)}s to complete`
+        details: `Tests took ${Math.round(duration / 1000)}s to complete`,
       });
     }
 
@@ -466,7 +466,7 @@ class JestCiCdReporter {
           category: 'coverage',
           priority: 'medium',
           recommendation: 'Improve test coverage',
-          details: `Coverage is currently at ${status} level`
+          details: `Coverage is currently at ${status} level`,
         });
       }
     }
@@ -493,24 +493,24 @@ class JestCiCdReporter {
       can_deploy: !report.cicd_summary.should_block_deployment,
       quality_gate_passed: report.cicd_summary.quality_gate_status.status === 'PASSED',
       timestamp: report.metadata.timestamp,
-      blocking_issues: report.cicd_summary.quality_gate_status.blocking_issues || []
+      blocking_issues: report.cicd_summary.quality_gate_status.blocking_issues || [],
     };
 
     fs.writeFileSync(
       path.join(outputDir, 'deployment-gate.json'),
-      JSON.stringify(deploymentStatus, null, 2)
+      JSON.stringify(deploymentStatus, null, 2),
     );
 
     // Write simple status for shell scripts
     fs.writeFileSync(
       path.join(outputDir, 'test-status.txt'),
-      report.cicd_summary.pipeline_status
+      report.cicd_summary.pipeline_status,
     );
 
     // Write health score
     fs.writeFileSync(
       path.join(outputDir, 'health-score.txt'),
-      report.cicd_summary.test_health_score.toString()
+      report.cicd_summary.test_health_score.toString(),
     );
   }
 
@@ -556,10 +556,10 @@ class JestCiCdReporter {
             text: `*Test Pipeline ${status}* ${emoji}\n\n` +
                   `*Tests:* ${report.test_execution.summary.passed_tests}/${report.test_execution.summary.total_tests} passed\n` +
                   `*Duration:* ${Math.round(report.test_execution.summary.execution_time_ms / 1000)}s\n` +
-                  `*Health Score:* ${report.cicd_summary.test_health_score}/100`
-          }
-        }
-      ]
+                  `*Health Score:* ${report.cicd_summary.test_health_score}/100`,
+          },
+        },
+      ],
     };
   }
 
@@ -577,9 +577,9 @@ class JestCiCdReporter {
         facts: [
           { name: 'Tests Passed', value: `${report.test_execution.summary.passed_tests}/${report.test_execution.summary.total_tests}` },
           { name: 'Duration', value: `${Math.round(report.test_execution.summary.execution_time_ms / 1000)}s` },
-          { name: 'Health Score', value: `${report.cicd_summary.test_health_score}/100` }
-        ]
-      }]
+          { name: 'Health Score', value: `${report.cicd_summary.test_health_score}/100` },
+        ],
+      }],
     };
   }
 
@@ -616,12 +616,12 @@ class JestCiCdReporter {
   }
 
   detectCiProvider() {
-    if (process.env.GITHUB_ACTIONS) return 'github_actions';
-    if (process.env.GITLAB_CI) return 'gitlab_ci';
-    if (process.env.JENKINS_URL) return 'jenkins';
-    if (process.env.TRAVIS) return 'travis';
-    if (process.env.CIRCLECI) return 'circleci';
-    if (process.env.CI) return 'unknown_ci';
+    if (process.env.GITHUB_ACTIONS) {return 'github_actions';}
+    if (process.env.GITLAB_CI) {return 'gitlab_ci';}
+    if (process.env.JENKINS_URL) {return 'jenkins';}
+    if (process.env.TRAVIS) {return 'travis';}
+    if (process.env.CIRCLECI) {return 'circleci';}
+    if (process.env.CI) {return 'unknown_ci';}
     return 'local';
   }
 

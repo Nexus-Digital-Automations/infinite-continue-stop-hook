@@ -35,10 +35,10 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             enabled: true,
             successCriteria: {
               exitCode: 0,
-              outputContains: 'test passed'
-            }
-          }
-        ]
+              outputContains: 'test passed',
+            },
+          },
+        ],
       };
 
       fs.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
@@ -50,7 +50,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
           const configData = fs.readFileSync(configPath, 'utf8');
           const config = JSON.parse(configData);
           return config.customValidationRules.filter(rule =>
-            rule.id && rule.name && rule.command && rule.enabled !== false
+            rule.id && rule.name && rule.command && rule.enabled !== false,
           );
         }
         return [];
@@ -72,24 +72,24 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             id: 'valid-rule',
             name: 'Valid Rule',
             command: 'echo "valid"',
-            enabled: true
+            enabled: true,
           },
           {
             // Missing id
             name: 'Invalid Rule 1',
-            command: 'echo "invalid"'
+            command: 'echo "invalid"',
           },
           {
             id: 'invalid-rule-2',
             // Missing name
-            command: 'echo "invalid"'
+            command: 'echo "invalid"',
           },
           {
             id: 'invalid-rule-3',
-            name: 'Invalid Rule 3'
+            name: 'Invalid Rule 3',
             // Missing command
-          }
-        ]
+          },
+        ],
       };
 
       fs.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
@@ -100,7 +100,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
           const configData = fs.readFileSync(configPath, 'utf8');
           const config = JSON.parse(configData);
           return config.customValidationRules.filter(rule =>
-            rule.id && rule.name && rule.command && rule.enabled !== false
+            rule.id && rule.name && rule.command && rule.enabled !== false,
           );
         }
         return [];
@@ -119,15 +119,15 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             id: 'enabled-rule',
             name: 'Enabled Rule',
             command: 'echo "enabled"',
-            enabled: true
+            enabled: true,
           },
           {
             id: 'disabled-rule',
             name: 'Disabled Rule',
             command: 'echo "disabled"',
-            enabled: false
-          }
-        ]
+            enabled: false,
+          },
+        ],
       };
 
       fs.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
@@ -138,7 +138,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
           const configData = fs.readFileSync(configPath, 'utf8');
           const config = JSON.parse(configData);
           return config.customValidationRules.filter(rule =>
-            rule.id && rule.name && rule.command && rule.enabled !== false
+            rule.id && rule.name && rule.command && rule.enabled !== false,
           );
         }
         return [];
@@ -157,7 +157,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
           const configData = fs.readFileSync(configPath, 'utf8');
           const config = JSON.parse(configData);
           return config.customValidationRules.filter(rule =>
-            rule.id && rule.name && rule.command && rule.enabled !== false
+            rule.id && rule.name && rule.command && rule.enabled !== false,
           );
         }
         return [];
@@ -177,7 +177,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             const configData = fs.readFileSync(configPath, 'utf8');
             const config = JSON.parse(configData);
             return config.customValidationRules.filter(rule =>
-              rule.id && rule.name && rule.command && rule.enabled !== false
+              rule.id && rule.name && rule.command && rule.enabled !== false,
             );
           }
           return [];
@@ -200,8 +200,8 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         timeout: 5000,
         successCriteria: {
           exitCode: 0,
-          outputContains: 'validation successful'
-        }
+          outputContains: 'validation successful',
+        },
       };
 
       // Mock validation execution
@@ -209,7 +209,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         try {
           const result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
-            encoding: 'utf8'
+            encoding: 'utf8',
           });
 
           if (rule.successCriteria) {
@@ -226,12 +226,12 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
           return {
             success: true,
-            details: `Custom validation '${rule.name}' passed`
+            details: `Custom validation '${rule.name}' passed`,
           };
         } catch (error) {
           return {
             success: false,
-            error: `Custom validation '${rule.name}' failed: ${error.message}`
+            error: `Custom validation '${rule.name}' failed: ${error.message}`,
           };
         }
       };
@@ -250,15 +250,15 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         timeout: 5000,
         successCriteria: {
           exitCode: 0,
-          outputContains: 'expected text'
-        }
+          outputContains: 'expected text',
+        },
       };
 
       const executeCustomValidation = (rule) => {
         try {
           const result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
-            encoding: 'utf8'
+            encoding: 'utf8',
           });
 
           if (rule.successCriteria) {
@@ -275,12 +275,12 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
           return {
             success: true,
-            details: `Custom validation '${rule.name}' passed`
+            details: `Custom validation '${rule.name}' passed`,
           };
         } catch (error) {
           return {
             success: false,
-            error: `Custom validation '${rule.name}' failed: ${error.message}`
+            error: `Custom validation '${rule.name}' failed: ${error.message}`,
           };
         }
       };
@@ -299,15 +299,15 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         timeout: 5000,
         successCriteria: {
           exitCode: 0,
-          outputNotContains: 'failed'
-        }
+          outputNotContains: 'failed',
+        },
       };
 
       const executeCustomValidation = (rule) => {
         try {
           const result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
-            encoding: 'utf8'
+            encoding: 'utf8',
           });
 
           if (rule.successCriteria) {
@@ -324,12 +324,12 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
           return {
             success: true,
-            details: `Custom validation '${rule.name}' passed`
+            details: `Custom validation '${rule.name}' passed`,
           };
         } catch (error) {
           return {
             success: false,
-            error: `Custom validation '${rule.name}' failed: ${error.message}`
+            error: `Custom validation '${rule.name}' failed: ${error.message}`,
           };
         }
       };
@@ -345,24 +345,24 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         id: 'command-fail-test',
         name: 'Command Fail Test',
         command: 'nonexistent-command',
-        timeout: 5000
+        timeout: 5000,
       };
 
       const executeCustomValidation = (rule) => {
         try {
           const result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
-            encoding: 'utf8'
+            encoding: 'utf8',
           });
 
           return {
             success: true,
-            details: `Custom validation '${rule.name}' passed`
+            details: `Custom validation '${rule.name}' passed`,
           };
         } catch (error) {
           return {
             success: false,
-            error: `Custom validation '${rule.name}' failed: ${error.message}`
+            error: `Custom validation '${rule.name}' failed: ${error.message}`,
           };
         }
       };
@@ -381,11 +381,11 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         name: 'Environment Test',
         command: 'echo $TEST_VAR',
         environment: {
-          TEST_VAR: 'environment_value'
+          TEST_VAR: 'environment_value',
         },
         successCriteria: {
-          outputContains: 'environment_value'
-        }
+          outputContains: 'environment_value',
+        },
       };
 
       const executeCustomValidationWithEnv = (rule) => {
@@ -400,7 +400,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
           const result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
             encoding: 'utf8',
-            env: { ...process.env, ...rule.environment }
+            env: { ...process.env, ...rule.environment },
           });
 
           if (rule.successCriteria && rule.successCriteria.outputContains) {
@@ -411,12 +411,12 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
           return {
             success: true,
-            details: `Custom validation '${rule.name}' passed`
+            details: `Custom validation '${rule.name}' passed`,
           };
         } catch (error) {
           return {
             success: false,
-            error: `Custom validation '${rule.name}' failed: ${error.message}`
+            error: `Custom validation '${rule.name}' failed: ${error.message}`,
           };
         }
       };
@@ -436,12 +436,12 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         'type-validation',
         'build-validation',
         'start-validation',
-        'test-validation'
+        'test-validation',
       ];
 
       const customRules = [
         { id: 'custom-rule-1', name: 'Custom Rule 1', command: 'echo test' },
-        { id: 'custom-rule-2', name: 'Custom Rule 2', command: 'echo test' }
+        { id: 'custom-rule-2', name: 'Custom Rule 2', command: 'echo test' },
       ];
 
       const customCriteriaIds = customRules.map(rule => rule.id);
@@ -458,20 +458,20 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         'focused-codebase',
         'security-validation',
         'custom-api-test',
-        'custom-performance-check'
+        'custom-performance-check',
       ];
 
       const progressReport = {
         totalValidations: mockValidationCriteria.length,
         completedValidations: 0,
-        validationDetails: []
+        validationDetails: [],
       };
 
       // Simulate processing validation results
       mockValidationCriteria.forEach(criteria => {
         progressReport.validationDetails.push({
           criterion: criteria,
-          status: 'pending'
+          status: 'pending',
         });
       });
 
@@ -496,14 +496,14 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             successCriteria: {
               exitCode: 0,
               outputContains: 'All tests passed',
-              outputNotContains: 'FAILED'
+              outputNotContains: 'FAILED',
             },
             environment: {
               NODE_ENV: 'test',
-              CUSTOM_FLAG: 'true'
-            }
-          }
-        ]
+              CUSTOM_FLAG: 'true',
+            },
+          },
+        ],
       };
 
       // Validate schema
@@ -531,24 +531,24 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         id: 'timeout-test',
         name: 'Timeout Test',
         command: 'sleep 10',
-        timeout: 1000 // 1 second timeout for 10 second sleep
+        timeout: 1000, // 1 second timeout for 10 second sleep
       };
 
       const executeCustomValidation = (rule) => {
         try {
           const result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
-            encoding: 'utf8'
+            encoding: 'utf8',
           });
 
           return {
             success: true,
-            details: `Custom validation '${rule.name}' passed`
+            details: `Custom validation '${rule.name}' passed`,
           };
         } catch (error) {
           return {
             success: false,
-            error: `Custom validation '${rule.name}' failed: ${error.message}`
+            error: `Custom validation '${rule.name}' failed: ${error.message}`,
           };
         }
       };
@@ -568,7 +568,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             const config = JSON.parse(configData);
             if (config.customValidationRules && Array.isArray(config.customValidationRules)) {
               return config.customValidationRules.filter(rule =>
-                rule.id && rule.name && rule.command && rule.enabled !== false
+                rule.id && rule.name && rule.command && rule.enabled !== false,
               );
             }
           }

@@ -180,12 +180,12 @@ class AutonomousTaskManagerAPI {
     this.ragOps = new RAGOperations({
       taskManager: this,
       agentManager: this,
-      withTimeout: this.withTimeout.bind(this)
+      withTimeout: this.withTimeout.bind(this),
     });
 
     // Initialize validation dependency management system
     this.dependencyManager = new ValidationDependencyManager({
-      projectRoot: PROJECT_ROOT
+      projectRoot: PROJECT_ROOT,
     });
 
     // Initialize features file and task structures if they don't exist
@@ -231,8 +231,8 @@ class AutonomousTaskManagerAPI {
       // File doesn't exist, create it with new TASKS.json schema
       const initialStructure = {
         project: path.basename(PROJECT_ROOT),
-        schema_version: "2.0.0",
-        migrated_from: "new_installation",
+        schema_version: '2.0.0',
+        migrated_from: 'new_installation',
         migration_date: new Date().toISOString(),
 
         tasks: [],
@@ -247,41 +247,41 @@ class AutonomousTaskManagerAPI {
           required_fields: this.requiredFields,
           auto_generation_enabled: true,
           mandatory_test_gate: true,
-          security_validation_required: true
+          security_validation_required: true,
         },
 
         auto_generation_config: {
           test_task_template: {
-            title_pattern: "Implement comprehensive tests for {feature_title}",
-            description_pattern: "Create unit tests, integration tests, and E2E tests to achieve >{coverage}% coverage for {feature_title}. Must validate all functionality, edge cases, and error conditions.",
-            priority: "high",
-            required_capabilities: ["testing"],
+            title_pattern: 'Implement comprehensive tests for {feature_title}',
+            description_pattern: 'Create unit tests, integration tests, and E2E tests to achieve >{coverage}% coverage for {feature_title}. Must validate all functionality, edge cases, and error conditions.',
+            priority: 'high',
+            required_capabilities: ['testing'],
             validation_requirements: {
               test_coverage: true,
-              linter_pass: true
-            }
+              linter_pass: true,
+            },
           },
           audit_task_template: {
-            title_pattern: "Security and quality audit for {feature_title}",
-            description_pattern: "Run semgrep security scan, dependency vulnerability check, code quality analysis, and compliance validation for {feature_title}. Zero tolerance for security vulnerabilities.",
-            priority: "high",
-            required_capabilities: ["security", "analysis"],
+            title_pattern: 'Security and quality audit for {feature_title}',
+            description_pattern: 'Run semgrep security scan, dependency vulnerability check, code quality analysis, and compliance validation for {feature_title}. Zero tolerance for security vulnerabilities.',
+            priority: 'high',
+            required_capabilities: ['security', 'analysis'],
             validation_requirements: {
               security_scan: true,
               linter_pass: true,
-              type_check: true
-            }
-          }
+              type_check: true,
+            },
+          },
         },
 
         priority_system: {
           order: this.priorityOrder,
           error_priorities: {
-            critical: ["build-breaking", "security-vulnerability", "production-down"],
-            high: ["linter-errors", "type-errors", "test-failures"],
-            normal: ["warnings", "optimization-opportunities"],
-            low: ["documentation-improvements", "code-style"]
-          }
+            critical: ['build-breaking', 'security-vulnerability', 'production-down'],
+            high: ['linter-errors', 'type-errors', 'test-failures'],
+            normal: ['warnings', 'optimization-opportunities'],
+            low: ['documentation-improvements', 'code-style'],
+          },
         },
 
         metadata: {
@@ -293,12 +293,12 @@ class AutonomousTaskManagerAPI {
             error: 0,
             feature: 0,
             test: 0,
-            audit: 0
+            audit: 0,
           },
-          approval_history: []
+          approval_history: [],
         },
 
-        agents: {}
+        agents: {},
       };
 
       await fs.writeFile(this.tasksPath, JSON.stringify(initialStructure, null, 2));
@@ -849,13 +849,13 @@ class AutonomousTaskManagerAPI {
         validation,
         visualization,
         analytics,
-        message: 'Validation dependency configuration retrieved successfully'
+        message: 'Validation dependency configuration retrieved successfully',
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        message: 'Failed to get validation dependencies'
+        message: 'Failed to get validation dependencies',
       };
     }
   }
@@ -882,13 +882,13 @@ class AutonomousTaskManagerAPI {
         dependencyConfig,
         configPath,
         validation,
-        message: `Validation dependency for '${criterion}' updated successfully`
+        message: `Validation dependency for '${criterion}' updated successfully`,
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        message: `Failed to update validation dependency for '${criterion}'`
+        message: `Failed to update validation dependency for '${criterion}'`,
       };
     }
   }
@@ -913,15 +913,15 @@ class AutonomousTaskManagerAPI {
           optimalConcurrency: maxConcurrency,
           estimatedTimeReduction: `${Math.round(parallelPlan.parallelizationGain)}%`,
           totalWaves: parallelPlan.totalWaves,
-          criticalPath: this._identifyCriticalPath(executionOrder)
+          criticalPath: this._identifyCriticalPath(executionOrder),
         },
-        message: 'Validation execution plan generated successfully'
+        message: 'Validation execution plan generated successfully',
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        message: 'Failed to generate validation execution plan'
+        message: 'Failed to generate validation execution plan',
       };
     }
   }
@@ -946,13 +946,13 @@ class AutonomousTaskManagerAPI {
           validation.issues.map(issue => `Fix ${issue.type}: ${issue.description}`),
         message: validation.valid ?
           'Dependency graph validation passed' :
-          'Dependency graph validation failed - issues detected'
+          'Dependency graph validation failed - issues detected',
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        message: 'Failed to validate dependency graph'
+        message: 'Failed to validate dependency graph',
       };
     }
   }
@@ -975,15 +975,15 @@ class AutonomousTaskManagerAPI {
           nodeCount: visualization.nodes.length,
           edgeCount: visualization.edges.length,
           levelCount: visualization.levels,
-          complexityScore: this._calculateComplexityScore(visualization)
+          complexityScore: this._calculateComplexityScore(visualization),
         },
-        message: 'Dependency visualization data generated successfully'
+        message: 'Dependency visualization data generated successfully',
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        message: 'Failed to generate dependency visualization'
+        message: 'Failed to generate dependency visualization',
       };
     }
   }
@@ -1000,13 +1000,13 @@ class AutonomousTaskManagerAPI {
         criterion,
         result,
         duration,
-        message: 'Validation execution recorded successfully'
+        message: 'Validation execution recorded successfully',
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        message: 'Failed to record validation execution'
+        message: 'Failed to record validation execution',
       };
     }
   }
@@ -1026,7 +1026,7 @@ class AutonomousTaskManagerAPI {
         chains.push({
           criterion,
           depth: this._calculateDepth(criterion, new Set()),
-          estimatedDuration: deps.metadata.estimatedDuration || 10000
+          estimatedDuration: deps.metadata.estimatedDuration || 10000,
         });
       }
     }
@@ -1038,12 +1038,12 @@ class AutonomousTaskManagerAPI {
    * Helper method to calculate dependency depth
    */
   _calculateDepth(criterion, visited = new Set()) {
-    if (visited.has(criterion)) return 0;
+    if (visited.has(criterion)) {return 0;}
 
     visited.add(criterion);
     const deps = this.dependencyManager.getDependency(criterion);
 
-    if (!deps || deps.dependencies.length === 0) return 0;
+    if (!deps || deps.dependencies.length === 0) {return 0;}
 
     let maxDepth = 0;
     for (const dep of deps.dependencies) {
@@ -1088,9 +1088,9 @@ class AutonomousTaskManagerAPI {
           'type-validation',
           'build-validation',
           'start-validation',
-          'test-validation'
+          'test-validation',
         ],
-        status: 'in_progress'
+        status: 'in_progress',
       };
 
       await fs.writeFile(authStateFile, JSON.stringify(authState, null, 2));
@@ -1100,7 +1100,7 @@ class AutonomousTaskManagerAPI {
         authKey,
         message: `Multi-step authorization started for ${agentId}. Must complete ${authState.requiredSteps.length} validation steps sequentially.`,
         nextStep: authState.requiredSteps[0],
-        instructions: `Next: validate-criterion ${authKey} ${authState.requiredSteps[0]}`
+        instructions: `Next: validate-criterion ${authKey} ${authState.requiredSteps[0]}`,
       };
     } catch (error) {
       return {
@@ -1113,8 +1113,8 @@ class AutonomousTaskManagerAPI {
 
   async validateCriterion(authKey, criterion) {
     const startTime = Date.now();
-    let validationResult = null;
-    let performanceMetrics = {
+    const validationResult = null;
+    const performanceMetrics = {
       criterion,
       startTime: new Date().toISOString(),
       endTime: null,
@@ -1122,7 +1122,7 @@ class AutonomousTaskManagerAPI {
       memoryUsageBefore: process.memoryUsage(),
       memoryUsageAfter: null,
       success: false,
-      error: null
+      error: null,
     };
 
     try {
@@ -1164,7 +1164,7 @@ class AutonomousTaskManagerAPI {
           criterion,
           error: validationResult.error,
           timestamp: new Date().toISOString(),
-          retryCount: 1
+          retryCount: 1,
         }]);
 
         return {
@@ -1173,7 +1173,7 @@ class AutonomousTaskManagerAPI {
           currentStep: authState.currentStep,
           nextStep: expectedStep,
           instructions: `Fix issues and retry: validate-criterion ${authKey} ${criterion}`,
-          selectiveRevalidationNote: `Use selective re-validation: selective-revalidation ${authKey}`
+          selectiveRevalidationNote: `Use selective re-validation: selective-revalidation ${authKey}`,
         };
       }
 
@@ -1211,12 +1211,12 @@ class AutonomousTaskManagerAPI {
           durationMs: performanceMetrics.durationMs,
           memoryDelta: {
             rss: performanceMetrics.memoryUsageAfter.rss - performanceMetrics.memoryUsageBefore.rss,
-            heapUsed: performanceMetrics.memoryUsageAfter.heapUsed - performanceMetrics.memoryUsageBefore.heapUsed
-          }
+            heapUsed: performanceMetrics.memoryUsageAfter.heapUsed - performanceMetrics.memoryUsageBefore.heapUsed,
+          },
         },
         instructions: isComplete
           ? `All validations complete! Final step: complete-authorization ${authKey}`
-          : `Next: validate-criterion ${authKey} ${nextStep}`
+          : `Next: validate-criterion ${authKey} ${nextStep}`,
       };
     } catch (error) {
       // Capture performance metrics for failed validation
@@ -1241,9 +1241,9 @@ class AutonomousTaskManagerAPI {
           durationMs: performanceMetrics.durationMs,
           memoryDelta: performanceMetrics.memoryUsageAfter ? {
             rss: performanceMetrics.memoryUsageAfter.rss - performanceMetrics.memoryUsageBefore.rss,
-            heapUsed: performanceMetrics.memoryUsageAfter.heapUsed - performanceMetrics.memoryUsageBefore.heapUsed
-          } : null
-        }
+            heapUsed: performanceMetrics.memoryUsageAfter.heapUsed - performanceMetrics.memoryUsageBefore.heapUsed,
+          } : null,
+        },
       };
     }
   }
@@ -1283,7 +1283,7 @@ class AutonomousTaskManagerAPI {
 
       // If specific criteria provided, validate only those; otherwise validate all remaining
       const targetCriteria = criteria || authState.requiredSteps.filter(step =>
-        !authState.completedSteps.includes(step)
+        !authState.completedSteps.includes(step),
       );
 
       // Track parallel execution progress
@@ -1293,7 +1293,7 @@ class AutonomousTaskManagerAPI {
         failedCriteria: [],
         executionGroups: [],
         totalTimeMs: 0,
-        parallelizationGain: 0
+        parallelizationGain: 0,
       };
 
       const startTime = Date.now();
@@ -1301,7 +1301,7 @@ class AutonomousTaskManagerAPI {
       // Execute validations in parallel groups
       for (const group of validationGroups) {
         const groupCriteria = group.criteria.filter(c => targetCriteria.includes(c));
-        if (groupCriteria.length === 0) continue;
+        if (groupCriteria.length === 0) {continue;}
 
         const groupStartTime = Date.now();
         console.error(`🔄 Executing validation group: ${group.name} (${groupCriteria.length} criteria in parallel)`);
@@ -1318,7 +1318,7 @@ class AutonomousTaskManagerAPI {
                 criterion,
                 duration,
                 status: 'completed',
-                details: validationResult.details
+                details: validationResult.details,
               });
               return { criterion, success: true, duration, result: validationResult };
             } else {
@@ -1326,7 +1326,7 @@ class AutonomousTaskManagerAPI {
                 criterion,
                 duration,
                 status: 'failed',
-                error: validationResult.error
+                error: validationResult.error,
               });
               return { criterion, success: false, duration, error: validationResult.error };
             }
@@ -1336,7 +1336,7 @@ class AutonomousTaskManagerAPI {
               criterion,
               duration,
               status: 'failed',
-              error: error.message
+              error: error.message,
             });
             return { criterion, success: false, duration, error: error.message };
           }
@@ -1351,7 +1351,7 @@ class AutonomousTaskManagerAPI {
           criteria: groupCriteria,
           results: groupResults,
           duration: groupDuration,
-          parallelCount: groupCriteria.length
+          parallelCount: groupCriteria.length,
         });
 
         // If any validation in the group failed, stop execution (unless force mode)
@@ -1395,7 +1395,7 @@ class AutonomousTaskManagerAPI {
           status: result.status,
           duration: result.duration,
           message: result.details || result.error || 'Validation completed',
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         };
       }
 
@@ -1405,7 +1405,7 @@ class AutonomousTaskManagerAPI {
           criterion: failure.criterion,
           error: failure.error,
           timestamp: new Date().toISOString(),
-          retryCount: 1
+          retryCount: 1,
         })));
       }
 
@@ -1426,14 +1426,14 @@ class AutonomousTaskManagerAPI {
         performance: {
           totalTimeMs: parallelResults.totalTimeMs,
           parallelizationGain: `${parallelResults.parallelizationGain}%`,
-          executedInParallel: parallelResults.completedCriteria.length + parallelResults.failedCriteria.length
+          executedInParallel: parallelResults.completedCriteria.length + parallelResults.failedCriteria.length,
         },
         instructions: isComplete
           ? `All validations complete! Final step: complete-authorization ${authKey}`
           : `Continue with remaining validations or run: validate-criteria-parallel ${authKey}`,
         selectiveRevalidationNote: parallelResults.failedCriteria.length > 0
           ? `Use selective re-validation for failed criteria: selective-revalidation ${authKey}`
-          : null
+          : null,
       };
     } catch (error) {
       return {
@@ -1453,19 +1453,24 @@ class AutonomousTaskManagerAPI {
    */
   _getValidationDependencyGroups() {
     try {
-      // Load any custom dependency configuration
-      this.dependencyManager.loadDependencyConfig().catch(() => {
-        // Ignore errors - use defaults if config doesn't exist
-      });
-
       // Validate dependency graph
       const validation = this.dependencyManager.validateDependencyGraph();
       if (!validation.valid) {
         console.error('⚠️ Dependency validation issues detected:', validation.issues);
       }
 
-      // Generate parallel execution plan
-      const parallelPlan = this.dependencyManager.generateParallelExecutionPlan();
+      // Generate parallel execution plan with default criteria
+      const defaultCriteria = [
+        'focused-codebase',
+        'security-validation',
+        'linter-validation',
+        'type-validation',
+        'build-validation',
+        'start-validation',
+        'test-validation',
+      ];
+
+      const parallelPlan = this.dependencyManager.generateParallelExecutionPlan(defaultCriteria);
 
       // Convert parallel execution plan to legacy group format for backward compatibility
       const groups = parallelPlan.plan.map((wave, index) => ({
@@ -1475,8 +1480,13 @@ class AutonomousTaskManagerAPI {
         description: `Wave ${index + 1}: ${wave.criteria.length} criteria (${Math.round(wave.estimatedDuration / 1000)}s estimated)`,
         estimatedDuration: wave.estimatedDuration,
         concurrency: wave.concurrency,
-        parallelizable: wave.criteria.every(c => c.parallelizable)
+        parallelizable: wave.criteria.every(c => c.parallelizable),
+        resourceUtilization: wave.resourceUtilization,
+        loadBalance: wave.loadBalance,
       }));
+
+      console.log(`🚀 Generated ${groups.length} execution waves using ValidationDependencyManager`);
+      console.log(`📊 Estimated parallelization gain: ${parallelPlan.parallelizationGain.toFixed(1)}%`);
 
       return groups;
     } catch (error) {
@@ -1485,23 +1495,23 @@ class AutonomousTaskManagerAPI {
       // Fallback to original hardcoded groups if dependency manager fails
       return [
         {
-          name: "Independent Code Quality Checks",
+          name: 'Independent Code Quality Checks',
           criteria: ['focused-codebase', 'security-validation', 'linter-validation', 'type-validation'],
           dependencies: [],
-          description: "Code quality validations that don't depend on build or runtime"
+          description: "Code quality validations that don't depend on build or runtime",
         },
         {
-          name: "Build and Runtime Validation",
+          name: 'Build and Runtime Validation',
           criteria: ['build-validation', 'start-validation'],
           dependencies: ['focused-codebase', 'linter-validation', 'type-validation'],
-          description: "Build and startup validations that require clean code"
+          description: 'Build and startup validations that require clean code',
         },
         {
-          name: "Test Execution",
+          name: 'Test Execution',
           criteria: ['test-validation'],
           dependencies: ['build-validation'],
-          description: "Test execution that requires successful build"
-        }
+          description: 'Test execution that requires successful build',
+        },
       ];
     }
   }
@@ -1539,7 +1549,7 @@ class AutonomousTaskManagerAPI {
         timestamp: new Date().toISOString(),
         session_type: 'multi_step_validated',
         validation_steps: authState.completedSteps,
-        total_time: Math.round((new Date() - new Date(authState.startTime)) / 1000) + 's'
+        total_time: Math.round((new Date() - new Date(authState.startTime)) / 1000) + 's',
       };
 
       await fs.writeFile(stopFlagPath, JSON.stringify(stopData, null, 2));
@@ -1594,11 +1604,11 @@ class AutonomousTaskManagerAPI {
         `**/test*${featureId}*`,
         `**/spec*${featureId}*`,
         `**/${featureId}*.test.*`,
-        `**/${featureId}*.spec.*`
+        `**/${featureId}*.spec.*`,
       ];
 
       let testsFound = false;
-      let testFiles = [];
+      const testFiles = [];
 
       for (const pattern of testPatterns) {
         try {
@@ -1623,7 +1633,7 @@ class AutonomousTaskManagerAPI {
               const { execSync } = require('child_process');
               const grepResult = execSync(
                 `find "${testDirPath}" -name "*.js" -o -name "*.ts" -o -name "*.jsx" -o -name "*.tsx" | xargs grep -l "${featureId}" 2>/dev/null || true`,
-                { cwd: PROJECT_ROOT }
+                { cwd: PROJECT_ROOT },
               ).toString();
 
               if (grepResult.trim()) {
@@ -1648,9 +1658,9 @@ class AutonomousTaskManagerAPI {
             '2. Write integration tests if applicable',
             '3. Ensure test coverage >80%',
             '4. Run tests to verify they pass',
-            '5. Then retry this validation'
+            '5. Then retry this validation',
           ],
-          blockingAdvancement: true
+          blockingAdvancement: true,
         };
       }
 
@@ -1660,14 +1670,14 @@ class AutonomousTaskManagerAPI {
         testsFound: true,
         testFiles,
         message: 'Tests found for feature - proceeding to coverage validation',
-        nextStep: `confirm-test-coverage ${featureId}`
+        nextStep: `confirm-test-coverage ${featureId}`,
       };
 
     } catch (error) {
       return {
         success: false,
         error: `Test validation failed: ${error.message}`,
-        featureId
+        featureId,
       };
     }
   }
@@ -1682,7 +1692,7 @@ class AutonomousTaskManagerAPI {
         'npm run coverage',
         'jest --coverage',
         'npm test -- --coverage',
-        'yarn test --coverage'
+        'yarn test --coverage',
       ];
 
       let coverageResult = null;
@@ -1693,7 +1703,7 @@ class AutonomousTaskManagerAPI {
           const result = execSync(cmd, {
             cwd: PROJECT_ROOT,
             timeout: 120000,
-            stdio: 'pipe'
+            stdio: 'pipe',
           }).toString();
 
           // Parse coverage percentage from common formats
@@ -1725,9 +1735,9 @@ class AutonomousTaskManagerAPI {
             '1. Add more comprehensive tests to increase coverage',
             '2. Test edge cases and error conditions',
             '3. Ensure all code paths are tested',
-            '4. Re-run coverage validation'
+            '4. Re-run coverage validation',
           ],
-          blockingAdvancement: true
+          blockingAdvancement: true,
         };
       }
 
@@ -1737,7 +1747,7 @@ class AutonomousTaskManagerAPI {
         coveragePercentage,
         minimumRequired: minimumCoverage,
         message: `Test coverage ${coveragePercentage}% meets requirement - proceeding to pipeline validation`,
-        nextStep: `confirm-pipeline-passes ${featureId}`
+        nextStep: `confirm-pipeline-passes ${featureId}`,
       };
 
     } catch (error) {
@@ -1748,8 +1758,8 @@ class AutonomousTaskManagerAPI {
         fallbackInstructions: [
           'If no coverage tools available, manually verify comprehensive test suite',
           'Ensure all feature functionality is tested',
-          'Consider adding jest --coverage or similar to package.json'
-        ]
+          'Consider adding jest --coverage or similar to package.json',
+        ],
       };
     }
   }
@@ -1763,7 +1773,7 @@ class AutonomousTaskManagerAPI {
         { name: 'linting', cmd: 'npm run lint', timeout: 60000 },
         { name: 'type checking', cmd: 'npm run typecheck', timeout: 60000 },
         { name: 'build', cmd: 'npm run build', timeout: 120000 },
-        { name: 'tests', cmd: 'npm test', timeout: 180000 }
+        { name: 'tests', cmd: 'npm test', timeout: 180000 },
       ];
 
       const results = [];
@@ -1774,13 +1784,13 @@ class AutonomousTaskManagerAPI {
           const result = execSync(step.cmd, {
             cwd: PROJECT_ROOT,
             timeout: step.timeout,
-            stdio: 'pipe'
+            stdio: 'pipe',
           });
 
           results.push({
             step: step.name,
             status: 'passed',
-            command: step.cmd
+            command: step.cmd,
           });
         } catch (error) {
           allPassed = false;
@@ -1788,7 +1798,7 @@ class AutonomousTaskManagerAPI {
             step: step.name,
             status: 'failed',
             command: step.cmd,
-            error: error.message
+            error: error.message,
           });
         }
       }
@@ -1804,9 +1814,9 @@ class AutonomousTaskManagerAPI {
             '2. Resolve type checking issues',
             '3. Ensure build succeeds',
             '4. Make sure all tests pass',
-            '5. Re-run pipeline validation'
+            '5. Re-run pipeline validation',
           ],
-          blockingAdvancement: true
+          blockingAdvancement: true,
         };
       }
 
@@ -1815,14 +1825,14 @@ class AutonomousTaskManagerAPI {
         featureId,
         pipelineResults: results,
         message: 'All pipeline validations passed - feature ready for advancement',
-        nextStep: `advance-to-next-feature ${featureId}`
+        nextStep: `advance-to-next-feature ${featureId}`,
       };
 
     } catch (error) {
       return {
         success: false,
         error: `Pipeline validation failed: ${error.message}`,
-        featureId
+        featureId,
       };
     }
   }
@@ -1836,7 +1846,7 @@ class AutonomousTaskManagerAPI {
           success: false,
           error: 'Cannot advance: Feature tests validation failed',
           blockingValidation: testValidation,
-          requiredStep: `validate-feature-tests ${currentFeatureId}`
+          requiredStep: `validate-feature-tests ${currentFeatureId}`,
         };
       }
 
@@ -1846,7 +1856,7 @@ class AutonomousTaskManagerAPI {
           success: false,
           error: 'Cannot advance: Test coverage validation failed',
           blockingValidation: coverageValidation,
-          requiredStep: `confirm-test-coverage ${currentFeatureId}`
+          requiredStep: `confirm-test-coverage ${currentFeatureId}`,
         };
       }
 
@@ -1856,7 +1866,7 @@ class AutonomousTaskManagerAPI {
           success: false,
           error: 'Cannot advance: Pipeline validation failed',
           blockingValidation: pipelineValidation,
-          requiredStep: `confirm-pipeline-passes ${currentFeatureId}`
+          requiredStep: `confirm-pipeline-passes ${currentFeatureId}`,
         };
       }
 
@@ -1876,7 +1886,7 @@ class AutonomousTaskManagerAPI {
       const nextFeature = await this._atomicFeatureOperation((features) => {
         const nextFeature = features.features.find(f =>
           f.status === 'approved' &&
-          f.id !== currentFeatureId
+          f.id !== currentFeatureId,
         );
         return nextFeature;
       });
@@ -1888,7 +1898,7 @@ class AutonomousTaskManagerAPI {
         nextFeature: nextFeature ? {
           id: nextFeature.id,
           title: nextFeature.title,
-          description: nextFeature.description
+          description: nextFeature.description,
         } : null,
         message: nextFeature
           ? `✅ Feature ${currentFeatureId} complete! Next feature: ${nextFeature.id}`
@@ -1896,15 +1906,15 @@ class AutonomousTaskManagerAPI {
         testGatesPassed: {
           tests: true,
           coverage: true,
-          pipeline: true
-        }
+          pipeline: true,
+        },
       };
 
     } catch (error) {
       return {
         success: false,
         error: `Failed to advance to next feature: ${error.message}`,
-        currentFeatureId
+        currentFeatureId,
       };
     }
   }
@@ -1921,26 +1931,26 @@ class AutonomousTaskManagerAPI {
         testGates: {
           tests: testValidation.success,
           coverage: coverageValidation.success,
-          pipeline: pipelineValidation.success
+          pipeline: pipelineValidation.success,
         },
         allGatesPassed: testValidation.success && coverageValidation.success && pipelineValidation.success,
         canAdvance: testValidation.success && coverageValidation.success && pipelineValidation.success,
         details: {
           testValidation,
           coverageValidation,
-          pipelineValidation
+          pipelineValidation,
         },
         nextRequiredStep: !testValidation.success ? `validate-feature-tests ${featureId}` :
-                         !coverageValidation.success ? `confirm-test-coverage ${featureId}` :
-                         !pipelineValidation.success ? `confirm-pipeline-passes ${featureId}` :
-                         `advance-to-next-feature ${featureId}`
+          !coverageValidation.success ? `confirm-test-coverage ${featureId}` :
+            !pipelineValidation.success ? `confirm-pipeline-passes ${featureId}` :
+              `advance-to-next-feature ${featureId}`,
       };
 
     } catch (error) {
       return {
         success: false,
         error: `Failed to get feature test status: ${error.message}`,
-        featureId
+        featureId,
       };
     }
   }
@@ -1982,7 +1992,7 @@ class AutonomousTaskManagerAPI {
         totalMeasurements: existingMetrics.metrics.length,
         averageDurationMs: existingMetrics.metrics.reduce((sum, m) => sum + m.durationMs, 0) / existingMetrics.metrics.length,
         successRate: (existingMetrics.metrics.filter(m => m.success).length / existingMetrics.metrics.length) * 100,
-        bycriterion: {}
+        bycriterion: {},
       };
 
       // Group by criterion
@@ -1994,13 +2004,13 @@ class AutonomousTaskManagerAPI {
             totalDuration: 0,
             successCount: 0,
             avgDuration: 0,
-            successRate: 0
+            successRate: 0,
           };
         }
         const criterionStats = byCriterion[metric.criterion];
         criterionStats.count++;
         criterionStats.totalDuration += metric.durationMs;
-        if (metric.success) criterionStats.successCount++;
+        if (metric.success) {criterionStats.successCount++;}
       });
 
       // Calculate averages
@@ -2016,7 +2026,7 @@ class AutonomousTaskManagerAPI {
       return {
         success: true,
         stored: true,
-        metricsFile
+        metricsFile,
       };
 
     } catch (error) {
@@ -2024,7 +2034,7 @@ class AutonomousTaskManagerAPI {
       return {
         success: false,
         error: error.message,
-        stored: false
+        stored: false,
       };
     }
   }
@@ -2044,7 +2054,7 @@ class AutonomousTaskManagerAPI {
           success: true,
           metrics: [],
           statistics: null,
-          message: 'No performance metrics available yet'
+          message: 'No performance metrics available yet',
         };
       }
 
@@ -2074,9 +2084,9 @@ class AutonomousTaskManagerAPI {
         filtering: {
           applied: options,
           totalRecords: metricsData.metrics?.length || 0,
-          filteredRecords: filteredMetrics.length
+          filteredRecords: filteredMetrics.length,
         },
-        featureId: 'feature_1758946499841_cd5eba625370' // Feature 8 ID
+        featureId: 'feature_1758946499841_cd5eba625370', // Feature 8 ID
       };
 
     } catch (error) {
@@ -2084,7 +2094,7 @@ class AutonomousTaskManagerAPI {
         success: false,
         error: error.message,
         metrics: [],
-        statistics: null
+        statistics: null,
       };
     }
   }
@@ -2102,7 +2112,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           trends: [],
-          message: 'No performance data available for trend analysis'
+          message: 'No performance data available for trend analysis',
         };
       }
 
@@ -2124,14 +2134,14 @@ class AutonomousTaskManagerAPI {
         totalDataPoints: metrics.length,
         analysisWindow: options.timeRange || 'all',
         insights: this._generateTrendInsights(trends),
-        featureId: 'feature_1758946499841_cd5eba625370'
+        featureId: 'feature_1758946499841_cd5eba625370',
       };
 
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        trends: []
+        trends: [],
       };
     }
   }
@@ -2149,7 +2159,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           bottlenecks: [],
-          message: 'No performance data available for bottleneck analysis'
+          message: 'No performance data available for bottleneck analysis',
         };
       }
 
@@ -2168,20 +2178,20 @@ class AutonomousTaskManagerAPI {
           totalCriteria: bottleneckAnalysis.totalCriteria,
           averageExecutionTime: bottleneckAnalysis.averageExecutionTime,
           slowestCriterion: bottleneckAnalysis.slowestCriterion,
-          fastestCriterion: bottleneckAnalysis.fastestCriterion
+          fastestCriterion: bottleneckAnalysis.fastestCriterion,
         },
         thresholds: {
           slowThreshold: options.slowThreshold || 5000, // ms
-          criticalThreshold: options.criticalThreshold || 10000 // ms
+          criticalThreshold: options.criticalThreshold || 10000, // ms
         },
-        featureId: 'feature_1758946499841_cd5eba625370'
+        featureId: 'feature_1758946499841_cd5eba625370',
       };
 
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        bottlenecks: []
+        bottlenecks: [],
       };
     }
   }
@@ -2199,7 +2209,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           report: null,
-          message: 'No timing data available for detailed report'
+          message: 'No timing data available for detailed report',
         };
       }
 
@@ -2217,16 +2227,16 @@ class AutonomousTaskManagerAPI {
         dataRange: {
           from: metrics.length > 0 ? metrics[0].startTime : null,
           to: metrics.length > 0 ? metrics[metrics.length - 1].startTime : null,
-          totalRecords: metrics.length
+          totalRecords: metrics.length,
         },
-        featureId: 'feature_1758946499841_cd5eba625370'
+        featureId: 'feature_1758946499841_cd5eba625370',
       };
 
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        report: null
+        report: null,
       };
     }
   }
@@ -2244,7 +2254,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           resourceAnalysis: null,
-          message: 'No resource usage data available'
+          message: 'No resource usage data available',
         };
       }
 
@@ -2261,17 +2271,17 @@ class AutonomousTaskManagerAPI {
         currentSystemResources: {
           memory: process.memoryUsage(),
           uptime: process.uptime(),
-          cpuUsage: process.cpuUsage()
+          cpuUsage: process.cpuUsage(),
         },
         analysisType: options.analysisType || 'comprehensive',
-        featureId: 'feature_1758946499841_cd5eba625370'
+        featureId: 'feature_1758946499841_cd5eba625370',
       };
 
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        resourceAnalysis: null
+        resourceAnalysis: null,
       };
     }
   }
@@ -2289,7 +2299,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           benchmarks: null,
-          message: 'No performance data available for benchmarking'
+          message: 'No performance data available for benchmarking',
         };
       }
 
@@ -2307,17 +2317,17 @@ class AutonomousTaskManagerAPI {
           linter_validation: { target: '< 2000ms', acceptable: '< 5000ms' },
           type_validation: { target: '< 3000ms', acceptable: '< 8000ms' },
           build_validation: { target: '< 30000ms', acceptable: '< 60000ms' },
-          test_validation: { target: '< 10000ms', acceptable: '< 30000ms' }
+          test_validation: { target: '< 10000ms', acceptable: '< 30000ms' },
         },
         recommendations: this._generateBenchmarkRecommendations(benchmarks),
-        featureId: 'feature_1758946499841_cd5eba625370'
+        featureId: 'feature_1758946499841_cd5eba625370',
       };
 
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        benchmarks: null
+        benchmarks: null,
       };
     }
   }
@@ -2348,13 +2358,13 @@ class AutonomousTaskManagerAPI {
         median: p50,
         min: Math.min(...durations),
         max: Math.max(...durations),
-        percentiles: { p50, p90, p95, p99 }
+        percentiles: { p50, p90, p95, p99 },
       },
       criteriaBreakdown: this._groupMetricsByCriteria(metrics),
       timeRange: {
         from: metrics[0]?.startTime,
-        to: metrics[metrics.length - 1]?.startTime
-      }
+        to: metrics[metrics.length - 1]?.startTime,
+      },
     };
   }
 
@@ -2408,7 +2418,7 @@ class AutonomousTaskManagerAPI {
         metrics: periodMetrics.length,
         averageDuration: Math.round(avgDuration),
         successRate: Math.round(successRate * 100) / 100,
-        criteria: [...new Set(periodMetrics.map(m => m.criterion))]
+        criteria: [...new Set(periodMetrics.map(m => m.criterion))],
       });
     });
 
@@ -2419,7 +2429,7 @@ class AutonomousTaskManagerAPI {
    * Generate trend insights
    */
   _generateTrendInsights(trends) {
-    if (trends.length < 2) return [];
+    if (trends.length < 2) {return [];}
 
     const insights = [];
     const recent = trends[trends.length - 1];
@@ -2431,7 +2441,7 @@ class AutonomousTaskManagerAPI {
       insights.push({
         type: durationChange > 0 ? 'performance_degradation' : 'performance_improvement',
         message: `Validation performance ${durationChange > 0 ? 'degraded' : 'improved'} by ${Math.abs(durationChange).toFixed(1)}%`,
-        impact: Math.abs(durationChange) > 25 ? 'high' : 'medium'
+        impact: Math.abs(durationChange) > 25 ? 'high' : 'medium',
       });
     }
 
@@ -2441,7 +2451,7 @@ class AutonomousTaskManagerAPI {
       insights.push({
         type: successRateChange > 0 ? 'reliability_improvement' : 'reliability_concern',
         message: `Success rate ${successRateChange > 0 ? 'improved' : 'decreased'} by ${Math.abs(successRateChange).toFixed(1)}%`,
-        impact: Math.abs(successRateChange) > 10 ? 'high' : 'medium'
+        impact: Math.abs(successRateChange) > 10 ? 'high' : 'medium',
       });
     }
 
@@ -2470,7 +2480,7 @@ class AutonomousTaskManagerAPI {
           avgDuration: Math.round(stats.avgDuration),
           maxDuration: Math.round(stats.maxDuration),
           frequency: stats.count,
-          failureRate: Math.round((1 - stats.successRate / 100) * 100)
+          failureRate: Math.round((1 - stats.successRate / 100) * 100),
         });
 
         // Generate recommendations
@@ -2498,7 +2508,7 @@ class AutonomousTaskManagerAPI {
       totalCriteria: Object.keys(byCriterion).length,
       averageExecutionTime: Math.round(metrics.reduce((sum, m) => sum + m.durationMs, 0) / metrics.length),
       slowestCriterion: bottlenecks[0] || null,
-      fastestCriterion: Object.entries(byCriterion).sort((a, b) => a[1].avgDuration - b[1].avgDuration)[0]
+      fastestCriterion: Object.entries(byCriterion).sort((a, b) => a[1].avgDuration - b[1].avgDuration)[0],
     };
   }
 
@@ -2516,7 +2526,7 @@ class AutonomousTaskManagerAPI {
           maxDuration: 0,
           successCount: 0,
           avgDuration: 0,
-          successRate: 0
+          successRate: 0,
         };
       }
 
@@ -2524,7 +2534,7 @@ class AutonomousTaskManagerAPI {
       stats.count++;
       stats.totalDuration += metric.durationMs;
       stats.maxDuration = Math.max(stats.maxDuration, metric.durationMs);
-      if (metric.success) stats.successCount++;
+      if (metric.success) {stats.successCount++;}
     });
 
     // Calculate averages
@@ -2549,7 +2559,7 @@ class AutonomousTaskManagerAPI {
         totalValidations: metrics.length,
         recentValidations: recentMetrics.length,
         overallSuccessRate: Math.round((metrics.filter(m => m.success).length / metrics.length) * 100),
-        totalExecutionTime: Math.round(metrics.reduce((sum, m) => sum + m.durationMs, 0))
+        totalExecutionTime: Math.round(metrics.reduce((sum, m) => sum + m.durationMs, 0)),
       },
       criteriaBreakdown: Object.entries(byCriterion).map(([criterion, stats]) => ({
         criterion,
@@ -2557,15 +2567,15 @@ class AutonomousTaskManagerAPI {
         avgDuration: Math.round(stats.avgDuration),
         maxDuration: Math.round(stats.maxDuration),
         successRate: Math.round(stats.successRate),
-        performance_grade: this._getPerformanceGrade(stats.avgDuration)
+        performance_grade: this._getPerformanceGrade(stats.avgDuration),
       })),
       recentActivity: recentMetrics.slice(-10).map(m => ({
         criterion: m.criterion,
         duration: m.durationMs,
         success: m.success,
-        timestamp: m.startTime
+        timestamp: m.startTime,
       })),
-      performanceDistribution: this._calculatePerformanceDistribution(metrics)
+      performanceDistribution: this._calculatePerformanceDistribution(metrics),
     };
   }
 
@@ -2573,10 +2583,10 @@ class AutonomousTaskManagerAPI {
    * Get performance grade based on duration
    */
   _getPerformanceGrade(avgDuration) {
-    if (avgDuration < 1000) return 'A';
-    if (avgDuration < 2000) return 'B';
-    if (avgDuration < 5000) return 'C';
-    if (avgDuration < 10000) return 'D';
+    if (avgDuration < 1000) {return 'A';}
+    if (avgDuration < 2000) {return 'B';}
+    if (avgDuration < 5000) {return 'C';}
+    if (avgDuration < 10000) {return 'D';}
     return 'F';
   }
 
@@ -2590,15 +2600,11 @@ class AutonomousTaskManagerAPI {
       { label: '1-2s', count: 0 },
       { label: '2-5s', count: 0 },
       { label: '5-10s', count: 0 },
-      { label: '> 10s', count: 0 }
+      { label: '> 10s', count: 0 },
     ];
 
     durations.forEach(duration => {
-      if (duration < 1000) ranges[0].count++;
-      else if (duration < 2000) ranges[1].count++;
-      else if (duration < 5000) ranges[2].count++;
-      else if (duration < 10000) ranges[3].count++;
-      else ranges[4].count++;
+      if (duration < 1000) {ranges[0].count++;} else if (duration < 2000) {ranges[1].count++;} else if (duration < 5000) {ranges[2].count++;} else if (duration < 10000) {ranges[3].count++;} else {ranges[4].count++;}
     });
 
     return ranges;
@@ -2613,14 +2619,14 @@ class AutonomousTaskManagerAPI {
     if (memoryMetrics.length === 0) {
       return {
         memory: { available: false, message: 'No memory usage data available' },
-        recommendations: ['Enable memory monitoring for resource analysis']
+        recommendations: ['Enable memory monitoring for resource analysis'],
       };
     }
 
     const memoryDeltas = memoryMetrics.map(m => ({
       criterion: m.criterion,
       rssChange: m.memoryUsageAfter.rss - m.memoryUsageBefore.rss,
-      heapChange: m.memoryUsageAfter.heapUsed - m.memoryUsageBefore.heapUsed
+      heapChange: m.memoryUsageAfter.heapUsed - m.memoryUsageBefore.heapUsed,
     }));
 
     return {
@@ -2629,9 +2635,9 @@ class AutonomousTaskManagerAPI {
         avgRssChange: Math.round(memoryDeltas.reduce((sum, d) => sum + d.rssChange, 0) / memoryDeltas.length),
         avgHeapChange: Math.round(memoryDeltas.reduce((sum, d) => sum + d.heapChange, 0) / memoryDeltas.length),
         highestMemoryUsage: Math.max(...memoryDeltas.map(d => d.rssChange)),
-        byCriterion: this._groupMemoryUsageByCriterion(memoryDeltas)
+        byCriterion: this._groupMemoryUsageByCriterion(memoryDeltas),
       },
-      recommendations: this._generateResourceRecommendations(memoryDeltas)
+      recommendations: this._generateResourceRecommendations(memoryDeltas),
     };
   }
 
@@ -2646,7 +2652,7 @@ class AutonomousTaskManagerAPI {
         grouped[delta.criterion] = {
           count: 0,
           totalRssChange: 0,
-          totalHeapChange: 0
+          totalHeapChange: 0,
         };
       }
 
@@ -2696,20 +2702,20 @@ class AutonomousTaskManagerAPI {
       overall: {
         current_avg: Math.round(recentMetrics.reduce((sum, m) => sum + m.durationMs, 0) / recentMetrics.length),
         historical_avg: Math.round(metrics.reduce((sum, m) => sum + m.durationMs, 0) / metrics.length),
-        improvement_percentage: this._calculateImprovementPercentage(metrics, recentMetrics)
+        improvement_percentage: this._calculateImprovementPercentage(metrics, recentMetrics),
       },
       by_criterion: Object.entries(byCriterion).map(([criterion, stats]) => ({
         criterion,
         benchmark: Math.round(stats.avgDuration),
         grade: this._getPerformanceGrade(stats.avgDuration),
-        meets_target: this._meetsPerformanceTarget(criterion, stats.avgDuration)
+        meets_target: this._meetsPerformanceTarget(criterion, stats.avgDuration),
       })),
       comparison_period: `${timeRange} days`,
       data_quality: {
         total_data_points: metrics.length,
         recent_data_points: recentMetrics.length,
-        data_completeness: Math.round((recentMetrics.length / Math.min(metrics.length, 100)) * 100)
-      }
+        data_completeness: Math.round((recentMetrics.length / Math.min(metrics.length, 100)) * 100),
+      },
     };
   }
 
@@ -2717,7 +2723,7 @@ class AutonomousTaskManagerAPI {
    * Calculate improvement percentage
    */
   _calculateImprovementPercentage(allMetrics, recentMetrics) {
-    if (allMetrics.length < 10 || recentMetrics.length < 5) return null;
+    if (allMetrics.length < 10 || recentMetrics.length < 5) {return null;}
 
     const oldAvg = allMetrics.slice(0, Math.floor(allMetrics.length / 2))
       .reduce((sum, m) => sum + m.durationMs, 0) / Math.floor(allMetrics.length / 2);
@@ -2735,7 +2741,7 @@ class AutonomousTaskManagerAPI {
       'type-validation': 3000,
       'build-validation': 30000,
       'test-validation': 10000,
-      'security-validation': 5000
+      'security-validation': 5000,
     };
 
     const target = targets[criterion] || 5000;
@@ -2754,7 +2760,7 @@ class AutonomousTaskManagerAPI {
           criterion: criterion.criterion,
           current: `${criterion.benchmark}ms`,
           target: `< ${this._getTargetForCriterion(criterion.criterion)}ms`,
-          suggestion: this._getSuggestionForCriterion(criterion.criterion)
+          suggestion: this._getSuggestionForCriterion(criterion.criterion),
         });
       }
     });
@@ -2771,7 +2777,7 @@ class AutonomousTaskManagerAPI {
       'type-validation': 3000,
       'build-validation': 30000,
       'test-validation': 10000,
-      'security-validation': 5000
+      'security-validation': 5000,
     };
     return targets[criterion] || 5000;
   }
@@ -2785,7 +2791,7 @@ class AutonomousTaskManagerAPI {
       'type-validation': 'Implement incremental type checking or optimize tsconfig',
       'build-validation': 'Enable build caching and incremental compilation',
       'test-validation': 'Implement parallel test execution and optimize test suite',
-      'security-validation': 'Cache security scan results and use incremental scanning'
+      'security-validation': 'Cache security scan results and use incremental scanning',
     };
     return suggestions[criterion] || 'Review and optimize validation implementation';
   }
@@ -2815,14 +2821,14 @@ class AutonomousTaskManagerAPI {
         const statusOutput = execSync('git status --porcelain', {
           cwd: PROJECT_ROOT,
           timeout: 10000,
-          encoding: 'utf8'
+          encoding: 'utf8',
         });
 
         if (statusOutput.trim()) {
           const stashMessage = `validation-snapshot-${snapshotId}`;
           execSync(`git stash push -m "${stashMessage}"`, {
             cwd: PROJECT_ROOT,
-            timeout: 10000
+            timeout: 10000,
           });
           stashCreated = true;
           gitState.stashMessage = stashMessage;
@@ -2839,7 +2845,7 @@ class AutonomousTaskManagerAPI {
         'FEATURES.json',
         'TASKS.json',
         '.env',
-        '.env.local'
+        '.env.local',
       ];
 
       const backupPromises = criticalFiles.map(async (file) => {
@@ -2865,12 +2871,12 @@ class AutonomousTaskManagerAPI {
         stashCreated: stashCreated,
         criticalFiles: criticalFiles,
         validationAttempt: options.validationAttempt || 'unknown',
-        projectRoot: PROJECT_ROOT
+        projectRoot: PROJECT_ROOT,
       };
 
       await fs.writeFile(
         path.join(snapshotDir, 'snapshot-metadata.json'),
-        JSON.stringify(snapshotData, null, 2)
+        JSON.stringify(snapshotData, null, 2),
       );
 
       // Update snapshot history
@@ -2883,13 +2889,13 @@ class AutonomousTaskManagerAPI {
         description: snapshotData.description,
         gitCommit: gitState.commitHash,
         stashCreated: stashCreated,
-        message: 'Validation state snapshot created successfully'
+        message: 'Validation state snapshot created successfully',
       };
 
     } catch (error) {
       return {
         success: false,
-        error: `Failed to create validation state snapshot: ${error.message}`
+        error: `Failed to create validation state snapshot: ${error.message}`,
       };
     }
   }
@@ -2911,7 +2917,7 @@ class AutonomousTaskManagerAPI {
           if (snapshotData.gitState.commitHash) {
             execSync(`git reset --hard ${snapshotData.gitState.commitHash}`, {
               cwd: PROJECT_ROOT,
-              timeout: 10000
+              timeout: 10000,
             });
           }
 
@@ -2920,14 +2926,14 @@ class AutonomousTaskManagerAPI {
             const stashList = execSync('git stash list', {
               cwd: PROJECT_ROOT,
               timeout: 10000,
-              encoding: 'utf8'
+              encoding: 'utf8',
             });
 
             if (stashList.includes(snapshotData.gitState.stashMessage)) {
               // Find stash index
               const stashLines = stashList.split('\n');
               const stashLine = stashLines.find(line =>
-                line.includes(snapshotData.gitState.stashMessage)
+                line.includes(snapshotData.gitState.stashMessage),
               );
 
               if (stashLine) {
@@ -2935,7 +2941,7 @@ class AutonomousTaskManagerAPI {
                 if (stashIndex) {
                   execSync(`git stash pop stash@{${stashIndex}}`, {
                     cwd: PROJECT_ROOT,
-                    timeout: 10000
+                    timeout: 10000,
                   });
                 }
               }
@@ -2966,7 +2972,7 @@ class AutonomousTaskManagerAPI {
         snapshotId: snapshotId,
         timestamp: new Date().toISOString(),
         reason: options.reason || 'Manual rollback requested',
-        success: true
+        success: true,
       });
 
       return {
@@ -2975,7 +2981,7 @@ class AutonomousTaskManagerAPI {
         restoredAt: new Date().toISOString(),
         gitCommit: snapshotData.gitState.commitHash,
         filesRestored: snapshotData.criticalFiles.length,
-        message: 'Rollback completed successfully'
+        message: 'Rollback completed successfully',
       };
 
     } catch (error) {
@@ -2984,12 +2990,12 @@ class AutonomousTaskManagerAPI {
         timestamp: new Date().toISOString(),
         reason: options.reason || 'Manual rollback requested',
         success: false,
-        error: error.message
+        error: error.message,
       });
 
       return {
         success: false,
-        error: `Failed to perform rollback: ${error.message}`
+        error: `Failed to perform rollback: ${error.message}`,
       };
     }
   }
@@ -3005,7 +3011,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           snapshots: [],
-          message: 'No snapshots directory found'
+          message: 'No snapshots directory found',
         };
       }
 
@@ -3027,7 +3033,7 @@ class AutonomousTaskManagerAPI {
               gitCommit: metadata.gitState?.commitHash?.substr(0, 8) || 'unknown',
               validationAttempt: metadata.validationAttempt,
               stashCreated: metadata.stashCreated,
-              age: this._calculateSnapshotAge(metadata.timestamp)
+              age: this._calculateSnapshotAge(metadata.timestamp),
             });
           }
         } catch (error) {
@@ -3047,13 +3053,13 @@ class AutonomousTaskManagerAPI {
         success: true,
         snapshots: limitedSnapshots,
         total: snapshots.length,
-        showing: limitedSnapshots.length
+        showing: limitedSnapshots.length,
       };
 
     } catch (error) {
       return {
         success: false,
-        error: `Failed to get available snapshots: ${error.message}`
+        error: `Failed to get available snapshots: ${error.message}`,
       };
     }
   }
@@ -3082,7 +3088,7 @@ class AutonomousTaskManagerAPI {
           success: true,
           history: events,
           total: historyData.events?.length || 0,
-          showing: events.length
+          showing: events.length,
         };
 
       } catch (error) {
@@ -3091,14 +3097,14 @@ class AutonomousTaskManagerAPI {
           history: [],
           total: 0,
           showing: 0,
-          message: 'No rollback history found'
+          message: 'No rollback history found',
         };
       }
 
     } catch (error) {
       return {
         success: false,
-        error: `Failed to get rollback history: ${error.message}`
+        error: `Failed to get rollback history: ${error.message}`,
       };
     }
   }
@@ -3116,7 +3122,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           cleaned: 0,
-          message: 'No snapshots directory found'
+          message: 'No snapshots directory found',
         };
       }
 
@@ -3125,7 +3131,7 @@ class AutonomousTaskManagerAPI {
 
       // Collect all valid snapshots with metadata
       for (const entry of entries) {
-        if (entry === 'rollback-history.json') continue;
+        if (entry === 'rollback-history.json') {continue;}
 
         const snapshotDir = path.join(snapshotsDir, entry);
         const metadataPath = path.join(snapshotDir, 'snapshot-metadata.json');
@@ -3136,7 +3142,7 @@ class AutonomousTaskManagerAPI {
             const metadata = JSON.parse(await fs.readFile(metadataPath, 'utf8'));
             snapshots.push({
               ...metadata,
-              directory: snapshotDir
+              directory: snapshotDir,
             });
           }
         } catch (error) {
@@ -3145,7 +3151,7 @@ class AutonomousTaskManagerAPI {
             id: entry,
             timestamp: '1970-01-01T00:00:00.000Z',
             directory: snapshotDir,
-            invalid: true
+            invalid: true,
           });
         }
       }
@@ -3179,13 +3185,13 @@ class AutonomousTaskManagerAPI {
         cleaned: cleanedCount,
         remaining: snapshots.length - cleanedCount,
         maxAge: maxAge,
-        maxCount: maxCount
+        maxCount: maxCount,
       };
 
     } catch (error) {
       return {
         success: false,
-        error: `Failed to cleanup old snapshots: ${error.message}`
+        error: `Failed to cleanup old snapshots: ${error.message}`,
       };
     }
   }
@@ -3200,14 +3206,14 @@ class AutonomousTaskManagerAPI {
         commitHash: null,
         branch: null,
         hasUncommittedChanges: false,
-        stashCount: 0
+        stashCount: 0,
       };
 
       try {
         gitState.commitHash = execSync('git rev-parse HEAD', {
           cwd: PROJECT_ROOT,
           timeout: 5000,
-          encoding: 'utf8'
+          encoding: 'utf8',
         }).trim();
       } catch (error) {
         console.warn('Could not get git commit hash:', error.message);
@@ -3217,7 +3223,7 @@ class AutonomousTaskManagerAPI {
         gitState.branch = execSync('git branch --show-current', {
           cwd: PROJECT_ROOT,
           timeout: 5000,
-          encoding: 'utf8'
+          encoding: 'utf8',
         }).trim();
       } catch (error) {
         console.warn('Could not get git branch:', error.message);
@@ -3227,7 +3233,7 @@ class AutonomousTaskManagerAPI {
         const statusOutput = execSync('git status --porcelain', {
           cwd: PROJECT_ROOT,
           timeout: 5000,
-          encoding: 'utf8'
+          encoding: 'utf8',
         });
         gitState.hasUncommittedChanges = statusOutput.trim().length > 0;
       } catch (error) {
@@ -3238,7 +3244,7 @@ class AutonomousTaskManagerAPI {
         const stashOutput = execSync('git stash list', {
           cwd: PROJECT_ROOT,
           timeout: 5000,
-          encoding: 'utf8'
+          encoding: 'utf8',
         });
         gitState.stashCount = stashOutput.split('\n').filter(line => line.trim()).length;
       } catch (error) {
@@ -3253,7 +3259,7 @@ class AutonomousTaskManagerAPI {
         branch: null,
         hasUncommittedChanges: false,
         stashCount: 0,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -3278,7 +3284,7 @@ class AutonomousTaskManagerAPI {
         timestamp: snapshotData.timestamp,
         description: snapshotData.description,
         gitCommit: snapshotData.gitState?.commitHash?.substr(0, 8) || 'unknown',
-        validationAttempt: snapshotData.validationAttempt
+        validationAttempt: snapshotData.validationAttempt,
       });
 
       // Keep only last 50 entries
@@ -3471,7 +3477,7 @@ class AutonomousTaskManagerAPI {
             ...cacheData.result,
             fromCache: true,
             cacheAge: age,
-            originalDuration: cacheData.originalDuration
+            originalDuration: cacheData.originalDuration,
           };
         } else {
           // Cache expired, remove it
@@ -3511,7 +3517,7 @@ class AutonomousTaskManagerAPI {
         cacheKey,
         result: { ...result, fromCache: undefined }, // Remove cache metadata before storing
         timestamp: Date.now(),
-        originalDuration: duration
+        originalDuration: duration,
       };
 
       await fs.writeFile(cacheFile, JSON.stringify(cacheData, null, 2));
@@ -3541,7 +3547,7 @@ class AutonomousTaskManagerAPI {
       let cleanedCount = 0;
 
       for (const file of files) {
-        if (!file.endsWith('.json')) continue;
+        if (!file.endsWith('.json')) {continue;}
 
         try {
           const filePath = path.join(cacheDir, file);
@@ -3600,7 +3606,7 @@ class AutonomousTaskManagerAPI {
       return {
         ...result,
         fromCache: false,
-        executionTime: duration
+        executionTime: duration,
       };
 
     } catch (error) {
@@ -3608,7 +3614,7 @@ class AutonomousTaskManagerAPI {
         success: false,
         error: error.message,
         fromCache: false,
-        executionTime: Date.now() - startTime
+        executionTime: Date.now() - startTime,
       };
     }
   }
@@ -3635,7 +3641,7 @@ class AutonomousTaskManagerAPI {
             rule.id &&
             rule.name &&
             rule.command &&
-            rule.enabled !== false
+            rule.enabled !== false,
           );
         }
       }
@@ -3660,7 +3666,7 @@ class AutonomousTaskManagerAPI {
             return {
               success: true,
               count: approvedFeatures.length,
-              details: `Validated ${approvedFeatures.length} focused features only`
+              details: `Validated ${approvedFeatures.length} focused features only`,
             };
           });
           return featuresResult;
@@ -3672,7 +3678,7 @@ class AutonomousTaskManagerAPI {
             'trivy fs . --format json || echo "trivy not available"',
             'npm audit --json || echo "npm audit not available"',
             'bandit -r . -f json || echo "bandit not available"',
-            'safety check --json || echo "safety not available"'
+            'safety check --json || echo "safety not available"',
           ];
 
           for (const cmd of securityCommands) {
@@ -3704,7 +3710,7 @@ class AutonomousTaskManagerAPI {
             'go fmt -d .',
             'cargo clippy',
             'ktlint',
-            'swiftlint'
+            'swiftlint',
           ];
 
           return await this._tryCommands(lintCommands, 'Linting');
@@ -3719,7 +3725,7 @@ class AutonomousTaskManagerAPI {
             'go build -o /dev/null .',
             'cargo check',
             'kotlinc -no-stdlib -Xmulti-platform .',
-            'swiftc -typecheck'
+            'swiftc -typecheck',
           ];
 
           return await this._tryCommands(typeCommands, 'Type checking');
@@ -3737,7 +3743,7 @@ class AutonomousTaskManagerAPI {
             'mvn compile',
             'gradle build',
             'dotnet build',
-            'swift build'
+            'swift build',
           ];
 
           return await this._tryCommands(buildCommands, 'Building');
@@ -3747,7 +3753,7 @@ class AutonomousTaskManagerAPI {
           const startCommands = [
             'npm run start',
             'yarn start',
-            'pnpm start'
+            'pnpm start',
           ];
 
           return await this._tryCommands(startCommands, 'Starting', true);
@@ -3769,7 +3775,7 @@ class AutonomousTaskManagerAPI {
             'swift test',
             'bundle exec rspec',
             'mocha',
-            'jest'
+            'jest',
           ];
 
           return await this._tryCommands(testCommands, 'Testing');
@@ -3785,10 +3791,10 @@ class AutonomousTaskManagerAPI {
               const options = {
                 cwd: PROJECT_ROOT,
                 timeout,
-                stdio: 'pipe'
+                stdio: 'pipe',
               };
 
-              let command = customRule.command;
+              const command = customRule.command;
 
               // Support environment variable substitution
               if (customRule.environment) {
@@ -3818,13 +3824,13 @@ class AutonomousTaskManagerAPI {
 
               return {
                 success: true,
-                details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`
+                details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
               };
 
             } catch (error) {
               return {
                 success: false,
-                error: `Custom validation '${customRule.name}' failed: ${error.message}`
+                error: `Custom validation '${customRule.name}' failed: ${error.message}`,
               };
             }
           }
@@ -3845,7 +3851,7 @@ class AutonomousTaskManagerAPI {
         const options = {
           cwd: PROJECT_ROOT,
           timeout,
-          stdio: isStartCommand ? 'pipe' : 'inherit'
+          stdio: isStartCommand ? 'pipe' : 'inherit',
         };
 
         if (isStartCommand) {
@@ -3853,7 +3859,7 @@ class AutonomousTaskManagerAPI {
           const child = require('child_process').spawn('sh', ['-c', cmd], {
             cwd: PROJECT_ROOT,
             stdio: 'pipe',
-            detached: true
+            detached: true,
           });
 
           await new Promise((resolve, reject) => {
@@ -3931,10 +3937,10 @@ class AutonomousTaskManagerAPI {
           criterion: failure.criterion,
           error: failure.error,
           timestamp: failure.timestamp || new Date().toISOString(),
-          retryCount: failure.retryCount || 0
+          retryCount: failure.retryCount || 0,
         })),
         lastUpdate: new Date().toISOString(),
-        totalFailures: failedCriteria.length
+        totalFailures: failedCriteria.length,
       };
 
       await fs.writeFile(failuresFile, JSON.stringify(failureData, null, 2));
@@ -4001,7 +4007,7 @@ class AutonomousTaskManagerAPI {
         // Clear specific resolved failures
         const currentFailures = await this._loadValidationFailures(authKey);
         const remainingFailures = currentFailures.filter(failure =>
-          !resolvedCriteria.includes(failure.criterion)
+          !resolvedCriteria.includes(failure.criterion),
         );
 
         if (remainingFailures.length === 0) {
@@ -4046,7 +4052,7 @@ class AutonomousTaskManagerAPI {
             success: true,
             message: 'No previous validation failures found - nothing to re-validate',
             duration: Date.now() - startTime,
-            criteriaValidated: []
+            criteriaValidated: [],
           };
         }
       }
@@ -4071,7 +4077,7 @@ class AutonomousTaskManagerAPI {
             success: result.success,
             details: result.details || result.error,
             duration: validationDuration,
-            fromCache: result.fromCache || false
+            fromCache: result.fromCache || false,
           });
 
           if (result.success) {
@@ -4082,7 +4088,7 @@ class AutonomousTaskManagerAPI {
               criterion,
               error: result.error || result.details,
               timestamp: new Date().toISOString(),
-              retryCount: 1
+              retryCount: 1,
             });
             console.error(`❌ ${criterion}: FAILED - ${result.error || result.details}`);
           }
@@ -4091,7 +4097,7 @@ class AutonomousTaskManagerAPI {
             criterion,
             error: error.message,
             timestamp: new Date().toISOString(),
-            retryCount: 1
+            retryCount: 1,
           });
           console.error(`💥 ${criterion}: ERROR - ${error.message}`);
         }
@@ -4123,14 +4129,14 @@ class AutonomousTaskManagerAPI {
         results: validationResults,
         message: failureCount === 0
           ? `All ${successCount} criteria now passing!`
-          : `${successCount} criteria resolved, ${failureCount} still need attention`
+          : `${successCount} criteria resolved, ${failureCount} still need attention`,
       };
 
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        duration: Date.now() - startTime
+        duration: Date.now() - startTime,
       };
     }
   }
@@ -4145,44 +4151,44 @@ class AutonomousTaskManagerAPI {
         {
           id: 'focused-codebase',
           name: 'Focused Codebase Validation',
-          description: 'Validates only user-outlined features exist'
+          description: 'Validates only user-outlined features exist',
         },
         {
           id: 'security-validation',
           name: 'Security Validation',
-          description: 'Runs security scans and vulnerability checks'
+          description: 'Runs security scans and vulnerability checks',
         },
         {
           id: 'linter-validation',
           name: 'Linter Validation',
-          description: 'Runs code linting and style checks'
+          description: 'Runs code linting and style checks',
         },
         {
           id: 'type-validation',
           name: 'Type Validation',
-          description: 'Runs type checking and compilation checks'
+          description: 'Runs type checking and compilation checks',
         },
         {
           id: 'build-validation',
           name: 'Build Validation',
-          description: 'Tests application build process'
+          description: 'Tests application build process',
         },
         {
           id: 'start-validation',
           name: 'Start Validation',
-          description: 'Tests application startup capabilities'
+          description: 'Tests application startup capabilities',
         },
         {
           id: 'test-validation',
           name: 'Test Validation',
-          description: 'Runs automated test suites'
-        }
+          description: 'Runs automated test suites',
+        },
       ],
       usage: {
         selectiveRevalidation: 'timeout 10s node taskmanager-api.js selective-revalidation <authKey> [criteria...]',
         listFailures: 'timeout 10s node taskmanager-api.js list-validation-failures <authKey>',
-        clearFailures: 'timeout 10s node taskmanager-api.js clear-validation-failures <authKey>'
-      }
+        clearFailures: 'timeout 10s node taskmanager-api.js clear-validation-failures <authKey>',
+      },
     };
   }
 
@@ -4219,8 +4225,8 @@ class AutonomousTaskManagerAPI {
           estimatedResolutionTime: '15 minutes',
           rollbackPlan: 'If deployment fails, rollback to previous version using blue-green deployment',
           affectedSystems: ['web-api', 'user-auth', 'payment-service'],
-          stakeholderNotifications: ['cto@company.com', 'product-manager@company.com']
-        }
+          stakeholderNotifications: ['cto@company.com', 'product-manager@company.com'],
+        },
       };
     }
 
@@ -4230,7 +4236,7 @@ class AutonomousTaskManagerAPI {
       return {
         success: false,
         error: `Invalid impact level. Must be one of: ${validImpactLevels.join(', ')}`,
-        providedLevel: emergencyData.impactLevel
+        providedLevel: emergencyData.impactLevel,
       };
     }
 
@@ -4277,9 +4283,9 @@ class AutonomousTaskManagerAPI {
             action: 'created',
             timestamp: new Date().toISOString(),
             details: 'Emergency override authorization created',
-            authorizedBy: emergencyData.authorizedBy
-          }
-        ]
+            authorizedBy: emergencyData.authorizedBy,
+          },
+        ],
       };
 
       const emergencyFile = path.join(emergencyDir, `emergency_${emergencyKey}.json`);
@@ -4291,7 +4297,7 @@ class AutonomousTaskManagerAPI {
         incidentId: emergencyData.incidentId,
         impactLevel: emergencyData.impactLevel,
         authorizedBy: emergencyData.authorizedBy,
-        justification: emergencyData.justification
+        justification: emergencyData.justification,
       });
 
       console.error(`🚨 EMERGENCY OVERRIDE CREATED: ${emergencyKey}`);
@@ -4310,25 +4316,25 @@ class AutonomousTaskManagerAPI {
           authorizedBy: emergencyData.authorizedBy,
           expiresAt: emergencyRecord.expiresAt,
           maxUsage: emergencyRecord.maxUsage,
-          status: 'active'
+          status: 'active',
         },
         usage: {
           executeOverride: `timeout 10s node taskmanager-api.js execute-emergency-override ${emergencyKey} '{"reason":"Detailed reason for using override"}'`,
           checkStatus: `timeout 10s node taskmanager-api.js check-emergency-override ${emergencyKey}`,
-          auditTrail: `timeout 10s node taskmanager-api.js emergency-audit-trail ${emergencyKey}`
+          auditTrail: `timeout 10s node taskmanager-api.js emergency-audit-trail ${emergencyKey}`,
         },
         warnings: [
           'Emergency override expires in 2 hours',
           `Limited to ${emergencyRecord.maxUsage} uses for ${emergencyData.impactLevel} impact incidents`,
           'All usage is logged and audited',
-          'Abuse of emergency overrides may result in access revocation'
-        ]
+          'Abuse of emergency overrides may result in access revocation',
+        ],
       };
 
     } catch (error) {
       return {
         success: false,
-        error: `Failed to create emergency override: ${error.message}`
+        error: `Failed to create emergency override: ${error.message}`,
       };
     }
   }
@@ -4356,7 +4362,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: false,
           error: 'Invalid or expired emergency key',
-          emergencyKey
+          emergencyKey,
         };
       }
 
@@ -4367,7 +4373,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: false,
           error: `Emergency override is ${emergencyRecord.status}`,
-          emergencyKey
+          emergencyKey,
         };
       }
 
@@ -4379,7 +4385,7 @@ class AutonomousTaskManagerAPI {
           success: false,
           error: 'Emergency override has expired',
           expiredAt: emergencyRecord.expiresAt,
-          emergencyKey
+          emergencyKey,
         };
       }
 
@@ -4390,7 +4396,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: false,
           error: `Emergency override usage limit reached (${emergencyRecord.maxUsage} uses)`,
-          emergencyKey
+          emergencyKey,
         };
       }
 
@@ -4400,7 +4406,7 @@ class AutonomousTaskManagerAPI {
         action: 'executed',
         timestamp: new Date().toISOString(),
         reason: overrideReason,
-        remainingUses: emergencyRecord.maxUsage - emergencyRecord.usageCount
+        remainingUses: emergencyRecord.maxUsage - emergencyRecord.usageCount,
       });
 
       // Mark as exhausted if no more uses remain
@@ -4409,7 +4415,7 @@ class AutonomousTaskManagerAPI {
         emergencyRecord.auditTrail.push({
           action: 'exhausted',
           timestamp: new Date().toISOString(),
-          details: 'Maximum usage limit reached'
+          details: 'Maximum usage limit reached',
         });
       }
 
@@ -4430,7 +4436,7 @@ class AutonomousTaskManagerAPI {
         timestamp: new Date().toISOString(),
         emergency_expires_at: emergencyRecord.expiresAt,
         usage_count: emergencyRecord.usageCount,
-        max_usage: emergencyRecord.maxUsage
+        max_usage: emergencyRecord.maxUsage,
       };
 
       await fs.writeFile(stopFlagPath, JSON.stringify(stopData, null, 2));
@@ -4442,7 +4448,7 @@ class AutonomousTaskManagerAPI {
         reason: overrideReason,
         authorizedBy: emergencyRecord.authorizedBy,
         usageCount: emergencyRecord.usageCount,
-        remainingUses: emergencyRecord.maxUsage - emergencyRecord.usageCount
+        remainingUses: emergencyRecord.maxUsage - emergencyRecord.usageCount,
       });
 
       console.error(`🚨 EMERGENCY OVERRIDE EXECUTED: ${emergencyKey}`);
@@ -4466,14 +4472,14 @@ class AutonomousTaskManagerAPI {
           'EMERGENCY OVERRIDE ACTIVE - Normal validation bypassed',
           'All actions are being audited and logged',
           'Emergency authorization expires at: ' + emergencyRecord.expiresAt,
-          `Remaining emergency uses: ${emergencyRecord.maxUsage - emergencyRecord.usageCount}`
-        ]
+          `Remaining emergency uses: ${emergencyRecord.maxUsage - emergencyRecord.usageCount}`,
+        ],
       };
 
     } catch (error) {
       return {
         success: false,
-        error: `Failed to execute emergency override: ${error.message}`
+        error: `Failed to execute emergency override: ${error.message}`,
       };
     }
   }
@@ -4497,7 +4503,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: false,
           error: 'Emergency override not found',
-          emergencyKey
+          emergencyKey,
         };
       }
 
@@ -4514,14 +4520,14 @@ class AutonomousTaskManagerAPI {
           remainingUses: emergencyRecord.maxUsage - emergencyRecord.usageCount,
           expiresAt: emergencyRecord.expiresAt,
           isExpired: new Date() > new Date(emergencyRecord.expiresAt),
-          isExhausted: emergencyRecord.usageCount >= emergencyRecord.maxUsage
-        }
+          isExhausted: emergencyRecord.usageCount >= emergencyRecord.maxUsage,
+        },
       };
 
     } catch (error) {
       return {
         success: false,
-        error: `Failed to check emergency override: ${error.message}`
+        error: `Failed to check emergency override: ${error.message}`,
       };
     }
   }
@@ -4559,8 +4565,8 @@ class AutonomousTaskManagerAPI {
           hostname: require('os').hostname(),
           platform: require('os').platform(),
           node_version: process.version,
-          working_directory: process.cwd()
-        }
+          working_directory: process.cwd(),
+        },
       };
 
       auditLog.push(auditEntry);
@@ -4662,8 +4668,8 @@ class AutonomousTaskManagerAPI {
             auto_generated: true,
             feature_category: feature.category,
             business_value: feature.business_value,
-            ...taskOptions.metadata
-          }
+            ...taskOptions.metadata,
+          },
         };
 
         features.tasks.push(task);
@@ -4672,7 +4678,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           task,
-          message: 'Autonomous task created successfully from approved feature'
+          message: 'Autonomous task created successfully from approved feature',
         };
       });
 
@@ -4680,7 +4686,7 @@ class AutonomousTaskManagerAPI {
     } catch (error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -4697,7 +4703,7 @@ class AutonomousTaskManagerAPI {
           return {
             success: true,
             generated_tasks: [],
-            message: 'No approved features found to generate tasks'
+            message: 'No approved features found to generate tasks',
           };
         }
 
@@ -4734,8 +4740,8 @@ class AutonomousTaskManagerAPI {
               auto_generated: true,
               feature_category: feature.category,
               business_value: feature.business_value,
-              generation_batch: new Date().toISOString()
-            }
+              generation_batch: new Date().toISOString(),
+            },
           };
 
           features.tasks.push(mainTask);
@@ -4757,7 +4763,7 @@ class AutonomousTaskManagerAPI {
           success: true,
           generated_tasks: generatedTasks,
           approved_features_processed: approvedFeatures.length,
-          message: `Generated ${generatedTasks.length} tasks from ${approvedFeatures.length} approved features`
+          message: `Generated ${generatedTasks.length} tasks from ${approvedFeatures.length} approved features`,
         };
       });
 
@@ -4765,7 +4771,7 @@ class AutonomousTaskManagerAPI {
     } catch (error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -4783,7 +4789,7 @@ class AutonomousTaskManagerAPI {
           success: true,
           tasks: [],
           total: 0,
-          message: 'No tasks in queue'
+          message: 'No tasks in queue',
         };
       }
 
@@ -4814,7 +4820,7 @@ class AutonomousTaskManagerAPI {
       const priorityOrder = { 'critical': 4, 'high': 3, 'normal': 2, 'low': 1 };
       tasks.sort((a, b) => {
         const priorityDiff = (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0);
-        if (priorityDiff !== 0) return priorityDiff;
+        if (priorityDiff !== 0) {return priorityDiff;}
         return new Date(a.created_at) - new Date(b.created_at);
       });
 
@@ -4823,12 +4829,12 @@ class AutonomousTaskManagerAPI {
         tasks,
         total: tasks.length,
         filters_applied: filters,
-        message: `Retrieved ${tasks.length} tasks from queue`
+        message: `Retrieved ${tasks.length} tasks from queue`,
       };
     } catch (error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -4862,7 +4868,7 @@ class AutonomousTaskManagerAPI {
         const requiredCapabilities = task.required_capabilities || [];
 
         const hasRequiredCapabilities = requiredCapabilities.every(cap =>
-          agentCapabilities.includes(cap) || agentCapabilities.includes('general')
+          agentCapabilities.includes(cap) || agentCapabilities.includes('general'),
         );
 
         if (!hasRequiredCapabilities && !assignmentOptions.force) {
@@ -4870,7 +4876,7 @@ class AutonomousTaskManagerAPI {
             success: false,
             error: `Agent ${agentId} lacks required capabilities: ${requiredCapabilities.join(', ')}`,
             agent_capabilities: agentCapabilities,
-            required_capabilities: requiredCapabilities
+            required_capabilities: requiredCapabilities,
           };
         }
 
@@ -4882,7 +4888,7 @@ class AutonomousTaskManagerAPI {
         task.assignment_metadata = {
           forced: assignmentOptions.force || false,
           assignment_reason: assignmentOptions.reason || 'capability_match',
-          ...assignmentOptions.metadata
+          ...assignmentOptions.metadata,
         };
 
         // Update agent assignment count
@@ -4898,7 +4904,7 @@ class AutonomousTaskManagerAPI {
           success: true,
           task,
           agent: { id: agentId, capabilities: agentCapabilities },
-          message: `Task ${taskId} successfully assigned to agent ${agentId}`
+          message: `Task ${taskId} successfully assigned to agent ${agentId}`,
         };
       });
 
@@ -4906,7 +4912,7 @@ class AutonomousTaskManagerAPI {
     } catch (error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -4938,7 +4944,7 @@ class AutonomousTaskManagerAPI {
           progress_percentage: progressUpdate.progress_percentage || 0,
           notes: progressUpdate.notes || '',
           updated_by: progressUpdate.updated_by || 'autonomous_system',
-          metadata: progressUpdate.metadata || {}
+          metadata: progressUpdate.metadata || {},
         };
 
         task.progress_history.push(progressEntry);
@@ -4963,7 +4969,7 @@ class AutonomousTaskManagerAPI {
             task_id: taskId,
             completed_at: task.completed_at,
             assigned_to: task.assigned_to,
-            feature_id: task.feature_id
+            feature_id: task.feature_id,
           });
         }
 
@@ -4974,7 +4980,7 @@ class AutonomousTaskManagerAPI {
           success: true,
           task,
           progress_entry: progressEntry,
-          message: 'Task progress updated successfully'
+          message: 'Task progress updated successfully',
         };
       });
 
@@ -4982,7 +4988,7 @@ class AutonomousTaskManagerAPI {
     } catch (error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -5003,7 +5009,7 @@ class AutonomousTaskManagerAPI {
 
         // Validate capabilities
         const validCapabilities = capabilities.filter(cap =>
-          this.validAgentCapabilities.includes(cap) || cap === 'general'
+          this.validAgentCapabilities.includes(cap) || cap === 'general',
         );
 
         if (validCapabilities.length !== capabilities.length) {
@@ -5011,7 +5017,7 @@ class AutonomousTaskManagerAPI {
           return {
             success: false,
             error: `Invalid capabilities: ${invalidCaps.join(', ')}`,
-            valid_capabilities: this.validAgentCapabilities
+            valid_capabilities: this.validAgentCapabilities,
           };
         }
 
@@ -5025,7 +5031,7 @@ class AutonomousTaskManagerAPI {
           success: true,
           agent_id: agentId,
           capabilities,
-          message: `Capabilities registered for agent ${agentId}`
+          message: `Capabilities registered for agent ${agentId}`,
         };
       });
 
@@ -5033,7 +5039,7 @@ class AutonomousTaskManagerAPI {
     } catch (error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -5072,8 +5078,8 @@ class AutonomousTaskManagerAPI {
           created_by: taskData.created_by || 'manual_creation',
           metadata: {
             auto_generated: false,
-            ...taskData.metadata
-          }
+            ...taskData.metadata,
+          },
         };
 
         features.tasks.push(task);
@@ -5082,7 +5088,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           task,
-          message: 'Task created successfully'
+          message: 'Task created successfully',
         };
       });
 
@@ -5111,7 +5117,7 @@ class AutonomousTaskManagerAPI {
       return {
         success: true,
         task,
-        message: 'Task retrieved successfully'
+        message: 'Task retrieved successfully',
       };
     } catch (error) {
       throw new Error(`Failed to get task: ${error.message}`);
@@ -5157,7 +5163,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           task,
-          message: 'Task updated successfully'
+          message: 'Task updated successfully',
         };
       });
 
@@ -5186,7 +5192,7 @@ class AutonomousTaskManagerAPI {
           return {
             success: true,
             task,
-            message: 'Task was already completed'
+            message: 'Task was already completed',
           };
         }
 
@@ -5208,7 +5214,7 @@ class AutonomousTaskManagerAPI {
           completed_at: task.completed_at,
           assigned_to: task.assigned_to,
           feature_id: task.feature_id,
-          result: resultData
+          result: resultData,
         });
 
         features.metadata.updated = new Date().toISOString();
@@ -5216,7 +5222,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           task,
-          message: 'Task completed successfully'
+          message: 'Task completed successfully',
         };
       });
 
@@ -5237,7 +5243,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           tasks: [],
-          message: 'No tasks exist in the system'
+          message: 'No tasks exist in the system',
         };
       }
 
@@ -5247,7 +5253,7 @@ class AutonomousTaskManagerAPI {
         success: true,
         tasks: agentTasks,
         count: agentTasks.length,
-        message: `Found ${agentTasks.length} tasks for agent ${agentId}`
+        message: `Found ${agentTasks.length} tasks for agent ${agentId}`,
       };
     } catch (error) {
       throw new Error(`Failed to get agent tasks: ${error.message}`);
@@ -5265,7 +5271,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           tasks: [],
-          message: 'No tasks exist in the system'
+          message: 'No tasks exist in the system',
         };
       }
 
@@ -5275,7 +5281,7 @@ class AutonomousTaskManagerAPI {
         success: true,
         tasks: statusTasks,
         count: statusTasks.length,
-        message: `Found ${statusTasks.length} tasks with status '${status}'`
+        message: `Found ${statusTasks.length} tasks with status '${status}'`,
       };
     } catch (error) {
       throw new Error(`Failed to get tasks by status: ${error.message}`);
@@ -5293,7 +5299,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           tasks: [],
-          message: 'No tasks exist in the system'
+          message: 'No tasks exist in the system',
         };
       }
 
@@ -5303,7 +5309,7 @@ class AutonomousTaskManagerAPI {
         success: true,
         tasks: priorityTasks,
         count: priorityTasks.length,
-        message: `Found ${priorityTasks.length} tasks with priority '${priority}'`
+        message: `Found ${priorityTasks.length} tasks with priority '${priority}'`,
       };
     } catch (error) {
       throw new Error(`Failed to get tasks by priority: ${error.message}`);
@@ -5321,7 +5327,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           tasks: [],
-          message: 'No tasks or agents exist in the system'
+          message: 'No tasks or agents exist in the system',
         };
       }
 
@@ -5332,12 +5338,12 @@ class AutonomousTaskManagerAPI {
 
       // Find unassigned tasks that match agent capabilities
       const availableTasks = features.tasks.filter(task => {
-        if (task.status !== 'queued') return false;
-        if (task.assigned_to) return false;
+        if (task.status !== 'queued') {return false;}
+        if (task.assigned_to) {return false;}
 
         // Check if agent has required capabilities
         const hasCapabilities = task.required_capabilities.every(cap =>
-          agent.capabilities.includes(cap) || agent.capabilities.includes('general')
+          agent.capabilities.includes(cap) || agent.capabilities.includes('general'),
         );
 
         return hasCapabilities;
@@ -5347,7 +5353,7 @@ class AutonomousTaskManagerAPI {
         success: true,
         tasks: availableTasks,
         count: availableTasks.length,
-        message: `Found ${availableTasks.length} available tasks for agent ${agentId}`
+        message: `Found ${availableTasks.length} available tasks for agent ${agentId}`,
       };
     } catch (error) {
       throw new Error(`Failed to get available tasks: ${error.message}`);
@@ -5369,9 +5375,9 @@ class AutonomousTaskManagerAPI {
             by_status: {},
             by_priority: {},
             by_type: {},
-            completion_rate: 0
+            completion_rate: 0,
           },
-          message: 'No tasks exist in the system'
+          message: 'No tasks exist in the system',
         };
       }
 
@@ -5381,7 +5387,7 @@ class AutonomousTaskManagerAPI {
         by_priority: {},
         by_type: {},
         by_agent: {},
-        completion_rate: 0
+        completion_rate: 0,
       };
 
       // Calculate statistics
@@ -5410,7 +5416,7 @@ class AutonomousTaskManagerAPI {
       return {
         success: true,
         statistics: stats,
-        message: 'Task statistics calculated successfully'
+        message: 'Task statistics calculated successfully',
       };
     } catch (error) {
       throw new Error(`Failed to get task statistics: ${error.message}`);
@@ -5429,7 +5435,7 @@ class AutonomousTaskManagerAPI {
           return {
             success: true,
             created_tasks: [],
-            message: 'No approved features found to create tasks from'
+            message: 'No approved features found to create tasks from',
           };
         }
 
@@ -5464,8 +5470,8 @@ class AutonomousTaskManagerAPI {
             metadata: {
               auto_generated: true,
               feature_category: feature.category,
-              business_value: feature.business_value
-            }
+              business_value: feature.business_value,
+            },
           };
 
           features.tasks.push(mainTask);
@@ -5484,7 +5490,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           created_tasks: createdTasks,
-          message: `Created ${createdTasks.length} tasks from ${approvedFeatures.length} approved features`
+          message: `Created ${createdTasks.length} tasks from ${approvedFeatures.length} approved features`,
         };
       });
 
@@ -5504,21 +5510,21 @@ class AutonomousTaskManagerAPI {
           return {
             success: true,
             assignments: [],
-            message: 'No tasks or agents available for optimization'
+            message: 'No tasks or agents available for optimization',
           };
         }
 
         const assignments = [];
         const unassignedTasks = features.tasks.filter(t =>
-          t.status === 'queued' && !t.assigned_to
+          t.status === 'queued' && !t.assigned_to,
         );
 
         const activeAgents = Object.keys(features.agents).map(agentId => ({
           id: agentId,
           ...features.agents[agentId],
           workload: features.tasks.filter(t =>
-            t.assigned_to === agentId && ['queued', 'in_progress'].includes(t.status)
-          ).length
+            t.assigned_to === agentId && ['queued', 'in_progress'].includes(t.status),
+          ).length,
         }));
 
         // Sort agents by workload (least busy first)
@@ -5528,8 +5534,8 @@ class AutonomousTaskManagerAPI {
         unassignedTasks.forEach(task => {
           const suitableAgent = activeAgents.find(agent =>
             task.required_capabilities.every(cap =>
-              agent.capabilities.includes(cap) || agent.capabilities.includes('general')
-            )
+              agent.capabilities.includes(cap) || agent.capabilities.includes('general'),
+            ),
           );
 
           if (suitableAgent) {
@@ -5543,7 +5549,7 @@ class AutonomousTaskManagerAPI {
               task_id: task.id,
               agent_id: suitableAgent.id,
               task_title: task.title,
-              reason: 'capability_match_and_workload_balance'
+              reason: 'capability_match_and_workload_balance',
             });
           }
         });
@@ -5553,7 +5559,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           assignments,
-          message: `Optimized assignments for ${assignments.length} tasks`
+          message: `Optimized assignments for ${assignments.length} tasks`,
         };
       });
 
@@ -5578,7 +5584,7 @@ class AutonomousTaskManagerAPI {
           capabilities: Array.isArray(capabilities) ? capabilities : [capabilities],
           registered_at: new Date().toISOString(),
           last_seen: new Date().toISOString(),
-          status: 'active'
+          status: 'active',
         };
 
         features.metadata.updated = new Date().toISOString();
@@ -5586,7 +5592,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           agent: features.agents[agentId],
-          message: `Agent ${agentId} registered successfully with capabilities: ${capabilities.join(', ')}`
+          message: `Agent ${agentId} registered successfully with capabilities: ${capabilities.join(', ')}`,
         };
       });
 
@@ -5623,7 +5629,7 @@ class AutonomousTaskManagerAPI {
 
         return {
           success: true,
-          message: `Agent ${agentId} unregistered successfully`
+          message: `Agent ${agentId} unregistered successfully`,
         };
       });
 
@@ -5644,7 +5650,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           agents: [],
-          message: 'No agents registered in the system'
+          message: 'No agents registered in the system',
         };
       }
 
@@ -5654,7 +5660,7 @@ class AutonomousTaskManagerAPI {
         success: true,
         agents,
         count: agents.length,
-        message: `Found ${agents.length} registered agents`
+        message: `Found ${agents.length} registered agents`,
       };
     } catch (error) {
       throw new Error(`Failed to get active agents: ${error.message}`);
@@ -5670,7 +5676,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           message: 'WebSocket server is already running',
-          port: this.wsPort
+          port: this.wsPort,
         };
       }
 
@@ -5685,7 +5691,7 @@ class AutonomousTaskManagerAPI {
         ws.send(JSON.stringify({
           type: 'connection_established',
           timestamp: new Date().toISOString(),
-          message: 'Connected to TaskManager WebSocket server'
+          message: 'Connected to TaskManager WebSocket server',
         }));
 
         ws.on('close', () => {
@@ -5702,7 +5708,7 @@ class AutonomousTaskManagerAPI {
         success: true,
         message: `WebSocket server started on port ${port}`,
         port,
-        endpoint: `ws://localhost:${port}`
+        endpoint: `ws://localhost:${port}`,
       };
     } catch (error) {
       throw new Error(`Failed to start WebSocket server: ${error.message}`);
@@ -5713,7 +5719,7 @@ class AutonomousTaskManagerAPI {
    * Broadcast status update to all connected WebSocket clients
    */
   async _broadcastStatusUpdate() {
-    if (!this.wss) return;
+    if (!this.wss) {return;}
 
     try {
       const stats = await this.getTaskStatistics();
@@ -5724,7 +5730,7 @@ class AutonomousTaskManagerAPI {
         timestamp: new Date().toISOString(),
         task_statistics: stats.statistics,
         active_agents: agents.count,
-        system_status: 'operational'
+        system_status: 'operational',
       };
 
       this.wss.clients.forEach((client) => {
@@ -6479,145 +6485,145 @@ class AutonomousTaskManagerAPI {
     };
   }
 
-/**
+  /**
  * Generate unique task ID
  */
-_generateTaskId() {
-  const timestamp = Date.now();
-  const randomString = crypto.randomBytes(6).toString('hex');
-  return `task_${timestamp}_${randomString}`;
-}
+  _generateTaskId() {
+    const timestamp = Date.now();
+    const randomString = crypto.randomBytes(6).toString('hex');
+    return `task_${timestamp}_${randomString}`;
+  }
 
-/**
+  /**
  * Infer task type from feature characteristics
  */
-_inferTaskType(feature) {
-  if (feature.category === 'bug-fix') return 'implementation';
-  if (feature.category === 'security') return 'analysis';
-  if (feature.category === 'performance') return 'analysis';
-  if (feature.category === 'documentation') return 'documentation';
-  return 'implementation';
-}
+  _inferTaskType(feature) {
+    if (feature.category === 'bug-fix') {return 'implementation';}
+    if (feature.category === 'security') {return 'analysis';}
+    if (feature.category === 'performance') {return 'analysis';}
+    if (feature.category === 'documentation') {return 'documentation';}
+    return 'implementation';
+  }
 
-/**
+  /**
  * Infer task priority from feature characteristics
  */
-_inferTaskPriority(feature) {
-  if (feature.category === 'security') return 'critical';
-  if (feature.category === 'bug-fix') return 'high';
-  if (feature.category === 'performance') return 'high';
-  if (feature.business_value && feature.business_value.toLowerCase().includes('critical')) return 'critical';
-  if (feature.business_value && feature.business_value.toLowerCase().includes('essential')) return 'high';
-  return 'normal';
-}
+  _inferTaskPriority(feature) {
+    if (feature.category === 'security') {return 'critical';}
+    if (feature.category === 'bug-fix') {return 'high';}
+    if (feature.category === 'performance') {return 'high';}
+    if (feature.business_value && feature.business_value.toLowerCase().includes('critical')) {return 'critical';}
+    if (feature.business_value && feature.business_value.toLowerCase().includes('essential')) {return 'high';}
+    return 'normal';
+  }
 
-/**
+  /**
  * Estimate effort required for feature implementation
  */
-_estimateEffort(feature) {
-  let baseEffort = 5; // Base effort in hours
+  _estimateEffort(feature) {
+    let baseEffort = 5; // Base effort in hours
 
-  // Adjust based on category
-  if (feature.category === 'new-feature') baseEffort *= 2;
-  if (feature.category === 'enhancement') baseEffort *= 1.5;
-  if (feature.category === 'security') baseEffort *= 1.8;
+    // Adjust based on category
+    if (feature.category === 'new-feature') {baseEffort *= 2;}
+    if (feature.category === 'enhancement') {baseEffort *= 1.5;}
+    if (feature.category === 'security') {baseEffort *= 1.8;}
 
-  // Adjust based on description length (complexity indicator)
-  const complexityMultiplier = Math.min(feature.description.length / 500, 3);
-  baseEffort *= (1 + complexityMultiplier);
+    // Adjust based on description length (complexity indicator)
+    const complexityMultiplier = Math.min(feature.description.length / 500, 3);
+    baseEffort *= (1 + complexityMultiplier);
 
-  return Math.ceil(baseEffort);
-}
+    return Math.ceil(baseEffort);
+  }
 
-/**
+  /**
  * Infer required capabilities from feature characteristics
  */
-_inferCapabilities(feature) {
-  const capabilities = [];
+  _inferCapabilities(feature) {
+    const capabilities = [];
 
-  if (feature.category === 'security') capabilities.push('security');
-  if (feature.category === 'performance') capabilities.push('performance');
-  if (feature.category === 'documentation') capabilities.push('documentation');
-  if (feature.category === 'bug-fix') capabilities.push('analysis');
+    if (feature.category === 'security') {capabilities.push('security');}
+    if (feature.category === 'performance') {capabilities.push('performance');}
+    if (feature.category === 'documentation') {capabilities.push('documentation');}
+    if (feature.category === 'bug-fix') {capabilities.push('analysis');}
 
-  // Check description for technology hints
-  const description = feature.description.toLowerCase();
-  if (description.includes('frontend') || description.includes('ui') || description.includes('interface')) {
-    capabilities.push('frontend');
+    // Check description for technology hints
+    const description = feature.description.toLowerCase();
+    if (description.includes('frontend') || description.includes('ui') || description.includes('interface')) {
+      capabilities.push('frontend');
+    }
+    if (description.includes('backend') || description.includes('api') || description.includes('server')) {
+      capabilities.push('backend');
+    }
+    if (description.includes('test') || description.includes('testing')) {
+      capabilities.push('testing');
+    }
+
+    return capabilities.length > 0 ? capabilities : ['general'];
   }
-  if (description.includes('backend') || description.includes('api') || description.includes('server')) {
-    capabilities.push('backend');
-  }
-  if (description.includes('test') || description.includes('testing')) {
-    capabilities.push('testing');
-  }
 
-  return capabilities.length > 0 ? capabilities : ['general'];
-}
-
-/**
+  /**
  * Determine if feature is complex enough to warrant supporting tasks
  */
-_isComplexFeature(feature) {
-  return feature.category === 'new-feature' ||
+  _isComplexFeature(feature) {
+    return feature.category === 'new-feature' ||
          feature.description.length > 800 ||
          feature.business_value.toLowerCase().includes('comprehensive');
-}
+  }
 
-/**
+  /**
  * Generate supporting tasks for complex features
  */
-_generateSupportingTasks(feature, mainTaskId) {
-  const supportingTasks = [];
+  _generateSupportingTasks(feature, mainTaskId) {
+    const supportingTasks = [];
 
-  // Always add testing task for complex features
-  supportingTasks.push({
-    id: this._generateTaskId(),
-    feature_id: feature.id,
-    title: `Test: ${feature.title}`,
-    description: `Comprehensive testing for ${feature.title}`,
-    type: 'testing',
-    priority: this._inferTaskPriority(feature),
-    status: 'queued',
-    dependencies: [mainTaskId],
-    estimated_effort: Math.ceil(this._estimateEffort(feature) * 0.6),
-    required_capabilities: ['testing'],
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    created_by: 'autonomous_system',
-    metadata: {
-      auto_generated: true,
-      supporting_task: true,
-      main_task_id: mainTaskId
-    }
-  });
-
-  // Add documentation task for new features
-  if (feature.category === 'new-feature') {
+    // Always add testing task for complex features
     supportingTasks.push({
       id: this._generateTaskId(),
       feature_id: feature.id,
-      title: `Document: ${feature.title}`,
-      description: `Documentation for ${feature.title}`,
-      type: 'documentation',
-      priority: 'normal',
+      title: `Test: ${feature.title}`,
+      description: `Comprehensive testing for ${feature.title}`,
+      type: 'testing',
+      priority: this._inferTaskPriority(feature),
       status: 'queued',
       dependencies: [mainTaskId],
-      estimated_effort: Math.ceil(this._estimateEffort(feature) * 0.3),
-      required_capabilities: ['documentation'],
+      estimated_effort: Math.ceil(this._estimateEffort(feature) * 0.6),
+      required_capabilities: ['testing'],
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       created_by: 'autonomous_system',
       metadata: {
         auto_generated: true,
         supporting_task: true,
-        main_task_id: mainTaskId
-      }
+        main_task_id: mainTaskId,
+      },
     });
-  }
 
-  return supportingTasks;
-}
+    // Add documentation task for new features
+    if (feature.category === 'new-feature') {
+      supportingTasks.push({
+        id: this._generateTaskId(),
+        feature_id: feature.id,
+        title: `Document: ${feature.title}`,
+        description: `Documentation for ${feature.title}`,
+        type: 'documentation',
+        priority: 'normal',
+        status: 'queued',
+        dependencies: [mainTaskId],
+        estimated_effort: Math.ceil(this._estimateEffort(feature) * 0.3),
+        required_capabilities: ['documentation'],
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        created_by: 'autonomous_system',
+        metadata: {
+          auto_generated: true,
+          supporting_task: true,
+          main_task_id: mainTaskId,
+        },
+      });
+    }
+
+    return supportingTasks;
+  }
 
   // =================== RAG SELF-LEARNING METHODS ===================
   // Intelligent learning and knowledge management operations
@@ -6629,13 +6635,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.storeLesson(lessonData),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6647,13 +6653,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.searchLessons(query, options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6665,13 +6671,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.storeError(errorData),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6683,13 +6689,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.findSimilarErrors(errorDescription, options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6701,13 +6707,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.getRelevantLessons(taskId, options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6719,13 +6725,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.getAnalytics(),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6739,13 +6745,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.getLessonVersionHistory(lessonId),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6757,13 +6763,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.compareLessonVersions(lessonId, versionA, versionB),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6775,13 +6781,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.rollbackLessonVersion(lessonId, targetVersion),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6793,13 +6799,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.getLessonVersionAnalytics(lessonId),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6811,13 +6817,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.storeLessonWithVersioning(lessonData, versionOptions),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6829,13 +6835,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.searchLessonsWithVersioning(query, options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6849,13 +6855,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.recordLessonUsage(lessonId, usageData),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6867,13 +6873,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.recordLessonFeedback(lessonId, feedbackData),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6885,13 +6891,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.recordLessonOutcome(lessonId, outcomeData),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6903,13 +6909,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.getLessonQualityScore(lessonId),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6921,13 +6927,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.getLessonQualityAnalytics(options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6939,13 +6945,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.getQualityBasedRecommendations(options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6957,13 +6963,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.searchLessonsWithQuality(query, options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6975,13 +6981,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.updateLessonQualityScore(lessonId, scoreData),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -6995,13 +7001,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.registerProject(projectData),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7013,13 +7019,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.shareLessonCrossProject(lessonId, projectId, sharingData),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7031,13 +7037,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.calculateProjectRelevance(sourceProjectId, targetProjectId),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7049,13 +7055,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.getSharedLessonsForProject(projectId, options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7067,13 +7073,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.getProjectRecommendations(projectId, options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7085,13 +7091,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.recordLessonApplication(applicationData),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7103,13 +7109,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.getCrossProjectAnalytics(projectId, options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7121,13 +7127,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.updateProject(projectId, updates),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7139,13 +7145,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.getProject(projectId),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7157,13 +7163,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.listProjects(options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7177,13 +7183,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.deprecateLesson(lessonId, deprecationData),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7195,13 +7201,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.restoreLesson(lessonId, restorationData),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7213,13 +7219,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.getLessonDeprecationStatus(lessonId),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7231,13 +7237,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.getDeprecatedLessons(options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7249,13 +7255,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.cleanupObsoleteLessons(options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7267,13 +7273,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.getDeprecationAnalytics(options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7287,13 +7293,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.detectLearningPatterns(options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7305,13 +7311,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.analyzePatternEvolution(category, options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7323,13 +7329,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.getPatternBasedSuggestions(context, options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7341,13 +7347,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.analyzeLessonPatterns(lessonId, options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7359,13 +7365,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.getPatternAnalytics(options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7377,13 +7383,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.clusterPatterns(options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7395,13 +7401,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.searchSimilarPatterns(query, options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7413,13 +7419,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.generatePatternInsights(options),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7431,13 +7437,13 @@ _generateSupportingTasks(feature, mainTaskId) {
     try {
       return await this.withTimeout(
         this.ragOps.updatePatternDetectionConfig(configUpdates),
-        this.timeout
+        this.timeout,
       );
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        ragSystem: 'error'
+        ragSystem: 'error',
       };
     }
   }
@@ -7628,7 +7634,7 @@ async function main() {
           authKey: args[1],
           totalFailures: failures.length,
           failures: failures,
-          selectableValidationCriteria: api.getSelectableValidationCriteria().availableCriteria
+          selectableValidationCriteria: api.getSelectableValidationCriteria().availableCriteria,
         };
         break;
       }
@@ -7643,7 +7649,7 @@ async function main() {
           message: specificCriteria
             ? `Cleared failures for specific criteria: ${specificCriteria.join(', ')}`
             : 'Cleared all validation failures',
-          authKey: args[1]
+          authKey: args[1],
         };
         break;
       }
@@ -7691,19 +7697,19 @@ async function main() {
               success: true,
               date: args[1],
               totalEntries: auditLog.length,
-              auditLog
+              auditLog,
             };
           } else {
             result = {
               success: false,
               error: `No audit log found for date: ${args[1]}`,
-              availableDates: 'Check .emergency-audit/ directory for available dates'
+              availableDates: 'Check .emergency-audit/ directory for available dates',
             };
           }
         } catch (error) {
           result = {
             success: false,
-            error: `Failed to read audit log: ${error.message}`
+            error: `Failed to read audit log: ${error.message}`,
           };
         }
         break;
@@ -7732,7 +7738,7 @@ async function main() {
                     usageCount: record.usageCount,
                     maxUsage: record.maxUsage,
                     expiresAt: record.expiresAt,
-                    timestamp: record.timestamp
+                    timestamp: record.timestamp,
                   });
                 } catch (error) {
                   // Skip invalid files
@@ -7743,20 +7749,20 @@ async function main() {
             result = {
               success: true,
               totalOverrides: overrides.length,
-              overrides: overrides.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+              overrides: overrides.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)),
             };
           } else {
             result = {
               success: true,
               totalOverrides: 0,
               overrides: [],
-              message: 'No emergency overrides found'
+              message: 'No emergency overrides found',
             };
           }
         } catch (error) {
           result = {
             success: false,
-            error: `Failed to list emergency overrides: ${error.message}`
+            error: `Failed to list emergency overrides: ${error.message}`,
           };
         }
         break;
@@ -8312,8 +8318,109 @@ async function main() {
         break;
       }
 
+      // 🎯 FEATURE 1: VALIDATION DEPENDENCY MANAGEMENT ENDPOINTS
+      case 'get-dependency-graph': {
+        result = {
+          success: true,
+          dependencyGraph: api.dependencyManager.getAllDependencies(),
+          visualization: api.dependencyManager.getDependencyVisualization(),
+        };
+        break;
+      }
+      case 'validate-dependency-graph': {
+        result = api.dependencyManager.validateDependencyGraph();
+        break;
+      }
+      case 'get-execution-order': {
+        const criteria = args[1] ? JSON.parse(args[1]) : null;
+        result = {
+          success: true,
+          executionOrder: api.dependencyManager.getExecutionOrder(criteria),
+        };
+        break;
+      }
+      case 'generate-parallel-execution-plan': {
+        const criteria = args[1] ? JSON.parse(args[1]) : null;
+        const maxConcurrency = args[2] ? parseInt(args[2]) : 4;
+        result = api.dependencyManager.generateParallelExecutionPlan(criteria, maxConcurrency);
+        break;
+      }
+      case 'get-dependency-visualization': {
+        const format = args[1] || 'mermaid';
+        result = api.dependencyManager.generateInteractiveVisualization(format);
+        break;
+      }
+      case 'add-dependency': {
+        if (!args[1] || !args[2]) {
+          throw new Error('Usage: add-dependency <criterion> <dependencyConfig>');
+        }
+        const criterion = args[1];
+        const dependencyConfig = JSON.parse(args[2]);
+        api.dependencyManager.addDependency(criterion, dependencyConfig);
+        result = {
+          success: true,
+          message: `Dependency configuration added for ${criterion}`,
+        };
+        break;
+      }
+      case 'remove-dependency': {
+        if (!args[1]) {
+          throw new Error('Usage: remove-dependency <criterion>');
+        }
+        const removed = api.dependencyManager.removeDependency(args[1]);
+        result = {
+          success: removed,
+          message: removed ? `Dependency removed for ${args[1]}` : `No dependency found for ${args[1]}`,
+        };
+        break;
+      }
+      case 'get-dependency': {
+        if (!args[1]) {
+          throw new Error('Usage: get-dependency <criterion>');
+        }
+        const dependency = api.dependencyManager.getDependency(args[1]);
+        result = {
+          success: !!dependency,
+          dependency,
+        };
+        break;
+      }
+      case 'save-dependency-config': {
+        const filePath = args[1] || null;
+        const savedPath = await api.dependencyManager.saveDependencyConfig(filePath);
+        result = {
+          success: true,
+          savedPath,
+          message: `Dependency configuration saved to ${savedPath}`,
+        };
+        break;
+      }
+      case 'load-dependency-config': {
+        const filePath = args[1] || null;
+        const config = await api.dependencyManager.loadDependencyConfig(filePath);
+        result = {
+          success: true,
+          config,
+          message: config ? 'Dependency configuration loaded successfully' : 'No configuration file found, using defaults',
+        };
+        break;
+      }
+      case 'get-execution-analytics': {
+        result = {
+          success: true,
+          analytics: api.dependencyManager.getExecutionAnalytics(),
+        };
+        break;
+      }
+      case 'generate-adaptive-execution-plan': {
+        const criteria = args[1] ? JSON.parse(args[1]) : null;
+        const systemInfo = args[2] ? JSON.parse(args[2]) : {};
+        result = api.dependencyManager.generateAdaptiveExecutionPlan(criteria, systemInfo);
+        break;
+      }
+
       default:
-        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, start-authorization, validate-criterion, validate-criteria-parallel, complete-authorization, authorize-stop, validate-feature-tests, confirm-test-coverage, confirm-pipeline-passes, advance-to-next-feature, get-feature-test-status, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents, store-lesson, search-lessons, store-error, find-similar-errors, get-relevant-lessons, rag-analytics, lesson-version-history, compare-lesson-versions, rollback-lesson-version, lesson-version-analytics, store-lesson-versioned, search-lessons-versioned, record-lesson-usage, record-lesson-feedback, record-lesson-outcome, get-lesson-quality-score, get-quality-analytics, get-quality-recommendations, search-lessons-quality, update-lesson-quality, register-project, share-lesson-cross-project, calculate-project-relevance, get-shared-lessons, get-project-recommendations, record-lesson-application, get-cross-project-analytics, update-project, get-project, list-projects, deprecate-lesson, restore-lesson, get-lesson-deprecation-status, get-deprecated-lessons, cleanup-obsolete-lessons, get-deprecation-analytics, detect-patterns, analyze-pattern-evolution, get-pattern-suggestions, analyze-lesson-patterns, get-pattern-analytics, cluster-patterns, search-similar-patterns, generate-pattern-insights, update-pattern-config, get-validation-performance-metrics, get-performance-trends, identify-performance-bottlenecks, get-detailed-timing-report, analyze-resource-usage, get-performance-benchmarks, create-validation-state-snapshot, perform-rollback, get-available-rollback-snapshots, get-rollback-history, cleanup-old-rollback-snapshots`);
+        throw new Error(`Unknown command: ${command}. Available commands: guide, methods, suggest-feature, approve-feature, bulk-approve-features, reject-feature, list-features, feature-stats, get-initialization-stats, initialize, reinitialize, start-authorization, validate-criterion, validate-criteria-parallel, complete-authorization, authorize-stop, validate-feature-tests, confirm-test-coverage, confirm-pipeline-passes, advance-to-next-feature, get-feature-test-status, create-task, get-task, update-task, assign-task, complete-task, get-agent-tasks, get-tasks-by-status, get-tasks-by-priority, get-available-tasks, create-tasks-from-features, get-task-queue, get-task-stats, optimize-assignments, start-websocket, register-agent, unregister-agent, get-active-agents, store-lesson, search-lessons, store-error, find-similar-errors, get-relevant-lessons, rag-analytics, lesson-version-history, compare-lesson-versions, rollback-lesson-version, lesson-version-analytics, store-lesson-versioned, search-lessons-versioned, record-lesson-usage, record-lesson-feedback, record-lesson-outcome, get-lesson-quality-score, get-quality-analytics, get-quality-recommendations, search-lessons-quality, update-lesson-quality, register-project, share-lesson-cross-project, calculate-project-relevance, get-shared-lessons, get-project-recommendations, record-lesson-application, get-cross-project-analytics, update-project, get-project, list-projects, deprecate-lesson, restore-lesson, get-lesson-deprecation-status, get-deprecated-lessons, cleanup-obsolete-lessons, get-deprecation-analytics, detect-patterns, analyze-pattern-evolution, get-pattern-suggestions, analyze-lesson-patterns, get-pattern-analytics, cluster-patterns, search-similar-patterns, generate-pattern-insights, update-pattern-config, get-validation-performance-metrics, get-performance-trends, identify-performance-bottlenecks, get-detailed-timing-report, analyze-resource-usage, get-performance-benchmarks, create-validation-state-snapshot, perform-rollback, get-available-rollback-snapshots, get-rollback-history, cleanup-old-rollback-snapshots, get-dependency-graph, validate-dependency-graph, get-execution-order, generate-parallel-execution-plan, get-dependency-visualization, add-dependency, remove-dependency, get-dependency, save-dependency-config, load-dependency-config, get-execution-analytics, generate-adaptive-execution-plan`);
     }
 
     console.log(JSON.stringify(result, null, 2));

@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 
 /**
  * FEATURES.json to TASKS.json Migration Script
@@ -54,7 +53,7 @@ class TaskMigrator {
         success: true,
         backup: this.backupPath,
         newFile: this.tasksPath,
-        stats: await this.getMigrationStats(tasksData)
+        stats: await this.getMigrationStats(tasksData),
       };
 
     } catch (error) {
@@ -113,8 +112,8 @@ class TaskMigrator {
     // Create base TASKS.json structure
     const tasksData = {
       project: featuresData.project || path.basename(this.projectRoot),
-      schema_version: "2.0.0",
-      migrated_from: "FEATURES.json",
+      schema_version: '2.0.0',
+      migrated_from: 'FEATURES.json',
       migration_date: migrationDate,
 
       tasks: [],
@@ -125,50 +124,50 @@ class TaskMigrator {
       workflow_config: {
         require_approval: featuresData.workflow_config?.require_approval ?? true,
         auto_reject_timeout_hours: featuresData.workflow_config?.auto_reject_timeout_hours ?? 168,
-        allowed_statuses: ["suggested", "approved", "in-progress", "completed", "blocked", "rejected"],
-        allowed_task_types: ["error", "feature", "test", "audit"],
-        required_fields: ["title", "description", "business_value", "category", "type"],
+        allowed_statuses: ['suggested', 'approved', 'in-progress', 'completed', 'blocked', 'rejected'],
+        allowed_task_types: ['error', 'feature', 'test', 'audit'],
+        required_fields: ['title', 'description', 'business_value', 'category', 'type'],
         auto_generation_enabled: true,
         mandatory_test_gate: true,
-        security_validation_required: true
+        security_validation_required: true,
       },
 
       auto_generation_config: {
         test_task_template: {
-          title_pattern: "Implement comprehensive tests for {feature_title}",
-          description_pattern: "Create unit tests, integration tests, and E2E tests to achieve >{coverage}% coverage for {feature_title}. Must validate all functionality, edge cases, and error conditions.",
-          priority: "high",
-          required_capabilities: ["testing"],
+          title_pattern: 'Implement comprehensive tests for {feature_title}',
+          description_pattern: 'Create unit tests, integration tests, and E2E tests to achieve >{coverage}% coverage for {feature_title}. Must validate all functionality, edge cases, and error conditions.',
+          priority: 'high',
+          required_capabilities: ['testing'],
           validation_requirements: {
             test_coverage: true,
-            linter_pass: true
-          }
+            linter_pass: true,
+          },
         },
         audit_task_template: {
-          title_pattern: "Security and quality audit for {feature_title}",
-          description_pattern: "Run semgrep security scan, dependency vulnerability check, code quality analysis, and compliance validation for {feature_title}. Zero tolerance for security vulnerabilities.",
-          priority: "high",
-          required_capabilities: ["security", "analysis"],
+          title_pattern: 'Security and quality audit for {feature_title}',
+          description_pattern: 'Run semgrep security scan, dependency vulnerability check, code quality analysis, and compliance validation for {feature_title}. Zero tolerance for security vulnerabilities.',
+          priority: 'high',
+          required_capabilities: ['security', 'analysis'],
           validation_requirements: {
             security_scan: true,
             linter_pass: true,
-            type_check: true
-          }
-        }
+            type_check: true,
+          },
+        },
       },
 
       priority_system: {
-        order: ["USER_REQUESTS", "ERROR", "AUDIT", "FEATURE", "TEST"],
+        order: ['USER_REQUESTS', 'ERROR', 'AUDIT', 'FEATURE', 'TEST'],
         error_priorities: {
-          critical: ["build-breaking", "security-vulnerability", "production-down"],
-          high: ["linter-errors", "type-errors", "test-failures"],
-          normal: ["warnings", "optimization-opportunities"],
-          low: ["documentation-improvements", "code-style"]
-        }
+          critical: ['build-breaking', 'security-vulnerability', 'production-down'],
+          high: ['linter-errors', 'type-errors', 'test-failures'],
+          normal: ['warnings', 'optimization-opportunities'],
+          low: ['documentation-improvements', 'code-style'],
+        },
       },
 
       metadata: {
-        version: "2.0.0",
+        version: '2.0.0',
         created: featuresData.metadata?.created || migrationDate,
         updated: migrationDate,
         total_tasks: 0,
@@ -176,18 +175,18 @@ class TaskMigrator {
           error: 0,
           feature: 0,
           test: 0,
-          audit: 0
+          audit: 0,
         },
         approval_history: featuresData.metadata?.approval_history || [],
         migration_stats: {
           features_migrated: 0,
           tasks_created: 0,
-          auto_generated_tasks: 0
+          auto_generated_tasks: 0,
         },
-        initialization_stats: featuresData.metadata?.initialization_stats || {}
+        initialization_stats: featuresData.metadata?.initialization_stats || {},
       },
 
-      agents: featuresData.agents || {}
+      agents: featuresData.agents || {},
     };
 
     // Transform existing features to feature tasks
@@ -197,7 +196,7 @@ class TaskMigrator {
 
         const featureTask = {
           id: taskId,
-          type: "feature",
+          type: 'feature',
           parent_id: null,
           linked_tasks: [],
           title: feature.title,
@@ -210,37 +209,37 @@ class TaskMigrator {
           auto_generation_rules: {
             generate_test_task: true,
             generate_audit_task: true,
-            test_coverage_requirement: 80
+            test_coverage_requirement: 80,
           },
           dependencies: [],
           estimated_effort: 5, // Default value
           required_capabilities: this.inferCapabilitiesFromCategory(feature.category),
           created_at: feature.created_at,
           updated_at: feature.updated_at,
-          created_by: feature.suggested_by || "system",
+          created_by: feature.suggested_by || 'system',
           assigned_to: null,
           assigned_at: null,
-          completed_at: feature.status === "implemented" ? feature.updated_at : null,
+          completed_at: feature.status === 'implemented' ? feature.updated_at : null,
           validation_requirements: {
             security_scan: true,
             test_coverage: true,
             linter_pass: true,
             type_check: true,
-            build_success: true
+            build_success: true,
           },
-          metadata: feature.metadata || {}
+          metadata: feature.metadata || {},
         };
 
         tasksData.tasks.push(featureTask);
         tasksData.metadata.tasks_by_type.feature++;
 
         // Store for auto-generation later
-        if (feature.status === "approved") {
+        if (feature.status === 'approved') {
           tasksData.task_relationships[taskId] = {
             auto_generated_test: null,
             auto_generated_audit: null,
             dependencies: [],
-            dependents: []
+            dependents: [],
           };
         }
       }
@@ -260,33 +259,33 @@ class TaskMigrator {
           linked_tasks: [],
           title: task.title,
           description: task.description,
-          business_value: task.metadata?.business_value || "Implementation of approved feature",
-          category: task.metadata?.feature_category || "enhancement",
+          business_value: task.metadata?.business_value || 'Implementation of approved feature',
+          category: task.metadata?.feature_category || 'enhancement',
           status: this.mapTaskStatus(task.status),
-          priority: task.priority || "normal",
+          priority: task.priority || 'normal',
           auto_generated: task.metadata?.auto_generated || false,
           auto_generation_rules: {
             generate_test_task: false,
             generate_audit_task: false,
-            test_coverage_requirement: 80
+            test_coverage_requirement: 80,
           },
           dependencies: task.dependencies || [],
           estimated_effort: task.estimated_effort || 5,
-          required_capabilities: task.required_capabilities || ["general"],
+          required_capabilities: task.required_capabilities || ['general'],
           created_at: task.created_at,
           updated_at: task.updated_at,
-          created_by: task.created_by || "system",
+          created_by: task.created_by || 'system',
           assigned_to: task.assigned_to || null,
           assigned_at: task.assigned_at || null,
-          completed_at: task.status === "completed" ? task.updated_at : null,
+          completed_at: task.status === 'completed' ? task.updated_at : null,
           validation_requirements: {
             security_scan: false,
             test_coverage: false,
             linter_pass: true,
             type_check: true,
-            build_success: true
+            build_success: true,
           },
-          metadata: task.metadata || {}
+          metadata: task.metadata || {},
         };
 
         tasksData.tasks.push(migratedTask);
@@ -313,34 +312,34 @@ class TaskMigrator {
     const autoTaskIdCounter = Date.now() + 10000;
 
     for (const [index, task] of tasksData.tasks.entries()) {
-      if (task.type === "feature" && task.status === "approved") {
+      if (task.type === 'feature' && task.status === 'approved') {
         const testTaskId = `task_${autoTaskIdCounter + autoTasksGenerated * 2}_${this.generateHash()}`;
         const auditTaskId = `task_${autoTaskIdCounter + autoTasksGenerated * 2 + 1}_${this.generateHash()}`;
 
         // Generate test task
         const testTask = {
           id: testTaskId,
-          type: "test",
+          type: 'test',
           parent_id: task.id,
           linked_tasks: [task.id],
           title: `Implement comprehensive tests for ${task.title}`,
           description: `Create unit tests, integration tests, and E2E tests to achieve >80% coverage for ${task.title}. Must validate all functionality, edge cases, and error conditions.`,
           business_value: `Ensures reliability and quality of ${task.title} feature`,
           category: task.category,
-          status: "suggested",
-          priority: "high",
+          status: 'suggested',
+          priority: 'high',
           auto_generated: true,
           auto_generation_rules: {
             generate_test_task: false,
             generate_audit_task: false,
-            test_coverage_requirement: 80
+            test_coverage_requirement: 80,
           },
           dependencies: [task.id],
           estimated_effort: Math.ceil(task.estimated_effort * 0.6),
-          required_capabilities: ["testing"],
+          required_capabilities: ['testing'],
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-          created_by: "auto_generation_system",
+          created_by: 'auto_generation_system',
           assigned_to: null,
           assigned_at: null,
           completed_at: null,
@@ -349,38 +348,38 @@ class TaskMigrator {
             test_coverage: true,
             linter_pass: true,
             type_check: true,
-            build_success: true
+            build_success: true,
           },
           metadata: {
             auto_generated_for: task.id,
-            generation_rule: "mandatory_test_gate"
-          }
+            generation_rule: 'mandatory_test_gate',
+          },
         };
 
         // Generate audit task
         const auditTask = {
           id: auditTaskId,
-          type: "audit",
+          type: 'audit',
           parent_id: task.id,
           linked_tasks: [task.id],
           title: `Security and quality audit for ${task.title}`,
           description: `Run semgrep security scan, dependency vulnerability check, code quality analysis, and compliance validation for ${task.title}. Zero tolerance for security vulnerabilities.`,
           business_value: `Ensures security and quality compliance of ${task.title} feature`,
-          category: "security",
-          status: "suggested",
-          priority: "high",
+          category: 'security',
+          status: 'suggested',
+          priority: 'high',
           auto_generated: true,
           auto_generation_rules: {
             generate_test_task: false,
             generate_audit_task: false,
-            test_coverage_requirement: 80
+            test_coverage_requirement: 80,
           },
           dependencies: [task.id],
           estimated_effort: Math.ceil(task.estimated_effort * 0.4),
-          required_capabilities: ["security", "analysis"],
+          required_capabilities: ['security', 'analysis'],
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-          created_by: "auto_generation_system",
+          created_by: 'auto_generation_system',
           assigned_to: null,
           assigned_at: null,
           completed_at: null,
@@ -389,12 +388,12 @@ class TaskMigrator {
             test_coverage: false,
             linter_pass: true,
             type_check: true,
-            build_success: true
+            build_success: true,
           },
           metadata: {
             auto_generated_for: task.id,
-            generation_rule: "mandatory_security_audit"
-          }
+            generation_rule: 'mandatory_security_audit',
+          },
         };
 
         // Add to tasks array
@@ -406,7 +405,7 @@ class TaskMigrator {
             auto_generated_test: null,
             auto_generated_audit: null,
             dependencies: [],
-            dependents: []
+            dependents: [],
           };
         }
 
@@ -437,17 +436,17 @@ class TaskMigrator {
     console.log('🔍 Validating transformed data...');
 
     // Check required fields
-    if (!tasksData.project) throw new Error('Missing project name');
-    if (!tasksData.schema_version) throw new Error('Missing schema version');
-    if (!Array.isArray(tasksData.tasks)) throw new Error('Tasks must be an array');
+    if (!tasksData.project) {throw new Error('Missing project name');}
+    if (!tasksData.schema_version) {throw new Error('Missing schema version');}
+    if (!Array.isArray(tasksData.tasks)) {throw new Error('Tasks must be an array');}
 
     // Validate each task
     for (const [index, task] of tasksData.tasks.entries()) {
-      if (!task.id) throw new Error(`Task ${index} missing ID`);
-      if (!task.type) throw new Error(`Task ${task.id} missing type`);
-      if (!task.title) throw new Error(`Task ${task.id} missing title`);
-      if (!task.description) throw new Error(`Task ${task.id} missing description`);
-      if (!["error", "feature", "test", "audit"].includes(task.type)) {
+      if (!task.id) {throw new Error(`Task ${index} missing ID`);}
+      if (!task.type) {throw new Error(`Task ${task.id} missing type`);}
+      if (!task.title) {throw new Error(`Task ${task.id} missing title`);}
+      if (!task.description) {throw new Error(`Task ${task.id} missing description`);}
+      if (!['error', 'feature', 'test', 'audit'].includes(task.type)) {
         throw new Error(`Task ${task.id} has invalid type: ${task.type}`);
       }
     }
@@ -476,7 +475,7 @@ class TaskMigrator {
       tasksByType: tasksData.metadata.tasks_by_type,
       migrationStats: tasksData.metadata.migration_stats,
       autoGenerationEnabled: tasksData.workflow_config.auto_generation_enabled,
-      mandatoryTestGate: tasksData.workflow_config.mandatory_test_gate
+      mandatoryTestGate: tasksData.workflow_config.mandatory_test_gate,
     };
   }
 
@@ -492,7 +491,7 @@ class TaskMigrator {
       'performance': 'normal',
       'enhancement': 'normal',
       'new-feature': 'normal',
-      'documentation': 'low'
+      'documentation': 'low',
     };
     return priorityMap[category] || 'normal';
   }
@@ -504,15 +503,15 @@ class TaskMigrator {
       'performance': ['performance', 'analysis'],
       'enhancement': ['general'],
       'new-feature': ['frontend', 'backend'],
-      'documentation': ['documentation']
+      'documentation': ['documentation'],
     };
     return capabilityMap[category] || ['general'];
   }
 
   inferTaskTypeFromExisting(task) {
-    if (task.type === 'testing') return 'test';
-    if (task.type === 'validation') return 'audit';
-    if (task.type === 'analysis') return 'audit';
+    if (task.type === 'testing') {return 'test';}
+    if (task.type === 'validation') {return 'audit';}
+    if (task.type === 'analysis') {return 'audit';}
     return 'feature'; // Default for implementation tasks
   }
 
@@ -524,7 +523,7 @@ class TaskMigrator {
       'blocked': 'blocked',
       'completed': 'completed',
       'failed': 'blocked',
-      'cancelled': 'rejected'
+      'cancelled': 'rejected',
     };
     return statusMap[status] || status;
   }

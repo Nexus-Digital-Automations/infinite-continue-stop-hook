@@ -1095,26 +1095,26 @@
     },
     "initialization_stats": {
       "total_initializations": 3195,
-      "total_reinitializations": 86,
+      "total_reinitializations": 89,
       "current_day": "2025-09-27",
       "time_buckets": {
-        "10:00-14:59": {
+        "11:00-15:59": {
           "init": 0,
           "reinit": 0
         },
-        "15:00-19:59": {
+        "16:00-20:59": {
           "init": 0,
           "reinit": 0
         },
-        "20:00-00:59": {
+        "21:00-01:59": {
           "init": 0,
-          "reinit": 24
+          "reinit": 2
         },
-        "01:00-05:59": {
+        "02:00-06:59": {
           "init": 0,
           "reinit": 0
         },
-        "06:00-10:59": {
+        "07:00-11:59": {
           "init": 0,
           "reinit": 0
         }
@@ -1931,56 +1931,12 @@
           }
         }
       ],
-      "last_reset": "2025-09-27T03:18:03.073Z",
-      "last_updated": "2025-09-27T04:42:10.445Z"
+      "last_reset": "2025-09-27T05:00:07.916Z",
+      "last_updated": "2025-09-27T05:00:16.628Z"
     },
     "total_features": 5
   },
   "agents": {
-    "agent_learning_system": {
-      "lastHeartbeat": "2025-09-27T04:13:57.909Z",
-      "status": "active",
-      "reinitialized": "2025-09-27T04:13:57.909Z",
-      "sessionId": "6898526173f7c258",
-      "previousSessions": [
-        "359b2328d1ba3e13"
-      ]
-    },
-    "agent_consolidation_1758946098": {
-      "lastHeartbeat": "2025-09-27T04:08:18.679Z",
-      "status": "active",
-      "reinitialized": "2025-09-27T04:08:18.679Z",
-      "sessionId": "34a9522eb8e1b85e",
-      "previousSessions": []
-    },
-    "continue_migration_work": {
-      "lastHeartbeat": "2025-09-27T04:11:41.798Z",
-      "status": "active",
-      "reinitialized": "2025-09-27T04:11:41.798Z",
-      "sessionId": "319297a8780fe7e3",
-      "previousSessions": []
-    },
-    "agent_1758946372889": {
-      "lastHeartbeat": "2025-09-27T04:14:25.143Z",
-      "status": "active",
-      "reinitialized": "2025-09-27T04:14:25.143Z",
-      "sessionId": "d512ebeed804b970",
-      "previousSessions": []
-    },
-    "agent_learning_system_5": {
-      "lastHeartbeat": "2025-09-27T04:16:48.824Z",
-      "status": "active",
-      "reinitialized": "2025-09-27T04:16:48.824Z",
-      "sessionId": "1c2381a26b32815a",
-      "previousSessions": []
-    },
-    "agent_learning_system_6": {
-      "lastHeartbeat": "2025-09-27T04:23:04.293Z",
-      "status": "active",
-      "reinitialized": "2025-09-27T04:23:04.293Z",
-      "sessionId": "3a35e99d164f95b1",
-      "previousSessions": []
-    },
     "agent_1758946487032": {
       "lastHeartbeat": "2025-09-27T04:33:20.730Z",
       "status": "active",
@@ -1991,12 +1947,22 @@
       ]
     },
     "CLAUDE_AGENT_001": {
-      "lastHeartbeat": "2025-09-27T04:42:10.444Z",
+      "lastHeartbeat": "2025-09-27T05:00:07.915Z",
       "status": "active",
-      "reinitialized": "2025-09-27T04:42:10.444Z",
-      "sessionId": "fc8ea0d614adca6f",
+      "reinitialized": "2025-09-27T05:00:07.915Z",
+      "sessionId": "086f3fefbd2ecf10",
       "previousSessions": [
-        "3dd0737f270b11a3"
+        "3dd0737f270b11a3",
+        "fc8ea0d614adca6f"
+      ]
+    },
+    "agent_1758958399822": {
+      "lastHeartbeat": "2025-09-27T05:00:16.627Z",
+      "status": "active",
+      "reinitialized": "2025-09-27T05:00:16.627Z",
+      "sessionId": "7b2a9c12a86ec1d0",
+      "previousSessions": [
+        "95b7b2136ef0192f"
       ]
     }
   },

@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 
 /**
  * Comprehensive Code Quality Analyzer
@@ -31,32 +30,32 @@ const QUALITY_CONFIG = {
   complexity: {
     cyclomatic: { excellent: 5, good: 10, acceptable: 15, warning: 20, critical: 25 },
     cognitive: { excellent: 10, good: 15, acceptable: 25, warning: 30, critical: 40 },
-    npath: { excellent: 200, good: 1000, acceptable: 5000, warning: 10000, critical: 50000 }
+    npath: { excellent: 200, good: 1000, acceptable: 5000, warning: 10000, critical: 50000 },
   },
 
   // Size thresholds
   size: {
     lines_per_function: { excellent: 20, good: 50, acceptable: 100, warning: 200, critical: 500 },
     lines_per_file: { excellent: 200, good: 500, acceptable: 1000, warning: 2000, critical: 5000 },
-    parameters_per_function: { excellent: 3, good: 5, acceptable: 7, warning: 10, critical: 15 }
+    parameters_per_function: { excellent: 3, good: 5, acceptable: 7, warning: 10, critical: 15 },
   },
 
   // Duplication thresholds
   duplication: {
     duplicate_lines_percent: { excellent: 0, good: 3, acceptable: 5, warning: 10, critical: 20 },
-    duplicate_blocks: { excellent: 0, good: 2, acceptable: 5, warning: 10, critical: 25 }
+    duplicate_blocks: { excellent: 0, good: 2, acceptable: 5, warning: 10, critical: 25 },
   },
 
   // Security thresholds
   security: {
     vulnerabilities: { excellent: 0, good: 0, acceptable: 1, warning: 3, critical: 5 },
-    security_hotspots: { excellent: 0, good: 2, acceptable: 5, warning: 10, critical: 20 }
+    security_hotspots: { excellent: 0, good: 2, acceptable: 5, warning: 10, critical: 20 },
   },
 
   // Maintainability thresholds
   maintainability: {
     index: { excellent: 85, good: 70, acceptable: 60, warning: 50, critical: 30 },
-    technical_debt_ratio: { excellent: 0, good: 5, acceptable: 10, warning: 20, critical: 30 }
+    technical_debt_ratio: { excellent: 0, good: 5, acceptable: 10, warning: 20, critical: 30 },
   },
 
   // File patterns to analyze
@@ -71,9 +70,9 @@ const QUALITY_CONFIG = {
       '**/*.test.js',
       '**/*.spec.js',
       '**/jest.config.js',
-      '**/eslint.config.js'
-    ]
-  }
+      '**/eslint.config.js',
+    ],
+  },
 };
 
 /**
@@ -87,7 +86,7 @@ class QualityLogger {
   }
 
   log(level, message, data = {}) {
-    if (this.silent && level !== 'error') return;
+    if (this.silent && level !== 'error') {return;}
 
     const timestamp = new Date().toISOString();
 
@@ -100,7 +99,7 @@ class QualityLogger {
         warning: '⚠️',
         error: '❌',
         debug: '🔍',
-        analysis: '🔬'
+        analysis: '🔬',
       }[level] || '📊';
 
       console.log(`${emoji} ${message}`);
@@ -134,7 +133,7 @@ class CodeQualityAnalyzer {
       security: {},
       maintainability: {},
       smells: {},
-      architecture: {}
+      architecture: {},
     };
     this.issues = [];
     this.recommendations = [];
@@ -166,7 +165,7 @@ class CodeQualityAnalyzer {
         quality_level: this.metrics.quality_level,
         issues: this.issues,
         recommendations: this.recommendations,
-        detailed_metrics: this.metrics
+        detailed_metrics: this.metrics,
       };
 
     } catch (error) {
@@ -188,7 +187,7 @@ class CodeQualityAnalyzer {
       try {
         const files = glob.sync(pattern, {
           ignore: this.config.patterns.exclude,
-          absolute: true
+          absolute: true,
         });
         allFiles.push(...files);
       } catch (error) {
@@ -210,7 +209,7 @@ class CodeQualityAnalyzer {
       cyclomatic: { total: 0, max: 0, average: 0, files: {} },
       cognitive: { total: 0, max: 0, average: 0, files: {} },
       npath: { total: 0, max: 0, average: 0, files: {} },
-      functions: { total: 0, complex_functions: 0 }
+      functions: { total: 0, complex_functions: 0 },
     };
 
     for (const filePath of this.sourceFiles) {
@@ -239,7 +238,7 @@ class CodeQualityAnalyzer {
             file: filePath,
             metric: 'cyclomatic_complexity',
             value: fileComplexity.cyclomatic,
-            message: `High cyclomatic complexity: ${fileComplexity.cyclomatic}`
+            message: `High cyclomatic complexity: ${fileComplexity.cyclomatic}`,
           });
         }
 
@@ -298,7 +297,7 @@ class CodeQualityAnalyzer {
         cognitive,
         function_count: functionCount,
         complex_functions: complexFunctions,
-        line_count: lines.length
+        line_count: lines.length,
       };
 
     } catch (error) {
@@ -326,7 +325,7 @@ class CodeQualityAnalyzer {
       total_files: this.sourceFiles.length,
       average_file_size: 0,
       largest_file: { path: '', lines: 0 },
-      files_over_threshold: 0
+      files_over_threshold: 0,
     };
 
     for (const filePath of this.sourceFiles) {
@@ -349,7 +348,7 @@ class CodeQualityAnalyzer {
             file: filePath,
             metric: 'file_size',
             value: lineCount,
-            message: `Large file: ${lineCount} lines`
+            message: `Large file: ${lineCount} lines`,
           });
         }
 
@@ -375,7 +374,7 @@ class CodeQualityAnalyzer {
       total_lines: this.metrics.size.total_lines,
       duplication_percentage: 0,
       duplicate_blocks: 0,
-      duplicated_files: []
+      duplicated_files: [],
     };
 
     // Simple duplication detection (can be enhanced with more sophisticated algorithms)
@@ -439,7 +438,7 @@ class CodeQualityAnalyzer {
         severity: duplicationData.duplication_percentage > this.config.duplication.duplicate_lines_percent.critical ? 'critical' : 'warning',
         metric: 'code_duplication',
         value: duplicationData.duplication_percentage,
-        message: `High code duplication: ${duplicationData.duplication_percentage.toFixed(2)}%`
+        message: `High code duplication: ${duplicationData.duplication_percentage.toFixed(2)}%`,
       });
     }
 
@@ -471,7 +470,7 @@ class CodeQualityAnalyzer {
       security_hotspots: [],
       total_vulnerabilities: 0,
       critical_vulnerabilities: 0,
-      security_score: 100
+      security_score: 100,
     };
 
     // Run basic security pattern detection
@@ -482,7 +481,7 @@ class CodeQualityAnalyzer {
       { pattern: /Math\.random\s*\(\)/, severity: 'info', message: 'Use of Math.random() for security purposes' },
       { pattern: /password\s*=\s*["'][^"']*["']/, severity: 'critical', message: 'Hardcoded password detected' },
       { pattern: /api[_-]?key\s*=\s*["'][^"']*["']/, severity: 'critical', message: 'Hardcoded API key detected' },
-      { pattern: /\.\.\//g, severity: 'warning', message: 'Path traversal pattern detected' }
+      { pattern: /\.\.\//g, severity: 'warning', message: 'Path traversal pattern detected' },
     ];
 
     for (const filePath of this.sourceFiles) {
@@ -502,7 +501,7 @@ class CodeQualityAnalyzer {
                 line: i + 1,
                 pattern: secPattern.pattern.source,
                 message: secPattern.message,
-                code_snippet: line.trim()
+                code_snippet: line.trim(),
               };
 
               securityData.vulnerabilities.push(vulnerability);
@@ -524,7 +523,7 @@ class CodeQualityAnalyzer {
     // Calculate security score (100 - penalties)
     securityData.security_score = Math.max(0, 100 -
       (securityData.critical_vulnerabilities * 20) -
-      ((securityData.total_vulnerabilities - securityData.critical_vulnerabilities) * 5)
+      ((securityData.total_vulnerabilities - securityData.critical_vulnerabilities) * 5),
     );
 
     // Add high-severity issues to main issues list
@@ -549,13 +548,13 @@ class CodeQualityAnalyzer {
       technical_debt_minutes: 0,
       technical_debt_ratio: 0,
       code_smells: 0,
-      maintainability_score: 0
+      maintainability_score: 0,
     };
 
     // Calculate maintainability index (simplified Halstead-based)
-    let totalComplexity = this.metrics.complexity.cyclomatic.total;
-    let totalLines = this.metrics.size.total_lines;
-    let totalDuplication = this.metrics.duplication.duplicate_lines;
+    const totalComplexity = this.metrics.complexity.cyclomatic.total;
+    const totalLines = this.metrics.size.total_lines;
+    const totalDuplication = this.metrics.duplication.duplicate_lines;
 
     // Simplified maintainability index calculation
     if (totalLines > 0) {
@@ -576,7 +575,7 @@ class CodeQualityAnalyzer {
       (maintainabilityData.technical_debt_minutes / (totalLines * 0.5)) * 100 : 0; // Assume 0.5 min per line baseline
 
     maintainabilityData.maintainability_score = Math.max(0,
-      100 - (maintainabilityData.technical_debt_ratio * 2)
+      100 - (maintainabilityData.technical_debt_ratio * 2),
     );
 
     this.metrics.maintainability = maintainabilityData;
@@ -595,7 +594,7 @@ class CodeQualityAnalyzer {
       god_objects: 0,
       feature_envy: 0,
       data_clumps: 0,
-      total_smells: 0
+      total_smells: 0,
     };
 
     // Detect various code smells
@@ -630,12 +629,11 @@ class CodeQualityAnalyzer {
                 line: i + 1 - functionLineCount,
                 metric: 'long_method',
                 value: functionLineCount,
-                message: `Long method '${functionName}': ${functionLineCount} lines`
+                message: `Long method '${functionName}': ${functionLineCount} lines`,
               });
             }
             inFunction = false;
-          }
-          else if (inFunction) {
+          } else if (inFunction) {
             functionLineCount++;
           }
         }
@@ -677,7 +675,7 @@ class CodeQualityAnalyzer {
       dependency_depth: 0,
       circular_dependencies: 0,
       architecture_score: 0,
-      modularity_index: 0
+      modularity_index: 0,
     };
 
     // Simple architecture analysis
@@ -729,7 +727,7 @@ class CodeQualityAnalyzer {
 
     // Calculate architecture score
     architectureData.architecture_score = Math.min(100,
-      (100 / (1 + architectureData.module_coupling / 10)) * architectureData.modularity_index
+      (100 / (1 + architectureData.module_coupling / 10)) * architectureData.modularity_index,
     );
 
     this.metrics.architecture = architectureData;
@@ -748,7 +746,7 @@ class CodeQualityAnalyzer {
       duplication: 0.15,
       security: 0.25,
       maintainability: 0.15,
-      architecture: 0.1
+      architecture: 0.1,
     };
 
     let weightedScore = 0;
@@ -809,7 +807,7 @@ class CodeQualityAnalyzer {
         category: 'critical_issues',
         recommendation: 'Address critical quality issues immediately',
         details: `${criticalIssues.length} critical issues found that require immediate attention`,
-        action_items: criticalIssues.slice(0, 5).map(issue => issue.message)
+        action_items: criticalIssues.slice(0, 5).map(issue => issue.message),
       });
     }
 
@@ -822,8 +820,8 @@ class CodeQualityAnalyzer {
         action_items: [
           'Break down complex functions into smaller ones',
           'Extract common logic into utility functions',
-          'Consider using design patterns to simplify code structure'
-        ]
+          'Consider using design patterns to simplify code structure',
+        ],
       });
     }
 
@@ -836,8 +834,8 @@ class CodeQualityAnalyzer {
         action_items: [
           'Extract duplicated code into reusable functions',
           'Create shared utility modules',
-          'Implement consistent coding patterns'
-        ]
+          'Implement consistent coding patterns',
+        ],
       });
     }
 
@@ -850,8 +848,8 @@ class CodeQualityAnalyzer {
         action_items: [
           'Review and fix hardcoded credentials',
           'Sanitize user inputs to prevent XSS',
-          'Use secure coding practices'
-        ]
+          'Use secure coding practices',
+        ],
       });
     }
 
@@ -864,8 +862,8 @@ class CodeQualityAnalyzer {
         action_items: [
           'Refactor long methods into smaller functions',
           'Split large classes into focused components',
-          'Improve code organization and structure'
-        ]
+          'Improve code organization and structure',
+        ],
       });
     }
 
@@ -884,8 +882,8 @@ class CodeQualityAnalyzer {
         analyzer_version: '1.0.0',
         analysis_scope: {
           total_files: this.sourceFiles.length,
-          total_lines: this.metrics.size.total_lines
-        }
+          total_lines: this.metrics.size.total_lines,
+        },
       },
 
       summary: {
@@ -893,7 +891,7 @@ class CodeQualityAnalyzer {
         quality_level: this.metrics.quality_level,
         total_issues: this.issues.length,
         critical_issues: this.issues.filter(i => i.severity === 'critical').length,
-        recommendations_count: this.recommendations.length
+        recommendations_count: this.recommendations.length,
       },
 
       detailed_metrics: this.metrics,
@@ -902,10 +900,10 @@ class CodeQualityAnalyzer {
         by_severity: {
           critical: this.issues.filter(i => i.severity === 'critical'),
           warning: this.issues.filter(i => i.severity === 'warning'),
-          info: this.issues.filter(i => i.severity === 'info')
+          info: this.issues.filter(i => i.severity === 'info'),
         },
         by_category: this.groupIssuesByCategory(),
-        top_issues: this.issues.slice(0, 10)
+        top_issues: this.issues.slice(0, 10),
       },
 
       recommendations: this.recommendations,
@@ -915,8 +913,8 @@ class CodeQualityAnalyzer {
         size_gate: this.metrics.size.average_file_size <= 500,
         duplication_gate: this.metrics.duplication.duplication_percentage <= 5,
         security_gate: this.metrics.security.critical_vulnerabilities === 0,
-        maintainability_gate: this.metrics.maintainability.maintainability_index >= 60
-      }
+        maintainability_gate: this.metrics.maintainability.maintainability_index >= 60,
+      },
     };
 
     // Write report to file
@@ -927,13 +925,13 @@ class CodeQualityAnalyzer {
 
     fs.writeFileSync(
       path.join(reportsDir, 'code-quality-report.json'),
-      JSON.stringify(report, null, 2)
+      JSON.stringify(report, null, 2),
     );
 
     // Write summary for quick access
     fs.writeFileSync(
       path.join(reportsDir, 'quality-summary.json'),
-      JSON.stringify(report.summary, null, 2)
+      JSON.stringify(report.summary, null, 2),
     );
 
     this.logger.success('Quality report generated successfully');
@@ -993,7 +991,7 @@ Examples:
   const options = {
     verbose: args.includes('--verbose'),
     silent: args.includes('--silent'),
-    structured: args.includes('--structured')
+    structured: args.includes('--structured'),
   };
 
   const configArg = args.find(arg => arg.startsWith('--config='));

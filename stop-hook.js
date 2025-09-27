@@ -65,7 +65,7 @@ function generateValidationProgressReport(flagData, logger) {
     validationDetails: [],
     overallProgress: 0,
     estimatedTimeRemaining: 0,
-    lastValidationTime: new Date().toISOString()
+    lastValidationTime: new Date().toISOString(),
   };
 
   // Load custom validation rules from project configuration
@@ -85,7 +85,7 @@ function generateValidationProgressReport(flagData, logger) {
             rule.id &&
             rule.name &&
             rule.command &&
-            rule.enabled !== false
+            rule.enabled !== false,
           );
         }
       }
@@ -104,7 +104,7 @@ function generateValidationProgressReport(flagData, logger) {
     'type-validation',
     'build-validation',
     'start-validation',
-    'test-validation'
+    'test-validation',
   ];
 
   // Load and merge custom validation rules
@@ -123,7 +123,7 @@ function generateValidationProgressReport(flagData, logger) {
           duration: result.duration || 0,
           message: result.message || 'No details available',
           timestamp: result.timestamp || new Date().toISOString(),
-          progress: result.status === 'completed' ? 100 : result.status === 'failed' ? 0 : 50
+          progress: result.status === 'completed' ? 100 : result.status === 'failed' ? 0 : 50,
         });
 
         if (result.status === 'completed') {
@@ -138,7 +138,7 @@ function generateValidationProgressReport(flagData, logger) {
           duration: 0,
           message: 'Validation not yet started',
           timestamp: new Date().toISOString(),
-          progress: 0
+          progress: 0,
         });
       }
     }
@@ -189,9 +189,9 @@ function checkStopAllowed(workingDir = process.cwd()) {
 
 📋 **DETAILED VALIDATION STATUS:**
 ${progressReport.validationDetails.map(v =>
-  `${v.status === 'completed' ? '✅' : v.status === 'failed' ? '❌' : '⏳'} ${v.criterion}: ${v.status.toUpperCase()} (${v.progress}%)
-   Duration: ${v.duration}s | ${v.message}`
-).join('\n')}
+    `${v.status === 'completed' ? '✅' : v.status === 'failed' ? '❌' : '⏳'} ${v.criterion}: ${v.status.toUpperCase()} (${v.progress}%)
+   Duration: ${v.duration}s | ${v.message}`,
+  ).join('\n')}
 
 🕐 **LAST UPDATE:** ${progressReport.lastValidationTime}
 🎯 **AUTHORIZATION STATUS:** ${flagData.stop_allowed ? 'APPROVED' : 'PENDING'}

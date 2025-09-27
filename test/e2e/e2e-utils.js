@@ -59,8 +59,8 @@ class E2EEnvironment {
   async createFeaturesFile() {
     const initialFeatures = {
       project: `e2e-test-${this.testName}`,
-      schema_version: "2.0.0",
-      migrated_from: "test-initialization",
+      schema_version: '2.0.0',
+      migrated_from: 'test-initialization',
       migration_date: new Date().toISOString(),
       features: [],
       completed_features: [],
@@ -84,11 +84,11 @@ class E2EEnvironment {
           error: 0,
           feature: 0,
           test: 0,
-          audit: 0
+          audit: 0,
         },
         approval_history: [],
       },
-      agents: {}
+      agents: {},
     };
 
     await fs.writeFile(this.featuresPath, JSON.stringify(initialFeatures, null, 2));

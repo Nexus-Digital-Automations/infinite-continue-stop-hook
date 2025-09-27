@@ -1,12 +1,10 @@
 {
-  "authKey": "83e5355d-8888-43d6-9525-3503fa443be6",
-  "agentId": "claude-e2e-test-agent",
-  "startTime": "2025-09-26T21:09:48.994Z",
-  "expiresAt": "2025-09-26T21:39:48.995Z",
-  "currentStep": 1,
-  "completedSteps": [
-    "focused-codebase"
-  ],
+  "authKey": "fd6c6b49-111c-411c-b2aa-1118f1569cdf",
+  "agentId": "agent_1758958399822",
+  "startTime": "2025-09-27T04:56:27.666Z",
+  "expiresAt": "2025-09-27T05:26:27.666Z",
+  "currentStep": 0,
+  "completedSteps": [],
   "requiredSteps": [
     "focused-codebase",
     "security-validation",
@@ -16,6 +14,5 @@
     "start-validation",
     "test-validation"
   ],
-  "status": "in_progress",
-  "lastValidation": "2025-09-26T21:09:55.233Z"
+  "status": "in_progress"
 }

@@ -41,7 +41,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
           durationMs: 1500,
           success: true,
           memoryUsageBefore: { rss: 50000000, heapUsed: 30000000 },
-          memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 }
+          memoryUsageAfter: { rss: 52000000, heapUsed: 31000000 },
         },
         {
           criterion: 'build-validation',
@@ -50,7 +50,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
           durationMs: 15000, // Critical bottleneck
           success: false,
           memoryUsageBefore: { rss: 52000000, heapUsed: 31000000 },
-          memoryUsageAfter: { rss: 65000000, heapUsed: 40000000 }
+          memoryUsageAfter: { rss: 65000000, heapUsed: 40000000 },
         },
         {
           criterion: 'test-validation',
@@ -59,7 +59,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
           durationMs: 8000, // Moderate bottleneck
           success: true,
           memoryUsageBefore: { rss: 65000000, heapUsed: 40000000 },
-          memoryUsageAfter: { rss: 67000000, heapUsed: 42000000 }
+          memoryUsageAfter: { rss: 67000000, heapUsed: 42000000 },
         },
         {
           criterion: 'type-validation',
@@ -68,7 +68,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
           durationMs: 2500,
           success: true,
           memoryUsageBefore: { rss: 67000000, heapUsed: 42000000 },
-          memoryUsageAfter: { rss: 68000000, heapUsed: 43000000 }
+          memoryUsageAfter: { rss: 68000000, heapUsed: 43000000 },
         },
         {
           criterion: 'security-validation',
@@ -77,16 +77,16 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
           durationMs: 4500,
           success: true,
           memoryUsageBefore: { rss: 68000000, heapUsed: 43000000 },
-          memoryUsageAfter: { rss: 69000000, heapUsed: 44000000 }
-        }
+          memoryUsageAfter: { rss: 69000000, heapUsed: 44000000 },
+        },
       ],
       statistics: {
         lastUpdated: new Date().toISOString(),
         totalMeasurements: 5,
         averageDurationMs: 6300,
         successRate: 80,
-        bycriterion: {}
-      }
+        bycriterion: {},
+      },
     };
 
     fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
@@ -101,7 +101,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       const result = execSync(fullCommand, {
         encoding: 'utf8',
         timeout: 10000,
-        ...options
+        ...options,
       });
 
       return JSON.parse(result.trim());
@@ -145,7 +145,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
-        '\'{"criterion":"linter-validation"}\''
+        '\'{"criterion":"linter-validation"}\'',
       );
 
       expect(result.success).toBe(true);
@@ -160,7 +160,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
-        '\'{"successOnly":false}\''
+        '\'{"successOnly":false}\'',
       );
 
       expect(result.success).toBe(true);
@@ -174,7 +174,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
-        '\'{"limit":2}\''
+        '\'{"limit":2}\'',
       );
 
       expect(result.success).toBe(true);
@@ -231,7 +231,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'identify-performance-bottlenecks',
-        '\'{"slowThreshold":2000,"criticalThreshold":6000}\''
+        '\'{"slowThreshold":2000,"criticalThreshold":6000}\'',
       );
 
       expect(result.success).toBe(true);
@@ -252,12 +252,12 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(result.recommendations).toBeDefined();
 
       const buildRecommendation = result.recommendations.find(r =>
-        r.includes('build') && r.includes('incremental builds')
+        r.includes('build') && r.includes('incremental builds'),
       );
       expect(buildRecommendation).toBeDefined();
 
       const testRecommendation = result.recommendations.find(r =>
-        r.includes('test') && r.includes('parallel execution')
+        r.includes('test') && r.includes('parallel execution'),
       );
       expect(testRecommendation).toBeDefined();
     });
@@ -289,7 +289,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'get-performance-trends',
-        '\'{"groupBy":"hourly"}\''
+        '\'{"groupBy":"hourly"}\'',
       );
 
       expect(result.success).toBe(true);
@@ -345,7 +345,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'get-detailed-timing-report',
-        '\'{"recent":3}\''
+        '\'{"recent":3}\'',
       );
 
       expect(result.success).toBe(true);
@@ -410,7 +410,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'analyze-resource-usage',
-        '\'{"analysisType":"memory_focused"}\''
+        '\'{"analysisType":"memory_focused"}\'',
       );
 
       expect(result.success).toBe(true);
@@ -484,7 +484,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'get-performance-benchmarks',
-        '\'{"timeRange":7}\''
+        '\'{"timeRange":7}\'',
       );
 
       expect(result.success).toBe(true);
@@ -499,7 +499,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       const result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
         'invalid-json',
-        { stdio: 'pipe' }
+        { stdio: 'pipe' },
       );
 
       expect(result.success).toBe(false);
@@ -533,7 +533,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
         'get-performance-trends',
         'get-detailed-timing-report',
         'analyze-resource-usage',
-        'get-performance-benchmarks'
+        'get-performance-benchmarks',
       ];
 
       endpoints.forEach(endpoint => {

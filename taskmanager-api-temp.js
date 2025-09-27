@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /* eslint-disable no-console -- CLI API requires console output for user interaction */
 /**
  * Autonomous Task Management API - Advanced Feature Lifecycle & Task Orchestration
@@ -795,8 +794,8 @@ class AutonomousTaskManagerAPI {
             auto_generated: true,
             feature_category: feature.category,
             business_value: feature.business_value,
-            ...taskOptions.metadata
-          }
+            ...taskOptions.metadata,
+          },
         };
 
         features.tasks.push(task);
@@ -805,7 +804,7 @@ class AutonomousTaskManagerAPI {
         return {
           success: true,
           task,
-          message: 'Autonomous task created successfully from approved feature'
+          message: 'Autonomous task created successfully from approved feature',
         };
       });
 
@@ -813,7 +812,7 @@ class AutonomousTaskManagerAPI {
     } catch (error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -830,7 +829,7 @@ class AutonomousTaskManagerAPI {
           return {
             success: true,
             generated_tasks: [],
-            message: 'No approved features found to generate tasks'
+            message: 'No approved features found to generate tasks',
           };
         }
 
@@ -867,8 +866,8 @@ class AutonomousTaskManagerAPI {
               auto_generated: true,
               feature_category: feature.category,
               business_value: feature.business_value,
-              generation_batch: new Date().toISOString()
-            }
+              generation_batch: new Date().toISOString(),
+            },
           };
 
           features.tasks.push(mainTask);
@@ -890,7 +889,7 @@ class AutonomousTaskManagerAPI {
           success: true,
           generated_tasks: generatedTasks,
           approved_features_processed: approvedFeatures.length,
-          message: `Generated ${generatedTasks.length} tasks from ${approvedFeatures.length} approved features`
+          message: `Generated ${generatedTasks.length} tasks from ${approvedFeatures.length} approved features`,
         };
       });
 
@@ -898,7 +897,7 @@ class AutonomousTaskManagerAPI {
     } catch (error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -916,7 +915,7 @@ class AutonomousTaskManagerAPI {
           success: true,
           tasks: [],
           total: 0,
-          message: 'No tasks in queue'
+          message: 'No tasks in queue',
         };
       }
 
@@ -947,7 +946,7 @@ class AutonomousTaskManagerAPI {
       const priorityOrder = { 'critical': 4, 'high': 3, 'normal': 2, 'low': 1 };
       tasks.sort((a, b) => {
         const priorityDiff = (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0);
-        if (priorityDiff !== 0) return priorityDiff;
+        if (priorityDiff !== 0) {return priorityDiff;}
         return new Date(a.created_at) - new Date(b.created_at);
       });
 
@@ -956,12 +955,12 @@ class AutonomousTaskManagerAPI {
         tasks,
         total: tasks.length,
         filters_applied: filters,
-        message: `Retrieved ${tasks.length} tasks from queue`
+        message: `Retrieved ${tasks.length} tasks from queue`,
       };
     } catch (error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -995,7 +994,7 @@ class AutonomousTaskManagerAPI {
         const requiredCapabilities = task.required_capabilities || [];
 
         const hasRequiredCapabilities = requiredCapabilities.every(cap =>
-          agentCapabilities.includes(cap) || agentCapabilities.includes('general')
+          agentCapabilities.includes(cap) || agentCapabilities.includes('general'),
         );
 
         if (!hasRequiredCapabilities && !assignmentOptions.force) {
@@ -1003,7 +1002,7 @@ class AutonomousTaskManagerAPI {
             success: false,
             error: `Agent ${agentId} lacks required capabilities: ${requiredCapabilities.join(', ')}`,
             agent_capabilities: agentCapabilities,
-            required_capabilities: requiredCapabilities
+            required_capabilities: requiredCapabilities,
           };
         }
 
@@ -1015,7 +1014,7 @@ class AutonomousTaskManagerAPI {
         task.assignment_metadata = {
           forced: assignmentOptions.force || false,
           assignment_reason: assignmentOptions.reason || 'capability_match',
-          ...assignmentOptions.metadata
+          ...assignmentOptions.metadata,
         };
 
         // Update agent assignment count
@@ -1031,7 +1030,7 @@ class AutonomousTaskManagerAPI {
           success: true,
           task,
           agent: { id: agentId, capabilities: agentCapabilities },
-          message: `Task ${taskId} successfully assigned to agent ${agentId}`
+          message: `Task ${taskId} successfully assigned to agent ${agentId}`,
         };
       });
 
@@ -1039,7 +1038,7 @@ class AutonomousTaskManagerAPI {
     } catch (error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -1071,7 +1070,7 @@ class AutonomousTaskManagerAPI {
           progress_percentage: progressUpdate.progress_percentage || 0,
           notes: progressUpdate.notes || '',
           updated_by: progressUpdate.updated_by || 'autonomous_system',
-          metadata: progressUpdate.metadata || {}
+          metadata: progressUpdate.metadata || {},
         };
 
         task.progress_history.push(progressEntry);
@@ -1096,7 +1095,7 @@ class AutonomousTaskManagerAPI {
             task_id: taskId,
             completed_at: task.completed_at,
             assigned_to: task.assigned_to,
-            feature_id: task.feature_id
+            feature_id: task.feature_id,
           });
         }
 
@@ -1107,7 +1106,7 @@ class AutonomousTaskManagerAPI {
           success: true,
           task,
           progress_entry: progressEntry,
-          message: 'Task progress updated successfully'
+          message: 'Task progress updated successfully',
         };
       });
 
@@ -1115,7 +1114,7 @@ class AutonomousTaskManagerAPI {
     } catch (error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -1136,7 +1135,7 @@ class AutonomousTaskManagerAPI {
 
         // Validate capabilities
         const validCapabilities = capabilities.filter(cap =>
-          this.validAgentCapabilities.includes(cap) || cap === 'general'
+          this.validAgentCapabilities.includes(cap) || cap === 'general',
         );
 
         if (validCapabilities.length !== capabilities.length) {
@@ -1144,7 +1143,7 @@ class AutonomousTaskManagerAPI {
           return {
             success: false,
             error: `Invalid capabilities: ${invalidCaps.join(', ')}`,
-            valid_capabilities: this.validAgentCapabilities
+            valid_capabilities: this.validAgentCapabilities,
           };
         }
 
@@ -1158,7 +1157,7 @@ class AutonomousTaskManagerAPI {
           success: true,
           agent_id: agentId,
           capabilities,
-          message: `Capabilities registered for agent ${agentId}`
+          message: `Capabilities registered for agent ${agentId}`,
         };
       });
 
@@ -1166,7 +1165,7 @@ class AutonomousTaskManagerAPI {
     } catch (error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -1752,145 +1751,145 @@ class AutonomousTaskManagerAPI {
     };
   }
 
-/**
+  /**
  * Generate unique task ID
  */
-_generateTaskId() {
-  const timestamp = Date.now();
-  const randomString = crypto.randomBytes(6).toString('hex');
-  return `task_${timestamp}_${randomString}`;
-}
+  _generateTaskId() {
+    const timestamp = Date.now();
+    const randomString = crypto.randomBytes(6).toString('hex');
+    return `task_${timestamp}_${randomString}`;
+  }
 
-/**
+  /**
  * Infer task type from feature characteristics
  */
-_inferTaskType(feature) {
-  if (feature.category === 'bug-fix') return 'implementation';
-  if (feature.category === 'security') return 'analysis';
-  if (feature.category === 'performance') return 'analysis';
-  if (feature.category === 'documentation') return 'documentation';
-  return 'implementation';
-}
+  _inferTaskType(feature) {
+    if (feature.category === 'bug-fix') {return 'implementation';}
+    if (feature.category === 'security') {return 'analysis';}
+    if (feature.category === 'performance') {return 'analysis';}
+    if (feature.category === 'documentation') {return 'documentation';}
+    return 'implementation';
+  }
 
-/**
+  /**
  * Infer task priority from feature characteristics
  */
-_inferTaskPriority(feature) {
-  if (feature.category === 'security') return 'critical';
-  if (feature.category === 'bug-fix') return 'high';
-  if (feature.category === 'performance') return 'high';
-  if (feature.business_value && feature.business_value.toLowerCase().includes('critical')) return 'critical';
-  if (feature.business_value && feature.business_value.toLowerCase().includes('essential')) return 'high';
-  return 'normal';
-}
+  _inferTaskPriority(feature) {
+    if (feature.category === 'security') {return 'critical';}
+    if (feature.category === 'bug-fix') {return 'high';}
+    if (feature.category === 'performance') {return 'high';}
+    if (feature.business_value && feature.business_value.toLowerCase().includes('critical')) {return 'critical';}
+    if (feature.business_value && feature.business_value.toLowerCase().includes('essential')) {return 'high';}
+    return 'normal';
+  }
 
-/**
+  /**
  * Estimate effort required for feature implementation
  */
-_estimateEffort(feature) {
-  let baseEffort = 5; // Base effort in hours
+  _estimateEffort(feature) {
+    let baseEffort = 5; // Base effort in hours
 
-  // Adjust based on category
-  if (feature.category === 'new-feature') baseEffort *= 2;
-  if (feature.category === 'enhancement') baseEffort *= 1.5;
-  if (feature.category === 'security') baseEffort *= 1.8;
+    // Adjust based on category
+    if (feature.category === 'new-feature') {baseEffort *= 2;}
+    if (feature.category === 'enhancement') {baseEffort *= 1.5;}
+    if (feature.category === 'security') {baseEffort *= 1.8;}
 
-  // Adjust based on description length (complexity indicator)
-  const complexityMultiplier = Math.min(feature.description.length / 500, 3);
-  baseEffort *= (1 + complexityMultiplier);
+    // Adjust based on description length (complexity indicator)
+    const complexityMultiplier = Math.min(feature.description.length / 500, 3);
+    baseEffort *= (1 + complexityMultiplier);
 
-  return Math.ceil(baseEffort);
-}
+    return Math.ceil(baseEffort);
+  }
 
-/**
+  /**
  * Infer required capabilities from feature characteristics
  */
-_inferCapabilities(feature) {
-  const capabilities = [];
+  _inferCapabilities(feature) {
+    const capabilities = [];
 
-  if (feature.category === 'security') capabilities.push('security');
-  if (feature.category === 'performance') capabilities.push('performance');
-  if (feature.category === 'documentation') capabilities.push('documentation');
-  if (feature.category === 'bug-fix') capabilities.push('analysis');
+    if (feature.category === 'security') {capabilities.push('security');}
+    if (feature.category === 'performance') {capabilities.push('performance');}
+    if (feature.category === 'documentation') {capabilities.push('documentation');}
+    if (feature.category === 'bug-fix') {capabilities.push('analysis');}
 
-  // Check description for technology hints
-  const description = feature.description.toLowerCase();
-  if (description.includes('frontend') || description.includes('ui') || description.includes('interface')) {
-    capabilities.push('frontend');
+    // Check description for technology hints
+    const description = feature.description.toLowerCase();
+    if (description.includes('frontend') || description.includes('ui') || description.includes('interface')) {
+      capabilities.push('frontend');
+    }
+    if (description.includes('backend') || description.includes('api') || description.includes('server')) {
+      capabilities.push('backend');
+    }
+    if (description.includes('test') || description.includes('testing')) {
+      capabilities.push('testing');
+    }
+
+    return capabilities.length > 0 ? capabilities : ['general'];
   }
-  if (description.includes('backend') || description.includes('api') || description.includes('server')) {
-    capabilities.push('backend');
-  }
-  if (description.includes('test') || description.includes('testing')) {
-    capabilities.push('testing');
-  }
 
-  return capabilities.length > 0 ? capabilities : ['general'];
-}
-
-/**
+  /**
  * Determine if feature is complex enough to warrant supporting tasks
  */
-_isComplexFeature(feature) {
-  return feature.category === 'new-feature' ||
+  _isComplexFeature(feature) {
+    return feature.category === 'new-feature' ||
          feature.description.length > 800 ||
          feature.business_value.toLowerCase().includes('comprehensive');
-}
+  }
 
-/**
+  /**
  * Generate supporting tasks for complex features
  */
-_generateSupportingTasks(feature, mainTaskId) {
-  const supportingTasks = [];
+  _generateSupportingTasks(feature, mainTaskId) {
+    const supportingTasks = [];
 
-  // Always add testing task for complex features
-  supportingTasks.push({
-    id: this._generateTaskId(),
-    feature_id: feature.id,
-    title: `Test: ${feature.title}`,
-    description: `Comprehensive testing for ${feature.title}`,
-    type: 'testing',
-    priority: this._inferTaskPriority(feature),
-    status: 'queued',
-    dependencies: [mainTaskId],
-    estimated_effort: Math.ceil(this._estimateEffort(feature) * 0.6),
-    required_capabilities: ['testing'],
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    created_by: 'autonomous_system',
-    metadata: {
-      auto_generated: true,
-      supporting_task: true,
-      main_task_id: mainTaskId
-    }
-  });
-
-  // Add documentation task for new features
-  if (feature.category === 'new-feature') {
+    // Always add testing task for complex features
     supportingTasks.push({
       id: this._generateTaskId(),
       feature_id: feature.id,
-      title: `Document: ${feature.title}`,
-      description: `Documentation for ${feature.title}`,
-      type: 'documentation',
-      priority: 'normal',
+      title: `Test: ${feature.title}`,
+      description: `Comprehensive testing for ${feature.title}`,
+      type: 'testing',
+      priority: this._inferTaskPriority(feature),
       status: 'queued',
       dependencies: [mainTaskId],
-      estimated_effort: Math.ceil(this._estimateEffort(feature) * 0.3),
-      required_capabilities: ['documentation'],
+      estimated_effort: Math.ceil(this._estimateEffort(feature) * 0.6),
+      required_capabilities: ['testing'],
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       created_by: 'autonomous_system',
       metadata: {
         auto_generated: true,
         supporting_task: true,
-        main_task_id: mainTaskId
-      }
+        main_task_id: mainTaskId,
+      },
     });
-  }
 
-  return supportingTasks;
-}
+    // Add documentation task for new features
+    if (feature.category === 'new-feature') {
+      supportingTasks.push({
+        id: this._generateTaskId(),
+        feature_id: feature.id,
+        title: `Document: ${feature.title}`,
+        description: `Documentation for ${feature.title}`,
+        type: 'documentation',
+        priority: 'normal',
+        status: 'queued',
+        dependencies: [mainTaskId],
+        estimated_effort: Math.ceil(this._estimateEffort(feature) * 0.3),
+        required_capabilities: ['documentation'],
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        created_by: 'autonomous_system',
+        metadata: {
+          auto_generated: true,
+          supporting_task: true,
+          main_task_id: mainTaskId,
+        },
+      });
+    }
+
+    return supportingTasks;
+  }
 
   /**
    * Cleanup resources and connections

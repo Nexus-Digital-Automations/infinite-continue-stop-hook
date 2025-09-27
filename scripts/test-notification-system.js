@@ -27,7 +27,7 @@ class TestNotificationSystem {
       notificationLevel: process.env.NOTIFICATION_LEVEL || 'all', // all, failures-only, critical-only
       historyFile: './coverage/notifications/history.json',
       configFile: './coverage/notifications/config.json',
-      ...options
+      ...options,
     };
 
     this.notificationHistory = this.loadNotificationHistory();
@@ -122,15 +122,15 @@ class TestNotificationSystem {
         failed_tests: failedTests,
         total_tests: totalTests,
         failure_rate: failureRate,
-        failed_suites: testResults.summary.numFailedTestSuites
+        failed_suites: testResults.summary.numFailedTestSuites,
       },
       actions: [
         'Review failing tests in the CI/CD pipeline',
         'Check test logs for error details',
-        'Fix failing tests before merging'
+        'Fix failing tests before merging',
       ],
       channels: ['slack', 'teams', 'discord'],
-      color: '#FF0000'
+      color: '#FF0000',
     };
   }
 
@@ -153,15 +153,15 @@ class TestNotificationSystem {
         gap: gap,
         statements: coverageData.total.statements.pct,
         branches: coverageData.total.branches.pct,
-        functions: coverageData.total.functions.pct
+        functions: coverageData.total.functions.pct,
       },
       actions: [
         'Add more unit tests to improve coverage',
         'Focus on uncovered code paths',
-        'Review coverage report for specific files'
+        'Review coverage report for specific files',
       ],
       channels: ['slack', 'teams'],
-      color: '#FFA500'
+      color: '#FFA500',
     };
   }
 
@@ -181,15 +181,15 @@ class TestNotificationSystem {
       details: {
         current_coverage: currentCoverage,
         previous_coverage: previousCoverage,
-        drop_percentage: drop
+        drop_percentage: drop,
       },
       actions: [
         'Review recent code changes',
         'Add tests for new functionality',
-        'Check if tests were removed or modified'
+        'Check if tests were removed or modified',
       ],
       channels: ['slack', 'teams'],
-      color: '#FF4500'
+      color: '#FF4500',
     };
   }
 
@@ -208,15 +208,15 @@ class TestNotificationSystem {
       details: {
         status: qualityGate.status,
         health_score: cicdData.cicd_summary.test_health_score,
-        blocking_issues: blockingIssues.map(issue => issue.message)
+        blocking_issues: blockingIssues.map(issue => issue.message),
       },
       actions: [
         'Review and resolve blocking issues',
         'Fix all failing tests',
-        'Ensure coverage meets requirements'
+        'Ensure coverage meets requirements',
       ],
       channels: ['slack', 'teams', 'discord'],
-      color: '#DC143C'
+      color: '#DC143C',
     };
   }
 
@@ -236,15 +236,15 @@ class TestNotificationSystem {
       details: {
         duration_seconds: Math.round(duration / 1000),
         threshold_seconds: threshold / 1000,
-        over_threshold_seconds: overTime
+        over_threshold_seconds: overTime,
       },
       actions: [
         'Optimize slow test cases',
         'Review test parallelization',
-        'Consider test sharding'
+        'Consider test sharding',
       ],
       channels: ['slack'],
-      color: '#FFD700'
+      color: '#FFD700',
     };
   }
 
@@ -254,7 +254,7 @@ class TestNotificationSystem {
   async createFlakyTestNotification(cicdData) {
     const flakyTests = cicdData.test_execution?.flaky_test_detection?.potentially_flaky || [];
 
-    if (flakyTests.length === 0) return null;
+    if (flakyTests.length === 0) {return null;}
 
     return {
       type: 'flaky_tests',
@@ -263,15 +263,15 @@ class TestNotificationSystem {
       message: `${flakyTests.length} potentially flaky test(s) detected`,
       details: {
         flaky_count: flakyTests.length,
-        tests: flakyTests.slice(0, 3) // Show first 3
+        tests: flakyTests.slice(0, 3), // Show first 3
       },
       actions: [
         'Review flaky test patterns',
         'Improve test isolation',
-        'Add retry mechanisms where appropriate'
+        'Add retry mechanisms where appropriate',
       ],
       channels: ['slack'],
-      color: '#9370DB'
+      color: '#9370DB',
     };
   }
 
@@ -315,17 +315,17 @@ class TestNotificationSystem {
           {
             title: 'Priority',
             value: notification.priority.toUpperCase(),
-            short: true
+            short: true,
           },
           {
             title: 'Type',
             value: notification.type.replace('_', ' '),
-            short: true
-          }
+            short: true,
+          },
         ],
         footer: 'Test Notification System',
-        ts: Math.floor(Date.now() / 1000)
-      }]
+        ts: Math.floor(Date.now() / 1000),
+      }],
     };
 
     // Add actions as fields
@@ -333,7 +333,7 @@ class TestNotificationSystem {
       payload.attachments[0].fields.push({
         title: 'Recommended Actions',
         value: notification.actions.map(action => `• ${action}`).join('\n'),
-        short: false
+        short: false,
       });
     }
 
@@ -354,9 +354,9 @@ class TestNotificationSystem {
         activitySubtitle: notification.message,
         facts: [
           { name: 'Priority', value: notification.priority.toUpperCase() },
-          { name: 'Type', value: notification.type.replace('_', ' ') }
-        ]
-      }]
+          { name: 'Type', value: notification.type.replace('_', ' ') },
+        ],
+      }],
     };
 
     // Add actions
@@ -378,11 +378,11 @@ class TestNotificationSystem {
         color: parseInt(notification.color.replace('#', ''), 16),
         fields: [
           { name: 'Priority', value: notification.priority.toUpperCase(), inline: true },
-          { name: 'Type', value: notification.type.replace('_', ' '), inline: true }
+          { name: 'Type', value: notification.type.replace('_', ' '), inline: true },
         ],
         footer: { text: 'Test Notification System' },
-        timestamp: new Date().toISOString()
-      }]
+        timestamp: new Date().toISOString(),
+      }],
     };
 
     // Add actions
@@ -390,7 +390,7 @@ class TestNotificationSystem {
       payload.embeds[0].fields.push({
         name: 'Recommended Actions',
         value: notification.actions.map(action => `• ${action}`).join('\n'),
-        inline: false
+        inline: false,
       });
     }
 
@@ -407,8 +407,8 @@ class TestNotificationSystem {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(data)
-        }
+          'Content-Length': Buffer.byteLength(data),
+        },
       };
 
       const req = https.request(url, options, (res) => {
@@ -445,7 +445,7 @@ class TestNotificationSystem {
   }
 
   isCoverageDropSignificant(coverageData) {
-    if (!this.lastRun || !this.lastRun.coverage_percentage) return false;
+    if (!this.lastRun || !this.lastRun.coverage_percentage) {return false;}
     const drop = this.lastRun.coverage_percentage - coverageData.total.lines.pct;
     return drop >= this.options.coverageDropThreshold;
   }
@@ -521,7 +521,7 @@ class TestNotificationSystem {
         git_commit: this.getGitCommit(),
         notifications_sent: notifications.length,
         notification_types: notifications.map(n => n.type),
-        coverage_percentage: (await this.loadCoverageData())?.total?.lines?.pct || 0
+        coverage_percentage: (await this.loadCoverageData())?.total?.lines?.pct || 0,
       };
 
       this.notificationHistory.push(entry);

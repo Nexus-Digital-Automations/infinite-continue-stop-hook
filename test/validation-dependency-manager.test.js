@@ -50,12 +50,12 @@ describe('ValidationDependencyManager', () => {
     test('should add custom dependency correctly', () => {
       const customDep = {
         dependencies: [
-          { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT },
         ],
         description: 'Custom validation step',
         estimatedDuration: 15000,
         parallelizable: true,
-        resourceRequirements: ['filesystem']
+        resourceRequirements: ['filesystem'],
       };
 
       manager.addDependency('custom-validation', customDep);
@@ -71,8 +71,8 @@ describe('ValidationDependencyManager', () => {
       expect(() => {
         manager.addDependency('invalid-dep', {
           dependencies: [
-            { criterion: 'linter-validation', type: 'invalid-type' }
-          ]
+            { criterion: 'linter-validation', type: 'invalid-type' },
+          ],
         });
       }).toThrow('Invalid dependency type');
     });
@@ -93,13 +93,13 @@ describe('ValidationDependencyManager', () => {
     test('should detect circular dependencies', () => {
       // Create circular dependency
       manager.addDependency('dep-a', {
-        dependencies: [{ criterion: 'dep-b', type: DEPENDENCY_TYPES.STRICT }]
+        dependencies: [{ criterion: 'dep-b', type: DEPENDENCY_TYPES.STRICT }],
       });
       manager.addDependency('dep-b', {
-        dependencies: [{ criterion: 'dep-c', type: DEPENDENCY_TYPES.STRICT }]
+        dependencies: [{ criterion: 'dep-c', type: DEPENDENCY_TYPES.STRICT }],
       });
       manager.addDependency('dep-c', {
-        dependencies: [{ criterion: 'dep-a', type: DEPENDENCY_TYPES.STRICT }]
+        dependencies: [{ criterion: 'dep-a', type: DEPENDENCY_TYPES.STRICT }],
       });
 
       const validation = manager.validateDependencyGraph();
@@ -111,8 +111,8 @@ describe('ValidationDependencyManager', () => {
     test('should detect missing dependencies', () => {
       manager.addDependency('invalid-dep', {
         dependencies: [
-          { criterion: 'non-existent-dep', type: DEPENDENCY_TYPES.STRICT }
-        ]
+          { criterion: 'non-existent-dep', type: DEPENDENCY_TYPES.STRICT },
+        ],
       });
 
       const validation = manager.validateDependencyGraph();
@@ -154,8 +154,8 @@ describe('ValidationDependencyManager', () => {
       // Create a scenario where weak dependencies might cause deadlock
       manager.addDependency('deadlock-test', {
         dependencies: [
-          { criterion: 'non-ready-dep', type: DEPENDENCY_TYPES.WEAK }
-        ]
+          { criterion: 'non-ready-dep', type: DEPENDENCY_TYPES.WEAK },
+        ],
       });
 
       const executionOrder = manager.getExecutionOrder(['deadlock-test']);
@@ -216,17 +216,17 @@ describe('ValidationDependencyManager', () => {
       manager.addDependency('network-intensive-1', {
         dependencies: [],
         resourceRequirements: ['network', 'ports'],
-        parallelizable: true
+        parallelizable: true,
       });
       manager.addDependency('network-intensive-2', {
         dependencies: [],
         resourceRequirements: ['network', 'ports'],
-        parallelizable: true
+        parallelizable: true,
       });
 
       const plan = manager.generateParallelExecutionPlan(
         ['network-intensive-1', 'network-intensive-2'],
-        4
+        4,
       );
 
       // These should not be in the same wave due to port conflicts
@@ -243,34 +243,34 @@ describe('ValidationDependencyManager', () => {
         dependencies: [],
         estimatedDuration: 50000,
         parallelizable: true,
-        resourceRequirements: ['filesystem']
+        resourceRequirements: ['filesystem'],
       });
       manager.addDependency('low-priority', {
         dependencies: [],
         estimatedDuration: 5000,
         parallelizable: true,
-        resourceRequirements: ['filesystem']
+        resourceRequirements: ['filesystem'],
       });
 
       // Add dependencies to make high-priority more important
       manager.addDependency('dependent-1', {
-        dependencies: [{ criterion: 'high-priority', type: DEPENDENCY_TYPES.STRICT }]
+        dependencies: [{ criterion: 'high-priority', type: DEPENDENCY_TYPES.STRICT }],
       });
       manager.addDependency('dependent-2', {
-        dependencies: [{ criterion: 'high-priority', type: DEPENDENCY_TYPES.STRICT }]
+        dependencies: [{ criterion: 'high-priority', type: DEPENDENCY_TYPES.STRICT }],
       });
 
       const plan = manager.generateParallelExecutionPlan(
         ['high-priority', 'low-priority', 'dependent-1', 'dependent-2'],
-        4
+        4,
       );
 
       // High-priority should be scheduled early due to many dependents
       const highPriorityWave = plan.plan.findIndex(wave =>
-        wave.criteria.some(c => c.criterion === 'high-priority')
+        wave.criteria.some(c => c.criterion === 'high-priority'),
       );
       const lowPriorityWave = plan.plan.findIndex(wave =>
-        wave.criteria.some(c => c.criterion === 'low-priority')
+        wave.criteria.some(c => c.criterion === 'low-priority'),
       );
 
       expect(highPriorityWave).toBeLessThanOrEqual(lowPriorityWave);
@@ -283,7 +283,7 @@ describe('ValidationDependencyManager', () => {
         availableCPUs: 8,
         availableMemory: 8 * 1024 * 1024 * 1024, // 8GB
         networkLatency: 10,
-        diskIOLoad: 0.3
+        diskIOLoad: 0.3,
       };
 
       const adaptivePlan = manager.generateAdaptiveExecutionPlan(null, systemInfo);
@@ -300,7 +300,7 @@ describe('ValidationDependencyManager', () => {
         availableCPUs: 2,
         availableMemory: 1024 * 1024 * 1024, // 1GB
         networkLatency: 200,
-        diskIOLoad: 0.9
+        diskIOLoad: 0.9,
       };
 
       const adaptivePlan = manager.generateAdaptiveExecutionPlan(null, limitedSystemInfo);
@@ -317,7 +317,7 @@ describe('ValidationDependencyManager', () => {
         availableCPUs: 4,
         availableMemory: 4 * 1024 * 1024 * 1024,
         networkLatency: 150, // High latency
-        diskIOLoad: 0.8 // High disk load
+        diskIOLoad: 0.8, // High disk load
       };
 
       const adaptivePlan = manager.generateAdaptiveExecutionPlan(null, highLatencySystem);
@@ -325,7 +325,7 @@ describe('ValidationDependencyManager', () => {
 
       expect(optimizations.resourceScheduling.length).toBeGreaterThan(0);
       expect(optimizations.resourceScheduling.some(opt =>
-        opt.type === 'network_prioritization' || opt.type === 'disk_io_staggering'
+        opt.type === 'network_prioritization' || opt.type === 'disk_io_staggering',
       )).toBe(true);
     });
   });
@@ -413,31 +413,31 @@ describe('ValidationDependencyManager', () => {
       manager.addDependency('frontend-build', {
         dependencies: [
           { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT },
-          { criterion: 'type-validation', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'type-validation', type: DEPENDENCY_TYPES.STRICT },
         ],
         estimatedDuration: 30000,
         parallelizable: false,
-        resourceRequirements: ['filesystem', 'cpu']
+        resourceRequirements: ['filesystem', 'cpu'],
       });
 
       manager.addDependency('backend-build', {
         dependencies: [
           { criterion: 'linter-validation', type: DEPENDENCY_TYPES.STRICT },
-          { criterion: 'type-validation', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'type-validation', type: DEPENDENCY_TYPES.STRICT },
         ],
         estimatedDuration: 45000,
         parallelizable: false,
-        resourceRequirements: ['filesystem', 'cpu', 'memory']
+        resourceRequirements: ['filesystem', 'cpu', 'memory'],
       });
 
       manager.addDependency('integration-tests', {
         dependencies: [
           { criterion: 'frontend-build', type: DEPENDENCY_TYPES.STRICT },
-          { criterion: 'backend-build', type: DEPENDENCY_TYPES.STRICT }
+          { criterion: 'backend-build', type: DEPENDENCY_TYPES.STRICT },
         ],
         estimatedDuration: 60000,
         parallelizable: true,
-        resourceRequirements: ['network', 'filesystem']
+        resourceRequirements: ['network', 'filesystem'],
       });
     });
 
@@ -632,13 +632,13 @@ describe('ValidationDependencyManager', () => {
     test('should handle invalid dependency specifications', () => {
       expect(() => {
         manager.addDependency('test', {
-          dependencies: [{ criterion: 'valid', type: null }]
+          dependencies: [{ criterion: 'valid', type: null }],
         });
       }).toThrow('Invalid dependency specification');
 
       expect(() => {
         manager.addDependency('test', {
-          dependencies: [{ criterion: null, type: DEPENDENCY_TYPES.STRICT }]
+          dependencies: [{ criterion: null, type: DEPENDENCY_TYPES.STRICT }],
         });
       }).toThrow('Invalid dependency specification');
     });
@@ -678,11 +678,11 @@ describe('ValidationDependencyManager', () => {
       for (let i = 0; i < 100; i++) {
         manager.addDependency(`criterion-${i}`, {
           dependencies: i > 0 ? [
-            { criterion: `criterion-${i - 1}`, type: DEPENDENCY_TYPES.WEAK }
+            { criterion: `criterion-${i - 1}`, type: DEPENDENCY_TYPES.WEAK },
           ] : [],
           estimatedDuration: Math.random() * 20000 + 5000,
           parallelizable: Math.random() > 0.3,
-          resourceRequirements: ['filesystem']
+          resourceRequirements: ['filesystem'],
         });
       }
 

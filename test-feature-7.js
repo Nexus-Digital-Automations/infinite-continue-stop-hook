@@ -12,7 +12,7 @@ async function testAdaptiveLearningPaths() {
     const ragOps = new RAGOperations({
       taskManager: null,
       agentManager: null,
-      withTimeout: async (promise, timeout) => promise
+      withTimeout: async (promise, timeout) => promise,
     });
 
     // Test user profile
@@ -20,14 +20,14 @@ async function testAdaptiveLearningPaths() {
       userId: 'test_user',
       skillLevels: {
         'javascript': 'intermediate',
-        'nodejs': 'beginner'
+        'nodejs': 'beginner',
       },
       strengthAreas: ['javascript', 'frontend'],
       weaknessAreas: ['backend', 'databases'],
       learningStyle: 'mixed',
       preferredDifficulty: 'intermediate',
       completedLessons: [1, 2, 3],
-      interests: ['web development', 'api design']
+      interests: ['web development', 'api design'],
     };
 
     // Test learning goals
@@ -35,7 +35,7 @@ async function testAdaptiveLearningPaths() {
       skills: ['nodejs', 'express', 'database', 'api'],
       timeline: '30 days',
       priorities: ['backend development', 'api design'],
-      objectives: ['Build REST API', 'Understand database integration']
+      objectives: ['Build REST API', 'Understand database integration'],
     };
 
     // Test 1: Generate adaptive learning path
@@ -44,27 +44,27 @@ async function testAdaptiveLearningPaths() {
       pathType: 'adaptive',
       maxLength: 10,
       includeBranching: true,
-      includeAssessments: true
+      includeAssessments: true,
     });
     console.log('Learning path result:', {
       success: learningPath.success,
       pathType: learningPath.pathType,
       totalLessons: learningPath.pathMetrics?.totalLessons || 0,
       estimatedDuration: learningPath.estimatedDuration || 0,
-      message: learningPath.message
+      message: learningPath.message,
     });
 
     // Test 2: Get learning path recommendations
     console.log('\n2. Testing getLearningPathRecommendations...');
     const pathRecommendations = await ragOps.getLearningPathRecommendations(userProfile, ['nodejs', 'express'], {
       includeAlternatives: true,
-      maxRecommendations: 3
+      maxRecommendations: 3,
     });
     console.log('Path recommendations result:', {
       success: pathRecommendations.success,
       count: pathRecommendations.count,
       skillGaps: pathRecommendations.skillGaps,
-      message: pathRecommendations.message
+      message: pathRecommendations.message,
     });
 
     // Test 3: Track learning path progress
@@ -74,39 +74,39 @@ async function testAdaptiveLearningPaths() {
       averageScore: 0.8,
       timeSpent: 120, // minutes
       strugglingAreas: ['databases'],
-      strongAreas: ['javascript']
+      strongAreas: ['javascript'],
     };
     const progressTracking = await ragOps.trackLearningPathProgress('path_123', userProgress, {
       includeDetailedAnalysis: true,
-      checkAdaptationTriggers: true
+      checkAdaptationTriggers: true,
     });
     console.log('Progress tracking result:', {
       success: progressTracking.success,
       completionPercentage: progressTracking.completionPercentage,
-      message: progressTracking.message
+      message: progressTracking.message,
     });
 
     // Test 4: Get adaptive learning analytics
     console.log('\n4. Testing getAdaptiveLearningAnalytics...');
     const analytics = await ragOps.getAdaptiveLearningAnalytics({
       timeRange: 30,
-      includeUserSegmentation: true
+      includeUserSegmentation: true,
     });
     console.log('Analytics result:', {
       success: analytics.success,
       timeRange: analytics.timeRange,
-      message: analytics.message
+      message: analytics.message,
     });
 
     // Test 5: Adapt learning path (simulate adaptation)
     console.log('\n5. Testing adaptLearningPath...');
     const pathAdaptation = await ragOps.adaptLearningPath('path_123', userProgress, {
       adaptationTrigger: 'performance_drop',
-      preserveProgress: true
+      preserveProgress: true,
     });
     console.log('Path adaptation result:', {
       success: pathAdaptation.success,
-      message: pathAdaptation.message
+      message: pathAdaptation.message,
     });
 
     console.log('\n✅ Feature 7: Adaptive Learning Paths System integration test completed successfully!');

@@ -26,7 +26,7 @@ class CoverageArtifactsGenerator {
       compressArtifacts: false,
       generateBadges: true,
       createManifest: true,
-      ...options
+      ...options,
     };
 
     this.artifacts = [];
@@ -34,7 +34,7 @@ class CoverageArtifactsGenerator {
       generator: 'Coverage Artifacts Generator v1.0.0',
       timestamp: new Date().toISOString(),
       git: this.getGitInfo(),
-      environment: this.getEnvironmentInfo()
+      environment: this.getEnvironmentInfo(),
     };
   }
 
@@ -84,7 +84,7 @@ class CoverageArtifactsGenerator {
       path.join(this.options.outputDir, 'dashboard'),
       path.join(this.options.outputDir, 'ci'),
       path.join(this.options.outputDir, 'badges'),
-      path.join(this.options.outputDir, 'summary')
+      path.join(this.options.outputDir, 'summary'),
     ];
 
     dirs.forEach(dir => {
@@ -105,7 +105,7 @@ class CoverageArtifactsGenerator {
       { src: 'coverage-final.json', type: 'detailed', format: 'json' },
       { src: 'lcov.info', type: 'lcov', format: 'lcov' },
       { src: 'cobertura-coverage.xml', type: 'cobertura', format: 'xml' },
-      { src: 'clover.xml', type: 'clover', format: 'xml' }
+      { src: 'clover.xml', type: 'clover', format: 'xml' },
     ];
 
     for (const file of coverageFiles) {
@@ -122,7 +122,7 @@ class CoverageArtifactsGenerator {
           format: file.format,
           path: destPath,
           size: fs.statSync(destPath).size,
-          description: this.getFileDescription(file.type)
+          description: this.getFileDescription(file.type),
         });
 
         console.log(`  ✓ Processed ${file.src}`);
@@ -143,7 +143,7 @@ class CoverageArtifactsGenerator {
         format: 'html',
         path: htmlArtifactDir,
         size: this.getDirectorySize(htmlArtifactDir),
-        description: 'Interactive HTML coverage report'
+        description: 'Interactive HTML coverage report',
       });
 
       console.log('  ✓ Processed HTML coverage report');
@@ -173,11 +173,11 @@ class CoverageArtifactsGenerator {
         lines: Math.round(summary.lines.pct * 100) / 100,
         statements: Math.round(summary.statements.pct * 100) / 100,
         functions: Math.round(summary.functions.pct * 100) / 100,
-        branches: Math.round(summary.branches.pct * 100) / 100
+        branches: Math.round(summary.branches.pct * 100) / 100,
       },
       thresholds_met: this.checkThresholds(summary),
       quality_score: this.calculateQualityScore(summary),
-      git_info: this.metadata.git
+      git_info: this.metadata.git,
     };
 
     const summaryArtifactPath = path.join(this.options.outputDir, 'summary', 'coverage-simple.json');
@@ -189,7 +189,7 @@ class CoverageArtifactsGenerator {
       format: 'json',
       path: summaryArtifactPath,
       size: fs.statSync(summaryArtifactPath).size,
-      description: 'Simplified coverage summary for dashboards'
+      description: 'Simplified coverage summary for dashboards',
     });
 
     // Generate CSV summary for spreadsheet integration
@@ -203,7 +203,7 @@ class CoverageArtifactsGenerator {
       format: 'csv',
       path: csvPath,
       size: fs.statSync(csvPath).size,
-      description: 'Coverage summary in CSV format for spreadsheet tools'
+      description: 'Coverage summary in CSV format for spreadsheet tools',
     });
 
     console.log('  ✓ Generated summary artifacts');
@@ -239,13 +239,13 @@ class CoverageArtifactsGenerator {
         'coverage.functions.covered': coverageData.total.functions.covered,
         'coverage.functions.total': coverageData.total.functions.total,
         'coverage.branches.covered': coverageData.total.branches.covered,
-        'coverage.branches.total': coverageData.total.branches.total
+        'coverage.branches.total': coverageData.total.branches.total,
       },
       tags: {
         project: this.getProjectName(),
         branch: this.metadata.git.branch || 'unknown',
-        commit: this.metadata.git.commit || 'unknown'
-      }
+        commit: this.metadata.git.commit || 'unknown',
+      },
     };
 
     const metricsPath = path.join(this.options.outputDir, 'dashboard', 'metrics.json');
@@ -257,7 +257,7 @@ class CoverageArtifactsGenerator {
       format: 'json',
       path: metricsPath,
       size: fs.statSync(metricsPath).size,
-      description: 'Time-series metrics for dashboard integration'
+      description: 'Time-series metrics for dashboard integration',
     });
 
     // Generate InfluxDB line protocol format
@@ -271,7 +271,7 @@ class CoverageArtifactsGenerator {
       format: 'influx',
       path: influxPath,
       size: fs.statSync(influxPath).size,
-      description: 'InfluxDB line protocol format for time-series databases'
+      description: 'InfluxDB line protocol format for time-series databases',
     });
 
     console.log('  ✓ Generated dashboard artifacts');
@@ -298,7 +298,7 @@ class CoverageArtifactsGenerator {
         `COVERAGE_LINES_COVERED=${summary.lines.covered}`,
         `COVERAGE_LINES_TOTAL=${summary.lines.total}`,
         `COVERAGE_THRESHOLD_MET=${this.checkThresholds(summary).overall}`,
-        `COVERAGE_QUALITY_SCORE=${this.calculateQualityScore(summary)}`
+        `COVERAGE_QUALITY_SCORE=${this.calculateQualityScore(summary)}`,
       ];
 
       const envPath = path.join(this.options.outputDir, 'ci', 'coverage.env');
@@ -310,7 +310,7 @@ class CoverageArtifactsGenerator {
         format: 'env',
         path: envPath,
         size: fs.statSync(envPath).size,
-        description: 'Environment variables for CI pipeline consumption'
+        description: 'Environment variables for CI pipeline consumption',
       });
 
       // Generate GitHub Actions outputs
@@ -320,7 +320,7 @@ class CoverageArtifactsGenerator {
         `coverage-functions=${summary.functions.pct}`,
         `coverage-branches=${summary.branches.pct}`,
         `coverage-threshold-met=${this.checkThresholds(summary).overall}`,
-        `coverage-quality=${this.getQualityRating(summary)}`
+        `coverage-quality=${this.getQualityRating(summary)}`,
       ];
 
       const githubPath = path.join(this.options.outputDir, 'ci', 'github-outputs.txt');
@@ -332,7 +332,7 @@ class CoverageArtifactsGenerator {
         format: 'text',
         path: githubPath,
         size: fs.statSync(githubPath).size,
-        description: 'GitHub Actions step outputs'
+        description: 'GitHub Actions step outputs',
       });
 
       console.log('  ✓ Generated CI artifacts');
@@ -361,7 +361,7 @@ class CoverageArtifactsGenerator {
       statements: this.generateBadgeData('statements', summary.statements.pct),
       functions: this.generateBadgeData('functions', summary.functions.pct),
       branches: this.generateBadgeData('branches', summary.branches.pct),
-      overall: this.generateBadgeData('coverage', this.calculateOverallCoverage(summary))
+      overall: this.generateBadgeData('coverage', this.calculateOverallCoverage(summary)),
     };
 
     const badgesPath = path.join(this.options.outputDir, 'badges', 'badges.json');
@@ -373,7 +373,7 @@ class CoverageArtifactsGenerator {
       format: 'json',
       path: badgesPath,
       size: fs.statSync(badgesPath).size,
-      description: 'Badge configuration data for shields.io integration'
+      description: 'Badge configuration data for shields.io integration',
     });
 
     // Generate individual badge URLs
@@ -387,7 +387,7 @@ class CoverageArtifactsGenerator {
         format: 'url',
         path: urlPath,
         size: fs.statSync(urlPath).size,
-        description: `${type} coverage badge URL`
+        description: `${type} coverage badge URL`,
       });
     });
 
@@ -406,12 +406,12 @@ class CoverageArtifactsGenerator {
         total_artifacts: this.artifacts.length,
         total_size: this.artifacts.reduce((sum, artifact) => sum + artifact.size, 0),
         artifact_types: [...new Set(this.artifacts.map(a => a.type))],
-        formats: [...new Set(this.artifacts.map(a => a.format))]
+        formats: [...new Set(this.artifacts.map(a => a.format))],
       },
       artifacts: this.artifacts.map(artifact => ({
         ...artifact,
-        path: path.relative(process.cwd(), artifact.path) // Make paths relative
-      }))
+        path: path.relative(process.cwd(), artifact.path), // Make paths relative
+      })),
     };
 
     const manifestPath = path.join(this.options.outputDir, 'manifest.json');
@@ -483,7 +483,7 @@ Generated by Coverage Artifacts Generator v1.0.0
         commit: execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(),
         branch: execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim(),
         author: execSync('git log -1 --pretty=format:"%an"', { encoding: 'utf8' }).trim(),
-        message: execSync('git log -1 --pretty=format:"%s"', { encoding: 'utf8' }).trim()
+        message: execSync('git log -1 --pretty=format:"%s"', { encoding: 'utf8' }).trim(),
       };
     } catch (error) {
       return { commit: 'unknown', branch: 'unknown', author: 'unknown', message: 'unknown' };
@@ -495,14 +495,14 @@ Generated by Coverage Artifacts Generator v1.0.0
       ci: process.env.CI === 'true',
       node_version: process.version,
       platform: process.platform,
-      provider: this.detectCIProvider()
+      provider: this.detectCIProvider(),
     };
   }
 
   detectCIProvider() {
-    if (process.env.GITHUB_ACTIONS) return 'github-actions';
-    if (process.env.GITLAB_CI) return 'gitlab-ci';
-    if (process.env.JENKINS_URL) return 'jenkins';
+    if (process.env.GITHUB_ACTIONS) {return 'github-actions';}
+    if (process.env.GITLAB_CI) {return 'gitlab-ci';}
+    if (process.env.JENKINS_URL) {return 'jenkins';}
     return 'unknown';
   }
 
@@ -529,7 +529,7 @@ Generated by Coverage Artifacts Generator v1.0.0
       overall: summary.lines.pct >= thresholds.lines &&
                summary.statements.pct >= thresholds.statements &&
                summary.functions.pct >= thresholds.functions &&
-               summary.branches.pct >= thresholds.branches
+               summary.branches.pct >= thresholds.branches,
     };
   }
 
@@ -545,24 +545,24 @@ Generated by Coverage Artifacts Generator v1.0.0
 
   getQualityRating(summary) {
     const score = this.calculateQualityScore(summary);
-    if (score >= 90) return 'excellent';
-    if (score >= 80) return 'good';
-    if (score >= 70) return 'fair';
+    if (score >= 90) {return 'excellent';}
+    if (score >= 80) {return 'good';}
+    if (score >= 70) {return 'fair';}
     return 'poor';
   }
 
   generateBadgeData(label, percentage) {
     const color = percentage >= 90 ? 'brightgreen' :
-                 percentage >= 80 ? 'green' :
-                 percentage >= 70 ? 'yellowgreen' :
-                 percentage >= 60 ? 'yellow' :
-                 percentage >= 50 ? 'orange' : 'red';
+      percentage >= 80 ? 'green' :
+        percentage >= 70 ? 'yellowgreen' :
+          percentage >= 60 ? 'yellow' :
+            percentage >= 50 ? 'orange' : 'red';
 
     return {
       label,
       message: `${percentage.toFixed(1)}%`,
       color,
-      url: `https://img.shields.io/badge/${label}-${percentage.toFixed(1)}%25-${color}`
+      url: `https://img.shields.io/badge/${label}-${percentage.toFixed(1)}%25-${color}`,
     };
   }
 
@@ -577,7 +577,7 @@ Generated by Coverage Artifacts Generator v1.0.0
           data.lines.pct,
           data.statements.pct,
           data.functions.pct,
-          data.branches.pct
+          data.branches.pct,
         ].join(','));
       }
     });
@@ -649,14 +649,14 @@ Generated by Coverage Artifacts Generator v1.0.0
       'lcov': 'LCOV format for IDE and tool integration',
       'cobertura': 'Cobertura XML format for Jenkins and other tools',
       'clover': 'Clover XML format for Atlassian tools',
-      'html': 'Interactive HTML coverage report'
+      'html': 'Interactive HTML coverage report',
     };
 
     return descriptions[type] || 'Coverage data';
   }
 
   formatBytes(bytes) {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) {return '0 Bytes';}
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
@@ -697,7 +697,7 @@ Generated by Coverage Artifacts Generator v1.0.0
       'html': 'Interactive HTML reports',
       'dashboard': 'Dashboard integration files',
       'ci': 'CI/CD pipeline files',
-      'badges': 'Badge generation files'
+      'badges': 'Badge generation files',
     };
 
     return descriptions[type] || 'Coverage files';

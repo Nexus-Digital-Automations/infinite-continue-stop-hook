@@ -61,12 +61,12 @@ describe('TaskManager API Validation Dependency Integration', () => {
     test('should update validation dependency successfully', async () => {
       const dependencyConfig = {
         dependencies: [
-          { criterion: 'linter-validation', type: 'strict' }
+          { criterion: 'linter-validation', type: 'strict' },
         ],
         description: 'Test custom validation',
         estimatedDuration: 15000,
         parallelizable: true,
-        resourceRequirements: ['filesystem']
+        resourceRequirements: ['filesystem'],
       };
 
       const result = await api.updateValidationDependency('test-validation', dependencyConfig);
@@ -176,7 +176,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
     test('should execute parallel validation with monitoring', async () => {
       // Mock execution for testing (real execution would require actual validation commands)
       const result = await api.executeParallelValidation(null, {
-        timeout: 5000 // Short timeout for test
+        timeout: 5000, // Short timeout for test
       });
 
       // Result structure should be correct even if execution fails due to mocked environment
@@ -196,10 +196,10 @@ describe('TaskManager API Validation Dependency Integration', () => {
       return new Promise((resolve, reject) => {
         const child = spawn('node', [
           path.join(process.cwd(), '../../taskmanager-api.js'),
-          ...args
+          ...args,
         ], {
           cwd: tempDir,
-          stdio: 'pipe'
+          stdio: 'pipe',
         });
 
         let stdout = '';
@@ -291,13 +291,13 @@ describe('TaskManager API Validation Dependency Integration', () => {
         description: 'CLI test validation',
         estimatedDuration: 10000,
         parallelizable: true,
-        resourceRequirements: ['filesystem']
+        resourceRequirements: ['filesystem'],
       });
 
       const { code, result } = await executeCommand([
         'update-validation-dependency',
         'cli-test-validation',
-        dependencyConfig
+        dependencyConfig,
       ]);
 
       expect(code).toBe(0);
@@ -310,8 +310,8 @@ describe('TaskManager API Validation Dependency Integration', () => {
     test('should handle invalid dependency configuration gracefully', async () => {
       const invalidConfig = {
         dependencies: [
-          { criterion: 'non-existent', type: 'invalid-type' }
-        ]
+          { criterion: 'non-existent', type: 'invalid-type' },
+        ],
       };
 
       const result = await api.updateValidationDependency('invalid-test', invalidConfig);
@@ -355,12 +355,12 @@ describe('TaskManager API Validation Dependency Integration', () => {
       for (let i = 0; i < 50; i++) {
         const dependencyConfig = {
           dependencies: i > 0 ? [
-            { criterion: `perf-test-${i - 1}`, type: 'weak' }
+            { criterion: `perf-test-${i - 1}`, type: 'weak' },
           ] : [],
           description: `Performance test validation ${i}`,
           estimatedDuration: Math.random() * 20000 + 5000,
           parallelizable: Math.random() > 0.3,
-          resourceRequirements: ['filesystem']
+          resourceRequirements: ['filesystem'],
         };
 
         await api.updateValidationDependency(`perf-test-${i}`, dependencyConfig);
@@ -397,7 +397,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
         api.generateValidationExecutionPlan(),
         api.validateDependencyGraph(),
         api.getDependencyVisualization(),
-        api.generateInteractiveVisualization('json')
+        api.generateInteractiveVisualization('json'),
       ];
 
       const results = await Promise.all(promises);
@@ -417,7 +417,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
         description: 'Persistence test validation',
         estimatedDuration: 12000,
         parallelizable: false,
-        resourceRequirements: ['filesystem', 'cpu']
+        resourceRequirements: ['filesystem', 'cpu'],
       };
 
       const updateResult = await api.updateValidationDependency('persistence-test', customConfig);
@@ -440,12 +440,12 @@ describe('TaskManager API Validation Dependency Integration', () => {
       // Make changes
       await api.updateValidationDependency('integrity-test-1', {
         dependencies: [],
-        description: 'Integrity test 1'
+        description: 'Integrity test 1',
       });
 
       await api.updateValidationDependency('integrity-test-2', {
         dependencies: [{ criterion: 'integrity-test-1', type: 'strict' }],
-        description: 'Integrity test 2'
+        description: 'Integrity test 2',
       });
 
       // Validate graph integrity
@@ -478,8 +478,8 @@ describe('TaskManager API Validation Dependency Integration', () => {
             description: 'Setup validation environment',
             estimatedDuration: 5000,
             parallelizable: true,
-            resourceRequirements: ['filesystem']
-          }
+            resourceRequirements: ['filesystem'],
+          },
         },
         {
           name: 'workflow-lint',
@@ -488,8 +488,8 @@ describe('TaskManager API Validation Dependency Integration', () => {
             description: 'Custom linting workflow',
             estimatedDuration: 15000,
             parallelizable: true,
-            resourceRequirements: ['filesystem']
-          }
+            resourceRequirements: ['filesystem'],
+          },
         },
         {
           name: 'workflow-test',
@@ -498,22 +498,22 @@ describe('TaskManager API Validation Dependency Integration', () => {
             description: 'Custom testing workflow',
             estimatedDuration: 30000,
             parallelizable: false,
-            resourceRequirements: ['filesystem', 'cpu', 'memory']
-          }
+            resourceRequirements: ['filesystem', 'cpu', 'memory'],
+          },
         },
         {
           name: 'workflow-deploy',
           config: {
             dependencies: [
               { criterion: 'workflow-test', type: 'strict' },
-              { criterion: 'security-validation', type: 'weak' }
+              { criterion: 'security-validation', type: 'weak' },
             ],
             description: 'Deployment validation',
             estimatedDuration: 20000,
             parallelizable: false,
-            resourceRequirements: ['network', 'filesystem']
-          }
-        }
+            resourceRequirements: ['network', 'filesystem'],
+          },
+        },
       ];
 
       // 3. Add all custom validations
@@ -529,7 +529,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
 
       // 5. Generate execution plan
       const executionPlan = await api.generateValidationExecutionPlan(
-        customValidations.map(v => v.name)
+        customValidations.map(v => v.name),
       );
       expect(executionPlan.success).toBe(true);
       expect(executionPlan.parallelPlan.totalWaves).toBeGreaterThan(0);

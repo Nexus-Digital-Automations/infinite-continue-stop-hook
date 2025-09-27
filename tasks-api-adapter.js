@@ -23,12 +23,12 @@ class TasksApiAdapter {
         updated: tasksData.metadata?.updated || new Date().toISOString(),
         total_features: 0,
         approval_history: tasksData.metadata?.approval_history || [],
-        initialization_stats: tasksData.metadata?.initialization_stats || {}
+        initialization_stats: tasksData.metadata?.initialization_stats || {},
       },
       workflow_config: tasksData.workflow_config || {},
       tasks: [],
       completed_tasks: tasksData.completed_tasks || [],
-      agents: tasksData.agents || {}
+      agents: tasksData.agents || {},
     };
 
     // Convert feature tasks to legacy features format
@@ -45,7 +45,7 @@ class TasksApiAdapter {
             created_at: task.created_at,
             updated_at: task.updated_at,
             suggested_by: task.created_by,
-            metadata: task.metadata || {}
+            metadata: task.metadata || {},
           };
 
           // Add approval/rejection fields based on status
@@ -92,7 +92,7 @@ class TasksApiAdapter {
       auto_generation_rules: {
         generate_test_task: taskType === 'feature',
         generate_audit_task: taskType === 'feature',
-        test_coverage_requirement: 80
+        test_coverage_requirement: 80,
       },
       dependencies: [],
       estimated_effort: 5,
@@ -108,9 +108,9 @@ class TasksApiAdapter {
         test_coverage: true,
         linter_pass: true,
         type_check: true,
-        build_success: true
+        build_success: true,
       },
-      metadata: {}
+      metadata: {},
     };
   }
 
@@ -125,27 +125,27 @@ class TasksApiAdapter {
     // Generate test task
     const testTask = {
       id: testTaskId,
-      type: "test",
+      type: 'test',
       parent_id: featureTask.id,
       linked_tasks: [featureTask.id],
       title: `Implement comprehensive tests for ${featureTask.title}`,
       description: `Create unit tests, integration tests, and E2E tests to achieve >80% coverage for ${featureTask.title}. Must validate all functionality, edge cases, and error conditions.`,
       business_value: `Ensures reliability and quality of ${featureTask.title} feature`,
       category: featureTask.category,
-      status: "suggested",
-      priority: "high",
+      status: 'suggested',
+      priority: 'high',
       auto_generated: true,
       auto_generation_rules: {
         generate_test_task: false,
         generate_audit_task: false,
-        test_coverage_requirement: 80
+        test_coverage_requirement: 80,
       },
       dependencies: [featureTask.id],
       estimated_effort: Math.ceil(featureTask.estimated_effort * 0.6),
-      required_capabilities: ["testing"],
+      required_capabilities: ['testing'],
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      created_by: "auto_generation_system",
+      created_by: 'auto_generation_system',
       assigned_to: null,
       assigned_at: null,
       completed_at: null,
@@ -154,38 +154,38 @@ class TasksApiAdapter {
         test_coverage: true,
         linter_pass: true,
         type_check: true,
-        build_success: true
+        build_success: true,
       },
       metadata: {
         auto_generated_for: featureTask.id,
-        generation_rule: "mandatory_test_gate"
-      }
+        generation_rule: 'mandatory_test_gate',
+      },
     };
 
     // Generate audit task
     const auditTask = {
       id: auditTaskId,
-      type: "audit",
+      type: 'audit',
       parent_id: featureTask.id,
       linked_tasks: [featureTask.id],
       title: `Security and quality audit for ${featureTask.title}`,
       description: `Run semgrep security scan, dependency vulnerability check, code quality analysis, and compliance validation for ${featureTask.title}. Zero tolerance for security vulnerabilities.`,
       business_value: `Ensures security and quality compliance of ${featureTask.title} feature`,
-      category: "security",
-      status: "suggested",
-      priority: "high",
+      category: 'security',
+      status: 'suggested',
+      priority: 'high',
       auto_generated: true,
       auto_generation_rules: {
         generate_test_task: false,
         generate_audit_task: false,
-        test_coverage_requirement: 80
+        test_coverage_requirement: 80,
       },
       dependencies: [featureTask.id],
       estimated_effort: Math.ceil(featureTask.estimated_effort * 0.4),
-      required_capabilities: ["security", "analysis"],
+      required_capabilities: ['security', 'analysis'],
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      created_by: "auto_generation_system",
+      created_by: 'auto_generation_system',
       assigned_to: null,
       assigned_at: null,
       completed_at: null,
@@ -194,12 +194,12 @@ class TasksApiAdapter {
         test_coverage: false,
         linter_pass: true,
         type_check: true,
-        build_success: true
+        build_success: true,
       },
       metadata: {
         auto_generated_for: featureTask.id,
-        generation_rule: "mandatory_security_audit"
-      }
+        generation_rule: 'mandatory_security_audit',
+      },
     };
 
     autoTasks.push(testTask, auditTask);
@@ -213,7 +213,7 @@ class TasksApiAdapter {
       auto_generated_test: testTaskId,
       auto_generated_audit: auditTaskId,
       dependencies: [],
-      dependents: [testTaskId, auditTaskId]
+      dependents: [testTaskId, auditTaskId],
     };
 
     // Update feature task's linked tasks
@@ -240,14 +240,14 @@ class TasksApiAdapter {
       'error': 1,
       'audit': 2,
       'feature': 3,
-      'test': 4
+      'test': 4,
     };
 
     const priorityWeight = {
       'critical': 0,
       'high': 1,
       'normal': 2,
-      'low': 3
+      'low': 3,
     };
 
     return tasks.sort((a, b) => {
@@ -284,7 +284,7 @@ class TasksApiAdapter {
       'performance': 'normal',
       'enhancement': 'normal',
       'new-feature': 'normal',
-      'documentation': 'low'
+      'documentation': 'low',
     };
     return priorityMap[category] || 'normal';
   }
@@ -296,7 +296,7 @@ class TasksApiAdapter {
       'performance': ['performance', 'analysis'],
       'enhancement': ['general'],
       'new-feature': ['frontend', 'backend'],
-      'documentation': ['documentation']
+      'documentation': ['documentation'],
     };
     return capabilityMap[category] || ['general'];
   }

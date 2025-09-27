@@ -216,11 +216,11 @@ const TEST_FIXTURES = {
         error: 0,
         feature: 0,
         test: 0,
-        audit: 0
+        audit: 0,
       },
       approval_history: [],
     },
-    agents: {}
+    agents: {},
   },
 
   // Tasks file with sample data
@@ -245,7 +245,7 @@ const TEST_FIXTURES = {
         auto_generation_rules: {
           generate_test_task: true,
           generate_audit_task: true,
-          test_coverage_requirement: 80
+          test_coverage_requirement: 80,
         },
         dependencies: [],
         estimated_effort: 5,
@@ -261,7 +261,7 @@ const TEST_FIXTURES = {
           test_coverage: true,
           linter_pass: true,
           type_check: true,
-          build_success: true
+          build_success: true,
         },
         metadata: {},
       },
@@ -280,7 +280,7 @@ const TEST_FIXTURES = {
         auto_generation_rules: {
           generate_test_task: true,
           generate_audit_task: true,
-          test_coverage_requirement: 80
+          test_coverage_requirement: 80,
         },
         dependencies: [],
         estimated_effort: 5,
@@ -296,12 +296,12 @@ const TEST_FIXTURES = {
           test_coverage: true,
           linter_pass: true,
           type_check: true,
-          build_success: true
+          build_success: true,
         },
         metadata: {
           approved_by: 'test-approver',
           approval_date: '2025-09-23T11:00:00.000Z',
-          approval_notes: 'Approved for implementation'
+          approval_notes: 'Approved for implementation',
         },
       },
       {
@@ -319,7 +319,7 @@ const TEST_FIXTURES = {
         auto_generation_rules: {
           generate_test_task: false,
           generate_audit_task: false,
-          test_coverage_requirement: 80
+          test_coverage_requirement: 80,
         },
         dependencies: [],
         estimated_effort: 2,
@@ -335,12 +335,12 @@ const TEST_FIXTURES = {
           test_coverage: false,
           linter_pass: true,
           type_check: true,
-          build_success: true
+          build_success: true,
         },
         metadata: {
           rejected_by: 'test-rejector',
           rejection_date: '2025-09-23T09:30:00.000Z',
-          rejection_reason: 'Not aligned with project goals'
+          rejection_reason: 'Not aligned with project goals',
         },
       },
     ],
@@ -365,7 +365,7 @@ const TEST_FIXTURES = {
         error: 0,
         feature: 3,
         test: 0,
-        audit: 0
+        audit: 0,
       },
       approval_history: [
         {
