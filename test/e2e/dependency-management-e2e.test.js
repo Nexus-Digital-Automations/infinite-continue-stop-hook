@@ -122,7 +122,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         expect(validationResult.validation.valid).toBe(true);
 
         // Step 3: Generate execution order
-        const executionResult = executeTaskManagerCommand('get-execution-order');
+        const executionResult = executeTaskManagerCommand('generate-validation-execution-plan');
         expect(executionResult.success).toBe(true);
         expect(executionResult.executionOrder.length).toBeGreaterThanOrEqual(10); // 7 default + 3 custom
 
@@ -521,7 +521,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         expect(validationResult.validation.valid).toBe(true);
 
         // Generate execution order for microservices
-        const executionResult = executeTaskManagerCommand('get-execution-order');
+        const executionResult = executeTaskManagerCommand('generate-validation-execution-plan');
         expect(executionResult.success).toBe(true);
         expect(executionResult.executionOrder.length).toBeGreaterThanOrEqual(15); // 7 default + 8 custom
 
@@ -601,7 +601,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         expect(validationResult.validation.issues.some(issue => issue.type === 'cycle')).toBe(true);
 
         // Execution order should still work with forced execution
-        const executionResult = executeTaskManagerCommand('get-execution-order');
+        const executionResult = executeTaskManagerCommand('generate-validation-execution-plan');
         expect(executionResult.success).toBe(true);
         expect(executionResult.executionOrder.length).toBeGreaterThanOrEqual(10); // Should include all criteria
 
@@ -713,7 +713,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
 
         // Generate execution order efficiently
         const executionStart = Date.now();
-        const executionResult = executeTaskManagerCommand('get-execution-order');
+        const executionResult = executeTaskManagerCommand('generate-validation-execution-plan');
         const executionTime = Date.now() - executionStart;
 
         expect(executionResult.success).toBe(true);
@@ -859,7 +859,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
       });
 
       // Verify execution order respects actual validation dependencies
-      const executionResult = executeTaskManagerCommand('get-execution-order');
+      const executionResult = executeTaskManagerCommand('generate-validation-execution-plan');
       expect(executionResult.success).toBe(true);
 
       const criteriaOrder = executionResult.executionOrder.map(item => item.criterion);

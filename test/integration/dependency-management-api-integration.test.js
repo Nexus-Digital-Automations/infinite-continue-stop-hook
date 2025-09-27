@@ -99,8 +99,8 @@ describe('Dependency Management API Integration Tests', () => {
   });
 
   describe('Execution Planning API Endpoints', () => {
-    test('get-execution-order should return optimal execution sequence', () => {
-      const result = executeTaskManagerCommand('get-execution-order');
+    test('generate-validation-execution-plan should return optimal execution sequence', () => {
+      const result = executeTaskManagerCommand('generate-validation-execution-plan');
 
       expect(result.success).toBe(true);
       expect(result).toHaveProperty('executionOrder');
@@ -128,9 +128,9 @@ describe('Dependency Management API Integration Tests', () => {
       expect(startIndex).toBeGreaterThan(buildIndex);
     });
 
-    test('get-execution-order with specific criteria should work correctly', () => {
+    test('generate-validation-execution-plan with specific criteria should work correctly', () => {
       const criteria = ['linter-validation', 'build-validation', 'test-validation'];
-      const result = executeTaskManagerCommand('get-execution-order', `'${JSON.stringify(criteria)}'`);
+      const result = executeTaskManagerCommand('generate-validation-execution-plan', `'${JSON.stringify(criteria)}'`);
 
       expect(result.success).toBe(true);
       expect(result.executionOrder.length).toBe(3);
@@ -444,7 +444,7 @@ describe('Dependency Management API Integration Tests', () => {
     });
 
     test('should handle empty criteria in execution planning', () => {
-      const orderResult = executeTaskManagerCommand('get-execution-order', "'[]'");
+      const orderResult = executeTaskManagerCommand('generate-validation-execution-plan', "'[]'");
       expect(orderResult.success).toBe(true);
       expect(orderResult.executionOrder).toHaveLength(0);
 

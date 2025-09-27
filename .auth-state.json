@@ -1,0 +1,21 @@
+{
+  "authKey": "f142e634aa45f661e4a884ffa88f64f8",
+  "agentId": "agent_dependency_test_001",
+  "startTime": "2025-09-27T18:26:17.535Z",
+  "expiresAt": "2025-09-27T18:56:17.535Z",
+  "currentStep": 1,
+  "completedSteps": [
+    "focused-codebase"
+  ],
+  "requiredSteps": [
+    "focused-codebase",
+    "security-validation",
+    "linter-validation",
+    "type-validation",
+    "build-validation",
+    "start-validation",
+    "test-validation"
+  ],
+  "status": "in_progress",
+  "lastValidation": "2025-09-27T18:26:26.094Z"
+}
