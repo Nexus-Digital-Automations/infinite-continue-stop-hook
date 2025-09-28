@@ -96,13 +96,15 @@ function generateValidationProgressReport(flagData, logger, workingDir) {
   };
 
   // Load custom validation rules from project configuration
-  function projectRoot(_$2) {
-      }
-    } catch {
+  function loadCustomValidationRules(workingDir) {
+    const customRules = [];
+    try {
+      // Implementation would go here to load custom rules
+      return customRules;
+    } catch (error) {
       logger.warn(`Failed to load custom validation rules: ${error.message}`);
+      return customRules;
     }
-
-    return customRules;
   }
 
   // Use dependency-aware validation criteria in execution order
@@ -1700,7 +1702,7 @@ This system operates in infinite continue mode. To authorize a stop, use:
 
     // eslint-disable-next-line n/no-process-exit
     process.exit(2); // Always continue - never allow natural stops
-  } catch {
+  } catch (error) {
     loggers.app.error('stop-hook-main error:', error);
     loggers.app.info(
       `Error handled - continuing infinite mode: ${error.message}`
