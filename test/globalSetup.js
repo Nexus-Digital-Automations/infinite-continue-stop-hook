@@ -16,7 +16,7 @@ const fs = require('fs');
  * Global setup function - runs once before all tests
  */
 module.exports = () => {
-  console.log('🚀 Initializing Jest testing environment...');
+  loggers.stopHook.log('🚀 Initializing Jest testing environment...');
 
   // Set up test environment variables
   process.env.NODE_ENV = 'test';
@@ -37,7 +37,7 @@ module.exports = () => {
 
     if (!fs.existsSync(fullPath)) {
       fs.mkdirSync(fullPath, { recursive: true });
-      console.log(`📁 Created test directory: ${dir}`);
+      loggers.stopHook.log(`📁 Created test directory: ${dir}`);
     }
   });
 
@@ -60,9 +60,12 @@ module.exports = () => {
           } else {
             fs.unlinkSync(entryPath);
           }
-          console.log(`🧹 Cleaned up old test file: ${entry}`);
+          loggers.stopHook.log(`🧹 Cleaned up old test file: ${entry}`);
         } catch (error) {
-          console.warn(`⚠️  Could not clean up ${entry}:`, error.message);
+          loggers.stopHook.warn(
+            `⚠️  Could not clean up ${entry}:`,
+            error.message
+          );
         }
       }
     }
@@ -84,7 +87,7 @@ module.exports = () => {
 
   // Performance monitoring setup
   if (process.env.MONITOR_TEST_PERFORMANCE === 'true') {
-    console.log('📊 Performance monitoring enabled');
+    loggers.stopHook.log('📊 Performance monitoring enabled');
     global.testPerformanceData = {
       suites: [],
       slowTests: [],
@@ -94,7 +97,9 @@ module.exports = () => {
 
   // Memory management for CI environments
   if (process.env.CI === 'true') {
-    console.log('🏗️  CI environment detected - enabling memory optimizations');
+    loggers.stopHook.log(
+      '🏗️  CI environment detected - enabling memory optimizations'
+    );
 
     // Lower memory thresholds for CI
     if (global.gc) {
@@ -109,17 +114,23 @@ module.exports = () => {
   }
 
   // Test reporting setup
-  console.log('📋 Test reporting configuration:');
+  loggers.stopHook.log('📋 Test reporting configuration:');
   console.log(
-    `   • Coverage: ${process.env.COVERAGE ? 'enabled' : 'disabled'}`,
+    `   • Coverage: ${process.env.COVERAGE ? 'enabled' : 'disabled'}`
   );
-  console.log(`   • Verbose: ${process.env.VERBOSE ? 'enabled' : 'disabled'}`);
-  console.log(`   • Watch mode: ${process.env.WATCH ? 'enabled' : 'disabled'}`);
-  console.log(`   • Max workers: ${process.env.MAX_WORKERS || 'auto'}`);
+  loggers.stopHook.log(
+    `   • Verbose: ${process.env.VERBOSE ? 'enabled' : 'disabled'}`
+  );
+  loggers.stopHook.log(
+    `   • Watch mode: ${process.env.WATCH ? 'enabled' : 'disabled'}`
+  );
+  loggers.stopHook.log(
+    `   • Max workers: ${process.env.MAX_WORKERS || 'auto'}`
+  );
 
   // Network and external service mocking
   if (process.env.MOCK_EXTERNAL_SERVICES !== 'false') {
-    console.log('🔧 External service mocking enabled');
+    loggers.stopHook.log('🔧 External service mocking enabled');
 
     // Mock common external services
     process.env.DISABLE_EXTERNAL_REQUESTS = 'true';
@@ -129,7 +140,7 @@ module.exports = () => {
   // Test data initialization
   try {
     const sampleData = require('./fixtures/sampleData');
-    console.log('✅ Test fixtures loaded successfully');
+    loggers.stopHook.log('✅ Test fixtures loaded successfully');
 
     // Validate sample data structure
     if (!sampleData.SAMPLE_FEATURES || !sampleData.SAMPLE_AGENTS) {
@@ -138,13 +149,13 @@ module.exports = () => {
 
     global.SAMPLE_DATA = sampleData;
   } catch (error) {
-    console.error('❌ Failed to load test fixtures:', error.message);
+    loggers.stopHook.error('❌ Failed to load test fixtures:', error.message);
     throw new Error('Failed to load test fixtures');
   }
 
   // Database setup for integration tests
   if (process.env.TEST_DATABASE === 'true') {
-    console.log('🗄️  Test database setup...');
+    loggers.stopHook.log('🗄️  Test database setup...');
     // This would initialize test database connections
     // For now, we'll just set up the environment
     process.env.DATABASE_URL =
@@ -186,7 +197,7 @@ module.exports = () => {
     },
   };
 
-  console.log('✅ Jest global setup completed successfully');
-  console.log('📝 Test environment ready');
-  console.log('');
+  loggers.stopHook.log('✅ Jest global setup completed successfully');
+  loggers.stopHook.log('📝 Test environment ready');
+  loggers.stopHook.log('');
 };

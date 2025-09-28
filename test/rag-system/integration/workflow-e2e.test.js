@@ -17,7 +17,7 @@ describe('RAG System End-to-End Workflows', () => {
   let _testAgentId;
 
   beforeAll(async () => {
-    console.log('Setting up E2E test environment...');
+    loggers.stopHook.log('Setting up E2E test environment...');
 
     // Setup test project directory
     __testProjectRoot = _path.join(
@@ -42,11 +42,11 @@ describe('RAG System End-to-End Workflows', () => {
 
   afterAll(async () => {
     // Cleanup test environment
-    console.log('Cleaning up E2E test environment...');
+    loggers.stopHook.log('Cleaning up E2E test environment...');
     try {
       await __fs.rm(__testProjectRoot, { recursive: true, force: true });
     } catch (error) {
-      console.warn('Cleanup warning:', error.message);
+      loggers.stopHook.warn('Cleanup warning:', error.message);
     }
   });
 

@@ -196,7 +196,7 @@ global.RAG_TEST_UTILS = {
     try {
       await _fs.rm(dirPath, { recursive: true, force: true });
     } catch (error) {
-      console.warn(`Cleanup warning for ${dirPath}:`, error.message);
+      loggers.stopHook.warn(`Cleanup warning for ${dirPath}:`, error.message);
     }
   },
 
@@ -221,7 +221,7 @@ global.RAG_TEST_UTILS = {
       const { result, duration } =
         await global.RAG_TEST_UTILS.measureTime(operation);
 
-      console.log(`${name} completed in ${duration.toFixed(2)}ms`);
+      loggers.stopHook.log(`${name} completed in ${duration.toFixed(2)}ms`);
       global.RAG_TEST_UTILS.assertPerformance(duration, threshold, name);
 
       return result;
@@ -259,7 +259,7 @@ afterEach(async () => {
         }),
       ),
     );
-  } catch {
+  } catch (error) {
     // Ignore cleanup errors
   }
 });
@@ -324,8 +324,8 @@ expect.extend({
   },
 });
 
-console.log('RAG System test environment initialized');
-console.log('Test data path:', global.RAG_TEST_CONFIG.testDataPath);
+loggers.stopHook.log('RAG System test environment initialized');
+loggers.stopHook.log('Test data path:', global.RAG_TEST_CONFIG.testDataPath);
 console.log(
   'Performance thresholds:',
   global.RAG_TEST_CONFIG.performanceThresholds,

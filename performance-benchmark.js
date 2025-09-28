@@ -71,7 +71,7 @@ class TaskManagerPerformanceBenchmark {
           if (jsonMatch) {
             response = JSON.parse(jsonMatch[0]);
           }
-        } catch {
+        } catch (error) {
           // Response is not JSON - keep as string
           response = stdout;
         }
@@ -100,7 +100,7 @@ class TaskManagerPerformanceBenchmark {
    * Benchmark API endpoint response times
    */
   async benchmarkApiEndpoints() {
-    console.log('📊 Benchmarking API endpoint response times...');
+    loggers.stopHook.log('📊 Benchmarking API endpoint response times...');
 
     const endpoints = [
       ['init'],
@@ -115,14 +115,14 @@ class TaskManagerPerformanceBenchmark {
     ];
 
     for (const endpoint of endpoints) {
-      console.log(`   Testing ${endpoint[0]}...`);
+      loggers.stopHook.log(`   Testing ${endpoint[0]}...`);
 
       // Run each endpoint multiple times for statistical significance
       for (let i = 0; i < 5; i++) {
         // eslint-disable-next-line no-await-in-loop -- Sequential timing measurements required
         const result = await this.executeTimedCommand(
           endpoint[0],
-          endpoint.slice(1),
+          endpoint.slice(1)
         );
         this.results.apiResponses.push({
           endpoint: endpoint[0],
@@ -141,25 +141,27 @@ class TaskManagerPerformanceBenchmark {
    * Test embedded subtasks performance
    */
   async benchmarkSubtaskOperations() {
-    console.log('🔧 Benchmarking embedded subtask operations...');
+    loggers.stopHook.log('🔧 Benchmarking embedded subtask operations...');
 
     try {
       // Initialize agent first
-      console.log('   Initializing test agent...');
+      loggers.stopHook.log('   Initializing test agent...');
       const initResult = await this.executeTimedCommand('init');
       if (!initResult.success) {
-        console.log('   ❌ Failed to initialize agent for subtask testing');
+        loggers.stopHook.log(
+          '   ❌ Failed to initialize agent for subtask testing'
+        );
         return;
       }
 
       const agentId = initResult.response?.agentId;
       if (!agentId) {
-        console.log('   ❌ No agent ID returned from init');
+        loggers.stopHook.log('   ❌ No agent ID returned from init');
         return;
       }
 
       // Create a test task
-      console.log('   Creating test task...');
+      loggers.stopHook.log('   Creating test task...');
       const taskData = {
         title: 'Performance Test Task',
         description: 'Task for performance testing embedded subtasks',
@@ -175,15 +177,15 @@ class TaskManagerPerformanceBenchmark {
       });
 
       if (!createResult.success || !createResult.response?.task?.id) {
-        console.log('   ❌ Failed to create test task');
+        loggers.stopHook.log('   ❌ Failed to create test task');
         return;
       }
 
       const taskId = createResult.response.task.id;
-      console.log(`   Created task: ${taskId}`);
+      loggers.stopHook.log(`   Created task: ${taskId}`);
 
       // Test subtask creation performance
-      console.log('   Testing subtask creation...');
+      loggers.stopHook.log('   Testing subtask creation...');
       for (let i = 0; i < 3; i++) {
         const subtaskData = {
           type: 'research',
@@ -209,7 +211,7 @@ class TaskManagerPerformanceBenchmark {
       }
 
       // Test subtask listing performance
-      console.log('   Testing subtask listing...');
+      loggers.stopHook.log('   Testing subtask listing...');
       const listResult = await this.executeTimedCommand('list-subtasks', [
         taskId,
       ]);
@@ -219,7 +221,9 @@ class TaskManagerPerformanceBenchmark {
         ...listResult,
       });
     } catch (error) {
-      console.log(`   ❌ Error in subtask benchmarking: ${error.message}`);
+      loggers.stopHook.log(
+        `   ❌ Error in subtask benchmarking: ${error.message}`
+      );
     }
   }
 
@@ -227,7 +231,7 @@ class TaskManagerPerformanceBenchmark {
    * Test success criteria validation performance
    */
   async benchmarkSuccessCriteria() {
-    console.log('✅ Benchmarking success criteria validation...');
+    loggers.stopHook.log('✅ Benchmarking success criteria validation...');
 
     try {
       // Test basic criteria operations
@@ -252,7 +256,7 @@ class TaskManagerPerformanceBenchmark {
       ];
 
       for (const [command, ...args] of operations) {
-        console.log(`   Testing ${command}...`);
+        loggers.stopHook.log(`   Testing ${command}...`);
         // eslint-disable-next-line no-await-in-loop -- Sequential command testing required for timing
         const result = await this.executeTimedCommand(command, args);
         this.results.successCriteriaValidation.push({
@@ -262,7 +266,7 @@ class TaskManagerPerformanceBenchmark {
       }
     } catch (error) {
       console.log(
-        `   ❌ Error in success criteria benchmarking: ${error.message}`,
+        `   ❌ Error in success criteria benchmarking: ${error.message}`
       );
     }
   }
@@ -271,7 +275,7 @@ class TaskManagerPerformanceBenchmark {
    * Test concurrent agent access performance
    */
   async benchmarkConcurrentAccess() {
-    console.log('👥 Benchmarking concurrent agent access...');
+    loggers.stopHook.log('👥 Benchmarking concurrent agent access...');
 
     const concurrentOperations = [];
     const numConcurrentAgents = 3;
@@ -283,7 +287,7 @@ class TaskManagerPerformanceBenchmark {
           agentIndex: i,
           operation: 'concurrent_init',
           ...result,
-        })),
+        }))
       );
     }
 
@@ -299,7 +303,7 @@ class TaskManagerPerformanceBenchmark {
             agentIndex: i,
             operation: 'concurrent_list',
             ...result,
-          })),
+          }))
         );
       }
 
@@ -307,7 +311,7 @@ class TaskManagerPerformanceBenchmark {
       this.results.concurrentAccess.push(...listResults);
     } catch (error) {
       console.log(
-        `   ❌ Error in concurrent access benchmarking: ${error.message}`,
+        `   ❌ Error in concurrent access benchmarking: ${error.message}`
       );
     }
   }
@@ -316,7 +320,7 @@ class TaskManagerPerformanceBenchmark {
    * Monitor memory usage during operations
    */
   async monitorMemoryUsage() {
-    console.log('💾 Monitoring memory usage patterns...');
+    loggers.stopHook.log('💾 Monitoring memory usage patterns...');
 
     const memorySnapshots = [];
     const startMemory = process.memoryUsage();
@@ -351,7 +355,7 @@ class TaskManagerPerformanceBenchmark {
    * Analyze results and identify bottlenecks
    */
   analyzeBottlenecks() {
-    console.log('🔍 Analyzing performance bottlenecks...');
+    loggers.stopHook.log('🔍 Analyzing performance bottlenecks...');
 
     const bottlenecks = [];
 
@@ -390,7 +394,7 @@ class TaskManagerPerformanceBenchmark {
           return (
             snapshot.heapUsed - this.results.memoryUsage.snapshots[0].heapUsed
           );
-        },
+        }
       );
 
       const maxMemoryGrowth = Math.max(...memoryGrowth);
@@ -406,7 +410,7 @@ class TaskManagerPerformanceBenchmark {
 
     // Analyze concurrent access performance
     const concurrentInits = this.results.concurrentAccess.filter(
-      (r) => r.operation === 'concurrent_init',
+      (r) => r.operation === 'concurrent_init'
     );
     if (concurrentInits.length > 0) {
       const avgConcurrentTime =
@@ -428,7 +432,7 @@ class TaskManagerPerformanceBenchmark {
    * Generate optimization recommendations
    */
   generateRecommendations() {
-    console.log('💡 Generating optimization recommendations...');
+    loggers.stopHook.log('💡 Generating optimization recommendations...');
 
     const recommendations = [];
 
@@ -485,7 +489,7 @@ class TaskManagerPerformanceBenchmark {
    * Generate comprehensive performance report
    */
   async generateReport() {
-    console.log('📋 Generating comprehensive performance report...');
+    loggers.stopHook.log('📋 Generating comprehensive performance report...');
 
     const report = {
       metadata: {
@@ -519,7 +523,7 @@ class TaskManagerPerformanceBenchmark {
     const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-report-${Date.now()}.json`;
     await fs.writeFile(reportPath, JSON.stringify(report, null, 2));
 
-    console.log(`\n📊 Performance Report Generated: ${reportPath}`);
+    loggers.stopHook.log(`\n📊 Performance Report Generated: ${reportPath}`);
     return report;
   }
 
@@ -595,10 +599,10 @@ class TaskManagerPerformanceBenchmark {
   summarizeConcurrentPerformance() {
     const concurrent = {
       init: this.results.concurrentAccess.filter(
-        (r) => r.operation === 'concurrent_init',
+        (r) => r.operation === 'concurrent_init'
       ),
       list: this.results.concurrentAccess.filter(
-        (r) => r.operation === 'concurrent_list',
+        (r) => r.operation === 'concurrent_list'
       ),
     };
 
@@ -655,8 +659,8 @@ class TaskManagerPerformanceBenchmark {
    * Run complete performance benchmark suite
    */
   async runCompleteBenchmark() {
-    console.log('🚀 Starting TaskManager Performance Benchmark Suite');
-    console.log('================================================\n');
+    loggers.stopHook.log('🚀 Starting TaskManager Performance Benchmark Suite');
+    loggers.stopHook.log('================================================\n');
 
     try {
       await this.benchmarkApiEndpoints();
@@ -670,26 +674,30 @@ class TaskManagerPerformanceBenchmark {
 
       const report = await this.generateReport();
 
-      console.log('\n✅ Performance Benchmark Suite Completed Successfully!');
-      console.log(`\n📈 Summary:`);
-      console.log(`   • API Endpoints Tested: ${report.summary.totalApiTests}`);
-      console.log(
-        `   • Subtask Operations: ${report.summary.totalSubtaskTests}`,
+      loggers.stopHook.log(
+        '\n✅ Performance Benchmark Suite Completed Successfully!'
+      );
+      loggers.stopHook.log(`\n📈 Summary:`);
+      loggers.stopHook.log(
+        `   • API Endpoints Tested: ${report.summary.totalApiTests}`
       );
       console.log(
-        `   • Concurrent Tests: ${report.summary.totalConcurrentTests}`,
+        `   • Subtask Operations: ${report.summary.totalSubtaskTests}`
       );
       console.log(
-        `   • Bottlenecks Identified: ${report.summary.totalBottlenecks}`,
+        `   • Concurrent Tests: ${report.summary.totalConcurrentTests}`
       );
       console.log(
-        `   • Recommendations Generated: ${report.summary.totalRecommendations}`,
+        `   • Bottlenecks Identified: ${report.summary.totalBottlenecks}`
+      );
+      console.log(
+        `   • Recommendations Generated: ${report.summary.totalRecommendations}`
       );
 
       return report;
     } catch (error) {
-      console.error(`❌ Benchmark suite failed: ${error.message}`);
-      console.error(error.stack);
+      loggers.stopHook.error(`❌ Benchmark suite failed: ${error.message}`);
+      loggers.stopHook.error(error.stack);
       throw error;
     }
   }
@@ -701,11 +709,11 @@ if (require.main === module) {
   benchmark
     .runCompleteBenchmark()
     .then(() => {
-      console.log('\n🎉 All benchmarks completed successfully!');
+      loggers.stopHook.log('\n🎉 All benchmarks completed successfully!');
       throw new Error('Benchmark completed successfully');
     })
     .catch((error) => {
-      console.error('\n❌ Benchmark suite failed:', error.message);
+      loggers.stopHook.error('\n❌ Benchmark suite failed:', error.message);
       throw error;
     });
 }

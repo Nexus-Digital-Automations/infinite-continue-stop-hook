@@ -42,51 +42,51 @@ const DEFAULT_CONFIG = {
 class CoverageLogger {
   static info(message) {
     if (!process.env.QUIET) {
-      console.log(`📊 ${message}`);
+      loggers.stopHook.log(`📊 ${message}`);
     }
   }
 
   static success(message) {
-    console.log(`✅ ${message}`);
+    loggers.stopHook.log(`✅ ${message}`);
   }
 
   static warning(message) {
-    console.log(`⚠️  ${message}`);
+    loggers.stopHook.log(`⚠️  ${message}`);
   }
 
   static error(message) {
-    console.log(`❌ ${message}`);
+    loggers.stopHook.log(`❌ ${message}`);
   }
 
   static debug(message) {
     if (process.env.DEBUG) {
-      console.log(`🐛 DEBUG: ${message}`);
+      loggers.stopHook.log(`🐛 DEBUG: ${message}`);
     }
   }
 
   static table(headers, rows) {
     // Simple table formatter
     const maxLengths = headers.map((header, i) =>
-      Math.max(header.length, ...rows.map((row) => String(row[i] || '').length)),
+      Math.max(header.length, ...rows.map((row) => String(row[i] || '').length))
     );
 
     const separator = '─'.repeat(
-      maxLengths.reduce((sum, len) => sum + len + 3, 1),
+      maxLengths.reduce((sum, len) => sum + len + 3, 1)
     );
 
-    console.log(`┌${separator}┐`);
+    loggers.stopHook.log(`┌${separator}┐`);
     console.log(
-      `│ ${headers.map((h, i) => h.padEnd(maxLengths[i])).join(' │ ')} │`,
+      `│ ${headers.map((h, i) => h.padEnd(maxLengths[i])).join(' │ ')} │`
     );
-    console.log(`├${separator}┤`);
+    loggers.stopHook.log(`├${separator}┤`);
 
     rows.forEach((row) => {
       console.log(
-        `│ ${row.map((cell, i) => String(cell || '').padEnd(maxLengths[i])).join(' │ ')} │`,
+        `│ ${row.map((cell, i) => String(cell || '').padEnd(maxLengths[i])).join(' │ ')} │`
       );
     });
 
-    console.log(`└${separator}┘`);
+    loggers.stopHook.log(`└${separator}┘`);
   }
 }
 
@@ -134,7 +134,7 @@ class CoverageThresholdChecker {
     } catch (error) {
       CoverageLogger.error(`Coverage validation failed: ${error.message}`);
       if (process.env.DEBUG) {
-        console.error(error.stack);
+        loggers.stopHook.error(error.stack);
       }
       throw error;
     }
@@ -153,9 +153,9 @@ class CoverageThresholdChecker {
       CoverageLogger.info('Coverage data not found, attempting to generate...');
       try {
         execSync('npm run coverage:ci', { stdio: 'inherit', timeout: 120000 });
-      } catch {
+      } catch (error) {
         throw new Error(
-          'Failed to generate coverage data. Run tests with coverage first.',
+          'Failed to generate coverage data. Run tests with coverage first.'
         );
       }
     }
@@ -174,7 +174,7 @@ class CoverageThresholdChecker {
       this.results.summary = coverageData.total;
       CoverageLogger.success('Coverage data loaded successfully');
       CoverageLogger.debug(
-        `Coverage summary: ${JSON.stringify(coverageData.total, null, 2)}`,
+        `Coverage summary: ${JSON.stringify(coverageData.total, null, 2)}`
       );
 
       return coverageData;
@@ -231,7 +231,7 @@ class CoverageThresholdChecker {
       (!this.config.strict_mode || warnings.length === 0);
 
     CoverageLogger.debug(
-      `Validation complete. Failures: ${failures.length}, Warnings: ${warnings.length}`,
+      `Validation complete. Failures: ${failures.length}, Warnings: ${warnings.length}`
     );
   }
 
@@ -247,7 +247,7 @@ class CoverageThresholdChecker {
         summary.branches.pct +
         summary.functions.pct +
         summary.lines.pct) /
-        4,
+        4
     );
 
     const color = this.getBadgeColor(overallCoverage);
@@ -270,7 +270,7 @@ class CoverageThresholdChecker {
 
     fs.writeFileSync(
       path.join(badgeDir, 'data.json'),
-      JSON.stringify(badgeData, null, 2),
+      JSON.stringify(badgeData, null, 2)
     );
 
     CoverageLogger.success(`Coverage badge generated: ${overallCoverage}%`);
@@ -317,15 +317,15 @@ class CoverageThresholdChecker {
       critical_thresholds: this.config.critical_thresholds,
       badge: this.results.badge_url
         ? {
-          url: this.results.badge_url,
-          coverage_percentage: Math.round(
-            (this.results.summary.statements.pct +
+            url: this.results.badge_url,
+            coverage_percentage: Math.round(
+              (this.results.summary.statements.pct +
                 this.results.summary.branches.pct +
                 this.results.summary.functions.pct +
                 this.results.summary.lines.pct) /
-                4,
-          ),
-        }
+                4
+            ),
+          }
         : null,
       git: this.getGitInfo(),
       environment: {
@@ -342,7 +342,7 @@ class CoverageThresholdChecker {
 
     fs.writeFileSync(
       'coverage/threshold-validation.json',
-      JSON.stringify(report, null, 2),
+      JSON.stringify(report, null, 2)
     );
 
     CoverageLogger.success('Validation report generated');
@@ -354,7 +354,7 @@ class CoverageThresholdChecker {
   displayResults() {
     const { summary, failures, warnings, passed } = this.results;
 
-    console.log('\n📊 Coverage Threshold Validation Results:');
+    loggers.stopHook.log('\n📊 Coverage Threshold Validation Results:');
 
     // Coverage table
     const tableHeaders = ['Metric', 'Coverage', 'Target', 'Critical', 'Status'];
@@ -379,31 +379,31 @@ class CoverageThresholdChecker {
           `${critical}%`,
           status,
         ];
-      },
+      }
     );
 
     CoverageLogger.table(tableHeaders, tableRows);
 
     // Overall status
     const overallStatus = passed ? '✅ PASSED' : '❌ FAILED';
-    console.log(`\nOverall Status: ${overallStatus}`);
+    loggers.stopHook.log(`\nOverall Status: ${overallStatus}`);
 
     // Failures
     if (failures.length > 0) {
-      console.log(`\n❌ Critical Issues (${failures.length}):`);
+      loggers.stopHook.log(`\n❌ Critical Issues (${failures.length}):`);
       failures.forEach((failure, index) => {
-        console.log(`  ${index + 1}. ${failure.message}`);
+        loggers.stopHook.log(`  ${index + 1}. ${failure.message}`);
       });
     }
 
     // Warnings
     if (warnings.length > 0) {
-      console.log(`\n⚠️  Warnings (${warnings.length}):`);
+      loggers.stopHook.log(`\n⚠️  Warnings (${warnings.length}):`);
       warnings.forEach((warning, index) => {
         if (typeof warning === 'string') {
-          console.log(`  ${index + 1}. ${warning}`);
+          loggers.stopHook.log(`  ${index + 1}. ${warning}`);
         } else {
-          console.log(`  ${index + 1}. ${warning.message}`);
+          loggers.stopHook.log(`  ${index + 1}. ${warning.message}`);
         }
       });
     }
@@ -415,25 +415,31 @@ class CoverageThresholdChecker {
           summary.branches.pct +
           summary.functions.pct +
           summary.lines.pct) /
-          4,
+          4
       );
-      console.log(`\n🏷️  Coverage Badge: ${overallCoverage}%`);
-      console.log(`   URL: ${this.results.badge_url}`);
+      loggers.stopHook.log(`\n🏷️  Coverage Badge: ${overallCoverage}%`);
+      loggers.stopHook.log(`   URL: ${this.results.badge_url}`);
     }
 
     // Configuration info
     if (this.config.strict_mode) {
-      console.log('\n⚠️  Running in STRICT MODE - warnings will cause failure');
+      loggers.stopHook.log(
+        '\n⚠️  Running in STRICT MODE - warnings will cause failure'
+      );
     }
 
-    console.log(`\n📁 Detailed report: coverage/threshold-validation.json`);
+    loggers.stopHook.log(
+      `\n📁 Detailed report: coverage/threshold-validation.json`
+    );
 
     // Exit guidance
     if (!passed) {
-      console.log('\n💡 To fix coverage issues:');
-      console.log('   1. Add tests for uncovered code');
-      console.log('   2. Run: npm run coverage:report');
-      console.log('   3. Check HTML report: coverage/lcov-report/index.html');
+      loggers.stopHook.log('\n💡 To fix coverage issues:');
+      loggers.stopHook.log('   1. Add tests for uncovered code');
+      loggers.stopHook.log('   2. Run: npm run coverage:report');
+      loggers.stopHook.log(
+        '   3. Check HTML report: coverage/lcov-report/index.html'
+      );
     }
   }
 
@@ -448,7 +454,7 @@ class CoverageThresholdChecker {
           encoding: 'utf8',
         }).trim(),
       };
-    } catch {
+    } catch (error) {
       return { commit: 'unknown', branch: 'unknown' };
     }
   }
@@ -508,7 +514,7 @@ Examples:
       const customThresholds = JSON.parse(thresholdArg.split('=')[1]);
       config.thresholds = { ...config.thresholds, ...customThresholds };
     } catch (error) {
-      console.error('❌ Invalid thresholds JSON:', error.message);
+      loggers.stopHook.error('❌ Invalid thresholds JSON:', error.message);
       throw error;
     }
   }
@@ -517,7 +523,7 @@ Examples:
   try {
     checker.run();
   } catch (error) {
-    console.error('❌ Fatal error:', error.message);
+    loggers.stopHook.error('❌ Fatal error:', error.message);
     throw error;
   }
 }

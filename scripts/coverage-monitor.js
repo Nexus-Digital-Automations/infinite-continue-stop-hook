@@ -34,13 +34,13 @@ const CONFIG = {
       process.cwd(),
       'coverage',
       'reports',
-      'coverage-trends.json',
+      'coverage-trends.json'
     ),
     validation: path.join(
       process.cwd(),
       'coverage',
       'reports',
-      'coverage-validation.json',
+      'coverage-validation.json'
     ),
   },
 };
@@ -50,24 +50,24 @@ const CONFIG = {
  */
 class Logger {
   static info(message) {
-    console.log(`ℹ️  ${message}`);
+    loggers.stopHook.log(`ℹ️  ${message}`);
   }
 
   static success(message) {
-    console.log(`✅ ${message}`);
+    loggers.stopHook.log(`✅ ${message}`);
   }
 
   static warning(message) {
-    console.log(`⚠️  ${message}`);
+    loggers.stopHook.log(`⚠️  ${message}`);
   }
 
   static error(message) {
-    console.log(`❌ ${message}`);
+    loggers.stopHook.log(`❌ ${message}`);
   }
 
   static debug(message) {
     if (process.env.DEBUG) {
-      console.log(`🐛 DEBUG: ${message}`);
+      loggers.stopHook.log(`🐛 DEBUG: ${message}`);
     }
   }
 }
@@ -149,7 +149,7 @@ class CoverageMonitor {
       if (fs.existsSync(CONFIG.paths.summary)) {
         Logger.warning('Tests failed but coverage data was generated');
         this.validation.warnings.push(
-          'Some tests failed during coverage analysis',
+          'Some tests failed during coverage analysis'
         );
       } else {
         throw new Error(`Coverage analysis failed: ${error.message}`);
@@ -169,14 +169,14 @@ class CoverageMonitor {
 
     try {
       const coverageData = JSON.parse(
-        fs.readFileSync(CONFIG.paths.summary, 'utf8'),
+        fs.readFileSync(CONFIG.paths.summary, 'utf8')
       );
       this.coverageData = coverageData;
       this.validation.summary = coverageData.total;
 
       Logger.success('Coverage data loaded successfully');
       Logger.debug(
-        `Total coverage: ${JSON.stringify(coverageData.total, null, 2)}`,
+        `Total coverage: ${JSON.stringify(coverageData.total, null, 2)}`
       );
     } catch (error) {
       throw new Error(`Failed to parse coverage data: ${error.message}`);
@@ -200,12 +200,12 @@ class CoverageMonitor {
 
       if (actual < critical) {
         failures.push(
-          `Critical failure: ${metric} coverage ${actual.toFixed(2)}% < ${critical}% (critical threshold)`,
+          `Critical failure: ${metric} coverage ${actual.toFixed(2)}% < ${critical}% (critical threshold)`
         );
         this.validation.passed = false;
       } else if (actual < threshold) {
         warnings.push(
-          `Warning: ${metric} coverage ${actual.toFixed(2)}% < ${threshold}% (target threshold)`,
+          `Warning: ${metric} coverage ${actual.toFixed(2)}% < ${threshold}% (target threshold)`
         );
       }
     }
@@ -216,7 +216,7 @@ class CoverageMonitor {
     // Log results
     if (failures.length > 0) {
       Logger.error(
-        `Coverage validation failed with ${failures.length} critical issues`,
+        `Coverage validation failed with ${failures.length} critical issues`
       );
       failures.forEach((failure) => Logger.error(failure));
     }
@@ -258,7 +258,7 @@ class CoverageMonitor {
     // Write validation report
     fs.writeFileSync(
       CONFIG.paths.validation,
-      JSON.stringify(reportData, null, 2),
+      JSON.stringify(reportData, null, 2)
     );
 
     Logger.success('Coverage reports generated');
@@ -276,7 +276,7 @@ class CoverageMonitor {
     if (fs.existsSync(CONFIG.paths.trends)) {
       try {
         trends = JSON.parse(fs.readFileSync(CONFIG.paths.trends, 'utf8'));
-      } catch {
+      } catch (error) {
         Logger.warning('Could not load existing trends, starting fresh');
       }
     }
@@ -310,10 +310,10 @@ class CoverageMonitor {
 
     const { summary } = this.validation;
 
-    console.log('\n📊 Coverage Summary:');
-    console.log('┌──────────────┬──────────┬───────────┬────────┐');
-    console.log('│ Metric       │ Coverage │ Threshold │ Status │');
-    console.log('├──────────────┼──────────┼───────────┼────────┤');
+    loggers.stopHook.log('\n📊 Coverage Summary:');
+    loggers.stopHook.log('┌──────────────┬──────────┬───────────┬────────┐');
+    loggers.stopHook.log('│ Metric       │ Coverage │ Threshold │ Status │');
+    loggers.stopHook.log('├──────────────┼──────────┼───────────┼────────┤');
 
     for (const [metric, threshold] of Object.entries(CONFIG.thresholds)) {
       const actual = summary[metric].pct;
@@ -321,26 +321,30 @@ class CoverageMonitor {
       const metricName = metric.charAt(0).toUpperCase() + metric.slice(1);
 
       console.log(
-        `│ ${metricName.padEnd(12)} │ ${actual.toFixed(2).padStart(6)}%  │ ${threshold.toString().padStart(7)}%  │ ${status.padEnd(6)} │`,
+        `│ ${metricName.padEnd(12)} │ ${actual.toFixed(2).padStart(6)}%  │ ${threshold.toString().padStart(7)}%  │ ${status.padEnd(6)} │`
       );
     }
 
-    console.log('└──────────────┴──────────┴───────────┴────────┘');
+    loggers.stopHook.log('└──────────────┴──────────┴───────────┴────────┘');
 
     // Overall status
     const overallStatus = this.validation.passed ? '✅ PASSED' : '❌ FAILED';
-    console.log(`\nOverall Status: ${overallStatus}`);
+    loggers.stopHook.log(`\nOverall Status: ${overallStatus}`);
 
     // Additional info
     if (this.validation.warnings.length > 0) {
-      console.log(`\n⚠️  Warnings: ${this.validation.warnings.length}`);
+      loggers.stopHook.log(
+        `\n⚠️  Warnings: ${this.validation.warnings.length}`
+      );
     }
 
     if (this.validation.failures.length > 0) {
-      console.log(`\n❌ Critical Issues: ${this.validation.failures.length}`);
+      loggers.stopHook.log(
+        `\n❌ Critical Issues: ${this.validation.failures.length}`
+      );
     }
 
-    console.log(`\n📁 Reports available in: ${CONFIG.paths.reports}`);
+    loggers.stopHook.log(`\n📁 Reports available in: ${CONFIG.paths.reports}`);
   }
 
   /**
@@ -360,7 +364,7 @@ class CoverageMonitor {
           encoding: 'utf8',
         }).trim(),
       };
-    } catch {
+    } catch (error) {
       Logger.debug('Could not get Git information');
       return {
         commit: 'unknown',

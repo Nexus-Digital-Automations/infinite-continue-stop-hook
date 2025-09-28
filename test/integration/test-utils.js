@@ -78,7 +78,7 @@ function execAPI(command, args = [], options = {}) {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch {
+        } catch (error) {
           // If both fail, include raw output for debugging
           reject(
             new Error(
@@ -142,7 +142,7 @@ async function cleanupTestEnvironment(testDir) {
   try {
     await fs.rm(testDir, { recursive: true, force: true });
   } catch (error) {
-    console.warn(`Cleanup warning for ${testDir}:`, error.message);
+    loggers.stopHook.warn(`Cleanup warning for ${testDir}:`, error.message);
   }
 }
 
@@ -286,7 +286,7 @@ async function setupGlobalCleanup() {
     });
     await Promise.all(cleanupPromises);
   } catch (error) {
-    console.warn('Global cleanup warning:', error.message);
+    loggers.stopHook.warn('Global cleanup warning:', error.message);
   }
 }
 
@@ -297,7 +297,7 @@ async function teardownGlobalCleanup() {
   try {
     await fs.rm(BASE_TEST_DIR, { recursive: true, force: true });
   } catch (error) {
-    console.warn('Global teardown warning:', error.message);
+    loggers.stopHook.warn('Global teardown warning:', error.message);
   }
 }
 

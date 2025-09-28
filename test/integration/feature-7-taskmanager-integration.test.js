@@ -67,7 +67,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch {
+          } catch (error) {
             // Silently fail for missing or invalid custom rules
           }
 
@@ -113,7 +113,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch {
+          } catch (error) {
             // Silently fail for missing or invalid custom rules
           }
 
@@ -178,7 +178,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch {
+          } catch (error) {
             // Silently fail
           }
 
@@ -358,7 +358,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch {
+          } catch (error) {
             // Silently fail
           }
 
@@ -466,7 +466,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch {
+          } catch (error) {
             // Silently fail
           }
 
@@ -598,7 +598,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch {
+          } catch (error) {
             // Silently fail
           }
 
@@ -729,7 +729,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch {
+          } catch (error) {
             // Silently fail
           }
 
@@ -851,7 +851,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch {
+          } catch (error) {
             // Silently fail
           }
 
@@ -900,7 +900,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch {
+          } catch (error) {
             // Silently fail
           }
 

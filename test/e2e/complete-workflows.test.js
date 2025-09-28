@@ -244,7 +244,7 @@ describe('Complete System Workflows E2E', () => {
         // Verify stop hook handled properly (may succeed or fail based on conditions)
         expect(stopResult).toBeTruthy();
 
-        console.log('✅ Complete system integration workflow test passed');
+        loggers.stopHook.log('✅ Complete system integration workflow test passed');
       },
       E2E_TIMEOUT,
     );
@@ -306,7 +306,7 @@ describe('Complete System Workflows E2E', () => {
         E2EAssertions.assertFeatureCount(finalFeatures, 1);
         expect(finalFeatures.features[0].status).toBe('suggested');
 
-        console.log('✅ Error recovery workflow test passed');
+        loggers.stopHook.log('✅ Error recovery workflow test passed');
       },
       E2E_TIMEOUT,
     );
@@ -464,7 +464,7 @@ describe('Complete System Workflows E2E', () => {
           features.metadata.approval_history.map((h) => h.approved_by),
         ).toContain('business-analyst');
 
-        console.log('✅ Multi-stakeholder approval workflow test passed');
+        loggers.stopHook.log('✅ Multi-stakeholder approval workflow test passed');
       },
       E2E_TIMEOUT,
     );

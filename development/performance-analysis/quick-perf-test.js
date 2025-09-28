@@ -70,7 +70,7 @@ class QuickPerfTest {
       if (arg.startsWith('{') || arg.startsWith('[')) {
         try {
           JSON.parse(arg);
-        } catch {
+        } catch (error) {
           throw new Error(`Invalid JSON argument: ${arg}`);
         }
       } else {
@@ -87,7 +87,7 @@ class QuickPerfTest {
   }
 
   measureEndpoint(command, args = [], iterations = 3) {
-    console.log(`Testing ${command}...`);
+    loggers.stopHook.log(`Testing ${command}...`);
     const times = [];
     let successCount = 0;
     const errors = [];
@@ -133,7 +133,7 @@ class QuickPerfTest {
   }
 
   runCriticalPathTest() {
-    console.log('🚀 Running Critical Path Performance Test\n');
+    loggers.stopHook.log('🚀 Running Critical Path Performance Test\n');
 
     // Test core endpoints individually
     const endpoints = [
@@ -148,14 +148,14 @@ class QuickPerfTest {
     ];
 
     for (const endpoint of endpoints) {
-      console.log(`\n📊 Testing: ${endpoint.description}`);
+      loggers.stopHook.log(`\n📊 Testing: ${endpoint.description}`);
       this.results[endpoint.cmd] = this.measureEndpoint(
         endpoint.cmd,
         endpoint.args,
       );
 
       const result = this.results[endpoint.cmd];
-      console.log(`  ✅ Success Rate: ${result.successRate.toFixed(1)}%`);
+      loggers.stopHook.log(`  ✅ Success Rate: ${result.successRate.toFixed(1)}%`);
       console.log(
         `  ⏱️  Avg Response: ${result.averageResponseTime.toFixed(2)}ms`,
       );
@@ -164,7 +164,7 @@ class QuickPerfTest {
       );
 
       if (result.errors.length > 0) {
-        console.log(`  ❌ Errors: ${result.errors.length}`);
+        loggers.stopHook.log(`  ❌ Errors: ${result.errors.length}`);
       }
     }
 
@@ -294,9 +294,9 @@ function main() {
     const report = tester.generateQuickReport();
     const outputFile = tester.saveReport(report);
 
-    console.log('\n\n📊 QUICK PERFORMANCE TEST RESULTS');
-    console.log('===================================');
-    console.log(`Total Endpoints Tested: ${report.summary.totalEndpoints}`);
+    loggers.stopHook.log('\n\n📊 QUICK PERFORMANCE TEST RESULTS');
+    loggers.stopHook.log('===================================');
+    loggers.stopHook.log(`Total Endpoints Tested: ${report.summary.totalEndpoints}`);
     console.log(
       `Overall Success Rate: ${report.summary.overallSuccessRate.toFixed(2)}%`,
     );
@@ -317,15 +317,15 @@ function main() {
     }
 
     if (report.recommendations.length > 0) {
-      console.log('\n🔧 Key Recommendations:');
+      loggers.stopHook.log('\n🔧 Key Recommendations:');
       report.recommendations.forEach((rec, i) => {
-        console.log(`  ${i + 1}. [${rec.priority}] ${rec.recommendation}`);
+        loggers.stopHook.log(`  ${i + 1}. [${rec.priority}] ${rec.recommendation}`);
       });
     }
 
-    console.log(`\n📄 Full report saved to: ${outputFile}`);
+    loggers.stopHook.log(`\n📄 Full report saved to: ${outputFile}`);
   } catch (error) {
-    console.error('❌ Performance test failed:', error);
+    loggers.stopHook.error('❌ Performance test failed:', error);
     throw error;
   }
 }

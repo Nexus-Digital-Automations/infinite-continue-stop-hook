@@ -51,7 +51,7 @@ global.testUtils = {
         // eslint-disable-next-line no-await-in-loop -- Retry mechanism requires sequential attempts
         await fn();
         return;
-      } catch {
+      } catch (error) {
         // eslint-disable-next-line no-await-in-loop -- Retry mechanism requires sequential delays
         await new Promise((resolve) => {
           setTimeout(resolve, interval);
@@ -130,7 +130,7 @@ console.error = (...args) => {
     if (
       message.includes('Warning: ReactDOM.render is deprecated') ||
       message.includes(
-        'Jest did not exit one second after the test run completed',
+        'Jest did not exit one second after the test run completed'
       ) ||
       message.includes('A worker process has failed to exit gracefully')
     ) {

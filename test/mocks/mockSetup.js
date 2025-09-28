@@ -258,7 +258,7 @@ class MockManager {
       }
     } catch (error) {
       // Fetch not available in this Node.js version, skip mocking
-      console.log('Fetch not available for mocking:', error.message);
+      loggers.stopHook.log('Fetch not available for mocking:', error.message);
     }
   }
 
@@ -346,7 +346,7 @@ class MockManager {
       }
     } catch (error) {
       // Fetch not available, skip restoration
-      console.log('Fetch not available for restoration:', error.message);
+      loggers.stopHook.log('Fetch not available for restoration:', error.message);
     }
 
     this.originalModules.clear();
@@ -412,7 +412,7 @@ function mockAPIError(command, error) {
   const mockManager = getMockManager();
   if (mockManager) {
     // This would be implemented to inject specific errors for testing
-    console.warn(`Mock API error for ${command}: ${error}`);
+    loggers.stopHook.warn(`Mock API error for ${command}: ${error}`);
   }
 }
 

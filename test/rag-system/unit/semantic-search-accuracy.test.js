@@ -16,14 +16,14 @@ describe('Semantic Search Accuracy Validation', () => {
   let _embeddingService;
 
   beforeAll(() => {
-    console.log('Setting up semantic search accuracy test environment...');
+    loggers.stopHook.log('Setting up semantic search accuracy test environment...');
 
     // Initialize test dataset with known technical content
     _testDataSet = setupTechnicalTestDataset();
   });
 
   afterAll(() => {
-    console.log('Cleaning up semantic search test environment...');
+    loggers.stopHook.log('Cleaning up semantic search test environment...');
   });
 
   beforeEach(() => {
@@ -235,8 +235,8 @@ describe('Semantic Search Accuracy Validation', () => {
                   throw new Error(\`HTTP \${response.status}: \${response.statusText}\`);
                 }
                 return await response.json();
-              } catch {
-        console.error('Failed to fetch user:', error);
+              } catch (error) {
+        loggers.stopHook.error('Failed to fetch user:', error);
                 throw error;
               }
             }

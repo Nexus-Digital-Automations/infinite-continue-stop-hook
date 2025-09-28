@@ -65,7 +65,7 @@ describe('Performance Validation E2E', () => {
             thresholds,
           );
         } catch (error) {
-          console.warn(`Performance validation warning: ${error.message}`);
+          loggers.stopHook.warn(`Performance validation warning: ${error.message}`);
           console.warn(
             `Actual metrics: avg=${performanceMetrics.avg}ms, max=${performanceMetrics.max}ms`,
           );
@@ -77,8 +77,8 @@ describe('Performance Validation E2E', () => {
           'Features response structure:',
           JSON.stringify(features, null, 2),
         );
-        console.log('Features.features type:', typeof features.features);
-        console.log('Features.features value:', features.features);
+        loggers.stopHook.log('Features.features type:', typeof features.features);
+        loggers.stopHook.log('Features.features value:', features.features);
         expect(
           features.features && features.features.length,
         ).toBeGreaterThanOrEqual(5);
@@ -155,7 +155,7 @@ describe('Performance Validation E2E', () => {
             approvalThresholds,
           );
         } catch (error) {
-          console.warn(`Approval performance warning: ${error.message}`);
+          loggers.stopHook.warn(`Approval performance warning: ${error.message}`);
         }
 
         console.log(
@@ -227,11 +227,11 @@ describe('Performance Validation E2E', () => {
         const avgIndividualTime = bulkSuggestionTime / bulkSize;
         const bulkEfficiency = avgIndividualTime / bulkApprovalMetrics.avg;
 
-        console.log(`✅ Bulk operation performance test: ${bulkSize} features`);
+        loggers.stopHook.log(`✅ Bulk operation performance test: ${bulkSize} features`);
         console.log(
           `   Individual avg: ${avgIndividualTime}ms, Bulk time: ${bulkApprovalMetrics.avg}ms`,
         );
-        console.log(`   Bulk efficiency: ${bulkEfficiency.toFixed(2)}x`);
+        loggers.stopHook.log(`   Bulk efficiency: ${bulkEfficiency.toFixed(2)}x`);
 
         // Validate bulk operations completed
         const features = await environment.getFeatures();
@@ -279,7 +279,7 @@ describe('Performance Validation E2E', () => {
         console.log(
           `✅ High concurrency performance test: ${totalOperations} operations in ${totalTime}ms`,
         );
-        console.log(`   Average per operation: ${avgTimePerOperation}ms`);
+        loggers.stopHook.log(`   Average per operation: ${avgTimePerOperation}ms`);
         console.log(
           `   Concurrent agents: ${concurrentAgents}, Operations per agent: ${operationsPerAgent}`,
         );
@@ -334,7 +334,7 @@ describe('Performance Validation E2E', () => {
         console.log(
           `   Total time: ${contentionTime}ms, Throughput: ${contentionThroughput.toFixed(2)} ops/sec`,
         );
-        console.log(`   Average time under contention: ${avgContentionTime}ms`);
+        loggers.stopHook.log(`   Average time under contention: ${avgContentionTime}ms`);
       },
       E2E_TIMEOUT * 2,
     );
@@ -366,7 +366,7 @@ describe('Performance Validation E2E', () => {
         try {
           PerformanceTestHelpers.validatePerformance(apiMetrics, apiThresholds);
         } catch (error) {
-          console.warn(`TaskManager API performance warning: ${error.message}`);
+          loggers.stopHook.warn(`TaskManager API performance warning: ${error.message}`);
         }
 
         console.log(
@@ -417,7 +417,7 @@ describe('Performance Validation E2E', () => {
             authThresholds,
           );
         } catch (error) {
-          console.warn(`Authorization performance warning: ${error.message}`);
+          loggers.stopHook.warn(`Authorization performance warning: ${error.message}`);
         }
 
         console.log(
@@ -455,6 +455,7 @@ describe('Performance Validation E2E', () => {
           }
 
           const scalabilityStart = Date.now();
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for scalability testing with different feature counts
           await Promise.all(scalabilityPromises);
           const scalabilityTime = Date.now() - scalabilityStart;
 
@@ -468,10 +469,12 @@ describe('Performance Validation E2E', () => {
           );
 
           // Clear environment for next test
+          // eslint-disable-next-line no-await-in-loop -- Sequential cleanup required between scalability tests
           await environment.cleanup();
           environment = new E2EEnvironment(
             'performance-validation-scalability',
           );
+          // eslint-disable-next-line no-await-in-loop -- Sequential setup required between scalability tests
           await environment.setup();
         }
       },
@@ -588,6 +591,7 @@ describe('Performance Validation E2E', () => {
         ];
 
         for (const baselineTest of baselineTests) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for baseline performance testing
           const metrics = await PerformanceTestHelpers.measurePerformance(
             baselineTest.test,
             3,

@@ -45,30 +45,30 @@ const CONFIG = {
 class PerformanceLogger {
   static info(message) {
     if (!CONFIG.output.ci_mode || CONFIG.output.verbose) {
-      console.log(`⚡ ${message}`);
+      loggers.stopHook.log(`⚡ ${message}`);
     }
   }
 
   static success(message) {
-    console.log(`✅ ${message}`);
+    loggers.stopHook.log(`✅ ${message}`);
   }
 
   static warning(message) {
-    console.log(`⚠️  ${message}`);
+    loggers.stopHook.log(`⚠️  ${message}`);
   }
 
   static error(message) {
-    console.log(`❌ ${message}`);
+    loggers.stopHook.log(`❌ ${message}`);
   }
 
   static debug(message) {
     if (CONFIG.output.verbose) {
-      console.log(`🐛 DEBUG: ${message}`);
+      loggers.stopHook.log(`🐛 DEBUG: ${message}`);
     }
   }
 
   static metric(name, value, unit = '') {
-    console.log(`📊 ${name}: ${value}${unit}`);
+    loggers.stopHook.log(`📊 ${name}: ${value}${unit}`);
   }
 }
 
@@ -164,7 +164,7 @@ class ResourceMonitor {
         heapTotal: sum.heapTotal + measurement.memory.heapTotal,
         external: sum.external + measurement.memory.external,
       }),
-      { rss: 0, heapUsed: 0, heapTotal: 0, external: 0 },
+      { rss: 0, heapUsed: 0, heapTotal: 0, external: 0 }
     );
 
     const count = this.measurements.length;
@@ -210,7 +210,7 @@ class TestPerformanceMonitor {
 
       const duration = Date.now() - this.startTime;
       PerformanceLogger.success(
-        `Test performance monitoring completed in ${duration}ms`,
+        `Test performance monitoring completed in ${duration}ms`
       );
 
       // Exit with appropriate code
@@ -220,7 +220,7 @@ class TestPerformanceMonitor {
       }
     } catch (error) {
       PerformanceLogger.error(
-        `Test performance monitoring failed: ${error.message}`,
+        `Test performance monitoring failed: ${error.message}`
       );
       PerformanceLogger.debug(error.stack);
       throw error;
@@ -247,7 +247,7 @@ class TestPerformanceMonitor {
    */
   async runTestSuites() {
     PerformanceLogger.info(
-      'Running test suites with performance monitoring...',
+      'Running test suites with performance monitoring...'
     );
 
     const testCommands = [
@@ -316,7 +316,7 @@ class TestPerformanceMonitor {
     } catch (error) {
       const duration = Date.now() - suiteStartTime;
       PerformanceLogger.error(
-        `${testSuite.name} failed after ${duration}ms: ${error.message}`,
+        `${testSuite.name} failed after ${duration}ms: ${error.message}`
       );
 
       this.errors.push({
@@ -411,7 +411,7 @@ class TestPerformanceMonitor {
     // Calculate total test time
     const totalTestTime = this.suiteResults.reduce(
       (sum, result) => sum + result.duration,
-      0,
+      0
     );
 
     // Identify slowest tests
@@ -469,7 +469,7 @@ class TestPerformanceMonitor {
   analyzeParallelizationOpportunities() {
     const serialTime = this.suiteResults.reduce(
       (sum, result) => sum + result.duration,
-      0,
+      0
     );
     const longestSuite = Math.max(...this.suiteResults.map((r) => r.duration));
 
@@ -523,7 +523,7 @@ class TestPerformanceMonitor {
     for (const suiteResult of this.suiteResults) {
       const suiteFile = path.join(
         CONFIG.paths.results,
-        `${suiteResult.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.json`,
+        `${suiteResult.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.json`
       );
       fs.writeFileSync(suiteFile, JSON.stringify(suiteResult, null, 2));
     }
@@ -542,9 +542,9 @@ class TestPerformanceMonitor {
     if (fs.existsSync(CONFIG.paths.trends)) {
       try {
         trends = JSON.parse(fs.readFileSync(CONFIG.paths.trends, 'utf8'));
-      } catch {
+      } catch (error) {
         PerformanceLogger.warning(
-          'Could not load existing trends, starting fresh',
+          'Could not load existing trends, starting fresh'
         );
       }
     }
@@ -585,66 +585,78 @@ class TestPerformanceMonitor {
     const successfulSuites = this.suiteResults.filter((r) => r.success).length;
     const failedSuites = this.suiteResults.filter((r) => !r.success).length;
 
-    console.log('\n⚡ Test Performance Summary:');
-    console.log('┌─────────────────────────┬──────────────────┬──────────┐');
-    console.log('│ Metric                  │ Value            │ Status   │');
-    console.log('├─────────────────────────┼──────────────────┼──────────┤');
+    loggers.stopHook.log('\n⚡ Test Performance Summary:');
+    loggers.stopHook.log(
+      '┌─────────────────────────┬──────────────────┬──────────┐'
+    );
+    loggers.stopHook.log(
+      '│ Metric                  │ Value            │ Status   │'
+    );
+    loggers.stopHook.log(
+      '├─────────────────────────┼──────────────────┼──────────┤'
+    );
 
     // Overall metrics
     console.log(
-      `│ Total Execution Time    │ ${this.formatDuration(totalDuration).padEnd(14)} │ ${this.getTimeStatus(totalDuration).padEnd(8)} │`,
+      `│ Total Execution Time    │ ${this.formatDuration(totalDuration).padEnd(14)} │ ${this.getTimeStatus(totalDuration).padEnd(8)} │`
     );
     console.log(
-      `│ Test Suites Run         │ ${this.suiteResults.length.toString().padEnd(14)} │ ${'ℹ️ Info'.padEnd(8)} │`,
+      `│ Test Suites Run         │ ${this.suiteResults.length.toString().padEnd(14)} │ ${'ℹ️ Info'.padEnd(8)} │`
     );
     console.log(
-      `│ Successful Suites       │ ${successfulSuites.toString().padEnd(14)} │ ${successfulSuites === this.suiteResults.length ? '✅ Good' : '⚠️ Check'} │`,
+      `│ Successful Suites       │ ${successfulSuites.toString().padEnd(14)} │ ${successfulSuites === this.suiteResults.length ? '✅ Good' : '⚠️ Check'} │`
     );
     console.log(
-      `│ Failed Suites           │ ${failedSuites.toString().padEnd(14)} │ ${failedSuites === 0 ? '✅ Good' : '❌ Bad'} │`,
+      `│ Failed Suites           │ ${failedSuites.toString().padEnd(14)} │ ${failedSuites === 0 ? '✅ Good' : '❌ Bad'} │`
     );
 
     if (this.analysis) {
       console.log(
-        `│ Peak Memory Usage       │ ${this.analysis.memoryAnalysis.peak_memory.padEnd(14)} │ ${'📊 Info'.padEnd(8)} │`,
+        `│ Peak Memory Usage       │ ${this.analysis.memoryAnalysis.peak_memory.padEnd(14)} │ ${'📊 Info'.padEnd(8)} │`
       );
       console.log(
-        `│ Potential Speedup       │ ${this.analysis.parallelizationAnalysis.potential_speedup.padEnd(14)} │ ${'🚀 Info'.padEnd(8)} │`,
+        `│ Potential Speedup       │ ${this.analysis.parallelizationAnalysis.potential_speedup.padEnd(14)} │ ${'🚀 Info'.padEnd(8)} │`
       );
     }
 
-    console.log('└─────────────────────────┴──────────────────┴──────────┘');
+    loggers.stopHook.log(
+      '└─────────────────────────┴──────────────────┴──────────┘'
+    );
 
     // Slowest tests
     if (this.analysis?.slowestTests?.length > 0) {
-      console.log('\n🐌 Slowest Test Suites:');
+      loggers.stopHook.log('\n🐌 Slowest Test Suites:');
       this.analysis.slowestTests.forEach((test, index) => {
         console.log(
-          `${index + 1}. ${test.name}: ${this.formatDuration(test.duration)}`,
+          `${index + 1}. ${test.name}: ${this.formatDuration(test.duration)}`
         );
       });
     }
 
     // Warnings and errors
     if (this.warnings.length > 0) {
-      console.log(`\n⚠️  Performance Warnings: ${this.warnings.length}`);
+      loggers.stopHook.log(
+        `\n⚠️  Performance Warnings: ${this.warnings.length}`
+      );
     }
 
     if (this.errors.length > 0) {
-      console.log(`\n❌ Performance Errors: ${this.errors.length}`);
+      loggers.stopHook.log(`\n❌ Performance Errors: ${this.errors.length}`);
       this.errors.forEach((error) => {
-        console.log(`   - ${error.message || error.error}`);
+        loggers.stopHook.log(`   - ${error.message || error.error}`);
       });
     }
 
     // Recommendations
     if (this.analysis?.parallelizationAnalysis?.recommendation) {
       console.log(
-        `\n💡 Recommendation: ${this.analysis.parallelizationAnalysis.recommendation}`,
+        `\n💡 Recommendation: ${this.analysis.parallelizationAnalysis.recommendation}`
       );
     }
 
-    console.log(`\n📁 Detailed reports available in: ${CONFIG.paths.reports}`);
+    loggers.stopHook.log(
+      `\n📁 Detailed reports available in: ${CONFIG.paths.reports}`
+    );
   }
 
   /**
@@ -699,7 +711,7 @@ class TestPerformanceMonitor {
           encoding: 'utf8',
         }).trim(),
       };
-    } catch {
+    } catch (error) {
       return { commit: 'unknown', branch: 'unknown', author: 'unknown' };
     }
   }

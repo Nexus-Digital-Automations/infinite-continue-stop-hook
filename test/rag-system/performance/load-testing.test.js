@@ -56,7 +56,7 @@ describe('RAG System Performance and Load Testing', () => {
   let _loadGenerator;
 
   beforeAll(() => {
-    console.log('Setting up performance test environment...');
+    loggers.stopHook.log('Setting up performance test environment...');
     jest.setTimeout(300000); // 5 minutes for performance tests
 
     // Initialize performance monitoring
@@ -65,7 +65,7 @@ describe('RAG System Performance and Load Testing', () => {
   });
 
   afterAll(() => {
-    console.log('Cleaning up performance test environment...');
+    loggers.stopHook.log('Cleaning up performance test environment...');
     // await performanceMonitor.generateReport();
   });
 
@@ -136,9 +136,9 @@ describe('RAG System Performance and Load Testing', () => {
       expect(_longContent.embeddingTime).toBeLessThan(_shortContent.embeddingTime * 5);
 
       // Log performance metrics
-      console.log('Embedding Performance Results:');
+      loggers.stopHook.log('Embedding Performance Results:');
       embeddingTimes.forEach(result => {
-        console.log(`Content: ${result.contentLength} chars, Time: ${result.embeddingTime.toFixed(2)}ms`);
+        loggers.stopHook.log(`Content: ${result.contentLength} chars, Time: ${result.embeddingTime.toFixed(2)}ms`);
       });
       */
     });
@@ -161,7 +161,7 @@ describe('RAG System Performance and Load Testing', () => {
 
       /* Future implementation:
       // Store dataset
-      console.log('Storing test dataset...');
+      loggers.stopHook.log('Storing test dataset...');
       const _storeStartTime = Date.now();
 
       for (const lesson of _largeDataset) {
@@ -169,7 +169,7 @@ describe('RAG System Performance and Load Testing', () => {
       }
 
       const _storeEndTime = Date.now();
-      console.log(`Dataset storage completed in ${_storeEndTime - _storeStartTime}ms`);
+      loggers.stopHook.log(`Dataset storage completed in ${_storeEndTime - _storeStartTime}ms`);
 
       // Test various search queries
       const _searchQueries = [
@@ -211,11 +211,11 @@ describe('RAG System Performance and Load Testing', () => {
 
       expect(avgSearchTime).toBeLessThan(300); // Average under 300ms
 
-      console.log('Search Performance Results:');
+      loggers.stopHook.log('Search Performance Results:');
       searchTimes.forEach(result => {
-        console.log(`Query: "${result.query}", Time: ${result.searchTime.toFixed(2)}ms, Results: ${result.resultCount}`);
+        loggers.stopHook.log(`Query: "${result.query}", Time: ${result.searchTime.toFixed(2)}ms, Results: ${result.resultCount}`);
       });
-      console.log(`Average search time: ${avgSearchTime.toFixed(2)}ms`);
+      loggers.stopHook.log(`Average search time: ${avgSearchTime.toFixed(2)}ms`);
       */
     });
 
@@ -263,9 +263,9 @@ describe('RAG System Performance and Load Testing', () => {
       }
 
       // Verify batch efficiency scaling
-      console.log('Batch Performance Results:');
+      loggers.stopHook.log('Batch Performance Results:');
       batchPerformance.forEach(result => {
-        console.log(`Batch Size: ${result.batchSize}, Store: ${result.storeTime.toFixed(2)}ms (${result.storeTimePerItem.toFixed(2)}ms/item), Retrieve: ${result.retrieveTime.toFixed(2)}ms (${result.retrieveTimePerItem.toFixed(2)}ms/item)`);
+        loggers.stopHook.log(`Batch Size: ${result.batchSize}, Store: ${result.storeTime.toFixed(2)}ms (${result.storeTimePerItem.toFixed(2)}ms/item), Retrieve: ${result.retrieveTime.toFixed(2)}ms (${result.retrieveTimePerItem.toFixed(2)}ms/item)`);
       });
 
       // Larger batches should have better per-item performance
@@ -285,7 +285,7 @@ describe('RAG System Performance and Load Testing', () => {
       expect(true).toBe(true);
 
       /* Future implementation:
-      console.log(`Testing ${concurrentUsers} concurrent users with ${operationsPerUser} operations each`);
+      loggers.stopHook.log(`Testing ${concurrentUsers} concurrent users with ${operationsPerUser} operations each`);
 
       const _userPromises = Array.from({ length: concurrentUsers }, async (_, userId) => {
         const _userResults = {
@@ -362,11 +362,11 @@ describe('RAG System Performance and Load Testing', () => {
       expect(avgStoreTime).toBeLessThan(2000); // Under 2 seconds
       expect(totalErrors).toBe(0); // No errors under normal concurrent load
 
-      console.log(`Concurrent Performance Results:`);
-      console.log(`Average search time: ${avgSearchTime.toFixed(2)}ms`);
-      console.log(`Average store time: ${avgStoreTime.toFixed(2)}ms`);
-      console.log(`Total operations: ${totalSearches + totalStores}`);
-      console.log(`Error rate: ${(totalErrors / (totalSearches + totalStores) * 100).toFixed(2)}%`);
+      loggers.stopHook.log(`Concurrent Performance Results:`);
+      loggers.stopHook.log(`Average search time: ${avgSearchTime.toFixed(2)}ms`);
+      loggers.stopHook.log(`Average store time: ${avgStoreTime.toFixed(2)}ms`);
+      loggers.stopHook.log(`Total operations: ${totalSearches + totalStores}`);
+      loggers.stopHook.log(`Error rate: ${(totalErrors / (totalSearches + totalStores) * 100).toFixed(2)}%`);
       */
     });
 
@@ -430,10 +430,10 @@ describe('RAG System Performance and Load Testing', () => {
       expect(finalLesson.lesson.content).toBeDefined();
       expect(finalLesson.lesson.content.length).toBeGreaterThan(0);
 
-      console.log(`Concurrency Test Results:`);
-      console.log(`Successful modifications: ${successfulModifications}/${concurrentModifiers}`);
-      console.log(`Final modification count: ${finalLesson.lesson.modification_count}`);
-      console.log(`Final content length: ${finalLesson.lesson.content.length}`);
+      loggers.stopHook.log(`Concurrency Test Results:`);
+      loggers.stopHook.log(`Successful modifications: ${successfulModifications}/${concurrentModifiers}`);
+      loggers.stopHook.log(`Final modification count: ${finalLesson.lesson.modification_count}`);
+      loggers.stopHook.log(`Final content length: ${finalLesson.lesson.content.length}`);
       */
     });
   });
@@ -446,7 +446,7 @@ describe('RAG System Performance and Load Testing', () => {
       expect(true).toBe(true);
 
       /* Future implementation:
-      console.log('Initial memory usage:', formatMemoryUsage(initialMemory));
+      loggers.stopHook.log('Initial memory usage:', formatMemoryUsage(initialMemory));
 
       // Create large dataset to test memory usage
       const _largeOperations = [
@@ -484,21 +484,21 @@ describe('RAG System Performance and Load Testing', () => {
 
       for (const testOperation of largeOperations) {
         const _preOpMemory = process.memoryUsage();
-        console.log(`\nStarting: ${testOperation.name}`);
-        console.log('Pre-operation memory:', formatMemoryUsage(preOpMemory));
+        loggers.stopHook.log(`\nStarting: ${testOperation.name}`);
+        loggers.stopHook.log('Pre-operation memory:', formatMemoryUsage(preOpMemory));
 
         const _startTime = Date.now();
         const result = await testOperation.operation();
         const _endTime = Date.now();
 
         const _postOpMemory = process.memoryUsage();
-        console.log('Post-operation memory:', formatMemoryUsage(postOpMemory));
+        loggers.stopHook.log('Post-operation memory:', formatMemoryUsage(postOpMemory));
 
         const _memoryIncrease = postOpMemory.heapUsed - preOpMemory.heapUsed;
         const _durationMs = endTime - startTime;
 
-        console.log(`Operation completed in ${durationMs}ms`);
-        console.log(`Memory increase: ${_formatBytes(memoryIncrease)}`);
+        loggers.stopHook.log(`Operation completed in ${durationMs}ms`);
+        loggers.stopHook.log(`Memory increase: ${_formatBytes(memoryIncrease)}`);
 
         // Memory increase should be reasonable
         expect(memoryIncrease).toBeLessThan(200 * 1024 * 1024); // Less than 200MB
@@ -514,7 +514,7 @@ describe('RAG System Performance and Load Testing', () => {
       }
 
       const _finalMemory = process.memoryUsage();
-      console.log('\nFinal memory usage:', formatMemoryUsage(finalMemory));
+      loggers.stopHook.log('\nFinal memory usage:', formatMemoryUsage(finalMemory));
 
       // Total memory usage should not have increased dramatically
       const _totalIncrease = finalMemory.heapUsed - initialMemory.heapUsed;
@@ -545,7 +545,7 @@ describe('RAG System Performance and Load Testing', () => {
             expect(searchResult.success).toBe(true);
 
             const _currentMemory = process.memoryUsage();
-            console.log(`Memory pressure test ${i}: ${formatMemoryUsage(currentMemory)}`);
+            loggers.stopHook.log(`Memory pressure test ${i}: ${formatMemoryUsage(currentMemory)}`);
 
             // System should still respond within reasonable time
             const _startTime = Date.now();
@@ -563,7 +563,7 @@ describe('RAG System Performance and Load Testing', () => {
       } catch (error) {
         // System should handle memory errors gracefully
         expect(error.message).toContain('memory');
-        console.log('Expected memory error handled gracefully:', error.message);
+        loggers.stopHook.log('Expected memory error handled gracefully:', error.message);
       } finally {
         // Cleanup
         memoryPressure.length = 0;
@@ -589,7 +589,7 @@ describe('RAG System Performance and Load Testing', () => {
       ];
 
       for (const dataset of testDatasets) {
-        console.log(`Testing database performance with ${dataset.size} ${dataset.complexity} records`);
+        loggers.stopHook.log(`Testing database performance with ${dataset.size} ${dataset.complexity} records`);
 
         // Generate and store test data
         const _testData = generateTestDataset(dataset.size, dataset.complexity);
@@ -602,7 +602,7 @@ describe('RAG System Performance and Load Testing', () => {
         expect(storeResults.stored_count).toBe(dataset.size);
 
         const _storeTime = _storeEndTime - _storeStartTime;
-        console.log(`Storage time: ${storeTime}ms (${(storeTime/dataset.size).toFixed(2)}ms per record)`);
+        loggers.stopHook.log(`Storage time: ${storeTime}ms (${(storeTime/dataset.size).toFixed(2)}ms per record)`);
 
         // Test various query patterns
         const _queryTests = [
@@ -633,7 +633,7 @@ describe('RAG System Performance and Load Testing', () => {
           const _queryEndTime = Date.now();
 
           const _queryTime = queryEndTime - queryStartTime;
-          console.log(`${queryTest.name}: ${queryTime}ms`);
+          loggers.stopHook.log(`${queryTest.name}: ${queryTime}ms`);
 
           expect(result.success).toBe(true);
           expect(queryTime).toBeLessThan(2000); // Under 2 seconds
@@ -653,7 +653,7 @@ describe('RAG System Performance and Load Testing', () => {
       expect(true).toBe(true);
 
       /* Future implementation:
-      console.log(`Testing connection pooling with ${concurrentQueries} concurrent connections`);
+      loggers.stopHook.log(`Testing connection pooling with ${concurrentQueries} concurrent connections`);
 
       const _connectionTests = Array.from({ length: concurrentQueries }, async (_, connId) => {
         const _connectionResults = {
@@ -701,10 +701,10 @@ describe('RAG System Performance and Load Testing', () => {
       const _avgQueryTime = totalQueryTime / totalQueries;
       const _errorRate = (totalErrors / totalQueries) * 100;
 
-      console.log(`Connection pooling results:`);
-      console.log(`Total queries: ${totalQueries}`);
-      console.log(`Average query time: ${avgQueryTime.toFixed(2)}ms`);
-      console.log(`Error rate: ${errorRate.toFixed(2)}%`);
+      loggers.stopHook.log(`Connection pooling results:`);
+      loggers.stopHook.log(`Total queries: ${totalQueries}`);
+      loggers.stopHook.log(`Average query time: ${avgQueryTime.toFixed(2)}ms`);
+      loggers.stopHook.log(`Error rate: ${errorRate.toFixed(2)}%`);
 
       // Connection pooling should maintain good performance
       expect(avgQueryTime).toBeLessThan(500); // Under 500ms average

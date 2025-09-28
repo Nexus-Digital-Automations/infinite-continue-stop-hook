@@ -186,7 +186,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             );
           }
           return [];
-        } catch {
+        } catch (error) {
           return [];
         }
       };
@@ -599,7 +599,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             }
           }
           return [];
-        } catch {
+        } catch (error) {
           return [];
         }
       };

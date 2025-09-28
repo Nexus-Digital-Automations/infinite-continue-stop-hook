@@ -437,7 +437,7 @@ describe('CLI Commands Integration Tests', () => {
         const errorOutput = JSON.parse(result1.stderr);
         expect(errorOutput.success).toBe(false);
         expect(errorOutput.error).toBeDefined();
-      } catch {
+      } catch (error) {
         // If not JSON, should still contain error information
         expect(result1.stderr).toContain('required') ||
           expect(result1.stderr).toContain('Error') ||

@@ -64,7 +64,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         }
         const result = JSON.parse(jsonString);
         resolve(result);
-      } catch {
+      } catch (error) {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);

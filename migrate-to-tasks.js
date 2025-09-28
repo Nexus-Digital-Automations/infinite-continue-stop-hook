@@ -15,7 +15,7 @@ class TaskMigrator {
     this.tasksPath = path.join(projectRoot, 'TASKS.json');
     this.backupPath = path.join(
       projectRoot,
-      `FEATURES.json.backup.${Date.now()}`,
+      `FEATURES.json.backup.${Date.now()}`
     );
   }
 
@@ -24,7 +24,7 @@ class TaskMigrator {
    */
   async migrate() {
     try {
-      console.log('🚀 Starting FEATURES.json → TASKS.json migration...');
+      loggers.stopHook.log('🚀 Starting FEATURES.json → TASKS.json migration...');
 
       // Step 1: Validate source file exists
       await this.validateSourceFile();
@@ -47,9 +47,9 @@ class TaskMigrator {
       // Step 7: Generate auto-tasks for existing approved features
       await this.generateAutoTasks(tasksData);
 
-      console.log('✅ Migration completed successfully!');
-      console.log(`📁 Backup created: ${this.backupPath}`);
-      console.log(`📁 New file created: ${this.tasksPath}`);
+      loggers.stopHook.log('✅ Migration completed successfully!');
+      loggers.stopHook.log(`📁 Backup created: ${this.backupPath}`);
+      loggers.stopHook.log(`📁 New file created: ${this.tasksPath}`);
 
       return {
         success: true,
@@ -58,7 +58,7 @@ class TaskMigrator {
         stats: await this.getMigrationStats(tasksData),
       };
     } catch (error) {
-      console.error('❌ Migration failed:', error.message);
+      loggers.stopHook.error('❌ Migration failed:', error.message);
       throw error;
     }
   }
@@ -69,8 +69,8 @@ class TaskMigrator {
   async validateSourceFile() {
     try {
       await fs.access(this.featuresPath);
-      console.log('✓ Source FEATURES.json found');
-    } catch {
+      loggers.stopHook.log('✓ Source FEATURES.json found');
+    } catch (error) {
       throw new Error(`FEATURES.json not found at ${this.featuresPath}`);
     }
   }
@@ -81,7 +81,7 @@ class TaskMigrator {
   async createBackup() {
     try {
       await fs.copyFile(this.featuresPath, this.backupPath);
-      console.log(`✓ Backup created: ${this.backupPath}`);
+      loggers.stopHook.log(`✓ Backup created: ${this.backupPath}`);
     } catch (error) {
       throw new Error(`Failed to create backup: ${error.message}`);
     }
@@ -94,7 +94,7 @@ class TaskMigrator {
     try {
       const data = await fs.readFile(this.featuresPath, 'utf8');
       const parsedData = JSON.parse(data);
-      console.log('✓ Features data loaded and parsed');
+      loggers.stopHook.log('✓ Features data loaded and parsed');
       return parsedData;
     } catch (error) {
       throw new Error(`Failed to load features data: ${error.message}`);
@@ -105,7 +105,7 @@ class TaskMigrator {
    * Transform FEATURES.json data to new TASKS.json schema
    */
   transformToTasksSchema(featuresData) {
-    console.log('🔄 Transforming to TASKS.json schema...');
+    loggers.stopHook.log('🔄 Transforming to TASKS.json schema...');
 
     const migrationDate = new Date().toISOString();
     const taskIdCounter = Date.now();
@@ -236,7 +236,7 @@ class TaskMigrator {
           dependencies: [],
           estimated_effort: 5, // Default value
           required_capabilities: this.inferCapabilitiesFromCategory(
-            feature.category,
+            feature.category
           ),
           created_at: feature.created_at,
           updated_at: feature.updated_at,
@@ -329,7 +329,7 @@ class TaskMigrator {
 
     tasksData.metadata.total_tasks = tasksData.tasks.length;
 
-    console.log(`✓ Transformed ${tasksData.tasks.length} tasks`);
+    loggers.stopHook.log(`✓ Transformed ${tasksData.tasks.length} tasks`);
     return tasksData;
   }
 
@@ -337,7 +337,7 @@ class TaskMigrator {
    * Generate auto-tasks for approved features
    */
   generateAutoTasks(tasksData) {
-    console.log('🔄 Generating auto-tasks for approved features...');
+    loggers.stopHook.log('🔄 Generating auto-tasks for approved features...');
 
     let autoTasksGenerated = 0;
     const autoTaskIdCounter = Date.now() + 10000;
@@ -463,7 +463,7 @@ class TaskMigrator {
       autoTasksGenerated * 2;
 
     console.log(
-      `✓ Generated ${autoTasksGenerated * 2} auto-tasks (${autoTasksGenerated} test + ${autoTasksGenerated} audit)`,
+      `✓ Generated ${autoTasksGenerated * 2} auto-tasks (${autoTasksGenerated} test + ${autoTasksGenerated} audit)`
     );
   }
 
@@ -471,7 +471,7 @@ class TaskMigrator {
    * Validate the transformed data structure
    */
   validateTransformedData(tasksData) {
-    console.log('🔍 Validating transformed data...');
+    loggers.stopHook.log('🔍 Validating transformed data...');
 
     // Check required fields
     if (!tasksData.project) {
@@ -503,7 +503,7 @@ class TaskMigrator {
       }
     }
 
-    console.log('✓ Data validation passed');
+    loggers.stopHook.log('✓ Data validation passed');
   }
 
   /**
@@ -512,7 +512,7 @@ class TaskMigrator {
   async writeTasksFile(tasksData) {
     try {
       await fs.writeFile(this.tasksPath, JSON.stringify(tasksData, null, 2));
-      console.log(`✓ TASKS.json written to ${this.tasksPath}`);
+      loggers.stopHook.log(`✓ TASKS.json written to ${this.tasksPath}`);
     } catch (error) {
       throw new Error(`Failed to write TASKS.json: ${error.message}`);
     }
@@ -595,12 +595,12 @@ if (require.main === module) {
   migrator
     .migrate()
     .then((result) => {
-      console.log('\n📊 Migration Summary:');
-      console.log(JSON.stringify(result.stats, null, 2));
+      loggers.stopHook.log('\n📊 Migration Summary:');
+      loggers.stopHook.log({ additionalData: [null, 2)] }, JSON.stringify(result.stats);
       throw new Error('Migration completed successfully');
     })
     .catch((error) => {
-      console.error('\n❌ Migration failed:', error.message);
+      loggers.stopHook.error('\n❌ Migration failed:', error.message);
       throw error;
     });
 }

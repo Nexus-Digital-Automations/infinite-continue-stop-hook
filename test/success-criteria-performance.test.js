@@ -98,7 +98,7 @@ class PerformanceMonitor {
 
   getAverageTime(operationName) {
     const _ops = this.measurements.filter(
-      (m) => m.operationName === operationName && !m.error,
+      (m) => m.operationName === operationName && !m.error
     );
     if (_ops.length === 0) {
       return 0;
@@ -150,10 +150,10 @@ class PerformanceMonitor {
     ];
     operationTypes.forEach((opType) => {
       const _ops = this.measurements.filter(
-        (m) => m.operationName === opType && !m.error,
+        (m) => m.operationName === opType && !m.error
       );
       const _errors = this.measurements.filter(
-        (m) => m.operationName === opType && m.error,
+        (m) => m.operationName === opType && m.error
       );
 
       if (_ops.length > 0) {
@@ -201,7 +201,7 @@ function execAPIWithMonitoring(
   monitor,
   command,
   args = [],
-  timeout = PERFORMANCE_TIMEOUT,
+  timeout = PERFORMANCE_TIMEOUT
 ) {
   return monitor.measureOperation(`api_${command}`, () => {
     return new Promise((resolve, reject) => {
@@ -218,7 +218,7 @@ function execAPIWithMonitoring(
         {
           stdio: ['pipe', 'pipe', 'pipe'],
           env: { ...process.env, NODE_ENV: 'test' },
-        },
+        }
       );
 
       let stdout = '';
@@ -237,12 +237,12 @@ function execAPIWithMonitoring(
           try {
             const result = stdout.trim() ? JSON.parse(stdout) : {};
             resolve(result);
-          } catch {
+          } catch (error) {
             resolve({ rawOutput: stdout, stderr });
           }
         } else {
           reject(
-            new Error(`Command failed with code ${code}: ${stderr || stdout}`),
+            new Error(`Command failed with code ${code}: ${stderr || stdout}`)
           );
         }
       });
@@ -281,12 +281,12 @@ async function setupPerformanceTestProject() {
 
     await _fs.writeFile(
       _path.join(TEST_PROJECT_DIR, 'package.json'),
-      JSON.stringify(packageJson, null, 2),
+      JSON.stringify(packageJson, null, 2)
     );
 
     // Create main application file
     const indexJs = `
-console.log('Performance test application started');
+loggers.stopHook.log('Performance test application started');
 
 // Simulate some work
 function performWork() {
@@ -299,7 +299,7 @@ function performWork() {
   }
   
   const duration = Date.now() - start;
-  console.log(\`Work completed in \${duration}ms, result: \${result}\`);
+  loggers.stopHook.log(\`Work completed in \${duration}ms, result: \${result}\`);
   return result;
 }
 
@@ -314,10 +314,10 @@ function allocateMemory() {
 
 performWork();
 const memAlloc = allocateMemory();
-console.log(\`Memory allocated: \${memAlloc} arrays\`);
+loggers.stopHook.log(\`Memory allocated: \${memAlloc} arrays\`);
 
 setTimeout(() => {
-  console.log('Application completed successfully');
+  loggers.stopHook.log('Application completed successfully');
   process.exit(0);
 }, 1000);
 `;
@@ -340,9 +340,9 @@ describe('Performance Test Suite', () => {
 
     await _fs.writeFile(_path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
-    console.log('Performance test project setup completed');
+    loggers.stopHook.log('Performance test project setup completed');
   } catch (error) {
-    console.error('Failed to setup performance test project:', error);
+    loggers.stopHook.error('Failed to setup performance test project:', error);
     throw error;
   }
 }
@@ -350,9 +350,9 @@ describe('Performance Test Suite', () => {
 async function cleanupPerformanceTestProject() {
   try {
     await _fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
-    console.log('Performance test project cleanup completed');
+    loggers.stopHook.log('Performance test project cleanup completed');
   } catch (error) {
-    console.error('Failed to cleanup performance test project:', error);
+    loggers.stopHook.error('Failed to cleanup performance test project:', error);
   }
 }
 
@@ -385,17 +385,17 @@ describe('Success Criteria Performance Tests', () => {
       async () => {
         const { result, measurement } = await execAPIWithMonitoring(
           monitor,
-          'success-criteria:init',
+          'success-criteria:init'
         );
 
         expect(measurement.duration).toBeLessThan(30000); // 30 second requirement
         expect(result).toBeDefined();
 
         console.log(
-          `Initialize duration: ${measurement.duration.toFixed(2)}ms`,
+          `Initialize duration: ${measurement.duration.toFixed(2)}ms`
         );
       },
-      PERFORMANCE_TIMEOUT,
+      PERFORMANCE_TIMEOUT
     );
 
     test(
@@ -429,17 +429,17 @@ describe('Success Criteria Performance Tests', () => {
         const { result, _measurement } = await execAPIWithMonitoring(
           monitor,
           'success-criteria:create-template',
-          [_templateData],
+          [_templateData]
         );
 
         expect(_measurement.duration).toBeLessThan(30000);
         expect(result).toBeDefined();
 
         console.log(
-          `Create template duration: ${_measurement.duration.toFixed(2)}ms`,
+          `Create template duration: ${_measurement.duration.toFixed(2)}ms`
         );
       },
-      PERFORMANCE_TIMEOUT,
+      PERFORMANCE_TIMEOUT
     );
 
     test(
@@ -461,29 +461,29 @@ describe('Success Criteria Performance Tests', () => {
         await execAPIWithMonitoring(
           monitor,
           'success-criteria:create-template',
-          [_templateData],
+          [_templateData]
         );
         await execAPIWithMonitoring(
           monitor,
           'success-criteria:apply-template',
-          ['Validation Test Template'],
+          ['Validation Test Template']
         );
 
         // Validate - this is the critical performance test
         const { result, _measurement } = await execAPIWithMonitoring(
           monitor,
-          'success-criteria:validate',
+          'success-criteria:validate'
         );
 
         expect(_measurement.duration).toBeLessThan(30000); // Critical 30-second requirement
         expect(result).toBeDefined();
 
         console.log(
-          `Validation duration: ${_measurement.duration.toFixed(2)}ms`,
+          `Validation duration: ${_measurement.duration.toFixed(2)}ms`
         );
-        console.log(`Validation result:`, result);
+        loggers.stopHook.log(`Validation result:`, result);
       },
-      PERFORMANCE_TIMEOUT,
+      PERFORMANCE_TIMEOUT
     );
 
     test(
@@ -508,17 +508,17 @@ describe('Success Criteria Performance Tests', () => {
         const { result, _measurement } = await execAPIWithMonitoring(
           monitor,
           'success-criteria:create-template',
-          [_largeTemplateData],
+          [_largeTemplateData]
         );
 
         expect(_measurement.duration).toBeLessThan(30000);
         expect(result).toBeDefined();
 
         console.log(
-          `Large template creation duration: ${_measurement.duration.toFixed(2)}ms`,
+          `Large template creation duration: ${_measurement.duration.toFixed(2)}ms`
         );
       },
-      PERFORMANCE_TIMEOUT,
+      PERFORMANCE_TIMEOUT
     );
 
     test(
@@ -548,7 +548,7 @@ describe('Success Criteria Performance Tests', () => {
           _operations.push(
             execAPIWithMonitoring(monitor, 'success-criteria:create-template', [
               _templateData,
-            ]),
+            ])
           );
         }
 
@@ -563,10 +563,10 @@ describe('Success Criteria Performance Tests', () => {
           expect(result._measurement.duration).toBeLessThan(10000); // Individual ops should be fast
         });
 
-        console.log(`Rapid operations total time: ${_totalTime.toFixed(2)}ms`);
-        console.log(`Average per operation: ${(_totalTime / 10).toFixed(2)}ms`);
+        loggers.stopHook.log(`Rapid operations total time: ${_totalTime.toFixed(2)}ms`);
+        loggers.stopHook.log(`Average per operation: ${(_totalTime / 10).toFixed(2)}ms`);
       },
-      PERFORMANCE_TIMEOUT,
+      PERFORMANCE_TIMEOUT
     );
   });
 
@@ -591,12 +591,12 @@ describe('Success Criteria Performance Tests', () => {
         await execAPIWithMonitoring(
           monitor,
           'success-criteria:create-template',
-          [_templateData],
+          [_templateData]
         );
         await execAPIWithMonitoring(
           monitor,
           'success-criteria:apply-template',
-          ['Memory Test Template'],
+          ['Memory Test Template']
         );
         await execAPIWithMonitoring(monitor, 'success-criteria:validate');
 
@@ -614,11 +614,11 @@ describe('Success Criteria Performance Tests', () => {
         expect(monitor.detectMemoryLeaks()).toBe(false);
 
         console.log(
-          `Memory increase: ${(_memoryIncrease / 1024 / 1024).toFixed(2)}MB`,
+          `Memory increase: ${(_memoryIncrease / 1024 / 1024).toFixed(2)}MB`
         );
-        console.log(`Peak usage: ${(_peakUsage / 1024 / 1024).toFixed(2)}MB`);
+        loggers.stopHook.log(`Peak usage: ${(_peakUsage / 1024 / 1024).toFixed(2)}MB`);
       },
-      PERFORMANCE_TIMEOUT,
+      PERFORMANCE_TIMEOUT
     );
 
     test(
@@ -658,7 +658,7 @@ describe('Success Criteria Performance Tests', () => {
           await execAPIWithMonitoring(
             monitor,
             'success-criteria:create-template',
-            [data],
+            [data]
           );
           _gcStats.push({
             phase: `template-${index}`,
@@ -679,7 +679,7 @@ describe('Success Criteria Performance Tests', () => {
           heapTotal: stat.memory.heapTotal,
         }));
 
-        console.log('Memory usage pattern:', _memoryPattern);
+        loggers.stopHook.log('Memory usage pattern:', _memoryPattern);
 
         // Memory should not continuously increase
         const _finalHeap = _gcStats[_gcStats.length - 1].memory.heapUsed;
@@ -687,7 +687,7 @@ describe('Success Criteria Performance Tests', () => {
 
         expect(_finalHeap).toBeLessThan(_maxHeap * 1.5); // Final memory shouldn't be too much higher than max
       },
-      PERFORMANCE_TIMEOUT,
+      PERFORMANCE_TIMEOUT
     );
   });
 
@@ -719,7 +719,7 @@ describe('Success Criteria Performance Tests', () => {
           const { _measurement } = await execAPIWithMonitoring(
             monitor,
             'success-criteria:create-template',
-            [templateData],
+            [templateData]
           );
 
           _runTimes.push(_measurement.duration);
@@ -737,7 +737,7 @@ describe('Success Criteria Performance Tests', () => {
         const _variance =
           _runTimes.reduce(
             (sum, time) => sum + Math.pow(time - _avgTime, 2),
-            0,
+            0
           ) / _runTimes.length;
         const _stdDev = Math.sqrt(_variance);
 
@@ -745,16 +745,16 @@ describe('Success Criteria Performance Tests', () => {
         expect(_stdDev).toBeLessThan(_avgTime * 0.5); // StdDev should be less than 50% of average
         expect(_maxTime).toBeLessThan(_avgTime * 2); // Max time shouldn't be more than 2x average
 
-        console.log(`Performance consistency analysis:`);
-        console.log(`  Average: ${_avgTime.toFixed(2)}ms`);
-        console.log(`  Min: ${_minTime.toFixed(2)}ms`);
-        console.log(`  Max: ${_maxTime.toFixed(2)}ms`);
-        console.log(`  Std Dev: ${_stdDev.toFixed(2)}ms`);
+        loggers.stopHook.log(`Performance consistency analysis:`);
+        loggers.stopHook.log(`  Average: ${_avgTime.toFixed(2)}ms`);
+        loggers.stopHook.log(`  Min: ${_minTime.toFixed(2)}ms`);
+        loggers.stopHook.log(`  Max: ${_maxTime.toFixed(2)}ms`);
+        loggers.stopHook.log(`  Std Dev: ${_stdDev.toFixed(2)}ms`);
         console.log(
-          `  Coefficient of variation: ${((_stdDev / _avgTime) * 100).toFixed(2)}%`,
+          `  Coefficient of variation: ${((_stdDev / _avgTime) * 100).toFixed(2)}%`
         );
       },
-      PERFORMANCE_TIMEOUT * 2,
+      PERFORMANCE_TIMEOUT * 2
     );
 
     test(
@@ -789,7 +789,7 @@ describe('Success Criteria Performance Tests', () => {
                 estimatedTime: i * 10,
                 dependencies: Array.from(
                   { length: i % 10 },
-                  (_, k) => `dep-${k}`,
+                  (_, k) => `dep-${k}`
                 ),
               },
             })),
@@ -798,7 +798,7 @@ describe('Success Criteria Performance Tests', () => {
           const { _measurement } = await execAPIWithMonitoring(
             monitor,
             'success-criteria:create-template',
-            [_massiveTemplateData],
+            [_massiveTemplateData]
           );
 
           // Generate performance report
@@ -806,7 +806,7 @@ describe('Success Criteria Performance Tests', () => {
 
           console.log(
             'Performance stress test report:',
-            JSON.stringify(_report, null, 2),
+            JSON.stringify(_report, null, 2)
           );
 
           // Even under stress, should not exceed 30 seconds
@@ -820,7 +820,7 @@ describe('Success Criteria Performance Tests', () => {
           const _report = monitor.generateReport();
           console.log(
             'Performance stress test failed with report:',
-            JSON.stringify(_report, null, 2),
+            JSON.stringify(_report, null, 2)
           );
 
           // Even if the operation fails, it should fail quickly
@@ -829,14 +829,14 @@ describe('Success Criteria Performance Tests', () => {
           ) {
             expect(
               _report.operationSummary['api_success-criteria:create-template']
-                .maxTime,
+                .maxTime
             ).toBeLessThan(30000);
           }
 
           throw _error;
         }
       },
-      PERFORMANCE_TIMEOUT,
+      PERFORMANCE_TIMEOUT
     );
   });
 
@@ -894,15 +894,15 @@ describe('Success Criteria Performance Tests', () => {
         // Should not have performance violations
         expect(_report.performanceViolations).toHaveLength(0);
 
-        console.log('Comprehensive performance metrics:');
-        console.log(JSON.stringify(_report, null, 2));
+        loggers.stopHook.log('Comprehensive performance metrics:');
+        loggers.stopHook.log({ additionalData: [null, 2)] }, JSON.stringify(_report);
 
         // Save report for analysis
         const _reportPath = _path.join(__dirname, 'performance-report.json');
         await _fs.writeFile(_reportPath, JSON.stringify(_report, null, 2));
-        console.log(`Performance report saved to: ${_reportPath}`);
+        loggers.stopHook.log(`Performance report saved to: ${_reportPath}`);
       },
-      PERFORMANCE_TIMEOUT,
+      PERFORMANCE_TIMEOUT
     );
 
     test(
@@ -917,7 +917,7 @@ describe('Success Criteria Performance Tests', () => {
           nodeVersion: process.version,
         };
 
-        console.log('System information:', _systemInfo);
+        loggers.stopHook.log('System information:', _systemInfo);
 
         // CPU benchmark
         const _cpuStart = process.hrtime.bigint();
@@ -953,7 +953,7 @@ describe('Success Criteria Performance Tests', () => {
         const { measurement } = await execAPIWithMonitoring(
           monitor,
           'success-criteria:create-template',
-          [_templateData],
+          [_templateData]
         );
 
         const _benchmarkResults = {
@@ -966,7 +966,7 @@ describe('Success Criteria Performance Tests', () => {
             (measurement.memoryDelta.heapUsed || 0) / _memBenchmark,
         };
 
-        console.log('Benchmark results:', _benchmarkResults);
+        loggers.stopHook.log('Benchmark results:', _benchmarkResults);
 
         // Performance should scale reasonably with system capabilities
         expect(_benchmarkResults.successCriteriaBenchmark).toBeLessThan(30000);
@@ -976,11 +976,11 @@ describe('Success Criteria Performance Tests', () => {
         const _benchmarkPath = _path.join(__dirname, 'benchmark-results.json');
         await _fs.writeFile(
           _benchmarkPath,
-          JSON.stringify(_benchmarkResults, null, 2),
+          JSON.stringify(_benchmarkResults, null, 2)
         );
-        console.log(`Benchmark results saved to: ${_benchmarkPath}`);
+        loggers.stopHook.log(`Benchmark results saved to: ${_benchmarkPath}`);
       },
-      PERFORMANCE_TIMEOUT,
+      PERFORMANCE_TIMEOUT
     );
   });
 });

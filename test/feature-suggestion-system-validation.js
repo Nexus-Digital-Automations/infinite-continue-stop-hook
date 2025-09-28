@@ -27,12 +27,14 @@ class FeatureSuggestionValidator {
     this.testFeatureId = null;
     this.startTime = Date.now();
 
-    console.log('🧪 Feature Suggestion System Validation Test');
-    console.log('=' * 60);
-    console.log(`📅 Started: ${new Date().toISOString()}`);
-    console.log('🎯 Parent Feature: feature_suggested_1757095650796_wpub5ogu3');
-    console.log('⚡ Phase: 2 (Implementation & Development)');
-    console.log('');
+    loggers.stopHook.log('🧪 Feature Suggestion System Validation Test');
+    loggers.stopHook.log('=' * 60);
+    loggers.stopHook.log(`📅 Started: ${new Date().toISOString()}`);
+    loggers.stopHook.log(
+      '🎯 Parent Feature: feature_suggested_1757095650796_wpub5ogu3'
+    );
+    loggers.stopHook.log('⚡ Phase: 2 (Implementation & Development)');
+    loggers.stopHook.log('');
   }
 
   /**
@@ -44,8 +46,8 @@ class FeatureSuggestionValidator {
   executeCommand(command, description) {
     const operationId = `op_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-    console.log(`🔄 [${operationId}] ${description}`);
-    console.log(`   Command: ${command}`);
+    loggers.stopHook.log(`🔄 [${operationId}] ${description}`);
+    loggers.stopHook.log(`   Command: ${command}`);
 
     try {
       const _startTime = Date.now();
@@ -59,13 +61,13 @@ class FeatureSuggestionValidator {
       let _result;
       try {
         _result = JSON.parse(_output);
-      } catch {
+      } catch (error) {
         _result = { raw_output: _output };
       }
 
-      console.log(`✅ [${operationId}] Success (${_duration}ms)`);
+      loggers.stopHook.log(`✅ [${operationId}] Success (${_duration}ms)`);
       console.log(
-        `   Result: ${JSON.stringify(_result.success || _result.message || 'OK', null, 2)}`,
+        `   Result: ${JSON.stringify(_result.success || _result.message || 'OK', null, 2)}`
       );
 
       this.testResults.push({
@@ -80,7 +82,7 @@ class FeatureSuggestionValidator {
 
       return { success: true, data: _result, duration: _duration };
     } catch (error) {
-      console.log(`❌ [${operationId}] Failed: ${error.message}`);
+      loggers.stopHook.log(`❌ [${operationId}] Failed: ${error.message}`);
 
       this.testResults.push({
         id: operationId,
@@ -99,8 +101,8 @@ class FeatureSuggestionValidator {
    * Test 1: Validate agent can suggest new features
    */
   async testFeatureSuggestion() {
-    console.log('\n📋 TEST 1: Feature Suggestion Capability');
-    console.log('─'.repeat(50));
+    loggers.stopHook.log('\n📋 TEST 1: Feature Suggestion Capability');
+    loggers.stopHook.log('─'.repeat(50));
 
     const testFeatureData = {
       title: 'Test Validation Feature',
@@ -114,12 +116,12 @@ class FeatureSuggestionValidator {
     const command = `timeout 10s node "${this.taskmanagerPath}" suggest-feature '${JSON.stringify(testFeatureData)}'`;
     const result = await this.executeCommand(
       command,
-      'Agent suggests new test feature',
+      'Agent suggests new test feature'
     );
 
     if (result.success && result.data.featureId) {
       this.testFeatureId = result.data.featureId;
-      console.log(`🎯 Test feature created: ${this.testFeatureId}`);
+      loggers.stopHook.log(`🎯 Test feature created: ${this.testFeatureId}`);
       return true;
     }
 
@@ -130,31 +132,35 @@ class FeatureSuggestionValidator {
    * Test 2: Validate feature listing and status tracking
    */
   async testFeatureListing() {
-    console.log('\n📜 TEST 2: Feature Listing & Status Tracking');
-    console.log('─'.repeat(50));
+    loggers.stopHook.log('\n📜 TEST 2: Feature Listing & Status Tracking');
+    loggers.stopHook.log('─'.repeat(50));
 
     const command = `timeout 10s node "${this.taskmanagerPath}" list-features`;
     const result = await this.executeCommand(
       command,
-      'List all features including suggested',
+      'List all features including suggested'
     );
 
     if (result.success && result.data.features) {
       const features = result.data.features;
       const suggestedFeatures = features.filter(
-        (f) => f.status === 'suggested',
+        (f) => f.status === 'suggested'
       );
       const approvedFeatures = features.filter((f) => f.status === 'approved');
 
-      console.log(`📊 Total features: ${features.length}`);
-      console.log(`💡 Suggested features: ${suggestedFeatures.length}`);
-      console.log(`✅ Approved features: ${approvedFeatures.length}`);
+      loggers.stopHook.log(`📊 Total features: ${features.length}`);
+      loggers.stopHook.log(
+        `💡 Suggested features: ${suggestedFeatures.length}`
+      );
+      loggers.stopHook.log(`✅ Approved features: ${approvedFeatures.length}`);
 
       // Verify our test feature appears in the list
       if (this.testFeatureId) {
         const testFeature = features.find((f) => f.id === this.testFeatureId);
         if (testFeature) {
-          console.log(`🎯 Test feature found in list: ${testFeature.status}`);
+          loggers.stopHook.log(
+            `🎯 Test feature found in list: ${testFeature.status}`
+          );
           return true;
         }
       }
@@ -167,11 +173,11 @@ class FeatureSuggestionValidator {
    * Test 3: Validate feature approval workflow
    */
   async testFeatureApproval() {
-    console.log('\n👍 TEST 3: Feature Approval Workflow');
-    console.log('─'.repeat(50));
+    loggers.stopHook.log('\n👍 TEST 3: Feature Approval Workflow');
+    loggers.stopHook.log('─'.repeat(50));
 
     if (!this.testFeatureId) {
-      console.log('⚠️  Skipping: No test feature ID available');
+      loggers.stopHook.log('⚠️  Skipping: No test feature ID available');
       return false;
     }
 
@@ -183,16 +189,16 @@ class FeatureSuggestionValidator {
       const listCommand = `timeout 10s node "${this.taskmanagerPath}" list-features`;
       const listResult = await this.executeCommand(
         listCommand,
-        'Verify feature approval status',
+        'Verify feature approval status'
       );
 
       if (listResult.success && listResult.data.features) {
         const approvedFeature = listResult.data.features.find(
-          (f) => f.id === this.testFeatureId,
+          (f) => f.id === this.testFeatureId
         );
         if (approvedFeature && approvedFeature.status === 'approved') {
           console.log(
-            `✅ Feature successfully approved: ${approvedFeature.status}`,
+            `✅ Feature successfully approved: ${approvedFeature.status}`
           );
           return true;
         }
@@ -206,11 +212,11 @@ class FeatureSuggestionValidator {
    * Test 4: Validate phase system integration
    */
   async testPhaseSystemIntegration() {
-    console.log('\n⚙️  TEST 4: Phase System Integration');
-    console.log('─'.repeat(50));
+    loggers.stopHook.log('\n⚙️  TEST 4: Phase System Integration');
+    loggers.stopHook.log('─'.repeat(50));
 
     if (!this.testFeatureId) {
-      console.log('⚠️  Skipping: No test feature ID available');
+      loggers.stopHook.log('⚠️  Skipping: No test feature ID available');
       return false;
     }
 
@@ -223,7 +229,7 @@ class FeatureSuggestionValidator {
     const createCommand = `timeout 10s node "${this.taskmanagerPath}" create-phase ${this.testFeatureId} '${JSON.stringify(phaseData)}'`;
     const createResult = await this.executeCommand(
       createCommand,
-      'Create test phase',
+      'Create test phase'
     );
 
     if (createResult.success) {
@@ -231,7 +237,7 @@ class FeatureSuggestionValidator {
       const listCommand = `timeout 10s node "${this.taskmanagerPath}" list-phases ${this.testFeatureId}`;
       const listResult = await this.executeCommand(
         listCommand,
-        'List feature phases',
+        'List feature phases'
       );
 
       if (
@@ -239,9 +245,11 @@ class FeatureSuggestionValidator {
         listResult.data.phases &&
         listResult.data.phases.length > 0
       ) {
-        console.log(`📊 Phases created: ${listResult.data.phases.length}`);
+        loggers.stopHook.log(
+          `📊 Phases created: ${listResult.data.phases.length}`
+        );
         console.log(
-          `📈 Completion: ${listResult.data.statistics.completion_percentage}%`,
+          `📈 Completion: ${listResult.data.statistics.completion_percentage}%`
         );
         return true;
       }
@@ -254,8 +262,8 @@ class FeatureSuggestionValidator {
    * Test 5: Validate complete feature lifecycle
    */
   async testCompleteLifecycle() {
-    console.log('\n🔄 TEST 5: Complete Feature Lifecycle');
-    console.log('─'.repeat(50));
+    loggers.stopHook.log('\n🔄 TEST 5: Complete Feature Lifecycle');
+    loggers.stopHook.log('─'.repeat(50));
 
     // This test validates the original Test Feature Suggestion feature
     const originalFeatureId = 'feature_suggested_1757095650796_wpub5ogu3';
@@ -264,22 +272,22 @@ class FeatureSuggestionValidator {
     const currentPhaseCommand = `timeout 10s node "${this.taskmanagerPath}" current-phase ${originalFeatureId}`;
     const currentPhaseResult = await this.executeCommand(
       currentPhaseCommand,
-      'Check original feature current phase',
+      'Check original feature current phase'
     );
 
     if (currentPhaseResult.success) {
       const phase = currentPhaseResult.data.currentPhase;
       console.log(
-        `📍 Current Phase: ${phase.number} - ${phase.title} (${phase.status})`,
+        `📍 Current Phase: ${phase.number} - ${phase.title} (${phase.status})`
       );
       console.log(
-        `📊 Overall Progress: ${currentPhaseResult.data.statistics.completion_percentage}%`,
+        `📊 Overall Progress: ${currentPhaseResult.data.statistics.completion_percentage}%`
       );
 
       // If we're in Phase 2 and it's in progress, this test validates the implementation is working
       if (phase.number === 2 && phase.status === 'in_progress') {
         console.log(
-          '✅ Phase 2 validation successful - feature lifecycle working correctly',
+          '✅ Phase 2 validation successful - feature lifecycle working correctly'
         );
         return true;
       }
@@ -292,14 +300,14 @@ class FeatureSuggestionValidator {
    * Cleanup test artifacts
    */
   cleanup() {
-    console.log('\n🧹 CLEANUP: Removing Test Artifacts');
-    console.log('─'.repeat(50));
+    loggers.stopHook.log('\n🧹 CLEANUP: Removing Test Artifacts');
+    loggers.stopHook.log('─'.repeat(50));
 
     if (this.testFeatureId) {
       // Note: In a real system, you might want to keep test data for audit
       // For this validation, we'll leave the test feature for inspection
       console.log(
-        `📝 Test feature preserved for inspection: ${this.testFeatureId}`,
+        `📝 Test feature preserved for inspection: ${this.testFeatureId}`
       );
     }
   }
@@ -313,36 +321,42 @@ class FeatureSuggestionValidator {
     const failedTests = this.testResults.filter((r) => !r.success).length;
     const duration = Date.now() - this.startTime;
 
-    console.log('\n📊 FEATURE SUGGESTION SYSTEM VALIDATION REPORT');
-    console.log('='.repeat(60));
-    console.log(`🕒 Total Duration: ${duration}ms`);
-    console.log(`✅ Successful Operations: ${successfulTests}`);
-    console.log(`❌ Failed Operations: ${failedTests}`);
+    loggers.stopHook.log('\n📊 FEATURE SUGGESTION SYSTEM VALIDATION REPORT');
+    loggers.stopHook.log('='.repeat(60));
+    loggers.stopHook.log(`🕒 Total Duration: ${duration}ms`);
+    loggers.stopHook.log(`✅ Successful Operations: ${successfulTests}`);
+    loggers.stopHook.log(`❌ Failed Operations: ${failedTests}`);
     console.log(
-      `📈 Success Rate: ${((successfulTests / this.testResults.length) * 100).toFixed(1)}%`,
+      `📈 Success Rate: ${((successfulTests / this.testResults.length) * 100).toFixed(1)}%`
     );
-    console.log('');
+    loggers.stopHook.log('');
 
-    console.log('📋 Test Results Summary:');
+    loggers.stopHook.log('📋 Test Results Summary:');
     this.testResults.forEach((result, index) => {
       const status = result.success ? '✅' : '❌';
       const duration = result.duration ? `(${result.duration}ms)` : '';
       console.log(
-        `  ${index + 1}. ${status} ${result.description} ${duration}`,
+        `  ${index + 1}. ${status} ${result.description} ${duration}`
       );
     });
 
-    console.log('');
-    console.log('🎯 Validation Conclusions:');
-    console.log('  • Feature suggestion workflow is functional');
-    console.log('  • Agent can suggest features without authorization');
-    console.log('  • Approval/rejection system works correctly');
-    console.log('  • Phase system integrates properly with features');
-    console.log('  • Complete feature lifecycle is validated');
-    console.log('');
-    console.log('✅ Test Feature Suggestion implementation SUCCESSFUL');
-    console.log('📋 Phase 2 (Implementation & Development) COMPLETE');
-    console.log('🚀 Ready to progress to Phase 3 (Testing & Validation)');
+    loggers.stopHook.log('');
+    loggers.stopHook.log('🎯 Validation Conclusions:');
+    loggers.stopHook.log('  • Feature suggestion workflow is functional');
+    loggers.stopHook.log(
+      '  • Agent can suggest features without authorization'
+    );
+    loggers.stopHook.log('  • Approval/rejection system works correctly');
+    loggers.stopHook.log('  • Phase system integrates properly with features');
+    loggers.stopHook.log('  • Complete feature lifecycle is validated');
+    loggers.stopHook.log('');
+    loggers.stopHook.log(
+      '✅ Test Feature Suggestion implementation SUCCESSFUL'
+    );
+    loggers.stopHook.log('📋 Phase 2 (Implementation & Development) COMPLETE');
+    loggers.stopHook.log(
+      '🚀 Ready to progress to Phase 3 (Testing & Validation)'
+    );
 
     return {
       success: failedTests === 0,
@@ -361,7 +375,9 @@ class FeatureSuggestionValidator {
    */
   async runValidation() {
     try {
-      console.log('🚀 Starting Feature Suggestion System Validation...\n');
+      loggers.stopHook.log(
+        '🚀 Starting Feature Suggestion System Validation...\n'
+      );
 
       // Run all tests
       await this.testFeatureSuggestion();
@@ -380,7 +396,7 @@ class FeatureSuggestionValidator {
         '..',
         'development',
         'test-reports',
-        'feature-suggestion-validation-report.json',
+        'feature-suggestion-validation-report.json'
       );
 
       // Ensure directory exists
@@ -404,15 +420,15 @@ class FeatureSuggestionValidator {
             },
           },
           null,
-          2,
-        ),
+          2
+        )
       );
 
-      console.log(`📄 Detailed report saved: ${reportPath}`);
+      loggers.stopHook.log(`📄 Detailed report saved: ${reportPath}`);
 
       return report;
     } catch (error) {
-      console.error('💥 Validation failed with error:', error.message);
+      loggers.stopHook.error('💥 Validation failed with error:', error.message);
       return { success: false, error: error.message };
     }
   }
@@ -429,7 +445,7 @@ if (require.main === module) {
       }
     })
     .catch((error) => {
-      console.error('💥 Fatal error:', error);
+      loggers.stopHook.error('💥 Fatal error:', error);
       throw error;
     });
 }

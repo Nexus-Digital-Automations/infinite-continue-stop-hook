@@ -71,7 +71,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
     dependencies.forEach((criterion) => {
       try {
         executeTaskManagerCommand('remove-dependency', criterion);
-      } catch {
+      } catch (error) {
         // Ignore cleanup errors
       }
     });

@@ -104,7 +104,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
       const duration = endTime - startTime;
       expect(duration).toBeLessThan(30000); // Should complete within 30 seconds
 
-      console.log(`Concurrent operations completed in ${duration}ms`);
+      loggers.stopHook.log(`Concurrent operations completed in ${duration}ms`);
     });
 
     test('should handle mixed concurrent operations without conflicts', async () => {

@@ -44,7 +44,7 @@ class NodeVersionPerformanceBenchmark {
    * CPU-intensive benchmark testing V8 performance
    */
   benchmarkCPUIntensive() {
-    console.log('🔥 Running CPU-intensive benchmark...');
+    loggers.stopHook.log('🔥 Running CPU-intensive benchmark...');
 
     const iterations = 1000000;
     const start = process.hrtime.bigint();
@@ -65,14 +65,16 @@ class NodeVersionPerformanceBenchmark {
       result_hash: Math.round(result % 1000000),
     };
 
-    console.log(`✅ CPU benchmark completed: ${duration.toFixed(2)}ms`);
+    loggers.stopHook.log(
+      `✅ CPU benchmark completed: ${duration.toFixed(2)}ms`
+    );
   }
 
   /**
    * Memory allocation and garbage collection benchmark
    */
   benchmarkMemoryOperations() {
-    console.log('🧠 Running memory operations benchmark...');
+    loggers.stopHook.log('🧠 Running memory operations benchmark...');
 
     const start = process.hrtime.bigint();
     const initialMemory = process.memoryUsage();
@@ -112,20 +114,22 @@ class NodeVersionPerformanceBenchmark {
       initial_memory_mb: Math.round(initialMemory.heapUsed / 1024 / 1024),
       final_memory_mb: Math.round(finalMemory.heapUsed / 1024 / 1024),
       memory_delta_mb: Math.round(
-        (finalMemory.heapUsed - initialMemory.heapUsed) / 1024 / 1024,
+        (finalMemory.heapUsed - initialMemory.heapUsed) / 1024 / 1024
       ),
       arrays_created: arrays.length,
       json_operations: 100,
     };
 
-    console.log(`✅ Memory benchmark completed: ${duration.toFixed(2)}ms`);
+    loggers.stopHook.log(
+      `✅ Memory benchmark completed: ${duration.toFixed(2)}ms`
+    );
   }
 
   /**
    * Asynchronous operations benchmark
    */
   async benchmarkAsyncOperations() {
-    console.log('⚡ Running async operations benchmark...');
+    loggers.stopHook.log('⚡ Running async operations benchmark...');
 
     const start = process.hrtime.bigint();
 
@@ -135,7 +139,7 @@ class NodeVersionPerformanceBenchmark {
       promises.push(
         new Promise((resolve) => {
           setImmediate(() => resolve(i * 2));
-        }),
+        })
       );
     }
 
@@ -148,7 +152,7 @@ class NodeVersionPerformanceBenchmark {
         (_, i) =>
           new Promise((resolve) => {
             process.nextTick(() => resolve(i));
-          }),
+          })
       );
       return Promise.all(promises);
     };
@@ -165,14 +169,16 @@ class NodeVersionPerformanceBenchmark {
       total_operations: promises.length + asyncResults.length,
     };
 
-    console.log(`✅ Async benchmark completed: ${duration.toFixed(2)}ms`);
+    loggers.stopHook.log(
+      `✅ Async benchmark completed: ${duration.toFixed(2)}ms`
+    );
   }
 
   /**
    * File system operations benchmark
    */
   async benchmarkFileOperations() {
-    console.log('📁 Running file operations benchmark...');
+    loggers.stopHook.log('📁 Running file operations benchmark...');
 
     const tempDir = path.join(this.outputDir, 'temp-benchmark');
     if (!fs.existsSync(tempDir)) {
@@ -199,7 +205,7 @@ class NodeVersionPerformanceBenchmark {
     // File read operations
     const files = fs.readdirSync(tempDir);
     const readPromises = files.map((file) =>
-      fs.promises.readFile(path.join(tempDir, file), 'utf8'),
+      fs.promises.readFile(path.join(tempDir, file), 'utf8')
     );
 
     const fileContents = await Promise.all(readPromises);
@@ -221,7 +227,7 @@ class NodeVersionPerformanceBenchmark {
     };
 
     console.log(
-      `✅ File operations benchmark completed: ${duration.toFixed(2)}ms`,
+      `✅ File operations benchmark completed: ${duration.toFixed(2)}ms`
     );
   }
 
@@ -229,7 +235,7 @@ class NodeVersionPerformanceBenchmark {
    * Native module performance test
    */
   benchmarkNativeModules() {
-    console.log('🔧 Testing native module performance...');
+    loggers.stopHook.log('🔧 Testing native module performance...');
 
     const start = process.hrtime.bigint();
 
@@ -261,7 +267,7 @@ class NodeVersionPerformanceBenchmark {
       };
 
       console.log(
-        `✅ Native modules benchmark completed: ${duration.toFixed(2)}ms`,
+        `✅ Native modules benchmark completed: ${duration.toFixed(2)}ms`
       );
     } catch (error) {
       this.results.benchmarks.native_modules = {
@@ -270,7 +276,9 @@ class NodeVersionPerformanceBenchmark {
         error: error.message,
       };
 
-      console.log(`❌ Native modules benchmark failed: ${error.message}`);
+      loggers.stopHook.log(
+        `❌ Native modules benchmark failed: ${error.message}`
+      );
     }
   }
 
@@ -278,7 +286,7 @@ class NodeVersionPerformanceBenchmark {
    * Analyze benchmark results and generate performance insights
    */
   analyzePerformance() {
-    console.log('📊 Analyzing performance results...');
+    loggers.stopHook.log('📊 Analyzing performance results...');
 
     const totalBenchmarkTime = Object.values(this.results.benchmarks)
       .filter((b) => b.duration_ms)
@@ -309,7 +317,7 @@ class NodeVersionPerformanceBenchmark {
     ) {
       score -= Math.min(
         20,
-        (benchmarks.cpu_intensive.duration_ms - 1000) / 100,
+        (benchmarks.cpu_intensive.duration_ms - 1000) / 100
       );
     }
 
@@ -320,7 +328,7 @@ class NodeVersionPerformanceBenchmark {
     ) {
       score -= Math.min(
         15,
-        (benchmarks.memory_operations.memory_delta_mb - 100) / 10,
+        (benchmarks.memory_operations.memory_delta_mb - 100) / 10
       );
     }
 
@@ -331,7 +339,7 @@ class NodeVersionPerformanceBenchmark {
     ) {
       score -= Math.min(
         15,
-        (benchmarks.async_operations.duration_ms - 500) / 50,
+        (benchmarks.async_operations.duration_ms - 500) / 50
       );
     }
 
@@ -342,7 +350,7 @@ class NodeVersionPerformanceBenchmark {
     ) {
       score -= Math.min(
         10,
-        (benchmarks.file_operations.duration_ms - 1000) / 100,
+        (benchmarks.file_operations.duration_ms - 1000) / 100
       );
     }
 
@@ -400,19 +408,19 @@ class NodeVersionPerformanceBenchmark {
 
     if (benchmarks.cpu_intensive?.operations_per_second < 50000) {
       optimizations.push(
-        'Consider upgrading to newer Node.js version for V8 improvements',
+        'Consider upgrading to newer Node.js version for V8 improvements'
       );
     }
 
     if (benchmarks.memory_operations?.memory_delta_mb > 100) {
       optimizations.push(
-        'Implement memory pooling or streaming for large data operations',
+        'Implement memory pooling or streaming for large data operations'
       );
     }
 
     if (benchmarks.async_operations?.duration_ms > 750) {
       optimizations.push(
-        'Optimize async operation patterns and reduce Promise overhead',
+        'Optimize async operation patterns and reduce Promise overhead'
       );
     }
 
@@ -432,38 +440,38 @@ class NodeVersionPerformanceBenchmark {
 
     if (majorVersion < 18) {
       this.results.recommendations.push(
-        '⚠️ Node.js version below minimum requirement (18.x)',
+        '⚠️ Node.js version below minimum requirement (18.x)'
       );
     } else if (majorVersion === 18) {
       this.results.recommendations.push(
-        '✅ Node.js 18.x - Good for production stability',
+        '✅ Node.js 18.x - Good for production stability'
       );
     } else if (majorVersion === 20) {
       this.results.recommendations.push(
-        '🚀 Node.js 20.x LTS - Recommended for production',
+        '🚀 Node.js 20.x LTS - Recommended for production'
       );
     } else if (majorVersion >= 22) {
       this.results.recommendations.push(
-        '⚡ Node.js 22.x+ - Latest features and performance',
+        '⚡ Node.js 22.x+ - Latest features and performance'
       );
     }
 
     const score = this.results.performance_analysis.performance_score;
     if (score >= 90) {
       this.results.recommendations.push(
-        '🏆 Excellent performance - optimal for production',
+        '🏆 Excellent performance - optimal for production'
       );
     } else if (score >= 75) {
       this.results.recommendations.push(
-        '✅ Good performance - suitable for production',
+        '✅ Good performance - suitable for production'
       );
     } else if (score >= 60) {
       this.results.recommendations.push(
-        '⚠️ Fair performance - consider optimizations',
+        '⚠️ Fair performance - consider optimizations'
       );
     } else {
       this.results.recommendations.push(
-        '❌ Poor performance - requires investigation',
+        '❌ Poor performance - requires investigation'
       );
     }
   }
@@ -475,11 +483,11 @@ class NodeVersionPerformanceBenchmark {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const resultsFile = path.join(
       this.outputDir,
-      `node-performance-${timestamp}.json`,
+      `node-performance-${timestamp}.json`
     );
     const latestFile = path.join(
       this.outputDir,
-      'latest-node-performance.json',
+      'latest-node-performance.json'
     );
 
     // Save detailed results
@@ -491,9 +499,9 @@ class NodeVersionPerformanceBenchmark {
     const report = this.generateMarkdownReport();
     fs.writeFileSync(reportFile, report);
 
-    console.log(`📄 Results saved to: ${resultsFile}`);
-    console.log(`📄 Latest results: ${latestFile}`);
-    console.log(`📄 Report: ${reportFile}`);
+    loggers.stopHook.log(`📄 Results saved to: ${resultsFile}`);
+    loggers.stopHook.log(`📄 Latest results: ${latestFile}`);
+    loggers.stopHook.log(`📄 Report: ${reportFile}`);
   }
 
   /**
@@ -557,24 +565,26 @@ ${this.results.recommendations?.map((r) => `- ${r}`).join('\n')}
    * Display results summary
    */
   displaySummary() {
-    console.log('\n📊 Performance Benchmark Summary');
-    console.log('================================');
-    console.log(`Node.js Version: ${this.results.environment.node_version}`);
-    console.log(`Platform: ${this.results.environment.platform}`);
+    loggers.stopHook.log('\n📊 Performance Benchmark Summary');
+    loggers.stopHook.log('================================');
+    loggers.stopHook.log(
+      `Node.js Version: ${this.results.environment.node_version}`
+    );
+    loggers.stopHook.log(`Platform: ${this.results.environment.platform}`);
     console.log(
-      `Performance Score: ${this.results.performance_analysis.performance_score}/100`,
+      `Performance Score: ${this.results.performance_analysis.performance_score}/100`
     );
 
-    console.log('\n🏃 Benchmark Results:');
+    loggers.stopHook.log('\n🏃 Benchmark Results:');
     Object.entries(this.results.benchmarks).forEach(([name, data]) => {
       if (data.duration_ms) {
-        console.log(`  ${name}: ${data.duration_ms.toFixed(2)}ms`);
+        loggers.stopHook.log(`  ${name}: ${data.duration_ms.toFixed(2)}ms`);
       }
     });
 
-    console.log('\n💡 Recommendations:');
+    loggers.stopHook.log('\n💡 Recommendations:');
     this.results.recommendations.forEach((rec) => {
-      console.log(`  ${rec}`);
+      loggers.stopHook.log(`  ${rec}`);
     });
   }
 
@@ -582,7 +592,9 @@ ${this.results.recommendations?.map((r) => `- ${r}`).join('\n')}
    * Run complete benchmark suite
    */
   async run() {
-    console.log('🚀 Starting Node.js Performance Benchmark Suite...\n');
+    loggers.stopHook.log(
+      '🚀 Starting Node.js Performance Benchmark Suite...\n'
+    );
 
     try {
       this.benchmarkCPUIntensive();
@@ -595,9 +607,9 @@ ${this.results.recommendations?.map((r) => `- ${r}`).join('\n')}
       this.saveResults();
       this.displaySummary();
 
-      console.log('\n✅ Benchmark suite completed successfully!');
+      loggers.stopHook.log('\n✅ Benchmark suite completed successfully!');
     } catch (error) {
-      console.error('❌ Benchmark suite failed:', error.message);
+      loggers.stopHook.error('❌ Benchmark suite failed:', error.message);
       throw new Error(`Benchmark suite failed: ${error.message}`);
     }
   }

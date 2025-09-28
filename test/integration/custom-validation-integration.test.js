@@ -30,7 +30,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     try {
       await fs.rm(testProjectRoot, { recursive: true, force: true });
     } catch (error) {
-      console.warn('Failed to cleanup test directory:', error.message);
+      loggers.stopHook.warn('Failed to cleanup test directory:', error.message);
     }
     process.chdir(originalCwd);
   });
@@ -45,7 +45,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
           force: true,
         });
       }
-    } catch {
+    } catch (error) {
       // Ignore cleanup errors
     }
   });

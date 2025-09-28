@@ -19,7 +19,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
     _fileExists(filePath) {
       try {
         return fs.existsSync(filePath);
-      } catch {
+      } catch (error) {
         return false;
       }
     }

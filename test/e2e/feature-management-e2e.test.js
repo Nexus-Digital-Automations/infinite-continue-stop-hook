@@ -169,7 +169,7 @@ describe('Feature Management System E2E', () => {
               const response = JSON.parse(result.value.stdout);
               expect(response.success).toBe(false);
               expect(response.error).toContain('missing');
-            } catch {
+            } catch (error) {
               // If we can't parse JSON, the command itself may have failed which is also valid
               expect(result.value.success).toBe(false);
             }
@@ -250,7 +250,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch {
+          } catch (error) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );
@@ -362,7 +362,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch {
+          } catch (error) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );
@@ -411,7 +411,7 @@ describe('Feature Management System E2E', () => {
           expect(feature.approved_by).toBe('bulk-approver');
         });
 
-        console.log(`✅ Bulk approval test passed for ${batchSize} features`);
+        loggers.stopHook.log(`✅ Bulk approval test passed for ${batchSize} features`);
       },
       E2E_TIMEOUT,
     );
@@ -442,7 +442,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.stdout);
             return response.feature?.id;
-          } catch {
+          } catch (error) {
             throw new Error(
               `Failed to extract feature ID from: ${result.stdout}`,
             );
@@ -554,7 +554,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch {
+          } catch (error) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );
@@ -564,6 +564,7 @@ describe('Feature Management System E2E', () => {
         // Step 2: Apply different statuses
         for (let i = 0; i < testFeatures.length; i++) {
           if (testFeatures[i].shouldApprove) {
+            // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup with ordered statuses
             await FeatureTestHelpers.approveFeature(
               environment,
               featureIds[i],
@@ -571,6 +572,7 @@ describe('Feature Management System E2E', () => {
               `Approved ${testFeatures[i].title}`,
             );
           } else if (testFeatures[i].shouldReject) {
+            // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup with ordered statuses
             await FeatureTestHelpers.rejectFeature(
               environment,
               featureIds[i],
@@ -698,7 +700,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch {
+          } catch (error) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );
@@ -809,7 +811,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch {
+          } catch (error) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );

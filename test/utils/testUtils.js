@@ -82,13 +82,13 @@ class APIExecutor {
 
       child.on('close', (code) => {
         if (!silent) {
-          console.log(`Command: ${command} ${args.join(' ')}`);
-          console.log(`Exit code: ${code}`);
+          loggers.stopHook.log(`Command: ${command} ${args.join(' ')}`);
+          loggers.stopHook.log(`Exit code: ${code}`);
           if (stdout) {
-            console.log(`Stdout: ${stdout.substring(0, 500)}...`);
+            loggers.stopHook.log(`Stdout: ${stdout.substring(0, 500)}...`);
           }
           if (stderr) {
-            console.log(`Stderr: ${stderr.substring(0, 500)}...`);
+            loggers.stopHook.log(`Stderr: ${stderr.substring(0, 500)}...`);
           }
         }
 
@@ -104,7 +104,7 @@ class APIExecutor {
           try {
             const stderrJson = JSON.parse(stderr.trim());
             resolve(stderrJson);
-          } catch {
+          } catch (error) {
             reject(
               new Error(
                 `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
@@ -154,7 +154,7 @@ class APIExecutor {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
-    console.log(`Cleaning up test data: ${JSON.stringify(testData)}`);
+    loggers.stopHook.log(`Cleaning up test data: ${JSON.stringify(testData)}`);
   }
 }
 

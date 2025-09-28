@@ -6,7 +6,9 @@ const RAGOperations = require('./lib/api-modules/rag/ragOperations');
 
 async function testLearningRecommendationEngine() {
   try {
-    console.log('Testing Feature 6: Learning Recommendation Engine...');
+    loggers.stopHook.log(
+      'Testing Feature 6: Learning Recommendation Engine...'
+    );
 
     // Create RAG operations instance
     const ragOps = new RAGOperations({
@@ -33,13 +35,13 @@ async function testLearningRecommendationEngine() {
     };
 
     // Test 1: Generate learning recommendations
-    console.log('\n1. Testing generateLearningRecommendations...');
+    loggers.stopHook.log('\n1. Testing generateLearningRecommendations...');
     const recommendations = await ragOps.generateLearningRecommendations(
       userContext,
       {
         strategy: 'hybrid',
         limit: 5,
-      },
+      }
     );
     console.log('Recommendations result:', {
       success: recommendations.success,
@@ -49,7 +51,7 @@ async function testLearningRecommendationEngine() {
     });
 
     // Test 2: Get trending lessons
-    console.log('\n2. Testing getTrendingLessons...');
+    loggers.stopHook.log('\n2. Testing getTrendingLessons...');
     const trending = await ragOps.getTrendingLessons({
       timeRange: 'week',
       limit: 3,
@@ -62,7 +64,7 @@ async function testLearningRecommendationEngine() {
     });
 
     // Test 3: Get similar lessons (if we have any lessons)
-    console.log('\n3. Testing getSimilarLessons...');
+    loggers.stopHook.log('\n3. Testing getSimilarLessons...');
     const similar = await ragOps.getSimilarLessons(1, {
       limit: 3,
       threshold: 0.6,
@@ -73,7 +75,7 @@ async function testLearningRecommendationEngine() {
     });
 
     // Test 4: Get recommendation analytics
-    console.log('\n4. Testing getRecommendationAnalytics...');
+    loggers.stopHook.log('\n4. Testing getRecommendationAnalytics...');
     const analytics = await ragOps.getRecommendationAnalytics({
       timeRange: 30,
     });
@@ -84,11 +86,11 @@ async function testLearningRecommendationEngine() {
     });
 
     console.log(
-      '\n✅ Feature 6: Learning Recommendation Engine integration test completed successfully!',
+      '\n✅ Feature 6: Learning Recommendation Engine integration test completed successfully!'
     );
   } catch (error) {
-    console.error('❌ Feature 6 test failed:', error.message);
-    console.error('Stack:', error.stack);
+    loggers.stopHook.error('❌ Feature 6 test failed:', error.message);
+    loggers.stopHook.error('Stack:', error.stack);
   }
 }
 

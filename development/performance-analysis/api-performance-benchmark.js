@@ -177,10 +177,10 @@ class APIPerformanceBenchmark {
    * Benchmark all critical API endpoints
    */
   async benchmarkAllEndpoints() {
-    console.log('🚀 Starting comprehensive API performance benchmark...\n');
+    loggers.stopHook.log('🚀 Starting comprehensive API performance benchmark...\n');
 
     // Initialize system first
-    console.log('📋 Initializing agent for testing...');
+    loggers.stopHook.log('📋 Initializing agent for testing...');
     const initResult = await this.executeCommand('init');
     this.results.endpoints.init = initResult;
 
@@ -191,19 +191,19 @@ class APIPerformanceBenchmark {
       );
       if (agentMatch) {
         this.testData.agentId = agentMatch[1];
-        console.log(`✅ Agent initialized: ${this.testData.agentId}`);
+        loggers.stopHook.log(`✅ Agent initialized: ${this.testData.agentId}`);
       }
     }
 
     // Core agent management endpoints
-    console.log('\n🔍 Testing agent management endpoints...');
+    loggers.stopHook.log('\n🔍 Testing agent management endpoints...');
     this.results.endpoints.listAgents =
       await this.executeCommand('list-agents');
     this.results.endpoints.status = await this.executeCommand('status');
     this.results.endpoints.stats = await this.executeCommand('stats');
 
     // Task management endpoints
-    console.log('\n📝 Testing task management endpoints...');
+    loggers.stopHook.log('\n📝 Testing task management endpoints...');
     this.results.endpoints.listTasks = await this.executeCommand('list');
 
     // Create test task for further testing
@@ -222,7 +222,7 @@ class APIPerformanceBenchmark {
         JSON.stringify(createTaskResult).match(/"id":\s*"([^"]+)"/);
       if (taskMatch) {
         this.testData.taskId = taskMatch[1];
-        console.log(`✅ Test task created: ${this.testData.taskId}`);
+        loggers.stopHook.log(`✅ Test task created: ${this.testData.taskId}`);
 
         // Test task operations with created task
         if (this.testData.agentId) {
@@ -240,7 +240,7 @@ class APIPerformanceBenchmark {
     }
 
     // Subtask management endpoints
-    console.log('\n🔗 Testing subtask management endpoints...');
+    loggers.stopHook.log('\n🔗 Testing subtask management endpoints...');
     this.results.endpoints.listSubtasks =
       await this.executeCommand('list-subtasks');
 
@@ -259,7 +259,7 @@ class APIPerformanceBenchmark {
     }
 
     // Success criteria endpoints
-    console.log('\n✅ Testing success criteria endpoints...');
+    loggers.stopHook.log('\n✅ Testing success criteria endpoints...');
     this.results.endpoints.getSuccessCriteria = await this.executeCommand(
       'get-success-criteria',
     );
@@ -267,20 +267,20 @@ class APIPerformanceBenchmark {
       await this.executeCommand('criteria-report');
 
     // RAG system endpoints
-    console.log('\n🧠 Testing RAG system endpoints...');
+    loggers.stopHook.log('\n🧠 Testing RAG system endpoints...');
     this.results.endpoints.ragHealth = await this.executeCommand('rag-health');
     this.results.endpoints.ragSearch = await this.executeCommand('rag-search', [
       'performance testing',
     ]);
 
     // Advanced operations
-    console.log('\n🔧 Testing advanced operations...');
+    loggers.stopHook.log('\n🔧 Testing advanced operations...');
     this.results.endpoints.usageAnalytics =
       await this.executeCommand('usage-analytics');
     this.results.endpoints.guide = await this.executeCommand('guide');
     this.results.endpoints.methods = await this.executeCommand('methods');
 
-    console.log('\n✅ Benchmark completed! Analyzing results...\n');
+    loggers.stopHook.log('\n✅ Benchmark completed! Analyzing results...\n');
   }
 
   /**
@@ -651,7 +651,9 @@ class APIPerformanceBenchmark {
     const mid = Math.floor(sorted.length / 2);
 
     return sorted.length % 2 !== 0
+      // eslint-disable-next-line security/detect-object-injection -- Safe array access with calculated midpoint index
       ? sorted[mid]
+      // eslint-disable-next-line security/detect-object-injection -- Safe array access with calculated indices for median calculation
       : (sorted[mid - 1] + sorted[mid]) / 2;
   }
 
@@ -700,7 +702,7 @@ class APIPerformanceBenchmark {
     // Justification: Filename is validated with regex and path traversal protection above
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     fs.writeFileSync(outputFile, JSON.stringify(report, null, 2));
-    console.log(`📊 Performance report saved to: ${outputFile}`);
+    loggers.stopHook.log(`📊 Performance report saved to: ${outputFile}`);
 
     return outputFile;
   }
@@ -724,8 +726,8 @@ async function main() {
     const outputFile = await benchmark.saveResults(report);
 
     // Display summary
-    console.log('\n📊 PERFORMANCE BENCHMARK SUMMARY');
-    console.log('=====================================');
+    loggers.stopHook.log('\n📊 PERFORMANCE BENCHMARK SUMMARY');
+    loggers.stopHook.log('=====================================');
     console.log(
       `Endpoints Tested: ${report.executiveSummary.totalEndpointsTested}`,
     );
@@ -740,7 +742,7 @@ async function main() {
     );
 
     if (report.performanceAnalysis.slowestEndpoints.length > 0) {
-      console.log('\n🐌 Slowest Endpoints:');
+      loggers.stopHook.log('\n🐌 Slowest Endpoints:');
       report.performanceAnalysis.slowestEndpoints
         .slice(0, 3)
         .forEach((endpoint) => {
@@ -750,9 +752,9 @@ async function main() {
         });
     }
 
-    console.log(`\n📄 Full report: ${outputFile}`);
+    loggers.stopHook.log(`\n📄 Full report: ${outputFile}`);
   } catch (error) {
-    console.error('❌ Benchmark failed:', error);
+    loggers.stopHook.error('❌ Benchmark failed:', error);
     throw error;
   }
 }

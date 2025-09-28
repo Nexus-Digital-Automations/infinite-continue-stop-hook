@@ -1,4 +1,4 @@
-/* eslint-disable no-console -- CLI hook requires console output */
+const { loggers } = require('./lib/logger');
 /**
  * Claude Code UserPromptSubmit Hook
  * Automatically appends specified text to every user message
@@ -36,18 +36,18 @@ process.stdin.on('end', () => {
       message: userMessage,
     };
 
-    console.log(JSON.stringify(modifiedData));
-  } catch {
+    loggers.stopHook.info(JSON.stringify(modifiedData));
+  } catch (error) {
     // If JSON parsing fails, treat as plain text and append
     const appendText =
       '\n\ncontinue. make sure to think and use concurrent subagents when appropriate';
     const modifiedMessage = inputData.trim() + appendText;
-    console.log(modifiedMessage);
+    loggers.stopHook.info(modifiedMessage);
   }
 });
 
 // Handle errors
 process.on('error', (_err) => {
-  console.error('Error in append-text-hook:', _err);
+  loggers.stopHook.error('Error in append-text-hook:', _err);
   throw new Error(`append-text-hook error: ${_err.message}`);
 });

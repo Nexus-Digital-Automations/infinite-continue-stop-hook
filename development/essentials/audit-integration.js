@@ -420,7 +420,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       );
       await fs.access(packageJsonPath);
       hasPackageJson = true;
-    } catch {
+    } catch (error) {
       // Package.json not found or access denied
     }
 

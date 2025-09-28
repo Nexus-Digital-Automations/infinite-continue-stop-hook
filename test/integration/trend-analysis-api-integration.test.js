@@ -147,7 +147,7 @@ describe('Trend Analysis API Integration Tests', () => {
       if (error.stdout) {
         try {
           return JSON.parse(error.stdout.trim());
-        } catch {
+        } catch (error) {
           return { success: false, error: error.message, stdout: error.stdout };
         }
       }

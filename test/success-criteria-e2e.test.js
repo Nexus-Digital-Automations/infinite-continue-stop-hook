@@ -77,7 +77,7 @@ async function execAPI(command, args = []) {
   const result = await execCommand('timeout', [`60s`, 'node', ...allArgs]);
 
   if (!result.success) {
-    console.error(`API command failed for ${command}:`, result.stderr);
+    loggers.stopHook.error(`API command failed for ${command}:`, result.stderr);
     throw new Error(`API command failed: ${result.stderr}`);
   }
 
@@ -88,7 +88,7 @@ async function execAPI(command, args = []) {
       'Failed to parse API response:',
       result.stdout,
       'Error:',
-      parseError.message,
+      parseError.message
     );
     // Some commands return plain text, not JSON
     return { success: true, output: result.stdout, raw: true };
@@ -136,7 +136,7 @@ async function setupE2EProject() {
 
     await _fs.writeFile(
       _path.join(E2E_PROJECT_DIR, 'package.json'),
-      JSON.stringify(packageJson, null, 2),
+      JSON.stringify(packageJson, null, 2)
     );
 
     // Create sample source files
@@ -157,7 +157,7 @@ module.exports = { processMessage };
 
     await _fs.writeFile(
       _path.join(E2E_PROJECT_DIR, 'src', 'app.js'),
-      sampleCode,
+      sampleCode
     );
 
     // Create test files
@@ -176,7 +176,7 @@ describe('Application Tests', () => {
 
     await _fs.writeFile(
       _path.join(E2E_PROJECT_DIR, 'test', 'app.test.js'),
-      testCode,
+      testCode
     );
 
     // Create TASKS.json structure (new format)
@@ -261,12 +261,12 @@ describe('Application Tests', () => {
       _path.join(
         E2E_PROJECT_DIR,
         'development',
-        'success-criteria-config.json',
+        'success-criteria-config.json'
       ),
-      JSON.stringify(successCriteriaConfig, null, 2),
+      JSON.stringify(successCriteriaConfig, null, 2)
     );
   } catch (error) {
-    console.error('Failed to setup E2E project:', error);
+    loggers.stopHook.error('Failed to setup E2E project:', error);
     throw error;
   }
 }
@@ -277,7 +277,7 @@ describe('Application Tests', () => {
 async function cleanupE2EProject() {
   try {
     await _fs.rm(E2E_PROJECT_DIR, { recursive: true, force: true });
-  } catch {
+  } catch (error) {
     // Ignore cleanup errors
   }
 }
@@ -309,7 +309,7 @@ describe('Success Criteria End-to-End Tests', () => {
         expect(initResult.success).toBe(true);
       }
     } catch (error) {
-      console.warn(`Agent initialization warning: ${error.message}`);
+      loggers.stopHook.warn(`Agent initialization warning: ${error.message}`);
       // Continue with test - some initialization issues may be recoverable
     }
   }, 60000);
@@ -348,7 +348,7 @@ describe('Success Criteria End-to-End Tests', () => {
           expect(approveResult.success).toBe(true);
         }
       } catch (error) {
-        console.warn(`Feature approval warning: ${error.message}`);
+        loggers.stopHook.warn(`Feature approval warning: ${error.message}`);
       }
 
       // 3. Execute validation steps (simulated implementation)
@@ -382,7 +382,7 @@ describe('Success Criteria End-to-End Tests', () => {
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const approvedFeature = listResult.features.find(
-              (f) => f.id === featureId,
+              (f) => f.id === featureId
             );
             if (approvedFeature) {
               expect(approvedFeature.status).toBe('approved');
@@ -390,7 +390,7 @@ describe('Success Criteria End-to-End Tests', () => {
           }
         }
       } catch (error) {
-        console.warn(`Feature listing warning: ${error.message}`);
+        loggers.stopHook.warn(`Feature listing warning: ${error.message}`);
       }
 
       // Validation results should show successful workflow
@@ -429,7 +429,7 @@ describe('Success Criteria End-to-End Tests', () => {
           expect(approveResult.success).toBe(true);
         }
       } catch (error) {
-        console.warn(`Feature approval warning: ${error.message}`);
+        loggers.stopHook.warn(`Feature approval warning: ${error.message}`);
       }
 
       // Simulate validation failures during implementation
@@ -461,7 +461,7 @@ describe('Success Criteria End-to-End Tests', () => {
           }
         }
       } catch (error) {
-        console.warn(`Feature verification warning: ${error.message}`);
+        loggers.stopHook.warn(`Feature verification warning: ${error.message}`);
       }
 
       // Expected validation failures should be detected
@@ -504,7 +504,9 @@ describe('Success Criteria End-to-End Tests', () => {
           }
         }
       } catch (error) {
-        console.warn(`Feature metadata verification warning: ${error.message}`);
+        loggers.stopHook.warn(
+          `Feature metadata verification warning: ${error.message}`
+        );
       }
 
       // Approve and validate enterprise-level requirements
@@ -516,7 +518,9 @@ describe('Success Criteria End-to-End Tests', () => {
           expect(approveResult.success).toBe(true);
         }
       } catch (error) {
-        console.warn(`Enterprise feature approval warning: ${error.message}`);
+        loggers.stopHook.warn(
+          `Enterprise feature approval warning: ${error.message}`
+        );
       }
 
       // Execute comprehensive validations for enterprise feature
@@ -542,7 +546,7 @@ describe('Success Criteria End-to-End Tests', () => {
           expect(updatedFeature.success).toBe(true);
           if (updatedFeature.features && updatedFeature.features.length > 0) {
             const approvedFeature = updatedFeature.features.find(
-              (f) => f.id === featureId,
+              (f) => f.id === featureId
             );
             if (approvedFeature) {
               expect(approvedFeature.status).toBe('approved');
@@ -551,7 +555,7 @@ describe('Success Criteria End-to-End Tests', () => {
         }
       } catch (error) {
         console.warn(
-          `Enhanced validation verification warning: ${error.message}`,
+          `Enhanced validation verification warning: ${error.message}`
         );
       }
     }, 30000);
@@ -585,7 +589,7 @@ describe('Success Criteria End-to-End Tests', () => {
           expect(approveResult.success).toBe(true);
         }
       } catch (error) {
-        console.warn(`Feature approval warning: ${error.message}`);
+        loggers.stopHook.warn(`Feature approval warning: ${error.message}`);
       }
 
       // 3. Implement feature (simulate code changes)
@@ -601,7 +605,7 @@ function authenticate(username, password) {
 }
 
 module.exports = { authenticate };
-`,
+`
       );
 
       // 4. Run validation checks
@@ -621,7 +625,7 @@ module.exports = { authenticate };
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const implementedFeature = listResult.features.find(
-              (f) => f.id === featureId,
+              (f) => f.id === featureId
             );
             if (implementedFeature) {
               expect(implementedFeature.status).toBe('approved');
@@ -630,7 +634,7 @@ module.exports = { authenticate };
         }
       } catch (error) {
         console.warn(
-          `Feature workflow completion verification warning: ${error.message}`,
+          `Feature workflow completion verification warning: ${error.message}`
         );
       }
 
@@ -664,7 +668,7 @@ module.exports = { authenticate };
           expect(approveResult.success).toBe(true);
         }
       } catch (error) {
-        console.warn(`Bug fix approval warning: ${error.message}`);
+        loggers.stopHook.warn(`Bug fix approval warning: ${error.message}`);
       }
 
       // Implement bug fix
@@ -686,7 +690,7 @@ function authenticateWithTimeout(username, password, timeout = 10000) {
 }
 
 module.exports = { authenticateWithTimeout };
-`,
+`
       );
 
       // Verify bug fix workflow completion
@@ -701,7 +705,7 @@ module.exports = { authenticateWithTimeout };
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const bugFixFeature = listResult.features.find(
-              (f) => f.id === featureId,
+              (f) => f.id === featureId
             );
             if (bugFixFeature) {
               expect(bugFixFeature.status).toBe('approved');
@@ -710,7 +714,9 @@ module.exports = { authenticateWithTimeout };
           }
         }
       } catch (error) {
-        console.warn(`Bug fix workflow verification warning: ${error.message}`);
+        loggers.stopHook.warn(
+          `Bug fix workflow verification warning: ${error.message}`
+        );
       }
 
       // Validation checks should pass
@@ -745,7 +751,9 @@ module.exports = { authenticateWithTimeout };
           expect(approveResult.success).toBe(true);
         }
       } catch (error) {
-        console.warn(`Refactoring feature approval warning: ${error.message}`);
+        loggers.stopHook.warn(
+          `Refactoring feature approval warning: ${error.message}`
+        );
       }
 
       // Perform refactoring
@@ -796,7 +804,7 @@ async function authenticate(username, password, options = {}) {
 }
 
 module.exports = { authenticate };
-`,
+`
       );
 
       // Verify refactoring workflow completion
@@ -811,7 +819,7 @@ module.exports = { authenticate };
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const refactorFeature = listResult.features.find(
-              (f) => f.id === featureId,
+              (f) => f.id === featureId
             );
             if (refactorFeature) {
               expect(refactorFeature.status).toBe('approved');
@@ -821,7 +829,7 @@ module.exports = { authenticate };
         }
       } catch (error) {
         console.warn(
-          `Refactoring workflow verification warning: ${error.message}`,
+          `Refactoring workflow verification warning: ${error.message}`
         );
       }
 
@@ -879,7 +887,9 @@ module.exports = { authenticate };
           expect(approveResult.success).toBe(true);
         }
       } catch (error) {
-        console.warn(`Multi-agent feature approval warning: ${error.message}`);
+        loggers.stopHook.warn(
+          `Multi-agent feature approval warning: ${error.message}`
+        );
       }
 
       // Simulate coordination between agents for different validation aspects
@@ -904,7 +914,7 @@ module.exports = { authenticate };
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const coordinatedFeature = listResult.features.find(
-              (f) => f.id === featureId,
+              (f) => f.id === featureId
             );
             if (coordinatedFeature) {
               expect(coordinatedFeature.status).toBe('approved');
@@ -913,7 +923,7 @@ module.exports = { authenticate };
         }
       } catch (error) {
         console.warn(
-          `Multi-agent coordination verification warning: ${error.message}`,
+          `Multi-agent coordination verification warning: ${error.message}`
         );
       }
 
@@ -950,7 +960,9 @@ module.exports = { authenticate };
           expect(approveResult.success).toBe(true);
         }
       } catch (error) {
-        console.warn(`Performance feature approval warning: ${error.message}`);
+        loggers.stopHook.warn(
+          `Performance feature approval warning: ${error.message}`
+        );
       }
 
       // Simulate performance optimization
@@ -977,7 +989,7 @@ module.exports = { authenticate };
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const performanceFeature = listResult.features.find(
-              (f) => f.id === featureId,
+              (f) => f.id === featureId
             );
             if (performanceFeature) {
               expect(performanceFeature.status).toBe('approved');
@@ -987,7 +999,7 @@ module.exports = { authenticate };
         }
       } catch (error) {
         console.warn(
-          `Performance feature verification warning: ${error.message}`,
+          `Performance feature verification warning: ${error.message}`
         );
       }
 
@@ -1025,7 +1037,9 @@ module.exports = { authenticate };
           expect(approveResult.success).toBe(true);
         }
       } catch (error) {
-        console.warn(`Regression detection approval warning: ${error.message}`);
+        loggers.stopHook.warn(
+          `Regression detection approval warning: ${error.message}`
+        );
       }
 
       // Simulate performance regression detection workflow
@@ -1049,7 +1063,7 @@ module.exports = { authenticate };
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const regressionFeature = listResult.features.find(
-              (f) => f.id === featureId,
+              (f) => f.id === featureId
             );
             if (regressionFeature) {
               expect(regressionFeature.status).toBe('approved');
@@ -1058,7 +1072,7 @@ module.exports = { authenticate };
         }
       } catch (error) {
         console.warn(
-          `Regression detection verification warning: ${error.message}`,
+          `Regression detection verification warning: ${error.message}`
         );
       }
 
@@ -1103,7 +1117,9 @@ module.exports = { authenticate };
           expect(approveResult.success).toBe(true);
         }
       } catch (error) {
-        console.warn(`Evidence collection approval warning: ${error.message}`);
+        loggers.stopHook.warn(
+          `Evidence collection approval warning: ${error.message}`
+        );
       }
 
       // Collect evidence during validation
@@ -1116,21 +1132,21 @@ module.exports = { authenticate };
         E2E_PROJECT_DIR,
         'development',
         'evidence',
-        featureId,
+        featureId
       );
       await _fs.mkdir(evidenceDir, { recursive: true });
 
       await _fs.writeFile(
         _path.join(evidenceDir, 'lint-output.txt'),
-        lintResult.stdout || 'Linting passed - no errors found',
+        lintResult.stdout || 'Linting passed - no errors found'
       );
       await _fs.writeFile(
         _path.join(evidenceDir, 'build-output.txt'),
-        buildResult.stdout || 'Build completed successfully',
+        buildResult.stdout || 'Build completed successfully'
       );
       await _fs.writeFile(
         _path.join(evidenceDir, 'test-output.txt'),
-        testResult.stdout || 'All tests passed',
+        testResult.stdout || 'All tests passed'
       );
 
       // Verify evidence collection workflow
@@ -1145,7 +1161,7 @@ module.exports = { authenticate };
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const evidenceFeature = listResult.features.find(
-              (f) => f.id === featureId,
+              (f) => f.id === featureId
             );
             if (evidenceFeature) {
               expect(evidenceFeature.status).toBe('approved');
@@ -1154,20 +1170,20 @@ module.exports = { authenticate };
         }
       } catch (error) {
         console.warn(
-          `Evidence collection verification warning: ${error.message}`,
+          `Evidence collection verification warning: ${error.message}`
         );
       }
 
       // Verify evidence files exist
       const lintEvidence = await _fs.readFile(
         _path.join(evidenceDir, 'lint-output.txt'),
-        'utf8',
+        'utf8'
       );
       expect(lintEvidence).toContain('Linting passed');
 
       const buildEvidence = await _fs.readFile(
         _path.join(evidenceDir, 'build-output.txt'),
-        'utf8',
+        'utf8'
       );
       expect(buildEvidence).toContain('completed successfully');
 

@@ -62,7 +62,7 @@ class QuickPerformanceTest {
             if (jsonMatch) {
               response = JSON.parse(jsonMatch[0]);
             }
-          } catch {
+          } catch (error) {
             response = stdout;
           }
 
@@ -84,8 +84,8 @@ class QuickPerformanceTest {
   }
 
   async runQuickTests() {
-    console.log('🚀 Quick TaskManager Performance Test');
-    console.log('=====================================\n');
+    loggers.stopHook.log('🚀 Quick TaskManager Performance Test');
+    loggers.stopHook.log('=====================================\n');
 
     const tests = [
       { name: 'System Initialization', command: 'init' },
@@ -98,7 +98,7 @@ class QuickPerformanceTest {
     ];
 
     for (const test of tests) {
-      console.log(`📊 Testing: ${test.name}`);
+      loggers.stopHook.log(`📊 Testing: ${test.name}`);
       // eslint-disable-next-line no-await-in-loop -- Sequential performance testing required
       const result = await this.executeCommand(test.command);
 
@@ -111,10 +111,10 @@ class QuickPerformanceTest {
       const duration = result.duration.toFixed(2);
       const memoryMB = (result.memoryUsed / (1024 * 1024)).toFixed(2);
 
-      console.log(`   ${status} ${duration}ms (${memoryMB}MB memory)`);
+      loggers.stopHook.log(`   ${status} ${duration}ms (${memoryMB}MB memory)`);
 
       if (!result.success) {
-        console.log(`   Error: ${result.error || 'Command failed'}`);
+        loggers.stopHook.log(`   Error: ${result.error || 'Command failed'}`);
       }
     }
 
@@ -122,8 +122,8 @@ class QuickPerformanceTest {
   }
 
   generateQuickReport() {
-    console.log('\n📋 Performance Analysis');
-    console.log('=======================');
+    loggers.stopHook.log('\n📋 Performance Analysis');
+    loggers.stopHook.log('=======================');
 
     const successful = this.results.filter((r) => r.success);
     const failed = this.results.filter((r) => !r.success);
@@ -134,73 +134,83 @@ class QuickPerformanceTest {
       const maxTime = Math.max(...successful.map((r) => r.duration));
       const minTime = Math.min(...successful.map((r) => r.duration));
 
-      console.log(`\n📊 Response Time Metrics:`);
-      console.log(`   Average: ${avgTime.toFixed(2)}ms`);
-      console.log(`   Fastest: ${minTime.toFixed(2)}ms`);
-      console.log(`   Slowest: ${maxTime.toFixed(2)}ms`);
+      loggers.stopHook.log(`\n📊 Response Time Metrics:`);
+      loggers.stopHook.log(`   Average: ${avgTime.toFixed(2)}ms`);
+      loggers.stopHook.log(`   Fastest: ${minTime.toFixed(2)}ms`);
+      loggers.stopHook.log(`   Slowest: ${maxTime.toFixed(2)}ms`);
     }
 
     if (failed.length > 0) {
-      console.log(`\n❌ Failed Operations: ${failed.length}`);
+      loggers.stopHook.log(`\n❌ Failed Operations: ${failed.length}`);
       failed.forEach((f) => {
-        console.log(`   • ${f.testName}: ${f.error || 'Unknown error'}`);
+        loggers.stopHook.log(
+          `   • ${f.testName}: ${f.error || 'Unknown error'}`
+        );
       });
     }
 
     // Performance analysis
     const slowOperations = successful.filter((r) => r.duration > 2000);
     if (slowOperations.length > 0) {
-      console.log(`\n⚠️  Slow Operations (>2s):`);
+      loggers.stopHook.log(`\n⚠️  Slow Operations (>2s):`);
       slowOperations.forEach((op) => {
-        console.log(`   • ${op.testName}: ${op.duration.toFixed(2)}ms`);
+        loggers.stopHook.log(
+          `   • ${op.testName}: ${op.duration.toFixed(2)}ms`
+        );
       });
     }
 
     const fastOperations = successful.filter((r) => r.duration < 500);
     if (fastOperations.length > 0) {
-      console.log(`\n⚡ Fast Operations (<500ms):`);
+      loggers.stopHook.log(`\n⚡ Fast Operations (<500ms):`);
       fastOperations.forEach((op) => {
-        console.log(`   • ${op.testName}: ${op.duration.toFixed(2)}ms`);
+        loggers.stopHook.log(
+          `   • ${op.testName}: ${op.duration.toFixed(2)}ms`
+        );
       });
     }
 
     // Memory analysis
     const totalMemoryUsed = this.results.reduce(
       (sum, r) => sum + (r.memoryUsed || 0),
-      0,
+      0
     );
     const avgMemoryPerOp = totalMemoryUsed / this.results.length;
 
-    console.log(`\n💾 Memory Usage:`);
-    console.log(`   Total: ${(totalMemoryUsed / (1024 * 1024)).toFixed(2)}MB`);
+    loggers.stopHook.log(`\n💾 Memory Usage:`);
+    loggers.stopHook.log(
+      `   Total: ${(totalMemoryUsed / (1024 * 1024)).toFixed(2)}MB`
+    );
     console.log(
-      `   Average per operation: ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB`,
+      `   Average per operation: ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB`
     );
 
     // Recommendations
-    console.log(`\n💡 Performance Recommendations:`);
+    loggers.stopHook.log(`\n💡 Performance Recommendations:`);
 
     if (slowOperations.length > 0) {
       console.log(
-        `   • Investigate and optimize ${slowOperations.length} slow operations`,
+        `   • Investigate and optimize ${slowOperations.length} slow operations`
       );
     }
 
     if (failed.length > 0) {
       console.log(
-        `   • Address ${failed.length} failing operations for system reliability`,
+        `   • Address ${failed.length} failing operations for system reliability`
       );
     }
 
     if (avgMemoryPerOp > 10 * 1024 * 1024) {
       // 10MB per operation
       console.log(
-        `   • Review memory usage patterns - average ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB per operation`,
+        `   • Review memory usage patterns - average ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB per operation`
       );
     }
 
     if (successful.length === this.results.length) {
-      console.log(`   • System performing well - all operations successful`);
+      loggers.stopHook.log(
+        `   • System performing well - all operations successful`
+      );
     }
 
     const report = {
@@ -235,7 +245,7 @@ class QuickPerformanceTest {
     };
 
     console.log(
-      `\n🎯 Performance Score: ${this.calculatePerformanceScore(report)}/100`,
+      `\n🎯 Performance Score: ${this.calculatePerformanceScore(report)}/100`
     );
 
     return report;
@@ -277,11 +287,11 @@ if (require.main === module) {
   test
     .runQuickTests()
     .then((_report) => {
-      console.log('\n✅ Quick performance test completed!');
+      loggers.stopHook.log('\n✅ Quick performance test completed!');
       throw new Error('Performance test completed successfully');
     })
     .catch((error) => {
-      console.error('❌ Performance test failed:', error.message);
+      loggers.stopHook.error('❌ Performance test failed:', error.message);
       throw error;
     });
 }

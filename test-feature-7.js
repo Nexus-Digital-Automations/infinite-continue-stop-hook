@@ -6,7 +6,9 @@ const RAGOperations = require('./lib/api-modules/rag/ragOperations');
 
 async function testAdaptiveLearningPaths() {
   try {
-    console.log('Testing Feature 7: Adaptive Learning Paths System...');
+    loggers.stopHook.log(
+      'Testing Feature 7: Adaptive Learning Paths System...'
+    );
 
     // Create RAG operations instance
     const ragOps = new RAGOperations({
@@ -39,7 +41,7 @@ async function testAdaptiveLearningPaths() {
     };
 
     // Test 1: Generate adaptive learning path
-    console.log('\n1. Testing generateAdaptiveLearningPath...');
+    loggers.stopHook.log('\n1. Testing generateAdaptiveLearningPath...');
     const learningPath = await ragOps.generateAdaptiveLearningPath(
       userProfile,
       learningGoals,
@@ -48,7 +50,7 @@ async function testAdaptiveLearningPaths() {
         maxLength: 10,
         includeBranching: true,
         includeAssessments: true,
-      },
+      }
     );
     console.log('Learning path result:', {
       success: learningPath.success,
@@ -59,14 +61,14 @@ async function testAdaptiveLearningPaths() {
     });
 
     // Test 2: Get learning path recommendations
-    console.log('\n2. Testing getLearningPathRecommendations...');
+    loggers.stopHook.log('\n2. Testing getLearningPathRecommendations...');
     const pathRecommendations = await ragOps.getLearningPathRecommendations(
       userProfile,
       ['nodejs', 'express'],
       {
         includeAlternatives: true,
         maxRecommendations: 3,
-      },
+      }
     );
     console.log('Path recommendations result:', {
       success: pathRecommendations.success,
@@ -76,7 +78,7 @@ async function testAdaptiveLearningPaths() {
     });
 
     // Test 3: Track learning path progress
-    console.log('\n3. Testing trackLearningPathProgress...');
+    loggers.stopHook.log('\n3. Testing trackLearningPathProgress...');
     const userProgress = {
       completionRate: 0.6,
       averageScore: 0.8,
@@ -90,7 +92,7 @@ async function testAdaptiveLearningPaths() {
       {
         includeDetailedAnalysis: true,
         checkAdaptationTriggers: true,
-      },
+      }
     );
     console.log('Progress tracking result:', {
       success: progressTracking.success,
@@ -99,7 +101,7 @@ async function testAdaptiveLearningPaths() {
     });
 
     // Test 4: Get adaptive learning analytics
-    console.log('\n4. Testing getAdaptiveLearningAnalytics...');
+    loggers.stopHook.log('\n4. Testing getAdaptiveLearningAnalytics...');
     const analytics = await ragOps.getAdaptiveLearningAnalytics({
       timeRange: 30,
       includeUserSegmentation: true,
@@ -111,14 +113,14 @@ async function testAdaptiveLearningPaths() {
     });
 
     // Test 5: Adapt learning path (simulate adaptation)
-    console.log('\n5. Testing adaptLearningPath...');
+    loggers.stopHook.log('\n5. Testing adaptLearningPath...');
     const pathAdaptation = await ragOps.adaptLearningPath(
       'path_123',
       userProgress,
       {
         adaptationTrigger: 'performance_drop',
         preserveProgress: true,
-      },
+      }
     );
     console.log('Path adaptation result:', {
       success: pathAdaptation.success,
@@ -126,11 +128,11 @@ async function testAdaptiveLearningPaths() {
     });
 
     console.log(
-      '\n✅ Feature 7: Adaptive Learning Paths System integration test completed successfully!',
+      '\n✅ Feature 7: Adaptive Learning Paths System integration test completed successfully!'
     );
   } catch (error) {
-    console.error('❌ Feature 7 test failed:', error.message);
-    console.error('Stack:', error.stack);
+    loggers.stopHook.error('❌ Feature 7 test failed:', error.message);
+    loggers.stopHook.error('Stack:', error.stack);
   }
 }
 

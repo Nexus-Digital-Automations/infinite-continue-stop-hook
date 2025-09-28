@@ -54,12 +54,12 @@ class ParallelTestOptimizer {
 
     const optimalLimit = Math.min(cpuBasedLimit, memoryBasedLimit, 8); // Cap at 8
 
-    console.log(`🔧 System Analysis:`);
-    console.log(`  CPU Cores: ${cpuCount}`);
-    console.log(`  Total Memory: ${totalMemoryGB.toFixed(1)}GB`);
-    console.log(`  CPU-based limit: ${cpuBasedLimit}`);
-    console.log(`  Memory-based limit: ${memoryBasedLimit}`);
-    console.log(`  Optimal parallelism: ${optimalLimit}`);
+    loggers.stopHook.log(`🔧 System Analysis:`);
+    loggers.stopHook.log(`  CPU Cores: ${cpuCount}`);
+    loggers.stopHook.log(`  Total Memory: ${totalMemoryGB.toFixed(1)}GB`);
+    loggers.stopHook.log(`  CPU-based limit: ${cpuBasedLimit}`);
+    loggers.stopHook.log(`  Memory-based limit: ${memoryBasedLimit}`);
+    loggers.stopHook.log(`  Optimal parallelism: ${optimalLimit}`);
 
     return optimalLimit;
   }
@@ -84,7 +84,7 @@ class ParallelTestOptimizer {
         }
       });
     } catch (error) {
-      console.warn('⚠️ Could not read package.json:', error.message);
+      loggers.stopHook.warn('⚠️ Could not read package.json:', error.message);
     }
 
     return testSuites;
@@ -243,14 +243,14 @@ class ParallelTestOptimizer {
    * Generate optimized execution plan
    */
   generateExecutionPlan() {
-    console.log('📋 Generating optimized execution plan...');
+    loggers.stopHook.log('📋 Generating optimized execution plan...');
 
     // Separate parallelizable and non-parallelizable tests
     const parallelizable = this.config.testSuites.filter(
-      (suite) => suite.parallelizable,
+      (suite) => suite.parallelizable
     );
     const sequential = this.config.testSuites.filter(
-      (suite) => !suite.parallelizable,
+      (suite) => !suite.parallelizable
     );
 
     // Sort by estimated duration (longest first for better load balancing)
@@ -268,15 +268,15 @@ class ParallelTestOptimizer {
     // Estimate time savings
     this.executionPlan.estimated_time_savings = this.calculateTimeSavings();
 
-    console.log(`✅ Execution plan generated:`);
+    loggers.stopHook.log(`✅ Execution plan generated:`);
     console.log(
-      `  Parallel groups: ${this.executionPlan.parallel_groups.length}`,
+      `  Parallel groups: ${this.executionPlan.parallel_groups.length}`
     );
     console.log(
-      `  Sequential tests: ${this.executionPlan.sequential_tests.length}`,
+      `  Sequential tests: ${this.executionPlan.sequential_tests.length}`
     );
     console.log(
-      `  Estimated time savings: ${this.executionPlan.estimated_time_savings}%`,
+      `  Estimated time savings: ${this.executionPlan.estimated_time_savings}%`
     );
   }
 
@@ -297,7 +297,7 @@ class ParallelTestOptimizer {
         const group = {
           tests: tests.slice(i, i + maxGroupSize),
           estimated_duration: Math.max(
-            ...tests.slice(i, i + maxGroupSize).map((t) => t.estimatedDuration),
+            ...tests.slice(i, i + maxGroupSize).map((t) => t.estimatedDuration)
           ),
           resource_profile: tests[0].resourceRequirements,
         };
@@ -403,7 +403,7 @@ class ParallelTestOptimizer {
     const avgGroupSize =
       this.executionPlan.parallel_groups.reduce(
         (sum, group) => sum + group.tests.length,
-        0,
+        0
       ) / this.executionPlan.parallel_groups.length;
     if (avgGroupSize < this.config.maxParallelJobs * 0.7) {
       opportunities.push({
@@ -440,11 +440,11 @@ class ParallelTestOptimizer {
       // For parallel groups, sum all tests in the group
       totalMemory += group.tests.reduce(
         (sum, test) => sum + test.resourceRequirements.memory,
-        0,
+        0
       );
       totalCPU += group.tests.reduce(
         (sum, test) => sum + test.resourceRequirements.cpu,
-        0,
+        0
       );
     });
 
@@ -457,7 +457,7 @@ class ParallelTestOptimizer {
   calculateTimeSavings() {
     const sequentialTime = this.config.testSuites.reduce(
       (sum, test) => sum + test.estimatedDuration,
-      0,
+      0
     );
     const parallelTime =
       this.executionPlan.critical_path.total_estimated_duration;
@@ -547,11 +547,11 @@ class ParallelTestOptimizer {
       'ubuntu-latest': this.config.maxParallelJobs,
       'windows-latest': Math.max(
         2,
-        Math.floor(this.config.maxParallelJobs * 0.75),
+        Math.floor(this.config.maxParallelJobs * 0.75)
       ),
       'macos-latest': Math.max(
         2,
-        Math.floor(this.config.maxParallelJobs * 0.5),
+        Math.floor(this.config.maxParallelJobs * 0.5)
       ),
     };
 
@@ -578,11 +578,11 @@ class ParallelTestOptimizer {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const analysisFile = path.join(
       this.outputDir,
-      `parallel-optimization-${timestamp}.json`,
+      `parallel-optimization-${timestamp}.json`
     );
     const latestFile = path.join(
       this.outputDir,
-      'latest-parallel-optimization.json',
+      'latest-parallel-optimization.json'
     );
 
     const analysis = {
@@ -598,14 +598,14 @@ class ParallelTestOptimizer {
     // Generate human-readable report
     const reportFile = path.join(
       this.outputDir,
-      'parallel-optimization-report.md',
+      'parallel-optimization-report.md'
     );
     const report = this.generateMarkdownReport(analysis);
     fs.writeFileSync(reportFile, report);
 
-    console.log(`📄 Analysis saved to: ${analysisFile}`);
-    console.log(`📄 Latest analysis: ${latestFile}`);
-    console.log(`📄 Report: ${reportFile}`);
+    loggers.stopHook.log(`📄 Analysis saved to: ${analysisFile}`);
+    loggers.stopHook.log(`📄 Latest analysis: ${latestFile}`);
+    loggers.stopHook.log(`📄 Report: ${reportFile}`);
 
     return analysis;
   }
@@ -631,21 +631,21 @@ class ParallelTestOptimizer {
 
 ### Parallelizable Tests
 ${analysis.execution_plan.parallel_groups
-    .map(
-      (group, i) =>
-        `#### Group ${i + 1}
+  .map(
+    (group, i) =>
+      `#### Group ${i + 1}
   - **Tests**: ${group.tests.map((t) => t.name).join(', ')}
   - **Estimated Duration**: ${group.estimated_duration}s
-  - **Resource Profile**: ${group.resource_profile.memory}MB RAM, ${group.resource_profile.cpu} CPU cores`,
-    )
-    .join('\n\n')}
+  - **Resource Profile**: ${group.resource_profile.memory}MB RAM, ${group.resource_profile.cpu} CPU cores`
+  )
+  .join('\n\n')}
 
 ### Sequential Tests
 ${
   analysis.execution_plan.sequential_tests
     ?.map(
       (test) =>
-        `- **${test.name}**: ${test.estimatedDuration}s (${test.dependencies.join(', ')})`,
+        `- **${test.name}**: ${test.estimatedDuration}s (${test.dependencies.join(', ')})`
     )
     .join('\n') || 'None'
 }
@@ -655,7 +655,7 @@ ${
   analysis.execution_plan.critical_path.bottlenecks
     ?.map(
       (b) =>
-        `- **${b.type}**: ${b.test || 'N/A'} (${b.duration}s) - ${b.suggestion}`,
+        `- **${b.type}**: ${b.test || 'N/A'} (${b.duration}s) - ${b.suggestion}`
     )
     .join('\n') || 'None identified'
 }
@@ -675,14 +675,14 @@ strategy:
   matrix:
     include:
 ${analysis.github_actions_matrix.strategy.matrix.include
-    .map(
-      (item) =>
-        `      - node-version: "${item['node-version']}"
+  .map(
+    (item) =>
+      `      - node-version: "${item['node-version']}"
         os: ${item.os}
         test-strategy: ${item['test-strategy']}
-        parallel-jobs: ${item['parallel-jobs']}`,
-    )
-    .join('\n')}
+        parallel-jobs: ${item['parallel-jobs']}`
+  )
+  .join('\n')}
 \`\`\`
 
 ## Recommendations
@@ -701,35 +701,41 @@ ${analysis.github_actions_matrix.strategy.matrix.include
    * Display optimization summary
    */
   displaySummary() {
-    console.log('\n📊 Parallel Test Optimization Summary');
-    console.log('====================================');
-    console.log(`System Parallelism: ${this.config.maxParallelJobs} jobs`);
-    console.log(`Test Suites Found: ${this.config.testSuites.length}`);
+    loggers.stopHook.log('\n📊 Parallel Test Optimization Summary');
+    loggers.stopHook.log('====================================');
+    loggers.stopHook.log(
+      `System Parallelism: ${this.config.maxParallelJobs} jobs`
+    );
+    loggers.stopHook.log(`Test Suites Found: ${this.config.testSuites.length}`);
     console.log(
-      `Parallel Groups: ${this.executionPlan.parallel_groups.length}`,
+      `Parallel Groups: ${this.executionPlan.parallel_groups.length}`
     );
     console.log(
-      `Sequential Tests: ${this.executionPlan.sequential_tests?.length || 0}`,
+      `Sequential Tests: ${this.executionPlan.sequential_tests?.length || 0}`
     );
     console.log(
-      `Estimated Time Savings: ${this.executionPlan.estimated_time_savings}%`,
+      `Estimated Time Savings: ${this.executionPlan.estimated_time_savings}%`
     );
 
     if (this.executionPlan.critical_path.bottlenecks?.length > 0) {
-      console.log('\n⚠️ Bottlenecks Identified:');
+      loggers.stopHook.log('\n⚠️ Bottlenecks Identified:');
       this.executionPlan.critical_path.bottlenecks.forEach((bottleneck) => {
-        console.log(`  ${bottleneck.type}: ${bottleneck.test || 'N/A'}`);
+        loggers.stopHook.log(
+          `  ${bottleneck.type}: ${bottleneck.test || 'N/A'}`
+        );
       });
     }
 
     if (
       this.executionPlan.critical_path.optimization_opportunities?.length > 0
     ) {
-      console.log('\n💡 Optimization Opportunities:');
+      loggers.stopHook.log('\n💡 Optimization Opportunities:');
       this.executionPlan.critical_path.optimization_opportunities.forEach(
         (opportunity) => {
-          console.log(`  ${opportunity.type}: ${opportunity.suggestion}`);
-        },
+          loggers.stopHook.log(
+            `  ${opportunity.type}: ${opportunity.suggestion}`
+          );
+        }
       );
     }
   }
@@ -738,17 +744,21 @@ ${analysis.github_actions_matrix.strategy.matrix.include
    * Run complete optimization analysis
    */
   run() {
-    console.log('🚀 Starting Parallel Test Optimization Analysis...\n');
+    loggers.stopHook.log(
+      '🚀 Starting Parallel Test Optimization Analysis...\n'
+    );
 
     try {
       this.generateExecutionPlan();
       const analysis = this.saveAnalysis();
       this.displaySummary();
 
-      console.log('\n✅ Optimization analysis completed successfully!');
+      loggers.stopHook.log(
+        '\n✅ Optimization analysis completed successfully!'
+      );
       return analysis;
     } catch (error) {
-      console.error('❌ Optimization analysis failed:', error.message);
+      loggers.stopHook.error('❌ Optimization analysis failed:', error.message);
       throw error;
     }
   }

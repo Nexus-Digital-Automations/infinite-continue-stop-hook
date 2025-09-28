@@ -198,7 +198,7 @@ describe('Multi-Agent Scenarios E2E', () => {
         // Verify approval history
         expect(features.metadata.approval_history).toHaveLength(3);
 
-        console.log('✅ Concurrent approval/rejection operations test passed');
+        loggers.stopHook.log('✅ Concurrent approval/rejection operations test passed');
       },
       E2E_TIMEOUT,
     );
@@ -468,7 +468,7 @@ describe('Multi-Agent Scenarios E2E', () => {
         expect(features.project).toBeTruthy();
         expect(features.metadata).toBeTruthy();
 
-        console.log('✅ Stop hook authorization cascading test passed');
+        loggers.stopHook.log('✅ Stop hook authorization cascading test passed');
       },
       E2E_TIMEOUT,
     );

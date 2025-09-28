@@ -18,7 +18,7 @@ describe('RAG System Data Migration and Integrity', () => {
   let _backupManager;
 
   beforeAll(async () => {
-    console.log('Setting up data integrity test environment...');
+    loggers.stopHook.log('Setting up data integrity test environment...');
 
     // Setup test migration directory
     _testMigrationPath = _path.join(
@@ -32,11 +32,11 @@ describe('RAG System Data Migration and Integrity', () => {
   });
 
   afterAll(async () => {
-    console.log('Cleaning up data integrity test environment...');
+    loggers.stopHook.log('Cleaning up data integrity test environment...');
     try {
       await _fs.rm(_testMigrationPath, { recursive: true, force: true });
     } catch (error) {
-      console.warn('Cleanup warning:', error.message);
+      loggers.stopHook.warn('Cleanup warning:', error.message);
     }
   });
 
@@ -104,7 +104,7 @@ describe('RAG System Data Migration and Integrity', () => {
         expect(lesson.migration_timestamp).toBeDefined();
       }
 
-      console.log(`Successfully migrated ${originalCount} lesson files`);
+      loggers.stopHook.log(`Successfully migrated ${originalCount} lesson files`);
       */
     });
 
@@ -132,7 +132,7 @@ try {
   });
   if (!response.ok) throw new Error('API Error');
 } catch (error) {
-        console.error(error);
+        loggers.stopHook.error(error);
 }
 \`\`\`
 
@@ -294,7 +294,7 @@ Tags: database, performance, connection-pooling`,
       expect(hugeFilerror).toBeDefined();
       expect(hugeFilerror.error_type).toBe('file_too_large');
 
-      console.log(`Migration completed with ${errorMigrationResult.errors.length} errors handled gracefully`);
+      loggers.stopHook.log(`Migration completed with ${errorMigrationResult.errors.length} errors handled gracefully`);
       */
     });
   });
@@ -365,7 +365,7 @@ Tags: database, performance, connection-pooling`,
         expect(foundInSearch).toBe(true);
       }
 
-      console.log('Data integrity validation passed all checks');
+      loggers.stopHook.log('Data integrity validation passed all checks');
       */
     });
 
@@ -413,7 +413,7 @@ Tags: database, performance, connection-pooling`,
       expect(corruptedLesson.repair_suggestions).toBeDefined();
       expect(corruptedLesson.repair_suggestions).toContain('regenerate_embedding');
 
-      console.log(`Detected ${corruptionResult.corrupted_items.length} corrupted items`);
+      loggers.stopHook.log(`Detected ${corruptionResult.corrupted_items.length} corrupted items`);
       */
     });
 
@@ -480,7 +480,7 @@ Tags: database, performance, connection-pooling`,
       );
       expect(stillCorrupted).toBeUndefined();
 
-      console.log('Automatic data repair completed successfully');
+      loggers.stopHook.log('Automatic data repair completed successfully');
       */
     });
   });
@@ -539,7 +539,7 @@ Tags: database, performance, connection-pooling`,
       expect(integrityResult.is_valid).toBe(true);
       expect(integrityResult.checksum_verified).toBe(true);
 
-      console.log(`Created backup ${backupResult.backup_id} with ${backupResult.lessons_backed_up} lessons`);
+      loggers.stopHook.log(`Created backup ${backupResult.backup_id} with ${backupResult.lessons_backed_up} lessons`);
       */
     });
 
@@ -628,7 +628,7 @@ Tags: database, performance, connection-pooling`,
       const _searchResult = await ragSystem.searchLessons('restoration validation');
       expect(searchResult.results.length).toBeGreaterThan(0);
 
-      console.log(`Restored ${restoreResult.lessons_restored} lessons from backup`);
+      loggers.stopHook.log(`Restored ${restoreResult.lessons_restored} lessons from backup`);
       */
     });
 
@@ -714,7 +714,7 @@ Tags: database, performance, connection-pooling`,
       const _nonExistentLesson = await ragSystem.getLessonById(anotherNewLesson.lesson_id);
       expect(nonExistentLesson.success).toBe(false); // Should not exist
 
-      console.log('Point-in-time recovery completed successfully');
+      loggers.stopHook.log('Point-in-time recovery completed successfully');
       */
     });
   });

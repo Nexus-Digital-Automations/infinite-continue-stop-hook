@@ -101,7 +101,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       enableBackup: false, // Disable backup for tests
     });
 
-    console.log('Initializing RAG system components...');
+    loggers.stopHook.log('Initializing RAG system components...');
 
     // Initialize all components
     await embeddingGenerator.initialize();
@@ -109,7 +109,7 @@ describe('RAG System End-to-End Integration Tests', () => {
     await semanticSearchEngine.initialize();
     await ragOperations.initialize();
 
-    console.log('RAG system initialization completed');
+    loggers.stopHook.log('RAG system initialization completed');
   }, 120000); // 2 minutes timeout for initialization
 
   afterAll(async () => {
@@ -131,7 +131,7 @@ describe('RAG System End-to-End Integration Tests', () => {
     try {
       await _fs.rm(testDataPath, { recursive: true, force: true });
     } catch (error) {
-      console.warn('Failed to clean up test data:', error.message);
+      loggers.stopHook.warn('Failed to clean up test data:', error.message);
     }
   });
 

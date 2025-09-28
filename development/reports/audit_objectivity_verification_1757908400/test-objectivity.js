@@ -4,20 +4,20 @@ async function testObjectivityEnforcement() {
   const tm = new TaskManager("./TODO.json");
   const data = await tm.readTodo();
   
-  console.log("🔍 Audit Objectivity Enforcement Test Results");
-  console.log("=".repeat(50));
-  console.log("");
+  loggers.stopHook.log("🔍 Audit Objectivity Enforcement Test Results");
+  loggers.stopHook.log("=".repeat(50));
+  loggers.stopHook.log("");
   
   const taskId = "error_1757786940145_4agh3myjq";
   const task = data.tasks.find(t => t.id === taskId);
   
-  console.log("📋 Task Details:");
-  console.log(`   Task ID: ${task.id}`);
-  console.log(`   Title: ${task.title}`);
-  console.log(`   Category: ${task.category}`);
-  console.log(`   Original Implementer: ${task.original_implementer}`);
-  console.log(`   Current Status: ${task.status}`);
-  console.log("");
+  loggers.stopHook.log("📋 Task Details:");
+  loggers.stopHook.log(`   Task ID: ${task.id}`);
+  loggers.stopHook.log(`   Title: ${task.title}`);
+  loggers.stopHook.log(`   Category: ${task.category}`);
+  loggers.stopHook.log(`   Original Implementer: ${task.original_implementer}`);
+  loggers.stopHook.log(`   Current Status: ${task.status}`);
+  loggers.stopHook.log("");
   
   const scenarios = [
     {
@@ -37,8 +37,8 @@ async function testObjectivityEnforcement() {
     }
   ];
   
-  console.log("🧪 Testing Agent Claim Validation:");
-  console.log("");
+  loggers.stopHook.log("🧪 Testing Agent Claim Validation:");
+  loggers.stopHook.log("");
   
   let passCount = 0;
   let totalTests = 0;
@@ -51,27 +51,27 @@ async function testObjectivityEnforcement() {
     if (actualResult === scenario.expected) passCount++;
     totalTests++;
     
-    console.log(`${scenario.name}:`);
-    console.log(`   Agent ID: ${scenario.agentId}`);
-    console.log(`   Expected: ${scenario.expected}`);
-    console.log(`   Actual: ${actualResult}`);
-    console.log(`   Status: ${status}`);
+    loggers.stopHook.log(`${scenario.name}:`);
+    loggers.stopHook.log(`   Agent ID: ${scenario.agentId}`);
+    loggers.stopHook.log(`   Expected: ${scenario.expected}`);
+    loggers.stopHook.log(`   Actual: ${actualResult}`);
+    loggers.stopHook.log(`   Status: ${status}`);
     
     if (!validation.valid) {
-      console.log(`   Reason: ${validation.errorResult.reason}`);
+      loggers.stopHook.log(`   Reason: ${validation.errorResult.reason}`);
     }
-    console.log("");
+    loggers.stopHook.log("");
   });
   
-  console.log("🎯 Test Summary:");
-  console.log(`   Tests Passed: ${passCount}/${totalTests}`);
-  console.log(`   Success Rate: ${Math.round((passCount/totalTests)*100)}%`);
-  console.log("");
-  console.log("🔒 Audit Objectivity System Status:");
+  loggers.stopHook.log("🎯 Test Summary:");
+  loggers.stopHook.log(`   Tests Passed: ${passCount}/${totalTests}`);
+  loggers.stopHook.log(`   Success Rate: ${Math.round((passCount/totalTests)*100)}%`);
+  loggers.stopHook.log("");
+  loggers.stopHook.log("🔒 Audit Objectivity System Status:");
   if (passCount === totalTests) {
-    console.log("   ✅ VERIFIED WORKING - All objectivity controls functioning correctly");
+    loggers.stopHook.log("   ✅ VERIFIED WORKING - All objectivity controls functioning correctly");
   } else {
-    console.log("   ❌ ISSUES DETECTED - Objectivity controls need debugging");
+    loggers.stopHook.log("   ❌ ISSUES DETECTED - Objectivity controls need debugging");
   }
 }
 

@@ -16,12 +16,12 @@ describe('Embedding Generation System', () => {
 
   beforeAll(() => {
     // Initialize embedding service when available
-    console.log('Setting up embedding generation test environment...');
+    loggers.stopHook.log('Setting up embedding generation test environment...');
   });
 
   afterAll(() => {
     // Cleanup resources
-    console.log('Cleaning up embedding test environment...');
+    loggers.stopHook.log('Cleaning up embedding test environment...');
   });
 
   beforeEach(() => {

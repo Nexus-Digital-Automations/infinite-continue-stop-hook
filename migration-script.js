@@ -1,3 +1,4 @@
+const { loggers } = require('./lib/logger');
 /**
  * TODO.json to FEATURES.json Migration Script
  *
@@ -37,7 +38,9 @@ class FeaturesMigration {
    */
   migrate() {
     try {
-      console.log('🚀 Starting TODO.json → FEATURES.json migration...');
+      loggers.stopHook.log(
+        '🚀 Starting TODO.json → FEATURES.json migration...'
+      );
 
       // Step 1: Load and validate TODO.json
       const todoData = this.loadTodoData();
@@ -57,10 +60,10 @@ class FeaturesMigration {
       // Step 6: Generate migration report
       this.generateMigrationReport();
 
-      console.log('✅ Migration completed successfully!');
+      loggers.stopHook.log('✅ Migration completed successfully!');
       return true;
     } catch (error) {
-      console.error('❌ Migration failed:', error.message);
+      loggers.stopHook.error('❌ Migration failed:', error.message);
       this.migrationReport.errors.push(error.message);
       return false;
     }
@@ -70,7 +73,7 @@ class FeaturesMigration {
    * Load and validate TODO.json data
    */
   loadTodoData() {
-    console.log('📖 Loading TODO.json data...');
+    loggers.stopHook.log('📖 Loading TODO.json data...');
 
     if (!fs.existsSync(this.todoPath)) {
       throw new Error(`TODO.json not found at ${this.todoPath}`);
@@ -83,7 +86,9 @@ class FeaturesMigration {
       ? todoData.tasks.length
       : 0;
 
-    console.log(`📊 Found ${this.migrationReport.totalTasks} tasks to migrate`);
+    loggers.stopHook.log(
+      `📊 Found ${this.migrationReport.totalTasks} tasks to migrate`
+    );
     return todoData;
   }
 
@@ -91,17 +96,17 @@ class FeaturesMigration {
    * Create backup with timestamp
    */
   createBackup(todoData) {
-    console.log('💾 Creating backup...');
+    loggers.stopHook.log('💾 Creating backup...');
 
     fs.writeFileSync(this.backupPath, JSON.stringify(todoData, null, 2));
-    console.log(`✅ Backup created: ${this.backupPath}`);
+    loggers.stopHook.log(`✅ Backup created: ${this.backupPath}`);
   }
 
   /**
    * Create new FEATURES.json schema structure
    */
   createFeaturesSchema(todoData) {
-    console.log('🏗️  Designing FEATURES.json schema...');
+    loggers.stopHook.log('🏗️  Designing FEATURES.json schema...');
 
     return {
       // Meta information
@@ -179,7 +184,7 @@ class FeaturesMigration {
    * Transform TODO.json data to FEATURES.json format
    */
   transformData(todoData, featuresSchema) {
-    console.log('🔄 Transforming data to new format...');
+    loggers.stopHook.log('🔄 Transforming data to new format...');
 
     const transformedData = { ...featuresSchema };
 
@@ -192,10 +197,10 @@ class FeaturesMigration {
           this.migrationReport.migratedFeatures++;
         } catch (error) {
           this.migrationReport.errors.push(
-            `Failed to transform task ${task.id || index}: ${error.message}`,
+            `Failed to transform task ${task.id || index}: ${error.message}`
           );
           console.warn(
-            `⚠️  Warning: Failed to transform task ${task.id || index}`,
+            `⚠️  Warning: Failed to transform task ${task.id || index}`
           );
         }
       });
@@ -209,7 +214,7 @@ class FeaturesMigration {
           transformedData.completed_features.push(transformedFeature);
         } catch (error) {
           this.migrationReport.errors.push(
-            `Failed to transform completed task ${task.id || index}: ${error.message}`,
+            `Failed to transform completed task ${task.id || index}: ${error.message}`
           );
         }
       });
@@ -219,7 +224,7 @@ class FeaturesMigration {
     transformedData.migration_stats = this.migrationReport;
 
     console.log(
-      `✅ Transformed ${this.migrationReport.migratedFeatures} features`,
+      `✅ Transformed ${this.migrationReport.migratedFeatures} features`
     );
     return transformedData;
   }
@@ -308,14 +313,14 @@ class FeaturesMigration {
    * Write the new FEATURES.json file
    */
   writeFeaturesFile(transformedData) {
-    console.log('💾 Writing FEATURES.json...');
+    loggers.stopHook.log('💾 Writing FEATURES.json...');
 
     const featuresContent = JSON.stringify(transformedData, null, 2);
     fs.writeFileSync(this.featuresPath, featuresContent);
 
-    console.log(`✅ FEATURES.json created: ${this.featuresPath}`);
+    loggers.stopHook.log(`✅ FEATURES.json created: ${this.featuresPath}`);
     console.log(
-      `📊 File size: ${Math.round(featuresContent.length / 1024)} KB`,
+      `📊 File size: ${Math.round(featuresContent.length / 1024)} KB`
     );
   }
 
@@ -328,29 +333,31 @@ class FeaturesMigration {
       new Date(this.migrationReport.endTime) -
       new Date(this.migrationReport.startTime);
 
-    console.log('\n📋 Migration Report:');
-    console.log('===================');
-    console.log(`📅 Start Time: ${this.migrationReport.startTime}`);
-    console.log(`📅 End Time: ${this.migrationReport.endTime}`);
-    console.log(`⏱️  Duration: ${this.migrationReport.duration}ms`);
-    console.log(`📝 Total Tasks: ${this.migrationReport.totalTasks}`);
+    loggers.stopHook.log('\n📋 Migration Report:');
+    loggers.stopHook.log('===================');
+    loggers.stopHook.log(`📅 Start Time: ${this.migrationReport.startTime}`);
+    loggers.stopHook.log(`📅 End Time: ${this.migrationReport.endTime}`);
+    loggers.stopHook.log(`⏱️  Duration: ${this.migrationReport.duration}ms`);
+    loggers.stopHook.log(`📝 Total Tasks: ${this.migrationReport.totalTasks}`);
     console.log(
-      `✅ Migrated Features: ${this.migrationReport.migratedFeatures}`,
+      `✅ Migrated Features: ${this.migrationReport.migratedFeatures}`
     );
-    console.log(`⚠️  Errors: ${this.migrationReport.errors.length}`);
-    console.log(`🔶 Warnings: ${this.migrationReport.warnings.length}`);
+    loggers.stopHook.log(`⚠️  Errors: ${this.migrationReport.errors.length}`);
+    loggers.stopHook.log(
+      `🔶 Warnings: ${this.migrationReport.warnings.length}`
+    );
 
     if (this.migrationReport.errors.length > 0) {
-      console.log('\n❌ Errors:');
+      loggers.stopHook.log('\n❌ Errors:');
       this.migrationReport.errors.forEach((error, index) => {
-        console.log(`   ${index + 1}. ${error}`);
+        loggers.stopHook.log(`   ${index + 1}. ${error}`);
       });
     }
 
     if (this.migrationReport.warnings.length > 0) {
-      console.log('\n⚠️  Warnings:');
+      loggers.stopHook.log('\n⚠️  Warnings:');
       this.migrationReport.warnings.forEach((warning, index) => {
-        console.log(`   ${index + 1}. ${warning}`);
+        loggers.stopHook.log(`   ${index + 1}. ${warning}`);
       });
     }
   }
@@ -359,7 +366,7 @@ class FeaturesMigration {
    * Validate migration results
    */
   validateMigration() {
-    console.log('🔍 Validating migration results...');
+    loggers.stopHook.log('🔍 Validating migration results...');
 
     try {
       // Check if FEATURES.json exists and is valid JSON
@@ -378,7 +385,7 @@ class FeaturesMigration {
         'settings',
       ];
       const missingFields = requiredFields.filter(
-        (field) => !Object.prototype.hasOwnProperty.call(featuresData, field),
+        (field) => !Object.prototype.hasOwnProperty.call(featuresData, field)
       );
 
       if (missingFields.length > 0) {
@@ -390,10 +397,10 @@ class FeaturesMigration {
         throw new Error('Features field must be an array');
       }
 
-      console.log('✅ Migration validation passed');
+      loggers.stopHook.log('✅ Migration validation passed');
       return true;
     } catch (error) {
-      console.error('❌ Migration validation failed:', error.message);
+      loggers.stopHook.error('❌ Migration validation failed:', error.message);
       return false;
     }
   }
@@ -417,7 +424,7 @@ if (require.main === module) {
       }
     })
     .catch((error) => {
-      console.error('💥 Unexpected error:', error);
+      loggers.stopHook.error('💥 Unexpected error:', error);
       throw error;
     });
 }

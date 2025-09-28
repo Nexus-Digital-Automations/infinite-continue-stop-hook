@@ -24,7 +24,7 @@ class TestNotificationSystem {
       coverageThreshold: parseFloat(process.env.COVERAGE_THRESHOLD || '80'),
       testFailureThreshold: parseInt(process.env.TEST_FAILURE_THRESHOLD || '0'),
       coverageDropThreshold: parseFloat(
-        process.env.COVERAGE_DROP_THRESHOLD || '5',
+        process.env.COVERAGE_DROP_THRESHOLD || '5'
       ),
       notificationLevel: process.env.NOTIFICATION_LEVEL || 'all', // all, failures-only, critical-only
       historyFile: './coverage/notifications/history.json',
@@ -41,7 +41,7 @@ class TestNotificationSystem {
    */
   async processNotifications() {
     try {
-      console.log('🔔 Processing test notifications...');
+      loggers.stopHook.log('🔔 Processing test notifications...');
 
       const testResults = await this.loadTestResults();
       const coverageData = await this.loadCoverageData();
@@ -50,22 +50,27 @@ class TestNotificationSystem {
       const notifications = await this.analyzeAndGenerateNotifications(
         testResults,
         coverageData,
-        cicdData,
+        cicdData
       );
 
       if (notifications.length === 0) {
-        console.log('✅ No notifications needed - all quality gates passed');
+        loggers.stopHook.log(
+          '✅ No notifications needed - all quality gates passed'
+        );
         return;
       }
 
       await this.sendNotifications(notifications);
       await this.updateNotificationHistory(notifications);
 
-      console.log(`📤 Sent ${notifications.length} notification(s)`);
+      loggers.stopHook.log(`📤 Sent ${notifications.length} notification(s)`);
     } catch (error) {
-      console.error('❌ Failed to process notifications:', error.message);
+      loggers.stopHook.error(
+        '❌ Failed to process notifications:',
+        error.message
+      );
       if (process.env.DEBUG) {
-        console.error(error.stack);
+        loggers.stopHook.error(error.stack);
       }
       throw new Error(`Failed to process notifications: ${error.message}`);
     }
@@ -88,7 +93,7 @@ class TestNotificationSystem {
     // Coverage threshold notifications
     if (coverageData && this.isCoverageBelowThreshold(coverageData)) {
       notifications.push(
-        this.createCoverageThresholdNotification(coverageData),
+        this.createCoverageThresholdNotification(coverageData)
       );
     }
 
@@ -518,7 +523,7 @@ class TestNotificationSystem {
         return JSON.parse(fs.readFileSync(path, 'utf8'));
       }
     } catch (error) {
-      console.warn('⚠️ Could not load test results:', error.message);
+      loggers.stopHook.warn('⚠️ Could not load test results:', error.message);
     }
     return null;
   }
@@ -530,7 +535,7 @@ class TestNotificationSystem {
         return JSON.parse(fs.readFileSync(path, 'utf8'));
       }
     } catch (error) {
-      console.warn('⚠️ Could not load coverage data:', error.message);
+      loggers.stopHook.warn('⚠️ Could not load coverage data:', error.message);
     }
     return null;
   }
@@ -542,7 +547,7 @@ class TestNotificationSystem {
         return JSON.parse(fs.readFileSync(path, 'utf8'));
       }
     } catch (error) {
-      console.warn('⚠️ Could not load CI/CD data:', error.message);
+      loggers.stopHook.warn('⚠️ Could not load CI/CD data:', error.message);
     }
     return null;
   }
@@ -553,7 +558,10 @@ class TestNotificationSystem {
         return JSON.parse(fs.readFileSync(this.options.historyFile, 'utf8'));
       }
     } catch (error) {
-      console.warn('⚠️ Could not load notification history:', error.message);
+      loggers.stopHook.warn(
+        '⚠️ Could not load notification history:',
+        error.message
+      );
     }
     return [];
   }
@@ -592,17 +600,20 @@ class TestNotificationSystem {
 
       fs.writeFileSync(
         this.options.historyFile,
-        JSON.stringify(this.notificationHistory, null, 2),
+        JSON.stringify(this.notificationHistory, null, 2)
       );
     } catch (error) {
-      console.warn('⚠️ Could not update notification history:', error.message);
+      loggers.stopHook.warn(
+        '⚠️ Could not update notification history:',
+        error.message
+      );
     }
   }
 
   getGitCommit() {
     try {
       return execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
-    } catch {
+    } catch (error) {
       return 'unknown';
     }
   }
@@ -610,11 +621,11 @@ class TestNotificationSystem {
   logNotificationResults(results) {
     results.forEach((result, index) => {
       if (result.status === 'fulfilled') {
-        console.log(`✅ Notification ${index + 1} sent successfully`);
+        loggers.stopHook.log(`✅ Notification ${index + 1} sent successfully`);
       } else {
         console.log(
           `❌ Notification ${index + 1} failed:`,
-          result.reason.message,
+          result.reason.message
         );
       }
     });
@@ -669,7 +680,7 @@ Examples:
 
   const notificationSystem = new TestNotificationSystem(options);
   notificationSystem.processNotifications().catch((error) => {
-    console.error('❌ Fatal error:', error.message);
+    loggers.stopHook.error('❌ Fatal error:', error.message);
     throw new Error(`Fatal error: ${error.message}`);
   });
 }

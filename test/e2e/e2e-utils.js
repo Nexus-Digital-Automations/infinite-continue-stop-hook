@@ -137,7 +137,7 @@ class E2EEnvironment {
         // eslint-disable-next-line no-await-in-loop -- Sequential cleanup required for proper teardown order
         await task();
       } catch (error) {
-        console.warn(`Cleanup task failed: ${error.message}`);
+        loggers.stopHook.warn(`Cleanup task failed: ${error.message}`);
       }
     }
   }
@@ -536,6 +536,7 @@ class StopHookTestHelpers {
 
     for (let i = 0; i < maxIterations; i++) {
       // Test the stop hook - should always block (exit code 2) in infinite mode
+      // eslint-disable-next-line no-await-in-loop -- Sequential processing required for testing infinite continue behavior over time
       const result = await CommandExecutor.executeStopHook(
         [], // No arguments - just test the hook
         {
@@ -572,6 +573,7 @@ class PerformanceTestHelpers {
 
     for (let i = 0; i < iterations; i++) {
       const startTime = Date.now();
+      // eslint-disable-next-line no-await-in-loop -- Sequential processing required for accurate performance measurement
       await command();
       const duration = Date.now() - startTime;
       results.push(duration);
@@ -710,7 +712,7 @@ class E2EAssertions {
           `JSON response does not contain "${expectedText}" ${message}\nActual response: ${responseText}`,
         );
       }
-    } catch {
+    } catch (error) {
       // Fall back to text search if not JSON
       this.assertOutputContains(result, expectedText, message);
     }
@@ -751,7 +753,7 @@ class E2EAssertions {
     let parsed;
     try {
       parsed = JSON.parse(result.stdout);
-    } catch {
+    } catch (error) {
       throw new Error(`Response is not valid JSON: ${result.stdout}`);
     }
 
