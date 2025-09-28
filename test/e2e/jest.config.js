@@ -13,4 +13,9 @@ module.exports = {
   detectOpenHandles: false,
   collectCoverage: false,
   maxWorkers: 1, // Run E2E tests sequentially to avoid conflicts
+
+  // Mock problematic ES module dependencies
+  moduleNameMapper: {
+    '@xenova/transformers': '<rootDir>/../../test/mocks/transformers-mock.js',
+  },
 };

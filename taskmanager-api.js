@@ -5338,7 +5338,7 @@ class AutonomousTaskManagerAPI {
 
     // Check file existence (post-execution)
     if (criteria.fileExists) {
-      const FS = require('fs');
+      const _FS = require('fs');
       const PATH = require('path');
       for (const file of criteria.fileExists) {
         const filePath = PATH.join(PROJECT_ROOT, file);
@@ -5350,7 +5350,7 @@ class AutonomousTaskManagerAPI {
 
     // Check file contents (post-execution)
     if (criteria.fileContains) {
-      const FS = require('fs');
+      const _FS = require('fs');
       const PATH = require('path');
       for (const [filePath, patterns] of Object.entries(
         criteria.fileContains
@@ -6074,7 +6074,7 @@ class AutonomousTaskManagerAPI {
     const gracefulStrategies = {
       Linting: () => {
         // Check if there's a linting config but the command failed
-        const FS = require('fs');
+        const _FS = require('fs');
         const lintConfigs = [
           '.eslintrc.js',
           '.eslintrc.json',
@@ -6097,7 +6097,7 @@ class AutonomousTaskManagerAPI {
 
       'Type checking': () => {
         // Check if this is a dynamically typed language
-        const FS = require('fs');
+        const _FS = require('fs');
         if (FS.existsSync('package.json')) {
           const packageJson = JSON.parse(
             FS.readFileSync('package.json', 'utf8')
@@ -6122,7 +6122,7 @@ class AutonomousTaskManagerAPI {
 
       Building: () => {
         // Check if this might be a library or script-only project
-        const FS = require('fs');
+        const _FS = require('fs');
         if (FS.existsSync('package.json')) {
           const packageJson = JSON.parse(
             FS.readFileSync('package.json', 'utf8')
@@ -6146,7 +6146,7 @@ class AutonomousTaskManagerAPI {
 
       Testing: () => {
         // Check if tests exist but test runner is misconfigured
-        const FS = require('fs');
+        const _FS = require('fs');
         const testDirs = ['test', 'tests', '__tests__', 'spec'];
         const testFiles = ['*.test.js', '*.spec.js', '*.test.ts', '*.spec.ts'];
 

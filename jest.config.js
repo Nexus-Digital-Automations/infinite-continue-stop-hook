@@ -20,6 +20,7 @@ module.exports = {
       testEnvironment: 'node',
       testMatch: ['<rootDir>/test/unit/**/*.test.js'],
       setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
+      transformIgnorePatterns: ['node_modules/(?!(@xenova/transformers)/)'],
     },
     {
       displayName: 'integration',
@@ -27,6 +28,7 @@ module.exports = {
       testMatch: ['<rootDir>/test/integration/**/*.test.js'],
       setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
       testTimeout: 45000,
+      transformIgnorePatterns: ['node_modules/(?!(@xenova/transformers)/)'],
     },
     {
       displayName: 'e2e',
@@ -34,6 +36,7 @@ module.exports = {
       testMatch: ['<rootDir>/test/e2e/**/*.test.js'],
       setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
       testTimeout: 60000,
+      transformIgnorePatterns: ['node_modules/(?!(@xenova/transformers)/)'],
     },
   ],
 
@@ -65,6 +68,9 @@ module.exports = {
   transform: {
     '^.+\\.js$': ['babel-jest', { presets: ['@babel/preset-env'] }],
   },
+
+  // Transform ES modules from node_modules
+  transformIgnorePatterns: ['node_modules/(?!(@xenova/transformers)/)'],
 
   // Module file extensions
   moduleFileExtensions: ['js', 'json', 'node'],

@@ -3,12 +3,12 @@
  * Systematically adds error parameter to catch blocks that reference error in their body
  */
 
-const FS = require('fs');
-const PATH = require('path');
+const _FS = require('fs');
+const _PATH = require('path');
 const { loggers } = require('./lib/logger');
 
-function filePath(_$2) {
-
+function fixFile(filePath) {
+  try {
     let content = FS.readFileSync(filePath, 'utf8');
     let modified = false;
 

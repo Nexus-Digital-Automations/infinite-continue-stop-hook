@@ -30,7 +30,10 @@ const targetedFixes = [
   { pattern: /parseError/g, replacement: 'error' },
 ];
 
-function filePath(_$2) {`);
+function fixFile(filePath) {
+  const normalizedPath = PATH.resolve(filePath);
+
+  if (!normalizedPath.endsWith('.js')) {
     return false;
   }
 

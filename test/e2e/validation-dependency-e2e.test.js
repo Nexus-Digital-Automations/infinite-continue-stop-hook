@@ -17,7 +17,7 @@ const {
   ValidationDependencyManager,
   DEPENDENCY_TYPES,
 } = require('../../lib/validation-dependency-manager');
-const { TaskManagerAPI } = require('../../taskmanager-api');
+const AutonomousTaskManagerAPI = require('../../taskmanager-api');
 const FS = require('fs').promises;
 const PATH = require('path');
 const os = require('os');
@@ -51,7 +51,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
     // Initialize managers
     manager = new ValidationDependencyManager({ projectRoot: tempDir });
-    _api = new TaskManagerAPI();
+    _api = new AutonomousTaskManagerAPI();
   });
 
   afterAll(async () => {

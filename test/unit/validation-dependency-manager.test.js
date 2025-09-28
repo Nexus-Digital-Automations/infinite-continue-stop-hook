@@ -95,7 +95,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(dependencies).toHaveProperty(newCriterion);
       expect(dependencies[newCriterion].dependencies).toHaveLength(1);
       expect(dependencies[newCriterion].metadata.description).toBe(
-        'Custom validation check',
+        'Custom validation check'
       );
     });
 
@@ -115,7 +115,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(config.criterion).toBe('build-validation');
       expect(config.dependencies).toHaveLength(2);
       expect(config.metadata.description).toBe(
-        'Tests application build process',
+        'Tests application build process'
       );
     });
 
@@ -187,7 +187,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(validation.issues[0].type).toBe('missing_dependency');
       expect(validation.issues[0].criterion).toBe('incomplete-criterion');
       expect(validation.issues[0].missingDependency).toBe(
-        'non-existent-criterion',
+        'non-existent-criterion'
       );
     });
   });
@@ -412,7 +412,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(analytics.criteriaStats).toHaveProperty('linter-validation');
       expect(analytics.criteriaStats['linter-validation'].executions).toBe(2);
       expect(analytics.criteriaStats['linter-validation'].successRate).toBe(
-        100,
+        100
       );
     });
 
@@ -459,7 +459,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       const loadedDeps = newManager.getAllDependencies();
 
       expect(Object.keys(loadedDeps)).toHaveLength(
-        Object.keys(originalDeps).length,
+        Object.keys(originalDeps).length
       );
       expect(loadedDeps).toHaveProperty('build-validation');
 
@@ -469,7 +469,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
 
     test('should handle missing configuration file gracefully', async () => {
       const result = await dependencyManager.loadDependencyConfig(
-        '/non/existent/PATH.json',
+        '/non/existent/PATH.json'
       );
       expect(result).toBeNull();
     });
@@ -486,17 +486,17 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
 
       const adaptivePlan = dependencyManager.generateAdaptiveExecutionPlan(
         null,
-        systemInfo,
+        systemInfo
       );
 
       expect(adaptivePlan).toHaveProperty('plan');
       expect(adaptivePlan).toHaveProperty('adaptiveOptimizations');
       expect(adaptivePlan.adaptiveOptimizations).toHaveProperty('systemAware');
       expect(adaptivePlan.adaptiveOptimizations).toHaveProperty(
-        'resourceScheduling',
+        'resourceScheduling'
       );
       expect(adaptivePlan.adaptiveOptimizations).toHaveProperty(
-        'executionTiming',
+        'executionTiming'
       );
 
       const systemAware = adaptivePlan.adaptiveOptimizations.systemAware;
@@ -515,7 +515,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
 
       const adaptivePlan = dependencyManager.generateAdaptiveExecutionPlan(
         null,
-        constrainedSystem,
+        constrainedSystem
       );
 
       // Should recommend lower concurrency for constrained system
@@ -525,7 +525,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
 
       // Should include optimization recommendations
       expect(
-        adaptivePlan.adaptiveOptimizations.resourceScheduling.length,
+        adaptivePlan.adaptiveOptimizations.resourceScheduling.length
       ).toBeGreaterThan(0);
     });
   });
@@ -538,11 +538,11 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
           dependencies:
             i > 0
               ? [
-                {
-                  criterion: `custom-criterion-${i - 1}`,
-                  type: DEPENDENCY_TYPES.WEAK,
-                },
-              ]
+                  {
+                    criterion: `custom-criterion-${i - 1}`,
+                    type: DEPENDENCY_TYPES.WEAK,
+                  },
+                ]
               : [],
           description: `Custom validation criterion ${i}`,
           estimatedDuration: 5000 + i * 1000,

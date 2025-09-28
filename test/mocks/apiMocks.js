@@ -482,7 +482,7 @@ class DatabaseMock {
     const id = data.id || TestIdGenerator.generateTaskId();
     const record = { ...data, id, created: new Date().toISOString() };
     this.collections.get(collection).set(id, record);
-    this.queries.push({ OPERATION 'insert', collection, data: record });
+    this.queries.push({ operation: 'insert', collection, data: record });
     return record;
   }
 
