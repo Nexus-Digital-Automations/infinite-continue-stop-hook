@@ -1674,7 +1674,7 @@ This system operates in infinite continue mode. To authorize a stop, use:
     // eslint-disable-next-line n/no-process-exit
     process.exit(2); // Always continue - never allow natural stops
   } catch (_error) {
-    console.error('DETAILED ERROR DEBUG:', error.Name, ':', error.message);
+    console.error('DETAILED ERROR DEBUG:', error.Name, ':', _error.message);
     console.error('STACK TRACE:', error.stack);
     loggers.app.error('stop-hook-main error:', error);
     loggers.app.info(

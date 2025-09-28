@@ -50,7 +50,7 @@ describe('Multi-Agent Scenarios E2E', () => {
           const agentOperations = [];
 
           for (let j = 0; j < featuresPerAgent; j++) {
-            const FEATURE_DATA = FeatureTestHelpers.createFeatureData({
+            const featureData = FeatureTestHelpers.createFeatureData({
               title: `Agent ${i} Feature ${j} - Concurrent Test`,
               description: `Feature ${j} suggested by agent ${i} for concurrent testing`,
               business_value: `Validates concurrent operations for agent ${i}, feature ${j}`,

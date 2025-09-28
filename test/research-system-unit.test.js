@@ -173,7 +173,7 @@ describe('Feature Management System Unit Tests', () => {
     });
 
     test('should create feature suggestion with enhancement category', async () => {
-      const FEATURE_DATA = {
+      const featureData = {
         title: 'Add dark mode toggle',
         description:
           'Implement theme switching functionality with persistent user preference storage',

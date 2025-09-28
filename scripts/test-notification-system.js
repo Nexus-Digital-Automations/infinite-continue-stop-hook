@@ -524,7 +524,7 @@ class TestNotificationSystem {
         return JSON.parse(FS.readFileSync(path, 'utf8'));
       }
     } catch {
-      loggers.stopHook.warn('⚠️ Could not load test results:', error.message);
+      loggers.stopHook.warn('⚠️ Could not load test results:', _error.message);
     }
     return null;
   }
@@ -536,7 +536,7 @@ class TestNotificationSystem {
         return JSON.parse(FS.readFileSync(path, 'utf8'));
       }
     } catch {
-      loggers.stopHook.warn('⚠️ Could not load coverage data:', error.message);
+      loggers.stopHook.warn('⚠️ Could not load coverage data:', _error.message);
     }
     return null;
   }
@@ -548,7 +548,7 @@ class TestNotificationSystem {
         return JSON.parse(FS.readFileSync(path, 'utf8'));
       }
     } catch {
-      loggers.stopHook.warn('⚠️ Could not load CI/CD data:', error.message);
+      loggers.stopHook.warn('⚠️ Could not load CI/CD data:', _error.message);
     }
     return null;
   }
@@ -681,7 +681,7 @@ Examples:
 
   const notificationSystem = new TestNotificationSystem(options);
   notificationSystem.processNotifications().catch((_error) => {
-    loggers.stopHook.error('❌ Fatal error:', error.message);
+    loggers.stopHook.error('❌ Fatal error:', _error.message);
     throw new Error(`Fatal error: ${error.message}`);
   });
 }

@@ -34,7 +34,7 @@ class EmergencySyntaxFixer {
         this.errors.forEach((error) => console.log(`  - ${error}`));
       }
     } catch (_error) {
-      console.error('❌ Emergency fix failed:', error.message);
+      console.error('❌ Emergency fix failed:', _error.message);
       throw error;
     }
   }
@@ -141,7 +141,7 @@ class EmergencySyntaxFixer {
 
       // Write file if changes were made
       if (hasChanges) {
-        FS.writeFileSync(filePath, fixedContent, 'utf8');
+        FS.writeFileSync(_filePath, fixedContent, 'utf8');
         this.fixedFiles.push(_filePath);
       }
     } catch (_error) {

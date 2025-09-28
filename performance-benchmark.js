@@ -714,7 +714,7 @@ if (require.main === module) {
       throw new Error('Benchmark completed successfully');
     })
     .catch((error) => {
-      loggers.stopHook.error('\n❌ Benchmark suite failed:', error.message);
+      loggers.stopHook.error('\n❌ Benchmark suite failed:', _error.message);
       throw error;
     });
 }

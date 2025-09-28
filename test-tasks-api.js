@@ -133,7 +133,7 @@ async function testTasksApi() {
       relationshipCount: relationshipCount,
     };
   } catch {
-    loggers.stopHook.error('❌ Test failed:', error.message);
+    loggers.stopHook.error('❌ Test failed:', _error.message);
     throw error;
   }
 }
@@ -149,7 +149,7 @@ if (require.main === module) {
       return result;
     })
     .catch((error) => {
-      loggers.stopHook.error('\n❌ Test failed:', error.message);
+      loggers.stopHook.error('\n❌ Test failed:', _error.message);
       throw error;
     });
 }

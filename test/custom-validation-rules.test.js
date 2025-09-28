@@ -52,7 +52,10 @@ describe('CustomValidationRulesManager', () => {
     try {
       await FS.rm(testProjectRoot, { recursive: true, force: true });
     } catch {
-      loggers.stopHook.warn('Failed to cleanup test directory:', error.message);
+      loggers.stopHook.warn(
+        'Failed to cleanup test directory:',
+        _error.message
+      );
     }
     process.chdir(originalCwd);
   });

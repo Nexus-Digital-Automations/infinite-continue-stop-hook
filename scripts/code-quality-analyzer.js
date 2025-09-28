@@ -1264,7 +1264,7 @@ Examples:
       throw new Error('Code quality score below threshold');
     }
   } catch {
-    loggers.stopHook.error('❌ Code quality analysis failed:', error.message);
+    loggers.stopHook.error('❌ Code quality analysis failed:', _error.message);
     throw error;
   }
 }

@@ -564,7 +564,7 @@ describe('RAG System Performance And Load Testing', () => {
       } catch (_error) {
         // System should handle memory errors gracefully
         expect(error.message).toContain('memory');
-        loggers.stopHook.log('Expected memory error handled gracefully:', error.message);
+        loggers.stopHook.log('Expected memory error handled gracefully:', _error.message);
       } finally {
         // Cleanup
         memoryPressure.length = 0;

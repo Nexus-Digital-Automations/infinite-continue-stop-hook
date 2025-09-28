@@ -126,7 +126,7 @@ class ConsoleToStructuredMigrator {
       );
 
       if (modified) {
-        FS.writeFileSync(filePath, newContent, 'utf8');
+        FS.writeFileSync(_filePath, newContent, 'utf8');
         loggers.app.info('Migrated console calls to structured logging', {
           filePath: path.relative(process.cwd(), _filePath),
           replacedCalls: this.replacedCalls,

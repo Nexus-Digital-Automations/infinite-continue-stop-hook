@@ -150,7 +150,7 @@ module.exports = () => {
 
     global.SAMPLE_DATA = sampleData;
   } catch {
-    loggers.stopHook.error('❌ Failed to load test fixtures:', error.message);
+    loggers.stopHook.error('❌ Failed to load test fixtures:', _error.message);
     throw new Error('Failed to load test fixtures');
   }
 
@@ -179,7 +179,7 @@ module.exports = () => {
     createTempFile: (name, content) => {
       const filePath = path.join(global.TEST_CONSTANTS.TEMP_DIR, name);
 
-      FS.writeFileSync(filePath, content);
+      FS.writeFileSync(_filePath, content);
       return filePath;
     },
 

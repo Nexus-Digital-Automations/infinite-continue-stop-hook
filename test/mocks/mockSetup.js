@@ -259,7 +259,7 @@ class MockManager {
       }
     } catch (_error) {
       // Fetch not available in this Node.js version, skip mocking
-      loggers.stopHook.log('Fetch not available for mocking:', error.message);
+      loggers.stopHook.log('Fetch not available for mocking:', _error.message);
     }
   }
 

@@ -768,7 +768,7 @@ ${analysis.github_actions_matrix.strategy.matrix.include
       );
       return analysis;
     } catch (_error) {
-      loggers.stopHook.error('❌ Optimization analysis failed:', error.message);
+      loggers.stopHook.error('❌ Optimization analysis failed:', _error.message);
       throw error;
     }
   }

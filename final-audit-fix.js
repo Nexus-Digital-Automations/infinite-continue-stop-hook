@@ -39,7 +39,7 @@ function finalAuditFix() {
     fs.writeFileSync(filePath, content);
     console.log('Applied final comprehensive audit test fixes successfully');
   } catch (_error) {
-    console.error('Error applying final fixes:', error.message);
+    console.error('Error applying final fixes:', _error.message);
     throw error;
   }
 }

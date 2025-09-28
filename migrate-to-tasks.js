@@ -61,7 +61,7 @@ class TaskMigrator {
         stats: await this.getMigrationStats(tasksData),
       };
     } catch {
-      loggers.stopHook.error('❌ Migration failed:', error.message);
+      loggers.stopHook.error('❌ Migration failed:', _error.message);
       throw error;
     }
   }
@@ -606,7 +606,7 @@ if (require.main === module) {
       throw new Error('Migration completed successfully');
     })
     .catch((error) => {
-      loggers.stopHook.error('\n❌ Migration failed:', error.message);
+      loggers.stopHook.error('\n❌ Migration failed:', _error.message);
       throw error;
     });
 }

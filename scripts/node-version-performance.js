@@ -622,7 +622,7 @@ ${this.results.recommendations?.map((r) => `- ${r}`).join('\n')}
 
       loggers.stopHook.log('\n✅ Benchmark suite completed successfully!');
     } catch (_error) {
-      loggers.stopHook.error('❌ Benchmark suite failed:', error.message);
+      loggers.stopHook.error('❌ Benchmark suite failed:', _error.message);
       throw new Error(`Benchmark suite failed: ${error.message}`);
     }
   }

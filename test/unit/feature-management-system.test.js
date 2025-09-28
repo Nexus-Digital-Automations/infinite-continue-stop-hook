@@ -177,7 +177,7 @@ describe('Feature Management System Unit Tests', () => {
     });
 
     test('should create feature suggestion with enhancement category', async () => {
-      const FEATURE_DATA = {
+      const featureData = {
         title: 'Add dark mode toggle',
         description:
           'Implement theme switching functionality with persistent user preference storage',
@@ -196,7 +196,7 @@ describe('Feature Management System Unit Tests', () => {
     });
 
     test('should create feature suggestion with new-feature category', async () => {
-      const FEATURE_DATA = {
+      const featureData = {
         title: 'User authentication system',
         description:
           'Complete login/logout functionality with JWT tokens And session management',
@@ -214,7 +214,7 @@ describe('Feature Management System Unit Tests', () => {
     });
 
     test('should create feature suggestion with bug-fix category', async () => {
-      const FEATURE_DATA = {
+      const featureData = {
         title: 'Fix login form validation',
         description:
           'Resolve email validation issues And improve error handling',
@@ -298,7 +298,7 @@ describe('Feature Management System Unit Tests', () => {
 
     test('should filter features by status', async () => {
       // First create a feature
-      const FEATURE_DATA = {
+      const featureData = {
         title: 'Test feature for filtering',
         description: 'This feature will be used to test filtering',
         business_value: 'Validates filtering functionality',
@@ -370,7 +370,7 @@ describe('Feature Management System Unit Tests', () => {
       expect(initResult.success).toBe(true);
 
       // Create a feature for approval testing
-      const FEATURE_DATA = {
+      const featureData = {
         title: 'Feature for approval testing',
         description: 'This feature will be used to test approval workflow',
         business_value: 'Validates approval functionality',

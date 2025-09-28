@@ -762,7 +762,7 @@ ${
       loggers.stopHook.log('\n✅ Feature validation completed successfully!');
       return this.validationResults;
     } catch {
-      loggers.stopHook.error('❌ Feature validation failed:', error.message);
+      loggers.stopHook.error('❌ Feature validation failed:', _error.message);
       throw error;
     }
   }

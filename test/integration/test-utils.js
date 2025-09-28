@@ -143,7 +143,7 @@ async function cleanupTestEnvironment(testDir) {
   try {
     await FS.rm(testDir, { recursive: true, force: true });
   } catch (_error) {
-    loggers.stopHook.warn(`Cleanup warning for ${testDir}:`, error.message);
+    loggers.stopHook.warn(`Cleanup warning for ${testDir}:`, _error.message);
   }
 }
 
@@ -287,7 +287,7 @@ async function setupGlobalCleanup() {
     });
     await Promise.all(cleanupPromises);
   } catch (_error) {
-    loggers.stopHook.warn('Global cleanup warning:', error.message);
+    loggers.stopHook.warn('Global cleanup warning:', _error.message);
   }
 }
 
@@ -298,7 +298,7 @@ async function teardownGlobalCleanup() {
   try {
     await FS.rm(BASE_TEST_DIR, { recursive: true, force: true });
   } catch (_error) {
-    loggers.stopHook.warn('Global teardown warning:', error.message);
+    loggers.stopHook.warn('Global teardown warning:', _error.message);
   }
 }
 

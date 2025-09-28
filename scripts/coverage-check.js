@@ -515,7 +515,7 @@ Examples:
       const customThresholds = JSON.parse(thresholdArg.split('=')[1]);
       config.thresholds = { ...config.thresholds, ...customThresholds };
     } catch {
-      loggers.stopHook.error('❌ Invalid thresholds JSON:', error.message);
+      loggers.stopHook.error('❌ Invalid thresholds JSON:', _error.message);
       throw error;
     }
   }
@@ -524,7 +524,7 @@ Examples:
   try {
     checker.run();
   } catch {
-    loggers.stopHook.error('❌ Fatal error:', error.message);
+    loggers.stopHook.error('❌ Fatal error:', _error.message);
     throw error;
   }
 }

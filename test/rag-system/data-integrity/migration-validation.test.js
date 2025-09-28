@@ -37,7 +37,7 @@ describe('RAG System Data Migration And Integrity', () => {
     try {
       await FS.rm(_testMigrationPath, { recursive: true, force: true });
     } catch (_error) {
-      loggers.stopHook.warn('Cleanup warning:', error.message);
+      loggers.stopHook.warn('Cleanup warning:', _error.message);
     }
   });
 

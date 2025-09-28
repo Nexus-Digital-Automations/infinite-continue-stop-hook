@@ -63,7 +63,7 @@ class FeaturesMigration {
       loggers.stopHook.log('✅ Migration completed successfully!');
       return true;
     } catch {
-      loggers.stopHook.error('❌ Migration failed:', error.message);
+      loggers.stopHook.error('❌ Migration failed:', _error.message);
       this.migrationReport.errors.push(error.message);
       return false;
     }
@@ -400,7 +400,7 @@ class FeaturesMigration {
       loggers.stopHook.log('✅ Migration validation passed');
       return true;
     } catch {
-      loggers.stopHook.error('❌ Migration validation failed:', error.message);
+      loggers.stopHook.error('❌ Migration validation failed:', _error.message);
       return false;
     }
   }

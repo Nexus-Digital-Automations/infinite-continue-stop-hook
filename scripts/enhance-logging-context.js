@@ -97,7 +97,7 @@ class LoggingContextEnhancer {
       );
 
       if (enhanced) {
-        FS.writeFileSync(filePath, newContent, 'utf8');
+        FS.writeFileSync(_filePath, newContent, 'utf8');
         loggers.app.info('Enhanced logging context in file', {
           filePath: path.relative(process.cwd(), _filePath),
           enhancedCalls: this.enhancedCalls,

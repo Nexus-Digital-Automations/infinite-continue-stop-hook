@@ -95,7 +95,7 @@ describe('Feature Management Lifecycle', () => {
 
     describe('Basic Feature Suggestion', () => {
       test('should create feature suggestion with all required fields', async () => {
-        const FEATURE_DATA = {
+        const featureData = {
           title: 'User Authentication System Implementation',
           description:
             'Implement a comprehensive user authentication system with JWT tokens, OAuth integration, And role-based access control',
@@ -137,7 +137,7 @@ describe('Feature Management Lifecycle', () => {
         // Create features in parallel for better test performance
         const results = await Promise.all(
           categories.map(async (category) => {
-            const FEATURE_DATA = {
+            const featureData = {
               ...TEST_FIXTURES.validFeature,
               title: `${category} Feature Test`,
               category: category,
@@ -167,7 +167,7 @@ describe('Feature Management Lifecycle', () => {
         // Create features in parallel for better test performance
         const results = await Promise.all(
           Array.from({ length: numFeatures }, (_, i) => {
-            const FEATURE_DATA = {
+            const featureData = {
               ...TEST_FIXTURES.validFeature,
               title: `Test Feature Number ${i + 1} Implementation`,
             };
@@ -202,7 +202,7 @@ describe('Feature Management Lifecycle', () => {
           tags: ['mvp', 'user-facing', 'high-impact'],
         };
 
-        const FEATURE_DATA = {
+        const featureData = {
           ...TEST_FIXTURES.validFeature,
           metadata: customMetadata,
         };

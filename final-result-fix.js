@@ -36,7 +36,7 @@ class FinalResultFixer {
 
       console.log('✅ Final result/result variable fix completed successfully');
     } catch (_error) {
-      console.error('❌ Failed to complete final fix:', error.message);
+      console.error('❌ Failed to complete final fix:', _error.message);
       throw new Error(`Final fix failed: ${error.message}`);
     }
   }
@@ -83,7 +83,7 @@ class FinalResultFixer {
     }
 
     if (changes > 0) {
-      FS.writeFileSync(filePath, content);
+      FS.writeFileSync(_filePath, content);
       this.fixedFiles.push({ path: filePath, changes });
       this.totalChanges += changes;
       console.log(
@@ -194,7 +194,7 @@ class FinalResultFixer {
     }
 
     if (changes > 0) {
-      FS.writeFileSync(filePath, content);
+      FS.writeFileSync(_filePath, content);
       this.fixedFiles.push({ path: filePath, changes });
       this.totalChanges += changes;
       console.log(

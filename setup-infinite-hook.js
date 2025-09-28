@@ -463,7 +463,7 @@ async function processProject(targetPath) {
 
     return { success: true, project: projectName };
   } catch {
-    loggers.stopHook.error(`❌ ${projectName} - Error:`, error.message);
+    loggers.stopHook.error(`❌ ${projectName} - Error:`, _error.message);
     return { success: false, project: projectName, error: error.message };
   }
 }
@@ -901,7 +901,7 @@ async function main() {
       'node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js"'
     );
   } catch {
-    loggers.stopHook.error('\n❌ Batch setup error:', error.message);
+    loggers.stopHook.error('\n❌ Batch setup error:', _error.message);
     throw error;
   } finally {
     rl.close();

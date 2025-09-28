@@ -233,7 +233,7 @@ describe('CLI Commands Integration Tests', () => {
 
     test('should execute feature management commands', async () => {
       // 1. Suggest feature
-      const FEATURE_DATA = generateTestFeature({
+      const featureData = generateTestFeature({
         title: 'CLI Test Feature',
         category: 'enhancement',
       });
@@ -548,7 +548,7 @@ describe('CLI Commands Integration Tests', () => {
   describe('CLI Workflow Integration', () => {
     test('should execute complete feature workflow via CLI', async () => {
       // 1. Suggest feature
-      const FEATURE_DATA = generateTestFeature({
+      const featureData = generateTestFeature({
         title: 'Complete CLI Workflow Feature',
         category: 'enhancement',
       });

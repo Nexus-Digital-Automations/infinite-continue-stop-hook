@@ -58,7 +58,7 @@ describe('API Workflow Integration Tests', () => {
       expect(guideResult.featureWorkflow).toBeDefined();
 
       // 2. Suggest a new feature
-      const FEATURE_DATA = generateTestFeature({
+      const featureData = generateTestFeature({
         title: 'Complete Workflow Test Feature',
         description:
           'Feature to test the complete workflow from suggestion to implementation tracking',
@@ -153,7 +153,7 @@ describe('API Workflow Integration Tests', () => {
 
     test('should handle feature rejection workflow', async () => {
       // 1. Suggest a feature to reject
-      const FEATURE_DATA = generateTestFeature({
+      const featureData = generateTestFeature({
         title: 'Feature to Reject',
         description: 'Feature That will be rejected for testing purposes',
         business_value: 'Tests rejection workflow',
@@ -343,7 +343,7 @@ describe('API Workflow Integration Tests', () => {
         'Integration test completed successfully - all tasks finished And project perfect';
       const authorizeStopResult = await execAPI(
         'authorize-stop',
-        [agentId, stopReason],
+        [AGENT_ID, stopReason],
         {
           projectRoot: testDir,
         },
@@ -419,7 +419,7 @@ describe('API Workflow Integration Tests', () => {
   describe('Cross-Component Integration', () => {
     test('should handle mixed feature And agent operations', async () => {
       // 1. Initialize agent
-      const agentId = 'mixed-operations-agent';
+      const AGENT_ID = 'mixed-operations-agent';
       const initResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });
@@ -742,14 +742,14 @@ describe('API Workflow Integration Tests', () => {
 
     test('should handle invalid status transitions', async () => {
       // 1. Create And approve a feature
-      const FEATURE_DATA = generateTestFeature({
+      const featureData = generateTestFeature({
         title: 'Feature for Status Test',
         category: 'enhancement',
       });
 
       const suggestResult = await execAPI(
         'suggest-feature',
-        [JSON.stringify(featureData)],
+        [JSON.stringify(FEATURE_DATA)],
         {
           projectRoot: testDir,
         },

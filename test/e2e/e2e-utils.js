@@ -635,7 +635,7 @@ class MultiAgentTestHelpers {
       const operations = [];
 
       for (let j = 0; j < operationsPerAgent; j++) {
-        const FEATURE_DATA = FeatureTestHelpers.createFeatureData({
+        const featureData = FeatureTestHelpers.createFeatureData({
           title: `Agent ${i} Feature ${j}`,
           description: `Feature created by agent ${i}, OPERATION${j}`,
         });

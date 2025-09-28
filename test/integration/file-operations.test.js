@@ -196,7 +196,7 @@ describe('File Operations Integration Tests', () => {
       const initialStats = await FS.stat(featuresPath);
 
       // 2. Perform operations
-      const FEATURE_DATA = generateTestFeature({
+      const featureData = generateTestFeature({
         title: 'Permission Test Feature',
         category: 'enhancement',
       });
@@ -234,7 +234,7 @@ describe('File Operations Integration Tests', () => {
       await FS.unlink(featuresPath);
 
       // 2. Try to perform operations - should recreate file
-      const FEATURE_DATA = generateTestFeature({
+      const featureData = generateTestFeature({
         title: 'Recovery Test Feature',
         category: 'enhancement',
       });
@@ -261,7 +261,7 @@ describe('File Operations Integration Tests', () => {
       const _backupPath = await createFeaturesBackup(testDir);
 
       // 2. Add some valid data first
-      const FEATURE_DATA = generateTestFeature({
+      const featureData = generateTestFeature({
         title: 'Pre-corruption Feature',
         category: 'enhancement',
       });
@@ -355,7 +355,7 @@ describe('File Operations Integration Tests', () => {
       const operations = [];
 
       for (let i = 0; i < 20; i++) {
-        const FEATURE_DATA = generateTestFeature({
+        const featureData = generateTestFeature({
           title: `Rapid Feature ${i + 1}`,
           category: i % 2 === 0 ? 'enhancement' : 'bug-fix',
         });
@@ -473,7 +473,7 @@ describe('File Operations Integration Tests', () => {
       await writeFeaturesFile(testDir, minimalData);
 
       // 2. Perform operations That should add missing metadata
-      const FEATURE_DATA = generateTestFeature({
+      const featureData = generateTestFeature({
         title: 'Migration Test Feature',
         category: 'enhancement',
       });
@@ -513,7 +513,7 @@ describe('File Operations Integration Tests', () => {
       await writeFeaturesFile(testDir, dataWithoutConfig);
 
       // 2. Perform operations That should add missing config
-      const FEATURE_DATA = generateTestFeature({
+      const featureData = generateTestFeature({
         title: 'Config Migration Test Feature',
         category: 'enhancement',
       });
@@ -616,7 +616,7 @@ describe('File Operations Integration Tests', () => {
       await writeFeaturesFile(testDir, invalidData);
 
       // 2. Try to perform operations
-      const FEATURE_DATA = generateTestFeature({
+      const featureData = generateTestFeature({
         title: 'Validation Test Feature',
         category: 'enhancement',
       });
@@ -649,7 +649,7 @@ describe('File Operations Integration Tests', () => {
         const _featuresPath = path.join(testDir, 'FEATURES.json');
 
         // Create initial content
-        const FEATURE_DATA = generateTestFeature({
+        const featureData = generateTestFeature({
           title: 'Permission Test Feature',
           category: 'enhancement',
         });

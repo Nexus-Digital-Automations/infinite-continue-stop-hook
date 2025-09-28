@@ -107,7 +107,7 @@ function fixFileUnusedVars(filePath) {
 
     return false;
   } catch (_error) {
-    console.error(`  ✗ Error processing ${filePath}:`, error.message);
+    console.error(`  ✗ Error processing ${filePath}:`, _error.message);
     return false;
   }
 }

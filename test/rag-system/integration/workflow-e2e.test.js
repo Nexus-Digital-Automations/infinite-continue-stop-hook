@@ -47,7 +47,7 @@ describe('RAG System End-to-End Workflows', () => {
     try {
       await __fs.rm(__testProjectRoot, { recursive: true, force: true });
     } catch (_error) {
-      loggers.stopHook.warn('Cleanup warning:', error.message);
+      loggers.stopHook.warn('Cleanup warning:', _error.message);
     }
   });
 

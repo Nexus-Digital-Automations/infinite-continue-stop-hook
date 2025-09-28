@@ -197,7 +197,7 @@ global.RAG_TEST_UTILS = {
     try {
       await FS.rm(dirPath, { recursive: true, force: true });
     } catch (_error) {
-      loggers.stopHook.warn(`Cleanup warning for ${dirPath}:`, error.message);
+      loggers.stopHook.warn(`Cleanup warning for ${dirPath}:`, _error.message);
     }
   },
 

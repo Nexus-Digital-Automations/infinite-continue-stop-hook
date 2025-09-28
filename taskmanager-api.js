@@ -2095,7 +2095,7 @@ class AutonomousTaskManagerAPI {
   async validateFeatureTests(featureId) {
     try {
       // Load feature data
-      const FEATURE_DATA = await this._atomicFeatureOperation((features) => {
+      const featureData = await this._atomicFeatureOperation((features) => {
         const feature = features.features.find((f) => f.id === featureId);
         if (!feature) {
           throw new Error(`Feature ${featureId} not found`);
@@ -10766,7 +10766,7 @@ async function main() {
             'Feature data required. Usage: suggest-feature \'{"title":"...", "description":"...", "business_value":"...", "category":"..."}\''
           );
         }
-        const FEATURE_DATA = JSON.parse(args[1]);
+        const featureData = JSON.parse(args[1]);
         result = await api.suggestFeature(featureData);
         break;
       }

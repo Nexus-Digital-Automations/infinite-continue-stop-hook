@@ -756,7 +756,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     });
 
     test('should suggest new feature', async () => {
-      const FEATURE_DATA = {
+      const featureData = {
         title: 'Add dark mode support',
         description: 'Implement dark theme toggle for better user experience',
         rationale: 'Many users prefer dark themes for reduced eye strain',
@@ -780,7 +780,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
     test('should list suggested features', async () => {
       // First suggest a feature
-      const FEATURE_DATA = {
+      const featureData = {
         title: 'Test suggested feature',
         description: 'Feature for testing listing',
         rationale: 'Testing purposes',
@@ -802,7 +802,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
     test('should approve suggested feature', async () => {
       // First suggest a feature
-      const FEATURE_DATA = {
+      const featureData = {
         title: 'Feature to approve',
         description: 'Feature for approval testing',
         rationale: 'Testing feature approval workflow',
@@ -828,7 +828,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
     test('should reject suggested feature', async () => {
       // First suggest a feature
-      const FEATURE_DATA = {
+      const featureData = {
         title: 'Feature to reject',
         description: 'Feature for rejection testing',
         rationale: 'Testing feature rejection workflow',
@@ -856,7 +856,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
     test('should list all features with filters', async () => {
       // Suggest And approve a feature
-      const FEATURE_DATA = {
+      const featureData = {
         title: 'Approved feature',
         description: 'Feature for listing test',
         rationale: 'Testing feature listing',

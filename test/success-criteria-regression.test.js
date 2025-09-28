@@ -1146,7 +1146,10 @@ describe('Success Criteria Regression Tests', () => {
 
           loggers.stopHook.log(`API contract for ${api} is stable`);
         } catch (_error) {
-          loggers.stopHook.log(`API contract issue for ${api}:`, error.message);
+          loggers.stopHook.log(
+            `API contract issue for ${api}:`,
+            _error.message
+          );
         }
       }
 

@@ -119,7 +119,7 @@ describe('Example Test with Mock Framework', () => {
       const AGENT_ID = TestIdGenerator.generateAgentId();
       await APIExecutor.initializeTestAgent(_AGENT_ID);
 
-      const FEATURE_DATA = TestDataFactory.createFeatureData({
+      const featureData = TestDataFactory.createFeatureData({
         title: 'Test Feature with Mocks',
         category: 'enhancement',
       });

@@ -460,7 +460,7 @@ describe('Feature Lifecycle Integration Tests', () => {
 
     test('should prevent invalid approval transitions', async () => {
       // 1. Create And approve a feature
-      const FEATURE_DATA = generateTestFeature({
+      const featureData = generateTestFeature({
         title: 'Transition Test Feature',
         category: 'enhancement',
       });
@@ -607,7 +607,7 @@ describe('Feature Lifecycle Integration Tests', () => {
 
     test('should prevent operations on rejected features', async () => {
       // 1. Create And reject a feature
-      const FEATURE_DATA = generateTestFeature({
+      const featureData = generateTestFeature({
         title: 'Feature to Reject',
         category: 'enhancement',
       });
@@ -688,7 +688,7 @@ describe('Feature Lifecycle Integration Tests', () => {
       ];
 
       for (const feature of testFeatures) {
-        const FEATURE_DATA = generateTestFeature(feature);
+        const featureData = generateTestFeature(feature);
         await execAPI('suggest-feature', [JSON.stringify(featureData)], {
           projectRoot: testDir,
         });

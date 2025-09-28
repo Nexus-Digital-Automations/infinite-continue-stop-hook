@@ -833,7 +833,7 @@ if (require.main === module) {
   try {
     generator.generate();
   } catch {
-    loggers.stopHook.error('❌ Fatal error:', error.message);
+    loggers.stopHook.error('❌ Fatal error:', _error.message);
     throw error;
   }
 }

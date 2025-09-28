@@ -40,7 +40,7 @@ describe('Complete System Workflows E2E', () => {
         // Test the complete feature lifecycle from suggestion to implementation
 
         // Step 1: Suggest a feature
-        const FEATURE_DATA = FeatureTestHelpers.createFeatureData({
+        const featureData = FeatureTestHelpers.createFeatureData({
           title: 'E2E Test Feature - Complete Workflow',
           description:
             'Test feature for validating complete workflow from suggestion to implementation',
