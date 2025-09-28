@@ -234,18 +234,18 @@ class TestAssertions {
 
   /**
    * Assert performance meets threshold requirements
-   * @param {string} operation - Operation type
+   * @param {string} OPERATION- Operation type
    * @param {number} actualTime - Actual execution time in ms
    * @param {number} customThreshold - Custom threshold (optional)
    */
-  assertPerformanceThreshold(operation, actualTime, customThreshold = null) {
-    const threshold = customThreshold || this.thresholds.performance[operation];
+  assertPerformanceThreshold(OPERATION actualTime, customThreshold = null) {
+    const threshold = customThreshold || this.thresholds.performance[OPERATION;
 
     if (threshold) {
       expect(actualTime).toBeLessThan(threshold);
     } else {
       console.warn(
-        `No performance threshold defined for operation: ${operation}`,
+        `No performance threshold defined for OPERATION ${OPERATION`,
       );
     }
   }

@@ -70,7 +70,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       );
 
       // Execute CLI command
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" load-custom-validation-rules`,
         { encoding: 'utf8' },
       );
@@ -105,7 +105,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         JSON.stringify(config, null, 2),
       );
 
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" get-custom-validation-rules`,
         { encoding: 'utf8' },
       );
@@ -136,7 +136,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         JSON.stringify(config, null, 2),
       );
 
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule echo_test`,
         { encoding: 'utf8' },
       );
@@ -173,7 +173,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         JSON.stringify(config, null, 2),
       );
 
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-all-custom-validation-rules`,
         { encoding: 'utf8' },
       );
@@ -188,7 +188,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     });
 
     test('should generate custom validation config via CLI', () => {
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" generate-custom-validation-config`,
         { encoding: 'utf8' },
       );
@@ -226,7 +226,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       );
 
       // Get analytics
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" get-custom-validation-analytics`,
         { encoding: 'utf8' },
       );
@@ -257,7 +257,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         'invalid json',
       );
 
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" load-custom-validation-rules`,
         { encoding: 'utf8' },
       );
@@ -284,7 +284,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         JSON.stringify(config, null, 2),
       );
 
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule nonexistent_rule`,
         { encoding: 'utf8' },
       );
@@ -325,7 +325,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         JSON.stringify(config, null, 2),
       );
 
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" get-custom-validation-rules`,
         { encoding: 'utf8' },
       );
@@ -346,7 +346,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         'FROM node:14',
       );
 
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" load-custom-validation-rules`,
         { encoding: 'utf8' },
       );
@@ -379,7 +379,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         JSON.stringify(config, null, 2),
       );
 
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule env_test`,
         { encoding: 'utf8' },
       );
@@ -411,7 +411,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         JSON.stringify(config, null, 2),
       );
 
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule file_check`,
         { encoding: 'utf8' },
       );
@@ -453,7 +453,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         JSON.stringify(config, null, 2),
       );
 
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule version_check`,
         { encoding: 'utf8' },
       );
@@ -491,7 +491,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         JSON.stringify(config, null, 2),
       );
 
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule conditional_test`,
         { encoding: 'utf8' },
       );
@@ -529,7 +529,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         JSON.stringify(config, null, 2),
       );
 
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule composite_test`,
         { encoding: 'utf8' },
       );
@@ -572,21 +572,21 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       // Execute multiple commands in parallel
       const promises = [
         new Promise((resolve) => {
-          const _result = execSync(
+          const RESULT = execSync(
             `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule concurrent_test_1`,
             { encoding: 'utf8' },
           );
           resolve(JSON.parse(result));
         }),
         new Promise((resolve) => {
-          const _result = execSync(
+          const RESULT = execSync(
             `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule concurrent_test_2`,
             { encoding: 'utf8' },
           );
           resolve(JSON.parse(result));
         }),
         new Promise((resolve) => {
-          const _result = execSync(
+          const RESULT = execSync(
             `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule concurrent_test_3`,
             { encoding: 'utf8' },
           );
@@ -630,7 +630,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       }
 
       // Check analytics
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" get-custom-validation-analytics`,
         { encoding: 'utf8' },
       );
@@ -651,7 +651,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
   describe('Integration with Existing Validation System', () => {
     test('should maintain compatibility with existing validation commands', () => {
       // Test That existing validation commands still work
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" get-validation-dependencies`,
         { encoding: 'utf8' },
       );
@@ -664,7 +664,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     });
 
     test('should not interfere with dependency management', () => {
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" validate-dependency-graph`,
         { encoding: 'utf8' },
       );
@@ -676,7 +676,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     });
 
     test('should work alongside parallel execution planning', () => {
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" generate-validation-execution-plan null 4`,
         { encoding: 'utf8' },
       );
@@ -760,7 +760,7 @@ module.exports = app;
       );
 
       // Execute all rules
-      const _result = execSync(
+      const RESULT = execSync(
         `timeout 30s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-all-custom-validation-rules`,
         { encoding: 'utf8' },
       );

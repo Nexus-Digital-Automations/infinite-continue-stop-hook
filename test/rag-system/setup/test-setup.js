@@ -9,7 +9,7 @@
  */
 
 const PATH = require('path');
-const _FS = require('fs').promises;
+const FS = require('fs').promises;
 
 // Global test configuration
 global.RAG_TEST_CONFIG = {
@@ -140,7 +140,7 @@ global.RAG_TEST_UTILS = {
    */
   measureTime: async (fn) => {
     const start = process.hrtime.bigint();
-    const _result = await fn();
+    const RESULT = await fn();
     const end = process.hrtime.bigint();
     const duration = Number(end - start) / 1000000; // Convert to milliseconds
     return { result, duration };
@@ -149,10 +149,10 @@ global.RAG_TEST_UTILS = {
   /**
    * Assert performance threshold
    */
-  assertPerformance: (duration, threshold, operation) => {
+  assertPerformance: (duration, threshold, OPERATION => {
     if (duration > threshold) {
       throw new Error(
-        `Performance threshold exceeded for ${operation}: ${duration}ms > ${threshold}ms`,
+        `Performance threshold exceeded for ${OPERATION: ${duration}ms > ${threshold}ms`,
       );
     }
   },
@@ -216,10 +216,10 @@ global.RAG_TEST_UTILS = {
   /**
    * Create performance test suite
    */
-  createPerformanceTest: (name, operation, threshold) => {
+  createPerformanceTest: (name, OPERATION threshold) => {
     return async () => {
       const { result, duration } =
-        await global.RAG_TEST_UTILS.measureTime(operation);
+        await global.RAG_TEST_UTILS.measureTime(OPERATION;
 
       loggers.stopHook.log(`${name} completed in ${duration.toFixed(2)}ms`);
       global.RAG_TEST_UTILS.assertPerformance(duration, threshold, name);

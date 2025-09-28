@@ -120,7 +120,7 @@ class TaskManagerPerformanceBenchmark {
       // Run each endpoint multiple times for statistical significance
       for (let i = 0; i < 5; i++) {
         // eslint-disable-next-line no-await-in-loop -- Sequential timing measurements required
-        const _result = await this.executeTimedCommand(
+        const RESULT = await this.executeTimedCommand(
           endpoint[0],
           endpoint.slice(1)
         );
@@ -172,7 +172,7 @@ class TaskManagerPerformanceBenchmark {
         JSON.stringify(taskData),
       ]);
       this.results.subtaskOperations.push({
-        operation: 'create_task',
+        OPERATION 'create_task',
         ...createResult,
       });
 
@@ -196,14 +196,14 @@ class TaskManagerPerformanceBenchmark {
         };
 
         // eslint-disable-next-line no-await-in-loop -- Sequential subtask creation required for timing
-        const _result = await this.executeTimedCommand('create-subtask', [
+        const RESULT = await this.executeTimedCommand('create-subtask', [
           taskId,
           JSON.stringify(subtaskData),
           agentId,
         ]);
 
         this.results.subtaskOperations.push({
-          operation: 'create_subtask',
+          OPERATION 'create_subtask',
           iteration: i + 1,
           taskId,
           ...result,
@@ -216,7 +216,7 @@ class TaskManagerPerformanceBenchmark {
         taskId,
       ]);
       this.results.subtaskOperations.push({
-        operation: 'list_subtasks',
+        OPERATION 'list_subtasks',
         taskId,
         ...listResult,
       });
@@ -258,9 +258,9 @@ class TaskManagerPerformanceBenchmark {
       for (const [command, ...args] of operations) {
         loggers.stopHook.log(`   Testing ${command}...`);
         // eslint-disable-next-line no-await-in-loop -- Sequential command testing required for timing
-        const _result = await this.executeTimedCommand(command, args);
+        const RESULT = await this.executeTimedCommand(command, args);
         this.results.successCriteriaValidation.push({
-          operation: command,
+          OPERATION command,
           ...result,
         });
       }
@@ -285,7 +285,7 @@ class TaskManagerPerformanceBenchmark {
       concurrentOperations.push(
         this.executeTimedCommand('init').then((result) => ({
           agentIndex: i,
-          operation: 'concurrent_init',
+          OPERATION 'concurrent_init',
           ...result,
         }))
       );
@@ -301,7 +301,7 @@ class TaskManagerPerformanceBenchmark {
         listOperations.push(
           this.executeTimedCommand('list').then((result) => ({
             agentIndex: i,
-            operation: 'concurrent_list',
+            OPERATION 'concurrent_list',
             ...result,
           }))
         );
@@ -410,7 +410,7 @@ class TaskManagerPerformanceBenchmark {
 
     // Analyze concurrent access performance
     const concurrentInits = this.results.concurrentAccess.filter(
-      (r) => r.operation === 'concurrent_init'
+      (r) => r.OPERATION=== 'concurrent_init'
     );
     if (concurrentInits.length > 0) {
       const avgConcurrentTime =
@@ -565,8 +565,8 @@ class TaskManagerPerformanceBenchmark {
     const operations = {};
 
     this.results.subtaskOperations.forEach((result) => {
-      if (!operations[result.operation]) {
-        operations[result.operation] = {
+      if (!operations[result.OPERATION) {
+        operations[result.OPERATION = {
           count: 0,
           totalTime: 0,
           minTime: Infinity,
@@ -575,7 +575,7 @@ class TaskManagerPerformanceBenchmark {
         };
       }
 
-      const op = operations[result.operation];
+      const op = operations[result.OPERATION;
       op.count++;
       op.totalTime += result.duration;
       op.minTime = Math.min(op.minTime, result.duration);
@@ -599,10 +599,10 @@ class TaskManagerPerformanceBenchmark {
   summarizeConcurrentPerformance() {
     const concurrent = {
       init: this.results.concurrentAccess.filter(
-        (r) => r.operation === 'concurrent_init'
+        (r) => r.OPERATION=== 'concurrent_init'
       ),
       list: this.results.concurrentAccess.filter(
-        (r) => r.operation === 'concurrent_list'
+        (r) => r.OPERATION=== 'concurrent_list'
       ),
     };
 

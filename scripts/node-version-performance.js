@@ -52,7 +52,7 @@ class NodeVersionPerformanceBenchmark {
   benchmarkCPUIntensive() {
     this.logger.info('Running CPU-intensive benchmark', {
       iterations: 1000000,
-      operation: 'cpu-benchmark-start',
+      OPERATION 'cpu-benchmark-start',
     });
 
     const iterations = 1000000;
@@ -78,7 +78,7 @@ class NodeVersionPerformanceBenchmark {
       duration_ms: duration.toFixed(2),
       operations_per_second: Math.round(iterations / (duration / 1000)),
       iterations,
-      operation: 'cpu-benchmark-complete',
+      OPERATION 'cpu-benchmark-complete',
     });
   }
 
@@ -432,7 +432,7 @@ class NodeVersionPerformanceBenchmark {
 
     if (benchmarks.async_operations?.duration_ms > 750) {
       optimizations.push(
-        'Optimize async operation patterns And reduce Promise overhead'
+        'Optimize async _operationpatterns And reduce Promise overhead'
       );
     }
 

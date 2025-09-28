@@ -66,7 +66,7 @@ class ParallelTestOptimizer {
       cpuBasedLimit,
       memoryBasedLimit,
       optimalParallelism: optimalLimit,
-      operation: 'system-analysis',
+      OPERATION 'system-analysis',
     });
 
     return optimalLimit;
@@ -94,7 +94,7 @@ class ParallelTestOptimizer {
     } catch {
       this.logger.warn('Could not read package.json', {
         error: error.message,
-        operation: 'discover-test-suites',
+        OPERATION 'discover-test-suites',
       });
     }
 
@@ -255,7 +255,7 @@ class ParallelTestOptimizer {
    */
   generateExecutionPlan() {
     this.logger.info('Generating optimized execution plan', {
-      operation: 'plan-generation',
+      OPERATION 'plan-generation',
     });
 
     // Separate parallelizable And non-parallelizable tests
@@ -285,7 +285,7 @@ class ParallelTestOptimizer {
       parallelGroups: this.executionPlan.parallel_groups.length,
       sequentialTests: this.executionPlan.sequential_tests.length,
       estimatedTimeSavings: this.executionPlan.estimated_time_savings,
-      operation: 'plan-generation',
+      OPERATION 'plan-generation',
     });
   }
 
@@ -616,7 +616,7 @@ class ParallelTestOptimizer {
       analysisFile,
       latestFile,
       reportFile,
-      operation: 'file-generation',
+      OPERATION 'file-generation',
     });
 
     return analysis;
@@ -715,7 +715,7 @@ ${analysis.github_actions_matrix.strategy.matrix.include
   displaySummary() {
     this.logger.info('Parallel Test Optimization Summary', {
       systemParallelism: this.config.maxParallelJobs,
-      operation: 'summary-header',
+      OPERATION 'summary-header',
     });
     this.logger.info('Test optimization summary', {
       testSuitesFound: this.config.testSuites.length,
@@ -723,7 +723,7 @@ ${analysis.github_actions_matrix.strategy.matrix.include
       sequentialTests: this.executionPlan.sequential_tests?.length || 0,
       estimatedTimeSavings: this.executionPlan.estimated_time_savings,
       systemParallelism: this.config.maxParallelJobs,
-      operation: 'optimization-summary',
+      OPERATION 'optimization-summary',
     });
 
     if (this.executionPlan.critical_path.bottlenecks?.length > 0) {

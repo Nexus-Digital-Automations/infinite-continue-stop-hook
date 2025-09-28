@@ -143,7 +143,7 @@ function generateValidationProgressReport(flagData, logger, workingDir) {
   // Process validation results from flag data
   if (flagData.validation_results) {
     for (const criteria of validationCriteria) {
-      const _result = flagData.validation_results[criteria];
+      const RESULT = flagData.validation_results[criteria];
       if (result) {
         progressReport.validationDetails.push({
           criterion: criteria,
@@ -477,7 +477,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook path validated through hook configuration system
       if (FS.existsSync(projectPath)) {
-        const _result = await cleanupStaleAgentsInProject(projectPath, logger);
+        const RESULT = await cleanupStaleAgentsInProject(projectPath, logger);
         return result;
       } else {
         logger.addFlow(
@@ -1011,7 +1011,7 @@ If you want to enable task management for this project:
         logger.info('TASKS.json corruption automatically fixed', {
           fixesApplied: corruptionCheck.fixesApplied,
           component: 'StopHook',
-          operation: 'corruptionCheck',
+          OPERATION 'corruptionCheck',
         });
         console.log(
           `🔧 STOP HOOK: Automatically fixed TASKS.json corruption - ${corruptionCheck.fixesApplied.join(', ')}`
@@ -1021,7 +1021,7 @@ If you want to enable task management for this project:
       logger.error('TASKS.json corruption check failed', {
         error: corruptionError.message,
         component: 'StopHook',
-        operation: 'corruptionCheck',
+        OPERATION 'corruptionCheck',
       });
       console.error(
         `⚠️ STOP HOOK: Corruption check failed:`,
@@ -1070,7 +1070,7 @@ If you want to enable task management for this project:
           orphanedTasksReset: multiProjectResults.totalOrphanedTasksReset,
           errors: multiProjectResults.errors,
           component: 'StopHook',
-          operation: 'multiProjectCleanup',
+          OPERATION 'multiProjectCleanup',
         });
 
         console.error(`
@@ -1327,7 +1327,7 @@ If you want to enable task management for this project:
           testErrorsMoved: sortResult.tasksMoved,
           tasksUpdated: sortResult.tasksUpdated,
           component: 'StopHook',
-          operation: 'automaticTaskSorting',
+          OPERATION 'automaticTaskSorting',
         });
 
         console.error(`
@@ -1359,7 +1359,7 @@ This ensures proper priority ordering with test tasks only executed after all er
 
 Task sorting encountered an issue: ${sortingError.message}
 
-This is non-critical And won't prevent continued operation.
+This is non-critical And won't prevent continued OPERATION
 Tasks will continue to work but may not be optimally sorted.
       `);
     }
@@ -1669,7 +1669,7 @@ This keeps TASKS.json clean And prevents it from becoming crowded with completed
 
 Task archival encountered an issue: ${archivalError.message}
 
-This is non-critical And won't prevent continued operation.
+This is non-critical And won't prevent continued OPERATION
       `);
     }
 

@@ -482,14 +482,14 @@ class DatabaseMock {
     const id = data.id || TestIdGenerator.generateTaskId();
     const record = { ...data, id, created: new Date().toISOString() };
     this.collections.get(collection).set(id, record);
-    this.queries.push({ operation: 'insert', collection, data: record });
+    this.queries.push({ OPERATION 'insert', collection, data: record });
     return record;
   }
 
   find(collection, query = {}) {
     this.createCollection(collection);
     const records = Array.from(this.collections.get(collection).values());
-    this.queries.push({ operation: 'find', collection, query });
+    this.queries.push({ OPERATION 'find', collection, query });
 
     // Simple query filtering
     return records.filter((record) => {
@@ -509,7 +509,7 @@ class DatabaseMock {
         updated: new Date().toISOString(),
       };
       records.set(id, record);
-      this.queries.push({ operation: 'update', collection, id, updates });
+      this.queries.push({ OPERATION 'update', collection, id, updates });
       return record;
     }
     return null;
@@ -519,7 +519,7 @@ class DatabaseMock {
     this.createCollection(collection);
     const records = this.collections.get(collection);
     const deleted = records.delete(id);
-    this.queries.push({ operation: 'delete', collection, id });
+    this.queries.push({ OPERATION 'delete', collection, id });
     return deleted;
   }
 

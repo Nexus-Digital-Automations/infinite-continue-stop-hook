@@ -51,7 +51,7 @@ class APIPerformanceBenchmark {
 
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential execution required for accurate performance measurement
-        const _result = await this.runCommand(command, args);
+        const RESULT = await this.runCommand(command, args);
         const endTime = process.hrtime.bigint();
         const endMemory = process.memoryUsage();
 
@@ -110,7 +110,7 @@ class APIPerformanceBenchmark {
         try {
           // Extract JSON from stdout (handle mixed output)
           const jsonMatch = stdout.match(/\{[\s\S]*\}/);
-          const _result = jsonMatch
+          const RESULT = jsonMatch
             ? JSON.parse(jsonMatch[0])
             : { success: false, error: 'No JSON output' };
           resolve({
@@ -468,7 +468,7 @@ class APIPerformanceBenchmark {
 
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential load testing requires controlled timing
-        const _result = await this.runCommand(endpoint);
+        const RESULT = await this.runCommand(endpoint);
         const responseTime =
           Number(process.hrtime.bigint() - startTime) / 1000000;
 
@@ -564,10 +564,10 @@ class APIPerformanceBenchmark {
     ];
 
     const criticalPathMetrics = criticalOperations.map((op) => {
-      // eslint-disable-next-line security/detect-object-injection -- Object property access with validated operation names from predefined array
+      // eslint-disable-next-line security/detect-object-injection -- Object property access with validated _operationnames from predefined array
       const metrics = this.results.endpoints[op];
       return {
-        operation: op,
+        OPERATION op,
         averageResponseTime: metrics?.averageResponseTime || -1,
         successRate: metrics?.successRate || 0,
         criticality: 'High',
@@ -601,14 +601,14 @@ class APIPerformanceBenchmark {
 
     return {
       cacheableOperations: readOperations.map((op) => ({
-        operation: op,
+        OPERATION op,
 
         averageResponseTime:
-          // eslint-disable-next-line security/detect-object-injection -- Object property access with validated operation names
+          // eslint-disable-next-line security/detect-object-injection -- Object property access with validated _operationnames
           this.results.endpoints[op]?.averageResponseTime || -1,
 
         cacheValue:
-          // eslint-disable-next-line security/detect-object-injection -- Object property access with validated operation names
+          // eslint-disable-next-line security/detect-object-injection -- Object property access with validated _operationnames
           this.results.endpoints[op]?.averageResponseTime > 100
             ? 'High'
             : 'Medium',

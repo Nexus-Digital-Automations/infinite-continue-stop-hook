@@ -106,7 +106,7 @@ describe('Example Test with Mock Framework', () => {
   describe('API Mock Integration', () => {
     test('should mock agent initialization', async () => {
       const agentId = TestIdGenerator.generateAgentId();
-      const _result = await APIExecutor.initializeTestAgent(agentId);
+      const result = await APIExecutor.initializeTestAgent(agentId);
 
       expect(result.agentId).toBe(agentId);
       expect(result.result.success).toBe(true);
@@ -124,7 +124,7 @@ describe('Example Test with Mock Framework', () => {
         category: 'enhancement',
       });
 
-      const _result = await APIExecutor.createTestFeature(featureData);
+      const result = await APIExecutor.createTestFeature(featureData);
 
       expect(result.success).toBe(true);
       expect(result.feature).toBeDefined();
@@ -144,7 +144,7 @@ describe('Example Test with Mock Framework', () => {
       };
 
       // Call API directly without defaults to test validation
-      const _result = await APIExecutor.execAPI(
+      const result = await APIExecutor.execAPI(
         'suggest-feature',
         [JSON.stringify(invalidFeatureData)],
         { silent: true },
@@ -166,7 +166,7 @@ describe('Example Test with Mock Framework', () => {
         TestDataFactory.createFeatureData({ category: 'bug-fix' }),
       );
 
-      const _result = await APIExecutor.execAPI('list-features', [
+      const result = await APIExecutor.execAPI('list-features', [
         JSON.stringify({ category: 'enhancement' }),
       ]);
 
@@ -265,7 +265,7 @@ describe('Example Test with Mock Framework', () => {
     test('should retry failed operations', async () => {
       let attempts = 0;
 
-      const _result = await TestExecution.retry(
+      const result = await TestExecution.retry(
         () => {
           attempts++;
           if (attempts < 3) {
@@ -337,7 +337,7 @@ describe('Example Test with Mock Framework', () => {
       const agentId = TestIdGenerator.generateAgentId();
       await APIExecutor.initializeTestAgent(agentId);
 
-      const _result = await APIExecutor.execAPI('approve-feature', [
+      const result = await APIExecutor.execAPI('approve-feature', [
         'non-existent-feature',
       ]);
 

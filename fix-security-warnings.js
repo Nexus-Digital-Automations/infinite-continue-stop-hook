@@ -32,14 +32,14 @@ function addSecurityDisableComments(filePath) {
     ];
 
     fsPatterns.forEach((pattern) => {
-      content = content.replace(pattern, (match, whitespace, operation) => {
+      content = content.replace(pattern, (match, whitespace, OPERATION => {
         if (
           !match.includes(
             'eslint-disable-next-line security/detect-non-literal-fs-filename'
           )
         ) {
           changesCount++;
-          return `${whitespace}// eslint-disable-next-line security/detect-non-literal-fs-filename\n${whitespace}${operation}`;
+          return `${whitespace}// eslint-disable-next-line security/detect-non-literal-fs-filename\n${whitespace}${OPERATION`;
         }
         return match;
       });
@@ -56,7 +56,7 @@ function addSecurityDisableComments(filePath) {
     ];
 
     objectPatterns.forEach((pattern) => {
-      content = content.replace(pattern, (match, whitespace, operation) => {
+      content = content.replace(pattern, (match, whitespace, OPERATION => {
         if (
           !match.includes(
             'eslint-disable-next-line security/detect-object-injection'
@@ -79,10 +79,10 @@ function addSecurityDisableComments(filePath) {
     ];
 
     consolePatterns.forEach((pattern) => {
-      content = content.replace(pattern, (match, whitespace, operation) => {
+      content = content.replace(pattern, (match, whitespace, OPERATION => {
         if (!match.includes('eslint-disable-next-line no-console')) {
           changesCount++;
-          return `${whitespace}// eslint-disable-next-line no-console\n${whitespace}${operation}`;
+          return `${whitespace}// eslint-disable-next-line no-console\n${whitespace}${OPERATION`;
         }
         return match;
       });

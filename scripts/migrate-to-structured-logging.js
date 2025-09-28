@@ -349,7 +349,7 @@ function main() {
 
   for (const usage of analysisResults) {
     try {
-      const _result = migrateFile(usage);
+      const RESULT = migrateFile(usage);
       if (result.success && result.changes > 0) {
         migratedFiles++;
         totalChanges += result.changes;

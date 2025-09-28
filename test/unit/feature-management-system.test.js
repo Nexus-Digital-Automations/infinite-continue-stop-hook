@@ -11,7 +11,7 @@
 
 const PATH = require('path');
 const { spawn } = require('child_process');
-const _FS = require('fs');
+const FS = require('fs');
 
 // Test configuration
 const TEST_PROJECT_DIR = PATH.join(
@@ -62,7 +62,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         if (jsonStart > 0) {
           jsonString = jsonString.substring(jsonStart);
         }
-        const _result = JSON.parse(jsonString);
+        const result = JSON.parse(jsonString);
         resolve(result);
       } catch {
         try {
@@ -186,7 +186,7 @@ describe('Feature Management System Unit Tests', () => {
         category: 'enhancement',
       };
 
-      const _result = await execAPI('suggest-feature', [
+      const result = await execAPI('suggest-feature', [
         JSON.stringify(featureData),
       ]);
       expect(result.success).toBe(true);
@@ -204,7 +204,7 @@ describe('Feature Management System Unit Tests', () => {
         category: 'new-feature',
       };
 
-      const _result = await execAPI('suggest-feature', [
+      const result = await execAPI('suggest-feature', [
         JSON.stringify(featureData),
       ]);
       expect(result.success).toBe(true);
@@ -222,7 +222,7 @@ describe('Feature Management System Unit Tests', () => {
         category: 'bug-fix',
       };
 
-      const _result = await execAPI('suggest-feature', [
+      const result = await execAPI('suggest-feature', [
         JSON.stringify(featureData),
       ]);
       expect(result.success).toBe(true);
@@ -237,7 +237,7 @@ describe('Feature Management System Unit Tests', () => {
       };
 
       try {
-        const _result = await execAPI('suggest-feature', [
+        const result = await execAPI('suggest-feature', [
           JSON.stringify(incompleteFeatureData),
         ]);
         // API should either reject with error or return success=false
@@ -262,7 +262,7 @@ describe('Feature Management System Unit Tests', () => {
       };
 
       try {
-        const _result = await execAPI('suggest-feature', [
+        const result = await execAPI('suggest-feature', [
           JSON.stringify(invalidFeatureData),
         ]);
         // API should either reject with error or return success=false
@@ -291,7 +291,7 @@ describe('Feature Management System Unit Tests', () => {
     });
 
     test('should list all features', async () => {
-      const _result = await execAPI('list-features');
+      const result = await execAPI('list-features');
       expect(result.success).toBe(true);
       expect(Array.isArray(result.features)).toBe(true);
     });
@@ -309,7 +309,7 @@ describe('Feature Management System Unit Tests', () => {
 
       // Then list features with status filter
       const filterData = { status: 'suggested' };
-      const _result = await execAPI('list-features', [
+      const result = await execAPI('list-features', [
         JSON.stringify(filterData),
       ]);
 
@@ -343,7 +343,7 @@ describe('Feature Management System Unit Tests', () => {
 
       // Filter by category
       const filterData = { category: 'enhancement' };
-      const _result = await execAPI('list-features', [
+      const result = await execAPI('list-features', [
         JSON.stringify(filterData),
       ]);
 
@@ -390,7 +390,7 @@ describe('Feature Management System Unit Tests', () => {
         notes: 'Feature approved for implementation',
       };
 
-      const _result = await execAPI('approve-feature', [
+      const result = await execAPI('approve-feature', [
         _createdFeatureId,
         JSON.stringify(approvalData),
       ]);
@@ -404,7 +404,7 @@ describe('Feature Management System Unit Tests', () => {
         reason: 'Feature requires more specification',
       };
 
-      const _result = await execAPI('reject-feature', [
+      const result = await execAPI('reject-feature', [
         _createdFeatureId,
         JSON.stringify(rejectionData),
       ]);
@@ -416,7 +416,7 @@ describe('Feature Management System Unit Tests', () => {
       const nonExistentId = 'non-existent-feature-id';
 
       try {
-        const _result = await execAPI('approve-feature', [nonExistentId]);
+        const result = await execAPI('approve-feature', [nonExistentId]);
         // API should either reject with error or return success=false
         if (result.success === false) {
           expect(result.error || result.message).toBeDefined();
@@ -444,7 +444,7 @@ describe('Feature Management System Unit Tests', () => {
 
     test('should attempt to generate feature statistics', async () => {
       try {
-        const _result = await execAPI('feature-stats');
+        const result = await execAPI('feature-stats');
         // If successful, verify structure
         if (result.success) {
           expect(result.stats).toBeDefined();
@@ -460,7 +460,7 @@ describe('Feature Management System Unit Tests', () => {
 
     test('should handle statistics requests gracefully', async () => {
       try {
-        const _result = await execAPI('feature-stats');
+        const result = await execAPI('feature-stats');
         // Either success or graceful error handling
         expect(result).toBeDefined();
       } catch {
@@ -476,7 +476,7 @@ describe('Feature Management System Unit Tests', () => {
 
   describe('Initialization Statistics', () => {
     test('should get initialization statistics', async () => {
-      const _result = await execAPI('get-initialization-stats');
+      const result = await execAPI('get-initialization-stats');
       expect(result.success).toBe(true);
       expect(result.stats).toBeDefined();
       expect(typeof result.stats.total_initializations).toBe('number');
@@ -484,7 +484,7 @@ describe('Feature Management System Unit Tests', () => {
     });
 
     test('should include time bucket statistics', async () => {
-      const _result = await execAPI('get-initialization-stats');
+      const result = await execAPI('get-initialization-stats');
       expect(result.success).toBe(true);
       expect(result.stats.time_buckets).toBeDefined();
       expect(result.stats.current_bucket).toBeDefined();
@@ -497,7 +497,7 @@ describe('Feature Management System Unit Tests', () => {
 
   describe('API Documentation', () => {
     test('should provide API guide', async () => {
-      const _result = await execAPI('guide');
+      const result = await execAPI('guide');
       expect(result.success).toBe(true);
       expect(result.featureManager).toBeDefined();
       expect(result.coreCommands).toBeDefined();
@@ -505,7 +505,7 @@ describe('Feature Management System Unit Tests', () => {
 
     test('should handle methods request', async () => {
       try {
-        const _result = await execAPI('methods');
+        const result = await execAPI('methods');
         // If successful, verify structure
         if (result.success) {
           expect(result.methods || result.guide || result).toBeDefined();

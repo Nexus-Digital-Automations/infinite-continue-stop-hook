@@ -118,7 +118,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
 
       const featureIds = [];
       for (const featureData of initialFeatures) {
-        const _result = await execAPI(
+        const RESULT = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {
@@ -230,7 +230,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
 
       const featureIds = [];
       for (const featureData of bulkFeatures) {
-        const _result = await execAPI(
+        const RESULT = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {
@@ -379,7 +379,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
       );
 
       for (const featureData of validFeatures) {
-        const _result = await execAPI(
+        const RESULT = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {
@@ -482,7 +482,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
           category: 'enhancement',
         });
 
-        const _result = await execAPI(
+        const RESULT = await execAPI(
           'suggest-feature',
           [JSON.stringify(testFeature)],
           {
@@ -510,7 +510,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
       );
 
       for (const featureData of features) {
-        const _result = await execAPI(
+        const RESULT = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {
@@ -535,7 +535,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
         category: 'bug-fix',
       });
 
-      const _result = await execAPI(
+      const RESULT = await execAPI(
         'suggest-feature',
         [JSON.stringify(recoveryFeature)],
         {
@@ -569,7 +569,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
           await corruptFeaturesFile(testDir);
         }
 
-        const _result = await execAPI(
+        const RESULT = await execAPI(
           'suggest-feature',
           [JSON.stringify(feature)],
           {
@@ -686,7 +686,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
         });
 
         const startTime = Date.now();
-        const _result = await execAPI(
+        const RESULT = await execAPI(
           'suggest-feature',
           [JSON.stringify(feature)],
           {
@@ -762,14 +762,14 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
       const startTime = Date.now();
       const featureIds = [];
 
-      for (const operation of mixedOperations) {
+      for (const OPERATIONOF mixedOperations) {
         let result;
 
-        switch (operation.type) {
+        switch (_operationtype) {
           case 'suggest':
             result = await execAPI(
               'suggest-feature',
-              [JSON.stringify(operation.data)],
+              [JSON.stringify(_operationdata)],
               {
                 projectRoot: testDir,
               },
@@ -780,7 +780,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
             break;
 
           case 'agent-init':
-            result = await execAPI('initialize', [operation.agentId], {
+            result = await execAPI('initialize', [_operationagentId], {
               projectRoot: testDir,
             });
             break;

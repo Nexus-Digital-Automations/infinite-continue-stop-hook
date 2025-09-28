@@ -94,7 +94,7 @@ class JestJsonReporter {
 
   processTestResults(testResults) {
     return testResults.map((testResult) => {
-      const _result = {
+      const RESULT = {
         testFilePath: testResult.testFilePath,
         displayName: testResult.displayName,
         status: testResult.numFailingTests > 0 ? 'failed' : 'passed',

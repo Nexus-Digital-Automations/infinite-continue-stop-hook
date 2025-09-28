@@ -13,7 +13,7 @@
  * Created: 2025-09-13
  */
 
-const _FS = require('fs').promises;
+const FS = require('fs').promises;
 const PATH = require('path');
 const { execSync } = require('child_process');
 const { createLogger } = require('./lib/utils/logger');
@@ -58,7 +58,6 @@ class SuccessCriteriaValidator {
    */
   async initialize() {
     try {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- Success criteria path validated through validator configuration
       const configData = await FS.readFile(this.configPath, 'utf8');
       this.config = JSON.parse(configData);
 
@@ -84,9 +83,8 @@ class SuccessCriteriaValidator {
    */
   async ensureDirectories() {
     try {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path constructed from trusted success criteria system
       await FS.mkdir(this.evidenceDir, { recursive: true });
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- Validation path controlled by success criteria security protocols
+
       await FS.mkdir(this.reportDir, { recursive: true });
     } catch {
       ValidationLogger.error(
@@ -559,7 +557,6 @@ class SuccessCriteriaValidator {
       // Parallel file reading for performance optimization
       const fileContentPromises = files.map(async (file) => {
         try {
-          // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path constructed from trusted success criteria system
           const content = await FS.readFile(file, 'utf8');
           return { file, content };
         } catch {
@@ -716,7 +713,6 @@ class SuccessCriteriaValidator {
   async getAllSourceFiles() {
     const sourceFiles = [];
     const walkDir = async (dir) => {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- Validation path controlled by success criteria security protocols
       const files = await FS.readdir(dir, { withFileTypes: true });
 
       // Separate directories And files for parallel processing
@@ -782,7 +778,7 @@ class SuccessCriteriaValidator {
       this.reportDir,
       `${taskId}_validation_report.json`
     );
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- Success criteria path validated through validator configuration
+
     await FS.writeFile(reportPath, JSON.stringify(report, null, 2));
 
     return report;

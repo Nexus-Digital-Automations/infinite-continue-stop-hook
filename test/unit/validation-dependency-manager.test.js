@@ -468,7 +468,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
     });
 
     test('should handle missing configuration file gracefully', async () => {
-      const RESULT = await dependencyManager.loadDependencyConfig(
+      const result = await dependencyManager.loadDependencyConfig(
         '/non/existent/path.json',
       );
       expect(result).toBeNull();

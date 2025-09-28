@@ -9,7 +9,7 @@
  */
 
 const PATH = require('path');
-const _FS = require('fs').promises;
+const FS = require('fs').promises;
 const _CRYPTO = require('crypto');
 
 describe('RAG System Data Migration And Integrity', () => {
@@ -324,7 +324,7 @@ Tags: database, performance, connection-pooling`,
       // Store lessons
       const _storedLessons = [];
       for (const lesson of testLessons) {
-        const _result = await ragSystem.storeLesson(lesson);
+        const RESULT = await ragSystem.storeLesson(lesson);
         expect(result.success).toBe(true);
         storedLessons.push(result.lesson_id);
       }
@@ -503,7 +503,7 @@ Tags: database, performance, connection-pooling`,
       // Store test data
       const _storedIds = [];
       for (const lesson of backupTestData) {
-        const _result = await ragSystem.storeLesson(lesson);
+        const RESULT = await ragSystem.storeLesson(lesson);
         storedIds.push(result.lesson_id);
       }
 
@@ -567,7 +567,7 @@ Tags: database, performance, connection-pooling`,
       // Store original data And create backup
       const _originalIds = [];
       for (const lesson of originalData) {
-        const _result = await ragSystem.storeLesson(lesson);
+        const RESULT = await ragSystem.storeLesson(lesson);
         originalIds.push(result.lesson_id);
       }
 
@@ -645,7 +645,7 @@ Tags: database, performance, connection-pooling`,
 
       const _initialIds = [];
       for (const lesson of initialLessons) {
-        const _result = await ragSystem.storeLesson(lesson);
+        const RESULT = await ragSystem.storeLesson(lesson);
         initialIds.push(result.lesson_id);
       }
 

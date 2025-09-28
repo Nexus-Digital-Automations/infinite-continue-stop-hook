@@ -9,7 +9,7 @@
  */
 
 const PATH = require('path');
-const _FS = require('fs').promises;
+const FS = require('fs').promises;
 
 // Helper functions for test data generation
 function _getRandomTechnicalTopic() {
@@ -316,7 +316,7 @@ describe('RAG System Performance And Load Testing', () => {
               // Search operation
               const _searchStartTime = process.hrtime.bigint();
               const _searchResult = await ragSystem.searchLessons(
-                `test query from user ${userId} operation ${i}`,
+                `test query from user ${userId} OPERATION${i}`,
                 { limit: 10 }
               );
               const _searchEndTime = process.hrtime.bigint();
@@ -452,7 +452,7 @@ describe('RAG System Performance And Load Testing', () => {
       const _largeOperations = [
         {
           name: 'Large batch embedding generation',
-          operation: async () => {
+          OPERATION async () => {
             const _largeBatch = Array.from({ length: 500 }, (_, i) =>
               generateLargeTechnicalContent(i)
             );
@@ -461,7 +461,7 @@ describe('RAG System Performance And Load Testing', () => {
         },
         {
           name: 'Large search result processing',
-          operation: async () => {
+          OPERATION async () => {
             return ragSystem.searchLessons('comprehensive technical query', {
               limit: 1000,
               include_full_content: true,
@@ -471,7 +471,7 @@ describe('RAG System Performance And Load Testing', () => {
         },
         {
           name: 'Large dataset migration',
-          operation: async () => {
+          OPERATION async () => {
             const _migrationData = Array.from({ length: 1000 }, (_, i) => ({
               title: `Migration Lesson ${i}`,
               content: generateLargeTechnicalContent(i),
@@ -485,14 +485,14 @@ describe('RAG System Performance And Load Testing', () => {
       for (const testOperation of largeOperations) {
         const _preOpMemory = process.memoryUsage();
         loggers.stopHook.log(`\nStarting: ${testOperation.name}`);
-        loggers.stopHook.log('Pre-operation memory:', formatMemoryUsage(preOpMemory));
+        loggers.stopHook.log('Pre-_operationmemory:', formatMemoryUsage(preOpMemory));
 
         const START_TIME = Date.now();
-        const _result = await testOperation.operation();
+        const RESULT = await testOperation.OPERATION);
         const END_TIME = Date.now();
 
         const _postOpMemory = process.memoryUsage();
-        loggers.stopHook.log('Post-operation memory:', formatMemoryUsage(postOpMemory));
+        loggers.stopHook.log('Post-_operationmemory:', formatMemoryUsage(postOpMemory));
 
         const MEMORY_INCREASE = postOpMemory.heapUsed - preOpMemory.heapUsed;
         const _durationMs = endTime - startTime;
@@ -535,7 +535,7 @@ describe('RAG System Performance And Load Testing', () => {
         for (let i = 0; i < 100; i++) {
           memoryPressure.push(new Array(1024 * 1024).fill(i)); // 1MB arrays
 
-          // Test system operation under pressure
+          // Test system _operationunder pressure
           if (i % 20 === 0) {
             const _searchResult = await ragSystem.searchLessons(
               'memory pressure test query',
@@ -629,7 +629,7 @@ describe('RAG System Performance And Load Testing', () => {
 
         for (const queryTest of queryTests) {
           const _queryStartTime = Date.now();
-          const _result = await queryTest.query();
+          const RESULT = await queryTest.query();
           const _queryEndTime = Date.now();
 
           const QUERY_TIME = queryEndTime - queryStartTime;
@@ -666,7 +666,7 @@ describe('RAG System Performance And Load Testing', () => {
           try {
             const _queryStartTime = Date.now();
 
-            const _result = await ragSystem.searchLessons(
+            const RESULT = await ragSystem.searchLessons(
               `connection test query ${connId}-${i}`,
               { limit: 5 }
             );

@@ -563,25 +563,25 @@ describe('API Workflow Integration Tests', () => {
       const suggestedFeatures = [];
       const agents = [];
 
-      for (const operation of operations) {
-        switch (operation.type) {
+      for (const OPERATIONOF operations) {
+        switch (_operationtype) {
           case 'init': {
             const initResult = await execAPI(
               'initialize',
-              [operation.agentId],
+              [_operationagentId],
               {
                 projectRoot: testDir,
               },
             );
             expect(initResult.success).toBe(true);
-            agents.push(operation.agentId);
+            agents.push(_operationagentId);
             break;
           }
 
           case 'suggest': {
             const suggestResult = await execAPI(
               'suggest-feature',
-              [JSON.stringify(operation.feature)],
+              [JSON.stringify(_operationfeature)],
               { projectRoot: testDir },
             );
             expect(suggestResult.success).toBe(true);
@@ -593,8 +593,8 @@ describe('API Workflow Integration Tests', () => {
             const approveResult = await execAPI(
               'approve-feature',
               [
-                suggestedFeatures[operation.index],
-                JSON.stringify({ approved_by: operation.agentId }),
+                suggestedFeatures[_operationindex],
+                JSON.stringify({ approved_by: _operationagentId }),
               ],
               { projectRoot: testDir },
             );
@@ -606,9 +606,9 @@ describe('API Workflow Integration Tests', () => {
             const rejectResult = await execAPI(
               'reject-feature',
               [
-                suggestedFeatures[operation.index],
+                suggestedFeatures[_operationindex],
                 JSON.stringify({
-                  rejected_by: operation.agentId,
+                  rejected_by: _operationagentId,
                   reason: 'Consistency test rejection',
                 }),
               ],
@@ -716,7 +716,7 @@ describe('API Workflow Integration Tests', () => {
     });
 
     test('should handle malformed JSON in feature suggestion', async () => {
-      const _result = await execAPI('suggest-feature', ['{ invalid json }'], {
+      const RESULT = await execAPI('suggest-feature', ['{ invalid json }'], {
         projectRoot: testDir,
       });
 

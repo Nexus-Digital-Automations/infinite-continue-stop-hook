@@ -13,7 +13,7 @@
 const { performance } = require('perf_hooks');
 const { spawn } = require('child_process');
 const PATH = require('path');
-const _FS = require('fs').promises;
+const FS = require('fs').promises;
 const OS = require('os');
 
 // Test configuration
@@ -58,12 +58,12 @@ class PerformanceMonitor {
     }
   }
 
-  async measureOperation(operationName, operation) {
+  async measureOperation(operationName, OPERATION {
     const startTime = performance.now();
     const startMemory = process.memoryUsage();
 
     try {
-      const _result = await operation();
+      const RESULT = await OPERATION);
       const END_TIME = performance.now();
       const END_MEMORY = process.memoryUsage();
 
@@ -173,7 +173,7 @@ class PerformanceMonitor {
         // Check for performance violations
         if (MAX_TIME > 30000) {
           report.performanceViolations.push({
-            operation: opType,
+            OPERATION opType,
             type: 'MAX_TIME_VIOLATION',
             value: MAX_TIME,
             threshold: 30000,
@@ -181,7 +181,7 @@ class PerformanceMonitor {
         }
         if (AVG_TIME > 30000) {
           report.performanceViolations.push({
-            operation: opType,
+            OPERATION opType,
             type: 'AVG_TIME_VIOLATION',
             value: AVG_TIME,
             threshold: 30000,
@@ -235,7 +235,7 @@ function execAPIWithMonitoring(
       CHILD.on('close', (code) => {
         if (code === 0) {
           try {
-            const _result = stdout.trim() ? JSON.parse(stdout) : {};
+            const RESULT = stdout.trim() ? JSON.parse(stdout) : {};
             resolve(result);
           } catch {
             resolve({ rawOutput: stdout, stderr });
@@ -570,7 +570,7 @@ describe('Success Criteria Performance Tests', () => {
           `Rapid operations total time: ${TOTAL_TIME.toFixed(2)}ms`
         );
         loggers.stopHook.log(
-          `Average per operation: ${(TOTAL_TIME / 10).toFixed(2)}ms`
+          `Average per OPERATION ${(TOTAL_TIME / 10).toFixed(2)}ms`
         );
       },
       PERFORMANCE_TIMEOUT
@@ -832,7 +832,7 @@ describe('Success Criteria Performance Tests', () => {
             JSON.stringify(REPORT, null, 2)
           );
 
-          // Even if the operation fails, it should fail quickly
+          // Even if the _operationfails, it should fail quickly
           if (REPORT.operationSummary['api_success-criteria:create-template']) {
             expect(
               REPORT.operationSummary['api_success-criteria:create-template']

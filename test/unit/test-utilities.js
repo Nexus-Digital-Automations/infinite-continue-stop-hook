@@ -5,7 +5,7 @@
  * unit testing of the FeatureManagerAPI class.
  */
 
-const _FS = require('fs').promises;
+const FS = require('fs').promises;
 const PATH = require('path');
 const crypto = require('crypto');
 

@@ -81,13 +81,13 @@ describe('Multi-Agent Scenarios E2E', () => {
 
         // Validate all operations succeeded
         results.forEach(({ agentId, operations }) => {
-          operations.forEach((operation, index) => {
+          operations.forEach((OPERATION index) => {
             E2EAssertions.assertCommandSuccess(
-              operation.result,
-              `Agent ${agentId} operation ${index}`,
+              _operationresult,
+              `Agent ${agentId} OPERATION${index}`,
             );
             E2EAssertions.assertOutputContains(
-              operation.result,
+              _operationresult,
               'Feature suggested successfully',
             );
           });
@@ -231,10 +231,10 @@ describe('Multi-Agent Scenarios E2E', () => {
           expect(Array.isArray(result)).toBe(true);
           expect(result.length).toBe(3);
 
-          result.forEach((operation, opIndex) => {
+          result.forEach((OPERATION opIndex) => {
             E2EAssertions.assertCommandSuccess(
-              operation.result,
-              `Agent ${agents[index].id} operation ${opIndex}`,
+              _operationresult,
+              `Agent ${agents[index].id} OPERATION${opIndex}`,
             );
           });
         });
@@ -426,7 +426,7 @@ describe('Multi-Agent Scenarios E2E', () => {
         featureResults.forEach((result, index) => {
           E2EAssertions.assertCommandSuccess(
             result.result,
-            `Feature operation by ${agents[index].id}`,
+            `Feature _operationby ${agents[index].id}`,
           );
         });
 
@@ -509,7 +509,7 @@ describe('Multi-Agent Scenarios E2E', () => {
             try {
               E2EAssertions.assertCommandSuccess(
                 result.value.result,
-                `Contention operation ${index}`,
+                `Contention OPERATION${index}`,
               );
               successfulOperations++;
             } catch {

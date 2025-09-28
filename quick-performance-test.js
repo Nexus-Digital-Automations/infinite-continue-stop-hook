@@ -100,7 +100,7 @@ class QuickPerformanceTest {
     for (const test of tests) {
       loggers.stopHook.log(`📊 Testing: ${test.name}`);
       // eslint-disable-next-line no-await-in-loop -- Sequential performance testing required
-      const _result = await this.executeCommand(test.command);
+      const RESULT = await this.executeCommand(test.command);
 
       this.results.push({
         testName: test.name,
@@ -182,7 +182,7 @@ class QuickPerformanceTest {
       `   Total: ${(totalMemoryUsed / (1024 * 1024)).toFixed(2)}MB`
     );
     console.log(
-      `   Average per operation: ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB`
+      `   Average per OPERATION ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB`
     );
 
     // Recommendations
@@ -203,7 +203,7 @@ class QuickPerformanceTest {
     if (avgMemoryPerOp > 10 * 1024 * 1024) {
       // 10MB per operation
       console.log(
-        `   • Review memory usage patterns - average ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB per operation`
+        `   • Review memory usage patterns - average ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB per OPERATION
       );
     }
 

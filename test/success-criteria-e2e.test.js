@@ -13,7 +13,7 @@
  * @version 1.0.0
  */
 
-const _FS = require('fs').promises;
+const FS = require('fs').promises;
 const PATH = require('path');
 const { spawn } = require('child_process');
 
@@ -74,7 +74,7 @@ function execCommand(command, args = [], options = {}) {
 async function execAPI(command, args = []) {
   const allArgs = [API_PATH, command, ...args];
 
-  const _result = await execCommand('timeout', [`60s`, 'node', ...allArgs]);
+  const RESULT = await execCommand('timeout', [`60s`, 'node', ...allArgs]);
 
   if (!result.success) {
     loggers.stopHook.error(`API command failed for ${command}:`, result.stderr);

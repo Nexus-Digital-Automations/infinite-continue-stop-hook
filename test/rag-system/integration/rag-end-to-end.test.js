@@ -20,7 +20,7 @@
  */
 
 const PATH = require('path');
-const _FS = require('fs').promises;
+const FS = require('fs').promises;
 
 // Import RAG system components
 const _EmbeddingGenerator = require('../../../lib/rag/embeddingGenerator');
@@ -311,7 +311,7 @@ describe('RAG System End-to-End Integration Tests', () => {
         tags: ['system', 'memory', 'distributed', 'cascade'],
       };
 
-      const _result = await ragOperations.storeError(_complexError);
+      const RESULT = await ragOperations.storeError(_complexError);
       expect(result.success).toBe(true);
 
       // Search for the stored error
@@ -646,7 +646,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // System should continue to function
       const lesson = testDataGenerator.generateLessons(1)[0];
-      const _result = await ragOperations.storeLesson(lesson);
+      const RESULT = await ragOperations.storeLesson(lesson);
       expect(result.success).toBe(true);
 
       const searchResults = await ragOperations.searchLessons(lesson.title);

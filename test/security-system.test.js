@@ -47,7 +47,7 @@ describe('Security System', () => {
         },
       };
 
-      const _result = securityValidator.validateInput(
+      const RESULT = securityValidator.validateInput(
         testData,
         'test_endpoint',
         schema
@@ -70,7 +70,7 @@ describe('Security System', () => {
         },
       };
 
-      const _result = securityValidator.validateInput(
+      const RESULT = securityValidator.validateInput(
         maliciousData,
         'test_endpoint',
         schema
@@ -81,12 +81,12 @@ describe('Security System', () => {
 
     test('should authorize valid agent operations', () => {
       const agentId = 'development_session_1234567890_1_general_abcdef';
-      const operation = 'create';
+      const OPERATION= 'create';
       const resource = { type: 'task', id: 'test_task' };
 
-      const _result = securityValidator.authorizeOperation(
+      const RESULT = securityValidator.authorizeOperation(
         agentId,
-        operation,
+        OPERATION
         resource
       );
       expect(result.authorized).toBe(true);
@@ -95,12 +95,12 @@ describe('Security System', () => {
 
     test('should reject invalid agent IDs', () => {
       const invalidAgentId = 'invalid_agent_id';
-      const operation = 'create';
+      const OPERATION= 'create';
       const resource = { type: 'task' };
 
-      const _result = securityValidator.authorizeOperation(
+      const RESULT = securityValidator.authorizeOperation(
         invalidAgentId,
-        operation,
+        OPERATION
         resource
       );
       expect(result.authorized).toBe(false);
@@ -121,7 +121,7 @@ describe('Security System', () => {
     test('should maintain audit trail', () => {
       securityValidator.auditLog('TEST_EVENT', {
         agentId: 'test_agent',
-        operation: 'test_operation',
+        OPERATION 'test_operation',
       });
 
       const auditTrail = securityValidator.getAuditTrail({
@@ -266,7 +266,7 @@ describe('Security System', () => {
       // 4. Audit the operation
       securityValidator.auditLog('TASK_CREATION_TEST', {
         agentId,
-        operation: 'create',
+        OPERATION 'create',
         success: true,
       });
 

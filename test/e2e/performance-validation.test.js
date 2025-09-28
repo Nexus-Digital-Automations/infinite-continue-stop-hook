@@ -133,7 +133,7 @@ describe('Performance Validation E2E', () => {
         let approvalIndex = 0;
         const approvalTest = async () => {
           const id = featureIds[approvalIndex % featureIds.length];
-          const _result = await FeatureTestHelpers.approveFeature(
+          const RESULT = await FeatureTestHelpers.approveFeature(
             environment,
             id,
             `performance-tester-${approvalIndex}`,
@@ -173,7 +173,7 @@ describe('Performance Validation E2E', () => {
     );
 
     test(
-      'Bulk operation performance validation',
+      'Bulk _operationperformance validation',
       async () => {
         // Test performance of bulk operations
 
@@ -185,8 +185,8 @@ describe('Performance Validation E2E', () => {
           bulkFeaturePromises.push(
             FeatureTestHelpers.suggestFeature(environment, {
               title: `Bulk Performance Test Feature ${i}`,
-              description: `Feature ${i} for bulk operation performance testing`,
-              business_value: 'Validates bulk operation performance',
+              description: `Feature ${i} for bulk _operationperformance testing`,
+              business_value: 'Validates bulk _operationperformance',
               category: 'enhancement',
             }),
           );
@@ -235,7 +235,7 @@ describe('Performance Validation E2E', () => {
         const bulkEfficiency = avgIndividualTime / bulkApprovalMetrics.avg;
 
         loggers.stopHook.log(
-          `✅ Bulk operation performance test: ${bulkSize} features`,
+          `✅ Bulk _operationperformance test: ${bulkSize} features`,
         );
         console.log(
           `   Individual avg: ${avgIndividualTime}ms, Bulk time: ${bulkApprovalMetrics.avg}ms`,
@@ -277,7 +277,7 @@ describe('Performance Validation E2E', () => {
         const avgTimePerOperation = totalTime / totalOperations;
 
         // Validate concurrent performance
-        expect(avgTimePerOperation).toBeLessThan(API_TIMEOUT); // Each operation should complete within timeout
+        expect(avgTimePerOperation).toBeLessThan(API_TIMEOUT); // Each _operationshould complete within timeout
         expect(results.every((result) => !result.error)).toBe(true); // All operations should succeed
 
         // Validate system integrity under load
@@ -291,7 +291,7 @@ describe('Performance Validation E2E', () => {
           `✅ High concurrency performance test: ${totalOperations} operations in ${totalTime}ms`,
         );
         loggers.stopHook.log(
-          `   Average per operation: ${avgTimePerOperation}ms`,
+          `   Average per OPERATION ${avgTimePerOperation}ms`,
         );
         console.log(
           `   Concurrent agents: ${concurrentAgents}, Operations per agent: ${operationsPerAgent}`,

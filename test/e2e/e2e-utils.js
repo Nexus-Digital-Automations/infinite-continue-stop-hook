@@ -169,7 +169,7 @@ class E2EEnvironment {
    */
   async getFeatures() {
     try {
-      const _result = await CommandExecutor.executeAPI('list-features', [], {
+      const RESULT = await CommandExecutor.executeAPI('list-features', [], {
         projectRoot: this.testDir,
       });
 
@@ -270,7 +270,7 @@ class CommandExecutor {
         }
         isResolved = true;
 
-        const _result = {
+        const RESULT = {
           code,
           stdout: stdout.trim(),
           stderr: stderr.trim(),
@@ -406,7 +406,7 @@ class FeatureTestHelpers {
       category: data.category,
     });
 
-    const _result = await CommandExecutor.executeAPI(
+    const RESULT = await CommandExecutor.executeAPI(
       'suggest-feature',
       [jsonData],
       { projectRoot: environment.testDir },
@@ -537,7 +537,7 @@ class StopHookTestHelpers {
     for (let i = 0; i < maxIterations; i++) {
       // Test the stop hook - should always block (exit code 2) in infinite mode
       // eslint-disable-next-line no-await-in-loop -- Sequential processing required for testing infinite continue behavior over time
-      const _result = await CommandExecutor.executeStopHook(
+      const RESULT = await CommandExecutor.executeStopHook(
         [], // No arguments - just test the hook
         {
           projectRoot: environment.testDir,
@@ -636,7 +636,7 @@ class MultiAgentTestHelpers {
       for (let j = 0; j < operationsPerAgent; j++) {
         const featureData = FeatureTestHelpers.createFeatureData({
           title: `Agent ${i} Feature ${j}`,
-          description: `Feature created by agent ${i}, operation ${j}`,
+          description: `Feature created by agent ${i}, OPERATION${j}`,
         });
 
         operations.push(

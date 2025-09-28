@@ -13,7 +13,7 @@
 
 const { spawn } = require('child_process');
 const PATH = require('path');
-const _FS = require('fs').promises;
+const FS = require('fs').promises;
 
 // Test configuration
 const API_PATH = PATH.join(__dirname, '..', 'taskmanager-api.js');
@@ -52,7 +52,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
     child.on('close', (code) => {
       if (code === 0) {
         try {
-          const _result = stdout.trim() ? JSON.parse(stdout) : {};
+          const RESULT = stdout.trim() ? JSON.parse(stdout) : {};
           resolve(result);
         } catch {
           resolve({ rawOutput: stdout, stderr });
@@ -276,7 +276,7 @@ describe('FEATURES.json System Validation Tests', () => {
       const createdFeatures = [];
       for (const feature of features) {
         // eslint-disable-next-line no-await-in-loop -- Sequential feature creation required for validation
-        const _result = await createFeature(feature);
+        const RESULT = await createFeature(feature);
         expect(result.success).toBe(true);
         expect(result.feature).toBeDefined();
         expect(result.feature.status).toBe('suggested');

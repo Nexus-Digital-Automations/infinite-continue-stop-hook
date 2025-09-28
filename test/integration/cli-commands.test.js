@@ -180,7 +180,7 @@ describe('CLI Commands Integration Tests', () => {
     });
 
     test('should handle unknown commands', async () => {
-      const _result = await execCLIDirect([
+      const RESULT = await execCLIDirect([
         'unknown-command',
         '--project-root',
         testDir,
@@ -198,7 +198,7 @@ describe('CLI Commands Integration Tests', () => {
 
   describe('Core Command Execution', () => {
     test('should execute guide command successfully', async () => {
-      const _result = await execCLIDirect(['guide', '--project-root', testDir]);
+      const RESULT = await execCLIDirect(['guide', '--project-root', testDir]);
 
       expect(result.code).toBe(0);
       expect(result.stdout).not.toBe('');
@@ -213,7 +213,7 @@ describe('CLI Commands Integration Tests', () => {
     });
 
     test('should execute methods command successfully', async () => {
-      const _result = await execCLIDirect([
+      const RESULT = await execCLIDirect([
         'methods',
         '--project-root',
         testDir,
@@ -357,7 +357,7 @@ describe('CLI Commands Integration Tests', () => {
 
       const featureIds = [];
       for (const featureData of features) {
-        const _result = await execCLIDirect([
+        const RESULT = await execCLIDirect([
           'suggest-feature',
           JSON.stringify(featureData),
           '--project-root',
@@ -404,7 +404,7 @@ describe('CLI Commands Integration Tests', () => {
       ];
 
       for (const command of commands) {
-        const _result = await execCLIDirect([
+        const RESULT = await execCLIDirect([
           ...command,
           '--project-root',
           testDir,
@@ -444,7 +444,7 @@ describe('CLI Commands Integration Tests', () => {
           expect(result1.stderr).toContain('Usage');
       }
 
-      // 2. Test operation on non-existent feature
+      // 2. Test _operationon non-existent feature
       const result2 = await execCLIDirect([
         'approve-feature',
         'non-existent-feature-id',
@@ -466,7 +466,7 @@ describe('CLI Commands Integration Tests', () => {
         category: 'enhancement',
       });
 
-      const _result = await execCLIDirect([
+      const RESULT = await execCLIDirect([
         'suggest-feature',
         JSON.stringify(specialFeatureData),
         '--project-root',
@@ -492,7 +492,7 @@ describe('CLI Commands Integration Tests', () => {
     test('should complete basic commands within reasonable time', async () => {
       const startTime = Date.now();
 
-      const _result = await execCLIDirect(['guide', '--project-root', testDir], {
+      const RESULT = await execCLIDirect(['guide', '--project-root', testDir], {
         timeout: 5000,
       }); // 5 second timeout
 
@@ -705,7 +705,7 @@ describe('CLI Commands Integration Tests', () => {
       await fs.unlink(featuresPath);
 
       // 2. Try to perform operations
-      const _result = await execCLIDirect([
+      const RESULT = await execCLIDirect([
         'list-features',
         '--project-root',
         emptyDir,
@@ -723,7 +723,7 @@ describe('CLI Commands Integration Tests', () => {
     });
 
     test('should handle invalid project root paths', async () => {
-      const _result = await execCLIDirect([
+      const RESULT = await execCLIDirect([
         'guide',
         '--project-root',
         '/non/existent/path',

@@ -48,7 +48,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
 
   describe('API Method Integration', () => {
     test('should get validation dependencies successfully', async () => {
-      const _result = await api.getValidationDependencies();
+      const RESULT = await api.getValidationDependencies();
 
       expect(result.success).toBe(true);
       expect(result.dependencies).toBeDefined();
@@ -67,7 +67,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
         resourceRequirements: ['filesystem'],
       };
 
-      const _result = await api.updateValidationDependency(
+      const RESULT = await api.updateValidationDependency(
         'test-validation',
         dependencyConfig,
       );
@@ -80,7 +80,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
     });
 
     test('should generate validation execution plan successfully', async () => {
-      const _result = await api.generateValidationExecutionPlan();
+      const RESULT = await api.generateValidationExecutionPlan();
 
       expect(result.success).toBe(true);
       expect(result.executionOrder).toBeDefined();
@@ -96,7 +96,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
     });
 
     test('should validate dependency graph successfully', async () => {
-      const _result = await api.validateDependencyGraph();
+      const RESULT = await api.validateDependencyGraph();
 
       expect(result.success).toBe(true);
       expect(result.validation).toBeDefined();
@@ -106,7 +106,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
     });
 
     test('should get dependency visualization successfully', async () => {
-      const _result = await api.getDependencyVisualization();
+      const RESULT = await api.getDependencyVisualization();
 
       expect(result.success).toBe(true);
       expect(result.visualization).toBeDefined();
@@ -126,7 +126,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
       const formats = ['mermaid', 'graphviz', 'json', 'ascii'];
 
       for (const format of formats) {
-        const _result = await api.generateInteractiveVisualization(format);
+        const RESULT = await api.generateInteractiveVisualization(format);
 
         expect(result.success).toBe(true);
         expect(result.visualization).toBeDefined();
@@ -138,7 +138,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
     });
 
     test('should generate comprehensive dependency analysis report', async () => {
-      const _result = await api.generateDependencyAnalysisReport();
+      const RESULT = await api.generateDependencyAnalysisReport();
 
       expect(result.success).toBe(true);
       expect(result.report).toBeDefined();
@@ -180,7 +180,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
 
     test('should execute parallel validation with monitoring', async () => {
       // Mock execution for testing (real execution would require actual validation commands)
-      const _result = await api.executeParallelValidation(null, {
+      const RESULT = await api.executeParallelValidation(null, {
         timeout: 5000, // Short timeout for test
       });
 
@@ -221,7 +221,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
 
         child.on('close', (code) => {
           try {
-            const _result = JSON.parse(stdout);
+            const RESULT = JSON.parse(stdout);
             resolve({ code, result, stderr });
           } catch {
             reject(
@@ -333,7 +333,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
         dependencies: [{ criterion: 'non-existent', type: 'invalid-type' }],
       };
 
-      const _result = await api.updateValidationDependency(
+      const RESULT = await api.updateValidationDependency(
         'invalid-test',
         invalidConfig,
       );
@@ -344,7 +344,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
     });
 
     test('should handle empty criteria list', async () => {
-      const _result = await api.generateValidationExecutionPlan([]);
+      const RESULT = await api.generateValidationExecutionPlan([]);
 
       expect(result.success).toBe(true);
       expect(result.parallelPlan.plan).toEqual([]);
@@ -362,7 +362,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
     test('should handle missing dependency file gracefully', async () => {
       // Try to load from non-existent directory
       const tempApi = new TaskManagerAPI();
-      const _result = await tempApi.getValidationDependencies();
+      const RESULT = await tempApi.getValidationDependencies();
 
       // Should still work with default dependencies
       expect(result.success).toBe(true);
@@ -396,7 +396,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
 
       // Test plan generation performance
       const planStartTime = Date.now();
-      const _result = await api.generateValidationExecutionPlan();
+      const RESULT = await api.generateValidationExecutionPlan();
       const planTime = Date.now() - planStartTime;
 
       expect(planTime).toBeLessThan(10000); // Should complete within 10 seconds
@@ -407,7 +407,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
     test('should handle complex visualization generation efficiently', async () => {
       // Generate complex visualization
       const startTime = Date.now();
-      const _result = await api.generateDependencyAnalysisReport();
+      const RESULT = await api.generateDependencyAnalysisReport();
       const duration = Date.now() - startTime;
 
       expect(duration).toBeLessThan(15000); // Should complete within 15 seconds
@@ -548,7 +548,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
 
       // 3. Add all custom validations
       for (const validation of customValidations) {
-        const _result = await api.updateValidationDependency(
+        const RESULT = await api.updateValidationDependency(
           validation.name,
           validation.config,
         );

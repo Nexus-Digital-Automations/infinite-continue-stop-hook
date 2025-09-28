@@ -119,7 +119,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       const initResults = [];
       for (const agentId of agentIds) {
         // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup with ordered agent initialization
-        const _result = await execAPI('initialize', [agentId], {
+        const RESULT = await execAPI('initialize', [agentId], {
           projectRoot: testDir,
         });
         expect(result.success).toBe(true);
@@ -700,7 +700,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       ];
       expect(expectedBuckets).toContain(currentBucket);
 
-      // 3. Perform operation And verify it's tracked in correct bucket
+      // 3. Perform _operationAnd verify it's tracked in correct bucket
       await execAPI('initialize', ['bucket-test-agent'], {
         projectRoot: testDir,
       });
@@ -797,7 +797,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       const initResults = [];
       for (const agentId of agentTeam) {
-        const _result = await execAPI('initialize', [agentId], {
+        const RESULT = await execAPI('initialize', [agentId], {
           projectRoot: testDir,
         });
         expect(result.success).toBe(true);

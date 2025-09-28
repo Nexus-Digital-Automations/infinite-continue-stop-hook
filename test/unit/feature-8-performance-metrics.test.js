@@ -487,7 +487,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
   describe('getValidationPerformanceMetrics', () => {
     test('should return empty metrics when no data available', async () => {
-      const _result = await taskManager.getValidationPerformanceMetrics();
+      const result = await taskManager.getValidationPerformanceMetrics();
 
       expect(result.success).toBe(true);
       expect(result.metrics).toEqual([]);
@@ -522,7 +522,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
       fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const _result = await taskManager.getValidationPerformanceMetrics({
+      const result = await taskManager.getValidationPerformanceMetrics({
         criterion: 'linter-validation',
         limit: 10,
       });
@@ -573,7 +573,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
       fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const _result = await taskManager.getValidationPerformanceMetrics();
+      const result = await taskManager.getValidationPerformanceMetrics();
 
       expect(result.success).toBe(true);
       expect(result.statistics).toBeDefined();
@@ -589,7 +589,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
   describe('identifyPerformanceBottlenecks', () => {
     test('should return empty bottlenecks when no data available', async () => {
-      const _result = await taskManager.identifyPerformanceBottlenecks();
+      const result = await taskManager.identifyPerformanceBottlenecks();
 
       expect(result.success).toBe(true);
       expect(result.bottlenecks).toEqual([]);
@@ -624,7 +624,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
       fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const _result = await taskManager.identifyPerformanceBottlenecks();
+      const result = await taskManager.identifyPerformanceBottlenecks();
 
       expect(result.success).toBe(true);
       expect(result.bottlenecks).toHaveLength(2);
@@ -652,7 +652,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
       fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const _result = await taskManager.identifyPerformanceBottlenecks({
+      const result = await taskManager.identifyPerformanceBottlenecks({
         slowThreshold: 2000,
         criticalThreshold: 4000,
       });
@@ -667,7 +667,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
   describe('getPerformanceBenchmarks', () => {
     test('should return null benchmarks when no data available', async () => {
-      const _result = await taskManager.getPerformanceBenchmarks();
+      const result = await taskManager.getPerformanceBenchmarks();
 
       expect(result.success).toBe(true);
       expect(result.benchmarks).toBe(null);
@@ -702,7 +702,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
       fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const _result = await taskManager.getPerformanceBenchmarks();
+      const result = await taskManager.getPerformanceBenchmarks();
 
       expect(result.success).toBe(true);
       expect(result.benchmarks).toBeDefined();
@@ -749,7 +749,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
       fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const _result = await taskManager.getPerformanceBenchmarks();
+      const result = await taskManager.getPerformanceBenchmarks();
 
       expect(result.success).toBe(true);
       expect(result.recommendations).toHaveLength(2);
@@ -824,7 +824,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       // Write invalid JSON to metrics file
       fs.writeFileSync(mockMetricsFile, 'invalid json content');
 
-      const _result = await taskManager.getValidationPerformanceMetrics();
+      const result = await taskManager.getValidationPerformanceMetrics();
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Unexpected token');
@@ -836,7 +836,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       const mockMetrics = { metrics: [] };
       fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const _result = await taskManager.getValidationPerformanceMetrics();
+      const result = await taskManager.getValidationPerformanceMetrics();
 
       expect(result.success).toBe(true);
       expect(result.metrics).toEqual([]);
@@ -847,7 +847,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       const mockMetrics = { otherData: 'test' };
       fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const _result = await taskManager.getValidationPerformanceMetrics();
+      const result = await taskManager.getValidationPerformanceMetrics();
 
       expect(result.success).toBe(true);
       expect(result.metrics).toEqual([]);

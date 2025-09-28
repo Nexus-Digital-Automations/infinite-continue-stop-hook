@@ -212,7 +212,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
       // Mock validation execution
       const executeCustomValidation = (rule) => {
         try {
-          const _result = execSync(rule.command, {
+          const result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
             encoding: 'utf8',
           });
@@ -242,7 +242,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         }
       };
 
-      const _result = executeCustomValidation(mockRule);
+      const result = executeCustomValidation(mockRule);
 
       expect(result.success).toBe(true);
       expect(result.details).toContain('Success Test');
@@ -262,7 +262,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const executeCustomValidation = (rule) => {
         try {
-          const _result = execSync(rule.command, {
+          const result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
             encoding: 'utf8',
           });
@@ -292,7 +292,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         }
       };
 
-      const _result = executeCustomValidation(mockRule);
+      const result = executeCustomValidation(mockRule);
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Expected output not found');
@@ -312,7 +312,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const executeCustomValidation = (rule) => {
         try {
-          const _result = execSync(rule.command, {
+          const result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
             encoding: 'utf8',
           });
@@ -342,7 +342,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         }
       };
 
-      const _result = executeCustomValidation(mockRule);
+      const result = executeCustomValidation(mockRule);
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Forbidden output detected');
@@ -358,7 +358,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const executeCustomValidation = (rule) => {
         try {
-          const RESULT = execSync(rule.command, {
+          const result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
             encoding: 'utf8',
           });
@@ -375,7 +375,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         }
       };
 
-      const _result = executeCustomValidation(mockRule);
+      const result = executeCustomValidation(mockRule);
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Command Fail Test');
@@ -405,7 +405,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             });
           }
 
-          const _result = execSync(rule.command, {
+          const result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
             encoding: 'utf8',
             env: { ...process.env, ...rule.environment },
@@ -429,7 +429,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         }
       };
 
-      const _result = executeCustomValidationWithEnv(mockRule);
+      const result = executeCustomValidationWithEnv(mockRule);
 
       expect(result.success).toBe(true);
     });
@@ -558,7 +558,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const executeCustomValidation = (rule) => {
         try {
-          const RESULT = execSync(rule.command, {
+          const result = execSync(rule.command, {
             timeout: rule.timeout || 60000,
             encoding: 'utf8',
           });
@@ -575,7 +575,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
         }
       };
 
-      const _result = executeCustomValidation(mockRule);
+      const result = executeCustomValidation(mockRule);
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Timeout Test');

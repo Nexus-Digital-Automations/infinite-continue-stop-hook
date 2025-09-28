@@ -5,7 +5,7 @@
 
 const fs = require('fs').promises;
 const path = require('path');
-const TasksApiAdapter = require('./tasks-api-adapter');
+const TASKS_API_ADAPTER = require('./tasks-api-adapter');
 
 async function testTasksApi() {
   loggers.stopHook.log('🧪 Testing TASKS.json API system...\n');
@@ -31,7 +31,7 @@ async function testTasksApi() {
 
     // Test 3: Test adapter functionality
     loggers.stopHook.log('\nTest 3: Testing adapter functionality...');
-    const adapter = new TasksApiAdapter();
+    const adapter = new TASKS_API_ADAPTER();
     const adaptedData = adapter.adaptTasksToFeaturesFormat(tasksData);
     loggers.stopHook.log(
       `✅ Adapted ${adaptedData.features.length} feature tasks`

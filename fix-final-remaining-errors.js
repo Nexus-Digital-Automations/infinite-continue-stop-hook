@@ -40,9 +40,9 @@ class FinalErrorFixer {
           replacement:
             'throw new Error(`TaskManager API error: ${JSON.stringify(RESULT)}`)',
         },
-        // Fix: const _result = JSON.parse(output); -> const RESULT = JSON.parse(output);
+        // Fix: const RESULT = JSON.parse(output); -> const RESULT = JSON.parse(output);
         {
-          pattern: /const _result = JSON\.parse\(output\);/g,
+          pattern: /const RESULT = JSON\.parse\(output\);/g,
           replacement: 'const RESULT = JSON.parse(output);',
         },
       ];
