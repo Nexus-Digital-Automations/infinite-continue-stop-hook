@@ -5881,7 +5881,7 @@ class AutonomousTaskManagerAPI {
   /**
    * Enhanced start command validation with better error handling
    */
-  async _validateStartCommand(cmd, timeout) {
+  _validateStartCommand(cmd, timeout) {
     const { spawn } = require('child_process');
 
     return new Promise((resolve) => {
@@ -12085,6 +12085,7 @@ async function main() {
       guide: api._getFallbackGuide('autonomous-task-management'),
     };
 
+    // eslint-disable-next-line no-console -- CLI error output for API error responses
     console.error(JSON.stringify(errorResponse, null, 2));
     throw new Error('Autonomous Task Management API execution failed');
   } finally {
