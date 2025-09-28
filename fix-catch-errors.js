@@ -83,7 +83,7 @@ function findJavaScriptFiles() {
         if (stat.isDirectory()) {
           if (
             !['node_modules', '.git', 'coverage', 'dist', 'build'].includes(
-              entry
+              entry,
             )
           ) {
             walkDir(fullPath);
@@ -107,7 +107,7 @@ function getCurrentErrorCount() {
       'npm run lint 2>&1 | grep "\'error\' is not defined" | wc -l',
       {
         encoding: 'utf8',
-      }
+      },
     );
     return parseInt(result.trim());
   } catch {

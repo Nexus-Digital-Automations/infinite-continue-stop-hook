@@ -27,7 +27,7 @@ describe('Security System', () => {
       expect(securityValidator).toBeDefined();
       expect(securityValidator.config.maxStringLength).toBe(10000);
       expect(securityValidator.config.allowedAgentRoles).toContain(
-        'development'
+        'development',
       );
     });
 
@@ -50,7 +50,7 @@ describe('Security System', () => {
       const result = securityValidator.validateInput(
         testData,
         'test_endpoint',
-        schema
+        schema,
       );
       expect(result.valid).toBe(true);
       expect(result.data).toEqual(testData);
@@ -73,7 +73,7 @@ describe('Security System', () => {
       const result = securityValidator.validateInput(
         maliciousData,
         'test_endpoint',
-        schema
+        schema,
       );
       expect(result.valid).toBe(false);
       expect(result.error).toContain('Security threats detected');
@@ -87,7 +87,7 @@ describe('Security System', () => {
       const result = securityValidator.authorizeOperation(
         agentId,
         operation,
-        resource
+        resource,
       );
       expect(result.authorized).toBe(true);
       expect(result.agentRole).toBe('development');
@@ -101,7 +101,7 @@ describe('Security System', () => {
       const result = securityValidator.authorizeOperation(
         invalidAgentId,
         operation,
-        resource
+        resource,
       );
       expect(result.authorized).toBe(false);
       expect(result.error).toContain('Invalid agent ID format');
@@ -245,7 +245,7 @@ describe('Security System', () => {
       const inputValidation = securityValidator.validateInput(
         taskData,
         'create_task',
-        schema
+        schema,
       );
       expect(inputValidation.valid).toBe(true);
 
@@ -253,13 +253,13 @@ describe('Security System', () => {
       const authorization = securityValidator.authorizeOperation(
         agentId,
         'create',
-        { type: 'task' }
+        { type: 'task' },
       );
       expect(authorization.authorized).toBe(true);
 
       // 3. Sanitize data
       const sanitizedData = securityValidator.sanitizeResearchInput(
-        inputValidation.data
+        inputValidation.data,
       );
       expect(sanitizedData).toBeDefined();
 

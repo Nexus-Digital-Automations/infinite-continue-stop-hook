@@ -43,7 +43,7 @@ function fixFile(filePath) {
   const normalizedPath = path.normalize(filePath);
   if (normalizedPath.includes('..') || !normalizedPath.startsWith(rootDir)) {
     loggers.app.warn(
-      `Security: Rejected potentially unsafe file path: ${filePath}`
+      `Security: Rejected potentially unsafe file path: ${filePath}`,
     );
     return false;
   }
@@ -78,7 +78,7 @@ function fixFile(filePath) {
 
 // Fix the main taskmanager-api.js file
 loggers.app.info(
-  '🚀 Starting comprehensive error and template literal fixes...'
+  '🚀 Starting comprehensive error and template literal fixes...',
 );
 const result = fixFile('./taskmanager-api.js');
 

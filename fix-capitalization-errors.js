@@ -69,13 +69,13 @@ function fixFile(filePath) {
   const normalizedPath = path.normalize(filePath);
   if (normalizedPath.includes('..') || !normalizedPath.startsWith(rootDir)) {
     loggers.app.warn(
-      `Security: Rejected potentially unsafe file path: ${filePath}`
+      `Security: Rejected potentially unsafe file path: ${filePath}`,
     );
     return false;
   }
 
   try {
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
+
     // Justification: File path is validated above to ensure it's within project directory
     let content = fs.readFileSync(normalizedPath, 'utf8');
     let modified = false;
@@ -89,7 +89,7 @@ function fixFile(filePath) {
     });
 
     if (modified) {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename
+
       // Justification: File path is validated above to ensure it's within project directory
       fs.writeFileSync(normalizedPath, content, 'utf8');
       loggers.app.info(`✅ Fixed: ${filePath}`);
@@ -109,7 +109,7 @@ function findAndFixFiles() {
     // Get all JS files excluding node_modules and .git
     const output = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./.git/*"',
-      { encoding: 'utf8' }
+      { encoding: 'utf8' },
     );
     const files = output
       .trim()
@@ -126,7 +126,7 @@ function findAndFixFiles() {
     });
 
     loggers.app.info(
-      `📊 Summary: Fixed ${fixedCount} out of ${files.length} files`
+      `📊 Summary: Fixed ${fixedCount} out of ${files.length} files`,
     );
 
     if (fixedCount > 0) {
@@ -136,7 +136,7 @@ function findAndFixFiles() {
         loggers.app.info('✅ Linting passed!');
       } catch {
         loggers.app.warn(
-          '⚠️  Some linting issues remain, but syntax errors should be fixed'
+          '⚠️  Some linting issues remain, but syntax errors should be fixed',
         );
       }
     }

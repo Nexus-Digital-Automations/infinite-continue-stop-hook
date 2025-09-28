@@ -14,7 +14,7 @@ function fixTemplateStrings(filePath) {
   const normalizedPath = path.normalize(filePath);
   if (normalizedPath.includes('..') || !normalizedPath.startsWith(rootDir)) {
     loggers.app.warn(
-      `Security: Rejected potentially unsafe file path: ${filePath}`
+      `Security: Rejected potentially unsafe file path: ${filePath}`,
     );
     return false;
   }
@@ -122,7 +122,7 @@ if (result) {
     loggers.app.info('✅ Tests passed!');
   } catch {
     loggers.app.warn(
-      '⚠️  Tests still have issues, but template literals should be fixed'
+      '⚠️  Tests still have issues, but template literals should be fixed',
     );
   }
 } else {

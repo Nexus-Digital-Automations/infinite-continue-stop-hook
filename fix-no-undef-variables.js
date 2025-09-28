@@ -41,7 +41,7 @@ function fixVariableIssues(filePath) {
     /const result = ([^;]+);[\s\S]*?expect\(result/g,
     (match) => {
       return match.replace('const result =', 'const result =');
-    }
+    },
   );
 
   // Fix: const result = ... followed by expect(result...)
@@ -49,7 +49,7 @@ function fixVariableIssues(filePath) {
     /const result = ([^;]+);[\s\S]*?expect\(result/g,
     (match) => {
       return match.replace('const result =', 'const result =');
-    }
+    },
   );
 
   // Fix: path. should be PATH. when PATH is imported
@@ -62,7 +62,7 @@ function fixVariableIssues(filePath) {
     /catch\s*\(\s*_error\s*\)\s*{[\s\S]*?error\.message/g,
     (match) => {
       return match.replace('(_error)', '(error)');
-    }
+    },
   );
 
   // Fix: catch () { ... error.message }
@@ -70,7 +70,7 @@ function fixVariableIssues(filePath) {
     /catch\s*\(\s*\)\s*{([^}]*error\.message[^}]*)}/g,
     (match, body) => {
       return `catch (error) {${body}}`;
-    }
+    },
   );
 
   // Fix: result variable usage when result is declared
@@ -78,7 +78,7 @@ function fixVariableIssues(filePath) {
     /const result = ([^;]+);([\s\S]*?)resolve\(result\)/g,
     (match, assignment, body) => {
       return `const result = ${assignment};${body}resolve(result)`;
-    }
+    },
   );
 
   // Fix: return { result } when result was declared
@@ -89,9 +89,9 @@ function fixVariableIssues(filePath) {
         /return\s*{\s*([^}]*)\s*}/,
         (returnMatch, returnBody) => {
           return `return { ${returnBody.replace(/result/g, 'result')} }`;
-        }
+        },
       )}`;
-    }
+    },
   );
 
   if (content !== originalContent) {

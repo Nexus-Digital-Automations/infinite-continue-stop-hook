@@ -115,7 +115,7 @@ filesToFix.forEach((file) => {
 });
 
 console.log(
-  `\n📊 Summary: Fixed ${fixedCount} out of ${filesToFix.length} files`
+  `\n📊 Summary: Fixed ${fixedCount} out of ${filesToFix.length} files`,
 );
 
 // Try running tests to verify

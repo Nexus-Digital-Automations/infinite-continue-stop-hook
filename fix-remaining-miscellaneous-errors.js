@@ -203,7 +203,7 @@ class MiscellaneousLintFixer {
         this.fixEscapeCharacters(filePath, processedContent2);
       const { content: finalContent, fixes: fixes4 } = this.fixSyntaxErrors(
         filePath,
-        processedContent3
+        processedContent3,
       );
 
       const totalFixes = fixes1 + fixes2 + fixes3 + fixes4;
@@ -212,7 +212,7 @@ class MiscellaneousLintFixer {
         // eslint-disable-next-line security/detect-non-literal-fs-filename
         fs.writeFileSync(filePath, finalContent);
         loggers.app.info(
-          `✅ Fixed ${totalFixes} issues in: ${path.relative(process.cwd(), filePath)}`
+          `✅ Fixed ${totalFixes} issues in: ${path.relative(process.cwd(), filePath)}`,
         );
       }
 
@@ -269,7 +269,7 @@ class MiscellaneousLintFixer {
 
     const filesWithErrors = this.getFilesWithErrors();
     loggers.app.info(
-      `📁 Processing ${filesWithErrors.length} files with potential errors`
+      `📁 Processing ${filesWithErrors.length} files with potential errors`,
     );
 
     for (const filePath of filesWithErrors) {
@@ -286,11 +286,11 @@ class MiscellaneousLintFixer {
       try {
         execSync('npm run lint > /dev/null 2>&1');
         loggers.app.info(
-          '✅ All miscellaneous linting errors have been fixed!'
+          '✅ All miscellaneous linting errors have been fixed!',
         );
       } catch {
         loggers.app.info(
-          'ℹ️  Some linting errors may remain - running final check...'
+          'ℹ️  Some linting errors may remain - running final check...',
         );
       }
     }

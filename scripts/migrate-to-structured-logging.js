@@ -121,7 +121,7 @@ function analyzeConsoleUsage(filePath) {
 
     // Match console.method patterns
     const consoleMatch = trimmed.match(
-      /console\.(log|info|warn|error|debug|trace)\s*\(/
+      /console\.(log|info|warn|error|debug|trace)\s*\(/,
     );
     if (consoleMatch) {
       usage.consoleLines.push({
@@ -211,7 +211,7 @@ function convertConsoleCall(consoleLine, fileContext) {
     return `${indentation}${loggerInstance}.${consoleMethod.split('.')[1]}(${args});`;
   } catch {
     console.warn(
-      `Could not parse console call in ${fileContext.filePath}:${consoleLine.lineNumber} - keeping original`
+      `Could not parse console call in ${fileContext.filePath}:${consoleLine.lineNumber} - keeping original`,
     );
     return originalLine;
   }
@@ -302,7 +302,7 @@ function main() {
   }
 
   console.log(
-    `🔍 Analysis complete: ${totalConsoleLines} console calls found in ${analysisResults.length} files`
+    `🔍 Analysis complete: ${totalConsoleLines} console calls found in ${analysisResults.length} files`,
   );
 
   // Show summary
@@ -336,7 +336,7 @@ function main() {
 
   if (!process.argv.includes('--force')) {
     console.log(
-      '\n⚠️  This will modify source files. Use --force to proceed or --dry-run to preview.'
+      '\n⚠️  This will modify source files. Use --force to proceed or --dry-run to preview.',
     );
     return;
   }
@@ -354,7 +354,7 @@ function main() {
         migratedFiles++;
         totalChanges += result.changes;
         console.log(
-          `✅ ${path.relative(rootDir, usage.filePath)}: ${result.message}`
+          `✅ ${path.relative(rootDir, usage.filePath)}: ${result.message}`,
         );
       }
     } catch {
@@ -367,7 +367,7 @@ function main() {
   console.log(`   Files modified: ${migratedFiles}`);
   console.log(`   Console calls converted: ${totalChanges}`);
   console.log(
-    `   Remaining files with console calls: ${analysisResults.length - migratedFiles}`
+    `   Remaining files with console calls: ${analysisResults.length - migratedFiles}`,
   );
 
   // Run linter to check for any issues
