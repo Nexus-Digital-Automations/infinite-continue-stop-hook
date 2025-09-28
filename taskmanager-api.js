@@ -47,6 +47,15 @@ const crypto = require('crypto');
 // Import RAG operations for self-learning capabilities
 const RAGOperations = require('./lib/api-modules/rag/ragOperations');
 
+// Import structured logging and secret management
+const { loggers, createContextLogger, timeOperation } = require('./lib/logger');
+const {
+  secretManager,
+  validateRequiredSecrets,
+  getEnvVar,
+  isSecureEnvironment,
+} = require('./lib/secretManager');
+
 // Import validation dependency management system
 const {
   ValidationDependencyManager,
@@ -10195,6 +10204,39 @@ class AutonomousTaskManagerAPI {
 
 // CLI interface
 async function main() {
+  // Initialize structured logging and secret management
+  const logger = createContextLogger({ module: 'taskManagerAPI' });
+
+  try {
+    // Validate required secrets at startup
+    logger.info(
+      {
+        command: args[0],
+        environment: getEnvVar('NODE_ENV', 'development'),
+        isSecure: isSecureEnvironment(),
+      },
+      'Starting TaskManager API'
+    );
+
+    // Initialize secret management
+    await validateRequiredSecrets();
+    logger.info('Secret validation completed successfully');
+  } catch (error) {
+    logger.error(
+      { error: error.message },
+      'Failed to initialize secret management'
+    );
+    console.error('❌ Secret Management Error:', error.message);
+
+    if (isSecureEnvironment()) {
+      process.exit(1);
+    } else {
+      console.warn(
+        '⚠️  Warning: Running in development mode with missing secrets'
+      );
+    }
+  }
+
   // Use the already parsed args (with --project-root removed)
   const command = args[0];
   const api = new AutonomousTaskManagerAPI();
