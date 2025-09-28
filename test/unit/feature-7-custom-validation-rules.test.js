@@ -221,7 +221,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             const { _exitCode, outputContains, outputNotContains } =
               rule.successCriteria;
 
-            if (outputContains && !result.includes(outputContains)) {
+            if (outputContains && !RESULT.includes(outputContains)) {
               return { success: false, error: 'Expected output not found' };
             }
 
@@ -271,7 +271,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             const { _exitCode, outputContains, outputNotContains } =
               rule.successCriteria;
 
-            if (outputContains && !result.includes(outputContains)) {
+            if (outputContains && !RESULT.includes(outputContains)) {
               return { success: false, error: 'Expected output not found' };
             }
 
@@ -321,7 +321,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             const { _exitCode, outputContains, outputNotContains } =
               rule.successCriteria;
 
-            if (outputContains && !result.includes(outputContains)) {
+            if (outputContains && !RESULT.includes(outputContains)) {
               return { success: false, error: 'Expected output not found' };
             }
 
