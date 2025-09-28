@@ -769,8 +769,11 @@ describe('Initialization Statistics', () => {
           const nextDateStr = `2025-01-${nextDay.toString().padStart(2, '0')}`;
           timeUtils.mockCurrentTimeISO(`${nextDateStr}T12:00:00.000Z`);
 
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for extensive daily history testing
           const features = await api._loadFeatures();
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for extensive daily history testing
           await api._resetDailyBucketsIfNeeded(features);
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for extensive daily history testing
           await api._saveFeatures(features);
         }
 

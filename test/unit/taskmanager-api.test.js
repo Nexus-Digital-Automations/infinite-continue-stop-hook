@@ -593,6 +593,7 @@ describe('FeatureManagerAPI', () => {
 
         suggestedFeatureIds = [];
         for (const feature of features) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup
           const result = await api.suggestFeature(feature);
           suggestedFeatureIds.push(result.feature.id);
         }
