@@ -26,7 +26,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
 
   beforeAll(async () => {
     // Create temporary directory for test project
-    tempDir = await FS.mkdtemp(PATH.join(os.tmpdir(), 'taskmanager-test-'));
+    tempDir = await FS.mkdtemp(path.join(os.tmpdir(), 'taskmanager-test-'));
     originalCwd = process.cwd();
     process.chdir(tempDir);
 
