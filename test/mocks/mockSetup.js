@@ -133,7 +133,7 @@ class MockManager {
         default:
           result = { success: false, error: `Unknown command: ${apiCommand}` };
       }
-    } catch {
+    } catch (error) {
       result = { success: false, error: error.message };
     }
 
@@ -142,7 +142,7 @@ class MockManager {
       stdout: {
         on: jest.fn((event, callback) => {
           if (event === 'data') {
-            setTimeout(() => callback(JSON.stringify(result)), 10);
+            setTimeout(() => callback(JSON.stringify(RESULT)), 10);
           }
         }),
       },
@@ -257,7 +257,7 @@ class MockManager {
           };
         });
       }
-    } catch {
+    } catch (error) {
       // Fetch not available in this Node.js version, skip mocking
       loggers.stopHook.log('Fetch not available for mocking:', error.message);
     }
@@ -345,7 +345,7 @@ class MockManager {
       if (this.originalModules.has('global.fetch')) {
         global[fetchProp] = this.originalModules.get('global.fetch');
       }
-    } catch {
+    } catch (error) {
       // Fetch not available, skip restoration
       loggers.stopHook.log(
         'Fetch not available for restoration:',
@@ -446,10 +446,10 @@ function featureData(_$2) {
   return null;
 }
 
-function expectAgentInitialized(agentId) {
+function expectAgentInitialized(_AGENT_ID) {
   const mockManager = getMockManager();
   if (mockManager) {
-    const agent = mockManager.taskManagerAPI.agents.get(agentId);
+    const agent = mockManager.taskManagerAPI.agents.get(_AGENT_ID);
     expect(agent).toBeDefined();
     expect(agent.status).toBe('active');
     return agent;

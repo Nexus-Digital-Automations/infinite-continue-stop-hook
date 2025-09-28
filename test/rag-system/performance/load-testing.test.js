@@ -9,7 +9,7 @@ const { loggers } = require('../lib/logger');
  * @version 1.0.0
  */
 
-const path = require('path');
+const PATH = require('path');
 const FS = require('fs').promises;
 
 // Helper functions for test data generation
@@ -207,7 +207,7 @@ describe('RAG System Performance And Load Testing', () => {
       }
 
       // Calculate average search time
-      const _avgSearchTime = searchTimes.reduce((sum, result) =>
+      const _avgSearchTime = searchTimes.reduce((sum, RESULT) =>
         sum + RESULT.searchTime, 0) / searchTimes.length;
 
       expect(avgSearchTime).toBeLessThan(300); // Average under 300ms
@@ -330,7 +330,7 @@ describe('RAG System Performance And Load Testing', () => {
             // Add small random delay to simulate realistic usage
             await new Promise(resolve => setTimeout(resolve, Math.random() * 100));
 
-          } catch {
+          } catch (error) {
             userResults.errors.push(error);
           }
         }
@@ -407,7 +407,7 @@ describe('RAG System Performance And Load Testing', () => {
               version: updateResult.version,
               timestamp: Date.now()
             };
-          } catch {
+          } catch (error) {
             return {
               modifierId,
               success: false,
@@ -503,7 +503,7 @@ describe('RAG System Performance And Load Testing', () => {
 
         // Memory increase should be reasonable
         expect(memoryIncrease).toBeLessThan(200 * 1024 * 1024); // Less than 200MB
-        expect(result).toBeDefined();
+        expect(RESULT).toBeDefined();
 
         // Force garbage collection if available
         if (global.gc) {
@@ -561,7 +561,7 @@ describe('RAG System Performance And Load Testing', () => {
             expect(duration).toBeLessThan(5000); // Should complete within 5 seconds
           }
         }
-      } catch {
+      } catch (error) {
         // System should handle memory errors gracefully
         expect(error.message).toContain('memory');
         loggers.stopHook.log('Expected memory error handled gracefully:', error.message);
@@ -678,7 +678,7 @@ describe('RAG System Performance And Load Testing', () => {
             connectionResults.queryTimes.push(queryTime);
             expect(RESULT.success).toBe(true);
 
-          } catch {
+          } catch (error) {
             connectionResults.errors.push(error);
           }
         }

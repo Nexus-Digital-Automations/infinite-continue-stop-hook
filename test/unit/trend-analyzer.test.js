@@ -1,5 +1,5 @@
 const FS = require('fs');
-const path = require('path');
+const PATH = require('path');
 const TrendAnalyzer = require('../../lib/trend-analyzer');
 
 describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
@@ -118,8 +118,8 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
     test('should return insufficient data message when not enough metrics', async () => {
       const RESULT = await trendAnalyzer.analyzeTrends();
 
-      expect(RESULT.success).toBe(true);
-      expect(RESULT.analysis.summary).toContain('Insufficient historical data');
+      expect(result.success).toBe(true);
+      expect(result.analysis.summary).toContain('Insufficient historical data');
     });
 
     test('should analyze comprehensive trends with sufficient data', async () => {
@@ -130,17 +130,17 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
         granularity: 'daily',
       });
 
-      expect(RESULT.success).toBe(true);
-      expect(RESULT.analysis).toBeDefined();
-      expect(RESULT.analysis.metadata).toBeDefined();
-      expect(RESULT.analysis.metadata.totalMetrics).toBeGreaterThan(0);
-      expect(RESULT.analysis.overall).toBeDefined();
-      expect(RESULT.analysis.byCriterion).toBeDefined();
-      expect(RESULT.analysis.decomposition).toBeDefined();
-      expect(RESULT.analysis.patterns).toBeDefined();
-      expect(RESULT.analysis.health).toBeDefined();
-      expect(RESULT.analysis.volatility).toBeDefined();
-      expect(RESULT.analysis.comparative).toBeDefined();
+      expect(result.success).toBe(true);
+      expect(result.analysis).toBeDefined();
+      expect(result.analysis.metadata).toBeDefined();
+      expect(result.analysis.metadata.totalMetrics).toBeGreaterThan(0);
+      expect(result.analysis.overall).toBeDefined();
+      expect(result.analysis.byCriterion).toBeDefined();
+      expect(result.analysis.decomposition).toBeDefined();
+      expect(result.analysis.patterns).toBeDefined();
+      expect(result.analysis.health).toBeDefined();
+      expect(result.analysis.volatility).toBeDefined();
+      expect(result.analysis.comparative).toBeDefined();
     });
 
     test('should include forecasts when requested', async () => {
@@ -151,8 +151,8 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
         includeForecast: true,
       });
 
-      expect(RESULT.success).toBe(true);
-      expect(RESULT.analysis.forecasts).toBeDefined();
+      expect(result.success).toBe(true);
+      expect(result.analysis.forecasts).toBeDefined();
     });
 
     test('should include baseline comparisons when requested', async () => {
@@ -163,8 +163,8 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
         includeBaselines: true,
       });
 
-      expect(RESULT.success).toBe(true);
-      expect(RESULT.analysis.baselines).toBeDefined();
+      expect(result.success).toBe(true);
+      expect(result.analysis.baselines).toBeDefined();
     });
 
     test('should handle different granularities', async () => {
@@ -207,16 +207,16 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
         },
       );
 
-      expect(RESULT.success).toBe(true);
-      expect(RESULT.analysis.criterion).toBe('build-validation');
-      expect(RESULT.analysis.metadata).toBeDefined();
-      expect(RESULT.analysis.timeSeries).toBeDefined();
-      expect(RESULT.analysis.trend).toBeDefined();
-      expect(RESULT.analysis.statistics).toBeDefined();
-      expect(RESULT.analysis.seasonality).toBeDefined();
-      expect(RESULT.analysis.changePoints).toBeDefined();
-      expect(RESULT.analysis.regressions).toBeDefined();
-      expect(RESULT.analysis.anomalies).toBeDefined();
+      expect(result.success).toBe(true);
+      expect(result.analysis.criterion).toBe('build-validation');
+      expect(result.analysis.metadata).toBeDefined();
+      expect(result.analysis.timeSeries).toBeDefined();
+      expect(result.analysis.trend).toBeDefined();
+      expect(result.analysis.statistics).toBeDefined();
+      expect(result.analysis.seasonality).toBeDefined();
+      expect(result.analysis.changePoints).toBeDefined();
+      expect(result.analysis.regressions).toBeDefined();
+      expect(result.analysis.anomalies).toBeDefined();
     });
 
     test('should calculate trend characteristics correctly', async () => {
@@ -245,16 +245,16 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
         granularity: 'daily',
       });
 
-      expect(RESULT.success).toBe(true);
-      expect(RESULT.healthTrends).toBeDefined();
-      expect(RESULT.healthTrends.data).toBeDefined();
-      expect(Array.isArray(RESULT.healthTrends.data)).toBe(true);
-      expect(RESULT.healthTrends.analysis).toBeDefined();
-      expect(RESULT.healthTrends.summary).toBeDefined();
-      expect(RESULT.healthTrends.summary.currentHealth).toBeGreaterThanOrEqual(
+      expect(result.success).toBe(true);
+      expect(result.healthTrends).toBeDefined();
+      expect(result.healthTrends.data).toBeDefined();
+      expect(Array.isArray(result.healthTrends.data)).toBe(true);
+      expect(result.healthTrends.analysis).toBeDefined();
+      expect(result.healthTrends.summary).toBeDefined();
+      expect(result.healthTrends.summary.currentHealth).toBeGreaterThanOrEqual(
         0,
       );
-      expect(RESULT.healthTrends.summary.currentHealth).toBeLessThanOrEqual(
+      expect(result.healthTrends.summary.currentHealth).toBeLessThanOrEqual(
         100,
       );
     });
@@ -264,12 +264,12 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
 
       const RESULT = await trendAnalyzer.generateHealthScoreTrends();
 
-      expect(RESULT.success).toBe(true);
-      expect(RESULT.healthTrends.summary.healthTrend).toMatch(
+      expect(result.success).toBe(true);
+      expect(result.healthTrends.summary.healthTrend).toMatch(
         /increasing|decreasing|stable/,
       );
-      expect(typeof RESULT.healthTrends.summary.volatility).toBe('number');
-      expect(RESULT.healthTrends.summary.recommendation).toBeDefined();
+      expect(typeof result.healthTrends.summary.volatility).toBe('number');
+      expect(result.healthTrends.summary.recommendation).toBeDefined();
     });
   });
 
@@ -294,8 +294,8 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
         periodB,
       );
 
-      expect(RESULT.success).toBe(true);
-      expect(RESULT.comparison.summary).toContain('Insufficient data');
+      expect(result.success).toBe(true);
+      expect(result.comparison.summary).toContain('Insufficient data');
     });
 
     test('should compare two performance periods', async () => {
@@ -318,16 +318,16 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
         periodB,
       );
 
-      expect(RESULT.success).toBe(true);
-      expect(RESULT.comparison).toBeDefined();
-      expect(RESULT.comparison.periods).toBeDefined();
-      expect(RESULT.comparison.periods.periodA.label).toBe('Two Weeks Ago');
-      expect(RESULT.comparison.periods.periodB.label).toBe('Last Two Weeks');
-      expect(RESULT.comparison.performance).toBeDefined();
-      expect(RESULT.comparison.significance).toBeDefined();
-      expect(RESULT.comparison.distributions).toBeDefined();
-      expect(RESULT.comparison.byCriterion).toBeDefined();
-      expect(RESULT.comparison.summary).toBeDefined();
+      expect(result.success).toBe(true);
+      expect(result.comparison).toBeDefined();
+      expect(result.comparison.periods).toBeDefined();
+      expect(result.comparison.periods.periodA.label).toBe('Two Weeks Ago');
+      expect(result.comparison.periods.periodB.label).toBe('Last Two Weeks');
+      expect(result.comparison.performance).toBeDefined();
+      expect(result.comparison.significance).toBeDefined();
+      expect(result.comparison.distributions).toBeDefined();
+      expect(result.comparison.byCriterion).toBeDefined();
+      expect(result.comparison.summary).toBeDefined();
     });
   });
 
@@ -544,8 +544,8 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
     test('should handle missing metrics files gracefully', async () => {
       const RESULT = await trendAnalyzer.analyzeTrends();
 
-      expect(RESULT.success).toBe(true);
-      expect(RESULT.analysis.summary).toContain('Insufficient historical data');
+      expect(result.success).toBe(true);
+      expect(result.analysis.summary).toContain('Insufficient historical data');
     });
 
     test('should handle corrupted metrics files', async () => {
@@ -554,7 +554,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
       const RESULT = await trendAnalyzer.analyzeTrends();
 
       // Should still succeed by gracefully handling the error
-      expect(RESULT.success).toBe(true);
+      expect(result.success).toBe(true);
     });
 
     test('should handle empty metrics arrays', async () => {
@@ -566,8 +566,8 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
 
       const RESULT = await trendAnalyzer.analyzeTrends();
 
-      expect(RESULT.success).toBe(true);
-      expect(RESULT.analysis.summary).toContain('Insufficient historical data');
+      expect(result.success).toBe(true);
+      expect(result.analysis.summary).toContain('Insufficient historical data');
     });
 
     test('should handle invalid time ranges', () => {
@@ -582,7 +582,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
       createMockMetricsData(10);
 
       const RESULT = await trendAnalyzer.analyzeTrends();
-      expect(RESULT.success).toBe(true);
+      expect(result.success).toBe(true);
 
       // Check if trends file was created
       const trendsFileExists = await trendAnalyzer._fileExists(mockTrendsFile);

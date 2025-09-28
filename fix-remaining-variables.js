@@ -1,5 +1,5 @@
 const fs = require('fs');
-const path = require('path');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 // Get all JS files excluding node_modules, .git, and utility scripts
@@ -13,14 +13,14 @@ function getAllJsFiles() {
       .trim()
       .split('\n')
       .filter((f) => f && f.endsWith('.js'));
-  } catch (_error) {
+  } catch (error) {
     console.error('Failed to get JS files:', error.message);
     return [];
   }
 }
 
 // Fix common variable naming issues
-function fixFile(filePath) {
+function fixFile(_filePath) {
   try {
     let content = fs.readFileSync(filePath, 'utf8');
     let modified = false;
@@ -50,7 +50,7 @@ function fixFile(filePath) {
     const patterns = [
       { from: /const FS = /g, to: 'const FS = ' },
       { from: /const CRYPTO = /g, to: 'const CRYPTO = ' },
-      { from: /\berror\) => \{/g, to: '_error) => {' },
+      { from: /\berror\) => \{/g, to: 'error) => {' },
       {
         from: /catch \(error\) \{([^}]*?)(?!error\.)/g,
         to: 'catch (_error) {$1',
@@ -71,7 +71,7 @@ function fixFile(filePath) {
     }
 
     return false;
-  } catch (_error) {
+  } catch (error) {
     console.error(`Error fixing ${filePath}:`, error.message);
     return false;
   }
@@ -97,7 +97,7 @@ console.log('🔧 Running ESLint autofix...');
 try {
   execSync('npm run lint -- --fix', { stdio: 'inherit' });
   console.log('✅ Autofix completed');
-} catch (error) {
+} catch (_error) {
   console.log('⚠️ Autofix completed with some remaining issues');
 }
 

@@ -1,10 +1,10 @@
-/* eslint-disable no-console */
+/* eslint-disable no-console, security/detect-non-literal-fs-filename */
 /**
  * Fix undefined variables in audit-system-validation.test.js
  */
 
 const fs = require('fs');
-const path = require('path');
+const PATH = require('path');
 
 function fixAuditTestVariables() {
   const filePath =

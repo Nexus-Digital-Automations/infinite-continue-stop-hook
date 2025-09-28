@@ -40,7 +40,7 @@ describe('Complete System Workflows E2E', () => {
         // Test the complete feature lifecycle from suggestion to implementation
 
         // Step 1: Suggest a feature
-        const featureData = FeatureTestHelpers.createFeatureData({
+        const FEATURE_DATA = FeatureTestHelpers.createFeatureData({
           title: 'E2E Test Feature - Complete Workflow',
           description:
             'Test feature for validating complete workflow from suggestion to implementation',
@@ -143,7 +143,7 @@ describe('Complete System Workflows E2E', () => {
             category: 'new-feature',
           });
 
-        const featureId = E2EAssertions.extractFeatureId(result);
+        const featureId = E2EAssertions.extractFeatureId(RESULT);
 
         // Step 2: Reject the feature
         const rejectionResult = await FeatureTestHelpers.rejectFeature(
@@ -205,7 +205,7 @@ describe('Complete System Workflows E2E', () => {
         }
 
         const featureResults = await Promise.all(featurePromises);
-        const featureIds = featureResults.map((result) =>
+        const featureIds = featureResults.map((RESULT) =>
           E2EAssertions.extractFeatureId(result.result),
         );
 

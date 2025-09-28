@@ -46,11 +46,11 @@ describe('Multi-Agent Scenarios E2E', () => {
         // Create concurrent feature suggestions
         const agentPromises = [];
         for (let i = 0; i < agentCount; i++) {
-          const agentId = `concurrent-agent-${i}`;
+          const AGENT_ID = `concurrent-agent-${i}`;
           const agentOperations = [];
 
           for (let j = 0; j < featuresPerAgent; j++) {
-            const featureData = FeatureTestHelpers.createFeatureData({
+            const FEATURE_DATA = FeatureTestHelpers.createFeatureData({
               title: `Agent ${i} Feature ${j} - Concurrent Test`,
               description: `Feature ${j} suggested by agent ${i} for concurrent testing`,
               business_value: `Validates concurrent operations for agent ${i}, feature ${j}`,
@@ -138,7 +138,7 @@ describe('Multi-Agent Scenarios E2E', () => {
         }
 
         const featureResults = await Promise.all(featurePromises);
-        const featureIds = featureResults.map((result) => {
+        const featureIds = featureResults.map((RESULT) => {
           const match = result.result.stdout.match(/Feature ID: (\w+)/);
           return match[1];
         });
@@ -229,7 +229,7 @@ describe('Multi-Agent Scenarios E2E', () => {
           }
 
           // Each result should be an array of successful operations
-          expect(Array.isArray(result)).toBe(true);
+          expect(Array.isArray(RESULT)).toBe(true);
           expect(result.length).toBe(3);
 
           result.forEach((operation, opIndex) => {
@@ -343,7 +343,7 @@ describe('Multi-Agent Scenarios E2E', () => {
         ]);
 
         // Both rejection attempts should fail
-        rejectionAttempts.forEach((result) => {
+        rejectionAttempts.forEach((RESULT) => {
           if (result.status === 'fulfilled') {
             E2EAssertions.assertCommandFailure(
               result.value,
@@ -456,7 +456,7 @@ describe('Multi-Agent Scenarios E2E', () => {
 
         // Step 3: Validate That stop hook integration works across multiple streams
         [result1, result2, result3].forEach((result, _index) => {
-          expect(Array.isArray(result)).toBe(true);
+          expect(Array.isArray(RESULT)).toBe(true);
           expect(result.length).toBeGreaterThan(0);
 
           // At least some iterations should complete

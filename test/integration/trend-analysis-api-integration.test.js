@@ -1,5 +1,5 @@
 const FS = require('fs');
-const path = require('path');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 // Integration tests for Historical Trend Analysis API endpoints
@@ -147,7 +147,7 @@ describe('Trend Analysis API Integration Tests', () => {
       if (error.stdout) {
         try {
           return JSON.parse(error.stdout.trim());
-        } catch {
+        } catch (error) {
           return { success: false, error: error.message, stdout: error.stdout };
         }
       }

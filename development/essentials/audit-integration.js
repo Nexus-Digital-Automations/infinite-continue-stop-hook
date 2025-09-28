@@ -17,7 +17,7 @@
  */
 
 const FS = require('fs').promises;
-const path = require('path');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 /**
@@ -31,14 +31,14 @@ class SecurityUtils {
    * @returns {string} Safe resolved path
    * @throws {Error} If path is invalid or outside base directory
    */
-  static validatePath(basePath, filePath) {
+  static validatePath(basePath, _filePath) {
     if (!filePath || typeof filePath !== 'string') {
       throw new Error('Invalid file path provided');
     }
 
     // Resolve paths to prevent directory traversal
     const resolvedBase = path.resolve(basePath);
-    const resolvedPath = path.resolve(basePath, path.basename(filePath));
+    const resolvedPath = path.resolve(basePath, path.basename(_filePath));
 
     // Ensure the resolved path is within the base directory
     if (
@@ -61,7 +61,7 @@ class SecurityUtils {
    * @returns {Promise<string>} File contents
    */
   static safeReadFile(basePath, filePath, encoding = 'utf-8') {
-    const safePath = this.validatePath(basePath, filePath);
+    const safePath = this.validatePath(basePath, _filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     return FS.readFile(safePath, encoding);
   }
@@ -74,7 +74,7 @@ class SecurityUtils {
    * @returns {Promise<void>}
    */
   static async safeWriteFile(basePath, filePath, content) {
-    const safePath = this.validatePath(basePath, filePath);
+    const safePath = this.validatePath(basePath, _filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     await FS.mkdir(path.dirname(safePath), { recursive: true });
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
@@ -89,7 +89,7 @@ class SecurityUtils {
    * @returns {Promise<void>}
    */
   static async safeAppendFile(basePath, filePath, content) {
-    const safePath = this.validatePath(basePath, filePath);
+    const safePath = this.validatePath(basePath, _filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     await FS.mkdir(path.dirname(safePath), { recursive: true });
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
@@ -420,7 +420,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       );
       await FS.access(packageJsonPath);
       hasPackageJson = true;
-    } catch {
+    } catch (error) {
 
       // Package.json not found or access denied
     }
@@ -477,12 +477,12 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
         encoding: 'utf-8',
         cwd: this.projectRoot,
       });
-      const result = JSON.parse(output);
+      const RESULT = JSON.parse(output);
 
       if (result.success) {
         return result;
       } else {
-        throw new Error(`TaskManager API error: ${JSON.stringify(result)}`);
+        throw new Error(`TaskManager API error: ${JSON.stringify(RESULT)}`);
       }
     } catch (error) {
       this.logger.error(`❌ Failed to create audit task: ${error.message}`);
@@ -530,7 +530,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
    * @param {string} agentId - Agent ID to analyze
    * @returns {string|null} Detected role or null
    */
-  detectAgentRole(agentId) {
+  detectAgentRole(_AGENT_ID) {
     const lowerAgentId = agentId.toLowerCase();
 
     for (const [role, patterns] of Object.entries(this.agentRolePatterns)) {
@@ -623,7 +623,7 @@ if (require.main === module) {
 
       integration
         .createAuditTask(originalTaskId, implementerAgent, { title: taskTitle })
-        .then((result) => {
+        .then((RESULT) => {
           integration.logger.log(`\n🎉 Audit task created successfully!`);
           integration.logger.log(`Original Task: ${originalTaskId}`);
           integration.logger.log(`Audit Task: ${result.taskId}`);

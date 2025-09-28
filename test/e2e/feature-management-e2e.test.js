@@ -170,7 +170,7 @@ describe('Feature Management System E2E', () => {
               const response = JSON.parse(result.value.stdout);
               expect(response.success).toBe(false);
               expect(response.error).toContain('missing');
-            } catch {
+            } catch (error) {
               // If we can't parse JSON, the command itself may have failed which is also valid
               expect(result.value.success).toBe(false);
             }
@@ -251,7 +251,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch {
+          } catch (error) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );
@@ -363,7 +363,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch {
+          } catch (error) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );
@@ -445,7 +445,7 @@ describe('Feature Management System E2E', () => {
           try {
             const response = JSON.parse(result.stdout);
             return response.feature?.id;
-          } catch {
+          } catch (error) {
             throw new Error(
               `Failed to extract feature ID from: ${result.stdout}`,
             );
@@ -550,14 +550,14 @@ describe('Feature Management System E2E', () => {
         );
 
         const featureResults = await Promise.all(featurePromises);
-        const featureIds = featureResults.map((result) => {
+        const featureIds = featureResults.map((RESULT) => {
           if (result.featureId) {
             return result.featureId;
           }
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch {
+          } catch (error) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );
@@ -696,14 +696,14 @@ describe('Feature Management System E2E', () => {
           ),
         );
 
-        const searchIds = searchResults.map((result) => {
+        const searchIds = searchResults.map((RESULT) => {
           if (result.featureId) {
             return result.featureId;
           }
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch {
+          } catch (error) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );
@@ -807,14 +807,14 @@ describe('Feature Management System E2E', () => {
           ),
         );
 
-        const exportIds = exportResults.map((result) => {
+        const exportIds = exportResults.map((RESULT) => {
           if (result.featureId) {
             return result.featureId;
           }
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature?.id;
-          } catch {
+          } catch (error) {
             throw new Error(
               `Failed to extract feature ID from: ${result.result.stdout}`,
             );

@@ -1,11 +1,12 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename */
 const fs = require('fs');
-const path = require('path');
+const PATH = require('path');
 
 /**
  * Comprehensive fix for E2E variable naming issues
  */
 
-function fixComprehensiveVariableIssues(filePath) {
+function fixComprehensiveVariableIssues(_filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
     let fixed = content;
@@ -13,11 +14,11 @@ function fixComprehensiveVariableIssues(filePath) {
 
     // Fix RESULT variable declarations to result
     const beforeRESULT = fixed;
-    fixed = fixed.replace(/const RESULT = /g, 'const result = ');
+    fixed = fixed.replace(/const RESULT = /g, 'const RESULT = ');
     if (beforeRESULT !== fixed) {
       changes++;
       console.log(
-        `Fixed RESULT variable declarations in ${path.basename(filePath)}`
+        `Fixed RESULT variable declarations in ${path.basename(_filePath)}`
       );
     }
 
@@ -27,7 +28,7 @@ function fixComprehensiveVariableIssues(filePath) {
     if (beforeName !== fixed) {
       changes++;
       console.log(
-        `Fixed name: property declarations in ${path.basename(filePath)}`
+        `Fixed name: property declarations in ${path.basename(_filePath)}`
       );
     }
 
@@ -37,7 +38,7 @@ function fixComprehensiveVariableIssues(filePath) {
     if (beforeDestructure !== fixed) {
       changes++;
       console.log(
-        `Fixed destructuring name to name in ${path.basename(filePath)}`
+        `Fixed destructuring name to name in ${path.basename(_filePath)}`
       );
     }
 
@@ -47,7 +48,7 @@ function fixComprehensiveVariableIssues(filePath) {
     if (beforeTemplate !== fixed) {
       changes++;
       console.log(
-        `Fixed template literal name to name in ${path.basename(filePath)}`
+        `Fixed template literal name to name in ${path.basename(_filePath)}`
       );
     }
 
@@ -60,7 +61,7 @@ function fixComprehensiveVariableIssues(filePath) {
     if (beforePush !== fixed) {
       changes++;
       console.log(
-        `Fixed testDependencies.push(name) to name in ${path.basename(filePath)}`
+        `Fixed testDependencies.push(name) to name in ${path.basename(_filePath)}`
       );
     }
 

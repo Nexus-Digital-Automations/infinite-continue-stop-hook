@@ -7,7 +7,7 @@
 
 const { execSync } = require('child_process');
 const FS = require('fs').promises;
-const path = require('path');
+const PATH = require('path');
 
 describe('Dependency Management API Integration Tests', () => {
   const PROJECT_ROOT = process.cwd();
@@ -27,11 +27,11 @@ describe('Dependency Management API Integration Tests', () => {
       });
 
       return JSON.parse(output.trim());
-    } catch {
+    } catch (error) {
       if (error.stdout) {
         try {
           return JSON.parse(error.stdout.trim());
-        } catch {
+        } catch (error) {
           throw new Error(
             `Command failed: ${error.message}, Output: ${error.stdout || error.stderr}`,
           );
@@ -46,8 +46,8 @@ describe('Dependency Management API Integration Tests', () => {
       const RESULT = executeTaskManagerCommand('get-dependency-graph');
 
       expect(RESULT.success).toBe(true);
-      expect(result).toHaveProperty('dependencyGraph');
-      expect(result).toHaveProperty('visualization');
+      expect(RESULT).toHaveProperty('dependencyGraph');
+      expect(RESULT).toHaveProperty('visualization');
 
       // Verify all standard criteria are present
       const dependencies = RESULT.dependencyGraph;
@@ -83,7 +83,7 @@ describe('Dependency Management API Integration Tests', () => {
       const RESULT = executeTaskManagerCommand('get-dependency-visualization');
 
       expect(RESULT.success).toBe(true);
-      expect(result).toHaveProperty('visualization');
+      expect(RESULT).toHaveProperty('visualization');
 
       const viz = RESULT.visualization;
       expect(viz).toHaveProperty('nodes');
@@ -107,8 +107,8 @@ describe('Dependency Management API Integration Tests', () => {
       );
 
       expect(RESULT.success).toBe(true);
-      expect(result).toHaveProperty('executionOrder');
-      expect(result).toHaveProperty('totalCriteria');
+      expect(RESULT).toHaveProperty('executionOrder');
+      expect(RESULT).toHaveProperty('totalCriteria');
 
       const order = RESULT.executionOrder;
       expect(order).toBeInstanceOf(Array);
@@ -164,13 +164,13 @@ describe('Dependency Management API Integration Tests', () => {
       );
 
       expect(RESULT.success).toBe(true);
-      expect(result).toHaveProperty('plan');
-      expect(result).toHaveProperty('totalWaves');
-      expect(result).toHaveProperty('estimatedTotalDuration');
-      expect(result).toHaveProperty('sequentialDuration');
-      expect(result).toHaveProperty('parallelizationGain');
-      expect(result).toHaveProperty('efficiency');
-      expect(result).toHaveProperty('recommendations');
+      expect(RESULT).toHaveProperty('plan');
+      expect(RESULT).toHaveProperty('totalWaves');
+      expect(RESULT).toHaveProperty('estimatedTotalDuration');
+      expect(RESULT).toHaveProperty('sequentialDuration');
+      expect(RESULT).toHaveProperty('parallelizationGain');
+      expect(RESULT).toHaveProperty('efficiency');
+      expect(RESULT).toHaveProperty('recommendations');
 
       // Verify parallel plan structure
       expect(RESULT.plan).toBeInstanceOf(Array);
@@ -218,8 +218,8 @@ describe('Dependency Management API Integration Tests', () => {
       );
 
       expect(RESULT.success).toBe(true);
-      expect(result).toHaveProperty('plan');
-      expect(result).toHaveProperty('adaptiveOptimizations');
+      expect(RESULT).toHaveProperty('plan');
+      expect(RESULT).toHaveProperty('adaptiveOptimizations');
 
       const optimizations = RESULT.adaptiveOptimizations;
       expect(optimizations).toHaveProperty('systemAware');
@@ -275,7 +275,7 @@ describe('Dependency Management API Integration Tests', () => {
       );
 
       expect(RESULT.success).toBe(true);
-      expect(result).toHaveProperty('dependency');
+      expect(RESULT).toHaveProperty('dependency');
 
       const dependency = RESULT.dependency;
       expect(dependency.criterion).toBe('build-validation');
@@ -344,7 +344,7 @@ describe('Dependency Management API Integration Tests', () => {
       const RESULT = executeTaskManagerCommand('save-dependency-config');
 
       expect(RESULT.success).toBe(true);
-      expect(result).toHaveProperty('configPath');
+      expect(RESULT).toHaveProperty('configPath');
       expect(RESULT.configPath).toContain('.validation-dependencies.json');
 
       // Verify file exists And contains valid data
@@ -432,7 +432,7 @@ describe('Dependency Management API Integration Tests', () => {
       const RESULT = executeTaskManagerCommand('get-execution-analytics');
 
       expect(RESULT.success).toBe(true);
-      expect(result).toHaveProperty('analytics');
+      expect(RESULT).toHaveProperty('analytics');
 
       // for fresh system, might have no data
       if (RESULT.analytics.noData) {

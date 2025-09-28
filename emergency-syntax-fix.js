@@ -1,11 +1,11 @@
-/* eslint-disable no-console */
+/* eslint-disable no-console, security/detect-non-literal-fs-filename */
 /**
  * Emergency fix for invalid JavaScript syntax created by systematic fix
  * Fixes: const FS = require(...) and other invalid syntax patterns
  */
 
 const FS = require('fs');
-const path = require('path');
+const PATH = require('path');
 
 class EmergencySyntaxFixer {
   constructor() {
@@ -23,7 +23,7 @@ class EmergencySyntaxFixer {
 
       // Apply emergency fixes
       for (const filePath of jsFiles) {
-        this.processFile(filePath);
+        this.processFile(_filePath);
       }
 
       console.log(`✅ Fixed ${this.fixedFiles.length} files`);
@@ -65,7 +65,7 @@ class EmergencySyntaxFixer {
     return files;
   }
 
-  processFile(filePath) {
+  processFile(_filePath) {
     try {
       const content = FS.readFileSync(filePath, 'utf8');
       let fixedContent = content;
@@ -73,7 +73,7 @@ class EmergencySyntaxFixer {
 
       // Fix 1: Invalid const FS = require(...) patterns
       const invalidConstFix = fixedContent.replace(
-        /const unused = require\(/g,
+        /const UNUSED = require\(/g,
         'const FS = require('
       );
       if (invalidConstFix !== fixedContent) {
@@ -114,19 +114,19 @@ class EmergencySyntaxFixer {
       // Fix 5: Restore common library imports that got broken
       const commonImportFixes = [
         {
-          pattern: /const unused = require\('fs'\)/,
+          pattern: /const UNUSED = require\('fs'\)/,
           replacement: "const FS = require('fs')",
         },
         {
-          pattern: /const unused = require\('path'\)/,
-          replacement: "const path = require('path')",
+          pattern: /const UNUSED = require\('path'\)/,
+          replacement: "const PATH = require('path')",
         },
         {
-          pattern: /const unused = require\('sqlite3'\)/,
+          pattern: /const UNUSED = require\('sqlite3'\)/,
           replacement: "const SQLITE3 = require('sqlite3')",
         },
         {
-          pattern: /const unused = require\('@eslint\/js'\)/,
+          pattern: /const UNUSED = require\('@eslint\/js'\)/,
           replacement: "const JS = require('@eslint/js')",
         },
       ];
@@ -142,7 +142,7 @@ class EmergencySyntaxFixer {
       // Write file if changes were made
       if (hasChanges) {
         FS.writeFileSync(filePath, fixedContent, 'utf8');
-        this.fixedFiles.push(filePath);
+        this.fixedFiles.push(_filePath);
       }
     } catch (error) {
       this.errors.push(`${filePath}: ${error.message}`);

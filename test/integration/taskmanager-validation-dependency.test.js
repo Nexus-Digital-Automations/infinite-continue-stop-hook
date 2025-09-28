@@ -15,7 +15,7 @@
 
 const { TaskManagerAPI } = require('../../taskmanager-api');
 const FS = require('fs').promises;
-const path = require('path');
+const PATH = require('path');
 const os = require('os');
 const { spawn } = require('child_process');
 
@@ -223,7 +223,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
           try {
             const RESULT = JSON.parse(stdout);
             resolve({ code, result: RESULT, stderr });
-          } catch {
+          } catch (error) {
             reject(
               new Error(`Failed to parse JSON: ${stdout}\nStderr: ${stderr}`),
             );

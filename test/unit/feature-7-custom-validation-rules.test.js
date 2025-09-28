@@ -1,5 +1,5 @@
 const FS = require('fs');
-const path = require('path');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 // Test suite for Feature 7: Custom Project Validation Rules
@@ -186,7 +186,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             );
           }
           return [];
-        } catch {
+        } catch (error) {
           return [];
         }
       };
@@ -599,7 +599,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             }
           }
           return [];
-        } catch {
+        } catch (error) {
           return [];
         }
       };

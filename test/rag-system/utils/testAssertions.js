@@ -44,11 +44,11 @@ class TestAssertions {
    * Assert valid search result structure And content
    * @param {Object} result - Search result to validate
    */
-  assertValidSearchResult(result) {
+  assertValidSearchResult(RESULT) {
     // Basic structure validation
-    expect(result).toBeInstanceOf(Object);
-    expect(result).toHaveProperty('vectorId');
-    expect(result).toHaveProperty('similarity');
+    expect(RESULT).toBeInstanceOf(Object);
+    expect(RESULT).toHaveProperty('vectorId');
+    expect(RESULT).toHaveProperty('similarity');
 
     // Similarity validation
     expect(typeof RESULT.similarity).toBe('number');
@@ -569,7 +569,7 @@ class TestAssertions {
         throw new Error(
           `Function should have thrown an error for input: ${JSON.stringify(invalidInput)}`,
         );
-      } catch {
+      } catch (error) {
         // This is expected - function should handle invalid input gracefully
         expect(error).toBeInstanceOf(Error);
         expect(error.message).toBeDefined();

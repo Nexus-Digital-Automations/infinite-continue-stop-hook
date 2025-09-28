@@ -307,7 +307,7 @@ class CodeQualityAnalyzer {
 
     for (const filePath of this.sourceFiles) {
       try {
-        const fileComplexity = this.analyzeFileComplexity(filePath);
+        const fileComplexity = this.analyzeFileComplexity(_filePath);
 
         // Aggregate cyclomatic complexity
         complexityData.cyclomatic.files[filePath] = fileComplexity.cyclomatic;
@@ -370,7 +370,7 @@ class CodeQualityAnalyzer {
   /**
    * Analyze complexity for a single file
    */
-  analyzeFileComplexity(filePath) {
+  analyzeFileComplexity(_filePath) {
     try {
       const content = FS.readFileSync(filePath, 'utf8');
 

@@ -13,7 +13,7 @@
  */
 
 const FS = require('fs');
-const path = require('path');
+const PATH = require('path');
 
 class FinalResultFixer {
   constructor() {
@@ -45,7 +45,7 @@ class FinalResultFixer {
     const filePath =
       '/Users/jeremyparker/infinite-continue-stop-hook/scripts/test-performance.js';
 
-    if (!FS.existsSync(filePath)) {
+    if (!FS.existsSync(_filePath)) {
       console.warn('⚠️ test-performance.js not found');
       return;
     }
@@ -101,14 +101,14 @@ class FinalResultFixer {
     ];
 
     for (const filePath of testFiles) {
-      if (FS.existsSync(filePath)) {
-        this.fixTestFile(filePath);
+      if (FS.existsSync(_filePath)) {
+        this.fixTestFile(_filePath);
       }
     }
   }
 
-  fixTestFile(filePath) {
-    console.log(`🔧 Fixing ${PATH.relative(process.cwd(), filePath)}...`);
+  fixTestFile(_filePath) {
+    console.log(`🔧 Fixing ${PATH.relative(process.cwd(), _filePath)}...`);
 
     let content = FS.readFileSync(filePath, 'utf8');
     let changes = 0;
@@ -125,7 +125,7 @@ class FinalResultFixer {
             following.includes('return result')
           ) {
             changes++;
-            return `const result = ${assignment};\n${following.replace(/\bresult\b/g, 'result')}`;
+            return `const RESULT = ${assignment};\n${following.replace(/\bresult\b/g, 'result')}`;
           }
           return match;
         },
@@ -157,7 +157,7 @@ class FinalResultFixer {
     // Simple pattern-based fixes
     const simpleFixes = [
       // Fix unused RESULT variables - convert to result
-      { from: /const RESULT = ([^;]+);\s*$/gm, to: 'const result = $1;' },
+      { from: /const RESULT = ([^;]+);\s*$/gm, to: 'const RESULT = $1;' },
       // Fix inconsistent variable usage in same scope
       {
         from: /RESULT\.(\w+)/g,
@@ -198,11 +198,11 @@ class FinalResultFixer {
       this.fixedFiles.push({ path: filePath, changes });
       this.totalChanges += changes;
       console.log(
-        `✅ Fixed ${changes} issues in ${PATH.relative(process.cwd(), filePath)}`
+        `✅ Fixed ${changes} issues in ${PATH.relative(process.cwd(), _filePath)}`
       );
     } else {
       console.log(
-        `✅ No issues found in ${PATH.relative(process.cwd(), filePath)}`
+        `✅ No issues found in ${PATH.relative(process.cwd(), _filePath)}`
       );
     }
   }

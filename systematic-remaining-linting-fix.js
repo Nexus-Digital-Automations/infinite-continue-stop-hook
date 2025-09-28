@@ -27,7 +27,7 @@ class SystematicLintingFixer {
 
       // Apply systematic fixes
       for (const filePath of jsFiles) {
-        this.processFile(filePath);
+        this.processFile(_filePath);
       }
 
       console.log(`✅ Processed ${this.fixedFiles.length} files`);
@@ -76,7 +76,7 @@ class SystematicLintingFixer {
   /**
    * Process a single file with systematic fixes
    */
-  processFile(filePath) {
+  processFile(_filePath) {
     try {
       const content = FS.readFileSync(filePath, 'utf8');
       let fixedContent = content;
@@ -120,7 +120,7 @@ class SystematicLintingFixer {
       // Write file if changes were made
       if (hasChanges) {
         FS.writeFileSync(filePath, fixedContent, 'utf8');
-        this.fixedFiles.push(filePath);
+        this.fixedFiles.push(_filePath);
       }
     } catch (error) {
       this.errors.push(`${filePath}: ${error.message}`);
@@ -165,7 +165,7 @@ class SystematicLintingFixer {
       // Catch blocks
       {
         pattern: /catch\s*\(\s*([a-zA-Z_$][\w$]*)\s*\)\s*{/,
-        replacement: 'catch (_error) {',
+        replacement: 'catch (error) {',
       },
       // Variable declarations that aren't used
       {
@@ -201,10 +201,10 @@ class SystematicLintingFixer {
 
     // Fix common undefined variable patterns
     const fixes = [
-      // _error not defined in catch blocks - define it
+      // error not defined in catch blocks - define it
       {
-        pattern: /catch\s*\(\s*\)\s*{([^}]*?)(_error|error)([^}]*?)}/g,
-        replacement: 'catch (_error) {$1_error$3}',
+        pattern: /catch\s*\(\s*\)\s*{([^}]*?)(error|error)([^}]*?)}/g,
+        replacement: 'catch (error) {$1_error$3}',
       },
 
       // result not defined when RESULT exists
@@ -250,7 +250,7 @@ class SystematicLintingFixer {
     // Fix catch blocks that reference error without defining it
     fixedContent = fixedContent.replace(
       /catch\s*\(\s*\)\s*{([^}]*?)(\berror\b)([^}]*?)}/g,
-      'catch (_error) {$1_error$3}',
+      'catch (error) {$1_error$3}',
     );
 
     return { content: fixedContent };

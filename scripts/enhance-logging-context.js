@@ -57,14 +57,14 @@ class LoggingContextEnhancer {
     };
   }
 
-  enhanceFile(filePath) {
+  enhanceFile(_filePath) {
     try {
       const content = FS.readFileSync(filePath, 'utf8');
       let newContent = content;
       let enhanced = false;
 
       // Determine context based on file type
-      const contextInfo = this.getFileContext(filePath);
+      const contextInfo = this.getFileContext(_filePath);
 
       // Enhance simple logger calls (no context)
       newContent = newContent.replace(
@@ -73,7 +73,7 @@ class LoggingContextEnhancer {
           this.enhancedCalls++;
           enhanced = true;
           return `loggers.${loggerType}.${level}('${message}', ${JSON.stringify(contextInfo)});`;
-        },
+        }
       );
 
       // Enhance existing context logger calls to include standard fields
@@ -93,13 +93,13 @@ class LoggingContextEnhancer {
             // If we can't parse the context, leave it as is
             return match;
           }
-        },
+        }
       );
 
       if (enhanced) {
         FS.writeFileSync(filePath, newContent, 'utf8');
         loggers.app.info('Enhanced logging context in file', {
-          filePath: path.relative(process.cwd(), filePath),
+          filePath: path.relative(process.cwd(), _filePath),
           enhancedCalls: this.enhancedCalls,
         });
         this.processedFiles++;
@@ -112,8 +112,8 @@ class LoggingContextEnhancer {
     }
   }
 
-  getFileContext(filePath) {
-    const fileName = path.basename(filePath);
+  getFileContext(_filePath) {
+    const fileName = path.basename(_filePath);
 
     // Determine context based on file purpose
     if (fileName.includes('agent')) {
@@ -221,7 +221,7 @@ module.exports = {
     FS.writeFileSync(
       path.join(process.cwd(), 'lib/logging-utilities.js'),
       utilityCode,
-      'utf8',
+      'utf8'
     );
 
     loggers.app.info('Created enhanced logging utilities', {
@@ -236,10 +236,10 @@ if (require.main === module) {
   enhancer
     .enhance()
     .then(() => enhancer.createLoggingUtilities())
-    .then((result) => {
+    .then((RESULT) => {
       if (result && RESULT.enhancedCalls === 0) {
         loggers.app.warn(
-          'No logging calls were enhanced - may need manual review',
+          'No logging calls were enhanced - may need manual review'
         );
       }
     })

@@ -13,7 +13,7 @@
 
 const { spawn } = require('child_process');
 const FS = require('fs');
-const path = require('path');
+const PATH = require('path');
 const { loggers } = require('../../lib/logger');
 
 class APIPerformanceBenchmark {
@@ -51,7 +51,7 @@ class APIPerformanceBenchmark {
 
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential execution required for accurate performance measurement
-        const result = await this.runCommand(command, args);
+        const RESULT = await this.runCommand(command, args);
         const endTime = process.hrtime.bigint();
         const endMemory = process.memoryUsage();
 
@@ -64,7 +64,7 @@ class APIPerformanceBenchmark {
           memoryDelta,
           success: result.success,
           errorDetails: result.error || null,
-          outputSize: JSON.stringify(result).length,
+          outputSize: JSON.stringify(RESULT).length,
         });
 
         // Small delay between iterations
@@ -110,7 +110,7 @@ class APIPerformanceBenchmark {
         try {
           // Extract JSON from stdout (handle mixed output)
           const jsonMatch = stdout.match(/\{[\s\S]*\}/);
-          const result = jsonMatch
+          const RESULT = jsonMatch
             ? JSON.parse(jsonMatch[0])
             : { success: false, error: 'No JSON output' };
           resolve({
@@ -468,7 +468,7 @@ class APIPerformanceBenchmark {
 
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential load testing requires controlled timing
-        const result = await this.runCommand(endpoint);
+        const RESULT = await this.runCommand(endpoint);
         const responseTime =
           Number(process.hrtime.bigint() - startTime) / 1000000;
 

@@ -9,7 +9,7 @@
  */
 
 const FS = require('fs');
-const path = require('path');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 // Files to fix based on grep results
@@ -64,7 +64,7 @@ class ResultVariableFixer {
 
       // Process each file
       for (const filePath of allFiles) {
-        this.processFile(filePath);
+        this.processFile(_filePath);
       }
 
       this.generateReport();
@@ -124,9 +124,9 @@ class ResultVariableFixer {
   /**
    * Process individual file to fix RESULT issues
    */
-  processFile(filePath) {
+  processFile(_filePath) {
     try {
-      console.log(`🔧 Processing: ${path.relative(process.cwd(), filePath)}`);
+      console.log(`🔧 Processing: ${path.relative(process.cwd(), _filePath)}`);
 
       let content = FS.readFileSync(filePath, 'utf8');
       let modified = false;
@@ -141,7 +141,7 @@ class ResultVariableFixer {
       ];
 
       for (const fix of fixes) {
-        const result = fix(content, filePath);
+        const RESULT = fix(content, _filePath);
         if (result.modified) {
           content = result.content;
           modified = true;
@@ -156,7 +156,7 @@ class ResultVariableFixer {
           changes,
         });
         console.log(
-          `✅ Fixed ${changes} issues in ${path.relative(process.cwd(), filePath)}`,
+          `✅ Fixed ${changes} issues in ${path.relative(process.cwd(), _filePath)}`,
         );
       }
 
@@ -173,7 +173,7 @@ class ResultVariableFixer {
   /**
    * Fix RESULT variable names to lowercase result
    */
-  fixResultVariableNames(content, filePath) {
+  fixResultVariableNames(content, _filePath) {
     let modified = false;
     let changes = 0;
 
@@ -183,25 +183,25 @@ class ResultVariableFixer {
       {
         pattern:
           /\.reduce\(\s*\(\s*sum,\s*result\s*\)\s*=>\s*sum\s*\+\s*RESULT\.duration/g,
-        replacement: '.reduce((sum, result) => sum + result.duration',
+        replacement: '.reduce((sum, RESULT) => sum + result.duration',
         description: 'reduce function parameter',
       },
       // In filter functions where RESULT should be result
       {
         pattern: /\.filter\(\s*\(\s*result\s*\)\s*=>\s*RESULT\.success\)/g,
-        replacement: '.filter((result) => result.success)',
+        replacement: '.filter((RESULT) => result.success)',
         description: 'filter function parameter',
       },
       // Generic RESULT.property patterns in callbacks
       {
         pattern: /\(\s*result\s*\)\s*=>\s*RESULT\./g,
-        replacement: '(result) => result.',
+        replacement: '(RESULT) => result.',
         description: 'callback parameter consistency',
       },
       // In assignments where RESULT should be result for consistency
       {
         pattern: /const\s+result\s*=\s*[^;]+;\s*([^;]*RESULT\.)/g,
-        replacement: (match, p1) => match.replace(/RESULT\./g, 'result.'),
+        replacement: (match, _p1) => match.replace(/RESULT\./g, 'result.'),
         description: 'result variable consistency in scope',
       },
     ];
@@ -232,7 +232,7 @@ class ResultVariableFixer {
   /**
    * Fix variable declaration issues
    */
-  fixVariableDeclarations(content, filePath) {
+  fixVariableDeclarations(content, _filePath) {
     let modified = false;
     let changes = 0;
 
@@ -304,7 +304,7 @@ class ResultVariableFixer {
   /**
    * Fix scope issues
    */
-  fixScopeIssues(content, filePath) {
+  fixScopeIssues(content, _filePath) {
     let modified = false;
     let changes = 0;
 
@@ -332,7 +332,7 @@ class ResultVariableFixer {
           // Fix inconsistent result usage in same scope as RESULT declaration
           if (
             followingLine.includes('result.') &&
-            !followingLine.includes('(result)') &&
+            !followingLine.includes('(RESULT)') &&
             !followingLine.includes('=> result')
           ) {
             lines[j] = followingLine.replace(/result\./g, 'RESULT.');
@@ -356,12 +356,12 @@ class ResultVariableFixer {
   /**
    * Fix specific patterns identified in the codebase
    */
-  fixSpecificPatterns(content, filePath) {
+  fixSpecificPatterns(content, _filePath) {
     let modified = false;
     let changes = 0;
 
     // File-specific fixes
-    const fileName = path.basename(filePath);
+    const fileName = path.basename(_filePath);
 
     if (fileName === 'jest-json-reporter.js') {
       // Fix the specific issue where result should be RESULT in return statement
@@ -382,7 +382,7 @@ class ResultVariableFixer {
       const beforeContent = content;
       content = content.replace(
         /\.reduce\(\s*\(\s*sum,\s*result\s*\)\s*=>\s*sum\s*\+\s*RESULT\.duration/g,
-        '.reduce((sum, result) => sum + result.duration',
+        '.reduce((sum, RESULT) => sum + result.duration',
       );
       if (content !== beforeContent) {
         modified = true;

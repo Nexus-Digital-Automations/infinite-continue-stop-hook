@@ -14,7 +14,7 @@
  */
 
 const FS = require('fs').promises;
-const path = require('path');
+const PATH = require('path');
 const {
   execAPI,
   createTestEnvironment,
@@ -158,7 +158,7 @@ describe('File Operations Integration Tests', () => {
       const results = await execAPIConcurrently(concurrentCommands);
 
       // 2. Verify all operations succeeded
-      expect(results.every((result) => result.success)).toBe(true);
+      expect(results.every((RESULT) => result.success)).toBe(true);
 
       // 3. Verify file integrity after concurrent operations
       const featuresData = await readFeaturesFile(testDir);
@@ -172,7 +172,7 @@ describe('File Operations Integration Tests', () => {
       expect(uniqueIds.size).toBe(5);
 
       // 5. Perform concurrent approvals
-      const approvalCommands = results.slice(0, 3).map((result) => ({
+      const approvalCommands = results.slice(0, 3).map((RESULT) => ({
         command: 'approve-feature',
         args: [
           RESULT.feature.id,
@@ -182,7 +182,7 @@ describe('File Operations Integration Tests', () => {
       }));
 
       const approvalResults = await execAPIConcurrently(approvalCommands);
-      expect(approvalResults.every((result) => result.success)).toBe(true);
+      expect(approvalResults.every((RESULT) => result.success)).toBe(true);
 
       // 6. Verify final file integrity
       const finalFeaturesData = await readFeaturesFile(testDir);
@@ -196,7 +196,7 @@ describe('File Operations Integration Tests', () => {
       const initialStats = await FS.stat(featuresPath);
 
       // 2. Perform operations
-      const featureData = generateTestFeature({
+      const FEATURE_DATA = generateTestFeature({
         title: 'Permission Test Feature',
         category: 'enhancement',
       });
@@ -234,7 +234,7 @@ describe('File Operations Integration Tests', () => {
       await FS.unlink(featuresPath);
 
       // 2. Try to perform operations - should recreate file
-      const featureData = generateTestFeature({
+      const FEATURE_DATA = generateTestFeature({
         title: 'Recovery Test Feature',
         category: 'enhancement',
       });
@@ -261,7 +261,7 @@ describe('File Operations Integration Tests', () => {
       const _backupPath = await createFeaturesBackup(testDir);
 
       // 2. Add some valid data first
-      const featureData = generateTestFeature({
+      const FEATURE_DATA = generateTestFeature({
         title: 'Pre-corruption Feature',
         category: 'enhancement',
       });
@@ -330,7 +330,7 @@ describe('File Operations Integration Tests', () => {
         }));
 
         const batchResults = await execAPIConcurrently(batchCommands);
-        expect(batchResults.every((result) => result.success)).toBe(true);
+        expect(batchResults.every((RESULT) => result.success)).toBe(true);
       }
 
       // 3. Verify file integrity with large dataset
@@ -355,7 +355,7 @@ describe('File Operations Integration Tests', () => {
       const operations = [];
 
       for (let i = 0; i < 20; i++) {
-        const featureData = generateTestFeature({
+        const FEATURE_DATA = generateTestFeature({
           title: `Rapid Feature ${i + 1}`,
           category: i % 2 === 0 ? 'enhancement' : 'bug-fix',
         });
@@ -371,7 +371,7 @@ describe('File Operations Integration Tests', () => {
       const results = await Promise.all(operations);
 
       // 3. Verify all operations succeeded
-      expect(results.every((result) => result.success)).toBe(true);
+      expect(results.every((RESULT) => result.success)).toBe(true);
 
       // 4. Verify final file integrity
       const featuresData = await readFeaturesFile(testDir);
@@ -405,7 +405,7 @@ describe('File Operations Integration Tests', () => {
       }));
 
       const initialResults = await execAPIConcurrently(initialCommands);
-      expect(initialResults.every((result) => result.success)).toBe(true);
+      expect(initialResults.every((RESULT) => result.success)).toBe(true);
 
       // 2. Mix read And write operations
       const mixedOperations = [
@@ -447,7 +447,7 @@ describe('File Operations Integration Tests', () => {
       const mixedResults = await Promise.all(mixedOperations);
 
       // 4. Verify all operations succeeded
-      expect(mixedResults.every((result) => result.success)).toBe(true);
+      expect(mixedResults.every((RESULT) => result.success)).toBe(true);
 
       // 5. Verify final file integrity
       const featuresData = await readFeaturesFile(testDir);
@@ -473,7 +473,7 @@ describe('File Operations Integration Tests', () => {
       await writeFeaturesFile(testDir, minimalData);
 
       // 2. Perform operations That should add missing metadata
-      const featureData = generateTestFeature({
+      const FEATURE_DATA = generateTestFeature({
         title: 'Migration Test Feature',
         category: 'enhancement',
       });
@@ -513,7 +513,7 @@ describe('File Operations Integration Tests', () => {
       await writeFeaturesFile(testDir, dataWithoutConfig);
 
       // 2. Perform operations That should add missing config
-      const featureData = generateTestFeature({
+      const FEATURE_DATA = generateTestFeature({
         title: 'Config Migration Test Feature',
         category: 'enhancement',
       });
@@ -616,7 +616,7 @@ describe('File Operations Integration Tests', () => {
       await writeFeaturesFile(testDir, invalidData);
 
       // 2. Try to perform operations
-      const featureData = generateTestFeature({
+      const FEATURE_DATA = generateTestFeature({
         title: 'Validation Test Feature',
         category: 'enhancement',
       });
@@ -649,7 +649,7 @@ describe('File Operations Integration Tests', () => {
         const _featuresPath = path.join(testDir, 'FEATURES.json');
 
         // Create initial content
-        const featureData = generateTestFeature({
+        const FEATURE_DATA = generateTestFeature({
           title: 'Permission Test Feature',
           category: 'enhancement',
         });
@@ -681,7 +681,7 @@ describe('File Operations Integration Tests', () => {
         if (!secondResult.success) {
           expect(secondResult.error).toBeDefined();
         }
-      } catch {
+      } catch (error) {
         // If permission operations fail, skip this test
         console.warn(
           'Permission test skipped due to system limitations:',

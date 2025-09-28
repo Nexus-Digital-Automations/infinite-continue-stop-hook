@@ -134,7 +134,7 @@ class TestDataGenerator {
    */
   generateLessons(count, options = {}) {
     const lessons = [];
-    const category = options.category || this.getRandomCategory();
+    const CATEGORY = options.category || this.getRandomCategory();
 
     for (let i = 0; i < count; i++) {
       const tech = this.getRandomTechnology();
@@ -347,7 +347,7 @@ ${this.generatePrevention(errorType, tech)}
 
     for (let i = 0; i < count; i++) {
       const tech = this.getRandomTechnology();
-      const category = this.getRandomCategory();
+      const CATEGORY = this.getRandomCategory();
       const feature = this.getRandomFeature(tech);
 
       contexts.push({

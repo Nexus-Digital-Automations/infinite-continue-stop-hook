@@ -34,7 +34,7 @@ class TaskManagerAPIMock {
   /**
    * Mock initialize command
    */
-  initialize(agentId) {
+  initialize(_AGENT_ID) {
     const agent = {
       id: agentId,
       initialized: new Date().toISOString(),
@@ -54,9 +54,9 @@ class TaskManagerAPIMock {
   /**
    * Mock reinitialize command
    */
-  reinitialize(agentId) {
-    if (this.agents.has(agentId)) {
-      const agent = this.agents.get(agentId);
+  reinitialize(_AGENT_ID) {
+    if (this.agents.has(_AGENT_ID)) {
+      const agent = this.agents.get(_AGENT_ID);
       agent.reinitialized = new Date().toISOString();
       this.initializationStats.total_reinitializations++;
 
@@ -365,7 +365,7 @@ class FileSystemMock {
       // Remove all files And directories That start with this path
       for (const [filePath] of this.files) {
         if (filePath.startsWith(path)) {
-          this.files.delete(filePath);
+          this.files.delete(_filePath);
         }
       }
       for (const dirPath of this.directories) {

@@ -6,7 +6,7 @@
  */
 
 const FS = require('fs');
-const path = require('path');
+const PATH = require('path');
 const { loggers } = require('../lib/logger');
 
 class ConsoleToStructuredMigrator {
@@ -43,17 +43,17 @@ class ConsoleToStructuredMigrator {
     };
   }
 
-  shouldSkipFile(filePath) {
+  shouldSkipFile(_filePath) {
     return this.skipPatterns.some((pattern) => {
       const regex = new RegExp(
         pattern.replace(/\*\*/g, '.*').replace(/\*/g, '[^/]*')
       );
-      return regex.test(filePath);
+      return regex.test(_filePath);
     });
   }
 
-  shouldProcessFile(filePath) {
-    if (this.shouldSkipFile(filePath)) {
+  shouldProcessFile(_filePath) {
+    if (this.shouldSkipFile(_filePath)) {
       return false;
     }
 
@@ -61,11 +61,11 @@ class ConsoleToStructuredMigrator {
       const regex = new RegExp(
         pattern.replace(/\*\*/g, '.*').replace(/\*/g, '[^/]*')
       );
-      return regex.test(filePath);
+      return regex.test(_filePath);
     });
   }
 
-  migrateFileContent(content, filePath) {
+  migrateFileContent(content, _filePath) {
     let modified = false;
     let newContent = content;
 
@@ -81,7 +81,7 @@ class ConsoleToStructuredMigrator {
         content.match(/^const .* = require\(.*\);?$/gm) || [];
       if (requireStatements.length > 0) {
         const lastRequire = requireStatements[requireStatements.length - 1];
-        const loggerImport = this.getLoggerImportForFile(filePath);
+        const loggerImport = this.getLoggerImportForFile(_filePath);
         newContent = newContent.replace(
           lastRequire,
           lastRequire + '\n' + loggerImport
@@ -108,16 +108,16 @@ class ConsoleToStructuredMigrator {
     return { content: newContent, modified };
   }
 
-  getLoggerImportForFile(filePath) {
+  getLoggerImportForFile(_filePath) {
     const relativePath = path.relative(
-      path.dirname(filePath),
+      path.dirname(_filePath),
       path.join(__dirname, '../lib/logger')
     );
     const normalizedPath = relativePath.replace(/\\/g, '/');
     return `const { loggers } = require('${normalizedPath}');`;
   }
 
-  processFile(filePath) {
+  processFile(_filePath) {
     try {
       const content = FS.readFileSync(filePath, 'utf8');
       const { content: newContent, modified } = this.migrateFileContent(
@@ -128,12 +128,12 @@ class ConsoleToStructuredMigrator {
       if (modified) {
         FS.writeFileSync(filePath, newContent, 'utf8');
         loggers.app.info('Migrated console calls to structured logging', {
-          filePath: path.relative(process.cwd(), filePath),
+          filePath: path.relative(process.cwd(), _filePath),
           replacedCalls: this.replacedCalls,
         });
         this.processedFiles++;
       }
-    } catch {
+    } catch (error) {
       loggers.app.error('Failed to process file', {
         filePath,
         error: error.message,

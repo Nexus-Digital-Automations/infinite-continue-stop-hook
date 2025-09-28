@@ -12,7 +12,7 @@ class ValidationTestLogger {
   }
 }
 
-const _unused = ['error', 'feature', 'subtask', 'test'];
+const _UNUSED = ['error', 'feature', 'subtask', 'test'];
 const VALID_CATEGORIES = ['error', 'feature', 'subtask', 'test', 'audit'];
 const VALID_COMMANDS = [
   'guide',
@@ -194,7 +194,7 @@ class TaskManagerValidator {
           const validation = this.validateTaskCreation(parsed);
           this.errors.push(...validation.errors);
           this.warnings.push(...validation.warnings);
-        } catch {
+        } catch (error) {
           this.errors.push('Invalid JSON format in create command');
         }
       }
@@ -282,8 +282,8 @@ if (require.main === module) {
 
   testCases.forEach((testCase) => {
     ValidationTestLogger.log(`Testing: ${testCase.name}`);
-    const result = validator.validateTaskCreation(testCase.data);
-    ValidationTestLogger.log(validator.formatResult(result));
+    const RESULT = validator.validateTaskCreation(testCase.data);
+    ValidationTestLogger.log(validator.formatResult(RESULT));
   });
 
   // Command validation tests
@@ -299,8 +299,8 @@ if (require.main === module) {
 
   commandTests.forEach((test) => {
     ValidationTestLogger.log(`Testing command: ${test.name}`);
-    const result = validator.validateCommand(test.command, test.args);
-    ValidationTestLogger.log(validator.formatResult(result));
+    const RESULT = validator.validateCommand(test.command, test.args);
+    ValidationTestLogger.log(validator.formatResult(RESULT));
   });
 }
 

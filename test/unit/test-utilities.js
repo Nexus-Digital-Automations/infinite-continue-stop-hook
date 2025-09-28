@@ -7,7 +7,7 @@
 
 // File system utilities (imported but used via MockFileSystem)
 // const FS = require('fs').promises;
-// const path = require('path');
+// const PATH = require('path');
 const crypto = require('crypto');
 
 /**
@@ -23,16 +23,16 @@ class MockFileSystem {
   }
 
   // Mock FS.access
-  async access(filePath) {
+  async access(_filePath) {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
-    if (this.accessErrors.has(filePath)) {
-      const error = new Error(this.accessErrors.get(filePath));
+    if (this.accessErrors.has(_filePath)) {
+      const error = new Error(this.accessErrors.get(_filePath));
       error.code = 'ENOENT';
       throw error;
     }
-    if (!this.files.has(filePath)) {
+    if (!this.files.has(_filePath)) {
       const error = new Error('File not found');
       error.code = 'ENOENT';
       throw error;
@@ -44,18 +44,18 @@ class MockFileSystem {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
-    if (this.readErrors.has(filePath)) {
-      const error = new Error(this.readErrors.get(filePath));
+    if (this.readErrors.has(_filePath)) {
+      const error = new Error(this.readErrors.get(_filePath));
       error.code =
-        this.readErrors.get(filePath) === 'File not found' ? 'ENOENT' : 'EIO';
+        this.readErrors.get(_filePath) === 'File not found' ? 'ENOENT' : 'EIO';
       throw error;
     }
-    if (!this.files.has(filePath)) {
+    if (!this.files.has(_filePath)) {
       const error = new Error('File not found');
       error.code = 'ENOENT';
       throw error;
     }
-    return this.files.get(filePath);
+    return this.files.get(_filePath);
   }
 
   // Mock FS.writeFile
@@ -63,8 +63,8 @@ class MockFileSystem {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
-    if (this.writeErrors.has(filePath)) {
-      throw new Error(this.writeErrors.get(filePath));
+    if (this.writeErrors.has(_filePath)) {
+      throw new Error(this.writeErrors.get(_filePath));
     }
     this.files.set(filePath, data);
   }
@@ -74,8 +74,8 @@ class MockFileSystem {
     this.files.set(filePath, content);
   }
 
-  deleteFile(filePath) {
-    this.files.delete(filePath);
+  deleteFile(_filePath) {
+    this.files.delete(_filePath);
   }
 
   setAccessError(filePath, error) {
@@ -101,12 +101,12 @@ class MockFileSystem {
     this.clearErrors();
   }
 
-  hasFile(filePath) {
-    return this.files.has(filePath);
+  hasFile(_filePath) {
+    return this.files.has(_filePath);
   }
 
-  getFile(filePath) {
-    return this.files.get(filePath);
+  getFile(_filePath) {
+    return this.files.get(_filePath);
   }
 }
 

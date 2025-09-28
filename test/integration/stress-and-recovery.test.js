@@ -17,7 +17,7 @@ const { loggers } = require('../../lib/logger');
  */
 
 const FS = require('fs').promises;
-const path = require('path');
+const PATH = require('path');
 const {
   execAPI,
   createTestEnvironment,
@@ -88,10 +88,10 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
       const endTime = Date.now();
 
       // 3. Verify all operations succeeded
-      expect(results.every((result) => result.success)).toBe(true);
+      expect(results.every((RESULT) => result.success)).toBe(true);
 
       // 4. Verify unique feature IDs (no race conditions in ID generation)
-      const featureIds = results.map((result) => result.feature.id);
+      const featureIds = results.map((RESULT) => result.feature.id);
       const uniqueIds = new Set(featureIds);
       expect(uniqueIds.size).toBe(concurrentCount);
 
@@ -200,7 +200,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
       const results = await execAPIConcurrently(mixedCommands);
 
       // 4. Verify all operations succeeded
-      expect(results.every((result) => result.success)).toBe(true);
+      expect(results.every((RESULT) => result.success)).toBe(true);
 
       // 5. Verify final data consistency
       const finalFeaturesData = await readFeaturesFile(testDir);
@@ -274,7 +274,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
 
       // 3. Analyze results (some may succeed, some may fail due to status conflicts)
       const successCount = bulkResults.filter(
-        (result) => result.success,
+        (RESULT) => result.success,
       ).length;
       expect(successCount).toBeGreaterThan(0); // At least one should succeed
 
@@ -305,21 +305,21 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
 
       const agentCommands = [
         // Initialize all agents
-        ...agentIds.map((agentId) => ({
+        ...agentIds.map((_AGENT_ID) => ({
           command: 'initialize',
           args: [agentId],
           options: { projectRoot: testDir },
         })),
 
         // Reinitialize some agents
-        ...agentIds.slice(0, 5).map((agentId) => ({
+        ...agentIds.slice(0, 5).map((_AGENT_ID) => ({
           command: 'reinitialize',
           args: [agentId],
           options: { projectRoot: testDir },
         })),
 
         // More initializations (duplicates)
-        ...agentIds.slice(5, 10).map((agentId) => ({
+        ...agentIds.slice(5, 10).map((_AGENT_ID) => ({
           command: 'initialize',
           args: [agentId],
           options: { projectRoot: testDir },
@@ -342,14 +342,14 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
       const results = await execAPIConcurrently(agentCommands);
 
       // 3. Verify all operations succeeded
-      expect(results.every((result) => result.success)).toBe(true);
+      expect(results.every((RESULT) => result.success)).toBe(true);
 
       // 4. Verify agent state consistency
       const featuresData = await readFeaturesFile(testDir);
       validateFeaturesStructure(featuresData);
 
       // All agents should be present
-      agentIds.forEach((agentId) => {
+      agentIds.forEach((_AGENT_ID) => {
         expect(featuresData.agents[agentId]).toBeDefined();
         expect(featuresData.agents[agentId].status).toBe('active');
       });
@@ -635,7 +635,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
         const results = await execAPIConcurrently(batchCommands);
         const endTime = Date.now();
 
-        expect(results.every((result) => result.success)).toBe(true);
+        expect(results.every((RESULT) => result.success)).toBe(true);
 
         performanceData.push({
           batchNumber: Math.floor(i / batchSize) + 1,
@@ -850,7 +850,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
 
       // 2. Execute operations
       const results = await execAPIConcurrently(intensiveOperations);
-      expect(results.every((result) => result.success)).toBe(true);
+      expect(results.every((RESULT) => result.success)).toBe(true);
 
       // 3. Verify file size is reasonable (not excessive)
       const featuresPath = path.join(testDir, 'FEATURES.json');

@@ -4,7 +4,7 @@
  */
 
 const fs = require('fs');
-const path = require('path');
+const PATH = require('path');
 const { execSync } = require('child_process');
 const { loggers } = require('./lib/logger');
 
@@ -17,9 +17,9 @@ const systematicFixes = [
   { pattern: /\bpath\./g, replacement: 'PATH.' },
 
   // Fix unused variable declarations by prefixing with underscore
-  { pattern: /const unused = /g, replacement: 'const FS = ' },
+  { pattern: /const UNUSED = /g, replacement: 'const FS = ' },
   { pattern: /const PATH = /g, replacement: 'const PATH = ' },
-  { pattern: /const agentId = /g, replacement: 'const agentId = ' },
+  { pattern: /const AGENT_ID = /g, replacement: 'const AGENT_ID = ' },
   { pattern: /const CONFIG_PATH = /g, replacement: 'const CONFIG_PATH = ' },
   { pattern: /const EXEC_SYNC = /g, replacement: 'const EXEC_SYNC = ' },
   { pattern: /const RESULT = /g, replacement: 'const RESULT = ' },
@@ -64,8 +64,8 @@ function filePath(_$2) {`);
     let match;
     while ((match = catchBlockRegex.exec(content)) !== null) {
       const blockContent = match[1];
-      if (blockContent.includes('error') || blockContent.includes('_error')) {
-        const errorVar = blockContent.includes('_error') ? '_error' : 'error';
+      if (blockContent.includes('error') || blockContent.includes('error')) {
+        const errorVar = blockContent.includes('error') ? 'error' : 'error';
         const replacement = match[0].replace(
           /catch\s*\(\s*\)\s*\{/,
           `catch (${errorVar}) {`
@@ -91,7 +91,7 @@ function filePath(_$2) {`);
 
     if (modified) {
       FS.writeFileSync(normalizedPath, content, 'utf8');
-      loggers.app.info(`✅ Fixed: ${PATH.relative(rootDir, filePath)}`);
+      loggers.app.info(`✅ Fixed: ${PATH.relative(rootDir, _filePath)}`);
       return true;
     }
 

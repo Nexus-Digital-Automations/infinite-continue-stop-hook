@@ -14,7 +14,7 @@ const { loggers } = require('./lib/logger');
 const { performance } = require('perf_hooks');
 const { spawn } = require('child_process');
 const FS = require('fs').promises;
-const path = require('path');
+const PATH = require('path');
 
 class TaskManagerPerformanceBenchmark {
   constructor() {
@@ -72,7 +72,7 @@ class TaskManagerPerformanceBenchmark {
           if (jsonMatch) {
             response = JSON.parse(jsonMatch[0]);
           }
-        } catch {
+        } catch (error) {
           // Response is not JSON - keep as string
           response = stdout;
         }
@@ -155,7 +155,7 @@ class TaskManagerPerformanceBenchmark {
         return;
       }
 
-      const agentId = initResult.response?.agentId;
+      const AGENT_ID = initResult.response?.agentId;
       if (!agentId) {
         loggers.stopHook.log('   ❌ No agent ID returned from init');
         return;
@@ -221,7 +221,7 @@ class TaskManagerPerformanceBenchmark {
         taskId,
         ...listResult,
       });
-    } catch {
+    } catch (error) {
       loggers.stopHook.log(
         `   ❌ Error in subtask benchmarking: ${error.message}`
       );
@@ -265,7 +265,7 @@ class TaskManagerPerformanceBenchmark {
           ...result,
         });
       }
-    } catch {
+    } catch (error) {
       loggers.app.info(
         `   ❌ Error in success criteria benchmarking: ${error.message}`
       );
@@ -284,7 +284,7 @@ class TaskManagerPerformanceBenchmark {
     // Create multiple concurrent init operations
     for (let i = 0; i < numConcurrentAgents; i++) {
       concurrentOperations.push(
-        this.executeTimedCommand('init').then((result) => ({
+        this.executeTimedCommand('init').then((RESULT) => ({
           agentIndex: i,
           OPERATION 'concurrent_init',
           ...result,
@@ -300,7 +300,7 @@ class TaskManagerPerformanceBenchmark {
       const listOperations = [];
       for (let i = 0; i < numConcurrentAgents; i++) {
         listOperations.push(
-          this.executeTimedCommand('list').then((result) => ({
+          this.executeTimedCommand('list').then((RESULT) => ({
             agentIndex: i,
             OPERATION 'concurrent_list',
             ...result,
@@ -310,7 +310,7 @@ class TaskManagerPerformanceBenchmark {
 
       const listResults = await Promise.all(listOperations);
       this.results.concurrentAccess.push(...listResults);
-    } catch {
+    } catch (error) {
       loggers.app.info(
         `   ❌ Error in concurrent access benchmarking: ${error.message}`
       );
@@ -361,7 +361,7 @@ class TaskManagerPerformanceBenchmark {
     const bottlenecks = [];
 
     // Analyze API response times
-    const apiTimes = this.results.apiResponses.reduce((acc, result) => {
+    const apiTimes = this.results.apiResponses.reduce((acc, RESULT) => {
       if (!acc[result.endpoint]) {
         acc[result.endpoint] = [];
       }
@@ -531,7 +531,7 @@ class TaskManagerPerformanceBenchmark {
   summarizeApiPerformance() {
     const endpoints = {};
 
-    this.results.apiResponses.forEach((result) => {
+    this.results.apiResponses.forEach((RESULT) => {
       if (!endpoints[result.endpoint]) {
         endpoints[result.endpoint] = {
           count: 0,
@@ -565,7 +565,7 @@ class TaskManagerPerformanceBenchmark {
   summarizeSubtaskPerformance() {
     const operations = {};
 
-    this.results.subtaskOperations.forEach((result) => {
+    this.results.subtaskOperations.forEach((RESULT) => {
       if (!operations[result.OPERATION) {
         operations[result.OPERATION = {
           count: 0,
@@ -696,7 +696,7 @@ class TaskManagerPerformanceBenchmark {
       );
 
       return report;
-    } catch {
+    } catch (error) {
       loggers.stopHook.error(`❌ Benchmark suite failed: ${error.message}`);
       loggers.stopHook.error(error.stack);
       throw error;
@@ -713,7 +713,7 @@ if (require.main === module) {
       loggers.stopHook.log('\n🎉 All benchmarks completed successfully!');
       throw new Error('Benchmark completed successfully');
     })
-    .catch((_error) => {
+    .catch((error) => {
       loggers.stopHook.error('\n❌ Benchmark suite failed:', error.message);
       throw error;
     });

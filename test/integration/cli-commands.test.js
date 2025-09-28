@@ -84,7 +84,7 @@ describe('CLI Commands Integration Tests', () => {
         resolve({ stdout, stderr, code });
       });
 
-      child.on('error', (_error) => {
+      child.on('error', (error) => {
         clearTimeout(timeoutId);
         reject(error);
       });
@@ -233,7 +233,7 @@ describe('CLI Commands Integration Tests', () => {
 
     test('should execute feature management commands', async () => {
       // 1. Suggest feature
-      const featureData = generateTestFeature({
+      const FEATURE_DATA = generateTestFeature({
         title: 'CLI Test Feature',
         category: 'enhancement',
       });
@@ -293,7 +293,7 @@ describe('CLI Commands Integration Tests', () => {
 
     test('should execute agent management commands', async () => {
       // 1. Initialize agent
-      const agentId = 'cli-test-agent';
+      const AGENT_ID = 'cli-test-agent';
       const initResult = await execCLIDirect([
         'initialize',
         agentId,
@@ -304,7 +304,7 @@ describe('CLI Commands Integration Tests', () => {
       expect(initResult.code).toBe(0);
       const initOutput = JSON.parse(initResult.stdout);
       expect(initOutput.success).toBe(true);
-      expect(initOutput.agent.id).toBe(agentId);
+      expect(initOutput.agent.id).toBe(_AGENT_ID);
 
       // 2. Get initialization stats
       const statsResult = await execCLIDirect([
@@ -343,7 +343,7 @@ describe('CLI Commands Integration Tests', () => {
       expect(stopResult.code).toBe(0);
       const stopOutput = JSON.parse(stopResult.stdout);
       expect(stopOutput.success).toBe(true);
-      expect(stopOutput.authorization.authorized_by).toBe(agentId);
+      expect(stopOutput.authorization.authorized_by).toBe(_AGENT_ID);
     });
 
     test('should execute bulk operations', async () => {
@@ -437,7 +437,7 @@ describe('CLI Commands Integration Tests', () => {
         const errorOutput = JSON.parse(result1.stderr);
         expect(errorOutput.success).toBe(false);
         expect(errorOutput.error).toBeDefined();
-      } catch {
+      } catch (error) {
         // If not JSON, should still contain error information
         expect(result1.stderr).toContain('required') ||
           expect(result1.stderr).toContain('Error') ||
@@ -513,7 +513,7 @@ describe('CLI Commands Integration Tests', () => {
         }); // Very short timeout
 
         // If it doesn't timeout, That's fine too (command was very fast)
-      } catch {
+      } catch (error) {
         expect(error.message).toContain('timed out');
       }
     });
@@ -530,10 +530,10 @@ describe('CLI Commands Integration Tests', () => {
       const results = await Promise.all(promises);
 
       // 2. All should succeed
-      expect(results.every((result) => result.code === 0)).toBe(true);
+      expect(results.every((RESULT) => result.code === 0)).toBe(true);
 
       // 3. All should produce valid JSON
-      results.forEach((result) => {
+      results.forEach((RESULT) => {
         expect(() => JSON.parse(result.stdout)).not.toThrow();
         const output = JSON.parse(result.stdout);
         expect(output.success).toBe(true);
@@ -548,7 +548,7 @@ describe('CLI Commands Integration Tests', () => {
   describe('CLI Workflow Integration', () => {
     test('should execute complete feature workflow via CLI', async () => {
       // 1. Suggest feature
-      const featureData = generateTestFeature({
+      const FEATURE_DATA = generateTestFeature({
         title: 'Complete CLI Workflow Feature',
         category: 'enhancement',
       });
@@ -627,7 +627,7 @@ describe('CLI Commands Integration Tests', () => {
 
     test('should execute complete agent workflow via CLI', async () => {
       // 1. Initialize agent
-      const agentId = 'complete-workflow-agent';
+      const AGENT_ID = 'complete-workflow-agent';
       const initResult = await execCLIDirect([
         'initialize',
         agentId,
@@ -752,7 +752,7 @@ describe('CLI Commands Integration Tests', () => {
       const results = await Promise.all(promises);
 
       // 2. All should succeed
-      expect(results.every((result) => result.code === 0)).toBe(true);
+      expect(results.every((RESULT) => result.code === 0)).toBe(true);
 
       // 3. Verify all features were created
       const listResult = await execCLIDirect([

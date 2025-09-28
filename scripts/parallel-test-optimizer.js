@@ -11,7 +11,7 @@ const { loggers } = require('../lib/logger');
  */
 
 const FS = require('fs');
-const path = require('path');
+const PATH = require('path');
 const { EXEC_SYNC, _spawn } = require('child_process');
 const os = require('os');
 const { createLogger } = require('../lib/utils/logger');
@@ -92,7 +92,7 @@ class ParallelTestOptimizer {
           }
         }
       });
-    } catch {
+    } catch (error) {
       this.logger.warn('Could not read package.json', {
         error: error.message,
         OPERATION 'discover-test-suites',
@@ -767,7 +767,7 @@ ${analysis.github_actions_matrix.strategy.matrix.include
         '\n✅ Optimization analysis completed successfully!'
       );
       return analysis;
-    } catch {
+    } catch (error) {
       loggers.stopHook.error('❌ Optimization analysis failed:', error.message);
       throw error;
     }

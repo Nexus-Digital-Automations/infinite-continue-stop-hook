@@ -20,8 +20,8 @@ class TestLogger {
 }
 
 function cmd(_$2) {);
-    return JSON.parse(result);
-  } catch {
+    return JSON.parse(RESULT);
+  } catch (error) {
     return { success: false, error: error.message };
   }
 }

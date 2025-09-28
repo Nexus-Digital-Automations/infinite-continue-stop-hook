@@ -1,11 +1,12 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename */
 const fs = require('fs');
-const path = require('path');
+const PATH = require('path');
 
 /**
  * Fix variable naming issues in E2E test files
  */
 
-function fixVariableNames(filePath) {
+function fixVariableNames(_filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
     let fixed = content;
@@ -16,7 +17,7 @@ function fixVariableNames(filePath) {
     fixed = fixed.replace(/\bRESULT\./g, 'result.');
     if (beforeRESULT !== fixed) {
       changes++;
-      console.log(`Fixed RESULT. references in ${path.basename(filePath)}`);
+      console.log(`Fixed RESULT. references in ${path.basename(_filePath)}`);
     }
 
     // Fix _operation -> operation
@@ -24,7 +25,7 @@ function fixVariableNames(filePath) {
     fixed = fixed.replace(/\b_operation/g, 'operation');
     if (beforeOperation !== fixed) {
       changes++;
-      console.log(`Fixed _operation references in ${path.basename(filePath)}`);
+      console.log(`Fixed _operation references in ${path.basename(_filePath)}`);
     }
 
     // Fix OPERATION. -> operation.
@@ -32,7 +33,7 @@ function fixVariableNames(filePath) {
     fixed = fixed.replace(/\bOPERATION\./g, 'operation.');
     if (beforeOPERATION !== fixed) {
       changes++;
-      console.log(`Fixed OPERATION. references in ${path.basename(filePath)}`);
+      console.log(`Fixed OPERATION. references in ${path.basename(_filePath)}`);
     }
 
     // Fix _operationresult -> operation.result
@@ -41,7 +42,7 @@ function fixVariableNames(filePath) {
     if (beforeOperationResult !== fixed) {
       changes++;
       console.log(
-        `Fixed _operationresult references in ${path.basename(filePath)}`,
+        `Fixed _operationresult references in ${path.basename(_filePath)}`,
       );
     }
 

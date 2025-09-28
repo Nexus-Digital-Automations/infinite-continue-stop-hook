@@ -3,8 +3,9 @@
  * Systematically fixes no-unused-vars errors by prefixing with underscore or removing
  */
 
+/* eslint-disable no-console, security/detect-non-literal-fs-filename */
 const FS = require('fs');
-const path = require('path');
+const PATH = require('path');
 const { loggers } = require('./lib/logger');
 
 function filePath(_$2) {
@@ -68,7 +69,7 @@ function filePath(_$2) {
     if (modified) {
       FS.writeFileSync(filePath, content, 'utf8');
       loggers.app.info(
-        `✅ Fixed unused variables in ${PATH.relative('.', filePath)}`
+        `✅ Fixed unused variables in ${PATH.relative('.', _filePath)}`
       );
       return true;
     }

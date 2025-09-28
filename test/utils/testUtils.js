@@ -9,7 +9,7 @@
  * @since 2025-09-23
  */
 
-const path = require('path');
+const PATH = require('path');
 const FS = require('fs');
 const childProcess = require('child_process');
 const { loggers } = require('../../lib/logger');
@@ -99,13 +99,13 @@ class APIExecutor {
           if (jsonStart > 0) {
             jsonString = jsonString.substring(jsonStart);
           }
-          const result = JSON.parse(jsonString);
-          resolve(result);
-        } catch {
+          const RESULT = JSON.parse(jsonString);
+          resolve(RESULT);
+        } catch (error) {
           try {
             const stderrJson = JSON.parse(stderr.trim());
             resolve(stderrJson);
-          } catch (parseError) {
+          } catch (_parseError) {
 
             reject(
               new Error(
@@ -116,8 +116,8 @@ class APIExecutor {
         }
       });
 
-      child.on('error', (_error) => {
-        reject(new Error(`Command execution failed: ${_error.message}`));
+      child.on('error', (error) => {
+        reject(new Error(`Command execution failed: ${error.message}`));
       });
     });
   }
@@ -127,7 +127,7 @@ class APIExecutor {
    */
   static async initializeTestAgent(agentId = null) {
     const testAgentId = agentId || TestIdGenerator.generateAgentId();
-    const result = await this.execAPI('initialize', [testAgentId], {
+    const RESULT = await this.execAPI('initialize', [testAgentId], {
       silent: true,
     });
     return { agentId: testAgentId, result };
@@ -385,7 +385,7 @@ class TestExecution {
 class PerformanceUtils {
   static async measureTime(fn) {
     const start = process.hrtime.bigint();
-    const result = await fn();
+    const RESULT = await fn();
     const end = process.hrtime.bigint();
     const duration = Number(end - start) / 1000000; // Convert to milliseconds
 
@@ -394,7 +394,7 @@ class PerformanceUtils {
 
   static async measureMemory(fn) {
     const before = process.memoryUsage();
-    const result = await fn();
+    const RESULT = await fn();
     const after = process.memoryUsage();
 
     const memoryDelta = {

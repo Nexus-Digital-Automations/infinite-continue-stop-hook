@@ -4,15 +4,15 @@
  */
 
 const FS = require('fs');
-const path = require('path');
+const PATH = require('path');
 const { loggers } = require('./lib/logger');
 
-function fixErrorCatchBlocks(filePath) {
+function fixErrorCatchBlocks(_filePath) {
   try {
     let content = FS.readFileSync(filePath, 'utf8');
     let modified = false;
 
-    // Find all catch blocks without parameters that reference 'error' (not '_error')
+    // Find all catch blocks without parameters that reference 'error' (not 'error')
     // This regex matches multiline catch blocks
     const catchBlockRegex = /} catch \{\s*((?:[^{}]|\{[^{}]*\})*?)\s*\}/gs;
     const replacements = [];
@@ -21,11 +21,11 @@ function fixErrorCatchBlocks(filePath) {
     while ((match = catchBlockRegex.exec(content)) !== null) {
       const blockContent = match[1];
 
-      // Check if the block content references 'error' but not '_error'
-      if (blockContent.includes('error') && !blockContent.includes('_error')) {
+      // Check if the block content references 'error' but not 'error'
+      if (blockContent.includes('error') && !blockContent.includes('error')) {
         replacements.push({
           original: match[0],
-          replacement: match[0].replace('} catch {', '} catch (_error) {'),
+          replacement: match[0].replace('} catch {', '} catch (error) {'),
         });
       }
     }
@@ -39,7 +39,7 @@ function fixErrorCatchBlocks(filePath) {
     if (modified) {
       FS.writeFileSync(filePath, content, 'utf8');
       loggers.app.info(
-        `✅ Fixed error catch blocks in ${path.relative('.', filePath)}`,
+        `✅ Fixed error catch blocks in ${path.relative('.', _filePath)}`,
       );
       return true;
     }

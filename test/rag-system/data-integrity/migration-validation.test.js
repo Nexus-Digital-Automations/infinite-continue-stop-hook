@@ -9,7 +9,7 @@ const { loggers } = require('../lib/logger');
  * @version 1.0.0
  */
 
-const path = require('path');
+const PATH = require('path');
 const FS = require('fs').promises;
 const CRYPTO = require('crypto');
 
@@ -36,7 +36,7 @@ describe('RAG System Data Migration And Integrity', () => {
     loggers.stopHook.log('Cleaning up data integrity test environment...');
     try {
       await FS.rm(_testMigrationPath, { recursive: true, force: true });
-    } catch {
+    } catch (error) {
       loggers.stopHook.warn('Cleanup warning:', error.message);
     }
   });
@@ -132,7 +132,7 @@ try {
     req.on('error', reject);
   });
   if (!response.ok) throw new Error('API Error');
-} catch {
+} catch (error) {
         loggers.stopHook.error(error);
 }
 \`\`\`

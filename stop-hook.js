@@ -127,8 +127,8 @@ function generateValidationProgressReport(flagData, logger, _workingDir) {
   // Process validation results from flag data
   if (flagData.validation_results) {
     for (const criteria of validationCriteria) {
-      const result = flagData.validation_results[criteria];
-      if (result) {
+      const RESULT = flagData.validation_results[criteria];
+      if (RESULT) {
         progressReport.validationDetails.push({
           criterion: criteria,
           status: result.status || 'pending',
@@ -352,7 +352,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
     const isActive = timeSinceHeartbeat < staleAgentTimeout;
 
     if (!isActive) {
-      staleAgents.push(agentId);
+      staleAgents.push(_AGENT_ID);
     }
   }
 
@@ -461,7 +461,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook path validated through hook configuration system
       if (FS.existsSync(projectPath)) {
-        const result = await cleanupStaleAgentsInProject(projectPath, logger);
+        const RESULT = await cleanupStaleAgentsInProject(projectPath, logger);
         return result;
       } else {
         logger.addFlow(
@@ -492,7 +492,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
 
   // Aggregate results from parallel processing
   for (const result of projectResults) {
-    results.projectResults.push(result);
+    results.projectResults.push(RESULT);
     results.totalAgentsRemoved += result.agentsRemoved;
     results.totalTasksUnassigned += result.tasksUnassigned;
     results.totalOrphanedTasksReset += result.orphanedTasksReset || 0;
@@ -532,7 +532,7 @@ async function autoSortTasksByPriority(_taskManager) {
 
       const title = (task.title || '').toLowerCase();
       const description = (task.description || '').toLowerCase();
-      const category = task.category ? String(task.category).toLowerCase() : '';
+      const CATEGORY = task.category ? String(task.category).toLowerCase() : '';
       const allText = `${title} ${description} ${category}`;
 
       // ERROR detection (highest priority)
@@ -1124,9 +1124,9 @@ If you want to enable task management for this project:
       );
 
       if (isActive) {
-        activeAgents.push(agentId);
+        activeAgents.push(_AGENT_ID);
       } else {
-        staleAgents.push(agentId);
+        staleAgents.push(_AGENT_ID);
       }
     }
 

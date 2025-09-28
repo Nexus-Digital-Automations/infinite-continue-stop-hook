@@ -90,7 +90,7 @@ describe('Feature Lifecycle Integration Tests', () => {
         expect(RESULT.feature.created_at).toBeDefined();
         expect(RESULT.feature.updated_at).toBeDefined();
 
-        suggestResults.push(result);
+        suggestResults.push(RESULT);
       }
 
       // 3. Verify all features are suggested
@@ -256,10 +256,10 @@ describe('Feature Lifecycle Integration Tests', () => {
       const results = await execAPIConcurrently(commands);
 
       // 3. Verify all succeeded
-      expect(results.every((result) => result.success)).toBe(true);
+      expect(results.every((RESULT) => result.success)).toBe(true);
 
       // 4. Verify unique IDs
-      const featureIds = results.map((result) => result.feature.id);
+      const featureIds = results.map((RESULT) => result.feature.id);
       const uniqueIds = new Set(featureIds);
       expect(uniqueIds.size).toBe(featureCount);
 
@@ -460,7 +460,7 @@ describe('Feature Lifecycle Integration Tests', () => {
 
     test('should prevent invalid approval transitions', async () => {
       // 1. Create And approve a feature
-      const featureData = generateTestFeature({
+      const FEATURE_DATA = generateTestFeature({
         title: 'Transition Test Feature',
         category: 'enhancement',
       });
@@ -607,7 +607,7 @@ describe('Feature Lifecycle Integration Tests', () => {
 
     test('should prevent operations on rejected features', async () => {
       // 1. Create And reject a feature
-      const featureData = generateTestFeature({
+      const FEATURE_DATA = generateTestFeature({
         title: 'Feature to Reject',
         category: 'enhancement',
       });
@@ -688,7 +688,7 @@ describe('Feature Lifecycle Integration Tests', () => {
       ];
 
       for (const feature of testFeatures) {
-        const featureData = generateTestFeature(feature);
+        const FEATURE_DATA = generateTestFeature(feature);
         await execAPI('suggest-feature', [JSON.stringify(featureData)], {
           projectRoot: testDir,
         });

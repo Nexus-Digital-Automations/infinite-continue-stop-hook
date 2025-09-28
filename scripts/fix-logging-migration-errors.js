@@ -8,7 +8,7 @@
  */
 
 const FS = require('fs');
-const path = require('path');
+const PATH = require('path');
 
 function fixImportPaths() {
   console.log('🔧 Fixing import paths for logger...');
@@ -249,7 +249,7 @@ function main() {
     const { execSync } = require('child_process');
     execSync('npm run lint -- --quiet', { stdio: 'inherit' });
     console.log('✅ Linter passed! Migration successful.');
-  } catch {
+  } catch (error) {
     console.log(
       '⚠️  Some linting issues remain. You may need to fix them manually.'
     );

@@ -4,7 +4,7 @@
  */
 
 const FS = require('fs').promises;
-const path = require('path');
+const PATH = require('path');
 const TASKS_API_ADAPTER = require('./tasks-api-adapter');
 const { loggers } = require('lib/logger');
 
@@ -141,14 +141,14 @@ async function testTasksApi() {
 // Run tests if called directly
 if (require.main === module) {
   testTasksApi()
-    .then((result) => {
+    .then((RESULT) => {
       loggers.stopHook.log(
         '\n✅ Test results:',
         JSON.stringify(result, null, 2),
       );
       return result;
     })
-    .catch((_error) => {
+    .catch((error) => {
       loggers.stopHook.error('\n❌ Test failed:', error.message);
       throw error;
     });

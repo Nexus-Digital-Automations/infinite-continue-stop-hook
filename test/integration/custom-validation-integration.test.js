@@ -11,7 +11,7 @@ const { loggers } = require('../../lib/logger');
  */
 
 const FS = require('fs').promises;
-const path = require('path');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 // We need to test the actual TaskManager API integration
@@ -30,7 +30,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
   afterAll(async () => {
     try {
       await FS.rm(testProjectRoot, { recursive: true, force: true });
-    } catch {
+    } catch (error) {
       loggers.stopHook.warn('Failed to cleanup test directory:', error.message);
     }
     process.chdir(originalCwd);
@@ -46,7 +46,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
           force: true,
         });
       }
-    } catch {
+    } catch (error) {
       // Ignore cleanup errors
     }
   });
@@ -76,7 +76,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(true);
       expect(output.rulesLoaded).toBe(1);
@@ -111,7 +111,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(true);
       expect(output.totalRules).toBe(2);
@@ -142,7 +142,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(true);
       expect(output.ruleId).toBe('echo_test');
@@ -179,7 +179,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(true);
       expect(output.executedRules).toBe(2);
@@ -194,7 +194,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(true);
       expect(output.config).toHaveProperty('project_type');
@@ -232,7 +232,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(true);
       expect(output.analytics).toHaveProperty('totalExecutions');
@@ -263,7 +263,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(false);
       expect(output.error).toBeDefined();
@@ -290,7 +290,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(false);
       expect(output.error).toContain('not found or not enabled');
@@ -331,7 +331,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(true);
       expect(output.detectedTechStack).toContain('nodejs');
@@ -352,7 +352,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(true);
       expect(output.detectedTechStack).toContain('nodejs');
@@ -385,7 +385,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(true);
       expect(output.output).toContain('Environment: integration_test');
@@ -417,7 +417,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(false); // package.json doesn't exist
       expect(output.output.found).toContain('required-file.txt');
@@ -459,7 +459,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(true);
       expect(output.output.matches).toBeDefined();
@@ -497,7 +497,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(true);
       expect(output.output.conditionMet).toBe(true);
@@ -535,7 +535,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(true);
       expect(output.output.operator).toBe('And');
@@ -577,21 +577,21 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
             `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule concurrent_test_1`,
             { encoding: 'utf8' },
           );
-          resolve(JSON.parse(result));
+          resolve(JSON.parse(RESULT));
         }),
         new Promise((resolve) => {
           const RESULT = execSync(
             `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule concurrent_test_2`,
             { encoding: 'utf8' },
           );
-          resolve(JSON.parse(result));
+          resolve(JSON.parse(RESULT));
         }),
         new Promise((resolve) => {
           const RESULT = execSync(
             `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule concurrent_test_3`,
             { encoding: 'utf8' },
           );
-          resolve(JSON.parse(result));
+          resolve(JSON.parse(RESULT));
         }),
       ];
 
@@ -636,7 +636,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(true);
       expect(output.analytics.totalExecutions).toBeGreaterThanOrEqual(5);
@@ -657,7 +657,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(true);
       expect(output.dependencies).toBeDefined();
@@ -670,7 +670,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(true);
       expect(output.validation.valid).toBe(true);
@@ -682,7 +682,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(true);
       expect(output.executionOrder).toBeDefined();
@@ -766,7 +766,7 @@ module.exports = app;
         { encoding: 'utf8' },
       );
 
-      const output = JSON.parse(result);
+      const output = JSON.parse(RESULT);
 
       expect(output.success).toBe(true);
       expect(output.executedRules).toBe(3);

@@ -13,7 +13,7 @@
  * of the FeatureManagerAPI with detailed lifecycle testing.
  */
 
-const path = require('path');
+const PATH = require('path');
 const CRYPTO = require('crypto');
 const {
   MockFileSystem,
@@ -97,13 +97,13 @@ describe('Agent Management', () => {
   describe('Agent Initialization', () => {
     describe('Basic Agent Initialization', () => {
       test('should initialize new agent successfully', async () => {
-        const agentId = 'test-agent-001';
+        const AGENT_ID = 'test-agent-001';
 
-        const RESULT = await api.initializeAgent(agentId);
+        const RESULT = await api.initializeAgent(_AGENT_ID);
 
         expect(RESULT.success).toBe(true);
         expect(RESULT.agent).toBeDefined();
-        expect(RESULT.agent.id).toBe(agentId);
+        expect(RESULT.agent.id).toBe(_AGENT_ID);
         expect(RESULT.agent.status).toBe('initialized');
         expect(RESULT.agent.sessionId).toBeDefined();
         expect(RESULT.agent.timestamp).toBe('2025-09-23T12:00:00.000Z');
@@ -127,9 +127,9 @@ describe('Agent Management', () => {
       });
 
       test('should update features file with agent data', async () => {
-        const agentId = 'persistent-agent';
+        const AGENT_ID = 'persistent-agent';
 
-        const RESULT = await api.initializeAgent(agentId);
+        const RESULT = await api.initializeAgent(_AGENT_ID);
         expect(RESULT.success).toBe(true);
 
         const features = await api._loadFeatures();
@@ -146,9 +146,9 @@ describe('Agent Management', () => {
       });
 
       test('should track initialization in time bucket stats', async () => {
-        const agentId = 'stats-agent';
+        const AGENT_ID = 'stats-agent';
 
-        const RESULT = await api.initializeAgent(agentId);
+        const RESULT = await api.initializeAgent(_AGENT_ID);
         expect(RESULT.success).toBe(true);
 
         // Verify initialization stats were updated
@@ -167,19 +167,19 @@ describe('Agent Management', () => {
 
         for (const agentId of specialAgentIds) {
           // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation
-          const RESULT = await api.initializeAgent(agentId);
+          const RESULT = await api.initializeAgent(_AGENT_ID);
 
           expect(RESULT.success).toBe(true);
-          expect(RESULT.agent.id).toBe(agentId);
+          expect(RESULT.agent.id).toBe(_AGENT_ID);
         }
       });
     });
 
     describe('Agent Session Management', () => {
       test('should create agent entry in features file', async () => {
-        const agentId = 'session-test-agent';
+        const AGENT_ID = 'session-test-agent';
 
-        await api.initializeAgent(agentId);
+        await api.initializeAgent(_AGENT_ID);
 
         const features = await api._loadFeatures();
         const agent = features.agents[agentId];
@@ -192,17 +192,17 @@ describe('Agent Management', () => {
       });
 
       test('should overwrite existing agent data on new initialization', async () => {
-        const agentId = 'overwrite-test-agent';
+        const AGENT_ID = 'overwrite-test-agent';
 
         // First initialization
-        const result1 = await api.initializeAgent(agentId);
+        const result1 = await api.initializeAgent(_AGENT_ID);
         const sessionId1 = result1.agent.sessionId;
 
         // Advance time slightly
         timeUtils.mockCurrentTimeISO('2025-09-23T12:05:00.000Z');
 
         // Second initialization
-        const result2 = await api.initializeAgent(agentId);
+        const result2 = await api.initializeAgent(_AGENT_ID);
         const sessionId2 = result2.agent.sessionId;
 
         expect(result1.success).toBe(true);
@@ -226,8 +226,8 @@ describe('Agent Management', () => {
           JSON.stringify(featuresWithoutAgents),
         );
 
-        const agentId = 'init-agents-section';
-        const RESULT = await api.initializeAgent(agentId);
+        const AGENT_ID = 'init-agents-section';
+        const RESULT = await api.initializeAgent(_AGENT_ID);
 
         expect(RESULT.success).toBe(true);
 
@@ -421,7 +421,7 @@ describe('Agent Management', () => {
   describe('Stop Authorization', () => {
     describe('Basic Stop Authorization', () => {
       test('should authorize stop successfully with reason', async () => {
-        const agentId = 'stopping-agent';
+        const AGENT_ID = 'stopping-agent';
         const reason =
           'All TodoWrite tasks completed successfully. Linter passes, build succeeds, tests pass.';
 
@@ -429,7 +429,7 @@ describe('Agent Management', () => {
 
         expect(RESULT.success).toBe(true);
         expect(RESULT.authorization).toBeDefined();
-        expect(RESULT.authorization.authorized_by).toBe(agentId);
+        expect(RESULT.authorization.authorized_by).toBe(_AGENT_ID);
         expect(RESULT.authorization.reason).toBe(reason);
         expect(RESULT.authorization.timestamp).toBe('2025-09-23T12:00:00.000Z');
         expect(RESULT.authorization.stop_flag_created).toBe(true);
@@ -437,21 +437,21 @@ describe('Agent Management', () => {
       });
 
       test('should authorize stop with default reason when none provided', async () => {
-        const agentId = 'default-reason-agent';
+        const AGENT_ID = 'default-reason-agent';
 
-        const RESULT = await api.authorizeStop(agentId);
+        const RESULT = await api.authorizeStop(_AGENT_ID);
 
         expect(RESULT.success).toBe(true);
         expect(RESULT.authorization.reason).toBe(
           'Agent authorized stop after completing all tasks And achieving project perfection',
         );
-        expect(RESULT.authorization.authorized_by).toBe(agentId);
+        expect(RESULT.authorization.authorized_by).toBe(_AGENT_ID);
       });
 
       test('should create .stop-allowed flag file', async () => {
-        const agentId = 'flag-creation-agent';
+        const AGENT_ID = 'flag-creation-agent';
 
-        const RESULT = await api.authorizeStop(agentId);
+        const RESULT = await api.authorizeStop(_AGENT_ID);
         expect(RESULT.success).toBe(true);
 
         // Verify flag file was created
@@ -459,13 +459,13 @@ describe('Agent Management', () => {
 
         const flagContent = JSON.parse(mockFs.getFile(TEST_STOP_FLAG_PATH));
         expect(flagContent.stop_allowed).toBe(true);
-        expect(flagContent.authorized_by).toBe(agentId);
+        expect(flagContent.authorized_by).toBe(_AGENT_ID);
         expect(flagContent.session_type).toBe('self_authorized');
         expect(flagContent.timestamp).toBe('2025-09-23T12:00:00.000Z');
       });
 
       test('should include comprehensive stop data in flag file', async () => {
-        const agentId = 'comprehensive-stop-agent';
+        const AGENT_ID = 'comprehensive-stop-agent';
         const reason =
           'Project perfection achieved: all features implemented, tests pass, code quality excellent';
 
@@ -496,7 +496,7 @@ describe('Agent Management', () => {
       });
 
       test('should handle very long reasons', async () => {
-        const agentId = 'long-reason-agent';
+        const AGENT_ID = 'long-reason-agent';
         const longReason = 'A'.repeat(1000);
 
         const RESULT = await api.authorizeStop(agentId, longReason);
@@ -509,14 +509,14 @@ describe('Agent Management', () => {
       });
 
       test('should handle special characters in agent ID And reason', async () => {
-        const agentId = 'special-chars-agent_123!@#';
+        const AGENT_ID = 'special-chars-agent_123!@#';
         const reason =
           'Reason with special chars: !@#$%^&*()_+-={}[]|\\:";\'<>?,./';
 
         const RESULT = await api.authorizeStop(agentId, reason);
 
         expect(RESULT.success).toBe(true);
-        expect(RESULT.authorization.authorized_by).toBe(agentId);
+        expect(RESULT.authorization.authorized_by).toBe(_AGENT_ID);
         expect(RESULT.authorization.reason).toBe(reason);
       });
 
@@ -584,14 +584,14 @@ describe('Agent Management', () => {
   describe('Agent Management Integration', () => {
     describe('Agent Lifecycle Integration', () => {
       test('should handle complete agent lifecycle', async () => {
-        const agentId = 'lifecycle-agent';
+        const AGENT_ID = 'lifecycle-agent';
 
         // 1. Initialize agent
-        const initResult = await api.initializeAgent(agentId);
+        const initResult = await api.initializeAgent(_AGENT_ID);
         expect(initResult.success).toBe(true);
 
         // 2. Reinitialize agent
-        const reinitResult = await api.reinitializeAgent(agentId);
+        const reinitResult = await api.reinitializeAgent(_AGENT_ID);
         expect(reinitResult.success).toBe(true);
 
         // 3. Authorize stop
@@ -619,7 +619,7 @@ describe('Agent Management', () => {
         // Initialize all agents
         for (const agentId of agents) {
           // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation
-          const RESULT = await api.initializeAgent(agentId);
+          const RESULT = await api.initializeAgent(_AGENT_ID);
           expect(RESULT.success).toBe(true);
         }
 
@@ -650,10 +650,10 @@ describe('Agent Management', () => {
 
     describe('Agent Management with Feature Operations', () => {
       test('should maintain agent state during feature operations', async () => {
-        const agentId = 'feature-ops-agent';
+        const AGENT_ID = 'feature-ops-agent';
 
         // Initialize agent
-        const initResult = await api.initializeAgent(agentId);
+        const initResult = await api.initializeAgent(_AGENT_ID);
         expect(initResult.success).toBe(true);
 
         // Perform feature operations
@@ -676,7 +676,7 @@ describe('Agent Management', () => {
         const suggestedFeature = features.features.find(
           (f) => f.id === suggestResult.feature.id,
         );
-        expect(suggestedFeature.suggested_by).toBe(agentId);
+        expect(suggestedFeature.suggested_by).toBe(_AGENT_ID);
       });
     });
   });
@@ -731,16 +731,16 @@ describe('Agent Management', () => {
         const agents = ['concurrent-1', 'concurrent-2', 'concurrent-3'];
 
         // Simulate concurrent operations
-        const promises = agents.map((agentId) => api.initializeAgent(agentId));
+        const promises = agents.map((_AGENT_ID) => api.initializeAgent(_AGENT_ID));
         const results = await Promise.all(promises);
 
         // All operations should succeed
-        results.forEach((result) => {
+        results.forEach((RESULT) => {
           expect(result.success).toBe(true);
         });
 
         const features = await api._loadFeatures();
-        agents.forEach((agentId) => {
+        agents.forEach((_AGENT_ID) => {
           expect(features.agents[agentId]).toBeDefined();
         });
       });

@@ -423,7 +423,7 @@ if (require.main === module) {
         throw new Error('Migration failed');
       }
     })
-    .catch((_error) => {
+    .catch((error) => {
       loggers.stopHook.error('💥 Unexpected error:', error);
       throw error;
     });

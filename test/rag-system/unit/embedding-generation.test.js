@@ -41,7 +41,7 @@ describe('Embedding Generation System', () => {
           try {
             const _users = await getUsersFromDatabase();
             res.json(users);
-          } catch {
+          } catch (error) {
             res.status(500).json({ error: 'Internal server error' });
           }
         });
@@ -152,7 +152,7 @@ describe('Embedding Generation System', () => {
         const DURATION = Date.now() - start;
         expect(duration).toBeLessThan(10000);
         expect(embedding).toBeDefined();
-      } catch {
+      } catch (error) {
         if (error.message === 'Timeout') {
           // Acceptable if service properly times out
           const DURATION = Date.now() - start;
@@ -457,7 +457,7 @@ describe('Embedding Generation System', () => {
       try {
         const _embedding = await embeddingService.generateEmbedding('test content');
         expect(embedding).toBeNull(); // Should handle gracefully
-      } catch {
+      } catch (error) {
         expect(error.message).toContain('Embedding service unavailable');
       } finally {
         embeddingService.embeddingClient = originalService;

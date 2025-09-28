@@ -38,7 +38,7 @@ describe.skip('Stop Hook Integration E2E', () => {
       async () => {
         // Test basic stop hook authorization for a single agent
 
-        const agentId = 'e2e-stop-test-agent';
+        const AGENT_ID = 'e2e-stop-test-agent';
 
         // Step 1: Initialize agent through proper API
         const initResult = await CommandExecutor.executeAPI(
@@ -92,7 +92,7 @@ describe.skip('Stop Hook Integration E2E', () => {
       async () => {
         // Test stop hook integration with ongoing feature management operations
 
-        const agentId = 'feature-stop-integration-agent';
+        const AGENT_ID = 'feature-stop-integration-agent';
 
         // Step 1: Create feature during agent operation
         const featureResult = await FeatureTestHelpers.suggestFeature(
@@ -133,7 +133,7 @@ describe.skip('Stop Hook Integration E2E', () => {
         expect(features.features).toHaveLength(1);
         expect(features.features[0].status).toBe('approved');
         expect(stopResult.blocked).toBe(true); // Should block without authorization
-        expect(features.features[0].approved_by).toBe(agentId);
+        expect(features.features[0].approved_by).toBe(_AGENT_ID);
 
         expect(stopResult).toBeTruthy();
 
@@ -164,7 +164,7 @@ describe.skip('Stop Hook Integration E2E', () => {
 
         // Check for proper blocking behavior
         continueResults.forEach((result, _index) => {
-          expect(result).toBeTruthy();
+          expect(RESULT).toBeTruthy();
           expect(result.blocked).toBe(true); // Should always block in infinite mode
           expect(result.success).toBe(true); // Success means it properly blocked
 
@@ -230,7 +230,7 @@ describe.skip('Stop Hook Integration E2E', () => {
       async () => {
         // Test stop hook conditions based on different system states
 
-        const agentId = 'conditional-stop-agent';
+        const AGENT_ID = 'conditional-stop-agent';
 
         // Step 1: Test stop with pending tasks (should potentially continue)
         const pendingTasksResult = await FeatureTestHelpers.suggestFeature(
@@ -290,7 +290,7 @@ describe.skip('Stop Hook Integration E2E', () => {
       async () => {
         // Test stop hook behavior during error conditions
 
-        const agentId = 'error-recovery-agent';
+        const AGENT_ID = 'error-recovery-agent';
 
         // Step 1: Test stop hook behavior under various conditions
         const stopTestResults = await Promise.allSettled([
@@ -340,7 +340,7 @@ describe.skip('Stop Hook Integration E2E', () => {
       async () => {
         // Test stop hook integration throughout complete feature lifecycle
 
-        const agentId = 'lifecycle-integration-agent';
+        const AGENT_ID = 'lifecycle-integration-agent';
 
         // Step 1: Create feature at start of agent work
         const initialFeature = await FeatureTestHelpers.suggestFeature(
@@ -395,7 +395,7 @@ describe.skip('Stop Hook Integration E2E', () => {
         // Step 5: Validate complete integration
         const features = await environment.getFeatures();
         expect(features.features[0].status).toBe('approved');
-        expect(features.features[0].approved_by).toBe(agentId);
+        expect(features.features[0].approved_by).toBe(_AGENT_ID);
 
         console.log(
           `✅ Stop hook lifecycle integration test passed for feature: ${featureId}`,
@@ -409,7 +409,7 @@ describe.skip('Stop Hook Integration E2E', () => {
       async () => {
         // Test stop hook performance with multiple rapid requests
 
-        const agentId = 'performance-test-agent';
+        const AGENT_ID = 'performance-test-agent';
         const requestCount = 10;
 
         // Step 1: Rapid stop hook requests (should all block consistently)
@@ -457,7 +457,7 @@ describe.skip('Stop Hook Integration E2E', () => {
       async () => {
         // Test system recovery capabilities after stop hook failures
 
-        const agentId = 'recovery-test-agent';
+        const AGENT_ID = 'recovery-test-agent';
 
         // Step 1: Create system state before failure simulation
         const preFailureFeature = await FeatureTestHelpers.suggestFeature(

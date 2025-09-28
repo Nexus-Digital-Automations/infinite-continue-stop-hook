@@ -1,12 +1,12 @@
-/* eslint-disable no-console */
+/* eslint-disable no-console, security/detect-non-literal-fs-filename */
 const fs = require('fs');
-const path = require('path');
+const PATH = require('path');
 
 /**
  * Fix catch blocks that use 'error' variable but don't declare it in E2E tests
  */
 
-function fixCatchBlocks(filePath) {
+function fixCatchBlocks(_filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');

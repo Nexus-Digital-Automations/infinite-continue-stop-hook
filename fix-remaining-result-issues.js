@@ -9,7 +9,7 @@
  */
 
 const FS = require('fs');
-const path = require('path');
+const PATH = require('path');
 
 // Specific files with issues identified from linting output
 const SPECIFIC_FIXES = [
@@ -153,9 +153,9 @@ class RemainingResultFixer {
     }
   }
 
-  fixTestFile(filePath) {
+  fixTestFile(_filePath) {
     console.log(
-      `🔧 Processing test file: ${path.relative(process.cwd(), filePath)}`,
+      `🔧 Processing test file: ${path.relative(process.cwd(), _filePath)}`,
     );
 
     let content = FS.readFileSync(filePath, 'utf8');
@@ -176,7 +176,7 @@ class RemainingResultFixer {
       // Fix unused RESULT variables - convert to result
       {
         pattern: /const\s+RESULT\s*=\s*([^;]+);\s*([^}]*?)result\s*=/g,
-        replacement: 'const result = $1;\n$2result =',
+        replacement: 'const RESULT = $1;\n$2result =',
         description: 'Convert RESULT to result for consistency',
       },
       // Fix agentId/AGENT_ID inconsistencies
@@ -212,10 +212,10 @@ class RemainingResultFixer {
       // Look for RESULT declaration followed by result usage
       if (
         line.includes('const RESULT = ') ||
-        line.includes('const result = ')
+        line.includes('const RESULT = ')
       ) {
         const isResultDeclaration = line.includes('const RESULT = ');
-        const isresultDeclaration = line.includes('const result = ');
+        const isresultDeclaration = line.includes('const RESULT = ');
 
         // Look ahead for inconsistent usage
         for (let j = i + 1; j < Math.min(i + 10, lines.length); j++) {
@@ -233,7 +233,7 @@ class RemainingResultFixer {
           if (
             isResultDeclaration &&
             nextLine.includes('result.') &&
-            !nextLine.includes('(result)')
+            !nextLine.includes('(RESULT)')
           ) {
             lines[j] = nextLine.replace(/result\./g, 'RESULT.');
             lineModified = true;
@@ -259,11 +259,11 @@ class RemainingResultFixer {
         changes: totalChanges,
       });
       console.log(
-        `✅ Fixed ${totalChanges} issues in ${path.relative(process.cwd(), filePath)}`,
+        `✅ Fixed ${totalChanges} issues in ${path.relative(process.cwd(), _filePath)}`,
       );
     } else {
       console.log(
-        `✅ No issues found in ${path.relative(process.cwd(), filePath)}`,
+        `✅ No issues found in ${path.relative(process.cwd(), _filePath)}`,
       );
     }
   }

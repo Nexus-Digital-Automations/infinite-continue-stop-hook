@@ -1,5 +1,5 @@
 const FS = require('fs');
-const path = require('path');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 // Integration tests for Feature 8: Stop Hook Validation Performance Metrics API endpoints
@@ -108,11 +108,11 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       });
 
       return JSON.parse(RESULT.trim());
-    } catch {
+    } catch (error) {
       if (error.stdout) {
         try {
           return JSON.parse(error.stdout.trim());
-        } catch {
+        } catch (error) {
           return { success: false, error: error.message, stdout: error.stdout };
         }
       }

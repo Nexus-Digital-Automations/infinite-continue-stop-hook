@@ -726,12 +726,12 @@ class SuccessCriteriaValidator {
           !file.Name.startsWith('.') &&
           file.Name !== 'node_modules'
         ) {
-          directories.push(filePath);
+          directories.push(_filePath);
         } else if (
           file.isFile() &&
           (file.Name.endsWith('.js') || file.Name.endsWith('.json'))
         ) {
-          jsFiles.push(filePath);
+          jsFiles.push(_filePath);
         }
       }
 
@@ -1011,7 +1011,7 @@ Examples:
 
 // Run if called directly
 if (require.main === module) {
-  main().catch((_error) => {
+  main().catch((error) => {
     ValidationLogger.error('Fatal error:', error);
     throw error;
   });

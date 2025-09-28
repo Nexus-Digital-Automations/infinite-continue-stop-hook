@@ -9,7 +9,7 @@
  */
 
 const FS = require('fs').promises;
-const path = require('path');
+const PATH = require('path');
 const { spawn } = require('child_process');
 const crypto = require('crypto');
 const { loggers } = require('../../lib/logger');
@@ -73,13 +73,13 @@ function execAPI(command, args = [], options = {}) {
 
         // Try to parse JSON response
         const RESULT = JSON.parse(jsonString);
-        resolve(result);
-      } catch {
+        resolve(RESULT);
+      } catch (error) {
         // If JSON parsing fails, check if we can extract JSON from stderr
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch {
+        } catch (error) {
           // If both fail, include raw output for debugging
           reject(
             new Error(
@@ -90,7 +90,7 @@ function execAPI(command, args = [], options = {}) {
       }
     });
 
-    child.on('error', (_error) => {
+    child.on('error', (error) => {
       reject(new Error(`Command execution failed: ${error.message}`));
     });
   });
@@ -142,7 +142,7 @@ async function createTestEnvironment(testName) {
 async function cleanupTestEnvironment(testDir) {
   try {
     await FS.rm(testDir, { recursive: true, force: true });
-  } catch {
+  } catch (error) {
     loggers.stopHook.warn(`Cleanup warning for ${testDir}:`, error.message);
   }
 }
@@ -286,7 +286,7 @@ async function setupGlobalCleanup() {
       return FS.rm(fullPath, { recursive: true, force: true });
     });
     await Promise.all(cleanupPromises);
-  } catch {
+  } catch (error) {
     loggers.stopHook.warn('Global cleanup warning:', error.message);
   }
 }
@@ -297,7 +297,7 @@ async function setupGlobalCleanup() {
 async function teardownGlobalCleanup() {
   try {
     await FS.rm(BASE_TEST_DIR, { recursive: true, force: true });
-  } catch {
+  } catch (error) {
     loggers.stopHook.warn('Global teardown warning:', error.message);
   }
 }

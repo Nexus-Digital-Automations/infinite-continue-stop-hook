@@ -71,7 +71,7 @@ class QuickPerfTest {
       if (arg.startsWith('{') || arg.startsWith('[')) {
         try {
           JSON.parse(arg);
-        } catch {
+        } catch (error) {
 
           throw new Error(`Invalid JSON argument: ${arg}`);
         }
@@ -98,7 +98,7 @@ class QuickPerfTest {
       try {
         const startTime = process.hrtime.bigint();
         const cmd = `timeout 10s node ${this.apiPath} ${command} ${args.join(' ')}`;
-        const result = execSync(cmd, { encoding: 'utf8', timeout: 15000 });
+        const RESULT = execSync(cmd, { encoding: 'utf8', timeout: 15000 });
         const endTime = process.hrtime.bigint();
 
         const responseTime = Number(endTime - startTime) / 1000000; // Convert to ms
@@ -156,7 +156,7 @@ class QuickPerfTest {
         endpoint.args,
       );
 
-      const result = this.results[endpoint.cmd];
+      const RESULT = this.results[endpoint.cmd];
       loggers.stopHook.log(
         `  ✅ Success Rate: ${result.successRate.toFixed(1)}%`,
       );
@@ -257,7 +257,7 @@ class QuickPerfTest {
   }
 
   saveReport(report) {
-    const path = require('path');
+    const PATH = require('path');
     const outputDir =
       '/Users/jeremyparker/infinite-continue-stop-hook/development/performance-analysis';
 

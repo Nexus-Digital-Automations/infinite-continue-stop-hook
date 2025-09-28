@@ -83,7 +83,7 @@
  */
 
 const FS = require('fs');
-const path = require('path');
+const PATH = require('path');
 const readline = require('readline');
 const { loggers } = require('./lib/logger');
 
@@ -708,7 +708,7 @@ function createFeatureFromPhaseGroup(group) {
     4: 'huginn',
     5: 'orchestrator',
   };
-  const category = categoryMap[group.phase.major] || 'uncategorized';
+  const CATEGORY = categoryMap[group.phase.major] || 'uncategorized';
 
   // Calculate status based on subtask statuses
   const statuses = group.tasks.map((t) => t.status);
@@ -823,7 +823,7 @@ async function main() {
       `Processing single project: ${path.basename(targetPath)}`,
     );
     const RESULT = await processProject(targetPath);
-    results.push(result);
+    results.push(RESULT);
 
     // Summary
 

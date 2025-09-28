@@ -597,7 +597,7 @@ if (require.main === module) {
 
   migrator
     .migrate()
-    .then((result) => {
+    .then((RESULT) => {
       loggers.stopHook.log('\n📊 Migration Summary:');
       loggers.stopHook.log(
         { additionalData: [null, 2] },
@@ -605,7 +605,7 @@ if (require.main === module) {
       );
       throw new Error('Migration completed successfully');
     })
-    .catch((_error) => {
+    .catch((error) => {
       loggers.stopHook.error('\n❌ Migration failed:', error.message);
       throw error;
     });

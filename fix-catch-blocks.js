@@ -5,7 +5,7 @@ const fs = require('fs');
  * Fix catch blocks that use 'error' variable but don't declare it
  */
 
-function fixCatchBlocks(filePath) {
+function fixCatchBlocks(_filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n');
@@ -62,4 +62,4 @@ function fixCatchBlocks(filePath) {
 // Fix the main file
 const filePath =
   '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
-fixCatchBlocks(filePath);
+fixCatchBlocks(_filePath);

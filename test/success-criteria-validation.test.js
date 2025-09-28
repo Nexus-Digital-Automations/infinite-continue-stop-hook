@@ -54,8 +54,8 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
       if (code === 0) {
         try {
           const RESULT = stdout.trim() ? JSON.parse(stdout) : {};
-          resolve(result);
-        } catch {
+          resolve(RESULT);
+        } catch (error) {
           resolve({ rawOutput: stdout, stderr });
         }
       } else {
@@ -65,7 +65,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
       }
     });
 
-    child.on('error', (_error) => {
+    child.on('error', (error) => {
       reject(error);
     });
   });

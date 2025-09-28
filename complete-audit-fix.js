@@ -28,7 +28,7 @@ function completeAuditFix() {
     );
 
     // Fix the resolve statement
-    content = content.replace(/resolve\(result\);/g, 'resolve(result);');
+    content = content.replace(/resolve\(result\);/g, 'resolve(RESULT);');
 
     fs.writeFileSync(filePath, content);
     console.log('Applied complete audit test fixes successfully');

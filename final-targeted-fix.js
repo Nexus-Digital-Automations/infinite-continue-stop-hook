@@ -16,22 +16,22 @@ const targetedFixes = [
   { pattern: /const RESULT = ([^;]+);/g, replacement: 'const RESULT = $1;' },
 
   // Fix specific variable naming issues
-  { pattern: /const agentId = /g, replacement: 'const agentId = ' },
+  { pattern: /const AGENT_ID = /g, replacement: 'const AGENT_ID = ' },
   { pattern: /const CONFIG_PATH = /g, replacement: 'const CONFIG_PATH = ' },
   { pattern: /const EXEC_SYNC = /g, replacement: 'const EXEC_SYNC = ' },
 
-  // Fix _error issues in catch blocks - ensure error parameter is present
+  // Fix error issues in catch blocks - ensure error parameter is present
   {
-    pattern: /} catch \{\s*[^}]*_error/g,
-    replacement: (match) => match.replace('catch {', 'catch (_error) {'),
+    pattern: /} catch \{\s*[^}]*error/g,
+    replacement: (match) => match.replace('catch {', 'catch (error) {'),
   },
 
   // Fix parseError -> error
   { pattern: /parseError/g, replacement: 'error' },
 ];
 
-function fixFile(filePath) {
-  const normalizedPath = PATH.resolve(filePath);
+function fixFile(_filePath) {
+  const normalizedPath = PATH.resolve(_filePath);
 
   if (!normalizedPath.endsWith('.js')) {
     return false;
@@ -54,9 +54,9 @@ function fixFile(filePath) {
       }
     });
 
-    // Manual fix for specific catch block patterns that reference _error without parameter
+    // Manual fix for specific catch block patterns that reference error without parameter
     const catchBlocksWithError = content.match(
-      /catch\s*\(\s*\)\s*\{[^}]*_error[^}]*\}/g
+      /catch\s*\(\s*\)\s*\{[^}]*error[^}]*\}/g
     );
     if (catchBlocksWithError) {
       catchBlocksWithError.forEach((catchBlock) => {
@@ -71,7 +71,7 @@ function fixFile(filePath) {
 
     if (modified) {
       FS.writeFileSync(normalizedPath, content, 'utf8');
-      loggers.app.info(`Fixed: ${PATH.relative(rootDir, filePath)}`);
+      loggers.app.info(`Fixed: ${PATH.relative(rootDir, _filePath)}`);
       return true;
     }
 
@@ -118,8 +118,8 @@ const errorFiles = getErrorFiles();
 loggers.app.info(`📊 Processing ${errorFiles.length} files with errors...`);
 
 let fixedCount = 0;
-errorFiles.forEach((filePath) => {
-  if (applyTargetedFixes(filePath)) {
+errorFiles.forEach((_filePath) => {
+  if (applyTargetedFixes(_filePath)) {
     fixedCount++;
   }
 });

@@ -3,9 +3,9 @@
  * Fixes all catch block parameter inconsistencies in the codebase
  */
 
-/* eslint-disable security/detect-non-literal-fs-filename */
+/* eslint-disable no-console, security/detect-non-literal-fs-filename */
 const fs = require('fs');
-const path = require('path');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
@@ -21,16 +21,16 @@ function getAllJsFiles() {
       .trim()
       .split('\n')
       .filter((f) => f && f.endsWith('.js'));
-  } catch (_error) {
-    console.error('Failed to get JS files:', _error.message);
+  } catch (error) {
+    console.error('Failed to get JS files:', error.message);
     return [];
   }
 }
 
 // Comprehensive catch block fixing function
-function fixAllCatchBlocks(filePath) {
+function fixAllCatchBlocks(_filePath) {
   try {
-    if (!fs.existsSync(filePath)) {
+    if (!fs.existsSync(_filePath)) {
       return false;
     }
 
@@ -63,14 +63,11 @@ function fixAllCatchBlocks(filePath) {
         pos++;
       }
 
-      // Check if error or _error is used in the block
-      if (
-        blockContent.includes('_error.') ||
-        blockContent.includes('_error ')
-      ) {
+      // Check if error or error is used in the block
+      if (blockContent.includes('error.') || blockContent.includes('error ')) {
         fixes1.push({
           original: match1[0],
-          replacement: 'catch (_error) {',
+          replacement: 'catch (error) {',
         });
       } else if (
         blockContent.includes('error.') ||
@@ -78,7 +75,7 @@ function fixAllCatchBlocks(filePath) {
       ) {
         fixes1.push({
           original: match1[0],
-          replacement: 'catch (_error) {',
+          replacement: 'catch (error) {',
         });
       }
     }
@@ -91,7 +88,7 @@ function fixAllCatchBlocks(filePath) {
       }
     });
 
-    // Fix Pattern 2: catch (_error) {} but _error is used inside - change parameter to _error
+    // Fix Pattern 2: catch (error) {} but error is used inside - change parameter to error
     const pattern2 = /catch\s*\(\s*error\s*\)\s*\{/g;
     let match2;
     const fixes2 = [];
@@ -116,14 +113,11 @@ function fixAllCatchBlocks(filePath) {
         pos++;
       }
 
-      // Check if _error is used instead of error
-      if (
-        blockContent.includes('_error.') ||
-        blockContent.includes('_error ')
-      ) {
+      // Check if error is used instead of error
+      if (blockContent.includes('error.') || blockContent.includes('error ')) {
         fixes2.push({
           original: match2[0],
-          replacement: 'catch (_error) {',
+          replacement: 'catch (error) {',
         });
       }
     }
@@ -136,8 +130,8 @@ function fixAllCatchBlocks(filePath) {
       }
     });
 
-    // Fix Pattern 3: catch(_error) {} but error is used inside - change parameter to error
-    const pattern3 = /catch\s*\(\s*_error\s*\)\s*\{/g;
+    // Fix Pattern 3: catch(error) {} but error is used inside - change parameter to error
+    const pattern3 = /catch\s*\(\s*error\s*\)\s*\{/g;
     let match3;
     const fixes3 = [];
 
@@ -161,15 +155,15 @@ function fixAllCatchBlocks(filePath) {
         pos++;
       }
 
-      // Check if error is used instead of _error
+      // Check if error is used instead of error
       if (
         (blockContent.includes('error.') || blockContent.includes('error ')) &&
-        !blockContent.includes('_error.') &&
-        !blockContent.includes('_error ')
+        !blockContent.includes('error.') &&
+        !blockContent.includes('error ')
       ) {
         fixes3.push({
           original: match3[0],
-          replacement: 'catch (_error) {',
+          replacement: 'catch (error) {',
         });
       }
     }
@@ -182,7 +176,7 @@ function fixAllCatchBlocks(filePath) {
       }
     });
 
-    // Fix Pattern 4: catch (_error) {} where error is unused - change to _error
+    // Fix Pattern 4: catch (error) {} where error is unused - change to error
     const pattern4 = /catch\s*\(\s*error\s*\)\s*\{/g;
     let match4;
     const fixes4 = [];
@@ -217,7 +211,7 @@ function fixAllCatchBlocks(filePath) {
       ) {
         fixes4.push({
           original: match4[0],
-          replacement: 'catch (_error) {',
+          replacement: 'catch (error) {',
         });
       }
     }
@@ -232,13 +226,15 @@ function fixAllCatchBlocks(filePath) {
 
     if (modified && content !== originalContent) {
       fs.writeFileSync(filePath, content, 'utf8');
-      console.log(`Fixed catch blocks in: ${path.relative(rootDir, filePath)}`);
+      console.log(
+        `Fixed catch blocks in: ${path.relative(rootDir, _filePath)}`,
+      );
       return true;
     }
 
     return false;
-  } catch (_error) {
-    console.error(`Error fixing catch blocks in ${filePath}:`, _error.message);
+  } catch (error) {
+    console.error(`Error fixing catch blocks in ${filePath}:`, error.message);
     return false;
   }
 }
@@ -270,7 +266,7 @@ try {
 // Final status check
 console.log('🔄 Checking final linting status...');
 try {
-  const lintResult = execSync('npm run lint 2>&1', {
+  const LINT_RESULT = execSync('npm run lint 2>&1', {
     cwd: rootDir,
     encoding: 'utf8',
   });

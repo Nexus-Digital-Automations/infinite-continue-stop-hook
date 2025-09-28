@@ -26,7 +26,7 @@ async function testAuditOverrideFix() {
 
   try {
     // Initialize a test agent
-    const agentId = 'test_audit_override_agent_123';
+    const AGENT_ID = 'test_audit_override_agent_123';
 
     // Create a simple feature task
     const featureResult = await tm.createTask({

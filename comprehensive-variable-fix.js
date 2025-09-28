@@ -35,11 +35,11 @@ const comprehensiveFixes = [
 
 // Catch block fixes for specific patterns
 const catchBlockFixes = [
-  // Add _error parameter to catch blocks that reference _error
+  // Add error parameter to catch blocks that reference error
   {
     pattern: /catch\s*\(\s*\)\s*\{([^{}]*\b_error\b[^{}]*)\}/g,
     replacement: (match, _blockContent) => {
-      return match.replace(/catch\s*\(\s*\)\s*\{/, 'catch (_error) {');
+      return match.replace(/catch\s*\(\s*\)\s*\{/, 'catch (error) {');
     },
   },
 
@@ -52,8 +52,8 @@ const catchBlockFixes = [
   },
 ];
 
-function fixFile(filePath) {
-  const normalizedPath = PATH.resolve(filePath);
+function fixFile(_filePath) {
+  const normalizedPath = PATH.resolve(_filePath);
 
   if (!normalizedPath.endsWith('.js')) {
     return false;
@@ -89,7 +89,7 @@ function fixFile(filePath) {
       }
     });
 
-    // Handle multi-line catch blocks that reference _error or error
+    // Handle multi-line catch blocks that reference error or error
 
     const multiLineCatchRegex =
       /catch\s*\(\s*\)\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/gs;
@@ -98,12 +98,12 @@ function fixFile(filePath) {
 
     while ((match = multiLineCatchRegex.exec(content)) !== null) {
       const blockContent = match[1];
-      if (blockContent.includes('_error')) {
+      if (blockContent.includes('error')) {
         replacements.push({
           original: match[0],
           replacement: match[0].replace(
             /catch\s*\(\s*\)\s*\{/,
-            'catch (_error) {'
+            'catch (error) {'
           ),
         });
       } else if (blockContent.includes('error')) {
@@ -125,7 +125,7 @@ function fixFile(filePath) {
 
     if (modified) {
       FS.writeFileSync(normalizedPath, content, 'utf8');
-      loggers.app.info(`Fixed: ${PATH.relative(rootDir, filePath)}`);
+      loggers.app.info(`Fixed: ${PATH.relative(rootDir, _filePath)}`);
       return true;
     }
 

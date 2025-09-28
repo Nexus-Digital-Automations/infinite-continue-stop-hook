@@ -117,7 +117,7 @@ describe('Performance Validation E2E', () => {
         }
 
         const suggestionResults = await Promise.all(featurePromises);
-        const featureIds = suggestionResults.map((result) => {
+        const featureIds = suggestionResults.map((RESULT) => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature.id;
@@ -134,7 +134,7 @@ describe('Performance Validation E2E', () => {
         let approvalIndex = 0;
         const approvalTest = async () => {
           const id = featureIds[approvalIndex % featureIds.length];
-          const result = await FeatureTestHelpers.approveFeature(
+          const RESULT = await FeatureTestHelpers.approveFeature(
             environment,
             id,
             `performance-tester-${approvalIndex}`,
@@ -197,7 +197,7 @@ describe('Performance Validation E2E', () => {
         const bulkResults = await Promise.all(bulkFeaturePromises);
         const bulkSuggestionTime = Date.now() - bulkSuggestionStart;
 
-        const bulkFeatureIds = bulkResults.map((result) => {
+        const bulkFeatureIds = bulkResults.map((RESULT) => {
           try {
             const response = JSON.parse(result.result.stdout);
             return response.feature.id;
@@ -279,7 +279,7 @@ describe('Performance Validation E2E', () => {
 
         // Validate concurrent performance
         expect(avgTimePerOperation).toBeLessThan(API_TIMEOUT); // Each operationshould complete within timeout
-        expect(results.every((result) => !result.error)).toBe(true); // All operations should succeed
+        expect(results.every((RESULT) => !result.error)).toBe(true); // All operations should succeed
 
         // Validate system integrity under load
         const features = await environment.getFeatures();
@@ -328,7 +328,7 @@ describe('Performance Validation E2E', () => {
 
         // Analyze contention results
         const successfulOperations = contentionResults.filter(
-          (result) =>
+          (RESULT) =>
             result.status === 'fulfilled' && result.value.result.success,
         ).length;
 

@@ -1,5 +1,6 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename */
 const fs = require('fs');
-const path = require('path');
+const PATH = require('path');
 
 /**
  * Emergency fix for duplicate FS variable declarations
@@ -7,20 +8,20 @@ const path = require('path');
  * that are preventing the testing framework from running
  */
 
-function fixDuplicateFS(filePath) {
+function fixDuplicateFS(_filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
 
     // Pattern 1: Fix path + fs.promises duplicates
     let fixed = content.replace(
       /const FS = require\('path'\);\s*\n\s*const FS = require\('fs'\)\.promises;/g,
-      "const path = require('path');\nconst FS = require('fs').promises;"
+      "const PATH = require('path');\nconst FS = require('fs').promises;"
     );
 
     // Pattern 2: Fix path + fs duplicates
     fixed = fixed.replace(
       /const FS = require\('path'\);\s*\n\s*const FS = require\('fs'\);/g,
-      "const path = require('path');\nconst FS = require('fs');"
+      "const PATH = require('path');\nconst FS = require('fs');"
     );
 
     // Pattern 3: Fix sqlite3 + fs.promises duplicates

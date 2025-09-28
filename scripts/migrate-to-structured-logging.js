@@ -6,7 +6,7 @@
  */
 
 const FS = require('fs');
-const path = require('path');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 // Configuration
@@ -76,7 +76,7 @@ function rootDir(_$2) {
 /**
  * Analyze console usage in a file
  */
-function analyzeConsoleUsage(filePath) {
+function analyzeConsoleUsage(_filePath) {
   const content = FS.readFileSync(filePath, 'utf8');
   const lines = content.split('\n');
 
@@ -195,7 +195,7 @@ function convertConsoleCall(consoleLine, fileContext) {
 
     // Default case
     return `${indentation}${loggerInstance}.${consoleMethod.split('.')[1]}(${args});`;
-  } catch {
+  } catch (error) {
     console.warn(
       `Could not parse console call in ${fileContext.filePath}:${consoleLine.lineNumber} - keeping original`
     );
@@ -282,7 +282,7 @@ function main() {
         analysisResults.push(usage);
         totalConsoleLines += usage.consoleLines.length;
       }
-    } catch {
+    } catch (error) {
       console.warn(`⚠️  Could not analyze ${file}: ${error.message}`);
     }
   }
@@ -343,7 +343,7 @@ function main() {
           `✅ ${path.relative(rootDir, usage.filePath)}: ${RESULT.message}`
         );
       }
-    } catch {
+    } catch (error) {
       console.error(`❌ Failed to migrate ${usage.filePath}: ${error.message}`);
     }
   }
@@ -361,7 +361,7 @@ function main() {
     console.log('\n🔍 Running linter to check for issues...');
     execSync('npm run lint', { stdio: 'inherit' });
     console.log('✅ Linter passed - migration successful!');
-  } catch {
+  } catch (error) {
     console.warn('⚠️  Linter found issues - you may need to fix them manually');
   }
 }

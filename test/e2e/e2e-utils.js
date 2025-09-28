@@ -10,7 +10,7 @@ const { loggers } = require('../lib/logger');
  */
 
 const FS = require('fs').promises;
-const path = require('path');
+const PATH = require('path');
 const { spawn } = require('child_process');
 const crypto = require('crypto');
 
@@ -170,7 +170,7 @@ class E2EEnvironment {
    */
   async getFeatures() {
     try {
-      const result = await CommandExecutor.executeAPI('list-features', [], {
+      const RESULT = await CommandExecutor.executeAPI('list-features', [], {
         projectRoot: this.testDir,
       });
 
@@ -271,7 +271,7 @@ class CommandExecutor {
         }
         isResolved = true;
 
-        const result = {
+        const RESULT = {
           code,
           stdout: stdout.trim(),
           stderr: stderr.trim(),
@@ -285,11 +285,11 @@ class CommandExecutor {
           error.result = result;
           reject(error);
         } else {
-          resolve(result);
+          resolve(RESULT);
         }
       });
 
-      child.on('error', (_error) => {
+      child.on('error', (error) => {
         if (isResolved) {
           return;
         }
@@ -407,7 +407,7 @@ class FeatureTestHelpers {
       category: data.category,
     });
 
-    const result = await CommandExecutor.executeAPI(
+    const RESULT = await CommandExecutor.executeAPI(
       'suggest-feature',
       [jsonData],
       { projectRoot: environment.testDir },
@@ -538,7 +538,7 @@ class StopHookTestHelpers {
     for (let i = 0; i < maxIterations; i++) {
       // Test the stop hook - should always block (exit code 2) in infinite mode
       // eslint-disable-next-line no-await-in-loop -- Sequential processing required for testing infinite continue behavior over time
-      const result = await CommandExecutor.executeStopHook(
+      const RESULT = await CommandExecutor.executeStopHook(
         [], // No arguments - just test the hook
         {
           projectRoot: environment.testDir,
@@ -631,11 +631,11 @@ class MultiAgentTestHelpers {
 
     // Create concurrent agent operations
     for (let i = 0; i < agentCount; i++) {
-      const agentId = `e2e-agent-${i}`;
+      const AGENT_ID = `e2e-agent-${i}`;
       const operations = [];
 
       for (let j = 0; j < operationsPerAgent; j++) {
-        const featureData = FeatureTestHelpers.createFeatureData({
+        const FEATURE_DATA = FeatureTestHelpers.createFeatureData({
           title: `Agent ${i} Feature ${j}`,
           description: `Feature created by agent ${i}, OPERATION${j}`,
         });
@@ -713,7 +713,7 @@ class E2EAssertions {
           `JSON response does not contain "${expectedText}" ${message}\nActual response: ${responseText}`,
         );
       }
-    } catch {
+    } catch (error) {
       // Fall back to text search if not JSON
       this.assertOutputContains(result, expectedText, message);
     }
@@ -754,7 +754,7 @@ class E2EAssertions {
     let parsed;
     try {
       parsed = JSON.parse(result.stdout);
-    } catch {
+    } catch (error) {
       throw new Error(`Response is not valid JSON: ${result.stdout}`);
     }
 

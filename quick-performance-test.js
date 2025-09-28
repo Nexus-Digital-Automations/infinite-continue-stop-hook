@@ -63,7 +63,7 @@ class QuickPerformanceTest {
             if (jsonMatch) {
               response = JSON.parse(jsonMatch[0]);
             }
-          } catch {
+          } catch (error) {
             response = stdout;
           }
 
@@ -291,7 +291,7 @@ if (require.main === module) {
       loggers.stopHook.log('\n✅ Quick performance test completed!');
       throw new Error('Performance test completed successfully');
     })
-    .catch((_error) => {
+    .catch((error) => {
       loggers.stopHook.error('❌ Performance test failed:', error.message);
       throw error;
     });
