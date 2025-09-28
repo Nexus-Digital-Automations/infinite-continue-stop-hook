@@ -4976,9 +4976,11 @@ class AutonomousTaskManagerAPI {
 
         // Validate configuration schema
         if (!this._validateCustomValidationConfig(config)) {
-          console.warn(
-            '⚠️ Invalid custom validation configuration, skipping custom rules'
-          );
+          this.logger.warn('Invalid custom validation configuration', {
+            component: 'CustomValidator',
+            operation: 'validateConfig',
+            action: 'skipped_custom_rules'
+          });
           return [];
         }
 
@@ -4998,16 +5000,20 @@ class AutonomousTaskManagerAPI {
             }
           }
 
-          console.log(
-            `📋 Loaded ${applicableRules.length} applicable custom validation rules`
-          );
+          this.logger.info('Loaded applicable custom validation rules', {
+            count: applicableRules.length,
+            component: 'CustomValidator',
+            operation: 'loadRules'
+          });
           return applicableRules;
         }
       }
     } catch (_error) {
-      console.warn(
-        `⚠️ Failed to load custom validation rules: ${error.message}`
-      );
+      this.logger.warn('Failed to load custom validation rules', {
+        error: error.message,
+        component: 'CustomValidator',
+        operation: 'loadRules'
+      });
     }
 
     return [];

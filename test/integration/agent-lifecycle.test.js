@@ -118,6 +118,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       const initResults = [];
       for (const agentId of agentIds) {
+        // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup with ordered agent initialization
         const result = await execAPI('initialize', [agentId], {
           projectRoot: testDir,
         });
