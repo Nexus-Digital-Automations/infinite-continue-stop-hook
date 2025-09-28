@@ -1,5 +1,4 @@
 /**
-const { loggers } = require('../lib/logger');
  * RAG System API Endpoints Unit Tests
  *
  * Comprehensive testing of RAG-based lessons And error database API endpoints
@@ -9,6 +8,7 @@ const { loggers } = require('../lib/logger');
  * @version 1.0.0
  */
 
+const { loggers } = require('../../../lib/logger');
 const _request = require('supertest');
 const PATH = require('path');
 
@@ -131,7 +131,7 @@ describe('RAG System API Endpoints', () => {
 
           const DURATION = Date.now() - start;
           expect(duration).toBeLessThan(10000);
-        } catch (error) {
+        } catch {
         expect(error.code).toBe('ECONNABORTED');
         }
         */

@@ -62,7 +62,7 @@ module.exports = () => {
             fs.unlinkSync(entryPath);
           }
           loggers.stopHook.log(`🧹 Cleaned up old test file: ${entry}`);
-        } catch (error) {
+        } catch {
           loggers.stopHook.warn(
             `⚠️  Could not clean up ${entry}:`,
             error.message
@@ -116,7 +116,7 @@ module.exports = () => {
 
   // Test reporting setup
   loggers.stopHook.log('📋 Test reporting configuration:');
-  console.log(
+  loggers.app.info(
     `   • Coverage: ${process.env.COVERAGE ? 'enabled' : 'disabled'}`
   );
   loggers.stopHook.log(
@@ -149,7 +149,7 @@ module.exports = () => {
     }
 
     global.SAMPLE_DATA = sampleData;
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('❌ Failed to load test fixtures:', error.message);
     throw new Error('Failed to load test fixtures');
   }

@@ -64,11 +64,11 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         }
         const result = JSON.parse(jsonString);
         resolve(result);
-      } catch (parseError) {
+      } catch {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (_error) {
+        } catch {
           reject(
             new Error(
               `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`

@@ -142,7 +142,7 @@ function findFilesWithLoggersIssues() {
     }
 
     return Array.from(files);
-  } catch (error) {
+  } catch {
     // If grep finds no matches, execSync throws an error
     if (error.status === 1) {
       return [];
@@ -193,7 +193,7 @@ async function main() {
 }
 
 if (require.main === module) {
-  main().catch(console.error);
+  main();
 }
 
 module.exports = { fixLoggersImport, findFilesWithLoggersIssues };

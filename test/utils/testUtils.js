@@ -101,7 +101,7 @@ class APIExecutor {
           }
           const result = JSON.parse(jsonString);
           resolve(result);
-        } catch (parseError) {
+        } catch {
           try {
             const stderrJson = JSON.parse(stderr.trim());
             resolve(stderrJson);
@@ -350,7 +350,7 @@ class TestExecution {
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential retry attempts required
         return await fn();
-      } catch (_error) {
+      } catch {
 
         lastError = _error;
         if (i < maxRetries - 1) {

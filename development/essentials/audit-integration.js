@@ -253,7 +253,7 @@ class AUDIT_INTEGRATION {
    * @param {Object} projectCriteria - Project success criteria
    * @returns {string} Comprehensive audit description
    */
-  generateAuditDescription(originalTaskId, taskDetails, PROJECT_CRITERIA) {
+  generateAuditDescription(originalTaskId, taskDetails, _PROJECT_CRITERIA) {
     return `Comprehensive 25-point quality audit And review of completed implementation.
 
 **ORIGINAL TASK**: ${originalTaskId}
@@ -291,7 +291,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
    * @param {Object} projectCriteria - Project-specific success criteria
    * @returns {Array} Array of success criteria strings
    */
-  generate25PointSuccessCriteria(PROJECT_CRITERIA) {
+  generate25PointSuccessCriteria(_PROJECT_CRITERIA) {
     return [
       // Critical Gates (1-10) - MANDATORY
       'CRITICAL GATE #1: Linter perfection achieved (zero warnings/errors)',
@@ -375,8 +375,8 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       };
 
       return criteria;
-    } catch (_error) {
-      this.logger.log(`⚠️ Could not load task requirements: ${__error.message}`);
+    } catch {
+      this.logger.log(`⚠️ Could not load task requirements: ${_error.message}`);
       return {};
     }
   }
@@ -484,8 +484,8 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       } else {
         throw new Error(`TaskManager API error: ${JSON.stringify(result)}`);
       }
-    } catch (_error) {
-      this.logger._error(`❌ Failed to create audit task: ${_error.message}`);
+    } catch {
+      this.logger.error(`❌ Failed to create audit task: ${_error.message}`);
       throw _error;
     }
   }
@@ -566,8 +566,8 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
         'development/logs/audit_integration.log',
         JSON.stringify(logEntry) + '\n',
       );
-    } catch (_error) {
-      this.logger.log(`⚠️ Failed to log audit task creation: ${__error.message}`);
+    } catch {
+      this.logger.log(`⚠️ Failed to log audit task creation: ${_error.message}`);
     }
   }
 
@@ -615,7 +615,7 @@ if (require.main === module) {
       const taskTitle = process.argv[5] || 'Feature Implementation';
 
       if (!originalTaskId || !implementerAgent) {
-        this.logger.error(
+        integration.logger.error(
           'Usage: node audit-integration.js create-audit <originalTaskId> <implementerAgent> [taskTitle]',
         );
         throw new Error('Missing required arguments for create-audit command');
@@ -624,16 +624,16 @@ if (require.main === module) {
       integration
         .createAuditTask(originalTaskId, implementerAgent, { title: taskTitle })
         .then((result) => {
-          this.logger.log(`\n🎉 Audit task created successfully!`);
-          this.logger.log(`Original Task: ${originalTaskId}`);
-          this.logger.log(`Audit Task: ${result.taskId}`);
-          this.logger.log(`Implementer: ${implementerAgent}`);
-          this.logger.log(
+          integration.logger.log(`\n🎉 Audit task created successfully!`);
+          integration.logger.log(`Original Task: ${originalTaskId}`);
+          integration.logger.log(`Audit Task: ${result.taskId}`);
+          integration.logger.log(`Implementer: ${implementerAgent}`);
+          integration.logger.log(
             `\nNext: Assign different agent to audit task for objectivity`,
           );
         })
         .catch((error) => {
-          this.logger.error(`❌ Failed to create audit task: ${error.message}`);
+          integration.logger.error(`❌ Failed to create audit task: ${error.message}`);
           throw error;
         });
       break;
@@ -644,7 +644,7 @@ if (require.main === module) {
       const auditor = process.argv[4];
 
       if (!implementer || !auditor) {
-        this.logger.error(
+        integration.logger.error(
           'Usage: node audit-integration.js validate-objectivity <implementerAgent> <auditorAgent>',
         );
         throw new Error(
@@ -656,7 +656,7 @@ if (require.main === module) {
         implementer,
         auditor,
       );
-      this.logger.log(
+      integration.logger.log(
         `Objectivity Check: ${isObjective ? '✅ PASSED' : '❌ FAILED'}`,
       );
       if (!isObjective) {
@@ -666,13 +666,13 @@ if (require.main === module) {
     }
 
     case 'config':
-      this.logger.log('Current Audit Integration Configuration:');
-      this.logger.log(JSON.stringify(integration.getConfiguration(), null, 2));
+      integration.logger.log('Current Audit Integration Configuration:');
+      integration.logger.log(JSON.stringify(integration.getConfiguration(), null, 2));
       break;
 
     case 'help':
     default:
-      this.logger.log(`
+      integration.logger.log(`
 Audit System Integration - TaskManager API Integration
 
 USAGE:

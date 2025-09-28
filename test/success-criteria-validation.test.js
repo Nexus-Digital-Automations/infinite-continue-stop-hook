@@ -13,6 +13,7 @@
 
 const { spawn } = require('child_process');
 const PATH = require('path');
+const { loggers } = require('../lib/logger');
 const FS = require('fs').promises;
 
 // Test configuration
@@ -165,7 +166,7 @@ app.start().then(() => {
     await FS.writeFile(FEATURES_PATH, JSON.stringify(initialFeatures, null, 2));
 
     loggers.stopHook.log('Features test project setup completed');
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('Failed to setup features test project:', error);
     throw error;
   }
@@ -175,7 +176,7 @@ async function cleanupFeaturesTestProject() {
   try {
     await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Features test project cleanup completed');
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('Failed to cleanup features test project:', error);
   }
 }
@@ -513,7 +514,7 @@ describe('FEATURES.json System Validation Tests', () => {
         status.PROJECT_CRITERIA.find((c) => c.id === 'child-unique')
       ).toBeDefined();
 
-      console.log(
+      loggers.app.info(
         'Template inheritance conflict resolution validated successfully'
       );
     });
@@ -637,7 +638,7 @@ describe('FEATURES.json System Validation Tests', () => {
       ).toBeUndefined();
       expect(status.PROJECT_CRITERIA.length).toBe(1); // Only base criterion remains
 
-      console.log(
+      loggers.app.info(
         'Custom criteria modification And removal validated successfully'
       );
     });
@@ -703,7 +704,7 @@ describe('FEATURES.json System Validation Tests', () => {
         status.PROJECT_CRITERIA.find((c) => c.id === 'initial-1')
       ).toBeUndefined();
 
-      console.log(
+      loggers.app.info(
         'Custom criteria persistence across template changes validated successfully'
       );
     });
@@ -976,7 +977,7 @@ describe('FEATURES.json System Validation Tests', () => {
       expect(PROD_CRITERION).toBeDefined();
       expect(PROD_CRITERION.enabled).toBe(false);
 
-      console.log(
+      loggers.app.info(
         'Project environment-specific criteria validated successfully'
       );
     });
@@ -1046,7 +1047,7 @@ describe('FEATURES.json System Validation Tests', () => {
         );
       }
 
-      console.log(
+      loggers.app.info(
         'Conditional criteria based on project characteristics validated successfully'
       );
     });
@@ -1121,7 +1122,7 @@ describe('FEATURES.json System Validation Tests', () => {
       expect(HIGH_PRIORITY_PERFORMANCE.criteria.length).toBe(1);
       expect(HIGH_PRIORITY_PERFORMANCE.criteria[0].id).toBe('high-1');
 
-      console.log(
+      loggers.app.info(
         'Criteria prioritization And filtering validated successfully'
       );
     });
@@ -1223,7 +1224,7 @@ describe('FEATURES.json System Validation Tests', () => {
       expect(status.inheritanceChain).toBeDefined();
       expect(status.inheritanceChain.length).toBe(3); // org -> team -> project
 
-      console.log(
+      loggers.app.info(
         'Complete template inheritance workflow validated successfully'
       );
     });
@@ -1287,10 +1288,10 @@ describe('FEATURES.json System Validation Tests', () => {
         VALIDATION_RESULT.overallStatus
       );
 
-      console.log(
+      loggers.app.info(
         'Validation execution with inherited criteria validated successfully'
       );
-      console.log(
+      loggers.app.info(
         'Validation results:',
         VALIDATION_RESULT.results.map((r) => ({
           id: r.criterionId,

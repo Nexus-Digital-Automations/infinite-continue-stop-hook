@@ -109,7 +109,7 @@ class QuickPerfTest {
         if (result.includes('"success": false') || result.includes('error')) {
           errors.push(`Iteration ${i + 1}: API returned error`);
         }
-      } catch (_error) {
+      } catch {
         errors.push(`Iteration ${i + 1}: ${_error.message}`);
         times.push(-1); // Mark as failed
       }
@@ -332,7 +332,7 @@ function main() {
     }
 
     loggers.stopHook.log(`\n📄 Full report saved to: ${outputFile}`);
-  } catch (_error) {
+  } catch {
 
     loggers.stopHook._error('❌ Performance test failed:', _error);
     throw _error;

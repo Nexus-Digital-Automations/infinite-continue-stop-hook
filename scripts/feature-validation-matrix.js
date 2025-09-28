@@ -13,6 +13,7 @@ const fs = require('fs');
 const path = require('path');
 const { execSync, spawn: _spawn } = require('child_process');
 const OS = require('os');
+const { loggers } = require('../lib/logger');
 
 class FeatureValidationMatrix {
   constructor() {
@@ -145,7 +146,7 @@ class FeatureValidationMatrix {
       if (!startTest.success) {
         result.errors.push(`API startup failed: ${startTest.error}`);
       }
-    } catch (error) {
+    } catch {
       result.status = 'failed';
       result.errors.push(`API validation error: ${error.message}`);
     }
@@ -173,7 +174,7 @@ class FeatureValidationMatrix {
         try {
           require(dep);
           result.details[`${dep}_available`] = true;
-        } catch (error) {
+        } catch {
           result.details[`${dep}_available`] = false;
           result.errors.push(`RAG dependency missing: ${dep}`);
         }
@@ -205,7 +206,7 @@ class FeatureValidationMatrix {
       }
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch (error) {
+    } catch {
       result.status = 'failed';
       result.errors.push(`RAG validation error: ${error.message}`);
     }
@@ -271,7 +272,7 @@ class FeatureValidationMatrix {
       }
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch (error) {
+    } catch {
       result.status = 'failed';
       result.errors.push(`File operations validation error: ${error.message}`);
     }
@@ -339,7 +340,7 @@ class FeatureValidationMatrix {
       }
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch (error) {
+    } catch {
       result.status = 'failed';
       result.errors.push(`Agent management validation error: ${error.message}`);
     }
@@ -403,7 +404,7 @@ class FeatureValidationMatrix {
       };
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch (error) {
+    } catch {
       result.status = 'failed';
       result.errors.push(
         `Performance monitoring validation error: ${error.message}`
@@ -438,7 +439,7 @@ class FeatureValidationMatrix {
           const module = dep.test();
           result.details[`${dep.name}_loaded`] = true;
           result.details[`${dep.name}_version`] = module.version || 'unknown';
-        } catch (error) {
+        } catch {
           result.details[`${dep.name}_loaded`] = false;
           result.errors.push(
             `Native dependency failed: ${dep.name} - ${error.message}`
@@ -458,13 +459,13 @@ class FeatureValidationMatrix {
             `Native module rebuild failed: ${rebuildTest.error}`
           );
         }
-      } catch (error) {
+      } catch {
         result.details.rebuild_capability = false;
         result.errors.push(`Rebuild test error: ${error.message}`);
       }
 
       result.status = result.errors.length === 0 ? 'passed' : 'failed';
-    } catch (error) {
+    } catch {
       result.status = 'failed';
       result.errors.push(
         `Native dependencies validation error: ${error.message}`
@@ -494,7 +495,7 @@ class FeatureValidationMatrix {
           duration: Date.now() - start,
           error: null,
         });
-      } catch (error) {
+      } catch {
         resolve({
           success: false,
           output: error.stdout || '',
@@ -721,17 +722,17 @@ ${
     loggers.stopHook.log('=============================');
     loggers.stopHook.log(`Node.js Version: ${this.environment.node_version}`);
     loggers.stopHook.log(`Platform: ${this.environment.platform}`);
-    console.log(
+    loggers.app.info(
       `Overall Status: ${this.validationResults.overall_status.toUpperCase()}`
     );
-    console.log(
+    loggers.app.info(
       `Compatibility Score: ${this.validationResults.compatibility_matrix.compatibility_score}/100`
     );
 
     loggers.stopHook.log('\n🧪 Feature Results:');
     Object.values(this.validationResults.feature_tests).forEach((test) => {
       const status = test.status === 'passed' ? '✅' : '❌';
-      console.log(
+      loggers.app.info(
         `  ${status} ${test.name}: ${test.status} (${test.errors.length} errors)`
       );
     });
@@ -739,7 +740,7 @@ ${
     if (this.validationResults.issues_found.length > 0) {
       loggers.stopHook.log('\n⚠️ Critical Issues:');
       this.validationResults.issues_found.forEach((issue) => {
-        console.log(
+        loggers.app.info(
           `  ${issue.feature}: ${issue.errors.length} critical errors`
         );
       });
@@ -760,7 +761,7 @@ ${
 
       loggers.stopHook.log('\n✅ Feature validation completed successfully!');
       return this.validationResults;
-    } catch (error) {
+    } catch {
       loggers.stopHook.error('❌ Feature validation failed:', error.message);
       throw error;
     }

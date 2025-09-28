@@ -182,7 +182,7 @@ class QuickPerformanceTest {
     loggers.stopHook.log(
       `   Total: ${(totalMemoryUsed / (1024 * 1024)).toFixed(2)}MB`
     );
-    console.log(
+    loggers.app.info(
       `   Average per OPERATION ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB`
     );
 
@@ -190,20 +190,20 @@ class QuickPerformanceTest {
     loggers.stopHook.log(`\n💡 Performance Recommendations:`);
 
     if (slowOperations.length > 0) {
-      console.log(
+      loggers.app.info(
         `   • Investigate And optimize ${slowOperations.length} slow operations`
       );
     }
 
     if (failed.length > 0) {
-      console.log(
+      loggers.app.info(
         `   • Address ${failed.length} failing operations for system reliability`
       );
     }
 
     if (avgMemoryPerOp > 10 * 1024 * 1024) {
       // 10MB per operation
-      console.log(
+      loggers.app.info(
         `   • Review memory usage patterns - average ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB per operation,
       );
     }
@@ -245,7 +245,7 @@ class QuickPerformanceTest {
       },
     };
 
-    console.log(
+    loggers.app.info(
       `\n🎯 Performance Score: ${this.calculatePerformanceScore(report)}/100`
     );
 

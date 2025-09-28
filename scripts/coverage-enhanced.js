@@ -20,6 +20,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync, _spawn } = require('child_process');
+const { loggers } = require('../lib/logger');
 
 // Enhanced Configuration
 const ENHANCED_CONFIG = {
@@ -135,7 +136,7 @@ class EnhancedLogger {
     const elapsed = Date.now() - this.startTime;
 
     if (this.structured) {
-      console.log(
+      loggers.app.info(
         JSON.stringify({
           timestamp,
           level,
@@ -202,13 +203,13 @@ class EnhancedLogger {
     const bottomBorder = `└${separator.replace(/┼/g, '┴')}┘`;
 
     loggers.stopHook.log(topBorder);
-    console.log(
+    loggers.app.info(
       `│ ${headers.map((h, i) => h.padEnd(maxLengths[i])).join(' │ ')} │`
     );
     loggers.stopHook.log(middleBorder);
 
     rows.forEach((row) => {
-      console.log(
+      loggers.app.info(
         `│ ${row.map((cell, i) => String(cell || '').padEnd(maxLengths[i])).join(' │ ')} │`
       );
     });
@@ -263,7 +264,7 @@ class EnhancedCoverageSystem {
       if (hasFailures) {
         throw new Error('Coverage validation failed with blocking failures');
       }
-    } catch (error) {
+    } catch {
       this.logger.error('Coverage pipeline failed', {
         error: error.message,
         stack: error.stack,
@@ -453,7 +454,7 @@ class EnhancedCoverageSystem {
 
       this.logger.success('Coverage data loaded successfully');
       this.logger.debug('Coverage summary', this.results.coverage.summary);
-    } catch (error) {
+    } catch {
       throw new Error(`Failed to load coverage data: ${error.message}`);
     }
   }
@@ -1143,7 +1144,7 @@ Last updated: ${new Date().toISOString()}
       }
 
       this.logger.success('Integrations updated');
-    } catch (error) {
+    } catch {
       this.logger.warning(`Integration update failed: ${error.message}`);
     }
   }
@@ -1197,11 +1198,11 @@ Last updated: ${new Date().toISOString()}
     if (this.results.trends?.analysis) {
       const trend = this.results.trends.analysis;
       if (trend.regression_detected) {
-        console.log(
+        loggers.app.info(
           '📉 Regression Detected: Coverage has decreased significantly'
         );
       } else if (trend.improvement_detected) {
-        console.log(
+        loggers.app.info(
           '📈 Improvement Detected: Coverage has increased significantly'
         );
       }
@@ -1209,7 +1210,7 @@ Last updated: ${new Date().toISOString()}
 
     // Issues summary
     if (validation.blocking_failures.length > 0) {
-      console.log(
+      loggers.app.info(
         `\n❌ Blocking Issues: ${validation.blocking_failures.length}`
       );
       validation.blocking_failures.forEach((failure, i) => {
@@ -1252,10 +1253,10 @@ Last updated: ${new Date().toISOString()}
     });
 
     if (this.results.badges) {
-      console.log(
+      loggers.app.info(
         `\n🏷️ Coverage Badges: ${this.config.paths.badges}/badges.json`
       );
-      console.log(
+      loggers.app.info(
         `   README snippet: ${this.config.paths.badges}/README-snippet.md`
       );
     }
@@ -1462,7 +1463,7 @@ Last updated: ${new Date().toISOString()}
           encoding: 'utf8',
         }).trim(),
       };
-    } catch (error) {
+    } catch {
       this.logger.debug('Could not get Git information', {
         error: error.message,
       });
@@ -1494,7 +1495,7 @@ if (require.main === module) {
   const args = process.argv.slice(2);
 
   if (args.includes('--help') || args.includes('-h')) {
-    console.log(`
+    loggers.app.info(`
 Enhanced Coverage Pipeline Integration System
 
 Usage: node coverage-enhanced.js [options]
@@ -1535,7 +1536,7 @@ Examples:
     try {
       const customConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
       Object.assign(options, customConfig);
-    } catch (error) {
+    } catch {
       loggers.stopHook.error(`❌ Failed to load config: ${error.message}`);
       throw error;
     }
@@ -1574,7 +1575,7 @@ Examples:
   const system = new EnhancedCoverageSystem(options);
   try {
     system.run();
-  } catch (error) {
+  } catch {
     loggers.stopHook.error(
       '❌ Enhanced coverage system failed:',
       error.message

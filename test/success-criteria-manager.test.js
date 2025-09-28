@@ -34,11 +34,11 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       updateTaskSuccessCriteria: jest.fn(),
     };
 
-    mockWithTimeout = jest.fn((OPERATION => {
-      if (typeof OPERATION=== 'function') {
-        return OPERATION);
+    mockWithTimeout = jest.fn((operation) => {
+      if (typeof operation === 'function') {
+        return operation();
       }
-      return Promise.resolve(OPERATION;
+      return Promise.resolve(operation);
     });
     mockGetGuideForError = jest
       .fn()

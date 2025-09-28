@@ -11,6 +11,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { loggers } = require('../lib/logger');
 
 // Configuration
 const CONFIG = {
@@ -108,7 +109,7 @@ class CoverageMonitor {
       if (!this.validation.passed) {
         throw new Error('Coverage validation failed');
       }
-    } catch (error) {
+    } catch {
       LOGGER.error(`Coverage monitoring failed: ${error.message}`);
       LOGGER.debug(error.stack);
       throw error;
@@ -178,7 +179,7 @@ class CoverageMonitor {
       LOGGER.debug(
         `Total coverage: ${JSON.stringify(coverageData.total, null, 2)}`
       );
-    } catch (error) {
+    } catch {
       throw new Error(`Failed to parse coverage data: ${error.message}`);
     }
   }
@@ -381,7 +382,7 @@ if (require.main === module) {
   const monitor = new CoverageMonitor();
   try {
     monitor.run();
-  } catch (error) {
+  } catch {
     LOGGER.error(`Fatal error: ${error.message}`);
     throw error;
   }

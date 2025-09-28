@@ -10,6 +10,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { loggers } = require('./lib/logger');
 
 class MiscellaneousLintFixer {
   constructor() {
@@ -49,7 +50,7 @@ class MiscellaneousLintFixer {
       // CRYPTO unused
       {
         pattern: /(\s+)(const|let|var)\s+CRYPTO\s*=/g,
-        replacement: '$1$2 _CRYPTO =',
+        replacement: '$1$2 CRYPTO =',
       },
       // RESULTS unused
       {
@@ -210,17 +211,17 @@ class MiscellaneousLintFixer {
       if (totalFixes > 0 && finalContent !== originalContent) {
         // eslint-disable-next-line security/detect-non-literal-fs-filename
         fs.writeFileSync(filePath, finalContent);
-        // eslint-disable-next-line no-console
-        console.log(
+        loggers.app.info(
           `✅ Fixed ${totalFixes} issues in: ${path.relative(process.cwd(), filePath)}`
         );
       }
 
       this.filesProcessed++;
       return totalFixes;
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(`❌ Error processing ${filePath}:`, error.message);
+    } catch {
+      loggers.app.error(`❌ Error processing ${filePath}:`, {
+        error: error.message,
+      });
       return 0;
     }
   }
@@ -244,8 +245,7 @@ class MiscellaneousLintFixer {
 
       return Array.from(filesWithErrors);
     } catch {
-      // eslint-disable-next-line no-console
-      console.log('Could not get lint output, processing common files...');
+      loggers.app.info('Could not get lint output, processing common files...');
       return [
         '/Users/jeremyparker/infinite-continue-stop-hook/append-text-hook.js',
         '/Users/jeremyparker/infinite-continue-stop-hook/development/essentials/audit-integration.js',
@@ -265,12 +265,10 @@ class MiscellaneousLintFixer {
    * Main execution
    */
   run() {
-    // eslint-disable-next-line no-console
-    console.log('🔧 Starting miscellaneous linting error fixes...');
+    loggers.app.info('🔧 Starting miscellaneous linting error fixes...');
 
     const filesWithErrors = this.getFilesWithErrors();
-    // eslint-disable-next-line no-console
-    console.log(
+    loggers.app.info(
       `📁 Processing ${filesWithErrors.length} files with potential errors`
     );
 
@@ -279,22 +277,19 @@ class MiscellaneousLintFixer {
       this.fixCount += fixes;
     }
 
-    console.log(`\n📊 Summary:`);
-    // eslint-disable-next-line no-console
-    console.log(`- Files processed: ${this.filesProcessed}`);
-    // eslint-disable-next-line no-console
-    console.log(`- Total fixes applied: ${this.fixCount}`);
+    loggers.app.info(`📊 Summary:`);
+    loggers.app.info(`- Files processed: ${this.filesProcessed}`);
+    loggers.app.info(`- Total fixes applied: ${this.fixCount}`);
 
     if (this.fixCount > 0) {
-      // eslint-disable-next-line no-console
-      console.log('\n🔍 Verifying fixes...');
+      loggers.app.info('🔍 Verifying fixes...');
       try {
         execSync('npm run lint > /dev/null 2>&1');
-        // eslint-disable-next-line no-console
-        console.log('✅ All miscellaneous linting errors have been fixed!');
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log(
+        loggers.app.info(
+          '✅ All miscellaneous linting errors have been fixed!'
+        );
+      } catch {
+        loggers.app.info(
           'ℹ️  Some linting errors may remain - running final check...'
         );
       }

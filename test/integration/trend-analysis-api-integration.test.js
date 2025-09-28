@@ -143,11 +143,11 @@ describe('Trend Analysis API Integration Tests', () => {
       });
 
       return JSON.parse(result.trim());
-    } catch (error) {
+    } catch {
       if (error.stdout) {
         try {
           return JSON.parse(error.stdout.trim());
-        } catch (error) {
+        } catch {
           return { success: false, error: error.message, stdout: error.stdout };
         }
       }

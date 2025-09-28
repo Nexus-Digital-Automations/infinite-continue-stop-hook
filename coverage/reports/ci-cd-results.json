@@ -1,28 +1,28 @@
 {
   "metadata": {
-    "timestamp": "2025-09-28T04:26:17.567Z",
+    "timestamp": "2025-09-28T06:55:03.270Z",
     "reporter": "jest-cicd-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System",
-    "duration_ms": 884
+    "duration_ms": 4043
   },
   "cicd_summary": {
     "pipeline_status": "FAILURE",
-    "total_duration_ms": 884,
+    "total_duration_ms": 4043,
     "should_block_deployment": true,
     "quality_gate_status": {
       "status": "FAILED",
       "criteria": {
         "tests_passing": false,
-        "no_failed_tests": true,
+        "no_failed_tests": false,
         "coverage_adequate": false,
-        "performance_acceptable": false
+        "performance_acceptable": true
       },
       "blocking_issues": [
         {
           "type": "test_failures",
           "severity": "critical",
-          "message": "0 test(s) failed",
+          "message": "1 test(s) failed",
           "action": "Fix failing tests before deployment"
         },
         {
@@ -30,52 +30,59 @@
           "severity": "warning",
           "message": "Code coverage below acceptable threshold",
           "action": "Add more tests to improve coverage"
-        },
-        {
-          "type": "performance",
-          "severity": "warning",
-          "message": "Test execution time is slow",
-          "action": "Optimize slow tests or improve test parallelization"
         }
       ]
     },
-    "test_health_score": null
+    "test_health_score": 96
   },
   "test_execution": {
     "summary": {
       "total_suites": 1,
       "passed_suites": 0,
       "failed_suites": 1,
-      "total_tests": 0,
-      "passed_tests": 0,
-      "failed_tests": 0,
+      "total_tests": 12,
+      "passed_tests": 11,
+      "failed_tests": 1,
       "pending_tests": 0,
-      "success_rate": "NaN",
-      "execution_time_ms": 884
+      "success_rate": "91.67",
+      "execution_time_ms": 4043
     },
     "performance_metrics": {
-      "average_test_duration": null,
-      "slowest_suite": null,
+      "average_test_duration": 336.9166666666667,
+      "slowest_suite": {
+        "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js",
+        "duration_ms": 3482,
+        "num_tests": 12
+      },
       "memory_usage": {
-        "rss": 192446464,
-        "heap_total": 95977472,
-        "heap_used": 71650144,
-        "external": 5311698,
-        "heap_usage_percent": "74.65"
+        "rss": 244875264,
+        "heap_total": 138231808,
+        "heap_used": 104791808,
+        "external": 5597130,
+        "heap_usage_percent": "75.81"
       },
       "parallel_efficiency": {
-        "parallel_efficiency_percent": 0,
-        "total_execution_time_ms": 885,
-        "serial_time_ms": 0,
+        "parallel_efficiency_percent": "86.12",
+        "total_execution_time_ms": 4043,
+        "serial_time_ms": 3482,
         "time_saved_ms": 0
       }
     },
     "failure_analysis": {
-      "total_failures": 0,
+      "total_failures": 1,
       "failed_suites": 1,
-      "failure_details": [],
-      "failure_patterns": {},
-      "common_failure_type": "none"
+      "failure_details": [
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js",
+          "test": "Verification Endpoints submit-verification-evidence should successfully submit valid verification evidence",
+          "duration": 7,
+          "error": "Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)\n\nExpected: \"/test/project/TASKS.json\", StringContaining \"\\\"status\\\":\\\"passed\\\"\"\nReceived\n       1: \"/test/project/TASKS.json.lock\", \"50421\", "
+        }
+      ],
+      "failure_patterns": {
+        "assertion": 1
+      },
+      "common_failure_type": "assertion"
     },
     "flaky_test_detection": {
       "potentially_flaky": [],
@@ -84,11 +91,11 @@
     }
   },
   "git": {
-    "commit_sha": "501c97ffee934e3c86a31e120b906c54decbcd66",
+    "commit_sha": "b7b0dc4112d5296bedceaa608534b99b89d84dcc",
     "branch": "main",
     "author": "Claude <claude@anthropic.com>",
-    "commit_message": "fix: resolve significant number of no-unused-vars errors",
-    "commit_date": "2025-09-27 23:19:51 -0500",
+    "commit_message": "fix: resolve critical JavaScript parsing error in quick-perf-test.js",
+    "commit_date": "2025-09-28 01:53:11 -0500",
     "tag": null,
     "is_dirty": true,
     "remote_url": "https://github.com/Nexus-Digital-Automations/infinite-continue-stop-hook.git"
@@ -104,7 +111,7 @@
     "locale": "en-US",
     "memory": {
       "total": 25769803776,
-      "available": 127500288
+      "available": 379060224
     },
     "cpu": {
       "cores": 8,
@@ -122,5 +129,12 @@
     "coverage_status": "not_available"
   },
   "notifications": [],
-  "recommendations": []
+  "recommendations": [
+    {
+      "category": "testing",
+      "priority": "high",
+      "recommendation": "Fix failing tests immediately",
+      "details": "1 tests are currently failing"
+    }
+  ]
 }

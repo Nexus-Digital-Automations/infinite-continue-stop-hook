@@ -3,6 +3,11 @@
  */
 
 const fs = require('fs');
+const path = require('path');
+const { loggers } = require('./lib/logger');
+
+// Define root directory for security validation
+const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
 const fixes = [
   // Fix unused errors - prefix with underscore
@@ -11,10 +16,10 @@ const fixes = [
   { pattern: /\}\s*catch\s*\(\s*error\s*\)/g, replacement: '} catch (_error)' },
 
   // Fix template literal issues
-  { pattern: /`([^`]*)\$\{([^}]*)\s*`/g, replacement: '`$1\${$2}`' },
+  { pattern: /`([^`]*)\$\{([^}]*)\s*`/g, replacement: '`$1${$2}`' },
   {
     pattern: /details:\s*`([^`]*)\$\{([^}]*)\s*-/g,
-    replacement: 'details: `$1\${$2} -',
+    replacement: 'details: `$1${$2} -',
   },
 
   // Fix specific template literal patterns that might be malformed
@@ -34,8 +39,18 @@ const fixes = [
 ];
 
 function fixFile(filePath) {
+  // Security: Validate file path to prevent directory traversal
+  const normalizedPath = path.normalize(filePath);
+  if (normalizedPath.includes('..') || !normalizedPath.startsWith(rootDir)) {
+    loggers.app.warn(
+      `Security: Rejected potentially unsafe file path: ${filePath}`
+    );
+    return false;
+  }
+
   try {
-    let content = fs.readFileSync(filePath, 'utf8');
+    // Justification: File path is validated above to ensure it's within project directory
+    let content = fs.readFileSync(normalizedPath, 'utf8');
     let modified = false;
 
     fixes.forEach((fix) => {
@@ -43,29 +58,32 @@ function fixFile(filePath) {
       content = content.replace(fix.pattern, fix.replacement);
       if (content !== originalContent) {
         modified = true;
-        console.log(`Applied fix: ${fix.pattern}`);
+        loggers.app.info(`Applied fix: ${fix.pattern}`);
       }
     });
 
     if (modified) {
-      fs.writeFileSync(filePath, content, 'utf8');
-      console.log(`✅ Fixed: ${filePath}`);
+      // Justification: File path is validated above to ensure it's within project directory
+      fs.writeFileSync(normalizedPath, content, 'utf8');
+      loggers.app.info(`✅ Fixed: ${filePath}`);
       return true;
     }
 
     return false;
-  } catch (error) {
-    console.error(`❌ Error fixing ${filePath}:`, error.message);
+  } catch {
+    loggers.app.error(`❌ Error fixing ${filePath}:`, { error: error.message });
     return false;
   }
 }
 
 // Fix the main taskmanager-api.js file
-console.log('🚀 Starting comprehensive error and template literal fixes...\n');
+loggers.app.info(
+  '🚀 Starting comprehensive error and template literal fixes...'
+);
 const result = fixFile('./taskmanager-api.js');
 
 if (result) {
-  console.log('\n✨ Comprehensive fixes completed!');
+  loggers.app.info('✨ Comprehensive fixes completed!');
 } else {
-  console.log('\n📝 No fixes needed');
+  loggers.app.info('📝 No fixes needed');
 }

@@ -113,9 +113,7 @@ class RemainingErrorsFixer {
         replacement: (match, before, after) => {
           // Change catch { to catch (error) {
           const fixed =
-            before.replace(/\}\s*catch\s*\{/, '} catch (error) {') +
-            'error' +
-            after;
+            before.replace(/\}\s*catch\s*\{/, '} catch {') + 'error' + after;
           return fixed;
         },
       },
@@ -129,7 +127,7 @@ class RemainingErrorsFixer {
         pattern: /(\}\s*catch\s*\(\s*\)\s*\{[^}]*?)error(\.[^}]*?\})/g,
         replacement: (match, before, after) => {
           return (
-            before.replace(/\}\s*catch\s*\(\s*\)\s*\{/, '} catch (error) {') +
+            before.replace(/\}\s*catch\s*\(\s*\)\s*\{/, '} catch {') +
             'error' +
             after
           );
@@ -239,7 +237,7 @@ class RemainingErrorsFixer {
       }
 
       return totalChanges;
-    } catch (error) {
+    } catch {
       console.error(`Error processing ${filePath}:`, error.message);
       return false;
     }
@@ -306,7 +304,7 @@ class RemainingErrorsFixer {
   /**
    * Run comprehensive fix
    */
-  async run() {
+  run() {
     console.log('🚀 Fixing remaining no-undef errors comprehensively...\n');
 
     const initialCounts = this.getCurrentErrorCounts();
@@ -340,7 +338,7 @@ class RemainingErrorsFixer {
 
 if (require.main === module) {
   const fixer = new RemainingErrorsFixer();
-  fixer.run().catch(console.error);
+  fixer.run();
 }
 
 module.exports = RemainingErrorsFixer;

@@ -106,7 +106,7 @@ class FileLock {
             // Lock file already removed or doesn't exist
           }
         };
-      } catch (_error) {
+      } catch {
         if (_error.code === 'EEXIST') {
           // Lock file exists, check if process is still alive
           try {
@@ -249,8 +249,18 @@ const PRIORITY_ORDER = ['USER_REQUESTS', 'ERROR', 'AUDIT', 'FEATURE', 'TEST'];
  */
 class AutonomousTaskManagerAPI {
   constructor(options = {}) {
-    // Core data persistence paths
-    this.tasksPath = TASKS_PATH;
+    // Handle both projectRoot string and options object for backward compatibility
+    if (typeof options === 'string') {
+      // If first parameter is a string, treat it as projectRoot
+      const projectRoot = options;
+      this.tasksPath = path.join(projectRoot, 'TASKS.json');
+      options = {};
+    } else {
+      // Use options.projectRoot if provided, otherwise use module-level TASKS_PATH
+      this.tasksPath = options.projectRoot
+        ? path.join(options.projectRoot, 'TASKS.json')
+        : TASKS_PATH;
+    }
 
     // Dry run mode configuration
     this.dryRunMode = options.dryRun || false;
@@ -489,7 +499,7 @@ class AutonomousTaskManagerAPI {
       });
 
       return result;
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -555,7 +565,7 @@ class AutonomousTaskManagerAPI {
         feature,
         message: 'Feature approved successfully',
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -621,7 +631,7 @@ class AutonomousTaskManagerAPI {
         feature,
         message: 'Feature rejected successfully',
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -691,7 +701,7 @@ class AutonomousTaskManagerAPI {
             status: 'approved',
             success: true,
           });
-        } catch (_error) {
+        } catch {
           errors.push(`Error approving ${featureId}: ${_error.message}`);
         }
       }
@@ -707,7 +717,7 @@ class AutonomousTaskManagerAPI {
         errors: errors,
         message: `Bulk approval completed: ${results.length} approved, ${errors.length} errors`,
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -746,7 +756,7 @@ class AutonomousTaskManagerAPI {
         total: filteredFeatures.length,
         metadata: features.metadata,
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -792,7 +802,7 @@ class AutonomousTaskManagerAPI {
         stats,
         metadata: features.metadata,
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -859,7 +869,7 @@ class AutonomousTaskManagerAPI {
       };
 
       return response;
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -906,7 +916,7 @@ class AutonomousTaskManagerAPI {
       result.comprehensiveGuide = guideData;
 
       return result;
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: `Failed to initialize agent: ${_error.message}`,
@@ -963,7 +973,7 @@ class AutonomousTaskManagerAPI {
       result.comprehensiveGuide = guideData;
 
       return result;
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: `Failed to reinitialize agent: ${_error.message}`,
@@ -996,7 +1006,7 @@ class AutonomousTaskManagerAPI {
         analytics,
         message: 'Validation dependency configuration retrieved successfully',
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -1031,7 +1041,7 @@ class AutonomousTaskManagerAPI {
         validation,
         message: `Validation dependency for '${criterion}' updated successfully`,
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -1067,7 +1077,7 @@ class AutonomousTaskManagerAPI {
         },
         message: 'Validation execution plan generated successfully',
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -1103,7 +1113,7 @@ class AutonomousTaskManagerAPI {
           ? 'Dependency graph validation passed'
           : 'Dependency graph validation failed - issues detected',
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -1134,7 +1144,7 @@ class AutonomousTaskManagerAPI {
         },
         message: 'Dependency visualization data generated successfully',
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -1162,7 +1172,7 @@ class AutonomousTaskManagerAPI {
         duration,
         message: 'Validation execution recorded successfully',
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -1192,7 +1202,7 @@ class AutonomousTaskManagerAPI {
         message:
           result.message || 'Custom validation rules loaded successfully',
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -1222,7 +1232,7 @@ class AutonomousTaskManagerAPI {
         analytics,
         message: `Found ${rulesData.totalRules} custom validation rules (${rulesData.enabledRules} enabled)`,
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -1253,7 +1263,7 @@ class AutonomousTaskManagerAPI {
           ? `Custom validation rule '${ruleId}' executed successfully`
           : `Custom validation rule '${ruleId}' failed: ${result.error}`,
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -1321,7 +1331,7 @@ class AutonomousTaskManagerAPI {
         results,
         message: `Custom validation completed: ${successfulRules}/${results.length} rules passed`,
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -1345,7 +1355,7 @@ class AutonomousTaskManagerAPI {
         message:
           'Example custom validation configuration generated successfully',
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -1366,7 +1376,7 @@ class AutonomousTaskManagerAPI {
         analytics,
         message: 'Custom validation analytics retrieved successfully',
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -1478,7 +1488,7 @@ class AutonomousTaskManagerAPI {
         nextStep: authState.requiredSteps[0],
         instructions: `Next: validate-criterion ${authKey} ${authState.requiredSteps[0]}`,
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: `Failed to start authorization: ${_error.message}`,
@@ -1504,7 +1514,7 @@ class AutonomousTaskManagerAPI {
     try {
       const FS = require('fs').promises;
       const PATH = require('path');
-      const { execSync: _execSync } = require('child_process');
+      const { execSync: EXEC_SYNC } = require('child_process');
 
       const authStateFile = path.join(PROJECT_ROOT, '.auth-state.json');
 
@@ -1612,7 +1622,7 @@ class AutonomousTaskManagerAPI {
           ? `All validations complete! Final step: complete-authorization ${authKey}`
           : `Next: validate-criterion ${authKey} ${nextStep}`,
       };
-    } catch (_error) {
+    } catch {
       // Capture performance metrics for failed validation
       performanceMetrics.endTime = new Date().toISOString();
       performanceMetrics.durationMs = Date.now() - startTime;
@@ -1657,7 +1667,7 @@ class AutonomousTaskManagerAPI {
     try {
       const FS = require('fs').promises;
       const PATH = require('path');
-      const { execSync: _execSync } = require('child_process');
+      const { execSync: EXEC_SYNC } = require('child_process');
 
       const authStateFile = path.join(PROJECT_ROOT, '.auth-state.json');
 
@@ -1760,7 +1770,7 @@ class AutonomousTaskManagerAPI {
                 error: validationResult.error,
               };
             }
-          } catch (_error) {
+          } catch {
             const duration = Date.now() - criterionStartTime;
             parallelResults.failedCriteria.push({
               criterion,
@@ -1905,7 +1915,7 @@ class AutonomousTaskManagerAPI {
             ? `Use selective re-validation for failed criteria: selective-revalidation ${authKey}`
             : null,
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: `Parallel validation failed: ${error.message}`,
@@ -1981,7 +1991,7 @@ class AutonomousTaskManagerAPI {
       );
 
       return groups;
-    } catch (_error) {
+    } catch {
       loggers.taskManager.error(_error.message);
 
       // Fallback to original hardcoded groups if dependency manager fails
@@ -2079,7 +2089,7 @@ class AutonomousTaskManagerAPI {
         },
         message: `Stop authorized by agent ${authState.agentId} after completing all ${authState.completedSteps.length} validation steps`,
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: `Failed to complete authorization: ${error.message}`,
@@ -2183,7 +2193,7 @@ class AutonomousTaskManagerAPI {
         message: 'Tests found for feature - proceeding to coverage validation',
         nextStep: `confirm-test-coverage ${featureId}`,
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: `Test validation failed: ${error.message}`,
@@ -2260,7 +2270,7 @@ class AutonomousTaskManagerAPI {
         message: `Test coverage ${coveragePercentage}% meets requirement - proceeding to pipeline validation`,
         nextStep: `confirm-pipeline-passes ${featureId}`,
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: `Coverage validation failed: ${error.message}`,
@@ -2302,7 +2312,7 @@ class AutonomousTaskManagerAPI {
             status: 'passed',
             command: step.cmd,
           });
-        } catch (_error) {
+        } catch {
           allPassed = false;
           results.push({
             step: step.name,
@@ -2339,7 +2349,7 @@ class AutonomousTaskManagerAPI {
           'All pipeline validations passed - feature ready for advancement',
         nextStep: `advance-to-next-feature ${featureId}`,
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: `Pipeline validation failed: ${error.message}`,
@@ -2425,7 +2435,7 @@ class AutonomousTaskManagerAPI {
           pipeline: true,
         },
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: `Failed to advance to next feature: ${error.message}`,
@@ -2469,7 +2479,7 @@ class AutonomousTaskManagerAPI {
               ? `confirm-pipeline-passes ${featureId}`
               : `advance-to-next-feature ${featureId}`,
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: `Failed to get feature test status: ${error.message}`,
@@ -2561,7 +2571,7 @@ class AutonomousTaskManagerAPI {
         stored: true,
         metricsFile,
       };
-    } catch (_error) {
+    } catch {
       // Don't fail validation due to metrics storage issues
       return {
         success: false,
@@ -2634,7 +2644,7 @@ class AutonomousTaskManagerAPI {
         },
         featureId: 'feature_1758946499841_cd5eba625370', // Feature 8 ID
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -2684,7 +2694,7 @@ class AutonomousTaskManagerAPI {
         insights: this._generateTrendInsights(trends),
         featureId: 'feature_1758946499841_cd5eba625370',
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -2736,7 +2746,7 @@ class AutonomousTaskManagerAPI {
         },
         featureId: 'feature_1758946499841_cd5eba625370',
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -2783,7 +2793,7 @@ class AutonomousTaskManagerAPI {
         },
         featureId: 'feature_1758946499841_cd5eba625370',
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -2833,7 +2843,7 @@ class AutonomousTaskManagerAPI {
         analysisType: options.analysisType || 'comprehensive',
         featureId: 'feature_1758946499841_cd5eba625370',
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -2881,7 +2891,7 @@ class AutonomousTaskManagerAPI {
         recommendations: this._generateBenchmarkRecommendations(benchmarks),
         featureId: 'feature_1758946499841_cd5eba625370',
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -2896,7 +2906,7 @@ class AutonomousTaskManagerAPI {
   async analyzePerformanceTrends(_options = {}) {
     try {
       return await this.trendAnalyzer.analyzeTrends(_options);
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -2910,7 +2920,7 @@ class AutonomousTaskManagerAPI {
   analyzeCriterionTrend(criterion, _options = {}) {
     try {
       return this.trendAnalyzer.analyzeCriterionTrend(criterion, _options);
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -2924,7 +2934,7 @@ class AutonomousTaskManagerAPI {
   generateHealthScoreTrends(_options = {}) {
     try {
       return this.trendAnalyzer.generateHealthScoreTrends(_options);
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -2942,7 +2952,7 @@ class AutonomousTaskManagerAPI {
         periodB,
         _options
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -2979,7 +2989,7 @@ class AutonomousTaskManagerAPI {
           analysisScope: 'performance_forecasting',
         },
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -3014,7 +3024,7 @@ class AutonomousTaskManagerAPI {
           analysisScope: 'volatility_analysis',
         },
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -3091,7 +3101,7 @@ class AutonomousTaskManagerAPI {
           },
         };
       }
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -3127,7 +3137,7 @@ class AutonomousTaskManagerAPI {
           analysisScope: 'seasonality_analysis',
         },
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -3162,7 +3172,7 @@ class AutonomousTaskManagerAPI {
           analysisScope: 'baseline_comparison',
         },
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -3530,7 +3540,7 @@ class AutonomousTaskManagerAPI {
         featureId: 'feature_1758946499841_performance_metrics',
         generatedAt: new Date().toISOString(),
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -3565,7 +3575,7 @@ class AutonomousTaskManagerAPI {
         featureId: 'feature_1758946499841_performance_metrics',
         generatedAt: new Date().toISOString(),
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -3594,7 +3604,7 @@ class AutonomousTaskManagerAPI {
         featureId: 'feature_1758946499841_performance_metrics',
         generatedAt: new Date().toISOString(),
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -3623,7 +3633,7 @@ class AutonomousTaskManagerAPI {
         availableMetrics: metricsData.length,
         featureId: 'feature_1758946499841_performance_metrics',
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -3653,7 +3663,7 @@ class AutonomousTaskManagerAPI {
         featureId: 'feature_1758946499841_performance_metrics',
         generatedAt: new Date().toISOString(),
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -3689,7 +3699,7 @@ class AutonomousTaskManagerAPI {
         featureId: 'feature_1758946499841_performance_metrics',
         generatedAt: new Date().toISOString(),
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -3715,7 +3725,7 @@ class AutonomousTaskManagerAPI {
         featureId: 'feature_1758946499841_performance_metrics',
         generatedAt: new Date().toISOString(),
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -3777,7 +3787,7 @@ class AutonomousTaskManagerAPI {
         featureId: 'feature_1758946499841_performance_metrics',
         generatedAt: new Date().toISOString(),
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -4057,7 +4067,7 @@ class AutonomousTaskManagerAPI {
           stashCreated = true;
           gitState.stashMessage = stashMessage;
         }
-      } catch (_error) {
+      } catch {
         loggers.taskManager.warn(
           'Warning: Could not create git stash:',
           error.message
@@ -4118,7 +4128,7 @@ class AutonomousTaskManagerAPI {
         stashCreated: stashCreated,
         message: 'Validation state snapshot created successfully',
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: `Failed to create validation state snapshot: ${error.message}`,
@@ -4177,7 +4187,7 @@ class AutonomousTaskManagerAPI {
               }
             }
           }
-        } catch (_error) {
+        } catch {
           this.logger.warn('Git rollback encountered issues', {
             error: error.message,
             component: 'GitManager',
@@ -4217,7 +4227,7 @@ class AutonomousTaskManagerAPI {
         filesRestored: snapshotData.criticalFiles.length,
         message: 'Rollback completed successfully',
       };
-    } catch (_error) {
+    } catch {
       await this._logRollbackEvent({
         snapshotId: snapshotId,
         timestamp: new Date().toISOString(),
@@ -4291,7 +4301,7 @@ class AutonomousTaskManagerAPI {
         total: snapshots.length,
         showing: limitedSnapshots.length,
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: `Failed to get available snapshots: ${_error.message}`,
@@ -4340,7 +4350,7 @@ class AutonomousTaskManagerAPI {
           message: 'No rollback history found',
         };
       }
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: `Failed to get rollback history: ${error.message}`,
@@ -4418,7 +4428,7 @@ class AutonomousTaskManagerAPI {
           try {
             await this._removeDirectory(snapshot.directory);
             cleanedCount++;
-          } catch (_error) {
+          } catch {
             this.logger.warn('Failed to cleanup snapshot', {
               snapshotId: snapshot.id,
               error: error.message,
@@ -4436,7 +4446,7 @@ class AutonomousTaskManagerAPI {
         maxAge: maxAge,
         maxCount: maxCount,
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: `Failed to cleanup old snapshots: ${error.message}`,
@@ -4463,7 +4473,7 @@ class AutonomousTaskManagerAPI {
           timeout: 5000,
           encoding: 'utf8',
         }).trim();
-      } catch (_error) {
+      } catch {
         loggers.taskManager.warn(
           'Could not get git commit hash:',
           error.message
@@ -4476,7 +4486,7 @@ class AutonomousTaskManagerAPI {
           timeout: 5000,
           encoding: 'utf8',
         }).trim();
-      } catch (_error) {
+      } catch {
         loggers.taskManager.warn('Could not get git branch:', error.message);
       }
 
@@ -4487,7 +4497,7 @@ class AutonomousTaskManagerAPI {
           encoding: 'utf8',
         });
         gitState.hasUncommittedChanges = statusOutput.trim().length > 0;
-      } catch (_error) {
+      } catch {
         loggers.taskManager.warn('Could not check git status:', error.message);
       }
 
@@ -4500,12 +4510,12 @@ class AutonomousTaskManagerAPI {
         gitState.stashCount = stashOutput
           .split('\n')
           .filter((line) => line.trim()).length;
-      } catch (_error) {
+      } catch {
         loggers.taskManager.warn('Could not get stash count:', error.message);
       }
 
       return gitState;
-    } catch (_error) {
+    } catch {
       return {
         commitHash: null,
         branch: null,
@@ -4547,7 +4557,7 @@ class AutonomousTaskManagerAPI {
       history.snapshots = history.snapshots.slice(0, 50);
 
       await fs.writeFile(historyFile, JSON.stringify(history, null, 2));
-    } catch (_error) {
+    } catch {
       loggers.taskManager.warn(
         'Failed to update snapshot history:',
         error.message
@@ -4580,7 +4590,7 @@ class AutonomousTaskManagerAPI {
       history.events = history.events.slice(0, 100);
 
       await fs.writeFile(historyFile, JSON.stringify(history, null, 2));
-    } catch (_error) {
+    } catch {
       loggers.taskManager.warn('Failed to log rollback event:', error.message);
     }
   }
@@ -4622,7 +4632,7 @@ class AutonomousTaskManagerAPI {
 
         await fs.rmdir(dirPath);
       }
-    } catch (_error) {
+    } catch {
       throw new Error(
         `Failed to remove directory ${dirPath}: ${_error.message}`
       );
@@ -4651,7 +4661,7 @@ class AutonomousTaskManagerAPI {
           .toString()
           .trim();
         cacheInputs.push(`git:${gitHash}`);
-      } catch (_error) {
+      } catch {
         // No git or error, use timestamp as fallback
         cacheInputs.push(`timestamp:${Date.now()}`);
       }
@@ -4829,7 +4839,7 @@ class AutonomousTaskManagerAPI {
         `💾 Cache MISS for ${criterion} - executing validation`
       );
       return null;
-    } catch (_error) {
+    } catch {
       loggers.taskManager.error(_error.message);
       return null;
     }
@@ -4868,7 +4878,7 @@ class AutonomousTaskManagerAPI {
         component: 'ValidationCache',
         operation: 'cacheStore',
       });
-    } catch (_error) {
+    } catch {
       loggers.taskManager.error(_error.message);
       // Don't fail validation due to cache issues
     }
@@ -4916,7 +4926,7 @@ class AutonomousTaskManagerAPI {
           `🧹 Cleaned up ${cleanedCount} old cache entries`
         );
       }
-    } catch (_error) {
+    } catch {
       // Cache cleanup is non-critical
       loggers.taskManager.error(_error.message);
     }
@@ -4959,7 +4969,7 @@ class AutonomousTaskManagerAPI {
         fromCache: false,
         executionTime: DURATION,
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -5021,7 +5031,7 @@ class AutonomousTaskManagerAPI {
           return applicableRules;
         }
       }
-    } catch (_error) {
+    } catch {
       this.logger.warn('Failed to load custom validation rules', {
         error: error.message,
         component: 'CustomValidator',
@@ -5229,7 +5239,7 @@ class AutonomousTaskManagerAPI {
       }
 
       return true;
-    } catch (_error) {
+    } catch {
       this.logger.warn('Error evaluating conditions for rule', {
         ruleId: rule.id,
         error: error.message,
@@ -5456,7 +5466,7 @@ class AutonomousTaskManagerAPI {
           skipped: customRules.length - results.length,
         },
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: `Failed to execute custom validation rules: ${error.message}`,
@@ -5787,7 +5797,7 @@ class AutonomousTaskManagerAPI {
                 success: true,
                 details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
               };
-            } catch (_error) {
+            } catch {
               return {
                 success: false,
                 error: `Custom validation '${customRule.name}' failed: ${error.message}`,
@@ -5800,7 +5810,7 @@ class AutonomousTaskManagerAPI {
             error: `Unknown validation criterion: ${criterion}`,
           };
       }
-    } catch (_error) {
+    } catch {
       return { success: false, error: _error.message };
     }
   }
@@ -5836,13 +5846,14 @@ class AutonomousTaskManagerAPI {
               success: true,
               details: `passed with command: ${cmd}`,
             };
-          } catch (commandError) {
+          } catch {
             errors.push(`${cmd}: ${commandError.message}`);
 
             // Special fallback for common build system issues
             if (this._isKnownBuildSystemIssue(commandError.message, cmd)) {
               const fallbackResult = await this._attemptBuildSystemFallback(
-                cmd, operation,
+                cmd,
+                operation,
                 timeout
               );
               if (fallbackResult.success) {
@@ -5852,7 +5863,7 @@ class AutonomousTaskManagerAPI {
             }
           }
         }
-      } catch (_error) {
+      } catch {
         errors.push(`${cmd}: ${error.message}`);
         continue;
       }
@@ -5950,7 +5961,7 @@ class AutonomousTaskManagerAPI {
 
             try {
               child.kill('SIGTERM');
-            } catch (_error) {
+            } catch {
               // Already killed
             }
 
@@ -5982,7 +5993,7 @@ class AutonomousTaskManagerAPI {
             details:
               'Start command executed successfully (killed after timeout)',
           });
-        } catch (killError) {
+        } catch {
           resolve({
             success: false,
             error: `Failed to kill start process: ${killError.message}`,
@@ -6072,7 +6083,7 @@ class AutonomousTaskManagerAPI {
           success: true,
           details: `passed with fallback strategy: ${fallbackCmd}`,
         };
-      } catch (fallbackError) {
+      } catch {
         // Continue to next fallback
         continue;
       }
@@ -6188,12 +6199,12 @@ class AutonomousTaskManagerAPI {
       },
     };
 
-    const strategy = gracefulStrategies[OPERATION;
+    const strategy = gracefulStrategies[operation];
     if (strategy) {
       try {
         const result = await strategy();
         return { ...result, attempted: true };
-      } catch (strategyError) {
+      } catch {
         return {
           success: false,
           error: `Graceful fallback failed: ${strategyError.message}`,
@@ -6280,7 +6291,7 @@ class AutonomousTaskManagerAPI {
           if (scripts.test && Object.keys(scripts).length <= 3) {
             return 'library';
           }
-        } catch (_error) {
+        } catch {
           // Ignore JSON parsing errors
         }
       }
@@ -6336,7 +6347,7 @@ class AutonomousTaskManagerAPI {
           operation: 'storeFailures',
         }
       );
-    } catch (_error) {
+    } catch {
       loggers.taskManager.error(_error.message);
       // Don't fail validation due to storage issues
     }
@@ -6379,7 +6390,7 @@ class AutonomousTaskManagerAPI {
       }
 
       return [];
-    } catch (_error) {
+    } catch {
       loggers.taskManager.error(_error.message);
       return [];
     }
@@ -6430,7 +6441,7 @@ class AutonomousTaskManagerAPI {
           });
         }
       }
-    } catch (_error) {
+    } catch {
       loggers.taskManager.error(_error.message);
       // Don't fail validation due to cleanup issues
     }
@@ -6521,7 +6532,7 @@ class AutonomousTaskManagerAPI {
               operation: 'selectiveRevalidation',
             });
           }
-        } catch (_error) {
+        } catch {
           newFailures.push({
             criterion,
             error: _error.message,
@@ -6567,7 +6578,7 @@ class AutonomousTaskManagerAPI {
             ? `All ${successCount} criteria now passing!`
             : `${successCount} criteria resolved, ${failureCount} still need attention`,
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -6806,7 +6817,7 @@ class AutonomousTaskManagerAPI {
           'Abuse of emergency overrides may result in access revocation',
         ],
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: `Failed to create emergency override: ${error.message}`,
@@ -6980,7 +6991,7 @@ class AutonomousTaskManagerAPI {
           `Remaining emergency uses: ${emergencyRecord.maxUsage - emergencyRecord.usageCount}`,
         ],
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: `Failed to execute emergency override: ${error.message}`,
@@ -7032,7 +7043,7 @@ class AutonomousTaskManagerAPI {
           isExhausted: emergencyRecord.usageCount >= emergencyRecord.maxUsage,
         },
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: `Failed to check emergency override: ${error.message}`,
@@ -7080,7 +7091,7 @@ class AutonomousTaskManagerAPI {
       auditLog.push(auditEntry);
 
       await fs.writeFile(auditFile, JSON.stringify(auditLog, null, 2));
-    } catch (_error) {
+    } catch {
       loggers.taskManager.error(_error.message);
       // Don't fail emergency operations due to audit logging issues
     }
@@ -7121,7 +7132,7 @@ class AutonomousTaskManagerAPI {
           },
           message: `Stop authorized by agent ${agentId} - stop hook will allow termination on next trigger`,
         };
-      } catch (_error) {
+      } catch {
         return {
           success: false,
           error: `Failed to authorize stop: ${error.message}`,
@@ -7210,7 +7221,7 @@ class AutonomousTaskManagerAPI {
       });
 
       return result;
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -7309,7 +7320,7 @@ class AutonomousTaskManagerAPI {
       });
 
       return result;
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -7377,7 +7388,7 @@ class AutonomousTaskManagerAPI {
         filters_applied: filters,
         message: `Retrieved ${tasks.length} tasks from queue`,
       };
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -7459,7 +7470,7 @@ class AutonomousTaskManagerAPI {
       });
 
       return result;
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -7538,7 +7549,7 @@ class AutonomousTaskManagerAPI {
       });
 
       return result;
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -7595,7 +7606,7 @@ class AutonomousTaskManagerAPI {
       });
 
       return result;
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -7659,7 +7670,7 @@ class AutonomousTaskManagerAPI {
       });
 
       return result;
-    } catch (_error) {
+    } catch {
       throw new Error(`Failed to create task: ${_error.message}`);
     }
   }
@@ -7685,7 +7696,7 @@ class AutonomousTaskManagerAPI {
         task,
         message: 'Task retrieved successfully',
       };
-    } catch (_error) {
+    } catch {
       throw new Error(`Failed to get task: ${_error.message}`);
     }
   }
@@ -7724,7 +7735,7 @@ class AutonomousTaskManagerAPI {
         },
         message: 'Verification requirements retrieved successfully',
       };
-    } catch (_error) {
+    } catch {
       throw new Error(
         `Failed to get verification requirements: ${_error.message}`
       );
@@ -7786,7 +7797,7 @@ class AutonomousTaskManagerAPI {
       });
 
       return result;
-    } catch (_error) {
+    } catch {
       throw new Error(
         `Failed to submit verification evidence: ${_error.message}`
       );
@@ -7844,7 +7855,7 @@ class AutonomousTaskManagerAPI {
       });
 
       return result;
-    } catch (_error) {
+    } catch {
       throw new Error(`Failed to update task: ${_error.message}`);
     }
   }
@@ -7903,7 +7914,7 @@ class AutonomousTaskManagerAPI {
       });
 
       return result;
-    } catch (_error) {
+    } catch {
       throw new Error(`Failed to complete task: ${_error.message}`);
     }
   }
@@ -7933,7 +7944,7 @@ class AutonomousTaskManagerAPI {
         count: agentTasks.length,
         message: `Found ${agentTasks.length} tasks for agent ${agentId}`,
       };
-    } catch (_error) {
+    } catch {
       throw new Error(`Failed to get agent tasks: ${_error.message}`);
     }
   }
@@ -7961,7 +7972,7 @@ class AutonomousTaskManagerAPI {
         count: statusTasks.length,
         message: `Found ${statusTasks.length} tasks with status '${status}'`,
       };
-    } catch (_error) {
+    } catch {
       throw new Error(`Failed to get tasks by status: ${_error.message}`);
     }
   }
@@ -7991,7 +8002,7 @@ class AutonomousTaskManagerAPI {
         count: priorityTasks.length,
         message: `Found ${priorityTasks.length} tasks with priority '${priority}'`,
       };
-    } catch (_error) {
+    } catch {
       throw new Error(`Failed to get tasks by priority: ${_error.message}`);
     }
   }
@@ -8041,7 +8052,7 @@ class AutonomousTaskManagerAPI {
         count: availableTasks.length,
         message: `Found ${availableTasks.length} available tasks for agent ${agentId}`,
       };
-    } catch (_error) {
+    } catch {
       throw new Error(`Failed to get available tasks: ${_error.message}`);
     }
   }
@@ -8107,7 +8118,7 @@ class AutonomousTaskManagerAPI {
         statistics: stats,
         message: 'Task statistics calculated successfully',
       };
-    } catch (_error) {
+    } catch {
       throw new Error(`Failed to get task statistics: ${_error.message}`);
     }
   }
@@ -8198,7 +8209,7 @@ class AutonomousTaskManagerAPI {
       });
 
       return result;
-    } catch (_error) {
+    } catch {
       throw new Error(
         `Failed to create tasks from features: ${_error.message}`
       );
@@ -8273,7 +8284,7 @@ class AutonomousTaskManagerAPI {
       });
 
       return result;
-    } catch (_error) {
+    } catch {
       throw new Error(`Failed to optimize task assignments: ${_error.message}`);
     }
   }
@@ -8308,7 +8319,7 @@ class AutonomousTaskManagerAPI {
       });
 
       return result;
-    } catch (_error) {
+    } catch {
       throw new Error(`Failed to register agent: ${_error.message}`);
     }
   }
@@ -8345,7 +8356,7 @@ class AutonomousTaskManagerAPI {
       });
 
       return result;
-    } catch (_error) {
+    } catch {
       throw new Error(`Failed to unregister agent: ${_error.message}`);
     }
   }
@@ -8373,7 +8384,7 @@ class AutonomousTaskManagerAPI {
         count: agents.length,
         message: `Found ${agents.length} registered agents`,
       };
-    } catch (_error) {
+    } catch {
       throw new Error(`Failed to get active agents: ${_error.message}`);
     }
   }
@@ -8404,7 +8415,11 @@ class AutonomousTaskManagerAPI {
       this.wsPort = port;
 
       this.wss.on('connection', (ws) => {
-        loggers.taskManager.info('New webSocket client connected');
+        loggers.taskManager.info('New webSocket client connected', {
+          taskId: 'process.env.TASK_ID || null',
+          operationId: 'crypto.randomUUID()',
+          module: 'taskmanager-api',
+        });
 
         // Send initial status
         ws.send(
@@ -8416,7 +8431,11 @@ class AutonomousTaskManagerAPI {
         );
 
         ws.on('close', () => {
-          loggers.taskManager.info('webSocket client disconnected');
+          loggers.taskManager.info('webSocket client disconnected', {
+            taskId: 'process.env.TASK_ID || null',
+            operationId: 'crypto.randomUUID()',
+            module: 'taskmanager-api',
+          });
         });
       });
 
@@ -8431,7 +8450,7 @@ class AutonomousTaskManagerAPI {
         port,
         endpoint: `ws://localhost:${port}`,
       };
-    } catch (_error) {
+    } catch {
       throw new Error(`Failed to start webSocket server: ${_error.message}`);
     }
   }
@@ -8462,7 +8481,7 @@ class AutonomousTaskManagerAPI {
           client.send(JSON.stringify(statusUpdate));
         }
       });
-    } catch (_error) {
+    } catch {
       loggers.taskManager.error('Failed to broadcast status update:', error);
     }
   }
@@ -8536,7 +8555,7 @@ class AutonomousTaskManagerAPI {
     try {
       const data = await fs.readFile(this.tasksPath, 'utf8');
       return JSON.parse(data);
-    } catch (_error) {
+    } catch {
       if (_error.code === 'ENOENT') {
         // File doesn't exist, create it
         await this._ensureTasksFile();
@@ -8552,7 +8571,7 @@ class AutonomousTaskManagerAPI {
   async _saveTasks(tasks) {
     try {
       await fs.writeFile(this.tasksPath, JSON.stringify(tasks, null, 2));
-    } catch (_error) {
+    } catch {
       throw new Error(`Failed to save tasks: ${_error.message}`);
     }
   }
@@ -8564,7 +8583,7 @@ class AutonomousTaskManagerAPI {
     try {
       const data = await fs.readFile(this.tasksPath, 'utf8');
       return JSON.parse(data);
-    } catch (_error) {
+    } catch {
       if (_error.code === 'ENOENT') {
         // File doesn't exist, create it
         await this._ensureFeaturesFile();
@@ -8580,7 +8599,7 @@ class AutonomousTaskManagerAPI {
   async _saveFeatures(features) {
     try {
       await fs.writeFile(this.tasksPath, JSON.stringify(features, null, 2));
-    } catch (_error) {
+    } catch {
       throw new Error(`Failed to save features: ${_error.message}`);
     }
   }
@@ -8647,7 +8666,7 @@ class AutonomousTaskManagerAPI {
 
       // Return dry run result with information about what would have happened
       return this._formatDryRunResult(result, features, featuresCopy);
-    } catch (_error) {
+    } catch {
       // Return dry run error information
       return {
         success: false,
@@ -9330,7 +9349,7 @@ class AutonomousTaskManagerAPI {
           };
         })()
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -9536,7 +9555,7 @@ class AutonomousTaskManagerAPI {
       });
 
       return true;
-    } catch (_error) {
+    } catch {
       loggers.taskManager.error(_error.message);
       return false;
     }
@@ -9837,6 +9856,11 @@ class AutonomousTaskManagerAPI {
       isValid = false;
     }
 
+    // Skip requirements validation if reviewedItems is not a valid array
+    if (!Array.isArray(evidenceData.reviewedItems)) {
+      return { isValid, errors };
+    }
+
     // Validate against each requirement
     requirements.forEach((requirement, index) => {
       if (requirement.critical) {
@@ -9949,7 +9973,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.storeLesson(lessonData),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -9967,7 +9991,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.searchLessons(query, _options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -9982,7 +10006,7 @@ class AutonomousTaskManagerAPI {
   storeError(errorData) {
     try {
       return this.withTimeout(this.ragOps.storeError(errorData), this.timeout);
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10000,7 +10024,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.findSimilarErrors(errorDescription, _options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10018,7 +10042,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.getRelevantLessons(taskId, _options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10033,7 +10057,7 @@ class AutonomousTaskManagerAPI {
   getRagAnalytics() {
     try {
       return this.withTimeout(this.ragOps.getAnalytics(), this.timeout);
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10053,7 +10077,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.getLessonVersionHistory(lessonId),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10071,7 +10095,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.compareLessonVersions(lessonId, versionA, versionB),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10089,7 +10113,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.rollbackLessonVersion(lessonId, targetVersion),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10107,7 +10131,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.getLessonVersionAnalytics(lessonId),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10125,7 +10149,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.storeLessonWithVersioning(lessonData, versionOptions),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10143,7 +10167,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.searchLessonsWithVersioning(query, _options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10163,7 +10187,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.recordLessonUsage(lessonId, usageData),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10181,7 +10205,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.recordLessonFeedback(lessonId, feedbackData),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10199,7 +10223,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.recordLessonOutcome(lessonId, outcomeData),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10217,7 +10241,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.getLessonQualityScore(lessonId),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10235,7 +10259,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.getLessonQualityAnalytics(_options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10253,7 +10277,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.getQualityBasedRecommendations(_options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10271,7 +10295,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.searchLessonsWithQuality(query, _options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10289,7 +10313,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.updateLessonQualityScore(lessonId, scoreData),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10309,7 +10333,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.registerProject(projectData),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10327,7 +10351,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.shareLessonCrossProject(lessonId, projectId, sharingData),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10345,7 +10369,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.calculateProjectRelevance(sourceProjectId, targetProjectId),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10363,7 +10387,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.getSharedLessonsForProject(projectId, _options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10381,7 +10405,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.getProjectRecommendations(projectId, _options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10399,7 +10423,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.recordLessonApplication(applicationData),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10417,7 +10441,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.getCrossProjectAnalytics(projectId, _options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10435,7 +10459,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.updateProject(projectId, updates),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10450,7 +10474,7 @@ class AutonomousTaskManagerAPI {
   getProject(projectId) {
     try {
       return this.withTimeout(this.ragOps.getProject(projectId), this.timeout);
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10465,7 +10489,7 @@ class AutonomousTaskManagerAPI {
   listProjects(_options = {}) {
     try {
       return this.withTimeout(this.ragOps.listProjects(_options), this.timeout);
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10485,7 +10509,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.deprecateLesson(lessonId, deprecationData),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10503,7 +10527,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.restoreLesson(lessonId, restorationData),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10521,7 +10545,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.getLessonDeprecationStatus(lessonId),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10539,7 +10563,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.getDeprecatedLessons(_options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10557,7 +10581,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.cleanupObsoleteLessons(_options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10575,7 +10599,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.getDeprecationAnalytics(_options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10595,7 +10619,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.detectLearningPatterns(_options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10613,7 +10637,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.analyzePatternEvolution(category, _options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10631,7 +10655,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.getPatternBasedSuggestions(context, _options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10649,7 +10673,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.analyzeLessonPatterns(lessonId, _options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10667,7 +10691,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.getPatternAnalytics(_options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10685,7 +10709,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.clusterPatterns(_options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10703,7 +10727,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.searchSimilarPatterns(query, _options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10721,7 +10745,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.generatePatternInsights(_options),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10739,7 +10763,7 @@ class AutonomousTaskManagerAPI {
         this.ragOps.updatePatternDetectionConfig(configUpdates),
         this.timeout
       );
-    } catch (_error) {
+    } catch {
       return {
         success: false,
         error: _error.message,
@@ -10788,7 +10812,7 @@ async function main() {
     // Initialize secret management
     await validateRequiredSecrets();
     logger.info('Secret validation completed successfully');
-  } catch (_error) {
+  } catch {
     logger.error(
       { error: error.message },
       'Failed to initialize secret management'
@@ -10796,7 +10820,9 @@ async function main() {
     loggers.taskManager.error('❌ Secret Management Error:', error.message);
 
     if (isSecureEnvironment()) {
-      process.exit(1);
+      throw new Error(
+        'Secret management initialization failed in secure environment'
+      );
     } else {
       this.logger.warn('Running in development mode with missing secrets', {
         component: 'SecretManager',
@@ -11096,7 +11122,7 @@ async function main() {
                 'Check .emergency-audit/ directory for available dates',
             };
           }
-        } catch (_error) {
+        } catch {
           result = {
             success: false,
             error: `Failed to read audit log: ${error.message}`,
@@ -11153,7 +11179,7 @@ async function main() {
               message: 'No emergency overrides found',
             };
           }
-        } catch (_error) {
+        } catch {
           result = {
             success: false,
             error: `Failed to list emergency overrides: ${error.message}`,
@@ -11297,7 +11323,11 @@ async function main() {
           'webSocket server running. Press Ctrl+C to stop.'
         );
         process.on('SIGINT', () => {
-          loggers.taskManager.info('\nShutting down webSocket server...');
+          loggers.taskManager.info('\nShutting down webSocket server...', {
+            taskId: 'process.env.TASK_ID || null',
+            operationId: 'crypto.randomUUID()',
+            module: 'taskmanager-api',
+          });
           api.cleanup();
           throw new Error('webSocket server shutdown requested');
         });
@@ -12200,7 +12230,7 @@ async function main() {
       { additionalData: [null, 2] },
       JSON.stringify(result)
     );
-  } catch (_error) {
+  } catch {
     const errorResponse = {
       success: false,
       error: _error.message,
@@ -12225,7 +12255,7 @@ module.exports = AutonomousTaskManagerAPI;
 // Run CLI if called directly (CommonJS equivalent)
 if (require.main === module) {
   main().catch((error) => {
-    console.error('TaskManager API Error:', error.message);
+    loggers.app.error('TaskManager API Error:', error.message);
     throw error;
   });
 }

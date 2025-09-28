@@ -21,7 +21,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync: _execSync } = require('child_process');
+const { execSync: EXEC_SYNC } = require('child_process');
+const { loggers } = require('../lib/logger');
 
 // Quality metrics configuration
 const QUALITY_CONFIG = {
@@ -256,7 +257,7 @@ class CodeQualityAnalyzer {
         recommendations: this.recommendations,
         detailed_metrics: this.metrics,
       };
-    } catch (error) {
+    } catch {
       this.logger.error('Code quality analysis failed', {
         error: error.message,
       });
@@ -280,7 +281,7 @@ class CodeQualityAnalyzer {
           absolute: true,
         });
         allFiles.push(...files);
-      } catch (error) {
+      } catch {
         this.logger.warning(`Failed to glob pattern ${pattern}`, {
           error: error.message,
         });
@@ -346,7 +347,7 @@ class CodeQualityAnalyzer {
             message: `High cyclomatic complexity: ${fileComplexity.cyclomatic}`,
           });
         }
-      } catch (error) {
+      } catch {
         this.logger.debug(`Failed to analyze complexity for ${filePath}`, {
           error: error.message,
         });
@@ -470,7 +471,7 @@ class CodeQualityAnalyzer {
             message: `Large file: ${lineCount} lines`,
           });
         }
-      } catch (error) {
+      } catch {
         this.logger.debug(`Failed to analyze size for ${filePath}`, {
           error: error.message,
         });
@@ -542,7 +543,7 @@ class CodeQualityAnalyzer {
             blockHashes.get(hash).push({ file: filePath, startLine: i + 1 });
           }
         }
-      } catch (error) {
+      } catch {
         this.logger.debug(`Failed to analyze duplication for ${filePath}`, {
           error: error.message,
         });
@@ -686,7 +687,7 @@ class CodeQualityAnalyzer {
             }
           }
         }
-      } catch (error) {
+      } catch {
         this.logger.debug(`Failed to analyze security for ${filePath}`, {
           error: error.message,
         });
@@ -842,7 +843,7 @@ class CodeQualityAnalyzer {
         if (lines.length > this.config.size.lines_per_file.critical) {
           smellsData.god_objects++;
         }
-      } catch (error) {
+      } catch {
         this.logger.debug(`Failed to detect smells for ${filePath}`, {
           error: error.message,
         });
@@ -923,7 +924,7 @@ class CodeQualityAnalyzer {
 
         imports.set(filePath, fileImports);
         exports.set(filePath, fileExports);
-      } catch (error) {
+      } catch {
         this.logger.debug(`Failed to analyze architecture for ${filePath}`, {
           error: error.message,
         });
@@ -1205,7 +1206,7 @@ if (require.main === module) {
   const args = process.argv.slice(2);
 
   if (args.includes('--help') || args.includes('-h')) {
-    console.log(`
+    loggers.app.info(`
 Comprehensive Code Quality Analyzer
 
 Usage: node code-quality-analyzer.js [options]
@@ -1246,7 +1247,7 @@ Examples:
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Config path validated by quality analyzer
       const customConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
       options.config = customConfig;
-    } catch (error) {
+    } catch {
       loggers.stopHook.error(`❌ Failed to load config: ${error.message}`);
       throw error;
     }
@@ -1257,7 +1258,7 @@ Examples:
   try {
     const result = analyzer.analyze();
     loggers.stopHook.log(`\n📊 Code Quality Analysis Complete:`);
-    console.log(
+    loggers.app.info(
       `   Overall Score: ${result.overall_score}/100 (${result.quality_level})`
     );
     loggers.stopHook.log(`   Issues Found: ${result.issues.length}`);
@@ -1268,7 +1269,7 @@ Examples:
     if (result.overall_score < 70) {
       throw new Error('Code quality score below threshold');
     }
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('❌ Code quality analysis failed:', error.message);
     throw error;
   }

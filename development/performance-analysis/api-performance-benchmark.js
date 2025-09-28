@@ -8,7 +8,7 @@
  * @date 2025-09-21
  */
 
-/* eslint-disable no-console */
+
 // Console output is intentional for this development/analysis tool
 
 const { spawn } = require('child_process');
@@ -70,7 +70,7 @@ class APIPerformanceBenchmark {
         // Small delay between iterations
         // eslint-disable-next-line no-await-in-loop -- Sequential delay required for benchmark accuracy
         await this.sleep(100);
-      } catch (error) {
+      } catch {
         results.push({
           iteration: i + 1,
           responseTime: -1,
@@ -118,7 +118,7 @@ class APIPerformanceBenchmark {
             exitCode: code,
             stderr: stderr,
           });
-        } catch (error) {
+        } catch {
           resolve({
             success: false,
             error: `Parse error: ${error.message}`,
@@ -418,7 +418,7 @@ class APIPerformanceBenchmark {
    * Load testing simulation
    */
   async performLoadTest(endpoint = 'list', concurrency = 5, duration = 30) {
-    console.log(
+    loggers.app.info(
       `🔥 Starting load test: ${endpoint} (${concurrency} concurrent, ${duration}s)`,
     );
 
@@ -479,7 +479,7 @@ class APIPerformanceBenchmark {
           success: result.success,
           timestamp: Date.now(),
         });
-      } catch (error) {
+      } catch {
         results.push({
           workerId,
           requestCount: ++requestCount,
@@ -567,7 +567,7 @@ class APIPerformanceBenchmark {
       // eslint-disable-next-line security/detect-object-injection -- Object property access with validated _operationnames from predefined array
       const metrics = this.results.endpoints[op];
       return {
-        operation, op,
+        operation: op,
         averageResponseTime: metrics?.averageResponseTime || -1,
         successRate: metrics?.successRate || 0,
         criticality: 'High',
@@ -601,8 +601,7 @@ class APIPerformanceBenchmark {
 
     return {
       cacheableOperations: readOperations.map((op) => ({
-        operation, op,
-
+        operation: op,
         averageResponseTime:
           // eslint-disable-next-line security/detect-object-injection -- Object property access with validated _operationnames
           this.results.endpoints[op]?.averageResponseTime || -1,
@@ -731,16 +730,16 @@ async function main() {
     // Display summary
     loggers.stopHook.log('\n📊 PERFORMANCE BENCHMARK SUMMARY');
     loggers.stopHook.log('=====================================');
-    console.log(
+    loggers.app.info(
       `Endpoints Tested: ${report.executiveSummary.totalEndpointsTested}`,
     );
-    console.log(
+    loggers.app.info(
       `Success Rate: ${report.executiveSummary.overallSuccessRate.toFixed(2)}%`,
     );
-    console.log(
+    loggers.app.info(
       `Average Response Time: ${report.executiveSummary.averageSystemResponseTime.toFixed(2)}ms`,
     );
-    console.log(
+    loggers.app.info(
       `Critical Recommendations: ${report.executiveSummary.criticalRecommendations}`,
     );
 
@@ -749,14 +748,14 @@ async function main() {
       report.performanceAnalysis.slowestEndpoints
         .slice(0, 3)
         .forEach((endpoint) => {
-          console.log(
+          loggers.app.info(
             `  ${endpoint.endpoint}: ${endpoint.averageResponseTime.toFixed(2)}ms`,
           );
         });
     }
 
     loggers.stopHook.log(`\n📄 Full report: ${outputFile}`);
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('❌ Benchmark failed:', error);
     throw error;
   }

@@ -8,6 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { loggers } = require('../lib/logger');
 
 class ComprehensiveLintingFix {
   constructor() {
@@ -36,7 +37,7 @@ class ComprehensiveLintingFix {
         hasChanges = true;
       }
 
-      // Pattern 2: } catch (error) { ... ${error.message} }
+      // Pattern 2: } catch { ... ${error.message} }
       // Fix: Change ${error.message} to ${_error.message}
       const errorTemplatePattern =
         /catch\s*\(\s*_error\s*\)\s*\{[^}]*?\$\{error\./g;
@@ -90,8 +91,8 @@ class ComprehensiveLintingFix {
       }
 
       return { content: newContent, hasChanges };
-    } catch (error) {
-      console.error(`Error processing ${filePath}:`, error.message);
+    } catch {
+      loggers.app.error(`Error processing ${filePath}:`, error.message);
       return { content: null, hasChanges: false };
     }
   }
@@ -105,7 +106,7 @@ class ComprehensiveLintingFix {
       let newContent = content;
       let hasChanges = false;
 
-      // Pattern: } catch (error) { with no usage of _error
+      // Pattern: } catch { with no usage of _error
       const catchBlockPattern = /}\s*catch\s*\(\s*_error\s*\)\s*\{([^}]*)\}/g;
 
       let match;
@@ -121,8 +122,8 @@ class ComprehensiveLintingFix {
       }
 
       return { content: newContent, hasChanges };
-    } catch (error) {
-      console.error(`Error processing ${filePath}:`, error.message);
+    } catch {
+      loggers.app.error(`Error processing ${filePath}:`, error.message);
       return { content: null, hasChanges: false };
     }
   }
@@ -166,8 +167,8 @@ class ComprehensiveLintingFix {
       }
 
       return { content: lines.join('\n'), hasChanges };
-    } catch (error) {
-      console.error(
+    } catch {
+      loggers.app.error(
         `Error processing unused parameters in ${filePath}:`,
         error.message
       );
@@ -184,7 +185,7 @@ class ComprehensiveLintingFix {
         encoding: 'utf8',
       });
       return result.split('\n').filter((line) => line.includes('error'));
-    } catch (error) {
+    } catch {
       return error.stdout
         ? error.stdout.split('\n').filter((line) => line.includes('error'))
         : [];
@@ -195,7 +196,7 @@ class ComprehensiveLintingFix {
    * Process a single file with all fixes
    */
   processFile(filePath) {
-    console.log(`Processing: ${path.relative('.', filePath)}`);
+    loggers.app.info(`Processing: ${path.relative('.', filePath)}`);
 
     let currentContent = fs.readFileSync(filePath, 'utf8');
     let totalChanges = false;
@@ -218,7 +219,7 @@ class ComprehensiveLintingFix {
 
     if (totalChanges) {
       this.fixedFiles.push(filePath);
-      console.log(`  ✅ Fixed errors in ${path.relative('.', filePath)}`);
+      loggers.app.info(`  ✅ Fixed errors in ${path.relative('.', filePath)}`);
     }
   }
 
@@ -254,15 +255,15 @@ class ComprehensiveLintingFix {
    * Run comprehensive fix process
    */
   async run() {
-    console.log('🚀 Starting comprehensive linting error fix...\n');
+    loggers.app.info('🚀 Starting comprehensive linting error fix...\n');
 
     // Get current error count
     const initialErrors = this.getCurrentErrorCount();
-    console.log(`📊 Initial error count: ${initialErrors}\n`);
+    loggers.app.info(`📊 Initial error count: ${initialErrors}\n`);
 
     // Find and process all files
     const files = this.findJavaScriptFiles();
-    console.log(`📁 Found ${files.length} JavaScript files to process\n`);
+    loggers.app.info(`📁 Found ${files.length} JavaScript files to process\n`);
 
     // Process files in batches to avoid overwhelming the system
     const batchSize = 10;
@@ -276,7 +277,7 @@ class ComprehensiveLintingFix {
       // Check progress every batch
       if ((i + batchSize) % 50 === 0) {
         const currentErrors = this.getCurrentErrorCount();
-        console.log(
+        loggers.app.info(
           `\n📊 Progress: ${i + batchSize}/${files.length} files, ${currentErrors} errors remaining\n`
         );
       }
@@ -286,18 +287,20 @@ class ComprehensiveLintingFix {
     const finalErrors = this.getCurrentErrorCount();
     const errorsFixed = initialErrors - finalErrors;
 
-    console.log('\n🎉 Comprehensive fix completed!');
-    console.log(`📊 Files processed: ${files.length}`);
-    console.log(`📊 Files modified: ${this.fixedFiles.length}`);
-    console.log(`📊 Errors fixed: ${errorsFixed}`);
-    console.log(`📊 Remaining errors: ${finalErrors}`);
+    loggers.app.info('\n🎉 Comprehensive fix completed!');
+    loggers.app.info(`📊 Files processed: ${files.length}`);
+    loggers.app.info(`📊 Files modified: ${this.fixedFiles.length}`);
+    loggers.app.info(`📊 Errors fixed: ${errorsFixed}`);
+    loggers.app.info(`📊 Remaining errors: ${finalErrors}`);
 
     if (finalErrors > 0) {
-      console.log('\n🔍 Running final lint check...');
+      loggers.app.info('\n🔍 Running final lint check...');
       try {
         execSync('npm run lint -- --quiet', { stdio: 'inherit' });
-      } catch (error) {
-        console.log('⚠️  Some errors remain and may need manual intervention.');
+      } catch {
+        loggers.app.info(
+          '⚠️  Some errors remain and may need manual intervention.'
+        );
       }
     }
   }

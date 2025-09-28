@@ -8,6 +8,10 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { loggers } = require('./lib/logger');
+
+// Define root directory for security validation
+const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 
 // Pattern replacements to fix capitalized variables
 const fixes = [
@@ -61,8 +65,19 @@ const fixes = [
 
 // Function to apply fixes to a file
 function fixFile(filePath) {
+  // Security: Validate file path to prevent directory traversal
+  const normalizedPath = path.normalize(filePath);
+  if (normalizedPath.includes('..') || !normalizedPath.startsWith(rootDir)) {
+    loggers.app.warn(
+      `Security: Rejected potentially unsafe file path: ${filePath}`
+    );
+    return false;
+  }
+
   try {
-    let content = fs.readFileSync(filePath, 'utf8');
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
+    // Justification: File path is validated above to ensure it's within project directory
+    let content = fs.readFileSync(normalizedPath, 'utf8');
     let modified = false;
 
     fixes.forEach((fix) => {
@@ -74,14 +89,16 @@ function fixFile(filePath) {
     });
 
     if (modified) {
-      fs.writeFileSync(filePath, content, 'utf8');
-      console.log(`✅ Fixed: ${filePath}`);
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
+      // Justification: File path is validated above to ensure it's within project directory
+      fs.writeFileSync(normalizedPath, content, 'utf8');
+      loggers.app.info(`✅ Fixed: ${filePath}`);
       return true;
     }
 
     return false;
-  } catch (error) {
-    console.error(`❌ Error fixing ${filePath}:`, error.message);
+  } catch {
+    loggers.app.error(`❌ Error fixing ${filePath}:`, { error: error.message });
     return false;
   }
 }
@@ -99,7 +116,7 @@ function findAndFixFiles() {
       .split('\n')
       .filter((f) => f);
 
-    console.log(`🔍 Found ${files.length} JavaScript files to check`);
+    loggers.app.info(`🔍 Found ${files.length} JavaScript files to check`);
 
     let fixedCount = 0;
     files.forEach((file) => {
@@ -108,28 +125,30 @@ function findAndFixFiles() {
       }
     });
 
-    console.log(
-      `\n📊 Summary: Fixed ${fixedCount} out of ${files.length} files`
+    loggers.app.info(
+      `📊 Summary: Fixed ${fixedCount} out of ${files.length} files`
     );
 
     if (fixedCount > 0) {
-      console.log('\n🎯 Running linter to verify fixes...');
+      loggers.app.info('🎯 Running linter to verify fixes...');
       try {
         execSync('npm run lint', { stdio: 'inherit' });
-        console.log('✅ Linting passed!');
-      } catch (lintError) {
-        console.log(
+        loggers.app.info('✅ Linting passed!');
+      } catch {
+        loggers.app.warn(
           '⚠️  Some linting issues remain, but syntax errors should be fixed'
         );
       }
     }
-  } catch (error) {
-    console.error('❌ Error during file processing:', error.message);
-    process.exit(1);
+  } catch {
+    loggers.app.error('❌ Error during file processing:', {
+      error: error.message,
+    });
+    throw new Error(`File processing failed: ${error.message}`);
   }
 }
 
 // Run the fix
-console.log('🚀 Starting comprehensive capitalization error fix...\n');
+loggers.app.info('🚀 Starting comprehensive capitalization error fix...');
 findAndFixFiles();
-console.log('\n✨ Capitalization error fix completed!');
+loggers.app.info('✨ Capitalization error fix completed!');

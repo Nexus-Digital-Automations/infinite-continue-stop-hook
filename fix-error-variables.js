@@ -24,25 +24,25 @@ class ErrorVariableFixer {
       let newContent = content;
       let hasChanges = false;
 
-      // Pattern 1: } catch (error) { ... error.something }
-      // Fix: Change to } catch (error) { ... error.something }
+      // Pattern 1: } catch { ... error.something }
+      // Fix: Change to } catch { ... error.something }
       const emptyCatchPattern = /}\s*catch\s*\(\s*\)\s*\{([^}]*error[^}]*)\}/g;
       if (emptyCatchPattern.test(content)) {
         newContent = newContent.replace(
           /}\s*catch\s*\(\s*\)\s*\{/g,
-          '} catch (error) {'
+          '} catch {'
         );
         hasChanges = true;
       }
 
-      // Pattern 2: } catch (error) { ... error.something } (no parentheses)
+      // Pattern 2: } catch { ... error.something } (no parentheses)
       const noCatchParamPattern = /}\s*catch\s*\{([^}]*error[^}]*)\}/g;
       if (noCatchParamPattern.test(content)) {
-        newContent = newContent.replace(/}\s*catch\s*\{/g, '} catch (error) {');
+        newContent = newContent.replace(/}\s*catch\s*\{/g, '} catch {');
         hasChanges = true;
       }
 
-      // Pattern 3: catch (_error) { ... error.something }
+      // Pattern 3: catch (_error) { ... __error.something }
       // Fix: Change error references to _error
       const lines = newContent.split('\n');
       const newLines = [];
@@ -96,7 +96,7 @@ class ErrorVariableFixer {
       }
 
       return { content: newContent, hasChanges };
-    } catch (err) {
+    } catch {
       console.error(`Error processing ${filePath}:`, err.message);
       return { content: null, hasChanges: false };
     }
@@ -142,7 +142,7 @@ class ErrorVariableFixer {
       }
 
       return Array.from(files);
-    } catch (error) {
+    } catch {
       console.error('Error finding files with error issues:', error.message);
       return [];
     }
@@ -166,7 +166,7 @@ class ErrorVariableFixer {
   /**
    * Run the fix process
    */
-  async run() {
+  run() {
     console.log('🚀 Starting error variable fix...\n');
 
     const initialErrors = this.getCurrentErrorCount();
@@ -196,7 +196,7 @@ class ErrorVariableFixer {
 // Run the fix
 if (require.main === module) {
   const fixer = new ErrorVariableFixer();
-  fixer.run().catch(console.error);
+  fixer.run();
 }
 
 module.exports = ErrorVariableFixer;

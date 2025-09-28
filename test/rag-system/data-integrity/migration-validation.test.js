@@ -11,7 +11,7 @@ const { loggers } = require('../lib/logger');
 
 const PATH = require('path');
 const FS = require('fs').promises;
-const _CRYPTO = require('crypto');
+const CRYPTO = require('crypto');
 
 describe('RAG System Data Migration And Integrity', () => {
   let _ragSystem;
@@ -36,7 +36,7 @@ describe('RAG System Data Migration And Integrity', () => {
     loggers.stopHook.log('Cleaning up data integrity test environment...');
     try {
       await FS.rm(_testMigrationPath, { recursive: true, force: true });
-    } catch (error) {
+    } catch {
       loggers.stopHook.warn('Cleanup warning:', error.message);
     }
   });
@@ -132,7 +132,7 @@ try {
     req.on('error', reject);
   });
   if (!response.ok) throw new Error('API Error');
-} catch (error) {
+} catch {
         loggers.stopHook.error(error);
 }
 \`\`\`

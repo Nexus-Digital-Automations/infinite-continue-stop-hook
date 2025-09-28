@@ -193,8 +193,7 @@ class TaskManagerValidator {
           const validation = this.validateTaskCreation(parsed);
           this.errors.push(...validation.errors);
           this.warnings.push(...validation.warnings);
-        } catch (_error) {
-
+        } catch {
           this.errors.push('Invalid JSON format in create command');
         }
       }

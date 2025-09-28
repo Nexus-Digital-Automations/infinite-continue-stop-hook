@@ -13,8 +13,8 @@ function fixFile(filePath) {
   let newContent = content;
   let hasChanges = false;
 
-  // Pattern: } catch (error) { ... error... }
-  // Replace with: } catch (error) { ... error... }
+  // Pattern: } catch { ... error... }
+  // Replace with: } catch { ... error... }
 
   // Find catch blocks without parameters that contain error references
   const catchBlockPattern = /}\s*catch\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g;
@@ -25,10 +25,7 @@ function fixFile(filePath) {
 
     // If the catch body contains 'error', add the error parameter
     if (catchBody.includes('error')) {
-      const replacement = match[0].replace(
-        /}\s*catch\s*\{/,
-        '} catch (error) {'
-      );
+      const replacement = match[0].replace(/}\s*catch\s*\{/, '} catch {');
       newContent = newContent.replace(match[0], replacement);
       hasChanges = true;
     }
@@ -42,8 +39,8 @@ function fixFile(filePath) {
   for (let i = 0; i < lines.length; i++) {
     let line = lines[i];
 
-    // Check if this line has } catch (error) {
-    if (line.includes('} catch (error) {')) {
+    // Check if this line has } catch {
+    if (line.includes('} catch {')) {
       // Check if current line or next few lines have 'error'
       let hasErrorRef = false;
       for (let j = i; j < Math.min(i + 5, lines.length); j++) {
@@ -54,7 +51,7 @@ function fixFile(filePath) {
       }
 
       if (hasErrorRef) {
-        line = line.replace(/}\s*catch\s*\{/, '} catch (error) {');
+        line = line.replace(/}\s*catch\s*\{/, '} catch {');
         hasChanges = true;
       }
     }
@@ -95,7 +92,7 @@ function findJavaScriptFiles() {
           files.push(fullPath);
         }
       }
-    } catch (err) {
+    } catch {
       // Skip directories we can't read
     }
   }
@@ -118,7 +115,7 @@ function getCurrentErrorCount() {
   }
 }
 
-async function main() {
+function main() {
   console.log('🚀 Fixing catch block error variables...\n');
 
   const initialErrors = getCurrentErrorCount();
@@ -145,5 +142,5 @@ async function main() {
 }
 
 if (require.main === module) {
-  main().catch(console.error);
+  main();
 }

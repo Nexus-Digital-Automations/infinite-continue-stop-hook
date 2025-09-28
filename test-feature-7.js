@@ -3,6 +3,7 @@
  */
 
 const RAGOPERATIONS = require('./lib/api-modules/rag/ragOperations');
+const { loggers } = require('lib/logger');
 
 async function testAdaptiveLearningPaths() {
   try {
@@ -52,7 +53,7 @@ async function testAdaptiveLearningPaths() {
         includeAssessments: true,
       }
     );
-    console.log('Learning path result:', {
+    loggers.app.info('Learning path result:', {
       success: learningPath.success,
       pathType: learningPath.pathType,
       totalLessons: learningPath.pathMetrics?.totalLessons || 0,
@@ -70,7 +71,7 @@ async function testAdaptiveLearningPaths() {
         maxRecommendations: 3,
       }
     );
-    console.log('Path recommendations result:', {
+    loggers.app.info('Path recommendations result:', {
       success: pathRecommendations.success,
       count: pathRecommendations.count,
       skillGaps: pathRecommendations.skillGaps,
@@ -94,7 +95,7 @@ async function testAdaptiveLearningPaths() {
         checkAdaptationTriggers: true,
       }
     );
-    console.log('Progress tracking result:', {
+    loggers.app.info('Progress tracking result:', {
       success: progressTracking.success,
       completionPercentage: progressTracking.completionPercentage,
       message: progressTracking.message,
@@ -106,7 +107,7 @@ async function testAdaptiveLearningPaths() {
       timeRange: 30,
       includeUserSegmentation: true,
     });
-    console.log('Analytics result:', {
+    loggers.app.info('Analytics result:', {
       success: analytics.success,
       timeRange: analytics.timeRange,
       message: analytics.message,
@@ -122,15 +123,15 @@ async function testAdaptiveLearningPaths() {
         preserveProgress: true,
       }
     );
-    console.log('Path adaptation result:', {
+    loggers.app.info('Path adaptation result:', {
       success: pathAdaptation.success,
       message: pathAdaptation.message,
     });
 
-    console.log(
+    loggers.app.info(
       '\n✅ Feature 7: Adaptive Learning Paths System integration test completed successfully!'
     );
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('❌ Feature 7 test failed:', error.message);
     loggers.stopHook.error('Stack:', error.stack);
   }

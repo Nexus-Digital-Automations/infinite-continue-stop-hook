@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint-disable no-console -- Setup script requires console output for user feedback */
+
 /**
  * Infinite Continue Hook Setup And Project Initialization System
  *
@@ -256,18 +256,18 @@ function needsTodoUpdate(todoPath) {
       (existing.tasks && existing.tasks.some((t) => !t.title)); // Missing title field
 
     if (hasOldSchema) {
-      console.log(
+      loggers.app.info(
         `⚠️  ${PATH.basename(PATH.dirname(todoPath))} - FEATURES.json uses old schema, will update`
       );
       return true;
     }
 
-    console.log(
+    loggers.app.info(
       `✓ ${PATH.basename(PATH.dirname(todoPath))} - FEATURES.json already up to date`
     );
     return false;
   } catch {
-    console.log(
+    loggers.app.info(
       `⚠️  ${PATH.basename(PATH.dirname(todoPath))} - FEATURES.json corrupted, will recreate`
     );
     return true;
@@ -466,7 +466,7 @@ async function processProject(targetPath) {
     }
 
     return { success: true, project: projectName };
-  } catch (error) {
+  } catch {
     loggers.stopHook.error(`❌ ${projectName} - Error:`, error.message);
     return { success: false, project: projectName, error: error.message };
   }
@@ -509,7 +509,7 @@ function migrateToFeatureBasedSystem(targetPath) {
     // Analyze current tasks for feature grouping
     const analysis = analyzeTasksForFeatures(todoData.tasks);
 
-    console.log(
+    loggers.app.info(
       `   📊 Analysis: ${analysis.summary.phased_tasks} phased tasks, ${analysis.summary.non_phased_tasks} independent tasks`
     );
 
@@ -520,7 +520,7 @@ function migrateToFeatureBasedSystem(targetPath) {
 
     FS.writeFileSync(todoPath, JSON.stringify(migrated, null, 2));
 
-    console.log(
+    loggers.app.info(
       `   ✅ Migration completed: ${migrated.features.length} features, ${migrated.tasks.length} tasks`
     );
 
@@ -534,7 +534,7 @@ function migrateToFeatureBasedSystem(targetPath) {
         `   🗑️  Removed features.json (dual system eliminated)`
       );
     }
-  } catch (error) {
+  } catch {
     loggers.stopHook.log(`   ❌ Feature migration failed: ${error.message}`);
     // Don't fail the entire setup for migration issues
   }
@@ -788,7 +788,7 @@ function calculateCompletionPercentage(tasks) {
 }
 
 async function main() {
-  console.log(
+  loggers.app.info(
     '=== Infinite Continue Stop Hook - Batch FEATURES.json Setup ===\n'
   );
 
@@ -879,7 +879,7 @@ async function main() {
 
     loggers.stopHook.log('📋 TaskManager system is centralized at:');
 
-    console.log(
+    loggers.app.info(
       '   /Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/'
     );
 
@@ -887,24 +887,24 @@ async function main() {
 
     loggers.stopHook.log('📋 Use universal commands to work with any project:');
 
-    console.log(
+    loggers.app.info(
       '   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project /path/to/project'
     );
 
-    console.log(
+    loggers.app.info(
       '   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" api current --project /path/to/project'
     );
 
     loggers.stopHook.log('');
 
-    console.log(
+    loggers.app.info(
       '📋 Updated hook reference in ~/.claude/settings.json should point to:'
     );
 
-    console.log(
+    loggers.app.info(
       'node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js"'
     );
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('\n❌ Batch setup error:', error.message);
     throw error;
   } finally {

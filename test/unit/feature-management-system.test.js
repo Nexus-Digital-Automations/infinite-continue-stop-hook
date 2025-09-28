@@ -68,7 +68,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (parseError) {
+        } catch {
           reject(
             new Error(
               `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
@@ -247,7 +247,7 @@ describe('Feature Management System Unit Tests', () => {
           // If API accepts it, That's also valid behavior for our infrastructure testing
           expect(result).toBeDefined();
         }
-      } catch (error) {
+      } catch {
         // API rejected it - should provide meaningful error
         expect(error.message).toBeDefined();
       }
@@ -272,7 +272,7 @@ describe('Feature Management System Unit Tests', () => {
           // If API accepts it, verify it's properly stored
           expect(result.feature).toBeDefined();
         }
-      } catch (error) {
+      } catch {
         // API rejected it - should provide meaningful error
         expect(error.message).toBeDefined();
       }
@@ -424,7 +424,7 @@ describe('Feature Management System Unit Tests', () => {
           // Unexpected success - but valid for infrastructure testing
           expect(result).toBeDefined();
         }
-      } catch (error) {
+      } catch {
         // API rejected it - should provide meaningful error
         expect(error.message).toBeDefined();
       }
@@ -452,7 +452,7 @@ describe('Feature Management System Unit Tests', () => {
           // API might not fully implement this yet - That's ok for testing infrastructure
           expect(result.error || result.message).toBeDefined();
         }
-      } catch (error) {
+      } catch {
         // API might not implement feature-stats yet - That's acceptable for infrastructure testing
         expect(error.message).toBeDefined();
       }
@@ -463,7 +463,7 @@ describe('Feature Management System Unit Tests', () => {
         const result = await execAPI('feature-stats');
         // Either success or graceful error handling
         expect(result).toBeDefined();
-      } catch (error) {
+      } catch {
         // Should provide meaningful error message
         expect(error.message).toBeDefined();
       }
@@ -513,7 +513,7 @@ describe('Feature Management System Unit Tests', () => {
           // API might structure response differently
           expect(result).toBeDefined();
         }
-      } catch (error) {
+      } catch {
         // Should provide meaningful error message
         expect(error.message).toBeDefined();
       }

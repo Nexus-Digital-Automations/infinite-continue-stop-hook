@@ -66,7 +66,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         try {
           const result = JSON.parse(stdout);
           resolve(result);
-        } catch (parseError) {
+        } catch {
           reject(
             new Error(
               `JSON parse error: ${parseError.message}\nOutput: ${stdout}`
@@ -132,7 +132,7 @@ async function setupTestProject() {
       PATH.join(TEST_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2)
     );
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('Failed to setup test project:', error);
     throw error;
   }
@@ -425,7 +425,7 @@ describe('Success Criteria Integration Tests', () => {
       try {
         const result = await execAPI('complete', ['non_existent_task_id']);
         expect(result.success).toBe(false);
-      } catch (error) {
+      } catch {
         // Expected to fail
         expect(error).toBeDefined();
       }

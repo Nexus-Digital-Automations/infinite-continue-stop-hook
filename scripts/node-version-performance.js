@@ -12,7 +12,7 @@ const { loggers } = require('../lib/logger');
 
 const fs = require('fs');
 const path = require('path');
-const { _execSync, _spawn } = require('child_process');
+const { EXEC_SYNC, _spawn } = require('child_process');
 const os = require('os');
 const { createLogger } = require('../lib/utils/logger');
 
@@ -239,7 +239,7 @@ class NodeVersionPerformanceBenchmark {
       total_file_operations: writePromises.length + fileContents.length,
     };
 
-    console.log(
+    loggers.app.info(
       `✅ File operations benchmark completed: ${duration.toFixed(2)}ms`
     );
   }
@@ -279,10 +279,10 @@ class NodeVersionPerformanceBenchmark {
         status: 'success',
       };
 
-      console.log(
+      loggers.app.info(
         `✅ Native modules benchmark completed: ${duration.toFixed(2)}ms`
       );
-    } catch (error) {
+    } catch {
       this.results.benchmarks.native_modules = {
         duration_ms: 0,
         status: 'failed',
@@ -584,7 +584,7 @@ ${this.results.recommendations?.map((r) => `- ${r}`).join('\n')}
       `Node.js Version: ${this.results.environment.node_version}`
     );
     loggers.stopHook.log(`Platform: ${this.results.environment.platform}`);
-    console.log(
+    loggers.app.info(
       `Performance Score: ${this.results.performance_analysis.performance_score}/100`
     );
 
@@ -621,7 +621,7 @@ ${this.results.recommendations?.map((r) => `- ${r}`).join('\n')}
       this.displaySummary();
 
       loggers.stopHook.log('\n✅ Benchmark suite completed successfully!');
-    } catch (error) {
+    } catch {
       loggers.stopHook.error('❌ Benchmark suite failed:', error.message);
       throw new Error(`Benchmark suite failed: ${error.message}`);
     }

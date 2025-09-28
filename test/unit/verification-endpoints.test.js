@@ -12,7 +12,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { _execSync } = require('child_process');
 const AutonomousTaskManagerAPI = require('../../taskmanager-api');
 
 // Mock fs module for controlled testing
@@ -22,6 +22,14 @@ jest.mock('fs', () => ({
     readFile: jest.fn(),
     writeFile: jest.fn(),
   },
+  existsSync: jest.fn().mockReturnValue(true),
+  mkdirSync: jest.fn(),
+  writeFileSync: jest.fn(),
+  readFileSync: jest.fn().mockReturnValue('{}'),
+  copyFileSync: jest.fn(),
+  statSync: jest.fn().mockReturnValue({ mtime: new Date() }),
+  unlinkSync: jest.fn(),
+  appendFileSync: jest.fn(),
 }));
 
 // Mock execSync to prevent actual command execution
@@ -247,12 +255,12 @@ describe('Verification Endpoints', () => {
       expect(result.verificationGate.verifiedAt).toBeTruthy();
       expect(result.message).toBe('Verification evidence submitted successfully');
 
-      // Verify file write was called
-      expect(mockFs.writeFile).toHaveBeenCalledWith(
-        testTasksPath,
-        expect.stringContaining('"status":"passed"'),
-        'utf8',
+      // Verify file write was called for the tasks file (not the lock file)
+      const tasksWriteCall = mockFs.writeFile.mock.calls.find(call =>
+        call[0] === testTasksPath && call[1].includes('"status":"passed"'),
       );
+      expect(tasksWriteCall).toBeDefined();
+      expect(tasksWriteCall[1]).toContain('"status":"passed"');
     });
 
     it('should reject evidence when verification gate already passed', async () => {

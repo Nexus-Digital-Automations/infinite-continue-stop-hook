@@ -196,7 +196,7 @@ global.RAG_TEST_UTILS = {
   cleanupTestDirectory: async (dirPath) => {
     try {
       await FS.rm(dirPath, { recursive: true, force: true });
-    } catch (error) {
+    } catch {
       loggers.stopHook.warn(`Cleanup warning for ${dirPath}:`, error.message);
     }
   },
@@ -260,7 +260,7 @@ afterEach(async () => {
         }),
       ),
     );
-  } catch (error) {
+  } catch {
     // Ignore cleanup errors
   }
 });

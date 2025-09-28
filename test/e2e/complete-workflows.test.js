@@ -1,5 +1,4 @@
 /**
-const { loggers } = require('../lib/logger');
  * Complete Workflows E2E Tests
  *
  * Tests complete system workflows from user perspective, validating the entire
@@ -18,6 +17,7 @@ const {
   E2EAssertions,
   E2E_TIMEOUT,
 } = require('./e2e-utils');
+const { loggers } = require('../../lib/logger');
 
 describe('Complete System Workflows E2E', () => {
   let environment;

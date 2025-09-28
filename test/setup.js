@@ -11,6 +11,7 @@
 
 const { customMatchers } = require('./utils/testUtils');
 const { TestLogger } = require('./utils/testUtils');
+const { _loggers } = require('../lib/logger');
 
 // Set test environment variables
 process.env.NODE_ENV = 'test';

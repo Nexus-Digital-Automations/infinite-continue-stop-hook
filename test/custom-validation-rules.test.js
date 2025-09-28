@@ -16,7 +16,7 @@
 
 const fs = require('fs').promises;
 const path = require('path');
-const { execSync: _execSync } = require('child_process');
+const { execSync: EXEC_SYNC } = require('child_process');
 const { loggers } = require('../lib/logger');
 const {
   CustomValidationRulesManager,
@@ -51,7 +51,7 @@ describe('CustomValidationRulesManager', () => {
     // Cleanup test directory
     try {
       await fs.rm(testProjectRoot, { recursive: true, force: true });
-    } catch (error) {
+    } catch {
       loggers.stopHook.warn('Failed to cleanup test directory:', error.message);
     }
     process.chdir(originalCwd);
@@ -68,7 +68,7 @@ describe('CustomValidationRulesManager', () => {
         })
       );
       await Promise.all(deletions);
-    } catch (error) {
+    } catch {
       // Ignore cleanup errors
     }
   });
@@ -393,7 +393,7 @@ describe('CustomValidationRulesManager', () => {
     test('should fail when unwanted pattern is found', async () => {
       await fs.writeFile(
         path.join(testProjectRoot, 'debug.txt'),
-        'console.log("debug")'
+        'loggers.app.info("debug")'
       );
 
       const rule = {

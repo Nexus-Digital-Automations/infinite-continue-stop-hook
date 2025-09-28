@@ -78,7 +78,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         // Try to parse JSON response
         const result = JSON.parse(jsonString);
         resolve(result);
-      } catch (parseError) {
+      } catch {
         // If JSON parsing fails, check if we can extract JSON from stderr
         try {
           const stderrJson = JSON.parse(stderr.trim());
@@ -1000,7 +1000,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     test('should handle invalid command gracefully', async () => {
       try {
         await execAPI('invalid-command');
-      } catch (error) {
+      } catch {
         expect(error.message).toContain('Command failed');
       }
     });
@@ -1045,7 +1045,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       // by using a very short timeout
       try {
         await execAPI('guide', [], 100); // 100ms timeout
-      } catch (error) {
+      } catch {
         expect(error.message).toContain('Command failed');
       }
     }, 10000);

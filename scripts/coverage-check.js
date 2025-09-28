@@ -11,6 +11,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { loggers } = require('../lib/logger');
 
 // Configuration
 const DEFAULT_CONFIG = {
@@ -131,7 +132,7 @@ class CoverageThresholdChecker {
       if (shouldFail) {
         throw new Error('Coverage validation failed');
       }
-    } catch (error) {
+    } catch {
       CoverageLogger.error(`Coverage validation failed: ${error.message}`);
       if (process.env.DEBUG) {
         loggers.stopHook.error(error.stack);
@@ -178,7 +179,7 @@ class CoverageThresholdChecker {
       );
 
       return coverageData;
-    } catch (error) {
+    } catch {
       if (error.message.includes('Invalid coverage')) {
         throw error;
       }
@@ -513,7 +514,7 @@ Examples:
     try {
       const customThresholds = JSON.parse(thresholdArg.split('=')[1]);
       config.thresholds = { ...config.thresholds, ...customThresholds };
-    } catch (error) {
+    } catch {
       loggers.stopHook.error('❌ Invalid thresholds JSON:', error.message);
       throw error;
     }
@@ -522,7 +523,7 @@ Examples:
   const checker = new CoverageThresholdChecker(config);
   try {
     checker.run();
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('❌ Fatal error:', error.message);
     throw error;
   }

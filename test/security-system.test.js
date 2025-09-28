@@ -81,11 +81,12 @@ describe('Security System', () => {
 
     test('should authorize valid agent operations', () => {
       const agentId = 'development_session_1234567890_1_general_abcdef';
-      const OPERATION= 'create';
+      const OPERATION = 'create';
       const resource = { type: 'task', id: 'test_task' };
 
       const result = securityValidator.authorizeOperation(
-        agentId, operation,
+        agentId,
+        operation,
         resource
       );
       expect(result.authorized).toBe(true);
@@ -94,11 +95,12 @@ describe('Security System', () => {
 
     test('should reject invalid agent IDs', () => {
       const invalidAgentId = 'invalid_agent_id';
-      const OPERATION= 'create';
+      const OPERATION = 'create';
       const resource = { type: 'task' };
 
       const result = securityValidator.authorizeOperation(
-        invalidAgentId, operation,
+        invalidAgentId,
+        operation,
         resource
       );
       expect(result.authorized).toBe(false);
@@ -119,7 +121,7 @@ describe('Security System', () => {
     test('should maintain audit trail', () => {
       securityValidator.auditLog('TEST_EVENT', {
         agentId: 'test_agent',
-        OPERATION 'test_operation',
+        operation: 'test_operation',
       });
 
       const auditTrail = securityValidator.getAuditTrail({
@@ -264,7 +266,7 @@ describe('Security System', () => {
       // 4. Audit the operation
       securityValidator.auditLog('TASK_CREATION_TEST', {
         agentId,
-        OPERATION 'create',
+        operation: 'create',
         success: true,
       });
 

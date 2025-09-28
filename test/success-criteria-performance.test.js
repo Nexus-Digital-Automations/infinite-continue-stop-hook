@@ -1,5 +1,4 @@
 /**
-const { loggers } = require('../lib/logger');
  * Success Criteria Performance Test Suite
  * Testing Agent #6 - Performance And Timing Validation
  *
@@ -11,6 +10,7 @@ const { loggers } = require('../lib/logger');
  * - Memory leak detection for long-running operations
  */
 
+const { loggers } = require('../lib/logger');
 const { performance } = require('perf_hooks');
 const { spawn } = require('child_process');
 const PATH = require('path');
@@ -59,12 +59,12 @@ class PerformanceMonitor {
     }
   }
 
-  async measureOperation(operationName, OPERATION {
+  async measureOperation(operationName, operation) {
     const startTime = performance.now();
     const startMemory = process.memoryUsage();
 
     try {
-      const result = await OPERATION);
+      const result = await operation();
       const END_TIME = performance.now();
       const END_MEMORY = process.memoryUsage();
 
@@ -84,16 +84,16 @@ class PerformanceMonitor {
 
       this.measurements.push(MEASUREMENT);
       return { result, MEASUREMENT };
-    } catch (error) {
+    } catch {
       const END_TIME = performance.now();
       const MEASUREMENT = {
         operationName,
         duration: END_TIME - startTime,
-        error: _error.message,
+        error: error.message,
         timestamp: Date.now(),
       };
       this.measurements.push(MEASUREMENT);
-      throw _error;
+      throw error;
     }
   }
 
@@ -174,7 +174,8 @@ class PerformanceMonitor {
         // Check for performance violations
         if (MAX_TIME > 30000) {
           report.performanceViolations.push({
-            operation, opType,
+            operation,
+            opType,
             type: 'MAX_TIME_VIOLATION',
             value: MAX_TIME,
             threshold: 30000,
@@ -182,7 +183,8 @@ class PerformanceMonitor {
         }
         if (AVG_TIME > 30000) {
           report.performanceViolations.push({
-            operation, opType,
+            operation,
+            opType,
             type: 'AVG_TIME_VIOLATION',
             value: AVG_TIME,
             threshold: 30000,
@@ -342,7 +344,7 @@ describe('Performance Test Suite', () => {
     await FS.writeFile(PATH.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     loggers.stopHook.log('Performance test project setup completed');
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('Failed to setup performance test project:', error);
     throw error;
   }
@@ -352,7 +354,7 @@ async function cleanupPerformanceTestProject() {
   try {
     await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Performance test project cleanup completed');
-  } catch (error) {
+  } catch {
     loggers.stopHook.error(
       'Failed to cleanup performance test project:',
       error
@@ -395,7 +397,7 @@ describe('Success Criteria Performance Tests', () => {
         expect(measurement.duration).toBeLessThan(30000); // 30 second requirement
         expect(result).toBeDefined();
 
-        console.log(
+        loggers.app.info(
           `Initialize duration: ${measurement.duration.toFixed(2)}ms`
         );
       },
@@ -439,7 +441,7 @@ describe('Success Criteria Performance Tests', () => {
         expect(MEASUREMENT.duration).toBeLessThan(30000);
         expect(result).toBeDefined();
 
-        console.log(
+        loggers.app.info(
           `Create template duration: ${MEASUREMENT.duration.toFixed(2)}ms`
         );
       },
@@ -482,7 +484,7 @@ describe('Success Criteria Performance Tests', () => {
         expect(MEASUREMENT.duration).toBeLessThan(30000); // Critical 30-second requirement
         expect(result).toBeDefined();
 
-        console.log(
+        loggers.app.info(
           `Validation duration: ${MEASUREMENT.duration.toFixed(2)}ms`
         );
         loggers.stopHook.log(`Validation result:`, result);
@@ -518,7 +520,7 @@ describe('Success Criteria Performance Tests', () => {
         expect(MEASUREMENT.duration).toBeLessThan(30000);
         expect(result).toBeDefined();
 
-        console.log(
+        loggers.app.info(
           `Large template creation duration: ${MEASUREMENT.duration.toFixed(2)}ms`
         );
       },
@@ -621,7 +623,7 @@ describe('Success Criteria Performance Tests', () => {
         // Should not detect memory leaks
         expect(monitor.detectMemoryLeaks()).toBe(false);
 
-        console.log(
+        loggers.app.info(
           `Memory increase: ${(MEMORY_INCREASE / 1024 / 1024).toFixed(2)}MB`
         );
         loggers.stopHook.log(
@@ -760,7 +762,7 @@ describe('Success Criteria Performance Tests', () => {
         loggers.stopHook.log(`  Min: ${MIN_TIME.toFixed(2)}ms`);
         loggers.stopHook.log(`  Max: ${MAX_TIME.toFixed(2)}ms`);
         loggers.stopHook.log(`  Std Dev: ${STD_DEV.toFixed(2)}ms`);
-        console.log(
+        loggers.app.info(
           `  Coefficient of variation: ${((STD_DEV / AVG_TIME) * 100).toFixed(2)}%`
         );
       },
@@ -814,7 +816,7 @@ describe('Success Criteria Performance Tests', () => {
           // Generate performance report
           const REPORT = monitor.generateReport();
 
-          console.log(
+          loggers.app.info(
             'Performance stress test report:',
             JSON.stringify(REPORT, null, 2)
           );
@@ -826,9 +828,9 @@ describe('Success Criteria Performance Tests', () => {
           expect(REPORT.totalOperations).toBeGreaterThan(0);
           expect(REPORT.operationSummary).toBeDefined();
           expect(REPORT.memoryAnalysis).toBeDefined();
-        } catch (error) {
+        } catch {
           const REPORT = monitor.generateReport();
-          console.log(
+          loggers.app.info(
             'Performance stress test failed with report:',
             JSON.stringify(REPORT, null, 2)
           );
@@ -841,7 +843,7 @@ describe('Success Criteria Performance Tests', () => {
             ).toBeLessThan(30000);
           }
 
-          throw _error;
+          throw error;
         }
       },
       PERFORMANCE_TIMEOUT

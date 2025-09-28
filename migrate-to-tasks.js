@@ -60,7 +60,7 @@ class TaskMigrator {
         newFile: this.tasksPath,
         stats: await this.getMigrationStats(tasksData),
       };
-    } catch (error) {
+    } catch {
       loggers.stopHook.error('❌ Migration failed:', error.message);
       throw error;
     }
@@ -85,7 +85,7 @@ class TaskMigrator {
     try {
       await fs.copyFile(this.featuresPath, this.backupPath);
       loggers.stopHook.log(`✓ Backup created: ${this.backupPath}`);
-    } catch (error) {
+    } catch {
       throw new Error(`Failed to create backup: ${error.message}`);
     }
   }
@@ -99,7 +99,7 @@ class TaskMigrator {
       const parsedData = JSON.parse(data);
       loggers.stopHook.log('✓ Features data loaded And parsed');
       return parsedData;
-    } catch (error) {
+    } catch {
       throw new Error(`Failed to load features data: ${error.message}`);
     }
   }
@@ -516,7 +516,7 @@ class TaskMigrator {
     try {
       await fs.writeFile(this.tasksPath, JSON.stringify(tasksData, null, 2));
       loggers.stopHook.log(`✓ TASKS.json written to ${this.tasksPath}`);
-    } catch (error) {
+    } catch {
       throw new Error(`Failed to write TASKS.json: ${error.message}`);
     }
   }

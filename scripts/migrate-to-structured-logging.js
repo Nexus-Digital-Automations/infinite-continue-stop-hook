@@ -296,7 +296,7 @@ function main() {
         analysisResults.push(usage);
         totalConsoleLines += usage.consoleLines.length;
       }
-    } catch (error) {
+    } catch {
       console.warn(`⚠️  Could not analyze ${file}: ${error.message}`);
     }
   }
@@ -357,7 +357,7 @@ function main() {
           `✅ ${path.relative(rootDir, usage.filePath)}: ${result.message}`
         );
       }
-    } catch (error) {
+    } catch {
       console.error(`❌ Failed to migrate ${usage.filePath}: ${error.message}`);
     }
   }

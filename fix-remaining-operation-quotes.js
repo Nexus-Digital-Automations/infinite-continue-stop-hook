@@ -14,6 +14,6 @@ try {
 
   fs.writeFileSync(file, content, 'utf8');
   console.log('✅ Fixed all OPERATION quotes patterns in taskmanager-api.js');
-} catch (error) {
+} catch {
   console.error('❌ Error:', error.message);
 }

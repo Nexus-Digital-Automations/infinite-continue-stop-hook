@@ -221,7 +221,7 @@ class TaskManagerPerformanceBenchmark {
         taskId,
         ...listResult,
       });
-    } catch (error) {
+    } catch {
       loggers.stopHook.log(
         `   ❌ Error in subtask benchmarking: ${error.message}`
       );
@@ -265,8 +265,8 @@ class TaskManagerPerformanceBenchmark {
           ...result,
         });
       }
-    } catch (error) {
-      console.log(
+    } catch {
+      loggers.app.info(
         `   ❌ Error in success criteria benchmarking: ${error.message}`
       );
     }
@@ -310,8 +310,8 @@ class TaskManagerPerformanceBenchmark {
 
       const listResults = await Promise.all(listOperations);
       this.results.concurrentAccess.push(...listResults);
-    } catch (error) {
-      console.log(
+    } catch {
+      loggers.app.info(
         `   ❌ Error in concurrent access benchmarking: ${error.message}`
       );
     }
@@ -682,21 +682,21 @@ class TaskManagerPerformanceBenchmark {
       loggers.stopHook.log(
         `   • API Endpoints Tested: ${report.summary.totalApiTests}`
       );
-      console.log(
+      loggers.app.info(
         `   • Subtask Operations: ${report.summary.totalSubtaskTests}`
       );
-      console.log(
+      loggers.app.info(
         `   • Concurrent Tests: ${report.summary.totalConcurrentTests}`
       );
-      console.log(
+      loggers.app.info(
         `   • Bottlenecks Identified: ${report.summary.totalBottlenecks}`
       );
-      console.log(
+      loggers.app.info(
         `   • Recommendations Generated: ${report.summary.totalRecommendations}`
       );
 
       return report;
-    } catch (error) {
+    } catch {
       loggers.stopHook.error(`❌ Benchmark suite failed: ${error.message}`);
       loggers.stopHook.error(error.stack);
       throw error;

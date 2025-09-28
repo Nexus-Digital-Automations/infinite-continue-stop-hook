@@ -100,7 +100,7 @@ function addSecurityDisableComments(filePath) {
     }
 
     return false;
-  } catch (error) {
+  } catch {
     // eslint-disable-next-line no-console
     console.error(`❌ Error processing ${filePath}:`, error.message);
     return false;

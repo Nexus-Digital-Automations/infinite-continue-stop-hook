@@ -137,7 +137,7 @@ function main() {
     } else {
       console.log('🔧 Some errors remain - manual fixes may be needed');
     }
-  } catch (error) {
+  } catch {
     console.error('Error checking lint status:', error.message);
   }
 }

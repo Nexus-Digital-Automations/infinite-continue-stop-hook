@@ -131,7 +131,7 @@ describe('RAG System End-to-End Integration Tests', () => {
     // Clean up test files
     try {
       await FS.rm(testDataPath, { recursive: true, force: true });
-    } catch (error) {
+    } catch {
       loggers.stopHook.warn('Failed to clean up test data:', error.message);
     }
   });

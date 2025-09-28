@@ -62,7 +62,7 @@ class FeaturesMigration {
 
       loggers.stopHook.log('✅ Migration completed successfully!');
       return true;
-    } catch (error) {
+    } catch {
       loggers.stopHook.error('❌ Migration failed:', error.message);
       this.migrationReport.errors.push(error.message);
       return false;
@@ -195,11 +195,11 @@ class FeaturesMigration {
           const transformedFeature = this.transformTask(task);
           transformedData.features.push(transformedFeature);
           this.migrationReport.migratedFeatures++;
-        } catch (error) {
+        } catch {
           this.migrationReport.errors.push(
             `Failed to transform task ${task.id || index}: ${error.message}`
           );
-          console.warn(
+          loggers.app.warn(
             `⚠️  Warning: Failed to transform task ${task.id || index}`
           );
         }
@@ -212,7 +212,7 @@ class FeaturesMigration {
         try {
           const transformedFeature = this.transformTask(task, true);
           transformedData.completed_features.push(transformedFeature);
-        } catch (error) {
+        } catch {
           this.migrationReport.errors.push(
             `Failed to transform completed task ${task.id || index}: ${error.message}`
           );
@@ -223,7 +223,7 @@ class FeaturesMigration {
     // Update migration stats
     transformedData.migration_stats = this.migrationReport;
 
-    console.log(
+    loggers.app.info(
       `✅ Transformed ${this.migrationReport.migratedFeatures} features`
     );
     return transformedData;
@@ -319,7 +319,7 @@ class FeaturesMigration {
     fs.writeFileSync(this.featuresPath, featuresContent);
 
     loggers.stopHook.log(`✅ FEATURES.json created: ${this.featuresPath}`);
-    console.log(
+    loggers.app.info(
       `📊 File size: ${Math.round(featuresContent.length / 1024)} KB`
     );
   }
@@ -339,7 +339,7 @@ class FeaturesMigration {
     loggers.stopHook.log(`📅 End Time: ${this.migrationReport.endTime}`);
     loggers.stopHook.log(`⏱️  Duration: ${this.migrationReport.duration}ms`);
     loggers.stopHook.log(`📝 Total Tasks: ${this.migrationReport.totalTasks}`);
-    console.log(
+    loggers.app.info(
       `✅ Migrated Features: ${this.migrationReport.migratedFeatures}`
     );
     loggers.stopHook.log(`⚠️  Errors: ${this.migrationReport.errors.length}`);
@@ -399,7 +399,7 @@ class FeaturesMigration {
 
       loggers.stopHook.log('✅ Migration validation passed');
       return true;
-    } catch (error) {
+    } catch {
       loggers.stopHook.error('❌ Migration validation failed:', error.message);
       return false;
     }

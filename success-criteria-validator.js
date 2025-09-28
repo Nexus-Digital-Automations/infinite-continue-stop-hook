@@ -70,7 +70,7 @@ class SuccessCriteriaValidator {
       ValidationLogger.log(`✅ Success Criteria Validator initialized`);
       ValidationLogger.log(`📁 Evidence storage: ${this.evidenceDir}`);
       ValidationLogger.log(`📊 Report storage: ${this.reportDir}`);
-    } catch (error) {
+    } catch {
       ValidationLogger.error(
         `❌ Failed to initialize validator: ${error.message}`
       );
@@ -86,7 +86,7 @@ class SuccessCriteriaValidator {
       await FS.mkdir(this.evidenceDir, { recursive: true });
 
       await FS.mkdir(this.reportDir, { recursive: true });
-    } catch (error) {
+    } catch {
       ValidationLogger.error(
         `❌ Failed to create directories: ${error.message}`
       );
@@ -251,7 +251,7 @@ class SuccessCriteriaValidator {
         criteria: task.success_criteria || [],
         category: task.category || 'feature',
       };
-    } catch (error) {
+    } catch {
       ValidationLogger.error(
         `❌ Failed to get task criteria: ${error.message}`
       );
@@ -352,7 +352,7 @@ class SuccessCriteriaValidator {
               evidence: null,
             };
         }
-      } catch (error) {
+      } catch {
         results[criterion.name] = {
           status: 'failed',
           message: error.message,
@@ -386,7 +386,7 @@ class SuccessCriteriaValidator {
           timestamp: new Date().toISOString(),
         },
       };
-    } catch (error) {
+    } catch {
       // Check if it's because there are linting errors
       if (
         (error.stdout && error.stdout.includes('warning')) ||
@@ -436,7 +436,7 @@ class SuccessCriteriaValidator {
           timestamp: new Date().toISOString(),
         },
       };
-    } catch (error) {
+    } catch {
       return {
         status: 'failed',
         message: `Build failed: ${error.message}`,
@@ -510,7 +510,7 @@ class SuccessCriteriaValidator {
           },
         };
       }
-    } catch (error) {
+    } catch {
       return {
         status: 'error',
         message: `Test execution failed: ${error.message}`,
@@ -559,7 +559,7 @@ class SuccessCriteriaValidator {
         try {
           const content = await FS.readFile(file, 'utf8');
           return { file, content };
-        } catch (error) {
+        } catch {
           // Skip files That can't be read
           return { file, content: null, error };
         }
@@ -608,7 +608,7 @@ class SuccessCriteriaValidator {
           },
         };
       }
-    } catch (error) {
+    } catch {
       return {
         status: 'error',
         message: `Security validation failed: ${error.message}`,
@@ -636,7 +636,7 @@ class SuccessCriteriaValidator {
           timestamp: new Date().toISOString(),
         },
       };
-    } catch (error) {
+    } catch {
       return {
         status: 'failed',
         message: `Dependency audit failed: ${error.message}`,
@@ -877,7 +877,7 @@ class SuccessCriteriaValidator {
       this.displayResults(results);
 
       return { results, report };
-    } catch (error) {
+    } catch {
       ValidationLogger.error(`❌ Validation failed: ${error.message}`);
       throw error;
     }
@@ -1003,7 +1003,7 @@ Examples:
     await validator.validateTask(taskId, options);
 
     ValidationLogger.log('\n✅ Validation completed successfully');
-  } catch (error) {
+  } catch {
     ValidationLogger.error(`❌ Validation failed: ${error.message}`);
     throw error;
   }

@@ -1,0 +1,33 @@
+{
+  "execution": {
+    "timestamp": "2025-09-28T06:47:53.697Z",
+    "projectRoot": "/Users/jeremyparker/infinite-continue-stop-hook",
+    "hookVersion": "1.0.0",
+    "nodeVersion": "v22.20.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "pid": 34789,
+    "cwd": "/Users/jeremyparker/infinite-continue-stop-hook",
+    "endTimestamp": "2025-09-28T06:47:53.697Z",
+    "durationMs": 0
+  },
+  "input": {},
+  "projectState": {},
+  "decisions": [],
+  "flow": [
+    {
+      "timestamp": "2025-09-28T06:47:53.697Z",
+      "message": "ERROR in autoSortTasksByPriority: Validation failed: Task subtask_1759042073696_jzc04z2wz: Required field 'category' is missing, Task test_1759042073696_03z5uklde: Required field 'category' is missing, Task test_1759042073696_ume7ehpri: Required field 'category' is missing, Task test_1759042073696_kna20y9ku: Required field 'category' is missing"
+    }
+  ],
+  "output": {},
+  "errors": [
+    {
+      "timestamp": "2025-09-28T06:47:53.697Z",
+      "context": "autoSortTasksByPriority",
+      "message": "Validation failed: Task subtask_1759042073696_jzc04z2wz: Required field 'category' is missing, Task test_1759042073696_03z5uklde: Required field 'category' is missing, Task test_1759042073696_ume7ehpri: Required field 'category' is missing, Task test_1759042073696_kna20y9ku: Required field 'category' is missing",
+      "stack": "Error: Validation failed: Task subtask_1759042073696_jzc04z2wz: Required field 'category' is missing, Task test_1759042073696_03z5uklde: Required field 'category' is missing, Task test_1759042073696_ume7ehpri: Required field 'category' is missing, Task test_1759042073696_kna20y9ku: Required field 'category' is missing\n    at TaskManager.writeTodo (/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager.js:211:17)\n    at autoSortTasksByPriority (/Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js:733:25)\n    at async Socket.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js:1317:26)",
+      "name": "Error"
+    }
+  ]
+}

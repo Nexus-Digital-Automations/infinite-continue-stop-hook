@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-/* eslint-disable no-console -- CLI hook requires console output for user feedback */
+
 const FS = require('fs');
 const PATH = require('path');
 const TASK_MANAGER = require('./lib/taskManager');
 const LOGGER = require('./lib/logger');
+const { loggers } = require('./lib/logger');
 const VALIDATION_DEPENDENCY_MANAGER = require('./lib/validationDependencyManager');
 
 // ============================================================================
@@ -116,7 +117,7 @@ function generateValidationProgressReport(flagData, logger, workingDir) {
           );
         }
       }
-    } catch (error) {
+    } catch {
       logger.warn(`Failed to load custom validation rules: ${error.message}`);
     }
 
@@ -238,7 +239,7 @@ function checkStopAllowed(workingDir = process.cwd()) {
       );
 
       // Display detailed validation progress
-      console.error(`
+      loggers.app.error(`
 🔍 **VALIDATION PROGRESS REPORT - STOP AUTHORIZATION**
 
 📊 **OVERALL PROGRESS:** ${progressReport.overallProgress}% Complete
@@ -262,9 +263,9 @@ ${progressReport.validationDetails
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
       FS.unlinkSync(stopFlagPath); // Remove flag after reading
       return flagData.stop_allowed === true;
-    } catch (error) {
+    } catch {
       // Invalid flag file, remove it
-      console.error(
+      loggers.app.error(
         `⚠️ Invalid validation progress file detected - cleaning up. Error: ${error.message}`
       );
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
@@ -274,7 +275,7 @@ ${progressReport.validationDetails
   }
 
   // No authorization found - provide progress guidance
-  console.error(`
+  loggers.app.error(`
 🔍 **VALIDATION PROGRESS MONITORING**
 
 📊 **status:** No active validation process detected
@@ -324,7 +325,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
   try {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path constructed from trusted hook configuration
     todoData = JSON.parse(FS.readFileSync(todoPath, 'utf8'));
-  } catch (error) {
+  } catch {
     logger.addFlow(
       `Failed to read TASKS.json in ${projectPath}: ${error.message}`
     );
@@ -430,7 +431,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Hook system path controlled by stop hook security protocols
       FS.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
       logger.addFlow(`Updated ${projectPath}/TASKS.json with cleanup results`);
-    } catch (error) {
+    } catch {
       logger.addFlow(
         `Failed to write TASKS.json in ${projectPath}: ${error.message}`
       );
@@ -491,7 +492,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
           skipped: true,
         };
       }
-    } catch (error) {
+    } catch {
       const errorMsg = `Failed to process ${projectPath}: ${error.message}`;
       logger.addFlow(errorMsg);
       return {
@@ -737,7 +738,7 @@ async function autoSortTasksByPriority(taskManager) {
       tasksUpdated,
       totalTasks: tasksOrFeatures.length,
     };
-  } catch (error) {
+  } catch {
     // Log error through logger for proper tracking
     const logger = new LOGGER.LOGGER(process.cwd());
     logger.logError(error, 'autoSortTasksByPriority');
@@ -955,7 +956,7 @@ process.stdin.on('end', async () => {
             logger.logExit(0, 'DONE command detected - allowing stop');
             logger.save();
 
-            console.error(`
+            loggers.app.error(`
 ✅ DONE COMMAND DETECTED
 
 The assistant has written "DONE" as instructed.
@@ -969,7 +970,7 @@ This is the expected behavior when the /done command is used.
         } else {
           logger.addFlow(`Transcript file not found: ${_transcript_path}`);
         }
-      } catch (transcriptError) {
+      } catch {
         logger.addFlow(`Error reading transcript: ${transcriptError.message}`);
       }
     }
@@ -982,7 +983,7 @@ This is the expected behavior when the /done command is used.
       logger.logExit(2, 'No TASKS.json found - continuing infinite mode');
       logger.save();
 
-      console.error(`
+      loggers.app.error(`
 🚫 NO TASKMANAGER PROJECT DETECTED
 
 This directory does not contain a TASKS.json file, which means it's not a TaskManager project.
@@ -1013,17 +1014,17 @@ If you want to enable task management for this project:
           component: 'StopHook',
           operation: 'corruptionCheck',
         });
-        console.log(
+        loggers.app.info(
           `🔧 STOP HOOK: Automatically fixed TASKS.json corruption - ${corruptionCheck.fixesApplied.join(', ')}`
         );
       }
-    } catch (corruptionError) {
+    } catch {
       logger.error('TASKS.json corruption check failed', {
         error: corruptionError.message,
         component: 'StopHook',
         operation: 'corruptionCheck',
       });
-      console.error(
+      loggers.app.error(
         `⚠️ STOP HOOK: Corruption check failed:`,
         corruptionError.message
       );
@@ -1073,7 +1074,7 @@ If you want to enable task management for this project:
           operation: 'multiProjectCleanup',
         });
 
-        console.error(`
+        loggers.app.error(`
 🧹 **MULTI-PROJECT STALE AGENT CLEANUP COMPLETED:**
 - Projects processed: ${multiProjectResults.projectResults.length}
 - Total stale agents removed: ${multiProjectResults.totalAgentsRemoved}
@@ -1088,7 +1089,7 @@ If you want to enable task management for this project:
           `Multi-project cleanup errors: ${multiProjectResults.errors.join('; ')}`
         );
       }
-    } catch (multiProjectError) {
+    } catch {
       logger.addFlow(
         `Multi-project cleanup failed: ${multiProjectError.message}`
       );
@@ -1330,7 +1331,7 @@ If you want to enable task management for this project:
           operation: 'automaticTaskSorting',
         });
 
-        console.error(`
+        loggers.app.error(`
 ✅ AUTOMATIC TASK SORTING COMPLETED
 
 📊 Task Classification Results:
@@ -1349,12 +1350,12 @@ This ensures proper priority ordering with test tasks only executed after all er
       } else {
         logger.addFlow('Task sorting completed - no reclassification needed');
       }
-    } catch (sortingError) {
+    } catch {
       logger.addFlow(
         `Task sorting encountered an error: ${sortingError.message}`
       );
 
-      console.error(`
+      loggers.app.error(`
 ⚠️ AUTOMATIC TASK SORTING WARNING
 
 Task sorting encountered an issue: ${sortingError.message}
@@ -1388,7 +1389,7 @@ Tasks will continue to work but may not be optimally sorted.
         );
         logger.save();
 
-        console.error(`
+        loggers.app.error(`
 🔄 STALE AGENTS DETECTED AND CLEANED UP
 
 Working Directory: ${workingDir}
@@ -1438,7 +1439,7 @@ To recover And continue work from the previous stale agents:
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID]
 
 2. **Check for unfinished tasks from previous agents:**
-   node -e 'const TASK_MANAGER = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TASKS.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Pending tasks to continue:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
+   node -e 'const TASK_MANAGER = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TASKS.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); loggers.app.info("Pending tasks to continue:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
 
 3. **Continue the most important unfinished work first**
 
@@ -1494,7 +1495,7 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
         );
         logger.save();
 
-        console.error(`
+        loggers.app.error(`
 🤖 NO AGENTS DETECTED - FRESH PROJECT SETUP
 
 Working Directory: ${workingDir}
@@ -1525,7 +1526,7 @@ To start working with this TaskManager project:
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" initialize [AGENT_ID]
 
 2. **Check for any existing tasks to work on:**
-   node -e 'const TASK_MANAGER = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TASKS.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Available tasks:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
+   node -e 'const TASK_MANAGER = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TASKS.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); loggers.app.info("Available tasks:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
 
 3. **Begin working on the highest priority tasks**
 
@@ -1587,7 +1588,7 @@ When ALL TodoWrite tasks are complete And project achieves perfection, agents mu
       logger.logExit(0, 'Endpoint-triggered stop (single use)');
       logger.save();
 
-      console.error(`
+      loggers.app.error(`
 🛑 ENDPOINT-TRIGGERED STOP AUTHORIZED
 
 A stop request was authorized via the stop endpoint.
@@ -1597,7 +1598,7 @@ This is a single-use authorization.
 ⚡ Future stop hook triggers will return to infinite continue mode.
 
 To trigger another stop, use the TaskManager API:
-node -e "const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TASKS.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => console.log(JSON.stringify(result, null, 2)));"
+node -e "const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TASKS.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => loggers.app.info(JSON.stringify(result, null, 2)));"
 `);
       // eslint-disable-next-line n/no-process-exit
       process.exit(0); // Allow stop only when endpoint triggered
@@ -1611,7 +1612,7 @@ node -e "const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-sto
     let taskStatus;
     try {
       taskStatus = await taskManager.getTaskStatus();
-    } catch (error) {
+    } catch {
       // Handle corrupted TASKS.json by using autoFixer
       logger.addFlow(
         `Task status failed, attempting auto-fix: ${error.message}`
@@ -1649,7 +1650,7 @@ node -e "const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-sto
           `Successfully archived ${archivalResult.migrated} completed tasks to DONE.json`
         );
 
-        console.error(`
+        loggers.app.error(`
 ✅ AUTOMATIC TASK ARCHIVAL COMPLETED
 
 📁 Archived ${archivalResult.migrated} completed tasks to DONE.json
@@ -1661,10 +1662,10 @@ This keeps TASKS.json clean And prevents it from becoming crowded with completed
       } else {
         logger.addFlow('No completed tasks found to archive');
       }
-    } catch (archivalError) {
+    } catch {
       logger.addFlow(`Task archival failed: ${archivalError.message}`);
 
-      console.error(`
+      loggers.app.error(`
 ⚠️ AUTOMATIC TASK ARCHIVAL WARNING
 
 Task archival encountered an issue: ${archivalError.message}
@@ -1682,7 +1683,7 @@ This is non-critical And won't prevent continued operation,
 
     // Output detailed instructions to Claude
 
-    console.error(`
+    loggers.app.error(`
 🔄 INFINITE CONTINUE MODE ACTIVE
 
 🚨 **AGENT WORKFLOW MANDATES - PROFESSIONAL DEVELOPER PROTOCOL:**
@@ -1718,15 +1719,13 @@ This system operates in infinite continue mode. To authorize a stop, use:
 
     // eslint-disable-next-line n/no-process-exit
     process.exit(2); // Always continue - never allow natural stops
-  } catch (error) {
-    logger.logError(error, 'stop-hook-main');
-    logger.logExit(
-      2,
+  } catch {
+    loggers.app.error('stop-hook-main error:', error);
+    loggers.app.info(
       `Error handled - continuing infinite mode: ${error.message}`
     );
-    logger.save();
 
-    console.error(`
+    loggers.app.error(`
 ⚠️ STOP HOOK ERROR - CONTINUING ANYWAY
 
 Error encountered: ${error.message}

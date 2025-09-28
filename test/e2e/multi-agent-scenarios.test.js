@@ -513,7 +513,7 @@ describe('Multi-Agent Scenarios E2E', () => {
                 `Contention OPERATION${index}`,
               );
               successfulOperations++;
-            } catch (error) {
+            } catch {
               console.warn(
                 `Operation ${index} failed validation: ${error.message}`,
               );

@@ -58,7 +58,7 @@ class FinalErrorFixer {
       // Add missing path import at top
       if (
         !content.includes("const path = require('path')") &&
-        !content.includes('_path') &&
+        !content.includes('PATH') &&
         content.includes('path.')
       ) {
         const lines = content.split('\n');
@@ -85,7 +85,7 @@ class FinalErrorFixer {
         this.fixCount += fixCount;
       }
       this.filesProcessed++;
-    } catch (error) {
+    } catch {
       // eslint-disable-next-line no-console
       console.error(`❌ Error fixing audit-integration.js:`, error.message);
     }
@@ -126,7 +126,7 @@ class FinalErrorFixer {
         this.fixCount += fixCount;
       }
       this.filesProcessed++;
-    } catch (error) {
+    } catch {
       // eslint-disable-next-line no-console
       console.error(
         `❌ Error fixing taskmanager-validation.js:`,
@@ -186,7 +186,7 @@ class FinalErrorFixer {
         this.fixCount += fixCount;
       }
       this.filesProcessed++;
-    } catch (error) {
+    } catch {
       // eslint-disable-next-line no-console
       console.error(`❌ Error fixing quick-perf-test.js:`, error.message);
     }
@@ -236,7 +236,7 @@ class FinalErrorFixer {
         this.fixCount += fixCount;
       }
       this.filesProcessed++;
-    } catch (error) {
+    } catch {
       // eslint-disable-next-line no-console
       console.error(`❌ Error fixing fix-capital-for-loops.js:`, error.message);
     }
@@ -259,23 +259,23 @@ class FinalErrorFixer {
           pattern: /expect\(result\)\.toBeNull\(\);/g,
           replacement: 'expect(result).toBeNull();',
         },
-        // Fix: expect(path.path) -> expect(_path.path)
-        { pattern: /expect\(path\.path\)/g, replacement: 'expect(_path.path)' },
+        // Fix: expect(path.path) -> expect(PATH.path)
+        { pattern: /expect\(path\.path\)/g, replacement: 'expect(PATH.path)' },
         {
           pattern: /expect\(path\.totalDuration\)/g,
-          replacement: 'expect(_path.totalDuration)',
+          replacement: 'expect(PATH.totalDuration)',
         },
         {
           pattern: /expect\(path\.averageDuration\)/g,
-          replacement: 'expect(_path.averageDuration)',
+          replacement: 'expect(PATH.averageDuration)',
         },
         {
           pattern: /expect\(path\.bottlenecks\)/g,
-          replacement: 'expect(_path.bottlenecks)',
+          replacement: 'expect(PATH.bottlenecks)',
         },
         {
           pattern: /expect\(path\.optimizationPotential\)/g,
-          replacement: 'expect(_path.optimizationPotential)',
+          replacement: 'expect(PATH.optimizationPotential)',
         },
       ];
 
@@ -296,7 +296,7 @@ class FinalErrorFixer {
         this.fixCount += fixCount;
       }
       this.filesProcessed++;
-    } catch (error) {
+    } catch {
       // eslint-disable-next-line no-console
       console.error(
         `❌ Error fixing validation-dependency-manager.test.js:`,
@@ -355,7 +355,7 @@ class FinalErrorFixer {
           this.fixCount += fixCount;
         }
         this.filesProcessed++;
-      } catch (error) {
+      } catch {
         // eslint-disable-next-line no-console
         console.error(
           `❌ Error fixing unused errors in ${filePath}:`,
@@ -392,7 +392,7 @@ class FinalErrorFixer {
         execSync('npm run lint > /dev/null 2>&1');
         // eslint-disable-next-line no-console
         console.log('✅ All final linting errors have been fixed!');
-      } catch (error) {
+      } catch {
         // eslint-disable-next-line no-console
         console.log(
           'ℹ️  Some linting errors may still remain - check output for details'

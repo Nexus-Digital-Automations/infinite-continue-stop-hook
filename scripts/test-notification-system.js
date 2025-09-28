@@ -65,7 +65,7 @@ class TestNotificationSystem {
       await this.updateNotificationHistory(notifications);
 
       loggers.stopHook.log(`📤 Sent ${notifications.length} notification(s)`);
-    } catch (error) {
+    } catch {
       loggers.stopHook.error(
         '❌ Failed to process notifications:',
         error.message
@@ -523,7 +523,7 @@ class TestNotificationSystem {
       if (fs.existsSync(path)) {
         return JSON.parse(fs.readFileSync(path, 'utf8'));
       }
-    } catch (error) {
+    } catch {
       loggers.stopHook.warn('⚠️ Could not load test results:', error.message);
     }
     return null;
@@ -535,7 +535,7 @@ class TestNotificationSystem {
       if (fs.existsSync(path)) {
         return JSON.parse(fs.readFileSync(path, 'utf8'));
       }
-    } catch (error) {
+    } catch {
       loggers.stopHook.warn('⚠️ Could not load coverage data:', error.message);
     }
     return null;
@@ -547,7 +547,7 @@ class TestNotificationSystem {
       if (fs.existsSync(path)) {
         return JSON.parse(fs.readFileSync(path, 'utf8'));
       }
-    } catch (error) {
+    } catch {
       loggers.stopHook.warn('⚠️ Could not load CI/CD data:', error.message);
     }
     return null;
@@ -558,7 +558,7 @@ class TestNotificationSystem {
       if (fs.existsSync(this.options.historyFile)) {
         return JSON.parse(fs.readFileSync(this.options.historyFile, 'utf8'));
       }
-    } catch (error) {
+    } catch {
       loggers.stopHook.warn(
         '⚠️ Could not load notification history:',
         error.message
@@ -603,7 +603,7 @@ class TestNotificationSystem {
         this.options.historyFile,
         JSON.stringify(this.notificationHistory, null, 2)
       );
-    } catch (error) {
+    } catch {
       loggers.stopHook.warn(
         '⚠️ Could not update notification history:',
         error.message
@@ -624,7 +624,7 @@ class TestNotificationSystem {
       if (result.status === 'fulfilled') {
         loggers.stopHook.log(`✅ Notification ${index + 1} sent successfully`);
       } else {
-        console.log(
+        loggers.app.info(
           `❌ Notification ${index + 1} failed:`,
           result.reason.message
         );
@@ -638,7 +638,7 @@ if (require.main === module) {
   const args = process.argv.slice(2);
 
   if (args.includes('--help') || args.includes('-h')) {
-    console.log(`
+    loggers.app.info(`
 Test Notification System
 
 Usage: node test-notification-system.js [options]

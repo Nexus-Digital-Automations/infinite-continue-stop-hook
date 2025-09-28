@@ -135,7 +135,7 @@ describe('Feature Management Lifecycle', () => {
         ];
 
         // Create features in parallel for better test performance
-        const RESULTS = await Promise.all(
+        const _RESULTS = await Promise.all(
           categories.map(async (category) => {
             const featureData = {
               ...TEST_FIXTURES.validFeature,

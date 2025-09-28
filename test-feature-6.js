@@ -3,6 +3,7 @@
  */
 
 const RAGOPERATIONS = require('./lib/api-modules/rag/ragOperations');
+const { loggers } = require('lib/logger');
 
 async function testLearningRecommendationEngine() {
   try {
@@ -43,7 +44,7 @@ async function testLearningRecommendationEngine() {
         limit: 5,
       }
     );
-    console.log('Recommendations result:', {
+    loggers.app.info('Recommendations result:', {
       success: recommendations.success,
       count: recommendations.count,
       strategy: recommendations.strategy,
@@ -56,7 +57,7 @@ async function testLearningRecommendationEngine() {
       timeRange: 'week',
       limit: 3,
     });
-    console.log('Trending lessons result:', {
+    loggers.app.info('Trending lessons result:', {
       success: trending.success,
       count: trending.count,
       timeRange: trending.timeRange,
@@ -69,7 +70,7 @@ async function testLearningRecommendationEngine() {
       limit: 3,
       threshold: 0.6,
     });
-    console.log('Similar lessons result:', {
+    loggers.app.info('Similar lessons result:', {
       success: similar.success,
       message: similar.message,
     });
@@ -79,16 +80,16 @@ async function testLearningRecommendationEngine() {
     const analytics = await ragOps.getRecommendationAnalytics({
       timeRange: 30,
     });
-    console.log('Recommendation analytics result:', {
+    loggers.app.info('Recommendation analytics result:', {
       success: analytics.success,
       timeRange: analytics.timeRange,
       message: analytics.message,
     });
 
-    console.log(
+    loggers.app.info(
       '\n✅ Feature 6: Learning Recommendation Engine integration test completed successfully!'
     );
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('❌ Feature 6 test failed:', error.message);
     loggers.stopHook.error('Stack:', error.stack);
   }

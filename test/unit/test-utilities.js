@@ -5,8 +5,8 @@
  * unit testing of the FeatureManagerAPI class.
  */
 
-const FS = require('fs').promises;
-const PATH = require('path');
+const _FS = require('fs').promises;
+const _PATH = require('path');
 const crypto = require('crypto');
 
 /**
@@ -598,7 +598,7 @@ const testHelpers = {
     let error = null;
     try {
       await asyncFn();
-    } catch (err) {
+    } catch {
       error = err;
     }
     expect(error).not.toBeNull();

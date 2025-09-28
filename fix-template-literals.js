@@ -14,6 +14,6 @@ try {
 
   fs.writeFileSync(file, content, 'utf8');
   console.log('✅ Fixed malformed template literals in taskmanager-api.js');
-} catch (error) {
+} catch {
   console.error('❌ Error:', error.message);
 }

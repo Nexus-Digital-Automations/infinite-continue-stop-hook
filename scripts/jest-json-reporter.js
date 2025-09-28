@@ -189,7 +189,7 @@ class JestJsonReporter {
           pct: summary.lines.pct,
         },
       };
-    } catch (error) {
+    } catch {
       return {
         error: 'Failed to process coverage map',
         message: error.message,

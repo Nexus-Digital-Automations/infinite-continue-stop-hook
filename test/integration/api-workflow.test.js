@@ -710,7 +710,7 @@ describe('API Workflow Integration Tests', () => {
         await execAPI('invalid-command', [], { projectRoot: testDir });
         // Should not reach here
         expect(true).toBe(false);
-      } catch (error) {
+      } catch {
         expect(error.message).toContain('Command failed');
       }
     });
