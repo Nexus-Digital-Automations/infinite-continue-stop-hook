@@ -74,6 +74,7 @@ describe('Feature Lifecycle Integration Tests', () => {
       // 2. Suggest all features
       const suggestResults = [];
       for (const featureData of features) {
+        // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup
         const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
@@ -104,6 +105,7 @@ describe('Feature Lifecycle Integration Tests', () => {
 
       // 4. Test filtering by category
       for (const category of categories) {
+        // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation
         const categoryResult = await execAPI(
           'list-features',
           [JSON.stringify({ category })],

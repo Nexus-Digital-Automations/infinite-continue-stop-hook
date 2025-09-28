@@ -42,7 +42,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
       {
         cwd: __dirname,
         stdio: ['pipe', 'pipe', 'pipe'],
-      }
+      },
     );
 
     let stdout = '';
@@ -72,8 +72,8 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         } catch {
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`
-            )
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
+            ),
           );
         }
       }
@@ -97,7 +97,7 @@ function setupAuditTestEnvironment() {
   const essentialsDir = _path.join(
     TEST_PROJECT_DIR,
     'development',
-    'essentials'
+    'essentials',
   );
   if (!_fs.existsSync(essentialsDir)) {
     _fs.mkdirSync(essentialsDir, { recursive: true });
@@ -195,7 +195,7 @@ This file defines the standard completion criteria that ALL tasks must satisfy b
 
   _fs.writeFileSync(
     _path.join(essentialsDir, 'audit-criteria.md'),
-    auditCriteriaContent
+    auditCriteriaContent,
   );
 
   // Create alternative audit criteria for testing fallback behavior
@@ -210,7 +210,7 @@ This file defines the standard completion criteria that ALL tasks must satisfy b
 
   _fs.writeFileSync(
     _path.join(essentialsDir, 'minimal-audit-criteria.md'),
-    minimalAuditContent
+    minimalAuditContent,
   );
 
   // Create TODO.json
@@ -324,7 +324,7 @@ describe('Audit System Validation Tests', () => {
       // Remove audit criteria file
       const _auditCriteriaPath = _path.join(
         TEST_PROJECT_DIR,
-        'development/essentials/audit-criteria.md'
+        'development/essentials/audit-criteria.md',
       );
       if (_fs.existsSync(_auditCriteriaPath)) {
         _fs.unlinkSync(_auditCriteriaPath);
@@ -358,7 +358,7 @@ describe('Audit System Validation Tests', () => {
       ];
       _basicCriteria.forEach((criterion) => {
         expect(
-          _auditSubtask.success_criteria.some((sc) => sc.includes(criterion))
+          _auditSubtask.success_criteria.some((sc) => sc.includes(criterion)),
         ).toBe(true);
       });
     });
@@ -493,7 +493,7 @@ describe('Audit System Validation Tests', () => {
       const _listResult2 = await execAPI('list'); // Same API, different agent would be handled by claiming logic
 
       const _task = _listResult1.tasks.find(
-        (t) => t.id === createResult.taskId
+        (t) => t.id === createResult.taskId,
       );
       const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
@@ -533,11 +533,11 @@ describe('Audit System Validation Tests', () => {
       // Should include security-specific criteria
       expect(_auditSubtask.success_criteria).toContain('Security Review');
       expect(_auditSubtask.success_criteria).toContain(
-        'No Credential Exposure'
+        'No Credential Exposure',
       );
       expect(_auditSubtask.success_criteria).toContain('Input Validation');
       expect(_auditSubtask.success_criteria).toContain(
-        'Authentication/Authorization'
+        'Authentication/Authorization',
       );
     });
 
@@ -564,7 +564,7 @@ describe('Audit System Validation Tests', () => {
         (criterion) =>
           criterion.includes('TaskManager') ||
           criterion.includes('Agent') ||
-          criterion.includes('TODO.json')
+          criterion.includes('TODO.json'),
       );
 
       // This test validates that project-specific criteria can be loaded
@@ -643,12 +643,12 @@ describe('Audit System Validation Tests', () => {
       const _auditSubtask = _task.subtasks.find((st) => st.type === 'audit');
 
       expect(_auditSubtask.description).toContain(
-        'Comprehensive quality audit and review'
+        'Comprehensive quality audit and review',
       );
       expect(_auditSubtask.description).toContain(_detailedTaskData.title);
       expect(_auditSubtask.description).toContain('Original Description:');
       expect(_auditSubtask.description).toContain(
-        _detailedTaskData.description
+        _detailedTaskData.description,
       );
 
       // Should reference the task being audited
@@ -840,7 +840,7 @@ describe('Audit System Validation Tests', () => {
       // Verify all audit subtasks were created properly
       const listResult = await execAPI('list');
       const _featureTasks = listResult.tasks.filter(
-        (t) => t.category === 'feature'
+        (t) => t.category === 'feature',
       );
 
       expect(_featureTasks.length).toBe(_numTasks);
@@ -866,11 +866,11 @@ describe('Audit System Validation Tests', () => {
       // Create corrupted audit criteria file
       const _auditCriteriaPath = _path.join(
         TEST_PROJECT_DIR,
-        'development/essentials/audit-criteria.md'
+        'development/essentials/audit-criteria.md',
       );
       _fs.writeFileSync(
         _auditCriteriaPath,
-        'Invalid markdown content without proper formatting\n###\n- [ ] Broken'
+        'Invalid markdown content without proper formatting\n###\n- [ ] Broken',
       );
 
       const featureTaskData = {
@@ -898,7 +898,7 @@ describe('Audit System Validation Tests', () => {
       // Create very large audit criteria file
       const _auditCriteriaPath = _path.join(
         TEST_PROJECT_DIR,
-        'development/essentials/audit-criteria.md'
+        'development/essentials/audit-criteria.md',
       );
 
       let largeContent = '# Large Audit Criteria\n\n## Quality Gates\n\n';
@@ -953,7 +953,7 @@ describe('Audit System Validation Tests', () => {
       expect(_auditSubtask.title).toContain('Audit:');
       expect(_auditSubtask.description).toContain(_specialCharsTaskData.title);
       expect(_auditSubtask.description).toContain(
-        _specialCharsTaskData.description
+        _specialCharsTaskData.description,
       );
 
       // Should generate valid audit subtask ID despite special characters in source

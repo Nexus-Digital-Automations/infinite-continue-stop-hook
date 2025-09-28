@@ -65,7 +65,7 @@ class FeatureSuggestionValidator {
 
       console.log(`✅ [${operationId}] Success (${_duration}ms)`);
       console.log(
-        `   Result: ${JSON.stringify(_result.success || _result.message || 'OK', null, 2)}`
+        `   Result: ${JSON.stringify(_result.success || _result.message || 'OK', null, 2)}`,
       );
 
       this.testResults.push({
@@ -114,7 +114,7 @@ class FeatureSuggestionValidator {
     const command = `timeout 10s node "${this.taskmanagerPath}" suggest-feature '${JSON.stringify(testFeatureData)}'`;
     const result = await this.executeCommand(
       command,
-      'Agent suggests new test feature'
+      'Agent suggests new test feature',
     );
 
     if (result.success && result.data.featureId) {
@@ -136,13 +136,13 @@ class FeatureSuggestionValidator {
     const command = `timeout 10s node "${this.taskmanagerPath}" list-features`;
     const result = await this.executeCommand(
       command,
-      'List all features including suggested'
+      'List all features including suggested',
     );
 
     if (result.success && result.data.features) {
       const features = result.data.features;
       const suggestedFeatures = features.filter(
-        (f) => f.status === 'suggested'
+        (f) => f.status === 'suggested',
       );
       const approvedFeatures = features.filter((f) => f.status === 'approved');
 
@@ -183,16 +183,16 @@ class FeatureSuggestionValidator {
       const listCommand = `timeout 10s node "${this.taskmanagerPath}" list-features`;
       const listResult = await this.executeCommand(
         listCommand,
-        'Verify feature approval status'
+        'Verify feature approval status',
       );
 
       if (listResult.success && listResult.data.features) {
         const approvedFeature = listResult.data.features.find(
-          (f) => f.id === this.testFeatureId
+          (f) => f.id === this.testFeatureId,
         );
         if (approvedFeature && approvedFeature.status === 'approved') {
           console.log(
-            `✅ Feature successfully approved: ${approvedFeature.status}`
+            `✅ Feature successfully approved: ${approvedFeature.status}`,
           );
           return true;
         }
@@ -223,7 +223,7 @@ class FeatureSuggestionValidator {
     const createCommand = `timeout 10s node "${this.taskmanagerPath}" create-phase ${this.testFeatureId} '${JSON.stringify(phaseData)}'`;
     const createResult = await this.executeCommand(
       createCommand,
-      'Create test phase'
+      'Create test phase',
     );
 
     if (createResult.success) {
@@ -231,7 +231,7 @@ class FeatureSuggestionValidator {
       const listCommand = `timeout 10s node "${this.taskmanagerPath}" list-phases ${this.testFeatureId}`;
       const listResult = await this.executeCommand(
         listCommand,
-        'List feature phases'
+        'List feature phases',
       );
 
       if (
@@ -241,7 +241,7 @@ class FeatureSuggestionValidator {
       ) {
         console.log(`📊 Phases created: ${listResult.data.phases.length}`);
         console.log(
-          `📈 Completion: ${listResult.data.statistics.completion_percentage}%`
+          `📈 Completion: ${listResult.data.statistics.completion_percentage}%`,
         );
         return true;
       }
@@ -264,22 +264,22 @@ class FeatureSuggestionValidator {
     const currentPhaseCommand = `timeout 10s node "${this.taskmanagerPath}" current-phase ${originalFeatureId}`;
     const currentPhaseResult = await this.executeCommand(
       currentPhaseCommand,
-      'Check original feature current phase'
+      'Check original feature current phase',
     );
 
     if (currentPhaseResult.success) {
       const phase = currentPhaseResult.data.currentPhase;
       console.log(
-        `📍 Current Phase: ${phase.number} - ${phase.title} (${phase.status})`
+        `📍 Current Phase: ${phase.number} - ${phase.title} (${phase.status})`,
       );
       console.log(
-        `📊 Overall Progress: ${currentPhaseResult.data.statistics.completion_percentage}%`
+        `📊 Overall Progress: ${currentPhaseResult.data.statistics.completion_percentage}%`,
       );
 
       // If we're in Phase 2 and it's in progress, this test validates the implementation is working
       if (phase.number === 2 && phase.status === 'in_progress') {
         console.log(
-          '✅ Phase 2 validation successful - feature lifecycle working correctly'
+          '✅ Phase 2 validation successful - feature lifecycle working correctly',
         );
         return true;
       }
@@ -299,7 +299,7 @@ class FeatureSuggestionValidator {
       // Note: In a real system, you might want to keep test data for audit
       // For this validation, we'll leave the test feature for inspection
       console.log(
-        `📝 Test feature preserved for inspection: ${this.testFeatureId}`
+        `📝 Test feature preserved for inspection: ${this.testFeatureId}`,
       );
     }
   }
@@ -319,7 +319,7 @@ class FeatureSuggestionValidator {
     console.log(`✅ Successful Operations: ${successfulTests}`);
     console.log(`❌ Failed Operations: ${failedTests}`);
     console.log(
-      `📈 Success Rate: ${((successfulTests / this.testResults.length) * 100).toFixed(1)}%`
+      `📈 Success Rate: ${((successfulTests / this.testResults.length) * 100).toFixed(1)}%`,
     );
     console.log('');
 
@@ -328,7 +328,7 @@ class FeatureSuggestionValidator {
       const status = result.success ? '✅' : '❌';
       const duration = result.duration ? `(${result.duration}ms)` : '';
       console.log(
-        `  ${index + 1}. ${status} ${result.description} ${duration}`
+        `  ${index + 1}. ${status} ${result.description} ${duration}`,
       );
     });
 
@@ -380,7 +380,7 @@ class FeatureSuggestionValidator {
         '..',
         'development',
         'test-reports',
-        'feature-suggestion-validation-report.json'
+        'feature-suggestion-validation-report.json',
       );
 
       // Ensure directory exists
@@ -404,8 +404,8 @@ class FeatureSuggestionValidator {
             },
           },
           null,
-          2
-        )
+          2,
+        ),
       );
 
       console.log(`📄 Detailed report saved: ${reportPath}`);

@@ -122,7 +122,7 @@ class TaskManagerPerformanceBenchmark {
         // eslint-disable-next-line no-await-in-loop -- Sequential timing measurements required
         const result = await this.executeTimedCommand(
           endpoint[0],
-          endpoint.slice(1)
+          endpoint.slice(1),
         );
         this.results.apiResponses.push({
           endpoint: endpoint[0],
@@ -262,7 +262,7 @@ class TaskManagerPerformanceBenchmark {
       }
     } catch (error) {
       console.log(
-        `   ❌ Error in success criteria benchmarking: ${error.message}`
+        `   ❌ Error in success criteria benchmarking: ${error.message}`,
       );
     }
   }
@@ -283,7 +283,7 @@ class TaskManagerPerformanceBenchmark {
           agentIndex: i,
           operation: 'concurrent_init',
           ...result,
-        }))
+        })),
       );
     }
 
@@ -299,7 +299,7 @@ class TaskManagerPerformanceBenchmark {
             agentIndex: i,
             operation: 'concurrent_list',
             ...result,
-          }))
+          })),
         );
       }
 
@@ -307,7 +307,7 @@ class TaskManagerPerformanceBenchmark {
       this.results.concurrentAccess.push(...listResults);
     } catch (error) {
       console.log(
-        `   ❌ Error in concurrent access benchmarking: ${error.message}`
+        `   ❌ Error in concurrent access benchmarking: ${error.message}`,
       );
     }
   }
@@ -390,7 +390,7 @@ class TaskManagerPerformanceBenchmark {
           return (
             snapshot.heapUsed - this.results.memoryUsage.snapshots[0].heapUsed
           );
-        }
+        },
       );
 
       const maxMemoryGrowth = Math.max(...memoryGrowth);
@@ -406,7 +406,7 @@ class TaskManagerPerformanceBenchmark {
 
     // Analyze concurrent access performance
     const concurrentInits = this.results.concurrentAccess.filter(
-      (r) => r.operation === 'concurrent_init'
+      (r) => r.operation === 'concurrent_init',
     );
     if (concurrentInits.length > 0) {
       const avgConcurrentTime =
@@ -595,10 +595,10 @@ class TaskManagerPerformanceBenchmark {
   summarizeConcurrentPerformance() {
     const concurrent = {
       init: this.results.concurrentAccess.filter(
-        (r) => r.operation === 'concurrent_init'
+        (r) => r.operation === 'concurrent_init',
       ),
       list: this.results.concurrentAccess.filter(
-        (r) => r.operation === 'concurrent_list'
+        (r) => r.operation === 'concurrent_list',
       ),
     };
 
@@ -674,16 +674,16 @@ class TaskManagerPerformanceBenchmark {
       console.log(`\n📈 Summary:`);
       console.log(`   • API Endpoints Tested: ${report.summary.totalApiTests}`);
       console.log(
-        `   • Subtask Operations: ${report.summary.totalSubtaskTests}`
+        `   • Subtask Operations: ${report.summary.totalSubtaskTests}`,
       );
       console.log(
-        `   • Concurrent Tests: ${report.summary.totalConcurrentTests}`
+        `   • Concurrent Tests: ${report.summary.totalConcurrentTests}`,
       );
       console.log(
-        `   • Bottlenecks Identified: ${report.summary.totalBottlenecks}`
+        `   • Bottlenecks Identified: ${report.summary.totalBottlenecks}`,
       );
       console.log(
-        `   • Recommendations Generated: ${report.summary.totalRecommendations}`
+        `   • Recommendations Generated: ${report.summary.totalRecommendations}`,
       );
 
       return report;

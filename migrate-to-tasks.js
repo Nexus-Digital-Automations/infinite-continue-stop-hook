@@ -15,7 +15,7 @@ class TaskMigrator {
     this.tasksPath = path.join(projectRoot, 'TASKS.json');
     this.backupPath = path.join(
       projectRoot,
-      `FEATURES.json.backup.${Date.now()}`
+      `FEATURES.json.backup.${Date.now()}`,
     );
   }
 
@@ -236,7 +236,7 @@ class TaskMigrator {
           dependencies: [],
           estimated_effort: 5, // Default value
           required_capabilities: this.inferCapabilitiesFromCategory(
-            feature.category
+            feature.category,
           ),
           created_at: feature.created_at,
           updated_at: feature.updated_at,
@@ -463,7 +463,7 @@ class TaskMigrator {
       autoTasksGenerated * 2;
 
     console.log(
-      `✓ Generated ${autoTasksGenerated * 2} auto-tasks (${autoTasksGenerated} test + ${autoTasksGenerated} audit)`
+      `✓ Generated ${autoTasksGenerated * 2} auto-tasks (${autoTasksGenerated} test + ${autoTasksGenerated} audit)`,
     );
   }
 

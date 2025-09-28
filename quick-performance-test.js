@@ -167,14 +167,14 @@ class QuickPerformanceTest {
     // Memory analysis
     const totalMemoryUsed = this.results.reduce(
       (sum, r) => sum + (r.memoryUsed || 0),
-      0
+      0,
     );
     const avgMemoryPerOp = totalMemoryUsed / this.results.length;
 
     console.log(`\n💾 Memory Usage:`);
     console.log(`   Total: ${(totalMemoryUsed / (1024 * 1024)).toFixed(2)}MB`);
     console.log(
-      `   Average per operation: ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB`
+      `   Average per operation: ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB`,
     );
 
     // Recommendations
@@ -182,20 +182,20 @@ class QuickPerformanceTest {
 
     if (slowOperations.length > 0) {
       console.log(
-        `   • Investigate and optimize ${slowOperations.length} slow operations`
+        `   • Investigate and optimize ${slowOperations.length} slow operations`,
       );
     }
 
     if (failed.length > 0) {
       console.log(
-        `   • Address ${failed.length} failing operations for system reliability`
+        `   • Address ${failed.length} failing operations for system reliability`,
       );
     }
 
     if (avgMemoryPerOp > 10 * 1024 * 1024) {
       // 10MB per operation
       console.log(
-        `   • Review memory usage patterns - average ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB per operation`
+        `   • Review memory usage patterns - average ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB per operation`,
       );
     }
 
@@ -235,7 +235,7 @@ class QuickPerformanceTest {
     };
 
     console.log(
-      `\n🎯 Performance Score: ${this.calculatePerformanceScore(report)}/100`
+      `\n🎯 Performance Score: ${this.calculatePerformanceScore(report)}/100`,
     );
 
     return report;

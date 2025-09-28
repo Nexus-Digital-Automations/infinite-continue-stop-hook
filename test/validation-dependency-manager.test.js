@@ -121,7 +121,7 @@ describe('ValidationDependencyManager', () => {
       const validation = manager.validateDependencyGraph();
       expect(validation.valid).toBe(false);
       expect(
-        validation.issues.some((issue) => issue.type === 'missing_dependency')
+        validation.issues.some((issue) => issue.type === 'missing_dependency'),
       ).toBe(true);
     });
 
@@ -231,7 +231,7 @@ describe('ValidationDependencyManager', () => {
 
       const plan = manager.generateParallelExecutionPlan(
         ['network-intensive-1', 'network-intensive-2'],
-        4
+        4,
       );
 
       // These should not be in the same wave due to port conflicts
@@ -273,15 +273,15 @@ describe('ValidationDependencyManager', () => {
 
       const plan = manager.generateParallelExecutionPlan(
         ['high-priority', 'low-priority', 'dependent-1', 'dependent-2'],
-        4
+        4,
       );
 
       // High-priority should be scheduled early due to many dependents
       const highPriorityWave = plan.plan.findIndex((wave) =>
-        wave.criteria.some((c) => c.criterion === 'high-priority')
+        wave.criteria.some((c) => c.criterion === 'high-priority'),
       );
       const lowPriorityWave = plan.plan.findIndex((wave) =>
-        wave.criteria.some((c) => c.criterion === 'low-priority')
+        wave.criteria.some((c) => c.criterion === 'low-priority'),
       );
 
       expect(highPriorityWave).toBeLessThanOrEqual(lowPriorityWave);
@@ -299,14 +299,14 @@ describe('ValidationDependencyManager', () => {
 
       const adaptivePlan = manager.generateAdaptiveExecutionPlan(
         null,
-        systemInfo
+        systemInfo,
       );
 
       expect(adaptivePlan).toBeDefined();
       expect(adaptivePlan.adaptiveOptimizations).toBeDefined();
       expect(adaptivePlan.adaptiveOptimizations.systemAware).toBeDefined();
       expect(
-        adaptivePlan.adaptiveOptimizations.resourceScheduling
+        adaptivePlan.adaptiveOptimizations.resourceScheduling,
       ).toBeDefined();
       expect(adaptivePlan.adaptiveOptimizations.executionTiming).toBeDefined();
     });
@@ -321,7 +321,7 @@ describe('ValidationDependencyManager', () => {
 
       const adaptivePlan = manager.generateAdaptiveExecutionPlan(
         null,
-        limitedSystemInfo
+        limitedSystemInfo,
       );
       const systemAware = adaptivePlan.adaptiveOptimizations.systemAware;
 
@@ -341,7 +341,7 @@ describe('ValidationDependencyManager', () => {
 
       const adaptivePlan = manager.generateAdaptiveExecutionPlan(
         null,
-        highLatencySystem
+        highLatencySystem,
       );
       const optimizations = adaptivePlan.adaptiveOptimizations;
 
@@ -350,8 +350,8 @@ describe('ValidationDependencyManager', () => {
         optimizations.resourceScheduling.some(
           (opt) =>
             opt.type === 'network_prioritization' ||
-            opt.type === 'disk_io_staggering'
-        )
+            opt.type === 'disk_io_staggering',
+        ),
       ).toBe(true);
     });
   });
@@ -631,7 +631,7 @@ describe('ValidationDependencyManager', () => {
       expect(analytics.criteriaStats['linter-validation']).toBeDefined();
       expect(analytics.criteriaStats['linter-validation'].executions).toBe(2);
       expect(analytics.criteriaStats['linter-validation'].successRate).toBe(
-        100
+        100,
       );
 
       expect(analytics.criteriaStats['build-validation']).toBeDefined();
@@ -721,11 +721,11 @@ describe('ValidationDependencyManager', () => {
           dependencies:
             i > 0
               ? [
-                  {
-                    criterion: `criterion-${i - 1}`,
-                    type: DEPENDENCY_TYPES.WEAK,
-                  },
-                ]
+                {
+                  criterion: `criterion-${i - 1}`,
+                  type: DEPENDENCY_TYPES.WEAK,
+                },
+              ]
               : [],
           estimatedDuration: Math.random() * 20000 + 5000,
           parallelizable: Math.random() > 0.3,
@@ -753,7 +753,7 @@ describe('ValidationDependencyManager', () => {
         manager.recordExecution(
           `criterion-${i % 10}`,
           'success',
-          Math.random() * 10000
+          Math.random() * 10000,
         );
       }
 

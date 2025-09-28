@@ -88,7 +88,7 @@ async function execAPI(command, args = []) {
       'Failed to parse API response:',
       result.stdout,
       'Error:',
-      parseError.message
+      parseError.message,
     );
     // Some commands return plain text, not JSON
     return { success: true, output: result.stdout, raw: true };
@@ -136,7 +136,7 @@ async function setupE2EProject() {
 
     await _fs.writeFile(
       _path.join(E2E_PROJECT_DIR, 'package.json'),
-      JSON.stringify(packageJson, null, 2)
+      JSON.stringify(packageJson, null, 2),
     );
 
     // Create sample source files
@@ -157,7 +157,7 @@ module.exports = { processMessage };
 
     await _fs.writeFile(
       _path.join(E2E_PROJECT_DIR, 'src', 'app.js'),
-      sampleCode
+      sampleCode,
     );
 
     // Create test files
@@ -176,7 +176,7 @@ describe('Application Tests', () => {
 
     await _fs.writeFile(
       _path.join(E2E_PROJECT_DIR, 'test', 'app.test.js'),
-      testCode
+      testCode,
     );
 
     // Create TASKS.json structure (new format)
@@ -261,9 +261,9 @@ describe('Application Tests', () => {
       _path.join(
         E2E_PROJECT_DIR,
         'development',
-        'success-criteria-config.json'
+        'success-criteria-config.json',
       ),
-      JSON.stringify(successCriteriaConfig, null, 2)
+      JSON.stringify(successCriteriaConfig, null, 2),
     );
   } catch (error) {
     console.error('Failed to setup E2E project:', error);
@@ -382,7 +382,7 @@ describe('Success Criteria End-to-End Tests', () => {
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const approvedFeature = listResult.features.find(
-              (f) => f.id === featureId
+              (f) => f.id === featureId,
             );
             if (approvedFeature) {
               expect(approvedFeature.status).toBe('approved');
@@ -542,7 +542,7 @@ describe('Success Criteria End-to-End Tests', () => {
           expect(updatedFeature.success).toBe(true);
           if (updatedFeature.features && updatedFeature.features.length > 0) {
             const approvedFeature = updatedFeature.features.find(
-              (f) => f.id === featureId
+              (f) => f.id === featureId,
             );
             if (approvedFeature) {
               expect(approvedFeature.status).toBe('approved');
@@ -551,7 +551,7 @@ describe('Success Criteria End-to-End Tests', () => {
         }
       } catch (error) {
         console.warn(
-          `Enhanced validation verification warning: ${error.message}`
+          `Enhanced validation verification warning: ${error.message}`,
         );
       }
     }, 30000);
@@ -601,7 +601,7 @@ function authenticate(username, password) {
 }
 
 module.exports = { authenticate };
-`
+`,
       );
 
       // 4. Run validation checks
@@ -621,7 +621,7 @@ module.exports = { authenticate };
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const implementedFeature = listResult.features.find(
-              (f) => f.id === featureId
+              (f) => f.id === featureId,
             );
             if (implementedFeature) {
               expect(implementedFeature.status).toBe('approved');
@@ -630,7 +630,7 @@ module.exports = { authenticate };
         }
       } catch (error) {
         console.warn(
-          `Feature workflow completion verification warning: ${error.message}`
+          `Feature workflow completion verification warning: ${error.message}`,
         );
       }
 
@@ -686,7 +686,7 @@ function authenticateWithTimeout(username, password, timeout = 10000) {
 }
 
 module.exports = { authenticateWithTimeout };
-`
+`,
       );
 
       // Verify bug fix workflow completion
@@ -701,7 +701,7 @@ module.exports = { authenticateWithTimeout };
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const bugFixFeature = listResult.features.find(
-              (f) => f.id === featureId
+              (f) => f.id === featureId,
             );
             if (bugFixFeature) {
               expect(bugFixFeature.status).toBe('approved');
@@ -796,7 +796,7 @@ async function authenticate(username, password, options = {}) {
 }
 
 module.exports = { authenticate };
-`
+`,
       );
 
       // Verify refactoring workflow completion
@@ -811,7 +811,7 @@ module.exports = { authenticate };
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const refactorFeature = listResult.features.find(
-              (f) => f.id === featureId
+              (f) => f.id === featureId,
             );
             if (refactorFeature) {
               expect(refactorFeature.status).toBe('approved');
@@ -821,7 +821,7 @@ module.exports = { authenticate };
         }
       } catch (error) {
         console.warn(
-          `Refactoring workflow verification warning: ${error.message}`
+          `Refactoring workflow verification warning: ${error.message}`,
         );
       }
 
@@ -904,7 +904,7 @@ module.exports = { authenticate };
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const coordinatedFeature = listResult.features.find(
-              (f) => f.id === featureId
+              (f) => f.id === featureId,
             );
             if (coordinatedFeature) {
               expect(coordinatedFeature.status).toBe('approved');
@@ -913,7 +913,7 @@ module.exports = { authenticate };
         }
       } catch (error) {
         console.warn(
-          `Multi-agent coordination verification warning: ${error.message}`
+          `Multi-agent coordination verification warning: ${error.message}`,
         );
       }
 
@@ -977,7 +977,7 @@ module.exports = { authenticate };
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const performanceFeature = listResult.features.find(
-              (f) => f.id === featureId
+              (f) => f.id === featureId,
             );
             if (performanceFeature) {
               expect(performanceFeature.status).toBe('approved');
@@ -987,7 +987,7 @@ module.exports = { authenticate };
         }
       } catch (error) {
         console.warn(
-          `Performance feature verification warning: ${error.message}`
+          `Performance feature verification warning: ${error.message}`,
         );
       }
 
@@ -1049,7 +1049,7 @@ module.exports = { authenticate };
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const regressionFeature = listResult.features.find(
-              (f) => f.id === featureId
+              (f) => f.id === featureId,
             );
             if (regressionFeature) {
               expect(regressionFeature.status).toBe('approved');
@@ -1058,7 +1058,7 @@ module.exports = { authenticate };
         }
       } catch (error) {
         console.warn(
-          `Regression detection verification warning: ${error.message}`
+          `Regression detection verification warning: ${error.message}`,
         );
       }
 
@@ -1116,21 +1116,21 @@ module.exports = { authenticate };
         E2E_PROJECT_DIR,
         'development',
         'evidence',
-        featureId
+        featureId,
       );
       await _fs.mkdir(evidenceDir, { recursive: true });
 
       await _fs.writeFile(
         _path.join(evidenceDir, 'lint-output.txt'),
-        lintResult.stdout || 'Linting passed - no errors found'
+        lintResult.stdout || 'Linting passed - no errors found',
       );
       await _fs.writeFile(
         _path.join(evidenceDir, 'build-output.txt'),
-        buildResult.stdout || 'Build completed successfully'
+        buildResult.stdout || 'Build completed successfully',
       );
       await _fs.writeFile(
         _path.join(evidenceDir, 'test-output.txt'),
-        testResult.stdout || 'All tests passed'
+        testResult.stdout || 'All tests passed',
       );
 
       // Verify evidence collection workflow
@@ -1145,7 +1145,7 @@ module.exports = { authenticate };
           expect(listResult.success).toBe(true);
           if (listResult.features && listResult.features.length > 0) {
             const evidenceFeature = listResult.features.find(
-              (f) => f.id === featureId
+              (f) => f.id === featureId,
             );
             if (evidenceFeature) {
               expect(evidenceFeature.status).toBe('approved');
@@ -1154,20 +1154,20 @@ module.exports = { authenticate };
         }
       } catch (error) {
         console.warn(
-          `Evidence collection verification warning: ${error.message}`
+          `Evidence collection verification warning: ${error.message}`,
         );
       }
 
       // Verify evidence files exist
       const lintEvidence = await _fs.readFile(
         _path.join(evidenceDir, 'lint-output.txt'),
-        'utf8'
+        'utf8',
       );
       expect(lintEvidence).toContain('Linting passed');
 
       const buildEvidence = await _fs.readFile(
         _path.join(evidenceDir, 'build-output.txt'),
-        'utf8'
+        'utf8',
       );
       expect(buildEvidence).toContain('completed successfully');
 
