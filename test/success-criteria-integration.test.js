@@ -46,7 +46,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
       {
         stdio: ['pipe', 'pipe', 'pipe'],
         env: { ...process.env, NODE_ENV: 'test' },
-      },
+      }
     );
 
     let stdout = '';
@@ -68,15 +68,15 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         } catch (parseError) {
           reject(
             new Error(
-              `JSON parse error: ${parseError.message}\nOutput: ${stdout}`,
-            ),
+              `JSON parse error: ${parseError.message}\nOutput: ${stdout}`
+            )
           );
         }
       } else {
         reject(
           new Error(
-            `Command failed with code ${code}.\nStderr: ${stderr}\nStdout: ${stdout}`,
-          ),
+            `Command failed with code ${code}.\nStderr: ${stderr}\nStdout: ${stdout}`
+          )
         );
       }
     });
@@ -129,7 +129,7 @@ async function setupTestProject() {
 
     await _fs.writeFile(
       _path.join(TEST_PROJECT_DIR, 'package.json'),
-      JSON.stringify(packageJson, null, 2),
+      JSON.stringify(packageJson, null, 2)
     );
   } catch (error) {
     console.error('Failed to setup test project:', error);
@@ -338,7 +338,7 @@ describe('Success Criteria Integration Tests', () => {
             description: `Performance test task ${i + 1}`,
             category: 'feature',
           }),
-        ]),
+        ])
       );
 
       const createResults = await Promise.all(createPromises);
@@ -385,7 +385,7 @@ describe('Success Criteria Integration Tests', () => {
       // Test with enterprise-level criteria (25 points)
       const _largeCriteriaSet = Array.from(
         { length: 25 },
-        (_, i) => `Criterion ${i + 1}`,
+        (_, i) => `Criterion ${i + 1}`
       );
 
       const _startTime = Date.now();
@@ -535,7 +535,7 @@ describe('Success Criteria Integration Tests', () => {
       ];
 
       const _createPromises = tasks.map((task) =>
-        execAPI('create', [JSON.stringify(task)]),
+        execAPI('create', [JSON.stringify(task)])
       );
 
       const _results = await Promise.all(_createPromises);

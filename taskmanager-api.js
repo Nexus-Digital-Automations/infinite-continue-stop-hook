@@ -2895,7 +2895,7 @@ class AutonomousTaskManagerAPI {
   /**
    * Compare performance across different time periods
    */
-  async comparePerformancePeriods(periodA, periodB, _options = {}) {
+  comparePerformancePeriods(periodA, periodB, _options = {}) {
     try {
       return this.trendAnalyzer.comparePerformancePeriods(
         periodA,

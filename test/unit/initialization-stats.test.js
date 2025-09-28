@@ -435,6 +435,7 @@ describe('Initialization Statistics', () => {
         for (let day = 1; day <= 35; day++) {
           const dateStr = `2025-09-${day.toString().padStart(2, '0')}`;
           timeUtils.mockCurrentTimeISO(`${dateStr}T12:00:00.000Z`);
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for time bucket validation
           await api._updateTimeBucketStats('init');
 
           // Move to next day to trigger reset
@@ -442,8 +443,11 @@ describe('Initialization Statistics', () => {
             timeUtils.mockCurrentTimeISO(
               `2025-09-${(day + 1).toString().padStart(2, '0')}T12:00:00.000Z`,
             );
+            // eslint-disable-next-line no-await-in-loop -- Sequential processing required for time bucket validation
             const features = await api._loadFeatures();
+            // eslint-disable-next-line no-await-in-loop -- Sequential processing required for time bucket validation
             await api._resetDailyBucketsIfNeeded(features);
+            // eslint-disable-next-line no-await-in-loop -- Sequential processing required for time bucket validation
             await api._saveFeatures(features);
           }
         }
