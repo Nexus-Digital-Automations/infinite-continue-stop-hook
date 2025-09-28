@@ -34,7 +34,7 @@ function finalAuditFix() {
     );
 
     // Clean up any remaining unused variable assignments
-    content = content.replace(/^\s*const result = [^;]+;\s*$/gm, '');
+    content = content.replace(/^\s*const RESULT = [^;]+;\s*$/gm, '');
 
     fs.writeFileSync(filePath, content);
     console.log('Applied final comprehensive audit test fixes successfully');

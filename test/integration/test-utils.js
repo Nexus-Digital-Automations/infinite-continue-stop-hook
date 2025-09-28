@@ -72,7 +72,7 @@ function execAPI(command, args = [], options = {}) {
         }
 
         // Try to parse JSON response
-        const result = JSON.parse(jsonString);
+        const RESULT = JSON.parse(jsonString);
         resolve(result);
       } catch {
         // If JSON parsing fails, check if we can extract JSON from stderr

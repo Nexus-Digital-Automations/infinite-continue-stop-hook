@@ -1,4 +1,4 @@
-const _FS = require('fs');
+const FS = require('fs');
 const PATH = require('path');
 const { execSync } = require('child_process');
 
@@ -244,8 +244,8 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const RESULT = executeCustomValidation(mockRule);
 
-      expect(result.success).toBe(true);
-      expect(result.details).toContain('Success Test');
+      expect(RESULT.success).toBe(true);
+      expect(RESULT.details).toContain('Success Test');
     });
 
     test('should fail when output does not contain required text', () => {
@@ -294,8 +294,8 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const RESULT = executeCustomValidation(mockRule);
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Expected output not found');
+      expect(RESULT.success).toBe(false);
+      expect(RESULT.error).toContain('Expected output not found');
     });
 
     test('should fail when output contains forbidden text', () => {
@@ -344,8 +344,8 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const RESULT = executeCustomValidation(mockRule);
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Forbidden output detected');
+      expect(RESULT.success).toBe(false);
+      expect(RESULT.error).toContain('Forbidden output detected');
     });
 
     test('should handle command execution failures', () => {
@@ -377,8 +377,8 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const RESULT = executeCustomValidation(mockRule);
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Command Fail Test');
+      expect(RESULT.success).toBe(false);
+      expect(RESULT.error).toContain('Command Fail Test');
     });
   });
 
@@ -412,7 +412,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
           });
 
           if (rule.successCriteria && rule.successCriteria.outputContains) {
-            if (!result.includes(rule.successCriteria.outputContains)) {
+            if (!RESULT.includes(rule.successCriteria.outputContains)) {
               return { success: false, error: 'Expected output not found' };
             }
           }
@@ -431,7 +431,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const RESULT = executeCustomValidationWithEnv(mockRule);
 
-      expect(result.success).toBe(true);
+      expect(RESULT.success).toBe(true);
     });
   });
 
@@ -577,8 +577,8 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const RESULT = executeCustomValidation(mockRule);
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Timeout Test');
+      expect(RESULT.success).toBe(false);
+      expect(RESULT.error).toContain('Timeout Test');
     });
 
     test('should handle missing config file without crashing', () => {

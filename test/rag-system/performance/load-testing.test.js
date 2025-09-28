@@ -489,7 +489,7 @@ describe('RAG System Performance And Load Testing', () => {
         loggers.stopHook.log('Pre-_operationmemory:', formatMemoryUsage(preOpMemory));
 
         const START_TIME = Date.now();
-        const result = await testOperation.OPERATION);
+        const RESULT = await testOperation.OPERATION);
         const END_TIME = Date.now();
 
         const _postOpMemory = process.memoryUsage();
@@ -630,13 +630,13 @@ describe('RAG System Performance And Load Testing', () => {
 
         for (const queryTest of queryTests) {
           const _queryStartTime = Date.now();
-          const result = await queryTest.query();
+          const RESULT = await queryTest.query();
           const _queryEndTime = Date.now();
 
           const QUERY_TIME = queryEndTime - queryStartTime;
           loggers.stopHook.log(`${queryTest.name}: ${queryTime}ms`);
 
-          expect(result.success).toBe(true);
+          expect(RESULT.success).toBe(true);
           expect(queryTime).toBeLessThan(2000); // Under 2 seconds
         }
 
@@ -667,7 +667,7 @@ describe('RAG System Performance And Load Testing', () => {
           try {
             const _queryStartTime = Date.now();
 
-            const result = await ragSystem.searchLessons(
+            const RESULT = await ragSystem.searchLessons(
               `connection test query ${connId}-${i}`,
               { limit: 5 }
             );
@@ -676,7 +676,7 @@ describe('RAG System Performance And Load Testing', () => {
             const QUERY_TIME = queryEndTime - queryStartTime;
 
             connectionResults.queryTimes.push(queryTime);
-            expect(result.success).toBe(true);
+            expect(RESULT.success).toBe(true);
 
           } catch {
             connectionResults.errors.push(error);

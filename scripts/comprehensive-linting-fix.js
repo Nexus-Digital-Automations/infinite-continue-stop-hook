@@ -181,7 +181,7 @@ class ComprehensiveLintingFix {
    */
   getLintErrorsForFile(filePath) {
     try {
-      const result = execSync(`npm run lint -- "${filePath}" 2>&1`, {
+      const RESULT = execSync(`npm run lint -- "${filePath}" 2>&1`, {
         encoding: 'utf8',
       });
       return RESULT.split('\n').filter((line) => line.includes('error'));
@@ -209,8 +209,8 @@ class ComprehensiveLintingFix {
     ];
 
     for (const fix of fixes) {
-      const result = fix();
-      if (result.hasChanges && RESULT.content) {
+      const RESULT = fix();
+      if (RESULT.hasChanges && RESULT.content) {
         FS.writeFileSync(filePath, RESULT.content);
         currentContent = RESULT.content;
         totalChanges = true;
@@ -300,11 +300,11 @@ class ComprehensiveLintingFix {
    */
   getCurrentErrorCount() {
     try {
-      const result = execSync(
+      const RESULT = execSync(
         'npm run lint 2>&1 | grep -E "(error|warning)" | wc -l',
         { encoding: 'utf8' }
       );
-      return parseInt(result.trim());
+      return parseInt(RESULT.trim());
     } catch {
       return 0;
     }

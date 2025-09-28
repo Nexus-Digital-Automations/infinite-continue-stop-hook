@@ -9,7 +9,7 @@
  * @since 2025-09-23
  */
 
-const FS = require('path');
+const PATH = require('path');
 const { spawn } = require('child_process');
 const FS = require('fs');
 

@@ -101,7 +101,7 @@ class QuickPerformanceTest {
     for (const test of tests) {
       loggers.stopHook.log(`📊 Testing: ${test.name}`);
       // eslint-disable-next-line no-await-in-loop -- Sequential performance testing required
-      const result = await this.executeCommand(test.command);
+      const RESULT = await this.executeCommand(test.command);
 
       this.results.push({
         testName: test.name,
@@ -110,12 +110,12 @@ class QuickPerformanceTest {
 
       const status = RESULT.success ? '✅' : '❌';
       const duration = RESULT.duration.toFixed(2);
-      const memoryMB = (result.memoryUsed / (1024 * 1024)).toFixed(2);
+      const memoryMB = (RESULT.memoryUsed / (1024 * 1024)).toFixed(2);
 
       loggers.stopHook.log(`   ${status} ${duration}ms (${memoryMB}MB memory)`);
 
-      if (!result.success) {
-        loggers.stopHook.log(`   Error: ${result.error || 'Command failed'}`);
+      if (!RESULT.success) {
+        loggers.stopHook.log(`   Error: ${RESULT.error || 'Command failed'}`);
       }
     }
 

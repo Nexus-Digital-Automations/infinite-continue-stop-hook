@@ -22,7 +22,7 @@ const systematicFixes = [
   { pattern: /const agentId = /g, replacement: 'const agentId = ' },
   { pattern: /const CONFIG_PATH = /g, replacement: 'const CONFIG_PATH = ' },
   { pattern: /const EXEC_SYNC = /g, replacement: 'const EXEC_SYNC = ' },
-  { pattern: /const result = /g, replacement: 'const result = ' },
+  { pattern: /const RESULT = /g, replacement: 'const RESULT = ' },
 
   // Fix specific undefined variable names
   { pattern: /\bparseError\b/g, replacement: 'error' },

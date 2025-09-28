@@ -1250,7 +1250,7 @@ Examples:
   // Run analysis
   const analyzer = new CodeQualityAnalyzer(options);
   try {
-    const result = analyzer.analyze();
+    const RESULT = analyzer.analyze();
     loggers.stopHook.log(`\n📊 Code Quality Analysis Complete:`);
     loggers.app.info(
       `   Overall Score: ${result.overall_score}/100 (${result.quality_level})`

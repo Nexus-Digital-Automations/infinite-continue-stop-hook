@@ -9,7 +9,7 @@
  * @since 2025-09-23
  */
 
-const FS = require('path');
+const PATH = require('path');
 const { spawn } = require('child_process');
 const FS = require('fs');
 
@@ -62,7 +62,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         if (jsonStart > 0) {
           jsonString = jsonString.substring(jsonStart);
         }
-        const result = JSON.parse(jsonString);
+        const RESULT = JSON.parse(jsonString);
         resolve(result);
       } catch {
         try {
@@ -182,7 +182,7 @@ describe('Feature Management System Unit Tests', () => {
         category: 'enhancement',
       };
 
-      const result = await execAPI('suggest-feature', [
+      const RESULT = await execAPI('suggest-feature', [
         JSON.stringify(featureData),
       ]);
       expect(result.success).toBe(true);
@@ -200,7 +200,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [JSON.stringify(apiTaskData)]);
+      const RESULT = await execAPI('create', [JSON.stringify(apiTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -235,7 +235,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'critical',
       };
 
-      const result = await execAPI('create', [
+      const RESULT = await execAPI('create', [
         JSON.stringify(securityTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -267,7 +267,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [
+      const RESULT = await execAPI('create', [
         JSON.stringify(performanceTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -308,7 +308,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [JSON.stringify(complexTaskData)]);
+      const RESULT = await execAPI('create', [JSON.stringify(complexTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -347,7 +347,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [
+      const RESULT = await execAPI('create', [
         JSON.stringify(taskWithGenericTerms),
       ]);
       expect(result.success).toBe(true);
@@ -385,7 +385,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [JSON.stringify(verboseTaskData)]);
+      const RESULT = await execAPI('create', [JSON.stringify(verboseTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -427,7 +427,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [
+      const RESULT = await execAPI('create', [
         JSON.stringify(standardTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -460,7 +460,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [
+      const RESULT = await execAPI('create', [
         JSON.stringify(researchTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -486,7 +486,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'critical',
       };
 
-      const result = await execAPI('create', [
+      const RESULT = await execAPI('create', [
         JSON.stringify(implementationTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -521,7 +521,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [
+      const RESULT = await execAPI('create', [
         JSON.stringify(architectureTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -562,7 +562,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [
+      const RESULT = await execAPI('create', [
         JSON.stringify(documentedTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -611,7 +611,7 @@ describe('Feature Management System Unit Tests', () => {
       }
 
       for await (const taskData of taskDataList) {
-        const result = await execAPI('create', [JSON.stringify(taskData)]);
+        const RESULT = await execAPI('create', [JSON.stringify(taskData)]);
         expect(result.success).toBe(true);
 
         const listResult = await execAPI('list');
@@ -640,7 +640,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(taskData)]);
+      const RESULT = await execAPI('create', [JSON.stringify(taskData)]);
       expect(result.success).toBe(true);
 
       const afterTime = Date.now();
@@ -678,7 +678,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'low',
       };
 
-      const result = await execAPI('create', [JSON.stringify(minimalTaskData)]);
+      const RESULT = await execAPI('create', [JSON.stringify(minimalTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -706,7 +706,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [
+      const RESULT = await execAPI('create', [
         JSON.stringify(specialCharsTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -749,7 +749,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(longTaskData)]);
+      const RESULT = await execAPI('create', [JSON.stringify(longTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');

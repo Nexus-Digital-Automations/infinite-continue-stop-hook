@@ -203,7 +203,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 if (customRule) {
                   try {
                     const timeout = customRule.timeout || 60000;
-                    const result = execSync(customRule.command, {
+                    const RESULT = execSync(customRule.command, {
                       cwd: mockProjectRoot,
                       timeout,
                       encoding: 'utf8',
@@ -214,7 +214,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                       const { outputContains, outputNotContains } =
                         customRule.successCriteria;
 
-                      if (outputContains && !result.includes(outputContains)) {
+                      if (outputContains && !RESULT.includes(outputContains)) {
                         return {
                           success: false,
                           error: `Custom validation '${customRule.name}' failed: expected output not found`,
@@ -374,7 +374,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
             if (customRule) {
               try {
                 const timeout = customRule.timeout || 60000;
-                const result = execSync(customRule.command, {
+                const RESULT = execSync(customRule.command, {
                   cwd: mockProjectRoot,
                   timeout,
                   encoding: 'utf8',
@@ -489,7 +489,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   });
                 }
 
-                const result = execSync(customRule.command, {
+                const RESULT = execSync(customRule.command, {
                   cwd: mockProjectRoot,
                   timeout,
                   encoding: 'utf8',
@@ -500,7 +500,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   const { outputContains, outputNotContains } =
                     customRule.successCriteria;
 
-                  if (outputContains && !result.includes(outputContains)) {
+                  if (outputContains && !RESULT.includes(outputContains)) {
                     return {
                       success: false,
                       error: `Custom validation '${customRule.name}' failed: expected output not found`,
@@ -612,7 +612,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
             if (customRule) {
               try {
                 const timeout = customRule.timeout || 60000;
-                const result = execSync(customRule.command, {
+                const RESULT = execSync(customRule.command, {
                   cwd: mockProjectRoot,
                   timeout,
                   encoding: 'utf8',
@@ -630,7 +630,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     };
                   }
 
-                  if (outputContains && !result.includes(outputContains)) {
+                  if (outputContains && !RESULT.includes(outputContains)) {
                     return {
                       success: false,
                       error: `Custom validation '${customRule.name}' failed: expected output not found`,
@@ -742,7 +742,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
             if (customRule) {
               try {
                 const timeout = customRule.timeout || 60000;
-                const result = execSync(customRule.command, {
+                const RESULT = execSync(customRule.command, {
                   cwd: mockProjectRoot,
                   timeout,
                   encoding: 'utf8',
@@ -760,7 +760,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     };
                   }
 
-                  if (outputContains && !result.includes(outputContains)) {
+                  if (outputContains && !RESULT.includes(outputContains)) {
                     return {
                       success: false,
                       error: `Custom validation '${customRule.name}' failed: expected output not found`,

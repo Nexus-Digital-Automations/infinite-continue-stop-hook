@@ -134,7 +134,7 @@ describe('Performance Validation E2E', () => {
         let approvalIndex = 0;
         const approvalTest = async () => {
           const id = featureIds[approvalIndex % featureIds.length];
-          const result = await FeatureTestHelpers.approveFeature(
+          const RESULT = await FeatureTestHelpers.approveFeature(
             environment,
             id,
             `performance-tester-${approvalIndex}`,

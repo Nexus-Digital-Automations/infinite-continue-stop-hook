@@ -55,7 +55,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
     child.on('close', (code) => {
       if (code === 0) {
         try {
-          const result = stdout.trim() ? JSON.parse(stdout) : {};
+          const RESULT = stdout.trim() ? JSON.parse(stdout) : {};
           resolve(result);
         } catch {
           resolve({ rawOutput: stdout, stderr });
@@ -847,7 +847,7 @@ describe('Success Criteria Regression Tests', () => {
       // Use for-await-of to maintain sequential processing for deprecated endpoint testing
       for await (const endpoint of DEPRECATED_ENDPOINTS) {
         try {
-          const result = await execAPI(endpoint);
+          const RESULT = await execAPI(endpoint);
 
           // Should work but may include deprecation warnings
           expect(result).toBeDefined();
@@ -1132,13 +1132,13 @@ describe('Success Criteria Regression Tests', () => {
           // Safe: Test comparison, not security-sensitive
           // eslint-disable-next-line security/detect-possible-timing-attacks
           if (api === 'success-criteria:init') {
-            const result = await execAPI(api);
+            const RESULT = await execAPI(api);
             expect(result).toBeDefined();
 
             // Safe: Test comparison, not security-sensitive
             // eslint-disable-next-line security/detect-possible-timing-attacks
           } else if (api === 'success-criteria:status') {
-            const result = await execAPI(api);
+            const RESULT = await execAPI(api);
             expect(result).toBeDefined();
             // Status should always have certain fields
             expect(result.projectCriteria !== undefined).toBe(true);
@@ -1187,7 +1187,7 @@ describe('Success Criteria Regression Tests', () => {
         {
           name: 'Basic Validation',
           test: async () => {
-            const result = await execAPI('success-criteria:validate');
+            const RESULT = await execAPI('success-criteria:validate');
             return RESULT.results !== undefined;
           },
         },
@@ -1274,7 +1274,7 @@ describe('Success Criteria Regression Tests', () => {
 
       // Use for-await-of to maintain sequential processing for performance testing
       for await (const test of PERFORMANCE_TESTS) {
-        const result = await test.test();
+        const RESULT = await test.test();
         expect(result.duration).toBeLessThan(result.threshold);
 
         loggers.app.info(

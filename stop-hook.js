@@ -127,7 +127,7 @@ function generateValidationProgressReport(flagData, logger, workingDir) {
   // Process validation results from flag data
   if (flagData.validation_results) {
     for (const criteria of validationCriteria) {
-      const result = flagData.validation_results[criteria];
+      const RESULT = flagData.validation_results[criteria];
       if (result) {
         progressReport.validationDetails.push({
           criterion: criteria,
@@ -352,7 +352,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
     const isActive = timeSinceHeartbeat < staleAgentTimeout;
 
     if (!isActive) {
-      staleAgents.push(agentId);
+      staleAgents.push(_agentId);
     }
   }
 
@@ -461,7 +461,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook path validated through hook configuration system
       if (FS.existsSync(projectPath)) {
-        const result = await cleanupStaleAgentsInProject(projectPath, logger);
+        const RESULT = await cleanupStaleAgentsInProject(projectPath, logger);
         return result;
       } else {
         logger.addFlow(
@@ -1124,9 +1124,9 @@ If you want to enable task management for this project:
       );
 
       if (isActive) {
-        activeAgents.push(agentId);
+        activeAgents.push(_agentId);
       } else {
-        staleAgents.push(agentId);
+        staleAgents.push(_agentId);
       }
     }
 

@@ -34,7 +34,7 @@ class TaskManagerAPIMock {
   /**
    * Mock initialize command
    */
-  initialize(agentId) {
+  initialize(_agentId) {
     const agent = {
       id: agentId,
       initialized: new Date().toISOString(),
@@ -54,9 +54,9 @@ class TaskManagerAPIMock {
   /**
    * Mock reinitialize command
    */
-  reinitialize(agentId) {
-    if (this.agents.has(agentId)) {
-      const agent = this.agents.get(agentId);
+  reinitialize(_agentId) {
+    if (this.agents.has(_agentId)) {
+      const agent = this.agents.get(_agentId);
       agent.reinitialized = new Date().toISOString();
       this.initializationStats.total_reinitializations++;
 
@@ -489,7 +489,7 @@ class DatabaseMock {
   find(collection, query = {}) {
     this.createCollection(collection);
     const records = Array.from(this.collections.get(collection).values());
-    this.queries.push({ OPERATION 'find', collection, query });
+    this.queries.push({ operation: 'find', collection, query });
 
     // Simple query filtering
     return records.filter((record) => {
@@ -509,7 +509,7 @@ class DatabaseMock {
         updated: new Date().toISOString(),
       };
       records.set(id, record);
-      this.queries.push({ OPERATION 'update', collection, id, updates });
+      this.queries.push({ operation: 'update', collection, id, updates });
       return record;
     }
     return null;
@@ -519,7 +519,7 @@ class DatabaseMock {
     this.createCollection(collection);
     const records = this.collections.get(collection);
     const deleted = records.delete(id);
-    this.queries.push({ OPERATION 'delete', collection, id });
+    this.queries.push({ operation: 'delete', collection, id });
     return deleted;
   }
 

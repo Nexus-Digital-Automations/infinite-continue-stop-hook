@@ -198,11 +198,11 @@ class ConsoleToStructuredMigrator {
 if (require.main === module) {
   try {
     const migrator = new ConsoleToStructuredMigrator();
-    const result = migrator.migrate();
+    const RESULT = migrator.migrate();
 
-    if (result.skippedFiles > 0) {
+    if (RESULT.skippedFiles > 0) {
       throw new Error(
-        `Migration completed with ${result.skippedFiles} skipped files`
+        `Migration completed with ${RESULT.skippedFiles} skipped files`
       );
     }
   } catch (_error) {

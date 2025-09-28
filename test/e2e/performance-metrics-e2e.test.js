@@ -38,13 +38,13 @@ describe('Performance Metrics System E2E Tests', () => {
     try {
       const fullCommand = `timeout 10s node "${taskManagerPath}" --project-root "${mockProjectRoot}" ${command} ${args}`;
 
-      const result = execSync(fullCommand, {
+      const RESULT = execSync(fullCommand, {
         encoding: 'utf8',
         timeout: 10000,
         ...options,
       });
 
-      return JSON.parse(result.trim());
+      return JSON.parse(RESULT.trim());
     } catch (error) {
       if (error.stdout) {
         try {
@@ -284,12 +284,12 @@ describe('Performance Metrics System E2E Tests', () => {
       ];
 
       endpoints.forEach((endpoint) => {
-        const result = executeTaskManagerCommand(endpoint);
-        expect(result.success).toBe(true);
+        const RESULT = executeTaskManagerCommand(endpoint);
+        expect(RESULT.success).toBe(true);
 
         // Each endpoint should be working with the same dataset
-        if (result.totalDataPoints) {
-          expect(result.totalDataPoints).toBe(totalMetrics);
+        if (RESULT.totalDataPoints) {
+          expect(RESULT.totalDataPoints).toBe(totalMetrics);
         }
       });
     });
@@ -376,15 +376,15 @@ describe('Performance Metrics System E2E Tests', () => {
 
       // Test That analysis completes within reasonable time
       const startTime = Date.now();
-      const result = executeTaskManagerCommand(
+      const RESULT = executeTaskManagerCommand(
         'analyze-performance-trends',
         '\'{"timeRange":60}\'',
       );
       const endTime = Date.now();
 
-      expect(result.success).toBe(true);
+      expect(RESULT.success).toBe(true);
       expect(endTime - startTime).toBeLessThan(10000); // Should complete within 10 seconds
-      expect(result.analysis.metadata.totalMetrics).toBe(1500);
+      expect(RESULT.analysis.metadata.totalMetrics).toBe(1500);
     });
 
     test('should gracefully handle concurrent access patterns', () => {
@@ -474,12 +474,12 @@ describe('Performance Metrics System E2E Tests', () => {
       );
 
       // System should handle gracefully And process valid data
-      const result = executeTaskManagerCommand(
+      const RESULT = executeTaskManagerCommand(
         'get-validation-performance-metrics',
       );
-      expect(result.success).toBe(true);
+      expect(RESULT.success).toBe(true);
       // Should have filtered out invalid metrics
-      expect(result.metrics.length).toBeLessThan(5);
+      expect(RESULT.metrics.length).toBeLessThan(5);
     });
 
     test('should validate feature IDs consistently', () => {
@@ -495,9 +495,9 @@ describe('Performance Metrics System E2E Tests', () => {
       ];
 
       endpointsWithFeatureId.forEach((endpoint) => {
-        const result = executeTaskManagerCommand(endpoint);
-        expect(result.success).toBe(true);
-        expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
+        const RESULT = executeTaskManagerCommand(endpoint);
+        expect(RESULT.success).toBe(true);
+        expect(RESULT.featureId).toBe('feature_1758946499841_cd5eba625370');
       });
     });
   });
@@ -608,12 +608,12 @@ describe('Performance Metrics System E2E Tests', () => {
       FS.writeFileSync(legacyFile, JSON.stringify(legacyData, null, 2));
 
       // Should work with legacy format
-      const result = executeTaskManagerCommand(
+      const RESULT = executeTaskManagerCommand(
         'get-validation-performance-metrics',
       );
-      expect(result.success).toBe(true);
-      expect(result.metrics.length).toBe(1);
-      expect(result.metrics[0].criterion).toBe('linter-validation');
+      expect(RESULT.success).toBe(true);
+      expect(RESULT.metrics.length).toBe(1);
+      expect(RESULT.metrics[0].criterion).toBe('linter-validation');
     });
 
     test('should handle version migration scenarios', () => {
@@ -646,11 +646,11 @@ describe('Performance Metrics System E2E Tests', () => {
         JSON.stringify(legacyData, null, 2),
       );
 
-      const result = executeTaskManagerCommand(
+      const RESULT = executeTaskManagerCommand(
         'get-validation-performance-metrics',
       );
-      expect(result.success).toBe(true);
-      expect(result.metrics.length).toBe(2); // Should combine both sources
+      expect(RESULT.success).toBe(true);
+      expect(RESULT.metrics.length).toBe(2); // Should combine both sources
     });
   });
 });

@@ -180,15 +180,15 @@ describe('CLI Commands Integration Tests', () => {
     });
 
     test('should handle unknown commands', async () => {
-      const result = await execCLIDirect([
+      const RESULT = await execCLIDirect([
         'unknown-command',
         '--project-root',
         testDir,
       ]);
 
-      expect(result.code).not.toBe(0);
-      expect(result.stderr).toContain('Unknown command') ||
-        expect(result.stderr).toContain('unknown-command');
+      expect(RESULT.code).not.toBe(0);
+      expect(RESULT.stderr).toContain('Unknown command') ||
+        expect(RESULT.stderr).toContain('unknown-command');
     });
   });
 
@@ -198,13 +198,13 @@ describe('CLI Commands Integration Tests', () => {
 
   describe('Core Command Execution', () => {
     test('should execute guide command successfully', async () => {
-      const result = await execCLIDirect(['guide', '--project-root', testDir]);
+      const RESULT = await execCLIDirect(['guide', '--project-root', testDir]);
 
-      expect(result.code).toBe(0);
-      expect(result.stdout).not.toBe('');
+      expect(RESULT.code).toBe(0);
+      expect(RESULT.stdout).not.toBe('');
 
       // Parse JSON output
-      const output = JSON.parse(result.stdout);
+      const output = JSON.parse(RESULT.stdout);
       expect(output.success).toBe(true);
       expect(output.featureManager).toBeDefined();
       expect(output.featureWorkflow).toBeDefined();
@@ -213,17 +213,17 @@ describe('CLI Commands Integration Tests', () => {
     });
 
     test('should execute methods command successfully', async () => {
-      const result = await execCLIDirect([
+      const RESULT = await execCLIDirect([
         'methods',
         '--project-root',
         testDir,
       ]);
 
-      expect(result.code).toBe(0);
-      expect(result.stdout).not.toBe('');
+      expect(RESULT.code).toBe(0);
+      expect(RESULT.stdout).not.toBe('');
 
       // Parse JSON output
-      const output = JSON.parse(result.stdout);
+      const output = JSON.parse(RESULT.stdout);
       expect(output.success).toBe(true);
       expect(output.cliMapping).toBeDefined();
       expect(output.availableCommands).toBeDefined();
@@ -304,7 +304,7 @@ describe('CLI Commands Integration Tests', () => {
       expect(initResult.code).toBe(0);
       const initOutput = JSON.parse(initResult.stdout);
       expect(initOutput.success).toBe(true);
-      expect(initOutput.agent.id).toBe(agentId);
+      expect(initOutput.agent.id).toBe(_agentId);
 
       // 2. Get initialization stats
       const statsResult = await execCLIDirect([
@@ -343,7 +343,7 @@ describe('CLI Commands Integration Tests', () => {
       expect(stopResult.code).toBe(0);
       const stopOutput = JSON.parse(stopResult.stdout);
       expect(stopOutput.success).toBe(true);
-      expect(stopOutput.authorization.authorized_by).toBe(agentId);
+      expect(stopOutput.authorization.authorized_by).toBe(_agentId);
     });
 
     test('should execute bulk operations', async () => {
@@ -357,15 +357,15 @@ describe('CLI Commands Integration Tests', () => {
 
       const featureIds = [];
       for (const featureData of features) {
-        const result = await execCLIDirect([
+        const RESULT = await execCLIDirect([
           'suggest-feature',
           JSON.stringify(featureData),
           '--project-root',
           testDir,
         ]);
 
-        expect(result.code).toBe(0);
-        const output = JSON.parse(result.stdout);
+        expect(RESULT.code).toBe(0);
+        const output = JSON.parse(RESULT.stdout);
         featureIds.push(output.feature.id);
       }
 
@@ -404,19 +404,19 @@ describe('CLI Commands Integration Tests', () => {
       ];
 
       for (const command of commands) {
-        const result = await execCLIDirect([
+        const RESULT = await execCLIDirect([
           ...command,
           '--project-root',
           testDir,
         ]);
 
-        expect(result.code).toBe(0);
-        expect(result.stdout).not.toBe('');
+        expect(RESULT.code).toBe(0);
+        expect(RESULT.stdout).not.toBe('');
 
         // Should be valid JSON
-        expect(() => JSON.parse(result.stdout)).not.toThrow();
+        expect(() => JSON.parse(RESULT.stdout)).not.toThrow();
 
-        const output = JSON.parse(result.stdout);
+        const output = JSON.parse(RESULT.stdout);
         expect(output.success).toBeDefined();
       }
     });
@@ -466,15 +466,15 @@ describe('CLI Commands Integration Tests', () => {
         category: 'enhancement',
       });
 
-      const result = await execCLIDirect([
+      const RESULT = await execCLIDirect([
         'suggest-feature',
         JSON.stringify(specialFeatureData),
         '--project-root',
         testDir,
       ]);
 
-      expect(result.code).toBe(0);
-      const output = JSON.parse(result.stdout);
+      expect(RESULT.code).toBe(0);
+      const output = JSON.parse(RESULT.stdout);
       expect(output.success).toBe(true);
       expect(output.feature.title).toBe(specialFeatureData.title);
       expect(output.feature.description).toBe(specialFeatureData.description);
@@ -492,14 +492,14 @@ describe('CLI Commands Integration Tests', () => {
     test('should complete basic commands within reasonable time', async () => {
       const startTime = Date.now();
 
-      const result = await execCLIDirect(['guide', '--project-root', testDir], {
+      const RESULT = await execCLIDirect(['guide', '--project-root', testDir], {
         timeout: 5000,
       }); // 5 second timeout
 
       const endTime = Date.now();
       const duration = endTime - startTime;
 
-      expect(result.code).toBe(0);
+      expect(RESULT.code).toBe(0);
       expect(duration).toBeLessThan(5000); // Should complete in under 5 seconds
     });
 
@@ -530,7 +530,7 @@ describe('CLI Commands Integration Tests', () => {
       const results = await Promise.all(promises);
 
       // 2. All should succeed
-      expect(results.every((result) => RESULT.code === 0)).toBe(true);
+      expect(results.every((result) => result.code === 0)).toBe(true);
 
       // 3. All should produce valid JSON
       results.forEach((result) => {
@@ -705,33 +705,33 @@ describe('CLI Commands Integration Tests', () => {
       await FS.unlink(featuresPath);
 
       // 2. Try to perform operations
-      const result = await execCLIDirect([
+      const RESULT = await execCLIDirect([
         'list-features',
         '--project-root',
         emptyDir,
       ]);
 
       // Should either succeed (recreating file) or fail gracefully
-      if (result.code === 0) {
-        const output = JSON.parse(result.stdout);
+      if (RESULT.code === 0) {
+        const output = JSON.parse(RESULT.stdout);
         expect(output.success).toBe(true);
       } else {
-        expect(result.stderr).not.toBe('');
+        expect(RESULT.stderr).not.toBe('');
       }
 
       await cleanupTestEnvironment(emptyDir);
     });
 
     test('should handle invalid project root paths', async () => {
-      const result = await execCLIDirect([
+      const RESULT = await execCLIDirect([
         'guide',
         '--project-root',
         '/non/existent/path',
       ]);
 
       // Should fail gracefully with meaningful error
-      expect(result.code).not.toBe(0);
-      expect(result.stderr).not.toBe('');
+      expect(RESULT.code).not.toBe(0);
+      expect(RESULT.stderr).not.toBe('');
     });
 
     test('should handle concurrent CLI executions safely', async () => {
@@ -752,7 +752,7 @@ describe('CLI Commands Integration Tests', () => {
       const results = await Promise.all(promises);
 
       // 2. All should succeed
-      expect(results.every((result) => RESULT.code === 0)).toBe(true);
+      expect(results.every((result) => result.code === 0)).toBe(true);
 
       // 3. Verify all features were created
       const listResult = await execCLIDirect([

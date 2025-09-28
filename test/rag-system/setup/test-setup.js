@@ -141,7 +141,7 @@ global.RAG_TEST_UTILS = {
    */
   measureTime: async (fn) => {
     const start = process.hrtime.bigint();
-    const result = await fn();
+    const RESULT = await fn();
     const end = process.hrtime.bigint();
     const duration = Number(end - start) / 1000000; // Convert to milliseconds
     return { result, duration };

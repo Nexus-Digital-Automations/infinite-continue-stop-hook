@@ -335,12 +335,12 @@ function main() {
 
   for (const usage of analysisResults) {
     try {
-      const result = migrateFile(usage);
-      if (result.success && RESULT.changes > 0) {
+      const RESULT = migrateFile(usage);
+      if (RESULT.success && RESULT.changes > 0) {
         migratedFiles++;
         totalChanges += RESULT.changes;
         console.log(
-          `✅ ${PATH.relative(rootDir, usage.filePath)}: ${result.message}`
+          `✅ ${PATH.relative(rootDir, usage.filePath)}: ${RESULT.message}`
         );
       }
     } catch {

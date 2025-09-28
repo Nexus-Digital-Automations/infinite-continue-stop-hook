@@ -3,8 +3,8 @@
  * Systematically adds error parameter to catch blocks that reference error in their body
  */
 
-const _FS = require('fs');
-const _PATH = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { loggers } = require('./lib/logger');
 
 function fixFile(filePath) {

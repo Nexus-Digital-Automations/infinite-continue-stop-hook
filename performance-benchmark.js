@@ -121,7 +121,7 @@ class TaskManagerPerformanceBenchmark {
       // Run each endpoint multiple times for statistical significance
       for (let i = 0; i < 5; i++) {
         // eslint-disable-next-line no-await-in-loop -- Sequential timing measurements required
-        const result = await this.executeTimedCommand(
+        const RESULT = await this.executeTimedCommand(
           endpoint[0],
           endpoint.slice(1)
         );
@@ -197,7 +197,7 @@ class TaskManagerPerformanceBenchmark {
         };
 
         // eslint-disable-next-line no-await-in-loop -- Sequential subtask creation required for timing
-        const result = await this.executeTimedCommand('create-subtask', [
+        const RESULT = await this.executeTimedCommand('create-subtask', [
           taskId,
           JSON.stringify(subtaskData),
           agentId,
@@ -259,7 +259,7 @@ class TaskManagerPerformanceBenchmark {
       for (const [command, ...args] of operations) {
         loggers.stopHook.log(`   Testing ${command}...`);
         // eslint-disable-next-line no-await-in-loop -- Sequential command testing required for timing
-        const result = await this.executeTimedCommand(command, args);
+        const RESULT = await this.executeTimedCommand(command, args);
         this.results.successCriteriaValidation.push({
           operation, command,
           ...result,

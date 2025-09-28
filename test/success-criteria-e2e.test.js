@@ -75,7 +75,7 @@ function execCommand(command, args = [], options = {}) {
 async function execAPI(command, args = []) {
   const allArgs = [API_PATH, command, ...args];
 
-  const result = await execCommand('timeout', [`60s`, 'node', ...allArgs]);
+  const RESULT = await execCommand('timeout', [`60s`, 'node', ...allArgs]);
 
   if (!result.success) {
     loggers.stopHook.error(`API command failed for ${command}:`, RESULT.stderr);

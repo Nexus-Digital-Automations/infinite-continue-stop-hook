@@ -26,7 +26,7 @@ function filePath(_$2) {
       { pattern: /const RESULTS = /g, replacement: 'const RESULTS = ' },
       { pattern: /const CRITERIA = /g, replacement: 'const CRITERIA = ' },
       { pattern: /const TASK = /g, replacement: 'const TASK = ' },
-      { pattern: /const result = /g, replacement: 'const RESULT = ' },
+      { pattern: /const RESULT = /g, replacement: 'const RESULT = ' },
       {
         pattern: /const approveFeature = /g,
         replacement: 'const APPROVE_FEATURE = ',

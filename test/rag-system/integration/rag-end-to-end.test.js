@@ -312,8 +312,8 @@ describe('RAG System End-to-End Integration Tests', () => {
         tags: ['system', 'memory', 'distributed', 'cascade'],
       };
 
-      const result = await ragOperations.storeError(_complexError);
-      expect(result.success).toBe(true);
+      const RESULT = await ragOperations.storeError(_complexError);
+      expect(RESULT.success).toBe(true);
 
       // Search for the stored error
       const _searchResults = await ragOperations.findSimilarErrors(
@@ -647,8 +647,8 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // System should continue to function
       const lesson = testDataGenerator.generateLessons(1)[0];
-      const result = await ragOperations.storeLesson(lesson);
-      expect(result.success).toBe(true);
+      const RESULT = await ragOperations.storeLesson(lesson);
+      expect(RESULT.success).toBe(true);
 
       const searchResults = await ragOperations.searchLessons(lesson.title);
       expect(searchResults.length).toBeGreaterThan(0);

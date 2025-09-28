@@ -82,8 +82,8 @@
  * @since 2024-01-01
  */
 
-const _FS = require('fs');
-const _PATH = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const readline = require('readline');
 const { loggers } = require('./lib/logger');
 
@@ -822,7 +822,7 @@ async function main() {
     loggers.stopHook.log(
       `Processing single project: ${PATH.basename(targetPath)}`
     );
-    const result = await processProject(targetPath);
+    const RESULT = await processProject(targetPath);
     results.push(result);
 
     // Summary
