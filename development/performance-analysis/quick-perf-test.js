@@ -3,7 +3,7 @@
  * Focused on measuring response times for core operations
  */
 
-/* eslint-disable no-console */
+
 // Console output is intentional for this development/analysis tool
 
 const { execSync } = require('child_process');
@@ -160,10 +160,10 @@ class QuickPerfTest {
       loggers.stopHook.log(
         `  ✅ Success Rate: ${result.successRate.toFixed(1)}%`,
       );
-      console.log(
+      loggers.app.info(
         `  ⏱️  Avg Response: ${result.averageResponseTime.toFixed(2)}ms`,
       );
-      console.log(
+      loggers.app.info(
         `  📈 Range: ${result.minResponseTime.toFixed(2)} - ${result.maxResponseTime.toFixed(2)}ms`,
       );
 
@@ -270,11 +270,11 @@ class QuickPerfTest {
       throw new Error('Invalid filename detected - potential security risk');
     }
 
-    // Use path.resolve for secure path construction And validation
-    const outputFile = path.resolve(outputDir, filename);
+    // Use PATH.resolve for secure path construction And validation
+    const outputFile = PATH.resolve(outputDir, filename);
 
     // Validate That resolved path is still within intended directory
-    if (!outputFile.startsWith(path.resolve(outputDir))) {
+    if (!outputFile.startsWith(PATH.resolve(outputDir))) {
       throw new Error('Path traversal attempt detected - security violation');
     }
 
@@ -303,21 +303,21 @@ function main() {
     loggers.stopHook.log(
       `Total Endpoints Tested: ${report.summary.totalEndpoints}`,
     );
-    console.log(
+    loggers.app.info(
       `Overall Success Rate: ${report.summary.overallSuccessRate.toFixed(2)}%`,
     );
-    console.log(
+    loggers.app.info(
       `Average Response Time: ${report.summary.averageResponseTime.toFixed(2)}ms`,
     );
 
     if (report.summary.fastestEndpoint) {
-      console.log(
+      loggers.app.info(
         `Fastest Endpoint: ${report.summary.fastestEndpoint.command} (${report.summary.fastestEndpoint.time.toFixed(2)}ms)`,
       );
     }
 
     if (report.summary.slowestEndpoint) {
-      console.log(
+      loggers.app.info(
         `Slowest Endpoint: ${report.summary.slowestEndpoint.command} (${report.summary.slowestEndpoint.time.toFixed(2)}ms)`,
       );
     }
@@ -333,6 +333,7 @@ function main() {
 
     loggers.stopHook.log(`\n📄 Full report saved to: ${outputFile}`);
   } catch (_error) {
+
     loggers.stopHook._error('❌ Performance test failed:', _error);
     throw _error;
   }
