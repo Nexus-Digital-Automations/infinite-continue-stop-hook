@@ -9858,10 +9858,7 @@ class AutonomousTaskManagerAPI {
    */
   async storeError(errorData) {
     try {
-      return this.withTimeout(
-        this.ragOps.storeError(errorData),
-        this.timeout
-      );
+      return this.withTimeout(this.ragOps.storeError(errorData), this.timeout);
     } catch (_error) {
       return {
         success: false,
@@ -10329,10 +10326,7 @@ class AutonomousTaskManagerAPI {
    */
   async getProject(projectId) {
     try {
-      return this.withTimeout(
-        this.ragOps.getProject(projectId),
-        this.timeout
-      );
+      return this.withTimeout(this.ragOps.getProject(projectId), this.timeout);
     } catch (_error) {
       return {
         success: false,
@@ -10347,10 +10341,7 @@ class AutonomousTaskManagerAPI {
    */
   async listProjects(_options = {}) {
     try {
-      return this.withTimeout(
-        this.ragOps.listProjects(_options),
-        this.timeout
-      );
+      return this.withTimeout(this.ragOps.listProjects(_options), this.timeout);
     } catch (_error) {
       return {
         success: false,

@@ -150,7 +150,7 @@ class NodeVersionPerformanceBenchmark {
             process.nextTick(() => resolve(i));
           })
       );
-      return await Promise.all(promises);
+      return Promise.all(promises);
     };
 
     const asyncResults = await asyncOperations(500);

@@ -745,6 +745,7 @@ describe('Initialization Statistics', () => {
       test('should handle large initialization counts', async () => {
         // Simulate many operations
         for (let i = 0; i < 1000; i++) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for initialization stats testing
           await api._updateTimeBucketStats('init');
         }
 
