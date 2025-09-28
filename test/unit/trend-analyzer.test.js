@@ -232,7 +232,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
       );
       expect(result.analysis.trend.strength).toBeGreaterThanOrEqual(0);
       expect(result.analysis.trend.strength).toBeLessThanOrEqual(1);
-      expect(typeof RESULT.analysis.trend.slope).toBe('number');
+      expect(typeof result.analysis.trend.slope).toBe('number');
     });
   });
 
@@ -268,7 +268,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
       expect(result.healthTrends.summary.healthTrend).toMatch(
         /increasing|decreasing|stable/,
       );
-      expect(typeof RESULT.healthTrends.summary.volatility).toBe('number');
+      expect(typeof result.healthTrends.summary.volatility).toBe('number');
       expect(result.healthTrends.summary.recommendation).toBeDefined();
     });
   });
