@@ -296,7 +296,7 @@ describe('CLI Commands Integration Tests', () => {
       const AGENT_ID = 'cli-test-agent';
       const initResult = await execCLIDirect([
         'initialize',
-        agentId,
+        AGENT_ID,
         '--project-root',
         testDir,
       ]);
@@ -304,7 +304,7 @@ describe('CLI Commands Integration Tests', () => {
       expect(initResult.code).toBe(0);
       const initOutput = JSON.parse(initResult.stdout);
       expect(initOutput.success).toBe(true);
-      expect(initOutput.agent.id).toBe(_AGENT_ID);
+      expect(initOutput.agent.id).toBe(AGENT_ID);
 
       // 2. Get initialization stats
       const statsResult = await execCLIDirect([
@@ -321,7 +321,7 @@ describe('CLI Commands Integration Tests', () => {
       // 3. Reinitialize agent
       const reinitResult = await execCLIDirect([
         'reinitialize',
-        agentId,
+        AGENT_ID,
         '--project-root',
         testDir,
       ]);
@@ -334,7 +334,7 @@ describe('CLI Commands Integration Tests', () => {
       // 4. Authorize stop
       const stopResult = await execCLIDirect([
         'authorize-stop',
-        agentId,
+        AGENT_ID,
         'CLI test completed successfully',
         '--project-root',
         testDir,
@@ -343,7 +343,7 @@ describe('CLI Commands Integration Tests', () => {
       expect(stopResult.code).toBe(0);
       const stopOutput = JSON.parse(stopResult.stdout);
       expect(stopOutput.success).toBe(true);
-      expect(stopOutput.authorization.authorized_by).toBe(_AGENT_ID);
+      expect(stopOutput.authorization.authorized_by).toBe(AGENT_ID);
     });
 
     test('should execute bulk operations', async () => {
@@ -630,7 +630,7 @@ describe('CLI Commands Integration Tests', () => {
       const AGENT_ID = 'complete-workflow-agent';
       const initResult = await execCLIDirect([
         'initialize',
-        agentId,
+        AGENT_ID,
         '--project-root',
         testDir,
       ]);
@@ -653,7 +653,7 @@ describe('CLI Commands Integration Tests', () => {
       // 3. Reinitialize agent
       const reinitResult = await execCLIDirect([
         'reinitialize',
-        agentId,
+        AGENT_ID,
         '--project-root',
         testDir,
       ]);
@@ -678,7 +678,7 @@ describe('CLI Commands Integration Tests', () => {
       // 5. Authorize stop
       const stopResult = await execCLIDirect([
         'authorize-stop',
-        agentId,
+        AGENT_ID,
         'Complete workflow test finished successfully',
         '--project-root',
         testDir,

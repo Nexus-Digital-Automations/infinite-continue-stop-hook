@@ -225,7 +225,7 @@ describe('Agent Lifecycle Integration Tests', () => {
     test('should handle agent reinitialization process', async () => {
       // 1. Initialize agent first
       const AGENT_ID = 'reinit-test-agent';
-      const initResult = await execAPI('initialize', [agentId], {
+      const initResult = await execAPI('initialize', [AGENT_ID], {
         projectRoot: testDir,
       });
       expect(initResult.success).toBe(true);
@@ -233,12 +233,12 @@ describe('Agent Lifecycle Integration Tests', () => {
       const originalSessionId = initResult.agent.sessionId;
 
       // 2. Reinitialize agent
-      const reinitResult = await execAPI('reinitialize', [agentId], {
+      const reinitResult = await execAPI('reinitialize', [AGENT_ID], {
         projectRoot: testDir,
       });
 
       expect(reinitResult.success).toBe(true);
-      expect(reinitResult.agent.id).toBe(_AGENT_ID);
+      expect(reinitResult.agent.id).toBe(AGENT_ID);
       expect(reinitResult.agent.status).toBe('reinitialized');
       expect(reinitResult.agent.sessionId).toBeDefined();
       expect(reinitResult.agent.sessionId).not.toBe(originalSessionId);
@@ -322,18 +322,18 @@ describe('Agent Lifecycle Integration Tests', () => {
     test('should handle reinitialization of non-existent agent', async () => {
       // 1. Try to reinitialize agent That doesn't exist
       const AGENT_ID = 'non-existent-agent';
-      const reinitResult = await execAPI('reinitialize', [agentId], {
+      const reinitResult = await execAPI('reinitialize', [AGENT_ID], {
         projectRoot: testDir,
       });
 
       // Should succeed (creates new agent)
       expect(reinitResult.success).toBe(true);
-      expect(reinitResult.agent.id).toBe(_AGENT_ID);
+      expect(reinitResult.agent.id).toBe(AGENT_ID);
       expect(reinitResult.agent.status).toBe('reinitialized');
 
       // 2. Verify agent is created
       const featuresData = await readFeaturesFile(testDir);
-      expect(featuresData.agents[agentId]).toBeDefined();
+      expect(featuresData.agents[AGENT_ID]).toBeDefined();
     });
 
     test('should handle concurrent reinitializations', async () => {
@@ -387,7 +387,7 @@ describe('Agent Lifecycle Integration Tests', () => {
     test('should handle agent stop authorization process', async () => {
       // 1. Initialize agent
       const AGENT_ID = 'stop-auth-agent';
-      const initResult = await execAPI('initialize', [agentId], {
+      const initResult = await execAPI('initialize', [AGENT_ID], {
         projectRoot: testDir,
       });
       expect(initResult.success).toBe(true);
@@ -397,14 +397,14 @@ describe('Agent Lifecycle Integration Tests', () => {
         'Integration test completed - all tasks finished And project perfect';
       const stopResult = await execAPI(
         'authorize-stop',
-        [agentId, stopReason],
+        [AGENT_ID, stopReason],
         {
           projectRoot: testDir,
         },
       );
 
       expect(stopResult.success).toBe(true);
-      expect(stopResult.authorization.authorized_by).toBe(_AGENT_ID);
+      expect(stopResult.authorization.authorized_by).toBe(AGENT_ID);
       expect(stopResult.authorization.reason).toBe(stopReason);
       expect(stopResult.authorization.timestamp).toBeDefined();
       expect(stopResult.authorization.stop_flag_created).toBe(true);
@@ -422,7 +422,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       const stopFlagData = JSON.parse(stopFlagContent);
 
       expect(stopFlagData.stop_allowed).toBe(true);
-      expect(stopFlagData.authorized_by).toBe(_AGENT_ID);
+      expect(stopFlagData.authorized_by).toBe(AGENT_ID);
       expect(stopFlagData.reason).toBe(stopReason);
       expect(stopFlagData.timestamp).toBeDefined();
       expect(stopFlagData.session_type).toBe('self_authorized');
@@ -477,18 +477,18 @@ describe('Agent Lifecycle Integration Tests', () => {
     test('should handle stop authorization without reason', async () => {
       // 1. Initialize agent
       const AGENT_ID = 'no-reason-agent';
-      const initResult = await execAPI('initialize', [agentId], {
+      const initResult = await execAPI('initialize', [AGENT_ID], {
         projectRoot: testDir,
       });
       expect(initResult.success).toBe(true);
 
       // 2. Authorize stop without reason
-      const stopResult = await execAPI('authorize-stop', [agentId], {
+      const stopResult = await execAPI('authorize-stop', [AGENT_ID], {
         projectRoot: testDir,
       });
 
       expect(stopResult.success).toBe(true);
-      expect(stopResult.authorization.authorized_by).toBe(_AGENT_ID);
+      expect(stopResult.authorization.authorized_by).toBe(AGENT_ID);
       expect(stopResult.authorization.reason).toBeDefined();
       expect(stopResult.authorization.reason).toContain('completing all tasks');
 
@@ -507,7 +507,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       const stopResult = await execAPI(
         'authorize-stop',
-        [agentId, stopReason],
+        [AGENT_ID, stopReason],
         {
           projectRoot: testDir,
         },
@@ -515,7 +515,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       // Should succeed (doesn't require agent to exist first)
       expect(stopResult.success).toBe(true);
-      expect(stopResult.authorization.authorized_by).toBe(_AGENT_ID);
+      expect(stopResult.authorization.authorized_by).toBe(AGENT_ID);
 
       // 2. Verify stop flag creation
       const stopFlagPath = path.join(testDir, '.stop-allowed');
@@ -773,7 +773,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       const stopFlagContent = await FS.readFile(stopFlagPath, 'utf8');
       const stopFlagData = JSON.parse(stopFlagContent);
-      expect(stopFlagData.authorized_by).toBe(_AGENT_ID);
+      expect(stopFlagData.authorized_by).toBe(AGENT_ID);
       expect(stopFlagData.reason).toBe(stopReason);
 
       // 7. Verify final statistics
