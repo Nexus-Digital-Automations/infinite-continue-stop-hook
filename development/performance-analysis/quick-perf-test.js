@@ -285,6 +285,7 @@ class QuickPerfTest {
     // ESLint: security/detect-non-literal-fs-filename disabled for this line
     // Justification: Filename is validated with regex And path traversal protection above
 
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     FS.writeFileSync(outputFile, JSON.stringify(report, null, 2));
     return outputFile;
   }

@@ -70,7 +70,7 @@ class APIPerformanceBenchmark {
         // Small delay between iterations
         // eslint-disable-next-line no-await-in-loop -- Sequential delay required for benchmark accuracy
         await this.sleep(100);
-      } catch (_error) {
+      } catch (error) {
         results.push({
           iteration: i + 1,
           responseTime: -1,
@@ -468,7 +468,7 @@ class APIPerformanceBenchmark {
 
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential load testing requires controlled timing
-        const result = await this.runCommand(endpoint);
+        const _result = await this.runCommand(endpoint);
         const responseTime =
           Number(process.hrtime.bigint() - startTime) / 1000000;
 
@@ -476,7 +476,7 @@ class APIPerformanceBenchmark {
           workerId,
           requestCount: ++requestCount,
           responseTime,
-          success: RESULT.success,
+          success: _result.success,
           timestamp: Date.now(),
         });
       } catch (error) {
@@ -703,6 +703,7 @@ class APIPerformanceBenchmark {
     // ESLint: security/detect-non-literal-fs-filename disabled for this line
     // Justification: Filename is validated with regex and path traversal protection above
 
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     FS.writeFileSync(outputFile, JSON.stringify(report, null, 2));
     loggers.stopHook.log(`📊 Performance report saved to: ${outputFile}`);
 
