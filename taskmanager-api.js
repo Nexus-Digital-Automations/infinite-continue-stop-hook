@@ -5458,7 +5458,7 @@ class AutonomousTaskManagerAPI {
             'swiftlint',
           ];
 
-          return await this._tryCommands(lintCommands, 'Linting');
+          return this._tryCommands(lintCommands, 'Linting');
 
         case 'type-validation':
           // Check if this is a JavaScript-only project (no type checking needed)
@@ -5798,7 +5798,7 @@ class AutonomousTaskManagerAPI {
    * Execute command with robust timeout handling that actually works
    * Prevents infinite hangs from build systems like Turbo that don't respect Node.js timeouts
    */
-  async _executeCommandWithRobustTimeout(cmd, timeout, isStartCommand = false) {
+  _executeCommandWithRobustTimeout(cmd, timeout, isStartCommand = false) {
     const { spawn } = require('child_process');
 
     return new Promise((resolve, reject) => {

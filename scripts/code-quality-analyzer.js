@@ -1243,6 +1243,7 @@ Examples:
   if (configArg) {
     const configPath = configArg.split('=')[1];
     try {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- Config path validated by quality analyzer
       const customConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
       options.config = customConfig;
     } catch (error) {
