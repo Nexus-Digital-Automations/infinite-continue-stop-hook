@@ -129,7 +129,7 @@ class APIPerformanceBenchmark {
         }
       });
 
-      child.on('error', (_error) => {
+      child.on('error', (error) => {
         reject(error);
       });
     });

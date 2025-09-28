@@ -110,7 +110,7 @@ class QuickPerfTest {
           errors.push(`Iteration ${i + 1}: API returned error`);
         }
       } catch (error) {
-        errors.push(`Iteration ${i + 1}: ${_error.message}`);
+        errors.push(`Iteration ${i + 1}: ${error.message}`);
         times.push(-1); // Mark as failed
       }
     }
@@ -335,8 +335,8 @@ function main() {
     loggers.stopHook.log(`\n📄 Full report saved to: ${outputFile}`);
   } catch (error) {
 
-    loggers.stopHook.error('❌ Performance test failed:', _error);
-    throw _error;
+    loggers.stopHook.error('❌ Performance test failed:', error);
+    throw error;
   }
 }
 

@@ -17,7 +17,7 @@
  */
 
 const FS = require('fs').promises;
-const path = require('path');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 /**
@@ -253,7 +253,7 @@ class AUDIT_INTEGRATION {
    * @param {Object} projectCriteria - Project success criteria
    * @returns {string} Comprehensive audit description
    */
-  generateAuditDescription(originalTaskId, taskDetails, PROJECT_CRITERIA) {
+  generateAuditDescription(originalTaskId, taskDetails, _projectCriteria) {
     return `Comprehensive 25-point quality audit And review of completed implementation.
 
 **ORIGINAL TASK**: ${originalTaskId}
@@ -291,7 +291,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
    * @param {Object} projectCriteria - Project-specific success criteria
    * @returns {Array} Array of success criteria strings
    */
-  generate25PointSuccessCriteria(PROJECT_CRITERIA) {
+  generate25PointSuccessCriteria(_projectCriteria) {
     return [
       // Critical Gates (1-10) - MANDATORY
       'CRITICAL GATE #1: Linter perfection achieved (zero warnings/errors)',
@@ -376,7 +376,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
 
       return criteria;
     } catch (error) {
-      this.logger.log(`⚠️ Could not load task requirements: ${_error.message}`);
+      this.logger.log(`⚠️ Could not load task requirements: ${error.message}`);
       return {};
     }
   }

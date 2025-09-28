@@ -226,7 +226,7 @@ class TaskManagerValidator {
 
     if (result.errors.length > 0) {
       output += '❌ ERRORS:\n';
-      result.errors.forEach((_error) => {
+      result.errors.forEach((error) => {
         output += `  - ${error}\n`;
       });
     }
