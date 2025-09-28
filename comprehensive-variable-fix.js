@@ -101,7 +101,7 @@ function fixFile(filePath) {
           original: match[0],
           replacement: match[0].replace(
             /catch\s*\(\s*\)\s*\{/,
-            'catch (_error) {'
+            'catch (_error) {',
           ),
         });
       } else if (blockContent.includes('error')) {
@@ -109,7 +109,7 @@ function fixFile(filePath) {
           original: match[0],
           replacement: match[0].replace(
             /catch\s*\(\s*\)\s*\{/,
-            'catch (error) {'
+            'catch (error) {',
           ),
         });
       }
@@ -141,7 +141,7 @@ function getAllJsFiles() {
   try {
     const output = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./.git/*"',
-      { cwd: rootDir, encoding: 'utf8' }
+      { cwd: rootDir, encoding: 'utf8' },
     );
     return output
       .trim()
@@ -193,7 +193,7 @@ try {
   const warningCount = warningMatches ? parseInt(warningMatches[1]) : 0;
 
   loggers.app.info(
-    `📊 Final status: ${errorCount} errors, ${warningCount} warnings remaining`
+    `📊 Final status: ${errorCount} errors, ${warningCount} warnings remaining`,
   );
 
   if (errorCount === 0) {

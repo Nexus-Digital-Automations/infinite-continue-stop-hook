@@ -35,7 +35,7 @@ describe('CustomValidationRulesManager', () => {
     testProjectRoot = PATH.join(
       __dirname,
       'test-data',
-      'custom-validation-test'
+      'custom-validation-test',
     );
     await FS.mkdir(testProjectRoot, { recursive: true });
   });
@@ -65,7 +65,7 @@ describe('CustomValidationRulesManager', () => {
         FS.rm(PATH.join(testProjectRoot, file), {
           recursive: true,
           force: true,
-        })
+        }),
       );
       await Promise.all(deletions);
     } catch {
@@ -97,7 +97,7 @@ describe('CustomValidationRulesManager', () => {
 
       await FS.writeFile(
         PATH.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       const RESULT = await manager.loadCustomRules();
@@ -120,7 +120,7 @@ describe('CustomValidationRulesManager', () => {
 
       await FS.writeFile(
         PATH.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(invalidConfig, null, 2)
+        JSON.stringify(invalidConfig, null, 2),
       );
 
       const RESULT = await manager.loadCustomRules();
@@ -162,7 +162,7 @@ describe('CustomValidationRulesManager', () => {
     test('should detect Python project', async () => {
       await FS.writeFile(
         PATH.join(testProjectRoot, 'requirements.txt'),
-        'requests==2.25.1'
+        'requests==2.25.1',
       );
 
       await manager._detectTechnologyStack();
@@ -174,7 +174,7 @@ describe('CustomValidationRulesManager', () => {
       await FS.writeFile(PATH.join(testProjectRoot, 'package.json'), '{}');
       await FS.writeFile(
         PATH.join(testProjectRoot, 'Dockerfile'),
-        'FROM node:14'
+        'FROM node:14',
       );
 
       await manager._detectTechnologyStack();
@@ -275,7 +275,7 @@ describe('CustomValidationRulesManager', () => {
     test('should detect existing files', async () => {
       await FS.writeFile(
         PATH.join(testProjectRoot, 'test.txt'),
-        'test content'
+        'test content',
       );
 
       const rule = {
@@ -305,7 +305,7 @@ describe('CustomValidationRulesManager', () => {
       };
 
       await expect(manager._executeFileExistsRule(rule)).rejects.toThrow(
-        'Missing required files'
+        'Missing required files',
       );
     });
 
@@ -353,7 +353,7 @@ describe('CustomValidationRulesManager', () => {
     test('should fail when pattern not found', async () => {
       await FS.writeFile(
         PATH.join(testProjectRoot, 'content.txt'),
-        'No matching content'
+        'No matching content',
       );
 
       const rule = {
@@ -371,7 +371,7 @@ describe('CustomValidationRulesManager', () => {
     test('should validate pattern absence when should_match is false', async () => {
       await FS.writeFile(
         PATH.join(testProjectRoot, 'clean.txt'),
-        'Clean content without debug'
+        'Clean content without debug',
       );
 
       const rule = {
@@ -393,7 +393,7 @@ describe('CustomValidationRulesManager', () => {
     test('should fail when unwanted pattern is found', async () => {
       await FS.writeFile(
         PATH.join(testProjectRoot, 'debug.txt'),
-        'loggers.app.info("debug")'
+        'loggers.app.info("debug")',
       );
 
       const rule = {
@@ -474,7 +474,7 @@ describe('CustomValidationRulesManager', () => {
 
       const missingFileCondition = { type: 'file_exists', file: 'missing.txt' };
       expect(await manager._evaluateCondition(missingFileCondition)).toBe(
-        false
+        false,
       );
 
       // Test environment_var condition
@@ -650,7 +650,7 @@ describe('CustomValidationRulesManager', () => {
 
       await FS.writeFile(
         PATH.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       await FS.writeFile(PATH.join(testProjectRoot, 'package.json'), '{}');
@@ -700,7 +700,7 @@ describe('CustomValidationRulesManager', () => {
       expect(exampleConfig).toHaveProperty('custom_rules');
       expect(exampleConfig.custom_rules).toHaveProperty('security_audit');
       expect(exampleConfig.custom_rules).toHaveProperty(
-        'documentation_completeness'
+        'documentation_completeness',
       );
       expect(exampleConfig.custom_rules).toHaveProperty('environment_specific');
     });
@@ -723,7 +723,7 @@ describe('CustomValidationRulesManager', () => {
     test('should handle malformed JSON configuration', async () => {
       await FS.writeFile(
         PATH.join(testProjectRoot, '.validation-rules.json'),
-        'invalid json content'
+        'invalid json content',
       );
 
       const RESULT = await manager.loadCustomRules();
@@ -766,7 +766,7 @@ describe('CustomValidationRulesManager', () => {
 
       await FS.writeFile(
         PATH.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       const RESULT = await manager.loadCustomRules();
@@ -801,7 +801,7 @@ describe('CustomValidationRulesManager', () => {
 
       await FS.writeFile(
         PATH.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       await manager.loadCustomRules();
@@ -837,7 +837,7 @@ describe('CustomValidationRulesManager', () => {
 
       await FS.writeFile(
         PATH.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       await manager.loadCustomRules();
@@ -867,14 +867,14 @@ describe('CustomValidationRulesManager', () => {
 
       await FS.writeFile(
         PATH.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       await manager.loadCustomRules();
 
       // Execute rule many times to test history limiting
       const executions = Array.from({ length: 150 }, () =>
-        manager.executeRule('test_rule')
+        manager.executeRule('test_rule'),
       );
       await Promise.all(executions);
 

@@ -20,13 +20,13 @@ function comprehensiveAuditFix() {
     // Fix variable declarations - remove the constants and ensure proper let declarations
     content = content.replace(
       /const TEST_AGENT_ID = null;\s*const AUDIT_AGENT_ID = null;/g,
-      ''
+      '',
     );
 
     // Ensure proper variable declarations at describe block start
     content = content.replace(
       /(describe\('Audit System Validation Tests', \(\) => \{\s*let implementationAgentId = null;)/,
-      '$1\n  let testAgentId = null;\n  let auditAgentId = null;'
+      '$1\n  let testAgentId = null;\n  let auditAgentId = null;',
     );
 
     // Fix ALL instances of RESULT.taskId to result.taskId
@@ -38,13 +38,13 @@ function comprehensiveAuditFix() {
     // Fix specific patterns where result is still missing
     content = content.replace(
       /const TASK = listResult\.tasks\.find\(\(t\) => t\.id === RESULT\.taskId\);/g,
-      'const TASK = listResult.tasks.find((t) => t.id === result.taskId);'
+      'const TASK = listResult.tasks.find((t) => t.id === result.taskId);',
     );
 
     // Fix any remaining undefined result references in test expectations
     content = content.replace(
       /expect\(RESULT\.success\)\.toBe\(true\);/g,
-      'expect(result.success).toBe(true);'
+      'expect(result.success).toBe(true);',
     );
 
     fs.writeFileSync(filePath, content);

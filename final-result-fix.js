@@ -72,7 +72,7 @@ class FinalResultFixer {
       const beforeCount = content.split(fix.from).length - 1;
       content = content.replace(
         new RegExp(fix.from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'),
-        fix.to
+        fix.to,
       );
       const afterCount = content.split(fix.from).length - 1;
       changes += beforeCount - afterCount;
@@ -83,7 +83,7 @@ class FinalResultFixer {
       this.fixedFiles.push({ path: filePath, changes });
       this.totalChanges += changes;
       console.log(
-        `✅ Fixed ${changes} name/name issues in test-performance.js`
+        `✅ Fixed ${changes} name/name issues in test-performance.js`,
       );
     }
   }
@@ -194,11 +194,11 @@ class FinalResultFixer {
       this.fixedFiles.push({ path: filePath, changes });
       this.totalChanges += changes;
       console.log(
-        `✅ Fixed ${changes} issues in ${PATH.relative(process.cwd(), filePath)}`
+        `✅ Fixed ${changes} issues in ${PATH.relative(process.cwd(), filePath)}`,
       );
     } else {
       console.log(
-        `✅ No issues found in ${PATH.relative(process.cwd(), filePath)}`
+        `✅ No issues found in ${PATH.relative(process.cwd(), filePath)}`,
       );
     }
   }
@@ -209,10 +209,10 @@ class FinalResultFixer {
     console.log('│ Metric                  │ Count    │');
     console.log('├─────────────────────────┼──────────┤');
     console.log(
-      `│ Files Modified          │ ${this.fixedFiles.length.toString().padEnd(8)} │`
+      `│ Files Modified          │ ${this.fixedFiles.length.toString().padEnd(8)} │`,
     );
     console.log(
-      `│ Total Changes           │ ${this.totalChanges.toString().padEnd(8)} │`
+      `│ Total Changes           │ ${this.totalChanges.toString().padEnd(8)} │`,
     );
     console.log('└─────────────────────────┴──────────┘');
 
@@ -220,7 +220,7 @@ class FinalResultFixer {
       console.log('\n📁 Modified Files:');
       for (const file of this.fixedFiles) {
         console.log(
-          `  ✅ ${PATH.relative(process.cwd(), file.path)} (${file.changes} changes)`
+          `  ✅ ${PATH.relative(process.cwd(), file.path)} (${file.changes} changes)`,
         );
       }
     }

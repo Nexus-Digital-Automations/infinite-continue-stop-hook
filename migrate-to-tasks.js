@@ -16,7 +16,7 @@ class TaskMigrator {
     this.tasksPath = PATH.join(projectRoot, 'TASKS.json');
     this.backupPath = PATH.join(
       projectRoot,
-      `FEATURES.json.backup.${Date.now()}`
+      `FEATURES.json.backup.${Date.now()}`,
     );
   }
 
@@ -26,7 +26,7 @@ class TaskMigrator {
   async migrate() {
     try {
       loggers.stopHook.log(
-        '🚀 Starting FEATURES.json → TASKS.json migration...'
+        '🚀 Starting FEATURES.json → TASKS.json migration...',
       );
 
       // Step 1: Validate source file exists
@@ -239,7 +239,7 @@ class TaskMigrator {
           dependencies: [],
           estimated_effort: 5, // Default value
           required_capabilities: this.inferCapabilitiesFromCategory(
-            feature.category
+            feature.category,
           ),
           created_at: feature.created_at,
           updated_at: feature.updated_at,
@@ -466,7 +466,7 @@ class TaskMigrator {
       autoTasksGenerated * 2;
 
     console.log(
-      `✓ Generated ${autoTasksGenerated * 2} auto-tasks (${autoTasksGenerated} test + ${autoTasksGenerated} audit)`
+      `✓ Generated ${autoTasksGenerated * 2} auto-tasks (${autoTasksGenerated} test + ${autoTasksGenerated} audit)`,
     );
   }
 
@@ -601,7 +601,7 @@ if (require.main === module) {
       loggers.stopHook.log('\n📊 Migration Summary:');
       loggers.stopHook.log(
         { additionalData: [null, 2] },
-        JSON.stringify(result.stats)
+        JSON.stringify(result.stats),
       );
       throw new Error('Migration completed successfully');
     })
