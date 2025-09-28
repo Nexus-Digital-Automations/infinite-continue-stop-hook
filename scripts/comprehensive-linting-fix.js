@@ -254,7 +254,7 @@ class ComprehensiveLintingFix {
   /**
    * Run comprehensive fix process
    */
-  async run() {
+  run() {
     loggers.app.info('🚀 Starting comprehensive linting error fix...\n');
 
     // Get current error count

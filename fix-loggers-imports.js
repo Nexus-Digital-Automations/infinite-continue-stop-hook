@@ -164,7 +164,7 @@ function getCurrentLoggersErrorCount() {
   }
 }
 
-async function main() {
+function main() {
   console.log('🚀 Fixing loggers import issues...\n');
 
   const initialErrors = getCurrentLoggersErrorCount();

@@ -37,12 +37,12 @@ class SecurityUtils {
     }
 
     // Resolve paths to prevent directory traversal
-    const resolvedBase = path.resolve(basePath);
-    const resolvedPath = path.resolve(basePath, path.basename(filePath));
+    const resolvedBase = PATH.resolve(basePath);
+    const resolvedPath = PATH.resolve(basePath, PATH.basename(filePath));
 
     // Ensure the resolved path is within the base directory
     if (
-      !resolvedPath.startsWith(resolvedBase + path.sep) &&
+      !resolvedPath.startsWith(resolvedBase + PATH.sep) &&
       resolvedPath !== resolvedBase
     ) {
       throw new Error(
@@ -63,7 +63,7 @@ class SecurityUtils {
   static safeReadFile(basePath, filePath, encoding = 'utf-8') {
     const safePath = this.validatePath(basePath, filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
-    return fs.readFile(safePath, encoding);
+    return FS.readFile(safePath, encoding);
   }
 
   /**
@@ -76,9 +76,9 @@ class SecurityUtils {
   static async safeWriteFile(basePath, filePath, content) {
     const safePath = this.validatePath(basePath, filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
-    await fs.mkdir(path.dirname(safePath), { recursive: true });
+    await FS.mkdir(PATH.dirname(safePath), { recursive: true });
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
-    return fs.writeFile(safePath, content, 'utf-8');
+    return FS.writeFile(safePath, content, 'utf-8');
   }
 
   /**
@@ -91,9 +91,9 @@ class SecurityUtils {
   static async safeAppendFile(basePath, filePath, content) {
     const safePath = this.validatePath(basePath, filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
-    await fs.mkdir(path.dirname(safePath), { recursive: true });
+    await FS.mkdir(PATH.dirname(safePath), { recursive: true });
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
-    return fs.appendFile(safePath, content);
+    return FS.appendFile(safePath, content);
   }
 }
 
@@ -134,8 +134,8 @@ class AuditLogger {
 class AUDIT_INTEGRATION {
   constructor() {
     this.projectRoot = process.cwd();
-    this.essentialsDir = path.join(__dirname);
-    this.taskManagerApiPath = path.join(this.projectRoot, 'taskmanager-api.js');
+    this.essentialsDir = PATH.join(__dirname);
+    this.taskManagerApiPath = PATH.join(this.projectRoot, 'taskmanager-api.js');
     this.logger = new AuditLogger();
 
     // Integration configuration
@@ -375,7 +375,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       };
 
       return criteria;
-    } catch {
+    } catch (error) {
       this.logger.log(`⚠️ Could not load task requirements: ${error.message}`);
       return {};
     }
@@ -418,7 +418,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
         this.projectRoot,
         'package.json',
       );
-      await fs.access(packageJsonPath);
+      await FS.access(packageJsonPath);
       hasPackageJson = true;
     } catch {
 
@@ -484,7 +484,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       } else {
         throw new Error(`TaskManager API error: ${JSON.stringify(result)}`);
       }
-    } catch {
+    } catch (error) {
       this.logger.error(`❌ Failed to create audit task: ${error.message}`);
       throw error;
     }

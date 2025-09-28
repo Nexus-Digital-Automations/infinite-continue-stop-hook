@@ -33,7 +33,7 @@ class LoggingContextEnhancer {
     ];
   }
 
-  async enhance() {
+  enhance() {
     loggers.app.info('Starting logging context enhancement');
 
     // Process system files

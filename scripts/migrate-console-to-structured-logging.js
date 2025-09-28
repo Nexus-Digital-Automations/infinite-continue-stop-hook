@@ -117,7 +117,7 @@ class ConsoleToStructuredMigrator {
     return `const { loggers } = require('${normalizedPath}');`;
   }
 
-  async processFile(filePath) {
+  processFile(filePath) {
     try {
       const content = fs.readFileSync(filePath, 'utf8');
       const { content: newContent, modified } = this.migrateFileContent(
@@ -142,7 +142,7 @@ class ConsoleToStructuredMigrator {
     }
   }
 
-  async findJavaScriptFiles(dir = process.cwd()) {
+  findJavaScriptFiles(dir = process.cwd()) {
     const files = [];
 
     function scan(directory) {
@@ -164,10 +164,10 @@ class ConsoleToStructuredMigrator {
     return files;
   }
 
-  async migrate() {
+  migrate() {
     loggers.app.info('Starting console.log to structured logging migration');
 
-    const allFiles = await this.findJavaScriptFiles();
+    const allFiles = this.findJavaScriptFiles();
     const filesToProcess = allFiles.filter((file) =>
       this.shouldProcessFile(file)
     );
@@ -179,7 +179,7 @@ class ConsoleToStructuredMigrator {
     });
 
     for (const file of filesToProcess) {
-      await this.processFile(file);
+      this.processFile(file);
     }
 
     loggers.app.info('Console.log migration completed', {
@@ -205,20 +205,19 @@ class ConsoleToStructuredMigrator {
 
 // Execute migration if run directly
 if (require.main === module) {
-  const migrator = new ConsoleToStructuredMigrator();
-  migrator
-    .migrate()
-    .then((result) => {
-      if (result.skippedFiles > 0) {
-        throw new Error(
-          `Migration completed with ${result.skippedFiles} skipped files`
-        );
-      }
-    })
-    .catch((error) => {
-      loggers.app.error('Migration failed', { error: error.message });
-      throw new Error(`Migration failed: ${error.message}`);
-    });
+  try {
+    const migrator = new ConsoleToStructuredMigrator();
+    const result = migrator.migrate();
+
+    if (result.skippedFiles > 0) {
+      throw new Error(
+        `Migration completed with ${result.skippedFiles} skipped files`
+      );
+    }
+  } catch (error) {
+    loggers.app.error('Migration failed', { error: error.message });
+    throw new Error(`Migration failed: ${error.message}`);
+  }
 }
 
 module.exports = ConsoleToStructuredMigrator;

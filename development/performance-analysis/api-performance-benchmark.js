@@ -702,7 +702,7 @@ class APIPerformanceBenchmark {
 
     // ESLint: security/detect-non-literal-fs-filename disabled for this line
     // Justification: Filename is validated with regex and path traversal protection above
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
+
     fs.writeFileSync(outputFile, JSON.stringify(report, null, 2));
     loggers.stopHook.log(`📊 Performance report saved to: ${outputFile}`);
 

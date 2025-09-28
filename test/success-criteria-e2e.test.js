@@ -1,5 +1,4 @@
 /**
-const { loggers } = require('../lib/logger');
  * Success Criteria End-to-End Tests
  *
  * Comprehensive end-to-end test suite Covering:
@@ -17,6 +16,7 @@ const { loggers } = require('../lib/logger');
 const FS = require('fs').promises;
 const PATH = require('path');
 const { spawn } = require('child_process');
+const { loggers } = require('../lib/logger');
 
 // Test configuration
 const E2E_PROJECT_DIR = PATH.join(__dirname, 'success-criteria-e2e-project');
