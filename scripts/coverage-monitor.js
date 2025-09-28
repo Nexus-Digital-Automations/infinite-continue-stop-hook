@@ -34,13 +34,13 @@ const CONFIG = {
       process.cwd(),
       'coverage',
       'reports',
-      'coverage-trends.json'
+      'coverage-trends.json',
     ),
     validation: path.join(
       process.cwd(),
       'coverage',
       'reports',
-      'coverage-validation.json'
+      'coverage-validation.json',
     ),
   },
 };
@@ -149,7 +149,7 @@ class CoverageMonitor {
       if (fs.existsSync(CONFIG.paths.summary)) {
         Logger.warning('Tests failed but coverage data was generated');
         this.validation.warnings.push(
-          'Some tests failed during coverage analysis'
+          'Some tests failed during coverage analysis',
         );
       } else {
         throw new Error(`Coverage analysis failed: ${error.message}`);
@@ -169,14 +169,14 @@ class CoverageMonitor {
 
     try {
       const coverageData = JSON.parse(
-        fs.readFileSync(CONFIG.paths.summary, 'utf8')
+        fs.readFileSync(CONFIG.paths.summary, 'utf8'),
       );
       this.coverageData = coverageData;
       this.validation.summary = coverageData.total;
 
       Logger.success('Coverage data loaded successfully');
       Logger.debug(
-        `Total coverage: ${JSON.stringify(coverageData.total, null, 2)}`
+        `Total coverage: ${JSON.stringify(coverageData.total, null, 2)}`,
       );
     } catch (error) {
       throw new Error(`Failed to parse coverage data: ${error.message}`);
@@ -200,12 +200,12 @@ class CoverageMonitor {
 
       if (actual < critical) {
         failures.push(
-          `Critical failure: ${metric} coverage ${actual.toFixed(2)}% < ${critical}% (critical threshold)`
+          `Critical failure: ${metric} coverage ${actual.toFixed(2)}% < ${critical}% (critical threshold)`,
         );
         this.validation.passed = false;
       } else if (actual < threshold) {
         warnings.push(
-          `Warning: ${metric} coverage ${actual.toFixed(2)}% < ${threshold}% (target threshold)`
+          `Warning: ${metric} coverage ${actual.toFixed(2)}% < ${threshold}% (target threshold)`,
         );
       }
     }
@@ -216,7 +216,7 @@ class CoverageMonitor {
     // Log results
     if (failures.length > 0) {
       Logger.error(
-        `Coverage validation failed with ${failures.length} critical issues`
+        `Coverage validation failed with ${failures.length} critical issues`,
       );
       failures.forEach((failure) => Logger.error(failure));
     }
@@ -258,7 +258,7 @@ class CoverageMonitor {
     // Write validation report
     fs.writeFileSync(
       CONFIG.paths.validation,
-      JSON.stringify(reportData, null, 2)
+      JSON.stringify(reportData, null, 2),
     );
 
     Logger.success('Coverage reports generated');
@@ -321,7 +321,7 @@ class CoverageMonitor {
       const metricName = metric.charAt(0).toUpperCase() + metric.slice(1);
 
       console.log(
-        `│ ${metricName.padEnd(12)} │ ${actual.toFixed(2).padStart(6)}%  │ ${threshold.toString().padStart(7)}%  │ ${status.padEnd(6)} │`
+        `│ ${metricName.padEnd(12)} │ ${actual.toFixed(2).padStart(6)}%  │ ${threshold.toString().padStart(7)}%  │ ${status.padEnd(6)} │`,
       );
     }
 

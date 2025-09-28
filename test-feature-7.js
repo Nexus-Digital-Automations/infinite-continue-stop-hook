@@ -48,7 +48,7 @@ async function testAdaptiveLearningPaths() {
         maxLength: 10,
         includeBranching: true,
         includeAssessments: true,
-      }
+      },
     );
     console.log('Learning path result:', {
       success: learningPath.success,
@@ -66,7 +66,7 @@ async function testAdaptiveLearningPaths() {
       {
         includeAlternatives: true,
         maxRecommendations: 3,
-      }
+      },
     );
     console.log('Path recommendations result:', {
       success: pathRecommendations.success,
@@ -90,7 +90,7 @@ async function testAdaptiveLearningPaths() {
       {
         includeDetailedAnalysis: true,
         checkAdaptationTriggers: true,
-      }
+      },
     );
     console.log('Progress tracking result:', {
       success: progressTracking.success,
@@ -118,7 +118,7 @@ async function testAdaptiveLearningPaths() {
       {
         adaptationTrigger: 'performance_drop',
         preserveProgress: true,
-      }
+      },
     );
     console.log('Path adaptation result:', {
       success: pathAdaptation.success,
@@ -126,7 +126,7 @@ async function testAdaptiveLearningPaths() {
     });
 
     console.log(
-      '\n✅ Feature 7: Adaptive Learning Paths System integration test completed successfully!'
+      '\n✅ Feature 7: Adaptive Learning Paths System integration test completed successfully!',
     );
   } catch (error) {
     console.error('❌ Feature 7 test failed:', error.message);
