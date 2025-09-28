@@ -12,7 +12,7 @@
 
 const FS = require('fs');
 const PATH = require('path');
-const { EXEC_SYNC } = require('child_process');
+const { execSync: _execSync } = require('child_process');
 const AutonomousTaskManagerAPI = require('../../taskmanager-api');
 
 // Mock fs module for controlled testing
@@ -128,7 +128,7 @@ describe('Verification Endpoints', () => {
       mockFs.readFile.mockResolvedValue(JSON.stringify(mockTasksData));
 
       // Execute test
-      const RESULT = await api.getVerificationRequirements('task_123');
+      const result = await api.getVerificationRequirements('task_123');
 
       // Verify results
       expect(result.success).toBe(true);
@@ -244,7 +244,7 @@ describe('Verification Endpoints', () => {
       mockFs.writeFile.mockResolvedValue(undefined);
 
       // Execute test
-      const RESULT = await api.submitVerificationEvidence('task_123', validEvidence);
+      const result = await api.submitVerificationEvidence('task_123', validEvidence);
 
       // Verify results
       expect(result.success).toBe(true);
@@ -521,7 +521,7 @@ describe('Verification Endpoints', () => {
       mockFs.writeFile.mockResolvedValue(undefined);
 
       // Execute test
-      const RESULT = await api.submitVerificationEvidence('task_123', comprehensiveEvidence);
+      const result = await api.submitVerificationEvidence('task_123', comprehensiveEvidence);
 
       // Verify comprehensive evidence is accepted
       expect(result.success).toBe(true);
