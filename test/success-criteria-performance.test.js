@@ -41,10 +41,10 @@ class PerformanceMonitor {
         const memUsage = process.memoryUsage();
         this.memorySnapshots.push({
           timestamp: Date.now(),
-          heapUsed: _memUsage.heapUsed,
-          heapTotal: _memUsage.heapTotal,
-          external: _memUsage.external,
-          rss: _memUsage.rss,
+          heapUsed: memUsage.heapUsed,
+          heapTotal: memUsage.heapTotal,
+          external: memUsage.external,
+          rss: memUsage.rss,
         });
       }
     }, MEMORY_SAMPLING_INTERVAL);
