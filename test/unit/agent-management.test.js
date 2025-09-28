@@ -67,7 +67,7 @@ describe('Agent Management', () => {
     api.featuresPath = TEST_FEATURES_PATH;
 
     // Connect jest mocks to MockFileSystem instance
-    const fs = require('fs');
+    const FS = require('fs');
     fs.promises.access.mockImplementation((...args) => mockFs.access(...args));
     fs.promises.readFile.mockImplementation((...args) =>
       mockFs.readFile(...args),
@@ -97,7 +97,7 @@ describe('Agent Management', () => {
   describe('Agent Initialization', () => {
     describe('Basic Agent Initialization', () => {
       test('should initialize new agent successfully', async () => {
-        const agentId = 'test-agent-001';
+        const AGENT_ID = 'test-agent-001';
 
         const result = await api.initializeAgent(agentId);
 
@@ -127,7 +127,7 @@ describe('Agent Management', () => {
       });
 
       test('should update features file with agent data', async () => {
-        const agentId = 'persistent-agent';
+        const AGENT_ID = 'persistent-agent';
 
         const result = await api.initializeAgent(agentId);
         expect(result.success).toBe(true);
@@ -146,7 +146,7 @@ describe('Agent Management', () => {
       });
 
       test('should track initialization in time bucket stats', async () => {
-        const agentId = 'stats-agent';
+        const AGENT_ID = 'stats-agent';
 
         const result = await api.initializeAgent(agentId);
         expect(result.success).toBe(true);
@@ -177,7 +177,7 @@ describe('Agent Management', () => {
 
     describe('Agent Session Management', () => {
       test('should create agent entry in features file', async () => {
-        const agentId = 'session-test-agent';
+        const AGENT_ID = 'session-test-agent';
 
         await api.initializeAgent(agentId);
 
@@ -192,7 +192,7 @@ describe('Agent Management', () => {
       });
 
       test('should overwrite existing agent data on new initialization', async () => {
-        const agentId = 'overwrite-test-agent';
+        const AGENT_ID = 'overwrite-test-agent';
 
         // First initialization
         const result1 = await api.initializeAgent(agentId);
@@ -226,7 +226,7 @@ describe('Agent Management', () => {
           JSON.stringify(featuresWithoutAgents),
         );
 
-        const agentId = 'init-agents-section';
+        const AGENT_ID = 'init-agents-section';
         const result = await api.initializeAgent(agentId);
 
         expect(result.success).toBe(true);
@@ -421,7 +421,7 @@ describe('Agent Management', () => {
   describe('Stop Authorization', () => {
     describe('Basic Stop Authorization', () => {
       test('should authorize stop successfully with reason', async () => {
-        const agentId = 'stopping-agent';
+        const AGENT_ID = 'stopping-agent';
         const reason =
           'All TodoWrite tasks completed successfully. Linter passes, build succeeds, tests pass.';
 
@@ -437,7 +437,7 @@ describe('Agent Management', () => {
       });
 
       test('should authorize stop with default reason when none provided', async () => {
-        const agentId = 'default-reason-agent';
+        const AGENT_ID = 'default-reason-agent';
 
         const result = await api.authorizeStop(agentId);
 
@@ -449,7 +449,7 @@ describe('Agent Management', () => {
       });
 
       test('should create .stop-allowed flag file', async () => {
-        const agentId = 'flag-creation-agent';
+        const AGENT_ID = 'flag-creation-agent';
 
         const result = await api.authorizeStop(agentId);
         expect(result.success).toBe(true);
@@ -465,7 +465,7 @@ describe('Agent Management', () => {
       });
 
       test('should include comprehensive stop data in flag file', async () => {
-        const agentId = 'comprehensive-stop-agent';
+        const AGENT_ID = 'comprehensive-stop-agent';
         const reason =
           'Project perfection achieved: all features implemented, tests pass, code quality excellent';
 
@@ -496,7 +496,7 @@ describe('Agent Management', () => {
       });
 
       test('should handle very long reasons', async () => {
-        const agentId = 'long-reason-agent';
+        const AGENT_ID = 'long-reason-agent';
         const longReason = 'A'.repeat(1000);
 
         const result = await api.authorizeStop(agentId, longReason);
@@ -509,7 +509,7 @@ describe('Agent Management', () => {
       });
 
       test('should handle special characters in agent ID And reason', async () => {
-        const agentId = 'special-chars-agent_123!@#';
+        const AGENT_ID = 'special-chars-agent_123!@#';
         const reason =
           'Reason with special chars: !@#$%^&*()_+-={}[]|\\:";\'<>?,./';
 
@@ -584,7 +584,7 @@ describe('Agent Management', () => {
   describe('Agent Management Integration', () => {
     describe('Agent Lifecycle Integration', () => {
       test('should handle complete agent lifecycle', async () => {
-        const agentId = 'lifecycle-agent';
+        const AGENT_ID = 'lifecycle-agent';
 
         // 1. Initialize agent
         const initResult = await api.initializeAgent(agentId);
@@ -650,7 +650,7 @@ describe('Agent Management', () => {
 
     describe('Agent Management with Feature Operations', () => {
       test('should maintain agent state during feature operations', async () => {
-        const agentId = 'feature-ops-agent';
+        const AGENT_ID = 'feature-ops-agent';
 
         // Initialize agent
         const initResult = await api.initializeAgent(agentId);

@@ -9,6 +9,7 @@
  */
 
 const PATH = require('path');
+const { loggers } = require('../../../lib/logger');
 
 describe('Embedding Generation System', () => {
   let _embeddingService;

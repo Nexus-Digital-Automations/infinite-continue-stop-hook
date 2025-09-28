@@ -5,8 +5,8 @@
  * and operationId context for better observability and tracing.
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { loggers } = require('../lib/logger');
 
 class LoggingContextEnhancer {

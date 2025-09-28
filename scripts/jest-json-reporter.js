@@ -9,8 +9,8 @@
  * @since 2025-09-23
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 
 class JestJsonReporter {
   constructor(globalConfig, options) {

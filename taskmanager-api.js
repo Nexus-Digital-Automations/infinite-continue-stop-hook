@@ -40,8 +40,8 @@
  * Usage: node taskmanager-api.js <command> [args...] [--project-root /path/to/project]
  */
 
-const path = require('path');
-const fs = require('fs').promises;
+const PATH = require('path');
+const FS = require('fs').promises;
 const crypto = require('crypto');
 
 // Import RAG operations for self-learning capabilities
@@ -6492,7 +6492,7 @@ class AutonomousTaskManagerAPI {
       });
 
       // Perform validation on selected criteria only
-      const validationResults = [];
+      const VALIDATION_RESULTS = [];
       const newFailures = [];
       const resolvedFailures = [];
 
@@ -8723,7 +8723,7 @@ class AutonomousTaskManagerAPI {
 
       // Modified features
       const changedFeatures = modifiedFeatures.filter((mf) => {
-        const original = originalFeatures.find((of) => of.id === mf.id);
+        const ORIGINAL = originalFeatures.find((of) => of.id === mf.id);
         return original && JSON.stringify(original) !== JSON.stringify(mf);
       });
       if (changedFeatures.length > 0) {
@@ -8762,7 +8762,7 @@ class AutonomousTaskManagerAPI {
 
       // Modified tasks
       const changedTasks = modifiedTasks.filter((mt) => {
-        const original = originalTasks.find((ot) => ot.id === mt.id);
+        const ORIGINAL = originalTasks.find((ot) => ot.id === mt.id);
         return original && JSON.stringify(original) !== JSON.stringify(mt);
       });
       if (changedTasks.length > 0) {

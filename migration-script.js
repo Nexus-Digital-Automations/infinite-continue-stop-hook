@@ -12,7 +12,7 @@ const { loggers } = require('./lib/logger');
  * - Creates comprehensive audit trail of migration
  */
 
-const fs = require('fs');
+const FS = require('fs');
 
 class FeaturesMigration {
   constructor() {

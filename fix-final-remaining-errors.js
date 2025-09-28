@@ -7,8 +7,8 @@
  * - Specific file issues
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 class FinalErrorFixer {
@@ -346,7 +346,7 @@ class FinalErrorFixer {
 
         if (fixCount > 0) {
           content = lines.join('\n');
-          // eslint-disable-next-line security/detect-non-literal-fs-filename
+
           fs.writeFileSync(filePath, content);
           // eslint-disable-next-line no-console
           console.log(

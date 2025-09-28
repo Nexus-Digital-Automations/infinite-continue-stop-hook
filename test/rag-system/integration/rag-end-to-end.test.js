@@ -198,7 +198,7 @@ describe('RAG System End-to-End Integration Tests', () => {
         maxResults: 3,
       });
 
-      expect(RESULTS).toBeInstanceOf(Array);
+      expect(_RESULTS).toBeInstanceOf(Array);
       expect(RESULTS.length).toBeGreaterThan(0);
       expect(RESULTS.length).toBeLessThanOrEqual(3);
 
@@ -347,7 +347,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       const _processingTime = END_TIME - START_TIME;
 
       // Verify all operations succeeded
-      expect(RESULTS).toHaveLength(_batchSize);
+      expect(_RESULTS).toHaveLength(_batchSize);
       RESULTS.forEach((result) => {
         expect(result.success).toBe(true);
       });

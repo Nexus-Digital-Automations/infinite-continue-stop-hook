@@ -51,7 +51,7 @@ describe('FeatureManagerAPI', () => {
     mockFs = new MockFileSystem();
 
     // Get the mocked fs module And connect it to our MockFileSystem
-    const fs = require('fs');
+    const FS = require('fs');
     fs.promises.access.mockImplementation((...args) => mockFs.access(...args));
     fs.promises.readFile.mockImplementation((...args) =>
       mockFs.readFile(...args),
@@ -963,7 +963,7 @@ describe('FeatureManagerAPI', () => {
 
     describe('initializeAgent', () => {
       test('should initialize new agent successfully', async () => {
-        const agentId = 'test-agent-001';
+        const AGENT_ID = 'test-agent-001';
         const result = await api.initializeAgent(agentId);
 
         expect(result.success).toBe(true);
@@ -984,7 +984,7 @@ describe('FeatureManagerAPI', () => {
 
     describe('reinitializeAgent', () => {
       test('should reinitialize existing agent', async () => {
-        const agentId = 'test-agent-002';
+        const AGENT_ID = 'test-agent-002';
 
         // First initialize
         await api.initializeAgent(agentId);
@@ -1009,7 +1009,7 @@ describe('FeatureManagerAPI', () => {
 
     describe('authorizeStop', () => {
       test('should authorize stop with reason', async () => {
-        const agentId = 'test-agent-003';
+        const AGENT_ID = 'test-agent-003';
         const reason = 'Task completed successfully';
 
         const result = await api.authorizeStop(agentId, reason);
@@ -1022,7 +1022,7 @@ describe('FeatureManagerAPI', () => {
       });
 
       test('should authorize stop with default reason', async () => {
-        const agentId = 'test-agent-004';
+        const AGENT_ID = 'test-agent-004';
 
         const result = await api.authorizeStop(agentId);
 

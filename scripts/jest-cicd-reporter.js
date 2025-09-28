@@ -9,8 +9,8 @@
  * @since 2025-09-23
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 class JestCiCdReporter {
@@ -265,7 +265,7 @@ class JestCiCdReporter {
     return 'other';
   }
 
-  detectFlakyTests(RESULTS) {
+  detectFlakyTests(_RESULTS) {
     // Placeholder for flaky test detection
     // In a real implementation, this would compare with historical data
     return {

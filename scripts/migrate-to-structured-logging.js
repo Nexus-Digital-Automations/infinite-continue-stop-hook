@@ -5,8 +5,8 @@
  * console.info, And console.debug calls with structured Pino logging.
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 // Configuration

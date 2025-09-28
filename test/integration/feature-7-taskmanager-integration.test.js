@@ -43,7 +43,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         },
 
         async _loadCustomValidationRules() {
-          const fs = require('fs').promises;
+          const FS = require('fs').promises;
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
@@ -89,7 +89,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         },
 
         async _loadCustomValidationRules() {
-          const fs = require('fs').promises;
+          const FS = require('fs').promises;
           const configPath = path.join(
             '/nonexistent',
             '.claude-validation.json',
@@ -154,7 +154,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         },
 
         async _loadCustomValidationRules() {
-          const fs = require('fs').promises;
+          const FS = require('fs').promises;
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
@@ -334,7 +334,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         },
 
         async _loadCustomValidationRules() {
-          const fs = require('fs').promises;
+          const FS = require('fs').promises;
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
@@ -442,7 +442,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         },
 
         async _loadCustomValidationRules() {
-          const fs = require('fs').promises;
+          const FS = require('fs').promises;
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
@@ -574,7 +574,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         },
 
         async _loadCustomValidationRules() {
-          const fs = require('fs').promises;
+          const FS = require('fs').promises;
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
@@ -705,7 +705,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         },
 
         async _loadCustomValidationRules() {
-          const fs = require('fs').promises;
+          const FS = require('fs').promises;
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
@@ -827,7 +827,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         },
 
         async _loadCustomValidationRules() {
-          const fs = require('fs').promises;
+          const FS = require('fs').promises;
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',
@@ -876,7 +876,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         },
 
         async _loadCustomValidationRules() {
-          const fs = require('fs').promises;
+          const FS = require('fs').promises;
           const configPath = path.join(
             mockProjectRoot,
             '.claude-validation.json',

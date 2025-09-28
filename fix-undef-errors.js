@@ -2,8 +2,8 @@
  * Fix all undefined variable errors - systematic approach
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync } = require('child_process');
 const { loggers } = require('./lib/logger');
 
@@ -14,21 +14,21 @@ const fixes = [
   // Fix catch blocks that reference _error but don't have it as parameter
   {
     pattern: /catch \(\) \{[^}]*_error/g,
-    replacement: (match) => match.replace('catch () {', 'catch (_error) {'),
+    replacement: (match) => match.replace('catch () {', 'catch {'),
   },
   {
     pattern: /catch\(\)\{[^}]*_error/g,
-    replacement: (match) => match.replace('catch(){', 'catch(_error){'),
+    replacement: (match) => match.replace('catch(){', 'catch {'),
   },
 
   // Fix catch blocks that reference error but don't have it as parameter
   {
     pattern: /catch \(\) \{[^}]*\berror\b/g,
-    replacement: (match) => match.replace('catch () {', 'catch (error) {'),
+    replacement: (match) => match.replace('catch () {', 'catch {'),
   },
   {
     pattern: /catch\(\)\{[^}]*\berror\b/g,
-    replacement: (match) => match.replace('catch(){', 'catch(error){'),
+    replacement: (match) => match.replace('catch(){', 'catch {'),
   },
 
   // Fix specific undefined variable patterns
@@ -76,7 +76,7 @@ function fixFile(filePath) {
 
     // Apply comprehensive fixes for undefined errors
     fixes.forEach((fix) => {
-      const originalContent = content;
+      const ORIGINAL_CONTENT = content;
       content = content.replace(fix.pattern, fix.replacement);
       if (content !== originalContent) {
         modified = true;
@@ -111,7 +111,7 @@ function fixFile(filePath) {
     }
 
     return false;
-  } catch (error) {
+  } catch {
     loggers.app.error(`❌ Error fixing ${filePath}:`, { error: error.message });
     return false;
   }
@@ -136,7 +136,7 @@ function getUndefErrorFiles() {
     });
 
     return Array.from(errorFiles);
-  } catch (error) {
+  } catch {
     // Parse from error output if command fails
     return error.stdout
       ? error.stdout
@@ -172,7 +172,7 @@ loggers.app.info('🔄 Running linter to check progress...');
 try {
   execSync('npm run lint', { cwd: rootDir, stdio: 'inherit' });
   loggers.app.info('\n🎉 ALL LINTING ERRORS RESOLVED! 🎉');
-} catch (error) {
+} catch {
   const output = error.stdout || error.message;
   const errorCount = (output.match(/error/g) || []).length;
   loggers.app.info(

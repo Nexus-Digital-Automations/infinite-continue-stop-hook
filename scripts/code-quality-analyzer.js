@@ -19,8 +19,8 @@
  * @since 2025-09-23
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync: EXEC_SYNC } = require('child_process');
 const { loggers } = require('../lib/logger');
 
@@ -446,7 +446,6 @@ class CodeQualityAnalyzer {
 
     for (const filePath of this.sourceFiles) {
       try {
-        // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated by quality analyzer for source code analysis
         const content = fs.readFileSync(filePath, 'utf8');
         const lineCount = content.split('\n').length;
 
@@ -509,7 +508,6 @@ class CodeQualityAnalyzer {
 
     for (const filePath of this.sourceFiles) {
       try {
-        // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated by quality analyzer for source code analysis
         const content = fs.readFileSync(filePath, 'utf8');
         const lines = content.split('\n');
 
@@ -660,7 +658,6 @@ class CodeQualityAnalyzer {
 
     for (const filePath of this.sourceFiles) {
       try {
-        // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated by quality analyzer for source code analysis
         const content = fs.readFileSync(filePath, 'utf8');
         const lines = content.split('\n');
 
@@ -795,7 +792,6 @@ class CodeQualityAnalyzer {
     // Detect various code smells
     for (const filePath of this.sourceFiles) {
       try {
-        // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated by quality analyzer for source code analysis
         const content = fs.readFileSync(filePath, 'utf8');
         const lines = content.split('\n');
 
@@ -893,7 +889,6 @@ class CodeQualityAnalyzer {
 
     for (const filePath of this.sourceFiles) {
       try {
-        // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path validated by quality analyzer for source code analysis
         const content = fs.readFileSync(filePath, 'utf8');
         const lines = content.split('\n');
 
@@ -1244,7 +1239,6 @@ Examples:
   if (configArg) {
     const configPath = configArg.split('=')[1];
     try {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- Config path validated by quality analyzer
       const customConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
       options.config = customConfig;
     } catch {

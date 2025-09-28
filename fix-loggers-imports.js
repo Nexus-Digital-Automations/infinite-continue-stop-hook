@@ -4,8 +4,8 @@
  * Adds missing logger imports to files that reference 'loggers' but don't import it
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 function fixLoggersImport(filePath) {

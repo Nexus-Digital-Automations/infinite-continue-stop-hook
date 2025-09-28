@@ -105,7 +105,7 @@ describe('Example Test with Mock Framework', () => {
 
   describe('API Mock Integration', () => {
     test('should mock agent initialization', async () => {
-      const agentId = TestIdGenerator.generateAgentId();
+      const AGENT_ID = TestIdGenerator.generateAgentId();
       const result = await APIExecutor.initializeTestAgent(agentId);
 
       expect(result.agentId).toBe(agentId);
@@ -116,7 +116,7 @@ describe('Example Test with Mock Framework', () => {
     });
 
     test('should mock feature creation', async () => {
-      const agentId = TestIdGenerator.generateAgentId();
+      const AGENT_ID = TestIdGenerator.generateAgentId();
       await APIExecutor.initializeTestAgent(agentId);
 
       const featureData = TestDataFactory.createFeatureData({
@@ -135,7 +135,7 @@ describe('Example Test with Mock Framework', () => {
     });
 
     test('should handle feature validation errors', async () => {
-      const agentId = TestIdGenerator.generateAgentId();
+      const AGENT_ID = TestIdGenerator.generateAgentId();
       await APIExecutor.initializeTestAgent(agentId);
 
       const invalidFeatureData = {
@@ -155,7 +155,7 @@ describe('Example Test with Mock Framework', () => {
     });
 
     test('should mock feature listing with filters', async () => {
-      const agentId = TestIdGenerator.generateAgentId();
+      const AGENT_ID = TestIdGenerator.generateAgentId();
       await APIExecutor.initializeTestAgent(agentId);
 
       // Create multiple features
@@ -334,7 +334,7 @@ describe('Example Test with Mock Framework', () => {
     });
 
     test('should provide meaningful error messages', async () => {
-      const agentId = TestIdGenerator.generateAgentId();
+      const AGENT_ID = TestIdGenerator.generateAgentId();
       await APIExecutor.initializeTestAgent(agentId);
 
       const result = await APIExecutor.execAPI('approve-feature', [

@@ -5,8 +5,8 @@
  * with enhanced task types, auto-generation, And CLAUDE.md compliance
  */
 
-const fs = require('fs').promises;
-const path = require('path');
+const FS = require('fs').promises;
+const PATH = require('path');
 const { loggers } = require('./lib/logger');
 
 class TaskMigrator {

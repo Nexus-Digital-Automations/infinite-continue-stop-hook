@@ -2,8 +2,8 @@
  * Comprehensive fix for all unused error and template literal issues
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { loggers } = require('./lib/logger');
 
 // Define root directory for security validation
@@ -54,7 +54,7 @@ function fixFile(filePath) {
     let modified = false;
 
     fixes.forEach((fix) => {
-      const originalContent = content;
+      const ORIGINAL_CONTENT = content;
       content = content.replace(fix.pattern, fix.replacement);
       if (content !== originalContent) {
         modified = true;

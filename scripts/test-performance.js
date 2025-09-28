@@ -8,8 +8,8 @@
  * @version 1.0.0
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync, spawn } = require('child_process');
 const { loggers } = require('../lib/logger');
 
@@ -76,7 +76,7 @@ class PerformanceLogger {
 /**
  * System resource monitor
  */
-class ResourceMonitor {
+class RESOURCE_MONITOR {
   constructor() {
     this.startTime = Date.now();
     this.startMemory = process.memoryUsage();
@@ -186,7 +186,7 @@ class TestPerformanceMonitor {
     this.startTime = Date.now();
     this.testResults = [];
     this.suiteResults = [];
-    this.resourceMonitor = new ResourceMonitor();
+    this.resourceMonitor = new RESOURCE_MONITOR();
     this.warnings = [];
     this.errors = [];
   }

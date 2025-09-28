@@ -111,13 +111,13 @@ class RemainingErrorsFixer {
       {
         pattern: /(\}\s*catch\s*\{[^}]*?)error(\.[^}]*?\})/g,
         replacement: (match, before, after) => {
-          // Change catch { to catch (error) {
+          // Change catch { to catch {
           const fixed =
             before.replace(/\}\s*catch\s*\{/, '} catch {') + 'error' + after;
           return fixed;
         },
       },
-      // catch (_error) { ... _error ... }
+      // catch { ... _error ... }
       {
         pattern: /(catch\s*\(\s*_error\s*\)[^}]*?)error(?!\w)/g,
         replacement: '$1_error',
@@ -152,12 +152,12 @@ class RemainingErrorsFixer {
     let newContent = content;
     let hasChanges = false;
 
-    // Fix RESULT vs result inconsistencies (prefer result)
+    // Fix result vs result inconsistencies (prefer result)
     const lines = content.split('\n');
     const newLines = [];
 
     for (let line of lines) {
-      const original = line;
+      const ORIGINAL = line;
 
       // Fix const result = ... patterns
       if (line.includes('const result =')) {
@@ -166,13 +166,13 @@ class RemainingErrorsFixer {
       }
 
       // Fix result. references to result.
-      if (line.includes('RESULT.') && !line.includes('const RESULT')) {
-        line = line.replace(/RESULT\./g, 'result.');
+      if (line.includes('result.') && !line.includes('const result')) {
+        line = line.replace(/result\./g, 'result.');
         hasChanges = true;
       }
 
       // Fix return result to return result
-      if (line.includes('return RESULT') && !line.includes('const RESULT')) {
+      if (line.includes('return result') && !line.includes('const result')) {
         line = line.replace(/return result(?!\w)/g, 'return result');
         hasChanges = true;
       }

@@ -2,7 +2,7 @@
  * Final comprehensive fix for all syntax errors
  */
 
-const fs = require('fs');
+const FS = require('fs');
 const { execSync } = require('child_process');
 
 const fixes = [
@@ -60,7 +60,7 @@ function fixFile(filePath) {
   try {
     let content = fs.readFileSync(filePath, 'utf8');
     let modified = false;
-    const originalContent = content;
+    const ORIGINAL_CONTENT = content;
 
     fixes.forEach((fix) => {
       const beforeFix = content;

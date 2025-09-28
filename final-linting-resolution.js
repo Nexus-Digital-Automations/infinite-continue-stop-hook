@@ -1,8 +1,8 @@
 // Final systematic resolution for remaining 589 linting errors
 // Target: ZERO TOLERANCE achievement per CLAUDE.md mandate
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync } = require('child_process');
 const { loggers } = require('./lib/logger');
 
@@ -18,7 +18,7 @@ const quickFixes = [
   { pattern: /const CRYPTO = /g, replacement: 'const CRYPTO = ' },
   { pattern: /const FS = /g, replacement: 'const FS = ' },
   { pattern: /const PATH = /g, replacement: 'const PATH = ' },
-  { pattern: /const result = /g, replacement: 'const RESULT = ' },
+  { pattern: /const result = /g, replacement: 'const result = ' },
   { pattern: /const RESULTS = /g, replacement: 'const RESULTS = ' },
   { pattern: /const execSync = /g, replacement: 'const EXEC_SYNC = ' },
   { pattern: /const CONFIG_PATH = /g, replacement: 'const CONFIG_PATH = ' },

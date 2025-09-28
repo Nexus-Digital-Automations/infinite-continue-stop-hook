@@ -523,7 +523,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
 
       // 2. Simulate partial write by creating truncated file
       const featuresPath = path.join(testDir, 'FEATURES.json');
-      const originalContent = await fs.readFile(featuresPath, 'utf8');
+      const ORIGINAL_CONTENT = await fs.readFile(featuresPath, 'utf8');
       const truncatedContent = originalContent.substring(
         0,
         originalContent.length / 2,

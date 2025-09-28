@@ -34,11 +34,11 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
       updateTaskSuccessCriteria: jest.fn(),
     };
 
-    mockWithTimeout = jest.fn((operation) => {
+    mockWithTimeout = jest.fn((_operation) => {
       if (typeof operation === 'function') {
         return operation();
       }
-      return Promise.resolve(operation);
+      return Promise.resolve(_operation);
     });
     mockGetGuideForError = jest
       .fn()
@@ -858,7 +858,7 @@ describe('SUCCESS_CRITERIA_MANAGER Unit Tests', () => {
 
     test('should handle timeout scenarios gracefully', async () => {
       const TEST_TASK_ID = 'test_1234567890_abcdef';
-      mockWithTimeout.mockImplementation((OPERATION) => {
+      mockWithTimeout.mockImplementation((_OPERATION) => {
         return new Promise((_, reject) => {
           setTimeout(() => reject(new Error('Operation timeout')), 100);
         });

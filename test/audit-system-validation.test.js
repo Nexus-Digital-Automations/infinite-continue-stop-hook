@@ -842,7 +842,7 @@ describe('Audit System Validation Tests', () => {
       );
 
       expect(FEATURE_TASKS.length).toBe(NUM_TASKS);
-      FEATURE_TASKS.forEach((TASK) => {
+      FEATURE_TASKS.forEach((_TASK) => {
         const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
         expect(AUDIT_SUBTASK).toBeDefined();
         expect(AUDIT_SUBTASK.success_criteria.length).toBeGreaterThan(0);

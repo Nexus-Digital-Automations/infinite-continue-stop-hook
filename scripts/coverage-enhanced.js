@@ -17,8 +17,8 @@
  * @since 2025-09-23
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync, _spawn } = require('child_process');
 const { loggers } = require('../lib/logger');
 
@@ -281,9 +281,7 @@ class EnhancedCoverageSystem {
 
     // Create all required directories
     Object.values(this.config.paths).forEach((dir) => {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- Directory path validated by coverage system configuration
       if (!fs.existsSync(dir)) {
-        // eslint-disable-next-line security/detect-non-literal-fs-filename -- Directory path validated by coverage system configuration
         fs.mkdirSync(dir, { recursive: true });
         this.logger.debug(`Created directory: ${dir}`);
       }
@@ -304,22 +302,18 @@ class EnhancedCoverageSystem {
       new Date().toISOString().split('T')[0]
     );
 
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- Reports path validated by coverage system configuration
     if (fs.existsSync(this.config.paths.reports)) {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- Archive directory path validated by coverage system
       if (!fs.existsSync(archiveDir)) {
-        // eslint-disable-next-line security/detect-non-literal-fs-filename -- Archive directory path validated by coverage system
         fs.mkdirSync(archiveDir, { recursive: true });
       }
 
       // Copy previous reports to archive
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- Reports path validated by coverage system configuration
+
       const files = fs.readdirSync(this.config.paths.reports);
       files.forEach((file) => {
         const source = path.join(this.config.paths.reports, file);
         const dest = path.join(archiveDir, file);
 
-        // eslint-disable-next-line security/detect-non-literal-fs-filename -- Source file path validated by coverage system
         if (fs.statSync(source).isFile()) {
           fs.copyFileSync(source, dest);
         }

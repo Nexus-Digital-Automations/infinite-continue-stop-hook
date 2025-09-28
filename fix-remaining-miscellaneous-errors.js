@@ -7,8 +7,8 @@
  * - Syntax errors
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync } = require('child_process');
 const { loggers } = require('./lib/logger');
 
@@ -26,7 +26,7 @@ class MiscellaneousLintFixer {
     let localFixCount = 0;
 
     // Fix unused variables (not already prefixed with _)
-    const unusedVarPatterns = [
+    const UNUSED_VAR_PATTERNS = [
       // 'VARIABLE' is assigned a value but never used
       /(\s+)([A-Z_][A-Z0-9_]*)\s*=.*?(?=\n.*?'[A-Z_][A-Z0-9_]*' is assigned a value but never used)/gs,
       // Simple variable assignments
@@ -194,7 +194,7 @@ class MiscellaneousLintFixer {
         return 0;
       }
 
-      const originalContent = fs.readFileSync(filePath, 'utf8');
+      const ORIGINAL_CONTENT = fs.readFileSync(filePath, 'utf8');
       const { content: processedContent, fixes: fixes1 } =
         this.fixUnusedVariables(filePath, originalContent);
       const { content: processedContent2, fixes: fixes2 } =
@@ -209,7 +209,6 @@ class MiscellaneousLintFixer {
       const totalFixes = fixes1 + fixes2 + fixes3 + fixes4;
 
       if (totalFixes > 0 && finalContent !== originalContent) {
-        // eslint-disable-next-line security/detect-non-literal-fs-filename
         fs.writeFileSync(filePath, finalContent);
         loggers.app.info(
           `✅ Fixed ${totalFixes} issues in: ${path.relative(process.cwd(), filePath)}`

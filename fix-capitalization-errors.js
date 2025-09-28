@@ -5,8 +5,8 @@
  * These errors were introduced by incorrect linting that capitalized variables.
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync } = require('child_process');
 const { loggers } = require('./lib/logger');
 
@@ -80,7 +80,7 @@ function fixFile(filePath) {
     let modified = false;
 
     fixes.forEach((fix) => {
-      const originalContent = content;
+      const ORIGINAL_CONTENT = content;
       content = content.replace(fix.pattern, fix.replacement);
       if (content !== originalContent) {
         modified = true;

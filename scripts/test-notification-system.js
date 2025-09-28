@@ -9,8 +9,8 @@
  * @since 2025-09-23
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const https = require('https');
 const { execSync } = require('child_process');
 const { loggers } = require('../lib/logger');
@@ -519,7 +519,7 @@ class TestNotificationSystem {
 
   loadTestResults() {
     try {
-      const path = './coverage/reports/test-results.json';
+      const PATH = './coverage/reports/test-results.json';
       if (fs.existsSync(path)) {
         return JSON.parse(fs.readFileSync(path, 'utf8'));
       }
@@ -531,7 +531,7 @@ class TestNotificationSystem {
 
   loadCoverageData() {
     try {
-      const path = './coverage/coverage-summary.json';
+      const PATH = './coverage/coverage-summary.json';
       if (fs.existsSync(path)) {
         return JSON.parse(fs.readFileSync(path, 'utf8'));
       }
@@ -543,7 +543,7 @@ class TestNotificationSystem {
 
   loadCICDData() {
     try {
-      const path = './coverage/reports/ci-cd-results.json';
+      const PATH = './coverage/reports/ci-cd-results.json';
       if (fs.existsSync(path)) {
         return JSON.parse(fs.readFileSync(path, 'utf8'));
       }

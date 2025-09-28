@@ -5,8 +5,8 @@
  * using the existing Pino-based logger infrastructure.
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { loggers } = require('../lib/logger');
 
 class ConsoleToStructuredMigrator {

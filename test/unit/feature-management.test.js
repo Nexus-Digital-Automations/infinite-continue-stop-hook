@@ -64,7 +64,7 @@ describe('Feature Management Lifecycle', () => {
     api.featuresPath = TEST_FEATURES_PATH;
 
     // Connect jest mocks to MockFileSystem instance
-    const fs = require('fs');
+    const FS = require('fs');
     fs.promises.access.mockImplementation((...args) => mockFs.access(...args));
     fs.promises.readFile.mockImplementation((...args) =>
       mockFs.readFile(...args),

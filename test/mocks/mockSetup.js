@@ -165,7 +165,7 @@ class MockManager {
    * Setup file system mock (selective - only for test paths)
    */
   setupFileSystemMock() {
-    const fs = require('fs');
+    const FS = require('fs');
     this.originalModules.set('fs.existsSync', fs.existsSync);
     this.originalModules.set('fs.readFileSync', fs.readFileSync);
     this.originalModules.set('fs.writeFileSync', fs.writeFileSync);
@@ -326,7 +326,7 @@ class MockManager {
     }
 
     // Restore fs methods
-    const fs = require('fs');
+    const FS = require('fs');
     [
       'existsSync',
       'readFileSync',

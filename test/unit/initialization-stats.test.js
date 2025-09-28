@@ -43,7 +43,7 @@ describe('Initialization Statistics', () => {
 
     // Mock the fs module
     originalFs = require('fs').promises;
-    const fs = require('fs');
+    const FS = require('fs');
     fs.promises = mockFs;
 
     // Setup initial tasks file
@@ -55,7 +55,7 @@ describe('Initialization Statistics', () => {
 
   afterEach(() => {
     // Restore original file system
-    const fs = require('fs');
+    const FS = require('fs');
     fs.promises = originalFs;
 
     jest.clearAllMocks();

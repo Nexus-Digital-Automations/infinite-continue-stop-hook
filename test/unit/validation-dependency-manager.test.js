@@ -429,7 +429,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(configPath).toContain('.validation-dependencies.json');
 
       // Verify file exists And contains valid JSON
-      const fs = require('fs').promises;
+      const FS = require('fs').promises;
       const configData = await fs.readFile(configPath, 'utf8');
       const config = JSON.parse(configData);
 
@@ -463,7 +463,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(loadedDeps).toHaveProperty('build-validation');
 
       // Cleanup
-      const fs = require('fs').promises;
+      const FS = require('fs').promises;
       await fs.unlink(configPath);
     });
 

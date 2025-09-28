@@ -8,8 +8,8 @@
  * - Handles error variable references
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 // List of files that have no-undef errors
@@ -34,7 +34,7 @@ function fixVariableIssues(filePath) {
   console.log(`Fixing: ${filePath}`);
 
   let content = fs.readFileSync(filePath, 'utf8');
-  const originalContent = content;
+  const ORIGINAL_CONTENT = content;
 
   // Fix: const result = ... followed by expect(result...)
   content = content.replace(
@@ -69,7 +69,7 @@ function fixVariableIssues(filePath) {
   content = content.replace(
     /catch\s*\(\s*\)\s*{([^}]*error\.message[^}]*)}/g,
     (match, body) => {
-      return `catch (error) {${body}}`;
+      return `catch {${body}}`;
     }
   );
 

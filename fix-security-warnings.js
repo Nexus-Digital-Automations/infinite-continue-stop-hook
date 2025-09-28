@@ -19,7 +19,7 @@ function addSecurityDisableComments(filePath) {
 
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     let content = fs.readFileSync(filePath, 'utf8');
-    const originalContent = content;
+    const ORIGINAL_CONTENT = content;
     let changesCount = 0;
 
     // Fix security/detect-non-literal-fs-filename warnings

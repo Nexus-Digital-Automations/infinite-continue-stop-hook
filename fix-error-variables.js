@@ -5,8 +5,8 @@
  * by fixing catch blocks that reference undefined error variables.
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 class ErrorVariableFixer {
@@ -42,7 +42,7 @@ class ErrorVariableFixer {
         hasChanges = true;
       }
 
-      // Pattern 3: catch (_error) { ... __error.something }
+      // Pattern 3: catch { ... __error.something }
       // Fix: Change error references to _error
       const lines = newContent.split('\n');
       const newLines = [];

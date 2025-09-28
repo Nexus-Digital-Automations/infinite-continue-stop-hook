@@ -14,8 +14,8 @@
  * @since 2025-09-27
  */
 
-const fs = require('fs').promises;
-const path = require('path');
+const FS = require('fs').promises;
+const PATH = require('path');
 const { execSync: EXEC_SYNC } = require('child_process');
 const { loggers } = require('../lib/logger');
 const {

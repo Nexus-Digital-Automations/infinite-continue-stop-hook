@@ -56,7 +56,7 @@ describe('Agent Lifecycle Integration Tests', () => {
   describe('Agent Initialization Workflow', () => {
     test('should handle single agent initialization process', async () => {
       // 1. Initialize agent
-      const agentId = 'test-agent-001';
+      const AGENT_ID = 'test-agent-001';
       const initResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });
@@ -192,7 +192,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
     test('should prevent duplicate agent initialization', async () => {
       // 1. Initialize an agent
-      const agentId = 'duplicate-test-agent';
+      const AGENT_ID = 'duplicate-test-agent';
       const firstInitResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });
@@ -224,7 +224,7 @@ describe('Agent Lifecycle Integration Tests', () => {
   describe('Agent Reinitialization Workflow', () => {
     test('should handle agent reinitialization process', async () => {
       // 1. Initialize agent first
-      const agentId = 'reinit-test-agent';
+      const AGENT_ID = 'reinit-test-agent';
       const initResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });
@@ -277,7 +277,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
     test('should handle multiple reinitializations of same agent', async () => {
       // 1. Initialize agent
-      const agentId = 'multi-reinit-agent';
+      const AGENT_ID = 'multi-reinit-agent';
       const initResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });
@@ -321,7 +321,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
     test('should handle reinitialization of non-existent agent', async () => {
       // 1. Try to reinitialize agent That doesn't exist
-      const agentId = 'non-existent-agent';
+      const AGENT_ID = 'non-existent-agent';
       const reinitResult = await execAPI('reinitialize', [agentId], {
         projectRoot: testDir,
       });
@@ -386,7 +386,7 @@ describe('Agent Lifecycle Integration Tests', () => {
   describe('Stop Authorization Workflow', () => {
     test('should handle agent stop authorization process', async () => {
       // 1. Initialize agent
-      const agentId = 'stop-auth-agent';
+      const AGENT_ID = 'stop-auth-agent';
       const initResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });
@@ -476,7 +476,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
     test('should handle stop authorization without reason', async () => {
       // 1. Initialize agent
-      const agentId = 'no-reason-agent';
+      const AGENT_ID = 'no-reason-agent';
       const initResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });
@@ -502,7 +502,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
     test('should handle stop authorization by non-existent agent', async () => {
       // 1. Try to authorize stop with non-existent agent
-      const agentId = 'non-existent-stop-agent';
+      const AGENT_ID = 'non-existent-stop-agent';
       const stopReason = 'Testing stop authorization by non-existent agent';
 
       const stopResult = await execAPI(
@@ -577,7 +577,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       const initialReinits = initialStats.total_reinitializations;
 
       // 2. Perform various agent operations
-      const agentId = 'stats-test-agent';
+      const AGENT_ID = 'stats-test-agent';
 
       // Initialize
       const initResult = await execAPI('initialize', [agentId], {
@@ -722,7 +722,7 @@ describe('Agent Lifecycle Integration Tests', () => {
   describe('Complete Agent Lifecycle Scenarios', () => {
     test('should handle complete agent workflow from initialization to stop', async () => {
       // 1. Initialize agent
-      const agentId = 'complete-lifecycle-agent';
+      const AGENT_ID = 'complete-lifecycle-agent';
       const initResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });
@@ -850,7 +850,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
     test('should handle agent workflow error recovery', async () => {
       // 1. Initialize agent
-      const agentId = 'error-recovery-agent';
+      const AGENT_ID = 'error-recovery-agent';
       const initResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });

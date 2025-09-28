@@ -4,8 +4,8 @@
  * Fixes catch blocks that are missing the error parameter but reference 'error' inside
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 function fixFile(filePath) {

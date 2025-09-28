@@ -5,8 +5,8 @@
  * Focuses on patterns that can't be auto-fixed by ESLint.
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync } = require('child_process');
 const { loggers } = require('../lib/logger');
 
@@ -26,7 +26,7 @@ class ComprehensiveLintingFix {
       let newContent = content;
       let hasChanges = false;
 
-      // Pattern 1: catch (_error) { ... error.message }
+      // Pattern 1: catch { ... error.message }
       // Fix: Change error.message to _error.message
       const errorRefPattern = /catch\s*\(\s*_error\s*\)\s*\{[^}]*?error\./g;
       if (errorRefPattern.test(content)) {

@@ -253,7 +253,7 @@ class AUDIT_INTEGRATION {
    * @param {Object} projectCriteria - Project success criteria
    * @returns {string} Comprehensive audit description
    */
-  generateAuditDescription(originalTaskId, taskDetails, _PROJECT_CRITERIA) {
+  generateAuditDescription(originalTaskId, taskDetails, PROJECT_CRITERIA) {
     return `Comprehensive 25-point quality audit And review of completed implementation.
 
 **ORIGINAL TASK**: ${originalTaskId}
@@ -291,7 +291,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
    * @param {Object} projectCriteria - Project-specific success criteria
    * @returns {Array} Array of success criteria strings
    */
-  generate25PointSuccessCriteria(_PROJECT_CRITERIA) {
+  generate25PointSuccessCriteria(PROJECT_CRITERIA) {
     return [
       // Critical Gates (1-10) - MANDATORY
       'CRITICAL GATE #1: Linter perfection achieved (zero warnings/errors)',
@@ -375,7 +375,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       };
 
       return criteria;
-    } catch (error) {
+    } catch {
       this.logger.log(`⚠️ Could not load task requirements: ${error.message}`);
       return {};
     }
@@ -484,7 +484,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       } else {
         throw new Error(`TaskManager API error: ${JSON.stringify(result)}`);
       }
-    } catch (error) {
+    } catch {
       this.logger.error(`❌ Failed to create audit task: ${error.message}`);
       throw error;
     }
@@ -566,7 +566,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
         'development/logs/audit_integration.log',
         JSON.stringify(logEntry) + '\n',
       );
-    } catch (error) {
+    } catch {
       this.logger.log(`⚠️ Failed to log audit task creation: ${error.message}`);
     }
   }

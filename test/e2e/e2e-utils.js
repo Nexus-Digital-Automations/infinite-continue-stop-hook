@@ -631,7 +631,7 @@ class MultiAgentTestHelpers {
 
     // Create concurrent agent operations
     for (let i = 0; i < agentCount; i++) {
-      const agentId = `e2e-agent-${i}`;
+      const AGENT_ID = `e2e-agent-${i}`;
       const operations = [];
 
       for (let j = 0; j < operationsPerAgent; j++) {

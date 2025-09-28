@@ -80,7 +80,7 @@ describe('Security System', () => {
     });
 
     test('should authorize valid agent operations', () => {
-      const agentId = 'development_session_1234567890_1_general_abcdef';
+      const AGENT_ID = 'development_session_1234567890_1_general_abcdef';
       const OPERATION = 'create';
       const resource = { type: 'task', id: 'test_task' };
 
@@ -225,7 +225,7 @@ describe('Security System', () => {
     });
 
     test('should validate complete security workflow', () => {
-      const agentId = 'development_session_1234567890_1_general_abcdef';
+      const AGENT_ID = 'development_session_1234567890_1_general_abcdef';
       const taskData = {
         title: 'Security Test Task',
         description: 'Testing security validation',

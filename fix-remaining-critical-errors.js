@@ -1,8 +1,8 @@
 // Targeted script to fix remaining critical linting errors
 // Focuses on high-impact fixes without over-correction
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 console.log('🎯 TARGETED CRITICAL ERROR RESOLUTION'); // eslint-disable-line no-console
@@ -236,7 +236,7 @@ errorsByFile.forEach((errors, filePath) => {
   }
 
   try {
-    let content = fs.readFileSync(filePath, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename
+    let content = fs.readFileSync(filePath, 'utf8');
     let totalChanged = false;
 
     // Apply fixes in order
@@ -256,7 +256,7 @@ errorsByFile.forEach((errors, filePath) => {
     });
 
     if (totalChanged) {
-      fs.writeFileSync(filePath, content); // eslint-disable-line security/detect-non-literal-fs-filename
+      fs.writeFileSync(filePath, content);
       filesFixed++;
       console.log(`✅ Fixed: ${path.relative(rootDir, filePath)}`); // eslint-disable-line no-console
     }

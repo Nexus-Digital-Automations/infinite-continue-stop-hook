@@ -59,7 +59,7 @@ class PerformanceMonitor {
     }
   }
 
-  async measureOperation(operationName, operation) {
+  async measureOperation(operationName, _operation) {
     const startTime = performance.now();
     const startMemory = process.memoryUsage();
 
@@ -563,7 +563,7 @@ describe('Success Criteria Performance Tests', () => {
         const TOTAL_TIME = performance.now() - START_TIME;
 
         expect(TOTAL_TIME).toBeLessThan(30000);
-        expect(RESULTS).toHaveLength(10);
+        expect(_RESULTS).toHaveLength(10);
 
         RESULTS.forEach((result) => {
           expect(result.MEASUREMENT.duration).toBeLessThan(10000); // Individual ops should be fast

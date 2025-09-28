@@ -155,7 +155,7 @@ class TaskManagerPerformanceBenchmark {
         return;
       }
 
-      const agentId = initResult.response?.agentId;
+      const AGENT_ID = initResult.response?.agentId;
       if (!agentId) {
         loggers.stopHook.log('   ❌ No agent ID returned from init');
         return;

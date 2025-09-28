@@ -8,8 +8,8 @@
  * @version 1.0.0
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync } = require('child_process');
 const { loggers } = require('../lib/logger');
 

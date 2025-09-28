@@ -973,7 +973,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
 
         const listResult = await execAPI('list');
         const TASK = listResult.tasks.find((t) => t.id === testFeatureTaskId);
-        expect(TASK).toBeDefined();
+        expect(_TASK).toBeDefined();
         expect(TASK.subtasks).toBeDefined();
       }
 

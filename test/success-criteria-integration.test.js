@@ -205,7 +205,7 @@ describe('Success Criteria Integration Tests', () => {
       expect(listResult.success).toBe(true);
 
       const TASK = listResult.tasks.find((t) => t.id === taskId);
-      expect(TASK).toBeDefined();
+      expect(_TASK).toBeDefined();
     });
 
     test('should apply template to task success criteria', async () => {
@@ -296,7 +296,7 @@ describe('Success Criteria Integration Tests', () => {
       expect(listResult.success).toBe(true);
 
       const TASK = listResult.tasks.find((t) => t.id === createResult.task.id);
-      expect(TASK).toBeDefined();
+      expect(_TASK).toBeDefined();
     });
 
     test('should validate template application workflow', async () => {
@@ -320,7 +320,7 @@ describe('Success Criteria Integration Tests', () => {
       expect(listResult.success).toBe(true);
 
       const TASK = listResult.tasks.find((t) => t.id === TASK_ID);
-      expect(TASK).toBeDefined();
+      expect(_TASK).toBeDefined();
       expect(TASK.category).toBe('feature');
     });
   });
@@ -563,7 +563,7 @@ describe('Success Criteria Integration Tests', () => {
       expect(listResult.success).toBe(true);
 
       const TASK = listResult.tasks.find((t) => t.id === TASK_ID);
-      expect(TASK).toBeDefined();
+      expect(_TASK).toBeDefined();
       expect(TASK.success_criteria).toBeUndefined();
     });
   });
@@ -594,7 +594,7 @@ describe('Success Criteria Integration Tests', () => {
       expect(listResult.success).toBe(true);
 
       const TASK = listResult.tasks.find((t) => t.id === TASK_ID);
-      expect(TASK).toBeDefined();
+      expect(_TASK).toBeDefined();
       expect(TASK.status).toBe('in_progress');
       expect(TASK.assigned_agent).toBe(agentId);
     });
@@ -619,7 +619,7 @@ describe('Success Criteria Integration Tests', () => {
       expect(listResult.success).toBe(true);
 
       const TASK = listResult.tasks.find((t) => t.id === createResult.task.id);
-      expect(TASK).toBeDefined();
+      expect(_TASK).toBeDefined();
     });
 
     test('should handle concurrent modifications safely', async () => {
