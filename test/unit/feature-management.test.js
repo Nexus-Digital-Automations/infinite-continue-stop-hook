@@ -995,6 +995,7 @@ describe('Feature Management Lifecycle', () => {
 
         // Add features to existing data
         for (const feature of additionalFeatures) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup
           await api.suggestFeature(feature);
         }
 

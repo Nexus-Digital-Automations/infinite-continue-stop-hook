@@ -1160,20 +1160,18 @@ class CodeQualityAnalyzer {
 
     // Write report to file
     const reportsDir = 'coverage/reports';
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- Reports directory path validated by quality analyzer
+
     if (!fs.existsSync(reportsDir)) {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- Reports directory path validated by quality analyzer
       fs.mkdirSync(reportsDir, { recursive: true });
     }
 
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- Report file path validated by quality analyzer
     fs.writeFileSync(
       path.join(reportsDir, 'code-quality-report.json'),
       JSON.stringify(report, null, 2)
     );
 
     // Write summary for quick access
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- Report file path validated by quality analyzer
+
     fs.writeFileSync(
       path.join(reportsDir, 'quality-summary.json'),
       JSON.stringify(report.summary, null, 2)

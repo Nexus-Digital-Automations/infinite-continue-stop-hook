@@ -34,9 +34,8 @@ module.exports = () => {
 
   testDirs.forEach((dir) => {
     const fullPath = path.join(process.cwd(), dir);
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- Test directory path validated from trusted test configuration
+
     if (!fs.existsSync(fullPath)) {
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- Test directory path validated from trusted test configuration
       fs.mkdirSync(fullPath, { recursive: true });
       console.log(`📁 Created test directory: ${dir}`);
     }
@@ -44,13 +43,12 @@ module.exports = () => {
 
   // Clean up any leftover test files from previous runs
   const tempDir = path.join(process.cwd(), 'test/temp');
-  // eslint-disable-next-line security/detect-non-literal-fs-filename -- Temp directory path validated from trusted test configuration
+
   if (fs.existsSync(tempDir)) {
-    // eslint-disable-next-line security/detect-non-literal-fs-filename -- Temp directory path validated from trusted test configuration
     const entries = fs.readdirSync(tempDir);
     for (const entry of entries) {
       const entryPath = path.join(tempDir, entry);
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- Entry path constructed from validated temp directory
+
       const stat = fs.statSync(entryPath);
 
       // Remove files/directories older than 1 hour
@@ -168,7 +166,7 @@ module.exports = () => {
     // These will be enhanced in setup.js
     createTempFile: (name, content) => {
       const filePath = path.join(global.TEST_CONSTANTS.TEMP_DIR, name);
-      // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path constructed from validated temp directory
+
       fs.writeFileSync(filePath, content);
       return filePath;
     },

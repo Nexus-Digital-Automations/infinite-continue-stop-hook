@@ -5297,7 +5297,6 @@ class AutonomousTaskManagerAPI {
       )) {
         const fullPath = path.join(PROJECT_ROOT, filePath);
         if (fs.existsSync(fullPath)) {
-          // eslint-disable-next-line security/detect-non-literal-fs-filename -- Reading validated project file for success criteria validation
           const content = fs.readFileSync(fullPath, 'utf8');
           for (const pattern of patterns) {
             if (!content.includes(pattern)) {
@@ -5529,7 +5528,6 @@ class AutonomousTaskManagerAPI {
             const _fsSync = require('fs');
             if (_fsSync.existsSync('package.json')) {
               const packageJson = JSON.parse(
-                // eslint-disable-next-line security/detect-non-literal-fs-filename -- Reading standard package.json from project root
                 _fsSync.readFileSync('package.json', 'utf8')
               );
               const scripts = packageJson.scripts || {};
@@ -5570,7 +5568,6 @@ class AutonomousTaskManagerAPI {
             const _fsSync = require('fs');
             if (_fsSync.existsSync('package.json')) {
               const packageJson = JSON.parse(
-                // eslint-disable-next-line security/detect-non-literal-fs-filename -- Reading standard package.json from project root
                 _fsSync.readFileSync('package.json', 'utf8')
               );
               const scripts = packageJson.scripts || {};
@@ -5604,7 +5601,6 @@ class AutonomousTaskManagerAPI {
             const _fsSync = require('fs');
             if (_fsSync.existsSync('package.json')) {
               const packageJson = JSON.parse(
-                // eslint-disable-next-line security/detect-non-literal-fs-filename -- Reading standard package.json from project root
                 _fsSync.readFileSync('package.json', 'utf8')
               );
               const scripts = packageJson.scripts || {};
@@ -6040,7 +6036,6 @@ class AutonomousTaskManagerAPI {
         const _fs = require('fs');
         if (_fs.existsSync('package.json')) {
           const packageJson = JSON.parse(
-            // eslint-disable-next-line security/detect-non-literal-fs-filename -- Reading standard package.json from project root
             _fs.readFileSync('package.json', 'utf8')
           );
           const deps = {
@@ -6066,7 +6061,6 @@ class AutonomousTaskManagerAPI {
         const _fs = require('fs');
         if (_fs.existsSync('package.json')) {
           const packageJson = JSON.parse(
-            // eslint-disable-next-line security/detect-non-literal-fs-filename -- Reading standard package.json from project root
             _fs.readFileSync('package.json', 'utf8')
           );
 
@@ -12081,7 +12075,6 @@ async function main() {
         );
     }
 
-    // eslint-disable-next-line no-console -- CLI output for API response data
     console.log(JSON.stringify(result, null, 2));
   } catch (_error) {
     const errorResponse = {
@@ -12092,7 +12085,6 @@ async function main() {
       guide: api._getFallbackGuide('autonomous-task-management'),
     };
 
-    // eslint-disable-next-line no-console -- CLI error output for API error responses
     console.error(JSON.stringify(errorResponse, null, 2));
     throw new Error('Autonomous Task Management API execution failed');
   } finally {
@@ -12106,7 +12098,6 @@ module.exports = AutonomousTaskManagerAPI;
 // Run CLI if called directly (CommonJS equivalent)
 if (require.main === module) {
   main().catch((error) => {
-    // eslint-disable-next-line no-console -- CLI error output for unhandled errors
     console.error(error.message);
     throw error;
   });

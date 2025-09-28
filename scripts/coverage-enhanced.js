@@ -320,7 +320,6 @@ class EnhancedCoverageSystem {
 
         // eslint-disable-next-line security/detect-non-literal-fs-filename -- Source file path validated by coverage system
         if (fs.statSync(source).isFile()) {
-          // eslint-disable-next-line security/detect-non-literal-fs-filename -- Source and destination paths validated by coverage system
           fs.copyFileSync(source, dest);
         }
       });
