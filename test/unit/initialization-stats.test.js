@@ -761,6 +761,7 @@ describe('Initialization Statistics', () => {
           const dateStr = `2025-01-${day.toString().padStart(2, '0')}`;
           timeUtils.mockCurrentTimeISO(`${dateStr}T12:00:00.000Z`);
 
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for extensive daily history testing
           await api._updateTimeBucketStats('init');
 
           // Force day change
