@@ -28,7 +28,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
       });
 
       return JSON.parse(output.trim());
-    } catch (error) {
+    } catch (_error) {
       if (error.stdout) {
         try {
           return JSON.parse(error.stdout.trim());

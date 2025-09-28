@@ -13,7 +13,7 @@ function getAllJsFiles() {
       .trim()
       .split('\n')
       .filter((f) => f && f.endsWith('.js'));
-  } catch (error) {
+  } catch (_error) {
     console.error('Failed to get JS files:', error.message);
     return [];
   }

@@ -210,7 +210,7 @@ class SystematicLintingFixer {
       // result not defined when RESULT exists
       { pattern: /(?<!['"`])(\s+)result(?=\.)/g, replacement: '$1RESULT' },
 
-      // Common variable name mismatches
+      // Common variable Name mismatches
       { pattern: /([^a-zA-Z_$])fs\./g, replacement: '$1FS.' },
       { pattern: /([^a-zA-Z_$])path\./g, replacement: '$1PATH.' },
     ];

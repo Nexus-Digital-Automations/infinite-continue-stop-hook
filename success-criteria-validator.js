@@ -101,131 +101,131 @@ class SuccessCriteriaValidator {
     return [
       {
         id: 1,
-        name: 'Linter Perfection',
+        Name: 'Linter Perfection',
         category: 'quality',
         automated: true,
       },
-      { id: 2, name: 'Build Success', category: 'quality', automated: true },
-      { id: 3, name: 'Runtime Success', category: 'quality', automated: true },
-      { id: 4, name: 'Test Integrity', category: 'quality', automated: true },
+      { id: 2, Name: 'Build Success', category: 'quality', automated: true },
+      { id: 3, Name: 'Runtime Success', category: 'quality', automated: true },
+      { id: 4, Name: 'Test Integrity', category: 'quality', automated: true },
       {
         id: 5,
-        name: 'Function Documentation',
+        Name: 'Function Documentation',
         category: 'documentation',
         automated: false,
       },
       {
         id: 6,
-        name: 'API Documentation',
+        Name: 'API Documentation',
         category: 'documentation',
         automated: false,
       },
       {
         id: 7,
-        name: 'Architecture Documentation',
+        Name: 'Architecture Documentation',
         category: 'documentation',
         automated: false,
       },
       {
         id: 8,
-        name: 'Decision Rationale',
+        Name: 'Decision Rationale',
         category: 'documentation',
         automated: false,
       },
       {
         id: 9,
-        name: 'Error Handling',
+        Name: 'Error Handling',
         category: 'implementation',
         automated: false,
       },
       {
         id: 10,
-        name: 'Performance Metrics',
+        Name: 'Performance Metrics',
         category: 'performance',
         automated: true,
       },
       {
         id: 11,
-        name: 'Security Review',
+        Name: 'Security Review',
         category: 'security',
         automated: true,
       },
       {
         id: 12,
-        name: 'Architectural Consistency',
+        Name: 'Architectural Consistency',
         category: 'architecture',
         automated: false,
       },
       {
         id: 13,
-        name: 'Dependency Validation',
+        Name: 'Dependency Validation',
         category: 'dependencies',
         automated: true,
       },
       {
         id: 14,
-        name: 'Version Compatibility',
+        Name: 'Version Compatibility',
         category: 'compatibility',
         automated: true,
       },
-      { id: 15, name: 'Security Audit', category: 'security', automated: true },
+      { id: 15, Name: 'Security Audit', category: 'security', automated: true },
       {
         id: 16,
-        name: 'Cross-Platform',
+        Name: 'Cross-Platform',
         category: 'compatibility',
         automated: true,
       },
       {
         id: 17,
-        name: 'Environment Variables',
+        Name: 'Environment Variables',
         category: 'configuration',
         automated: false,
       },
       {
         id: 18,
-        name: 'Configuration',
+        Name: 'Configuration',
         category: 'configuration',
         automated: false,
       },
       {
         id: 19,
-        name: 'No Credential Exposure',
+        Name: 'No Credential Exposure',
         category: 'security',
         automated: true,
       },
       {
         id: 20,
-        name: 'Input Validation',
+        Name: 'Input Validation',
         category: 'security',
         automated: true,
       },
       {
         id: 21,
-        name: 'Output Encoding',
+        Name: 'Output Encoding',
         category: 'security',
         automated: true,
       },
       {
         id: 22,
-        name: 'Authentication/Authorization',
+        Name: 'Authentication/Authorization',
         category: 'security',
         automated: false,
       },
       {
         id: 23,
-        name: 'License Compliance',
+        Name: 'License Compliance',
         category: 'compliance',
         automated: true,
       },
       {
         id: 24,
-        name: 'Data Privacy',
+        Name: 'Data Privacy',
         category: 'compliance',
         automated: false,
       },
       {
         id: 25,
-        name: 'Regulatory Compliance',
+        Name: 'Regulatory Compliance',
         category: 'compliance',
         automated: false,
       },
@@ -275,7 +275,7 @@ class SuccessCriteriaValidator {
       if (criteria) {
         inheritedCriteria.push(
           ...criteria.criteria.map((c) => ({
-            name: c,
+            Name: c,
             category: criteriaSet,
             mandatory: criteria.mandatory,
             validation_method: criteria.validation_method,
@@ -299,61 +299,61 @@ class SuccessCriteriaValidator {
         continue;
       }
 
-      ValidationLogger.log(`🔍 Validating: ${criterion.name}`);
+      ValidationLogger.log(`🔍 Validating: ${criterion.Name}`);
 
       try {
-        switch (criterion.name) {
+        switch (criterion.Name) {
           case 'Linter Perfection':
-            results[criterion.name] = this.validateLinting();
+            results[criterion.Name] = this.validateLinting();
             break;
           case 'Build Success':
-            results[criterion.name] = this.validateBuild();
+            results[criterion.Name] = this.validateBuild();
             break;
           case 'Runtime Success':
-            results[criterion.name] = this.validateRuntime();
+            results[criterion.Name] = this.validateRuntime();
             break;
           case 'Test Integrity':
-            results[criterion.name] = this.validateTests();
+            results[criterion.Name] = this.validateTests();
             break;
           case 'Performance Metrics':
-            results[criterion.name] = this.validatePerformance();
+            results[criterion.Name] = this.validatePerformance();
             break;
           case 'Security Review':
-            results[criterion.name] = await this.validateSecurity();
+            results[criterion.Name] = await this.validateSecurity();
             break;
           case 'Dependency Validation':
-            results[criterion.name] = this.validateDependencies();
+            results[criterion.Name] = this.validateDependencies();
             break;
           case 'Version Compatibility':
-            results[criterion.name] = this.validateCompatibility();
+            results[criterion.Name] = this.validateCompatibility();
             break;
           case 'Security Audit':
-            results[criterion.name] = this.validateSecurityAudit();
+            results[criterion.Name] = this.validateSecurityAudit();
             break;
           case 'Cross-Platform':
-            results[criterion.name] = this.validateCrossPlatform();
+            results[criterion.Name] = this.validateCrossPlatform();
             break;
           case 'No Credential Exposure':
-            results[criterion.name] = this.validateCredentialExposure();
+            results[criterion.Name] = this.validateCredentialExposure();
             break;
           case 'Input Validation':
-            results[criterion.name] = this.validateInputValidation();
+            results[criterion.Name] = this.validateInputValidation();
             break;
           case 'Output Encoding':
-            results[criterion.name] = this.validateOutputEncoding();
+            results[criterion.Name] = this.validateOutputEncoding();
             break;
           case 'License Compliance':
-            results[criterion.name] = this.validateLicenseCompliance();
+            results[criterion.Name] = this.validateLicenseCompliance();
             break;
           default:
-            results[criterion.name] = {
+            results[criterion.Name] = {
               status: 'pending',
               message: 'Automated validation not implemented',
               evidence: null,
             };
         }
       } catch {
-        results[criterion.name] = {
+        results[criterion.Name] = {
           status: 'failed',
           message: error.message,
           evidence: null,
@@ -720,16 +720,16 @@ class SuccessCriteriaValidator {
       const jsFiles = [];
 
       for (const file of files) {
-        const filePath = path.join(dir, file.name);
+        const filePath = path.join(dir, file.Name);
         if (
           file.isDirectory() &&
-          !file.name.startsWith('.') &&
-          file.name !== 'node_modules'
+          !file.Name.startsWith('.') &&
+          file.Name !== 'node_modules'
         ) {
           directories.push(filePath);
         } else if (
           file.isFile() &&
-          (file.name.endsWith('.js') || file.name.endsWith('.json'))
+          (file.Name.endsWith('.js') || file.Name.endsWith('.json'))
         ) {
           jsFiles.push(filePath);
         }

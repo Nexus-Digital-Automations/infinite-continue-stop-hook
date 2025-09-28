@@ -358,7 +358,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const executeCustomValidation = (rule) => {
         try {
-          const RESULT = execSync(rule.command, {
+          execSync(rule.command, {
             timeout: rule.timeout || 60000,
             encoding: 'utf8',
           });
@@ -558,7 +558,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const executeCustomValidation = (rule) => {
         try {
-          const RESULT = execSync(rule.command, {
+          execSync(rule.command, {
             timeout: rule.timeout || 60000,
             encoding: 'utf8',
           });

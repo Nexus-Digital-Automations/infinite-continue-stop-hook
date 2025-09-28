@@ -55,7 +55,7 @@
  *
  * === COMMAND LINE INTERFACE ===
  * • --no-interactive / --batch: Skip interactive prompts
- * • --project-name: Specify project name
+ * • --project-Name: Specify project Name
  * • --task: Initial task description
  * • --mode: Task execution mode
  * • --prompt: Detailed task instructions
@@ -69,7 +69,7 @@
  *    node setup-infinite-hook.js /path/to/project
  *
  * 2. Batch Setup:
- *    node setup-infinite-hook.js --batch --project-name "MyProject"
+ *    node setup-infinite-hook.js --batch --project-Name "MyProject"
  *
  * 3. Single Project:
  *    node setup-infinite-hook.js /path/to/project --single
@@ -95,7 +95,7 @@ const projectPath =
 // Check for command line flags
 const flags = {
   noInteractive: args.includes('--no-interactive') || args.includes('--batch'),
-  projectName: getArgValue('--project-name'),
+  projectName: getArgValue('--project-Name'),
   task: getArgValue('--task'),
   mode: getArgValue('--mode') || 'DEVELOPMENT',
   prompt: getArgValue('--prompt'),
@@ -122,7 +122,7 @@ function question(prompt) {
 }
 
 async function getProjectInfo(targetPath) {
-  // Try to detect project name from package.json or directory name
+  // Try to detect project Name from package.json or directory Name
   let detectedName = path.basename(targetPath);
 
   const packageJsonPath = path.join(targetPath, 'package.json');
@@ -130,11 +130,11 @@ async function getProjectInfo(targetPath) {
   if (FS.existsSync(packageJsonPath)) {
     try {
       const packageJson = JSON.parse(FS.readFileSync(packageJsonPath, 'utf8'));
-      if (packageJson.name) {
-        detectedName = packageJson.name;
+      if (packageJson.Name) {
+        detectedName = packageJson.Name;
       }
     } catch {
-      // Ignore And use directory name
+      // Ignore And use directory Name
     }
   }
 
@@ -161,7 +161,7 @@ async function getProjectInfo(targetPath) {
 
   loggers.stopHook.log('\n=== Project Configuration ===');
   const projectName =
-    (await question(`Project name (${detectedName}): `)) || detectedName;
+    (await question(`Project Name (${detectedName}): `)) || detectedName;
 
   loggers.stopHook.log('\n=== Initial Task Setup ===');
   const taskDescription = await question('Task description: ');
@@ -622,7 +622,7 @@ function extractPhaseFromTitle(title) {
  * @returns {string} Generated feature title
  */
 function generateFeatureTitle(phaseKey, sampleTitle) {
-  // Extract feature name from task title
+  // Extract feature Name from task title
 
   // Use string parsing instead of regex to avoid security warnings
   const lowerTitle = sampleTitle.toLowerCase();

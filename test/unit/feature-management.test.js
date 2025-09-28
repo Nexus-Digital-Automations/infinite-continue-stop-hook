@@ -794,7 +794,7 @@ describe('Feature Management Lifecycle', () => {
         expect(result.error_count).toBe(3);
         expect(result.errors).toHaveLength(3);
 
-        result.errors.forEach((_error) => {
+        result.errors.forEach((error) => {
           expect(error).toContain('not found');
         });
       });

@@ -18,33 +18,33 @@ function findClaudeProjectRoot(startDir = process.cwd()) {
   let currentDir = startDir;
 
   // Look for "Claude Coding Projects" in the path And check for TASKS.json
-  while (currentDir !== path.dirname(currentDir)) {
+  while (currentDir !== PATH.dirname(currentDir)) {
     // Not at filesystem root
     // Check if we're in or found "Claude Coding Projects"
     if (currentDir.includes('Claude Coding Projects')) {
       // Look for TASKS.json in potential project roots
-      const segments = currentDir.split(path.sep);
+      const segments = currentDir.split(PATH.sep);
       const claudeIndex = segments.findIndex((segment) =>
         segment.includes('Claude Coding Projects'),
       );
 
       if (claudeIndex !== -1 && claudeIndex < segments.length - 1) {
         // Try the next directory after "Claude Coding Projects"
-        const projectDir = segments.slice(0, claudeIndex + 2).join(path.sep);
+        const projectDir = segments.slice(0, claudeIndex + 2).join(PATH.sep);
         // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script validating project structure with computed paths
-        if (FS.existsSync(path.join(projectDir, 'TASKS.json'))) {
+        if (FS.existsSync(PATH.join(projectDir, 'TASKS.json'))) {
           return projectDir;
         }
       }
 
       // Also check current directory
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script validating project structure with computed paths
-      if (FS.existsSync(path.join(currentDir, 'TASKS.json'))) {
+      if (FS.existsSync(PATH.join(currentDir, 'TASKS.json'))) {
         return currentDir;
       }
     }
 
-    currentDir = path.dirname(currentDir);
+    currentDir = PATH.dirname(currentDir);
   }
 
   // Fallback to original behavior
@@ -60,7 +60,7 @@ function findClaudeProjectRoot(startDir = process.cwd()) {
  * Provides real-time visibility into validation progress, completion percentage, detailed status,
  * dependency relationships, And intelligent execution planning
  */
-function generateValidationProgressReport(flagData, logger, workingDir) {
+function generateValidationProgressReport(flagData, logger, _workingDir) {
   // Initialize dependency manager for intelligent validation ordering
   const dependencyManager = new VALIDATION_DEPENDENCY_MANAGER(workingDir);
 
@@ -109,7 +109,7 @@ function generateValidationProgressReport(flagData, logger, workingDir) {
 
   // Use dependency-aware validation criteria in execution order
   const customRules = loadCustomValidationRules(workingDir);
-  const CUSTOM_CRITERIA_IDS = customRules.map((rule) => rule.id);
+  // const CUSTOM_CRITERIA_IDS = customRules.map((rule) => rule.id);
 
   // Add any custom criteria to dependency manager
   customRules.forEach((rule) => {
@@ -117,7 +117,7 @@ function generateValidationProgressReport(flagData, logger, workingDir) {
       dependencies: rule.dependencies || [],
       parallel_group: rule.parallel_group || 'custom',
       estimated_duration: rule.estimated_duration || 60,
-      description: rule.description || rule.name || '',
+      description: rule.description || rule.Name || '',
     });
   });
 
@@ -127,7 +127,7 @@ function generateValidationProgressReport(flagData, logger, workingDir) {
   // Process validation results from flag data
   if (flagData.validation_results) {
     for (const criteria of validationCriteria) {
-      const RESULT = flagData.validation_results[criteria];
+      const result = flagData.validation_results[criteria];
       if (result) {
         progressReport.validationDetails.push({
           criterion: criteria,
@@ -204,7 +204,7 @@ function generateValidationProgressReport(flagData, logger, workingDir) {
  * Provides comprehensive visibility into validation progress And status
  */
 function checkStopAllowed(workingDir = process.cwd()) {
-  const stopFlagPath = path.join(workingDir, '.stop-allowed');
+  const stopFlagPath = PATH.join(workingDir, '.stop-allowed');
 
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated working directory path
   if (FS.existsSync(stopFlagPath)) {
@@ -290,7 +290,7 @@ When running the multi-step authorization protocol, progress will be displayed h
  * @returns {Object} Cleanup results
  */
 function cleanupStaleAgentsInProject(projectPath, logger) {
-  const todoPath = path.join(projectPath, 'TASKS.json');
+  const todoPath = PATH.join(projectPath, 'TASKS.json');
 
   // Check if TASKS.json exists in this project
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook path validated through hook configuration system
@@ -461,7 +461,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook path validated through hook configuration system
       if (FS.existsSync(projectPath)) {
-        const RESULT = await cleanupStaleAgentsInProject(projectPath, logger);
+        const result = await cleanupStaleAgentsInProject(projectPath, logger);
         return result;
       } else {
         logger.addFlow(
@@ -512,7 +512,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
 /**
  * Automatically reclassify test errors And sort tasks according to CLAUDE.md priority rules
  */
-async function autoSortTasksByPriority(taskManager) {
+async function autoSortTasksByPriority(_taskManager) {
   try {
     const todoData = await taskManager.readTodo();
     let tasksMoved = 0;
@@ -803,14 +803,14 @@ function provideInstructiveTaskGuidance(taskManager, taskStatus) {
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" list-features
 
    # Read development/essentials/ files
-   ls development/essentials/ 2>/dev/null && find development/essentials/ -type f -name "*.md" -exec echo "=== {} ===" \\; -exec cat {} \\;
+   ls development/essentials/ 2>/dev/null && find development/essentials/ -type f -Name "*.md" -exec echo "=== {} ===" \\; -exec cat {} \\;
 
    # Check current feature status
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" list-features
 
 **FEATURE MANAGEMENT:**
    # Suggest new feature
-   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" suggest-feature '{"title":"Feature name", "description":"Feature details", "business_value":"Value proposition", "category":"enhancement"}'
+   timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" suggest-feature '{"title":"Feature Name", "description":"Feature details", "business_value":"Value proposition", "category":"enhancement"}'
 
    # Approve suggested feature (user-only)
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" approve-feature [FEATURE_ID] '{"approved_by":"user", "notes":"Approval reason"}'
@@ -979,7 +979,7 @@ This is the expected behavior when the /done command is used.
     }
 
     // Check if TASKS.json exists in current project
-    const todoPath = path.join(workingDir, 'TASKS.json');
+    const todoPath = PATH.join(workingDir, 'TASKS.json');
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated paths from project structure
     if (!FS.existsSync(todoPath)) {
       logger.addFlow('No TASKS.json found - this is not a TaskManager project');
@@ -1674,7 +1674,7 @@ This system operates in infinite continue mode. To authorize a stop, use:
     // eslint-disable-next-line n/no-process-exit
     process.exit(2); // Always continue - never allow natural stops
   } catch (error) {
-    console.error('DETAILED ERROR DEBUG:', error.name, ':', error.message);
+    console.error('DETAILED ERROR DEBUG:', error.Name, ':', error.message);
     console.error('STACK TRACE:', error.stack);
     loggers.app.error('stop-hook-main error:', error);
     loggers.app.info(

@@ -78,7 +78,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
       }
     });
 
-    child.on('error', (_error) => {
+    child.on('error', (error) => {
       reject(new Error(`Command execution failed: ${error.message}`));
     });
   });

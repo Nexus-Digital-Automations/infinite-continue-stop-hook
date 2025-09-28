@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * Final fix for name vs name property inconsistencies
+ * Final fix for Name vs Name property inconsistencies
  */
 
 function fixFinalNameIssues(filePath) {
@@ -11,80 +11,78 @@ function fixFinalNameIssues(filePath) {
     let fixed = content;
     let changes = 0;
 
-    // Fix name: to name: in object properties (more specific pattern)
+    // Fix Name: to Name: in object properties (more specific pattern)
     const beforeNameProp = fixed;
-    fixed = fixed.replace(/(\s+)name:\s*([^,\n}]+)/g, '$1name: $2');
+    fixed = fixed.replace(/(\s+)Name:\s*([^,\n}]+)/g, '$1name: $2');
     if (beforeNameProp !== fixed) {
       changes++;
       console.log(
-        `Fixed name: property declarations in ${path.basename(filePath)}`
+        `Fixed Name: property declarations in ${path.basename(filePath)}`,
       );
     }
 
-    // Fix { name, config } destructuring to { name, config }
+    // Fix { Name, config } destructuring to { Name, config }
     const beforeNameDestructure = fixed;
-    fixed = fixed.replace(/\{\s*name\s*,\s*config\s*\}/g, '{ name, config }');
+    fixed = fixed.replace(/\{\s*Name\s*,\s*config\s*\}/g, '{ Name, config }');
     if (beforeNameDestructure !== fixed) {
       changes++;
       console.log(
-        `Fixed { name, config } destructuring in ${path.basename(filePath)}`
+        `Fixed { Name, config } destructuring in ${path.basename(filePath)}`,
       );
     }
 
-    // Fix ${name} template literals to ${name}
+    // Fix ${Name} template literals to ${Name}
     const beforeNameTemplate = fixed;
-    fixed = fixed.replace(/\$\{name\}/g, '${name}');
+    fixed = fixed.replace(/\$\{Name\}/g, '${Name}');
     if (beforeNameTemplate !== fixed) {
       changes++;
-      console.log(
-        `Fixed ${name} template literals in ${path.basename(filePath)}`
-      );
+      console.log(`Fixed template literals in ${path.basename(filePath)}`);
     }
 
-    // Fix testDependencies.push(name) to testDependencies.push(name)
+    // Fix testDependencies.push(Name) to testDependencies.push(Name)
     const beforeNamePush = fixed;
     fixed = fixed.replace(
-      /testDependencies\.push\(name\)/g,
-      'testDependencies.push(name)'
+      /testDependencies\.push\(Name\)/g,
+      'testDependencies.push(Name)',
     );
     if (beforeNamePush !== fixed) {
       changes++;
       console.log(
-        `Fixed testDependencies.push(name) in ${path.basename(filePath)}`
+        `Fixed testDependencies.push(Name) in ${path.basename(filePath)}`,
       );
     }
 
-    // Fix step.name to step.name
+    // Fix step.Name to step.Name
     const beforeStepName = fixed;
-    fixed = fixed.replace(/step\.name/g, 'step.name');
+    fixed = fixed.replace(/step\.Name/g, 'step.Name');
     if (beforeStepName !== fixed) {
       changes++;
-      console.log(`Fixed step.name references in ${path.basename(filePath)}`);
+      console.log(`Fixed step.Name references in ${path.basename(filePath)}`);
     }
 
-    // Fix systemConfig.name to systemConfig.name
+    // Fix systemConfig.Name to systemConfig.Name
     const beforeSystemConfigName = fixed;
-    fixed = fixed.replace(/systemConfig\.name/g, 'systemConfig.name');
+    fixed = fixed.replace(/systemConfig\.Name/g, 'systemConfig.Name');
     if (beforeSystemConfigName !== fixed) {
       changes++;
       console.log(
-        `Fixed systemConfig.name references in ${path.basename(filePath)}`
+        `Fixed systemConfig.Name references in ${path.basename(filePath)}`,
       );
     }
 
-    // Fix baselineTest.name to baselineTest.name
+    // Fix baselineTest.Name to baselineTest.Name
     const beforeBaselineTestName = fixed;
-    fixed = fixed.replace(/baselineTest\.name/g, 'baselineTest.name');
+    fixed = fixed.replace(/baselineTest\.Name/g, 'baselineTest.Name');
     if (beforeBaselineTestName !== fixed) {
       changes++;
       console.log(
-        `Fixed baselineTest.name references in ${path.basename(filePath)}`
+        `Fixed baselineTest.Name references in ${path.basename(filePath)}`,
       );
     }
 
     if (changes > 0) {
       fs.writeFileSync(filePath, fixed);
-      console.log(`Fixed ${changes} final name issues in: ${filePath}`);
+      console.log(`Fixed ${changes} final Name issues in: ${filePath}`);
       return true;
     }
 
@@ -130,4 +128,4 @@ for (const file of e2eFiles) {
   }
 }
 
-console.log(`Fixed final name issues in ${fixedCount} E2E test files.`);
+console.log(`Fixed final Name issues in ${fixedCount} E2E test files.`);

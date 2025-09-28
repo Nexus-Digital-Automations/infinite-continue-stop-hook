@@ -478,7 +478,7 @@ class TaskMigrator {
 
     // Check required fields
     if (!tasksData.project) {
-      throw new Error('Missing project name');
+      throw new Error('Missing project Name');
     }
     if (!tasksData.schema_version) {
       throw new Error('Missing schema version');

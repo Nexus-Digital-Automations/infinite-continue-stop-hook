@@ -106,7 +106,7 @@ class ComprehensiveLintingFix {
       let newContent = content;
       let hasChanges = false;
 
-      // Pattern: } catch (error) { with no usage of _error
+      // Pattern: } catch (_error) { with no usage of _error
       const catchBlockPattern = /}\s*catch\s*\(\s*_error\s*\)\s*\{([^}]*)\}/g;
 
       let match;

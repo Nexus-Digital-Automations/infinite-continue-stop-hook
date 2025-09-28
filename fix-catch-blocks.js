@@ -39,7 +39,7 @@ function fixCatchBlocks(filePath) {
 
         // If error is used, fix the catch declaration
         if (usesError) {
-          lines[i] = line.replace('} catch {', '} catch (error) {');
+          lines[i] = line.replace('} catch {', '} catch (_error) {');
           modified = true;
           console.log(`Fixed catch block at line ${i + 1}`);
         }

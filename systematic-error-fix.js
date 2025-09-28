@@ -58,7 +58,7 @@ function filePath(_$2) {`);
     });
 
     // Fix catch blocks with undefined error variables
-    // Pattern: catch (_error) { ... error.something ... }
+    // Pattern: catch (error) { ... error.something ... }
     const catchBlockRegex =
       /catch\s*\(\s*\)\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g;
     let match;

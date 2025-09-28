@@ -5,7 +5,7 @@
 
 /* eslint-disable security/detect-non-literal-fs-filename */
 const FS = require('fs');
-const path = require('path');
+const PATH = require('path');
 const { execSync } = require('child_process');
 const { loggers } = require('./lib/logger');
 
@@ -47,7 +47,7 @@ const catchBlockFixes = [
   {
     pattern: /catch\s*\(\s*\)\s*\{([^{}]*\berror\b[^{}]*)\}/g,
     replacement: (match, _blockContent) => {
-      return match.replace(/catch\s*\(\s*\)\s*\{/, 'catch (error) {');
+      return match.replace(/catch\s*\(\s*\)\s*\{/, 'catch (_error) {');
     },
   },
 ];
@@ -90,13 +90,14 @@ function fixFile(filePath) {
     });
 
     // Handle multi-line catch blocks that reference _error or error
+    // eslint-disable-next-line security/detect-unsafe-regex
     const multiLineCatchRegex =
       /catch\s*\(\s*\)\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/gs;
     let match;
     const replacements = [];
 
     while ((match = multiLineCatchRegex.exec(content)) !== null) {
-      const BLOCK_CONTENT = match[1];
+      const blockContent = match[1];
       if (blockContent.includes('_error')) {
         replacements.push({
           original: match[0],
@@ -110,7 +111,7 @@ function fixFile(filePath) {
           original: match[0],
           replacement: match[0].replace(
             /catch\s*\(\s*\)\s*\{/,
-            'catch (error) {'
+            'catch (_error) {'
           ),
         });
       }
@@ -129,9 +130,9 @@ function fixFile(filePath) {
     }
 
     return false;
-  } catch (fixError) {
+  } catch (_fixError) {
     loggers.app.error(`Error fixing ${filePath}:`, {
-      error: fixError.message,
+      error: _fixError.message,
     });
     return false;
   }
@@ -161,7 +162,7 @@ loggers.app.info(`📊 Processing ${allFiles.length} JavaScript files...`);
 
 let fixedCount = 0;
 allFiles.forEach((file) => {
-  if (applyComprehensiveFixes(file)) {
+  if (fixFile(file)) {
     fixedCount++;
   }
 });
@@ -173,7 +174,7 @@ loggers.app.info('🔧 Running autofix after comprehensive fixes...');
 try {
   execSync('npm run lint -- --fix', { cwd: rootDir, stdio: 'inherit' });
   loggers.app.info('✅ Autofix completed successfully');
-} catch (autofixError) {
+} catch (_autofixError) {
   loggers.app.warn('⚠️ Autofix completed with some remaining issues');
 }
 

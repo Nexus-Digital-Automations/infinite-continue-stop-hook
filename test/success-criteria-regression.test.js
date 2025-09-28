@@ -220,7 +220,7 @@ describe('Regression Test Suite', () => {
     await FS.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     loggers.stopHook.log('Regression test project setup completed');
-  } catch (error) {
+  } catch (_error) {
     loggers.stopHook.error('Failed to setup regression test project:', error);
     throw error;
   }
@@ -230,7 +230,7 @@ async function cleanupRegressionTestProject() {
   try {
     await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Regression test project cleanup completed');
-  } catch (error) {
+  } catch (_error) {
     loggers.stopHook.error('Failed to cleanup regression test project:', error);
   }
 }
@@ -375,7 +375,7 @@ describe('Success Criteria Regression Tests', () => {
 
           const status = await execAPI('success-criteria:status');
           expect(status.projectCriteria.length).toBeGreaterThan(0);
-        } catch (error) {
+        } catch (_error) {
           // Log version compatibility issues but don't fail test
           loggers.app.info(
             `API version ${version} compatibility note:`,
@@ -680,7 +680,7 @@ describe('Success Criteria Regression Tests', () => {
           loggers.stopHook.log(
             `Schema ${schema.version} compatibility confirmed`
           );
-        } catch (error) {
+        } catch (_error) {
           loggers.app.info(
             `Schema ${schema.version} evolution note:`,
             _error.message
@@ -858,7 +858,7 @@ describe('Success Criteria Regression Tests', () => {
               RESULT.warning || 'Endpoint is deprecated'
             );
           }
-        } catch (error) {
+        } catch (_error) {
           // Some deprecated endpoints might be completely removed
           loggers.app.info(
             `Deprecated endpoint ${endpoint} is no longer available:`,
@@ -976,7 +976,7 @@ describe('Success Criteria Regression Tests', () => {
           loggers.app.info(
             `Template version ${template.version} compatibility confirmed`
           );
-        } catch (error) {
+        } catch (_error) {
           loggers.app.info(
             `Template version ${template.version} compatibility issue:`,
             _error.message
