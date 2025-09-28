@@ -9,7 +9,7 @@ const {
   ValidationDependencyManager,
   DEPENDENCY_TYPES,
 } = require('../../lib/validation-dependency-manager');
-const _FS = require('fs').promises;
+const FS = require('fs').promises;
 
 describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
   let dependencyManager;
@@ -430,7 +430,6 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(configPath).toContain('.validation-dependencies.json');
 
       // Verify file exists And contains valid JSON
-      const _FS = require('fs').promises;
       const configData = await FS.readFile(configPath, 'utf8');
       const config = JSON.parse(configData);
 
