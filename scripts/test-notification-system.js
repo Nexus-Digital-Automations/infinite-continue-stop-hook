@@ -24,7 +24,7 @@ class TestNotificationSystem {
       coverageThreshold: parseFloat(process.env.COVERAGE_THRESHOLD || '80'),
       testFailureThreshold: parseInt(process.env.TEST_FAILURE_THRESHOLD || '0'),
       coverageDropThreshold: parseFloat(
-        process.env.COVERAGE_DROP_THRESHOLD || '5',
+        process.env.COVERAGE_DROP_THRESHOLD || '5'
       ),
       notificationLevel: process.env.NOTIFICATION_LEVEL || 'all', // all, failures-only, critical-only
       historyFile: './coverage/notifications/history.json',
@@ -50,7 +50,7 @@ class TestNotificationSystem {
       const notifications = await this.analyzeAndGenerateNotifications(
         testResults,
         coverageData,
-        cicdData,
+        cicdData
       );
 
       if (notifications.length === 0) {
@@ -88,7 +88,7 @@ class TestNotificationSystem {
     // Coverage threshold notifications
     if (coverageData && this.isCoverageBelowThreshold(coverageData)) {
       notifications.push(
-        this.createCoverageThresholdNotification(coverageData),
+        this.createCoverageThresholdNotification(coverageData)
       );
     }
 
@@ -592,7 +592,7 @@ class TestNotificationSystem {
 
       fs.writeFileSync(
         this.options.historyFile,
-        JSON.stringify(this.notificationHistory, null, 2),
+        JSON.stringify(this.notificationHistory, null, 2)
       );
     } catch (error) {
       console.warn('⚠️ Could not update notification history:', error.message);
@@ -614,7 +614,7 @@ class TestNotificationSystem {
       } else {
         console.log(
           `❌ Notification ${index + 1} failed:`,
-          result.reason.message,
+          result.reason.message
         );
       }
     });

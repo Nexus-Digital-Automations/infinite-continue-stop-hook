@@ -39,7 +39,7 @@ async function testLearningRecommendationEngine() {
       {
         strategy: 'hybrid',
         limit: 5,
-      },
+      }
     );
     console.log('Recommendations result:', {
       success: recommendations.success,
@@ -84,7 +84,7 @@ async function testLearningRecommendationEngine() {
     });
 
     console.log(
-      '\n✅ Feature 6: Learning Recommendation Engine integration test completed successfully!',
+      '\n✅ Feature 6: Learning Recommendation Engine integration test completed successfully!'
     );
   } catch (error) {
     console.error('❌ Feature 6 test failed:', error.message);

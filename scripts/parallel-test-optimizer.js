@@ -247,10 +247,10 @@ class ParallelTestOptimizer {
 
     // Separate parallelizable and non-parallelizable tests
     const parallelizable = this.config.testSuites.filter(
-      (suite) => suite.parallelizable,
+      (suite) => suite.parallelizable
     );
     const sequential = this.config.testSuites.filter(
-      (suite) => !suite.parallelizable,
+      (suite) => !suite.parallelizable
     );
 
     // Sort by estimated duration (longest first for better load balancing)
@@ -270,13 +270,13 @@ class ParallelTestOptimizer {
 
     console.log(`✅ Execution plan generated:`);
     console.log(
-      `  Parallel groups: ${this.executionPlan.parallel_groups.length}`,
+      `  Parallel groups: ${this.executionPlan.parallel_groups.length}`
     );
     console.log(
-      `  Sequential tests: ${this.executionPlan.sequential_tests.length}`,
+      `  Sequential tests: ${this.executionPlan.sequential_tests.length}`
     );
     console.log(
-      `  Estimated time savings: ${this.executionPlan.estimated_time_savings}%`,
+      `  Estimated time savings: ${this.executionPlan.estimated_time_savings}%`
     );
   }
 
@@ -297,7 +297,7 @@ class ParallelTestOptimizer {
         const group = {
           tests: tests.slice(i, i + maxGroupSize),
           estimated_duration: Math.max(
-            ...tests.slice(i, i + maxGroupSize).map((t) => t.estimatedDuration),
+            ...tests.slice(i, i + maxGroupSize).map((t) => t.estimatedDuration)
           ),
           resource_profile: tests[0].resourceRequirements,
         };
@@ -403,7 +403,7 @@ class ParallelTestOptimizer {
     const avgGroupSize =
       this.executionPlan.parallel_groups.reduce(
         (sum, group) => sum + group.tests.length,
-        0,
+        0
       ) / this.executionPlan.parallel_groups.length;
     if (avgGroupSize < this.config.maxParallelJobs * 0.7) {
       opportunities.push({
@@ -440,11 +440,11 @@ class ParallelTestOptimizer {
       // For parallel groups, sum all tests in the group
       totalMemory += group.tests.reduce(
         (sum, test) => sum + test.resourceRequirements.memory,
-        0,
+        0
       );
       totalCPU += group.tests.reduce(
         (sum, test) => sum + test.resourceRequirements.cpu,
-        0,
+        0
       );
     });
 
@@ -457,7 +457,7 @@ class ParallelTestOptimizer {
   calculateTimeSavings() {
     const sequentialTime = this.config.testSuites.reduce(
       (sum, test) => sum + test.estimatedDuration,
-      0,
+      0
     );
     const parallelTime =
       this.executionPlan.critical_path.total_estimated_duration;
@@ -547,11 +547,11 @@ class ParallelTestOptimizer {
       'ubuntu-latest': this.config.maxParallelJobs,
       'windows-latest': Math.max(
         2,
-        Math.floor(this.config.maxParallelJobs * 0.75),
+        Math.floor(this.config.maxParallelJobs * 0.75)
       ),
       'macos-latest': Math.max(
         2,
-        Math.floor(this.config.maxParallelJobs * 0.5),
+        Math.floor(this.config.maxParallelJobs * 0.5)
       ),
     };
 
@@ -578,11 +578,11 @@ class ParallelTestOptimizer {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const analysisFile = path.join(
       this.outputDir,
-      `parallel-optimization-${timestamp}.json`,
+      `parallel-optimization-${timestamp}.json`
     );
     const latestFile = path.join(
       this.outputDir,
-      'latest-parallel-optimization.json',
+      'latest-parallel-optimization.json'
     );
 
     const analysis = {
@@ -598,7 +598,7 @@ class ParallelTestOptimizer {
     // Generate human-readable report
     const reportFile = path.join(
       this.outputDir,
-      'parallel-optimization-report.md',
+      'parallel-optimization-report.md'
     );
     const report = this.generateMarkdownReport(analysis);
     fs.writeFileSync(reportFile, report);
@@ -631,21 +631,21 @@ class ParallelTestOptimizer {
 
 ### Parallelizable Tests
 ${analysis.execution_plan.parallel_groups
-    .map(
-      (group, i) =>
-        `#### Group ${i + 1}
+  .map(
+    (group, i) =>
+      `#### Group ${i + 1}
   - **Tests**: ${group.tests.map((t) => t.name).join(', ')}
   - **Estimated Duration**: ${group.estimated_duration}s
-  - **Resource Profile**: ${group.resource_profile.memory}MB RAM, ${group.resource_profile.cpu} CPU cores`,
-    )
-    .join('\n\n')}
+  - **Resource Profile**: ${group.resource_profile.memory}MB RAM, ${group.resource_profile.cpu} CPU cores`
+  )
+  .join('\n\n')}
 
 ### Sequential Tests
 ${
   analysis.execution_plan.sequential_tests
     ?.map(
       (test) =>
-        `- **${test.name}**: ${test.estimatedDuration}s (${test.dependencies.join(', ')})`,
+        `- **${test.name}**: ${test.estimatedDuration}s (${test.dependencies.join(', ')})`
     )
     .join('\n') || 'None'
 }
@@ -655,7 +655,7 @@ ${
   analysis.execution_plan.critical_path.bottlenecks
     ?.map(
       (b) =>
-        `- **${b.type}**: ${b.test || 'N/A'} (${b.duration}s) - ${b.suggestion}`,
+        `- **${b.type}**: ${b.test || 'N/A'} (${b.duration}s) - ${b.suggestion}`
     )
     .join('\n') || 'None identified'
 }
@@ -675,14 +675,14 @@ strategy:
   matrix:
     include:
 ${analysis.github_actions_matrix.strategy.matrix.include
-    .map(
-      (item) =>
-        `      - node-version: "${item['node-version']}"
+  .map(
+    (item) =>
+      `      - node-version: "${item['node-version']}"
         os: ${item.os}
         test-strategy: ${item['test-strategy']}
-        parallel-jobs: ${item['parallel-jobs']}`,
-    )
-    .join('\n')}
+        parallel-jobs: ${item['parallel-jobs']}`
+  )
+  .join('\n')}
 \`\`\`
 
 ## Recommendations
@@ -706,13 +706,13 @@ ${analysis.github_actions_matrix.strategy.matrix.include
     console.log(`System Parallelism: ${this.config.maxParallelJobs} jobs`);
     console.log(`Test Suites Found: ${this.config.testSuites.length}`);
     console.log(
-      `Parallel Groups: ${this.executionPlan.parallel_groups.length}`,
+      `Parallel Groups: ${this.executionPlan.parallel_groups.length}`
     );
     console.log(
-      `Sequential Tests: ${this.executionPlan.sequential_tests?.length || 0}`,
+      `Sequential Tests: ${this.executionPlan.sequential_tests?.length || 0}`
     );
     console.log(
-      `Estimated Time Savings: ${this.executionPlan.estimated_time_savings}%`,
+      `Estimated Time Savings: ${this.executionPlan.estimated_time_savings}%`
     );
 
     if (this.executionPlan.critical_path.bottlenecks?.length > 0) {
@@ -729,7 +729,7 @@ ${analysis.github_actions_matrix.strategy.matrix.include
       this.executionPlan.critical_path.optimization_opportunities.forEach(
         (opportunity) => {
           console.log(`  ${opportunity.type}: ${opportunity.suggestion}`);
-        },
+        }
       );
     }
   }

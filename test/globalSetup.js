@@ -108,7 +108,7 @@ module.exports = () => {
   // Test reporting setup
   console.log('📋 Test reporting configuration:');
   console.log(
-    `   • Coverage: ${process.env.COVERAGE ? 'enabled' : 'disabled'}`,
+    `   • Coverage: ${process.env.COVERAGE ? 'enabled' : 'disabled'}`
   );
   console.log(`   • Verbose: ${process.env.VERBOSE ? 'enabled' : 'disabled'}`);
   console.log(`   • Watch mode: ${process.env.WATCH ? 'enabled' : 'disabled'}`);

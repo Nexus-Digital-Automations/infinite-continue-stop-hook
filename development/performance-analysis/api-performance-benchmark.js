@@ -561,7 +561,7 @@ class APIPerformanceBenchmark {
     ];
 
     const criticalPathMetrics = criticalOperations.map((op) => {
-      // eslint-disable-next-line security/detect-object-injection
+      // eslint-disable-next-line security/detect-object-injection -- Object property access with validated operation names from predefined array
       const metrics = this.results.endpoints[op];
       return {
         operation: op,
@@ -601,9 +601,11 @@ class APIPerformanceBenchmark {
         operation: op,
 
         averageResponseTime:
+          // eslint-disable-next-line security/detect-object-injection -- Object property access with validated operation names
           this.results.endpoints[op]?.averageResponseTime || -1,
 
         cacheValue:
+          // eslint-disable-next-line security/detect-object-injection -- Object property access with validated operation names
           this.results.endpoints[op]?.averageResponseTime > 100
             ? 'High'
             : 'Medium',

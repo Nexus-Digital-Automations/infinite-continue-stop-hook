@@ -46,7 +46,7 @@ async function testTasksApi() {
     // Test 5: Verify task relationships
     console.log('\nTest 5: Verifying task relationships...');
     const relationshipCount = Object.keys(
-      tasksData.task_relationships || {},
+      tasksData.task_relationships || {}
     ).length;
     console.log(`✅ Task relationships defined: ${relationshipCount}`);
 
@@ -67,13 +67,13 @@ async function testTasksApi() {
     console.log('\nTest 8: Verifying CLAUDE.md compliance...');
     const workflowConfig = tasksData.workflow_config;
     console.log(
-      `✅ Auto-generation enabled: ${workflowConfig.auto_generation_enabled}`,
+      `✅ Auto-generation enabled: ${workflowConfig.auto_generation_enabled}`
     );
     console.log(
-      `✅ Mandatory test gate: ${workflowConfig.mandatory_test_gate}`,
+      `✅ Mandatory test gate: ${workflowConfig.mandatory_test_gate}`
     );
     console.log(
-      `✅ Security validation required: ${workflowConfig.security_validation_required}`,
+      `✅ Security validation required: ${workflowConfig.security_validation_required}`
     );
 
     // Test 9: Test feature task to auto-task generation
@@ -91,25 +91,25 @@ async function testTasksApi() {
     });
     console.log(`✅ Generated ${autoTasks.length} auto-tasks for test feature`);
     console.log(
-      `✅ Auto-task types: ${autoTasks.map((t) => t.type).join(', ')}`,
+      `✅ Auto-task types: ${autoTasks.map((t) => t.type).join(', ')}`
     );
 
     // Summary
     console.log(
-      '\n🎉 All tests passed! TASKS.json system is working correctly.',
+      '\n🎉 All tests passed! TASKS.json system is working correctly.'
     );
     console.log('\n📊 Migration Summary:');
     console.log(`   • Schema version: ${tasksData.schema_version}`);
     console.log(`   • Total tasks: ${tasksData.metadata.total_tasks}`);
     console.log(
-      `   • Features migrated: ${tasksData.metadata.migration_stats.features_migrated}`,
+      `   • Features migrated: ${tasksData.metadata.migration_stats.features_migrated}`
     );
     console.log(
-      `   • Auto-generated tasks: ${tasksData.metadata.migration_stats.auto_generated_tasks}`,
+      `   • Auto-generated tasks: ${tasksData.metadata.migration_stats.auto_generated_tasks}`
     );
     console.log(`   • Task types supported: ${taskTypes.length}`);
     console.log(
-      `   • Auto-generation enabled: ${workflowConfig.auto_generation_enabled}`,
+      `   • Auto-generation enabled: ${workflowConfig.auto_generation_enabled}`
     );
     console.log(`   • CLAUDE.md compliance: ✅`);
 

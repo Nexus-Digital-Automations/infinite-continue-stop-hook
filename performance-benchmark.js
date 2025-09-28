@@ -119,9 +119,10 @@ class TaskManagerPerformanceBenchmark {
 
       // Run each endpoint multiple times for statistical significance
       for (let i = 0; i < 5; i++) {
+        // eslint-disable-next-line no-await-in-loop -- Sequential timing measurements required
         const result = await this.executeTimedCommand(
           endpoint[0],
-          endpoint.slice(1),
+          endpoint.slice(1)
         );
         this.results.apiResponses.push({
           endpoint: endpoint[0],
@@ -130,6 +131,7 @@ class TaskManagerPerformanceBenchmark {
         });
 
         // Brief pause between requests
+        // eslint-disable-next-line no-await-in-loop -- Sequential timing with delays required
         await this.sleep(100);
       }
     }
@@ -191,6 +193,7 @@ class TaskManagerPerformanceBenchmark {
           prevents_implementation: false,
         };
 
+        // eslint-disable-next-line no-await-in-loop -- Sequential subtask creation required for timing
         const result = await this.executeTimedCommand('create-subtask', [
           taskId,
           JSON.stringify(subtaskData),
@@ -250,6 +253,7 @@ class TaskManagerPerformanceBenchmark {
 
       for (const [command, ...args] of operations) {
         console.log(`   Testing ${command}...`);
+        // eslint-disable-next-line no-await-in-loop -- Sequential command testing required for timing
         const result = await this.executeTimedCommand(command, args);
         this.results.successCriteriaValidation.push({
           operation: command,
@@ -258,7 +262,7 @@ class TaskManagerPerformanceBenchmark {
       }
     } catch (error) {
       console.log(
-        `   ❌ Error in success criteria benchmarking: ${error.message}`,
+        `   ❌ Error in success criteria benchmarking: ${error.message}`
       );
     }
   }
@@ -279,7 +283,7 @@ class TaskManagerPerformanceBenchmark {
           agentIndex: i,
           operation: 'concurrent_init',
           ...result,
-        })),
+        }))
       );
     }
 
@@ -295,7 +299,7 @@ class TaskManagerPerformanceBenchmark {
             agentIndex: i,
             operation: 'concurrent_list',
             ...result,
-          })),
+          }))
         );
       }
 
@@ -303,7 +307,7 @@ class TaskManagerPerformanceBenchmark {
       this.results.concurrentAccess.push(...listResults);
     } catch (error) {
       console.log(
-        `   ❌ Error in concurrent access benchmarking: ${error.message}`,
+        `   ❌ Error in concurrent access benchmarking: ${error.message}`
       );
     }
   }
@@ -327,9 +331,12 @@ class TaskManagerPerformanceBenchmark {
       memorySnapshots.push(snapshot);
 
       // Perform some operations to trigger memory usage
+      // eslint-disable-next-line no-await-in-loop -- Sequential memory monitoring required
       await this.executeTimedCommand('list');
+      // eslint-disable-next-line no-await-in-loop -- Sequential memory monitoring required
       await this.executeTimedCommand('stats');
 
+      // eslint-disable-next-line no-await-in-loop -- Sequential timing with delays required
       await this.sleep(500);
     }
 
@@ -383,7 +390,7 @@ class TaskManagerPerformanceBenchmark {
           return (
             snapshot.heapUsed - this.results.memoryUsage.snapshots[0].heapUsed
           );
-        },
+        }
       );
 
       const maxMemoryGrowth = Math.max(...memoryGrowth);
@@ -399,7 +406,7 @@ class TaskManagerPerformanceBenchmark {
 
     // Analyze concurrent access performance
     const concurrentInits = this.results.concurrentAccess.filter(
-      (r) => r.operation === 'concurrent_init',
+      (r) => r.operation === 'concurrent_init'
     );
     if (concurrentInits.length > 0) {
       const avgConcurrentTime =
@@ -588,10 +595,10 @@ class TaskManagerPerformanceBenchmark {
   summarizeConcurrentPerformance() {
     const concurrent = {
       init: this.results.concurrentAccess.filter(
-        (r) => r.operation === 'concurrent_init',
+        (r) => r.operation === 'concurrent_init'
       ),
       list: this.results.concurrentAccess.filter(
-        (r) => r.operation === 'concurrent_list',
+        (r) => r.operation === 'concurrent_list'
       ),
     };
 
@@ -667,16 +674,16 @@ class TaskManagerPerformanceBenchmark {
       console.log(`\n📈 Summary:`);
       console.log(`   • API Endpoints Tested: ${report.summary.totalApiTests}`);
       console.log(
-        `   • Subtask Operations: ${report.summary.totalSubtaskTests}`,
+        `   • Subtask Operations: ${report.summary.totalSubtaskTests}`
       );
       console.log(
-        `   • Concurrent Tests: ${report.summary.totalConcurrentTests}`,
+        `   • Concurrent Tests: ${report.summary.totalConcurrentTests}`
       );
       console.log(
-        `   • Bottlenecks Identified: ${report.summary.totalBottlenecks}`,
+        `   • Bottlenecks Identified: ${report.summary.totalBottlenecks}`
       );
       console.log(
-        `   • Recommendations Generated: ${report.summary.totalRecommendations}`,
+        `   • Recommendations Generated: ${report.summary.totalRecommendations}`
       );
 
       return report;

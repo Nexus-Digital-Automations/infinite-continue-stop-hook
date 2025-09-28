@@ -172,14 +172,14 @@ async function _getProjectInfo(targetPath) {
   const taskDescription = await question('Task description: ');
   const taskMode =
     (await question(
-      'Task mode (DEVELOPMENT/REFACTORING/TESTING/RESEARCH) [DEVELOPMENT]: ',
+      'Task mode (DEVELOPMENT/REFACTORING/TESTING/RESEARCH) [DEVELOPMENT]: '
     )) || 'DEVELOPMENT';
   const taskPrompt = await question('Detailed task prompt: ');
   const dependencies = await question(
-    'Dependencies (comma-separated files/dirs, or press Enter to skip): ',
+    'Dependencies (comma-separated files/dirs, or press Enter to skip): '
   );
   const importantFiles = await question(
-    'Important files to read first (comma-separated, or press Enter to skip): ',
+    'Important files to read first (comma-separated, or press Enter to skip): '
   );
   const requiresResearch = await question('Requires research? (y/n) [n]: ');
 
@@ -268,18 +268,18 @@ function needsTodoUpdate(todoPath) {
 
     if (hasOldSchema) {
       console.log(
-        `⚠️  ${_path.basename(_path.dirname(todoPath))} - FEATURES.json uses old schema, will update`,
+        `⚠️  ${_path.basename(_path.dirname(todoPath))} - FEATURES.json uses old schema, will update`
       );
       return true;
     }
 
     console.log(
-      `✓ ${_path.basename(_path.dirname(todoPath))} - FEATURES.json already up to date`,
+      `✓ ${_path.basename(_path.dirname(todoPath))} - FEATURES.json already up to date`
     );
     return false;
   } catch {
     console.log(
-      `⚠️  ${_path.basename(_path.dirname(todoPath))} - FEATURES.json corrupted, will recreate`,
+      `⚠️  ${_path.basename(_path.dirname(todoPath))} - FEATURES.json corrupted, will recreate`
     );
     return true;
   }
@@ -524,7 +524,7 @@ function migrateToFeatureBasedSystem(targetPath) {
     const analysis = analyzeTasksForFeatures(todoData.tasks);
 
     console.log(
-      `   📊 Analysis: ${analysis.summary.phased_tasks} phased tasks, ${analysis.summary.non_phased_tasks} independent tasks`,
+      `   📊 Analysis: ${analysis.summary.phased_tasks} phased tasks, ${analysis.summary.non_phased_tasks} independent tasks`
     );
 
     // Convert to feature-based structure
@@ -535,7 +535,7 @@ function migrateToFeatureBasedSystem(targetPath) {
     _fs.writeFileSync(todoPath, JSON.stringify(migrated, null, 2));
 
     console.log(
-      `   ✅ Migration completed: ${migrated.features.length} features, ${migrated.tasks.length} tasks`,
+      `   ✅ Migration completed: ${migrated.features.length} features, ${migrated.tasks.length} tasks`
     );
 
     // Clean up features.json if it exists (eliminating dual system)
@@ -802,7 +802,7 @@ function calculateCompletionPercentage(tasks) {
 
 async function main() {
   console.log(
-    '=== Infinite Continue Stop Hook - Batch FEATURES.json Setup ===\n',
+    '=== Infinite Continue Stop Hook - Batch FEATURES.json Setup ===\n'
   );
 
   // Resolve project path
@@ -883,7 +883,7 @@ async function main() {
     console.log('📋 TaskManager system is centralized at:');
 
     console.log(
-      '   /Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/',
+      '   /Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/'
     );
 
     console.log('');
@@ -891,21 +891,21 @@ async function main() {
     console.log('📋 Use universal commands to work with any project:');
 
     console.log(
-      '   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project /path/to/project',
+      '   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" init --project /path/to/project'
     );
 
     console.log(
-      '   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" api current --project /path/to/project',
+      '   node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/tm-universal.js" api current --project /path/to/project'
     );
 
     console.log('');
 
     console.log(
-      '📋 Updated hook reference in ~/.claude/settings.json should point to:',
+      '📋 Updated hook reference in ~/.claude/settings.json should point to:'
     );
 
     console.log(
-      'node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js"',
+      'node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js"'
     );
   } catch (error) {
     console.error('\n❌ Batch setup error:', error.message);

@@ -192,10 +192,10 @@ class FeaturesMigration {
           this.migrationReport.migratedFeatures++;
         } catch (error) {
           this.migrationReport.errors.push(
-            `Failed to transform task ${task.id || index}: ${error.message}`,
+            `Failed to transform task ${task.id || index}: ${error.message}`
           );
           console.warn(
-            `⚠️  Warning: Failed to transform task ${task.id || index}`,
+            `⚠️  Warning: Failed to transform task ${task.id || index}`
           );
         }
       });
@@ -209,7 +209,7 @@ class FeaturesMigration {
           transformedData.completed_features.push(transformedFeature);
         } catch (error) {
           this.migrationReport.errors.push(
-            `Failed to transform completed task ${task.id || index}: ${error.message}`,
+            `Failed to transform completed task ${task.id || index}: ${error.message}`
           );
         }
       });
@@ -219,7 +219,7 @@ class FeaturesMigration {
     transformedData.migration_stats = this.migrationReport;
 
     console.log(
-      `✅ Transformed ${this.migrationReport.migratedFeatures} features`,
+      `✅ Transformed ${this.migrationReport.migratedFeatures} features`
     );
     return transformedData;
   }
@@ -315,7 +315,7 @@ class FeaturesMigration {
 
     console.log(`✅ FEATURES.json created: ${this.featuresPath}`);
     console.log(
-      `📊 File size: ${Math.round(featuresContent.length / 1024)} KB`,
+      `📊 File size: ${Math.round(featuresContent.length / 1024)} KB`
     );
   }
 
@@ -335,7 +335,7 @@ class FeaturesMigration {
     console.log(`⏱️  Duration: ${this.migrationReport.duration}ms`);
     console.log(`📝 Total Tasks: ${this.migrationReport.totalTasks}`);
     console.log(
-      `✅ Migrated Features: ${this.migrationReport.migratedFeatures}`,
+      `✅ Migrated Features: ${this.migrationReport.migratedFeatures}`
     );
     console.log(`⚠️  Errors: ${this.migrationReport.errors.length}`);
     console.log(`🔶 Warnings: ${this.migrationReport.warnings.length}`);
@@ -378,7 +378,7 @@ class FeaturesMigration {
         'settings',
       ];
       const missingFields = requiredFields.filter(
-        (field) => !Object.prototype.hasOwnProperty.call(featuresData, field),
+        (field) => !Object.prototype.hasOwnProperty.call(featuresData, field)
       );
 
       if (missingFields.length > 0) {

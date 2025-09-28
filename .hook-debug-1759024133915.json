@@ -1,0 +1,70 @@
+{
+  "execution": {
+    "timestamp": "2025-09-28T01:48:53.913Z",
+    "projectRoot": "/Users/jeremyparker/infinite-continue-stop-hook",
+    "hookVersion": "1.0.0",
+    "nodeVersion": "v22.20.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "pid": 41828,
+    "cwd": "/Users/jeremyparker/infinite-continue-stop-hook",
+    "endTimestamp": "2025-09-28T01:48:53.914Z",
+    "durationMs": 1
+  },
+  "input": {
+    "sessionId": "manual_test",
+    "transcriptPath": "",
+    "stopHookActive": true,
+    "rawInput": {
+      "session_id": "manual_test",
+      "transcript_path": "",
+      "stop_hook_active": true,
+      "hook_event_name": "manual_execution"
+    }
+  },
+  "projectState": {},
+  "decisions": [],
+  "flow": [
+    {
+      "timestamp": "2025-09-28T01:48:53.913Z",
+      "message": "Raw input data: \"\""
+    },
+    {
+      "timestamp": "2025-09-28T01:48:53.913Z",
+      "message": "Input data length: 0"
+    },
+    {
+      "timestamp": "2025-09-28T01:48:53.913Z",
+      "message": "No input detected - running in manual mode"
+    },
+    {
+      "timestamp": "2025-09-28T01:48:53.913Z",
+      "message": "Received input from Claude Code"
+    },
+    {
+      "timestamp": "2025-09-28T01:48:53.913Z",
+      "message": "Received manual_execution event from Claude Code"
+    },
+    {
+      "timestamp": "2025-09-28T01:48:53.914Z",
+      "message": "ERROR in stop-hook-main: Logger is not a constructor"
+    },
+    {
+      "timestamp": "2025-09-28T01:48:53.914Z",
+      "message": "Exiting with code 2: Error handled - continuing infinite mode: Logger is not a constructor"
+    }
+  ],
+  "output": {
+    "exitCode": 2,
+    "exitReason": "Error handled - continuing infinite mode: Logger is not a constructor"
+  },
+  "errors": [
+    {
+      "timestamp": "2025-09-28T01:48:53.914Z",
+      "context": "stop-hook-main",
+      "message": "Logger is not a constructor",
+      "stack": "TypeError: Logger is not a constructor\n    at new AutoFixer (/Users/jeremyparker/infinite-continue-stop-hook/lib/autoFixer.js:97:19)\n    at ReadStream.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/stop-hook.js:1006:23)\n    at ReadStream.emit (node:events:519:28)\n    at endReadableNT (node:internal/streams/readable:1698:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)",
+      "name": "TypeError"
+    }
+  ]
+}
