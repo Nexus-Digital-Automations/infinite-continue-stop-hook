@@ -48,9 +48,11 @@ global.testUtils = {
     const start = Date.now();
     while (Date.now() - start < timeout) {
       try {
+        // eslint-disable-next-line no-await-in-loop -- Retry mechanism requires sequential attempts
         await fn();
         return;
       } catch {
+        // eslint-disable-next-line no-await-in-loop -- Retry mechanism requires sequential delays
         await new Promise((resolve) => {
           setTimeout(resolve, interval);
         });

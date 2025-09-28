@@ -271,6 +271,7 @@ class TestPerformanceMonitor {
     ];
 
     for (const testSuite of testCommands) {
+      // eslint-disable-next-line no-await-in-loop -- Sequential test execution required
       await this.runTestSuite(testSuite);
     }
   }

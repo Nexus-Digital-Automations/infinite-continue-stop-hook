@@ -1279,19 +1279,20 @@ class AutonomousTaskManagerAPI {
       const results = [];
       const startTime = Date.now();
 
-      console.log(
-        `🚀 Executing ${enabledRuleIds.length} custom validation rules...`
-      );
+      // Use structured logging for internal validation operations
+      const { createLogger } = require('./lib/utils/logger');
+      const logger = createLogger('CustomValidation');
+      logger.info(`Executing ${enabledRuleIds.length} custom validation rules`);
 
       for (const ruleId of enabledRuleIds) {
-        console.log(`  📋 Executing rule: ${ruleId}`);
+        logger.info(`Executing rule: ${ruleId}`);
         const result = await this.customValidationManager.executeRule(ruleId);
         results.push(result);
 
         if (!result.success) {
-          console.log(`  ❌ Rule failed: ${ruleId} - ${result.error}`);
+          logger.warn(`Rule failed: ${ruleId} - ${result.error}`);
         } else {
-          console.log(`  ✅ Rule passed: ${ruleId}`);
+          logger.info(`Rule passed: ${ruleId}`);
         }
       }
 
@@ -5296,6 +5297,7 @@ class AutonomousTaskManagerAPI {
       )) {
         const fullPath = path.join(PROJECT_ROOT, filePath);
         if (fs.existsSync(fullPath)) {
+          // eslint-disable-next-line security/detect-non-literal-fs-filename -- Reading validated project file for success criteria validation
           const content = fs.readFileSync(fullPath, 'utf8');
           for (const pattern of patterns) {
             if (!content.includes(pattern)) {
@@ -5527,6 +5529,7 @@ class AutonomousTaskManagerAPI {
             const _fsSync = require('fs');
             if (_fsSync.existsSync('package.json')) {
               const packageJson = JSON.parse(
+                // eslint-disable-next-line security/detect-non-literal-fs-filename -- Reading standard package.json from project root
                 _fsSync.readFileSync('package.json', 'utf8')
               );
               const scripts = packageJson.scripts || {};
@@ -5559,7 +5562,7 @@ class AutonomousTaskManagerAPI {
             'swift build',
           ];
 
-          return await this._tryCommands(buildCommands, 'Building');
+          return this._tryCommands(buildCommands, 'Building');
 
         case 'start-validation':
           // Check if this is self-validation (TaskManager API validating itself)
@@ -5567,6 +5570,7 @@ class AutonomousTaskManagerAPI {
             const _fsSync = require('fs');
             if (_fsSync.existsSync('package.json')) {
               const packageJson = JSON.parse(
+                // eslint-disable-next-line security/detect-non-literal-fs-filename -- Reading standard package.json from project root
                 _fsSync.readFileSync('package.json', 'utf8')
               );
               const scripts = packageJson.scripts || {};
@@ -5592,7 +5596,7 @@ class AutonomousTaskManagerAPI {
           // Language-agnostic start validation
           const startCommands = ['npm run start', 'yarn start', 'pnpm start'];
 
-          return await this._tryCommands(startCommands, 'Starting', true);
+          return this._tryCommands(startCommands, 'Starting', true);
 
         case 'test-validation':
           // Check if this is self-validation with complex test suite
@@ -5600,6 +5604,7 @@ class AutonomousTaskManagerAPI {
             const _fsSync = require('fs');
             if (_fsSync.existsSync('package.json')) {
               const packageJson = JSON.parse(
+                // eslint-disable-next-line security/detect-non-literal-fs-filename -- Reading standard package.json from project root
                 _fsSync.readFileSync('package.json', 'utf8')
               );
               const scripts = packageJson.scripts || {};
@@ -5641,11 +5646,11 @@ class AutonomousTaskManagerAPI {
             'jest',
           ];
 
-          return await this._tryCommands(testCommands, 'Testing');
+          return this._tryCommands(testCommands, 'Testing');
 
         case 'custom-validation':
           // Execute all applicable custom validation rules
-          return await this._executeAllCustomRules();
+          return this._executeAllCustomRules();
 
         default:
           // Check if this is a custom validation rule
@@ -6007,7 +6012,7 @@ class AutonomousTaskManagerAPI {
    */
   async _attemptGracefulFallback(operation, lastCommand, errors) {
     const gracefulStrategies = {
-      Linting: async () => {
+      Linting: () => {
         // Check if there's a linting config but the command failed
         const _fs = require('fs');
         const lintConfigs = [
@@ -6030,11 +6035,12 @@ class AutonomousTaskManagerAPI {
         return { success: false, error: 'No linting configuration found' };
       },
 
-      'Type checking': async () => {
+      'Type checking': () => {
         // Check if this is a dynamically typed language
         const _fs = require('fs');
         if (_fs.existsSync('package.json')) {
           const packageJson = JSON.parse(
+            // eslint-disable-next-line security/detect-non-literal-fs-filename -- Reading standard package.json from project root
             _fs.readFileSync('package.json', 'utf8')
           );
           const deps = {
@@ -6055,11 +6061,12 @@ class AutonomousTaskManagerAPI {
         return { success: false, error: 'Type checking required but failed' };
       },
 
-      Building: async () => {
+      Building: () => {
         // Check if this might be a library or script-only project
         const _fs = require('fs');
         if (_fs.existsSync('package.json')) {
           const packageJson = JSON.parse(
+            // eslint-disable-next-line security/detect-non-literal-fs-filename -- Reading standard package.json from project root
             _fs.readFileSync('package.json', 'utf8')
           );
 
@@ -6079,7 +6086,7 @@ class AutonomousTaskManagerAPI {
         };
       },
 
-      Testing: async () => {
+      Testing: () => {
         // Check if tests exist but test runner is misconfigured
         const _fs = require('fs');
         const testDirs = ['test', 'tests', '__tests__', 'spec'];
@@ -8489,7 +8496,7 @@ class AutonomousTaskManagerAPI {
   async _atomicFeatureOperation(modifier) {
     // If in dry run mode, use dry run version
     if (this.dryRunMode) {
-      return await this._dryRunFeatureOperation(modifier);
+      return this._dryRunFeatureOperation(modifier);
     }
 
     const releaseLock = await fileLock.acquire(this.tasksPath);

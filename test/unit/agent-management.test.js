@@ -166,6 +166,7 @@ describe('Agent Management', () => {
         ];
 
         for (const agentId of specialAgentIds) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation
           const result = await api.initializeAgent(agentId);
 
           expect(result.success).toBe(true);
@@ -617,6 +618,7 @@ describe('Agent Management', () => {
 
         // Initialize all agents
         for (const agentId of agents) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation
           const result = await api.initializeAgent(agentId);
           expect(result.success).toBe(true);
         }

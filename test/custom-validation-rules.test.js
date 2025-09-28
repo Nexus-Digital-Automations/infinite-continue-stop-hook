@@ -60,12 +60,13 @@ describe('CustomValidationRulesManager', () => {
     // Clean up test files after each test
     try {
       const files = await fs.readdir(testProjectRoot);
-      for (const file of files) {
-        await fs.rm(path.join(testProjectRoot, file), {
+      const deletions = files.map((file) =>
+        fs.rm(path.join(testProjectRoot, file), {
           recursive: true,
           force: true,
-        });
-      }
+        })
+      );
+      await Promise.all(deletions);
     } catch {
       // Ignore cleanup errors
     }
@@ -871,9 +872,10 @@ describe('CustomValidationRulesManager', () => {
       await manager.loadCustomRules();
 
       // Execute rule many times to test history limiting
-      for (let i = 0; i < 150; i++) {
-        await manager.executeRule('test_rule');
-      }
+      const executions = Array.from({ length: 150 }, () =>
+        manager.executeRule('test_rule')
+      );
+      await Promise.all(executions);
 
       const times = manager.ruleExecutionTimes.get('test_rule');
       expect(times.length).toBeLessThanOrEqual(100);

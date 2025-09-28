@@ -276,6 +276,7 @@ describe('Feature Management Lifecycle', () => {
         ];
 
         for (const invalidFeature of invalidFeatures) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation
           const result = await api.suggestFeature(invalidFeature);
           expect(result.success).toBe(false);
           expect(result.error).toContain(
@@ -322,6 +323,7 @@ describe('Feature Management Lifecycle', () => {
           const invalidFeature = { ...TEST_FIXTURES.validFeature };
           delete invalidFeature[field];
 
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation
           const result = await api.suggestFeature(invalidFeature);
 
           expect(result.success).toBe(false);
@@ -727,6 +729,7 @@ describe('Feature Management Lifecycle', () => {
       ];
 
       for (const title of featureTitles) {
+        // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup
         const result = await api.suggestFeature({
           ...TEST_FIXTURES.validFeature,
           title: title,
@@ -863,6 +866,7 @@ describe('Feature Management Lifecycle', () => {
         const statuses = ['suggested', 'approved', 'rejected'];
 
         for (const status of statuses) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation
           const result = await api.listFeatures({ status });
 
           expect(result.success).toBe(true);
@@ -876,6 +880,7 @@ describe('Feature Management Lifecycle', () => {
         const categories = ['enhancement', 'new-feature', 'documentation'];
 
         for (const category of categories) {
+          // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation
           const result = await api.listFeatures({ category });
 
           expect(result.success).toBe(true);
