@@ -176,7 +176,7 @@ class E2EEnvironment {
 
       // Parse the JSON response from stdout
       let apiResponse;
-      if (result.result && result.result.stdout) {
+      if (result.result && RESULT.result.stdout) {
         apiResponse = JSON.parse(result.result.stdout);
       } else if (result.stdout) {
         apiResponse = JSON.parse(result.stdout);
@@ -548,9 +548,9 @@ class StopHookTestHelpers {
 
       iterations.push({
         iteration: i,
-        blocked: result.code === 2,
+        blocked: RESULT.code === 2,
         result: result,
-        success: result.code === 2, // Success means it properly blocked
+        success: RESULT.code === 2, // Success means it properly blocked
       });
 
       // Always blocks in infinite mode unless proper authorization exists

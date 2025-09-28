@@ -13,7 +13,7 @@
  * of the FeatureManagerAPI with detailed lifecycle testing.
  */
 
-const PATH = require('path');
+const FS = require('path');
 const CRYPTO = require('crypto');
 const {
   MockFileSystem,
@@ -571,7 +571,7 @@ describe('Agent Management', () => {
 
           expect(result.success).toBe(false);
           expect(result.error).toContain('Failed to authorize stop');
-        } catch (error) {
+        } catch (_error) {
           // Expected in this test scenario
           expect(error.message).toContain('File system unavailable');
         }

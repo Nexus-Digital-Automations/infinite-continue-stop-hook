@@ -124,7 +124,7 @@ describe('Performance Validation E2E', () => {
           } catch {
             console.error(
               'Failed to parse feature suggestion response:',
-              result.result.stdout,
+              RESULT.result.stdout,
             );
             throw error;
           }
@@ -204,7 +204,7 @@ describe('Performance Validation E2E', () => {
           } catch {
             console.error(
               'Failed to parse bulk feature suggestion response:',
-              result.result.stdout,
+              RESULT.result.stdout,
             );
             throw error;
           }
@@ -329,7 +329,7 @@ describe('Performance Validation E2E', () => {
         // Analyze contention results
         const successfulOperations = contentionResults.filter(
           (result) =>
-            result.status === 'fulfilled' && result.value.result.success,
+            RESULT.status === 'fulfilled' && RESULT.value.result.success,
         ).length;
 
         const contentionThroughput =

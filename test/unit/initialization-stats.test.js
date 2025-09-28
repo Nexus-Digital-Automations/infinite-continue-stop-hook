@@ -13,7 +13,7 @@
  * features of the FeatureManagerAPI with detailed time-based testing.
  */
 
-const PATH = require('path');
+const FS = require('path');
 const {
   MockFileSystem,
   TEST_FIXTURES,
@@ -490,7 +490,7 @@ describe('Initialization Statistics', () => {
           'Initialization statistics retrieved successfully',
         );
 
-        const stats = result.stats;
+        const stats = RESULT.stats;
         expect(stats.total_initializations).toBeDefined();
         expect(stats.total_reinitializations).toBeDefined();
         expect(stats.current_day).toBe('2025-09-23');
@@ -505,7 +505,7 @@ describe('Initialization Statistics', () => {
       test('should format time buckets correctly', async () => {
         const result = await api.getInitializationStats();
 
-        const buckets = result.stats.time_buckets;
+        const buckets = RESULT.stats.time_buckets;
         const expectedBuckets = [
           '07:00-11:59',
           '12:00-16:59',
@@ -529,8 +529,8 @@ describe('Initialization Statistics', () => {
       test('should calculate today totals correctly', async () => {
         const result = await api.getInitializationStats();
 
-        const todayTotals = result.stats.today_totals;
-        const buckets = result.stats.time_buckets;
+        const todayTotals = RESULT.stats.today_totals;
+        const buckets = RESULT.stats.time_buckets;
 
         const expectedInit = Object.values(buckets).reduce(
           (sum, bucket) => sum + bucket.initializations,

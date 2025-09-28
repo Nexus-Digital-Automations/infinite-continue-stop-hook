@@ -187,13 +187,13 @@ class JestCiCdReporter {
     let maxDuration = 0;
 
     testResults.forEach((result) => {
-      const duration = result.perfStats.end - result.perfStats.start;
+      const duration = RESULT.perfStats.end - RESULT.perfStats.start;
       if (duration > maxDuration) {
         maxDuration = duration;
         slowest = {
-          path: result.testFilePath,
+          path: RESULT.testFilePath,
           duration_ms: duration,
-          num_tests: result.numPassingTests + result.numFailingTests,
+          num_tests: RESULT.numPassingTests + RESULT.numFailingTests,
         };
       }
     });
@@ -219,11 +219,11 @@ class JestCiCdReporter {
 
             // Track failure patterns
             const errorType = this.categorizeError(
-              test.failureMessages?.[0] || '',
+              test.failureMessages?.[0] || ''
             );
             failurePatterns.set(
               errorType,
-              (failurePatterns.get(errorType) || 0) + 1,
+              (failurePatterns.get(errorType) || 0) + 1
             );
           }
         });
@@ -367,8 +367,8 @@ class JestCiCdReporter {
     // Simplified parallel efficiency calculation
     const totalTime = Date.now() - this.startTime;
     const serialTime = results.testResults.reduce(
-      (sum, result) => sum + (result.perfStats.end - result.perfStats.start),
-      0,
+      (sum, result) => sum + (result.perfStats.end - RESULT.perfStats.start),
+      0
     );
 
     const efficiency =
@@ -566,19 +566,19 @@ class JestCiCdReporter {
 
     FS.writeFileSync(
       PATH.join(outputDir, 'deployment-gate.json'),
-      JSON.stringify(deploymentStatus, null, 2),
+      JSON.stringify(deploymentStatus, null, 2)
     );
 
     // Write simple status for shell scripts
     FS.writeFileSync(
       PATH.join(outputDir, 'test-status.txt'),
-      report.cicd_summary.pipeline_status,
+      report.cicd_summary.pipeline_status
     );
 
     // Write health score
     FS.writeFileSync(
       PATH.join(outputDir, 'health-score.txt'),
-      report.cicd_summary.test_health_score.toString(),
+      report.cicd_summary.test_health_score.toString()
     );
   }
 

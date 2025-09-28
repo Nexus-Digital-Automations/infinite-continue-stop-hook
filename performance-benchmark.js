@@ -544,9 +544,9 @@ class TaskManagerPerformanceBenchmark {
 
       const ep = endpoints[result.endpoint];
       ep.count++;
-      ep.totalTime += result.duration;
-      ep.minTime = Math.min(ep.minTime, result.duration);
-      ep.maxTime = Math.max(ep.maxTime, result.duration);
+      ep.totalTime += RESULT.duration;
+      ep.minTime = Math.min(ep.minTime, RESULT.duration);
+      ep.maxTime = Math.max(ep.maxTime, RESULT.duration);
       if (!result.success) {
         ep.errors++;
       }
@@ -578,9 +578,9 @@ class TaskManagerPerformanceBenchmark {
 
       const op = operations[result.OPERATION;
       op.count++;
-      op.totalTime += result.duration;
-      op.minTime = Math.min(op.minTime, result.duration);
-      op.maxTime = Math.max(op.maxTime, result.duration);
+      op.totalTime += RESULT.duration;
+      op.minTime = Math.min(op.minTime, RESULT.duration);
+      op.maxTime = Math.max(op.maxTime, RESULT.duration);
       if (!result.success) {
         op.errors++;
       }

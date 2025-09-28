@@ -254,7 +254,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(result.thresholds.slowThreshold).toBe(2000);
       expect(result.thresholds.criticalThreshold).toBe(6000);
 
-      const criticalBottlenecks = result.bottlenecks.filter(
+      const criticalBottlenecks = RESULT.bottlenecks.filter(
         (b) => b.severity === 'critical',
       );
       expect(criticalBottlenecks).toHaveLength(2); // build And test > 6000ms
@@ -270,12 +270,12 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(result.success).toBe(true);
       expect(result.recommendations).toBeDefined();
 
-      const buildRecommendation = result.recommendations.find(
+      const buildRecommendation = RESULT.recommendations.find(
         (r) => r.includes('build') && r.includes('incremental builds'),
       );
       expect(buildRecommendation).toBeDefined();
 
-      const testRecommendation = result.recommendations.find(
+      const testRecommendation = RESULT.recommendations.find(
         (r) => r.includes('test') && r.includes('parallel execution'),
       );
       expect(testRecommendation).toBeDefined();
@@ -354,7 +354,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(result.report.criteriaBreakdown).toBeDefined();
       expect(result.report.criteriaBreakdown).toHaveLength(5);
 
-      const buildCriteria = result.report.criteriaBreakdown.find(
+      const buildCriteria = RESULT.report.criteriaBreakdown.find(
         (c) => c.criterion === 'build-validation',
       );
       expect(buildCriteria).toBeDefined();
@@ -386,7 +386,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(result.report.performanceDistribution).toBeDefined();
       expect(Array.isArray(result.report.performanceDistribution)).toBe(true);
 
-      const distribution = result.report.performanceDistribution;
+      const distribution = RESULT.report.performanceDistribution;
       const totalCount = distribution.reduce(
         (sum, range) => sum + range.count,
         0,
@@ -481,13 +481,13 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       expect(result.success).toBe(true);
 
-      const buildBenchmark = result.benchmarks.by_criterion.find(
+      const buildBenchmark = RESULT.benchmarks.by_criterion.find(
         (c) => c.criterion === 'build-validation',
       );
       expect(buildBenchmark).toBeDefined();
       expect(buildBenchmark.meets_target).toBe(true); // 15000ms < 30000ms target
 
-      const testBenchmark = result.benchmarks.by_criterion.find(
+      const testBenchmark = RESULT.benchmarks.by_criterion.find(
         (c) => c.criterion === 'test-validation',
       );
       expect(testBenchmark).toBeDefined();
@@ -505,7 +505,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       // Should have recommendations for criteria That don't meet targets
       if (result.recommendations.length > 0) {
-        const recommendation = result.recommendations[0];
+        const recommendation = RESULT.recommendations[0];
         expect(recommendation.criterion).toBeDefined();
         expect(recommendation.current).toBeDefined();
         expect(recommendation.target).toBeDefined();

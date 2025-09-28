@@ -144,7 +144,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
       expect(result.report).toBeDefined();
 
       // Check report structure
-      const report = result.report;
+      const report = RESULT.report;
       expect(report.summary).toBeDefined();
       expect(report.dependencyAnalysis).toBeDefined();
       expect(report.executionPlanning).toBeDefined();
@@ -186,7 +186,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
 
       // Result structure should be correct even if execution fails due to mocked environment
       expect(result).toBeDefined();
-      expect(typeof result.success).toBe('boolean');
+      expect(typeof RESULT.success).toBe('boolean');
       expect(result.plan).toBeDefined();
 
       if (result.success) {

@@ -87,8 +87,8 @@ class JestJsonReporter {
           failed_suites: report.summary.numFailedTestSuites,
         },
         null,
-        2,
-      ),
+        2
+      )
     );
   }
 
@@ -118,7 +118,7 @@ class JestJsonReporter {
       };
 
       if (this.options.includeTestCases) {
-        result.testCases = testResult.testResults.map((testCase) => ({
+        RESULT.testCases = testResult.testResults.map((testCase) => ({
           ancestorTitles: testCase.ancestorTitles,
           title: testCase.title,
           fullName: testCase.fullName,
@@ -130,7 +130,7 @@ class JestJsonReporter {
       }
 
       if (this.options.includeAssertionResults && testResult.testResults) {
-        result.failureDetails = testResult.testResults
+        RESULT.failureDetails = testResult.testResults
           .filter((testCase) => testCase.status === 'failed')
           .map((testCase) => ({
             title: testCase.title,
@@ -145,7 +145,7 @@ class JestJsonReporter {
         testResult.console &&
         testResult.console.length > 0
       ) {
-        result.consoleOutput = testResult.console.map((log) => ({
+        RESULT.consoleOutput = testResult.console.map((log) => ({
           type: log.type,
           message: log.message,
           origin: log.origin,

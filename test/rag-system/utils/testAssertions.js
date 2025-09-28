@@ -51,22 +51,22 @@ class TestAssertions {
     expect(result).toHaveProperty('similarity');
 
     // Similarity validation
-    expect(typeof result.similarity).toBe('number');
+    expect(typeof RESULT.similarity).toBe('number');
     expect(result.similarity).toBeGreaterThan(0);
     expect(result.similarity).toBeLessThanOrEqual(1);
 
     // Metadata validation
     if (result.title) {
-      expect(typeof result.title).toBe('string');
+      expect(typeof RESULT.title).toBe('string');
       expect(result.title.length).toBeGreaterThan(0);
     }
 
     if (result.description) {
-      expect(typeof result.description).toBe('string');
+      expect(typeof RESULT.description).toBe('string');
     }
 
     if (result.content_type) {
-      expect(typeof result.content_type).toBe('string');
+      expect(typeof RESULT.content_type).toBe('string');
       expect([
         'error',
         'features',

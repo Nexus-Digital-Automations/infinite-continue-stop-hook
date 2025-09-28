@@ -73,7 +73,7 @@ class LoggingContextEnhancer {
           this.enhancedCalls++;
           enhanced = true;
           return `loggers.${loggerType}.${level}('${message}', ${JSON.stringify(contextInfo)});`;
-        },
+        }
       );
 
       // Enhance existing context logger calls to include standard fields
@@ -93,7 +93,7 @@ class LoggingContextEnhancer {
             // If we can't parse the context, leave it as is
             return match;
           }
-        },
+        }
       );
 
       if (enhanced) {
@@ -221,7 +221,7 @@ module.exports = {
     FS.writeFileSync(
       PATH.join(process.cwd(), 'lib/logging-utilities.js'),
       utilityCode,
-      'utf8',
+      'utf8'
     );
 
     loggers.app.info('Created enhanced logging utilities', {
@@ -237,9 +237,9 @@ if (require.main === module) {
     .enhance()
     .then(() => enhancer.createLoggingUtilities())
     .then((result) => {
-      if (result && result.enhancedCalls === 0) {
+      if (result && RESULT.enhancedCalls === 0) {
         loggers.app.warn(
-          'No logging calls were enhanced - may need manual review',
+          'No logging calls were enhanced - may need manual review'
         );
       }
     })

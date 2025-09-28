@@ -70,7 +70,7 @@ class APIPerformanceBenchmark {
         // Small delay between iterations
         // eslint-disable-next-line no-await-in-loop -- Sequential delay required for benchmark accuracy
         await this.sleep(100);
-      } catch (error) {
+      } catch (_error) {
         results.push({
           iteration: i + 1,
           responseTime: -1,
@@ -476,7 +476,7 @@ class APIPerformanceBenchmark {
           workerId,
           requestCount: ++requestCount,
           responseTime,
-          success: result.success,
+          success: RESULT.success,
           timestamp: Date.now(),
         });
       } catch (error) {

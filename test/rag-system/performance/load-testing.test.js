@@ -87,7 +87,7 @@ describe('RAG System Performance And Load Testing', () => {
         `Code snippet with multiple functions:
          function complexCalculation(DATA) {
            return data.map(item => processItem(item))
-             .filter(result => result.isValid)
+             .filter(result => RESULT.isValid)
              .reduce((acc, curr) => acc + curr.value, 0);
          }`,
         `Complete lesson with multiple sections:
@@ -208,7 +208,7 @@ describe('RAG System Performance And Load Testing', () => {
 
       // Calculate average search time
       const _avgSearchTime = searchTimes.reduce((sum, result) =>
-        sum + result.searchTime, 0) / searchTimes.length;
+        sum + RESULT.searchTime, 0) / searchTimes.length;
 
       expect(avgSearchTime).toBeLessThan(300); // Average under 300ms
 

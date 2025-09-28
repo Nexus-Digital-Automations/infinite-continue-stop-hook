@@ -50,7 +50,7 @@ describe('Dependency Management API Integration Tests', () => {
       expect(result).toHaveProperty('visualization');
 
       // Verify all standard criteria are present
-      const dependencies = result.dependencyGraph;
+      const dependencies = RESULT.dependencyGraph;
       expect(dependencies).toHaveProperty('focused-codebase');
       expect(dependencies).toHaveProperty('security-validation');
       expect(dependencies).toHaveProperty('linter-validation');
@@ -60,7 +60,7 @@ describe('Dependency Management API Integration Tests', () => {
       expect(dependencies).toHaveProperty('test-validation');
 
       // Verify visualization structure
-      const viz = result.visualization;
+      const viz = RESULT.visualization;
       expect(viz).toHaveProperty('nodes');
       expect(viz).toHaveProperty('edges');
       expect(viz).toHaveProperty('statistics');
@@ -85,7 +85,7 @@ describe('Dependency Management API Integration Tests', () => {
       expect(result.success).toBe(true);
       expect(result).toHaveProperty('visualization');
 
-      const viz = result.visualization;
+      const viz = RESULT.visualization;
       expect(viz).toHaveProperty('nodes');
       expect(viz).toHaveProperty('edges');
       expect(viz).toHaveProperty('statistics');
@@ -110,7 +110,7 @@ describe('Dependency Management API Integration Tests', () => {
       expect(result).toHaveProperty('executionOrder');
       expect(result).toHaveProperty('totalCriteria');
 
-      const order = result.executionOrder;
+      const order = RESULT.executionOrder;
       expect(order).toBeInstanceOf(Array);
       expect(order.length).toBe(7);
 
@@ -146,7 +146,7 @@ describe('Dependency Management API Integration Tests', () => {
       expect(result.success).toBe(true);
       expect(result.executionOrder.length).toBe(3);
 
-      const orderCriteria = result.executionOrder.map((item) => item.criterion);
+      const orderCriteria = RESULT.executionOrder.map((item) => item.criterion);
       expect(orderCriteria).toContain('linter-validation');
       expect(orderCriteria).toContain('build-validation');
       expect(orderCriteria).toContain('test-validation');
@@ -179,7 +179,7 @@ describe('Dependency Management API Integration Tests', () => {
 
       // Verify wave structure
       if (result.plan.length > 0) {
-        const firstWave = result.plan[0];
+        const firstWave = RESULT.plan[0];
         expect(firstWave).toHaveProperty('wave');
         expect(firstWave).toHaveProperty('criteria');
         expect(firstWave).toHaveProperty('estimatedDuration');
@@ -198,7 +198,7 @@ describe('Dependency Management API Integration Tests', () => {
       expect(result.plan).toBeInstanceOf(Array);
 
       // With concurrency limit of 2, no wave should exceed 2 criteria
-      result.plan.forEach((wave) => {
+      RESULT.plan.forEach((wave) => {
         expect(wave.concurrency).toBeLessThanOrEqual(2);
         expect(wave.criteria.length).toBeLessThanOrEqual(2);
       });
@@ -221,7 +221,7 @@ describe('Dependency Management API Integration Tests', () => {
       expect(result).toHaveProperty('plan');
       expect(result).toHaveProperty('adaptiveOptimizations');
 
-      const optimizations = result.adaptiveOptimizations;
+      const optimizations = RESULT.adaptiveOptimizations;
       expect(optimizations).toHaveProperty('systemAware');
       expect(optimizations).toHaveProperty('resourceScheduling');
       expect(optimizations).toHaveProperty('executionTiming');
@@ -277,7 +277,7 @@ describe('Dependency Management API Integration Tests', () => {
       expect(result.success).toBe(true);
       expect(result).toHaveProperty('dependency');
 
-      const dependency = result.dependency;
+      const dependency = RESULT.dependency;
       expect(dependency.criterion).toBe('build-validation');
       expect(dependency).toHaveProperty('dependencies');
       expect(dependency).toHaveProperty('metadata');
@@ -566,7 +566,7 @@ describe('Dependency Management API Integration Tests', () => {
       expect(result.plan).toBeInstanceOf(Array);
 
       // With concurrency 1, should be essentially sequential
-      result.plan.forEach((wave) => {
+      RESULT.plan.forEach((wave) => {
         expect(wave.concurrency).toBeLessThanOrEqual(1);
         expect(wave.criteria.length).toBeLessThanOrEqual(1);
       });

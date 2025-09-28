@@ -15,7 +15,7 @@
  */
 
 const { spawn } = require('child_process');
-const PATH = require('path');
+const FS = require('path');
 const {
   _execAPI,
   createTestEnvironment,
@@ -530,7 +530,7 @@ describe('CLI Commands Integration Tests', () => {
       const results = await Promise.all(promises);
 
       // 2. All should succeed
-      expect(results.every((result) => result.code === 0)).toBe(true);
+      expect(results.every((result) => RESULT.code === 0)).toBe(true);
 
       // 3. All should produce valid JSON
       results.forEach((result) => {
@@ -752,7 +752,7 @@ describe('CLI Commands Integration Tests', () => {
       const results = await Promise.all(promises);
 
       // 2. All should succeed
-      expect(results.every((result) => result.code === 0)).toBe(true);
+      expect(results.every((result) => RESULT.code === 0)).toBe(true);
 
       // 3. Verify all features were created
       const listResult = await execCLIDirect([

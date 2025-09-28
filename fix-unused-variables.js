@@ -7,11 +7,7 @@ const FS = require('fs');
 const PATH = require('path');
 const { loggers } = require('./lib/logger');
 
-function fixUnusedVariables(filePath) {
-  try {
-    if (!FS.existsSync(filePath)) {
-      return false;
-    }
+function filePath(_$2) {
 
     let content = FS.readFileSync(filePath, 'utf8');
     let modified = false;
@@ -63,7 +59,7 @@ function fixUnusedVariables(filePath) {
     // Fix specific patterns where variables are assigned to themselves
     content = content.replace(
       /error = error;/g,
-      '// error = error; // Self-assignment removed',
+      '// error = error; // Self-assignment removed'
     );
     if (content !== FS.readFileSync(filePath, 'utf8')) {
       modified = true;
@@ -72,13 +68,13 @@ function fixUnusedVariables(filePath) {
     if (modified) {
       FS.writeFileSync(filePath, content, 'utf8');
       loggers.app.info(
-        `✅ Fixed unused variables in ${PATH.relative('.', filePath)}`,
+        `✅ Fixed unused variables in ${PATH.relative('.', filePath)}`
       );
       return true;
     }
 
     return false;
-  } catch (error) {
+  } catch (_error) {
     loggers.app.error(`❌ Error fixing ${filePath}:`, { error: error.message });
     return false;
   }
@@ -110,7 +106,7 @@ function getFilesWithUnusedVars() {
 loggers.app.info('🎯 Fixing unused variable declarations...');
 const filesToFix = getFilesWithUnusedVars();
 loggers.app.info(
-  `📊 Processing ${filesToFix.length} files with unused variables...`,
+  `📊 Processing ${filesToFix.length} files with unused variables...`
 );
 
 let totalFixed = 0;

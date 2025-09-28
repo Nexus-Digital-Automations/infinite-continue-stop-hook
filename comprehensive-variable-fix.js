@@ -4,7 +4,7 @@
  */
 
 const fs = require('fs');
-const PATH = require('path');
+const FS = require('path');
 const { execSync } = require('child_process');
 const { loggers } = require('./lib/logger');
 
@@ -51,22 +51,16 @@ const catchBlockFixes = [
   },
 ];
 
-function applyComprehensiveFixes(filePath) {
-  // Convert relative path to absolute path for security validation
-  const absolutePath = PATH.resolve(rootDir, filePath);
-  const normalizedPath = PATH.normalize(absolutePath);
-
-  if (normalizedPath.includes('..') || !normalizedPath.startsWith(rootDir)) {
-    loggers.app.warn(`Security: Rejected unsafe path: ${filePath}`);
+function filePath(_$2) {`);
     return false;
   }
 
   try {
-    if (!fs.existsSync(normalizedPath)) {
+    if (!FS.existsSync(normalizedPath)) {
       return false;
     }
 
-    let content = fs.readFileSync(normalizedPath, 'utf8');
+    let content = FS.readFileSync(normalizedPath, 'utf8');
     let modified = false;
 
     // Apply comprehensive fixes
@@ -104,7 +98,7 @@ function applyComprehensiveFixes(filePath) {
           original: match[0],
           replacement: match[0].replace(
             /catch\s*\(\s*\)\s*\{/,
-            'catch (_error) {',
+            'catch (_error) {'
           ),
         });
       } else if (blockContent.includes('error')) {
@@ -112,7 +106,7 @@ function applyComprehensiveFixes(filePath) {
           original: match[0],
           replacement: match[0].replace(
             /catch\s*\(\s*\)\s*\{/,
-            'catch (error) {',
+            'catch (error) {'
           ),
         });
       }
@@ -125,7 +119,7 @@ function applyComprehensiveFixes(filePath) {
     });
 
     if (modified) {
-      fs.writeFileSync(normalizedPath, content, 'utf8');
+      FS.writeFileSync(normalizedPath, content, 'utf8');
       loggers.app.info(`✅ Fixed: ${PATH.relative(rootDir, filePath)}`);
       return true;
     }
@@ -144,7 +138,7 @@ function getAllJsFiles() {
   try {
     const output = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./.git/*"',
-      { cwd: rootDir, encoding: 'utf8' },
+      { cwd: rootDir, encoding: 'utf8' }
     );
     return output
       .trim()
@@ -196,7 +190,7 @@ try {
   const warningCount = warningMatches ? parseInt(warningMatches[1]) : 0;
 
   loggers.app.info(
-    `📊 Final status: ${errorCount} errors, ${warningCount} warnings remaining`,
+    `📊 Final status: ${errorCount} errors, ${warningCount} warnings remaining`
   );
 
   if (errorCount === 0) {

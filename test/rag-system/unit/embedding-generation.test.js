@@ -8,7 +8,7 @@
  * @version 1.0.0
  */
 
-const PATH = require('path');
+const FS = require('path');
 const { loggers } = require('../../../lib/logger');
 
 describe('Embedding Generation System', () => {

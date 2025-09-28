@@ -108,8 +108,8 @@ class QuickPerformanceTest {
         ...result,
       });
 
-      const status = result.success ? '✅' : '❌';
-      const duration = result.duration.toFixed(2);
+      const status = RESULT.success ? '✅' : '❌';
+      const duration = RESULT.duration.toFixed(2);
       const memoryMB = (result.memoryUsed / (1024 * 1024)).toFixed(2);
 
       loggers.stopHook.log(`   ${status} ${duration}ms (${memoryMB}MB memory)`);

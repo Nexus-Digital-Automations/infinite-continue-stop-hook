@@ -256,10 +256,10 @@ describe('Feature Lifecycle Integration Tests', () => {
       const results = await execAPIConcurrently(commands);
 
       // 3. Verify all succeeded
-      expect(results.every((result) => result.success)).toBe(true);
+      expect(results.every((result) => RESULT.success)).toBe(true);
 
       // 4. Verify unique IDs
-      const featureIds = results.map((result) => result.feature.id);
+      const featureIds = results.map((result) => RESULT.feature.id);
       const uniqueIds = new Set(featureIds);
       expect(uniqueIds.size).toBe(featureCount);
 

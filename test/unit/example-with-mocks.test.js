@@ -175,7 +175,7 @@ describe('Example Test with Mock Framework', () => {
       expect(result.features.length).toBeGreaterThan(0);
 
       // All features should be enhancement category
-      result.features.forEach((feature) => {
+      RESULT.features.forEach((feature) => {
         expect(feature.category).toBe('enhancement');
       });
     });
@@ -327,7 +327,7 @@ describe('Example Test with Mock Framework', () => {
       try {
         await APIExecutor.execAPI('invalid-command');
         expect.fail('Should have thrown an error');
-      } catch (error) {
+      } catch (_error) {
         expect(error.message).toBeDefined();
         TestLogger.debug('Handled expected error', { error: error.message });
       }

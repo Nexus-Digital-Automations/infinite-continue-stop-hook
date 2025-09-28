@@ -225,7 +225,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
                       if (
                         outputNotContains &&
-                        result.includes(outputNotContains)
+                        RESULT.includes(outputNotContains)
                       ) {
                         return {
                           success: false,
@@ -511,7 +511,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     };
                   }
 
-                  if (outputNotContains && result.includes(outputNotContains)) {
+                  if (outputNotContains && RESULT.includes(outputNotContains)) {
                     return {
                       success: false,
                       error: `Custom validation '${customRule.name}' failed: forbidden output detected`,
@@ -642,7 +642,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     };
                   }
 
-                  if (outputNotContains && result.includes(outputNotContains)) {
+                  if (outputNotContains && RESULT.includes(outputNotContains)) {
                     return {
                       success: false,
                       error: `Custom validation '${customRule.name}' failed: forbidden output detected`,
@@ -773,7 +773,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     };
                   }
 
-                  if (outputNotContains && result.includes(outputNotContains)) {
+                  if (outputNotContains && RESULT.includes(outputNotContains)) {
                     return {
                       success: false,
                       error: `Custom validation '${customRule.name}' failed: forbidden output detected`,

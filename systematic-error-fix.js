@@ -17,7 +17,7 @@ const systematicFixes = [
   { pattern: /\bpath\./g, replacement: 'PATH.' },
 
   // Fix unused variable declarations by prefixing with underscore
-  { pattern: /const FS = /g, replacement: 'const FS = ' },
+  { pattern: /const unused = /g, replacement: 'const FS = ' },
   { pattern: /const PATH = /g, replacement: 'const PATH = ' },
   { pattern: /const agentId = /g, replacement: 'const agentId = ' },
   { pattern: /const CONFIG_PATH = /g, replacement: 'const CONFIG_PATH = ' },
@@ -36,12 +36,7 @@ const systematicFixes = [
   { pattern: /\bPATH\b(?=.*\))/g, replacement: 'PATH' },
 ];
 
-function applySystematicFixes(filePath) {
-  // Convert relative path to absolute path for security validation
-  const absolutePath = PATH.resolve(rootDir, filePath);
-  const normalizedPath = PATH.normalize(absolutePath);
-  if (normalizedPath.includes('..') || !normalizedPath.startsWith(rootDir)) {
-    loggers.app.warn(`Security: Rejected unsafe path: ${filePath}`);
+function filePath(_$2) {`);
     return false;
   }
 
@@ -63,7 +58,7 @@ function applySystematicFixes(filePath) {
     });
 
     // Fix catch blocks with undefined error variables
-    // Pattern: catch (error) { ... error.something ... }
+    // Pattern: catch (_error) { ... error.something ... }
     const catchBlockRegex =
       /catch\s*\(\s*\)\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g;
     let match;
@@ -73,7 +68,7 @@ function applySystematicFixes(filePath) {
         const errorVar = blockContent.includes('_error') ? '_error' : 'error';
         const replacement = match[0].replace(
           /catch\s*\(\s*\)\s*\{/,
-          `catch (${errorVar}) {`,
+          `catch (${errorVar}) {`
         );
         content = content.replace(match[0], replacement);
         modified = true;
@@ -114,7 +109,7 @@ function getAllJsFiles() {
   try {
     const output = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./.git/*"',
-      { cwd: rootDir, encoding: 'utf8' },
+      { cwd: rootDir, encoding: 'utf8' }
     );
     return output
       .trim()
@@ -157,7 +152,7 @@ try {
   const warningCount = warningMatches ? parseInt(warningMatches[1]) : 0;
 
   loggers.app.info(
-    `📊 Progress: ${errorCount} errors, ${warningCount} warnings remaining`,
+    `📊 Progress: ${errorCount} errors, ${warningCount} warnings remaining`
   );
 
   if (errorCount === 0) {

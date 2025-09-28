@@ -158,7 +158,7 @@ describe('File Operations Integration Tests', () => {
       const results = await execAPIConcurrently(concurrentCommands);
 
       // 2. Verify all operations succeeded
-      expect(results.every((result) => result.success)).toBe(true);
+      expect(results.every((result) => RESULT.success)).toBe(true);
 
       // 3. Verify file integrity after concurrent operations
       const featuresData = await readFeaturesFile(testDir);
@@ -175,14 +175,14 @@ describe('File Operations Integration Tests', () => {
       const approvalCommands = results.slice(0, 3).map((result) => ({
         command: 'approve-feature',
         args: [
-          result.feature.id,
+          RESULT.feature.id,
           JSON.stringify({ approved_by: 'concurrent-test' }),
         ],
         options: { projectRoot: testDir },
       }));
 
       const approvalResults = await execAPIConcurrently(approvalCommands);
-      expect(approvalResults.every((result) => result.success)).toBe(true);
+      expect(approvalResults.every((result) => RESULT.success)).toBe(true);
 
       // 6. Verify final file integrity
       const finalFeaturesData = await readFeaturesFile(testDir);
@@ -330,7 +330,7 @@ describe('File Operations Integration Tests', () => {
         }));
 
         const batchResults = await execAPIConcurrently(batchCommands);
-        expect(batchResults.every((result) => result.success)).toBe(true);
+        expect(batchResults.every((result) => RESULT.success)).toBe(true);
       }
 
       // 3. Verify file integrity with large dataset
@@ -371,7 +371,7 @@ describe('File Operations Integration Tests', () => {
       const results = await Promise.all(operations);
 
       // 3. Verify all operations succeeded
-      expect(results.every((result) => result.success)).toBe(true);
+      expect(results.every((result) => RESULT.success)).toBe(true);
 
       // 4. Verify final file integrity
       const featuresData = await readFeaturesFile(testDir);
@@ -405,7 +405,7 @@ describe('File Operations Integration Tests', () => {
       }));
 
       const initialResults = await execAPIConcurrently(initialCommands);
-      expect(initialResults.every((result) => result.success)).toBe(true);
+      expect(initialResults.every((result) => RESULT.success)).toBe(true);
 
       // 2. Mix read And write operations
       const mixedOperations = [
@@ -447,7 +447,7 @@ describe('File Operations Integration Tests', () => {
       const mixedResults = await Promise.all(mixedOperations);
 
       // 4. Verify all operations succeeded
-      expect(mixedResults.every((result) => result.success)).toBe(true);
+      expect(mixedResults.every((result) => RESULT.success)).toBe(true);
 
       // 5. Verify final file integrity
       const featuresData = await readFeaturesFile(testDir);

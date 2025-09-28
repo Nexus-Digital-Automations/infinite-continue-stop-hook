@@ -7,11 +7,7 @@ const FS = require('fs');
 const PATH = require('path');
 const { loggers } = require('./lib/logger');
 
-function fixErrorCatchBlocks(filePath) {
-  try {
-    if (!FS.existsSync(filePath)) {
-      return false;
-    }
+function filePath(_$2) {
 
     let content = FS.readFileSync(filePath, 'utf8');
     let modified = false;
@@ -29,7 +25,7 @@ function fixErrorCatchBlocks(filePath) {
       if (blockContent.includes('error') && !blockContent.includes('_error')) {
         replacements.push({
           original: match[0],
-          replacement: match[0].replace('} catch {', '} catch (error) {'),
+          replacement: match[0].replace('} catch {', '} catch (_error) {'),
         });
       }
     }
@@ -43,7 +39,7 @@ function fixErrorCatchBlocks(filePath) {
     if (modified) {
       FS.writeFileSync(filePath, content, 'utf8');
       loggers.app.info(
-        `✅ Fixed error catch blocks in ${PATH.relative('.', filePath)}`,
+        `✅ Fixed error catch blocks in ${PATH.relative('.', filePath)}`
       );
       return true;
     }
@@ -83,7 +79,7 @@ function getFilesWithErrorIssues() {
 loggers.app.info('🎯 Fixing undefined error variables in catch blocks...');
 const filesToFix = getFilesWithErrorIssues();
 loggers.app.info(
-  `📊 Processing ${filesToFix.length} files with error issues...`,
+  `📊 Processing ${filesToFix.length} files with error issues...`
 );
 
 let totalFixed = 0;

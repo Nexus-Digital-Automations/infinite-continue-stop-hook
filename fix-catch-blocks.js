@@ -7,11 +7,7 @@ const FS = require('fs');
 const PATH = require('path');
 const { loggers } = require('./lib/logger');
 
-function fixCatchBlocks(filePath) {
-  try {
-    if (!FS.existsSync(filePath)) {
-      return false;
-    }
+function filePath(_$2) {
 
     let content = FS.readFileSync(filePath, 'utf8');
     let modified = false;
@@ -43,7 +39,7 @@ function fixCatchBlocks(filePath) {
     if (modified) {
       FS.writeFileSync(filePath, content, 'utf8');
       loggers.app.info(
-        `✅ Fixed catch blocks in ${PATH.relative('.', filePath)}`,
+        `✅ Fixed catch blocks in ${PATH.relative('.', filePath)}`
       );
       return true;
     }

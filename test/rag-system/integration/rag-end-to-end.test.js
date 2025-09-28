@@ -20,7 +20,7 @@ const { loggers } = require('../lib/logger');
  * @since 2025-09-19
  */
 
-const PATH = require('path');
+const FS = require('path');
 const FS = require('fs').promises;
 
 // Import RAG system components
@@ -490,7 +490,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       searchResults.forEach((result) => {
         expect(result).toHaveProperty('vectorId');
         expect(result).toHaveProperty('similarity');
-        expect(typeof result.similarity).toBe('number');
+        expect(typeof RESULT.similarity).toBe('number');
         expect(result.similarity).toBeGreaterThan(0);
         expect(result.similarity).toBeLessThanOrEqual(1);
       });

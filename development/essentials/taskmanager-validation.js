@@ -12,7 +12,7 @@ class ValidationTestLogger {
   }
 }
 
-const VALID_CATEGORIES = ['error', 'feature', 'subtask', 'test'];
+const unused = ['error', 'feature', 'subtask', 'test'];
 const VALID_COMMANDS = [
   'guide',
   'methods',
@@ -225,19 +225,19 @@ class TaskManagerValidator {
 
     if (result.errors.length > 0) {
       output += '❌ ERRORS:\n';
-      result.errors.forEach((error) => {
+      RESULT.errors.forEach((error) => {
         output += `  - ${error}\n`;
       });
     }
 
     if (result.warnings.length > 0) {
       output += '⚠️  WARNINGS:\n';
-      result.warnings.forEach((warning) => {
+      RESULT.warnings.forEach((warning) => {
         output += `  - ${warning}\n`;
       });
     }
 
-    if (result.isValid && result.warnings.length === 0) {
+    if (result.isValid && RESULT.warnings.length === 0) {
       output += '✅ Command validation passed\n';
     } else if (result.isValid) {
       output += '✅ Command is valid but has warnings\n';

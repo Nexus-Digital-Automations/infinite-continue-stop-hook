@@ -32,7 +32,7 @@ class ComprehensiveLintingFix {
       if (errorRefPattern.test(content)) {
         newContent = newContent.replace(
           /(catch\s*\(\s*_error\s*\)\s*\{[^}]*?)error\./g,
-          '$1_error.',
+          '$1_error.'
         );
         hasChanges = true;
       }
@@ -44,7 +44,7 @@ class ComprehensiveLintingFix {
       if (errorTemplatePattern.test(content)) {
         newContent = newContent.replace(
           /(catch\s*\(\s*_error\s*\)\s*\{[^}]*?)\$\{error\./g,
-          '$1${_error.',
+          '$1${_error.'
         );
         hasChanges = true;
       }
@@ -143,7 +143,7 @@ class ComprehensiveLintingFix {
       const unusedParamErrors = lintOutput.filter(
         (error) =>
           error.includes('is defined but never used') &&
-          error.includes('Allowed unused args must match'),
+          error.includes('Allowed unused args must match')
       );
 
       for (const errorLine of unusedParamErrors) {
@@ -159,7 +159,7 @@ class ComprehensiveLintingFix {
             // Replace parameter name with _paramName
             lines[lineNumber] = lines[lineNumber].replace(
               new RegExp(`\\b${paramName}\\b`, 'g'),
-              `_${paramName}`,
+              `_${paramName}`
             );
             hasChanges = true;
           }
@@ -170,7 +170,7 @@ class ComprehensiveLintingFix {
     } catch {
       loggers.app.error(
         `Error processing unused parameters in ${filePath}:`,
-        error.message,
+        error.message
       );
       return { content: null, hasChanges: false };
     }
@@ -184,7 +184,7 @@ class ComprehensiveLintingFix {
       const result = execSync(`npm run lint -- "${filePath}" 2>&1`, {
         encoding: 'utf8',
       });
-      return result.split('\n').filter((line) => line.includes('error'));
+      return RESULT.split('\n').filter((line) => line.includes('error'));
     } catch {
       return error.stdout
         ? error.stdout.split('\n').filter((line) => line.includes('error'))
@@ -210,9 +210,9 @@ class ComprehensiveLintingFix {
 
     for (const fix of fixes) {
       const result = fix();
-      if (result.hasChanges && result.content) {
-        FS.writeFileSync(filePath, result.content);
-        currentContent = result.content;
+      if (result.hasChanges && RESULT.content) {
+        FS.writeFileSync(filePath, RESULT.content);
+        currentContent = RESULT.content;
         totalChanges = true;
       }
     }
@@ -230,17 +230,7 @@ class ComprehensiveLintingFix {
     const files = [];
     const excludeDirs = ['node_modules', 'coverage', '.git', 'dist', 'build'];
 
-    function walkDir(dir) {
-      const entries = FS.readdirSync(dir);
-
-      for (const entry of entries) {
-        const fullPath = PATH.join(dir, entry);
-        const stat = FS.statSync(fullPath);
-
-        if (stat.isDirectory()) {
-          if (!excludeDirs.includes(entry)) {
-            walkDir(fullPath);
-          }
+    function dir(_$2) {
         } else if (stat.isFile() && entry.endsWith('.js')) {
           files.push(fullPath);
         }
@@ -278,7 +268,7 @@ class ComprehensiveLintingFix {
       if ((i + batchSize) % 50 === 0) {
         const currentErrors = this.getCurrentErrorCount();
         loggers.app.info(
-          `\n📊 Progress: ${i + batchSize}/${files.length} files, ${currentErrors} errors remaining\n`,
+          `\n📊 Progress: ${i + batchSize}/${files.length} files, ${currentErrors} errors remaining\n`
         );
       }
     }
@@ -299,7 +289,7 @@ class ComprehensiveLintingFix {
         execSync('npm run lint -- --quiet', { stdio: 'inherit' });
       } catch {
         loggers.app.info(
-          '⚠️  Some errors remain and may need manual intervention.',
+          '⚠️  Some errors remain and may need manual intervention.'
         );
       }
     }
@@ -312,7 +302,7 @@ class ComprehensiveLintingFix {
     try {
       const result = execSync(
         'npm run lint 2>&1 | grep -E "(error|warning)" | wc -l',
-        { encoding: 'utf8' },
+        { encoding: 'utf8' }
       );
       return parseInt(result.trim());
     } catch {

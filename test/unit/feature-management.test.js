@@ -14,7 +14,7 @@
  * of the FeatureManagerAPI with detailed lifecycle testing.
  */
 
-const PATH = require('path');
+const FS = require('path');
 const {
   MockFileSystem,
   TEST_FIXTURES,
@@ -178,7 +178,7 @@ describe('Feature Management Lifecycle', () => {
         });
 
         // Extract feature IDs
-        const featureIds = new Set(results.map((result) => result.feature.id));
+        const featureIds = new Set(results.map((result) => RESULT.feature.id));
 
         // All IDs should be unique
         expect(featureIds.size).toBe(numFeatures);
@@ -757,7 +757,7 @@ describe('Feature Management Lifecycle', () => {
         expect(result.errors).toHaveLength(0);
 
         // Verify all features are approved
-        result.approved_features.forEach((approvedFeature) => {
+        RESULT.approved_features.forEach((approvedFeature) => {
           expect(approvedFeature.success).toBe(true);
           expect(approvedFeature.status).toBe('approved');
           expect(suggestedFeatureIds).toContain(approvedFeature.feature_id);
@@ -804,7 +804,7 @@ describe('Feature Management Lifecycle', () => {
         expect(result.error_count).toBe(3);
         expect(result.errors).toHaveLength(3);
 
-        result.errors.forEach((error) => {
+        RESULT.errors.forEach((error) => {
           expect(error).toContain('not found');
         });
       });
@@ -846,7 +846,7 @@ describe('Feature Management Lifecycle', () => {
         expect(result.metadata).toBeDefined();
 
         // Verify feature data structure
-        result.features.forEach((feature) => {
+        RESULT.features.forEach((feature) => {
           testHelpers.validateFeatureStructure(feature);
         });
       });
@@ -931,7 +931,7 @@ describe('Feature Management Lifecycle', () => {
         expect(result.stats).toBeDefined();
         expect(result.metadata).toBeDefined();
 
-        const stats = result.stats;
+        const stats = RESULT.stats;
         expect(stats.total).toBe(3);
         expect(stats.by_status).toEqual({
           suggested: 1,
@@ -954,7 +954,7 @@ describe('Feature Management Lifecycle', () => {
         expect(result.stats.recent_activity.length).toBe(2); // From test fixtures
 
         // Verify recent activity structure
-        result.stats.recent_activity.forEach((activity) => {
+        RESULT.stats.recent_activity.forEach((activity) => {
           expect(activity).toHaveProperty('feature_id');
           expect(activity).toHaveProperty('action');
           expect(activity).toHaveProperty('timestamp');

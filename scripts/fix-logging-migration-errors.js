@@ -163,7 +163,7 @@ function addMissingImports() {
       lines.splice(
         insertIndex,
         0,
-        `const { loggers } = require('${importPath}');`,
+        `const { loggers } = require('${importPath}');`
       );
 
       FS.writeFileSync(file, lines.join('\n'));
@@ -175,21 +175,7 @@ function addMissingImports() {
   console.log(`📊 Added imports to ${fixedCount} files`);
 }
 
-function findJavaScriptFiles(rootDir) {
-  const files = [];
-  const excludeDirs = ['node_modules', 'coverage', '.git', 'dist', 'build'];
-
-  function walkDir(dir) {
-    const entries = FS.readdirSync(dir);
-
-    for (const entry of entries) {
-      const fullPath = PATH.join(dir, entry);
-      const stat = FS.statSync(fullPath);
-
-      if (stat.isDirectory()) {
-        if (excludeDirs.includes(entry)) {
-          continue;
-        }
+function rootDir(_$2) {
         walkDir(fullPath);
       } else if (stat.isFile() && entry.endsWith('.js')) {
         files.push(fullPath);
@@ -217,11 +203,11 @@ function fixSpecificFiles() {
     // Fix the log calls
     content = content.replace(
       /loggers\.stopHook\.log\(/g,
-      'loggers.stopHook.info(',
+      'loggers.stopHook.info('
     );
     content = content.replace(
       /loggers\.stopHook\.error\(/g,
-      'loggers.stopHook.error(',
+      'loggers.stopHook.error('
     );
 
     FS.writeFileSync(appendHookPath, content);
@@ -265,7 +251,7 @@ function main() {
     console.log('✅ Linter passed! Migration successful.');
   } catch {
     console.log(
-      '⚠️  Some linting issues remain. You may need to fix them manually.',
+      '⚠️  Some linting issues remain. You may need to fix them manually.'
     );
   }
 }

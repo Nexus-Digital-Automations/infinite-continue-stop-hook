@@ -442,15 +442,7 @@ function expectAPICall(command, _args = []) {
   expect(history).toBeDefined();
 }
 
-function expectFeatureCreated(featureData) {
-  const mockManager = getMockManager();
-  if (mockManager) {
-    const features = Array.from(mockManager.taskManagerAPI.features.values());
-    const feature = features.find((f) => f.title === featureData.title);
-    expect(feature).toBeDefined();
-    expect(feature.title).toBe(featureData.title);
-    return feature;
-  }
+function featureData(_$2) {
   return null;
 }
 

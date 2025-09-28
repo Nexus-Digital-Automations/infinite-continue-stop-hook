@@ -9,7 +9,7 @@ const { loggers } = require('../lib/logger');
  * @version 1.0.0
  */
 
-const PATH = require('path');
+const FS = require('path');
 const FS = require('fs').promises;
 
 // Global test configuration

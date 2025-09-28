@@ -1032,7 +1032,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
       // Verify all standard criteria have proper configurations
       standardCriteria.forEach((criterion) => {
         expect(result.dependencyGraph).toHaveProperty(criterion);
-        const config = result.dependencyGraph[criterion];
+        const config = RESULT.dependencyGraph[criterion];
         expect(config.metadata.description).toBeTruthy();
         expect(config.metadata.estimatedDuration).toBeGreaterThan(0);
       });

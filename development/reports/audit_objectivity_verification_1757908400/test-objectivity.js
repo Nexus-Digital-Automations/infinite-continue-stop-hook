@@ -1,4 +1,4 @@
-const TASK_MANAGER = require("./lib/taskManager");
+const FS = require("./lib/taskManager");
 const { loggers } = require('./lib/logger');
 
 async function testObjectivityEnforcement() {

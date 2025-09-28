@@ -127,7 +127,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       }
 
       // 2. Verify all agents have unique session IDs
-      const sessionIds = initResults.map((result) => result.agent.sessionId);
+      const sessionIds = initResults.map((result) => RESULT.agent.sessionId);
       const uniqueSessionIds = new Set(sessionIds);
       expect(uniqueSessionIds.size).toBe(agentIds.length);
 
@@ -164,10 +164,10 @@ describe('Agent Lifecycle Integration Tests', () => {
       const results = await execAPIConcurrently(concurrentCommands);
 
       // 2. Verify all initializations succeeded
-      expect(results.every((result) => result.success)).toBe(true);
+      expect(results.every((result) => RESULT.success)).toBe(true);
 
       // 3. Verify all agents have unique session IDs
-      const sessionIds = results.map((result) => result.agent.sessionId);
+      const sessionIds = results.map((result) => RESULT.agent.sessionId);
       const uniqueSessionIds = new Set(sessionIds);
       expect(uniqueSessionIds.size).toBe(agentIds.length);
 
@@ -361,10 +361,10 @@ describe('Agent Lifecycle Integration Tests', () => {
       const reinitResults = await execAPIConcurrently(reinitCommands);
 
       // 3. Verify all reinitializations succeeded
-      expect(reinitResults.every((result) => result.success)).toBe(true);
+      expect(reinitResults.every((result) => RESULT.success)).toBe(true);
 
       // 4. Verify unique session IDs
-      const sessionIds = reinitResults.map((result) => result.agent.sessionId);
+      const sessionIds = reinitResults.map((result) => RESULT.agent.sessionId);
       const uniqueSessionIds = new Set(sessionIds);
       expect(uniqueSessionIds.size).toBe(agentIds.length);
 

@@ -12,7 +12,7 @@
  * @version 1.0.0
  */
 
-const PATH = require('path');
+const FS = require('path');
 const {
   execAPI,
   createTestEnvironment,
@@ -229,9 +229,9 @@ describe('API Workflow Integration Tests', () => {
       const suggestResults = await Promise.all(suggestPromises);
 
       // Verify all suggestions succeeded
-      expect(suggestResults.every((result) => result.success)).toBe(true);
+      expect(suggestResults.every((result) => RESULT.success)).toBe(true);
 
-      const featureIds = suggestResults.map((result) => result.feature.id);
+      const featureIds = suggestResults.map((result) => RESULT.feature.id);
 
       // 2. Bulk approve all features
       const bulkApprovalData = {
@@ -383,7 +383,7 @@ describe('API Workflow Integration Tests', () => {
       const initResults = await Promise.all(initPromises);
 
       // Verify all initializations succeeded
-      expect(initResults.every((result) => result.success)).toBe(true);
+      expect(initResults.every((result) => RESULT.success)).toBe(true);
       initResults.forEach((result, index) => {
         expect(result.agent.id).toBe(agentIds[index]);
         expect(result.agent.status).toBe('initialized');
@@ -404,7 +404,7 @@ describe('API Workflow Integration Tests', () => {
       const reinitResults = await Promise.all(reinitPromises);
 
       // Verify all reinitializations succeeded
-      expect(reinitResults.every((result) => result.success)).toBe(true);
+      expect(reinitResults.every((result) => RESULT.success)).toBe(true);
       reinitResults.forEach((result, index) => {
         expect(result.agent.id).toBe(agentIds[index]);
         expect(result.agent.status).toBe('reinitialized');

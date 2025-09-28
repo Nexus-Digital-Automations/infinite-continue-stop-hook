@@ -314,7 +314,7 @@ describe('Trend Analysis API Integration Tests', () => {
 
       expect(result.success).toBe(true);
       expect(result.healthTrends.summary.recommendation).toBeDefined();
-      expect(typeof result.healthTrends.summary.recommendation).toBe('string');
+      expect(typeof RESULT.healthTrends.summary.recommendation).toBe('string');
     });
   });
 

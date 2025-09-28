@@ -225,7 +225,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
               return { success: false, error: 'Expected output not found' };
             }
 
-            if (outputNotContains && result.includes(outputNotContains)) {
+            if (outputNotContains && RESULT.includes(outputNotContains)) {
               return { success: false, error: 'Forbidden output detected' };
             }
           }
@@ -275,7 +275,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
               return { success: false, error: 'Expected output not found' };
             }
 
-            if (outputNotContains && result.includes(outputNotContains)) {
+            if (outputNotContains && RESULT.includes(outputNotContains)) {
               return { success: false, error: 'Forbidden output detected' };
             }
           }
@@ -325,7 +325,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
               return { success: false, error: 'Expected output not found' };
             }
 
-            if (outputNotContains && result.includes(outputNotContains)) {
+            if (outputNotContains && RESULT.includes(outputNotContains)) {
               return { success: false, error: 'Forbidden output detected' };
             }
           }

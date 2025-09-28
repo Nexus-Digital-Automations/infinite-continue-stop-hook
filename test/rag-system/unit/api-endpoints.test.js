@@ -10,7 +10,7 @@
 
 const { loggers } = require('../../../lib/logger');
 const _request = require('supertest');
-const PATH = require('path');
+const FS = require('path');
 
 // Import TaskManager API - will be updated when RAG endpoints are implemented
 const _API_BASE =

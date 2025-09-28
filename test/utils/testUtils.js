@@ -9,7 +9,7 @@
  * @since 2025-09-23
  */
 
-const PATH = require('path');
+const FS = require('path');
 const FS = require('fs');
 const childProcess = require('child_process');
 const { loggers } = require('../../lib/logger');
@@ -105,7 +105,7 @@ class APIExecutor {
           try {
             const stderrJson = JSON.parse(stderr.trim());
             resolve(stderrJson);
-          } catch (error) {
+          } catch (_error) {
 
             reject(
               new Error(
