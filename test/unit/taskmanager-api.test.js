@@ -12,7 +12,7 @@
  * Target: >90% code coverage with thorough testing of all code paths
  */
 
-const FS = require('path');
+const path = require('path');
 const crypto = require('crypto');
 const {
   MockFileSystem,
@@ -35,7 +35,7 @@ const FeatureManagerAPI = require('../../taskmanager-api.js');
 
 // Test constants
 const TEST_PROJECT_ROOT = '/test/project';
-const TEST_FEATURES_PATH = PATH.join(TEST_PROJECT_ROOT, 'FEATURES.json');
+const TEST_FEATURES_PATH = path.join(TEST_PROJECT_ROOT, 'FEATURES.json');
 
 describe('FeatureManagerAPI', () => {
   let api;
@@ -612,7 +612,7 @@ describe('FeatureManagerAPI', () => {
         expect(result.errors).toHaveLength(0);
 
         // Verify all features are approved
-        RESULT.approved_features.forEach((approvedFeature) => {
+        result.approved_features.forEach((approvedFeature) => {
           expect(approvedFeature.status).toBe('approved');
           expect(approvedFeature.success).toBe(true);
         });
@@ -644,7 +644,7 @@ describe('FeatureManagerAPI', () => {
         expect(result.approved_count).toBe(0);
         expect(result.error_count).toBe(2);
         expect(result.errors).toHaveLength(2);
-        RESULT.errors.forEach((error) => {
+        result.errors.forEach((error) => {
           expect(error).toContain('not found');
         });
       });
@@ -678,7 +678,7 @@ describe('FeatureManagerAPI', () => {
         expect(result.metadata).toBeDefined();
 
         // Verify features are correctly returned
-        const statuses = RESULT.features.map((f) => f.status);
+        const statuses = result.features.map((f) => f.status);
         expect(statuses).toContain('suggested');
         expect(statuses).toContain('approved');
         expect(statuses).toContain('rejected');
@@ -734,7 +734,7 @@ describe('FeatureManagerAPI', () => {
         expect(result.stats).toBeDefined();
         expect(result.metadata).toBeDefined();
 
-        const stats = RESULT.stats;
+        const stats = result.stats;
         expect(stats.total).toBe(3);
         expect(stats.by_status.suggested).toBe(1);
         expect(stats.by_status.approved).toBe(1);
@@ -1090,8 +1090,8 @@ describe('FeatureManagerAPI', () => {
 
         expect(result.success).toBe(true);
         expect(result.stats.today_totals).toBeDefined();
-        expect(typeof RESULT.stats.today_totals.initializations).toBe('number');
-        expect(typeof RESULT.stats.today_totals.reinitializations).toBe(
+        expect(typeof result.stats.today_totals.initializations).toBe('number');
+        expect(typeof result.stats.today_totals.reinitializations).toBe(
           'number',
         );
       });
