@@ -468,7 +468,7 @@ class APIPerformanceBenchmark {
 
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential load testing requires controlled timing
-        const _result = await this.runCommand(endpoint);
+        const result = await this.runCommand(endpoint);
         const responseTime =
           Number(process.hrtime.bigint() - startTime) / 1000000;
 
@@ -476,7 +476,7 @@ class APIPerformanceBenchmark {
           workerId,
           requestCount: ++requestCount,
           responseTime,
-          success: _result.success,
+          success: result.success,
           timestamp: Date.now(),
         });
       } catch (error) {
