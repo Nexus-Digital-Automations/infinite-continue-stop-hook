@@ -304,7 +304,7 @@ describe('CLI Commands Integration Tests', () => {
       expect(initResult.code).toBe(0);
       const initOutput = JSON.parse(initResult.stdout);
       expect(initOutput.success).toBe(true);
-      expect(initOutput.agent.id).toBe(_agentId);
+      expect(initOutput.agent.id).toBe(AGENT_ID);
 
       // 2. Get initialization stats
       const statsResult = await execCLIDirect([
@@ -343,7 +343,7 @@ describe('CLI Commands Integration Tests', () => {
       expect(stopResult.code).toBe(0);
       const stopOutput = JSON.parse(stopResult.stdout);
       expect(stopOutput.success).toBe(true);
-      expect(stopOutput.authorization.authorized_by).toBe(_agentId);
+      expect(stopOutput.authorization.authorized_by).toBe(AGENT_ID);
     });
 
     test('should execute bulk operations', async () => {

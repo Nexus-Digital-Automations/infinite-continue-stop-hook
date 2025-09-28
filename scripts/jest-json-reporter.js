@@ -118,7 +118,7 @@ class JestJsonReporter {
       };
 
       if (this.options.includeTestCases) {
-        result.testCases = testResult.testResults.map((testCase) => ({
+        RESULT.testCases = testResult.testResults.map((testCase) => ({
           ancestorTitles: testCase.ancestorTitles,
           title: testCase.title,
           fullName: testCase.fullName,
@@ -130,7 +130,7 @@ class JestJsonReporter {
       }
 
       if (this.options.includeAssertionResults && testResult.testResults) {
-        result.failureDetails = testResult.testResults
+        RESULT.failureDetails = testResult.testResults
           .filter((testCase) => testCase.status === 'failed')
           .map((testCase) => ({
             title: testCase.title,
@@ -152,7 +152,7 @@ class JestJsonReporter {
         }));
       }
 
-      return result;
+      return RESULT;
     });
   }
 

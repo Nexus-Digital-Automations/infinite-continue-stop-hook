@@ -76,7 +76,7 @@ class PerformanceLogger {
 /**
  * System resource monitor
  */
-class RESOURCE_MONITOR {
+class ResourceMonitor {
   constructor() {
     this.startTime = Date.now();
     this.startMemory = process.memoryUsage();
@@ -186,7 +186,7 @@ class TestPerformanceMonitor {
     this.startTime = Date.now();
     this.testResults = [];
     this.suiteResults = [];
-    this.resourceMonitor = new RESOURCE_MONITOR();
+    this.resourceMonitor = new ResourceMonitor();
     this.warnings = [];
     this.errors = [];
   }
@@ -411,13 +411,13 @@ class TestPerformanceMonitor {
 
     // Calculate total test time
     const totalTestTime = this.suiteResults.reduce(
-      (sum, result) => sum + RESULT.duration,
+      (sum, result) => sum + result.duration,
       0
     );
 
     // Identify slowest tests
     const slowestTests = this.suiteResults
-      .filter((result) => RESULT.success)
+      .filter((result) => result.success)
       .sort((a, b) => b.duration - a.duration)
       .slice(0, 5);
 
@@ -469,7 +469,7 @@ class TestPerformanceMonitor {
    */
   analyzeParallelizationOpportunities() {
     const serialTime = this.suiteResults.reduce(
-      (sum, result) => sum + RESULT.duration,
+      (sum, result) => sum + result.duration,
       0
     );
     const longestSuite = Math.max(...this.suiteResults.map((r) => r.duration));

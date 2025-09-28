@@ -305,21 +305,21 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
 
       const agentCommands = [
         // Initialize all agents
-        ...agentIds.map((_agentId) => ({
+        ...agentIds.map((AGENT_ID) => ({
           command: 'initialize',
           args: [agentId],
           options: { projectRoot: testDir },
         })),
 
         // Reinitialize some agents
-        ...agentIds.slice(0, 5).map((_agentId) => ({
+        ...agentIds.slice(0, 5).map((AGENT_ID) => ({
           command: 'reinitialize',
           args: [agentId],
           options: { projectRoot: testDir },
         })),
 
         // More initializations (duplicates)
-        ...agentIds.slice(5, 10).map((_agentId) => ({
+        ...agentIds.slice(5, 10).map((AGENT_ID) => ({
           command: 'initialize',
           args: [agentId],
           options: { projectRoot: testDir },
@@ -349,7 +349,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
       validateFeaturesStructure(featuresData);
 
       // All agents should be present
-      agentIds.forEach((_agentId) => {
+      agentIds.forEach((AGENT_ID) => {
         expect(featuresData.agents[agentId]).toBeDefined();
         expect(featuresData.agents[agentId].status).toBe('active');
       });

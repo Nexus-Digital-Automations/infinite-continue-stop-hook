@@ -1,0 +1,236 @@
+/**
+ * Final RESULT/result Variable Consistency Fix
+ *
+ * This script performs a comprehensive fix of all remaining RESULT/result variable issues
+ * based on linting errors and inconsistencies.
+ *
+ * @author Variable Consistency Agent
+ * @version 1.0.0
+ */
+
+const FS = require('fs');
+const PATH = require('path');
+
+class FinalResultFixer {
+  constructor() {
+    this.fixedFiles = [];
+    this.totalChanges = 0;
+  }
+
+  run() {
+    console.log('🔧 Starting final RESULT/result variable consistency fix...');
+
+    try {
+      // Fix test-performance.js name/name inconsistencies
+      this.fixTestPerformanceFile();
+
+      // Fix remaining test files
+      this.fixRemainingTestFiles();
+
+      // Generate report
+      this.generateReport();
+
+      console.log('✅ Final RESULT/result variable fix completed successfully');
+    } catch (error) {
+      console.error('❌ Failed to complete final fix:', error.message);
+      process.exit(1);
+    }
+  }
+
+  fixTestPerformanceFile() {
+    const filePath =
+      '/Users/jeremyparker/infinite-continue-stop-hook/scripts/test-performance.js';
+
+    if (!FS.existsSync(filePath)) {
+      console.warn('⚠️ test-performance.js not found');
+      return;
+    }
+
+    console.log('🔧 Fixing test-performance.js...');
+
+    let content = FS.readFileSync(filePath, 'utf8');
+    let changes = 0;
+
+    // Fix name to name consistently
+    const nameFixes = [
+      {
+        from: "static metric(name, value, unit = '')",
+        to: "static metric(name, value, unit = '')",
+      },
+      { from: '{ name:', to: '{ name:' },
+      { from: 'testSuite.name', to: 'testSuite.name' },
+      { from: 'name: testSuite.name', to: 'name: testSuite.name' },
+      { from: 'name } = suiteResult', to: 'name } = suiteResult' },
+      { from: '${name}', to: '${name}' },
+      { from: 'suite: name', to: 'suite: name' },
+      { from: 'name: r.name', to: 'name: r.name' },
+      { from: 'suiteResult.name', to: 'suiteResult.name' },
+      { from: 'test.name', to: 'test.name' },
+    ];
+
+    for (const fix of nameFixes) {
+      const beforeCount = content.split(fix.from).length - 1;
+      content = content.replace(
+        new RegExp(fix.from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'),
+        fix.to
+      );
+      const afterCount = content.split(fix.from).length - 1;
+      changes += beforeCount - afterCount;
+    }
+
+    if (changes > 0) {
+      FS.writeFileSync(filePath, content);
+      this.fixedFiles.push({ path: filePath, changes });
+      this.totalChanges += changes;
+      console.log(
+        `✅ Fixed ${changes} name/name issues in test-performance.js`
+      );
+    }
+  }
+
+  fixRemainingTestFiles() {
+    const testFiles = [
+      '/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management-system.test.js',
+      '/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js',
+      '/Users/jeremyparker/infinite-continue-stop-hook/test/unit/initialization-stats.test.js',
+      '/Users/jeremyparker/infinite-continue-stop-hook/test/unit/taskmanager-api.test.js',
+    ];
+
+    for (const filePath of testFiles) {
+      if (FS.existsSync(filePath)) {
+        this.fixTestFile(filePath);
+      }
+    }
+  }
+
+  fixTestFile(filePath) {
+    console.log(`🔧 Fixing ${PATH.relative(process.cwd(), filePath)}...`);
+
+    let content = FS.readFileSync(filePath, 'utf8');
+    let changes = 0;
+
+    // Fix specific patterns in test files
+    const fixes = [
+      // Fix RESULT declared but result used
+      {
+        pattern: /const\s+RESULT\s*=\s*([^;]+);\s*([^]*?)\bresult\b/g,
+        replacement: (match, assignment, following) => {
+          // If following code uses 'result', change the declaration to use 'result'
+          if (
+            following.includes('result.') ||
+            following.includes('return result')
+          ) {
+            changes++;
+            return `const result = ${assignment};\n${following.replace(/\bresult\b/g, 'result')}`;
+          }
+          return match;
+        },
+      },
+      // Fix agentId/agentId consistency - change to AGENT_ID
+      {
+        pattern: /const\s+agentId\s*=\s*([^;]+);([^]*?)(\w*agentId)/g,
+        replacement: (match, assignment, middle, usage) => {
+          if (!usage.startsWith('_')) {
+            changes++;
+            return `const AGENT_ID = ${assignment};${middle}AGENT_ID`;
+          }
+          return match;
+        },
+      },
+    ];
+
+    for (const fix of fixes) {
+      if (typeof fix.replacement === 'function') {
+        content = content.replace(fix.pattern, fix.replacement);
+      } else {
+        const beforeCount = (content.match(fix.pattern) || []).length;
+        content = content.replace(fix.pattern, fix.replacement);
+        const afterCount = (content.match(fix.pattern) || []).length;
+        changes += beforeCount - afterCount;
+      }
+    }
+
+    // Simple pattern-based fixes
+    const simpleFixes = [
+      // Fix unused RESULT variables - convert to result
+      { from: /const RESULT = ([^;]+);\s*$/gm, to: 'const result = $1;' },
+      // Fix inconsistent variable usage in same scope
+      {
+        from: /RESULT\.(\w+)/g,
+        to: (match, prop) => {
+          // Context-aware replacement - if we see lowercase result used more, use that
+          const lines = content.split('\n');
+          const currentLineIndex =
+            content.substring(0, content.indexOf(match)).split('\n').length - 1;
+          const contextLines = lines
+            .slice(Math.max(0, currentLineIndex - 5), currentLineIndex + 5)
+            .join('\n');
+
+          if (
+            contextLines.includes('const result =') ||
+            contextLines.includes('result.')
+          ) {
+            changes++;
+            return `result.${prop}`;
+          }
+          return match;
+        },
+      },
+    ];
+
+    for (const fix of simpleFixes) {
+      if (typeof fix.to === 'function') {
+        content = content.replace(fix.from, fix.to);
+      } else {
+        const beforeCount = (content.match(fix.from) || []).length;
+        content = content.replace(fix.from, fix.to);
+        const afterCount = (content.match(fix.from) || []).length;
+        changes += beforeCount - afterCount;
+      }
+    }
+
+    if (changes > 0) {
+      FS.writeFileSync(filePath, content);
+      this.fixedFiles.push({ path: filePath, changes });
+      this.totalChanges += changes;
+      console.log(
+        `✅ Fixed ${changes} issues in ${PATH.relative(process.cwd(), filePath)}`
+      );
+    } else {
+      console.log(
+        `✅ No issues found in ${PATH.relative(process.cwd(), filePath)}`
+      );
+    }
+  }
+
+  generateReport() {
+    console.log('\n📊 Final Fix Report:');
+    console.log('┌─────────────────────────┬──────────┐');
+    console.log('│ Metric                  │ Count    │');
+    console.log('├─────────────────────────┼──────────┤');
+    console.log(
+      `│ Files Modified          │ ${this.fixedFiles.length.toString().padEnd(8)} │`
+    );
+    console.log(
+      `│ Total Changes           │ ${this.totalChanges.toString().padEnd(8)} │`
+    );
+    console.log('└─────────────────────────┴──────────┘');
+
+    if (this.fixedFiles.length > 0) {
+      console.log('\n📁 Modified Files:');
+      for (const file of this.fixedFiles) {
+        console.log(
+          `  ✅ ${PATH.relative(process.cwd(), file.path)} (${file.changes} changes)`
+        );
+      }
+    }
+  }
+}
+
+// CLI interface
+if (require.main === module) {
+  const fixer = new FinalResultFixer();
+  fixer.run();
+}
+
+module.exports = FinalResultFixer;

@@ -287,7 +287,7 @@ describe('API Workflow Integration Tests', () => {
       });
 
       expect(initResult.success).toBe(true);
-      expect(initResult.agent.id).toBe(_agentId);
+      expect(initResult.agent.id).toBe(AGENT_ID);
       expect(initResult.agent.status).toBe('initialized');
       expect(initResult.agent.sessionId).toBeDefined();
 
@@ -313,7 +313,7 @@ describe('API Workflow Integration Tests', () => {
       });
 
       expect(reinitResult.success).toBe(true);
-      expect(reinitResult.agent.id).toBe(_agentId);
+      expect(reinitResult.agent.id).toBe(AGENT_ID);
       expect(reinitResult.agent.status).toBe('reinitialized');
       expect(reinitResult.agent.sessionId).toBeDefined();
       expect(reinitResult.agent.previousSessions).toBeGreaterThan(0);
@@ -350,7 +350,7 @@ describe('API Workflow Integration Tests', () => {
       );
 
       expect(authorizeStopResult.success).toBe(true);
-      expect(authorizeStopResult.authorization.authorized_by).toBe(_agentId);
+      expect(authorizeStopResult.authorization.authorized_by).toBe(AGENT_ID);
       expect(authorizeStopResult.authorization.reason).toBe(stopReason);
       expect(authorizeStopResult.authorization.stop_flag_created).toBe(true);
 
@@ -368,7 +368,7 @@ describe('API Workflow Integration Tests', () => {
           await FS.readFile(stopFlagPath, 'utf8'),
         );
         expect(stopFlagData.stop_allowed).toBe(true);
-        expect(stopFlagData.authorized_by).toBe(_agentId);
+        expect(stopFlagData.authorized_by).toBe(AGENT_ID);
         expect(stopFlagData.reason).toBe(stopReason);
       }
     });
@@ -376,7 +376,7 @@ describe('API Workflow Integration Tests', () => {
     test('should handle multiple concurrent agent operations', async () => {
       // 1. Initialize multiple agents concurrently
       const agentIds = ['agent-001', 'agent-002', 'agent-003'];
-      const initPromises = agentIds.map((_agentId) =>
+      const initPromises = agentIds.map((AGENT_ID) =>
         execAPI('initialize', [agentId], { projectRoot: testDir }),
       );
 
@@ -391,13 +391,13 @@ describe('API Workflow Integration Tests', () => {
 
       // 2. Verify all agents are recorded
       const featuresData = await readFeaturesFile(testDir);
-      agentIds.forEach((_agentId) => {
+      agentIds.forEach((AGENT_ID) => {
         expect(featuresData.agents[agentId]).toBeDefined();
         expect(featuresData.agents[agentId].status).toBe('active');
       });
 
       // 3. Reinitialize all agents concurrently
-      const reinitPromises = agentIds.map((_agentId) =>
+      const reinitPromises = agentIds.map((AGENT_ID) =>
         execAPI('reinitialize', [agentId], { projectRoot: testDir }),
       );
 
@@ -629,7 +629,7 @@ describe('API Workflow Integration Tests', () => {
 
       // Verify agents
       expect(Object.keys(finalFeaturesData.agents)).toHaveLength(2);
-      agents.forEach((_agentId) => {
+      agents.forEach((AGENT_ID) => {
         expect(finalFeaturesData.agents[agentId]).toBeDefined();
       });
 

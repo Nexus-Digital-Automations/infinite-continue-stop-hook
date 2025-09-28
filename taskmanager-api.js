@@ -1720,11 +1720,11 @@ class AutonomousTaskManagerAPI {
         const groupStartTime = Date.now();
         loggers.validation.info(
           {
-            validationGroup: group.Name,
+            validationGroup: group.name,
             criteriaCount: groupCriteria.length,
             parallelExecution: true,
           },
-          `Executing validation group: ${group.Name} (${groupCriteria.length} criteria in parallel)`
+          `Executing validation group: ${group.name} (${groupCriteria.length} criteria in parallel)`
         );
 
         // Run all criteria in this group in parallel
@@ -1784,7 +1784,7 @@ class AutonomousTaskManagerAPI {
         const groupDuration = Date.now() - groupStartTime;
 
         parallelResults.executionGroups.push({
-          groupName: group.Name,
+          groupName: group.name,
           criteria: groupCriteria,
           results: groupResults,
           duration: groupDuration,
@@ -1795,9 +1795,9 @@ class AutonomousTaskManagerAPI {
         const groupFailures = groupResults.filter((r) => !r.success);
         if (groupFailures.length > 0) {
           this.logger.error(
-            `Group ${group.Name} failed - ${groupFailures.length} validation(s) failed`,
+            `Group ${group.name} failed - ${groupFailures.length} validation(s) failed`,
             {
-              groupName: group.Name,
+              groupName: group.name,
               failureCount: groupFailures.length,
               groupFailures: groupFailures.map((f) => ({
                 criterion: f.criterion,
@@ -1809,8 +1809,8 @@ class AutonomousTaskManagerAPI {
           break;
         }
 
-        this.logger.info(`Group ${group.Name} completed successfully`, {
-          groupName: group.Name,
+        this.logger.info(`Group ${group.name} completed successfully`, {
+          groupName: group.name,
           duration_ms: groupDuration,
           validationType: 'group_validation',
           status: 'success',
@@ -1951,7 +1951,7 @@ class AutonomousTaskManagerAPI {
 
       // Convert parallel execution plan to legacy group format for backward compatibility
       const groups = parallelPlan.plan.map((wave, index) => ({
-        Name: `Execution Wave ${index + 1}`,
+        name: `Execution Wave ${index + 1}`,
         criteria: wave.criteria.map((c) => c.criterion),
         dependencies:
           index > 0
@@ -1989,7 +1989,7 @@ class AutonomousTaskManagerAPI {
       // Fallback to original hardcoded groups if dependency manager fails
       return [
         {
-          Name: 'Independent Code Quality Checks',
+          name: 'Independent Code Quality Checks',
           criteria: [
             'focused-codebase',
             'security-validation',
@@ -2001,7 +2001,7 @@ class AutonomousTaskManagerAPI {
             "Code quality validations That don't depend on build or runtime",
         },
         {
-          Name: 'Build And Runtime Validation',
+          name: 'Build And Runtime Validation',
           criteria: ['build-validation', 'start-validation'],
           dependencies: [
             'focused-codebase',
@@ -2011,7 +2011,7 @@ class AutonomousTaskManagerAPI {
           description: 'Build And startup validations That require clean code',
         },
         {
-          Name: 'Test Execution',
+          name: 'Test Execution',
           criteria: ['test-validation'],
           dependencies: ['build-validation'],
           description: 'Test execution That requires successful build',
@@ -2138,7 +2138,7 @@ class AutonomousTaskManagerAPI {
             if (await this._fileExists(testDirPath)) {
               const { execSync } = require('child_process');
               const grepResult = execSync(
-                `find "${testDirPath}" -Name "*.js" -o -Name "*.ts" -o -Name "*.jsx" -o -Name "*.tsx" | xargs grep -l "${featureId}" 2>/dev/null || true`,
+                `find "${testDirPath}" -name "*.js" -o -name "*.ts" -o -name "*.jsx" -o -name "*.tsx" | xargs grep -l "${featureId}" 2>/dev/null || true`,
                 { cwd: PROJECT_ROOT }
               ).toString();
 
@@ -2276,10 +2276,10 @@ class AutonomousTaskManagerAPI {
 
       // Run validation pipeline commands
       const pipelineCommands = [
-        { Name: 'linting', cmd: 'npm run lint', timeout: 60000 },
-        { Name: 'type checking', cmd: 'npm run typecheck', timeout: 60000 },
-        { Name: 'build', cmd: 'npm run build', timeout: 120000 },
-        { Name: 'tests', cmd: 'npm test', timeout: 180000 },
+        { name: 'linting', cmd: 'npm run lint', timeout: 60000 },
+        { name: 'type checking', cmd: 'npm run typecheck', timeout: 60000 },
+        { name: 'build', cmd: 'npm run build', timeout: 120000 },
+        { name: 'tests', cmd: 'npm test', timeout: 180000 },
       ];
 
       const results = [];
@@ -2294,14 +2294,14 @@ class AutonomousTaskManagerAPI {
           });
 
           results.push({
-            step: step.Name,
+            step: step.name,
             status: 'passed',
             command: step.cmd,
           });
         } catch (_error) {
           allPassed = false;
           results.push({
-            step: step.Name,
+            step: step.name,
             status: 'failed',
             command: step.cmd,
             error: _error.message,
@@ -5024,7 +5024,7 @@ class AutonomousTaskManagerAPI {
     }
 
     // Required fields
-    const requiredFields = ['id', 'Name', 'command'];
+    const requiredFields = ['id', 'name', 'command'];
     for (const field of requiredFields) {
       if (!rule[field] || typeof rule[field] !== 'string') {
         loggers.taskManager.warn(
@@ -5204,7 +5204,7 @@ class AutonomousTaskManagerAPI {
     const startTime = Date.now();
 
     try {
-      loggers.taskManager.info(`🔄 Executing custom rule: ${rule.Name}`);
+      loggers.taskManager.info(`🔄 Executing custom rule: ${rule.name}`);
 
       const timeout = rule.timeout || 60000; // Default 60 seconds
       const result = execSync(rule.command, {
@@ -5222,12 +5222,12 @@ class AutonomousTaskManagerAPI {
       return {
         success,
         ruleId: rule.id,
-        ruleName: rule.Name,
+        ruleName: rule.name,
         duration,
         output: result,
         details: success
-          ? `Custom rule '${rule.Name}' passed`
-          : `Custom rule '${rule.Name}' failed success criteria`,
+          ? `Custom rule '${rule.name}' passed`
+          : `Custom rule '${rule.name}' failed success criteria`,
       };
     } catch (error) {
       const DURATION = Date.now() - startTime;
@@ -5235,7 +5235,7 @@ class AutonomousTaskManagerAPI {
       // Handle retries if configured
       if (rule.failureHandling && rule.failureHandling.retryCount > 0) {
         this.logger.info('Retrying custom rule', {
-          ruleName: rule.Name,
+          ruleName: rule.name,
           retriesRemaining: rule.failureHandling.retryCount,
           component: 'CustomValidator',
           operation: 'retryRule',
@@ -5258,7 +5258,7 @@ class AutonomousTaskManagerAPI {
       return {
         success: false,
         ruleId: rule.id,
-        ruleName: rule.Name,
+        ruleName: rule.name,
         duration: Date.now() - startTime,
         error: _error.message,
         details: `${_error.message}`,
@@ -5378,7 +5378,7 @@ class AutonomousTaskManagerAPI {
             rule.failureHandling.continueOnFailure === false
           ) {
             this.logger.error('Custom rule failed, stopping execution', {
-              ruleName: rule.Name,
+              ruleName: rule.name,
               component: 'CustomValidator',
               operation: 'executeRule',
               action: 'stopping_execution',
@@ -5517,7 +5517,7 @@ class AutonomousTaskManagerAPI {
             try {
               const { execSync } = require('child_process');
               const result = execSync(
-                `find . -Name "${pattern}" -not -path "./node_modules/*" | head -1`,
+                `find . -name "${pattern}" -not -path "./node_modules/*" | head -1`,
                 {
                   cwd: PROJECT_ROOT,
                   encoding: 'utf8',
@@ -5610,7 +5610,7 @@ class AutonomousTaskManagerAPI {
               if (
                 scripts.start &&
                 scripts.start.includes('taskmanager-api.js') &&
-                packageJson.Name === 'claude-taskmanager'
+                packageJson.name === 'claude-taskmanager'
               ) {
                 return {
                   success: true,
@@ -5643,7 +5643,7 @@ class AutonomousTaskManagerAPI {
               if (
                 scripts.test &&
                 scripts['test:quick'] &&
-                packageJson.Name === 'claude-taskmanager'
+                packageJson.name === 'claude-taskmanager'
               ) {
                 return {
                   success: true,
@@ -5714,33 +5714,33 @@ class AutonomousTaskManagerAPI {
                 if (exitCode !== undefined && exitCode !== 0) {
                   return {
                     success: false,
-                    error: `Custom validation '${customRule.Name}' failed: non-zero exit code`,
+                    error: `Custom validation '${customRule.name}' failed: non-zero exit code`,
                   };
                 }
 
                 if (outputContains && !result.includes(outputContains)) {
                   return {
                     success: false,
-                    error: `Custom validation '${customRule.Name}' failed: expected output not found`,
+                    error: `Custom validation '${customRule.name}' failed: expected output not found`,
                   };
                 }
 
                 if (outputNotContains && result.includes(outputNotContains)) {
                   return {
                     success: false,
-                    error: `Custom validation '${customRule.Name}' failed: forbidden output detected`,
+                    error: `Custom validation '${customRule.name}' failed: forbidden output detected`,
                   };
                 }
               }
 
               return {
                 success: true,
-                details: `Custom validation '${customRule.Name}' passed: ${customRule.description || 'No description'}`,
+                details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
               };
             } catch (error) {
               return {
                 success: false,
-                error: `Custom validation '${customRule.Name}' failed: ${error.message}`,
+                error: `Custom validation '${customRule.name}' failed: ${error.message}`,
               };
             }
           }
@@ -6519,37 +6519,37 @@ class AutonomousTaskManagerAPI {
       availableCriteria: [
         {
           id: 'focused-codebase',
-          Name: 'Focused Codebase Validation',
+          name: 'Focused Codebase Validation',
           description: 'Validates only user-outlined features exist',
         },
         {
           id: 'security-validation',
-          Name: 'Security Validation',
+          name: 'Security Validation',
           description: 'Runs security scans And vulnerability checks',
         },
         {
           id: 'linter-validation',
-          Name: 'Linter Validation',
+          name: 'Linter Validation',
           description: 'Runs code linting And style checks',
         },
         {
           id: 'type-validation',
-          Name: 'Type Validation',
+          name: 'Type Validation',
           description: 'Runs type checking And compilation checks',
         },
         {
           id: 'build-validation',
-          Name: 'Build Validation',
+          name: 'Build Validation',
           description: 'Tests application build process',
         },
         {
           id: 'start-validation',
-          Name: 'Start Validation',
+          name: 'Start Validation',
           description: 'Tests application startup capabilities',
         },
         {
           id: 'test-validation',
-          Name: 'Test Validation',
+          name: 'Test Validation',
           description: 'Runs automated test suites',
         },
       ],
@@ -8943,7 +8943,7 @@ class AutonomousTaskManagerAPI {
                 'suggest-feature': {
                   description: 'Create new feature suggestion',
                   usage:
-                    'node taskmanager-api.js suggest-feature \'{"title":"Feature Name", "description":"Details", "business_value":"Value proposition", "category":"enhancement|bug-fix|new-feature|performance|security|documentation"}\'',
+                    'node taskmanager-api.js suggest-feature \'{"title":"Feature name", "description":"Details", "business_value":"Value proposition", "category":"enhancement|bug-fix|new-feature|performance|security|documentation"}\'',
                   required_fields: [
                     'title',
                     'description',
@@ -11470,7 +11470,7 @@ async function main() {
       case 'register-project': {
         if (!args[1]) {
           throw new Error(
-            'Project data required. Usage: register-project \'{"project_id":"id", "project_name":"Name", ...}\''
+            'Project data required. Usage: register-project \'{"project_id":"id", "project_name":"name", ...}\''
           );
         }
         const projectData = JSON.parse(args[1]);

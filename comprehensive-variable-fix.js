@@ -3,8 +3,8 @@
  * Fixes all remaining variable naming inconsistencies and undefined variable issues
  */
 
-const fs = require('fs');
-const FS = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync } = require('child_process');
 const { loggers } = require('./lib/logger');
 

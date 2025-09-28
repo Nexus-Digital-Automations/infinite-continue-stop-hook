@@ -352,7 +352,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
     const isActive = timeSinceHeartbeat < staleAgentTimeout;
 
     if (!isActive) {
-      staleAgents.push(_agentId);
+      staleAgents.push(AGENT_ID);
     }
   }
 
@@ -1124,9 +1124,9 @@ If you want to enable task management for this project:
       );
 
       if (isActive) {
-        activeAgents.push(_agentId);
+        activeAgents.push(AGENT_ID);
       } else {
-        staleAgents.push(_agentId);
+        staleAgents.push(AGENT_ID);
       }
     }
 

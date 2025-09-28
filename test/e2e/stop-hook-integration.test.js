@@ -133,7 +133,7 @@ describe.skip('Stop Hook Integration E2E', () => {
         expect(features.features).toHaveLength(1);
         expect(features.features[0].status).toBe('approved');
         expect(stopResult.blocked).toBe(true); // Should block without authorization
-        expect(features.features[0].approved_by).toBe(_agentId);
+        expect(features.features[0].approved_by).toBe(AGENT_ID);
 
         expect(stopResult).toBeTruthy();
 
@@ -395,7 +395,7 @@ describe.skip('Stop Hook Integration E2E', () => {
         // Step 5: Validate complete integration
         const features = await environment.getFeatures();
         expect(features.features[0].status).toBe('approved');
-        expect(features.features[0].approved_by).toBe(_agentId);
+        expect(features.features[0].approved_by).toBe(AGENT_ID);
 
         console.log(
           `✅ Stop hook lifecycle integration test passed for feature: ${featureId}`,

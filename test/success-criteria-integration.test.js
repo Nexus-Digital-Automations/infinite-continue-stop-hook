@@ -594,7 +594,7 @@ describe('Success Criteria Integration Tests', () => {
       const TASK = listResult.tasks.find((t) => t.id === TASK_ID);
       expect(TASK).toBeDefined();
       expect(TASK.status).toBe('in_progress');
-      expect(TASK.assigned_agent).toBe(_agentId);
+      expect(TASK.assigned_agent).toBe(AGENT_ID);
     });
 
     test('should validate criteria format consistency', async () => {

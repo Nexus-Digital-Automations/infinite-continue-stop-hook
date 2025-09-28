@@ -98,7 +98,7 @@ function execAPI(command, args = [], options = {}) {
 
 /**
  * Create a clean test environment with isolated FEATURES.json file
- * @param {string} testName - Name of the test (used for directory naming)
+ * @param {string} testName - name of the test (used for directory naming)
  * @returns {Promise<string>} Path to the created test environment
  */
 async function createTestEnvironment(testName) {

@@ -170,16 +170,16 @@ class E2EEnvironment {
    */
   async getFeatures() {
     try {
-      const RESULT = await CommandExecutor.executeAPI('list-features', [], {
+      const result = await CommandExecutor.executeAPI('list-features', [], {
         projectRoot: this.testDir,
       });
 
       // Parse the JSON response from stdout
       let apiResponse;
-      if (RESULT.result && RESULT.RESULT.stdout) {
-        apiResponse = JSON.parse(RESULT.RESULT.stdout);
-      } else if (RESULT.stdout) {
-        apiResponse = JSON.parse(RESULT.stdout);
+      if (result.result && result.result.stdout) {
+        apiResponse = JSON.parse(result.result.stdout);
+      } else if (result.stdout) {
+        apiResponse = JSON.parse(result.stdout);
       } else {
         throw new Error('No stdout in API response');
       }
@@ -271,7 +271,7 @@ class CommandExecutor {
         }
         isResolved = true;
 
-        const RESULT = {
+        const result = {
           code,
           stdout: stdout.trim(),
           stderr: stderr.trim(),
@@ -281,7 +281,7 @@ class CommandExecutor {
         };
 
         if (expectSuccess && code !== 0) {
-          const error = new Error(`Command failed: ${RESULT.command}`);
+          const error = new Error(`Command failed: ${result.command}`);
           error.result = result;
           reject(error);
         } else {
@@ -407,7 +407,7 @@ class FeatureTestHelpers {
       category: data.category,
     });
 
-    const RESULT = await CommandExecutor.executeAPI(
+    const result = await CommandExecutor.executeAPI(
       'suggest-feature',
       [jsonData],
       { projectRoot: environment.testDir },
@@ -538,7 +538,7 @@ class StopHookTestHelpers {
     for (let i = 0; i < maxIterations; i++) {
       // Test the stop hook - should always block (exit code 2) in infinite mode
       // eslint-disable-next-line no-await-in-loop -- Sequential processing required for testing infinite continue behavior over time
-      const RESULT = await CommandExecutor.executeStopHook(
+      const result = await CommandExecutor.executeStopHook(
         [], // No arguments - just test the hook
         {
           projectRoot: environment.testDir,
@@ -548,9 +548,9 @@ class StopHookTestHelpers {
 
       iterations.push({
         iteration: i,
-        blocked: RESULT.code === 2,
+        blocked: result.code === 2,
         result: result,
-        success: RESULT.code === 2, // Success means it properly blocked
+        success: result.code === 2, // Success means it properly blocked
       });
 
       // Always blocks in infinite mode unless proper authorization exists

@@ -34,7 +34,7 @@ class TaskManagerAPIMock {
   /**
    * Mock initialize command
    */
-  initialize(_agentId) {
+  initialize(AGENT_ID) {
     const agent = {
       id: agentId,
       initialized: new Date().toISOString(),
@@ -54,9 +54,9 @@ class TaskManagerAPIMock {
   /**
    * Mock reinitialize command
    */
-  reinitialize(_agentId) {
-    if (this.agents.has(_agentId)) {
-      const agent = this.agents.get(_agentId);
+  reinitialize(AGENT_ID) {
+    if (this.agents.has(AGENT_ID)) {
+      const agent = this.agents.get(AGENT_ID);
       agent.reinitialized = new Date().toISOString();
       this.initializationStats.total_reinitializations++;
 

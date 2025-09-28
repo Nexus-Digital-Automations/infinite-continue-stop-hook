@@ -446,10 +446,10 @@ function featureData(_$2) {
   return null;
 }
 
-function expectAgentInitialized(_agentId) {
+function expectAgentInitialized(AGENT_ID) {
   const mockManager = getMockManager();
   if (mockManager) {
-    const agent = mockManager.taskManagerAPI.agents.get(_agentId);
+    const agent = mockManager.taskManagerAPI.agents.get(AGENT_ID);
     expect(agent).toBeDefined();
     expect(agent.status).toBe('active');
     return agent;
