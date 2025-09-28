@@ -83,7 +83,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const readline = require('readline');
 const { loggers } = require('./lib/logger');
 
@@ -123,9 +123,9 @@ function question(prompt) {
 
 async function getProjectInfo(targetPath) {
   // Try to detect project name from package.json or directory name
-  let detectedName = PATH.basename(targetPath);
+  let detectedName = path.basename(targetPath);
 
-  const packageJsonPath = PATH.join(targetPath, 'package.json');
+  const packageJsonPath = path.join(targetPath, 'package.json');
 
   if (FS.existsSync(packageJsonPath)) {
     try {
@@ -195,7 +195,7 @@ async function getProjectInfo(targetPath) {
 
 function createProjectDirectories(targetPath) {
   // Create /development directory
-  const developmentPath = PATH.join(targetPath, 'development');
+  const developmentPath = path.join(targetPath, 'development');
 
   if (!FS.existsSync(developmentPath)) {
     FS.mkdirSync(developmentPath, { recursive: true });
@@ -204,7 +204,7 @@ function createProjectDirectories(targetPath) {
   }
 
   // Create /development/tasks directory
-  const tasksPath = PATH.join(developmentPath, 'tasks');
+  const tasksPath = path.join(developmentPath, 'tasks');
 
   if (!FS.existsSync(tasksPath)) {
     FS.mkdirSync(tasksPath, { recursive: true });
@@ -213,7 +213,7 @@ function createProjectDirectories(targetPath) {
   }
 
   // Create /development/reports directory
-  const reportsPath = PATH.join(developmentPath, 'reports');
+  const reportsPath = path.join(developmentPath, 'reports');
 
   if (!FS.existsSync(reportsPath)) {
     FS.mkdirSync(reportsPath, { recursive: true });
@@ -222,7 +222,7 @@ function createProjectDirectories(targetPath) {
   }
 
   // Create /development/logs directory
-  const logsPath = PATH.join(developmentPath, 'logs');
+  const logsPath = path.join(developmentPath, 'logs');
 
   if (!FS.existsSync(logsPath)) {
     FS.mkdirSync(logsPath, { recursive: true });
@@ -253,25 +253,25 @@ function needsTodoUpdate(todoPath) {
 
     if (hasOldSchema) {
       loggers.app.info(
-        `⚠️  ${PATH.basename(PATH.dirname(todoPath))} - FEATURES.json uses old schema, will update`,
+        `⚠️  ${path.basename(path.dirname(todoPath))} - FEATURES.json uses old schema, will update`,
       );
       return true;
     }
 
     loggers.app.info(
-      `✓ ${PATH.basename(PATH.dirname(todoPath))} - FEATURES.json already up to date`,
+      `✓ ${path.basename(path.dirname(todoPath))} - FEATURES.json already up to date`,
     );
     return false;
   } catch {
     loggers.app.info(
-      `⚠️  ${PATH.basename(PATH.dirname(todoPath))} - FEATURES.json corrupted, will recreate`,
+      `⚠️  ${path.basename(path.dirname(todoPath))} - FEATURES.json corrupted, will recreate`,
     );
     return true;
   }
 }
 
 function createTodoJson(targetPath, projectInfo) {
-  const todoPath = PATH.join(targetPath, 'FEATURES.json');
+  const todoPath = path.join(targetPath, 'FEATURES.json');
 
   // Smart update logic - only update if schema is old or missing
   if (!needsTodoUpdate(todoPath)) {
@@ -407,14 +407,14 @@ function getProjectDirectories(basePath) {
   }
 
   return FS.readdirSync(basePath)
-    .map((item) => PATH.join(basePath, item))
+    .map((item) => path.join(basePath, item))
     .filter((itemPath) => {
       if (!FS.statSync(itemPath).isDirectory()) {
         return false;
       }
 
       // Skip hidden directories And common ignore patterns
-      const dirname = PATH.basename(itemPath);
+      const dirname = path.basename(itemPath);
       if (
         dirname.startsWith('.') ||
         dirname === 'node_modules' ||
@@ -429,7 +429,7 @@ function getProjectDirectories(basePath) {
 }
 
 async function processProject(targetPath) {
-  const projectName = PATH.basename(targetPath);
+  const projectName = path.basename(targetPath);
 
   loggers.stopHook.log(`\n=== Processing ${projectName} ===`);
 
@@ -473,7 +473,7 @@ async function processProject(targetPath) {
  * @param {string} targetPath - Target project path
  */
 function migrateToFeatureBasedSystem(targetPath) {
-  const todoPath = PATH.join(targetPath, 'FEATURES.json');
+  const todoPath = path.join(targetPath, 'FEATURES.json');
 
   try {
     loggers.stopHook.log(`   🔄 Checking for feature-based migration...`);
@@ -500,7 +500,7 @@ function migrateToFeatureBasedSystem(targetPath) {
 
     FS.writeFileSync(backupPath, JSON.stringify(todoData, null, 2));
 
-    loggers.stopHook.log(`   📋 Created backup: ${PATH.basename(backupPath)}`);
+    loggers.stopHook.log(`   📋 Created backup: ${path.basename(backupPath)}`);
 
     // Analyze current tasks for feature grouping
     const analysis = analyzeTasksForFeatures(todoData.tasks);
@@ -521,7 +521,7 @@ function migrateToFeatureBasedSystem(targetPath) {
     );
 
     // Clean up features.json if it exists (eliminating dual system)
-    const featuresJsonPath = PATH.join(targetPath, 'features.json');
+    const featuresJsonPath = path.join(targetPath, 'features.json');
 
     if (FS.existsSync(featuresJsonPath)) {
       FS.unlinkSync(featuresJsonPath);
@@ -789,7 +789,7 @@ async function main() {
   );
 
   // Resolve project path
-  const targetPath = PATH.resolve(projectPath);
+  const targetPath = path.resolve(projectPath);
 
   // Verify project path exists
 
@@ -820,7 +820,7 @@ async function main() {
     // This ensures TODO.json is created only in the root of the specified directory
 
     loggers.stopHook.log(
-      `Processing single project: ${PATH.basename(targetPath)}`,
+      `Processing single project: ${path.basename(targetPath)}`,
     );
     const RESULT = await processProject(targetPath);
     results.push(result);

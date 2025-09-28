@@ -14,7 +14,7 @@
  */
 
 const FS = require('fs').promises;
-const PATH = require('path');
+const path = require('path');
 const {
   execAPI,
   createTestEnvironment,
@@ -128,7 +128,7 @@ describe('File Operations Integration Tests', () => {
       expect(featuresData.agents['persistence-agent']).toBeDefined();
 
       // 6. Verify JSON formatting is maintained
-      const featuresPath = PATH.join(testDir, 'FEATURES.json');
+      const featuresPath = path.join(testDir, 'FEATURES.json');
       const rawFileContent = await FS.readFile(featuresPath, 'utf8');
 
       // Should be properly formatted JSON with 2-space indentation
@@ -192,7 +192,7 @@ describe('File Operations Integration Tests', () => {
 
     test('should preserve file permissions And ownership', async () => {
       // 1. Check initial file stats
-      const featuresPath = PATH.join(testDir, 'FEATURES.json');
+      const featuresPath = path.join(testDir, 'FEATURES.json');
       const initialStats = await FS.stat(featuresPath);
 
       // 2. Perform operations
@@ -230,7 +230,7 @@ describe('File Operations Integration Tests', () => {
   describe('Backup And Recovery Scenarios', () => {
     test('should handle missing FEATURES.json file gracefully', async () => {
       // 1. Remove FEATURES.json file
-      const featuresPath = PATH.join(testDir, 'FEATURES.json');
+      const featuresPath = path.join(testDir, 'FEATURES.json');
       await FS.unlink(featuresPath);
 
       // 2. Try to perform operations - should recreate file
@@ -339,7 +339,7 @@ describe('File Operations Integration Tests', () => {
       expect(featuresData.features).toHaveLength(100);
 
       // 4. Test file size
-      const featuresPath = PATH.join(testDir, 'FEATURES.json');
+      const featuresPath = path.join(testDir, 'FEATURES.json');
       const stats = await FS.stat(featuresPath);
       expect(stats.size).toBeGreaterThan(50000); // Should be > 50KB with all the data
     });
@@ -646,7 +646,7 @@ describe('File Operations Integration Tests', () => {
 
       try {
         // 1. Try to make file read-only (this may not work in all environments)
-        const _featuresPath = PATH.join(testDir, 'FEATURES.json');
+        const _featuresPath = path.join(testDir, 'FEATURES.json');
 
         // Create initial content
         const featureData = generateTestFeature({

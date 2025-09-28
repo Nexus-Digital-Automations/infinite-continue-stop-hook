@@ -9,7 +9,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 
 // Specific files with issues identified from linting output
 const SPECIFIC_FIXES = [
@@ -102,7 +102,7 @@ class RemainingResultFixer {
       this.generateReport();
 
       console.log(
-        '✅ Remaining RESULT/result variable issues fixed successfully',
+        '✅ Remaining RESULT/result variable issues fixed successfully'
       );
     } catch (error) {
       console.error('❌ Failed to fix remaining issues:', error.message);
@@ -144,18 +144,18 @@ class RemainingResultFixer {
         changes: totalChanges,
       });
       console.log(
-        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), file)}`,
+        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), file)}`
       );
     } else {
       console.log(
-        `✅ No issues found in ${PATH.relative(process.cwd(), file)}`,
+        `✅ No issues found in ${PATH.relative(process.cwd(), file)}`
       );
     }
   }
 
   fixTestFile(filePath) {
     console.log(
-      `🔧 Processing test file: ${PATH.relative(process.cwd(), filePath)}`,
+      `🔧 Processing test file: ${PATH.relative(process.cwd(), filePath)}`
     );
 
     let content = FS.readFileSync(filePath, 'utf8');
@@ -259,11 +259,11 @@ class RemainingResultFixer {
         changes: totalChanges,
       });
       console.log(
-        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), filePath)}`,
+        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), filePath)}`
       );
     } else {
       console.log(
-        `✅ No issues found in ${PATH.relative(process.cwd(), filePath)}`,
+        `✅ No issues found in ${PATH.relative(process.cwd(), filePath)}`
       );
     }
   }
@@ -274,10 +274,10 @@ class RemainingResultFixer {
     console.log('│ Metric                  │ Count    │');
     console.log('├─────────────────────────┼──────────┤');
     console.log(
-      `│ Files Modified          │ ${this.fixedFiles.length.toString().padEnd(8)} │`,
+      `│ Files Modified          │ ${this.fixedFiles.length.toString().padEnd(8)} │`
     );
     console.log(
-      `│ Errors Encountered      │ ${this.errors.length.toString().padEnd(8)} │`,
+      `│ Errors Encountered      │ ${this.errors.length.toString().padEnd(8)} │`
     );
     console.log('└─────────────────────────┴──────────┘');
 
@@ -285,7 +285,7 @@ class RemainingResultFixer {
       console.log('\n📁 Modified Files:');
       for (const file of this.fixedFiles) {
         console.log(
-          `  ✅ ${PATH.relative(process.cwd(), file.path)} (${file.changes} changes)`,
+          `  ✅ ${PATH.relative(process.cwd(), file.path)} (${file.changes} changes)`
         );
       }
     }

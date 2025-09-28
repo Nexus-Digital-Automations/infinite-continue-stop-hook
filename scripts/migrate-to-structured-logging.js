@@ -6,7 +6,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { execSync } = require('child_process');
 
 // Configuration
@@ -340,7 +340,7 @@ function main() {
         migratedFiles++;
         totalChanges += RESULT.changes;
         console.log(
-          `✅ ${PATH.relative(rootDir, usage.filePath)}: ${RESULT.message}`
+          `✅ ${path.relative(rootDir, usage.filePath)}: ${RESULT.message}`
         );
       }
     } catch {

@@ -213,14 +213,14 @@ describe('Basic Testing Infrastructure', () => {
       }); // 50ms
       const timeout = 100; // 100ms timeout
 
-      const RESULT = await TestExecution.withTimeout(promise, timeout);
+      const result = await TestExecution.withTimeout(promise, timeout);
       expect(result).toBe('success');
     });
 
     test('should retry failed operations', async () => {
       let attempts = 0;
 
-      const RESULT = await TestExecution.retry(
+      const result = await TestExecution.retry(
         () => {
           attempts++;
           if (attempts < 3) {

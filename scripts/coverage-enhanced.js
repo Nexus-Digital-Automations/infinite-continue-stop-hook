@@ -297,7 +297,7 @@ class EnhancedCoverageSystem {
    * Archive previous coverage reports
    */
   archivePreviousReports() {
-    const archiveDir = PATH.join(
+    const archiveDir = path.join(
       this.config.paths.archive,
       new Date().toISOString().split('T')[0],
     );
@@ -311,8 +311,8 @@ class EnhancedCoverageSystem {
 
       const files = FS.readdirSync(this.config.paths.reports);
       files.forEach((file) => {
-        const source = PATH.join(this.config.paths.reports, file);
-        const dest = PATH.join(archiveDir, file);
+        const source = path.join(this.config.paths.reports, file);
+        const dest = path.join(archiveDir, file);
 
         if (FS.statSync(source).isFile()) {
           FS.copyFileSync(source, dest);
@@ -344,7 +344,7 @@ class EnhancedCoverageSystem {
       const toDelete = archives.slice(this.config.reports.max_archived_reports);
 
       toDelete.forEach((archive) => {
-        const archivePath = PATH.join(this.config.paths.archive, archive);
+        const archivePath = path.join(this.config.paths.archive, archive);
         FS.rmSync(archivePath, { recursive: true, force: true });
       });
 
@@ -407,7 +407,7 @@ class EnhancedCoverageSystem {
       // Check if coverage data was generated despite test failures
       if (
         FS.existsSync(
-          PATH.join(this.config.paths.coverage, 'coverage-summary.json'),
+          path.join(this.config.paths.coverage, 'coverage-summary.json'),
         )
       ) {
         this.logger.warning('Tests failed but coverage data was generated');
@@ -423,7 +423,7 @@ class EnhancedCoverageSystem {
   loadCoverageData() {
     this.logger.info('Loading coverage data');
 
-    const summaryPath = PATH.join(
+    const summaryPath = path.join(
       this.config.paths.coverage,
       'coverage-summary.json',
     );
@@ -459,7 +459,7 @@ class EnhancedCoverageSystem {
   performTrendAnalysis() {
     this.logger.info('Performing trend analysis');
 
-    const trendsPath = PATH.join(
+    const trendsPath = path.join(
       this.config.paths.trends,
       'coverage-trends.json',
     );
@@ -833,7 +833,7 @@ class EnhancedCoverageSystem {
       next_actions: this.generateNextActions(),
     };
 
-    const reportPath = PATH.join(
+    const reportPath = path.join(
       this.config.paths.reports,
       'executive-summary.json',
     );
@@ -866,7 +866,7 @@ class EnhancedCoverageSystem {
       },
     };
 
-    const reportPath = PATH.join(
+    const reportPath = path.join(
       this.config.paths.reports,
       'technical-report.json',
     );
@@ -898,7 +898,7 @@ class EnhancedCoverageSystem {
       timestamp: new Date().toISOString(),
     };
 
-    const reportPath = PATH.join(
+    const reportPath = path.join(
       this.config.paths.reports,
       'ci-cd-report.json',
     );
@@ -924,7 +924,7 @@ class EnhancedCoverageSystem {
       recommendations: this.results.trends.analysis.recommendations || [],
     };
 
-    const reportPath = PATH.join(
+    const reportPath = path.join(
       this.config.paths.reports,
       'trend-analysis.json',
     );
@@ -953,7 +953,7 @@ class EnhancedCoverageSystem {
       historical_performance: this.extractPerformanceHistory(),
     };
 
-    const reportPath = PATH.join(
+    const reportPath = path.join(
       this.config.paths.reports,
       'performance-report.json',
     );
@@ -1039,13 +1039,13 @@ class EnhancedCoverageSystem {
     };
 
     FS.writeFileSync(
-      PATH.join(badgesDir, 'badges.json'),
+      path.join(badgesDir, 'badges.json'),
       JSON.stringify(badgesData, null, 2),
     );
 
     // Generate README snippet
     const readmeSnippet = this.generateReadmeSnippet(badges);
-    FS.writeFileSync(PATH.join(badgesDir, 'README-snippet.md'), readmeSnippet);
+    FS.writeFileSync(path.join(badgesDir, 'README-snippet.md'), readmeSnippet);
 
     this.results.badges = badges;
 

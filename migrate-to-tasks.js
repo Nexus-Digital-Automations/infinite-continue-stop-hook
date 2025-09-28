@@ -12,9 +12,9 @@ const { loggers } = require('./lib/logger');
 class TaskMigrator {
   constructor(projectRoot = process.cwd()) {
     this.projectRoot = projectRoot;
-    this.featuresPath = PATH.join(projectRoot, 'FEATURES.json');
-    this.tasksPath = PATH.join(projectRoot, 'TASKS.json');
-    this.backupPath = PATH.join(
+    this.featuresPath = path.join(projectRoot, 'FEATURES.json');
+    this.tasksPath = path.join(projectRoot, 'TASKS.json');
+    this.backupPath = path.join(
       projectRoot,
       `FEATURES.json.backup.${Date.now()}`,
     );
@@ -115,7 +115,7 @@ class TaskMigrator {
 
     // Create base TASKS.json structure
     const tasksData = {
-      project: featuresData.project || PATH.basename(this.projectRoot),
+      project: featuresData.project || path.basename(this.projectRoot),
       schema_version: '2.0.0',
       migrated_from: 'FEATURES.json',
       migration_date: migrationDate,
@@ -605,7 +605,7 @@ if (require.main === module) {
       );
       throw new Error('Migration completed successfully');
     })
-    .catch((error) => {
+    .catch((_error) => {
       loggers.stopHook.error('\n❌ Migration failed:', error.message);
       throw error;
     });

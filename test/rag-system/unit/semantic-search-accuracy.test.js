@@ -9,7 +9,7 @@
  */
 
 const { loggers } = require('../../../lib/logger');
-const PATH = require('path');
+const path = require('path');
 
 describe('Semantic Search Accuracy Validation', () => {
   let _ragSystem;

@@ -1,18 +1,18 @@
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const TrendAnalyzer = require('../../lib/trend-analyzer');
 
 describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
   const mockProjectRoot = '/tmp/test-trend-analyzer';
-  const mockEnhancedMetricsFile = PATH.join(
+  const mockEnhancedMetricsFile = path.join(
     mockProjectRoot,
     '.validation-performance-enhanced.json',
   );
-  const mockLegacyMetricsFile = PATH.join(
+  const mockLegacyMetricsFile = path.join(
     mockProjectRoot,
     '.validation-performance.json',
   );
-  const mockTrendsFile = PATH.join(mockProjectRoot, '.validation-trends.json');
+  const mockTrendsFile = path.join(mockProjectRoot, '.validation-trends.json');
 
   let trendAnalyzer;
 

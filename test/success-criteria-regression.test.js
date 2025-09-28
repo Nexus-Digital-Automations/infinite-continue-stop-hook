@@ -16,8 +16,8 @@ const { loggers } = require('../lib/logger');
 const FS = require('fs').promises;
 
 // Test configuration
-const API_PATH = PATH.join(__dirname, '..', 'taskmanager-api.js');
-const TEST_PROJECT_DIR = PATH.join(__dirname, 'regression-test-project');
+const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
+const TEST_PROJECT_DIR = path.join(__dirname, 'regression-test-project');
 const TIMEOUT = 30000;
 
 /**
@@ -67,7 +67,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
       }
     });
 
-    child.on('error', (error) => {
+    child.on('error', (_error) => {
       reject(error);
     });
   });
@@ -134,7 +134,7 @@ async function createLegacyProjectConfig() {
   };
 
   // Write legacy config file
-  const configPath = PATH.join(TEST_PROJECT_DIR, '.success-criteria.json');
+  const configPath = path.join(TEST_PROJECT_DIR, '.success-criteria.json');
   await FS.writeFile(configPath, JSON.stringify(legacyConfig, null, 2));
 
   return configPath;
@@ -167,7 +167,7 @@ async function setupRegressionTestProject() {
     };
 
     await FS.writeFile(
-      PATH.join(TEST_PROJECT_DIR, 'package.json'),
+      path.join(TEST_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2)
     );
 
@@ -201,7 +201,7 @@ app.start().then(() => {
 });
 `;
 
-    await FS.writeFile(PATH.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
+    await FS.writeFile(path.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
 
     // Create test file
     const testJs = `
@@ -217,10 +217,10 @@ describe('Regression Test Suite', () => {
 });
 `;
 
-    await FS.writeFile(PATH.join(TEST_PROJECT_DIR, 'test.js'), testJs);
+    await FS.writeFile(path.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     loggers.stopHook.log('Regression test project setup completed');
-  } catch (_error) {
+  } catch (error) {
     loggers.stopHook.error('Failed to setup regression test project:', error);
     throw error;
   }
@@ -375,7 +375,7 @@ describe('Success Criteria Regression Tests', () => {
 
           const status = await execAPI('success-criteria:status');
           expect(status.projectCriteria.length).toBeGreaterThan(0);
-        } catch (_error) {
+        } catch (error) {
           // Log version compatibility issues but don't fail test
           loggers.app.info(
             `API version ${version} compatibility note:`,
@@ -446,7 +446,7 @@ describe('Success Criteria Regression Tests', () => {
         ],
       };
 
-      const CONFIG_PATH = PATH.join(
+      const CONFIG_PATH = path.join(
         TEST_PROJECT_DIR,
         '.success-criteria-deprecated.json'
       );
@@ -522,7 +522,7 @@ describe('Success Criteria Regression Tests', () => {
         ],
       };
 
-      const CONFIG_PATH = PATH.join(
+      const CONFIG_PATH = path.join(
         TEST_PROJECT_DIR,
         '.success-criteria-extended.json'
       );
@@ -583,7 +583,7 @@ describe('Success Criteria Regression Tests', () => {
         ],
       };
 
-      const OLD_DATA_PATH = PATH.join(TEST_PROJECT_DIR, 'old-format-data.json');
+      const OLD_DATA_PATH = path.join(TEST_PROJECT_DIR, 'old-format-data.json');
       await FS.writeFile(
         OLD_DATA_PATH,
         JSON.stringify(OLD_FORMAT_DATA, null, 2)
@@ -680,7 +680,7 @@ describe('Success Criteria Regression Tests', () => {
           loggers.stopHook.log(
             `Schema ${schema.version} compatibility confirmed`
           );
-        } catch (_error) {
+        } catch (error) {
           loggers.app.info(
             `Schema ${schema.version} evolution note:`,
             _error.message
@@ -738,7 +738,7 @@ describe('Success Criteria Regression Tests', () => {
         ],
       };
 
-      const DATA_PATH = PATH.join(TEST_PROJECT_DIR, 'integrity-test-data.json');
+      const DATA_PATH = path.join(TEST_PROJECT_DIR, 'integrity-test-data.json');
       await FS.writeFile(DATA_PATH, JSON.stringify(TEST_DATA, null, 2));
 
       // Migrate And validate integrity
@@ -858,7 +858,7 @@ describe('Success Criteria Regression Tests', () => {
               RESULT.warning || 'Endpoint is deprecated'
             );
           }
-        } catch (_error) {
+        } catch (error) {
           // Some deprecated endpoints might be completely removed
           loggers.app.info(
             `Deprecated endpoint ${endpoint} is no longer available:`,
@@ -976,7 +976,7 @@ describe('Success Criteria Regression Tests', () => {
           loggers.app.info(
             `Template version ${template.version} compatibility confirmed`
           );
-        } catch (_error) {
+        } catch (error) {
           loggers.app.info(
             `Template version ${template.version} compatibility issue:`,
             _error.message
@@ -1145,7 +1145,7 @@ describe('Success Criteria Regression Tests', () => {
           }
 
           loggers.stopHook.log(`API contract for ${api} is stable`);
-        } catch (_error) {
+        } catch (error) {
           loggers.stopHook.log(
             `API contract issue for ${api}:`,
             _error.message
@@ -1219,7 +1219,7 @@ describe('Success Criteria Regression Tests', () => {
           loggers.stopHook.log(
             `Essential function '${func.name}' is preserved`
           );
-        } catch (_error) {
+        } catch (error) {
           loggers.app.error(
             `Essential function '${func.name}' failed:`,
             _error.message

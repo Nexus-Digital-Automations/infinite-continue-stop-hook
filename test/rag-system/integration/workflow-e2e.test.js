@@ -9,7 +9,7 @@ const { loggers } = require('../lib/logger');
  * @version 1.0.0
  */
 
-const PATH = require('path');
+const path = require('path');
 const __fs = require('fs').promises;
 
 describe('RAG System End-to-End Workflows', () => {
@@ -21,7 +21,7 @@ describe('RAG System End-to-End Workflows', () => {
     loggers.stopHook.log('Setting up E2E test environment...');
 
     // Setup test project directory
-    __testProjectRoot = PATH.join(
+    __testProjectRoot = path.join(
       __dirname,
       '../../test-projects/rag-e2e-test',
     );
@@ -33,7 +33,7 @@ describe('RAG System End-to-End Workflows', () => {
       metadata: { created: new Date().toISOString() },
     };
     await __fs.writeFile(
-      PATH.join(__testProjectRoot, 'TODO.json'),
+      path.join(__testProjectRoot, 'TODO.json'),
       JSON.stringify(todoData, null, 2),
     );
 
@@ -458,7 +458,7 @@ describe('RAG System End-to-End Workflows', () => {
 
       /* Future implementation:
       // Setup: Create mock development/lessons structure
-      const _lessonsDir = PATH.join(_testProjectRoot, 'development', 'lessons');
+      const _lessonsDir = path.join(_testProjectRoot, 'development', 'lessons');
       await FS.mkdir(lessonsDir, { recursive: true });
 
       const _mockLessonFiles = [
@@ -498,7 +498,7 @@ describe('RAG System End-to-End Workflows', () => {
 
       for (const file of mockLessonFiles) {
         await FS.writeFile(
-          PATH.join(lessonsDir, file.filename),
+          path.join(lessonsDir, file.filename),
           file.content
         );
       }
@@ -558,7 +558,7 @@ describe('RAG System End-to-End Workflows', () => {
       expect(storeResponse.success).toBe(true);
 
       // Verify lesson is also accessible via traditional file structure
-      const _lessonsDir = PATH.join(_testProjectRoot, 'development', 'lessons');
+      const _lessonsDir = path.join(_testProjectRoot, 'development', 'lessons');
       const _files = await FS.readdir(lessonsDir);
 
       const _dbLessonFile = files.find(file =>
@@ -567,7 +567,7 @@ describe('RAG System End-to-End Workflows', () => {
       expect(dbLessonFile).toBeDefined();
 
       const _fileContent = await FS.readFile(
-        PATH.join(lessonsDir, dbLessonFile),
+        path.join(lessonsDir, dbLessonFile),
         'utf8'
       );
       expect(fileContent).toContain('Database Connection Pooling');
@@ -579,7 +579,7 @@ describe('RAG System End-to-End Workflows', () => {
         'optimize database performance And reduce latency'
       );
       await FS.writeFile(
-        PATH.join(lessonsDir, dbLessonFile),
+        path.join(lessonsDir, dbLessonFile),
         updatedContent
       );
 

@@ -8,7 +8,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 
 function fixImportPaths() {
   console.log('🔧 Fixing import paths for logger...');

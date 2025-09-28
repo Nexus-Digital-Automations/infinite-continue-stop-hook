@@ -11,7 +11,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { execSync: _execSync } = require('child_process');
 const AutonomousTaskManagerAPI = require('../../taskmanager-api');
 
@@ -84,7 +84,7 @@ describe('Verification Endpoints', () => {
 
     // Setup test environment
     testProjectRoot = '/test/project';
-    testTasksPath = PATH.join(testProjectRoot, 'TASKS.json');
+    testTasksPath = path.join(testProjectRoot, 'TASKS.json');
 
     // Create API instance
     api = new AutonomousTaskManagerAPI(testProjectRoot);

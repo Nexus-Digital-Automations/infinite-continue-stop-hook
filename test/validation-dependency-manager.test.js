@@ -18,7 +18,7 @@ const {
   DEPENDENCY_TYPES,
 } = require('../lib/validation-dependency-manager');
 const FS = require('fs').promises;
-const PATH = require('path');
+const path = require('path');
 const os = require('os');
 
 describe('ValidationDependencyManager', () => {
@@ -27,7 +27,7 @@ describe('ValidationDependencyManager', () => {
 
   beforeEach(async () => {
     // Create temporary directory for test configuration files
-    tempDir = await FS.mkdtemp(PATH.join(os.tmpdir(), 'validation-test-'));
+    tempDir = await FS.mkdtemp(path.join(os.tmpdir(), 'validation-test-'));
     manager = new ValidationDependencyManager({ projectRoot: tempDir });
   });
 

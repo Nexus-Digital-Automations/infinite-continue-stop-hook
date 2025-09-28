@@ -1164,14 +1164,14 @@ class CodeQualityAnalyzer {
     }
 
     FS.writeFileSync(
-      PATH.join(reportsDir, 'code-quality-report.json'),
+      path.join(reportsDir, 'code-quality-report.json'),
       JSON.stringify(report, null, 2),
     );
 
     // Write summary for quick access
 
     FS.writeFileSync(
-      PATH.join(reportsDir, 'quality-summary.json'),
+      path.join(reportsDir, 'quality-summary.json'),
       JSON.stringify(report.summary, null, 2),
     );
 

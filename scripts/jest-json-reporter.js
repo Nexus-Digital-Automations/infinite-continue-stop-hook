@@ -9,6 +9,8 @@
  * @since 2025-09-23
  */
 
+/* eslint-disable security/detect-non-literal-fs-filename */
+
 const FS = require('fs');
 const PATH = require('path');
 
@@ -63,7 +65,7 @@ class JestJsonReporter {
     };
 
     // Ensure output directory exists
-    const outputDir = PATH.dirname(this.options.outputPath);
+    const outputDir = path.dirname(this.options.outputPath);
     if (!FS.existsSync(outputDir)) {
       FS.mkdirSync(outputDir, { recursive: true });
     }
@@ -72,7 +74,7 @@ class JestJsonReporter {
     FS.writeFileSync(this.options.outputPath, JSON.stringify(report, null, 2));
 
     // Also write a summary file for quick access
-    const summaryPath = PATH.join(outputDir, 'test-summary.json');
+    const summaryPath = path.join(outputDir, 'test-summary.json');
     FS.writeFileSync(
       summaryPath,
       JSON.stringify(

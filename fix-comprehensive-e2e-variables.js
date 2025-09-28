@@ -17,7 +17,7 @@ function fixComprehensiveVariableIssues(filePath) {
     if (beforeRESULT !== fixed) {
       changes++;
       console.log(
-        `Fixed RESULT variable declarations in ${path.basename(filePath)}`,
+        `Fixed RESULT variable declarations in ${path.basename(filePath)}`
       );
     }
 
@@ -27,7 +27,7 @@ function fixComprehensiveVariableIssues(filePath) {
     if (beforeName !== fixed) {
       changes++;
       console.log(
-        `Fixed name: property declarations in ${path.basename(filePath)}`,
+        `Fixed name: property declarations in ${path.basename(filePath)}`
       );
     }
 
@@ -37,7 +37,7 @@ function fixComprehensiveVariableIssues(filePath) {
     if (beforeDestructure !== fixed) {
       changes++;
       console.log(
-        `Fixed destructuring name to name in ${path.basename(filePath)}`,
+        `Fixed destructuring name to name in ${path.basename(filePath)}`
       );
     }
 
@@ -47,7 +47,7 @@ function fixComprehensiveVariableIssues(filePath) {
     if (beforeTemplate !== fixed) {
       changes++;
       console.log(
-        `Fixed template literal name to name in ${path.basename(filePath)}`,
+        `Fixed template literal name to name in ${path.basename(filePath)}`
       );
     }
 
@@ -55,19 +55,19 @@ function fixComprehensiveVariableIssues(filePath) {
     const beforePush = fixed;
     fixed = fixed.replace(
       /testDependencies\.push\(name\)/g,
-      'testDependencies.push(name)',
+      'testDependencies.push(name)'
     );
     if (beforePush !== fixed) {
       changes++;
       console.log(
-        `Fixed testDependencies.push(name) to name in ${path.basename(filePath)}`,
+        `Fixed testDependencies.push(name) to name in ${path.basename(filePath)}`
       );
     }
 
     if (changes > 0) {
       fs.writeFileSync(filePath, fixed);
       console.log(
-        `Fixed ${changes} comprehensive variable issues in: ${filePath}`,
+        `Fixed ${changes} comprehensive variable issues in: ${filePath}`
       );
       return true;
     }
@@ -115,5 +115,5 @@ for (const file of e2eFiles) {
 }
 
 console.log(
-  `Fixed comprehensive variable issues in ${fixedCount} E2E test files.`,
+  `Fixed comprehensive variable issues in ${fixedCount} E2E test files.`
 );

@@ -15,7 +15,7 @@
 
 const { TaskManagerAPI } = require('../../taskmanager-api');
 const FS = require('fs').promises;
-const PATH = require('path');
+const path = require('path');
 const os = require('os');
 const { spawn } = require('child_process');
 
@@ -185,7 +185,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
       });
 
       // Result structure should be correct even if execution fails due to mocked environment
-      expect(result).toBeDefined();
+      expect(RESULT).toBeDefined();
       expect(typeof RESULT.success).toBe('boolean');
       expect(RESULT.plan).toBeDefined();
 
@@ -201,7 +201,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
       return new Promise((resolve, reject) => {
         const child = spawn(
           'node',
-          [PATH.join(process.cwd(), '../../taskmanager-api.js'), ...args],
+          [path.join(process.cwd(), '../../taskmanager-api.js'), ...args],
           {
             cwd: tempDir,
             stdio: 'pipe',
@@ -222,7 +222,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
         child.on('close', (code) => {
           try {
             const RESULT = JSON.parse(stdout);
-            resolve({ code, result, stderr });
+            resolve({ code, result: RESULT, stderr });
           } catch {
             reject(
               new Error(`Failed to parse JSON: ${stdout}\nStderr: ${stderr}`),
@@ -355,8 +355,8 @@ describe('TaskManager API Validation Dependency Integration', () => {
       const result =
         await api.generateInteractiveVisualization('invalid-format');
 
-      expect(RESULT.success).toBe(false);
-      expect(RESULT.error).toContain('Unsupported visualization format');
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('Unsupported visualization format');
     });
 
     test('should handle missing dependency file gracefully', async () => {

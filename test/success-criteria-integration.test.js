@@ -14,14 +14,14 @@
  */
 
 const FS = require('fs').promises;
-const PATH = require('path');
+const path = require('path');
 const { spawn } = require('child_process');
 const { loggers } = require('../lib/logger');
 
 // Test configuration
-const TEST_PROJECT_DIR = PATH.join(__dirname, 'success-criteria-test-project');
-const TODO_PATH = PATH.join(TEST_PROJECT_DIR, 'TODO.json');
-const API_PATH = PATH.join(__dirname, '..', 'taskmanager-api.js');
+const TEST_PROJECT_DIR = path.join(__dirname, 'success-criteria-test-project');
+const TODO_PATH = path.join(TEST_PROJECT_DIR, 'TODO.json');
+const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
 const TIMEOUT = 15000; // 15 seconds for API operations
 
 /**
@@ -80,7 +80,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
       }
     });
 
-    child.on('error', (error) => {
+    child.on('error', (_error) => {
       reject(new Error(`Spawn error: ${error.message}`));
     });
   });
@@ -127,7 +127,7 @@ async function setupTestProject() {
     };
 
     await FS.writeFile(
-      PATH.join(TEST_PROJECT_DIR, 'package.json'),
+      path.join(TEST_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2),
     );
   } catch {
@@ -594,7 +594,7 @@ describe('Success Criteria Integration Tests', () => {
       const TASK = listResult.tasks.find((t) => t.id === TASK_ID);
       expect(TASK).toBeDefined();
       expect(TASK.status).toBe('in_progress');
-      expect(TASK.assigned_agent).toBe(AGENT_ID);
+      expect(TASK.assigned_agent).toBe(agentId);
     });
 
     test('should validate criteria format consistency', async () => {

@@ -11,7 +11,7 @@ const { loggers } = require('../lib/logger');
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { EXEC_SYNC, _spawn } = require('child_process');
 const os = require('os');
 const { createLogger } = require('../lib/utils/logger');
@@ -38,7 +38,7 @@ class ParallelTestOptimizer {
       estimated_time_savings: 0,
     };
 
-    this.outputDir = PATH.join(process.cwd(), 'test-performance');
+    this.outputDir = path.join(process.cwd(), 'test-performance');
     this.ensureOutputDirectory();
   }
 
@@ -586,11 +586,11 @@ class ParallelTestOptimizer {
    */
   saveAnalysis() {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const analysisFile = PATH.join(
+    const analysisFile = path.join(
       this.outputDir,
       `parallel-optimization-${timestamp}.json`
     );
-    const latestFile = PATH.join(
+    const latestFile = path.join(
       this.outputDir,
       'latest-parallel-optimization.json'
     );
@@ -606,7 +606,7 @@ class ParallelTestOptimizer {
     FS.writeFileSync(latestFile, JSON.stringify(analysis, null, 2));
 
     // Generate human-readable report
-    const reportFile = PATH.join(
+    const reportFile = path.join(
       this.outputDir,
       'parallel-optimization-report.md'
     );

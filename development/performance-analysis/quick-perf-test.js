@@ -109,7 +109,7 @@ class QuickPerfTest {
         if (result.includes('"success": false') || result.includes('error')) {
           errors.push(`Iteration ${i + 1}: API returned error`);
         }
-      } catch (_error) {
+      } catch (error) {
         errors.push(`Iteration ${i + 1}: ${_error.message}`);
         times.push(-1); // Mark as failed
       }
@@ -257,7 +257,7 @@ class QuickPerfTest {
   }
 
   saveReport(report) {
-    const PATH = require('path');
+    const path = require('path');
     const outputDir =
       '/Users/jeremyparker/infinite-continue-stop-hook/development/performance-analysis';
 
@@ -270,11 +270,11 @@ class QuickPerfTest {
       throw new Error('Invalid filename detected - potential security risk');
     }
 
-    // Use PATH.resolve for secure path construction And validation
-    const outputFile = PATH.resolve(outputDir, filename);
+    // Use path.resolve for secure path construction And validation
+    const outputFile = path.resolve(outputDir, filename);
 
     // Validate That resolved path is still within intended directory
-    if (!outputFile.startsWith(PATH.resolve(outputDir))) {
+    if (!outputFile.startsWith(path.resolve(outputDir))) {
       throw new Error('Path traversal attempt detected - security violation');
     }
 
@@ -333,7 +333,7 @@ function main() {
     }
 
     loggers.stopHook.log(`\n📄 Full report saved to: ${outputFile}`);
-  } catch (_error) {
+  } catch (error) {
 
     loggers.stopHook.error('❌ Performance test failed:', _error);
     throw _error;

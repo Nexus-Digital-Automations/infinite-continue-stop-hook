@@ -357,7 +357,7 @@ describe('FeatureManagerAPI', () => {
         expect(result.feature.id).toMatch(/^feature_\d+_[a-f0-9]+$/);
         expect(result.feature.status).toBe('suggested');
         expect(result.feature.title).toBe(TEST_FIXTURES.validFeature.title);
-        expect(RESULT.message).toBe('Feature suggestion created successfully');
+        expect(result.message).toBe('Feature suggestion created successfully');
 
         testHelpers.validateFeatureStructure(result.feature);
       });
@@ -414,7 +414,7 @@ describe('FeatureManagerAPI', () => {
         expect(result.feature.approval_notes).toBe(
           TEST_FIXTURES.validApprovalData.notes,
         );
-        expect(RESULT.message).toBe('Feature approved successfully');
+        expect(result.message).toBe('Feature approved successfully');
       });
 
       test('should approve feature with default approval data', async () => {
@@ -507,7 +507,7 @@ describe('FeatureManagerAPI', () => {
         expect(result.feature.rejection_reason).toBe(
           TEST_FIXTURES.validRejectionData.reason,
         );
-        expect(RESULT.message).toBe('Feature rejected successfully');
+        expect(result.message).toBe('Feature rejected successfully');
       });
 
       test('should reject feature with default rejection data', async () => {
@@ -594,12 +594,12 @@ describe('FeatureManagerAPI', () => {
         );
         expect(result.success).toBe(true);
         expect(result.approved_count).toBe(3);
-        expect(RESULT.error_count).toBe(0);
-        expect(RESULT.approved_features).toHaveLength(3);
-        expect(RESULT.errors).toHaveLength(0);
+        expect(result.error_count).toBe(0);
+        expect(result.approved_features).toHaveLength(3);
+        expect(result.errors).toHaveLength(0);
 
         // Verify all features are approved
-        RESULT.approved_features.forEach((approvedFeature) => {
+        result.approved_features.forEach((approvedFeature) => {
           expect(approvedFeature.status).toBe('approved');
           expect(approvedFeature.success).toBe(true);
         });
@@ -612,13 +612,13 @@ describe('FeatureManagerAPI', () => {
         const result = await api.bulkApproveFeatures(suggestedFeatureIds);
         expect(result.success).toBe(true);
         expect(result.approved_count).toBe(2);
-        expect(RESULT.error_count).toBe(1);
-        expect(RESULT.approved_features).toHaveLength(2);
-        expect(RESULT.errors).toHaveLength(1);
-        expect(RESULT.errors[0]).toContain(
+        expect(result.error_count).toBe(1);
+        expect(result.approved_features).toHaveLength(2);
+        expect(result.errors).toHaveLength(1);
+        expect(result.errors[0]).toContain(
           "must be in 'suggested' status to approve",
         );
-        expect(RESULT.errors[0]).toContain('Current status: approved');
+        expect(result.errors[0]).toContain('Current status: approved');
       });
 
       test('should handle non-existent feature IDs', async () => {
@@ -627,9 +627,9 @@ describe('FeatureManagerAPI', () => {
         const result = await api.bulkApproveFeatures(invalidIds);
         expect(result.success).toBe(true);
         expect(result.approved_count).toBe(0);
-        expect(RESULT.error_count).toBe(2);
-        expect(RESULT.errors).toHaveLength(2);
-        RESULT.errors.forEach((error) => {
+        expect(result.error_count).toBe(2);
+        expect(result.errors).toHaveLength(2);
+        result.errors.forEach((_error) => {
           expect(error).toContain('not found');
         });
       });
@@ -638,9 +638,9 @@ describe('FeatureManagerAPI', () => {
         const result = await api.bulkApproveFeatures([]);
         expect(result.success).toBe(true);
         expect(result.approved_count).toBe(0);
-        expect(RESULT.error_count).toBe(0);
-        expect(RESULT.approved_features).toHaveLength(0);
-        expect(RESULT.errors).toHaveLength(0);
+        expect(result.error_count).toBe(0);
+        expect(result.approved_features).toHaveLength(0);
+        expect(result.errors).toHaveLength(0);
       });
     });
 
@@ -825,7 +825,7 @@ describe('FeatureManagerAPI', () => {
       test('should return API methods information', () => {
         const result = api.getApiMethods();
         expect(result.success).toBe(true);
-        expect(RESULT.message).toContain('Feature Management API');
+        expect(result.message).toContain('Feature Management API');
         expect(result.cliMapping).toBeDefined();
         expect(result.availableCommands).toBeDefined();
         expect(result.guide).toBeDefined();
@@ -856,7 +856,7 @@ describe('FeatureManagerAPI', () => {
         expect(result.featureWorkflow).toBeDefined();
         expect(result.coreCommands).toBeDefined();
         expect(result.workflows).toBeDefined();
-        expect(RESULT.examples).toBeDefined();
+        expect(result.examples).toBeDefined();
         expect(result.requirements).toBeDefined();
       });
 
@@ -874,9 +874,10 @@ describe('FeatureManagerAPI', () => {
 
       test('should include usage examples', async () => {
         const result = await api.getComprehensiveGuide();
-        expect(RESULT.examples.featureCreation).toBeDefined();
-        expect(RESULT.examples.approvalWorkflow).toBeDefined();
-        expect(RESULT.examples.initializationTracking).toBeDefined();
+        expect(result.success).toBe(true);
+        expect(result.examples.featureCreation).toBeDefined();
+        expect(result.examples.approvalWorkflow).toBeDefined();
+        expect(result.examples.initializationTracking).toBeDefined();
       });
 
       test('should handle timeout errors gracefully', async () => {
@@ -929,11 +930,11 @@ describe('FeatureManagerAPI', () => {
 
     describe('initializeAgent', () => {
       test('should initialize new agent successfully', async () => {
-        const AGENT_ID = 'test-agent-001';
-        const result = await api.initializeAgent(AGENT_ID);
+        const agentId = 'test-agent-001';
+        const result = await api.initializeAgent(agentId);
         expect(result.success).toBe(true);
         expect(result.agent).toBeDefined();
-        expect(result.agent.id).toBe(AGENT_ID);
+        expect(result.agent.id).toBe(agentId);
         expect(result.agent.status).toBe('initialized');
         expect(result.agent.sessionId).toBeDefined();
       });
@@ -948,15 +949,15 @@ describe('FeatureManagerAPI', () => {
 
     describe('reinitializeAgent', () => {
       test('should reinitialize existing agent', async () => {
-        const AGENT_ID = 'test-agent-002';
+        const agentId = 'test-agent-002';
         // First initialize
-        await api.initializeAgent(AGENT_ID);
+        await api.initializeAgent(agentId);
 
         // Then reinitialize
-        const result = await api.reinitializeAgent(AGENT_ID);
+        const result = await api.reinitializeAgent(agentId);
         expect(result.success).toBe(true);
         expect(result.agent).toBeDefined();
-        expect(result.agent.id).toBe(AGENT_ID);
+        expect(result.agent.id).toBe(agentId);
         expect(result.agent.previousSessions).toBeDefined();
       });
 
@@ -970,20 +971,20 @@ describe('FeatureManagerAPI', () => {
 
     describe('authorizeStop', () => {
       test('should authorize stop with reason', async () => {
-        const AGENT_ID = 'test-agent-003';
+        const agentId = 'test-agent-003';
         const reason = 'Task completed successfully';
 
         const result = await api.authorizeStop(agentId, reason);
         expect(result.success).toBe(true);
         expect(result.authorization).toBeDefined();
-        expect(result.authorization.authorized_by).toBe(AGENT_ID);
+        expect(result.authorization.authorized_by).toBe(agentId);
         expect(result.authorization.reason).toBe(reason);
         expect(result.authorization.timestamp).toBeDefined();
       });
 
       test('should authorize stop with default reason', async () => {
-        const AGENT_ID = 'test-agent-004';
-        const result = await api.authorizeStop(AGENT_ID);
+        const agentId = 'test-agent-004';
+        const result = await api.authorizeStop(agentId);
         expect(result.success).toBe(true);
         expect(result.authorization.reason).toBe(
           'Agent authorized stop after completing all tasks And achieving project perfection',

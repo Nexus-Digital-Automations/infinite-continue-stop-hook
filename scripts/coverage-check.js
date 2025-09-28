@@ -147,7 +147,7 @@ class CoverageThresholdChecker {
   loadCoverageData() {
     CoverageLogger.info('Loading coverage data...');
 
-    const summaryPath = PATH.resolve(this.config.paths.summary);
+    const summaryPath = path.resolve(this.config.paths.summary);
 
     if (!FS.existsSync(summaryPath)) {
       // Try to generate coverage if it doesn't exist
@@ -264,13 +264,13 @@ class CoverageThresholdChecker {
       timestamp: new Date().toISOString(),
     };
 
-    const badgeDir = PATH.join('coverage', 'badge');
+    const badgeDir = path.join('coverage', 'badge');
     if (!FS.existsSync(badgeDir)) {
       FS.mkdirSync(badgeDir, { recursive: true });
     }
 
     FS.writeFileSync(
-      PATH.join(badgeDir, 'data.json'),
+      path.join(badgeDir, 'data.json'),
       JSON.stringify(badgeData, null, 2),
     );
 

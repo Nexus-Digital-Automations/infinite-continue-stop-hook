@@ -18,13 +18,13 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { spawn } = require('child_process');
 
 // Test configuration
-const TEST_PROJECT_DIR = PATH.join(__dirname, 'embedded-subtasks-test-project');
-const TODO_PATH = PATH.join(TEST_PROJECT_DIR, 'TODO.json');
-const API_PATH = PATH.join(__dirname, '..', 'taskmanager-api.js');
+const TEST_PROJECT_DIR = path.join(__dirname, 'embedded-subtasks-test-project');
+const TODO_PATH = path.join(TEST_PROJECT_DIR, 'TODO.json');
+const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
 const TIMEOUT = 15000; // 15 seconds for API operations
 
 /**
@@ -94,7 +94,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
       }
     });
 
-    child.on('error', (error) => {
+    child.on('error', (_error) => {
       reject(new Error(`Command execution failed: ${error.message}`));
     });
   });
@@ -105,7 +105,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
  */
 function createTestTodoFile() {
   // Create development/essentials directory
-  const essentialsDir = PATH.join(
+  const essentialsDir = path.join(
     TEST_PROJECT_DIR,
     'development',
     'essentials',
@@ -135,7 +135,7 @@ function createTestTodoFile() {
 `;
 
   FS.writeFileSync(
-    PATH.join(essentialsDir, 'audit-criteria.md'),
+    path.join(essentialsDir, 'audit-criteria.md'),
     auditCriteriaContent,
   );
 
@@ -739,7 +739,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
 
     test('should handle missing audit criteria file gracefully', async () => {
       // Remove audit criteria file
-      const AUDIT_CRITERIA_PATH = PATH.join(
+      const AUDIT_CRITERIA_PATH = path.join(
         TEST_PROJECT_DIR,
         'development/essentials/audit-criteria.md',
       );

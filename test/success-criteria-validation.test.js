@@ -17,9 +17,9 @@ const { loggers } = require('../lib/logger');
 const FS = require('fs').promises;
 
 // Test configuration
-const API_PATH = PATH.join(__dirname, '..', 'taskmanager-api.js');
-const TEST_PROJECT_DIR = PATH.join(__dirname, 'features-test-project');
-const FEATURES_PATH = PATH.join(TEST_PROJECT_DIR, 'FEATURES.json');
+const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
+const TEST_PROJECT_DIR = path.join(__dirname, 'features-test-project');
+const FEATURES_PATH = path.join(TEST_PROJECT_DIR, 'FEATURES.json');
 const TIMEOUT = 15000;
 
 /**
@@ -65,7 +65,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
       }
     });
 
-    child.on('error', (error) => {
+    child.on('error', (_error) => {
       reject(error);
     });
   });
@@ -97,7 +97,7 @@ async function setupFeaturesTestProject() {
     };
 
     await FS.writeFile(
-      PATH.join(TEST_PROJECT_DIR, 'package.json'),
+      path.join(TEST_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2)
     );
 
@@ -139,7 +139,7 @@ app.start().then(() => {
 });
 `;
 
-    await FS.writeFile(PATH.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
+    await FS.writeFile(path.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
 
     // Initialize empty FEATURES.json file - the API will populate it
     const initialFeatures = {
@@ -166,7 +166,7 @@ app.start().then(() => {
     await FS.writeFile(FEATURES_PATH, JSON.stringify(initialFeatures, null, 2));
 
     loggers.stopHook.log('Features test project setup completed');
-  } catch (_error) {
+  } catch (error) {
     loggers.stopHook.error('Failed to setup features test project:', error);
     throw error;
   }

@@ -28,10 +28,10 @@ const CONFIG = {
     identify_bottlenecks: true,
   },
   paths: {
-    reports: PATH.join(process.cwd(), 'test-performance'),
-    results: PATH.join(process.cwd(), 'test-performance', 'results'),
-    trends: PATH.join(process.cwd(), 'test-performance', 'trends.json'),
-    summary: PATH.join(process.cwd(), 'test-performance', 'latest-report.json'),
+    reports: path.join(process.cwd(), 'test-performance'),
+    results: path.join(process.cwd(), 'test-performance', 'results'),
+    trends: path.join(process.cwd(), 'test-performance', 'trends.json'),
+    summary: path.join(process.cwd(), 'test-performance', 'latest-report.json'),
   },
   output: {
     verbose: process.env.VERBOSE === 'true',
@@ -373,7 +373,7 @@ class TestPerformanceMonitor {
         });
       });
 
-      child.on('error', (error) => {
+      child.on('error', (_error) => {
         clearTimeout(timeout);
         reject(error);
       });
@@ -522,7 +522,7 @@ class TestPerformanceMonitor {
 
     // Write individual suite results
     for (const suiteResult of this.suiteResults) {
-      const suiteFile = PATH.join(
+      const suiteFile = path.join(
         CONFIG.paths.results,
         `${suiteResult.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.json`,
       );
@@ -643,7 +643,7 @@ class TestPerformanceMonitor {
 
     if (this.errors.length > 0) {
       loggers.stopHook.log(`\n❌ Performance Errors: ${this.errors.length}`);
-      this.errors.forEach((error) => {
+      this.errors.forEach((_error) => {
         loggers.stopHook.log(`   - ${error.message || error.error}`);
       });
     }
@@ -755,7 +755,7 @@ Examples:
   }
 
   const monitor = new TestPerformanceMonitor();
-  monitor.run().catch((error) => {
+  monitor.run().catch((_error) => {
     PerformanceLogger.error(`Fatal error: ${error.message}`);
     throw error;
   });

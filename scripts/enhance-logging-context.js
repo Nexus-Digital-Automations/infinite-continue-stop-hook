@@ -38,7 +38,7 @@ class LoggingContextEnhancer {
 
     // Process system files
     for (const file of this.systemFiles) {
-      const fullPath = PATH.join(process.cwd(), file);
+      const fullPath = path.join(process.cwd(), file);
       if (FS.existsSync(fullPath)) {
         this.enhanceFile(fullPath);
       } else {
@@ -99,7 +99,7 @@ class LoggingContextEnhancer {
       if (enhanced) {
         FS.writeFileSync(filePath, newContent, 'utf8');
         loggers.app.info('Enhanced logging context in file', {
-          filePath: PATH.relative(process.cwd(), filePath),
+          filePath: path.relative(process.cwd(), filePath),
           enhancedCalls: this.enhancedCalls,
         });
         this.processedFiles++;
@@ -113,7 +113,7 @@ class LoggingContextEnhancer {
   }
 
   getFileContext(filePath) {
-    const fileName = PATH.basename(filePath);
+    const fileName = path.basename(filePath);
 
     // Determine context based on file purpose
     if (fileName.includes('agent')) {
@@ -219,7 +219,7 @@ module.exports = {
 `;
 
     FS.writeFileSync(
-      PATH.join(process.cwd(), 'lib/logging-utilities.js'),
+      path.join(process.cwd(), 'lib/logging-utilities.js'),
       utilityCode,
       'utf8',
     );
@@ -243,7 +243,7 @@ if (require.main === module) {
         );
       }
     })
-    .catch((error) => {
+    .catch((_error) => {
       loggers.app.error('Enhancement failed', { error: error.message });
       throw new Error(`Enhancement failed: ${error.message}`);
     });

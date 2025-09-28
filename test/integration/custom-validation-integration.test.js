@@ -11,11 +11,11 @@ const { loggers } = require('../../lib/logger');
  */
 
 const FS = require('fs').promises;
-const PATH = require('path');
+const path = require('path');
 const { execSync } = require('child_process');
 
 // We need to test the actual TaskManager API integration
-const taskManagerApiPath = PATH.join(__dirname, '../../taskmanager-api.js');
+const taskManagerApiPath = path.join(__dirname, '../../taskmanager-api.js');
 
 describe('Custom Validation Rules Integration with TaskManager API', () => {
   let testProjectRoot;
@@ -23,7 +23,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
   beforeAll(async () => {
     originalCwd = process.cwd();
-    testProjectRoot = PATH.join(__dirname, '../test-data', 'integration-test');
+    testProjectRoot = path.join(__dirname, '../test-data', 'integration-test');
     await FS.mkdir(testProjectRoot, { recursive: true });
   });
 
@@ -41,7 +41,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     try {
       const files = await FS.readdir(testProjectRoot);
       for (const file of files) {
-        await FS.rm(PATH.join(testProjectRoot, file), {
+        await FS.rm(path.join(testProjectRoot, file), {
           recursive: true,
           force: true,
         });
@@ -66,7 +66,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       };
 
       await FS.writeFile(
-        PATH.join(testProjectRoot, '.validation-rules.json'),
+        path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
 
@@ -102,7 +102,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       };
 
       await FS.writeFile(
-        PATH.join(testProjectRoot, '.validation-rules.json'),
+        path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
 
@@ -133,7 +133,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       };
 
       await FS.writeFile(
-        PATH.join(testProjectRoot, '.validation-rules.json'),
+        path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
 
@@ -152,7 +152,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
     test('should execute all custom validation rules via CLI', async () => {
       // Create package.json for file_exists rule
-      await FS.writeFile(PATH.join(testProjectRoot, 'package.json'), '{}');
+      await FS.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
 
       const config = {
         custom_rules: {
@@ -170,7 +170,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       };
 
       await FS.writeFile(
-        PATH.join(testProjectRoot, '.validation-rules.json'),
+        path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
 
@@ -216,7 +216,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       };
 
       await FS.writeFile(
-        PATH.join(testProjectRoot, '.validation-rules.json'),
+        path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
 
@@ -254,7 +254,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
     test('should handle invalid configuration file', async () => {
       await FS.writeFile(
-        PATH.join(testProjectRoot, '.validation-rules.json'),
+        path.join(testProjectRoot, '.validation-rules.json'),
         'invalid json',
       );
 
@@ -281,7 +281,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       };
 
       await FS.writeFile(
-        PATH.join(testProjectRoot, '.validation-rules.json'),
+        path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
 
@@ -300,7 +300,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
   describe('Technology Stack Detection Integration', () => {
     test('should detect Node.js project And enable appropriate rules', async () => {
       await FS.writeFile(
-        PATH.join(testProjectRoot, 'package.json'),
+        path.join(testProjectRoot, 'package.json'),
         '{"name": "test-project"}',
       );
 
@@ -322,7 +322,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       };
 
       await FS.writeFile(
-        PATH.join(testProjectRoot, '.validation-rules.json'),
+        path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
 
@@ -341,9 +341,9 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     });
 
     test('should detect multiple technologies', async () => {
-      await FS.writeFile(PATH.join(testProjectRoot, 'package.json'), '{}');
+      await FS.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
       await FS.writeFile(
-        PATH.join(testProjectRoot, 'Dockerfile'),
+        path.join(testProjectRoot, 'Dockerfile'),
         'FROM node:14',
       );
 
@@ -376,7 +376,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       };
 
       await FS.writeFile(
-        PATH.join(testProjectRoot, '.validation-rules.json'),
+        path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
 
@@ -393,7 +393,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
     test('should execute file existence rules', async () => {
       await FS.writeFile(
-        PATH.join(testProjectRoot, 'required-file.txt'),
+        path.join(testProjectRoot, 'required-file.txt'),
         'content',
       );
 
@@ -408,7 +408,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       };
 
       await FS.writeFile(
-        PATH.join(testProjectRoot, '.validation-rules.json'),
+        path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
 
@@ -434,7 +434,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       };
 
       await FS.writeFile(
-        PATH.join(testProjectRoot, 'package.json'),
+        path.join(testProjectRoot, 'package.json'),
         JSON.stringify(packageJson, null, 2),
       );
 
@@ -450,7 +450,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       };
 
       await FS.writeFile(
-        PATH.join(testProjectRoot, '.validation-rules.json'),
+        path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
 
@@ -466,7 +466,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     });
 
     test('should execute conditional rules', async () => {
-      await FS.writeFile(PATH.join(testProjectRoot, 'package.json'), '{}');
+      await FS.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
 
       const config = {
         custom_rules: {
@@ -488,7 +488,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       };
 
       await FS.writeFile(
-        PATH.join(testProjectRoot, '.validation-rules.json'),
+        path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
 
@@ -526,7 +526,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       };
 
       await FS.writeFile(
-        PATH.join(testProjectRoot, '.validation-rules.json'),
+        path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
 
@@ -566,7 +566,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       };
 
       await FS.writeFile(
-        PATH.join(testProjectRoot, '.validation-rules.json'),
+        path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
 
@@ -618,7 +618,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       };
 
       await FS.writeFile(
-        PATH.join(testProjectRoot, '.validation-rules.json'),
+        path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
 
@@ -694,7 +694,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     test('should support a realistic security audit configuration', async () => {
       // Create realistic project structure
       await FS.writeFile(
-        PATH.join(testProjectRoot, 'package.json'),
+        path.join(testProjectRoot, 'package.json'),
         JSON.stringify(
           {
             name: 'test-project',
@@ -712,9 +712,9 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         ),
       );
 
-      await FS.mkdir(PATH.join(testProjectRoot, 'src'), { recursive: true });
+      await FS.mkdir(path.join(testProjectRoot, 'src'), { recursive: true });
       await FS.writeFile(
-        PATH.join(testProjectRoot, 'src', 'app.js'),
+        path.join(testProjectRoot, 'src', 'app.js'),
         `
 const express = require('express');
 const app = express();
@@ -756,7 +756,7 @@ module.exports = app;
       };
 
       await FS.writeFile(
-        PATH.join(testProjectRoot, '.validation-rules.json'),
+        path.join(testProjectRoot, '.validation-rules.json'),
         JSON.stringify(config, null, 2),
       );
 

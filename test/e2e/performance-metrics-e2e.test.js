@@ -1,17 +1,17 @@
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { execSync } = require('child_process');
 
 // End-to-End tests for complete Performance Metrics system workflow
 // Tests the full lifecycle: metrics collection → storage → analysis → trend analysis
 describe('Performance Metrics System E2E Tests', () => {
   const mockProjectRoot = '/tmp/test-performance-e2e';
-  const taskManagerPath = PATH.resolve(__dirname, '../../taskmanager-api.js');
-  const mockMetricsFile = PATH.join(
+  const taskManagerPath = path.resolve(__dirname, '../../taskmanager-api.js');
+  const mockMetricsFile = path.join(
     mockProjectRoot,
     '.validation-performance-enhanced.json',
   );
-  const mockTrendsFile = PATH.join(mockProjectRoot, '.validation-trends.json');
+  const mockTrendsFile = path.join(mockProjectRoot, '.validation-trends.json');
 
   beforeEach(() => {
     // Create mock directory
@@ -601,7 +601,7 @@ describe('Performance Metrics System E2E Tests', () => {
         ],
       };
 
-      const legacyFile = PATH.join(
+      const legacyFile = path.join(
         mockProjectRoot,
         '.validation-performance.json',
       );
@@ -642,7 +642,7 @@ describe('Performance Metrics System E2E Tests', () => {
 
       FS.writeFileSync(mockMetricsFile, JSON.stringify(enhancedData, null, 2));
       FS.writeFileSync(
-        PATH.join(mockProjectRoot, '.validation-performance.json'),
+        path.join(mockProjectRoot, '.validation-performance.json'),
         JSON.stringify(legacyData, null, 2),
       );
 

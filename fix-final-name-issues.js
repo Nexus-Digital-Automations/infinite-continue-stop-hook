@@ -17,7 +17,7 @@ function fixFinalNameIssues(filePath) {
     if (beforeNameProp !== fixed) {
       changes++;
       console.log(
-        `Fixed name: property declarations in ${path.basename(filePath)}`,
+        `Fixed name: property declarations in ${path.basename(filePath)}`
       );
     }
 
@@ -27,7 +27,7 @@ function fixFinalNameIssues(filePath) {
     if (beforeNameDestructure !== fixed) {
       changes++;
       console.log(
-        `Fixed { name, config } destructuring in ${path.basename(filePath)}`,
+        `Fixed { name, config } destructuring in ${path.basename(filePath)}`
       );
     }
 
@@ -37,7 +37,7 @@ function fixFinalNameIssues(filePath) {
     if (beforeNameTemplate !== fixed) {
       changes++;
       console.log(
-        `Fixed ${name} template literals in ${path.basename(filePath)}`,
+        `Fixed ${name} template literals in ${path.basename(filePath)}`
       );
     }
 
@@ -45,12 +45,12 @@ function fixFinalNameIssues(filePath) {
     const beforeNamePush = fixed;
     fixed = fixed.replace(
       /testDependencies\.push\(name\)/g,
-      'testDependencies.push(name)',
+      'testDependencies.push(name)'
     );
     if (beforeNamePush !== fixed) {
       changes++;
       console.log(
-        `Fixed testDependencies.push(name) in ${path.basename(filePath)}`,
+        `Fixed testDependencies.push(name) in ${path.basename(filePath)}`
       );
     }
 
@@ -68,7 +68,7 @@ function fixFinalNameIssues(filePath) {
     if (beforeSystemConfigName !== fixed) {
       changes++;
       console.log(
-        `Fixed systemConfig.name references in ${path.basename(filePath)}`,
+        `Fixed systemConfig.name references in ${path.basename(filePath)}`
       );
     }
 
@@ -78,7 +78,7 @@ function fixFinalNameIssues(filePath) {
     if (beforeBaselineTestName !== fixed) {
       changes++;
       console.log(
-        `Fixed baselineTest.name references in ${path.basename(filePath)}`,
+        `Fixed baselineTest.name references in ${path.basename(filePath)}`
       );
     }
 

@@ -9,7 +9,7 @@
  * @since 2025-09-23
  */
 
-const PATH = require('path');
+const path = require('path');
 const FS = require('fs');
 const childProcess = require('child_process');
 const { loggers } = require('../../lib/logger');
@@ -19,7 +19,7 @@ const { loggers } = require('../../lib/logger');
  */
 const TEST_CONFIG = {
   DEFAULT_TIMEOUT: 10000,
-  API_PATH: PATH.join(__dirname, '..', '..', 'taskmanager-api.js'),
+  API_PATH: path.join(__dirname, '..', '..', 'taskmanager-api.js'),
   TEST_PROJECT_PREFIX: 'test-project-',
   TEST_AGENT_PREFIX: 'test-agent-',
 };
@@ -116,7 +116,7 @@ class APIExecutor {
         }
       });
 
-      child.on('error', (error) => {
+      child.on('error', (_error) => {
         reject(new Error(`Command execution failed: ${error.message}`));
       });
     });

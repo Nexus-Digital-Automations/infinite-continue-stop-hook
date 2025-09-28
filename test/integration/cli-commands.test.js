@@ -84,7 +84,7 @@ describe('CLI Commands Integration Tests', () => {
         resolve({ stdout, stderr, code });
       });
 
-      child.on('error', (error) => {
+      child.on('error', (_error) => {
         clearTimeout(timeoutId);
         reject(error);
       });
@@ -304,7 +304,7 @@ describe('CLI Commands Integration Tests', () => {
       expect(initResult.code).toBe(0);
       const initOutput = JSON.parse(initResult.stdout);
       expect(initOutput.success).toBe(true);
-      expect(initOutput.agent.id).toBe(AGENT_ID);
+      expect(initOutput.agent.id).toBe(agentId);
 
       // 2. Get initialization stats
       const statsResult = await execCLIDirect([
@@ -343,7 +343,7 @@ describe('CLI Commands Integration Tests', () => {
       expect(stopResult.code).toBe(0);
       const stopOutput = JSON.parse(stopResult.stdout);
       expect(stopOutput.success).toBe(true);
-      expect(stopOutput.authorization.authorized_by).toBe(AGENT_ID);
+      expect(stopOutput.authorization.authorized_by).toBe(agentId);
     });
 
     test('should execute bulk operations', async () => {
@@ -701,7 +701,7 @@ describe('CLI Commands Integration Tests', () => {
 
       // Remove FEATURES.json
       const FS = require('fs').promises;
-      const featuresPath = PATH.join(emptyDir, 'FEATURES.json');
+      const featuresPath = path.join(emptyDir, 'FEATURES.json');
       await FS.unlink(featuresPath);
 
       // 2. Try to perform operations

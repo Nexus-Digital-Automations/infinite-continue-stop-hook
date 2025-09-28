@@ -18,13 +18,13 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { spawn } = require('child_process');
 
 // Test configuration
-const TEST_PROJECT_DIR = PATH.join(__dirname, 'test-api-project');
-const TODO_PATH = PATH.join(TEST_PROJECT_DIR, 'TODO.json');
-const API_PATH = PATH.join(__dirname, '..', 'taskmanager-api.js');
+const TEST_PROJECT_DIR = path.join(__dirname, 'test-api-project');
+const TODO_PATH = path.join(TEST_PROJECT_DIR, 'TODO.json');
+const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
 const TIMEOUT = 15000; // 15 seconds for API operations
 
 /**
@@ -83,7 +83,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (_error) {
+        } catch (error) {
           // If both fail, include raw output for debugging
           reject(
             new Error(
@@ -94,7 +94,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
       }
     });
 
-    child.on('error', (error) => {
+    child.on('error', (_error) => {
       reject(new Error(`Command execution failed: ${error.message}`));
     });
   });

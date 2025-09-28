@@ -43,7 +43,7 @@ class ValidationLogger {
 
 class SuccessCriteriaValidator {
   constructor() {
-    this.configPath = PATH.join(
+    this.configPath = path.join(
       __dirname,
       'development/essentials/success-criteria-config.json',
     );
@@ -61,8 +61,8 @@ class SuccessCriteriaValidator {
       const configData = await FS.readFile(this.configPath, 'utf8');
       this.config = JSON.parse(configData);
 
-      this.evidenceDir = PATH.join(__dirname, this.config.evidence_storage);
-      this.reportDir = PATH.join(__dirname, this.config.report_storage);
+      this.evidenceDir = path.join(__dirname, this.config.evidence_storage);
+      this.reportDir = path.join(__dirname, this.config.report_storage);
 
       // Ensure directories exist
       await this.ensureDirectories();
@@ -237,7 +237,7 @@ class SuccessCriteriaValidator {
    */
   async getTaskCriteria(taskId) {
     try {
-      const todoPath = PATH.join(__dirname, 'FEATURES.json');
+      const todoPath = path.join(__dirname, 'FEATURES.json');
       const todoData = await FS.readFile(todoPath, 'utf8');
       const todo = JSON.parse(todoData);
 
@@ -720,7 +720,7 @@ class SuccessCriteriaValidator {
       const jsFiles = [];
 
       for (const file of files) {
-        const filePath = PATH.join(dir, file.name);
+        const filePath = path.join(dir, file.name);
         if (
           file.isDirectory() &&
           !file.name.startsWith('.') &&
@@ -774,7 +774,7 @@ class SuccessCriteriaValidator {
     };
 
     // Save report to file
-    const reportPath = PATH.join(
+    const reportPath = path.join(
       this.reportDir,
       `${taskId}_validation_report.json`,
     );
@@ -869,7 +869,7 @@ class SuccessCriteriaValidator {
       if (options.report) {
         report = await this.generateReport(taskId, results);
         ValidationLogger.log(
-          `📋 Validation report generated: ${PATH.join(this.reportDir, `${taskId}_validation_report.json`)}`,
+          `📋 Validation report generated: ${path.join(this.reportDir, `${taskId}_validation_report.json`)}`,
         );
       }
 
@@ -1011,7 +1011,7 @@ Examples:
 
 // Run if called directly
 if (require.main === module) {
-  main().catch((error) => {
+  main().catch((_error) => {
     ValidationLogger.error('Fatal error:', error);
     throw error;
   });

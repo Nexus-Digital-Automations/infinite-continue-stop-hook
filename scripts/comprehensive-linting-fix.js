@@ -6,7 +6,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { execSync } = require('child_process');
 const { loggers } = require('../lib/logger');
 
@@ -106,7 +106,7 @@ class ComprehensiveLintingFix {
       let newContent = content;
       let hasChanges = false;
 
-      // Pattern: } catch (_error) { with no usage of _error
+      // Pattern: } catch (error) { with no usage of _error
       const catchBlockPattern = /}\s*catch\s*\(\s*_error\s*\)\s*\{([^}]*)\}/g;
 
       let match;

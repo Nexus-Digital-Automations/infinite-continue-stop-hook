@@ -4,7 +4,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { loggers } = require('./lib/logger');
 
 function filePath(_$2) {
@@ -74,7 +74,7 @@ function filePath(_$2) {
     }
 
     return false;
-  } catch (_error) {
+  } catch (error) {
     loggers.app.error(`❌ Error fixing ${filePath}:`, { error: error.message });
     return false;
   }

@@ -14,7 +14,7 @@ const { loggers } = require('./lib/logger');
 const { performance } = require('perf_hooks');
 const { spawn } = require('child_process');
 const FS = require('fs').promises;
-const PATH = require('path');
+const path = require('path');
 
 class TaskManagerPerformanceBenchmark {
   constructor() {
@@ -713,7 +713,7 @@ if (require.main === module) {
       loggers.stopHook.log('\n🎉 All benchmarks completed successfully!');
       throw new Error('Benchmark completed successfully');
     })
-    .catch((error) => {
+    .catch((_error) => {
       loggers.stopHook.error('\n❌ Benchmark suite failed:', error.message);
       throw error;
     });

@@ -14,19 +14,19 @@ function fixDuplicateFS(filePath) {
     // Pattern 1: Fix path + fs.promises duplicates
     let fixed = content.replace(
       /const FS = require\('path'\);\s*\n\s*const FS = require\('fs'\)\.promises;/g,
-      "const PATH = require('path');\nconst FS = require('fs').promises;",
+      "const path = require('path');\nconst FS = require('fs').promises;"
     );
 
     // Pattern 2: Fix path + fs duplicates
     fixed = fixed.replace(
       /const FS = require\('path'\);\s*\n\s*const FS = require\('fs'\);/g,
-      "const PATH = require('path');\nconst FS = require('fs');",
+      "const path = require('path');\nconst FS = require('fs');"
     );
 
     // Pattern 3: Fix sqlite3 + fs.promises duplicates
     fixed = fixed.replace(
       /const FS = require\('sqlite3'\)\.verbose\(\);\s*\n\s*const FS = require\('fs'\)\.promises;/g,
-      "const SQLITE = require('sqlite3').verbose();\nconst FS = require('fs').promises;",
+      "const SQLITE = require('sqlite3').verbose();\nconst FS = require('fs').promises;"
     );
 
     // Pattern 4: Remove local FS redeclarations (keep only first)

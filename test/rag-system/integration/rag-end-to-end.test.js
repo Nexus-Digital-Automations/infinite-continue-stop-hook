@@ -20,7 +20,7 @@ const { loggers } = require('../lib/logger');
  * @since 2025-09-19
  */
 
-const PATH = require('path');
+const path = require('path');
 const FS = require('fs').promises;
 
 // Import RAG system components
@@ -44,13 +44,13 @@ describe('RAG System End-to-End Integration Tests', () => {
   let testAssertions;
 
   // Test data storage paths
-  const testDataPath = PATH.join(__dirname, '../test-data');
-  const ragTestPath = PATH.join(testDataPath, 'rag-test');
+  const testDataPath = path.join(__dirname, '../test-data');
+  const ragTestPath = path.join(testDataPath, 'rag-test');
 
   beforeAll(async () => {
     // Create test environment
     await FS.mkdir(ragTestPath, { recursive: true });
-    await FS.mkdir(PATH.join(ragTestPath, 'rag'), { recursive: true });
+    await FS.mkdir(path.join(ragTestPath, 'rag'), { recursive: true });
 
     // Initialize test utilities
     testDataGenerator = new _TestDataGenerator();
@@ -65,8 +65,8 @@ describe('RAG System End-to-End Integration Tests', () => {
     });
 
     vectorDatabase = new _VectorDatabase({
-      indexPath: PATH.join(ragTestPath, 'rag', 'test-vector.index'),
-      metadataPath: PATH.join(ragTestPath, 'rag', 'test-metadata.db'),
+      indexPath: path.join(ragTestPath, 'rag', 'test-vector.index'),
+      metadataPath: path.join(ragTestPath, 'rag', 'test-metadata.db'),
       embeddingDimension: 384, // MiniLM dimension
       enableMultiIndex: true,
       contentTypes: [
@@ -97,7 +97,7 @@ describe('RAG System End-to-End Integration Tests', () => {
     });
 
     migrationSystem = new _MigrationSystem({
-      sourcePath: PATH.join(ragTestPath, 'development'),
+      sourcePath: path.join(ragTestPath, 'development'),
       batchSize: 10, // Smaller batches for tests
       enableBackup: false, // Disable backup for tests
     });
@@ -500,18 +500,18 @@ describe('RAG System End-to-End Integration Tests', () => {
   describe('Migration System Integration', () => {
     test('should create test content for migration', async () => {
       // Create test lesson files
-      const testLessonsPath = PATH.join(ragTestPath, 'development', 'lessons');
-      await FS.mkdir(PATH.join(testLessonsPath, 'features'), {
+      const testLessonsPath = path.join(ragTestPath, 'development', 'lessons');
+      await FS.mkdir(path.join(testLessonsPath, 'features'), {
         recursive: true,
       });
-      await FS.mkdir(PATH.join(testLessonsPath, 'errors'), {
+      await FS.mkdir(path.join(testLessonsPath, 'errors'), {
         recursive: true,
       });
 
       // Create sample lesson files
       const sampleLessons = [
         {
-          path: PATH.join(
+          path: path.join(
             testLessonsPath,
             'features',
             'react-optimization.md',
@@ -520,7 +520,7 @@ describe('RAG System End-to-End Integration Tests', () => {
             '# React Performance Optimization\n\nBest practices for optimizing React applications...',
         },
         {
-          path: PATH.join(testLessonsPath, 'errors', 'async-errors.md'),
+          path: path.join(testLessonsPath, 'errors', 'async-errors.md'),
           content:
             '# Async Function Errors\n\nCommon errors in async functions And how to fix them...',
         },
@@ -535,10 +535,10 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Verify files were created
       const featuresFiles = await FS.readdir(
-        PATH.join(testLessonsPath, 'features'),
+        path.join(testLessonsPath, 'features'),
       );
       const errorsFiles = await FS.readdir(
-        PATH.join(testLessonsPath, 'errors'),
+        path.join(testLessonsPath, 'errors'),
       );
 
       expect(featuresFiles).toContain('react-optimization.md');
@@ -697,8 +697,8 @@ describe('RAG System Performance Benchmarks', () => {
       fallbackModel: 'sentence-transformers/all-MiniLM-L6-v2',
     });
     const vectorDB = new _VectorDatabase({
-      indexPath: PATH.join(__dirname, '../test-data/perf-test-vector.index'),
-      metadataPath: PATH.join(__dirname, '../test-data/perf-test-metadata.db'),
+      indexPath: path.join(__dirname, '../test-data/perf-test-vector.index'),
+      metadataPath: path.join(__dirname, '../test-data/perf-test-metadata.db'),
       embeddingDimension: 384,
     });
     const searchEngine = new _SemanticSearchEngine({
@@ -706,7 +706,7 @@ describe('RAG System Performance Benchmarks', () => {
       vectorDatabase: vectorDB,
     });
     const ragOps = new _RAGOperations({
-      projectRoot: PATH.join(__dirname, '../test-data'),
+      projectRoot: path.join(__dirname, '../test-data'),
       embeddingGenerator: embeddingGen,
       vectorDatabase: vectorDB,
       semanticSearchEngine: searchEngine,

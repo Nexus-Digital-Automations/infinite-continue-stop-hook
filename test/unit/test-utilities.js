@@ -7,7 +7,7 @@
 
 // File system utilities (imported but used via MockFileSystem)
 // const FS = require('fs').promises;
-// const PATH = require('path');
+// const path = require('path');
 const crypto = require('crypto');
 
 /**

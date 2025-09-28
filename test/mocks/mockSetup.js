@@ -182,10 +182,10 @@ class MockManager {
     const isTestPath = (path) => {
       return (
         path &&
-        (PATH.includes('/test/') ||
-          PATH.includes('test-project') ||
-          PATH.includes('FEATURES.json') ||
-          PATH.includes('TODO.json'))
+        (path.includes('/test/') ||
+          path.includes('test-project') ||
+          path.includes('FEATURES.json') ||
+          path.includes('TODO.json'))
       );
     };
 
@@ -446,10 +446,10 @@ function featureData(_$2) {
   return null;
 }
 
-function expectAgentInitialized(AGENT_ID) {
+function expectAgentInitialized(agentId) {
   const mockManager = getMockManager();
   if (mockManager) {
-    const agent = mockManager.taskManagerAPI.agents.get(AGENT_ID);
+    const agent = mockManager.taskManagerAPI.agents.get(agentId);
     expect(agent).toBeDefined();
     expect(agent.status).toBe('active');
     return agent;

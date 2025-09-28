@@ -18,7 +18,7 @@ const {
   DEPENDENCY_TYPES,
 } = require('../../lib/validation-dependency-manager');
 const FS = require('fs').promises;
-const PATH = require('path');
+const path = require('path');
 const os = require('os');
 
 describe('Validation Dependency Management End-to-End Tests', () => {
@@ -27,7 +27,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
   beforeAll(async () => {
     // Create test environment
-    tempDir = await FS.mkdtemp(PATH.join(os.tmpdir(), 'validation-e2e-'));
+    tempDir = await FS.mkdtemp(path.join(os.tmpdir(), 'validation-e2e-'));
 
     // Create mock package.json for validation commands
     const packageJson = {
@@ -43,7 +43,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
     };
 
     await FS.writeFile(
-      PATH.join(tempDir, 'package.json'),
+      path.join(tempDir, 'package.json'),
       JSON.stringify(packageJson, null, 2),
     );
 

@@ -1,20 +1,20 @@
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { execSync } = require('child_process');
 
 // Integration tests for Historical Trend Analysis API endpoints
 // Tests the new trend analysis endpoints added to Feature 8
 describe('Trend Analysis API Integration Tests', () => {
   const mockProjectRoot = '/tmp/test-trend-analysis-api';
-  const mockEnhancedMetricsFile = PATH.join(
+  const mockEnhancedMetricsFile = path.join(
     mockProjectRoot,
     '.validation-performance-enhanced.json',
   );
-  const mockLegacyMetricsFile = PATH.join(
+  const mockLegacyMetricsFile = path.join(
     mockProjectRoot,
     '.validation-performance.json',
   );
-  const taskManagerPath = PATH.resolve(__dirname, '../../taskmanager-api.js');
+  const taskManagerPath = path.resolve(__dirname, '../../taskmanager-api.js');
 
   beforeEach(() => {
     // Create mock directory

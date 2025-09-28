@@ -594,7 +594,7 @@ class TestNotificationSystem {
       }
 
       // Ensure directory exists
-      const dir = PATH.dirname(this.options.historyFile);
+      const dir = path.dirname(this.options.historyFile);
       if (!FS.existsSync(dir)) {
         FS.mkdirSync(dir, { recursive: true });
       }
@@ -680,7 +680,7 @@ Examples:
   });
 
   const notificationSystem = new TestNotificationSystem(options);
-  notificationSystem.processNotifications().catch((error) => {
+  notificationSystem.processNotifications().catch((_error) => {
     loggers.stopHook.error('❌ Fatal error:', error.message);
     throw new Error(`Fatal error: ${error.message}`);
   });

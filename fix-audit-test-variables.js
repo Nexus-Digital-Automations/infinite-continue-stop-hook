@@ -4,7 +4,7 @@
  */
 
 const fs = require('fs');
-const PATH = require('path');
+const path = require('path');
 
 function fixAuditTestVariables() {
   const filePath =
@@ -18,13 +18,13 @@ function fixAuditTestVariables() {
     // Fix the error.message issue in catch block
     content = content.replace(
       /`Command failed \(code \$\{code\}\): \$\{stderr\}\\nStdout: \$\{stdout\}\\nParse error: \$\{error\.message\}`/g,
-      '`Command failed (code ${code}): ${stderr}\\nStdout: ${stdout}\\nParse error: Unknown parse error`',
+      '`Command failed (code ${code}): ${stderr}\\nStdout: ${stdout}\\nParse error: Unknown parse error`'
     );
 
     // Fix variable declarations at the top
     content = content.replace(
       /const TEST_AGENT_ID = null;\s*const AUDIT_AGENT_ID = null;/g,
-      'let testAgentId = null;\n  let auditAgentId = null;',
+      'let testAgentId = null;\n  let auditAgentId = null;'
     );
 
     // Fix all instances of RESULT.taskId to result.taskId
@@ -38,7 +38,7 @@ function fixAuditTestVariables() {
       // Add at the top of describe block if not present
       content = content.replace(
         /(describe\('Audit System Validation Tests', \(\) => \{[\s\S]*?)let implementationAgentId = null;/,
-        '$1let implementationAgentId = null;\n  let testAgentId = null;\n  let auditAgentId = null;',
+        '$1let implementationAgentId = null;\n  let testAgentId = null;\n  let auditAgentId = null;'
       );
     }
 

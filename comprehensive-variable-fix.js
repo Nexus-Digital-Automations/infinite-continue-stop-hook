@@ -3,8 +3,9 @@
  * Fixes all remaining variable naming inconsistencies and undefined variable issues
  */
 
+/* eslint-disable security/detect-non-literal-fs-filename */
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { execSync } = require('child_process');
 const { loggers } = require('./lib/logger');
 
@@ -13,7 +14,7 @@ const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 // Comprehensive fix patterns for all remaining variable issues
 const comprehensiveFixes = [
   // Fix result declared but result used - change usage to match declaration
-  { pattern: /\bresult\b(?=\s*[.\[\(])/g, replacement: 'result' },
+  { pattern: /\bresult\b(?=\s*[.[()])/g, replacement: 'result' },
   { pattern: /\bresult\s*\./g, replacement: 'result.' },
   { pattern: /\bresult\s*\[/g, replacement: 'result[' },
   { pattern: /\bresult\s*\(/g, replacement: 'result(' },
@@ -37,7 +38,7 @@ const catchBlockFixes = [
   // Add _error parameter to catch blocks that reference _error
   {
     pattern: /catch\s*\(\s*\)\s*\{([^{}]*\b_error\b[^{}]*)\}/g,
-    replacement: (match, blockContent) => {
+    replacement: (match, _blockContent) => {
       return match.replace(/catch\s*\(\s*\)\s*\{/, 'catch (_error) {');
     },
   },
@@ -45,7 +46,7 @@ const catchBlockFixes = [
   // Add error parameter to catch blocks that reference error
   {
     pattern: /catch\s*\(\s*\)\s*\{([^{}]*\berror\b[^{}]*)\}/g,
-    replacement: (match, blockContent) => {
+    replacement: (match, _blockContent) => {
       return match.replace(/catch\s*\(\s*\)\s*\{/, 'catch (error) {');
     },
   },
@@ -101,7 +102,7 @@ function fixFile(filePath) {
           original: match[0],
           replacement: match[0].replace(
             /catch\s*\(\s*\)\s*\{/,
-            'catch (_error) {',
+            'catch (_error) {'
           ),
         });
       } else if (blockContent.includes('error')) {
@@ -109,7 +110,7 @@ function fixFile(filePath) {
           original: match[0],
           replacement: match[0].replace(
             /catch\s*\(\s*\)\s*\{/,
-            'catch (error) {',
+            'catch (error) {'
           ),
         });
       }
@@ -141,7 +142,7 @@ function getAllJsFiles() {
   try {
     const output = execSync(
       'find . -name "*.js" -not -path "./node_modules/*" -not -path "./.git/*"',
-      { cwd: rootDir, encoding: 'utf8' },
+      { cwd: rootDir, encoding: 'utf8' }
     );
     return output
       .trim()
@@ -193,7 +194,7 @@ try {
   const warningCount = warningMatches ? parseInt(warningMatches[1]) : 0;
 
   loggers.app.info(
-    `📊 Final status: ${errorCount} errors, ${warningCount} warnings remaining`,
+    `📊 Final status: ${errorCount} errors, ${warningCount} warnings remaining`
   );
 
   if (errorCount === 0) {

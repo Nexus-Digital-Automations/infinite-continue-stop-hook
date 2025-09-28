@@ -17,7 +17,7 @@ const { loggers } = require('../../lib/logger');
  */
 
 const FS = require('fs').promises;
-const PATH = require('path');
+const path = require('path');
 const {
   execAPI,
   createTestEnvironment,
@@ -305,21 +305,21 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
 
       const agentCommands = [
         // Initialize all agents
-        ...agentIds.map((AGENT_ID) => ({
+        ...agentIds.map((agentId) => ({
           command: 'initialize',
           args: [agentId],
           options: { projectRoot: testDir },
         })),
 
         // Reinitialize some agents
-        ...agentIds.slice(0, 5).map((AGENT_ID) => ({
+        ...agentIds.slice(0, 5).map((agentId) => ({
           command: 'reinitialize',
           args: [agentId],
           options: { projectRoot: testDir },
         })),
 
         // More initializations (duplicates)
-        ...agentIds.slice(5, 10).map((AGENT_ID) => ({
+        ...agentIds.slice(5, 10).map((agentId) => ({
           command: 'initialize',
           args: [agentId],
           options: { projectRoot: testDir },
@@ -349,7 +349,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
       validateFeaturesStructure(featuresData);
 
       // All agents should be present
-      agentIds.forEach((AGENT_ID) => {
+      agentIds.forEach((agentId) => {
         expect(featuresData.agents[agentId]).toBeDefined();
         expect(featuresData.agents[agentId].status).toBe('active');
       });
@@ -438,7 +438,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
       expect(initialResult.success).toBe(true);
 
       // 2. Delete FEATURES.json file
-      const featuresPath = PATH.join(testDir, 'FEATURES.json');
+      const featuresPath = path.join(testDir, 'FEATURES.json');
       await FS.unlink(featuresPath);
 
       // 3. Try to perform operations (should recreate file)
@@ -522,7 +522,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
       }
 
       // 2. Simulate partial write by creating truncated file
-      const featuresPath = PATH.join(testDir, 'FEATURES.json');
+      const featuresPath = path.join(testDir, 'FEATURES.json');
       const ORIGINAL_CONTENT = await FS.readFile(featuresPath, 'utf8');
       const truncatedContent = originalContent.substring(
         0,
@@ -853,7 +853,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
       expect(results.every((result) => result.success)).toBe(true);
 
       // 3. Verify file size is reasonable (not excessive)
-      const featuresPath = PATH.join(testDir, 'FEATURES.json');
+      const featuresPath = path.join(testDir, 'FEATURES.json');
       const stats = await FS.stat(featuresPath);
       expect(stats.size).toBeLessThan(500000); // Should be under 500KB
 

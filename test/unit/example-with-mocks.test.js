@@ -327,7 +327,7 @@ describe('Example Test with Mock Framework', () => {
       try {
         await APIExecutor.execAPI('invalid-command');
         expect.fail('Should have thrown an error');
-      } catch (_error) {
+      } catch (error) {
         expect(error.message).toBeDefined();
         TestLogger.debug('Handled expected error', { error: error.message });
       }

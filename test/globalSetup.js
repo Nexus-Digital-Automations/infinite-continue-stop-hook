@@ -9,7 +9,7 @@
  * @since 2025-09-23
  */
 
-const PATH = require('path');
+const path = require('path');
 const FS = require('fs');
 const { loggers } = require('../lib/logger');
 
@@ -34,7 +34,7 @@ module.exports = () => {
   ];
 
   testDirs.forEach((dir) => {
-    const fullPath = PATH.join(process.cwd(), dir);
+    const fullPath = path.join(process.cwd(), dir);
 
     if (!FS.existsSync(fullPath)) {
       FS.mkdirSync(fullPath, { recursive: true });
@@ -43,12 +43,12 @@ module.exports = () => {
   });
 
   // Clean up any leftover test files from previous runs
-  const tempDir = PATH.join(process.cwd(), 'test/temp');
+  const tempDir = path.join(process.cwd(), 'test/temp');
 
   if (FS.existsSync(tempDir)) {
     const entries = FS.readdirSync(tempDir);
     for (const entry of entries) {
-      const entryPath = PATH.join(tempDir, entry);
+      const entryPath = path.join(tempDir, entry);
 
       const stat = FS.statSync(entryPath);
 
@@ -75,9 +75,9 @@ module.exports = () => {
   // Set up global test constants
   global.TEST_CONSTANTS = {
     PROJECT_ROOT: process.cwd(),
-    TEST_ROOT: PATH.join(process.cwd(), 'test'),
-    TEMP_DIR: PATH.join(process.cwd(), 'test/temp'),
-    FIXTURES_DIR: PATH.join(process.cwd(), 'test/fixtures'),
+    TEST_ROOT: path.join(process.cwd(), 'test'),
+    TEMP_DIR: path.join(process.cwd(), 'test/temp'),
+    FIXTURES_DIR: path.join(process.cwd(), 'test/fixtures'),
     TIMEOUT: {
       UNIT: 5000,
       INTEGRATION: 15000,
@@ -177,14 +177,14 @@ module.exports = () => {
   global.testUtils = {
     // These will be enhanced in setup.js
     createTempFile: (name, content) => {
-      const filePath = PATH.join(global.TEST_CONSTANTS.TEMP_DIR, name);
+      const filePath = path.join(global.TEST_CONSTANTS.TEMP_DIR, name);
 
       FS.writeFileSync(filePath, content);
       return filePath;
     },
 
     createTempDir: (name) => {
-      const dirPath = PATH.join(global.TEST_CONSTANTS.TEMP_DIR, name);
+      const dirPath = path.join(global.TEST_CONSTANTS.TEMP_DIR, name);
       FS.mkdirSync(dirPath, { recursive: true });
       return dirPath;
     },

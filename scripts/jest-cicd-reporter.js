@@ -542,7 +542,7 @@ class JestCiCdReporter {
 
   writeReport(report) {
     // Ensure output directory exists
-    const outputDir = PATH.dirname(this.options.outputPath);
+    const outputDir = path.dirname(this.options.outputPath);
     if (!FS.existsSync(outputDir)) {
       FS.mkdirSync(outputDir, { recursive: true });
     }
@@ -552,7 +552,7 @@ class JestCiCdReporter {
   }
 
   writeStatusFiles(report) {
-    const outputDir = PATH.dirname(this.options.outputPath);
+    const outputDir = path.dirname(this.options.outputPath);
 
     // Write deployment gate status
     const deploymentStatus = {
@@ -565,19 +565,19 @@ class JestCiCdReporter {
     };
 
     FS.writeFileSync(
-      PATH.join(outputDir, 'deployment-gate.json'),
+      path.join(outputDir, 'deployment-gate.json'),
       JSON.stringify(deploymentStatus, null, 2),
     );
 
     // Write simple status for shell scripts
     FS.writeFileSync(
-      PATH.join(outputDir, 'test-status.txt'),
+      path.join(outputDir, 'test-status.txt'),
       report.cicd_summary.pipeline_status,
     );
 
     // Write health score
     FS.writeFileSync(
-      PATH.join(outputDir, 'health-score.txt'),
+      path.join(outputDir, 'health-score.txt'),
       report.cicd_summary.test_health_score.toString(),
     );
   }

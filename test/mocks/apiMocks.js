@@ -34,7 +34,7 @@ class TaskManagerAPIMock {
   /**
    * Mock initialize command
    */
-  initialize(AGENT_ID) {
+  initialize(agentId) {
     const agent = {
       id: agentId,
       initialized: new Date().toISOString(),
@@ -54,9 +54,9 @@ class TaskManagerAPIMock {
   /**
    * Mock reinitialize command
    */
-  reinitialize(AGENT_ID) {
-    if (this.agents.has(AGENT_ID)) {
-      const agent = this.agents.get(AGENT_ID);
+  reinitialize(agentId) {
+    if (this.agents.has(agentId)) {
+      const agent = this.agents.get(agentId);
       agent.reinitialized = new Date().toISOString();
       this.initializationStats.total_reinitializations++;
 
@@ -347,7 +347,7 @@ class FileSystemMock {
   mkdirSync(path, options = {}) {
     if (options.recursive) {
       // Create all parent directories
-      const parts = PATH.split('/');
+      const parts = path.split('/');
       let currentPath = '';
       for (const part of parts) {
         if (part) {
@@ -386,9 +386,9 @@ class FileSystemMock {
     for (const [filePath] of this.files) {
       if (
         filePath.startsWith(path + '/') &&
-        !filePath.substring(PATH.length + 1).includes('/')
+        !filePath.substring(path.length + 1).includes('/')
       ) {
-        entries.push(filePath.substring(PATH.length + 1));
+        entries.push(filePath.substring(path.length + 1));
       }
     }
 
@@ -396,9 +396,9 @@ class FileSystemMock {
     for (const dirPath of this.directories) {
       if (
         dirPath.startsWith(path + '/') &&
-        !dirPath.substring(PATH.length + 1).includes('/')
+        !dirPath.substring(path.length + 1).includes('/')
       ) {
-        entries.push(dirPath.substring(PATH.length + 1));
+        entries.push(dirPath.substring(path.length + 1));
       }
     }
 

@@ -5,7 +5,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 
 class EmergencySyntaxFixer {
   constructor() {
@@ -74,7 +74,7 @@ class EmergencySyntaxFixer {
       // Fix 1: Invalid const FS = require(...) patterns
       const invalidConstFix = fixedContent.replace(
         /const unused = require\(/g,
-        'const FS = require(',
+        'const FS = require('
       );
       if (invalidConstFix !== fixedContent) {
         fixedContent = invalidConstFix;
@@ -84,7 +84,7 @@ class EmergencySyntaxFixer {
       // Fix 2: catch (_error) invalid syntax
       const invalidCatchFix = fixedContent.replace(
         /catch \(1\)/g,
-        'catch (_error)',
+        'catch (_error)'
       );
       if (invalidCatchFix !== fixedContent) {
         fixedContent = invalidCatchFix;
@@ -94,7 +94,7 @@ class EmergencySyntaxFixer {
       // Fix 3: Other invalid const unused patterns
       const invalidConstPattern2 = fixedContent.replace(
         /const unused/g,
-        'const unused',
+        'const unused'
       );
       if (invalidConstPattern2 !== fixedContent) {
         fixedContent = invalidConstPattern2;
@@ -104,7 +104,7 @@ class EmergencySyntaxFixer {
       // Fix 4: function 1 patterns
       const invalidFunctionFix = fixedContent.replace(
         /function 1\(/g,
-        'function unused(',
+        'function unused('
       );
       if (invalidFunctionFix !== fixedContent) {
         fixedContent = invalidFunctionFix;
@@ -119,7 +119,7 @@ class EmergencySyntaxFixer {
         },
         {
           pattern: /const unused = require\('path'\)/,
-          replacement: "const PATH = require('path')",
+          replacement: "const path = require('path')",
         },
         {
           pattern: /const unused = require\('sqlite3'\)/,

@@ -28,16 +28,16 @@ const CONFIG = {
     lines: 60,
   },
   paths: {
-    coverage: PATH.join(process.cwd(), 'coverage'),
-    reports: PATH.join(process.cwd(), 'coverage', 'reports'),
-    summary: PATH.join(process.cwd(), 'coverage', 'coverage-summary.json'),
-    trends: PATH.join(
+    coverage: path.join(process.cwd(), 'coverage'),
+    reports: path.join(process.cwd(), 'coverage', 'reports'),
+    summary: path.join(process.cwd(), 'coverage', 'coverage-summary.json'),
+    trends: path.join(
       process.cwd(),
       'coverage',
       'reports',
       'coverage-trends.json',
     ),
-    validation: PATH.join(
+    validation: path.join(
       process.cwd(),
       'coverage',
       'reports',

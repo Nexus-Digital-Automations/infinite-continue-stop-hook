@@ -9,7 +9,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { execSync } = require('child_process');
 
 // Files to fix based on grep results
@@ -116,7 +116,7 @@ class ResultVariableFixer {
       }
     } catch (error) {
       console.warn(
-        `⚠️ Warning: Could not read directory ${dir}: ${error.message}`,
+        `⚠️ Warning: Could not read directory ${dir}: ${error.message}`
       );
     }
   }
@@ -156,7 +156,7 @@ class ResultVariableFixer {
           changes,
         });
         console.log(
-          `✅ Fixed ${changes} issues in ${PATH.relative(process.cwd(), filePath)}`,
+          `✅ Fixed ${changes} issues in ${PATH.relative(process.cwd(), filePath)}`
         );
       }
 
@@ -219,7 +219,7 @@ class ResultVariableFixer {
         modified = true;
         changes += beforeCount - afterCount;
         console.log(
-          `  📝 Fixed ${beforeCount - afterCount} ${description} issues`,
+          `  📝 Fixed ${beforeCount - afterCount} ${description} issues`
         );
       }
     }
@@ -276,7 +276,7 @@ class ResultVariableFixer {
             changes++;
             return replacement.replace(
               /\$(\d+)/g,
-              (_, num) => args[parseInt(num) - 1] || '',
+              (_, num) => args[parseInt(num) - 1] || ''
             );
           }
           return match;
@@ -290,7 +290,7 @@ class ResultVariableFixer {
           modified = true;
           changes += beforeCount - afterCount;
           console.log(
-            `  📝 Fixed ${beforeCount - afterCount} ${description} issues`,
+            `  📝 Fixed ${beforeCount - afterCount} ${description} issues`
           );
         }
       }
@@ -323,7 +323,7 @@ class ResultVariableFixer {
           // Stop at next function/block
           if (
             followingLine.match(
-              /^\s*(function|class|\w+\s*[=:]\s*(function|\()|const\s+\w+\s*=\s*\{)/,
+              /^\s*(function|class|\w+\s*[=:]\s*(function|\()|const\s+\w+\s*=\s*\{)/
             )
           ) {
             break;
@@ -368,7 +368,7 @@ class ResultVariableFixer {
       const beforeContent = content;
       content = content.replace(
         /return\s+result;(\s*}\s*\)\s*;)/g,
-        'return RESULT;$1',
+        'return RESULT;$1'
       );
       if (content !== beforeContent) {
         modified = true;
@@ -382,7 +382,7 @@ class ResultVariableFixer {
       const beforeContent = content;
       content = content.replace(
         /\.reduce\(\s*\(\s*sum,\s*result\s*\)\s*=>\s*sum\s*\+\s*RESULT\.duration/g,
-        '.reduce((sum, result) => sum + result.duration',
+        '.reduce((sum, result) => sum + result.duration'
       );
       if (content !== beforeContent) {
         modified = true;
@@ -403,22 +403,22 @@ class ResultVariableFixer {
     console.log('│ Metric                  │ Count    │');
     console.log('├─────────────────────────┼──────────┤');
     console.log(
-      `│ Files Processed         │ ${this.stats.filesProcessed.toString().padEnd(8)} │`,
+      `│ Files Processed         │ ${this.stats.filesProcessed.toString().padEnd(8)} │`
     );
     console.log(
-      `│ Files Modified          │ ${this.fixedFiles.length.toString().padEnd(8)} │`,
+      `│ Files Modified          │ ${this.fixedFiles.length.toString().padEnd(8)} │`
     );
     console.log(
-      `│ Result Variables Fixed  │ ${this.stats.resultVariablesFixed.toString().padEnd(8)} │`,
+      `│ Result Variables Fixed  │ ${this.stats.resultVariablesFixed.toString().padEnd(8)} │`
     );
     console.log(
-      `│ Declarations Fixed      │ ${this.stats.declarationsFixed.toString().padEnd(8)} │`,
+      `│ Declarations Fixed      │ ${this.stats.declarationsFixed.toString().padEnd(8)} │`
     );
     console.log(
-      `│ Scope Issues Fixed      │ ${this.stats.scopeIssuesFixed.toString().padEnd(8)} │`,
+      `│ Scope Issues Fixed      │ ${this.stats.scopeIssuesFixed.toString().padEnd(8)} │`
     );
     console.log(
-      `│ Errors Encountered      │ ${this.errors.length.toString().padEnd(8)} │`,
+      `│ Errors Encountered      │ ${this.errors.length.toString().padEnd(8)} │`
     );
     console.log('└─────────────────────────┴──────────┘');
 
@@ -426,7 +426,7 @@ class ResultVariableFixer {
       console.log('\n📁 Modified Files:');
       for (const file of this.fixedFiles) {
         console.log(
-          `  ✅ ${PATH.relative(process.cwd(), file.path)} (${file.changes} changes)`,
+          `  ✅ ${PATH.relative(process.cwd(), file.path)} (${file.changes} changes)`
         );
       }
     }
@@ -435,7 +435,7 @@ class ResultVariableFixer {
       console.log('\n❌ Errors:');
       for (const error of this.errors) {
         console.log(
-          `  ❌ ${PATH.relative(process.cwd(), error.file)}: ${error.error}`,
+          `  ❌ ${PATH.relative(process.cwd(), error.file)}: ${error.error}`
         );
       }
     }
@@ -456,11 +456,11 @@ class ResultVariableFixer {
 
     FS.writeFileSync(
       PATH.join(process.cwd(), 'result-variable-fix-report.json'),
-      JSON.stringify(report, null, 2),
+      JSON.stringify(report, null, 2)
     );
 
     console.log(
-      '\n📄 Detailed report saved to: result-variable-fix-report.json',
+      '\n📄 Detailed report saved to: result-variable-fix-report.json'
     );
   }
 }

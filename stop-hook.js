@@ -18,33 +18,33 @@ function findClaudeProjectRoot(startDir = process.cwd()) {
   let currentDir = startDir;
 
   // Look for "Claude Coding Projects" in the path And check for TASKS.json
-  while (currentDir !== PATH.dirname(currentDir)) {
+  while (currentDir !== path.dirname(currentDir)) {
     // Not at filesystem root
     // Check if we're in or found "Claude Coding Projects"
     if (currentDir.includes('Claude Coding Projects')) {
       // Look for TASKS.json in potential project roots
-      const segments = currentDir.split(PATH.sep);
+      const segments = currentDir.split(path.sep);
       const claudeIndex = segments.findIndex((segment) =>
         segment.includes('Claude Coding Projects'),
       );
 
       if (claudeIndex !== -1 && claudeIndex < segments.length - 1) {
         // Try the next directory after "Claude Coding Projects"
-        const projectDir = segments.slice(0, claudeIndex + 2).join(PATH.sep);
+        const projectDir = segments.slice(0, claudeIndex + 2).join(path.sep);
         // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script validating project structure with computed paths
-        if (FS.existsSync(PATH.join(projectDir, 'TASKS.json'))) {
+        if (FS.existsSync(path.join(projectDir, 'TASKS.json'))) {
           return projectDir;
         }
       }
 
       // Also check current directory
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script validating project structure with computed paths
-      if (FS.existsSync(PATH.join(currentDir, 'TASKS.json'))) {
+      if (FS.existsSync(path.join(currentDir, 'TASKS.json'))) {
         return currentDir;
       }
     }
 
-    currentDir = PATH.dirname(currentDir);
+    currentDir = path.dirname(currentDir);
   }
 
   // Fallback to original behavior
@@ -204,7 +204,7 @@ function generateValidationProgressReport(flagData, logger, workingDir) {
  * Provides comprehensive visibility into validation progress And status
  */
 function checkStopAllowed(workingDir = process.cwd()) {
-  const stopFlagPath = PATH.join(workingDir, '.stop-allowed');
+  const stopFlagPath = path.join(workingDir, '.stop-allowed');
 
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated working directory path
   if (FS.existsSync(stopFlagPath)) {
@@ -290,7 +290,7 @@ When running the multi-step authorization protocol, progress will be displayed h
  * @returns {Object} Cleanup results
  */
 function cleanupStaleAgentsInProject(projectPath, logger) {
-  const todoPath = PATH.join(projectPath, 'TASKS.json');
+  const todoPath = path.join(projectPath, 'TASKS.json');
 
   // Check if TASKS.json exists in this project
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook path validated through hook configuration system
@@ -352,7 +352,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
     const isActive = timeSinceHeartbeat < staleAgentTimeout;
 
     if (!isActive) {
-      staleAgents.push(AGENT_ID);
+      staleAgents.push(agentId);
     }
   }
 
@@ -979,7 +979,7 @@ This is the expected behavior when the /done command is used.
     }
 
     // Check if TASKS.json exists in current project
-    const todoPath = PATH.join(workingDir, 'TASKS.json');
+    const todoPath = path.join(workingDir, 'TASKS.json');
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated paths from project structure
     if (!FS.existsSync(todoPath)) {
       logger.addFlow('No TASKS.json found - this is not a TaskManager project');
@@ -1124,9 +1124,9 @@ If you want to enable task management for this project:
       );
 
       if (isActive) {
-        activeAgents.push(AGENT_ID);
+        activeAgents.push(agentId);
       } else {
-        staleAgents.push(AGENT_ID);
+        staleAgents.push(agentId);
       }
     }
 

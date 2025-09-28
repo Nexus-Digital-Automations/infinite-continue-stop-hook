@@ -9,7 +9,7 @@ const { loggers } = require('../lib/logger');
  * @version 1.0.0
  */
 
-const PATH = require('path');
+const path = require('path');
 const FS = require('fs').promises;
 const CRYPTO = require('crypto');
 
@@ -22,7 +22,7 @@ describe('RAG System Data Migration And Integrity', () => {
     loggers.stopHook.log('Setting up data integrity test environment...');
 
     // Setup test migration directory
-    _testMigrationPath = PATH.join(
+    _testMigrationPath = path.join(
       __dirname,
       '../../test-data/migration-test',
     );
@@ -176,12 +176,12 @@ Tags: database, performance, connection-pooling`,
 
       /* Future implementation:
       // Create test files
-      const _formatTestPath = PATH.join(_testMigrationPath, 'format-test');
+      const _formatTestPath = path.join(_testMigrationPath, 'format-test');
       await FS.mkdir(_formatTestPath, { recursive: true });
 
       for (const testFile of testFileFormats) {
         await FS.writeFile(
-          PATH.join(_formatTestPath, testFile.filename),
+          path.join(_formatTestPath, testFile.filename),
           testFile.content
         );
       }
@@ -251,13 +251,13 @@ Tags: database, performance, connection-pooling`,
       expect(true).toBe(true);
 
       /* Future implementation:
-      const _errorTestPath = PATH.join(_testMigrationPath, 'error-test');
+      const _errorTestPath = path.join(_testMigrationPath, 'error-test');
       await FS.mkdir(_errorTestPath, { recursive: true });
 
       // Create problematic files
       for (const problemFile of problematicFiles) {
         await FS.writeFile(
-          PATH.join(_errorTestPath, problemFile.filename),
+          path.join(_errorTestPath, problemFile.filename),
           problemFile.content
         );
       }
@@ -810,7 +810,7 @@ Tags: optimization, frontend, backend, caching`,
     // Create directories And files in parallel for each category
     await Promise.all(
       Object.entries(lessonsStructure).map(async ([category, files]) => {
-        const _categoryPath = PATH.join(
+        const _categoryPath = path.join(
           _testMigrationPath,
           'development',
           'lessons',
@@ -821,7 +821,7 @@ Tags: optimization, frontend, backend, caching`,
         // Create all files in this category in parallel
         await Promise.all(
           Object.entries(files).map(([filename, content]) =>
-            FS.writeFile(PATH.join(_categoryPath, filename), content),
+            FS.writeFile(path.join(_categoryPath, filename), content),
           ),
         );
       }),
@@ -836,8 +836,8 @@ Tags: optimization, frontend, backend, caching`,
 
       // Use for-await-of pattern for sequential directory scanning
       for await (const _entry of _entries) {
-        const _fullPath = PATH.join(dirPath, _entry.name);
-        const _relPath = PATH.join(relativePath, _entry.name);
+        const _fullPath = path.join(dirPath, _entry.name);
+        const _relPath = path.join(relativePath, _entry.name);
 
         if (_entry.isDirectory()) {
           await scanDirectory(_fullPath, _relPath);

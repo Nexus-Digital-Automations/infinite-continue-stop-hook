@@ -1,12 +1,12 @@
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { execSync } = require('child_process');
 
 // Test suite for Feature 7: Custom Project Validation Rules
 // Feature ID: feature_1758946487032_0f9c9de60c88
 describe('Feature 7: Custom Project Validation Rules', () => {
   const mockProjectRoot = '/tmp/test-project';
-  const mockConfigPath = PATH.join(mockProjectRoot, '.claude-validation.json');
+  const mockConfigPath = path.join(mockProjectRoot, '.claude-validation.json');
 
   beforeEach(() => {
     // Create mock project directory
@@ -45,7 +45,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       // Mock the loadCustomValidationRules function
       const loadCustomValidationRules = (projectRoot) => {
-        const configPath = PATH.join(projectRoot, '.claude-validation.json');
+        const configPath = path.join(projectRoot, '.claude-validation.json');
         if (FS.existsSync(configPath)) {
           const configData = FS.readFileSync(configPath, 'utf8');
           const config = JSON.parse(configData);
@@ -96,7 +96,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
       FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const loadCustomValidationRules = (projectRoot) => {
-        const configPath = PATH.join(projectRoot, '.claude-validation.json');
+        const configPath = path.join(projectRoot, '.claude-validation.json');
         if (FS.existsSync(configPath)) {
           const configData = FS.readFileSync(configPath, 'utf8');
           const config = JSON.parse(configData);
@@ -135,7 +135,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
       FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const loadCustomValidationRules = (projectRoot) => {
-        const configPath = PATH.join(projectRoot, '.claude-validation.json');
+        const configPath = path.join(projectRoot, '.claude-validation.json');
         if (FS.existsSync(configPath)) {
           const configData = FS.readFileSync(configPath, 'utf8');
           const config = JSON.parse(configData);
@@ -155,7 +155,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
     test('should return empty array when no config file exists', () => {
       const loadCustomValidationRules = (projectRoot) => {
-        const configPath = PATH.join(projectRoot, '.claude-validation.json');
+        const configPath = path.join(projectRoot, '.claude-validation.json');
         if (FS.existsSync(configPath)) {
           const configData = FS.readFileSync(configPath, 'utf8');
           const config = JSON.parse(configData);
@@ -176,7 +176,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
 
       const loadCustomValidationRules = (projectRoot) => {
         try {
-          const configPath = PATH.join(projectRoot, '.claude-validation.json');
+          const configPath = path.join(projectRoot, '.claude-validation.json');
           if (FS.existsSync(configPath)) {
             const configData = FS.readFileSync(configPath, 'utf8');
             const config = JSON.parse(configData);
@@ -234,7 +234,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch {
+        } catch (error) {
           return {
             success: false,
             error: `Custom validation '${rule.name}' failed: ${error.message}`,
@@ -284,7 +284,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch {
+        } catch (error) {
           return {
             success: false,
             error: `Custom validation '${rule.name}' failed: ${error.message}`,
@@ -334,7 +334,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch {
+        } catch (error) {
           return {
             success: false,
             error: `Custom validation '${rule.name}' failed: ${error.message}`,
@@ -367,7 +367,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch {
+        } catch (error) {
           return {
             success: false,
             error: `Custom validation '${rule.name}' failed: ${error.message}`,
@@ -421,7 +421,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch {
+        } catch (error) {
           return {
             success: false,
             error: `Custom validation '${rule.name}' failed: ${error.message}`,
@@ -567,7 +567,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             success: true,
             details: `Custom validation '${rule.name}' passed`,
           };
-        } catch {
+        } catch (error) {
           return {
             success: false,
             error: `Custom validation '${rule.name}' failed: ${error.message}`,
@@ -584,7 +584,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
     test('should handle missing config file without crashing', () => {
       const loadCustomValidationRules = (projectRoot) => {
         try {
-          const configPath = PATH.join(projectRoot, '.claude-validation.json');
+          const configPath = path.join(projectRoot, '.claude-validation.json');
           if (FS.existsSync(configPath)) {
             const configData = FS.readFileSync(configPath, 'utf8');
             const config = JSON.parse(configData);

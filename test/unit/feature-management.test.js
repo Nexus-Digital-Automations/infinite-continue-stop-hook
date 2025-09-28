@@ -14,7 +14,7 @@
  * of the FeatureManagerAPI with detailed lifecycle testing.
  */
 
-const FS = require('path');
+const path = require('path');
 const {
   MockFileSystem,
   TEST_FIXTURES,
@@ -50,7 +50,7 @@ describe('Feature Management Lifecycle', () => {
   let timeUtils;
 
   const TEST_PROJECT_ROOT = '/test/feature-project';
-  const TEST_FEATURES_PATH = PATH.join(TEST_PROJECT_ROOT, 'FEATURES.json');
+  const TEST_FEATURES_PATH = path.join(TEST_PROJECT_ROOT, 'FEATURES.json');
 
   beforeEach(() => {
     // Reset the crypto counter for deterministic ID generation
@@ -153,6 +153,10 @@ describe('Feature Management Lifecycle', () => {
         );
 
         // Verify all features were created
+        results.forEach((result) => {
+          expect(result.success).toBe(true);
+        });
+
         const features = await api._loadFeatures();
         expect(features.features).toHaveLength(categories.length);
       });
@@ -790,7 +794,7 @@ describe('Feature Management Lifecycle', () => {
         expect(result.error_count).toBe(3);
         expect(result.errors).toHaveLength(3);
 
-        result.errors.forEach((error) => {
+        result.errors.forEach((_error) => {
           expect(error).toContain('not found');
         });
       });

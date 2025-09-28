@@ -7,7 +7,7 @@
 
 const { execSync } = require('child_process');
 const FS = require('fs').promises;
-const PATH = require('path');
+const path = require('path');
 
 describe('Dependency Management E2E Tests - Complete Workflows', () => {
   const PROJECT_ROOT = process.cwd();

@@ -13,7 +13,7 @@
  * features of the FeatureManagerAPI with detailed time-based testing.
  */
 
-const PATH = require('path');
+const path = require('path');
 const {
   MockFileSystem,
   TEST_FIXTURES,
@@ -31,7 +31,7 @@ describe('Initialization Statistics', () => {
   let originalFs;
 
   const TEST_PROJECT_ROOT = '/test/stats-project';
-  const TEST_TASKS_PATH = PATH.join(TEST_PROJECT_ROOT, 'TASKS.json');
+  const TEST_TASKS_PATH = path.join(TEST_PROJECT_ROOT, 'TASKS.json');
 
   beforeEach(() => {
     api = new FeatureManagerAPI();

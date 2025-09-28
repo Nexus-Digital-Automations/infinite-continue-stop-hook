@@ -13,7 +13,7 @@
 
 const { spawn } = require('child_process');
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { loggers } = require('../../lib/logger');
 
 class APIPerformanceBenchmark {
@@ -129,7 +129,7 @@ class APIPerformanceBenchmark {
         }
       });
 
-      child.on('error', (error) => {
+      child.on('error', (_error) => {
         reject(error);
       });
     });
@@ -687,11 +687,11 @@ class APIPerformanceBenchmark {
       throw new Error('Invalid filename detected - potential security risk');
     }
 
-    // Use PATH.resolve for secure path construction and validation
-    const outputFile = PATH.resolve(outputDir, filename);
+    // Use path.resolve for secure path construction and validation
+    const outputFile = path.resolve(outputDir, filename);
 
     // Validate that resolved path is still within intended directory
-    if (!outputFile.startsWith(PATH.resolve(outputDir))) {
+    if (!outputFile.startsWith(path.resolve(outputDir))) {
       throw new Error('Path traversal attempt detected - security violation');
     }
 

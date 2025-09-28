@@ -1,11 +1,11 @@
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 
 // Test suite for Feature 8: Stop Hook Validation Performance Metrics
 // Feature ID: feature_1758946499841_cd5eba625370
 describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
   const mockProjectRoot = '/tmp/test-performance-metrics';
-  const mockMetricsFile = PATH.join(
+  const mockMetricsFile = path.join(
     mockProjectRoot,
     '.validation-performance.json',
   );
@@ -28,8 +28,8 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
     async getValidationPerformanceMetrics(options = {}) {
       try {
         const FS = require('fs').promises;
-        const PATH = require('path');
-        const metricsFile = PATH.join(
+        const path = require('path');
+        const metricsFile = path.join(
           this.PROJECT_ROOT,
           '.validation-performance.json',
         );
@@ -84,7 +84,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           },
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch (_error) {
+      } catch (error) {
         return {
           success: false,
           error: error.message,
@@ -96,8 +96,8 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
     async identifyPerformanceBottlenecks(options = {}) {
       try {
-        const PATH = require('path');
-        const metricsFile = PATH.join(
+        const path = require('path');
+        const metricsFile = path.join(
           this.PROJECT_ROOT,
           '.validation-performance.json',
         );
@@ -144,8 +144,8 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
     async getPerformanceBenchmarks(options = {}) {
       try {
-        const PATH = require('path');
-        const metricsFile = PATH.join(
+        const path = require('path');
+        const metricsFile = path.join(
           this.PROJECT_ROOT,
           '.validation-performance.json',
         );

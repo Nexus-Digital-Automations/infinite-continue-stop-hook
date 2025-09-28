@@ -6,7 +6,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { loggers } = require('../lib/logger');
 
 class ConsoleToStructuredMigrator {
@@ -109,9 +109,9 @@ class ConsoleToStructuredMigrator {
   }
 
   getLoggerImportForFile(filePath) {
-    const relativePath = PATH.relative(
-      PATH.dirname(filePath),
-      PATH.join(__dirname, '../lib/logger')
+    const relativePath = path.relative(
+      path.dirname(filePath),
+      path.join(__dirname, '../lib/logger')
     );
     const normalizedPath = relativePath.replace(/\\/g, '/');
     return `const { loggers } = require('${normalizedPath}');`;
@@ -128,7 +128,7 @@ class ConsoleToStructuredMigrator {
       if (modified) {
         FS.writeFileSync(filePath, newContent, 'utf8');
         loggers.app.info('Migrated console calls to structured logging', {
-          filePath: PATH.relative(process.cwd(), filePath),
+          filePath: path.relative(process.cwd(), filePath),
           replacedCalls: this.replacedCalls,
         });
         this.processedFiles++;
@@ -205,7 +205,7 @@ if (require.main === module) {
         `Migration completed with ${RESULT.skippedFiles} skipped files`
       );
     }
-  } catch (_error) {
+  } catch (error) {
     loggers.app.error('Migration failed', { error: error.message });
     throw new Error(`Migration failed: ${error.message}`);
   }

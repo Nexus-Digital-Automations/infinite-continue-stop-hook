@@ -4,7 +4,7 @@
  */
 
 const FS = require('fs').promises;
-const PATH = require('path');
+const path = require('path');
 const TASKS_API_ADAPTER = require('./tasks-api-adapter');
 const { loggers } = require('lib/logger');
 
@@ -14,7 +14,7 @@ async function testTasksApi() {
   try {
     // Test 1: Verify TASKS.json exists And has correct structure
     loggers.stopHook.log('Test 1: Verifying TASKS.json structure...');
-    const tasksPath = PATH.join(__dirname, 'TASKS.json');
+    const tasksPath = path.join(__dirname, 'TASKS.json');
     const tasksData = JSON.parse(await FS.readFile(tasksPath, 'utf8'));
 
     loggers.stopHook.log(`✅ Schema version: ${tasksData.schema_version}`);
@@ -148,7 +148,7 @@ if (require.main === module) {
       );
       return result;
     })
-    .catch((error) => {
+    .catch((_error) => {
       loggers.stopHook.error('\n❌ Test failed:', error.message);
       throw error;
     });

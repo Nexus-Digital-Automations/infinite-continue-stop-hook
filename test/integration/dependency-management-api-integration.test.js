@@ -7,7 +7,7 @@
 
 const { execSync } = require('child_process');
 const FS = require('fs').promises;
-const PATH = require('path');
+const path = require('path');
 
 describe('Dependency Management API Integration Tests', () => {
   const PROJECT_ROOT = process.cwd();
@@ -367,7 +367,7 @@ describe('Dependency Management API Integration Tests', () => {
     });
 
     test('save-dependency-config with custom path should work', async () => {
-      const customPath = PATH.join(PROJECT_ROOT, 'test-dependency-config.json');
+      const customPath = path.join(PROJECT_ROOT, 'test-dependency-config.json');
 
       const RESULT = executeTaskManagerCommand(
         'save-dependency-config',
@@ -418,7 +418,7 @@ describe('Dependency Management API Integration Tests', () => {
     test('load-dependency-config should handle missing file gracefully', () => {
       const RESULT = executeTaskManagerCommand(
         'load-dependency-config',
-        "'/non/existent/PATH.json'",
+        "'/non/existent/path.json'",
       );
 
       expect(RESULT.success).toBe(true);

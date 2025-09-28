@@ -291,7 +291,7 @@ if (require.main === module) {
       loggers.stopHook.log('\n✅ Quick performance test completed!');
       throw new Error('Performance test completed successfully');
     })
-    .catch((error) => {
+    .catch((_error) => {
       loggers.stopHook.error('❌ Performance test failed:', error.message);
       throw error;
     });

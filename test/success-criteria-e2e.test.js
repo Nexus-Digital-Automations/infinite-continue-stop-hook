@@ -14,14 +14,14 @@
  */
 
 const FS = require('fs').promises;
-const PATH = require('path');
+const path = require('path');
 const { spawn } = require('child_process');
 const { loggers } = require('../lib/logger');
 
 // Test configuration
-const E2E_PROJECT_DIR = PATH.join(__dirname, 'success-criteria-e2e-project');
-const TASKS_PATH = PATH.join(E2E_PROJECT_DIR, 'TASKS.json');
-const API_PATH = PATH.join(__dirname, '..', 'taskmanager-api.js');
+const E2E_PROJECT_DIR = path.join(__dirname, 'success-criteria-e2e-project');
+const TASKS_PATH = path.join(E2E_PROJECT_DIR, 'TASKS.json');
+const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
 const TIMEOUT = 60000; // 60 seconds for E2E operations
 
 /**
@@ -60,7 +60,7 @@ function execCommand(command, args = [], options = {}) {
       });
     });
 
-    child.on('error', (error) => {
+    child.on('error', (_error) => {
       reject(error);
     });
   });
@@ -103,12 +103,12 @@ async function setupE2EProject() {
   try {
     // Create project directory
     await FS.mkdir(E2E_PROJECT_DIR, { recursive: true });
-    await FS.mkdir(PATH.join(E2E_PROJECT_DIR, 'src'), { recursive: true });
-    await FS.mkdir(PATH.join(E2E_PROJECT_DIR, 'test'), { recursive: true });
-    await FS.mkdir(PATH.join(E2E_PROJECT_DIR, 'development'), {
+    await FS.mkdir(path.join(E2E_PROJECT_DIR, 'src'), { recursive: true });
+    await FS.mkdir(path.join(E2E_PROJECT_DIR, 'test'), { recursive: true });
+    await FS.mkdir(path.join(E2E_PROJECT_DIR, 'development'), {
       recursive: true,
     });
-    await FS.mkdir(PATH.join(E2E_PROJECT_DIR, 'development', 'evidence'), {
+    await FS.mkdir(path.join(E2E_PROJECT_DIR, 'development', 'evidence'), {
       recursive: true,
     });
 
@@ -136,7 +136,7 @@ async function setupE2EProject() {
     };
 
     await FS.writeFile(
-      PATH.join(E2E_PROJECT_DIR, 'package.json'),
+      path.join(E2E_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2),
     );
 
@@ -156,7 +156,7 @@ function processMessage(_message) {
 module.exports = { processMessage };
 `;
 
-    await FS.writeFile(PATH.join(E2E_PROJECT_DIR, 'src', 'app.js'), sampleCode);
+    await FS.writeFile(path.join(E2E_PROJECT_DIR, 'src', 'app.js'), sampleCode);
 
     // Create test files
     const testCode = `const { processMessage } = require('../src/app');
@@ -173,7 +173,7 @@ describe('Application Tests', () => {
 `;
 
     await FS.writeFile(
-      PATH.join(E2E_PROJECT_DIR, 'test', 'app.test.js'),
+      path.join(E2E_PROJECT_DIR, 'test', 'app.test.js'),
       testCode,
     );
 
@@ -247,8 +247,8 @@ describe('Application Tests', () => {
     const successCriteriaConfig = {
       default_template: '25_point_standard',
       validation_timeout: 300,
-      evidence_storage: PATH.join(E2E_PROJECT_DIR, 'development', 'evidence'),
-      report_storage: PATH.join(E2E_PROJECT_DIR, 'development', 'reports'),
+      evidence_storage: path.join(E2E_PROJECT_DIR, 'development', 'evidence'),
+      report_storage: path.join(E2E_PROJECT_DIR, 'development', 'reports'),
       validation_agents: {
         automated: ['linter', 'build', 'test'],
         manual: ['documentation', 'architecture'],
@@ -256,7 +256,7 @@ describe('Application Tests', () => {
     };
 
     await FS.writeFile(
-      PATH.join(E2E_PROJECT_DIR, 'development', 'success-criteria-config.json'),
+      path.join(E2E_PROJECT_DIR, 'development', 'success-criteria-config.json'),
       JSON.stringify(successCriteriaConfig, null, 2),
     );
   } catch {
@@ -586,7 +586,7 @@ describe('Success Criteria End-to-End Tests', () => {
 
       // 3. Implement feature (simulate code changes)
       await FS.writeFile(
-        PATH.join(E2E_PROJECT_DIR, 'src', 'auth.js'),
+        path.join(E2E_PROJECT_DIR, 'src', 'auth.js'),
         `// User authentication module
 function authenticate(username, password) {
   if (!username || !password) {
@@ -665,7 +665,7 @@ module.exports = { authenticate };
 
       // Implement bug fix
       await FS.writeFile(
-        PATH.join(E2E_PROJECT_DIR, 'src', 'auth-fix.js'),
+        path.join(E2E_PROJECT_DIR, 'src', 'auth-fix.js'),
         `// Bug fix for authentication timeout
 function authenticateWithTimeout(username, password, timeout = 10000) {
   return new Promise((resolve, reject) => {
@@ -750,7 +750,7 @@ module.exports = { authenticateWithTimeout };
 
       // Perform refactoring
       await FS.writeFile(
-        PATH.join(E2E_PROJECT_DIR, 'src', 'auth-refactored.js'),
+        path.join(E2E_PROJECT_DIR, 'src', 'auth-refactored.js'),
         `/**
  * Refactored Authentication Module
  *
@@ -1120,7 +1120,7 @@ module.exports = { authenticate };
       const testResult = await execCommand('npm', ['run', 'test']);
 
       // Store evidence
-      const evidenceDir = PATH.join(
+      const evidenceDir = path.join(
         E2E_PROJECT_DIR,
         'development',
         'evidence',
@@ -1129,15 +1129,15 @@ module.exports = { authenticate };
       await FS.mkdir(evidenceDir, { recursive: true });
 
       await FS.writeFile(
-        PATH.join(evidenceDir, 'lint-output.txt'),
+        path.join(evidenceDir, 'lint-output.txt'),
         lintResult.stdout || 'Linting passed - no errors found',
       );
       await FS.writeFile(
-        PATH.join(evidenceDir, 'build-output.txt'),
+        path.join(evidenceDir, 'build-output.txt'),
         buildResult.stdout || 'Build completed successfully',
       );
       await FS.writeFile(
-        PATH.join(evidenceDir, 'test-output.txt'),
+        path.join(evidenceDir, 'test-output.txt'),
         testResult.stdout || 'All tests passed',
       );
 
@@ -1168,13 +1168,13 @@ module.exports = { authenticate };
 
       // Verify evidence files exist
       const lintEvidence = await FS.readFile(
-        PATH.join(evidenceDir, 'lint-output.txt'),
+        path.join(evidenceDir, 'lint-output.txt'),
         'utf8',
       );
       expect(lintEvidence).toContain('Linting passed');
 
       const buildEvidence = await FS.readFile(
-        PATH.join(evidenceDir, 'build-output.txt'),
+        path.join(evidenceDir, 'build-output.txt'),
         'utf8',
       );
       expect(buildEvidence).toContain('completed successfully');

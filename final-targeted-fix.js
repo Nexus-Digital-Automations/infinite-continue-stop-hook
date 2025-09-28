@@ -56,13 +56,13 @@ function fixFile(filePath) {
 
     // Manual fix for specific catch block patterns that reference _error without parameter
     const catchBlocksWithError = content.match(
-      /catch\s*\(\s*\)\s*\{[^}]*_error[^}]*\}/g,
+      /catch\s*\(\s*\)\s*\{[^}]*_error[^}]*\}/g
     );
     if (catchBlocksWithError) {
       catchBlocksWithError.forEach((catchBlock) => {
         const fixed = catchBlock.replace(
           /catch\s*\(\s*\)\s*\{/,
-          'catch (_error) {',
+          'catch (_error) {'
         );
         content = content.replace(catchBlock, fixed);
         modified = true;
@@ -104,10 +104,10 @@ function getErrorFiles() {
   } catch (error) {
     return error.stdout
       ? error.stdout
-        .split('\n')
-        .filter((line) => line.includes('.js:') && line.includes('error'))
-        .map((line) => line.split(':')[0])
-        .filter((file, index, arr) => arr.indexOf(file) === index)
+          .split('\n')
+          .filter((line) => line.includes('.js:') && line.includes('error'))
+          .map((line) => line.split(':')[0])
+          .filter((file, index, arr) => arr.indexOf(file) === index)
       : [];
   }
 }
@@ -140,7 +140,7 @@ loggers.app.info('🔄 Running final linting check...');
 try {
   execSync('npm run lint', { cwd: rootDir, stdio: 'inherit' });
   loggers.app.info(
-    '🎉🎉🎉 ZERO TOLERANCE ACHIEVED! ALL LINTING ERRORS RESOLVED! 🎉🎉🎉',
+    '🎉🎉🎉 ZERO TOLERANCE ACHIEVED! ALL LINTING ERRORS RESOLVED! 🎉🎉🎉'
   );
 } catch (finalError) {
   const output = finalError.stdout || finalError.message;
@@ -151,7 +151,7 @@ try {
   const warningCount = warningMatches ? parseInt(warningMatches[1]) : 0;
 
   loggers.app.info(
-    `📊 Final status: ${errorCount} errors, ${warningCount} warnings remaining`,
+    `📊 Final status: ${errorCount} errors, ${warningCount} warnings remaining`
   );
 
   if (errorCount === 0) {

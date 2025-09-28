@@ -9,17 +9,17 @@
  * @since 2025-09-23
  */
 
-const PATH = require('path');
+const path = require('path');
 const { spawn } = require('child_process');
 const FS = require('fs');
 
 // Test configuration
-const TEST_PROJECT_DIR = PATH.join(
+const TEST_PROJECT_DIR = path.join(
   __dirname,
   'feature-management-test-project',
 );
-const FEATURES_PATH = PATH.join(TEST_PROJECT_DIR, 'FEATURES.json');
-const API_PATH = PATH.join(__dirname, '..', 'taskmanager-api.js');
+const FEATURES_PATH = path.join(TEST_PROJECT_DIR, 'FEATURES.json');
+const API_PATH = path.join(__dirname, '..', 'taskmanager-api.js');
 const TIMEOUT = 10000; // 10 seconds for feature management operations
 
 /**
@@ -68,7 +68,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (_error) {
+        } catch (error) {
           reject(
             new Error(
               `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${error.message}`,
@@ -78,7 +78,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
       }
     });
 
-    child.on('error', (error) => {
+    child.on('error', (_error) => {
       reject(new Error(`Command execution failed: ${error.message}`));
     });
   });
@@ -116,7 +116,7 @@ function setupFeatureTestEnvironment() {
   };
 
   FS.writeFileSync(
-    PATH.join(TEST_PROJECT_DIR, 'package.json'),
+    path.join(TEST_PROJECT_DIR, 'package.json'),
     JSON.stringify(packageData, null, 2),
   );
 }

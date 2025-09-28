@@ -11,7 +11,7 @@ const { loggers } = require('../lib/logger');
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { EXEC_SYNC, _spawn } = require('child_process');
 const os = require('os');
 const { createLogger } = require('../lib/utils/logger');
@@ -37,7 +37,7 @@ class NodeVersionPerformanceBenchmark {
       recommendations: [],
     };
 
-    this.outputDir = PATH.join(process.cwd(), 'test-performance');
+    this.outputDir = path.join(process.cwd(), 'test-performance');
     this.ensureOutputDirectory();
   }
 
@@ -193,7 +193,7 @@ class NodeVersionPerformanceBenchmark {
   async benchmarkFileOperations() {
     loggers.stopHook.log('📁 Running file operations benchmark...');
 
-    const tempDir = PATH.join(this.outputDir, 'temp-benchmark');
+    const tempDir = path.join(this.outputDir, 'temp-benchmark');
     if (!FS.existsSync(tempDir)) {
       FS.mkdirSync(tempDir, { recursive: true });
     }
@@ -203,7 +203,7 @@ class NodeVersionPerformanceBenchmark {
     // File write operations
     const writePromises = [];
     for (let i = 0; i < 100; i++) {
-      const filePath = PATH.join(tempDir, `test-file-${i}.json`);
+      const filePath = path.join(tempDir, `test-file-${i}.json`);
       const data = JSON.stringify({
         id: i,
         data: new Array(100).fill(i),
@@ -218,14 +218,14 @@ class NodeVersionPerformanceBenchmark {
     // File read operations
     const files = FS.readdirSync(tempDir);
     const readPromises = files.map((file) =>
-      FS.promises.readFile(PATH.join(tempDir, file), 'utf8')
+      FS.promises.readFile(path.join(tempDir, file), 'utf8')
     );
 
     const fileContents = await Promise.all(readPromises);
 
     // Cleanup
     for (const file of files) {
-      FS.unlinkSync(PATH.join(tempDir, file));
+      FS.unlinkSync(path.join(tempDir, file));
     }
     FS.rmdirSync(tempDir);
 
@@ -494,11 +494,11 @@ class NodeVersionPerformanceBenchmark {
    */
   saveResults() {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const resultsFile = PATH.join(
+    const resultsFile = path.join(
       this.outputDir,
       `node-performance-${timestamp}.json`
     );
-    const latestFile = PATH.join(
+    const latestFile = path.join(
       this.outputDir,
       'latest-node-performance.json'
     );
@@ -508,7 +508,7 @@ class NodeVersionPerformanceBenchmark {
     FS.writeFileSync(latestFile, JSON.stringify(this.results, null, 2));
 
     // Save human-readable report
-    const reportFile = PATH.join(this.outputDir, 'node-performance-report.md');
+    const reportFile = path.join(this.outputDir, 'node-performance-report.md');
     const report = this.generateMarkdownReport();
     FS.writeFileSync(reportFile, report);
 

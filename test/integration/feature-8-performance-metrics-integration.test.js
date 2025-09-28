@@ -1,16 +1,16 @@
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { execSync } = require('child_process');
 
 // Integration tests for Feature 8: Stop Hook Validation Performance Metrics API endpoints
 // Feature ID: feature_1758946499841_cd5eba625370
 describe('Feature 8: Performance Metrics API Integration Tests', () => {
   const mockProjectRoot = '/tmp/test-performance-api-integration';
-  const mockMetricsFile = PATH.join(
+  const mockMetricsFile = path.join(
     mockProjectRoot,
     '.validation-performance.json',
   );
-  const taskManagerPath = PATH.resolve(__dirname, '../../taskmanager-api.js');
+  const taskManagerPath = path.resolve(__dirname, '../../taskmanager-api.js');
 
   beforeEach(() => {
     // Create mock directory if it doesn't exist

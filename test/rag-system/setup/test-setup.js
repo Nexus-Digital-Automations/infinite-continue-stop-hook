@@ -9,14 +9,14 @@ const { loggers } = require('../lib/logger');
  * @version 1.0.0
  */
 
-const PATH = require('path');
+const path = require('path');
 const FS = require('fs').promises;
 
 // Global test configuration
 global.RAG_TEST_CONFIG = {
-  testDataPath: PATH.join(__dirname, '../test-data'),
-  tempPath: PATH.join(__dirname, '../temp'),
-  mockDataPath: PATH.join(__dirname, '../mocks'),
+  testDataPath: path.join(__dirname, '../test-data'),
+  tempPath: path.join(__dirname, '../temp'),
+  mockDataPath: path.join(__dirname, '../mocks'),
   performanceThresholds: {
     embeddingGeneration: 2000, // 2 seconds
     semanticSearch: 500, // 500ms
@@ -169,7 +169,7 @@ global.RAG_TEST_UTILS = {
     const files = [];
 
     for (const [name, content] of Object.entries(structure)) {
-      const _fullPath = PATH.join(basePath, name);
+      const _fullPath = path.join(basePath, name);
 
       if (typeof content === 'object') {
         directories.push({ path: _fullPath, content });
@@ -254,7 +254,7 @@ afterEach(async () => {
     // Delete all temporary files in parallel
     await Promise.all(
       tempFiles.map((file) =>
-        FS.rm(PATH.join(global.RAG_TEST_CONFIG.tempPath, file), {
+        FS.rm(path.join(global.RAG_TEST_CONFIG.tempPath, file), {
           recursive: true,
           force: true,
         }),

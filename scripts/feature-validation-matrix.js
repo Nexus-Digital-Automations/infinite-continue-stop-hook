@@ -33,7 +33,7 @@ class FeatureValidationMatrix {
       overall_status: 'unknown',
     };
 
-    this.outputDir = PATH.join(process.cwd(), 'test-performance');
+    this.outputDir = path.join(process.cwd(), 'test-performance');
     this.ensureOutputDirectory();
   }
 
@@ -59,7 +59,7 @@ class FeatureValidationMatrix {
     });
 
     // RAG System features
-    if (FS.existsSync(PATH.join(process.cwd(), 'lib'))) {
+    if (FS.existsSync(path.join(process.cwd(), 'lib'))) {
       features.push({
         name: 'RAG System',
         type: 'rag',
@@ -229,13 +229,13 @@ class FeatureValidationMatrix {
       loggers.stopHook.log('📁 Testing File Operations...');
 
       // Create temporary test directory
-      const testDir = PATH.join(this.outputDir, 'feature-test-temp');
+      const testDir = path.join(this.outputDir, 'feature-test-temp');
       if (!FS.existsSync(testDir)) {
         FS.mkdirSync(testDir, { recursive: true });
       }
 
       // Test file creation
-      const testFile = PATH.join(testDir, 'test-file.json');
+      const testFile = path.join(testDir, 'test-file.json');
       const testData = { test: 'data', timestamp: Date.now() };
 
       FS.writeFileSync(testFile, JSON.stringify(testData, null, 2));
@@ -601,11 +601,11 @@ class FeatureValidationMatrix {
    */
   saveResults() {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const resultsFile = PATH.join(
+    const resultsFile = path.join(
       this.outputDir,
       `feature-validation-${timestamp}.json`,
     );
-    const latestFile = PATH.join(
+    const latestFile = path.join(
       this.outputDir,
       'latest-feature-validation.json',
     );
@@ -620,7 +620,7 @@ class FeatureValidationMatrix {
     );
 
     // Generate human-readable report
-    const reportFile = PATH.join(
+    const reportFile = path.join(
       this.outputDir,
       'feature-validation-report.md',
     );
