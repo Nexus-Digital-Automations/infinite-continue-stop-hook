@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const fs = require('fs');
 
 /**
@@ -60,7 +61,7 @@ function fixCatchBlocks(_filePath) {
     }
 
     return false;
-  } catch (error) {
+  } catch (_error) {
     console.error(`Error fixing ${filePath}:`, error.message);
     return false;
   }

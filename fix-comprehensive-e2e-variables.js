@@ -12,13 +12,13 @@ function fixComprehensiveVariableIssues(_filePath) {
     let fixed = content;
     let changes = 0;
 
-    // Fix RESULT variable declarations to result
+    // Fix result variable declarations to result
     const beforeRESULT = fixed;
     fixed = fixed.replace(/const RESULT = /g, 'const RESULT = ');
     if (beforeRESULT !== fixed) {
       changes++;
       console.log(
-        `Fixed RESULT variable declarations in ${path.basename(_filePath)}`
+        `Fixed result variable declarations in ${path.basename(_filePath)}`
       );
     }
 
@@ -74,7 +74,7 @@ function fixComprehensiveVariableIssues(_filePath) {
     }
 
     return false;
-  } catch (error) {
+  } catch (_error) {
     console.error(`Error fixing ${filePath}:`, error.message);
     return false;
   }

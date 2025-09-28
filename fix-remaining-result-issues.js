@@ -1,7 +1,7 @@
 /**
- * Fix Remaining RESULT/result Variable Issues
+ * Fix Remaining result/result Variable Issues
  *
- * This script specifically targets the remaining RESULT/result variable inconsistencies
+ * This script specifically targets the remaining result/result variable inconsistencies
  * identified in the linting output.
  *
  * @author Variable Consistency Agent
@@ -16,60 +16,60 @@ const SPECIFIC_FIXES = [
   {
     file: '/Users/jeremyparker/infinite-continue-stop-hook/scripts/jest-json-reporter.js',
     fixes: [
-      // Line 121: result.testCases should be RESULT.testCases
+      // Line 121: result.testCases should be result.testCases
       {
         pattern: /(\s+)(result\.testCases\s*=)/g,
         replacement: '$1RESULT.testCases =',
-        description: 'Fix result.testCases to RESULT.testCases',
+        description: 'Fix result.testCases to result.testCases',
       },
-      // Line 133: result.failureDetails should be RESULT.failureDetails
+      // Line 133: result.failureDetails should be result.failureDetails
       {
         pattern: /(\s+)(result\.failureDetails\s*=)/g,
         replacement: '$1RESULT.failureDetails =',
-        description: 'Fix result.failureDetails to RESULT.failureDetails',
+        description: 'Fix result.failureDetails to result.failureDetails',
       },
-      // Line 155: return result should be return RESULT
+      // Line 155: return result should be return result
       {
         pattern: /return\s+result;/g,
-        replacement: 'return RESULT;',
-        description: 'Fix return result to return RESULT',
+        replacement: 'return result;',
+        description: 'Fix return result to return result',
       },
     ],
   },
   {
     file: '/Users/jeremyparker/infinite-continue-stop-hook/scripts/test-performance.js',
     fixes: [
-      // Fix RESULT.duration in reduce functions to result.duration
+      // Fix result.duration in reduce functions to result.duration
       {
         pattern:
-          /(\s+\(\s*sum,\s*result\s*\)\s*=>\s*sum\s*\+\s*)RESULT\.duration/g,
+          /(\s+\(\s*sum,\s*result\s*\)\s*=>\s*sum\s*\+\s*)result\.duration/g,
         replacement: '$1result.duration',
         description:
-          'Fix RESULT.duration to result.duration in reduce functions',
+          'Fix result.duration to result.duration in reduce functions',
       },
-      // Fix RESULT.success in filter functions to result.success
+      // Fix result.success in filter functions to result.success
       {
-        pattern: /(\(\s*result\s*\)\s*=>\s*)RESULT\.success/g,
+        pattern: /(\(\s*result\s*\)\s*=>\s*)result\.success/g,
         replacement: '$1result.success',
-        description: 'Fix RESULT.success to result.success in filter functions',
+        description: 'Fix result.success to result.success in filter functions',
       },
       // Fix class Name
       {
-        pattern: /class\s+ResourceMonitor/g,
-        replacement: 'class ResourceMonitor',
-        description: 'Fix class Name from ResourceMonitor to ResourceMonitor',
+        pattern: /class\s+RESOURCE_MONITOR/g,
+        replacement: 'class RESOURCE_MONITOR',
+        description: 'Fix class Name from RESOURCE_MONITOR to RESOURCE_MONITOR',
       },
       // Fix constructor call
       {
-        pattern: /new\s+ResourceMonitor\(\)/g,
-        replacement: 'new ResourceMonitor()',
+        pattern: /new\s+RESOURCE_MONITOR\(\)/g,
+        replacement: 'new RESOURCE_MONITOR()',
         description: 'Fix constructor call',
       },
     ],
   },
 ];
 
-// Additional files with RESULT/result issues from test files
+// Additional files with result/result issues from test files
 const TEST_FILE_FIXES = [
   '/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management-system.test.js',
   '/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-management.test.js',
@@ -84,7 +84,7 @@ class RemainingResultFixer {
   }
 
   run() {
-    console.log('🔧 Fixing remaining RESULT/result variable issues...');
+    console.log('🔧 Fixing remaining result/result variable issues...');
 
     try {
       // Apply specific fixes
@@ -102,9 +102,9 @@ class RemainingResultFixer {
       this.generateReport();
 
       console.log(
-        '✅ Remaining RESULT/result variable issues fixed successfully',
+        '✅ Remaining result/result variable issues fixed successfully'
       );
-    } catch (error) {
+    } catch (_error) {
       console.error('❌ Failed to fix remaining issues:', error.message);
       process.exit(1);
     }
@@ -144,40 +144,40 @@ class RemainingResultFixer {
         changes: totalChanges,
       });
       console.log(
-        `✅ Fixed ${totalChanges} issues in ${path.relative(process.cwd(), file)}`,
+        `✅ Fixed ${totalChanges} issues in ${path.relative(process.cwd(), file)}`
       );
     } else {
       console.log(
-        `✅ No issues found in ${path.relative(process.cwd(), file)}`,
+        `✅ No issues found in ${path.relative(process.cwd(), file)}`
       );
     }
   }
 
   fixTestFile(_filePath) {
     console.log(
-      `🔧 Processing test file: ${path.relative(process.cwd(), _filePath)}`,
+      `🔧 Processing test file: ${path.relative(process.cwd(), _filePath)}`
     );
 
     let content = FS.readFileSync(filePath, 'utf8');
     let modified = false;
     let totalChanges = 0;
 
-    // Fix patterns where RESULT is declared but result is used
+    // Fix patterns where result is declared but result is used
     const fixes = [
-      // Fix cases where RESULT is declared but result is referenced
+      // Fix cases where result is declared but result is referenced
       {
         pattern:
-          /(\s+const\s+RESULT\s*=\s*[^;]+;\s*)([^}]*?result\.[a-zA-Z_][a-zA-Z0-9_]*)/g,
+          /(\s+const\s+result\s*=\s*[^;]+;\s*)([^}]*?result\.[a-zA-Z_][a-zA-Z0-9_]*)/g,
         replacement: (match, declaration, usage) => {
-          return declaration + usage.replace(/result\./g, 'RESULT.');
+          return declaration + usage.replace(/result\./g, 'result.');
         },
-        description: 'Fix result references in RESULT scope',
+        description: 'Fix result references in result scope',
       },
-      // Fix unused RESULT variables - convert to result
+      // Fix unused result variables - convert to result
       {
-        pattern: /const\s+RESULT\s*=\s*([^;]+);\s*([^}]*?)result\s*=/g,
+        pattern: /const\s+result\s*=\s*([^;]+);\s*([^}]*?)result\s*=/g,
         replacement: 'const RESULT = $1;\n$2result =',
-        description: 'Convert RESULT to result for consistency',
+        description: 'Convert result to result for consistency',
       },
       // Fix agentId/AGENT_ID inconsistencies
       {
@@ -209,7 +209,7 @@ class RemainingResultFixer {
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // Look for RESULT declaration followed by result usage
+      // Look for result declaration followed by result usage
       if (
         line.includes('const RESULT = ') ||
         line.includes('const RESULT = ')
@@ -233,13 +233,13 @@ class RemainingResultFixer {
           if (
             isResultDeclaration &&
             nextLine.includes('result.') &&
-            !nextLine.includes('(RESULT)')
+            !nextLine.includes('(result)')
           ) {
-            lines[j] = nextLine.replace(/result\./g, 'RESULT.');
+            lines[j] = nextLine.replace(/result\./g, 'result.');
             lineModified = true;
             totalChanges++;
-          } else if (isresultDeclaration && nextLine.includes('RESULT.')) {
-            lines[j] = nextLine.replace(/RESULT\./g, 'result.');
+          } else if (isresultDeclaration && nextLine.includes('result.')) {
+            lines[j] = nextLine.replace(/result\./g, 'result.');
             lineModified = true;
             totalChanges++;
           }
@@ -259,11 +259,11 @@ class RemainingResultFixer {
         changes: totalChanges,
       });
       console.log(
-        `✅ Fixed ${totalChanges} issues in ${path.relative(process.cwd(), _filePath)}`,
+        `✅ Fixed ${totalChanges} issues in ${path.relative(process.cwd(), _filePath)}`
       );
     } else {
       console.log(
-        `✅ No issues found in ${path.relative(process.cwd(), _filePath)}`,
+        `✅ No issues found in ${path.relative(process.cwd(), _filePath)}`
       );
     }
   }
@@ -274,10 +274,10 @@ class RemainingResultFixer {
     console.log('│ Metric                  │ Count    │');
     console.log('├─────────────────────────┼──────────┤');
     console.log(
-      `│ Files Modified          │ ${this.fixedFiles.length.toString().padEnd(8)} │`,
+      `│ Files Modified          │ ${this.fixedFiles.length.toString().padEnd(8)} │`
     );
     console.log(
-      `│ Errors Encountered      │ ${this.errors.length.toString().padEnd(8)} │`,
+      `│ Errors Encountered      │ ${this.errors.length.toString().padEnd(8)} │`
     );
     console.log('└─────────────────────────┴──────────┘');
 
@@ -285,7 +285,7 @@ class RemainingResultFixer {
       console.log('\n📁 Modified Files:');
       for (const file of this.fixedFiles) {
         console.log(
-          `  ✅ ${path.relative(process.cwd(), file.path)} (${file.changes} changes)`,
+          `  ✅ ${path.relative(process.cwd(), file.path)} (${file.changes} changes)`
         );
       }
     }

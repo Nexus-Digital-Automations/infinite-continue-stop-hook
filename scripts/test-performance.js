@@ -9,7 +9,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { execSync, spawn } = require('child_process');
 const { loggers } = require('../lib/logger');
 
@@ -76,7 +76,7 @@ class PerformanceLogger {
 /**
  * System resource monitor
  */
-class ResourceMonitor {
+class RESOURCE_MONITOR {
   constructor() {
     this.startTime = Date.now();
     this.startMemory = process.memoryUsage();
@@ -186,7 +186,7 @@ class TestPerformanceMonitor {
     this.startTime = Date.now();
     this.testResults = [];
     this.suiteResults = [];
-    this.resourceMonitor = new ResourceMonitor();
+    this.resourceMonitor = new RESOURCE_MONITOR();
     this.warnings = [];
     this.errors = [];
   }
@@ -287,7 +287,7 @@ class TestPerformanceMonitor {
     const suiteStartMemory = process.memoryUsage();
 
     try {
-      const RESULT = await this.executeTestCommand(testSuite);
+      const result = await this.executeTestCommand(testSuite);
       const duration = Date.now() - suiteStartTime;
       const endMemory = process.memoryUsage();
 
@@ -295,7 +295,7 @@ class TestPerformanceMonitor {
         name: testSuite.name,
         command: testSuite.command,
         duration,
-        success: RESULT.success,
+        success: result.success,
         memory: {
           start: suiteStartMemory,
           end: endMemory,
@@ -304,7 +304,7 @@ class TestPerformanceMonitor {
             heapUsed: endMemory.heapUsed - suiteStartMemory.heapUsed,
           },
         },
-        output: RESULT.output,
+        output: result.output,
         timestamp: new Date().toISOString(),
       };
 
@@ -411,13 +411,13 @@ class TestPerformanceMonitor {
 
     // Calculate total test time
     const totalTestTime = this.suiteResults.reduce(
-      (sum, RESULT) => sum + result.duration,
+      (sum, result) => sum + result.duration,
       0
     );
 
     // Identify slowest tests
     const slowestTests = this.suiteResults
-      .filter((RESULT) => result.success)
+      .filter((result) => result.success)
       .sort((a, b) => b.duration - a.duration)
       .slice(0, 5);
 
@@ -469,7 +469,7 @@ class TestPerformanceMonitor {
    */
   analyzeParallelizationOpportunities() {
     const serialTime = this.suiteResults.reduce(
-      (sum, RESULT) => sum + result.duration,
+      (sum, result) => sum + result.duration,
       0
     );
     const longestSuite = Math.max(...this.suiteResults.map((r) => r.duration));

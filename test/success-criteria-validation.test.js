@@ -53,9 +53,9 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
     child.on('close', (code) => {
       if (code === 0) {
         try {
-          const RESULT = stdout.trim() ? JSON.parse(stdout) : {};
-          resolve(RESULT);
-        } catch (error) {
+          const result = stdout.trim() ? JSON.parse(stdout) : {};
+          resolve(result);
+        } catch (_error) {
           resolve({ rawOutput: stdout, stderr });
         }
       } else {
@@ -166,7 +166,7 @@ app.start().then(() => {
     await FS.writeFile(FEATURES_PATH, JSON.stringify(initialFeatures, null, 2));
 
     loggers.stopHook.log('Features test project setup completed');
-  } catch (error) {
+  } catch (_error) {
     loggers.stopHook.error('Failed to setup features test project:', error);
     throw error;
   }
@@ -176,7 +176,7 @@ async function cleanupFeaturesTestProject() {
   try {
     await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Features test project cleanup completed');
-  } catch (error) {
+  } catch (_error) {
     loggers.stopHook.error('Failed to cleanup features test project:', error);
   }
 }
@@ -270,7 +270,7 @@ describe('FEATURES.json System Validation Tests', () => {
       const createdFeatures = [];
       for (const feature of features) {
         // eslint-disable-next-line no-await-in-loop -- Sequential feature creation required for validation
-        const RESULT = await createFeature(feature);
+        const result = await createFeature(feature);
         expect(result.success).toBe(true);
         expect(result.feature).toBeDefined();
         expect(result.feature.status).toBe('suggested');

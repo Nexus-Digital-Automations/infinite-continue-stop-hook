@@ -13,7 +13,7 @@
  * @since 2025-09-13
  */
 
-const PATH = require('path');
+const path = require('path');
 const { spawn } = require('child_process');
 const FS = require('fs');
 
@@ -64,7 +64,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
           jsonString = jsonString.substring(jsonStart);
         }
 
-        const RESULT = JSON.parse(jsonString);
+        const result = JSON.parse(jsonString);
         resolve(RESULT);
       } catch {
         try {
@@ -276,7 +276,7 @@ describe('Audit System Validation Tests', () => {
         priority: 'high',
       };
 
-      const RESULT = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       expect(RESULT.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -339,7 +339,7 @@ describe('Audit System Validation Tests', () => {
         priority: 'medium',
       };
 
-      const RESULT = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       expect(RESULT.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -373,7 +373,7 @@ describe('Audit System Validation Tests', () => {
         priority: 'medium',
       };
 
-      const RESULT = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       expect(RESULT.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -422,7 +422,7 @@ describe('Audit System Validation Tests', () => {
         priority: 'high',
       };
 
-      const RESULT = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       expect(RESULT.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -491,7 +491,7 @@ describe('Audit System Validation Tests', () => {
 
       // Verify both agents can see the task but audit maintains independence
       const LIST_RESULT1 = await execAPI('list');
-      const LIST_RESULT2 = await execAPI('list'); // Same API, different agent would be handled by claiming logic
+      const _LIST_RESULT2 = await execAPI('list'); // Same API, different agent would be handled by claiming logic
 
       const TASK = LIST_RESULT1.tasks.find((t) => t.id === createResult.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
@@ -520,7 +520,7 @@ describe('Audit System Validation Tests', () => {
         priority: 'critical',
       };
 
-      const RESULT = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(SECURITY_TASK_DATA),
       ]);
       expect(RESULT.success).toBe(true);
@@ -549,7 +549,7 @@ describe('Audit System Validation Tests', () => {
         priority: 'high',
       };
 
-      const RESULT = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(TASK_MANAGER_TASK_DATA),
       ]);
       expect(RESULT.success).toBe(true);
@@ -579,7 +579,7 @@ describe('Audit System Validation Tests', () => {
         priority: 'medium',
       };
 
-      const RESULT = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       expect(RESULT.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -611,7 +611,7 @@ describe('Audit System Validation Tests', () => {
         priority: 'medium',
       };
 
-      const RESULT = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       expect(RESULT.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -632,7 +632,7 @@ describe('Audit System Validation Tests', () => {
         important_files: ['src/api.js', 'src/database.js', 'src/auth.js'],
       };
 
-      const RESULT = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(DETAILED_TASK_DATA),
       ]);
       expect(RESULT.success).toBe(true);
@@ -671,7 +671,7 @@ describe('Audit System Validation Tests', () => {
       }
 
       for await (const taskData of taskDataList) {
-        const RESULT = await execAPI('create', [JSON.stringify(taskData)]);
+        const result = await execAPI('create', [JSON.stringify(taskData)]);
         expect(RESULT.success).toBe(true);
 
         const listResult = await execAPI('list');
@@ -707,7 +707,7 @@ describe('Audit System Validation Tests', () => {
         priority: 'critical',
       };
 
-      const RESULT = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(CRITICAL_TASK_DATA),
       ]);
       expect(RESULT.success).toBe(true);
@@ -732,7 +732,7 @@ describe('Audit System Validation Tests', () => {
         priority: 'medium',
       };
 
-      const RESULT = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       expect(RESULT.success).toBe(true);
 
       const AFTER_TIME = Date.now();
@@ -756,7 +756,7 @@ describe('Audit System Validation Tests', () => {
         priority: 'low',
       };
 
-      const RESULT = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(MINIMAL_TASK_DATA),
       ]);
       expect(RESULT.success).toBe(true);
@@ -793,7 +793,7 @@ describe('Audit System Validation Tests', () => {
         priority: 'high',
       };
 
-      const RESULT = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(PERFORMANCE_TASK_DATA),
       ]);
 
@@ -830,7 +830,7 @@ describe('Audit System Validation Tests', () => {
       const END_TIME = Date.now();
       const TOTAL_TIME = END_TIME - START_TIME;
 
-      RESULTS.forEach((RESULT) => {
+      RESULTS.forEach((result) => {
         expect(RESULT.success).toBe(true);
       });
 
@@ -880,7 +880,7 @@ describe('Audit System Validation Tests', () => {
         priority: 'medium',
       };
 
-      const RESULT = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       expect(RESULT.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -915,7 +915,7 @@ describe('Audit System Validation Tests', () => {
         priority: 'medium',
       };
 
-      const RESULT = await execAPI('create', [JSON.stringify(featureTaskData)]);
+      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       expect(RESULT.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -939,7 +939,7 @@ describe('Audit System Validation Tests', () => {
         priority: 'medium',
       };
 
-      const RESULT = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(SPECIAL_CHARS_TASK_DATA),
       ]);
       expect(RESULT.success).toBe(true);

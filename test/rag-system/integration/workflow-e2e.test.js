@@ -9,7 +9,7 @@ const { loggers } = require('../lib/logger');
  * @version 1.0.0
  */
 
-const PATH = require('path');
+const path = require('path');
 const __fs = require('fs').promises;
 
 describe('RAG System End-to-End Workflows', () => {
@@ -46,7 +46,7 @@ describe('RAG System End-to-End Workflows', () => {
     loggers.stopHook.log('Cleaning up E2E test environment...');
     try {
       await __fs.rm(__testProjectRoot, { recursive: true, force: true });
-    } catch (error) {
+    } catch (_error) {
       loggers.stopHook.warn('Cleanup warning:', error.message);
     }
   });

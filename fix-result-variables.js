@@ -1,7 +1,7 @@
 /**
- * Fix RESULT/result Variable Inconsistencies
+ * Fix result/result Variable Inconsistencies
  *
- * This script fixes all uppercase RESULT variables that should be lowercase result,
+ * This script fixes all uppercase result variables that should be lowercase result,
  * handles variable declaration issues, and ensures proper scoping.
  *
  * @author Variable Consistency Agent
@@ -54,13 +54,13 @@ class ResultVariableFixer {
    * Main execution method
    */
   run() {
-    console.log('🔧 Starting RESULT/result variable fix...');
+    console.log('🔧 Starting result/result variable fix...');
 
     try {
-      // Find all files with RESULT issues
+      // Find all files with result issues
       const allFiles = this.findAllFilesWithResultIssues();
 
-      console.log(`📁 Found ${allFiles.length} files with RESULT issues`);
+      console.log(`📁 Found ${allFiles.length} files with result issues`);
 
       // Process each file
       for (const filePath of allFiles) {
@@ -69,15 +69,15 @@ class ResultVariableFixer {
 
       this.generateReport();
 
-      console.log('✅ RESULT/result variable fix completed successfully');
-    } catch (error) {
-      console.error('❌ Failed to fix RESULT/result variables:', error.message);
+      console.log('✅ result/result variable fix completed successfully');
+    } catch (_error) {
+      console.error('❌ Failed to fix result/result variables:', error.message);
       process.exit(1);
     }
   }
 
   /**
-   * Find all files with RESULT variable issues
+   * Find all files with result variable issues
    */
   findAllFilesWithResultIssues() {
     const files = new Set([...FILES_TO_FIX]);
@@ -107,22 +107,22 @@ class ResultVariableFixer {
         if (stat.isDirectory()) {
           this.findFilesInDirectory(fullPath, files);
         } else if (item.endsWith('.js') || item.endsWith('.test.js')) {
-          // Check if file contains RESULT
+          // Check if file contains result
           const content = FS.readFileSync(fullPath, 'utf8');
-          if (content.includes('RESULT')) {
+          if (content.includes('result')) {
             files.add(fullPath);
           }
         }
       }
-    } catch (error) {
+    } catch (_error) {
       console.warn(
-        `⚠️ Warning: Could not read directory ${dir}: ${error.message}`,
+        `⚠️ Warning: Could not read directory ${dir}: ${error.message}`
       );
     }
   }
 
   /**
-   * Process individual file to fix RESULT issues
+   * Process individual file to fix result issues
    */
   processFile(_filePath) {
     try {
@@ -156,12 +156,12 @@ class ResultVariableFixer {
           changes,
         });
         console.log(
-          `✅ Fixed ${changes} issues in ${path.relative(process.cwd(), _filePath)}`,
+          `✅ Fixed ${changes} issues in ${path.relative(process.cwd(), _filePath)}`
         );
       }
 
       this.stats.filesProcessed++;
-    } catch (error) {
+    } catch (_error) {
       console.error(`❌ Error processing ${filePath}: ${error.message}`);
       this.errors.push({
         file: filePath,
@@ -171,37 +171,37 @@ class ResultVariableFixer {
   }
 
   /**
-   * Fix RESULT variable names to lowercase result
+   * Fix result variable names to lowercase result
    */
   fixResultVariableNames(content, _filePath) {
     let modified = false;
     let changes = 0;
 
-    // Fix specific RESULT patterns that should be result
+    // Fix specific result patterns that should be result
     const patterns = [
-      // In reduce functions where RESULT should be result
+      // In reduce functions where result should be result
       {
         pattern:
-          /\.reduce\(\s*\(\s*sum,\s*result\s*\)\s*=>\s*sum\s*\+\s*RESULT\.duration/g,
-        replacement: '.reduce((sum, RESULT) => sum + result.duration',
+          /\.reduce\(\s*\(\s*sum,\s*result\s*\)\s*=>\s*sum\s*\+\s*result\.duration/g,
+        replacement: '.reduce((sum, result) => sum + result.duration',
         description: 'reduce function parameter',
       },
-      // In filter functions where RESULT should be result
+      // In filter functions where result should be result
       {
-        pattern: /\.filter\(\s*\(\s*result\s*\)\s*=>\s*RESULT\.success\)/g,
-        replacement: '.filter((RESULT) => result.success)',
+        pattern: /\.filter\(\s*\(\s*result\s*\)\s*=>\s*result\.success\)/g,
+        replacement: '.filter((result) => result.success)',
         description: 'filter function parameter',
       },
-      // Generic RESULT.property patterns in callbacks
+      // Generic result.property patterns in callbacks
       {
-        pattern: /\(\s*result\s*\)\s*=>\s*RESULT\./g,
-        replacement: '(RESULT) => result.',
+        pattern: /\(\s*result\s*\)\s*=>\s*result\./g,
+        replacement: '(result) => result.',
         description: 'callback parameter consistency',
       },
-      // In assignments where RESULT should be result for consistency
+      // In assignments where result should be result for consistency
       {
-        pattern: /const\s+result\s*=\s*[^;]+;\s*([^;]*RESULT\.)/g,
-        replacement: (match, _p1) => match.replace(/RESULT\./g, 'result.'),
+        pattern: /const\s+result\s*=\s*[^;]+;\s*([^;]*result\.)/g,
+        replacement: (match, _p1) => match.replace(/result\./g, 'result.'),
         description: 'result variable consistency in scope',
       },
     ];
@@ -219,7 +219,7 @@ class ResultVariableFixer {
         modified = true;
         changes += beforeCount - afterCount;
         console.log(
-          `  📝 Fixed ${beforeCount - afterCount} ${description} issues`,
+          `  📝 Fixed ${beforeCount - afterCount} ${description} issues`
         );
       }
     }
@@ -242,17 +242,17 @@ class ResultVariableFixer {
       {
         pattern: /(\s+)(result\.testCases\s*=)/g,
         replacement: '$1RESULT.testCases =',
-        description: 'missing RESULT reference',
+        description: 'missing result reference',
       },
       {
         pattern: /(\s+)(result\.failureDetails\s*=)/g,
         replacement: '$1RESULT.failureDetails =',
-        description: 'missing RESULT reference',
+        description: 'missing result reference',
       },
       // Fix return statement issues
       {
         pattern: /return\s+result;/g,
-        replacement: 'return RESULT;',
+        replacement: 'return result;',
         description: 'return statement consistency',
         // Only apply in specific contexts
         condition: (content, match) => {
@@ -262,7 +262,7 @@ class ResultVariableFixer {
           const lastLines = lines.slice(-10).join('\n');
           return (
             lastLines.includes('const RESULT = {') ||
-            lastLines.includes('RESULT.')
+            lastLines.includes('result.')
           );
         },
       },
@@ -276,7 +276,7 @@ class ResultVariableFixer {
             changes++;
             return replacement.replace(
               /\$(\d+)/g,
-              (_, num) => args[parseInt(num) - 1] || '',
+              (_, num) => args[parseInt(num) - 1] || ''
             );
           }
           return match;
@@ -290,7 +290,7 @@ class ResultVariableFixer {
           modified = true;
           changes += beforeCount - afterCount;
           console.log(
-            `  📝 Fixed ${beforeCount - afterCount} ${description} issues`,
+            `  📝 Fixed ${beforeCount - afterCount} ${description} issues`
           );
         }
       }
@@ -314,7 +314,7 @@ class ResultVariableFixer {
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
 
-      // If we see a RESULT declaration, check following lines for inconsistent usage
+      // If we see a result declaration, check following lines for inconsistent usage
       if (line.includes('const RESULT = ')) {
         // Look ahead for inconsistent usage in the same scope
         for (let j = i + 1; j < Math.min(i + 20, lines.length); j++) {
@@ -323,19 +323,19 @@ class ResultVariableFixer {
           // Stop at next function/block
           if (
             followingLine.match(
-              /^\s*(function|class|\w+\s*[=:]\s*(function|\()|const\s+\w+\s*=\s*\{)/,
+              /^\s*(function|class|\w+\s*[=:]\s*(function|\()|const\s+\w+\s*=\s*\{)/
             )
           ) {
             break;
           }
 
-          // Fix inconsistent result usage in same scope as RESULT declaration
+          // Fix inconsistent result usage in same scope as result declaration
           if (
             followingLine.includes('result.') &&
-            !followingLine.includes('(RESULT)') &&
+            !followingLine.includes('(result)') &&
             !followingLine.includes('=> result')
           ) {
-            lines[j] = followingLine.replace(/result\./g, 'RESULT.');
+            lines[j] = followingLine.replace(/result\./g, 'result.');
             modified = true;
             changes++;
           }
@@ -364,11 +364,11 @@ class ResultVariableFixer {
     const fileName = path.basename(_filePath);
 
     if (fileName === 'jest-json-reporter.js') {
-      // Fix the specific issue where result should be RESULT in return statement
+      // Fix the specific issue where result should be result in return statement
       const beforeContent = content;
       content = content.replace(
         /return\s+result;(\s*}\s*\)\s*;)/g,
-        'return RESULT;$1',
+        'return result;$1'
       );
       if (content !== beforeContent) {
         modified = true;
@@ -381,8 +381,8 @@ class ResultVariableFixer {
       // Fix specific reduce function issues
       const beforeContent = content;
       content = content.replace(
-        /\.reduce\(\s*\(\s*sum,\s*result\s*\)\s*=>\s*sum\s*\+\s*RESULT\.duration/g,
-        '.reduce((sum, RESULT) => sum + result.duration',
+        /\.reduce\(\s*\(\s*sum,\s*result\s*\)\s*=>\s*sum\s*\+\s*result\.duration/g,
+        '.reduce((sum, result) => sum + result.duration'
       );
       if (content !== beforeContent) {
         modified = true;
@@ -398,27 +398,27 @@ class ResultVariableFixer {
    * Generate fix report
    */
   generateReport() {
-    console.log('\n📊 RESULT/result Variable Fix Report:');
+    console.log('\n📊 result/result Variable Fix Report:');
     console.log('┌─────────────────────────┬──────────┐');
     console.log('│ Metric                  │ Count    │');
     console.log('├─────────────────────────┼──────────┤');
     console.log(
-      `│ Files Processed         │ ${this.stats.filesProcessed.toString().padEnd(8)} │`,
+      `│ Files Processed         │ ${this.stats.filesProcessed.toString().padEnd(8)} │`
     );
     console.log(
-      `│ Files Modified          │ ${this.fixedFiles.length.toString().padEnd(8)} │`,
+      `│ Files Modified          │ ${this.fixedFiles.length.toString().padEnd(8)} │`
     );
     console.log(
-      `│ Result Variables Fixed  │ ${this.stats.resultVariablesFixed.toString().padEnd(8)} │`,
+      `│ Result Variables Fixed  │ ${this.stats.resultVariablesFixed.toString().padEnd(8)} │`
     );
     console.log(
-      `│ Declarations Fixed      │ ${this.stats.declarationsFixed.toString().padEnd(8)} │`,
+      `│ Declarations Fixed      │ ${this.stats.declarationsFixed.toString().padEnd(8)} │`
     );
     console.log(
-      `│ Scope Issues Fixed      │ ${this.stats.scopeIssuesFixed.toString().padEnd(8)} │`,
+      `│ Scope Issues Fixed      │ ${this.stats.scopeIssuesFixed.toString().padEnd(8)} │`
     );
     console.log(
-      `│ Errors Encountered      │ ${this.errors.length.toString().padEnd(8)} │`,
+      `│ Errors Encountered      │ ${this.errors.length.toString().padEnd(8)} │`
     );
     console.log('└─────────────────────────┴──────────┘');
 
@@ -426,7 +426,7 @@ class ResultVariableFixer {
       console.log('\n📁 Modified Files:');
       for (const file of this.fixedFiles) {
         console.log(
-          `  ✅ ${path.relative(process.cwd(), file.path)} (${file.changes} changes)`,
+          `  ✅ ${path.relative(process.cwd(), file.path)} (${file.changes} changes)`
         );
       }
     }
@@ -435,7 +435,7 @@ class ResultVariableFixer {
       console.log('\n❌ Errors:');
       for (const error of this.errors) {
         console.log(
-          `  ❌ ${path.relative(process.cwd(), error.file)}: ${error.error}`,
+          `  ❌ ${path.relative(process.cwd(), error.file)}: ${error.error}`
         );
       }
     }
@@ -456,11 +456,11 @@ class ResultVariableFixer {
 
     FS.writeFileSync(
       path.join(process.cwd(), 'result-variable-fix-report.json'),
-      JSON.stringify(report, null, 2),
+      JSON.stringify(report, null, 2)
     );
 
     console.log(
-      '\n📄 Detailed report saved to: result-variable-fix-report.json',
+      '\n📄 Detailed report saved to: result-variable-fix-report.json'
     );
   }
 }

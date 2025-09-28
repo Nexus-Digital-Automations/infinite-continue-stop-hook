@@ -71,7 +71,7 @@ class QuickPerfTest {
       if (arg.startsWith('{') || arg.startsWith('[')) {
         try {
           JSON.parse(arg);
-        } catch (error) {
+        } catch (_error) {
 
           throw new Error(`Invalid JSON argument: ${arg}`);
         }
@@ -98,7 +98,7 @@ class QuickPerfTest {
       try {
         const startTime = process.hrtime.bigint();
         const cmd = `timeout 10s node ${this.apiPath} ${command} ${args.join(' ')}`;
-        const RESULT = execSync(cmd, { encoding: 'utf8', timeout: 15000 });
+        const result = execSync(cmd, { encoding: 'utf8', timeout: 15000 });
         const endTime = process.hrtime.bigint();
 
         const responseTime = Number(endTime - startTime) / 1000000; // Convert to ms
@@ -109,7 +109,7 @@ class QuickPerfTest {
         if (result.includes('"success": false') || result.includes('error')) {
           errors.push(`Iteration ${i + 1}: API returned error`);
         }
-      } catch (error) {
+      } catch (_error) {
         errors.push(`Iteration ${i + 1}: ${error.message}`);
         times.push(-1); // Mark as failed
       }
@@ -156,7 +156,7 @@ class QuickPerfTest {
         endpoint.args,
       );
 
-      const RESULT = this.results[endpoint.cmd];
+      const result = this.results[endpoint.cmd];
       loggers.stopHook.log(
         `  ✅ Success Rate: ${result.successRate.toFixed(1)}%`,
       );
@@ -257,7 +257,7 @@ class QuickPerfTest {
   }
 
   saveReport(report) {
-    const PATH = require('path');
+    const path = require('path');
     const outputDir =
       '/Users/jeremyparker/infinite-continue-stop-hook/development/performance-analysis';
 
@@ -333,7 +333,7 @@ function main() {
     }
 
     loggers.stopHook.log(`\n📄 Full report saved to: ${outputFile}`);
-  } catch (error) {
+  } catch (_error) {
 
     loggers.stopHook.error('❌ Performance test failed:', error);
     throw error;

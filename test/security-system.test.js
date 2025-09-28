@@ -47,13 +47,13 @@ describe('Security System', () => {
         },
       };
 
-      const RESULT = securityValidator.validateInput(
+      const result = securityValidator.validateInput(
         testData,
         'test_endpoint',
         schema
       );
-      expect(RESULT.valid).toBe(true);
-      expect(RESULT.data).toEqual(testData);
+      expect(result.valid).toBe(true);
+      expect(result.data).toEqual(testData);
     });
 
     test('should detect security threats in input', () => {
@@ -70,27 +70,27 @@ describe('Security System', () => {
         },
       };
 
-      const RESULT = securityValidator.validateInput(
+      const result = securityValidator.validateInput(
         maliciousData,
         'test_endpoint',
         schema
       );
-      expect(RESULT.valid).toBe(false);
-      expect(RESULT.error).toContain('Security threats detected');
+      expect(result.valid).toBe(false);
+      expect(result.error).toContain('Security threats detected');
     });
 
     test('should authorize valid agent operations', () => {
       const AGENT_ID = 'development_session_1234567890_1_general_abcdef';
-      const operation = 'create';
+      const OPERATION = 'create';
       const resource = { type: 'task', id: 'test_task' };
 
-      const RESULT = securityValidator.authorizeOperation(
-        agentId,
-        operation,
+      const result = securityValidator.authorizeOperation(
+        AGENT_ID,
+        OPERATION,
         resource
       );
-      expect(RESULT.authorized).toBe(true);
-      expect(RESULT.agentRole).toBe('development');
+      expect(result.authorized).toBe(true);
+      expect(result.agentRole).toBe('development');
     });
 
     test('should reject invalid agent IDs', () => {
@@ -98,13 +98,13 @@ describe('Security System', () => {
       const OPERATION = 'create';
       const resource = { type: 'task' };
 
-      const RESULT = securityValidator.authorizeOperation(
+      const result = securityValidator.authorizeOperation(
         invalidAgentId,
-        operation,
+        OPERATION,
         resource
       );
-      expect(RESULT.authorized).toBe(false);
-      expect(RESULT.error).toContain('Invalid agent ID format');
+      expect(result.authorized).toBe(false);
+      expect(result.error).toContain('Invalid agent ID format');
     });
 
     test('should sanitize research input data', () => {
@@ -251,7 +251,7 @@ describe('Security System', () => {
 
       // 2. Authorize operation
       const authorization = securityValidator.authorizeOperation(
-        agentId,
+        AGENT_ID,
         'create',
         { type: 'task' }
       );
@@ -265,7 +265,7 @@ describe('Security System', () => {
 
       // 4. Audit the operation
       securityValidator.auditLog('TASK_CREATION_TEST', {
-        agentId,
+        AGENT_ID,
         operation: 'create',
         success: true,
       });

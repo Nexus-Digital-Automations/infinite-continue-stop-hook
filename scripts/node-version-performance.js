@@ -11,7 +11,7 @@ const { loggers } = require('../lib/logger');
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { EXEC_SYNC, _spawn } = require('child_process');
 const os = require('os');
 const { createLogger } = require('../lib/utils/logger');
@@ -282,7 +282,7 @@ class NodeVersionPerformanceBenchmark {
       loggers.app.info(
         `✅ Native modules benchmark completed: ${duration.toFixed(2)}ms`
       );
-    } catch (error) {
+    } catch (_error) {
       this.results.benchmarks.native_modules = {
         duration_ms: 0,
         status: 'failed',
@@ -621,7 +621,7 @@ ${this.results.recommendations?.map((r) => `- ${r}`).join('\n')}
       this.displaySummary();
 
       loggers.stopHook.log('\n✅ Benchmark suite completed successfully!');
-    } catch (error) {
+    } catch (_error) {
       loggers.stopHook.error('❌ Benchmark suite failed:', error.message);
       throw new Error(`Benchmark suite failed: ${error.message}`);
     }

@@ -106,7 +106,7 @@ describe('Example Test with Mock Framework', () => {
   describe('API Mock Integration', () => {
     test('should mock agent initialization', async () => {
       const AGENT_ID = TestIdGenerator.generateAgentId();
-      const RESULT = await APIExecutor.initializeTestAgent(_AGENT_ID);
+      const result = await APIExecutor.initializeTestAgent(_AGENT_ID);
 
       expect(result.agentId).toBe(_AGENT_ID);
       expect(result.result.success).toBe(true);
@@ -124,7 +124,7 @@ describe('Example Test with Mock Framework', () => {
         category: 'enhancement',
       });
 
-      const RESULT = await APIExecutor.createTestFeature(featureData);
+      const result = await APIExecutor.createTestFeature(featureData);
 
       expect(result.success).toBe(true);
       expect(result.feature).toBeDefined();
@@ -144,7 +144,7 @@ describe('Example Test with Mock Framework', () => {
       };
 
       // Call API directly without defaults to test validation
-      const RESULT = await APIExecutor.execAPI(
+      const result = await APIExecutor.execAPI(
         'suggest-feature',
         [JSON.stringify(invalidFeatureData)],
         { silent: true },
@@ -166,7 +166,7 @@ describe('Example Test with Mock Framework', () => {
         TestDataFactory.createFeatureData({ category: 'bug-fix' }),
       );
 
-      const RESULT = await APIExecutor.execAPI('list-features', [
+      const result = await APIExecutor.execAPI('list-features', [
         JSON.stringify({ category: 'enhancement' }),
       ]);
 
@@ -228,7 +228,7 @@ describe('Example Test with Mock Framework', () => {
         },
       );
 
-      expect(RESULT).toBe('test-result');
+      expect(result).toBe('test-result');
       expect(duration).toBeGreaterThan(90); // Should be around 100ms
       expect(duration).toBeLessThan(200); // Allow some variance
     });
@@ -244,7 +244,7 @@ describe('Example Test with Mock Framework', () => {
         },
       );
 
-      expect(RESULT).toBe(1000);
+      expect(result).toBe(1000);
       expect(memoryDelta).toBeDefined();
       expect(typeof memoryDelta.heapUsed).toBe('number');
     });
@@ -265,7 +265,7 @@ describe('Example Test with Mock Framework', () => {
     test('should retry failed operations', async () => {
       let attempts = 0;
 
-      const RESULT = await TestExecution.retry(
+      const result = await TestExecution.retry(
         () => {
           attempts++;
           if (attempts < 3) {
@@ -277,7 +277,7 @@ describe('Example Test with Mock Framework', () => {
         10,
       );
 
-      expect(RESULT).toBe('success');
+      expect(result).toBe('success');
       expect(attempts).toBe(3);
     });
 
@@ -327,7 +327,7 @@ describe('Example Test with Mock Framework', () => {
       try {
         await APIExecutor.execAPI('invalid-command');
         expect.fail('Should have thrown an error');
-      } catch (error) {
+      } catch (_error) {
         expect(error.message).toBeDefined();
         TestLogger.debug('Handled expected error', { error: error.message });
       }
@@ -337,7 +337,7 @@ describe('Example Test with Mock Framework', () => {
       const AGENT_ID = TestIdGenerator.generateAgentId();
       await APIExecutor.initializeTestAgent(_AGENT_ID);
 
-      const RESULT = await APIExecutor.execAPI('approve-feature', [
+      const result = await APIExecutor.execAPI('approve-feature', [
         'non-existent-feature',
       ]);
 

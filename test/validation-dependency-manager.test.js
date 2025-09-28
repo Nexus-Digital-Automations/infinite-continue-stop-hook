@@ -18,7 +18,7 @@ const {
   DEPENDENCY_TYPES,
 } = require('../lib/validation-dependency-manager');
 const FS = require('fs').promises;
-const PATH = require('path');
+const path = require('path');
 const os = require('os');
 
 describe('ValidationDependencyManager', () => {
@@ -589,9 +589,9 @@ describe('ValidationDependencyManager', () => {
       const newManager = new ValidationDependencyManager({
         projectRoot: tempDir,
       });
-      const RESULT = await newManager.loadDependencyConfig();
+      const result = await newManager.loadDependencyConfig();
 
-      expect(RESULT).toBeNull(); // File doesn't exist, should return null
+      expect(result).toBeNull(); // File doesn't exist, should return null
 
       // Should still have default dependencies
       const dependencies = newManager.getAllDependencies();

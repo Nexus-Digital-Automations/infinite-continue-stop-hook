@@ -29,27 +29,27 @@ function comprehensiveAuditFix() {
       '$1\n  let testAgentId = null;\n  let auditAgentId = null;'
     );
 
-    // Fix ALL instances of RESULT.taskId to result.taskId
-    content = content.replace(/RESULT\.taskId/g, 'result.taskId');
+    // Fix ALL instances of result.taskId to result.taskId
+    content = content.replace(/result\.taskId/g, 'result.taskId');
 
-    // Remove ALL unused RESULT assignments
+    // Remove ALL unused result assignments
     content = content.replace(/\s*const RESULT = [^;]+;\s*/g, '\n');
 
     // Fix specific patterns where result is still missing
     content = content.replace(
-      /const TASK = listResult\.tasks\.find\(\(t\) => t\.id === RESULT\.taskId\);/g,
+      /const TASK = listResult\.tasks\.find\(\(t\) => t\.id === result\.taskId\);/g,
       'const TASK = listResult.tasks.find((t) => t.id === result.taskId);'
     );
 
     // Fix any remaining undefined result references in test expectations
     content = content.replace(
-      /expect\(RESULT\.success\)\.toBe\(true\);/g,
+      /expect\(result\.success\)\.toBe\(true\);/g,
       'expect(result.success).toBe(true);'
     );
 
     fs.writeFileSync(filePath, content);
     console.log('Applied comprehensive audit test fixes successfully');
-  } catch (error) {
+  } catch (_error) {
     console.error('Error applying comprehensive fixes:', error.message);
     throw error;
   }

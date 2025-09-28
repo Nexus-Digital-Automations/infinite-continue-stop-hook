@@ -143,7 +143,7 @@ describe('Complete System Workflows E2E', () => {
             category: 'new-feature',
           });
 
-        const featureId = E2EAssertions.extractFeatureId(RESULT);
+        const featureId = E2EAssertions.extractFeatureId(result);
 
         // Step 2: Reject the feature
         const rejectionResult = await FeatureTestHelpers.rejectFeature(
@@ -205,7 +205,7 @@ describe('Complete System Workflows E2E', () => {
         }
 
         const featureResults = await Promise.all(featurePromises);
-        const featureIds = featureResults.map((RESULT) =>
+        const featureIds = featureResults.map((result) =>
           E2EAssertions.extractFeatureId(result.result),
         );
 

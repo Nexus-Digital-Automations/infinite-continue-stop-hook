@@ -229,9 +229,9 @@ describe('API Workflow Integration Tests', () => {
       const suggestResults = await Promise.all(suggestPromises);
 
       // Verify all suggestions succeeded
-      expect(suggestResults.every((RESULT) => result.success)).toBe(true);
+      expect(suggestResults.every((result) => result.success)).toBe(true);
 
-      const featureIds = suggestResults.map((RESULT) => result.feature.id);
+      const featureIds = suggestResults.map((result) => result.feature.id);
 
       // 2. Bulk approve all features
       const bulkApprovalData = {
@@ -282,20 +282,20 @@ describe('API Workflow Integration Tests', () => {
     test('should execute complete agent lifecycle: initialize → reinitialize → stop authorization', async () => {
       // 1. Initialize agent
       const AGENT_ID = 'integration-test-agent-001';
-      const initResult = await execAPI('initialize', [agentId], {
+      const initResult = await execAPI('initialize', [AGENT_ID], {
         projectRoot: testDir,
       });
 
       expect(initResult.success).toBe(true);
-      expect(initResult.agent.id).toBe(_AGENT_ID);
+      expect(initResult.agent.id).toBe(AGENT_ID);
       expect(initResult.agent.status).toBe('initialized');
       expect(initResult.agent.sessionId).toBeDefined();
 
       // 2. Verify agent is recorded in FEATURES.json
       const featuresData = await readFeaturesFile(testDir);
-      expect(featuresData.agents[agentId]).toBeDefined();
-      expect(featuresData.agents[agentId].status).toBe('active');
-      expect(featuresData.agents[agentId].sessionId).toBeDefined();
+      expect(featuresData.agents[AGENT_ID]).toBeDefined();
+      expect(featuresData.agents[AGENT_ID].status).toBe('active');
+      expect(featuresData.agents[AGENT_ID].sessionId).toBeDefined();
 
       // 3. Get initialization statistics
       const initStatsResult = await execAPI('get-initialization-stats', [], {
@@ -308,19 +308,19 @@ describe('API Workflow Integration Tests', () => {
       ).toBeGreaterThan(0);
 
       // 4. Reinitialize agent
-      const reinitResult = await execAPI('reinitialize', [agentId], {
+      const reinitResult = await execAPI('reinitialize', [AGENT_ID], {
         projectRoot: testDir,
       });
 
       expect(reinitResult.success).toBe(true);
-      expect(reinitResult.agent.id).toBe(_AGENT_ID);
+      expect(reinitResult.agent.id).toBe(AGENT_ID);
       expect(reinitResult.agent.status).toBe('reinitialized');
       expect(reinitResult.agent.sessionId).toBeDefined();
       expect(reinitResult.agent.previousSessions).toBeGreaterThan(0);
 
       // 5. Verify reinitialization is recorded
       const updatedFeaturesData = await readFeaturesFile(testDir);
-      expect(updatedFeaturesData.agents[agentId].previousSessions).toHaveLength(
+      expect(updatedFeaturesData.agents[AGENT_ID].previousSessions).toHaveLength(
         1,
       );
 
@@ -350,7 +350,7 @@ describe('API Workflow Integration Tests', () => {
       );
 
       expect(authorizeStopResult.success).toBe(true);
-      expect(authorizeStopResult.authorization.authorized_by).toBe(_AGENT_ID);
+      expect(authorizeStopResult.authorization.authorized_by).toBe(AGENT_ID);
       expect(authorizeStopResult.authorization.reason).toBe(stopReason);
       expect(authorizeStopResult.authorization.stop_flag_created).toBe(true);
 
@@ -368,7 +368,7 @@ describe('API Workflow Integration Tests', () => {
           await FS.readFile(stopFlagPath, 'utf8'),
         );
         expect(stopFlagData.stop_allowed).toBe(true);
-        expect(stopFlagData.authorized_by).toBe(_AGENT_ID);
+        expect(stopFlagData.authorized_by).toBe(AGENT_ID);
         expect(stopFlagData.reason).toBe(stopReason);
       }
     });
@@ -376,14 +376,14 @@ describe('API Workflow Integration Tests', () => {
     test('should handle multiple concurrent agent operations', async () => {
       // 1. Initialize multiple agents concurrently
       const agentIds = ['agent-001', 'agent-002', 'agent-003'];
-      const initPromises = agentIds.map((_AGENT_ID) =>
+      const initPromises = agentIds.map((agentId) =>
         execAPI('initialize', [agentId], { projectRoot: testDir }),
       );
 
       const initResults = await Promise.all(initPromises);
 
       // Verify all initializations succeeded
-      expect(initResults.every((RESULT) => result.success)).toBe(true);
+      expect(initResults.every((result) => result.success)).toBe(true);
       initResults.forEach((result, index) => {
         expect(result.agent.id).toBe(agentIds[index]);
         expect(result.agent.status).toBe('initialized');
@@ -391,20 +391,20 @@ describe('API Workflow Integration Tests', () => {
 
       // 2. Verify all agents are recorded
       const featuresData = await readFeaturesFile(testDir);
-      agentIds.forEach((_AGENT_ID) => {
+      agentIds.forEach((agentId) => {
         expect(featuresData.agents[agentId]).toBeDefined();
         expect(featuresData.agents[agentId].status).toBe('active');
       });
 
       // 3. Reinitialize all agents concurrently
-      const reinitPromises = agentIds.map((_AGENT_ID) =>
+      const reinitPromises = agentIds.map((agentId) =>
         execAPI('reinitialize', [agentId], { projectRoot: testDir }),
       );
 
       const reinitResults = await Promise.all(reinitPromises);
 
       // Verify all reinitializations succeeded
-      expect(reinitResults.every((RESULT) => result.success)).toBe(true);
+      expect(reinitResults.every((result) => result.success)).toBe(true);
       reinitResults.forEach((result, index) => {
         expect(result.agent.id).toBe(agentIds[index]);
         expect(result.agent.status).toBe('reinitialized');
@@ -419,7 +419,7 @@ describe('API Workflow Integration Tests', () => {
   describe('Cross-Component Integration', () => {
     test('should handle mixed feature And agent operations', async () => {
       // 1. Initialize agent
-      const AGENT_ID = 'mixed-operations-agent';
+      const agentId = 'mixed-operations-agent';
       const initResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });
@@ -629,7 +629,7 @@ describe('API Workflow Integration Tests', () => {
 
       // Verify agents
       expect(Object.keys(finalFeaturesData.agents)).toHaveLength(2);
-      agents.forEach((_AGENT_ID) => {
+      agents.forEach((agentId) => {
         expect(finalFeaturesData.agents[agentId]).toBeDefined();
       });
 
@@ -716,12 +716,12 @@ describe('API Workflow Integration Tests', () => {
     });
 
     test('should handle malformed JSON in feature suggestion', async () => {
-      const RESULT = await execAPI('suggest-feature', ['{ invalid json }'], {
+      const result = await execAPI('suggest-feature', ['{ invalid json }'], {
         projectRoot: testDir,
       });
 
-      expect(RESULT.success).toBe(false);
-      expect(RESULT.error).toBeDefined();
+      expect(result.success).toBe(false);
+      expect(result.error).toBeDefined();
     });
 
     test('should handle operations on non-existent features', async () => {

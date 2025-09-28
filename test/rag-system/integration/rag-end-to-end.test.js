@@ -20,7 +20,7 @@ const { loggers } = require('../lib/logger');
  * @since 2025-09-19
  */
 
-const PATH = require('path');
+const path = require('path');
 const FS = require('fs').promises;
 
 // Import RAG system components
@@ -131,7 +131,7 @@ describe('RAG System End-to-End Integration Tests', () => {
     // Clean up test files
     try {
       await FS.rm(testDataPath, { recursive: true, force: true });
-    } catch (error) {
+    } catch (_error) {
       loggers.stopHook.warn('Failed to clean up test data:', error.message);
     }
   });
@@ -179,12 +179,12 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Validate each result And collect them
       for (const result of results) {
-        expect(RESULT).toHaveProperty('success', true);
-        expect(RESULT).toHaveProperty('vectorId');
-        expect(RESULT).toHaveProperty('lessonId');
-        expect(RESULT).toHaveProperty('embeddingDimension');
+        expect(result).toHaveProperty('success', true);
+        expect(result).toHaveProperty('vectorId');
+        expect(result).toHaveProperty('lessonId');
+        expect(result).toHaveProperty('embeddingDimension');
 
-        storedLessons.push(RESULT);
+        storedLessons.push(result);
       }
 
       // Verify storage statistics
@@ -204,10 +204,10 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Verify result structure
       for (const result of RESULTS) {
-        testAssertions.assertValidSearchResult(RESULT);
-        expect(RESULT).toHaveProperty('relevanceScore');
-        expect(RESULT).toHaveProperty('lessonType');
-        expect(RESULT).toHaveProperty('confidenceLevel');
+        testAssertions.assertValidSearchResult(result);
+        expect(result).toHaveProperty('relevanceScore');
+        expect(result).toHaveProperty('lessonType');
+        expect(result).toHaveProperty('confidenceLevel');
       }
 
       // Verify relevance ordering
@@ -258,11 +258,11 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Validate each result And collect them
       for (const result of results) {
-        expect(RESULT).toHaveProperty('success', true);
-        expect(RESULT).toHaveProperty('vectorId');
-        expect(RESULT).toHaveProperty('errorId');
+        expect(result).toHaveProperty('success', true);
+        expect(result).toHaveProperty('vectorId');
+        expect(result).toHaveProperty('errorId');
 
-        storedErrors.push(RESULT);
+        storedErrors.push(result);
       }
     });
 
@@ -312,8 +312,8 @@ describe('RAG System End-to-End Integration Tests', () => {
         tags: ['system', 'memory', 'distributed', 'cascade'],
       };
 
-      const RESULT = await ragOperations.storeError(_complexError);
-      expect(RESULT.success).toBe(true);
+      const result = await ragOperations.storeError(_complexError);
+      expect(result.success).toBe(true);
 
       // Search for the stored error
       const _searchResults = await ragOperations.findSimilarErrors(
@@ -348,7 +348,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Verify all operations succeeded
       expect(_RESULTS).toHaveLength(_batchSize);
-      RESULTS.forEach((RESULT) => {
+      RESULTS.forEach((result) => {
         expect(result.success).toBe(true);
       });
 
@@ -391,8 +391,8 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // Verify all searches completed successfully
       expect(results).toHaveLength(totalQueries);
-      results.forEach((RESULT) => {
-        expect(RESULT).toBeInstanceOf(Array);
+      results.forEach((result) => {
+        expect(result).toBeInstanceOf(Array);
       });
 
       // Performance assertions
@@ -487,10 +487,10 @@ describe('RAG System End-to-End Integration Tests', () => {
       expect(searchResults).toBeInstanceOf(Array);
 
       // Each result should have required properties
-      searchResults.forEach((RESULT) => {
-        expect(RESULT).toHaveProperty('vectorId');
-        expect(RESULT).toHaveProperty('similarity');
-        expect(typeof RESULT.similarity).toBe('number');
+      searchResults.forEach((result) => {
+        expect(result).toHaveProperty('vectorId');
+        expect(result).toHaveProperty('similarity');
+        expect(typeof result.similarity).toBe('number');
         expect(result.similarity).toBeGreaterThan(0);
         expect(result.similarity).toBeLessThanOrEqual(1);
       });
@@ -647,8 +647,8 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // System should continue to function
       const lesson = testDataGenerator.generateLessons(1)[0];
-      const RESULT = await ragOperations.storeLesson(lesson);
-      expect(RESULT.success).toBe(true);
+      const result = await ragOperations.storeLesson(lesson);
+      expect(result.success).toBe(true);
 
       const searchResults = await ragOperations.searchLessons(lesson.title);
       expect(searchResults.length).toBeGreaterThan(0);

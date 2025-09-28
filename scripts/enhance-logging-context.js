@@ -6,7 +6,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { loggers } = require('../lib/logger');
 
 class LoggingContextEnhancer {
@@ -59,7 +59,7 @@ class LoggingContextEnhancer {
 
   enhanceFile(_filePath) {
     try {
-      const content = FS.readFileSync(filePath, 'utf8');
+      const content = FS.readFileSync(_filePath, 'utf8');
       let newContent = content;
       let enhanced = false;
 
@@ -236,8 +236,8 @@ if (require.main === module) {
   enhancer
     .enhance()
     .then(() => enhancer.createLoggingUtilities())
-    .then((RESULT) => {
-      if (result && RESULT.enhancedCalls === 0) {
+    .then((result) => {
+      if (result && result.enhancedCalls === 0) {
         loggers.app.warn(
           'No logging calls were enhanced - may need manual review'
         );

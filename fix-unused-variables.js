@@ -75,7 +75,7 @@ function filePath(_$2) {
     }
 
     return false;
-  } catch (error) {
+  } catch (_error) {
     loggers.app.error(`❌ Error fixing ${filePath}:`, { error: error.message });
     return false;
   }

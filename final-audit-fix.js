@@ -20,7 +20,7 @@ function finalAuditFix() {
       'reject(new Error(`Command execution failed: ${error.message}`));'
     );
 
-    // Replace ALL instances of RESULT (uppercase) with result (lowercase)
+    // Replace ALL instances of result (uppercase) with result (lowercase)
     content = content.replace(/\bRESULT\b/g, 'result');
 
     // Fix variable references that might still be uppercase
@@ -34,11 +34,11 @@ function finalAuditFix() {
     );
 
     // Clean up any remaining unused variable assignments
-    content = content.replace(/^\s*const RESULT = [^;]+;\s*$/gm, '');
+    content = content.replace(/^\s*const result = [^;]+;\s*$/gm, '');
 
     fs.writeFileSync(filePath, content);
     console.log('Applied final comprehensive audit test fixes successfully');
-  } catch (error) {
+  } catch (_error) {
     console.error('Error applying final fixes:', error.message);
     throw error;
   }

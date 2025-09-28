@@ -1,10 +1,10 @@
 /**
  * Systematic fix for remaining 2437 linting issues
- * Focuses on the most common patterns: RESULT/result naming, unused variables, no-undef errors
+ * Focuses on the most common patterns: result/result naming, unused variables, no-undef errors
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 
 class SystematicLintingFixer {
   constructor() {
@@ -18,7 +18,7 @@ class SystematicLintingFixer {
   run() {
     try {
       console.log(
-        '🔧 Starting systematic linting fix for remaining 2437 issues...',
+        '🔧 Starting systematic linting fix for remaining 2437 issues...'
       );
 
       // Get all JavaScript files
@@ -37,7 +37,7 @@ class SystematicLintingFixer {
         console.log('\n❌ Errors encountered:');
         this.errors.forEach((error) => console.log(`  - ${error}`));
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('❌ Systematic fix failed:', error.message);
       throw error;
     }
@@ -78,11 +78,11 @@ class SystematicLintingFixer {
    */
   processFile(_filePath) {
     try {
-      const content = FS.readFileSync(filePath, 'utf8');
+      const content = FS.readFileSync(_filePath, 'utf8');
       let fixedContent = content;
       let hasChanges = false;
 
-      // Fix 1: RESULT vs result naming issues (most common pattern)
+      // Fix 1: result vs result naming issues (most common pattern)
       const resultFixes = this.fixResultNaming(fixedContent);
       if (resultFixes.content !== fixedContent) {
         fixedContent = resultFixes.content;
@@ -122,27 +122,27 @@ class SystematicLintingFixer {
         FS.writeFileSync(filePath, fixedContent, 'utf8');
         this.fixedFiles.push(_filePath);
       }
-    } catch (error) {
+    } catch (_error) {
       this.errors.push(`${filePath}: ${error.message}`);
     }
   }
 
   /**
-   * Fix RESULT vs result naming issues
-   * Pattern: const RESULT = something; then later RESULT.property (should be RESULT.property)
+   * Fix result vs result naming issues
+   * Pattern: const result = something; then later result.property (should be result.property)
    */
   fixResultNaming(content) {
     let fixedContent = content;
 
-    // Find lines with const RESULT =
-    const resultDeclarationRegex = /const\s+RESULT\s*=/g;
+    // Find lines with const result =
+    const resultDeclarationRegex = /const\s+result\s*=/g;
     const hasResultDeclaration = resultDeclarationRegex.test(content);
 
     if (hasResultDeclaration) {
-      // Replace RESULT.something with RESULT.something (but not in strings)
+      // Replace result.something with result.something (but not in strings)
       fixedContent = fixedContent.replace(
         /(?<!['"`])(\s+)result\.([\w]+)/g,
-        '$1RESULT.$2',
+        '$1RESULT.$2'
       );
     }
 
@@ -165,7 +165,7 @@ class SystematicLintingFixer {
       // Catch blocks
       {
         pattern: /catch\s*\(\s*([a-zA-Z_$][\w$]*)\s*\)\s*{/,
-        replacement: 'catch (error) {',
+        replacement: 'catch (_error) {',
       },
       // Variable declarations that aren't used
       {
@@ -204,10 +204,10 @@ class SystematicLintingFixer {
       // error not defined in catch blocks - define it
       {
         pattern: /catch\s*\(\s*\)\s*{([^}]*?)(error|error)([^}]*?)}/g,
-        replacement: 'catch (error) {$1_error$3}',
+        replacement: 'catch (_error) {$1_error$3}',
       },
 
-      // result not defined when RESULT exists
+      // result not defined when result exists
       { pattern: /(?<!['"`])(\s+)result(?=\.)/g, replacement: '$1RESULT' },
 
       // Common variable Name mismatches
@@ -233,8 +233,8 @@ class SystematicLintingFixer {
       fixedContent = fixedContent.replace(/([^a-zA-Z_$])fs\./g, '$1FS.');
     }
 
-    // If we have const PATH = require('path'), make sure usage is PATH not path
-    if (fixedContent.includes("const PATH = require('path')")) {
+    // If we have const path = require('path'), make sure usage is PATH not path
+    if (fixedContent.includes("const path = require('path')")) {
       fixedContent = fixedContent.replace(/([^a-zA-Z_$])path\./g, '$1PATH.');
     }
 
@@ -250,7 +250,7 @@ class SystematicLintingFixer {
     // Fix catch blocks that reference error without defining it
     fixedContent = fixedContent.replace(
       /catch\s*\(\s*\)\s*{([^}]*?)(\berror\b)([^}]*?)}/g,
-      'catch (error) {$1_error$3}',
+      'catch (_error) {$1_error$3}'
     );
 
     return { content: fixedContent };

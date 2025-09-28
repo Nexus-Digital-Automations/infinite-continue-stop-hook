@@ -10,7 +10,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { execSync } = require('child_process');
 
 class JestCiCdReporter {
@@ -186,14 +186,14 @@ class JestCiCdReporter {
     let slowest = null;
     let maxDuration = 0;
 
-    testResults.forEach((RESULT) => {
-      const duration = RESULT.perfStats.end - RESULT.perfStats.start;
+    testResults.forEach((result) => {
+      const duration = result.perfStats.end - result.perfStats.start;
       if (duration > maxDuration) {
         maxDuration = duration;
         slowest = {
-          path: RESULT.testFilePath,
+          path: result.testFilePath,
           duration_ms: duration,
-          num_tests: RESULT.numPassingTests + RESULT.numFailingTests,
+          num_tests: result.numPassingTests + result.numFailingTests,
         };
       }
     });
@@ -367,7 +367,7 @@ class JestCiCdReporter {
     // Simplified parallel efficiency calculation
     const totalTime = Date.now() - this.startTime;
     const serialTime = results.testResults.reduce(
-      (sum, RESULT) => sum + (result.perfStats.end - RESULT.perfStats.start),
+      (sum, result) => sum + (result.perfStats.end - result.perfStats.start),
       0
     );
 

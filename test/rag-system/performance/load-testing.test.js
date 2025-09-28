@@ -9,7 +9,7 @@ const { loggers } = require('../lib/logger');
  * @version 1.0.0
  */
 
-const PATH = require('path');
+const path = require('path');
 const FS = require('fs').promises;
 
 // Helper functions for test data generation
@@ -87,7 +87,7 @@ describe('RAG System Performance And Load Testing', () => {
         `Code snippet with multiple functions:
          function complexCalculation(DATA) {
            return data.map(item => processItem(item))
-             .filter(result => RESULT.isValid)
+             .filter(result => result.isValid)
              .reduce((acc, curr) => acc + curr.value, 0);
          }`,
         `Complete lesson with multiple sections:
@@ -207,8 +207,8 @@ describe('RAG System Performance And Load Testing', () => {
       }
 
       // Calculate average search time
-      const _avgSearchTime = searchTimes.reduce((sum, RESULT) =>
-        sum + RESULT.searchTime, 0) / searchTimes.length;
+      const _avgSearchTime = searchTimes.reduce((sum, result) =>
+        sum + result.searchTime, 0) / searchTimes.length;
 
       expect(avgSearchTime).toBeLessThan(300); // Average under 300ms
 
@@ -330,7 +330,7 @@ describe('RAG System Performance And Load Testing', () => {
             // Add small random delay to simulate realistic usage
             await new Promise(resolve => setTimeout(resolve, Math.random() * 100));
 
-          } catch (error) {
+          } catch (_error) {
             userResults.errors.push(error);
           }
         }
@@ -407,7 +407,7 @@ describe('RAG System Performance And Load Testing', () => {
               version: updateResult.version,
               timestamp: Date.now()
             };
-          } catch (error) {
+          } catch (_error) {
             return {
               modifierId,
               success: false,
@@ -489,7 +489,7 @@ describe('RAG System Performance And Load Testing', () => {
         loggers.stopHook.log('Pre-_operationmemory:', formatMemoryUsage(preOpMemory));
 
         const START_TIME = Date.now();
-        const RESULT = await testOperation.OPERATION);
+        const result = await testOperation.OPERATION);
         const END_TIME = Date.now();
 
         const _postOpMemory = process.memoryUsage();
@@ -503,7 +503,7 @@ describe('RAG System Performance And Load Testing', () => {
 
         // Memory increase should be reasonable
         expect(memoryIncrease).toBeLessThan(200 * 1024 * 1024); // Less than 200MB
-        expect(RESULT).toBeDefined();
+        expect(result).toBeDefined();
 
         // Force garbage collection if available
         if (global.gc) {
@@ -561,7 +561,7 @@ describe('RAG System Performance And Load Testing', () => {
             expect(duration).toBeLessThan(5000); // Should complete within 5 seconds
           }
         }
-      } catch (error) {
+      } catch (_error) {
         // System should handle memory errors gracefully
         expect(error.message).toContain('memory');
         loggers.stopHook.log('Expected memory error handled gracefully:', error.message);
@@ -630,13 +630,13 @@ describe('RAG System Performance And Load Testing', () => {
 
         for (const queryTest of queryTests) {
           const _queryStartTime = Date.now();
-          const RESULT = await queryTest.query();
+          const result = await queryTest.query();
           const _queryEndTime = Date.now();
 
           const QUERY_TIME = queryEndTime - queryStartTime;
           loggers.stopHook.log(`${queryTest.name}: ${queryTime}ms`);
 
-          expect(RESULT.success).toBe(true);
+          expect(result.success).toBe(true);
           expect(queryTime).toBeLessThan(2000); // Under 2 seconds
         }
 
@@ -667,7 +667,7 @@ describe('RAG System Performance And Load Testing', () => {
           try {
             const _queryStartTime = Date.now();
 
-            const RESULT = await ragSystem.searchLessons(
+            const result = await ragSystem.searchLessons(
               `connection test query ${connId}-${i}`,
               { limit: 5 }
             );
@@ -676,9 +676,9 @@ describe('RAG System Performance And Load Testing', () => {
             const QUERY_TIME = queryEndTime - queryStartTime;
 
             connectionResults.queryTimes.push(queryTime);
-            expect(RESULT.success).toBe(true);
+            expect(result.success).toBe(true);
 
-          } catch (error) {
+          } catch (_error) {
             connectionResults.errors.push(error);
           }
         }

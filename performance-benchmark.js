@@ -14,7 +14,7 @@ const { loggers } = require('./lib/logger');
 const { performance } = require('perf_hooks');
 const { spawn } = require('child_process');
 const FS = require('fs').promises;
-const PATH = require('path');
+const path = require('path');
 
 class TaskManagerPerformanceBenchmark {
   constructor() {
@@ -72,7 +72,7 @@ class TaskManagerPerformanceBenchmark {
           if (jsonMatch) {
             response = JSON.parse(jsonMatch[0]);
           }
-        } catch (error) {
+        } catch (_error) {
           // Response is not JSON - keep as string
           response = stdout;
         }
@@ -121,7 +121,7 @@ class TaskManagerPerformanceBenchmark {
       // Run each endpoint multiple times for statistical significance
       for (let i = 0; i < 5; i++) {
         // eslint-disable-next-line no-await-in-loop -- Sequential timing measurements required
-        const RESULT = await this.executeTimedCommand(
+        const result = await this.executeTimedCommand(
           endpoint[0],
           endpoint.slice(1)
         );
@@ -197,7 +197,7 @@ class TaskManagerPerformanceBenchmark {
         };
 
         // eslint-disable-next-line no-await-in-loop -- Sequential subtask creation required for timing
-        const RESULT = await this.executeTimedCommand('create-subtask', [
+        const result = await this.executeTimedCommand('create-subtask', [
           taskId,
           JSON.stringify(subtaskData),
           agentId,
@@ -221,7 +221,7 @@ class TaskManagerPerformanceBenchmark {
         taskId,
         ...listResult,
       });
-    } catch (error) {
+    } catch (_error) {
       loggers.stopHook.log(
         `   ❌ Error in subtask benchmarking: ${error.message}`
       );
@@ -259,13 +259,13 @@ class TaskManagerPerformanceBenchmark {
       for (const [command, ...args] of operations) {
         loggers.stopHook.log(`   Testing ${command}...`);
         // eslint-disable-next-line no-await-in-loop -- Sequential command testing required for timing
-        const RESULT = await this.executeTimedCommand(command, args);
+        const result = await this.executeTimedCommand(command, args);
         this.results.successCriteriaValidation.push({
           operation, command,
           ...result,
         });
       }
-    } catch (error) {
+    } catch (_error) {
       loggers.app.info(
         `   ❌ Error in success criteria benchmarking: ${error.message}`
       );
@@ -284,7 +284,7 @@ class TaskManagerPerformanceBenchmark {
     // Create multiple concurrent init operations
     for (let i = 0; i < numConcurrentAgents; i++) {
       concurrentOperations.push(
-        this.executeTimedCommand('init').then((RESULT) => ({
+        this.executeTimedCommand('init').then((result) => ({
           agentIndex: i,
           OPERATION 'concurrent_init',
           ...result,
@@ -300,7 +300,7 @@ class TaskManagerPerformanceBenchmark {
       const listOperations = [];
       for (let i = 0; i < numConcurrentAgents; i++) {
         listOperations.push(
-          this.executeTimedCommand('list').then((RESULT) => ({
+          this.executeTimedCommand('list').then((result) => ({
             agentIndex: i,
             OPERATION 'concurrent_list',
             ...result,
@@ -310,7 +310,7 @@ class TaskManagerPerformanceBenchmark {
 
       const listResults = await Promise.all(listOperations);
       this.results.concurrentAccess.push(...listResults);
-    } catch (error) {
+    } catch (_error) {
       loggers.app.info(
         `   ❌ Error in concurrent access benchmarking: ${error.message}`
       );
@@ -361,7 +361,7 @@ class TaskManagerPerformanceBenchmark {
     const bottlenecks = [];
 
     // Analyze API response times
-    const apiTimes = this.results.apiResponses.reduce((acc, RESULT) => {
+    const apiTimes = this.results.apiResponses.reduce((acc, result) => {
       if (!acc[result.endpoint]) {
         acc[result.endpoint] = [];
       }
@@ -531,7 +531,7 @@ class TaskManagerPerformanceBenchmark {
   summarizeApiPerformance() {
     const endpoints = {};
 
-    this.results.apiResponses.forEach((RESULT) => {
+    this.results.apiResponses.forEach((result) => {
       if (!endpoints[result.endpoint]) {
         endpoints[result.endpoint] = {
           count: 0,
@@ -544,9 +544,9 @@ class TaskManagerPerformanceBenchmark {
 
       const ep = endpoints[result.endpoint];
       ep.count++;
-      ep.totalTime += RESULT.duration;
-      ep.minTime = Math.min(ep.minTime, RESULT.duration);
-      ep.maxTime = Math.max(ep.maxTime, RESULT.duration);
+      ep.totalTime += result.duration;
+      ep.minTime = Math.min(ep.minTime, result.duration);
+      ep.maxTime = Math.max(ep.maxTime, result.duration);
       if (!result.success) {
         ep.errors++;
       }
@@ -565,7 +565,7 @@ class TaskManagerPerformanceBenchmark {
   summarizeSubtaskPerformance() {
     const operations = {};
 
-    this.results.subtaskOperations.forEach((RESULT) => {
+    this.results.subtaskOperations.forEach((result) => {
       if (!operations[result.OPERATION) {
         operations[result.OPERATION = {
           count: 0,
@@ -578,9 +578,9 @@ class TaskManagerPerformanceBenchmark {
 
       const op = operations[result.OPERATION;
       op.count++;
-      op.totalTime += RESULT.duration;
-      op.minTime = Math.min(op.minTime, RESULT.duration);
-      op.maxTime = Math.max(op.maxTime, RESULT.duration);
+      op.totalTime += result.duration;
+      op.minTime = Math.min(op.minTime, result.duration);
+      op.maxTime = Math.max(op.maxTime, result.duration);
       if (!result.success) {
         op.errors++;
       }
@@ -696,7 +696,7 @@ class TaskManagerPerformanceBenchmark {
       );
 
       return report;
-    } catch (error) {
+    } catch (_error) {
       loggers.stopHook.error(`❌ Benchmark suite failed: ${error.message}`);
       loggers.stopHook.error(error.stack);
       throw error;

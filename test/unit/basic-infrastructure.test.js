@@ -170,7 +170,7 @@ describe('Basic Testing Infrastructure', () => {
         },
       );
 
-      expect(RESULT).toBe('test-complete');
+      expect(result).toBe('test-complete');
       expect(duration).toBeGreaterThan(delay - 10); // Allow some variance
       expect(duration).toBeLessThan(delay + 50); // Allow some variance
     });
@@ -188,7 +188,7 @@ describe('Basic Testing Infrastructure', () => {
         },
       );
 
-      expect(RESULT).toBe(1000);
+      expect(result).toBe(1000);
       expect(memoryDelta).toBeDefined();
       expect(typeof memoryDelta.heapUsed).toBe('number');
       expect(typeof memoryDelta.rss).toBe('number');
@@ -213,14 +213,14 @@ describe('Basic Testing Infrastructure', () => {
       }); // 50ms
       const timeout = 100; // 100ms timeout
 
-      const RESULT = await TestExecution.withTimeout(promise, timeout);
-      expect(RESULT).toBe('success');
+      const result = await TestExecution.withTimeout(promise, timeout);
+      expect(result).toBe('success');
     });
 
     test('should retry failed operations', async () => {
       let attempts = 0;
 
-      const RESULT = await TestExecution.retry(
+      const result = await TestExecution.retry(
         () => {
           attempts++;
           if (attempts < 3) {
@@ -232,7 +232,7 @@ describe('Basic Testing Infrastructure', () => {
         10,
       ); // 5 max retries, 10ms delay
 
-      expect(RESULT).toBe('success-after-retries');
+      expect(result).toBe('success-after-retries');
       expect(attempts).toBe(3);
     });
 

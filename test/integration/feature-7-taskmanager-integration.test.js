@@ -1,5 +1,5 @@
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 
 // Integration tests for Feature 7: Custom Validation Rules with TaskManager API
 // Feature ID: feature_1758946487032_0f9c9de60c88
@@ -67,7 +67,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch (error) {
+          } catch (_error) {
             // Silently fail for missing or invalid custom rules
           }
 
@@ -112,7 +112,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch (error) {
+          } catch (_error) {
             // Silently fail for missing or invalid custom rules
           }
 
@@ -176,7 +176,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch (error) {
+          } catch (_error) {
             // Silently fail
           }
 
@@ -203,7 +203,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 if (customRule) {
                   try {
                     const timeout = customRule.timeout || 60000;
-                    const RESULT = execSync(customRule.command, {
+                    const result = execSync(customRule.command, {
                       cwd: mockProjectRoot,
                       timeout,
                       encoding: 'utf8',
@@ -214,7 +214,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                       const { outputContains, outputNotContains } =
                         customRule.successCriteria;
 
-                      if (outputContains && !RESULT.includes(outputContains)) {
+                      if (outputContains && !result.includes(outputContains)) {
                         return {
                           success: false,
                           error: `Custom validation '${customRule.name}' failed: expected output not found`,
@@ -223,7 +223,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
                       if (
                         outputNotContains &&
-                        RESULT.includes(outputNotContains)
+                        result.includes(outputNotContains)
                       ) {
                         return {
                           success: false,
@@ -236,7 +236,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                       success: true,
                       details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                     };
-                  } catch (error) {
+                  } catch (_error) {
                     return {
                       success: false,
                       error: `Custom validation '${customRule.name}' failed: ${error.message}`,
@@ -250,7 +250,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 };
               }
             }
-          } catch (error) {
+          } catch (_error) {
             return { success: false, error: error.message };
           }
         },
@@ -295,7 +295,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 };
               }
             }
-          } catch (error) {
+          } catch (_error) {
             return { success: false, error: error.message };
           }
         },
@@ -355,7 +355,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch (error) {
+          } catch (_error) {
             // Silently fail
           }
 
@@ -374,7 +374,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
             if (customRule) {
               try {
                 const timeout = customRule.timeout || 60000;
-                const RESULT = execSync(customRule.command, {
+                const result = execSync(customRule.command, {
                   cwd: mockProjectRoot,
                   timeout,
                   encoding: 'utf8',
@@ -384,7 +384,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   success: true,
                   details: `Custom validation '${customRule.name}' passed`,
                 };
-              } catch (error) {
+              } catch (_error) {
                 return {
                   success: false,
                   error: `Custom validation '${customRule.name}' failed: ${error.message}`,
@@ -396,7 +396,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               success: false,
               error: `Unknown validation criterion: ${criterion}`,
             };
-          } catch (error) {
+          } catch (_error) {
             return { success: false, error: error.message };
           }
         },
@@ -462,7 +462,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch (error) {
+          } catch (_error) {
             // Silently fail
           }
 
@@ -489,7 +489,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   });
                 }
 
-                const RESULT = execSync(customRule.command, {
+                const result = execSync(customRule.command, {
                   cwd: mockProjectRoot,
                   timeout,
                   encoding: 'utf8',
@@ -500,14 +500,14 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   const { outputContains, outputNotContains } =
                     customRule.successCriteria;
 
-                  if (outputContains && !RESULT.includes(outputContains)) {
+                  if (outputContains && !result.includes(outputContains)) {
                     return {
                       success: false,
                       error: `Custom validation '${customRule.name}' failed: expected output not found`,
                     };
                   }
 
-                  if (outputNotContains && RESULT.includes(outputNotContains)) {
+                  if (outputNotContains && result.includes(outputNotContains)) {
                     return {
                       success: false,
                       error: `Custom validation '${customRule.name}' failed: forbidden output detected`,
@@ -519,7 +519,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   success: true,
                   details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                 };
-              } catch (error) {
+              } catch (_error) {
                 return {
                   success: false,
                   error: `Custom validation '${customRule.name}' failed: ${error.message}`,
@@ -531,7 +531,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               success: false,
               error: `Unknown validation criterion: ${criterion}`,
             };
-          } catch (error) {
+          } catch (_error) {
             return { success: false, error: error.message };
           }
         },
@@ -593,7 +593,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch (error) {
+          } catch (_error) {
             // Silently fail
           }
 
@@ -612,7 +612,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
             if (customRule) {
               try {
                 const timeout = customRule.timeout || 60000;
-                const RESULT = execSync(customRule.command, {
+                const result = execSync(customRule.command, {
                   cwd: mockProjectRoot,
                   timeout,
                   encoding: 'utf8',
@@ -630,14 +630,14 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     };
                   }
 
-                  if (outputContains && !RESULT.includes(outputContains)) {
+                  if (outputContains && !result.includes(outputContains)) {
                     return {
                       success: false,
                       error: `Custom validation '${customRule.name}' failed: expected output not found`,
                     };
                   }
 
-                  if (outputNotContains && RESULT.includes(outputNotContains)) {
+                  if (outputNotContains && result.includes(outputNotContains)) {
                     return {
                       success: false,
                       error: `Custom validation '${customRule.name}' failed: forbidden output detected`,
@@ -649,7 +649,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   success: true,
                   details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                 };
-              } catch (error) {
+              } catch (_error) {
                 return {
                   success: false,
                   error: `Custom validation '${customRule.name}' failed: ${error.message}`,
@@ -661,7 +661,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               success: false,
               error: `Unknown validation criterion: ${criterion}`,
             };
-          } catch (error) {
+          } catch (_error) {
             return { success: false, error: error.message };
           }
         },
@@ -723,7 +723,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch (error) {
+          } catch (_error) {
             // Silently fail
           }
 
@@ -742,7 +742,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
             if (customRule) {
               try {
                 const timeout = customRule.timeout || 60000;
-                const RESULT = execSync(customRule.command, {
+                const result = execSync(customRule.command, {
                   cwd: mockProjectRoot,
                   timeout,
                   encoding: 'utf8',
@@ -760,14 +760,14 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     };
                   }
 
-                  if (outputContains && !RESULT.includes(outputContains)) {
+                  if (outputContains && !result.includes(outputContains)) {
                     return {
                       success: false,
                       error: `Custom validation '${customRule.name}' failed: expected output not found`,
                     };
                   }
 
-                  if (outputNotContains && RESULT.includes(outputNotContains)) {
+                  if (outputNotContains && result.includes(outputNotContains)) {
                     return {
                       success: false,
                       error: `Custom validation '${customRule.name}' failed: forbidden output detected`,
@@ -779,7 +779,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                   success: true,
                   details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
                 };
-              } catch (error) {
+              } catch (_error) {
                 return {
                   success: false,
                   error: `Custom validation '${customRule.name}' failed: ${error.message}`,
@@ -791,7 +791,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               success: false,
               error: `Unknown validation criterion: ${criterion}`,
             };
-          } catch (error) {
+          } catch (_error) {
             return { success: false, error: error.message };
           }
         },
@@ -844,7 +844,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch (error) {
+          } catch (_error) {
             // Silently fail
           }
 
@@ -892,7 +892,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 );
               }
             }
-          } catch (error) {
+          } catch (_error) {
             // Silently fail
           }
 

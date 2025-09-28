@@ -9,7 +9,7 @@ const { loggers } = require('../lib/logger');
  * @version 1.0.0
  */
 
-const PATH = require('path');
+const path = require('path');
 const FS = require('fs').promises;
 
 // Global test configuration
@@ -141,7 +141,7 @@ global.RAG_TEST_UTILS = {
    */
   measureTime: async (fn) => {
     const start = process.hrtime.bigint();
-    const RESULT = await fn();
+    const result = await fn();
     const end = process.hrtime.bigint();
     const duration = Number(end - start) / 1000000; // Convert to milliseconds
     return { result, duration };
@@ -196,7 +196,7 @@ global.RAG_TEST_UTILS = {
   cleanupTestDirectory: async (dirPath) => {
     try {
       await FS.rm(dirPath, { recursive: true, force: true });
-    } catch (error) {
+    } catch (_error) {
       loggers.stopHook.warn(`Cleanup warning for ${dirPath}:`, error.message);
     }
   },
@@ -260,7 +260,7 @@ afterEach(async () => {
         }),
       ),
     );
-  } catch (error) {
+  } catch (_error) {
     // Ignore cleanup errors
   }
 });

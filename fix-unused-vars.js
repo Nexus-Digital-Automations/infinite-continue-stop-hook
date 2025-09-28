@@ -72,7 +72,7 @@ const patterns = [
   { search: /\(filePath\)/g, replace: '(_filePath)' },
   { search: /\(p1\)/g, replace: '(_p1)' },
   { search: /\(agentId\)/g, replace: '(_AGENT_ID)' },
-  { search: /\(result\)/g, replace: '(RESULT)' },
+  { search: /\(result\)/g, replace: '(result)' },
   { search: /\(schema\)/g, replace: '(_schema)' },
   { search: /\(AGENT_ID\)/g, replace: '(_AGENT_ID)' },
   { search: /\(PATH\)/g, replace: '(PATH)' },
@@ -85,7 +85,7 @@ const patterns = [
   { search: /, filePath\)/g, replace: ', _filePath)' },
   { search: /, p1\)/g, replace: ', _p1)' },
   { search: /, agentId\)/g, replace: ', _AGENT_ID)' },
-  { search: /, result\)/g, replace: ', RESULT)' },
+  { search: /, result\)/g, replace: ', result)' },
   { search: /, schema\)/g, replace: ', _schema)' },
   { search: /, AGENT_ID\)/g, replace: ', _AGENT_ID)' },
   { search: /, PATH\)/g, replace: ', PATH)' },
@@ -97,7 +97,7 @@ const patterns = [
   // Catch patterns for specific cases
   { search: /catch \(error\)/g, replace: 'catch (error)' },
   { search: /catch\(error\)/g, replace: 'catch(error)' },
-  { search: /} catch \(error\) {/g, replace: '} catch (error) {' },
+  { search: /} catch \(error\) {/g, replace: '} catch (_error) {' },
   { search: /} catch\(error\) {/g, replace: '} catch(error) {' },
   { search: /catch \(parseError\)/g, replace: 'catch (_parseError)' },
   { search: /catch\(parseError\)/g, replace: 'catch(_parseError)' },
@@ -137,7 +137,7 @@ function fixFileUnusedVars(_filePath) {
           content = newContent;
           modified = true;
           console.log(
-            `  ✓ Applied pattern in ${path.relative(process.cwd(), _filePath)}`,
+            `  ✓ Applied pattern in ${path.relative(process.cwd(), _filePath)}`
           );
         }
       }
@@ -149,7 +149,7 @@ function fixFileUnusedVars(_filePath) {
     }
 
     return false;
-  } catch (error) {
+  } catch (_error) {
     console.error(`  ✗ Error processing ${filePath}:`, error.message);
     return false;
   }
@@ -181,14 +181,14 @@ function main() {
   try {
     execSync('npm run lint', { stdio: 'pipe' });
     console.log('✅ All linting errors resolved!');
-  } catch (error) {
+  } catch (_error) {
     console.log(
-      '⚠️  Some linting errors may remain. Running detailed check...',
+      '⚠️  Some linting errors may remain. Running detailed check...'
     );
     try {
       const output = execSync(
         'npm run lint 2>&1 | grep "no-unused-vars" | head -20',
-        { encoding: 'utf8' },
+        { encoding: 'utf8' }
       );
       if (output.trim()) {
         console.log('Remaining no-unused-vars errors:');

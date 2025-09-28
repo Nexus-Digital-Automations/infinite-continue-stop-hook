@@ -9,7 +9,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { execSync } = require('child_process');
 const { loggers } = require('../lib/logger');
 

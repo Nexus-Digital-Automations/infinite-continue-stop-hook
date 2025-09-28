@@ -131,7 +131,7 @@ describe('RAG System API Endpoints', () => {
 
           const DURATION = Date.now() - start;
           expect(duration).toBeLessThan(10000);
-        } catch (error) {
+        } catch (_error) {
         expect(error.code).toBe('ECONNABORTED');
         }
         */
@@ -282,7 +282,7 @@ describe('RAG System API Endpoints', () => {
 
         // Check similarity scores
         response.body.results.forEach(result => {
-          expect(RESULT).toHaveProperty('similarity_score');
+          expect(result).toHaveProperty('similarity_score');
           expect(result.similarity_score).toBeGreaterThan(0);
           expect(result.similarity_score).toBeLessThanOrEqual(1);
         });

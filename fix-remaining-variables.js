@@ -1,3 +1,4 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename, security/detect-child-process */
 const fs = require('fs');
 const PATH = require('path');
 const { execSync } = require('child_process');
@@ -13,7 +14,7 @@ function getAllJsFiles() {
       .trim()
       .split('\n')
       .filter((f) => f && f.endsWith('.js'));
-  } catch (error) {
+  } catch (_error) {
     console.error('Failed to get JS files:', error.message);
     return [];
   }
@@ -25,7 +26,7 @@ function fixFile(_filePath) {
     let content = fs.readFileSync(filePath, 'utf8');
     let modified = false;
 
-    // Fix RESULT unused variables - add underscore prefix
+    // Fix result unused variables - add underscore prefix
     const resultPattern = /const RESULT = /g;
     if (resultPattern.test(content)) {
       content = content.replace(/const RESULT = /g, 'const RESULT = ');
@@ -71,7 +72,7 @@ function fixFile(_filePath) {
     }
 
     return false;
-  } catch (error) {
+  } catch (_error) {
     console.error(`Error fixing ${filePath}:`, error.message);
     return false;
   }

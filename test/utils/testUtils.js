@@ -9,7 +9,7 @@
  * @since 2025-09-23
  */
 
-const PATH = require('path');
+const path = require('path');
 const FS = require('fs');
 const childProcess = require('child_process');
 const { loggers } = require('../../lib/logger');
@@ -99,9 +99,9 @@ class APIExecutor {
           if (jsonStart > 0) {
             jsonString = jsonString.substring(jsonStart);
           }
-          const RESULT = JSON.parse(jsonString);
-          resolve(RESULT);
-        } catch (error) {
+          const result = JSON.parse(jsonString);
+          resolve(result);
+        } catch (_error) {
           try {
             const stderrJson = JSON.parse(stderr.trim());
             resolve(stderrJson);
@@ -127,7 +127,7 @@ class APIExecutor {
    */
   static async initializeTestAgent(agentId = null) {
     const testAgentId = agentId || TestIdGenerator.generateAgentId();
-    const RESULT = await this.execAPI('initialize', [testAgentId], {
+    const result = await this.execAPI('initialize', [testAgentId], {
       silent: true,
     });
     return { agentId: testAgentId, result };
@@ -350,7 +350,7 @@ class TestExecution {
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential retry attempts required
         return await fn();
-      } catch (error) {
+      } catch (_error) {
 
         lastError = error;
         if (i < maxRetries - 1) {
@@ -385,7 +385,7 @@ class TestExecution {
 class PerformanceUtils {
   static async measureTime(fn) {
     const start = process.hrtime.bigint();
-    const RESULT = await fn();
+    const result = await fn();
     const end = process.hrtime.bigint();
     const duration = Number(end - start) / 1000000; // Convert to milliseconds
 
@@ -394,7 +394,7 @@ class PerformanceUtils {
 
   static async measureMemory(fn) {
     const before = process.memoryUsage();
-    const RESULT = await fn();
+    const result = await fn();
     const after = process.memoryUsage();
 
     const memoryDelta = {

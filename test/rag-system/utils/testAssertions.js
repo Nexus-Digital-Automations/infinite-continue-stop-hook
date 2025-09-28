@@ -44,29 +44,29 @@ class TestAssertions {
    * Assert valid search result structure And content
    * @param {Object} result - Search result to validate
    */
-  assertValidSearchResult(RESULT) {
+  assertValidSearchResult(result) {
     // Basic structure validation
-    expect(RESULT).toBeInstanceOf(Object);
-    expect(RESULT).toHaveProperty('vectorId');
-    expect(RESULT).toHaveProperty('similarity');
+    expect(result).toBeInstanceOf(Object);
+    expect(result).toHaveProperty('vectorId');
+    expect(result).toHaveProperty('similarity');
 
     // Similarity validation
-    expect(typeof RESULT.similarity).toBe('number');
+    expect(typeof result.similarity).toBe('number');
     expect(result.similarity).toBeGreaterThan(0);
     expect(result.similarity).toBeLessThanOrEqual(1);
 
     // Metadata validation
     if (result.title) {
-      expect(typeof RESULT.title).toBe('string');
+      expect(typeof result.title).toBe('string');
       expect(result.title.length).toBeGreaterThan(0);
     }
 
     if (result.description) {
-      expect(typeof RESULT.description).toBe('string');
+      expect(typeof result.description).toBe('string');
     }
 
     if (result.content_type) {
-      expect(typeof RESULT.content_type).toBe('string');
+      expect(typeof result.content_type).toBe('string');
       expect([
         'error',
         'features',
@@ -569,7 +569,7 @@ class TestAssertions {
         throw new Error(
           `Function should have thrown an error for input: ${JSON.stringify(invalidInput)}`,
         );
-      } catch (error) {
+      } catch (_error) {
         // This is expected - function should handle invalid input gracefully
         expect(error).toBeInstanceOf(Error);
         expect(error.message).toBeDefined();

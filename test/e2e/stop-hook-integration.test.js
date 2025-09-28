@@ -164,7 +164,7 @@ describe.skip('Stop Hook Integration E2E', () => {
 
         // Check for proper blocking behavior
         continueResults.forEach((result, _index) => {
-          expect(RESULT).toBeTruthy();
+          expect(result).toBeTruthy();
           expect(result.blocked).toBe(true); // Should always block in infinite mode
           expect(result.success).toBe(true); // Success means it properly blocked
 

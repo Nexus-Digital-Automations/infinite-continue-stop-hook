@@ -13,7 +13,7 @@ const rootDir = '/Users/jeremyparker/infinite-continue-stop-hook';
 // Targeted fixes for specific patterns causing errors
 const targetedFixes = [
   // Fix result variable inconsistencies
-  { pattern: /const RESULT = ([^;]+);/g, replacement: 'const RESULT = $1;' },
+  { pattern: /const result = ([^;]+);/g, replacement: 'const result = $1;' },
 
   // Fix specific variable naming issues
   { pattern: /const AGENT_ID = /g, replacement: 'const AGENT_ID = ' },
@@ -23,7 +23,7 @@ const targetedFixes = [
   // Fix error issues in catch blocks - ensure error parameter is present
   {
     pattern: /} catch \{\s*[^}]*error/g,
-    replacement: (match) => match.replace('catch {', 'catch (error) {'),
+    replacement: (match) => match.replace('catch {', 'catch (_error) {'),
   },
 
   // Fix parseError -> error
@@ -101,7 +101,7 @@ function getErrorFiles() {
     });
 
     return Array.from(errorFiles);
-  } catch (error) {
+  } catch (_error) {
     return error.stdout
       ? error.stdout
           .split('\n')

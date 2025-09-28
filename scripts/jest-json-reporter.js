@@ -12,7 +12,7 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 
 class JestJsonReporter {
   constructor(globalConfig, options) {
@@ -96,7 +96,7 @@ class JestJsonReporter {
 
   processTestResults(testResults) {
     return testResults.map((testResult) => {
-      const RESULT = {
+      const result = {
         testFilePath: testResult.testFilePath,
         displayName: testResult.displayName,
         status: testResult.numFailingTests > 0 ? 'failed' : 'passed',
@@ -120,7 +120,7 @@ class JestJsonReporter {
       };
 
       if (this.options.includeTestCases) {
-        RESULT.testCases = testResult.testResults.map((testCase) => ({
+        result.testCases = testResult.testResults.map((testCase) => ({
           ancestorTitles: testCase.ancestorTitles,
           title: testCase.title,
           fullName: testCase.fullName,
@@ -132,7 +132,7 @@ class JestJsonReporter {
       }
 
       if (this.options.includeAssertionResults && testResult.testResults) {
-        RESULT.failureDetails = testResult.testResults
+        result.failureDetails = testResult.testResults
           .filter((testCase) => testCase.status === 'failed')
           .map((testCase) => ({
             title: testCase.title,
@@ -147,14 +147,14 @@ class JestJsonReporter {
         testResult.console &&
         testResult.console.length > 0
       ) {
-        RESULT.consoleOutput = testResult.console.map((log) => ({
+        result.consoleOutput = testResult.console.map((log) => ({
           type: log.type,
           message: log.message,
           origin: log.origin,
         }));
       }
 
-      return RESULT;
+      return result;
     });
   }
 

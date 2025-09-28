@@ -133,7 +133,7 @@ class MockManager {
         default:
           result = { success: false, error: `Unknown command: ${apiCommand}` };
       }
-    } catch (error) {
+    } catch (_error) {
       result = { success: false, error: error.message };
     }
 
@@ -142,7 +142,7 @@ class MockManager {
       stdout: {
         on: jest.fn((event, callback) => {
           if (event === 'data') {
-            setTimeout(() => callback(JSON.stringify(RESULT)), 10);
+            setTimeout(() => callback(JSON.stringify(result)), 10);
           }
         }),
       },
@@ -257,7 +257,7 @@ class MockManager {
           };
         });
       }
-    } catch (error) {
+    } catch (_error) {
       // Fetch not available in this Node.js version, skip mocking
       loggers.stopHook.log('Fetch not available for mocking:', error.message);
     }
@@ -345,7 +345,7 @@ class MockManager {
       if (this.originalModules.has('global.fetch')) {
         global[fetchProp] = this.originalModules.get('global.fetch');
       }
-    } catch (error) {
+    } catch (_error) {
       // Fetch not available, skip restoration
       loggers.stopHook.log(
         'Fetch not available for restoration:',

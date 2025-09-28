@@ -14,7 +14,7 @@
  */
 
 const FS = require('fs').promises;
-const PATH = require('path');
+const path = require('path');
 const { spawn } = require('child_process');
 const { loggers } = require('../lib/logger');
 
@@ -75,10 +75,10 @@ function execCommand(command, args = [], options = {}) {
 async function execAPI(command, args = []) {
   const allArgs = [API_PATH, command, ...args];
 
-  const RESULT = await execCommand('timeout', [`60s`, 'node', ...allArgs]);
+  const result = await execCommand('timeout', [`60s`, 'node', ...allArgs]);
 
   if (!result.success) {
-    loggers.stopHook.error(`API command failed for ${command}:`, RESULT.stderr);
+    loggers.stopHook.error(`API command failed for ${command}:`, result.stderr);
     throw new Error(`API command failed: ${result.stderr}`);
   }
 
@@ -87,12 +87,12 @@ async function execAPI(command, args = []) {
   } catch {
     loggers.app.error(
       'Failed to parse API response:',
-      RESULT.stdout,
+      result.stdout,
       'Error:',
       error.message
     );
     // Some commands return plain text, not JSON
-    return { success: true, output: RESULT.stdout, raw: true };
+    return { success: true, output: result.stdout, raw: true };
   }
 }
 

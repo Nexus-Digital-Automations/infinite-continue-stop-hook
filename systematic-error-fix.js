@@ -4,7 +4,7 @@
  */
 
 const fs = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { execSync } = require('child_process');
 const { loggers } = require('./lib/logger');
 
@@ -22,7 +22,7 @@ const systematicFixes = [
   { pattern: /const AGENT_ID = /g, replacement: 'const AGENT_ID = ' },
   { pattern: /const CONFIG_PATH = /g, replacement: 'const CONFIG_PATH = ' },
   { pattern: /const EXEC_SYNC = /g, replacement: 'const EXEC_SYNC = ' },
-  { pattern: /const RESULT = /g, replacement: 'const RESULT = ' },
+  { pattern: /const result = /g, replacement: 'const result = ' },
 
   // Fix specific undefined variable names
   { pattern: /\bparseError\b/g, replacement: 'error' },
@@ -58,7 +58,7 @@ function filePath(_$2) {`);
     });
 
     // Fix catch blocks with undefined error variables
-    // Pattern: catch (error) { ... error.something ... }
+    // Pattern: catch (_error) { ... error.something ... }
     const catchBlockRegex =
       /catch\s*\(\s*\)\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g;
     let match;
@@ -115,7 +115,7 @@ function getAllJsFiles() {
       .trim()
       .split('\n')
       .filter((f) => f);
-  } catch (error) {
+  } catch (_error) {
     loggers.app.error('Failed to get JS files:', { error: error.message });
     return [];
   }
@@ -143,7 +143,7 @@ try {
     encoding: 'utf8',
   });
   loggers.app.info('🎉 ALL LINTING ERRORS RESOLVED!');
-} catch (error) {
+} catch (_error) {
   const output = error.stdout || error.message;
   const errorMatches = output.match(/(\d+) errors/);
   const warningMatches = output.match(/(\d+) warnings/);

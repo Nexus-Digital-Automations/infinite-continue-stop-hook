@@ -138,7 +138,7 @@ describe('Multi-Agent Scenarios E2E', () => {
         }
 
         const featureResults = await Promise.all(featurePromises);
-        const featureIds = featureResults.map((RESULT) => {
+        const featureIds = featureResults.map((result) => {
           const match = result.result.stdout.match(/Feature ID: (\w+)/);
           return match[1];
         });
@@ -229,7 +229,7 @@ describe('Multi-Agent Scenarios E2E', () => {
           }
 
           // Each result should be an array of successful operations
-          expect(Array.isArray(RESULT)).toBe(true);
+          expect(Array.isArray(result)).toBe(true);
           expect(result.length).toBe(3);
 
           result.forEach((operation, opIndex) => {
@@ -343,7 +343,7 @@ describe('Multi-Agent Scenarios E2E', () => {
         ]);
 
         // Both rejection attempts should fail
-        rejectionAttempts.forEach((RESULT) => {
+        rejectionAttempts.forEach((result) => {
           if (result.status === 'fulfilled') {
             E2EAssertions.assertCommandFailure(
               result.value,
@@ -456,7 +456,7 @@ describe('Multi-Agent Scenarios E2E', () => {
 
         // Step 3: Validate That stop hook integration works across multiple streams
         [result1, result2, result3].forEach((result, _index) => {
-          expect(Array.isArray(RESULT)).toBe(true);
+          expect(Array.isArray(result)).toBe(true);
           expect(result.length).toBeGreaterThan(0);
 
           // At least some iterations should complete
@@ -513,7 +513,7 @@ describe('Multi-Agent Scenarios E2E', () => {
                 `Contention OPERATION${index}`,
               );
               successfulOperations++;
-            } catch (error) {
+            } catch (_error) {
               console.warn(
                 `Operation ${index} failed validation: ${error.message}`,
               );

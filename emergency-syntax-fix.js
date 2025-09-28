@@ -5,7 +5,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 
 class EmergencySyntaxFixer {
   constructor() {
@@ -33,7 +33,7 @@ class EmergencySyntaxFixer {
         console.log('\n❌ Errors encountered:');
         this.errors.forEach((error) => console.log(`  - ${error}`));
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('❌ Emergency fix failed:', error.message);
       throw error;
     }
@@ -67,7 +67,7 @@ class EmergencySyntaxFixer {
 
   processFile(_filePath) {
     try {
-      const content = FS.readFileSync(filePath, 'utf8');
+      const content = FS.readFileSync(_filePath, 'utf8');
       let fixedContent = content;
       let hasChanges = false;
 
@@ -119,7 +119,7 @@ class EmergencySyntaxFixer {
         },
         {
           pattern: /const UNUSED = require\('path'\)/,
-          replacement: "const PATH = require('path')",
+          replacement: "const path = require('path')",
         },
         {
           pattern: /const UNUSED = require\('sqlite3'\)/,
@@ -144,7 +144,7 @@ class EmergencySyntaxFixer {
         FS.writeFileSync(filePath, fixedContent, 'utf8');
         this.fixedFiles.push(_filePath);
       }
-    } catch (error) {
+    } catch (_error) {
       this.errors.push(`${filePath}: ${error.message}`);
     }
   }

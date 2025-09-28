@@ -6,7 +6,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { execSync } = require('child_process');
 
 // Configuration
@@ -77,7 +77,7 @@ function rootDir(_$2) {
  * Analyze console usage in a file
  */
 function analyzeConsoleUsage(_filePath) {
-  const content = FS.readFileSync(filePath, 'utf8');
+  const content = FS.readFileSync(_filePath, 'utf8');
   const lines = content.split('\n');
 
   const usage = {
@@ -195,7 +195,7 @@ function convertConsoleCall(consoleLine, fileContext) {
 
     // Default case
     return `${indentation}${loggerInstance}.${consoleMethod.split('.')[1]}(${args});`;
-  } catch (error) {
+  } catch (_error) {
     console.warn(
       `Could not parse console call in ${fileContext.filePath}:${consoleLine.lineNumber} - keeping original`
     );
@@ -282,7 +282,7 @@ function main() {
         analysisResults.push(usage);
         totalConsoleLines += usage.consoleLines.length;
       }
-    } catch (error) {
+    } catch (_error) {
       console.warn(`⚠️  Could not analyze ${file}: ${error.message}`);
     }
   }
@@ -335,15 +335,15 @@ function main() {
 
   for (const usage of analysisResults) {
     try {
-      const RESULT = migrateFile(usage);
-      if (RESULT.success && RESULT.changes > 0) {
+      const result = migrateFile(usage);
+      if (result.success && result.changes > 0) {
         migratedFiles++;
-        totalChanges += RESULT.changes;
+        totalChanges += result.changes;
         console.log(
-          `✅ ${path.relative(rootDir, usage.filePath)}: ${RESULT.message}`
+          `✅ ${path.relative(rootDir, usage.filePath)}: ${result.message}`
         );
       }
-    } catch (error) {
+    } catch (_error) {
       console.error(`❌ Failed to migrate ${usage.filePath}: ${error.message}`);
     }
   }
@@ -361,7 +361,7 @@ function main() {
     console.log('\n🔍 Running linter to check for issues...');
     execSync('npm run lint', { stdio: 'inherit' });
     console.log('✅ Linter passed - migration successful!');
-  } catch (error) {
+  } catch (_error) {
     console.warn('⚠️  Linter found issues - you may need to fix them manually');
   }
 }

@@ -39,7 +39,7 @@ const catchBlockFixes = [
   {
     pattern: /catch\s*\(\s*\)\s*\{([^{}]*\b_error\b[^{}]*)\}/g,
     replacement: (match, _blockContent) => {
-      return match.replace(/catch\s*\(\s*\)\s*\{/, 'catch (error) {');
+      return match.replace(/catch\s*\(\s*\)\s*\{/, 'catch (_error) {');
     },
   },
 
@@ -103,7 +103,7 @@ function fixFile(_filePath) {
           original: match[0],
           replacement: match[0].replace(
             /catch\s*\(\s*\)\s*\{/,
-            'catch (error) {'
+            'catch (_error) {'
           ),
         });
       } else if (blockContent.includes('error')) {
@@ -149,7 +149,7 @@ function getAllJsFiles() {
       .trim()
       .split('\n')
       .filter((f) => f);
-  } catch (error) {
+  } catch (_error) {
     loggers.app.error('Failed to get JS files:', { error: error.message });
     return [];
   }
@@ -186,7 +186,7 @@ try {
     encoding: 'utf8',
   });
   loggers.app.info('🎉 ALL LINTING ERRORS RESOLVED!');
-} catch (error) {
+} catch (_error) {
   const output = error.stdout || error.message;
   const errorMatches = output.match(/(\d+) errors/);
   const warningMatches = output.match(/(\d+) warnings/);

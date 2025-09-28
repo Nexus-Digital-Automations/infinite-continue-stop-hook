@@ -6,7 +6,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const { loggers } = require('../lib/logger');
 
 class ConsoleToStructuredMigrator {
@@ -119,7 +119,7 @@ class ConsoleToStructuredMigrator {
 
   processFile(_filePath) {
     try {
-      const content = FS.readFileSync(filePath, 'utf8');
+      const content = FS.readFileSync(_filePath, 'utf8');
       const { content: newContent, modified } = this.migrateFileContent(
         content,
         filePath
@@ -133,7 +133,7 @@ class ConsoleToStructuredMigrator {
         });
         this.processedFiles++;
       }
-    } catch (error) {
+    } catch (_error) {
       loggers.app.error('Failed to process file', {
         filePath,
         error: error.message,
@@ -198,14 +198,14 @@ class ConsoleToStructuredMigrator {
 if (require.main === module) {
   try {
     const migrator = new ConsoleToStructuredMigrator();
-    const RESULT = migrator.migrate();
+    const result = migrator.migrate();
 
-    if (RESULT.skippedFiles > 0) {
+    if (result.skippedFiles > 0) {
       throw new Error(
-        `Migration completed with ${RESULT.skippedFiles} skipped files`
+        `Migration completed with ${result.skippedFiles} skipped files`
       );
     }
-  } catch (error) {
+  } catch (_error) {
     loggers.app.error('Migration failed', { error: error.message });
     throw new Error(`Migration failed: ${error.message}`);
   }

@@ -91,7 +91,7 @@ class ComprehensiveLintingFix {
       }
 
       return { content: newContent, hasChanges };
-    } catch (error) {
+    } catch (_error) {
       loggers.app.error(`Error processing ${filePath}:`, error.message);
       return { content: null, hasChanges: false };
     }
@@ -106,7 +106,7 @@ class ComprehensiveLintingFix {
       let newContent = content;
       let hasChanges = false;
 
-      // Pattern: } catch (error) { with no usage of error
+      // Pattern: } catch (_error) { with no usage of error
       const catchBlockPattern = /}\s*catch\s*\(\s*error\s*\)\s*\{([^}]*)\}/g;
 
       let match;
@@ -122,7 +122,7 @@ class ComprehensiveLintingFix {
       }
 
       return { content: newContent, hasChanges };
-    } catch (error) {
+    } catch (_error) {
       loggers.app.error(`Error processing ${filePath}:`, error.message);
       return { content: null, hasChanges: false };
     }
@@ -167,7 +167,7 @@ class ComprehensiveLintingFix {
       }
 
       return { content: lines.join('\n'), hasChanges };
-    } catch (error) {
+    } catch (_error) {
       loggers.app.error(
         `Error processing unused parameters in ${filePath}:`,
         error.message
@@ -184,8 +184,8 @@ class ComprehensiveLintingFix {
       const RESULT = execSync(`npm run lint -- "${filePath}" 2>&1`, {
         encoding: 'utf8',
       });
-      return RESULT.split('\n').filter((line) => line.includes('error'));
-    } catch (error) {
+      return result.split('\n').filter((line) => line.includes('error'));
+    } catch (_error) {
       return error.stdout
         ? error.stdout.split('\n').filter((line) => line.includes('error'))
         : [];
@@ -210,9 +210,9 @@ class ComprehensiveLintingFix {
 
     for (const fix of fixes) {
       const RESULT = fix();
-      if (RESULT.hasChanges && RESULT.content) {
-        FS.writeFileSync(filePath, RESULT.content);
-        currentContent = RESULT.content;
+      if (result.hasChanges && result.content) {
+        FS.writeFileSync(filePath, result.content);
+        currentContent = result.content;
         totalChanges = true;
       }
     }
@@ -287,7 +287,7 @@ class ComprehensiveLintingFix {
       loggers.app.info('\n🔍 Running final lint check...');
       try {
         execSync('npm run lint -- --quiet', { stdio: 'inherit' });
-      } catch (error) {
+      } catch (_error) {
         loggers.app.info(
           '⚠️  Some errors remain and may need manual intervention.'
         );
@@ -304,8 +304,8 @@ class ComprehensiveLintingFix {
         'npm run lint 2>&1 | grep -E "(error|warning)" | wc -l',
         { encoding: 'utf8' }
       );
-      return parseInt(RESULT.trim());
-    } catch (error) {
+      return parseInt(result.trim());
+    } catch (_error) {
       return 0;
     }
   }

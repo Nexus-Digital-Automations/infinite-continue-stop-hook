@@ -10,7 +10,7 @@
  */
 
 const FS = require('fs');
-const PATH = require('path');
+const path = require('path');
 const https = require('https');
 const { execSync } = require('child_process');
 const { loggers } = require('../lib/logger');
@@ -626,7 +626,7 @@ class TestNotificationSystem {
       } else {
         loggers.app.info(
           `❌ Notification ${index + 1} failed:`,
-          RESULT.reason.message
+          result.reason.message
         );
       }
     });

@@ -16,7 +16,7 @@
  */
 
 const FS = require('fs').promises;
-const PATH = require('path');
+const path = require('path');
 const {
   execAPI,
   createTestEnvironment,
@@ -119,15 +119,15 @@ describe('Agent Lifecycle Integration Tests', () => {
       const initResults = [];
       for (const agentId of agentIds) {
         // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup with ordered agent initialization
-        const RESULT = await execAPI('initialize', [agentId], {
+        const result = await execAPI('initialize', [agentId], {
           projectRoot: testDir,
         });
-        expect(RESULT.success).toBe(true);
-        initResults.push(RESULT);
+        expect(result.success).toBe(true);
+        initResults.push(result);
       }
 
       // 2. Verify all agents have unique session IDs
-      const sessionIds = initResults.map((RESULT) => result.agent.sessionId);
+      const sessionIds = initResults.map((result) => result.agent.sessionId);
       const uniqueSessionIds = new Set(sessionIds);
       expect(uniqueSessionIds.size).toBe(agentIds.length);
 
@@ -164,10 +164,10 @@ describe('Agent Lifecycle Integration Tests', () => {
       const results = await execAPIConcurrently(concurrentCommands);
 
       // 2. Verify all initializations succeeded
-      expect(results.every((RESULT) => result.success)).toBe(true);
+      expect(results.every((result) => result.success)).toBe(true);
 
       // 3. Verify all agents have unique session IDs
-      const sessionIds = results.map((RESULT) => result.agent.sessionId);
+      const sessionIds = results.map((result) => result.agent.sessionId);
       const uniqueSessionIds = new Set(sessionIds);
       expect(uniqueSessionIds.size).toBe(agentIds.length);
 
@@ -361,10 +361,10 @@ describe('Agent Lifecycle Integration Tests', () => {
       const reinitResults = await execAPIConcurrently(reinitCommands);
 
       // 3. Verify all reinitializations succeeded
-      expect(reinitResults.every((RESULT) => result.success)).toBe(true);
+      expect(reinitResults.every((result) => result.success)).toBe(true);
 
       // 4. Verify unique session IDs
-      const sessionIds = reinitResults.map((RESULT) => result.agent.sessionId);
+      const sessionIds = reinitResults.map((result) => result.agent.sessionId);
       const uniqueSessionIds = new Set(sessionIds);
       expect(uniqueSessionIds.size).toBe(agentIds.length);
 
@@ -797,11 +797,11 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       const initResults = [];
       for (const agentId of agentTeam) {
-        const RESULT = await execAPI('initialize', [agentId], {
+        const result = await execAPI('initialize', [agentId], {
           projectRoot: testDir,
         });
-        expect(RESULT.success).toBe(true);
-        initResults.push(RESULT);
+        expect(result.success).toBe(true);
+        initResults.push(result);
       }
 
       // 2. Simulate collaborative work with reinitializations

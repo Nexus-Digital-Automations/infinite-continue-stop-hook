@@ -1,3 +1,4 @@
+/* eslint-disable no-console, security/detect-non-literal-fs-filename */
 const fs = require('fs');
 const PATH = require('path');
 
@@ -17,7 +18,7 @@ function fixFinalNameIssues(_filePath) {
     if (beforeNameProp !== fixed) {
       changes++;
       console.log(
-        `Fixed Name: property declarations in ${path.basename(_filePath)}`,
+        `Fixed Name: property declarations in ${path.basename(_filePath)}`
       );
     }
 
@@ -27,7 +28,7 @@ function fixFinalNameIssues(_filePath) {
     if (beforeNameDestructure !== fixed) {
       changes++;
       console.log(
-        `Fixed { Name, config } destructuring in ${path.basename(_filePath)}`,
+        `Fixed { Name, config } destructuring in ${path.basename(_filePath)}`
       );
     }
 
@@ -43,12 +44,12 @@ function fixFinalNameIssues(_filePath) {
     const beforeNamePush = fixed;
     fixed = fixed.replace(
       /testDependencies\.push\(Name\)/g,
-      'testDependencies.push(Name)',
+      'testDependencies.push(Name)'
     );
     if (beforeNamePush !== fixed) {
       changes++;
       console.log(
-        `Fixed testDependencies.push(Name) in ${path.basename(_filePath)}`,
+        `Fixed testDependencies.push(Name) in ${path.basename(_filePath)}`
       );
     }
 
@@ -66,7 +67,7 @@ function fixFinalNameIssues(_filePath) {
     if (beforeSystemConfigName !== fixed) {
       changes++;
       console.log(
-        `Fixed systemConfig.Name references in ${path.basename(_filePath)}`,
+        `Fixed systemConfig.Name references in ${path.basename(_filePath)}`
       );
     }
 
@@ -76,7 +77,7 @@ function fixFinalNameIssues(_filePath) {
     if (beforeBaselineTestName !== fixed) {
       changes++;
       console.log(
-        `Fixed baselineTest.Name references in ${path.basename(_filePath)}`,
+        `Fixed baselineTest.Name references in ${path.basename(_filePath)}`
       );
     }
 
@@ -87,7 +88,7 @@ function fixFinalNameIssues(_filePath) {
     }
 
     return false;
-  } catch (error) {
+  } catch (_error) {
     console.error(`Error fixing ${filePath}:`, error.message);
     return false;
   }

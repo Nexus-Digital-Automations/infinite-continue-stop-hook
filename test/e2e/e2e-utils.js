@@ -10,7 +10,7 @@ const { loggers } = require('../lib/logger');
  */
 
 const FS = require('fs').promises;
-const PATH = require('path');
+const path = require('path');
 const { spawn } = require('child_process');
 const crypto = require('crypto');
 
@@ -137,7 +137,7 @@ class E2EEnvironment {
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential cleanup required for proper teardown order
         await task();
-      } catch (error) {
+      } catch (_error) {
         loggers.stopHook.warn(`Cleanup task failed: ${error.message}`);
       }
     }
@@ -158,7 +158,7 @@ class E2EEnvironment {
       } else {
         await FS.unlink(dirPath);
       }
-    } catch (error) {
+    } catch (_error) {
       if (error.code !== 'ENOENT') {
         throw error;
       }
@@ -170,7 +170,7 @@ class E2EEnvironment {
    */
   async getFeatures() {
     try {
-      const RESULT = await CommandExecutor.executeAPI('list-features', [], {
+      const result = await CommandExecutor.executeAPI('list-features', [], {
         projectRoot: this.testDir,
       });
 
@@ -189,7 +189,7 @@ class E2EEnvironment {
       } else {
         throw new Error(`TaskManager API error: ${apiResponse.error}`);
       }
-    } catch (error) {
+    } catch (_error) {
       throw new Error(
         `Failed to get features from TaskManager API: ${error.message}`,
       );
@@ -271,7 +271,7 @@ class CommandExecutor {
         }
         isResolved = true;
 
-        const RESULT = {
+        const result = {
           code,
           stdout: stdout.trim(),
           stderr: stderr.trim(),
@@ -285,7 +285,7 @@ class CommandExecutor {
           error.result = result;
           reject(error);
         } else {
-          resolve(RESULT);
+          resolve(result);
         }
       });
 
@@ -407,7 +407,7 @@ class FeatureTestHelpers {
       category: data.category,
     });
 
-    const RESULT = await CommandExecutor.executeAPI(
+    const result = await CommandExecutor.executeAPI(
       'suggest-feature',
       [jsonData],
       { projectRoot: environment.testDir },
@@ -538,7 +538,7 @@ class StopHookTestHelpers {
     for (let i = 0; i < maxIterations; i++) {
       // Test the stop hook - should always block (exit code 2) in infinite mode
       // eslint-disable-next-line no-await-in-loop -- Sequential processing required for testing infinite continue behavior over time
-      const RESULT = await CommandExecutor.executeStopHook(
+      const result = await CommandExecutor.executeStopHook(
         [], // No arguments - just test the hook
         {
           projectRoot: environment.testDir,
@@ -713,7 +713,7 @@ class E2EAssertions {
           `JSON response does not contain "${expectedText}" ${message}\nActual response: ${responseText}`,
         );
       }
-    } catch (error) {
+    } catch (_error) {
       // Fall back to text search if not JSON
       this.assertOutputContains(result, expectedText, message);
     }
@@ -740,7 +740,7 @@ class E2EAssertions {
         return responseJson.feature.id;
       }
       throw new Error('No feature ID found in response');
-    } catch (error) {
+    } catch (_error) {
       throw new Error(
         `Failed to extract feature ID: ${error.message}\nResponse: ${commandResult.stdout}`,
       );
@@ -754,7 +754,7 @@ class E2EAssertions {
     let parsed;
     try {
       parsed = JSON.parse(result.stdout);
-    } catch (error) {
+    } catch (_error) {
       throw new Error(`Response is not valid JSON: ${result.stdout}`);
     }
 

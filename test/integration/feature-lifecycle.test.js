@@ -75,7 +75,7 @@ describe('Feature Lifecycle Integration Tests', () => {
       const suggestResults = [];
       for (const featureData of features) {
         // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {
@@ -83,14 +83,14 @@ describe('Feature Lifecycle Integration Tests', () => {
           },
         );
 
-        expect(RESULT.success).toBe(true);
-        expect(RESULT.feature.status).toBe('suggested');
-        expect(RESULT.feature.category).toBe(featureData.category);
-        expect(RESULT.feature.id).toMatch(/^feature_\d+_\w+$/);
-        expect(RESULT.feature.created_at).toBeDefined();
-        expect(RESULT.feature.updated_at).toBeDefined();
+        expect(result.success).toBe(true);
+        expect(result.feature.status).toBe('suggested');
+        expect(result.feature.category).toBe(featureData.category);
+        expect(result.feature.id).toMatch(/^feature_\d+_\w+$/);
+        expect(result.feature.created_at).toBeDefined();
+        expect(result.feature.updated_at).toBeDefined();
 
-        suggestResults.push(RESULT);
+        suggestResults.push(result);
       }
 
       // 3. Verify all features are suggested
@@ -161,7 +161,7 @@ describe('Feature Lifecycle Integration Tests', () => {
       ];
 
       for (const incompleteFeature of incompleteFeatures) {
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(incompleteFeature)],
           {
@@ -169,10 +169,10 @@ describe('Feature Lifecycle Integration Tests', () => {
           },
         );
 
-        expect(RESULT.success).toBe(false);
-        expect(RESULT.error).toBeDefined();
-        expect(RESULT.error).toContain('Required field') ||
-          expect(RESULT.error).toContain('missing');
+        expect(result.success).toBe(false);
+        expect(result.error).toBeDefined();
+        expect(result.error).toContain('Required field') ||
+          expect(result.error).toContain('missing');
       }
 
       // 2. Test invalid category
@@ -256,10 +256,10 @@ describe('Feature Lifecycle Integration Tests', () => {
       const results = await execAPIConcurrently(commands);
 
       // 3. Verify all succeeded
-      expect(results.every((RESULT) => result.success)).toBe(true);
+      expect(results.every((result) => result.success)).toBe(true);
 
       // 4. Verify unique IDs
-      const featureIds = results.map((RESULT) => result.feature.id);
+      const featureIds = results.map((result) => result.feature.id);
       const uniqueIds = new Set(featureIds);
       expect(uniqueIds.size).toBe(featureCount);
 
@@ -298,15 +298,15 @@ describe('Feature Lifecycle Integration Tests', () => {
 
       const featureIds = [];
       for (const featureData of testFeatures) {
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {
             projectRoot: testDir,
           },
         );
-        expect(RESULT.success).toBe(true);
-        featureIds.push(RESULT.feature.id);
+        expect(result.success).toBe(true);
+        featureIds.push(result.feature.id);
       }
 
       // 2. Approve features with different approval data
@@ -387,15 +387,15 @@ describe('Feature Lifecycle Integration Tests', () => {
 
       const featureIds = [];
       for (const featureData of features) {
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {
             projectRoot: testDir,
           },
         );
-        expect(RESULT.success).toBe(true);
-        featureIds.push(RESULT.feature.id);
+        expect(result.success).toBe(true);
+        featureIds.push(result.feature.id);
       }
 
       // 2. Bulk approve first 10 features
@@ -531,15 +531,15 @@ describe('Feature Lifecycle Integration Tests', () => {
 
       const featureIds = [];
       for (const featureData of testFeatures) {
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {
             projectRoot: testDir,
           },
         );
-        expect(RESULT.success).toBe(true);
-        featureIds.push(RESULT.feature.id);
+        expect(result.success).toBe(true);
+        featureIds.push(result.feature.id);
       }
 
       // 2. Reject features with different reasons
@@ -846,15 +846,15 @@ describe('Feature Lifecycle Integration Tests', () => {
 
       const featureIds = [];
       for (const featureData of sprintFeatures) {
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {
             projectRoot: testDir,
           },
         );
-        expect(RESULT.success).toBe(true);
-        featureIds.push(RESULT.feature.id);
+        expect(result.success).toBe(true);
+        featureIds.push(result.feature.id);
       }
 
       // 2. Product review - approve high priority features
@@ -952,15 +952,15 @@ describe('Feature Lifecycle Integration Tests', () => {
       // 2. Suggest all features
       const featureIds = [];
       for (const featureData of features) {
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {
             projectRoot: testDir,
           },
         );
-        expect(RESULT.success).toBe(true);
-        featureIds.push(RESULT.feature.id);
+        expect(result.success).toBe(true);
+        featureIds.push(result.feature.id);
       }
 
       // 3. Perform complex approval/rejection pattern

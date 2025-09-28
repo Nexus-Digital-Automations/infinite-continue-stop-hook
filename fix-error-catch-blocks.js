@@ -3,6 +3,7 @@
  * Systematically adds error parameter to catch blocks that reference error in their body
  */
 
+/* eslint-disable security/detect-non-literal-fs-filename */
 const FS = require('fs');
 const PATH = require('path');
 const { loggers } = require('./lib/logger');
@@ -25,7 +26,7 @@ function fixErrorCatchBlocks(_filePath) {
       if (blockContent.includes('error') && !blockContent.includes('error')) {
         replacements.push({
           original: match[0],
-          replacement: match[0].replace('} catch {', '} catch (error) {'),
+          replacement: match[0].replace('} catch {', '} catch (_error) {'),
         });
       }
     }
@@ -39,13 +40,13 @@ function fixErrorCatchBlocks(_filePath) {
     if (modified) {
       FS.writeFileSync(filePath, content, 'utf8');
       loggers.app.info(
-        `✅ Fixed error catch blocks in ${path.relative('.', _filePath)}`,
+        `✅ Fixed error catch blocks in ${path.relative('.', _filePath)}`
       );
       return true;
     }
 
     return false;
-  } catch (error) {
+  } catch (_error) {
     loggers.app.error(`❌ Error fixing ${filePath}:`, { error: error.message });
     return false;
   }
@@ -79,7 +80,7 @@ function getFilesWithErrorIssues() {
 loggers.app.info('🎯 Fixing undefined error variables in catch blocks...');
 const filesToFix = getFilesWithErrorIssues();
 loggers.app.info(
-  `📊 Processing ${filesToFix.length} files with error issues...`,
+  `📊 Processing ${filesToFix.length} files with error issues...`
 );
 
 let totalFixed = 0;

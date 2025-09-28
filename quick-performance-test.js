@@ -63,7 +63,7 @@ class QuickPerformanceTest {
             if (jsonMatch) {
               response = JSON.parse(jsonMatch[0]);
             }
-          } catch (error) {
+          } catch (_error) {
             response = stdout;
           }
 
@@ -101,21 +101,21 @@ class QuickPerformanceTest {
     for (const test of tests) {
       loggers.stopHook.log(`📊 Testing: ${test.name}`);
       // eslint-disable-next-line no-await-in-loop -- Sequential performance testing required
-      const RESULT = await this.executeCommand(test.command);
+      const result = await this.executeCommand(test.command);
 
       this.results.push({
         testName: test.name,
         ...result,
       });
 
-      const status = RESULT.success ? '✅' : '❌';
-      const duration = RESULT.duration.toFixed(2);
-      const memoryMB = (RESULT.memoryUsed / (1024 * 1024)).toFixed(2);
+      const status = result.success ? '✅' : '❌';
+      const duration = result.duration.toFixed(2);
+      const memoryMB = (result.memoryUsed / (1024 * 1024)).toFixed(2);
 
       loggers.stopHook.log(`   ${status} ${duration}ms (${memoryMB}MB memory)`);
 
-      if (!RESULT.success) {
-        loggers.stopHook.log(`   Error: ${RESULT.error || 'Command failed'}`);
+      if (!result.success) {
+        loggers.stopHook.log(`   Error: ${result.error || 'Command failed'}`);
       }
     }
 

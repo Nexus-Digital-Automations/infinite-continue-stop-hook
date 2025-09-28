@@ -12,12 +12,12 @@ function fixVariableNames(_filePath) {
     let fixed = content;
     let changes = 0;
 
-    // Fix RESULT. -> result.
+    // Fix result. -> result.
     const beforeRESULT = fixed;
     fixed = fixed.replace(/\bRESULT\./g, 'result.');
     if (beforeRESULT !== fixed) {
       changes++;
-      console.log(`Fixed RESULT. references in ${path.basename(_filePath)}`);
+      console.log(`Fixed result. references in ${path.basename(_filePath)}`);
     }
 
     // Fix _operation -> operation
@@ -42,7 +42,7 @@ function fixVariableNames(_filePath) {
     if (beforeOperationResult !== fixed) {
       changes++;
       console.log(
-        `Fixed _operationresult references in ${path.basename(_filePath)}`,
+        `Fixed _operationresult references in ${path.basename(_filePath)}`
       );
     }
 
@@ -53,7 +53,7 @@ function fixVariableNames(_filePath) {
     }
 
     return false;
-  } catch (error) {
+  } catch (_error) {
     console.error(`Error fixing ${filePath}:`, error.message);
     return false;
   }

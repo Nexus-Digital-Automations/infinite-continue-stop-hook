@@ -18,21 +18,21 @@ function completeAuditFix() {
     // Pattern: Find lines with only expect(result.success) without prior API call
     content = content.replace(
       /(\s+)(expect\(result\.success\)\.toBe\(true\);)/g,
-      "$1const RESULT = await execAPI('create', [JSON.stringify(featureTaskData)]);\n1$2"
+      "$1const result = await execAPI('create', [JSON.stringify(featureTaskData)]);\n1$2"
     );
 
-    // Fix the RESULT variables that should be result in JSON parse
+    // Fix the result variables that should be result in JSON parse
     content = content.replace(
-      /const RESULT = JSON\.parse\(jsonString\);/g,
-      'const RESULT = JSON.parse(jsonString);'
+      /const result = JSON\.parse\(jsonString\);/g,
+      'const result = JSON.parse(jsonString);'
     );
 
     // Fix the resolve statement
-    content = content.replace(/resolve\(result\);/g, 'resolve(RESULT);');
+    content = content.replace(/resolve\(result\);/g, 'resolve(result);');
 
     fs.writeFileSync(filePath, content);
     console.log('Applied complete audit test fixes successfully');
-  } catch (error) {
+  } catch (_error) {
     console.error('Error applying complete fixes:', error.message);
     throw error;
   }

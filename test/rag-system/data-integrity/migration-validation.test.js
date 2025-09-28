@@ -9,7 +9,7 @@ const { loggers } = require('../lib/logger');
  * @version 1.0.0
  */
 
-const PATH = require('path');
+const path = require('path');
 const FS = require('fs').promises;
 const CRYPTO = require('crypto');
 
@@ -36,7 +36,7 @@ describe('RAG System Data Migration And Integrity', () => {
     loggers.stopHook.log('Cleaning up data integrity test environment...');
     try {
       await FS.rm(_testMigrationPath, { recursive: true, force: true });
-    } catch (error) {
+    } catch (_error) {
       loggers.stopHook.warn('Cleanup warning:', error.message);
     }
   });
@@ -132,7 +132,7 @@ try {
     req.on('error', reject);
   });
   if (!response.ok) throw new Error('API Error');
-} catch (error) {
+} catch (_error) {
         loggers.stopHook.error(error);
 }
 \`\`\`
@@ -325,9 +325,9 @@ Tags: database, performance, connection-pooling`,
       // Store lessons
       const _storedLessons = [];
       for (const lesson of testLessons) {
-        const RESULT = await ragSystem.storeLesson(lesson);
-        expect(RESULT.success).toBe(true);
-        storedLessons.push(RESULT.lesson_id);
+        const result = await ragSystem.storeLesson(lesson);
+        expect(result.success).toBe(true);
+        storedLessons.push(result.lesson_id);
       }
 
       // Run comprehensive integrity check
@@ -504,8 +504,8 @@ Tags: database, performance, connection-pooling`,
       // Store test data
       const _storedIds = [];
       for (const lesson of backupTestData) {
-        const RESULT = await ragSystem.storeLesson(lesson);
-        storedIds.push(RESULT.lesson_id);
+        const result = await ragSystem.storeLesson(lesson);
+        storedIds.push(result.lesson_id);
       }
 
       // Create full system backup
@@ -568,8 +568,8 @@ Tags: database, performance, connection-pooling`,
       // Store original data And create backup
       const _originalIds = [];
       for (const lesson of originalData) {
-        const RESULT = await ragSystem.storeLesson(lesson);
-        originalIds.push(RESULT.lesson_id);
+        const result = await ragSystem.storeLesson(lesson);
+        originalIds.push(result.lesson_id);
       }
 
       const _backupResult = await ragSystem.createBackup({
@@ -646,8 +646,8 @@ Tags: database, performance, connection-pooling`,
 
       const _initialIds = [];
       for (const lesson of initialLessons) {
-        const RESULT = await ragSystem.storeLesson(lesson);
-        initialIds.push(RESULT.lesson_id);
+        const result = await ragSystem.storeLesson(lesson);
+        initialIds.push(result.lesson_id);
       }
 
       // Create initial full backup

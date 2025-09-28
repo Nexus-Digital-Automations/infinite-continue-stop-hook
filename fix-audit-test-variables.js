@@ -27,10 +27,10 @@ function fixAuditTestVariables() {
       'let testAgentId = null;\n  let auditAgentId = null;'
     );
 
-    // Fix all instances of RESULT.taskId to result.taskId
-    content = content.replace(/RESULT\.taskId/g, 'result.taskId');
+    // Fix all instances of result.taskId to result.taskId
+    content = content.replace(/result\.taskId/g, 'result.taskId');
 
-    // Remove unused RESULT assignments
+    // Remove unused result assignments
     content = content.replace(/\s*const RESULT = [^;]+;/g, '');
 
     // Fix testAgentId usage (make sure it's declared)
@@ -44,7 +44,7 @@ function fixAuditTestVariables() {
 
     fs.writeFileSync(filePath, content);
     console.log('Fixed audit test file variables successfully');
-  } catch (error) {
+  } catch (_error) {
     console.error('Error fixing audit test file:', error.message);
     throw error;
   }
