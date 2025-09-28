@@ -1253,14 +1253,14 @@ Examples:
     const RESULT = analyzer.analyze();
     loggers.stopHook.log(`\n📊 Code Quality Analysis Complete:`);
     loggers.app.info(
-      `   Overall Score: ${result.overall_score}/100 (${result.quality_level})`,
+      `   Overall Score: ${RESULT.overall_score}/100 (${RESULT.quality_level})`,
     );
-    loggers.stopHook.log(`   Issues Found: ${result.issues.length}`);
+    loggers.stopHook.log(`   Issues Found: ${RESULT.issues.length}`);
     loggers.stopHook.log(
-      `   Recommendations: ${result.recommendations.length}`,
+      `   Recommendations: ${RESULT.recommendations.length}`,
     );
 
-    if (result.overall_score < 70) {
+    if (RESULT.overall_score < 70) {
       throw new Error('Code quality score below threshold');
     }
   } catch {

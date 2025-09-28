@@ -12139,7 +12139,7 @@ async function main() {
       { additionalData: [null, 2] },
       JSON.stringify(result),
     );
-  } catch (error) {
+  } catch (_error) {
     const errorResponse = {
       success: false,
       error: _error.message,

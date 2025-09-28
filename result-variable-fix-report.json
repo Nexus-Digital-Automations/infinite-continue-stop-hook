@@ -1,34 +1,14 @@
 {
-  "timestamp": "2025-09-28T15:25:51.018Z",
+  "timestamp": "2025-09-28T15:51:59.517Z",
   "stats": {
-    "filesProcessed": 48,
-    "resultVariablesFixed": 29,
-    "declarationsFixed": 10,
-    "scopeIssuesFixed": 1059
+    "filesProcessed": 37,
+    "resultVariablesFixed": 0,
+    "declarationsFixed": 7,
+    "scopeIssuesFixed": 8
   },
   "fixedFiles": [
     {
-      "path": "scripts/test-performance.js",
-      "changes": 3
-    },
-    {
-      "path": "scripts/jest-json-reporter.js",
-      "changes": 3
-    },
-    {
-      "path": "stop-hook.js",
-      "changes": 8
-    },
-    {
       "path": "scripts/feature-validation-matrix.js",
-      "changes": 2
-    },
-    {
-      "path": "scripts/migrate-to-structured-logging.js",
-      "changes": 2
-    },
-    {
-      "path": "scripts/migrate-console-to-structured-logging.js",
       "changes": 2
     },
     {
@@ -36,115 +16,7 @@
       "changes": 4
     },
     {
-      "path": "quick-performance-test.js",
-      "changes": 3
-    },
-    {
-      "path": "scripts/comprehensive-linting-fix.js",
-      "changes": 2
-    },
-    {
-      "path": "test/integration/agent-lifecycle.test.js",
-      "changes": 7
-    },
-    {
-      "path": "test/integration/api-workflow.test.js",
-      "changes": 6
-    },
-    {
-      "path": "test/integration/cli-commands.test.js",
-      "changes": 25
-    },
-    {
-      "path": "test/integration/dependency-management-api-integration.test.js",
-      "changes": 58
-    },
-    {
-      "path": "test/integration/feature-7-taskmanager-integration.test.js",
-      "changes": 4
-    },
-    {
-      "path": "test/integration/feature-8-performance-metrics-integration.test.js",
-      "changes": 124
-    },
-    {
-      "path": "test/integration/feature-lifecycle.test.js",
-      "changes": 22
-    },
-    {
-      "path": "test/integration/file-operations.test.js",
-      "changes": 6
-    },
-    {
-      "path": "test/integration/stress-and-recovery.test.js",
-      "changes": 19
-    },
-    {
       "path": "test/integration/taskmanager-validation-dependency.test.js",
-      "changes": 60
-    },
-    {
-      "path": "test/integration/trend-analysis-api-integration.test.js",
-      "changes": 115
-    },
-    {
-      "path": "test/e2e/dependency-management-e2e.test.js",
-      "changes": 13
-    },
-    {
-      "path": "test/e2e/e2e-utils.js",
-      "changes": 7
-    },
-    {
-      "path": "test/e2e/performance-metrics-e2e.test.js",
-      "changes": 15
-    },
-    {
-      "path": "test/unit/agent-management.test.js",
-      "changes": 68
-    },
-    {
-      "path": "test/unit/example-with-mocks.test.js",
-      "changes": 13
-    },
-    {
-      "path": "test/unit/feature-7-custom-validation-rules.test.js",
-      "changes": 12
-    },
-    {
-      "path": "test/unit/feature-8-performance-metrics.test.js",
-      "changes": 57
-    },
-    {
-      "path": "test/unit/feature-management-system.test.js",
-      "changes": 17
-    },
-    {
-      "path": "test/unit/feature-management.test.js",
-      "changes": 150
-    },
-    {
-      "path": "test/unit/initialization-stats.test.js",
-      "changes": 28
-    },
-    {
-      "path": "test/unit/taskmanager-api.test.js",
-      "changes": 170
-    },
-    {
-      "path": "test/unit/trend-analyzer.test.js",
-      "changes": 57
-    },
-    {
-      "path": "test/rag-system/data-integrity/migration-validation.test.js",
-      "changes": 5
-    },
-    {
-      "path": "test/rag-system/integration/rag-end-to-end.test.js",
-      "changes": 2
-    },
-    {
-      "path": "test/rag-system/performance/load-testing.test.js",
       "changes": 2
     }
   ],

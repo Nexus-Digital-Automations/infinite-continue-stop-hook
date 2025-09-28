@@ -630,7 +630,7 @@ describe('FeatureManagerAPI', () => {
         expect(result.error_count).toBe(2);
         expect(result.errors).toHaveLength(2);
         result.errors.forEach((_error) => {
-          expect(error).toContain('not found');
+          expect(_error).toContain('not found');
         });
       });
 

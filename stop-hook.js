@@ -62,7 +62,7 @@ function findClaudeProjectRoot(startDir = process.cwd()) {
  */
 function generateValidationProgressReport(flagData, logger, _workingDir) {
   // Initialize dependency manager for intelligent validation ordering
-  const dependencyManager = new VALIDATION_DEPENDENCY_MANAGER(workingDir);
+  const dependencyManager = new VALIDATION_DEPENDENCY_MANAGER(_workingDir);
 
   // Validate dependency configuration
   const configValidation = dependencyManager.validateDependencyConfiguration();
@@ -96,7 +96,7 @@ function generateValidationProgressReport(flagData, logger, _workingDir) {
   };
 
   // Load custom validation rules from project configuration
-  function loadCustomValidationRules(workingDir) {
+  function loadCustomValidationRules(_workingDir) {
     const customRules = [];
     try {
       // Implementation would go here to load custom rules
@@ -108,7 +108,7 @@ function generateValidationProgressReport(flagData, logger, _workingDir) {
   }
 
   // Use dependency-aware validation criteria in execution order
-  const customRules = loadCustomValidationRules(workingDir);
+  const customRules = loadCustomValidationRules(_workingDir);
   // const CUSTOM_CRITERIA_IDS = customRules.map((rule) => rule.id);
 
   // Add any custom criteria to dependency manager
@@ -514,7 +514,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
  */
 async function autoSortTasksByPriority(_taskManager) {
   try {
-    const todoData = await taskManager.readTodo();
+    const todoData = await _taskManager.readTodo();
     let tasksMoved = 0;
     let tasksUpdated = 0;
 
@@ -735,7 +735,7 @@ async function autoSortTasksByPriority(_taskManager) {
 
     // Save the updated TASKS.json
     if (tasksMoved > 0 || tasksUpdated > 0) {
-      await taskManager.writeTodo(todoData);
+      await _taskManager.writeTodo(todoData);
     }
 
     return {

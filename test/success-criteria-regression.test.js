@@ -1145,7 +1145,7 @@ describe('Success Criteria Regression Tests', () => {
           }
 
           loggers.stopHook.log(`API contract for ${api} is stable`);
-        } catch (error) {
+        } catch (_error) {
           loggers.stopHook.log(
             `API contract issue for ${api}:`,
             _error.message
@@ -1219,7 +1219,7 @@ describe('Success Criteria Regression Tests', () => {
           loggers.stopHook.log(
             `Essential function '${func.name}' is preserved`
           );
-        } catch (error) {
+        } catch (_error) {
           loggers.app.error(
             `Essential function '${func.name}' failed:`,
             _error.message

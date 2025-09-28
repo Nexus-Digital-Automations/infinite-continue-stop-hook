@@ -17,7 +17,7 @@
  */
 
 const FS = require('fs').promises;
-const PATH = require('path');
+const path = require('path');
 const { execSync } = require('child_process');
 
 /**
@@ -37,12 +37,12 @@ class SecurityUtils {
     }
 
     // Resolve paths to prevent directory traversal
-    const resolvedBase = PATH.resolve(basePath);
-    const resolvedPath = PATH.resolve(basePath, PATH.basename(filePath));
+    const resolvedBase = path.resolve(basePath);
+    const resolvedPath = path.resolve(basePath, path.basename(filePath));
 
     // Ensure the resolved path is within the base directory
     if (
-      !resolvedPath.startsWith(resolvedBase + PATH.sep) &&
+      !resolvedPath.startsWith(resolvedBase + path.sep) &&
       resolvedPath !== resolvedBase
     ) {
       throw new Error(
@@ -76,7 +76,7 @@ class SecurityUtils {
   static async safeWriteFile(basePath, filePath, content) {
     const safePath = this.validatePath(basePath, filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
-    await FS.mkdir(PATH.dirname(safePath), { recursive: true });
+    await FS.mkdir(path.dirname(safePath), { recursive: true });
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     return FS.writeFile(safePath, content, 'utf-8');
   }
@@ -91,7 +91,7 @@ class SecurityUtils {
   static async safeAppendFile(basePath, filePath, content) {
     const safePath = this.validatePath(basePath, filePath);
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
-    await FS.mkdir(PATH.dirname(safePath), { recursive: true });
+    await FS.mkdir(path.dirname(safePath), { recursive: true });
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- safePath is validated And sanitized
     return FS.appendFile(safePath, content);
   }
@@ -134,8 +134,8 @@ class AuditLogger {
 class AUDIT_INTEGRATION {
   constructor() {
     this.projectRoot = process.cwd();
-    this.essentialsDir = PATH.join(__dirname);
-    this.taskManagerApiPath = PATH.join(this.projectRoot, 'taskmanager-api.js');
+    this.essentialsDir = path.join(__dirname);
+    this.taskManagerApiPath = path.join(this.projectRoot, 'taskmanager-api.js');
     this.logger = new AuditLogger();
 
     // Integration configuration

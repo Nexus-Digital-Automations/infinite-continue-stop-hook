@@ -101,7 +101,7 @@ class ResultVariableFixer {
       const items = FS.readdirSync(dir);
 
       for (const item of items) {
-        const fullPath = PATH.join(dir, item);
+        const fullPath = path.join(dir, item);
         const stat = FS.statSync(fullPath);
 
         if (stat.isDirectory()) {
@@ -126,7 +126,7 @@ class ResultVariableFixer {
    */
   processFile(filePath) {
     try {
-      console.log(`🔧 Processing: ${PATH.relative(process.cwd(), filePath)}`);
+      console.log(`🔧 Processing: ${path.relative(process.cwd(), filePath)}`);
 
       let content = FS.readFileSync(filePath, 'utf8');
       let modified = false;
@@ -156,7 +156,7 @@ class ResultVariableFixer {
           changes,
         });
         console.log(
-          `✅ Fixed ${changes} issues in ${PATH.relative(process.cwd(), filePath)}`,
+          `✅ Fixed ${changes} issues in ${path.relative(process.cwd(), filePath)}`,
         );
       }
 
@@ -361,7 +361,7 @@ class ResultVariableFixer {
     let changes = 0;
 
     // File-specific fixes
-    const fileName = PATH.basename(filePath);
+    const fileName = path.basename(filePath);
 
     if (fileName === 'jest-json-reporter.js') {
       // Fix the specific issue where result should be RESULT in return statement
@@ -426,7 +426,7 @@ class ResultVariableFixer {
       console.log('\n📁 Modified Files:');
       for (const file of this.fixedFiles) {
         console.log(
-          `  ✅ ${PATH.relative(process.cwd(), file.path)} (${file.changes} changes)`,
+          `  ✅ ${path.relative(process.cwd(), file.path)} (${file.changes} changes)`,
         );
       }
     }
@@ -435,7 +435,7 @@ class ResultVariableFixer {
       console.log('\n❌ Errors:');
       for (const error of this.errors) {
         console.log(
-          `  ❌ ${PATH.relative(process.cwd(), error.file)}: ${error.error}`,
+          `  ❌ ${path.relative(process.cwd(), error.file)}: ${error.error}`,
         );
       }
     }
@@ -446,16 +446,16 @@ class ResultVariableFixer {
       stats: this.stats,
       fixedFiles: this.fixedFiles.map((f) => ({
         ...f,
-        path: PATH.relative(process.cwd(), f.path),
+        path: path.relative(process.cwd(), f.path),
       })),
       errors: this.errors.map((e) => ({
         ...e,
-        file: PATH.relative(process.cwd(), e.file),
+        file: path.relative(process.cwd(), e.file),
       })),
     };
 
     FS.writeFileSync(
-      PATH.join(process.cwd(), 'result-variable-fix-report.json'),
+      path.join(process.cwd(), 'result-variable-fix-report.json'),
       JSON.stringify(report, null, 2),
     );
 

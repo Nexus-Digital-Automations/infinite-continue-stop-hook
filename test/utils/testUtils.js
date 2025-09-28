@@ -117,7 +117,7 @@ class APIExecutor {
       });
 
       child.on('error', (_error) => {
-        reject(new Error(`Command execution failed: ${error.message}`));
+        reject(new Error(`Command execution failed: ${_error.message}`));
       });
     });
   }

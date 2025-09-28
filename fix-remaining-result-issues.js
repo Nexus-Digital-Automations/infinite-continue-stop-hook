@@ -55,14 +55,14 @@ const SPECIFIC_FIXES = [
       },
       // Fix class Name
       {
-        pattern: /class\s+RESOURCE_MONITOR/g,
-        replacement: 'class RESOURCE_MONITOR',
-        description: 'Fix class Name from RESOURCE_MONITOR to RESOURCE_MONITOR',
+        pattern: /class\s+ResourceMonitor/g,
+        replacement: 'class ResourceMonitor',
+        description: 'Fix class Name from ResourceMonitor to ResourceMonitor',
       },
       // Fix constructor call
       {
-        pattern: /new\s+RESOURCE_MONITOR\(\)/g,
-        replacement: 'new RESOURCE_MONITOR()',
+        pattern: /new\s+ResourceMonitor\(\)/g,
+        replacement: 'new ResourceMonitor()',
         description: 'Fix constructor call',
       },
     ],
@@ -118,7 +118,7 @@ class RemainingResultFixer {
       return;
     }
 
-    console.log(`🔧 Processing: ${PATH.relative(process.cwd(), file)}`);
+    console.log(`🔧 Processing: ${path.relative(process.cwd(), file)}`);
 
     let content = FS.readFileSync(file, 'utf8');
     let modified = false;
@@ -144,18 +144,18 @@ class RemainingResultFixer {
         changes: totalChanges,
       });
       console.log(
-        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), file)}`,
+        `✅ Fixed ${totalChanges} issues in ${path.relative(process.cwd(), file)}`,
       );
     } else {
       console.log(
-        `✅ No issues found in ${PATH.relative(process.cwd(), file)}`,
+        `✅ No issues found in ${path.relative(process.cwd(), file)}`,
       );
     }
   }
 
   fixTestFile(filePath) {
     console.log(
-      `🔧 Processing test file: ${PATH.relative(process.cwd(), filePath)}`,
+      `🔧 Processing test file: ${path.relative(process.cwd(), filePath)}`,
     );
 
     let content = FS.readFileSync(filePath, 'utf8');
@@ -259,11 +259,11 @@ class RemainingResultFixer {
         changes: totalChanges,
       });
       console.log(
-        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), filePath)}`,
+        `✅ Fixed ${totalChanges} issues in ${path.relative(process.cwd(), filePath)}`,
       );
     } else {
       console.log(
-        `✅ No issues found in ${PATH.relative(process.cwd(), filePath)}`,
+        `✅ No issues found in ${path.relative(process.cwd(), filePath)}`,
       );
     }
   }
@@ -285,7 +285,7 @@ class RemainingResultFixer {
       console.log('\n📁 Modified Files:');
       for (const file of this.fixedFiles) {
         console.log(
-          `  ✅ ${PATH.relative(process.cwd(), file.path)} (${file.changes} changes)`,
+          `  ✅ ${path.relative(process.cwd(), file.path)} (${file.changes} changes)`,
         );
       }
     }

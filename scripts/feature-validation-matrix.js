@@ -520,9 +520,9 @@ class FeatureValidationMatrix {
         this.validationResults.feature_tests[feature.name] = result;
 
         const status = RESULT.status === 'passed' ? '✅' : '❌';
-        loggers.stopHook.log(`${status} ${feature.name}: ${result.status}`);
+        loggers.stopHook.log(`${status} ${feature.name}: ${RESULT.status}`);
 
-        if (result.errors.length > 0 && feature.critical) {
+        if (RESULT.errors.length > 0 && feature.critical) {
           this.validationResults.issues_found.push({
             feature: feature.name,
             type: 'critical',

@@ -90,7 +90,7 @@ function fixFile(filePath) {
     });
 
     // Handle multi-line catch blocks that reference _error or error
-    // eslint-disable-next-line security/detect-unsafe-regex
+
     const multiLineCatchRegex =
       /catch\s*\(\s*\)\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/gs;
     let match;

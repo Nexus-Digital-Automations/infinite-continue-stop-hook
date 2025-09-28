@@ -22,7 +22,7 @@ function getAllJsFiles() {
       .split('\n')
       .filter((f) => f && f.endsWith('.js'));
   } catch (_error) {
-    console.error('Failed to get JS files:', error.message);
+    console.error('Failed to get JS files:', _error.message);
     return [];
   }
 }
@@ -237,8 +237,8 @@ function fixAllCatchBlocks(filePath) {
     }
 
     return false;
-  } catch (error) {
-    console.error(`Error fixing catch blocks in ${filePath}:`, error.message);
+  } catch (_error) {
+    console.error(`Error fixing catch blocks in ${filePath}:`, _error.message);
     return false;
   }
 }

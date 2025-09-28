@@ -13,7 +13,7 @@
  * of the FeatureManagerAPI with detailed lifecycle testing.
  */
 
-const FS = require('path');
+const path = require('path');
 const CRYPTO = require('crypto');
 const {
   MockFileSystem,

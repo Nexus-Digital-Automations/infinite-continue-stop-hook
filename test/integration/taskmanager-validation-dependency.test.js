@@ -355,8 +355,8 @@ describe('TaskManager API Validation Dependency Integration', () => {
       const result =
         await api.generateInteractiveVisualization('invalid-format');
 
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Unsupported visualization format');
+      expect(RESULT.success).toBe(false);
+      expect(RESULT.error).toContain('Unsupported visualization format');
     });
 
     test('should handle missing dependency file gracefully', async () => {
