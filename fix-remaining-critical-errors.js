@@ -90,7 +90,7 @@ function fixUnusedVariables(filePath, content) {
   newContent = newContent.replace(unusedParamPattern, (match, param) => {
     return match.replace(
       new RegExp(`\\b${param}\\b(?=\\s*[,)])`, 'g'),
-      `_${param}`,
+      `_${param}`
     );
   });
 
@@ -169,7 +169,7 @@ function fixParsingErrors(filePath, content) {
 
   lines.forEach((line) => {
     const importMatch = line.match(
-      /const\s*{\s*(\w+)\s*}\s*=\s*require\([^)]+\)/,
+      /const\s*{\s*(\w+)\s*}\s*=\s*require\([^)]+\)/
     );
     if (importMatch) {
       const varName = importMatch[1];
@@ -216,9 +216,9 @@ function fixSecurityWarnings(filePath, content) {
         newContent = newContent.replace(
           new RegExp(
             pattern.split(' //')[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
-            'g',
+            'g'
           ),
-          pattern,
+          pattern
         );
         changed = true;
       }
@@ -277,6 +277,6 @@ if (finalErrorCount === 0) {
   console.log('🎉 ZERO TOLERANCE ACHIEVED! 🎉'); // eslint-disable-line no-console
 } else if (finalErrorCount < 500) {
   console.log(
-    '✅ Significant progress made. Remaining errors likely need manual fixes.',
+    '✅ Significant progress made. Remaining errors likely need manual fixes.'
   );
 }

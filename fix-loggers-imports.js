@@ -127,7 +127,7 @@ function findFilesWithLoggersIssues() {
       'npm run lint 2>&1 | grep "\'loggers\' is not defined"',
       {
         encoding: 'utf8',
-      },
+      }
     );
 
     const files = new Set();
@@ -156,7 +156,7 @@ function getCurrentLoggersErrorCount() {
   try {
     const result = execSync(
       'npm run lint 2>&1 | grep "\'loggers\' is not defined" | wc -l',
-      { encoding: 'utf8' },
+      { encoding: 'utf8' }
     );
     return parseInt(result.trim());
   } catch {

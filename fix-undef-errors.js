@@ -64,7 +64,7 @@ function fixFile(filePath) {
   const normalizedPath = path.normalize(filePath);
   if (normalizedPath.includes('..') || !normalizedPath.startsWith(rootDir)) {
     loggers.app.warn(
-      `Security: Rejected potentially unsafe file path: ${filePath}`,
+      `Security: Rejected potentially unsafe file path: ${filePath}`
     );
     return false;
   }
@@ -81,7 +81,7 @@ function fixFile(filePath) {
       if (content !== originalContent) {
         modified = true;
         loggers.app.info(
-          `Applied fix: ${fix.pattern.toString().substring(0, 50)}...`,
+          `Applied fix: ${fix.pattern.toString().substring(0, 50)}...`
         );
       }
     });
@@ -95,7 +95,7 @@ function fixFile(filePath) {
         const errorVar = blockContent.includes('_error') ? '_error' : 'error';
         const replacement = match[0].replace(
           'catch () {',
-          `catch (${errorVar}) {`,
+          `catch (${errorVar}) {`
         );
         content = content.replace(match[0], replacement);
         modified = true;
@@ -140,13 +140,13 @@ function getUndefErrorFiles() {
     // Parse from error output if command fails
     return error.stdout
       ? error.stdout
-        .split('\n')
-        .filter(
-          (line) =>
-            line.includes('is not defined') && line.includes('no-undef'),
-        )
-        .map((line) => line.split(':')[0])
-        .filter((file, index, arr) => arr.indexOf(file) === index)
+          .split('\n')
+          .filter(
+            (line) =>
+              line.includes('is not defined') && line.includes('no-undef')
+          )
+          .map((line) => line.split(':')[0])
+          .filter((file, index, arr) => arr.indexOf(file) === index)
       : [];
   }
 }
@@ -155,7 +155,7 @@ function getUndefErrorFiles() {
 loggers.app.info('🔍 Identifying files with undefined variable errors...');
 const undefFiles = getUndefErrorFiles();
 loggers.app.info(
-  `🔧 Processing ${undefFiles.length} files with undefined errors...`,
+  `🔧 Processing ${undefFiles.length} files with undefined errors...`
 );
 
 let fixedCount = 0;
@@ -176,7 +176,7 @@ try {
   const output = error.stdout || error.message;
   const errorCount = (output.match(/error/g) || []).length;
   loggers.app.info(
-    `📊 Progress: ${errorCount} errors remaining (significant improvement!)`,
+    `📊 Progress: ${errorCount} errors remaining (significant improvement!)`
   );
 
   if (errorCount < 100) {

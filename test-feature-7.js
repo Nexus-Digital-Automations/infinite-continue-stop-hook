@@ -8,7 +8,7 @@ const { loggers } = require('lib/logger');
 async function testAdaptiveLearningPaths() {
   try {
     loggers.stopHook.log(
-      'Testing Feature 7: Adaptive Learning Paths System...',
+      'Testing Feature 7: Adaptive Learning Paths System...'
     );
 
     // Create RAG operations instance
@@ -51,7 +51,7 @@ async function testAdaptiveLearningPaths() {
         maxLength: 10,
         includeBranching: true,
         includeAssessments: true,
-      },
+      }
     );
     loggers.app.info('Learning path result:', {
       success: learningPath.success,
@@ -69,7 +69,7 @@ async function testAdaptiveLearningPaths() {
       {
         includeAlternatives: true,
         maxRecommendations: 3,
-      },
+      }
     );
     loggers.app.info('Path recommendations result:', {
       success: pathRecommendations.success,
@@ -93,7 +93,7 @@ async function testAdaptiveLearningPaths() {
       {
         includeDetailedAnalysis: true,
         checkAdaptationTriggers: true,
-      },
+      }
     );
     loggers.app.info('Progress tracking result:', {
       success: progressTracking.success,
@@ -121,7 +121,7 @@ async function testAdaptiveLearningPaths() {
       {
         adaptationTrigger: 'performance_drop',
         preserveProgress: true,
-      },
+      }
     );
     loggers.app.info('Path adaptation result:', {
       success: pathAdaptation.success,
@@ -129,7 +129,7 @@ async function testAdaptiveLearningPaths() {
     });
 
     loggers.app.info(
-      '\n✅ Feature 7: Adaptive Learning Paths System integration test completed successfully!',
+      '\n✅ Feature 7: Adaptive Learning Paths System integration test completed successfully!'
     );
   } catch {
     loggers.stopHook.error('❌ Feature 7 test failed:', error.message);

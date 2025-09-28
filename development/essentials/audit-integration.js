@@ -566,8 +566,8 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
         'development/logs/audit_integration.log',
         JSON.stringify(logEntry) + '\n',
       );
-    } catch {
-      this.logger.log(`⚠️ Failed to log audit task creation: ${_error.message}`);
+    } catch (error) {
+      this.logger.log(`⚠️ Failed to log audit task creation: ${error.message}`);
     }
   }
 

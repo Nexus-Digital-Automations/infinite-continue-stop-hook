@@ -41,7 +41,7 @@ function fixFile(filePath) {
   const normalizedPath = path.normalize(filePath);
   if (normalizedPath.includes('..') || !normalizedPath.startsWith(rootDir)) {
     loggers.app.warn(
-      `Security: Rejected potentially unsafe file path: ${filePath}`,
+      `Security: Rejected potentially unsafe file path: ${filePath}`
     );
     return false;
   }
@@ -79,7 +79,7 @@ function fixFile(filePath) {
     if (content.includes('process.exit(')) {
       content = content.replace(
         /process\.exit\([^)]*\);?/g,
-        'throw new Error("Process termination");',
+        'throw new Error("Process termination");'
       );
       changed = true;
     }
@@ -123,10 +123,10 @@ function getErrorFiles() {
   } catch {
     return error.stdout
       ? error.stdout
-        .split('\n')
-        .filter((line) => line.includes('.js:') && line.includes('error'))
-        .map((line) => line.split(':')[0])
-        .filter((file, index, arr) => arr.indexOf(file) === index)
+          .split('\n')
+          .filter((line) => line.includes('.js:') && line.includes('error'))
+          .map((line) => line.split(':')[0])
+          .filter((file, index, arr) => arr.indexOf(file) === index)
       : [];
   }
 }

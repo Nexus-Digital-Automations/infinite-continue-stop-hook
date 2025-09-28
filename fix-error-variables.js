@@ -30,7 +30,7 @@ class ErrorVariableFixer {
       if (emptyCatchPattern.test(content)) {
         newContent = newContent.replace(
           /}\s*catch\s*\(\s*\)\s*\{/g,
-          '} catch {',
+          '} catch {'
         );
         hasChanges = true;
       }
@@ -113,7 +113,7 @@ class ErrorVariableFixer {
       fs.writeFileSync(filePath, result.content);
       this.fixedFiles.push(filePath);
       console.log(
-        `  ✅ Fixed error variables in ${path.relative('.', filePath)}`,
+        `  ✅ Fixed error variables in ${path.relative('.', filePath)}`
       );
     }
   }
@@ -127,7 +127,7 @@ class ErrorVariableFixer {
         'npm run lint 2>&1 | grep "\'error\' is not defined"',
         {
           encoding: 'utf8',
-        },
+        }
       );
 
       const files = new Set();
@@ -155,7 +155,7 @@ class ErrorVariableFixer {
     try {
       const result = execSync(
         'npm run lint 2>&1 | grep "\'error\' is not defined" | wc -l',
-        { encoding: 'utf8' },
+        { encoding: 'utf8' }
       );
       return parseInt(result.trim());
     } catch {

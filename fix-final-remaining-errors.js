@@ -130,7 +130,7 @@ class FinalErrorFixer {
       // eslint-disable-next-line no-console
       console.error(
         `❌ Error fixing taskmanager-validation.js:`,
-        error.message,
+        error.message
       );
     }
   }
@@ -291,7 +291,7 @@ class FinalErrorFixer {
         fs.writeFileSync(filePath, content);
         // eslint-disable-next-line no-console
         console.log(
-          `✅ Fixed ${fixCount} issues in validation-dependency-manager.test.js`,
+          `✅ Fixed ${fixCount} issues in validation-dependency-manager.test.js`
         );
         this.fixCount += fixCount;
       }
@@ -300,7 +300,7 @@ class FinalErrorFixer {
       // eslint-disable-next-line no-console
       console.error(
         `❌ Error fixing validation-dependency-manager.test.js:`,
-        error.message,
+        error.message
       );
     }
   }
@@ -338,7 +338,7 @@ class FinalErrorFixer {
             lines.splice(
               i + 1,
               0,
-              '    // eslint-disable-next-line no-unused-vars -- Error handled via other means',
+              '    // eslint-disable-next-line no-unused-vars -- Error handled via other means'
             );
             fixCount++;
           }
@@ -350,7 +350,7 @@ class FinalErrorFixer {
           fs.writeFileSync(filePath, content);
           // eslint-disable-next-line no-console
           console.log(
-            `✅ Fixed ${fixCount} unused _error issues in ${path.basename(filePath)}`,
+            `✅ Fixed ${fixCount} unused _error issues in ${path.basename(filePath)}`
           );
           this.fixCount += fixCount;
         }
@@ -359,7 +359,7 @@ class FinalErrorFixer {
         // eslint-disable-next-line no-console
         console.error(
           `❌ Error fixing unused errors in ${filePath}:`,
-          error.message,
+          error.message
         );
       }
     });
@@ -395,7 +395,7 @@ class FinalErrorFixer {
       } catch {
         // eslint-disable-next-line no-console
         console.log(
-          'ℹ️  Some linting errors may still remain - check output for details',
+          'ℹ️  Some linting errors may still remain - check output for details'
         );
       }
     }

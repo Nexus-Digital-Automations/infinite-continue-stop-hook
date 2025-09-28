@@ -163,7 +163,7 @@ function addMissingImports() {
       lines.splice(
         insertIndex,
         0,
-        `const { loggers } = require('${importPath}');`,
+        `const { loggers } = require('${importPath}');`
       );
 
       fs.writeFileSync(file, lines.join('\n'));
@@ -217,11 +217,11 @@ function fixSpecificFiles() {
     // Fix the log calls
     content = content.replace(
       /loggers\.stopHook\.log\(/g,
-      'loggers.stopHook.info(',
+      'loggers.stopHook.info('
     );
     content = content.replace(
       /loggers\.stopHook\.error\(/g,
-      'loggers.stopHook.error(',
+      'loggers.stopHook.error('
     );
 
     fs.writeFileSync(appendHookPath, content);
@@ -265,7 +265,7 @@ function main() {
     console.log('✅ Linter passed! Migration successful.');
   } catch {
     console.log(
-      '⚠️  Some linting issues remain. You may need to fix them manually.',
+      '⚠️  Some linting issues remain. You may need to fix them manually.'
     );
   }
 }
