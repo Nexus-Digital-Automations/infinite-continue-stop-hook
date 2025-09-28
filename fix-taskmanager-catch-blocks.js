@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 /**
- * Fix catch blocks that use 'error' variable but don't declare it
+ * Fix catch blocks that use 'error' variable but don't declare it in TaskManager API
  */
 
 function fixCatchBlocks(filePath) {
@@ -28,7 +28,15 @@ function fixCatchBlocks(filePath) {
           if (
             nextLine.includes('error.message') ||
             nextLine.includes('error.stack') ||
-            nextLine.includes('error.name')
+            nextLine.includes('error.name') ||
+            nextLine.includes('error.code') ||
+            nextLine.includes('error.stdout') ||
+            nextLine.includes('error.stderr') ||
+            nextLine.includes('throw error') ||
+            nextLine.includes('console.error(error') ||
+            nextLine.includes('logger.error(') ||
+            (nextLine.includes('loggers.') && nextLine.includes('error')) ||
+            (nextLine.includes('this.logger.') && nextLine.includes('error'))
           ) {
             usesError = true;
           }
@@ -58,7 +66,13 @@ function fixCatchBlocks(filePath) {
   }
 }
 
-// Fix the main file
+// Fix the TaskManager API file
 const filePath =
   '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
-fixCatchBlocks(filePath);
+console.log(`Checking ${filePath} for catch block issues...`);
+
+if (fixCatchBlocks(filePath)) {
+  console.log('Successfully fixed TaskManager API catch blocks.');
+} else {
+  console.log('No catch block fixes needed in TaskManager API.');
+}

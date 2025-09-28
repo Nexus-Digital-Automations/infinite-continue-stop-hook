@@ -9,7 +9,7 @@
  * @since 2025-09-23
  */
 
-const FS = require('path');
+const PATH = require('path');
 const FS = require('fs');
 const { loggers } = require('../lib/logger');
 

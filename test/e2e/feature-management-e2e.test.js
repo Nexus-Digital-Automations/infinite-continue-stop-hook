@@ -60,7 +60,7 @@ describe('Feature Management System E2E', () => {
         // Validate all suggestions succeeded
         results.forEach((result, index) => {
           E2EAssertions.assertCommandSuccess(
-            RESULT.result,
+            result.result,
             `${categories[index]} suggestion`,
           );
           const response = E2EAssertions.assertJsonResponse(result.result, [
@@ -245,7 +245,7 @@ describe('Feature Management System E2E', () => {
 
         const featureIds = suggestionResults.map((result) => {
           if (result.featureId) {
-            return RESULT.featureId;
+            return result.featureId;
           }
           // Fallback to extracting from response
           try {
@@ -358,7 +358,7 @@ describe('Feature Management System E2E', () => {
         const batchResults = await Promise.all(batchPromises);
         const batchIds = batchResults.map((result) => {
           if (result.featureId) {
-            return RESULT.featureId;
+            return result.featureId;
           }
           try {
             const response = JSON.parse(result.result.stdout);
@@ -439,7 +439,7 @@ describe('Feature Management System E2E', () => {
 
         const featureId = (() => {
           if (result.featureId) {
-            return RESULT.featureId;
+            return result.featureId;
           }
           // result is the direct result object, not wrapped in .result
           try {
@@ -552,7 +552,7 @@ describe('Feature Management System E2E', () => {
         const featureResults = await Promise.all(featurePromises);
         const featureIds = featureResults.map((result) => {
           if (result.featureId) {
-            return RESULT.featureId;
+            return result.featureId;
           }
           try {
             const response = JSON.parse(result.result.stdout);
@@ -698,7 +698,7 @@ describe('Feature Management System E2E', () => {
 
         const searchIds = searchResults.map((result) => {
           if (result.featureId) {
-            return RESULT.featureId;
+            return result.featureId;
           }
           try {
             const response = JSON.parse(result.result.stdout);
@@ -809,7 +809,7 @@ describe('Feature Management System E2E', () => {
 
         const exportIds = exportResults.map((result) => {
           if (result.featureId) {
-            return RESULT.featureId;
+            return result.featureId;
           }
           try {
             const response = JSON.parse(result.result.stdout);

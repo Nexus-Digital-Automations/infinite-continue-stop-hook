@@ -131,14 +131,14 @@ function generateValidationProgressReport(flagData, logger, workingDir) {
       if (result) {
         progressReport.validationDetails.push({
           criterion: criteria,
-          status: RESULT.status || 'pending',
-          duration: RESULT.duration || 0,
-          message: RESULT.message || 'No details available',
-          timestamp: RESULT.timestamp || new Date().toISOString(),
+          status: result.status || 'pending',
+          duration: result.duration || 0,
+          message: result.message || 'No details available',
+          timestamp: result.timestamp || new Date().toISOString(),
           progress:
-            RESULT.status === 'completed'
+            result.status === 'completed'
               ? 100
-              : RESULT.status === 'failed'
+              : result.status === 'failed'
                 ? 0
                 : 50,
         });
@@ -246,7 +246,7 @@ ${progressReport.validationDetails
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
       FS.unlinkSync(stopFlagPath); // Remove flag after reading
       return flagData.stop_allowed === true;
-    } catch {
+    } catch (error) {
       // Invalid flag file, remove it
       loggers.app.error(
         `⚠️ Invalid validation progress file detected - cleaning up. Error: ${error.message}`
@@ -308,7 +308,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
   try {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path constructed from trusted hook configuration
     todoData = JSON.parse(FS.readFileSync(todoPath, 'utf8'));
-  } catch {
+  } catch (error) {
     logger.addFlow(
       `Failed to read TASKS.json in ${projectPath}: ${error.message}`
     );
@@ -414,7 +414,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Hook system path controlled by stop hook security protocols
       FS.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
       logger.addFlow(`Updated ${projectPath}/TASKS.json with cleanup results`);
-    } catch {
+    } catch (error) {
       logger.addFlow(
         `Failed to write TASKS.json in ${projectPath}: ${error.message}`
       );
@@ -475,7 +475,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
           skipped: true,
         };
       }
-    } catch {
+    } catch (error) {
       const errorMsg = `Failed to process ${projectPath}: ${error.message}`;
       logger.addFlow(errorMsg);
       return {
@@ -493,9 +493,9 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
   // Aggregate results from parallel processing
   for (const result of projectResults) {
     results.projectResults.push(result);
-    results.totalAgentsRemoved += RESULT.agentsRemoved;
-    results.totalTasksUnassigned += RESULT.tasksUnassigned;
-    results.totalOrphanedTasksReset += RESULT.orphanedTasksReset || 0;
+    results.totalAgentsRemoved += result.agentsRemoved;
+    results.totalTasksUnassigned += result.tasksUnassigned;
+    results.totalOrphanedTasksReset += result.orphanedTasksReset || 0;
 
     if (result.error) {
       results.errors.push(`${result.projectPath}: ${result.error}`);
@@ -658,6 +658,28 @@ async function autoSortTasksByPriority(taskManager) {
         tasksMoved++;
       }
 
+      // STEP 2: Ensure all tasks have required category field for validation
+      if (!task.category) {
+        const taskPrefix = getCurrentPrefix(task.id || '');
+        switch (taskPrefix) {
+          case 'error':
+            task.category = 'error';
+            break;
+          case 'feature':
+            task.category = 'implementation';
+            break;
+          case 'subtask':
+            task.category = 'implementation';
+            break;
+          case 'test':
+            task.category = 'testing';
+            break;
+          default:
+            task.category = 'implementation';
+        }
+        updated = true;
+      }
+
       if (updated) {
         tasksUpdated++;
       }
@@ -721,11 +743,9 @@ async function autoSortTasksByPriority(taskManager) {
       tasksUpdated,
       totalTasks: tasksOrFeatures.length,
     };
-  } catch {
-    // Log error through logger for proper tracking
-    const logger = new LOGGER.LOGGER(process.cwd());
-    logger.logError(error, 'autoSortTasksByPriority');
-    logger.save();
+  } catch (error) {
+    // Log error through logger for proper tracking - use loggers.app for error handling
+    loggers.app.error('autoSortTasksByPriority error:', error);
     return { error: error.message, tasksMoved: 0, tasksUpdated: 0 };
   }
 }
@@ -953,7 +973,7 @@ This is the expected behavior when the /done command is used.
         } else {
           logger.addFlow(`Transcript file not found: ${_transcript_path}`);
         }
-      } catch {
+      } catch (transcriptError) {
         logger.addFlow(`Error reading transcript: ${transcriptError.message}`);
       }
     }
@@ -1001,7 +1021,7 @@ If you want to enable task management for this project:
           `🔧 STOP HOOK: Automatically fixed TASKS.json corruption - ${corruptionCheck.fixesApplied.join(', ')}`
         );
       }
-    } catch {
+    } catch (corruptionError) {
       logger.error('TASKS.json corruption check failed', {
         error: corruptionError.message,
         component: 'StopHook',
@@ -1072,7 +1092,7 @@ If you want to enable task management for this project:
           `Multi-project cleanup errors: ${multiProjectResults.errors.join('; ')}`
         );
       }
-    } catch {
+    } catch (multiProjectError) {
       logger.addFlow(
         `Multi-project cleanup failed: ${multiProjectError.message}`
       );
@@ -1290,63 +1310,14 @@ If you want to enable task management for this project:
     }
 
     // ========================================================================
-    // AUTOMATIC TASK SORTING: RECLASSIFY TEST ERRORS AND SORT BY PRIORITY
+    // AUTOMATIC TASK SORTING: DISABLED DUE TO VALIDATION CONFLICTS
     // ========================================================================
 
-    try {
-      logger.addFlow(
-        'Running automatic task sorting And test error reclassification'
-      );
-      const sortResult = await autoSortTasksByPriority(taskManager);
-
-      if (sortResult.error) {
-        logger.addFlow(`Task sorting failed: ${sortResult.error}`);
-      } else if (sortResult.tasksMoved > 0) {
-        logger.addFlow(
-          `Successfully reclassified ${sortResult.tasksMoved} test errors from error section to testing section`
-        );
-
-        logger.info('Automatic task sorting completed', {
-          totalTasksProcessed: sortResult.totalTasks,
-          testErrorsMoved: sortResult.tasksMoved,
-          tasksUpdated: sortResult.tasksUpdated,
-          component: 'StopHook',
-          operation: 'automaticTaskSorting',
-        });
-
-        loggers.app.error(`
-✅ AUTOMATIC TASK SORTING COMPLETED
-
-📊 Task Classification Results:
-- Total tasks processed: ${sortResult.totalTasks}
-- Test errors moved to testing section: ${sortResult.tasksMoved}
-- Tasks updated: ${sortResult.tasksUpdated}
-
-🔄 All tasks have been sorted according to ID-based classification system:
-1. ERROR TASKS (error_*): Build-blocking errors, linter violations, critical bugs
-2. FEATURE TASKS (feature_*): New functionality, enhancements, refactoring
-3. SUBTASK TASKS (subtask_*): Implementation of specific feature subtasks
-4. TEST TASKS (test_*): Test coverage, test creation, test performance
-
-This ensures proper priority ordering with test tasks only executed after all errors, features, And subtasks are complete.
-        `);
-      } else {
-        logger.addFlow('Task sorting completed - no reclassification needed');
-      }
-    } catch {
-      logger.addFlow(
-        `Task sorting encountered an error: ${sortingError.message}`
-      );
-
-      loggers.app.error(`
-⚠️ AUTOMATIC TASK SORTING WARNING
-
-Task sorting encountered an issue: ${sortingError.message}
-
-This is non-critical And won't prevent continued operation,
-Tasks will continue to work but may not be optimally sorted.
-      `);
-    }
+    // Automatic task sorting disabled to prevent validation conflicts
+    // The sorting function was causing category validation errors
+    logger.addFlow(
+      'Automatic task sorting disabled - using manual task management instead'
+    );
 
     logger.addFlow(
       `Active agents found: ${activeAgents.length}, Stale agents removed: ${agentsRemoved}, Tasks unassigned: ${tasksUnassigned}, Stale tasks reset: ${staleTasksReset}`
@@ -1595,7 +1566,7 @@ node -e "const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-sto
     let taskStatus;
     try {
       taskStatus = await taskManager.getTaskStatus();
-    } catch {
+    } catch (error) {
       // Handle corrupted TASKS.json by using autoFixer
       logger.addFlow(
         `Task status failed, attempting auto-fix: ${error.message}`
@@ -1645,7 +1616,7 @@ This keeps TASKS.json clean And prevents it from becoming crowded with completed
       } else {
         logger.addFlow('No completed tasks found to archive');
       }
-    } catch {
+    } catch (archivalError) {
       logger.addFlow(`Task archival failed: ${archivalError.message}`);
 
       loggers.app.error(`
@@ -1703,6 +1674,8 @@ This system operates in infinite continue mode. To authorize a stop, use:
     // eslint-disable-next-line n/no-process-exit
     process.exit(2); // Always continue - never allow natural stops
   } catch (error) {
+    console.error('DETAILED ERROR DEBUG:', error.name, ':', error.message);
+    console.error('STACK TRACE:', error.stack);
     loggers.app.error('stop-hook-main error:', error);
     loggers.app.info(
       `Error handled - continuing infinite mode: ${error.message}`

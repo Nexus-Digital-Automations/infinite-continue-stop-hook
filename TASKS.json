@@ -2287,22 +2287,7 @@
     "last_bulk_archive": "2025-09-28T06:55:15.906Z",
     "bulk_archive_count": 5
   },
-  "agents": {
-    "AGENT_001": {
-      "lastHeartbeat": "2025-09-28T06:48:47.152Z",
-      "status": "active",
-      "reinitialized": "2025-09-28T06:48:47.152Z",
-      "sessionId": "a10f50e75a1f9e9e",
-      "previousSessions": []
-    },
-    "require_await_fixer": {
-      "lastHeartbeat": "2025-09-28T06:51:36.507Z",
-      "status": "active",
-      "reinitialized": "2025-09-28T06:51:36.507Z",
-      "sessionId": "1515dde898310dcd",
-      "previousSessions": []
-    }
-  },
+  "agents": {},
   "features": [
     {
       "id": "feature_1758946372889_4bc64043b483",

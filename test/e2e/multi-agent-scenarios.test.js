@@ -82,13 +82,13 @@ describe('Multi-Agent Scenarios E2E', () => {
 
         // Validate all operations succeeded
         results.forEach(({ agentId, operations }) => {
-          operations.forEach((OPERATION index) => {
+          operations.forEach((operation, index) => {
             E2EAssertions.assertCommandSuccess(
-              _operationresult,
-              `Agent ${agentId} OPERATION${index}`,
+              operation.result,
+              `Agent ${agentId} operation ${index}`,
             );
             E2EAssertions.assertOutputContains(
-              _operationresult,
+              operation.result,
               'Feature suggested successfully',
             );
           });
@@ -139,7 +139,7 @@ describe('Multi-Agent Scenarios E2E', () => {
 
         const featureResults = await Promise.all(featurePromises);
         const featureIds = featureResults.map((result) => {
-          const match = RESULT.result.stdout.match(/Feature ID: (\w+)/);
+          const match = result.result.stdout.match(/Feature ID: (\w+)/);
           return match[1];
         });
 
@@ -232,10 +232,10 @@ describe('Multi-Agent Scenarios E2E', () => {
           expect(Array.isArray(result)).toBe(true);
           expect(result.length).toBe(3);
 
-          RESULT.forEach((OPERATION opIndex) => {
+          result.forEach((operation, opIndex) => {
             E2EAssertions.assertCommandSuccess(
-              _operationresult,
-              `Agent ${agents[index].id} OPERATION${opIndex}`,
+              operation.result,
+              `Agent ${agents[index].id} operation ${opIndex}`,
             );
           });
         });
@@ -274,7 +274,7 @@ describe('Multi-Agent Scenarios E2E', () => {
           },
         );
 
-        const featureId = RESULT.stdout.match(/Feature ID: (\w+)/)[1];
+        const featureId = result.stdout.match(/Feature ID: (\w+)/)[1];
 
         // Step 2: Multiple agents try to approve the same feature simultaneously
         const conflictPromises = [
@@ -306,7 +306,7 @@ describe('Multi-Agent Scenarios E2E', () => {
         let _failureCount = 0;
 
         conflictResults.forEach((result, _index) => {
-          if (result.status === 'fulfilled' && RESULT.value.success) {
+          if (result.status === 'fulfilled' && result.value.success) {
             successCount++;
           } else {
             _failureCount++;
@@ -346,7 +346,7 @@ describe('Multi-Agent Scenarios E2E', () => {
         rejectionAttempts.forEach((result) => {
           if (result.status === 'fulfilled') {
             E2EAssertions.assertCommandFailure(
-              RESULT.value,
+              result.value,
               'Rejection of approved feature',
             );
           }
@@ -426,8 +426,8 @@ describe('Multi-Agent Scenarios E2E', () => {
         // Validate feature operations succeeded despite stop hook integration
         featureResults.forEach((result, index) => {
           E2EAssertions.assertCommandSuccess(
-            RESULT.result,
-            `Feature _operationby ${agents[index].id}`,
+            result.result,
+            `Feature operationby ${agents[index].id}`,
           );
         });
 
@@ -460,7 +460,7 @@ describe('Multi-Agent Scenarios E2E', () => {
           expect(result.length).toBeGreaterThan(0);
 
           // At least some iterations should complete
-          const completedIterations = RESULT.filter(
+          const completedIterations = result.filter(
             (r) => r.success || r.code === 0,
           );
           expect(completedIterations.length).toBeGreaterThan(0);
@@ -509,11 +509,11 @@ describe('Multi-Agent Scenarios E2E', () => {
           if (result.status === 'fulfilled') {
             try {
               E2EAssertions.assertCommandSuccess(
-                RESULT.value.result,
+                result.value.result,
                 `Contention OPERATION${index}`,
               );
               successfulOperations++;
-            } catch {
+            } catch (error) {
               console.warn(
                 `Operation ${index} failed validation: ${error.message}`,
               );

@@ -524,12 +524,12 @@ describe('ValidationDependencyManager', () => {
       expect(criticalPaths.length).toBeLessThanOrEqual(5); // Top 5 only
 
       if (criticalPaths.length > 0) {
-        const PATH = criticalPaths[0];
-        expect(PATH.path).toBeDefined();
-        expect(PATH.totalDuration).toBeGreaterThan(0);
-        expect(PATH.averageDuration).toBeGreaterThan(0);
-        expect(PATH.bottlenecks).toBeDefined();
-        expect(PATH.optimizationPotential).toBeGreaterThanOrEqual(0);
+        const path = criticalPaths[0];
+        expect(path.path).toBeDefined();
+        expect(path.totalDuration).toBeGreaterThan(0);
+        expect(path.averageDuration).toBeGreaterThan(0);
+        expect(path.bottlenecks).toBeDefined();
+        expect(path.optimizationPotential).toBeGreaterThanOrEqual(0);
       }
     });
 
@@ -566,13 +566,13 @@ describe('ValidationDependencyManager', () => {
 
     test('should load configuration from file', async () => {
       // Save current configuration
-      const CONFIG_PATH = await manager.saveDependencyConfig();
+      const configPath = await manager.saveDependencyConfig();
 
       // Create new manager And load configuration
       const newManager = new ValidationDependencyManager({
         projectRoot: tempDir,
       });
-      const loadedConfig = await newManager.loadDependencyConfig();
+      const loadedConfig = await newManager.loadDependencyConfig(configPath);
 
       expect(loadedConfig).toBeDefined();
       expect(loadedConfig.version).toBeDefined();
@@ -589,7 +589,7 @@ describe('ValidationDependencyManager', () => {
       const newManager = new ValidationDependencyManager({
         projectRoot: tempDir,
       });
-      const RESULT = await newManager.loadDependencyConfig();
+      const result = await newManager.loadDependencyConfig();
 
       expect(result).toBeNull(); // File doesn't exist, should return null
 

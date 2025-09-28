@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "timestamp": "2025-09-28T07:01:39.985Z",
+    "timestamp": "2025-09-28T15:06:00.368Z",
     "reporter": "jest-json-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System"
@@ -10,26 +10,30 @@
     "numPassedTestSuites": 0,
     "numFailedTestSuites": 1,
     "numPendingTestSuites": 0,
-    "numTotalTests": 0,
+    "numTotalTests": 12,
     "numPassedTests": 0,
-    "numFailedTests": 0,
+    "numFailedTests": 12,
     "numPendingTests": 0,
     "numTodoTests": 0,
-    "startTime": 1759042898648,
-    "endTime": 1759042899985,
-    "duration": 1337,
+    "startTime": 1759071950655,
+    "endTime": 1759071960368,
+    "duration": 9713,
     "success": false
   },
   "testResults": [
     {
       "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js",
-      "status": "passed",
-      "startTime": 0,
-      "endTime": 0,
-      "duration": 0,
-      "numTests": 0,
+      "displayName": {
+        "color": "white",
+        "name": "unit"
+      },
+      "status": "failed",
+      "startTime": 1759071950904,
+      "endTime": 1759071960318,
+      "duration": 9414,
+      "numTests": 12,
       "numPassingTests": 0,
-      "numFailingTests": 0,
+      "numFailingTests": 12,
       "numPendingTests": 0,
       "snapshot": {
         "added": 0,
@@ -38,8 +42,322 @@
         "updated": 0,
         "unchecked": 0
       },
-      "testCases": [],
-      "failureDetails": []
+      "testCases": [
+        {
+          "ancestorTitles": [
+            "Verification Endpoints",
+            "get-verification-requirements"
+          ],
+          "title": "should successfully retrieve verification requirements for a task",
+          "fullName": "Verification Endpoints get-verification-requirements should successfully retrieve verification requirements for a task",
+          "status": "failed",
+          "duration": 2,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Verification Endpoints",
+            "get-verification-requirements"
+          ],
+          "title": "should throw error when task ID does not exist",
+          "fullName": "Verification Endpoints get-verification-requirements should throw error when task ID does not exist",
+          "status": "failed",
+          "duration": 7,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Verification Endpoints",
+            "get-verification-requirements"
+          ],
+          "title": "should throw error when task has no verification gate",
+          "fullName": "Verification Endpoints get-verification-requirements should throw error when task has no verification gate",
+          "status": "failed",
+          "duration": 3,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Verification Endpoints",
+            "get-verification-requirements"
+          ],
+          "title": "should throw error when no tasks exist in system",
+          "fullName": "Verification Endpoints get-verification-requirements should throw error when no tasks exist in system",
+          "status": "failed",
+          "duration": 3,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Verification Endpoints",
+            "submit-verification-evidence"
+          ],
+          "title": "should successfully submit valid verification evidence",
+          "fullName": "Verification Endpoints submit-verification-evidence should successfully submit valid verification evidence",
+          "status": "failed",
+          "duration": 1230,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Verification Endpoints",
+            "submit-verification-evidence"
+          ],
+          "title": "should reject evidence when verification gate already passed",
+          "fullName": "Verification Endpoints submit-verification-evidence should reject evidence when verification gate already passed",
+          "status": "failed",
+          "duration": 1288,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Verification Endpoints",
+            "submit-verification-evidence"
+          ],
+          "title": "should reject evidence missing required fields",
+          "fullName": "Verification Endpoints submit-verification-evidence should reject evidence missing required fields",
+          "status": "failed",
+          "duration": 1199,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Verification Endpoints",
+            "submit-verification-evidence"
+          ],
+          "title": "should reject evidence with invalid reviewedItems format",
+          "fullName": "Verification Endpoints submit-verification-evidence should reject evidence with invalid reviewedItems format",
+          "status": "failed",
+          "duration": 1213,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Verification Endpoints",
+            "submit-verification-evidence"
+          ],
+          "title": "should reject null or undefined evidence data",
+          "fullName": "Verification Endpoints submit-verification-evidence should reject null or undefined evidence data",
+          "status": "failed",
+          "duration": 1188,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Verification Endpoints",
+            "submit-verification-evidence"
+          ],
+          "title": "should handle task without verification gate",
+          "fullName": "Verification Endpoints submit-verification-evidence should handle task without verification gate",
+          "status": "failed",
+          "duration": 1165,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Verification Endpoints",
+            "Evidence validation logic"
+          ],
+          "title": "should validate evidence against requirements properly",
+          "fullName": "Verification Endpoints Evidence validation logic should validate evidence against requirements properly",
+          "status": "failed",
+          "duration": 1230,
+          "numPassingAsserts": 0,
+          "location": null
+        },
+        {
+          "ancestorTitles": [
+            "Verification Endpoints",
+            "Integration scenarios"
+          ],
+          "title": "should handle complete verification workflow",
+          "fullName": "Verification Endpoints Integration scenarios should handle complete verification workflow",
+          "status": "failed",
+          "duration": 1,
+          "numPassingAsserts": 0,
+          "location": null
+        }
+      ],
+      "failureDetails": [
+        {
+          "title": "should successfully retrieve verification requirements for a task",
+          "fullName": "Verification Endpoints get-verification-requirements should successfully retrieve verification requirements for a task",
+          "failureMessages": [
+            "Error: Failed to get verification requirements: FS is not defined\n    at AutonomousTaskManagerAPI.getVerificationRequirements (/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js:7701:13)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:131:22)"
+          ],
+          "failureDetails": [
+            {}
+          ]
+        },
+        {
+          "title": "should throw error when task ID does not exist",
+          "fullName": "Verification Endpoints get-verification-requirements should throw error when task ID does not exist",
+          "failureMessages": [
+            "Error: expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to get verification requirements: Task with ID nonexistent_task not found\"\nReceived message:   \"Failed to get verification requirements: FS is not defined\"\n\n      7699 |       };\n      7700 |     } catch (_error) {\n    > 7701 |       throw new Error(\n           |             ^\n      7702 |         `Failed to get verification requirements: ${_error.message}`\n      7703 |       );\n      7704 |     }\n\n      at AutonomousTaskManagerAPI.getVerificationRequirements (taskmanager-api.js:7701:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:161:7)\n    at Object.toThrow (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/expect/build/index.js:2155:20)\n    at Object.toThrow (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:162:18)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1006:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:946:3)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
+          ],
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to get verification requirements: Task with ID nonexistent_task not found\"\nReceived message:   \"Failed to get verification requirements: FS is not defined\"\n\n      7699 |       };\n      7700 |     } catch (_error) {\n    > 7701 |       throw new Error(\n           |             ^\n      7702 |         `Failed to get verification requirements: ${_error.message}`\n      7703 |       );\n      7704 |     }\n\n      at AutonomousTaskManagerAPI.getVerificationRequirements (taskmanager-api.js:7701:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:161:7)",
+                "pass": false
+              },
+              "message": "expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to get verification requirements: Task with ID nonexistent_task not found\"\nReceived message:   \"Failed to get verification requirements: FS is not defined\"\n\n      7699 |       };\n      7700 |     } catch (_error) {\n    > 7701 |       throw new Error(\n           |             ^\n      7702 |         `Failed to get verification requirements: ${_error.message}`\n      7703 |       );\n      7704 |     }\n\n      at AutonomousTaskManagerAPI.getVerificationRequirements (taskmanager-api.js:7701:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:161:7)"
+            }
+          ]
+        },
+        {
+          "title": "should throw error when task has no verification gate",
+          "fullName": "Verification Endpoints get-verification-requirements should throw error when task has no verification gate",
+          "failureMessages": [
+            "Error: expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to get verification requirements: Task task_123 does not have verification requirements\"\nReceived message:   \"Failed to get verification requirements: FS is not defined\"\n\n      7699 |       };\n      7700 |     } catch (_error) {\n    > 7701 |       throw new Error(\n           |             ^\n      7702 |         `Failed to get verification requirements: ${_error.message}`\n      7703 |       );\n      7704 |     }\n\n      at AutonomousTaskManagerAPI.getVerificationRequirements (taskmanager-api.js:7701:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:182:7)\n    at Object.toThrow (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/expect/build/index.js:2155:20)\n    at Object.toThrow (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:183:18)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1006:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:946:3)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
+          ],
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to get verification requirements: Task task_123 does not have verification requirements\"\nReceived message:   \"Failed to get verification requirements: FS is not defined\"\n\n      7699 |       };\n      7700 |     } catch (_error) {\n    > 7701 |       throw new Error(\n           |             ^\n      7702 |         `Failed to get verification requirements: ${_error.message}`\n      7703 |       );\n      7704 |     }\n\n      at AutonomousTaskManagerAPI.getVerificationRequirements (taskmanager-api.js:7701:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:182:7)",
+                "pass": false
+              },
+              "message": "expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to get verification requirements: Task task_123 does not have verification requirements\"\nReceived message:   \"Failed to get verification requirements: FS is not defined\"\n\n      7699 |       };\n      7700 |     } catch (_error) {\n    > 7701 |       throw new Error(\n           |             ^\n      7702 |         `Failed to get verification requirements: ${_error.message}`\n      7703 |       );\n      7704 |     }\n\n      at AutonomousTaskManagerAPI.getVerificationRequirements (taskmanager-api.js:7701:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:182:7)"
+            }
+          ]
+        },
+        {
+          "title": "should throw error when no tasks exist in system",
+          "fullName": "Verification Endpoints get-verification-requirements should throw error when no tasks exist in system",
+          "failureMessages": [
+            "Error: expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to get verification requirements: No tasks exist in the system\"\nReceived message:   \"Failed to get verification requirements: FS is not defined\"\n\n      7699 |       };\n      7700 |     } catch (_error) {\n    > 7701 |       throw new Error(\n           |             ^\n      7702 |         `Failed to get verification requirements: ${_error.message}`\n      7703 |       );\n      7704 |     }\n\n      at AutonomousTaskManagerAPI.getVerificationRequirements (taskmanager-api.js:7701:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:197:7)\n    at Object.toThrow (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/expect/build/index.js:2155:20)\n    at Object.toThrow (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:198:18)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1006:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:946:3)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
+          ],
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to get verification requirements: No tasks exist in the system\"\nReceived message:   \"Failed to get verification requirements: FS is not defined\"\n\n      7699 |       };\n      7700 |     } catch (_error) {\n    > 7701 |       throw new Error(\n           |             ^\n      7702 |         `Failed to get verification requirements: ${_error.message}`\n      7703 |       );\n      7704 |     }\n\n      at AutonomousTaskManagerAPI.getVerificationRequirements (taskmanager-api.js:7701:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:197:7)",
+                "pass": false
+              },
+              "message": "expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to get verification requirements: No tasks exist in the system\"\nReceived message:   \"Failed to get verification requirements: FS is not defined\"\n\n      7699 |       };\n      7700 |     } catch (_error) {\n    > 7701 |       throw new Error(\n           |             ^\n      7702 |         `Failed to get verification requirements: ${_error.message}`\n      7703 |       );\n      7704 |     }\n\n      at AutonomousTaskManagerAPI.getVerificationRequirements (taskmanager-api.js:7701:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:197:7)"
+            }
+          ]
+        },
+        {
+          "title": "should successfully submit valid verification evidence",
+          "fullName": "Verification Endpoints submit-verification-evidence should successfully submit valid verification evidence",
+          "failureMessages": [
+            "Error: Failed to submit verification evidence: Could not acquire lock for /test/project/TASKS.json after 200 attempts\n    at AutonomousTaskManagerAPI.submitVerificationEvidence (/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js:7763:13)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:247:22)"
+          ],
+          "failureDetails": [
+            {}
+          ]
+        },
+        {
+          "title": "should reject evidence when verification gate already passed",
+          "fullName": "Verification Endpoints submit-verification-evidence should reject evidence when verification gate already passed",
+          "failureMessages": [
+            "Error: expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to submit verification evidence: Task task_123 verification gate has already passed\"\nReceived message:   \"Failed to submit verification evidence: Could not acquire lock for /test/project/TASKS.json after 200 attempts\"\n\n      7761 |       return result;\n      7762 |     } catch (_error) {\n    > 7763 |       throw new Error(\n           |             ^\n      7764 |         `Failed to submit verification evidence: ${_error.message}`\n      7765 |       );\n      7766 |     }\n\n      at AutonomousTaskManagerAPI.submitVerificationEvidence (taskmanager-api.js:7763:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:301:7)\n    at Object.toThrow (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/expect/build/index.js:2155:20)\n    at Object.toThrow (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:302:18)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1006:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:946:3)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
+          ],
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to submit verification evidence: Task task_123 verification gate has already passed\"\nReceived message:   \"Failed to submit verification evidence: Could not acquire lock for /test/project/TASKS.json after 200 attempts\"\n\n      7761 |       return result;\n      7762 |     } catch (_error) {\n    > 7763 |       throw new Error(\n           |             ^\n      7764 |         `Failed to submit verification evidence: ${_error.message}`\n      7765 |       );\n      7766 |     }\n\n      at AutonomousTaskManagerAPI.submitVerificationEvidence (taskmanager-api.js:7763:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:301:7)",
+                "pass": false
+              },
+              "message": "expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to submit verification evidence: Task task_123 verification gate has already passed\"\nReceived message:   \"Failed to submit verification evidence: Could not acquire lock for /test/project/TASKS.json after 200 attempts\"\n\n      7761 |       return result;\n      7762 |     } catch (_error) {\n    > 7763 |       throw new Error(\n           |             ^\n      7764 |         `Failed to submit verification evidence: ${_error.message}`\n      7765 |       );\n      7766 |     }\n\n      at AutonomousTaskManagerAPI.submitVerificationEvidence (taskmanager-api.js:7763:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:301:7)"
+            }
+          ]
+        },
+        {
+          "title": "should reject evidence missing required fields",
+          "fullName": "Verification Endpoints submit-verification-evidence should reject evidence missing required fields",
+          "failureMessages": [
+            "Error: expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to submit verification evidence: Verification evidence validation failed: Evidence must include agentId\"\nReceived message:   \"Failed to submit verification evidence: Could not acquire lock for /test/project/TASKS.json after 200 attempts\"\n\n      7761 |       return result;\n      7762 |     } catch (_error) {\n    > 7763 |       throw new Error(\n           |             ^\n      7764 |         `Failed to submit verification evidence: ${_error.message}`\n      7765 |       );\n      7766 |     }\n\n      at AutonomousTaskManagerAPI.submitVerificationEvidence (taskmanager-api.js:7763:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:340:7)\n    at Object.toThrow (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/expect/build/index.js:2155:20)\n    at Object.toThrow (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:341:18)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1006:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:946:3)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
+          ],
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to submit verification evidence: Verification evidence validation failed: Evidence must include agentId\"\nReceived message:   \"Failed to submit verification evidence: Could not acquire lock for /test/project/TASKS.json after 200 attempts\"\n\n      7761 |       return result;\n      7762 |     } catch (_error) {\n    > 7763 |       throw new Error(\n           |             ^\n      7764 |         `Failed to submit verification evidence: ${_error.message}`\n      7765 |       );\n      7766 |     }\n\n      at AutonomousTaskManagerAPI.submitVerificationEvidence (taskmanager-api.js:7763:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:340:7)",
+                "pass": false
+              },
+              "message": "expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to submit verification evidence: Verification evidence validation failed: Evidence must include agentId\"\nReceived message:   \"Failed to submit verification evidence: Could not acquire lock for /test/project/TASKS.json after 200 attempts\"\n\n      7761 |       return result;\n      7762 |     } catch (_error) {\n    > 7763 |       throw new Error(\n           |             ^\n      7764 |         `Failed to submit verification evidence: ${_error.message}`\n      7765 |       );\n      7766 |     }\n\n      at AutonomousTaskManagerAPI.submitVerificationEvidence (taskmanager-api.js:7763:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:340:7)"
+            }
+          ]
+        },
+        {
+          "title": "should reject evidence with invalid reviewedItems format",
+          "fullName": "Verification Endpoints submit-verification-evidence should reject evidence with invalid reviewedItems format",
+          "failureMessages": [
+            "Error: expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to submit verification evidence: Verification evidence validation failed: Evidence must include reviewedItems array\"\nReceived message:   \"Failed to submit verification evidence: Could not acquire lock for /test/project/TASKS.json after 200 attempts\"\n\n      7761 |       return result;\n      7762 |     } catch (_error) {\n    > 7763 |       throw new Error(\n           |             ^\n      7764 |         `Failed to submit verification evidence: ${_error.message}`\n      7765 |       );\n      7766 |     }\n\n      at AutonomousTaskManagerAPI.submitVerificationEvidence (taskmanager-api.js:7763:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:399:7)\n    at Object.toThrow (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/expect/build/index.js:2155:20)\n    at Object.toThrow (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:400:18)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1006:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:946:3)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
+          ],
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to submit verification evidence: Verification evidence validation failed: Evidence must include reviewedItems array\"\nReceived message:   \"Failed to submit verification evidence: Could not acquire lock for /test/project/TASKS.json after 200 attempts\"\n\n      7761 |       return result;\n      7762 |     } catch (_error) {\n    > 7763 |       throw new Error(\n           |             ^\n      7764 |         `Failed to submit verification evidence: ${_error.message}`\n      7765 |       );\n      7766 |     }\n\n      at AutonomousTaskManagerAPI.submitVerificationEvidence (taskmanager-api.js:7763:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:399:7)",
+                "pass": false
+              },
+              "message": "expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to submit verification evidence: Verification evidence validation failed: Evidence must include reviewedItems array\"\nReceived message:   \"Failed to submit verification evidence: Could not acquire lock for /test/project/TASKS.json after 200 attempts\"\n\n      7761 |       return result;\n      7762 |     } catch (_error) {\n    > 7763 |       throw new Error(\n           |             ^\n      7764 |         `Failed to submit verification evidence: ${_error.message}`\n      7765 |       );\n      7766 |     }\n\n      at AutonomousTaskManagerAPI.submitVerificationEvidence (taskmanager-api.js:7763:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:399:7)"
+            }
+          ]
+        },
+        {
+          "title": "should reject null or undefined evidence data",
+          "fullName": "Verification Endpoints submit-verification-evidence should reject null or undefined evidence data",
+          "failureMessages": [
+            "Error: expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to submit verification evidence: Verification evidence validation failed: Evidence data is required\"\nReceived message:   \"Failed to submit verification evidence: Could not acquire lock for /test/project/TASKS.json after 200 attempts\"\n\n      7761 |       return result;\n      7762 |     } catch (_error) {\n    > 7763 |       throw new Error(\n           |             ^\n      7764 |         `Failed to submit verification evidence: ${_error.message}`\n      7765 |       );\n      7766 |     }\n\n      at AutonomousTaskManagerAPI.submitVerificationEvidence (taskmanager-api.js:7763:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:426:7)\n    at Object.toThrow (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/expect/build/index.js:2155:20)\n    at Object.toThrow (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:427:18)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1006:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:946:3)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
+          ],
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to submit verification evidence: Verification evidence validation failed: Evidence data is required\"\nReceived message:   \"Failed to submit verification evidence: Could not acquire lock for /test/project/TASKS.json after 200 attempts\"\n\n      7761 |       return result;\n      7762 |     } catch (_error) {\n    > 7763 |       throw new Error(\n           |             ^\n      7764 |         `Failed to submit verification evidence: ${_error.message}`\n      7765 |       );\n      7766 |     }\n\n      at AutonomousTaskManagerAPI.submitVerificationEvidence (taskmanager-api.js:7763:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:426:7)",
+                "pass": false
+              },
+              "message": "expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to submit verification evidence: Verification evidence validation failed: Evidence data is required\"\nReceived message:   \"Failed to submit verification evidence: Could not acquire lock for /test/project/TASKS.json after 200 attempts\"\n\n      7761 |       return result;\n      7762 |     } catch (_error) {\n    > 7763 |       throw new Error(\n           |             ^\n      7764 |         `Failed to submit verification evidence: ${_error.message}`\n      7765 |       );\n      7766 |     }\n\n      at AutonomousTaskManagerAPI.submitVerificationEvidence (taskmanager-api.js:7763:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:426:7)"
+            }
+          ]
+        },
+        {
+          "title": "should handle task without verification gate",
+          "fullName": "Verification Endpoints submit-verification-evidence should handle task without verification gate",
+          "failureMessages": [
+            "Error: expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to submit verification evidence: Task task_123 does not have a verification gate\"\nReceived message:   \"Failed to submit verification evidence: Could not acquire lock for /test/project/TASKS.json after 200 attempts\"\n\n      7761 |       return result;\n      7762 |     } catch (_error) {\n    > 7763 |       throw new Error(\n           |             ^\n      7764 |         `Failed to submit verification evidence: ${_error.message}`,\n      7765 |       );\n      7766 |     }\n\n      at AutonomousTaskManagerAPI.submitVerificationEvidence (taskmanager-api.js:7763:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:456:7)\n    at Object.toThrow (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/expect/build/index.js:2155:20)\n    at Object.toThrow (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:457:18)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1006:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:946:3)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
+          ],
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to submit verification evidence: Task task_123 does not have a verification gate\"\nReceived message:   \"Failed to submit verification evidence: Could not acquire lock for /test/project/TASKS.json after 200 attempts\"\n\n      7761 |       return result;\n      7762 |     } catch (_error) {\n    > 7763 |       throw new Error(\n           |             ^\n      7764 |         `Failed to submit verification evidence: ${_error.message}`,\n      7765 |       );\n      7766 |     }\n\n      at AutonomousTaskManagerAPI.submitVerificationEvidence (taskmanager-api.js:7763:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:456:7)",
+                "pass": false
+              },
+              "message": "expect(received).rejects.toThrow(expected)\n\nExpected substring: \"Failed to submit verification evidence: Task task_123 does not have a verification gate\"\nReceived message:   \"Failed to submit verification evidence: Could not acquire lock for /test/project/TASKS.json after 200 attempts\"\n\n      7761 |       return result;\n      7762 |     } catch (_error) {\n    > 7763 |       throw new Error(\n           |             ^\n      7764 |         `Failed to submit verification evidence: ${_error.message}`,\n      7765 |       );\n      7766 |     }\n\n      at AutonomousTaskManagerAPI.submitVerificationEvidence (taskmanager-api.js:7763:13)\n      at Object.<anonymous> (test/unit/verification-endpoints.test.js:456:7)"
+            }
+          ]
+        },
+        {
+          "title": "should validate evidence against requirements properly",
+          "fullName": "Verification Endpoints Evidence validation logic should validate evidence against requirements properly",
+          "failureMessages": [
+            "Error: Failed to submit verification evidence: Could not acquire lock for /test/project/TASKS.json after 200 attempts\n    at AutonomousTaskManagerAPI.submitVerificationEvidence (/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js:7763:13)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:524:22)"
+          ],
+          "failureDetails": [
+            {}
+          ]
+        },
+        {
+          "title": "should handle complete verification workflow",
+          "fullName": "Verification Endpoints Integration scenarios should handle complete verification workflow",
+          "failureMessages": [
+            "Error: Failed to get verification requirements: FS is not defined\n    at AutonomousTaskManagerAPI.getVerificationRequirements (/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js:7701:13)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:564:28)"
+          ],
+          "failureDetails": [
+            {}
+          ]
+        }
+      ]
     }
   ],
   "coverageMap": null,

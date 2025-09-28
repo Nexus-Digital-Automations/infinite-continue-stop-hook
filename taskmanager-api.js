@@ -40,8 +40,7 @@
  * Usage: node taskmanager-api.js <command> [args...] [--project-root /path/to/project]
  */
 
-const FS = require('path');
-const FS = require('fs').promises;
+const PATH = require('path');
 const crypto = require('crypto');
 
 // Import RAG operations for self-learning capabilities
@@ -916,7 +915,7 @@ class AutonomousTaskManagerAPI {
       RESULT.comprehensiveGuide = guideData;
 
       return result;
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: `Failed to initialize agent: ${_error.message}`,
@@ -973,7 +972,7 @@ class AutonomousTaskManagerAPI {
       RESULT.comprehensiveGuide = guideData;
 
       return result;
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: `Failed to reinitialize agent: ${_error.message}`,
@@ -1041,7 +1040,7 @@ class AutonomousTaskManagerAPI {
         validation,
         message: `Validation dependency for '${criterion}' updated successfully`,
       };
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: _error.message,
@@ -1263,7 +1262,7 @@ class AutonomousTaskManagerAPI {
           ? `Custom validation rule '${ruleId}' executed successfully`
           : `Custom validation rule '${ruleId}' failed: ${result.error}`,
       };
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: _error.message,
@@ -1453,7 +1452,6 @@ class AutonomousTaskManagerAPI {
 
   async startAuthorization(agentId) {
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
       const crypto = require('crypto');
 
@@ -1488,7 +1486,7 @@ class AutonomousTaskManagerAPI {
         nextStep: authState.requiredSteps[0],
         instructions: `Next: validate-criterion ${authKey} ${authState.requiredSteps[0]}`,
       };
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: `Failed to start authorization: ${_error.message}`,
@@ -1512,7 +1510,6 @@ class AutonomousTaskManagerAPI {
     };
 
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
       const { execSync: EXEC_SYNC } = require('child_process');
 
@@ -1622,7 +1619,7 @@ class AutonomousTaskManagerAPI {
           ? `All validations complete! Final step: complete-authorization ${authKey}`
           : `Next: validate-criterion ${authKey} ${nextStep}`,
       };
-    } catch {
+    } catch (error) {
       // Capture performance metrics for failed validation
       performanceMetrics.endTime = new Date().toISOString();
       performanceMetrics.durationMs = Date.now() - startTime;
@@ -1665,7 +1662,6 @@ class AutonomousTaskManagerAPI {
    */
   async validateCriteriaParallel(authKey, criteria = null) {
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
       const { execSync: EXEC_SYNC } = require('child_process');
 
@@ -1915,7 +1911,7 @@ class AutonomousTaskManagerAPI {
             ? `Use selective re-validation for failed criteria: selective-revalidation ${authKey}`
             : null,
       };
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: `Parallel validation failed: ${error.message}`,
@@ -2030,7 +2026,6 @@ class AutonomousTaskManagerAPI {
 
   async completeAuthorization(authKey) {
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
 
       const authStateFile = PATH.join(PROJECT_ROOT, '.auth-state.json');
@@ -2089,7 +2084,7 @@ class AutonomousTaskManagerAPI {
         },
         message: `Stop authorized by agent ${authState.agentId} after completing all ${authState.completedSteps.length} validation steps`,
       };
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: `Failed to complete authorization: ${error.message}`,
@@ -2105,7 +2100,6 @@ class AutonomousTaskManagerAPI {
 
   async validateFeatureTests(featureId) {
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
 
       // Load feature data
@@ -2193,7 +2187,7 @@ class AutonomousTaskManagerAPI {
         message: 'Tests found for feature - proceeding to coverage validation',
         nextStep: `confirm-test-coverage ${featureId}`,
       };
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: `Test validation failed: ${error.message}`,
@@ -2270,7 +2264,7 @@ class AutonomousTaskManagerAPI {
         message: `Test coverage ${coveragePercentage}% meets requirement - proceeding to pipeline validation`,
         nextStep: `confirm-pipeline-passes ${featureId}`,
       };
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: `Coverage validation failed: ${error.message}`,
@@ -2349,7 +2343,7 @@ class AutonomousTaskManagerAPI {
           'All pipeline validations passed - feature ready for advancement',
         nextStep: `advance-to-next-feature ${featureId}`,
       };
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: `Pipeline validation failed: ${error.message}`,
@@ -2435,7 +2429,7 @@ class AutonomousTaskManagerAPI {
           pipeline: true,
         },
       };
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: `Failed to advance to next feature: ${error.message}`,
@@ -2479,7 +2473,7 @@ class AutonomousTaskManagerAPI {
               ? `confirm-pipeline-passes ${featureId}`
               : `advance-to-next-feature ${featureId}`,
       };
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: `Failed to get feature test status: ${error.message}`,
@@ -2494,7 +2488,6 @@ class AutonomousTaskManagerAPI {
    */
   async _storeValidationPerformanceMetrics(performanceMetrics) {
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
 
       const metricsFile = PATH.join(
@@ -2587,7 +2580,6 @@ class AutonomousTaskManagerAPI {
    */
   async getValidationPerformanceMetrics(_options = {}) {
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
       const metricsFile = PATH.join(
         PROJECT_ROOT,
@@ -2659,7 +2651,6 @@ class AutonomousTaskManagerAPI {
    */
   async getPerformanceTrends(options = {}) {
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
       const metricsFile = PATH.join(
         PROJECT_ROOT,
@@ -2708,7 +2699,6 @@ class AutonomousTaskManagerAPI {
    */
   async identifyPerformanceBottlenecks(options = {}) {
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
       const metricsFile = PATH.join(
         PROJECT_ROOT,
@@ -2760,7 +2750,6 @@ class AutonomousTaskManagerAPI {
    */
   async getDetailedTimingReport(options = {}) {
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
       const metricsFile = PATH.join(
         PROJECT_ROOT,
@@ -2807,7 +2796,6 @@ class AutonomousTaskManagerAPI {
    */
   async analyzeResourceUsage(options = {}) {
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
       const metricsFile = PATH.join(
         PROJECT_ROOT,
@@ -2857,7 +2845,6 @@ class AutonomousTaskManagerAPI {
    */
   async getPerformanceBenchmarks(options = {}) {
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
       const metricsFile = PATH.join(
         PROJECT_ROOT,
@@ -4040,7 +4027,6 @@ class AutonomousTaskManagerAPI {
         '.validation-snapshots',
         snapshotId
       );
-      const FS = require('fs').promises;
       const { execSync } = require('child_process');
 
       // Create snapshot directory
@@ -4067,7 +4053,7 @@ class AutonomousTaskManagerAPI {
           stashCreated = true;
           gitState.stashMessage = stashMessage;
         }
-      } catch {
+      } catch (error) {
         loggers.taskManager.warn(
           'Warning: Could not create git stash:',
           error.message
@@ -4128,7 +4114,7 @@ class AutonomousTaskManagerAPI {
         stashCreated: stashCreated,
         message: 'Validation state snapshot created successfully',
       };
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: `Failed to create validation state snapshot: ${error.message}`,
@@ -4143,7 +4129,6 @@ class AutonomousTaskManagerAPI {
         '.validation-snapshots',
         snapshotId
       );
-      const FS = require('fs').promises;
       const { execSync } = require('child_process');
 
       // Verify snapshot exists
@@ -4187,7 +4172,7 @@ class AutonomousTaskManagerAPI {
               }
             }
           }
-        } catch {
+        } catch (error) {
           this.logger.warn('Git rollback encountered issues', {
             error: error.message,
             component: 'GitManager',
@@ -4227,7 +4212,7 @@ class AutonomousTaskManagerAPI {
         filesRestored: snapshotData.criticalFiles.length,
         message: 'Rollback completed successfully',
       };
-    } catch {
+    } catch (error) {
       await this._logRollbackEvent({
         snapshotId: snapshotId,
         timestamp: new Date().toISOString(),
@@ -4246,7 +4231,6 @@ class AutonomousTaskManagerAPI {
   async getAvailableRollbackSnapshots(_options = {}) {
     try {
       const snapshotsDir = PATH.join(PROJECT_ROOT, '.validation-snapshots');
-      const FS = require('fs').promises;
 
       try {
         await FS.access(snapshotsDir);
@@ -4301,7 +4285,7 @@ class AutonomousTaskManagerAPI {
         total: snapshots.length,
         showing: limitedSnapshots.length,
       };
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: `Failed to get available snapshots: ${_error.message}`,
@@ -4316,7 +4300,6 @@ class AutonomousTaskManagerAPI {
         '.validation-snapshots',
         'rollback-history.json'
       );
-      const FS = require('fs').promises;
 
       try {
         const historyData = JSON.parse(await FS.readFile(historyFile, 'utf8'));
@@ -4350,7 +4333,7 @@ class AutonomousTaskManagerAPI {
           message: 'No rollback history found',
         };
       }
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: `Failed to get rollback history: ${error.message}`,
@@ -4361,7 +4344,6 @@ class AutonomousTaskManagerAPI {
   async cleanupOldRollbackSnapshots(_options = {}) {
     try {
       const snapshotsDir = PATH.join(PROJECT_ROOT, '.validation-snapshots');
-      const FS = require('fs').promises;
       const maxAge = options.maxAgeHours || 24; // Default: 24 hours
       const maxCount = options.maxCount || 10; // Default: keep 10 snapshots
 
@@ -4428,7 +4410,7 @@ class AutonomousTaskManagerAPI {
           try {
             await this._removeDirectory(snapshot.directory);
             cleanedCount++;
-          } catch {
+          } catch (error) {
             this.logger.warn('Failed to cleanup snapshot', {
               snapshotId: snapshot.id,
               error: error.message,
@@ -4446,7 +4428,7 @@ class AutonomousTaskManagerAPI {
         maxAge: maxAge,
         maxCount: maxCount,
       };
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: `Failed to cleanup old snapshots: ${error.message}`,
@@ -4473,7 +4455,7 @@ class AutonomousTaskManagerAPI {
           timeout: 5000,
           encoding: 'utf8',
         }).trim();
-      } catch {
+      } catch (error) {
         loggers.taskManager.warn(
           'Could not get git commit hash:',
           error.message
@@ -4486,7 +4468,7 @@ class AutonomousTaskManagerAPI {
           timeout: 5000,
           encoding: 'utf8',
         }).trim();
-      } catch {
+      } catch (error) {
         loggers.taskManager.warn('Could not get git branch:', error.message);
       }
 
@@ -4497,7 +4479,7 @@ class AutonomousTaskManagerAPI {
           encoding: 'utf8',
         });
         gitState.hasUncommittedChanges = statusOutput.trim().length > 0;
-      } catch {
+      } catch (error) {
         loggers.taskManager.warn('Could not check git status:', error.message);
       }
 
@@ -4510,7 +4492,7 @@ class AutonomousTaskManagerAPI {
         gitState.stashCount = stashOutput
           .split('\n')
           .filter((line) => line.trim()).length;
-      } catch {
+      } catch (error) {
         loggers.taskManager.warn('Could not get stash count:', error.message);
       }
 
@@ -4533,7 +4515,6 @@ class AutonomousTaskManagerAPI {
         '.validation-snapshots',
         'snapshot-history.json'
       );
-      const FS = require('fs').promises;
 
       let history = { snapshots: [] };
 
@@ -4557,7 +4538,7 @@ class AutonomousTaskManagerAPI {
       history.snapshots = history.snapshots.slice(0, 50);
 
       await FS.writeFile(historyFile, JSON.stringify(history, null, 2));
-    } catch {
+    } catch (error) {
       loggers.taskManager.warn(
         'Failed to update snapshot history:',
         error.message
@@ -4572,7 +4553,6 @@ class AutonomousTaskManagerAPI {
         '.validation-snapshots',
         'rollback-history.json'
       );
-      const FS = require('fs').promises;
 
       let history = { events: [] };
 
@@ -4590,7 +4570,7 @@ class AutonomousTaskManagerAPI {
       history.events = history.events.slice(0, 100);
 
       await FS.writeFile(historyFile, JSON.stringify(history, null, 2));
-    } catch {
+    } catch (error) {
       loggers.taskManager.warn('Failed to log rollback event:', error.message);
     }
   }
@@ -4610,8 +4590,6 @@ class AutonomousTaskManagerAPI {
   }
 
   async _removeDirectory(dirPath) {
-    const FS = require('fs').promises;
-
     try {
       const stats = await FS.stat(dirPath);
       if (stats.isDirectory()) {
@@ -4645,7 +4623,6 @@ class AutonomousTaskManagerAPI {
    * Provides massive time savings on repeated authorization attempts
    */
   async _getValidationCacheKey(criterion) {
-    const FS = require('fs').promises;
     const crypto = require('crypto');
     const { execSync } = require('child_process');
 
@@ -4796,7 +4773,6 @@ class AutonomousTaskManagerAPI {
    */
   async _loadValidationCache(criterion, cacheKey) {
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
 
       const cacheDir = PATH.join(PROJECT_ROOT, '.validation-cache');
@@ -4850,7 +4826,6 @@ class AutonomousTaskManagerAPI {
    */
   async _storeValidationCache(criterion, cacheKey, result, duration) {
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
 
       const cacheDir = PATH.join(PROJECT_ROOT, '.validation-cache');
@@ -4889,7 +4864,6 @@ class AutonomousTaskManagerAPI {
    */
   async _cleanupValidationCache() {
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
 
       const cacheDir = PATH.join(PROJECT_ROOT, '.validation-cache');
@@ -4987,7 +4961,6 @@ class AutonomousTaskManagerAPI {
    * Feature 2: Stop Hook Custom Project Validation Rules
    */
   async _loadCustomValidationRules() {
-    const FS = require('fs').promises;
     const PATH = require('path');
 
     const customRulesPath = PATH.join(PROJECT_ROOT, '.claude-validation.json');
@@ -5031,7 +5004,7 @@ class AutonomousTaskManagerAPI {
           return applicableRules;
         }
       }
-    } catch {
+    } catch (error) {
       this.logger.warn('Failed to load custom validation rules', {
         error: error.message,
         component: 'CustomValidator',
@@ -5123,7 +5096,6 @@ class AutonomousTaskManagerAPI {
       return true; // No conditions means always applicable
     }
 
-    const FS = require('fs').promises;
     const PATH = require('path');
 
     try {
@@ -5239,7 +5211,7 @@ class AutonomousTaskManagerAPI {
       }
 
       return true;
-    } catch {
+    } catch (error) {
       this.logger.warn('Error evaluating conditions for rule', {
         ruleId: rule.id,
         error: error.message,
@@ -5283,7 +5255,7 @@ class AutonomousTaskManagerAPI {
           ? `Custom rule '${rule.name}' passed`
           : `Custom rule '${rule.name}' failed success criteria`,
       };
-    } catch {
+    } catch (error) {
       const DURATION = Date.now() - startTime;
 
       // Handle retries if configured
@@ -5466,7 +5438,7 @@ class AutonomousTaskManagerAPI {
           skipped: customRules.length - results.length,
         },
       };
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: `Failed to execute custom validation rules: ${error.message}`,
@@ -5477,7 +5449,6 @@ class AutonomousTaskManagerAPI {
 
   async _performLanguageAgnosticValidationCore(criterion) {
     const { execSync } = require('child_process');
-    const FS = require('fs').promises;
     const PATH = require('path');
 
     try {
@@ -5797,7 +5768,7 @@ class AutonomousTaskManagerAPI {
                 success: true,
                 details: `Custom validation '${customRule.name}' passed: ${customRule.description || 'No description'}`,
               };
-            } catch {
+            } catch (error) {
               return {
                 success: false,
                 error: `Custom validation '${customRule.name}' failed: ${error.message}`,
@@ -5863,7 +5834,7 @@ class AutonomousTaskManagerAPI {
             }
           }
         }
-      } catch {
+      } catch (error) {
         errors.push(`${cmd}: ${error.message}`);
         continue;
       }
@@ -6221,7 +6192,6 @@ class AutonomousTaskManagerAPI {
   }
 
   async _fileExists(filePath) {
-    const FS = require('fs').promises;
     try {
       await FS.access(filePath);
       return true;
@@ -6236,7 +6206,6 @@ class AutonomousTaskManagerAPI {
   async _detectProjectType() {
     try {
       const PATH = require('path');
-      const FS = require('fs').promises;
 
       // Check for various project indicators
       const indicators = {
@@ -6313,7 +6282,6 @@ class AutonomousTaskManagerAPI {
    */
   async _storeValidationFailures(authKey, failedCriteria) {
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
 
       const failuresDir = PATH.join(PROJECT_ROOT, '.validation-failures');
@@ -6358,7 +6326,6 @@ class AutonomousTaskManagerAPI {
    */
   async _loadValidationFailures(authKey) {
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
 
       const failuresDir = PATH.join(PROJECT_ROOT, '.validation-failures');
@@ -6401,7 +6368,6 @@ class AutonomousTaskManagerAPI {
    */
   async _clearValidationFailures(authKey, resolvedCriteria = null) {
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
 
       const failuresDir = PATH.join(PROJECT_ROOT, '.validation-failures');
@@ -6717,7 +6683,6 @@ class AutonomousTaskManagerAPI {
       .slice(0, 16);
 
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
 
       const emergencyDir = PATH.join(PROJECT_ROOT, '.emergency-overrides');
@@ -6817,7 +6782,7 @@ class AutonomousTaskManagerAPI {
           'Abuse of emergency overrides may result in access revocation',
         ],
       };
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: `Failed to create emergency override: ${error.message}`,
@@ -6844,7 +6809,6 @@ class AutonomousTaskManagerAPI {
     }
 
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
 
       const emergencyDir = PATH.join(PROJECT_ROOT, '.emergency-overrides');
@@ -6991,7 +6955,7 @@ class AutonomousTaskManagerAPI {
           `Remaining emergency uses: ${emergencyRecord.maxUsage - emergencyRecord.usageCount}`,
         ],
       };
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: `Failed to execute emergency override: ${error.message}`,
@@ -7008,7 +6972,6 @@ class AutonomousTaskManagerAPI {
     }
 
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
 
       const emergencyDir = PATH.join(PROJECT_ROOT, '.emergency-overrides');
@@ -7043,7 +7006,7 @@ class AutonomousTaskManagerAPI {
           isExhausted: emergencyRecord.usageCount >= emergencyRecord.maxUsage,
         },
       };
-    } catch {
+    } catch (error) {
       return {
         success: false,
         error: `Failed to check emergency override: ${error.message}`,
@@ -7056,7 +7019,6 @@ class AutonomousTaskManagerAPI {
    */
   async _logEmergencyAudit(action, details) {
     try {
-      const FS = require('fs').promises;
       const PATH = require('path');
 
       const auditDir = PATH.join(PROJECT_ROOT, '.emergency-audit');
@@ -7132,7 +7094,7 @@ class AutonomousTaskManagerAPI {
           },
           message: `Stop authorized by agent ${agentId} - stop hook will allow termination on next trigger`,
         };
-      } catch {
+      } catch (error) {
         return {
           success: false,
           error: `Failed to authorize stop: ${error.message}`,
@@ -8481,7 +8443,7 @@ class AutonomousTaskManagerAPI {
           client.send(JSON.stringify(statusUpdate));
         }
       });
-    } catch {
+    } catch (error) {
       loggers.taskManager.error('Failed to broadcast status update:', error);
     }
   }
@@ -8666,7 +8628,7 @@ class AutonomousTaskManagerAPI {
 
       // Return dry run result with information about what would have happened
       return this._formatDryRunResult(result, features, featuresCopy);
-    } catch {
+    } catch (error) {
       // Return dry run error information
       return {
         success: false,
@@ -10812,7 +10774,7 @@ async function main() {
     // Initialize secret management
     await validateRequiredSecrets();
     logger.info('Secret validation completed successfully');
-  } catch {
+  } catch (error) {
     logger.error(
       { error: error.message },
       'Failed to initialize secret management'
@@ -10824,11 +10786,14 @@ async function main() {
         'Secret management initialization failed in secure environment'
       );
     } else {
-      this.logger.warn('Running in development mode with missing secrets', {
-        component: 'SecretManager',
-        operation: 'validateSecrets',
-        environment: 'development',
-      });
+      loggers.taskManager.warn(
+        'Running in development mode with missing secrets',
+        {
+          component: 'SecretManager',
+          operation: 'validateSecrets',
+          environment: 'development',
+        }
+      );
     }
   }
 
@@ -11097,7 +11062,6 @@ async function main() {
             'Date required. Usage: emergency-audit-trail <YYYY-MM-DD>'
           );
         }
-        const FS = require('fs').promises;
         const PATH = require('path');
         const auditDir = PATH.join(PROJECT_ROOT, '.emergency-audit');
         const auditFile = PATH.join(
@@ -11122,7 +11086,7 @@ async function main() {
                 'Check .emergency-audit/ directory for available dates',
             };
           }
-        } catch {
+        } catch (error) {
           result = {
             success: false,
             error: `Failed to read audit log: ${error.message}`,
@@ -11131,7 +11095,6 @@ async function main() {
         break;
       }
       case 'list-emergency-overrides': {
-        const FS = require('fs').promises;
         const PATH = require('path');
         const emergencyDir = PATH.join(PROJECT_ROOT, '.emergency-overrides');
 
@@ -11179,7 +11142,7 @@ async function main() {
               message: 'No emergency overrides found',
             };
           }
-        } catch {
+        } catch (error) {
           result = {
             success: false,
             error: `Failed to list emergency overrides: ${error.message}`,

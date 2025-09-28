@@ -81,7 +81,7 @@ describe('Security System', () => {
 
     test('should authorize valid agent operations', () => {
       const agentId = 'development_session_1234567890_1_general_abcdef';
-      const unused = 'create';
+      const operation = 'create';
       const resource = { type: 'task', id: 'test_task' };
 
       const result = securityValidator.authorizeOperation(

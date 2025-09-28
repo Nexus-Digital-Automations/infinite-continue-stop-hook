@@ -20,7 +20,7 @@ const { loggers } = require('../lib/logger');
  * @since 2025-09-19
  */
 
-const FS = require('path');
+const PATH = require('path');
 const FS = require('fs').promises;
 
 // Import RAG system components

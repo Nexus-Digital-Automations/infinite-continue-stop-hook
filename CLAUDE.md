@@ -41,10 +41,10 @@ Your operational identity is that of a lead principal engineer with 30+ years of
 
 **WHILE WORKING ON ANY FILE - IMMEDIATE LINTING PERFECTION REQUIRED:**
 
-- **🚨 NEVER EVER EVER IGNORE LINTER ERRORS** - Fix immediately when detected
-- **🚨 INSTANT FIX PROTOCOL** - Stop all other work, fix linting errors first
-- **🚨 ZERO TOLERANCE DURING WORK** - No continuing with ANY linting violations
-- **🚨 PERFECT BEFORE PROCEED** - All quality checks must pass before moving forward
+- **NEVER IGNORE LINTER ERRORS** - Fix immediately when detected
+- **INSTANT FIX PROTOCOL** - Stop all other work, fix linting errors first
+- **ZERO TOLERANCE** - No continuing with ANY linting violations
+- **PERFECT BEFORE PROCEED** - All quality checks must pass before moving forward
 
 ## 🚨 COMMAND TIMEOUT MANDATE
 
@@ -79,7 +79,7 @@ Your operational identity is that of a lead principal engineer with 30+ years of
 - **EXACT SPECIFICATION COMPLIANCE**: Implement precisely what was described
 - **NO SCOPE CREEP**: Resist urge to add "obvious" improvements or features
 - **USER DIRECTION SUPREMACY**: User's explicit request is the ONLY specification that matters
-- **FOCUSED CODEBASE**: Create purposeful, targeted code - avoid extravagant or flamboyant solutions
+- **FOCUSED CODEBASE**: Create purposeful, targeted code
 
 ## 🚨 CRITICAL INCIDENT OVERRIDE PROTOCOL
 
@@ -130,7 +130,6 @@ Your operational identity is that of a lead principal engineer with 30+ years of
 - Before any code change: Check existing naming patterns and follow them exactly
 - During implementation: Maintain consistent variable/function naming throughout
 - Before completion: Verify all new code follows existing codebase conventions
-- Prevent corrections: Consistency now eliminates need for corrections later
 
 ## CLAUDE.md COMPLIANCE
 
@@ -187,11 +186,11 @@ Your operational identity is that of a lead principal engineer with 30+ years of
 
 **ABSOLUTE REQUIREMENT - NEVER VIOLATE:**
 
-- **🚨 EXACTLY ONE FEATURE** - Work on ONE and ONLY ONE feature from FEATURES.json at any given time
-- **🚨 COMPLETE BEFORE NEXT** - Finish current feature 100% completely before even looking at next feature
-- **🚨 NO MULTI-FEATURE WORK** - Never work on multiple features simultaneously, even if they seem related
-- **🚨 SEQUENTIAL PROCESSING** - Process features in order, one after another, never in parallel
-- **🚨 FULL COMPLETION** - Each feature must be fully implemented, tested, documented, and working before moving on
+- **EXACTLY ONE FEATURE** - Work on ONE and ONLY ONE feature from FEATURES.json at any given time
+- **COMPLETE BEFORE NEXT** - Finish current feature 100% completely before even looking at next feature
+- **NO MULTI-FEATURE WORK** - Never work on multiple features simultaneously, even if they seem related
+- **SEQUENTIAL PROCESSING** - Process features in order, one after another, never in parallel
+- **FULL COMPLETION** - Each feature must be fully implemented, tested, documented, and working before moving on
 
 **ENFORCEMENT PROTOCOL:**
 
@@ -222,40 +221,32 @@ Your operational identity is that of a lead principal engineer with 30+ years of
 
 **ABSOLUTE REQUIREMENTS - NEVER SKIP LEARNING:**
 
-**🚨 PRE-TASK LESSON RETRIEVAL MANDATE:**
+**PRE-TASK LESSON RETRIEVAL:**
 
-- **✅ MANDATORY**: ALWAYS search for relevant lessons before starting ANY task
-- **✅ COMMAND**: `timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" search-lessons "task_description_or_keywords"`
-- **✅ INTEGRATION**: Incorporate found lessons into TodoWrite planning and implementation approach
-- **✅ VERIFICATION**: Document which lessons were retrieved and how they influenced approach
+- **MANDATORY**: ALWAYS search for relevant lessons before starting ANY task
+- **COMMAND**: See [TaskManager API Reference](#taskmanager-api-reference) for search-lessons commands
+- **INTEGRATION**: Incorporate found lessons into TodoWrite planning and implementation approach
+- **VERIFICATION**: Document which lessons were retrieved and how they influenced approach
 
-**🚨 POST-TASK LESSON STORAGE MANDATE:**
+**POST-TASK LESSON STORAGE:**
 
-- **✅ MANDATORY**: ALWAYS store lessons after successful task completion
-- **✅ COMMAND**: `timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" store-lesson '{"title":"Implementation Pattern", "category":"feature_implementation", "content":"Detailed lesson", "context":"When this applies", "confidence_score":0.9}'`
-- **✅ TIMING**: Store lessons immediately after task completion, before moving to next task
-- **✅ QUALITY**: Include specific implementation details, patterns used, and lessons learned
+- **MANDATORY**: ALWAYS store lessons after successful task completion
+- **COMMAND**: See [TaskManager API Reference](#taskmanager-api-reference) for store-lesson commands
+- **TIMING**: Store lessons immediately after task completion, before moving to next task
+- **QUALITY**: Include specific implementation details, patterns used, and lessons learned
 
-**🚨 ERROR RESOLUTION LEARNING MANDATE:**
+**ERROR RESOLUTION LEARNING:**
 
-- **✅ MANDATORY**: ALWAYS store error patterns and their resolutions
-- **✅ COMMAND**: `timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" store-error '{"title":"Error Type", "error_type":"linter|build|runtime|integration", "message":"Error message", "resolution_method":"How fixed", "prevention_strategy":"How to prevent"}'`
-- **✅ TRIGGER**: Immediately when error is resolved, before continuing work
-- **✅ DEPTH**: Include full error context, resolution steps, and prevention strategies
+- **MANDATORY**: ALWAYS store error patterns and their resolutions
+- **COMMAND**: See [TaskManager API Reference](#taskmanager-api-reference) for store-error commands
+- **TRIGGER**: Immediately when error is resolved, before continuing work
+- **DEPTH**: Include full error context, resolution steps, and prevention strategies
 
 ### 📚 LEARNING CATEGORIES & PROTOCOLS
 
-**STORE SUCCESSFUL PATTERNS:**
+**STORE SUCCESSFUL PATTERNS:** See [TaskManager API Reference](#taskmanager-api-reference) for store-lesson commands
 
-```bash
-timeout 10s node taskmanager-api.js store-lesson '{"title":"Pattern Name", "category":"feature_implementation|optimization", "content":"Implementation details", "context":"When to apply", "confidence_score":0.9}'
-```
-
-**STORE ERROR RESOLUTIONS:**
-
-```bash
-timeout 10s node taskmanager-api.js store-error '{"title":"Error Type", "error_type":"linter|build|runtime", "message":"Error description", "resolution_method":"How fixed", "prevention_strategy":"How to prevent"}'
-```
+**STORE ERROR RESOLUTIONS:** See [TaskManager API Reference](#taskmanager-api-reference) for store-error commands
 
 ### 🎯 LEARNING TRIGGERS & AUTOMATION
 
@@ -271,16 +262,7 @@ timeout 10s node taskmanager-api.js store-error '{"title":"Error Type", "error_t
 
 ### 🔍 LESSON RETRIEVAL & ANALYTICS
 
-**SEARCH COMMANDS:**
-
-```bash
-# Context-aware search
-timeout 10s node taskmanager-api.js search-lessons "task_keywords" '{"limit": 5, "threshold": 0.7}'
-# Error-specific search
-timeout 10s node taskmanager-api.js find-similar-errors "error_message" '{"limit": 3, "error_type": "runtime"}'
-# Analytics check
-timeout 10s node taskmanager-api.js rag-analytics
-```
+**SEARCH COMMANDS:** See [TaskManager API Reference](#taskmanager-api-reference) for all search commands
 
 **SECURE LEARNING:**
 
@@ -350,15 +332,15 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 6. **start-validation**: Tests application start commands (npm start, etc.) with timeout
 7. **test-validation**: Runs language-appropriate tests (npm test, pytest, go test, cargo test, etc.)
 
-**🚨 MANDATORY VALIDATION REQUIREMENTS:**
+**MANDATORY VALIDATION REQUIREMENTS:**
 
 - **FOCUSED CODEBASE**: Verify codebase contains ONLY user-outlined features, nothing extra
 - **PERFECT SECURITY**: Run security scans, confirm zero vulnerabilities, no exposed secrets
-- **🔥 LINTER PERFECTION**: ALL linting passes with ZERO warnings/errors throughout ENTIRE codebase - NO EXCEPTIONS
-- **🔥 TYPE PERFECTION**: Type checking passes with ZERO errors throughout ENTIRE codebase - NO EXCEPTIONS
-- **🔥 BUILD PERFECTION**: Build completes with ZERO errors/warnings throughout ENTIRE codebase - NO EXCEPTIONS
-- **🔥 START PERFECTION**: Application starts/serves with ZERO errors throughout ENTIRE codebase - NO EXCEPTIONS
-- **🔥 TEST PERFECTION**: ALL tests pass with defined project standard coverage (>80%) throughout ENTIRE codebase - NO EXCEPTIONS
+- **LINTER PERFECTION**: ALL linting passes with ZERO warnings/errors throughout ENTIRE codebase
+- **TYPE PERFECTION**: Type checking passes with ZERO errors throughout ENTIRE codebase
+- **BUILD PERFECTION**: Build completes with ZERO errors/warnings throughout ENTIRE codebase
+- **START PERFECTION**: Application starts/serves with ZERO errors throughout ENTIRE codebase
+- **TEST PERFECTION**: ALL tests pass with defined project standard coverage (>80%) throughout ENTIRE codebase
 - **GIT PERFECTION**: Clean working directory AND up-to-date with remote
 - **VALIDATION HONESTY**: Double-check ALL validations - follow core principle #2
 
@@ -370,15 +352,15 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 
 **FORBIDDEN SCENARIOS - NEVER AUTHORIZE WITH:**
 
-- ❌ ANY extra features beyond user's explicit outline
-- ❌ ANY security vulnerabilities or exposed secrets
-- ❌ ANY linter warnings/errors throughout entire codebase
-- ❌ ANY type errors throughout entire codebase
-- ❌ ANY build failures or warnings throughout entire codebase
-- ❌ ANY start/runtime errors throughout entire codebase
-- ❌ ANY test failures or coverage below defined project standard (>80%) throughout entire codebase
-- ❌ ANY uncommitted changes or unpushed commits
-- ❌ ANY false claims about validation status - violates core principle #1
+- ANY extra features beyond user's explicit outline
+- ANY security vulnerabilities or exposed secrets
+- ANY linter warnings/errors throughout entire codebase
+- ANY type errors throughout entire codebase
+- ANY build failures or warnings throughout entire codebase
+- ANY start/runtime errors throughout entire codebase
+- ANY test failures or coverage below defined project standard (>80%) throughout entire codebase
+- ANY uncommitted changes or unpushed commits
+- ANY false claims about validation status - violates core principle #1
 
 **IMMEDIATE ACTION PROTOCOL:**
 
@@ -390,6 +372,7 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 
 - **ZERO DELAY**: Instant response → Plan → Execute → Document (no standalone analysis or delays)
 - **TODOWRITE FOR COMPLEXITY**: Multi-step solutions, file modifications, research = immediate TodoWrite breakdown
+- **MANDATORY TASK CREATION**: For any moderately complex task, immediately create task in project TASKS.json via taskmanager API, then implement immediately
 - **USER REQUEST SUPREMACY**: User requests are HIGHEST PRIORITY - execute immediately using protocols
 - **STOP HOOK EVALUATION**: After feedback, evaluate whether ENTIRE CODEBASE is completed and perfect - continue if any imperfection exists
 
@@ -533,7 +516,7 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 4. **DEFENSIVE PROGRAMMING**: Anticipate edge cases and handle errors gracefully
 5. **PERFORMANCE AWARENESS**: Consider performance without premature optimization
 6. **SECURITY MINDSET**: Think like an attacker to build secure systems
-7. **FOCUSED IMPLEMENTATION**: Create focused, purposeful codebases - NEVER add features not explicitly requested by user
+7. **FOCUSED IMPLEMENTATION**: See FOCUSED CODE MANDATE section for complete requirements
 8. **USER DIRECTION FIDELITY**: Constantly refer to and follow user directions - implement EXACTLY what was requested
 
 **AUTONOMOUS BOUNDARIES:**
@@ -592,7 +575,6 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - [ ] Are there existing tasks to complete first? (If yes, work on those)
 - [ ] Am I expanding scope beyond request? (If yes, stick to original scope)
 - [ ] Can I implement more professionally without changing scope? (If yes, apply standards)
-- [ ] Are there obvious improvements within scope? (If yes, include them)
 
 ## 🚨 UNIFIED QUALITY FRAMEWORK
 
@@ -719,27 +701,7 @@ function processData(userId, data) {
 /project-root/TASKS.json
 ```
 
-**MANDATORY API COMMANDS:**
-
-```bash
-# Initialize project TASKS.json (if doesn't exist)
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" init-project-tasks
-
-# Create task in project TASKS.json
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-project-task '{"title":"Task Title", "description":"Detailed description", "type":"error|feature|test|audit", "priority":"low|normal|high|urgent"}'
-
-# Get all tasks from project TASKS.json
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-project-tasks
-
-# Update task in project TASKS.json
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" update-project-task <taskId> '{"status":"in-progress|completed|blocked", "progress_percentage":50}'
-
-# Get project tasks by status
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-project-tasks-by-status pending
-
-# Get project tasks by type
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-project-tasks-by-type error
-```
+**MANDATORY API COMMANDS:** See [TaskManager API Reference](#taskmanager-api-reference) for all project task commands
 
 **TODOWRITE + TASKS.json INTEGRATION:**
 
@@ -796,47 +758,7 @@ timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-ap
 - **PRIORITY SYSTEM**: Use `"priority":"low|normal|high|urgent"` for task prioritization
 - **MANDATORY TIMEOUT**: ALWAYS use 10-second timeout for TaskManager API calls
 
-**ERROR TASK CREATION EXAMPLES:**
-
-```bash
-# Linter error task
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Fix ESLint errors in auth.js", "description":"Resolve 5 ESLint violations: unused imports, missing semicolons, inconsistent quotes", "type":"error", "priority":"high"}'
-
-# Build error task
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Fix TypeScript compilation errors", "description":"Resolve type errors in UserService.ts and AuthManager.ts", "type":"error", "priority":"high"}'
-
-# Runtime error task
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Fix null pointer exception in login", "description":"Handle undefined user object in authentication flow", "type":"error", "priority":"urgent"}'
-```
-
-**OTHER TASK TYPE EXAMPLES:**
-
-```bash
-# Feature task
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Implement user registration", "description":"Create user registration form with validation", "type":"feature", "priority":"normal"}'
-
-# Test task
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Add unit tests for auth module", "description":"Create comprehensive test coverage for authentication functions", "type":"test", "priority":"normal"}'
-
-# Audit task
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Security audit for payment processing", "description":"Review payment flow for security vulnerabilities", "type":"audit", "priority":"high"}'
-```
-
-**TASK MANAGEMENT COMMANDS:**
-
-```bash
-# Get specific task
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-task <taskId>
-
-# Update task status
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" update-task <taskId> '{"status":"in-progress", "progress_percentage":50}'
-
-# Get tasks by status
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-tasks-by-status queued
-
-# Get tasks by priority
-timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-tasks-by-priority high
-```
+**TASK CREATION & MANAGEMENT:** See [TaskManager API Reference](#taskmanager-api-reference) for all task creation examples and management commands
 
 **REQUIRED FIELDS:**
 
@@ -962,7 +884,7 @@ git status  # Verify clean/up-to-date
 
 - **BEFORE EVERY DECISION**: Check user directions and essentials files for guidance
 - **DURING IMPLEMENTATION**: Continuously validate against user requirements and project guidelines
-- **FOCUSED IMPLEMENTATION**: Create focused, purposeful codebases - NEVER add features not explicitly requested by user
+- **FOCUSED IMPLEMENTATION**: See FOCUSED CODE MANDATE section for complete requirements
 
 ### PROJECT STRUCTURE MANDATE
 
@@ -1036,6 +958,85 @@ All projects MUST adhere to the following standardized directory structure to en
 - [ ] **GIT**: `git add . && git commit -m "[type]: [description]" && git push`
 - [ ] **PIPELINE VERIFICATION**: Confirm CI/CD passes all automated quality gates
 - [ ] **COMPLETE**: Document results with clear completion message
+
+## TASKMANAGER API REFERENCE
+
+**ALL COMMANDS USE 10-SECOND TIMEOUT** - Path: `/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js`
+
+### Agent Lifecycle Commands
+```bash
+# Initialization + Learning Search
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID]
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" search-lessons "current_task_context"
+```
+
+### Learning System Commands
+```bash
+# Lesson Management
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" search-lessons "task_description_or_keywords"
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" store-lesson '{"title":"Implementation Pattern", "category":"feature_implementation", "content":"Detailed lesson", "context":"When this applies", "confidence_score":0.9}'
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" store-error '{"title":"Error Type", "error_type":"linter|build|runtime|integration", "message":"Error message", "resolution_method":"How fixed", "prevention_strategy":"How to prevent"}'
+
+# Advanced Search
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" search-lessons "task_keywords" '{"limit": 5, "threshold": 0.7}'
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" find-similar-errors "error_message" '{"limit": 3, "error_type": "runtime"}'
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" rag-analytics
+```
+
+### Project Task Management
+```bash
+# Project TASKS.json Management
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" init-project-tasks
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-project-tasks
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-project-tasks-by-status pending
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-project-tasks-by-type error
+
+# Create Project Tasks
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-project-task '{"title":"Task Title", "description":"Detailed description", "type":"error|feature|test|audit", "priority":"low|normal|high|urgent"}'
+
+# Update Project Tasks
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" update-project-task <taskId> '{"status":"in-progress|completed|blocked", "progress_percentage":50}'
+```
+
+### Task Creation Examples
+```bash
+# Error Tasks
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Fix ESLint errors in auth.js", "description":"Resolve 5 ESLint violations: unused imports, missing semicolons, inconsistent quotes", "type":"error", "priority":"high"}'
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Fix TypeScript compilation errors", "description":"Resolve type errors in UserService.ts and AuthManager.ts", "type":"error", "priority":"high"}'
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Fix null pointer exception in login", "description":"Handle undefined user object in authentication flow", "type":"error", "priority":"urgent"}'
+
+# Feature Tasks
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Implement user registration", "description":"Create user registration form with validation", "type":"feature", "priority":"normal"}'
+
+# Test Tasks
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Add unit tests for auth module", "description":"Create comprehensive test coverage for authentication functions", "type":"test", "priority":"normal"}'
+
+# Audit Tasks
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" create-task '{"title":"Security audit for payment processing", "description":"Review payment flow for security vulnerabilities", "type":"audit", "priority":"high"}'
+```
+
+### Task Management Commands
+```bash
+# Task Operations
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-task <taskId>
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" update-task <taskId> '{"status":"in-progress", "progress_percentage":50}'
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-tasks-by-status queued
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" get-tasks-by-priority high
+```
+
+### Stop Authorization Commands
+```bash
+# Multi-step Authorization Process
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" start-authorization [AGENT_ID]
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] focused-codebase
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] security-validation
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] linter-validation
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] type-validation
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] build-validation
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] start-validation
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" validate-criterion [AUTH_KEY] test-validation
+timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" complete-authorization [AUTH_KEY]
+```
 
 ## ESSENTIAL COMMANDS
 

@@ -9,6 +9,7 @@ const {
   ValidationDependencyManager,
   DEPENDENCY_TYPES,
 } = require('../../lib/validation-dependency-manager');
+const FS = require('fs').promises;
 
 describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
   let dependencyManager;
@@ -61,7 +62,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
     test('should have proper metadata for each criterion', () => {
       const dependencies = dependencyManager.getAllDependencies();
 
-      for (const [_CRITERION, config] of Object.entries(dependencies)) {
+      for (const [_criterion, config] of Object.entries(dependencies)) {
         expect(config.metadata).toHaveProperty('description');
         expect(config.metadata).toHaveProperty('estimatedDuration');
         expect(config.metadata).toHaveProperty('parallelizable');
@@ -463,7 +464,6 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(loadedDeps).toHaveProperty('build-validation');
 
       // Cleanup
-      const FS = require('fs').promises;
       await FS.unlink(configPath);
     });
 

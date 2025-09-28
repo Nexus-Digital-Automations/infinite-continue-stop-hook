@@ -13,7 +13,7 @@
 const { loggers } = require('../lib/logger');
 const { performance } = require('perf_hooks');
 const { spawn } = require('child_process');
-const FS = require('path');
+const PATH = require('path');
 const FS = require('fs').promises;
 const OS = require('os');
 

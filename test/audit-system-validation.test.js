@@ -13,7 +13,7 @@
  * @since 2025-09-13
  */
 
-const FS = require('path');
+const PATH = require('path');
 const { spawn } = require('child_process');
 const FS = require('fs');
 
@@ -63,7 +63,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         if (jsonStart > 0) {
           jsonString = jsonString.substring(jsonStart);
         }
-        const result = JSON.parse(jsonString);
+
         resolve(result);
       } catch {
         try {
@@ -72,7 +72,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         } catch {
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${error.message}`
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: Unknown parse error`
             )
           );
         }
@@ -80,7 +80,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
     });
 
     child.on('error', (error) => {
-      reject(new Error(`Command execution failed: ${error.message}`));
+      reject(new Error(`Command execution failed: Unknown parse error`));
     });
   });
 }
@@ -245,8 +245,8 @@ function cleanupAuditTestEnvironment() {
 
 describe('Audit System Validation Tests', () => {
   let implementationAgentId = null;
-  const TEST_AGENT_ID = null;
-  const AUDIT_AGENT_ID = null;
+  let testAgentId = null;
+  let auditAgentId = null;
 
   beforeEach(() => {
     setupAuditTestEnvironment();
@@ -275,11 +275,10 @@ describe('Audit System Validation Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const TASK = listResult.tasks.find((t) => t.id === RESULT.taskId);
+      const TASK = listResult.tasks.find((t) => t.id === result.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
 
       expect(AUDIT_SUBTASK).toBeDefined();
@@ -338,11 +337,10 @@ describe('Audit System Validation Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const TASK = listResult.tasks.find((t) => t.id === RESULT.taskId);
+      const TASK = listResult.tasks.find((t) => t.id === result.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
 
       expect(AUDIT_SUBTASK).toBeDefined();
@@ -372,11 +370,10 @@ describe('Audit System Validation Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const TASK = listResult.tasks.find((t) => t.id === RESULT.taskId);
+      const TASK = listResult.tasks.find((t) => t.id === result.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
 
       // Verify criteria are strings, not markdown checkbox format
@@ -421,11 +418,10 @@ describe('Audit System Validation Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const TASK = listResult.tasks.find((t) => t.id === RESULT.taskId);
+      const TASK = listResult.tasks.find((t) => t.id === result.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
 
       expect(AUDIT_SUBTASK).toBeDefined();
@@ -519,13 +515,10 @@ describe('Audit System Validation Tests', () => {
         priority: 'critical',
       };
 
-      const result = await execAPI('create', [
-        JSON.stringify(SECURITY_TASK_DATA),
-      ]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const TASK = listResult.tasks.find((t) => t.id === RESULT.taskId);
+      const TASK = listResult.tasks.find((t) => t.id === result.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
 
       // Should include security-specific criteria
@@ -548,13 +541,10 @@ describe('Audit System Validation Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [
-        JSON.stringify(TASK_MANAGER_TASK_DATA),
-      ]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const TASK = listResult.tasks.find((t) => t.id === RESULT.taskId);
+      const TASK = listResult.tasks.find((t) => t.id === result.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
 
       // Should include project-specific criteria if defined in audit-criteria.md
@@ -578,11 +568,10 @@ describe('Audit System Validation Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const TASK = listResult.tasks.find((t) => t.id === RESULT.taskId);
+      const TASK = listResult.tasks.find((t) => t.id === result.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
 
       expect(AUDIT_SUBTASK.estimated_hours).toBeDefined();
@@ -610,11 +599,10 @@ describe('Audit System Validation Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const TASK = listResult.tasks.find((t) => t.id === RESULT.taskId);
+      const TASK = listResult.tasks.find((t) => t.id === result.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
 
       expect(AUDIT_SUBTASK.prevents_completion).toBe(true);
@@ -631,13 +619,10 @@ describe('Audit System Validation Tests', () => {
         important_files: ['src/api.js', 'src/database.js', 'src/auth.js'],
       };
 
-      const result = await execAPI('create', [
-        JSON.stringify(DETAILED_TASK_DATA),
-      ]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const TASK = listResult.tasks.find((t) => t.id === RESULT.taskId);
+      const TASK = listResult.tasks.find((t) => t.id === result.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
 
       expect(AUDIT_SUBTASK.description).toContain(
@@ -670,11 +655,10 @@ describe('Audit System Validation Tests', () => {
       }
 
       for await (const taskData of taskDataList) {
-        const result = await execAPI('create', [JSON.stringify(taskData)]);
         expect(result.success).toBe(true);
 
         const listResult = await execAPI('list');
-        const TASK = listResult.tasks.find((t) => t.id === RESULT.taskId);
+        const TASK = listResult.tasks.find((t) => t.id === result.taskId);
         const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
 
         if (AUDIT_SUBTASK) {
@@ -706,13 +690,10 @@ describe('Audit System Validation Tests', () => {
         priority: 'critical',
       };
 
-      const result = await execAPI('create', [
-        JSON.stringify(CRITICAL_TASK_DATA),
-      ]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const TASK = listResult.tasks.find((t) => t.id === RESULT.taskId);
+      const TASK = listResult.tasks.find((t) => t.id === result.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
 
       expect(AUDIT_SUBTASK.audit_type).toBe('embedded_quality_gate');
@@ -731,13 +712,12 @@ describe('Audit System Validation Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       expect(result.success).toBe(true);
 
       const AFTER_TIME = Date.now();
 
       const listResult = await execAPI('list');
-      const TASK = listResult.tasks.find((t) => t.id === RESULT.taskId);
+      const TASK = listResult.tasks.find((t) => t.id === result.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
 
       expect(AUDIT_SUBTASK.created_at).toBeDefined();
@@ -755,13 +735,10 @@ describe('Audit System Validation Tests', () => {
         priority: 'low',
       };
 
-      const result = await execAPI('create', [
-        JSON.stringify(MINIMAL_TASK_DATA),
-      ]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const TASK = listResult.tasks.find((t) => t.id === RESULT.taskId);
+      const TASK = listResult.tasks.find((t) => t.id === result.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
 
       expect(AUDIT_SUBTASK).toBeDefined();
@@ -792,10 +769,6 @@ describe('Audit System Validation Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [
-        JSON.stringify(PERFORMANCE_TASK_DATA),
-      ]);
-
       const END_TIME = Date.now();
       const EXECUTION_TIME = END_TIME - START_TIME;
 
@@ -803,7 +776,7 @@ describe('Audit System Validation Tests', () => {
       expect(EXECUTION_TIME).toBeLessThan(5000); // Should complete within 5 seconds
 
       const listResult = await execAPI('list');
-      const TASK = listResult.tasks.find((t) => t.id === RESULT.taskId);
+      const TASK = listResult.tasks.find((t) => t.id === result.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
 
       expect(AUDIT_SUBTASK).toBeDefined();
@@ -879,11 +852,10 @@ describe('Audit System Validation Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const TASK = listResult.tasks.find((t) => t.id === RESULT.taskId);
+      const TASK = listResult.tasks.find((t) => t.id === result.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
 
       // Should still create audit subtask with fallback criteria
@@ -914,11 +886,10 @@ describe('Audit System Validation Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const TASK = listResult.tasks.find((t) => t.id === RESULT.taskId);
+      const TASK = listResult.tasks.find((t) => t.id === result.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
 
       expect(AUDIT_SUBTASK).toBeDefined();
@@ -938,13 +909,10 @@ describe('Audit System Validation Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [
-        JSON.stringify(SPECIAL_CHARS_TASK_DATA),
-      ]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
-      const TASK = listResult.tasks.find((t) => t.id === RESULT.taskId);
+      const TASK = listResult.tasks.find((t) => t.id === result.taskId);
       const AUDIT_SUBTASK = TASK.subtasks.find((st) => st.type === 'audit');
 
       expect(AUDIT_SUBTASK).toBeDefined();

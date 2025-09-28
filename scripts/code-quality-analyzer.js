@@ -1270,3 +1270,4 @@ Examples:
 }
 
 module.exports = CodeQualityAnalyzer;
+s = CodeQualityAnalyzer;

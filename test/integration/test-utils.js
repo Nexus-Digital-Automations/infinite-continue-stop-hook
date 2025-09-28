@@ -101,7 +101,8 @@ function execAPI(command, args = [], options = {}) {
  * @param {string} testName - Name of the test (used for directory naming)
  * @returns {Promise<string>} Path to the created test environment
  */
-async function testName(_$2) {-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`;
+async function createTestEnvironment(testName) {
+  const testId = `${testName}-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`;
   const testDir = PATH.join(BASE_TEST_DIR, testId);
 
   // Create test directory

@@ -28,11 +28,11 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
       });
 
       return JSON.parse(output.trim());
-    } catch {
+    } catch (error) {
       if (error.stdout) {
         try {
           return JSON.parse(error.stdout.trim());
-        } catch {
+        } catch (parseError) {
           throw new Error(
             `Command failed: ${error.message}, Output: ${error.stdout || error.stderr}`,
           );
@@ -71,7 +71,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
     dependencies.forEach((criterion) => {
       try {
         executeTaskManagerCommand('remove-dependency', criterion);
-      } catch {
+      } catch (error) {
         // Ignore cleanup errors
       }
     });
@@ -1032,7 +1032,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
       // Verify all standard criteria have proper configurations
       standardCriteria.forEach((criterion) => {
         expect(result.dependencyGraph).toHaveProperty(criterion);
-        const config = RESULT.dependencyGraph[criterion];
+        const config = result.dependencyGraph[criterion];
         expect(config.metadata.description).toBeTruthy();
         expect(config.metadata.estimatedDuration).toBeGreaterThan(0);
       });

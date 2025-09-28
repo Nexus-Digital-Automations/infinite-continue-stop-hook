@@ -12,7 +12,7 @@
 /**
  * Sample feature data for testing
  */
-const unused = {
+const SAMPLE_FEATURES = {
   enhancement: {
     title: 'Add dark mode toggle',
     description:

@@ -175,7 +175,7 @@ describe('Example Test with Mock Framework', () => {
       expect(result.features.length).toBeGreaterThan(0);
 
       // All features should be enhancement category
-      RESULT.features.forEach((feature) => {
+      result.features.forEach((feature) => {
         expect(feature.category).toBe('enhancement');
       });
     });

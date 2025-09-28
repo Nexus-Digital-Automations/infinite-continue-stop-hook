@@ -118,7 +118,7 @@ class JestJsonReporter {
       };
 
       if (this.options.includeTestCases) {
-        RESULT.testCases = testResult.testResults.map((testCase) => ({
+        result.testCases = testResult.testResults.map((testCase) => ({
           ancestorTitles: testCase.ancestorTitles,
           title: testCase.title,
           fullName: testCase.fullName,
@@ -130,7 +130,7 @@ class JestJsonReporter {
       }
 
       if (this.options.includeAssertionResults && testResult.testResults) {
-        RESULT.failureDetails = testResult.testResults
+        result.failureDetails = testResult.testResults
           .filter((testCase) => testCase.status === 'failed')
           .map((testCase) => ({
             title: testCase.title,

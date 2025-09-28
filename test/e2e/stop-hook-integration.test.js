@@ -128,7 +128,7 @@ describe.skip('Stop Hook Integration E2E', () => {
           500,
         );
 
-        // Step 4: Validate both feature _operationAnd stop hook behavior
+        // Step 4: Validate both feature operationAnd stop hook behavior
         const features = await environment.getFeatures();
         expect(features.features).toHaveLength(1);
         expect(features.features[0].status).toBe('approved');

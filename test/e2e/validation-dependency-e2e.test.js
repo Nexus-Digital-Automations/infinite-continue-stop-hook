@@ -358,7 +358,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       );
 
       // All operations should complete without throwing
-      const failures = results.filter((result) => RESULT.status === 'rejected');
+      const failures = results.filter((result) => result.status === 'rejected');
       expect(failures.length).toBe(0);
 
       // System should remain in consistent state

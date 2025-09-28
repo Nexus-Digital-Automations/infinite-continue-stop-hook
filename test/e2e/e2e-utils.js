@@ -137,7 +137,7 @@ class E2EEnvironment {
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential cleanup required for proper teardown order
         await task();
-      } catch {
+      } catch (error) {
         loggers.stopHook.warn(`Cleanup task failed: ${error.message}`);
       }
     }
@@ -158,7 +158,7 @@ class E2EEnvironment {
       } else {
         await FS.unlink(dirPath);
       }
-    } catch {
+    } catch (error) {
       if (error.code !== 'ENOENT') {
         throw error;
       }
@@ -176,7 +176,7 @@ class E2EEnvironment {
 
       // Parse the JSON response from stdout
       let apiResponse;
-      if (result.result && RESULT.result.stdout) {
+      if (result.result && result.result.stdout) {
         apiResponse = JSON.parse(result.result.stdout);
       } else if (result.stdout) {
         apiResponse = JSON.parse(result.stdout);
@@ -189,7 +189,7 @@ class E2EEnvironment {
       } else {
         throw new Error(`TaskManager API error: ${apiResponse.error}`);
       }
-    } catch {
+    } catch (error) {
       throw new Error(
         `Failed to get features from TaskManager API: ${error.message}`,
       );
@@ -548,9 +548,9 @@ class StopHookTestHelpers {
 
       iterations.push({
         iteration: i,
-        blocked: RESULT.code === 2,
+        blocked: result.code === 2,
         result: result,
-        success: RESULT.code === 2, // Success means it properly blocked
+        success: result.code === 2, // Success means it properly blocked
       });
 
       // Always blocks in infinite mode unless proper authorization exists
@@ -740,7 +740,7 @@ class E2EAssertions {
         return responseJson.feature.id;
       }
       throw new Error('No feature ID found in response');
-    } catch {
+    } catch (error) {
       throw new Error(
         `Failed to extract feature ID: ${error.message}\nResponse: ${commandResult.stdout}`,
       );

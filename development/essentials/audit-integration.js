@@ -376,7 +376,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
 
       return criteria;
     } catch (_error) {
-      this.logger.log(`⚠️ Could not load task requirements: ${error.message}`);
+      this.logger.log(`⚠️ Could not load task requirements: ${_error.message}`);
       return {};
     }
   }

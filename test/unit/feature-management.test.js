@@ -178,7 +178,7 @@ describe('Feature Management Lifecycle', () => {
         });
 
         // Extract feature IDs
-        const featureIds = new Set(results.map((result) => RESULT.feature.id));
+        const featureIds = new Set(results.map((result) => result.feature.id));
 
         // All IDs should be unique
         expect(featureIds.size).toBe(numFeatures);
@@ -757,7 +757,7 @@ describe('Feature Management Lifecycle', () => {
         expect(result.errors).toHaveLength(0);
 
         // Verify all features are approved
-        RESULT.approved_features.forEach((approvedFeature) => {
+        result.approved_features.forEach((approvedFeature) => {
           expect(approvedFeature.success).toBe(true);
           expect(approvedFeature.status).toBe('approved');
           expect(suggestedFeatureIds).toContain(approvedFeature.feature_id);
@@ -804,7 +804,7 @@ describe('Feature Management Lifecycle', () => {
         expect(result.error_count).toBe(3);
         expect(result.errors).toHaveLength(3);
 
-        RESULT.errors.forEach((error) => {
+        result.errors.forEach((error) => {
           expect(error).toContain('not found');
         });
       });
@@ -846,7 +846,7 @@ describe('Feature Management Lifecycle', () => {
         expect(result.metadata).toBeDefined();
 
         // Verify feature data structure
-        RESULT.features.forEach((feature) => {
+        result.features.forEach((feature) => {
           testHelpers.validateFeatureStructure(feature);
         });
       });
@@ -931,7 +931,7 @@ describe('Feature Management Lifecycle', () => {
         expect(result.stats).toBeDefined();
         expect(result.metadata).toBeDefined();
 
-        const stats = RESULT.stats;
+        const stats = result.stats;
         expect(stats.total).toBe(3);
         expect(stats.by_status).toEqual({
           suggested: 1,
@@ -954,7 +954,7 @@ describe('Feature Management Lifecycle', () => {
         expect(result.stats.recent_activity.length).toBe(2); // From test fixtures
 
         // Verify recent activity structure
-        RESULT.stats.recent_activity.forEach((activity) => {
+        result.stats.recent_activity.forEach((activity) => {
           expect(activity).toHaveProperty('feature_id');
           expect(activity).toHaveProperty('action');
           expect(activity).toHaveProperty('timestamp');
