@@ -6,7 +6,7 @@ const fs = require('fs');
 
 const filePath =
   '/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js';
-const content = fs.readFileSync(filePath, 'utf8');
+const content = fs.readFileSync(_filePath, 'utf8');
 
 // Fix the specific logger reference issue
 const fixed = content.replace(
@@ -15,7 +15,7 @@ const fixed = content.replace(
 );
 
 if (content !== fixed) {
-  fs.writeFileSync(filePath, fixed);
+  fs.writeFileSync(_filePath, fixed);
   console.log('Fixed logger reference in TaskManager API');
 } else {
   console.log('No logger reference fix needed');

@@ -524,12 +524,12 @@ describe('ValidationDependencyManager', () => {
       expect(criticalPaths.length).toBeLessThanOrEqual(5); // Top 5 only
 
       if (criticalPaths.length > 0) {
-        const PATH = criticalPaths[0];
-        expect(path.path).toBeDefined();
-        expect(path.totalDuration).toBeGreaterThan(0);
-        expect(path.averageDuration).toBeGreaterThan(0);
-        expect(path.bottlenecks).toBeDefined();
-        expect(path.optimizationPotential).toBeGreaterThanOrEqual(0);
+        const criticalPath = criticalPaths[0];
+        expect(criticalPath.path).toBeDefined();
+        expect(criticalPath.totalDuration).toBeGreaterThan(0);
+        expect(criticalPath.averageDuration).toBeGreaterThan(0);
+        expect(criticalPath.bottlenecks).toBeDefined();
+        expect(criticalPath.optimizationPotential).toBeGreaterThanOrEqual(0);
       }
     });
 

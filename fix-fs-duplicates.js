@@ -10,7 +10,7 @@ const PATH = require('path');
 
 function fixDuplicateFS(_filePath) {
   try {
-    const content = fs.readFileSync(filePath, 'utf8');
+    const content = fs.readFileSync(_filePath, 'utf8');
 
     // Pattern 1: Fix path + fs.promises duplicates
     let fixed = content.replace(
@@ -52,7 +52,7 @@ function fixDuplicateFS(_filePath) {
     fixed = fixed.replace(/FS\.basename\(/g, 'PATH.basename(');
 
     if (content !== fixed) {
-      fs.writeFileSync(filePath, fixed);
+      fs.writeFileSync(_filePath, fixed);
       console.log(`Fixed: ${filePath}`);
       return true;
     }
@@ -71,7 +71,7 @@ function findJSFiles(dir) {
     const items = fs.readdirSync(currentDir);
 
     for (const item of items) {
-      const fullPath = path.join(currentDir, item);
+      const fullPath = PATH.join(currentDir, item);
       const stat = fs.statSync(fullPath);
 
       if (

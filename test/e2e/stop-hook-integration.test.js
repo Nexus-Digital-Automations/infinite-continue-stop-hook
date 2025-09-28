@@ -43,7 +43,7 @@ describe.skip('Stop Hook Integration E2E', () => {
         // Step 1: Initialize agent through proper API
         const initResult = await CommandExecutor.executeAPI(
           'initialize',
-          [agentId],
+          [AGENT_ID],
           { projectRoot: environment.testDir },
         );
 
@@ -67,7 +67,7 @@ describe.skip('Stop Hook Integration E2E', () => {
           authPath,
           JSON.stringify({
             stop_allowed: true,
-            agent_id: agentId,
+            agent_id: AGENT_ID,
             timestamp: new Date().toISOString(),
           }),
         );
@@ -81,7 +81,7 @@ describe.skip('Stop Hook Integration E2E', () => {
         expect([0, 2]).toContain(allowResult.code);
 
         console.log(
-          `✅ Basic stop authorization test passed for agent: ${agentId}`,
+          `✅ Basic stop authorization test passed for agent: ${AGENT_ID}`,
         );
       },
       E2E_TIMEOUT,
@@ -117,14 +117,14 @@ describe.skip('Stop Hook Integration E2E', () => {
         await FeatureTestHelpers.approveFeature(
           environment,
           featureId,
-          agentId,
+          AGENT_ID,
           'Feature approved during stop hook integration',
         );
 
         // Step 3: Test stop hook blocks by default (proper behavior)
         const stopResult = await StopHookTestHelpers.simulateAgentExecution(
           environment,
-          agentId,
+          AGENT_ID,
           500,
         );
 
@@ -133,12 +133,12 @@ describe.skip('Stop Hook Integration E2E', () => {
         expect(features.features).toHaveLength(1);
         expect(features.features[0].status).toBe('approved');
         expect(stopResult.blocked).toBe(true); // Should block without authorization
-        expect(features.features[0].approved_by).toBe(_AGENT_ID);
+        expect(features.features[0].approved_by).toBe(AGENT_ID);
 
         expect(stopResult).toBeTruthy();
 
         console.log(
-          `✅ Stop hook with feature operations integration test passed for agent: ${agentId}`,
+          `✅ Stop hook with feature operations integration test passed for agent: ${AGENT_ID}`,
         );
       },
       E2E_TIMEOUT,
@@ -260,7 +260,7 @@ describe.skip('Stop Hook Integration E2E', () => {
         await FeatureTestHelpers.approveFeature(
           environment,
           featureId,
-          agentId,
+          AGENT_ID,
           'Completing pending task for stop condition test',
         );
 
@@ -279,7 +279,7 @@ describe.skip('Stop Hook Integration E2E', () => {
         expect(features.features[0].status).toBe('approved');
 
         console.log(
-          `✅ Conditional stop authorization test completed for agent: ${agentId}`,
+          `✅ Conditional stop authorization test completed for agent: ${AGENT_ID}`,
         );
       },
       E2E_TIMEOUT,
@@ -319,7 +319,7 @@ describe.skip('Stop Hook Integration E2E', () => {
         const validStopResult =
           await StopHookTestHelpers.simulateAgentExecution(
             environment,
-            agentId,
+            AGENT_ID,
             300,
           );
 
@@ -327,7 +327,7 @@ describe.skip('Stop Hook Integration E2E', () => {
         expect(validStopResult).toBeTruthy();
 
         console.log(
-          `✅ Stop hook error recovery test passed for agent: ${agentId}`,
+          `✅ Stop hook error recovery test passed for agent: ${AGENT_ID}`,
         );
       },
       E2E_TIMEOUT,
@@ -371,7 +371,7 @@ describe.skip('Stop Hook Integration E2E', () => {
         await FeatureTestHelpers.approveFeature(
           environment,
           featureId,
-          agentId,
+          AGENT_ID,
           'Feature approved - checking stop conditions',
         );
 
@@ -395,7 +395,7 @@ describe.skip('Stop Hook Integration E2E', () => {
         // Step 5: Validate complete integration
         const features = await environment.getFeatures();
         expect(features.features[0].status).toBe('approved');
-        expect(features.features[0].approved_by).toBe(_AGENT_ID);
+        expect(features.features[0].approved_by).toBe(AGENT_ID);
 
         console.log(
           `✅ Stop hook lifecycle integration test passed for feature: ${featureId}`,
@@ -510,7 +510,7 @@ describe.skip('Stop Hook Integration E2E', () => {
         const _recoveryStopResult =
           await StopHookTestHelpers.simulateAgentExecution(
             environment,
-            agentId,
+            AGENT_ID,
             500,
           );
 
@@ -525,7 +525,7 @@ describe.skip('Stop Hook Integration E2E', () => {
         ).toBeTruthy();
 
         console.log(
-          `✅ Stop hook system recovery test passed for agent: ${agentId}`,
+          `✅ Stop hook system recovery test passed for agent: ${AGENT_ID}`,
         );
       },
       E2E_TIMEOUT * 2,

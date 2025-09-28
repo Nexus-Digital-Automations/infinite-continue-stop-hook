@@ -116,7 +116,7 @@ function getAllJsFiles() {
       .split('\n')
       .filter((f) => f);
   } catch (_error) {
-    loggers.app.error('Failed to get JS files:', { error: error.message });
+    loggers.app.error('Failed to get JS files:', { error: _error.message });
     return [];
   }
 }
@@ -144,7 +144,7 @@ try {
   });
   loggers.app.info('🎉 ALL LINTING ERRORS RESOLVED!');
 } catch (_error) {
-  const output = error.stdout || error.message;
+  const output = _error.stdout || _error.message;
   const errorMatches = output.match(/(\d+) errors/);
   const warningMatches = output.match(/(\d+) warnings/);
 

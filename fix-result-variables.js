@@ -71,7 +71,10 @@ class ResultVariableFixer {
 
       console.log('✅ result/result variable fix completed successfully');
     } catch (_error) {
-      console.error('❌ Failed to fix result/result variables:', error.message);
+      console.error(
+        '❌ Failed to fix result/result variables:',
+        _error.message
+      );
       process.exit(1);
     }
   }
@@ -101,7 +104,7 @@ class ResultVariableFixer {
       const items = FS.readdirSync(dir);
 
       for (const item of items) {
-        const fullPath = path.join(dir, item);
+        const fullPath = PATH.join(dir, item);
         const stat = FS.statSync(fullPath);
 
         if (stat.isDirectory()) {
@@ -126,7 +129,7 @@ class ResultVariableFixer {
    */
   processFile(_filePath) {
     try {
-      console.log(`🔧 Processing: ${path.relative(process.cwd(), _filePath)}`);
+      console.log(`🔧 Processing: ${PATH.relative(process.cwd(), _filePath)}`);
 
       let content = FS.readFileSync(filePath, 'utf8');
       let modified = false;
@@ -156,7 +159,7 @@ class ResultVariableFixer {
           changes,
         });
         console.log(
-          `✅ Fixed ${changes} issues in ${path.relative(process.cwd(), _filePath)}`
+          `✅ Fixed ${changes} issues in ${PATH.relative(process.cwd(), _filePath)}`
         );
       }
 
@@ -361,7 +364,7 @@ class ResultVariableFixer {
     let changes = 0;
 
     // File-specific fixes
-    const fileName = path.basename(_filePath);
+    const fileName = PATH.basename(_filePath);
 
     if (fileName === 'jest-json-reporter.js') {
       // Fix the specific issue where result should be result in return statement
@@ -426,7 +429,7 @@ class ResultVariableFixer {
       console.log('\n📁 Modified Files:');
       for (const file of this.fixedFiles) {
         console.log(
-          `  ✅ ${path.relative(process.cwd(), file.path)} (${file.changes} changes)`
+          `  ✅ ${PATH.relative(process.cwd(), file.path)} (${file.changes} changes)`
         );
       }
     }
@@ -435,7 +438,7 @@ class ResultVariableFixer {
       console.log('\n❌ Errors:');
       for (const error of this.errors) {
         console.log(
-          `  ❌ ${path.relative(process.cwd(), error.file)}: ${error.error}`
+          `  ❌ ${PATH.relative(process.cwd(), error.file)}: ${error.error}`
         );
       }
     }
@@ -446,16 +449,16 @@ class ResultVariableFixer {
       stats: this.stats,
       fixedFiles: this.fixedFiles.map((f) => ({
         ...f,
-        path: path.relative(process.cwd(), f.path),
+        path: PATH.relative(process.cwd(), f.path),
       })),
       errors: this.errors.map((e) => ({
         ...e,
-        file: path.relative(process.cwd(), e.file),
+        file: PATH.relative(process.cwd(), e.file),
       })),
     };
 
     FS.writeFileSync(
-      path.join(process.cwd(), 'result-variable-fix-report.json'),
+      PATH.join(process.cwd(), 'result-variable-fix-report.json'),
       JSON.stringify(report, null, 2)
     );
 

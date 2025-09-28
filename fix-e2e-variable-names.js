@@ -8,7 +8,7 @@ const PATH = require('path');
 
 function fixVariableNames(_filePath) {
   try {
-    const content = fs.readFileSync(filePath, 'utf8');
+    const content = fs.readFileSync(_filePath, 'utf8');
     let fixed = content;
     let changes = 0;
 
@@ -17,7 +17,7 @@ function fixVariableNames(_filePath) {
     fixed = fixed.replace(/\bRESULT\./g, 'result.');
     if (beforeRESULT !== fixed) {
       changes++;
-      console.log(`Fixed result. references in ${path.basename(_filePath)}`);
+      console.log(`Fixed result. references in ${PATH.basename(_filePath)}`);
     }
 
     // Fix _operation -> operation
@@ -25,7 +25,7 @@ function fixVariableNames(_filePath) {
     fixed = fixed.replace(/\b_operation/g, 'operation');
     if (beforeOperation !== fixed) {
       changes++;
-      console.log(`Fixed _operation references in ${path.basename(_filePath)}`);
+      console.log(`Fixed _operation references in ${PATH.basename(_filePath)}`);
     }
 
     // Fix OPERATION. -> operation.
@@ -33,7 +33,7 @@ function fixVariableNames(_filePath) {
     fixed = fixed.replace(/\bOPERATION\./g, 'operation.');
     if (beforeOPERATION !== fixed) {
       changes++;
-      console.log(`Fixed OPERATION. references in ${path.basename(_filePath)}`);
+      console.log(`Fixed OPERATION. references in ${PATH.basename(_filePath)}`);
     }
 
     // Fix _operationresult -> operation.result
@@ -42,12 +42,12 @@ function fixVariableNames(_filePath) {
     if (beforeOperationResult !== fixed) {
       changes++;
       console.log(
-        `Fixed _operationresult references in ${path.basename(_filePath)}`
+        `Fixed _operationresult references in ${PATH.basename(_filePath)}`
       );
     }
 
     if (changes > 0) {
-      fs.writeFileSync(filePath, fixed);
+      fs.writeFileSync(_filePath, fixed);
       console.log(`Fixed ${changes} variable naming issues in: ${filePath}`);
       return true;
     }
@@ -66,7 +66,7 @@ function findE2ETestFiles(dir) {
     const items = fs.readdirSync(currentDir);
 
     for (const item of items) {
-      const fullPath = path.join(currentDir, item);
+      const fullPath = PATH.join(currentDir, item);
       const stat = fs.statSync(fullPath);
 
       if (stat.isDirectory() && !item.startsWith('.')) {

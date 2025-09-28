@@ -186,8 +186,8 @@ class ComprehensiveLintingFix {
       });
       return result.split('\n').filter((line) => line.includes('error'));
     } catch (_error) {
-      return error.stdout
-        ? error.stdout.split('\n').filter((line) => line.includes('error'))
+      return _error.stdout
+        ? _error.stdout.split('\n').filter((line) => line.includes('error'))
         : [];
     }
   }

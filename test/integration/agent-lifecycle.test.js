@@ -57,12 +57,12 @@ describe('Agent Lifecycle Integration Tests', () => {
     test('should handle single agent initialization process', async () => {
       // 1. Initialize agent
       const AGENT_ID = 'test-agent-001';
-      const initResult = await execAPI('initialize', [agentId], {
+      const initResult = await execAPI('initialize', [AGENT_ID], {
         projectRoot: testDir,
       });
 
       expect(initResult.success).toBe(true);
-      expect(initResult.agent.id).toBe(_AGENT_ID);
+      expect(initResult.agent.id).toBe(AGENT_ID);
       expect(initResult.agent.status).toBe('initialized');
       expect(initResult.agent.sessionId).toBeDefined();
       expect(initResult.agent.sessionId).toMatch(/^[a-f0-9]{16}$/);

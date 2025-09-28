@@ -106,18 +106,18 @@ describe('Example Test with Mock Framework', () => {
   describe('API Mock Integration', () => {
     test('should mock agent initialization', async () => {
       const AGENT_ID = TestIdGenerator.generateAgentId();
-      const result = await APIExecutor.initializeTestAgent(_AGENT_ID);
+      const result = await APIExecutor.initializeTestAgent(AGENT_ID);
 
-      expect(result.agentId).toBe(_AGENT_ID);
+      expect(result.agentId).toBe(AGENT_ID);
       expect(result.result.success).toBe(true);
 
       // Verify using mock validation helper
-      expectAgentInitialized(_AGENT_ID);
+      expectAgentInitialized(AGENT_ID);
     });
 
     test('should mock feature creation', async () => {
       const AGENT_ID = TestIdGenerator.generateAgentId();
-      await APIExecutor.initializeTestAgent(_AGENT_ID);
+      await APIExecutor.initializeTestAgent(AGENT_ID);
 
       const featureData = TestDataFactory.createFeatureData({
         title: 'Test Feature with Mocks',
@@ -136,7 +136,7 @@ describe('Example Test with Mock Framework', () => {
 
     test('should handle feature validation errors', async () => {
       const AGENT_ID = TestIdGenerator.generateAgentId();
-      await APIExecutor.initializeTestAgent(_AGENT_ID);
+      await APIExecutor.initializeTestAgent(AGENT_ID);
 
       const invalidFeatureData = {
         title: 'Invalid Feature',
@@ -156,7 +156,7 @@ describe('Example Test with Mock Framework', () => {
 
     test('should mock feature listing with filters', async () => {
       const AGENT_ID = TestIdGenerator.generateAgentId();
-      await APIExecutor.initializeTestAgent(_AGENT_ID);
+      await APIExecutor.initializeTestAgent(AGENT_ID);
 
       // Create multiple features
       await APIExecutor.createTestFeature(
@@ -335,7 +335,7 @@ describe('Example Test with Mock Framework', () => {
 
     test('should provide meaningful error messages', async () => {
       const AGENT_ID = TestIdGenerator.generateAgentId();
-      await APIExecutor.initializeTestAgent(_AGENT_ID);
+      await APIExecutor.initializeTestAgent(AGENT_ID);
 
       const result = await APIExecutor.execAPI('approve-feature', [
         'non-existent-feature',

@@ -11,7 +11,7 @@ function fixAuditTestVariables() {
     '/Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js';
 
   try {
-    let content = fs.readFileSync(filePath, 'utf-8');
+    let content = fs.readFileSync(_filePath, 'utf-8');
 
     console.log('Fixing audit test file variables...');
 
@@ -42,10 +42,10 @@ function fixAuditTestVariables() {
       );
     }
 
-    fs.writeFileSync(filePath, content);
+    fs.writeFileSync(_filePath, content);
     console.log('Fixed audit test file variables successfully');
   } catch (_error) {
-    console.error('Error fixing audit test file:', error.message);
+    console.error('Error fixing audit test file:', _error.message);
     throw error;
   }
 }

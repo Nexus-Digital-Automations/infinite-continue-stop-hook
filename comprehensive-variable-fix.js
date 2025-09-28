@@ -187,7 +187,7 @@ try {
   });
   loggers.app.info('🎉 ALL LINTING ERRORS RESOLVED!');
 } catch (_error) {
-  const output = error.stdout || error.message;
+  const output = _error.stdout || _error.message;
   const errorMatches = output.match(/(\d+) errors/);
   const warningMatches = output.match(/(\d+) warnings/);
 

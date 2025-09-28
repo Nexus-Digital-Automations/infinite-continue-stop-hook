@@ -105,7 +105,7 @@ class RemainingResultFixer {
         '✅ Remaining result/result variable issues fixed successfully'
       );
     } catch (_error) {
-      console.error('❌ Failed to fix remaining issues:', error.message);
+      console.error('❌ Failed to fix remaining issues:', _error.message);
       process.exit(1);
     }
   }
@@ -118,7 +118,7 @@ class RemainingResultFixer {
       return;
     }
 
-    console.log(`🔧 Processing: ${path.relative(process.cwd(), file)}`);
+    console.log(`🔧 Processing: ${PATH.relative(process.cwd(), file)}`);
 
     let content = FS.readFileSync(file, 'utf8');
     let modified = false;
@@ -144,18 +144,18 @@ class RemainingResultFixer {
         changes: totalChanges,
       });
       console.log(
-        `✅ Fixed ${totalChanges} issues in ${path.relative(process.cwd(), file)}`
+        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), file)}`
       );
     } else {
       console.log(
-        `✅ No issues found in ${path.relative(process.cwd(), file)}`
+        `✅ No issues found in ${PATH.relative(process.cwd(), file)}`
       );
     }
   }
 
   fixTestFile(_filePath) {
     console.log(
-      `🔧 Processing test file: ${path.relative(process.cwd(), _filePath)}`
+      `🔧 Processing test file: ${PATH.relative(process.cwd(), _filePath)}`
     );
 
     let content = FS.readFileSync(filePath, 'utf8');
@@ -259,11 +259,11 @@ class RemainingResultFixer {
         changes: totalChanges,
       });
       console.log(
-        `✅ Fixed ${totalChanges} issues in ${path.relative(process.cwd(), _filePath)}`
+        `✅ Fixed ${totalChanges} issues in ${PATH.relative(process.cwd(), _filePath)}`
       );
     } else {
       console.log(
-        `✅ No issues found in ${path.relative(process.cwd(), _filePath)}`
+        `✅ No issues found in ${PATH.relative(process.cwd(), _filePath)}`
       );
     }
   }
@@ -285,7 +285,7 @@ class RemainingResultFixer {
       console.log('\n📁 Modified Files:');
       for (const file of this.fixedFiles) {
         console.log(
-          `  ✅ ${path.relative(process.cwd(), file.path)} (${file.changes} changes)`
+          `  ✅ ${PATH.relative(process.cwd(), file.path)} (${file.changes} changes)`
         );
       }
     }

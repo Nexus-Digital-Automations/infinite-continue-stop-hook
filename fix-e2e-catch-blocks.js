@@ -8,7 +8,7 @@ const PATH = require('path');
 
 function fixCatchBlocks(_filePath) {
   try {
-    const content = fs.readFileSync(filePath, 'utf8');
+    const content = fs.readFileSync(_filePath, 'utf8');
     const lines = content.split('\n');
     let modified = false;
 
@@ -55,7 +55,7 @@ function fixCatchBlocks(_filePath) {
     }
 
     if (modified) {
-      fs.writeFileSync(filePath, lines.join('\n'));
+      fs.writeFileSync(_filePath, lines.join('\n'));
       console.log(`Fixed catch blocks in: ${filePath}`);
       return true;
     }
@@ -74,7 +74,7 @@ function findE2ETestFiles(dir) {
     const items = fs.readdirSync(currentDir);
 
     for (const item of items) {
-      const fullPath = path.join(currentDir, item);
+      const fullPath = PATH.join(currentDir, item);
       const stat = fs.statSync(fullPath);
 
       if (stat.isDirectory() && !item.startsWith('.')) {

@@ -931,10 +931,10 @@ describe('FeatureManagerAPI', () => {
     describe('initializeAgent', () => {
       test('should initialize new agent successfully', async () => {
         const AGENT_ID = 'test-agent-001';
-        const result = await api.initializeAgent(_AGENT_ID);
+        const result = await api.initializeAgent(AGENT_ID);
         expect(result.success).toBe(true);
         expect(result.agent).toBeDefined();
-        expect(result.agent.id).toBe(_AGENT_ID);
+        expect(result.agent.id).toBe(AGENT_ID);
         expect(result.agent.status).toBe('initialized');
         expect(result.agent.sessionId).toBeDefined();
       });
@@ -951,13 +951,13 @@ describe('FeatureManagerAPI', () => {
       test('should reinitialize existing agent', async () => {
         const AGENT_ID = 'test-agent-002';
         // First initialize
-        await api.initializeAgent(_AGENT_ID);
+        await api.initializeAgent(AGENT_ID);
 
         // Then reinitialize
-        const result = await api.reinitializeAgent(_AGENT_ID);
+        const result = await api.reinitializeAgent(AGENT_ID);
         expect(result.success).toBe(true);
         expect(result.agent).toBeDefined();
-        expect(result.agent.id).toBe(_AGENT_ID);
+        expect(result.agent.id).toBe(AGENT_ID);
         expect(result.agent.previousSessions).toBeDefined();
       });
 
@@ -974,17 +974,17 @@ describe('FeatureManagerAPI', () => {
         const AGENT_ID = 'test-agent-003';
         const reason = 'Task completed successfully';
 
-        const result = await api.authorizeStop(agentId, reason);
+        const result = await api.authorizeStop(AGENT_ID, reason);
         expect(result.success).toBe(true);
         expect(result.authorization).toBeDefined();
-        expect(result.authorization.authorized_by).toBe(_AGENT_ID);
+        expect(result.authorization.authorized_by).toBe(AGENT_ID);
         expect(result.authorization.reason).toBe(reason);
         expect(result.authorization.timestamp).toBeDefined();
       });
 
       test('should authorize stop with default reason', async () => {
         const AGENT_ID = 'test-agent-004';
-        const result = await api.authorizeStop(_AGENT_ID);
+        const result = await api.authorizeStop(AGENT_ID);
         expect(result.success).toBe(true);
         expect(result.authorization.reason).toBe(
           'Agent authorized stop after completing all tasks And achieving project perfection',

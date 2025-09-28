@@ -10,7 +10,7 @@ function comprehensiveAuditFix() {
     '/Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js';
 
   try {
-    let content = fs.readFileSync(filePath, 'utf-8');
+    let content = fs.readFileSync(_filePath, 'utf-8');
 
     console.log('Applying comprehensive audit test fixes...');
 
@@ -47,10 +47,10 @@ function comprehensiveAuditFix() {
       'expect(result.success).toBe(true);'
     );
 
-    fs.writeFileSync(filePath, content);
+    fs.writeFileSync(_filePath, content);
     console.log('Applied comprehensive audit test fixes successfully');
   } catch (_error) {
-    console.error('Error applying comprehensive fixes:', error.message);
+    console.error('Error applying comprehensive fixes:', _error.message);
     throw error;
   }
 }

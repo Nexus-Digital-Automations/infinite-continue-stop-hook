@@ -22,7 +22,7 @@ function getAllJsFiles() {
       .split('\n')
       .filter((f) => f && f.endsWith('.js'));
   } catch (_error) {
-    console.error('Failed to get JS files:', error.message);
+    console.error('Failed to get JS files:', _error.message);
     return [];
   }
 }
@@ -34,7 +34,7 @@ function fixAllCatchBlocks(_filePath) {
       return false;
     }
 
-    let content = fs.readFileSync(filePath, 'utf8');
+    let content = fs.readFileSync(_filePath, 'utf8');
     let modified = false;
     const originalContent = content;
 
@@ -225,16 +225,16 @@ function fixAllCatchBlocks(_filePath) {
     });
 
     if (modified && content !== originalContent) {
-      fs.writeFileSync(filePath, content, 'utf8');
+      fs.writeFileSync(_filePath, content, 'utf8');
       console.log(
-        `Fixed catch blocks in: ${path.relative(rootDir, _filePath)}`
+        `Fixed catch blocks in: ${PATH.relative(rootDir, _filePath)}`
       );
       return true;
     }
 
     return false;
   } catch (_error) {
-    console.error(`Error fixing catch blocks in ${filePath}:`, error.message);
+    console.error(`Error fixing catch blocks in ${_filePath}:`, _error.message);
     return false;
   }
 }
@@ -272,7 +272,7 @@ try {
   });
   console.log('🎉 ALL LINTING ERRORS RESOLVED!');
 } catch (_error) {
-  const output = error.stdout || error.message;
+  const output = _error.stdout || _error.message;
   const errorMatches = output.match(/(\d+) errors/);
   const warningMatches = output.match(/(\d+) warnings/);
 

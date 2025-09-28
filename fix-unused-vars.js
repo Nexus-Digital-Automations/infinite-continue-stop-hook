@@ -108,7 +108,7 @@ function getAllJSFiles(dir) {
   const items = fs.readdirSync(dir);
 
   for (const item of items) {
-    const fullPath = path.join(dir, item);
+    const fullPath = PATH.join(dir, item);
     const stat = fs.statSync(fullPath);
 
     if (
@@ -127,7 +127,7 @@ function getAllJSFiles(dir) {
 
 function fixFileUnusedVars(_filePath) {
   try {
-    let content = fs.readFileSync(filePath, 'utf8');
+    let content = fs.readFileSync(_filePath, 'utf8');
     let modified = false;
 
     for (const pattern of patterns) {
@@ -137,14 +137,14 @@ function fixFileUnusedVars(_filePath) {
           content = newContent;
           modified = true;
           console.log(
-            `  ✓ Applied pattern in ${path.relative(process.cwd(), _filePath)}`
+            `  ✓ Applied pattern in ${PATH.relative(process.cwd(), _filePath)}`
           );
         }
       }
     }
 
     if (modified) {
-      fs.writeFileSync(filePath, content, 'utf8');
+      fs.writeFileSync(_filePath, content, 'utf8');
       return true;
     }
 
@@ -164,7 +164,7 @@ function main() {
   let totalModified = 0;
 
   for (const filePath of jsFiles) {
-    const relativePath = path.relative(projectRoot, _filePath);
+    const relativePath = PATH.relative(projectRoot, _filePath);
     console.log(`Processing: ${relativePath}`);
 
     if (fixFileUnusedVars(_filePath)) {

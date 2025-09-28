@@ -15,7 +15,7 @@ function getAllJsFiles() {
       .split('\n')
       .filter((f) => f && f.endsWith('.js'));
   } catch (_error) {
-    console.error('Failed to get JS files:', error.message);
+    console.error('Failed to get JS files:', _error.message);
     return [];
   }
 }
@@ -23,7 +23,7 @@ function getAllJsFiles() {
 // Fix common variable naming issues
 function fixFile(_filePath) {
   try {
-    let content = fs.readFileSync(filePath, 'utf8');
+    let content = fs.readFileSync(_filePath, 'utf8');
     let modified = false;
 
     // Fix result unused variables - add underscore prefix
@@ -66,7 +66,7 @@ function fixFile(_filePath) {
     });
 
     if (modified) {
-      fs.writeFileSync(filePath, content, 'utf8');
+      fs.writeFileSync(_filePath, content, 'utf8');
       console.log(`Fixed: ${filePath}`);
       return true;
     }

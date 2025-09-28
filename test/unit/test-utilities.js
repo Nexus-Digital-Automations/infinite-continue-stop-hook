@@ -44,18 +44,18 @@ class MockFileSystem {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
-    if (this.readErrors.has(_filePath)) {
-      const error = new Error(this.readErrors.get(_filePath));
+    if (this.readErrors.has(filePath)) {
+      const error = new Error(this.readErrors.get(filePath));
       error.code =
-        this.readErrors.get(_filePath) === 'File not found' ? 'ENOENT' : 'EIO';
+        this.readErrors.get(filePath) === 'File not found' ? 'ENOENT' : 'EIO';
       throw error;
     }
-    if (!this.files.has(_filePath)) {
+    if (!this.files.has(filePath)) {
       const error = new Error('File not found');
       error.code = 'ENOENT';
       throw error;
     }
-    return this.files.get(_filePath);
+    return this.files.get(filePath);
   }
 
   // Mock FS.writeFile
@@ -63,8 +63,8 @@ class MockFileSystem {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
-    if (this.writeErrors.has(_filePath)) {
-      throw new Error(this.writeErrors.get(_filePath));
+    if (this.writeErrors.has(filePath)) {
+      throw new Error(this.writeErrors.get(filePath));
     }
     this.files.set(filePath, data);
   }

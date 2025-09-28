@@ -7,7 +7,7 @@ const fs = require('fs');
 
 function fixCatchBlocks(_filePath) {
   try {
-    const content = fs.readFileSync(filePath, 'utf8');
+    const content = fs.readFileSync(_filePath, 'utf8');
     const lines = content.split('\n');
     let modified = false;
 
@@ -55,7 +55,7 @@ function fixCatchBlocks(_filePath) {
     }
 
     if (modified) {
-      fs.writeFileSync(filePath, lines.join('\n'));
+      fs.writeFileSync(_filePath, lines.join('\n'));
       console.log(`Fixed catch blocks in: ${filePath}`);
       return true;
     }

@@ -102,7 +102,7 @@ function generateValidationProgressReport(flagData, logger, _workingDir) {
       // Implementation would go here to load custom rules
       return customRules;
     } catch (_error) {
-      logger.warn(`Failed to load custom validation rules: ${error.message}`);
+      logger.warn(`Failed to load custom validation rules: ${_error.message}`);
       return customRules;
     }
   }
@@ -249,7 +249,7 @@ ${progressReport.validationDetails
     } catch (_error) {
       // Invalid flag file, remove it
       loggers.app.error(
-        `⚠️ Invalid validation progress file detected - cleaning up. Error: ${error.message}`
+        `⚠️ Invalid validation progress file detected - cleaning up. Error: ${_error.message}`
       );
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
       FS.unlinkSync(stopFlagPath);
@@ -310,14 +310,14 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
     todoData = JSON.parse(FS.readFileSync(todoPath, 'utf8'));
   } catch (_error) {
     logger.addFlow(
-      `Failed to read TASKS.json in ${projectPath}: ${error.message}`
+      `Failed to read TASKS.json in ${projectPath}: ${_error.message}`
     );
     return {
       agentsRemoved: 0,
       tasksUnassigned: 0,
       orphanedTasksReset: 0,
       projectPath,
-      error: error.message,
+      error: _error.message,
     };
   }
 
@@ -416,7 +416,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
       logger.addFlow(`Updated ${projectPath}/TASKS.json with cleanup results`);
     } catch (_error) {
       logger.addFlow(
-        `Failed to write TASKS.json in ${projectPath}: ${error.message}`
+        `Failed to write TASKS.json in ${projectPath}: ${_error.message}`
       );
       return {
         agentsRemoved: 0,

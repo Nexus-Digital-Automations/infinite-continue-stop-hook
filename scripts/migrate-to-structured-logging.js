@@ -81,7 +81,7 @@ function analyzeConsoleUsage(_filePath) {
   const lines = content.split('\n');
 
   const usage = {
-    filePath,
+    _filePath,
     consoleLines: [],
     hasLoggerImport: false,
     importType: null,

@@ -77,7 +77,7 @@ function fixFile(_filePath) {
 
     return false;
   } catch (fixError) {
-    loggers.app.error(`Error fixing ${filePath}:`, {
+    loggers.app.error(`Error fixing ${_filePath}:`, {
       error: fixError.message,
     });
     return false;
@@ -102,8 +102,8 @@ function getErrorFiles() {
 
     return Array.from(errorFiles);
   } catch (_error) {
-    return error.stdout
-      ? error.stdout
+    return _error.stdout
+      ? _error.stdout
           .split('\n')
           .filter((line) => line.includes('.js:') && line.includes('error'))
           .map((line) => line.split(':')[0])

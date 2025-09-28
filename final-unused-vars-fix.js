@@ -73,7 +73,7 @@ function getAllJSFiles(dir) {
 
 function fixFileUnusedVars(filePath) {
   try {
-    let content = fs.readFileSync(filePath, 'utf8');
+    let content = fs.readFileSync(_filePath, 'utf8');
     let modified = false;
 
     for (const pattern of additionalPatterns) {
@@ -101,7 +101,7 @@ function fixFileUnusedVars(filePath) {
     }
 
     if (modified) {
-      fs.writeFileSync(filePath, content, 'utf8');
+      fs.writeFileSync(_filePath, content, 'utf8');
       return true;
     }
 

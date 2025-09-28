@@ -8,7 +8,7 @@ const PATH = require('path');
 
 function fixFinalNameIssues(_filePath) {
   try {
-    const content = fs.readFileSync(filePath, 'utf8');
+    const content = fs.readFileSync(_filePath, 'utf8');
     let fixed = content;
     let changes = 0;
 
@@ -18,7 +18,7 @@ function fixFinalNameIssues(_filePath) {
     if (beforeNameProp !== fixed) {
       changes++;
       console.log(
-        `Fixed Name: property declarations in ${path.basename(_filePath)}`
+        `Fixed Name: property declarations in ${PATH.basename(_filePath)}`
       );
     }
 
@@ -28,7 +28,7 @@ function fixFinalNameIssues(_filePath) {
     if (beforeNameDestructure !== fixed) {
       changes++;
       console.log(
-        `Fixed { Name, config } destructuring in ${path.basename(_filePath)}`
+        `Fixed { Name, config } destructuring in ${PATH.basename(_filePath)}`
       );
     }
 
@@ -37,7 +37,7 @@ function fixFinalNameIssues(_filePath) {
     fixed = fixed.replace(/\$\{Name\}/g, '${Name}');
     if (beforeNameTemplate !== fixed) {
       changes++;
-      console.log(`Fixed template literals in ${path.basename(_filePath)}`);
+      console.log(`Fixed template literals in ${PATH.basename(_filePath)}`);
     }
 
     // Fix testDependencies.push(Name) to testDependencies.push(Name)
@@ -49,7 +49,7 @@ function fixFinalNameIssues(_filePath) {
     if (beforeNamePush !== fixed) {
       changes++;
       console.log(
-        `Fixed testDependencies.push(Name) in ${path.basename(_filePath)}`
+        `Fixed testDependencies.push(Name) in ${PATH.basename(_filePath)}`
       );
     }
 
@@ -58,7 +58,7 @@ function fixFinalNameIssues(_filePath) {
     fixed = fixed.replace(/step\.Name/g, 'step.Name');
     if (beforeStepName !== fixed) {
       changes++;
-      console.log(`Fixed step.Name references in ${path.basename(_filePath)}`);
+      console.log(`Fixed step.Name references in ${PATH.basename(_filePath)}`);
     }
 
     // Fix systemConfig.Name to systemConfig.Name
@@ -67,7 +67,7 @@ function fixFinalNameIssues(_filePath) {
     if (beforeSystemConfigName !== fixed) {
       changes++;
       console.log(
-        `Fixed systemConfig.Name references in ${path.basename(_filePath)}`
+        `Fixed systemConfig.Name references in ${PATH.basename(_filePath)}`
       );
     }
 
@@ -77,12 +77,12 @@ function fixFinalNameIssues(_filePath) {
     if (beforeBaselineTestName !== fixed) {
       changes++;
       console.log(
-        `Fixed baselineTest.Name references in ${path.basename(_filePath)}`
+        `Fixed baselineTest.Name references in ${PATH.basename(_filePath)}`
       );
     }
 
     if (changes > 0) {
-      fs.writeFileSync(filePath, fixed);
+      fs.writeFileSync(_filePath, fixed);
       console.log(`Fixed ${changes} final Name issues in: ${filePath}`);
       return true;
     }
@@ -101,7 +101,7 @@ function findE2ETestFiles(dir) {
     const items = fs.readdirSync(currentDir);
 
     for (const item of items) {
-      const fullPath = path.join(currentDir, item);
+      const fullPath = PATH.join(currentDir, item);
       const stat = fs.statSync(fullPath);
 
       if (stat.isDirectory() && !item.startsWith('.')) {

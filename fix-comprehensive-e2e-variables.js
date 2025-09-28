@@ -8,7 +8,7 @@ const PATH = require('path');
 
 function fixComprehensiveVariableIssues(_filePath) {
   try {
-    const content = fs.readFileSync(filePath, 'utf8');
+    const content = fs.readFileSync(_filePath, 'utf8');
     let fixed = content;
     let changes = 0;
 
@@ -18,7 +18,7 @@ function fixComprehensiveVariableIssues(_filePath) {
     if (beforeRESULT !== fixed) {
       changes++;
       console.log(
-        `Fixed result variable declarations in ${path.basename(_filePath)}`
+        `Fixed result variable declarations in ${PATH.basename(_filePath)}`
       );
     }
 
@@ -28,7 +28,7 @@ function fixComprehensiveVariableIssues(_filePath) {
     if (beforeName !== fixed) {
       changes++;
       console.log(
-        `Fixed name: property declarations in ${path.basename(_filePath)}`
+        `Fixed name: property declarations in ${PATH.basename(_filePath)}`
       );
     }
 
@@ -38,7 +38,7 @@ function fixComprehensiveVariableIssues(_filePath) {
     if (beforeDestructure !== fixed) {
       changes++;
       console.log(
-        `Fixed destructuring name to name in ${path.basename(_filePath)}`
+        `Fixed destructuring name to name in ${PATH.basename(_filePath)}`
       );
     }
 
@@ -48,7 +48,7 @@ function fixComprehensiveVariableIssues(_filePath) {
     if (beforeTemplate !== fixed) {
       changes++;
       console.log(
-        `Fixed template literal name to name in ${path.basename(_filePath)}`
+        `Fixed template literal name to name in ${PATH.basename(_filePath)}`
       );
     }
 
@@ -61,21 +61,21 @@ function fixComprehensiveVariableIssues(_filePath) {
     if (beforePush !== fixed) {
       changes++;
       console.log(
-        `Fixed testDependencies.push(name) to name in ${path.basename(_filePath)}`
+        `Fixed testDependencies.push(name) to name in ${PATH.basename(_filePath)}`
       );
     }
 
     if (changes > 0) {
-      fs.writeFileSync(filePath, fixed);
+      fs.writeFileSync(_filePath, fixed);
       console.log(
-        `Fixed ${changes} comprehensive variable issues in: ${filePath}`
+        `Fixed ${changes} comprehensive variable issues in: ${_filePath}`
       );
       return true;
     }
 
     return false;
   } catch (_error) {
-    console.error(`Error fixing ${filePath}:`, error.message);
+    console.error(`Error fixing ${_filePath}:`, error.message);
     return false;
   }
 }
@@ -87,7 +87,7 @@ function findE2ETestFiles(dir) {
     const items = fs.readdirSync(currentDir);
 
     for (const item of items) {
-      const fullPath = path.join(currentDir, item);
+      const fullPath = PATH.join(currentDir, item);
       const stat = fs.statSync(fullPath);
 
       if (stat.isDirectory() && !item.startsWith('.')) {
