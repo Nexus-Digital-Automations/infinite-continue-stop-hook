@@ -9,7 +9,7 @@
  * @since 2025-09-23
  */
 
-const FS = require('path');
+const PATH = require('path');
 const FS = require('fs');
 const childProcess = require('child_process');
 const { loggers } = require('../../lib/logger');
@@ -105,11 +105,11 @@ class APIExecutor {
           try {
             const stderrJson = JSON.parse(stderr.trim());
             resolve(stderrJson);
-          } catch (_error) {
+          } catch (parseError) {
 
             reject(
               new Error(
-                `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${error.message}`,
+                `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
               ),
             );
           }
@@ -350,9 +350,9 @@ class TestExecution {
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential retry attempts required
         return await fn();
-      } catch {
+      } catch (error) {
 
-        lastError = _error;
+        lastError = error;
         if (i < maxRetries - 1) {
           // eslint-disable-next-line no-await-in-loop -- Sequential delay required between retry attempts
           await new Promise((resolve) => {

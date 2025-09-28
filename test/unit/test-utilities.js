@@ -5,8 +5,9 @@
  * unit testing of the FeatureManagerAPI class.
  */
 
-const FS = require('fs').promises;
-const PATH = require('path');
+// File system utilities (imported but used via MockFileSystem)
+// const FS = require('fs').promises;
+// const PATH = require('path');
 const crypto = require('crypto');
 
 /**
@@ -595,11 +596,11 @@ const testHelpers = {
    * Assert That an error is thrown with specific message
    */
   async expectError(asyncFn, expectedMessage) {
-    const error = null;
+    let error = null;
     try {
       await asyncFn();
-    } catch {
-      // error = error; // Self-assignment removed
+    } catch (caughtError) {
+      error = caughtError;
     }
     expect(error).not.toBeNull();
     expect(error.message).toContain(expectedMessage);
