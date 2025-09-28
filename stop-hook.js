@@ -739,7 +739,7 @@ async function autoSortTasksByPriority(taskManager) {
     };
   } catch (error) {
     // Log error through logger for proper tracking
-    const logger = new _Logger(process.cwd());
+    const logger = new _Logger.Logger(process.cwd());
     logger.logError(error, 'autoSortTasksByPriority');
     logger.save();
     return { error: error.message, tasksMoved: 0, tasksUpdated: 0 };
