@@ -38,7 +38,7 @@ class PerformanceMonitor {
     this.memorySnapshots = [];
     this.monitoringInterval = setInterval(() => {
       if (this.isMonitoring) {
-        const _memUsage = process.memoryUsage();
+        const memUsage = process.memoryUsage();
         this.memorySnapshots.push({
           timestamp: Date.now(),
           heapUsed: _memUsage.heapUsed,

@@ -5519,7 +5519,7 @@ class AutonomousTaskManagerAPI {
             'swiftc -typecheck',
           ];
 
-          return await this._tryCommands(typeCommands, 'Type checking');
+          return this._tryCommands(typeCommands, 'Type checking');
 
         case 'build-validation':
           // Check if this is a script-only project (no build required)
@@ -12099,6 +12099,7 @@ module.exports = AutonomousTaskManagerAPI;
 // Run CLI if called directly (CommonJS equivalent)
 if (require.main === module) {
   main().catch((error) => {
+    // eslint-disable-next-line no-console -- CLI error output for unhandled errors
     console.error(error.message);
     throw error;
   });
