@@ -1,8 +1,8 @@
 {
-  "project": "e2e-test-feature-management",
+  "project": "e2e-test-performance-validation",
   "schema_version": "2.0.0",
   "migrated_from": "test-initialization",
-  "migration_date": "2025-09-28T15:28:57.122Z",
+  "migration_date": "2025-09-28T15:29:10.120Z",
   "features": [],
   "completed_features": [],
   "feature_relationships": {},
@@ -34,8 +34,8 @@
   },
   "metadata": {
     "version": "2.0.0",
-    "created": "2025-09-28T15:28:57.122Z",
-    "updated": "2025-09-28T15:28:57.122Z",
+    "created": "2025-09-28T15:29:10.120Z",
+    "updated": "2025-09-28T15:29:10.120Z",
     "total_features": 0,
     "features_by_type": {
       "error": 0,

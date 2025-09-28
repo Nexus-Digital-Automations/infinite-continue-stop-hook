@@ -55,14 +55,14 @@ const SPECIFIC_FIXES = [
       },
       // Fix class name
       {
-        pattern: /class\s+ResourceMonitor/g,
-        replacement: 'class ResourceMonitor',
-        description: 'Fix class name from ResourceMonitor to ResourceMonitor',
+        pattern: /class\s+RESOURCE_MONITOR/g,
+        replacement: 'class RESOURCE_MONITOR',
+        description: 'Fix class name from RESOURCE_MONITOR to RESOURCE_MONITOR',
       },
       // Fix constructor call
       {
-        pattern: /new\s+ResourceMonitor\(\)/g,
-        replacement: 'new ResourceMonitor()',
+        pattern: /new\s+RESOURCE_MONITOR\(\)/g,
+        replacement: 'new RESOURCE_MONITOR()',
         description: 'Fix constructor call',
       },
     ],

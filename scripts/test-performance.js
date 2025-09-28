@@ -76,7 +76,7 @@ class PerformanceLogger {
 /**
  * System resource monitor
  */
-class ResourceMonitor {
+class RESOURCE_MONITOR {
   constructor() {
     this.startTime = Date.now();
     this.startMemory = process.memoryUsage();
@@ -186,7 +186,7 @@ class TestPerformanceMonitor {
     this.startTime = Date.now();
     this.testResults = [];
     this.suiteResults = [];
-    this.resourceMonitor = new ResourceMonitor();
+    this.resourceMonitor = new RESOURCE_MONITOR();
     this.warnings = [];
     this.errors = [];
   }

@@ -741,12 +741,12 @@ describe('Feature Management Lifecycle', () => {
         );
         expect(result.success).toBe(true);
         expect(result.approved_count).toBe(5);
-        expect(RESULT.error_count).toBe(0);
-        expect(RESULT.approved_features).toHaveLength(5);
-        expect(RESULT.errors).toHaveLength(0);
+        expect(result.error_count).toBe(0);
+        expect(result.approved_features).toHaveLength(5);
+        expect(result.errors).toHaveLength(0);
 
         // Verify all features are approved
-        RESULT.approved_features.forEach((approvedFeature) => {
+        result.approved_features.forEach((approvedFeature) => {
           expect(approvedFeature.success).toBe(true);
           expect(approvedFeature.status).toBe('approved');
           expect(suggestedFeatureIds).toContain(approvedFeature.feature_id);
@@ -760,25 +760,25 @@ describe('Feature Management Lifecycle', () => {
         const result = await api.bulkApproveFeatures(suggestedFeatureIds);
         expect(result.success).toBe(true);
         expect(result.approved_count).toBe(4);
-        expect(RESULT.error_count).toBe(1);
-        expect(RESULT.approved_features).toHaveLength(4);
-        expect(RESULT.errors).toHaveLength(1);
+        expect(result.error_count).toBe(1);
+        expect(result.approved_features).toHaveLength(4);
+        expect(result.errors).toHaveLength(1);
 
         // Check error message
-        expect(RESULT.errors[0]).toContain(
+        expect(result.errors[0]).toContain(
           "must be in 'suggested' status to approve",
         );
-        expect(RESULT.errors[0]).toContain('Current status: approved');
-        expect(RESULT.errors[0]).toContain(suggestedFeatureIds[2]);
+        expect(result.errors[0]).toContain('Current status: approved');
+        expect(result.errors[0]).toContain(suggestedFeatureIds[2]);
       });
 
       test('should handle empty feature IDs array in bulk approval', async () => {
         const result = await api.bulkApproveFeatures([]);
         expect(result.success).toBe(true);
         expect(result.approved_count).toBe(0);
-        expect(RESULT.error_count).toBe(0);
-        expect(RESULT.approved_features).toHaveLength(0);
-        expect(RESULT.errors).toHaveLength(0);
+        expect(result.error_count).toBe(0);
+        expect(result.approved_features).toHaveLength(0);
+        expect(result.errors).toHaveLength(0);
       });
 
       test('should handle non-existent feature IDs in bulk approval', async () => {
@@ -787,10 +787,10 @@ describe('Feature Management Lifecycle', () => {
         const result = await api.bulkApproveFeatures(nonExistentIds);
         expect(result.success).toBe(true);
         expect(result.approved_count).toBe(0);
-        expect(RESULT.error_count).toBe(3);
-        expect(RESULT.errors).toHaveLength(3);
+        expect(result.error_count).toBe(3);
+        expect(result.errors).toHaveLength(3);
 
-        RESULT.errors.forEach((error) => {
+        result.errors.forEach((error) => {
           expect(error).toContain('not found');
         });
       });

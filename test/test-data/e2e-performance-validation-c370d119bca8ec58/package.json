@@ -1,7 +1,7 @@
 {
-  "name": "e2e-test-feature-management",
+  "name": "e2e-test-performance-validation",
   "version": "1.0.0",
-  "description": "E2E test environment for feature-management",
+  "description": "E2E test environment for performance-validation",
   "scripts": {
     "start": "echo \"Test project started\"",
     "build": "echo \"Test project built\"",
