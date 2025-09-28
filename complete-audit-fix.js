@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Complete fix for audit test file - restore missing API calls
  */

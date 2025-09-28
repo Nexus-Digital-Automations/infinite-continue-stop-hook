@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Comprehensive fix for audit-system-validation.test.js undefined variables
  */

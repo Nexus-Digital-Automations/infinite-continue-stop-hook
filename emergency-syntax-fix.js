@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Emergency fix for invalid JavaScript syntax created by systematic fix
  * Fixes: const FS = require(...) and other invalid syntax patterns

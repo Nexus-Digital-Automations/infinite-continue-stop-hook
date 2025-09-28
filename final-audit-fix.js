@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Final comprehensive fix for all no-undef errors in audit test file
  */
