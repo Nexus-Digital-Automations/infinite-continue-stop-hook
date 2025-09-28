@@ -4,8 +4,8 @@
  * Targets the remaining variable issues: loggers, result, error, _error, etc.
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 class RemainingErrorsFixer {

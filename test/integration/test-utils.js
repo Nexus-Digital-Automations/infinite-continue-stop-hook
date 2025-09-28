@@ -8,8 +8,8 @@
  * @version 1.0.0
  */
 
-const fs = require('fs').promises;
-const path = require('path');
+const FS = require('fs').promises;
+const PATH = require('path');
 const { spawn } = require('child_process');
 const crypto = require('crypto');
 const { loggers } = require('../../lib/logger');

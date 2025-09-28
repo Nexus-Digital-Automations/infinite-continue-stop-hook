@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 
 // Test suite for Feature 8: Stop Hook Validation Performance Metrics
 // Feature ID: feature_1758946499841_cd5eba625370

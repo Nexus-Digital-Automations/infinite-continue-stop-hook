@@ -6,8 +6,8 @@
  */
 
 const { execSync } = require('child_process');
-const fs = require('fs').promises;
-const path = require('path');
+const FS = require('fs').promises;
+const PATH = require('path');
 
 describe('Dependency Management API Integration Tests', () => {
   const PROJECT_ROOT = process.cwd();

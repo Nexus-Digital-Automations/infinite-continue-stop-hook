@@ -57,7 +57,7 @@ class LoggingContextEnhancer {
     };
   }
 
-  async enhanceFile(filePath) {
+  enhanceFile(filePath) {
     try {
       const content = fs.readFileSync(filePath, 'utf8');
       let newContent = content;

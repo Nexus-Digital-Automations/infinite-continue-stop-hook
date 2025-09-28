@@ -6,7 +6,7 @@
  */
 
 const { execSync } = require('child_process');
-const fs = require('fs').promises;
+const FS = require('fs').promises;
 const PATH = require('path');
 
 describe('Dependency Management E2E Tests - Complete Workflows', () => {

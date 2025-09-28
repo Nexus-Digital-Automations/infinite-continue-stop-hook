@@ -12,8 +12,8 @@
 // Console output is intentional for this development/analysis tool
 
 const { spawn } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { loggers } = require('../../lib/logger');
 
 class APIPerformanceBenchmark {

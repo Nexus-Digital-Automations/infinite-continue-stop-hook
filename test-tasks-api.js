@@ -3,8 +3,8 @@
  * Validates migration, adapter functionality, And auto-generation
  */
 
-const fs = require('fs').promises;
-const path = require('path');
+const FS = require('fs').promises;
+const PATH = require('path');
 const TASKS_API_ADAPTER = require('./tasks-api-adapter');
 const { loggers } = require('lib/logger');
 

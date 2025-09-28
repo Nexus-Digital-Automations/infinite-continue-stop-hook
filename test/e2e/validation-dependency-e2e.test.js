@@ -18,8 +18,8 @@ const {
   DEPENDENCY_TYPES,
 } = require('../../lib/validation-dependency-manager');
 const { TaskManagerAPI } = require('../../taskmanager-api');
-const fs = require('fs').promises;
-const path = require('path');
+const FS = require('fs').promises;
+const PATH = require('path');
 const os = require('os');
 
 describe('Validation Dependency Management End-to-End Tests', () => {

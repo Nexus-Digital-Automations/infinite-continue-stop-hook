@@ -5,8 +5,8 @@
  * in utility scripts where console output and file operations are necessary.
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 
 function addSecurityDisableComments(filePath) {
   try {

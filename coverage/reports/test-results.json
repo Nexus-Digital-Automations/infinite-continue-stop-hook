@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "timestamp": "2025-09-28T06:55:03.268Z",
+    "timestamp": "2025-09-28T07:01:39.985Z",
     "reporter": "jest-json-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System"
@@ -10,30 +10,26 @@
     "numPassedTestSuites": 0,
     "numFailedTestSuites": 1,
     "numPendingTestSuites": 0,
-    "numTotalTests": 12,
-    "numPassedTests": 11,
-    "numFailedTests": 1,
+    "numTotalTests": 0,
+    "numPassedTests": 0,
+    "numFailedTests": 0,
     "numPendingTests": 0,
     "numTodoTests": 0,
-    "startTime": 1759042499227,
-    "endTime": 1759042503268,
-    "duration": 4041,
+    "startTime": 1759042898648,
+    "endTime": 1759042899985,
+    "duration": 1337,
     "success": false
   },
   "testResults": [
     {
       "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js",
-      "displayName": {
-        "color": "white",
-        "name": "unit"
-      },
-      "status": "failed",
-      "startTime": 1759042499724,
-      "endTime": 1759042503206,
-      "duration": 3482,
-      "numTests": 12,
-      "numPassingTests": 11,
-      "numFailingTests": 1,
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
+      "numPassingTests": 0,
+      "numFailingTests": 0,
       "numPendingTests": 0,
       "snapshot": {
         "added": 0,
@@ -42,169 +38,8 @@
         "updated": 0,
         "unchecked": 0
       },
-      "testCases": [
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "get-verification-requirements"
-          ],
-          "title": "should successfully retrieve verification requirements for a task",
-          "fullName": "Verification Endpoints get-verification-requirements should successfully retrieve verification requirements for a task",
-          "status": "passed",
-          "duration": 4,
-          "numPassingAsserts": 8,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "get-verification-requirements"
-          ],
-          "title": "should throw error when task ID does not exist",
-          "fullName": "Verification Endpoints get-verification-requirements should throw error when task ID does not exist",
-          "status": "passed",
-          "duration": 490,
-          "numPassingAsserts": 1,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "get-verification-requirements"
-          ],
-          "title": "should throw error when task has no verification gate",
-          "fullName": "Verification Endpoints get-verification-requirements should throw error when task has no verification gate",
-          "status": "passed",
-          "duration": 1,
-          "numPassingAsserts": 1,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "get-verification-requirements"
-          ],
-          "title": "should throw error when no tasks exist in system",
-          "fullName": "Verification Endpoints get-verification-requirements should throw error when no tasks exist in system",
-          "status": "passed",
-          "duration": 3,
-          "numPassingAsserts": 1,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "submit-verification-evidence"
-          ],
-          "title": "should successfully submit valid verification evidence",
-          "fullName": "Verification Endpoints submit-verification-evidence should successfully submit valid verification evidence",
-          "status": "failed",
-          "duration": 7,
-          "numPassingAsserts": 7,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "submit-verification-evidence"
-          ],
-          "title": "should reject evidence when verification gate already passed",
-          "fullName": "Verification Endpoints submit-verification-evidence should reject evidence when verification gate already passed",
-          "status": "passed",
-          "duration": 32,
-          "numPassingAsserts": 1,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "submit-verification-evidence"
-          ],
-          "title": "should reject evidence missing required fields",
-          "fullName": "Verification Endpoints submit-verification-evidence should reject evidence missing required fields",
-          "status": "passed",
-          "duration": 1,
-          "numPassingAsserts": 3,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "submit-verification-evidence"
-          ],
-          "title": "should reject evidence with invalid reviewedItems format",
-          "fullName": "Verification Endpoints submit-verification-evidence should reject evidence with invalid reviewedItems format",
-          "status": "passed",
-          "duration": 0,
-          "numPassingAsserts": 1,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "submit-verification-evidence"
-          ],
-          "title": "should reject null or undefined evidence data",
-          "fullName": "Verification Endpoints submit-verification-evidence should reject null or undefined evidence data",
-          "status": "passed",
-          "duration": 1,
-          "numPassingAsserts": 2,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "submit-verification-evidence"
-          ],
-          "title": "should handle task without verification gate",
-          "fullName": "Verification Endpoints submit-verification-evidence should handle task without verification gate",
-          "status": "passed",
-          "duration": 1,
-          "numPassingAsserts": 1,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "Evidence validation logic"
-          ],
-          "title": "should validate evidence against requirements properly",
-          "fullName": "Verification Endpoints Evidence validation logic should validate evidence against requirements properly",
-          "status": "passed",
-          "duration": 1,
-          "numPassingAsserts": 3,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "Integration scenarios"
-          ],
-          "title": "should handle complete verification workflow",
-          "fullName": "Verification Endpoints Integration scenarios should handle complete verification workflow",
-          "status": "passed",
-          "duration": 5,
-          "numPassingAsserts": 8,
-          "location": null
-        }
-      ],
-      "failureDetails": [
-        {
-          "title": "should successfully submit valid verification evidence",
-          "fullName": "Verification Endpoints submit-verification-evidence should successfully submit valid verification evidence",
-          "failureMessages": [
-            "Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)\n\nExpected: \"/test/project/TASKS.json\", StringContaining \"\\\"status\\\":\\\"passed\\\"\"\nReceived\n       1: \"/test/project/TASKS.json.lock\", \"50421\", {\"flag\": \"wx\"}\n       2: \"/test/project/TASKS.json\", \"{\n  \\\"tasks\\\": [\n    {\n      \\\"id\\\": \\\"task_123\\\",\n      \\\"title\\\": \\\"Test Task\\\",\n      \\\"verificationGate\\\": {\n        \\\"status\\\": \\\"passed\\\",\n        \\\"requirements\\\": [\n          {\n            \\\"type\\\": \\\"file\\\",\n            \\\"description\\\": \\\"Review existing codebase patterns\\\",\n            \\\"critical\\\": true\n          }\n        ],\n        \\\"evidence\\\": {\n          \\\"agentId\\\": \\\"test_agent_001\\\",\n          \\\"reviewedItems\\\": [\n            {\n              \\\"type\\\": \\\"file\\\",\n              \\\"description\\\": \\\"Reviewed taskmanager-api.js for patterns\\\",\n              \\\"details\\\": \\\"Examined existing API structure and conventions\\\"\n            }\n          ],\n          \\\"summary\\\": \\\"Successfully reviewed existing codebase patterns and API conventions\\\"\n        },\n        \\\"verifiedAt\\\": \\\"2025-09-28T06:55:03.071Z\\\",\n        \\\"verifiedBy\\\": \\\"test_agent_001\\\"\n      },\n      \\\"updated_at\\\": \\\"2025-09-28T06:55:03.071Z\\\"\n    }\n  ],\n  \\\"metadata\\\": {\n    \\\"version\\\": \\\"2.0.0\\\",\n    \\\"updated\\\": \\\"2025-09-28T06:55:03.071Z\\\"\n  }\n}\"\n\nNumber of calls: 2\n    at Object.toHaveBeenCalledWith (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:259:32)"
-          ],
-          "failureDetails": [
-            {
-              "matcherResult": {
-                "message": "expect(jest.fn()).toHaveBeenCalledWith(...expected)\n\nExpected: \"/test/project/TASKS.json\", StringContaining \"\\\"status\\\":\\\"passed\\\"\"\nReceived\n       1: \"/test/project/TASKS.json.lock\", \"50421\", {\"flag\": \"wx\"}\n       2: \"/test/project/TASKS.json\", \"{\n  \\\"tasks\\\": [\n    {\n      \\\"id\\\": \\\"task_123\\\",\n      \\\"title\\\": \\\"Test Task\\\",\n      \\\"verificationGate\\\": {\n        \\\"status\\\": \\\"passed\\\",\n        \\\"requirements\\\": [\n          {\n            \\\"type\\\": \\\"file\\\",\n            \\\"description\\\": \\\"Review existing codebase patterns\\\",\n            \\\"critical\\\": true\n          }\n        ],\n        \\\"evidence\\\": {\n          \\\"agentId\\\": \\\"test_agent_001\\\",\n          \\\"reviewedItems\\\": [\n            {\n              \\\"type\\\": \\\"file\\\",\n              \\\"description\\\": \\\"Reviewed taskmanager-api.js for patterns\\\",\n              \\\"details\\\": \\\"Examined existing API structure and conventions\\\"\n            }\n          ],\n          \\\"summary\\\": \\\"Successfully reviewed existing codebase patterns and API conventions\\\"\n        },\n        \\\"verifiedAt\\\": \\\"2025-09-28T06:55:03.071Z\\\",\n        \\\"verifiedBy\\\": \\\"test_agent_001\\\"\n      },\n      \\\"updated_at\\\": \\\"2025-09-28T06:55:03.071Z\\\"\n    }\n  ],\n  \\\"metadata\\\": {\n    \\\"version\\\": \\\"2.0.0\\\",\n    \\\"updated\\\": \\\"2025-09-28T06:55:03.071Z\\\"\n  }\n}\"\n\nNumber of calls: 2",
-                "pass": false
-              }
-            }
-          ]
-        }
-      ]
+      "testCases": [],
+      "failureDetails": []
     }
   ],
   "coverageMap": null,

@@ -2,7 +2,7 @@
  * Fix malformed template literals with 'operation' keyword
  */
 
-const fs = require('fs');
+const FS = require('fs');
 
 const file = 'taskmanager-api.js';
 

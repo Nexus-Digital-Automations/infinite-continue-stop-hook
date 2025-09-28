@@ -13,7 +13,7 @@ const { loggers } = require('./lib/logger');
 
 const { performance } = require('perf_hooks');
 const { spawn } = require('child_process');
-const fs = require('fs').promises;
+const FS = require('fs').promises;
 const PATH = require('path');
 
 class TaskManagerPerformanceBenchmark {

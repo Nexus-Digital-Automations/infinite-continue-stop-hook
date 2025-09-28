@@ -13,7 +13,7 @@
  * features of the FeatureManagerAPI with detailed time-based testing.
  */
 
-const path = require('path');
+const PATH = require('path');
 const {
   MockFileSystem,
   TEST_FIXTURES,

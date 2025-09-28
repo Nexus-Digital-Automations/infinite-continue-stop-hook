@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 // End-to-End tests for complete Performance Metrics system workflow

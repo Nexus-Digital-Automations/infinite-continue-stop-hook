@@ -12,7 +12,7 @@
  * @version 1.0.0
  */
 
-const path = require('path');
+const PATH = require('path');
 const {
   execAPI,
   createTestEnvironment,

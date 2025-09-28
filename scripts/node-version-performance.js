@@ -10,8 +10,8 @@ const { loggers } = require('../lib/logger');
  * @since 2025-09-23
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { EXEC_SYNC, _spawn } = require('child_process');
 const os = require('os');
 const { createLogger } = require('../lib/utils/logger');

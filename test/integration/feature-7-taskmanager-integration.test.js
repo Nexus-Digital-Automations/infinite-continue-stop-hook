@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 
 // Integration tests for Feature 7: Custom Validation Rules with TaskManager API
 // Feature ID: feature_1758946487032_0f9c9de60c88

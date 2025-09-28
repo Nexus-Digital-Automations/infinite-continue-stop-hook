@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 // Test suite for Feature 7: Custom Project Validation Rules

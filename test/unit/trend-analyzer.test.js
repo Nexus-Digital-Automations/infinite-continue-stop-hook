@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const TrendAnalyzer = require('../../lib/trend-analyzer');
 
 describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {

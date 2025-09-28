@@ -16,8 +16,8 @@
  * @author Audit System Agent #4
  */
 
-const fs = require('fs').promises;
-const path = require('path');
+const FS = require('fs').promises;
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 /**
@@ -375,8 +375,8 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       };
 
       return criteria;
-    } catch {
-      this.logger.log(`⚠️ Could not load task requirements: ${_error.message}`);
+    } catch (error) {
+      this.logger.log(`⚠️ Could not load task requirements: ${error.message}`);
       return {};
     }
   }
@@ -484,9 +484,9 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
       } else {
         throw new Error(`TaskManager API error: ${JSON.stringify(result)}`);
       }
-    } catch {
-      this.logger.error(`❌ Failed to create audit task: ${_error.message}`);
-      throw _error;
+    } catch (error) {
+      this.logger.error(`❌ Failed to create audit task: ${error.message}`);
+      throw error;
     }
   }
 

@@ -75,7 +75,6 @@ function fixFile(filePath) {
   }
 
   try {
-
     // Justification: File path is validated above to ensure it's within project directory
     let content = fs.readFileSync(normalizedPath, 'utf8');
     let modified = false;
@@ -89,7 +88,6 @@ function fixFile(filePath) {
     });
 
     if (modified) {
-
       // Justification: File path is validated above to ensure it's within project directory
       fs.writeFileSync(normalizedPath, content, 'utf8');
       loggers.app.info(`✅ Fixed: ${filePath}`);

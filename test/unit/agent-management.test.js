@@ -14,7 +14,7 @@
  */
 
 const PATH = require('path');
-const _CRYPTO = require('crypto');
+const CRYPTO = require('crypto');
 const {
   MockFileSystem,
   TEST_FIXTURES,

@@ -2,7 +2,7 @@
  * Fix remaining OPERATION quotes patterns
  */
 
-const fs = require('fs');
+const FS = require('fs');
 
 const file = 'taskmanager-api.js';
 

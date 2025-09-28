@@ -10,8 +10,8 @@
  * This validates the implementation of the "Implement Humble Code Verification Protocol Endpoints" feature.
  */
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('fs');
+const PATH = require('path');
 const { _execSync } = require('child_process');
 const AutonomousTaskManagerAPI = require('../../taskmanager-api');
 

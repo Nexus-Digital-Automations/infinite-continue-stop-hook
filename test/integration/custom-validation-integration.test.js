@@ -10,8 +10,8 @@ const { loggers } = require('../../lib/logger');
  * @since 2025-09-27
  */
 
-const fs = require('fs').promises;
-const path = require('path');
+const FS = require('fs').promises;
+const PATH = require('path');
 const { execSync } = require('child_process');
 
 // We need to test the actual TaskManager API integration

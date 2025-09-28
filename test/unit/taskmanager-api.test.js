@@ -12,7 +12,7 @@
  * Target: >90% code coverage with thorough testing of all code paths
  */
 
-const path = require('path');
+const PATH = require('path');
 const crypto = require('crypto');
 const {
   MockFileSystem,

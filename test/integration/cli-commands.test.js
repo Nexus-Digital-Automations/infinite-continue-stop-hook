@@ -15,7 +15,7 @@
  */
 
 const { spawn } = require('child_process');
-const path = require('path');
+const PATH = require('path');
 const {
   _execAPI,
   createTestEnvironment,
