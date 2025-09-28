@@ -62,12 +62,12 @@ describe('Performance Validation E2E', () => {
         try {
           PerformanceTestHelpers.validatePerformance(
             performanceMetrics,
-            thresholds
+            thresholds,
           );
         } catch (error) {
           console.warn(`Performance validation warning: ${error.message}`);
           console.warn(
-            `Actual metrics: avg=${performanceMetrics.avg}ms, max=${performanceMetrics.max}ms`
+            `Actual metrics: avg=${performanceMetrics.avg}ms, max=${performanceMetrics.max}ms`,
           );
         }
 
@@ -75,19 +75,19 @@ describe('Performance Validation E2E', () => {
         const features = await environment.getFeatures();
         console.log(
           'Features response structure:',
-          JSON.stringify(features, null, 2)
+          JSON.stringify(features, null, 2),
         );
         console.log('Features.features type:', typeof features.features);
         console.log('Features.features value:', features.features);
         expect(
-          features.features && features.features.length
+          features.features && features.features.length,
         ).toBeGreaterThanOrEqual(5);
 
         console.log(
-          `✅ Feature suggestion performance test: avg=${performanceMetrics.avg}ms, max=${performanceMetrics.max}ms, min=${performanceMetrics.min}ms`
+          `✅ Feature suggestion performance test: avg=${performanceMetrics.avg}ms, max=${performanceMetrics.max}ms, min=${performanceMetrics.min}ms`,
         );
       },
-      E2E_TIMEOUT
+      E2E_TIMEOUT,
     );
 
     test(
@@ -106,7 +106,7 @@ describe('Performance Validation E2E', () => {
               description: `Feature ${i} for approval performance testing`,
               business_value: 'Validates approval API performance',
               category: 'enhancement',
-            })
+            }),
           );
         }
 
@@ -118,7 +118,7 @@ describe('Performance Validation E2E', () => {
           } catch (error) {
             console.error(
               'Failed to parse feature suggestion response:',
-              result.result.stdout
+              result.result.stdout,
             );
             throw error;
           }
@@ -132,7 +132,7 @@ describe('Performance Validation E2E', () => {
             environment,
             id,
             `performance-tester-${approvalIndex}`,
-            `Performance test approval ${approvalIndex}`
+            `Performance test approval ${approvalIndex}`,
           );
           approvalIndex++;
           return result;
@@ -140,7 +140,7 @@ describe('Performance Validation E2E', () => {
 
         const approvalMetrics = await PerformanceTestHelpers.measurePerformance(
           approvalTest,
-          3
+          3,
         );
 
         // Validate approval performance
@@ -152,17 +152,17 @@ describe('Performance Validation E2E', () => {
         try {
           PerformanceTestHelpers.validatePerformance(
             approvalMetrics,
-            approvalThresholds
+            approvalThresholds,
           );
         } catch (error) {
           console.warn(`Approval performance warning: ${error.message}`);
         }
 
         console.log(
-          `✅ Feature approval performance test: avg=${approvalMetrics.avg}ms, max=${approvalMetrics.max}ms`
+          `✅ Feature approval performance test: avg=${approvalMetrics.avg}ms, max=${approvalMetrics.max}ms`,
         );
       },
-      E2E_TIMEOUT
+      E2E_TIMEOUT,
     );
 
     test(
@@ -181,7 +181,7 @@ describe('Performance Validation E2E', () => {
               description: `Feature ${i} for bulk operation performance testing`,
               business_value: 'Validates bulk operation performance',
               category: 'enhancement',
-            })
+            }),
           );
         }
 
@@ -196,7 +196,7 @@ describe('Performance Validation E2E', () => {
           } catch (error) {
             console.error(
               'Failed to parse bulk feature suggestion response:',
-              result.result.stdout
+              result.result.stdout,
             );
             throw error;
           }
@@ -211,8 +211,8 @@ describe('Performance Validation E2E', () => {
                 featureId,
                 '{"approved_by":"bulk-performance-tester","notes":"Bulk performance test approval"}',
               ],
-              { projectRoot: environment.testDir }
-            )
+              { projectRoot: environment.testDir },
+            ),
           );
 
           const startTime = Date.now();
@@ -229,7 +229,7 @@ describe('Performance Validation E2E', () => {
 
         console.log(`✅ Bulk operation performance test: ${bulkSize} features`);
         console.log(
-          `   Individual avg: ${avgIndividualTime}ms, Bulk time: ${bulkApprovalMetrics.avg}ms`
+          `   Individual avg: ${avgIndividualTime}ms, Bulk time: ${bulkApprovalMetrics.avg}ms`,
         );
         console.log(`   Bulk efficiency: ${bulkEfficiency.toFixed(2)}x`);
 
@@ -237,10 +237,10 @@ describe('Performance Validation E2E', () => {
         const features = await environment.getFeatures();
         expect(
           features.features &&
-            features.features.filter((f) => f.status === 'approved')
+            features.features.filter((f) => f.status === 'approved'),
         ).toHaveLength(bulkSize);
       },
-      E2E_TIMEOUT
+      E2E_TIMEOUT,
     );
   });
 
@@ -258,7 +258,7 @@ describe('Performance Validation E2E', () => {
           await MultiAgentTestHelpers.simulateConcurrentAgents(
             environment,
             concurrentAgents,
-            operationsPerAgent
+            operationsPerAgent,
           );
         const totalTime = Date.now() - startTime;
 
@@ -273,18 +273,18 @@ describe('Performance Validation E2E', () => {
         const features = await environment.getFeatures();
         // Allow for some failures under high concurrency (≥90% success rate)
         expect(
-          features.features && features.features.length
+          features.features && features.features.length,
         ).toBeGreaterThanOrEqual(Math.floor(totalOperations * 0.9));
 
         console.log(
-          `✅ High concurrency performance test: ${totalOperations} operations in ${totalTime}ms`
+          `✅ High concurrency performance test: ${totalOperations} operations in ${totalTime}ms`,
         );
         console.log(`   Average per operation: ${avgTimePerOperation}ms`);
         console.log(
-          `   Concurrent agents: ${concurrentAgents}, Operations per agent: ${operationsPerAgent}`
+          `   Concurrent agents: ${concurrentAgents}, Operations per agent: ${operationsPerAgent}`,
         );
       },
-      E2E_TIMEOUT * 2
+      E2E_TIMEOUT * 2,
     ); // Extended timeout for high concurrency
 
     test(
@@ -304,7 +304,7 @@ describe('Performance Validation E2E', () => {
               business_value:
                 'Validates performance during concurrent file access',
               category: 'enhancement',
-            })
+            }),
           );
         }
 
@@ -315,7 +315,7 @@ describe('Performance Validation E2E', () => {
         // Analyze contention results
         const successfulOperations = contentionResults.filter(
           (result) =>
-            result.status === 'fulfilled' && result.value.result.success
+            result.status === 'fulfilled' && result.value.result.success,
         ).length;
 
         const contentionThroughput =
@@ -324,19 +324,19 @@ describe('Performance Validation E2E', () => {
 
         // Performance validation under contention
         expect(successfulOperations).toBeGreaterThanOrEqual(
-          contentionOperations * 0.75
+          contentionOperations * 0.75,
         ); // At least 75% success
         expect(avgContentionTime).toBeLessThan(API_TIMEOUT * 2); // Allow some degradation under contention
 
         console.log(
-          `✅ Resource contention performance test: ${successfulOperations}/${contentionOperations} operations`
+          `✅ Resource contention performance test: ${successfulOperations}/${contentionOperations} operations`,
         );
         console.log(
-          `   Total time: ${contentionTime}ms, Throughput: ${contentionThroughput.toFixed(2)} ops/sec`
+          `   Total time: ${contentionTime}ms, Throughput: ${contentionThroughput.toFixed(2)} ops/sec`,
         );
         console.log(`   Average time under contention: ${avgContentionTime}ms`);
       },
-      E2E_TIMEOUT * 2
+      E2E_TIMEOUT * 2,
     );
   });
 
@@ -354,7 +354,7 @@ describe('Performance Validation E2E', () => {
 
         const apiMetrics = await PerformanceTestHelpers.measurePerformance(
           apiTest,
-          5
+          5,
         );
 
         // Validate API performance
@@ -370,10 +370,10 @@ describe('Performance Validation E2E', () => {
         }
 
         console.log(
-          `✅ TaskManager API performance test: avg=${apiMetrics.avg}ms, max=${apiMetrics.max}ms`
+          `✅ TaskManager API performance test: avg=${apiMetrics.avg}ms, max=${apiMetrics.max}ms`,
         );
       },
-      E2E_TIMEOUT
+      E2E_TIMEOUT,
     );
 
     test(
@@ -386,7 +386,7 @@ describe('Performance Validation E2E', () => {
             const startResult = await CommandExecutor.executeAPI(
               'start-authorization',
               ['performance-auth-agent'],
-              { projectRoot: environment.testDir }
+              { projectRoot: environment.testDir },
             );
 
             if (startResult.result.success) {
@@ -402,7 +402,7 @@ describe('Performance Validation E2E', () => {
 
         const authMetrics = await PerformanceTestHelpers.measurePerformance(
           authTest,
-          3
+          3,
         );
 
         // Validate authorization performance
@@ -414,17 +414,17 @@ describe('Performance Validation E2E', () => {
         try {
           PerformanceTestHelpers.validatePerformance(
             authMetrics,
-            authThresholds
+            authThresholds,
           );
         } catch (error) {
           console.warn(`Authorization performance warning: ${error.message}`);
         }
 
         console.log(
-          `✅ Multi-step authorization performance test: avg=${authMetrics.avg}ms, max=${authMetrics.max}ms`
+          `✅ Multi-step authorization performance test: avg=${authMetrics.avg}ms, max=${authMetrics.max}ms`,
         );
       },
-      E2E_TIMEOUT
+      E2E_TIMEOUT,
     );
   });
 
@@ -450,7 +450,7 @@ describe('Performance Validation E2E', () => {
                 description: `Feature ${i} for scalability validation with ${test.featureCount} features`,
                 business_value: `Tests system performance with ${test.featureCount} total features`,
                 category: 'enhancement',
-              })
+              }),
             );
           }
 
@@ -464,18 +464,18 @@ describe('Performance Validation E2E', () => {
           expect(avgTimePerFeature).toBeLessThan(test.expectedMaxTime);
 
           console.log(
-            `✅ Scalability test (${test.featureCount} features): ${scalabilityTime}ms total, ${avgTimePerFeature}ms avg`
+            `✅ Scalability test (${test.featureCount} features): ${scalabilityTime}ms total, ${avgTimePerFeature}ms avg`,
           );
 
           // Clear environment for next test
           await environment.cleanup();
           environment = new E2EEnvironment(
-            'performance-validation-scalability'
+            'performance-validation-scalability',
           );
           await environment.setup();
         }
       },
-      E2E_TIMEOUT * 3
+      E2E_TIMEOUT * 3,
     ); // Extended timeout for scalability testing
 
     test(
@@ -493,7 +493,7 @@ describe('Performance Validation E2E', () => {
                 description: `Feature ${i} for memory usage validation - contains detailed description with comprehensive business value analysis and implementation considerations that help validate memory efficiency during large-scale operations across the entire system infrastructure`,
                 business_value: `Comprehensive business value analysis for feature ${i} including detailed ROI calculations, user impact assessments, technical debt reduction metrics, and long-term strategic alignment with organizational objectives and performance benchmarks`,
                 category: 'enhancement',
-              })
+              }),
             );
           }
 
@@ -506,7 +506,7 @@ describe('Performance Validation E2E', () => {
 
         const memoryMetrics = await PerformanceTestHelpers.measurePerformance(
           memoryTest,
-          2
+          2,
         );
 
         // Validate memory test performance
@@ -517,22 +517,22 @@ describe('Performance Validation E2E', () => {
           const features = await environment.getFeatures();
           // Allow for some failures under intensive load (≥95% success rate)
           expect(
-            features.features && features.features.length
+            features.features && features.features.length,
           ).toBeGreaterThanOrEqual(38); // At least 38 out of 40 features
         } catch (error) {
           // If API response fails due to large payload, it's acceptable for memory stress test
           console.warn(
-            `API response failed under memory stress (expected): ${error.message}`
+            `API response failed under memory stress (expected): ${error.message}`,
           );
           // Test passes if we can create intensive operations without system crash
           expect(true).toBe(true);
         }
 
         console.log(
-          `✅ Memory usage validation test: avg=${memoryMetrics.avg}ms for intensive operations`
+          `✅ Memory usage validation test: avg=${memoryMetrics.avg}ms for intensive operations`,
         );
       },
-      E2E_TIMEOUT * 3
+      E2E_TIMEOUT * 3,
     );
   });
 
@@ -564,7 +564,7 @@ describe('Performance Validation E2E', () => {
                   description: 'Feature for baseline approval measurement',
                   business_value: 'Establishes approval performance baseline',
                   category: 'enhancement',
-                }
+                },
               );
               const response = JSON.parse(result.stdout);
               const featureId = response.feature.id;
@@ -572,7 +572,7 @@ describe('Performance Validation E2E', () => {
                 environment,
                 featureId,
                 'baseline-tester',
-                'Baseline test'
+                'Baseline test',
               );
             },
             expectedMaxTime: API_TIMEOUT * 0.7,
@@ -590,25 +590,25 @@ describe('Performance Validation E2E', () => {
         for (const baselineTest of baselineTests) {
           const metrics = await PerformanceTestHelpers.measurePerformance(
             baselineTest.test,
-            3
+            3,
           );
 
           // Check for performance regressions
           if (metrics.avg > baselineTest.expectedMaxTime) {
             console.warn(
-              `⚠️  Performance regression detected in ${baselineTest.name}:`
+              `⚠️  Performance regression detected in ${baselineTest.name}:`,
             );
             console.warn(
-              `   Expected max: ${baselineTest.expectedMaxTime}ms, Actual avg: ${metrics.avg}ms`
+              `   Expected max: ${baselineTest.expectedMaxTime}ms, Actual avg: ${metrics.avg}ms`,
             );
           }
 
           console.log(
-            `✅ ${baselineTest.name} baseline: avg=${metrics.avg}ms, max=${metrics.max}ms`
+            `✅ ${baselineTest.name} baseline: avg=${metrics.avg}ms, max=${metrics.max}ms`,
           );
         }
       },
-      E2E_TIMEOUT * 2
+      E2E_TIMEOUT * 2,
     );
 
     test(
@@ -627,7 +627,7 @@ describe('Performance Validation E2E', () => {
               description: 'Complete workflow for performance validation',
               business_value: 'Validates end-to-end performance',
               category: 'enhancement',
-            }
+            },
           );
 
           const response = JSON.parse(result.stdout);
@@ -637,7 +637,7 @@ describe('Performance Validation E2E', () => {
             environment,
             featureId,
             'e2e-tester',
-            'E2E workflow test'
+            'E2E workflow test',
           );
 
           await CommandExecutor.executeAPI('list-features', [], {
@@ -653,7 +653,7 @@ describe('Performance Validation E2E', () => {
 
         const e2eMetrics = await PerformanceTestHelpers.measurePerformance(
           e2eWorkflowTest,
-          3
+          3,
         );
 
         // Validate end-to-end performance
@@ -661,10 +661,10 @@ describe('Performance Validation E2E', () => {
         expect(e2eMetrics.avg).toBeLessThan(e2eThreshold);
 
         console.log(
-          `✅ End-to-end workflow performance test: avg=${e2eMetrics.avg}ms, max=${e2eMetrics.max}ms`
+          `✅ End-to-end workflow performance test: avg=${e2eMetrics.avg}ms, max=${e2eMetrics.max}ms`,
         );
       },
-      E2E_TIMEOUT * 2
+      E2E_TIMEOUT * 2,
     );
   });
 });

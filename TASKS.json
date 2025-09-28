@@ -1094,8 +1094,8 @@
       "auto_generated_tasks": 0
     },
     "initialization_stats": {
-      "total_initializations": 3195,
-      "total_reinitializations": 132,
+      "total_initializations": 3196,
+      "total_reinitializations": 133,
       "current_day": "2025-09-27",
       "time_buckets": {
         "11:00-15:59": {
@@ -1103,8 +1103,8 @@
           "reinit": 4
         },
         "16:00-20:59": {
-          "init": 0,
-          "reinit": 2
+          "init": 1,
+          "reinit": 3
         },
         "21:00-01:59": {
           "init": 0,
@@ -1932,7 +1932,7 @@
         }
       ],
       "last_reset": "2025-09-27T05:00:07.916Z",
-      "last_updated": "2025-09-27T21:45:15.051Z"
+      "last_updated": "2025-09-27T23:14:21.293Z"
     },
     "total_features": 6
   },
@@ -2024,6 +2024,66 @@
       "updated_at": "2025-09-27T12:44:52.238Z",
       "suggested_by": "system",
       "metadata": {}
+    },
+    {
+      "id": "feature_1759082400000_struct_logging",
+      "title": "Add Structured Logging and Observability",
+      "description": "Integrate a dedicated, structured logging library like Pino or Winston to replace all console.log calls with a centralized logger instance. Log events as JSON objects with consistent fields (timestamp, level, message, agentId, taskId). This allows logs to be easily ingested, searched, and analyzed by monitoring platforms like Datadog, Splunk, or an ELK stack.",
+      "business_value": "Structured logging is essential for debugging and monitoring complex, asynchronous systems. It allows you to trace the lifecycle of a task across multiple agents and functions, set up automated alerts for error spikes, and build dashboards to monitor system health.",
+      "category": "enhancement",
+      "status": "approved",
+      "created_at": "2025-09-27T23:20:00.000Z",
+      "updated_at": "2025-09-27T23:21:00.000Z",
+      "suggested_by": "user",
+      "metadata": {},
+      "approved_by": "user",
+      "approval_date": "2025-09-27T23:21:00.000Z",
+      "approval_notes": "User-requested feature for production monitoring and observability"
+    },
+    {
+      "id": "feature_1759082400001_secret_mgmt",
+      "title": "Harden Security with Secret Management",
+      "description": "Integrate a secret management solution using environment variables for secrets (process.env.API_KEY). For more advanced use cases, integrate with a dedicated secret manager like HashiCorp Vault, AWS Secrets Manager, or Doppler. Add a startup check to ensure all required secrets are present before the application runs.",
+      "business_value": "This is a critical security practice. It ensures that sensitive information is never hardcoded and can be securely managed and rotated without changing the codebase.",
+      "category": "security",
+      "status": "approved",
+      "created_at": "2025-09-27T23:20:01.000Z",
+      "updated_at": "2025-09-27T23:21:01.000Z",
+      "suggested_by": "user",
+      "metadata": {},
+      "approved_by": "user",
+      "approval_date": "2025-09-27T23:21:01.000Z",
+      "approval_notes": "User-requested critical security enhancement"
+    },
+    {
+      "id": "feature_1759082400002_state_machine",
+      "title": "Introduce a State Machine for Task/Feature Status",
+      "description": "Implement a formal state machine library like XState to manage status transitions. Define a state machine that explicitly lists all possible statuses (states) and the valid transitions between them. For example, a suggested feature can only transition to approved or rejected. Any other attempted transition would throw an error.",
+      "business_value": "A state machine makes status transitions declarative, predictable, and self-documenting. It prevents invalid states and makes the application's logic more robust and easier to understand.",
+      "category": "enhancement",
+      "status": "approved",
+      "created_at": "2025-09-27T23:20:02.000Z",
+      "updated_at": "2025-09-27T23:21:02.000Z",
+      "suggested_by": "user",
+      "metadata": {},
+      "approved_by": "user",
+      "approval_date": "2025-09-27T23:21:02.000Z",
+      "approval_notes": "User-requested feature for robust state management"
+    },
+    {
+      "id": "feature_1759082400003_dry_run_mode",
+      "title": "Add a Dry Run Mode to the API",
+      "description": "Add a --dry-run flag to all state-changing API commands (suggest-feature, approve-feature, update-task, etc.). When the --dry-run flag is present, the command would execute all of its validation and logic but would stop just before writing any changes to TASKS.json or other files. It would output a message indicating what would have happened.",
+      "business_value": "This allows users (and agents) to safely preview the outcome of a command before committing to it, preventing accidental or incorrect modifications. It's an excellent safety and debugging tool.",
+      "category": "enhancement",
+      "status": "approved",
+      "created_at": "2025-09-27T23:20:03.000Z",
+      "updated_at": "2025-09-27T23:21:03.000Z",
+      "suggested_by": "user",
+      "metadata": {},
+      "approved_by": "user",
+      "approval_date": "2025-09-27T23:21:03.000Z",
+      "approval_notes": "User-requested safety and debugging enhancement"
     }
   ],
   "settings": {

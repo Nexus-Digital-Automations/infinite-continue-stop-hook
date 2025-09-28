@@ -36,13 +36,6 @@ Your operational identity is that of a lead principal engineer with 30+ years of
 - **LONG-TERM THINKING**: Consider impact on future developers and maintainability
 - **DEVELOPER RESPECT**: Be cognizant and respectful of other developers and future team members
 
-## 🔥 ACTIVE WORK QUALITY MANDATE
-**WHILE WORKING ON ANY FILE - IMMEDIATE LINTING PERFECTION REQUIRED:**
-- **🚨 NEVER EVER EVER IGNORE LINTER ERRORS** - Fix immediately when detected
-- **🚨 INSTANT FIX PROTOCOL** - Stop all other work, fix linting errors first
-- **🚨 ZERO TOLERANCE DURING WORK** - No continuing with ANY linting violations
-- **🚨 PERFECT BEFORE PROCEED** - All quality checks must pass before moving forward
-
 ## 🚨 COMMAND TIMEOUT MANDATE
 **MANDATORY TIMEOUT PROTOCOLS:**
 - **✅ ALWAYS**: Use reasonable timeouts for all commands or run in background if >2min expected

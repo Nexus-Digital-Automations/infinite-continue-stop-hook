@@ -16,7 +16,7 @@ const _fs = require('fs');
 // Test configuration
 const TEST_PROJECT_DIR = _path.join(
   __dirname,
-  'feature-management-test-project'
+  'feature-management-test-project',
 );
 const FEATURES_PATH = _path.join(TEST_PROJECT_DIR, 'FEATURES.json');
 const API_PATH = _path.join(__dirname, '..', 'taskmanager-api.js');
@@ -41,7 +41,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
       {
         cwd: __dirname,
         stdio: ['pipe', 'pipe', 'pipe'],
-      }
+      },
     );
 
     let stdout = '';
@@ -71,8 +71,8 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         } catch (parseError) {
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`
-            )
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
+            ),
           );
         }
       }
@@ -117,7 +117,7 @@ function setupFeatureTestEnvironment() {
 
   _fs.writeFileSync(
     _path.join(TEST_PROJECT_DIR, 'package.json'),
-    JSON.stringify(packageData, null, 2)
+    JSON.stringify(packageData, null, 2),
   );
 }
 

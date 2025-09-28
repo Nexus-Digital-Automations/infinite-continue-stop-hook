@@ -76,7 +76,7 @@ class MockManager {
         'get-initialization-stats',
         'guide',
         'methods',
-      ].includes(arg)
+      ].includes(arg),
     );
     const commandArgs = args.slice(args.indexOf(apiCommand) + 1);
 
@@ -91,7 +91,7 @@ class MockManager {
           break;
         case 'suggest-feature':
           result = this.taskManagerAPI.suggestFeature(
-            JSON.parse(commandArgs[0])
+            JSON.parse(commandArgs[0]),
           );
           break;
         case 'list-features': {
@@ -103,7 +103,7 @@ class MockManager {
           const approvalData = commandArgs[1] ? JSON.parse(commandArgs[1]) : {};
           result = this.taskManagerAPI.approveFeature(
             commandArgs[0],
-            approvalData
+            approvalData,
           );
           break;
         }
@@ -113,7 +113,7 @@ class MockManager {
             : {};
           result = this.taskManagerAPI.rejectFeature(
             commandArgs[0],
-            rejectionData
+            rejectionData,
           );
           break;
         }
@@ -291,14 +291,14 @@ class MockManager {
       JSON.stringify({
         name: 'test-project',
         version: '1.0.0',
-      })
+      }),
     );
     this.fileSystem.writeFileSync(
       '/test-project/FEATURES.json',
       JSON.stringify({
         features: [],
         metadata: { version: '3.0.0' },
-      })
+      }),
     );
   }
 
@@ -320,7 +320,7 @@ class MockManager {
     // Restore child_process.spawn
     if (this.originalModules.has('child_process.spawn')) {
       require('child_process').spawn = this.originalModules.get(
-        'child_process.spawn'
+        'child_process.spawn',
       );
     }
 

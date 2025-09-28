@@ -72,7 +72,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
             'performance',
             'security',
           ][i % 5],
-        })
+        }),
       );
 
       const commands = features.map((featureData) => ({
@@ -113,7 +113,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         generateTestFeature({
           title: `Mixed Ops Feature ${i + 1}`,
           category: 'enhancement',
-        })
+        }),
       );
 
       const featureIds = [];
@@ -123,7 +123,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
           [JSON.stringify(featureData)],
           {
             projectRoot: testDir,
-          }
+          },
         );
         expect(result.success).toBe(true);
         featureIds.push(result.feature.id);
@@ -139,7 +139,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
               generateTestFeature({
                 title: `Concurrent New Feature ${i + 1}`,
                 category: 'new-feature',
-              })
+              }),
             ),
           ],
           options: { projectRoot: testDir },
@@ -210,12 +210,12 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
 
       // Verify approval history contains expected number of entries
       expect(
-        finalFeaturesData.metadata.approval_history.length
+        finalFeaturesData.metadata.approval_history.length,
       ).toBeGreaterThanOrEqual(10);
 
       // Verify agents were created
       expect(
-        Object.keys(finalFeaturesData.agents).length
+        Object.keys(finalFeaturesData.agents).length,
       ).toBeGreaterThanOrEqual(5);
     });
 
@@ -225,7 +225,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         generateTestFeature({
           title: `Bulk Race Test Feature ${i + 1}`,
           category: 'enhancement',
-        })
+        }),
       );
 
       const featureIds = [];
@@ -235,7 +235,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
           [JSON.stringify(featureData)],
           {
             projectRoot: testDir,
-          }
+          },
         );
         expect(result.success).toBe(true);
         featureIds.push(result.feature.id);
@@ -273,7 +273,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
 
       // 3. Analyze results (some may succeed, some may fail due to status conflicts)
       const successCount = bulkResults.filter(
-        (result) => result.success
+        (result) => result.success,
       ).length;
       expect(successCount).toBeGreaterThan(0); // At least one should succeed
 
@@ -283,13 +283,13 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
 
       // Count approved features
       const approvedFeatures = finalFeaturesData.features.filter(
-        (f) => f.status === 'approved'
+        (f) => f.status === 'approved',
       );
       expect(approvedFeatures.length).toBeGreaterThan(0);
 
       // Verify no duplicate approvals in history
       const approvalIds = finalFeaturesData.metadata.approval_history.map(
-        (h) => h.feature_id
+        (h) => h.feature_id,
       );
       const uniqueApprovalIds = new Set(approvalIds);
       expect(uniqueApprovalIds.size).toBe(approvalIds.length);
@@ -299,7 +299,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
       // 1. Create concurrent agent operations
       const agentIds = Array.from(
         { length: 15 },
-        (_, i) => `stress-agent-${i + 1}`
+        (_, i) => `stress-agent-${i + 1}`,
       );
 
       const agentCommands = [
@@ -359,7 +359,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
       });
       expect(statsResult.success).toBe(true);
       expect(statsResult.stats.total_initializations).toBeGreaterThanOrEqual(
-        agentIds.length
+        agentIds.length,
       );
     });
   });
@@ -375,7 +375,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         generateTestFeature({
           title: `Pre-Corruption Feature ${i + 1}`,
           category: 'enhancement',
-        })
+        }),
       );
 
       for (const featureData of validFeatures) {
@@ -384,7 +384,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
           [JSON.stringify(featureData)],
           {
             projectRoot: testDir,
-          }
+          },
         );
         expect(result.success).toBe(true);
       }
@@ -406,7 +406,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         [JSON.stringify(recoveryFeature)],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       // 5. Verify recovery behavior
@@ -432,7 +432,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         [JSON.stringify(feature)],
         {
           projectRoot: testDir,
-        }
+        },
       );
       expect(initialResult.success).toBe(true);
 
@@ -451,7 +451,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         [JSON.stringify(recoveryFeature)],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       expect(recoveryResult.success).toBe(true);
@@ -487,7 +487,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
           [JSON.stringify(testFeature)],
           {
             projectRoot: testDir,
-          }
+          },
         );
 
         // Should either succeed (with recovery) or fail gracefully
@@ -506,7 +506,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         generateTestFeature({
           title: `Partial Write Test ${i + 1}`,
           category: 'enhancement',
-        })
+        }),
       );
 
       for (const featureData of features) {
@@ -515,7 +515,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
           [JSON.stringify(featureData)],
           {
             projectRoot: testDir,
-          }
+          },
         );
         expect(result.success).toBe(true);
       }
@@ -525,7 +525,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
       const originalContent = await fs.readFile(featuresPath, 'utf8');
       const truncatedContent = originalContent.substring(
         0,
-        originalContent.length / 2
+        originalContent.length / 2,
       );
       await fs.writeFile(featuresPath, truncatedContent);
 
@@ -540,7 +540,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         [JSON.stringify(recoveryFeature)],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       // 4. Verify recovery behavior
@@ -574,7 +574,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
           [JSON.stringify(feature)],
           {
             projectRoot: testDir,
-          }
+          },
         );
 
         if (result.success) {
@@ -615,7 +615,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
             'performance',
             'security',
           ][i % 5],
-        })
+        }),
       );
 
       // 2. Add features in batches to measure performance
@@ -670,7 +670,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
       expect(statsEndTime - statsStartTime).toBeLessThan(5000); // Under 5 seconds
 
       console.log(
-        `Performance test completed: ${largeDatasetSize} features, stats in ${statsEndTime - statsStartTime}ms`
+        `Performance test completed: ${largeDatasetSize} features, stats in ${statsEndTime - statsStartTime}ms`,
       );
     });
 
@@ -691,7 +691,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
           [JSON.stringify(feature)],
           {
             projectRoot: testDir,
-          }
+          },
         );
         const endTime = Date.now();
 
@@ -717,7 +717,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
       expect(featuresData.features).toHaveLength(rapidOperationCount);
 
       console.log(
-        `Rapid operations: First half avg: ${firstHalfAvg}ms, Second half avg: ${secondHalfAvg}ms`
+        `Rapid operations: First half avg: ${firstHalfAvg}ms, Second half avg: ${secondHalfAvg}ms`,
       );
     });
 
@@ -772,7 +772,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
               [JSON.stringify(operation.data)],
               {
                 projectRoot: testDir,
-              }
+              },
             );
             if (result.success) {
               featureIds.push(result.feature.id);
@@ -809,7 +809,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
           JSON.stringify(approvalIds),
           JSON.stringify({ approved_by: 'mixed-load-test' }),
         ],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(bulkApproveResult.success).toBe(true);
@@ -820,7 +820,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
       validateFeaturesStructure(finalFeaturesData);
 
       console.log(
-        `Mixed load test completed in ${totalTime}ms with ${mixedOperations.length} operations`
+        `Mixed load test completed in ${totalTime}ms with ${mixedOperations.length} operations`,
       );
     });
   });
@@ -841,7 +841,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
               description: 'X'.repeat(1000), // Large description
               business_value: 'Y'.repeat(500), // Large business value
               category: 'enhancement',
-            })
+            }),
           ),
         ],
         options: { projectRoot: testDir },
@@ -874,7 +874,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         [JSON.stringify(feature)],
         {
           projectRoot: testDir,
-        }
+        },
       );
       expect(initialResult.success).toBe(true);
 
@@ -892,7 +892,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         [JSON.stringify(errorTestFeature)],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       // 3. Verify system can still operate after errors
@@ -906,7 +906,7 @@ describe('Stress Testing and Error Recovery Integration Tests', () => {
         [JSON.stringify(recoveryFeature)],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       // At least recovery should work

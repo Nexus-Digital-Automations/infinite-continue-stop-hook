@@ -147,7 +147,7 @@ describe('Example Test with Mock Framework', () => {
       const result = await APIExecutor.execAPI(
         'suggest-feature',
         [JSON.stringify(invalidFeatureData)],
-        { silent: true }
+        { silent: true },
       );
 
       expect(result.success).toBe(false);
@@ -160,10 +160,10 @@ describe('Example Test with Mock Framework', () => {
 
       // Create multiple features
       await APIExecutor.createTestFeature(
-        TestDataFactory.createFeatureData({ category: 'enhancement' })
+        TestDataFactory.createFeatureData({ category: 'enhancement' }),
       );
       await APIExecutor.createTestFeature(
-        TestDataFactory.createFeatureData({ category: 'bug-fix' })
+        TestDataFactory.createFeatureData({ category: 'bug-fix' }),
       );
 
       const result = await APIExecutor.execAPI('list-features', [
@@ -189,10 +189,10 @@ describe('Example Test with Mock Framework', () => {
       // Verify environment files exist in mock filesystem
       const mocks = mockManager.getMocks();
       expect(mocks.fileSystem.existsSync(testEnvironment.featuresPath)).toBe(
-        true
+        true,
       );
       expect(mocks.fileSystem.existsSync(testEnvironment.packagePath)).toBe(
-        true
+        true,
       );
     });
 
@@ -225,7 +225,7 @@ describe('Example Test with Mock Framework', () => {
             setTimeout(resolve, 100);
           });
           return 'test-result';
-        }
+        },
       );
 
       expect(result).toBe('test-result');
@@ -241,7 +241,7 @@ describe('Example Test with Mock Framework', () => {
             .fill(0)
             .map((_, i) => ({ id: i, data: `item-${i}` }));
           return data.length;
-        }
+        },
       );
 
       expect(result).toBe(1000);
@@ -257,8 +257,8 @@ describe('Example Test with Mock Framework', () => {
           new Promise((resolve) => {
             setTimeout(resolve, 2000);
           }),
-          1000
-        )
+          1000,
+        ),
       ).rejects.toThrow('Test timed out after 1000ms');
     });
 
@@ -274,7 +274,7 @@ describe('Example Test with Mock Framework', () => {
           return 'success';
         },
         5,
-        10
+        10,
       );
 
       expect(result).toBe('success');
@@ -283,7 +283,7 @@ describe('Example Test with Mock Framework', () => {
 
     test('should execute promises in parallel with concurrency control', async () => {
       const promises = Array.from({ length: 10 }, (_, i) =>
-        Promise.resolve(i * 2)
+        Promise.resolve(i * 2),
       );
 
       const results = await TestExecution.parallel(promises, 3);

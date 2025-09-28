@@ -45,7 +45,7 @@ function execAPI(command, args = [], options = {}) {
         cwd: __dirname,
         stdio: ['pipe', 'pipe', 'pipe'],
         env: { ...process.env, NODE_ENV: 'test' },
-      }
+      },
     );
 
     let stdout = '';
@@ -82,8 +82,8 @@ function execAPI(command, args = [], options = {}) {
           // If both fail, include raw output for debugging
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`
-            )
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
+            ),
           );
         }
       }
@@ -208,7 +208,7 @@ function delay(ms) {
  */
 function execAPIConcurrently(commands) {
   const promises = commands.map(({ command, args, options }) =>
-    execAPI(command, args, options)
+    execAPI(command, args, options),
   );
   return Promise.all(promises);
 }

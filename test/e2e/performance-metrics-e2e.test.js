@@ -9,7 +9,7 @@ describe('Performance Metrics System E2E Tests', () => {
   const taskManagerPath = path.resolve(__dirname, '../../taskmanager-api.js');
   const mockMetricsFile = path.join(
     mockProjectRoot,
-    '.validation-performance-enhanced.json'
+    '.validation-performance-enhanced.json',
   );
   const mockTrendsFile = path.join(mockProjectRoot, '.validation-trends.json');
 
@@ -118,7 +118,7 @@ describe('Performance Metrics System E2E Tests', () => {
                 degradationFactor *
                 dayOfWeekFactor *
                 timeOfDayFactor *
-                randomFactor
+                randomFactor,
             );
 
             // Simulate occasional anomalies
@@ -179,7 +179,7 @@ describe('Performance Metrics System E2E Tests', () => {
 
     // Sort by timestamp (most recent first)
     metricsData.metrics.sort(
-      (a, b) => new Date(b.timing.startTime) - new Date(a.timing.startTime)
+      (a, b) => new Date(b.timing.startTime) - new Date(a.timing.startTime),
     );
 
     fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
@@ -190,7 +190,7 @@ describe('Performance Metrics System E2E Tests', () => {
     test('should handle full workflow from empty state to comprehensive analysis', () => {
       // 1. Initial state - no metrics
       let result = executeTaskManagerCommand(
-        'get-validation-performance-metrics'
+        'get-validation-performance-metrics',
       );
       expect(result.success).toBe(true);
       expect(result.metrics).toHaveLength(0);
@@ -234,7 +234,7 @@ describe('Performance Metrics System E2E Tests', () => {
       // 8. Comprehensive trend analysis
       result = executeTaskManagerCommand(
         'analyze-performance-trends',
-        '\'{"timeRange":21}\''
+        '\'{"timeRange":21}\'',
       );
       expect(result.success).toBe(true);
       expect(result.analysis.metadata.totalMetrics).toBeGreaterThan(300);
@@ -244,7 +244,7 @@ describe('Performance Metrics System E2E Tests', () => {
       // 9. Specific criterion analysis (build validation should show degradation)
       result = executeTaskManagerCommand(
         'analyze-criterion-trend',
-        'build-validation'
+        'build-validation',
       );
       expect(result.success).toBe(true);
       expect(result.analysis.criterion).toBe('build-validation');
@@ -271,7 +271,7 @@ describe('Performance Metrics System E2E Tests', () => {
 
       // Get basic metrics count
       const basicMetrics = executeTaskManagerCommand(
-        'get-validation-performance-metrics'
+        'get-validation-performance-metrics',
       );
       const totalMetrics = basicMetrics.metrics.length;
 
@@ -300,27 +300,27 @@ describe('Performance Metrics System E2E Tests', () => {
       // Test filtering by criterion
       const linterMetrics = executeTaskManagerCommand(
         'get-validation-performance-metrics',
-        '\'{"criterion":"linter-validation"}\''
+        '\'{"criterion":"linter-validation"}\'',
       );
       expect(linterMetrics.success).toBe(true);
       expect(
-        linterMetrics.metrics.every((m) => m.criterion === 'linter-validation')
+        linterMetrics.metrics.every((m) => m.criterion === 'linter-validation'),
       ).toBe(true);
 
       // Test time range filtering
       const recentMetrics = executeTaskManagerCommand(
         'get-validation-performance-metrics',
-        '\'{"timeRange":7}\'' // Last 7 days
+        '\'{"timeRange":7}\'', // Last 7 days
       );
       expect(recentMetrics.success).toBe(true);
       expect(recentMetrics.metrics.length).toBeLessThan(
-        linterMetrics.metrics.length
+        linterMetrics.metrics.length,
       );
 
       // Test trend analysis with same time range
       const trendAnalysis = executeTaskManagerCommand(
         'analyze-performance-trends',
-        '\'{"timeRange":7}\''
+        '\'{"timeRange":7}\'',
       );
       expect(trendAnalysis.success).toBe(true);
       expect(trendAnalysis.analysis.metadata.timeRange.days).toBe(7);
@@ -371,14 +371,14 @@ describe('Performance Metrics System E2E Tests', () => {
 
       fs.writeFileSync(
         mockMetricsFile,
-        JSON.stringify(largeMetricsData, null, 2)
+        JSON.stringify(largeMetricsData, null, 2),
       );
 
       // Test that analysis completes within reasonable time
       const startTime = Date.now();
       const result = executeTaskManagerCommand(
         'analyze-performance-trends',
-        '\'{"timeRange":60}\''
+        '\'{"timeRange":60}\'',
       );
       const endTime = Date.now();
 
@@ -470,12 +470,12 @@ describe('Performance Metrics System E2E Tests', () => {
 
       fs.writeFileSync(
         mockMetricsFile,
-        JSON.stringify(mixedQualityData, null, 2)
+        JSON.stringify(mixedQualityData, null, 2),
       );
 
       // System should handle gracefully and process valid data
       const result = executeTaskManagerCommand(
-        'get-validation-performance-metrics'
+        'get-validation-performance-metrics',
       );
       expect(result.success).toBe(true);
       // Should have filtered out invalid metrics
@@ -520,7 +520,7 @@ describe('Performance Metrics System E2E Tests', () => {
 
       // Basic analysis should work
       let result = executeTaskManagerCommand(
-        'get-validation-performance-metrics'
+        'get-validation-performance-metrics',
       );
       expect(result.success).toBe(true);
       expect(result.metrics.length).toBe(1);
@@ -560,7 +560,7 @@ describe('Performance Metrics System E2E Tests', () => {
 
       let result = executeTaskManagerCommand(
         'analyze-criterion-trend',
-        'build-validation'
+        'build-validation',
       );
       expect(result.success).toBe(true);
 
@@ -571,7 +571,7 @@ describe('Performance Metrics System E2E Tests', () => {
 
       result = executeTaskManagerCommand(
         'analyze-criterion-trend',
-        'build-validation'
+        'build-validation',
       );
       expect(result.success).toBe(true);
 
@@ -579,7 +579,7 @@ describe('Performance Metrics System E2E Tests', () => {
 
       // More data should generally provide more reliable trend detection
       expect(result.analysis.metadata.totalMetrics).toBeGreaterThan(
-        weekData.metrics.length
+        weekData.metrics.length,
       );
     });
   });
@@ -603,13 +603,13 @@ describe('Performance Metrics System E2E Tests', () => {
 
       const legacyFile = path.join(
         mockProjectRoot,
-        '.validation-performance.json'
+        '.validation-performance.json',
       );
       fs.writeFileSync(legacyFile, JSON.stringify(legacyData, null, 2));
 
       // Should work with legacy format
       const result = executeTaskManagerCommand(
-        'get-validation-performance-metrics'
+        'get-validation-performance-metrics',
       );
       expect(result.success).toBe(true);
       expect(result.metrics.length).toBe(1);
@@ -643,11 +643,11 @@ describe('Performance Metrics System E2E Tests', () => {
       fs.writeFileSync(mockMetricsFile, JSON.stringify(enhancedData, null, 2));
       fs.writeFileSync(
         path.join(mockProjectRoot, '.validation-performance.json'),
-        JSON.stringify(legacyData, null, 2)
+        JSON.stringify(legacyData, null, 2),
       );
 
       const result = executeTaskManagerCommand(
-        'get-validation-performance-metrics'
+        'get-validation-performance-metrics',
       );
       expect(result.success).toBe(true);
       expect(result.metrics.length).toBe(2); // Should combine both sources

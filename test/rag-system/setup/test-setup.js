@@ -152,7 +152,7 @@ global.RAG_TEST_UTILS = {
   assertPerformance: (duration, threshold, operation) => {
     if (duration > threshold) {
       throw new Error(
-        `Performance threshold exceeded for ${operation}: ${duration}ms > ${threshold}ms`
+        `Performance threshold exceeded for ${operation}: ${duration}ms > ${threshold}ms`,
       );
     }
   },
@@ -185,7 +185,7 @@ global.RAG_TEST_UTILS = {
 
     // Create all files in parallel (after directories exist)
     await Promise.all(
-      files.map((file) => _fs.writeFile(file.path, file.content))
+      files.map((file) => _fs.writeFile(file.path, file.content)),
     );
   },
 
@@ -256,8 +256,8 @@ afterEach(async () => {
         _fs.rm(_path.join(global.RAG_TEST_CONFIG.tempPath, file), {
           recursive: true,
           force: true,
-        })
-      )
+        }),
+      ),
     );
   } catch {
     // Ignore cleanup errors
@@ -328,5 +328,5 @@ console.log('RAG System test environment initialized');
 console.log('Test data path:', global.RAG_TEST_CONFIG.testDataPath);
 console.log(
   'Performance thresholds:',
-  global.RAG_TEST_CONFIG.performanceThresholds
+  global.RAG_TEST_CONFIG.performanceThresholds,
 );

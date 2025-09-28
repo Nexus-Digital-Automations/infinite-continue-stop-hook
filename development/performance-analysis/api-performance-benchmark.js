@@ -139,7 +139,7 @@ class APIPerformanceBenchmark {
    */
   calculateMetrics(results) {
     const successfulResults = results.filter(
-      (r) => r.success && r.responseTime > 0
+      (r) => r.success && r.responseTime > 0,
     );
     const responseTimes = successfulResults.map((r) => r.responseTime);
     const memoryDeltas = successfulResults.map((r) => r.memoryDelta);
@@ -187,7 +187,7 @@ class APIPerformanceBenchmark {
     if (initResult.success) {
       // Extract agent ID for subsequent tests
       const agentMatch = JSON.stringify(initResult).match(
-        /"agentId":\s*"([^"]+)"/
+        /"agentId":\s*"([^"]+)"/,
       );
       if (agentMatch) {
         this.testData.agentId = agentMatch[1];
@@ -228,12 +228,12 @@ class APIPerformanceBenchmark {
         if (this.testData.agentId) {
           this.results.endpoints.claimTask = await this.executeCommand(
             'claim',
-            [this.testData.taskId, this.testData.agentId]
+            [this.testData.taskId, this.testData.agentId],
           );
 
           this.results.endpoints.completeTask = await this.executeCommand(
             'complete',
-            [this.testData.taskId, '"Performance test completed"']
+            [this.testData.taskId, '"Performance test completed"'],
           );
         }
       }
@@ -254,14 +254,14 @@ class APIPerformanceBenchmark {
             description: 'Subtask for performance testing',
             type: 'implementation',
           }),
-        ]
+        ],
       );
     }
 
     // Success criteria endpoints
     console.log('\n✅ Testing success criteria endpoints...');
     this.results.endpoints.getSuccessCriteria = await this.executeCommand(
-      'get-success-criteria'
+      'get-success-criteria',
     );
     this.results.endpoints.criteriaReport =
       await this.executeCommand('criteria-report');
@@ -326,10 +326,10 @@ class APIPerformanceBenchmark {
 
     // Sort by performance metrics
     analysis.slowestEndpoints.sort(
-      (a, b) => b.averageResponseTime - a.averageResponseTime
+      (a, b) => b.averageResponseTime - a.averageResponseTime,
     );
     analysis.fastestEndpoints.sort(
-      (a, b) => a.averageResponseTime - b.averageResponseTime
+      (a, b) => a.averageResponseTime - b.averageResponseTime,
     );
 
     // Generate optimization recommendations
@@ -416,7 +416,7 @@ class APIPerformanceBenchmark {
    */
   async performLoadTest(endpoint = 'list', concurrency = 5, duration = 30) {
     console.log(
-      `🔥 Starting load test: ${endpoint} (${concurrency} concurrent, ${duration}s)`
+      `🔥 Starting load test: ${endpoint} (${concurrency} concurrent, ${duration}s)`,
     );
 
     const startTime = Date.now();
@@ -426,7 +426,7 @@ class APIPerformanceBenchmark {
       const promise = this.loadTestWorker(
         endpoint,
         startTime + duration * 1000,
-        i
+        i,
       );
       promises.push(promise);
     }
@@ -446,7 +446,7 @@ class APIPerformanceBenchmark {
       requestsPerSecond: allResults.length / duration,
       p95ResponseTime: this.percentile(
         allResults.map((r) => r.responseTime),
-        95
+        95,
       ),
       errorRate:
         (allResults.filter((r) => !r.success).length / allResults.length) * 100,
@@ -524,7 +524,7 @@ class APIPerformanceBenchmark {
   generateExecutiveSummary() {
     const endpoints = Object.keys(this.results.endpoints).length;
     const successfulEndpoints = Object.values(this.results.endpoints).filter(
-      (e) => e.success
+      (e) => e.success,
     ).length;
     const averageResponseTime =
       Object.values(this.results.endpoints)
@@ -543,7 +543,7 @@ class APIPerformanceBenchmark {
           .map((e) => e.endpoint) || [],
       criticalRecommendations:
         this.results.analysis?.optimizationOpportunities?.filter(
-          (r) => r.priority === 'High'
+          (r) => r.priority === 'High',
         ).length || 0,
     };
   }
@@ -576,10 +576,10 @@ class APIPerformanceBenchmark {
       totalCriticalPathTime: criticalPathMetrics.reduce(
         (sum, op) =>
           sum + (op.averageResponseTime > 0 ? op.averageResponseTime : 0),
-        0
+        0,
       ),
       bottlenecks: criticalPathMetrics.filter(
-        (op) => op.averageResponseTime > 500
+        (op) => op.averageResponseTime > 500,
       ),
     };
   }
@@ -725,16 +725,16 @@ async function main() {
     console.log('\n📊 PERFORMANCE BENCHMARK SUMMARY');
     console.log('=====================================');
     console.log(
-      `Endpoints Tested: ${report.executiveSummary.totalEndpointsTested}`
+      `Endpoints Tested: ${report.executiveSummary.totalEndpointsTested}`,
     );
     console.log(
-      `Success Rate: ${report.executiveSummary.overallSuccessRate.toFixed(2)}%`
+      `Success Rate: ${report.executiveSummary.overallSuccessRate.toFixed(2)}%`,
     );
     console.log(
-      `Average Response Time: ${report.executiveSummary.averageSystemResponseTime.toFixed(2)}ms`
+      `Average Response Time: ${report.executiveSummary.averageSystemResponseTime.toFixed(2)}ms`,
     );
     console.log(
-      `Critical Recommendations: ${report.executiveSummary.criticalRecommendations}`
+      `Critical Recommendations: ${report.executiveSummary.criticalRecommendations}`,
     );
 
     if (report.performanceAnalysis.slowestEndpoints.length > 0) {
@@ -743,7 +743,7 @@ async function main() {
         .slice(0, 3)
         .forEach((endpoint) => {
           console.log(
-            `  ${endpoint.endpoint}: ${endpoint.averageResponseTime.toFixed(2)}ms`
+            `  ${endpoint.endpoint}: ${endpoint.averageResponseTime.toFixed(2)}ms`,
           );
         });
     }

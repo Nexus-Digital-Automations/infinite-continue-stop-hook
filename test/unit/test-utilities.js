@@ -627,7 +627,7 @@ const testHelpers = {
 
     // Validate status is one of allowed values
     expect(['suggested', 'approved', 'rejected', 'implemented']).toContain(
-      feature.status
+      feature.status,
     );
   },
 

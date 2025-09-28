@@ -6,11 +6,11 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
   const mockProjectRoot = '/tmp/test-trend-analyzer';
   const mockEnhancedMetricsFile = path.join(
     mockProjectRoot,
-    '.validation-performance-enhanced.json'
+    '.validation-performance-enhanced.json',
   );
   const mockLegacyMetricsFile = path.join(
     mockProjectRoot,
-    '.validation-performance.json'
+    '.validation-performance.json',
   );
   const mockTrendsFile = path.join(mockProjectRoot, '.validation-trends.json');
 
@@ -28,7 +28,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
         if (fs.existsSync(file)) {
           fs.unlinkSync(file);
         }
-      }
+      },
     );
 
     trendAnalyzer = new TrendAnalyzer(mockProjectRoot);
@@ -73,17 +73,17 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
           criterion === 'build-validation' ? 1 + day * 0.02 : 1;
         const randomVariation = 0.8 + Math.random() * 0.4; // ±20% variation
         const duration = Math.round(
-          baseDuration * trendFactor * randomVariation
+          baseDuration * trendFactor * randomVariation,
         );
 
         metrics.push({
           criterion,
           timing: {
             startTime: new Date(
-              dayTimestamp + index * 60 * 60 * 1000
+              dayTimestamp + index * 60 * 60 * 1000,
             ).toISOString(),
             endTime: new Date(
-              dayTimestamp + index * 60 * 60 * 1000 + duration
+              dayTimestamp + index * 60 * 60 * 1000 + duration,
             ).toISOString(),
             durationMs: duration,
           },
@@ -109,7 +109,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
 
     fs.writeFileSync(
       mockEnhancedMetricsFile,
-      JSON.stringify(metricsData, null, 2)
+      JSON.stringify(metricsData, null, 2),
     );
     return metricsData;
   }
@@ -204,7 +204,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
         {
           timeRange: 15,
           granularity: 'daily',
-        }
+        },
       );
 
       expect(result.success).toBe(true);
@@ -228,7 +228,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
       expect(result.success).toBe(true);
       expect(result.analysis.trend).toBeDefined();
       expect(result.analysis.trend.direction).toMatch(
-        /increasing|decreasing|stable/
+        /increasing|decreasing|stable/,
       );
       expect(result.analysis.trend.strength).toBeGreaterThanOrEqual(0);
       expect(result.analysis.trend.strength).toBeLessThanOrEqual(1);
@@ -252,10 +252,10 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
       expect(result.healthTrends.analysis).toBeDefined();
       expect(result.healthTrends.summary).toBeDefined();
       expect(result.healthTrends.summary.currentHealth).toBeGreaterThanOrEqual(
-        0
+        0,
       );
       expect(result.healthTrends.summary.currentHealth).toBeLessThanOrEqual(
-        100
+        100,
       );
     });
 
@@ -266,7 +266,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
 
       expect(result.success).toBe(true);
       expect(result.healthTrends.summary.healthTrend).toMatch(
-        /increasing|decreasing|stable/
+        /increasing|decreasing|stable/,
       );
       expect(typeof result.healthTrends.summary.volatility).toBe('number');
       expect(result.healthTrends.summary.recommendation).toBeDefined();
@@ -291,7 +291,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
 
       const result = await trendAnalyzer.comparePerformancePeriods(
         periodA,
-        periodB
+        periodB,
       );
 
       expect(result.success).toBe(true);
@@ -315,7 +315,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
 
       const result = await trendAnalyzer.comparePerformancePeriods(
         periodA,
-        periodB
+        periodB,
       );
 
       expect(result.success).toBe(true);
@@ -354,11 +354,11 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
 
       fs.writeFileSync(
         mockEnhancedMetricsFile,
-        JSON.stringify(enhancedData, null, 2)
+        JSON.stringify(enhancedData, null, 2),
       );
       fs.writeFileSync(
         mockLegacyMetricsFile,
-        JSON.stringify(legacyData, null, 2)
+        JSON.stringify(legacyData, null, 2),
       );
 
       const metrics = await trendAnalyzer._loadMetricsData();
@@ -491,12 +491,12 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
     test('should detect cyclical patterns', () => {
       const durations = [10, 20, 15, 25, 12, 22, 14, 24]; // High variance
       const timestamps = durations.map(
-        (_, i) => new Date(Date.now() + i * 60 * 60 * 1000)
+        (_, i) => new Date(Date.now() + i * 60 * 60 * 1000),
       );
 
       const pattern = trendAnalyzer._detectCyclicalPattern(
         durations,
-        timestamps
+        timestamps,
       );
 
       expect(pattern.detected).toBe(true);
@@ -514,7 +514,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
 
       const pattern = trendAnalyzer._detectSeasonalPattern(
         durations,
-        timestamps
+        timestamps,
       );
 
       expect(pattern.detected).toBeDefined();
@@ -525,12 +525,12 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
     test('should detect trending patterns', () => {
       const increasingDurations = [10, 12, 14, 16, 18, 20, 22, 24];
       const timestamps = increasingDurations.map(
-        (_, i) => new Date(Date.now() + i * 60 * 60 * 1000)
+        (_, i) => new Date(Date.now() + i * 60 * 60 * 1000),
       );
 
       const pattern = trendAnalyzer._detectTrendingPattern(
         increasingDurations,
-        timestamps
+        timestamps,
       );
 
       expect(pattern.detected).toBe(true);
@@ -561,7 +561,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
       const emptyData = { metrics: [] };
       fs.writeFileSync(
         mockEnhancedMetricsFile,
-        JSON.stringify(emptyData, null, 2)
+        JSON.stringify(emptyData, null, 2),
       );
 
       const result = await trendAnalyzer.analyzeTrends();

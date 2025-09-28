@@ -23,7 +23,7 @@ describe('RAG System Data Migration and Integrity', () => {
     // Setup test migration directory
     _testMigrationPath = _path.join(
       __dirname,
-      '../../test-data/migration-test'
+      '../../test-data/migration-test',
     );
     await _fs.mkdir(_testMigrationPath, { recursive: true });
 
@@ -165,7 +165,7 @@ Tags: database, performance, connection-pooling`,
               ],
             },
             null,
-            2
+            2,
           ),
         },
       ];
@@ -813,17 +813,17 @@ Tags: optimization, frontend, backend, caching`,
           _testMigrationPath,
           'development',
           'lessons',
-          category
+          category,
         );
         await _fs.mkdir(_categoryPath, { recursive: true });
 
         // Create all files in this category in parallel
         await Promise.all(
           Object.entries(files).map(([filename, content]) =>
-            _fs.writeFile(_path.join(_categoryPath, filename), content)
-          )
+            _fs.writeFile(_path.join(_categoryPath, filename), content),
+          ),
         );
-      })
+      }),
     );
   }
 

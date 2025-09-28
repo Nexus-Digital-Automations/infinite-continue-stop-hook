@@ -423,7 +423,7 @@ describe('Embedding Generation System', () => {
     test('should monitor memory usage during large batch processing', () => {
       const _largeBatch = Array.from(
         { length: 100 },
-        (_, i) => `Content item ${i}: ${'x'.repeat(1000)}`
+        (_, i) => `Content item ${i}: ${'x'.repeat(1000)}`,
       );
 
       // Placeholder for future implementation

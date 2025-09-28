@@ -352,7 +352,7 @@ describe('CLI Commands Integration Tests', () => {
         generateTestFeature({
           title: `Bulk CLI Feature ${i + 1}`,
           category: 'enhancement',
-        })
+        }),
       );
 
       const featureIds = [];
@@ -479,7 +479,7 @@ describe('CLI Commands Integration Tests', () => {
       expect(output.feature.title).toBe(specialFeatureData.title);
       expect(output.feature.description).toBe(specialFeatureData.description);
       expect(output.feature.business_value).toBe(
-        specialFeatureData.business_value
+        specialFeatureData.business_value,
       );
     });
   });
@@ -672,7 +672,7 @@ describe('CLI Commands Integration Tests', () => {
       expect(updatedStatsResult.code).toBe(0);
       const updatedStatsOutput = JSON.parse(updatedStatsResult.stdout);
       expect(updatedStatsOutput.stats.total_reinitializations).toBeGreaterThan(
-        0
+        0,
       );
 
       // 5. Authorize stop
@@ -742,7 +742,7 @@ describe('CLI Commands Integration Tests', () => {
           generateTestFeature({
             title: `Concurrent CLI Feature ${i + 1}`,
             category: 'enhancement',
-          })
+          }),
         ),
         '--project-root',
         testDir,

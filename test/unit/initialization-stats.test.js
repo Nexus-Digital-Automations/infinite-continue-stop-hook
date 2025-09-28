@@ -49,7 +49,7 @@ describe('Initialization Statistics', () => {
     // Setup initial tasks file
     mockFs.setFile(
       TEST_TASKS_PATH,
-      JSON.stringify(TEST_FIXTURES.emptyFeaturesFile)
+      JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
     );
   });
 
@@ -169,19 +169,19 @@ describe('Initialization Statistics', () => {
 
         expect(features.metadata.initialization_stats).toBeDefined();
         expect(
-          features.metadata.initialization_stats.total_initializations
+          features.metadata.initialization_stats.total_initializations,
         ).toBe(0);
         expect(
-          features.metadata.initialization_stats.total_reinitializations
+          features.metadata.initialization_stats.total_reinitializations,
         ).toBe(0);
         expect(
-          features.metadata.initialization_stats.current_day
+          features.metadata.initialization_stats.current_day,
         ).toBeDefined();
         expect(
-          features.metadata.initialization_stats.time_buckets
+          features.metadata.initialization_stats.time_buckets,
         ).toBeDefined();
         expect(features.metadata.initialization_stats.daily_history).toEqual(
-          []
+          [],
         );
       });
 
@@ -323,7 +323,7 @@ describe('Initialization Statistics', () => {
         expect(statsResult.success).toBe(true);
         expect(statsResult.stats.total_initializations).toBeGreaterThan(0);
         expect(statsResult.stats.today_totals.initializations).toBeGreaterThan(
-          0
+          0,
         );
       });
 
@@ -339,7 +339,7 @@ describe('Initialization Statistics', () => {
         expect(statsResult.success).toBe(true);
         expect(statsResult.stats.total_reinitializations).toBeGreaterThan(0);
         expect(
-          statsResult.stats.today_totals.reinitializations
+          statsResult.stats.today_totals.reinitializations,
         ).toBeGreaterThan(0);
       });
     });
@@ -440,7 +440,7 @@ describe('Initialization Statistics', () => {
           // Move to next day to trigger reset
           if (day < 35) {
             timeUtils.mockCurrentTimeISO(
-              `2025-09-${(day + 1).toString().padStart(2, '0')}T12:00:00.000Z`
+              `2025-09-${(day + 1).toString().padStart(2, '0')}T12:00:00.000Z`,
             );
             const features = await api._loadFeatures();
             await api._resetDailyBucketsIfNeeded(features);
@@ -457,7 +457,7 @@ describe('Initialization Statistics', () => {
         // Should not contain very old entries
         const oldestEntry = stats.daily_history[0];
         expect(new Date(oldestEntry.date).getTime()).toBeGreaterThan(
-          new Date('2025-09-05').getTime()
+          new Date('2025-09-05').getTime(),
         );
       });
     });
@@ -470,7 +470,7 @@ describe('Initialization Statistics', () => {
       // Setup some test data
       mockFs.setFile(
         TEST_TASKS_PATH,
-        JSON.stringify(TEST_FIXTURES.featuresWithData)
+        JSON.stringify(TEST_FIXTURES.featuresWithData),
       );
     });
 
@@ -483,7 +483,7 @@ describe('Initialization Statistics', () => {
         expect(result.success).toBe(true);
         expect(result.stats).toBeDefined();
         expect(result.message).toBe(
-          'Initialization statistics retrieved successfully'
+          'Initialization statistics retrieved successfully',
         );
 
         const stats = result.stats;
@@ -517,7 +517,7 @@ describe('Initialization Statistics', () => {
           expect(buckets[bucketName]).toHaveProperty('total');
           expect(buckets[bucketName].total).toBe(
             buckets[bucketName].initializations +
-              buckets[bucketName].reinitializations
+              buckets[bucketName].reinitializations,
           );
         });
       });
@@ -530,11 +530,11 @@ describe('Initialization Statistics', () => {
 
         const expectedInit = Object.values(buckets).reduce(
           (sum, bucket) => sum + bucket.initializations,
-          0
+          0,
         );
         const expectedReinit = Object.values(buckets).reduce(
           (sum, bucket) => sum + bucket.reinitializations,
-          0
+          0,
         );
 
         expect(todayTotals.initializations).toBe(expectedInit);
@@ -580,13 +580,13 @@ describe('Initialization Statistics', () => {
         const updatedStats = await api.getInitializationStats();
 
         expect(updatedStats.stats.total_initializations).toBeGreaterThan(
-          initialStats.stats.total_initializations
+          initialStats.stats.total_initializations,
         );
         expect(updatedStats.stats.total_reinitializations).toBeGreaterThan(
-          initialStats.stats.total_reinitializations
+          initialStats.stats.total_reinitializations,
         );
         expect(
-          updatedStats.stats.time_buckets['12:00-16:59'].total
+          updatedStats.stats.time_buckets['12:00-16:59'].total,
         ).toBeGreaterThan(initialStats.stats.time_buckets['12:00-16:59'].total);
       });
 
@@ -603,7 +603,7 @@ describe('Initialization Statistics', () => {
 
         expect(stats.stats.time_buckets['12:00-16:59'].initializations).toBe(1);
         expect(stats.stats.time_buckets['17:00-21:59'].reinitializations).toBe(
-          1
+          1,
         );
         expect(stats.stats.current_bucket).toBe('17:00-21:59');
       });
@@ -670,11 +670,11 @@ describe('Initialization Statistics', () => {
 
         const updatedFeatures = await api._loadFeatures();
         expect(
-          updatedFeatures.metadata.initialization_stats.time_buckets
+          updatedFeatures.metadata.initialization_stats.time_buckets,
         ).toBeDefined();
         expect(
           typeof updatedFeatures.metadata.initialization_stats
-            .total_initializations
+            .total_initializations,
         ).toBe('number');
       });
     });

@@ -165,7 +165,7 @@ class TestDataGenerator {
       feature,
     });
     const tags = template.tags.map((tag) =>
-      this.interpolateTemplate(tag, { tech, feature })
+      this.interpolateTemplate(tag, { tech, feature }),
     );
 
     const codeExample = this.codeExamples[tech]
@@ -181,7 +181,7 @@ class TestDataGenerator {
         title,
         description,
         codeExample,
-        tech
+        tech,
       ),
       tags,
       timestamp: new Date().toISOString(),

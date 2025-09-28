@@ -70,10 +70,10 @@ describe('Agent Management', () => {
     const fs = require('fs');
     fs.promises.access.mockImplementation((...args) => mockFs.access(...args));
     fs.promises.readFile.mockImplementation((...args) =>
-      mockFs.readFile(...args)
+      mockFs.readFile(...args),
     );
     fs.promises.writeFile.mockImplementation((...args) =>
-      mockFs.writeFile(...args)
+      mockFs.writeFile(...args),
     );
 
     // Mock time for consistent testing
@@ -82,7 +82,7 @@ describe('Agent Management', () => {
     // Setup initial features file
     mockFs.setFile(
       TEST_FEATURES_PATH,
-      JSON.stringify(TEST_FIXTURES.emptyFeaturesFile)
+      JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
     );
   });
 
@@ -108,7 +108,7 @@ describe('Agent Management', () => {
         expect(result.agent.sessionId).toBeDefined();
         expect(result.agent.timestamp).toBe('2025-09-23T12:00:00.000Z');
         expect(result.message).toBe(
-          `Agent ${agentId} successfully initialized`
+          `Agent ${agentId} successfully initialized`,
         );
       });
 
@@ -137,10 +137,10 @@ describe('Agent Management', () => {
         expect(features.agents[agentId]).toBeDefined();
         expect(features.agents[agentId].status).toBe('active');
         expect(features.agents[agentId].initialized).toBe(
-          '2025-09-23T12:00:00.000Z'
+          '2025-09-23T12:00:00.000Z',
         );
         expect(features.agents[agentId].lastHeartbeat).toBe(
-          '2025-09-23T12:00:00.000Z'
+          '2025-09-23T12:00:00.000Z',
         );
         expect(features.agents[agentId].sessionId).toBeDefined();
       });
@@ -222,7 +222,7 @@ describe('Agent Management', () => {
         delete featuresWithoutAgents.agents;
         mockFs.setFile(
           TEST_FEATURES_PATH,
-          JSON.stringify(featuresWithoutAgents)
+          JSON.stringify(featuresWithoutAgents),
         );
 
         const agentId = 'init-agents-section';
@@ -289,7 +289,7 @@ describe('Agent Management', () => {
         expect(result.agent.sessionId).not.toBe(originalSessionId);
         expect(result.agent.previousSessions).toBe(1);
         expect(result.message).toBe(
-          `Agent ${existingAgentId} successfully reinitialized`
+          `Agent ${existingAgentId} successfully reinitialized`,
         );
       });
 
@@ -442,7 +442,7 @@ describe('Agent Management', () => {
 
         expect(result.success).toBe(true);
         expect(result.authorization.reason).toBe(
-          'Agent authorized stop after completing all tasks and achieving project perfection'
+          'Agent authorized stop after completing all tasks and achieving project perfection',
         );
         expect(result.authorization.authorized_by).toBe(agentId);
       });
@@ -526,7 +526,7 @@ describe('Agent Management', () => {
         // First authorization
         const result1 = await api.authorizeStop(
           firstAgent,
-          'First stop reason'
+          'First stop reason',
         );
         expect(result1.success).toBe(true);
 
@@ -536,7 +536,7 @@ describe('Agent Management', () => {
         // Second authorization (should overwrite)
         const result2 = await api.authorizeStop(
           secondAgent,
-          'Second stop reason'
+          'Second stop reason',
         );
         expect(result2.success).toBe(true);
 
@@ -596,7 +596,7 @@ describe('Agent Management', () => {
         // 3. Authorize stop
         const stopResult = await api.authorizeStop(
           agentId,
-          'Lifecycle test completed'
+          'Lifecycle test completed',
         );
         expect(stopResult.success).toBe(true);
 
@@ -628,7 +628,7 @@ describe('Agent Management', () => {
         // One agent authorizes stop
         const stopResult = await api.authorizeStop(
           agents[2],
-          'First to complete tasks'
+          'First to complete tasks',
         );
         expect(stopResult.success).toBe(true);
 
@@ -672,7 +672,7 @@ describe('Agent Management', () => {
 
         // Verify feature was created by the agent
         const suggestedFeature = features.features.find(
-          (f) => f.id === suggestResult.feature.id
+          (f) => f.id === suggestResult.feature.id,
         );
         expect(suggestedFeature.suggested_by).toBe(agentId);
       });

@@ -99,7 +99,7 @@ class E2EEnvironment {
 
     await fs.writeFile(
       this.featuresPath,
-      JSON.stringify(initialFeatures, null, 2)
+      JSON.stringify(initialFeatures, null, 2),
     );
   }
 
@@ -124,7 +124,7 @@ class E2EEnvironment {
 
     await fs.writeFile(
       path.join(this.testDir, 'package.json'),
-      JSON.stringify(packageJson, null, 2)
+      JSON.stringify(packageJson, null, 2),
     );
   }
 
@@ -151,7 +151,7 @@ class E2EEnvironment {
       if (stats.isDirectory()) {
         const files = await fs.readdir(dirPath);
         await Promise.all(
-          files.map((file) => this.removeDirectory(path.join(dirPath, file)))
+          files.map((file) => this.removeDirectory(path.join(dirPath, file))),
         );
         await fs.rmdir(dirPath);
       } else {
@@ -190,7 +190,7 @@ class E2EEnvironment {
       }
     } catch (error) {
       throw new Error(
-        `Failed to get features from TaskManager API: ${error.message}`
+        `Failed to get features from TaskManager API: ${error.message}`,
       );
     }
   }
@@ -316,7 +316,7 @@ class CommandExecutor {
         child.kill('SIGKILL');
 
         const error = new Error(
-          `Command timed out after ${timeout}ms: ${command} ${args.join(' ')}`
+          `Command timed out after ${timeout}ms: ${command} ${args.join(' ')}`,
         );
         error.result = {
           code: -1,
@@ -355,7 +355,7 @@ class CommandExecutor {
       {
         ...options,
         timeout: options.timeout || API_TIMEOUT,
-      }
+      },
     );
   }
 
@@ -409,7 +409,7 @@ class FeatureTestHelpers {
     const result = await CommandExecutor.executeAPI(
       'suggest-feature',
       [jsonData],
-      { projectRoot: environment.testDir }
+      { projectRoot: environment.testDir },
     );
 
     return { result, featureData: data };
@@ -422,7 +422,7 @@ class FeatureTestHelpers {
     environment,
     featureId,
     approver = 'e2e-test',
-    notes = 'E2E test approval'
+    notes = 'E2E test approval',
   ) {
     const approvalData = JSON.stringify({
       approved_by: approver,
@@ -432,7 +432,7 @@ class FeatureTestHelpers {
     return CommandExecutor.executeAPI(
       'approve-feature',
       [featureId, approvalData],
-      { projectRoot: environment.testDir }
+      { projectRoot: environment.testDir },
     );
   }
 
@@ -443,7 +443,7 @@ class FeatureTestHelpers {
     environment,
     featureId,
     rejector = 'e2e-test',
-    reason = 'E2E test rejection'
+    reason = 'E2E test rejection',
   ) {
     const rejectionData = JSON.stringify({
       rejected_by: rejector,
@@ -453,7 +453,7 @@ class FeatureTestHelpers {
     return CommandExecutor.executeAPI(
       'reject-feature',
       [featureId, rejectionData],
-      { projectRoot: environment.testDir }
+      { projectRoot: environment.testDir },
     );
   }
 
@@ -490,7 +490,7 @@ class FeatureTestHelpers {
 
     if (feature.status !== expectedStatus) {
       throw new Error(
-        `Expected feature status '${expectedStatus}' but got '${feature.status}'`
+        `Expected feature status '${expectedStatus}' but got '${feature.status}'`,
       );
     }
 
@@ -509,7 +509,7 @@ class StopHookTestHelpers {
   static async simulateAgentExecution(
     environment,
     _agentId = 'e2e-test-agent',
-    duration = 1000
+    duration = 1000,
   ) {
     // Simulate some work
     await new Promise((resolve) => {
@@ -519,7 +519,7 @@ class StopHookTestHelpers {
     // Test stop hook without authorization first (should block)
     const blockResult = await CommandExecutor.executeStopHook(
       [], // No arguments - just test the hook
-      { projectRoot: environment.testDir, expectSuccess: false }
+      { projectRoot: environment.testDir, expectSuccess: false },
     );
 
     return {
@@ -541,7 +541,7 @@ class StopHookTestHelpers {
         {
           projectRoot: environment.testDir,
           expectSuccess: false, // Expect blocking behavior
-        }
+        },
       );
 
       iterations.push({
@@ -593,13 +593,13 @@ class PerformanceTestHelpers {
 
     if (thresholds.maxAvg && metrics.avg > thresholds.maxAvg) {
       issues.push(
-        `Average time ${metrics.avg}ms exceeds threshold ${thresholds.maxAvg}ms`
+        `Average time ${metrics.avg}ms exceeds threshold ${thresholds.maxAvg}ms`,
       );
     }
 
     if (thresholds.maxMax && metrics.max > thresholds.maxMax) {
       issues.push(
-        `Maximum time ${metrics.max}ms exceeds threshold ${thresholds.maxMax}ms`
+        `Maximum time ${metrics.max}ms exceeds threshold ${thresholds.maxMax}ms`,
       );
     }
 
@@ -622,7 +622,7 @@ class MultiAgentTestHelpers {
   static async simulateConcurrentAgents(
     environment,
     agentCount = 3,
-    operationsPerAgent = 2
+    operationsPerAgent = 2,
   ) {
     const agents = [];
 
@@ -638,7 +638,7 @@ class MultiAgentTestHelpers {
         });
 
         operations.push(
-          FeatureTestHelpers.suggestFeature(environment, featureData)
+          FeatureTestHelpers.suggestFeature(environment, featureData),
         );
       }
 
@@ -651,8 +651,8 @@ class MultiAgentTestHelpers {
     // Wait for all agents to complete
     const results = await Promise.all(
       agents.map((agent) =>
-        agent.operations.catch((error) => ({ error, agentId: agent.id }))
-      )
+        agent.operations.catch((error) => ({ error, agentId: agent.id })),
+      ),
     );
 
     return { agents, results };
@@ -670,7 +670,7 @@ class E2EAssertions {
   static assertCommandSuccess(result, message = '') {
     if (!result.success) {
       throw new Error(
-        `Command failed ${message}: ${result.command}\nStdout: ${result.stdout}\nStderr: ${result.stderr}`
+        `Command failed ${message}: ${result.command}\nStdout: ${result.stdout}\nStderr: ${result.stderr}`,
       );
     }
   }
@@ -681,7 +681,7 @@ class E2EAssertions {
   static assertCommandFailure(result, message = '') {
     if (result.success) {
       throw new Error(
-        `Command unexpectedly succeeded ${message}: ${result.command}\nStdout: ${result.stdout}`
+        `Command unexpectedly succeeded ${message}: ${result.command}\nStdout: ${result.stdout}`,
       );
     }
   }
@@ -693,7 +693,7 @@ class E2EAssertions {
     const fullOutput = `${result.stdout} ${result.stderr}`.toLowerCase();
     if (!fullOutput.includes(expectedText.toLowerCase())) {
       throw new Error(
-        `Output does not contain "${expectedText}" ${message}\nActual output: ${fullOutput}`
+        `Output does not contain "${expectedText}" ${message}\nActual output: ${fullOutput}`,
       );
     }
   }
@@ -707,7 +707,7 @@ class E2EAssertions {
       const responseText = JSON.stringify(parsed).toLowerCase();
       if (!responseText.includes(expectedText.toLowerCase())) {
         throw new Error(
-          `JSON response does not contain "${expectedText}" ${message}\nActual response: ${responseText}`
+          `JSON response does not contain "${expectedText}" ${message}\nActual response: ${responseText}`,
         );
       }
     } catch {
@@ -722,7 +722,7 @@ class E2EAssertions {
   static assertFeatureCount(features, expectedCount, message = '') {
     if (features.features.length !== expectedCount) {
       throw new Error(
-        `Expected ${expectedCount} features but got ${features.features.length} ${message}`
+        `Expected ${expectedCount} features but got ${features.features.length} ${message}`,
       );
     }
   }
@@ -739,7 +739,7 @@ class E2EAssertions {
       throw new Error('No feature ID found in response');
     } catch (error) {
       throw new Error(
-        `Failed to extract feature ID: ${error.message}\nResponse: ${commandResult.stdout}`
+        `Failed to extract feature ID: ${error.message}\nResponse: ${commandResult.stdout}`,
       );
     }
   }
@@ -758,7 +758,7 @@ class E2EAssertions {
     expectedFields.forEach((field) => {
       if (!(field in parsed)) {
         throw new Error(
-          `Response missing expected field '${field}': ${result.stdout}`
+          `Response missing expected field '${field}': ${result.stdout}`,
         );
       }
     });

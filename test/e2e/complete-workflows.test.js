@@ -49,15 +49,15 @@ describe('Complete System Workflows E2E', () => {
 
         const suggestionResult = await FeatureTestHelpers.suggestFeature(
           environment,
-          featureData
+          featureData,
         );
         E2EAssertions.assertCommandSuccess(
           suggestionResult.result,
-          'Feature suggestion'
+          'Feature suggestion',
         );
         E2EAssertions.assertOutputContains(
           suggestionResult.result,
-          'Feature suggestion created successfully'
+          'Feature suggestion created successfully',
         );
 
         // Extract feature ID from JSON response
@@ -70,7 +70,7 @@ describe('Complete System Workflows E2E', () => {
         let feature = await FeatureTestHelpers.validateFeatureStatus(
           environment,
           featureId,
-          'suggested'
+          'suggested',
         );
         expect(feature.title).toBe(featureData.title);
         expect(feature.description).toBe(featureData.description);
@@ -82,23 +82,23 @@ describe('Complete System Workflows E2E', () => {
           environment,
           featureId,
           'e2e-workflow-tester',
-          'Approved for complete workflow testing'
+          'Approved for complete workflow testing',
         );
         E2EAssertions.assertCommandSuccess(approvalResult, 'Feature approval');
         E2EAssertions.assertOutputContains(
           approvalResult,
-          'approved successfully'
+          'approved successfully',
         );
 
         // Step 4: Validate feature is in 'approved' status
         feature = await FeatureTestHelpers.validateFeatureStatus(
           environment,
           featureId,
-          'approved'
+          'approved',
         );
         expect(feature.approved_by).toBe('e2e-workflow-tester');
         expect(feature.approval_notes).toBe(
-          'Approved for complete workflow testing'
+          'Approved for complete workflow testing',
         );
         expect(feature.approval_date).toBeTruthy();
 
@@ -106,7 +106,7 @@ describe('Complete System Workflows E2E', () => {
         const listResult = await CommandExecutor.executeAPI(
           'list-features',
           [],
-          { projectRoot: environment.testDir }
+          { projectRoot: environment.testDir },
         );
         E2EAssertions.assertCommandSuccess(listResult, 'Feature listing');
         E2EAssertions.assertOutputContains(listResult, featureData.title);
@@ -118,14 +118,14 @@ describe('Complete System Workflows E2E', () => {
         expect(features.metadata.total_features).toBe(1);
         expect(features.metadata.approval_history).toHaveLength(1);
         expect(features.metadata.approval_history[0].feature_id).toBe(
-          featureId
+          featureId,
         );
 
         console.log(
-          `✅ Complete workflow test passed for feature: ${featureId}`
+          `✅ Complete workflow test passed for feature: ${featureId}`,
         );
       },
-      E2E_TIMEOUT
+      E2E_TIMEOUT,
     );
 
     test(
@@ -149,34 +149,34 @@ describe('Complete System Workflows E2E', () => {
           environment,
           featureId,
           'e2e-workflow-tester',
-          'Not aligned with testing priorities'
+          'Not aligned with testing priorities',
         );
         E2EAssertions.assertCommandSuccess(
           rejectionResult,
-          'Feature rejection'
+          'Feature rejection',
         );
         E2EAssertions.assertOutputContains(
           rejectionResult,
-          'Feature rejected successfully'
+          'Feature rejected successfully',
         );
 
         // Step 3: Validate feature is in 'rejected' status
         const feature = await FeatureTestHelpers.validateFeatureStatus(
           environment,
           featureId,
-          'rejected'
+          'rejected',
         );
         expect(feature.rejected_by).toBe('e2e-workflow-tester');
         expect(feature.rejection_reason).toBe(
-          'Not aligned with testing priorities'
+          'Not aligned with testing priorities',
         );
         expect(feature.rejection_date).toBeTruthy();
 
         console.log(
-          `✅ Feature rejection workflow test passed for feature: ${featureId}`
+          `✅ Feature rejection workflow test passed for feature: ${featureId}`,
         );
       },
-      E2E_TIMEOUT
+      E2E_TIMEOUT,
     );
   });
 
@@ -199,13 +199,13 @@ describe('Complete System Workflows E2E', () => {
               description: `Feature ${i + 1} for system integration testing`,
               business_value: `Validates system scalability aspect ${i + 1}`,
               category: 'enhancement',
-            })
+            }),
           );
         }
 
         const featureResults = await Promise.all(featurePromises);
         const featureIds = featureResults.map((result) =>
-          E2EAssertions.extractFeatureId(result.result)
+          E2EAssertions.extractFeatureId(result.result),
         );
 
         // Step 3: Batch approve features
@@ -214,8 +214,8 @@ describe('Complete System Workflows E2E', () => {
             environment,
             id,
             'system-integrator',
-            'Batch approved for testing'
-          )
+            'Batch approved for testing',
+          ),
         );
         await Promise.all(approvalPromises);
 
@@ -223,7 +223,7 @@ describe('Complete System Workflows E2E', () => {
         const currentFeatures = await environment.getFeatures();
         E2EAssertions.assertFeatureCount(currentFeatures, 3);
         expect(
-          currentFeatures.features.every((f) => f.status === 'approved')
+          currentFeatures.features.every((f) => f.status === 'approved'),
         ).toBe(true);
         expect(currentFeatures.metadata.total_features).toBe(3);
 
@@ -238,7 +238,7 @@ describe('Complete System Workflows E2E', () => {
         const stopResult = await StopHookTestHelpers.simulateAgentExecution(
           environment,
           'system-integration-agent',
-          500
+          500,
         );
 
         // Verify stop hook handled properly (may succeed or fail based on conditions)
@@ -246,7 +246,7 @@ describe('Complete System Workflows E2E', () => {
 
         console.log('✅ Complete system integration workflow test passed');
       },
-      E2E_TIMEOUT
+      E2E_TIMEOUT,
     );
 
     test(
@@ -261,11 +261,11 @@ describe('Complete System Workflows E2E', () => {
           {
             projectRoot: environment.testDir,
             expectSuccess: false,
-          }
+          },
         );
         E2EAssertions.assertCommandFailure(
           invalidResult,
-          'Invalid feature suggestion'
+          'Invalid feature suggestion',
         );
 
         // Step 2: Verify system state remained clean
@@ -280,11 +280,11 @@ describe('Complete System Workflows E2E', () => {
             description: 'Feature to test error recovery',
             business_value: 'Validates system resilience',
             category: 'enhancement',
-          }
+          },
         );
         E2EAssertions.assertCommandSuccess(
           validResult,
-          'Feature suggestion after error'
+          'Feature suggestion after error',
         );
 
         // Step 4: Test non-existent feature operations
@@ -294,11 +294,11 @@ describe('Complete System Workflows E2E', () => {
           {
             projectRoot: environment.testDir,
             expectSuccess: false,
-          }
+          },
         );
         E2EAssertions.assertCommandFailure(
           nonExistentResult,
-          'Non-existent feature approval'
+          'Non-existent feature approval',
         );
 
         // Step 5: Verify system state integrity after errors
@@ -308,7 +308,7 @@ describe('Complete System Workflows E2E', () => {
 
         console.log('✅ Error recovery workflow test passed');
       },
-      E2E_TIMEOUT
+      E2E_TIMEOUT,
     );
   });
 
@@ -330,23 +330,23 @@ describe('Complete System Workflows E2E', () => {
 
         const suggestionResult = await FeatureTestHelpers.suggestFeature(
           environment,
-          userFeature
+          userFeature,
         );
         E2EAssertions.assertCommandSuccess(suggestionResult.result);
 
         const featureId = E2EAssertions.extractFeatureId(
-          suggestionResult.result
+          suggestionResult.result,
         );
 
         // Step 2: Review process - check feature details
         const detailsResult = await CommandExecutor.executeAPI(
           'feature-details',
           [featureId],
-          { projectRoot: environment.testDir }
+          { projectRoot: environment.testDir },
         );
         E2EAssertions.assertCommandSuccess(
           detailsResult,
-          'Feature details retrieval'
+          'Feature details retrieval',
         );
         E2EAssertions.assertOutputContains(detailsResult, userFeature.title);
 
@@ -355,7 +355,7 @@ describe('Complete System Workflows E2E', () => {
           environment,
           featureId,
           'product-manager',
-          'Approved based on strong ROI metrics and user feedback'
+          'Approved based on strong ROI metrics and user feedback',
         );
         E2EAssertions.assertCommandSuccess(approvalResult);
 
@@ -364,7 +364,7 @@ describe('Complete System Workflows E2E', () => {
         const trackingResult = await CommandExecutor.executeAPI(
           'list-features',
           ['--status', 'approved'],
-          { projectRoot: environment.testDir }
+          { projectRoot: environment.testDir },
         );
         E2EAssertions.assertCommandSuccess(trackingResult);
         E2EAssertions.assertOutputContains(trackingResult, userFeature.title);
@@ -382,14 +382,14 @@ describe('Complete System Workflows E2E', () => {
         // Verify audit history
         expect(features.metadata.approval_history).toHaveLength(1);
         expect(features.metadata.approval_history[0].approved_by).toBe(
-          'product-manager'
+          'product-manager',
         );
 
         console.log(
-          `✅ Complete user journey test passed for feature: ${featureId}`
+          `✅ Complete user journey test passed for feature: ${featureId}`,
         );
       },
-      E2E_TIMEOUT
+      E2E_TIMEOUT,
     );
 
     test(
@@ -407,7 +407,7 @@ describe('Complete System Workflows E2E', () => {
             business_value:
               'Reduces server load by 40% and improves user experience',
             category: 'performance',
-          }
+          },
         );
 
         const techFeatureId = E2EAssertions.extractFeatureId(techResult);
@@ -421,7 +421,7 @@ describe('Complete System Workflows E2E', () => {
             business_value:
               'Enables data-driven decisions and increases customer satisfaction',
             category: 'new-feature',
-          }
+          },
         );
 
         const bizFeatureId = E2EAssertions.extractFeatureId(bizResult);
@@ -431,14 +431,14 @@ describe('Complete System Workflows E2E', () => {
           environment,
           techFeatureId,
           'tech-lead',
-          'Critical for system scalability'
+          'Critical for system scalability',
         );
 
         await FeatureTestHelpers.approveFeature(
           environment,
           bizFeatureId,
           'business-analyst',
-          'Aligns with customer success metrics'
+          'Aligns with customer success metrics',
         );
 
         // Step 4: Validate multi-stakeholder state
@@ -446,7 +446,7 @@ describe('Complete System Workflows E2E', () => {
         E2EAssertions.assertFeatureCount(features, 2);
 
         const techFeature = features.features.find(
-          (f) => f.id === techFeatureId
+          (f) => f.id === techFeatureId,
         );
         const bizFeature = features.features.find((f) => f.id === bizFeatureId);
 
@@ -458,15 +458,15 @@ describe('Complete System Workflows E2E', () => {
         // Step 5: Verify comprehensive audit trail
         expect(features.metadata.approval_history).toHaveLength(2);
         expect(
-          features.metadata.approval_history.map((h) => h.approved_by)
+          features.metadata.approval_history.map((h) => h.approved_by),
         ).toContain('tech-lead');
         expect(
-          features.metadata.approval_history.map((h) => h.approved_by)
+          features.metadata.approval_history.map((h) => h.approved_by),
         ).toContain('business-analyst');
 
         console.log('✅ Multi-stakeholder approval workflow test passed');
       },
-      E2E_TIMEOUT
+      E2E_TIMEOUT,
     );
   });
 });

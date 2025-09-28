@@ -81,7 +81,7 @@ describe('RAG System Performance and Load Testing', () => {
         'Medium length technical documentation explaining API implementation patterns and best practices for error handling in distributed systems.',
         'Very long technical content: ' +
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '.repeat(
-            100
+            100,
           ),
         `Code snippet with multiple functions:
          function complexCalculation(_data) {

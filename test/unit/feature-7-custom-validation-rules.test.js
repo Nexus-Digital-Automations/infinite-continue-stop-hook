@@ -51,7 +51,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
           const config = JSON.parse(configData);
           return config.customValidationRules.filter(
             (rule) =>
-              rule.id && rule.name && rule.command && rule.enabled !== false
+              rule.id && rule.name && rule.command && rule.enabled !== false,
           );
         }
         return [];
@@ -102,7 +102,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
           const config = JSON.parse(configData);
           return config.customValidationRules.filter(
             (rule) =>
-              rule.id && rule.name && rule.command && rule.enabled !== false
+              rule.id && rule.name && rule.command && rule.enabled !== false,
           );
         }
         return [];
@@ -141,7 +141,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
           const config = JSON.parse(configData);
           return config.customValidationRules.filter(
             (rule) =>
-              rule.id && rule.name && rule.command && rule.enabled !== false
+              rule.id && rule.name && rule.command && rule.enabled !== false,
           );
         }
         return [];
@@ -161,7 +161,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
           const config = JSON.parse(configData);
           return config.customValidationRules.filter(
             (rule) =>
-              rule.id && rule.name && rule.command && rule.enabled !== false
+              rule.id && rule.name && rule.command && rule.enabled !== false,
           );
         }
         return [];
@@ -182,7 +182,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             const config = JSON.parse(configData);
             return config.customValidationRules.filter(
               (rule) =>
-                rule.id && rule.name && rule.command && rule.enabled !== false
+                rule.id && rule.name && rule.command && rule.enabled !== false,
             );
           }
           return [];
@@ -487,13 +487,13 @@ describe('Feature 7: Custom Project Validation Rules', () => {
       expect(progressReport.validationDetails).toHaveLength(4);
       expect(
         progressReport.validationDetails.some(
-          (v) => v.criterion === 'custom-api-test'
-        )
+          (v) => v.criterion === 'custom-api-test',
+        ),
       ).toBe(true);
       expect(
         progressReport.validationDetails.some(
-          (v) => v.criterion === 'custom-performance-check'
-        )
+          (v) => v.criterion === 'custom-performance-check',
+        ),
       ).toBe(true);
     });
   });
@@ -594,7 +594,7 @@ describe('Feature 7: Custom Project Validation Rules', () => {
             ) {
               return config.customValidationRules.filter(
                 (rule) =>
-                  rule.id && rule.name && rule.command && rule.enabled !== false
+                  rule.id && rule.name && rule.command && rule.enabled !== false,
               );
             }
           }

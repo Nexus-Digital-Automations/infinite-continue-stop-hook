@@ -73,7 +73,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       expect(featuresData.agents[agentId]).toBeDefined();
       expect(featuresData.agents[agentId].status).toBe('active');
       expect(featuresData.agents[agentId].sessionId).toBe(
-        initResult.agent.sessionId
+        initResult.agent.sessionId,
       );
       expect(featuresData.agents[agentId].initialized).toBeDefined();
       expect(featuresData.agents[agentId].lastHeartbeat).toBeDefined();
@@ -101,7 +101,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       const bucketValues = Object.values(statsResult.stats.time_buckets);
       const totalInits = bucketValues.reduce(
         (sum, bucket) => sum + bucket.initializations,
-        0
+        0,
       );
       expect(totalInits).toBeGreaterThan(0);
     });
@@ -143,7 +143,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       });
       expect(statsResult.success).toBe(true);
       expect(statsResult.stats.total_initializations).toBeGreaterThanOrEqual(
-        agentIds.length
+        agentIds.length,
       );
     });
 
@@ -151,7 +151,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       // 1. Create multiple agents concurrently
       const agentIds = Array.from(
         { length: 10 },
-        (_, i) => `concurrent-agent-${i + 1}`
+        (_, i) => `concurrent-agent-${i + 1}`,
       );
 
       const concurrentCommands = agentIds.map((agentId) => ({
@@ -185,7 +185,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       });
       expect(statsResult.success).toBe(true);
       expect(statsResult.stats.total_initializations).toBeGreaterThanOrEqual(
-        agentIds.length
+        agentIds.length,
       );
     });
 
@@ -247,11 +247,11 @@ describe('Agent Lifecycle Integration Tests', () => {
       const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.agents[agentId]).toBeDefined();
       expect(featuresData.agents[agentId].sessionId).toBe(
-        reinitResult.agent.sessionId
+        reinitResult.agent.sessionId,
       );
       expect(featuresData.agents[agentId].previousSessions).toHaveLength(1);
       expect(featuresData.agents[agentId].previousSessions[0]).toBe(
-        originalSessionId
+        originalSessionId,
       );
       expect(featuresData.agents[agentId].reinitialized).toBeDefined();
 
@@ -262,14 +262,14 @@ describe('Agent Lifecycle Integration Tests', () => {
       expect(statsResult.success).toBe(true);
       expect(statsResult.stats.total_reinitializations).toBeGreaterThan(0);
       expect(statsResult.stats.today_totals.reinitializations).toBeGreaterThan(
-        0
+        0,
       );
 
       // Check that reinitialization is tracked in time buckets
       const bucketValues = Object.values(statsResult.stats.time_buckets);
       const totalReinits = bucketValues.reduce(
         (sum, bucket) => sum + bucket.reinitializations,
-        0
+        0,
       );
       expect(totalReinits).toBeGreaterThan(0);
     });
@@ -301,10 +301,10 @@ describe('Agent Lifecycle Integration Tests', () => {
       // 4. Verify final agent state
       const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.agents[agentId].previousSessions).toHaveLength(
-        reinitCount
+        reinitCount,
       );
       expect(featuresData.agents[agentId].previousSessions).toEqual(
-        sessionIds.slice(0, -1)
+        sessionIds.slice(0, -1),
       );
 
       // 5. Verify statistics
@@ -313,7 +313,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       });
       expect(statsResult.success).toBe(true);
       expect(statsResult.stats.total_reinitializations).toBeGreaterThanOrEqual(
-        reinitCount
+        reinitCount,
       );
     });
 
@@ -398,7 +398,7 @@ describe('Agent Lifecycle Integration Tests', () => {
         [agentId, stopReason],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       expect(stopResult.success).toBe(true);
@@ -456,7 +456,7 @@ describe('Agent Lifecycle Integration Tests', () => {
           [testCase.agentId, testCase.reason],
           {
             projectRoot: testDir,
-          }
+          },
         );
 
         expect(stopResult.success).toBe(true);
@@ -508,7 +508,7 @@ describe('Agent Lifecycle Integration Tests', () => {
         [agentId, stopReason],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       // Should succeed (doesn't require agent to exist first)
@@ -540,7 +540,7 @@ describe('Agent Lifecycle Integration Tests', () => {
         const stopResult = await execAPI(
           'authorize-stop',
           [agentId, `Stop authorized by ${agentId}`],
-          { projectRoot: testDir }
+          { projectRoot: testDir },
         );
 
         expect(stopResult.success).toBe(true);
@@ -553,7 +553,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       expect(stopFlagData.authorized_by).toBe(agentIds[agentIds.length - 1]);
       expect(stopFlagData.reason).toBe(
-        `Stop authorized by ${agentIds[agentIds.length - 1]}`
+        `Stop authorized by ${agentIds[agentIds.length - 1]}`,
       );
     });
   });
@@ -614,11 +614,11 @@ describe('Agent Lifecycle Integration Tests', () => {
       const bucketValues = Object.values(updatedStats.time_buckets);
       const totalBucketInits = bucketValues.reduce(
         (sum, bucket) => sum + bucket.initializations,
-        0
+        0,
       );
       const totalBucketReinits = bucketValues.reduce(
         (sum, bucket) => sum + bucket.reinitializations,
-        0
+        0,
       );
 
       expect(totalBucketInits).toBeGreaterThan(0);
@@ -629,7 +629,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       expect(updatedStats.today_totals.reinitializations).toBeGreaterThan(0);
       expect(updatedStats.today_totals.combined).toBe(
         updatedStats.today_totals.initializations +
-          updatedStats.today_totals.reinitializations
+          updatedStats.today_totals.reinitializations,
       );
     });
 
@@ -661,20 +661,20 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       // 5. Verify cumulative tracking
       expect(statsResult2.stats.total_initializations).toBeGreaterThan(
-        statsResult1.stats.total_initializations
+        statsResult1.stats.total_initializations,
       );
       expect(statsResult2.stats.total_reinitializations).toBeGreaterThanOrEqual(
-        statsResult1.stats.total_reinitializations
+        statsResult1.stats.total_reinitializations,
       );
 
       // 6. Verify file persistence
       const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.metadata.initialization_stats).toBeDefined();
       expect(
-        featuresData.metadata.initialization_stats.total_initializations
+        featuresData.metadata.initialization_stats.total_initializations,
       ).toBe(statsResult2.stats.total_initializations);
       expect(
-        featuresData.metadata.initialization_stats.total_reinitializations
+        featuresData.metadata.initialization_stats.total_reinitializations,
       ).toBe(statsResult2.stats.total_reinitializations);
     });
 
@@ -755,7 +755,7 @@ describe('Agent Lifecycle Integration Tests', () => {
         [agentId, stopReason],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       expect(stopResult.success).toBe(true);
@@ -825,7 +825,7 @@ describe('Agent Lifecycle Integration Tests', () => {
           'lead-agent',
           'Team collaboration completed - all agents finished their tasks successfully',
         ],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(stopResult.success).toBe(true);
@@ -836,10 +836,10 @@ describe('Agent Lifecycle Integration Tests', () => {
       });
       expect(statsResult.success).toBe(true);
       expect(statsResult.stats.total_initializations).toBeGreaterThanOrEqual(
-        agentTeam.length
+        agentTeam.length,
       );
       expect(statsResult.stats.total_reinitializations).toBeGreaterThanOrEqual(
-        3
+        3,
       );
 
       // 6. Verify file integrity after complex operations
@@ -866,14 +866,14 @@ describe('Agent Lifecycle Integration Tests', () => {
       // 3. Verify recovery state
       const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.agents[agentId].previousSessions).toHaveLength(
-        recoveryCount
+        recoveryCount,
       );
 
       // 4. Final authorization after recovery
       const stopResult = await execAPI(
         'authorize-stop',
         [agentId, 'Recovery testing completed - system resilience validated'],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(stopResult.success).toBe(true);
@@ -884,7 +884,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       });
       expect(statsResult.success).toBe(true);
       expect(statsResult.stats.total_reinitializations).toBeGreaterThanOrEqual(
-        recoveryCount
+        recoveryCount,
       );
     });
   });

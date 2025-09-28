@@ -54,10 +54,10 @@ describe('FeatureManagerAPI', () => {
     const fs = require('fs');
     fs.promises.access.mockImplementation((...args) => mockFs.access(...args));
     fs.promises.readFile.mockImplementation((...args) =>
-      mockFs.readFile(...args)
+      mockFs.readFile(...args),
     );
     fs.promises.writeFile.mockImplementation((...args) =>
-      mockFs.writeFile(...args)
+      mockFs.writeFile(...args),
     );
 
     // Create API instance
@@ -151,7 +151,7 @@ describe('FeatureManagerAPI', () => {
       test('should not overwrite existing FEATURES.json', async () => {
         // Set up existing file
         const originalData = testHelpers.deepClone(
-          TEST_FIXTURES.featuresWithData
+          TEST_FIXTURES.featuresWithData,
         );
         mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(originalData));
 
@@ -168,7 +168,7 @@ describe('FeatureManagerAPI', () => {
       test('should load existing features file successfully', async () => {
         mockFs.setFile(
           TEST_FEATURES_PATH,
-          JSON.stringify(TEST_FIXTURES.featuresWithData)
+          JSON.stringify(TEST_FIXTURES.featuresWithData),
         );
 
         const features = await api._loadFeatures();
@@ -192,7 +192,7 @@ describe('FeatureManagerAPI', () => {
         mockFs.setFile(TEST_FEATURES_PATH, 'invalid json content');
 
         await expect(api._loadFeatures()).rejects.toThrow(
-          'Failed to load features'
+          'Failed to load features',
         );
       });
 
@@ -200,7 +200,7 @@ describe('FeatureManagerAPI', () => {
         mockFs.setReadError(TEST_FEATURES_PATH, 'Permission denied');
 
         await expect(api._loadFeatures()).rejects.toThrow(
-          'Failed to load features'
+          'Failed to load features',
         );
       });
     });
@@ -221,7 +221,7 @@ describe('FeatureManagerAPI', () => {
         const testData = testHelpers.deepClone(TEST_FIXTURES.emptyFeaturesFile);
 
         await expect(api._saveFeatures(testData)).rejects.toThrow(
-          'Failed to save features'
+          'Failed to save features',
         );
       });
     });
@@ -233,19 +233,19 @@ describe('FeatureManagerAPI', () => {
     describe('_validateFeatureData', () => {
       test('should validate correct feature data successfully', () => {
         expect(() =>
-          api._validateFeatureData(TEST_FIXTURES.validFeature)
+          api._validateFeatureData(TEST_FIXTURES.validFeature),
         ).not.toThrow();
       });
 
       test('should reject null or undefined feature data', () => {
         expect(() => api._validateFeatureData(null)).toThrow(
-          'Feature data must be a valid object'
+          'Feature data must be a valid object',
         );
         expect(() => api._validateFeatureData(undefined)).toThrow(
-          'Feature data must be a valid object'
+          'Feature data must be a valid object',
         );
         expect(() => api._validateFeatureData('string')).toThrow(
-          'Feature data must be a valid object'
+          'Feature data must be a valid object',
         );
       });
 
@@ -254,10 +254,10 @@ describe('FeatureManagerAPI', () => {
           ([key, invalidFeature]) => {
             if (key.startsWith('missing')) {
               expect(() => api._validateFeatureData(invalidFeature)).toThrow(
-                /Required field.*is missing or empty/
+                /Required field.*is missing or empty/,
               );
             }
-          }
+          },
         );
       });
 
@@ -266,7 +266,7 @@ describe('FeatureManagerAPI', () => {
         emptyFeatures.forEach((key) => {
           if (TEST_FIXTURES.invalidFeatures[key]) {
             expect(() =>
-              api._validateFeatureData(TEST_FIXTURES.invalidFeatures[key])
+              api._validateFeatureData(TEST_FIXTURES.invalidFeatures[key]),
             ).toThrow(/Required field.*is missing or empty/);
           }
         });
@@ -275,43 +275,43 @@ describe('FeatureManagerAPI', () => {
       test('should reject invalid category', () => {
         expect(() =>
           api._validateFeatureData(
-            TEST_FIXTURES.invalidFeatures.invalidCategory
-          )
+            TEST_FIXTURES.invalidFeatures.invalidCategory,
+          ),
         ).toThrow(/Invalid category.*Must be one of/);
       });
 
       test('should reject title length violations', () => {
         expect(() =>
-          api._validateFeatureData(TEST_FIXTURES.invalidFeatures.shortTitle)
+          api._validateFeatureData(TEST_FIXTURES.invalidFeatures.shortTitle),
         ).toThrow('Feature title must be between 10 and 200 characters');
         expect(() =>
-          api._validateFeatureData(TEST_FIXTURES.invalidFeatures.longTitle)
+          api._validateFeatureData(TEST_FIXTURES.invalidFeatures.longTitle),
         ).toThrow('Feature title must be between 10 and 200 characters');
       });
 
       test('should reject description length violations', () => {
         expect(() =>
           api._validateFeatureData(
-            TEST_FIXTURES.invalidFeatures.shortDescription
-          )
+            TEST_FIXTURES.invalidFeatures.shortDescription,
+          ),
         ).toThrow('Feature description must be between 20 and 2000 characters');
         expect(() =>
           api._validateFeatureData(
-            TEST_FIXTURES.invalidFeatures.longDescription
-          )
+            TEST_FIXTURES.invalidFeatures.longDescription,
+          ),
         ).toThrow('Feature description must be between 20 and 2000 characters');
       });
 
       test('should reject business value length violations', () => {
         expect(() =>
           api._validateFeatureData(
-            TEST_FIXTURES.invalidFeatures.shortBusinessValue
-          )
+            TEST_FIXTURES.invalidFeatures.shortBusinessValue,
+          ),
         ).toThrow('Business value must be between 10 and 1000 characters');
         expect(() =>
           api._validateFeatureData(
-            TEST_FIXTURES.invalidFeatures.longBusinessValue
-          )
+            TEST_FIXTURES.invalidFeatures.longBusinessValue,
+          ),
         ).toThrow('Business value must be between 10 and 1000 characters');
       });
     });
@@ -345,7 +345,7 @@ describe('FeatureManagerAPI', () => {
       // Setup empty features file for each test
       mockFs.setFile(
         TEST_FEATURES_PATH,
-        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile)
+        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
       );
     });
 
@@ -365,7 +365,7 @@ describe('FeatureManagerAPI', () => {
 
       test('should handle validation errors gracefully', async () => {
         const result = await api.suggestFeature(
-          TEST_FIXTURES.invalidFeatures.missingTitle
+          TEST_FIXTURES.invalidFeatures.missingTitle,
         );
 
         expect(result.success).toBe(false);
@@ -398,7 +398,7 @@ describe('FeatureManagerAPI', () => {
       beforeEach(async () => {
         // Create a suggested feature for approval tests
         const suggestResult = await api.suggestFeature(
-          TEST_FIXTURES.validFeature
+          TEST_FIXTURES.validFeature,
         );
         testFeatureId = suggestResult.feature.id;
       });
@@ -406,17 +406,17 @@ describe('FeatureManagerAPI', () => {
       test('should approve suggested feature successfully', async () => {
         const result = await api.approveFeature(
           testFeatureId,
-          TEST_FIXTURES.validApprovalData
+          TEST_FIXTURES.validApprovalData,
         );
 
         expect(result.success).toBe(true);
         expect(result.feature.id).toBe(testFeatureId);
         expect(result.feature.status).toBe('approved');
         expect(result.feature.approved_by).toBe(
-          TEST_FIXTURES.validApprovalData.approved_by
+          TEST_FIXTURES.validApprovalData.approved_by,
         );
         expect(result.feature.approval_notes).toBe(
-          TEST_FIXTURES.validApprovalData.notes
+          TEST_FIXTURES.validApprovalData.notes,
         );
         expect(result.message).toBe('Feature approved successfully');
       });
@@ -434,7 +434,7 @@ describe('FeatureManagerAPI', () => {
 
         expect(result.success).toBe(false);
         expect(result.error).toContain(
-          'Feature with ID non-existent-id not found'
+          'Feature with ID non-existent-id not found',
         );
       });
 
@@ -447,14 +447,14 @@ describe('FeatureManagerAPI', () => {
 
         expect(result.success).toBe(false);
         expect(result.error).toContain(
-          "Feature must be in 'suggested' status to approve"
+          "Feature must be in 'suggested' status to approve",
         );
       });
 
       test('should update approval history correctly', async () => {
         const result = await api.approveFeature(
           testFeatureId,
-          TEST_FIXTURES.validApprovalData
+          TEST_FIXTURES.validApprovalData,
         );
         expect(result.success).toBe(true);
 
@@ -465,7 +465,7 @@ describe('FeatureManagerAPI', () => {
         expect(historyEntry.feature_id).toBe(testFeatureId);
         expect(historyEntry.action).toBe('approved');
         expect(historyEntry.approved_by).toBe(
-          TEST_FIXTURES.validApprovalData.approved_by
+          TEST_FIXTURES.validApprovalData.approved_by,
         );
       });
 
@@ -496,7 +496,7 @@ describe('FeatureManagerAPI', () => {
       beforeEach(async () => {
         // Create a suggested feature for rejection tests
         const suggestResult = await api.suggestFeature(
-          TEST_FIXTURES.validFeature
+          TEST_FIXTURES.validFeature,
         );
         testFeatureId = suggestResult.feature.id;
       });
@@ -504,17 +504,17 @@ describe('FeatureManagerAPI', () => {
       test('should reject suggested feature successfully', async () => {
         const result = await api.rejectFeature(
           testFeatureId,
-          TEST_FIXTURES.validRejectionData
+          TEST_FIXTURES.validRejectionData,
         );
 
         expect(result.success).toBe(true);
         expect(result.feature.id).toBe(testFeatureId);
         expect(result.feature.status).toBe('rejected');
         expect(result.feature.rejected_by).toBe(
-          TEST_FIXTURES.validRejectionData.rejected_by
+          TEST_FIXTURES.validRejectionData.rejected_by,
         );
         expect(result.feature.rejection_reason).toBe(
-          TEST_FIXTURES.validRejectionData.reason
+          TEST_FIXTURES.validRejectionData.reason,
         );
         expect(result.message).toBe('Feature rejected successfully');
       });
@@ -532,7 +532,7 @@ describe('FeatureManagerAPI', () => {
 
         expect(result.success).toBe(false);
         expect(result.error).toContain(
-          'Feature with ID non-existent-id not found'
+          'Feature with ID non-existent-id not found',
         );
       });
 
@@ -545,14 +545,14 @@ describe('FeatureManagerAPI', () => {
 
         expect(result.success).toBe(false);
         expect(result.error).toContain(
-          "Feature must be in 'suggested' status to reject"
+          "Feature must be in 'suggested' status to reject",
         );
       });
 
       test('should update approval history correctly', async () => {
         const result = await api.rejectFeature(
           testFeatureId,
-          TEST_FIXTURES.validRejectionData
+          TEST_FIXTURES.validRejectionData,
         );
         expect(result.success).toBe(true);
 
@@ -563,10 +563,10 @@ describe('FeatureManagerAPI', () => {
         expect(historyEntry.feature_id).toBe(testFeatureId);
         expect(historyEntry.action).toBe('rejected');
         expect(historyEntry.rejected_by).toBe(
-          TEST_FIXTURES.validRejectionData.rejected_by
+          TEST_FIXTURES.validRejectionData.rejected_by,
         );
         expect(historyEntry.reason).toBe(
-          TEST_FIXTURES.validRejectionData.reason
+          TEST_FIXTURES.validRejectionData.reason,
         );
       });
     });
@@ -601,7 +601,7 @@ describe('FeatureManagerAPI', () => {
       test('should approve multiple features successfully', async () => {
         const result = await api.bulkApproveFeatures(
           suggestedFeatureIds,
-          TEST_FIXTURES.validApprovalData
+          TEST_FIXTURES.validApprovalData,
         );
 
         expect(result.success).toBe(true);
@@ -629,7 +629,7 @@ describe('FeatureManagerAPI', () => {
         expect(result.approved_features).toHaveLength(2);
         expect(result.errors).toHaveLength(1);
         expect(result.errors[0]).toContain(
-          "must be in 'suggested' status to approve"
+          "must be in 'suggested' status to approve",
         );
         expect(result.errors[0]).toContain('Current status: approved');
       });
@@ -664,7 +664,7 @@ describe('FeatureManagerAPI', () => {
         // Use features file with test data
         mockFs.setFile(
           TEST_FEATURES_PATH,
-          JSON.stringify(TEST_FIXTURES.featuresWithData)
+          JSON.stringify(TEST_FIXTURES.featuresWithData),
         );
       });
 
@@ -722,7 +722,7 @@ describe('FeatureManagerAPI', () => {
       beforeEach(() => {
         mockFs.setFile(
           TEST_FEATURES_PATH,
-          JSON.stringify(TEST_FIXTURES.featuresWithData)
+          JSON.stringify(TEST_FIXTURES.featuresWithData),
         );
       });
 
@@ -755,7 +755,7 @@ describe('FeatureManagerAPI', () => {
       test('should handle empty features file', async () => {
         mockFs.setFile(
           TEST_FEATURES_PATH,
-          JSON.stringify(TEST_FIXTURES.emptyFeaturesFile)
+          JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
         );
 
         const result = await api.getFeatureStats();
@@ -786,7 +786,7 @@ describe('FeatureManagerAPI', () => {
         });
 
         await expect(api.withTimeout(slowPromise, 50)).rejects.toThrow(
-          'Operation timed out after 50ms'
+          'Operation timed out after 50ms',
         );
       });
 
@@ -796,7 +796,7 @@ describe('FeatureManagerAPI', () => {
         });
 
         await expect(api.withTimeout(slowPromise)).rejects.toThrow(
-          'Operation timed out after 10000ms'
+          'Operation timed out after 10000ms',
         );
       });
 
@@ -804,7 +804,7 @@ describe('FeatureManagerAPI', () => {
         const rejectPromise = Promise.reject(new Error('Promise failed'));
 
         await expect(api.withTimeout(rejectPromise, 1000)).rejects.toThrow(
-          'Promise failed'
+          'Promise failed',
         );
       });
     });
@@ -896,10 +896,10 @@ describe('FeatureManagerAPI', () => {
         expect(result.featureWorkflow.statuses).toBeDefined();
         expect(result.featureWorkflow.transitions).toBeDefined();
         expect(result.featureWorkflow.statuses.suggested).toBe(
-          'Initial feature suggestion - requires approval'
+          'Initial feature suggestion - requires approval',
         );
         expect(result.featureWorkflow.statuses.approved).toBe(
-          'Feature approved for implementation'
+          'Feature approved for implementation',
         );
       });
 
@@ -941,10 +941,10 @@ describe('FeatureManagerAPI', () => {
 
         expect(guide.commands).toContain('guide - Get comprehensive guide');
         expect(guide.commands).toContain(
-          'suggest-feature - Create feature suggestion'
+          'suggest-feature - Create feature suggestion',
         );
         expect(guide.commands).toContain(
-          'get-initialization-stats - Get initialization usage statistics by time buckets'
+          'get-initialization-stats - Get initialization usage statistics by time buckets',
         );
       });
     });
@@ -956,7 +956,7 @@ describe('FeatureManagerAPI', () => {
     beforeEach(() => {
       mockFs.setFile(
         api.featuresPath,
-        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile)
+        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
       );
     });
 
@@ -1027,7 +1027,7 @@ describe('FeatureManagerAPI', () => {
 
         expect(result.success).toBe(true);
         expect(result.authorization.reason).toBe(
-          'Agent authorized stop after completing all tasks and achieving project perfection'
+          'Agent authorized stop after completing all tasks and achieving project perfection',
         );
       });
 
@@ -1048,7 +1048,7 @@ describe('FeatureManagerAPI', () => {
     beforeEach(() => {
       mockFs.setFile(
         api.featuresPath,
-        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile)
+        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
       );
     });
 
@@ -1077,7 +1077,7 @@ describe('FeatureManagerAPI', () => {
 
         expect(result.success).toBe(true);
         expect(result.stats.current_bucket).toMatch(
-          /^\d{2}:\d{2}-\d{2}:\d{2}$/
+          /^\d{2}:\d{2}-\d{2}:\d{2}$/,
         );
       });
 
@@ -1091,7 +1091,7 @@ describe('FeatureManagerAPI', () => {
         expect(result.stats.today_totals).toBeDefined();
         expect(typeof result.stats.today_totals.initializations).toBe('number');
         expect(typeof result.stats.today_totals.reinitializations).toBe(
-          'number'
+          'number',
         );
       });
     });

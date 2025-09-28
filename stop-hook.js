@@ -4,6 +4,7 @@ const _fs = require('fs');
 const _path = require('path');
 const _TaskManager = require('./lib/taskManager');
 const _Logger = require('./lib/logger');
+const _ValidationDependencyManager = require('./lib/validationDependencyManager');
 
 // ============================================================================
 // NEVER-STOP INFINITE CONTINUE HOOK WITH INSTRUCTIVE TASK MANAGEMENT
@@ -53,19 +54,44 @@ function findClaudeProjectRoot(startDir = process.cwd()) {
  * Check if stop is allowed via endpoint trigger
  */
 /**
- * Feature 1: Validation Progress Reporting
+ * Feature 1: Validation Progress Reporting with Dependency Management
  * Enhanced stop authorization checking with comprehensive validation progress reporting
- * Provides real-time visibility into validation progress, completion percentage, and detailed status
+ * Provides real-time visibility into validation progress, completion percentage, detailed status,
+ * dependency relationships, and intelligent execution planning
  */
 function generateValidationProgressReport(flagData, logger, workingDir) {
+  // Initialize dependency manager for intelligent validation ordering
+  const dependencyManager = new _ValidationDependencyManager(workingDir);
+
+  // Validate dependency configuration
+  const configValidation = dependencyManager.validateDependencyConfiguration();
+  if (!configValidation.valid) {
+    logger.warn(
+      `Validation dependency configuration issues: ${configValidation.issues.map((i) => i.message).join(', ')}`
+    );
+  }
+
+  // Get dependency-aware execution information
+  const executionOrder = dependencyManager.getValidationOrder();
+  const parallelGroups = dependencyManager.getParallelExecutionPlan();
+  const timeEstimates = dependencyManager.getExecutionTimeEstimates();
+
   const progressReport = {
-    totalValidations: 7,
+    totalValidations: executionOrder.length,
     completedValidations: 0,
     failedValidations: 0,
     validationDetails: [],
     overallProgress: 0,
     estimatedTimeRemaining: 0,
     lastValidationTime: new Date().toISOString(),
+    // Add dependency management information
+    dependencyInfo: {
+      executionOrder,
+      parallelGroups,
+      timeEstimates,
+      configurationValid: configValidation.valid,
+      configurationIssues: configValidation.issues,
+    },
   };
 
   // Load custom validation rules from project configuration
@@ -97,24 +123,22 @@ function generateValidationProgressReport(flagData, logger, workingDir) {
     return customRules;
   }
 
-  // Standard validation criteria with progress tracking
-  const standardValidationCriteria = [
-    'focused-codebase',
-    'security-validation',
-    'linter-validation',
-    'type-validation',
-    'build-validation',
-    'start-validation',
-    'test-validation',
-  ];
-
-  // Load and merge custom validation rules
+  // Use dependency-aware validation criteria in execution order
   const customRules = loadCustomValidationRules(workingDir);
   const customCriteriaIds = customRules.map((rule) => rule.id);
-  const validationCriteria = [
-    ...standardValidationCriteria,
-    ...customCriteriaIds,
-  ];
+
+  // Add any custom criteria to dependency manager
+  customRules.forEach((rule) => {
+    dependencyManager.addCustomCriterion(rule.id, {
+      dependencies: rule.dependencies || [],
+      parallel_group: rule.parallel_group || 'custom',
+      estimated_duration: rule.estimated_duration || 60,
+      description: rule.description || rule.name || '',
+    });
+  });
+
+  // Get updated execution order including custom criteria
+  const validationCriteria = dependencyManager.getValidationOrder();
 
   // Process validation results from flag data
   if (flagData.validation_results) {
@@ -159,18 +183,30 @@ function generateValidationProgressReport(flagData, logger, workingDir) {
       100
   );
 
-  // Estimate remaining time based on average validation duration
-  const avgDuration =
+  // Use dependency-aware time estimation for better accuracy
+  const completedCriteria = new Set(
     progressReport.validationDetails
-      .filter((v) => v.duration > 0)
-      .reduce((sum, v) => sum + v.duration, 0) /
-    Math.max(progressReport.completedValidations, 1);
-
-  const remainingValidations =
-    progressReport.totalValidations - progressReport.completedValidations;
-  progressReport.estimatedTimeRemaining = Math.round(
-    avgDuration * remainingValidations
+      .filter((v) => v.status === 'completed')
+      .map((v) => v.criterion)
   );
+
+  // Get intelligent time remaining based on parallel execution potential
+  progressReport.estimatedTimeRemaining =
+    timeEstimates.parallel_time_seconds || 0;
+
+  // Adjust based on actual completion progress
+  if (progressReport.completedValidations > 0) {
+    const remainingCriteria = validationCriteria.filter(
+      (criterion) => !completedCriteria.has(criterion)
+    );
+    const remainingDuration = remainingCriteria.reduce((total, criterion) => {
+      return (
+        total +
+        (dependencyManager.dependencies[criterion]?.estimated_duration || 60)
+      );
+    }, 0);
+    progressReport.estimatedTimeRemaining = Math.round(remainingDuration * 0.8); // Account for parallel execution
+  }
 
   logger.addFlow(
     `Validation progress: ${progressReport.overallProgress}% complete (${progressReport.completedValidations}/${progressReport.totalValidations})`
@@ -879,6 +915,64 @@ process.stdin.on('end', async () => {
     logger.addFlow(
       `Received ${hook_event_name || 'unknown'} event from Claude Code`
     );
+
+    // ========================================================================
+    // CHECK FOR DONE COMMAND IN TRANSCRIPT
+    // ========================================================================
+    // Check if the transcript contains just "DONE" as the last assistant message
+    if (_transcript_path && _transcript_path.trim() !== '') {
+      try {
+        logger.addFlow(
+          `Checking transcript for DONE command: ${_transcript_path}`
+        );
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- transcript path from Claude Code hook
+        if (_fs.existsSync(_transcript_path)) {
+          // eslint-disable-next-line security/detect-non-literal-fs-filename -- transcript path from Claude Code hook
+          const transcriptContent = _fs.readFileSync(_transcript_path, 'utf8');
+
+          // Parse the transcript to find the last assistant message
+          const lines = transcriptContent.split('\n');
+          let lastAssistantMessage = '';
+          let inAssistantBlock = false;
+
+          for (const line of lines) {
+            if (line.startsWith('Assistant:')) {
+              inAssistantBlock = true;
+              lastAssistantMessage = ''; // Reset for new assistant message
+            } else if (line.startsWith('Human:')) {
+              inAssistantBlock = false;
+            } else if (inAssistantBlock) {
+              lastAssistantMessage += line.trim() + ' ';
+            }
+          }
+
+          // Check if the last assistant message is just "DONE"
+          const trimmedMessage = lastAssistantMessage.trim();
+          logger.addFlow(`Last assistant message: "${trimmedMessage}"`);
+
+          if (trimmedMessage === 'DONE' || trimmedMessage === 'DONE.') {
+            logger.addFlow('DONE command detected - allowing stop');
+            logger.logExit(0, 'DONE command detected - allowing stop');
+            logger.save();
+
+            console.error(`
+✅ DONE COMMAND DETECTED
+
+The assistant has written "DONE" as instructed.
+Allowing the conversation to stop.
+
+This is the expected behavior when the /done command is used.
+`);
+            // eslint-disable-next-line n/no-process-exit
+            process.exit(0); // Allow stop when DONE is detected
+          }
+        } else {
+          logger.addFlow(`Transcript file not found: ${_transcript_path}`);
+        }
+      } catch (transcriptError) {
+        logger.addFlow(`Error reading transcript: ${transcriptError.message}`);
+      }
+    }
 
     // Check if TASKS.json exists in current project
     const todoPath = _path.join(workingDir, 'TASKS.json');

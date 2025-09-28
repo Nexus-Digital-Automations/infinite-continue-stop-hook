@@ -72,7 +72,7 @@ describe('API Workflow Integration Tests', () => {
         [JSON.stringify(featureData)],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       expect(suggestResult.success).toBe(true);
@@ -108,14 +108,14 @@ describe('API Workflow Integration Tests', () => {
       const approveResult = await execAPI(
         'approve-feature',
         [featureId, JSON.stringify(approvalData)],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(approveResult.success).toBe(true);
       expect(approveResult.feature.status).toBe('approved');
       expect(approveResult.feature.approved_by).toBe('integration-test');
       expect(approveResult.feature.approval_notes).toBe(
-        'Approved for workflow integration testing'
+        'Approved for workflow integration testing',
       );
 
       // 6. Verify approval is reflected in statistics
@@ -131,18 +131,18 @@ describe('API Workflow Integration Tests', () => {
       const featuresData = await readFeaturesFile(testDir);
       expect(featuresData.metadata.approval_history).toHaveLength(1);
       expect(featuresData.metadata.approval_history[0].feature_id).toBe(
-        featureId
+        featureId,
       );
       expect(featuresData.metadata.approval_history[0].action).toBe('approved');
       expect(featuresData.metadata.approval_history[0].approved_by).toBe(
-        'integration-test'
+        'integration-test',
       );
 
       // 8. Test filtering by status
       const approvedFeaturesResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'approved' })],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(approvedFeaturesResult.success).toBe(true);
@@ -165,7 +165,7 @@ describe('API Workflow Integration Tests', () => {
         [JSON.stringify(featureData)],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       expect(suggestResult.success).toBe(true);
@@ -180,14 +180,14 @@ describe('API Workflow Integration Tests', () => {
       const rejectResult = await execAPI(
         'reject-feature',
         [featureId, JSON.stringify(rejectionData)],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(rejectResult.success).toBe(true);
       expect(rejectResult.feature.status).toBe('rejected');
       expect(rejectResult.feature.rejected_by).toBe('integration-test');
       expect(rejectResult.feature.rejection_reason).toBe(
-        'Not aligned with current testing priorities'
+        'Not aligned with current testing priorities',
       );
 
       // 3. Verify rejection is recorded in approval history
@@ -195,7 +195,7 @@ describe('API Workflow Integration Tests', () => {
       expect(featuresData.metadata.approval_history).toHaveLength(1);
       expect(featuresData.metadata.approval_history[0].action).toBe('rejected');
       expect(featuresData.metadata.approval_history[0].reason).toBe(
-        'Not aligned with current testing priorities'
+        'Not aligned with current testing priorities',
       );
 
       // 4. Verify statistics reflect rejection
@@ -223,7 +223,7 @@ describe('API Workflow Integration Tests', () => {
       const suggestPromises = features.map((featureData) =>
         execAPI('suggest-feature', [JSON.stringify(featureData)], {
           projectRoot: testDir,
-        })
+        }),
       );
 
       const suggestResults = await Promise.all(suggestPromises);
@@ -242,7 +242,7 @@ describe('API Workflow Integration Tests', () => {
       const bulkApproveResult = await execAPI(
         'bulk-approve-features',
         [JSON.stringify(featureIds), JSON.stringify(bulkApprovalData)],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(bulkApproveResult.success).toBe(true);
@@ -254,13 +254,13 @@ describe('API Workflow Integration Tests', () => {
       const listResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'approved' })],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(listResult.success).toBe(true);
       expect(listResult.features).toHaveLength(3);
       expect(listResult.features.every((f) => f.status === 'approved')).toBe(
-        true
+        true,
       );
 
       // 4. Verify approval history contains all approvals
@@ -268,8 +268,8 @@ describe('API Workflow Integration Tests', () => {
       expect(featuresData.metadata.approval_history).toHaveLength(3);
       expect(
         featuresData.metadata.approval_history.every(
-          (h) => h.action === 'approved'
-        )
+          (h) => h.action === 'approved',
+        ),
       ).toBe(true);
     });
   });
@@ -304,7 +304,7 @@ describe('API Workflow Integration Tests', () => {
       expect(initStatsResult.success).toBe(true);
       expect(initStatsResult.stats.total_initializations).toBeGreaterThan(0);
       expect(
-        initStatsResult.stats.today_totals.initializations
+        initStatsResult.stats.today_totals.initializations,
       ).toBeGreaterThan(0);
 
       // 4. Reinitialize agent
@@ -321,21 +321,21 @@ describe('API Workflow Integration Tests', () => {
       // 5. Verify reinitialization is recorded
       const updatedFeaturesData = await readFeaturesFile(testDir);
       expect(updatedFeaturesData.agents[agentId].previousSessions).toHaveLength(
-        1
+        1,
       );
 
       // 6. Check updated initialization statistics
       const updatedInitStatsResult = await execAPI(
         'get-initialization-stats',
         [],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
       expect(updatedInitStatsResult.success).toBe(true);
       expect(
-        updatedInitStatsResult.stats.total_reinitializations
+        updatedInitStatsResult.stats.total_reinitializations,
       ).toBeGreaterThan(0);
       expect(
-        updatedInitStatsResult.stats.today_totals.reinitializations
+        updatedInitStatsResult.stats.today_totals.reinitializations,
       ).toBeGreaterThan(0);
 
       // 7. Authorize stop
@@ -346,7 +346,7 @@ describe('API Workflow Integration Tests', () => {
         [agentId, stopReason],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       expect(authorizeStopResult.success).toBe(true);
@@ -365,7 +365,7 @@ describe('API Workflow Integration Tests', () => {
 
       if (stopFlagExists) {
         const stopFlagData = JSON.parse(
-          await fs.readFile(stopFlagPath, 'utf8')
+          await fs.readFile(stopFlagPath, 'utf8'),
         );
         expect(stopFlagData.stop_allowed).toBe(true);
         expect(stopFlagData.authorized_by).toBe(agentId);
@@ -377,7 +377,7 @@ describe('API Workflow Integration Tests', () => {
       // 1. Initialize multiple agents concurrently
       const agentIds = ['agent-001', 'agent-002', 'agent-003'];
       const initPromises = agentIds.map((agentId) =>
-        execAPI('initialize', [agentId], { projectRoot: testDir })
+        execAPI('initialize', [agentId], { projectRoot: testDir }),
       );
 
       const initResults = await Promise.all(initPromises);
@@ -398,7 +398,7 @@ describe('API Workflow Integration Tests', () => {
 
       // 3. Reinitialize all agents concurrently
       const reinitPromises = agentIds.map((agentId) =>
-        execAPI('reinitialize', [agentId], { projectRoot: testDir })
+        execAPI('reinitialize', [agentId], { projectRoot: testDir }),
       );
 
       const reinitResults = await Promise.all(reinitPromises);
@@ -440,14 +440,14 @@ describe('API Workflow Integration Tests', () => {
         [JSON.stringify(featureData1)],
         {
           projectRoot: testDir,
-        }
+        },
       );
       const suggest2Result = await execAPI(
         'suggest-feature',
         [JSON.stringify(featureData2)],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       expect(suggest1Result.success && suggest2Result.success).toBe(true);
@@ -462,7 +462,7 @@ describe('API Workflow Integration Tests', () => {
             notes: 'Agent approved feature 1',
           }),
         ],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       const reject2Result = await execAPI(
@@ -474,7 +474,7 @@ describe('API Workflow Integration Tests', () => {
             reason: 'Agent rejected feature 2',
           }),
         ],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(approve1Result.success && reject2Result.success).toBe(true);
@@ -512,7 +512,7 @@ describe('API Workflow Integration Tests', () => {
         [JSON.stringify(featureData3)],
         {
           projectRoot: testDir,
-        }
+        },
       );
       const approve3Result = await execAPI(
         'approve-feature',
@@ -523,7 +523,7 @@ describe('API Workflow Integration Tests', () => {
             notes: 'Post-reinit approval',
           }),
         ],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(suggest3Result.success && approve3Result.success).toBe(true);
@@ -571,7 +571,7 @@ describe('API Workflow Integration Tests', () => {
               [operation.agentId],
               {
                 projectRoot: testDir,
-              }
+              },
             );
             expect(initResult.success).toBe(true);
             agents.push(operation.agentId);
@@ -582,7 +582,7 @@ describe('API Workflow Integration Tests', () => {
             const suggestResult = await execAPI(
               'suggest-feature',
               [JSON.stringify(operation.feature)],
-              { projectRoot: testDir }
+              { projectRoot: testDir },
             );
             expect(suggestResult.success).toBe(true);
             suggestedFeatures.push(suggestResult.feature.id);
@@ -596,7 +596,7 @@ describe('API Workflow Integration Tests', () => {
                 suggestedFeatures[operation.index],
                 JSON.stringify({ approved_by: operation.agentId }),
               ],
-              { projectRoot: testDir }
+              { projectRoot: testDir },
             );
             expect(approveResult.success).toBe(true);
             break;
@@ -612,7 +612,7 @@ describe('API Workflow Integration Tests', () => {
                   reason: 'Consistency test rejection',
                 }),
               ],
-              { projectRoot: testDir }
+              { projectRoot: testDir },
             );
             expect(rejectResult.success).toBe(true);
             break;
@@ -752,7 +752,7 @@ describe('API Workflow Integration Tests', () => {
         [JSON.stringify(featureData)],
         {
           projectRoot: testDir,
-        }
+        },
       );
       expect(suggestResult.success).toBe(true);
 
@@ -761,7 +761,7 @@ describe('API Workflow Integration Tests', () => {
         [suggestResult.feature.id],
         {
           projectRoot: testDir,
-        }
+        },
       );
       expect(approveResult.success).toBe(true);
 
@@ -771,11 +771,11 @@ describe('API Workflow Integration Tests', () => {
         [suggestResult.feature.id],
         {
           projectRoot: testDir,
-        }
+        },
       );
       expect(secondApproveResult.success).toBe(false);
       expect(secondApproveResult.error).toContain(
-        "must be in 'suggested' status"
+        "must be in 'suggested' status",
       );
 
       // 3. Try to reject an already approved feature
@@ -784,7 +784,7 @@ describe('API Workflow Integration Tests', () => {
         [suggestResult.feature.id],
         {
           projectRoot: testDir,
-        }
+        },
       );
       expect(rejectResult.success).toBe(false);
       expect(rejectResult.error).toContain("must be in 'suggested' status");

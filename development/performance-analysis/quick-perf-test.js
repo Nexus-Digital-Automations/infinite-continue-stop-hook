@@ -49,7 +49,7 @@ class QuickPerfTest {
     // Validate command is in whitelist
     if (!this.allowedCommands.has(command)) {
       throw new Error(
-        `Invalid command: ${command}. Only whitelisted commands are allowed.`
+        `Invalid command: ${command}. Only whitelisted commands are allowed.`,
       );
     }
 
@@ -62,7 +62,7 @@ class QuickPerfTest {
     const sanitizedArgs = args.map((arg) => {
       if (typeof arg !== 'string') {
         throw new Error(
-          `All arguments must be strings. Received: ${typeof arg}`
+          `All arguments must be strings. Received: ${typeof arg}`,
         );
       }
 
@@ -151,16 +151,16 @@ class QuickPerfTest {
       console.log(`\n📊 Testing: ${endpoint.description}`);
       this.results[endpoint.cmd] = this.measureEndpoint(
         endpoint.cmd,
-        endpoint.args
+        endpoint.args,
       );
 
       const result = this.results[endpoint.cmd];
       console.log(`  ✅ Success Rate: ${result.successRate.toFixed(1)}%`);
       console.log(
-        `  ⏱️  Avg Response: ${result.averageResponseTime.toFixed(2)}ms`
+        `  ⏱️  Avg Response: ${result.averageResponseTime.toFixed(2)}ms`,
       );
       console.log(
-        `  📈 Range: ${result.minResponseTime.toFixed(2)} - ${result.maxResponseTime.toFixed(2)}ms`
+        `  📈 Range: ${result.minResponseTime.toFixed(2)} - ${result.maxResponseTime.toFixed(2)}ms`,
       );
 
       if (result.errors.length > 0) {
@@ -188,7 +188,7 @@ class QuickPerfTest {
 
     // Calculate summary metrics
     const validResults = Object.values(this.results).filter(
-      (r) => r.successRate > 0
+      (r) => r.successRate > 0,
     );
 
     if (validResults.length > 0) {
@@ -201,7 +201,7 @@ class QuickPerfTest {
 
       // Find fastest and slowest
       const sorted = validResults.sort(
-        (a, b) => a.averageResponseTime - b.averageResponseTime
+        (a, b) => a.averageResponseTime - b.averageResponseTime,
       );
       report.summary.fastestEndpoint = {
         command: sorted[0].command,
@@ -298,21 +298,21 @@ function main() {
     console.log('===================================');
     console.log(`Total Endpoints Tested: ${report.summary.totalEndpoints}`);
     console.log(
-      `Overall Success Rate: ${report.summary.overallSuccessRate.toFixed(2)}%`
+      `Overall Success Rate: ${report.summary.overallSuccessRate.toFixed(2)}%`,
     );
     console.log(
-      `Average Response Time: ${report.summary.averageResponseTime.toFixed(2)}ms`
+      `Average Response Time: ${report.summary.averageResponseTime.toFixed(2)}ms`,
     );
 
     if (report.summary.fastestEndpoint) {
       console.log(
-        `Fastest Endpoint: ${report.summary.fastestEndpoint.command} (${report.summary.fastestEndpoint.time.toFixed(2)}ms)`
+        `Fastest Endpoint: ${report.summary.fastestEndpoint.command} (${report.summary.fastestEndpoint.time.toFixed(2)}ms)`,
       );
     }
 
     if (report.summary.slowestEndpoint) {
       console.log(
-        `Slowest Endpoint: ${report.summary.slowestEndpoint.command} (${report.summary.slowestEndpoint.time.toFixed(2)}ms)`
+        `Slowest Endpoint: ${report.summary.slowestEndpoint.command} (${report.summary.slowestEndpoint.time.toFixed(2)}ms)`,
       );
     }
 

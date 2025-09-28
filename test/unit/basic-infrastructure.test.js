@@ -167,7 +167,7 @@ describe('Basic Testing Infrastructure', () => {
             setTimeout(resolve, delay);
           });
           return 'test-complete';
-        }
+        },
       );
 
       expect(result).toBe('test-complete');
@@ -185,7 +185,7 @@ describe('Basic Testing Infrastructure', () => {
             nested: { value: i * 2 },
           }));
           return largeArray.length;
-        }
+        },
       );
 
       expect(result).toBe(1000);
@@ -203,7 +203,7 @@ describe('Basic Testing Infrastructure', () => {
       const timeout = 100; // 100ms timeout
 
       await expect(TestExecution.withTimeout(promise, timeout)).rejects.toThrow(
-        'Test timed out after 100ms'
+        'Test timed out after 100ms',
       );
     });
 
@@ -229,7 +229,7 @@ describe('Basic Testing Infrastructure', () => {
           return 'success-after-retries';
         },
         5,
-        10
+        10,
       ); // 5 max retries, 10ms delay
 
       expect(result).toBe('success-after-retries');
@@ -246,8 +246,8 @@ describe('Basic Testing Infrastructure', () => {
             throw new Error('Persistent failure');
           },
           3,
-          10
-        ) // 3 max retries, 10ms delay
+          10,
+        ), // 3 max retries, 10ms delay
       ).rejects.toThrow('Persistent failure');
 
       expect(attempts).toBe(3);
@@ -259,7 +259,7 @@ describe('Basic Testing Infrastructure', () => {
         (_, i) =>
           new Promise((resolve) => {
             setTimeout(() => resolve(i * 2), 10);
-          })
+          }),
       );
 
       const results = await TestExecution.parallel(promises, 3); // Max 3 concurrent

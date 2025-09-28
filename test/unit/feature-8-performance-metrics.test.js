@@ -7,7 +7,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
   const mockProjectRoot = '/tmp/test-performance-metrics';
   const mockMetricsFile = path.join(
     mockProjectRoot,
-    '.validation-performance.json'
+    '.validation-performance.json',
   );
 
   // Mock TaskManager class for testing
@@ -31,7 +31,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         const path = require('path');
         const metricsFile = path.join(
           this.PROJECT_ROOT,
-          '.validation-performance.json'
+          '.validation-performance.json',
         );
 
         if (!(await this._fileExists(metricsFile))) {
@@ -50,20 +50,20 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         let filteredMetrics = metricsData.metrics || [];
         if (options.timeRange) {
           const cutoffTime = new Date(
-            Date.now() - options.timeRange * 24 * 60 * 60 * 1000
+            Date.now() - options.timeRange * 24 * 60 * 60 * 1000,
           );
           filteredMetrics = filteredMetrics.filter(
-            (m) => new Date(m.startTime) >= cutoffTime
+            (m) => new Date(m.startTime) >= cutoffTime,
           );
         }
         if (options.criterion) {
           filteredMetrics = filteredMetrics.filter(
-            (m) => m.criterion === options.criterion
+            (m) => m.criterion === options.criterion,
           );
         }
         if (options.successOnly !== undefined) {
           filteredMetrics = filteredMetrics.filter(
-            (m) => m.success === options.successOnly
+            (m) => m.success === options.successOnly,
           );
         }
 
@@ -100,7 +100,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         const path = require('path');
         const metricsFile = path.join(
           this.PROJECT_ROOT,
-          '.validation-performance.json'
+          '.validation-performance.json',
         );
 
         if (!(await this._fileExists(metricsFile))) {
@@ -149,7 +149,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         const path = require('path');
         const metricsFile = path.join(
           this.PROJECT_ROOT,
-          '.validation-performance.json'
+          '.validation-performance.json',
         );
 
         if (!(await this._fileExists(metricsFile))) {
@@ -167,7 +167,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         // Calculate benchmarks
         const benchmarks = this._calculatePerformanceBenchmarks(
           metrics,
-          options
+          options,
         );
 
         return {
@@ -213,7 +213,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         successRate: Math.round(successRate * 100) / 100,
         timing: {
           average: Math.round(
-            durations.reduce((sum, d) => sum + d, 0) / durations.length
+            durations.reduce((sum, d) => sum + d, 0) / durations.length,
           ),
           median: p50,
           min: Math.min(...durations),
@@ -254,15 +254,15 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           // Generate recommendations
           if (criterion.includes('build')) {
             recommendations.push(
-              `Consider implementing incremental builds for ${criterion}`
+              `Consider implementing incremental builds for ${criterion}`,
             );
           } else if (criterion.includes('test')) {
             recommendations.push(
-              `Optimize test suite for ${criterion} - consider parallel execution`
+              `Optimize test suite for ${criterion} - consider parallel execution`,
             );
           } else if (criterion.includes('linter')) {
             recommendations.push(
-              `Review linter configuration for ${criterion} - disable non-critical rules`
+              `Review linter configuration for ${criterion} - disable non-critical rules`,
             );
           }
         }
@@ -281,11 +281,11 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         recommendations,
         totalCriteria: Object.keys(byCriterion).length,
         averageExecutionTime: Math.round(
-          metrics.reduce((sum, m) => sum + m.durationMs, 0) / metrics.length
+          metrics.reduce((sum, m) => sum + m.durationMs, 0) / metrics.length,
         ),
         slowestCriterion: bottlenecks[0] || null,
         fastestCriterion: Object.entries(byCriterion).sort(
-          (a, b) => a[1].avgDuration - b[1].avgDuration
+          (a, b) => a[1].avgDuration - b[1].avgDuration,
         )[0],
       };
     }
@@ -329,21 +329,21 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       const timeRange = options.timeRange || 30; // days
       const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
       const recentMetrics = metrics.filter(
-        (m) => new Date(m.startTime) >= cutoffDate
+        (m) => new Date(m.startTime) >= cutoffDate,
       );
 
       return {
         overall: {
           current_avg: Math.round(
             recentMetrics.reduce((sum, m) => sum + m.durationMs, 0) /
-              recentMetrics.length
+              recentMetrics.length,
           ),
           historical_avg: Math.round(
-            metrics.reduce((sum, m) => sum + m.durationMs, 0) / metrics.length
+            metrics.reduce((sum, m) => sum + m.durationMs, 0) / metrics.length,
           ),
           improvement_percentage: this._calculateImprovementPercentage(
             metrics,
-            recentMetrics
+            recentMetrics,
           ),
         },
         by_criterion: Object.entries(byCriterion).map(([criterion, stats]) => ({
@@ -352,7 +352,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           grade: this._getPerformanceGrade(stats.avgDuration),
           meets_target: this._meetsPerformanceTarget(
             criterion,
-            stats.avgDuration
+            stats.avgDuration,
           ),
         })),
         comparison_period: `${timeRange} days`,
@@ -360,7 +360,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           total_data_points: metrics.length,
           recent_data_points: recentMetrics.length,
           data_completeness: Math.round(
-            (recentMetrics.length / Math.min(metrics.length, 100)) * 100
+            (recentMetrics.length / Math.min(metrics.length, 100)) * 100,
           ),
         },
       };
@@ -594,7 +594,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       expect(result.success).toBe(true);
       expect(result.bottlenecks).toEqual([]);
       expect(result.message).toBe(
-        'No performance data available for bottleneck analysis'
+        'No performance data available for bottleneck analysis',
       );
     });
 
@@ -633,7 +633,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       expect(result.bottlenecks[1].criterion).toBe('linter-validation');
       expect(result.bottlenecks[1].severity).toBe('moderate');
       expect(result.recommendations).toContain(
-        'Consider implementing incremental builds for build-validation'
+        'Consider implementing incremental builds for build-validation',
       );
       expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
     });
@@ -672,7 +672,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       expect(result.success).toBe(true);
       expect(result.benchmarks).toBe(null);
       expect(result.message).toBe(
-        'No performance data available for benchmarking'
+        'No performance data available for benchmarking',
       );
     });
 
@@ -709,14 +709,14 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       expect(result.benchmarks.by_criterion).toHaveLength(3);
 
       const linterBenchmark = result.benchmarks.by_criterion.find(
-        (c) => c.criterion === 'linter-validation'
+        (c) => c.criterion === 'linter-validation',
       );
       expect(linterBenchmark.benchmark).toBe(1500);
       expect(linterBenchmark.grade).toBe('B'); // 1000ms < duration < 2000ms
       expect(linterBenchmark.meets_target).toBe(true); // < 2000ms target
 
       const buildBenchmark = result.benchmarks.by_criterion.find(
-        (c) => c.criterion === 'build-validation'
+        (c) => c.criterion === 'build-validation',
       );
       expect(buildBenchmark.benchmark).toBe(25000);
       expect(buildBenchmark.grade).toBe('F'); // > 10000ms
@@ -724,7 +724,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
       expect(result.industry_standards).toBeDefined();
       expect(result.industry_standards.linter_validation.target).toBe(
-        '< 2000ms'
+        '< 2000ms',
       );
       expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
     });
@@ -755,14 +755,14 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       expect(result.recommendations).toHaveLength(2);
 
       const linterRec = result.recommendations.find(
-        (r) => r.criterion === 'linter-validation'
+        (r) => r.criterion === 'linter-validation',
       );
       expect(linterRec.current).toBe('3000ms');
       expect(linterRec.target).toBe('< 2000ms');
       expect(linterRec.suggestion).toContain('Consider using faster linters');
 
       const testRec = result.recommendations.find(
-        (r) => r.criterion === 'test-validation'
+        (r) => r.criterion === 'test-validation',
       );
       expect(testRec.current).toBe('15000ms');
       expect(testRec.target).toBe('< 10000ms');
@@ -799,22 +799,22 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
     test('should check performance targets correctly', () => {
       expect(
-        taskManager._meetsPerformanceTarget('linter-validation', 1500)
+        taskManager._meetsPerformanceTarget('linter-validation', 1500),
       ).toBe(true);
       expect(
-        taskManager._meetsPerformanceTarget('linter-validation', 3000)
+        taskManager._meetsPerformanceTarget('linter-validation', 3000),
       ).toBe(false);
       expect(
-        taskManager._meetsPerformanceTarget('build-validation', 25000)
+        taskManager._meetsPerformanceTarget('build-validation', 25000),
       ).toBe(true);
       expect(
-        taskManager._meetsPerformanceTarget('build-validation', 35000)
+        taskManager._meetsPerformanceTarget('build-validation', 35000),
       ).toBe(false);
       expect(
-        taskManager._meetsPerformanceTarget('unknown-validation', 4000)
+        taskManager._meetsPerformanceTarget('unknown-validation', 4000),
       ).toBe(true); // Default 5000ms
       expect(
-        taskManager._meetsPerformanceTarget('unknown-validation', 6000)
+        taskManager._meetsPerformanceTarget('unknown-validation', 6000),
       ).toBe(false);
     });
   });

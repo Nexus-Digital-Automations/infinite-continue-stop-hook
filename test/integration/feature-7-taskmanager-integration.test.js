@@ -46,7 +46,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           const fs = require('fs').promises;
           const configPath = path.join(
             mockProjectRoot,
-            '.claude-validation.json'
+            '.claude-validation.json',
           );
 
           try {
@@ -63,7 +63,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     rule.id &&
                     rule.name &&
                     rule.command &&
-                    rule.enabled !== false
+                    rule.enabled !== false,
                 );
               }
             }
@@ -92,7 +92,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           const fs = require('fs').promises;
           const configPath = path.join(
             '/nonexistent',
-            '.claude-validation.json'
+            '.claude-validation.json',
           );
 
           try {
@@ -109,7 +109,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     rule.id &&
                     rule.name &&
                     rule.command &&
-                    rule.enabled !== false
+                    rule.enabled !== false,
                 );
               }
             }
@@ -157,7 +157,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           const fs = require('fs').promises;
           const configPath = path.join(
             mockProjectRoot,
-            '.claude-validation.json'
+            '.claude-validation.json',
           );
 
           try {
@@ -174,7 +174,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     rule.id &&
                     rule.name &&
                     rule.command &&
-                    rule.enabled !== false
+                    rule.enabled !== false,
                 );
               }
             }
@@ -199,7 +199,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                 // Check if this is a custom validation rule
                 const customRules = await this._loadCustomValidationRules();
                 const customRule = customRules.find(
-                  (rule) => rule.id === criterion
+                  (rule) => rule.id === criterion,
                 );
 
                 if (customRule) {
@@ -260,7 +260,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
       const result =
         await mockTaskManager._performLanguageAgnosticValidationCore(
-          'custom-api-tests'
+          'custom-api-tests',
         );
 
       expect(result.success).toBe(true);
@@ -284,7 +284,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
               default: {
                 const customRules = this._loadCustomValidationRules();
                 const customRule = customRules.find(
-                  (rule) => rule.id === criterion
+                  (rule) => rule.id === criterion,
                 );
 
                 if (customRule) {
@@ -305,12 +305,12 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
       const result =
         await mockTaskManager._performLanguageAgnosticValidationCore(
-          'nonexistent-rule'
+          'nonexistent-rule',
         );
 
       expect(result.success).toBe(false);
       expect(result.error).toContain(
-        'Unknown validation criterion: nonexistent-rule'
+        'Unknown validation criterion: nonexistent-rule',
       );
     });
 
@@ -337,7 +337,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           const fs = require('fs').promises;
           const configPath = path.join(
             mockProjectRoot,
-            '.claude-validation.json'
+            '.claude-validation.json',
           );
 
           try {
@@ -354,7 +354,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     rule.id &&
                     rule.name &&
                     rule.command &&
-                    rule.enabled !== false
+                    rule.enabled !== false,
                 );
               }
             }
@@ -371,7 +371,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           try {
             const customRules = await this._loadCustomValidationRules();
             const customRule = customRules.find(
-              (rule) => rule.id === criterion
+              (rule) => rule.id === criterion,
             );
 
             if (customRule) {
@@ -407,7 +407,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
       const result =
         await mockTaskManager._performLanguageAgnosticValidationCore(
-          'failing-rule'
+          'failing-rule',
         );
 
       expect(result.success).toBe(false);
@@ -445,7 +445,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           const fs = require('fs').promises;
           const configPath = path.join(
             mockProjectRoot,
-            '.claude-validation.json'
+            '.claude-validation.json',
           );
 
           try {
@@ -462,7 +462,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     rule.id &&
                     rule.name &&
                     rule.command &&
-                    rule.enabled !== false
+                    rule.enabled !== false,
                 );
               }
             }
@@ -479,7 +479,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           try {
             const customRules = await this._loadCustomValidationRules();
             const customRule = customRules.find(
-              (rule) => rule.id === criterion
+              (rule) => rule.id === criterion,
             );
 
             if (customRule) {
@@ -543,7 +543,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
       const result =
         await mockTaskManager._performLanguageAgnosticValidationCore(
-          'env-rule'
+          'env-rule',
         );
 
       expect(result.success).toBe(true);
@@ -577,7 +577,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           const fs = require('fs').promises;
           const configPath = path.join(
             mockProjectRoot,
-            '.claude-validation.json'
+            '.claude-validation.json',
           );
 
           try {
@@ -594,7 +594,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     rule.id &&
                     rule.name &&
                     rule.command &&
-                    rule.enabled !== false
+                    rule.enabled !== false,
                 );
               }
             }
@@ -611,7 +611,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           try {
             const customRules = await this._loadCustomValidationRules();
             const customRule = customRules.find(
-              (rule) => rule.id === criterion
+              (rule) => rule.id === criterion,
             );
 
             if (customRule) {
@@ -674,7 +674,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
       const result =
         await mockTaskManager._performLanguageAgnosticValidationCore(
-          'exit-code-rule'
+          'exit-code-rule',
         );
 
       expect(result.success).toBe(true);
@@ -708,7 +708,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           const fs = require('fs').promises;
           const configPath = path.join(
             mockProjectRoot,
-            '.claude-validation.json'
+            '.claude-validation.json',
           );
 
           try {
@@ -725,7 +725,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     rule.id &&
                     rule.name &&
                     rule.command &&
-                    rule.enabled !== false
+                    rule.enabled !== false,
                 );
               }
             }
@@ -742,7 +742,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           try {
             const customRules = await this._loadCustomValidationRules();
             const customRule = customRules.find(
-              (rule) => rule.id === criterion
+              (rule) => rule.id === criterion,
             );
 
             if (customRule) {
@@ -805,7 +805,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
 
       const result =
         await mockTaskManager._performLanguageAgnosticValidationCore(
-          'multi-criteria-rule'
+          'multi-criteria-rule',
         );
 
       expect(result.success).toBe(true);
@@ -830,7 +830,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           const fs = require('fs').promises;
           const configPath = path.join(
             mockProjectRoot,
-            '.claude-validation.json'
+            '.claude-validation.json',
           );
 
           try {
@@ -847,7 +847,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     rule.id &&
                     rule.name &&
                     rule.command &&
-                    rule.enabled !== false
+                    rule.enabled !== false,
                 );
               }
             }
@@ -879,7 +879,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
           const fs = require('fs').promises;
           const configPath = path.join(
             mockProjectRoot,
-            '.claude-validation.json'
+            '.claude-validation.json',
           );
 
           try {
@@ -896,7 +896,7 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
                     rule.id &&
                     rule.name &&
                     rule.command &&
-                    rule.enabled !== false
+                    rule.enabled !== false,
                 );
               }
             }

@@ -8,7 +8,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
   const mockProjectRoot = '/tmp/test-performance-api-integration';
   const mockMetricsFile = path.join(
     mockProjectRoot,
-    '.validation-performance.json'
+    '.validation-performance.json',
   );
   const taskManagerPath = path.resolve(__dirname, '../../taskmanager-api.js');
 
@@ -123,7 +123,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
   describe('get-validation-performance-metrics endpoint', () => {
     test('should return empty metrics when no data available', () => {
       const result = executeTaskManagerCommand(
-        'get-validation-performance-metrics'
+        'get-validation-performance-metrics',
       );
 
       expect(result.success).toBe(true);
@@ -136,7 +136,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       createMockMetricsData();
 
       const result = executeTaskManagerCommand(
-        'get-validation-performance-metrics'
+        'get-validation-performance-metrics',
       );
 
       expect(result.success).toBe(true);
@@ -152,7 +152,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
-        '\'{"criterion":"linter-validation"}\''
+        '\'{"criterion":"linter-validation"}\'',
       );
 
       expect(result.success).toBe(true);
@@ -167,7 +167,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
-        '\'{"successOnly":false}\''
+        '\'{"successOnly":false}\'',
       );
 
       expect(result.success).toBe(true);
@@ -181,7 +181,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
-        '\'{"limit":2}\''
+        '\'{"limit":2}\'',
       );
 
       expect(result.success).toBe(true);
@@ -193,7 +193,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       createMockMetricsData();
 
       const result = executeTaskManagerCommand(
-        'get-validation-performance-metrics'
+        'get-validation-performance-metrics',
       );
 
       expect(result.success).toBe(true);
@@ -209,13 +209,13 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
   describe('identify-performance-bottlenecks endpoint', () => {
     test('should return empty bottlenecks when no data available', () => {
       const result = executeTaskManagerCommand(
-        'identify-performance-bottlenecks'
+        'identify-performance-bottlenecks',
       );
 
       expect(result.success).toBe(true);
       expect(result.bottlenecks).toEqual([]);
       expect(result.message).toBe(
-        'No performance data available for bottleneck analysis'
+        'No performance data available for bottleneck analysis',
       );
     });
 
@@ -223,7 +223,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       createMockMetricsData();
 
       const result = executeTaskManagerCommand(
-        'identify-performance-bottlenecks'
+        'identify-performance-bottlenecks',
       );
 
       expect(result.success).toBe(true);
@@ -246,7 +246,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'identify-performance-bottlenecks',
-        '\'{"slowThreshold":2000,"criticalThreshold":6000}\''
+        '\'{"slowThreshold":2000,"criticalThreshold":6000}\'',
       );
 
       expect(result.success).toBe(true);
@@ -255,7 +255,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(result.thresholds.criticalThreshold).toBe(6000);
 
       const criticalBottlenecks = result.bottlenecks.filter(
-        (b) => b.severity === 'critical'
+        (b) => b.severity === 'critical',
       );
       expect(criticalBottlenecks).toHaveLength(2); // build and test > 6000ms
     });
@@ -264,19 +264,19 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       createMockMetricsData();
 
       const result = executeTaskManagerCommand(
-        'identify-performance-bottlenecks'
+        'identify-performance-bottlenecks',
       );
 
       expect(result.success).toBe(true);
       expect(result.recommendations).toBeDefined();
 
       const buildRecommendation = result.recommendations.find(
-        (r) => r.includes('build') && r.includes('incremental builds')
+        (r) => r.includes('build') && r.includes('incremental builds'),
       );
       expect(buildRecommendation).toBeDefined();
 
       const testRecommendation = result.recommendations.find(
-        (r) => r.includes('test') && r.includes('parallel execution')
+        (r) => r.includes('test') && r.includes('parallel execution'),
       );
       expect(testRecommendation).toBeDefined();
     });
@@ -289,7 +289,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(result.success).toBe(true);
       expect(result.trends).toEqual([]);
       expect(result.message).toBe(
-        'No performance data available for trend analysis'
+        'No performance data available for trend analysis',
       );
     });
 
@@ -310,7 +310,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'get-performance-trends',
-        '\'{"groupBy":"hourly"}\''
+        '\'{"groupBy":"hourly"}\'',
       );
 
       expect(result.success).toBe(true);
@@ -336,7 +336,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(result.success).toBe(true);
       expect(result.report).toBe(null);
       expect(result.message).toBe(
-        'No timing data available for detailed report'
+        'No timing data available for detailed report',
       );
     });
 
@@ -355,7 +355,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(result.report.criteriaBreakdown).toHaveLength(5);
 
       const buildCriteria = result.report.criteriaBreakdown.find(
-        (c) => c.criterion === 'build-validation'
+        (c) => c.criterion === 'build-validation',
       );
       expect(buildCriteria).toBeDefined();
       expect(buildCriteria.performance_grade).toBe('F'); // 15000ms > 10000ms
@@ -370,7 +370,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'get-detailed-timing-report',
-        '\'{"recent":3}\''
+        '\'{"recent":3}\'',
       );
 
       expect(result.success).toBe(true);
@@ -389,7 +389,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       const distribution = result.report.performanceDistribution;
       const totalCount = distribution.reduce(
         (sum, range) => sum + range.count,
-        0
+        0,
       );
       expect(totalCount).toBe(5); // All metrics categorized
     });
@@ -438,7 +438,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'analyze-resource-usage',
-        '\'{"analysisType":"memory_focused"}\''
+        '\'{"analysisType":"memory_focused"}\'',
       );
 
       expect(result.success).toBe(true);
@@ -453,7 +453,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(result.success).toBe(true);
       expect(result.benchmarks).toBe(null);
       expect(result.message).toBe(
-        'No performance data available for benchmarking'
+        'No performance data available for benchmarking',
       );
     });
 
@@ -482,13 +482,13 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       expect(result.success).toBe(true);
 
       const buildBenchmark = result.benchmarks.by_criterion.find(
-        (c) => c.criterion === 'build-validation'
+        (c) => c.criterion === 'build-validation',
       );
       expect(buildBenchmark).toBeDefined();
       expect(buildBenchmark.meets_target).toBe(true); // 15000ms < 30000ms target
 
       const testBenchmark = result.benchmarks.by_criterion.find(
-        (c) => c.criterion === 'test-validation'
+        (c) => c.criterion === 'test-validation',
       );
       expect(testBenchmark).toBeDefined();
       expect(testBenchmark.meets_target).toBe(true); // 8000ms < 10000ms target
@@ -518,7 +518,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
       const result = executeTaskManagerCommand(
         'get-performance-benchmarks',
-        '\'{"timeRange":7}\''
+        '\'{"timeRange":7}\'',
       );
 
       expect(result.success).toBe(true);
@@ -533,7 +533,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       const result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
         'invalid-json',
-        { stdio: 'pipe' }
+        { stdio: 'pipe' },
       );
 
       expect(result.success).toBe(false);
@@ -545,7 +545,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       fs.writeFileSync(mockMetricsFile, 'invalid json content');
 
       const result = executeTaskManagerCommand(
-        'get-validation-performance-metrics'
+        'get-validation-performance-metrics',
       );
 
       expect(result.success).toBe(false);

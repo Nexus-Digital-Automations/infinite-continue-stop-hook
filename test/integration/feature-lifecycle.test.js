@@ -68,7 +68,7 @@ describe('Feature Lifecycle Integration Tests', () => {
           description: `Comprehensive test for ${category} category feature lifecycle`,
           business_value: `Validates ${category} workflow functionality`,
           category,
-        })
+        }),
       );
 
       // 2. Suggest all features
@@ -79,7 +79,7 @@ describe('Feature Lifecycle Integration Tests', () => {
           [JSON.stringify(featureData)],
           {
             projectRoot: testDir,
-          }
+          },
         );
 
         expect(result.success).toBe(true);
@@ -99,7 +99,7 @@ describe('Feature Lifecycle Integration Tests', () => {
       expect(listResult.success).toBe(true);
       expect(listResult.features).toHaveLength(6);
       expect(listResult.features.every((f) => f.status === 'suggested')).toBe(
-        true
+        true,
       );
 
       // 4. Test filtering by category
@@ -107,7 +107,7 @@ describe('Feature Lifecycle Integration Tests', () => {
         const categoryResult = await execAPI(
           'list-features',
           [JSON.stringify({ category })],
-          { projectRoot: testDir }
+          { projectRoot: testDir },
         );
 
         expect(categoryResult.success).toBe(true);
@@ -164,7 +164,7 @@ describe('Feature Lifecycle Integration Tests', () => {
           [JSON.stringify(incompleteFeature)],
           {
             projectRoot: testDir,
-          }
+          },
         );
 
         expect(result.success).toBe(false);
@@ -184,7 +184,7 @@ describe('Feature Lifecycle Integration Tests', () => {
         [JSON.stringify(invalidCategoryFeature)],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       expect(invalidResult.success).toBe(false);
@@ -204,7 +204,7 @@ describe('Feature Lifecycle Integration Tests', () => {
         [JSON.stringify(tooShortFeature)],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       expect(shortResult.success).toBe(false);
@@ -223,7 +223,7 @@ describe('Feature Lifecycle Integration Tests', () => {
         [JSON.stringify(tooLongFeature)],
         {
           projectRoot: testDir,
-        }
+        },
       );
 
       expect(longResult.success).toBe(false);
@@ -241,7 +241,7 @@ describe('Feature Lifecycle Integration Tests', () => {
           category: ['enhancement', 'bug-fix', 'new-feature', 'performance'][
             i % 4
           ],
-        })
+        }),
       );
 
       const commands = features.map((featureData) => ({
@@ -301,7 +301,7 @@ describe('Feature Lifecycle Integration Tests', () => {
           [JSON.stringify(featureData)],
           {
             projectRoot: testDir,
-          }
+          },
         );
         expect(result.success).toBe(true);
         featureIds.push(result.feature.id);
@@ -327,16 +327,16 @@ describe('Feature Lifecycle Integration Tests', () => {
         const approveResult = await execAPI(
           'approve-feature',
           [featureIds[i], JSON.stringify(approvalData[i])],
-          { projectRoot: testDir }
+          { projectRoot: testDir },
         );
 
         expect(approveResult.success).toBe(true);
         expect(approveResult.feature.status).toBe('approved');
         expect(approveResult.feature.approved_by).toBe(
-          approvalData[i].approved_by
+          approvalData[i].approved_by,
         );
         expect(approveResult.feature.approval_notes).toBe(
-          approvalData[i].notes
+          approvalData[i].notes,
         );
         expect(approveResult.feature.approval_date).toBeDefined();
       }
@@ -356,13 +356,13 @@ describe('Feature Lifecycle Integration Tests', () => {
       const approvedResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'approved' })],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(approvedResult.success).toBe(true);
       expect(approvedResult.features).toHaveLength(3);
       expect(
-        approvedResult.features.every((f) => f.status === 'approved')
+        approvedResult.features.every((f) => f.status === 'approved'),
       ).toBe(true);
 
       // 5. Verify statistics
@@ -380,7 +380,7 @@ describe('Feature Lifecycle Integration Tests', () => {
         generateTestFeature({
           title: `Bulk Approval Feature ${i + 1}`,
           category: ['enhancement', 'bug-fix', 'performance'][i % 3],
-        })
+        }),
       );
 
       const featureIds = [];
@@ -390,7 +390,7 @@ describe('Feature Lifecycle Integration Tests', () => {
           [JSON.stringify(featureData)],
           {
             projectRoot: testDir,
-          }
+          },
         );
         expect(result.success).toBe(true);
         featureIds.push(result.feature.id);
@@ -406,7 +406,7 @@ describe('Feature Lifecycle Integration Tests', () => {
       const bulkResult = await execAPI(
         'bulk-approve-features',
         [JSON.stringify(bulkIds), JSON.stringify(bulkApprovalData)],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(bulkResult.success).toBe(true);
@@ -418,7 +418,7 @@ describe('Feature Lifecycle Integration Tests', () => {
       const listApprovedResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'approved' })],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(listApprovedResult.success).toBe(true);
@@ -426,7 +426,7 @@ describe('Feature Lifecycle Integration Tests', () => {
       listApprovedResult.features.forEach((feature) => {
         expect(feature.approved_by).toBe('bulk-approval-system');
         expect(feature.approval_notes).toBe(
-          'Batch approved for Sprint 2024-Q1'
+          'Batch approved for Sprint 2024-Q1',
         );
       });
 
@@ -435,7 +435,7 @@ describe('Feature Lifecycle Integration Tests', () => {
         const approveResult = await execAPI(
           'approve-feature',
           [featureId, JSON.stringify({ approved_by: 'individual-approver' })],
-          { projectRoot: testDir }
+          { projectRoot: testDir },
         );
 
         expect(approveResult.success).toBe(true);
@@ -445,7 +445,7 @@ describe('Feature Lifecycle Integration Tests', () => {
       const finalListResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'approved' })],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(finalListResult.success).toBe(true);
@@ -468,7 +468,7 @@ describe('Feature Lifecycle Integration Tests', () => {
         [JSON.stringify(featureData)],
         {
           projectRoot: testDir,
-        }
+        },
       );
       expect(suggestResult.success).toBe(true);
 
@@ -477,7 +477,7 @@ describe('Feature Lifecycle Integration Tests', () => {
         [suggestResult.feature.id],
         {
           projectRoot: testDir,
-        }
+        },
       );
       expect(approveResult.success).toBe(true);
 
@@ -487,7 +487,7 @@ describe('Feature Lifecycle Integration Tests', () => {
         [suggestResult.feature.id],
         {
           projectRoot: testDir,
-        }
+        },
       );
       expect(secondApproveResult.success).toBe(false);
       expect(secondApproveResult.error).toContain('suggested');
@@ -498,7 +498,7 @@ describe('Feature Lifecycle Integration Tests', () => {
         [suggestResult.feature.id],
         {
           projectRoot: testDir,
-        }
+        },
       );
       expect(rejectResult.success).toBe(false);
       expect(rejectResult.error).toContain('suggested');
@@ -534,7 +534,7 @@ describe('Feature Lifecycle Integration Tests', () => {
           [JSON.stringify(featureData)],
           {
             projectRoot: testDir,
-          }
+          },
         );
         expect(result.success).toBe(true);
         featureIds.push(result.feature.id);
@@ -557,16 +557,16 @@ describe('Feature Lifecycle Integration Tests', () => {
         const rejectResult = await execAPI(
           'reject-feature',
           [featureIds[i], JSON.stringify(rejectionReasons[i])],
-          { projectRoot: testDir }
+          { projectRoot: testDir },
         );
 
         expect(rejectResult.success).toBe(true);
         expect(rejectResult.feature.status).toBe('rejected');
         expect(rejectResult.feature.rejected_by).toBe(
-          rejectionReasons[i].rejected_by
+          rejectionReasons[i].rejected_by,
         );
         expect(rejectResult.feature.rejection_reason).toBe(
-          rejectionReasons[i].reason
+          rejectionReasons[i].reason,
         );
         expect(rejectResult.feature.rejection_date).toBeDefined();
       }
@@ -586,13 +586,13 @@ describe('Feature Lifecycle Integration Tests', () => {
       const rejectedResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'rejected' })],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(rejectedResult.success).toBe(true);
       expect(rejectedResult.features).toHaveLength(3);
       expect(
-        rejectedResult.features.every((f) => f.status === 'rejected')
+        rejectedResult.features.every((f) => f.status === 'rejected'),
       ).toBe(true);
 
       // 5. Verify statistics
@@ -615,7 +615,7 @@ describe('Feature Lifecycle Integration Tests', () => {
         [JSON.stringify(featureData)],
         {
           projectRoot: testDir,
-        }
+        },
       );
       expect(suggestResult.success).toBe(true);
 
@@ -625,7 +625,7 @@ describe('Feature Lifecycle Integration Tests', () => {
           suggestResult.feature.id,
           JSON.stringify({ rejected_by: 'test', reason: 'Testing rejection' }),
         ],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
       expect(rejectResult.success).toBe(true);
 
@@ -635,7 +635,7 @@ describe('Feature Lifecycle Integration Tests', () => {
         [suggestResult.feature.id],
         {
           projectRoot: testDir,
-        }
+        },
       );
       expect(approveResult.success).toBe(false);
       expect(approveResult.error).toContain('suggested');
@@ -646,7 +646,7 @@ describe('Feature Lifecycle Integration Tests', () => {
         [suggestResult.feature.id],
         {
           projectRoot: testDir,
-        }
+        },
       );
       expect(secondRejectResult.success).toBe(false);
       expect(secondRejectResult.error).toContain('suggested');
@@ -710,7 +710,7 @@ describe('Feature Lifecycle Integration Tests', () => {
         await execAPI(
           'reject-feature',
           [features[i].id, JSON.stringify({ reason: 'Test rejection' })],
-          { projectRoot: testDir }
+          { projectRoot: testDir },
         );
       }
     });
@@ -720,39 +720,39 @@ describe('Feature Lifecycle Integration Tests', () => {
       const suggestedResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'suggested' })],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(suggestedResult.success).toBe(true);
       expect(suggestedResult.features).toHaveLength(1);
       expect(
-        suggestedResult.features.every((f) => f.status === 'suggested')
+        suggestedResult.features.every((f) => f.status === 'suggested'),
       ).toBe(true);
 
       // 2. Test approved filter
       const approvedResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'approved' })],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(approvedResult.success).toBe(true);
       expect(approvedResult.features).toHaveLength(3);
       expect(
-        approvedResult.features.every((f) => f.status === 'approved')
+        approvedResult.features.every((f) => f.status === 'approved'),
       ).toBe(true);
 
       // 3. Test rejected filter
       const rejectedResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'rejected' })],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(rejectedResult.success).toBe(true);
       expect(rejectedResult.features).toHaveLength(2);
       expect(
-        rejectedResult.features.every((f) => f.status === 'rejected')
+        rejectedResult.features.every((f) => f.status === 'rejected'),
       ).toBe(true);
     });
 
@@ -770,7 +770,7 @@ describe('Feature Lifecycle Integration Tests', () => {
         const categoryResult = await execAPI(
           'list-features',
           [JSON.stringify({ category })],
-          { projectRoot: testDir }
+          { projectRoot: testDir },
         );
 
         expect(categoryResult.success).toBe(true);
@@ -784,15 +784,15 @@ describe('Feature Lifecycle Integration Tests', () => {
       const enhancementApprovedResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'approved', category: 'enhancement' })],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(enhancementApprovedResult.success).toBe(true);
       if (enhancementApprovedResult.features.length > 0) {
         expect(
           enhancementApprovedResult.features.every(
-            (f) => f.status === 'approved' && f.category === 'enhancement'
-          )
+            (f) => f.status === 'approved' && f.category === 'enhancement',
+          ),
         ).toBe(true);
       }
 
@@ -800,7 +800,7 @@ describe('Feature Lifecycle Integration Tests', () => {
       const nonExistentResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'implemented', category: 'non-existent' })],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(nonExistentResult.success).toBe(true);
@@ -849,7 +849,7 @@ describe('Feature Lifecycle Integration Tests', () => {
           [JSON.stringify(featureData)],
           {
             projectRoot: testDir,
-          }
+          },
         );
         expect(result.success).toBe(true);
         featureIds.push(result.feature.id);
@@ -866,7 +866,7 @@ describe('Feature Lifecycle Integration Tests', () => {
             notes: 'Sprint 2024-Q1 approved',
           }),
         ],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(bulkApproveResult.success).toBe(true);
@@ -883,7 +883,7 @@ describe('Feature Lifecycle Integration Tests', () => {
               reason: 'Deferred to next sprint',
             }),
           ],
-          { projectRoot: testDir }
+          { projectRoot: testDir },
         );
 
         expect(rejectResult.success).toBe(true);
@@ -902,7 +902,7 @@ describe('Feature Lifecycle Integration Tests', () => {
       const approvedResult = await execAPI(
         'list-features',
         [JSON.stringify({ status: 'approved' })],
-        { projectRoot: testDir }
+        { projectRoot: testDir },
       );
 
       expect(approvedResult.success).toBe(true);
@@ -914,20 +914,20 @@ describe('Feature Lifecycle Integration Tests', () => {
 
       // Check that all high priority features have approval entries
       const approvalEntries = featuresData.metadata.approval_history.filter(
-        (h) => h.action === 'approved'
+        (h) => h.action === 'approved',
       );
       expect(approvalEntries).toHaveLength(4);
       expect(
-        approvalEntries.every((e) => e.approved_by === 'product-team')
+        approvalEntries.every((e) => e.approved_by === 'product-team'),
       ).toBe(true);
 
       // Check that low priority features have rejection entries
       const rejectionEntries = featuresData.metadata.approval_history.filter(
-        (h) => h.action === 'rejected'
+        (h) => h.action === 'rejected',
       );
       expect(rejectionEntries).toHaveLength(2);
       expect(
-        rejectionEntries.every((e) => e.rejected_by === 'product-team')
+        rejectionEntries.every((e) => e.rejected_by === 'product-team'),
       ).toBe(true);
     });
 
@@ -944,7 +944,7 @@ describe('Feature Lifecycle Integration Tests', () => {
             'performance',
             'security',
           ][i % 5],
-        })
+        }),
       );
 
       // 2. Suggest all features
@@ -955,7 +955,7 @@ describe('Feature Lifecycle Integration Tests', () => {
           [JSON.stringify(featureData)],
           {
             projectRoot: testDir,
-          }
+          },
         );
         expect(result.success).toBe(true);
         featureIds.push(result.feature.id);
@@ -971,7 +971,7 @@ describe('Feature Lifecycle Integration Tests', () => {
               featureIds[i],
               JSON.stringify({ approved_by: 'complex-workflow-test' }),
             ],
-            { projectRoot: testDir }
+            { projectRoot: testDir },
           );
         } else if (i % 5 === 0) {
           // Reject every 5th feature (some overlap with approvals)
@@ -984,7 +984,7 @@ describe('Feature Lifecycle Integration Tests', () => {
                 reason: 'Complex test rejection',
               }),
             ],
-            { projectRoot: testDir }
+            { projectRoot: testDir },
           );
         }
         // Leave others as suggested

@@ -66,13 +66,13 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       // Execute CLI command
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" load-custom-validation-rules`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -102,12 +102,12 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" get-custom-validation-rules`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -133,12 +133,12 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule echo_test`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -170,12 +170,12 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-all-custom-validation-rules`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -190,7 +190,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     test('should generate custom validation config via CLI', () => {
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" generate-custom-validation-config`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -216,19 +216,19 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       // Execute rule to generate data
       execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule analytics_test`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       // Get analytics
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" get-custom-validation-analytics`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -246,7 +246,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       expect(() => {
         execSync(
           `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule`,
-          { encoding: 'utf8' }
+          { encoding: 'utf8' },
         );
       }).toThrow();
     });
@@ -254,12 +254,12 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     test('should handle invalid configuration file', async () => {
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        'invalid json'
+        'invalid json',
       );
 
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" load-custom-validation-rules`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -281,12 +281,12 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule nonexistent_rule`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -300,7 +300,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     test('should detect Node.js project and enable appropriate rules', async () => {
       await fs.writeFile(
         path.join(testProjectRoot, 'package.json'),
-        '{"name": "test-project"}'
+        '{"name": "test-project"}',
       );
 
       const config = {
@@ -322,12 +322,12 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" get-custom-validation-rules`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -343,12 +343,12 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       await fs.writeFile(path.join(testProjectRoot, 'package.json'), '{}');
       await fs.writeFile(
         path.join(testProjectRoot, 'Dockerfile'),
-        'FROM node:14'
+        'FROM node:14',
       );
 
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" load-custom-validation-rules`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -376,12 +376,12 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule env_test`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -393,7 +393,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     test('should execute file existence rules', async () => {
       await fs.writeFile(
         path.join(testProjectRoot, 'required-file.txt'),
-        'content'
+        'content',
       );
 
       const config = {
@@ -408,12 +408,12 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule file_check`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -434,7 +434,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, 'package.json'),
-        JSON.stringify(packageJson, null, 2)
+        JSON.stringify(packageJson, null, 2),
       );
 
       const config = {
@@ -450,12 +450,12 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule version_check`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -488,12 +488,12 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule conditional_test`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -526,12 +526,12 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule composite_test`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -566,7 +566,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       // Execute multiple commands in parallel
@@ -574,21 +574,21 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
         new Promise((resolve) => {
           const result = execSync(
             `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule concurrent_test_1`,
-            { encoding: 'utf8' }
+            { encoding: 'utf8' },
           );
           resolve(JSON.parse(result));
         }),
         new Promise((resolve) => {
           const result = execSync(
             `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule concurrent_test_2`,
-            { encoding: 'utf8' }
+            { encoding: 'utf8' },
           );
           resolve(JSON.parse(result));
         }),
         new Promise((resolve) => {
           const result = execSync(
             `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule concurrent_test_3`,
-            { encoding: 'utf8' }
+            { encoding: 'utf8' },
           );
           resolve(JSON.parse(result));
         }),
@@ -618,21 +618,21 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       // Execute the rule multiple times
       for (let i = 0; i < 5; i++) {
         execSync(
           `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-custom-validation-rule analytics_rule`,
-          { encoding: 'utf8' }
+          { encoding: 'utf8' },
         );
       }
 
       // Check analytics
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" get-custom-validation-analytics`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -640,10 +640,10 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       expect(output.success).toBe(true);
       expect(output.analytics.totalExecutions).toBeGreaterThanOrEqual(5);
       expect(
-        output.analytics.ruleStatistics.analytics_rule.executions
+        output.analytics.ruleStatistics.analytics_rule.executions,
       ).toBeGreaterThanOrEqual(5);
       expect(output.analytics.ruleStatistics.analytics_rule.successRate).toBe(
-        100
+        100,
       );
     });
   });
@@ -653,7 +653,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
       // Test that existing validation commands still work
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" get-validation-dependencies`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -666,7 +666,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     test('should not interfere with dependency management', () => {
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" validate-dependency-graph`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -678,7 +678,7 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
     test('should work alongside parallel execution planning', () => {
       const result = execSync(
         `timeout 10s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" generate-validation-execution-plan null 4`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -707,8 +707,8 @@ describe('Custom Validation Rules Integration with TaskManager API', () => {
             },
           },
           null,
-          2
-        )
+          2,
+        ),
       );
 
       await fs.mkdir(path.join(testProjectRoot, 'src'), { recursive: true });
@@ -723,7 +723,7 @@ app.get('/', (req, res) => {
 });
 
 module.exports = app;
-      `
+      `,
       );
 
       const config = {
@@ -756,13 +756,13 @@ module.exports = app;
 
       await fs.writeFile(
         path.join(testProjectRoot, '.validation-rules.json'),
-        JSON.stringify(config, null, 2)
+        JSON.stringify(config, null, 2),
       );
 
       // Execute all rules
       const result = execSync(
         `timeout 30s node "${taskManagerApiPath}" --project-root "${testProjectRoot}" execute-all-custom-validation-rules`,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       );
 
       const output = JSON.parse(result);
@@ -770,13 +770,13 @@ module.exports = app;
       expect(output.success).toBe(true);
       expect(output.executedRules).toBe(3);
       expect(output.results.some((r) => r.ruleId === 'security_audit')).toBe(
-        true
+        true,
       );
       expect(
-        output.results.some((r) => r.ruleId === 'file_structure_check')
+        output.results.some((r) => r.ruleId === 'file_structure_check'),
       ).toBe(true);
       expect(output.results.some((r) => r.ruleId === 'no_debug_code')).toBe(
-        true
+        true,
       );
     });
   });

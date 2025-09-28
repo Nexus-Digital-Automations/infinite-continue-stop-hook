@@ -67,10 +67,10 @@ describe('Feature Management Lifecycle', () => {
     const fs = require('fs');
     fs.promises.access.mockImplementation((...args) => mockFs.access(...args));
     fs.promises.readFile.mockImplementation((...args) =>
-      mockFs.readFile(...args)
+      mockFs.readFile(...args),
     );
     fs.promises.writeFile.mockImplementation((...args) =>
-      mockFs.writeFile(...args)
+      mockFs.writeFile(...args),
     );
 
     // Mock time for consistent testing
@@ -89,7 +89,7 @@ describe('Feature Management Lifecycle', () => {
     beforeEach(() => {
       mockFs.setFile(
         TEST_FEATURES_PATH,
-        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile)
+        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
       );
     });
 
@@ -149,7 +149,7 @@ describe('Feature Management Lifecycle', () => {
             expect(result.feature.category).toBe(category);
 
             return result;
-          })
+          }),
         );
 
         // Verify all features were created
@@ -169,7 +169,7 @@ describe('Feature Management Lifecycle', () => {
             };
 
             return api.suggestFeature(featureData);
-          })
+          }),
         );
 
         // Verify all features were created successfully
@@ -223,7 +223,7 @@ describe('Feature Management Lifecycle', () => {
 
         expect(result.success).toBe(false);
         expect(result.error).toContain(
-          'Feature title must be between 10 and 200 characters'
+          'Feature title must be between 10 and 200 characters',
         );
       });
 
@@ -237,7 +237,7 @@ describe('Feature Management Lifecycle', () => {
 
         expect(result.success).toBe(false);
         expect(result.error).toContain(
-          'Feature title must be between 10 and 200 characters'
+          'Feature title must be between 10 and 200 characters',
         );
       });
 
@@ -251,7 +251,7 @@ describe('Feature Management Lifecycle', () => {
 
         expect(result.success).toBe(false);
         expect(result.error).toContain(
-          'Feature description must be between 20 and 2000 characters'
+          'Feature description must be between 20 and 2000 characters',
         );
       });
 
@@ -265,7 +265,7 @@ describe('Feature Management Lifecycle', () => {
 
         expect(result.success).toBe(false);
         expect(result.error).toContain(
-          'Feature description must be between 20 and 2000 characters'
+          'Feature description must be between 20 and 2000 characters',
         );
       });
 
@@ -279,7 +279,7 @@ describe('Feature Management Lifecycle', () => {
           const result = await api.suggestFeature(invalidFeature);
           expect(result.success).toBe(false);
           expect(result.error).toContain(
-            'Business value must be between 10 and 1000 characters'
+            'Business value must be between 10 and 1000 characters',
           );
         }
 
@@ -291,7 +291,7 @@ describe('Feature Management Lifecycle', () => {
         const result = await api.suggestFeature(emptyBusinessValueFeature);
         expect(result.success).toBe(false);
         expect(result.error).toContain(
-          "Required field 'business_value' is missing or empty"
+          "Required field 'business_value' is missing or empty",
         );
       });
 
@@ -306,7 +306,7 @@ describe('Feature Management Lifecycle', () => {
         expect(result.success).toBe(false);
         expect(result.error).toContain('Invalid category');
         expect(result.error).toContain(
-          'Must be one of: enhancement, bug-fix, new-feature, performance, security, documentation'
+          'Must be one of: enhancement, bug-fix, new-feature, performance, security, documentation',
         );
       });
 
@@ -326,7 +326,7 @@ describe('Feature Management Lifecycle', () => {
 
           expect(result.success).toBe(false);
           expect(result.error).toContain(
-            `Required field '${field}' is missing or empty`
+            `Required field '${field}' is missing or empty`,
           );
         }
       });
@@ -383,12 +383,12 @@ describe('Feature Management Lifecycle', () => {
     beforeEach(async () => {
       mockFs.setFile(
         TEST_FEATURES_PATH,
-        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile)
+        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
       );
 
       // Create a suggested feature for approval tests
       const suggestResult = await api.suggestFeature(
-        TEST_FIXTURES.validFeature
+        TEST_FIXTURES.validFeature,
       );
       suggestedFeatureId = suggestResult.feature.id;
     });
@@ -403,7 +403,7 @@ describe('Feature Management Lifecycle', () => {
 
         const result = await api.approveFeature(
           suggestedFeatureId,
-          approvalData
+          approvalData,
         );
 
         expect(result.success).toBe(true);
@@ -438,16 +438,16 @@ describe('Feature Management Lifecycle', () => {
         expect(result.success).toBe(true);
         expect(result.feature.title).toBe(TEST_FIXTURES.validFeature.title);
         expect(result.feature.description).toBe(
-          TEST_FIXTURES.validFeature.description
+          TEST_FIXTURES.validFeature.description,
         );
         expect(result.feature.business_value).toBe(
-          TEST_FIXTURES.validFeature.business_value
+          TEST_FIXTURES.validFeature.business_value,
         );
         expect(result.feature.category).toBe(
-          TEST_FIXTURES.validFeature.category
+          TEST_FIXTURES.validFeature.category,
         );
         expect(result.feature.suggested_by).toBe(
-          TEST_FIXTURES.validFeature.suggested_by
+          TEST_FIXTURES.validFeature.suggested_by,
         );
       });
     });
@@ -461,7 +461,7 @@ describe('Feature Management Lifecycle', () => {
 
         const result = await api.approveFeature(
           suggestedFeatureId,
-          approvalData
+          approvalData,
         );
         expect(result.success).toBe(true);
 
@@ -473,7 +473,7 @@ describe('Feature Management Lifecycle', () => {
         expect(history[0].action).toBe('approved');
         expect(history[0].approved_by).toBe('lead-architect');
         expect(history[0].notes).toBe(
-          'Technical review complete. Architecture approved.'
+          'Technical review complete. Architecture approved.',
         );
         expect(history[0].timestamp).toBe('2025-09-23T12:00:00.000Z');
       });
@@ -539,7 +539,7 @@ describe('Feature Management Lifecycle', () => {
 
         expect(result.success).toBe(false);
         expect(result.error).toContain(
-          `Feature with ID ${nonExistentId} not found`
+          `Feature with ID ${nonExistentId} not found`,
         );
       });
 
@@ -553,7 +553,7 @@ describe('Feature Management Lifecycle', () => {
 
         expect(secondResult.success).toBe(false);
         expect(secondResult.error).toContain(
-          "Feature must be in 'suggested' status to approve"
+          "Feature must be in 'suggested' status to approve",
         );
         expect(secondResult.error).toContain('Current status: approved');
       });
@@ -568,7 +568,7 @@ describe('Feature Management Lifecycle', () => {
 
         expect(approveResult.success).toBe(false);
         expect(approveResult.error).toContain(
-          "Feature must be in 'suggested' status to approve"
+          "Feature must be in 'suggested' status to approve",
         );
         expect(approveResult.error).toContain('Current status: rejected');
       });
@@ -583,12 +583,12 @@ describe('Feature Management Lifecycle', () => {
     beforeEach(async () => {
       mockFs.setFile(
         TEST_FEATURES_PATH,
-        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile)
+        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
       );
 
       // Create a suggested feature for rejection tests
       const suggestResult = await api.suggestFeature(
-        TEST_FIXTURES.validFeature
+        TEST_FIXTURES.validFeature,
       );
       suggestedFeatureId = suggestResult.feature.id;
     });
@@ -603,7 +603,7 @@ describe('Feature Management Lifecycle', () => {
 
         const result = await api.rejectFeature(
           suggestedFeatureId,
-          rejectionData
+          rejectionData,
         );
 
         expect(result.success).toBe(true);
@@ -643,7 +643,7 @@ describe('Feature Management Lifecycle', () => {
 
         const result = await api.rejectFeature(
           suggestedFeatureId,
-          rejectionData
+          rejectionData,
         );
         expect(result.success).toBe(true);
 
@@ -655,7 +655,7 @@ describe('Feature Management Lifecycle', () => {
         expect(history[0].action).toBe('rejected');
         expect(history[0].rejected_by).toBe('product-owner');
         expect(history[0].reason).toBe(
-          'Feature does not align with current product strategy and user research findings.'
+          'Feature does not align with current product strategy and user research findings.',
         );
         expect(history[0].timestamp).toBe('2025-09-23T12:00:00.000Z');
       });
@@ -669,7 +669,7 @@ describe('Feature Management Lifecycle', () => {
 
         expect(result.success).toBe(false);
         expect(result.error).toContain(
-          `Feature with ID ${nonExistentId} not found`
+          `Feature with ID ${nonExistentId} not found`,
         );
       });
 
@@ -683,7 +683,7 @@ describe('Feature Management Lifecycle', () => {
 
         expect(rejectResult.success).toBe(false);
         expect(rejectResult.error).toContain(
-          "Feature must be in 'suggested' status to reject"
+          "Feature must be in 'suggested' status to reject",
         );
         expect(rejectResult.error).toContain('Current status: approved');
       });
@@ -698,7 +698,7 @@ describe('Feature Management Lifecycle', () => {
 
         expect(secondResult.success).toBe(false);
         expect(secondResult.error).toContain(
-          "Feature must be in 'suggested' status to reject"
+          "Feature must be in 'suggested' status to reject",
         );
         expect(secondResult.error).toContain('Current status: rejected');
       });
@@ -713,7 +713,7 @@ describe('Feature Management Lifecycle', () => {
     beforeEach(async () => {
       mockFs.setFile(
         TEST_FEATURES_PATH,
-        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile)
+        JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
       );
 
       // Create multiple suggested features for bulk operations
@@ -744,7 +744,7 @@ describe('Feature Management Lifecycle', () => {
 
         const result = await api.bulkApproveFeatures(
           suggestedFeatureIds,
-          approvalData
+          approvalData,
         );
 
         expect(result.success).toBe(true);
@@ -775,7 +775,7 @@ describe('Feature Management Lifecycle', () => {
 
         // Check error message
         expect(result.errors[0]).toContain(
-          "must be in 'suggested' status to approve"
+          "must be in 'suggested' status to approve",
         );
         expect(result.errors[0]).toContain('Current status: approved');
         expect(result.errors[0]).toContain(suggestedFeatureIds[2]);
@@ -829,7 +829,7 @@ describe('Feature Management Lifecycle', () => {
       // Use features file with diverse test data
       mockFs.setFile(
         TEST_FEATURES_PATH,
-        JSON.stringify(TEST_FIXTURES.featuresWithData)
+        JSON.stringify(TEST_FIXTURES.featuresWithData),
       );
     });
 
@@ -914,7 +914,7 @@ describe('Feature Management Lifecycle', () => {
     beforeEach(() => {
       mockFs.setFile(
         TEST_FEATURES_PATH,
-        JSON.stringify(TEST_FIXTURES.featuresWithData)
+        JSON.stringify(TEST_FIXTURES.featuresWithData),
       );
     });
 
@@ -959,7 +959,7 @@ describe('Feature Management Lifecycle', () => {
       test('should handle empty features file for statistics', async () => {
         mockFs.setFile(
           TEST_FEATURES_PATH,
-          JSON.stringify(TEST_FIXTURES.emptyFeaturesFile)
+          JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
         );
 
         const result = await api.getFeatureStats();
@@ -1026,7 +1026,7 @@ describe('Feature Management Lifecycle', () => {
       test('should handle file write errors in feature suggestion', async () => {
         mockFs.setFile(
           TEST_FEATURES_PATH,
-          JSON.stringify(TEST_FIXTURES.emptyFeaturesFile)
+          JSON.stringify(TEST_FIXTURES.emptyFeaturesFile),
         );
         mockFs.setWriteError(TEST_FEATURES_PATH, 'Disk full');
 

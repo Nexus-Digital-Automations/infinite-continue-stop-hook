@@ -66,7 +66,7 @@ class APIExecutor {
         {
           cwd: options.cwd || __dirname,
           stdio: ['pipe', 'pipe', 'pipe'],
-        }
+        },
       );
 
       let stdout = '';
@@ -107,8 +107,8 @@ class APIExecutor {
           } catch {
             reject(
               new Error(
-                `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`
-              )
+                `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
+              ),
             );
           }
         }
@@ -335,7 +335,7 @@ class TestExecution {
       new Promise((_, reject) => {
         setTimeout(
           () => reject(new Error(`Test timed out after ${timeout}ms`)),
-          timeout
+          timeout,
         );
       }),
     ]);
@@ -412,21 +412,21 @@ class TestLogger {
   static info(message, data = null) {
     console.log(
       `[TEST INFO] ${message}`,
-      data ? JSON.stringify(data, null, 2) : ''
+      data ? JSON.stringify(data, null, 2) : '',
     );
   }
 
   static warn(message, data = null) {
     console.warn(
       `[TEST WARN] ${message}`,
-      data ? JSON.stringify(data, null, 2) : ''
+      data ? JSON.stringify(data, null, 2) : '',
     );
   }
 
   static error(message, data = null) {
     console.error(
       `[TEST ERROR] ${message}`,
-      data ? JSON.stringify(data, null, 2) : ''
+      data ? JSON.stringify(data, null, 2) : '',
     );
   }
 
@@ -434,7 +434,7 @@ class TestLogger {
     if (process.env.TEST_DEBUG) {
       console.log(
         `[TEST DEBUG] ${message}`,
-        data ? JSON.stringify(data, null, 2) : ''
+        data ? JSON.stringify(data, null, 2) : '',
       );
     }
   }

@@ -494,7 +494,7 @@ class DatabaseMock {
     // Simple query filtering
     return records.filter((record) => {
       return Object.entries(query).every(
-        ([key, value]) => record[key] === value
+        ([key, value]) => record[key] === value,
       );
     });
   }

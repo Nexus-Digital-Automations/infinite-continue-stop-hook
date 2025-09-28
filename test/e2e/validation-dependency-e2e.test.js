@@ -46,7 +46,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
     await fs.writeFile(
       path.join(tempDir, 'package.json'),
-      JSON.stringify(packageJson, null, 2)
+      JSON.stringify(packageJson, null, 2),
     );
 
     // Initialize managers
@@ -140,7 +140,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       // 4. Generate execution plan
       const executionPlan = manager.generateParallelExecutionPlan(
         customPipeline.map((step) => step.name),
-        3 // Max concurrency
+        3, // Max concurrency
       );
 
       expect(executionPlan.plan.length).toBeGreaterThan(0);
@@ -148,7 +148,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
       // 5. Verify dependency ordering
       const executionOrder = manager.getExecutionOrder(
-        customPipeline.map((step) => step.name)
+        customPipeline.map((step) => step.name),
       );
 
       const stepPositions = new Map();
@@ -158,16 +158,16 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
       // Verify critical dependencies
       expect(stepPositions.get('environment-setup')).toBeLessThan(
-        stepPositions.get('code-quality-check')
+        stepPositions.get('code-quality-check'),
       );
       expect(stepPositions.get('environment-setup')).toBeLessThan(
-        stepPositions.get('security-audit')
+        stepPositions.get('security-audit'),
       );
       expect(stepPositions.get('code-quality-check')).toBeLessThan(
-        stepPositions.get('integration-build')
+        stepPositions.get('integration-build'),
       );
       expect(stepPositions.get('integration-build')).toBeLessThan(
-        stepPositions.get('deployment-validation')
+        stepPositions.get('deployment-validation'),
       );
 
       // 6. Generate comprehensive analysis
@@ -221,7 +221,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       // Execute parallel validation (simulated)
       const executionResult = await manager.executeParallelValidationPlan(
         executionPlan,
-        monitoringOptions
+        monitoringOptions,
       );
 
       expect(executionResult).toBeDefined();
@@ -229,10 +229,10 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
       // Verify event sequence
       const waveStartEvents = executionEvents.filter(
-        (e) => e.type === 'wave_start'
+        (e) => e.type === 'wave_start',
       );
       const waveCompleteEvents = executionEvents.filter(
-        (e) => e.type === 'wave_complete'
+        (e) => e.type === 'wave_complete',
       );
 
       expect(waveStartEvents.length).toBeGreaterThan(0);
@@ -243,7 +243,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       if (executionResult.success) {
         expect(executionResult.summary.totalCriteria).toBeGreaterThan(0);
         expect(
-          executionResult.summary.parallelizationGain
+          executionResult.summary.parallelizationGain,
         ).toBeGreaterThanOrEqual(0);
       }
     });
@@ -308,7 +308,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       const planStart = Date.now();
       const executionPlan = manager.generateParallelExecutionPlan(
         largePipeline.map((step) => step.name),
-        8
+        8,
       );
       const planTime = Date.now() - planStart;
 
@@ -323,7 +323,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
       expect(vizTime).toBeLessThan(10000); // Should complete within 10 seconds
       expect(visualization.debugInfo.dependencyChains.length).toBeGreaterThan(
-        0
+        0,
       );
     });
 
@@ -354,7 +354,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
       // Execute all operations concurrently
       const results = await Promise.allSettled(
-        concurrentOperations.map((op) => op())
+        concurrentOperations.map((op) => op()),
       );
 
       // All operations should complete without throwing
@@ -419,14 +419,14 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
       const executionResult = await manager.executeParallelValidationPlan(
         executionPlan,
-        { timeout: 10000, maxRetries: 1 }
+        { timeout: 10000, maxRetries: 1 },
       );
 
       // Should handle failure gracefully
       expect(executionResult).toBeDefined();
       expect(executionResult.success).toBe(false);
       expect(
-        executionResult.executionState.failedCriteria.has('failing-validation')
+        executionResult.executionState.failedCriteria.has('failing-validation'),
       ).toBe(true);
 
       // Restore original method
@@ -460,7 +460,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       const validation = manager.validateDependencyGraph();
       expect(validation.valid).toBe(false);
       expect(validation.issues.some((issue) => issue.type === 'cycle')).toBe(
-        true
+        true,
       );
 
       // Should still be able to generate execution plan (with forced execution)
@@ -474,7 +474,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
       // Should include forced executions
       const _forcedExecutions = executionPlan.plan.some((wave) =>
-        wave.criteria.some((criterion) => criterion.forced)
+        wave.criteria.some((criterion) => criterion.forced),
       );
 
       // May or may not have forced executions depending on implementation
@@ -518,7 +518,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       for (const systemConfig of systemConfigurations) {
         const adaptivePlan = manager.generateAdaptiveExecutionPlan(
           null,
-          systemConfig.config
+          systemConfig.config,
         );
 
         expect(adaptivePlan.adaptiveOptimizations).toBeDefined();
@@ -542,7 +542,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
           const resourceOpts =
             adaptivePlan.adaptiveOptimizations.resourceScheduling;
           expect(
-            resourceOpts.some((opt) => opt.type === 'network_prioritization')
+            resourceOpts.some((opt) => opt.type === 'network_prioritization'),
           ).toBe(true);
         }
       }
@@ -585,7 +585,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
       // Should identify long dependency chain as an issue
       const chainOptimization = suggestions.find(
-        (s) => s.type === 'dependency_optimization'
+        (s) => s.type === 'dependency_optimization',
       );
       expect(chainOptimization).toBeDefined();
 
