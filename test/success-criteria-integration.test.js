@@ -16,6 +16,7 @@
 const FS = require('fs').promises;
 const PATH = require('path');
 const { spawn } = require('child_process');
+const { loggers } = require('../lib/logger');
 
 // Test configuration
 const TEST_PROJECT_DIR = PATH.join(__dirname, 'success-criteria-test-project');
@@ -143,7 +144,7 @@ async function setupTestProject() {
 async function cleanupTestProject() {
   try {
     await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
-  } catch (error) {
+  } catch {
     // Ignore cleanup errors
   }
 }

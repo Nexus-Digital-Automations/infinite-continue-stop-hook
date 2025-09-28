@@ -27,7 +27,7 @@ describe('ValidationDependencyManager', () => {
 
   beforeEach(async () => {
     // Create temporary directory for test configuration files
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'validation-test-'));
+    tempDir = await fs.mkdtemp(PATH.join(os.tmpdir(), 'validation-test-'));
     manager = new ValidationDependencyManager({ projectRoot: tempDir });
   });
 
@@ -525,11 +525,11 @@ describe('ValidationDependencyManager', () => {
 
       if (criticalPaths.length > 0) {
         const PATH = criticalPaths[0];
-        expect(_path.path).toBeDefined();
-        expect(_path.totalDuration).toBeGreaterThan(0);
-        expect(_path.averageDuration).toBeGreaterThan(0);
-        expect(_path.bottlenecks).toBeDefined();
-        expect(_path.optimizationPotential).toBeGreaterThanOrEqual(0);
+        expect(PATH.path).toBeDefined();
+        expect(PATH.totalDuration).toBeGreaterThan(0);
+        expect(PATH.averageDuration).toBeGreaterThan(0);
+        expect(PATH.bottlenecks).toBeDefined();
+        expect(PATH.optimizationPotential).toBeGreaterThanOrEqual(0);
       }
     });
 

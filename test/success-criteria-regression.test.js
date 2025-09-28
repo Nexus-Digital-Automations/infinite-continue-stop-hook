@@ -12,6 +12,7 @@
 
 const { spawn } = require('child_process');
 const PATH = require('path');
+const { loggers } = require('../lib/logger');
 const FS = require('fs').promises;
 
 // Test configuration
@@ -282,7 +283,7 @@ describe('Success Criteria Regression Tests', () => {
       expect(status.appliedTemplate).toBeDefined();
       expect(status.appliedTemplate.version).toBe('1.0.0');
 
-      console.log(
+      loggers.app.info(
         'Legacy template format v1.0 compatibility validated successfully'
       );
     });
@@ -340,7 +341,7 @@ describe('Success Criteria Regression Tests', () => {
       expect(UPGRADED_CRITERION.description).toBeDefined();
       expect(UPGRADED_CRITERION.category).toBeDefined();
 
-      console.log(
+      loggers.app.info(
         'Legacy template upgrade compatibility validated successfully'
       );
     });
@@ -374,9 +375,9 @@ describe('Success Criteria Regression Tests', () => {
 
           const status = await execAPI('success-criteria:status');
           expect(status.projectCriteria.length).toBeGreaterThan(0);
-        } catch (error) {
+        } catch (_error) {
           // Log version compatibility issues but don't fail test
-          console.log(
+          loggers.app.info(
             `API version ${version} compatibility note:`,
             _error.message
           );
@@ -420,7 +421,7 @@ describe('Success Criteria Regression Tests', () => {
         }
       }
 
-      console.log(
+      loggers.app.info(
         'Legacy project configuration migration validated successfully'
       );
     });
@@ -484,7 +485,7 @@ describe('Success Criteria Regression Tests', () => {
         }
       }
 
-      console.log(
+      loggers.app.info(
         'Deprecated configuration fields handling validated successfully'
       );
     });
@@ -679,8 +680,8 @@ describe('Success Criteria Regression Tests', () => {
           loggers.stopHook.log(
             `Schema ${schema.version} compatibility confirmed`
           );
-        } catch (error) {
-          console.log(
+        } catch (_error) {
+          loggers.app.info(
             `Schema ${schema.version} evolution note:`,
             _error.message
           );
@@ -852,14 +853,14 @@ describe('Success Criteria Regression Tests', () => {
           expect(result).toBeDefined();
 
           if (result.deprecated || result.warning) {
-            console.log(
+            loggers.app.info(
               `Deprecation warning for ${endpoint}:`,
               result.warning || 'Endpoint is deprecated'
             );
           }
-        } catch (error) {
+        } catch (_error) {
           // Some deprecated endpoints might be completely removed
-          console.log(
+          loggers.app.info(
             `Deprecated endpoint ${endpoint} is no longer available:`,
             _error.message
           );
@@ -923,13 +924,13 @@ describe('Success Criteria Regression Tests', () => {
       }
 
       if (LEGACY_RESULT.degradationWarnings) {
-        console.log(
+        loggers.app.info(
           'Graceful degradation warnings:',
           LEGACY_RESULT.degradationWarnings
         );
       }
 
-      console.log(
+      loggers.app.info(
         'Graceful degradation for missing features validated successfully'
       );
     });
@@ -972,18 +973,18 @@ describe('Success Criteria Regression Tests', () => {
           expect(status.appliedTemplate.version).toBe(template.version);
           expect(status.projectCriteria.length).toBeGreaterThan(0);
 
-          console.log(
+          loggers.app.info(
             `Template version ${template.version} compatibility confirmed`
           );
-        } catch (error) {
-          console.log(
+        } catch (_error) {
+          loggers.app.info(
             `Template version ${template.version} compatibility issue:`,
             _error.message
           );
         }
       }
 
-      console.log(
+      loggers.app.info(
         'Cross-version template compatibility validated successfully'
       );
     });
@@ -1144,7 +1145,7 @@ describe('Success Criteria Regression Tests', () => {
           }
 
           loggers.stopHook.log(`API contract for ${api} is stable`);
-        } catch (error) {
+        } catch (_error) {
           loggers.stopHook.log(
             `API contract issue for ${api}:`,
             _error.message
@@ -1218,8 +1219,8 @@ describe('Success Criteria Regression Tests', () => {
           loggers.stopHook.log(
             `Essential function '${func.name}' is preserved`
           );
-        } catch (error) {
-          console.error(
+        } catch (_error) {
+          loggers.app.error(
             `Essential function '${func.name}' failed:`,
             _error.message
           );
@@ -1227,7 +1228,7 @@ describe('Success Criteria Regression Tests', () => {
         }
       }
 
-      console.log(
+      loggers.app.info(
         'Essential functionality preservation validated successfully'
       );
     });
@@ -1276,12 +1277,12 @@ describe('Success Criteria Regression Tests', () => {
         const result = await test.test();
         expect(result.duration).toBeLessThan(result.threshold);
 
-        console.log(
+        loggers.app.info(
           `Performance test '${test.name}': ${result.duration}ms (threshold: ${result.threshold}ms)`
         );
 
         if (result.duration > result.threshold * 0.8) {
-          console.warn(
+          loggers.app.warn(
             `Performance warning: '${test.name}' is approaching threshold`
           );
         }
