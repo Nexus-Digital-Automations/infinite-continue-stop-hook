@@ -15,8 +15,8 @@ const { spawn } = require('child_process');
 const crypto = require('crypto');
 
 // Test configuration constants
-const PROJECT_ROOT = path.join(__dirname, '..', '..');
-const TEST_DATA_DIR = path.join(__dirname, '..', 'test-data');
+const PROJECT_ROOT = PATH.join(__dirname, '..', '..');
+const TEST_DATA_DIR = PATH.join(__dirname, '..', 'test-data');
 const E2E_TIMEOUT = 30000; // 30 seconds for E2E operations
 const API_TIMEOUT = 10000; // 10 seconds for API calls (matching system design)
 
@@ -28,10 +28,10 @@ class E2EEnvironment {
   constructor(testName) {
     this.testName = testName;
     this.testId = crypto.randomBytes(8).toString('hex');
-    this.testDir = path.join(TEST_DATA_DIR, `e2e-${testName}-${this.testId}`);
-    this.featuresPath = path.join(this.testDir, 'FEATURES.json');
-    this.apiPath = path.join(PROJECT_ROOT, 'taskmanager-api.js');
-    this.stopHookPath = path.join(PROJECT_ROOT, 'stop-hook.js');
+    this.testDir = PATH.join(TEST_DATA_DIR, `e2e-${testName}-${this.testId}`);
+    this.featuresPath = PATH.join(this.testDir, 'FEATURES.json');
+    this.apiPath = PATH.join(PROJECT_ROOT, 'taskmanager-api.js');
+    this.stopHookPath = PATH.join(PROJECT_ROOT, 'stop-hook.js');
     this.cleanupTasks = [];
   }
 
@@ -40,7 +40,7 @@ class E2EEnvironment {
    */
   async setup() {
     // Create test directory
-    await fs.mkdir(this.testDir, { recursive: true });
+    await FS.mkdir(this.testDir, { recursive: true });
 
     // Create basic FEATURES.json structure
     await this.createFeaturesFile();
@@ -98,7 +98,7 @@ class E2EEnvironment {
       agents: {},
     };
 
-    await fs.writeFile(
+    await FS.writeFile(
       this.featuresPath,
       JSON.stringify(initialFeatures, null, 2),
     );
@@ -123,8 +123,8 @@ class E2EEnvironment {
       },
     };
 
-    await fs.writeFile(
-      path.join(this.testDir, 'package.json'),
+    await FS.writeFile(
+      PATH.join(this.testDir, 'package.json'),
       JSON.stringify(packageJson, null, 2),
     );
   }
@@ -148,15 +148,15 @@ class E2EEnvironment {
    */
   async removeDirectory(dirPath) {
     try {
-      const stats = await fs.stat(dirPath);
+      const stats = await FS.stat(dirPath);
       if (stats.isDirectory()) {
-        const files = await fs.readdir(dirPath);
+        const files = await FS.readdir(dirPath);
         await Promise.all(
-          files.map((file) => this.removeDirectory(path.join(dirPath, file))),
+          files.map((file) => this.removeDirectory(PATH.join(dirPath, file))),
         );
-        await fs.rmdir(dirPath);
+        await FS.rmdir(dirPath);
       } else {
-        await fs.unlink(dirPath);
+        await FS.unlink(dirPath);
       }
     } catch {
       if (error.code !== 'ENOENT') {
@@ -200,7 +200,7 @@ class E2EEnvironment {
    * Update FEATURES.json content
    */
   async updateFeatures(features) {
-    await fs.writeFile(this.featuresPath, JSON.stringify(features, null, 2));
+    await FS.writeFile(this.featuresPath, JSON.stringify(features, null, 2));
   }
 }
 
@@ -631,7 +631,7 @@ class MultiAgentTestHelpers {
 
     // Create concurrent agent operations
     for (let i = 0; i < agentCount; i++) {
-      const AGENT_ID = `e2e-agent-${i}`;
+      const agentId = `e2e-agent-${i}`;
       const operations = [];
 
       for (let j = 0; j < operationsPerAgent; j++) {

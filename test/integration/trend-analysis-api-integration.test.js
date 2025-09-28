@@ -6,34 +6,34 @@ const { execSync } = require('child_process');
 // Tests the new trend analysis endpoints added to Feature 8
 describe('Trend Analysis API Integration Tests', () => {
   const mockProjectRoot = '/tmp/test-trend-analysis-api';
-  const mockEnhancedMetricsFile = path.join(
+  const mockEnhancedMetricsFile = PATH.join(
     mockProjectRoot,
     '.validation-performance-enhanced.json',
   );
-  const mockLegacyMetricsFile = path.join(
+  const mockLegacyMetricsFile = PATH.join(
     mockProjectRoot,
     '.validation-performance.json',
   );
-  const taskManagerPath = path.resolve(__dirname, '../../taskmanager-api.js');
+  const taskManagerPath = PATH.resolve(__dirname, '../../taskmanager-api.js');
 
   beforeEach(() => {
     // Create mock directory
-    if (!fs.existsSync(mockProjectRoot)) {
-      fs.mkdirSync(mockProjectRoot, { recursive: true });
+    if (!FS.existsSync(mockProjectRoot)) {
+      FS.mkdirSync(mockProjectRoot, { recursive: true });
     }
 
     // Clean up previous test data
     [mockEnhancedMetricsFile, mockLegacyMetricsFile].forEach((file) => {
-      if (fs.existsSync(file)) {
-        fs.unlinkSync(file);
+      if (FS.existsSync(file)) {
+        FS.unlinkSync(file);
       }
     });
   });
 
   afterEach(() => {
     // Clean up test directory
-    if (fs.existsSync(mockProjectRoot)) {
-      fs.rmSync(mockProjectRoot, { recursive: true, force: true });
+    if (FS.existsSync(mockProjectRoot)) {
+      FS.rmSync(mockProjectRoot, { recursive: true, force: true });
     }
   });
 
@@ -125,7 +125,7 @@ describe('Trend Analysis API Integration Tests', () => {
       metrics: metrics.reverse(), // Most recent first
     };
 
-    fs.writeFileSync(
+    FS.writeFileSync(
       mockEnhancedMetricsFile,
       JSON.stringify(metricsData, null, 2),
     );
@@ -550,7 +550,7 @@ describe('Trend Analysis API Integration Tests', () => {
     });
 
     test('should handle corrupted metrics file', () => {
-      fs.writeFileSync(mockEnhancedMetricsFile, 'invalid json content');
+      FS.writeFileSync(mockEnhancedMetricsFile, 'invalid json content');
 
       const result = executeTaskManagerCommand('analyze-performance-trends');
 
@@ -611,11 +611,11 @@ describe('Trend Analysis API Integration Tests', () => {
         ],
       };
 
-      fs.writeFileSync(
+      FS.writeFileSync(
         mockEnhancedMetricsFile,
         JSON.stringify(enhancedData, null, 2),
       );
-      fs.writeFileSync(
+      FS.writeFileSync(
         mockLegacyMetricsFile,
         JSON.stringify(legacyData, null, 2),
       );
@@ -651,7 +651,7 @@ describe('Trend Analysis API Integration Tests', () => {
         ],
       };
 
-      fs.writeFileSync(
+      FS.writeFileSync(
         mockEnhancedMetricsFile,
         JSON.stringify(mixedQualityData, null, 2),
       );

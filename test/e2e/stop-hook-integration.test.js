@@ -38,7 +38,7 @@ describe.skip('Stop Hook Integration E2E', () => {
       async () => {
         // Test basic stop hook authorization for a single agent
 
-        const AGENT_ID = 'e2e-stop-test-agent';
+        const agentId = 'e2e-stop-test-agent';
 
         // Step 1: Initialize agent through proper API
         const initResult = await CommandExecutor.executeAPI(
@@ -92,7 +92,7 @@ describe.skip('Stop Hook Integration E2E', () => {
       async () => {
         // Test stop hook integration with ongoing feature management operations
 
-        const AGENT_ID = 'feature-stop-integration-agent';
+        const agentId = 'feature-stop-integration-agent';
 
         // Step 1: Create feature during agent operation
         const featureResult = await FeatureTestHelpers.suggestFeature(
@@ -230,7 +230,7 @@ describe.skip('Stop Hook Integration E2E', () => {
       async () => {
         // Test stop hook conditions based on different system states
 
-        const AGENT_ID = 'conditional-stop-agent';
+        const agentId = 'conditional-stop-agent';
 
         // Step 1: Test stop with pending tasks (should potentially continue)
         const pendingTasksResult = await FeatureTestHelpers.suggestFeature(
@@ -290,7 +290,7 @@ describe.skip('Stop Hook Integration E2E', () => {
       async () => {
         // Test stop hook behavior during error conditions
 
-        const AGENT_ID = 'error-recovery-agent';
+        const agentId = 'error-recovery-agent';
 
         // Step 1: Test stop hook behavior under various conditions
         const stopTestResults = await Promise.allSettled([
@@ -340,7 +340,7 @@ describe.skip('Stop Hook Integration E2E', () => {
       async () => {
         // Test stop hook integration throughout complete feature lifecycle
 
-        const AGENT_ID = 'lifecycle-integration-agent';
+        const agentId = 'lifecycle-integration-agent';
 
         // Step 1: Create feature at start of agent work
         const initialFeature = await FeatureTestHelpers.suggestFeature(
@@ -409,7 +409,7 @@ describe.skip('Stop Hook Integration E2E', () => {
       async () => {
         // Test stop hook performance with multiple rapid requests
 
-        const AGENT_ID = 'performance-test-agent';
+        const agentId = 'performance-test-agent';
         const requestCount = 10;
 
         // Step 1: Rapid stop hook requests (should all block consistently)
@@ -457,7 +457,7 @@ describe.skip('Stop Hook Integration E2E', () => {
       async () => {
         // Test system recovery capabilities after stop hook failures
 
-        const AGENT_ID = 'recovery-test-agent';
+        const agentId = 'recovery-test-agent';
 
         // Step 1: Create system state before failure simulation
         const preFailureFeature = await FeatureTestHelpers.suggestFeature(

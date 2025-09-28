@@ -354,7 +354,7 @@ describe('Dependency Management API Integration Tests', () => {
         .catch(() => false);
       expect(configExists).toBe(true);
 
-      const configData = await fs.readFile(result.configPath, 'utf8');
+      const configData = await FS.readFile(result.configPath, 'utf8');
       const config = JSON.parse(configData);
 
       expect(config).toHaveProperty('version');
@@ -363,11 +363,11 @@ describe('Dependency Management API Integration Tests', () => {
       expect(Object.keys(config.dependencies).length).toBeGreaterThanOrEqual(7);
 
       // Cleanup
-      await fs.unlink(result.configPath);
+      await FS.unlink(result.configPath);
     });
 
     test('save-dependency-config with custom path should work', async () => {
-      const customPath = path.join(PROJECT_ROOT, 'test-dependency-config.json');
+      const customPath = PATH.join(PROJECT_ROOT, 'test-dependency-config.json');
 
       const result = executeTaskManagerCommand(
         'save-dependency-config',
@@ -385,7 +385,7 @@ describe('Dependency Management API Integration Tests', () => {
       expect(configExists).toBe(true);
 
       // Cleanup
-      await fs.unlink(customPath);
+      await FS.unlink(customPath);
     });
 
     test('load-dependency-config should restore configuration from file', async () => {
@@ -412,13 +412,13 @@ describe('Dependency Management API Integration Tests', () => {
       expect(getResult.success).toBe(true);
 
       // Cleanup
-      await fs.unlink(saveResult.configPath);
+      await FS.unlink(saveResult.configPath);
     });
 
     test('load-dependency-config should handle missing file gracefully', () => {
       const result = executeTaskManagerCommand(
         'load-dependency-config',
-        "'/non/existent/path.json'",
+        "'/non/existent/PATH.json'",
       );
 
       expect(result.success).toBe(true);

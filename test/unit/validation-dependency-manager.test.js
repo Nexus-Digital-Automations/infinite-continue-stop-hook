@@ -430,7 +430,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
 
       // Verify file exists And contains valid JSON
       const FS = require('fs').promises;
-      const configData = await fs.readFile(configPath, 'utf8');
+      const configData = await FS.readFile(configPath, 'utf8');
       const config = JSON.parse(configData);
 
       expect(config).toHaveProperty('version');
@@ -439,7 +439,7 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
       expect(Object.keys(config.dependencies)).toHaveLength(7);
 
       // Cleanup
-      await fs.unlink(configPath);
+      await FS.unlink(configPath);
     });
 
     test('should load dependency configuration from file', async () => {
@@ -464,12 +464,12 @@ describe('ValidationDependencyManager - Comprehensive Unit Tests', () => {
 
       // Cleanup
       const FS = require('fs').promises;
-      await fs.unlink(configPath);
+      await FS.unlink(configPath);
     });
 
     test('should handle missing configuration file gracefully', async () => {
       const result = await dependencyManager.loadDependencyConfig(
-        '/non/existent/path.json',
+        '/non/existent/PATH.json',
       );
       expect(result).toBeNull();
     });

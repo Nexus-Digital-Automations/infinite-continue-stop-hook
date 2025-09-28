@@ -50,7 +50,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
       {
         cwd: __dirname,
         stdio: ['pipe', 'pipe', 'pipe'],
-      }
+      },
     );
 
     let stdout = '';
@@ -83,12 +83,12 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch {
+        } catch (error) {
           // If both fail, include raw output for debugging
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`
-            )
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${error.message}`,
+            ),
           );
         }
       }
@@ -291,7 +291,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
       expect(result.success).toBe(false);
       expect(result.error).toBe(
-        'No agent ID provided And no agent initialized'
+        'No agent ID provided And no agent initialized',
       );
     });
   });
@@ -563,7 +563,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       expect(result.documentationInstructions).toBeDefined();
       expect(result.documentationInstructions.mandatory).toBe(true);
       expect(result.documentationInstructions.files_to_update).toContain(
-        'development/essentials/features.md'
+        'development/essentials/features.md',
       );
     });
 
@@ -615,7 +615,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       ];
 
       await Promise.all(
-        tasks.map((taskData) => execAPI('create', [JSON.stringify(taskData)]))
+        tasks.map((taskData) => execAPI('create', [JSON.stringify(taskData)])),
       );
     });
 
@@ -639,7 +639,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       expect(result.success).toBe(true);
       expect(result.tasks).toHaveLength(4);
       expect(result.tasks.every((task) => task.status === 'pending')).toBe(
-        true
+        true,
       );
     });
 
@@ -691,7 +691,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       ];
 
       const createResults = await Promise.all(
-        tasks.map((taskData) => execAPI('create', [JSON.stringify(taskData)]))
+        tasks.map((taskData) => execAPI('create', [JSON.stringify(taskData)])),
       );
 
       // Find the test task ID from results
@@ -882,7 +882,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       ]);
       expect(approvedResult.success).toBe(true);
       expect(
-        approvedResult.features.every((f) => f.status === 'approved')
+        approvedResult.features.every((f) => f.status === 'approved'),
       ).toBe(true);
     });
 
@@ -895,8 +895,8 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
       await Promise.all(
         features.map((featureData) =>
-          execAPI('suggest-feature', [JSON.stringify(featureData), testAgentId])
-        )
+          execAPI('suggest-feature', [JSON.stringify(featureData), testAgentId]),
+        ),
       );
 
       const result = await execAPI('feature-stats');
@@ -968,13 +968,13 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       ];
 
       const createResults = await Promise.all(
-        tasks.map((taskData) => execAPI('create', [JSON.stringify(taskData)]))
+        tasks.map((taskData) => execAPI('create', [JSON.stringify(taskData)])),
       );
 
       await Promise.all(
         createResults.map((result) =>
-          execAPI('claim', [result.taskId, testAgentId])
-        )
+          execAPI('claim', [result.taskId, testAgentId]),
+        ),
       );
     });
 
@@ -1000,7 +1000,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
     test('should handle invalid command gracefully', async () => {
       try {
         await execAPI('invalid-command');
-      } catch {
+      } catch (error) {
         expect(error.message).toContain('Command failed');
       }
     });
@@ -1028,7 +1028,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
 
       expect(result.success).toBe(false);
       expect(result.error).toBe(
-        'No agent ID provided And no agent initialized'
+        'No agent ID provided And no agent initialized',
       );
     });
 
@@ -1045,7 +1045,7 @@ describe('TaskManager API Comprehensive Test Suite', () => {
       // by using a very short timeout
       try {
         await execAPI('guide', [], 100); // 100ms timeout
-      } catch {
+      } catch (error) {
         expect(error.message).toContain('Command failed');
       }
     }, 10000);

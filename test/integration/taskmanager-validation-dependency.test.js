@@ -26,7 +26,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
 
   beforeAll(async () => {
     // Create temporary directory for test project
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'taskmanager-test-'));
+    tempDir = await FS.mkdtemp(PATH.join(os.tmpdir(), 'taskmanager-test-'));
     originalCwd = process.cwd();
     process.chdir(tempDir);
 
@@ -39,7 +39,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
     process.chdir(originalCwd);
 
     // Clean up temporary directory
-    await fs.rmdir(tempDir, { recursive: true });
+    await FS.rmdir(tempDir, { recursive: true });
   });
 
   beforeEach(() => {
@@ -201,7 +201,7 @@ describe('TaskManager API Validation Dependency Integration', () => {
       return new Promise((resolve, reject) => {
         const child = spawn(
           'node',
-          [path.join(process.cwd(), '../../taskmanager-api.js'), ...args],
+          [PATH.join(process.cwd(), '../../taskmanager-api.js'), ...args],
           {
             cwd: tempDir,
             stdio: 'pipe',

@@ -68,11 +68,11 @@ describe('Agent Management', () => {
 
     // Connect jest mocks to MockFileSystem instance
     const FS = require('fs');
-    fs.promises.access.mockImplementation((...args) => mockFs.access(...args));
-    fs.promises.readFile.mockImplementation((...args) =>
+    FS.promises.access.mockImplementation((...args) => mockFs.access(...args));
+    FS.promises.readFile.mockImplementation((...args) =>
       mockFs.readFile(...args),
     );
-    fs.promises.writeFile.mockImplementation((...args) =>
+    FS.promises.writeFile.mockImplementation((...args) =>
       mockFs.writeFile(...args),
     );
 
@@ -97,9 +97,9 @@ describe('Agent Management', () => {
   describe('Agent Initialization', () => {
     describe('Basic Agent Initialization', () => {
       test('should initialize new agent successfully', async () => {
-        const AGENT_ID = 'test-agent-001';
+        const agentId = 'test-agent-001';
 
-        const result = await api.initializeAgent(agentId);
+        const RESULT = await api.initializeAgent(agentId);
 
         expect(result.success).toBe(true);
         expect(result.agent).toBeDefined();
@@ -127,9 +127,9 @@ describe('Agent Management', () => {
       });
 
       test('should update features file with agent data', async () => {
-        const AGENT_ID = 'persistent-agent';
+        const agentId = 'persistent-agent';
 
-        const result = await api.initializeAgent(agentId);
+        const RESULT = await api.initializeAgent(agentId);
         expect(result.success).toBe(true);
 
         const features = await api._loadFeatures();
@@ -146,9 +146,9 @@ describe('Agent Management', () => {
       });
 
       test('should track initialization in time bucket stats', async () => {
-        const AGENT_ID = 'stats-agent';
+        const agentId = 'stats-agent';
 
-        const result = await api.initializeAgent(agentId);
+        const RESULT = await api.initializeAgent(agentId);
         expect(result.success).toBe(true);
 
         // Verify initialization stats were updated
@@ -167,7 +167,7 @@ describe('Agent Management', () => {
 
         for (const agentId of specialAgentIds) {
           // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation
-          const result = await api.initializeAgent(agentId);
+          const RESULT = await api.initializeAgent(agentId);
 
           expect(result.success).toBe(true);
           expect(result.agent.id).toBe(agentId);
@@ -177,7 +177,7 @@ describe('Agent Management', () => {
 
     describe('Agent Session Management', () => {
       test('should create agent entry in features file', async () => {
-        const AGENT_ID = 'session-test-agent';
+        const agentId = 'session-test-agent';
 
         await api.initializeAgent(agentId);
 
@@ -192,7 +192,7 @@ describe('Agent Management', () => {
       });
 
       test('should overwrite existing agent data on new initialization', async () => {
-        const AGENT_ID = 'overwrite-test-agent';
+        const agentId = 'overwrite-test-agent';
 
         // First initialization
         const result1 = await api.initializeAgent(agentId);
@@ -226,8 +226,8 @@ describe('Agent Management', () => {
           JSON.stringify(featuresWithoutAgents),
         );
 
-        const AGENT_ID = 'init-agents-section';
-        const result = await api.initializeAgent(agentId);
+        const agentId = 'init-agents-section';
+        const RESULT = await api.initializeAgent(agentId);
 
         expect(result.success).toBe(true);
 
@@ -241,7 +241,7 @@ describe('Agent Management', () => {
       test('should handle file write errors during initialization', async () => {
         mockFs.setWriteError(TEST_FEATURES_PATH, 'Disk full');
 
-        const result = await api.initializeAgent('error-test-agent');
+        const RESULT = await api.initializeAgent('error-test-agent');
 
         expect(result.success).toBe(false);
         expect(result.error).toContain('Failed to initialize agent');
@@ -251,14 +251,14 @@ describe('Agent Management', () => {
       test('should handle corrupted features file during initialization', async () => {
         mockFs.setFile(TEST_FEATURES_PATH, 'invalid json');
 
-        const result = await api.initializeAgent('corrupt-file-agent');
+        const RESULT = await api.initializeAgent('corrupt-file-agent');
 
         expect(result.success).toBe(false);
         expect(result.error).toContain('Failed to initialize agent');
       });
 
       test('should handle empty agent ID gracefully', async () => {
-        const result = await api.initializeAgent('');
+        const RESULT = await api.initializeAgent('');
 
         expect(result.success).toBe(true);
         expect(result.agent.id).toBe('');
@@ -280,7 +280,7 @@ describe('Agent Management', () => {
 
     describe('Basic Agent Reinitialization', () => {
       test('should reinitialize existing agent successfully', async () => {
-        const result = await api.reinitializeAgent(existingAgentId);
+        const RESULT = await api.reinitializeAgent(existingAgentId);
 
         expect(result.success).toBe(true);
         expect(result.agent).toBeDefined();
@@ -295,7 +295,7 @@ describe('Agent Management', () => {
       });
 
       test('should preserve agent history during reinitialization', async () => {
-        const result = await api.reinitializeAgent(existingAgentId);
+        const RESULT = await api.reinitializeAgent(existingAgentId);
         expect(result.success).toBe(true);
 
         const features = await api._loadFeatures();
@@ -310,7 +310,7 @@ describe('Agent Management', () => {
         // Advance time for reinitialization
         timeUtils.mockCurrentTimeISO('2025-09-23T13:00:00.000Z');
 
-        const result = await api.reinitializeAgent(existingAgentId);
+        const RESULT = await api.reinitializeAgent(existingAgentId);
         expect(result.success).toBe(true);
 
         const features = await api._loadFeatures();
@@ -321,7 +321,7 @@ describe('Agent Management', () => {
       });
 
       test('should track reinitialization in time bucket stats', async () => {
-        const result = await api.reinitializeAgent(existingAgentId);
+        const RESULT = await api.reinitializeAgent(existingAgentId);
         expect(result.success).toBe(true);
 
         // Verify reinitialization stats were updated
@@ -357,7 +357,7 @@ describe('Agent Management', () => {
       test('should reinitialize non-existent agent as new agent', async () => {
         const newAgentId = 'non-existent-agent';
 
-        const result = await api.reinitializeAgent(newAgentId);
+        const RESULT = await api.reinitializeAgent(newAgentId);
 
         expect(result.success).toBe(true);
         expect(result.agent.id).toBe(newAgentId);
@@ -383,7 +383,7 @@ describe('Agent Management', () => {
         };
         await api._saveFeatures(features);
 
-        const result = await api.reinitializeAgent('incomplete-agent');
+        const RESULT = await api.reinitializeAgent('incomplete-agent');
 
         expect(result.success).toBe(true);
         expect(result.agent.previousSessions).toBe(0);
@@ -398,7 +398,7 @@ describe('Agent Management', () => {
       test('should handle file write errors during reinitialization', async () => {
         mockFs.setWriteError(TEST_FEATURES_PATH, 'Permission denied');
 
-        const result = await api.reinitializeAgent(existingAgentId);
+        const RESULT = await api.reinitializeAgent(existingAgentId);
 
         expect(result.success).toBe(false);
         expect(result.error).toContain('Failed to reinitialize agent');
@@ -408,7 +408,7 @@ describe('Agent Management', () => {
       test('should handle corrupted features file during reinitialization', async () => {
         mockFs.setFile(TEST_FEATURES_PATH, '{ corrupted json }');
 
-        const result = await api.reinitializeAgent(existingAgentId);
+        const RESULT = await api.reinitializeAgent(existingAgentId);
 
         expect(result.success).toBe(false);
         expect(result.error).toContain('Failed to reinitialize agent');
@@ -421,11 +421,11 @@ describe('Agent Management', () => {
   describe('Stop Authorization', () => {
     describe('Basic Stop Authorization', () => {
       test('should authorize stop successfully with reason', async () => {
-        const AGENT_ID = 'stopping-agent';
+        const agentId = 'stopping-agent';
         const reason =
           'All TodoWrite tasks completed successfully. Linter passes, build succeeds, tests pass.';
 
-        const result = await api.authorizeStop(agentId, reason);
+        const RESULT = await api.authorizeStop(agentId, reason);
 
         expect(result.success).toBe(true);
         expect(result.authorization).toBeDefined();
@@ -437,9 +437,9 @@ describe('Agent Management', () => {
       });
 
       test('should authorize stop with default reason when none provided', async () => {
-        const AGENT_ID = 'default-reason-agent';
+        const agentId = 'default-reason-agent';
 
-        const result = await api.authorizeStop(agentId);
+        const RESULT = await api.authorizeStop(agentId);
 
         expect(result.success).toBe(true);
         expect(result.authorization.reason).toBe(
@@ -449,9 +449,9 @@ describe('Agent Management', () => {
       });
 
       test('should create .stop-allowed flag file', async () => {
-        const AGENT_ID = 'flag-creation-agent';
+        const agentId = 'flag-creation-agent';
 
-        const result = await api.authorizeStop(agentId);
+        const RESULT = await api.authorizeStop(agentId);
         expect(result.success).toBe(true);
 
         // Verify flag file was created
@@ -465,11 +465,11 @@ describe('Agent Management', () => {
       });
 
       test('should include comprehensive stop data in flag file', async () => {
-        const AGENT_ID = 'comprehensive-stop-agent';
+        const agentId = 'comprehensive-stop-agent';
         const reason =
           'Project perfection achieved: all features implemented, tests pass, code quality excellent';
 
-        const result = await api.authorizeStop(agentId, reason);
+        const RESULT = await api.authorizeStop(agentId, reason);
         expect(result.success).toBe(true);
 
         const flagContent = JSON.parse(mockFs.getFile(TEST_STOP_FLAG_PATH));
@@ -486,7 +486,7 @@ describe('Agent Management', () => {
 
     describe('Stop Authorization Edge Cases', () => {
       test('should handle empty agent ID', async () => {
-        const result = await api.authorizeStop('');
+        const RESULT = await api.authorizeStop('');
 
         expect(result.success).toBe(true);
         expect(result.authorization.authorized_by).toBe('');
@@ -496,10 +496,10 @@ describe('Agent Management', () => {
       });
 
       test('should handle very long reasons', async () => {
-        const AGENT_ID = 'long-reason-agent';
+        const agentId = 'long-reason-agent';
         const longReason = 'A'.repeat(1000);
 
-        const result = await api.authorizeStop(agentId, longReason);
+        const RESULT = await api.authorizeStop(agentId, longReason);
 
         expect(result.success).toBe(true);
         expect(result.authorization.reason).toBe(longReason);
@@ -509,11 +509,11 @@ describe('Agent Management', () => {
       });
 
       test('should handle special characters in agent ID And reason', async () => {
-        const AGENT_ID = 'special-chars-agent_123!@#';
+        const agentId = 'special-chars-agent_123!@#';
         const reason =
           'Reason with special chars: !@#$%^&*()_+-={}[]|\\:";\'<>?,./';
 
-        const result = await api.authorizeStop(agentId, reason);
+        const RESULT = await api.authorizeStop(agentId, reason);
 
         expect(result.success).toBe(true);
         expect(result.authorization.authorized_by).toBe(agentId);
@@ -552,7 +552,7 @@ describe('Agent Management', () => {
       test('should handle file write errors during stop authorization', async () => {
         mockFs.setWriteError(TEST_STOP_FLAG_PATH, 'Permission denied');
 
-        const result = await api.authorizeStop('error-agent');
+        const RESULT = await api.authorizeStop('error-agent');
 
         expect(result.success).toBe(false);
         expect(result.error).toContain('Failed to authorize stop');
@@ -567,11 +567,11 @@ describe('Agent Management', () => {
         });
 
         try {
-          const result = await api.authorizeStop('fs-error-agent');
+          const RESULT = await api.authorizeStop('fs-error-agent');
 
           expect(result.success).toBe(false);
           expect(result.error).toContain('Failed to authorize stop');
-        } catch {
+        } catch (error) {
           // Expected in this test scenario
           expect(error.message).toContain('File system unavailable');
         }
@@ -584,7 +584,7 @@ describe('Agent Management', () => {
   describe('Agent Management Integration', () => {
     describe('Agent Lifecycle Integration', () => {
       test('should handle complete agent lifecycle', async () => {
-        const AGENT_ID = 'lifecycle-agent';
+        const agentId = 'lifecycle-agent';
 
         // 1. Initialize agent
         const initResult = await api.initializeAgent(agentId);
@@ -619,7 +619,7 @@ describe('Agent Management', () => {
         // Initialize all agents
         for (const agentId of agents) {
           // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test validation
-          const result = await api.initializeAgent(agentId);
+          const RESULT = await api.initializeAgent(agentId);
           expect(result.success).toBe(true);
         }
 
@@ -650,7 +650,7 @@ describe('Agent Management', () => {
 
     describe('Agent Management with Feature Operations', () => {
       test('should maintain agent state during feature operations', async () => {
-        const AGENT_ID = 'feature-ops-agent';
+        const agentId = 'feature-ops-agent';
 
         // Initialize agent
         const initResult = await api.initializeAgent(agentId);
@@ -698,7 +698,7 @@ describe('Agent Management', () => {
         };
         mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(partialAgentData));
 
-        const result = await api.reinitializeAgent('partial-agent');
+        const RESULT = await api.reinitializeAgent('partial-agent');
 
         expect(result.success).toBe(true);
 
@@ -716,7 +716,7 @@ describe('Agent Management', () => {
         };
         mockFs.setFile(TEST_FEATURES_PATH, JSON.stringify(malformedData));
 
-        const result = await api.initializeAgent('recovery-agent');
+        const RESULT = await api.initializeAgent('recovery-agent');
 
         expect(result.success).toBe(true);
 

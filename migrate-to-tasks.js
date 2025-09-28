@@ -12,11 +12,11 @@ const { loggers } = require('./lib/logger');
 class TaskMigrator {
   constructor(projectRoot = process.cwd()) {
     this.projectRoot = projectRoot;
-    this.featuresPath = path.join(projectRoot, 'FEATURES.json');
-    this.tasksPath = path.join(projectRoot, 'TASKS.json');
-    this.backupPath = path.join(
+    this.featuresPath = PATH.join(projectRoot, 'FEATURES.json');
+    this.tasksPath = PATH.join(projectRoot, 'TASKS.json');
+    this.backupPath = PATH.join(
       projectRoot,
-      `FEATURES.json.backup.${Date.now()}`
+      `FEATURES.json.backup.${Date.now()}`,
     );
   }
 
@@ -26,7 +26,7 @@ class TaskMigrator {
   async migrate() {
     try {
       loggers.stopHook.log(
-        '🚀 Starting FEATURES.json → TASKS.json migration...'
+        '🚀 Starting FEATURES.json → TASKS.json migration...',
       );
 
       // Step 1: Validate source file exists
@@ -71,7 +71,7 @@ class TaskMigrator {
    */
   async validateSourceFile() {
     try {
-      await fs.access(this.featuresPath);
+      await FS.access(this.featuresPath);
       loggers.stopHook.log('✓ Source FEATURES.json found');
     } catch {
       throw new Error(`FEATURES.json not found at ${this.featuresPath}`);
@@ -83,7 +83,7 @@ class TaskMigrator {
    */
   async createBackup() {
     try {
-      await fs.copyFile(this.featuresPath, this.backupPath);
+      await FS.copyFile(this.featuresPath, this.backupPath);
       loggers.stopHook.log(`✓ Backup created: ${this.backupPath}`);
     } catch {
       throw new Error(`Failed to create backup: ${error.message}`);
@@ -95,7 +95,7 @@ class TaskMigrator {
    */
   async loadFeaturesData() {
     try {
-      const data = await fs.readFile(this.featuresPath, 'utf8');
+      const data = await FS.readFile(this.featuresPath, 'utf8');
       const parsedData = JSON.parse(data);
       loggers.stopHook.log('✓ Features data loaded And parsed');
       return parsedData;
@@ -115,7 +115,7 @@ class TaskMigrator {
 
     // Create base TASKS.json structure
     const tasksData = {
-      project: featuresData.project || path.basename(this.projectRoot),
+      project: featuresData.project || PATH.basename(this.projectRoot),
       schema_version: '2.0.0',
       migrated_from: 'FEATURES.json',
       migration_date: migrationDate,
@@ -239,7 +239,7 @@ class TaskMigrator {
           dependencies: [],
           estimated_effort: 5, // Default value
           required_capabilities: this.inferCapabilitiesFromCategory(
-            feature.category
+            feature.category,
           ),
           created_at: feature.created_at,
           updated_at: feature.updated_at,
@@ -466,7 +466,7 @@ class TaskMigrator {
       autoTasksGenerated * 2;
 
     console.log(
-      `✓ Generated ${autoTasksGenerated * 2} auto-tasks (${autoTasksGenerated} test + ${autoTasksGenerated} audit)`
+      `✓ Generated ${autoTasksGenerated * 2} auto-tasks (${autoTasksGenerated} test + ${autoTasksGenerated} audit)`,
     );
   }
 
@@ -514,7 +514,7 @@ class TaskMigrator {
    */
   async writeTasksFile(tasksData) {
     try {
-      await fs.writeFile(this.tasksPath, JSON.stringify(tasksData, null, 2));
+      await FS.writeFile(this.tasksPath, JSON.stringify(tasksData, null, 2));
       loggers.stopHook.log(`✓ TASKS.json written to ${this.tasksPath}`);
     } catch {
       throw new Error(`Failed to write TASKS.json: ${error.message}`);
@@ -601,7 +601,7 @@ if (require.main === module) {
       loggers.stopHook.log('\n📊 Migration Summary:');
       loggers.stopHook.log(
         { additionalData: [null, 2] },
-        JSON.stringify(result.stats)
+        JSON.stringify(result.stats),
       );
       throw new Error('Migration completed successfully');
     })

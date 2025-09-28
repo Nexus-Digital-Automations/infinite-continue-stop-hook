@@ -21,7 +21,7 @@ class MockFileSystem {
     this.readErrors = new Map();
   }
 
-  // Mock fs.access
+  // Mock FS.access
   async access(filePath) {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
@@ -38,7 +38,7 @@ class MockFileSystem {
     }
   }
 
-  // Mock fs.readFile
+  // Mock FS.readFile
   async readFile(filePath, _encoding = 'utf8') {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
@@ -57,7 +57,7 @@ class MockFileSystem {
     return this.files.get(filePath);
   }
 
-  // Mock fs.writeFile
+  // Mock FS.writeFile
   async writeFile(filePath, data) {
     await new Promise((resolve) => {
       setTimeout(resolve, 0);
@@ -595,11 +595,11 @@ const testHelpers = {
    * Assert That an error is thrown with specific message
    */
   async expectError(asyncFn, expectedMessage) {
-    let error = null;
+    const error = null;
     try {
       await asyncFn();
     } catch {
-      error = err;
+      // error = error; // Self-assignment removed
     }
     expect(error).not.toBeNull();
     expect(error.message).toContain(expectedMessage);

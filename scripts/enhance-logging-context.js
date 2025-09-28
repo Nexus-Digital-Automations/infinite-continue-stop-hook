@@ -38,8 +38,8 @@ class LoggingContextEnhancer {
 
     // Process system files
     for (const file of this.systemFiles) {
-      const fullPath = path.join(process.cwd(), file);
-      if (fs.existsSync(fullPath)) {
+      const fullPath = PATH.join(process.cwd(), file);
+      if (FS.existsSync(fullPath)) {
         this.enhanceFile(fullPath);
       } else {
         loggers.app.warn('System file not found for enhancement', { file });
@@ -59,7 +59,7 @@ class LoggingContextEnhancer {
 
   enhanceFile(filePath) {
     try {
-      const content = fs.readFileSync(filePath, 'utf8');
+      const content = FS.readFileSync(filePath, 'utf8');
       let newContent = content;
       let enhanced = false;
 
@@ -73,7 +73,7 @@ class LoggingContextEnhancer {
           this.enhancedCalls++;
           enhanced = true;
           return `loggers.${loggerType}.${level}('${message}', ${JSON.stringify(contextInfo)});`;
-        }
+        },
       );
 
       // Enhance existing context logger calls to include standard fields
@@ -93,13 +93,13 @@ class LoggingContextEnhancer {
             // If we can't parse the context, leave it as is
             return match;
           }
-        }
+        },
       );
 
       if (enhanced) {
-        fs.writeFileSync(filePath, newContent, 'utf8');
+        FS.writeFileSync(filePath, newContent, 'utf8');
         loggers.app.info('Enhanced logging context in file', {
-          filePath: path.relative(process.cwd(), filePath),
+          filePath: PATH.relative(process.cwd(), filePath),
           enhancedCalls: this.enhancedCalls,
         });
         this.processedFiles++;
@@ -113,12 +113,12 @@ class LoggingContextEnhancer {
   }
 
   getFileContext(filePath) {
-    const fileName = path.basename(filePath);
+    const fileName = PATH.basename(filePath);
 
     // Determine context based on file purpose
     if (fileName.includes('agent')) {
       return {
-        agentId: 'process.env.AGENT_ID || "unknown"',
+        agentId: 'process.env.agentId || "unknown"',
         operationId: 'crypto.randomUUID()',
         module: fileName.replace('.js', ''),
       };
@@ -175,7 +175,7 @@ function createTaskLogger(taskId, agentId = null) {
 // Create context-aware logger for operations
 function createOperationLogger(operationName, agentId = null, taskId = null) {
   return createContextLogger({
-    agentId: agentId || process.env.AGENT_ID || 'unknown',
+    agentId: agentId || process.env.agentId || 'unknown',
     taskId: taskId || process.env.TASK_ID || null,
     module: operationName,
     operationId: crypto.randomUUID()
@@ -185,7 +185,7 @@ function createOperationLogger(operationName, agentId = null, taskId = null) {
 // Enhanced logging with automatic context detection
 function logWithContext(level, message, customContext = {}) {
   const autoContext = {
-    agentId: process.env.AGENT_ID || 'unknown',
+    agentId: process.env.agentId || 'unknown',
     taskId: process.env.TASK_ID || null,
     operationId: crypto.randomUUID(),
     timestamp: new Date().toISOString(),
@@ -198,7 +198,7 @@ function logWithContext(level, message, customContext = {}) {
 // Performance logging with context
 function logPerformance(operation, durationMs, agentId = null, taskId = null) {
   const context = {
-    agentId: agentId || process.env.AGENT_ID || 'unknown',
+    agentId: agentId || process.env.agentId || 'unknown',
     taskId: taskId || process.env.TASK_ID || null,
     operation,
     durationMs,
@@ -218,10 +218,10 @@ module.exports = {
 };
 `;
 
-    fs.writeFileSync(
-      path.join(process.cwd(), 'lib/logging-utilities.js'),
+    FS.writeFileSync(
+      PATH.join(process.cwd(), 'lib/logging-utilities.js'),
       utilityCode,
-      'utf8'
+      'utf8',
     );
 
     loggers.app.info('Created enhanced logging utilities', {
@@ -239,7 +239,7 @@ if (require.main === module) {
     .then((result) => {
       if (result && result.enhancedCalls === 0) {
         loggers.app.warn(
-          'No logging calls were enhanced - may need manual review'
+          'No logging calls were enhanced - may need manual review',
         );
       }
     })

@@ -6,31 +6,31 @@ const { execSync } = require('child_process');
 // Tests the full lifecycle: metrics collection → storage → analysis → trend analysis
 describe('Performance Metrics System E2E Tests', () => {
   const mockProjectRoot = '/tmp/test-performance-e2e';
-  const taskManagerPath = path.resolve(__dirname, '../../taskmanager-api.js');
-  const mockMetricsFile = path.join(
+  const taskManagerPath = PATH.resolve(__dirname, '../../taskmanager-api.js');
+  const mockMetricsFile = PATH.join(
     mockProjectRoot,
     '.validation-performance-enhanced.json',
   );
-  const mockTrendsFile = path.join(mockProjectRoot, '.validation-trends.json');
+  const mockTrendsFile = PATH.join(mockProjectRoot, '.validation-trends.json');
 
   beforeEach(() => {
     // Create mock directory
-    if (!fs.existsSync(mockProjectRoot)) {
-      fs.mkdirSync(mockProjectRoot, { recursive: true });
+    if (!FS.existsSync(mockProjectRoot)) {
+      FS.mkdirSync(mockProjectRoot, { recursive: true });
     }
 
     // Clean up previous test data
     [mockMetricsFile, mockTrendsFile].forEach((file) => {
-      if (fs.existsSync(file)) {
-        fs.unlinkSync(file);
+      if (FS.existsSync(file)) {
+        FS.unlinkSync(file);
       }
     });
   });
 
   afterEach(() => {
     // Clean up test directory
-    if (fs.existsSync(mockProjectRoot)) {
-      fs.rmSync(mockProjectRoot, { recursive: true, force: true });
+    if (FS.existsSync(mockProjectRoot)) {
+      FS.rmSync(mockProjectRoot, { recursive: true, force: true });
     }
   });
 
@@ -182,7 +182,7 @@ describe('Performance Metrics System E2E Tests', () => {
       (a, b) => new Date(b.timing.startTime) - new Date(a.timing.startTime),
     );
 
-    fs.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
+    FS.writeFileSync(mockMetricsFile, JSON.stringify(metricsData, null, 2));
     return metricsData;
   }
 
@@ -369,7 +369,7 @@ describe('Performance Metrics System E2E Tests', () => {
         }
       }
 
-      fs.writeFileSync(
+      FS.writeFileSync(
         mockMetricsFile,
         JSON.stringify(largeMetricsData, null, 2),
       );
@@ -468,7 +468,7 @@ describe('Performance Metrics System E2E Tests', () => {
         ],
       };
 
-      fs.writeFileSync(
+      FS.writeFileSync(
         mockMetricsFile,
         JSON.stringify(mixedQualityData, null, 2),
       );
@@ -516,7 +516,7 @@ describe('Performance Metrics System E2E Tests', () => {
         ],
       };
 
-      fs.writeFileSync(mockMetricsFile, JSON.stringify(minimalData, null, 2));
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(minimalData, null, 2));
 
       // Basic analysis should work
       let result = executeTaskManagerCommand(
@@ -556,7 +556,7 @@ describe('Performance Metrics System E2E Tests', () => {
         });
       }
 
-      fs.writeFileSync(mockMetricsFile, JSON.stringify(weekData, null, 2));
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(weekData, null, 2));
 
       let result = executeTaskManagerCommand(
         'analyze-criterion-trend',
@@ -601,11 +601,11 @@ describe('Performance Metrics System E2E Tests', () => {
         ],
       };
 
-      const legacyFile = path.join(
+      const legacyFile = PATH.join(
         mockProjectRoot,
         '.validation-performance.json',
       );
-      fs.writeFileSync(legacyFile, JSON.stringify(legacyData, null, 2));
+      FS.writeFileSync(legacyFile, JSON.stringify(legacyData, null, 2));
 
       // Should work with legacy format
       const result = executeTaskManagerCommand(
@@ -640,9 +640,9 @@ describe('Performance Metrics System E2E Tests', () => {
         ],
       };
 
-      fs.writeFileSync(mockMetricsFile, JSON.stringify(enhancedData, null, 2));
-      fs.writeFileSync(
-        path.join(mockProjectRoot, '.validation-performance.json'),
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(enhancedData, null, 2));
+      FS.writeFileSync(
+        PATH.join(mockProjectRoot, '.validation-performance.json'),
         JSON.stringify(legacyData, null, 2),
       );
 

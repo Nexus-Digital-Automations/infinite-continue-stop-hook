@@ -5,17 +5,17 @@ const PATH = require('path');
 // Feature ID: feature_1758946487032_0f9c9de60c88
 describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () => {
   const mockProjectRoot = '/tmp/test-taskmanager';
-  const mockConfigPath = path.join(mockProjectRoot, '.claude-validation.json');
+  const mockConfigPath = PATH.join(mockProjectRoot, '.claude-validation.json');
 
   beforeEach(() => {
-    if (!fs.existsSync(mockProjectRoot)) {
-      fs.mkdirSync(mockProjectRoot, { recursive: true });
+    if (!FS.existsSync(mockProjectRoot)) {
+      FS.mkdirSync(mockProjectRoot, { recursive: true });
     }
   });
 
   afterEach(() => {
-    if (fs.existsSync(mockConfigPath)) {
-      fs.unlinkSync(mockConfigPath);
+    if (FS.existsSync(mockConfigPath)) {
+      FS.unlinkSync(mockConfigPath);
     }
   });
 
@@ -34,24 +34,24 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         ],
       };
 
-      fs.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
+      FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       // Mock TaskManager _loadCustomValidationRules method
       const mockTaskManager = {
         _fileExists(filePath) {
-          return fs.existsSync(filePath);
+          return FS.existsSync(filePath);
         },
 
         async _loadCustomValidationRules() {
           const FS = require('fs').promises;
-          const configPath = path.join(
+          const configPath = PATH.join(
             mockProjectRoot,
             '.claude-validation.json',
           );
 
           try {
             if (await this._fileExists(configPath)) {
-              const configData = await fs.readFile(configPath, 'utf8');
+              const configData = await FS.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
               if (
@@ -85,19 +85,19 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
     test('should return empty array for missing config file', async () => {
       const mockTaskManager = {
         _fileExists(filePath) {
-          return fs.existsSync(filePath);
+          return FS.existsSync(filePath);
         },
 
         async _loadCustomValidationRules() {
           const FS = require('fs').promises;
-          const configPath = path.join(
+          const configPath = PATH.join(
             '/nonexistent',
             '.claude-validation.json',
           );
 
           try {
             if (await this._fileExists(configPath)) {
-              const configData = await fs.readFile(configPath, 'utf8');
+              const configData = await FS.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
               if (
@@ -145,24 +145,24 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         ],
       };
 
-      fs.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
+      FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       // Mock TaskManager validation method
       const mockTaskManager = {
         _fileExists(filePath) {
-          return fs.existsSync(filePath);
+          return FS.existsSync(filePath);
         },
 
         async _loadCustomValidationRules() {
           const FS = require('fs').promises;
-          const configPath = path.join(
+          const configPath = PATH.join(
             mockProjectRoot,
             '.claude-validation.json',
           );
 
           try {
             if (await this._fileExists(configPath)) {
-              const configData = await fs.readFile(configPath, 'utf8');
+              const configData = await FS.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
               if (
@@ -326,23 +326,23 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         ],
       };
 
-      fs.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
+      FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const mockTaskManager = {
         _fileExists(filePath) {
-          return fs.existsSync(filePath);
+          return FS.existsSync(filePath);
         },
 
         async _loadCustomValidationRules() {
           const FS = require('fs').promises;
-          const configPath = path.join(
+          const configPath = PATH.join(
             mockProjectRoot,
             '.claude-validation.json',
           );
 
           try {
             if (await this._fileExists(configPath)) {
-              const configData = await fs.readFile(configPath, 'utf8');
+              const configData = await FS.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
               if (
@@ -434,23 +434,23 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         ],
       };
 
-      fs.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
+      FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const mockTaskManager = {
         _fileExists(filePath) {
-          return fs.existsSync(filePath);
+          return FS.existsSync(filePath);
         },
 
         async _loadCustomValidationRules() {
           const FS = require('fs').promises;
-          const configPath = path.join(
+          const configPath = PATH.join(
             mockProjectRoot,
             '.claude-validation.json',
           );
 
           try {
             if (await this._fileExists(configPath)) {
-              const configData = await fs.readFile(configPath, 'utf8');
+              const configData = await FS.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
               if (
@@ -566,23 +566,23 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         ],
       };
 
-      fs.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
+      FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const mockTaskManager = {
         _fileExists(filePath) {
-          return fs.existsSync(filePath);
+          return FS.existsSync(filePath);
         },
 
         async _loadCustomValidationRules() {
           const FS = require('fs').promises;
-          const configPath = path.join(
+          const configPath = PATH.join(
             mockProjectRoot,
             '.claude-validation.json',
           );
 
           try {
             if (await this._fileExists(configPath)) {
-              const configData = await fs.readFile(configPath, 'utf8');
+              const configData = await FS.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
               if (
@@ -697,23 +697,23 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         ],
       };
 
-      fs.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
+      FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const mockTaskManager = {
         _fileExists(filePath) {
-          return fs.existsSync(filePath);
+          return FS.existsSync(filePath);
         },
 
         async _loadCustomValidationRules() {
           const FS = require('fs').promises;
-          const configPath = path.join(
+          const configPath = PATH.join(
             mockProjectRoot,
             '.claude-validation.json',
           );
 
           try {
             if (await this._fileExists(configPath)) {
-              const configData = await fs.readFile(configPath, 'utf8');
+              const configData = await FS.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
               if (
@@ -819,23 +819,23 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         customValidationRules: [],
       };
 
-      fs.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
+      FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const mockTaskManager = {
         _fileExists(filePath) {
-          return fs.existsSync(filePath);
+          return FS.existsSync(filePath);
         },
 
         async _loadCustomValidationRules() {
           const FS = require('fs').promises;
-          const configPath = path.join(
+          const configPath = PATH.join(
             mockProjectRoot,
             '.claude-validation.json',
           );
 
           try {
             if (await this._fileExists(configPath)) {
-              const configData = await fs.readFile(configPath, 'utf8');
+              const configData = await FS.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
               if (
@@ -868,23 +868,23 @@ describe('Feature 7: TaskManager API Integration - Custom Validation Rules', () 
         someOtherProperty: 'value',
       };
 
-      fs.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
+      FS.writeFileSync(mockConfigPath, JSON.stringify(mockConfig, null, 2));
 
       const mockTaskManager = {
         _fileExists(filePath) {
-          return fs.existsSync(filePath);
+          return FS.existsSync(filePath);
         },
 
         async _loadCustomValidationRules() {
           const FS = require('fs').promises;
-          const configPath = path.join(
+          const configPath = PATH.join(
             mockProjectRoot,
             '.claude-validation.json',
           );
 
           try {
             if (await this._fileExists(configPath)) {
-              const configData = await fs.readFile(configPath, 'utf8');
+              const configData = await FS.readFile(configPath, 'utf8');
               const config = JSON.parse(configData);
 
               if (

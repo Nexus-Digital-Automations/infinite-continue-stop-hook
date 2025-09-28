@@ -56,7 +56,7 @@ describe('Agent Lifecycle Integration Tests', () => {
   describe('Agent Initialization Workflow', () => {
     test('should handle single agent initialization process', async () => {
       // 1. Initialize agent
-      const AGENT_ID = 'test-agent-001';
+      const agentId = 'test-agent-001';
       const initResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });
@@ -192,7 +192,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
     test('should prevent duplicate agent initialization', async () => {
       // 1. Initialize an agent
-      const AGENT_ID = 'duplicate-test-agent';
+      const agentId = 'duplicate-test-agent';
       const firstInitResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });
@@ -224,7 +224,7 @@ describe('Agent Lifecycle Integration Tests', () => {
   describe('Agent Reinitialization Workflow', () => {
     test('should handle agent reinitialization process', async () => {
       // 1. Initialize agent first
-      const AGENT_ID = 'reinit-test-agent';
+      const agentId = 'reinit-test-agent';
       const initResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });
@@ -277,7 +277,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
     test('should handle multiple reinitializations of same agent', async () => {
       // 1. Initialize agent
-      const AGENT_ID = 'multi-reinit-agent';
+      const agentId = 'multi-reinit-agent';
       const initResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });
@@ -321,7 +321,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
     test('should handle reinitialization of non-existent agent', async () => {
       // 1. Try to reinitialize agent That doesn't exist
-      const AGENT_ID = 'non-existent-agent';
+      const agentId = 'non-existent-agent';
       const reinitResult = await execAPI('reinitialize', [agentId], {
         projectRoot: testDir,
       });
@@ -386,7 +386,7 @@ describe('Agent Lifecycle Integration Tests', () => {
   describe('Stop Authorization Workflow', () => {
     test('should handle agent stop authorization process', async () => {
       // 1. Initialize agent
-      const AGENT_ID = 'stop-auth-agent';
+      const agentId = 'stop-auth-agent';
       const initResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });
@@ -410,7 +410,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       expect(stopResult.authorization.stop_flag_created).toBe(true);
 
       // 3. Verify stop flag file creation
-      const stopFlagPath = path.join(testDir, '.stop-allowed');
+      const stopFlagPath = PATH.join(testDir, '.stop-allowed');
       const stopFlagExists = await fs
         .access(stopFlagPath)
         .then(() => true)
@@ -418,7 +418,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       expect(stopFlagExists).toBe(true);
 
       // 4. Verify stop flag content
-      const stopFlagContent = await fs.readFile(stopFlagPath, 'utf8');
+      const stopFlagContent = await FS.readFile(stopFlagPath, 'utf8');
       const stopFlagData = JSON.parse(stopFlagContent);
 
       expect(stopFlagData.stop_allowed).toBe(true);
@@ -465,8 +465,8 @@ describe('Agent Lifecycle Integration Tests', () => {
         expect(stopResult.authorization.reason).toBe(testCase.reason);
 
         // Verify stop flag (each authorization overwrites the previous one)
-        const stopFlagPath = path.join(testDir, '.stop-allowed');
-        const stopFlagContent = await fs.readFile(stopFlagPath, 'utf8');
+        const stopFlagPath = PATH.join(testDir, '.stop-allowed');
+        const stopFlagContent = await FS.readFile(stopFlagPath, 'utf8');
         const stopFlagData = JSON.parse(stopFlagContent);
 
         expect(stopFlagData.authorized_by).toBe(testCase.agentId);
@@ -476,7 +476,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
     test('should handle stop authorization without reason', async () => {
       // 1. Initialize agent
-      const AGENT_ID = 'no-reason-agent';
+      const agentId = 'no-reason-agent';
       const initResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });
@@ -493,8 +493,8 @@ describe('Agent Lifecycle Integration Tests', () => {
       expect(stopResult.authorization.reason).toContain('completing all tasks');
 
       // 3. Verify default reason in stop flag
-      const stopFlagPath = path.join(testDir, '.stop-allowed');
-      const stopFlagContent = await fs.readFile(stopFlagPath, 'utf8');
+      const stopFlagPath = PATH.join(testDir, '.stop-allowed');
+      const stopFlagContent = await FS.readFile(stopFlagPath, 'utf8');
       const stopFlagData = JSON.parse(stopFlagContent);
 
       expect(stopFlagData.reason).toContain('completing all tasks');
@@ -502,7 +502,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
     test('should handle stop authorization by non-existent agent', async () => {
       // 1. Try to authorize stop with non-existent agent
-      const AGENT_ID = 'non-existent-stop-agent';
+      const agentId = 'non-existent-stop-agent';
       const stopReason = 'Testing stop authorization by non-existent agent';
 
       const stopResult = await execAPI(
@@ -518,7 +518,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       expect(stopResult.authorization.authorized_by).toBe(agentId);
 
       // 2. Verify stop flag creation
-      const stopFlagPath = path.join(testDir, '.stop-allowed');
+      const stopFlagPath = PATH.join(testDir, '.stop-allowed');
       const stopFlagExists = await fs
         .access(stopFlagPath)
         .then(() => true)
@@ -549,8 +549,8 @@ describe('Agent Lifecycle Integration Tests', () => {
       }
 
       // 3. Verify final stop flag reflects last authorization
-      const stopFlagPath = path.join(testDir, '.stop-allowed');
-      const stopFlagContent = await fs.readFile(stopFlagPath, 'utf8');
+      const stopFlagPath = PATH.join(testDir, '.stop-allowed');
+      const stopFlagContent = await FS.readFile(stopFlagPath, 'utf8');
       const stopFlagData = JSON.parse(stopFlagContent);
 
       expect(stopFlagData.authorized_by).toBe(agentIds[agentIds.length - 1]);
@@ -577,7 +577,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       const initialReinits = initialStats.total_reinitializations;
 
       // 2. Perform various agent operations
-      const AGENT_ID = 'stats-test-agent';
+      const agentId = 'stats-test-agent';
 
       // Initialize
       const initResult = await execAPI('initialize', [agentId], {
@@ -722,7 +722,7 @@ describe('Agent Lifecycle Integration Tests', () => {
   describe('Complete Agent Lifecycle Scenarios', () => {
     test('should handle complete agent workflow from initialization to stop', async () => {
       // 1. Initialize agent
-      const AGENT_ID = 'complete-lifecycle-agent';
+      const agentId = 'complete-lifecycle-agent';
       const initResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });
@@ -764,14 +764,14 @@ describe('Agent Lifecycle Integration Tests', () => {
       expect(stopResult.authorization.stop_flag_created).toBe(true);
 
       // 6. Verify stop flag
-      const stopFlagPath = path.join(testDir, '.stop-allowed');
+      const stopFlagPath = PATH.join(testDir, '.stop-allowed');
       const stopFlagExists = await fs
         .access(stopFlagPath)
         .then(() => true)
         .catch(() => false);
       expect(stopFlagExists).toBe(true);
 
-      const stopFlagContent = await fs.readFile(stopFlagPath, 'utf8');
+      const stopFlagContent = await FS.readFile(stopFlagPath, 'utf8');
       const stopFlagData = JSON.parse(stopFlagContent);
       expect(stopFlagData.authorized_by).toBe(agentId);
       expect(stopFlagData.reason).toBe(stopReason);
@@ -850,7 +850,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
     test('should handle agent workflow error recovery', async () => {
       // 1. Initialize agent
-      const AGENT_ID = 'error-recovery-agent';
+      const agentId = 'error-recovery-agent';
       const initResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });

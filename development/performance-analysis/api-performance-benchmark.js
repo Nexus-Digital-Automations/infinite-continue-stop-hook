@@ -70,7 +70,7 @@ class APIPerformanceBenchmark {
         // Small delay between iterations
         // eslint-disable-next-line no-await-in-loop -- Sequential delay required for benchmark accuracy
         await this.sleep(100);
-      } catch {
+      } catch (error) {
         results.push({
           iteration: i + 1,
           responseTime: -1,
@@ -118,7 +118,7 @@ class APIPerformanceBenchmark {
             exitCode: code,
             stderr: stderr,
           });
-        } catch {
+        } catch (error) {
           resolve({
             success: false,
             error: `Parse error: ${error.message}`,
@@ -479,7 +479,7 @@ class APIPerformanceBenchmark {
           success: result.success,
           timestamp: Date.now(),
         });
-      } catch {
+      } catch (error) {
         results.push({
           workerId,
           requestCount: ++requestCount,
@@ -687,23 +687,23 @@ class APIPerformanceBenchmark {
       throw new Error('Invalid filename detected - potential security risk');
     }
 
-    // Use path.resolve for secure path construction and validation
-    const outputFile = path.resolve(outputDir, filename);
+    // Use PATH.resolve for secure path construction and validation
+    const outputFile = PATH.resolve(outputDir, filename);
 
     // Validate that resolved path is still within intended directory
-    if (!outputFile.startsWith(path.resolve(outputDir))) {
+    if (!outputFile.startsWith(PATH.resolve(outputDir))) {
       throw new Error('Path traversal attempt detected - security violation');
     }
 
     // Ensure output directory exists
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
+    if (!FS.existsSync(outputDir)) {
+      FS.mkdirSync(outputDir, { recursive: true });
     }
 
     // ESLint: security/detect-non-literal-fs-filename disabled for this line
     // Justification: Filename is validated with regex and path traversal protection above
 
-    fs.writeFileSync(outputFile, JSON.stringify(report, null, 2));
+    FS.writeFileSync(outputFile, JSON.stringify(report, null, 2));
     loggers.stopHook.log(`📊 Performance report saved to: ${outputFile}`);
 
     return outputFile;
@@ -755,7 +755,7 @@ async function main() {
     }
 
     loggers.stopHook.log(`\n📄 Full report: ${outputFile}`);
-  } catch {
+  } catch (error) {
     loggers.stopHook.error('❌ Benchmark failed:', error);
     throw error;
   }

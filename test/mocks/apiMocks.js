@@ -347,7 +347,7 @@ class FileSystemMock {
   mkdirSync(path, options = {}) {
     if (options.recursive) {
       // Create all parent directories
-      const parts = path.split('/');
+      const parts = PATH.split('/');
       let currentPath = '';
       for (const part of parts) {
         if (part) {
@@ -386,9 +386,9 @@ class FileSystemMock {
     for (const [filePath] of this.files) {
       if (
         filePath.startsWith(path + '/') &&
-        !filePath.substring(path.length + 1).includes('/')
+        !filePath.substring(PATH.length + 1).includes('/')
       ) {
-        entries.push(filePath.substring(path.length + 1));
+        entries.push(filePath.substring(PATH.length + 1));
       }
     }
 
@@ -396,9 +396,9 @@ class FileSystemMock {
     for (const dirPath of this.directories) {
       if (
         dirPath.startsWith(path + '/') &&
-        !dirPath.substring(path.length + 1).includes('/')
+        !dirPath.substring(PATH.length + 1).includes('/')
       ) {
-        entries.push(dirPath.substring(path.length + 1));
+        entries.push(dirPath.substring(PATH.length + 1));
       }
     }
 

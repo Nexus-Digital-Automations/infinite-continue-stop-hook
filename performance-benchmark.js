@@ -155,7 +155,7 @@ class TaskManagerPerformanceBenchmark {
         return;
       }
 
-      const AGENT_ID = initResult.response?.agentId;
+      const agentId = initResult.response?.agentId;
       if (!agentId) {
         loggers.stopHook.log('   ❌ No agent ID returned from init');
         return;
@@ -522,7 +522,7 @@ class TaskManagerPerformanceBenchmark {
 
     // Save report to file
     const reportPath = `/Users/jeremyparker/infinite-continue-stop-hook/performance-report-${Date.now()}.json`;
-    await fs.writeFile(reportPath, JSON.stringify(report, null, 2));
+    await FS.writeFile(reportPath, JSON.stringify(report, null, 2));
 
     loggers.stopHook.log(`\n📊 Performance Report Generated: ${reportPath}`);
     return report;

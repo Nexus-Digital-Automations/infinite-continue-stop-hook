@@ -37,13 +37,13 @@ class NodeVersionPerformanceBenchmark {
       recommendations: [],
     };
 
-    this.outputDir = path.join(process.cwd(), 'test-performance');
+    this.outputDir = PATH.join(process.cwd(), 'test-performance');
     this.ensureOutputDirectory();
   }
 
   ensureOutputDirectory() {
-    if (!fs.existsSync(this.outputDir)) {
-      fs.mkdirSync(this.outputDir, { recursive: true });
+    if (!FS.existsSync(this.outputDir)) {
+      FS.mkdirSync(this.outputDir, { recursive: true });
     }
   }
 
@@ -193,9 +193,9 @@ class NodeVersionPerformanceBenchmark {
   async benchmarkFileOperations() {
     loggers.stopHook.log('📁 Running file operations benchmark...');
 
-    const tempDir = path.join(this.outputDir, 'temp-benchmark');
-    if (!fs.existsSync(tempDir)) {
-      fs.mkdirSync(tempDir, { recursive: true });
+    const tempDir = PATH.join(this.outputDir, 'temp-benchmark');
+    if (!FS.existsSync(tempDir)) {
+      FS.mkdirSync(tempDir, { recursive: true });
     }
 
     const start = process.hrtime.bigint();
@@ -203,31 +203,31 @@ class NodeVersionPerformanceBenchmark {
     // File write operations
     const writePromises = [];
     for (let i = 0; i < 100; i++) {
-      const filePath = path.join(tempDir, `test-file-${i}.json`);
+      const filePath = PATH.join(tempDir, `test-file-${i}.json`);
       const data = JSON.stringify({
         id: i,
         data: new Array(100).fill(i),
         timestamp: Date.now(),
       });
 
-      writePromises.push(fs.promises.writeFile(filePath, data, 'utf8'));
+      writePromises.push(FS.promises.writeFile(filePath, data, 'utf8'));
     }
 
     await Promise.all(writePromises);
 
     // File read operations
-    const files = fs.readdirSync(tempDir);
+    const files = FS.readdirSync(tempDir);
     const readPromises = files.map((file) =>
-      fs.promises.readFile(path.join(tempDir, file), 'utf8')
+      FS.promises.readFile(PATH.join(tempDir, file), 'utf8')
     );
 
     const fileContents = await Promise.all(readPromises);
 
     // Cleanup
     for (const file of files) {
-      fs.unlinkSync(path.join(tempDir, file));
+      FS.unlinkSync(PATH.join(tempDir, file));
     }
-    fs.rmdirSync(tempDir);
+    FS.rmdirSync(tempDir);
 
     const end = process.hrtime.bigint();
     const duration = Number(end - start) / 1000000;
@@ -494,23 +494,23 @@ class NodeVersionPerformanceBenchmark {
    */
   saveResults() {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const resultsFile = path.join(
+    const resultsFile = PATH.join(
       this.outputDir,
       `node-performance-${timestamp}.json`
     );
-    const latestFile = path.join(
+    const latestFile = PATH.join(
       this.outputDir,
       'latest-node-performance.json'
     );
 
     // Save detailed results
-    fs.writeFileSync(resultsFile, JSON.stringify(this.results, null, 2));
-    fs.writeFileSync(latestFile, JSON.stringify(this.results, null, 2));
+    FS.writeFileSync(resultsFile, JSON.stringify(this.results, null, 2));
+    FS.writeFileSync(latestFile, JSON.stringify(this.results, null, 2));
 
     // Save human-readable report
-    const reportFile = path.join(this.outputDir, 'node-performance-report.md');
+    const reportFile = PATH.join(this.outputDir, 'node-performance-report.md');
     const report = this.generateMarkdownReport();
-    fs.writeFileSync(reportFile, report);
+    FS.writeFileSync(reportFile, report);
 
     loggers.stopHook.log(`📄 Results saved to: ${resultsFile}`);
     loggers.stopHook.log(`📄 Latest results: ${latestFile}`);

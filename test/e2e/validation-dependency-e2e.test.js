@@ -29,7 +29,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
   beforeAll(async () => {
     // Create test environment
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'validation-e2e-'));
+    tempDir = await FS.mkdtemp(PATH.join(os.tmpdir(), 'validation-e2e-'));
 
     // Create mock package.json for validation commands
     const packageJson = {
@@ -44,8 +44,8 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       },
     };
 
-    await fs.writeFile(
-      path.join(tempDir, 'package.json'),
+    await FS.writeFile(
+      PATH.join(tempDir, 'package.json'),
       JSON.stringify(packageJson, null, 2),
     );
 
@@ -56,7 +56,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
 
   afterAll(async () => {
     // Clean up test environment
-    await fs.rmdir(tempDir, { recursive: true });
+    await FS.rmdir(tempDir, { recursive: true });
   });
 
   describe('Complete Workflow Integration', () => {
@@ -374,7 +374,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       expect(validConfigPath).toBeDefined();
 
       // Corrupt the configuration file
-      await fs.writeFile(validConfigPath, '{ invalid json }');
+      await FS.writeFile(validConfigPath, '{ invalid json }');
 
       // Create new manager instance
       const corruptedManager = new ValidationDependencyManager({

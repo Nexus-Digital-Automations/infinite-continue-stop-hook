@@ -15,8 +15,8 @@ const crypto = require('crypto');
 const { loggers } = require('../../lib/logger');
 
 // Test configuration constants
-const BASE_TEST_DIR = path.join(__dirname, 'test-environments');
-const API_PATH = path.join(__dirname, '..', '..', 'taskmanager-api.js');
+const BASE_TEST_DIR = PATH.join(__dirname, 'test-environments');
+const API_PATH = PATH.join(__dirname, '..', '..', 'taskmanager-api.js');
 const DEFAULT_TIMEOUT = 15000; // 15 seconds for API operations
 
 /**
@@ -83,7 +83,7 @@ function execAPI(command, args = [], options = {}) {
           // If both fail, include raw output for debugging
           reject(
             new Error(
-              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
+              `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${error.message}`,
             ),
           );
         }
@@ -103,10 +103,10 @@ function execAPI(command, args = [], options = {}) {
  */
 async function createTestEnvironment(testName) {
   const testId = `${testName}-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`;
-  const testDir = path.join(BASE_TEST_DIR, testId);
+  const testDir = PATH.join(BASE_TEST_DIR, testId);
 
   // Create test directory
-  await fs.mkdir(testDir, { recursive: true });
+  await FS.mkdir(testDir, { recursive: true });
 
   // Create initial FEATURES.json structure
   const featuresData = {
@@ -128,8 +128,8 @@ async function createTestEnvironment(testName) {
     agents: {},
   };
 
-  const featuresPath = path.join(testDir, 'FEATURES.json');
-  await fs.writeFile(featuresPath, JSON.stringify(featuresData, null, 2));
+  const featuresPath = PATH.join(testDir, 'FEATURES.json');
+  await FS.writeFile(featuresPath, JSON.stringify(featuresData, null, 2));
 
   return testDir;
 }
@@ -141,7 +141,7 @@ async function createTestEnvironment(testName) {
  */
 async function cleanupTestEnvironment(testDir) {
   try {
-    await fs.rm(testDir, { recursive: true, force: true });
+    await FS.rm(testDir, { recursive: true, force: true });
   } catch {
     loggers.stopHook.warn(`Cleanup warning for ${testDir}:`, error.message);
   }
@@ -153,8 +153,8 @@ async function cleanupTestEnvironment(testDir) {
  * @returns {Promise<Object>} Parsed FEATURES.json content
  */
 async function readFeaturesFile(testDir) {
-  const featuresPath = path.join(testDir, 'FEATURES.json');
-  const data = await fs.readFile(featuresPath, 'utf8');
+  const featuresPath = PATH.join(testDir, 'FEATURES.json');
+  const data = await FS.readFile(featuresPath, 'utf8');
   return JSON.parse(data);
 }
 
@@ -165,8 +165,8 @@ async function readFeaturesFile(testDir) {
  * @returns {Promise<void>}
  */
 async function writeFeaturesFile(testDir, featuresData) {
-  const featuresPath = path.join(testDir, 'FEATURES.json');
-  await fs.writeFile(featuresPath, JSON.stringify(featuresData, null, 2));
+  const featuresPath = PATH.join(testDir, 'FEATURES.json');
+  await FS.writeFile(featuresPath, JSON.stringify(featuresData, null, 2));
 }
 
 /**
@@ -175,9 +175,9 @@ async function writeFeaturesFile(testDir, featuresData) {
  * @returns {Promise<string>} Path to the backup file
  */
 async function createFeaturesBackup(testDir) {
-  const featuresPath = path.join(testDir, 'FEATURES.json');
-  const backupPath = path.join(testDir, 'FEATURES.json.backup');
-  await fs.copyFile(featuresPath, backupPath);
+  const featuresPath = PATH.join(testDir, 'FEATURES.json');
+  const backupPath = PATH.join(testDir, 'FEATURES.json.backup');
+  await FS.copyFile(featuresPath, backupPath);
   return backupPath;
 }
 
@@ -187,8 +187,8 @@ async function createFeaturesBackup(testDir) {
  * @returns {Promise<void>}
  */
 async function corruptFeaturesFile(testDir) {
-  const featuresPath = path.join(testDir, 'FEATURES.json');
-  await fs.writeFile(featuresPath, '{ invalid json syntax }');
+  const featuresPath = PATH.join(testDir, 'FEATURES.json');
+  await FS.writeFile(featuresPath, '{ invalid json syntax }');
 }
 
 /**
@@ -276,14 +276,14 @@ function validateFeaturesStructure(featuresData) {
  */
 async function setupGlobalCleanup() {
   // Ensure base test directory exists
-  await fs.mkdir(BASE_TEST_DIR, { recursive: true });
+  await FS.mkdir(BASE_TEST_DIR, { recursive: true });
 
   // Clean up any leftover test environments from previous runs
   try {
-    const entries = await fs.readdir(BASE_TEST_DIR);
+    const entries = await FS.readdir(BASE_TEST_DIR);
     const cleanupPromises = entries.map((entry) => {
-      const fullPath = path.join(BASE_TEST_DIR, entry);
-      return fs.rm(fullPath, { recursive: true, force: true });
+      const fullPath = PATH.join(BASE_TEST_DIR, entry);
+      return FS.rm(fullPath, { recursive: true, force: true });
     });
     await Promise.all(cleanupPromises);
   } catch {
@@ -296,7 +296,7 @@ async function setupGlobalCleanup() {
  */
 async function teardownGlobalCleanup() {
   try {
-    await fs.rm(BASE_TEST_DIR, { recursive: true, force: true });
+    await FS.rm(BASE_TEST_DIR, { recursive: true, force: true });
   } catch {
     loggers.stopHook.warn('Global teardown warning:', error.message);
   }

@@ -38,13 +38,13 @@ class ParallelTestOptimizer {
       estimated_time_savings: 0,
     };
 
-    this.outputDir = path.join(process.cwd(), 'test-performance');
+    this.outputDir = PATH.join(process.cwd(), 'test-performance');
     this.ensureOutputDirectory();
   }
 
   ensureOutputDirectory() {
-    if (!fs.existsSync(this.outputDir)) {
-      fs.mkdirSync(this.outputDir, { recursive: true });
+    if (!FS.existsSync(this.outputDir)) {
+      FS.mkdirSync(this.outputDir, { recursive: true });
     }
   }
 
@@ -80,7 +80,7 @@ class ParallelTestOptimizer {
     const testSuites = [];
 
     try {
-      const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+      const packageJson = JSON.parse(FS.readFileSync('package.json', 'utf8'));
       const scripts = packageJson.scripts || {};
 
       // Identify test scripts
@@ -586,11 +586,11 @@ class ParallelTestOptimizer {
    */
   saveAnalysis() {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const analysisFile = path.join(
+    const analysisFile = PATH.join(
       this.outputDir,
       `parallel-optimization-${timestamp}.json`
     );
-    const latestFile = path.join(
+    const latestFile = PATH.join(
       this.outputDir,
       'latest-parallel-optimization.json'
     );
@@ -602,16 +602,16 @@ class ParallelTestOptimizer {
       timestamp: new Date().toISOString(),
     };
 
-    fs.writeFileSync(analysisFile, JSON.stringify(analysis, null, 2));
-    fs.writeFileSync(latestFile, JSON.stringify(analysis, null, 2));
+    FS.writeFileSync(analysisFile, JSON.stringify(analysis, null, 2));
+    FS.writeFileSync(latestFile, JSON.stringify(analysis, null, 2));
 
     // Generate human-readable report
-    const reportFile = path.join(
+    const reportFile = PATH.join(
       this.outputDir,
       'parallel-optimization-report.md'
     );
     const report = this.generateMarkdownReport(analysis);
-    fs.writeFileSync(reportFile, report);
+    FS.writeFileSync(reportFile, report);
 
     this.logger.info('Performance analysis files generated', {
       analysisFile,

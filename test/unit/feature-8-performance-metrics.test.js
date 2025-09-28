@@ -5,7 +5,7 @@ const PATH = require('path');
 // Feature ID: feature_1758946499841_cd5eba625370
 describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
   const mockProjectRoot = '/tmp/test-performance-metrics';
-  const mockMetricsFile = path.join(
+  const mockMetricsFile = PATH.join(
     mockProjectRoot,
     '.validation-performance.json',
   );
@@ -18,7 +18,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
     _fileExists(filePath) {
       try {
-        return fs.existsSync(filePath);
+        return FS.existsSync(filePath);
       } catch {
         return false;
       }
@@ -29,7 +29,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       try {
         const FS = require('fs').promises;
         const PATH = require('path');
-        const metricsFile = path.join(
+        const metricsFile = PATH.join(
           this.PROJECT_ROOT,
           '.validation-performance.json',
         );
@@ -43,7 +43,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           };
         }
 
-        const data = await fs.readFile(metricsFile, 'utf8');
+        const data = await FS.readFile(metricsFile, 'utf8');
         const metricsData = JSON.parse(data);
 
         // Apply filtering options
@@ -84,7 +84,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           },
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch {
+      } catch (error) {
         return {
           success: false,
           error: error.message,
@@ -98,7 +98,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       try {
         const FS = require('fs').promises;
         const PATH = require('path');
-        const metricsFile = path.join(
+        const metricsFile = PATH.join(
           this.PROJECT_ROOT,
           '.validation-performance.json',
         );
@@ -111,7 +111,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           };
         }
 
-        const data = await fs.readFile(metricsFile, 'utf8');
+        const data = await FS.readFile(metricsFile, 'utf8');
         const metricsData = JSON.parse(data);
         const metrics = metricsData.metrics || [];
 
@@ -134,7 +134,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           },
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch {
+      } catch (error) {
         return {
           success: false,
           error: error.message,
@@ -147,7 +147,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       try {
         const FS = require('fs').promises;
         const PATH = require('path');
-        const metricsFile = path.join(
+        const metricsFile = PATH.join(
           this.PROJECT_ROOT,
           '.validation-performance.json',
         );
@@ -160,7 +160,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           };
         }
 
-        const data = await fs.readFile(metricsFile, 'utf8');
+        const data = await FS.readFile(metricsFile, 'utf8');
         const metricsData = JSON.parse(data);
         const metrics = metricsData.metrics || [];
 
@@ -182,7 +182,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           recommendations: this._generateBenchmarkRecommendations(benchmarks),
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch {
+      } catch (error) {
         return {
           success: false,
           error: error.message,
@@ -463,13 +463,13 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
   beforeEach(() => {
     // Create mock directory if it doesn't exist
-    if (!fs.existsSync(mockProjectRoot)) {
-      fs.mkdirSync(mockProjectRoot, { recursive: true });
+    if (!FS.existsSync(mockProjectRoot)) {
+      FS.mkdirSync(mockProjectRoot, { recursive: true });
     }
 
     // Clean up previous test data
-    if (fs.existsSync(mockMetricsFile)) {
-      fs.unlinkSync(mockMetricsFile);
+    if (FS.existsSync(mockMetricsFile)) {
+      FS.unlinkSync(mockMetricsFile);
     }
 
     taskManager = new MockTaskManager();
@@ -477,11 +477,11 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
   afterEach(() => {
     // Clean up test directory
-    if (fs.existsSync(mockMetricsFile)) {
-      fs.unlinkSync(mockMetricsFile);
+    if (FS.existsSync(mockMetricsFile)) {
+      FS.unlinkSync(mockMetricsFile);
     }
-    if (fs.existsSync(mockProjectRoot)) {
-      fs.rmSync(mockProjectRoot, { recursive: true, force: true });
+    if (FS.existsSync(mockProjectRoot)) {
+      FS.rmSync(mockProjectRoot, { recursive: true, force: true });
     }
   });
 
@@ -520,7 +520,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         ],
       };
 
-      fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
       const result = await taskManager.getValidationPerformanceMetrics({
         criterion: 'linter-validation',
@@ -571,7 +571,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         ],
       };
 
-      fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
       const result = await taskManager.getValidationPerformanceMetrics();
 
@@ -622,7 +622,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         ],
       };
 
-      fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
       const result = await taskManager.identifyPerformanceBottlenecks();
 
@@ -650,7 +650,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         ],
       };
 
-      fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
       const result = await taskManager.identifyPerformanceBottlenecks({
         slowThreshold: 2000,
@@ -700,7 +700,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         ],
       };
 
-      fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
       const result = await taskManager.getPerformanceBenchmarks();
 
@@ -747,7 +747,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         ],
       };
 
-      fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
       const result = await taskManager.getPerformanceBenchmarks();
 
@@ -822,7 +822,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
   describe('Error Handling', () => {
     test('should handle corrupted metrics file gracefully', async () => {
       // Write invalid JSON to metrics file
-      fs.writeFileSync(mockMetricsFile, 'invalid json content');
+      FS.writeFileSync(mockMetricsFile, 'invalid json content');
 
       const result = await taskManager.getValidationPerformanceMetrics();
 
@@ -834,7 +834,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
     test('should handle empty metrics array', async () => {
       const mockMetrics = { metrics: [] };
-      fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
       const result = await taskManager.getValidationPerformanceMetrics();
 
@@ -845,7 +845,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
     test('should handle missing metrics property', async () => {
       const mockMetrics = { otherData: 'test' };
-      fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
+      FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
       const result = await taskManager.getValidationPerformanceMetrics();
 

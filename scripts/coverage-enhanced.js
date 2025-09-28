@@ -143,7 +143,7 @@ class EnhancedLogger {
           message,
           elapsed_ms: elapsed,
           ...data,
-        })
+        }),
       );
     } else {
       const emoji =
@@ -194,7 +194,7 @@ class EnhancedLogger {
     }
 
     const maxLengths = headers.map((header, i) =>
-      Math.max(header.length, ...rows.map((row) => String(row[i] || '').length))
+      Math.max(header.length, ...rows.map((row) => String(row[i] || '').length)),
     );
 
     const separator = maxLengths.map((len) => '─'.repeat(len + 2)).join('┼');
@@ -204,13 +204,13 @@ class EnhancedLogger {
 
     loggers.stopHook.log(topBorder);
     loggers.app.info(
-      `│ ${headers.map((h, i) => h.padEnd(maxLengths[i])).join(' │ ')} │`
+      `│ ${headers.map((h, i) => h.padEnd(maxLengths[i])).join(' │ ')} │`,
     );
     loggers.stopHook.log(middleBorder);
 
     rows.forEach((row) => {
       loggers.app.info(
-        `│ ${row.map((cell, i) => String(cell || '').padEnd(maxLengths[i])).join(' │ ')} │`
+        `│ ${row.map((cell, i) => String(cell || '').padEnd(maxLengths[i])).join(' │ ')} │`,
       );
     });
 
@@ -255,7 +255,7 @@ class EnhancedCoverageSystem {
 
       const duration = Date.now() - this.startTime;
       this.logger.success(
-        `Coverage pipeline completed successfully in ${duration}ms`
+        `Coverage pipeline completed successfully in ${duration}ms`,
       );
 
       // Check for failures
@@ -281,8 +281,8 @@ class EnhancedCoverageSystem {
 
     // Create all required directories
     Object.values(this.config.paths).forEach((dir) => {
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
+      if (!FS.existsSync(dir)) {
+        FS.mkdirSync(dir, { recursive: true });
         this.logger.debug(`Created directory: ${dir}`);
       }
     });
@@ -297,25 +297,25 @@ class EnhancedCoverageSystem {
    * Archive previous coverage reports
    */
   archivePreviousReports() {
-    const archiveDir = path.join(
+    const archiveDir = PATH.join(
       this.config.paths.archive,
-      new Date().toISOString().split('T')[0]
+      new Date().toISOString().split('T')[0],
     );
 
-    if (fs.existsSync(this.config.paths.reports)) {
-      if (!fs.existsSync(archiveDir)) {
-        fs.mkdirSync(archiveDir, { recursive: true });
+    if (FS.existsSync(this.config.paths.reports)) {
+      if (!FS.existsSync(archiveDir)) {
+        FS.mkdirSync(archiveDir, { recursive: true });
       }
 
       // Copy previous reports to archive
 
-      const files = fs.readdirSync(this.config.paths.reports);
+      const files = FS.readdirSync(this.config.paths.reports);
       files.forEach((file) => {
-        const source = path.join(this.config.paths.reports, file);
-        const dest = path.join(archiveDir, file);
+        const source = PATH.join(this.config.paths.reports, file);
+        const dest = PATH.join(archiveDir, file);
 
-        if (fs.statSync(source).isFile()) {
-          fs.copyFileSync(source, dest);
+        if (FS.statSync(source).isFile()) {
+          FS.copyFileSync(source, dest);
         }
       });
 
@@ -330,7 +330,7 @@ class EnhancedCoverageSystem {
    * Clean old archived reports
    */
   cleanOldArchives() {
-    if (!fs.existsSync(this.config.paths.archive)) {
+    if (!FS.existsSync(this.config.paths.archive)) {
       return;
     }
 
@@ -344,8 +344,8 @@ class EnhancedCoverageSystem {
       const toDelete = archives.slice(this.config.reports.max_archived_reports);
 
       toDelete.forEach((archive) => {
-        const archivePath = path.join(this.config.paths.archive, archive);
-        fs.rmSync(archivePath, { recursive: true, force: true });
+        const archivePath = PATH.join(this.config.paths.archive, archive);
+        FS.rmSync(archivePath, { recursive: true, force: true });
       });
 
       this.logger.debug(`Cleaned ${toDelete.length} old archives`);
@@ -372,7 +372,7 @@ class EnhancedCoverageSystem {
         '--passWithNoTests',
         '--silent',
         ...this.config.reports.formats.map(
-          (format) => `--coverageReporters=${format}`
+          (format) => `--coverageReporters=${format}`,
         ),
       ];
 
@@ -401,13 +401,13 @@ class EnhancedCoverageSystem {
 
       this.logger.performance(
         'Coverage analysis completed',
-        this.results.performance
+        this.results.performance,
       );
     } catch {
       // Check if coverage data was generated despite test failures
       if (
-        fs.existsSync(
-          path.join(this.config.paths.coverage, 'coverage-summary.json')
+        FS.existsSync(
+          PATH.join(this.config.paths.coverage, 'coverage-summary.json'),
         )
       ) {
         this.logger.warning('Tests failed but coverage data was generated');
@@ -423,17 +423,17 @@ class EnhancedCoverageSystem {
   loadCoverageData() {
     this.logger.info('Loading coverage data');
 
-    const summaryPath = path.join(
+    const summaryPath = PATH.join(
       this.config.paths.coverage,
-      'coverage-summary.json'
+      'coverage-summary.json',
     );
 
-    if (!fs.existsSync(summaryPath)) {
+    if (!FS.existsSync(summaryPath)) {
       throw new Error('Coverage summary not found');
     }
 
     try {
-      const coverageData = JSON.parse(fs.readFileSync(summaryPath, 'utf8'));
+      const coverageData = JSON.parse(FS.readFileSync(summaryPath, 'utf8'));
 
       if (!coverageData.total) {
         throw new Error('Invalid coverage data format');
@@ -459,16 +459,16 @@ class EnhancedCoverageSystem {
   performTrendAnalysis() {
     this.logger.info('Performing trend analysis');
 
-    const trendsPath = path.join(
+    const trendsPath = PATH.join(
       this.config.paths.trends,
-      'coverage-trends.json'
+      'coverage-trends.json',
     );
     let trends = [];
 
     // Load existing trends
-    if (fs.existsSync(trendsPath)) {
+    if (FS.existsSync(trendsPath)) {
       try {
-        trends = JSON.parse(fs.readFileSync(trendsPath, 'utf8'));
+        trends = JSON.parse(FS.readFileSync(trendsPath, 'utf8'));
       } catch {
         this.logger.warning('Could not load existing trends');
       }
@@ -500,13 +500,13 @@ class EnhancedCoverageSystem {
     };
 
     // Save updated trends
-    if (!fs.existsSync(this.config.paths.trends)) {
-      fs.mkdirSync(this.config.paths.trends, { recursive: true });
+    if (!FS.existsSync(this.config.paths.trends)) {
+      FS.mkdirSync(this.config.paths.trends, { recursive: true });
     }
-    fs.writeFileSync(trendsPath, JSON.stringify(trends, null, 2));
+    FS.writeFileSync(trendsPath, JSON.stringify(trends, null, 2));
 
     this.logger.success(
-      `Trend analysis completed (${trends.length} data points)`
+      `Trend analysis completed (${trends.length} data points)`,
     );
   }
 
@@ -579,16 +579,16 @@ class EnhancedCoverageSystem {
     // Generate recommendations
     if (analysis.regression_detected) {
       analysis.recommendations.push(
-        '⚠️ Coverage regression detected - review recent changes'
+        '⚠️ Coverage regression detected - review recent changes',
       );
       analysis.recommendations.push(
-        '📝 Add tests for newly added or modified code'
+        '📝 Add tests for newly added or modified code',
       );
     }
 
     if (analysis.trend_direction === 'declining') {
       analysis.recommendations.push(
-        '📉 Overall coverage trend is declining - prioritize test coverage'
+        '📉 Overall coverage trend is declining - prioritize test coverage',
       );
     }
 
@@ -665,18 +665,18 @@ class EnhancedCoverageSystem {
     // Generate recommendations
     validation.recommendations = this.generateQualityRecommendations(
       validation,
-      coverage
+      coverage,
     );
 
     this.results.validation = validation;
 
     this.logger.success(
-      `Quality gates executed - Level: ${validation.quality_level}`
+      `Quality gates executed - Level: ${validation.quality_level}`,
     );
 
     if (validation.blocking_failures.length > 0) {
       this.logger.error(
-        `${validation.blocking_failures.length} blocking failures detected`
+        `${validation.blocking_failures.length} blocking failures detected`,
       );
     }
 
@@ -694,7 +694,7 @@ class EnhancedCoverageSystem {
     for (const level of levels) {
       const thresholds = this.config.thresholds[level];
       const meetsLevel = ['statements', 'branches', 'functions', 'lines'].every(
-        (metric) => coverage[metric].pct >= thresholds[metric]
+        (metric) => coverage[metric].pct >= thresholds[metric],
       );
 
       if (meetsLevel) {
@@ -714,19 +714,19 @@ class EnhancedCoverageSystem {
     // Coverage-specific recommendations
     if (coverage.branches.pct < 80) {
       recommendations.push(
-        '🌿 Improve branch coverage by adding tests for conditional logic'
+        '🌿 Improve branch coverage by adding tests for conditional logic',
       );
     }
 
     if (coverage.functions.pct < 85) {
       recommendations.push(
-        '🔧 Increase function coverage by testing all exported functions'
+        '🔧 Increase function coverage by testing all exported functions',
       );
     }
 
     if (coverage.statements.pct < 85) {
       recommendations.push(
-        '📝 Add more comprehensive test cases to improve statement coverage'
+        '📝 Add more comprehensive test cases to improve statement coverage',
       );
     }
 
@@ -735,33 +735,33 @@ class EnhancedCoverageSystem {
       case 'critical':
       case 'below_critical':
         recommendations.push(
-          '🚨 URGENT: Coverage is critically low - immediate action required'
+          '🚨 URGENT: Coverage is critically low - immediate action required',
         );
         recommendations.push(
-          '📚 Focus on testing core business logic And high-risk areas'
+          '📚 Focus on testing core business logic And high-risk areas',
         );
         break;
       case 'minimum':
         recommendations.push(
-          '⚠️ Coverage meets minimum requirements but needs improvement'
+          '⚠️ Coverage meets minimum requirements but needs improvement',
         );
         recommendations.push(
-          '🎯 Target 85%+ coverage for production readiness'
+          '🎯 Target 85%+ coverage for production readiness',
         );
         break;
       case 'acceptable':
         recommendations.push(
-          '👍 Coverage is acceptable - work towards "good" level (85%+)'
+          '👍 Coverage is acceptable - work towards "good" level (85%+)',
         );
         break;
       case 'good':
         recommendations.push(
-          '🎉 Good coverage! Consider pushing towards excellent (95%+)'
+          '🎉 Good coverage! Consider pushing towards excellent (95%+)',
         );
         break;
       case 'excellent':
         recommendations.push(
-          '🌟 Excellent coverage! Maintain this level going forward'
+          '🌟 Excellent coverage! Maintain this level going forward',
         );
         break;
     }
@@ -776,8 +776,8 @@ class EnhancedCoverageSystem {
     this.logger.info('Generating comprehensive coverage reports');
 
     const reportsDir = this.config.paths.reports;
-    if (!fs.existsSync(reportsDir)) {
-      fs.mkdirSync(reportsDir, { recursive: true });
+    if (!FS.existsSync(reportsDir)) {
+      FS.mkdirSync(reportsDir, { recursive: true });
     }
 
     // Generate executive summary report
@@ -814,7 +814,7 @@ class EnhancedCoverageSystem {
             this.results.coverage.summary.branches.pct +
             this.results.coverage.summary.functions.pct +
             this.results.coverage.summary.lines.pct) /
-            4
+            4,
         ),
         metrics: this.results.coverage.summary,
       },
@@ -833,11 +833,11 @@ class EnhancedCoverageSystem {
       next_actions: this.generateNextActions(),
     };
 
-    const reportPath = path.join(
+    const reportPath = PATH.join(
       this.config.paths.reports,
-      'executive-summary.json'
+      'executive-summary.json',
     );
-    fs.writeFileSync(reportPath, JSON.stringify(summary, null, 2));
+    FS.writeFileSync(reportPath, JSON.stringify(summary, null, 2));
 
     this.results.reports.executive = reportPath;
   }
@@ -866,11 +866,11 @@ class EnhancedCoverageSystem {
       },
     };
 
-    const reportPath = path.join(
+    const reportPath = PATH.join(
       this.config.paths.reports,
-      'technical-report.json'
+      'technical-report.json',
     );
-    fs.writeFileSync(reportPath, JSON.stringify(technical, null, 2));
+    FS.writeFileSync(reportPath, JSON.stringify(technical, null, 2));
 
     this.results.reports.technical = reportPath;
   }
@@ -886,7 +886,7 @@ class EnhancedCoverageSystem {
           this.results.coverage.summary.branches.pct +
           this.results.coverage.summary.functions.pct +
           this.results.coverage.summary.lines.pct) /
-          4
+          4,
       ),
       quality_level: this.results.validation.quality_level,
       blocking_failures: this.results.validation.blocking_failures,
@@ -898,11 +898,11 @@ class EnhancedCoverageSystem {
       timestamp: new Date().toISOString(),
     };
 
-    const reportPath = path.join(
+    const reportPath = PATH.join(
       this.config.paths.reports,
-      'ci-cd-report.json'
+      'ci-cd-report.json',
     );
-    fs.writeFileSync(reportPath, JSON.stringify(cicd, null, 2));
+    FS.writeFileSync(reportPath, JSON.stringify(cicd, null, 2));
 
     this.results.reports.cicd = reportPath;
   }
@@ -924,11 +924,11 @@ class EnhancedCoverageSystem {
       recommendations: this.results.trends.analysis.recommendations || [],
     };
 
-    const reportPath = path.join(
+    const reportPath = PATH.join(
       this.config.paths.reports,
-      'trend-analysis.json'
+      'trend-analysis.json',
     );
-    fs.writeFileSync(reportPath, JSON.stringify(trendReport, null, 2));
+    FS.writeFileSync(reportPath, JSON.stringify(trendReport, null, 2));
 
     this.results.reports.trends = reportPath;
   }
@@ -953,11 +953,11 @@ class EnhancedCoverageSystem {
       historical_performance: this.extractPerformanceHistory(),
     };
 
-    const reportPath = path.join(
+    const reportPath = PATH.join(
       this.config.paths.reports,
-      'performance-report.json'
+      'performance-report.json',
     );
-    fs.writeFileSync(reportPath, JSON.stringify(perfReport, null, 2));
+    FS.writeFileSync(reportPath, JSON.stringify(perfReport, null, 2));
 
     this.results.reports.performance = reportPath;
   }
@@ -974,8 +974,8 @@ class EnhancedCoverageSystem {
     this.logger.info('Generating coverage badges');
 
     const badgesDir = this.config.paths.badges;
-    if (!fs.existsSync(badgesDir)) {
-      fs.mkdirSync(badgesDir, { recursive: true });
+    if (!FS.existsSync(badgesDir)) {
+      FS.mkdirSync(badgesDir, { recursive: true });
     }
 
     const badges = [];
@@ -989,7 +989,7 @@ class EnhancedCoverageSystem {
         coverage.branches.pct +
         coverage.functions.pct +
         coverage.lines.pct) /
-        4
+        4,
     );
 
     badges.push({
@@ -1038,26 +1038,26 @@ class EnhancedCoverageSystem {
       quality_level: qualityLevel,
     };
 
-    fs.writeFileSync(
-      path.join(badgesDir, 'badges.json'),
-      JSON.stringify(badgesData, null, 2)
+    FS.writeFileSync(
+      PATH.join(badgesDir, 'badges.json'),
+      JSON.stringify(badgesData, null, 2),
     );
 
     // Generate README snippet
     const readmeSnippet = this.generateReadmeSnippet(badges);
-    fs.writeFileSync(path.join(badgesDir, 'README-snippet.md'), readmeSnippet);
+    FS.writeFileSync(PATH.join(badgesDir, 'README-snippet.md'), readmeSnippet);
 
     this.results.badges = badges;
 
     // Update CI/CD report with badge data
     if (this.results.reports.cicd) {
       const cicdReport = JSON.parse(
-        fs.readFileSync(this.results.reports.cicd, 'utf8')
+        FS.readFileSync(this.results.reports.cicd, 'utf8'),
       );
       cicdReport.badges = badges;
-      fs.writeFileSync(
+      FS.writeFileSync(
         this.results.reports.cicd,
-        JSON.stringify(cicdReport, null, 2)
+        JSON.stringify(cicdReport, null, 2),
       );
     }
 
@@ -1104,12 +1104,12 @@ ${quality ? quality.markdown : ''}
 | Metric | Coverage | Badge |
 |--------|----------|-------|
 ${badges
-  .filter((b) => b.metric)
-  .map(
-    (badge) =>
-      `| ${badge.metric.charAt(0).toUpperCase() + badge.metric.slice(1)} | ${badge.percentage}% | ${badge.markdown} |`
-  )
-  .join('\n')}
+    .filter((b) => b.metric)
+    .map(
+      (badge) =>
+        `| ${badge.metric.charAt(0).toUpperCase() + badge.metric.slice(1)} | ${badge.percentage}% | ${badge.markdown} |`,
+    )
+    .join('\n')}
 
 Last updated: ${new Date().toISOString()}
 
@@ -1174,7 +1174,7 @@ Last updated: ${new Date().toISOString()}
           `${target}%`,
           status,
         ];
-      }
+      },
     );
 
     this.logger.table(tableHeaders, tableRows, 'Coverage Summary');
@@ -1193,11 +1193,11 @@ Last updated: ${new Date().toISOString()}
       const trend = this.results.trends.analysis;
       if (trend.regression_detected) {
         loggers.app.info(
-          '📉 Regression Detected: Coverage has decreased significantly'
+          '📉 Regression Detected: Coverage has decreased significantly',
         );
       } else if (trend.improvement_detected) {
         loggers.app.info(
-          '📈 Improvement Detected: Coverage has increased significantly'
+          '📈 Improvement Detected: Coverage has increased significantly',
         );
       }
     }
@@ -1205,7 +1205,7 @@ Last updated: ${new Date().toISOString()}
     // Issues summary
     if (validation.blocking_failures.length > 0) {
       loggers.app.info(
-        `\n❌ Blocking Issues: ${validation.blocking_failures.length}`
+        `\n❌ Blocking Issues: ${validation.blocking_failures.length}`,
       );
       validation.blocking_failures.forEach((failure, i) => {
         loggers.stopHook.log(`   ${i + 1}. ${failure.message}`);
@@ -1219,7 +1219,7 @@ Last updated: ${new Date().toISOString()}
       });
       if (validation.warnings.length > 3) {
         loggers.stopHook.log(
-          `   ... And ${validation.warnings.length - 3} more`
+          `   ... And ${validation.warnings.length - 3} more`,
         );
       }
     }
@@ -1236,7 +1236,7 @@ Last updated: ${new Date().toISOString()}
     if (this.results.performance) {
       const execTime = this.results.performance.execution_time_ms;
       loggers.stopHook.log(
-        `\n⚡ Performance: ${execTime.toFixed(0)}ms execution time`
+        `\n⚡ Performance: ${execTime.toFixed(0)}ms execution time`,
       );
     }
 
@@ -1248,10 +1248,10 @@ Last updated: ${new Date().toISOString()}
 
     if (this.results.badges) {
       loggers.app.info(
-        `\n🏷️ Coverage Badges: ${this.config.paths.badges}/badges.json`
+        `\n🏷️ Coverage Badges: ${this.config.paths.badges}/badges.json`,
       );
       loggers.app.info(
-        `   README snippet: ${this.config.paths.badges}/README-snippet.md`
+        `   README snippet: ${this.config.paths.badges}/README-snippet.md`,
       );
     }
   }
@@ -1281,27 +1281,27 @@ Last updated: ${new Date().toISOString()}
     // Strategic recommendations based on current state
     if (coverage.branches.pct < 85) {
       recommendations.push(
-        '📋 Implement property-based testing to improve branch coverage'
+        '📋 Implement property-based testing to improve branch coverage',
       );
       recommendations.push(
-        '🔄 Add integration tests for complex business logic flows'
+        '🔄 Add integration tests for complex business logic flows',
       );
     }
 
     if (this.results.validation.quality_level === 'minimum') {
       recommendations.push(
-        '📚 Establish testing guidelines And code review standards'
+        '📚 Establish testing guidelines And code review standards',
       );
       recommendations.push(
-        '🎯 Set team coverage goals And track progress weekly'
+        '🎯 Set team coverage goals And track progress weekly',
       );
     }
 
     recommendations.push(
-      '🔧 Consider implementing mutation testing for quality validation'
+      '🔧 Consider implementing mutation testing for quality validation',
     );
     recommendations.push(
-      '📊 Set up coverage monitoring dashboards for continuous visibility'
+      '📊 Set up coverage monitoring dashboards for continuous visibility',
     );
 
     return recommendations;
@@ -1316,7 +1316,7 @@ Last updated: ${new Date().toISOString()}
 
     if (validation.blocking_failures.length > 0) {
       actions.push(
-        '🚨 URGENT: Fix blocking coverage failures before deployment'
+        '🚨 URGENT: Fix blocking coverage failures before deployment',
       );
       actions.push('📝 Add tests for uncovered critical code paths');
     }
@@ -1528,7 +1528,7 @@ Examples:
   if (configArg) {
     const configPath = configArg.split('=')[1];
     try {
-      const customConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+      const customConfig = JSON.parse(FS.readFileSync(configPath, 'utf8'));
       Object.assign(options, customConfig);
     } catch {
       loggers.stopHook.error(`❌ Failed to load config: ${error.message}`);
@@ -1572,7 +1572,7 @@ Examples:
   } catch {
     loggers.stopHook.error(
       '❌ Enhanced coverage system failed:',
-      error.message
+      error.message,
     );
     throw error;
   }

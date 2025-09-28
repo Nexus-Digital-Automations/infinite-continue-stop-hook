@@ -438,8 +438,8 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
       expect(initialResult.success).toBe(true);
 
       // 2. Delete FEATURES.json file
-      const featuresPath = path.join(testDir, 'FEATURES.json');
-      await fs.unlink(featuresPath);
+      const featuresPath = PATH.join(testDir, 'FEATURES.json');
+      await FS.unlink(featuresPath);
 
       // 3. Try to perform operations (should recreate file)
       const recoveryFeature = generateTestFeature({
@@ -522,13 +522,13 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
       }
 
       // 2. Simulate partial write by creating truncated file
-      const featuresPath = path.join(testDir, 'FEATURES.json');
-      const ORIGINAL_CONTENT = await fs.readFile(featuresPath, 'utf8');
+      const featuresPath = PATH.join(testDir, 'FEATURES.json');
+      const ORIGINAL_CONTENT = await FS.readFile(featuresPath, 'utf8');
       const truncatedContent = originalContent.substring(
         0,
         originalContent.length / 2,
       );
-      await fs.writeFile(featuresPath, truncatedContent);
+      await FS.writeFile(featuresPath, truncatedContent);
 
       // 3. Try to perform operations
       const recoveryFeature = generateTestFeature({
@@ -853,8 +853,8 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
       expect(results.every((result) => result.success)).toBe(true);
 
       // 3. Verify file size is reasonable (not excessive)
-      const featuresPath = path.join(testDir, 'FEATURES.json');
-      const stats = await fs.stat(featuresPath);
+      const featuresPath = PATH.join(testDir, 'FEATURES.json');
+      const stats = await FS.stat(featuresPath);
       expect(stats.size).toBeLessThan(500000); // Should be under 500KB
 
       // 4. Verify data integrity despite large content

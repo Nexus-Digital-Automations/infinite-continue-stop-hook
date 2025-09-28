@@ -36,7 +36,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         stdio: ['pipe', 'pipe', 'pipe'],
         cwd: TEST_PROJECT_DIR, // Execute from test project directory
         env: { ...process.env, NODE_ENV: 'test' },
-      }
+      },
     );
 
     let stdout = '';
@@ -53,14 +53,14 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
     child.on('close', (code) => {
       if (code === 0) {
         try {
-          const result = stdout.trim() ? JSON.parse(stdout) : {};
+          const RESULT = stdout.trim() ? JSON.parse(stdout) : {};
           resolve(result);
         } catch {
           resolve({ rawOutput: stdout, stderr });
         }
       } else {
         reject(
-          new Error(`Command failed with code ${code}: ${stderr || stdout}`)
+          new Error(`Command failed with code ${code}: ${stderr || stdout}`),
         );
       }
     });
@@ -98,7 +98,7 @@ async function setupFeaturesTestProject() {
 
     await FS.writeFile(
       PATH.join(TEST_PROJECT_DIR, 'package.json'),
-      JSON.stringify(packageJson, null, 2)
+      JSON.stringify(packageJson, null, 2),
     );
 
     // Create main application file
@@ -166,7 +166,7 @@ app.start().then(() => {
     await FS.writeFile(FEATURES_PATH, JSON.stringify(initialFeatures, null, 2));
 
     loggers.stopHook.log('Features test project setup completed');
-  } catch {
+  } catch (error) {
     loggers.stopHook.error('Failed to setup features test project:', error);
     throw error;
   }
@@ -176,7 +176,7 @@ async function cleanupFeaturesTestProject() {
   try {
     await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Features test project cleanup completed');
-  } catch {
+  } catch (error) {
     loggers.stopHook.error('Failed to cleanup features test project:', error);
   }
 }
@@ -277,7 +277,7 @@ describe('FEATURES.json System Validation Tests', () => {
       const createdFeatures = [];
       for (const feature of features) {
         // eslint-disable-next-line no-await-in-loop -- Sequential feature creation required for validation
-        const result = await createFeature(feature);
+        const RESULT = await createFeature(feature);
         expect(result.success).toBe(true);
         expect(result.feature).toBeDefined();
         expect(result.feature.status).toBe('suggested');
@@ -292,7 +292,7 @@ describe('FEATURES.json System Validation Tests', () => {
       // Check That all our test features are present
       for (const feature of features) {
         const found = listResult.features.find(
-          (f) => f.title === feature.title
+          (f) => f.title === feature.title,
         );
         expect(found).toBeDefined();
         expect(found.status).toBe('suggested');
@@ -300,7 +300,7 @@ describe('FEATURES.json System Validation Tests', () => {
       }
 
       loggers.stopHook.log(
-        'Feature creation And listing validated successfully'
+        'Feature creation And listing validated successfully',
       );
     });
 
@@ -348,7 +348,7 @@ describe('FEATURES.json System Validation Tests', () => {
         'Override Child Template',
         'Override Base Template',
         CHILD_CRITERIA,
-        OVERRIDES
+        OVERRIDES,
       );
 
       // Apply child template
@@ -359,7 +359,7 @@ describe('FEATURES.json System Validation Tests', () => {
       // Validate overrides were applied
       const status = await execAPI('success-criteria:status');
       const overriddenCriterion = status.PROJECT_CRITERIA.find(
-        (c) => c.id === 'override-test-1'
+        (c) => c.id === 'override-test-1',
       );
 
       expect(overriddenCriterion).toBeDefined();
@@ -370,7 +370,7 @@ describe('FEATURES.json System Validation Tests', () => {
 
       // Validate non-overridden criteria remain unchanged
       const nonOverriddenCriterion = status.PROJECT_CRITERIA.find(
-        (c) => c.id === 'override-test-2'
+        (c) => c.id === 'override-test-2',
       );
       expect(nonOverriddenCriterion.description).toBe('Base requirement 2');
 
@@ -411,7 +411,7 @@ describe('FEATURES.json System Validation Tests', () => {
       await createChildTemplate(
         'Parent Template',
         'Grandparent Template',
-        PARENT_CRITERIA
+        PARENT_CRITERIA,
       );
 
       // Create child template inheriting from parent
@@ -426,7 +426,7 @@ describe('FEATURES.json System Validation Tests', () => {
       await createChildTemplate(
         'Multi-Level Child Template',
         'Parent Template',
-        CHILD_CRITERIA
+        CHILD_CRITERIA,
       );
 
       // Apply multi-level child template
@@ -447,7 +447,7 @@ describe('FEATURES.json System Validation Tests', () => {
       });
 
       loggers.stopHook.log(
-        'Multi-level template inheritance validated successfully'
+        'Multi-level template inheritance validated successfully',
       );
     });
 
@@ -487,7 +487,7 @@ describe('FEATURES.json System Validation Tests', () => {
       await createChildTemplate(
         'Conflict Child Template',
         'Conflict Base Template',
-        CHILD_CRITERIA
+        CHILD_CRITERIA,
       );
 
       // Apply child template
@@ -498,7 +498,7 @@ describe('FEATURES.json System Validation Tests', () => {
       // Validate conflict resolution (child should win)
       const status = await execAPI('success-criteria:status');
       const conflictCriterion = status.PROJECT_CRITERIA.find(
-        (c) => c.id === 'conflict-id'
+        (c) => c.id === 'conflict-id',
       );
 
       expect(conflictCriterion).toBeDefined();
@@ -508,14 +508,14 @@ describe('FEATURES.json System Validation Tests', () => {
 
       // Ensure both unique criteria are present
       expect(
-        status.PROJECT_CRITERIA.find((c) => c.id === 'base-unique')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'base-unique'),
       ).toBeDefined();
       expect(
-        status.PROJECT_CRITERIA.find((c) => c.id === 'child-unique')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'child-unique'),
       ).toBeDefined();
 
       loggers.app.info(
-        'Template inheritance conflict resolution validated successfully'
+        'Template inheritance conflict resolution validated successfully',
       );
     });
   });
@@ -566,7 +566,7 @@ describe('FEATURES.json System Validation Tests', () => {
       expect(status.PROJECT_CRITERIA.length).toBe(4); // 2 base + 2 custom
 
       const customCriterion1 = status.PROJECT_CRITERIA.find(
-        (c) => c.id === 'custom-1'
+        (c) => c.id === 'custom-1',
       );
       expect(customCriterion1).toBeDefined();
       expect(customCriterion1.category).toBe('custom');
@@ -574,7 +574,7 @@ describe('FEATURES.json System Validation Tests', () => {
       expect(customCriterion1.metadata.source).toBe('project-requirements');
 
       const customCriterion2 = status.PROJECT_CRITERIA.find(
-        (c) => c.id === 'custom-2'
+        (c) => c.id === 'custom-2',
       );
       expect(customCriterion2).toBeDefined();
       expect(customCriterion2.priority).toBe('high');
@@ -620,7 +620,7 @@ describe('FEATURES.json System Validation Tests', () => {
       // Validate modification
       let status = await execAPI('success-criteria:status');
       const modified = status.PROJECT_CRITERIA.find(
-        (c) => c.id === 'modifiable-custom'
+        (c) => c.id === 'modifiable-custom',
       );
 
       expect(modified.description).toBe('Modified custom requirement');
@@ -634,12 +634,12 @@ describe('FEATURES.json System Validation Tests', () => {
       // Validate removal
       status = await execAPI('success-criteria:status');
       expect(
-        status.PROJECT_CRITERIA.find((c) => c.id === 'modifiable-custom')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'modifiable-custom'),
       ).toBeUndefined();
       expect(status.PROJECT_CRITERIA.length).toBe(1); // Only base criterion remains
 
       loggers.app.info(
-        'Custom criteria modification And removal validated successfully'
+        'Custom criteria modification And removal validated successfully',
       );
     });
 
@@ -683,29 +683,29 @@ describe('FEATURES.json System Validation Tests', () => {
       // Validate That custom criterion persisted
       const status = await execAPI('success-criteria:status');
       const persistentCustom = status.PROJECT_CRITERIA.find(
-        (c) => c.id === 'persistent-custom'
+        (c) => c.id === 'persistent-custom',
       );
 
       expect(persistentCustom).toBeDefined();
       expect(persistentCustom.description).toBe(
-        'Persistent custom requirement'
+        'Persistent custom requirement',
       );
 
       // Validate new template criteria are present
       expect(
-        status.PROJECT_CRITERIA.find((c) => c.id === 'new-1')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'new-1'),
       ).toBeDefined();
       expect(
-        status.PROJECT_CRITERIA.find((c) => c.id === 'new-2')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'new-2'),
       ).toBeDefined();
 
       // Validate old template criteria are gone
       expect(
-        status.PROJECT_CRITERIA.find((c) => c.id === 'initial-1')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'initial-1'),
       ).toBeUndefined();
 
       loggers.app.info(
-        'Custom criteria persistence across template changes validated successfully'
+        'Custom criteria persistence across template changes validated successfully',
       );
     });
   });
@@ -746,11 +746,11 @@ describe('FEATURES.json System Validation Tests', () => {
       expect(status.appliedTemplate.version).toBe('1.0.0');
       expect(status.appliedTemplate.compatibility).toBeDefined();
       expect(status.appliedTemplate.compatibility.minSystemVersion).toBe(
-        '2.0.0'
+        '2.0.0',
       );
 
       loggers.stopHook.log(
-        'Template version compatibility validated successfully'
+        'Template version compatibility validated successfully',
       );
     });
 
@@ -817,14 +817,14 @@ describe('FEATURES.json System Validation Tests', () => {
 
       // Check modified criterion
       const modifiedCriterion = status.PROJECT_CRITERIA.find(
-        (c) => c.id === 'upgrade-1'
+        (c) => c.id === 'upgrade-1',
       );
       expect(modifiedCriterion.description).toBe('V2 updated requirement');
       expect(modifiedCriterion.priority).toBe('high');
 
       // Check new criterion
       const newCriterion = status.PROJECT_CRITERIA.find(
-        (c) => c.id === 'upgrade-3'
+        (c) => c.id === 'upgrade-3',
       );
       expect(newCriterion).toBeDefined();
       expect(newCriterion.category).toBe('security');
@@ -891,29 +891,29 @@ describe('FEATURES.json System Validation Tests', () => {
 
       // Check for dependency criteria
       expect(
-        status.PROJECT_CRITERIA.find((c) => c.id === 'dep-1')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'dep-1'),
       ).toBeDefined();
       expect(
-        status.PROJECT_CRITERIA.find((c) => c.id === 'dep-2')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'dep-2'),
       ).toBeDefined();
 
       // Check for main criteria
       expect(
-        status.PROJECT_CRITERIA.find((c) => c.id === 'main-1')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'main-1'),
       ).toBeDefined();
       expect(
-        status.PROJECT_CRITERIA.find((c) => c.id === 'main-2')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'main-2'),
       ).toBeDefined();
 
       // Validate dependency information is tracked
       expect(status.resolvedDependencies).toBeDefined();
       expect(status.resolvedDependencies.length).toBe(1);
       expect(status.resolvedDependencies[0].template).toBe(
-        'Dependency Template'
+        'Dependency Template',
       );
 
       loggers.stopHook.log(
-        'Template dependency resolution validated successfully'
+        'Template dependency resolution validated successfully',
       );
     });
   });
@@ -965,20 +965,20 @@ describe('FEATURES.json System Validation Tests', () => {
 
       // In test environment, development criteria should be enabled
       const DEV_CRITERION = status.PROJECT_CRITERIA.find(
-        (c) => c.id === 'dev-specific'
+        (c) => c.id === 'dev-specific',
       );
       expect(DEV_CRITERION).toBeDefined();
       expect(DEV_CRITERION.enabled).toBe(true);
 
       // Production criteria should be disabled in test environment
       const PROD_CRITERION = status.PROJECT_CRITERIA.find(
-        (c) => c.id === 'prod-specific'
+        (c) => c.id === 'prod-specific',
       );
       expect(PROD_CRITERION).toBeDefined();
       expect(PROD_CRITERION.enabled).toBe(false);
 
       loggers.app.info(
-        'Project environment-specific criteria validated successfully'
+        'Project environment-specific criteria validated successfully',
       );
     });
 
@@ -1032,23 +1032,23 @@ describe('FEATURES.json System Validation Tests', () => {
 
       // WebApp criteria should be applicable (we have package.json)
       const WEB_APP_CRITERION = status.PROJECT_CRITERIA.find(
-        (c) => c.id === 'webapp-specific'
+        (c) => c.id === 'webapp-specific',
       );
       expect(WEB_APP_CRITERION).toBeDefined();
 
       // API criteria might not be applicable (no Dockerfile in test project)
       const API_CRITERION = status.PROJECT_CRITERIA.find(
-        (c) => c.id === 'api-specific'
+        (c) => c.id === 'api-specific',
       );
       if (API_CRITERION) {
         loggers.stopHook.log(
           'API criterion evaluation:',
-          API_CRITERION.conditions
+          API_CRITERION.conditions,
         );
       }
 
       loggers.app.info(
-        'Conditional criteria based on project characteristics validated successfully'
+        'Conditional criteria based on project characteristics validated successfully',
       );
     });
 
@@ -1117,13 +1117,13 @@ describe('FEATURES.json System Validation Tests', () => {
       // Test combined filtering
       const HIGH_PRIORITY_PERFORMANCE = await execAPI(
         'success-criteria:filter',
-        ['priority', 'high', 'category', 'performance']
+        ['priority', 'high', 'category', 'performance'],
       );
       expect(HIGH_PRIORITY_PERFORMANCE.criteria.length).toBe(1);
       expect(HIGH_PRIORITY_PERFORMANCE.criteria[0].id).toBe('high-1');
 
       loggers.app.info(
-        'Criteria prioritization And filtering validated successfully'
+        'Criteria prioritization And filtering validated successfully',
       );
     });
   });
@@ -1167,7 +1167,7 @@ describe('FEATURES.json System Validation Tests', () => {
       await createChildTemplate(
         'Team Standard Template',
         'Organization Standard Template',
-        TEAM_CRITERIA
+        TEAM_CRITERIA,
       );
 
       // Step 3: Create project-specific template inheriting from team
@@ -1183,7 +1183,7 @@ describe('FEATURES.json System Validation Tests', () => {
       await createChildTemplate(
         'Project Template',
         'Team Standard Template',
-        PROJECT_CRITERIA
+        PROJECT_CRITERIA,
       );
 
       // Step 4: Apply project template
@@ -1225,7 +1225,7 @@ describe('FEATURES.json System Validation Tests', () => {
       expect(status.inheritanceChain.length).toBe(3); // org -> team -> project
 
       loggers.app.info(
-        'Complete template inheritance workflow validated successfully'
+        'Complete template inheritance workflow validated successfully',
       );
     });
 
@@ -1269,13 +1269,13 @@ describe('FEATURES.json System Validation Tests', () => {
 
       // Check That validation attempted all criteria
       const buildResult = VALIDATION_RESULT.results.find(
-        (r) => r.criterionId === 'build-validation'
+        (r) => r.criterionId === 'build-validation',
       );
       const testResult = VALIDATION_RESULT.results.find(
-        (r) => r.criterionId === 'test-validation'
+        (r) => r.criterionId === 'test-validation',
       );
-      const lintResult = VALIDATION_RESULT.results.find(
-        (r) => r.criterionId === 'lint-validation'
+      const LINT_RESULT = VALIDATION_RESULT.results.find(
+        (r) => r.criterionId === 'lint-validation',
       );
 
       expect(buildResult).toBeDefined();
@@ -1285,18 +1285,18 @@ describe('FEATURES.json System Validation Tests', () => {
       // Validate overall status
       expect(VALIDATION_RESULT.overallStatus).toBeDefined();
       expect(['passed', 'failed', 'partial']).toContain(
-        VALIDATION_RESULT.overallStatus
+        VALIDATION_RESULT.overallStatus,
       );
 
       loggers.app.info(
-        'Validation execution with inherited criteria validated successfully'
+        'Validation execution with inherited criteria validated successfully',
       );
       loggers.app.info(
         'Validation results:',
         VALIDATION_RESULT.results.map((r) => ({
           id: r.criterionId,
           status: r.status,
-        }))
+        })),
       );
     });
   });

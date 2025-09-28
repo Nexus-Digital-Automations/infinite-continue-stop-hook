@@ -25,7 +25,7 @@ class TestNotificationSystem {
       coverageThreshold: parseFloat(process.env.COVERAGE_THRESHOLD || '80'),
       testFailureThreshold: parseInt(process.env.TEST_FAILURE_THRESHOLD || '0'),
       coverageDropThreshold: parseFloat(
-        process.env.COVERAGE_DROP_THRESHOLD || '5'
+        process.env.COVERAGE_DROP_THRESHOLD || '5',
       ),
       notificationLevel: process.env.NOTIFICATION_LEVEL || 'all', // all, failures-only, critical-only
       historyFile: './coverage/notifications/history.json',
@@ -51,12 +51,12 @@ class TestNotificationSystem {
       const notifications = await this.analyzeAndGenerateNotifications(
         testResults,
         coverageData,
-        cicdData
+        cicdData,
       );
 
       if (notifications.length === 0) {
         loggers.stopHook.log(
-          '✅ No notifications needed - all quality gates passed'
+          '✅ No notifications needed - all quality gates passed',
         );
         return;
       }
@@ -68,7 +68,7 @@ class TestNotificationSystem {
     } catch {
       loggers.stopHook.error(
         '❌ Failed to process notifications:',
-        error.message
+        error.message,
       );
       if (process.env.DEBUG) {
         loggers.stopHook.error(error.stack);
@@ -94,7 +94,7 @@ class TestNotificationSystem {
     // Coverage threshold notifications
     if (coverageData && this.isCoverageBelowThreshold(coverageData)) {
       notifications.push(
-        this.createCoverageThresholdNotification(coverageData)
+        this.createCoverageThresholdNotification(coverageData),
       );
     }
 
@@ -520,8 +520,8 @@ class TestNotificationSystem {
   loadTestResults() {
     try {
       const PATH = './coverage/reports/test-results.json';
-      if (fs.existsSync(path)) {
-        return JSON.parse(fs.readFileSync(path, 'utf8'));
+      if (FS.existsSync(path)) {
+        return JSON.parse(FS.readFileSync(path, 'utf8'));
       }
     } catch {
       loggers.stopHook.warn('⚠️ Could not load test results:', error.message);
@@ -532,8 +532,8 @@ class TestNotificationSystem {
   loadCoverageData() {
     try {
       const PATH = './coverage/coverage-summary.json';
-      if (fs.existsSync(path)) {
-        return JSON.parse(fs.readFileSync(path, 'utf8'));
+      if (FS.existsSync(path)) {
+        return JSON.parse(FS.readFileSync(path, 'utf8'));
       }
     } catch {
       loggers.stopHook.warn('⚠️ Could not load coverage data:', error.message);
@@ -544,8 +544,8 @@ class TestNotificationSystem {
   loadCICDData() {
     try {
       const PATH = './coverage/reports/ci-cd-results.json';
-      if (fs.existsSync(path)) {
-        return JSON.parse(fs.readFileSync(path, 'utf8'));
+      if (FS.existsSync(path)) {
+        return JSON.parse(FS.readFileSync(path, 'utf8'));
       }
     } catch {
       loggers.stopHook.warn('⚠️ Could not load CI/CD data:', error.message);
@@ -555,13 +555,13 @@ class TestNotificationSystem {
 
   loadNotificationHistory() {
     try {
-      if (fs.existsSync(this.options.historyFile)) {
-        return JSON.parse(fs.readFileSync(this.options.historyFile, 'utf8'));
+      if (FS.existsSync(this.options.historyFile)) {
+        return JSON.parse(FS.readFileSync(this.options.historyFile, 'utf8'));
       }
     } catch {
       loggers.stopHook.warn(
         '⚠️ Could not load notification history:',
-        error.message
+        error.message,
       );
     }
     return [];
@@ -594,19 +594,19 @@ class TestNotificationSystem {
       }
 
       // Ensure directory exists
-      const dir = path.dirname(this.options.historyFile);
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
+      const dir = PATH.dirname(this.options.historyFile);
+      if (!FS.existsSync(dir)) {
+        FS.mkdirSync(dir, { recursive: true });
       }
 
-      fs.writeFileSync(
+      FS.writeFileSync(
         this.options.historyFile,
-        JSON.stringify(this.notificationHistory, null, 2)
+        JSON.stringify(this.notificationHistory, null, 2),
       );
     } catch {
       loggers.stopHook.warn(
         '⚠️ Could not update notification history:',
-        error.message
+        error.message,
       );
     }
   }
@@ -626,7 +626,7 @@ class TestNotificationSystem {
       } else {
         loggers.app.info(
           `❌ Notification ${index + 1} failed:`,
-          result.reason.message
+          result.reason.message,
         );
       }
     });

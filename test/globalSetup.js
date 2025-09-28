@@ -34,38 +34,38 @@ module.exports = () => {
   ];
 
   testDirs.forEach((dir) => {
-    const fullPath = path.join(process.cwd(), dir);
+    const fullPath = PATH.join(process.cwd(), dir);
 
-    if (!fs.existsSync(fullPath)) {
-      fs.mkdirSync(fullPath, { recursive: true });
+    if (!FS.existsSync(fullPath)) {
+      FS.mkdirSync(fullPath, { recursive: true });
       loggers.stopHook.log(`📁 Created test directory: ${dir}`);
     }
   });
 
   // Clean up any leftover test files from previous runs
-  const tempDir = path.join(process.cwd(), 'test/temp');
+  const tempDir = PATH.join(process.cwd(), 'test/temp');
 
-  if (fs.existsSync(tempDir)) {
-    const entries = fs.readdirSync(tempDir);
+  if (FS.existsSync(tempDir)) {
+    const entries = FS.readdirSync(tempDir);
     for (const entry of entries) {
-      const entryPath = path.join(tempDir, entry);
+      const entryPath = PATH.join(tempDir, entry);
 
-      const stat = fs.statSync(entryPath);
+      const stat = FS.statSync(entryPath);
 
       // Remove files/directories older than 1 hour
       const oneHourAgo = Date.now() - 60 * 60 * 1000;
       if (stat.mtime.getTime() < oneHourAgo) {
         try {
           if (stat.isDirectory()) {
-            fs.rmSync(entryPath, { recursive: true, force: true });
+            FS.rmSync(entryPath, { recursive: true, force: true });
           } else {
-            fs.unlinkSync(entryPath);
+            FS.unlinkSync(entryPath);
           }
           loggers.stopHook.log(`🧹 Cleaned up old test file: ${entry}`);
         } catch {
           loggers.stopHook.warn(
             `⚠️  Could not clean up ${entry}:`,
-            error.message
+            error.message,
           );
         }
       }
@@ -75,9 +75,9 @@ module.exports = () => {
   // Set up global test constants
   global.TEST_CONSTANTS = {
     PROJECT_ROOT: process.cwd(),
-    TEST_ROOT: path.join(process.cwd(), 'test'),
-    TEMP_DIR: path.join(process.cwd(), 'test/temp'),
-    FIXTURES_DIR: path.join(process.cwd(), 'test/fixtures'),
+    TEST_ROOT: PATH.join(process.cwd(), 'test'),
+    TEMP_DIR: PATH.join(process.cwd(), 'test/temp'),
+    FIXTURES_DIR: PATH.join(process.cwd(), 'test/fixtures'),
     TIMEOUT: {
       UNIT: 5000,
       INTEGRATION: 15000,
@@ -99,7 +99,7 @@ module.exports = () => {
   // Memory management for CI environments
   if (process.env.CI === 'true') {
     loggers.stopHook.log(
-      '🏗️  CI environment detected - enabling memory optimizations'
+      '🏗️  CI environment detected - enabling memory optimizations',
     );
 
     // Lower memory thresholds for CI
@@ -117,16 +117,16 @@ module.exports = () => {
   // Test reporting setup
   loggers.stopHook.log('📋 Test reporting configuration:');
   loggers.app.info(
-    `   • Coverage: ${process.env.COVERAGE ? 'enabled' : 'disabled'}`
+    `   • Coverage: ${process.env.COVERAGE ? 'enabled' : 'disabled'}`,
   );
   loggers.stopHook.log(
-    `   • Verbose: ${process.env.VERBOSE ? 'enabled' : 'disabled'}`
+    `   • Verbose: ${process.env.VERBOSE ? 'enabled' : 'disabled'}`,
   );
   loggers.stopHook.log(
-    `   • Watch mode: ${process.env.WATCH ? 'enabled' : 'disabled'}`
+    `   • Watch mode: ${process.env.WATCH ? 'enabled' : 'disabled'}`,
   );
   loggers.stopHook.log(
-    `   • Max workers: ${process.env.MAX_WORKERS || 'auto'}`
+    `   • Max workers: ${process.env.MAX_WORKERS || 'auto'}`,
   );
 
   // Network And external service mocking
@@ -177,23 +177,23 @@ module.exports = () => {
   global.testUtils = {
     // These will be enhanced in setup.js
     createTempFile: (name, content) => {
-      const filePath = path.join(global.TEST_CONSTANTS.TEMP_DIR, name);
+      const filePath = PATH.join(global.TEST_CONSTANTS.TEMP_DIR, name);
 
-      fs.writeFileSync(filePath, content);
+      FS.writeFileSync(filePath, content);
       return filePath;
     },
 
     createTempDir: (name) => {
-      const dirPath = path.join(global.TEST_CONSTANTS.TEMP_DIR, name);
-      fs.mkdirSync(dirPath, { recursive: true });
+      const dirPath = PATH.join(global.TEST_CONSTANTS.TEMP_DIR, name);
+      FS.mkdirSync(dirPath, { recursive: true });
       return dirPath;
     },
 
     cleanupTemp: () => {
       const tempDir = global.TEST_CONSTANTS.TEMP_DIR;
-      if (fs.existsSync(tempDir)) {
-        fs.rmSync(tempDir, { recursive: true, force: true });
-        fs.mkdirSync(tempDir, { recursive: true });
+      if (FS.existsSync(tempDir)) {
+        FS.rmSync(tempDir, { recursive: true, force: true });
+        FS.mkdirSync(tempDir, { recursive: true });
       }
     },
   };

@@ -281,7 +281,7 @@ describe('API Workflow Integration Tests', () => {
   describe('Complete Agent Lifecycle Workflow', () => {
     test('should execute complete agent lifecycle: initialize → reinitialize → stop authorization', async () => {
       // 1. Initialize agent
-      const AGENT_ID = 'integration-test-agent-001';
+      const agentId = 'integration-test-agent-001';
       const initResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });
@@ -356,7 +356,7 @@ describe('API Workflow Integration Tests', () => {
 
       // 8. Verify stop flag file was created
       const FS = require('fs').promises;
-      const stopFlagPath = path.join(testDir, '.stop-allowed');
+      const stopFlagPath = PATH.join(testDir, '.stop-allowed');
       const stopFlagExists = await fs
         .access(stopFlagPath)
         .then(() => true)
@@ -365,7 +365,7 @@ describe('API Workflow Integration Tests', () => {
 
       if (stopFlagExists) {
         const stopFlagData = JSON.parse(
-          await fs.readFile(stopFlagPath, 'utf8'),
+          await FS.readFile(stopFlagPath, 'utf8'),
         );
         expect(stopFlagData.stop_allowed).toBe(true);
         expect(stopFlagData.authorized_by).toBe(agentId);
@@ -419,7 +419,7 @@ describe('API Workflow Integration Tests', () => {
   describe('Cross-Component Integration', () => {
     test('should handle mixed feature And agent operations', async () => {
       // 1. Initialize agent
-      const AGENT_ID = 'mixed-operations-agent';
+      const agentId = 'mixed-operations-agent';
       const initResult = await execAPI('initialize', [agentId], {
         projectRoot: testDir,
       });

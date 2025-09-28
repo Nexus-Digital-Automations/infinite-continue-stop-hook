@@ -31,7 +31,7 @@ describe('Initialization Statistics', () => {
   let originalFs;
 
   const TEST_PROJECT_ROOT = '/test/stats-project';
-  const TEST_TASKS_PATH = path.join(TEST_PROJECT_ROOT, 'TASKS.json');
+  const TEST_TASKS_PATH = PATH.join(TEST_PROJECT_ROOT, 'TASKS.json');
 
   beforeEach(() => {
     api = new FeatureManagerAPI();
@@ -44,7 +44,7 @@ describe('Initialization Statistics', () => {
     // Mock the fs module
     originalFs = require('fs').promises;
     const FS = require('fs');
-    fs.promises = mockFs;
+    FS.promises = mockFs;
 
     // Setup initial tasks file
     mockFs.setFile(
@@ -56,7 +56,7 @@ describe('Initialization Statistics', () => {
   afterEach(() => {
     // Restore original file system
     const FS = require('fs');
-    fs.promises = originalFs;
+    FS.promises = originalFs;
 
     jest.clearAllMocks();
     mockFs.clearAll();

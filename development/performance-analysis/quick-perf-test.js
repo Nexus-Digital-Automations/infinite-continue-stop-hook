@@ -109,7 +109,7 @@ class QuickPerfTest {
         if (result.includes('"success": false') || result.includes('error')) {
           errors.push(`Iteration ${i + 1}: API returned error`);
         }
-      } catch {
+      } catch (_error) {
         errors.push(`Iteration ${i + 1}: ${_error.message}`);
         times.push(-1); // Mark as failed
       }
@@ -278,14 +278,14 @@ class QuickPerfTest {
       throw new Error('Path traversal attempt detected - security violation');
     }
 
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
+    if (!FS.existsSync(outputDir)) {
+      FS.mkdirSync(outputDir, { recursive: true });
     }
 
     // ESLint: security/detect-non-literal-fs-filename disabled for this line
     // Justification: Filename is validated with regex And path traversal protection above
 
-    fs.writeFileSync(outputFile, JSON.stringify(report, null, 2));
+    FS.writeFileSync(outputFile, JSON.stringify(report, null, 2));
     return outputFile;
   }
 }
@@ -332,9 +332,9 @@ function main() {
     }
 
     loggers.stopHook.log(`\n📄 Full report saved to: ${outputFile}`);
-  } catch {
+  } catch (_error) {
 
-    loggers.stopHook._error('❌ Performance test failed:', _error);
+    loggers.stopHook.error('❌ Performance test failed:', _error);
     throw _error;
   }
 }

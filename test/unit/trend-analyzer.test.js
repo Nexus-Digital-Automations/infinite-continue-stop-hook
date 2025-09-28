@@ -4,29 +4,29 @@ const TrendAnalyzer = require('../../lib/trend-analyzer');
 
 describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
   const mockProjectRoot = '/tmp/test-trend-analyzer';
-  const mockEnhancedMetricsFile = path.join(
+  const mockEnhancedMetricsFile = PATH.join(
     mockProjectRoot,
     '.validation-performance-enhanced.json',
   );
-  const mockLegacyMetricsFile = path.join(
+  const mockLegacyMetricsFile = PATH.join(
     mockProjectRoot,
     '.validation-performance.json',
   );
-  const mockTrendsFile = path.join(mockProjectRoot, '.validation-trends.json');
+  const mockTrendsFile = PATH.join(mockProjectRoot, '.validation-trends.json');
 
   let trendAnalyzer;
 
   beforeEach(() => {
     // Create mock directory
-    if (!fs.existsSync(mockProjectRoot)) {
-      fs.mkdirSync(mockProjectRoot, { recursive: true });
+    if (!FS.existsSync(mockProjectRoot)) {
+      FS.mkdirSync(mockProjectRoot, { recursive: true });
     }
 
     // Clean up previous test data
     [mockEnhancedMetricsFile, mockLegacyMetricsFile, mockTrendsFile].forEach(
       (file) => {
-        if (fs.existsSync(file)) {
-          fs.unlinkSync(file);
+        if (FS.existsSync(file)) {
+          FS.unlinkSync(file);
         }
       },
     );
@@ -36,8 +36,8 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
 
   afterEach(() => {
     // Clean up test directory
-    if (fs.existsSync(mockProjectRoot)) {
-      fs.rmSync(mockProjectRoot, { recursive: true, force: true });
+    if (FS.existsSync(mockProjectRoot)) {
+      FS.rmSync(mockProjectRoot, { recursive: true, force: true });
     }
   });
 
@@ -107,7 +107,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
       metrics: metrics.reverse(), // Most recent first
     };
 
-    fs.writeFileSync(
+    FS.writeFileSync(
       mockEnhancedMetricsFile,
       JSON.stringify(metricsData, null, 2),
     );
@@ -352,11 +352,11 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
         ],
       };
 
-      fs.writeFileSync(
+      FS.writeFileSync(
         mockEnhancedMetricsFile,
         JSON.stringify(enhancedData, null, 2),
       );
-      fs.writeFileSync(
+      FS.writeFileSync(
         mockLegacyMetricsFile,
         JSON.stringify(legacyData, null, 2),
       );
@@ -549,7 +549,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
     });
 
     test('should handle corrupted metrics files', async () => {
-      fs.writeFileSync(mockEnhancedMetricsFile, 'invalid json');
+      FS.writeFileSync(mockEnhancedMetricsFile, 'invalid json');
 
       const result = await trendAnalyzer.analyzeTrends();
 
@@ -559,7 +559,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
 
     test('should handle empty metrics arrays', async () => {
       const emptyData = { metrics: [] };
-      fs.writeFileSync(
+      FS.writeFileSync(
         mockEnhancedMetricsFile,
         JSON.stringify(emptyData, null, 2),
       );
@@ -589,7 +589,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
       expect(trendsFileExists).toBe(true);
 
       // Verify stored content
-      const storedData = JSON.parse(fs.readFileSync(mockTrendsFile, 'utf8'));
+      const storedData = JSON.parse(FS.readFileSync(mockTrendsFile, 'utf8'));
       expect(storedData.generatedAt).toBeDefined();
       expect(storedData.version).toBe('1.0.0');
       expect(storedData.analysis).toBeDefined();

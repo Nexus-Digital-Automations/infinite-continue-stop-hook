@@ -167,7 +167,7 @@ class QualityLogger {
 
     if (this.structured) {
       loggers.stopHook.log(
-        JSON.stringify({ timestamp, level, message, ...data })
+        JSON.stringify({ timestamp, level, message, ...data }),
       );
     } else {
       const emoji =
@@ -314,7 +314,7 @@ class CodeQualityAnalyzer {
         complexityData.cyclomatic.total += fileComplexity.cyclomatic;
         complexityData.cyclomatic.max = Math.max(
           complexityData.cyclomatic.max,
-          fileComplexity.cyclomatic
+          fileComplexity.cyclomatic,
         );
 
         // Aggregate cognitive complexity
@@ -322,7 +322,7 @@ class CodeQualityAnalyzer {
         complexityData.cognitive.total += fileComplexity.cognitive;
         complexityData.cognitive.max = Math.max(
           complexityData.cognitive.max,
-          fileComplexity.cognitive
+          fileComplexity.cognitive,
         );
 
         // Track functions
@@ -363,7 +363,7 @@ class CodeQualityAnalyzer {
 
     this.metrics.complexity = complexityData;
     this.logger.analysis(
-      `Complexity analysis complete - Avg cyclomatic: ${complexityData.cyclomatic.average.toFixed(2)}`
+      `Complexity analysis complete - Avg cyclomatic: ${complexityData.cyclomatic.average.toFixed(2)}`,
     );
   }
 
@@ -372,7 +372,7 @@ class CodeQualityAnalyzer {
    */
   analyzeFileComplexity(filePath) {
     try {
-      const content = fs.readFileSync(filePath, 'utf8');
+      const content = FS.readFileSync(filePath, 'utf8');
 
       // Simple complexity analysis (can be enhanced with AST parsing)
       const lines = content.split('\n');
@@ -446,7 +446,7 @@ class CodeQualityAnalyzer {
 
     for (const filePath of this.sourceFiles) {
       try {
-        const content = fs.readFileSync(filePath, 'utf8');
+        const content = FS.readFileSync(filePath, 'utf8');
         const lineCount = content.split('\n').length;
 
         sizeData.total_lines += lineCount;
@@ -484,7 +484,7 @@ class CodeQualityAnalyzer {
 
     this.metrics.size = sizeData;
     this.logger.analysis(
-      `Size analysis complete - Avg file size: ${sizeData.average_file_size.toFixed(0)} lines`
+      `Size analysis complete - Avg file size: ${sizeData.average_file_size.toFixed(0)} lines`,
     );
   }
 
@@ -508,7 +508,7 @@ class CodeQualityAnalyzer {
 
     for (const filePath of this.sourceFiles) {
       try {
-        const content = fs.readFileSync(filePath, 'utf8');
+        const content = FS.readFileSync(filePath, 'utf8');
         const lines = content.split('\n');
 
         // Track line-level duplication
@@ -586,7 +586,7 @@ class CodeQualityAnalyzer {
 
     this.metrics.duplication = duplicationData;
     this.logger.analysis(
-      `Duplication analysis complete - ${duplicationData.duplication_percentage.toFixed(2)}% duplication`
+      `Duplication analysis complete - ${duplicationData.duplication_percentage.toFixed(2)}% duplication`,
     );
   }
 
@@ -658,7 +658,7 @@ class CodeQualityAnalyzer {
 
     for (const filePath of this.sourceFiles) {
       try {
-        const content = fs.readFileSync(filePath, 'utf8');
+        const content = FS.readFileSync(filePath, 'utf8');
         const lines = content.split('\n');
 
         for (let i = 0; i < lines.length; i++) {
@@ -700,7 +700,7 @@ class CodeQualityAnalyzer {
         securityData.critical_vulnerabilities * 20 -
         (securityData.total_vulnerabilities -
           securityData.critical_vulnerabilities) *
-          5
+          5,
     );
 
     // Add high-severity issues to main issues list
@@ -712,7 +712,7 @@ class CodeQualityAnalyzer {
 
     this.metrics.security = securityData;
     this.logger.analysis(
-      `Security analysis complete - ${securityData.total_vulnerabilities} vulnerabilities found`
+      `Security analysis complete - ${securityData.total_vulnerabilities} vulnerabilities found`,
     );
   }
 
@@ -739,12 +739,12 @@ class CodeQualityAnalyzer {
     if (totalLines > 0) {
       const complexityFactor = Math.max(
         0,
-        100 - (totalComplexity / totalLines) * 100
+        100 - (totalComplexity / totalLines) * 100,
       );
       const sizeFactor = Math.max(0, 100 - Math.log10(totalLines) * 10);
       const duplicationFactor = Math.max(
         0,
-        100 - this.metrics.duplication.duplication_percentage * 2
+        100 - this.metrics.duplication.duplication_percentage * 2,
       );
 
       maintainabilityData.maintainability_index =
@@ -765,12 +765,12 @@ class CodeQualityAnalyzer {
 
     maintainabilityData.maintainability_score = Math.max(
       0,
-      100 - maintainabilityData.technical_debt_ratio * 2
+      100 - maintainabilityData.technical_debt_ratio * 2,
     );
 
     this.metrics.maintainability = maintainabilityData;
     this.logger.analysis(
-      `Maintainability analysis complete - Index: ${maintainabilityData.maintainability_index.toFixed(2)}`
+      `Maintainability analysis complete - Index: ${maintainabilityData.maintainability_index.toFixed(2)}`,
     );
   }
 
@@ -792,7 +792,7 @@ class CodeQualityAnalyzer {
     // Detect various code smells
     for (const filePath of this.sourceFiles) {
       try {
-        const content = fs.readFileSync(filePath, 'utf8');
+        const content = FS.readFileSync(filePath, 'utf8');
         const lines = content.split('\n');
 
         // Detect long methods/functions
@@ -855,7 +855,7 @@ class CodeQualityAnalyzer {
 
     this.metrics.smells = smellsData;
     this.logger.analysis(
-      `Code smell detection complete - ${smellsData.total_smells} smells found`
+      `Code smell detection complete - ${smellsData.total_smells} smells found`,
     );
   }
 
@@ -889,7 +889,7 @@ class CodeQualityAnalyzer {
 
     for (const filePath of this.sourceFiles) {
       try {
-        const content = fs.readFileSync(filePath, 'utf8');
+        const content = FS.readFileSync(filePath, 'utf8');
         const lines = content.split('\n');
 
         const fileImports = [];
@@ -898,7 +898,7 @@ class CodeQualityAnalyzer {
         for (const line of lines) {
           // Track imports
           const importMatch = line.match(
-            /import\s+.*\s+from\s+['"]([^'"]+)['"]/
+            /import\s+.*\s+from\s+['"]([^'"]+)['"]/,
           );
           if (importMatch) {
             fileImports.push(importMatch[1]);
@@ -946,12 +946,12 @@ class CodeQualityAnalyzer {
     architectureData.architecture_score = Math.min(
       100,
       (100 / (1 + architectureData.module_coupling / 10)) *
-        architectureData.modularity_index
+        architectureData.modularity_index,
     );
 
     this.metrics.architecture = architectureData;
     this.logger.analysis(
-      `Architecture analysis complete - Score: ${architectureData.architecture_score.toFixed(2)}`
+      `Architecture analysis complete - Score: ${architectureData.architecture_score.toFixed(2)}`,
     );
   }
 
@@ -975,21 +975,21 @@ class CodeQualityAnalyzer {
     // Complexity score (inverse of complexity)
     const complexityScore = Math.max(
       0,
-      100 - this.metrics.complexity.cyclomatic.average * 2
+      100 - this.metrics.complexity.cyclomatic.average * 2,
     );
     weightedScore += complexityScore * weights.complexity;
 
     // Size score (inverse of average file size)
     const sizeScore = Math.max(
       0,
-      100 - Math.log10(this.metrics.size.average_file_size + 1) * 10
+      100 - Math.log10(this.metrics.size.average_file_size + 1) * 10,
     );
     weightedScore += sizeScore * weights.size;
 
     // Duplication score
     const duplicationScore = Math.max(
       0,
-      100 - this.metrics.duplication.duplication_percentage * 5
+      100 - this.metrics.duplication.duplication_percentage * 5,
     );
     weightedScore += duplicationScore * weights.duplication;
 
@@ -1021,7 +1021,7 @@ class CodeQualityAnalyzer {
     }
 
     this.logger.success(
-      `Overall quality calculated - Score: ${this.metrics.overall_score}/100 (${this.metrics.quality_level})`
+      `Overall quality calculated - Score: ${this.metrics.overall_score}/100 (${this.metrics.quality_level})`,
     );
   }
 
@@ -1103,7 +1103,7 @@ class CodeQualityAnalyzer {
     }
 
     this.logger.success(
-      `Generated ${this.recommendations.length} improvement recommendations`
+      `Generated ${this.recommendations.length} improvement recommendations`,
     );
   }
 
@@ -1159,20 +1159,20 @@ class CodeQualityAnalyzer {
     // Write report to file
     const reportsDir = 'coverage/reports';
 
-    if (!fs.existsSync(reportsDir)) {
-      fs.mkdirSync(reportsDir, { recursive: true });
+    if (!FS.existsSync(reportsDir)) {
+      FS.mkdirSync(reportsDir, { recursive: true });
     }
 
-    fs.writeFileSync(
-      path.join(reportsDir, 'code-quality-report.json'),
-      JSON.stringify(report, null, 2)
+    FS.writeFileSync(
+      PATH.join(reportsDir, 'code-quality-report.json'),
+      JSON.stringify(report, null, 2),
     );
 
     // Write summary for quick access
 
-    fs.writeFileSync(
-      path.join(reportsDir, 'quality-summary.json'),
-      JSON.stringify(report.summary, null, 2)
+    FS.writeFileSync(
+      PATH.join(reportsDir, 'quality-summary.json'),
+      JSON.stringify(report.summary, null, 2),
     );
 
     this.logger.success('Quality report generated successfully');
@@ -1239,7 +1239,7 @@ Examples:
   if (configArg) {
     const configPath = configArg.split('=')[1];
     try {
-      const customConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+      const customConfig = JSON.parse(FS.readFileSync(configPath, 'utf8'));
       options.config = customConfig;
     } catch {
       loggers.stopHook.error(`❌ Failed to load config: ${error.message}`);
@@ -1253,11 +1253,11 @@ Examples:
     const result = analyzer.analyze();
     loggers.stopHook.log(`\n📊 Code Quality Analysis Complete:`);
     loggers.app.info(
-      `   Overall Score: ${result.overall_score}/100 (${result.quality_level})`
+      `   Overall Score: ${result.overall_score}/100 (${result.quality_level})`,
     );
     loggers.stopHook.log(`   Issues Found: ${result.issues.length}`);
     loggers.stopHook.log(
-      `   Recommendations: ${result.recommendations.length}`
+      `   Recommendations: ${result.recommendations.length}`,
     );
 
     if (result.overall_score < 70) {

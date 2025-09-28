@@ -166,58 +166,58 @@ class MockManager {
    */
   setupFileSystemMock() {
     const FS = require('fs');
-    this.originalModules.set('fs.existsSync', fs.existsSync);
-    this.originalModules.set('fs.readFileSync', fs.readFileSync);
-    this.originalModules.set('fs.writeFileSync', fs.writeFileSync);
-    this.originalModules.set('fs.mkdirSync', fs.mkdirSync);
-    this.originalModules.set('fs.rmSync', fs.rmSync);
+    this.originalModules.set('FS.existsSync', FS.existsSync);
+    this.originalModules.set('FS.readFileSync', FS.readFileSync);
+    this.originalModules.set('FS.writeFileSync', FS.writeFileSync);
+    this.originalModules.set('FS.mkdirSync', FS.mkdirSync);
+    this.originalModules.set('FS.rmSync', FS.rmSync);
 
-    const originalExistsSync = fs.existsSync;
-    const originalReadFileSync = fs.readFileSync;
-    const originalWriteFileSync = fs.writeFileSync;
-    const originalMkdirSync = fs.mkdirSync;
-    const originalRmSync = fs.rmSync;
+    const originalExistsSync = FS.existsSync;
+    const originalReadFileSync = FS.readFileSync;
+    const originalWriteFileSync = FS.writeFileSync;
+    const originalMkdirSync = FS.mkdirSync;
+    const originalRmSync = FS.rmSync;
 
     // Only mock test-related paths
     const isTestPath = (path) => {
       return (
         path &&
-        (path.includes('/test/') ||
-          path.includes('test-project') ||
-          path.includes('FEATURES.json') ||
-          path.includes('TODO.json'))
+        (PATH.includes('/test/') ||
+          PATH.includes('test-project') ||
+          PATH.includes('FEATURES.json') ||
+          PATH.includes('TODO.json'))
       );
     };
 
-    fs.existsSync = jest.fn((path) => {
+    FS.existsSync = jest.fn((path) => {
       if (isTestPath(path)) {
         return this.fileSystem.existsSync(path);
       }
       return originalExistsSync(path);
     });
 
-    fs.readFileSync = jest.fn((path, encoding) => {
+    FS.readFileSync = jest.fn((path, encoding) => {
       if (isTestPath(path)) {
         return this.fileSystem.readFileSync(path, encoding);
       }
       return originalReadFileSync(path, encoding);
     });
 
-    fs.writeFileSync = jest.fn((path, data) => {
+    FS.writeFileSync = jest.fn((path, data) => {
       if (isTestPath(path)) {
         return this.fileSystem.writeFileSync(path, data);
       }
       return originalWriteFileSync(path, data);
     });
 
-    fs.mkdirSync = jest.fn((path, options) => {
+    FS.mkdirSync = jest.fn((path, options) => {
       if (isTestPath(path)) {
         return this.fileSystem.mkdirSync(path, options);
       }
       return originalMkdirSync(path, options);
     });
 
-    fs.rmSync = jest.fn((path, options) => {
+    FS.rmSync = jest.fn((path, options) => {
       if (isTestPath(path)) {
         return this.fileSystem.rmSync(path, options);
       }
@@ -334,8 +334,8 @@ class MockManager {
       'mkdirSync',
       'rmSync',
     ].forEach((method) => {
-      if (this.originalModules.has(`fs.${method}`)) {
-        fs[method] = this.originalModules.get(`fs.${method}`);
+      if (this.originalModules.has(`FS.${method}`)) {
+        fs[method] = this.originalModules.get(`FS.${method}`);
       }
     });
 

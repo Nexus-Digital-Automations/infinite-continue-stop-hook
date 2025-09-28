@@ -219,11 +219,11 @@ class JestCiCdReporter {
 
             // Track failure patterns
             const errorType = this.categorizeError(
-              test.failureMessages?.[0] || ''
+              test.failureMessages?.[0] || '',
             );
             failurePatterns.set(
               errorType,
-              (failurePatterns.get(errorType) || 0) + 1
+              (failurePatterns.get(errorType) || 0) + 1,
             );
           }
         });
@@ -265,7 +265,7 @@ class JestCiCdReporter {
     return 'other';
   }
 
-  detectFlakyTests(_RESULTS) {
+  detectFlakyTests(RESULTS) {
     // Placeholder for flaky test detection
     // In a real implementation, this would compare with historical data
     return {
@@ -368,7 +368,7 @@ class JestCiCdReporter {
     const totalTime = Date.now() - this.startTime;
     const serialTime = results.testResults.reduce(
       (sum, result) => sum + (result.perfStats.end - result.perfStats.start),
-      0
+      0,
     );
 
     const efficiency =
@@ -542,17 +542,17 @@ class JestCiCdReporter {
 
   writeReport(report) {
     // Ensure output directory exists
-    const outputDir = path.dirname(this.options.outputPath);
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
+    const outputDir = PATH.dirname(this.options.outputPath);
+    if (!FS.existsSync(outputDir)) {
+      FS.mkdirSync(outputDir, { recursive: true });
     }
 
     // Write main report
-    fs.writeFileSync(this.options.outputPath, JSON.stringify(report, null, 2));
+    FS.writeFileSync(this.options.outputPath, JSON.stringify(report, null, 2));
   }
 
   writeStatusFiles(report) {
-    const outputDir = path.dirname(this.options.outputPath);
+    const outputDir = PATH.dirname(this.options.outputPath);
 
     // Write deployment gate status
     const deploymentStatus = {
@@ -564,21 +564,21 @@ class JestCiCdReporter {
         report.cicd_summary.quality_gate_status.blocking_issues || [],
     };
 
-    fs.writeFileSync(
-      path.join(outputDir, 'deployment-gate.json'),
-      JSON.stringify(deploymentStatus, null, 2)
+    FS.writeFileSync(
+      PATH.join(outputDir, 'deployment-gate.json'),
+      JSON.stringify(deploymentStatus, null, 2),
     );
 
     // Write simple status for shell scripts
-    fs.writeFileSync(
-      path.join(outputDir, 'test-status.txt'),
-      report.cicd_summary.pipeline_status
+    FS.writeFileSync(
+      PATH.join(outputDir, 'test-status.txt'),
+      report.cicd_summary.pipeline_status,
     );
 
     // Write health score
-    fs.writeFileSync(
-      path.join(outputDir, 'health-score.txt'),
-      report.cicd_summary.test_health_score.toString()
+    FS.writeFileSync(
+      PATH.join(outputDir, 'health-score.txt'),
+      report.cicd_summary.test_health_score.toString(),
     );
   }
 

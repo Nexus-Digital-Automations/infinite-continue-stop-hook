@@ -46,7 +46,7 @@ describe('Multi-Agent Scenarios E2E', () => {
         // Create concurrent feature suggestions
         const agentPromises = [];
         for (let i = 0; i < agentCount; i++) {
-          const AGENT_ID = `concurrent-agent-${i}`;
+          const agentId = `concurrent-agent-${i}`;
           const agentOperations = [];
 
           for (let j = 0; j < featuresPerAgent; j++) {

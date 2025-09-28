@@ -39,7 +39,7 @@ class FeaturesMigration {
   migrate() {
     try {
       loggers.stopHook.log(
-        '🚀 Starting TODO.json → FEATURES.json migration...'
+        '🚀 Starting TODO.json → FEATURES.json migration...',
       );
 
       // Step 1: Load And validate TODO.json
@@ -75,11 +75,11 @@ class FeaturesMigration {
   loadTodoData() {
     loggers.stopHook.log('📖 Loading TODO.json data...');
 
-    if (!fs.existsSync(this.todoPath)) {
+    if (!FS.existsSync(this.todoPath)) {
       throw new Error(`TODO.json not found at ${this.todoPath}`);
     }
 
-    const todoContent = fs.readFileSync(this.todoPath, 'utf8');
+    const todoContent = FS.readFileSync(this.todoPath, 'utf8');
     const todoData = JSON.parse(todoContent);
 
     this.migrationReport.totalTasks = todoData.tasks
@@ -87,7 +87,7 @@ class FeaturesMigration {
       : 0;
 
     loggers.stopHook.log(
-      `📊 Found ${this.migrationReport.totalTasks} tasks to migrate`
+      `📊 Found ${this.migrationReport.totalTasks} tasks to migrate`,
     );
     return todoData;
   }
@@ -98,7 +98,7 @@ class FeaturesMigration {
   createBackup(todoData) {
     loggers.stopHook.log('💾 Creating backup...');
 
-    fs.writeFileSync(this.backupPath, JSON.stringify(todoData, null, 2));
+    FS.writeFileSync(this.backupPath, JSON.stringify(todoData, null, 2));
     loggers.stopHook.log(`✅ Backup created: ${this.backupPath}`);
   }
 
@@ -197,10 +197,10 @@ class FeaturesMigration {
           this.migrationReport.migratedFeatures++;
         } catch {
           this.migrationReport.errors.push(
-            `Failed to transform task ${task.id || index}: ${error.message}`
+            `Failed to transform task ${task.id || index}: ${error.message}`,
           );
           loggers.app.warn(
-            `⚠️  Warning: Failed to transform task ${task.id || index}`
+            `⚠️  Warning: Failed to transform task ${task.id || index}`,
           );
         }
       });
@@ -214,7 +214,7 @@ class FeaturesMigration {
           transformedData.completed_features.push(transformedFeature);
         } catch {
           this.migrationReport.errors.push(
-            `Failed to transform completed task ${task.id || index}: ${error.message}`
+            `Failed to transform completed task ${task.id || index}: ${error.message}`,
           );
         }
       });
@@ -224,7 +224,7 @@ class FeaturesMigration {
     transformedData.migration_stats = this.migrationReport;
 
     loggers.app.info(
-      `✅ Transformed ${this.migrationReport.migratedFeatures} features`
+      `✅ Transformed ${this.migrationReport.migratedFeatures} features`,
     );
     return transformedData;
   }
@@ -316,11 +316,11 @@ class FeaturesMigration {
     loggers.stopHook.log('💾 Writing FEATURES.json...');
 
     const featuresContent = JSON.stringify(transformedData, null, 2);
-    fs.writeFileSync(this.featuresPath, featuresContent);
+    FS.writeFileSync(this.featuresPath, featuresContent);
 
     loggers.stopHook.log(`✅ FEATURES.json created: ${this.featuresPath}`);
     loggers.app.info(
-      `📊 File size: ${Math.round(featuresContent.length / 1024)} KB`
+      `📊 File size: ${Math.round(featuresContent.length / 1024)} KB`,
     );
   }
 
@@ -340,11 +340,11 @@ class FeaturesMigration {
     loggers.stopHook.log(`⏱️  Duration: ${this.migrationReport.duration}ms`);
     loggers.stopHook.log(`📝 Total Tasks: ${this.migrationReport.totalTasks}`);
     loggers.app.info(
-      `✅ Migrated Features: ${this.migrationReport.migratedFeatures}`
+      `✅ Migrated Features: ${this.migrationReport.migratedFeatures}`,
     );
     loggers.stopHook.log(`⚠️  Errors: ${this.migrationReport.errors.length}`);
     loggers.stopHook.log(
-      `🔶 Warnings: ${this.migrationReport.warnings.length}`
+      `🔶 Warnings: ${this.migrationReport.warnings.length}`,
     );
 
     if (this.migrationReport.errors.length > 0) {
@@ -370,11 +370,11 @@ class FeaturesMigration {
 
     try {
       // Check if FEATURES.json exists And is valid JSON
-      if (!fs.existsSync(this.featuresPath)) {
+      if (!FS.existsSync(this.featuresPath)) {
         throw new Error('FEATURES.json was not created');
       }
 
-      const featuresContent = fs.readFileSync(this.featuresPath, 'utf8');
+      const featuresContent = FS.readFileSync(this.featuresPath, 'utf8');
       const featuresData = JSON.parse(featuresContent);
 
       // Validate schema structure
@@ -385,7 +385,7 @@ class FeaturesMigration {
         'settings',
       ];
       const missingFields = requiredFields.filter(
-        (field) => !Object.prototype.hasOwnProperty.call(featuresData, field)
+        (field) => !Object.prototype.hasOwnProperty.call(featuresData, field),
       );
 
       if (missingFields.length > 0) {

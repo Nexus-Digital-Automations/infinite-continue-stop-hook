@@ -293,7 +293,7 @@ describe('CLI Commands Integration Tests', () => {
 
     test('should execute agent management commands', async () => {
       // 1. Initialize agent
-      const AGENT_ID = 'cli-test-agent';
+      const agentId = 'cli-test-agent';
       const initResult = await execCLIDirect([
         'initialize',
         agentId,
@@ -627,7 +627,7 @@ describe('CLI Commands Integration Tests', () => {
 
     test('should execute complete agent workflow via CLI', async () => {
       // 1. Initialize agent
-      const AGENT_ID = 'complete-workflow-agent';
+      const agentId = 'complete-workflow-agent';
       const initResult = await execCLIDirect([
         'initialize',
         agentId,
@@ -701,8 +701,8 @@ describe('CLI Commands Integration Tests', () => {
 
       // Remove FEATURES.json
       const FS = require('fs').promises;
-      const featuresPath = path.join(emptyDir, 'FEATURES.json');
-      await fs.unlink(featuresPath);
+      const featuresPath = PATH.join(emptyDir, 'FEATURES.json');
+      await FS.unlink(featuresPath);
 
       // 2. Try to perform operations
       const result = await execCLIDirect([

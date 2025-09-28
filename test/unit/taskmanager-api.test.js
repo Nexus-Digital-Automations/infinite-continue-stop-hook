@@ -35,7 +35,7 @@ const FeatureManagerAPI = require('../../taskmanager-api.js');
 
 // Test constants
 const TEST_PROJECT_ROOT = '/test/project';
-const TEST_FEATURES_PATH = path.join(TEST_PROJECT_ROOT, 'FEATURES.json');
+const TEST_FEATURES_PATH = PATH.join(TEST_PROJECT_ROOT, 'FEATURES.json');
 
 describe('FeatureManagerAPI', () => {
   let api;
@@ -52,11 +52,11 @@ describe('FeatureManagerAPI', () => {
 
     // Get the mocked fs module And connect it to our MockFileSystem
     const FS = require('fs');
-    fs.promises.access.mockImplementation((...args) => mockFs.access(...args));
-    fs.promises.readFile.mockImplementation((...args) =>
+    FS.promises.access.mockImplementation((...args) => mockFs.access(...args));
+    FS.promises.readFile.mockImplementation((...args) =>
       mockFs.readFile(...args),
     );
-    fs.promises.writeFile.mockImplementation((...args) =>
+    FS.promises.writeFile.mockImplementation((...args) =>
       mockFs.writeFile(...args),
     );
 
@@ -963,7 +963,7 @@ describe('FeatureManagerAPI', () => {
 
     describe('initializeAgent', () => {
       test('should initialize new agent successfully', async () => {
-        const AGENT_ID = 'test-agent-001';
+        const agentId = 'test-agent-001';
         const result = await api.initializeAgent(agentId);
 
         expect(result.success).toBe(true);
@@ -984,7 +984,7 @@ describe('FeatureManagerAPI', () => {
 
     describe('reinitializeAgent', () => {
       test('should reinitialize existing agent', async () => {
-        const AGENT_ID = 'test-agent-002';
+        const agentId = 'test-agent-002';
 
         // First initialize
         await api.initializeAgent(agentId);
@@ -1009,7 +1009,7 @@ describe('FeatureManagerAPI', () => {
 
     describe('authorizeStop', () => {
       test('should authorize stop with reason', async () => {
-        const AGENT_ID = 'test-agent-003';
+        const agentId = 'test-agent-003';
         const reason = 'Task completed successfully';
 
         const result = await api.authorizeStop(agentId, reason);
@@ -1022,7 +1022,7 @@ describe('FeatureManagerAPI', () => {
       });
 
       test('should authorize stop with default reason', async () => {
-        const AGENT_ID = 'test-agent-004';
+        const agentId = 'test-agent-004';
 
         const result = await api.authorizeStop(agentId);
 

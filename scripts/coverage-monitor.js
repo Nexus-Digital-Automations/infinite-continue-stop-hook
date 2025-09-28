@@ -28,20 +28,20 @@ const CONFIG = {
     lines: 60,
   },
   paths: {
-    coverage: path.join(process.cwd(), 'coverage'),
-    reports: path.join(process.cwd(), 'coverage', 'reports'),
-    summary: path.join(process.cwd(), 'coverage', 'coverage-summary.json'),
-    trends: path.join(
+    coverage: PATH.join(process.cwd(), 'coverage'),
+    reports: PATH.join(process.cwd(), 'coverage', 'reports'),
+    summary: PATH.join(process.cwd(), 'coverage', 'coverage-summary.json'),
+    trends: PATH.join(
       process.cwd(),
       'coverage',
       'reports',
-      'coverage-trends.json'
+      'coverage-trends.json',
     ),
-    validation: path.join(
+    validation: PATH.join(
       process.cwd(),
       'coverage',
       'reports',
-      'coverage-validation.json'
+      'coverage-validation.json',
     ),
   },
 };
@@ -124,8 +124,8 @@ class CoverageMonitor {
 
     const dirs = [CONFIG.paths.coverage, CONFIG.paths.reports];
     for (const dir of dirs) {
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
+      if (!FS.existsSync(dir)) {
+        FS.mkdirSync(dir, { recursive: true });
         LOGGER.debug(`Created directory: ${dir}`);
       }
     }
@@ -147,10 +147,10 @@ class CoverageMonitor {
       LOGGER.success('Coverage analysis completed');
     } catch {
       // Check if it's just a test failure but coverage was generated
-      if (fs.existsSync(CONFIG.paths.summary)) {
+      if (FS.existsSync(CONFIG.paths.summary)) {
         LOGGER.warning('Tests failed but coverage data was generated');
         this.validation.warnings.push(
-          'Some tests failed during coverage analysis'
+          'Some tests failed during coverage analysis',
         );
       } else {
         throw new Error(`Coverage analysis failed: ${error.message}`);
@@ -164,20 +164,20 @@ class CoverageMonitor {
   loadCoverageData() {
     LOGGER.info('Loading coverage data...');
 
-    if (!fs.existsSync(CONFIG.paths.summary)) {
+    if (!FS.existsSync(CONFIG.paths.summary)) {
       throw new Error('Coverage summary file not found');
     }
 
     try {
       const coverageData = JSON.parse(
-        fs.readFileSync(CONFIG.paths.summary, 'utf8')
+        FS.readFileSync(CONFIG.paths.summary, 'utf8'),
       );
       this.coverageData = coverageData;
       this.validation.summary = coverageData.total;
 
       LOGGER.success('Coverage data loaded successfully');
       LOGGER.debug(
-        `Total coverage: ${JSON.stringify(coverageData.total, null, 2)}`
+        `Total coverage: ${JSON.stringify(coverageData.total, null, 2)}`,
       );
     } catch {
       throw new Error(`Failed to parse coverage data: ${error.message}`);
@@ -201,12 +201,12 @@ class CoverageMonitor {
 
       if (actual < critical) {
         failures.push(
-          `Critical failure: ${metric} coverage ${actual.toFixed(2)}% < ${critical}% (critical threshold)`
+          `Critical failure: ${metric} coverage ${actual.toFixed(2)}% < ${critical}% (critical threshold)`,
         );
         this.validation.passed = false;
       } else if (actual < threshold) {
         warnings.push(
-          `Warning: ${metric} coverage ${actual.toFixed(2)}% < ${threshold}% (target threshold)`
+          `Warning: ${metric} coverage ${actual.toFixed(2)}% < ${threshold}% (target threshold)`,
         );
       }
     }
@@ -217,7 +217,7 @@ class CoverageMonitor {
     // Log results
     if (failures.length > 0) {
       LOGGER.error(
-        `Coverage validation failed with ${failures.length} critical issues`
+        `Coverage validation failed with ${failures.length} critical issues`,
       );
       failures.forEach((failure) => LOGGER.error(failure));
     }
@@ -257,9 +257,9 @@ class CoverageMonitor {
     };
 
     // Write validation report
-    fs.writeFileSync(
+    FS.writeFileSync(
       CONFIG.paths.validation,
-      JSON.stringify(reportData, null, 2)
+      JSON.stringify(reportData, null, 2),
     );
 
     LOGGER.success('Coverage reports generated');
@@ -274,9 +274,9 @@ class CoverageMonitor {
     let trends = [];
 
     // Load existing trends
-    if (fs.existsSync(CONFIG.paths.trends)) {
+    if (FS.existsSync(CONFIG.paths.trends)) {
       try {
-        trends = JSON.parse(fs.readFileSync(CONFIG.paths.trends, 'utf8'));
+        trends = JSON.parse(FS.readFileSync(CONFIG.paths.trends, 'utf8'));
       } catch {
         LOGGER.warning('Could not load existing trends, starting fresh');
       }
@@ -298,7 +298,7 @@ class CoverageMonitor {
     }
 
     // Write updated trends
-    fs.writeFileSync(CONFIG.paths.trends, JSON.stringify(trends, null, 2));
+    FS.writeFileSync(CONFIG.paths.trends, JSON.stringify(trends, null, 2));
 
     LOGGER.success('Coverage trends updated');
   }
@@ -322,7 +322,7 @@ class CoverageMonitor {
       const metricName = metric.charAt(0).toUpperCase() + metric.slice(1);
 
       loggers.stopHook.log(
-        `│ ${metricName.padEnd(12)} │ ${actual.toFixed(2).padStart(6)}%  │ ${threshold.toString().padStart(7)}%  │ ${status.padEnd(6)} │`
+        `│ ${metricName.padEnd(12)} │ ${actual.toFixed(2).padStart(6)}%  │ ${threshold.toString().padStart(7)}%  │ ${status.padEnd(6)} │`,
       );
     }
 
@@ -335,13 +335,13 @@ class CoverageMonitor {
     // Additional info
     if (this.validation.warnings.length > 0) {
       loggers.stopHook.log(
-        `\n⚠️  Warnings: ${this.validation.warnings.length}`
+        `\n⚠️  Warnings: ${this.validation.warnings.length}`,
       );
     }
 
     if (this.validation.failures.length > 0) {
       loggers.stopHook.log(
-        `\n❌ Critical Issues: ${this.validation.failures.length}`
+        `\n❌ Critical Issues: ${this.validation.failures.length}`,
       );
     }
 

@@ -68,22 +68,22 @@ class CoverageLogger {
   static table(headers, rows) {
     // Simple table formatter
     const maxLengths = headers.map((header, i) =>
-      Math.max(header.length, ...rows.map((row) => String(row[i] || '').length))
+      Math.max(header.length, ...rows.map((row) => String(row[i] || '').length)),
     );
 
     const separator = '─'.repeat(
-      maxLengths.reduce((sum, len) => sum + len + 3, 1)
+      maxLengths.reduce((sum, len) => sum + len + 3, 1),
     );
 
     loggers.stopHook.log(`┌${separator}┐`);
     loggers.stopHook.log(
-      `│ ${headers.map((h, i) => h.padEnd(maxLengths[i])).join(' │ ')} │`
+      `│ ${headers.map((h, i) => h.padEnd(maxLengths[i])).join(' │ ')} │`,
     );
     loggers.stopHook.log(`├${separator}┤`);
 
     rows.forEach((row) => {
       loggers.stopHook.log(
-        `│ ${row.map((cell, i) => String(cell || '').padEnd(maxLengths[i])).join(' │ ')} │`
+        `│ ${row.map((cell, i) => String(cell || '').padEnd(maxLengths[i])).join(' │ ')} │`,
       );
     });
 
@@ -147,26 +147,26 @@ class CoverageThresholdChecker {
   loadCoverageData() {
     CoverageLogger.info('Loading coverage data...');
 
-    const summaryPath = path.resolve(this.config.paths.summary);
+    const summaryPath = PATH.resolve(this.config.paths.summary);
 
-    if (!fs.existsSync(summaryPath)) {
+    if (!FS.existsSync(summaryPath)) {
       // Try to generate coverage if it doesn't exist
       CoverageLogger.info('Coverage data not found, attempting to generate...');
       try {
         execSync('npm run coverage:ci', { stdio: 'inherit', timeout: 120000 });
       } catch {
         throw new Error(
-          'Failed to generate coverage data. Run tests with coverage first.'
+          'Failed to generate coverage data. Run tests with coverage first.',
         );
       }
     }
 
-    if (!fs.existsSync(summaryPath)) {
+    if (!FS.existsSync(summaryPath)) {
       throw new Error(`Coverage summary file not found at: ${summaryPath}`);
     }
 
     try {
-      const coverageData = JSON.parse(fs.readFileSync(summaryPath, 'utf8'));
+      const coverageData = JSON.parse(FS.readFileSync(summaryPath, 'utf8'));
 
       if (!coverageData.total) {
         throw new Error('Invalid coverage data format - missing total summary');
@@ -175,7 +175,7 @@ class CoverageThresholdChecker {
       this.results.summary = coverageData.total;
       CoverageLogger.success('Coverage data loaded successfully');
       CoverageLogger.debug(
-        `Coverage summary: ${JSON.stringify(coverageData.total, null, 2)}`
+        `Coverage summary: ${JSON.stringify(coverageData.total, null, 2)}`,
       );
 
       return coverageData;
@@ -232,7 +232,7 @@ class CoverageThresholdChecker {
       (!this.config.strict_mode || warnings.length === 0);
 
     CoverageLogger.debug(
-      `Validation complete. Failures: ${failures.length}, Warnings: ${warnings.length}`
+      `Validation complete. Failures: ${failures.length}, Warnings: ${warnings.length}`,
     );
   }
 
@@ -248,7 +248,7 @@ class CoverageThresholdChecker {
         summary.branches.pct +
         summary.functions.pct +
         summary.lines.pct) /
-        4
+        4,
     );
 
     const color = this.getBadgeColor(overallCoverage);
@@ -264,14 +264,14 @@ class CoverageThresholdChecker {
       timestamp: new Date().toISOString(),
     };
 
-    const badgeDir = path.join('coverage', 'badge');
-    if (!fs.existsSync(badgeDir)) {
-      fs.mkdirSync(badgeDir, { recursive: true });
+    const badgeDir = PATH.join('coverage', 'badge');
+    if (!FS.existsSync(badgeDir)) {
+      FS.mkdirSync(badgeDir, { recursive: true });
     }
 
-    fs.writeFileSync(
-      path.join(badgeDir, 'data.json'),
-      JSON.stringify(badgeData, null, 2)
+    FS.writeFileSync(
+      PATH.join(badgeDir, 'data.json'),
+      JSON.stringify(badgeData, null, 2),
     );
 
     CoverageLogger.success(`Coverage badge generated: ${overallCoverage}%`);
@@ -318,15 +318,15 @@ class CoverageThresholdChecker {
       critical_thresholds: this.config.critical_thresholds,
       badge: this.results.badge_url
         ? {
-            url: this.results.badge_url,
-            coverage_percentage: Math.round(
-              (this.results.summary.statements.pct +
+          url: this.results.badge_url,
+          coverage_percentage: Math.round(
+            (this.results.summary.statements.pct +
                 this.results.summary.branches.pct +
                 this.results.summary.functions.pct +
                 this.results.summary.lines.pct) /
-                4
-            ),
-          }
+                4,
+          ),
+        }
         : null,
       git: this.getGitInfo(),
       environment: {
@@ -337,13 +337,13 @@ class CoverageThresholdChecker {
     };
 
     // Ensure coverage directory exists
-    if (!fs.existsSync('coverage')) {
-      fs.mkdirSync('coverage', { recursive: true });
+    if (!FS.existsSync('coverage')) {
+      FS.mkdirSync('coverage', { recursive: true });
     }
 
-    fs.writeFileSync(
+    FS.writeFileSync(
       'coverage/threshold-validation.json',
-      JSON.stringify(report, null, 2)
+      JSON.stringify(report, null, 2),
     );
 
     CoverageLogger.success('Validation report generated');
@@ -380,7 +380,7 @@ class CoverageThresholdChecker {
           `${critical}%`,
           status,
         ];
-      }
+      },
     );
 
     CoverageLogger.table(tableHeaders, tableRows);
@@ -416,7 +416,7 @@ class CoverageThresholdChecker {
           summary.branches.pct +
           summary.functions.pct +
           summary.lines.pct) /
-          4
+          4,
       );
       loggers.stopHook.log(`\n🏷️  Coverage Badge: ${overallCoverage}%`);
       loggers.stopHook.log(`   URL: ${this.results.badge_url}`);
@@ -425,12 +425,12 @@ class CoverageThresholdChecker {
     // Configuration info
     if (this.config.strict_mode) {
       loggers.stopHook.log(
-        '\n⚠️  Running in STRICT MODE - warnings will cause failure'
+        '\n⚠️  Running in STRICT MODE - warnings will cause failure',
       );
     }
 
     loggers.stopHook.log(
-      `\n📁 Detailed report: coverage/threshold-validation.json`
+      `\n📁 Detailed report: coverage/threshold-validation.json`,
     );
 
     // Exit guidance
@@ -439,7 +439,7 @@ class CoverageThresholdChecker {
       loggers.stopHook.log('   1. Add tests for uncovered code');
       loggers.stopHook.log('   2. Run: npm run coverage:report');
       loggers.stopHook.log(
-        '   3. Check HTML report: coverage/lcov-report/index.html'
+        '   3. Check HTML report: coverage/lcov-report/index.html',
       );
     }
   }

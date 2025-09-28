@@ -211,7 +211,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         expect(finalValidation.validation.valid).toBe(true);
 
         // Cleanup config file
-        await fs.unlink(saveResult.configPath);
+        await FS.unlink(saveResult.configPath);
       } finally {
         cleanupTestDependencies(testDependencies);
       }
@@ -1160,7 +1160,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
         configPath = saveResult.configPath;
 
         // Verify file exists And has correct content
-        const configData = await fs.readFile(configPath, 'utf8');
+        const configData = await FS.readFile(configPath, 'utf8');
         const config = JSON.parse(configData);
         expect(config).toHaveProperty('dependencies');
         expect(config.dependencies).toHaveProperty('persistence-test');
@@ -1198,7 +1198,7 @@ describe('Dependency Management E2E Tests - Complete Workflows', () => {
       } finally {
         cleanupTestDependencies(testDependencies);
         if (configPath) {
-          await fs.unlink(configPath).catch(() => {}); // Ignore errors
+          await FS.unlink(configPath).catch(() => {}); // Ignore errors
         }
       }
     });

@@ -38,14 +38,14 @@ function fixImportPaths() {
   let fixedCount = 0;
 
   for (const file of files) {
-    const relativePath = path.relative('.', file);
+    const relativePath = PATH.relative('.', file);
 
     for (const fix of fixes) {
       if (fix.pattern.test(relativePath)) {
-        const content = fs.readFileSync(file, 'utf8');
+        const content = FS.readFileSync(file, 'utf8');
         if (content.includes(fix.findImport)) {
           const newContent = content.replace(fix.findImport, fix.replaceImport);
-          fs.writeFileSync(file, newContent);
+          FS.writeFileSync(file, newContent);
           console.log(`  ✅ Fixed import path in ${relativePath}`);
           fixedCount++;
           break;
@@ -87,7 +87,7 @@ function fixSyntaxErrors() {
   let fixedCount = 0;
 
   for (const file of files) {
-    let content = fs.readFileSync(file, 'utf8');
+    let content = FS.readFileSync(file, 'utf8');
     let hasChanges = false;
 
     for (const fix of syntaxFixes) {
@@ -99,8 +99,8 @@ function fixSyntaxErrors() {
     }
 
     if (hasChanges) {
-      fs.writeFileSync(file, content);
-      console.log(`  ✅ Fixed syntax in ${path.relative('.', file)}`);
+      FS.writeFileSync(file, content);
+      console.log(`  ✅ Fixed syntax in ${PATH.relative('.', file)}`);
       fixedCount++;
     }
   }
@@ -115,8 +115,8 @@ function addMissingImports() {
   let fixedCount = 0;
 
   for (const file of files) {
-    const content = fs.readFileSync(file, 'utf8');
-    const relativePath = path.relative('.', file);
+    const content = FS.readFileSync(file, 'utf8');
+    const relativePath = PATH.relative('.', file);
 
     // Skip if already has logger import
     if (
@@ -163,10 +163,10 @@ function addMissingImports() {
       lines.splice(
         insertIndex,
         0,
-        `const { loggers } = require('${importPath}');`
+        `const { loggers } = require('${importPath}');`,
       );
 
-      fs.writeFileSync(file, lines.join('\n'));
+      FS.writeFileSync(file, lines.join('\n'));
       console.log(`  ✅ Added import to ${relativePath}`);
       fixedCount++;
     }
@@ -180,11 +180,11 @@ function findJavaScriptFiles(rootDir) {
   const excludeDirs = ['node_modules', 'coverage', '.git', 'dist', 'build'];
 
   function walkDir(dir) {
-    const entries = fs.readdirSync(dir);
+    const entries = FS.readdirSync(dir);
 
     for (const entry of entries) {
-      const fullPath = path.join(dir, entry);
-      const stat = fs.statSync(fullPath);
+      const fullPath = PATH.join(dir, entry);
+      const stat = FS.statSync(fullPath);
 
       if (stat.isDirectory()) {
         if (excludeDirs.includes(entry)) {
@@ -206,8 +206,8 @@ function fixSpecificFiles() {
 
   // Fix append-text-hook.js
   const appendHookPath = './append-text-hook.js';
-  if (fs.existsSync(appendHookPath)) {
-    let content = fs.readFileSync(appendHookPath, 'utf8');
+  if (FS.existsSync(appendHookPath)) {
+    let content = FS.readFileSync(appendHookPath, 'utf8');
 
     // Add proper import
     if (!content.includes("require('./lib/logger')")) {
@@ -217,24 +217,24 @@ function fixSpecificFiles() {
     // Fix the log calls
     content = content.replace(
       /loggers\.stopHook\.log\(/g,
-      'loggers.stopHook.info('
+      'loggers.stopHook.info(',
     );
     content = content.replace(
       /loggers\.stopHook\.error\(/g,
-      'loggers.stopHook.error('
+      'loggers.stopHook.error(',
     );
 
-    fs.writeFileSync(appendHookPath, content);
+    FS.writeFileSync(appendHookPath, content);
     console.log('  ✅ Fixed append-text-hook.js');
   }
 
   // Fix lib/utils/logger.js to add missing newline
   const utilsLoggerPath = './lib/utils/logger.js';
-  if (fs.existsSync(utilsLoggerPath)) {
-    let content = fs.readFileSync(utilsLoggerPath, 'utf8');
+  if (FS.existsSync(utilsLoggerPath)) {
+    let content = FS.readFileSync(utilsLoggerPath, 'utf8');
     if (!content.endsWith('\n')) {
       content += '\n';
-      fs.writeFileSync(utilsLoggerPath, content);
+      FS.writeFileSync(utilsLoggerPath, content);
       console.log('  ✅ Fixed missing newline in lib/utils/logger.js');
     }
   }
@@ -265,7 +265,7 @@ function main() {
     console.log('✅ Linter passed! Migration successful.');
   } catch {
     console.log(
-      '⚠️  Some linting issues remain. You may need to fix them manually.'
+      '⚠️  Some linting issues remain. You may need to fix them manually.',
     );
   }
 }

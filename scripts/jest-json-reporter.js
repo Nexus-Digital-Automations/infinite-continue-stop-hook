@@ -63,17 +63,17 @@ class JestJsonReporter {
     };
 
     // Ensure output directory exists
-    const outputDir = path.dirname(this.options.outputPath);
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
+    const outputDir = PATH.dirname(this.options.outputPath);
+    if (!FS.existsSync(outputDir)) {
+      FS.mkdirSync(outputDir, { recursive: true });
     }
 
     // Write JSON report
-    fs.writeFileSync(this.options.outputPath, JSON.stringify(report, null, 2));
+    FS.writeFileSync(this.options.outputPath, JSON.stringify(report, null, 2));
 
     // Also write a summary file for quick access
-    const summaryPath = path.join(outputDir, 'test-summary.json');
-    fs.writeFileSync(
+    const summaryPath = PATH.join(outputDir, 'test-summary.json');
+    FS.writeFileSync(
       summaryPath,
       JSON.stringify(
         {
@@ -87,8 +87,8 @@ class JestJsonReporter {
           failed_suites: report.summary.numFailedTestSuites,
         },
         null,
-        2
-      )
+        2,
+      ),
     );
   }
 

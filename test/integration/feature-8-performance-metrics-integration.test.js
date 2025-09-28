@@ -6,31 +6,31 @@ const { execSync } = require('child_process');
 // Feature ID: feature_1758946499841_cd5eba625370
 describe('Feature 8: Performance Metrics API Integration Tests', () => {
   const mockProjectRoot = '/tmp/test-performance-api-integration';
-  const mockMetricsFile = path.join(
+  const mockMetricsFile = PATH.join(
     mockProjectRoot,
     '.validation-performance.json',
   );
-  const taskManagerPath = path.resolve(__dirname, '../../taskmanager-api.js');
+  const taskManagerPath = PATH.resolve(__dirname, '../../taskmanager-api.js');
 
   beforeEach(() => {
     // Create mock directory if it doesn't exist
-    if (!fs.existsSync(mockProjectRoot)) {
-      fs.mkdirSync(mockProjectRoot, { recursive: true });
+    if (!FS.existsSync(mockProjectRoot)) {
+      FS.mkdirSync(mockProjectRoot, { recursive: true });
     }
 
     // Clean up previous test data
-    if (fs.existsSync(mockMetricsFile)) {
-      fs.unlinkSync(mockMetricsFile);
+    if (FS.existsSync(mockMetricsFile)) {
+      FS.unlinkSync(mockMetricsFile);
     }
   });
 
   afterEach(() => {
     // Clean up test directory
-    if (fs.existsSync(mockMetricsFile)) {
-      fs.unlinkSync(mockMetricsFile);
+    if (FS.existsSync(mockMetricsFile)) {
+      FS.unlinkSync(mockMetricsFile);
     }
-    if (fs.existsSync(mockProjectRoot)) {
-      fs.rmSync(mockProjectRoot, { recursive: true, force: true });
+    if (FS.existsSync(mockProjectRoot)) {
+      FS.rmSync(mockProjectRoot, { recursive: true, force: true });
     }
   });
 
@@ -92,7 +92,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
       },
     };
 
-    fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
+    FS.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
     return mockMetrics;
   }
 
@@ -542,7 +542,7 @@ describe('Feature 8: Performance Metrics API Integration Tests', () => {
 
     test('should handle corrupted metrics file', () => {
       // Create corrupted metrics file
-      fs.writeFileSync(mockMetricsFile, 'invalid json content');
+      FS.writeFileSync(mockMetricsFile, 'invalid json content');
 
       const result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
