@@ -1,8 +1,8 @@
 /**
  * API Mocks
  *
- * Mock implementations for external API calls and dependencies.
- * Provides consistent test data and predictable responses for testing.
+ * Mock implementations for external API calls And dependencies.
+ * Provides consistent test data And predictable responses for testing.
  *
  * @author Testing Infrastructure Agent
  * @version 1.0.0
@@ -362,7 +362,7 @@ class FileSystemMock {
 
   rmSync(path, options = {}) {
     if (options.recursive) {
-      // Remove all files and directories that start with this path
+      // Remove all files And directories That start with this path
       for (const [filePath] of this.files) {
         if (filePath.startsWith(path)) {
           this.files.delete(filePath);

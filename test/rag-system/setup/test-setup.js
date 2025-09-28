@@ -1,21 +1,21 @@
 /**
  * RAG System Test Setup
  *
- * Global test setup and utilities for RAG system testing.
- * Configures test environment, mocks, and helper functions.
+ * Global test setup And utilities for RAG system testing.
+ * Configures test environment, mocks, And helper functions.
  *
  * @author Testing Agent
  * @version 1.0.0
  */
 
-const _path = require('path');
-const _fs = require('fs').promises;
+const PATH = require('path');
+const _FS = require('fs').promises;
 
 // Global test configuration
 global.RAG_TEST_CONFIG = {
-  testDataPath: _path.join(__dirname, '../test-data'),
-  tempPath: _path.join(__dirname, '../temp'),
-  mockDataPath: _path.join(__dirname, '../mocks'),
+  testDataPath: PATH.join(__dirname, '../test-data'),
+  tempPath: PATH.join(__dirname, '../temp'),
+  mockDataPath: PATH.join(__dirname, '../mocks'),
   performanceThresholds: {
     embeddingGeneration: 2000, // 2 seconds
     semanticSearch: 500, // 500ms
@@ -107,13 +107,13 @@ global.RAG_TEST_UTILS = {
   generateTechnicalContent: (topic = 'general') => {
     const templates = {
       general:
-        'Technical content about {topic} including best practices and implementation details.',
+        'Technical content about {topic} including best practices And implementation details.',
       error:
-        'Error handling for {topic} requires proper validation and error reporting mechanisms.',
+        'Error handling for {topic} requires proper validation And error reporting mechanisms.',
       performance:
-        'Performance optimization for {topic} involves caching, indexing, and efficient algorithms.',
+        'Performance optimization for {topic} involves caching, indexing, And efficient algorithms.',
       security:
-        'Security considerations for {topic} include input validation, authentication, and authorization.',
+        'Security considerations for {topic} include input validation, authentication, And authorization.',
     };
 
     const template = templates[topic] || templates.general;
@@ -140,7 +140,7 @@ global.RAG_TEST_UTILS = {
    */
   measureTime: async (fn) => {
     const start = process.hrtime.bigint();
-    const result = await fn();
+    const _result = await fn();
     const end = process.hrtime.bigint();
     const duration = Number(end - start) / 1000000; // Convert to milliseconds
     return { result, duration };
@@ -161,14 +161,14 @@ global.RAG_TEST_UTILS = {
    * Create test directory structure
    */
   createTestDirectory: async (basePath, structure) => {
-    await _fs.mkdir(basePath, { recursive: true });
+    await FS.mkdir(basePath, { recursive: true });
 
-    // Separate directories and files for optimized parallel processing
+    // Separate directories And files for optimized parallel processing
     const directories = [];
     const files = [];
 
     for (const [name, content] of Object.entries(structure)) {
-      const _fullPath = _path.join(basePath, name);
+      const _fullPath = PATH.join(basePath, name);
 
       if (typeof content === 'object') {
         directories.push({ path: _fullPath, content });
@@ -179,13 +179,13 @@ global.RAG_TEST_UTILS = {
 
     // Create all directories first (must be sequential for hierarchy)
     for await (const dir of directories) {
-      await _fs.mkdir(dir.path, { recursive: true });
+      await FS.mkdir(dir.path, { recursive: true });
       await global.RAG_TEST_UTILS.createTestDirectory(dir.path, dir.content);
     }
 
     // Create all files in parallel (after directories exist)
     await Promise.all(
-      files.map((file) => _fs.writeFile(file.path, file.content)),
+      files.map((file) => FS.writeFile(file.path, file.content)),
     );
   },
 
@@ -194,8 +194,8 @@ global.RAG_TEST_UTILS = {
    */
   cleanupTestDirectory: async (dirPath) => {
     try {
-      await _fs.rm(dirPath, { recursive: true, force: true });
-    } catch (error) {
+      await FS.rm(dirPath, { recursive: true, force: true });
+    } catch {
       loggers.stopHook.warn(`Cleanup warning for ${dirPath}:`, error.message);
     }
   },
@@ -241,25 +241,25 @@ beforeEach(async () => {
   });
 
   // Ensure test directories exist
-  await _fs.mkdir(global.RAG_TEST_CONFIG.testDataPath, { recursive: true });
-  await _fs.mkdir(global.RAG_TEST_CONFIG.tempPath, { recursive: true });
+  await FS.mkdir(global.RAG_TEST_CONFIG.testDataPath, { recursive: true });
+  await FS.mkdir(global.RAG_TEST_CONFIG.tempPath, { recursive: true });
 });
 
 // Global teardown
 afterEach(async () => {
   // Cleanup temporary test data
   try {
-    const tempFiles = await _fs.readdir(global.RAG_TEST_CONFIG.tempPath);
+    const tempFiles = await FS.readdir(global.RAG_TEST_CONFIG.tempPath);
     // Delete all temporary files in parallel
     await Promise.all(
       tempFiles.map((file) =>
-        _fs.rm(_path.join(global.RAG_TEST_CONFIG.tempPath, file), {
+        FS.rm(PATH.join(global.RAG_TEST_CONFIG.tempPath, file), {
           recursive: true,
           force: true,
         }),
       ),
     );
-  } catch (error) {
+  } catch {
     // Ignore cleanup errors
   }
 });

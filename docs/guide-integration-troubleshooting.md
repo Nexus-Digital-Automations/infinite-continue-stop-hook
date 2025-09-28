@@ -7,6 +7,7 @@ This comprehensive troubleshooting guide helps you diagnose and resolve issues r
 ## Quick Diagnostic Commands
 
 ### Check Guide Integration Status
+
 ```bash
 # Verify guide integration is working
 timeout 10s node taskmanager-api.js guide | jq '.success'
@@ -19,6 +20,7 @@ timeout 10s node taskmanager-api.js methods | jq '.success'
 ```
 
 ### System Health Check
+
 ```bash
 # Check overall system status
 timeout 10s node taskmanager-api.js status
@@ -35,11 +37,13 @@ time timeout 10s node taskmanager-api.js guide > /dev/null
 ### Issue 1: Guides Not Appearing in Responses
 
 #### Symptoms
+
 - API responses don't include `guide` field
 - Missing contextual help information
 - No quickStart or initialization guidance
 
 #### Diagnostic Steps
+
 ```bash
 # Step 1: Check if guide endpoint works
 timeout 10s node taskmanager-api.js guide
@@ -57,6 +61,7 @@ timeout 10s node taskmanager-api.js init 2>&1 | grep -i error
 #### Common Causes and Solutions
 
 **Cause 1: Guide Generation Failure**
+
 ```bash
 # Check for guide generation errors
 timeout 10s node taskmanager-api.js init | jq '.guide.success'
@@ -67,6 +72,7 @@ timeout 10s node taskmanager-api.js init
 ```
 
 **Cause 2: Timeout Issues**
+
 ```bash
 # Check if guide generation is timing out
 timeout 15s node taskmanager-api.js guide
@@ -77,6 +83,7 @@ timeout 15s node taskmanager-api.js init
 ```
 
 **Cause 3: Memory Issues**
+
 ```bash
 # Check system memory usage
 ps aux | grep taskmanager-api
@@ -91,11 +98,13 @@ timeout 10s node taskmanager-api.js init
 ### Issue 2: Slow Response Times
 
 #### Symptoms
+
 - API responses taking >2 seconds
 - Timeouts during guide generation
 - High memory usage
 
 #### Diagnostic Steps
+
 ```bash
 # Step 1: Measure response time
 time timeout 10s node taskmanager-api.js init
@@ -113,6 +122,7 @@ kill $!
 #### Performance Optimization Solutions
 
 **Solution 1: Enable Caching**
+
 ```bash
 # Verify cache directory exists and has proper permissions
 ls -la .guide-cache/
@@ -124,6 +134,7 @@ timeout 10s node taskmanager-api.js init  # Second call (fast)
 ```
 
 **Solution 2: Reduce Guide Size**
+
 ```bash
 # Limit guide content size
 export GUIDE_MAX_SIZE=25000  # 25KB limit
@@ -134,6 +145,7 @@ timeout 10s node taskmanager-api.js init | jq '.guide | length'
 ```
 
 **Solution 3: Background Cache Warming**
+
 ```bash
 # Pre-generate common guides
 timeout 10s node taskmanager-api.js guide >/dev/null 2>&1 &
@@ -147,11 +159,13 @@ time timeout 10s node taskmanager-api.js init
 ### Issue 3: Incomplete Guide Information
 
 #### Symptoms
+
 - Guide responses missing expected sections
 - Empty quickStart arrays
 - Missing essential_commands information
 
 #### Diagnostic Steps
+
 ```bash
 # Step 1: Check guide content completeness
 timeout 10s node taskmanager-api.js init | jq '.guide | keys'
@@ -169,6 +183,7 @@ timeout 10s node taskmanager-api.js init | jq '.guide.error'
 #### Content Restoration Solutions
 
 **Solution 1: Clear Corrupted Cache**
+
 ```bash
 # Remove potentially corrupted cache
 rm -rf .guide-cache/
@@ -182,6 +197,7 @@ timeout 10s node taskmanager-api.js init | jq '.guide | keys | length'
 ```
 
 **Solution 2: Check Guide Generation Context**
+
 ```bash
 # Test different endpoints for guide completeness
 timeout 10s node taskmanager-api.js init | jq '.guide.focus'
@@ -191,12 +207,13 @@ timeout 10s node taskmanager-api.js reinitialize | jq '.guide.focus'
 ```
 
 **Solution 3: Verify TaskManager Core Functionality**
+
 ```bash
 # Test core TaskManager functionality
 timeout 10s node taskmanager-api.js methods | jq '.taskManagerMethods.count'
 # Expected: Number > 0
 
-# Test API wrapper functionality  
+# Test API wrapper functionality
 timeout 10s node taskmanager-api.js methods | jq '.apiMethods.count'
 # Expected: Number > 0
 ```
@@ -204,11 +221,13 @@ timeout 10s node taskmanager-api.js methods | jq '.apiMethods.count'
 ### Issue 4: Error Recovery Not Working
 
 #### Symptoms
+
 - Error responses don't include guide information
 - Missing recovery instructions
 - No contextual help for errors
 
 #### Diagnostic Steps
+
 ```bash
 # Step 1: Generate a known error
 timeout 10s node taskmanager-api.js claim nonexistent_task 2>&1 | jq '.guide'
@@ -226,6 +245,7 @@ timeout 10s node taskmanager-api.js init '{"invalid": "json"}'
 #### Error Recovery Solutions
 
 **Solution 1: Test Error Scenarios**
+
 ```bash
 # Test agent initialization error
 timeout 10s node taskmanager-api.js claim task_123
@@ -241,6 +261,7 @@ timeout 10s node taskmanager-api.js invalid_command
 ```
 
 **Solution 2: Verify Fallback Guide Generation**
+
 ```bash
 # Test fallback guide mechanism
 export GUIDE_GENERATION_TIMEOUT=100  # Very short timeout to trigger fallback
@@ -253,11 +274,13 @@ timeout 10s node taskmanager-api.js init | jq '.guide.message'
 ### Issue 5: Cache-Related Problems
 
 #### Symptoms
+
 - Old guide information appearing
 - Inconsistent guide content
 - Cache growth issues
 
 #### Diagnostic Steps
+
 ```bash
 # Step 1: Check cache directory
 ls -la .guide-cache/
@@ -273,6 +296,7 @@ timeout 10s node taskmanager-api.js init | jq '.guide.taskManager.version'
 #### Cache Management Solutions
 
 **Solution 1: Manual Cache Cleanup**
+
 ```bash
 # Clear entire cache
 rm -rf .guide-cache/
@@ -285,6 +309,7 @@ timeout 10s node taskmanager-api.js guide >/dev/null
 ```
 
 **Solution 2: Configure Cache Settings**
+
 ```bash
 # Reduce cache duration
 export GUIDE_MEMORY_CACHE_TTL=300000   # 5 minutes
@@ -299,6 +324,7 @@ timeout 10s node taskmanager-api.js init
 ```
 
 **Solution 3: Disable Caching (Temporary)**
+
 ```bash
 # Disable caching for debugging
 export GUIDE_CACHE_ENABLED=false
@@ -316,6 +342,7 @@ timeout 10s node taskmanager-api.js init
 ### Debug Mode Operation
 
 Enable debug mode for detailed troubleshooting:
+
 ```bash
 # Enable debug logging
 export DEBUG=taskmanager:guide*
@@ -330,6 +357,7 @@ unset DEBUG
 ### Performance Profiling
 
 Profile guide generation performance:
+
 ```bash
 # Create performance test script
 cat > test-guide-performance.js << 'EOF'
@@ -337,19 +365,19 @@ const { performance } = require('perf_hooks');
 
 async function testGuidePerformance() {
     const start = performance.now();
-    
+
     try {
         const { spawn } = require('child_process');
         const process = spawn('timeout', ['10s', 'node', 'taskmanager-api.js', 'init']);
-        
+
         await new Promise((resolve, reject) => {
             process.on('close', resolve);
             process.on('error', reject);
         });
-        
+
         const duration = performance.now() - start;
         console.log(`Guide integration took ${duration.toFixed(2)}ms`);
-        
+
     } catch (error) {
         console.error('Performance test failed:', error.message);
     }
@@ -368,6 +396,7 @@ rm test-guide-performance.js
 ### Memory Usage Analysis
 
 Monitor memory usage during guide operations:
+
 ```bash
 # Create memory monitoring script
 cat > monitor-guide-memory.sh << 'EOF'
@@ -402,6 +431,7 @@ rm monitor-guide-memory.sh
 ### Development Environment
 
 **Issue: Frequent Cache Invalidation**
+
 ```bash
 # Solution: Reduce cache TTL for development
 export GUIDE_MEMORY_CACHE_TTL=60000    # 1 minute
@@ -412,6 +442,7 @@ export NODE_ENV=development
 ```
 
 **Issue: Debug Information Cluttering Output**
+
 ```bash
 # Solution: Filter debug output
 timeout 10s node taskmanager-api.js init 2>/dev/null | jq '.guide.focus'
@@ -423,6 +454,7 @@ timeout 10s node taskmanager-api.js init 2>debug.log | jq '.guide'
 ### Production Environment
 
 **Issue: High Memory Usage**
+
 ```bash
 # Solution: Optimize for production
 export GUIDE_MAX_CACHE_ENTRIES=10
@@ -434,6 +466,7 @@ export NODE_ENV=production
 ```
 
 **Issue: Network Latency Impact**
+
 ```bash
 # Solution: Pre-warm cache
 timeout 10s node taskmanager-api.js guide >/dev/null &
@@ -447,6 +480,7 @@ time timeout 10s node taskmanager-api.js init >/dev/null
 ### CI/CD Environment
 
 **Issue: Inconsistent Guide Generation**
+
 ```bash
 # Solution: Ensure clean environment
 rm -rf .guide-cache/
@@ -580,6 +614,7 @@ echo "=== Verification complete ==="
 ### Complete System Reset
 
 If all else fails, perform a complete reset:
+
 ```bash
 #!/bin/bash
 # complete-guide-system-reset.sh
@@ -632,6 +667,7 @@ echo "✅ Complete reset successful"
 ## Getting Additional Help
 
 ### Log Collection
+
 ```bash
 # Collect comprehensive logs for support
 mkdir -p guide-debug-logs
@@ -648,6 +684,7 @@ echo "Debug logs collected in guide-debug-logs/"
 ```
 
 ### Support Information Template
+
 ```bash
 # Generate support information
 cat > guide-support-info.txt << EOF

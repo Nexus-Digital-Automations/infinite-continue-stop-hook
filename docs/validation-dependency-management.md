@@ -69,12 +69,12 @@ Define validation criteria with dependencies:
 const dependencyConfig = {
   dependencies: [
     { criterion: 'linter-validation', type: 'strict' },
-    { criterion: 'security-validation', type: 'weak' }
+    { criterion: 'security-validation', type: 'weak' },
   ],
   description: 'Build validation with dependencies',
   estimatedDuration: 45000,
   parallelizable: false,
-  resourceRequirements: ['filesystem', 'cpu', 'memory']
+  resourceRequirements: ['filesystem', 'cpu', 'memory'],
 };
 ```
 
@@ -100,7 +100,7 @@ Execute with comprehensive monitoring:
 const result = await manager.executeParallelValidationPlan(executionPlan, {
   onWaveStart: (info) => console.log(`Starting wave ${info.wave}`),
   onCriterionComplete: (info) => console.log(`Completed ${info.criterion}`),
-  onError: (info) => console.error(`Failed ${info.criterion}: ${info.error}`)
+  onError: (info) => console.error(`Failed ${info.criterion}: ${info.error}`),
 });
 ```
 
@@ -115,6 +115,7 @@ const manager = new ValidationDependencyManager(options);
 ```
 
 **Options:**
+
 - `projectRoot` (string): Project root directory path
 
 #### Core Methods
@@ -125,13 +126,11 @@ Add or update a dependency configuration.
 
 ```javascript
 manager.addDependency('custom-validation', {
-  dependencies: [
-    { criterion: 'linter-validation', type: 'strict' }
-  ],
+  dependencies: [{ criterion: 'linter-validation', type: 'strict' }],
   description: 'Custom validation step',
   estimatedDuration: 15000,
   parallelizable: true,
-  resourceRequirements: ['filesystem']
+  resourceRequirements: ['filesystem'],
 });
 ```
 
@@ -175,7 +174,7 @@ const adaptivePlan = manager.generateAdaptiveExecutionPlan(null, {
   availableCPUs: 8,
   availableMemory: 8 * 1024 * 1024 * 1024,
   networkLatency: 10,
-  diskIOLoad: 0.3
+  diskIOLoad: 0.3,
 });
 ```
 
@@ -185,10 +184,14 @@ Execute validation plan with real-time monitoring.
 
 ```javascript
 const result = await manager.executeParallelValidationPlan(plan, {
-  onWaveStart: (info) => { /* handle wave start */ },
-  onCriterionComplete: (info) => { /* handle completion */ },
+  onWaveStart: (info) => {
+    /* handle wave start */
+  },
+  onCriterionComplete: (info) => {
+    /* handle completion */
+  },
   timeout: 300000,
-  maxRetries: 2
+  maxRetries: 2,
 });
 ```
 
@@ -299,21 +302,19 @@ const customPipeline = [
       description: 'Initialize environment',
       estimatedDuration: 5000,
       parallelizable: true,
-      resourceRequirements: ['filesystem']
-    }
+      resourceRequirements: ['filesystem'],
+    },
   },
   {
     name: 'code-analysis',
     config: {
-      dependencies: [
-        { criterion: 'environment-setup', type: 'strict' }
-      ],
+      dependencies: [{ criterion: 'environment-setup', type: 'strict' }],
       description: 'Static code analysis',
       estimatedDuration: 20000,
       parallelizable: true,
-      resourceRequirements: ['filesystem', 'cpu']
-    }
-  }
+      resourceRequirements: ['filesystem', 'cpu'],
+    },
+  },
 ];
 
 // Add to manager
@@ -375,13 +376,25 @@ JSON format includes detailed debugging information:
 
 ```json
 {
-  "visualization": { /* graph data */ },
+  "visualization": {
+    /* graph data */
+  },
   "debugInfo": {
-    "dependencyChains": [ /* longest chains */ ],
-    "resourceConflicts": [ /* potential conflicts */ ],
-    "parallelizationOpportunities": [ /* optimization opportunities */ ],
-    "criticalPaths": [ /* performance bottlenecks */ ],
-    "optimizationSuggestions": [ /* actionable recommendations */ ]
+    "dependencyChains": [
+      /* longest chains */
+    ],
+    "resourceConflicts": [
+      /* potential conflicts */
+    ],
+    "parallelizationOpportunities": [
+      /* optimization opportunities */
+    ],
+    "criticalPaths": [
+      /* performance bottlenecks */
+    ],
+    "optimizationSuggestions": [
+      /* actionable recommendations */
+    ]
   }
 }
 ```
@@ -400,13 +413,14 @@ const resourcePools = {
   network: { maxConcurrent: 2, current: 0 },
   cpu: { maxConcurrent: 3, current: 0 },
   memory: { maxConcurrent: 2, current: 0 },
-  ports: { maxConcurrent: 1, current: 0 }
+  ports: { maxConcurrent: 1, current: 0 },
 };
 ```
 
 #### Priority Scheduling
 
 Criteria are prioritized based on:
+
 - Number of dependents (higher priority for blocking criteria)
 - Estimated duration (longer tasks start earlier)
 - Resource requirements (fewer resources = easier to schedule)
@@ -414,6 +428,7 @@ Criteria are prioritized based on:
 #### Load Balancing
 
 The system calculates load balance scores and provides recommendations:
+
 - Balance score: 1.0 = perfect balance, lower = more imbalanced
 - Recommendations for splitting long tasks or adjusting durations
 
@@ -433,6 +448,7 @@ const adaptivePlan = manager.generateAdaptiveExecutionPlan(null, systemInfo);
 ```
 
 **Optimizations include:**
+
 - CPU-based concurrency limits
 - Memory-aware task scheduling
 - Network latency adaptations
@@ -458,13 +474,14 @@ const executionResult = await manager.executeParallelValidationPlan(plan, {
   },
   onError: (info) => {
     console.error(`Failed ${info.criterion}: ${info.error}`);
-  }
+  },
 });
 ```
 
 ### Dependency Chain Analysis
 
 Automatically identifies:
+
 - Longest dependency chains
 - Critical paths that block execution
 - Opportunities for parallelization
@@ -527,9 +544,12 @@ module.exports = {
   coverageThreshold: {
     global: { branches: 80, functions: 80, lines: 80, statements: 80 },
     './lib/validation-dependency-manager.js': {
-      branches: 85, functions: 90, lines: 90, statements: 90
-    }
-  }
+      branches: 85,
+      functions: 90,
+      lines: 90,
+      statements: 90,
+    },
+  },
 };
 ```
 
@@ -542,6 +562,7 @@ module.exports = {
 **Problem**: Validation fails with circular dependency error.
 
 **Solution**:
+
 ```bash
 # Check dependency graph
 node taskmanager-api.js validate-dependency-graph
@@ -555,6 +576,7 @@ node taskmanager-api.js generate-interactive-visualization ascii
 **Problem**: Tasks fail due to resource conflicts.
 
 **Solution**:
+
 ```bash
 # Generate analysis report
 node taskmanager-api.js generate-dependency-analysis-report
@@ -567,6 +589,7 @@ node taskmanager-api.js generate-dependency-analysis-report
 **Problem**: Execution is slower than expected.
 
 **Solution**:
+
 1. Check parallelization efficiency in execution plan
 2. Review resource utilization metrics
 3. Consider system-adaptive planning
@@ -602,13 +625,11 @@ const manager = new ValidationDependencyManager({ projectRoot: process.cwd() });
 
 // Add custom validation
 manager.addDependency('api-tests', {
-  dependencies: [
-    { criterion: 'build-validation', type: 'strict' }
-  ],
+  dependencies: [{ criterion: 'build-validation', type: 'strict' }],
   description: 'API integration tests',
   estimatedDuration: 30000,
   parallelizable: true,
-  resourceRequirements: ['network', 'filesystem']
+  resourceRequirements: ['network', 'filesystem'],
 });
 
 // Generate execution plan
@@ -632,8 +653,8 @@ const pipeline = [
       description: 'Environment setup',
       estimatedDuration: 5000,
       parallelizable: true,
-      resourceRequirements: ['filesystem']
-    }
+      resourceRequirements: ['filesystem'],
+    },
   },
   {
     name: 'lint',
@@ -642,8 +663,8 @@ const pipeline = [
       description: 'Code linting',
       estimatedDuration: 15000,
       parallelizable: true,
-      resourceRequirements: ['filesystem']
-    }
+      resourceRequirements: ['filesystem'],
+    },
   },
   {
     name: 'test',
@@ -652,9 +673,9 @@ const pipeline = [
       description: 'Unit tests',
       estimatedDuration: 25000,
       parallelizable: false,
-      resourceRequirements: ['filesystem', 'cpu']
-    }
-  }
+      resourceRequirements: ['filesystem', 'cpu'],
+    },
+  },
 ];
 
 // Add pipeline to manager
@@ -667,18 +688,18 @@ const systemInfo = {
   availableCPUs: require('os').cpus().length,
   availableMemory: require('os').freemem(),
   networkLatency: 10,
-  diskIOLoad: 0.3
+  diskIOLoad: 0.3,
 };
 
 const adaptivePlan = manager.generateAdaptiveExecutionPlan(
-  pipeline.map(s => s.name),
+  pipeline.map((s) => s.name),
   systemInfo
 );
 
 // Execute with monitoring
 const result = await manager.executeParallelValidationPlan(adaptivePlan, {
   onWaveComplete: (info) => console.log(`Wave ${info.wave} completed`),
-  timeout: 120000
+  timeout: 120000,
 });
 
 console.log(`Pipeline completed: ${result.success ? 'SUCCESS' : 'FAILED'}`);

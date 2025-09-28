@@ -24,7 +24,7 @@ const { ValidationDependencyManager } = require('./lib/validation-dependency-man
 
 // Initialize the manager
 const manager = new ValidationDependencyManager({
-  projectRoot: process.cwd()
+  projectRoot: process.cwd(),
 });
 
 // Check default dependencies
@@ -37,13 +37,11 @@ console.log('Available validation criteria:', Object.keys(dependencies));
 ```javascript
 // Define a custom validation step
 manager.addDependency('custom-validation', {
-  dependencies: [
-    { criterion: 'linter-validation', type: 'strict' }
-  ],
+  dependencies: [{ criterion: 'linter-validation', type: 'strict' }],
   description: 'Custom business logic validation',
   estimatedDuration: 12000,
   parallelizable: true,
-  resourceRequirements: ['filesystem', 'cpu']
+  resourceRequirements: ['filesystem', 'cpu'],
 });
 
 // Validate the configuration
@@ -62,7 +60,7 @@ console.log(`Plan: ${plan.totalWaves} waves, ${plan.parallelizationGain.toFixed(
 
 // Execute with monitoring
 const result = await manager.executeParallelValidationPlan(plan, {
-  onCriterionComplete: (info) => console.log(`✓ ${info.criterion} (${info.duration}ms)`)
+  onCriterionComplete: (info) => console.log(`✓ ${info.criterion} (${info.duration}ms)`),
 });
 ```
 
@@ -90,22 +88,22 @@ class MyValidationService {
           description: 'Verify environment prerequisites',
           estimatedDuration: 5000,
           parallelizable: true,
-          resourceRequirements: ['filesystem']
-        }
+          resourceRequirements: ['filesystem'],
+        },
       },
       {
         name: 'integration-tests',
         config: {
           dependencies: [
             { criterion: 'build-validation', type: 'strict' },
-            { criterion: 'environment-check', type: 'strict' }
+            { criterion: 'environment-check', type: 'strict' },
           ],
           description: 'Run integration test suite',
           estimatedDuration: 45000,
           parallelizable: false,
-          resourceRequirements: ['network', 'filesystem', 'cpu']
-        }
-      }
+          resourceRequirements: ['network', 'filesystem', 'cpu'],
+        },
+      },
     ];
 
     for (const step of customSteps) {
@@ -124,8 +122,8 @@ class MyValidationService {
       callbacks: {
         onWaveStart: (info) => this.logWaveStart(info),
         onCriterionComplete: (info) => this.logCriterionComplete(info),
-        onError: (info) => this.logError(info)
-      }
+        onError: (info) => this.logError(info),
+      },
     });
   }
 
@@ -166,7 +164,7 @@ class CustomValidationFramework {
     // Validate configuration
     const validation = this.manager.validateDependencyGraph();
     if (!validation.valid) {
-      throw new Error(`Invalid pipeline: ${validation.issues.map(i => i.description).join(', ')}`);
+      throw new Error(`Invalid pipeline: ${validation.issues.map((i) => i.description).join(', ')}`);
     }
   }
 
@@ -196,9 +194,9 @@ class CustomValidationFramework {
           criterion: info.criterion,
           duration: info.duration,
           status: info.status,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
-      }
+      },
     });
 
     // Restore original method
@@ -212,7 +210,7 @@ class CustomValidationFramework {
     return {
       executionHistory: this.executionHistory,
       dependencyAnalytics: this.manager.getExecutionAnalytics(),
-      systemAnalytics: this.manager.generateInteractiveVisualization('json').debugInfo
+      systemAnalytics: this.manager.generateInteractiveVisualization('json').debugInfo,
     };
   }
 }
@@ -251,10 +249,7 @@ class ValidationAPI {
     // Add/update dependency
     this.app.put('/api/dependencies/:criterion', async (req, res) => {
       try {
-        const result = await this.api.updateValidationDependency(
-          req.params.criterion,
-          req.body
-        );
+        const result = await this.api.updateValidationDependency(req.params.criterion, req.body);
         res.json(result);
       } catch (error) {
         res.status(500).json({ error: error.message });
@@ -281,21 +276,22 @@ class ValidationAPI {
         res.writeHead(200, {
           'Content-Type': 'text/event-stream',
           'Cache-Control': 'no-cache',
-          'Connection': 'keep-alive'
+          Connection: 'keep-alive',
         });
 
         const callbacks = {
-          onWaveStart: (info) => res.write(`data: ${JSON.stringify({type: 'wave_start', ...info})}\\n\\n`),
-          onCriterionComplete: (info) => res.write(`data: ${JSON.stringify({type: 'criterion_complete', ...info})}\\n\\n`),
-          onError: (info) => res.write(`data: ${JSON.stringify({type: 'error', ...info})}\\n\\n`)
+          onWaveStart: (info) => res.write(`data: ${JSON.stringify({ type: 'wave_start', ...info })}\\n\\n`),
+          onCriterionComplete: (info) =>
+            res.write(`data: ${JSON.stringify({ type: 'criterion_complete', ...info })}\\n\\n`),
+          onError: (info) => res.write(`data: ${JSON.stringify({ type: 'error', ...info })}\\n\\n`),
         };
 
         const result = await this.api.executeParallelValidation(criteria, {
           ...options,
-          callbacks
+          callbacks,
         });
 
-        res.write(`data: ${JSON.stringify({type: 'complete', result})}\\n\\n`);
+        res.write(`data: ${JSON.stringify({ type: 'complete', result })}\\n\\n`);
         res.end();
       } catch (error) {
         res.status(500).json({ error: error.message });
@@ -348,8 +344,8 @@ const DependencyType = new GraphQLObjectType({
     description: { type: GraphQLString },
     estimatedDuration: { type: GraphQLString },
     parallelizable: { type: GraphQLBoolean },
-    resourceRequirements: { type: new GraphQLList(GraphQLString) }
-  }
+    resourceRequirements: { type: new GraphQLList(GraphQLString) },
+  },
 });
 
 const ExecutionPlanType = new GraphQLObjectType({
@@ -358,8 +354,8 @@ const ExecutionPlanType = new GraphQLObjectType({
     totalWaves: { type: GraphQLString },
     estimatedTotalDuration: { type: GraphQLString },
     parallelizationGain: { type: GraphQLString },
-    recommendations: { type: new GraphQLList(GraphQLString) }
-  }
+    recommendations: { type: new GraphQLList(GraphQLString) },
+  },
 });
 
 // Define schema
@@ -372,16 +368,16 @@ const schema = new GraphQLSchema({
         resolve: async () => {
           const result = await api.getValidationDependencies();
           return Object.values(result.dependencies);
-        }
+        },
       },
       executionPlan: {
         type: ExecutionPlanType,
         resolve: async () => {
           const result = await api.generateValidationExecutionPlan();
           return result.parallelPlan;
-        }
-      }
-    }
+        },
+      },
+    },
   }),
   mutation: new GraphQLObjectType({
     name: 'Mutation',
@@ -390,16 +386,16 @@ const schema = new GraphQLSchema({
         type: DependencyType,
         args: {
           criterion: { type: GraphQLString },
-          config: { type: GraphQLString } // JSON string
+          config: { type: GraphQLString }, // JSON string
         },
         resolve: async (parent, args) => {
           const config = JSON.parse(args.config);
           const result = await api.updateValidationDependency(args.criterion, config);
           return result.dependencyConfig;
-        }
-      }
-    }
-  })
+        },
+      },
+    },
+  }),
 });
 
 module.exports = schema;
@@ -420,10 +416,7 @@ const { TaskManagerAPI } = require('./taskmanager-api');
 const program = new Command();
 const api = new TaskManagerAPI();
 
-program
-  .name('validation-cli')
-  .description('Custom validation dependency management CLI')
-  .version('1.0.0');
+program.name('validation-cli').description('Custom validation dependency management CLI').version('1.0.0');
 
 program
   .command('plan')
@@ -443,7 +436,7 @@ program
 
       if (result.recommendations && result.recommendations.length > 0) {
         console.log(`\\n💡 Recommendations:`);
-        result.recommendations.forEach(rec => console.log(`   • ${rec}`));
+        result.recommendations.forEach((rec) => console.log(`   • ${rec}`));
       }
     } catch (error) {
       console.error('❌ Error:', error.message);
@@ -485,15 +478,15 @@ program
             const emoji = info.status === 'success' ? '✅' : '❌';
             console.log(`${emoji} ${info.criterion} (${info.duration}ms)`);
           },
-          onError: (info) => console.log(`❌ ${info.criterion}: ${info.error}`)
-        }
+          onError: (info) => console.log(`❌ ${info.criterion}: ${info.error}`),
+        },
       });
 
       console.log(`\\n🎯 Execution ${result.success ? 'completed successfully' : 'failed'}`);
       if (result.success && result.executionResult.summary) {
         const summary = result.executionResult.summary;
         console.log(`   Total time: ${(summary.totalDuration / 1000).toFixed(1)}s`);
-        console.log(`   Success rate: ${(summary.successfulCriteria / summary.totalCriteria * 100).toFixed(1)}%`);
+        console.log(`   Success rate: ${((summary.successfulCriteria / summary.totalCriteria) * 100).toFixed(1)}%`);
         console.log(`   Parallelization gain: ${summary.parallelizationGain.toFixed(1)}%`);
       }
     } catch (error) {
@@ -554,7 +547,7 @@ class FrontendPipeline {
       description: 'Setup Node.js environment and dependencies',
       estimatedDuration: 30000,
       parallelizable: true,
-      resourceRequirements: ['filesystem', 'network']
+      resourceRequirements: ['filesystem', 'network'],
     });
 
     // Code quality checks (can run in parallel after setup)
@@ -563,7 +556,7 @@ class FrontendPipeline {
       description: 'ESLint code quality check',
       estimatedDuration: 15000,
       parallelizable: true,
-      resourceRequirements: ['filesystem']
+      resourceRequirements: ['filesystem'],
     });
 
     this.manager.addDependency('typescript', {
@@ -571,7 +564,7 @@ class FrontendPipeline {
       description: 'TypeScript type checking',
       estimatedDuration: 20000,
       parallelizable: true,
-      resourceRequirements: ['filesystem', 'cpu']
+      resourceRequirements: ['filesystem', 'cpu'],
     });
 
     this.manager.addDependency('stylelint', {
@@ -579,19 +572,19 @@ class FrontendPipeline {
       description: 'CSS/SCSS linting',
       estimatedDuration: 8000,
       parallelizable: true,
-      resourceRequirements: ['filesystem']
+      resourceRequirements: ['filesystem'],
     });
 
     // Unit tests (after code quality)
     this.manager.addDependency('unit-tests', {
       dependencies: [
         { criterion: 'eslint', type: 'strict' },
-        { criterion: 'typescript', type: 'strict' }
+        { criterion: 'typescript', type: 'strict' },
       ],
       description: 'Jest unit tests',
       estimatedDuration: 45000,
       parallelizable: false,
-      resourceRequirements: ['filesystem', 'cpu', 'memory']
+      resourceRequirements: ['filesystem', 'cpu', 'memory'],
     });
 
     // Build (after code quality)
@@ -599,24 +592,24 @@ class FrontendPipeline {
       dependencies: [
         { criterion: 'eslint', type: 'strict' },
         { criterion: 'typescript', type: 'strict' },
-        { criterion: 'stylelint', type: 'weak' }
+        { criterion: 'stylelint', type: 'weak' },
       ],
       description: 'Webpack production build',
       estimatedDuration: 60000,
       parallelizable: false,
-      resourceRequirements: ['filesystem', 'cpu', 'memory']
+      resourceRequirements: ['filesystem', 'cpu', 'memory'],
     });
 
     // E2E tests (after build)
     this.manager.addDependency('e2e-tests', {
       dependencies: [
         { criterion: 'webpack-build', type: 'strict' },
-        { criterion: 'unit-tests', type: 'weak' }
+        { criterion: 'unit-tests', type: 'weak' },
       ],
       description: 'Cypress E2E tests',
       estimatedDuration: 120000,
       parallelizable: false,
-      resourceRequirements: ['filesystem', 'cpu', 'memory', 'network']
+      resourceRequirements: ['filesystem', 'cpu', 'memory', 'network'],
     });
   }
 
@@ -633,14 +626,14 @@ class FrontendPipeline {
         const duration = (info.duration / 1000).toFixed(1);
         console.log(`  ✅ ${info.criterion} (${duration}s)`);
       },
-      onError: (info) => console.log(`  ❌ ${info.criterion}: ${info.error}`)
+      onError: (info) => console.log(`  ❌ ${info.criterion}: ${info.error}`),
     });
   }
 }
 
 // Usage
 const pipeline = new FrontendPipeline();
-pipeline.execute().then(result => {
+pipeline.execute().then((result) => {
   console.log(`\\n🎯 Pipeline ${result.success ? 'succeeded' : 'failed'}`);
 });
 ```
@@ -662,7 +655,7 @@ class MicroservicesValidation {
       description: 'Global environment setup',
       estimatedDuration: 10000,
       parallelizable: true,
-      resourceRequirements: ['filesystem']
+      resourceRequirements: ['filesystem'],
     });
 
     // Per-service validation
@@ -673,7 +666,7 @@ class MicroservicesValidation {
         description: `Setup for ${service} service`,
         estimatedDuration: 8000,
         parallelizable: true,
-        resourceRequirements: ['filesystem']
+        resourceRequirements: ['filesystem'],
       });
 
       // Service linting
@@ -682,7 +675,7 @@ class MicroservicesValidation {
         description: `Lint ${service} service`,
         estimatedDuration: 12000,
         parallelizable: true,
-        resourceRequirements: ['filesystem']
+        resourceRequirements: ['filesystem'],
       });
 
       // Service unit tests
@@ -691,7 +684,7 @@ class MicroservicesValidation {
         description: `Unit tests for ${service} service`,
         estimatedDuration: 25000,
         parallelizable: true,
-        resourceRequirements: ['filesystem', 'cpu']
+        resourceRequirements: ['filesystem', 'cpu'],
       });
 
       // Service build
@@ -700,14 +693,14 @@ class MicroservicesValidation {
         description: `Build ${service} service`,
         estimatedDuration: 30000,
         parallelizable: true,
-        resourceRequirements: ['filesystem', 'cpu']
+        resourceRequirements: ['filesystem', 'cpu'],
       });
     }
 
     // Integration tests (after all services are built)
-    const serviceBuildDeps = this.services.map(service => ({
+    const serviceBuildDeps = this.services.map((service) => ({
       criterion: `${service}-build`,
-      type: 'strict'
+      type: 'strict',
     }));
 
     this.manager.addDependency('integration-tests', {
@@ -715,7 +708,7 @@ class MicroservicesValidation {
       description: 'Cross-service integration tests',
       estimatedDuration: 90000,
       parallelizable: false,
-      resourceRequirements: ['filesystem', 'cpu', 'memory', 'network']
+      resourceRequirements: ['filesystem', 'cpu', 'memory', 'network'],
     });
   }
 
@@ -725,7 +718,7 @@ class MicroservicesValidation {
       availableCPUs: require('os').cpus().length,
       availableMemory: require('os').freemem(),
       networkLatency: 15,
-      diskIOLoad: 0.4
+      diskIOLoad: 0.4,
     };
 
     const plan = this.manager.generateAdaptiveExecutionPlan(null, systemInfo);
@@ -742,7 +735,7 @@ class MicroservicesValidation {
       onCriterionComplete: (info) => {
         const duration = (info.duration / 1000).toFixed(1);
         console.log(`  ✅ ${info.criterion} (${duration}s)`);
-      }
+      },
     });
   }
 }
@@ -762,9 +755,9 @@ name: Validation Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   setup:
@@ -967,7 +960,7 @@ class OptimizedValidationRunner {
       memoryUtilization: (totalMemory - freeMemory) / totalMemory,
       platform: os.platform(),
       networkLatency: 10, // Could be measured dynamically
-      diskIOLoad: 0.3     // Could be measured dynamically
+      diskIOLoad: 0.3, // Could be measured dynamically
     };
   }
 
@@ -1003,7 +996,7 @@ class OptimizedValidationRunner {
 
     return await this.manager.executeParallelValidationPlan(plan, {
       maxRetries: this.systemInfo.platform === 'win32' ? 3 : 2, // Windows might need more retries
-      timeout: this.systemInfo.availableCPUs < 4 ? 600000 : 300000 // Longer timeout for slower systems
+      timeout: this.systemInfo.availableCPUs < 4 ? 600000 : 300000, // Longer timeout for slower systems
     });
   }
 }
@@ -1052,7 +1045,8 @@ class CachedValidationRunner {
     const configString = JSON.stringify(dependency);
     const configHash = crypto.createHash('md5').update(configString).digest('hex');
 
-    return crypto.createHash('md5')
+    return crypto
+      .createHash('md5')
       .update([configHash, ...checksums].join(''))
       .digest('hex');
   }
@@ -1068,7 +1062,8 @@ class CachedValidationRunner {
 
       // Check if cache is still valid (within 1 hour)
       const age = Date.now() - new Date(result.timestamp).getTime();
-      if (age < 3600000) { // 1 hour
+      if (age < 3600000) {
+        // 1 hour
         return result.data;
       }
     } catch (error) {
@@ -1084,7 +1079,7 @@ class CachedValidationRunner {
 
     const cacheData = {
       timestamp: new Date().toISOString(),
-      data: result
+      data: result,
     };
 
     try {
@@ -1377,12 +1372,13 @@ monitor.executeWithMonitoring().then(result => {
 ### 2. Resource Management
 
 - **Define accurate resource requirements**:
+
   ```javascript
   // Good: Specific resources
-  resourceRequirements: ['filesystem', 'cpu']
+  resourceRequirements: ['filesystem', 'cpu'];
 
   // Avoid: Generic or missing resources
-  resourceRequirements: ['filesystem', 'network', 'cpu', 'memory', 'ports']
+  resourceRequirements: ['filesystem', 'network', 'cpu', 'memory', 'ports'];
   ```
 
 - **Estimate durations realistically**:
@@ -1393,31 +1389,33 @@ monitor.executeWithMonitoring().then(result => {
 ### 3. Error Handling
 
 - **Design for failure**:
+
   ```javascript
   // Use weak dependencies for non-critical validations
   dependencies: [
     { criterion: 'linter-validation', type: 'strict' },
-    { criterion: 'optional-check', type: 'weak' }
-  ]
+    { criterion: 'optional-check', type: 'weak' },
+  ];
   ```
 
 - **Implement retry logic**:
   ```javascript
   const result = await manager.executeParallelValidationPlan(plan, {
     maxRetries: 2,
-    timeout: 300000
+    timeout: 300000,
   });
   ```
 
 ### 4. Performance Optimization
 
 - **Use adaptive planning**:
+
   ```javascript
   const systemInfo = {
     availableCPUs: os.cpus().length,
     availableMemory: os.freemem(),
     networkLatency: await measureNetworkLatency(),
-    diskIOLoad: await measureDiskLoad()
+    diskIOLoad: await measureDiskLoad(),
   };
 
   const plan = manager.generateAdaptiveExecutionPlan(null, systemInfo);
@@ -1431,6 +1429,7 @@ monitor.executeWithMonitoring().then(result => {
 ### 5. Visualization and Debugging
 
 - **Use visualization for understanding**:
+
   ```bash
   # Quick ASCII overview
   node taskmanager-api.js generate-interactive-visualization ascii
@@ -1440,6 +1439,7 @@ monitor.executeWithMonitoring().then(result => {
   ```
 
 - **Regular dependency audits**:
+
   ```bash
   # Check for issues
   node taskmanager-api.js validate-dependency-graph
@@ -1455,6 +1455,7 @@ monitor.executeWithMonitoring().then(result => {
 If you currently use manual validation scripts:
 
 1. **Inventory existing validations**:
+
    ```bash
    # List current validation commands
    grep -r "npm run" package.json
@@ -1462,20 +1463,22 @@ If you currently use manual validation scripts:
    ```
 
 2. **Define dependencies**:
+
    ```javascript
    // Convert sequential script to dependency definition
    // Old: npm run lint && npm run test && npm run build
 
    manager.addDependency('lint', { dependencies: [] });
    manager.addDependency('test', {
-     dependencies: [{ criterion: 'lint', type: 'strict' }]
+     dependencies: [{ criterion: 'lint', type: 'strict' }],
    });
    manager.addDependency('build', {
-     dependencies: [{ criterion: 'test', type: 'strict' }]
+     dependencies: [{ criterion: 'test', type: 'strict' }],
    });
    ```
 
 3. **Add parallel opportunities**:
+
    ```javascript
    // Identify independent validations that can run in parallel
    manager.addDependency('eslint', { dependencies: [] });
@@ -1487,8 +1490,8 @@ If you currently use manual validation scripts:
      dependencies: [
        { criterion: 'eslint', type: 'strict' },
        { criterion: 'typescript', type: 'strict' },
-       { criterion: 'stylelint', type: 'weak' }
-     ]
+       { criterion: 'stylelint', type: 'weak' },
+     ],
    });
    ```
 
@@ -1498,25 +1501,21 @@ If you currently use manual validation scripts:
 
 ```javascript
 // Old Gulp task
-gulp.task('validate', gulp.series(
-  'lint',
-  gulp.parallel('test', 'typecheck'),
-  'build'
-));
+gulp.task('validate', gulp.series('lint', gulp.parallel('test', 'typecheck'), 'build'));
 
 // New dependency definition
 manager.addDependency('lint', { dependencies: [] });
 manager.addDependency('test', {
-  dependencies: [{ criterion: 'lint', type: 'strict' }]
+  dependencies: [{ criterion: 'lint', type: 'strict' }],
 });
 manager.addDependency('typecheck', {
-  dependencies: [{ criterion: 'lint', type: 'strict' }]
+  dependencies: [{ criterion: 'lint', type: 'strict' }],
 });
 manager.addDependency('build', {
   dependencies: [
     { criterion: 'test', type: 'strict' },
-    { criterion: 'typecheck', type: 'strict' }
-  ]
+    { criterion: 'typecheck', type: 'strict' },
+  ],
 });
 ```
 
@@ -1532,16 +1531,16 @@ for (const component of components) {
   manager.addDependency(`build-${component}`, {
     dependencies: [{ criterion: 'lint', type: 'strict' }],
     parallelizable: true,
-    resourceRequirements: ['filesystem', 'cpu']
+    resourceRequirements: ['filesystem', 'cpu'],
   });
 }
 
 manager.addDependency('bundle', {
-  dependencies: components.map(c => ({
+  dependencies: components.map((c) => ({
     criterion: `build-${c}`,
-    type: 'strict'
+    type: 'strict',
   })),
-  parallelizable: false
+  parallelizable: false,
 });
 ```
 

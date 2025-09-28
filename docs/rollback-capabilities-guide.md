@@ -7,18 +7,21 @@ The Stop Hook Rollback Capabilities system provides robust snapshot management a
 ## Core Features
 
 ### 🔄 Validation State Snapshots
+
 - **Automatic Git State Capture**: Records current commit hash, branch, uncommitted changes
 - **Critical File Backup**: Preserves package.json, lock files, FEATURES.json, TASKS.json, environment files
 - **Git Stash Integration**: Automatically stashes uncommitted changes during snapshot creation
 - **Metadata Tracking**: Comprehensive snapshot information with timestamps and descriptions
 
 ### 🔙 Intelligent Rollback System
+
 - **Git State Restoration**: Resets to specific commit hashes and restores stashed changes
 - **File System Recovery**: Restores backed-up critical files to previous states
 - **Selective Rollback**: Choose specific aspects to rollback (git only, files only, or complete)
 - **Safety Validation**: Verifies snapshot integrity before performing rollback operations
 
 ### 📊 History & Analytics
+
 - **Rollback Event Logging**: Complete audit trail of all rollback operations
 - **Snapshot Management**: Track and organize validation state snapshots over time
 - **Cleanup Automation**: Automatic removal of old snapshots based on age and count limits
@@ -27,6 +30,7 @@ The Stop Hook Rollback Capabilities system provides robust snapshot management a
 ## Quick Start
 
 ### 1. Create Validation State Snapshot
+
 ```bash
 # Basic snapshot creation
 timeout 10s node taskmanager-api.js create-validation-state-snapshot
@@ -36,6 +40,7 @@ timeout 10s node taskmanager-api.js create-validation-state-snapshot '{"descript
 ```
 
 ### 2. List Available Snapshots
+
 ```bash
 # Show all available snapshots
 timeout 10s node taskmanager-api.js get-available-rollback-snapshots
@@ -45,6 +50,7 @@ timeout 10s node taskmanager-api.js get-available-rollback-snapshots '{"limit": 
 ```
 
 ### 3. Perform Rollback
+
 ```bash
 # Rollback to specific snapshot
 timeout 10s node taskmanager-api.js perform-rollback "snapshot_1759001005273_0omay9wk3"
@@ -54,6 +60,7 @@ timeout 10s node taskmanager-api.js perform-rollback "snapshot_1759001005273_0om
 ```
 
 ### 4. View Rollback History
+
 ```bash
 # Show rollback history
 timeout 10s node taskmanager-api.js get-rollback-history
@@ -69,11 +76,13 @@ timeout 10s node taskmanager-api.js get-rollback-history '{"limit": 10, "since":
 Creates a comprehensive snapshot of the current validation state.
 
 **Usage:**
+
 ```bash
 timeout 10s node taskmanager-api.js create-validation-state-snapshot [options]
 ```
 
 **Options:**
+
 ```json
 {
   "description": "Human-readable snapshot description",
@@ -82,6 +91,7 @@ timeout 10s node taskmanager-api.js create-validation-state-snapshot [options]
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -95,6 +105,7 @@ timeout 10s node taskmanager-api.js create-validation-state-snapshot [options]
 ```
 
 **What Gets Captured:**
+
 - Current Git commit hash and branch
 - Uncommitted changes (via git stash)
 - Critical project files: package.json, package-lock.json, yarn.lock, FEATURES.json, TASKS.json, .env files
@@ -105,11 +116,13 @@ timeout 10s node taskmanager-api.js create-validation-state-snapshot [options]
 Restores the system state to a previously created snapshot.
 
 **Usage:**
+
 ```bash
 timeout 10s node taskmanager-api.js perform-rollback <snapshotId> [options]
 ```
 
 **Options:**
+
 ```json
 {
   "reason": "Explanation for why rollback is needed"
@@ -117,6 +130,7 @@ timeout 10s node taskmanager-api.js perform-rollback <snapshotId> [options]
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -129,6 +143,7 @@ timeout 10s node taskmanager-api.js perform-rollback <snapshotId> [options]
 ```
 
 **Rollback Process:**
+
 1. **Git State Restoration**: Resets to snapshot commit hash using `git reset --hard`
 2. **Stash Recovery**: Restores previously stashed uncommitted changes if available
 3. **File Restoration**: Copies backed-up critical files to their original locations
@@ -139,11 +154,13 @@ timeout 10s node taskmanager-api.js perform-rollback <snapshotId> [options]
 Lists all available snapshots sorted by timestamp (newest first).
 
 **Usage:**
+
 ```bash
 timeout 10s node taskmanager-api.js get-available-rollback-snapshots [options]
 ```
 
 **Options:**
+
 ```json
 {
   "limit": 10
@@ -151,6 +168,7 @@ timeout 10s node taskmanager-api.js get-available-rollback-snapshots [options]
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -175,11 +193,13 @@ timeout 10s node taskmanager-api.js get-available-rollback-snapshots [options]
 Retrieves complete audit trail of rollback operations.
 
 **Usage:**
+
 ```bash
 timeout 10s node taskmanager-api.js get-rollback-history [options]
 ```
 
 **Options:**
+
 ```json
 {
   "limit": 50,
@@ -192,11 +212,13 @@ timeout 10s node taskmanager-api.js get-rollback-history [options]
 Removes old snapshots based on age and count limits.
 
 **Usage:**
+
 ```bash
 timeout 10s node taskmanager-api.js cleanup-old-rollback-snapshots [options]
 ```
 
 **Options:**
+
 ```json
 {
   "maxAgeHours": 24,
@@ -205,6 +227,7 @@ timeout 10s node taskmanager-api.js cleanup-old-rollback-snapshots [options]
 ```
 
 **Default Behavior:**
+
 - Removes snapshots older than 24 hours
 - Keeps maximum of 10 most recent snapshots
 - Always preserves at least 3 most recent snapshots regardless of age
@@ -239,6 +262,7 @@ timeout 10s node taskmanager-api.js perform-rollback "snapshot_id" '{"reason": "
 ## Best Practices
 
 ### 1. Snapshot Naming Strategy
+
 ```json
 {
   "description": "Before implementing user authentication",
@@ -247,13 +271,16 @@ timeout 10s node taskmanager-api.js perform-rollback "snapshot_id" '{"reason": "
 ```
 
 ### 2. Regular Cleanup
+
 ```bash
 # Weekly cleanup - remove snapshots older than 7 days, keep max 20
 timeout 10s node taskmanager-api.js cleanup-old-rollback-snapshots '{"maxAgeHours": 168, "maxCount": 20}'
 ```
 
 ### 3. Critical Moment Snapshots
+
 Create snapshots before:
+
 - Major feature implementations
 - Dependency updates
 - Configuration changes
@@ -261,7 +288,9 @@ Create snapshots before:
 - Production deployments
 
 ### 4. Rollback Verification
+
 After rollback, always verify:
+
 ```bash
 # Check git status
 git status
@@ -276,16 +305,19 @@ npm test
 ## Performance Considerations
 
 ### Snapshot Creation Performance
+
 - **Average Time**: 2-5 seconds for typical projects
 - **Storage Impact**: ~1-5MB per snapshot depending on backed-up files
 - **Git Operations**: Minimal impact using efficient git commands
 
 ### Rollback Performance
+
 - **Average Time**: 3-8 seconds for complete rollback
 - **Safety Checks**: Snapshot integrity validation adds ~1 second
 - **File Operations**: Parallel file restoration for optimal speed
 
 ### Storage Management
+
 - **Automatic Cleanup**: Prevents disk space issues
 - **Configurable Retention**: Balance between safety and storage
 - **Compression**: Snapshot data stored efficiently
@@ -295,35 +327,42 @@ npm test
 ### Common Issues
 
 #### 1. Snapshot Creation Failures
+
 ```json
 {
   "success": false,
   "error": "Failed to create validation state snapshot: Git repository in inconsistent state"
 }
 ```
+
 **Solution**: Resolve git conflicts or unstaged changes first
 
 #### 2. Rollback Failures
+
 ```json
 {
   "success": false,
   "error": "Failed to perform rollback: Snapshot directory not found"
 }
 ```
+
 **Solution**: Verify snapshot ID exists using `get-available-rollback-snapshots`
 
 #### 3. Git State Issues
+
 ```json
 {
   "success": false,
   "error": "Git rollback encountered issues: detached HEAD state"
 }
 ```
+
 **Solution**: Manually checkout desired branch before rollback
 
 ### Recovery Procedures
 
 #### 1. Manual Git Recovery
+
 ```bash
 # If automatic git rollback fails
 git checkout main
@@ -332,6 +371,7 @@ git stash pop  # if stash exists
 ```
 
 #### 2. Manual File Restoration
+
 ```bash
 # Navigate to snapshot directory
 cd .validation-snapshots/snapshot_id/
@@ -341,6 +381,7 @@ cp FEATURES.json ../../
 ```
 
 #### 3. Emergency Reset
+
 ```bash
 # Last resort: clean repository reset
 git reset --hard HEAD
@@ -352,16 +393,19 @@ timeout 10s node taskmanager-api.js perform-rollback "$(timeout 10s node taskman
 ## Security Considerations
 
 ### 1. Sensitive Data Protection
+
 - ⚠️ **Never snapshot sensitive files**: .env files with secrets, SSH keys, certificates
 - ✅ **Safe file patterns**: Configuration templates, dependency locks, project metadata
 - 🔒 **Gitignore compliance**: Respects .gitignore patterns for file backup
 
 ### 2. Access Control
+
 - 📁 **Snapshot directory**: `.validation-snapshots/` - ensure proper permissions
 - 🔐 **Git operations**: Uses current user's git configuration and permissions
 - 📝 **History logs**: Contain only metadata, no sensitive information
 
 ### 3. Cleanup Security
+
 - 🗑️ **Secure deletion**: Snapshots are completely removed during cleanup
 - 🔍 **Audit trail**: Cleanup operations logged for security review
 - ⏰ **Retention policies**: Automatic cleanup prevents indefinite data accumulation
@@ -371,6 +415,7 @@ timeout 10s node taskmanager-api.js perform-rollback "$(timeout 10s node taskman
 ### Debug Commands
 
 #### 1. Verify Snapshot Integrity
+
 ```bash
 # Check if snapshot directory exists
 ls -la .validation-snapshots/
@@ -383,6 +428,7 @@ cat .validation-snapshots/snapshot_id/snapshot-metadata.json | jq '.'
 ```
 
 #### 2. Git State Debugging
+
 ```bash
 # Check current git state
 git status
@@ -394,6 +440,7 @@ git fsck --full
 ```
 
 #### 3. History Analysis
+
 ```bash
 # Check rollback event logs
 cat .validation-snapshots/rollback-history.json | jq '.events[] | select(.success == false)'
@@ -401,16 +448,17 @@ cat .validation-snapshots/rollback-history.json | jq '.events[] | select(.succes
 
 ### Common Solutions
 
-| Issue | Symptoms | Solution |
-|-------|----------|----------|
-| Disk Space | Snapshot creation fails | Run cleanup: `cleanup-old-rollback-snapshots` |
-| Git Conflicts | Rollback partially fails | Resolve conflicts manually, retry rollback |
-| Permission Errors | Cannot create/restore files | Check filesystem permissions on project directory |
-| Stash Issues | Uncommitted changes lost | Check `git stash list`, manually recover if needed |
+| Issue             | Symptoms                    | Solution                                           |
+| ----------------- | --------------------------- | -------------------------------------------------- |
+| Disk Space        | Snapshot creation fails     | Run cleanup: `cleanup-old-rollback-snapshots`      |
+| Git Conflicts     | Rollback partially fails    | Resolve conflicts manually, retry rollback         |
+| Permission Errors | Cannot create/restore files | Check filesystem permissions on project directory  |
+| Stash Issues      | Uncommitted changes lost    | Check `git stash list`, manually recover if needed |
 
 ## Integration Examples
 
 ### 1. CI/CD Pipeline Integration
+
 ```bash
 #!/bin/bash
 # Pre-deployment snapshot
@@ -427,6 +475,7 @@ echo "Deployment successful, snapshot: $SNAPSHOT_ID"
 ```
 
 ### 2. Feature Development Workflow
+
 ```bash
 #!/bin/bash
 # Start new feature development
@@ -442,6 +491,7 @@ echo "When done, run validation and create new snapshot if successful"
 ```
 
 ### 3. Automated Testing Recovery
+
 ```bash
 #!/bin/bash
 # Create snapshot before test suite
@@ -466,6 +516,7 @@ fi
 The Stop Hook Rollback Capabilities feature provides enterprise-grade safety and recovery mechanisms for validation workflows. With comprehensive snapshot management, intelligent rollback operations, and seamless integration with existing validation processes, this system ensures that validation failures never result in permanent loss of work or project state.
 
 Key benefits:
+
 - ✅ **Zero Data Loss**: Complete state preservation and recovery
 - ✅ **Automatic Safety**: Integrated with validation workflow
 - ✅ **Audit Compliance**: Complete history and event logging

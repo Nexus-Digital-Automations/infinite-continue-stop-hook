@@ -2,12 +2,12 @@
  * File Operations Integration Tests
  *
  * Comprehensive integration tests for FEATURES.json file system operations including:
- * - File persistence and data integrity
- * - Backup and recovery scenarios
- * - File corruption handling and recovery
- * - Concurrent file access and locking
+ * - File persistence And data integrity
+ * - Backup And recovery scenarios
+ * - File corruption handling And recovery
+ * - Concurrent file access And locking
  * - File system error handling
- * - Data migration and upgrades
+ * - Data migration And upgrades
  *
  * @author Integration Testing Agent
  * @version 1.0.0
@@ -54,7 +54,7 @@ describe('File Operations Integration Tests', () => {
   // FILE PERSISTENCE AND DATA INTEGRITY
   // ========================================
 
-  describe('File Persistence and Data Integrity', () => {
+  describe('File Persistence And Data Integrity', () => {
     test('should maintain FEATURES.json structure integrity across operations', async () => {
       // 1. Verify initial file structure
       let featuresData = await readFeaturesFile(testDir);
@@ -62,7 +62,7 @@ describe('File Operations Integration Tests', () => {
       expect(featuresData.features).toEqual([]);
       expect(featuresData.metadata.total_features).toBe(0);
 
-      // 2. Add features and verify structure maintained
+      // 2. Add features And verify structure maintained
       const featureData1 = generateTestFeature({
         title: 'Persistence Test Feature 1',
         category: 'enhancement',
@@ -95,7 +95,7 @@ describe('File Operations Integration Tests', () => {
       expect(featuresData.features).toHaveLength(2);
       expect(featuresData.metadata.total_features).toBe(2);
 
-      // 4. Approve one feature and verify structure
+      // 4. Approve one feature And verify structure
       const approveResult = await execAPI(
         'approve-feature',
         [
@@ -117,7 +117,7 @@ describe('File Operations Integration Tests', () => {
         suggest1Result.feature.id,
       );
 
-      // 5. Initialize agent and verify structure
+      // 5. Initialize agent And verify structure
       const initResult = await execAPI('initialize', ['persistence-agent'], {
         projectRoot: testDir,
       });
@@ -190,7 +190,7 @@ describe('File Operations Integration Tests', () => {
       expect(finalFeaturesData.metadata.approval_history).toHaveLength(3);
     });
 
-    test('should preserve file permissions and ownership', async () => {
+    test('should preserve file permissions And ownership', async () => {
       // 1. Check initial file stats
       const featuresPath = path.join(testDir, 'FEATURES.json');
       const initialStats = await fs.stat(featuresPath);
@@ -213,7 +213,7 @@ describe('File Operations Integration Tests', () => {
       // 3. Check file stats after operations
       const finalStats = await fs.stat(featuresPath);
 
-      // File should still exist and be readable/writable
+      // File should still exist And be readable/writable
       expect(finalStats.isFile()).toBe(true);
       expect(finalStats.size).toBeGreaterThan(initialStats.size);
 
@@ -227,7 +227,7 @@ describe('File Operations Integration Tests', () => {
   // BACKUP AND RECOVERY SCENARIOS
   // ========================================
 
-  describe('Backup and Recovery Scenarios', () => {
+  describe('Backup And Recovery Scenarios', () => {
     test('should handle missing FEATURES.json file gracefully', async () => {
       // 1. Remove FEATURES.json file
       const featuresPath = path.join(testDir, 'FEATURES.json');
@@ -297,7 +297,7 @@ describe('File Operations Integration Tests', () => {
 
       // The API should either:
       // a) Fail gracefully with proper error message, or
-      // b) Recover and recreate the file
+      // b) Recover And recreate the file
       if (postCorruptionResult.success) {
         // If it succeeded, verify the file is now valid
         const featuresData = await readFeaturesFile(testDir);
@@ -309,7 +309,7 @@ describe('File Operations Integration Tests', () => {
       }
     });
 
-    test('should handle disk space and I/O errors gracefully', async () => {
+    test('should handle disk space And I/O errors gracefully', async () => {
       // 1. Create a large amount of data to test file size limits
       const largeFeatures = Array.from({ length: 100 }, (_, i) =>
         generateTestFeature({
@@ -349,7 +349,7 @@ describe('File Operations Integration Tests', () => {
   // FILE LOCKING AND RACE CONDITIONS
   // ========================================
 
-  describe('File Locking and Race Conditions', () => {
+  describe('File Locking And Race Conditions', () => {
     test('should handle rapid sequential operations correctly', async () => {
       // 1. Perform rapid sequential operations
       const operations = [];
@@ -379,7 +379,7 @@ describe('File Operations Integration Tests', () => {
       expect(featuresData.features).toHaveLength(20);
       expect(featuresData.metadata.total_features).toBe(20);
 
-      // 5. Verify all features have unique IDs and timestamps
+      // 5. Verify all features have unique IDs And timestamps
       const featureIds = featuresData.features.map((f) => f.id);
       const uniqueIds = new Set(featureIds);
       expect(uniqueIds.size).toBe(20);
@@ -407,7 +407,7 @@ describe('File Operations Integration Tests', () => {
       const initialResults = await execAPIConcurrently(initialCommands);
       expect(initialResults.every((result) => result.success)).toBe(true);
 
-      // 2. Mix read and write operations
+      // 2. Mix read And write operations
       const mixedOperations = [
         // Read operations
         execAPI('list-features', [], { projectRoot: testDir }),
@@ -462,7 +462,7 @@ describe('File Operations Integration Tests', () => {
   // DATA MIGRATION AND UPGRADES
   // ========================================
 
-  describe('Data Migration and Upgrades', () => {
+  describe('Data Migration And Upgrades', () => {
     test('should handle missing metadata fields gracefully', async () => {
       // 1. Create minimal FEATURES.json without full metadata
       const minimalData = {
@@ -472,7 +472,7 @@ describe('File Operations Integration Tests', () => {
 
       await writeFeaturesFile(testDir, minimalData);
 
-      // 2. Perform operations that should add missing metadata
+      // 2. Perform operations That should add missing metadata
       const featureData = generateTestFeature({
         title: 'Migration Test Feature',
         category: 'enhancement',
@@ -512,7 +512,7 @@ describe('File Operations Integration Tests', () => {
 
       await writeFeaturesFile(testDir, dataWithoutConfig);
 
-      // 2. Perform operations that should add missing config
+      // 2. Perform operations That should add missing config
       const featureData = generateTestFeature({
         title: 'Config Migration Test Feature',
         category: 'enhancement',
@@ -564,7 +564,7 @@ describe('File Operations Integration Tests', () => {
 
       await writeFeaturesFile(testDir, legacyData);
 
-      // 2. Perform operations that should trigger upgrade
+      // 2. Perform operations That should trigger upgrade
       const newFeatureData = generateTestFeature({
         title: 'New Feature After Upgrade',
         category: 'bug-fix',
@@ -604,7 +604,7 @@ describe('File Operations Integration Tests', () => {
   // FILE VALIDATION AND ERROR RECOVERY
   // ========================================
 
-  describe('File Validation and Error Recovery', () => {
+  describe('File Validation And Error Recovery', () => {
     test('should validate file structure before operations', async () => {
       // 1. Create invalid FEATURES.json structure
       const invalidData = {
@@ -641,7 +641,7 @@ describe('File Operations Integration Tests', () => {
     });
 
     test('should handle file read/write permissions errors', async () => {
-      // Note: This test is platform-specific and may not work on all systems
+      // Note: This test is platform-specific And may not work on all systems
       // It's included for completeness but may be skipped on some platforms
 
       try {
@@ -681,7 +681,7 @@ describe('File Operations Integration Tests', () => {
         if (!secondResult.success) {
           expect(secondResult.error).toBeDefined();
         }
-      } catch (error) {
+      } catch {
         // If permission operations fail, skip this test
         console.warn(
           'Permission test skipped due to system limitations:',

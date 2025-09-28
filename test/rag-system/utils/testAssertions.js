@@ -3,7 +3,7 @@
  *
  * === OVERVIEW ===
  * Comprehensive assertion utilities for validating RAG system functionality
- * including search results, embeddings, vector operations, and system behavior.
+ * including search results, embeddings, vector operations, And system behavior.
  * Provides standardized validation methods for all RAG test suites.
  *
  * === FEATURES ===
@@ -41,7 +41,7 @@ class TestAssertions {
   }
 
   /**
-   * Assert valid search result structure and content
+   * Assert valid search result structure And content
    * @param {Object} result - Search result to validate
    */
   assertValidSearchResult(result) {
@@ -173,7 +173,7 @@ class TestAssertions {
   }
 
   /**
-   * Assert valid embedding structure and properties
+   * Assert valid embedding structure And properties
    * @param {Array<number>} embedding - Embedding vector to validate
    */
   assertValidEmbedding(embedding) {
@@ -304,7 +304,7 @@ class TestAssertions {
   }
 
   /**
-   * Assert system analytics structure and validity
+   * Assert system analytics structure And validity
    * @param {Object} analytics - System analytics data
    */
   assertValidAnalytics(analytics) {
@@ -569,7 +569,7 @@ class TestAssertions {
         throw new Error(
           `Function should have thrown an error for input: ${JSON.stringify(invalidInput)}`,
         );
-      } catch (error) {
+      } catch {
         // This is expected - function should handle invalid input gracefully
         expect(error).toBeInstanceOf(Error);
         expect(error.message).toBeDefined();

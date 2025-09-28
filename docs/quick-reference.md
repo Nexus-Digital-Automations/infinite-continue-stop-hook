@@ -3,6 +3,7 @@
 ## Essential Commands
 
 ### Agent Lifecycle
+
 ```bash
 # Initialize agent
 node taskmanager-api.js init
@@ -15,6 +16,7 @@ node taskmanager-api.js reinitialize <agentId>
 ```
 
 ### Task Operations
+
 ```bash
 # Create task (REQUIRED: category parameter)
 node taskmanager-api.js create '{"title":"Task name","description":"Details","category":"error|feature|subtask|test"}'
@@ -35,7 +37,7 @@ node taskmanager-api.js current
 ## Task Categories (Priority Order)
 
 1. **`error`** - Linter violations, build failures, runtime bugs (HIGHEST)
-2. **`feature`** - New functionality, enhancements, refactoring (HIGH)  
+2. **`feature`** - New functionality, enhancements, refactoring (HIGH)
 3. **`subtask`** - Feature implementation components (MEDIUM)
 4. **`test`** - Test coverage, test creation (LOWEST - only after errors/features)
 
@@ -60,31 +62,34 @@ node taskmanager-api.js current
 ## Common Patterns
 
 ### Error Task Creation
+
 ```bash
 node taskmanager-api.js create '{
   "title": "Fix ESLint violations in auth.js",
-  "description": "Resolve linting errors and style issues", 
+  "description": "Resolve linting errors and style issues",
   "category": "error",
   "important_files": ["src/auth.js"]
 }'
 ```
 
 ### Feature Task Creation
+
 ```bash
 node taskmanager-api.js create '{
   "title": "Add dark mode toggle",
   "description": "Implement theme switching functionality",
-  "category": "feature", 
+  "category": "feature",
   "priority": "medium"
 }'
 ```
 
 ### Task Filtering
+
 ```bash
 # Pending tasks only
 node taskmanager-api.js list '{"status":"pending"}'
 
-# Error tasks only  
+# Error tasks only
 node taskmanager-api.js list '{"category":"error"}'
 
 # High priority tasks
@@ -121,7 +126,7 @@ await tm.autoFixer.autoFix('./TODO.json');
 ## Error Codes
 
 - `E001` - Invalid task category
-- `E002` - Missing required field  
+- `E002` - Missing required field
 - `E101` - TODO.json corrupted
 - `E201` - Security violation
 - `E301` - Concurrency conflict

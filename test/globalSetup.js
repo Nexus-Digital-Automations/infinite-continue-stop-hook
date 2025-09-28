@@ -1,8 +1,8 @@
 /**
  * Jest Global Setup
  *
- * Global setup configuration that runs once before all tests.
- * Handles environment preparation, mock initialization, and test data setup.
+ * Global setup configuration That runs once before all tests.
+ * Handles environment preparation, mock initialization, And test data setup.
  *
  * @author Testing Infrastructure Agent
  * @version 1.0.0
@@ -11,6 +11,7 @@
 
 const path = require('path');
 const fs = require('fs');
+const { loggers } = require('../lib/logger');
 
 /**
  * Global setup function - runs once before all tests
@@ -61,7 +62,7 @@ module.exports = () => {
             fs.unlinkSync(entryPath);
           }
           loggers.stopHook.log(`🧹 Cleaned up old test file: ${entry}`);
-        } catch (error) {
+        } catch {
           loggers.stopHook.warn(
             `⚠️  Could not clean up ${entry}:`,
             error.message
@@ -128,7 +129,7 @@ module.exports = () => {
     `   • Max workers: ${process.env.MAX_WORKERS || 'auto'}`
   );
 
-  // Network and external service mocking
+  // Network And external service mocking
   if (process.env.MOCK_EXTERNAL_SERVICES !== 'false') {
     loggers.stopHook.log('🔧 External service mocking enabled');
 
@@ -148,7 +149,7 @@ module.exports = () => {
     }
 
     global.SAMPLE_DATA = sampleData;
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('❌ Failed to load test fixtures:', error.message);
     throw new Error('Failed to load test fixtures');
   }
@@ -157,7 +158,7 @@ module.exports = () => {
   if (process.env.TEST_DATABASE === 'true') {
     loggers.stopHook.log('🗄️  Test database setup...');
     // This would initialize test database connections
-    // For now, we'll just set up the environment
+    // for now, we'll just set up the environment
     process.env.DATABASE_URL =
       process.env.TEST_DATABASE_URL || 'sqlite::memory:';
   }

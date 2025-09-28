@@ -2,7 +2,7 @@
  * Security System Tests
  *
  * Tests for the comprehensive security framework including SecurityValidator,
- * SecurityMiddleware, and SecurityManager components.
+ * SecurityMiddleware, And SecurityManager components.
  */
 
 const {
@@ -47,7 +47,7 @@ describe('Security System', () => {
         },
       };
 
-      const result = securityValidator.validateInput(
+      const _result = securityValidator.validateInput(
         testData,
         'test_endpoint',
         schema
@@ -70,7 +70,7 @@ describe('Security System', () => {
         },
       };
 
-      const result = securityValidator.validateInput(
+      const _result = securityValidator.validateInput(
         maliciousData,
         'test_endpoint',
         schema
@@ -84,7 +84,7 @@ describe('Security System', () => {
       const operation = 'create';
       const resource = { type: 'task', id: 'test_task' };
 
-      const result = securityValidator.authorizeOperation(
+      const _result = securityValidator.authorizeOperation(
         agentId,
         operation,
         resource
@@ -98,7 +98,7 @@ describe('Security System', () => {
       const operation = 'create';
       const resource = { type: 'task' };
 
-      const result = securityValidator.authorizeOperation(
+      const _result = securityValidator.authorizeOperation(
         invalidAgentId,
         operation,
         resource

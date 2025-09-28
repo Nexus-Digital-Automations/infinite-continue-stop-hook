@@ -8,6 +8,7 @@ Create a draft pull request from the current branch to the main branch.
 **Target branch (optional):** $ARGUMENTS
 
 **Process:**
+
 1. Check current branch (must not be main/master)
 2. Check working tree for uncommitted changes:
    - Review each change to determine if it belongs with the current PR
@@ -42,12 +43,14 @@ Create a draft pull request from the current branch to the main branch.
    - **Reference related issues/plans** - link to GitHub issues, project plans, or task files this PR addresses
 
 **Verb tense consistency:**
+
 - **Always use present tense** in "What" section: "Adds", "Updates", "Removes", "Fixes", "Improves"
-- **Never use past tense**: Avoid "Added", "Updated", "Removed", "Fixed"  
+- **Never use past tense**: Avoid "Added", "Updated", "Removed", "Fixed"
 - **Examples**: "Adds user authentication", "Updates error handling", "Removes deprecated functions", "Fixes memory leak"
 - **Rationale**: Present tense describes what the PR does when merged, not what was done during development
 
 **Related links guidelines:**
+
 - **ONLY include links that provide valuable context NOT already in the PR**
 - **External references**: Documentation, Stack Overflow, RFCs, design docs, external issues
 - **Background PRs**: Previous/related PRs that provide important context
@@ -60,12 +63,14 @@ Create a draft pull request from the current branch to the main branch.
 - **Quality over quantity** - 1-2 highly relevant links better than 5 marginally useful ones
 
 **When to apply template:**
+
 - Creating PRs in repos without templates
 - Repos with minimal templates missing key sections
 - Any time PR description would benefit from structured approach
 - Use good judgment - don't force inappropriate structure on simple fixes
 
 **Draft mode requirements:**
+
 - **Always create PRs in draft mode** for review workflows
 - **Draft allows iteration** - User can review and request changes before marking ready
 - **Prevents premature merge** - Ensures proper review process is followed
@@ -74,6 +79,7 @@ Create a draft pull request from the current branch to the main branch.
 9. Create the draft PR with descriptive title and structured body
 
 **GitHub CLI commands to use:**
+
 - `git branch --show-current` - Get current branch
 - `git fetch origin` - Get latest remote changes
 - `git merge-base HEAD origin/main` - Check if up to date

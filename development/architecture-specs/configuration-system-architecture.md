@@ -23,7 +23,7 @@ graph TD
     B --> C[User Config]
     C --> D[Request Config]
     D --> E[Final Resolved Config]
-    
+
     F[Environment Variables] --> A
     G[Config Files] --> B
     H[User Preferences] --> C
@@ -44,7 +44,7 @@ interface TaskManagerConfiguration {
     logLevel: 'error' | 'warn' | 'info' | 'debug' | 'trace';
     timezone: string;
   };
-  
+
   // Guide integration configuration
   guides: {
     enabled: boolean;
@@ -70,7 +70,7 @@ interface TaskManagerConfiguration {
       preGenerateCommon: boolean;
     };
   };
-  
+
   // Caching system configuration
   cache: {
     enabled: boolean;
@@ -104,7 +104,7 @@ interface TaskManagerConfiguration {
       manualEndpoints: boolean;
     };
   };
-  
+
   // Performance tuning configuration
   performance: {
     timeouts: {
@@ -127,7 +127,7 @@ interface TaskManagerConfiguration {
       lazyLoadingEnabled: boolean;
     };
   };
-  
+
   // Agent management configuration
   agents: {
     registration: {
@@ -154,7 +154,7 @@ interface TaskManagerConfiguration {
       };
     };
   };
-  
+
   // Task management configuration
   tasks: {
     creation: {
@@ -175,7 +175,7 @@ interface TaskManagerConfiguration {
       businessRuleValidation: boolean;
     };
   };
-  
+
   // Security configuration
   security: {
     authentication: {
@@ -200,7 +200,7 @@ interface TaskManagerConfiguration {
       };
     };
   };
-  
+
   // Integration configuration
   integrations: {
     webhooks: {
@@ -239,10 +239,10 @@ interface TaskManagerConfiguration {
 
 ```typescript
 enum ConfigurationSource {
-  DEFAULT = 0,           // Built-in defaults
-  GLOBAL_FILE = 1,      // Global configuration file
-  PROJECT_FILE = 2,     // Project-specific configuration
-  ENVIRONMENT = 3,      // Environment variables
+  DEFAULT = 0, // Built-in defaults
+  GLOBAL_FILE = 1, // Global configuration file
+  PROJECT_FILE = 2, // Project-specific configuration
+  ENVIRONMENT = 3, // Environment variables
   USER_PREFERENCES = 4, // User-specific settings
   REQUEST_OVERRIDE = 5, // API request parameters
 }
@@ -250,9 +250,8 @@ enum ConfigurationSource {
 class ConfigurationResolver {
   static resolve(sources: Map<ConfigurationSource, any>): TaskManagerConfiguration {
     // Higher numbers take precedence
-    const sortedSources = Array.from(sources.entries())
-      .sort(([a], [b]) => a - b);
-    
+    const sortedSources = Array.from(sources.entries()).sort(([a], [b]) => a - b);
+
     return this.deepMergeConfigurations(sortedSources.map(([_, config]) => config));
   }
 }
@@ -268,7 +267,7 @@ class TaskManagerConfigurationManager {
   private watchers: Map<string, ConfigWatcher[]> = new Map();
   private validator: ConfigurationValidator;
   private cache: ConfigurationCache;
-  
+
   constructor(options: ConfigManagerOptions = {}) {
     this.validator = new ConfigurationValidator();
     this.cache = new ConfigurationCache(options.cacheConfig);
@@ -276,16 +275,16 @@ class TaskManagerConfigurationManager {
     this.setupFileWatchers();
     this.setupEnvironmentMonitoring();
   }
-  
+
   /**
    * Load configuration from multiple sources with proper precedence
    */
   private loadInitialConfiguration(options: ConfigManagerOptions): TaskManagerConfiguration {
     const sources = new Map<ConfigurationSource, any>();
-    
+
     // 1. Load defaults
     sources.set(ConfigurationSource.DEFAULT, this.getDefaultConfiguration());
-    
+
     // 2. Load global configuration file
     try {
       const globalConfig = this.loadConfigFile(options.globalConfigPath);
@@ -293,7 +292,7 @@ class TaskManagerConfigurationManager {
     } catch (error) {
       this.logConfigError('Failed to load global config', error);
     }
-    
+
     // 3. Load project configuration
     try {
       const projectConfig = this.loadConfigFile(options.projectConfigPath);
@@ -301,11 +300,11 @@ class TaskManagerConfigurationManager {
     } catch (error) {
       this.logConfigError('Failed to load project config', error);
     }
-    
+
     // 4. Load environment variables
     const envConfig = this.loadEnvironmentConfiguration();
     if (envConfig) sources.set(ConfigurationSource.ENVIRONMENT, envConfig);
-    
+
     // 5. Load user preferences
     try {
       const userConfig = this.loadUserConfiguration(options.userId);
@@ -313,13 +312,13 @@ class TaskManagerConfigurationManager {
     } catch (error) {
       this.logConfigError('Failed to load user config', error);
     }
-    
+
     const resolvedConfig = ConfigurationResolver.resolve(sources);
     this.validator.validateConfiguration(resolvedConfig);
-    
+
     return resolvedConfig;
   }
-  
+
   /**
    * Update configuration at runtime with validation and notifications
    */
@@ -331,51 +330,50 @@ class TaskManagerConfigurationManager {
     try {
       // Create candidate configuration
       const candidateConfig = this.deepMerge(this.config, updates);
-      
+
       // Validate candidate configuration
       const validationResult = await this.validator.validateConfiguration(candidateConfig);
       if (!validationResult.valid) {
         return {
           success: false,
           errors: validationResult.errors,
-          rollback: null
+          rollback: null,
         };
       }
-      
+
       // Create rollback point
       const rollback = options.createRollback ? this.createRollbackPoint() : null;
-      
+
       // Apply configuration
       const previousConfig = this.config;
       this.config = candidateConfig;
-      
+
       // Update cache
       this.cache.invalidate('current-config');
       this.cache.set('current-config', candidateConfig);
-      
+
       // Notify watchers
       await this.notifyConfigurationChange(previousConfig, candidateConfig, source);
-      
+
       // Log configuration change
       this.logConfigurationChange(updates, source);
-      
+
       return {
         success: true,
         errors: [],
         rollback,
         appliedAt: new Date(),
-        affectedSections: this.getAffectedSections(updates)
+        affectedSections: this.getAffectedSections(updates),
       };
-      
     } catch (error) {
       return {
         success: false,
         errors: [error.message],
-        rollback: null
+        rollback: null,
       };
     }
   }
-  
+
   /**
    * Get configuration with request-specific overrides
    */
@@ -383,10 +381,10 @@ class TaskManagerConfigurationManager {
     if (Object.keys(overrides).length === 0) {
       return this.config;
     }
-    
+
     return this.deepMerge(this.config, overrides);
   }
-  
+
   /**
    * Hot-reload configuration from files
    */
@@ -394,12 +392,12 @@ class TaskManagerConfigurationManager {
     const reloadedConfig = this.loadInitialConfiguration({
       globalConfigPath: this.options.globalConfigPath,
       projectConfigPath: this.options.projectConfigPath,
-      userId: this.options.userId
+      userId: this.options.userId,
     });
-    
+
     await this.updateConfiguration(reloadedConfig, ConfigurationSource.GLOBAL_FILE, {
       createRollback: true,
-      notifyWatchers: true
+      notifyWatchers: true,
     });
   }
 }
@@ -411,77 +409,81 @@ class TaskManagerConfigurationManager {
 class ConfigurationValidator {
   private schema: JSONSchema7;
   private customValidators: Map<string, CustomValidator>;
-  
+
   constructor() {
     this.schema = this.buildConfigurationSchema();
     this.customValidators = this.setupCustomValidators();
   }
-  
+
   async validateConfiguration(config: TaskManagerConfiguration): Promise<ValidationResult> {
     const errors: ValidationError[] = [];
     const warnings: ValidationWarning[] = [];
-    
+
     // JSON Schema validation
     const schemaValidation = this.validateAgainstSchema(config);
     errors.push(...schemaValidation.errors);
     warnings.push(...schemaValidation.warnings);
-    
+
     // Custom business logic validation
     const businessValidation = await this.validateBusinessLogic(config);
     errors.push(...businessValidation.errors);
     warnings.push(...businessValidation.warnings);
-    
+
     // Cross-section validation
     const crossValidation = this.validateCrossSectionConsistency(config);
     errors.push(...crossValidation.errors);
     warnings.push(...crossValidation.warnings);
-    
+
     // Performance impact validation
     const performanceValidation = this.validatePerformanceImpact(config);
     warnings.push(...performanceValidation.warnings);
-    
+
     return {
       valid: errors.length === 0,
       errors,
       warnings,
-      validatedAt: new Date()
+      validatedAt: new Date(),
     };
   }
-  
+
   private validateBusinessLogic(config: TaskManagerConfiguration): Promise<ValidationResult> {
     const errors: ValidationError[] = [];
     const warnings: ValidationWarning[] = [];
-    
+
     // Cache configuration consistency
-    if (config.cache.enabled && !config.cache.levels.memory.enabled && 
-        !config.cache.levels.file.enabled && !config.cache.levels.redis.enabled) {
+    if (
+      config.cache.enabled &&
+      !config.cache.levels.memory.enabled &&
+      !config.cache.levels.file.enabled &&
+      !config.cache.levels.redis.enabled
+    ) {
       errors.push({
         path: 'cache',
         message: 'Cache is enabled but no cache levels are configured',
         severity: 'error',
-        suggestion: 'Enable at least one cache level or disable caching'
+        suggestion: 'Enable at least one cache level or disable caching',
       });
     }
-    
+
     // Performance configuration validation
     if (config.performance.timeouts.guideGeneration > config.performance.timeouts.apiOperations) {
       warnings.push({
         path: 'performance.timeouts',
         message: 'Guide generation timeout exceeds API operation timeout',
         severity: 'warning',
-        suggestion: 'Consider reducing guide generation timeout for better user experience'
+        suggestion: 'Consider reducing guide generation timeout for better user experience',
       });
     }
-    
+
     // Agent limits validation
     if (config.agents.registration.maxAgentsPerProject < 1) {
       errors.push({
         path: 'agents.registration.maxAgentsPerProject',
         message: 'Maximum agents per project must be at least 1',
-        severity: 'error'
+        severity: 'error',
       });
     }
-    
+
     return Promise.resolve({ valid: errors.length === 0, errors, warnings });
   }
 }
@@ -494,18 +496,18 @@ class ConfigurationValidator {
 ```typescript
 interface ConfigurationPaths {
   global: {
-    primary: '/etc/taskmanager/config.json',
-    fallback: '~/.taskmanager/config.json',
-    environment: process.env.TASKMANAGER_GLOBAL_CONFIG
+    primary: '/etc/taskmanager/config.json';
+    fallback: '~/.taskmanager/config.json';
+    environment: process.env.TASKMANAGER_GLOBAL_CONFIG;
   };
   project: {
-    primary: './taskmanager.config.json',
-    fallback: './.taskmanager/config.json',
-    environment: process.env.TASKMANAGER_PROJECT_CONFIG
+    primary: './taskmanager.config.json';
+    fallback: './.taskmanager/config.json';
+    environment: process.env.TASKMANAGER_PROJECT_CONFIG;
   };
   user: {
-    primary: '~/.taskmanager/user-config.json',
-    environment: process.env.TASKMANAGER_USER_CONFIG
+    primary: '~/.taskmanager/user-config.json';
+    environment: process.env.TASKMANAGER_USER_CONFIG;
   };
 }
 ```
@@ -518,29 +520,29 @@ enum ConfigurationFormat {
   YAML = 'yaml',
   TOML = 'toml',
   JavaScript = 'js',
-  TypeScript = 'ts'
+  TypeScript = 'ts',
 }
 
 class ConfigurationLoader {
   static async loadConfig(filePath: string): Promise<TaskManagerConfiguration | null> {
     const format = this.detectFormat(filePath);
-    
+
     switch (format) {
       case ConfigurationFormat.JSON:
         return this.loadJSONConfig(filePath);
-      
+
       case ConfigurationFormat.YAML:
         return this.loadYAMLConfig(filePath);
-      
+
       case ConfigurationFormat.TOML:
         return this.loadTOMLConfig(filePath);
-      
+
       case ConfigurationFormat.JavaScript:
         return this.loadJavaScriptConfig(filePath);
-      
+
       case ConfigurationFormat.TypeScript:
         return this.loadTypeScriptConfig(filePath);
-      
+
       default:
         throw new Error(`Unsupported configuration format: ${format}`);
     }
@@ -646,42 +648,38 @@ class ConfigurationLoader {
 class ConfigurationHotReload {
   private watchers: Map<string, FSWatcher> = new Map();
   private configManager: TaskManagerConfigurationManager;
-  
+
   constructor(configManager: TaskManagerConfigurationManager) {
     this.configManager = configManager;
   }
-  
+
   setupFileWatchers(configPaths: string[]): void {
-    configPaths.forEach(configPath => {
+    configPaths.forEach((configPath) => {
       if (fs.existsSync(configPath)) {
         const watcher = fs.watch(configPath, (eventType, filename) => {
           if (eventType === 'change') {
             this.handleConfigFileChange(configPath);
           }
         });
-        
+
         this.watchers.set(configPath, watcher);
       }
     });
   }
-  
+
   private async handleConfigFileChange(configPath: string): Promise<void> {
     try {
       // Debounce multiple changes
       await this.debounce(`file-change-${configPath}`, 1000);
-      
+
       // Reload configuration
       const newConfig = await ConfigurationLoader.loadConfig(configPath);
       if (newConfig) {
-        const updateResult = await this.configManager.updateConfiguration(
-          newConfig,
-          ConfigurationSource.PROJECT_FILE,
-          {
-            createRollback: true,
-            validateBeforeApply: true
-          }
-        );
-        
+        const updateResult = await this.configManager.updateConfiguration(newConfig, ConfigurationSource.PROJECT_FILE, {
+          createRollback: true,
+          validateBeforeApply: true,
+        });
+
         if (!updateResult.success) {
           this.logConfigError('Hot reload failed', updateResult.errors);
         } else {
@@ -700,7 +698,7 @@ class ConfigurationHotReload {
 ```typescript
 class ConfigurationAPI {
   constructor(private configManager: TaskManagerConfigurationManager) {}
-  
+
   /**
    * GET /config - Retrieve current configuration
    */
@@ -708,72 +706,67 @@ class ConfigurationAPI {
     try {
       const includeDefaults = req.query.includeDefaults === 'true';
       const section = req.query.section as string;
-      
+
       let config = this.configManager.getConfiguration();
-      
+
       if (section) {
         config = this.extractSection(config, section);
       }
-      
+
       if (!includeDefaults) {
         config = this.removeDefaults(config);
       }
-      
+
       res.json({
         success: true,
         data: config,
         meta: {
           source: 'current',
           lastModified: this.configManager.getLastModified(),
-          version: config.system.version
-        }
+          version: config.system.version,
+        },
       });
     } catch (error) {
       this.handleConfigError(res, error);
     }
   }
-  
+
   /**
    * PUT /config - Update configuration
    */
   async updateConfiguration(req: Request, res: Response): Promise<void> {
     try {
       const updates = req.body as Partial<TaskManagerConfiguration>;
-      const source = (req.body.source as ConfigurationSource) || 
-                    ConfigurationSource.REQUEST_OVERRIDE;
-      
-      const updateResult = await this.configManager.updateConfiguration(
-        updates,
-        source,
-        {
-          createRollback: true,
-          validateBeforeApply: true,
-          notifyWatchers: true
-        }
-      );
-      
+      const source = (req.body.source as ConfigurationSource) || ConfigurationSource.REQUEST_OVERRIDE;
+
+      const updateResult = await this.configManager.updateConfiguration(updates, source, {
+        createRollback: true,
+        validateBeforeApply: true,
+        notifyWatchers: true,
+      });
+
       if (updateResult.success) {
         res.json({
           success: true,
           data: {
             appliedAt: updateResult.appliedAt,
             affectedSections: updateResult.affectedSections,
-            rollbackId: updateResult.rollback?.id
+            rollbackId: updateResult.rollback?.id,
           },
-          message: 'Configuration updated successfully'
+          message: 'Configuration updated successfully',
         });
       } else {
         res.status(400).json({
           success: false,
           errors: updateResult.errors,
-          message: 'Configuration validation failed'
+          message: 'Configuration validation failed',
         });
       }
     } catch (error) {
       this.handleConfigError(res, error);
     }
   }
-  
+
   /**
    * POST /config/validate - Validate configuration without applying
    */
@@ -781,17 +774,17 @@ class ConfigurationAPI {
     try {
       const config = req.body as TaskManagerConfiguration;
       const validationResult = await this.configManager.validateConfiguration(config);
-      
+
       res.json({
         success: true,
         data: validationResult,
-        message: validationResult.valid ? 'Configuration is valid' : 'Configuration has errors'
+        message: validationResult.valid ? 'Configuration is valid' : 'Configuration has errors',
       });
     } catch (error) {
       this.handleConfigError(res, error);
     }
   }
-  
+
   /**
    * POST /config/rollback - Rollback to previous configuration
    */
@@ -799,18 +792,18 @@ class ConfigurationAPI {
     try {
       const rollbackId = req.body.rollbackId as string;
       const rollbackResult = await this.configManager.rollbackConfiguration(rollbackId);
-      
+
       if (rollbackResult.success) {
         res.json({
           success: true,
           data: rollbackResult,
-          message: 'Configuration rolled back successfully'
+          message: 'Configuration rolled back successfully',
         });
       } else {
         res.status(400).json({
           success: false,
           errors: rollbackResult.errors,
-          message: 'Rollback failed'
+          message: 'Rollback failed',
         });
       }
     } catch (error) {
@@ -830,103 +823,100 @@ class EnvironmentConfigurationAdapter {
     development: {
       system: {
         debug: true,
-        logLevel: 'debug'
+        logLevel: 'debug',
       },
       guides: {
         enabled: true,
         generation: {
           timeout: 10000,
-          backgroundGeneration: false
-        }
+          backgroundGeneration: false,
+        },
       },
       cache: {
         levels: {
           memory: { ttl: 300000 }, // 5 minutes
-          file: { enabled: false }
-        }
+          file: { enabled: false },
+        },
       },
       performance: {
         optimization: {
-          enableCircuitBreaker: false
-        }
-      }
+          enableCircuitBreaker: false,
+        },
+      },
     },
-    
+
     staging: {
       system: {
         debug: false,
-        logLevel: 'info'
+        logLevel: 'info',
       },
       guides: {
         generation: {
           timeout: 7500,
-          backgroundGeneration: true
-        }
+          backgroundGeneration: true,
+        },
       },
       cache: {
         levels: {
           memory: { ttl: 600000 }, // 10 minutes
-          file: { enabled: true }
-        }
+          file: { enabled: true },
+        },
       },
       performance: {
         optimization: {
           enableCircuitBreaker: true,
-          circuitBreakerThreshold: 3
-        }
-      }
+          circuitBreakerThreshold: 3,
+        },
+      },
     },
-    
+
     production: {
       system: {
         debug: false,
-        logLevel: 'warn'
+        logLevel: 'warn',
       },
       guides: {
         generation: {
           timeout: 5000,
           backgroundGeneration: true,
-          preGenerateCommon: true
-        }
+          preGenerateCommon: true,
+        },
       },
       cache: {
         levels: {
           memory: { ttl: 1800000 }, // 30 minutes
           file: { enabled: true },
-          redis: { enabled: true }
-        }
+          redis: { enabled: true },
+        },
       },
       performance: {
         optimization: {
           enableCircuitBreaker: true,
-          circuitBreakerThreshold: 5
+          circuitBreakerThreshold: 5,
         },
         concurrency: {
           maxConcurrentAgents: 100,
-          maxConcurrentTasks: 200
-        }
+          maxConcurrentTasks: 200,
+        },
       },
       security: {
         authentication: {
-          required: true
+          required: true,
         },
         dataProtection: {
           encryptSensitiveData: true,
-          auditTrail: true
-        }
-      }
-    }
+          auditTrail: true,
+        },
+      },
+    },
   };
-  
-  static adaptForEnvironment(
-    baseConfig: TaskManagerConfiguration,
-    environment: string
-  ): TaskManagerConfiguration {
+
+  static adaptForEnvironment(baseConfig: TaskManagerConfiguration, environment: string): TaskManagerConfiguration {
     const envOverrides = this.ENVIRONMENT_CONFIGS[environment as keyof typeof this.ENVIRONMENT_CONFIGS];
     if (!envOverrides) {
       return baseConfig;
     }
-    
+
     return this.deepMerge(baseConfig, envOverrides);
   }
 }
@@ -942,22 +932,22 @@ class ConfigurationVersionManager {
     ['1.0.0->2.0.0', new Migration_1_0_to_2_0()],
     ['2.0.0->2.1.0', new Migration_2_0_to_2_1()],
   ]);
-  
+
   static async migrateConfiguration(
     config: any,
     fromVersion: string,
     toVersion: string
   ): Promise<TaskManagerConfiguration> {
     const migrationPath = this.findMigrationPath(fromVersion, toVersion);
-    
+
     let currentConfig = config;
     for (const migration of migrationPath) {
       currentConfig = await migration.migrate(currentConfig);
     }
-    
+
     return currentConfig;
   }
-  
+
   static detectConfigurationVersion(config: any): string {
     // Legacy detection (no version field)
     if (!config.system || !config.system.version) {
@@ -965,7 +955,7 @@ class ConfigurationVersionManager {
       if (config.caching) return '1.0.0';
       return '0.9.0';
     }
-    
+
     return config.system.version;
   }
 }
@@ -978,7 +968,7 @@ class Migration_1_0_to_2_0 implements ConfigurationMigration {
         environment: oldConfig.environment || 'development',
         debug: oldConfig.debug || false,
         logLevel: oldConfig.logLevel || 'info',
-        timezone: 'UTC'
+        timezone: 'UTC',
       },
       guides: {
         enabled: oldConfig.guideIntegration?.enabled ?? true,
@@ -987,7 +977,7 @@ class Migration_1_0_to_2_0 implements ConfigurationMigration {
           reinitialize: oldConfig.guideIntegration?.autoIncludeOnReinit ?? true,
           error: oldConfig.guideIntegration?.autoIncludeOnError ?? true,
           taskCreation: false,
-          dependencies: true
+          dependencies: true,
         },
         // ... migrate other sections
       },
@@ -1004,23 +994,23 @@ class Migration_1_0_to_2_0 implements ConfigurationMigration {
 ```typescript
 class ConfigurationPerformanceMonitor {
   private metrics: Map<string, ConfigMetric> = new Map();
-  
+
   recordConfigurationAccess(section: string, duration: number): void {
     const metric = this.metrics.get(section) || {
       accessCount: 0,
       totalDuration: 0,
       maxDuration: 0,
-      minDuration: Infinity
+      minDuration: Infinity,
     };
-    
+
     metric.accessCount++;
     metric.totalDuration += duration;
     metric.maxDuration = Math.max(metric.maxDuration, duration);
     metric.minDuration = Math.min(metric.minDuration, duration);
-    
+
     this.metrics.set(section, metric);
   }
-  
+
   getPerformanceReport(): ConfigurationPerformanceReport {
     const report: ConfigurationPerformanceReport = {
       generatedAt: new Date(),
@@ -1029,26 +1019,28 @@ class ConfigurationPerformanceMonitor {
         totalAccesses: 0,
         averageAccessTime: 0,
         slowestSection: null,
-        fastestSection: null
-      }
+        fastestSection: null,
+      },
     };
-    
+
     // Generate detailed performance report
     for (const [section, metric] of this.metrics) {
       const avgDuration = metric.totalDuration / metric.accessCount;
       report.sections[section] = {
         ...metric,
-        averageDuration: avgDuration
+        averageDuration: avgDuration,
       };
-      
+
       report.overall.totalAccesses += metric.accessCount;
-      
-      if (!report.overall.slowestSection || 
-          avgDuration > report.sections[report.overall.slowestSection].averageDuration) {
+
+      if (
+        !report.overall.slowestSection ||
+        avgDuration > report.sections[report.overall.slowestSection].averageDuration
+      ) {
         report.overall.slowestSection = section;
       }
     }
-    
+
     return report;
   }
 }
@@ -1060,18 +1052,18 @@ class ConfigurationPerformanceMonitor {
 
 ```typescript
 interface ConfigurationPermissions {
-  read: string[];    // Roles that can read configuration
-  write: string[];   // Roles that can modify configuration
-  admin: string[];   // Roles that can perform admin operations
+  read: string[]; // Roles that can read configuration
+  write: string[]; // Roles that can modify configuration
+  admin: string[]; // Roles that can perform admin operations
 }
 
 class ConfigurationSecurityManager {
   private permissions: ConfigurationPermissions;
-  
+
   constructor(permissions: ConfigurationPermissions) {
     this.permissions = permissions;
   }
-  
+
   canAccessConfigurationSection(
     userRole: string,
     section: keyof TaskManagerConfiguration,
@@ -1079,27 +1071,24 @@ class ConfigurationSecurityManager {
   ): boolean {
     const sectionPermissions = this.getSectionPermissions(section);
     const allowedRoles = sectionPermissions[operation];
-    
+
     return allowedRoles.includes(userRole) || allowedRoles.includes('*');
   }
-  
-  maskSensitiveConfiguration(
-    config: TaskManagerConfiguration,
-    userRole: string
-  ): Partial<TaskManagerConfiguration> {
+
+  maskSensitiveConfiguration(config: TaskManagerConfiguration, userRole: string): Partial<TaskManagerConfiguration> {
     const masked = { ...config };
-    
+
     // Mask sensitive sections based on role
     if (!this.canAccessConfigurationSection(userRole, 'security', 'read')) {
       delete masked.security;
     }
-    
+
     if (!this.canAccessConfigurationSection(userRole, 'integrations', 'read')) {
       if (masked.integrations?.external?.databaseUrl) {
         masked.integrations.external.databaseUrl = '***MASKED***';
       }
     }
-    
+
     return masked;
   }
 }
@@ -1118,49 +1107,52 @@ describe('Configuration System', () => {
           default: defaultConfig,
           project: { guides: { enabled: false } },
           environment: { system: { debug: true } },
-          user: { performance: { timeouts: { apiOperations: 15000 } } }
-        }
+          user: { performance: { timeouts: { apiOperations: 15000 } } },
+        },
       });
-      
+
       const resolved = configManager.getConfiguration();
-      
+
       expect(resolved.guides.enabled).toBe(false); // Project override
-      expect(resolved.system.debug).toBe(true);    // Environment override
+      expect(resolved.system.debug).toBe(true); // Environment override
       expect(resolved.performance.timeouts.apiOperations).toBe(15000); // User override
     });
   });
-  
+
   describe('Configuration Validation', () => {
     test('should validate configuration schema', async () => {
       const invalidConfig = {
-        cache: { enabled: true, levels: {} } // Invalid: no cache levels
+        cache: { enabled: true, levels: {} }, // Invalid: no cache levels
       };
-      
+
       const validator = new ConfigurationValidator();
       const result = await validator.validateConfiguration(invalidConfig);
-      
+
       expect(result.valid).toBe(false);
       expect(result.errors).toHaveLength(1);
       expect(result.errors[0].path).toBe('cache');
     });
   });
-  
+
   describe('Hot Reload', () => {
     test('should hot-reload configuration when file changes', async (done) => {
       const configPath = './test-config.json';
       const configManager = new TaskManagerConfigurationManager({
-        projectConfigPath: configPath
+        projectConfigPath: configPath,
       });
-      
+
       configManager.onConfigurationChange((oldConfig, newConfig) => {
         expect(newConfig.guides.enabled).toBe(false);
         done();
       });
-      
+
       // Modify config file
-      fs.writeFileSync(configPath, JSON.stringify({
-        guides: { enabled: false }
-      }));
+      fs.writeFileSync(
+        configPath,
+        JSON.stringify({
+          guides: { enabled: false },
+        })
+      );
     });
   });
 });
@@ -1174,21 +1166,21 @@ describe('Configuration System', () => {
 class ConfigurationDocumentationGenerator {
   static generateMarkdownDocumentation(schema: JSONSchema7): string {
     let documentation = '# TaskManager Configuration Reference\n\n';
-    
+
     // Generate table of contents
     documentation += this.generateTableOfContents(schema);
-    
+
     // Generate detailed sections
     for (const [sectionName, sectionSchema] of Object.entries(schema.properties || {})) {
       documentation += this.generateSectionDocumentation(sectionName, sectionSchema);
     }
-    
+
     // Generate examples
     documentation += this.generateConfigurationExamples();
-    
+
     return documentation;
   }
-  
+
   static generateConfigurationExamples(): string {
     return `
 ## Configuration Examples
@@ -1210,6 +1202,7 @@ ${JSON.stringify(this.getProductionExample(), null, 2)}
 ## 12. Implementation Roadmap
 
 ### Phase 1: Core Configuration System (Week 1-2)
+
 - [ ] Implement basic configuration schema and validation
 - [ ] Create configuration manager with file loading
 - [ ] Implement hierarchical configuration resolution
@@ -1217,6 +1210,7 @@ ${JSON.stringify(this.getProductionExample(), null, 2)}
 - [ ] Create unit tests for core functionality
 
 ### Phase 2: Advanced Features (Week 3-4)
+
 - [ ] Implement hot-reload configuration system
 - [ ] Add configuration API endpoints
 - [ ] Create configuration migration system
@@ -1224,6 +1218,7 @@ ${JSON.stringify(this.getProductionExample(), null, 2)}
 - [ ] Add comprehensive error handling and fallbacks
 
 ### Phase 3: Integration and Optimization (Week 5-6)
+
 - [ ] Integrate with existing TaskManager API system
 - [ ] Add performance monitoring and optimization
 - [ ] Implement security and access control
@@ -1231,6 +1226,7 @@ ${JSON.stringify(this.getProductionExample(), null, 2)}
 - [ ] Generate documentation and examples
 
 ### Phase 4: Production Readiness (Week 7-8)
+
 - [ ] Performance testing and optimization
 - [ ] Security audit and hardening
 - [ ] Load testing with multiple configuration sources

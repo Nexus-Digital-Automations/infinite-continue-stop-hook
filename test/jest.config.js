@@ -43,7 +43,7 @@ module.exports = {
     },
   },
 
-  // Setup and teardown
+  // Setup And teardown
   setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
 
   // Test timeout (increased for integration tests)

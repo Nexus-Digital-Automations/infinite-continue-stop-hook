@@ -24,6 +24,7 @@ The TaskManager enforces a logical hierarchical task sorting system:
 5. **Creation Time** - Within all other equal criteria, newer tasks prioritized first
 
 **Logical Flow Examples:**
+
 - Task A depends on Task B → Task B prioritized regardless of categories
 - Both tasks are `linter-error` → Higher priority task comes first
 - Same category and priority → Newer task comes first
@@ -31,6 +32,7 @@ The TaskManager enforces a logical hierarchical task sorting system:
 ### Task Order Override
 
 Agents can override the normal task priority order when necessary using the `allowOutOfOrder` option. This is useful when:
+
 - Working on urgent fixes that can't wait for normal order
 - Implementing features that are independent of order
 - Debugging issues that require out-of-sequence work
@@ -44,16 +46,19 @@ Agents can override the normal task priority order when necessary using the `all
 Claims a task for an agent with comprehensive validation and order enforcement.
 
 **Syntax:**
+
 ```bash
 timeout 10s node taskmanager-api.js claim <taskId> [agentId] [priority]
 ```
 
 **Parameters:**
+
 - `taskId` (required) - Unique identifier of task to claim
-- `agentId` (optional) - Agent ID to claim for (uses current session agent if not provided)  
+- `agentId` (optional) - Agent ID to claim for (uses current session agent if not provided)
 - `priority` (optional) - Priority level: `normal` (default), `high`, `low`
 
 **Normal Flow Example:**
+
 ```bash
 # Claim task following normal priority order
 timeout 10s node taskmanager-api.js claim task_123
@@ -68,6 +73,7 @@ timeout 10s node taskmanager-api.js claim task_456
 ```
 
 **Response for order violation:**
+
 ```json
 {
   "success": false,
@@ -79,11 +85,12 @@ timeout 10s node taskmanager-api.js claim task_456
 ```
 
 **Agent Override (when justified):**
+
 ```javascript
 // Use TaskManager directly with allowOutOfOrder option
 const api = new TaskManagerAPI();
-const result = await api.taskManager.claimTask('task_456', agentId, 'normal', { 
-  allowOutOfOrder: true 
+const result = await api.taskManager.claimTask('task_456', agentId, 'normal', {
+  allowOutOfOrder: true,
 });
 ```
 
@@ -94,20 +101,23 @@ const result = await api.taskManager.claimTask('task_456', agentId, 'normal', {
 Creates a new task with validation and automatic categorization.
 
 **Syntax:**
+
 ```bash
 timeout 10s node taskmanager-api.js create '<json_task_data>'
 ```
 
 **Required Fields:**
+
 ```json
 {
   "title": "Task description",
-  "description": "Detailed task information", 
+  "description": "Detailed task information",
   "category": "error|feature|subtask|test"
 }
 ```
 
 **Optional Fields:**
+
 ```json
 {
   "category": "linter-error|build-error|missing-feature|etc",
@@ -119,6 +129,7 @@ timeout 10s node taskmanager-api.js create '<json_task_data>'
 ```
 
 **Example:**
+
 ```bash
 timeout 10s node taskmanager-api.js create '{"title":"Fix linter errors in auth.js", "description":"Resolve ESLint violations: unused imports, missing semicolons", "category":"linter-error"}'
 ```
@@ -130,11 +141,13 @@ timeout 10s node taskmanager-api.js create '{"title":"Fix linter errors in auth.
 Initializes a new agent session for task management.
 
 **Syntax:**
+
 ```bash
 timeout 10s node taskmanager-api.js init [--project-root /path/to/project]
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -152,6 +165,7 @@ timeout 10s node taskmanager-api.js init [--project-root /path/to/project]
 Checks current agent status and active tasks.
 
 **Syntax:**
+
 ```bash
 timeout 10s node taskmanager-api.js status [agentId]
 ```
@@ -163,16 +177,18 @@ timeout 10s node taskmanager-api.js status [agentId]
 Lists tasks with optional filtering.
 
 **Syntax:**
+
 ```bash
 timeout 10s node taskmanager-api.js list [filter_json]
 ```
 
 **Filter Examples:**
+
 ```bash
 # List pending tasks
 timeout 10s node taskmanager-api.js list '{"status":"pending"}'
 
-# List error tasks  
+# List error tasks
 timeout 10s node taskmanager-api.js list '{"category":"linter-error"}'
 
 # List tasks by agent
@@ -184,11 +200,13 @@ timeout 10s node taskmanager-api.js list '{"assignedTo":"agent_123"}'
 Marks a task as completed with optional completion data.
 
 **Syntax:**
+
 ```bash
 timeout 10s node taskmanager-api.js complete <taskId> [completion_data]
 ```
 
 **Example:**
+
 ```bash
 timeout 10s node taskmanager-api.js complete task_123 '{"summary":"Fixed all linter errors", "files_modified":["auth.js", "utils.js"]}'
 ```
@@ -200,6 +218,7 @@ timeout 10s node taskmanager-api.js complete task_123 '{"summary":"Fixed all lin
 Returns complete API documentation and usage examples.
 
 **Syntax:**
+
 ```bash
 timeout 10s node taskmanager-api.js guide
 ```
@@ -209,6 +228,7 @@ timeout 10s node taskmanager-api.js guide
 Lists all available API endpoints and their usage.
 
 **Syntax:**
+
 ```bash
 timeout 10s node taskmanager-api.js methods
 ```
@@ -224,6 +244,7 @@ The API automatically handles task dependencies:
 - **Order Enforcement** - Ensures dependencies are completed in correct order
 
 **Example Dependency Response:**
+
 ```json
 {
   "success": false,
@@ -250,10 +271,11 @@ timeout 10s node taskmanager-api.js create '{"title":"API Integration Research",
 ```
 
 **Research Task Response:**
+
 ```json
 {
   "success": true,
-  "taskId": "task_456", 
+  "taskId": "task_456",
   "researchInstructions": {
     "message": "🔬 RESEARCH TASK DETECTED - RESEARCH REQUIRED FIRST",
     "reportTemplate": {
@@ -271,15 +293,11 @@ All error responses include contextual guidance:
 ```json
 {
   "success": false,
-  "error": "Agent not initialized", 
+  "error": "Agent not initialized",
   "guide": {
     "focus": "Agent Initialization Required",
     "immediate_action": "Run: timeout 10s node taskmanager-api.js init",
-    "next_steps": [
-      "Initialize agent with init command",
-      "Verify with status command",
-      "Retry task claiming"
-    ]
+    "next_steps": ["Initialize agent with init command", "Verify with status command", "Retry task claiming"]
   }
 }
 ```
@@ -289,15 +307,18 @@ All error responses include contextual guidance:
 ### When to Use allowOutOfOrder
 
 **ALWAYS Override For:**
+
 - **USER REQUESTS** - When user explicitly asks for a specific task, ALWAYS override order - user intent takes absolute precedence over system order
 
 **Other Appropriate Use Cases:**
+
 - **Urgent bug fixes** that can't wait for normal order
 - **Independent features** that don't affect other work
 - **Research tasks** that inform other work
 - **Setup tasks** needed for other development
 
 **Inappropriate Use Cases (for autonomous work only):**
+
 - **Convenience** - avoiding dependencies without good reason
 - **Impatience** - bypassing order just to work faster
 - **Dependencies exist** - when tasks genuinely depend on others
@@ -310,6 +331,7 @@ All error responses include contextual guidance:
 4. **Document reasoning** in task completion notes
 
 **Code Example:**
+
 ```javascript
 // Attempt normal claim
 const normalResult = await api.claimTask('task_456');
@@ -318,18 +340,13 @@ if (!normalResult.success && normalResult.reason.includes('order violation')) {
   // Evaluate if override is justified
   const isUrgent = checkIfTaskIsUrgent('task_456');
   const isIndependent = checkIfTaskIsIndependent('task_456');
-  
+
   if (isUrgent || isIndependent) {
     // Override with justification
-    const overrideResult = await api.taskManager.claimTask(
-      'task_456', 
-      agentId, 
-      'normal', 
-      { 
-        allowOutOfOrder: true,
-        overrideReason: 'Urgent bug fix for production issue'
-      }
-    );
+    const overrideResult = await api.taskManager.claimTask('task_456', agentId, 'normal', {
+      allowOutOfOrder: true,
+      overrideReason: 'Urgent bug fix for production issue',
+    });
   }
 }
 ```
@@ -348,6 +365,7 @@ if (!normalResult.success && normalResult.reason.includes('order violation')) {
 ### Common Error Scenarios
 
 #### Agent Not Initialized
+
 ```json
 {
   "success": false,
@@ -357,9 +375,10 @@ if (!normalResult.success && normalResult.reason.includes('order violation')) {
 ```
 
 #### Task Order Violation
+
 ```json
 {
-  "success": false, 
+  "success": false,
   "reason": "Task order violation: must complete tasks in sequence",
   "nextTaskId": "task_123",
   "suggestion": "Complete task \"Setup environment\" first, or use allowOutOfOrder: true"
@@ -367,13 +386,14 @@ if (!normalResult.success && normalResult.reason.includes('order violation')) {
 ```
 
 #### Dependency Blocking
+
 ```json
 {
   "success": false,
   "blockedByDependencies": true,
   "nextDependency": {
     "id": "task_setup",
-    "title": "Setup development environment" 
+    "title": "Setup development environment"
   }
 }
 ```
@@ -383,6 +403,7 @@ if (!normalResult.success && normalResult.reason.includes('order violation')) {
 ### Timeout Configuration
 
 All API calls should use 10-second timeouts:
+
 ```bash
 timeout 10s node taskmanager-api.js <command>
 ```
@@ -390,13 +411,15 @@ timeout 10s node taskmanager-api.js <command>
 ### Caching
 
 The API includes intelligent caching:
+
 - **Guide information** cached for 15 minutes
-- **Task lists** cached for 1 minute  
+- **Task lists** cached for 1 minute
 - **Agent status** cached for 30 seconds
 
 ### Concurrent Operations
 
 The API handles concurrent operations safely:
+
 - **Distributed locking** prevents race conditions
 - **Atomic operations** ensure data consistency
 - **Conflict resolution** handles concurrent claims
@@ -404,11 +427,12 @@ The API handles concurrent operations safely:
 ## Integration Examples
 
 ### Basic Agent Workflow
+
 ```bash
 # 1. Initialize agent
 timeout 10s node taskmanager-api.js init
 
-# 2. Check status  
+# 2. Check status
 timeout 10s node taskmanager-api.js status
 
 # 3. List available tasks
@@ -422,6 +446,7 @@ timeout 10s node taskmanager-api.js complete task_123 '{"summary":"Task complete
 ```
 
 ### Error-First Workflow
+
 ```bash
 # 1. List error tasks first
 timeout 10s node taskmanager-api.js list '{"category":"error"}'
@@ -430,10 +455,11 @@ timeout 10s node taskmanager-api.js list '{"category":"error"}'
 timeout 10s node taskmanager-api.js claim task_error_1
 
 # 3. After fixing, claim next task
-timeout 10s node taskmanager-api.js list '{"status":"pending"}' 
+timeout 10s node taskmanager-api.js list '{"status":"pending"}'
 ```
 
 ### Research Workflow
+
 ```bash
 # 1. Create research task
 timeout 10s node taskmanager-api.js create '{"title":"Research OAuth patterns", "description":"Research OAuth 2.0 implementation", "category":"feature", "requires_research":true}'
@@ -450,13 +476,17 @@ timeout 10s node taskmanager-api.js complete task_research_1 '{"summary":"Resear
 ### Common Issues
 
 #### "No agent ID provided and no agent initialized"
+
 **Solution:** Initialize agent first
+
 ```bash
 timeout 10s node taskmanager-api.js init
 ```
 
-#### "Task order violation"  
+#### "Task order violation"
+
 **Solution:** Complete previous tasks or use override
+
 ```bash
 # Check what task should be done first
 timeout 10s node taskmanager-api.js list '{"status":"pending"}' | jq '.tasks[0]'
@@ -465,7 +495,9 @@ timeout 10s node taskmanager-api.js list '{"status":"pending"}' | jq '.tasks[0]'
 ```
 
 #### "Task not found"
+
 **Solution:** Check task ID and status
+
 ```bash
 timeout 10s node taskmanager-api.js list | grep task_123
 ```
@@ -477,7 +509,7 @@ timeout 10s node taskmanager-api.js list | grep task_123
 timeout 10s node taskmanager-api.js methods
 
 # Get comprehensive guide
-timeout 10s node taskmanager-api.js guide  
+timeout 10s node taskmanager-api.js guide
 
 # Check agent status
 timeout 10s node taskmanager-api.js status
@@ -489,7 +521,8 @@ node -e "console.log(JSON.parse(require('fs').readFileSync('TODO.json', 'utf8'))
 ---
 
 **Document Information**
+
 - **Version**: 1.0.0
-- **Last Updated**: 2025-09-08  
+- **Last Updated**: 2025-09-08
 - **Component**: TaskManager API Reference
 - **Status**: Production Ready

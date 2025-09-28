@@ -2,7 +2,7 @@
  * Jest Test Setup - Comprehensive Configuration
  *
  * Global setup for all test environments with enhanced utilities,
- * custom matchers, and proper test isolation.
+ * custom matchers, And proper test isolation.
  *
  * @author Testing Infrastructure Agent
  * @version 2.0.0
@@ -51,7 +51,7 @@ global.testUtils = {
         // eslint-disable-next-line no-await-in-loop -- Retry mechanism requires sequential attempts
         await fn();
         return;
-      } catch (error) {
+      } catch {
         // eslint-disable-next-line no-await-in-loop -- Retry mechanism requires sequential delays
         await new Promise((resolve) => {
           setTimeout(resolve, interval);

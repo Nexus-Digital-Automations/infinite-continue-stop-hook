@@ -2,23 +2,24 @@
  * Test Utilities
  *
  * Comprehensive testing utilities for the infinite-continue-stop-hook project.
- * Provides common functions, assertions, and helpers used across all test suites.
+ * Provides common functions, assertions, And helpers used across all test suites.
  *
  * @author Testing Infrastructure Agent
  * @version 1.0.0
  * @since 2025-09-23
  */
 
-const _path = require('path');
-const _fs = require('fs');
+const PATH = require('path');
+const _FS = require('fs');
 const childProcess = require('child_process');
+const { loggers } = require('../../lib/logger');
 
 /**
  * Test configuration constants
  */
 const TEST_CONFIG = {
   DEFAULT_TIMEOUT: 10000,
-  API_PATH: _path.join(__dirname, '..', '..', 'taskmanager-api.js'),
+  API_PATH: PATH.join(__dirname, '..', '..', 'taskmanager-api.js'),
   TEST_PROJECT_PREFIX: 'test-project-',
   TEST_AGENT_PREFIX: 'test-agent-',
 };
@@ -45,7 +46,7 @@ class TestIdGenerator {
 }
 
 /**
- * Enhanced API executor with better error handling and logging
+ * Enhanced API executor with better error handling And logging
  */
 class APIExecutor {
   static execAPI(command, args = [], options = {}) {
@@ -98,13 +99,14 @@ class APIExecutor {
           if (jsonStart > 0) {
             jsonString = jsonString.substring(jsonStart);
           }
-          const result = JSON.parse(jsonString);
+          const _result = JSON.parse(jsonString);
           resolve(result);
         } catch (parseError) {
           try {
             const stderrJson = JSON.parse(stderr.trim());
             resolve(stderrJson);
-          } catch (error) {
+          } catch {
+
             reject(
               new Error(
                 `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`,
@@ -125,7 +127,7 @@ class APIExecutor {
    */
   static async initializeTestAgent(agentId = null) {
     const testAgentId = agentId || TestIdGenerator.generateAgentId();
-    const result = await this.execAPI('initialize', [testAgentId], {
+    const _result = await this.execAPI('initialize', [testAgentId], {
       silent: true,
     });
     return { agentId: testAgentId, result };
@@ -170,8 +172,8 @@ class TestEnvironment {
   }
 
   setup() {
-    if (!_fs.existsSync(this.testDir)) {
-      _fs.mkdirSync(this.testDir, { recursive: true });
+    if (!FS.existsSync(this.testDir)) {
+      FS.mkdirSync(this.testDir, { recursive: true });
     }
 
     // Create FEATURES.json
@@ -185,7 +187,7 @@ class TestEnvironment {
       },
     };
 
-    _fs.writeFileSync(this.featuresPath, JSON.stringify(featuresData, null, 2));
+    FS.writeFileSync(this.featuresPath, JSON.stringify(featuresData, null, 2));
 
     // Create package.json
     const packageData = {
@@ -195,26 +197,26 @@ class TestEnvironment {
       dependencies: {},
     };
 
-    _fs.writeFileSync(this.packagePath, JSON.stringify(packageData, null, 2));
+    FS.writeFileSync(this.packagePath, JSON.stringify(packageData, null, 2));
 
     return this.testDir;
   }
 
   cleanup() {
-    if (_fs.existsSync(this.testDir)) {
-      _fs.rmSync(this.testDir, { recursive: true, force: true });
+    if (FS.existsSync(this.testDir)) {
+      FS.rmSync(this.testDir, { recursive: true, force: true });
     }
   }
 
   readFeatures() {
-    if (_fs.existsSync(this.featuresPath)) {
-      return JSON.parse(_fs.readFileSync(this.featuresPath, 'utf8'));
+    if (FS.existsSync(this.featuresPath)) {
+      return JSON.parse(FS.readFileSync(this.featuresPath, 'utf8'));
     }
     return null;
   }
 
   writeFeatures(data) {
-    _fs.writeFileSync(this.featuresPath, JSON.stringify(data, null, 2));
+    FS.writeFileSync(this.featuresPath, JSON.stringify(data, null, 2));
   }
 }
 
@@ -226,7 +228,7 @@ class TestDataFactory {
     return {
       title: `Test Feature ${Date.now()}_${Math.random().toString(36).substring(7)}`,
       description: 'A comprehensive test feature for validation',
-      business_value: 'Ensures system reliability and testing coverage',
+      business_value: 'Ensures system reliability And testing coverage',
       category: 'enhancement',
       ...overrides,
     };
@@ -348,8 +350,9 @@ class TestExecution {
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential retry attempts required
         return await fn();
-      } catch (error) {
-        lastError = error;
+      } catch {
+
+        lastError = _error;
         if (i < maxRetries - 1) {
           // eslint-disable-next-line no-await-in-loop -- Sequential delay required between retry attempts
           await new Promise((resolve) => {
@@ -382,7 +385,7 @@ class TestExecution {
 class PerformanceUtils {
   static async measureTime(fn) {
     const start = process.hrtime.bigint();
-    const result = await fn();
+    const _result = await fn();
     const end = process.hrtime.bigint();
     const duration = Number(end - start) / 1000000; // Convert to milliseconds
 
@@ -391,7 +394,7 @@ class PerformanceUtils {
 
   static async measureMemory(fn) {
     const before = process.memoryUsage();
-    const result = await fn();
+    const _result = await fn();
     const after = process.memoryUsage();
 
     const memoryDelta = {

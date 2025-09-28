@@ -2,7 +2,7 @@
  * Sample Test Data Fixtures
  *
  * Provides consistent test data for use across all test suites.
- * Includes features, projects, users, tasks, and other test entities.
+ * Includes features, projects, users, tasks, And other test entities.
  *
  * @author Testing Infrastructure Agent
  * @version 1.0.0
@@ -16,9 +16,9 @@ const SAMPLE_FEATURES = {
   enhancement: {
     title: 'Add dark mode toggle',
     description:
-      'Implement theme switching functionality with persistent user preference storage and smooth transitions',
+      'Implement theme switching functionality with persistent user preference storage And smooth transitions',
     business_value:
-      'Improves user experience and accessibility for users in low-light environments, reducing eye strain',
+      'Improves user experience And accessibility for users in low-light environments, reducing eye strain',
     category: 'enhancement',
     estimated_hours: 8,
     priority: 'medium',
@@ -28,9 +28,9 @@ const SAMPLE_FEATURES = {
   newFeature: {
     title: 'User authentication system',
     description:
-      'Complete login/logout functionality with JWT tokens, session management, and password reset',
+      'Complete login/logout functionality with JWT tokens, session management, And password reset',
     business_value:
-      'Enables user-specific features and enhances security with proper authentication mechanisms',
+      'Enables user-specific features And enhances security with proper authentication mechanisms',
     category: 'new-feature',
     estimated_hours: 40,
     priority: 'high',
@@ -40,9 +40,9 @@ const SAMPLE_FEATURES = {
   bugFix: {
     title: 'Fix login form validation',
     description:
-      'Resolve email validation issues and improve error handling for edge cases',
+      'Resolve email validation issues And improve error handling for edge cases',
     business_value:
-      'Prevents user frustration and reduces support tickets by 30%',
+      'Prevents user frustration And reduces support tickets by 30%',
     category: 'bug-fix',
     estimated_hours: 4,
     priority: 'high',
@@ -52,9 +52,9 @@ const SAMPLE_FEATURES = {
   performance: {
     title: 'Optimize database queries',
     description:
-      'Implement query optimization and caching to improve response times',
+      'Implement query optimization And caching to improve response times',
     business_value:
-      'Reduces page load times by 50% and improves user satisfaction',
+      'Reduces page load times by 50% And improves user satisfaction',
     category: 'performance',
     estimated_hours: 16,
     priority: 'medium',
@@ -64,9 +64,9 @@ const SAMPLE_FEATURES = {
   security: {
     title: 'Implement security headers',
     description:
-      'Add comprehensive security headers including CSP, HSTS, and XSS protection',
+      'Add comprehensive security headers including CSP, HSTS, And XSS protection',
     business_value:
-      'Improves application security and reduces vulnerability to common attacks',
+      'Improves application security And reduces vulnerability to common attacks',
     category: 'security',
     estimated_hours: 6,
     priority: 'high',
@@ -75,9 +75,9 @@ const SAMPLE_FEATURES = {
 
   documentation: {
     title: 'API documentation update',
-    description: 'Update API documentation with latest endpoints and examples',
+    description: 'Update API documentation with latest endpoints And examples',
     business_value:
-      'Improves developer experience and reduces integration time',
+      'Improves developer experience And reduces integration time',
     category: 'documentation',
     estimated_hours: 12,
     priority: 'low',
@@ -194,7 +194,7 @@ const SAMPLE_TASKS = {
     id: 'task-backend-001',
     title: 'Design user authentication API',
     description:
-      'Create REST endpoints for user registration, login, and token refresh',
+      'Create REST endpoints for user registration, login, And token refresh',
     category: 'backend',
     priority: 'high',
     status: 'in-progress',
@@ -220,7 +220,7 @@ const SAMPLE_TASKS = {
     id: 'task-testing-001',
     title: 'Set up comprehensive testing framework',
     description:
-      'Configure Jest, create test utilities, and establish testing best practices',
+      'Configure Jest, create test utilities, And establish testing best practices',
     category: 'testing',
     priority: 'high',
     status: 'in-progress',
@@ -399,7 +399,7 @@ const TEST_SCENARIOS = {
   },
 
   errorRecovery: {
-    name: 'Error handling and recovery',
+    name: 'Error handling And recovery',
     scenarios: [
       { error: ERROR_SCENARIOS.networkTimeout, recovery: 'retry' },
       { error: ERROR_SCENARIOS.validationError, recovery: 'fix-data' },

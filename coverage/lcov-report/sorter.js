@@ -33,7 +33,7 @@ var addSorting = (function() {
         let searchRegex;
         try {
             searchRegex = new RegExp(searchValue, 'i'); // 'i' for case-insensitive
-        } catch (error) {
+        } catch {
             searchRegex = null;
         }
 

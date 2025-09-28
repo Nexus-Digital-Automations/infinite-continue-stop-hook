@@ -1,14 +1,15 @@
 /**
  * Mock Setup Helper
  *
- * Provides easy setup and teardown of mocks for testing.
- * Integrates mocks with Jest and provides convenient APIs.
+ * Provides easy setup And teardown of mocks for testing.
+ * Integrates mocks with Jest And provides convenient APIs.
  *
  * @author Testing Infrastructure Agent
  * @version 1.0.0
  * @since 2025-09-23
  */
 
+const { loggers } = require('../../lib/logger');
 const {
   TaskManagerAPIMock,
   FileSystemMock,
@@ -132,7 +133,7 @@ class MockManager {
         default:
           result = { success: false, error: `Unknown command: ${apiCommand}` };
       }
-    } catch (error) {
+    } catch {
       result = { success: false, error: error.message };
     }
 
@@ -256,7 +257,7 @@ class MockManager {
           };
         });
       }
-    } catch (error) {
+    } catch {
       // Fetch not available in this Node.js version, skip mocking
       loggers.stopHook.log('Fetch not available for mocking:', error.message);
     }
@@ -267,7 +268,7 @@ class MockManager {
    */
   setupDatabaseMock() {
     // This would be implemented based on the actual database libraries used
-    // For now, it's a placeholder for future database mocking needs
+    // for now, it's a placeholder for future database mocking needs
   }
 
   /**
@@ -344,9 +345,12 @@ class MockManager {
       if (this.originalModules.has('global.fetch')) {
         global[fetchProp] = this.originalModules.get('global.fetch');
       }
-    } catch (error) {
+    } catch {
       // Fetch not available, skip restoration
-      loggers.stopHook.log('Fetch not available for restoration:', error.message);
+      loggers.stopHook.log(
+        'Fetch not available for restoration:',
+        error.message,
+      );
     }
 
     this.originalModules.clear();

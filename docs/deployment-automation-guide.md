@@ -54,6 +54,7 @@ graph TD
 This is the main deployment workflow that orchestrates the entire release process.
 
 #### Trigger Conditions
+
 - **Tag-based releases**: Automatically triggered on version tags (`v*.*.*`)
 - **Manual dispatch**: Triggered via GitHub Actions UI with customizable parameters
 
@@ -109,6 +110,7 @@ git push origin v1.2.3
 Manages the lifecycle of deployment artifacts.
 
 #### Supported Operations
+
 - **Store**: Upload and catalog artifacts
 - **Retrieve**: Download specific artifact versions
 - **Cleanup**: Remove expired artifacts
@@ -182,6 +184,7 @@ gh workflow run rollback-automation.yml \
 Each environment has specific configuration files in `.github/environments/`:
 
 #### Development Environment
+
 - **Auto-deployment**: Enabled
 - **Reviewers**: None required
 - **Resources**: Limited (0.5 CPU, 512Mi memory)
@@ -189,6 +192,7 @@ Each environment has specific configuration files in `.github/environments/`:
 - **Rollback**: Automatic on failure
 
 #### Staging Environment
+
 - **Auto-deployment**: Manual approval required
 - **Reviewers**: 1 required
 - **Resources**: Standard (1.0 CPU, 1Gi memory)
@@ -196,6 +200,7 @@ Each environment has specific configuration files in `.github/environments/`:
 - **Deployment window**: Business hours only
 
 #### Production Environment
+
 - **Auto-deployment**: Manual approval required
 - **Reviewers**: 2 required
 - **Wait timer**: 24 hours minimum
@@ -430,6 +435,7 @@ artifact-name/
 ### Initial Setup
 
 1. **Configure Environments**:
+
    ```bash
    # Create GitHub environments
    gh api repos/:owner/:repo/environments/development -X PUT
@@ -438,6 +444,7 @@ artifact-name/
    ```
 
 2. **Set Environment Secrets**:
+
    ```bash
    # Example secret configuration
    gh secret set DATABASE_URL --env production
@@ -454,6 +461,7 @@ artifact-name/
 ### First Deployment
 
 1. **Create Initial Release**:
+
    ```bash
    git tag v1.0.0
    git push origin v1.0.0
@@ -479,6 +487,7 @@ artifact-name/
 
 **Symptom**: Deployment workflow fails
 **Solutions**:
+
 1. Check quality gates (tests, coverage, security)
 2. Verify environment configuration
 3. Check artifact integrity
@@ -488,6 +497,7 @@ artifact-name/
 
 **Symptom**: Post-deployment health checks fail
 **Solutions**:
+
 1. Check application logs
 2. Verify database connectivity
 3. Check environment variables
@@ -497,6 +507,7 @@ artifact-name/
 
 **Symptom**: Rollback fails to complete
 **Solutions**:
+
 1. Check target version availability
 2. Verify backup integrity
 3. Manual intervention may be required
@@ -523,6 +534,7 @@ gh workflow run secure-deployment.yml -f security_action=compliance_check
 #### Production Emergency
 
 1. **Immediate Response**:
+
    ```bash
    # Emergency rollback
    gh workflow run rollback-automation.yml \
@@ -584,6 +596,7 @@ gh workflow run secure-deployment.yml -f security_action=compliance_check
 This deployment automation system provides a comprehensive, secure, and reliable approach to software delivery. It includes automated quality gates, security validation, environment management, monitoring, and rollback capabilities.
 
 The system is designed to:
+
 - **Reduce manual effort** through automation
 - **Improve reliability** through comprehensive testing
 - **Enhance security** through integrated scanning

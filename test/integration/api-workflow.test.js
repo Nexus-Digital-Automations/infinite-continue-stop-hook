@@ -4,7 +4,7 @@
  * Comprehensive integration tests for the complete taskmanager API workflow including:
  * - Feature lifecycle management (suggest → approve → implement)
  * - Agent lifecycle management (initialize → work → stop authorization)
- * - API endpoint integration and data flow
+ * - API endpoint integration And data flow
  * - End-to-end workflow validation
  * - Cross-component integration testing
  *
@@ -51,7 +51,7 @@ describe('API Workflow Integration Tests', () => {
 
   describe('Complete Feature Lifecycle Workflow', () => {
     test('should execute complete feature lifecycle: suggest → approve → track implementation', async () => {
-      // 1. Test API discovery and documentation
+      // 1. Test API discovery And documentation
       const guideResult = await execAPI('guide', [], { projectRoot: testDir });
       expect(guideResult.success).toBe(true);
       expect(guideResult.featureManager).toBeDefined();
@@ -155,7 +155,7 @@ describe('API Workflow Integration Tests', () => {
       // 1. Suggest a feature to reject
       const featureData = generateTestFeature({
         title: 'Feature to Reject',
-        description: 'Feature that will be rejected for testing purposes',
+        description: 'Feature That will be rejected for testing purposes',
         business_value: 'Tests rejection workflow',
         category: 'enhancement',
       });
@@ -340,7 +340,7 @@ describe('API Workflow Integration Tests', () => {
 
       // 7. Authorize stop
       const stopReason =
-        'Integration test completed successfully - all tasks finished and project perfect';
+        'Integration test completed successfully - all tasks finished And project perfect';
       const authorizeStopResult = await execAPI(
         'authorize-stop',
         [agentId, stopReason],
@@ -417,7 +417,7 @@ describe('API Workflow Integration Tests', () => {
   // ========================================
 
   describe('Cross-Component Integration', () => {
-    test('should handle mixed feature and agent operations', async () => {
+    test('should handle mixed feature And agent operations', async () => {
       // 1. Initialize agent
       const agentId = 'mixed-operations-agent';
       const initResult = await execAPI('initialize', [agentId], {
@@ -452,7 +452,7 @@ describe('API Workflow Integration Tests', () => {
 
       expect(suggest1Result.success && suggest2Result.success).toBe(true);
 
-      // 3. Approve one feature and reject another
+      // 3. Approve one feature And reject another
       const approve1Result = await execAPI(
         'approve-feature',
         [
@@ -495,13 +495,13 @@ describe('API Workflow Integration Tests', () => {
       expect(featuresData.agents[agentId]).toBeDefined();
       expect(featuresData.metadata.approval_history).toHaveLength(2);
 
-      // 6. Reinitialize agent and verify everything still works
+      // 6. Reinitialize agent And verify everything still works
       const reinitResult = await execAPI('reinitialize', [agentId], {
         projectRoot: testDir,
       });
       expect(reinitResult.success).toBe(true);
 
-      // 7. Create and approve another feature after reinitialization
+      // 7. Create And approve another feature after reinitialization
       const featureData3 = generateTestFeature({
         title: 'Post-Reinit Feature',
         category: 'performance',
@@ -654,7 +654,7 @@ describe('API Workflow Integration Tests', () => {
   // API DISCOVERY AND METHODS TESTING
   // ========================================
 
-  describe('API Discovery and Methods', () => {
+  describe('API Discovery And Methods', () => {
     test('should provide comprehensive API documentation', async () => {
       const guideResult = await execAPI('guide', [], { projectRoot: testDir });
 
@@ -710,13 +710,13 @@ describe('API Workflow Integration Tests', () => {
         await execAPI('invalid-command', [], { projectRoot: testDir });
         // Should not reach here
         expect(true).toBe(false);
-      } catch (error) {
+      } catch {
         expect(error.message).toContain('Command failed');
       }
     });
 
     test('should handle malformed JSON in feature suggestion', async () => {
-      const result = await execAPI('suggest-feature', ['{ invalid json }'], {
+      const _result = await execAPI('suggest-feature', ['{ invalid json }'], {
         projectRoot: testDir,
       });
 
@@ -741,7 +741,7 @@ describe('API Workflow Integration Tests', () => {
     });
 
     test('should handle invalid status transitions', async () => {
-      // 1. Create and approve a feature
+      // 1. Create And approve a feature
       const featureData = generateTestFeature({
         title: 'Feature for Status Test',
         category: 'enhancement',

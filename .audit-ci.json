@@ -4,8 +4,7 @@
   "high": true,
   "critical": true,
   "report-type": "json",
-  "allowlist": [
-  ],
+  "allowlist": [],
   "skip-dev": false,
   "summary": true,
   "advisories": [],

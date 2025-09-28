@@ -2,7 +2,7 @@
 
 **Version**: 1.0.0  
 **Date**: 2025-09-15  
-**Author**: Documentation Agent #5  
+**Author**: Documentation Agent #5
 
 ## Introduction
 
@@ -30,6 +30,7 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 ### Step 2: Understanding Your Task's Criteria
 
 Every task automatically receives success criteria based on:
+
 - **Standard Template**: 25-point quality checklist
 - **Project-wide Rules**: Organization-specific requirements
 - **Task-specific Additions**: Custom criteria for your specific task
@@ -56,6 +57,7 @@ timeout 10s node taskmanager-api.js criteria-report TASK_ID
 **Scenario**: You're implementing a new user registration feature.
 
 **Workflow**:
+
 ```bash
 # 1. Check your assigned criteria
 timeout 10s node taskmanager-api.js get-success-criteria feature_123_registration
@@ -71,6 +73,7 @@ timeout 10s node taskmanager-api.js criteria-report feature_123_registration
 ```
 
 **Expected Criteria** (automatically applied):
+
 - ✅ Code lints without errors
 - ✅ All tests pass
 - ✅ Build completes successfully
@@ -83,6 +86,7 @@ timeout 10s node taskmanager-api.js criteria-report feature_123_registration
 **Scenario**: Your API endpoints need sub-200ms response times.
 
 **Implementation**:
+
 ```javascript
 // Add custom performance criteria
 const response = await fetch(`/api/success-criteria/task/${taskId}`, {
@@ -94,21 +98,18 @@ const response = await fetch(`/api/success-criteria/task/${taskId}`, {
         category: 'performance',
         title: 'API Response Time',
         description: 'All endpoints must respond within 200ms',
-        requirements: [
-          'Average response time < 200ms',
-          '95th percentile < 300ms',
-          'No timeouts under normal load'
-        ],
+        requirements: ['Average response time < 200ms', '95th percentile < 300ms', 'No timeouts under normal load'],
         evidence_required: 'Load testing results',
         validation_method: 'automated',
-        priority: 'critical'
-      }
-    ]
-  })
+        priority: 'critical',
+      },
+    ],
+  }),
 });
 ```
 
 **Validation**:
+
 ```bash
 # The system will automatically run performance tests
 # and verify your custom criteria during validation
@@ -134,12 +135,8 @@ timeout 10s node taskmanager-api.js validate-criteria feature_123_api
       ]
     },
     {
-      "title": "Security Audit Required", 
-      "requirements": [
-        "Manual security team review",
-        "Penetration testing completed",
-        "Vulnerability scan clean"
-      ]
+      "title": "Security Audit Required",
+      "requirements": ["Manual security team review", "Penetration testing completed", "Vulnerability scan clean"]
     }
   ]
 }
@@ -150,6 +147,7 @@ timeout 10s node taskmanager-api.js validate-criteria feature_123_api
 **Scenario**: You're creating API documentation that needs review.
 
 **Custom Criteria Setup**:
+
 ```bash
 # Add documentation-specific criteria
 timeout 10s node taskmanager-api.js set-success-criteria feature_123_docs \
@@ -172,6 +170,7 @@ timeout 10s node taskmanager-api.js set-success-criteria feature_123_docs \
 ## Essential Commands Reference
 
 ### Information Commands
+
 ```bash
 # View available templates
 timeout 10s node taskmanager-api.js list-criteria-templates
@@ -187,6 +186,7 @@ timeout 10s node taskmanager-api.js criteria-report TASK_ID --format=summary
 ```
 
 ### Configuration Commands
+
 ```bash
 # Set custom criteria for a task
 timeout 10s node taskmanager-api.js set-success-criteria TASK_ID CRITERIA_JSON
@@ -199,6 +199,7 @@ timeout 10s node taskmanager-api.js override-criteria TASK_ID CRITERION_ID OVERR
 ```
 
 ### Validation Commands
+
 ```bash
 # Run full validation
 timeout 10s node taskmanager-api.js validate-criteria TASK_ID
@@ -218,6 +219,7 @@ timeout 10s node taskmanager-api.js validate-criteria TASK_ID --force
 ### 1. Early Validation Strategy
 
 **Do This** ✅:
+
 ```bash
 # Run validation early and often
 timeout 10s node taskmanager-api.js validate-criteria TASK_ID --category=automated
@@ -227,6 +229,7 @@ timeout 10s node taskmanager-api.js criteria-report TASK_ID --failed-only
 ```
 
 **Avoid This** ❌:
+
 - Waiting until task completion to run validation
 - Ignoring failed criteria and hoping they resolve
 - Skipping intermediate validation checks
@@ -234,6 +237,7 @@ timeout 10s node taskmanager-api.js criteria-report TASK_ID --failed-only
 ### 2. Evidence Collection
 
 **Do This** ✅:
+
 ```bash
 # Collect evidence as you work
 npm run lint > evidence/linter_results.log
@@ -246,6 +250,7 @@ timeout 10s node taskmanager-api.js validate-criteria TASK_ID \
 ```
 
 **Avoid This** ❌:
+
 - Manual validation without supporting evidence
 - Relying solely on "it works on my machine"
 - Missing documentation of validation steps
@@ -253,12 +258,13 @@ timeout 10s node taskmanager-api.js validate-criteria TASK_ID \
 ### 3. Custom Criteria Design
 
 **Good Criteria** ✅:
+
 ```json
 {
   "title": "Database Migration Safety",
   "requirements": [
     "Migration is reversible with rollback script",
-    "No data loss in migration process", 
+    "No data loss in migration process",
     "Migration tested on staging data",
     "Performance impact under 10% during migration"
   ],
@@ -268,6 +274,7 @@ timeout 10s node taskmanager-api.js validate-criteria TASK_ID \
 ```
 
 **Poor Criteria** ❌:
+
 ```json
 {
   "title": "Code Quality",
@@ -280,6 +287,7 @@ timeout 10s node taskmanager-api.js validate-criteria TASK_ID \
 ### 4. Handling Failed Validations
 
 **Systematic Approach** ✅:
+
 ```bash
 # 1. Identify specific failures
 timeout 10s node taskmanager-api.js criteria-report TASK_ID --failed-only
@@ -287,7 +295,7 @@ timeout 10s node taskmanager-api.js criteria-report TASK_ID --failed-only
 # 2. Address root causes
 # Fix the underlying issues, not just symptoms
 
-# 3. Re-validate incrementally  
+# 3. Re-validate incrementally
 timeout 10s node taskmanager-api.js validate-criteria TASK_ID --category=fixed_category
 
 # 4. Document resolution
@@ -301,6 +309,7 @@ timeout 10s node taskmanager-api.js validate-criteria TASK_ID --category=fixed_c
 **Problem**: Complex validation takes too long and times out.
 
 **Solution**:
+
 ```bash
 # Use async validation for long-running checks
 timeout 10s node taskmanager-api.js validate-criteria TASK_ID --async
@@ -317,6 +326,7 @@ timeout 10s node taskmanager-api.js set-validation-timeout TASK_ID 3600
 **Problem**: Project-wide criteria conflicts with task-specific needs.
 
 **Solution**:
+
 ```bash
 # Review conflicting criteria
 timeout 10s node taskmanager-api.js criteria-conflicts TASK_ID
@@ -335,6 +345,7 @@ timeout 10s node taskmanager-api.js add-task-note TASK_ID \
 **Problem**: Manual review criteria need human validation but no reviewer assigned.
 
 **Solution**:
+
 ```bash
 # Check review assignment status
 timeout 10s node taskmanager-api.js review-status TASK_ID
@@ -353,6 +364,7 @@ timeout 10s node taskmanager-api.js add-review-context TASK_ID \
 **Problem**: Setting up success criteria for a new project.
 
 **Solution**:
+
 ```bash
 # Start with standard template
 timeout 10s node taskmanager-api.js apply-template PROJECT_ID 25_point_standard
@@ -421,24 +433,27 @@ Once you're comfortable with the basics:
 ## Quick Reference Card
 
 ### Essential URLs
+
 - API Base: `/api/success-criteria`
 - Templates: `/api/success-criteria/templates`
 - Validation: `/api/success-criteria/validate/:taskId`
 - Reports: `/api/success-criteria/report/:taskId`
 
 ### Key File Locations
+
 - Templates: `development/essentials/success-criteria.md`
 - Evidence: `development/evidence/`
 - Reports: `development/reports/success-criteria/`
 - Config: `success-criteria-config.json`
 
 ### Emergency Contacts
+
 - System Issues: Check `development/errors/` for current issues
 - Criteria Conflicts: Review `development/reports/` for conflict resolution
 - Performance Problems: Monitor `development/logs/` for system health
 
 ---
 
-*Quick Start Guide v1.0.0*  
-*Generated by: Documentation Agent #5*  
-*Last Updated: 2025-09-15*
+_Quick Start Guide v1.0.0_  
+_Generated by: Documentation Agent #5_  
+_Last Updated: 2025-09-15_

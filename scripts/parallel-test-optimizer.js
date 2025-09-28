@@ -1,8 +1,8 @@
 /**
  * Parallel Test Execution Optimizer
  *
- * Optimizes test execution across multiple Node.js versions and platforms
- * by analyzing test dependencies, execution patterns, and system resources.
+ * Optimizes test execution across multiple Node.js versions And platforms
+ * by analyzing test dependencies, execution patterns, And system resources.
  *
  * @author Performance Optimization Agent
  * @version 2.0.0
@@ -13,9 +13,15 @@ const fs = require('fs');
 const path = require('path');
 const { _execSync, _spawn } = require('child_process');
 const os = require('os');
+const { createLogger } = require('../lib/utils/logger');
 
 class ParallelTestOptimizer {
   constructor() {
+    this.logger = createLogger('ParallelTestOptimizer', {
+      component: 'test-optimizer',
+      logToFile: true,
+    });
+
     this.config = {
       maxParallelJobs: this.calculateOptimalParallelism(),
       testSuites: this.discoverTestSuites(),
@@ -54,12 +60,14 @@ class ParallelTestOptimizer {
 
     const optimalLimit = Math.min(cpuBasedLimit, memoryBasedLimit, 8); // Cap at 8
 
-    loggers.stopHook.log(`🔧 System Analysis:`);
-    loggers.stopHook.log(`  CPU Cores: ${cpuCount}`);
-    loggers.stopHook.log(`  Total Memory: ${totalMemoryGB.toFixed(1)}GB`);
-    loggers.stopHook.log(`  CPU-based limit: ${cpuBasedLimit}`);
-    loggers.stopHook.log(`  Memory-based limit: ${memoryBasedLimit}`);
-    loggers.stopHook.log(`  Optimal parallelism: ${optimalLimit}`);
+    this.logger.info('System analysis for optimal parallelism', {
+      cpuCores: cpuCount,
+      totalMemoryGB: totalMemoryGB.toFixed(1),
+      cpuBasedLimit,
+      memoryBasedLimit,
+      optimalParallelism: optimalLimit,
+      operation: 'system-analysis',
+    });
 
     return optimalLimit;
   }
@@ -83,8 +91,11 @@ class ParallelTestOptimizer {
           }
         }
       });
-    } catch (error) {
-      loggers.stopHook.warn('⚠️ Could not read package.json:', error.message);
+    } catch {
+      this.logger.warn('Could not read package.json', {
+        error: error.message,
+        operation: 'discover-test-suites',
+      });
     }
 
     return testSuites;
@@ -184,7 +195,7 @@ class ParallelTestOptimizer {
   }
 
   /**
-   * Identify test dependencies that might affect parallelization
+   * Identify test dependencies That might affect parallelization
    */
   identifyTestDependencies(testName) {
     const dependencies = [];
@@ -216,7 +227,7 @@ class ParallelTestOptimizer {
    * Determine if test suite can run in parallel
    */
   isParallelizable(testName, command) {
-    // Tests that typically can't run in parallel
+    // Tests That typically can't run in parallel
     const nonParallelizable = [
       'stress',
       'performance',
@@ -243,9 +254,11 @@ class ParallelTestOptimizer {
    * Generate optimized execution plan
    */
   generateExecutionPlan() {
-    loggers.stopHook.log('📋 Generating optimized execution plan...');
+    this.logger.info('Generating optimized execution plan', {
+      operation: 'plan-generation',
+    });
 
-    // Separate parallelizable and non-parallelizable tests
+    // Separate parallelizable And non-parallelizable tests
     const parallelizable = this.config.testSuites.filter(
       (suite) => suite.parallelizable
     );
@@ -268,16 +281,12 @@ class ParallelTestOptimizer {
     // Estimate time savings
     this.executionPlan.estimated_time_savings = this.calculateTimeSavings();
 
-    loggers.stopHook.log(`✅ Execution plan generated:`);
-    console.log(
-      `  Parallel groups: ${this.executionPlan.parallel_groups.length}`
-    );
-    console.log(
-      `  Sequential tests: ${this.executionPlan.sequential_tests.length}`
-    );
-    console.log(
-      `  Estimated time savings: ${this.executionPlan.estimated_time_savings}%`
-    );
+    this.logger.info('Execution plan generated', {
+      parallelGroups: this.executionPlan.parallel_groups.length,
+      sequentialTests: this.executionPlan.sequential_tests.length,
+      estimatedTimeSavings: this.executionPlan.estimated_time_savings,
+      operation: 'plan-generation',
+    });
   }
 
   /**
@@ -287,7 +296,7 @@ class ParallelTestOptimizer {
     const groups = [];
     const maxGroupSize = this.config.maxParallelJobs;
 
-    // Group tests by resource requirements and dependencies
+    // Group tests by resource requirements And dependencies
     const resourceGroups =
       this.groupByResourceRequirements(parallelizableTests);
 
@@ -336,7 +345,7 @@ class ParallelTestOptimizer {
    * Calculate critical path through test execution
    */
   calculateCriticalPath() {
-    const _allGroups = [
+    const ALL_GROUPS = [
       ...this.executionPlan.parallel_groups,
       ...this.executionPlan.sequential_tests,
     ];
@@ -437,7 +446,7 @@ class ParallelTestOptimizer {
     let totalCPU = 0;
 
     this.executionPlan.parallel_groups.forEach((group) => {
-      // For parallel groups, sum all tests in the group
+      // for parallel groups, sum all tests in the group
       totalMemory += group.tests.reduce(
         (sum, test) => sum + test.resourceRequirements.memory,
         0
@@ -516,7 +525,7 @@ class ParallelTestOptimizer {
       return true;
     }
 
-    // For optimization, skip some older version + non-Linux combinations
+    // for optimization, skip some older version + non-Linux combinations
     if (nodeVersion === '18.x' && platform !== 'ubuntu-latest') {
       return false;
     }
@@ -603,9 +612,12 @@ class ParallelTestOptimizer {
     const report = this.generateMarkdownReport(analysis);
     fs.writeFileSync(reportFile, report);
 
-    loggers.stopHook.log(`📄 Analysis saved to: ${analysisFile}`);
-    loggers.stopHook.log(`📄 Latest analysis: ${latestFile}`);
-    loggers.stopHook.log(`📄 Report: ${reportFile}`);
+    this.logger.info('Performance analysis files generated', {
+      analysisFile,
+      latestFile,
+      reportFile,
+      operation: 'file-generation',
+    });
 
     return analysis;
   }
@@ -701,21 +713,18 @@ ${analysis.github_actions_matrix.strategy.matrix.include
    * Display optimization summary
    */
   displaySummary() {
-    loggers.stopHook.log('\n📊 Parallel Test Optimization Summary');
-    loggers.stopHook.log('====================================');
-    loggers.stopHook.log(
-      `System Parallelism: ${this.config.maxParallelJobs} jobs`
-    );
-    loggers.stopHook.log(`Test Suites Found: ${this.config.testSuites.length}`);
-    console.log(
-      `Parallel Groups: ${this.executionPlan.parallel_groups.length}`
-    );
-    console.log(
-      `Sequential Tests: ${this.executionPlan.sequential_tests?.length || 0}`
-    );
-    console.log(
-      `Estimated Time Savings: ${this.executionPlan.estimated_time_savings}%`
-    );
+    this.logger.info('Parallel Test Optimization Summary', {
+      systemParallelism: this.config.maxParallelJobs,
+      operation: 'summary-header',
+    });
+    this.logger.info('Test optimization summary', {
+      testSuitesFound: this.config.testSuites.length,
+      parallelGroups: this.executionPlan.parallel_groups.length,
+      sequentialTests: this.executionPlan.sequential_tests?.length || 0,
+      estimatedTimeSavings: this.executionPlan.estimated_time_savings,
+      systemParallelism: this.config.maxParallelJobs,
+      operation: 'optimization-summary',
+    });
 
     if (this.executionPlan.critical_path.bottlenecks?.length > 0) {
       loggers.stopHook.log('\n⚠️ Bottlenecks Identified:');
@@ -757,7 +766,7 @@ ${analysis.github_actions_matrix.strategy.matrix.include
         '\n✅ Optimization analysis completed successfully!'
       );
       return analysis;
-    } catch (error) {
+    } catch {
       loggers.stopHook.error('❌ Optimization analysis failed:', error.message);
       throw error;
     }

@@ -36,11 +36,11 @@ graph TB
 
 ### Workflow Files
 
-| Workflow | Purpose | Triggers |
-|----------|---------|----------|
-| `ci-cd-pipeline.yml` | Main CI/CD workflow with comprehensive testing | Push, PR, Manual |
-| `coverage-monitoring.yml` | Coverage analysis and trend tracking | Push to main/develop, Schedule |
-| `branch-protection-setup.yml` | Quality gates and branch protection configuration | Push to main, Manual |
+| Workflow                      | Purpose                                           | Triggers                       |
+| ----------------------------- | ------------------------------------------------- | ------------------------------ |
+| `ci-cd-pipeline.yml`          | Main CI/CD workflow with comprehensive testing    | Push, PR, Manual               |
+| `coverage-monitoring.yml`     | Coverage analysis and trend tracking              | Push to main/develop, Schedule |
+| `branch-protection-setup.yml` | Quality gates and branch protection configuration | Push to main, Manual           |
 
 ## 🚀 Getting Started
 
@@ -53,17 +53,20 @@ graph TB
 ### Setup
 
 1. **Clone repository**
+
    ```bash
    git clone <repository-url>
    cd infinite-continue-stop-hook
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm ci
    ```
 
 3. **Setup Git hooks**
+
    ```bash
    npm run prepare
    ```
@@ -78,6 +81,7 @@ graph TB
 ## 📋 Quality Gates
 
 ### Stage 1: Pre-commit Validation (Local)
+
 **Duration**: 30-60 seconds
 **Purpose**: Fast feedback to prevent CI/CD failures
 
@@ -88,6 +92,7 @@ graph TB
 - ⚠️ **Coverage validation** - For significant changes only
 
 ### Stage 2: Quick Validation (CI/CD)
+
 **Duration**: 3-5 minutes
 **Purpose**: Immediate feedback for basic issues
 
@@ -97,20 +102,24 @@ graph TB
 - ✅ **Dependency analysis** - Package structure validation
 
 ### Stage 3: Test Matrix (CI/CD)
+
 **Duration**: 10-20 minutes
 **Purpose**: Cross-platform and cross-version compatibility
 
 **Test Matrix:**
+
 - **Operating Systems**: Ubuntu, Windows, macOS
 - **Node.js Versions**: 18.x, 20.x, 22.x
 - **Test Suites**: Unit, Integration, RAG System, API
 
 **Optimizations:**
+
 - Excludes Windows/macOS for Node 18.x (optimization)
 - Allows Node 22.x failures (compatibility testing)
 - Parallel execution across matrix dimensions
 
 ### Stage 4: Code Quality & Security (CI/CD)
+
 **Duration**: 5-10 minutes
 **Purpose**: Comprehensive code analysis
 
@@ -120,6 +129,7 @@ graph TB
 - ✅ **Report generation** - Detailed security and quality reports
 
 ### Stage 5: Coverage Analysis (CI/CD)
+
 **Duration**: 5-8 minutes
 **Purpose**: Test coverage validation and trending
 
@@ -130,6 +140,7 @@ graph TB
 - ✅ **PR commenting** - Automated coverage feedback
 
 ### Stage 6: Build & Integration (CI/CD)
+
 **Duration**: 3-5 minutes
 **Purpose**: Application build and startup validation
 
@@ -138,6 +149,7 @@ graph TB
 - ✅ **Smoke tests** - Critical functionality verification
 
 ### Stage 7: Final Quality Gate (CI/CD)
+
 **Duration**: 1-2 minutes
 **Purpose**: Overall validation and deployment readiness
 
@@ -149,12 +161,12 @@ graph TB
 
 ### Thresholds
 
-| Metric | Target | Critical | Action |
-|--------|--------|----------|--------|
-| **Statements** | 80% | 70% | Block merge if below critical |
-| **Branches** | 85% | 75% | Block merge if below critical |
-| **Functions** | 80% | 70% | Block merge if below critical |
-| **Lines** | 80% | 70% | Block merge if below critical |
+| Metric         | Target | Critical | Action                        |
+| -------------- | ------ | -------- | ----------------------------- |
+| **Statements** | 80%    | 70%      | Block merge if below critical |
+| **Branches**   | 85%    | 75%      | Block merge if below critical |
+| **Functions**  | 80%    | 70%      | Block merge if below critical |
+| **Lines**      | 80%    | 70%      | Block merge if below critical |
 
 ### Coverage Monitoring
 
@@ -213,17 +225,20 @@ npm run prepare           # Install Husky git hooks
 ### Pre-commit Hook Behavior
 
 **Quick Checks** (always run):
+
 - Package.json syntax validation
 - ESLint on staged files only
 - Large file detection
 - Debugging code detection
 
 **Conditional Checks** (based on changes):
+
 - Test execution (if source code changed)
 - Security audit (if dependencies changed)
 - Coverage validation (if significant changes)
 
 **Interactive Prompts**:
+
 - Large files detected
 - Debugging code found
 - Coverage thresholds not met
@@ -232,6 +247,7 @@ npm run prepare           # Install Husky git hooks
 ### Pre-push Hook Behavior
 
 **Comprehensive Validation**:
+
 - Full test suite execution
 - Complete RAG system validation
 - Full ESLint check
@@ -240,6 +256,7 @@ npm run prepare           # Install Husky git hooks
 - Application startup test
 
 **Timeout Management**:
+
 - Tests: 120 seconds
 - RAG tests: 90 seconds
 - Lint: 30 seconds
@@ -250,17 +267,18 @@ npm run prepare           # Install Husky git hooks
 
 ### Environment Variables
 
-| Variable | Purpose | Default |
-|----------|---------|---------|
-| `CI` | CI environment detection | `true` in CI |
-| `NODE_ENV` | Node environment | `test` |
-| `COVERAGE_THRESHOLD` | Override coverage threshold | `80` |
-| `HUSKY_DEBUG` | Debug git hooks | `false` |
-| `DEBUG` | Enable debug logging | `false` |
+| Variable             | Purpose                     | Default      |
+| -------------------- | --------------------------- | ------------ |
+| `CI`                 | CI environment detection    | `true` in CI |
+| `NODE_ENV`           | Node environment            | `test`       |
+| `COVERAGE_THRESHOLD` | Override coverage threshold | `80`         |
+| `HUSKY_DEBUG`        | Debug git hooks             | `false`      |
+| `DEBUG`              | Enable debug logging        | `false`      |
 
 ### Customization
 
 **Coverage Thresholds** (`jest.config.js`):
+
 ```javascript
 coverageThreshold: {
   global: {
@@ -273,14 +291,16 @@ coverageThreshold: {
 ```
 
 **ESLint Configuration** (`eslint.config.mjs`):
+
 ```javascript
 export default tseslint.config(
-  eslint.configs.recommended,
+  eslint.configs.recommended
   // ... additional configurations
 );
 ```
 
 **Git Hooks** (`.husky/`):
+
 - Modify `pre-commit` for local validation rules
 - Modify `pre-push` for comprehensive validation rules
 
@@ -320,6 +340,7 @@ export default tseslint.config(
 ### Common Issues
 
 **Tests Failing Locally**:
+
 ```bash
 # Debug failing tests
 npm test -- --verbose --detectOpenHandles
@@ -332,6 +353,7 @@ npm test -- test/specific-test.test.js
 ```
 
 **Coverage Threshold Failures**:
+
 ```bash
 # Generate detailed coverage report
 npm run coverage:html
@@ -344,6 +366,7 @@ npm run coverage:json && cat coverage/coverage-summary.json
 ```
 
 **Lint Failures**:
+
 ```bash
 # Auto-fix issues
 npm run lint:fix
@@ -356,6 +379,7 @@ npx eslint --print-config file.js
 ```
 
 **Git Hook Issues**:
+
 ```bash
 # Reinstall hooks
 rm -rf .husky && npm run prepare
@@ -368,6 +392,7 @@ git commit --no-verify -m "emergency commit"
 ```
 
 **CI/CD Pipeline Failures**:
+
 1. Check GitHub Actions logs
 2. Look for timeout issues
 3. Verify environment variables
@@ -377,11 +402,13 @@ git commit --no-verify -m "emergency commit"
 ### Performance Optimization
 
 **Local Development**:
+
 - Use `npm run test:api` for quick feedback
 - Run `npm run lint:focused` on specific files
 - Use `npm run coverage:watch` during development
 
 **CI/CD Pipeline**:
+
 - Matrix exclusions reduce execution time
 - Cached dependencies speed up builds
 - Parallel job execution optimizes resource usage
@@ -406,6 +433,7 @@ git commit --no-verify -m "emergency commit"
 7. **Open Pull Request** and wait for CI/CD validation
 
 The CI/CD pipeline will automatically validate your changes and provide feedback on:
+
 - Test coverage
 - Code quality
 - Security vulnerabilities

@@ -14,6 +14,7 @@ This document outlines the comprehensive testing approach for the FEATURES.json 
 ## 📋 FEATURES.json System Architecture
 
 ### Core Components
+
 ```
 FEATURES.json System
 ├── Feature Management API (taskmanager-api.js)
@@ -25,6 +26,7 @@ FEATURES.json System
 ```
 
 ### Key Entities
+
 - **Features**: Core feature requests with approval workflow
 - **Agents**: Autonomous workers with session management
 - **Metadata**: System analytics and historical tracking
@@ -35,6 +37,7 @@ FEATURES.json System
 ### 1. **Unit Testing Approach**
 
 #### Feature Management API Testing
+
 ```javascript
 describe('Feature Management API', () => {
   describe('Feature Creation', () => {
@@ -43,7 +46,7 @@ describe('Feature Management API', () => {
         title: 'New Feature',
         description: 'Feature description',
         business_value: 'High impact feature',
-        category: 'enhancement'
+        category: 'enhancement',
       };
 
       const result = await api.suggestFeature(feature);
@@ -55,19 +58,18 @@ describe('Feature Management API', () => {
 
     it('should reject feature without required fields', async () => {
       const incompleteFeature = {
-        title: 'Incomplete Feature'
+        title: 'Incomplete Feature',
         // Missing: description, business_value, category
       };
 
-      await expect(api.suggestFeature(incompleteFeature))
-        .rejects
-        .toThrow('Required field');
+      await expect(api.suggestFeature(incompleteFeature)).rejects.toThrow('Required field');
     });
   });
 });
 ```
 
 #### Validation System Testing
+
 ```javascript
 describe('Feature Validation', () => {
   it('should validate feature schema compliance', () => {
@@ -81,7 +83,7 @@ describe('Feature Validation', () => {
   it('should enforce business rules', () => {
     const invalidFeature = {
       ...FeatureFactory.create(),
-      category: 'invalid-category'
+      category: 'invalid-category',
     };
 
     const validation = validateBusinessRules(invalidFeature);
@@ -94,6 +96,7 @@ describe('Feature Validation', () => {
 ### 2. **Integration Testing Approach**
 
 #### Complete Feature Lifecycle Testing
+
 ```javascript
 describe('Feature Lifecycle Integration', () => {
   it('should handle complete feature approval workflow', async () => {
@@ -102,23 +105,20 @@ describe('Feature Lifecycle Integration', () => {
       title: 'Integration Test Feature',
       description: 'Test complete workflow',
       business_value: 'Testing integration',
-      category: 'enhancement'
+      category: 'enhancement',
     });
 
     expect(suggestion.feature.status).toBe('suggested');
 
     // Step 2: Approve feature
-    const approval = await api.approveFeature(
-      suggestion.feature.id,
-      { notes: 'Integration test approval' }
-    );
+    const approval = await api.approveFeature(suggestion.feature.id, { notes: 'Integration test approval' });
 
     expect(approval.feature.status).toBe('approved');
     expect(approval.feature.approved_by).toBeDefined();
 
     // Step 3: Verify feature state
     const features = await api.listFeatures();
-    const approvedFeature = features.find(f => f.id === suggestion.feature.id);
+    const approvedFeature = features.find((f) => f.id === suggestion.feature.id);
 
     expect(approvedFeature.status).toBe('approved');
     expect(approvedFeature.approval_date).toBeDefined();
@@ -127,6 +127,7 @@ describe('Feature Lifecycle Integration', () => {
 ```
 
 #### Agent System Integration
+
 ```javascript
 describe('Agent Management Integration', () => {
   it('should manage agent lifecycle with FEATURES.json', async () => {
@@ -139,7 +140,7 @@ describe('Agent Management Integration', () => {
       title: 'Agent-suggested feature',
       description: 'Feature suggested by test agent',
       business_value: 'Agent testing',
-      category: 'enhancement'
+      category: 'enhancement',
     });
 
     // Verify agent tracking
@@ -153,6 +154,7 @@ describe('Agent Management Integration', () => {
 ### 3. **End-to-End Testing Approach**
 
 #### Complete System Workflow Testing
+
 ```javascript
 describe('FEATURES.json E2E Workflows', () => {
   it('should handle multi-agent feature development workflow', async () => {
@@ -165,7 +167,7 @@ describe('FEATURES.json E2E Workflows', () => {
       title: 'E2E Test Feature',
       description: 'Complete end-to-end feature',
       business_value: 'E2E testing validation',
-      category: 'enhancement'
+      category: 'enhancement',
     });
 
     // Approval workflow
@@ -185,6 +187,7 @@ describe('FEATURES.json E2E Workflows', () => {
 ```
 
 #### Bulk Operations Testing
+
 ```javascript
 describe('Bulk Feature Operations', () => {
   it('should handle bulk feature approval workflow', async () => {
@@ -192,10 +195,10 @@ describe('Bulk Feature Operations', () => {
     const features = await Promise.all([
       api.suggestFeature(FeatureFactory.create({ title: 'Bulk Feature 1' })),
       api.suggestFeature(FeatureFactory.create({ title: 'Bulk Feature 2' })),
-      api.suggestFeature(FeatureFactory.create({ title: 'Bulk Feature 3' }))
+      api.suggestFeature(FeatureFactory.create({ title: 'Bulk Feature 3' })),
     ]);
 
-    const featureIds = features.map(f => f.feature.id);
+    const featureIds = features.map((f) => f.feature.id);
 
     // Bulk approval
     const bulkApproval = await api.bulkApproveFeatures(featureIds);
@@ -205,8 +208,8 @@ describe('Bulk Feature Operations', () => {
 
     // Verify all features approved
     const approvedFeatures = await api.listFeatures({ status: 'approved' });
-    featureIds.forEach(id => {
-      expect(approvedFeatures.some(f => f.id === id)).toBe(true);
+    featureIds.forEach((id) => {
+      expect(approvedFeatures.some((f) => f.id === id)).toBe(true);
     });
   });
 });
@@ -215,6 +218,7 @@ describe('Bulk Feature Operations', () => {
 ## 🔧 Test Data Management
 
 ### Feature Factory Pattern
+
 ```javascript
 // test/factories/feature-factory.js
 class FeatureFactory {
@@ -225,7 +229,7 @@ class FeatureFactory {
       business_value: 'Test business value',
       category: 'enhancement',
       priority: 'medium',
-      ...overrides
+      ...overrides,
     };
   }
 
@@ -233,7 +237,7 @@ class FeatureFactory {
     return Array.from({ length: count }, (_, i) =>
       this.create({
         title: `Test Feature ${i + 1}`,
-        ...overrides
+        ...overrides,
       })
     );
   }
@@ -245,6 +249,7 @@ class FeatureFactory {
 ```
 
 ### Test Database Management
+
 ```javascript
 // test/utils/features-test-db.js
 class FeaturesTestDatabase {
@@ -265,7 +270,7 @@ class FeaturesTestDatabase {
       features: [],
       metadata: { version: '1.0.0' },
       workflow_config: { require_approval: true },
-      agents: {}
+      agents: {},
     };
 
     await fs.writeFile(FEATURES_FILE, JSON.stringify(testFeatures, null, 2));
@@ -276,6 +281,7 @@ class FeaturesTestDatabase {
 ## 📊 Performance Testing
 
 ### Feature System Performance Tests
+
 ```javascript
 describe('FEATURES.json Performance', () => {
   it('should handle high-volume feature operations', async () => {
@@ -313,6 +319,7 @@ describe('FEATURES.json Performance', () => {
 ```
 
 ### Memory Usage Testing
+
 ```javascript
 describe('Memory Usage', () => {
   it('should not leak memory during feature operations', async () => {
@@ -339,6 +346,7 @@ describe('Memory Usage', () => {
 ## 🔒 Security Testing
 
 ### Input Validation Testing
+
 ```javascript
 describe('FEATURES.json Security', () => {
   it('should sanitize feature input data', async () => {
@@ -346,7 +354,7 @@ describe('FEATURES.json Security', () => {
       title: '<script>alert("xss")</script>',
       description: '${process.env.SECRET}',
       business_value: '../../../etc/passwd',
-      category: 'enhancement'
+      category: 'enhancement',
     };
 
     const result = await api.suggestFeature(maliciousFeature);
@@ -362,7 +370,7 @@ describe('FEATURES.json Security', () => {
       title: 'Normal Title',
       description: '", "malicious_field": "injected_value", "fake": "',
       business_value: 'Normal value',
-      category: 'enhancement'
+      category: 'enhancement',
     };
 
     const result = await api.suggestFeature(injectionAttempt);
@@ -375,15 +383,18 @@ describe('FEATURES.json Security', () => {
 ```
 
 ### Authorization Testing
+
 ```javascript
 describe('Feature Authorization', () => {
   it('should enforce approval permissions', async () => {
     const feature = await api.suggestFeature(FeatureFactory.create());
 
     // Test unauthorized approval attempt
-    await expect(api.approveFeature(feature.feature.id, {
-      approver: 'unauthorized-user'
-    })).rejects.toThrow('Unauthorized');
+    await expect(
+      api.approveFeature(feature.feature.id, {
+        approver: 'unauthorized-user',
+      })
+    ).rejects.toThrow('Unauthorized');
   });
 });
 ```
@@ -391,13 +402,14 @@ describe('Feature Authorization', () => {
 ## 📈 Migration Testing
 
 ### TODO.json to FEATURES.json Migration
+
 ```javascript
 describe('Migration from TODO.json', () => {
   it('should migrate existing TODO items to FEATURES.json', async () => {
     // Setup legacy TODO.json
     const legacyTodos = [
       { title: 'Legacy Task 1', description: 'Legacy description' },
-      { title: 'Legacy Task 2', description: 'Another legacy task' }
+      { title: 'Legacy Task 2', description: 'Another legacy task' },
     ];
 
     await setupLegacyTodoFile(legacyTodos);
@@ -437,6 +449,7 @@ describe('Migration from TODO.json', () => {
 ## 🧩 Mock Strategies
 
 ### API Mocking for Unit Tests
+
 ```javascript
 // test/mocks/features-api-mock.js
 class MockFeaturesAPI {
@@ -450,7 +463,7 @@ class MockFeaturesAPI {
       ...featureData,
       id: `feature_${Date.now()}_${Math.random().toString(36)}`,
       status: 'suggested',
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     };
 
     this.features.set(feature.id, feature);
@@ -472,24 +485,27 @@ class MockFeaturesAPI {
 ```
 
 ### File System Mocking
+
 ```javascript
 // Mock FEATURES.json file operations
 jest.mock('fs/promises', () => ({
   readFile: jest.fn(),
   writeFile: jest.fn(),
-  access: jest.fn()
+  access: jest.fn(),
 }));
 
 const fs = require('fs/promises');
 
 beforeEach(() => {
   // Setup default mock behavior
-  fs.readFile.mockResolvedValue(JSON.stringify({
-    project: 'test-project',
-    features: [],
-    metadata: {},
-    agents: {}
-  }));
+  fs.readFile.mockResolvedValue(
+    JSON.stringify({
+      project: 'test-project',
+      features: [],
+      metadata: {},
+      agents: {},
+    })
+  );
 
   fs.writeFile.mockResolvedValue();
   fs.access.mockResolvedValue();
@@ -499,6 +515,7 @@ beforeEach(() => {
 ## 📋 Test Coverage Requirements
 
 ### Coverage Targets for FEATURES.json System
+
 - **Feature Management API**: 90%+ coverage
 - **Validation Logic**: 95%+ coverage
 - **Agent Management**: 85%+ coverage
@@ -506,6 +523,7 @@ beforeEach(() => {
 - **Integration Workflows**: 85%+ coverage
 
 ### Critical Path Coverage
+
 ```javascript
 // Ensure 100% coverage for critical operations
 const criticalPaths = [
@@ -513,11 +531,11 @@ const criticalPaths = [
   'feature approval',
   'agent initialization',
   'data validation',
-  'file persistence'
+  'file persistence',
 ];
 
 describe('Critical Path Coverage', () => {
-  criticalPaths.forEach(path => {
+  criticalPaths.forEach((path) => {
     it(`should have complete test coverage for ${path}`, () => {
       // Verify critical path is fully tested
       const coverage = getCoverageForPath(path);
@@ -531,6 +549,7 @@ describe('Critical Path Coverage', () => {
 ## 🚀 Continuous Integration
 
 ### CI Pipeline Integration
+
 ```yaml
 # .github/workflows/features-testing.yml
 name: FEATURES.json System Tests
@@ -563,6 +582,7 @@ jobs:
 ```
 
 ### Pre-commit Hooks
+
 ```bash
 # .husky/pre-commit
 #!/bin/sh

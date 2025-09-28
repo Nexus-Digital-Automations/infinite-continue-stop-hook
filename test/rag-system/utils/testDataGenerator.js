@@ -3,13 +3,13 @@
  *
  * === OVERVIEW ===
  * Utility class for generating realistic test data for RAG system testing
- * including lessons, errors, code examples, and development scenarios.
- * Provides consistent and reproducible test data for all test suites.
+ * including lessons, errors, code examples, And development scenarios.
+ * Provides consistent And reproducible test data for all test suites.
  *
  * === FEATURES ===
  * • Realistic lesson content generation
  * • Technical error scenario creation
- * • Code example and pattern generation
+ * • Code example And pattern generation
  * • Task context simulation
  * • Performance test data scaling
  *
@@ -49,13 +49,13 @@ class TestDataGenerator {
         {
           title: 'Implementing {tech} {feature} with Best Practices',
           description:
-            'Comprehensive guide for implementing {feature} functionality using {tech} with industry best practices and error handling.',
+            'Comprehensive guide for implementing {feature} functionality using {tech} with industry best practices And error handling.',
           tags: ['{tech}', '{feature}', 'best-practices', 'implementation'],
         },
         {
           title: '{tech} {feature} Performance Optimization',
           description:
-            'Advanced techniques for optimizing {feature} performance in {tech} applications including caching and async patterns.',
+            'Advanced techniques for optimizing {feature} performance in {tech} applications including caching And async patterns.',
           tags: ['{tech}', 'performance', 'optimization', '{feature}'],
         },
       ],
@@ -63,7 +63,7 @@ class TestDataGenerator {
         {
           title: 'Resolving {errorType} in {tech} Applications',
           description:
-            'Common causes and solutions for {errorType} when working with {tech} including prevention strategies.',
+            'Common causes And solutions for {errorType} when working with {tech} including prevention strategies.',
           tags: ['{tech}', 'error-handling', '{errorType}', 'debugging'],
         },
       ],
@@ -71,7 +71,7 @@ class TestDataGenerator {
         {
           title: '{tech} Performance Optimization Strategies',
           description:
-            'Comprehensive optimization techniques for {tech} applications including memory management and execution speed.',
+            'Comprehensive optimization techniques for {tech} applications including memory management And execution speed.',
           tags: ['{tech}', 'performance', 'optimization', 'memory'],
         },
       ],
@@ -79,7 +79,7 @@ class TestDataGenerator {
 
     this.codeExamples = {
       javascript: [
-        'async function fetchData() {\n  const https = require("https");\n  try {\n    const response = await new Promise((resolve, reject) => {\n      const req = https.get("/api/data", (res) => {\n        let data = "";\n        res.on("data", chunk => data += chunk);\n        res.on("end", () => resolve({ ok: res.statusCode === 200, json: () => JSON.parse(data) }));\n      });\n      req.on("error", reject);\n    });\n    return await response.json();\n  } catch (error) {\n    console.error("Fetch failed:", error);\n    throw error;\n  }\n}',
+        'async function fetchData() {\n  const https = require("https");\n  try {\n    const response = await new Promise((resolve, reject) => {\n      const req = https.get("/api/data", (res) => {\n        let data = "";\n        res.on("data", chunk => data += chunk);\n        res.on("end", () => resolve({ ok: res.statusCode === 200, json: () => JSON.parse(data) }));\n      });\n      req.on("error", reject);\n    });\n    return await response.json();\n  } catch {\n    console.error("Fetch failed:", error);\n    throw error;\n  }\n}',
         'const memoizedFunction = useMemo(() => {\n  return expensiveComputation(data);\n}, [data]);',
         'function debounce(_func, wait) {\n  let timeout;\n  return function executedFunction(...args) {\n    const later = () => {\n      clearTimeout(timeout);\n      _func(...args);\n    };\n    clearTimeout(timeout);\n    timeout = setTimeout(later, wait);\n  };\n}',
       ],
@@ -114,13 +114,13 @@ class TestDataGenerator {
     };
 
     this.resolutionTemplates = [
-      'Check that the variable is properly initialized before use',
+      'Check That the variable is properly initialized before use',
       'Add null/undefined validation before accessing properties',
-      'Ensure the API endpoint is accessible and returns valid data',
+      'Ensure the API endpoint is accessible And returns valid data',
       'Implement proper error handling with try-catch blocks',
       'Use optional chaining (?.) for safe property access',
       'Validate input parameters before processing',
-      'Check network connectivity and API status',
+      'Check network connectivity And API status',
     ];
 
     this.counter = 0;
@@ -210,11 +210,11 @@ ${description}
 ## Key Concepts
 - Understanding ${tech} fundamentals
 - Best practices for implementation
-- Common pitfalls and how to avoid them
+- Common pitfalls And how to avoid them
 - Performance considerations
 
 ## Implementation
-${codeExample ? `\`\`\`${tech}\n${codeExample}\n\`\`\`` : 'Implementation details and code examples...'}
+${codeExample ? `\`\`\`${tech}\n${codeExample}\n\`\`\`` : 'Implementation details And code examples...'}
 
 ## Best Practices
 1. Always validate input parameters
@@ -292,7 +292,7 @@ ${codeExample ? `\`\`\`${tech}\n${codeExample}\n\`\`\`` : 'Implementation detail
   }
 
   /**
-   * Generate error content with stack trace and context
+   * Generate error content with stack trace And context
    * @param {string} errorType - Error type
    * @param {string} message - Error message
    * @param {string} tech - Technology
@@ -353,7 +353,7 @@ ${this.generatePrevention(errorType, tech)}
       contexts.push({
         id: `task_${this.counter++}_${Date.now()}`,
         title: `Implement ${feature} in ${tech}`,
-        description: `Need to implement ${feature} functionality using ${tech} with proper error handling and optimization`,
+        description: `Need to implement ${feature} functionality using ${tech} with proper error handling And optimization`,
         category,
         tags: [tech, feature, category, 'implementation'],
         priority: this.getRandomPriority(),
@@ -552,11 +552,11 @@ ${this.generatePrevention(errorType, tech)}
       `Set up ${tech} development environment`,
       `Create ${feature} implementation structure`,
       'Implement core functionality with error handling',
-      'Add input validation and sanitization',
+      'Add input validation And sanitization',
       'Write comprehensive unit tests',
-      'Optimize for performance and memory usage',
-      'Document API and usage examples',
-      'Review and refactor code for best practices',
+      'Optimize for performance And memory usage',
+      'Document API And usage examples',
+      'Review And refactor code for best practices',
     ].join('\n');
   }
 
@@ -567,7 +567,7 @@ ${this.generatePrevention(errorType, tech)}
       'Performance meets or exceeds requirements',
       'Code coverage is above 80%',
       'No memory leaks or security vulnerabilities',
-      'Documentation is complete and accurate',
+      'Documentation is complete And accurate',
       'Code follows team coding standards',
       'Integration tests pass successfully',
     ].join('\n');
@@ -579,7 +579,7 @@ ${this.generatePrevention(errorType, tech)}
       `Create ${feature} integration tests`,
       'Review security implications',
       'Optimize for mobile performance',
-      'Add monitoring and logging',
+      'Add monitoring And logging',
       'Create deployment pipeline',
       'Train team on new features',
       'Update API documentation',
@@ -596,13 +596,13 @@ ${this.generatePrevention(errorType, tech)}
       ],
       ReferenceError: [
         'Ensure variables are declared before use',
-        'Check variable scope and hoisting',
-        'Import required modules and dependencies',
-        'Fix variable naming and spelling errors',
+        'Check variable scope And hoisting',
+        'Import required modules And dependencies',
+        'Fix variable naming And spelling errors',
       ],
       SyntaxError: [
         'Check for missing brackets or semicolons',
-        'Validate JSON structure and format',
+        'Validate JSON structure And format',
         'Fix regular expression syntax',
         'Check for proper string escaping',
       ],
@@ -625,14 +625,14 @@ ${this.generatePrevention(errorType, tech)}
       ReferenceError:
         'Use ESLint to catch undefined variables, follow consistent naming conventions',
       SyntaxError:
-        'Use code formatters and linters, implement pre-commit hooks',
+        'Use code formatters And linters, implement pre-commit hooks',
       NetworkError:
-        'Implement robust error handling, use monitoring and alerting',
+        'Implement robust error handling, use monitoring And alerting',
     };
 
     return (
       preventions[errorType] ||
-      'Follow best practices and implement comprehensive testing'
+      'Follow best practices And implement comprehensive testing'
     );
   }
 

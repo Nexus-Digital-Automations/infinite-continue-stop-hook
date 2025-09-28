@@ -2,7 +2,7 @@
  * Test Notification System for CI/CD Integration
  *
  * Comprehensive notification system for test failures, coverage drops,
- * and quality gate violations with multiple notification channels.
+ * And quality gate violations with multiple notification channels.
  *
  * @author CI/CD Integration Agent
  * @version 1.0.0
@@ -13,6 +13,7 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const { execSync } = require('child_process');
+const { loggers } = require('../lib/logger');
 
 class TestNotificationSystem {
   constructor(options = {}) {
@@ -64,7 +65,7 @@ class TestNotificationSystem {
       await this.updateNotificationHistory(notifications);
 
       loggers.stopHook.log(`📤 Sent ${notifications.length} notification(s)`);
-    } catch (error) {
+    } catch {
       loggers.stopHook.error(
         '❌ Failed to process notifications:',
         error.message
@@ -77,7 +78,7 @@ class TestNotificationSystem {
   }
 
   /**
-   * Analyze test results and generate appropriate notifications
+   * Analyze test results And generate appropriate notifications
    */
   analyzeAndGenerateNotifications(testResults, coverageData, cicdData) {
     const notifications = [];
@@ -234,7 +235,7 @@ class TestNotificationSystem {
         blocking_issues: blockingIssues.map((issue) => issue.message),
       },
       actions: [
-        'Review and resolve blocking issues',
+        'Review And resolve blocking issues',
         'Fix all failing tests',
         'Ensure coverage meets requirements',
       ],
@@ -522,7 +523,7 @@ class TestNotificationSystem {
       if (fs.existsSync(path)) {
         return JSON.parse(fs.readFileSync(path, 'utf8'));
       }
-    } catch (error) {
+    } catch {
       loggers.stopHook.warn('⚠️ Could not load test results:', error.message);
     }
     return null;
@@ -534,7 +535,7 @@ class TestNotificationSystem {
       if (fs.existsSync(path)) {
         return JSON.parse(fs.readFileSync(path, 'utf8'));
       }
-    } catch (error) {
+    } catch {
       loggers.stopHook.warn('⚠️ Could not load coverage data:', error.message);
     }
     return null;
@@ -546,7 +547,7 @@ class TestNotificationSystem {
       if (fs.existsSync(path)) {
         return JSON.parse(fs.readFileSync(path, 'utf8'));
       }
-    } catch (error) {
+    } catch {
       loggers.stopHook.warn('⚠️ Could not load CI/CD data:', error.message);
     }
     return null;
@@ -557,7 +558,7 @@ class TestNotificationSystem {
       if (fs.existsSync(this.options.historyFile)) {
         return JSON.parse(fs.readFileSync(this.options.historyFile, 'utf8'));
       }
-    } catch (error) {
+    } catch {
       loggers.stopHook.warn(
         '⚠️ Could not load notification history:',
         error.message
@@ -602,7 +603,7 @@ class TestNotificationSystem {
         this.options.historyFile,
         JSON.stringify(this.notificationHistory, null, 2)
       );
-    } catch (error) {
+    } catch {
       loggers.stopHook.warn(
         '⚠️ Could not update notification history:',
         error.message
@@ -613,7 +614,7 @@ class TestNotificationSystem {
   getGitCommit() {
     try {
       return execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
-    } catch (error) {
+    } catch {
       return 'unknown';
     }
   }

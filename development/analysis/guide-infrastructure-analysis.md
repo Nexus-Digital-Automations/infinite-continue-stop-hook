@@ -9,6 +9,7 @@ This analysis documents the comprehensive guide integration infrastructure alrea
 ### 1. Guide Caching System
 
 #### Core Implementation
+
 ```javascript
 // Performance-optimized caching system (lines 177-181)
 this._cachedGuide = null;
@@ -18,12 +19,14 @@ this._guideGenerationInProgress = false;
 ```
 
 #### Key Features
+
 - **1-minute cache duration** for balance between freshness and performance
 - **Concurrent generation prevention** to avoid duplicate guide creation
 - **Memory-efficient caching** with timestamp-based expiration
 - **Thread-safe implementation** with generation locks
 
 #### Performance Characteristics
+
 - Prevents multiple concurrent guide generations (lines 668-680)
 - Includes timeout protection (5-second timeout for guide generation)
 - Graceful degradation when guide generation fails
@@ -32,15 +35,16 @@ this._guideGenerationInProgress = false;
 ### 2. Contextual Guide Selection Logic
 
 #### Implementation Pattern
+
 ```javascript
 // Contextual guide delivery based on error context (lines 707-778)
 async _getGuideForError(errorContext) {
   const fullGuide = await this._getCachedGuide();
-  
+
   switch (errorContext) {
     case 'agent-init':
       return customized guide with initialization focus
-    case 'agent-reinit': 
+    case 'agent-reinit':
       return customized guide with reinitialization focus
     case 'task-operations':
       return customized guide with task operation focus
@@ -51,12 +55,14 @@ async _getGuideForError(errorContext) {
 ```
 
 #### Supported Contexts
+
 - **agent-init**: Agent initialization guidance with quick start commands
 - **agent-reinit**: Agent reinitialization with heartbeat renewal focus
 - **task-operations**: Task creation and management with classification emphasis
 - **general**: Fallback to comprehensive guide
 
 #### Customization Features
+
 - Context-specific quick start commands
 - Focused instruction sets based on operation type
 - Essential commands highlighted for immediate use
@@ -65,6 +71,7 @@ async _getGuideForError(errorContext) {
 ### 3. Fallback Mechanism Architecture
 
 #### Multi-Level Fallback System
+
 ```javascript
 // Robust fallback chain (lines 785-841)
 _getFallbackGuide(context = 'general') {
@@ -72,11 +79,11 @@ _getFallbackGuide(context = 'general') {
     essential_commands: {...},
     message: 'For complete API usage guidance, run guide command'
   };
-  
+
   // Add context-specific fallback guidance
   switch (context) {
     case 'agent-init': return agent initialization fallback
-    case 'agent-reinit': return reinitialization fallback  
+    case 'agent-reinit': return reinitialization fallback
     case 'task-operations': return task operations fallback
     default: return base guide
   }
@@ -84,6 +91,7 @@ _getFallbackGuide(context = 'general') {
 ```
 
 #### Fallback Levels
+
 1. **Full cached guide** - Primary delivery mechanism
 2. **Contextual fallback guide** - Reduced but relevant guidance
 3. **Base fallback guide** - Minimal essential commands
@@ -94,6 +102,7 @@ _getFallbackGuide(context = 'general') {
 #### Successful Integration Examples
 
 **Init Command Integration (lines 889-934)**
+
 ```javascript
 async initAgent(config = {}) {
   // Get guide information for all responses (both success and error)
@@ -106,7 +115,7 @@ async initAgent(config = {}) {
 
   try {
     const result = await this.withTimeout(/* initialization logic */);
-    
+
     // Add guide to success response
     return {
       ...result,
@@ -123,11 +132,13 @@ async initAgent(config = {}) {
 ```
 
 **Reinitialize Command Integration (lines 1432-1496)**
+
 - Identical pattern with context-specific guide delivery
 - Consistent error handling with guide fallbacks
 - Performance optimization through cached guide system
 
 #### CLI Command Integration Pattern
+
 ```javascript
 case 'guide': {
   const result = await api.getComprehensiveGuide();
@@ -139,10 +150,10 @@ case 'guide': {
 ### 5. Error Context Determination System
 
 #### Automatic Context Detection (lines 2251-2261)
+
 ```javascript
 // Determine error context based on error message and command
-if (error.message.includes('no agent id') || 
-    error.message.includes('agent not initialized')) {
+if (error.message.includes('no agent id') || error.message.includes('agent not initialized')) {
   errorContext = 'agent-init';
 } else if (command === 'init' || command === 'reinitialize') {
   errorContext = command === 'init' ? 'agent-init' : 'agent-reinit';
@@ -152,6 +163,7 @@ if (error.message.includes('no agent id') ||
 ```
 
 #### Context Mapping Strategy
+
 - **Error message analysis** for dynamic context detection
 - **Command-based context** for known operation types
 - **Fallback to general** when context cannot be determined
@@ -209,7 +221,7 @@ case 'command-name': {
       throw new Error(`Invalid JSON parameters: ${parseError.message}`);
     }
   }
-  
+
   // Execute API method (guide included in response)
   const result = await api.methodName(params);
   console.log(JSON.stringify(result, null, 2));
@@ -258,17 +270,20 @@ case 'new-context':
 ## Performance Optimization Strategies
 
 ### 1. Caching Strategy
+
 - **60-second cache duration** balances freshness with performance
 - **Single guide generation** prevents resource waste
 - **Memory-efficient storage** with automatic expiration
 - **Concurrent access protection** prevents race conditions
 
 ### 2. Timeout Configuration
+
 - **5-second timeout** for guide generation (faster than general 10-second timeout)
 - **Non-blocking guide failures** - methods continue without guides
 - **Graceful degradation** to fallback guides when timeouts occur
 
 ### 3. Lazy Loading Implementation
+
 - **On-demand generation** - guides created only when needed
 - **Context-specific optimization** - only relevant sections returned
 - **Fallback minimization** - reduced guide content for faster delivery
@@ -276,7 +291,9 @@ case 'new-context':
 ## Implementation Consistency Patterns
 
 ### 1. Response Structure Standardization
+
 All guide-integrated methods follow consistent response format:
+
 ```javascript
 {
   success: boolean,
@@ -290,12 +307,14 @@ All guide-integrated methods follow consistent response format:
 ```
 
 ### 2. Error Handling Patterns
+
 - **Guide generation never blocks** core functionality
 - **Multiple fallback levels** ensure guide availability
 - **Consistent error context detection** across all commands
 - **Performance timeout protection** prevents hanging operations
 
 ### 3. Integration Points
+
 - **API method level** - guide integration in core methods
 - **CLI command level** - transparent guide inclusion in CLI responses
 - **Error handling level** - contextual guides in error scenarios
@@ -304,18 +323,21 @@ All guide-integrated methods follow consistent response format:
 ## Architecture Benefits
 
 ### 1. Performance Benefits
+
 - **Single guide generation** per cache period reduces computational overhead
 - **Context-specific delivery** reduces response payload size
 - **Fallback optimization** ensures fast response even during failures
 - **Memory-efficient caching** prevents resource exhaustion
 
 ### 2. User Experience Benefits
+
 - **Context-aware guidance** provides relevant help for current operation
 - **Consistent help availability** across all commands and error states
 - **Progressive information disclosure** - from minimal to comprehensive guidance
 - **Self-documenting API** with embedded usage instructions
 
 ### 3. Maintenance Benefits
+
 - **Centralized guide management** - single source of truth for all guidance
 - **Consistent integration patterns** reduce implementation complexity
 - **Reusable components** speed up new command integration
@@ -324,19 +346,22 @@ All guide-integrated methods follow consistent response format:
 ## Recommendations for Consistent Integration
 
 ### 1. Standard Integration Process
+
 1. **Identify appropriate error context** for the command type
 2. **Implement guide integration** using established template patterns
-3. **Add context-specific sections** to _getGuideForError method
-4. **Create fallback guidance** in _getFallbackGuide method
+3. **Add context-specific sections** to \_getGuideForError method
+4. **Create fallback guidance** in \_getFallbackGuide method
 5. **Test guide delivery** in success, error, and timeout scenarios
 
 ### 2. Context Expansion Guidelines
+
 - **Create new contexts** for distinct operation types
 - **Reuse existing contexts** where operations overlap
 - **Maintain context hierarchy** from specific to general
 - **Document context mapping** for future development
 
 ### 3. Performance Considerations
+
 - **Maintain cache duration** at 60 seconds for optimal balance
 - **Use timeouts appropriately** - shorter for guides, longer for core operations
 - **Implement graceful degradation** in all guide integration points

@@ -10,6 +10,7 @@
 ## 🚨 Quick Diagnostic Commands
 
 ### Immediate Health Check
+
 ```bash
 # Check Jest installation and configuration
 npm test -- --version
@@ -26,6 +27,7 @@ npm install
 ```
 
 ### Environment Validation
+
 ```bash
 # Check environment variables
 echo $NODE_ENV
@@ -43,11 +45,13 @@ npm run | grep test
 ### 1. **Tests Not Running**
 
 #### Symptom: No tests found
+
 ```bash
 No tests found, exiting with code 0
 ```
 
 **Diagnosis:**
+
 ```bash
 # Check test file patterns
 npm test -- --listTests
@@ -57,6 +61,7 @@ npm test -- --showConfig | grep testMatch
 ```
 
 **Solutions:**
+
 ```bash
 # Fix test file naming
 mv test/myfile.js test/myfile.test.js
@@ -70,11 +75,13 @@ npm test -- test/specific-file.test.js
 ```
 
 #### Symptom: Jest command not found
+
 ```bash
 jest: command not found
 ```
 
 **Solutions:**
+
 ```bash
 # Reinstall Jest
 npm install --save-dev jest
@@ -89,11 +96,13 @@ npm list -g jest
 ### 2. **Test Failures**
 
 #### Symptom: Timeout errors
+
 ```bash
 Timeout - Async callback was not invoked within the 5000ms timeout
 ```
 
 **Diagnosis:**
+
 ```bash
 # Check test timeout settings
 npm test -- --testTimeout=30000
@@ -103,6 +112,7 @@ npm test -- --detectOpenHandles
 ```
 
 **Solutions:**
+
 ```bash
 # Increase timeout globally
 # In jest.config.js:
@@ -121,11 +131,13 @@ afterEach(async () => {
 ```
 
 #### Symptom: Async operation issues
+
 ```bash
 Cannot read property 'then' of undefined
 ```
 
 **Solutions:**
+
 ```javascript
 // ❌ WRONG - Missing await
 it('should create task', () => {
@@ -141,7 +153,7 @@ it('should create task', async () => {
 
 // ✅ CORRECT - Return promise
 it('should create task', () => {
-  return createTask().then(result => {
+  return createTask().then((result) => {
     expect(result.id).toBeDefined();
   });
 });
@@ -150,11 +162,13 @@ it('should create task', () => {
 ### 3. **Mock Issues**
 
 #### Symptom: Mocks not working
+
 ```bash
 TypeError: mockFunction is not a function
 ```
 
 **Diagnosis:**
+
 ```bash
 # Check mock setup
 console.log(jest.isMockFunction(myMock));
@@ -164,6 +178,7 @@ console.log(myMock.mock.calls);
 ```
 
 **Solutions:**
+
 ```javascript
 // ❌ WRONG - Mock after import
 const service = require('./service');
@@ -175,7 +190,7 @@ const service = require('./service');
 
 // ✅ CORRECT - Manual mock
 jest.mock('./service', () => ({
-  getData: jest.fn(() => Promise.resolve({ id: 1 }))
+  getData: jest.fn(() => Promise.resolve({ id: 1 })),
 }));
 
 // Clear mocks between tests
@@ -185,16 +200,18 @@ beforeEach(() => {
 ```
 
 #### Symptom: Module not found in mocks
+
 ```bash
 Cannot find module './non-existent-module'
 ```
 
 **Solutions:**
+
 ```javascript
 // Use __mocks__ directory
 // __mocks__/external-service.js
 module.exports = {
-  fetchData: jest.fn(() => Promise.resolve({}))
+  fetchData: jest.fn(() => Promise.resolve({})),
 };
 
 // Manual mock with error handling
@@ -210,11 +227,13 @@ jest.mock('./service', () => {
 ### 4. **Database/State Issues**
 
 #### Symptom: Tests affecting each other
+
 ```bash
 Expected 1 but received 2
 ```
 
 **Diagnosis:**
+
 ```bash
 # Run tests in isolation
 npm test -- --runInBand
@@ -224,6 +243,7 @@ npm test -- --verbose
 ```
 
 **Solutions:**
+
 ```javascript
 // Proper test isolation
 describe('Database tests', () => {
@@ -247,11 +267,13 @@ beforeEach(() => {
 ```
 
 #### Symptom: Database connection errors
+
 ```bash
 Connection refused / Database locked
 ```
 
 **Solutions:**
+
 ```bash
 # Use in-memory database for tests
 TEST_DATABASE_URL="sqlite::memory:" npm test
@@ -269,6 +291,7 @@ const db = new Database(':memory:', { timeout: 10000 });
 ### 5. **Performance Issues**
 
 #### Symptom: Tests running slowly
+
 ```bash
 Test Suites: 1 passed, 1 total
 Tests:       50 passed, 50 total
@@ -276,6 +299,7 @@ Time:        45.123 s
 ```
 
 **Diagnosis:**
+
 ```bash
 # Profile test execution
 npm test -- --verbose --silent=false
@@ -288,6 +312,7 @@ npm test -- --logHeapUsage
 ```
 
 **Solutions:**
+
 ```bash
 # Run tests in parallel
 npm test -- --maxWorkers=4
@@ -305,11 +330,13 @@ npm test -- --changedFilesWithAncestor
 ### 6. **Coverage Issues**
 
 #### Symptom: Coverage thresholds not met
+
 ```bash
 Coverage threshold for lines (80%) not met: 75.5%
 ```
 
 **Diagnosis:**
+
 ```bash
 # Generate detailed coverage report
 npm run coverage:html
@@ -319,6 +346,7 @@ npm run coverage:report
 ```
 
 **Solutions:**
+
 ```bash
 # Add tests for uncovered lines
 npm run coverage:html
@@ -341,11 +369,13 @@ coverageThreshold: {
 ```
 
 #### Symptom: No coverage data collected
+
 ```bash
 No coverage information was collected
 ```
 
 **Solutions:**
+
 ```bash
 # Enable coverage collection
 npm test -- --coverage
@@ -362,6 +392,7 @@ npm test -- --coverage --collectCoverageFrom="**/*.js"
 ### 1. **Debug Mode Setup**
 
 #### Node.js Inspector
+
 ```bash
 # Debug specific test
 node --inspect-brk node_modules/.bin/jest test/specific.test.js
@@ -371,6 +402,7 @@ node --inspect-brk --inspect-port=9229 node_modules/.bin/jest
 ```
 
 #### VS Code Debugging
+
 ```json
 // .vscode/launch.json
 {
@@ -387,6 +419,7 @@ node --inspect-brk --inspect-port=9229 node_modules/.bin/jest
 ### 2. **Memory Leak Detection**
 
 #### Heap Snapshot Analysis
+
 ```bash
 # Run with heap snapshots
 node --expose-gc --inspect node_modules/.bin/jest --logHeapUsage
@@ -396,6 +429,7 @@ npm test -- --detectLeaks --logHeapUsage
 ```
 
 #### Memory Debugging
+
 ```javascript
 // Add to test files for memory monitoring
 beforeEach(() => {
@@ -406,7 +440,8 @@ beforeEach(() => {
 afterEach(() => {
   const memAfter = process.memoryUsage();
   const memDiff = memAfter.heapUsed - global.testMemoryStart;
-  if (memDiff > 10 * 1024 * 1024) { // 10MB threshold
+  if (memDiff > 10 * 1024 * 1024) {
+    // 10MB threshold
     console.warn(`Memory increase: ${memDiff / 1024 / 1024}MB`);
   }
 });
@@ -415,6 +450,7 @@ afterEach(() => {
 ### 3. **Flaky Test Detection**
 
 #### Run Tests Multiple Times
+
 ```bash
 # Repeat tests to catch flaky behavior
 for i in {1..10}; do npm test -- test/flaky.test.js || break; done
@@ -424,10 +460,11 @@ npm test -- --testNamePattern="flaky test" --runInBand --repeatCount=10
 ```
 
 #### Identify Race Conditions
+
 ```javascript
 // Add artificial delays to expose race conditions
 beforeEach(async () => {
-  await new Promise(resolve => setTimeout(resolve, Math.random() * 100));
+  await new Promise((resolve) => setTimeout(resolve, Math.random() * 100));
 });
 
 // Use deterministic ordering
@@ -439,6 +476,7 @@ jest.useFakeTimers();
 ### 1. **CI/CD Issues**
 
 #### GitHub Actions Failures
+
 ```yaml
 # Add debugging to workflow
 - name: Debug Test Environment
@@ -453,6 +491,7 @@ jest.useFakeTimers();
 ```
 
 #### Docker Environment
+
 ```dockerfile
 # Dockerfile for consistent test environment
 FROM node:18-alpine
@@ -466,6 +505,7 @@ RUN npm test
 ### 2. **Windows-Specific Issues**
 
 #### Path Separator Issues
+
 ```javascript
 // Use path.join instead of hardcoded separators
 const path = require('path');
@@ -473,10 +513,11 @@ const testFile = path.join(__dirname, 'test', 'data.json');
 
 // Jest configuration for Windows
 // In jest.config.js:
-testMatch: ['<rootDir>/test/**/*.test.js']
+testMatch: ['<rootDir>/test/**/*.test.js'];
 ```
 
 #### Line Ending Issues
+
 ```bash
 # Configure git to handle line endings
 git config core.autocrlf input
@@ -488,6 +529,7 @@ echo "* text=auto" > .gitattributes
 ### 3. **macOS-Specific Issues**
 
 #### File System Case Sensitivity
+
 ```bash
 # Check case sensitivity
 touch test.txt TEST.TXT
@@ -502,15 +544,16 @@ const service = require('./UserService'); // Not ./userservice
 ### 1. **Test Execution Monitoring**
 
 #### Custom Test Reporter
+
 ```javascript
 // test/utils/performance-reporter.js
 class PerformanceReporter {
   onRunComplete(contexts, results) {
     const slowTests = results.testResults
-      .filter(test => test.perfStats.runtime > 5000)
-      .map(test => ({
+      .filter((test) => test.perfStats.runtime > 5000)
+      .map((test) => ({
         name: test.testFilePath,
-        duration: test.perfStats.runtime
+        duration: test.perfStats.runtime,
       }));
 
     if (slowTests.length > 0) {
@@ -523,6 +566,7 @@ module.exports = PerformanceReporter;
 ```
 
 #### Test Metrics Collection
+
 ```bash
 # Collect test metrics
 npm test -- --json --outputFile=test-results.json
@@ -534,6 +578,7 @@ node scripts/analyze-test-results.js
 ### 2. **Coverage Trend Analysis**
 
 #### Coverage History Tracking
+
 ```javascript
 // scripts/track-coverage.js
 const fs = require('fs');
@@ -542,7 +587,7 @@ const coverage = JSON.parse(fs.readFileSync('coverage/coverage-summary.json'));
 const trend = {
   date: new Date().toISOString(),
   coverage: coverage.total.lines.pct,
-  tests: coverage.total.tests
+  tests: coverage.total.tests,
 };
 
 // Append to history file
@@ -554,6 +599,7 @@ fs.appendFileSync('coverage-history.json', JSON.stringify(trend) + '\n');
 ### 1. **Pre-commit Testing**
 
 #### Husky Setup
+
 ```bash
 # Install husky
 npm install --save-dev husky
@@ -563,6 +609,7 @@ npx husky add .husky/pre-commit "npm run test:quick"
 ```
 
 #### Lint-staged Integration
+
 ```json
 // package.json
 {
@@ -575,6 +622,7 @@ npx husky add .husky/pre-commit "npm run test:quick"
 ### 2. **Test Quality Gates**
 
 #### Quality Checklist
+
 ```bash
 #!/bin/bash
 # scripts/quality-gate.sh
@@ -604,6 +652,7 @@ echo "✅ All quality checks passed!"
 ### 3. **Documentation Integration**
 
 #### Test Documentation Generator
+
 ```javascript
 // scripts/generate-test-docs.js
 const fs = require('fs');
@@ -615,7 +664,7 @@ function extractTestInfo(filePath) {
   return {
     file: filePath,
     testCount: tests.length,
-    tests: tests.map(test => test.slice(4, -1))
+    tests: tests.map((test) => test.slice(4, -1)),
   };
 }
 
@@ -630,6 +679,7 @@ fs.writeFileSync('test-documentation.json', JSON.stringify(testInfo, null, 2));
 ## 📚 Quick Reference
 
 ### Essential Commands
+
 ```bash
 # Quick diagnostics
 npm test -- --version --showConfig
@@ -648,6 +698,7 @@ npm run coverage:html && open coverage/lcov-report/index.html
 ```
 
 ### Emergency Contacts
+
 - **Linting Issues**: Run `npm run lint:fix`
 - **Cache Issues**: Run `npm run coverage:clean`
 - **Module Issues**: Delete `node_modules`, run `npm install`

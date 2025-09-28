@@ -65,6 +65,7 @@ All phase commands require a `featureId` parameter and operate ONLY on features.
 ### Phase Creation
 
 #### `create-phase`
+
 Creates a new sequential phase for a specific feature.
 
 ```bash
@@ -72,14 +73,16 @@ timeout 10s node taskmanager-api.js create-phase <featureId> '{"title": "Phase T
 ```
 
 **Parameters:**
+
 - `featureId` (required): Feature ID from TODO.json features array
 - `phaseData` (required): JSON object with phase details
-  - `title` (required): Phase title 
+  - `title` (required): Phase title
   - `description` (optional): Phase description
   - `number` (optional): Phase number (auto-assigned if not provided)
   - `status` (optional): Phase status (default: 'pending')
 
 **Examples:**
+
 ```bash
 # Create initial planning phase
 timeout 10s node taskmanager-api.js create-phase feature_456_xyz '{"title": "Planning & Requirements", "description": "Gather requirements and design architecture"}'
@@ -91,6 +94,7 @@ timeout 10s node taskmanager-api.js create-phase feature_456_xyz '{"title": "Cor
 ### Phase Updates
 
 #### `update-phase`
+
 Updates phase status, description, or other properties.
 
 ```bash
@@ -98,11 +102,13 @@ timeout 10s node taskmanager-api.js update-phase <featureId> <phaseNumber> '{"st
 ```
 
 **Parameters:**
+
 - `featureId` (required): Feature ID
 - `phaseNumber` (required): Phase number to update
 - `updates` (required): JSON object with field updates
 
 **Examples:**
+
 ```bash
 # Mark phase as completed
 timeout 10s node taskmanager-api.js update-phase feature_456_xyz 1 '{"status": "completed"}'
@@ -114,6 +120,7 @@ timeout 10s node taskmanager-api.js update-phase feature_456_xyz 2 '{"notes": "E
 ### Phase Progression
 
 #### `progress-phase`
+
 Completes current phase and automatically progresses to next phase.
 
 ```bash
@@ -121,16 +128,19 @@ timeout 10s node taskmanager-api.js progress-phase <featureId> <currentPhaseNumb
 ```
 
 **Parameters:**
+
 - `featureId` (required): Feature ID
 - `currentPhaseNumber` (required): Phase number to complete
 
 **Behavior:**
+
 - Marks specified phase as 'completed'
 - Sets completion timestamp
 - Automatically starts next phase (if exists)
 - Returns next phase object or null if no more phases
 
 **Examples:**
+
 ```bash
 # Complete Phase 1 and start Phase 2
 timeout 10s node taskmanager-api.js progress-phase feature_456_xyz 1
@@ -142,6 +152,7 @@ timeout 10s node taskmanager-api.js progress-phase feature_456_xyz 3
 ### Phase Queries
 
 #### `list-phases`
+
 Lists all phases for a feature with completion statistics.
 
 ```bash
@@ -149,11 +160,13 @@ timeout 10s node taskmanager-api.js list-phases <featureId>
 ```
 
 **Returns:**
+
 - Array of all phases for the feature
 - Completion statistics (total, completed, in_progress, pending)
 - Completion percentage
 
 #### `current-phase`
+
 Gets the currently active phase for a feature.
 
 ```bash
@@ -161,11 +174,13 @@ timeout 10s node taskmanager-api.js current-phase <featureId>
 ```
 
 **Returns:**
+
 - Current 'in_progress' phase, or first 'pending' phase if none in progress
 - Completion statistics
 - Status message
 
 #### `phase-stats`
+
 Gets detailed phase completion statistics.
 
 ```bash
@@ -173,6 +188,7 @@ timeout 10s node taskmanager-api.js phase-stats <featureId>
 ```
 
 **Returns:**
+
 - Detailed statistics object
 - Individual phase status breakdown
 - Timeline information
@@ -262,7 +278,7 @@ The system enforces feature-only phase creation:
 // ✅ VALID: Creating phase for feature
 await taskManager.createPhase('feature_123_abc', {
   title: 'Implementation Phase',
-  description: 'Core development work'
+  description: 'Core development work',
 });
 
 // ❌ INVALID: Attempting to create phase for task
@@ -288,7 +304,7 @@ await taskManager.createPhase('nonexistent_feature', { title: 'Phase 1' });
 ### ✅ When to Use Phases
 
 1. **Complex Features**: Multi-step features requiring structured development
-2. **Timeline Tracking**: Projects needing phase-based progress monitoring  
+2. **Timeline Tracking**: Projects needing phase-based progress monitoring
 3. **Team Coordination**: Features with multiple development stages
 4. **Milestone Management**: Features with distinct completion criteria
 5. **Sprint Planning**: Agile development with sprint-based phases
@@ -304,15 +320,17 @@ await taskManager.createPhase('nonexistent_feature', { title: 'Phase 1' });
 ### Naming Conventions
 
 **Good Phase Names:**
+
 ```
 ✅ "Discovery & Requirements"
-✅ "Core Implementation"  
+✅ "Core Implementation"
 ✅ "Testing & QA"
 ✅ "Performance Optimization"
 ✅ "Documentation & Deployment"
 ```
 
 **Poor Phase Names:**
+
 ```
 ❌ "Phase 1" (too generic)
 ❌ "Do stuff" (non-descriptive)
@@ -326,18 +344,21 @@ await taskManager.createPhase('nonexistent_feature', { title: 'Phase 1' });
 ### Common Issues
 
 **1. "Feature not found" Error**
+
 ```bash
 # Verify feature exists
 timeout 10s node taskmanager-api.js list-features
 ```
 
-**2. "Phase number required" Error**  
+**2. "Phase number required" Error**
+
 ```bash
 # Ensure phase number is provided as integer
 timeout 10s node taskmanager-api.js update-phase feature_123 1 '{"status": "completed"}'
 ```
 
 **3. "phases can only be added to features" Error**
+
 ```bash
 # Verify you're using a feature ID, not a task ID
 # Feature IDs typically start with "feature_" prefix
@@ -367,6 +388,7 @@ timeout 10s node taskmanager-api.js phase-stats <featureId>
 ---
 
 **Document Information**
+
 - **Last Updated**: 2025-09-09
 - **Version**: 2.1.0 (Phase System Implementation)
 - **Phase System**: FEATURE-EXCLUSIVE Sequential Phases

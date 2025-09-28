@@ -10,6 +10,7 @@
 - Follow project coding conventions
 
 ## Task Execution
+
 - Read all important files before starting
 - Create specific, actionable subtasks
 - Test functionality thoroughly

@@ -1,14 +1,17 @@
 # Research Task Guidelines and Configuration
 
 ## Overview
+
 This file defines comprehensive guidelines for research tasks within the embedded subtasks system, including research methodologies, configuration standards, reporting requirements, and integration protocols.
 
 ## Research Task Framework
 
 ### 🔍 Research Task Definition
+
 Research tasks are automatically generated for complex feature implementations requiring comprehensive analysis before development begins. They serve as critical intelligence-gathering phases that prevent implementation errors and ensure optimal technical approaches.
 
 ### Core Research Principles
+
 1. **Comprehensive Analysis**: Cover all relevant technical, architectural, and business aspects
 2. **Multi-Source Investigation**: Combine codebase analysis, internet research, and documentation review
 3. **Objective Assessment**: Provide unbiased analysis of options and approaches
@@ -18,30 +21,16 @@ Research tasks are automatically generated for complex feature implementations r
 ## Research Location Configuration
 
 ### 🏗️ Codebase Research
+
 ```json
 {
   "type": "codebase",
   "configuration": {
-    "primary_paths": [
-      "/src",
-      "/lib", 
-      "/api",
-      "/routes",
-      "/controllers",
-      "/models",
-      "/services",
-      "/components"
-    ],
-    "secondary_paths": [
-      "/config",
-      "/utils",
-      "/helpers",
-      "/middleware",
-      "/schemas"
-    ],
+    "primary_paths": ["/src", "/lib", "/api", "/routes", "/controllers", "/models", "/services", "/components"],
+    "secondary_paths": ["/config", "/utils", "/helpers", "/middleware", "/schemas"],
     "analysis_focus": [
       "Existing implementation patterns",
-      "Architectural decisions and conventions", 
+      "Architectural decisions and conventions",
       "Data flow and integration points",
       "Error handling strategies",
       "Performance optimization patterns",
@@ -58,6 +47,7 @@ Research tasks are automatically generated for complex feature implementations r
 ```
 
 ### 🌐 Internet Research
+
 ```json
 {
   "type": "internet",
@@ -74,7 +64,7 @@ Research tasks are automatically generated for complex feature implementations r
       "Official documentation",
       "Technical blogs and articles",
       "Stack Overflow and community forums",
-      "GitHub repositories and examples", 
+      "GitHub repositories and examples",
       "Academic papers and research",
       "Industry reports and case studies"
     ],
@@ -89,6 +79,7 @@ Research tasks are automatically generated for complex feature implementations r
 ```
 
 ### 📚 Documentation Research
+
 ```json
 {
   "type": "documentation",
@@ -120,10 +111,11 @@ Research tasks are automatically generated for complex feature implementations r
 ## Research Task Templates
 
 ### Standard Research Task Template
+
 ```json
 {
   "id": "research_[timestamp]_[random]",
-  "type": "research", 
+  "type": "research",
   "title": "Research: [Original Task Title]",
   "description": "Comprehensive research for [original task description] to support implementation",
   "status": "pending",
@@ -135,7 +127,7 @@ Research tasks are automatically generated for complex feature implementations r
       "focus": "Existing implementation patterns and architecture"
     },
     {
-      "type": "internet", 
+      "type": "internet",
       "keywords": ["auto-extracted from task description"],
       "focus": "Best practices, industry standards, and technical specifications"
     },
@@ -148,7 +140,7 @@ Research tasks are automatically generated for complex feature implementations r
   "deliverables": [
     "Technical analysis report",
     "Implementation recommendations",
-    "Risk assessment", 
+    "Risk assessment",
     "Alternative approaches evaluation"
   ],
   "prevents_implementation": true,
@@ -157,13 +149,14 @@ Research tasks are automatically generated for complex feature implementations r
 ```
 
 ### Complex Research Task Template
+
 ```json
 {
   "id": "research_[timestamp]_[random]",
   "type": "research",
   "title": "Research: [Complex Feature Title]",
   "description": "Comprehensive multi-phase research for [complex feature description]",
-  "status": "pending", 
+  "status": "pending",
   "estimated_hours": 2,
   "research_phases": [
     {
@@ -173,7 +166,7 @@ Research tasks are automatically generated for complex feature implementations r
       "deliverables": ["Architecture assessment", "Integration analysis"]
     },
     {
-      "phase": 2, 
+      "phase": 2,
       "title": "Technology Research",
       "focus": "Technology options and implementation approaches",
       "deliverables": ["Technology comparison", "Implementation strategies"]
@@ -181,7 +174,7 @@ Research tasks are automatically generated for complex feature implementations r
     {
       "phase": 3,
       "title": "Risk and Implementation Planning",
-      "focus": "Risk assessment and detailed implementation roadmap", 
+      "focus": "Risk assessment and detailed implementation roadmap",
       "deliverables": ["Risk assessment", "Implementation plan"]
     }
   ],
@@ -193,19 +186,21 @@ Research tasks are automatically generated for complex feature implementations r
 ## Research Execution Guidelines
 
 ### 🎯 Research Methodology
+
 1. **Systematic Approach**: Follow structured methodology for comprehensive coverage
 2. **Documentation-First**: Document findings as research progresses
 3. **Evidence-Based**: Support conclusions with concrete evidence and examples
 4. **Implementation-Focused**: Ensure research directly supports implementation decisions
 
 ### Research Execution Sequence
+
 ```bash
 # Phase 1: Codebase Analysis
 grep -r "relevant_patterns" src/ lib/ api/
 find . -name "*related*" -type f
 read important_files_identified
 
-# Phase 2: Documentation Review  
+# Phase 2: Documentation Review
 read README.md CLAUDE.md package.json
 find development/ -name "*.md" -exec read {} \;
 
@@ -219,6 +214,7 @@ websearch "[technology] security considerations"
 ```
 
 ### Research Quality Standards
+
 - **Completeness**: Cover all relevant aspects of the research topic
 - **Accuracy**: Verify information from multiple sources
 - **Relevance**: Focus on information directly applicable to implementation
@@ -228,45 +224,53 @@ websearch "[technology] security considerations"
 ## Research Deliverables Framework
 
 ### 📋 Technical Analysis Report
+
 ```markdown
 # Technical Analysis Report
 
 ## Executive Summary
+
 - Brief overview of research objectives and key findings
 - Primary recommendations for implementation approach
 - Critical risk factors and mitigation strategies
 
 ## Current State Analysis
+
 - Existing system architecture and capabilities
 - Current implementation patterns and conventions
 - Integration points and dependencies
 - Identified gaps and opportunities
 
 ## Technology Research
+
 - Available technology options and frameworks
 - Comparative analysis of approaches
 - Performance and scalability considerations
 - Security and compliance implications
 
 ## Implementation Recommendations
+
 - Recommended approach with rationale
 - Alternative approaches with trade-offs
 - Specific implementation steps and considerations
 - Required resources and dependencies
 
 ## Risk Assessment
+
 - Technical risks and mitigation strategies
 - Implementation challenges and solutions
 - Performance and scalability risks
 - Security and compliance risks
 
 ## Conclusion
+
 - Summary of key recommendations
 - Next steps for implementation team
 - Success criteria and validation approaches
 ```
 
 ### 🎯 Implementation Recommendations Template
+
 ```json
 {
   "implementation_recommendations": {
@@ -296,6 +300,7 @@ websearch "[technology] security considerations"
 ```
 
 ### ⚠️ Risk Assessment Framework
+
 ```json
 {
   "risk_assessment": {
@@ -303,13 +308,13 @@ websearch "[technology] security considerations"
       {
         "risk": "Description of technical risk",
         "probability": "Low/Medium/High",
-        "impact": "Low/Medium/High", 
+        "impact": "Low/Medium/High",
         "mitigation": "Specific mitigation strategy"
       }
     ],
     "implementation_risks": [
       {
-        "risk": "Implementation challenge", 
+        "risk": "Implementation challenge",
         "probability": "Low/Medium/High",
         "impact": "Low/Medium/High",
         "mitigation": "Approach to address challenge"
@@ -318,7 +323,7 @@ websearch "[technology] security considerations"
     "business_risks": [
       {
         "risk": "Business or operational risk",
-        "probability": "Low/Medium/High", 
+        "probability": "Low/Medium/High",
         "impact": "Low/Medium/High",
         "mitigation": "Business mitigation strategy"
       }
@@ -330,12 +335,14 @@ websearch "[technology] security considerations"
 ## Research Agent Specialization
 
 ### 🔬 Research Agent Roles
+
 - **Technology Research Specialist**: Focus on technology evaluation and comparison
 - **Architecture Research Specialist**: Focus on system architecture and integration
 - **Security Research Specialist**: Focus on security implications and best practices
 - **Performance Research Specialist**: Focus on performance optimization and scalability
 
 ### Research Agent Assignment Rules
+
 1. **Complex Features**: Assign specialized research agents based on feature complexity
 2. **Multi-Disciplinary Features**: Use multiple research agents for comprehensive coverage
 3. **Time-Critical Features**: Prioritize research agents with relevant specialization
@@ -344,6 +351,7 @@ websearch "[technology] security considerations"
 ## Research Report Management
 
 ### 📁 Report Organization
+
 ```
 development/research-reports/
 ├── task_[taskId]/
@@ -356,17 +364,19 @@ development/research-reports/
 ```
 
 ### Report Naming Conventions
+
 - **Main Report**: `research-report-task_[taskId].md`
 - **Specialized Reports**: `[specialty]-analysis-task_[taskId].md`
 - **Implementation Plans**: `implementation-plan-task_[taskId].md`
 - **Risk Assessments**: `risk-assessment-task_[taskId].md`
 
 ### Report Metadata
+
 ```json
 {
   "report_metadata": {
     "research_task_id": "research_1234567890_abcdef",
-    "parent_task_id": "feature_1234567890_abcdef", 
+    "parent_task_id": "feature_1234567890_abcdef",
     "research_agent": "research_session_xyz",
     "research_duration": "2 hours",
     "research_date": "2025-09-13",
@@ -380,6 +390,7 @@ development/research-reports/
 ## Integration with Implementation
 
 ### 🔄 Research-Implementation Handoff
+
 1. **Research Completion**: Research task marked complete with comprehensive report
 2. **Implementation Preparation**: Implementation agent reviews research deliverables
 3. **Implementation Planning**: Implementation approach based on research recommendations
@@ -387,6 +398,7 @@ development/research-reports/
 5. **Validation**: Implementation validated against research recommendations
 
 ### Implementation Validation Criteria
+
 - **Follows Recommendations**: Implementation aligns with research recommendations
 - **Addresses Risks**: Identified risks are properly mitigated
 - **Meets Quality Standards**: Implementation meets quality standards identified in research
@@ -395,16 +407,18 @@ development/research-reports/
 ## Research Quality Assurance
 
 ### 🔍 Research Validation
+
 - **Peer Review**: Research findings reviewed by other research agents
 - **Source Verification**: All sources and references validated
 - **Completeness Check**: All research objectives covered
 - **Accuracy Validation**: Technical claims verified through multiple sources
 
 ### Research Metrics
+
 - **Coverage**: Percentage of research objectives completed
 - **Source Diversity**: Number of different source types consulted
 - **Recommendation Confidence**: Confidence level in primary recommendations
 - **Implementation Success**: Success rate of implementations based on research
 
-*Created: 2025-09-13 by Configuration Agent #8*
-*Version: 1.0.0*
+_Created: 2025-09-13 by Configuration Agent #8_
+_Version: 1.0.0_

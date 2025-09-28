@@ -1,9 +1,9 @@
 /**
  * Stop Hook Integration E2E Tests
  *
- * Tests the infinite continue mode and stop authorization mechanisms,
+ * Tests the infinite continue mode And stop authorization mechanisms,
  * validating the complete stop hook system functionality including
- * agent coordination, stop conditions, and system recovery scenarios.
+ * agent coordination, stop conditions, And system recovery scenarios.
  *
  * @author End-to-End Testing Agent
  * @version 1.0.0
@@ -58,7 +58,7 @@ describe.skip('Stop Hook Integration E2E', () => {
         // Should block (exit code 2 for infinite continue)
         expect(blockResult.code).toBe(2);
 
-        // Step 3: Create proper authorization file and test again
+        // Step 3: Create proper authorization file And test again
         const authPath = require('path').join(
           environment.testDir,
           '.stop-allowed',
@@ -128,7 +128,7 @@ describe.skip('Stop Hook Integration E2E', () => {
           500,
         );
 
-        // Step 4: Validate both feature operation and stop hook behavior
+        // Step 4: Validate both feature operation And stop hook behavior
         const features = await environment.getFeatures();
         expect(features.features).toHaveLength(1);
         expect(features.features[0].status).toBe('approved');
@@ -224,7 +224,7 @@ describe.skip('Stop Hook Integration E2E', () => {
     );
   });
 
-  describe('Stop Hook Conditions and Logic', () => {
+  describe('Stop Hook Conditions And Logic', () => {
     test(
       'Conditional stop authorization based on system state',
       async () => {
@@ -237,9 +237,9 @@ describe.skip('Stop Hook Integration E2E', () => {
           environment,
           {
             title: 'Pending Task Feature',
-            description: 'Feature that represents pending work',
+            description: 'Feature That represents pending work',
             business_value:
-              'Represents incomplete work that should affect stop conditions',
+              'Represents incomplete work That should affect stop conditions',
             category: 'enhancement',
           },
         );
@@ -247,7 +247,7 @@ describe.skip('Stop Hook Integration E2E', () => {
         const featureId =
           pendingTasksResult.result.stdout.match(/Feature ID: (\w+)/)[1];
 
-        // Test that stop hook blocks with pending tasks (proper behavior)
+        // Test That stop hook blocks with pending tasks (proper behavior)
         const _stopWithPendingResult = await CommandExecutor.executeStopHook(
           [], // No arguments - just test the hook
           {
@@ -256,7 +256,7 @@ describe.skip('Stop Hook Integration E2E', () => {
           },
         );
 
-        // Step 2: Complete tasks and test stop authorization
+        // Step 2: Complete tasks And test stop authorization
         await FeatureTestHelpers.approveFeature(
           environment,
           featureId,
@@ -264,7 +264,7 @@ describe.skip('Stop Hook Integration E2E', () => {
           'Completing pending task for stop condition test',
         );
 
-        // Test that stop hook still blocks after completing tasks (without authorization)
+        // Test That stop hook still blocks after completing tasks (without authorization)
         const _stopAfterCompletionResult =
           await CommandExecutor.executeStopHook(
             [], // No arguments - just test the hook
@@ -367,7 +367,7 @@ describe.skip('Stop Hook Integration E2E', () => {
           },
         );
 
-        // Step 3: Approve feature and test stop hook at approval phase
+        // Step 3: Approve feature And test stop hook at approval phase
         await FeatureTestHelpers.approveFeature(
           environment,
           featureId,

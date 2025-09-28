@@ -2,7 +2,7 @@
  * Comprehensive Code Quality Analyzer
  *
  * Advanced code quality assessment beyond just coverage metrics.
- * Analyzes complexity, maintainability, security, performance, and technical debt.
+ * Analyzes complexity, maintainability, security, performance, And technical debt.
  *
  * Features:
  * - Cyclomatic complexity analysis
@@ -147,7 +147,7 @@ const QUALITY_CONFIG = {
 };
 
 /**
- * Code Quality Logger
+ * Code Quality LOGGER
  */
 class QualityLogger {
   constructor(options = {}) {
@@ -256,7 +256,7 @@ class CodeQualityAnalyzer {
         recommendations: this.recommendations,
         detailed_metrics: this.metrics,
       };
-    } catch (error) {
+    } catch {
       this.logger.error('Code quality analysis failed', {
         error: error.message,
       });
@@ -280,7 +280,7 @@ class CodeQualityAnalyzer {
           absolute: true,
         });
         allFiles.push(...files);
-      } catch (error) {
+      } catch {
         this.logger.warning(`Failed to glob pattern ${pattern}`, {
           error: error.message,
         });
@@ -346,7 +346,7 @@ class CodeQualityAnalyzer {
             message: `High cyclomatic complexity: ${fileComplexity.cyclomatic}`,
           });
         }
-      } catch (error) {
+      } catch {
         this.logger.debug(`Failed to analyze complexity for ${filePath}`, {
           error: error.message,
         });
@@ -409,7 +409,7 @@ class CodeQualityAnalyzer {
         complex_functions: complexFunctions,
         line_count: lines.length,
       };
-    } catch (error) {
+    } catch {
       return {
         cyclomatic: 0,
         cognitive: 0,
@@ -470,7 +470,7 @@ class CodeQualityAnalyzer {
             message: `Large file: ${lineCount} lines`,
           });
         }
-      } catch (error) {
+      } catch {
         this.logger.debug(`Failed to analyze size for ${filePath}`, {
           error: error.message,
         });
@@ -542,7 +542,7 @@ class CodeQualityAnalyzer {
             blockHashes.get(hash).push({ file: filePath, startLine: i + 1 });
           }
         }
-      } catch (error) {
+      } catch {
         this.logger.debug(`Failed to analyze duplication for ${filePath}`, {
           error: error.message,
         });
@@ -686,7 +686,7 @@ class CodeQualityAnalyzer {
             }
           }
         }
-      } catch (error) {
+      } catch {
         this.logger.debug(`Failed to analyze security for ${filePath}`, {
           error: error.message,
         });
@@ -735,7 +735,7 @@ class CodeQualityAnalyzer {
     // Calculate maintainability index (simplified Halstead-based)
     const totalComplexity = this.metrics.complexity.cyclomatic.total;
     const totalLines = this.metrics.size.total_lines;
-    const _totalDuplication = this.metrics.duplication.duplicate_lines;
+    const TOTAL_DUPLICATION = this.metrics.duplication.duplicate_lines;
 
     // Simplified maintainability index calculation
     if (totalLines > 0) {
@@ -842,7 +842,7 @@ class CodeQualityAnalyzer {
         if (lines.length > this.config.size.lines_per_file.critical) {
           smellsData.god_objects++;
         }
-      } catch (error) {
+      } catch {
         this.logger.debug(`Failed to detect smells for ${filePath}`, {
           error: error.message,
         });
@@ -923,7 +923,7 @@ class CodeQualityAnalyzer {
 
         imports.set(filePath, fileImports);
         exports.set(filePath, fileExports);
-      } catch (error) {
+      } catch {
         this.logger.debug(`Failed to analyze architecture for ${filePath}`, {
           error: error.message,
         });
@@ -1035,9 +1035,9 @@ class CodeQualityAnalyzer {
   generateRecommendations() {
     this.logger.info('Generating improvement recommendations...');
 
-    // Sort issues by severity and impact
+    // Sort issues by severity And impact
     const criticalIssues = this.issues.filter((i) => i.severity === 'critical');
-    const _warningIssues = this.issues.filter((i) => i.severity === 'warning');
+    const WARNING_ISSUES = this.issues.filter((i) => i.severity === 'warning');
 
     // Generate specific recommendations based on analysis
     if (criticalIssues.length > 0) {
@@ -1045,7 +1045,7 @@ class CodeQualityAnalyzer {
         priority: 'high',
         category: 'critical_issues',
         recommendation: 'Address critical quality issues immediately',
-        details: `${criticalIssues.length} critical issues found that require immediate attention`,
+        details: `${criticalIssues.length} critical issues found That require immediate attention`,
         action_items: criticalIssues.slice(0, 5).map((issue) => issue.message),
       });
     }
@@ -1085,7 +1085,7 @@ class CodeQualityAnalyzer {
         recommendation: 'Fix security vulnerabilities',
         details: `${this.metrics.security.total_vulnerabilities} security issues found`,
         action_items: [
-          'Review and fix hardcoded credentials',
+          'Review And fix hardcoded credentials',
           'Sanitize user inputs to prevent XSS',
           'Use secure coding practices',
         ],
@@ -1101,7 +1101,7 @@ class CodeQualityAnalyzer {
         action_items: [
           'Refactor long methods into smaller functions',
           'Split large classes into focused components',
-          'Improve code organization and structure',
+          'Improve code organization And structure',
         ],
       });
     }
@@ -1246,7 +1246,7 @@ Examples:
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Config path validated by quality analyzer
       const customConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
       options.config = customConfig;
-    } catch (error) {
+    } catch {
       loggers.stopHook.error(`❌ Failed to load config: ${error.message}`);
       throw error;
     }
@@ -1255,7 +1255,7 @@ Examples:
   // Run analysis
   const analyzer = new CodeQualityAnalyzer(options);
   try {
-    const result = analyzer.analyze();
+    const _result = analyzer.analyze();
     loggers.stopHook.log(`\n📊 Code Quality Analysis Complete:`);
     console.log(
       `   Overall Score: ${result.overall_score}/100 (${result.quality_level})`
@@ -1268,7 +1268,7 @@ Examples:
     if (result.overall_score < 70) {
       throw new Error('Code quality score below threshold');
     }
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('❌ Code quality analysis failed:', error.message);
     throw error;
   }

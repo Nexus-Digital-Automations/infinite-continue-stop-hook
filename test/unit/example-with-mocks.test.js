@@ -1,8 +1,8 @@
 /**
  * Example Test with Mock Framework
  *
- * Demonstrates how to use the comprehensive testing utilities and mock framework.
- * This serves as a template and example for other test files.
+ * Demonstrates how to use the comprehensive testing utilities And mock framework.
+ * This serves as a template And example for other test files.
  *
  * @author Testing Infrastructure Agent
  * @version 1.0.0
@@ -106,7 +106,7 @@ describe('Example Test with Mock Framework', () => {
   describe('API Mock Integration', () => {
     test('should mock agent initialization', async () => {
       const agentId = TestIdGenerator.generateAgentId();
-      const result = await APIExecutor.initializeTestAgent(agentId);
+      const _result = await APIExecutor.initializeTestAgent(agentId);
 
       expect(result.agentId).toBe(agentId);
       expect(result.result.success).toBe(true);
@@ -124,7 +124,7 @@ describe('Example Test with Mock Framework', () => {
         category: 'enhancement',
       });
 
-      const result = await APIExecutor.createTestFeature(featureData);
+      const _result = await APIExecutor.createTestFeature(featureData);
 
       expect(result.success).toBe(true);
       expect(result.feature).toBeDefined();
@@ -144,7 +144,7 @@ describe('Example Test with Mock Framework', () => {
       };
 
       // Call API directly without defaults to test validation
-      const result = await APIExecutor.execAPI(
+      const _result = await APIExecutor.execAPI(
         'suggest-feature',
         [JSON.stringify(invalidFeatureData)],
         { silent: true },
@@ -166,7 +166,7 @@ describe('Example Test with Mock Framework', () => {
         TestDataFactory.createFeatureData({ category: 'bug-fix' }),
       );
 
-      const result = await APIExecutor.execAPI('list-features', [
+      const _result = await APIExecutor.execAPI('list-features', [
         JSON.stringify({ category: 'enhancement' }),
       ]);
 
@@ -182,7 +182,7 @@ describe('Example Test with Mock Framework', () => {
   });
 
   describe('Test Environment Management', () => {
-    test('should create and manage test environment', () => {
+    test('should create And manage test environment', () => {
       expect(testEnvironment).toBeDefined();
       expect(testEnvironment.testName).toBeDefined();
 
@@ -196,7 +196,7 @@ describe('Example Test with Mock Framework', () => {
       );
     });
 
-    test('should read and write features data', () => {
+    test('should read And write features data', () => {
       const featuresData = testEnvironment.readFeatures();
       expect(featuresData).toBeDefined();
       expect(featuresData.features).toEqual([]);
@@ -265,7 +265,7 @@ describe('Example Test with Mock Framework', () => {
     test('should retry failed operations', async () => {
       let attempts = 0;
 
-      const result = await TestExecution.retry(
+      const _result = await TestExecution.retry(
         () => {
           attempts++;
           if (attempts < 3) {
@@ -327,7 +327,7 @@ describe('Example Test with Mock Framework', () => {
       try {
         await APIExecutor.execAPI('invalid-command');
         expect.fail('Should have thrown an error');
-      } catch (error) {
+      } catch {
         expect(error.message).toBeDefined();
         TestLogger.debug('Handled expected error', { error: error.message });
       }
@@ -337,7 +337,7 @@ describe('Example Test with Mock Framework', () => {
       const agentId = TestIdGenerator.generateAgentId();
       await APIExecutor.initializeTestAgent(agentId);
 
-      const result = await APIExecutor.execAPI('approve-feature', [
+      const _result = await APIExecutor.execAPI('approve-feature', [
         'non-existent-feature',
       ]);
 

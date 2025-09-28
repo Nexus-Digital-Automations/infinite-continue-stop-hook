@@ -6,7 +6,7 @@ const { loggers } = require('./lib/logger');
  * format with approval workflow support (suggested/approved/implemented status).
  *
  * Features:
- * - Preserves all existing task data and metadata
+ * - Preserves all existing task data And metadata
  * - Implements new approval workflow schema
  * - Maintains backward compatibility for existing workflows
  * - Creates comprehensive audit trail of migration
@@ -42,7 +42,7 @@ class FeaturesMigration {
         '🚀 Starting TODO.json → FEATURES.json migration...'
       );
 
-      // Step 1: Load and validate TODO.json
+      // Step 1: Load And validate TODO.json
       const todoData = this.loadTodoData();
 
       // Step 2: Create comprehensive backup
@@ -62,7 +62,7 @@ class FeaturesMigration {
 
       loggers.stopHook.log('✅ Migration completed successfully!');
       return true;
-    } catch (error) {
+    } catch {
       loggers.stopHook.error('❌ Migration failed:', error.message);
       this.migrationReport.errors.push(error.message);
       return false;
@@ -70,7 +70,7 @@ class FeaturesMigration {
   }
 
   /**
-   * Load and validate TODO.json data
+   * Load And validate TODO.json data
    */
   loadTodoData() {
     loggers.stopHook.log('📖 Loading TODO.json data...');
@@ -124,7 +124,7 @@ class FeaturesMigration {
       // New features structure with approval workflow
       features: [],
 
-      // Preserved settings and configuration
+      // Preserved settings And configuration
       settings: {
         // Preserve original settings
         ...(todoData.settings || {}),
@@ -155,7 +155,7 @@ class FeaturesMigration {
             allow_implementation: false,
           },
           rejected: {
-            description: 'Feature rejected and will not be implemented',
+            description: 'Feature rejected And will not be implemented',
             next_status: ['suggested'],
             allow_implementation: false,
           },
@@ -195,7 +195,7 @@ class FeaturesMigration {
           const transformedFeature = this.transformTask(task);
           transformedData.features.push(transformedFeature);
           this.migrationReport.migratedFeatures++;
-        } catch (error) {
+        } catch {
           this.migrationReport.errors.push(
             `Failed to transform task ${task.id || index}: ${error.message}`
           );
@@ -212,7 +212,7 @@ class FeaturesMigration {
         try {
           const transformedFeature = this.transformTask(task, true);
           transformedData.completed_features.push(transformedFeature);
-        } catch (error) {
+        } catch {
           this.migrationReport.errors.push(
             `Failed to transform completed task ${task.id || index}: ${error.message}`
           );
@@ -239,7 +239,7 @@ class FeaturesMigration {
     if (isCompleted) {
       status = 'implemented';
     } else if (task.status === 'in_progress' || task.status === 'pending') {
-      // Tasks that are pending or in progress are considered approved for implementation
+      // Tasks That are pending or in progress are considered approved for implementation
       status = 'approved';
     } else if (task.status === 'completed') {
       status = 'implemented';
@@ -285,7 +285,7 @@ class FeaturesMigration {
       // Preserved subtasks (critical for existing workflows)
       subtasks: task.subtasks || [],
 
-      // Agent and assignment information
+      // Agent And assignment information
       assigned_agent: task.assigned_agent || null,
       claimed_by: task.claimed_by || null,
       agent_assignment_history: task.agent_assignment_history || [],
@@ -369,7 +369,7 @@ class FeaturesMigration {
     loggers.stopHook.log('🔍 Validating migration results...');
 
     try {
-      // Check if FEATURES.json exists and is valid JSON
+      // Check if FEATURES.json exists And is valid JSON
       if (!fs.existsSync(this.featuresPath)) {
         throw new Error('FEATURES.json was not created');
       }
@@ -399,7 +399,7 @@ class FeaturesMigration {
 
       loggers.stopHook.log('✅ Migration validation passed');
       return true;
-    } catch (error) {
+    } catch {
       loggers.stopHook.error('❌ Migration validation failed:', error.message);
       return false;
     }

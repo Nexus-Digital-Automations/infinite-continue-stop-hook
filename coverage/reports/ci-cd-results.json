@@ -1,20 +1,20 @@
 {
   "metadata": {
-    "timestamp": "2025-09-27T13:42:19.026Z",
+    "timestamp": "2025-09-28T04:18:31.344Z",
     "reporter": "jest-cicd-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System",
-    "duration_ms": 1281
+    "duration_ms": 1105
   },
   "cicd_summary": {
     "pipeline_status": "FAILURE",
-    "total_duration_ms": 1281,
+    "total_duration_ms": 1105,
     "should_block_deployment": true,
     "quality_gate_status": {
       "status": "FAILED",
       "criteria": {
         "tests_passing": false,
-        "no_failed_tests": true,
+        "no_failed_tests": false,
         "coverage_adequate": false,
         "performance_acceptable": true
       },
@@ -22,7 +22,7 @@
         {
           "type": "test_failures",
           "severity": "critical",
-          "message": "0 test(s) failed",
+          "message": "12 test(s) failed",
           "action": "Fix failing tests before deployment"
         },
         {
@@ -33,47 +33,110 @@
         }
       ]
     },
-    "test_health_score": 100
+    "test_health_score": 50
   },
   "test_execution": {
     "summary": {
       "total_suites": 1,
-      "passed_suites": 1,
-      "failed_suites": 0,
-      "total_tests": 15,
-      "passed_tests": 15,
-      "failed_tests": 0,
+      "passed_suites": 0,
+      "failed_suites": 1,
+      "total_tests": 12,
+      "passed_tests": 0,
+      "failed_tests": 12,
       "pending_tests": 0,
-      "success_rate": "100.00",
-      "execution_time_ms": 1281
+      "success_rate": "0.00",
+      "execution_time_ms": 1105
     },
     "performance_metrics": {
-      "average_test_duration": 85.4,
+      "average_test_duration": 92.08333333333333,
       "slowest_suite": {
-        "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/feature-7-custom-validation-rules.test.js",
-        "duration_ms": 1155,
-        "num_tests": 15
+        "path": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js",
+        "duration_ms": 875,
+        "num_tests": 12
       },
       "memory_usage": {
-        "rss": 157712384,
-        "heap_total": 81674240,
-        "heap_used": 59289816,
-        "external": 4823894,
-        "heap_usage_percent": "72.59"
+        "rss": 254246912,
+        "heap_total": 149323776,
+        "heap_used": 118010400,
+        "external": 5609998,
+        "heap_usage_percent": "79.03"
       },
       "parallel_efficiency": {
-        "parallel_efficiency_percent": "90.09",
-        "total_execution_time_ms": 1282,
-        "serial_time_ms": 1155,
+        "parallel_efficiency_percent": "79.11",
+        "total_execution_time_ms": 1106,
+        "serial_time_ms": 875,
         "time_saved_ms": 0
       }
     },
     "failure_analysis": {
-      "total_failures": 0,
-      "failed_suites": 0,
-      "failure_details": [],
-      "failure_patterns": {},
-      "common_failure_type": "none"
+      "total_failures": 12,
+      "failed_suites": 1,
+      "failure_details": [
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js",
+          "test": "Verification Endpoints get-verification-requirements should successfully retrieve verification requirements for a task",
+          "duration": 2,
+          "error": "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/li"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js",
+          "test": "Verification Endpoints get-verification-requirements should throw error when task ID does not exist",
+          "duration": 1,
+          "error": "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/li"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js",
+          "test": "Verification Endpoints get-verification-requirements should throw error when task has no verification gate",
+          "duration": 1,
+          "error": "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/li"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js",
+          "test": "Verification Endpoints get-verification-requirements should throw error when no tasks exist in system",
+          "duration": 0,
+          "error": "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/li"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js",
+          "test": "Verification Endpoints submit-verification-evidence should successfully submit valid verification evidence",
+          "duration": 1,
+          "error": "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/li"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js",
+          "test": "Verification Endpoints submit-verification-evidence should reject evidence when verification gate already passed",
+          "duration": 0,
+          "error": "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/li"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js",
+          "test": "Verification Endpoints submit-verification-evidence should reject evidence missing required fields",
+          "duration": 1,
+          "error": "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/li"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js",
+          "test": "Verification Endpoints submit-verification-evidence should reject evidence with invalid reviewedItems format",
+          "duration": 0,
+          "error": "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/li"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js",
+          "test": "Verification Endpoints submit-verification-evidence should reject null or undefined evidence data",
+          "duration": 1,
+          "error": "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/li"
+        },
+        {
+          "suite": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js",
+          "test": "Verification Endpoints submit-verification-evidence should handle task without verification gate",
+          "duration": 0,
+          "error": "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/li"
+        }
+      ],
+      "failure_patterns": {
+        "async": 12
+      },
+      "common_failure_type": "async"
     },
     "flaky_test_detection": {
       "potentially_flaky": [],
@@ -82,11 +145,11 @@
     }
   },
   "git": {
-    "commit_sha": "4e6796b5e231e916f47b47c5eeb9de2aae00095d",
+    "commit_sha": "86ed09bc917ed3bb5206fc2398557397896979e6",
     "branch": "main",
     "author": "Claude <claude@anthropic.com>",
-    "commit_message": "fix: final API response structure and command fixes",
-    "commit_date": "2025-09-27 07:56:25 -0500",
+    "commit_message": "fix: resolve security/detect-object-injection warnings with eslint-disable comments",
+    "commit_date": "2025-09-27 21:31:52 -0500",
     "tag": null,
     "is_dirty": true,
     "remote_url": "https://github.com/Nexus-Digital-Automations/infinite-continue-stop-hook.git"
@@ -97,12 +160,12 @@
     "arch": "arm64",
     "ci": false,
     "ci_provider": "local",
-    "environment": "test",
+    "environment": "development",
     "timezone": "America/Chicago",
     "locale": "en-US",
     "memory": {
       "total": 25769803776,
-      "available": 2193358848
+      "available": 422690816
     },
     "cpu": {
       "cores": 8,
@@ -120,5 +183,12 @@
     "coverage_status": "not_available"
   },
   "notifications": [],
-  "recommendations": []
+  "recommendations": [
+    {
+      "category": "testing",
+      "priority": "high",
+      "recommendation": "Fix failing tests immediately",
+      "details": "12 tests are currently failing"
+    }
+  ]
 }

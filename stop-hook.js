@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /* eslint-disable no-console -- CLI hook requires console output for user feedback */
-const _fs = require('fs');
-const _path = require('path');
-const _TaskManager = require('./lib/taskManager');
-const _Logger = require('./lib/logger');
-const _ValidationDependencyManager = require('./lib/validationDependencyManager');
+const FS = require('fs');
+const PATH = require('path');
+const TASK_MANAGER = require('./lib/taskManager');
+const LOGGER = require('./lib/logger');
+const VALIDATION_DEPENDENCY_MANAGER = require('./lib/validationDependencyManager');
 
 // ============================================================================
 // NEVER-STOP INFINITE CONTINUE HOOK WITH INSTRUCTIVE TASK MANAGEMENT
@@ -16,34 +16,34 @@ const _ValidationDependencyManager = require('./lib/validationDependencyManager'
 function findClaudeProjectRoot(startDir = process.cwd()) {
   let currentDir = startDir;
 
-  // Look for "Claude Coding Projects" in the path and check for TASKS.json
-  while (currentDir !== _path.dirname(currentDir)) {
+  // Look for "Claude Coding Projects" in the path And check for TASKS.json
+  while (currentDir !== PATH.dirname(currentDir)) {
     // Not at filesystem root
     // Check if we're in or found "Claude Coding Projects"
     if (currentDir.includes('Claude Coding Projects')) {
       // Look for TASKS.json in potential project roots
-      const segments = currentDir.split(_path.sep);
+      const segments = currentDir.split(PATH.sep);
       const claudeIndex = segments.findIndex((segment) =>
         segment.includes('Claude Coding Projects')
       );
 
       if (claudeIndex !== -1 && claudeIndex < segments.length - 1) {
         // Try the next directory after "Claude Coding Projects"
-        const projectDir = segments.slice(0, claudeIndex + 2).join(_path.sep);
+        const projectDir = segments.slice(0, claudeIndex + 2).join(PATH.sep);
         // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script validating project structure with computed paths
-        if (_fs.existsSync(_path.join(projectDir, 'TASKS.json'))) {
+        if (FS.existsSync(PATH.join(projectDir, 'TASKS.json'))) {
           return projectDir;
         }
       }
 
       // Also check current directory
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script validating project structure with computed paths
-      if (_fs.existsSync(_path.join(currentDir, 'TASKS.json'))) {
+      if (FS.existsSync(PATH.join(currentDir, 'TASKS.json'))) {
         return currentDir;
       }
     }
 
-    currentDir = _path.dirname(currentDir);
+    currentDir = PATH.dirname(currentDir);
   }
 
   // Fallback to original behavior
@@ -57,11 +57,11 @@ function findClaudeProjectRoot(startDir = process.cwd()) {
  * Feature 1: Validation Progress Reporting with Dependency Management
  * Enhanced stop authorization checking with comprehensive validation progress reporting
  * Provides real-time visibility into validation progress, completion percentage, detailed status,
- * dependency relationships, and intelligent execution planning
+ * dependency relationships, And intelligent execution planning
  */
 function generateValidationProgressReport(flagData, logger, workingDir) {
   // Initialize dependency manager for intelligent validation ordering
-  const dependencyManager = new _ValidationDependencyManager(workingDir);
+  const dependencyManager = new VALIDATION_DEPENDENCY_MANAGER(workingDir);
 
   // Validate dependency configuration
   const configValidation = dependencyManager.validateDependencyConfiguration();
@@ -96,14 +96,14 @@ function generateValidationProgressReport(flagData, logger, workingDir) {
 
   // Load custom validation rules from project configuration
   function loadCustomValidationRules(projectRoot) {
-    const customRulesPath = _path.join(projectRoot, '.claude-validation.json');
+    const customRulesPath = PATH.join(projectRoot, '.claude-validation.json');
     let customRules = [];
 
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- loading project-specific validation config
-      if (_fs.existsSync(customRulesPath)) {
+      if (FS.existsSync(customRulesPath)) {
         // eslint-disable-next-line security/detect-non-literal-fs-filename -- loading project-specific validation config
-        const configData = _fs.readFileSync(customRulesPath, 'utf8');
+        const configData = FS.readFileSync(customRulesPath, 'utf8');
         const config = JSON.parse(configData);
 
         if (
@@ -116,7 +116,7 @@ function generateValidationProgressReport(flagData, logger, workingDir) {
           );
         }
       }
-    } catch (error) {
+    } catch {
       logger.warn(`Failed to load custom validation rules: ${error.message}`);
     }
 
@@ -125,7 +125,7 @@ function generateValidationProgressReport(flagData, logger, workingDir) {
 
   // Use dependency-aware validation criteria in execution order
   const customRules = loadCustomValidationRules(workingDir);
-  const customCriteriaIds = customRules.map((rule) => rule.id);
+  const CUSTOM_CRITERIA_IDS = customRules.map((rule) => rule.id);
 
   // Add any custom criteria to dependency manager
   customRules.forEach((rule) => {
@@ -143,7 +143,7 @@ function generateValidationProgressReport(flagData, logger, workingDir) {
   // Process validation results from flag data
   if (flagData.validation_results) {
     for (const criteria of validationCriteria) {
-      const result = flagData.validation_results[criteria];
+      const _result = flagData.validation_results[criteria];
       if (result) {
         progressReport.validationDetails.push({
           criterion: criteria,
@@ -217,20 +217,20 @@ function generateValidationProgressReport(flagData, logger, workingDir) {
 
 /**
  * Enhanced stop authorization checking with validation progress reporting
- * Provides comprehensive visibility into validation progress and status
+ * Provides comprehensive visibility into validation progress And status
  */
 function checkStopAllowed(workingDir = process.cwd()) {
-  const stopFlagPath = _path.join(workingDir, '.stop-allowed');
+  const stopFlagPath = PATH.join(workingDir, '.stop-allowed');
 
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated working directory path
-  if (_fs.existsSync(stopFlagPath)) {
-    // Read and immediately delete the flag (single-use)
+  if (FS.existsSync(stopFlagPath)) {
+    // Read And immediately delete the flag (single-use)
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script reading validated stop flag file
-      const flagData = JSON.parse(_fs.readFileSync(stopFlagPath, 'utf8'));
+      const flagData = JSON.parse(FS.readFileSync(stopFlagPath, 'utf8'));
 
       // Generate comprehensive validation progress report
-      const logger = new _Logger.Logger(workingDir);
+      const logger = new LOGGER.LOGGER(workingDir);
       const progressReport = generateValidationProgressReport(
         flagData,
         logger,
@@ -246,7 +246,7 @@ function checkStopAllowed(workingDir = process.cwd()) {
 ❌ **FAILED:** ${progressReport.failedValidations} validations
 ⏱️  **ESTIMATED TIME REMAINING:** ${progressReport.estimatedTimeRemaining}s
 
-📋 **DETAILED VALIDATION STATUS:**
+📋 **DETAILED VALIDATION status:**
 ${progressReport.validationDetails
   .map(
     (v) =>
@@ -256,19 +256,19 @@ ${progressReport.validationDetails
   .join('\n')}
 
 🕐 **LAST UPDATE:** ${progressReport.lastValidationTime}
-🎯 **AUTHORIZATION STATUS:** ${flagData.stop_allowed ? 'APPROVED' : 'PENDING'}
+🎯 **AUTHORIZATION status:** ${flagData.stop_allowed ? 'APPROVED' : 'PENDING'}
       `);
 
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
-      _fs.unlinkSync(stopFlagPath); // Remove flag after reading
+      FS.unlinkSync(stopFlagPath); // Remove flag after reading
       return flagData.stop_allowed === true;
-    } catch (error) {
+    } catch {
       // Invalid flag file, remove it
       console.error(
         `⚠️ Invalid validation progress file detected - cleaning up. Error: ${error.message}`
       );
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
-      _fs.unlinkSync(stopFlagPath);
+      FS.unlinkSync(stopFlagPath);
       return false;
     }
   }
@@ -277,7 +277,7 @@ ${progressReport.validationDetails
   console.error(`
 🔍 **VALIDATION PROGRESS MONITORING**
 
-📊 **STATUS:** No active validation process detected
+📊 **status:** No active validation process detected
 🛑 **AUTHORIZATION:** None found - stop hook will continue infinite mode
 
 💡 **TO VIEW VALIDATION PROGRESS:**
@@ -285,13 +285,13 @@ When running the multi-step authorization protocol, progress will be displayed h
 - Real-time completion percentage
 - Individual validation status (✅/❌/⏳)
 - Estimated time remaining
-- Detailed error messages and timing metrics
+- Detailed error messages And timing metrics
 
 📋 **AUTHORIZATION WORKFLOW:**
 1. Complete all TodoWrite tasks
 2. Run multi-step authorization: start-authorization → validate-criterion (×7) → complete-authorization
 3. Monitor progress through this enhanced reporting system
-4. Receive detailed completion status and approval confirmation
+4. Receive detailed completion status And approval confirmation
 
 ⚡ **CONTINUING INFINITE MODE** - No stop authorization detected
   `);
@@ -302,15 +302,15 @@ When running the multi-step authorization protocol, progress will be displayed h
 /**
  * Clean up stale agents in a single TASKS.json file
  * @param {string} projectPath - Path to project directory containing TASKS.json
- * @param {Object} logger - Logger instance for output
+ * @param {Object} logger - LOGGER instance for output
  * @returns {Object} Cleanup results
  */
 function cleanupStaleAgentsInProject(projectPath, logger) {
-  const todoPath = _path.join(projectPath, 'TASKS.json');
+  const todoPath = PATH.join(projectPath, 'TASKS.json');
 
   // Check if TASKS.json exists in this project
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook path validated through hook configuration system
-  if (!_fs.existsSync(todoPath)) {
+  if (!FS.existsSync(todoPath)) {
     logger.addFlow(`No TASKS.json found in ${projectPath} - skipping`);
     return {
       agentsRemoved: 0,
@@ -320,11 +320,11 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
     };
   }
 
-  let _todoData;
+  let todoData;
   try {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path constructed from trusted hook configuration
-    _todoData = JSON.parse(_fs.readFileSync(todoPath, 'utf8'));
-  } catch (error) {
+    todoData = JSON.parse(FS.readFileSync(todoPath, 'utf8'));
+  } catch {
     logger.addFlow(
       `Failed to read TASKS.json in ${projectPath}: ${error.message}`
     );
@@ -338,12 +338,12 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
   }
 
   // Initialize agents object if it doesn't exist (TASKS.json may not have agents)
-  if (!_todoData.agents) {
-    _todoData.agents = {};
+  if (!todoData.agents) {
+    todoData.agents = {};
   }
 
   // Get all agents from TASKS.json
-  const allAgents = Object.keys(_todoData.agents || {});
+  const allAgents = Object.keys(todoData.agents || {});
   if (allAgents.length === 0) {
     logger.addFlow(`No agents found in ${projectPath} - skipping`);
     return {
@@ -354,14 +354,14 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
     };
   }
 
-  // Clean up stale agents (older than 30 minutes) and identify active ones
+  // Clean up stale agents (older than 30 minutes) And identify active ones
   const staleAgentTimeout = 1800000; // 30 minutes
   const staleAgents = [];
 
   for (const agentId of allAgents) {
     // eslint-disable-next-line security/detect-object-injection -- Agent ID validated through Object.keys() iteration from TASKS.json structure
-    const agent = _todoData.agents[agentId];
-    // Handle both lastHeartbeat (camelCase) and last_heartbeat (snake_case) formats
+    const agent = todoData.agents[agentId];
+    // Handle both lastHeartbeat (camelCase) And last_heartbeat (snake_case) formats
     const lastHeartbeat = agent.lastHeartbeat || agent.last_heartbeat;
     const heartbeatTime = lastHeartbeat ? new Date(lastHeartbeat).getTime() : 0;
     const timeSinceHeartbeat = Date.now() - heartbeatTime;
@@ -378,13 +378,13 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
   const orphanedTasksReset = 0;
 
   for (const staleAgentId of staleAgents) {
-    // eslint-disable-next-line security/detect-object-injection -- Stale agent ID validated through timeout calculation and cleanup process
-    delete _todoData.agents[staleAgentId];
+    // eslint-disable-next-line security/detect-object-injection -- Stale agent ID validated through timeout calculation And cleanup process
+    delete todoData.agents[staleAgentId];
     agentsRemoved++;
     logger.addFlow(`Removed stale agent from ${projectPath}: ${staleAgentId}`);
 
-    // Find all features assigned to this stale agent and unassign them (if tasks field exists)
-    const tasksOrFeatures = _todoData.tasks || _todoData.features || [];
+    // Find all features assigned to this stale agent And unassign them (if tasks field exists)
+    const tasksOrFeatures = todoData.tasks || todoData.features || [];
     for (const item of tasksOrFeatures) {
       // Skip null/undefined items
       if (!item || typeof item !== 'object') {
@@ -428,9 +428,9 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
   if (agentsRemoved > 0 || tasksUnassigned > 0) {
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Hook system path controlled by stop hook security protocols
-      _fs.writeFileSync(todoPath, JSON.stringify(_todoData, null, 2));
+      FS.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
       logger.addFlow(`Updated ${projectPath}/TASKS.json with cleanup results`);
-    } catch (error) {
+    } catch {
       logger.addFlow(
         `Failed to write TASKS.json in ${projectPath}: ${error.message}`
       );
@@ -449,7 +449,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
 
 /**
  * Clean up stale agents across all known projects
- * @param {Object} logger - Logger instance for output
+ * @param {Object} logger - LOGGER instance for output
  * @returns {Object} Overall cleanup results
  */
 async function cleanupStaleAgentsAcrossProjects(logger) {
@@ -476,8 +476,8 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
   const projectPromises = knownProjects.map(async (projectPath) => {
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook path validated through hook configuration system
-      if (_fs.existsSync(projectPath)) {
-        const result = await cleanupStaleAgentsInProject(projectPath, logger);
+      if (FS.existsSync(projectPath)) {
+        const _result = await cleanupStaleAgentsInProject(projectPath, logger);
         return result;
       } else {
         logger.addFlow(
@@ -491,7 +491,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
           skipped: true,
         };
       }
-    } catch (error) {
+    } catch {
       const errorMsg = `Failed to process ${projectPath}: ${error.message}`;
       logger.addFlow(errorMsg);
       return {
@@ -526,7 +526,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
 }
 
 /**
- * Automatically reclassify test errors and sort tasks according to CLAUDE.md priority rules
+ * Automatically reclassify test errors And sort tasks according to CLAUDE.md priority rules
  */
 async function autoSortTasksByPriority(taskManager) {
   try {
@@ -737,9 +737,9 @@ async function autoSortTasksByPriority(taskManager) {
       tasksUpdated,
       totalTasks: tasksOrFeatures.length,
     };
-  } catch (error) {
+  } catch {
     // Log error through logger for proper tracking
-    const logger = new _Logger.Logger(process.cwd());
+    const logger = new LOGGER.LOGGER(process.cwd());
     logger.logError(error, 'autoSortTasksByPriority');
     logger.save();
     return { error: error.message, tasksMoved: 0, tasksUpdated: 0 };
@@ -757,9 +757,9 @@ function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 **MANDATORY AGENT LIFECYCLE:**
 1. **INITIALIZE AGENT** - Start fresh or reinitialize existing agent for session
 2. **CLAIM FEATURE OR REVIEW** - Either claim approved feature tasks OR focus on codebase review
-3. **TODOWRITE EXECUTION** - Use TodoWrite for task management and infinite continuation
+3. **TODOWRITE EXECUTION** - Use TodoWrite for task management And infinite continuation
 4. **VALIDATION CYCLE** - Continuously ensure: linter passes, builds succeed, runs/starts properly, unit tests pass with adequate coverage
-5. **STOP ONLY WHEN PERFECT** - Only stop when all validation passes and codebase is perfect
+5. **STOP ONLY WHEN PERFECT** - Only stop when all validation passes And codebase is perfect
 
 **ULTRATHINK - MANDATORY SEQUENCE:**
 1. **READ/REVIEW development/essentials/** directory - MANDATORY EVERY TIME
@@ -767,13 +767,13 @@ function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 3. **WORK ONLY ON APPROVED** - never implement unapproved features
 4. **DEPLOY CONCURRENT SUBAGENTS** - use up to 10 for complex tasks
 5. **VALIDATE BEFORE COMPLETION** - run all checks (lint, typecheck, tests) before marking complete
-6. **MAXIMUM LOGGING & DOCUMENTATION** - comprehensive logging and documentation in all code
+6. **MAXIMUM LOGGING & DOCUMENTATION** - comprehensive logging And documentation in all code
 
 🔴 **TASK COMPLETION MANDATE - ZERO TOLERANCE FOR ABANDONMENT:**
 **FINISH CURRENT TASKS BEFORE STARTING NEW ONES - PROFESSIONAL DEVELOPERS COMPLETE THEIR WORK**
 
 **CONTINUATION PROTOCOL:**
-✅ **CHECK FEATURE STATUS** → Use list-features to check current features and their approval status
+✅ **CHECK FEATURE status** → Use list-features to check current features And their approval status
 ✅ **COMPLETE CURRENT WORK** → Never abandon unfinished tasks - teams depend on you
 ✅ **PRESERVE CONTEXT** → Build upon existing work, maintain implementation approach
 ✅ **VALIDATE THOROUGHLY** → Run all checks before completion
@@ -794,7 +794,7 @@ function provideInstructiveTaskGuidance(taskManager, taskStatus) {
    # Initialize or reinitialize agent
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID]
 
-   # Check current feature status and available commands
+   # Check current feature status And available commands
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" guide
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" list-features
 
@@ -811,7 +811,7 @@ function provideInstructiveTaskGuidance(taskManager, taskStatus) {
    # Approve suggested feature (user-only)
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" approve-feature [FEATURE_ID] '{"approved_by":"user", "notes":"Approval reason"}'
 
-   # Check feature status and approval history
+   # Check feature status And approval history
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" feature-stats
 
 **VALIDATION PROTOCOL:**
@@ -819,7 +819,7 @@ function provideInstructiveTaskGuidance(taskManager, taskStatus) {
 If validation fails → Create linter-error task IMMEDIATELY, fix before completion
 
 **MULTI-STEP AUTHORIZATION PROTOCOL (LANGUAGE-AGNOSTIC):**
-When ALL TodoWrite tasks are complete and project achieves perfection, agents must complete multi-step authorization:
+When ALL TodoWrite tasks are complete And project achieves perfection, agents must complete multi-step authorization:
 
 **STEP 1: START AUTHORIZATION**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" start-authorization [AGENT_ID]
@@ -864,10 +864,10 @@ When ALL TodoWrite tasks are complete and project achieves perfection, agents mu
    Co-Authored-By: Claude <noreply@anthropic.com>"
    git push
 
-📊 **PROJECT STATUS:** ${taskStatus.pending} pending, ${taskStatus.in_progress} in progress, ${taskStatus.completed} completed
+📊 **PROJECT status:** ${taskStatus.pending} pending, ${taskStatus.in_progress} in progress, ${taskStatus.completed} completed
 🔗 **FEATURE SYSTEM:** Complete features in numerical order (Feature 1 → 2 → 3...), subtasks sequentially within features
 ⏰ **AUTOMATIC CLEANUP:** Stale tasks (>30 min) reset to pending on every stop hook call, stale agents removed automatically
-🛑 **SELF-AUTHORIZATION STOP:** Agents can authorize their own stop when ALL TodoWrite tasks complete AND project achieves perfection (check only scripts that exist: linter✅ build✅ start✅ tests✅)
+🛑 **SELF-AUTHORIZATION STOP:** Agents can authorize their own stop when ALL TodoWrite tasks complete AND project achieves perfection (check only scripts That exist: linter✅ build✅ start✅ tests✅)
 
 ⚠️ **BASH ESCAPING:** Use single quotes for node -e commands: \`node -e 'code'\` not \`node -e "code"\`
 Avoid ! operator - use \`(variable === undefined || variable === null)\` instead of \`!variable\`
@@ -882,25 +882,25 @@ process.stdin.on('data', (chunk) => (inputData += chunk));
 
 process.stdin.on('end', async () => {
   const workingDir = findClaudeProjectRoot();
-  const logger = new _Logger.Logger(workingDir);
+  const logger = new LOGGER.LOGGER(workingDir);
 
   try {
     // Debug logging for input data
     logger.addFlow(`Raw input data: "${inputData}"`);
     logger.addFlow(`Input data length: ${inputData.length}`);
 
-    let _hookInput;
+    let hookInput;
     if (!inputData || inputData.trim() === '') {
       // No input - probably manual execution, simulate Claude Code input
       logger.addFlow('No input detected - running in manual mode');
-      _hookInput = {
+      hookInput = {
         session_id: 'manual_test',
         transcript_path: '',
         stop_hook_active: true,
         hook_event_name: 'manual_execution',
       };
     } else {
-      _hookInput = JSON.parse(inputData);
+      hookInput = JSON.parse(inputData);
     }
 
     const {
@@ -908,10 +908,10 @@ process.stdin.on('end', async () => {
       transcript_path: _transcript_path,
       stop_hook_active: _stop_hook_active,
       hook_event_name,
-    } = _hookInput;
+    } = hookInput;
 
     // Log input with event details
-    logger.logInput(_hookInput);
+    logger.logInput(hookInput);
     logger.addFlow(
       `Received ${hook_event_name || 'unknown'} event from Claude Code`
     );
@@ -926,9 +926,9 @@ process.stdin.on('end', async () => {
           `Checking transcript for DONE command: ${_transcript_path}`
         );
         // eslint-disable-next-line security/detect-non-literal-fs-filename -- transcript path from Claude Code hook
-        if (_fs.existsSync(_transcript_path)) {
+        if (FS.existsSync(_transcript_path)) {
           // eslint-disable-next-line security/detect-non-literal-fs-filename -- transcript path from Claude Code hook
-          const transcriptContent = _fs.readFileSync(_transcript_path, 'utf8');
+          const transcriptContent = FS.readFileSync(_transcript_path, 'utf8');
 
           // Parse the transcript to find the last assistant message
           const lines = transcriptContent.split('\n');
@@ -975,9 +975,9 @@ This is the expected behavior when the /done command is used.
     }
 
     // Check if TASKS.json exists in current project
-    const todoPath = _path.join(workingDir, 'TASKS.json');
+    const todoPath = PATH.join(workingDir, 'TASKS.json');
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated paths from project structure
-    if (!_fs.existsSync(todoPath)) {
+    if (!FS.existsSync(todoPath)) {
       logger.addFlow('No TASKS.json found - this is not a TaskManager project');
       logger.logExit(2, 'No TASKS.json found - continuing infinite mode');
       logger.save();
@@ -993,7 +993,7 @@ The stop hook will continue infinitely to prevent accidental termination.
 💡 TO SET UP TASKMANAGER:
 If you want to enable task management for this project:
 1. Run: timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID]
-2. This will reinitialize your agent and prepare the TASKS.json system
+2. This will reinitialize your agent And prepare the TASKS.json system
 
 ⚡ CONTINUING OPERATION...
 `);
@@ -1002,17 +1002,27 @@ If you want to enable task management for this project:
     }
 
     // CRITICAL: Check for TASKS.json corruption before initializing TaskManager
-    const _AutoFixer = require('./lib/autoFixer');
-    const autoFixer = new _AutoFixer();
+    const AUTO_FIXER = require('./lib/autoFixer');
+    const autoFixer = new AUTO_FIXER();
 
     try {
       const corruptionCheck = await autoFixer.autoFix(todoPath);
       if (corruptionCheck.fixed && corruptionCheck.fixesApplied.length > 0) {
+        logger.info('TASKS.json corruption automatically fixed', {
+          fixesApplied: corruptionCheck.fixesApplied,
+          component: 'StopHook',
+          operation: 'corruptionCheck',
+        });
         console.log(
           `🔧 STOP HOOK: Automatically fixed TASKS.json corruption - ${corruptionCheck.fixesApplied.join(', ')}`
         );
       }
     } catch (corruptionError) {
+      logger.error('TASKS.json corruption check failed', {
+        error: corruptionError.message,
+        component: 'StopHook',
+        operation: 'corruptionCheck',
+      });
       console.error(
         `⚠️ STOP HOOK: Corruption check failed:`,
         corruptionError.message
@@ -1021,7 +1031,7 @@ If you want to enable task management for this project:
 
     // Initialize TaskManager with explicit project root to check agent status
     // Pass the working directory to ensure security validation uses correct project root
-    const taskManager = new _TaskManager(todoPath, {
+    const taskManager = new TASK_MANAGER(todoPath, {
       projectRoot: workingDir,
       enableAutoFix: true,
       validateOnRead: false,
@@ -1053,6 +1063,16 @@ If you want to enable task management for this project:
           `✅ Multi-project cleanup: ${multiProjectResults.totalAgentsRemoved} stale agents removed, ${multiProjectResults.totalTasksUnassigned} tasks unassigned, ${multiProjectResults.totalOrphanedTasksReset} orphaned tasks reset across ${multiProjectResults.projectResults.length} projects`
         );
 
+        logger.info('Multi-project stale agent cleanup completed', {
+          projectsProcessed: multiProjectResults.projectResults.length,
+          staleAgentsRemoved: multiProjectResults.totalAgentsRemoved,
+          tasksUnassigned: multiProjectResults.totalTasksUnassigned,
+          orphanedTasksReset: multiProjectResults.totalOrphanedTasksReset,
+          errors: multiProjectResults.errors,
+          component: 'StopHook',
+          operation: 'multiProjectCleanup',
+        });
+
         console.error(`
 🧹 **MULTI-PROJECT STALE AGENT CLEANUP COMPLETED:**
 - Projects processed: ${multiProjectResults.projectResults.length}
@@ -1079,7 +1099,7 @@ If you want to enable task management for this project:
     // LOCAL PROJECT STALE AGENT CLEANUP (for current project specifically)
     // ========================================================================
 
-    // Clean up stale agents (older than 30 minutes) and identify active ones
+    // Clean up stale agents (older than 30 minutes) And identify active ones
     const staleAgentTimeout = 1800000; // 30 minutes
     const activeAgents = [];
     const staleAgents = [];
@@ -1087,7 +1107,7 @@ If you want to enable task management for this project:
     for (const agentId of allAgents) {
       // eslint-disable-next-line security/detect-object-injection -- validated agent ID from TASKS.json structure
       const agent = todoData.agents[agentId];
-      // Handle both lastHeartbeat (camelCase) and last_heartbeat (snake_case) formats
+      // Handle both lastHeartbeat (camelCase) And last_heartbeat (snake_case) formats
       const lastHeartbeat = agent.lastHeartbeat || agent.last_heartbeat;
       const heartbeatTime = lastHeartbeat
         ? new Date(lastHeartbeat).getTime()
@@ -1116,7 +1136,7 @@ If you want to enable task management for this project:
       agentsRemoved++;
       logger.addFlow(`Removed stale agent: ${staleAgentId}`);
 
-      // Find all items assigned to this stale agent and unassign them
+      // Find all items assigned to this stale agent And unassign them
       const itemsArray = todoData.tasks || todoData.features || [];
       for (const item of itemsArray) {
         // Skip null/undefined items
@@ -1157,7 +1177,7 @@ If you want to enable task management for this project:
       }
     }
 
-    // Check for stale in-progress tasks (stuck for > 30 minutes) and reset them
+    // Check for stale in-progress tasks (stuck for > 30 minutes) And reset them
     const staleTaskTimeout = 1800000; // 30 minutes
     let staleTasksReset = 0;
 
@@ -1199,7 +1219,7 @@ If you want to enable task management for this project:
     }
 
     // ========================================================================
-    // ORPHANED TASK CLEANUP: Reset tasks that have been unassigned for >24 hours
+    // ORPHANED TASK CLEANUP: Reset tasks That have been unassigned for >24 hours
     // This fixes the critical bug where tasks unassigned by previous cleanup runs
     // remain in limbo indefinitely because they're no longer tied to active stale agents
     // ========================================================================
@@ -1291,7 +1311,7 @@ If you want to enable task management for this project:
 
     try {
       logger.addFlow(
-        'Running automatic task sorting and test error reclassification'
+        'Running automatic task sorting And test error reclassification'
       );
       const sortResult = await autoSortTasksByPriority(taskManager);
 
@@ -1301,6 +1321,14 @@ If you want to enable task management for this project:
         logger.addFlow(
           `Successfully reclassified ${sortResult.tasksMoved} test errors from error section to testing section`
         );
+
+        logger.info('Automatic task sorting completed', {
+          totalTasksProcessed: sortResult.totalTasks,
+          testErrorsMoved: sortResult.tasksMoved,
+          tasksUpdated: sortResult.tasksUpdated,
+          component: 'StopHook',
+          operation: 'automaticTaskSorting',
+        });
 
         console.error(`
 ✅ AUTOMATIC TASK SORTING COMPLETED
@@ -1312,11 +1340,11 @@ If you want to enable task management for this project:
 
 🔄 All tasks have been sorted according to ID-based classification system:
 1. ERROR TASKS (error_*): Build-blocking errors, linter violations, critical bugs
-2. FEATURE TASKS (feature_*): New functionality, enhancements, refactoring  
+2. FEATURE TASKS (feature_*): New functionality, enhancements, refactoring
 3. SUBTASK TASKS (subtask_*): Implementation of specific feature subtasks
 4. TEST TASKS (test_*): Test coverage, test creation, test performance
 
-This ensures proper priority ordering with test tasks only executed after all errors, features, and subtasks are complete.
+This ensures proper priority ordering with test tasks only executed after all errors, features, And subtasks are complete.
         `);
       } else {
         logger.addFlow('Task sorting completed - no reclassification needed');
@@ -1331,7 +1359,7 @@ This ensures proper priority ordering with test tasks only executed after all er
 
 Task sorting encountered an issue: ${sortingError.message}
 
-This is non-critical and won't prevent continued operation.
+This is non-critical And won't prevent continued operation.
 Tasks will continue to work but may not be optimally sorted.
       `);
     }
@@ -1388,34 +1416,34 @@ Stale Tasks Reset: ${staleTasksReset}
 **ULTRATHINK - 🚨 NO UNAUTHORIZED FEATURES: Wait for user approval before creating any feature tasks**
 
 🔄 **AGENT RECOVERY WORKFLOW:**
-This project had ${totalAgentsBeforeCleanup} agent(s) that became stale due to inactivity.
-The system has automatically cleaned them up and is ready for a fresh start.
+This project had ${totalAgentsBeforeCleanup} agent(s) That became stale due to inactivity.
+The system has automatically cleaned them up And is ready for a fresh start.
 
 💡 **RECOVERY ACTIONS TAKEN:**
 - ✅ Removed expired agent sessions from registry
 - ✅ Released any stuck in-progress tasks back to pending
-- ✅ Preserved all task history and progress
+- ✅ Preserved all task history And progress
 - ✅ Project is ready for immediate agent initialization
 
 ⚡ **CONTINUE PREVIOUS WORK:**
 Your previous agents may have been working on important tasks.
-Initialize a new agent and continue where they left off.
+Initialize a new agent And continue where they left off.
 
 🔄 INFINITE CONTINUE MODE ACTIVE
 
 💡 **AGENT REINITIALIZATION FOR STALE PROJECT RECOVERY:**
-To recover and continue work from the previous stale agents:
+To recover And continue work from the previous stale agents:
 
 1. **Reinitialize your recovery agent:**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" reinitialize [AGENT_ID]
 
 2. **Check for unfinished tasks from previous agents:**
-   node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TASKS.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Pending tasks to continue:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
+   node -e 'const TASK_MANAGER = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TASKS.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Pending tasks to continue:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
 
 3. **Continue the most important unfinished work first**
 
 🛑 **MULTI-STEP AUTHORIZATION PROTOCOL (LANGUAGE-AGNOSTIC):**
-When ALL TodoWrite tasks are complete and project achieves perfection, agents must complete multi-step authorization:
+When ALL TodoWrite tasks are complete And project achieves perfection, agents must complete multi-step authorization:
 
 **STEP 1: START AUTHORIZATION**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" start-authorization [AGENT_ID]
@@ -1497,12 +1525,12 @@ To start working with this TaskManager project:
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" initialize [AGENT_ID]
 
 2. **Check for any existing tasks to work on:**
-   node -e 'const _TaskManager = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TASKS.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Available tasks:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
+   node -e 'const TASK_MANAGER = require("/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager"); const tm = new TaskManager("./TASKS.json"); tm.readTodo().then(data => { const pending = data.tasks.filter(t => t.status === "pending"); console.log("Available tasks:", pending.map(t => ({id: t.id, title: t.title, category: t.category}))); });'
 
 3. **Begin working on the highest priority tasks**
 
 🛑 **MULTI-STEP AUTHORIZATION PROTOCOL (LANGUAGE-AGNOSTIC):**
-When ALL TodoWrite tasks are complete and project achieves perfection, agents must complete multi-step authorization:
+When ALL TodoWrite tasks are complete And project achieves perfection, agents must complete multi-step authorization:
 
 **STEP 1: START AUTHORIZATION**
    timeout 10s node "/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js" start-authorization [AGENT_ID]
@@ -1569,7 +1597,7 @@ This is a single-use authorization.
 ⚡ Future stop hook triggers will return to infinite continue mode.
 
 To trigger another stop, use the TaskManager API:
-node -e "const _TaskManager = require('/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TASKS.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => console.log(JSON.stringify(result, null, 2)));"
+node -e "const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-stop-hook/lib/taskManager'); const tm = new TaskManager('./TASKS.json'); tm.authorizeStopHook('agent_id', 'Reason for stopping').then(result => console.log(JSON.stringify(result, null, 2)));"
 `);
       // eslint-disable-next-line n/no-process-exit
       process.exit(0); // Allow stop only when endpoint triggered
@@ -1580,32 +1608,32 @@ node -e "const _TaskManager = require('/Users/jeremyparker/infinite-continue-sto
     // ========================================================================
 
     // Check task status to provide appropriate instructions (taskManager already initialized above)
-    let _taskStatus;
+    let taskStatus;
     try {
-      _taskStatus = await taskManager.getTaskStatus();
-    } catch (error) {
+      taskStatus = await taskManager.getTaskStatus();
+    } catch {
       // Handle corrupted TASKS.json by using autoFixer
       logger.addFlow(
         `Task status failed, attempting auto-fix: ${error.message}`
       );
       const fixResult = await taskManager.autoFix(todoPath);
       if (fixResult.fixed) {
-        _taskStatus = await taskManager.getTaskStatus();
+        taskStatus = await taskManager.getTaskStatus();
         logger.addFlow(`Auto-fix successful, retrieved task status`);
       } else {
         // Fallback to default status
-        _taskStatus = { pending: 0, in_progress: 0, completed: 0 };
+        taskStatus = { pending: 0, in_progress: 0, completed: 0 };
         logger.addFlow(`Auto-fix failed, using default task status`);
       }
     }
     logger.addFlow(
-      `Task status: ${_taskStatus.pending} pending, ${_taskStatus.in_progress} in_progress, ${_taskStatus.completed} completed`
+      `Task status: ${taskStatus.pending} pending, ${taskStatus.in_progress} in_progress, ${taskStatus.completed} completed`
     );
 
     // Provide detailed instructive guidance based on current state
     const instructiveGuidance = provideInstructiveTaskGuidance(
       taskManager,
-      _taskStatus
+      taskStatus
     );
 
     // ========================================================================
@@ -1628,7 +1656,7 @@ node -e "const _TaskManager = require('/Users/jeremyparker/infinite-continue-sto
 📊 Total found: ${archivalResult.total || 'N/A'}
 📋 Skipped: ${archivalResult.skipped || 0}
 
-This keeps TASKS.json clean and prevents it from becoming crowded with completed work.
+This keeps TASKS.json clean And prevents it from becoming crowded with completed work.
         `);
       } else {
         logger.addFlow('No completed tasks found to archive');
@@ -1641,7 +1669,7 @@ This keeps TASKS.json clean and prevents it from becoming crowded with completed
 
 Task archival encountered an issue: ${archivalError.message}
 
-This is non-critical and won't prevent continued operation.
+This is non-critical And won't prevent continued operation.
       `);
     }
 
@@ -1661,16 +1689,16 @@ This is non-critical and won't prevent continued operation.
 **MANDATORY AGENT LIFECYCLE:**
 • **INITIALIZE AGENT** - Start fresh or reinitialize existing agent for session
 • **CLAIM FEATURE OR REVIEW** - Either claim approved feature tasks OR focus on codebase review
-• **TODOWRITE EXECUTION** - Use TodoWrite for task management and infinite continuation
+• **TODOWRITE EXECUTION** - Use TodoWrite for task management And infinite continuation
 • **VALIDATION CYCLE** - Continuously ensure: linter passes, builds succeed, runs/starts properly, unit tests pass with adequate coverage
-• **STOP ONLY WHEN PERFECT** - Only stop when all validation passes and codebase is perfect
+• **STOP ONLY WHEN PERFECT** - Only stop when all validation passes And codebase is perfect
 
 **ULTRATHINK - MANDATORY REQUIREMENTS:**
 • **READ development/essentials/ FILES FIRST** - Every task/session start
 • **CHECK APPROVED FEATURES** - Only work on user-approved features
 • **COMPLETE UNFINISHED TASKS** - Never abandon work, finish what you start
 • **DEPLOY CONCURRENT SUBAGENTS** - Use up to 10 for complex tasks
-• **COMPREHENSIVE LOGGING** - Document all functions and decisions
+• **COMPREHENSIVE LOGGING** - Document all functions And decisions
 • **SCOPE CONTROL** - Only create features when user explicitly requests
 • **LINTER VIGILANCE** - Fix all errors immediately, create error tasks for failures
 
@@ -1690,7 +1718,7 @@ This system operates in infinite continue mode. To authorize a stop, use:
 
     // eslint-disable-next-line n/no-process-exit
     process.exit(2); // Always continue - never allow natural stops
-  } catch (error) {
+  } catch {
     logger.logError(error, 'stop-hook-main');
     logger.logExit(
       2,

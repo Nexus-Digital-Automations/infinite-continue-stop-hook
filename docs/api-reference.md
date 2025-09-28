@@ -7,7 +7,7 @@
 
 - [Overview](#overview)
 - [TaskManager API](#taskmanager-api)
-- [CLI Interface](#cli-interface)  
+- [CLI Interface](#cli-interface)
 - [Hook System API](#hook-system-api)
 - [Data Schemas](#data-schemas)
 - [Error Handling](#error-handling)
@@ -48,21 +48,22 @@ Creates a new task with comprehensive validation and automatic ID generation.
 
 ```javascript
 const task = await taskManager.createTask({
-  title: "Fix ESLint violations in auth.js",
-  description: "Resolve linting errors and style issues",
-  category: "error", // Required: error|feature|subtask|test
-  priority: "high", // Optional: low|medium|high|critical
+  title: 'Fix ESLint violations in auth.js',
+  description: 'Resolve linting errors and style issues',
+  category: 'error', // Required: error|feature|subtask|test
+  priority: 'high', // Optional: low|medium|high|critical
   dependencies: [], // Optional: array of task IDs
-  important_files: ["src/auth.js", "eslint.config.js"], // Optional
-  requires_research: false // Optional
+  important_files: ['src/auth.js', 'eslint.config.js'], // Optional
+  requires_research: false, // Optional
 });
 ```
 
 **Returns**: Promise resolving to created task object
 
 **Task Categories (Priority Order)**:
+
 1. `error` - System errors, linter violations, build failures (Priority 1)
-2. `feature` - New functionality, enhancements, refactoring (Priority 2)  
+2. `feature` - New functionality, enhancements, refactoring (Priority 2)
 3. `subtask` - Feature implementation components (Priority 3)
 4. `test` - Test coverage, test creation (Priority 4)
 
@@ -75,9 +76,9 @@ const result = await taskManager.claimTask(
   'feature_1234567890_abc123',
   'agent_development_001',
   'normal', // normal|urgent
-  { 
+  {
     allowOutOfOrder: false, // Override priority order
-    reason: 'User request' // Reason for override
+    reason: 'User request', // Reason for override
   }
 );
 ```
@@ -89,19 +90,14 @@ const result = await taskManager.claimTask(
 Updates task status with validation and history tracking.
 
 ```javascript
-await taskManager.updateTaskStatus(
-  'feature_1234567890_abc123',
-  'completed',
-  'Task completed successfully',
-  {
-    agentId: 'agent_development_001',
-    evidence: {
-      lintPassed: true,
-      testsRun: 15,
-      buildSuccessful: true
-    }
-  }
-);
+await taskManager.updateTaskStatus('feature_1234567890_abc123', 'completed', 'Task completed successfully', {
+  agentId: 'agent_development_001',
+  evidence: {
+    lintPassed: true,
+    testsRun: 15,
+    buildSuccessful: true,
+  },
+});
 ```
 
 **Valid Statuses**: `pending`, `in_progress`, `completed`, `failed`, `blocked`
@@ -121,20 +117,24 @@ const currentTask = await taskManager.getCurrentTask('agent_development_001');
 Advanced task querying with filtering and sorting capabilities.
 
 ```javascript
-const tasks = await taskManager.queryTasks({
-  status: 'pending',
-  category: 'error',
-  priority: 'high'
-}, {
-  sort: 'created_at',
-  limit: 10,
-  includeHistory: true
-});
+const tasks = await taskManager.queryTasks(
+  {
+    status: 'pending',
+    category: 'error',
+    priority: 'high',
+  },
+  {
+    sort: 'created_at',
+    limit: 10,
+    includeHistory: true,
+  }
+);
 ```
 
 **Filter Options**:
+
 - `status`: Task status
-- `category`: Task category  
+- `category`: Task category
 - `priority`: Task priority
 - `assigned_agent`: Agent ID
 - `created_after`: ISO date string
@@ -147,21 +147,19 @@ const tasks = await taskManager.queryTasks({
 Registers a new agent in the system.
 
 ```javascript
-const agent = await taskManager.agentRegistry.registerAgent(
-  'development_session_123_general_abc',
-  {
-    role: 'development', // development|testing|research|coordination
-    sessionId: 'session_123',
-    specialization: ['javascript', 'react'],
-    capabilities: {
-      concurrent_tasks: 3,
-      complexity_rating: 'high'
-    }
-  }
-);
+const agent = await taskManager.agentRegistry.registerAgent('development_session_123_general_abc', {
+  role: 'development', // development|testing|research|coordination
+  sessionId: 'session_123',
+  specialization: ['javascript', 'react'],
+  capabilities: {
+    concurrent_tasks: 3,
+    complexity_rating: 'high',
+  },
+});
 ```
 
 **Agent Roles**:
+
 - `development`: General development tasks
 - `testing`: Test creation and validation
 - `research`: Research and analysis tasks
@@ -214,7 +212,8 @@ Automatically fixes common TODO.json corruption issues.
 const fixResult = await taskManager.autoFixer.autoFix('./TODO.json');
 ```
 
-**Returns**: 
+**Returns**:
+
 ```javascript
 {
   fixed: boolean,
@@ -232,18 +231,18 @@ Creates a feature in the TODO.json features array.
 
 ```javascript
 const feature = await taskManager.createFeature({
-  title: "User Authentication System",
-  description: "Complete authentication with login, signup, and session management",
-  category: "security",
-  status: "planned", // planned|approved|in_progress|implemented|rejected
-  priority: "high",
+  title: 'User Authentication System',
+  description: 'Complete authentication with login, signup, and session management',
+  category: 'security',
+  status: 'planned', // planned|approved|in_progress|implemented|rejected
+  priority: 'high',
   subtasks: [
     {
-      title: "Implement login form",
-      description: "Create React login component",
-      estimated_hours: 4
-    }
-  ]
+      title: 'Implement login form',
+      description: 'Create React login component',
+      estimated_hours: 4,
+    },
+  ],
 });
 ```
 
@@ -261,10 +260,10 @@ Creates a feature suggestion for user approval.
 
 ```javascript
 const suggestion = await taskManager.suggestFeature({
-  title: "Dark Mode Theme",
-  description: "Add dark/light theme toggle to improve user experience",
-  rationale: "Many users prefer dark themes for reduced eye strain",
-  implementation_estimate: "2-3 hours"
+  title: 'Dark Mode Theme',
+  description: 'Add dark/light theme toggle to improve user experience',
+  rationale: 'Many users prefer dark themes for reduced eye strain',
+  implementation_estimate: '2-3 hours',
 });
 ```
 
@@ -277,17 +276,14 @@ const suggestion = await taskManager.suggestFeature({
 Sets up coordinated multi-agent task execution.
 
 ```javascript
-const coordination = await taskManager.createCoordinatedExecution(
-  ['task_1', 'task_2', 'task_3'],
-  {
-    coordinatorRequired: true,
-    maxConcurrent: 3,
-    dependencies: {
-      'task_2': ['task_1'],
-      'task_3': ['task_1', 'task_2']
-    }
-  }
-);
+const coordination = await taskManager.createCoordinatedExecution(['task_1', 'task_2', 'task_3'], {
+  coordinatorRequired: true,
+  maxConcurrent: 3,
+  dependencies: {
+    task_2: ['task_1'],
+    task_3: ['task_1', 'task_2'],
+  },
+});
 ```
 
 ##### `distributeTasksToAgents(taskIds, availableAgents)`
@@ -295,10 +291,7 @@ const coordination = await taskManager.createCoordinatedExecution(
 Intelligently distributes tasks to available agents.
 
 ```javascript
-const distribution = await taskManager.distributeTasksToAgents(
-  ['task_1', 'task_2', 'task_3'],
-  ['agent_1', 'agent_2']
-);
+const distribution = await taskManager.distributeTasksToAgents(['task_1', 'task_2', 'task_3'], ['agent_1', 'agent_2']);
 ```
 
 #### Quality Gates
@@ -312,6 +305,7 @@ const validation = await taskManager.executeQualityGates('task_123');
 ```
 
 **Returns**:
+
 ```javascript
 {
   passed: boolean,
@@ -332,7 +326,7 @@ await taskManager.addQualityGate('task_123', {
   name: 'security_scan',
   command: 'npm run security-audit',
   required: true,
-  timeout: 30000
+  timeout: 30000,
 });
 ```
 
@@ -380,7 +374,7 @@ Get agent status and current tasks.
 # Current agent status
 node taskmanager-api.js status
 
-# Specific agent status  
+# Specific agent status
 node taskmanager-api.js status development_session_123_general_abc
 ```
 
@@ -402,11 +396,13 @@ node taskmanager-api.js create '{"title":"Implement login","description":"Create
 ```
 
 **Required Fields**:
+
 - `title`: Task title
 - `description`: Detailed description
 - `category`: Task category (error|feature|subtask|test)
 
 **Optional Fields**:
+
 - `priority`: Priority level (low|medium|high|critical)
 - `dependencies`: Array of task IDs
 - `important_files`: Array of file paths
@@ -590,7 +586,7 @@ node taskmanager-api.js status
 # Agent 1: Initialize as development agent
 node taskmanager-api.js init '{"role":"development","specialization":["frontend"]}'
 
-# Agent 2: Initialize as testing agent  
+# Agent 2: Initialize as testing agent
 node taskmanager-api.js init '{"role":"testing","specialization":["e2e","unit"]}'
 
 # Create coordinated tasks
@@ -616,7 +612,7 @@ const path = require('path');
 
 function checkStopAllowed(workingDir = process.cwd()) {
   const stopFlagPath = path.join(workingDir, '.stop-allowed');
-  
+
   if (fs.existsSync(stopFlagPath)) {
     try {
       const flagData = JSON.parse(fs.readFileSync(stopFlagPath, 'utf8'));
@@ -652,7 +648,7 @@ The hook system integrates with Claude Code's stop hook mechanism:
 // In stop-hook.js
 process.stdin.on('end', async () => {
   const stopAllowed = checkStopAllowed(workingDir);
-  
+
   if (stopAllowed) {
     // Allow single stop
     process.exit(0);
@@ -725,30 +721,30 @@ interface Task {
   category: 'error' | 'feature' | 'subtask' | 'test';
   priority: 'low' | 'medium' | 'high' | 'critical';
   status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'blocked';
-  
+
   // Assignment
   assigned_agent?: string;
   claimed_by?: string;
   started_at?: string; // ISO date
-  
+
   // Dependencies and files
   dependencies: string[]; // Task IDs
   important_files: string[]; // File paths
-  
+
   // Metadata
   created_at: string; // ISO date
   completed_at?: string; // ISO date
   estimate?: string;
   requires_research: boolean;
   auto_research_created: boolean;
-  
+
   // Subtasks
   subtasks: Subtask[];
-  
+
   // History and tracking
   agent_assignment_history: AssignmentHistory[];
   status_history?: StatusHistory[];
-  
+
   // Quality gates
   quality_gates?: QualityGate[];
   completion_evidence?: Record<string, any>;
@@ -763,28 +759,28 @@ interface Agent {
   role: 'development' | 'testing' | 'research' | 'coordination';
   sessionId: string;
   specialization: string[];
-  
+
   // Status
   status: 'active' | 'inactive' | 'busy';
   lastHeartbeat: string; // ISO date
   last_heartbeat: string; // Legacy compatibility
-  
+
   // Capabilities
   capabilities: {
     concurrent_tasks: number;
     complexity_rating: 'low' | 'medium' | 'high';
     max_workload: number;
   };
-  
+
   // Current state
   workload: number;
   current_tasks: string[]; // Task IDs
-  
+
   // Statistics
   tasks_completed: number;
   tasks_failed: number;
   average_completion_time?: number;
-  
+
   // Registration
   registered_at: string; // ISO date
   config: Record<string, any>;
@@ -801,22 +797,22 @@ interface Feature {
   status: 'suggested' | 'planned' | 'approved' | 'in_progress' | 'implemented' | 'rejected';
   category: string;
   priority: 'low' | 'medium' | 'high' | 'critical';
-  
+
   // Implementation
   subtasks: FeatureSubtask[];
   task_ids: string[]; // Generated task IDs
-  
+
   // Metadata
   created_at: string;
   approved_at?: string;
   completed_at?: string;
   completion_percentage: number;
-  
+
   // Requirements
   estimated_hours?: number;
   requirements: string[];
   acceptance_criteria: string[];
-  
+
   // Tracking
   suggestion_history?: FeatureSuggestion[];
 }
@@ -906,6 +902,7 @@ class ValidationError extends Error {
 ```
 
 **Examples**:
+
 - Missing required fields in task creation
 - Invalid task category values
 - Malformed agent IDs
@@ -924,6 +921,7 @@ class CorruptionError extends Error {
 ```
 
 **Auto-Fix Capable**:
+
 - JSON syntax errors
 - Missing required fields
 - Invalid data structures
@@ -942,6 +940,7 @@ class SecurityError extends Error {
 ```
 
 **Triggers**:
+
 - Path traversal attempts
 - Access outside project boundaries
 - Invalid agent IDs with suspicious patterns
@@ -959,6 +958,7 @@ class ConcurrencyError extends Error {
 ```
 
 **Scenarios**:
+
 - Multiple agents claiming same task
 - Concurrent TODO.json modifications
 - Lock acquisition failures
@@ -973,26 +973,26 @@ const ERROR_CODES = {
   INVALID_TASK_CATEGORY: 'E001',
   MISSING_REQUIRED_FIELD: 'E002',
   INVALID_AGENT_ID: 'E003',
-  
+
   // Data
   TODO_CORRUPTED: 'E101',
   TODO_NOT_FOUND: 'E102',
   AUTO_FIX_FAILED: 'E103',
-  
+
   // Security
   PATH_TRAVERSAL: 'E201',
   UNAUTHORIZED_ACCESS: 'E202',
   SUSPICIOUS_AGENT_ID: 'E203',
-  
+
   // Concurrency
   TASK_ALREADY_CLAIMED: 'E301',
   AGENT_COLLISION: 'E302',
   LOCK_TIMEOUT: 'E303',
-  
+
   // Business Logic
   TASK_ORDER_VIOLATION: 'E401',
   AGENT_WORKLOAD_EXCEEDED: 'E402',
-  QUALITY_GATE_FAILED: 'E403'
+  QUALITY_GATE_FAILED: 'E403',
 };
 ```
 
@@ -1028,10 +1028,10 @@ try {
 } catch (error) {
   if (error instanceof ValidationError) {
     // Return empty result with warning
-    return { 
-      success: true, 
-      tasks: [], 
-      warning: 'Filter validation failed, returning all tasks' 
+    return {
+      success: true,
+      tasks: [],
+      warning: 'Filter validation failed, returning all tasks',
     };
   }
   throw error; // Re-throw critical errors
@@ -1065,15 +1065,13 @@ async function withRetry(operation, maxAttempts = 3) {
       return await operation();
     } catch (error) {
       if (attempt === maxAttempts) throw error;
-      
+
       if (error instanceof ConcurrencyError) {
         // Exponential backoff for concurrency errors
-        await new Promise(resolve => 
-          setTimeout(resolve, Math.pow(2, attempt) * 1000)
-        );
+        await new Promise((resolve) => setTimeout(resolve, Math.pow(2, attempt) * 1000));
         continue;
       }
-      
+
       throw error; // Don't retry non-recoverable errors
     }
   }
@@ -1114,25 +1112,22 @@ const path = require('path');
 
 class MyTaskService {
   constructor(projectRoot) {
-    this.taskManager = new TaskManager(
-      path.join(projectRoot, 'TODO.json'),
-      { 
-        projectRoot,
-        enableAutoFix: true 
-      }
-    );
+    this.taskManager = new TaskManager(path.join(projectRoot, 'TODO.json'), {
+      projectRoot,
+      enableAutoFix: true,
+    });
   }
-  
+
   async createErrorTask(title, description, files = []) {
     return await this.taskManager.createTask({
       title,
       description,
       category: 'error',
       priority: 'high',
-      important_files: files
+      important_files: files,
     });
   }
-  
+
   async getAgentCurrentTask(agentId) {
     return await this.taskManager.getCurrentTask(agentId);
   }
@@ -1149,16 +1144,16 @@ class TaskManagerCLI {
   constructor(apiPath) {
     this.apiPath = apiPath || './taskmanager-api.js';
   }
-  
+
   async executeCommand(command, args = []) {
     return new Promise((resolve, reject) => {
       const process = spawn('node', [this.apiPath, command, ...args], {
-        timeout: 10000
+        timeout: 10000,
       });
-      
+
       let output = '';
-      process.stdout.on('data', data => output += data);
-      
+      process.stdout.on('data', (data) => (output += data));
+
       process.on('close', (code) => {
         try {
           const result = JSON.parse(output);
@@ -1169,11 +1164,11 @@ class TaskManagerCLI {
       });
     });
   }
-  
+
   async initAgent(config = {}) {
     return await this.executeCommand('init', [JSON.stringify(config)]);
   }
-  
+
   async createTask(taskData) {
     return await this.executeCommand('create', [JSON.stringify(taskData)]);
   }
@@ -1188,34 +1183,33 @@ class MultiAgentTaskSystem {
     this.taskManager = new TaskManager(todoPath);
     this.agents = new Map();
   }
-  
+
   async registerAgent(role, specialization = []) {
-    const agent = await this.taskManager.agentRegistry.registerAgent(
-      this.generateAgentId(role),
-      { role, specialization }
-    );
-    
+    const agent = await this.taskManager.agentRegistry.registerAgent(this.generateAgentId(role), {
+      role,
+      specialization,
+    });
+
     this.agents.set(agent.id, agent);
     return agent;
   }
-  
+
   async distributeWork() {
-    const availableAgents = Array.from(this.agents.values())
-      .filter(agent => agent.status === 'active');
-    
+    const availableAgents = Array.from(this.agents.values()).filter((agent) => agent.status === 'active');
+
     const pendingTasks = await this.taskManager.queryTasks({
-      status: 'pending'
+      status: 'pending',
     });
-    
+
     // Distribute based on agent capabilities and task requirements
     const assignments = await this.taskManager.distributeTasksToAgents(
-      pendingTasks.map(t => t.id),
-      availableAgents.map(a => a.id)
+      pendingTasks.map((t) => t.id),
+      availableAgents.map((a) => a.id)
     );
-    
+
     return assignments;
   }
-  
+
   generateAgentId(role) {
     const timestamp = Date.now();
     const random = Math.random().toString(36).substring(2, 11);
@@ -1241,9 +1235,9 @@ app.post('/api/tasks', async (req, res) => {
     const task = await taskManager.createTask(req.body);
     res.json({ success: true, task });
   } catch (error) {
-    res.status(400).json({ 
-      success: false, 
-      error: error.message 
+    res.status(400).json({
+      success: false,
+      error: error.message,
     });
   }
 });
@@ -1253,25 +1247,21 @@ app.get('/api/tasks', async (req, res) => {
     const tasks = await taskManager.queryTasks(req.query);
     res.json({ success: true, tasks });
   } catch (error) {
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message,
     });
   }
 });
 
 app.post('/api/agents/:agentId/claim/:taskId', async (req, res) => {
   try {
-    const result = await taskManager.claimTask(
-      req.params.taskId,
-      req.params.agentId,
-      'normal'
-    );
+    const result = await taskManager.claimTask(req.params.taskId, req.params.agentId, 'normal');
     res.json(result);
   } catch (error) {
-    res.status(400).json({ 
-      success: false, 
-      error: error.message 
+    res.status(400).json({
+      success: false,
+      error: error.message,
     });
   }
 });
@@ -1283,9 +1273,9 @@ app.post('/api/stop-hook/authorize', async (req, res) => {
     const result = await taskManager.authorizeStopHook(agentId, reason);
     res.json(result);
   } catch (error) {
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message,
     });
   }
 });
@@ -1298,27 +1288,24 @@ class TaskManagerService {
   constructor(baseURL = '/api') {
     this.baseURL = baseURL;
   }
-  
+
   async createTask(taskData) {
     const response = await fetch(`${this.baseURL}/tasks`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(taskData)
+      body: JSON.stringify(taskData),
     });
     return response.json();
   }
-  
+
   async getTasks(filter = {}) {
     const params = new URLSearchParams(filter);
     const response = await fetch(`${this.baseURL}/tasks?${params}`);
     return response.json();
   }
-  
+
   async claimTask(taskId, agentId) {
-    const response = await fetch(
-      `${this.baseURL}/agents/${agentId}/claim/${taskId}`,
-      { method: 'POST' }
-    );
+    const response = await fetch(`${this.baseURL}/agents/${agentId}/claim/${taskId}`, { method: 'POST' });
     return response.json();
   }
 }
@@ -1328,7 +1315,7 @@ function useTasks() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
   const service = new TaskManagerService();
-  
+
   const loadTasks = useCallback(async (filter = {}) => {
     setLoading(true);
     try {
@@ -1340,15 +1327,18 @@ function useTasks() {
       setLoading(false);
     }
   }, []);
-  
-  const createTask = useCallback(async (taskData) => {
-    const result = await service.createTask(taskData);
-    if (result.success) {
-      await loadTasks(); // Reload tasks
-    }
-    return result;
-  }, [loadTasks]);
-  
+
+  const createTask = useCallback(
+    async (taskData) => {
+      const result = await service.createTask(taskData);
+      if (result.success) {
+        await loadTasks(); // Reload tasks
+      }
+      return result;
+    },
+    [loadTasks]
+  );
+
   return { tasks, loading, loadTasks, createTask };
 }
 ```
@@ -1363,7 +1353,7 @@ const path = require('path');
 describe('TaskManager Integration', () => {
   let taskManager;
   let testTodoPath;
-  
+
   beforeEach(() => {
     // Create temporary TODO.json for testing
     testTodoPath = path.join(__dirname, 'test-todo.json');
@@ -1376,54 +1366,54 @@ describe('TaskManager Integration', () => {
       execution_count: 0,
       settings: {},
       schema_version: '2.0.0',
-      last_updated: new Date().toISOString()
+      last_updated: new Date().toISOString(),
     };
     fs.writeFileSync(testTodoPath, JSON.stringify(testData, null, 2));
-    
+
     taskManager = new TaskManager(testTodoPath);
   });
-  
+
   afterEach(() => {
     // Cleanup
     if (fs.existsSync(testTodoPath)) {
       fs.unlinkSync(testTodoPath);
     }
   });
-  
+
   test('creates task with proper categorization', async () => {
     const task = await taskManager.createTask({
       title: 'Test task',
       description: 'Test description',
-      category: 'feature'
+      category: 'feature',
     });
-    
+
     expect(task.id).toMatch(/^feature_\d+_[a-z0-9]+$/);
     expect(task.category).toBe('feature');
     expect(task.status).toBe('pending');
   });
-  
+
   test('enforces task priority order', async () => {
     // Create tasks in reverse priority order
     const testTask = await taskManager.createTask({
       title: 'Test task',
       description: 'Test',
-      category: 'test'
+      category: 'test',
     });
-    
+
     const featureTask = await taskManager.createTask({
       title: 'Feature task',
       description: 'Feature',
-      category: 'feature'
+      category: 'feature',
     });
-    
+
     const errorTask = await taskManager.createTask({
       title: 'Error task',
       description: 'Error',
-      category: 'error'
+      category: 'error',
     });
-    
+
     const tasks = await taskManager.queryTasks({ status: 'pending' });
-    
+
     // Tasks should be ordered by priority
     expect(tasks[0].category).toBe('error');
     expect(tasks[1].category).toBe('feature');
@@ -1445,22 +1435,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '18'
-      
+
       - name: Install dependencies
         run: npm install
-      
+
       - name: Initialize TaskManager
         run: |
           node setup-infinite-hook.js . --batch --no-interactive \
             --project-name "${{ github.repository }}" \
             --task "CI/CD integration test" \
             --mode "TESTING"
-      
+
       - name: Create CI tasks
         run: |
           # Create linting task
@@ -1471,7 +1461,7 @@ jobs:
             "category": "error",
             "important_files": ["eslint.config.js", "src/"]
           }'
-          
+
           # Create test task
           node taskmanager-api.js create '{
             "title": "Run test suite",
@@ -1479,12 +1469,12 @@ jobs:
             "category": "test",
             "important_files": ["test/", "package.json"]
           }'
-      
+
       - name: Execute tasks
         run: |
           # Get current agent
           AGENT_ID=$(node taskmanager-api.js status | jq -r '.agentId')
-          
+
           # Process error tasks first (linting)
           ERROR_TASK=$(node taskmanager-api.js list '{"category":"error","status":"pending"}' | jq -r '.tasks[0].id')
           if [ "$ERROR_TASK" != "null" ]; then
@@ -1492,7 +1482,7 @@ jobs:
             npm run lint
             node taskmanager-api.js complete "$ERROR_TASK" '{"lintPassed": true}'
           fi
-          
+
           # Process test tasks after errors are resolved
           TEST_TASK=$(node taskmanager-api.js list '{"category":"test","status":"pending"}' | jq -r '.tasks[0].id')
           if [ "$TEST_TASK" != "null" ]; then
@@ -1500,12 +1490,12 @@ jobs:
             npm test
             node taskmanager-api.js complete "$TEST_TASK" '{"testsRun": true}'
           fi
-      
+
       - name: Generate task report
         run: |
           node taskmanager-api.js stats > task-report.json
           cat task-report.json
-      
+
       - name: Archive TaskManager logs
         uses: actions/upload-artifact@v2
         if: always()

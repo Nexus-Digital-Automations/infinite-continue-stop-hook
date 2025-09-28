@@ -2,7 +2,7 @@
 
 **Version**: 1.0.0  
 **Date**: 2025-09-15  
-**Author**: Documentation Agent #5  
+**Author**: Documentation Agent #5
 
 ## Overview
 
@@ -11,17 +11,21 @@ The Success Criteria API provides comprehensive endpoints for managing quality g
 ## Base Configuration
 
 ### API Base URL
+
 ```
 /api/success-criteria
 ```
 
 ### Authentication
+
 All endpoints use the existing TaskManager authentication system with agent-based authorization.
 
 ### Timeout Settings
+
 All API calls enforce a 10-second timeout as per project standards.
 
 ### Response Format
+
 ```json
 {
   "success": true|false,
@@ -41,9 +45,11 @@ All API calls enforce a 10-second timeout as per project standards.
 **Description**: Retrieves all success criteria assigned to a specific task, including standard template criteria, custom criteria, and inherited project-wide criteria.
 
 **Parameters**:
+
 - `taskId` (path): Unique task identifier (e.g., `feature_1757908790990_7cq3kgg1pv2`)
 
 **Query Parameters**:
+
 - `include` (optional): Comma-separated list of sections to include
   - Values: `template`, `custom`, `inherited`, `validation_status`
   - Default: All sections included
@@ -52,11 +58,13 @@ All API calls enforce a 10-second timeout as per project standards.
   - Default: `full`
 
 **Request Example**:
+
 ```bash
 GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,custom&format=summary
 ```
 
 **Response Example**:
+
 ```json
 {
   "success": true,
@@ -77,10 +85,7 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
           "category": "core_quality",
           "title": "Linter Perfection",
           "description": "All linting rules pass with zero violations",
-          "requirements": [
-            "No warnings or errors from static code analysis",
-            "Code style consistency maintained"
-          ],
+          "requirements": ["No warnings or errors from static code analysis", "Code style consistency maintained"],
           "evidence_required": "Clean linter output screenshot",
           "validation_method": "automated",
           "priority": "critical"
@@ -93,11 +98,7 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
         "category": "functional",
         "title": "User Authentication Integration",
         "description": "Successfully integrate with existing authentication system",
-        "requirements": [
-          "Login workflow functional",
-          "Session management working",
-          "Logout process complete"
-        ],
+        "requirements": ["Login workflow functional", "Session management working", "Logout process complete"],
         "evidence_required": "Integration test results",
         "validation_method": "manual",
         "priority": "critical"
@@ -126,6 +127,7 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
 ```
 
 **Error Responses**:
+
 ```json
 // Task not found
 {
@@ -151,9 +153,11 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
 **Description**: Assigns or updates custom success criteria for a specific task. This endpoint allows adding task-specific requirements beyond the standard template criteria.
 
 **Parameters**:
+
 - `taskId` (path): Unique task identifier
 
 **Request Body**:
+
 ```json
 {
   "custom_criteria": [
@@ -168,10 +172,7 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
       "acceptance_threshold": "Specific threshold for pass/fail"
     }
   ],
-  "inherited_criteria": [
-    "project_security_baseline",
-    "project_performance_baseline"
-  ],
+  "inherited_criteria": ["project_security_baseline", "project_performance_baseline"],
   "template_overrides": {
     "disable_criteria": [1, 5, 10],
     "modify_criteria": {
@@ -190,6 +191,7 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
 ```
 
 **Response Example**:
+
 ```json
 {
   "success": true,
@@ -223,6 +225,7 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
 **Description**: Defines success criteria that automatically apply to all tasks of specified types within the project. These criteria are inherited by individual tasks and enforced across the project.
 
 **Request Body**:
+
 ```json
 {
   "criteria_set_id": "project_security_v2",
@@ -264,6 +267,7 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
 ```
 
 **Response Example**:
+
 ```json
 {
   "success": true,
@@ -294,9 +298,11 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
 **Description**: Executes validation workflow for a specific task against all assigned success criteria. Supports both automated and manual validation processes.
 
 **Parameters**:
+
 - `taskId` (path): Unique task identifier
 
 **Request Body**:
+
 ```json
 {
   "validation_type": "full|partial|automated_only|manual_only",
@@ -360,6 +366,7 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
 ```
 
 **Response Example (Synchronous)**:
+
 ```json
 {
   "success": true,
@@ -376,9 +383,9 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
       "success_rate": 96.4
     },
     "category_breakdown": {
-      "core_quality": {"passed": 10, "failed": 0, "pending": 0},
-      "security": {"passed": 9, "failed": 0, "pending": 1},
-      "compliance": {"passed": 8, "failed": 0, "pending": 0}
+      "core_quality": { "passed": 10, "failed": 0, "pending": 0 },
+      "security": { "passed": 9, "failed": 0, "pending": 1 },
+      "compliance": { "passed": 8, "failed": 0, "pending": 0 }
     },
     "detailed_results": [
       {
@@ -417,6 +424,7 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
 ```
 
 **Response Example (Asynchronous)**:
+
 ```json
 {
   "success": true,
@@ -443,9 +451,11 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
 **Description**: Retrieves comprehensive validation report for a task, including historical validation data, trend analysis, and compliance tracking.
 
 **Parameters**:
+
 - `taskId` (path): Unique task identifier
 
 **Query Parameters**:
+
 - `format` (optional): Report format
   - Values: `detailed`, `summary`, `executive`, `compliance`
   - Default: `detailed`
@@ -457,6 +467,7 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
   - Default: `30d`
 
 **Response Example**:
+
 ```json
 {
   "success": true,
@@ -530,11 +541,13 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
 **Description**: Retrieves all available success criteria templates for the project.
 
 **Query Parameters**:
+
 - `category` (optional): Filter by category
 - `version` (optional): Specific template version
 - `active_only` (optional): Show only active templates (default: true)
 
 **Response Example**:
+
 ```json
 {
   "success": true,
@@ -553,7 +566,7 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
       },
       {
         "id": "security_focused",
-        "name": "Security-Focused Template", 
+        "name": "Security-Focused Template",
         "version": "2.1.0",
         "description": "Enhanced security requirements for sensitive features",
         "category": "security",
@@ -574,6 +587,7 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
 **Description**: Tracks the status of asynchronous validation processes.
 
 **Response Example**:
+
 ```json
 {
   "success": true,
@@ -601,16 +615,16 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
 
 ### Error Codes
 
-| Code | Description | Typical Causes |
-|------|-------------|----------------|
-| `TASK_NOT_FOUND` | Task ID does not exist | Invalid task ID, deleted task |
-| `INVALID_CRITERIA` | Malformed criteria data | Invalid JSON, missing required fields |
-| `VALIDATION_TIMEOUT` | Validation process timed out | Large task, slow validation tools |
-| `INSUFFICIENT_EVIDENCE` | Required evidence not provided | Missing automated results, incomplete manual reviews |
-| `CRITERIA_CONFLICT` | Conflicting criteria definitions | Overlapping requirements, contradictory rules |
-| `AUTHORIZATION_FAILED` | Agent lacks required permissions | Insufficient role, expired token |
-| `TEMPLATE_NOT_FOUND` | Referenced template does not exist | Invalid template ID, deprecated template |
-| `INHERITANCE_ERROR` | Project-wide criteria inheritance failed | Circular dependencies, malformed rules |
+| Code                    | Description                              | Typical Causes                                       |
+| ----------------------- | ---------------------------------------- | ---------------------------------------------------- |
+| `TASK_NOT_FOUND`        | Task ID does not exist                   | Invalid task ID, deleted task                        |
+| `INVALID_CRITERIA`      | Malformed criteria data                  | Invalid JSON, missing required fields                |
+| `VALIDATION_TIMEOUT`    | Validation process timed out             | Large task, slow validation tools                    |
+| `INSUFFICIENT_EVIDENCE` | Required evidence not provided           | Missing automated results, incomplete manual reviews |
+| `CRITERIA_CONFLICT`     | Conflicting criteria definitions         | Overlapping requirements, contradictory rules        |
+| `AUTHORIZATION_FAILED`  | Agent lacks required permissions         | Insufficient role, expired token                     |
+| `TEMPLATE_NOT_FOUND`    | Referenced template does not exist       | Invalid template ID, deprecated template             |
+| `INHERITANCE_ERROR`     | Project-wide criteria inheritance failed | Circular dependencies, malformed rules               |
 
 ### Error Response Format
 
@@ -618,17 +632,13 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
 {
   "success": false,
   "error": "Human-readable error message",
-  "errorCode": "MACHINE_READABLE_CODE", 
+  "errorCode": "MACHINE_READABLE_CODE",
   "details": {
     "field": "specific field with error",
     "provided": "value that was provided",
     "expected": "description of expected value"
   },
-  "suggestions": [
-    "Check task ID format",
-    "Verify criteria schema",
-    "Contact system administrator"
-  ],
+  "suggestions": ["Check task ID format", "Verify criteria schema", "Contact system administrator"],
   "timestamp": "2025-09-15T04:00:47.534Z",
   "requestId": "req_1757908790990_docs_error"
 }
@@ -637,16 +647,19 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
 ## Performance Considerations
 
 ### Response Time Targets
+
 - **GET requests**: < 500ms for 95th percentile
 - **POST requests**: < 2s for validation operations
 - **Async validation**: < 30s for complete workflow
 
 ### Rate Limiting
+
 - **Standard requests**: 100 requests per minute per agent
 - **Validation requests**: 10 concurrent validations per agent
 - **Project-wide updates**: 5 requests per minute per project
 
 ### Caching Strategy
+
 - **Template data**: Cached for 1 hour
 - **Validation results**: Cached for 24 hours
 - **Project criteria**: Cached for 4 hours
@@ -654,6 +667,7 @@ GET /api/success-criteria/feature_1757908790990_7cq3kgg1pv2?include=template,cus
 ## Integration Examples
 
 ### Basic Task Validation
+
 ```javascript
 // Example: Validate a completed feature task
 const response = await fetch('/api/success-criteria/validate/feature_123_abc', {
@@ -663,12 +677,18 @@ const response = await fetch('/api/success-criteria/validate/feature_123_abc', {
     validation_type: 'full',
     evidence: {
       automated_evidence: {
-        linter_results: { /* linter output */ },
-        build_results: { /* build output */ },
-        test_results: { /* test output */ }
-      }
-    }
-  })
+        linter_results: {
+          /* linter output */
+        },
+        build_results: {
+          /* build output */
+        },
+        test_results: {
+          /* test output */
+        },
+      },
+    },
+  }),
 });
 
 const validation = await response.json();
@@ -678,6 +698,7 @@ if (validation.success && validation.data.overall_status === 'passed') {
 ```
 
 ### Custom Criteria Assignment
+
 ```javascript
 // Example: Add custom performance requirements
 const criteriaResponse = await fetch('/api/success-criteria/task/feature_123_abc', {
@@ -689,21 +710,18 @@ const criteriaResponse = await fetch('/api/success-criteria/task/feature_123_abc
         category: 'performance',
         title: 'API Response Time',
         description: 'All API endpoints must respond within 200ms',
-        requirements: [
-          'Average response time < 200ms',
-          '95th percentile < 400ms',
-          'No timeouts during load testing'
-        ],
+        requirements: ['Average response time < 200ms', '95th percentile < 400ms', 'No timeouts during load testing'],
         evidence_required: 'Performance test results',
         validation_method: 'automated',
-        priority: 'critical'
-      }
-    ]
-  })
+        priority: 'critical',
+      },
+    ],
+  }),
 });
 ```
 
 ### Project-Wide Security Policy
+
 ```javascript
 // Example: Implement organization-wide security requirements
 const policyResponse = await fetch('/api/success-criteria/project-wide', {
@@ -714,7 +732,7 @@ const policyResponse = await fetch('/api/success-criteria/project-wide', {
     description: 'Updated security policy for Q4 2025',
     applies_to: {
       task_categories: ['feature', 'subtask'],
-      exclude_categories: ['documentation', 'test']
+      exclude_categories: ['documentation', 'test'],
     },
     criteria: [
       {
@@ -724,18 +742,18 @@ const policyResponse = await fetch('/api/success-criteria/project-wide', {
         requirements: [
           'No critical vulnerabilities',
           'High vulnerabilities must be justified',
-          'All dependencies up to date within 6 months'
+          'All dependencies up to date within 6 months',
         ],
         evidence_required: 'Vulnerability scan report',
         validation_method: 'automated',
-        priority: 'critical'
-      }
+        priority: 'critical',
+      },
     ],
     inheritance_rules: {
       mandatory: true,
-      allow_override: false
-    }
-  })
+      allow_override: false,
+    },
+  }),
 });
 ```
 
@@ -774,6 +792,6 @@ curl -X POST "/api/success-criteria/validate/feature_123_abc" \
 
 ---
 
-*API Reference v1.0.0*  
-*Generated by: Documentation Agent #5*  
-*Last Updated: 2025-09-15*
+_API Reference v1.0.0_  
+_Generated by: Documentation Agent #5_  
+_Last Updated: 2025-09-15_

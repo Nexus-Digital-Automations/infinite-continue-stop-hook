@@ -22,7 +22,7 @@
       "Write",
       "MultiEdit",
       "Glob",
-      "Grep", 
+      "Grep",
       "Task",
       "NotebookEdit",
       "Bash(npm run:*)",

@@ -10,6 +10,7 @@
 - Validate error handling
 
 ## Test Quality
+
 - Clear test descriptions
 - Isolated test cases
 - Fast execution

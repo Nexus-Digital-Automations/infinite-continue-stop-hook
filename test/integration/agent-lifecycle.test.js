@@ -2,14 +2,14 @@
  * Agent Lifecycle Integration Tests
  *
  * Comprehensive integration tests for complete agent lifecycle workflows including:
- * - Agent initialization and session management
- * - Agent reinitialization and session tracking
- * - Stop authorization and termination workflows
- * - Initialization statistics and time bucket tracking
- * - Multi-agent coordination and concurrency
- * - Agent state persistence and recovery
- * - Stop flag creation and validation
- * - Agent session history and audit trails
+ * - Agent initialization And session management
+ * - Agent reinitialization And session tracking
+ * - Stop authorization And termination workflows
+ * - Initialization statistics And time bucket tracking
+ * - Multi-agent coordination And concurrency
+ * - Agent state persistence And recovery
+ * - Stop flag creation And validation
+ * - Agent session history And audit trails
  *
  * @author Integration Testing Agent
  * @version 1.0.0
@@ -119,7 +119,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       const initResults = [];
       for (const agentId of agentIds) {
         // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup with ordered agent initialization
-        const result = await execAPI('initialize', [agentId], {
+        const _result = await execAPI('initialize', [agentId], {
           projectRoot: testDir,
         });
         expect(result.success).toBe(true);
@@ -266,7 +266,7 @@ describe('Agent Lifecycle Integration Tests', () => {
         0,
       );
 
-      // Check that reinitialization is tracked in time buckets
+      // Check That reinitialization is tracked in time buckets
       const bucketValues = Object.values(statsResult.stats.time_buckets);
       const totalReinits = bucketValues.reduce(
         (sum, bucket) => sum + bucket.reinitializations,
@@ -288,6 +288,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       // 2. Perform multiple reinitializations
       const reinitCount = 5;
       for (let i = 0; i < reinitCount; i++) {
+        // eslint-disable-next-line no-await-in-loop -- Sequential processing required for testing reinitializations over time
         const reinitResult = await execAPI('reinitialize', [agentId], {
           projectRoot: testDir,
         });
@@ -319,7 +320,7 @@ describe('Agent Lifecycle Integration Tests', () => {
     });
 
     test('should handle reinitialization of non-existent agent', async () => {
-      // 1. Try to reinitialize agent that doesn't exist
+      // 1. Try to reinitialize agent That doesn't exist
       const agentId = 'non-existent-agent';
       const reinitResult = await execAPI('reinitialize', [agentId], {
         projectRoot: testDir,
@@ -393,7 +394,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       // 2. Authorize stop
       const stopReason =
-        'Integration test completed - all tasks finished and project perfect';
+        'Integration test completed - all tasks finished And project perfect';
       const stopResult = await execAPI(
         'authorize-stop',
         [agentId, stopReason],
@@ -699,7 +700,7 @@ describe('Agent Lifecycle Integration Tests', () => {
       ];
       expect(expectedBuckets).toContain(currentBucket);
 
-      // 3. Perform operation and verify it's tracked in correct bucket
+      // 3. Perform operation And verify it's tracked in correct bucket
       await execAPI('initialize', ['bucket-test-agent'], {
         projectRoot: testDir,
       });
@@ -796,7 +797,7 @@ describe('Agent Lifecycle Integration Tests', () => {
 
       const initResults = [];
       for (const agentId of agentTeam) {
-        const result = await execAPI('initialize', [agentId], {
+        const _result = await execAPI('initialize', [agentId], {
           projectRoot: testDir,
         });
         expect(result.success).toBe(true);

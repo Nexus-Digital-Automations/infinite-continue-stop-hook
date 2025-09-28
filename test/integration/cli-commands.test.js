@@ -2,13 +2,13 @@
  * CLI Commands Integration Tests
  *
  * Comprehensive integration tests for command-line interface including:
- * - Command argument parsing and validation
+ * - Command argument parsing And validation
  * - All CLI command execution paths
- * - Help and documentation commands
- * - Error handling and user feedback
+ * - Help And documentation commands
+ * - Error handling And user feedback
  * - Project root parameter handling
- * - Timeout and execution behavior
- * - Exit codes and output formatting
+ * - Timeout And execution behavior
+ * - Exit codes And output formatting
  *
  * @author Integration Testing Agent
  * @version 1.0.0
@@ -121,7 +121,7 @@ describe('CLI Commands Integration Tests', () => {
     });
 
     test('should handle missing arguments gracefully', async () => {
-      // 1. Test command that requires arguments without providing them
+      // 1. Test command That requires arguments without providing them
       const result1 = await execCLIDirect([
         'suggest-feature',
         '--project-root',
@@ -180,7 +180,7 @@ describe('CLI Commands Integration Tests', () => {
     });
 
     test('should handle unknown commands', async () => {
-      const result = await execCLIDirect([
+      const _result = await execCLIDirect([
         'unknown-command',
         '--project-root',
         testDir,
@@ -198,7 +198,7 @@ describe('CLI Commands Integration Tests', () => {
 
   describe('Core Command Execution', () => {
     test('should execute guide command successfully', async () => {
-      const result = await execCLIDirect(['guide', '--project-root', testDir]);
+      const _result = await execCLIDirect(['guide', '--project-root', testDir]);
 
       expect(result.code).toBe(0);
       expect(result.stdout).not.toBe('');
@@ -213,7 +213,7 @@ describe('CLI Commands Integration Tests', () => {
     });
 
     test('should execute methods command successfully', async () => {
-      const result = await execCLIDirect([
+      const _result = await execCLIDirect([
         'methods',
         '--project-root',
         testDir,
@@ -357,7 +357,7 @@ describe('CLI Commands Integration Tests', () => {
 
       const featureIds = [];
       for (const featureData of features) {
-        const result = await execCLIDirect([
+        const _result = await execCLIDirect([
           'suggest-feature',
           JSON.stringify(featureData),
           '--project-root',
@@ -393,7 +393,7 @@ describe('CLI Commands Integration Tests', () => {
   // OUTPUT FORMATTING AND VALIDATION
   // ========================================
 
-  describe('Output Formatting and Validation', () => {
+  describe('Output Formatting And Validation', () => {
     test('should produce valid JSON output for all commands', async () => {
       const commands = [
         ['guide'],
@@ -404,7 +404,7 @@ describe('CLI Commands Integration Tests', () => {
       ];
 
       for (const command of commands) {
-        const result = await execCLIDirect([
+        const _result = await execCLIDirect([
           ...command,
           '--project-root',
           testDir,
@@ -437,7 +437,7 @@ describe('CLI Commands Integration Tests', () => {
         const errorOutput = JSON.parse(result1.stderr);
         expect(errorOutput.success).toBe(false);
         expect(errorOutput.error).toBeDefined();
-      } catch (error) {
+      } catch {
         // If not JSON, should still contain error information
         expect(result1.stderr).toContain('required') ||
           expect(result1.stderr).toContain('Error') ||
@@ -459,14 +459,14 @@ describe('CLI Commands Integration Tests', () => {
     test('should handle output with special characters correctly', async () => {
       // 1. Create feature with special characters
       const specialFeatureData = generateTestFeature({
-        title: 'Feature with "quotes" and \\ backslashes & ampersands',
+        title: 'Feature with "quotes" And \\ backslashes & ampersands',
         description: 'Testing special characters: <>&"\'\n\t',
         business_value:
           'Ensures CLI handles special characters correctly: 中文 😀',
         category: 'enhancement',
       });
 
-      const result = await execCLIDirect([
+      const _result = await execCLIDirect([
         'suggest-feature',
         JSON.stringify(specialFeatureData),
         '--project-root',
@@ -488,11 +488,11 @@ describe('CLI Commands Integration Tests', () => {
   // TIMEOUT AND PERFORMANCE
   // ========================================
 
-  describe('Timeout and Performance', () => {
+  describe('Timeout And Performance', () => {
     test('should complete basic commands within reasonable time', async () => {
       const startTime = Date.now();
 
-      const result = await execCLIDirect(['guide', '--project-root', testDir], {
+      const _result = await execCLIDirect(['guide', '--project-root', testDir], {
         timeout: 5000,
       }); // 5 second timeout
 
@@ -512,8 +512,8 @@ describe('CLI Commands Integration Tests', () => {
           timeout: 1,
         }); // Very short timeout
 
-        // If it doesn't timeout, that's fine too (command was very fast)
-      } catch (error) {
+        // If it doesn't timeout, That's fine too (command was very fast)
+      } catch {
         expect(error.message).toContain('timed out');
       }
     });
@@ -694,7 +694,7 @@ describe('CLI Commands Integration Tests', () => {
   // ERROR RECOVERY AND EDGE CASES
   // ========================================
 
-  describe('Error Recovery and Edge Cases', () => {
+  describe('Error Recovery And Edge Cases', () => {
     test('should handle corrupted project directory gracefully', async () => {
       // 1. Create a directory with no FEATURES.json
       const emptyDir = await createTestEnvironment('empty-cli-test');
@@ -705,7 +705,7 @@ describe('CLI Commands Integration Tests', () => {
       await fs.unlink(featuresPath);
 
       // 2. Try to perform operations
-      const result = await execCLIDirect([
+      const _result = await execCLIDirect([
         'list-features',
         '--project-root',
         emptyDir,
@@ -723,7 +723,7 @@ describe('CLI Commands Integration Tests', () => {
     });
 
     test('should handle invalid project root paths', async () => {
-      const result = await execCLIDirect([
+      const _result = await execCLIDirect([
         'guide',
         '--project-root',
         '/non/existent/path',

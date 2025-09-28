@@ -1,34 +1,34 @@
 #!/usr/bin/env node
 /* eslint-disable no-console -- Setup script requires console output for user feedback */
 /**
- * Infinite Continue Hook Setup and Project Initialization System
+ * Infinite Continue Hook Setup And Project Initialization System
  *
  * === OVERVIEW ===
- * Comprehensive project setup utility that initializes TaskManager system
+ * Comprehensive project setup utility That initializes TaskManager system
  * integration across development projects. This script creates the necessary
- * directory structures, configuration files, and FEATURES.json schemas required
+ * directory structures, configuration files, And FEATURES.json schemas required
  * for the infinite continue hook system to function properly.
  *
  * === KEY FEATURES ===
  * • Automated project directory structure creation
  * • FEATURES.json schema initialization with feature approval workflow
- * • Development mode files and guidelines setup
- * • Interactive and batch mode operations
- * • Project validation and compatibility checking
+ * • Development mode files And guidelines setup
+ * • Interactive And batch mode operations
+ * • Project validation And compatibility checking
  * • Centralized TaskManager system integration
  *
  * === PROJECT STRUCTURE CREATION ===
  * • /development - Core development documentation directory
  * • /development/tasks - Task-specific documentation
- * • /development/reports - Development reports and analysis
+ * • /development/reports - Development reports And analysis
  * • FEATURES.json - Feature approval workflow schema
  * • Agent registry integration for multi-agent coordination
  *
  * === FEATURES.JSON SCHEMA ===
  * Creates modern feature management compatible FEATURES.json structure:
- * • Task management with unique IDs and timestamps
+ * • Task management with unique IDs And timestamps
  * • Dependency system for complex workflows
- * • Agent coordination and multi-agent support
+ * • Agent coordination And multi-agent support
  * • Review strike system for quality control
  * • Mode-based workflow management
  * • Production-ready implementation requirements
@@ -37,7 +37,7 @@
  * • Interactive Mode - User-guided project configuration
  * • Batch Mode - Automated setup with minimal interaction
  * • Single Project Mode - Setup for specific project directory
- * • Validation Mode - Check and update existing projects
+ * • Validation Mode - Check And update existing projects
  *
  * === HOOK SYSTEM INTEGRATION ===
  * • Integrates with Claude Code infinite continue hook
@@ -47,9 +47,9 @@
  *
  * === QUALITY ASSURANCE SYSTEM ===
  * The setup creates a three-strike review system:
- * • Strike 1: Build and compilation validation
- * • Strike 2: Linting and code quality validation
- * • Strike 3: Test coverage and quality validation
+ * • Strike 1: Build And compilation validation
+ * • Strike 2: Linting And code quality validation
+ * • Strike 3: Test coverage And quality validation
  * • Automatic task creation for remediation
  * • Production-ready implementation enforcement
  *
@@ -82,9 +82,10 @@
  * @since 2024-01-01
  */
 
-const _fs = require('fs');
-const _path = require('path');
+const _FS = require('fs');
+const PATH = require('path');
 const readline = require('readline');
+const { loggers } = require('./lib/logger');
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -124,22 +125,22 @@ function question(prompt) {
   });
 }
 
-async function _getProjectInfo(targetPath) {
+async function getProjectInfo(targetPath) {
   // Try to detect project name from package.json or directory name
-  let detectedName = _path.basename(targetPath);
+  let detectedName = PATH.basename(targetPath);
 
-  const packageJsonPath = _path.join(targetPath, 'package.json');
+  const packageJsonPath = PATH.join(targetPath, 'package.json');
 
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- Package.json path constructed from trusted setup directory
-  if (_fs.existsSync(packageJsonPath)) {
+  if (FS.existsSync(packageJsonPath)) {
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Package.json path validated through setup process
-      const packageJson = JSON.parse(_fs.readFileSync(packageJsonPath, 'utf8'));
+      const packageJson = JSON.parse(FS.readFileSync(packageJsonPath, 'utf8'));
       if (packageJson.name) {
         detectedName = packageJson.name;
       }
-    } catch (error) {
-      // Ignore and use directory name
+    } catch {
+      // Ignore And use directory name
     }
   }
 
@@ -200,45 +201,45 @@ async function _getProjectInfo(targetPath) {
 
 function createProjectDirectories(targetPath) {
   // Create /development directory
-  const developmentPath = _path.join(targetPath, 'development');
+  const developmentPath = PATH.join(targetPath, 'development');
 
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- Development path constructed from trusted setup directory
-  if (!_fs.existsSync(developmentPath)) {
+  if (!FS.existsSync(developmentPath)) {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- Development path validated through setup process
-    _fs.mkdirSync(developmentPath, { recursive: true });
+    FS.mkdirSync(developmentPath, { recursive: true });
 
     loggers.stopHook.log(`✓ Created /development directory`);
   }
 
   // Create /development/tasks directory
-  const tasksPath = _path.join(developmentPath, 'tasks');
+  const tasksPath = PATH.join(developmentPath, 'tasks');
 
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- Tasks path constructed from validated development directory
-  if (!_fs.existsSync(tasksPath)) {
+  if (!FS.existsSync(tasksPath)) {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- Tasks path validated through setup process
-    _fs.mkdirSync(tasksPath, { recursive: true });
+    FS.mkdirSync(tasksPath, { recursive: true });
 
     loggers.stopHook.log(`✓ Created /development/tasks directory`);
   }
 
   // Create /development/reports directory
-  const reportsPath = _path.join(developmentPath, 'reports');
+  const reportsPath = PATH.join(developmentPath, 'reports');
 
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- Reports path constructed from validated development directory
-  if (!_fs.existsSync(reportsPath)) {
+  if (!FS.existsSync(reportsPath)) {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- Reports path validated through setup process
-    _fs.mkdirSync(reportsPath, { recursive: true });
+    FS.mkdirSync(reportsPath, { recursive: true });
 
     loggers.stopHook.log(`✓ Created /development/reports directory`);
   }
 
   // Create /development/logs directory
-  const logsPath = _path.join(developmentPath, 'logs');
+  const logsPath = PATH.join(developmentPath, 'logs');
 
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- Logs path constructed from validated development directory
-  if (!_fs.existsSync(logsPath)) {
+  if (!FS.existsSync(logsPath)) {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- Logs path validated through setup process
-    _fs.mkdirSync(logsPath, { recursive: true });
+    FS.mkdirSync(logsPath, { recursive: true });
 
     loggers.stopHook.log(`✓ Created /development/logs directory`);
   }
@@ -249,13 +250,13 @@ function createProjectDirectories(targetPath) {
 // Check if FEATURES.json needs to be updated to new schema
 function needsTodoUpdate(todoPath) {
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- FEATURES.json path constructed from trusted setup directory
-  if (!_fs.existsSync(todoPath)) {
+  if (!FS.existsSync(todoPath)) {
     return true;
   }
 
   try {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- FEATURES.json path validated through setup process
-    const existing = JSON.parse(_fs.readFileSync(todoPath, 'utf8'));
+    const existing = JSON.parse(FS.readFileSync(todoPath, 'utf8'));
 
     // Check for old schema indicators
     const hasOldSchema =
@@ -268,25 +269,25 @@ function needsTodoUpdate(todoPath) {
 
     if (hasOldSchema) {
       console.log(
-        `⚠️  ${_path.basename(_path.dirname(todoPath))} - FEATURES.json uses old schema, will update`
+        `⚠️  ${PATH.basename(PATH.dirname(todoPath))} - FEATURES.json uses old schema, will update`
       );
       return true;
     }
 
     console.log(
-      `✓ ${_path.basename(_path.dirname(todoPath))} - FEATURES.json already up to date`
+      `✓ ${PATH.basename(PATH.dirname(todoPath))} - FEATURES.json already up to date`
     );
     return false;
-  } catch (error) {
+  } catch {
     console.log(
-      `⚠️  ${_path.basename(_path.dirname(todoPath))} - FEATURES.json corrupted, will recreate`
+      `⚠️  ${PATH.basename(PATH.dirname(todoPath))} - FEATURES.json corrupted, will recreate`
     );
     return true;
   }
 }
 
 function createTodoJson(targetPath, projectInfo) {
-  const todoPath = _path.join(targetPath, 'FEATURES.json');
+  const todoPath = PATH.join(targetPath, 'FEATURES.json');
 
   // Smart update logic - only update if schema is old or missing
   if (!needsTodoUpdate(todoPath)) {
@@ -317,16 +318,16 @@ function createTodoJson(targetPath, projectInfo) {
     {
       title: 'Comprehensive Build & Startup Validation',
       criteria:
-        'MANDATORY: Verify project builds and starts successfully with log review',
+        'MANDATORY: Verify project builds And starts successfully with log review',
       dependencies: [],
       important_files: [],
       friendlyInstructions: `MANDATORY validation for professional development standards.
 
 Required validation steps:
-- Run 'npm run build' and verify zero errors/warnings
-- Run 'npm start' and verify application starts without errors  
+- Run 'npm run build' And verify zero errors/warnings
+- Run 'npm start' And verify application starts without errors  
 - Review startup logs for any errors, warnings, or issues
-- Verify all services start correctly and bind to expected ports
+- Verify all services start correctly And bind to expected ports
 - Test graceful shutdown if applicable
 
 Create error tasks for any issues found - this is not optional.`,
@@ -339,11 +340,11 @@ Create error tasks for any issues found - this is not optional.`,
       friendlyInstructions: `MANDATORY feature testing for quality assurance.
 
 Required testing approach:
-- For web apps: Use Puppeteer to test every implemented feature
-- For APIs: Test all endpoints with realistic data via direct calls
-- For CLI tools: Test all commands and options with various inputs
+- for web apps: Use Puppeteer to test every implemented feature
+- for APIs: Test all endpoints with realistic data via direct calls
+- for CLI tools: Test all commands And options with various inputs
 - Verify feature interactions work correctly
-- Test error handling and edge cases
+- Test error handling And edge cases
 - Ensure performance is within acceptable limits
 
 This ensures features work as intended before completion.`,
@@ -363,7 +364,7 @@ Complete validation requirements:
 - Performance validation (no memory leaks, acceptable response times)
 - Documentation completeness check
 
-Only when ALL validation passes and ALL user-approved features are complete 
+Only when ALL validation passes And ALL user-approved features are complete 
 should stop authorization be considered.`,
     },
   ];
@@ -389,7 +390,7 @@ Required for professional development standards:
 - Startup health check with log review
 - Feature testing with realistic scenarios
 - Integration testing between components
-- Performance and security validation
+- Performance And security validation
 
 This validation ensures professional-grade delivery quality.`,
       task_type: 'validation',
@@ -408,7 +409,7 @@ This validation ensures professional-grade delivery quality.`,
 
   // Write FEATURES.json
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- TODO.json path validated through setup process
-  _fs.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
+  FS.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
 
   loggers.stopHook.log(`\n✓ FEATURES.json created at: ${todoPath}`);
 
@@ -416,24 +417,23 @@ This validation ensures professional-grade delivery quality.`,
 }
 
 // Get all project directories to process
-function _getProjectDirectories(basePath) {
+function getProjectDirectories(basePath) {
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- Base path validated as trusted setup directory
-  if (!_fs.existsSync(basePath) || !_fs.statSync(basePath).isDirectory()) {
+  if (!FS.existsSync(basePath) || !FS.statSync(basePath).isDirectory()) {
     return [];
   }
 
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- Base path validated through setup process
-  return _fs
-    .readdirSync(basePath)
-    .map((item) => _path.join(basePath, item))
+  return FS.readdirSync(basePath)
+    .map((item) => PATH.join(basePath, item))
     .filter((itemPath) => {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Item path constructed from validated base directory
-      if (!_fs.statSync(itemPath).isDirectory()) {
+      if (!FS.statSync(itemPath).isDirectory()) {
         return false;
       }
 
-      // Skip hidden directories and common ignore patterns
-      const dirname = _path.basename(itemPath);
+      // Skip hidden directories And common ignore patterns
+      const dirname = PATH.basename(itemPath);
       if (
         dirname.startsWith('.') ||
         dirname === 'node_modules' ||
@@ -448,7 +448,7 @@ function _getProjectDirectories(basePath) {
 }
 
 async function processProject(targetPath) {
-  const projectName = _path.basename(targetPath);
+  const projectName = PATH.basename(targetPath);
 
   loggers.stopHook.log(`\n=== Processing ${projectName} ===`);
 
@@ -456,16 +456,16 @@ async function processProject(targetPath) {
     // Get project information for this specific project
     const projectInfo = {
       projectName: projectName,
-      taskDescription: 'Continue development and improvements',
+      taskDescription: 'Continue development And improvements',
       taskMode: 'DEVELOPMENT',
       taskPrompt:
-        'Continue with the current development tasks, fix any issues, and improve the codebase quality.',
+        'Continue with the current development tasks, fix any issues, And improve the codebase quality.',
       dependencies: [],
       importantFiles: [],
       requiresResearch: false,
     };
 
-    // Create project directories and copy mode files if needed
+    // Create project directories And copy mode files if needed
     await createProjectDirectories(targetPath);
 
     // Create/update FEATURES.json if needed
@@ -481,7 +481,7 @@ async function processProject(targetPath) {
     }
 
     return { success: true, project: projectName };
-  } catch (error) {
+  } catch {
     loggers.stopHook.error(`❌ ${projectName} - Error:`, error.message);
     return { success: false, project: projectName, error: error.message };
   }
@@ -492,13 +492,13 @@ async function processProject(targetPath) {
  * @param {string} targetPath - Target project path
  */
 function migrateToFeatureBasedSystem(targetPath) {
-  const todoPath = _path.join(targetPath, 'FEATURES.json');
+  const todoPath = PATH.join(targetPath, 'FEATURES.json');
 
   try {
     loggers.stopHook.log(`   🔄 Checking for feature-based migration...`);
 
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- FEATURES.json path constructed from trusted project directory
-    if (!_fs.existsSync(todoPath)) {
+    if (!FS.existsSync(todoPath)) {
       loggers.stopHook.log(
         `   ⚠️  No FEATURES.json found - skipping migration`
       );
@@ -507,7 +507,7 @@ function migrateToFeatureBasedSystem(targetPath) {
 
     // Read current FEATURES.json
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- FEATURES.json path validated through setup process
-    const todoData = JSON.parse(_fs.readFileSync(todoPath, 'utf8'));
+    const todoData = JSON.parse(FS.readFileSync(todoPath, 'utf8'));
 
     // Check if already feature-based
     if (todoData.features && Array.isArray(todoData.features)) {
@@ -518,9 +518,9 @@ function migrateToFeatureBasedSystem(targetPath) {
     // Create backup before migration
     const backupPath = todoPath + '.pre-feature-migration.backup';
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- Backup path constructed from validated FEATURES.json path
-    _fs.writeFileSync(backupPath, JSON.stringify(todoData, null, 2));
+    FS.writeFileSync(backupPath, JSON.stringify(todoData, null, 2));
 
-    loggers.stopHook.log(`   📋 Created backup: ${_path.basename(backupPath)}`);
+    loggers.stopHook.log(`   📋 Created backup: ${PATH.basename(backupPath)}`);
 
     // Analyze current tasks for feature grouping
     const analysis = analyzeTasksForFeatures(todoData.tasks);
@@ -534,24 +534,24 @@ function migrateToFeatureBasedSystem(targetPath) {
 
     // Write migrated structure
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- FEATURES.json path validated through setup process
-    _fs.writeFileSync(todoPath, JSON.stringify(migrated, null, 2));
+    FS.writeFileSync(todoPath, JSON.stringify(migrated, null, 2));
 
     console.log(
       `   ✅ Migration completed: ${migrated.features.length} features, ${migrated.tasks.length} tasks`
     );
 
     // Clean up features.json if it exists (eliminating dual system)
-    const featuresJsonPath = _path.join(targetPath, 'features.json');
+    const featuresJsonPath = PATH.join(targetPath, 'features.json');
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- Features.json path constructed from trusted project directory
-    if (_fs.existsSync(featuresJsonPath)) {
+    if (FS.existsSync(featuresJsonPath)) {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Features.json path validated through setup process
-      _fs.unlinkSync(featuresJsonPath);
+      FS.unlinkSync(featuresJsonPath);
 
       loggers.stopHook.log(
         `   🗑️  Removed features.json (dual system eliminated)`
       );
     }
-  } catch (error) {
+  } catch {
     loggers.stopHook.log(`   ❌ Feature migration failed: ${error.message}`);
     // Don't fail the entire setup for migration issues
   }
@@ -637,7 +637,7 @@ function extractPhaseFromTitle(title) {
 }
 
 /**
- * Generate feature title from phase key and task title
+ * Generate feature title from phase key And task title
  * @param {string} phaseKey - Phase key (e.g., "1.2")
  * @param {string} sampleTitle - Sample task title
  * @returns {string} Generated feature title
@@ -810,18 +810,18 @@ async function main() {
   );
 
   // Resolve project path
-  const targetPath = _path.resolve(projectPath);
+  const targetPath = PATH.resolve(projectPath);
 
   // Verify project path exists
-  // eslint-disable-next-line security/detect-non-literal-fs-filename -- Target path resolved from command line argument and validated
-  if (!_fs.existsSync(targetPath)) {
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- Target path resolved from command line argument And validated
+  if (!FS.existsSync(targetPath)) {
     loggers.stopHook.error(`Error: Path does not exist: ${targetPath}`);
     throw new Error(`Invalid path: ${targetPath}`);
   }
 
   // Verify it's a directory
-  // eslint-disable-next-line security/detect-non-literal-fs-filename -- Target path validated to exist and be trusted
-  if (!_fs.statSync(targetPath).isDirectory()) {
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- Target path validated to exist And be trusted
+  if (!FS.statSync(targetPath).isDirectory()) {
     loggers.stopHook.error(`Error: Path is not a directory: ${targetPath}`);
     throw new Error(`Path is not a directory: ${targetPath}`);
   }
@@ -841,9 +841,9 @@ async function main() {
     // This ensures TODO.json is created only in the root of the specified directory
 
     loggers.stopHook.log(
-      `Processing single project: ${_path.basename(targetPath)}`
+      `Processing single project: ${PATH.basename(targetPath)}`
     );
-    const result = await processProject(targetPath);
+    const _result = await processProject(targetPath);
     results.push(result);
 
     // Summary
@@ -890,7 +890,7 @@ async function main() {
       '   - FEATURES.json with new feature approval workflow'
     );
 
-    loggers.stopHook.log('   - Development mode files and directory structure');
+    loggers.stopHook.log('   - Development mode files And directory structure');
 
     loggers.stopHook.log('');
 
@@ -921,7 +921,7 @@ async function main() {
     console.log(
       'node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js"'
     );
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('\n❌ Batch setup error:', error.message);
     throw error;
   } finally {

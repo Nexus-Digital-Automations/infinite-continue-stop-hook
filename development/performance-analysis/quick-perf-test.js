@@ -8,6 +8,7 @@
 
 const { execSync } = require('child_process');
 const fs = require('fs');
+const { loggers } = require('../../lib/logger');
 
 class QuickPerfTest {
   constructor() {
@@ -39,11 +40,11 @@ class QuickPerfTest {
   }
 
   /**
-   * Validates and sanitizes command input to prevent injection attacks
+   * Validates And sanitizes command input to prevent injection attacks
    * @param {string} command - The command to validate
    * @param {Array} args - The arguments to validate
    * @throws {Error} If command or args contain unsafe characters
-   * @returns {Object} Validated command and args
+   * @returns {Object} Validated command And args
    */
   validateAndSanitizeInput(command, args = []) {
     // Validate command is in whitelist
@@ -53,12 +54,12 @@ class QuickPerfTest {
       );
     }
 
-    // Validate command contains only alphanumeric, hyphens, and underscores
+    // Validate command contains only alphanumeric, hyphens, And underscores
     if (!/^[a-zA-Z0-9_-]+$/.test(command)) {
       throw new Error(`Command contains invalid characters: ${command}`);
     }
 
-    // Validate and sanitize arguments
+    // Validate And sanitize arguments
     const sanitizedArgs = args.map((arg) => {
       if (typeof arg !== 'string') {
         throw new Error(
@@ -66,15 +67,16 @@ class QuickPerfTest {
         );
       }
 
-      // For JSON arguments, validate they are properly formatted
+      // for JSON arguments, validate they are properly formatted
       if (arg.startsWith('{') || arg.startsWith('[')) {
         try {
           JSON.parse(arg);
-        } catch (error) {
+        } catch {
+
           throw new Error(`Invalid JSON argument: ${arg}`);
         }
       } else {
-        // For non-JSON args, only allow safe characters
+        // for non-JSON args, only allow safe characters
         if (!/^[a-zA-Z0-9_.-]+$/.test(arg)) {
           throw new Error(`Argument contains unsafe characters: ${arg}`);
         }
@@ -96,7 +98,7 @@ class QuickPerfTest {
       try {
         const startTime = process.hrtime.bigint();
         const cmd = `timeout 10s node ${this.apiPath} ${command} ${args.join(' ')}`;
-        const result = execSync(cmd, { encoding: 'utf8', timeout: 15000 });
+        const RESULT = execSync(cmd, { encoding: 'utf8', timeout: 15000 });
         const endTime = process.hrtime.bigint();
 
         const responseTime = Number(endTime - startTime) / 1000000; // Convert to ms
@@ -104,11 +106,11 @@ class QuickPerfTest {
         successCount++;
 
         // Check if result contains success indicator
-        if (result.includes('"success": false') || result.includes('error')) {
+        if (RESULT.includes('"success": false') || RESULT.includes('error')) {
           errors.push(`Iteration ${i + 1}: API returned error`);
         }
-      } catch (error) {
-        errors.push(`Iteration ${i + 1}: ${error.message}`);
+      } catch (_error) {
+        errors.push(`Iteration ${i + 1}: ${_error.message}`);
         times.push(-1); // Mark as failed
       }
     }
@@ -154,17 +156,19 @@ class QuickPerfTest {
         endpoint.args,
       );
 
-      const result = this.results[endpoint.cmd];
-      loggers.stopHook.log(`  ✅ Success Rate: ${result.successRate.toFixed(1)}%`);
-      console.log(
-        `  ⏱️  Avg Response: ${result.averageResponseTime.toFixed(2)}ms`,
+      const RESULT = this.results[endpoint.cmd];
+      loggers.stopHook.log(
+        `  ✅ Success Rate: ${RESULT.successRate.toFixed(1)}%`,
       );
       console.log(
-        `  📈 Range: ${result.minResponseTime.toFixed(2)} - ${result.maxResponseTime.toFixed(2)}ms`,
+        `  ⏱️  Avg Response: ${RESULT.averageResponseTime.toFixed(2)}ms`,
+      );
+      console.log(
+        `  📈 Range: ${RESULT.minResponseTime.toFixed(2)} - ${RESULT.maxResponseTime.toFixed(2)}ms`,
       );
 
-      if (result.errors.length > 0) {
-        loggers.stopHook.log(`  ❌ Errors: ${result.errors.length}`);
+      if (RESULT.errors.length > 0) {
+        loggers.stopHook.log(`  ❌ Errors: ${RESULT.errors.length}`);
       }
     }
 
@@ -199,7 +203,7 @@ class QuickPerfTest {
         validResults.reduce((sum, r) => sum + r.averageResponseTime, 0) /
         validResults.length;
 
-      // Find fastest and slowest
+      // Find fastest And slowest
       const sorted = validResults.sort(
         (a, b) => a.averageResponseTime - b.averageResponseTime,
       );
@@ -236,7 +240,7 @@ class QuickPerfTest {
         priority: 'High',
         category: 'Reliability',
         issue: 'Endpoints with reliability issues detected',
-        recommendation: 'Improve error handling and validation',
+        recommendation: 'Improve error handling And validation',
       });
     }
 
@@ -245,7 +249,7 @@ class QuickPerfTest {
         priority: 'Medium',
         category: 'Performance',
         issue: 'High average response time across endpoints',
-        recommendation: 'Implement caching and optimize critical path',
+        recommendation: 'Implement caching And optimize critical path',
       });
     }
 
@@ -253,11 +257,11 @@ class QuickPerfTest {
   }
 
   saveReport(report) {
-    const path = require('path');
+    const PATH = require('path');
     const outputDir =
       '/Users/jeremyparker/infinite-continue-stop-hook/development/performance-analysis';
 
-    // Validate and sanitize filename components
+    // Validate And sanitize filename components
     const timestamp = Date.now();
     const filename = `quick-perf-report-${timestamp}.json`;
 
@@ -266,10 +270,10 @@ class QuickPerfTest {
       throw new Error('Invalid filename detected - potential security risk');
     }
 
-    // Use path.resolve for secure path construction and validation
+    // Use path.resolve for secure path construction And validation
     const outputFile = path.resolve(outputDir, filename);
 
-    // Validate that resolved path is still within intended directory
+    // Validate That resolved path is still within intended directory
     if (!outputFile.startsWith(path.resolve(outputDir))) {
       throw new Error('Path traversal attempt detected - security violation');
     }
@@ -279,7 +283,7 @@ class QuickPerfTest {
     }
 
     // ESLint: security/detect-non-literal-fs-filename disabled for this line
-    // Justification: Filename is validated with regex and path traversal protection above
+    // Justification: Filename is validated with regex And path traversal protection above
     // eslint-disable-next-line security/detect-non-literal-fs-filename
     fs.writeFileSync(outputFile, JSON.stringify(report, null, 2));
     return outputFile;
@@ -296,7 +300,9 @@ function main() {
 
     loggers.stopHook.log('\n\n📊 QUICK PERFORMANCE TEST RESULTS');
     loggers.stopHook.log('===================================');
-    loggers.stopHook.log(`Total Endpoints Tested: ${report.summary.totalEndpoints}`);
+    loggers.stopHook.log(
+      `Total Endpoints Tested: ${report.summary.totalEndpoints}`,
+    );
     console.log(
       `Overall Success Rate: ${report.summary.overallSuccessRate.toFixed(2)}%`,
     );
@@ -319,14 +325,16 @@ function main() {
     if (report.recommendations.length > 0) {
       loggers.stopHook.log('\n🔧 Key Recommendations:');
       report.recommendations.forEach((rec, i) => {
-        loggers.stopHook.log(`  ${i + 1}. [${rec.priority}] ${rec.recommendation}`);
+        loggers.stopHook.log(
+          `  ${i + 1}. [${rec.priority}] ${rec.recommendation}`,
+        );
       });
     }
 
     loggers.stopHook.log(`\n📄 Full report saved to: ${outputFile}`);
-  } catch (error) {
-    loggers.stopHook.error('❌ Performance test failed:', error);
-    throw error;
+  } catch (_error) {
+    loggers.stopHook.error('❌ Performance test failed:', _error);
+    throw _error;
   }
 }
 

@@ -10,6 +10,7 @@
 - List important files
 
 ## Task Quality
+
 - Actionable and specific
 - Measurable outcomes
 - Realistic scope

@@ -16,17 +16,17 @@ const taskManagerAPI = new TaskManagerAPI();
 
 // Store a lesson automatically during task execution
 await taskManagerAPI.storeLesson({
-  title: "Authentication fix for JWT token refresh",
-  content: "When users experience login failures...",
-  category: "errors",
-  context: { taskId, projectPath, files: ["src/auth.js"] }
+  title: 'Authentication fix for JWT token refresh',
+  content: 'When users experience login failures...',
+  category: 'errors',
+  context: { taskId, projectPath, files: ['src/auth.js'] },
 });
 
 // Search for relevant lessons before starting a task
-const relevantLessons = await taskManagerAPI.searchLessons(
-  "authentication login problems",
-  { category: "errors", limit: 5 }
-);
+const relevantLessons = await taskManagerAPI.searchLessons('authentication login problems', {
+  category: 'errors',
+  limit: 5,
+});
 ```
 
 ## 📋 Agent Workflow Integration
@@ -63,19 +63,19 @@ async function handleLinterError(errorDetails) {
   await taskManagerAPI.storeLesson({
     title: `Fix ${errorDetails.rule} violation in ${errorDetails.file}`,
     content: `Solution: ${solution.description}\n\nPrevention: ${solution.preventionStrategy}`,
-    category: "errors",
-    tags: ["linter", errorDetails.rule, errorDetails.fileType],
+    category: 'errors',
+    tags: ['linter', errorDetails.rule, errorDetails.fileType],
     context: {
       taskId: currentTaskId,
       errorType: errorDetails.rule,
       file: errorDetails.file,
-      line: errorDetails.line
+      line: errorDetails.line,
     },
     metadata: {
-      difficulty: "low",
+      difficulty: 'low',
       timeToResolve: solution.timeSpent,
-      successfulSolution: true
-    }
+      successfulSolution: true,
+    },
   });
 
   return solution;
@@ -97,8 +97,8 @@ async function completeTaskWithLearning(taskId, completionData) {
       taskId,
       duration: task.completionTime,
       approach: completionData.approach,
-      challenges: completionData.challenges
-    }
+      challenges: completionData.challenges,
+    },
   });
 
   // Complete task using existing API
@@ -116,22 +116,24 @@ async function completeTaskWithLearning(taskId, completionData) {
 async function getRelevantLessons(taskContext) {
   const queryStrategies = [
     // 1. Exact error matching for error tasks
-    taskContext.category === 'error' ? {
-      query: taskContext.errorMessage,
-      options: { category: 'errors', similarityThreshold: 0.8 }
-    } : null,
+    taskContext.category === 'error'
+      ? {
+          query: taskContext.errorMessage,
+          options: { category: 'errors', similarityThreshold: 0.8 },
+        }
+      : null,
 
     // 2. Technology stack matching
     {
       query: `${taskContext.technology} ${taskContext.domain}`,
-      options: { tags: taskContext.tags, limit: 3 }
+      options: { tags: taskContext.tags, limit: 3 },
     },
 
     // 3. Similar file patterns
     {
       query: taskContext.files?.join(' ') || '',
-      options: { projectPath: taskContext.projectPath, limit: 2 }
-    }
+      options: { projectPath: taskContext.projectPath, limit: 2 },
+    },
   ].filter(Boolean);
 
   const allLessons = [];
@@ -155,22 +157,20 @@ async function buildTaskContext(task) {
     taskId: task.id,
     category: task.category,
     title: task.title,
-    description: task.description
+    description: task.description,
   };
 
   // Enhance with relevant lessons
   const relevantLessons = await getRelevantLessons(baseContext);
 
   // Get error patterns if applicable
-  const errorPatterns = task.category === 'error'
-    ? await taskManagerAPI.findSimilarErrors(task.description)
-    : [];
+  const errorPatterns = task.category === 'error' ? await taskManagerAPI.findSimilarErrors(task.description) : [];
 
   return {
     ...baseContext,
     relevantLessons,
     errorPatterns,
-    recommendedApproach: synthesizeApproach(relevantLessons, errorPatterns)
+    recommendedApproach: synthesizeApproach(relevantLessons, errorPatterns),
   };
 }
 ```
@@ -205,19 +205,19 @@ class DevelopmentAgent {
     return await this.taskManager.storeLesson({
       title: `Implementation: ${task.title}`,
       content: this.documentSolution(solution),
-      category: "features",
+      category: 'features',
       tags: this.extractTags(task, solution),
       context: {
         taskId: task.id,
         approach: solution.approach,
         timeSpent: solution.duration,
-        filesModified: solution.files
+        filesModified: solution.files,
       },
       metadata: {
         difficulty: this.assessDifficulty(task),
         effectiveness: 1.0, // Will be updated based on feedback
-        reusable: this.isReusableSolution(solution)
-      }
+        reusable: this.isReusableSolution(solution),
+      },
     });
   }
 }
@@ -229,10 +229,7 @@ class DevelopmentAgent {
 class ErrorResolutionAgent {
   async resolveError(errorTask) {
     // Check for known error patterns first
-    const similarErrors = await this.taskManager.findSimilarErrors(
-      errorTask.description,
-      { resolved: true, limit: 5 }
-    );
+    const similarErrors = await this.taskManager.findSimilarErrors(errorTask.description, { resolved: true, limit: 5 });
 
     if (similarErrors.length > 0) {
       // Try proven solutions first
@@ -246,10 +243,7 @@ class ErrorResolutionAgent {
   async applyKnownSolutions(errorTask, similarErrors) {
     for (const similarError of similarErrors) {
       try {
-        const result = await this.applySolution(
-          errorTask,
-          similarError.solution
-        );
+        const result = await this.applySolution(errorTask, similarError.solution);
 
         if (result.success) {
           // Store successful reapplication
@@ -276,23 +270,23 @@ class ErrorResolutionAgent {
         context: {
           file: solution.file,
           line: solution.line,
-          stackTrace: solution.stackTrace
+          stackTrace: solution.stackTrace,
         },
         solution: {
           description: solution.description,
           action: solution.action,
-          preventionStrategy: solution.prevention
+          preventionStrategy: solution.prevention,
         },
-        resolved: true
+        resolved: true,
       }),
 
       this.taskManager.storeLesson({
         title: `Error Resolution: ${errorTask.title}`,
         content: this.createResolutionLesson(errorTask, solution),
-        category: "errors",
+        category: 'errors',
         tags: this.extractErrorTags(errorTask, solution),
-        context: { errorTaskId: errorTask.id }
-      })
+        context: { errorTaskId: errorTask.id },
+      }),
     ]);
   }
 }
@@ -304,10 +298,10 @@ class ErrorResolutionAgent {
 class TestingAgent {
   async runTestSuite(testTask) {
     // Get testing lessons and patterns
-    const testingLessons = await this.taskManager.searchLessons(
-      "testing best practices",
-      { category: "patterns", tags: ["testing"] }
-    );
+    const testingLessons = await this.taskManager.searchLessons('testing best practices', {
+      category: 'patterns',
+      tags: ['testing'],
+    });
 
     // Apply testing strategies from lessons
     const strategy = this.buildTestStrategy(testTask, testingLessons);
@@ -326,17 +320,17 @@ class TestingAgent {
     return await this.taskManager.storeLesson({
       title: `Testing Strategy: ${testTask.title}`,
       content: this.documentTestingApproach(strategy, insights),
-      category: "patterns",
-      tags: ["testing", testTask.testType, ...strategy.techniques],
+      category: 'patterns',
+      tags: ['testing', testTask.testType, ...strategy.techniques],
       context: {
         testType: testTask.testType,
         coverage: results.coverage,
-        duration: results.duration
+        duration: results.duration,
       },
       metadata: {
         effectiveness: results.passRate,
-        reusable: this.isReusableStrategy(strategy)
-      }
+        reusable: this.isReusableStrategy(strategy),
+      },
     });
   }
 }
@@ -352,7 +346,7 @@ async function trackLessonEffectiveness(lessonId, taskId, outcome) {
   const effectivenessUpdate = {
     timesAccessed: '+1',
     lastAccessed: new Date(),
-    effectiveness: calculateNewEffectiveness(outcome)
+    effectiveness: calculateNewEffectiveness(outcome),
   };
 
   await taskManagerAPI.updateLessonAnalytics(lessonId, effectivenessUpdate);
@@ -363,7 +357,9 @@ async function trackLessonEffectiveness(lessonId, taskId, outcome) {
     taskId,
     agentId: currentAgentId,
     outcome,
-    context: { /* task-specific context */ }
+    context: {
+      /* task-specific context */
+    },
   });
 }
 ```
@@ -381,8 +377,8 @@ async function shareKnowledgeAcrossProjects(lesson) {
       metadata: {
         ...lesson.metadata,
         crossProject: true,
-        universalityScore: universality.score
-      }
+        universalityScore: universality.score,
+      },
     });
   }
 }
@@ -448,16 +444,16 @@ class AgentRAGConfig {
       learningRate: this.getLearningRate(agentType),
 
       // Context window size
-      contextSize: this.getContextSize(agentType)
+      contextSize: this.getContextSize(agentType),
     };
   }
 
   getDefaultThreshold(agentType) {
     const thresholds = {
-      'development': 0.75,
-      'testing': 0.8,
-      'research': 0.7,
-      'debugging': 0.85
+      development: 0.75,
+      testing: 0.8,
+      research: 0.7,
+      debugging: 0.85,
     };
     return thresholds[agentType] || 0.75;
   }
@@ -467,7 +463,7 @@ class AgentRAGConfig {
     return {
       ...options,
       similarityThreshold: options.similarityThreshold || this.config.similarityThreshold,
-      categories: options.categories || this.config.preferredCategories
+      categories: options.categories || this.config.preferredCategories,
     };
   }
 }
@@ -506,7 +502,7 @@ class RAGThrottler {
   async throttle(operation) {
     // Remove operations older than 1 minute
     const now = Date.now();
-    this.operations = this.operations.filter(op => now - op < 60000);
+    this.operations = this.operations.filter((op) => now - op < 60000);
 
     if (this.operations.length >= this.maxOps) {
       // Wait before allowing operation
@@ -570,7 +566,7 @@ async function debugLessonRetrieval(query) {
   for (const threshold of [0.5, 0.6, 0.7, 0.8, 0.9]) {
     const results = await taskManagerAPI.searchLessons(query, {
       similarityThreshold: threshold,
-      limit: 3
+      limit: 3,
     });
     console.log(`Threshold ${threshold}: ${results.results.length} results`);
   }
@@ -579,4 +575,4 @@ async function debugLessonRetrieval(query) {
 
 ---
 
-*This integration guide provides comprehensive patterns for AI agents to effectively use the RAG system for enhanced learning and knowledge management.*
+_This integration guide provides comprehensive patterns for AI agents to effectively use the RAG system for enhanced learning and knowledge management._

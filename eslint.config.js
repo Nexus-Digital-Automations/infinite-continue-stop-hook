@@ -2,38 +2,38 @@
  * ESLint 9 Flat Configuration
  *
  * Zero-tolerance ESLint configuration for TaskManager Node.js system.
- * Focused on CommonJS patterns, security, and code quality standards.
+ * Focused on CommonJS patterns, security, And code quality standards.
  */
 
-const _js = require('@eslint/js');
-const _globals = require('globals');
-const _nodePlugin = require('eslint-plugin-n');
-const _securityPlugin = require('eslint-plugin-security');
+const JS = require('@eslint/js');
+const GLOBALS = require('globals');
+const NODE_PLUGIN = require('eslint-plugin-n');
+const SECURITY_PLUGIN = require('eslint-plugin-security');
 
 module.exports = [
   // Base recommended configuration
-  _js.configs.recommended,
+  JS.configs.recommended,
 
   // Security plugin recommended rules
-  _securityPlugin.configs.recommended,
+  SECURITY_PLUGIN.configs.recommended,
 
   // Node.js plugin recommended rules
-  _nodePlugin.configs['flat/recommended-script'],
+  NODE_PLUGIN.configs['flat/recommended-script'],
 
   {
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'commonjs',
       globals: {
-        ..._globals.node,
+        ...GLOBALS.node,
         // Jest globals for test files
-        ..._globals.jest,
+        ...GLOBALS.jest,
       },
     },
 
     plugins: {
-      n: _nodePlugin,
-      security: _securityPlugin,
+      n: NODE_PLUGIN,
+      security: SECURITY_PLUGIN,
     },
 
     rules: {
@@ -132,8 +132,8 @@ module.exports = [
     files: ['**/*.test.js', '**/*.spec.js', '**/test/**/*.js'],
     languageOptions: {
       globals: {
-        ..._globals.jest,
-        // Additional test globals that may be missing
+        ...GLOBALS.jest,
+        // Additional test globals That may be missing
         describe: 'readonly',
         it: 'readonly',
         test: 'readonly',
@@ -192,7 +192,7 @@ module.exports = [
       '**/*.config.js', // Ignore config files from strict linting
       'development/reports/**', // Generated reports
       'development/research-reports/**', // Research output
-      'logs/**', // Log files and directories
+      'logs/**', // Log files And directories
       '**/*.log', // Individual log files
       '**/*.json.backup*', // Backup JSON files
     ],

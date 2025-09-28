@@ -9381,23 +9381,8 @@
       "strategy": "eslint-disable"
     },
     "core_application": {
-      "patterns": [
-        "src/pages/",
-        "src/components/",
-        "src/hooks/",
-        "src/services/",
-        "src/utils/"
-      ],
-      "exclude_patterns": [
-        "test",
-        "debug",
-        "spec",
-        "mock",
-        "__tests__",
-        "validation",
-        "demo",
-        "phase.*validation"
-      ],
+      "patterns": ["src/pages/", "src/components/", "src/hooks/", "src/services/", "src/utils/"],
+      "exclude_patterns": ["test", "debug", "spec", "mock", "__tests__", "validation", "demo", "phase.*validation"],
       "files": [
         {
           "path": "src/utils/StandardBundleOptimization.ts",
@@ -15529,13 +15514,7 @@
       "strategy": "proper_logging"
     },
     "build_scripts": {
-      "patterns": [
-        "vite.config",
-        "scripts/",
-        "bundle-",
-        "analyze-",
-        "lint-"
-      ],
+      "patterns": ["vite.config", "scripts/", "bundle-", "analyze-", "lint-"],
       "files": [
         {
           "path": "vite.config.analytics-optimization.ts",
@@ -22013,12 +21992,7 @@
       "strategy": "eslint-disable"
     },
     "removable": {
-      "patterns": [
-        "temp",
-        "quick-",
-        "simple-",
-        "temporary"
-      ],
+      "patterns": ["temp", "quick-", "simple-", "temporary"],
       "files": [
         {
           "path": "temp_add_scripts.js",

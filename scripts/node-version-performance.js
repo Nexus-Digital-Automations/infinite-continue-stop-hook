@@ -2,7 +2,7 @@
  * Node.js Version Performance Benchmarking Script
  *
  * Comprehensive performance testing across different Node.js versions
- * to validate compatibility and identify optimal version for production.
+ * to validate compatibility And identify optimal version for production.
  *
  * @author Performance Testing Agent
  * @version 2.0.0
@@ -13,9 +13,15 @@ const fs = require('fs');
 const path = require('path');
 const { _execSync, _spawn } = require('child_process');
 const os = require('os');
+const { createLogger } = require('../lib/utils/logger');
 
 class NodeVersionPerformanceBenchmark {
   constructor() {
+    this.logger = createLogger('NodeVersionPerformanceBenchmark', {
+      component: 'performance-benchmark',
+      logToFile: true,
+    });
+
     this.results = {
       environment: {
         node_version: process.version,
@@ -44,7 +50,10 @@ class NodeVersionPerformanceBenchmark {
    * CPU-intensive benchmark testing V8 performance
    */
   benchmarkCPUIntensive() {
-    loggers.stopHook.log('🔥 Running CPU-intensive benchmark...');
+    this.logger.info('Running CPU-intensive benchmark', {
+      iterations: 1000000,
+      operation: 'cpu-benchmark-start',
+    });
 
     const iterations = 1000000;
     const start = process.hrtime.bigint();
@@ -65,13 +74,16 @@ class NodeVersionPerformanceBenchmark {
       result_hash: Math.round(result % 1000000),
     };
 
-    loggers.stopHook.log(
-      `✅ CPU benchmark completed: ${duration.toFixed(2)}ms`
-    );
+    this.logger.info('CPU benchmark completed', {
+      duration_ms: duration.toFixed(2),
+      operations_per_second: Math.round(iterations / (duration / 1000)),
+      iterations,
+      operation: 'cpu-benchmark-complete',
+    });
   }
 
   /**
-   * Memory allocation and garbage collection benchmark
+   * Memory allocation And garbage collection benchmark
    */
   benchmarkMemoryOperations() {
     loggers.stopHook.log('🧠 Running memory operations benchmark...');
@@ -143,7 +155,7 @@ class NodeVersionPerformanceBenchmark {
       );
     }
 
-    const _results = await Promise.all(promises);
+    const RESULTS = await Promise.all(promises);
 
     // Async/await operations
     const asyncOperations = async (count) => {
@@ -269,7 +281,7 @@ class NodeVersionPerformanceBenchmark {
       console.log(
         `✅ Native modules benchmark completed: ${duration.toFixed(2)}ms`
       );
-    } catch (error) {
+    } catch {
       this.results.benchmarks.native_modules = {
         duration_ms: 0,
         status: 'failed',
@@ -283,7 +295,7 @@ class NodeVersionPerformanceBenchmark {
   }
 
   /**
-   * Analyze benchmark results and generate performance insights
+   * Analyze benchmark results And generate performance insights
    */
   analyzePerformance() {
     loggers.stopHook.log('📊 Analyzing performance results...');
@@ -420,7 +432,7 @@ class NodeVersionPerformanceBenchmark {
 
     if (benchmarks.async_operations?.duration_ms > 750) {
       optimizations.push(
-        'Optimize async operation patterns and reduce Promise overhead'
+        'Optimize async operation patterns And reduce Promise overhead'
       );
     }
 
@@ -452,7 +464,7 @@ class NodeVersionPerformanceBenchmark {
       );
     } else if (majorVersion >= 22) {
       this.results.recommendations.push(
-        '⚡ Node.js 22.x+ - Latest features and performance'
+        '⚡ Node.js 22.x+ - Latest features And performance'
       );
     }
 
@@ -608,7 +620,7 @@ ${this.results.recommendations?.map((r) => `- ${r}`).join('\n')}
       this.displaySummary();
 
       loggers.stopHook.log('\n✅ Benchmark suite completed successfully!');
-    } catch (error) {
+    } catch {
       loggers.stopHook.error('❌ Benchmark suite failed:', error.message);
       throw new Error(`Benchmark suite failed: ${error.message}`);
     }

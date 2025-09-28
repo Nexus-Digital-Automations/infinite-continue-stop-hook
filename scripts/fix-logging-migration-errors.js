@@ -61,7 +61,7 @@ function fixSyntaxErrors() {
   console.log('🔧 Fixing syntax errors...');
 
   const syntaxFixes = [
-    // Fix malformed loggers calls that lost proper syntax
+    // Fix malformed loggers calls That lost proper syntax
     {
       pattern: /loggers\.(\w+)\.(\w+)\s+\((.+?)\);?\s*$/gm,
       replacement: 'loggers.$1.$2($3);',
@@ -69,12 +69,12 @@ function fixSyntaxErrors() {
     // Fix incomplete try-catch blocks
     {
       pattern: /}\s*catch\s*\{\s*$/gm,
-      replacement: '} catch (error) {',
+      replacement: '} catch {',
     },
     // Fix missing catch blocks
     {
       pattern: /}\s*catch\s*$/gm,
-      replacement: '} catch (error) {',
+      replacement: '} catch {',
     },
     // Fix unexpected tokens in specific patterns
     {
@@ -123,7 +123,7 @@ function addMissingImports() {
       content.includes("require('./logger')") ||
       content.includes("require('../../logger')") ||
       content.includes("require('./lib/logger')") ||
-      content.includes('_Logger') ||
+      content.includes('LOGGER') ||
       content.includes('test') || // Skip test files
       relativePath.includes('node_modules') ||
       relativePath.includes('coverage')
@@ -263,7 +263,7 @@ function main() {
     const { execSync } = require('child_process');
     execSync('npm run lint -- --quiet', { stdio: 'inherit' });
     console.log('✅ Linter passed! Migration successful.');
-  } catch (error) {
+  } catch {
     console.log(
       '⚠️  Some linting issues remain. You may need to fix them manually.'
     );

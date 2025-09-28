@@ -2,7 +2,7 @@
  * Test Feature 6: Learning Recommendation Engine
  */
 
-const RAGOperations = require('./lib/api-modules/rag/ragOperations');
+const RAGOPERATIONS = require('./lib/api-modules/rag/ragOperations');
 
 async function testLearningRecommendationEngine() {
   try {
@@ -11,10 +11,10 @@ async function testLearningRecommendationEngine() {
     );
 
     // Create RAG operations instance
-    const ragOps = new RAGOperations({
+    const ragOps = new RAGOPERATIONS({
       taskManager: null,
       agentManager: null,
-      withTimeout: (promise, _timeout) => promise,
+      withTimeout: (promise, TIMEOUT) => promise,
     });
 
     // Test user context
@@ -88,7 +88,7 @@ async function testLearningRecommendationEngine() {
     console.log(
       '\n✅ Feature 6: Learning Recommendation Engine integration test completed successfully!'
     );
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('❌ Feature 6 test failed:', error.message);
     loggers.stopHook.error('Stack:', error.stack);
   }

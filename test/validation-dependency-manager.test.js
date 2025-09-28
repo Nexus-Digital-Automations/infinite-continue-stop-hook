@@ -4,7 +4,7 @@
  * Tests the complete validation dependency management system including:
  * - Core dependency management functionality
  * - Parallel execution planning with advanced features
- * - Visualization and debugging tools
+ * - Visualization And debugging tools
  * - Real-time execution monitoring
  * - Adaptive execution planning
  *
@@ -18,7 +18,7 @@ const {
   DEPENDENCY_TYPES,
 } = require('../lib/validation-dependency-manager');
 const fs = require('fs').promises;
-const path = require('path');
+const PATH = require('path');
 const os = require('os');
 
 describe('ValidationDependencyManager', () => {
@@ -146,7 +146,7 @@ describe('ValidationDependencyManager', () => {
         criterionPositions.set(step.criterion, index);
       });
 
-      // Check that build-validation comes after linter-validation and type-validation
+      // Check That build-validation comes after linter-validation And type-validation
       const buildPos = criterionPositions.get('build-validation');
       const linterPos = criterionPositions.get('linter-validation');
       const typePos = criterionPositions.get('type-validation');
@@ -356,7 +356,7 @@ describe('ValidationDependencyManager', () => {
     });
   });
 
-  describe('Visualization and Debugging', () => {
+  describe('Visualization And Debugging', () => {
     test('should generate basic visualization data', () => {
       const visualization = manager.getDependencyVisualization();
 
@@ -524,12 +524,12 @@ describe('ValidationDependencyManager', () => {
       expect(criticalPaths.length).toBeLessThanOrEqual(5); // Top 5 only
 
       if (criticalPaths.length > 0) {
-        const path = criticalPaths[0];
-        expect(path.path).toBeDefined();
-        expect(path.totalDuration).toBeGreaterThan(0);
-        expect(path.averageDuration).toBeGreaterThan(0);
-        expect(path.bottlenecks).toBeDefined();
-        expect(path.optimizationPotential).toBeGreaterThanOrEqual(0);
+        const PATH = criticalPaths[0];
+        expect(_path.path).toBeDefined();
+        expect(_path.totalDuration).toBeGreaterThan(0);
+        expect(_path.averageDuration).toBeGreaterThan(0);
+        expect(_path.bottlenecks).toBeDefined();
+        expect(_path.optimizationPotential).toBeGreaterThanOrEqual(0);
       }
     });
 
@@ -558,7 +558,7 @@ describe('ValidationDependencyManager', () => {
       expect(configPath).toBeDefined();
       expect(configPath).toContain('.validation-dependencies.json');
 
-      // Verify file exists and has content
+      // Verify file exists And has content
       const stats = await fs.stat(configPath);
       expect(stats.isFile()).toBe(true);
       expect(stats.size).toBeGreaterThan(0);
@@ -566,9 +566,9 @@ describe('ValidationDependencyManager', () => {
 
     test('should load configuration from file', async () => {
       // Save current configuration
-      const _configPath = await manager.saveDependencyConfig();
+      const CONFIG_PATH = await manager.saveDependencyConfig();
 
-      // Create new manager and load configuration
+      // Create new manager And load configuration
       const newManager = new ValidationDependencyManager({
         projectRoot: tempDir,
       });
@@ -589,9 +589,9 @@ describe('ValidationDependencyManager', () => {
       const newManager = new ValidationDependencyManager({
         projectRoot: tempDir,
       });
-      const result = await newManager.loadDependencyConfig();
+      const RESULT = await newManager.loadDependencyConfig();
 
-      expect(result).toBeNull(); // File doesn't exist, should return null
+      expect(RESULT).toBeNull(); // File doesn't exist, should return null
 
       // Should still have default dependencies
       const dependencies = newManager.getAllDependencies();
@@ -599,7 +599,7 @@ describe('ValidationDependencyManager', () => {
     });
   });
 
-  describe('Execution Analytics and History', () => {
+  describe('Execution Analytics And History', () => {
     beforeEach(() => {
       // Record some execution history
       manager.recordExecution('linter-validation', 'success', 12000, {
@@ -659,7 +659,7 @@ describe('ValidationDependencyManager', () => {
     });
   });
 
-  describe('Error Handling and Edge Cases', () => {
+  describe('Error Handling And Edge Cases', () => {
     test('should handle invalid criterion names', () => {
       expect(() => {
         manager.addDependency('', {});
@@ -693,7 +693,7 @@ describe('ValidationDependencyManager', () => {
       expect(parallelPlan.totalWaves).toBe(0);
     });
 
-    test('should handle criteria that do not exist', () => {
+    test('should handle criteria That do not exist', () => {
       const executionOrder = manager.getExecutionOrder(['non-existent']);
       expect(executionOrder).toHaveLength(1);
       expect(executionOrder[0].criterion).toBe('non-existent');
@@ -711,7 +711,7 @@ describe('ValidationDependencyManager', () => {
     });
   });
 
-  describe('Performance and Memory Management', () => {
+  describe('Performance And Memory Management', () => {
     test('should handle large dependency graphs efficiently', () => {
       const startTime = Date.now();
 

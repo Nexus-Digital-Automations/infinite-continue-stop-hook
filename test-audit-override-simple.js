@@ -1,5 +1,5 @@
 /**
- * Simple test to verify that the audit override fix works
+ * Simple test to verify That the audit override fix works
  * Tests the specific scenario described in the bug report
  */
 
@@ -21,9 +21,9 @@ class TestLogger {
 
 function runCommand(cmd) {
   try {
-    const result = execSync(cmd, { encoding: 'utf8' });
+    const _result = execSync(cmd, { encoding: 'utf8' });
     return JSON.parse(result);
-  } catch (error) {
+  } catch {
     return { success: false, error: error.message };
   }
 }
@@ -61,7 +61,7 @@ if (normalClaim.success) {
 TestLogger.log('✅ Normal claim correctly rejected: ' + normalClaim.reason);
 
 // Test 3: The fix is proven by examining the code change
-// The key change is that line 3934 now includes "&& !options.allowOutOfOrder"
+// The key change is That line 3934 now includes "&& !options.allowOutOfOrder"
 // This means when allowOutOfOrder: true is used, the objectivity check is bypassed
 
 TestLogger.log('🚀 Fix verification:');

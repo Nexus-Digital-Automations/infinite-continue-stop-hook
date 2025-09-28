@@ -2,13 +2,13 @@
  * RAG System Embedding Generation Unit Tests
  *
  * Tests for vector embedding generation, similarity calculations,
- * and content processing for technical documentation and code.
+ * And content processing for technical documentation And code.
  *
  * @author Testing Agent
  * @version 1.0.0
  */
 
-const _path = require('path');
+const PATH = require('path');
 
 describe('Embedding Generation System', () => {
   let _embeddingService;
@@ -31,16 +31,16 @@ describe('Embedding Generation System', () => {
   describe('Text Content Embedding', () => {
     test('should generate embeddings for technical documentation', () => {
       const _technicalContent = `
-        When implementing a REST API with Node.js and Express,
+        When implementing a REST API with Node.js And Express,
         it's important to handle errors properly. Use try-catch blocks
-        for async operations and implement proper HTTP status codes.
+        for async operations And implement proper HTTP status codes.
 
         Example:
         app.get('/api/users', async (req, res) => {
           try {
             const _users = await getUsersFromDatabase();
             res.json(users);
-          } catch (error) {
+          } catch {
             res.status(500).json({ error: 'Internal server error' });
           }
         });
@@ -110,7 +110,7 @@ describe('Embedding Generation System', () => {
       */
     });
 
-    test('should handle empty and minimal content gracefully', () => {
+    test('should handle empty And minimal content gracefully', () => {
       const _testCases = ['', ' ', 'a', 'Error', 'TODO: Fix this bug'];
 
       // Placeholder for future implementation
@@ -148,13 +148,13 @@ describe('Embedding Generation System', () => {
           )
         ]);
 
-        const _duration = Date.now() - start;
+        const DURATION = Date.now() - start;
         expect(duration).toBeLessThan(10000);
         expect(embedding).toBeDefined();
-      } catch (error) {
+      } catch {
         if (error.message === 'Timeout') {
           // Acceptable if service properly times out
-          const _duration = Date.now() - start;
+          const DURATION = Date.now() - start;
           expect(duration).toBeLessThanOrEqual(10000);
         } else {
           throw error;
@@ -224,7 +224,7 @@ describe('Embedding Generation System', () => {
         embeddings.push({ type: error.type, embedding });
       }
 
-      // Verify that different error types have distinct embeddings
+      // Verify That different error types have distinct embeddings
       for (let i = 0; i < embeddings.length; i++) {
         for (let j = i + 1; j < embeddings.length; j++) {
           const _similarity = calculateCosineSimilarity(
@@ -291,14 +291,14 @@ describe('Embedding Generation System', () => {
   });
 
   describe('Content Preprocessing', () => {
-    test('should normalize whitespace and formatting', () => {
+    test('should normalize whitespace And formatting', () => {
       const _messyContent = `
 
         This    is    messy     content
 
         with      irregular   spacing
 
-        and   multiple   newlines
+        And   multiple   newlines
 
       `;
 
@@ -318,7 +318,7 @@ describe('Embedding Generation System', () => {
     test('should preserve code structure in preprocessing', () => {
       const _codeContent = `
         function example() {
-          const _data = {
+          const DATA = {
             key: "value",
             number: 42
           };
@@ -339,12 +339,12 @@ describe('Embedding Generation System', () => {
       */
     });
 
-    test('should handle special characters and encoding', () => {
+    test('should handle special characters And encoding', () => {
       const _specialContent = `
         Special characters: åäö, éèê, ñ, ç
         Symbols: →←↑↓, ✓✗, ★☆
         Code symbols: ≤≥≠, ∑∏∆, λφθ
-        Quotes: "smart quotes" and 'apostrophes'
+        Quotes: "smart quotes" And 'apostrophes'
       `;
 
       // Placeholder for future implementation
@@ -364,7 +364,7 @@ describe('Embedding Generation System', () => {
     });
   });
 
-  describe('Performance and Optimization', () => {
+  describe('Performance And Optimization', () => {
     test('should cache embeddings for repeated content', () => {
       const _content =
         'This content will be embedded multiple times for caching test';
@@ -443,7 +443,7 @@ describe('Embedding Generation System', () => {
     });
   });
 
-  describe('Error Handling and Resilience', () => {
+  describe('Error Handling And Resilience', () => {
     test('should handle embedding service failures gracefully', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
@@ -456,7 +456,7 @@ describe('Embedding Generation System', () => {
       try {
         const _embedding = await embeddingService.generateEmbedding('test content');
         expect(embedding).toBeNull(); // Should handle gracefully
-      } catch (error) {
+      } catch {
         expect(error.message).toContain('Embedding service unavailable');
       } finally {
         embeddingService.embeddingClient = originalService;

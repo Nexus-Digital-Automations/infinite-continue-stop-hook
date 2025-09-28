@@ -35,6 +35,7 @@ test/rag-system/
 #### 1. Unit Tests (`/unit/`)
 
 **API Endpoints** (`api-endpoints.test.js`)
+
 - Lesson storage and retrieval endpoints
 - Error storage and resolution endpoints
 - Semantic search functionality
@@ -43,6 +44,7 @@ test/rag-system/
 - Health and status monitoring
 
 **Embedding Generation** (`embedding-generation.test.js`)
+
 - Text content embedding accuracy
 - Code snippet processing
 - Error content embedding
@@ -52,6 +54,7 @@ test/rag-system/
 - Batch processing efficiency
 
 **Semantic Search Accuracy** (`semantic-search-accuracy.test.js`)
+
 - Technical content search relevance
 - Programming language distinction
 - Code vs documentation search
@@ -62,6 +65,7 @@ test/rag-system/
 #### 2. Integration Tests (`/integration/`)
 
 **End-to-End Workflows** (`workflow-e2e.test.js`)
+
 - Complete agent learning cycle
 - Cross-project knowledge transfer
 - TaskManager integration workflows
@@ -71,6 +75,7 @@ test/rag-system/
 #### 3. Performance Tests (`/performance/`)
 
 **Load Testing** (`load-testing.test.js`)
+
 - Embedding generation speed benchmarks
 - Semantic search response times
 - Batch operation efficiency
@@ -81,6 +86,7 @@ test/rag-system/
 #### 4. Data Integrity Tests (`/data-integrity/`)
 
 **Migration Validation** (`migration-validation.test.js`)
+
 - Existing lessons migration accuracy
 - Different file format handling
 - Data consistency validation
@@ -161,6 +167,7 @@ npx jest --coverage test/rag-system/
 ### Mock Data
 
 The test suite includes comprehensive mock implementations for:
+
 - Embedding service responses
 - Vector database operations
 - RAG system functionality
@@ -176,6 +183,7 @@ The test suite includes comprehensive mock implementations for:
 ### Cleanup
 
 All tests automatically clean up temporary data:
+
 - Test directories are removed after execution
 - Mock data is reset between tests
 - Database transactions are rolled back
@@ -186,6 +194,7 @@ All tests automatically clean up temporary data:
 ### Success Criteria
 
 **Functional Requirements**
+
 - ✅ All unit tests pass with 100% success rate
 - ✅ Integration tests demonstrate complete workflow functionality
 - ✅ Performance benchmarks meet defined SLAs
@@ -193,6 +202,7 @@ All tests automatically clean up temporary data:
 - ✅ Semantic search provides relevant results for technical queries
 
 **Quality Requirements**
+
 - ✅ Code coverage >90% for all new components
 - ✅ Zero critical security vulnerabilities
 - ✅ Performance regression <10% compared to baseline
@@ -212,21 +222,25 @@ All tests automatically clean up temporary data:
 ### Common Issues
 
 **Test Timeouts**
+
 - Increase timeout values in jest.config.js
 - Check for hanging async operations
 - Verify database connections are properly closed
 
 **Memory Issues**
+
 - Run tests with `--detectLeaks` flag
 - Check for unclosed resources in test cleanup
 - Use `--maxWorkers=1` for memory-constrained environments
 
 **Database Connection Errors**
+
 - Verify test database is running
 - Check connection string configuration
 - Ensure test data cleanup is working
 
 **Performance Test Failures**
+
 - Run performance tests in isolation
 - Check system resource availability
 - Verify baseline performance expectations

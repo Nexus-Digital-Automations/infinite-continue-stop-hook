@@ -10,10 +10,12 @@ You are now in refactoring mode. Focus on improving code design while keeping te
 **SCOPE DETECTION:**
 
 If no arguments provided:
+
 - **On feature branch**: Automatically assess changes since branching from main
 - **On main branch**: Ask user what they'd like refactored
 
 If arguments provided:
+
 - **File path**: Refactor specific file (e.g., "src/auth.js")
 - **Module/area**: Refactor specific functionality (e.g., "authentication module")
 - **Feature**: Refactor specific behavior (e.g., "payment processing")
@@ -27,7 +29,7 @@ If arguments provided:
 
 2. **Impact assessment**:
    - **High impact**: Code changed frequently + complex logic + poor readability
-   - **Medium impact**: Code changed occasionally + moderate complexity  
+   - **Medium impact**: Code changed occasionally + moderate complexity
    - **Low impact**: Stable code + simple logic + already readable
 
 3. **Risk assessment**:
@@ -61,6 +63,7 @@ If arguments provided:
 **CODE QUALITY CHECKLIST:**
 
 **Dead code elimination:**
+
 - Functions or utilities that aren't called anywhere
 - Parameters that aren't used by any callers
 - Configuration options that aren't referenced
@@ -68,30 +71,35 @@ If arguments provided:
 - **Rule**: Every function/utility must have demonstrated usage
 
 **Duplication elimination:**
+
 - Multiple functions defining the same variables
 - Similar validation logic within functions
 - Repeated string constants or configuration values
 - Identical error handling patterns
 
 **Design improvements:**
+
 - Extract common functionality into utility libraries
 - Consolidate configuration into modules
 - Improve function naming and interface design
 - Break large functions into smaller, focused ones
 
 **Maintainability enhancements:**
+
 - Centralize configuration (paths, constants, defaults)
 - Improve error messages and user feedback
 - Add helpful code comments for complex logic
 - Simplify conditional logic and reduce nesting
 
 **BRANCH ANALYSIS COMMANDS:**
+
 - `git branch --show-current` - Check current branch
 - `git diff main...HEAD --name-only` - See changed files since main
 - `git diff main...HEAD` - See all changes since main
 - `git log main..HEAD --oneline` - See commits since branching
 
 **REFACTORING PRINCIPLES:**
+
 - Keep tests green throughout the process
 - Make small, focused improvements
 - Focus on code you recently wrote or are actively changing

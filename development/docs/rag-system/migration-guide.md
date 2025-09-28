@@ -7,9 +7,13 @@ This guide provides comprehensive instructions for migrating from the current fi
 ## 🎯 Migration Strategy
 
 ### Phase 1: Preparation and Assessment
+
 ### Phase 2: Database Setup and Schema Creation
+
 ### Phase 3: Data Migration and Transformation
+
 ### Phase 4: Integration and Testing
+
 ### Phase 5: Rollout and Cleanup
 
 ## 📊 Pre-Migration Assessment
@@ -170,7 +174,7 @@ class LessonMigrator {
     for (const entry of entries) {
       const fullPath = path.join(dirPath, entry.name);
       if (entry.isDirectory()) {
-        files.push(...await this.findLessonFiles(fullPath));
+        files.push(...(await this.findLessonFiles(fullPath)));
       } else if (entry.isFile() && entry.name.endsWith('.md')) {
         files.push(fullPath);
       }
@@ -219,13 +223,13 @@ class LessonMigrator {
       context: {
         originalFile: filePath,
         migrationDate: new Date().toISOString(),
-        fileSize: (await fs.stat(filePath)).size
+        fileSize: (await fs.stat(filePath)).size,
       },
       metadata: {
         migrated: true,
-        source: 'file_migration'
+        source: 'file_migration',
       },
-      tags: tags
+      tags: tags,
     };
   }
 
@@ -244,7 +248,7 @@ class LessonMigrator {
             lesson.content,
             lesson.category,
             JSON.stringify(lesson.context),
-            JSON.stringify(lesson.metadata)
+            JSON.stringify(lesson.metadata),
           ]
         );
 
@@ -279,7 +283,7 @@ class LessonMigrator {
       try {
         const response = await this.openai.embeddings.create({
           model: 'text-embedding-3-small',
-          input: text.substring(0, 8000) // Limit for token constraints
+          input: text.substring(0, 8000), // Limit for token constraints
         });
         return response.data[0].embedding;
       } catch (error) {
@@ -296,7 +300,7 @@ class LessonMigrator {
     if (firstLine.startsWith('#')) {
       return firstLine.replace(/^#+\s*/, '').trim();
     }
-    return filename.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    return filename.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
   }
 
   extractTags(content, pathParts) {
@@ -305,33 +309,29 @@ class LessonMigrator {
     // Extract tags from content
     const tagMatches = content.match(/(?:tags?:|#)\s*([a-zA-Z0-9,\s]+)/gi);
     if (tagMatches) {
-      tagMatches.forEach(match => {
+      tagMatches.forEach((match) => {
         const extracted = match.replace(/(?:tags?:|#)\s*/i, '').split(',');
-        tags.push(...extracted.map(tag => tag.trim().toLowerCase()));
+        tags.push(...extracted.map((tag) => tag.trim().toLowerCase()));
       });
     }
 
-    return [...new Set(tags.filter(tag => tag && tag.length > 0))];
+    return [...new Set(tags.filter((tag) => tag && tag.length > 0))];
   }
 
   mapCategory(fileCategory) {
     const categoryMap = {
-      'errors': 'errors',
-      'features': 'features',
-      'optimization': 'optimization',
-      'decisions': 'decisions',
-      'patterns': 'patterns'
+      errors: 'errors',
+      features: 'features',
+      optimization: 'optimization',
+      decisions: 'decisions',
+      patterns: 'patterns',
     };
     return categoryMap[fileCategory] || 'general';
   }
 
   generateLessonId(filePath) {
     const timestamp = Date.now();
-    const hash = require('crypto')
-      .createHash('md5')
-      .update(filePath)
-      .digest('hex')
-      .substring(0, 8);
+    const hash = require('crypto').createHash('md5').update(filePath).digest('hex').substring(0, 8);
     return `lesson_${timestamp}_${hash}`;
   }
 
@@ -344,7 +344,7 @@ class LessonMigrator {
   }
 
   sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   async close() {
@@ -457,20 +457,24 @@ Update CLAUDE.md to include RAG workflows:
 
 ```markdown
 ### 🧠 RAG-ENHANCED PRE-TASK PREPARATION
+
 **MANDATORY RAG INTEGRATION IN ALL WORKFLOWS**
 
 **PREPARATION STEPS:**
+
 1. **RAG HEALTH CHECK**: `timeout 10s node taskmanager-api.js rag-health`
 2. **RELEVANT LESSONS**: `timeout 10s node taskmanager-api.js rag-get-relevant "$TASK_DESCRIPTION"`
 3. **ERROR PATTERNS**: `timeout 10s node taskmanager-api.js rag-similar-errors "$ERROR_DESCRIPTION"` (for error tasks)
 4. **CONTEXT ENHANCEMENT**: Apply retrieved lessons to task strategy
 
 **DURING TASK EXECUTION:**
+
 - **STORE INSIGHTS**: Automatically store solutions and discoveries
 - **REFERENCE PATTERNS**: Apply retrieved lesson patterns to current work
 - **DOCUMENT APPROACH**: Store approach reasoning for future reference
 
 **POST-TASK COMPLETION:**
+
 - **STORE COMPLETION LESSON**: Document successful completion approach
 - **UPDATE EFFECTIVENESS**: Mark used lessons as effective/ineffective
 - **CROSS-REFERENCE**: Link new lessons to related existing ones
@@ -607,7 +611,7 @@ const QATestSuite = {
     // Test TaskManager API integration
     // Verify agent workflow compatibility
     // Check error handling
-  }
+  },
 };
 ```
 
@@ -704,4 +708,4 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
 
 ---
 
-*This migration guide ensures a smooth transition from file-based lessons to the powerful RAG database system while preserving all existing knowledge and enhancing discoverability.*
+_This migration guide ensures a smooth transition from file-based lessons to the powerful RAG database system while preserving all existing knowledge and enhancing discoverability._

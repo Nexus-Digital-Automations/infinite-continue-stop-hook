@@ -33,18 +33,21 @@
 ## 🎯 Core Testing Principles
 
 ### 1. **Test-Driven Development (TDD)**
+
 - Write tests before implementation
 - Follow Red-Green-Refactor cycle
 - Design APIs through test interfaces
 - Maintain high test coverage (80%+ minimum)
 
 ### 2. **Test Independence**
+
 - Each test should run in isolation
 - No dependencies between test cases
 - Clean state before and after each test
 - Predictable and deterministic outcomes
 
 ### 3. **Fast Feedback Loops**
+
 - Unit tests execute in < 1 second
 - Integration tests complete in < 30 seconds
 - Quick failure detection and reporting
@@ -53,6 +56,7 @@
 ## 📝 Test Naming Conventions
 
 ### Descriptive Test Names
+
 ```javascript
 // ✅ GOOD - Clear, descriptive names
 describe('TaskManager API', () => {
@@ -70,6 +74,7 @@ describe('TaskManager', () => {
 ```
 
 ### Test Structure Pattern
+
 ```javascript
 // Follow AAA Pattern: Arrange, Act, Assert
 it('should calculate total with tax when tax rate is provided', () => {
@@ -88,6 +93,7 @@ it('should calculate total with tax when tax rate is provided', () => {
 ## 🏗️ Test Organization
 
 ### File Structure Conventions
+
 ```
 test/
 ├── unit/
@@ -110,6 +116,7 @@ test/
 ```
 
 ### Test Suite Organization
+
 ```javascript
 describe('TaskManager Service', () => {
   describe('Task Creation', () => {
@@ -131,44 +138,46 @@ describe('TaskManager Service', () => {
 ## 🔧 Testing Framework Setup
 
 ### Jest Configuration Architecture
+
 The project uses Jest v30.1.3 with a comprehensive multi-project configuration:
 
 ```javascript
 // jest.config.js - Enhanced configuration
 module.exports = {
-  testEnvironment: "node",
+  testEnvironment: 'node',
   projects: [
     {
-      displayName: "unit",
-      testMatch: ["<rootDir>/test/unit/**/*.test.js"],
+      displayName: 'unit',
+      testMatch: ['<rootDir>/test/unit/**/*.test.js'],
       testTimeout: 30000,
-      setupFilesAfterEnv: ["<rootDir>/test/setup.js"]
+      setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
     },
     {
-      displayName: "integration",
-      testMatch: ["<rootDir>/test/integration/**/*.test.js"],
+      displayName: 'integration',
+      testMatch: ['<rootDir>/test/integration/**/*.test.js'],
       testTimeout: 45000,
-      setupFilesAfterEnv: ["<rootDir>/test/setup.js"]
+      setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
     },
     {
-      displayName: "e2e",
-      testMatch: ["<rootDir>/test/e2e/**/*.test.js"],
+      displayName: 'e2e',
+      testMatch: ['<rootDir>/test/e2e/**/*.test.js'],
       testTimeout: 60000,
-      setupFilesAfterEnv: ["<rootDir>/test/setup.js"]
-    }
+      setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
+    },
   ],
   coverageThreshold: {
     global: {
       branches: 75,
       functions: 80,
       lines: 80,
-      statements: 80
-    }
-  }
+      statements: 80,
+    },
+  },
 };
 ```
 
 ### Module Path Mapping
+
 Simplify imports with module path mapping:
 
 ```javascript
@@ -183,6 +192,7 @@ moduleNameMapper: {
 ```
 
 ### Test Scripts Configuration
+
 Comprehensive test execution scripts:
 
 ```json
@@ -200,6 +210,7 @@ Comprehensive test execution scripts:
 ## 🧪 Test Types & Strategies
 
 ### 1. **Unit Tests**
+
 ```javascript
 // Testing individual functions/methods
 describe('validateEmail', () => {
@@ -217,6 +228,7 @@ describe('validateEmail', () => {
 ```
 
 ### 2. **Integration Tests**
+
 ```javascript
 // Testing component interactions
 describe('Task API Integration', () => {
@@ -231,10 +243,7 @@ describe('Task API Integration', () => {
   it('should create task and store in database', async () => {
     const taskData = { title: 'Test Task', priority: 'high' };
 
-    const response = await request(app)
-      .post('/api/tasks')
-      .send(taskData)
-      .expect(201);
+    const response = await request(app).post('/api/tasks').send(taskData).expect(201);
 
     const savedTask = await Task.findById(response.body.id);
     expect(savedTask.title).toBe('Test Task');
@@ -243,6 +252,7 @@ describe('Task API Integration', () => {
 ```
 
 ### 3. **End-to-End Tests**
+
 ```javascript
 // Testing complete user workflows
 describe('Task Management Workflow', () => {
@@ -250,20 +260,24 @@ describe('Task Management Workflow', () => {
     // User creates task
     const createResponse = await api.post('/tasks', {
       title: 'Complete project',
-      description: 'Finish the project by deadline'
+      description: 'Finish the project by deadline',
     });
 
     const taskId = createResponse.body.id;
 
     // User updates task
-    await api.put(`/tasks/${taskId}`, {
-      status: 'in_progress'
-    }).expect(200);
+    await api
+      .put(`/tasks/${taskId}`, {
+        status: 'in_progress',
+      })
+      .expect(200);
 
     // User completes task
-    await api.put(`/tasks/${taskId}`, {
-      status: 'completed'
-    }).expect(200);
+    await api
+      .put(`/tasks/${taskId}`, {
+        status: 'completed',
+      })
+      .expect(200);
 
     // Verify final state
     const finalTask = await api.get(`/tasks/${taskId}`);
@@ -275,6 +289,7 @@ describe('Task Management Workflow', () => {
 ## 🎭 Mock Framework Integration
 
 ### Comprehensive Mock Setup
+
 The project includes a sophisticated mock framework for consistent testing:
 
 ```javascript
@@ -311,6 +326,7 @@ describe('Example Test with Mock Framework', () => {
 ```
 
 ### Mock Validation Helpers
+
 Use custom validation helpers for common scenarios:
 
 ```javascript
@@ -327,6 +343,7 @@ expect(mocks.fileSystem.existsSync).toHaveBeenCalledWith(expectedPath);
 ```
 
 ### Test Environment Management
+
 Isolated test environments for each test case:
 
 ```javascript
@@ -362,6 +379,7 @@ class TestEnvironment {
 ## 🗂️ Test Data Management
 
 ### Test Data Factory Pattern
+
 Use factory pattern for consistent, configurable test data:
 
 ```javascript
@@ -402,6 +420,7 @@ class TestDataFactory {
 ```
 
 ### Sample Data Collections
+
 Organize domain-specific sample data:
 
 ```javascript
@@ -439,6 +458,7 @@ const SAMPLE_FEATURES = {
 ```
 
 ### Test ID Generation
+
 Generate unique identifiers for test isolation:
 
 ```javascript
@@ -464,6 +484,7 @@ class TestIdGenerator {
 ## 🎭 Mocking & Stubbing Best Practices
 
 ### Mock External Dependencies
+
 ```javascript
 // Mock external services
 jest.mock('../services/email-service');
@@ -483,6 +504,7 @@ describe('User Registration', () => {
 ```
 
 ### Database Mocking for Unit Tests
+
 ```javascript
 // Mock database operations
 jest.mock('../repositories/task-repository');
@@ -494,7 +516,7 @@ describe('TaskService', () => {
     TaskRepository.findById.mockResolvedValue({
       id: 1,
       title: 'Test Task',
-      createdAt: new Date('2025-01-01')
+      createdAt: new Date('2025-01-01'),
     });
 
     // Act
@@ -509,6 +531,7 @@ describe('TaskService', () => {
 ## ✅ Assertion Best Practices
 
 ### Specific Assertions
+
 ```javascript
 // ✅ GOOD - Specific assertions
 expect(response.status).toBe(200);
@@ -516,7 +539,7 @@ expect(response.body.tasks).toHaveLength(3);
 expect(response.body.tasks[0]).toMatchObject({
   id: expect.any(String),
   title: 'Test Task',
-  status: 'pending'
+  status: 'pending',
 });
 
 // ❌ BAD - Vague assertions
@@ -525,18 +548,15 @@ expect(response.body).toBeDefined();
 ```
 
 ### Error Testing
+
 ```javascript
 // Test error conditions explicitly
 it('should throw validation error for invalid input', async () => {
-  await expect(createTask({ title: '' }))
-    .rejects
-    .toThrow('Title is required');
+  await expect(createTask({ title: '' })).rejects.toThrow('Title is required');
 });
 
 it('should return 400 status for malformed request', async () => {
-  const response = await request(app)
-    .post('/api/tasks')
-    .send({ invalid: 'data' });
+  const response = await request(app).post('/api/tasks').send({ invalid: 'data' });
 
   expect(response.status).toBe(400);
   expect(response.body.error).toContain('validation');
@@ -546,6 +566,7 @@ it('should return 400 status for malformed request', async () => {
 ## 🧹 Test Maintenance
 
 ### Setup and Teardown
+
 ```javascript
 describe('Database Tests', () => {
   beforeAll(async () => {
@@ -572,6 +593,7 @@ describe('Database Tests', () => {
 ```
 
 ### Test Data Management
+
 ```javascript
 // Use factories for consistent test data
 const TaskFactory = {
@@ -580,8 +602,8 @@ const TaskFactory = {
     description: 'Default description',
     priority: 'medium',
     status: 'pending',
-    ...overrides
-  })
+    ...overrides,
+  }),
 };
 
 // Usage in tests
@@ -594,6 +616,7 @@ it('should create high priority task', () => {
 ## 📊 Performance Testing Guidelines
 
 ### Performance Measurement Utilities
+
 Use built-in performance utilities for consistent measurements:
 
 ```javascript
@@ -603,7 +626,7 @@ describe('Performance Validation', () => {
   test('should measure execution time accurately', async () => {
     const { result, duration } = await PerformanceUtils.measureTime(async () => {
       // Simulate work
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
       return 'test-result';
     });
 
@@ -617,7 +640,7 @@ describe('Performance Validation', () => {
       // Create memory-intensive objects
       const data = new Array(1000).fill(0).map((_, i) => ({
         id: i,
-        data: `item-${i}`
+        data: `item-${i}`,
       }));
       return data.length;
     });
@@ -631,6 +654,7 @@ describe('Performance Validation', () => {
 ```
 
 ### Bulk Operations Performance
+
 Test performance of bulk operations with realistic data sizes:
 
 ```javascript
@@ -640,7 +664,7 @@ describe('Bulk Feature Operations Performance', () => {
     const featureIds = [];
     for (let i = 0; i < 10; i++) {
       const feature = TestDataFactory.createFeatureData({
-        title: `Bulk Feature ${i}`
+        title: `Bulk Feature ${i}`,
       });
       const result = await execAPI('suggest-feature', [JSON.stringify(feature)]);
       featureIds.push(result.feature.id);
@@ -650,7 +674,7 @@ describe('Bulk Feature Operations Performance', () => {
     const { result, duration } = await PerformanceUtils.measureTime(async () => {
       return await execAPI('bulk-approve-features', [
         JSON.stringify(featureIds),
-        JSON.stringify({ approved_by: 'performance-tester' })
+        JSON.stringify({ approved_by: 'performance-tester' }),
       ]);
     });
 
@@ -663,6 +687,7 @@ describe('Bulk Feature Operations Performance', () => {
 ```
 
 ### Timeout and Retry Patterns
+
 Test resilience with timeout and retry utilities:
 
 ```javascript
@@ -672,7 +697,7 @@ describe('Resilience Testing', () => {
   test('should handle timeouts appropriately', async () => {
     await expect(
       TestExecution.withTimeout(
-        new Promise(resolve => setTimeout(resolve, 2000)), // 2 second delay
+        new Promise((resolve) => setTimeout(resolve, 2000)), // 2 second delay
         1000 // 1 second timeout
       )
     ).rejects.toThrow('Test timed out after 1000ms');
@@ -681,22 +706,24 @@ describe('Resilience Testing', () => {
   test('should retry failed operations with exponential backoff', async () => {
     let attempts = 0;
 
-    const result = await TestExecution.retry(async () => {
-      attempts++;
-      if (attempts < 3) {
-        throw new Error('Temporary failure');
-      }
-      return 'success';
-    }, 5, 100); // 5 retries, 100ms delay
+    const result = await TestExecution.retry(
+      async () => {
+        attempts++;
+        if (attempts < 3) {
+          throw new Error('Temporary failure');
+        }
+        return 'success';
+      },
+      5,
+      100
+    ); // 5 retries, 100ms delay
 
     expect(result).toBe('success');
     expect(attempts).toBe(3);
   });
 
   test('should execute parallel operations with concurrency control', async () => {
-    const promises = Array.from({ length: 10 }, (_, i) =>
-      Promise.resolve(i * 2)
-    );
+    const promises = Array.from({ length: 10 }, (_, i) => Promise.resolve(i * 2));
 
     const results = await TestExecution.parallel(promises, 3); // Max 3 concurrent
 
@@ -707,15 +734,16 @@ describe('Resilience Testing', () => {
 ```
 
 ### API Performance Benchmarks
+
 Set and validate API performance benchmarks:
 
 ```javascript
 describe('API Performance Benchmarks', () => {
   const PERFORMANCE_THRESHOLDS = {
-    feature_creation: 1000,    // 1 second
-    feature_listing: 500,      // 500ms
-    bulk_operations: 5000,     // 5 seconds
-    initialization: 2000,      // 2 seconds
+    feature_creation: 1000, // 1 second
+    feature_listing: 500, // 500ms
+    bulk_operations: 5000, // 5 seconds
+    initialization: 2000, // 2 seconds
   };
 
   test('should meet feature creation performance requirements', async () => {
@@ -745,6 +773,7 @@ describe('API Performance Benchmarks', () => {
 ## 🔒 Security Testing Best Practices
 
 ### Input Validation Testing
+
 ```javascript
 describe('Security Validations', () => {
   it('should sanitize HTML input', () => {
@@ -756,20 +785,17 @@ describe('Security Validations', () => {
   it('should reject SQL injection attempts', async () => {
     const maliciousQuery = "'; DROP TABLE users; --";
 
-    await expect(getUserByName(maliciousQuery))
-      .rejects
-      .toThrow('Invalid input');
+    await expect(getUserByName(maliciousQuery)).rejects.toThrow('Invalid input');
   });
 });
 ```
 
 ### Authentication Testing
+
 ```javascript
 describe('Authentication Middleware', () => {
   it('should reject requests without valid token', async () => {
-    const response = await request(app)
-      .get('/api/protected-resource')
-      .expect(401);
+    const response = await request(app).get('/api/protected-resource').expect(401);
 
     expect(response.body.error).toBe('Unauthorized');
   });
@@ -779,12 +805,14 @@ describe('Authentication Middleware', () => {
 ## 📈 Coverage Standards
 
 ### Coverage Targets
+
 - **Unit Tests**: 90%+ code coverage
 - **Integration Tests**: 80%+ feature coverage
 - **E2E Tests**: 100% critical path coverage
 - **Security Tests**: 100% input validation coverage
 
 ### Coverage Analysis
+
 ```javascript
 // Use coverage reports to identify gaps
 npm run coverage:report
@@ -799,6 +827,7 @@ npm run coverage:badge
 ## 🚀 Continuous Integration Best Practices
 
 ### Test Pipeline Configuration
+
 ```yaml
 # Example CI configuration
 test:
@@ -818,6 +847,7 @@ test:
 ```
 
 ### Quality Gates
+
 - All tests must pass
 - Coverage thresholds must be met
 - No linting errors
@@ -827,6 +857,7 @@ test:
 ## 🔧 Testing Tools & Libraries
 
 ### Recommended Testing Stack
+
 - **Test Runner**: Jest
 - **Assertion Library**: Jest built-in matchers
 - **Mocking**: Jest mocks + manual mocks
@@ -835,6 +866,7 @@ test:
 - **Reporting**: jest-html-reporters, jest-junit
 
 ### Custom Test Utilities
+
 ```javascript
 // test/utils/test-helpers.js
 const createTestApp = () => {
@@ -853,19 +885,21 @@ const expectValidationError = (response, field) => {
 module.exports = {
   createTestApp,
   createMockUser,
-  expectValidationError
+  expectValidationError,
 };
 ```
 
 ## 📚 Documentation Standards
 
 ### Test Documentation
+
 - Document test purpose and approach
 - Explain complex test scenarios
 - Maintain test-specific README files
 - Document setup and configuration requirements
 
 ### Code Comments
+
 ```javascript
 // Document complex test scenarios
 describe('Complex Business Logic', () => {
@@ -885,6 +919,7 @@ describe('Complex Business Logic', () => {
 ## ⚠️ Common Anti-Patterns to Avoid
 
 ### ❌ Don't Do This
+
 ```javascript
 // Vague test names
 it('should work', () => {});
@@ -907,6 +942,7 @@ createTask().then(() => {
 ```
 
 ### ✅ Do This Instead
+
 ```javascript
 // Descriptive test names
 it('should create task when all required fields are provided', () => {});
@@ -931,11 +967,13 @@ expect(taskCreated).toBe(true);
 ## 🎓 Learning Resources
 
 ### Internal Documentation
+
 - [Testing Architecture](./testing-architecture.md)
 - [Test Execution Guide](./test-execution-guide.md)
 - [Testing Troubleshooting](./testing-troubleshooting.md)
 
 ### External Resources
+
 - Jest Documentation: https://jestjs.io/docs/getting-started
 - Testing Best Practices: https://kentcdodds.com/blog/common-mistakes-with-react-testing-library
 - TDD Guidelines: https://martinfowler.com/bliki/TestDrivenDevelopment.html
@@ -945,6 +983,7 @@ expect(taskCreated).toBe(true);
 ## 📋 Testing Checklist
 
 ### Pre-Implementation Checklist
+
 - [ ] Test requirements defined and documented
 - [ ] Test data and fixtures prepared
 - [ ] Mock dependencies identified and configured
@@ -952,6 +991,7 @@ expect(taskCreated).toBe(true);
 - [ ] Error scenarios mapped out
 
 ### Implementation Checklist
+
 - [ ] Tests follow AAA pattern (Arrange, Act, Assert)
 - [ ] Descriptive test names that explain scenarios
 - [ ] Proper test isolation and cleanup
@@ -961,6 +1001,7 @@ expect(taskCreated).toBe(true);
 - [ ] Security validations included
 
 ### Quality Assurance Checklist
+
 - [ ] All tests pass consistently
 - [ ] Coverage thresholds met (80%+ lines, 75%+ branches)
 - [ ] No test flakiness or race conditions
@@ -969,6 +1010,7 @@ expect(taskCreated).toBe(true);
 - [ ] Documentation updated and accurate
 
 ### CI/CD Integration Checklist
+
 - [ ] Tests run in CI pipeline
 - [ ] Coverage reports generated
 - [ ] Performance benchmarks validated
@@ -981,6 +1023,7 @@ expect(taskCreated).toBe(true);
 ## 🚦 Test Execution Guidelines
 
 ### Local Development
+
 ```bash
 # Run all tests
 npm test
@@ -1001,6 +1044,7 @@ npm run test:unit:watch
 ```
 
 ### Performance Monitoring
+
 ```bash
 # Run performance tests
 npm run performance:test
@@ -1013,6 +1057,7 @@ npm run performance:test:json
 ```
 
 ### Quality Validation
+
 ```bash
 # Check coverage thresholds
 npm run coverage:check
@@ -1031,6 +1076,7 @@ npm run ci:quality-check
 This comprehensive testing best practices guide provides the foundation for building reliable, maintainable, and performant tests in the infinite-continue-stop-hook project. Key takeaways:
 
 ### Testing Excellence Principles
+
 1. **Comprehensive Coverage**: Unit, integration, and E2E tests work together
 2. **Performance Awareness**: Built-in performance monitoring and benchmarks
 3. **Data Consistency**: Robust validation of system state across operations
@@ -1038,6 +1084,7 @@ This comprehensive testing best practices guide provides the foundation for buil
 5. **Maintainable Code**: Clear patterns, utilities, and documentation
 
 ### Framework Benefits
+
 - **Sophisticated Mock System**: Consistent mocking across all test types
 - **Performance Utilities**: Built-in measurement and benchmarking tools
 - **Test Data Management**: Factory patterns and sample data collections
@@ -1045,6 +1092,7 @@ This comprehensive testing best practices guide provides the foundation for buil
 - **Advanced Patterns**: Multi-agent workflows and complex scenario testing
 
 ### Quality Assurance
+
 - **Automated Validation**: CI/CD integration with quality gates
 - **Coverage Monitoring**: Comprehensive coverage reporting and thresholds
 - **Performance Benchmarks**: Defined performance criteria and validation
@@ -1057,6 +1105,7 @@ By following these practices, developers ensure that the testing infrastructure 
 **Best Practices Reviewed By:** Senior Developer Standards & Testing Infrastructure Agent
 **Compliance:** Enterprise Testing Standards & Modern Testing Frameworks
 **Version History:**
+
 - v1.0.0: Initial framework and basic patterns
 - v2.0.0: Enhanced with comprehensive mock framework, performance utilities, advanced patterns, and real codebase examples
-**Next Review:** Quarterly or upon major framework changes
+  **Next Review:** Quarterly or upon major framework changes

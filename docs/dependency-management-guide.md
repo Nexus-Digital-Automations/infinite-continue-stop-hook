@@ -25,19 +25,25 @@ The dependency management system consists of several key components:
 ### Core Components
 
 #### ValidationDependencyManager
+
 The central class that manages all dependency relationships, execution planning, and optimization algorithms.
 
 #### Dependency Graph
+
 An internal representation of validation criteria and their relationships, optimized for fast dependency resolution and cycle detection.
 
 #### Execution Planner
+
 Advanced algorithms that generate optimal execution sequences, including:
+
 - Sequential execution with dependency constraints
 - Parallel execution with resource allocation
 - Adaptive execution based on system resources
 
 #### Visualization Engine
+
 Multiple visualization formats for debugging and understanding dependency relationships:
+
 - Mermaid.js diagrams for interactive web viewing
 - Graphviz DOT format for publication-quality graphics
 - ASCII art for terminal viewing
@@ -48,25 +54,31 @@ Multiple visualization formats for debugging and understanding dependency relati
 The system supports three types of dependencies between validation criteria:
 
 ### Strict Dependencies
+
 ```javascript
 { criterion: 'linter-validation', type: 'strict' }
 ```
+
 - **Behavior**: Dependent task CANNOT start until prerequisite completes successfully
 - **Use Case**: Critical dependencies where failure blocks all dependent tasks
 - **Example**: Build validation requires linter validation to pass first
 
 ### Weak Dependencies
+
 ```javascript
 { criterion: 'security-validation', type: 'weak' }
 ```
+
 - **Behavior**: Dependent task SHOULD wait for prerequisite, but can proceed if deadlock occurs
 - **Use Case**: Preferred ordering that can be overridden for optimization
 - **Example**: Type validation preferably runs after linter validation but can run in parallel if needed
 
 ### Optional Dependencies
+
 ```javascript
 { criterion: 'documentation-check', type: 'optional' }
 ```
+
 - **Behavior**: Dependent task can run in parallel but prerequisite is preferred to complete first
 - **Use Case**: Nice-to-have ordering for optimization without blocking execution
 - **Example**: Integration tests prefer documentation to be validated but don't require it
@@ -96,35 +108,35 @@ graph TD
 
 ### Default Configuration Details
 
-| Criterion | Dependencies | Duration | Parallelizable | Resources |
-|-----------|-------------|----------|----------------|-----------|
-| `focused-codebase` | None | 5s | ✅ | filesystem |
-| `security-validation` | None | 30s | ✅ | filesystem, network |
-| `linter-validation` | None | 15s | ✅ | filesystem |
-| `type-validation` | linter-validation (weak) | 20s | ✅ | filesystem, cpu |
-| `build-validation` | linter-validation (strict), type-validation (strict) | 45s | ❌ | filesystem, cpu, memory |
-| `start-validation` | build-validation (strict) | 20s | ❌ | filesystem, network, ports |
-| `test-validation` | build-validation (strict), start-validation (weak) | 60s | ✅ | filesystem, cpu, memory |
+| Criterion             | Dependencies                                         | Duration | Parallelizable | Resources                  |
+| --------------------- | ---------------------------------------------------- | -------- | -------------- | -------------------------- |
+| `focused-codebase`    | None                                                 | 5s       | ✅             | filesystem                 |
+| `security-validation` | None                                                 | 30s      | ✅             | filesystem, network        |
+| `linter-validation`   | None                                                 | 15s      | ✅             | filesystem                 |
+| `type-validation`     | linter-validation (weak)                             | 20s      | ✅             | filesystem, cpu            |
+| `build-validation`    | linter-validation (strict), type-validation (strict) | 45s      | ❌             | filesystem, cpu, memory    |
+| `start-validation`    | build-validation (strict)                            | 20s      | ❌             | filesystem, network, ports |
+| `test-validation`     | build-validation (strict), start-validation (weak)   | 60s      | ✅             | filesystem, cpu, memory    |
 
 ## API Reference
 
 ### Core Dependency Operations
 
 #### Get Dependency Graph
+
 ```bash
 timeout 10s node taskmanager-api.js get-dependency-graph
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
   "dependencyGraph": {
     "criterion-name": {
       "criterion": "criterion-name",
-      "dependencies": [
-        { "criterion": "prerequisite", "type": "strict" }
-      ],
+      "dependencies": [{ "criterion": "prerequisite", "type": "strict" }],
       "metadata": {
         "description": "Validation description",
         "estimatedDuration": 15000,
@@ -133,16 +145,20 @@ timeout 10s node taskmanager-api.js get-dependency-graph
       }
     }
   },
-  "visualization": { /* visualization data */ }
+  "visualization": {
+    /* visualization data */
+  }
 }
 ```
 
 #### Validate Dependency Graph
+
 ```bash
 timeout 10s node taskmanager-api.js validate-dependency-graph
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -157,6 +173,7 @@ timeout 10s node taskmanager-api.js validate-dependency-graph
 ```
 
 #### Add Custom Dependency
+
 ```bash
 timeout 10s node taskmanager-api.js add-dependency 'custom-validation' '{
   "dependencies": [
@@ -170,11 +187,13 @@ timeout 10s node taskmanager-api.js add-dependency 'custom-validation' '{
 ```
 
 #### Remove Dependency
+
 ```bash
 timeout 10s node taskmanager-api.js remove-dependency 'custom-validation'
 ```
 
 #### Get Specific Dependency
+
 ```bash
 timeout 10s node taskmanager-api.js get-dependency 'build-validation'
 ```
@@ -182,25 +201,30 @@ timeout 10s node taskmanager-api.js get-dependency 'build-validation'
 ### Execution Planning
 
 #### Get Execution Order
+
 ```bash
 timeout 10s node taskmanager-api.js get-execution-order
 ```
 
 **Optional with specific criteria:**
+
 ```bash
 timeout 10s node taskmanager-api.js get-execution-order '["linter-validation", "build-validation", "test-validation"]'
 ```
 
 #### Generate Parallel Execution Plan
+
 ```bash
 timeout 10s node taskmanager-api.js generate-parallel-execution-plan null 4
 ```
 
 **Parameters:**
+
 - First parameter: Array of criteria (null for all)
 - Second parameter: Maximum concurrency level
 
 **Response:**
+
 ```json
 {
   "plan": [
@@ -241,6 +265,7 @@ timeout 10s node taskmanager-api.js generate-parallel-execution-plan null 4
 ### Advanced Execution Planning
 
 #### Generate Adaptive Execution Plan
+
 ```bash
 timeout 10s node taskmanager-api.js generate-adaptive-execution-plan '{
   "availableCPUs": 8,
@@ -251,9 +276,12 @@ timeout 10s node taskmanager-api.js generate-adaptive-execution-plan '{
 ```
 
 **Response includes system-aware optimizations:**
+
 ```json
 {
-  "plan": [ /* standard execution plan */ ],
+  "plan": [
+    /* standard execution plan */
+  ],
   "adaptiveOptimizations": {
     "systemAware": {
       "recommendedConcurrency": 6,
@@ -281,16 +309,19 @@ timeout 10s node taskmanager-api.js generate-adaptive-execution-plan '{
 ### Configuration Management
 
 #### Save Configuration
+
 ```bash
 timeout 10s node taskmanager-api.js save-dependency-config
 ```
 
 **With custom path:**
+
 ```bash
 timeout 10s node taskmanager-api.js save-dependency-config '/path/to/custom-config.json'
 ```
 
 #### Load Configuration
+
 ```bash
 timeout 10s node taskmanager-api.js load-dependency-config '/path/to/config.json'
 ```
@@ -298,11 +329,13 @@ timeout 10s node taskmanager-api.js load-dependency-config '/path/to/config.json
 ### Analytics and Monitoring
 
 #### Get Execution Analytics
+
 ```bash
 timeout 10s node taskmanager-api.js get-execution-analytics
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -325,6 +358,7 @@ timeout 10s node taskmanager-api.js get-execution-analytics
 ## Basic Usage Examples
 
 ### Creating a Simple Dependency
+
 ```bash
 # Create a custom validation that depends on linter validation
 timeout 10s node taskmanager-api.js add-dependency 'api-validation' '{
@@ -339,6 +373,7 @@ timeout 10s node taskmanager-api.js add-dependency 'api-validation' '{
 ```
 
 ### Creating Complex Dependencies
+
 ```bash
 # Create integration test with multiple dependencies
 timeout 10s node taskmanager-api.js add-dependency 'integration-test' '{
@@ -357,6 +392,7 @@ timeout 10s node taskmanager-api.js add-dependency 'integration-test' '{
 ### Optimizing Execution for Different Scenarios
 
 #### High-Performance Development Machine
+
 ```bash
 # Generate plan optimized for powerful development machine
 timeout 10s node taskmanager-api.js generate-adaptive-execution-plan '{
@@ -368,6 +404,7 @@ timeout 10s node taskmanager-api.js generate-adaptive-execution-plan '{
 ```
 
 #### Constrained CI Environment
+
 ```bash
 # Generate plan optimized for constrained CI environment
 timeout 10s node taskmanager-api.js generate-adaptive-execution-plan '{
@@ -385,12 +422,14 @@ timeout 10s node taskmanager-api.js generate-adaptive-execution-plan '{
 The system automatically detects and reports dependency issues:
 
 #### Circular Dependencies
+
 ```bash
 # The system will detect if you create circular dependencies
 timeout 10s node taskmanager-api.js validate-dependency-graph
 ```
 
 If circular dependencies exist, the response will include:
+
 ```json
 {
   "validation": {
@@ -407,6 +446,7 @@ If circular dependencies exist, the response will include:
 ```
 
 #### Missing Dependencies
+
 ```json
 {
   "validation": {
@@ -449,6 +489,7 @@ The system identifies potential resource conflicts and provides optimization sug
 The system automatically optimizes parallel execution with several advanced features:
 
 #### Resource Pool Management
+
 - **Filesystem**: Manages concurrent file operations
 - **Network**: Prevents network saturation
 - **CPU**: Balances CPU-intensive tasks
@@ -456,9 +497,11 @@ The system automatically optimizes parallel execution with several advanced feat
 - **Ports**: Ensures port availability for services
 
 #### Load Balancing
+
 Algorithms automatically balance workload across execution waves to minimize total execution time.
 
 #### Critical Path Optimization
+
 The system identifies and prioritizes tasks on the critical path to minimize overall execution time.
 
 ## Optimization and Performance
@@ -472,6 +515,7 @@ The dependency management system typically achieves significant performance impr
 - **Typical Gains**: 60-85% reduction in total execution time
 
 ### Example Performance Results
+
 ```
 Standard 7 Validation Criteria:
 - Sequential Duration: 175 seconds
@@ -489,6 +533,7 @@ With Additional Custom Criteria (15 total):
 ### System Resource Optimization
 
 #### CPU Optimization
+
 ```bash
 # The system automatically adjusts concurrency based on available CPUs
 # High-CPU system: Higher concurrency for CPU-intensive tasks
@@ -496,12 +541,14 @@ With Additional Custom Criteria (15 total):
 ```
 
 #### Memory Management
+
 ```bash
 # Considers available memory when scheduling memory-intensive tasks
 # Prevents memory exhaustion by limiting concurrent memory-heavy operations
 ```
 
 #### Network Optimization
+
 ```bash
 # Detects network latency and adjusts network-dependent task scheduling
 # High latency: Prioritizes local validations first
@@ -509,6 +556,7 @@ With Additional Custom Criteria (15 total):
 ```
 
 #### Disk I/O Management
+
 ```bash
 # Monitors disk I/O load and staggers filesystem-intensive operations
 # High I/O load: Sequential execution of disk-heavy tasks
@@ -520,6 +568,7 @@ With Additional Custom Criteria (15 total):
 ### Interactive Visualizations
 
 #### Mermaid.js Format
+
 ```bash
 timeout 10s node taskmanager-api.js get-dependency-visualization
 ```
@@ -527,7 +576,9 @@ timeout 10s node taskmanager-api.js get-dependency-visualization
 Copy the generated Mermaid code to [https://mermaid.live/](https://mermaid.live/) for interactive viewing.
 
 #### ASCII Art for Terminal
+
 Perfect for quick debugging in the terminal:
+
 ```
 Validation Dependency Diagram
 ========================================
@@ -548,7 +599,9 @@ Level 2:
 ```
 
 #### Graphviz DOT Format
+
 Generate publication-quality dependency diagrams:
+
 ```bash
 # Save output to file and render with Graphviz
 timeout 10s node taskmanager-api.js get-dependency-visualization > deps.dot
@@ -558,12 +611,14 @@ dot -Tpng deps.dot -o dependency-graph.png
 ### Debugging Features
 
 #### Comprehensive Debug Information
+
 ```bash
 # Generate detailed debugging information
 timeout 10s node taskmanager-api.js get-dependency-visualization
 ```
 
 The JSON format includes extensive debugging data:
+
 - **Dependency Chains**: Complete chains from root to leaf nodes
 - **Resource Conflicts**: Detailed resource contention analysis
 - **Parallelization Opportunities**: Specific recommendations for optimization
@@ -571,12 +626,15 @@ The JSON format includes extensive debugging data:
 - **Optimization Suggestions**: Actionable recommendations for improvement
 
 #### Execution Analytics
+
 Track validation performance over time:
+
 ```bash
 timeout 10s node taskmanager-api.js get-execution-analytics
 ```
 
 Provides insights into:
+
 - Success rates per validation criterion
 - Average execution times and trends
 - Performance degradation detection
@@ -587,6 +645,7 @@ Provides insights into:
 ### Persistent Configuration
 
 #### Save Current Configuration
+
 ```bash
 # Save to default location (.validation-dependencies.json)
 timeout 10s node taskmanager-api.js save-dependency-config
@@ -596,6 +655,7 @@ timeout 10s node taskmanager-api.js save-dependency-config '/path/to/custom-conf
 ```
 
 #### Load Saved Configuration
+
 ```bash
 # Load from specific file
 timeout 10s node taskmanager-api.js load-dependency-config '/path/to/config.json'
@@ -605,6 +665,7 @@ timeout 10s node taskmanager-api.js load-dependency-config
 ```
 
 #### Configuration Format
+
 ```json
 {
   "version": "1.0.0",
@@ -612,9 +673,7 @@ timeout 10s node taskmanager-api.js load-dependency-config
   "dependencies": {
     "custom-validation": {
       "criterion": "custom-validation",
-      "dependencies": [
-        { "criterion": "linter-validation", "type": "strict" }
-      ],
+      "dependencies": [{ "criterion": "linter-validation", "type": "strict" }],
       "metadata": {
         "description": "Custom validation process",
         "estimatedDuration": 20000,
@@ -629,6 +688,7 @@ timeout 10s node taskmanager-api.js load-dependency-config
 ### Project-Specific Configurations
 
 #### Version Control Integration
+
 ```bash
 # Save project configuration to version control
 timeout 10s node taskmanager-api.js save-dependency-config '.validation-dependencies.json'
@@ -637,6 +697,7 @@ git commit -m "Add project-specific validation dependencies"
 ```
 
 #### Environment-Specific Optimization
+
 ```bash
 # Development environment (fast feedback)
 timeout 10s node taskmanager-api.js generate-parallel-execution-plan null 8
@@ -653,6 +714,7 @@ timeout 10s node taskmanager-api.js generate-parallel-execution-plan null 4
 ### Dependency Design Principles
 
 #### 1. Use Appropriate Dependency Types
+
 ```bash
 # Use strict dependencies for critical prerequisites
 { "criterion": "build-validation", "type": "strict" }
@@ -665,11 +727,13 @@ timeout 10s node taskmanager-api.js generate-parallel-execution-plan null 4
 ```
 
 #### 2. Minimize Strict Dependencies
+
 - Keep strict dependencies to absolute necessities
 - Use weak dependencies for preferred ordering
 - This maximizes parallelization opportunities
 
 #### 3. Realistic Duration Estimates
+
 ```javascript
 {
   "estimatedDuration": 15000, // Be realistic about actual execution time
@@ -678,6 +742,7 @@ timeout 10s node taskmanager-api.js generate-parallel-execution-plan null 4
 ```
 
 #### 4. Accurate Resource Requirements
+
 ```javascript
 {
   "resourceRequirements": ["network", "cpu"], // Only list resources actually used
@@ -688,6 +753,7 @@ timeout 10s node taskmanager-api.js generate-parallel-execution-plan null 4
 ### Performance Optimization
 
 #### 1. Profile Your Validations
+
 ```bash
 # Monitor actual execution times
 timeout 10s node taskmanager-api.js get-execution-analytics
@@ -700,6 +766,7 @@ timeout 10s node taskmanager-api.js add-dependency 'slow-validation' '{
 ```
 
 #### 2. Optimize Critical Paths
+
 ```bash
 # Identify critical paths
 timeout 10s node taskmanager-api.js get-dependency-visualization
@@ -711,6 +778,7 @@ timeout 10s node taskmanager-api.js get-dependency-visualization
 ```
 
 #### 3. Balance Resource Usage
+
 ```bash
 # Monitor resource utilization in execution plans
 timeout 10s node taskmanager-api.js generate-parallel-execution-plan
@@ -723,6 +791,7 @@ timeout 10s node taskmanager-api.js generate-parallel-execution-plan
 ### Maintenance and Monitoring
 
 #### 1. Regular Validation
+
 ```bash
 # Regularly validate dependency graph health
 timeout 10s node taskmanager-api.js validate-dependency-graph
@@ -732,6 +801,7 @@ timeout 10s node taskmanager-api.js generate-parallel-execution-plan
 ```
 
 #### 2. Performance Monitoring
+
 ```bash
 # Track execution analytics over time
 timeout 10s node taskmanager-api.js get-execution-analytics
@@ -741,6 +811,7 @@ timeout 10s node taskmanager-api.js get-execution-analytics
 ```
 
 #### 3. Configuration Management
+
 ```bash
 # Version control dependency configurations
 timeout 10s node taskmanager-api.js save-dependency-config
@@ -755,26 +826,31 @@ git add .validation-dependencies.json
 ### Common Issues and Solutions
 
 #### Circular Dependencies
+
 **Problem**: Validation fails with circular dependency error
+
 ```json
 {
   "validation": {
     "valid": false,
-    "issues": [{"type": "cycle", "criteria": ["a", "b", "c", "a"]}]
+    "issues": [{ "type": "cycle", "criteria": ["a", "b", "c", "a"] }]
   }
 }
 ```
 
 **Solution**:
+
 1. Review the dependency chain in the error message
 2. Identify the weakest link in the cycle
 3. Change one strict dependency to weak or remove it entirely
 4. Re-validate the graph
 
 #### Missing Dependencies
+
 **Problem**: Validation fails with missing dependency error
 
 **Solution**:
+
 ```bash
 # Check what dependencies exist
 timeout 10s node taskmanager-api.js get-dependency-graph
@@ -789,10 +865,13 @@ timeout 10s node taskmanager-api.js add-dependency 'missing-validation' '{
 ```
 
 #### Poor Performance
+
 **Problem**: Execution plan shows low parallelization gain
 
 **Solutions**:
+
 1. **Review dependencies**: Too many strict dependencies limit parallelism
+
 ```bash
 # Check current execution plan
 timeout 10s node taskmanager-api.js generate-parallel-execution-plan
@@ -805,10 +884,13 @@ timeout 10s node taskmanager-api.js generate-parallel-execution-plan
 4. **Review resource requirements** - over-specification limits concurrency
 
 #### Resource Contention
+
 **Problem**: Execution plan shows resource contention warnings
 
 **Solutions**:
+
 1. **Stagger resource-intensive tasks**:
+
 ```bash
 # Add dependencies to spread resource usage
 timeout 10s node taskmanager-api.js add-dependency 'network-validation-2' '{
@@ -823,11 +905,14 @@ timeout 10s node taskmanager-api.js add-dependency 'network-validation-2' '{
    - Consider running resource-heavy tasks sequentially
 
 #### Configuration Loading Issues
+
 **Problem**: Cannot load saved configuration
 
 **Solutions**:
+
 1. **Check file permissions and path**
 2. **Validate JSON syntax**:
+
 ```bash
 # Test JSON validity
 node -e "console.log(JSON.parse(require('fs').readFileSync('config.json', 'utf8')))"
@@ -835,6 +920,7 @@ node -e "console.log(JSON.parse(require('fs').readFileSync('config.json', 'utf8'
 
 3. **Check configuration version compatibility**
 4. **Regenerate configuration** if corrupted:
+
 ```bash
 timeout 10s node taskmanager-api.js save-dependency-config 'backup-config.json'
 ```
@@ -842,14 +928,17 @@ timeout 10s node taskmanager-api.js save-dependency-config 'backup-config.json'
 ### Performance Debugging
 
 #### Slow Execution Planning
+
 **Problem**: Dependency operations take too long
 
 **Solutions**:
+
 1. **Reduce dependency graph size**:
    - Remove unused custom dependencies
    - Simplify complex dependency chains
 
 2. **Check for complex cycles**:
+
 ```bash
 timeout 10s node taskmanager-api.js validate-dependency-graph
 ```
@@ -857,15 +946,19 @@ timeout 10s node taskmanager-api.js validate-dependency-graph
 3. **Monitor system resources** during planning
 
 #### Inaccurate Duration Estimates
+
 **Problem**: Actual execution times don't match estimates
 
 **Solutions**:
+
 1. **Profile actual execution times**:
+
 ```bash
 timeout 10s node taskmanager-api.js get-execution-analytics
 ```
 
 2. **Update estimates based on real data**:
+
 ```bash
 timeout 10s node taskmanager-api.js add-dependency 'slow-validation' '{
   "estimatedDuration": 60000, // Updated from profiling
@@ -881,6 +974,7 @@ timeout 10s node taskmanager-api.js add-dependency 'slow-validation' '{
 ### Advanced Debugging
 
 #### Visualization Debugging
+
 ```bash
 # Generate comprehensive debugging information
 timeout 10s node taskmanager-api.js get-dependency-visualization
@@ -893,6 +987,7 @@ timeout 10s node taskmanager-api.js get-dependency-visualization
 ```
 
 #### Execution History Analysis
+
 ```bash
 # Review execution patterns over time
 timeout 10s node taskmanager-api.js get-execution-analytics
@@ -908,6 +1003,7 @@ timeout 10s node taskmanager-api.js get-execution-analytics
 ### CI/CD Pipeline Integration
 
 #### GitHub Actions Example
+
 ```yaml
 name: Optimized Validation with Dependency Management
 
@@ -944,6 +1040,7 @@ jobs:
 ```
 
 #### Jenkins Pipeline Example
+
 ```groovy
 pipeline {
     agent any
@@ -981,6 +1078,7 @@ pipeline {
 ### Development Workflow Integration
 
 #### Pre-commit Hook
+
 ```bash
 #!/bin/bash
 # .git/hooks/pre-commit

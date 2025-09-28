@@ -1,8 +1,8 @@
 /**
  * Coverage Monitoring Script
  *
- * Comprehensive coverage analysis and validation for CI/CD pipeline.
- * Generates detailed reports, tracks trends, and validates thresholds.
+ * Comprehensive coverage analysis And validation for CI/CD pipeline.
+ * Generates detailed reports, tracks trends, And validates thresholds.
  *
  * @author CI/CD Pipeline System
  * @version 1.0.0
@@ -46,9 +46,9 @@ const CONFIG = {
 };
 
 /**
- * Logger utility with formatting
+ * LOGGER utility with formatting
  */
-class Logger {
+class LOGGER {
   static info(message) {
     loggers.stopHook.log(`ℹ️  ${message}`);
   }
@@ -73,7 +73,7 @@ class Logger {
 }
 
 /**
- * Coverage monitoring and validation system
+ * Coverage monitoring And validation system
  */
 class CoverageMonitor {
   constructor() {
@@ -91,7 +91,7 @@ class CoverageMonitor {
    */
   run() {
     try {
-      Logger.info('Starting coverage monitoring...');
+      LOGGER.info('Starting coverage monitoring...');
 
       this.setupDirectories();
       this.runCoverageAnalysis();
@@ -102,15 +102,15 @@ class CoverageMonitor {
       this.generateSummary();
 
       const duration = Date.now() - this.startTime;
-      Logger.success(`Coverage monitoring completed in ${duration}ms`);
+      LOGGER.success(`Coverage monitoring completed in ${duration}ms`);
 
       // Check for failures
       if (!this.validation.passed) {
         throw new Error('Coverage validation failed');
       }
-    } catch (error) {
-      Logger.error(`Coverage monitoring failed: ${error.message}`);
-      Logger.debug(error.stack);
+    } catch {
+      LOGGER.error(`Coverage monitoring failed: ${error.message}`);
+      LOGGER.debug(error.stack);
       throw error;
     }
   }
@@ -119,13 +119,13 @@ class CoverageMonitor {
    * Setup required directories
    */
   setupDirectories() {
-    Logger.info('Setting up directories...');
+    LOGGER.info('Setting up directories...');
 
     const dirs = [CONFIG.paths.coverage, CONFIG.paths.reports];
     for (const dir of dirs) {
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
-        Logger.debug(`Created directory: ${dir}`);
+        LOGGER.debug(`Created directory: ${dir}`);
       }
     }
   }
@@ -134,7 +134,7 @@ class CoverageMonitor {
    * Run Jest coverage analysis
    */
   runCoverageAnalysis() {
-    Logger.info('Running coverage analysis...');
+    LOGGER.info('Running coverage analysis...');
 
     try {
       // Run Jest with coverage
@@ -143,11 +143,11 @@ class CoverageMonitor {
         timeout: 120000, // 2 minutes timeout
       });
 
-      Logger.success('Coverage analysis completed');
-    } catch (error) {
+      LOGGER.success('Coverage analysis completed');
+    } catch {
       // Check if it's just a test failure but coverage was generated
       if (fs.existsSync(CONFIG.paths.summary)) {
-        Logger.warning('Tests failed but coverage data was generated');
+        LOGGER.warning('Tests failed but coverage data was generated');
         this.validation.warnings.push(
           'Some tests failed during coverage analysis'
         );
@@ -161,7 +161,7 @@ class CoverageMonitor {
    * Load coverage data from Jest output
    */
   loadCoverageData() {
-    Logger.info('Loading coverage data...');
+    LOGGER.info('Loading coverage data...');
 
     if (!fs.existsSync(CONFIG.paths.summary)) {
       throw new Error('Coverage summary file not found');
@@ -174,11 +174,11 @@ class CoverageMonitor {
       this.coverageData = coverageData;
       this.validation.summary = coverageData.total;
 
-      Logger.success('Coverage data loaded successfully');
-      Logger.debug(
+      LOGGER.success('Coverage data loaded successfully');
+      LOGGER.debug(
         `Total coverage: ${JSON.stringify(coverageData.total, null, 2)}`
       );
-    } catch (error) {
+    } catch {
       throw new Error(`Failed to parse coverage data: ${error.message}`);
     }
   }
@@ -187,7 +187,7 @@ class CoverageMonitor {
    * Validate coverage against thresholds
    */
   validateThresholds() {
-    Logger.info('Validating coverage thresholds...');
+    LOGGER.info('Validating coverage thresholds...');
 
     const { summary } = this.validation;
     const failures = [];
@@ -215,19 +215,19 @@ class CoverageMonitor {
 
     // Log results
     if (failures.length > 0) {
-      Logger.error(
+      LOGGER.error(
         `Coverage validation failed with ${failures.length} critical issues`
       );
-      failures.forEach((failure) => Logger.error(failure));
+      failures.forEach((failure) => LOGGER.error(failure));
     }
 
     if (warnings.length > 0) {
-      Logger.warning(`Coverage validation has ${warnings.length} warnings`);
-      warnings.forEach((warning) => Logger.warning(warning));
+      LOGGER.warning(`Coverage validation has ${warnings.length} warnings`);
+      warnings.forEach((warning) => LOGGER.warning(warning));
     }
 
     if (failures.length === 0 && warnings.length === 0) {
-      Logger.success('All coverage thresholds met!');
+      LOGGER.success('All coverage thresholds met!');
     }
   }
 
@@ -235,7 +235,7 @@ class CoverageMonitor {
    * Generate detailed coverage reports
    */
   generateReports() {
-    Logger.info('Generating coverage reports...');
+    LOGGER.info('Generating coverage reports...');
 
     const reportData = {
       timestamp: new Date().toISOString(),
@@ -261,14 +261,14 @@ class CoverageMonitor {
       JSON.stringify(reportData, null, 2)
     );
 
-    Logger.success('Coverage reports generated');
+    LOGGER.success('Coverage reports generated');
   }
 
   /**
    * Update coverage trends
    */
   updateTrends() {
-    Logger.info('Updating coverage trends...');
+    LOGGER.info('Updating coverage trends...');
 
     let trends = [];
 
@@ -276,8 +276,8 @@ class CoverageMonitor {
     if (fs.existsSync(CONFIG.paths.trends)) {
       try {
         trends = JSON.parse(fs.readFileSync(CONFIG.paths.trends, 'utf8'));
-      } catch (error) {
-        Logger.warning('Could not load existing trends, starting fresh');
+      } catch {
+        LOGGER.warning('Could not load existing trends, starting fresh');
       }
     }
 
@@ -299,14 +299,14 @@ class CoverageMonitor {
     // Write updated trends
     fs.writeFileSync(CONFIG.paths.trends, JSON.stringify(trends, null, 2));
 
-    Logger.success('Coverage trends updated');
+    LOGGER.success('Coverage trends updated');
   }
 
   /**
    * Generate final summary
    */
   generateSummary() {
-    Logger.info('Generating final summary...');
+    LOGGER.info('Generating final summary...');
 
     const { summary } = this.validation;
 
@@ -320,7 +320,7 @@ class CoverageMonitor {
       const status = actual >= threshold ? '✅ Pass' : '❌ Fail';
       const metricName = metric.charAt(0).toUpperCase() + metric.slice(1);
 
-      console.log(
+      loggers.stopHook.log(
         `│ ${metricName.padEnd(12)} │ ${actual.toFixed(2).padStart(6)}%  │ ${threshold.toString().padStart(7)}%  │ ${status.padEnd(6)} │`
       );
     }
@@ -364,8 +364,8 @@ class CoverageMonitor {
           encoding: 'utf8',
         }).trim(),
       };
-    } catch (error) {
-      Logger.debug('Could not get Git information');
+    } catch {
+      LOGGER.debug('Could not get Git information');
       return {
         commit: 'unknown',
         branch: 'unknown',
@@ -381,8 +381,8 @@ if (require.main === module) {
   const monitor = new CoverageMonitor();
   try {
     monitor.run();
-  } catch (error) {
-    Logger.error(`Fatal error: ${error.message}`);
+  } catch {
+    LOGGER.error(`Fatal error: ${error.message}`);
     throw error;
   }
 }

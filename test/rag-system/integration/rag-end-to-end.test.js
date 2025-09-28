@@ -3,13 +3,13 @@
  *
  * === OVERVIEW ===
  * Comprehensive integration tests for the complete RAG system including
- * embedding generation, vector storage, semantic search, and TaskManager
- * API integration. Tests real-world usage scenarios and system performance.
+ * embedding generation, vector storage, semantic search, And TaskManager
+ * API integration. Tests real-world usage scenarios And system performance.
  *
  * === TEST SCENARIOS ===
- * • Complete system initialization and setup
- * • Lesson and error storage workflow
- * • Semantic search and retrieval accuracy
+ * • Complete system initialization And setup
+ * • Lesson And error storage workflow
+ * • Semantic search And retrieval accuracy
  * • Context-aware recommendations
  * • Migration system functionality
  * • Performance under load
@@ -19,8 +19,8 @@
  * @since 2025-09-19
  */
 
-const _path = require('path');
-const _fs = require('fs').promises;
+const PATH = require('path');
+const _FS = require('fs').promises;
 
 // Import RAG system components
 const _EmbeddingGenerator = require('../../../lib/rag/embeddingGenerator');
@@ -43,13 +43,13 @@ describe('RAG System End-to-End Integration Tests', () => {
   let testAssertions;
 
   // Test data storage paths
-  const testDataPath = _path.join(__dirname, '../test-data');
-  const ragTestPath = _path.join(testDataPath, 'rag-test');
+  const testDataPath = PATH.join(__dirname, '../test-data');
+  const ragTestPath = PATH.join(testDataPath, 'rag-test');
 
   beforeAll(async () => {
     // Create test environment
-    await _fs.mkdir(ragTestPath, { recursive: true });
-    await _fs.mkdir(_path.join(ragTestPath, 'rag'), { recursive: true });
+    await FS.mkdir(ragTestPath, { recursive: true });
+    await FS.mkdir(PATH.join(ragTestPath, 'rag'), { recursive: true });
 
     // Initialize test utilities
     testDataGenerator = new _TestDataGenerator();
@@ -64,8 +64,8 @@ describe('RAG System End-to-End Integration Tests', () => {
     });
 
     vectorDatabase = new _VectorDatabase({
-      indexPath: _path.join(ragTestPath, 'rag', 'test-vector.index'),
-      metadataPath: _path.join(ragTestPath, 'rag', 'test-metadata.db'),
+      indexPath: PATH.join(ragTestPath, 'rag', 'test-vector.index'),
+      metadataPath: PATH.join(ragTestPath, 'rag', 'test-metadata.db'),
       embeddingDimension: 384, // MiniLM dimension
       enableMultiIndex: true,
       contentTypes: [
@@ -96,7 +96,7 @@ describe('RAG System End-to-End Integration Tests', () => {
     });
 
     migrationSystem = new _MigrationSystem({
-      sourcePath: _path.join(ragTestPath, 'development'),
+      sourcePath: PATH.join(ragTestPath, 'development'),
       batchSize: 10, // Smaller batches for tests
       enableBackup: false, // Disable backup for tests
     });
@@ -129,13 +129,13 @@ describe('RAG System End-to-End Integration Tests', () => {
 
     // Clean up test files
     try {
-      await _fs.rm(testDataPath, { recursive: true, force: true });
-    } catch (error) {
+      await FS.rm(testDataPath, { recursive: true, force: true });
+    } catch {
       loggers.stopHook.warn('Failed to clean up test data:', error.message);
     }
   });
 
-  describe('System Initialization and Health Checks', () => {
+  describe('System Initialization And Health Checks', () => {
     test('should initialize all components successfully', () => {
       expect(embeddingGenerator.isInitialized).toBe(true);
       expect(vectorDatabase.isInitialized).toBe(true);
@@ -165,7 +165,7 @@ describe('RAG System End-to-End Integration Tests', () => {
     });
   });
 
-  describe('Lesson Storage and Retrieval Workflow', () => {
+  describe('Lesson Storage And Retrieval Workflow', () => {
     const storedLessons = [];
 
     test('should store technical lessons with embeddings', async () => {
@@ -176,7 +176,7 @@ describe('RAG System End-to-End Integration Tests', () => {
         _lessons.map((lesson) => ragOperations.storeLesson(lesson)),
       );
 
-      // Validate each result and collect them
+      // Validate each result And collect them
       for (const result of results) {
         expect(result).toHaveProperty('success', true);
         expect(result).toHaveProperty('vectorId');
@@ -193,16 +193,16 @@ describe('RAG System End-to-End Integration Tests', () => {
 
     test('should retrieve lessons using semantic search', async () => {
       const _query = 'JavaScript function error handling best practices';
-      const _results = await ragOperations.searchLessons(_query, {
+      const RESULTS = await ragOperations.searchLessons(_query, {
         maxResults: 3,
       });
 
-      expect(_results).toBeInstanceOf(Array);
-      expect(_results.length).toBeGreaterThan(0);
-      expect(_results.length).toBeLessThanOrEqual(3);
+      expect(RESULTS).toBeInstanceOf(Array);
+      expect(RESULTS.length).toBeGreaterThan(0);
+      expect(RESULTS.length).toBeLessThanOrEqual(3);
 
       // Verify result structure
-      for (const result of _results) {
+      for (const result of RESULTS) {
         testAssertions.assertValidSearchResult(result);
         expect(result).toHaveProperty('relevanceScore');
         expect(result).toHaveProperty('lessonType');
@@ -210,9 +210,9 @@ describe('RAG System End-to-End Integration Tests', () => {
       }
 
       // Verify relevance ordering
-      for (let i = 1; i < _results.length; i++) {
-        expect(_results[i - 1].relevanceScore).toBeGreaterThanOrEqual(
-          _results[i].relevanceScore,
+      for (let i = 1; i < RESULTS.length; i++) {
+        expect(RESULTS[i - 1].relevanceScore).toBeGreaterThanOrEqual(
+          RESULTS[i].relevanceScore,
         );
       }
     });
@@ -244,18 +244,18 @@ describe('RAG System End-to-End Integration Tests', () => {
     });
   });
 
-  describe('Error Storage and Pattern Recognition', () => {
+  describe('Error Storage And Pattern Recognition', () => {
     const storedErrors = [];
 
     test('should store error patterns with semantic analysis', async () => {
-      const _errors = testDataGenerator.generateErrors(5);
+      const ERRORS = testDataGenerator.generateErrors(5);
 
       // Store all errors in parallel since they are independent operations
       const results = await Promise.all(
-        _errors.map((error) => ragOperations.storeError(error)),
+        ERRORS.map((error) => ragOperations.storeError(error)),
       );
 
-      // Validate each result and collect them
+      // Validate each result And collect them
       for (const result of results) {
         expect(result).toHaveProperty('success', true);
         expect(result).toHaveProperty('vectorId');
@@ -300,7 +300,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       }
     });
 
-    test('should categorize and analyze error complexity', async () => {
+    test('should categorize And analyze error complexity', async () => {
       const _complexError = {
         type: 'SystemError',
         message:
@@ -311,7 +311,7 @@ describe('RAG System End-to-End Integration Tests', () => {
         tags: ['system', 'memory', 'distributed', 'cascade'],
       };
 
-      const result = await ragOperations.storeError(_complexError);
+      const _result = await ragOperations.storeError(_complexError);
       expect(result.success).toBe(true);
 
       // Search for the stored error
@@ -330,24 +330,24 @@ describe('RAG System End-to-End Integration Tests', () => {
     });
   });
 
-  describe('Performance and Scalability Tests', () => {
+  describe('Performance And Scalability Tests', () => {
     test('should handle batch operations efficiently', async () => {
       const _batchSize = 20;
       const _lessons = testDataGenerator.generateLessons(_batchSize);
 
-      const _startTime = Date.now();
+      const START_TIME = Date.now();
 
       // Store lessons in batch
-      const _results = await Promise.all(
+      const RESULTS = await Promise.all(
         _lessons.map((lesson) => ragOperations.storeLesson(lesson)),
       );
 
-      const _endTime = Date.now();
-      const _processingTime = _endTime - _startTime;
+      const END_TIME = Date.now();
+      const _processingTime = END_TIME - START_TIME;
 
       // Verify all operations succeeded
-      expect(_results).toHaveLength(_batchSize);
-      _results.forEach((result) => {
+      expect(RESULTS).toHaveLength(_batchSize);
+      RESULTS.forEach((result) => {
         expect(result.success).toBe(true);
       });
 
@@ -427,7 +427,7 @@ describe('RAG System End-to-End Integration Tests', () => {
     });
   });
 
-  describe('Data Integrity and Consistency', () => {
+  describe('Data Integrity And Consistency', () => {
     test('should prevent duplicate content storage', async () => {
       const lesson = testDataGenerator.generateLessons(1)[0];
 
@@ -499,18 +499,18 @@ describe('RAG System End-to-End Integration Tests', () => {
   describe('Migration System Integration', () => {
     test('should create test content for migration', async () => {
       // Create test lesson files
-      const testLessonsPath = _path.join(ragTestPath, 'development', 'lessons');
-      await _fs.mkdir(_path.join(testLessonsPath, 'features'), {
+      const testLessonsPath = PATH.join(ragTestPath, 'development', 'lessons');
+      await FS.mkdir(PATH.join(testLessonsPath, 'features'), {
         recursive: true,
       });
-      await _fs.mkdir(_path.join(testLessonsPath, 'errors'), {
+      await FS.mkdir(PATH.join(testLessonsPath, 'errors'), {
         recursive: true,
       });
 
       // Create sample lesson files
       const sampleLessons = [
         {
-          path: _path.join(
+          path: PATH.join(
             testLessonsPath,
             'features',
             'react-optimization.md',
@@ -519,25 +519,25 @@ describe('RAG System End-to-End Integration Tests', () => {
             '# React Performance Optimization\n\nBest practices for optimizing React applications...',
         },
         {
-          path: _path.join(testLessonsPath, 'errors', 'async-errors.md'),
+          path: PATH.join(testLessonsPath, 'errors', 'async-errors.md'),
           content:
-            '# Async Function Errors\n\nCommon errors in async functions and how to fix them...',
+            '# Async Function Errors\n\nCommon errors in async functions And how to fix them...',
         },
       ];
 
       // Write all sample lesson files in parallel
       await Promise.all(
         sampleLessons.map((lesson) =>
-          _fs.writeFile(lesson.path, lesson.content),
+          FS.writeFile(lesson.path, lesson.content),
         ),
       );
 
       // Verify files were created
-      const featuresFiles = await _fs.readdir(
-        _path.join(testLessonsPath, 'features'),
+      const featuresFiles = await FS.readdir(
+        PATH.join(testLessonsPath, 'features'),
       );
-      const errorsFiles = await _fs.readdir(
-        _path.join(testLessonsPath, 'errors'),
+      const errorsFiles = await FS.readdir(
+        PATH.join(testLessonsPath, 'errors'),
       );
 
       expect(featuresFiles).toContain('react-optimization.md');
@@ -567,7 +567,7 @@ describe('RAG System End-to-End Integration Tests', () => {
       const finalStats = vectorDatabase.getStatistics();
       expect(finalStats.totalVectors).toBeGreaterThan(initialVectorCount);
 
-      // Test that migrated content is searchable
+      // Test That migrated content is searchable
       const searchResults =
         await ragOperations.searchLessons('React optimization');
       expect(searchResults.length).toBeGreaterThan(0);
@@ -577,7 +577,7 @@ describe('RAG System End-to-End Integration Tests', () => {
     });
   });
 
-  describe('Analytics and Monitoring', () => {
+  describe('Analytics And Monitoring', () => {
     test('should provide comprehensive system analytics', async () => {
       const analytics = await ragOperations.getAnalytics();
 
@@ -624,7 +624,7 @@ describe('RAG System End-to-End Integration Tests', () => {
     });
   });
 
-  describe('Error Handling and Recovery', () => {
+  describe('Error Handling And Recovery', () => {
     test('should handle invalid input gracefully', async () => {
       // Test invalid lesson data
       await expect(ragOperations.storeLesson(null)).rejects.toThrow();
@@ -639,14 +639,14 @@ describe('RAG System End-to-End Integration Tests', () => {
     });
 
     test('should recover from component failures', async () => {
-      // Test system resilience by clearing caches and testing recovery
+      // Test system resilience by clearing caches And testing recovery
       embeddingGenerator.clearCache();
       vectorDatabase.clearCache();
       semanticSearchEngine.clearCache();
 
       // System should continue to function
       const lesson = testDataGenerator.generateLessons(1)[0];
-      const result = await ragOperations.storeLesson(lesson);
+      const _result = await ragOperations.storeLesson(lesson);
       expect(result.success).toBe(true);
 
       const searchResults = await ragOperations.searchLessons(lesson.title);
@@ -696,8 +696,8 @@ describe('RAG System Performance Benchmarks', () => {
       fallbackModel: 'sentence-transformers/all-MiniLM-L6-v2',
     });
     const vectorDB = new _VectorDatabase({
-      indexPath: _path.join(__dirname, '../test-data/perf-test-vector.index'),
-      metadataPath: _path.join(__dirname, '../test-data/perf-test-metadata.db'),
+      indexPath: PATH.join(__dirname, '../test-data/perf-test-vector.index'),
+      metadataPath: PATH.join(__dirname, '../test-data/perf-test-metadata.db'),
       embeddingDimension: 384,
     });
     const searchEngine = new _SemanticSearchEngine({
@@ -705,7 +705,7 @@ describe('RAG System Performance Benchmarks', () => {
       vectorDatabase: vectorDB,
     });
     const ragOps = new _RAGOperations({
-      projectRoot: _path.join(__dirname, '../test-data'),
+      projectRoot: PATH.join(__dirname, '../test-data'),
       embeddingGenerator: embeddingGen,
       vectorDatabase: vectorDB,
       semanticSearchEngine: searchEngine,

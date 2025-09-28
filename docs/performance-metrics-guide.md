@@ -21,16 +21,19 @@ The Stop Hook Validation Performance Metrics system provides comprehensive perfo
 The performance metrics system consists of three main layers:
 
 ### 1. Collection Layer
+
 - **Performance Metrics Collector**: Captures detailed timing and resource usage data during validation execution
 - **Resource Monitor**: Tracks CPU, memory, and disk I/O usage
 - **Validation Criterion Tracker**: Provides granular timing for each validation step
 
 ### 2. Analysis Layer
+
 - **Trend Analyzer**: Performs sophisticated statistical analysis on historical performance data
 - **Bottleneck Identifier**: Identifies performance bottlenecks and optimization opportunities
 - **Pattern Recognition**: Detects seasonal patterns and performance anomalies
 
 ### 3. Storage Layer
+
 - **Metrics Database**: Persistent storage for performance metrics with efficient querying
 - **Time-Series Optimization**: Optimized storage format for historical trend analysis
 - **Data Retention**: Configurable retention policies for metrics data
@@ -57,6 +60,7 @@ const analyzer = new TrendAnalyzer(projectRoot);
 ```
 
 **Key Features:**
+
 - Time series decomposition (trend, seasonal, residual components)
 - Performance health scoring and risk assessment
 - Volatility analysis and pattern recognition
@@ -68,16 +72,19 @@ const analyzer = new TrendAnalyzer(projectRoot);
 ### Performance Metrics Endpoints
 
 #### Get Validation Performance Metrics
+
 ```bash
 timeout 10s node taskmanager-api.js get-validation-performance-metrics [options]
 ```
 
 **Options:**
+
 - `limit`: Maximum number of metrics to retrieve (default: 100)
 - `timeRange`: Time range in days for filtering (default: 30)
 - `criteria`: Filter by specific validation criteria
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -106,16 +113,19 @@ timeout 10s node taskmanager-api.js get-validation-performance-metrics [options]
 ```
 
 #### Analyze Performance Trends
+
 ```bash
 timeout 10s node taskmanager-api.js analyze-performance-trends '{"timeRange":30,"granularity":"daily"}'
 ```
 
 **Parameters:**
+
 - `timeRange`: Number of days to analyze (default: 90)
 - `granularity`: Analysis granularity (`hourly`, `daily`, `weekly`)
 - `includeForecasting`: Enable performance forecasting (default: true)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -163,46 +173,55 @@ timeout 10s node taskmanager-api.js analyze-performance-trends '{"timeRange":30,
 ### Advanced Analysis Endpoints
 
 #### Analyze Health Trends
+
 ```bash
 timeout 10s node taskmanager-api.js analyze-health-trends '{"timeRange":60}'
 ```
 
 #### Analyze Volatility
+
 ```bash
 timeout 10s node taskmanager-api.js analyze-volatility '{"window":14}'
 ```
 
 #### Perform Comparative Analysis
+
 ```bash
 timeout 10s node taskmanager-api.js perform-comparative-analysis '{"baseline":"last_month","comparison":"current_month"}'
 ```
 
 #### Generate Performance Forecasts
+
 ```bash
 timeout 10s node taskmanager-api.js generate-performance-forecasts '{"horizon":7,"confidence":0.95}'
 ```
 
 #### Compare with Baseline
+
 ```bash
 timeout 10s node taskmanager-api.js compare-with-baseline '{"baselineType":"historical_average","timeRange":30}'
 ```
 
 #### Calculate Performance Statistics
+
 ```bash
 timeout 10s node taskmanager-api.js calculate-performance-statistics '{"groupBy":"criterion"}'
 ```
 
 #### Detect Performance Patterns
+
 ```bash
 timeout 10s node taskmanager-api.js detect-performance-patterns '{"patternType":"seasonal"}'
 ```
 
 #### Identify Performance Bottlenecks
+
 ```bash
 timeout 10s node taskmanager-api.js identify-performance-bottlenecks '{"threshold":0.95}'
 ```
 
 #### Get Performance Summary
+
 ```bash
 timeout 10s node taskmanager-api.js get-performance-summary '{"timeRange":7,"includeRecommendations":true}'
 ```
@@ -283,11 +302,13 @@ Each metric record contains:
 The trend analyzer performs sophisticated time series analysis:
 
 #### Decomposition Analysis
+
 - **Trend Component**: Long-term directional movement
 - **Seasonal Component**: Recurring patterns (hourly, daily, weekly)
 - **Residual Component**: Random variations and anomalies
 
 #### Pattern Recognition
+
 - **Seasonality Detection**: Identifies recurring performance patterns
 - **Anomaly Detection**: Flags unusual performance deviations
 - **Cyclical Patterns**: Detects longer-term performance cycles
@@ -295,22 +316,25 @@ The trend analyzer performs sophisticated time series analysis:
 ### Statistical Methods
 
 #### Performance Health Scoring
+
 ```javascript
-healthScore = (
-  executionTimeWeight * executionTimeScore +
-  successRateWeight * successRateScore +
-  resourceEfficiencyWeight * resourceEfficiencyScore +
-  stabilityWeight * stabilityScore
-) * 100
+healthScore =
+  (executionTimeWeight * executionTimeScore +
+    successRateWeight * successRateScore +
+    resourceEfficiencyWeight * resourceEfficiencyScore +
+    stabilityWeight * stabilityScore) *
+  100;
 ```
 
 **Scoring Components:**
+
 - **Execution Time**: Compared to historical baselines
 - **Success Rate**: Percentage of successful validations
 - **Resource Efficiency**: CPU, memory, and I/O usage optimization
 - **Stability**: Consistency and predictability of performance
 
 #### Volatility Analysis
+
 - **Rolling Standard Deviation**: Measures performance consistency
 - **Risk Assessment**: Identifies periods of high performance variability
 - **Confidence Intervals**: Statistical bounds for expected performance
@@ -320,11 +344,13 @@ healthScore = (
 The system provides performance forecasting using:
 
 #### Time Series Forecasting
+
 - **ARIMA Models**: Auto-regressive integrated moving average
 - **Exponential Smoothing**: Weighted historical data
 - **Seasonal Adjustments**: Account for recurring patterns
 
 #### Confidence Levels
+
 - **95% Confidence**: Standard forecasting confidence
 - **99% Confidence**: Conservative forecasting for critical planning
 - **Custom Levels**: Configurable confidence thresholds
@@ -347,6 +373,7 @@ timeout 10s node taskmanager-api.js get-performance-summary '{"timeRange":7,"inc
 ### Advanced Analysis Workflows
 
 #### Performance Health Assessment
+
 ```bash
 # 1. Analyze overall health trends
 timeout 10s node taskmanager-api.js analyze-health-trends '{"timeRange":90}'
@@ -362,6 +389,7 @@ timeout 10s node taskmanager-api.js generate-performance-forecasts '{"horizon":1
 ```
 
 #### Comparative Analysis
+
 ```bash
 # Compare current month vs last month
 timeout 10s node taskmanager-api.js perform-comparative-analysis '{
@@ -377,6 +405,7 @@ timeout 10s node taskmanager-api.js compare-with-baseline '{
 ```
 
 #### Pattern Detection
+
 ```bash
 # Detect seasonal patterns
 timeout 10s node taskmanager-api.js detect-performance-patterns '{
@@ -394,6 +423,7 @@ timeout 10s node taskmanager-api.js detect-performance-patterns '{
 ### Integration with CI/CD
 
 #### Pre-Deployment Performance Check
+
 ```bash
 #!/bin/bash
 # performance-check.sh
@@ -413,6 +443,7 @@ echo "Performance check passed: Health score $HEALTH_SCORE"
 ```
 
 #### Automated Performance Alerts
+
 ```bash
 #!/bin/bash
 # performance-monitor.sh
@@ -443,13 +474,13 @@ const metricsConfig = {
   bottleneckDetection: {
     enabled: true,
     threshold: 0.95,
-    autoOptimize: false
+    autoOptimize: false,
   },
   retention: {
-    metrics: "90d",
-    aggregated: "1y",
-    summaries: "5y"
-  }
+    metrics: '90d',
+    aggregated: '1y',
+    summaries: '5y',
+  },
 };
 ```
 
@@ -458,23 +489,23 @@ const metricsConfig = {
 ```javascript
 const trendConfig = {
   defaultTimeRange: 90,
-  granularity: "daily",
+  granularity: 'daily',
   seasonalityDetection: {
     enabled: true,
     sensitivity: 0.8,
-    minCycles: 3
+    minCycles: 3,
   },
   anomalyDetection: {
     enabled: true,
     threshold: 2.0,
-    method: "z-score"
+    method: 'z-score',
   },
   forecasting: {
     enabled: true,
     horizon: 14,
     confidence: 0.95,
-    method: "auto"
-  }
+    method: 'auto',
+  },
 };
 ```
 
@@ -486,28 +517,28 @@ const performanceThresholds = {
     excellent: 90,
     good: 80,
     fair: 70,
-    poor: 60
+    poor: 60,
   },
   executionTime: {
-    fast: 1000,      // < 1s
-    normal: 5000,    // < 5s
-    slow: 10000,     // < 10s
-    critical: 30000  // > 30s
+    fast: 1000, // < 1s
+    normal: 5000, // < 5s
+    slow: 10000, // < 10s
+    critical: 30000, // > 30s
   },
   resourceUsage: {
     cpu: {
       low: 25,
       normal: 50,
       high: 75,
-      critical: 90
+      critical: 90,
     },
     memory: {
-      low: 100,      // MB
+      low: 100, // MB
       normal: 500,
       high: 1000,
-      critical: 2000
-    }
-  }
+      critical: 2000,
+    },
+  },
 };
 ```
 
@@ -516,6 +547,7 @@ const performanceThresholds = {
 ### Common Issues
 
 #### High Memory Usage During Analysis
+
 **Symptoms**: System runs out of memory during trend analysis
 **Solution**: Reduce analysis time range or increase system memory
 
@@ -528,6 +560,7 @@ timeout 10s node taskmanager-api.js analyze-performance-trends '{"timeRange":90,
 ```
 
 #### Missing Performance Data
+
 **Symptoms**: API returns empty metrics arrays
 **Solution**: Verify metrics collection is enabled and functioning
 
@@ -540,6 +573,7 @@ grep -r "metricsEnabled" . --include="*.js" --include="*.json"
 ```
 
 #### Slow Analysis Performance
+
 **Symptoms**: Trend analysis takes too long to complete
 **Solution**: Optimize query parameters and consider data archival
 
@@ -554,16 +588,19 @@ timeout 10s node taskmanager-api.js analyze-performance-trends '{"granularity":"
 ### Performance Optimization
 
 #### Database Query Optimization
+
 - Use appropriate time range filters
 - Leverage indexed timestamp columns
 - Consider data aggregation for historical analysis
 
 #### Memory Management
+
 - Implement streaming for large datasets
 - Use pagination for API responses
 - Clear analysis caches regularly
 
 #### Analysis Efficiency
+
 - Cache frequently accessed computations
 - Use background processing for heavy analysis
 - Implement incremental analysis updates
@@ -573,11 +610,13 @@ timeout 10s node taskmanager-api.js analyze-performance-trends '{"granularity":"
 ### Monitoring Strategy
 
 #### Continuous Monitoring
+
 - Set up automated daily performance health checks
 - Configure alerts for performance degradation
 - Monitor resource usage trends
 
 #### Proactive Analysis
+
 - Review weekly performance summaries
 - Investigate anomalies promptly
 - Track long-term performance trends
@@ -585,11 +624,13 @@ timeout 10s node taskmanager-api.js analyze-performance-trends '{"granularity":"
 ### Performance Optimization
 
 #### Regular Maintenance
+
 - Archive old metrics data periodically
 - Update performance baselines quarterly
 - Review and adjust threshold configurations
 
 #### Capacity Planning
+
 - Use forecasting for resource planning
 - Monitor growth trends in validation complexity
 - Plan for seasonal performance variations
@@ -597,6 +638,7 @@ timeout 10s node taskmanager-api.js analyze-performance-trends '{"granularity":"
 ### Alert Configuration
 
 #### Threshold-Based Alerts
+
 ```bash
 # Health score below 80
 if (healthScore < 80) trigger_alert("performance_degradation")
@@ -609,6 +651,7 @@ if (cpuUsage > 90) trigger_alert("high_cpu_usage")
 ```
 
 #### Trend-Based Alerts
+
 ```bash
 # Performance degrading for 3+ consecutive days
 if (degradingTrend.days >= 3) trigger_alert("sustained_degradation")
@@ -620,11 +663,13 @@ if (volatilityIncrease > 50) trigger_alert("performance_instability")
 ### Data Retention
 
 #### Retention Strategy
+
 - **Raw Metrics**: 90 days for detailed analysis
 - **Daily Aggregates**: 1 year for trend analysis
 - **Monthly Summaries**: 5 years for long-term planning
 
 #### Archival Process
+
 ```bash
 # Archive old metrics (run monthly)
 timeout 30s node taskmanager-api.js archive-old-metrics '{"olderThan":"90d"}'

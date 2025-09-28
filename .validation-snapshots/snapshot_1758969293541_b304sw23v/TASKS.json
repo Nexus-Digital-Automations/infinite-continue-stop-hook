@@ -23,9 +23,7 @@
       },
       "dependencies": [],
       "estimated_effort": 5,
-      "required_capabilities": [
-        "general"
-      ],
+      "required_capabilities": ["general"],
       "created_at": "2025-09-22T06:28:03.405Z",
       "updated_at": "2025-09-22T06:28:11.853Z",
       "created_by": "system",
@@ -60,9 +58,7 @@
       },
       "dependencies": [],
       "estimated_effort": 5,
-      "required_capabilities": [
-        "general"
-      ],
+      "required_capabilities": ["general"],
       "created_at": "2025-09-22T07:56:06.743Z",
       "updated_at": "2025-09-22T07:56:14.693Z",
       "created_by": "system",
@@ -97,9 +93,7 @@
       },
       "dependencies": [],
       "estimated_effort": 10,
-      "required_capabilities": [
-        "testing"
-      ],
+      "required_capabilities": ["testing"],
       "created_at": "2025-09-25T00:46:54.871Z",
       "updated_at": "2025-09-25T00:47:16.600Z",
       "created_by": "autonomous_system",
@@ -138,9 +132,7 @@
       },
       "dependencies": [],
       "estimated_effort": 9,
-      "required_capabilities": [
-        "testing"
-      ],
+      "required_capabilities": ["testing"],
       "created_at": "2025-09-25T00:46:54.872Z",
       "updated_at": "2025-09-25T00:46:54.872Z",
       "created_by": "autonomous_system",
@@ -179,10 +171,7 @@
       },
       "dependencies": [],
       "estimated_effort": 5,
-      "required_capabilities": [
-        "frontend",
-        "backend"
-      ],
+      "required_capabilities": ["frontend", "backend"],
       "created_at": "2025-09-22T06:28:27.223Z",
       "updated_at": "2025-09-22T06:28:32.284Z",
       "created_by": "system",
@@ -217,9 +206,7 @@
       },
       "dependencies": [],
       "estimated_effort": 5,
-      "required_capabilities": [
-        "general"
-      ],
+      "required_capabilities": ["general"],
       "created_at": "2025-09-22T06:32:17.567Z",
       "updated_at": "2025-09-22T06:32:24.169Z",
       "created_by": "system",
@@ -254,9 +241,7 @@
       },
       "dependencies": [],
       "estimated_effort": 5,
-      "required_capabilities": [
-        "general"
-      ],
+      "required_capabilities": ["general"],
       "created_at": "2025-09-22T07:58:05.463Z",
       "updated_at": "2025-09-22T07:58:15.474Z",
       "created_by": "system",
@@ -291,9 +276,7 @@
       },
       "dependencies": [],
       "estimated_effort": 5,
-      "required_capabilities": [
-        "general"
-      ],
+      "required_capabilities": ["general"],
       "created_at": "2025-09-22T07:58:06.514Z",
       "updated_at": "2025-09-22T07:58:15.474Z",
       "created_by": "system",
@@ -328,9 +311,7 @@
       },
       "dependencies": [],
       "estimated_effort": 5,
-      "required_capabilities": [
-        "general"
-      ],
+      "required_capabilities": ["general"],
       "created_at": "2025-09-22T07:58:07.672Z",
       "updated_at": "2025-09-22T07:58:15.474Z",
       "created_by": "system",
@@ -365,9 +346,7 @@
       },
       "dependencies": [],
       "estimated_effort": 5,
-      "required_capabilities": [
-        "general"
-      ],
+      "required_capabilities": ["general"],
       "created_at": "2025-09-22T08:00:05.044Z",
       "updated_at": "2025-09-22T08:00:09.598Z",
       "created_by": "system",
@@ -402,9 +381,7 @@
       },
       "dependencies": [],
       "estimated_effort": 5,
-      "required_capabilities": [
-        "general"
-      ],
+      "required_capabilities": ["general"],
       "created_at": "2025-09-22T08:00:05.910Z",
       "updated_at": "2025-09-22T08:00:10.935Z",
       "created_by": "system",
@@ -439,9 +416,7 @@
       },
       "dependencies": [],
       "estimated_effort": 5,
-      "required_capabilities": [
-        "documentation"
-      ],
+      "required_capabilities": ["documentation"],
       "created_at": "2025-09-22T08:00:07.451Z",
       "updated_at": "2025-09-23T18:25:00.000Z",
       "created_by": "system",
@@ -476,9 +451,7 @@
       },
       "dependencies": [],
       "estimated_effort": 5,
-      "required_capabilities": [
-        "general"
-      ],
+      "required_capabilities": ["general"],
       "created_at": "2025-09-22T08:00:12.320Z",
       "updated_at": "2025-09-22T08:00:16.332Z",
       "created_by": "system",
@@ -513,9 +486,7 @@
       },
       "dependencies": [],
       "estimated_effort": 5,
-      "required_capabilities": [
-        "general"
-      ],
+      "required_capabilities": ["general"],
       "created_at": "2025-09-23T15:05:53.379Z",
       "updated_at": "2025-09-23T15:05:53.380Z",
       "created_by": "system",
@@ -550,9 +521,7 @@
       },
       "dependencies": [],
       "estimated_effort": 9,
-      "required_capabilities": [
-        "testing"
-      ],
+      "required_capabilities": ["testing"],
       "created_at": "2025-09-25T00:46:54.872Z",
       "updated_at": "2025-09-25T00:46:54.872Z",
       "created_by": "autonomous_system",
@@ -591,9 +560,7 @@
       },
       "dependencies": [],
       "estimated_effort": 9,
-      "required_capabilities": [
-        "testing"
-      ],
+      "required_capabilities": ["testing"],
       "created_at": "2025-09-25T00:46:54.872Z",
       "updated_at": "2025-09-25T00:46:54.872Z",
       "created_by": "autonomous_system",
@@ -632,9 +599,7 @@
       },
       "dependencies": [],
       "estimated_effort": 9,
-      "required_capabilities": [
-        "testing"
-      ],
+      "required_capabilities": ["testing"],
       "created_at": "2025-09-25T00:46:54.872Z",
       "updated_at": "2025-09-25T00:46:54.872Z",
       "created_by": "autonomous_system",
@@ -673,9 +638,7 @@
       },
       "dependencies": [],
       "estimated_effort": 9,
-      "required_capabilities": [
-        "testing"
-      ],
+      "required_capabilities": ["testing"],
       "created_at": "2025-09-25T00:46:54.872Z",
       "updated_at": "2025-09-25T00:46:54.872Z",
       "created_by": "autonomous_system",
@@ -714,11 +677,7 @@
       },
       "dependencies": [],
       "estimated_effort": 9,
-      "required_capabilities": [
-        "analysis",
-        "backend",
-        "testing"
-      ],
+      "required_capabilities": ["analysis", "backend", "testing"],
       "created_at": "2025-09-25T00:46:54.872Z",
       "updated_at": "2025-09-25T00:46:54.872Z",
       "created_by": "autonomous_system",
@@ -757,9 +716,7 @@
       },
       "dependencies": [],
       "estimated_effort": 12,
-      "required_capabilities": [
-        "general"
-      ],
+      "required_capabilities": ["general"],
       "created_at": "2025-09-25T00:46:54.872Z",
       "updated_at": "2025-09-25T00:46:54.872Z",
       "created_by": "autonomous_system",
@@ -798,9 +755,7 @@
       },
       "dependencies": [],
       "estimated_effort": 11,
-      "required_capabilities": [
-        "testing"
-      ],
+      "required_capabilities": ["testing"],
       "created_at": "2025-09-25T00:46:54.872Z",
       "updated_at": "2025-09-25T00:46:54.872Z",
       "created_by": "autonomous_system",
@@ -881,27 +836,9 @@
   "workflow_config": {
     "require_approval": true,
     "auto_reject_timeout_hours": 168,
-    "allowed_statuses": [
-      "suggested",
-      "approved",
-      "in-progress",
-      "completed",
-      "blocked",
-      "rejected"
-    ],
-    "allowed_task_types": [
-      "error",
-      "feature",
-      "test",
-      "audit"
-    ],
-    "required_fields": [
-      "title",
-      "description",
-      "business_value",
-      "category",
-      "type"
-    ],
+    "allowed_statuses": ["suggested", "approved", "in-progress", "completed", "blocked", "rejected"],
+    "allowed_task_types": ["error", "feature", "test", "audit"],
+    "required_fields": ["title", "description", "business_value", "category", "type"],
     "auto_generation_enabled": true,
     "mandatory_test_gate": true,
     "security_validation_required": true
@@ -911,9 +848,7 @@
       "title_pattern": "Implement comprehensive tests for {feature_title}",
       "description_pattern": "Create unit tests, integration tests, and E2E tests to achieve >{coverage}% coverage for {feature_title}. Must validate all functionality, edge cases, and error conditions.",
       "priority": "high",
-      "required_capabilities": [
-        "testing"
-      ],
+      "required_capabilities": ["testing"],
       "validation_requirements": {
         "test_coverage": true,
         "linter_pass": true
@@ -923,10 +858,7 @@
       "title_pattern": "Security and quality audit for {feature_title}",
       "description_pattern": "Run semgrep security scan, dependency vulnerability check, code quality analysis, and compliance validation for {feature_title}. Zero tolerance for security vulnerabilities.",
       "priority": "high",
-      "required_capabilities": [
-        "security",
-        "analysis"
-      ],
+      "required_capabilities": ["security", "analysis"],
       "validation_requirements": {
         "security_scan": true,
         "linter_pass": true,
@@ -935,32 +867,12 @@
     }
   },
   "priority_system": {
-    "order": [
-      "USER_REQUESTS",
-      "ERROR",
-      "AUDIT",
-      "FEATURE",
-      "TEST"
-    ],
+    "order": ["USER_REQUESTS", "ERROR", "AUDIT", "FEATURE", "TEST"],
     "error_priorities": {
-      "critical": [
-        "build-breaking",
-        "security-vulnerability",
-        "production-down"
-      ],
-      "high": [
-        "linter-errors",
-        "type-errors",
-        "test-failures"
-      ],
-      "normal": [
-        "warnings",
-        "optimization-opportunities"
-      ],
-      "low": [
-        "documentation-improvements",
-        "code-style"
-      ]
+      "critical": ["build-breaking", "security-vulnerability", "production-down"],
+      "high": ["linter-errors", "type-errors", "test-failures"],
+      "normal": ["warnings", "optimization-opportunities"],
+      "low": ["documentation-improvements", "code-style"]
     }
   },
   "metadata": {

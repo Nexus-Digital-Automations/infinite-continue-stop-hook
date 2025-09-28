@@ -9,28 +9,12 @@
   "workflow_config": {
     "require_approval": true,
     "auto_reject_timeout_hours": 168,
-    "allowed_statuses": [
-      "suggested",
-      "approved",
-      "rejected",
-      "implemented"
-    ],
-    "allowed_feature_types": [
-      "error",
-      "feature",
-      "test",
-      "audit"
-    ],
+    "allowed_statuses": ["suggested", "approved", "rejected", "implemented"],
+    "allowed_feature_types": ["error", "feature", "test", "audit"],
     "auto_generation_enabled": true,
     "mandatory_test_gate": true,
     "security_validation_required": true,
-    "required_fields": [
-      "title",
-      "description",
-      "business_value",
-      "category",
-      "type"
-    ]
+    "required_fields": ["title", "description", "business_value", "category", "type"]
   },
   "metadata": {
     "version": "2.0.0",

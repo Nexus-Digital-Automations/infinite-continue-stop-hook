@@ -1,8 +1,8 @@
 # Comprehensive Testing Examples and FEATURES.json Testing Documentation
 
-*Author: Testing Analysis Agent*
-*Version: 1.0.0*
-*Date: 2025-09-23*
+_Author: Testing Analysis Agent_
+_Version: 1.0.0_
+_Date: 2025-09-23_
 
 ## 🎯 Overview
 
@@ -87,6 +87,7 @@ The FEATURES.json system is the core feature management component with the follo
 ### Testing Approach for FEATURES.json
 
 #### 1. Schema Validation Testing
+
 ```javascript
 describe('FEATURES.json Schema Validation', () => {
   test('should validate feature object structure', () => {
@@ -96,7 +97,14 @@ describe('FEATURES.json Schema Validation', () => {
     expect(feature).toHaveProperty('description');
     expect(feature).toHaveProperty('business_value');
     expect(feature).toHaveProperty('category');
-    expect(feature.category).toBeOneOf(['enhancement', 'bug-fix', 'new-feature', 'performance', 'security', 'documentation']);
+    expect(feature.category).toBeOneOf([
+      'enhancement',
+      'bug-fix',
+      'new-feature',
+      'performance',
+      'security',
+      'documentation',
+    ]);
   });
 
   test('should validate metadata structure', () => {
@@ -111,6 +119,7 @@ describe('FEATURES.json Schema Validation', () => {
 ```
 
 #### 2. Feature Lifecycle Testing
+
 ```javascript
 describe('Feature Lifecycle Management', () => {
   test('should handle complete feature lifecycle', async () => {
@@ -120,7 +129,7 @@ describe('Feature Lifecycle Management', () => {
     // 1. Suggest feature
     const featureData = TestDataFactory.createFeatureData({
       title: 'Lifecycle Test Feature',
-      category: 'enhancement'
+      category: 'enhancement',
     });
 
     const suggestionResult = await APIExecutor.createTestFeature(featureData);
@@ -130,22 +139,21 @@ describe('Feature Lifecycle Management', () => {
     // 2. Approve feature
     const approvalResult = await APIExecutor.execAPI('approve-feature', [
       suggestionResult.feature.id,
-      JSON.stringify({ approved_by: 'test-agent', notes: 'Test approval' })
+      JSON.stringify({ approved_by: 'test-agent', notes: 'Test approval' }),
     ]);
     expect(approvalResult.success).toBe(true);
     expect(approvalResult.feature.status).toBe('approved');
 
     // 3. List approved features
-    const listResult = await APIExecutor.execAPI('list-features', [
-      JSON.stringify({ status: 'approved' })
-    ]);
+    const listResult = await APIExecutor.execAPI('list-features', [JSON.stringify({ status: 'approved' })]);
     expect(listResult.success).toBe(true);
-    expect(listResult.features.some(f => f.id === suggestionResult.feature.id)).toBe(true);
+    expect(listResult.features.some((f) => f.id === suggestionResult.feature.id)).toBe(true);
   });
 });
 ```
 
 #### 3. Workflow Configuration Testing
+
 ```javascript
 describe('Workflow Configuration', () => {
   test('should enforce approval requirements', async () => {
@@ -165,13 +173,13 @@ describe('Workflow Configuration', () => {
     // Valid transition: suggested → approved
     const approvalResult = await APIExecutor.execAPI('approve-feature', [
       suggestionResult.feature.id,
-      JSON.stringify({ approved_by: 'test-agent' })
+      JSON.stringify({ approved_by: 'test-agent' }),
     ]);
     expect(approvalResult.success).toBe(true);
 
     // Invalid transition: approved → suggested (should fail)
     const invalidResult = await APIExecutor.execAPI('suggest-feature', [
-      JSON.stringify({ ...featureData, id: suggestionResult.feature.id })
+      JSON.stringify({ ...featureData, id: suggestionResult.feature.id }),
     ]);
     expect(invalidResult.success).toBe(false);
   });
@@ -181,14 +189,9 @@ describe('Workflow Configuration', () => {
 ## 🧪 Unit Test Examples
 
 ### Basic Unit Test Structure
+
 ```javascript
-const {
-  TestIdGenerator,
-  APIExecutor,
-  TestDataFactory,
-  PerformanceUtils,
-  TestLogger
-} = require('../utils/testUtils');
+const { TestIdGenerator, APIExecutor, TestDataFactory, PerformanceUtils, TestLogger } = require('../utils/testUtils');
 
 const { SAMPLE_FEATURES } = require('../fixtures/sampleData');
 
@@ -212,7 +215,7 @@ describe('Feature Management Unit Tests', () => {
   test('should create valid test data', () => {
     const feature = TestDataFactory.createFeatureData({
       category: 'bug-fix',
-      priority: 'high'
+      priority: 'high',
     });
 
     expect(feature.title).toBeDefined();
@@ -225,6 +228,7 @@ describe('Feature Management Unit Tests', () => {
 ```
 
 ### Advanced Unit Testing with Mocks
+
 ```javascript
 describe('Feature Validation Logic', () => {
   test('should validate required fields', () => {
@@ -235,7 +239,7 @@ describe('Feature Validation Logic', () => {
     const invalidFeature1 = {
       description: 'Test description',
       business_value: 'Test value',
-      category: 'enhancement'
+      category: 'enhancement',
     };
 
     const result1 = api.suggestFeature(invalidFeature1);
@@ -246,7 +250,7 @@ describe('Feature Validation Logic', () => {
     const invalidFeature2 = {
       title: 'Test Feature',
       description: 'Test description',
-      category: 'enhancement'
+      category: 'enhancement',
     };
 
     const result2 = api.suggestFeature(invalidFeature2);
@@ -258,7 +262,7 @@ describe('Feature Validation Logic', () => {
     const edgeCases = [
       { title: '', description: 'desc', business_value: 'value', category: 'enhancement' },
       { title: 'a'.repeat(1000), description: 'desc', business_value: 'value', category: 'enhancement' },
-      { title: 'Test', description: 'desc', business_value: 'value', category: 'invalid-category' }
+      { title: 'Test', description: 'desc', business_value: 'value', category: 'invalid-category' },
     ];
 
     edgeCases.forEach((feature, index) => {
@@ -273,6 +277,7 @@ describe('Feature Validation Logic', () => {
 ## 🔗 Integration Test Examples
 
 ### API Workflow Integration Testing
+
 ```javascript
 const { TestEnvironment } = require('../utils/testUtils');
 
@@ -294,10 +299,12 @@ describe('Feature Management API Integration', () => {
 
     // Create multiple features concurrently
     const featurePromises = Array.from({ length: 5 }, (_, i) =>
-      APIExecutor.createTestFeature(TestDataFactory.createFeatureData({
-        title: `Concurrent Feature ${i + 1}`,
-        category: 'enhancement'
-      }))
+      APIExecutor.createTestFeature(
+        TestDataFactory.createFeatureData({
+          title: `Concurrent Feature ${i + 1}`,
+          category: 'enhancement',
+        })
+      )
     );
 
     const results = await Promise.all(featurePromises);
@@ -325,13 +332,13 @@ describe('Feature Management API Integration', () => {
     // Approve feature
     const approvalResult = await APIExecutor.execAPI('approve-feature', [
       createResult.feature.id,
-      JSON.stringify({ approved_by: 'integration-test' })
+      JSON.stringify({ approved_by: 'integration-test' }),
     ]);
     expect(approvalResult.success).toBe(true);
 
     // Read from file system to verify persistence
     const featuresData = testEnvironment.readFeatures();
-    const persistedFeature = featuresData.features.find(f => f.id === createResult.feature.id);
+    const persistedFeature = featuresData.features.find((f) => f.id === createResult.feature.id);
 
     expect(persistedFeature).toBeDefined();
     expect(persistedFeature.status).toBe('approved');
@@ -341,6 +348,7 @@ describe('Feature Management API Integration', () => {
 ```
 
 ### File System Integration Testing
+
 ```javascript
 describe('File System Integration', () => {
   test('should handle file locking correctly', async () => {
@@ -354,15 +362,12 @@ describe('File System Integration', () => {
     const agent1 = TestIdGenerator.generateAgentId();
     const agent2 = TestIdGenerator.generateAgentId();
 
-    await Promise.all([
-      APIExecutor.initializeTestAgent(agent1),
-      APIExecutor.initializeTestAgent(agent2)
-    ]);
+    await Promise.all([APIExecutor.initializeTestAgent(agent1), APIExecutor.initializeTestAgent(agent2)]);
 
     // Create features concurrently from different agents
     const [result1, result2] = await Promise.all([
       APIExecutor.createTestFeature(TestDataFactory.createFeatureData({ title: 'Feature 1' })),
-      APIExecutor.createTestFeature(TestDataFactory.createFeatureData({ title: 'Feature 2' }))
+      APIExecutor.createTestFeature(TestDataFactory.createFeatureData({ title: 'Feature 2' })),
     ]);
 
     expect(result1.success).toBe(true);
@@ -378,6 +383,7 @@ describe('File System Integration', () => {
 ## 🎭 End-to-End Test Examples
 
 ### Complete Feature Workflow E2E
+
 ```javascript
 const { E2EEnvironment, CommandExecutor } = require('./e2e-utils');
 
@@ -404,31 +410,29 @@ describe('Complete Feature Management E2E', () => {
       title: 'E2E Test Feature',
       description: 'Complete end-to-end test feature for validation',
       business_value: 'Validates the entire feature management system',
-      category: 'enhancement'
+      category: 'enhancement',
     };
 
-    const suggestResult = await CommandExecutor.execute(environment, 'suggest-feature', [
-      JSON.stringify(featureData)
-    ]);
+    const suggestResult = await CommandExecutor.execute(environment, 'suggest-feature', [JSON.stringify(featureData)]);
     expect(suggestResult.success).toBe(true);
     expect(suggestResult.feature.status).toBe('suggested');
 
     // List features
     const listResult = await CommandExecutor.execute(environment, 'list-features');
     expect(listResult.success).toBe(true);
-    expect(listResult.features.some(f => f.id === suggestResult.feature.id)).toBe(true);
+    expect(listResult.features.some((f) => f.id === suggestResult.feature.id)).toBe(true);
 
     // Approve feature
     const approveResult = await CommandExecutor.execute(environment, 'approve-feature', [
       suggestResult.feature.id,
-      JSON.stringify({ approved_by: 'e2e-test', notes: 'E2E approval test' })
+      JSON.stringify({ approved_by: 'e2e-test', notes: 'E2E approval test' }),
     ]);
     expect(approveResult.success).toBe(true);
     expect(approveResult.feature.status).toBe('approved');
 
     // Verify persistence by reading file directly
     const featuresFile = await environment.readFeaturesFile();
-    const approvedFeature = featuresFile.features.find(f => f.id === suggestResult.feature.id);
+    const approvedFeature = featuresFile.features.find((f) => f.id === suggestResult.feature.id);
     expect(approvedFeature.status).toBe('approved');
     expect(approvedFeature.approved_by).toBe('e2e-test');
   }, 30000);
@@ -442,7 +446,7 @@ describe('Complete Feature Management E2E', () => {
     // Test feature approval without initialization
     const approvalResult = await CommandExecutor.execute(environment, 'approve-feature', [
       'non-existent-feature',
-      JSON.stringify({ approved_by: 'test' })
+      JSON.stringify({ approved_by: 'test' }),
     ]);
     expect(approvalResult.success).toBe(false);
   });
@@ -450,6 +454,7 @@ describe('Complete Feature Management E2E', () => {
 ```
 
 ### Multi-Agent E2E Scenarios
+
 ```javascript
 describe('Multi-Agent E2E Scenarios', () => {
   test('should handle multiple agents working simultaneously', async () => {
@@ -458,24 +463,24 @@ describe('Multi-Agent E2E Scenarios', () => {
     await environment.setup();
 
     // Initialize all agents
-    await Promise.all(agents.map(agentId =>
-      CommandExecutor.execute(environment, 'initialize', [agentId])
-    ));
+    await Promise.all(agents.map((agentId) => CommandExecutor.execute(environment, 'initialize', [agentId])));
 
     // Each agent suggests a feature
-    const suggestions = await Promise.all(agents.map((agentId, index) =>
-      CommandExecutor.execute(environment, 'suggest-feature', [
-        JSON.stringify({
-          title: `Feature from ${agentId}`,
-          description: `Feature suggested by ${agentId}`,
-          business_value: `Value from ${agentId}`,
-          category: 'enhancement'
-        })
-      ])
-    ));
+    const suggestions = await Promise.all(
+      agents.map((agentId, index) =>
+        CommandExecutor.execute(environment, 'suggest-feature', [
+          JSON.stringify({
+            title: `Feature from ${agentId}`,
+            description: `Feature suggested by ${agentId}`,
+            business_value: `Value from ${agentId}`,
+            category: 'enhancement',
+          }),
+        ])
+      )
+    );
 
     // All suggestions should succeed
-    suggestions.forEach(result => {
+    suggestions.forEach((result) => {
       expect(result.success).toBe(true);
     });
 
@@ -491,6 +496,7 @@ describe('Multi-Agent E2E Scenarios', () => {
 ## 🔌 API Testing Patterns
 
 ### TaskManager API Testing
+
 ```javascript
 describe('TaskManager API Testing Patterns', () => {
   test('should test all API endpoints', async () => {
@@ -501,7 +507,7 @@ describe('TaskManager API Testing Patterns', () => {
       { command: 'feature-stats', args: [] },
       { command: 'get-initialization-stats', args: [] },
       { command: 'guide', args: [] },
-      { command: 'methods', args: [] }
+      { command: 'methods', args: [] },
     ];
 
     for (const endpoint of endpoints) {
@@ -532,7 +538,7 @@ describe('TaskManager API Testing Patterns', () => {
     const errorScenarios = [
       { command: 'suggest-feature', args: ['invalid-json'], expectedError: 'JSON' },
       { command: 'approve-feature', args: ['non-existent'], expectedError: 'not found' },
-      { command: 'invalid-command', args: [], expectedError: 'Unknown command' }
+      { command: 'invalid-command', args: [], expectedError: 'Unknown command' },
     ];
 
     for (const scenario of errorScenarios) {
@@ -545,6 +551,7 @@ describe('TaskManager API Testing Patterns', () => {
 ```
 
 ### API Performance Testing
+
 ```javascript
 describe('API Performance', () => {
   test('should meet performance benchmarks', async () => {
@@ -560,17 +567,13 @@ describe('API Performance', () => {
     expect(duration).toBeLessThan(1000); // Should complete within 1 second
 
     // Test bulk operations performance
-    const bulkFeatures = Array.from({ length: 10 }, () =>
-      TestDataFactory.createFeatureData()
-    );
+    const bulkFeatures = Array.from({ length: 10 }, () => TestDataFactory.createFeatureData());
 
     const { result: bulkResult, duration: bulkDuration } = await PerformanceUtils.measureTime(async () => {
-      return await Promise.all(bulkFeatures.map(feature =>
-        APIExecutor.createTestFeature(feature)
-      ));
+      return await Promise.all(bulkFeatures.map((feature) => APIExecutor.createTestFeature(feature)));
     });
 
-    expect(bulkResult.every(r => r.success)).toBe(true);
+    expect(bulkResult.every((r) => r.success)).toBe(true);
     expect(bulkDuration).toBeLessThan(5000); // Bulk operations within 5 seconds
   });
 });
@@ -579,6 +582,7 @@ describe('API Performance', () => {
 ## 🎭 Mock Usage Examples
 
 ### Comprehensive Mock Setup
+
 ```javascript
 const { setupMocks, resetMocks, getMockManager } = require('../mocks/mockSetup');
 
@@ -604,16 +608,14 @@ describe('Advanced Mock Usage', () => {
     // Mock approval process
     const approvalResult = api.approveFeature(createResult.feature.id, {
       approved_by: 'test-approver',
-      notes: 'Mock approval'
+      notes: 'Mock approval',
     });
     expect(approvalResult.success).toBe(true);
     expect(approvalResult.feature.status).toBe('approved');
 
     // Verify mock state
     const allFeatures = api.listFeatures();
-    expect(allFeatures.features.some(f =>
-      f.id === createResult.feature.id && f.status === 'approved'
-    )).toBe(true);
+    expect(allFeatures.features.some((f) => f.id === createResult.feature.id && f.status === 'approved')).toBe(true);
   });
 
   test('should mock file system operations', () => {
@@ -636,6 +638,7 @@ describe('Advanced Mock Usage', () => {
 ```
 
 ### Mock Validation and Verification
+
 ```javascript
 describe('Mock Validation', () => {
   test('should track and validate mock interactions', () => {
@@ -674,6 +677,7 @@ describe('Mock Validation', () => {
 ## 📊 Test Data Management
 
 ### Test Data Factory Patterns
+
 ```javascript
 describe('Test Data Management', () => {
   test('should create consistent test data', () => {
@@ -686,7 +690,7 @@ describe('Test Data Management', () => {
     const customFeature = TestDataFactory.createFeatureData({
       category: 'bug-fix',
       priority: 'critical',
-      tags: ['urgent', 'security']
+      tags: ['urgent', 'security'],
     });
     expect(customFeature.category).toBe('bug-fix');
     expect(customFeature.priority).toBe('critical');
@@ -698,13 +702,13 @@ describe('Test Data Management', () => {
       { category: 'enhancement', complexity: 'low' },
       { category: 'bug-fix', priority: 'high' },
       { category: 'new-feature', estimated_hours: 40 },
-      { category: 'security', priority: 'critical' }
+      { category: 'security', priority: 'critical' },
     ];
 
-    scenarios.forEach(scenario => {
+    scenarios.forEach((scenario) => {
       const feature = TestDataFactory.createFeatureData(scenario);
       expect(feature.category).toBe(scenario.category);
-      Object.keys(scenario).forEach(key => {
+      Object.keys(scenario).forEach((key) => {
         if (key !== 'category') {
           expect(feature[key]).toBe(scenario[key]);
         }
@@ -715,20 +719,21 @@ describe('Test Data Management', () => {
 ```
 
 ### Sample Data Usage
+
 ```javascript
 describe('Sample Data Usage', () => {
   test('should utilize predefined sample data', () => {
     const { SAMPLE_FEATURES, SAMPLE_AGENTS } = require('../fixtures/sampleData');
 
     // Test with sample features
-    Object.values(SAMPLE_FEATURES).forEach(sampleFeature => {
+    Object.values(SAMPLE_FEATURES).forEach((sampleFeature) => {
       const result = mockManager.taskManagerAPI.suggestFeature(sampleFeature);
       expect(result.success).toBe(true);
       expect(result.feature.category).toBe(sampleFeature.category);
     });
 
     // Test with sample agents
-    Object.values(SAMPLE_AGENTS).forEach(sampleAgent => {
+    Object.values(SAMPLE_AGENTS).forEach((sampleAgent) => {
       const result = mockManager.taskManagerAPI.initialize(sampleAgent.id);
       expect(result.success).toBe(true);
       expect(result.agent.id).toBe(sampleAgent.id);
@@ -740,6 +745,7 @@ describe('Sample Data Usage', () => {
 ## ⚡ Performance Testing
 
 ### Performance Benchmarking
+
 ```javascript
 describe('Performance Testing', () => {
   test('should benchmark critical operations', async () => {
@@ -747,7 +753,7 @@ describe('Performance Testing', () => {
       featureCreation: 500, // ms
       featureApproval: 300,
       featureListing: 200,
-      bulkOperations: 2000
+      bulkOperations: 2000,
     };
 
     const agentId = TestIdGenerator.generateAgentId();
@@ -769,13 +775,9 @@ describe('Performance Testing', () => {
   test('should monitor memory usage', async () => {
     const { memoryDelta } = await PerformanceUtils.measureMemory(async () => {
       // Create many features to test memory usage
-      const features = Array.from({ length: 100 }, () =>
-        TestDataFactory.createFeatureData()
-      );
+      const features = Array.from({ length: 100 }, () => TestDataFactory.createFeatureData());
 
-      return await Promise.all(features.map(feature =>
-        APIExecutor.createTestFeature(feature)
-      ));
+      return await Promise.all(features.map((feature) => APIExecutor.createTestFeature(feature)));
     });
 
     // Memory usage should be reasonable
@@ -786,6 +788,7 @@ describe('Performance Testing', () => {
 ```
 
 ### Load Testing
+
 ```javascript
 describe('Load Testing', () => {
   test('should handle concurrent requests', async () => {
@@ -794,9 +797,11 @@ describe('Load Testing', () => {
     await APIExecutor.initializeTestAgent(agentId);
 
     const requests = Array.from({ length: concurrentRequests }, (_, i) =>
-      APIExecutor.createTestFeature(TestDataFactory.createFeatureData({
-        title: `Concurrent Feature ${i + 1}`
-      }))
+      APIExecutor.createTestFeature(
+        TestDataFactory.createFeatureData({
+          title: `Concurrent Feature ${i + 1}`,
+        })
+      )
     );
 
     const { results, duration } = await PerformanceUtils.measureTime(async () => {
@@ -804,13 +809,13 @@ describe('Load Testing', () => {
     });
 
     // All requests should succeed
-    expect(results.every(r => r.success)).toBe(true);
+    expect(results.every((r) => r.success)).toBe(true);
     expect(duration).toBeLessThan(10000); // Complete within 10 seconds
 
     TestLogger.info('Load test completed', {
       concurrentRequests,
       duration,
-      avgDurationPerRequest: duration / concurrentRequests
+      avgDurationPerRequest: duration / concurrentRequests,
     });
   });
 });
@@ -819,6 +824,7 @@ describe('Load Testing', () => {
 ## 🚨 Error Handling and Edge Cases
 
 ### Error Scenario Testing
+
 ```javascript
 describe('Error Handling', () => {
   test('should handle validation errors gracefully', async () => {
@@ -826,7 +832,7 @@ describe('Error Handling', () => {
       { title: '', description: 'desc', business_value: 'value' },
       { title: 'title', description: '', business_value: 'value' },
       { title: 'title', description: 'desc', business_value: '' },
-      { title: 'title', description: 'desc', business_value: 'value', category: 'invalid' }
+      { title: 'title', description: 'desc', business_value: 'value', category: 'invalid' },
     ];
 
     for (const invalidFeature of invalidFeatures) {
@@ -850,13 +856,17 @@ describe('Error Handling', () => {
 
     // Test retry mechanism
     let attempts = 0;
-    const result = await TestExecution.retry(async () => {
-      attempts++;
-      if (attempts < 3) {
-        throw new Error('Temporary failure');
-      }
-      return 'success';
-    }, 5, 10);
+    const result = await TestExecution.retry(
+      async () => {
+        attempts++;
+        if (attempts < 3) {
+          throw new Error('Temporary failure');
+        }
+        return 'success';
+      },
+      5,
+      10
+    );
 
     expect(result).toBe('success');
     expect(attempts).toBe(3);
@@ -879,13 +889,14 @@ describe('Error Handling', () => {
 ```
 
 ### Boundary Testing
+
 ```javascript
 describe('Boundary Testing', () => {
   test('should handle data size limits', async () => {
     const boundaryTests = [
       { title: 'a', description: 'min', business_value: 'b' },
       { title: 'a'.repeat(100), description: 'b'.repeat(500), business_value: 'c'.repeat(200) },
-      { title: 'a'.repeat(1000), description: 'b'.repeat(5000), business_value: 'c'.repeat(2000) }
+      { title: 'a'.repeat(1000), description: 'b'.repeat(5000), business_value: 'c'.repeat(2000) },
     ];
 
     for (const test of boundaryTests) {
@@ -904,6 +915,7 @@ describe('Boundary Testing', () => {
 ## 📝 Best Practices and Patterns
 
 ### Test Organization Best Practices
+
 ```javascript
 describe('Best Practice Examples', () => {
   // Use descriptive test names that explain behavior
@@ -913,7 +925,7 @@ describe('Best Practice Examples', () => {
     await APIExecutor.initializeTestAgent(agentId);
     const featureData = TestDataFactory.createFeatureData({
       title: 'Well-structured Test Feature',
-      category: 'enhancement'
+      category: 'enhancement',
     });
 
     // Act - Perform the operation being tested
@@ -940,7 +952,7 @@ describe('Best Practice Examples', () => {
     test('should allow approval', async () => {
       const result = await APIExecutor.execAPI('approve-feature', [
         suggestedFeature.id,
-        JSON.stringify({ approved_by: 'test-approver' })
+        JSON.stringify({ approved_by: 'test-approver' }),
       ]);
       expect(result.success).toBe(true);
       expect(result.feature.status).toBe('approved');
@@ -949,7 +961,7 @@ describe('Best Practice Examples', () => {
     test('should allow rejection', async () => {
       const result = await APIExecutor.execAPI('reject-feature', [
         suggestedFeature.id,
-        JSON.stringify({ rejected_by: 'test-approver', reason: 'Test rejection' })
+        JSON.stringify({ rejected_by: 'test-approver', reason: 'Test rejection' }),
       ]);
       expect(result.success).toBe(true);
       expect(result.feature.status).toBe('rejected');
@@ -959,6 +971,7 @@ describe('Best Practice Examples', () => {
 ```
 
 ### Custom Matchers
+
 ```javascript
 // Custom matchers for better assertions
 expect.extend({
@@ -967,32 +980,33 @@ expect.extend({
     const validStatuses = ['suggested', 'approved', 'rejected', 'implemented'];
     const validCategories = ['enhancement', 'bug-fix', 'new-feature', 'performance', 'security', 'documentation'];
 
-    const missingFields = requiredFields.filter(field => !received[field]);
+    const missingFields = requiredFields.filter((field) => !received[field]);
 
     if (missingFields.length > 0) {
       return {
         message: () => `Expected feature to have required fields: ${missingFields.join(', ')}`,
-        pass: false
+        pass: false,
       };
     }
 
     if (!validStatuses.includes(received.status)) {
       return {
         message: () => `Expected feature status to be one of: ${validStatuses.join(', ')}, got: ${received.status}`,
-        pass: false
+        pass: false,
       };
     }
 
     if (!validCategories.includes(received.category)) {
       return {
-        message: () => `Expected feature category to be one of: ${validCategories.join(', ')}, got: ${received.category}`,
-        pass: false
+        message: () =>
+          `Expected feature category to be one of: ${validCategories.join(', ')}, got: ${received.category}`,
+        pass: false,
       };
     }
 
     return {
       message: () => 'Feature is valid',
-      pass: true
+      pass: true,
     };
   },
 
@@ -1000,22 +1014,22 @@ expect.extend({
     if (!received || typeof received !== 'object') {
       return {
         message: () => 'Expected API response to be an object',
-        pass: false
+        pass: false,
       };
     }
 
     if (received.success !== true) {
       return {
         message: () => `Expected successful API response, got: ${JSON.stringify(received)}`,
-        pass: false
+        pass: false,
       };
     }
 
     return {
       message: () => 'API response is successful',
-      pass: true
+      pass: true,
     };
-  }
+  },
 });
 
 // Usage of custom matchers
@@ -1028,13 +1042,14 @@ test('should return valid feature from API', async () => {
 ```
 
 ### Test Cleanup and Resource Management
+
 ```javascript
 describe('Resource Management', () => {
   let resources = [];
 
   afterEach(async () => {
     // Clean up all resources created during tests
-    await Promise.all(resources.map(resource => resource.cleanup()));
+    await Promise.all(resources.map((resource) => resource.cleanup()));
     resources = [];
   });
 

@@ -1,10 +1,11 @@
 # Security Controls and Data Validation Guide
+
 ## Embedded Subtasks System Security Framework
 
 **Version**: 2.0.0
 **Created**: 2025-09-13
 **Updated**: 2025-09-21
-**Author**: Security & Validation Agent #10  
+**Author**: Security & Validation Agent #10
 
 ---
 
@@ -17,6 +18,7 @@ This document provides comprehensive security controls and data validation guide
 ### ✅ **FULLY IMPLEMENTED SECURITY FEATURES**
 
 #### **1. SubtasksSecurityEnhancer** (`lib/api-modules/core/subtasksSecurityEnhancer.js`)
+
 - **✅ Comprehensive Input Validation**: Full security threat detection and input sanitization
 - **✅ Authorization Controls**: Agent-based permissions with role validation
 - **✅ Audit Trail System**: Complete CRUD operation logging with timestamps and agent tracking
@@ -24,6 +26,7 @@ This document provides comprehensive security controls and data validation guide
 - **✅ Content Filtering**: Removes malicious scripts and dangerous patterns
 
 #### **2. Enhanced SubtasksManager Integration** (`lib/api-modules/core/subtasksManager.js`)
+
 - **✅ Security-Enhanced createSubtask**: Full validation, authorization, and audit logging
 - **✅ updateSubtaskWithSecurity**: Secure update operations with validation
 - **✅ deleteSubtaskWithSecurity**: Authorization-controlled deletion with audit trail
@@ -31,6 +34,7 @@ This document provides comprehensive security controls and data validation guide
 - **✅ Audit Trail Access**: Query and filter security events
 
 #### **3. Authorization Matrix**
+
 ```
 Operation    | Development | Research | Audit | Testing | Documentation
 ------------ | ----------- | -------- | ----- | ------- | -------------
@@ -41,6 +45,7 @@ DELETE       | ✅          | ❌       | ✅    | ❌      | ❌
 ```
 
 #### **4. Audit Trail Events**
+
 - **SUBTASK_CREATED**: Subtask creation with full metadata
 - **SUBTASK_UPDATED**: Field-level change tracking
 - **SUBTASK_DELETED**: Deletion with authorization details
@@ -51,6 +56,7 @@ DELETE       | ✅          | ❌       | ✅    | ❌      | ❌
 ### 🔧 **USAGE EXAMPLES**
 
 #### **Creating Secure Subtasks**
+
 ```javascript
 const subtasksManager = new SubtasksManager(dependencies);
 
@@ -65,9 +71,9 @@ const result = await subtasksManager.createSubtask(
       {
         type: 'internet',
         keywords: ['security', 'validation'],
-        focus: 'Best practices research'
-      }
-    ]
+        focus: 'Best practices research',
+      },
+    ],
   },
   'dev_session_1234_research_agent'
 );
@@ -78,12 +84,13 @@ console.log(result.security.validation_id); // val_1234567890_abc123
 ```
 
 #### **Security Audit Trail Query**
+
 ```javascript
 // Get security events for specific agent
 const auditTrail = subtasksManager.getSecurityAuditTrail({
   agentId: 'dev_session_1234_research_agent',
   operation: 'create',
-  since: '2025-09-21T00:00:00Z'
+  since: '2025-09-21T00:00:00Z',
 });
 
 // Get security statistics
@@ -94,6 +101,7 @@ console.log(`Security Success Rate: ${securityStats.securitySuccessRate}%`);
 ### 🛡️ **SECURITY ENFORCEMENT**
 
 #### **Input Validation Rules**
+
 - **Maximum Title Length**: 200 characters
 - **Maximum Description Length**: 5,000 characters
 - **Maximum Research Locations**: 20 per subtask
@@ -101,12 +109,14 @@ console.log(`Security Success Rate: ${securityStats.securitySuccessRate}%`);
 - **Content Filtering**: Removes scripts, dangerous patterns, SQL injection attempts
 
 #### **Authorization Enforcement**
+
 - **Agent Role Extraction**: Automatic role detection from agent ID
 - **Permission Matrix**: Role-based operation permissions
 - **Critical Subtask Protection**: Cannot delete subtasks that prevent completion
 - **Real-time Authorization**: Every operation checked before execution
 
 #### **Audit Trail Requirements**
+
 - **30-Day Retention**: All security events stored for compliance
 - **Comprehensive Logging**: Agent ID, operation, timestamp, metadata
 - **Tamper-Proof**: Immutable audit log with unique IDs
@@ -147,6 +157,7 @@ console.log(`Security Success Rate: ${securityStats.securitySuccessRate}%`);
 The core security validation framework providing:
 
 #### Input Validation
+
 - **Structure Validation**: Ensures data matches expected schema
 - **Type Validation**: Validates and converts data types
 - **Boundary Validation**: Enforces size and depth limits
@@ -159,11 +170,12 @@ const validator = new SecurityValidator(logger);
 // Validate API input
 const result = validator.validateInput(inputData, 'endpoint', schema);
 if (!result.valid) {
-    throw new Error(result.error);
+  throw new Error(result.error);
 }
 ```
 
 #### Authorization Controls
+
 - **Agent ID Validation**: Validates agent ID format and authenticity
 - **Role-Based Access**: Controls operations based on agent roles
 - **Resource Permissions**: Granular access control for resources
@@ -172,11 +184,12 @@ if (!result.valid) {
 // Authorize operation
 const authResult = validator.authorizeOperation(agentId, operation, resource);
 if (!authResult.authorized) {
-    throw new Error(authResult.error);
+  throw new Error(authResult.error);
 }
 ```
 
 #### Data Sanitization
+
 - **Script Removal**: Eliminates script tags and executable content
 - **Event Handler Filtering**: Removes potentially dangerous event handlers
 - **SQL Injection Prevention**: Filters SQL injection patterns
@@ -192,6 +205,7 @@ const sanitized = validator.sanitizeResearchInput(researchData);
 API middleware for comprehensive request/response security:
 
 #### Request Processing
+
 - **Rate Limiting**: Prevents abuse with configurable limits
 - **Request Validation**: Validates headers, size, and structure
 - **Authorization Checking**: Integrates with SecurityValidator
@@ -202,14 +216,17 @@ const SecurityMiddleware = require('./lib/api-modules/security/securityMiddlewar
 const middleware = new SecurityMiddleware(logger);
 
 // Apply security middleware
-app.use(middleware.createSecurityMiddleware({
+app.use(
+  middleware.createSecurityMiddleware({
     maxRequestsPerMinute: 100,
     maxRequestsPerHour: 1000,
-    auditAllRequests: true
-}));
+    auditAllRequests: true,
+  })
+);
 ```
 
 #### Response Security
+
 - **Security Headers**: Applies security headers (HSTS, CSP, etc.)
 - **Response Filtering**: Removes sensitive data from responses
 - **Audit Logging**: Comprehensive request/response logging
@@ -220,34 +237,34 @@ app.use(middleware.createSecurityMiddleware({
 
 ### Agent Roles and Permissions
 
-| Role | Permissions | Description |
-|------|-------------|-------------|
-| `development` | create, update, complete, claim, list, status | Full development operations |
-| `research` | create, update, complete, list, status | Research and analysis tasks |
-| `audit` | list, status, validate, review | Quality assurance and validation |
-| `testing` | list, status, test, validate | Testing and verification |
+| Role          | Permissions                                   | Description                      |
+| ------------- | --------------------------------------------- | -------------------------------- |
+| `development` | create, update, complete, claim, list, status | Full development operations      |
+| `research`    | create, update, complete, list, status        | Research and analysis tasks      |
+| `audit`       | list, status, validate, review                | Quality assurance and validation |
+| `testing`     | list, status, test, validate                  | Testing and verification         |
 
 ### Security Limits
 
 ```javascript
 const securityConfig = {
-    // Input validation limits
-    maxStringLength: 10000,
-    maxObjectDepth: 10,
-    maxArrayLength: 1000,
-    
-    // Rate limiting
-    maxRequestsPerMinute: 100,
-    maxRequestsPerHour: 1000,
-    blockDuration: 15 * 60 * 1000, // 15 minutes
-    
-    // Request validation
-    maxRequestSize: 1024 * 1024, // 1MB
-    requiredHeaders: ['user-agent'],
-    
-    // Audit settings
-    auditRetentionHours: 24,
-    auditMaxEntries: 10000
+  // Input validation limits
+  maxStringLength: 10000,
+  maxObjectDepth: 10,
+  maxArrayLength: 1000,
+
+  // Rate limiting
+  maxRequestsPerMinute: 100,
+  maxRequestsPerHour: 1000,
+  blockDuration: 15 * 60 * 1000, // 15 minutes
+
+  // Request validation
+  maxRequestSize: 1024 * 1024, // 1MB
+  requiredHeaders: ['user-agent'],
+
+  // Audit settings
+  auditRetentionHours: 24,
+  auditMaxEntries: 10000,
 };
 ```
 
@@ -298,10 +315,10 @@ All security-relevant operations are logged with detailed context:
 ```javascript
 // Get recent audit entries
 const entries = validator.getAuditTrail({
-    event: 'AUTHORIZATION_FAILURE',
-    since: '2025-09-13T00:00:00Z',
-    agentId: 'agent_123',
-    limit: 100
+  event: 'AUTHORIZATION_FAILURE',
+  since: '2025-09-13T00:00:00Z',
+  agentId: 'agent_123',
+  limit: 100,
 });
 
 // Get security metrics
@@ -321,7 +338,7 @@ console.log('Security threats:', metrics.securityThreats);
 // ✅ Good: Validate before processing
 const validation = validator.validateInput(input, endpoint, schema);
 if (!validation.valid) {
-    return sendError(400, validation.error);
+  return sendError(400, validation.error);
 }
 
 // ❌ Bad: Direct processing without validation
@@ -336,7 +353,7 @@ processData(input); // Vulnerable to injection
 // ✅ Good: Check authorization
 const auth = validator.authorizeOperation(agentId, 'create', resource);
 if (!auth.authorized) {
-    return sendError(403, 'Unauthorized');
+  return sendError(403, 'Unauthorized');
 }
 
 // ❌ Bad: Skip authorization checks
@@ -375,10 +392,10 @@ return sendError(400, `SQL error: ${dbError.message}`);
 ```javascript
 // ✅ Good: Comprehensive logging
 validator.auditLog('TASK_CREATED', {
-    agentId,
-    taskId,
-    operation: 'create',
-    metadata: safeMetadata
+  agentId,
+  taskId,
+  operation: 'create',
+  metadata: safeMetadata,
 });
 
 // ❌ Bad: No audit trail
@@ -393,47 +410,43 @@ createTask(taskData); // No trace of who did what
 
 ```javascript
 // Complete secure endpoint implementation
-app.post('/api/tasks', 
-    middleware.createSecurityMiddleware(),
-    async (req, res) => {
-        try {
-            const { agentId, operation } = req.securityContext;
-            
-            // Request is already validated and sanitized by middleware
-            const taskData = req.body;
-            
-            // Additional business logic validation
-            if (!isValidTaskCategory(taskData.category)) {
-                return res.status(400).json({
-                    success: false,
-                    error: 'Invalid task category'
-                });
-            }
-            
-            // Create task
-            const task = await taskManager.createTask(taskData);
-            
-            // Audit successful creation
-            validator.auditLog('TASK_CREATED', {
-                agentId,
-                taskId: task.id,
-                category: task.category
-            });
-            
-            res.json({
-                success: true,
-                task: task
-            });
-            
-        } catch (error) {
-            logger.error('Task creation failed', { error: error.message });
-            res.status(500).json({
-                success: false,
-                error: 'Task creation failed'
-            });
-        }
+app.post('/api/tasks', middleware.createSecurityMiddleware(), async (req, res) => {
+  try {
+    const { agentId, operation } = req.securityContext;
+
+    // Request is already validated and sanitized by middleware
+    const taskData = req.body;
+
+    // Additional business logic validation
+    if (!isValidTaskCategory(taskData.category)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid task category',
+      });
     }
-);
+
+    // Create task
+    const task = await taskManager.createTask(taskData);
+
+    // Audit successful creation
+    validator.auditLog('TASK_CREATED', {
+      agentId,
+      taskId: task.id,
+      category: task.category,
+    });
+
+    res.json({
+      success: true,
+      task: task,
+    });
+  } catch (error) {
+    logger.error('Task creation failed', { error: error.message });
+    res.status(500).json({
+      success: false,
+      error: 'Task creation failed',
+    });
+  }
+});
 ```
 
 ### Secure Data Processing
@@ -441,41 +454,40 @@ app.post('/api/tasks',
 ```javascript
 // Secure research data processing
 async function processResearchData(rawData, agentId) {
-    try {
-        // 1. Validate agent authorization
-        const auth = validator.authorizeOperation(agentId, 'research', { type: 'data' });
-        if (!auth.authorized) {
-            throw new Error('Unauthorized research access');
-        }
-        
-        // 2. Validate input structure
-        const validation = validator.validateInput(rawData, 'research', researchSchema);
-        if (!validation.valid) {
-            throw new Error(`Invalid research data: ${validation.error}`);
-        }
-        
-        // 3. Sanitize content
-        const sanitized = validator.sanitizeResearchInput(validation.data);
-        
-        // 4. Process safely
-        const processed = await analyzeData(sanitized);
-        
-        // 5. Audit operation
-        validator.auditLog('RESEARCH_PROCESSED', {
-            agentId,
-            dataSize: JSON.stringify(rawData).length,
-            sanitized: rawData !== sanitized
-        });
-        
-        return processed;
-        
-    } catch (error) {
-        validator.auditLog('RESEARCH_PROCESSING_FAILED', {
-            agentId,
-            error: error.message
-        });
-        throw error;
+  try {
+    // 1. Validate agent authorization
+    const auth = validator.authorizeOperation(agentId, 'research', { type: 'data' });
+    if (!auth.authorized) {
+      throw new Error('Unauthorized research access');
     }
+
+    // 2. Validate input structure
+    const validation = validator.validateInput(rawData, 'research', researchSchema);
+    if (!validation.valid) {
+      throw new Error(`Invalid research data: ${validation.error}`);
+    }
+
+    // 3. Sanitize content
+    const sanitized = validator.sanitizeResearchInput(validation.data);
+
+    // 4. Process safely
+    const processed = await analyzeData(sanitized);
+
+    // 5. Audit operation
+    validator.auditLog('RESEARCH_PROCESSED', {
+      agentId,
+      dataSize: JSON.stringify(rawData).length,
+      sanitized: rawData !== sanitized,
+    });
+
+    return processed;
+  } catch (error) {
+    validator.auditLog('RESEARCH_PROCESSING_FAILED', {
+      agentId,
+      error: error.message,
+    });
+    throw error;
+  }
 }
 ```
 
@@ -518,7 +530,7 @@ const metrics = middleware.getSecurityMetrics();
 Monitor these metrics for security incidents:
 
 - **Failed Authorizations**: > 10 per hour
-- **Rate Limit Violations**: > 5 per agent per hour  
+- **Rate Limit Violations**: > 5 per agent per hour
 - **Security Threats Detected**: > 0 (immediate alert)
 - **Validation Failures**: > 25% failure rate
 
@@ -542,10 +554,13 @@ const middleware = new SecurityMiddleware(logger);
 
 ```javascript
 // Apply to all API routes
-app.use('/api', middleware.createSecurityMiddleware({
+app.use(
+  '/api',
+  middleware.createSecurityMiddleware({
     maxRequestsPerMinute: 100,
-    auditAllRequests: true
-}));
+    auditAllRequests: true,
+  })
+);
 
 // Apply response filtering
 app.use('/api', middleware.createResponseMiddleware());
@@ -556,15 +571,15 @@ app.use('/api', middleware.createResponseMiddleware());
 ```javascript
 // In your API handlers
 async function handleTaskOperation(req, res) {
-    const { agentId, operation, resource } = req.securityContext;
-    
-    // Validate specific business rules
-    const validation = validator.validateInput(req.body, req.path, schema);
-    if (!validation.valid) {
-        return res.status(400).json({ error: validation.error });
-    }
-    
-    // Continue with operation...
+  const { agentId, operation, resource } = req.securityContext;
+
+  // Validate specific business rules
+  const validation = validator.validateInput(req.body, req.path, schema);
+  if (!validation.valid) {
+    return res.status(400).json({ error: validation.error });
+  }
+
+  // Continue with operation...
 }
 ```
 
@@ -573,12 +588,12 @@ async function handleTaskOperation(req, res) {
 ```javascript
 // Regular security monitoring
 setInterval(() => {
-    const metrics = middleware.getSecurityMetrics();
-    
-    if (metrics.validation.securityThreats > 0) {
-        logger.warn('Security threats detected', metrics);
-        // Send alerts, take action
-    }
+  const metrics = middleware.getSecurityMetrics();
+
+  if (metrics.validation.securityThreats > 0) {
+    logger.warn('Security threats detected', metrics);
+    // Send alerts, take action
+  }
 }, 60000); // Check every minute
 ```
 
@@ -613,8 +628,8 @@ const result = validator.validateInput(data, endpoint, schema);
 console.log('Validation result:', result);
 
 if (!result.valid) {
-    console.log('Validation errors:', result.error);
-    console.log('Input sample:', validator.createSafeSample(data));
+  console.log('Validation errors:', result.error);
+  console.log('Input sample:', validator.createSafeSample(data));
 }
 ```
 
@@ -652,7 +667,7 @@ console.log('Rate limiting stats:', metrics.rateLimiting);
 ### Runtime Security Monitoring
 
 - [ ] Monitor failed authorization attempts
-- [ ] Track rate limiting violations  
+- [ ] Track rate limiting violations
 - [ ] Alert on security threat detection
 - [ ] Review audit logs regularly
 - [ ] Monitor security metrics trends
@@ -708,4 +723,4 @@ When updating security components:
 
 ---
 
-*This security guide is maintained by the Security & Validation team. For questions or concerns, review the audit logs or check the security metrics dashboard.*
+_This security guide is maintained by the Security & Validation team. For questions or concerns, review the audit logs or check the security metrics dashboard._

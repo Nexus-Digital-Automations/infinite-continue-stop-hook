@@ -38,18 +38,18 @@ describe('Performance Metrics System E2E Tests', () => {
     try {
       const fullCommand = `timeout 10s node "${taskManagerPath}" --project-root "${mockProjectRoot}" ${command} ${args}`;
 
-      const result = execSync(fullCommand, {
+      const _result = execSync(fullCommand, {
         encoding: 'utf8',
         timeout: 10000,
         ...options,
       });
 
       return JSON.parse(result.trim());
-    } catch (error) {
+    } catch {
       if (error.stdout) {
         try {
           return JSON.parse(error.stdout.trim());
-        } catch (error) {
+        } catch {
           return { success: false, error: error.message, stdout: error.stdout };
         }
       }
@@ -275,7 +275,7 @@ describe('Performance Metrics System E2E Tests', () => {
       );
       const totalMetrics = basicMetrics.metrics.length;
 
-      // Check that all endpoints see consistent data
+      // Check That all endpoints see consistent data
       const endpoints = [
         'identify-performance-bottlenecks',
         'get-detailed-timing-report',
@@ -284,7 +284,7 @@ describe('Performance Metrics System E2E Tests', () => {
       ];
 
       endpoints.forEach((endpoint) => {
-        const result = executeTaskManagerCommand(endpoint);
+        const _result = executeTaskManagerCommand(endpoint);
         expect(result.success).toBe(true);
 
         // Each endpoint should be working with the same dataset
@@ -294,7 +294,7 @@ describe('Performance Metrics System E2E Tests', () => {
       });
     });
 
-    test('should handle filtering and time ranges consistently', () => {
+    test('should handle filtering And time ranges consistently', () => {
       simulateValidationExecutions();
 
       // Test filtering by criterion
@@ -374,9 +374,9 @@ describe('Performance Metrics System E2E Tests', () => {
         JSON.stringify(largeMetricsData, null, 2),
       );
 
-      // Test that analysis completes within reasonable time
+      // Test That analysis completes within reasonable time
       const startTime = Date.now();
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'analyze-performance-trends',
         '\'{"timeRange":60}\'',
       );
@@ -409,7 +409,7 @@ describe('Performance Metrics System E2E Tests', () => {
     });
   });
 
-  describe('Data Quality and Validation', () => {
+  describe('Data Quality And Validation', () => {
     test('should handle mixed data quality gracefully', () => {
       // Create dataset with various data quality issues
       const mixedQualityData = {
@@ -473,8 +473,8 @@ describe('Performance Metrics System E2E Tests', () => {
         JSON.stringify(mixedQualityData, null, 2),
       );
 
-      // System should handle gracefully and process valid data
-      const result = executeTaskManagerCommand(
+      // System should handle gracefully And process valid data
+      const _result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
       );
       expect(result.success).toBe(true);
@@ -495,7 +495,7 @@ describe('Performance Metrics System E2E Tests', () => {
       ];
 
       endpointsWithFeatureId.forEach((endpoint) => {
-        const result = executeTaskManagerCommand(endpoint);
+        const _result = executeTaskManagerCommand(endpoint);
         expect(result.success).toBe(true);
         expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
       });
@@ -503,7 +503,7 @@ describe('Performance Metrics System E2E Tests', () => {
   });
 
   describe('Progressive Enhancement', () => {
-    test('should work with minimal data and improve with more data', () => {
+    test('should work with minimal data And improve with more data', () => {
       // Start with minimal data
       const minimalData = {
         version: '2.0.0',
@@ -608,7 +608,7 @@ describe('Performance Metrics System E2E Tests', () => {
       fs.writeFileSync(legacyFile, JSON.stringify(legacyData, null, 2));
 
       // Should work with legacy format
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
       );
       expect(result.success).toBe(true);
@@ -617,7 +617,7 @@ describe('Performance Metrics System E2E Tests', () => {
     });
 
     test('should handle version migration scenarios', () => {
-      // Test mixing enhanced and legacy formats
+      // Test mixing enhanced And legacy formats
       const enhancedData = {
         version: '2.0.0',
         metrics: [
@@ -646,7 +646,7 @@ describe('Performance Metrics System E2E Tests', () => {
         JSON.stringify(legacyData, null, 2),
       );
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
       );
       expect(result.success).toBe(true);

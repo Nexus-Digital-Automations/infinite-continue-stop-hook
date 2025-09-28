@@ -1,8 +1,8 @@
 /**
  * Test Performance Monitoring Script
  *
- * Comprehensive test execution performance monitoring and analysis.
- * Tracks test execution times, identifies slow tests, and provides optimization insights.
+ * Comprehensive test execution performance monitoring And analysis.
+ * Tracks test execution times, identifies slow tests, And provides optimization insights.
  *
  * @author CI/CD Integration Agent
  * @version 1.0.0
@@ -11,6 +11,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync, spawn } = require('child_process');
+const { loggers } = require('../lib/logger');
 
 // Configuration
 const CONFIG = {
@@ -111,7 +112,7 @@ class ResourceMonitor {
   }
 
   /**
-   * Stop monitoring and return summary
+   * Stop monitoring And return summary
    */
   stopMonitoring() {
     if (this.monitoringInterval) {
@@ -218,7 +219,7 @@ class TestPerformanceMonitor {
       if (hasErrors) {
         throw new Error('Test performance monitoring completed with errors');
       }
-    } catch (error) {
+    } catch {
       PerformanceLogger.error(
         `Test performance monitoring failed: ${error.message}`
       );
@@ -243,7 +244,7 @@ class TestPerformanceMonitor {
   }
 
   /**
-   * Run test suites and collect performance data
+   * Run test suites And collect performance data
    */
   async runTestSuites() {
     PerformanceLogger.info(
@@ -286,7 +287,7 @@ class TestPerformanceMonitor {
     const suiteStartMemory = process.memoryUsage();
 
     try {
-      const result = await this.executeTestCommand(testSuite);
+      const _result = await this.executeTestCommand(testSuite);
       const duration = Date.now() - suiteStartTime;
       const endMemory = process.memoryUsage();
 
@@ -313,7 +314,7 @@ class TestPerformanceMonitor {
       this.checkSuitePerformance(suiteResult);
 
       PerformanceLogger.success(`${testSuite.name} completed in ${duration}ms`);
-    } catch (error) {
+    } catch {
       const duration = Date.now() - suiteStartTime;
       PerformanceLogger.error(
         `${testSuite.name} failed after ${duration}ms: ${error.message}`
@@ -329,7 +330,7 @@ class TestPerformanceMonitor {
   }
 
   /**
-   * Execute test command with timeout and performance monitoring
+   * Execute test command with timeout And performance monitoring
    */
   executeTestCommand(testSuite) {
     return new Promise((resolve, reject) => {
@@ -403,7 +404,7 @@ class TestPerformanceMonitor {
   }
 
   /**
-   * Analyze test results and identify performance issues
+   * Analyze test results And identify performance issues
    */
   analyzeResults(resourceData) {
     PerformanceLogger.info('Analyzing test performance results...');
@@ -542,7 +543,7 @@ class TestPerformanceMonitor {
     if (fs.existsSync(CONFIG.paths.trends)) {
       try {
         trends = JSON.parse(fs.readFileSync(CONFIG.paths.trends, 'utf8'));
-      } catch (error) {
+      } catch {
         PerformanceLogger.warning(
           'Could not load existing trends, starting fresh'
         );
@@ -597,24 +598,24 @@ class TestPerformanceMonitor {
     );
 
     // Overall metrics
-    console.log(
+    loggers.stopHook.log(
       `│ Total Execution Time    │ ${this.formatDuration(totalDuration).padEnd(14)} │ ${this.getTimeStatus(totalDuration).padEnd(8)} │`
     );
-    console.log(
+    loggers.stopHook.log(
       `│ Test Suites Run         │ ${this.suiteResults.length.toString().padEnd(14)} │ ${'ℹ️ Info'.padEnd(8)} │`
     );
-    console.log(
+    loggers.stopHook.log(
       `│ Successful Suites       │ ${successfulSuites.toString().padEnd(14)} │ ${successfulSuites === this.suiteResults.length ? '✅ Good' : '⚠️ Check'} │`
     );
-    console.log(
+    loggers.stopHook.log(
       `│ Failed Suites           │ ${failedSuites.toString().padEnd(14)} │ ${failedSuites === 0 ? '✅ Good' : '❌ Bad'} │`
     );
 
     if (this.analysis) {
-      console.log(
+      loggers.stopHook.log(
         `│ Peak Memory Usage       │ ${this.analysis.memoryAnalysis.peak_memory.padEnd(14)} │ ${'📊 Info'.padEnd(8)} │`
       );
-      console.log(
+      loggers.stopHook.log(
         `│ Potential Speedup       │ ${this.analysis.parallelizationAnalysis.potential_speedup.padEnd(14)} │ ${'🚀 Info'.padEnd(8)} │`
       );
     }
@@ -627,13 +628,13 @@ class TestPerformanceMonitor {
     if (this.analysis?.slowestTests?.length > 0) {
       loggers.stopHook.log('\n🐌 Slowest Test Suites:');
       this.analysis.slowestTests.forEach((test, index) => {
-        console.log(
+        loggers.stopHook.log(
           `${index + 1}. ${test.name}: ${this.formatDuration(test.duration)}`
         );
       });
     }
 
-    // Warnings and errors
+    // Warnings And errors
     if (this.warnings.length > 0) {
       loggers.stopHook.log(
         `\n⚠️  Performance Warnings: ${this.warnings.length}`
@@ -649,7 +650,7 @@ class TestPerformanceMonitor {
 
     // Recommendations
     if (this.analysis?.parallelizationAnalysis?.recommendation) {
-      console.log(
+      loggers.stopHook.log(
         `\n💡 Recommendation: ${this.analysis.parallelizationAnalysis.recommendation}`
       );
     }
@@ -711,7 +712,7 @@ class TestPerformanceMonitor {
           encoding: 'utf8',
         }).trim(),
       };
-    } catch (error) {
+    } catch {
       return { commit: 'unknown', branch: 'unknown', author: 'unknown' };
     }
   }
@@ -722,7 +723,7 @@ if (require.main === module) {
   const args = process.argv.slice(2);
 
   if (args.includes('--help') || args.includes('-h')) {
-    console.log(`
+    loggers.stopHook.log(`
 Test Performance Monitor
 
 Usage: node test-performance.js [options]

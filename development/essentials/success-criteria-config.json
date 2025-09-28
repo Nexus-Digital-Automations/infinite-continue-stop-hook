@@ -15,7 +15,7 @@
       "description": "Minimum security requirements for all features",
       "criteria": [
         "Input validation implemented",
-        "Output sanitization applied", 
+        "Output sanitization applied",
         "Authentication required where appropriate",
         "Audit logging enabled",
         "No credentials in code or logs"
@@ -91,7 +91,7 @@
       "validation": "violations_count === 0"
     },
     "build_log": {
-      "format": "text", 
+      "format": "text",
       "required_fields": ["status", "warnings_count", "errors_count", "timestamp"],
       "validation": "status === 'success' && errors_count === 0"
     },

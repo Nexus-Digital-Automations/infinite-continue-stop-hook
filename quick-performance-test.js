@@ -62,7 +62,7 @@ class QuickPerformanceTest {
             if (jsonMatch) {
               response = JSON.parse(jsonMatch[0]);
             }
-          } catch (error) {
+          } catch {
             response = stdout;
           }
 
@@ -100,7 +100,7 @@ class QuickPerformanceTest {
     for (const test of tests) {
       loggers.stopHook.log(`📊 Testing: ${test.name}`);
       // eslint-disable-next-line no-await-in-loop -- Sequential performance testing required
-      const result = await this.executeCommand(test.command);
+      const _result = await this.executeCommand(test.command);
 
       this.results.push({
         testName: test.name,
@@ -190,7 +190,7 @@ class QuickPerformanceTest {
 
     if (slowOperations.length > 0) {
       console.log(
-        `   • Investigate and optimize ${slowOperations.length} slow operations`
+        `   • Investigate And optimize ${slowOperations.length} slow operations`
       );
     }
 
@@ -286,7 +286,7 @@ if (require.main === module) {
   const test = new QuickPerformanceTest();
   test
     .runQuickTests()
-    .then((_report) => {
+    .then((_REPORT) => {
       loggers.stopHook.log('\n✅ Quick performance test completed!');
       throw new Error('Performance test completed successfully');
     })

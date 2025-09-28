@@ -2,7 +2,7 @@
 
 **Version**: 1.0.0  
 **Date**: 2025-09-15  
-**Author**: Documentation Agent #5  
+**Author**: Documentation Agent #5
 
 ## Executive Summary
 
@@ -47,10 +47,10 @@ External Tools          Success Criteria API              Data Layer
                         │  └─────────────────┘  │         │ Reports     │
 ┌─────────────┐         │                       │         │ Database    │
 │ Manual      │────────▶│  ┌─────────────────┐  │         └─────────────┘
-│ Reviewers   │         │  │ Manual Review   │  │         
-│ (Agents)    │         │  │ Workflows       │  │         
-└─────────────┘         │  └─────────────────┘  │         
-                        └───────────────────────┘         
+│ Reviewers   │         │  │ Manual Review   │  │
+│ (Agents)    │         │  │ Workflows       │  │
+└─────────────┘         │  └─────────────────┘  │
+                        └───────────────────────┘
 
 Agent Network           Notification System               Monitoring
 ┌─────────────┐         ┌───────────────────────┐         ┌─────────────┐
@@ -58,11 +58,11 @@ Agent Network           Notification System               Monitoring
 │Agents       │         │   Slack/Email        │         │ Metrics     │
 │             │         │   Status Updates     │         │ Alerting    │
 │Security     │         └───────────────────────┘         └─────────────┘
-│Agents       │         
-│             │         
-│Audit        │         
-│Agents       │         
-└─────────────┘         
+│Agents       │
+│             │
+│Audit        │
+│Agents       │
+└─────────────┘
 ```
 
 ## Core Components Deep Dive
@@ -72,12 +72,14 @@ Agent Network           Notification System               Monitoring
 **Purpose**: Manages success criteria templates and their inheritance hierarchies.
 
 **Key Responsibilities**:
+
 - Load and cache criteria templates
 - Apply project-wide inheritance rules
 - Handle template versioning and updates
 - Validate template schema compliance
 
 **Architecture**:
+
 ```javascript
 class CriteriaTemplateManager {
   constructor() {
@@ -91,7 +93,7 @@ class CriteriaTemplateManager {
     if (this.templateCache.has(`${templateId}:${version}`)) {
       return this.templateCache.get(`${templateId}:${version}`);
     }
-    
+
     const template = await this.fetchTemplate(templateId, version);
     this.templateCache.set(`${templateId}:${version}`, template);
     return template;
@@ -101,13 +103,14 @@ class CriteriaTemplateManager {
     // Apply project-wide and custom inheritance rules
     const projectCriteria = await this.inheritanceRules.getProjectCriteria(taskId);
     const customCriteria = await this.inheritanceRules.getCustomCriteria(taskId);
-    
+
     return this.mergeStrategies.apply(baseCriteria, projectCriteria, customCriteria);
   }
 }
 ```
 
 **Data Flow**:
+
 ```
 Template Request → Cache Check → Template Load → Schema Validation → Inheritance Application → Criteria Assembly
 ```
@@ -117,6 +120,7 @@ Template Request → Cache Check → Template Load → Schema Validation → Inh
 **Purpose**: Orchestrates automated and manual validation workflows for success criteria.
 
 **Key Responsibilities**:
+
 - Execute automated validation tools (linters, tests, builds)
 - Coordinate manual review processes
 - Collect and aggregate evidence
@@ -124,6 +128,7 @@ Template Request → Cache Check → Template Load → Schema Validation → Inh
 - Handle timeout and retry logic
 
 **Architecture**:
+
 ```javascript
 class ValidationEngine {
   constructor(taskManager, agentSystem, auditIntegration) {
@@ -135,17 +140,17 @@ class ValidationEngine {
 
   async validateTask(taskId, criteria, evidence = {}) {
     const validationSession = await this.createValidationSession(taskId);
-    
+
     try {
       // Parallel execution of automated validations
       const automatedResults = await this.runAutomatedValidation(criteria, evidence);
-      
+
       // Sequential manual validation for human review items
       const manualResults = await this.runManualValidation(criteria, validationSession);
-      
+
       // Aggregate and analyze results
       const finalResults = await this.aggregateResults(automatedResults, manualResults);
-      
+
       return this.generateValidationReport(taskId, finalResults);
     } catch (error) {
       await this.handleValidationError(validationSession, error);
@@ -156,6 +161,7 @@ class ValidationEngine {
 ```
 
 **Validation Workflow**:
+
 ```
 Criteria Input → Evidence Collection → Automated Validation → Manual Review Assignment → Review Completion → Results Aggregation → Report Generation
 ```
@@ -165,12 +171,14 @@ Criteria Input → Evidence Collection → Automated Validation → Manual Revie
 **Purpose**: Handles complex inheritance rules for project-wide and template-based criteria.
 
 **Key Responsibilities**:
+
 - Apply project-wide criteria to individual tasks
 - Resolve conflicts between different criteria sources
 - Handle criteria versioning and migration
 - Enforce mandatory vs. optional inheritance
 
 **Inheritance Hierarchy**:
+
 ```
 Priority Order (Highest to Lowest):
 1. Task-specific overrides
@@ -181,6 +189,7 @@ Priority Order (Highest to Lowest):
 ```
 
 **Conflict Resolution Strategies**:
+
 - **Override**: Higher priority criteria replace lower priority
 - **Merge**: Combine criteria from multiple sources
 - **Append**: Add criteria from all sources
@@ -191,12 +200,14 @@ Priority Order (Highest to Lowest):
 **Purpose**: Aggregates validation evidence from multiple sources and formats.
 
 **Evidence Types**:
+
 - **Automated Evidence**: Tool outputs, test results, build logs
 - **Manual Evidence**: Review comments, approval records, attestations
 - **File Evidence**: Screenshots, documents, compliance certificates
 - **Metric Evidence**: Performance data, security scan results
 
 **Storage Strategy**:
+
 ```
 Evidence Storage Structure:
 development/evidence/
@@ -218,6 +229,7 @@ development/evidence/
 **Purpose**: Provides real-time visibility into success criteria compliance and validation status.
 
 **Key Features**:
+
 - Real-time validation status tracking
 - Historical compliance trends
 - Project-wide quality metrics
@@ -225,6 +237,7 @@ development/evidence/
 - Risk and compliance reporting
 
 **Dashboard Architecture**:
+
 ```javascript
 class ReportingDashboard {
   constructor() {
@@ -238,12 +251,12 @@ class ReportingDashboard {
     const metrics = await this.metricsCollector.collect(timeRange, filters);
     const trends = await this.trendAnalyzer.analyze(metrics);
     const risks = await this.riskAssessment.evaluate(metrics);
-    
+
     return {
       current_status: metrics.current,
       historical_trends: trends,
       risk_indicators: risks,
-      recommendations: await this.generateRecommendations(metrics, trends, risks)
+      recommendations: await this.generateRecommendations(metrics, trends, risks),
     };
   }
 }
@@ -254,6 +267,7 @@ class ReportingDashboard {
 ### Core Data Structures
 
 #### Success Criteria Schema
+
 ```json
 {
   "criterion": {
@@ -274,6 +288,7 @@ class ReportingDashboard {
 ```
 
 #### Task Criteria Assignment
+
 ```json
 {
   "task_criteria": {
@@ -296,6 +311,7 @@ class ReportingDashboard {
 ```
 
 #### Validation Results
+
 ```json
 {
   "validation_result": {
@@ -317,7 +333,7 @@ class ReportingDashboard {
     "overall_score": "percentage_compliance",
     "performance_metrics": {
       "total_validation_time": "seconds",
-      "automated_validation_time": "seconds", 
+      "automated_validation_time": "seconds",
       "manual_validation_time": "seconds"
     }
   }
@@ -327,18 +343,21 @@ class ReportingDashboard {
 ### Data Persistence Strategy
 
 #### Primary Storage (TODO.json)
+
 - Task criteria assignments
 - Validation status and results
 - Project-wide criteria configurations
 - Historical validation data (last 30 days)
 
 #### Secondary Storage (File System)
+
 - Evidence files and artifacts
 - Detailed validation logs
 - Template definitions
 - Long-term historical data
 
 #### Cache Layer
+
 - Template data (1 hour TTL)
 - Validation results (24 hour TTL)
 - Project criteria (4 hour TTL)
@@ -351,6 +370,7 @@ class ReportingDashboard {
 The Success Criteria system extends the existing TaskManager API through several integration points:
 
 #### Command Handler Extension
+
 ```javascript
 // taskmanager-api.js command handler extension
 const commandHandlers = {
@@ -358,16 +378,18 @@ const commandHandlers = {
   'get-success-criteria': this.getSuccessCriteria.bind(this),
   'set-success-criteria': this.setSuccessCriteria.bind(this),
   'validate-criteria': this.validateCriteria.bind(this),
-  'criteria-report': this.generateCriteriaReport.bind(this)
+  'criteria-report': this.generateCriteriaReport.bind(this),
 };
 ```
 
 #### Task Lifecycle Integration
+
 ```
 Task Creation → Apply Default Criteria → Task In Progress → Validation Triggers → Task Completion → Final Validation → Criteria Report
 ```
 
 #### Agent System Integration
+
 - **Development Agents**: Execute criteria validation during implementation
 - **Review Agents**: Perform manual criteria review and approval
 - **Audit Agents**: Conduct independent criteria compliance verification
@@ -376,6 +398,7 @@ Task Creation → Apply Default Criteria → Task In Progress → Validation Tri
 ### External Tool Integration
 
 #### Automated Validation Tools
+
 ```javascript
 class AutomatedValidatorRegistry {
   constructor() {
@@ -384,22 +407,23 @@ class AutomatedValidatorRegistry {
       ['build', new BuildValidator(['npm', 'make', 'gradle'])],
       ['test', new TestValidator(['jest', 'pytest', 'go test'])],
       ['security', new SecurityValidator(['npm audit', 'snyk', 'sonarqube'])],
-      ['performance', new PerformanceValidator(['lighthouse', 'k6', 'wrk'])]
+      ['performance', new PerformanceValidator(['lighthouse', 'k6', 'wrk'])],
     ]);
   }
 }
 ```
 
 #### Evidence Collection Integration
+
 ```javascript
 class EvidenceIntegrationPoints {
   async collectFromTools() {
     return {
       linter: await this.runLinter(),
-      build: await this.runBuild(), 
+      build: await this.runBuild(),
       tests: await this.runTests(),
       security: await this.runSecurityScan(),
-      performance: await this.runPerformanceTests()
+      performance: await this.runPerformanceTests(),
     };
   }
 }
@@ -410,35 +434,39 @@ class EvidenceIntegrationPoints {
 ### Authentication and Authorization
 
 #### Agent-Based Access Control
+
 ```javascript
 class CriteriaAccessControl {
   async validateAccess(agentId, operation, resourceId) {
     const agent = await this.agentSystem.getAgent(agentId);
     const permissions = await this.getAgentPermissions(agent);
-    
+
     return this.evaluatePermission(permissions, operation, resourceId);
   }
 }
 ```
 
 #### Permission Matrix
-| Role | Read Criteria | Modify Criteria | Validate | Override | Admin |
-|------|---------------|-----------------|----------|----------|-------|
-| Development Agent | ✓ | Task-specific | ✓ | ✗ | ✗ |
-| Review Agent | ✓ | ✗ | Manual only | ✗ | ✗ |
-| Security Agent | ✓ | Security only | ✓ | Security only | ✗ |
-| Audit Agent | ✓ | ✗ | ✓ | ✓ | ✗ |
-| System Admin | ✓ | ✓ | ✓ | ✓ | ✓ |
+
+| Role              | Read Criteria | Modify Criteria | Validate    | Override      | Admin |
+| ----------------- | ------------- | --------------- | ----------- | ------------- | ----- |
+| Development Agent | ✓             | Task-specific   | ✓           | ✗             | ✗     |
+| Review Agent      | ✓             | ✗               | Manual only | ✗             | ✗     |
+| Security Agent    | ✓             | Security only   | ✓           | Security only | ✗     |
+| Audit Agent       | ✓             | ✗               | ✓           | ✓             | ✗     |
+| System Admin      | ✓             | ✓               | ✓           | ✓             | ✓     |
 
 ### Data Protection
 
 #### Evidence Security
+
 - **Encryption**: All evidence files encrypted at rest
 - **Access Logging**: Complete audit trail of evidence access
 - **Retention**: Automatic evidence cleanup per retention policies
 - **Integrity**: Cryptographic verification of evidence files
 
 #### API Security
+
 - **Rate Limiting**: Prevent abuse and ensure system stability
 - **Input Validation**: Comprehensive validation of all API inputs
 - **Output Sanitization**: Ensure no sensitive data leakage
@@ -449,6 +477,7 @@ class CriteriaAccessControl {
 ### Scalability Design
 
 #### Horizontal Scaling
+
 ```
 Load Balancer
      │
@@ -462,6 +491,7 @@ Load Balancer
 ```
 
 #### Asynchronous Processing
+
 ```javascript
 class AsyncValidationProcessor {
   async processValidation(taskId, criteria) {
@@ -469,13 +499,13 @@ class AsyncValidationProcessor {
     const validationJob = await this.validationQueue.add({
       taskId,
       criteria,
-      priority: this.calculatePriority(criteria)
+      priority: this.calculatePriority(criteria),
     });
-    
+
     return {
       validationId: validationJob.id,
       estimatedCompletion: this.estimateCompletion(criteria),
-      trackingUrl: `/api/success-criteria/validation-status/${validationJob.id}`
+      trackingUrl: `/api/success-criteria/validation-status/${validationJob.id}`,
     };
   }
 }
@@ -501,6 +531,7 @@ class AsyncValidationProcessor {
 ### Monitoring and Observability
 
 #### Key Metrics
+
 - **Response Time**: API endpoint performance tracking
 - **Validation Time**: End-to-end validation duration
 - **Success Rate**: Criteria compliance rates
@@ -508,6 +539,7 @@ class AsyncValidationProcessor {
 - **Resource Usage**: CPU, memory, and storage utilization
 
 #### Alerting Strategy
+
 ```javascript
 class CriteriaAlertingSystem {
   setupAlerts() {
@@ -515,7 +547,7 @@ class CriteriaAlertingSystem {
       validation_timeout: { threshold: 60, severity: 'warning' },
       high_failure_rate: { threshold: 10, severity: 'critical' },
       api_errors: { threshold: 5, severity: 'error' },
-      storage_usage: { threshold: 80, severity: 'warning' }
+      storage_usage: { threshold: 80, severity: 'warning' },
     };
   }
 }
@@ -526,16 +558,19 @@ class CriteriaAlertingSystem {
 ### Environment Configuration
 
 #### Development Environment
+
 - **Purpose**: Feature development and initial testing
 - **Criteria**: Relaxed validation timeouts, debug logging enabled
 - **Integration**: Limited external tool integration
 
-#### Staging Environment  
+#### Staging Environment
+
 - **Purpose**: Integration testing and pre-production validation
 - **Criteria**: Production-like validation rules, full tool integration
 - **Integration**: Complete external tool ecosystem
 
 #### Production Environment
+
 - **Purpose**: Live system with full monitoring and alerting
 - **Criteria**: Strict validation enforcement, optimized performance
 - **Integration**: Full monitoring, alerting, and backup systems
@@ -543,15 +578,17 @@ class CriteriaAlertingSystem {
 ### Disaster Recovery
 
 #### Backup Strategy
+
 ```
 Data Backup:
 ├── TODO.json → Hourly snapshots, 30-day retention
-├── Evidence files → Daily backup, 90-day retention  
+├── Evidence files → Daily backup, 90-day retention
 ├── Templates → Version-controlled, infinite retention
 └── Validation history → Weekly backup, 1-year retention
 ```
 
 #### Recovery Procedures
+
 1. **System Failure**: Automatic failover to standby instance
 2. **Data Corruption**: Restore from latest clean backup
 3. **Evidence Loss**: Trigger re-validation workflow
@@ -560,21 +597,23 @@ Data Backup:
 ## Migration and Versioning
 
 ### API Versioning Strategy
+
 - **URL Versioning**: `/api/v1/success-criteria`
 - **Header Versioning**: `Accept: application/vnd.api+json;version=1`
 - **Backward Compatibility**: Maintain previous version for 6 months
 
 ### Data Migration
+
 ```javascript
 class CriteriaMigrationManager {
   async migrateToNewVersion(fromVersion, toVersion) {
     const migrationPlan = await this.createMigrationPlan(fromVersion, toVersion);
-    
+
     for (const step of migrationPlan.steps) {
       await this.executeMigrationStep(step);
       await this.validateMigrationStep(step);
     }
-    
+
     return this.generateMigrationReport(migrationPlan);
   }
 }
@@ -582,6 +621,6 @@ class CriteriaMigrationManager {
 
 ---
 
-*Architecture Guide v1.0.0*  
-*Generated by: Documentation Agent #5*  
-*Last Updated: 2025-09-15*
+_Architecture Guide v1.0.0_  
+_Generated by: Documentation Agent #5_  
+_Last Updated: 2025-09-15_

@@ -1,12 +1,12 @@
 /**
  * Test Utilities for FeatureManagerAPI Unit Tests
  *
- * Provides mock objects, fixtures, and helper functions for comprehensive
+ * Provides mock objects, fixtures, And helper functions for comprehensive
  * unit testing of the FeatureManagerAPI class.
  */
 
-const _fs = require('fs').promises;
-const _path = require('path');
+const _FS = require('fs').promises;
+const PATH = require('path');
 const crypto = require('crypto');
 
 /**
@@ -119,7 +119,7 @@ const TEST_FIXTURES = {
     description:
       'A comprehensive test feature for unit testing purposes with detailed implementation requirements',
     business_value:
-      'Provides significant value to users by improving system functionality and user experience',
+      'Provides significant value to users by improving system functionality And user experience',
     category: 'enhancement',
     suggested_by: 'test-agent',
     metadata: {
@@ -173,33 +173,33 @@ const TEST_FIXTURES = {
     missingBusinessValue: {
       title: 'Feature without business value',
       description:
-        'A feature description that meets minimum length requirements for testing',
+        'A feature description That meets minimum length requirements for testing',
       category: 'enhancement',
     },
     shortBusinessValue: {
       title: 'Valid Feature Title',
       description:
-        'A feature description that meets minimum length requirements for testing',
+        'A feature description That meets minimum length requirements for testing',
       business_value: 'Too short',
       category: 'enhancement',
     },
     longBusinessValue: {
       title: 'Valid Feature Title',
       description:
-        'A feature description that meets minimum length requirements for testing',
+        'A feature description That meets minimum length requirements for testing',
       business_value: 'A'.repeat(1001),
       category: 'enhancement',
     },
     missingCategory: {
       title: 'Feature without category',
       description:
-        'A feature description that meets minimum length requirements for testing',
+        'A feature description That meets minimum length requirements for testing',
       business_value: 'Some business value',
     },
     invalidCategory: {
       title: 'Feature with invalid category',
       description:
-        'A feature description that meets minimum length requirements for testing',
+        'A feature description That meets minimum length requirements for testing',
       business_value: 'Some business value',
       category: 'invalid-category',
     },
@@ -260,7 +260,7 @@ const TEST_FIXTURES = {
         linked_tasks: [],
         title: 'Existing Suggested Feature',
         description:
-          'A feature that exists in suggested status for testing purposes',
+          'A feature That exists in suggested status for testing purposes',
         business_value:
           'Provides testing capabilities for the feature management system',
         category: 'enhancement',
@@ -297,7 +297,7 @@ const TEST_FIXTURES = {
         linked_tasks: [],
         title: 'Existing Approved Feature',
         description:
-          'A feature that exists in approved status for testing purposes',
+          'A feature That exists in approved status for testing purposes',
         business_value:
           'Provides testing capabilities for the feature management system',
         category: 'new-feature',
@@ -338,7 +338,7 @@ const TEST_FIXTURES = {
         linked_tasks: [],
         title: 'Existing Rejected Feature',
         description:
-          'A feature that exists in rejected status for testing purposes',
+          'A feature That exists in rejected status for testing purposes',
         business_value:
           'Would have provided testing capabilities but was rejected',
         category: 'documentation',
@@ -468,14 +468,14 @@ const TEST_FIXTURES = {
   // Valid approval data
   validApprovalData: {
     approved_by: 'test-approver',
-    notes: 'Feature approved after thorough review and meets all requirements',
+    notes: 'Feature approved after thorough review And meets all requirements',
   },
 
   // Valid rejection data
   validRejectionData: {
     rejected_by: 'test-rejector',
     reason:
-      'Feature does not align with current project priorities and roadmap',
+      'Feature does not align with current project priorities And roadmap',
   },
 
   // Agent IDs for testing
@@ -592,7 +592,7 @@ const testHelpers = {
   },
 
   /**
-   * Assert that an error is thrown with specific message
+   * Assert That an error is thrown with specific message
    */
   async expectError(asyncFn, expectedMessage) {
     let error = null;

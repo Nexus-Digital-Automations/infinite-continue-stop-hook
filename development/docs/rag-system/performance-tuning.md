@@ -8,14 +8,14 @@ This guide provides comprehensive performance optimization strategies for the RA
 
 ### Baseline Performance Goals
 
-| Metric | Target | Acceptable | Critical |
-|--------|--------|------------|----------|
-| Search Response Time | < 500ms | < 1000ms | > 2000ms |
-| Embedding Generation | < 2000ms | < 5000ms | > 10000ms |
-| Database Query Time | < 100ms | < 500ms | > 1000ms |
-| Memory Usage | < 2GB | < 4GB | > 8GB |
-| Cache Hit Rate | > 80% | > 60% | < 40% |
-| Concurrent Users | 20+ | 10+ | < 5 |
+| Metric               | Target   | Acceptable | Critical  |
+| -------------------- | -------- | ---------- | --------- |
+| Search Response Time | < 500ms  | < 1000ms   | > 2000ms  |
+| Embedding Generation | < 2000ms | < 5000ms   | > 10000ms |
+| Database Query Time  | < 100ms  | < 500ms    | > 1000ms  |
+| Memory Usage         | < 2GB    | < 4GB      | > 8GB     |
+| Cache Hit Rate       | > 80%    | > 60%      | < 40%     |
+| Concurrent Users     | 20+      | 10+        | < 5       |
 
 ### Performance Monitoring Commands
 
@@ -210,14 +210,14 @@ const poolConfig = {
   database: process.env.RAG_DB_NAME,
 
   // Connection pool settings
-  connectionLimit: 20,              // Maximum connections
-  acquireTimeout: 60000,           // 60 seconds to acquire connection
-  timeout: 10000,                  // 10 seconds for queries
-  reconnect: true,                 // Automatic reconnection
+  connectionLimit: 20, // Maximum connections
+  acquireTimeout: 60000, // 60 seconds to acquire connection
+  timeout: 10000, // 10 seconds for queries
+  reconnect: true, // Automatic reconnection
 
   // Performance optimization
-  multipleStatements: false,       // Security and performance
-  charset: 'utf8mb4',             // Full UTF-8 support
+  multipleStatements: false, // Security and performance
+  charset: 'utf8mb4', // Full UTF-8 support
 
   // Advanced settings
   typeCast: function (field, next) {
@@ -226,7 +226,7 @@ const poolConfig = {
       return JSON.parse(field.string());
     }
     return next();
-  }
+  },
 };
 ```
 
@@ -287,7 +287,7 @@ class OptimizedEmbeddingGenerator {
       const response = await this.openai.embeddings.create({
         model: process.env.RAG_EMBEDDING_MODEL || 'text-embedding-3-small',
         input: text,
-        encoding_format: 'float'  // More efficient than base64
+        encoding_format: 'float', // More efficient than base64
       });
 
       const embedding = response.data[0].embedding;
@@ -315,8 +315,8 @@ class OptimizedEmbeddingGenerator {
     try {
       const response = await this.openai.embeddings.create({
         model: process.env.RAG_EMBEDDING_MODEL || 'text-embedding-3-small',
-        input: batch.map(item => item.text),
-        encoding_format: 'float'
+        input: batch.map((item) => item.text),
+        encoding_format: 'float',
       });
 
       // Resolve promises with results
@@ -327,7 +327,7 @@ class OptimizedEmbeddingGenerator {
       });
     } catch (error) {
       // Reject all promises in batch
-      batch.forEach(item => item.reject(error));
+      batch.forEach((item) => item.reject(error));
     }
 
     this.processingBatch = false;
@@ -453,7 +453,7 @@ class RAGCacheManager {
       category: options.category,
       threshold: options.similarityThreshold,
       limit: options.limit,
-      project: options.projectPath
+      project: options.projectPath,
     };
     return crypto.createHash('sha256').update(JSON.stringify(keyData)).digest('hex');
   }
@@ -521,7 +521,7 @@ class ParallelRAGProcessor {
     const results = [];
 
     for (const chunk of chunks) {
-      const chunkPromises = chunk.map(query =>
+      const chunkPromises = chunk.map((query) =>
         this.semaphore.acquire().then(async (release) => {
           try {
             return await this.executeSearch(query);
@@ -571,16 +571,16 @@ class ParallelRAGProcessor {
 class MemoryOptimizedRAG {
   constructor() {
     this.embeddingCache = new LRUCache({
-      max: 10000,                    // Maximum cached embeddings
-      maxAge: 1000 * 60 * 60,       // 1 hour TTL
-      updateAgeOnGet: true,         // Reset TTL on access
-      length: (embedding) => embedding.length * 4  // Approximate memory usage
+      max: 10000, // Maximum cached embeddings
+      maxAge: 1000 * 60 * 60, // 1 hour TTL
+      updateAgeOnGet: true, // Reset TTL on access
+      length: (embedding) => embedding.length * 4, // Approximate memory usage
     });
 
     this.resultCache = new LRUCache({
-      max: 1000,                    // Maximum cached search results
-      maxAge: 1000 * 60 * 30,       // 30 minutes TTL
-      updateAgeOnGet: true
+      max: 1000, // Maximum cached search results
+      maxAge: 1000 * 60 * 30, // 30 minutes TTL
+      updateAgeOnGet: true,
     });
 
     // Monitor memory usage
@@ -590,7 +590,8 @@ class MemoryOptimizedRAG {
   async optimizeMemoryUsage() {
     const memUsage = process.memoryUsage();
 
-    if (memUsage.heapUsed > 1024 * 1024 * 1024) { // > 1GB
+    if (memUsage.heapUsed > 1024 * 1024 * 1024) {
+      // > 1GB
       // Aggressive cleanup
       this.embeddingCache.reset();
       this.resultCache.prune();
@@ -612,7 +613,7 @@ class MemoryOptimizedRAG {
       const batchResults = await this.searchBatch(query, {
         ...options,
         limit: batchSize,
-        offset: offset
+        offset: offset,
       });
 
       if (batchResults.length === 0) {
@@ -639,15 +640,15 @@ class RAGConnectionManager {
       read: this.createPool({
         ...dbConfig,
         acquireTimeout: 30000,
-        connectionLimit: 15,  // More connections for reads
-        queueLimit: 100
+        connectionLimit: 15, // More connections for reads
+        queueLimit: 100,
       }),
       write: this.createPool({
         ...dbConfig,
         acquireTimeout: 10000,
-        connectionLimit: 5,   // Fewer for writes
-        queueLimit: 50
-      })
+        connectionLimit: 5, // Fewer for writes
+        queueLimit: 50,
+      }),
     };
 
     this.monitorConnections();
@@ -694,7 +695,7 @@ class RAGPerformanceMonitor {
       searchLatency: new Histogram(),
       embeddingLatency: new Histogram(),
       cacheHitRate: new Counter(),
-      errorRate: new Counter()
+      errorRate: new Counter(),
     };
 
     this.startMonitoring();
@@ -714,7 +715,7 @@ class RAGPerformanceMonitor {
       p95SearchLatency: this.metrics.searchLatency.percentile(0.95),
       cacheHitRate: this.calculateCacheHitRate(),
       errorRate: this.metrics.errorRate.value,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
   }
 
@@ -869,6 +870,7 @@ class DynamicConfigManager {
 ## 🏆 Performance Optimization Checklist
 
 ### Database Level
+
 - [ ] All essential indexes created and optimized
 - [ ] Query performance analyzed and optimized
 - [ ] Database configuration tuned for workload
@@ -876,6 +878,7 @@ class DynamicConfigManager {
 - [ ] Regular maintenance scheduled
 
 ### Application Level
+
 - [ ] Multi-level caching implemented
 - [ ] Concurrent processing optimized
 - [ ] Memory usage monitored and controlled
@@ -883,6 +886,7 @@ class DynamicConfigManager {
 - [ ] Error handling and retries implemented
 
 ### Infrastructure Level
+
 - [ ] Adequate hardware resources allocated
 - [ ] Network latency minimized
 - [ ] Monitoring and alerting configured
@@ -890,6 +894,7 @@ class DynamicConfigManager {
 - [ ] Security without performance impact
 
 ### Operational Level
+
 - [ ] Performance baselines established
 - [ ] Regular performance testing scheduled
 - [ ] Capacity planning implemented
@@ -898,4 +903,4 @@ class DynamicConfigManager {
 
 ---
 
-*This performance tuning guide provides comprehensive optimization strategies for achieving maximum efficiency in your RAG system. Regular monitoring and adjustment of these settings will ensure optimal performance as your system scales.*
+_This performance tuning guide provides comprehensive optimization strategies for achieving maximum efficiency in your RAG system. Regular monitoring and adjustment of these settings will ensure optimal performance as your system scales._

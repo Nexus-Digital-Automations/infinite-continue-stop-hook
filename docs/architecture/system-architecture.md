@@ -13,23 +13,23 @@ graph TD
     A[TaskManager API] --> B[TaskManager Core]
     A --> C[Agent Manager]
     A --> D[Multi-Agent Orchestrator]
-    
+
     B --> E[TODO.json]
     B --> F[DONE.json]
     B --> G[Distributed Lock Manager]
-    
+
     C --> H[Agent Registry]
     C --> I[Heartbeat Monitor]
-    
+
     D --> J[Task Coordination]
     D --> K[Conflict Resolution]
-    
+
     L[Stop Hook] --> M[Infinite Continue Protocol]
     L --> N[Stop Authorization API]
-    
+
     O[Setup Hook] --> P[Project Initialization]
     O --> Q[Schema Migration]
-    
+
     R[Auto Fixer] --> S[Error Detection]
     R --> T[Automatic Recovery]
 ```
@@ -48,6 +48,7 @@ graph TD
 **Purpose**: Universal command-line interface providing comprehensive task management capabilities
 
 **Key Features**:
+
 - Universal project support (works with any codebase containing TODO.json)
 - Agent lifecycle management (initialization, heartbeat renewal, status tracking)
 - Task operations (create, claim, complete, list, filter, reorder)
@@ -57,6 +58,7 @@ graph TD
 - Performance optimized with 10-second timeouts and caching
 
 **Architecture**:
+
 ```javascript
 class TaskManagerAPI {
   constructor() {
@@ -69,8 +71,9 @@ class TaskManagerAPI {
 ```
 
 **Integration Patterns**:
+
 - CLI tool integration via command-line arguments
-- Programmatic usage via module imports  
+- Programmatic usage via module imports
 - CI/CD pipeline integration for automated workflows
 - Multi-agent orchestration for concurrent operations
 
@@ -79,6 +82,7 @@ class TaskManagerAPI {
 **Purpose**: Central component providing comprehensive task management with atomic operations and multi-agent coordination
 
 **Key Features**:
+
 - Atomic task operations with distributed locking
 - Multi-agent coordination and conflict resolution
 - Dependency management and validation
@@ -89,6 +93,7 @@ class TaskManagerAPI {
 - Research workflow integration
 
 **Task Lifecycle**:
+
 1. **Creation** - Tasks created with unique IDs and metadata
 2. **Assignment** - Tasks claimed by agents through coordination system
 3. **Execution** - Task status updated through workflow states
@@ -96,18 +101,19 @@ class TaskManagerAPI {
 5. **Cleanup** - Completed tasks moved to DONE.json archive
 
 **Multi-Agent Coordination**:
+
 ```javascript
 // Task claiming with coordination
 async claimTask(taskId, agentId, priority = 'normal', options = {}) {
   // 1. Acquire distributed lock
   const lockAcquired = await this.lockManager.acquireLock(`task_${taskId}`);
-  
+
   // 2. Validate task availability and agent eligibility
   const task = await this.validateTaskClaim(taskId, agentId);
-  
+
   // 3. Update task assignment with agent registry
   await this.agentManager.assignTask(agentId, taskId);
-  
+
   // 4. Release lock and return assignment
   await this.lockManager.releaseLock(`task_${taskId}`);
   return task;
@@ -119,17 +125,19 @@ async claimTask(taskId, agentId, priority = 'normal', options = {}) {
 **Purpose**: Manages agent lifecycle, registration, heartbeat monitoring, and task assignment
 
 **Components**:
+
 - **Agent Registry** (`lib/agentManager.js`): Central registry for all active agents
 - **Heartbeat Monitor**: Monitors agent health and detects stale agents
 - **Task Assignment**: Coordinates task distribution among agents
 
 **Agent Lifecycle**:
+
 ```javascript
 // Agent initialization
 const agentConfig = {
   role: 'development',
   sessionId: 'session_timestamp',
-  specialization: ['frontend', 'testing']
+  specialization: ['frontend', 'testing'],
 };
 
 // Registration and heartbeat
@@ -138,6 +146,7 @@ await agentManager.startHeartbeat(agentId);
 ```
 
 **Stale Agent Detection**:
+
 - Configurable heartbeat intervals (default: 30 seconds)
 - Automatic task reassignment on agent failure
 - Cleanup of abandoned resources
@@ -147,19 +156,21 @@ await agentManager.startHeartbeat(agentId);
 **Purpose**: Coordinates multiple concurrent agents, prevents conflicts, and manages resource allocation
 
 **Coordination Mechanisms**:
+
 - **Distributed Locking**: Prevents concurrent modification conflicts
 - **Task Queue Management**: Ensures proper task ordering and dependencies
 - **Resource Allocation**: Manages system resources across multiple agents
 - **Conflict Resolution**: Handles competing agent requests
 
 **Orchestration Flow**:
+
 ```mermaid
 sequenceDiagram
     participant A1 as Agent 1
     participant A2 as Agent 2
     participant O as Orchestrator
     participant TM as TaskManager
-    
+
     A1->>O: Request task claim
     A2->>O: Request same task claim
     O->>TM: Acquire distributed lock
@@ -175,33 +186,36 @@ sequenceDiagram
 **Purpose**: Implements infinite continue protocol with intelligent stop authorization
 
 **Core Mechanisms**:
+
 - **Never-Stop Protocol**: Prevents natural termination of execution
 - **Stop Authorization API**: Endpoint-based stop control
 - **Task Guidance System**: Provides intelligent suggestions for continued work
 - **Project Detection**: Automatically finds and works with TODO.json files
 
 **Infinite Continue Logic**:
+
 ```javascript
 function shouldStop() {
   // 1. Check if stop endpoint was triggered
   if (checkStopAuthorization()) {
     return allowOneTimeStop();
   }
-  
+
   // 2. Analyze current task state
   const taskStatus = analyzeTaskStatus();
-  
+
   // 3. Provide guidance for continued work
   if (taskStatus.hasAvailableTasks) {
     return provideTaskGuidance(taskStatus);
   }
-  
+
   // 4. Never allow natural stops
   return false;
 }
 ```
 
 **Stop Authorization**:
+
 - Single-use authorization tokens
 - Endpoint-based trigger mechanism
 - Automatic reset to never-stop mode
@@ -211,6 +225,7 @@ function shouldStop() {
 **Purpose**: Project initialization, schema migration, and system configuration
 
 **Key Features**:
+
 - **Automatic Project Detection**: Finds and configures projects in directory trees
 - **Schema Migration**: Updates TODO.json to latest format with backward compatibility
 - **Feature-Based System Integration**: Migrates from task-only to feature+task hybrid
@@ -218,17 +233,18 @@ function shouldStop() {
 - **Interactive/Non-Interactive Modes**: Supports both CLI and automated deployment
 
 **Migration Process**:
+
 ```javascript
 function migrateToFeatureBasedSystem(projectPath) {
   // 1. Backup existing TODO.json
   createBackup(todoPath);
-  
+
   // 2. Analyze existing tasks for feature grouping
   const analysis = analyzeTasksForFeatures(existingTasks);
-  
+
   // 3. Create feature structures from task analysis
   const features = createFeaturesFromAnalysis(analysis);
-  
+
   // 4. Update schema with new structure
   updateTodoSchema(features, tasks);
 }
@@ -242,23 +258,23 @@ function migrateToFeatureBasedSystem(projectPath) {
 flowchart TD
     A[User Request] --> B[TaskManager API]
     B --> C{Operation Type?}
-    
+
     C -->|Create| D[Validate Task Data]
     C -->|Claim| E[Check Agent Eligibility]
     C -->|Complete| F[Verify Task Ownership]
-    
+
     D --> G[Generate Unique ID]
     E --> H[Acquire Distributed Lock]
     F --> I[Update Task Status]
-    
+
     G --> J[Write to TODO.json]
     H --> K[Update Agent Registry]
     I --> L[Archive to DONE.json]
-    
+
     J --> M[Release Operations]
     K --> M
     L --> M
-    
+
     M --> N[Return Response]
 ```
 
@@ -268,16 +284,16 @@ flowchart TD
 flowchart LR
     A[Agent Registration] --> B[Heartbeat Monitoring]
     B --> C{Agent Healthy?}
-    
+
     C -->|Yes| D[Continue Monitoring]
     C -->|No| E[Mark Agent Stale]
-    
+
     D --> F[Task Assignment Available]
     E --> G[Reassign Tasks]
-    
+
     F --> H[Coordinate with Orchestrator]
     G --> H
-    
+
     H --> I[Update Agent Registry]
     I --> B
 ```
@@ -287,6 +303,7 @@ flowchart LR
 ### Input Validation and Sanitization
 
 **File Path Security**:
+
 ```javascript
 // ESLint security rules enforced
 // eslint-disable-next-line security/detect-non-literal-fs-filename -- validated path
@@ -294,6 +311,7 @@ const todoContent = fs.readFileSync(validatedPath, 'utf8');
 ```
 
 **JSON Schema Validation**:
+
 - Comprehensive schema validation for all TODO.json operations
 - Input sanitization for all user-provided data
 - Path traversal prevention for file operations
@@ -301,11 +319,13 @@ const todoContent = fs.readFileSync(validatedPath, 'utf8');
 ### Access Control
 
 **Agent Authentication**:
+
 - Unique agent IDs with session-based tracking
 - Agent capability validation before task assignment
 - Resource access control based on agent roles
 
 **Operation Authorization**:
+
 - Task ownership verification for modifications
 - Distributed locking prevents unauthorized concurrent access
 - Audit trail for all task operations
@@ -313,6 +333,7 @@ const todoContent = fs.readFileSync(validatedPath, 'utf8');
 ### Data Integrity
 
 **Atomic Operations**:
+
 ```javascript
 async performAtomicTaskOperation(operation) {
   const lockAcquired = await this.lockManager.acquireLock('todo_write');
@@ -328,6 +349,7 @@ async performAtomicTaskOperation(operation) {
 ```
 
 **Backup and Recovery**:
+
 - Automatic backup creation before schema migrations
 - Corruption detection and recovery mechanisms
 - Rollback capabilities for failed operations
@@ -355,15 +377,15 @@ class CustomAgent {
   constructor() {
     this.api = new TaskManagerAPI();
   }
-  
+
   async initializeAgent() {
     const result = await this.api.initializeAgent({
       role: 'development',
-      specialization: ['frontend']
+      specialization: ['frontend'],
     });
     this.agentId = result.agentId;
   }
-  
+
   async processNextTask() {
     const task = await this.api.claimNextTask(this.agentId);
     // Process task...
@@ -390,16 +412,19 @@ class CustomAgent {
 ### Optimization Strategies
 
 **Caching**:
+
 - File modification time tracking for TODO.json
 - In-memory caching of frequently accessed tasks
 - Lazy loading of heavy components (AutoFixer, LockManager)
 
 **I/O Optimization**:
+
 - Batch operations for multiple task modifications
 - Efficient JSON parsing with validation skipping options
 - Memory-efficient operation for large task sets
 
 **Concurrency**:
+
 - Non-blocking operations with proper async/await patterns
 - Distributed locking with minimal lock duration
 - Parallel processing support for independent operations
@@ -407,11 +432,13 @@ class CustomAgent {
 ### Resource Management
 
 **Memory Usage**:
+
 - Efficient data structures for task management
 - Automatic cleanup of completed tasks
 - Configurable cache sizes and retention policies
 
 **Network Operations**:
+
 - 10-second timeout protection for all operations
 - Retry mechanisms for transient failures
 - Connection pooling for external services
@@ -421,18 +448,20 @@ class CustomAgent {
 ### Logging System
 
 **Structured Logging**:
+
 ```javascript
 const logger = Logger.getLogger('TaskManager');
 logger.info('Task operation completed', {
   taskId: 'task_123',
-  agentId: 'agent_456', 
+  agentId: 'agent_456',
   operation: 'complete',
   duration: 1250,
-  success: true
+  success: true,
 });
 ```
 
 **Log Levels**:
+
 - **ERROR**: System errors, failures, exceptions
 - **WARN**: Warnings, deprecated usage, performance issues
 - **INFO**: General operations, state changes, completions
@@ -441,11 +470,13 @@ logger.info('Task operation completed', {
 ### Metrics and Analytics
 
 **Task Metrics**:
+
 - Task creation, completion, and failure rates
 - Agent utilization and performance statistics
 - System throughput and response times
 
 **System Health**:
+
 - Memory and CPU usage monitoring
 - File system I/O performance
 - Agent heartbeat and availability status
@@ -459,8 +490,8 @@ const customCategories = {
   'security-audit': {
     priority: 1,
     description: 'Security audit and vulnerability assessment',
-    requiredFields: ['security_level', 'audit_scope']
-  }
+    requiredFields: ['security_level', 'audit_scope'],
+  },
 };
 
 taskManager.registerTaskCategories(customCategories);
@@ -474,10 +505,10 @@ class SecurityAgent extends BaseAgent {
     super({
       role: 'security',
       specialization: ['audit', 'penetration-testing'],
-      capabilities: ['vulnerability-scanning', 'code-analysis']
+      capabilities: ['vulnerability-scanning', 'code-analysis'],
     });
   }
-  
+
   async canHandleTask(task) {
     return task.category === 'security-audit';
   }
@@ -490,8 +521,8 @@ class SecurityAgent extends BaseAgent {
 class PriorityOrchestrationStrategy {
   async assignTask(availableTasks, availableAgents) {
     // Custom logic for task assignment
-    const highPriorityTasks = availableTasks.filter(t => t.priority === 'critical');
-    const specializedAgents = availableAgents.filter(a => a.hasRequiredSkills(task));
+    const highPriorityTasks = availableTasks.filter((t) => t.priority === 'critical');
+    const specializedAgents = availableAgents.filter((a) => a.hasRequiredSkills(task));
     return this.optimizeAssignment(highPriorityTasks, specializedAgents);
   }
 }
@@ -502,11 +533,13 @@ class PriorityOrchestrationStrategy {
 ### Environment Setup
 
 **Requirements**:
+
 - Node.js 18+ with ES2022 support
 - File system write permissions for project directories
 - Network access for distributed operations (optional)
 
 **Configuration Files**:
+
 - `TODO.json` - Primary task and feature database
 - `DONE.json` - Completed task archive
 - Agent registry files for persistent agent state
@@ -514,16 +547,19 @@ class PriorityOrchestrationStrategy {
 ### Production Deployment
 
 **Single Project Setup**:
+
 ```bash
 node setup-infinite-hook.js /path/to/project --single --batch
 ```
 
 **Multi-Project Setup**:
+
 ```bash
 node setup-infinite-hook.js /projects/root --batch
 ```
 
 **CI/CD Integration**:
+
 ```bash
 node setup-infinite-hook.js $PROJECT_ROOT --batch --no-interactive \
   --task "Automated deployment tasks" \
@@ -535,18 +571,21 @@ node setup-infinite-hook.js $PROJECT_ROOT --batch --no-interactive \
 ### Common Issues
 
 **Task Order Violations**:
+
 ```bash
 # Use order override for user-requested tasks
 node taskmanager-api.js claim task_123 agent_456 --allow-out-of-order
 ```
 
 **Agent Registration Failures**:
+
 ```bash
 # Reinitialize agent with fresh session
 node taskmanager-api.js reinitialize agent_456
 ```
 
 **Schema Migration Issues**:
+
 ```bash
 # Force schema update with backup
 node setup-infinite-hook.js /project/path --force-update --backup
@@ -555,17 +594,20 @@ node setup-infinite-hook.js /project/path --force-update --backup
 ### Debugging Tools
 
 **Verbose Logging**:
+
 ```bash
 DEBUG=* node taskmanager-api.js list
 ```
 
 **System Status**:
+
 ```bash
 node taskmanager-api.js stats
 node taskmanager-api.js status agent_123
 ```
 
 **Schema Validation**:
+
 ```bash
 node taskmanager-api.js validate-schema
 ```
@@ -575,7 +617,7 @@ node taskmanager-api.js validate-schema
 ### Planned Features
 
 1. **Real-time Log Streaming**: Live log monitoring and streaming capabilities
-2. **Log Analytics Dashboard**: Visual log analysis and performance monitoring  
+2. **Log Analytics Dashboard**: Visual log analysis and performance monitoring
 3. **Automated Error Detection**: Intelligent error pattern recognition and alerting
 4. **Task Scheduling**: Time-based task scheduling and recurring task support
 5. **Task Metrics**: Detailed analytics on task completion times and success rates

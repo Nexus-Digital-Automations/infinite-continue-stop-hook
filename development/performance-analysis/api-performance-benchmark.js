@@ -14,6 +14,7 @@
 const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const { loggers } = require('../../lib/logger');
 
 class APIPerformanceBenchmark {
   constructor() {
@@ -50,7 +51,7 @@ class APIPerformanceBenchmark {
 
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential execution required for accurate performance measurement
-        const result = await this.runCommand(command, args);
+        const _result = await this.runCommand(command, args);
         const endTime = process.hrtime.bigint();
         const endMemory = process.memoryUsage();
 
@@ -69,7 +70,7 @@ class APIPerformanceBenchmark {
         // Small delay between iterations
         // eslint-disable-next-line no-await-in-loop -- Sequential delay required for benchmark accuracy
         await this.sleep(100);
-      } catch (error) {
+      } catch {
         results.push({
           iteration: i + 1,
           responseTime: -1,
@@ -109,7 +110,7 @@ class APIPerformanceBenchmark {
         try {
           // Extract JSON from stdout (handle mixed output)
           const jsonMatch = stdout.match(/\{[\s\S]*\}/);
-          const result = jsonMatch
+          const _result = jsonMatch
             ? JSON.parse(jsonMatch[0])
             : { success: false, error: 'No JSON output' };
           resolve({
@@ -117,7 +118,7 @@ class APIPerformanceBenchmark {
             exitCode: code,
             stderr: stderr,
           });
-        } catch (error) {
+        } catch {
           resolve({
             success: false,
             error: `Parse error: ${error.message}`,
@@ -177,7 +178,9 @@ class APIPerformanceBenchmark {
    * Benchmark all critical API endpoints
    */
   async benchmarkAllEndpoints() {
-    loggers.stopHook.log('🚀 Starting comprehensive API performance benchmark...\n');
+    loggers.stopHook.log(
+      '🚀 Starting comprehensive API performance benchmark...\n',
+    );
 
     // Initialize system first
     loggers.stopHook.log('📋 Initializing agent for testing...');
@@ -284,7 +287,7 @@ class APIPerformanceBenchmark {
   }
 
   /**
-   * Analyze performance bottlenecks and generate recommendations
+   * Analyze performance bottlenecks And generate recommendations
    */
   analyzePerformance() {
     const analysis = {
@@ -465,7 +468,7 @@ class APIPerformanceBenchmark {
 
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential load testing requires controlled timing
-        const result = await this.runCommand(endpoint);
+        const _result = await this.runCommand(endpoint);
         const responseTime =
           Number(process.hrtime.bigint() - startTime) / 1000000;
 
@@ -476,7 +479,7 @@ class APIPerformanceBenchmark {
           success: result.success,
           timestamp: Date.now(),
         });
-      } catch (error) {
+      } catch {
         results.push({
           workerId,
           requestCount: ++requestCount,
@@ -651,10 +654,10 @@ class APIPerformanceBenchmark {
     const mid = Math.floor(sorted.length / 2);
 
     return sorted.length % 2 !== 0
-      // eslint-disable-next-line security/detect-object-injection -- Safe array access with calculated midpoint index
-      ? sorted[mid]
-      // eslint-disable-next-line security/detect-object-injection -- Safe array access with calculated indices for median calculation
-      : (sorted[mid - 1] + sorted[mid]) / 2;
+      ? // eslint-disable-next-line security/detect-object-injection -- Safe array access with calculated midpoint index
+      sorted[mid]
+      : // eslint-disable-next-line security/detect-object-injection -- Safe array access with calculated indices for median calculation
+      (sorted[mid - 1] + sorted[mid]) / 2;
   }
 
   percentile(arr, p) {
@@ -676,7 +679,7 @@ class APIPerformanceBenchmark {
     const outputDir =
       '/Users/jeremyparker/infinite-continue-stop-hook/development/performance-analysis';
 
-    // Validate and sanitize filename components
+    // Validate And sanitize filename components
     const timestamp = Date.now();
     const filename = `api-performance-report-${timestamp}.json`;
 
@@ -753,7 +756,7 @@ async function main() {
     }
 
     loggers.stopHook.log(`\n📄 Full report: ${outputFile}`);
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('❌ Benchmark failed:', error);
     throw error;
   }

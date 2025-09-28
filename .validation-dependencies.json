@@ -9,9 +9,7 @@
         "description": "Validates only user-outlined features exist",
         "estimatedDuration": 5000,
         "parallelizable": true,
-        "resourceRequirements": [
-          "filesystem"
-        ]
+        "resourceRequirements": ["filesystem"]
       }
     },
     "security-validation": {
@@ -21,10 +19,7 @@
         "description": "Runs security scans and vulnerability checks",
         "estimatedDuration": 30000,
         "parallelizable": true,
-        "resourceRequirements": [
-          "filesystem",
-          "network"
-        ]
+        "resourceRequirements": ["filesystem", "network"]
       }
     },
     "linter-validation": {
@@ -34,9 +29,7 @@
         "description": "Runs code linting and style checks",
         "estimatedDuration": 15000,
         "parallelizable": true,
-        "resourceRequirements": [
-          "filesystem"
-        ]
+        "resourceRequirements": ["filesystem"]
       }
     },
     "type-validation": {
@@ -51,10 +44,7 @@
         "description": "Runs type checking and compilation checks",
         "estimatedDuration": 20000,
         "parallelizable": true,
-        "resourceRequirements": [
-          "filesystem",
-          "cpu"
-        ]
+        "resourceRequirements": ["filesystem", "cpu"]
       }
     },
     "build-validation": {
@@ -73,11 +63,7 @@
         "description": "Tests application build process",
         "estimatedDuration": 45000,
         "parallelizable": false,
-        "resourceRequirements": [
-          "filesystem",
-          "cpu",
-          "memory"
-        ]
+        "resourceRequirements": ["filesystem", "cpu", "memory"]
       }
     },
     "start-validation": {
@@ -92,11 +78,7 @@
         "description": "Tests application startup capabilities",
         "estimatedDuration": 20000,
         "parallelizable": false,
-        "resourceRequirements": [
-          "filesystem",
-          "network",
-          "ports"
-        ]
+        "resourceRequirements": ["filesystem", "network", "ports"]
       }
     },
     "test-validation": {
@@ -115,11 +97,7 @@
         "description": "Runs automated test suites",
         "estimatedDuration": 60000,
         "parallelizable": true,
-        "resourceRequirements": [
-          "filesystem",
-          "cpu",
-          "memory"
-        ]
+        "resourceRequirements": ["filesystem", "cpu", "memory"]
       }
     }
   }

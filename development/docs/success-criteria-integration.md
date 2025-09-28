@@ -2,7 +2,7 @@
 
 **Version**: 1.0.0  
 **Date**: 2025-09-15  
-**Author**: Documentation Agent #5  
+**Author**: Documentation Agent #5
 
 ## Overview
 
@@ -13,6 +13,7 @@ This guide provides practical examples and best practices for integrating the Su
 ### Standard Development Workflow
 
 #### Pre-Development Phase
+
 ```bash
 #!/bin/bash
 # pre-development-setup.sh
@@ -36,6 +37,7 @@ echo "Review criteria checklist and begin implementation"
 ```
 
 #### During Development
+
 ```bash
 #!/bin/bash
 # continuous-validation.sh
@@ -63,6 +65,7 @@ echo "Continuous validation complete"
 ```
 
 #### Pre-Commit Hooks
+
 ```bash
 #!/bin/bash
 # .git/hooks/pre-commit
@@ -72,13 +75,13 @@ TASK_ID=$(git branch --show-current | grep -o 'feature_[0-9_a-z]*' || echo "")
 
 if [ -n "$TASK_ID" ]; then
     echo "Running success criteria validation for: $TASK_ID"
-    
+
     # Run essential validations before commit
     timeout 10s node taskmanager-api.js validate-criteria $TASK_ID \
         --category=automated \
         --fail-fast \
         --evidence-auto-collect
-    
+
     if [ $? -eq 0 ]; then
         echo "✅ Pre-commit validation passed"
     else
@@ -92,6 +95,7 @@ fi
 ### Feature Branch Workflow
 
 #### Branch Creation with Criteria Setup
+
 ```bash
 #!/bin/bash
 # create-feature-branch.sh
@@ -109,7 +113,7 @@ timeout 10s node taskmanager-api.js set-success-criteria $TASK_ID \
     "title": "Feature Branch Integration",
     "requirements": [
       "Feature branch builds successfully",
-      "All feature tests pass", 
+      "All feature tests pass",
       "Feature documentation complete",
       "Code review completed"
     ],
@@ -152,6 +156,7 @@ echo "Feature branch setup complete"
 ```
 
 #### Pull Request Integration
+
 ```bash
 #!/bin/bash
 # pr-validation.sh
@@ -199,15 +204,16 @@ timeout 10s node taskmanager-api.js request-pr-reviews $TASK_ID $PR_NUMBER
 ### GitHub Actions Integration
 
 #### Complete Validation Workflow
+
 ```yaml
 # .github/workflows/success-criteria-validation.yml
 name: Success Criteria Validation
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   extract-task-info:
@@ -234,35 +240,35 @@ jobs:
     if: needs.extract-task-info.outputs.has-task == 'true'
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run Linter
         run: |
           npm run lint -- --format=json > linter-results.json
           npm run lint || true
-      
+
       - name: Run Tests
         run: |
           npm run test -- --coverage --json > test-results.json
           npm run test
-      
+
       - name: Build Project
         run: |
           npm run build 2>&1 | tee build-output.log
-      
+
       - name: Security Scan
         run: |
           npm audit --json > security-audit.json || true
           npm audit
-      
+
       - name: Collect Evidence
         run: |
           mkdir -p evidence/automated
@@ -270,13 +276,13 @@ jobs:
           mv test-results.json evidence/automated/
           mv build-output.log evidence/automated/
           mv security-audit.json evidence/automated/
-      
+
       - name: Upload Evidence
         uses: actions/upload-artifact@v3
         with:
           name: validation-evidence
           path: evidence/
-      
+
       - name: Run Success Criteria Validation
         env:
           TASK_ID: ${{ needs.extract-task-info.outputs.task-id }}
@@ -292,7 +298,7 @@ jobs:
     if: needs.extract-task-info.outputs.has-task == 'true'
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Request Manual Reviews
         env:
           TASK_ID: ${{ needs.extract-task-info.outputs.task-id }}
@@ -308,13 +314,13 @@ jobs:
     if: always() && needs.extract-task-info.outputs.has-task == 'true'
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Download Evidence
         uses: actions/download-artifact@v3
         with:
           name: validation-evidence
           path: evidence/
-      
+
       - name: Generate Validation Report
         env:
           TASK_ID: ${{ needs.extract-task-info.outputs.task-id }}
@@ -323,7 +329,7 @@ jobs:
             --format=markdown \
             --include-evidence \
             --output=validation-report.md
-      
+
       - name: Comment PR with Report
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v6
@@ -331,7 +337,7 @@ jobs:
           script: |
             const fs = require('fs');
             const report = fs.readFileSync('validation-report.md', 'utf8');
-            
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
@@ -346,14 +352,14 @@ jobs:
 // Jenkinsfile
 pipeline {
     agent any
-    
+
     environment {
         TASK_ID = sh(
             script: "echo ${env.BRANCH_NAME} | grep -o 'feature_[0-9_a-z]*' || echo ''",
             returnStdout: true
         ).trim()
     }
-    
+
     stages {
         stage('Setup') {
             when {
@@ -366,7 +372,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Automated Validation') {
             when {
                 expression { env.TASK_ID != '' }
@@ -382,7 +388,7 @@ pipeline {
                         }
                     }
                 }
-                
+
                 stage('Testing') {
                     steps {
                         script {
@@ -393,7 +399,7 @@ pipeline {
                         }
                     }
                 }
-                
+
                 stage('Building') {
                     steps {
                         script {
@@ -403,7 +409,7 @@ pipeline {
                         }
                     }
                 }
-                
+
                 stage('Security Scan') {
                     steps {
                         script {
@@ -416,7 +422,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Success Criteria Validation') {
             when {
                 expression { env.TASK_ID != '' }
@@ -429,7 +435,7 @@ pipeline {
                             --output-format=jenkins \\
                             --output-file=validation-results.json
                     """
-                    
+
                     // Parse results and set build status
                     def results = readJSON file: 'validation-results.json'
                     if (results.overall_status != 'passed') {
@@ -439,7 +445,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Generate Report') {
             when {
                 expression { env.TASK_ID != '' }
@@ -452,7 +458,7 @@ pipeline {
                             --include-evidence \\
                             --output=validation-report.html
                     """
-                    
+
                     publishHTML([
                         allowMissing: false,
                         alwaysLinkToLastBuild: true,
@@ -465,7 +471,7 @@ pipeline {
             }
         }
     }
-    
+
     post {
         always {
             script {
@@ -475,7 +481,7 @@ pipeline {
                 }
             }
         }
-        
+
         failure {
             script {
                 if (env.TASK_ID != '') {
@@ -488,7 +494,7 @@ pipeline {
                 }
             }
         }
-        
+
         success {
             script {
                 if (env.TASK_ID != '') {
@@ -510,6 +516,7 @@ pipeline {
 ### VS Code Extension
 
 #### settings.json Configuration
+
 ```json
 {
   "successCriteria.enabled": true,
@@ -523,134 +530,133 @@ pipeline {
 ```
 
 #### Extension Integration Script
+
 ```javascript
 // vs-code-extension/src/successCriteriaProvider.js
 const vscode = require('vscode');
 const { exec } = require('child_process');
 
 class SuccessCriteriaProvider {
-    constructor() {
-        this.statusBarItem = vscode.window.createStatusBarItem(
-            vscode.StatusBarAlignment.Left, 
-            100
-        );
-        this.currentTaskId = null;
-        this.validationStatus = 'unknown';
+  constructor() {
+    this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+    this.currentTaskId = null;
+    this.validationStatus = 'unknown';
+  }
+
+  activate(context) {
+    // Register commands
+    const validateCommand = vscode.commands.registerCommand('successCriteria.validate', () =>
+      this.validateCurrentTask()
+    );
+
+    const showCriteriaCommand = vscode.commands.registerCommand('successCriteria.showCriteria', () =>
+      this.showTaskCriteria()
+    );
+
+    // Set up file watcher for automatic validation
+    const watcher = vscode.workspace.createFileSystemWatcher('**/*.{js,ts,py}');
+    watcher.onDidSave(() => this.onFileSave());
+
+    // Update status bar
+    this.updateStatusBar();
+
+    context.subscriptions.push(validateCommand, showCriteriaCommand, watcher, this.statusBarItem);
+  }
+
+  async validateCurrentTask() {
+    if (!this.currentTaskId) {
+      await this.detectCurrentTask();
     }
 
-    activate(context) {
-        // Register commands
-        const validateCommand = vscode.commands.registerCommand(
-            'successCriteria.validate',
-            () => this.validateCurrentTask()
-        );
-
-        const showCriteriaCommand = vscode.commands.registerCommand(
-            'successCriteria.showCriteria',
-            () => this.showTaskCriteria()
-        );
-
-        // Set up file watcher for automatic validation
-        const watcher = vscode.workspace.createFileSystemWatcher('**/*.{js,ts,py}');
-        watcher.onDidSave(() => this.onFileSave());
-
-        // Update status bar
-        this.updateStatusBar();
-
-        context.subscriptions.push(
-            validateCommand,
-            showCriteriaCommand,
-            watcher,
-            this.statusBarItem
-        );
+    if (!this.currentTaskId) {
+      vscode.window.showWarningMessage('No active task detected');
+      return;
     }
 
-    async validateCurrentTask() {
-        if (!this.currentTaskId) {
-            await this.detectCurrentTask();
+    vscode.window.withProgress(
+      {
+        location: vscode.ProgressLocation.Notification,
+        title: `Validating task ${this.currentTaskId}`,
+        cancellable: false,
+      },
+      async (progress) => {
+        try {
+          const result = await this.runValidation(this.currentTaskId);
+          this.handleValidationResult(result);
+        } catch (error) {
+          vscode.window.showErrorMessage(`Validation failed: ${error.message}`);
         }
+      }
+    );
+  }
 
-        if (!this.currentTaskId) {
-            vscode.window.showWarningMessage('No active task detected');
-            return;
-        }
-
-        vscode.window.withProgress({
-            location: vscode.ProgressLocation.Notification,
-            title: `Validating task ${this.currentTaskId}`,
-            cancellable: false
-        }, async (progress) => {
+  async runValidation(taskId) {
+    return new Promise((resolve, reject) => {
+      exec(
+        `timeout 10s node taskmanager-api.js validate-criteria ${taskId} --format=json`,
+        { cwd: vscode.workspace.rootPath },
+        (error, stdout, stderr) => {
+          if (error) {
+            reject(error);
+          } else {
             try {
-                const result = await this.runValidation(this.currentTaskId);
-                this.handleValidationResult(result);
-            } catch (error) {
-                vscode.window.showErrorMessage(`Validation failed: ${error.message}`);
+              resolve(JSON.parse(stdout));
+            } catch (parseError) {
+              reject(parseError);
             }
-        });
-    }
-
-    async runValidation(taskId) {
-        return new Promise((resolve, reject) => {
-            exec(
-                `timeout 10s node taskmanager-api.js validate-criteria ${taskId} --format=json`,
-                { cwd: vscode.workspace.rootPath },
-                (error, stdout, stderr) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        try {
-                            resolve(JSON.parse(stdout));
-                        } catch (parseError) {
-                            reject(parseError);
-                        }
-                    }
-                }
-            );
-        });
-    }
-
-    handleValidationResult(result) {
-        this.validationStatus = result.overall_status;
-        this.updateStatusBar();
-
-        // Show validation problems in Problems panel
-        this.updateProblemsPanel(result);
-
-        // Show notification
-        if (result.overall_status === 'passed') {
-            vscode.window.showInformationMessage(
-                `✅ All success criteria passed (${result.criteria_summary.passed}/${result.criteria_summary.total})`
-            );
-        } else {
-            vscode.window.showWarningMessage(
-                `⚠️ Some criteria failed (${result.criteria_summary.failed} failed, ${result.criteria_summary.pending} pending)`
-            );
+          }
         }
-    }
+      );
+    });
+  }
 
-    updateStatusBar() {
-        if (this.currentTaskId) {
-            const icon = this.getStatusIcon();
-            this.statusBarItem.text = `${icon} ${this.currentTaskId}`;
-            this.statusBarItem.tooltip = `Success Criteria: ${this.validationStatus}`;
-            this.statusBarItem.command = 'successCriteria.showCriteria';
-        } else {
-            this.statusBarItem.text = '$(search) No Task';
-            this.statusBarItem.tooltip = 'Click to detect current task';
-            this.statusBarItem.command = 'successCriteria.detectTask';
-        }
-        this.statusBarItem.show();
-    }
+  handleValidationResult(result) {
+    this.validationStatus = result.overall_status;
+    this.updateStatusBar();
 
-    getStatusIcon() {
-        switch (this.validationStatus) {
-            case 'passed': return '$(check)';
-            case 'failed': return '$(error)';
-            case 'pending': return '$(clock)';
-            case 'in_progress': return '$(sync)';
-            default: return '$(question)';
-        }
+    // Show validation problems in Problems panel
+    this.updateProblemsPanel(result);
+
+    // Show notification
+    if (result.overall_status === 'passed') {
+      vscode.window.showInformationMessage(
+        `✅ All success criteria passed (${result.criteria_summary.passed}/${result.criteria_summary.total})`
+      );
+    } else {
+      vscode.window.showWarningMessage(
+        `⚠️ Some criteria failed (${result.criteria_summary.failed} failed, ${result.criteria_summary.pending} pending)`
+      );
     }
+  }
+
+  updateStatusBar() {
+    if (this.currentTaskId) {
+      const icon = this.getStatusIcon();
+      this.statusBarItem.text = `${icon} ${this.currentTaskId}`;
+      this.statusBarItem.tooltip = `Success Criteria: ${this.validationStatus}`;
+      this.statusBarItem.command = 'successCriteria.showCriteria';
+    } else {
+      this.statusBarItem.text = '$(search) No Task';
+      this.statusBarItem.tooltip = 'Click to detect current task';
+      this.statusBarItem.command = 'successCriteria.detectTask';
+    }
+    this.statusBarItem.show();
+  }
+
+  getStatusIcon() {
+    switch (this.validationStatus) {
+      case 'passed':
+        return '$(check)';
+      case 'failed':
+        return '$(error)';
+      case 'pending':
+        return '$(clock)';
+      case 'in_progress':
+        return '$(sync)';
+      default:
+        return '$(question)';
+    }
+  }
 }
 
 module.exports = SuccessCriteriaProvider;
@@ -659,28 +665,29 @@ module.exports = SuccessCriteriaProvider;
 ### IntelliJ IDEA Plugin
 
 #### Plugin Configuration
+
 ```xml
 <!-- plugin.xml -->
 <idea-plugin>
   <id>com.company.success-criteria</id>
   <name>Success Criteria Integration</name>
   <version>1.0.0</version>
-  
+
   <depends>com.intellij.modules.platform</depends>
-  
+
   <extensions defaultExtensionNs="com.intellij">
-    <toolWindow id="Success Criteria" anchor="bottom" 
+    <toolWindow id="Success Criteria" anchor="bottom"
                 factoryClass="com.company.successcriteria.SuccessCriteriaToolWindowFactory"/>
-    
-    <annotator language="JavaScript" 
+
+    <annotator language="JavaScript"
                implementationClass="com.company.successcriteria.CriteriaAnnotator"/>
-    
+
     <applicationService serviceInterface="com.company.successcriteria.CriteriaService"
                        serviceImplementation="com.company.successcriteria.CriteriaServiceImpl"/>
   </extensions>
-  
+
   <actions>
-    <action id="ValidateSuccessCriteria" 
+    <action id="ValidateSuccessCriteria"
             class="com.company.successcriteria.ValidateAction"
             text="Validate Success Criteria">
       <add-to-group group-id="BuildMenu" anchor="after" relative-to-action="CompileDirty"/>
@@ -694,6 +701,7 @@ module.exports = SuccessCriteriaProvider;
 ### Code Review Integration
 
 #### Review Request Automation
+
 ```bash
 #!/bin/bash
 # request-code-review.sh
@@ -726,6 +734,7 @@ echo "Code review requested from $REVIEWER for task $TASK_ID"
 ```
 
 #### Review Completion Integration
+
 ```bash
 #!/bin/bash
 # complete-code-review.sh
@@ -760,6 +769,7 @@ timeout 10s node taskmanager-api.js check-completion-readiness $TASK_ID
 ### Cross-Team Review Workflows
 
 #### Security Team Integration
+
 ```bash
 #!/bin/bash
 # security-review-workflow.sh
@@ -771,26 +781,26 @@ SECURITY_REQUIRED=$(timeout 10s node taskmanager-api.js check-security-requireme
 
 if [ "$SECURITY_REQUIRED" = "true" ]; then
     echo "Security review required for task: $TASK_ID"
-    
+
     # 2. Prepare security review package
     timeout 10s node taskmanager-api.js prepare-security-review $TASK_ID \
       --include-threat-model \
       --include-data-flow \
       --include-dependencies \
       --output=security-review-package.zip
-    
+
     # 3. Submit to security team
     timeout 10s node taskmanager-api.js submit-security-review $TASK_ID \
       --package=security-review-package.zip \
       --priority=normal \
       --deadline="+7 days"
-    
+
     # 4. Set up notification for completion
     timeout 10s node taskmanager-api.js setup-review-notification $TASK_ID \
       --review-type=security \
       --notification-channel=slack \
       --notification-target=#security-reviews
-    
+
     echo "Security review submitted - tracking ID: $(cat .security-review-id)"
 else
     echo "No security review required for task: $TASK_ID"
@@ -798,6 +808,7 @@ fi
 ```
 
 #### Architecture Review Process
+
 ```bash
 #!/bin/bash
 # architecture-review-workflow.sh
@@ -809,20 +820,20 @@ ARCH_COMPLEXITY=$(timeout 10s node taskmanager-api.js assess-architecture-comple
 
 if [ "$ARCH_COMPLEXITY" = "high" ] || [ "$ARCH_COMPLEXITY" = "medium" ]; then
     echo "Architecture review required - complexity: $ARCH_COMPLEXITY"
-    
+
     # 2. Generate architecture documentation
     timeout 10s node taskmanager-api.js generate-architecture-docs $TASK_ID \
       --include-diagrams \
       --include-decisions \
       --include-alternatives \
       --output=architecture-review-docs/
-    
+
     # 3. Request architecture review
     timeout 10s node taskmanager-api.js request-architecture-review $TASK_ID \
       --complexity=$ARCH_COMPLEXITY \
       --docs-location=architecture-review-docs/ \
       --reviewer-pool=architecture_team
-    
+
     echo "Architecture review requested for task: $TASK_ID"
 fi
 ```
@@ -832,6 +843,7 @@ fi
 ### Multi-Repository Project Integration
 
 #### Monorepo Configuration
+
 ```json
 {
   "success_criteria_config": {
@@ -860,6 +872,7 @@ fi
 ```
 
 #### Cross-Package Validation Script
+
 ```bash
 #!/bin/bash
 # validate-monorepo.sh
@@ -874,7 +887,7 @@ echo "Affected packages: $AFFECTED_PACKAGES"
 # 2. Run package-specific validations
 for package in $AFFECTED_PACKAGES; do
     echo "Validating package: $package"
-    
+
     timeout 10s node taskmanager-api.js validate-package-criteria $TASK_ID \
       --package=$package \
       --evidence-dir=evidence/$package/
@@ -894,6 +907,7 @@ timeout 10s node taskmanager-api.js generate-monorepo-report $TASK_ID \
 ### Microservices Integration
 
 #### Service-Level Criteria Configuration
+
 ```json
 {
   "microservices_criteria": {
@@ -924,6 +938,7 @@ timeout 10s node taskmanager-api.js generate-monorepo-report $TASK_ID \
 ```
 
 #### Service Integration Validation
+
 ```bash
 #!/bin/bash
 # validate-microservice-integration.sh
@@ -1009,6 +1024,6 @@ timeout 10s node taskmanager-api.js check-deployment-readiness $TASK_ID \
 
 ---
 
-*Integration Guide v1.0.0*  
-*Generated by: Documentation Agent #5*  
-*Last Updated: 2025-09-15*
+_Integration Guide v1.0.0_  
+_Generated by: Documentation Agent #5_  
+_Last Updated: 2025-09-15_

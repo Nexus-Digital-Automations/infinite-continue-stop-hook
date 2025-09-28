@@ -1,13 +1,13 @@
 /**
  * Initialization Statistics Unit Tests
  *
- * Comprehensive testing of initialization tracking and time bucket statistics including:
- * - Time bucket calculation and management (5-hour windows starting at 7am)
- * - Daily reset logic and bucket transitions
- * - Initialization and reinitialization counting
- * - Historical data preservation and rolling windows
- * - Statistics retrieval and formatting
- * - Edge cases around time boundaries and data migration
+ * Comprehensive testing of initialization tracking And time bucket statistics including:
+ * - Time bucket calculation And management (5-hour windows starting at 7am)
+ * - Daily reset logic And bucket transitions
+ * - Initialization And reinitialization counting
+ * - Historical data preservation And rolling windows
+ * - Statistics retrieval And formatting
+ * - Edge cases around time boundaries And data migration
  *
  * This test suite focuses specifically on the initialization statistics tracking
  * features of the FeatureManagerAPI with detailed time-based testing.
@@ -237,7 +237,7 @@ describe('Initialization Statistics', () => {
 
     describe('Initialization Tracking', () => {
       test('should track initialization in correct time bucket', async () => {
-        const result = await api._updateTimeBucketStats('init');
+        const _result = await api._updateTimeBucketStats('init');
         expect(result).toBe(true);
 
         const features = await api._loadFeatures();
@@ -253,7 +253,7 @@ describe('Initialization Statistics', () => {
       });
 
       test('should track reinitialization in correct time bucket', async () => {
-        const result = await api._updateTimeBucketStats('reinit');
+        const _result = await api._updateTimeBucketStats('reinit');
         expect(result).toBe(true);
 
         const features = await api._loadFeatures();
@@ -316,7 +316,7 @@ describe('Initialization Statistics', () => {
 
     describe('Integration with Agent Operations', () => {
       test('should track initialization through initializeAgent', async () => {
-        const result = await api.initializeAgent('test-agent');
+        const _result = await api.initializeAgent('test-agent');
         expect(result.success).toBe(true);
 
         const statsResult = await api.getInitializationStats();
@@ -332,7 +332,7 @@ describe('Initialization Statistics', () => {
         await api.initializeAgent('test-agent');
 
         // Then reinitialize
-        const result = await api.reinitializeAgent('test-agent');
+        const _result = await api.reinitializeAgent('test-agent');
         expect(result.success).toBe(true);
 
         const statsResult = await api.getInitializationStats();
@@ -349,7 +349,7 @@ describe('Initialization Statistics', () => {
 
   describe('Daily Reset Logic', () => {
     describe('Reset Detection', () => {
-      test('should detect day change and reset buckets', async () => {
+      test('should detect day change And reset buckets', async () => {
         // Start on day 1
         timeUtils.mockCurrentTimeISO('2025-09-23T14:00:00.000Z');
         await api._updateTimeBucketStats('init');
@@ -383,7 +383,7 @@ describe('Initialization Statistics', () => {
         timeUtils.mockCurrentTimeISO('2025-09-23T15:00:00.000Z');
         await api._updateTimeBucketStats('reinit');
 
-        // Day 2 - reset and new activity
+        // Day 2 - reset And new activity
         timeUtils.mockCurrentTimeISO('2025-09-24T12:00:00.000Z');
         await api._updateTimeBucketStats('init');
 
@@ -482,7 +482,7 @@ describe('Initialization Statistics', () => {
       test('should retrieve initialization statistics successfully', async () => {
         timeUtils.mockCurrentTimeISO('2025-09-23T14:30:00.000Z');
 
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         expect(result.success).toBe(true);
         expect(result.stats).toBeDefined();
@@ -503,7 +503,7 @@ describe('Initialization Statistics', () => {
       });
 
       test('should format time buckets correctly', async () => {
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         const buckets = result.stats.time_buckets;
         const expectedBuckets = [
@@ -527,7 +527,7 @@ describe('Initialization Statistics', () => {
       });
 
       test('should calculate today totals correctly', async () => {
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         const todayTotals = result.stats.today_totals;
         const buckets = result.stats.time_buckets;
@@ -547,7 +547,7 @@ describe('Initialization Statistics', () => {
       });
 
       test('should include recent activity history', async () => {
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         expect(result.stats.recent_activity).toBeDefined();
         expect(Array.isArray(result.stats.recent_activity)).toBe(true);
@@ -560,7 +560,7 @@ describe('Initialization Statistics', () => {
         delete features.metadata.initialization_stats;
         mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(features));
 
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         expect(result.success).toBe(true);
         expect(result.stats.total_initializations).toBe(0);
@@ -621,7 +621,7 @@ describe('Initialization Statistics', () => {
       test('should handle file read errors in getInitializationStats', async () => {
         mockFs.setReadError(TEST_TASKS_PATH, 'Permission denied');
 
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         expect(result.success).toBe(false);
         expect(result.error).toContain('Permission denied');
@@ -631,7 +631,7 @@ describe('Initialization Statistics', () => {
       test('should handle file write errors in _updateTimeBucketStats', async () => {
         mockFs.setWriteError(TEST_TASKS_PATH, 'Disk full');
 
-        const result = await api._updateTimeBucketStats('init');
+        const _result = await api._updateTimeBucketStats('init');
 
         expect(result).toBe(false);
       });
@@ -639,7 +639,7 @@ describe('Initialization Statistics', () => {
       test('should handle corrupted features file', async () => {
         mockFs.setFile(TEST_TASKS_PATH, '{ invalid json }');
 
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         expect(result.success).toBe(false);
         expect(result.error).toBeDefined();
@@ -655,7 +655,7 @@ describe('Initialization Statistics', () => {
         };
         mockFs.setFile(TEST_TASKS_PATH, JSON.stringify(corruptedFeatures));
 
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         expect(result.success).toBe(true);
         expect(result.stats.total_initializations).toBe(0);
@@ -686,7 +686,7 @@ describe('Initialization Statistics', () => {
 
   // =================== EDGE CASES AND BOUNDARIES ===================
 
-  describe('Edge Cases and Boundaries', () => {
+  describe('Edge Cases And Boundaries', () => {
     describe('Time Boundary Edge Cases', () => {
       test('should handle midnight crossover correctly', async () => {
         // Just before midnight
@@ -749,7 +749,7 @@ describe('Initialization Statistics', () => {
           await api._updateTimeBucketStats('init');
         }
 
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         expect(result.success).toBe(true);
         expect(result.stats.total_initializations).toBe(1000);
@@ -777,7 +777,7 @@ describe('Initialization Statistics', () => {
           await api._saveFeatures(features);
         }
 
-        const result = await api.getInitializationStats();
+        const _result = await api.getInitializationStats();
 
         expect(result.success).toBe(true);
         expect(result.stats.recent_activity.length).toBeLessThanOrEqual(7);

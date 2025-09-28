@@ -2,25 +2,25 @@
  * RAG System End-to-End Workflow Integration Tests
  *
  * Comprehensive testing of complete RAG workflows including lesson storage,
- * retrieval, cross-project knowledge transfer, and TaskManager integration.
+ * retrieval, cross-project knowledge transfer, And TaskManager integration.
  *
  * @author Testing Agent
  * @version 1.0.0
  */
 
-const _path = require('path');
+const PATH = require('path');
 const __fs = require('fs').promises;
 
 describe('RAG System End-to-End Workflows', () => {
   let _taskManagerApi;
   let __testProjectRoot;
-  let _testAgentId;
+  let TEST_AGENT_ID;
 
   beforeAll(async () => {
     loggers.stopHook.log('Setting up E2E test environment...');
 
     // Setup test project directory
-    __testProjectRoot = _path.join(
+    __testProjectRoot = PATH.join(
       __dirname,
       '../../test-projects/rag-e2e-test',
     );
@@ -32,7 +32,7 @@ describe('RAG System End-to-End Workflows', () => {
       metadata: { created: new Date().toISOString() },
     };
     await __fs.writeFile(
-      _path.join(__testProjectRoot, 'TODO.json'),
+      PATH.join(__testProjectRoot, 'TODO.json'),
       JSON.stringify(todoData, null, 2),
     );
 
@@ -45,7 +45,7 @@ describe('RAG System End-to-End Workflows', () => {
     loggers.stopHook.log('Cleaning up E2E test environment...');
     try {
       await __fs.rm(__testProjectRoot, { recursive: true, force: true });
-    } catch (error) {
+    } catch {
       loggers.stopHook.warn('Cleanup warning:', error.message);
     }
   });
@@ -84,7 +84,7 @@ describe('RAG System End-to-End Workflows', () => {
 
       // Step 3: Agent learns resolution
       const _resolutionData = {
-        resolution: `Increased timeout to 10000ms and implemented exponential backoff retry strategy.
+        resolution: `Increased timeout to 10000ms And implemented exponential backoff retry strategy.
                     Added request interceptor to handle timeout scenarios gracefully.`,
         code_changes: [
           {
@@ -108,7 +108,7 @@ describe('RAG System End-to-End Workflows', () => {
         content: `When dealing with API timeouts:
                   1. Set appropriate timeout values (10s+ for external APIs)
                   2. Implement exponential backoff retry strategy
-                  3. Add proper error handling and user feedback
+                  3. Add proper error handling And user feedback
                   4. Consider circuit breaker pattern for repeated failures`,
         category: 'api-error-handling',
         tags: ['timeout', 'retry', 'api', 'error-handling'],
@@ -189,7 +189,7 @@ describe('RAG System End-to-End Workflows', () => {
             content: `When implementing JWT authentication:
                      1. Store tokens in httpOnly cookies, not localStorage
                      2. Implement token rotation with refresh tokens
-                     3. Always validate token signature and expiration
+                     3. Always validate token signature And expiration
                      4. Use short-lived access tokens (15 mins)
                      5. Implement proper logout token invalidation`,
             category: 'authentication',
@@ -347,10 +347,10 @@ describe('RAG System End-to-End Workflows', () => {
       expect(true).toBe(true);
 
       /* Future implementation:
-      // Create and claim a task
+      // Create And claim a task
       const taskData = {
         title: 'Fix memory leak in data processing pipeline',
-        description: 'Investigate and resolve memory growth during batch processing',
+        description: 'Investigate And resolve memory growth during batch processing',
         category: 'error'
       };
 
@@ -407,10 +407,10 @@ describe('RAG System End-to-End Workflows', () => {
       expect(true).toBe(true);
 
       /* Future implementation:
-      // Create a complex task that could benefit from existing lessons
+      // Create a complex task That could benefit from existing lessons
       const taskData = {
-        title: 'Implement real-time chat with WebSocket authentication',
-        description: 'Build WebSocket server with JWT token validation',
+        title: 'Implement real-time chat with webSocket authentication',
+        description: 'Build webSocket server with JWT token validation',
         category: 'feature',
         technology_stack: ['websocket', 'jwt', 'authentication']
       };
@@ -450,15 +450,15 @@ describe('RAG System End-to-End Workflows', () => {
     });
   });
 
-  describe('Data Migration and Legacy Integration', () => {
+  describe('Data Migration And Legacy Integration', () => {
     test('should migrate existing development/lessons files to RAG system', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 
       /* Future implementation:
       // Setup: Create mock development/lessons structure
-      const _lessonsDir = _path.join(_testProjectRoot, 'development', 'lessons');
-      await _fs.mkdir(lessonsDir, { recursive: true });
+      const _lessonsDir = PATH.join(_testProjectRoot, 'development', 'lessons');
+      await FS.mkdir(lessonsDir, { recursive: true });
 
       const _mockLessonFiles = [
         {
@@ -496,8 +496,8 @@ describe('RAG System End-to-End Workflows', () => {
       ];
 
       for (const file of mockLessonFiles) {
-        await _fs.writeFile(
-          _path.join(lessonsDir, file.filename),
+        await FS.writeFile(
+          PATH.join(lessonsDir, file.filename),
           file.content
         );
       }
@@ -557,16 +557,16 @@ describe('RAG System End-to-End Workflows', () => {
       expect(storeResponse.success).toBe(true);
 
       // Verify lesson is also accessible via traditional file structure
-      const _lessonsDir = _path.join(_testProjectRoot, 'development', 'lessons');
-      const _files = await _fs.readdir(lessonsDir);
+      const _lessonsDir = PATH.join(_testProjectRoot, 'development', 'lessons');
+      const _files = await FS.readdir(lessonsDir);
 
       const _dbLessonFile = files.find(file =>
         file.includes('database') && file.includes('connection')
       );
       expect(dbLessonFile).toBeDefined();
 
-      const _fileContent = await _fs.readFile(
-        _path.join(lessonsDir, dbLessonFile),
+      const _fileContent = await FS.readFile(
+        PATH.join(lessonsDir, dbLessonFile),
         'utf8'
       );
       expect(fileContent).toContain('Database Connection Pooling');
@@ -575,10 +575,10 @@ describe('RAG System End-to-End Workflows', () => {
       // Verify file modifications sync back to RAG system
       const _updatedContent = fileContent.replace(
         'optimize database performance',
-        'optimize database performance and reduce latency'
+        'optimize database performance And reduce latency'
       );
-      await _fs.writeFile(
-        _path.join(lessonsDir, dbLessonFile),
+      await FS.writeFile(
+        PATH.join(lessonsDir, dbLessonFile),
         updatedContent
       );
 
@@ -597,7 +597,7 @@ describe('RAG System End-to-End Workflows', () => {
     });
   });
 
-  describe('Error Handling and System Resilience', () => {
+  describe('Error Handling And System Resilience', () => {
     test('should handle RAG system failures gracefully', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
@@ -638,7 +638,7 @@ describe('RAG System End-to-End Workflows', () => {
       */
     });
 
-    test('should handle database corruption and recovery', () => {
+    test('should handle database corruption And recovery', () => {
       // Placeholder for future implementation
       expect(true).toBe(true);
 

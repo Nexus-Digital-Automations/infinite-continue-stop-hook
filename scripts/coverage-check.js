@@ -2,7 +2,7 @@
  * Standalone Coverage Threshold Enforcement Script
  *
  * Enforces coverage thresholds independently of test execution.
- * Can be used in CI/CD pipelines, pre-commit hooks, and manual validation.
+ * Can be used in CI/CD pipelines, pre-commit hooks, And manual validation.
  *
  * @author CI/CD Integration Agent
  * @version 1.0.0
@@ -75,13 +75,13 @@ class CoverageLogger {
     );
 
     loggers.stopHook.log(`┌${separator}┐`);
-    console.log(
+    loggers.stopHook.log(
       `│ ${headers.map((h, i) => h.padEnd(maxLengths[i])).join(' │ ')} │`
     );
     loggers.stopHook.log(`├${separator}┤`);
 
     rows.forEach((row) => {
-      console.log(
+      loggers.stopHook.log(
         `│ ${row.map((cell, i) => String(cell || '').padEnd(maxLengths[i])).join(' │ ')} │`
       );
     });
@@ -131,7 +131,7 @@ class CoverageThresholdChecker {
       if (shouldFail) {
         throw new Error('Coverage validation failed');
       }
-    } catch (error) {
+    } catch {
       CoverageLogger.error(`Coverage validation failed: ${error.message}`);
       if (process.env.DEBUG) {
         loggers.stopHook.error(error.stack);
@@ -153,7 +153,7 @@ class CoverageThresholdChecker {
       CoverageLogger.info('Coverage data not found, attempting to generate...');
       try {
         execSync('npm run coverage:ci', { stdio: 'inherit', timeout: 120000 });
-      } catch (error) {
+      } catch {
         throw new Error(
           'Failed to generate coverage data. Run tests with coverage first.'
         );
@@ -178,7 +178,7 @@ class CoverageThresholdChecker {
       );
 
       return coverageData;
-    } catch (error) {
+    } catch {
       if (error.message.includes('Invalid coverage')) {
         throw error;
       }
@@ -454,7 +454,7 @@ class CoverageThresholdChecker {
           encoding: 'utf8',
         }).trim(),
       };
-    } catch (error) {
+    } catch {
       return { commit: 'unknown', branch: 'unknown' };
     }
   }
@@ -465,7 +465,7 @@ if (require.main === module) {
   const args = process.argv.slice(2);
 
   if (args.includes('--help') || args.includes('-h')) {
-    console.log(`
+    loggers.stopHook.log(`
 Coverage Threshold Checker
 
 Usage: node coverage-check.js [options]
@@ -513,7 +513,7 @@ Examples:
     try {
       const customThresholds = JSON.parse(thresholdArg.split('=')[1]);
       config.thresholds = { ...config.thresholds, ...customThresholds };
-    } catch (error) {
+    } catch {
       loggers.stopHook.error('❌ Invalid thresholds JSON:', error.message);
       throw error;
     }
@@ -522,7 +522,7 @@ Examples:
   const checker = new CoverageThresholdChecker(config);
   try {
     checker.run();
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('❌ Fatal error:', error.message);
     throw error;
   }

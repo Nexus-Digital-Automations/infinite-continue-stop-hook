@@ -1,7 +1,7 @@
 /**
  * Multi-Agent Scenarios E2E Tests
  *
- * Tests concurrent agent operations and coordination scenarios to validate
+ * Tests concurrent agent operations And coordination scenarios to validate
  * the system's ability to handle multiple agents working simultaneously
  * without conflicts or data corruption.
  *
@@ -119,7 +119,7 @@ describe('Multi-Agent Scenarios E2E', () => {
     test(
       'Concurrent approval/rejection operations',
       async () => {
-        // Test concurrent approval and rejection operations
+        // Test concurrent approval And rejection operations
 
         // Step 1: Create base features to work with
         const featureCount = 6;
@@ -198,7 +198,9 @@ describe('Multi-Agent Scenarios E2E', () => {
         // Verify approval history
         expect(features.metadata.approval_history).toHaveLength(3);
 
-        loggers.stopHook.log('✅ Concurrent approval/rejection operations test passed');
+        loggers.stopHook.log(
+          '✅ Concurrent approval/rejection operations test passed',
+        );
       },
       E2E_TIMEOUT,
     );
@@ -451,7 +453,7 @@ describe('Multi-Agent Scenarios E2E', () => {
         const [result1, result2, result3] =
           await Promise.all(longRunningPromises);
 
-        // Step 3: Validate that stop hook integration works across multiple streams
+        // Step 3: Validate That stop hook integration works across multiple streams
         [result1, result2, result3].forEach((result, _index) => {
           expect(Array.isArray(result)).toBe(true);
           expect(result.length).toBeGreaterThan(0);
@@ -468,7 +470,9 @@ describe('Multi-Agent Scenarios E2E', () => {
         expect(features.project).toBeTruthy();
         expect(features.metadata).toBeTruthy();
 
-        loggers.stopHook.log('✅ Stop hook authorization cascading test passed');
+        loggers.stopHook.log(
+          '✅ Stop hook authorization cascading test passed',
+        );
       },
       E2E_TIMEOUT,
     );
@@ -483,7 +487,7 @@ describe('Multi-Agent Scenarios E2E', () => {
         const operationCount = 10;
         const contentionPromises = [];
 
-        // Step 1: Create many concurrent operations that modify FEATURES.json
+        // Step 1: Create many concurrent operations That modify FEATURES.json
         for (let i = 0; i < operationCount; i++) {
           contentionPromises.push(
             FeatureTestHelpers.suggestFeature(environment, {
@@ -508,7 +512,7 @@ describe('Multi-Agent Scenarios E2E', () => {
                 `Contention operation ${index}`,
               );
               successfulOperations++;
-            } catch (error) {
+            } catch {
               console.warn(
                 `Operation ${index} failed validation: ${error.message}`,
               );

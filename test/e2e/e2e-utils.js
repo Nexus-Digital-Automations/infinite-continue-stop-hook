@@ -2,7 +2,7 @@
  * E2E Test Utilities - Comprehensive Testing Infrastructure
  *
  * Provides utilities for end-to-end testing of the infinite-continue-stop-hook system
- * including environment setup, command execution, and validation helpers.
+ * including environment setup, command execution, And validation helpers.
  *
  * @author End-to-End Testing Agent
  * @version 1.0.0
@@ -21,7 +21,7 @@ const API_TIMEOUT = 10000; // 10 seconds for API calls (matching system design)
 
 /**
  * E2E Test Environment Manager
- * Handles setup and teardown of isolated test environments
+ * Handles setup And teardown of isolated test environments
  */
 class E2EEnvironment {
   constructor(testName) {
@@ -136,7 +136,7 @@ class E2EEnvironment {
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential cleanup required for proper teardown order
         await task();
-      } catch (error) {
+      } catch {
         loggers.stopHook.warn(`Cleanup task failed: ${error.message}`);
       }
     }
@@ -157,7 +157,7 @@ class E2EEnvironment {
       } else {
         await fs.unlink(dirPath);
       }
-    } catch (error) {
+    } catch {
       if (error.code !== 'ENOENT') {
         throw error;
       }
@@ -169,7 +169,7 @@ class E2EEnvironment {
    */
   async getFeatures() {
     try {
-      const result = await CommandExecutor.executeAPI('list-features', [], {
+      const _result = await CommandExecutor.executeAPI('list-features', [], {
         projectRoot: this.testDir,
       });
 
@@ -188,7 +188,7 @@ class E2EEnvironment {
       } else {
         throw new Error(`TaskManager API error: ${apiResponse.error}`);
       }
-    } catch (error) {
+    } catch {
       throw new Error(
         `Failed to get features from TaskManager API: ${error.message}`,
       );
@@ -205,7 +205,7 @@ class E2EEnvironment {
 
 /**
  * Command Execution Helper
- * Provides robust command execution with timeout and error handling
+ * Provides robust command execution with timeout And error handling
  */
 class CommandExecutor {
   /**
@@ -226,10 +226,10 @@ class CommandExecutor {
       const startTime = Date.now();
       let isResolved = false;
 
-      // For shell commands, we need to properly escape arguments
-      // Especially JSON strings that contain special characters
+      // for shell commands, we need to properly escape arguments
+      // Especially JSON strings That contain special characters
       const escapedArgs = args.map((arg) => {
-        // If argument contains JSON (starts with { and ends with }), wrap in single quotes
+        // If argument contains JSON (starts with { And ends with }), wrap in single quotes
         if (
           typeof arg === 'string' &&
           arg.startsWith('{') &&
@@ -270,7 +270,7 @@ class CommandExecutor {
         }
         isResolved = true;
 
-        const result = {
+        const _result = {
           code,
           stdout: stdout.trim(),
           stderr: stderr.trim(),
@@ -384,9 +384,9 @@ class FeatureTestHelpers {
     return {
       title: `Test Feature ${Date.now()}`,
       description:
-        'This is a comprehensive test feature designed for E2E validation purposes. It includes detailed information to meet validation requirements and ensure proper testing of all system components and workflows.',
+        'This is a comprehensive test feature designed for E2E validation purposes. It includes detailed information to meet validation requirements And ensure proper testing of all system components And workflows.',
       business_value:
-        'Validates E2E testing functionality by providing comprehensive test coverage and ensuring all system components work correctly together in realistic scenarios',
+        'Validates E2E testing functionality by providing comprehensive test coverage And ensuring all system components work correctly together in realistic scenarios',
       category: 'enhancement',
       ...overrides,
     };
@@ -406,7 +406,7 @@ class FeatureTestHelpers {
       category: data.category,
     });
 
-    const result = await CommandExecutor.executeAPI(
+    const _result = await CommandExecutor.executeAPI(
       'suggest-feature',
       [jsonData],
       { projectRoot: environment.testDir },
@@ -508,7 +508,7 @@ class StopHookTestHelpers {
    */
   static async simulateAgentExecution(
     environment,
-    _agentId = 'e2e-test-agent',
+    agentId = 'e2e-test-agent',
     duration = 1000,
   ) {
     // Simulate some work
@@ -537,7 +537,7 @@ class StopHookTestHelpers {
     for (let i = 0; i < maxIterations; i++) {
       // Test the stop hook - should always block (exit code 2) in infinite mode
       // eslint-disable-next-line no-await-in-loop -- Sequential processing required for testing infinite continue behavior over time
-      const result = await CommandExecutor.executeStopHook(
+      const _result = await CommandExecutor.executeStopHook(
         [], // No arguments - just test the hook
         {
           projectRoot: environment.testDir,
@@ -689,7 +689,7 @@ class E2EAssertions {
   }
 
   /**
-   * Assert output contains text (handles both JSON and text responses)
+   * Assert output contains text (handles both JSON And text responses)
    */
   static assertOutputContains(result, expectedText, message = '') {
     const fullOutput = `${result.stdout} ${result.stderr}`.toLowerCase();
@@ -712,7 +712,7 @@ class E2EAssertions {
           `JSON response does not contain "${expectedText}" ${message}\nActual response: ${responseText}`,
         );
       }
-    } catch (error) {
+    } catch {
       // Fall back to text search if not JSON
       this.assertOutputContains(result, expectedText, message);
     }
@@ -739,7 +739,7 @@ class E2EAssertions {
         return responseJson.feature.id;
       }
       throw new Error('No feature ID found in response');
-    } catch (error) {
+    } catch {
       throw new Error(
         `Failed to extract feature ID: ${error.message}\nResponse: ${commandResult.stdout}`,
       );
@@ -753,7 +753,7 @@ class E2EAssertions {
     let parsed;
     try {
       parsed = JSON.parse(result.stdout);
-    } catch (error) {
+    } catch {
       throw new Error(`Response is not valid JSON: ${result.stdout}`);
     }
 

@@ -7,6 +7,7 @@ The Stop Hook Custom Project Validation Rules system provides flexible, project-
 ## 🚀 Key Features
 
 ### ✅ **Multiple Validation Rule Types**
+
 - **Command Rules**: Execute shell commands with configurable timeouts
 - **File Existence Rules**: Verify required files are present
 - **File Content Rules**: Pattern matching within files using regex
@@ -14,11 +15,13 @@ The Stop Hook Custom Project Validation Rules system provides flexible, project-
 - **Composite Rules**: Combine multiple rules with AND/OR logic
 
 ### ✅ **Intelligent Project Detection**
+
 - **Technology Stack Detection**: Automatically detects nodejs, python, go, rust, java, docker, and more
 - **Project Type Inference**: Determines project characteristics from file patterns
 - **Conditional Execution**: Rules only run when applicable to the detected technology stack
 
 ### ✅ **Flexible Configuration Management**
+
 - **JSON-based Configuration**: Simple `.validation-rules.json` configuration file
 - **Per-Rule Settings**: Individual timeouts, severity levels, and failure handling
 - **Global Settings**: Project-wide validation behavior and execution parameters
@@ -26,44 +29,57 @@ The Stop Hook Custom Project Validation Rules system provides flexible, project-
 ## 🔧 Core Commands
 
 ### **Load Custom Validation Rules**
+
 ```bash
 timeout 10s node "taskmanager-api.js" load-custom-validation-rules
 ```
+
 Loads and validates custom rules configuration with project detection.
 
 ### **Execute Single Rule**
+
 ```bash
 timeout 10s node "taskmanager-api.js" execute-custom-validation-rule <rule_id>
 ```
+
 Executes a specific validation rule by ID.
 
 ### **Execute All Rules**
+
 ```bash
 timeout 10s node "taskmanager-api.js" execute-all-custom-validation-rules
 ```
+
 Executes all enabled custom validation rules for the detected project type.
 
 ### **Get Custom Rules Configuration**
+
 ```bash
 timeout 10s node "taskmanager-api.js" get-custom-validation-rules
 ```
+
 Returns current custom validation rules configuration and status.
 
 ### **Generate Configuration Template**
+
 ```bash
 timeout 10s node "taskmanager-api.js" generate-custom-validation-config <project_type>
 ```
+
 Generates configuration template for specific project types.
 
 ### **Get Custom Validation Analytics**
+
 ```bash
 timeout 10s node "taskmanager-api.js" get-custom-validation-analytics
 ```
+
 Returns execution statistics and performance metrics for custom rules.
 
 ## 📋 Configuration Schema
 
 ### **Configuration File Structure**
+
 ```json
 {
   "project_type": "nodejs",
@@ -79,13 +95,16 @@ Returns execution statistics and performance metrics for custom rules.
       "enabled": true,
       "technology_stack": ["nodejs", "python"],
       "severity": "error|warning|info",
-      "config": { /* rule-specific configuration */ }
+      "config": {
+        /* rule-specific configuration */
+      }
     }
   }
 }
 ```
 
 ### **Global Settings**
+
 - **strict_mode**: Fail fast on first rule failure
 - **timeout_ms**: Default timeout for all rules
 - **parallel_execution**: Enable parallel rule execution when possible
@@ -93,6 +112,7 @@ Returns execution statistics and performance metrics for custom rules.
 ## 📝 Rule Type Specifications
 
 ### **Command Rules**
+
 Execute shell commands with validation based on exit codes and output.
 
 ```json
@@ -113,6 +133,7 @@ Execute shell commands with validation based on exit codes and output.
 ```
 
 **Properties:**
+
 - **command**: Shell command to execute
 - **timeout**: Command-specific timeout in milliseconds
 - **allow_failure**: Allow command to fail without stopping validation
@@ -120,6 +141,7 @@ Execute shell commands with validation based on exit codes and output.
 - **environment**: Additional environment variables
 
 ### **File Existence Rules**
+
 Verify that required files exist in the project.
 
 ```json
@@ -134,11 +156,13 @@ Verify that required files exist in the project.
 ```
 
 **Properties:**
+
 - **files**: Array of file paths to check (relative to project root)
 - **required**: Whether all files must exist
 - **allow_failure**: Continue if files are missing
 
 ### **File Content Rules**
+
 Pattern matching within files using regular expressions.
 
 ```json
@@ -156,12 +180,14 @@ Pattern matching within files using regular expressions.
 ```
 
 **Properties:**
+
 - **file**: Target file path (relative to project root)
 - **pattern**: Regular expression pattern to search for
 - **case_sensitive**: Whether pattern matching is case sensitive
 - **multiline**: Enable multiline pattern matching
 
 ### **Conditional Rules**
+
 Execute rules only when specific conditions are met.
 
 ```json
@@ -184,12 +210,14 @@ Execute rules only when specific conditions are met.
 ```
 
 **Condition Types:**
+
 - **files_exist**: Files/directories that must exist
 - **has_script**: Package.json script that must be present
 - **project_type**: Required project type
 - **technology_stack**: Required technology stack elements
 
 ### **Composite Rules**
+
 Combine multiple rules with logical operators.
 
 ```json
@@ -214,6 +242,7 @@ Combine multiple rules with logical operators.
 ```
 
 **Properties:**
+
 - **operator**: "and" (all must pass) or "or" (any can pass)
 - **rules**: Array of sub-rules to execute
 - **allow_failure**: Continue if composite rule fails
@@ -221,40 +250,48 @@ Combine multiple rules with logical operators.
 ## 🔍 Technology Stack Detection
 
 ### **Supported Technology Stacks**
+
 The system automatically detects project technology stacks based on file patterns:
 
 #### **Node.js Detection**
+
 - Files: `package.json`, `node_modules/`, `*.js`, `*.ts`
 - Scripts: npm scripts in package.json
 - Dependencies: package.json dependencies
 
 #### **Python Detection**
+
 - Files: `requirements.txt`, `setup.py`, `pyproject.toml`, `*.py`
 - Virtual environments: `venv/`, `.venv/`, `env/`
 - Package managers: pip, conda, poetry
 
 #### **Go Detection**
+
 - Files: `go.mod`, `go.sum`, `*.go`
 - Build files: `Makefile`, build scripts
 - Vendor directory: `vendor/`
 
 #### **Rust Detection**
+
 - Files: `Cargo.toml`, `Cargo.lock`, `*.rs`
 - Target directory: `target/`
 - Workspace files: `Cargo.workspace`
 
 #### **Java Detection**
+
 - Files: `pom.xml`, `build.gradle`, `*.java`
 - Build directories: `target/`, `build/`
 - Maven/Gradle wrapper scripts
 
 #### **Docker Detection**
+
 - Files: `Dockerfile`, `docker-compose.yml`, `.dockerignore`
 - Multi-stage builds and container configurations
 
 ## 📊 Rule Execution and Analytics
 
 ### **Execution Flow**
+
 1. **Load Configuration**: Parse `.validation-rules.json`
 2. **Detect Technology Stack**: Analyze project files and structure
 3. **Filter Rules**: Enable only rules matching detected technology stack
@@ -263,12 +300,14 @@ The system automatically detects project technology stacks based on file pattern
 6. **Generate Report**: Provide detailed execution summary and analytics
 
 ### **Performance Metrics**
+
 - **Execution Duration**: Time taken for each rule and overall validation
 - **Success Rate**: Percentage of rules passing vs. failing
 - **Technology Stack Accuracy**: Correctness of project detection
 - **Resource Utilization**: CPU, memory, and I/O usage during validation
 
 ### **Example Analytics Output**
+
 ```json
 {
   "success": true,
@@ -289,6 +328,7 @@ The system automatically detects project technology stacks based on file pattern
 ## 🔧 Configuration Examples
 
 ### **Node.js Project Configuration**
+
 ```json
 {
   "project_type": "nodejs",
@@ -333,6 +373,7 @@ The system automatically detects project technology stacks based on file pattern
 ```
 
 ### **Python Project Configuration**
+
 ```json
 {
   "project_type": "python",
@@ -376,6 +417,7 @@ The system automatically detects project technology stacks based on file pattern
 ```
 
 ### **Multi-Technology Project Configuration**
+
 ```json
 {
   "project_type": "fullstack",
@@ -428,6 +470,7 @@ The system automatically detects project technology stacks based on file pattern
 ## 🔄 Integration with Validation Workflow
 
 ### **Standalone Execution**
+
 Custom validation rules can be executed independently for project-specific validation:
 
 ```bash
@@ -437,14 +480,17 @@ timeout 10s node "taskmanager-api.js" execute-all-custom-validation-rules
 ```
 
 ### **Integration with Standard Validation**
+
 While custom rules run separately from the standard 7-criteria authorization workflow, they can be used as supplementary validation:
 
 **Standard Authorization Flow:**
+
 1. start-authorization
 2. validate-criterion (focused-codebase, security-validation, linter-validation, type-validation, build-validation, start-validation, test-validation)
 3. complete-authorization
 
 **Custom Rules as Additional Validation:**
+
 ```bash
 # Run custom validation before or after standard workflow
 timeout 10s node "taskmanager-api.js" execute-all-custom-validation-rules
@@ -456,6 +502,7 @@ timeout 10s node "taskmanager-api.js" complete-authorization <auth-key>
 ```
 
 ### **Conditional Integration**
+
 Custom rules can be designed to complement standard validation:
 
 ```json
@@ -480,6 +527,7 @@ Custom rules can be designed to complement standard validation:
 ## 📈 Best Practices
 
 ### **Rule Design**
+
 1. **Technology-Specific Rules**: Target rules to specific technology stacks
 2. **Meaningful Descriptions**: Provide clear, actionable descriptions
 3. **Appropriate Timeouts**: Set realistic timeouts based on command complexity
@@ -487,18 +535,21 @@ Custom rules can be designed to complement standard validation:
 5. **Failure Handling**: Consider when rules should block vs. warn
 
 ### **Configuration Management**
+
 1. **Version Control**: Include `.validation-rules.json` in version control
 2. **Environment-Specific Rules**: Use conditional rules for different environments
 3. **Team Collaboration**: Document custom rules for team understanding
 4. **Regular Review**: Periodically review and update rule configurations
 
 ### **Performance Optimization**
+
 1. **Parallel Execution**: Enable parallel execution for independent rules
 2. **Conditional Rules**: Use conditions to avoid unnecessary rule execution
 3. **Timeout Management**: Set appropriate timeouts to prevent hanging
 4. **Resource Awareness**: Consider CPU/memory impact of validation commands
 
 ### **Security Considerations**
+
 1. **Command Injection**: Validate and sanitize any dynamic command content
 2. **File Access**: Ensure file paths are within project boundaries
 3. **Environment Variables**: Be cautious with environment variable exposure
@@ -509,24 +560,28 @@ Custom rules can be designed to complement standard validation:
 ### **Common Issues**
 
 #### **Rule Configuration Errors**
+
 ```bash
 # Error: "Rule X: file and pattern are required for file_content type"
 # Solution: Ensure file_content rules have both 'file' and 'pattern' properties
 ```
 
 #### **Technology Stack Detection Issues**
+
 ```bash
 # Error: Rules not executing for detected stack
 # Solution: Check technology_stack array matches detected project type
 ```
 
 #### **Command Execution Failures**
+
 ```bash
 # Error: Command timeouts or failures
 # Solution: Increase timeout, check command validity, enable allow_failure if appropriate
 ```
 
 #### **File Path Issues**
+
 ```bash
 # Error: File not found errors
 # Solution: Use paths relative to project root, verify file existence
@@ -535,16 +590,19 @@ Custom rules can be designed to complement standard validation:
 ### **Debugging Commands**
 
 #### **Check Configuration Loading**
+
 ```bash
 timeout 10s node "taskmanager-api.js" get-custom-validation-rules
 ```
 
 #### **Test Individual Rules**
+
 ```bash
 timeout 10s node "taskmanager-api.js" execute-custom-validation-rule <rule_id>
 ```
 
 #### **Review Execution Analytics**
+
 ```bash
 timeout 10s node "taskmanager-api.js" get-custom-validation-analytics
 ```
@@ -552,6 +610,7 @@ timeout 10s node "taskmanager-api.js" get-custom-validation-analytics
 ## 📋 Complete Example Workflow
 
 ### **1. Create Configuration**
+
 Create `.validation-rules.json` in project root:
 
 ```json
@@ -577,6 +636,7 @@ Create `.validation-rules.json` in project root:
 ```
 
 ### **2. Load and Execute**
+
 ```bash
 # Load configuration
 timeout 10s node "taskmanager-api.js" load-custom-validation-rules
@@ -589,6 +649,7 @@ timeout 10s node "taskmanager-api.js" get-custom-validation-analytics
 ```
 
 ### **3. Integration with Workflow**
+
 ```bash
 # Custom validation as pre-check
 timeout 10s node "taskmanager-api.js" execute-all-custom-validation-rules
@@ -603,21 +664,25 @@ timeout 10s node "taskmanager-api.js" complete-authorization <auth-key>
 ## 🚀 Future Enhancements
 
 ### **Dynamic Rule Generation**
+
 - Automatically generate rules based on project analysis
 - Machine learning-based rule recommendations
 - Adaptive rule configuration based on project evolution
 
 ### **Advanced Integration**
+
 - Direct integration with standard validation criteria
 - Custom criteria in authorization workflow
 - Dependency relationships between custom and standard rules
 
 ### **Enhanced Analytics**
+
 - Historical trend analysis for custom rule performance
 - Comparative analytics across projects
 - Automated optimization recommendations
 
 ### **Cross-Project Rule Sharing**
+
 - Rule templates for common project types
 - Community rule marketplace
 - Organization-wide rule standardization
@@ -629,10 +694,11 @@ timeout 10s node "taskmanager-api.js" complete-authorization <auth-key>
 The Stop Hook Custom Project Validation Rules system provides a powerful, flexible framework for project-specific validation that complements the standard validation workflow. With support for multiple rule types, intelligent project detection, and comprehensive configuration management, it enables teams to implement validation criteria tailored to their specific technology stacks and project requirements.
 
 **Key Benefits:**
+
 - 🎯 **Technology-Aware**: Automatically detects and validates appropriate technology stacks
 - 🔧 **Flexible Configuration**: JSON-based rules with multiple validation types
 - ⚡ **Performance-Optimized**: Parallel execution and conditional rule evaluation
 - 📊 **Comprehensive Analytics**: Detailed execution metrics and success tracking
 - 🔄 **Workflow Integration**: Seamless integration with existing validation processes
 
-*Last Updated: 2025-09-27 by Stop Hook Custom Project Validation Rules Implementation*
+_Last Updated: 2025-09-27 by Stop Hook Custom Project Validation Rules Implementation_

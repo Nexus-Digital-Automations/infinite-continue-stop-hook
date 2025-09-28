@@ -2,7 +2,7 @@
  * TASKS.json API Adapter
  *
  * Provides adaptation layer between legacy FEATURES.json API calls
- * and new TASKS.json schema, enabling backward compatibility during migration
+ * And new TASKS.json schema, enabling backward compatibility during migration
  */
 
 class TasksApiAdapter {
@@ -133,8 +133,8 @@ class TasksApiAdapter {
       parent_id: featureTask.id,
       linked_tasks: [featureTask.id],
       title: `Implement comprehensive tests for ${featureTask.title}`,
-      description: `Create unit tests, integration tests, and E2E tests to achieve >80% coverage for ${featureTask.title}. Must validate all functionality, edge cases, and error conditions.`,
-      business_value: `Ensures reliability and quality of ${featureTask.title} feature`,
+      description: `Create unit tests, integration tests, And E2E tests to achieve >80% coverage for ${featureTask.title}. Must validate all functionality, edge cases, And error conditions.`,
+      business_value: `Ensures reliability And quality of ${featureTask.title} feature`,
       category: featureTask.category,
       status: 'suggested',
       priority: 'high',
@@ -172,9 +172,9 @@ class TasksApiAdapter {
       type: 'audit',
       parent_id: featureTask.id,
       linked_tasks: [featureTask.id],
-      title: `Security and quality audit for ${featureTask.title}`,
-      description: `Run semgrep security scan, dependency vulnerability check, code quality analysis, and compliance validation for ${featureTask.title}. Zero tolerance for security vulnerabilities.`,
-      business_value: `Ensures security and quality compliance of ${featureTask.title} feature`,
+      title: `Security And quality audit for ${featureTask.title}`,
+      description: `Run semgrep security scan, dependency vulnerability check, code quality analysis, And compliance validation for ${featureTask.title}. Zero tolerance for security vulnerabilities.`,
+      business_value: `Ensures security And quality compliance of ${featureTask.title} feature`,
       category: 'security',
       status: 'suggested',
       priority: 'high',

@@ -22,10 +22,12 @@ Store a new lesson with automatic embedding generation for semantic search.
 **Usage**: `timeout 10s node taskmanager-api.js store-lesson '<lessonData>'`
 
 **Required Fields**:
+
 - `title` (string): Brief title describing the lesson
 - `content` (string): Detailed lesson content
 
 **Optional Fields**:
+
 - `category` (string): Lesson category (default: "general")
 - `tags` (array): Array of tags for categorization
 - `projectId` (string): Project identifier (default: "global")
@@ -38,6 +40,7 @@ Store a new lesson with automatic embedding generation for semantic search.
 - `related_technologies` (array): Technologies involved
 
 **Example**:
+
 ```bash
 timeout 10s node taskmanager-api.js store-lesson '{
   "title": "API Error Handling Best Practices",
@@ -50,6 +53,7 @@ timeout 10s node taskmanager-api.js store-lesson '{
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -76,10 +80,12 @@ Store an error with its resolution details for future reference.
 **Usage**: `timeout 10s node taskmanager-api.js store-error '<errorData>'`
 
 **Required Fields**:
+
 - `error_description` (string): Description of the error
 - `resolution` (string): How the error was resolved
 
 **Optional Fields**:
+
 - `error_type` (string): Type of error (default: "general")
 - `severity` (string): Error severity ("low", "medium", "high", "critical")
 - `resolution_steps` (array): Step-by-step resolution process
@@ -93,6 +99,7 @@ Store an error with its resolution details for future reference.
 - `tools_used` (array): Tools used for resolution
 
 **Example**:
+
 ```bash
 timeout 10s node taskmanager-api.js store-error '{
   "error_description": "Cannot read property of undefined when accessing user.name",
@@ -111,6 +118,7 @@ timeout 10s node taskmanager-api.js store-error '{
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -137,16 +145,19 @@ Search for relevant lessons using semantic similarity.
 **Usage**: `timeout 10s node taskmanager-api.js search-lessons '<query>' '[options]'`
 
 **Parameters**:
+
 - `query` (string): Search query for finding relevant lessons
 - `options` (object, optional): Search filtering options
 
 **Options**:
+
 - `projectId` (string): Filter by project ID
 - `category` (string): Filter by lesson category
 - `limit` (number): Maximum number of results (default: 10)
 - `similarity_threshold` (number): Minimum similarity score (0-1)
 
 **Example**:
+
 ```bash
 timeout 10s node taskmanager-api.js search-lessons "error handling best practices" '{
   "category": "best-practices",
@@ -156,6 +167,7 @@ timeout 10s node taskmanager-api.js search-lessons "error handling best practice
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -184,16 +196,19 @@ Find similar resolved errors using semantic similarity.
 **Usage**: `timeout 10s node taskmanager-api.js find-similar-errors '<errorDescription>' '[options]'`
 
 **Parameters**:
+
 - `errorDescription` (string): Description of the current error
 - `options` (object, optional): Search filtering options
 
 **Options**:
+
 - `projectId` (string): Filter by project ID
 - `error_type` (string): Filter by error type
 - `limit` (number): Maximum number of results (default: 5)
 - `similarity_threshold` (number): Minimum similarity score (0-1)
 
 **Example**:
+
 ```bash
 timeout 10s node taskmanager-api.js find-similar-errors "Cannot read property of undefined" '{
   "error_type": "runtime",
@@ -202,6 +217,7 @@ timeout 10s node taskmanager-api.js find-similar-errors "Cannot read property of
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -231,10 +247,12 @@ Get contextually relevant lessons for a specific task context.
 **Usage**: `timeout 10s node taskmanager-api.js get-relevant-lessons '<taskContext>' '[options]'`
 
 **Parameters**:
+
 - `taskContext` (string): Context description of the current task
 - `options` (object, optional): Context filtering options
 
 **Options**:
+
 - `projectId` (string): Filter by project ID
 - `category` (string): Filter by lesson category
 - `technologies` (array): Filter by technologies involved
@@ -242,6 +260,7 @@ Get contextually relevant lessons for a specific task context.
 - `similarity_threshold` (number): Minimum similarity score (default: 0.3)
 
 **Example**:
+
 ```bash
 timeout 10s node taskmanager-api.js get-relevant-lessons "implementing user authentication API" '{
   "category": "implementation",
@@ -251,6 +270,7 @@ timeout 10s node taskmanager-api.js get-relevant-lessons "implementing user auth
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -278,11 +298,13 @@ Get usage patterns and effectiveness metrics for the knowledge base.
 **Usage**: `timeout 10s node taskmanager-api.js rag-analytics '[options]'`
 
 **Options**:
+
 - `projectId` (string): Filter analytics by project
 - `date_range` (object): Filter by date range
 - `category` (string): Filter by lesson category
 
 **Example**:
+
 ```bash
 timeout 10s node taskmanager-api.js rag-analytics '{
   "projectId": "current"
@@ -290,6 +312,7 @@ timeout 10s node taskmanager-api.js rag-analytics '{
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -355,6 +378,7 @@ development/rag-database/
 ### File Format
 
 **Lesson File Structure**:
+
 ```json
 {
   "id": "lesson_1642345678901_abc123",
@@ -380,6 +404,7 @@ development/rag-database/
 ```
 
 **Error File Structure**:
+
 ```json
 {
   "id": "error_1642345678901_def456",
@@ -446,6 +471,7 @@ All RAG endpoints include comprehensive error handling:
 - **Timeout Handling**: 10-second timeout for all operations
 
 **Error Response Format**:
+
 ```json
 {
   "success": false,

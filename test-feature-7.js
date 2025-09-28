@@ -2,7 +2,7 @@
  * Test Feature 7: Adaptive Learning Paths System
  */
 
-const RAGOperations = require('./lib/api-modules/rag/ragOperations');
+const RAGOPERATIONS = require('./lib/api-modules/rag/ragOperations');
 
 async function testAdaptiveLearningPaths() {
   try {
@@ -11,10 +11,10 @@ async function testAdaptiveLearningPaths() {
     );
 
     // Create RAG operations instance
-    const ragOps = new RAGOperations({
+    const ragOps = new RAGOPERATIONS({
       taskManager: null,
       agentManager: null,
-      withTimeout: (promise, _timeout) => promise,
+      withTimeout: (promise, TIMEOUT) => promise,
     });
 
     // Test user profile
@@ -130,7 +130,7 @@ async function testAdaptiveLearningPaths() {
     console.log(
       '\n✅ Feature 7: Adaptive Learning Paths System integration test completed successfully!'
     );
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('❌ Feature 7 test failed:', error.message);
     loggers.stopHook.error('Stack:', error.stack);
   }

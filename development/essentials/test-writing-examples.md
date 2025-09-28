@@ -16,6 +16,7 @@ This guide provides comprehensive examples of effective test writing patterns, a
 ### ✅ **Good Unit Test Patterns**
 
 #### Example 1: Function Testing with Edge Cases
+
 ```javascript
 // src/utils/validation.js
 function validateEmail(email) {
@@ -75,6 +76,7 @@ describe('validateEmail', () => {
 ```
 
 #### Example 2: Class Method Testing
+
 ```javascript
 // src/services/task-service.js
 class TaskService {
@@ -95,7 +97,7 @@ class TaskService {
       title: taskData.title.trim(),
       status: taskData.status || 'pending',
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
 
     return await this.repository.save(task);
@@ -116,7 +118,7 @@ describe('TaskService', () => {
       save: jest.fn(),
       findById: jest.fn(),
       update: jest.fn(),
-      delete: jest.fn()
+      delete: jest.fn(),
     };
     taskService = new TaskService(mockRepository);
   });
@@ -127,14 +129,14 @@ describe('TaskService', () => {
       const taskData = {
         title: 'Test Task',
         description: 'Test description',
-        priority: 'high'
+        priority: 'high',
       };
       const expectedTask = {
         ...taskData,
         id: expect.stringMatching(/^task_\d+_[a-z0-9]+$/),
         status: 'pending',
         createdAt: expect.any(Date),
-        updatedAt: expect.any(Date)
+        updatedAt: expect.any(Date),
       };
       mockRepository.save.mockResolvedValue(expectedTask);
 
@@ -152,9 +154,7 @@ describe('TaskService', () => {
 
       await taskService.createTask(taskData);
 
-      expect(mockRepository.save).toHaveBeenCalledWith(
-        expect.objectContaining({ title: 'Trimmed Task' })
-      );
+      expect(mockRepository.save).toHaveBeenCalledWith(expect.objectContaining({ title: 'Trimmed Task' }));
     });
 
     it('should set default status to pending', async () => {
@@ -163,17 +163,13 @@ describe('TaskService', () => {
 
       await taskService.createTask(taskData);
 
-      expect(mockRepository.save).toHaveBeenCalledWith(
-        expect.objectContaining({ status: 'pending' })
-      );
+      expect(mockRepository.save).toHaveBeenCalledWith(expect.objectContaining({ status: 'pending' }));
     });
 
     it('should throw error for empty title', async () => {
       const taskData = { title: '' };
 
-      await expect(taskService.createTask(taskData))
-        .rejects
-        .toThrow('Title is required');
+      await expect(taskService.createTask(taskData)).rejects.toThrow('Title is required');
 
       expect(mockRepository.save).not.toHaveBeenCalled();
     });
@@ -181,9 +177,7 @@ describe('TaskService', () => {
     it('should throw error for missing title', async () => {
       const taskData = { description: 'No title provided' };
 
-      await expect(taskService.createTask(taskData))
-        .rejects
-        .toThrow('Title is required');
+      await expect(taskService.createTask(taskData)).rejects.toThrow('Title is required');
     });
   });
 
@@ -203,6 +197,7 @@ describe('TaskService', () => {
 ### ❌ **Poor Unit Test Anti-Patterns**
 
 #### Anti-Pattern 1: Vague Test Names and Assertions
+
 ```javascript
 // ❌ BAD EXAMPLE - Don't do this
 describe('TaskService', () => {
@@ -237,9 +232,7 @@ describe('TaskService', () => {
   it('should throw ValidationError when title is missing', async () => {
     const service = new TaskService(mockRepository);
 
-    await expect(service.createTask({}))
-      .rejects
-      .toThrow('Title is required');
+    await expect(service.createTask({})).rejects.toThrow('Title is required');
   });
 });
 ```
@@ -249,6 +242,7 @@ describe('TaskService', () => {
 ### ✅ **Good Integration Test Patterns**
 
 #### Example 1: API Endpoint Testing
+
 ```javascript
 // test/api/task-endpoints.test.js
 const request = require('supertest');
@@ -274,13 +268,10 @@ describe('Task API Endpoints', () => {
       const taskData = {
         title: 'Integration Test Task',
         description: 'Test description',
-        priority: 'medium'
+        priority: 'medium',
       };
 
-      const response = await request(app)
-        .post('/api/tasks')
-        .send(taskData)
-        .expect(201);
+      const response = await request(app).post('/api/tasks').send(taskData).expect(201);
 
       expect(response.body).toMatchObject({
         id: expect.any(String),
@@ -289,44 +280,36 @@ describe('Task API Endpoints', () => {
         priority: 'medium',
         status: 'pending',
         createdAt: expect.any(String),
-        updatedAt: expect.any(String)
+        updatedAt: expect.any(String),
       });
 
       // Verify task was actually saved to database
-      const savedTask = await request(app)
-        .get(`/api/tasks/${response.body.id}`)
-        .expect(200);
+      const savedTask = await request(app).get(`/api/tasks/${response.body.id}`).expect(200);
 
       expect(savedTask.body.title).toBe('Integration Test Task');
     });
 
     it('should return 400 for invalid task data', async () => {
       const invalidData = {
-        description: 'Missing title'
+        description: 'Missing title',
         // title is required
       };
 
-      const response = await request(app)
-        .post('/api/tasks')
-        .send(invalidData)
-        .expect(400);
+      const response = await request(app).post('/api/tasks').send(invalidData).expect(400);
 
       expect(response.body).toMatchObject({
         error: expect.stringContaining('Title is required'),
-        details: expect.any(Object)
+        details: expect.any(Object),
       });
     });
 
     it('should handle special characters in task data', async () => {
       const taskData = {
         title: 'Task with émojis 🚀 and spéciäl characters',
-        description: 'Testing unicode: ñáéíóú'
+        description: 'Testing unicode: ñáéíóú',
       };
 
-      const response = await request(app)
-        .post('/api/tasks')
-        .send(taskData)
-        .expect(201);
+      const response = await request(app).post('/api/tasks').send(taskData).expect(201);
 
       expect(response.body.title).toBe('Task with émojis 🚀 and spéciäl characters');
       expect(response.body.description).toBe('Testing unicode: ñáéíóú');
@@ -338,43 +321,39 @@ describe('Task API Endpoints', () => {
       // Seed test data
       await request(app).post('/api/tasks').send({
         title: 'Task 1',
-        priority: 'high'
+        priority: 'high',
       });
       await request(app).post('/api/tasks').send({
         title: 'Task 2',
-        priority: 'low'
+        priority: 'low',
       });
     });
 
     it('should return all tasks with correct structure', async () => {
-      const response = await request(app)
-        .get('/api/tasks')
-        .expect(200);
+      const response = await request(app).get('/api/tasks').expect(200);
 
       expect(response.body).toEqual({
         tasks: expect.arrayContaining([
           expect.objectContaining({
             id: expect.any(String),
             title: 'Task 1',
-            priority: 'high'
+            priority: 'high',
           }),
           expect.objectContaining({
             id: expect.any(String),
             title: 'Task 2',
-            priority: 'low'
-          })
+            priority: 'low',
+          }),
         ]),
         total: 2,
         metadata: expect.objectContaining({
-          timestamp: expect.any(String)
-        })
+          timestamp: expect.any(String),
+        }),
       });
     });
 
     it('should support filtering by priority', async () => {
-      const response = await request(app)
-        .get('/api/tasks?priority=high')
-        .expect(200);
+      const response = await request(app).get('/api/tasks?priority=high').expect(200);
 
       expect(response.body.tasks).toHaveLength(1);
       expect(response.body.tasks[0].priority).toBe('high');
@@ -384,6 +363,7 @@ describe('Task API Endpoints', () => {
 ```
 
 #### Example 2: Database Integration Testing
+
 ```javascript
 // test/repositories/task-repository.test.js
 const TaskRepository = require('../../src/repositories/task-repository');
@@ -410,7 +390,7 @@ describe('TaskRepository Integration', () => {
       const taskData = {
         id: 'test-task-1',
         title: 'Database Test Task',
-        status: 'pending'
+        status: 'pending',
       };
 
       await repository.save(taskData);
@@ -423,18 +403,18 @@ describe('TaskRepository Integration', () => {
       const tasks = Array.from({ length: 10 }, (_, i) => ({
         id: `concurrent-task-${i}`,
         title: `Concurrent Task ${i}`,
-        status: 'pending'
+        status: 'pending',
       }));
 
       // Save all tasks concurrently
-      await Promise.all(tasks.map(task => repository.save(task)));
+      await Promise.all(tasks.map((task) => repository.save(task)));
 
       // Verify all tasks were saved
       const allTasks = await repository.findAll();
       expect(allTasks).toHaveLength(10);
 
-      tasks.forEach(task => {
-        expect(allTasks.some(t => t.id === task.id)).toBe(true);
+      tasks.forEach((task) => {
+        expect(allTasks.some((t) => t.id === task.id)).toBe(true);
       });
     });
   });
@@ -445,10 +425,10 @@ describe('TaskRepository Integration', () => {
       const testTasks = [
         { id: '1', title: 'High Priority', priority: 'high', status: 'pending' },
         { id: '2', title: 'Medium Priority', priority: 'medium', status: 'in_progress' },
-        { id: '3', title: 'Low Priority', priority: 'low', status: 'completed' }
+        { id: '3', title: 'Low Priority', priority: 'low', status: 'completed' },
       ];
 
-      await Promise.all(testTasks.map(task => repository.save(task)));
+      await Promise.all(testTasks.map((task) => repository.save(task)));
     });
 
     it('should filter tasks by status', async () => {
@@ -460,14 +440,14 @@ describe('TaskRepository Integration', () => {
     it('should support complex queries with multiple filters', async () => {
       const tasks = await repository.query({
         priority: 'high',
-        status: 'pending'
+        status: 'pending',
       });
 
       expect(tasks).toHaveLength(1);
       expect(tasks[0]).toMatchObject({
         title: 'High Priority',
         priority: 'high',
-        status: 'pending'
+        status: 'pending',
       });
     });
   });
@@ -479,6 +459,7 @@ describe('TaskRepository Integration', () => {
 ### ✅ **Good E2E Test Patterns**
 
 #### Example 1: Complete User Workflow
+
 ```javascript
 // test/e2e/task-management-workflow.test.js
 const request = require('supertest');
@@ -501,7 +482,7 @@ describe('Task Management E2E Workflow', () => {
       .send({
         title: 'E2E Test Task',
         description: 'Complete end-to-end test',
-        priority: 'high'
+        priority: 'high',
       })
       .expect(201);
 
@@ -509,27 +490,20 @@ describe('Task Management E2E Workflow', () => {
     expect(taskId).toBeDefined();
 
     // Step 2: Verify task appears in task list
-    const listResponse = await request(app)
-      .get('/api/tasks')
-      .expect(200);
+    const listResponse = await request(app).get('/api/tasks').expect(200);
 
-    const createdTask = listResponse.body.tasks.find(t => t.id === taskId);
+    const createdTask = listResponse.body.tasks.find((t) => t.id === taskId);
     expect(createdTask).toMatchObject({
       title: 'E2E Test Task',
       status: 'pending',
-      priority: 'high'
+      priority: 'high',
     });
 
     // Step 3: Update task status to in_progress
-    await request(app)
-      .put(`/api/tasks/${taskId}`)
-      .send({ status: 'in_progress' })
-      .expect(200);
+    await request(app).put(`/api/tasks/${taskId}`).send({ status: 'in_progress' }).expect(200);
 
     // Step 4: Verify status update
-    const updatedResponse = await request(app)
-      .get(`/api/tasks/${taskId}`)
-      .expect(200);
+    const updatedResponse = await request(app).get(`/api/tasks/${taskId}`).expect(200);
 
     expect(updatedResponse.body.status).toBe('in_progress');
     expect(updatedResponse.body.updatedAt).toBeDefined();
@@ -539,7 +513,7 @@ describe('Task Management E2E Workflow', () => {
       .post(`/api/tasks/${taskId}/comments`)
       .send({
         text: 'Making good progress on this task',
-        type: 'progress_update'
+        type: 'progress_update',
       })
       .expect(201);
 
@@ -548,52 +522,41 @@ describe('Task Management E2E Workflow', () => {
       .put(`/api/tasks/${taskId}`)
       .send({
         status: 'completed',
-        completedAt: new Date().toISOString()
+        completedAt: new Date().toISOString(),
       })
       .expect(200);
 
     // Step 7: Verify final state
-    const completedResponse = await request(app)
-      .get(`/api/tasks/${taskId}`)
-      .expect(200);
+    const completedResponse = await request(app).get(`/api/tasks/${taskId}`).expect(200);
 
     expect(completedResponse.body).toMatchObject({
       id: taskId,
       title: 'E2E Test Task',
       status: 'completed',
-      completedAt: expect.any(String)
+      completedAt: expect.any(String),
     });
 
     // Step 8: Verify task appears in completed tasks filter
-    const completedTasksResponse = await request(app)
-      .get('/api/tasks?status=completed')
-      .expect(200);
+    const completedTasksResponse = await request(app).get('/api/tasks?status=completed').expect(200);
 
-    expect(completedTasksResponse.body.tasks.some(t => t.id === taskId)).toBe(true);
+    expect(completedTasksResponse.body.tasks.some((t) => t.id === taskId)).toBe(true);
   });
 
   it('should handle error scenarios gracefully', async () => {
     // Try to update non-existent task
-    await request(app)
-      .put('/api/tasks/non-existent-id')
-      .send({ status: 'completed' })
-      .expect(404);
+    await request(app).put('/api/tasks/non-existent-id').send({ status: 'completed' }).expect(404);
 
     // Try to create task with invalid data
-    await request(app)
-      .post('/api/tasks')
-      .send({ description: 'Missing title' })
-      .expect(400);
+    await request(app).post('/api/tasks').send({ description: 'Missing title' }).expect(400);
 
     // Try to delete task that doesn't exist
-    await request(app)
-      .delete('/api/tasks/non-existent-id')
-      .expect(404);
+    await request(app).delete('/api/tasks/non-existent-id').expect(404);
   });
 });
 ```
 
 #### Example 2: Multi-User Scenario Testing
+
 ```javascript
 // test/e2e/multi-user-scenarios.test.js
 describe('Multi-User Task Management', () => {
@@ -612,7 +575,7 @@ describe('Multi-User Task Management', () => {
       .set('Authorization', `Bearer ${userToken1}`)
       .send({
         title: 'Collaborative Task',
-        description: 'Task for team collaboration'
+        description: 'Task for team collaboration',
       })
       .expect(201);
 
@@ -629,7 +592,7 @@ describe('Multi-User Task Management', () => {
       .set('Authorization', `Bearer ${userToken2}`)
       .expect(200);
 
-    expect(assignedTasks.body.tasks.some(t => t.id === task.body.id)).toBe(true);
+    expect(assignedTasks.body.tasks.some((t) => t.id === task.body.id)).toBe(true);
 
     // User 2 updates task status
     await request(app)
@@ -654,6 +617,7 @@ describe('Multi-User Task Management', () => {
 ### ✅ **Security Testing Patterns**
 
 #### Example 1: Input Validation and Sanitization
+
 ```javascript
 // test/security/input-validation.test.js
 describe('Input Validation Security', () => {
@@ -661,13 +625,10 @@ describe('Input Validation Security', () => {
     it('should sanitize HTML in task titles', async () => {
       const maliciousInput = {
         title: '<script>alert("XSS")</script>Malicious Task',
-        description: '<img src="x" onerror="alert(1)">'
+        description: '<img src="x" onerror="alert(1)">',
       };
 
-      const response = await request(app)
-        .post('/api/tasks')
-        .send(maliciousInput)
-        .expect(201);
+      const response = await request(app).post('/api/tasks').send(maliciousInput).expect(201);
 
       // HTML should be escaped or stripped
       expect(response.body.title).not.toContain('<script>');
@@ -678,13 +639,10 @@ describe('Input Validation Security', () => {
       const task = await createTestTask();
       const maliciousComment = {
         text: 'javascript:alert("XSS")',
-        type: 'comment'
+        type: 'comment',
       };
 
-      const response = await request(app)
-        .post(`/api/tasks/${task.id}/comments`)
-        .send(maliciousComment)
-        .expect(201);
+      const response = await request(app).post(`/api/tasks/${task.id}/comments`).send(maliciousComment).expect(201);
 
       expect(response.body.text).not.toContain('javascript:');
     });
@@ -702,10 +660,7 @@ describe('Input Validation Security', () => {
       expect(response.body.tasks).toEqual([]);
 
       // Verify tasks table still exists by creating a task
-      await request(app)
-        .post('/api/tasks')
-        .send({ title: 'Verification Task' })
-        .expect(201);
+      await request(app).post('/api/tasks').send({ title: 'Verification Task' }).expect(201);
     });
   });
 
@@ -725,24 +680,19 @@ describe('Input Validation Security', () => {
 ```
 
 #### Example 2: Authentication and Authorization
+
 ```javascript
 // test/security/auth-security.test.js
 describe('Authentication Security', () => {
   describe('Token Validation', () => {
     it('should reject requests with invalid tokens', async () => {
-      await request(app)
-        .get('/api/tasks')
-        .set('Authorization', 'Bearer invalid-token')
-        .expect(401);
+      await request(app).get('/api/tasks').set('Authorization', 'Bearer invalid-token').expect(401);
     });
 
     it('should reject expired tokens', async () => {
       const expiredToken = generateExpiredToken();
 
-      await request(app)
-        .get('/api/tasks')
-        .set('Authorization', `Bearer ${expiredToken}`)
-        .expect(401);
+      await request(app).get('/api/tasks').set('Authorization', `Bearer ${expiredToken}`).expect(401);
     });
 
     it('should prevent token fixation attacks', async () => {
@@ -750,10 +700,7 @@ describe('Authentication Security', () => {
       const adminToken = await authenticateUser('admin@test.com');
 
       // User shouldn't be able to use admin token
-      await request(app)
-        .get('/api/admin/users')
-        .set('Authorization', `Bearer ${userToken}`)
-        .expect(403);
+      await request(app).get('/api/admin/users').set('Authorization', `Bearer ${userToken}`).expect(403);
     });
   });
 
@@ -761,22 +708,16 @@ describe('Authentication Security', () => {
     it('should rate limit login attempts', async () => {
       const credentials = {
         email: 'user@test.com',
-        password: 'wrong-password'
+        password: 'wrong-password',
       };
 
       // Multiple failed attempts
       for (let i = 0; i < 5; i++) {
-        await request(app)
-          .post('/api/auth/login')
-          .send(credentials)
-          .expect(401);
+        await request(app).post('/api/auth/login').send(credentials).expect(401);
       }
 
       // Next attempt should be rate limited
-      await request(app)
-        .post('/api/auth/login')
-        .send(credentials)
-        .expect(429);
+      await request(app).post('/api/auth/login').send(credentials).expect(429);
     });
   });
 });
@@ -787,6 +728,7 @@ describe('Authentication Security', () => {
 ### ✅ **Performance Testing Patterns**
 
 #### Example 1: Load Testing
+
 ```javascript
 // test/performance/load-testing.test.js
 describe('Performance Load Testing', () => {
@@ -799,7 +741,7 @@ describe('Performance Load Testing', () => {
         .post('/api/tasks')
         .send({
           title: `Load Test Task ${i}`,
-          description: `Performance testing task ${i}`
+          description: `Performance testing task ${i}`,
         })
     );
 
@@ -809,7 +751,7 @@ describe('Performance Load Testing', () => {
     const duration = endTime - startTime;
 
     // All requests should succeed
-    responses.forEach(response => {
+    responses.forEach((response) => {
       expect(response.status).toBe(201);
     });
 
@@ -827,9 +769,7 @@ describe('Performance Load Testing', () => {
     const startTime = Date.now();
 
     // Test query performance
-    const response = await request(app)
-      .get('/api/tasks?limit=50&offset=0')
-      .expect(200);
+    const response = await request(app).get('/api/tasks?limit=50&offset=0').expect(200);
 
     const endTime = Date.now();
     const queryTime = endTime - startTime;
@@ -843,6 +783,7 @@ describe('Performance Load Testing', () => {
 ```
 
 #### Example 2: Memory Usage Testing
+
 ```javascript
 // test/performance/memory-testing.test.js
 describe('Memory Usage Testing', () => {
@@ -855,7 +796,7 @@ describe('Memory Usage Testing', () => {
         .post('/api/tasks')
         .send({
           title: `Memory Test Task ${i}`,
-          description: 'A'.repeat(1000) // Large description
+          description: 'A'.repeat(1000), // Large description
         });
 
       // Cleanup every 100 iterations
@@ -883,6 +824,7 @@ describe('Memory Usage Testing', () => {
 ### ✅ **Effective Mocking Patterns**
 
 #### Example 1: External Service Mocking
+
 ```javascript
 // test/mocks/external-services.test.js
 jest.mock('../../src/services/email-service');
@@ -904,10 +846,7 @@ describe('External Service Integration', () => {
     const task = await createTestTask();
 
     // Complete the task
-    await request(app)
-      .put(`/api/tasks/${task.id}`)
-      .send({ status: 'completed' })
-      .expect(200);
+    await request(app).put(`/api/tasks/${task.id}`).send({ status: 'completed' }).expect(200);
 
     // Verify notifications were sent
     expect(EmailService.sendEmail).toHaveBeenCalledWith({
@@ -915,14 +854,14 @@ describe('External Service Integration', () => {
       subject: 'Task Completed',
       template: 'task-completion',
       data: expect.objectContaining({
-        taskTitle: task.title
-      })
+        taskTitle: task.title,
+      }),
     });
 
     expect(NotificationService.sendPushNotification).toHaveBeenCalledWith(
       expect.objectContaining({
         type: 'task_completed',
-        taskId: task.id
+        taskId: task.id,
       })
     );
   });
@@ -935,15 +874,10 @@ describe('External Service Integration', () => {
     const task = await createTestTask();
 
     // Task completion should still succeed even if email fails
-    await request(app)
-      .put(`/api/tasks/${task.id}`)
-      .send({ status: 'completed' })
-      .expect(200);
+    await request(app).put(`/api/tasks/${task.id}`).send({ status: 'completed' }).expect(200);
 
     // Verify task was completed despite email failure
-    const completedTask = await request(app)
-      .get(`/api/tasks/${task.id}`)
-      .expect(200);
+    const completedTask = await request(app).get(`/api/tasks/${task.id}`).expect(200);
 
     expect(completedTask.body.status).toBe('completed');
   });
@@ -951,6 +885,7 @@ describe('External Service Integration', () => {
 ```
 
 #### Example 2: Database Mocking for Unit Tests
+
 ```javascript
 // test/services/task-service-unit.test.js
 const TaskService = require('../../src/services/task-service');
@@ -961,7 +896,7 @@ const mockRepository = {
   findById: jest.fn(),
   findByStatus: jest.fn(),
   update: jest.fn(),
-  delete: jest.fn()
+  delete: jest.fn(),
 };
 
 describe('TaskService Unit Tests', () => {
@@ -976,7 +911,7 @@ describe('TaskService Unit Tests', () => {
     it('should return filtered tasks by status', async () => {
       const mockTasks = [
         { id: '1', title: 'Task 1', status: 'pending' },
-        { id: '2', title: 'Task 2', status: 'pending' }
+        { id: '2', title: 'Task 2', status: 'pending' },
       ];
 
       mockRepository.findByStatus.mockResolvedValue(mockTasks);
@@ -990,9 +925,7 @@ describe('TaskService Unit Tests', () => {
     it('should throw error when repository fails', async () => {
       mockRepository.findByStatus.mockRejectedValue(new Error('Database error'));
 
-      await expect(taskService.getTasksByStatus('pending'))
-        .rejects
-        .toThrow('Database error');
+      await expect(taskService.getTasksByStatus('pending')).rejects.toThrow('Database error');
     });
   });
 });
@@ -1003,6 +936,7 @@ describe('TaskService Unit Tests', () => {
 ### ✅ **Test Data Management Patterns**
 
 #### Example 1: Factory Pattern for Test Data
+
 ```javascript
 // test/factories/task-factory.js
 class TaskFactory {
@@ -1017,7 +951,7 @@ class TaskFactory {
       createdAt: new Date(),
       updatedAt: new Date(),
       tags: [],
-      ...overrides
+      ...overrides,
     };
   }
 
@@ -1025,7 +959,7 @@ class TaskFactory {
     return Array.from({ length: count }, (_, i) =>
       this.create({
         title: `Test Task ${i + 1}`,
-        ...overrides
+        ...overrides,
       })
     );
   }
@@ -1034,7 +968,7 @@ class TaskFactory {
     return this.create({
       status: 'completed',
       completedAt: new Date(),
-      ...overrides
+      ...overrides,
     });
   }
 
@@ -1042,7 +976,7 @@ class TaskFactory {
     return this.create({
       priority: 'high',
       title: 'High Priority Task',
-      ...overrides
+      ...overrides,
     });
   }
 
@@ -1060,7 +994,7 @@ describe('Task Operations', () => {
   it('should handle task creation', async () => {
     const taskData = TaskFactory.create({
       title: 'Specific Test Task',
-      priority: 'high'
+      priority: 'high',
     });
 
     const result = await taskService.createTask(taskData);
@@ -1070,12 +1004,10 @@ describe('Task Operations', () => {
   it('should process multiple tasks', async () => {
     const tasks = TaskFactory.createMany(5, { status: 'pending' });
 
-    const results = await Promise.all(
-      tasks.map(task => taskService.createTask(task))
-    );
+    const results = await Promise.all(tasks.map((task) => taskService.createTask(task)));
 
     expect(results).toHaveLength(5);
-    results.forEach(result => {
+    results.forEach((result) => {
       expect(result.status).toBe('pending');
     });
   });
@@ -1083,6 +1015,7 @@ describe('Task Operations', () => {
 ```
 
 #### Example 2: Test Database Seeding
+
 ```javascript
 // test/utils/test-data-seeder.js
 class TestDataSeeder {
@@ -1090,12 +1023,10 @@ class TestDataSeeder {
     const tasks = [
       TaskFactory.create({ title: 'Seed Task 1', priority: 'high' }),
       TaskFactory.create({ title: 'Seed Task 2', priority: 'medium' }),
-      TaskFactory.createCompleted({ title: 'Completed Seed Task' })
+      TaskFactory.createCompleted({ title: 'Completed Seed Task' }),
     ];
 
-    return await Promise.all(
-      tasks.map(task => taskRepository.save(task))
-    );
+    return await Promise.all(tasks.map((task) => taskRepository.save(task)));
   }
 
   static async seedLargeDataset(count = 1000) {
@@ -1104,7 +1035,7 @@ class TestDataSeeder {
 
     for (let i = 0; i < tasks.length; i += batchSize) {
       const batch = tasks.slice(i, i + batchSize);
-      await Promise.all(batch.map(task => taskRepository.save(task)));
+      await Promise.all(batch.map((task) => taskRepository.save(task)));
     }
 
     return tasks;
@@ -1113,22 +1044,22 @@ class TestDataSeeder {
   static async seedUserScenarios() {
     const scenarios = {
       newUser: {
-        tasks: TaskFactory.createMany(2, { status: 'pending' })
+        tasks: TaskFactory.createMany(2, { status: 'pending' }),
       },
       activeUser: {
         tasks: [
           ...TaskFactory.createMany(5, { status: 'pending' }),
           ...TaskFactory.createMany(3, { status: 'in_progress' }),
-          ...TaskFactory.createMany(10, { status: 'completed' })
-        ]
+          ...TaskFactory.createMany(10, { status: 'completed' }),
+        ],
       },
       powerUser: {
-        tasks: TaskFactory.createMany(50)
-      }
+        tasks: TaskFactory.createMany(50),
+      },
     };
 
     for (const [scenario, data] of Object.entries(scenarios)) {
-      await Promise.all(data.tasks.map(task => taskRepository.save(task)));
+      await Promise.all(data.tasks.map((task) => taskRepository.save(task)));
     }
 
     return scenarios;
@@ -1143,6 +1074,7 @@ module.exports = TestDataSeeder;
 ## 📚 Summary Guidelines
 
 ### ✅ **Do These Things**
+
 - Write descriptive test names that explain the scenario
 - Use AAA pattern (Arrange, Act, Assert)
 - Test edge cases and error conditions
@@ -1153,6 +1085,7 @@ module.exports = TestDataSeeder;
 - Include performance considerations in critical tests
 
 ### ❌ **Avoid These Anti-Patterns**
+
 - Vague test names like "it works" or "handles data"
 - Testing implementation details instead of behavior
 - Large, monolithic tests that test multiple concerns
@@ -1163,6 +1096,7 @@ module.exports = TestDataSeeder;
 - Tests that depend on external services without mocks
 
 ### 🎯 **Quality Metrics**
+
 - **Coverage**: Aim for 80%+ line coverage, 90%+ for critical paths
 - **Performance**: Unit tests < 1s, Integration tests < 30s
 - **Reliability**: Tests should pass consistently (>99% reliability)

@@ -21,27 +21,33 @@ When invoked, you should:
 # CLAUDE.md - [Directory Name]
 
 ## Purpose
+
 Brief description of what this directory/module is responsible for.
 
 ## Key Components
+
 - **file1.ext**: Description of its role
 - **file2.ext**: Description of its role
 
 ## Important Patterns
+
 - Pattern 1: Description
 - Pattern 2: Description
 
 ## Dependencies
+
 - External dependencies this module relies on
 - Other modules it interacts with
 
 ## Critical Knowledge
+
 - Important implementation details
 - Common pitfalls to avoid
 - Performance considerations
 - Security considerations
 
 ## Recent Changes
+
 - Track significant changes when updating
 ```
 
@@ -56,6 +62,7 @@ Brief description of what this directory/module is responsible for.
 ## Example Workflow
 
 When starting work in tmux mode:
+
 1. Run `/cbox:init-docs` to scan and create missing CLAUDE.md files
 2. Review existing CLAUDE.md files in your working directories
 3. Update them as you learn critical information

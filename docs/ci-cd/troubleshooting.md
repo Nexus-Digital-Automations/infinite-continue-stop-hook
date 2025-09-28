@@ -5,11 +5,14 @@
 ### Pre-commit Hook Issues
 
 #### Issue: Git hooks not executing
+
 **Symptoms:**
+
 - No pre-commit validation when committing
 - Hooks appear to be bypassed
 
 **Solutions:**
+
 ```bash
 # 1. Reinstall Husky
 rm -rf .husky
@@ -27,11 +30,14 @@ HUSKY_DEBUG=1 git commit -m "test commit"
 ```
 
 #### Issue: Pre-commit hooks running too slowly
+
 **Symptoms:**
+
 - Hooks take longer than 2-3 minutes
 - Timeouts during test execution
 
 **Solutions:**
+
 ```bash
 # 1. Run only API tests instead of full suite
 # Edit .husky/pre-commit to use:
@@ -45,11 +51,14 @@ npm run test:api
 ```
 
 #### Issue: Coverage validation failures
+
 **Symptoms:**
+
 - "Coverage threshold not met" errors
 - Pre-commit hook blocks commits
 
 **Solutions:**
+
 ```bash
 # 1. Generate coverage report to see details
 npm run coverage:html
@@ -64,11 +73,14 @@ git commit --no-verify -m "urgent fix"
 ### CI/CD Pipeline Failures
 
 #### Issue: "Quick Validation" job failing
+
 **Symptoms:**
+
 - ESLint errors in CI but not locally
 - Package.json validation failures
 
 **Solutions:**
+
 ```bash
 # 1. Run the same checks locally
 npm run lint
@@ -86,11 +98,14 @@ npm install
 ```
 
 #### Issue: Test matrix jobs timing out
+
 **Symptoms:**
+
 - Jobs exceed 20-minute timeout
 - Hanging test processes
 
 **Solutions:**
+
 ```bash
 # 1. Check for infinite loops or hanging promises
 npm test -- --detectOpenHandles
@@ -106,11 +121,14 @@ git diff HEAD~1 -- test/
 ```
 
 #### Issue: Coverage analysis failures
+
 **Symptoms:**
+
 - Coverage reports not generated
 - Threshold validation errors
 
 **Solutions:**
+
 ```bash
 # 1. Test coverage generation locally
 npm run coverage:monitor
@@ -126,11 +144,14 @@ DEBUG=1 npm run coverage:monitor
 ```
 
 #### Issue: Security scan failures
+
 **Symptoms:**
+
 - High/critical vulnerabilities detected
 - Security audit blocking pipeline
 
 **Solutions:**
+
 ```bash
 # 1. Review audit results
 npm audit
@@ -148,11 +169,14 @@ npm update
 ### Performance Issues
 
 #### Issue: CI/CD pipeline running too long
+
 **Symptoms:**
+
 - Total pipeline time > 30 minutes
 - Resource consumption warnings
 
 **Optimization strategies:**
+
 ```yaml
 # 1. Optimize test matrix in .github/workflows/ci-cd-pipeline.yml
 strategy:
@@ -173,11 +197,14 @@ needs: []  # Remove unnecessary dependencies between jobs
 ```
 
 #### Issue: Local development slowness
+
 **Symptoms:**
+
 - Pre-commit hooks take > 5 minutes
 - Test execution very slow
 
 **Solutions:**
+
 ```bash
 # 1. Use focused testing during development
 npm run test:api  # Instead of full test suite
@@ -195,11 +222,14 @@ git commit --no-verify -m "WIP: rapid iteration"
 ### Environment-Specific Issues
 
 #### Issue: Windows-specific failures
+
 **Symptoms:**
+
 - Tests pass on Unix but fail on Windows
 - Path-related errors
 
 **Solutions:**
+
 ```javascript
 // 1. Use cross-platform path handling
 const path = require('path');
@@ -215,11 +245,14 @@ git config core.autocrlf true
 ```
 
 #### Issue: macOS-specific failures
+
 **Symptoms:**
+
 - File system case sensitivity issues
 - Permission errors
 
 **Solutions:**
+
 ```bash
 # 1. Check file case consistency
 find . -name "*.js" | grep -i duplicate
@@ -232,11 +265,14 @@ ls -la node_modules/.bin/
 ```
 
 #### Issue: Node.js version compatibility
+
 **Symptoms:**
+
 - Features work on Node 20.x but fail on 18.x
 - API compatibility issues
 
 **Solutions:**
+
 ```javascript
 // 1. Use feature detection instead of version checking
 if (typeof structuredClone !== 'undefined') {
@@ -255,6 +291,7 @@ if (typeof structuredClone !== 'undefined') {
 ### Quality Gate Bypasses
 
 #### Emergency Hotfixes
+
 When quality gates must be bypassed for critical production issues:
 
 ```bash
@@ -276,12 +313,13 @@ git push --force-with-lease
 ```
 
 #### Temporary Quality Relaxation
+
 For legitimate cases where strict quality gates prevent progress:
 
 ```yaml
 # In workflow file, temporarily adjust thresholds
 env:
-  COVERAGE_THRESHOLD: '70'  # Reduced from 80
+  COVERAGE_THRESHOLD: '70' # Reduced from 80
 ```
 
 ```bash
@@ -292,12 +330,14 @@ COVERAGE_THRESHOLD=70 npm run coverage:check
 ### Debugging Workflow Failures
 
 #### Access GitHub Actions Logs
+
 1. Go to repository → Actions tab
 2. Click on failed workflow run
 3. Click on failed job
 4. Expand failing step to see detailed logs
 
 #### Download Artifacts
+
 ```bash
 # Using GitHub CLI
 gh run download [run-id]
@@ -307,6 +347,7 @@ gh run download [run-id]
 ```
 
 #### Debug Workflow Locally
+
 ```bash
 # Use act to run GitHub Actions locally
 npm install -g @nektos/act
@@ -321,6 +362,7 @@ act -j test-matrix --matrix node-version:20.x
 ### Recovery Procedures
 
 #### Corrupted Git Hooks
+
 ```bash
 # 1. Remove all hooks
 rm -rf .husky
@@ -333,6 +375,7 @@ git commit --dry-run -m "test"
 ```
 
 #### Corrupted Coverage Data
+
 ```bash
 # 1. Clean coverage directory
 npm run coverage:clean
@@ -345,6 +388,7 @@ ls -la coverage/
 ```
 
 #### Broken Dependencies
+
 ```bash
 # 1. Clean install
 rm -rf node_modules package-lock.json
@@ -363,17 +407,20 @@ npm test
 ## 📞 Getting Help
 
 ### Internal Resources
+
 1. **Repository Documentation**: `docs/ci-cd/`
 2. **Workflow Files**: `.github/workflows/`
 3. **Configuration Files**: `jest.config.js`, `eslint.config.mjs`
 
 ### External Resources
+
 1. **GitHub Actions**: https://docs.github.com/en/actions
 2. **Jest Testing**: https://jestjs.io/docs/troubleshooting
 3. **ESLint**: https://eslint.org/docs/user-guide/troubleshooting
 4. **Husky**: https://typicode.github.io/husky/
 
 ### Emergency Contacts
+
 - **CI/CD Pipeline Issues**: Create GitHub issue with `ci-cd` label
 - **Critical Production Issues**: Contact repository administrators
 - **Security Vulnerabilities**: Follow security disclosure policy
@@ -381,6 +428,7 @@ npm test
 ## 🔧 Diagnostic Commands
 
 ### Quick Health Check
+
 ```bash
 #!/bin/bash
 echo "🏥 CI/CD Health Check"
@@ -411,6 +459,7 @@ echo "✅ Health check completed"
 ```
 
 ### Comprehensive Diagnostics
+
 ```bash
 #!/bin/bash
 echo "🔬 Comprehensive CI/CD Diagnostics"

@@ -1,10 +1,13 @@
 # CRITICAL FIX: Stale Agent Cleanup System Enhancement
 
 ## Issue Identified
+
 User reported that stale agent removal system was not working properly - agents were holding tasks for too long without being cleaned up automatically.
 
 ## Root Cause Analysis
+
 The stale agent cleanup system had several issues:
+
 1. **Too Lenient Timeout**: 30-minute timeout was too long for user requirements
 2. **Insufficient Frequency**: Cleanup only ran periodically, not aggressively enough
 3. **No Force Cleanup**: No mechanism to immediately clean up stuck tasks on demand
@@ -13,18 +16,22 @@ The stale agent cleanup system had several issues:
 ## Solution Implemented
 
 ### 1. Aggressive Timeout Reduction
+
 - **Changed stale agent timeout**: 30 minutes → 15 minutes
 - **Changed stale task timeout**: 30 minutes → 15 minutes
 - Applied consistently across all cleanup functions
 
 ### 2. Force Cleanup System (CRITICAL ENHANCEMENT)
+
 Added new force cleanup section that runs **EVERY TIME** the stop hook is called:
+
 - **Force cleanup threshold**: 10 minutes
 - **Triggers**: Every stop hook call (user's specific request)
 - **Action**: Immediately resets any task stuck >10 minutes
 - **Logging**: Comprehensive logging of all force cleanup actions
 
 ### 3. Enhanced Cleanup Flow
+
 ```
 Stop Hook Call → Force Cleanup (>10 min) → Regular Cleanup (>15 min) → Agent Cleanup (>15 min)
 ```
@@ -34,12 +41,14 @@ Stop Hook Call → Force Cleanup (>10 min) → Regular Cleanup (>15 min) → Age
 **File Modified**: `stop-hook.js`
 
 **Key Changes**:
+
 - Lines 657-711: Added FORCE CLEANUP section
 - Lines 661: `forceCleanupTimeout = 600000` (10 minutes)
 - Lines 107, 661, 738: Reduced timeouts from 1800000ms to 900000ms
 - Updated all messaging to reflect new timers
 
 **Force Cleanup Logic**:
+
 ```javascript
 for (const task of todoData.tasks) {
   if (task.status === 'in_progress' && task.started_at) {
@@ -59,11 +68,13 @@ for (const task of todoData.tasks) {
 ## Results Achieved
 
 ### Performance Improvements
+
 - **Maximum task hold time**: Reduced from 30+ minutes to 10-15 minutes maximum
 - **Cleanup frequency**: Now runs every stop hook call as requested
 - **Response time**: Immediate cleanup on every stop hook trigger
 
 ### User Requirements Fulfilled
+
 ✅ **Automatic cleanup runs EVERY TIME stop hook is called**
 ✅ **Force immediate cleanup of stale agents from claimed tasks**
 ✅ **Proper metadata collection and timestamp validation**
@@ -71,6 +82,7 @@ for (const task of todoData.tasks) {
 ✅ **Runs automatically and reliably**
 
 ## Testing Validation
+
 - Tested current stale task: 16 minutes old, exceeds both thresholds
 - Force cleanup threshold: 10 minutes ✅
 - Regular cleanup threshold: 15 minutes ✅
@@ -79,6 +91,7 @@ for (const task of todoData.tasks) {
 ## Lesson for Future Development
 
 ### When Implementing Cleanup Systems:
+
 1. **User Requirements First**: If user wants cleanup "every time", implement it exactly that way
 2. **Aggressive Thresholds**: Start with shorter timeouts and adjust based on usage
 3. **Multiple Cleanup Layers**: Implement both force cleanup and regular cleanup
@@ -86,24 +99,28 @@ for (const task of todoData.tasks) {
 5. **Immediate Testing**: Test with real stale data to verify logic
 
 ### Code Patterns Applied:
+
 - Force cleanup with immediate action
 - Consistent timeout application across all functions
 - Historical tracking of cleanup actions
 - User-friendly status reporting
 
 ## Prevention Strategy
+
 - Regular monitoring of cleanup effectiveness
 - User feedback integration for timeout adjustments
 - Comprehensive logging for debugging issues
 - Documentation of all cleanup thresholds and triggers
 
 ## Git Evidence
+
 - **Commit**: 96867aa
 - **Branch**: main
 - **Files Changed**: stop-hook.js, development/lessons/errors/
 - **Tests Passed**: Force cleanup logic validated
 
 ## Impact Assessment
+
 - **User Satisfaction**: Resolved critical user complaint immediately
 - **System Reliability**: Significantly improved cleanup reliability
 - **Performance**: Reduced maximum task hold time by 50-66%

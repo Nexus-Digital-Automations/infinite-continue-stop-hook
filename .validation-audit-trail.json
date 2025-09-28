@@ -12,11 +12,7 @@
       "totalSteps": 3,
       "completedSteps": 1,
       "failedSteps": 1,
-      "requiredSteps": [
-        "focused-codebase",
-        "security-validation",
-        "linter-validation"
-      ],
+      "requiredSteps": ["focused-codebase", "security-validation", "linter-validation"],
       "validationSteps": [
         {
           "criterion": "focused-codebase",
@@ -82,12 +78,7 @@
     "totalSessions": 1,
     "totalValidations": 0,
     "retentionPolicy": 2555,
-    "complianceStandards": [
-      "SOX",
-      "GDPR",
-      "ISO27001",
-      "HIPAA"
-    ],
+    "complianceStandards": ["SOX", "GDPR", "ISO27001", "HIPAA"],
     "lastUpdated": "2025-09-27T05:25:33.957Z"
   }
 }

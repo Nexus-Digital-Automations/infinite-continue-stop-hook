@@ -7,18 +7,21 @@ The TaskManager API features comprehensive automatic guide integration that enha
 ## Key Features
 
 ### 🚀 Automatic Guide Integration
+
 - **Smart Inclusion**: Guides are automatically included in API responses when beneficial
 - **Context-Aware**: Content adapts based on the operation, error context, and user state
 - **Performance Optimized**: Intelligent caching system ensures minimal latency impact
 - **Graceful Degradation**: System functions normally even if guide generation fails
 
 ### 🎯 Enhanced Developer Experience
+
 - **Reduced Manual Guide Calls**: Less need to separately fetch documentation
 - **Contextual Help**: Relevant guidance provided exactly when needed
 - **Error Recovery**: Enhanced error responses with troubleshooting guidance
 - **Agent Onboarding**: Comprehensive initialization guidance for new agents
 
 ### ⚡ Performance Characteristics
+
 - **Cached Responses**: 15-minute memory cache with 1-hour file cache
 - **Minimal Overhead**: <50ms additional response time
 - **Background Generation**: Popular guides pre-generated for instant access
@@ -59,11 +62,13 @@ graph TD
 The following endpoints **always** include guide information:
 
 #### `init` - Agent Initialization
+
 ```bash
 timeout 10s node taskmanager-api.js init
 ```
 
 **Response includes:**
+
 - Agent initialization workflow
 - Quick start commands
 - Essential API commands
@@ -71,18 +76,22 @@ timeout 10s node taskmanager-api.js init
 - Common workflows
 
 #### `reinitialize` - Agent Renewal
+
 ```bash
 timeout 10s node taskmanager-api.js reinitialize
 ```
 
 **Response includes:**
+
 - Reinitialization guidance
 - When to reinitialize
 - Status verification steps
 - Common renewal scenarios
 
 #### Error Responses
+
 All error responses automatically include:
+
 - Contextual troubleshooting guides
 - Recovery instructions
 - Relevant command examples
@@ -93,21 +102,25 @@ All error responses automatically include:
 These endpoints include guides based on context:
 
 #### `create` - Task Creation
+
 ```bash
 timeout 10s node taskmanager-api.js create '{"title":"Task", "description":"Details", "task_type":"feature"}'
 ```
 
 **Guide included when:**
+
 - First-time user detected
 - Invalid task_type provided
 - Validation errors occur
 
 #### `claim` - Task Claiming
+
 ```bash
 timeout 10s node taskmanager-api.js claim task_123
 ```
 
 **Guide included when:**
+
 - Dependency blocking occurs
 - Agent not initialized
 - Task claiming failures
@@ -115,29 +128,42 @@ timeout 10s node taskmanager-api.js claim task_123
 ## Enhanced Response Structure
 
 ### Standard Response Format
+
 ```json
 {
   "success": true,
-  "data": { /* Original API response data */ },
+  "data": {
+    /* Original API response data */
+  },
   "guide": {
     "success": true,
     "taskManager": {
       "version": "2.0.0",
       "description": "Universal TaskManager API for agent-driven development workflows"
     },
-    "taskClassification": { /* Task type definitions */ },
-    "coreCommands": { /* Essential commands */ },
-    "workflows": { /* Common workflows */ },
-    "examples": { /* Usage examples */ },
-    "requirements": { /* Mandatory requirements */ },
+    "taskClassification": {
+      /* Task type definitions */
+    },
+    "coreCommands": {
+      /* Essential commands */
+    },
+    "workflows": {
+      /* Common workflows */
+    },
+    "examples": {
+      /* Usage examples */
+    },
+    "requirements": {
+      /* Mandatory requirements */
+    },
     "focus": "Agent Initialization",
-    "quickStart": [
-      "node taskmanager-api.js guide",
-      "node taskmanager-api.js init", 
-      "node taskmanager-api.js status"
-    ],
-    "essential_commands": { /* Context-specific commands */ },
-    "initialization_help": { /* Step-by-step guidance */ }
+    "quickStart": ["node taskmanager-api.js guide", "node taskmanager-api.js init", "node taskmanager-api.js status"],
+    "essential_commands": {
+      /* Context-specific commands */
+    },
+    "initialization_help": {
+      /* Step-by-step guidance */
+    }
   }
 }
 ```
@@ -145,6 +171,7 @@ timeout 10s node taskmanager-api.js claim task_123
 ### Guide Content Structure
 
 #### Core Sections
+
 - **taskManager**: System version and description
 - **taskClassification**: Complete task type system with priorities
 - **coreCommands**: Essential API commands organized by category
@@ -153,6 +180,7 @@ timeout 10s node taskmanager-api.js claim task_123
 - **requirements**: Mandatory system requirements
 
 #### Context-Specific Sections
+
 - **focus**: Current operation context
 - **quickStart**: Immediate next steps
 - **essential_commands**: Priority commands for current situation
@@ -163,18 +191,21 @@ timeout 10s node taskmanager-api.js claim task_123
 ### Multi-Level Cache Architecture
 
 #### Level 1: Memory Cache
+
 - **Duration**: 15 minutes
 - **Capacity**: 50 entries
 - **Access Time**: <10ms
 - **Use Case**: Frequently accessed guides
 
-#### Level 2: File Cache  
+#### Level 2: File Cache
+
 - **Duration**: 1 hour
 - **Storage**: `.guide-cache` directory
 - **Compression**: Enabled for guides >5KB
 - **Use Case**: Persistent guide storage
 
 #### Level 3: Background Cache
+
 - **Strategy**: Pre-generate popular guides
 - **Refresh**: Every 10 minutes
 - **Targets**: `init`, `error`, `create`, `claim`
@@ -187,7 +218,7 @@ timeout 10s node taskmanager-api.js claim task_123
 {
   "cacheHitRate": "85%",
   "averageRetrievalTime": "12ms",
-  "memoryUsage": "8.5MB", 
+  "memoryUsage": "8.5MB",
   "backgroundRefreshSuccess": "98%"
 }
 ```
@@ -195,6 +226,7 @@ timeout 10s node taskmanager-api.js claim task_123
 ## Error Handling and Fallbacks
 
 ### Circuit Breaker Pattern
+
 - **Failure Threshold**: 5 consecutive failures
 - **Reset Timeout**: 60 seconds
 - **Monitoring Period**: 10 seconds
@@ -202,6 +234,7 @@ timeout 10s node taskmanager-api.js claim task_123
 ### Fallback Strategies
 
 #### 1. Cached Version Fallback
+
 ```javascript
 // Returns previously cached guide when generation fails
 {
@@ -214,7 +247,8 @@ timeout 10s node taskmanager-api.js claim task_123
 ```
 
 #### 2. Minimal Guide Fallback
-```javascript  
+
+```javascript
 // Returns essential commands only
 {
   "guide": {
@@ -228,6 +262,7 @@ timeout 10s node taskmanager-api.js claim task_123
 ```
 
 #### 3. Reference Fallback
+
 ```javascript
 // Returns guide endpoint reference
 {
@@ -243,14 +278,15 @@ timeout 10s node taskmanager-api.js claim task_123
 ### Working with Enhanced Responses
 
 #### Detecting Guide Integration
+
 ```javascript
 // Check if response includes guide
 if (response.guide && response.guide.success) {
   console.log('Guide included:', response.guide.focus);
-  
+
   // Access quick start commands
   if (response.guide.quickStart) {
-    response.guide.quickStart.forEach(cmd => {
+    response.guide.quickStart.forEach((cmd) => {
       console.log('Next step:', cmd);
     });
   }
@@ -258,16 +294,18 @@ if (response.guide && response.guide.success) {
 ```
 
 #### Parsing Task Classification
+
 ```javascript
 // Extract task types and priorities
 const taskTypes = response.guide.taskClassification.types;
-taskTypes.forEach(type => {
+taskTypes.forEach((type) => {
   console.log(`${type.name}: Priority ${type.priority}`);
   console.log(`Usage: ${type.description}`);
 });
 ```
 
 #### Using Contextual Commands
+
 ```javascript
 // Access context-specific commands
 if (response.guide.essential_commands) {
@@ -280,13 +318,15 @@ if (response.guide.essential_commands) {
 ### Best Practices for Integration
 
 #### 1. Handle Missing Guides Gracefully
+
 ```javascript
-const guide = response.guide || { 
-  message: "Guide not available" 
+const guide = response.guide || {
+  message: 'Guide not available',
 };
 ```
 
 #### 2. Cache Guide Information
+
 ```javascript
 // Store frequently accessed guide data
 const cachedGuides = new Map();
@@ -296,16 +336,16 @@ if (response.guide) {
 ```
 
 #### 3. Extract Relevant Information
+
 ```javascript
 // Focus on actionable guidance
-const nextSteps = response.guide.quickStart || 
-                  response.guide.initialization_help?.steps || 
-                  ['Check system status'];
+const nextSteps = response.guide.quickStart || response.guide.initialization_help?.steps || ['Check system status'];
 ```
 
 ## Usage Examples
 
 ### Example 1: Agent Initialization with Guide
+
 ```bash
 # Command
 timeout 10s node taskmanager-api.js init
@@ -316,12 +356,12 @@ timeout 10s node taskmanager-api.js init
   "agentId": "development_session_123_agent_abc",
   "config": { "role": "development" },
   "guide": {
-    "focus": "Agent Initialization", 
+    "focus": "Agent Initialization",
     "initialization_help": {
       "message": "🚨 AGENT INITIALIZATION GUIDANCE",
       "steps": [
         "1. Initialize agent: timeout 10s node taskmanager-api.js init",
-        "2. Verify initialization: timeout 10s node taskmanager-api.js status", 
+        "2. Verify initialization: timeout 10s node taskmanager-api.js status",
         "3. Begin task operations: timeout 10s node taskmanager-api.js list"
       ]
     }
@@ -330,6 +370,7 @@ timeout 10s node taskmanager-api.js init
 ```
 
 ### Example 2: Error Response with Recovery Guide
+
 ```bash
 # Command with error
 timeout 10s node taskmanager-api.js claim task_123
@@ -343,7 +384,7 @@ timeout 10s node taskmanager-api.js claim task_123
     "immediate_action": "Run: timeout 10s node taskmanager-api.js init",
     "next_steps": [
       "Initialize agent with init command",
-      "Verify with status command", 
+      "Verify with status command",
       "Retry task claiming"
     ]
   }
@@ -351,6 +392,7 @@ timeout 10s node taskmanager-api.js claim task_123
 ```
 
 ### Example 3: Task Creation with Type Guidance
+
 ```bash
 # Command
 timeout 10s node taskmanager-api.js create '{"title":"Fix bug", "description":"Debug issue"}'
@@ -373,21 +415,24 @@ timeout 10s node taskmanager-api.js create '{"title":"Fix bug", "description":"D
 ### Reducing Response Size
 
 #### 1. Selective Guide Inclusion
+
 ```javascript
 // Configure guide inclusion rules
 const guideConfig = {
   includeExamples: context.isFirstTime,
   includeWorkflows: context.hasErrors,
-  minimizeContent: context.isMobile
+  minimizeContent: context.isMobile,
 };
 ```
 
 #### 2. Content Compression
+
 - Guides >10KB automatically compressed
 - JSON minification removes whitespace
 - Redundant information eliminated
 
 #### 3. Background Pre-generation
+
 - Popular guides cached before requests
 - Async generation doesn't block responses
 - Smart cache warming based on usage patterns
@@ -395,12 +440,14 @@ const guideConfig = {
 ### Monitoring Performance
 
 #### Key Metrics
+
 - **Cache Hit Rate**: Target >80%
 - **Guide Generation Time**: Target <500ms
 - **Response Size Increase**: Typical <20KB
 - **Memory Usage**: Target <10MB total
 
 #### Performance Commands
+
 ```bash
 # Check cache statistics
 timeout 10s node taskmanager-api.js stats
@@ -412,13 +459,14 @@ timeout 10s node taskmanager-api.js guide | jq '.performance'
 ## Configuration Options
 
 ### Environment Variables
+
 ```bash
 # Enable/disable guide integration
 export GUIDE_INTEGRATION_ENABLED=true
 
 # Cache configuration
 export GUIDE_MEMORY_CACHE_TTL=900000    # 15 minutes
-export GUIDE_FILE_CACHE_TTL=3600000     # 1 hour  
+export GUIDE_FILE_CACHE_TTL=3600000     # 1 hour
 export GUIDE_MAX_CACHE_ENTRIES=50
 
 # Performance tuning
@@ -427,23 +475,24 @@ export GUIDE_MAX_SIZE=50000             # 50KB
 ```
 
 ### Runtime Configuration
+
 ```javascript
 // Configure guide behavior
 const guideConfig = {
   caching: {
     enabled: true,
     memoryTTL: 900000,
-    fileTTL: 3600000
+    fileTTL: 3600000,
   },
   inclusion: {
     alwaysInclude: ['init', 'reinitialize', 'error'],
-    conditionalInclude: ['create', 'claim', 'list']
+    conditionalInclude: ['create', 'claim', 'list'],
   },
   performance: {
     generationTimeout: 5000,
     maxGuideSize: 50000,
-    enableCompression: true
-  }
+    enableCompression: true,
+  },
 };
 ```
 
@@ -452,13 +501,16 @@ const guideConfig = {
 ### Common Issues
 
 #### 1. Guides Not Appearing
+
 **Symptoms**: Responses don't include guide information
-**Causes**: 
+**Causes**:
+
 - Guide integration disabled
 - Endpoint not configured for guides
 - Cache corruption
 
 **Solutions**:
+
 ```bash
 # Check configuration
 timeout 10s node taskmanager-api.js guide | jq '.success'
@@ -471,13 +523,16 @@ timeout 10s node taskmanager-api.js methods | jq '.examples'
 ```
 
 #### 2. Slow Response Times
+
 **Symptoms**: API responses taking >1 second
 **Causes**:
+
 - Cache misses
 - Guide generation timeout
 - Memory pressure
 
 **Solutions**:
+
 ```bash
 # Check cache performance
 timeout 10s node taskmanager-api.js stats | jq '.cacheHitRate'
@@ -485,18 +540,21 @@ timeout 10s node taskmanager-api.js stats | jq '.cacheHitRate'
 # Reduce guide size
 export GUIDE_MAX_SIZE=25000
 
-# Increase cache duration  
+# Increase cache duration
 export GUIDE_MEMORY_CACHE_TTL=1800000
 ```
 
 #### 3. Memory Usage Issues
+
 **Symptoms**: High memory consumption
 **Causes**:
+
 - Cache not clearing expired entries
 - Too many cached guides
 - Large guide content
 
 **Solutions**:
+
 ```bash
 # Reduce cache size
 export GUIDE_MAX_CACHE_ENTRIES=25
@@ -511,6 +569,7 @@ timeout 10s node taskmanager-api.js cleanup-cache
 ### Debug Commands
 
 #### Inspect Guide Cache
+
 ```bash
 # View cache contents
 ls -la .guide-cache/
@@ -523,6 +582,7 @@ timeout 10s node taskmanager-api.js test-guide init
 ```
 
 #### Performance Analysis
+
 ```bash
 # Measure response times
 time timeout 10s node taskmanager-api.js init
@@ -539,12 +599,14 @@ ps aux | grep taskmanager-api
 ### For Existing API Consumers
 
 #### No Changes Required
+
 - Existing integrations work unchanged
 - Guide information is additive only
 - Original response structure preserved
 - Backward compatibility maintained
 
 #### Optional Enhancements
+
 ```javascript
 // Before: Basic error handling
 try {
@@ -558,14 +620,14 @@ try {
 try {
   const response = await api.init();
   console.log('Agent ID:', response.agentId);
-  
+
   // Use included guidance
   if (response.guide?.quickStart) {
     console.log('Next steps:', response.guide.quickStart);
   }
 } catch (error) {
   console.error('Init failed:', error.message);
-  
+
   // Access error recovery guidance
   if (error.guide?.next_steps) {
     console.log('Recovery steps:', error.guide.next_steps);
@@ -576,25 +638,26 @@ try {
 ### For New Integrations
 
 #### Leverage Guide Information
+
 ```javascript
 class TaskManagerClient {
   async initialize() {
     const response = await this.api.init();
-    
+
     // Store guide information for reuse
     this.guide = response.guide;
     this.commands = response.guide.essential_commands;
     this.workflows = response.guide.workflows;
-    
+
     return response;
   }
-  
+
   async handleError(error) {
     // Use contextual error guidance
     if (error.guide) {
       console.log('Error context:', error.guide.focus);
       console.log('Recovery action:', error.guide.immediate_action);
-      
+
       // Execute suggested recovery steps
       for (const step of error.guide.next_steps || []) {
         console.log('Step:', step);
@@ -607,24 +670,28 @@ class TaskManagerClient {
 ## Best Practices
 
 ### 1. Guide Information Utilization
+
 - Always check for guide information in responses
 - Use contextual commands provided in guides
 - Follow quickStart sequences for optimal workflows
 - Store frequently used guide information for offline reference
 
 ### 2. Performance Considerations
+
 - Monitor response times when guides are included
 - Use caching for frequently accessed guide information
 - Consider network bandwidth when working with enhanced responses
 - Implement client-side guide caching for repeated operations
 
 ### 3. Error Handling Enhancement
+
 - Leverage enhanced error responses with recovery guidance
 - Follow suggested troubleshooting steps before escalation
 - Use contextual help information to resolve issues quickly
 - Store common error patterns and their guide solutions
 
 ### 4. Development Workflow Integration
+
 - Incorporate guide information into development tools
 - Use guide examples as templates for common operations
 - Integrate workflow guidance into automation scripts
@@ -633,12 +700,14 @@ class TaskManagerClient {
 ## Future Enhancements
 
 ### Planned Features
+
 - **Personalized Guides**: User behavior-based customization
-- **Multi-language Support**: Internationalization capabilities  
+- **Multi-language Support**: Internationalization capabilities
 - **Interactive Guidance**: Step-by-step interactive assistance
 - **Analytics Integration**: Usage-based guide optimization
 
 ### Extensibility
+
 - **Plugin Architecture**: Custom guide generators
 - **Template System**: Customizable guide templates
 - **Integration APIs**: Third-party tool integration
@@ -649,6 +718,7 @@ class TaskManagerClient {
 The TaskManager API guide integration system significantly enhances developer experience by providing contextual, intelligent guidance directly within API responses. The system is designed for performance, reliability, and ease of use while maintaining full backward compatibility.
 
 Key benefits include:
+
 - **Reduced Learning Curve**: Immediate access to relevant documentation
 - **Enhanced Error Recovery**: Contextual troubleshooting guidance
 - **Improved Productivity**: Less context switching between API and documentation

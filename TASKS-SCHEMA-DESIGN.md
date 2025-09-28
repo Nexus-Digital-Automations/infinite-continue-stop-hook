@@ -3,6 +3,7 @@
 ## Migration Overview: FEATURES.json → TASKS.json
 
 ### Core Changes
+
 1. **File Rename**: `FEATURES.json` → `TASKS.json`
 2. **Enhanced Task Types**: Support for `error`, `feature`, `test`, `audit` task types
 3. **Auto-Generation**: Automatic test and audit task creation for features
@@ -155,6 +156,7 @@
 ## Task Type Definitions
 
 ### ERROR Tasks
+
 - **Purpose**: Bug fixes, linter errors, build failures, runtime errors
 - **Priority**: Auto-assigned based on severity (critical for build-breaking)
 - **Auto-Generation**: None (errors are identified, not generated)
@@ -162,6 +164,7 @@
 - **Examples**: "Fix ESLint violations in auth.js", "Resolve TypeScript errors in UserService"
 
 ### FEATURE Tasks
+
 - **Purpose**: New functionality implementation
 - **Priority**: Normal (unless user-specified)
 - **Auto-Generation**: Always generates linked TEST and AUDIT tasks
@@ -169,6 +172,7 @@
 - **Examples**: "Add dark mode toggle", "Implement user authentication"
 
 ### TEST Tasks
+
 - **Purpose**: Unit, integration, E2E test implementation
 - **Priority**: High (linked to features), Normal (standalone improvements)
 - **Auto-Generation**: Generated for every approved FEATURE task
@@ -176,6 +180,7 @@
 - **Examples**: "Unit tests for UserService.authenticate()", "E2E tests for checkout flow"
 
 ### AUDIT Tasks
+
 - **Purpose**: Security scans, code quality, compliance validation
 - **Priority**: High (linked to features), Critical (security-sensitive)
 - **Auto-Generation**: Generated for every approved FEATURE task
@@ -185,7 +190,9 @@
 ## Auto-Generation Rules
 
 ### When FEATURE Task Approved:
+
 1. **Generate TEST Task**:
+
    ```json
    {
      "type": "test",
@@ -208,6 +215,7 @@
    ```
 
 ### Dependency Rules:
+
 - FEATURE cannot be marked complete until linked TEST and AUDIT tasks are completed
 - TEST tasks must achieve defined coverage requirements (>80%)
 - AUDIT tasks must pass security scans with zero vulnerabilities
@@ -229,21 +237,25 @@
 ## Migration Strategy
 
 ### Phase 1: File Rename & Schema Update
+
 1. Backup existing FEATURES.json
 2. Migrate schema while preserving existing data
 3. Update file path references in taskmanager-api.js
 
 ### Phase 2: Auto-Generation Implementation
+
 1. Add auto-generation logic for feature approval
 2. Create parent-child relationship management
 3. Implement dependency validation
 
 ### Phase 3: Priority System Enhancement
+
 1. Update task queuing with new priority rules
 2. Add task type filtering and sorting
 3. Ensure CLAUDE.md compliance (one feature at a time)
 
 ### Phase 4: Validation & Testing
+
 1. Test migration with existing data
 2. Validate auto-generation works correctly
 3. Confirm CLAUDE.md mandatory test gates function

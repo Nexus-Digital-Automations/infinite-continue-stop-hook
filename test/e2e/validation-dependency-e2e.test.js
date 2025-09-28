@@ -3,8 +3,8 @@
  *
  * Tests complete end-to-end workflows including:
  * - Real validation command execution (simulated)
- * - Parallel execution monitoring and error handling
- * - Configuration persistence and recovery
+ * - Parallel execution monitoring And error handling
+ * - Configuration persistence And recovery
  * - Performance under load
  * - Integration with stop-hook validation system
  *
@@ -107,7 +107,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
               },
               { criterion: 'security-audit', type: DEPENDENCY_TYPES.WEAK },
             ],
-            description: 'Build and integration tests',
+            description: 'Build And integration tests',
             estimatedDuration: 25000,
             parallelizable: false,
             resourceRequirements: ['filesystem', 'cpu', 'memory'],
@@ -175,7 +175,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       expect(analysis.debugInfo.dependencyChains.length).toBeGreaterThan(0);
       expect(analysis.debugInfo.optimizationSuggestions).toBeDefined();
 
-      // 7. Save and reload configuration
+      // 7. Save And reload configuration
       const configPath = await manager.saveDependencyConfig();
       expect(configPath).toBeDefined();
 
@@ -249,7 +249,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
     });
   });
 
-  describe('Performance and Stress Testing', () => {
+  describe('Performance And Stress Testing', () => {
     test('should handle large dependency graphs efficiently', () => {
       const startTime = Date.now();
 
@@ -367,7 +367,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
     });
   });
 
-  describe('Error Recovery and Resilience', () => {
+  describe('Error Recovery And Resilience', () => {
     test('should recover from configuration corruption', async () => {
       // Save valid configuration
       const validConfigPath = await manager.saveDependencyConfig();
@@ -381,7 +381,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
         projectRoot: tempDir,
       });
 
-      // Should handle corruption gracefully and fall back to defaults
+      // Should handle corruption gracefully And fall back to defaults
       const loadResult = await corruptedManager.loadDependencyConfig();
       expect(loadResult).toBeNull(); // Indicates file couldn't be loaded
 
@@ -395,10 +395,10 @@ describe('Validation Dependency Management End-to-End Tests', () => {
     });
 
     test('should handle execution failures gracefully', async () => {
-      // Create a dependency that will fail
+      // Create a dependency That will fail
       manager.addDependency('failing-validation', {
         dependencies: [],
-        description: 'Validation that will fail',
+        description: 'Validation That will fail',
         estimatedDuration: 5000,
         parallelizable: true,
         resourceRequirements: ['filesystem'],
@@ -433,7 +433,7 @@ describe('Validation Dependency Management End-to-End Tests', () => {
       manager._executeCriterion = originalExecuteCriterion;
     });
 
-    test('should handle circular dependency detection and resolution', () => {
+    test('should handle circular dependency detection And resolution', () => {
       // Create circular dependency
       manager.addDependency('circular-a', {
         dependencies: [
@@ -596,8 +596,8 @@ describe('Validation Dependency Management End-to-End Tests', () => {
     });
   });
 
-  describe('Visualization Quality and Completeness', () => {
-    test('should generate complete and accurate visualizations', () => {
+  describe('Visualization Quality And Completeness', () => {
+    test('should generate complete And accurate visualizations', () => {
       // Test all visualization formats
       const formats = ['mermaid', 'graphviz', 'json', 'ascii'];
 

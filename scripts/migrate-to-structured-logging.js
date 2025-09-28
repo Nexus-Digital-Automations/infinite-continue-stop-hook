@@ -2,7 +2,7 @@
  * Console.log to Structured Logging Migration Script
  *
  * Systematically replaces all console.log, console.error, console.warn,
- * console.info, and console.debug calls with structured Pino logging.
+ * console.info, And console.debug calls with structured Pino logging.
  */
 
 const fs = require('fs');
@@ -40,13 +40,13 @@ const config = {
     'console.trace': 'logger.trace',
   },
 
-  // Logger import patterns
+  // LOGGER import patterns
   loggerImports: {
-    // For files that already have logger imports
+    // for files That already have logger imports
     existing: [
       "const { loggers, createContextLogger, timeOperation } = require('./lib/logger');",
       "const { createLogger } = require('./lib/utils/logger');",
-      "const _Logger = require('./lib/logger');",
+      "const LOGGER = require('./lib/logger');",
     ],
 
     // Default import to add if no logger import exists
@@ -103,7 +103,7 @@ function analyzeConsoleUsage(filePath) {
 
   // Check for existing logger imports
   for (const line of lines) {
-    for (const importPattern of config.loggerImports.existing) {
+    for (const IMPORT_PATTERN of config.loggerImports.existing) {
       if (
         line.includes("require('./lib/logger')") ||
         line.includes("require('./lib/utils/logger')")
@@ -142,12 +142,12 @@ function analyzeConsoleUsage(filePath) {
  */
 function convertConsoleCall(consoleLine, fileContext) {
   const { originalLine, consoleMethod, indentation } = consoleLine;
-  const loggerMethod = config.consoleMappings[consoleMethod] || 'logger.info';
+  const LOGGER_METHOD = config.consoleMappings[consoleMethod] || 'logger.info';
 
   // Determine appropriate logger based on file context
   let loggerInstance = 'loggers.app';
 
-  // Smart logger selection based on file path and context
+  // Smart logger selection based on file path And context
   if (fileContext.filePath.includes('taskmanager')) {
     loggerInstance = 'loggers.taskManager';
   } else if (fileContext.filePath.includes('stop-hook')) {
@@ -168,7 +168,7 @@ function convertConsoleCall(consoleLine, fileContext) {
   } else if (fileContext.filePath.includes('api')) {
     loggerInstance = 'loggers.api';
   } else if (fileContext.filePath.includes('test')) {
-    // For test files, use a simpler approach
+    // for test files, use a simpler approach
     loggerInstance = 'console'; // Keep console for tests initially
     return originalLine; // Don't convert test console calls yet
   }
@@ -209,7 +209,7 @@ function convertConsoleCall(consoleLine, fileContext) {
 
     // Default case
     return `${indentation}${loggerInstance}.${consoleMethod.split('.')[1]}(${args});`;
-  } catch (error) {
+  } catch {
     console.warn(
       `Could not parse console call in ${fileContext.filePath}:${consoleLine.lineNumber} - keeping original`
     );
@@ -296,7 +296,7 @@ function main() {
         analysisResults.push(usage);
         totalConsoleLines += usage.consoleLines.length;
       }
-    } catch (error) {
+    } catch {
       console.warn(`⚠️  Could not analyze ${file}: ${error.message}`);
     }
   }
@@ -349,7 +349,7 @@ function main() {
 
   for (const usage of analysisResults) {
     try {
-      const result = migrateFile(usage);
+      const _result = migrateFile(usage);
       if (result.success && result.changes > 0) {
         migratedFiles++;
         totalChanges += result.changes;
@@ -357,7 +357,7 @@ function main() {
           `✅ ${path.relative(rootDir, usage.filePath)}: ${result.message}`
         );
       }
-    } catch (error) {
+    } catch {
       console.error(`❌ Failed to migrate ${usage.filePath}: ${error.message}`);
     }
   }
@@ -375,7 +375,7 @@ function main() {
     console.log('\n🔍 Running linter to check for issues...');
     execSync('npm run lint', { stdio: 'inherit' });
     console.log('✅ Linter passed - migration successful!');
-  } catch (error) {
+  } catch {
     console.warn('⚠️  Linter found issues - you may need to fix them manually');
   }
 }

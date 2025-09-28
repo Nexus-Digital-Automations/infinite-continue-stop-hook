@@ -14,18 +14,21 @@ This analysis provides a comprehensive inventory of ALL TaskManager API commands
 ## Complete Command Inventory (25 Commands Total)
 
 ### 1. Discovery & Documentation Commands
+
 - **methods** ✅ - Has dedicated error handling with basic response
 - **guide** ✅ - Has comprehensive guide response with error fallbacks
 
-### 2. Agent Lifecycle Commands  
+### 2. Agent Lifecycle Commands
+
 - **init** ✅ **EXCELLENT INTEGRATION** - Has contextual guide integration with `_getGuideForError('agent-init')`
 - **reinitialize** ✅ **EXCELLENT INTEGRATION** - Has contextual guide integration with `_getGuideForError('agent-reinit')`
 - **status** ❌ **MISSING GUIDE** - No error response guide integration
 - **current** ❌ **MISSING GUIDE** - No error response guide integration
 
 ### 3. Task Operations Commands
+
 - **list** ❌ **MISSING GUIDE** - No error response guide integration
-- **create** ❌ **MISSING GUIDE** - No error response guide integration  
+- **create** ❌ **MISSING GUIDE** - No error response guide integration
 - **create-error** ❌ **MISSING GUIDE** - No error response guide integration
 - **analyze-phase-insertion** ❌ **MISSING GUIDE** - No error response guide integration
 - **claim** ❌ **MISSING GUIDE** - No error response guide integration
@@ -33,15 +36,18 @@ This analysis provides a comprehensive inventory of ALL TaskManager API commands
 - **delete** ❌ **MISSING GUIDE** - No error response guide integration
 
 ### 4. Task Reordering Commands
+
 - **move-top** ❌ **MISSING GUIDE** - No error response guide integration
 - **move-up** ❌ **MISSING GUIDE** - No error response guide integration
 - **move-down** ❌ **MISSING GUIDE** - No error response guide integration
 - **move-bottom** ❌ **MISSING GUIDE** - No error response guide integration
 
 ### 5. Statistics Commands
+
 - **stats** ❌ **MISSING GUIDE** - No error response guide integration
 
 ### 6. Feature Management Commands (7 Commands)
+
 - **suggest-feature** ❌ **MISSING GUIDE** - No error response guide integration
 - **approve-feature** ❌ **MISSING GUIDE** - No error response guide integration
 - **reject-feature** ❌ **MISSING GUIDE** - No error response guide integration
@@ -50,12 +56,15 @@ This analysis provides a comprehensive inventory of ALL TaskManager API commands
 - **feature-stats** ❌ **MISSING GUIDE** - No error response guide integration
 
 ### 7. Default Case
+
 - **default** ❌ **HELP TEXT ONLY** - Provides usage help but no error context guide
 
 ## Current Error Handling Infrastructure
 
 ### Excellent Guide Integration Examples (2 commands)
+
 1. **init command** (lines 1777-1791):
+
    ```javascript
    const result = await api.initAgent(config);
    // initAgent method includes:
@@ -64,7 +73,7 @@ This analysis provides a comprehensive inventory of ALL TaskManager API commands
    ```
 
 2. **reinitialize command** (lines 1900-1915):
-   ```javascript  
+   ```javascript
    const result = await api.reinitializeAgent(agentId, config);
    // reinitializeAgent method includes:
    // - guide = await this._getGuideForError('agent-reinit');
@@ -72,20 +81,24 @@ This analysis provides a comprehensive inventory of ALL TaskManager API commands
    ```
 
 ### Global Error Handler Pattern (lines 2246-2294)
+
 The main() function has a comprehensive error handler that:
+
 - ✅ Determines error context based on command and error message
 - ✅ Calls `_getGuideForError(errorContext)` for contextual guidance
 - ✅ Falls back to `_getFallbackGuide(errorContext)` if needed
 - ✅ Returns structured error response with guide
 
 **CRITICAL ISSUE**: The global error handler only covers 3 contexts:
+
 - 'agent-init' - for init-related errors
-- 'agent-reinit' - for reinitialize-related errors  
+- 'agent-reinit' - for reinitialize-related errors
 - 'task-operations' - for create/claim/complete/list errors
 
 ## Missing Guide Integration Analysis
 
 ### Priority 1: High-Frequency Commands (11 commands)
+
 **Impact**: These are the most commonly used commands that need immediate guide integration:
 
 1. **create** - Core task creation, needs task_type guidance
@@ -100,42 +113,46 @@ The main() function has a comprehensive error handler that:
 10. **suggest-feature** - Feature suggestion, needs format guidance
 11. **approve-feature** - Feature approval, needs validation guidance
 
-### Priority 2: Task Management Commands (4 commands)  
+### Priority 2: Task Management Commands (4 commands)
+
 **Impact**: Used for task organization, need operation guidance:
 
 1. **move-top** - Task reordering guidance
-2. **move-up** - Task reordering guidance  
+2. **move-up** - Task reordering guidance
 3. **move-down** - Task reordering guidance
 4. **move-bottom** - Task reordering guidance
 
 ### Priority 3: Advanced Feature Commands (5 commands)
+
 **Impact**: Less frequently used but still need guidance:
 
 1. **reject-feature** - Feature rejection guidance
 2. **list-suggested-features** - Feature browsing guidance
-3. **list-features** - Feature browsing guidance  
+3. **list-features** - Feature browsing guidance
 4. **feature-stats** - Feature statistics guidance
 5. **analyze-phase-insertion** - Phase analysis guidance
 
 ## Error Context Mapping Analysis
 
-### Missing Error Contexts  
+### Missing Error Contexts
+
 The system needs these additional error contexts:
 
 1. **'task-creation'** - For create/create-error commands
 2. **'task-management'** - For claim/complete/delete commands
-3. **'task-listing'** - For list/current commands  
-4. **'task-reordering'** - For move-* commands
-5. **'feature-management'** - For feature-* commands
+3. **'task-listing'** - For list/current commands
+4. **'task-reordering'** - For move-\* commands
+5. **'feature-management'** - For feature-\* commands
 6. **'system-stats'** - For stats command
 7. **'agent-status'** - For status command
 
 ### Global Error Handler Enhancement Needed
+
 Current logic (lines 2250-2261):
+
 ```javascript
 // Determine error context based on error message and command
-if (error.message.includes('no agent id') || 
-    error.message.includes('agent not initialized')) {
+if (error.message.includes('no agent id') || error.message.includes('agent not initialized')) {
   errorContext = 'agent-init';
 } else if (command === 'init' || command === 'reinitialize') {
   errorContext = command === 'init' ? 'agent-init' : 'agent-reinit';
@@ -149,16 +166,19 @@ if (error.message.includes('no agent id') ||
 ## Implementation Strategy
 
 ### Phase 1: High-Priority Command Integration (11 commands)
+
 1. **Enhance `_getGuideForError()` method** - Add new error contexts
 2. **Enhance global error handler** - Map all commands to contexts
 3. **Add guide integration to individual command methods** - Follow init/reinitialize pattern
 
 ### Phase 2: Complete Coverage (Remaining 14 commands)
+
 1. **Task reordering commands** - Add operation guidance
-2. **Advanced feature commands** - Add workflow guidance  
+2. **Advanced feature commands** - Add workflow guidance
 3. **Specialized commands** - Add context-specific guidance
 
 ### Phase 3: Testing & Validation
+
 1. **Error scenario testing** - Test all error paths
 2. **Guide content validation** - Ensure helpful guidance
 3. **Performance impact assessment** - Monitor guide caching effectiveness
@@ -166,9 +186,11 @@ if (error.message.includes('no agent id') ||
 ## Technical Implementation Details
 
 ### Required Changes to `_getGuideForError()` Method
+
 Add cases for new error contexts:
+
 - 'task-creation'
-- 'task-management'  
+- 'task-management'
 - 'task-listing'
 - 'task-reordering'
 - 'feature-management'
@@ -176,10 +198,13 @@ Add cases for new error contexts:
 - 'agent-status'
 
 ### Required Changes to Global Error Handler
+
 Expand the command-to-context mapping to include all 25 commands.
 
 ### Pattern for Individual Method Enhancement
+
 Follow the init/reinitialize pattern:
+
 ```javascript
 async commandMethod() {
   let guide = null;
@@ -188,7 +213,7 @@ async commandMethod() {
   } catch {
     // Continue without guide
   }
-  
+
   try {
     // ... command logic ...
     return {
@@ -209,14 +234,16 @@ async commandMethod() {
 
 **MAJOR GAP IDENTIFIED**: Out of 25+ API commands, only 2 have comprehensive guide integration in their individual methods, while 23 commands rely solely on the global error handler which only covers 3 error contexts.
 
-**IMMEDIATE ACTION REQUIRED**: 
+**IMMEDIATE ACTION REQUIRED**:
+
 1. Expand global error handler to cover all commands (23 missing)
 2. Add individual method guide integration for high-priority commands (11 commands)
 3. Enhance `_getGuideForError()` with 7 new error contexts
 
-**SUCCESS CRITERIA**: 
+**SUCCESS CRITERIA**:
+
 - All 25 commands have appropriate error context mapping
-- All error responses include relevant contextual guidance  
+- All error responses include relevant contextual guidance
 - No command error response lacks guide integration
 - Agent troubleshooting is comprehensive across all operations
 

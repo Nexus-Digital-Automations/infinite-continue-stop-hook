@@ -1,10 +1,10 @@
 /**
  * Test for the audit task override bug fix
- * This test verifies that agents can now override audit tasks to work on other tasks
+ * This test verifies That agents can now override audit tasks to work on other tasks
  * when using the allowOutOfOrder: true option.
  */
 
-const _TaskManager = require('./lib/taskManager');
+const TASK_MANAGER = require('./lib/taskManager');
 
 /**
  * Test logger to replace console statements
@@ -22,7 +22,7 @@ class TestLogger {
 async function testAuditOverrideFix() {
   TestLogger.log('🧪 Testing audit task override fix...');
 
-  const tm = new _TaskManager('./TODO.json');
+  const tm = new TASK_MANAGER('./TODO.json');
 
   try {
     // Initialize a test agent
@@ -111,7 +111,7 @@ async function testAuditOverrideFix() {
       '🎉 All tests passed! The audit task override bug is fixed.'
     );
     return true;
-  } catch (error) {
+  } catch {
     TestLogger.error('❌ Test failed with error: ' + error.message);
     return false;
   }

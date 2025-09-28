@@ -26,6 +26,7 @@
 ## 🧪 Test Framework Overview
 
 ### Framework Stack
+
 - **Testing Framework**: Jest 30.1.3
 - **Test Environment**: Node.js
 - **Coverage Provider**: V8 (faster than babel)
@@ -33,6 +34,7 @@
 - **Test Types**: Unit, Integration, E2E, RAG System, Performance
 
 ### Project Structure
+
 ```
 test/
 ├── setup.js                    # Global test setup
@@ -51,6 +53,7 @@ test/
 ```
 
 ### Configuration Files
+
 - `jest.config.js` - Main Jest configuration with projects
 - `test/rag-system/jest.config.js` - RAG system specific config
 - `test/e2e/jest.config.js` - E2E test configuration
@@ -61,6 +64,7 @@ test/
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 ```bash
 # Ensure Node.js 18+ is installed
 node --version
@@ -73,6 +77,7 @@ npm run test -- --version
 ```
 
 ### Run All Tests
+
 ```bash
 # Complete test suite with coverage
 npm test
@@ -86,6 +91,7 @@ npm run test:quick
 ## 🚀 Test Execution Guide
 
 ### Core Test Commands
+
 ```bash
 # Complete test suite with coverage reporting
 npm test
@@ -101,6 +107,7 @@ npm test -- --testPathPattern="security"
 ```
 
 #### Unit Tests
+
 ```bash
 # All unit tests
 npm run test:unit
@@ -119,6 +126,7 @@ npm run test:unit:watch
 ```
 
 #### Integration Tests
+
 ```bash
 # All integration tests
 npm run test:integration
@@ -141,6 +149,7 @@ npm run test:integration:watch
 ```
 
 #### E2E Tests
+
 ```bash
 # All E2E tests
 npm run test:e2e
@@ -157,6 +166,7 @@ npm run test:e2e:watch
 ```
 
 #### RAG System Tests
+
 ```bash
 # All RAG tests
 npm run test:rag
@@ -175,6 +185,7 @@ npm run test:rag:watch
 ```
 
 ### Coverage Commands
+
 ```bash
 # Generate coverage report
 npm run coverage
@@ -195,6 +206,7 @@ npm run coverage:lcov      # LCOV format
 ```
 
 ### Coverage Quality Gates
+
 ```bash
 # Check coverage thresholds
 npm run coverage:check
@@ -212,6 +224,7 @@ npm run coverage:threshold-check
 ### Advanced Test Execution
 
 #### Environment Variables
+
 ```bash
 # Debug mode
 TEST_DEBUG=true npm test
@@ -233,6 +246,7 @@ npm test test/unit/taskmanager-api.test.js
 ```
 
 #### Jest CLI Options
+
 ```bash
 # Run tests and exit
 npm test -- --passWithNoTests
@@ -260,6 +274,7 @@ npm test -- --maxWorkers=4
 ### Debug Configuration
 
 #### 1. Enable Debug Mode
+
 ```bash
 # Set debug environment variable
 export TEST_DEBUG=true
@@ -270,6 +285,7 @@ TEST_DEBUG=true npm run test:unit:taskmanager
 ```
 
 #### 2. Node.js Inspector
+
 ```bash
 # Run tests with Node.js debugger
 node --inspect-brk node_modules/.bin/jest --runInBand
@@ -279,6 +295,7 @@ node --inspect-brk node_modules/.bin/jest test/unit/taskmanager-api.test.js --ru
 ```
 
 #### 3. VS Code Debug Configuration
+
 ```json
 {
   "name": "Debug Jest Tests",
@@ -297,6 +314,7 @@ node --inspect-brk node_modules/.bin/jest test/unit/taskmanager-api.test.js --ru
 ### Debugging Techniques
 
 #### 1. Test Utilities Debugging
+
 ```javascript
 // Use global test utilities
 global.testUtils.delay(1000); // Add delays
@@ -308,15 +326,17 @@ TestLogger.debug('Debug message', { data: 'example' });
 ```
 
 #### 2. API Debugging
+
 ```javascript
 // Enable verbose API execution
 const result = await APIExecutor.execAPI('command', ['args'], {
-  silent: false,  // Shows command output
-  timeout: 30000  // Increase timeout
+  silent: false, // Shows command output
+  timeout: 30000, // Increase timeout
 });
 ```
 
 #### 3. Memory and Performance Debugging
+
 ```javascript
 // Measure test performance
 const { PerformanceUtils } = require('../utils/testUtils');
@@ -329,6 +349,7 @@ console.log(`Test took ${duration}ms`);
 ```
 
 #### 4. Custom Assertions
+
 ```javascript
 // Use custom matchers for better error messages
 expect(apiResponse).toBeSuccessfulAPIResponse();
@@ -343,6 +364,7 @@ expect(errorResponse).toBeErrorAPIResponse();
 ### Test Failures
 
 #### 1. Timeout Issues
+
 ```bash
 # Common timeout error
 Error: Test timed out after 30000ms
@@ -361,6 +383,7 @@ test('long running test', async () => {
 ```
 
 #### 2. Memory Issues
+
 ```bash
 # Memory leak errors
 Error: JavaScript heap out of memory
@@ -377,6 +400,7 @@ npm test -- --maxWorkers=2
 ```
 
 #### 3. Port Conflicts
+
 ```bash
 # Port already in use errors
 Error: EADDRINUSE: address already in use :::3000
@@ -395,6 +419,7 @@ await global.testUtils.expectEventually(() => {
 ```
 
 #### 4. File System Issues
+
 ```bash
 # Permission errors
 Error: EACCES: permission denied
@@ -413,6 +438,7 @@ const testPath = path.join(__dirname, 'fixtures');
 ### Configuration Issues
 
 #### 1. Module Resolution
+
 ```bash
 # Cannot resolve module errors
 Error: Cannot find module '@test/utils'
@@ -428,6 +454,7 @@ const utils = require('../utils/testUtils');
 ```
 
 #### 2. Transform Issues
+
 ```bash
 # Unexpected token errors
 Error: Unexpected token 'export'
@@ -446,6 +473,7 @@ module.exports = {
 ```
 
 #### 3. Setup Issues
+
 ```bash
 # Setup file not found
 Error: Cannot find module '<rootDir>/test/setup.js'
@@ -461,6 +489,7 @@ ls -la test/setup.js
 ### Environment Issues
 
 #### 1. Dependencies
+
 ```bash
 # Missing dependencies
 Error: Cannot find module 'some-package'
@@ -478,6 +507,7 @@ npm ls
 ```
 
 #### 2. Node.js Version
+
 ```bash
 # Node.js version incompatibility
 Error: Unsupported Node.js version
@@ -501,6 +531,7 @@ nvm use 20
 The project uses a comprehensive CI/CD pipeline in `.github/workflows/ci-cd-pipeline.yml`:
 
 #### Pipeline Stages
+
 1. **Quick Validation** (5 minutes)
    - Linting
    - Package validation
@@ -537,6 +568,7 @@ The project uses a comprehensive CI/CD pipeline in `.github/workflows/ci-cd-pipe
    - Deployment readiness
 
 #### Local CI Simulation
+
 ```bash
 # Run complete quality check
 npm run ci:quality-check
@@ -553,6 +585,7 @@ npm run performance:test
 ### Coverage Monitoring
 
 #### Coverage Scripts
+
 ```bash
 # Generate coverage reports
 npm run coverage
@@ -568,6 +601,7 @@ npm run coverage:monitor
 ```
 
 #### Coverage Thresholds
+
 ```javascript
 // jest.config.js
 coverageThreshold: {
@@ -581,6 +615,7 @@ coverageThreshold: {
 ```
 
 #### Coverage Reports
+
 - **HTML**: `coverage/lcov-report/index.html`
 - **JSON**: `coverage/coverage-summary.json`
 - **LCOV**: `coverage/lcov.info`
@@ -591,6 +626,7 @@ coverageThreshold: {
 ## ⚡ Performance Testing
 
 ### Performance Scripts
+
 ```bash
 # Run performance tests
 npm run performance:test
@@ -606,9 +642,11 @@ npm run performance:monitor
 ```
 
 ### Performance Monitoring
+
 The project includes comprehensive performance monitoring:
 
 #### Features
+
 - Test execution timing
 - Memory usage analysis
 - Parallelization recommendations
@@ -616,6 +654,7 @@ The project includes comprehensive performance monitoring:
 - Bottleneck identification
 
 #### Performance Reports
+
 ```bash
 # View latest performance report
 cat test-performance/latest-report.json
@@ -625,12 +664,14 @@ cat test-performance/trends.json
 ```
 
 #### Performance Thresholds
+
 - Test duration warnings: > 5 seconds
 - Memory usage warnings: > 50MB delta
 - Automatic parallelization analysis
 - CI/CD performance validation
 
 ### RAG System Performance
+
 ```bash
 # RAG performance tests
 npm run test:rag:performance
@@ -644,6 +685,7 @@ npm test -- --maxWorkers=1 test/rag-system/performance
 ## 📊 Coverage Analysis
 
 ### Coverage Commands
+
 ```bash
 # Basic coverage
 npm run coverage
@@ -660,6 +702,7 @@ npm run coverage:threshold-check
 ```
 
 ### Coverage Configuration
+
 ```javascript
 // jest.config.js
 collectCoverageFrom: [
@@ -683,6 +726,7 @@ coverageThreshold: {
 ```
 
 ### Coverage Analysis Tools
+
 ```bash
 # Standalone coverage checker
 npm run coverage:check:standalone
@@ -701,6 +745,7 @@ npm run coverage:monitor
 ### Test Organization
 
 #### 1. File Naming
+
 ```
 test/
 ├── unit/
@@ -715,6 +760,7 @@ test/
 ```
 
 #### 2. Test Structure
+
 ```javascript
 describe('Feature Name', () => {
   beforeAll(async () => {
@@ -751,15 +797,17 @@ describe('Feature Name', () => {
 ### Test Data Management
 
 #### 1. Use Test Factories
+
 ```javascript
 const { TestDataFactory } = require('../utils/testUtils');
 
 const featureData = TestDataFactory.createFeatureData({
-  title: 'Custom Feature Title'
+  title: 'Custom Feature Title',
 });
 ```
 
 #### 2. Use Test Environment
+
 ```javascript
 const { TestEnvironment } = require('../utils/testUtils');
 
@@ -772,15 +820,15 @@ testEnv.cleanup();
 ### Error Handling
 
 #### 1. Proper Error Testing
+
 ```javascript
 test('should handle errors gracefully', async () => {
-  await expect(
-    APIExecutor.execAPI('invalid-command')
-  ).rejects.toThrow('Command failed');
+  await expect(APIExecutor.execAPI('invalid-command')).rejects.toThrow('Command failed');
 });
 ```
 
 #### 2. Timeout Handling
+
 ```javascript
 test('should handle timeouts', async () => {
   const promise = longRunningOperation();
@@ -792,11 +840,10 @@ test('should handle timeouts', async () => {
 ### Performance Considerations
 
 #### 1. Parallel Test Execution
+
 ```javascript
 test('should handle parallel operations', async () => {
-  const promises = Array.from({ length: 10 }, () =>
-    APIExecutor.execAPI('command')
-  );
+  const promises = Array.from({ length: 10 }, () => APIExecutor.execAPI('command'));
 
   const results = await TestExecution.parallel(promises, 3);
   expect(results).toHaveLength(10);
@@ -804,6 +851,7 @@ test('should handle parallel operations', async () => {
 ```
 
 #### 2. Resource Cleanup
+
 ```javascript
 afterEach(async () => {
   // Clean up test resources
@@ -814,6 +862,7 @@ afterEach(async () => {
 ### CI/CD Optimization
 
 #### 1. Test Categorization
+
 ```bash
 # Run only fast tests in pre-commit
 npm run test:unit
@@ -823,6 +872,7 @@ npm run test:integration
 ```
 
 #### 2. Conditional Test Execution
+
 ```javascript
 describe.skipIf(process.env.CI === 'true')('Local only tests', () => {
   // Tests that only run locally
@@ -836,26 +886,31 @@ describe.skipIf(process.env.CI === 'true')('Local only tests', () => {
 This guide provides comprehensive coverage for test execution and troubleshooting in the infinite-continue-stop-hook project. Key takeaways:
 
 ### Test Execution
+
 - Use appropriate test commands for different test types
 - Leverage environment variables for configuration
 - Use watch mode for development
 
 ### Debugging
+
 - Enable debug mode for detailed output
 - Use Node.js inspector for step-through debugging
 - Leverage test utilities for better debugging
 
 ### Troubleshooting
+
 - Check timeouts, memory, and configuration issues
 - Use proper error handling and cleanup
 - Monitor performance and coverage
 
 ### CI/CD Integration
+
 - Comprehensive pipeline with quality gates
 - Performance and coverage monitoring
 - Multi-platform testing support
 
 ### Best Practices
+
 - Organize tests logically
 - Use test utilities and factories
 - Handle errors and timeouts properly

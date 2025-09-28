@@ -2,9 +2,9 @@
 
 **Comprehensive testing framework for the infinite-continue-stop-hook project**
 
-*Author: Testing Infrastructure Agent*
-*Version: 2.0.0*
-*Date: 2025-09-23*
+_Author: Testing Infrastructure Agent_
+_Version: 2.0.0_
+_Date: 2025-09-23_
 
 ## 🎯 Overview
 
@@ -94,12 +94,14 @@ test/
 Test individual functions and modules in isolation.
 
 **Characteristics:**
+
 - Fast execution (< 5 seconds)
 - No external dependencies
 - Comprehensive mocking
 - High code coverage focus
 
 **Examples:**
+
 ```bash
 npm run test:unit:features     # Feature management tests
 npm run test:unit:agents       # Agent management tests
@@ -111,12 +113,14 @@ npm run test:unit:stats        # Statistics tests
 Test component interactions and workflows.
 
 **Characteristics:**
+
 - Medium execution time (< 45 seconds)
 - Real API calls (with test data)
 - File system operations
 - Cross-module testing
 
 **Examples:**
+
 ```bash
 npm run test:integration:api        # API workflow tests
 npm run test:integration:files      # File operation tests
@@ -128,12 +132,14 @@ npm run test:integration:features   # Feature lifecycle tests
 Test complete user scenarios and system workflows.
 
 **Characteristics:**
+
 - Longer execution time (< 60 seconds)
 - Full system testing
 - Real external services (when safe)
 - User scenario validation
 
 **Examples:**
+
 ```bash
 npm run test:e2e:complete-workflows
 npm run test:e2e:multi-agent
@@ -211,7 +217,7 @@ describe('My Feature', () => {
     // Arrange
     const testData = TestDataFactory.createFeatureData({
       title: 'Test Feature',
-      category: 'enhancement'
+      category: 'enhancement',
     });
 
     // Act
@@ -234,7 +240,7 @@ const featureId = TestIdGenerator.generateFeatureId();
 // Data Creation
 const feature = TestDataFactory.createFeatureData({
   category: 'bug-fix',
-  priority: 'high'
+  priority: 'high',
 });
 
 // Performance Testing
@@ -243,9 +249,13 @@ const { result, duration } = await PerformanceUtils.measureTime(async () => {
 });
 
 // Retry Logic
-const result = await TestExecution.retry(async () => {
-  return await unreliableOperation();
-}, 3, 1000);
+const result = await TestExecution.retry(
+  async () => {
+    return await unreliableOperation();
+  },
+  3,
+  1000
+);
 ```
 
 ### Custom Matchers
@@ -292,7 +302,7 @@ test('should handle API responses', () => {
     title: 'Test Feature',
     description: 'Test description',
     business_value: 'Test value',
-    category: 'enhancement'
+    category: 'enhancement',
   });
 
   expect(result.success).toBe(true);
@@ -306,7 +316,7 @@ test('should handle API responses', () => {
 const { expectFeatureCreated, expectAgentInitialized } = require('@mocks/mockSetup');
 
 test('should create feature in mock', async () => {
-  const featureData = { title: 'Test Feature', /* ... */ };
+  const featureData = { title: 'Test Feature' /* ... */ };
   await APIExecutor.createTestFeature(featureData);
 
   // Validate mock state
@@ -362,6 +372,7 @@ TestLogger.error('Error message');
 ### Coverage Configuration
 
 Coverage is configured to:
+
 - Collect from main source files (`*.js`, `lib/**/*.js`)
 - Exclude test files, node_modules, config files
 - Use v8 provider for accuracy
@@ -541,6 +552,7 @@ test/
 ### Key Classes and Functions
 
 **TestUtils:**
+
 - `TestIdGenerator`: Generate unique test IDs
 - `APIExecutor`: Execute API calls with mocking
 - `TestEnvironment`: Manage test environments
@@ -549,12 +561,14 @@ test/
 - `TestExecution`: Retry, timeout, parallel execution
 
 **Mocks:**
+
 - `TaskManagerAPIMock`: Mock TaskManager API
 - `FileSystemMock`: Mock file operations
 - `HTTPClientMock`: Mock HTTP requests
 - `DatabaseMock`: Mock database operations
 
 **Sample Data:**
+
 - `SAMPLE_FEATURES`: Feature test data
 - `SAMPLE_AGENTS`: Agent test data
 - `SAMPLE_PROJECTS`: Project configurations
@@ -593,4 +607,4 @@ For testing infrastructure questions:
 
 ---
 
-*This testing infrastructure provides a solid foundation for reliable, maintainable, and scalable testing. Follow these guidelines to ensure consistent, high-quality test coverage across the project.*
+_This testing infrastructure provides a solid foundation for reliable, maintainable, and scalable testing. Follow these guidelines to ensure consistent, high-quality test coverage across the project._

@@ -35,6 +35,7 @@ graph TD
 ### 📋 Job Descriptions
 
 #### 1. Pre-flight Validation (5 mins)
+
 - **Purpose**: Rapid feedback loop for basic validations
 - **Actions**:
   - Syntax validation for core JavaScript files
@@ -44,6 +45,7 @@ graph TD
 - **Parallelization**: Sets up optimal test matrix based on branch and context
 
 #### 2. Linting & Code Quality (10 mins)
+
 - **Purpose**: Enforce code standards and style consistency
 - **Tools**: ESLint with security plugins
 - **Actions**:
@@ -53,6 +55,7 @@ graph TD
   - Lint report generation
 
 #### 3. Test Matrix (25 mins)
+
 - **Purpose**: Comprehensive testing across environments
 - **Matrix**:
   - **Node.js versions**: 18.x, 20.x, 22.x
@@ -66,6 +69,7 @@ graph TD
   - E2E tests (Ubuntu only)
 
 #### 4. Security Analysis (15 mins)
+
 - **Purpose**: Multi-layered security validation
 - **Tools**:
   - NPM Audit (dependency vulnerabilities)
@@ -76,6 +80,7 @@ graph TD
 - **Scan Levels**: Minimal, Standard, Comprehensive
 
 #### 5. Performance Analysis (20 mins)
+
 - **Purpose**: Performance monitoring and optimization insights
 - **Actions**:
   - Performance benchmarks
@@ -86,6 +91,7 @@ graph TD
 - **Reporting**: Automated PR comments with performance metrics
 
 #### 6. Coverage Analysis (15 mins)
+
 - **Purpose**: Ensure comprehensive test coverage
 - **Actions**:
   - Merge coverage reports from all test runs
@@ -95,6 +101,7 @@ graph TD
 - **Thresholds**: Lines (80%), Branches (75%), Functions (80%), Statements (80%)
 
 #### 7. Build Validation (15 mins)
+
 - **Purpose**: Validate application integrity and startup
 - **Actions**:
   - Application startup validation
@@ -103,6 +110,7 @@ graph TD
   - Package integrity checks
 
 #### 8. Deployment Preparation (10 mins)
+
 - **Purpose**: Prepare production-ready deployment packages
 - **Actions**:
   - Create deployment package with production dependencies
@@ -111,12 +119,14 @@ graph TD
   - Create deployment artifacts
 
 #### 9. Quality Gate (5 mins)
+
 - **Purpose**: Final validation before deployment approval
 - **Evaluation**: Comprehensive status check of all critical jobs
 - **Reporting**: Final quality report generation
 - **Decision**: Pass/fail determination for deployment readiness
 
 #### 10. Deployment (10 mins)
+
 - **Purpose**: Deploy to target environment
 - **Environments**: Staging, Production
 - **Actions**:
@@ -127,11 +137,13 @@ graph TD
 ## 🎯 Trigger Conditions
 
 ### Automatic Triggers
+
 - **Push to branches**: `main`, `develop`, `feature/*`, `hotfix/*`
 - **Pull requests**: Against `main` or `develop`
 - **Tags**: Version tags (`v*`)
 
 ### Manual Triggers
+
 - **Workflow Dispatch**: With configurable options:
   - Performance tests toggle
   - Coverage threshold override
@@ -141,16 +153,19 @@ graph TD
 ## 🔧 Configuration Options
 
 ### Test Matrix Optimization
+
 - **Main branch**: Full matrix (all OS + Node.js combinations)
 - **Feature branches**: Optimized matrix (reduced combinations)
 - **Pull requests**: Full validation matrix
 
 ### Security Scan Levels
+
 - **Minimal**: NPM audit + dependency analysis + secret scanning
 - **Standard**: + Semgrep SAST analysis
 - **Comprehensive**: + CodeQL analysis
 
 ### Coverage Thresholds
+
 - **Global**: Lines 80%, Branches 75%, Functions 80%, Statements 80%
 - **Specific modules**: Higher thresholds for critical components
 - **Override**: Manual threshold adjustment via workflow dispatch
@@ -158,12 +173,14 @@ graph TD
 ## 📊 Caching Strategy
 
 ### Multi-level Caching
+
 1. **NPM Dependencies**: `~/.npm` with lock file hash keys
 2. **Node Modules**: Platform and Node.js version specific
 3. **Pre-flight Cache**: Minimal dependency caching for rapid feedback
 4. **Jest Cache**: Test execution optimization
 
 ### Cache Keys
+
 ```yaml
 # NPM cache
 key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
@@ -178,16 +195,19 @@ key: npm-preflight-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 ## 🛡️ Security Features
 
 ### Secret Scanning
+
 - **Tool**: Gitleaks with custom configuration
 - **Coverage**: API keys, tokens, certificates, database URLs
 - **Allowlists**: Test fixtures and mock data excluded
 
 ### SAST Analysis
+
 - **Tool**: Semgrep with multiple rulesets
 - **Rulesets**: JavaScript, Node.js, security-audit
 - **Output**: JSON reports for CI/CD integration
 
 ### Dependency Security
+
 - **NPM Audit**: Production and development dependencies
 - **Audit CI**: Configurable severity levels
 - **Vulnerability Tracking**: Automated reporting and alerting
@@ -195,6 +215,7 @@ key: npm-preflight-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 ## 📈 Artifact Management
 
 ### Retention Policies
+
 - **Test Results**: 30 days
 - **Security Reports**: 90 days
 - **Coverage Reports**: 90 days
@@ -203,6 +224,7 @@ key: npm-preflight-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 - **Deployment Packages**: 30 days
 
 ### Artifact Types
+
 - **Test Results**: JUnit XML, LCOV, coverage summaries
 - **Security Reports**: JSON reports from all security tools
 - **Performance Reports**: Benchmarks, memory profiles, insights
@@ -214,21 +236,25 @@ key: npm-preflight-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 ### Protection Levels
 
 #### Minimal Protection
+
 - Required status checks: Pre-flight + Linting
 - Required reviews: 1
 - Admin enforcement: Disabled
 
 #### Standard Protection
+
 - Required status checks: Core pipeline jobs
 - Required reviews: 1 with code owner approval
 - Admin enforcement: Disabled
 
 #### Strict Protection
+
 - Required status checks: All matrix combinations
 - Required reviews: 2 with code owner approval
 - Admin enforcement: Enabled
 
 ### CODEOWNERS Configuration
+
 ```
 # Global code owners
 * @owner
@@ -242,6 +268,7 @@ key: npm-preflight-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 ## 📝 Usage Examples
 
 ### Manual Performance Testing
+
 ```bash
 # Trigger performance tests manually
 gh workflow run enhanced-ci-cd-pipeline.yml \
@@ -250,6 +277,7 @@ gh workflow run enhanced-ci-cd-pipeline.yml \
 ```
 
 ### Environment Deployment
+
 ```bash
 # Deploy to production
 gh workflow run enhanced-ci-cd-pipeline.yml \
@@ -257,6 +285,7 @@ gh workflow run enhanced-ci-cd-pipeline.yml \
 ```
 
 ### Coverage Threshold Override
+
 ```bash
 # Temporarily lower coverage threshold
 gh workflow run enhanced-ci-cd-pipeline.yml \
@@ -268,26 +297,31 @@ gh workflow run enhanced-ci-cd-pipeline.yml \
 ### Common Issues
 
 #### Coverage Threshold Failures
+
 - **Symptom**: Coverage below required threshold
 - **Solution**: Add more comprehensive tests or adjust thresholds
 - **Command**: `npm run coverage:check:standalone`
 
 #### Security Scan Failures
+
 - **Symptom**: Security vulnerabilities detected
 - **Solution**: Update dependencies or add to allowlist if false positive
 - **Command**: `npm audit fix`
 
 #### Performance Degradation
+
 - **Symptom**: Performance warnings in PR comments
 - **Solution**: Investigate bottlenecks and optimize critical paths
 - **Command**: `npm run performance:test:verbose`
 
 #### Build Validation Failures
+
 - **Symptom**: Application fails to start
 - **Solution**: Check logs and fix startup issues
 - **Command**: `npm start`
 
 ### Debug Commands
+
 ```bash
 # Local coverage validation
 npm run coverage:check:strict
@@ -305,18 +339,21 @@ npm run lint
 ## 🎯 Best Practices
 
 ### For Developers
+
 1. **Run tests locally** before pushing
 2. **Check coverage** with `npm run coverage:check`
 3. **Validate security** with `npm audit`
 4. **Monitor performance** with `npm run performance:test`
 
 ### For Maintainers
+
 1. **Configure branch protection** using the workflow
 2. **Monitor security reports** regularly
 3. **Review performance trends** in PR comments
 4. **Update dependencies** proactively
 
 ### For CI/CD Management
+
 1. **Monitor workflow duration** and optimize bottlenecks
 2. **Review artifact storage** and adjust retention policies
 3. **Update security tools** and rulesets regularly
@@ -332,4 +369,4 @@ npm run lint
 
 ---
 
-*This documentation is automatically updated with workflow changes. Last updated: 2025-09-23*
+_This documentation is automatically updated with workflow changes. Last updated: 2025-09-23_

@@ -22,6 +22,7 @@ POST /api/rag/lessons
 ```
 
 **Request Body**:
+
 ```json
 {
   "title": "Fix authentication bug in user login",
@@ -46,6 +47,7 @@ POST /api/rag/lessons
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -65,6 +67,7 @@ POST /api/rag/lessons
 ```
 
 **Error Responses**:
+
 ```json
 {
   "success": false,
@@ -85,6 +88,7 @@ GET /api/rag/lessons/search
 ```
 
 **Query Parameters**:
+
 ```
 query              - Natural language search query (optional)
 category           - Filter by category (optional)
@@ -97,6 +101,7 @@ timeRange          - Date range filter: "7d", "30d", "90d", "all" (default: "all
 ```
 
 **Example Request**:
+
 ```bash
 curl -X GET "http://localhost:3000/api/rag/lessons/search?query=authentication%20login%20problems&limit=5&category=errors" \
   -H "Authorization: Bearer <token>" \
@@ -104,6 +109,7 @@ curl -X GET "http://localhost:3000/api/rag/lessons/search?query=authentication%2
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -148,6 +154,7 @@ GET /api/rag/lessons/{lessonId}
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -157,8 +164,12 @@ GET /api/rag/lessons/{lessonId}
     "content": "Detailed lesson content...",
     "category": "errors",
     "tags": ["authentication", "jwt", "middleware"],
-    "context": { /* full context object */ },
-    "metadata": { /* full metadata object */ },
+    "context": {
+      /* full context object */
+    },
+    "metadata": {
+      /* full metadata object */
+    },
     "relatedLessons": [
       {
         "lessonId": "lesson_xyz",
@@ -186,6 +197,7 @@ PUT /api/rag/lessons/{lessonId}
 ```
 
 **Request Body**:
+
 ```json
 {
   "title": "Updated title",
@@ -207,6 +219,7 @@ DELETE /api/rag/lessons/{lessonId}
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -226,6 +239,7 @@ POST /api/rag/errors
 ```
 
 **Request Body**:
+
 ```json
 {
   "title": "ESLint violation: unused variable in auth.js",
@@ -255,6 +269,7 @@ POST /api/rag/errors
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -283,6 +298,7 @@ GET /api/rag/errors/search
 ```
 
 **Query Parameters**: Similar to lessons search with additional error-specific filters:
+
 ```
 errorType    - Filter by error type
 severity     - Filter by severity level
@@ -299,6 +315,7 @@ GET /api/rag/errors/patterns
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -309,16 +326,8 @@ GET /api/rag/errors/patterns
       "description": "Common pattern of declaring but not using variables in auth code",
       "frequency": 47,
       "avgResolutionTime": "45s",
-      "commonSolutions": [
-        "Remove unused declarations",
-        "Implement proper variable usage",
-        "Configure ESLint auto-fix"
-      ],
-      "prevention": [
-        "Enable ESLint warnings",
-        "Use TypeScript strict mode",
-        "Implement pre-commit hooks"
-      ]
+      "commonSolutions": ["Remove unused declarations", "Implement proper variable usage", "Configure ESLint auto-fix"],
+      "prevention": ["Enable ESLint warnings", "Use TypeScript strict mode", "Implement pre-commit hooks"]
     }
   ]
 }
@@ -335,6 +344,7 @@ GET /api/rag/analytics/lessons
 ```
 
 **Query Parameters**:
+
 ```
 timeRange    - Analysis time range: "7d", "30d", "90d", "all"
 category     - Filter by lesson category
@@ -343,6 +353,7 @@ projectPath  - Filter by project
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -351,16 +362,14 @@ projectPath  - Filter by project
     "totalAccesses": 8934,
     "averageEffectiveness": 0.87,
     "topCategories": [
-      {"category": "errors", "count": 523, "effectiveness": 0.91},
-      {"category": "features", "count": 412, "effectiveness": 0.84}
+      { "category": "errors", "count": 523, "effectiveness": 0.91 },
+      { "category": "features", "count": 412, "effectiveness": 0.84 }
     ],
     "trendingTopics": [
-      {"topic": "authentication", "mentions": 89, "growth": "+23%"},
-      {"topic": "performance", "mentions": 67, "growth": "+15%"}
+      { "topic": "authentication", "mentions": 89, "growth": "+23%" },
+      { "topic": "performance", "mentions": 67, "growth": "+15%" }
     ],
-    "agentActivity": [
-      {"agentId": "dev_session_123", "lessons": 45, "effectiveness": 0.92}
-    ]
+    "agentActivity": [{ "agentId": "dev_session_123", "lessons": 45, "effectiveness": 0.92 }]
   }
 }
 ```
@@ -374,6 +383,7 @@ GET /api/rag/analytics/errors
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -383,8 +393,8 @@ GET /api/rag/analytics/errors
     "resolutionRate": 0.95,
     "avgResolutionTime": "2m 34s",
     "topErrorTypes": [
-      {"type": "linter_error", "count": 1234, "avgResolution": "45s"},
-      {"type": "build_error", "count": 567, "avgResolution": "3m 12s"}
+      { "type": "linter_error", "count": 1234, "avgResolution": "45s" },
+      { "type": "build_error", "count": 567, "avgResolution": "3m 12s" }
     ],
     "patterns": {
       "recurring": 34,
@@ -406,6 +416,7 @@ POST /api/rag/migration/import-lessons
 ```
 
 **Request Body**:
+
 ```json
 {
   "source": "file_system",
@@ -420,6 +431,7 @@ POST /api/rag/migration/import-lessons
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -454,6 +466,7 @@ GET /api/rag/health
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -481,6 +494,7 @@ POST /api/rag/embeddings/generate
 ```
 
 **Request Body**:
+
 ```json
 {
   "content": "Text content to generate embeddings for",
@@ -509,14 +523,14 @@ Authorization: Bearer <taskmanager_session_token>
 
 ## 📝 Error Codes
 
-| Code | Description |
-|------|-------------|
-| `VALIDATION_ERROR` | Request validation failed |
-| `NOT_FOUND` | Resource not found |
-| `RATE_LIMITED` | Too many requests |
-| `EMBEDDING_ERROR` | Embedding generation failed |
-| `SEARCH_ERROR` | Search operation failed |
-| `DATABASE_ERROR` | Database operation failed |
+| Code               | Description                 |
+| ------------------ | --------------------------- |
+| `VALIDATION_ERROR` | Request validation failed   |
+| `NOT_FOUND`        | Resource not found          |
+| `RATE_LIMITED`     | Too many requests           |
+| `EMBEDDING_ERROR`  | Embedding generation failed |
+| `SEARCH_ERROR`     | Search operation failed     |
+| `DATABASE_ERROR`   | Database operation failed   |
 
 ## 🎯 Best Practices
 
@@ -528,4 +542,4 @@ Authorization: Bearer <taskmanager_session_token>
 
 ---
 
-*This API reference provides complete documentation for integrating with the RAG-based lessons and error database system.*
+_This API reference provides complete documentation for integrating with the RAG-based lessons and error database system._

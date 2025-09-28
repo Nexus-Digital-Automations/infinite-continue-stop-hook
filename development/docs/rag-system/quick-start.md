@@ -324,4 +324,4 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
 
 ---
 
-*You're now ready to leverage the power of RAG-based learning in your development workflow! The system will continuously improve as you store more lessons and errors.*
+_You're now ready to leverage the power of RAG-based learning in your development workflow! The system will continuously improve as you store more lessons and errors._

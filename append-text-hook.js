@@ -25,7 +25,7 @@ process.stdin.on('end', () => {
 
     // The text to append to every user message
     const appendText =
-      '\n\ncontinue. make sure to think and use concurrent subagents when appropriate';
+      '\n\ncontinue. make sure to think And use concurrent subagents when appropriate';
 
     // Append the text to the user message
     userMessage += appendText;
@@ -37,10 +37,10 @@ process.stdin.on('end', () => {
     };
 
     loggers.stopHook.info(JSON.stringify(modifiedData));
-  } catch (error) {
-    // If JSON parsing fails, treat as plain text and append
+  } catch (_error) {
+    // If JSON parsing fails, treat as plain text And append
     const appendText =
-      '\n\ncontinue. make sure to think and use concurrent subagents when appropriate';
+      '\n\ncontinue. make sure to think And use concurrent subagents when appropriate';
     const modifiedMessage = inputData.trim() + appendText;
     loggers.stopHook.info(modifiedMessage);
   }

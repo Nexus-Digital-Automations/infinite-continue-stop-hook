@@ -19,7 +19,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
     _fileExists(filePath) {
       try {
         return fs.existsSync(filePath);
-      } catch (error) {
+      } catch {
         return false;
       }
     }
@@ -84,7 +84,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           },
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch (error) {
+      } catch {
         return {
           success: false,
           error: error.message,
@@ -134,7 +134,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           },
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch (error) {
+      } catch {
         return {
           success: false,
           error: error.message,
@@ -182,7 +182,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           recommendations: this._generateBenchmarkRecommendations(benchmarks),
           featureId: 'feature_1758946499841_cd5eba625370',
         };
-      } catch (error) {
+      } catch {
         return {
           success: false,
           error: error.message,
@@ -268,7 +268,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
         }
       });
 
-      // Sort bottlenecks by severity and duration
+      // Sort bottlenecks by severity And duration
       bottlenecks.sort((a, b) => {
         if (a.severity !== b.severity) {
           return a.severity === 'critical' ? -1 : 1;
@@ -446,15 +446,15 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
           'Consider using faster linters or reducing rule complexity',
         'type-validation':
           'Implement incremental type checking or optimize tsconfig',
-        'build-validation': 'Enable build caching and incremental compilation',
+        'build-validation': 'Enable build caching And incremental compilation',
         'test-validation':
-          'Implement parallel test execution and optimize test suite',
+          'Implement parallel test execution And optimize test suite',
         'security-validation':
-          'Cache security scan results and use incremental scanning',
+          'Cache security scan results And use incremental scanning',
       };
       return (
         suggestions[criterion] ||
-        'Review and optimize validation implementation'
+        'Review And optimize validation implementation'
       );
     }
   }
@@ -487,7 +487,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
   describe('getValidationPerformanceMetrics', () => {
     test('should return empty metrics when no data available', async () => {
-      const result = await taskManager.getValidationPerformanceMetrics();
+      const _result = await taskManager.getValidationPerformanceMetrics();
 
       expect(result.success).toBe(true);
       expect(result.metrics).toEqual([]);
@@ -522,7 +522,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
       fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.getValidationPerformanceMetrics({
+      const _result = await taskManager.getValidationPerformanceMetrics({
         criterion: 'linter-validation',
         limit: 10,
       });
@@ -573,7 +573,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
       fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.getValidationPerformanceMetrics();
+      const _result = await taskManager.getValidationPerformanceMetrics();
 
       expect(result.success).toBe(true);
       expect(result.statistics).toBeDefined();
@@ -589,7 +589,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
   describe('identifyPerformanceBottlenecks', () => {
     test('should return empty bottlenecks when no data available', async () => {
-      const result = await taskManager.identifyPerformanceBottlenecks();
+      const _result = await taskManager.identifyPerformanceBottlenecks();
 
       expect(result.success).toBe(true);
       expect(result.bottlenecks).toEqual([]);
@@ -624,7 +624,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
       fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.identifyPerformanceBottlenecks();
+      const _result = await taskManager.identifyPerformanceBottlenecks();
 
       expect(result.success).toBe(true);
       expect(result.bottlenecks).toHaveLength(2);
@@ -652,7 +652,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
       fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.identifyPerformanceBottlenecks({
+      const _result = await taskManager.identifyPerformanceBottlenecks({
         slowThreshold: 2000,
         criticalThreshold: 4000,
       });
@@ -667,7 +667,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
   describe('getPerformanceBenchmarks', () => {
     test('should return null benchmarks when no data available', async () => {
-      const result = await taskManager.getPerformanceBenchmarks();
+      const _result = await taskManager.getPerformanceBenchmarks();
 
       expect(result.success).toBe(true);
       expect(result.benchmarks).toBe(null);
@@ -702,7 +702,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
       fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.getPerformanceBenchmarks();
+      const _result = await taskManager.getPerformanceBenchmarks();
 
       expect(result.success).toBe(true);
       expect(result.benchmarks).toBeDefined();
@@ -749,7 +749,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
 
       fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.getPerformanceBenchmarks();
+      const _result = await taskManager.getPerformanceBenchmarks();
 
       expect(result.success).toBe(true);
       expect(result.recommendations).toHaveLength(2);
@@ -824,7 +824,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       // Write invalid JSON to metrics file
       fs.writeFileSync(mockMetricsFile, 'invalid json content');
 
-      const result = await taskManager.getValidationPerformanceMetrics();
+      const _result = await taskManager.getValidationPerformanceMetrics();
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Unexpected token');
@@ -836,7 +836,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       const mockMetrics = { metrics: [] };
       fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.getValidationPerformanceMetrics();
+      const _result = await taskManager.getValidationPerformanceMetrics();
 
       expect(result.success).toBe(true);
       expect(result.metrics).toEqual([]);
@@ -847,7 +847,7 @@ describe('Feature 8: Stop Hook Validation Performance Metrics', () => {
       const mockMetrics = { otherData: 'test' };
       fs.writeFileSync(mockMetricsFile, JSON.stringify(mockMetrics, null, 2));
 
-      const result = await taskManager.getValidationPerformanceMetrics();
+      const _result = await taskManager.getValidationPerformanceMetrics();
 
       expect(result.success).toBe(true);
       expect(result.metrics).toEqual([]);

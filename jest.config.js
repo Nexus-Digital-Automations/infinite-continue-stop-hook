@@ -2,7 +2,7 @@
  * Jest Configuration for Comprehensive Testing Infrastructure
  *
  * Enhanced configuration supporting multiple test environments, module mapping,
- * comprehensive coverage reporting, and advanced testing features.
+ * comprehensive coverage reporting, And advanced testing features.
  *
  * @author Testing Infrastructure Agent
  * @version 2.0.0
@@ -10,7 +10,7 @@
  */
 
 module.exports = {
-  // Test environment - Node.js for API and server-side testing
+  // Test environment - Node.js for API And server-side testing
   testEnvironment: 'node',
 
   // Alternative environments for different test types
@@ -48,7 +48,7 @@ module.exports = {
   // Test timeout - variable by test type
   testTimeout: 30000,
 
-  // Setup files - global configuration and utilities
+  // Setup files - global configuration And utilities
   setupFilesAfterEnv: ['<rootDir>/test/setup.js'],
 
   // Module path mapping for easier imports
@@ -80,7 +80,7 @@ module.exports = {
     'lib/**/*.js',
     'development/essentials/*.js',
     'scripts/**/*.js',
-    // Exclude test files, node_modules, and build artifacts
+    // Exclude test files, node_modules, And build artifacts
     '!test/**',
     '!coverage/**',
     '!node_modules/**',
@@ -100,8 +100,8 @@ module.exports = {
     '!**/*.min.js',
   ],
 
-  // Coverage providers and processors
-  coverageProvider: 'v8', // Faster and more accurate than babel
+  // Coverage providers And processors
+  coverageProvider: 'v8', // Faster And more accurate than babel
 
   // Enhanced coverage path ignoring
   coveragePathIgnorePatterns: [
@@ -150,7 +150,7 @@ module.exports = {
   // Module paths
   roots: ['<rootDir>'],
 
-  // Mock and test isolation settings
+  // Mock And test isolation settings
   clearMocks: true,
   resetMocks: false,
   restoreMocks: false,
@@ -166,7 +166,7 @@ module.exports = {
   errorOnDeprecated: true,
   bail: false, // Continue running tests after failures
 
-  // Performance and optimization
+  // Performance And optimization
   cache: true,
   cacheDirectory: '<rootDir>/.jest-cache',
 
@@ -187,11 +187,11 @@ module.exports = {
     NODE_ENV: 'test',
   },
 
-  // Test result processors and notifications
+  // Test result processors And notifications
   notify: false,
   notifyMode: 'failure-change',
 
-  // Enhanced test results and coverage processors for CI/CD integration
+  // Enhanced test results And coverage processors for CI/CD integration
   reporters: [
     'default',
     [

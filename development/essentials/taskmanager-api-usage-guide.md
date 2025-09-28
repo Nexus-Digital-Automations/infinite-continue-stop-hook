@@ -3,27 +3,33 @@
 ## 🚨 CRITICAL REQUIREMENTS
 
 ### Required Fields for Task Creation
+
 **MANDATORY**: All task creation MUST include these fields:
+
 - `title` (string) - Task name/summary
-- `description` (string) - Detailed task description  
+- `description` (string) - Detailed task description
 - `category` (string) - Task classification
 
 ### Valid Category Values
+
 **ONLY THESE VALUES ARE ACCEPTED:**
+
 - `error` - System errors, linter violations, build failures (Priority 1)
-- `feature` - New functionality, enhancements, refactoring (Priority 2)  
+- `feature` - New functionality, enhancements, refactoring (Priority 2)
 - `subtask` - Implementation of specific subtasks (Priority 3)
 - `test` - Test coverage, test creation (Priority 4)
 
 ## ✅ CORRECT API USAGE PATTERNS
 
 ### Task Creation Template
+
 ```bash
 # ALWAYS use this exact format:
 timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"[Task Name]", "description":"[Detailed Description]", "category":"[error|feature|subtask|test]"}'
 ```
 
 ### Real Examples
+
 ```bash
 # Error task (highest priority)
 timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"Fix ESLint violations in auth.js", "description":"Resolve 5 linting errors: unused imports, missing semicolons", "category":"error"}'
@@ -41,6 +47,7 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
 ## ❌ COMMON ERRORS TO AVOID
 
 ### Error #1: Missing Category Field
+
 ```bash
 # ❌ WRONG - Will fail with "Required field 'category' is missing"
 timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"Fix UI", "description":"Modern design"}'
@@ -50,6 +57,7 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
 ```
 
 ### Error #2: Using Old task_type Field
+
 ```bash
 # ❌ WRONG - Old API used task_type (no longer valid)
 timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js create '{"title":"Task", "task_type":"feature"}'
@@ -59,6 +67,7 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
 ```
 
 ### Error #3: Invalid Category Values
+
 ```bash
 # ❌ WRONG - Invalid category values
 "category":"bug"        # Use "error" instead
@@ -73,6 +82,7 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
 ```
 
 ### Error #4: Using Non-existent Commands
+
 ```bash
 # ❌ WRONG - Delete command doesn't exist in CLI interface
 timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js delete task_123
@@ -84,6 +94,7 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
 ## 🔧 AVAILABLE CLI COMMANDS
 
 ### Core Commands
+
 ```bash
 # Get API guide and documentation
 timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js guide
@@ -108,6 +119,7 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
 ```
 
 ### Commands NOT Available in CLI
+
 - `delete` - No delete functionality in CLI interface
 - `remove` - Not available
 - `destroy` - Not available
@@ -115,6 +127,7 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
 ## 📋 PRE-TASK VALIDATION CHECKLIST
 
 Before creating any task, verify:
+
 - [ ] Task has meaningful `title`
 - [ ] Task has detailed `description`
 - [ ] Task has valid `category` (error/feature/subtask/test)
@@ -125,6 +138,7 @@ Before creating any task, verify:
 ## 🚨 EMERGENCY ERROR RECOVERY
 
 ### If Task Creation Fails
+
 1. **Check error message** - Look for specific validation failures
 2. **Verify JSON format** - Ensure proper quoting and syntax
 3. **Confirm required fields** - title, description, category all present
@@ -132,6 +146,7 @@ Before creating any task, verify:
 5. **Retry with corrected format**
 
 ### If Command Not Found Error
+
 1. **Check available commands** - Run `guide` command for valid options
 2. **Verify command exists** - No delete/remove commands available
 3. **Use alternative approach** - Complete tasks instead of deleting
@@ -139,6 +154,7 @@ Before creating any task, verify:
 ## 🎯 CATEGORY SELECTION GUIDE
 
 **Choose `error` for:**
+
 - Linter violations (ESLint, Prettier, etc.)
 - Build failures and compilation errors
 - Runtime exceptions and bugs
@@ -146,6 +162,7 @@ Before creating any task, verify:
 - System startup failures
 
 **Choose `feature` for:**
+
 - New functionality implementation
 - User interface enhancements
 - Code refactoring and optimization
@@ -153,11 +170,13 @@ Before creating any task, verify:
 - Configuration improvements
 
 **Choose `subtask` for:**
+
 - Specific components of larger features
 - Implementation details of approved features
 - Step-by-step feature breakdowns
 
 **Choose `test` for:**
+
 - Unit test creation
 - Integration test setup
 - End-to-end test implementation
@@ -167,6 +186,7 @@ Before creating any task, verify:
 ## 📝 COMPLETION FORMAT GUIDELINES
 
 ### Safe Completion Formats
+
 ```bash
 # Simple string format (recommended)
 timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js complete task_123 '"Task completed successfully"'
@@ -176,6 +196,7 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
 ```
 
 ### Avoid These Completion Formats
+
 ```bash
 # ❌ Special characters and emojis
 timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js complete task_123 "Task completed! ✅"
@@ -188,6 +209,7 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
 ```
 
 This guide prevents the two critical errors encountered:
+
 1. **Non-existent delete command usage**
 2. **Missing required category field in task creation**
 

@@ -2,7 +2,7 @@
  * Commitlint Configuration
  *
  * Enforces conventional commit message format for automated changelog
- * generation and semantic versioning.
+ * generation And semantic versioning.
  */
 
 module.exports = {

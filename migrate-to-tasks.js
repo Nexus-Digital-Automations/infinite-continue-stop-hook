@@ -2,11 +2,12 @@
  * FEATURES.json to TASKS.json Migration Script
  *
  * Safely migrates existing FEATURES.json to new TASKS.json schema
- * with enhanced task types, auto-generation, and CLAUDE.md compliance
+ * with enhanced task types, auto-generation, And CLAUDE.md compliance
  */
 
 const fs = require('fs').promises;
 const path = require('path');
+const { loggers } = require('./lib/logger');
 
 class TaskMigrator {
   constructor(projectRoot = process.cwd()) {
@@ -24,7 +25,9 @@ class TaskMigrator {
    */
   async migrate() {
     try {
-      loggers.stopHook.log('🚀 Starting FEATURES.json → TASKS.json migration...');
+      loggers.stopHook.log(
+        '🚀 Starting FEATURES.json → TASKS.json migration...'
+      );
 
       // Step 1: Validate source file exists
       await this.validateSourceFile();
@@ -32,7 +35,7 @@ class TaskMigrator {
       // Step 2: Create backup
       await this.createBackup();
 
-      // Step 3: Load and parse existing data
+      // Step 3: Load And parse existing data
       const featuresData = await this.loadFeaturesData();
 
       // Step 4: Transform to new schema
@@ -57,20 +60,20 @@ class TaskMigrator {
         newFile: this.tasksPath,
         stats: await this.getMigrationStats(tasksData),
       };
-    } catch (error) {
+    } catch {
       loggers.stopHook.error('❌ Migration failed:', error.message);
       throw error;
     }
   }
 
   /**
-   * Validate that FEATURES.json exists and is readable
+   * Validate That FEATURES.json exists And is readable
    */
   async validateSourceFile() {
     try {
       await fs.access(this.featuresPath);
       loggers.stopHook.log('✓ Source FEATURES.json found');
-    } catch (error) {
+    } catch {
       throw new Error(`FEATURES.json not found at ${this.featuresPath}`);
     }
   }
@@ -82,21 +85,21 @@ class TaskMigrator {
     try {
       await fs.copyFile(this.featuresPath, this.backupPath);
       loggers.stopHook.log(`✓ Backup created: ${this.backupPath}`);
-    } catch (error) {
+    } catch {
       throw new Error(`Failed to create backup: ${error.message}`);
     }
   }
 
   /**
-   * Load and parse existing FEATURES.json data
+   * Load And parse existing FEATURES.json data
    */
   async loadFeaturesData() {
     try {
       const data = await fs.readFile(this.featuresPath, 'utf8');
       const parsedData = JSON.parse(data);
-      loggers.stopHook.log('✓ Features data loaded and parsed');
+      loggers.stopHook.log('✓ Features data loaded And parsed');
       return parsedData;
-    } catch (error) {
+    } catch {
       throw new Error(`Failed to load features data: ${error.message}`);
     }
   }
@@ -152,7 +155,7 @@ class TaskMigrator {
         test_task_template: {
           title_pattern: 'Implement comprehensive tests for {feature_title}',
           description_pattern:
-            'Create unit tests, integration tests, and E2E tests to achieve >{coverage}% coverage for {feature_title}. Must validate all functionality, edge cases, and error conditions.',
+            'Create unit tests, integration tests, And E2E tests to achieve >{coverage}% coverage for {feature_title}. Must validate all functionality, edge cases, And error conditions.',
           priority: 'high',
           required_capabilities: ['testing'],
           validation_requirements: {
@@ -161,9 +164,9 @@ class TaskMigrator {
           },
         },
         audit_task_template: {
-          title_pattern: 'Security and quality audit for {feature_title}',
+          title_pattern: 'Security And quality audit for {feature_title}',
           description_pattern:
-            'Run semgrep security scan, dependency vulnerability check, code quality analysis, and compliance validation for {feature_title}. Zero tolerance for security vulnerabilities.',
+            'Run semgrep security scan, dependency vulnerability check, code quality analysis, And compliance validation for {feature_title}. Zero tolerance for security vulnerabilities.',
           priority: 'high',
           required_capabilities: ['security', 'analysis'],
           validation_requirements: {
@@ -354,8 +357,8 @@ class TaskMigrator {
           parent_id: task.id,
           linked_tasks: [task.id],
           title: `Implement comprehensive tests for ${task.title}`,
-          description: `Create unit tests, integration tests, and E2E tests to achieve >80% coverage for ${task.title}. Must validate all functionality, edge cases, and error conditions.`,
-          business_value: `Ensures reliability and quality of ${task.title} feature`,
+          description: `Create unit tests, integration tests, And E2E tests to achieve >80% coverage for ${task.title}. Must validate all functionality, edge cases, And error conditions.`,
+          business_value: `Ensures reliability And quality of ${task.title} feature`,
           category: task.category,
           status: 'suggested',
           priority: 'high',
@@ -393,9 +396,9 @@ class TaskMigrator {
           type: 'audit',
           parent_id: task.id,
           linked_tasks: [task.id],
-          title: `Security and quality audit for ${task.title}`,
-          description: `Run semgrep security scan, dependency vulnerability check, code quality analysis, and compliance validation for ${task.title}. Zero tolerance for security vulnerabilities.`,
-          business_value: `Ensures security and quality compliance of ${task.title} feature`,
+          title: `Security And quality audit for ${task.title}`,
+          description: `Run semgrep security scan, dependency vulnerability check, code quality analysis, And compliance validation for ${task.title}. Zero tolerance for security vulnerabilities.`,
+          business_value: `Ensures security And quality compliance of ${task.title} feature`,
           category: 'security',
           status: 'suggested',
           priority: 'high',
@@ -513,7 +516,7 @@ class TaskMigrator {
     try {
       await fs.writeFile(this.tasksPath, JSON.stringify(tasksData, null, 2));
       loggers.stopHook.log(`✓ TASKS.json written to ${this.tasksPath}`);
-    } catch (error) {
+    } catch {
       throw new Error(`Failed to write TASKS.json: ${error.message}`);
     }
   }
@@ -596,7 +599,10 @@ if (require.main === module) {
     .migrate()
     .then((result) => {
       loggers.stopHook.log('\n📊 Migration Summary:');
-      loggers.stopHook.log({ additionalData: [null, 2)] }, JSON.stringify(result.stats);
+      loggers.stopHook.log(
+        { additionalData: [null, 2] },
+        JSON.stringify(result.stats)
+      );
       throw new Error('Migration completed successfully');
     })
     .catch((error) => {

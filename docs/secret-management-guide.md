@@ -7,6 +7,7 @@ The Infinite Continue Stop Hook project includes a comprehensive secret manageme
 ## Features
 
 ### Core Capabilities
+
 - ✅ **Multi-source secret loading** - Environment variables, .env files, external secret managers
 - ✅ **Schema-based validation** - Automatic validation with pattern matching, length requirements, allowed values
 - ✅ **Environment-aware requirements** - Different secret requirements for development, staging, and production
@@ -17,6 +18,7 @@ The Infinite Continue Stop Hook project includes a comprehensive secret manageme
 - ✅ **Secret rotation** - Built-in rotation capabilities for supported providers
 
 ### Security Features
+
 - **No hardcoded secrets** - All secrets loaded from external sources
 - **Secure audit trails** - Security logger captures sensitive secret access
 - **Input validation** - Schema validation prevents invalid secret values
@@ -164,17 +166,17 @@ spec:
   template:
     spec:
       containers:
-      - name: myapp
-        env:
-        - name: NODE_ENV
-          value: "production"
-        volumeMounts:
-        - name: secrets
-          mountPath: /var/run/secrets
+        - name: myapp
+          env:
+            - name: NODE_ENV
+              value: 'production'
+          volumeMounts:
+            - name: secrets
+              mountPath: /var/run/secrets
       volumes:
-      - name: secrets
-        secret:
-          secretName: myapp-secrets
+        - name: secrets
+          secret:
+            secretName: myapp-secrets
 ```
 
 ## Secret Rotation
@@ -186,16 +188,19 @@ The system includes built-in secret rotation capabilities:
 await secretManager.rotateSecret('API_KEY');
 
 // Automated rotation (implement in your application)
-setInterval(async () => {
-  const sensitiveSecrets = ['JWT_SECRET', 'ENCRYPTION_KEY'];
-  for (const secret of sensitiveSecrets) {
-    try {
-      await secretManager.rotateSecret(secret);
-    } catch (error) {
-      logger.error(`Failed to rotate ${secret}:`, error);
+setInterval(
+  async () => {
+    const sensitiveSecrets = ['JWT_SECRET', 'ENCRYPTION_KEY'];
+    for (const secret of sensitiveSecrets) {
+      try {
+        await secretManager.rotateSecret(secret);
+      } catch (error) {
+        logger.error(`Failed to rotate ${secret}:`, error);
+      }
     }
-  }
-}, 24 * 60 * 60 * 1000); // Daily rotation
+  },
+  24 * 60 * 60 * 1000
+); // Daily rotation
 ```
 
 ## Monitoring and Auditing
@@ -223,7 +228,7 @@ const apiKeyLogs = secretManager.getAuditLog({ key: 'API_KEY' });
 
 // Get logs since specific time
 const recentLogs = secretManager.getAuditLog({
-  since: new Date(Date.now() - 24 * 60 * 60 * 1000)
+  since: new Date(Date.now() - 24 * 60 * 60 * 1000),
 });
 ```
 
@@ -258,6 +263,7 @@ console.log(secretInfo);
 ### 2. Testing
 
 Test environments automatically set:
+
 - `NODE_ENV=test`
 - `TEST_MODE=jest`
 - Relaxed secret requirements
@@ -272,6 +278,7 @@ Test environments automatically set:
 ## Security Best Practices
 
 ### 1. Secret Management
+
 - ✅ Never commit secrets to version control
 - ✅ Use external secret managers in production
 - ✅ Rotate secrets regularly
@@ -279,12 +286,14 @@ Test environments automatically set:
 - ✅ Use least-privilege access
 
 ### 2. Environment Security
+
 - ✅ Different secret requirements per environment
 - ✅ Secure secret transportation (TLS/encryption)
 - ✅ Audit logging for compliance
 - ✅ Fail-fast on missing production secrets
 
 ### 3. Application Security
+
 - ✅ No secrets in application logs
 - ✅ Secure secret redaction in debug output
 - ✅ Input validation for all secrets
@@ -317,6 +326,7 @@ Test environments automatically set:
 ```
 
 **Solution**:
+
 - Verify AWS credentials and permissions
 - Check secret name and region configuration
 - Ensure network connectivity to AWS
@@ -339,7 +349,7 @@ const { validateRequiredSecrets } = require('./lib/secretManager');
 // Test with specific requirements
 validateRequiredSecrets(['API_KEY', 'JWT_SECRET'])
   .then(() => console.log('✅ All secrets valid'))
-  .catch(err => console.error('❌ Validation failed:', err.message));
+  .catch((err) => console.error('❌ Validation failed:', err.message));
 ```
 
 ## API Reference

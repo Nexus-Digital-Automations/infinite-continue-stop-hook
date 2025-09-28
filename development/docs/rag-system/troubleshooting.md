@@ -45,6 +45,7 @@ df -h && free -h
 #### Symptom: "Database connection failed" or "ECONNREFUSED"
 
 **Diagnosis Commands:**
+
 ```bash
 # Test database connectivity directly
 mysql -u rag_user -p rag_database -e "SELECT 1 as test;"
@@ -60,6 +61,7 @@ echo $RAG_DATABASE_URL | grep -o "mysql://[^:]*:[^@]*@[^/]*"
 **Common Causes and Solutions:**
 
 1. **Database service not running**
+
    ```bash
    # Start database service
    sudo systemctl start mysql  # Linux
@@ -67,6 +69,7 @@ echo $RAG_DATABASE_URL | grep -o "mysql://[^:]*:[^@]*@[^/]*"
    ```
 
 2. **Incorrect credentials**
+
    ```bash
    # Reset database password
    mysql -u root -p << EOF
@@ -79,6 +82,7 @@ echo $RAG_DATABASE_URL | grep -o "mysql://[^:]*:[^@]*@[^/]*"
    ```
 
 3. **Database doesn't exist**
+
    ```bash
    # Create database
    mysql -u root -p << EOF
@@ -87,6 +91,7 @@ echo $RAG_DATABASE_URL | grep -o "mysql://[^:]*:[^@]*@[^/]*"
    ```
 
 4. **Port conflicts**
+
    ```bash
    # Check what's using port 3306
    sudo lsof -i :3306
@@ -100,6 +105,7 @@ echo $RAG_DATABASE_URL | grep -o "mysql://[^:]*:[^@]*@[^/]*"
 #### Symptom: "OpenAI API error" or "Embedding generation failed"
 
 **Diagnosis Commands:**
+
 ```bash
 # Test API key validity
 curl -H "Authorization: Bearer $OPENAI_API_KEY" \
@@ -124,6 +130,7 @@ openai.embeddings.create({
 **Common Causes and Solutions:**
 
 1. **Invalid or missing API key**
+
    ```bash
    # Check if API key is set
    echo "API Key: ${OPENAI_API_KEY:0:10}..."
@@ -133,6 +140,7 @@ openai.embeddings.create({
    ```
 
 2. **Rate limiting**
+
    ```bash
    # Implement exponential backoff in code
    # Reduce RAG_BATCH_SIZE in .env
@@ -140,6 +148,7 @@ openai.embeddings.create({
    ```
 
 3. **Quota exceeded**
+
    ```bash
    # Check billing and usage at https://platform.openai.com/usage
    # Implement request throttling
@@ -147,6 +156,7 @@ openai.embeddings.create({
    ```
 
 4. **Network connectivity issues**
+
    ```bash
    # Test internet connectivity
    ping -c 3 api.openai.com
@@ -160,6 +170,7 @@ openai.embeddings.create({
 #### Symptom: Slow search responses or timeouts
 
 **Diagnosis Commands:**
+
 ```bash
 # Performance profiling
 time timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-search "test query"
@@ -182,6 +193,7 @@ EOF
 **Common Causes and Solutions:**
 
 1. **Missing or inefficient indexes**
+
    ```sql
    -- Check existing indexes
    SHOW INDEX FROM lessons;
@@ -193,6 +205,7 @@ EOF
    ```
 
 2. **Large dataset without optimization**
+
    ```sql
    -- Optimize tables
    OPTIMIZE TABLE lessons;
@@ -204,6 +217,7 @@ EOF
    ```
 
 3. **Inefficient similarity threshold**
+
    ```bash
    # Test different thresholds
    for threshold in 0.5 0.6 0.7 0.8 0.9; do
@@ -213,6 +227,7 @@ EOF
    ```
 
 4. **Memory constraints**
+
    ```bash
    # Check memory usage
    mysql -u rag_user -p rag_database << EOF
@@ -233,6 +248,7 @@ EOF
 #### Symptom: Irrelevant search results or no results found
 
 **Diagnosis Commands:**
+
 ```bash
 # Test embedding similarity
 timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-debug-similarity "query text"
@@ -251,6 +267,7 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
 **Common Causes and Solutions:**
 
 1. **Similarity threshold too high**
+
    ```bash
    # Lower threshold for broader results
    timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-search "query" --threshold 0.5
@@ -260,6 +277,7 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
    ```
 
 2. **Missing embeddings**
+
    ```sql
    -- Find lessons without embeddings
    SELECT l.lesson_id, l.title
@@ -271,6 +289,7 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
    ```
 
 3. **Poor lesson content quality**
+
    ```sql
    -- Check content length distribution
    SELECT
@@ -286,6 +305,7 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
    ```
 
 4. **Incorrect embedding model**
+
    ```bash
    # Verify embedding model
    echo "Current model: $RAG_EMBEDDING_MODEL"
@@ -310,6 +330,7 @@ timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api
 #### Symptom: Failed to store lessons or migration errors
 
 **Diagnosis Commands:**
+
 ```bash
 # Check disk space
 df -h
@@ -330,6 +351,7 @@ EOF
 **Common Causes and Solutions:**
 
 1. **Disk space full**
+
    ```bash
    # Clean up old logs
    find development/logs/ -name "*.log" -mtime +30 -delete
@@ -345,6 +367,7 @@ EOF
    ```
 
 2. **Lesson ID conflicts**
+
    ```sql
    -- Check for duplicate IDs
    SELECT lesson_id, COUNT(*) as count
@@ -362,6 +385,7 @@ EOF
    ```
 
 3. **JSON parsing errors**
+
    ```bash
    # Test JSON validation
    timeout 10s node -e "
@@ -387,6 +411,7 @@ EOF
 #### Symptom: High memory usage or system slowdown
 
 **Diagnosis Commands:**
+
 ```bash
 # Memory usage analysis
 ps aux | grep -E "(node|mysql)" | head -10
@@ -404,6 +429,7 @@ node --max-old-space-size=4096 /Users/jeremyparker/infinite-continue-stop-hook/t
 **Common Causes and Solutions:**
 
 1. **Insufficient database memory**
+
    ```sql
    -- Increase buffer pool size
    SET GLOBAL innodb_buffer_pool_size = 2147483648; -- 2GB
@@ -414,6 +440,7 @@ node --max-old-space-size=4096 /Users/jeremyparker/infinite-continue-stop-hook/t
    ```
 
 2. **Memory leaks in Node.js**
+
    ```bash
    # Run with memory profiling
    node --inspect /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-health
@@ -423,6 +450,7 @@ node --max-old-space-size=4096 /Users/jeremyparker/infinite-continue-stop-hook/t
    ```
 
 3. **Large embedding cache**
+
    ```bash
    # Clear embedding cache
    timeout 10s node /Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js rag-clear-cache
@@ -777,4 +805,4 @@ EOF
 
 ---
 
-*This troubleshooting guide provides comprehensive coverage of common RAG system issues. Keep this document updated as new issues are discovered and resolved.*
+_This troubleshooting guide provides comprehensive coverage of common RAG system issues. Keep this document updated as new issues are discovered and resolved._

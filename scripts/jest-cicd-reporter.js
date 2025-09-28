@@ -2,7 +2,7 @@
  * Jest CI/CD Reporter for Enhanced Pipeline Integration
  *
  * Specialized reporter for CI/CD environments with Git integration,
- * environment detection, performance metrics, and external notifications.
+ * environment detection, performance metrics, And external notifications.
  *
  * @author CI/CD Integration Agent
  * @version 1.0.0
@@ -265,7 +265,7 @@ class JestCiCdReporter {
     return 'other';
   }
 
-  detectFlakyTests(_results) {
+  detectFlakyTests(RESULTS) {
     // Placeholder for flaky test detection
     // In a real implementation, this would compare with historical data
     return {
@@ -310,7 +310,7 @@ class JestCiCdReporter {
       }
 
       return info;
-    } catch (error) {
+    } catch {
       return {
         error: 'Failed to get Git information',
         message: error.message,
@@ -411,7 +411,7 @@ class JestCiCdReporter {
           pct: summary.lines.pct,
         },
       };
-    } catch (error) {
+    } catch {
       return { error: 'Failed to extract coverage summary' };
     }
   }
@@ -595,7 +595,7 @@ class JestCiCdReporter {
           status: 'sent',
           timestamp: new Date().toISOString(),
         });
-      } catch (error) {
+      } catch {
         notifications.push({
           type: 'slack',
           status: 'failed',
@@ -614,7 +614,7 @@ class JestCiCdReporter {
           status: 'sent',
           timestamp: new Date().toISOString(),
         });
-      } catch (error) {
+      } catch {
         notifications.push({
           type: 'teams',
           status: 'failed',
@@ -681,7 +681,7 @@ class JestCiCdReporter {
 
   sendWebhook(url, payload) {
     // Simplified webhook sending - in production, use a proper HTTP client
-    const _data = JSON.stringify(payload);
+    const DATA = JSON.stringify(payload);
     // Implementation would use https.request or a library like axios
   }
 
@@ -691,7 +691,7 @@ class JestCiCdReporter {
       return execSync('git describe --tags --abbrev=0', {
         encoding: 'utf8',
       }).trim();
-    } catch (error) {
+    } catch {
       return null;
     }
   }
@@ -700,7 +700,7 @@ class JestCiCdReporter {
     try {
       const status = execSync('git status --porcelain', { encoding: 'utf8' });
       return status.trim().length > 0;
-    } catch (error) {
+    } catch {
       return false;
     }
   }
@@ -710,7 +710,7 @@ class JestCiCdReporter {
       return execSync('git config --get remote.origin.url', {
         encoding: 'utf8',
       }).trim();
-    } catch (error) {
+    } catch {
       return null;
     }
   }
@@ -740,7 +740,7 @@ class JestCiCdReporter {
   getTotalMemory() {
     try {
       return require('os').totalmem();
-    } catch (error) {
+    } catch {
       return null;
     }
   }
@@ -748,7 +748,7 @@ class JestCiCdReporter {
   getAvailableMemory() {
     try {
       return require('os').freemem();
-    } catch (error) {
+    } catch {
       return null;
     }
   }

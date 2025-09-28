@@ -280,34 +280,42 @@ Custom rules integrate seamlessly with the existing stop-hook validation system 
 ## Rule Types Reference
 
 ### 1. Command Rules (`type: "command"`)
+
 Execute shell commands and validate their success.
 
 **Options:**
+
 - `command`: Shell command to execute
 - `working_directory`: Directory to execute command in
 - `environment`: Additional environment variables
 - `allow_failure`: Whether to continue if command fails
 
 ### 2. File Existence Rules (`type: "file_exists"`)
+
 Validate that required files exist.
 
 **Options:**
+
 - `files`: Array of file paths (supports glob patterns)
 - `allow_failure`: Whether to continue if files are missing
 
 ### 3. File Content Rules (`type: "file_content"`)
+
 Validate file contents against patterns.
 
 **Options:**
+
 - `file`: File path to check
 - `pattern`: Regular expression pattern
 - `should_match`: Whether pattern should be found (true) or absent (false)
 - `flags`: Regex flags (i, g, m, etc.)
 
 ### 4. Conditional Rules (`type: "conditional"`)
+
 Execute rules based on conditions.
 
 **Condition Types:**
+
 - `tech_stack`: Check if technology is detected
 - `project_type`: Check project type
 - `file_exists`: Check if file exists
@@ -315,9 +323,11 @@ Execute rules based on conditions.
 - `command_succeeds`: Check if command succeeds
 
 ### 5. Composite Rules (`type: "composite"`)
+
 Combine multiple rules with logical operators.
 
 **Options:**
+
 - `operator`: "and" (all must pass) or "or" (any can pass)
 - `rules`: Array of sub-rules to execute
 
@@ -325,14 +335,14 @@ Combine multiple rules with logical operators.
 
 The system automatically detects technologies based on file patterns:
 
-| Technology | Detection Files |
-|------------|----------------|
-| Node.js | `package.json`, `npm-shrinkwrap.json`, `yarn.lock` |
-| Python | `requirements.txt`, `setup.py`, `pyproject.toml` |
-| Go | `go.mod`, `go.sum` |
-| Rust | `Cargo.toml`, `Cargo.lock` |
-| Docker | `Dockerfile`, `docker-compose.yml` |
-| Frontend | `webpack.config.js`, `vite.config.js` |
+| Technology | Detection Files                                    |
+| ---------- | -------------------------------------------------- |
+| Node.js    | `package.json`, `npm-shrinkwrap.json`, `yarn.lock` |
+| Python     | `requirements.txt`, `setup.py`, `pyproject.toml`   |
+| Go         | `go.mod`, `go.sum`                                 |
+| Rust       | `Cargo.toml`, `Cargo.lock`                         |
+| Docker     | `Dockerfile`, `docker-compose.yml`                 |
+| Frontend   | `webpack.config.js`, `vite.config.js`              |
 
 ## Integration with Existing System
 

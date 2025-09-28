@@ -516,6 +516,7 @@ chmod +x scripts/load-test-rag.sh
 ## 📋 Setup Verification Checklist
 
 ### Core Components
+
 - [ ] Database server installed and running
 - [ ] RAG database and tables created
 - [ ] Environment variables configured
@@ -523,6 +524,7 @@ chmod +x scripts/load-test-rag.sh
 - [ ] Node.js dependencies installed
 
 ### Database Setup
+
 - [ ] Database connection successful
 - [ ] All required tables exist
 - [ ] Vector indexes created
@@ -530,6 +532,7 @@ chmod +x scripts/load-test-rag.sh
 - [ ] User permissions configured
 
 ### API Integration
+
 - [ ] TaskManager API recognizes RAG methods
 - [ ] Health check returns success
 - [ ] Can store lessons successfully
@@ -537,6 +540,7 @@ chmod +x scripts/load-test-rag.sh
 - [ ] Can store errors successfully
 
 ### Security and Monitoring
+
 - [ ] Database users created with appropriate permissions
 - [ ] Backup script configured and scheduled
 - [ ] Monitoring script configured
@@ -544,6 +548,7 @@ chmod +x scripts/load-test-rag.sh
 - [ ] Security settings applied
 
 ### Performance and Testing
+
 - [ ] Search performance under 2 seconds
 - [ ] Load testing completed successfully
 - [ ] Integration tests pass
@@ -554,6 +559,7 @@ chmod +x scripts/load-test-rag.sh
 ### Common Setup Issues
 
 #### Issue: Database Connection Failed
+
 ```bash
 # Check database service status
 systemctl status mysql  # Linux
@@ -567,6 +573,7 @@ sudo ufw status  # Linux
 ```
 
 #### Issue: OpenAI API Errors
+
 ```bash
 # Verify API key
 echo $OPENAI_API_KEY | cut -c1-10  # Should show: sk-proj-...
@@ -577,6 +584,7 @@ curl -H "Authorization: Bearer $OPENAI_API_KEY" \
 ```
 
 #### Issue: Module Not Found Errors
+
 ```bash
 # Reinstall dependencies
 rm -rf node_modules package-lock.json
@@ -589,12 +597,14 @@ node --version  # Should be 18.0+
 ## 📞 Support and Next Steps
 
 ### Getting Help
+
 1. Check the [Troubleshooting Guide](./troubleshooting.md)
 2. Review logs in `development/logs/rag-system/`
 3. Run health checks and diagnostics
 4. Consult the [API Reference](./api-reference.md)
 
 ### Next Steps
+
 1. **Complete Migration**: Follow the [Migration Guide](./migration-guide.md)
 2. **Agent Integration**: Review [Agent Integration Guide](./agent-integration.md)
 3. **Performance Tuning**: See [Performance Tuning Guide](./performance-tuning.md)
@@ -602,4 +612,4 @@ node --version  # Should be 18.0+
 
 ---
 
-*Your RAG system is now set up and ready for use! Proceed to the migration guide to import existing lessons, or start using the system immediately for new development tasks.*
+_Your RAG system is now set up and ready for use! Proceed to the migration guide to import existing lessons, or start using the system immediately for new development tasks._

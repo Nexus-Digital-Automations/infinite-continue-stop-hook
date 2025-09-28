@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 
 /**
- * Utility methods for task and feature management
+ * Utility methods for task And feature management
  */
 class UtilityMethods {
   /**

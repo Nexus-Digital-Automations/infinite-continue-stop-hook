@@ -136,18 +136,18 @@ describe('Trend Analysis API Integration Tests', () => {
     try {
       const fullCommand = `timeout 10s node "${taskManagerPath}" --project-root "${mockProjectRoot}" ${command} ${args}`;
 
-      const result = execSync(fullCommand, {
+      const _result = execSync(fullCommand, {
         encoding: 'utf8',
         timeout: 10000,
         ...options,
       });
 
       return JSON.parse(result.trim());
-    } catch (error) {
+    } catch {
       if (error.stdout) {
         try {
           return JSON.parse(error.stdout.trim());
-        } catch (error) {
+        } catch {
           return { success: false, error: error.message, stdout: error.stdout };
         }
       }
@@ -157,7 +157,7 @@ describe('Trend Analysis API Integration Tests', () => {
 
   describe('analyze-performance-trends endpoint', () => {
     test('should return insufficient data when no metrics available', () => {
-      const result = executeTaskManagerCommand('analyze-performance-trends');
+      const _result = executeTaskManagerCommand('analyze-performance-trends');
 
       expect(result.success).toBe(true);
       expect(result.analysis.summary).toContain('Insufficient historical data');
@@ -166,7 +166,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should analyze comprehensive performance trends', () => {
       createComprehensiveMockData(30);
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'analyze-performance-trends',
         '\'{"timeRange":30,"granularity":"daily"}\'',
       );
@@ -205,7 +205,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should include forecasts when requested', () => {
       createComprehensiveMockData(20);
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'analyze-performance-trends',
         '\'{"timeRange":20,"includeForecast":true}\'',
       );
@@ -217,7 +217,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should include baseline comparisons when requested', () => {
       createComprehensiveMockData(20);
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'analyze-performance-trends',
         '\'{"timeRange":20,"includeBaselines":true}\'',
       );
@@ -229,7 +229,7 @@ describe('Trend Analysis API Integration Tests', () => {
 
   describe('analyze-criterion-trend endpoint', () => {
     test('should return error when criterion not provided', () => {
-      const result = executeTaskManagerCommand('analyze-criterion-trend');
+      const _result = executeTaskManagerCommand('analyze-criterion-trend');
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Criterion required');
@@ -238,7 +238,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should return insufficient data for non-existent criterion', () => {
       createComprehensiveMockData(10);
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'analyze-criterion-trend',
         'non-existent-criterion',
       );
@@ -250,7 +250,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should analyze specific criterion trends', () => {
       createComprehensiveMockData(15);
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'analyze-criterion-trend',
         'build-validation \'{"timeRange":15,"granularity":"daily"}\'',
       );
@@ -270,7 +270,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should detect performance regressions', () => {
       createComprehensiveMockData(20); // Creates degrading build performance
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'analyze-criterion-trend',
         'build-validation',
       );
@@ -285,7 +285,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should generate health score trends', () => {
       createComprehensiveMockData(20);
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'generate-health-score-trends',
         '\'{"timeRange":20,"granularity":"daily"}\'',
       );
@@ -310,7 +310,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should provide health trend recommendations', () => {
       createComprehensiveMockData(15);
 
-      const result = executeTaskManagerCommand('generate-health-score-trends');
+      const _result = executeTaskManagerCommand('generate-health-score-trends');
 
       expect(result.success).toBe(true);
       expect(result.healthTrends.summary.recommendation).toBeDefined();
@@ -320,7 +320,7 @@ describe('Trend Analysis API Integration Tests', () => {
 
   describe('compare-performance-periods endpoint', () => {
     test('should return error when periods not provided', () => {
-      const result = executeTaskManagerCommand('compare-performance-periods');
+      const _result = executeTaskManagerCommand('compare-performance-periods');
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Two periods required');
@@ -341,7 +341,7 @@ describe('Trend Analysis API Integration Tests', () => {
         label: 'Period B',
       });
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'compare-performance-periods',
         `'${periodA}' '${periodB}'`,
       );
@@ -365,7 +365,7 @@ describe('Trend Analysis API Integration Tests', () => {
         label: 'Last Two Weeks',
       });
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'compare-performance-periods',
         `'${periodA}' '${periodB}'`,
       );
@@ -387,7 +387,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should generate performance forecasts', () => {
       createComprehensiveMockData(30);
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'get-performance-forecasts',
         '\'{"timeRange":30,"granularity":"daily"}\'',
       );
@@ -403,7 +403,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should handle insufficient data for forecasting', () => {
       createComprehensiveMockData(3); // Very limited data
 
-      const result = executeTaskManagerCommand('get-performance-forecasts');
+      const _result = executeTaskManagerCommand('get-performance-forecasts');
 
       expect(result.success).toBe(true);
       // Should still return a result, but forecasts might be limited
@@ -415,7 +415,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should analyze performance volatility patterns', () => {
       createComprehensiveMockData(25);
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'analyze-performance-volatility',
         '\'{"timeRange":25,"granularity":"daily"}\'',
       );
@@ -430,7 +430,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should support different granularities for volatility analysis', () => {
       createComprehensiveMockData(10);
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'analyze-performance-volatility',
         '\'{"granularity":"hourly"}\'',
       );
@@ -444,7 +444,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should detect performance anomalies across all criteria', () => {
       createComprehensiveMockData(20); // Includes anomalies
 
-      const result = executeTaskManagerCommand('detect-performance-anomalies');
+      const _result = executeTaskManagerCommand('detect-performance-anomalies');
 
       expect(result.success).toBe(true);
       expect(result.anomalies).toBeDefined();
@@ -458,7 +458,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should detect anomalies for specific criterion', () => {
       createComprehensiveMockData(15);
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'detect-performance-anomalies',
         '\'{"criteria":"build-validation","timeRange":15}\'',
       );
@@ -472,7 +472,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should support custom granularity for anomaly detection', () => {
       createComprehensiveMockData(12);
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'detect-performance-anomalies',
         '\'{"granularity":"hourly"}\'',
       );
@@ -486,7 +486,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should analyze seasonality patterns in performance data', () => {
       createComprehensiveMockData(30); // 30 days with hourly variations
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'analyze-seasonality-patterns',
         '\'{"timeRange":30,"granularity":"daily"}\'',
       );
@@ -501,7 +501,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should detect time-based patterns', () => {
       createComprehensiveMockData(21); // 3 weeks of data
 
-      const result = executeTaskManagerCommand('analyze-seasonality-patterns');
+      const _result = executeTaskManagerCommand('analyze-seasonality-patterns');
 
       expect(result.success).toBe(true);
       expect(result.patterns).toBeDefined();
@@ -513,7 +513,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should compare current performance with baselines', () => {
       createComprehensiveMockData(20);
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'compare-with-baselines',
         '\'{"timeRange":20,"granularity":"daily"}\'',
       );
@@ -527,7 +527,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should use default timeRange when not specified', () => {
       createComprehensiveMockData(15);
 
-      const result = executeTaskManagerCommand('compare-with-baselines');
+      const _result = executeTaskManagerCommand('compare-with-baselines');
 
       expect(result.success).toBe(true);
       expect(result.timeRange).toBe(30); // Default value
@@ -539,7 +539,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should handle invalid JSON options gracefully', () => {
       createComprehensiveMockData(10);
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'analyze-performance-trends',
         'invalid-json',
         { stdio: 'pipe' },
@@ -552,15 +552,15 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should handle corrupted metrics file', () => {
       fs.writeFileSync(mockEnhancedMetricsFile, 'invalid json content');
 
-      const result = executeTaskManagerCommand('analyze-performance-trends');
+      const _result = executeTaskManagerCommand('analyze-performance-trends');
 
-      // Should handle gracefully and return insufficient data
+      // Should handle gracefully And return insufficient data
       expect(result.success).toBe(true);
       expect(result.analysis.summary).toContain('Insufficient historical data');
     });
 
     test('should handle missing metrics files', () => {
-      const result = executeTaskManagerCommand('generate-health-score-trends');
+      const _result = executeTaskManagerCommand('generate-health-score-trends');
 
       expect(result.success).toBe(true);
       // Should handle gracefully when no data available
@@ -573,7 +573,7 @@ describe('Trend Analysis API Integration Tests', () => {
       ];
 
       endpoints.forEach(({ command, shouldFail }) => {
-        const result = executeTaskManagerCommand(command);
+        const _result = executeTaskManagerCommand(command);
 
         if (shouldFail) {
           expect(result.success).toBe(false);
@@ -585,8 +585,8 @@ describe('Trend Analysis API Integration Tests', () => {
     });
   });
 
-  describe('Data Consistency and Validation', () => {
-    test('should handle both enhanced and legacy metrics formats', () => {
+  describe('Data Consistency And Validation', () => {
+    test('should handle both enhanced And legacy metrics formats', () => {
       // Create enhanced metrics
       const enhancedData = {
         version: '2.0.0',
@@ -620,7 +620,7 @@ describe('Trend Analysis API Integration Tests', () => {
         JSON.stringify(legacyData, null, 2),
       );
 
-      const result = executeTaskManagerCommand('analyze-performance-trends');
+      const _result = executeTaskManagerCommand('analyze-performance-trends');
 
       expect(result.success).toBe(true);
       // Should combine data from both sources
@@ -656,19 +656,19 @@ describe('Trend Analysis API Integration Tests', () => {
         JSON.stringify(mixedQualityData, null, 2),
       );
 
-      const result = executeTaskManagerCommand('analyze-performance-trends');
+      const _result = executeTaskManagerCommand('analyze-performance-trends');
 
-      // Should handle gracefully, processing valid data and skipping invalid
+      // Should handle gracefully, processing valid data And skipping invalid
       expect(result.success).toBe(true);
     });
   });
 
-  describe('Performance and Scalability', () => {
+  describe('Performance And Scalability', () => {
     test('should handle large datasets efficiently', () => {
       createComprehensiveMockData(90); // 3 months of data
 
       const startTime = Date.now();
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'analyze-performance-trends',
         '\'{"timeRange":90}\'',
       );
@@ -682,7 +682,7 @@ describe('Trend Analysis API Integration Tests', () => {
     test('should respect timeRange limits for performance', () => {
       createComprehensiveMockData(60);
 
-      const result = executeTaskManagerCommand(
+      const _result = executeTaskManagerCommand(
         'analyze-performance-trends',
         '\'{"timeRange":30}\'', // Limit to 30 days
       );

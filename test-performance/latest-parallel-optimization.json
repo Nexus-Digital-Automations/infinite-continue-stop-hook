@@ -38,10 +38,7 @@
           "cpu": 1,
           "io": "medium"
         },
-        "dependencies": [
-          "network",
-          "ports"
-        ],
+        "dependencies": ["network", "ports"],
         "parallelizable": true
       },
       {
@@ -119,9 +116,7 @@
           "cpu": 0.5,
           "io": "low"
         },
-        "dependencies": [
-          "database"
-        ],
+        "dependencies": ["database"],
         "parallelizable": true
       },
       {
@@ -134,9 +129,7 @@
           "cpu": 1,
           "io": "medium"
         },
-        "dependencies": [
-          "filesystem"
-        ],
+        "dependencies": ["filesystem"],
         "parallelizable": true
       },
       {
@@ -149,11 +142,7 @@
           "cpu": 1,
           "io": "medium"
         },
-        "dependencies": [
-          "filesystem",
-          "network",
-          "ports"
-        ],
+        "dependencies": ["filesystem", "network", "ports"],
         "parallelizable": true
       },
       {
@@ -166,9 +155,7 @@
           "cpu": 1,
           "io": "medium"
         },
-        "dependencies": [
-          "filesystem"
-        ],
+        "dependencies": ["filesystem"],
         "parallelizable": true
       },
       {
@@ -181,9 +168,7 @@
           "cpu": 1,
           "io": "medium"
         },
-        "dependencies": [
-          "filesystem"
-        ],
+        "dependencies": ["filesystem"],
         "parallelizable": true
       },
       {
@@ -196,9 +181,7 @@
           "cpu": 1,
           "io": "medium"
         },
-        "dependencies": [
-          "filesystem"
-        ],
+        "dependencies": ["filesystem"],
         "parallelizable": true
       },
       {
@@ -211,9 +194,7 @@
           "cpu": 1,
           "io": "medium"
         },
-        "dependencies": [
-          "filesystem"
-        ],
+        "dependencies": ["filesystem"],
         "parallelizable": true
       },
       {
@@ -226,9 +207,7 @@
           "cpu": 1,
           "io": "medium"
         },
-        "dependencies": [
-          "filesystem"
-        ],
+        "dependencies": ["filesystem"],
         "parallelizable": false
       },
       {
@@ -241,10 +220,7 @@
           "cpu": 1,
           "io": "medium"
         },
-        "dependencies": [
-          "filesystem",
-          "database"
-        ],
+        "dependencies": ["filesystem", "database"],
         "parallelizable": true
       },
       {
@@ -257,9 +233,7 @@
           "cpu": 1.5,
           "io": "high"
         },
-        "dependencies": [
-          "database"
-        ],
+        "dependencies": ["database"],
         "parallelizable": true
       },
       {
@@ -272,9 +246,7 @@
           "cpu": 0.5,
           "io": "low"
         },
-        "dependencies": [
-          "database"
-        ],
+        "dependencies": ["database"],
         "parallelizable": true
       },
       {
@@ -287,10 +259,7 @@
           "cpu": 1,
           "io": "medium"
         },
-        "dependencies": [
-          "filesystem",
-          "database"
-        ],
+        "dependencies": ["filesystem", "database"],
         "parallelizable": true
       },
       {
@@ -303,9 +272,7 @@
           "cpu": 2,
           "io": "medium"
         },
-        "dependencies": [
-          "database"
-        ],
+        "dependencies": ["database"],
         "parallelizable": false
       },
       {
@@ -318,9 +285,7 @@
           "cpu": 1.5,
           "io": "high"
         },
-        "dependencies": [
-          "database"
-        ],
+        "dependencies": ["database"],
         "parallelizable": true
       },
       {
@@ -333,9 +298,7 @@
           "cpu": 1.5,
           "io": "high"
         },
-        "dependencies": [
-          "database"
-        ],
+        "dependencies": ["database"],
         "parallelizable": true
       },
       {
@@ -348,9 +311,7 @@
           "cpu": 1.5,
           "io": "high"
         },
-        "dependencies": [
-          "network"
-        ],
+        "dependencies": ["network"],
         "parallelizable": true
       },
       {
@@ -363,9 +324,7 @@
           "cpu": 1.5,
           "io": "high"
         },
-        "dependencies": [
-          "network"
-        ],
+        "dependencies": ["network"],
         "parallelizable": true
       },
       {
@@ -378,9 +337,7 @@
           "cpu": 1.5,
           "io": "high"
         },
-        "dependencies": [
-          "network"
-        ],
+        "dependencies": ["network"],
         "parallelizable": true
       },
       {
@@ -393,9 +350,7 @@
           "cpu": 1.5,
           "io": "high"
         },
-        "dependencies": [
-          "network"
-        ],
+        "dependencies": ["network"],
         "parallelizable": true
       },
       {
@@ -408,9 +363,7 @@
           "cpu": 1.5,
           "io": "high"
         },
-        "dependencies": [
-          "network"
-        ],
+        "dependencies": ["network"],
         "parallelizable": true
       },
       {
@@ -423,9 +376,7 @@
           "cpu": 1.5,
           "io": "high"
         },
-        "dependencies": [
-          "network"
-        ],
+        "dependencies": ["network"],
         "parallelizable": false
       },
       {
@@ -494,16 +445,8 @@
         "parallelizable": true
       }
     ],
-    "nodeVersions": [
-      "18.x",
-      "20.x",
-      "22.x"
-    ],
-    "platforms": [
-      "ubuntu-latest",
-      "windows-latest",
-      "macos-latest"
-    ],
+    "nodeVersions": ["18.x", "20.x", "22.x"],
+    "platforms": ["ubuntu-latest", "windows-latest", "macos-latest"],
     "executionStrategy": "adaptive"
   },
   "execution_plan": {
@@ -538,9 +481,7 @@
               "cpu": 0.5,
               "io": "low"
             },
-            "dependencies": [
-              "database"
-            ],
+            "dependencies": ["database"],
             "parallelizable": true
           },
           {
@@ -628,9 +569,7 @@
               "cpu": 0.5,
               "io": "low"
             },
-            "dependencies": [
-              "database"
-            ],
+            "dependencies": ["database"],
             "parallelizable": true
           }
         ],
@@ -653,10 +592,7 @@
               "cpu": 1,
               "io": "medium"
             },
-            "dependencies": [
-              "filesystem",
-              "database"
-            ],
+            "dependencies": ["filesystem", "database"],
             "parallelizable": true
           },
           {
@@ -669,9 +605,7 @@
               "cpu": 1,
               "io": "medium"
             },
-            "dependencies": [
-              "filesystem"
-            ],
+            "dependencies": ["filesystem"],
             "parallelizable": true
           },
           {
@@ -684,11 +618,7 @@
               "cpu": 1,
               "io": "medium"
             },
-            "dependencies": [
-              "filesystem",
-              "network",
-              "ports"
-            ],
+            "dependencies": ["filesystem", "network", "ports"],
             "parallelizable": true
           },
           {
@@ -701,9 +631,7 @@
               "cpu": 1,
               "io": "medium"
             },
-            "dependencies": [
-              "filesystem"
-            ],
+            "dependencies": ["filesystem"],
             "parallelizable": true
           },
           {
@@ -716,9 +644,7 @@
               "cpu": 1,
               "io": "medium"
             },
-            "dependencies": [
-              "filesystem"
-            ],
+            "dependencies": ["filesystem"],
             "parallelizable": true
           },
           {
@@ -731,9 +657,7 @@
               "cpu": 1,
               "io": "medium"
             },
-            "dependencies": [
-              "filesystem"
-            ],
+            "dependencies": ["filesystem"],
             "parallelizable": true
           }
         ],
@@ -756,9 +680,7 @@
               "cpu": 1,
               "io": "medium"
             },
-            "dependencies": [
-              "filesystem"
-            ],
+            "dependencies": ["filesystem"],
             "parallelizable": true
           },
           {
@@ -771,10 +693,7 @@
               "cpu": 1,
               "io": "medium"
             },
-            "dependencies": [
-              "filesystem",
-              "database"
-            ],
+            "dependencies": ["filesystem", "database"],
             "parallelizable": true
           },
           {
@@ -813,10 +732,7 @@
               "cpu": 1,
               "io": "medium"
             },
-            "dependencies": [
-              "network",
-              "ports"
-            ],
+            "dependencies": ["network", "ports"],
             "parallelizable": true
           },
           {
@@ -852,9 +768,7 @@
               "cpu": 1.5,
               "io": "high"
             },
-            "dependencies": [
-              "network"
-            ],
+            "dependencies": ["network"],
             "parallelizable": true
           },
           {
@@ -867,9 +781,7 @@
               "cpu": 1.5,
               "io": "high"
             },
-            "dependencies": [
-              "network"
-            ],
+            "dependencies": ["network"],
             "parallelizable": true
           },
           {
@@ -882,9 +794,7 @@
               "cpu": 1.5,
               "io": "high"
             },
-            "dependencies": [
-              "network"
-            ],
+            "dependencies": ["network"],
             "parallelizable": true
           },
           {
@@ -897,9 +807,7 @@
               "cpu": 1.5,
               "io": "high"
             },
-            "dependencies": [
-              "network"
-            ],
+            "dependencies": ["network"],
             "parallelizable": true
           },
           {
@@ -912,9 +820,7 @@
               "cpu": 1.5,
               "io": "high"
             },
-            "dependencies": [
-              "network"
-            ],
+            "dependencies": ["network"],
             "parallelizable": true
           },
           {
@@ -927,9 +833,7 @@
               "cpu": 1.5,
               "io": "high"
             },
-            "dependencies": [
-              "database"
-            ],
+            "dependencies": ["database"],
             "parallelizable": true
           }
         ],
@@ -952,9 +856,7 @@
               "cpu": 1.5,
               "io": "high"
             },
-            "dependencies": [
-              "database"
-            ],
+            "dependencies": ["database"],
             "parallelizable": true
           },
           {
@@ -967,9 +869,7 @@
               "cpu": 1.5,
               "io": "high"
             },
-            "dependencies": [
-              "database"
-            ],
+            "dependencies": ["database"],
             "parallelizable": true
           }
         ],
@@ -994,9 +894,7 @@
           "cpu": 1,
           "io": "medium"
         },
-        "dependencies": [
-          "filesystem"
-        ],
+        "dependencies": ["filesystem"],
         "parallelizable": false
       },
       {
@@ -1009,9 +907,7 @@
           "cpu": 1.5,
           "io": "high"
         },
-        "dependencies": [
-          "network"
-        ],
+        "dependencies": ["network"],
         "parallelizable": false
       },
       {
@@ -1024,9 +920,7 @@
           "cpu": 2,
           "io": "medium"
         },
-        "dependencies": [
-          "database"
-        ],
+        "dependencies": ["database"],
         "parallelizable": false
       },
       {

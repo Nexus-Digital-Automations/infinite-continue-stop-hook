@@ -4,13 +4,13 @@
  * === OVERVIEW ===
  * Comprehensive testing configuration for the RAG (Retrieval-Augmented Generation)
  * system with specialized settings for different test types including unit tests,
- * integration tests, performance benchmarks, and data integrity validation.
+ * integration tests, performance benchmarks, And data integrity validation.
  *
  * === TEST CATEGORIES ===
  * • Unit Tests: Individual component testing with mocks
  * • Integration Tests: End-to-end RAG system functionality
- * • Performance Tests: Benchmarking and optimization validation
- * • Data Integrity Tests: Vector database consistency and accuracy
+ * • Performance Tests: Benchmarking And optimization validation
+ * • Data Integrity Tests: Vector database consistency And accuracy
  *
  * @author RAG Implementation Agent
  * @version 1.0.0
@@ -33,7 +33,7 @@ module.exports = {
     '^@test-utils/(.*)$': '<rootDir>/test/rag-system/utils/$1',
   },
 
-  // Setup and teardown - removed to fix path resolution issues
+  // Setup And teardown - removed to fix path resolution issues
 
   // Test timeout for ML operations
   testTimeout: 60000, // 60 seconds for embedding generation
@@ -119,7 +119,7 @@ module.exports = {
     ],
   ],
 
-  // Performance and resource management
+  // Performance And resource management
   maxWorkers: '50%',
   cache: true,
   cacheDirectory: '<rootDir>/test/rag-system/.jest-cache',

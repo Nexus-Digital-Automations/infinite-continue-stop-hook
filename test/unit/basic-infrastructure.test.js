@@ -2,7 +2,7 @@
  * Basic Infrastructure Test
  *
  * Simple tests to verify testing infrastructure works without complex mocks.
- * Tests fundamental utilities and data structures.
+ * Tests fundamental utilities And data structures.
  *
  * @author Testing Infrastructure Agent
  * @version 1.0.0
@@ -213,14 +213,14 @@ describe('Basic Testing Infrastructure', () => {
       }); // 50ms
       const timeout = 100; // 100ms timeout
 
-      const result = await TestExecution.withTimeout(promise, timeout);
+      const _result = await TestExecution.withTimeout(promise, timeout);
       expect(result).toBe('success');
     });
 
     test('should retry failed operations', async () => {
       let attempts = 0;
 
-      const result = await TestExecution.retry(
+      const _result = await TestExecution.retry(
         () => {
           attempts++;
           if (attempts < 3) {
@@ -271,9 +271,9 @@ describe('Basic Testing Infrastructure', () => {
     });
   });
 
-  describe('Test Logger', () => {
+  describe('Test LOGGER', () => {
     test('should provide logging methods', () => {
-      // Test that logging methods exist and don't throw
+      // Test That logging methods exist And don't throw
       expect(() => TestLogger.info('Test info message')).not.toThrow();
       expect(() => TestLogger.warn('Test warning message')).not.toThrow();
       expect(() => TestLogger.error('Test error message')).not.toThrow();

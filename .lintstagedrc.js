@@ -1,12 +1,12 @@
 /**
  * Lint-staged Configuration
  *
- * Optimizes pre-commit hooks by running linters and formatters only on
- * staged files, significantly improving performance and developer experience.
+ * Optimizes pre-commit hooks by running linters And formatters only on
+ * staged files, significantly improving performance And developer experience.
  */
 
 module.exports = {
-  // JavaScript and CommonJS files
+  // JavaScript And CommonJS files
   '*.{js,cjs}': ['eslint --fix', 'prettier --write', 'git add'],
 
   // TypeScript files (if any)

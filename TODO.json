@@ -76,32 +76,17 @@
           "research_locations": [
             {
               "type": "codebase",
-              "paths": [
-                "/api",
-                "/routes",
-                "/controllers"
-              ],
+              "paths": ["/api", "/routes", "/controllers"],
               "focus": "Existing implementation patterns and architecture"
             },
             {
               "type": "internet",
-              "keywords": [
-                "performance",
-                "analysis:",
-                "embedded",
-                "subtasks",
-                "success"
-              ],
+              "keywords": ["performance", "analysis:", "embedded", "subtasks", "success"],
               "focus": "Best practices, industry standards, and technical specifications"
             },
             {
               "type": "documentation",
-              "sources": [
-                "README.md",
-                "docs/",
-                "API documentation",
-                "package.json"
-              ],
+              "sources": ["README.md", "docs/", "API documentation", "package.json"],
               "focus": "Project configuration and existing documentation"
             }
           ],
@@ -206,32 +191,17 @@
           "research_locations": [
             {
               "type": "codebase",
-              "paths": [
-                "/api",
-                "/routes",
-                "/controllers"
-              ],
+              "paths": ["/api", "/routes", "/controllers"],
               "focus": "Existing implementation patterns and architecture"
             },
             {
               "type": "internet",
-              "keywords": [
-                "analyze",
-                "design",
-                "intelligent",
-                "research",
-                "system"
-              ],
+              "keywords": ["analyze", "design", "intelligent", "research", "system"],
               "focus": "Best practices, industry standards, and technical specifications"
             },
             {
               "type": "documentation",
-              "sources": [
-                "README.md",
-                "docs/",
-                "API documentation",
-                "package.json"
-              ],
+              "sources": ["README.md", "docs/", "API documentation", "package.json"],
               "focus": "Project configuration and existing documentation"
             }
           ],
@@ -321,32 +291,17 @@
           "research_locations": [
             {
               "type": "codebase",
-              "paths": [
-                "/api",
-                "/routes",
-                "/controllers"
-              ],
+              "paths": ["/api", "/routes", "/controllers"],
               "focus": "Existing implementation patterns and architecture"
             },
             {
               "type": "internet",
-              "keywords": [
-                "compatibility",
-                "analysis",
-                "embedded",
-                "subtasks",
-                "success"
-              ],
+              "keywords": ["compatibility", "analysis", "embedded", "subtasks", "success"],
               "focus": "Best practices, industry standards, and technical specifications"
             },
             {
               "type": "documentation",
-              "sources": [
-                "README.md",
-                "docs/",
-                "API documentation",
-                "package.json"
-              ],
+              "sources": ["README.md", "docs/", "API documentation", "package.json"],
               "focus": "Project configuration and existing documentation"
             }
           ],
@@ -436,32 +391,17 @@
           "research_locations": [
             {
               "type": "codebase",
-              "paths": [
-                "/api",
-                "/routes",
-                "/controllers"
-              ],
+              "paths": ["/api", "/routes", "/controllers"],
               "focus": "Existing implementation patterns and architecture"
             },
             {
               "type": "internet",
-              "keywords": [
-                "continue",
-                "taskmanager",
-                "enhancement",
-                "work",
-                "user"
-              ],
+              "keywords": ["continue", "taskmanager", "enhancement", "work", "user"],
               "focus": "Best practices, industry standards, and technical specifications"
             },
             {
               "type": "documentation",
-              "sources": [
-                "README.md",
-                "docs/",
-                "API documentation",
-                "package.json"
-              ],
+              "sources": ["README.md", "docs/", "API documentation", "package.json"],
               "focus": "Project configuration and existing documentation"
             }
           ],
@@ -551,32 +491,17 @@
           "research_locations": [
             {
               "type": "codebase",
-              "paths": [
-                "/api",
-                "/routes",
-                "/controllers"
-              ],
+              "paths": ["/api", "/routes", "/controllers"],
               "focus": "Existing implementation patterns and architecture"
             },
             {
               "type": "internet",
-              "keywords": [
-                "refactor",
-                "taskmanager-api.js",
-                "split",
-                "large",
-                "monolithic"
-              ],
+              "keywords": ["refactor", "taskmanager-api.js", "split", "large", "monolithic"],
               "focus": "Best practices, industry standards, and technical specifications"
             },
             {
               "type": "documentation",
-              "sources": [
-                "README.md",
-                "docs/",
-                "API documentation",
-                "package.json"
-              ],
+              "sources": ["README.md", "docs/", "API documentation", "package.json"],
               "focus": "Project configuration and existing documentation"
             }
           ],
@@ -857,32 +782,17 @@
           "research_locations": [
             {
               "type": "codebase",
-              "paths": [
-                "/models",
-                "/database",
-                "/migrations"
-              ],
+              "paths": ["/models", "/database", "/migrations"],
               "focus": "Existing implementation patterns and architecture"
             },
             {
               "type": "internet",
-              "keywords": [
-                "design",
-                "database",
-                "schema",
-                "embedded",
-                "subtasks"
-              ],
+              "keywords": ["design", "database", "schema", "embedded", "subtasks"],
               "focus": "Best practices, industry standards, and technical specifications"
             },
             {
               "type": "documentation",
-              "sources": [
-                "README.md",
-                "docs/",
-                "API documentation",
-                "package.json"
-              ],
+              "sources": ["README.md", "docs/", "API documentation", "package.json"],
               "focus": "Project configuration and existing documentation"
             }
           ],
@@ -981,32 +891,17 @@
           "research_locations": [
             {
               "type": "codebase",
-              "paths": [
-                "/api",
-                "/routes",
-                "/controllers"
-              ],
+              "paths": ["/api", "/routes", "/controllers"],
               "focus": "Existing implementation patterns and architecture"
             },
             {
               "type": "internet",
-              "keywords": [
-                "enhance",
-                "taskmanager-api.js",
-                "embedded",
-                "subtasks",
-                "success"
-              ],
+              "keywords": ["enhance", "taskmanager-api.js", "embedded", "subtasks", "success"],
               "focus": "Best practices, industry standards, and technical specifications"
             },
             {
               "type": "documentation",
-              "sources": [
-                "README.md",
-                "docs/",
-                "API documentation",
-                "package.json"
-              ],
+              "sources": ["README.md", "docs/", "API documentation", "package.json"],
               "focus": "Project configuration and existing documentation"
             }
           ],
@@ -1105,32 +1000,17 @@
           "research_locations": [
             {
               "type": "codebase",
-              "paths": [
-                "/lib",
-                "/src",
-                "/"
-              ],
+              "paths": ["/lib", "/src", "/"],
               "focus": "Existing implementation patterns and architecture"
             },
             {
               "type": "internet",
-              "keywords": [
-                "implement",
-                "success",
-                "criteria",
-                "management",
-                "system"
-              ],
+              "keywords": ["implement", "success", "criteria", "management", "system"],
               "focus": "Best practices, industry standards, and technical specifications"
             },
             {
               "type": "documentation",
-              "sources": [
-                "README.md",
-                "docs/",
-                "API documentation",
-                "package.json"
-              ],
+              "sources": ["README.md", "docs/", "API documentation", "package.json"],
               "focus": "Project configuration and existing documentation"
             }
           ],
@@ -1279,35 +1159,17 @@
           "research_locations": [
             {
               "type": "codebase",
-              "paths": [
-                "/api",
-                "/routes",
-                "/controllers",
-                "/models",
-                "/database",
-                "/migrations"
-              ],
+              "paths": ["/api", "/routes", "/controllers", "/models", "/database", "/migrations"],
               "focus": "Existing implementation patterns and architecture"
             },
             {
               "type": "internet",
-              "keywords": [
-                "security",
-                "comprehensive",
-                "data",
-                "validation",
-                "research"
-              ],
+              "keywords": ["security", "comprehensive", "data", "validation", "research"],
               "focus": "Best practices, industry standards, and technical specifications"
             },
             {
               "type": "documentation",
-              "sources": [
-                "README.md",
-                "docs/",
-                "API documentation",
-                "package.json"
-              ],
+              "sources": ["README.md", "docs/", "API documentation", "package.json"],
               "focus": "Project configuration and existing documentation"
             }
           ],
@@ -1397,32 +1259,17 @@
           "research_locations": [
             {
               "type": "codebase",
-              "paths": [
-                "/api",
-                "/routes",
-                "/controllers"
-              ],
+              "paths": ["/api", "/routes", "/controllers"],
               "focus": "Existing implementation patterns and architecture"
             },
             {
               "type": "internet",
-              "keywords": [
-                "research",
-                "success",
-                "criteria",
-                "endpoints",
-                "integration"
-              ],
+              "keywords": ["research", "success", "criteria", "endpoints", "integration"],
               "focus": "Best practices, industry standards, and technical specifications"
             },
             {
               "type": "documentation",
-              "sources": [
-                "README.md",
-                "docs/",
-                "API documentation",
-                "package.json"
-              ],
+              "sources": ["README.md", "docs/", "API documentation", "package.json"],
               "focus": "Project configuration and existing documentation"
             }
           ],
@@ -1602,30 +1449,17 @@
           "research_locations": [
             {
               "type": "codebase",
-              "paths": [
-                "/test",
-                "/tests",
-                "/__tests__"
-              ],
+              "paths": ["/test", "/tests", "/__tests__"],
               "focus": "Existing implementation patterns and architecture"
             },
             {
               "type": "internet",
-              "keywords": [
-                "test",
-                "feature",
-                "implementation"
-              ],
+              "keywords": ["test", "feature", "implementation"],
               "focus": "Best practices, industry standards, and technical specifications"
             },
             {
               "type": "documentation",
-              "sources": [
-                "README.md",
-                "docs/",
-                "API documentation",
-                "package.json"
-              ],
+              "sources": ["README.md", "docs/", "API documentation", "package.json"],
               "focus": "Project configuration and existing documentation"
             }
           ],
@@ -2982,9 +2816,7 @@
       "created_at": "2025-09-05T18:07:30.796Z",
       "updated_at": "2025-09-10T01:08:14.863Z",
       "suggested_by": "agent_test_001",
-      "subtasks": [
-        "task_1757098457009_kkad01wly"
-      ],
+      "subtasks": ["task_1757098457009_kkad01wly"],
       "dependencies": [],
       "success_criteria": [],
       "metadata": {

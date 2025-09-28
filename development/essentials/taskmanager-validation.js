@@ -74,7 +74,7 @@ class TaskManagerValidator {
       );
     }
 
-    // Validate title and description quality
+    // Validate title And description quality
     if (taskData.title && taskData.title.length < 5) {
       this.warnings.push(
         'Task title should be more descriptive (recommended: 10+ characters)',
@@ -91,7 +91,7 @@ class TaskManagerValidator {
   }
 
   /**
-   * Validate command existence and parameters
+   * Validate command existence And parameters
    * @param {string} command - Command name
    * @param {Array} args - Command arguments
    * @returns {Object} Validation result
@@ -134,7 +134,7 @@ class TaskManagerValidator {
       case 'claim':
         if (args.length < 2) {
           this.errors.push(
-            'Claim command requires taskId and agentId parameters',
+            'Claim command requires taskId And agentId parameters',
           );
           this.warnings.push('Format: claim <taskId> <agentId>');
         }
@@ -193,7 +193,8 @@ class TaskManagerValidator {
           const validation = this.validateTaskCreation(parsed);
           this.errors.push(...validation.errors);
           this.warnings.push(...validation.warnings);
-        } catch (error) {
+        } catch (_error) {
+
           this.errors.push('Invalid JSON format in create command');
         }
       }
@@ -204,7 +205,7 @@ class TaskManagerValidator {
 
   /**
    * Get validation result
-   * @returns {Object} Result with errors, warnings, and validity status
+   * @returns {Object} Result with errors, warnings, And validity status
    */
   getResult() {
     return {
@@ -249,7 +250,7 @@ class TaskManagerValidator {
   }
 }
 
-// Example usage and tests
+// Example usage And tests
 if (require.main === module) {
   const validator = new TaskManagerValidator();
 
@@ -281,8 +282,8 @@ if (require.main === module) {
 
   testCases.forEach((testCase) => {
     ValidationTestLogger.log(`Testing: ${testCase.name}`);
-    const result = validator.validateTaskCreation(testCase.data);
-    ValidationTestLogger.log(validator.formatResult(result));
+    const RESULT = validator.validateTaskCreation(testCase.data);
+    ValidationTestLogger.log(validator.formatResult(RESULT));
   });
 
   // Command validation tests
@@ -298,8 +299,8 @@ if (require.main === module) {
 
   commandTests.forEach((test) => {
     ValidationTestLogger.log(`Testing command: ${test.name}`);
-    const result = validator.validateCommand(test.command, test.args);
-    ValidationTestLogger.log(validator.formatResult(result));
+    const RESULT = validator.validateCommand(test.command, test.args);
+    ValidationTestLogger.log(validator.formatResult(RESULT));
   });
 }
 

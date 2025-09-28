@@ -2,11 +2,12 @@
 
 **Version:** 1.0  
 **Target Audience:** Developers and System Administrators  
-**Last Updated:** 2025-09-07  
+**Last Updated:** 2025-09-07
 
 ## Quick Reference
 
 ### Emergency Recovery Commands
+
 ```bash
 # Quick corruption check and auto-fix
 node -e "const AutoFixer = require('./lib/autoFixer'); new AutoFixer().autoFix('./TODO.json').then(r => console.log(JSON.stringify(r, null, 2)))"
@@ -23,17 +24,20 @@ echo '{"project":"recovery","tasks":[],"features":[],"agents":{},"current_mode":
 ### 1. Double-Encoded JSON String Corruption
 
 #### Symptoms
+
 - TODO.json file starts and ends with double quotes
-- Content contains escaped newlines (`\\n`) 
+- Content contains escaped newlines (`\\n`)
 - Error message: "todoData.tasks is not iterable"
 - File appears to contain JSON inside a string
 
 #### Example Corrupted Content
+
 ```
 "{\n  \"project\": \"infinite-continue-stop-hook\",\n  \"tasks\": [\n    {\n      \"id\": \"task_123\",\n      \"title\": \"Example Task\"\n    }\n  ]\n}"
 ```
 
 #### Automatic Recovery
+
 ```javascript
 // The system automatically detects and fixes this corruption
 const AutoFixer = require('./lib/autoFixer');
@@ -44,6 +48,7 @@ console.log('Recovery result:', result);
 ```
 
 #### Manual Recovery
+
 ```bash
 # Step 1: Check if automatic fix worked
 node -e "
@@ -75,11 +80,13 @@ if (content.startsWith('\"') && content.endsWith('\"')) {
 ### 2. Malformed JSON Syntax
 
 #### Symptoms
+
 - JSON.parse() throws SyntaxError
 - Missing commas, brackets, or quotes
 - Truncated file (incomplete write)
 
 #### Diagnostic Commands
+
 ```bash
 # Check JSON syntax
 node -e "
@@ -104,6 +111,7 @@ lines.forEach((line, i) => {
 ```
 
 #### Recovery Steps
+
 ```bash
 # Step 1: Try automatic recovery
 node -e "
@@ -127,11 +135,13 @@ cp TODO.json.backup TODO.json  # or TODO.json.pre-write-backup
 ### 3. Missing or Empty File
 
 #### Symptoms
+
 - File does not exist
 - File exists but is empty (0 bytes)
 - Error: "ENOENT: no such file or directory"
 
 #### Recovery
+
 ```bash
 # Check file status
 ls -la TODO.json 2>/dev/null || echo "File does not exist"
@@ -175,11 +185,13 @@ console.log('✅ Created minimal TODO.json structure');
 ### 4. Agent Corruption Issues
 
 #### Symptoms
+
 - "Agent not found" errors
 - Agents not properly registered
 - Tasks claimed by non-existent agents
 
 #### Diagnostic
+
 ```bash
 # Check agent registry
 node -e "
@@ -188,7 +200,7 @@ const tm = new TaskManager('./TODO.json');
 tm.readTodo().then(data => {
   console.log('Active agents:', Object.keys(data.agents || {}));
   console.log('Total agents:', Object.keys(data.agents || {}).length);
-  
+
   // Check for stale agents
   const now = Date.now();
   Object.entries(data.agents || {}).forEach(([id, agent]) => {
@@ -203,6 +215,7 @@ tm.readTodo().then(data => {
 ```
 
 #### Recovery
+
 ```bash
 # Clean up stale agents
 node -e "
@@ -211,18 +224,18 @@ const tm = new TaskManager('./TODO.json');
 tm.readTodo().then(async data => {
   const now = Date.now();
   let cleaned = 0;
-  
+
   Object.keys(data.agents || {}).forEach(agentId => {
     const agent = data.agents[agentId];
     const lastSeen = new Date(agent.lastHeartbeat).getTime();
     const staleMinutes = (now - lastSeen) / (1000 * 60);
-    
+
     if (staleMinutes > 15) {
       delete data.agents[agentId];
       cleaned++;
     }
   });
-  
+
   if (cleaned > 0) {
     await tm.writeTodo(data);
     console.log(\`✅ Cleaned up \${cleaned} stale agents\`);
@@ -246,7 +259,7 @@ tm.readTodo().then(async data => {
       reset++;
     }
   });
-  
+
   if (reset > 0) {
     await tm.writeTodo(data);
     console.log(\`✅ Reset \${reset} task assignments\`);
@@ -260,11 +273,13 @@ tm.readTodo().then(async data => {
 ### Full System Recovery
 
 #### When to Use
+
 - Multiple corruption types detected
 - Automatic recovery consistently fails
 - System completely non-functional
 
 #### Procedure
+
 ```bash
 # 1. Create emergency backup
 cp TODO.json TODO.json.emergency-backup-$(date +%Y%m%d-%H%M%S) 2>/dev/null
@@ -274,19 +289,19 @@ node -e "
 const fs = require('fs');
 try {
   const content = fs.readFileSync('./TODO.json', 'utf8');
-  
+
   // Try to extract tasks even from corrupted JSON
   const taskMatches = content.match(/\"id\":\\s*\"[^\"]+\"/g) || [];
   const titleMatches = content.match(/\"title\":\\s*\"[^\"]+\"/g) || [];
-  
+
   console.log('Found', taskMatches.length, 'task IDs');
   console.log('Found', titleMatches.length, 'task titles');
-  
+
   // Save extracted data for manual recovery
-  fs.writeFileSync('extracted-data.txt', 
-    'Task IDs:\\n' + taskMatches.join('\\n') + 
+  fs.writeFileSync('extracted-data.txt',
+    'Task IDs:\\n' + taskMatches.join('\\n') +
     '\\n\\nTask Titles:\\n' + titleMatches.join('\\n'));
-  
+
   console.log('✅ Extracted data saved to extracted-data.txt');
 } catch(e) {
   console.log('❌ Data extraction failed:', e.message);
@@ -329,6 +344,7 @@ tm.readTodo().then(data => {
 ### Preventive Maintenance
 
 #### Regular Health Checks
+
 ```bash
 # Daily health check script
 node -e "
@@ -340,10 +356,10 @@ autoFixer.getFileStatus('./TODO.json').then(status => {
   console.log('- Exists:', status.exists);
   console.log('- Size:', status.size, 'bytes');
   console.log('- Issues:', status.issues.length);
-  
+
   if (status.issues.length > 0) {
     console.log('Issues found:', status.issues);
-    
+
     autoFixer.autoFix('./TODO.json').then(fixResult => {
       if (fixResult.fixed) {
         console.log('✅ Issues automatically resolved:', fixResult.fixesApplied);
@@ -359,6 +375,7 @@ autoFixer.getFileStatus('./TODO.json').then(status => {
 ```
 
 #### Backup Verification
+
 ```bash
 # Verify backup integrity
 for backup in TODO.json.backup TODO.json.pre-write-backup; do
@@ -383,6 +400,7 @@ done
 ## Monitoring and Alerting
 
 ### Log Pattern Monitoring
+
 ```bash
 # Monitor for corruption events in logs
 grep -i "corruption\|double-encoded\|prevented.*json" *.log | tail -20
@@ -390,11 +408,12 @@ grep -i "corruption\|double-encoded\|prevented.*json" *.log | tail -20
 # Count corruption prevention events
 grep -c "PREVENTED JSON CORRUPTION" *.log 2>/dev/null || echo "No prevention events found"
 
-# Recent auto-fix events  
+# Recent auto-fix events
 grep "STOP HOOK: Automatically fixed" *.log 2>/dev/null | tail -10
 ```
 
 ### System Health Metrics
+
 ```bash
 # Check file modification patterns
 ls -lat TODO.json* | head -10
@@ -410,45 +429,51 @@ ls -la TODO.json.tmp TODO.json.*.tmp 2>/dev/null || echo "No temporary files fou
 
 ### Common Error Messages and Solutions
 
-| Error Message | Root Cause | Solution |
-|---------------|------------|----------|
-| `todoData.tasks is not iterable` | Double-encoded JSON string | Run `autoFixer.autoFix()` |
-| `JSON.parse() failed` | Malformed JSON syntax | Check for syntax errors, use auto-fix |
-| `Agent not found` | Stale agent reference | Clean agent registry |
-| `Invalid data type for TODO.json write` | String passed to write function | Fix calling code to pass objects |
-| `TODO.json data cannot be a string` | Corruption prevention triggered | Review data source, fix double-encoding |
-| `File does not exist` | Missing TODO.json | Create minimal structure |
-| `Failed to write TODO.json` | File system or permission issue | Check permissions, disk space |
+| Error Message                           | Root Cause                      | Solution                                |
+| --------------------------------------- | ------------------------------- | --------------------------------------- |
+| `todoData.tasks is not iterable`        | Double-encoded JSON string      | Run `autoFixer.autoFix()`               |
+| `JSON.parse() failed`                   | Malformed JSON syntax           | Check for syntax errors, use auto-fix   |
+| `Agent not found`                       | Stale agent reference           | Clean agent registry                    |
+| `Invalid data type for TODO.json write` | String passed to write function | Fix calling code to pass objects        |
+| `TODO.json data cannot be a string`     | Corruption prevention triggered | Review data source, fix double-encoding |
+| `File does not exist`                   | Missing TODO.json               | Create minimal structure                |
+| `Failed to write TODO.json`             | File system or permission issue | Check permissions, disk space           |
 
 ### Stop Hook Error Messages
+
 ```
 ⚠️ STOP HOOK ERROR - CONTINUING ANYWAY
 Error encountered: todoData.tasks is not iterable
 ```
+
 **Solution**: Double-encoded JSON corruption - run auto-fix
 
-```  
+```
 ⚠️ STOP HOOK: Corruption check failed: autoFixer.fixJsonFile is not a function
 ```
+
 **Solution**: Method name error - use `autoFixer.autoFix()` instead
 
 ```
 🔧 STOP HOOK: Automatically fixed TODO.json corruption - Fixed escaped JSON string corruption
 ```
+
 **Status**: Successful automatic recovery
 
 ## Contact and Escalation
 
 ### When to Escalate
+
 - Automatic recovery consistently fails
 - Data loss suspected or confirmed
 - System completely non-functional after recovery attempts
 - Corruption occurs repeatedly (>3 times per day)
 
 ### Escalation Information
+
 - **Primary Contact**: System Administrator
 - **Documentation**: This guide + system architecture docs
-- **Required Information**: 
+- **Required Information**:
   - Corruption timeline
   - Error messages (exact text)
   - Recovery attempts made
@@ -456,9 +481,10 @@ Error encountered: todoData.tasks is not iterable
   - Backup availability
 
 ### Emergency Procedures
+
 1. **Immediate**: Stop all TaskManager operations
-2. **Backup**: Save all TODO.json.* files with timestamps
-3. **Document**: Record exact error messages and timestamps  
+2. **Backup**: Save all TODO.json.\* files with timestamps
+3. **Document**: Record exact error messages and timestamps
 4. **Recover**: Apply appropriate recovery procedure from this guide
 5. **Test**: Validate system functionality after recovery
 6. **Monitor**: Watch for recurring issues
@@ -466,6 +492,7 @@ Error encountered: todoData.tasks is not iterable
 ---
 
 **Document Information**
+
 - **Version**: 1.0
 - **Last Updated**: 2025-09-07
 - **Next Review**: 2025-12-07

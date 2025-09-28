@@ -7,11 +7,13 @@ This document outlines the comprehensive timeout prevention measures implemented
 ## Root Cause Analysis
 
 ### Original Problem
+
 - **Issue**: `execSync` calls with timeout parameters don't work reliably with build systems like Turbo, Webpack, Vite
 - **Impact**: Validation steps would hang indefinitely, preventing authorization completion
 - **Location**: `_performLanguageAgnosticValidationCore` method in TaskManager API
 
 ### Technical Details
+
 - **Problem Pattern**: `execSync(cmd, { timeout: X })` fails to terminate child processes spawned by build systems
 - **Build Systems Affected**: Turbo, Webpack, Vite, Rollup, Jest, Vitest, Cypress
 - **Root Cause**: Build systems spawn additional child processes that don't respect Node.js timeout mechanisms
@@ -60,6 +62,7 @@ async _executeCommandWithRobustTimeout(cmd, timeout, isStartCommand = false) {
 ```
 
 **Key Features**:
+
 - Uses `spawn` instead of `execSync` for better process control
 - Implements process group killing with `SIGKILL` for forced termination
 - 45-second default timeout (reduced from 60s for better responsiveness)
@@ -70,16 +73,19 @@ async _executeCommandWithRobustTimeout(cmd, timeout, isStartCommand = false) {
 **Implementation**: Enhanced `_tryCommands` method with multiple fallback layers
 
 #### Layer 1: Command Alternatives
+
 - Multiple command variations attempted sequentially
 - Language-agnostic approach supports different environments
 - Comprehensive error capture and reporting
 
 #### Layer 2: Build System Specific Fallbacks
+
 - Specialized fallback strategies for known build system issues
 - Timeout-specific workarounds: `--no-cache`, `--no-watch`, `CI=true`
 - Test system optimizations: `--passWithNoTests`, `--maxWorkers=1`
 
 #### Layer 3: Graceful Degradation
+
 - Project type detection for intelligent fallbacks
 - JavaScript-only project detection (skips type checking)
 - Library project detection (skips build steps)
@@ -88,6 +94,7 @@ async _executeCommandWithRobustTimeout(cmd, timeout, isStartCommand = false) {
 ### 3. Intelligent Error Handling
 
 **Known Issue Detection**:
+
 ```javascript
 _isKnownBuildSystemIssue(errorMessage, command) {
   const knownIssues = [
@@ -101,6 +108,7 @@ _isKnownBuildSystemIssue(errorMessage, command) {
 ```
 
 **Fallback Strategies**:
+
 - Build commands: `--no-cache`, `--no-watch`, `--no-hot`, `CI=true`
 - Test commands: `--no-watch`, `--no-coverage`, `--passWithNoTests`
 - Environment variables: `NODE_ENV=production`, `CI=true`
@@ -108,6 +116,7 @@ _isKnownBuildSystemIssue(errorMessage, command) {
 ## Validation Results
 
 ### Successful Test Execution
+
 All 7 validation steps completed successfully with the new timeout handling:
 
 1. **focused-codebase**: ✅ 15ms (cache hit saved 12ms)
@@ -123,11 +132,13 @@ All 7 validation steps completed successfully with the new timeout handling:
 ## Configuration Guidelines
 
 ### Recommended Timeout Values
+
 - **Standard Operations**: 45 seconds (linting, building, type checking)
 - **Start Commands**: 10 seconds (quick validation, then kill)
 - **Test Operations**: 45 seconds with fallback to `--passWithNoTests`
 
 ### Build System Specific Settings
+
 - **Turbo**: Always use `CI=true` environment variable
 - **Webpack**: Include `--no-watch` flag for CI environments
 - **Vite**: Use `--no-hot` for validation runs
@@ -136,14 +147,18 @@ All 7 validation steps completed successfully with the new timeout handling:
 ## Monitoring and Diagnostics
 
 ### Error Tracking
+
 Enhanced error reporting includes:
+
 - All attempted commands with specific error messages
 - Fallback strategies attempted and their outcomes
 - Graceful degradation decisions and reasoning
 - Performance metrics for each validation step
 
 ### Performance Metrics
+
 Each validation includes:
+
 - Execution duration in milliseconds
 - Memory usage delta (RSS and heap)
 - Cache hit/miss status with time savings
@@ -152,12 +167,14 @@ Each validation includes:
 ## Maintenance Procedures
 
 ### Regular Health Checks
+
 1. **Monitor validation performance**: Check for increased execution times
 2. **Review error patterns**: Identify new build system issues
 3. **Validate fallback effectiveness**: Ensure graceful degradation works
 4. **Update timeout patterns**: Add new build systems as needed
 
 ### Troubleshooting Steps
+
 1. **Check timeout logs**: Look for `Command timed out after Xms` messages
 2. **Verify process cleanup**: Ensure no zombie processes remain
 3. **Test fallback paths**: Manually verify fallback strategies work
@@ -166,12 +183,14 @@ Each validation includes:
 ## Future Enhancements
 
 ### Planned Improvements
+
 1. **Dynamic timeout adjustment**: Based on historical execution times
 2. **Build system auto-detection**: Automatic fallback strategy selection
 3. **Parallel validation**: Independent validation steps run concurrently
 4. **Resource monitoring**: CPU and memory usage tracking during validation
 
 ### Extension Points
+
 - Add new build system patterns to `_isKnownBuildSystemIssue`
 - Implement custom fallback strategies in `_attemptGracefulFallback`
 - Extend timeout patterns for new development tools
@@ -197,4 +216,4 @@ Each validation includes:
 
 ---
 
-*This documentation ensures that validation timeout issues will not recur and provides a comprehensive reference for maintaining robust validation processes.*
+_This documentation ensures that validation timeout issues will not recur and provides a comprehensive reference for maintaining robust validation processes._

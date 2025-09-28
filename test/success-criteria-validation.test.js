@@ -1,24 +1,24 @@
 /**
  * FEATURES.json System Validation Test Suite
- * Testing FeatureManager API - Feature Lifecycle and Management Validation
+ * Testing FeatureManager API - Feature Lifecycle And Management Validation
  *
  * Purpose: Validate FEATURES.json feature management system functionality
  * Key Requirements:
- * - Feature suggestion, approval, and rejection workflow
+ * - Feature suggestion, approval, And rejection workflow
  * - Feature lifecycle management (suggested → approved → implemented)
- * - Agent initialization and session management
- * - Feature filtering and statistics
- * - Feature data validation and persistence
+ * - Agent initialization And session management
+ * - Feature filtering And statistics
+ * - Feature data validation And persistence
  */
 
 const { spawn } = require('child_process');
-const _path = require('path');
-const _fs = require('fs').promises;
+const PATH = require('path');
+const _FS = require('fs').promises;
 
 // Test configuration
-const API_PATH = _path.join(__dirname, '..', 'taskmanager-api.js');
-const TEST_PROJECT_DIR = _path.join(__dirname, 'features-test-project');
-const FEATURES_PATH = _path.join(TEST_PROJECT_DIR, 'FEATURES.json');
+const API_PATH = PATH.join(__dirname, '..', 'taskmanager-api.js');
+const TEST_PROJECT_DIR = PATH.join(__dirname, 'features-test-project');
+const FEATURES_PATH = PATH.join(TEST_PROJECT_DIR, 'FEATURES.json');
 const TIMEOUT = 15000;
 
 /**
@@ -52,9 +52,9 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
     child.on('close', (code) => {
       if (code === 0) {
         try {
-          const result = stdout.trim() ? JSON.parse(stdout) : {};
+          const _result = stdout.trim() ? JSON.parse(stdout) : {};
           resolve(result);
-        } catch (error) {
+        } catch {
           resolve({ rawOutput: stdout, stderr });
         }
       } else {
@@ -75,7 +75,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
  */
 async function setupFeaturesTestProject() {
   try {
-    await _fs.mkdir(TEST_PROJECT_DIR, { recursive: true });
+    await FS.mkdir(TEST_PROJECT_DIR, { recursive: true });
 
     // Create package.json for the test project
     const packageJson = {
@@ -95,8 +95,8 @@ async function setupFeaturesTestProject() {
       },
     };
 
-    await _fs.writeFile(
-      _path.join(TEST_PROJECT_DIR, 'package.json'),
+    await FS.writeFile(
+      PATH.join(TEST_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2)
     );
 
@@ -138,7 +138,7 @@ app.start().then(() => {
 });
 `;
 
-    await _fs.writeFile(_path.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
+    await FS.writeFile(PATH.join(TEST_PROJECT_DIR, 'index.js'), indexJs);
 
     // Initialize empty FEATURES.json file - the API will populate it
     const initialFeatures = {
@@ -162,13 +162,10 @@ app.start().then(() => {
       agents: {},
     };
 
-    await _fs.writeFile(
-      FEATURES_PATH,
-      JSON.stringify(initialFeatures, null, 2)
-    );
+    await FS.writeFile(FEATURES_PATH, JSON.stringify(initialFeatures, null, 2));
 
     loggers.stopHook.log('Features test project setup completed');
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('Failed to setup features test project:', error);
     throw error;
   }
@@ -176,9 +173,9 @@ app.start().then(() => {
 
 async function cleanupFeaturesTestProject() {
   try {
-    await _fs.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
+    await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Features test project cleanup completed');
-  } catch (error) {
+  } catch {
     loggers.stopHook.error('Failed to cleanup features test project:', error);
   }
 }
@@ -197,7 +194,7 @@ function createFeature(featureData) {
   return execAPI('suggest-feature', [JSON.stringify(feature)]);
 }
 
-function _approveFeature(featureId, approvalData = {}) {
+function approveFeature(featureId, approvalData = {}) {
   const approval = {
     approved_by: 'test-agent',
     approval_notes: 'Test approval',
@@ -206,7 +203,7 @@ function _approveFeature(featureId, approvalData = {}) {
   return execAPI('approve-feature', [featureId, JSON.stringify(approval)]);
 }
 
-function _rejectFeature(featureId, rejectionData = {}) {
+function rejectFeature(featureId, rejectionData = {}) {
   const rejection = {
     rejected_by: 'test-agent',
     rejection_reason: 'Test rejection',
@@ -252,13 +249,13 @@ describe('FEATURES.json System Validation Tests', () => {
   });
 
   describe('Feature Lifecycle Management', () => {
-    test('should create and manage feature suggestions correctly', async () => {
+    test('should create And manage feature suggestions correctly', async () => {
       // Create multiple feature suggestions with different categories
       const features = [
         {
           title: 'Add user authentication',
           description: 'Implement login/logout functionality with JWT tokens',
-          business_value: 'Enables user-specific features and security',
+          business_value: 'Enables user-specific features And security',
           category: 'new-feature',
         },
         {
@@ -269,9 +266,9 @@ describe('FEATURES.json System Validation Tests', () => {
         },
         {
           title: 'Optimize database queries',
-          description: 'Add indexes and optimize slow queries',
+          description: 'Add indexes And optimize slow queries',
           business_value:
-            'Improves application performance and user satisfaction',
+            'Improves application performance And user satisfaction',
           category: 'performance',
         },
       ];
@@ -279,7 +276,7 @@ describe('FEATURES.json System Validation Tests', () => {
       const createdFeatures = [];
       for (const feature of features) {
         // eslint-disable-next-line no-await-in-loop -- Sequential feature creation required for validation
-        const result = await createFeature(feature);
+        const _result = await createFeature(feature);
         expect(result.success).toBe(true);
         expect(result.feature).toBeDefined();
         expect(result.feature.status).toBe('suggested');
@@ -291,7 +288,7 @@ describe('FEATURES.json System Validation Tests', () => {
       expect(listResult.success).toBe(true);
       expect(listResult.features.length).toBeGreaterThanOrEqual(3);
 
-      // Check that all our test features are present
+      // Check That all our test features are present
       for (const feature of features) {
         const found = listResult.features.find(
           (f) => f.title === feature.title
@@ -302,13 +299,13 @@ describe('FEATURES.json System Validation Tests', () => {
       }
 
       loggers.stopHook.log(
-        'Feature creation and listing validated successfully'
+        'Feature creation And listing validated successfully'
       );
     });
 
     test('should validate template override behavior', async () => {
       // Create base template
-      const _baseCriteria = [
+      const BASE_CRITERIA = [
         {
           id: 'override-test-1',
           description: 'Original description',
@@ -327,10 +324,10 @@ describe('FEATURES.json System Validation Tests', () => {
         },
       ];
 
-      await createBaseTemplate('Override Base Template', _baseCriteria);
+      await createBaseTemplate('Override Base Template', BASE_CRITERIA);
 
       // Create child template with overrides
-      const _childCriteria = [
+      const CHILD_CRITERIA = [
         {
           id: 'child-new',
           description: 'New child requirement',
@@ -338,7 +335,7 @@ describe('FEATURES.json System Validation Tests', () => {
         },
       ];
 
-      const _overrides = {
+      const OVERRIDES = {
         'override-test-1': {
           description: 'Overridden description',
           priority: 'high',
@@ -349,8 +346,8 @@ describe('FEATURES.json System Validation Tests', () => {
       await createChildTemplate(
         'Override Child Template',
         'Override Base Template',
-        _childCriteria,
-        _overrides
+        CHILD_CRITERIA,
+        OVERRIDES
       );
 
       // Apply child template
@@ -360,7 +357,7 @@ describe('FEATURES.json System Validation Tests', () => {
 
       // Validate overrides were applied
       const status = await execAPI('success-criteria:status');
-      const overriddenCriterion = status._projectCriteria.find(
+      const overriddenCriterion = status.PROJECT_CRITERIA.find(
         (c) => c.id === 'override-test-1'
       );
 
@@ -371,7 +368,7 @@ describe('FEATURES.json System Validation Tests', () => {
       expect(overriddenCriterion.tags).toContain('critical');
 
       // Validate non-overridden criteria remain unchanged
-      const nonOverriddenCriterion = status._projectCriteria.find(
+      const nonOverriddenCriterion = status.PROJECT_CRITERIA.find(
         (c) => c.id === 'override-test-2'
       );
       expect(nonOverriddenCriterion.description).toBe('Base requirement 2');
@@ -381,7 +378,7 @@ describe('FEATURES.json System Validation Tests', () => {
 
     test('should validate multi-level template inheritance', async () => {
       // Create grandparent template
-      const _grandparentCriteria = [
+      const GRANDPARENT_CRITERIA = [
         {
           id: 'gp-1',
           description: 'Grandparent requirement 1',
@@ -394,10 +391,10 @@ describe('FEATURES.json System Validation Tests', () => {
         },
       ];
 
-      await createBaseTemplate('Grandparent Template', _grandparentCriteria);
+      await createBaseTemplate('Grandparent Template', GRANDPARENT_CRITERIA);
 
       // Create parent template inheriting from grandparent
-      const _parentCriteria = [
+      const PARENT_CRITERIA = [
         {
           id: 'parent-1',
           description: 'Parent requirement 1',
@@ -413,11 +410,11 @@ describe('FEATURES.json System Validation Tests', () => {
       await createChildTemplate(
         'Parent Template',
         'Grandparent Template',
-        _parentCriteria
+        PARENT_CRITERIA
       );
 
       // Create child template inheriting from parent
-      const _childCriteria = [
+      const CHILD_CRITERIA = [
         {
           id: 'child-1',
           description: 'Child requirement 1',
@@ -428,7 +425,7 @@ describe('FEATURES.json System Validation Tests', () => {
       await createChildTemplate(
         'Multi-Level Child Template',
         'Parent Template',
-        _childCriteria
+        CHILD_CRITERIA
       );
 
       // Apply multi-level child template
@@ -438,11 +435,11 @@ describe('FEATURES.json System Validation Tests', () => {
 
       // Validate all levels are present
       const status = await execAPI('success-criteria:status');
-      expect(status._projectCriteria.length).toBe(5); // 2 + 2 + 1
+      expect(status.PROJECT_CRITERIA.length).toBe(5); // 2 + 2 + 1
 
       // Check for all criteria IDs
       const expectedIds = ['gp-1', 'gp-2', 'parent-1', 'parent-2', 'child-1'];
-      const actualIds = status._projectCriteria.map((c) => c.id);
+      const actualIds = status.PROJECT_CRITERIA.map((c) => c.id);
 
       expectedIds.forEach((expectedId) => {
         expect(actualIds).toContain(expectedId);
@@ -455,7 +452,7 @@ describe('FEATURES.json System Validation Tests', () => {
 
     test('should validate template inheritance conflict resolution', async () => {
       // Create base template with conflicting ID
-      const _baseCriteria = [
+      const BASE_CRITERIA = [
         {
           id: 'conflict-id',
           description: 'Base description',
@@ -469,10 +466,10 @@ describe('FEATURES.json System Validation Tests', () => {
         },
       ];
 
-      await createBaseTemplate('Conflict Base Template', _baseCriteria);
+      await createBaseTemplate('Conflict Base Template', BASE_CRITERIA);
 
       // Create child template with same ID (should override)
-      const _childCriteria = [
+      const CHILD_CRITERIA = [
         {
           id: 'conflict-id',
           description: 'Child description',
@@ -489,7 +486,7 @@ describe('FEATURES.json System Validation Tests', () => {
       await createChildTemplate(
         'Conflict Child Template',
         'Conflict Base Template',
-        _childCriteria
+        CHILD_CRITERIA
       );
 
       // Apply child template
@@ -499,7 +496,7 @@ describe('FEATURES.json System Validation Tests', () => {
 
       // Validate conflict resolution (child should win)
       const status = await execAPI('success-criteria:status');
-      const conflictCriterion = status._projectCriteria.find(
+      const conflictCriterion = status.PROJECT_CRITERIA.find(
         (c) => c.id === 'conflict-id'
       );
 
@@ -510,10 +507,10 @@ describe('FEATURES.json System Validation Tests', () => {
 
       // Ensure both unique criteria are present
       expect(
-        status._projectCriteria.find((c) => c.id === 'base-unique')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'base-unique')
       ).toBeDefined();
       expect(
-        status._projectCriteria.find((c) => c.id === 'child-unique')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'child-unique')
       ).toBeDefined();
 
       console.log(
@@ -525,18 +522,18 @@ describe('FEATURES.json System Validation Tests', () => {
   describe('Custom Criteria Validation', () => {
     test('should validate custom criteria addition to templates', async () => {
       // Create base template
-      const _baseCriteria = [
+      const BASE_CRITERIA = [
         { id: 'base-1', description: 'Base requirement 1', category: 'build' },
         { id: 'base-2', description: 'Base requirement 2', category: 'test' },
       ];
 
-      await createBaseTemplate('Custom Base Template', _baseCriteria);
+      await createBaseTemplate('Custom Base Template', BASE_CRITERIA);
       await execAPI('success-criteria:apply-template', [
         'Custom Base Template',
       ]);
 
       // Add custom criteria to project
-      const _customCriteria = [
+      const CUSTOM_CRITERIA = [
         {
           id: 'custom-1',
           description: 'Project-specific custom requirement',
@@ -557,7 +554,7 @@ describe('FEATURES.json System Validation Tests', () => {
       ];
 
       // Use for-await-of to maintain sequential processing for criteria addition
-      for await (const criterion of _customCriteria) {
+      for await (const criterion of CUSTOM_CRITERIA) {
         await execAPI('success-criteria:add-criterion', [
           JSON.stringify(criterion),
         ]);
@@ -565,9 +562,9 @@ describe('FEATURES.json System Validation Tests', () => {
 
       // Validate custom criteria were added
       const status = await execAPI('success-criteria:status');
-      expect(status._projectCriteria.length).toBe(4); // 2 base + 2 custom
+      expect(status.PROJECT_CRITERIA.length).toBe(4); // 2 base + 2 custom
 
-      const customCriterion1 = status._projectCriteria.find(
+      const customCriterion1 = status.PROJECT_CRITERIA.find(
         (c) => c.id === 'custom-1'
       );
       expect(customCriterion1).toBeDefined();
@@ -575,7 +572,7 @@ describe('FEATURES.json System Validation Tests', () => {
       expect(customCriterion1.tags).toContain('project-specific');
       expect(customCriterion1.metadata.source).toBe('project-requirements');
 
-      const customCriterion2 = status._projectCriteria.find(
+      const customCriterion2 = status.PROJECT_CRITERIA.find(
         (c) => c.id === 'custom-2'
       );
       expect(customCriterion2).toBeDefined();
@@ -584,13 +581,13 @@ describe('FEATURES.json System Validation Tests', () => {
       loggers.stopHook.log('Custom criteria addition validated successfully');
     });
 
-    test('should validate custom criteria modification and removal', async () => {
-      // Setup base template and custom criterion
-      const _baseCriteria = [
+    test('should validate custom criteria modification And removal', async () => {
+      // Setup base template And custom criterion
+      const BASE_CRITERIA = [
         { id: 'base-1', description: 'Base requirement', category: 'build' },
       ];
 
-      await createBaseTemplate('Modification Base Template', _baseCriteria);
+      await createBaseTemplate('Modification Base Template', BASE_CRITERIA);
       await execAPI('success-criteria:apply-template', [
         'Modification Base Template',
       ]);
@@ -621,7 +618,7 @@ describe('FEATURES.json System Validation Tests', () => {
 
       // Validate modification
       let status = await execAPI('success-criteria:status');
-      const modified = status._projectCriteria.find(
+      const modified = status.PROJECT_CRITERIA.find(
         (c) => c.id === 'modifiable-custom'
       );
 
@@ -636,18 +633,18 @@ describe('FEATURES.json System Validation Tests', () => {
       // Validate removal
       status = await execAPI('success-criteria:status');
       expect(
-        status._projectCriteria.find((c) => c.id === 'modifiable-custom')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'modifiable-custom')
       ).toBeUndefined();
-      expect(status._projectCriteria.length).toBe(1); // Only base criterion remains
+      expect(status.PROJECT_CRITERIA.length).toBe(1); // Only base criterion remains
 
       console.log(
-        'Custom criteria modification and removal validated successfully'
+        'Custom criteria modification And removal validated successfully'
       );
     });
 
     test('should validate custom criteria persistence across template changes', async () => {
-      // Create initial template and add custom criteria
-      const _initialCriteria = [
+      // Create initial template And add custom criteria
+      const INITIAL_CRITERIA = [
         {
           id: 'initial-1',
           description: 'Initial requirement',
@@ -655,7 +652,7 @@ describe('FEATURES.json System Validation Tests', () => {
         },
       ];
 
-      await createBaseTemplate('Initial Template', _initialCriteria);
+      await createBaseTemplate('Initial Template', INITIAL_CRITERIA);
       await execAPI('success-criteria:apply-template', ['Initial Template']);
 
       const customCriterion = {
@@ -669,8 +666,8 @@ describe('FEATURES.json System Validation Tests', () => {
         JSON.stringify(customCriterion),
       ]);
 
-      // Create and apply different template
-      const _newCriteria = [
+      // Create And apply different template
+      const NEW_CRITERIA = [
         { id: 'new-1', description: 'New requirement', category: 'test' },
         {
           id: 'new-2',
@@ -679,12 +676,12 @@ describe('FEATURES.json System Validation Tests', () => {
         },
       ];
 
-      await createBaseTemplate('New Template', _newCriteria);
+      await createBaseTemplate('New Template', NEW_CRITERIA);
       await execAPI('success-criteria:apply-template', ['New Template']);
 
-      // Validate that custom criterion persisted
+      // Validate That custom criterion persisted
       const status = await execAPI('success-criteria:status');
-      const persistentCustom = status._projectCriteria.find(
+      const persistentCustom = status.PROJECT_CRITERIA.find(
         (c) => c.id === 'persistent-custom'
       );
 
@@ -695,15 +692,15 @@ describe('FEATURES.json System Validation Tests', () => {
 
       // Validate new template criteria are present
       expect(
-        status._projectCriteria.find((c) => c.id === 'new-1')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'new-1')
       ).toBeDefined();
       expect(
-        status._projectCriteria.find((c) => c.id === 'new-2')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'new-2')
       ).toBeDefined();
 
       // Validate old template criteria are gone
       expect(
-        status._projectCriteria.find((c) => c.id === 'initial-1')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'initial-1')
       ).toBeUndefined();
 
       console.log(
@@ -712,10 +709,10 @@ describe('FEATURES.json System Validation Tests', () => {
     });
   });
 
-  describe('Template Versioning and Compatibility', () => {
+  describe('Template Versioning And Compatibility', () => {
     test('should validate template version compatibility', async () => {
       // Create template with version metadata
-      const _versionedCriteria = [
+      const VERSIONED_CRITERIA = [
         { id: 'v1-1', description: 'Version 1 requirement', category: 'build' },
         {
           id: 'v1-2',
@@ -727,7 +724,7 @@ describe('FEATURES.json System Validation Tests', () => {
       const versionedTemplate = {
         name: 'Versioned Template',
         version: '1.0.0',
-        criteria: _versionedCriteria,
+        criteria: VERSIONED_CRITERIA,
         compatibility: {
           minSystemVersion: '2.0.0',
           maxSystemVersion: '3.0.0',
@@ -758,7 +755,7 @@ describe('FEATURES.json System Validation Tests', () => {
 
     test('should validate template upgrade behavior', async () => {
       // Create initial version of template
-      const _v1Criteria = [
+      const V1CRITERIA = [
         { id: 'upgrade-1', description: 'V1 requirement', category: 'build' },
         { id: 'upgrade-2', description: 'V1 requirement 2', category: 'test' },
       ];
@@ -766,7 +763,7 @@ describe('FEATURES.json System Validation Tests', () => {
       const v1Template = {
         name: 'Upgradeable Template',
         version: '1.0.0',
-        criteria: _v1Criteria,
+        criteria: V1CRITERIA,
       };
 
       await execAPI('success-criteria:create-template', [
@@ -776,8 +773,8 @@ describe('FEATURES.json System Validation Tests', () => {
         'Upgradeable Template',
       ]);
 
-      // Create upgraded version with additional criteria and modifications
-      const _v2Criteria = [
+      // Create upgraded version with additional criteria And modifications
+      const V2CRITERIA = [
         {
           id: 'upgrade-1',
           description: 'V2 updated requirement',
@@ -795,10 +792,10 @@ describe('FEATURES.json System Validation Tests', () => {
       const v2Template = {
         name: 'Upgradeable Template',
         version: '2.0.0',
-        criteria: _v2Criteria,
+        criteria: V2CRITERIA,
         upgradeFrom: '1.0.0',
         migrationNotes:
-          'Added security requirements and updated build criteria',
+          'Added security requirements And updated build criteria',
       };
 
       await execAPI('success-criteria:create-template', [
@@ -815,17 +812,17 @@ describe('FEATURES.json System Validation Tests', () => {
       const status = await execAPI('success-criteria:status');
 
       expect(status.appliedTemplate.version).toBe('2.0.0');
-      expect(status._projectCriteria.length).toBe(3);
+      expect(status.PROJECT_CRITERIA.length).toBe(3);
 
       // Check modified criterion
-      const modifiedCriterion = status._projectCriteria.find(
+      const modifiedCriterion = status.PROJECT_CRITERIA.find(
         (c) => c.id === 'upgrade-1'
       );
       expect(modifiedCriterion.description).toBe('V2 updated requirement');
       expect(modifiedCriterion.priority).toBe('high');
 
       // Check new criterion
-      const newCriterion = status._projectCriteria.find(
+      const newCriterion = status.PROJECT_CRITERIA.find(
         (c) => c.id === 'upgrade-3'
       );
       expect(newCriterion).toBeDefined();
@@ -836,7 +833,7 @@ describe('FEATURES.json System Validation Tests', () => {
 
     test('should validate template dependency resolution', async () => {
       // Create dependency template
-      const _dependencyCriteria = [
+      const DEPENDENCY_CRITERIA = [
         {
           id: 'dep-1',
           description: 'Dependency requirement 1',
@@ -849,26 +846,26 @@ describe('FEATURES.json System Validation Tests', () => {
         },
       ];
 
-      const _dependencyTemplate = {
+      const DEPENDENCY_TEMPLATE = {
         name: 'Dependency Template',
         version: '1.0.0',
-        criteria: _dependencyCriteria,
+        criteria: DEPENDENCY_CRITERIA,
       };
 
       await execAPI('success-criteria:create-template', [
-        JSON.stringify(_dependencyTemplate),
+        JSON.stringify(DEPENDENCY_TEMPLATE),
       ]);
 
       // Create main template with dependencies
-      const _mainCriteria = [
+      const MAIN_CRITERIA = [
         { id: 'main-1', description: 'Main requirement 1', category: 'build' },
         { id: 'main-2', description: 'Main requirement 2', category: 'test' },
       ];
 
-      const _mainTemplate = {
+      const MAIN_TEMPLATE = {
         name: 'Main Template with Dependencies',
         version: '1.0.0',
-        criteria: _mainCriteria,
+        criteria: MAIN_CRITERIA,
         dependencies: [
           {
             template: 'Dependency Template',
@@ -879,7 +876,7 @@ describe('FEATURES.json System Validation Tests', () => {
       };
 
       await execAPI('success-criteria:create-template', [
-        JSON.stringify(_mainTemplate),
+        JSON.stringify(MAIN_TEMPLATE),
       ]);
 
       // Apply main template (should auto-resolve dependencies)
@@ -887,24 +884,24 @@ describe('FEATURES.json System Validation Tests', () => {
         'Main Template with Dependencies',
       ]);
 
-      // Validate both main and dependency criteria are present
+      // Validate both main And dependency criteria are present
       const status = await execAPI('success-criteria:status');
-      expect(status._projectCriteria.length).toBe(4); // 2 main + 2 dependency
+      expect(status.PROJECT_CRITERIA.length).toBe(4); // 2 main + 2 dependency
 
       // Check for dependency criteria
       expect(
-        status._projectCriteria.find((c) => c.id === 'dep-1')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'dep-1')
       ).toBeDefined();
       expect(
-        status._projectCriteria.find((c) => c.id === 'dep-2')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'dep-2')
       ).toBeDefined();
 
       // Check for main criteria
       expect(
-        status._projectCriteria.find((c) => c.id === 'main-1')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'main-1')
       ).toBeDefined();
       expect(
-        status._projectCriteria.find((c) => c.id === 'main-2')
+        status.PROJECT_CRITERIA.find((c) => c.id === 'main-2')
       ).toBeDefined();
 
       // Validate dependency information is tracked
@@ -923,7 +920,7 @@ describe('FEATURES.json System Validation Tests', () => {
   describe('Project-Specific Customization Validation', () => {
     test('should validate project environment-specific criteria', async () => {
       // Create base template
-      const _baseCriteria = [
+      const BASE_CRITERIA = [
         {
           id: 'env-base-1',
           description: 'Base requirement',
@@ -931,13 +928,13 @@ describe('FEATURES.json System Validation Tests', () => {
         },
       ];
 
-      await createBaseTemplate('Environment Base Template', _baseCriteria);
+      await createBaseTemplate('Environment Base Template', BASE_CRITERIA);
       await execAPI('success-criteria:apply-template', [
         'Environment Base Template',
       ]);
 
       // Add environment-specific criteria
-      const _developmentCriteria = {
+      const DEVELOPMENT_CRITERIA = {
         id: 'dev-specific',
         description: 'Development environment requirement',
         category: 'development',
@@ -947,7 +944,7 @@ describe('FEATURES.json System Validation Tests', () => {
           process.env.NODE_ENV === 'test',
       };
 
-      const _productionCriteria = {
+      const PRODUCTION_CRITERIA = {
         id: 'prod-specific',
         description: 'Production environment requirement',
         category: 'production',
@@ -956,28 +953,28 @@ describe('FEATURES.json System Validation Tests', () => {
       };
 
       await execAPI('success-criteria:add-criterion', [
-        JSON.stringify(_developmentCriteria),
+        JSON.stringify(DEVELOPMENT_CRITERIA),
       ]);
       await execAPI('success-criteria:add-criterion', [
-        JSON.stringify(_productionCriteria),
+        JSON.stringify(PRODUCTION_CRITERIA),
       ]);
 
       // Validate environment-specific criteria behavior
       const status = await execAPI('success-criteria:status');
 
       // In test environment, development criteria should be enabled
-      const _devCriterion = status._projectCriteria.find(
+      const DEV_CRITERION = status.PROJECT_CRITERIA.find(
         (c) => c.id === 'dev-specific'
       );
-      expect(_devCriterion).toBeDefined();
-      expect(_devCriterion.enabled).toBe(true);
+      expect(DEV_CRITERION).toBeDefined();
+      expect(DEV_CRITERION.enabled).toBe(true);
 
       // Production criteria should be disabled in test environment
-      const _prodCriterion = status._projectCriteria.find(
+      const PROD_CRITERION = status.PROJECT_CRITERIA.find(
         (c) => c.id === 'prod-specific'
       );
-      expect(_prodCriterion).toBeDefined();
-      expect(_prodCriterion.enabled).toBe(false);
+      expect(PROD_CRITERION).toBeDefined();
+      expect(PROD_CRITERION.enabled).toBe(false);
 
       console.log(
         'Project environment-specific criteria validated successfully'
@@ -986,7 +983,7 @@ describe('FEATURES.json System Validation Tests', () => {
 
     test('should validate conditional criteria based on project characteristics', async () => {
       // Create base template
-      const _baseCriteria = [
+      const BASE_CRITERIA = [
         {
           id: 'conditional-base',
           description: 'Base requirement',
@@ -994,13 +991,13 @@ describe('FEATURES.json System Validation Tests', () => {
         },
       ];
 
-      await createBaseTemplate('Conditional Base Template', _baseCriteria);
+      await createBaseTemplate('Conditional Base Template', BASE_CRITERIA);
       await execAPI('success-criteria:apply-template', [
         'Conditional Base Template',
       ]);
 
       // Add conditional criteria based on project type
-      const _webAppCriteria = {
+      const WEB_APP_CRITERIA = {
         id: 'webapp-specific',
         description: 'Web application specific requirement',
         category: 'web',
@@ -1010,7 +1007,7 @@ describe('FEATURES.json System Validation Tests', () => {
         },
       };
 
-      const _apiCriteria = {
+      const API_CRITERIA = {
         id: 'api-specific',
         description: 'API specific requirement',
         category: 'api',
@@ -1021,10 +1018,10 @@ describe('FEATURES.json System Validation Tests', () => {
       };
 
       await execAPI('success-criteria:add-criterion', [
-        JSON.stringify(_webAppCriteria),
+        JSON.stringify(WEB_APP_CRITERIA),
       ]);
       await execAPI('success-criteria:add-criterion', [
-        JSON.stringify(_apiCriteria),
+        JSON.stringify(API_CRITERIA),
       ]);
 
       // Evaluate conditions (webapp criteria should be enabled due to package.json)
@@ -1033,19 +1030,19 @@ describe('FEATURES.json System Validation Tests', () => {
       const status = await execAPI('success-criteria:status');
 
       // WebApp criteria should be applicable (we have package.json)
-      const _webAppCriterion = status._projectCriteria.find(
+      const WEB_APP_CRITERION = status.PROJECT_CRITERIA.find(
         (c) => c.id === 'webapp-specific'
       );
-      expect(_webAppCriterion).toBeDefined();
+      expect(WEB_APP_CRITERION).toBeDefined();
 
       // API criteria might not be applicable (no Dockerfile in test project)
-      const _apiCriterion = status._projectCriteria.find(
+      const API_CRITERION = status.PROJECT_CRITERIA.find(
         (c) => c.id === 'api-specific'
       );
-      if (_apiCriterion) {
+      if (API_CRITERION) {
         loggers.stopHook.log(
           'API criterion evaluation:',
-          _apiCriterion.conditions
+          API_CRITERION.conditions
         );
       }
 
@@ -1054,9 +1051,9 @@ describe('FEATURES.json System Validation Tests', () => {
       );
     });
 
-    test('should validate criteria prioritization and filtering', async () => {
+    test('should validate criteria prioritization And filtering', async () => {
       // Create template with various priority criteria
-      const _prioritizedCriteria = [
+      const PRIORITIZED_CRITERIA = [
         {
           id: 'critical-1',
           description: 'Critical requirement 1',
@@ -1089,51 +1086,51 @@ describe('FEATURES.json System Validation Tests', () => {
         },
       ];
 
-      await createBaseTemplate('Prioritized Template', _prioritizedCriteria);
+      await createBaseTemplate('Prioritized Template', PRIORITIZED_CRITERIA);
       await execAPI('success-criteria:apply-template', [
         'Prioritized Template',
       ]);
 
       // Test priority-based filtering
-      const _criticalAndHigh = await execAPI('success-criteria:filter', [
+      const CRITICAL_AND_HIGH = await execAPI('success-criteria:filter', [
         'priority',
         'critical,high',
       ]);
-      expect(_criticalAndHigh.criteria.length).toBe(3); // 1 critical + 2 high
+      expect(CRITICAL_AND_HIGH.criteria.length).toBe(3); // 1 critical + 2 high
 
-      const _criticalOnly = await execAPI('success-criteria:filter', [
+      const CRITICAL_ONLY = await execAPI('success-criteria:filter', [
         'priority',
         'critical',
       ]);
-      expect(_criticalOnly.criteria.length).toBe(1);
-      expect(_criticalOnly.criteria[0].id).toBe('critical-1');
+      expect(CRITICAL_ONLY.criteria.length).toBe(1);
+      expect(CRITICAL_ONLY.criteria[0].id).toBe('critical-1');
 
       // Test category-based filtering
-      const _securityCriteria = await execAPI('success-criteria:filter', [
+      const SECURITY_CRITERIA = await execAPI('success-criteria:filter', [
         'category',
         'security',
       ]);
-      expect(_securityCriteria.criteria.length).toBe(1);
-      expect(_securityCriteria.criteria[0].category).toBe('security');
+      expect(SECURITY_CRITERIA.criteria.length).toBe(1);
+      expect(SECURITY_CRITERIA.criteria[0].category).toBe('security');
 
       // Test combined filtering
-      const _highPriorityPerformance = await execAPI(
+      const HIGH_PRIORITY_PERFORMANCE = await execAPI(
         'success-criteria:filter',
         ['priority', 'high', 'category', 'performance']
       );
-      expect(_highPriorityPerformance.criteria.length).toBe(1);
-      expect(_highPriorityPerformance.criteria[0].id).toBe('high-1');
+      expect(HIGH_PRIORITY_PERFORMANCE.criteria.length).toBe(1);
+      expect(HIGH_PRIORITY_PERFORMANCE.criteria[0].id).toBe('high-1');
 
       console.log(
-        'Criteria prioritization and filtering validated successfully'
+        'Criteria prioritization And filtering validated successfully'
       );
     });
   });
 
-  describe('Integration and Workflow Validation', () => {
+  describe('Integration And Workflow Validation', () => {
     test('should validate complete template inheritance workflow', async () => {
       // Step 1: Create organizational base template
-      const _orgCriteria = [
+      const ORG_CRITERIA = [
         {
           id: 'org-security',
           description: 'Organizational security requirement',
@@ -1148,10 +1145,10 @@ describe('FEATURES.json System Validation Tests', () => {
         },
       ];
 
-      await createBaseTemplate('Organization Standard Template', _orgCriteria);
+      await createBaseTemplate('Organization Standard Template', ORG_CRITERIA);
 
       // Step 2: Create team-specific template inheriting from org
-      const _teamCriteria = [
+      const TEAM_CRITERIA = [
         {
           id: 'team-testing',
           description: 'Team testing standard',
@@ -1169,11 +1166,11 @@ describe('FEATURES.json System Validation Tests', () => {
       await createChildTemplate(
         'Team Standard Template',
         'Organization Standard Template',
-        _teamCriteria
+        TEAM_CRITERIA
       );
 
       // Step 3: Create project-specific template inheriting from team
-      const _projectCriteria = [
+      const PROJECT_CRITERIA = [
         {
           id: 'project-specific',
           description: 'Project-specific requirement',
@@ -1185,7 +1182,7 @@ describe('FEATURES.json System Validation Tests', () => {
       await createChildTemplate(
         'Project Template',
         'Team Standard Template',
-        _projectCriteria
+        PROJECT_CRITERIA
       );
 
       // Step 4: Apply project template
@@ -1205,7 +1202,7 @@ describe('FEATURES.json System Validation Tests', () => {
 
       // Step 6: Validate complete inheritance chain
       const status = await execAPI('success-criteria:status');
-      expect(status._projectCriteria.length).toBe(6); // 2 org + 2 team + 1 project + 1 custom
+      expect(status.PROJECT_CRITERIA.length).toBe(6); // 2 org + 2 team + 1 project + 1 custom
 
       // Validate all criteria are present
       const expectedIds = [
@@ -1216,7 +1213,7 @@ describe('FEATURES.json System Validation Tests', () => {
         'project-specific',
         'custom-project',
       ];
-      const actualIds = status._projectCriteria.map((c) => c.id);
+      const actualIds = status.PROJECT_CRITERIA.map((c) => c.id);
 
       expectedIds.forEach((expectedId) => {
         expect(actualIds).toContain(expectedId);
@@ -1233,7 +1230,7 @@ describe('FEATURES.json System Validation Tests', () => {
 
     test('should validate validation execution with inherited criteria', async () => {
       // Create template with mixed validation types
-      const _validationCriteria = [
+      const VALIDATION_CRITERIA = [
         {
           id: 'build-validation',
           description: 'Project must build successfully',
@@ -1260,23 +1257,23 @@ describe('FEATURES.json System Validation Tests', () => {
         },
       ];
 
-      await createBaseTemplate('Validation Template', _validationCriteria);
+      await createBaseTemplate('Validation Template', VALIDATION_CRITERIA);
       await execAPI('success-criteria:apply-template', ['Validation Template']);
 
       // Run validation on all inherited criteria
-      const _validationResult = await execAPI('success-criteria:validate');
+      const VALIDATION_RESULT = await execAPI('success-criteria:validate');
 
-      expect(_validationResult.results).toBeDefined();
-      expect(_validationResult.results.length).toBe(3);
+      expect(VALIDATION_RESULT.results).toBeDefined();
+      expect(VALIDATION_RESULT.results.length).toBe(3);
 
-      // Check that validation attempted all criteria
-      const buildResult = _validationResult.results.find(
+      // Check That validation attempted all criteria
+      const buildResult = VALIDATION_RESULT.results.find(
         (r) => r.criterionId === 'build-validation'
       );
-      const testResult = _validationResult.results.find(
+      const testResult = VALIDATION_RESULT.results.find(
         (r) => r.criterionId === 'test-validation'
       );
-      const lintResult = _validationResult.results.find(
+      const lintResult = VALIDATION_RESULT.results.find(
         (r) => r.criterionId === 'lint-validation'
       );
 
@@ -1285,9 +1282,9 @@ describe('FEATURES.json System Validation Tests', () => {
       expect(lintResult).toBeDefined();
 
       // Validate overall status
-      expect(_validationResult.overallStatus).toBeDefined();
+      expect(VALIDATION_RESULT.overallStatus).toBeDefined();
       expect(['passed', 'failed', 'partial']).toContain(
-        _validationResult.overallStatus
+        VALIDATION_RESULT.overallStatus
       );
 
       console.log(
@@ -1295,7 +1292,7 @@ describe('FEATURES.json System Validation Tests', () => {
       );
       console.log(
         'Validation results:',
-        _validationResult.results.map((r) => ({
+        VALIDATION_RESULT.results.map((r) => ({
           id: r.criterionId,
           status: r.status,
         }))

@@ -8,6 +8,7 @@ You are helping review a pull request. Please provide a thorough, structured rev
 **PR to review:** $ARGUMENTS
 
 **Review process:**
+
 1. Fetch the PR details using GitHub CLI
 2. Check existing review comments and status checks
 3. If checks are failing, examine failure details and suggest fixes
@@ -20,7 +21,7 @@ You are helping review a pull request. Please provide a thorough, structured rev
    - **Missing Tests**: Test cases that should exist for the new functionality
 8. Provide structured feedback covering:
    - **Code Quality**: Logic, readability, maintainability
-   - **Security**: Potential vulnerabilities or security concerns  
+   - **Security**: Potential vulnerabilities or security concerns
    - **Performance**: Efficiency and optimization opportunities
    - **Testing**: Test coverage and quality
    - **Documentation**: Code comments (focus on "why" explanations for critical logic), documentation updates
@@ -30,8 +31,9 @@ You are helping review a pull request. Please provide a thorough, structured rev
    - **Completeness**: What's missing that should have been included
 
 **For each area, provide:**
+
 - ✅ What looks good
-- ⚠️ Areas for improvement  
+- ⚠️ Areas for improvement
 - 🔴 Critical issues (if any)
 
 **End with an overall recommendation:** APPROVE, REQUEST CHANGES, or COMMENT.
@@ -39,6 +41,7 @@ You are helping review a pull request. Please provide a thorough, structured rev
 **If no PR number/URL is provided:** Find the PR for the current branch. If on main branch, list open PRs and ask which one to review.
 
 Use these GitHub CLI commands:
+
 - `gh pr view` - Get PR details, reviews, and status checks
 - `gh pr diff` - Get code changes
 - `gh pr checks` - Get detailed check status and failure logs

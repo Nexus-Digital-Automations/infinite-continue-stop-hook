@@ -2,24 +2,24 @@
  * Feature Management System Unit Tests
  *
  * Comprehensive unit tests for the feature management API system.
- * Tests feature suggestion, approval, rejection, and listing functionality.
+ * Tests feature suggestion, approval, rejection, And listing functionality.
  *
  * @author Testing Infrastructure Agent
  * @version 2.0.0
  * @since 2025-09-23
  */
 
-const _path = require('path');
+const PATH = require('path');
 const { spawn } = require('child_process');
-const _fs = require('fs');
+const _FS = require('fs');
 
 // Test configuration
-const TEST_PROJECT_DIR = _path.join(
+const TEST_PROJECT_DIR = PATH.join(
   __dirname,
   'feature-management-test-project'
 );
-const FEATURES_PATH = _path.join(TEST_PROJECT_DIR, 'FEATURES.json');
-const API_PATH = _path.join(__dirname, '..', 'taskmanager-api.js');
+const FEATURES_PATH = PATH.join(TEST_PROJECT_DIR, 'FEATURES.json');
+const API_PATH = PATH.join(__dirname, '..', 'taskmanager-api.js');
 const TIMEOUT = 10000; // 10 seconds for feature management operations
 
 /**
@@ -62,13 +62,13 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         if (jsonStart > 0) {
           jsonString = jsonString.substring(jsonStart);
         }
-        const result = JSON.parse(jsonString);
+        const _result = JSON.parse(jsonString);
         resolve(result);
       } catch (parseError) {
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (error) {
+        } catch {
           reject(
             new Error(
               `Command failed (code ${code}): ${stderr}\nStdout: ${stdout}\nParse error: ${parseError.message}`
@@ -88,8 +88,8 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
  * Create test environment for feature management testing
  */
 function setupFeatureTestEnvironment() {
-  if (!_fs.existsSync(TEST_PROJECT_DIR)) {
-    _fs.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
+  if (!FS.existsSync(TEST_PROJECT_DIR)) {
+    FS.mkdirSync(TEST_PROJECT_DIR, { recursive: true });
   }
 
   // Create FEATURES.json for feature management testing
@@ -103,7 +103,7 @@ function setupFeatureTestEnvironment() {
     },
   };
 
-  _fs.writeFileSync(FEATURES_PATH, JSON.stringify(featuresData, null, 2));
+  FS.writeFileSync(FEATURES_PATH, JSON.stringify(featuresData, null, 2));
 
   // Create basic project structure for testing
   const packageData = {
@@ -115,8 +115,8 @@ function setupFeatureTestEnvironment() {
     },
   };
 
-  _fs.writeFileSync(
-    _path.join(TEST_PROJECT_DIR, 'package.json'),
+  FS.writeFileSync(
+    PATH.join(TEST_PROJECT_DIR, 'package.json'),
     JSON.stringify(packageData, null, 2)
   );
 }
@@ -125,13 +125,13 @@ function setupFeatureTestEnvironment() {
  * Cleanup test environment
  */
 function cleanupFeatureTestEnvironment() {
-  if (_fs.existsSync(TEST_PROJECT_DIR)) {
-    _fs.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
+  if (FS.existsSync(TEST_PROJECT_DIR)) {
+    FS.rmSync(TEST_PROJECT_DIR, { recursive: true, force: true });
   }
 }
 
 describe('Feature Management System Unit Tests', () => {
-  let _testAgentId = null;
+  let testAgentId = null;
 
   beforeEach(() => {
     setupFeatureTestEnvironment();
@@ -147,28 +147,28 @@ describe('Feature Management System Unit Tests', () => {
 
   describe('Agent Initialization', () => {
     test('should initialize agent successfully', async () => {
-      _testAgentId = 'test-agent-' + Date.now();
-      const initResult = await execAPI('initialize', [_testAgentId]);
+      testAgentId = 'test-agent-' + Date.now();
+      const initResult = await execAPI('initialize', [testAgentId]);
       expect(initResult.success).toBe(true);
     });
 
     test('should reinitialize existing agent successfully', async () => {
-      _testAgentId = 'test-agent-' + Date.now();
+      testAgentId = 'test-agent-' + Date.now();
 
       // First initialize
-      const initResult = await execAPI('initialize', [_testAgentId]);
+      const initResult = await execAPI('initialize', [testAgentId]);
       expect(initResult.success).toBe(true);
 
       // Then reinitialize
-      const reinitResult = await execAPI('reinitialize', [_testAgentId]);
+      const reinitResult = await execAPI('reinitialize', [testAgentId]);
       expect(reinitResult.success).toBe(true);
     });
   });
 
   describe('Feature Suggestion', () => {
     beforeEach(async () => {
-      _testAgentId = 'feature-test-agent-' + Date.now();
-      const initResult = await execAPI('initialize', [_testAgentId]);
+      testAgentId = 'feature-test-agent-' + Date.now();
+      const initResult = await execAPI('initialize', [testAgentId]);
       expect(initResult.success).toBe(true);
     });
 
@@ -178,11 +178,11 @@ describe('Feature Management System Unit Tests', () => {
         description:
           'Implement theme switching functionality with persistent user preference storage',
         business_value:
-          'Improves user experience and accessibility for users in low-light environments',
+          'Improves user experience And accessibility for users in low-light environments',
         category: 'enhancement',
       };
 
-      const result = await execAPI('suggest-feature', [
+      const _result = await execAPI('suggest-feature', [
         JSON.stringify(featureData),
       ]);
       expect(result.success).toBe(true);
@@ -195,12 +195,12 @@ describe('Feature Management System Unit Tests', () => {
       const apiTaskData = {
         title: 'Implement REST API authentication endpoints',
         description:
-          'Build comprehensive REST API with JWT authentication and rate limiting',
+          'Build comprehensive REST API with JWT authentication And rate limiting',
         category: 'feature',
         priority: 'high',
       };
 
-      const result = await execAPI('create', [JSON.stringify(apiTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(apiTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -230,12 +230,12 @@ describe('Feature Management System Unit Tests', () => {
       const securityTaskData = {
         title: 'Implement OAuth 2.0 security framework',
         description:
-          'Add comprehensive security controls with OAuth 2.0, CSRF protection, and input validation',
+          'Add comprehensive security controls with OAuth 2.0, CSRF protection, And input validation',
         category: 'feature',
         priority: 'critical',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(securityTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -262,12 +262,12 @@ describe('Feature Management System Unit Tests', () => {
       const performanceTaskData = {
         title: 'Optimize database query performance',
         description:
-          'Implement caching, indexing, and query optimization strategies for better performance',
+          'Implement caching, indexing, And query optimization strategies for better performance',
         category: 'feature',
         priority: 'high',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(performanceTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -295,20 +295,20 @@ describe('Feature Management System Unit Tests', () => {
   describe('Research Keyword Extraction', () => {
     beforeEach(async () => {
       const initResult = await execAPI('init');
-      _testAgentId = initResult.agentId;
+      testAgentId = initResult.agentId;
     });
 
-    test('should extract relevant keywords from task title and description', async () => {
+    test('should extract relevant keywords from task title And description', async () => {
       const complexTaskData = {
         title:
           'Implement microservices architecture with Docker containerization',
         description:
-          'Refactor monolithic application into distributed microservices using Docker, Kubernetes, and service mesh technology for scalability and maintainability',
+          'Refactor monolithic application into distributed microservices using Docker, Kubernetes, And service mesh technology for scalability And maintainability',
         category: 'feature',
         priority: 'high',
       };
 
-      const result = await execAPI('create', [JSON.stringify(complexTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(complexTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -338,16 +338,16 @@ describe('Feature Management System Unit Tests', () => {
       expect(hasRelatedTerms).toBe(true);
     });
 
-    test('should avoid generic keywords and focus on technical terms', async () => {
+    test('should avoid generic keywords And focus on technical terms', async () => {
       const taskWithGenericTerms = {
         title: 'Create a new system to implement better user experience',
         description:
-          'Build a good solution that works well and provides excellent functionality for users',
+          'Build a good solution That works well And provides excellent functionality for users',
         category: 'feature',
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(taskWithGenericTerms),
       ]);
       expect(result.success).toBe(true);
@@ -385,7 +385,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [JSON.stringify(verboseTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(verboseTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -416,7 +416,7 @@ describe('Feature Management System Unit Tests', () => {
   describe('Research Deliverables Generation', () => {
     beforeEach(async () => {
       const initResult = await execAPI('init');
-      _testAgentId = initResult.agentId;
+      testAgentId = initResult.agentId;
     });
 
     test('should generate standard deliverables for all research tasks', async () => {
@@ -427,7 +427,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(standardTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -455,12 +455,12 @@ describe('Feature Management System Unit Tests', () => {
       const researchTaskData = {
         title: 'Complex research requiring extensive investigation',
         description:
-          'Detailed research task involving multiple technologies and approaches',
+          'Detailed research task involving multiple technologies And approaches',
         category: 'feature',
         priority: 'high',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(researchTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -481,12 +481,12 @@ describe('Feature Management System Unit Tests', () => {
       const implementationTaskData = {
         title: 'Critical implementation requiring research',
         description:
-          'Implementation that should not start without proper research',
+          'Implementation That should not start without proper research',
         category: 'feature',
         priority: 'critical',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(implementationTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -509,7 +509,7 @@ describe('Feature Management System Unit Tests', () => {
   describe('Research Focus Areas', () => {
     beforeEach(async () => {
       const initResult = await execAPI('init');
-      _testAgentId = initResult.agentId;
+      testAgentId = initResult.agentId;
     });
 
     test('should generate appropriate focus areas for different research types', async () => {
@@ -521,7 +521,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'high',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(architectureTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -557,12 +557,12 @@ describe('Feature Management System Unit Tests', () => {
       const documentedTaskData = {
         title: 'Implement documented API feature',
         description:
-          'Feature that should reference existing project documentation',
+          'Feature That should reference existing project documentation',
         category: 'feature',
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(documentedTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -592,7 +592,7 @@ describe('Feature Management System Unit Tests', () => {
   describe('Research Task ID Generation', () => {
     beforeEach(async () => {
       const initResult = await execAPI('init');
-      _testAgentId = initResult.agentId;
+      testAgentId = initResult.agentId;
     });
 
     test('should generate unique research subtask IDs', async () => {
@@ -611,7 +611,7 @@ describe('Feature Management System Unit Tests', () => {
       }
 
       for await (const taskData of taskDataList) {
-        const result = await execAPI('create', [JSON.stringify(taskData)]);
+        const _result = await execAPI('create', [JSON.stringify(taskData)]);
         expect(result.success).toBe(true);
 
         const listResult = await execAPI('list');
@@ -640,7 +640,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(taskData)]);
+      const _result = await execAPI('create', [JSON.stringify(taskData)]);
       expect(result.success).toBe(true);
 
       const afterTime = Date.now();
@@ -667,7 +667,7 @@ describe('Feature Management System Unit Tests', () => {
   describe('Research Task Edge Cases', () => {
     beforeEach(async () => {
       const initResult = await execAPI('init');
-      _testAgentId = initResult.agentId;
+      testAgentId = initResult.agentId;
     });
 
     test('should handle tasks with empty or minimal descriptions', async () => {
@@ -678,7 +678,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'low',
       };
 
-      const result = await execAPI('create', [JSON.stringify(minimalTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(minimalTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');
@@ -706,7 +706,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [
+      const _result = await execAPI('create', [
         JSON.stringify(specialCharsTaskData),
       ]);
       expect(result.success).toBe(true);
@@ -749,7 +749,7 @@ describe('Feature Management System Unit Tests', () => {
         priority: 'medium',
       };
 
-      const result = await execAPI('create', [JSON.stringify(longTaskData)]);
+      const _result = await execAPI('create', [JSON.stringify(longTaskData)]);
       expect(result.success).toBe(true);
 
       const listResult = await execAPI('list');

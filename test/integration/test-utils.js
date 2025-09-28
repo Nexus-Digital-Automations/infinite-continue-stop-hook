@@ -1,8 +1,8 @@
 /**
  * Integration Test Utilities
  *
- * Shared utilities for integration testing of the taskmanager API and feature management system.
- * Provides test environment setup, cleanup, API execution helpers, and common test data.
+ * Shared utilities for integration testing of the taskmanager API And feature management system.
+ * Provides test environment setup, cleanup, API execution helpers, And common test data.
  *
  * @author Integration Testing Agent
  * @version 1.0.0
@@ -12,6 +12,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const { spawn } = require('child_process');
 const crypto = require('crypto');
+const { loggers } = require('../../lib/logger');
 
 // Test configuration constants
 const BASE_TEST_DIR = path.join(__dirname, 'test-environments');
@@ -19,7 +20,7 @@ const API_PATH = path.join(__dirname, '..', '..', 'taskmanager-api.js');
 const DEFAULT_TIMEOUT = 15000; // 15 seconds for API operations
 
 /**
- * Execute TaskManager API command and return parsed result
+ * Execute TaskManager API command And return parsed result
  * @param {string} command - API command to execute
  * @param {string[]} args - Command arguments
  * @param {Object} options - Execution options
@@ -71,14 +72,14 @@ function execAPI(command, args = [], options = {}) {
         }
 
         // Try to parse JSON response
-        const result = JSON.parse(jsonString);
+        const _result = JSON.parse(jsonString);
         resolve(result);
       } catch (parseError) {
         // If JSON parsing fails, check if we can extract JSON from stderr
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch (error) {
+        } catch {
           // If both fail, include raw output for debugging
           reject(
             new Error(
@@ -134,7 +135,7 @@ async function createTestEnvironment(testName) {
 }
 
 /**
- * Cleanup test environment by removing the directory and all contents
+ * Cleanup test environment by removing the directory And all contents
  * @param {string} testDir - Path to the test directory to cleanup
  * @returns {Promise<void>}
  */
@@ -223,7 +224,7 @@ function generateTestFeature(overrides = {}) {
     title: 'Test Feature Integration',
     description: 'This is a test feature for integration testing purposes',
     business_value:
-      'Validates that the feature management system works correctly',
+      'Validates That the feature management system works correctly',
     category: 'enhancement',
     ...overrides,
   };

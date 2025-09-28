@@ -2,7 +2,7 @@
 
 **Version**: 1.0.0  
 **Date**: 2025-09-15  
-**Author**: Documentation Agent #5  
+**Author**: Documentation Agent #5
 
 ## Quick Diagnostic Commands
 
@@ -30,18 +30,21 @@ timeout 10s node taskmanager-api.js validate-criteria TASK_ID --debug
 ### 1. Validation Timeout Issues
 
 #### Symptom
+
 ```
 Error: Validation timeout after 10 seconds
 Status: VALIDATION_TIMEOUT
 ```
 
 #### Root Causes
+
 - Complex validation workflows taking too long
-- External tool dependencies causing delays  
+- External tool dependencies causing delays
 - Network connectivity issues
 - Resource constraints
 
 #### Diagnostic Steps
+
 ```bash
 # Check current timeout settings
 timeout 10s node taskmanager-api.js get-config | grep timeout
@@ -57,6 +60,7 @@ top -p $(pgrep node)
 #### Solutions
 
 **Solution 1: Increase Timeout (Quick Fix)**
+
 ```bash
 # Temporarily increase timeout for specific task
 timeout 10s node taskmanager-api.js set-validation-timeout TASK_ID 3600
@@ -75,6 +79,7 @@ timeout 10s node taskmanager-api.js set-validation-timeout TASK_ID 3600
 ```
 
 **Solution 2: Use Asynchronous Validation**
+
 ```bash
 # Run validation asynchronously
 timeout 10s node taskmanager-api.js validate-criteria TASK_ID --async
@@ -91,6 +96,7 @@ timeout 10s node taskmanager-api.js validation-status VALIDATION_ID
 ```
 
 **Solution 3: Optimize Validation Workflow**
+
 ```bash
 # Run only essential validations first
 timeout 10s node taskmanager-api.js validate-criteria TASK_ID --category=critical
@@ -105,18 +111,21 @@ timeout 10s node taskmanager-api.js validate-criteria TASK_ID --use-cache
 ### 2. Criteria Not Found Errors
 
 #### Symptom
+
 ```
 Error: No success criteria found for task feature_123_abc
 Status: CRITERIA_NOT_FOUND
 ```
 
 #### Root Causes
+
 - Task created before criteria system activation
 - Missing template assignment
 - Corrupted criteria configuration
 - Inheritance rule failures
 
 #### Diagnostic Steps
+
 ```bash
 # Check if task exists
 timeout 10s node taskmanager-api.js get-task-info TASK_ID
@@ -134,6 +143,7 @@ timeout 10s node taskmanager-api.js validate-criteria-config
 #### Solutions
 
 **Solution 1: Apply Default Criteria**
+
 ```bash
 # Apply default template to task
 timeout 10s node taskmanager-api.js apply-default-criteria TASK_ID
@@ -143,6 +153,7 @@ timeout 10s node taskmanager-api.js get-success-criteria TASK_ID
 ```
 
 **Solution 2: Rebuild Criteria from Template**
+
 ```bash
 # Force rebuild from template
 timeout 10s node taskmanager-api.js rebuild-criteria TASK_ID --template=25_point_standard
@@ -152,6 +163,7 @@ timeout 10s node taskmanager-api.js apply-inheritance TASK_ID
 ```
 
 **Solution 3: Manual Criteria Assignment**
+
 ```bash
 # Manually assign specific criteria
 timeout 10s node taskmanager-api.js set-success-criteria TASK_ID \
@@ -161,25 +173,28 @@ timeout 10s node taskmanager-api.js set-success-criteria TASK_ID \
 ### 3. Evidence Collection Failures
 
 #### Symptom
+
 ```
 Error: Required evidence not provided for criterion: "Linter Perfection"
 Status: INSUFFICIENT_EVIDENCE
 ```
 
 #### Root Causes
+
 - Automated tools not running successfully
 - Missing evidence file paths
 - Tool configuration issues
 - Permission problems
 
 #### Diagnostic Steps
+
 ```bash
 # Check evidence directory
 ls -la development/evidence/task_TASK_ID/
 
 # Test automated tools individually
 npm run lint
-npm run test  
+npm run test
 npm run build
 
 # Check tool configurations
@@ -190,6 +205,7 @@ timeout 10s node taskmanager-api.js test-tool-config --tool=jest
 #### Solutions
 
 **Solution 1: Run Missing Tools**
+
 ```bash
 # Run linter and capture output
 npm run lint 2>&1 | tee development/evidence/task_TASK_ID/linter_results.log
@@ -202,6 +218,7 @@ npm run build 2>&1 | tee development/evidence/task_TASK_ID/build_results.log
 ```
 
 **Solution 2: Fix Tool Configuration**
+
 ```bash
 # Check linter configuration
 npx eslint --print-config src/
@@ -214,6 +231,7 @@ npm test -- --listTests
 ```
 
 **Solution 3: Provide Manual Evidence**
+
 ```bash
 # Provide manual evidence for failed automated checks
 timeout 10s node taskmanager-api.js add-manual-evidence TASK_ID \
@@ -225,6 +243,7 @@ timeout 10s node taskmanager-api.js add-manual-evidence TASK_ID \
 ### 4. Criteria Inheritance Conflicts
 
 #### Symptom
+
 ```
 Error: Conflicting criteria requirements
 Details: Project-wide security requirement conflicts with task-specific override
@@ -232,12 +251,14 @@ Status: CRITERIA_CONFLICT
 ```
 
 #### Root Causes
+
 - Contradictory requirements between sources
 - Invalid inheritance rules
 - Conflicting priority settings
 - Template version mismatches
 
 #### Diagnostic Steps
+
 ```bash
 # Analyze criteria conflicts
 timeout 10s node taskmanager-api.js analyze-conflicts TASK_ID
@@ -252,6 +273,7 @@ timeout 10s node taskmanager-api.js compare-criteria-sources TASK_ID
 #### Solutions
 
 **Solution 1: Resolve Conflicts Automatically**
+
 ```bash
 # Use automatic conflict resolution
 timeout 10s node taskmanager-api.js resolve-conflicts TASK_ID --strategy=project_takes_precedence
@@ -262,6 +284,7 @@ timeout 10s node taskmanager-api.js resolve-conflicts TASK_ID --strategy=highest
 ```
 
 **Solution 2: Manual Conflict Resolution**
+
 ```bash
 # Request manual override with justification
 timeout 10s node taskmanager-api.js request-override TASK_ID \
@@ -275,6 +298,7 @@ timeout 10s node taskmanager-api.js add-resolution-note TASK_ID \
 ```
 
 **Solution 3: Update Inheritance Rules**
+
 ```bash
 # Modify project-wide criteria to prevent future conflicts
 timeout 10s node taskmanager-api.js update-project-criteria \
@@ -285,6 +309,7 @@ timeout 10s node taskmanager-api.js update-project-criteria \
 ### 5. Manual Review Assignment Issues
 
 #### Symptom
+
 ```
 Error: No available agents for manual review
 Criterion: Security Audit
@@ -292,12 +317,14 @@ Status: REVIEW_ASSIGNMENT_FAILED
 ```
 
 #### Root Causes
+
 - No qualified reviewers available
 - Agent capacity limits reached
 - Missing agent permissions
 - Review workflow configuration issues
 
 #### Diagnostic Steps
+
 ```bash
 # Check available review agents
 timeout 10s node taskmanager-api.js list-review-agents --category=security
@@ -312,6 +339,7 @@ timeout 10s node taskmanager-api.js check-review-config --category=security
 #### Solutions
 
 **Solution 1: Request Specific Reviewer**
+
 ```bash
 # Assign specific agent for review
 timeout 10s node taskmanager-api.js assign-reviewer TASK_ID \
@@ -326,6 +354,7 @@ timeout 10s node taskmanager-api.js set-review-deadline TASK_ID \
 ```
 
 **Solution 2: Escalate Review Request**
+
 ```bash
 # Escalate to management for urgent reviews
 timeout 10s node taskmanager-api.js escalate-review TASK_ID \
@@ -335,6 +364,7 @@ timeout 10s node taskmanager-api.js escalate-review TASK_ID \
 ```
 
 **Solution 3: Use Alternative Review Process**
+
 ```bash
 # Use external review process
 timeout 10s node taskmanager-api.js external-review TASK_ID \
@@ -346,6 +376,7 @@ timeout 10s node taskmanager-api.js external-review TASK_ID \
 ### 6. Performance Issues
 
 #### Symptom
+
 ```
 Warning: Validation taking longer than expected
 Current duration: 180 seconds
@@ -353,12 +384,14 @@ Expected duration: 30 seconds
 ```
 
 #### Root Causes
+
 - Large codebase size
 - Inefficient validation tools
 - Resource constraints
 - Concurrent validation limits
 
 #### Diagnostic Steps
+
 ```bash
 # Profile validation performance
 timeout 10s node taskmanager-api.js profile-validation TASK_ID --detailed
@@ -375,6 +408,7 @@ timeout 10s node taskmanager-api.js analyze-bottlenecks TASK_ID
 #### Solutions
 
 **Solution 1: Optimize Validation Tools**
+
 ```bash
 # Enable incremental linting
 # In .eslintrc.json:
@@ -392,6 +426,7 @@ timeout 10s node taskmanager-api.js analyze-bottlenecks TASK_ID
 ```
 
 **Solution 2: Parallel Validation**
+
 ```bash
 # Configure parallel validation
 # In success-criteria-config.json:
@@ -405,6 +440,7 @@ timeout 10s node taskmanager-api.js analyze-bottlenecks TASK_ID
 ```
 
 **Solution 3: Selective Validation**
+
 ```bash
 # Run only changed file validation
 timeout 10s node taskmanager-api.js validate-criteria TASK_ID --changed-files-only
@@ -416,6 +452,7 @@ timeout 10s node taskmanager-api.js validate-criteria TASK_ID --skip-expensive
 ### 7. Authentication and Authorization Issues
 
 #### Symptom
+
 ```
 Error: Agent not authorized for success criteria operations
 Agent: dev_session_123
@@ -424,12 +461,14 @@ Status: AUTHORIZATION_FAILED
 ```
 
 #### Root Causes
+
 - Insufficient agent permissions
 - Expired authentication tokens
 - Role configuration issues
 - Agent registration problems
 
 #### Diagnostic Steps
+
 ```bash
 # Check agent permissions
 timeout 10s node taskmanager-api.js check-agent-permissions dev_session_123
@@ -444,6 +483,7 @@ timeout 10s node taskmanager-api.js test-auth --agent=dev_session_123
 #### Solutions
 
 **Solution 1: Refresh Agent Registration**
+
 ```bash
 # Re-initialize agent
 timeout 10s node taskmanager-api.js init --force
@@ -453,6 +493,7 @@ timeout 10s node taskmanager-api.js check-agent-permissions
 ```
 
 **Solution 2: Request Permission Upgrade**
+
 ```bash
 # Request additional permissions
 timeout 10s node taskmanager-api.js request-permissions \
@@ -461,6 +502,7 @@ timeout 10s node taskmanager-api.js request-permissions \
 ```
 
 **Solution 3: Use Different Agent**
+
 ```bash
 # Switch to agent with appropriate permissions
 timeout 10s node taskmanager-api.js switch-agent --agent=authorized_agent_id
@@ -492,6 +534,7 @@ timeout 10s node taskmanager-api.js system-metrics --real-time
 ### Log Analysis
 
 #### Key Log Locations
+
 ```bash
 # Success criteria system logs
 tail -f development/logs/success-criteria-*.log
@@ -507,6 +550,7 @@ tail -f development/logs/performance-*.log
 ```
 
 #### Log Analysis Commands
+
 ```bash
 # Search for specific errors
 grep "VALIDATION_TIMEOUT" development/logs/*.log | tail -20
@@ -521,6 +565,7 @@ grep "Error:" development/logs/*.log | cut -d: -f3 | sort | uniq -c | sort -nr
 ### Performance Monitoring
 
 #### Key Metrics to Monitor
+
 ```bash
 # Validation completion rates
 timeout 10s node taskmanager-api.js metrics --metric=validation_success_rate --period=24h
@@ -652,6 +697,7 @@ timeout 10s node taskmanager-api.js setup-alerts \
 ## Getting Additional Help
 
 ### Documentation Resources
+
 - **API Reference**: `development/docs/success-criteria-api.md`
 - **Architecture Guide**: `development/docs/success-criteria-architecture.md`
 - **Configuration Manual**: `development/docs/success-criteria-config.md`
@@ -680,6 +726,7 @@ timeout 10s node taskmanager-api.js create-support-bundle \
 ```
 
 ### Contact Points
+
 - **System Issues**: Check `development/errors/` for current known issues
 - **Performance Problems**: Review `development/logs/performance-*.log`
 - **Configuration Questions**: Consult `development/docs/success-criteria-config.md`
@@ -687,6 +734,6 @@ timeout 10s node taskmanager-api.js create-support-bundle \
 
 ---
 
-*Troubleshooting Guide v1.0.0*  
-*Generated by: Documentation Agent #5*  
-*Last Updated: 2025-09-15*
+_Troubleshooting Guide v1.0.0_  
+_Generated by: Documentation Agent #5_  
+_Last Updated: 2025-09-15_

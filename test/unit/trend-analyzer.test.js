@@ -59,7 +59,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
       ];
 
       criteria.forEach((criterion, index) => {
-        // Add some variation and trends
+        // Add some variation And trends
         const baseDuration = {
           'linter-validation': 1500,
           'type-validation': 2500,
@@ -116,7 +116,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
 
   describe('analyzeTrends', () => {
     test('should return insufficient data message when not enough metrics', async () => {
-      const result = await trendAnalyzer.analyzeTrends();
+      const _result = await trendAnalyzer.analyzeTrends();
 
       expect(result.success).toBe(true);
       expect(result.analysis.summary).toContain('Insufficient historical data');
@@ -125,7 +125,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
     test('should analyze comprehensive trends with sufficient data', async () => {
       createMockMetricsData(30);
 
-      const result = await trendAnalyzer.analyzeTrends({
+      const _result = await trendAnalyzer.analyzeTrends({
         timeRange: 30,
         granularity: 'daily',
       });
@@ -146,7 +146,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
     test('should include forecasts when requested', async () => {
       createMockMetricsData(30);
 
-      const result = await trendAnalyzer.analyzeTrends({
+      const _result = await trendAnalyzer.analyzeTrends({
         timeRange: 30,
         includeForecast: true,
       });
@@ -158,7 +158,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
     test('should include baseline comparisons when requested', async () => {
       createMockMetricsData(30);
 
-      const result = await trendAnalyzer.analyzeTrends({
+      const _result = await trendAnalyzer.analyzeTrends({
         timeRange: 30,
         includeBaselines: true,
       });
@@ -199,7 +199,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
     test('should analyze specific criterion trends', async () => {
       createMockMetricsData(15);
 
-      const result = await trendAnalyzer.analyzeCriterionTrend(
+      const _result = await trendAnalyzer.analyzeCriterionTrend(
         'build-validation',
         {
           timeRange: 15,
@@ -240,7 +240,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
     test('should generate health score trends over time', async () => {
       createMockMetricsData(20);
 
-      const result = await trendAnalyzer.generateHealthScoreTrends({
+      const _result = await trendAnalyzer.generateHealthScoreTrends({
         timeRange: 20,
         granularity: 'daily',
       });
@@ -262,7 +262,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
     test('should calculate health trend direction', async () => {
       createMockMetricsData(15);
 
-      const result = await trendAnalyzer.generateHealthScoreTrends();
+      const _result = await trendAnalyzer.generateHealthScoreTrends();
 
       expect(result.success).toBe(true);
       expect(result.healthTrends.summary.healthTrend).toMatch(
@@ -289,7 +289,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
         label: 'This Week',
       };
 
-      const result = await trendAnalyzer.comparePerformancePeriods(
+      const _result = await trendAnalyzer.comparePerformancePeriods(
         periodA,
         periodB,
       );
@@ -313,7 +313,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
         label: 'Last Two Weeks',
       };
 
-      const result = await trendAnalyzer.comparePerformancePeriods(
+      const _result = await trendAnalyzer.comparePerformancePeriods(
         periodA,
         periodB,
       );
@@ -332,8 +332,8 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
   });
 
   describe('Helper Methods', () => {
-    test('should load metrics from both enhanced and legacy files', async () => {
-      // Create both enhanced and legacy data
+    test('should load metrics from both enhanced And legacy files', async () => {
+      // Create both enhanced And legacy data
       const enhancedData = {
         metrics: [
           {
@@ -542,7 +542,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
 
   describe('Error Handling', () => {
     test('should handle missing metrics files gracefully', async () => {
-      const result = await trendAnalyzer.analyzeTrends();
+      const _result = await trendAnalyzer.analyzeTrends();
 
       expect(result.success).toBe(true);
       expect(result.analysis.summary).toContain('Insufficient historical data');
@@ -551,7 +551,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
     test('should handle corrupted metrics files', async () => {
       fs.writeFileSync(mockEnhancedMetricsFile, 'invalid json');
 
-      const result = await trendAnalyzer.analyzeTrends();
+      const _result = await trendAnalyzer.analyzeTrends();
 
       // Should still succeed by gracefully handling the error
       expect(result.success).toBe(true);
@@ -564,7 +564,7 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
         JSON.stringify(emptyData, null, 2),
       );
 
-      const result = await trendAnalyzer.analyzeTrends();
+      const _result = await trendAnalyzer.analyzeTrends();
 
       expect(result.success).toBe(true);
       expect(result.analysis.summary).toContain('Insufficient historical data');
@@ -577,11 +577,11 @@ describe('TrendAnalyzer - Historical Performance Trend Analysis', () => {
     });
   });
 
-  describe('Storage and Persistence', () => {
+  describe('Storage And Persistence', () => {
     test('should store trend analysis results', async () => {
       createMockMetricsData(10);
 
-      const result = await trendAnalyzer.analyzeTrends();
+      const _result = await trendAnalyzer.analyzeTrends();
       expect(result.success).toBe(true);
 
       // Check if trends file was created
