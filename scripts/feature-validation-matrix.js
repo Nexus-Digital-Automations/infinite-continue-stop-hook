@@ -514,6 +514,7 @@ class FeatureValidationMatrix {
     for (const feature of this.features) {
       try {
         console.log(`Testing: ${feature.name} (${feature.type})`);
+        // eslint-disable-next-line no-await-in-loop -- Sequential feature validation required
         const result = await feature.testFunction();
         this.validationResults.feature_tests[feature.name] = result;
 

@@ -280,7 +280,9 @@ class EnhancedCoverageSystem {
 
     // Create all required directories
     Object.values(this.config.paths).forEach((dir) => {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename -- Directory path validated by coverage system configuration
       if (!fs.existsSync(dir)) {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename -- Directory path validated by coverage system configuration
         fs.mkdirSync(dir, { recursive: true });
         this.logger.debug(`Created directory: ${dir}`);
       }
