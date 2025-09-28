@@ -35,7 +35,7 @@ class EmergencySyntaxFixer {
       }
     } catch (_error) {
       console.error('❌ Emergency fix failed:', _error.message);
-      throw error;
+      throw _error;
     }
   }
 
@@ -145,7 +145,7 @@ class EmergencySyntaxFixer {
         this.fixedFiles.push(_filePath);
       }
     } catch (_error) {
-      this.errors.push(`${filePath}: ${error.message}`);
+      this.errors.push(`${filePath}: ${_error.message}`);
     }
   }
 }

@@ -119,7 +119,7 @@ class ResultVariableFixer {
       }
     } catch (_error) {
       console.warn(
-        `⚠️ Warning: Could not read directory ${dir}: ${error.message}`
+        `⚠️ Warning: Could not read directory ${dir}: ${_error.message}`
       );
     }
   }
@@ -165,10 +165,10 @@ class ResultVariableFixer {
 
       this.stats.filesProcessed++;
     } catch (_error) {
-      console.error(`❌ Error processing ${filePath}: ${error.message}`);
+      console.error(`❌ Error processing ${filePath}: ${_error.message}`);
       this.errors.push({
         file: filePath,
-        error: error.message,
+        error: _error.message,
       });
     }
   }

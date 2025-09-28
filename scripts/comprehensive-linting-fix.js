@@ -181,10 +181,10 @@ class ComprehensiveLintingFix {
    */
   getLintErrorsForFile(_filePath) {
     try {
-      const RESULT = execSync(`npm run lint -- "${filePath}" 2>&1`, {
+      const RESULT = execSync(`npm run lint -- "${_filePath}" 2>&1`, {
         encoding: 'utf8',
       });
-      return result.split('\n').filter((line) => line.includes('error'));
+      return RESULT.split('\n').filter((line) => line.includes('error'));
     } catch (_error) {
       return _error.stdout
         ? _error.stdout.split('\n').filter((line) => line.includes('error'))

@@ -51,7 +51,7 @@ function comprehensiveAuditFix() {
     console.log('Applied comprehensive audit test fixes successfully');
   } catch (_error) {
     console.error('Error applying comprehensive fixes:', _error.message);
-    throw error;
+    throw _error;
   }
 }
 

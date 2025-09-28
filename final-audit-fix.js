@@ -10,7 +10,7 @@ function finalAuditFix() {
     '/Users/jeremyparker/infinite-continue-stop-hook/test/audit-system-validation.test.js';
 
   try {
-    let content = fs.readFileSync(_filePath, 'utf-8');
+    let content = fs.readFileSync(filePath, 'utf-8');
 
     console.log('Applying final comprehensive audit test fixes...');
 
@@ -36,7 +36,7 @@ function finalAuditFix() {
     // Clean up any remaining unused variable assignments
     content = content.replace(/^\s*const result = [^;]+;\s*$/gm, '');
 
-    fs.writeFileSync(_filePath, content);
+    fs.writeFileSync(filePath, content);
     console.log('Applied final comprehensive audit test fixes successfully');
   } catch (_error) {
     console.error('Error applying final fixes:', _error.message);

@@ -34,7 +34,7 @@ function completeAuditFix() {
     console.log('Applied complete audit test fixes successfully');
   } catch (_error) {
     console.error('Error applying complete fixes:', _error.message);
-    throw error;
+    throw _error;
   }
 }
 

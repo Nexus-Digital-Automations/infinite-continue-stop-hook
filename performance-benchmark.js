@@ -223,7 +223,7 @@ class TaskManagerPerformanceBenchmark {
       });
     } catch (_error) {
       loggers.stopHook.log(
-        `   ❌ Error in subtask benchmarking: ${error.message}`
+        `   ❌ Error in subtask benchmarking: ${_error.message}`
       );
     }
   }
@@ -267,7 +267,7 @@ class TaskManagerPerformanceBenchmark {
       }
     } catch (_error) {
       loggers.app.info(
-        `   ❌ Error in success criteria benchmarking: ${error.message}`
+        `   ❌ Error in success criteria benchmarking: ${_error.message}`
       );
     }
   }
@@ -312,7 +312,7 @@ class TaskManagerPerformanceBenchmark {
       this.results.concurrentAccess.push(...listResults);
     } catch (_error) {
       loggers.app.info(
-        `   ❌ Error in concurrent access benchmarking: ${error.message}`
+        `   ❌ Error in concurrent access benchmarking: ${_error.message}`
       );
     }
   }
@@ -697,9 +697,9 @@ class TaskManagerPerformanceBenchmark {
 
       return report;
     } catch (_error) {
-      loggers.stopHook.error(`❌ Benchmark suite failed: ${error.message}`);
-      loggers.stopHook.error(error.stack);
-      throw error;
+      loggers.stopHook.error(`❌ Benchmark suite failed: ${_error.message}`);
+      loggers.stopHook.error(_error.stack);
+      throw _error;
     }
   }
 }

@@ -39,7 +39,7 @@ class SystematicLintingFixer {
       }
     } catch (_error) {
       console.error('❌ Systematic fix failed:', _error.message);
-      throw error;
+      throw _error;
     }
   }
 
@@ -123,7 +123,7 @@ class SystematicLintingFixer {
         this.fixedFiles.push(_filePath);
       }
     } catch (_error) {
-      this.errors.push(`${filePath}: ${error.message}`);
+      this.errors.push(`${filePath}: ${_error.message}`);
     }
   }
 

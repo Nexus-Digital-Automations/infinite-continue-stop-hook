@@ -150,7 +150,7 @@ function getAllJsFiles() {
       .split('\n')
       .filter((f) => f);
   } catch (_error) {
-    loggers.app.error('Failed to get JS files:', { error: error.message });
+    loggers.app.error('Failed to get JS files:', { error: _error.message });
     return [];
   }
 }

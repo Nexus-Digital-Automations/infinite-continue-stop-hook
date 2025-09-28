@@ -423,7 +423,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
         tasksUnassigned: 0,
         orphanedTasksReset: 0,
         projectPath,
-        error: error.message,
+        error: _error.message,
       };
     }
   }
@@ -476,14 +476,14 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
         };
       }
     } catch (_error) {
-      const errorMsg = `Failed to process ${projectPath}: ${error.message}`;
+      const errorMsg = `Failed to process ${projectPath}: ${_error.message}`;
       logger.addFlow(errorMsg);
       return {
         agentsRemoved: 0,
         tasksUnassigned: 0,
         orphanedTasksReset: 0,
         projectPath,
-        error: error.message,
+        error: _error.message,
       };
     }
   });
@@ -745,8 +745,8 @@ async function autoSortTasksByPriority(_taskManager) {
     };
   } catch (_error) {
     // Log error through logger for proper tracking - use loggers.app for error handling
-    loggers.app.error('autoSortTasksByPriority error:', error);
-    return { error: error.message, tasksMoved: 0, tasksUpdated: 0 };
+    loggers.app.error('autoSortTasksByPriority error:', _error);
+    return { error: _error.message, tasksMoved: 0, tasksUpdated: 0 };
   }
 }
 
@@ -1569,7 +1569,7 @@ node -e "const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-sto
     } catch (_error) {
       // Handle corrupted TASKS.json by using autoFixer
       logger.addFlow(
-        `Task status failed, attempting auto-fix: ${error.message}`
+        `Task status failed, attempting auto-fix: ${_error.message}`
       );
       const fixResult = await taskManager.autoFix(todoPath);
       if (fixResult.fixed) {
@@ -1674,17 +1674,17 @@ This system operates in infinite continue mode. To authorize a stop, use:
     // eslint-disable-next-line n/no-process-exit
     process.exit(2); // Always continue - never allow natural stops
   } catch (_error) {
-    console.error('DETAILED ERROR DEBUG:', error.Name, ':', _error.message);
-    console.error('STACK TRACE:', error.stack);
-    loggers.app.error('stop-hook-main error:', error);
+    console.error('DETAILED ERROR DEBUG:', _error.name, ':', _error.message);
+    console.error('STACK TRACE:', _error.stack);
+    loggers.app.error('stop-hook-main error:', _error);
     loggers.app.info(
-      `Error handled - continuing infinite mode: ${error.message}`
+      `Error handled - continuing infinite mode: ${_error.message}`
     );
 
     loggers.app.error(`
 ⚠️ STOP HOOK ERROR - CONTINUING ANYWAY
 
-Error encountered: ${error.message}
+Error encountered: ${_error.message}
 
 🔄 INFINITE CONTINUE MODE MAINTAINED
 Even with errors, the system continues to prevent accidental termination.
