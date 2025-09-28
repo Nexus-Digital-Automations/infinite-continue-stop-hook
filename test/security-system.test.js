@@ -47,7 +47,7 @@ describe('Security System', () => {
         },
       };
 
-      const RESULT = securityValidator.validateInput(
+      const result = securityValidator.validateInput(
         testData,
         'test_endpoint',
         schema
@@ -70,7 +70,7 @@ describe('Security System', () => {
         },
       };
 
-      const RESULT = securityValidator.validateInput(
+      const result = securityValidator.validateInput(
         maliciousData,
         'test_endpoint',
         schema
@@ -84,9 +84,8 @@ describe('Security System', () => {
       const OPERATION= 'create';
       const resource = { type: 'task', id: 'test_task' };
 
-      const RESULT = securityValidator.authorizeOperation(
-        agentId,
-        OPERATION
+      const result = securityValidator.authorizeOperation(
+        agentId, operation,
         resource
       );
       expect(result.authorized).toBe(true);
@@ -98,9 +97,8 @@ describe('Security System', () => {
       const OPERATION= 'create';
       const resource = { type: 'task' };
 
-      const RESULT = securityValidator.authorizeOperation(
-        invalidAgentId,
-        OPERATION
+      const result = securityValidator.authorizeOperation(
+        invalidAgentId, operation,
         resource
       );
       expect(result.authorized).toBe(false);

@@ -63,7 +63,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
     child.on('close', (code) => {
       if (code === 0) {
         try {
-          const RESULT = JSON.parse(stdout);
+          const result = JSON.parse(stdout);
           resolve(result);
         } catch (parseError) {
           reject(
@@ -131,7 +131,7 @@ async function setupTestProject() {
       PATH.join(TEST_PROJECT_DIR, 'package.json'),
       JSON.stringify(packageJson, null, 2)
     );
-  } catch {
+  } catch (error) {
     loggers.stopHook.error('Failed to setup test project:', error);
     throw error;
   }
@@ -143,7 +143,7 @@ async function setupTestProject() {
 async function cleanupTestProject() {
   try {
     await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
-  } catch {
+  } catch (error) {
     // Ignore cleanup errors
   }
 }
@@ -189,7 +189,7 @@ describe('Success Criteria Integration Tests', () => {
 
       // Note: Success criteria endpoints would be added to TaskManager API
       // for now, we test the underlying functionality through task updates
-      const RESULT = await execAPI('list', [
+      const result = await execAPI('list', [
         JSON.stringify({ status: 'pending' }),
       ]);
       expect(result.success).toBe(true);
@@ -210,7 +210,7 @@ describe('Success Criteria Integration Tests', () => {
     test('should apply template to task success criteria', async () => {
       // Test template application
       // This would use POST /api/success-criteria/task/:taskId with template option
-      const RESULT = await execAPI('list', [JSON.stringify({ id: taskId })]);
+      const result = await execAPI('list', [JSON.stringify({ id: taskId })]);
       expect(result.success).toBe(true);
     });
 
@@ -233,7 +233,7 @@ describe('Success Criteria Integration Tests', () => {
     test('should handle project-wide criteria templates', async () => {
       // Test project-wide template management
       // This would use GET /api/success-criteria/project-wide endpoint
-      const RESULT = await execAPI('status', [agentId]);
+      const result = await execAPI('status', [agentId]);
       expect(result.success).toBe(true);
       expect(result.agent).toBeDefined();
     });
@@ -422,9 +422,9 @@ describe('Success Criteria Integration Tests', () => {
     test('should handle missing task for criteria operations', async () => {
       // Test operations on non-existent task
       try {
-        const RESULT = await execAPI('complete', ['non_existent_task_id']);
+        const result = await execAPI('complete', ['non_existent_task_id']);
         expect(result.success).toBe(false);
-      } catch {
+      } catch (error) {
         // Expected to fail
         expect(error).toBeDefined();
       }

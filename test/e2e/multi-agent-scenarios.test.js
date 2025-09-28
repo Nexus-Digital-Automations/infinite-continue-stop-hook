@@ -1,4 +1,5 @@
 /**
+const { loggers } = require('../lib/logger');
  * Multi-Agent Scenarios E2E Tests
  *
  * Tests concurrent agent operations And coordination scenarios to validate
@@ -512,7 +513,7 @@ describe('Multi-Agent Scenarios E2E', () => {
                 `Contention OPERATION${index}`,
               );
               successfulOperations++;
-            } catch {
+            } catch (error) {
               console.warn(
                 `Operation ${index} failed validation: ${error.message}`,
               );

@@ -133,7 +133,7 @@ class MockManager {
         default:
           result = { success: false, error: `Unknown command: ${apiCommand}` };
       }
-    } catch {
+    } catch (error) {
       result = { success: false, error: error.message };
     }
 
@@ -257,7 +257,7 @@ class MockManager {
           };
         });
       }
-    } catch {
+    } catch (error) {
       // Fetch not available in this Node.js version, skip mocking
       loggers.stopHook.log('Fetch not available for mocking:', error.message);
     }
@@ -345,7 +345,7 @@ class MockManager {
       if (this.originalModules.has('global.fetch')) {
         global[fetchProp] = this.originalModules.get('global.fetch');
       }
-    } catch {
+    } catch (error) {
       // Fetch not available, skip restoration
       loggers.stopHook.log(
         'Fetch not available for restoration:',

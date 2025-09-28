@@ -54,7 +54,7 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
     child.on('close', (code) => {
       if (code === 0) {
         try {
-          const RESULT = stdout.trim() ? JSON.parse(stdout) : {};
+          const result = stdout.trim() ? JSON.parse(stdout) : {};
           resolve(result);
         } catch {
           resolve({ rawOutput: stdout, stderr });
@@ -219,7 +219,7 @@ describe('Regression Test Suite', () => {
     await FS.writeFile(PATH.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     loggers.stopHook.log('Regression test project setup completed');
-  } catch {
+  } catch (error) {
     loggers.stopHook.error('Failed to setup regression test project:', error);
     throw error;
   }
@@ -229,7 +229,7 @@ async function cleanupRegressionTestProject() {
   try {
     await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Regression test project cleanup completed');
-  } catch {
+  } catch (error) {
     loggers.stopHook.error('Failed to cleanup regression test project:', error);
   }
 }
@@ -374,7 +374,7 @@ describe('Success Criteria Regression Tests', () => {
 
           const status = await execAPI('success-criteria:status');
           expect(status.projectCriteria.length).toBeGreaterThan(0);
-        } catch {
+        } catch (error) {
           // Log version compatibility issues but don't fail test
           console.log(
             `API version ${version} compatibility note:`,
@@ -679,7 +679,7 @@ describe('Success Criteria Regression Tests', () => {
           loggers.stopHook.log(
             `Schema ${schema.version} compatibility confirmed`
           );
-        } catch {
+        } catch (error) {
           console.log(
             `Schema ${schema.version} evolution note:`,
             _error.message
@@ -846,7 +846,7 @@ describe('Success Criteria Regression Tests', () => {
       // Use for-await-of to maintain sequential processing for deprecated endpoint testing
       for await (const endpoint of DEPRECATED_ENDPOINTS) {
         try {
-          const RESULT = await execAPI(endpoint);
+          const result = await execAPI(endpoint);
 
           // Should work but may include deprecation warnings
           expect(result).toBeDefined();
@@ -857,7 +857,7 @@ describe('Success Criteria Regression Tests', () => {
               result.warning || 'Endpoint is deprecated'
             );
           }
-        } catch {
+        } catch (error) {
           // Some deprecated endpoints might be completely removed
           console.log(
             `Deprecated endpoint ${endpoint} is no longer available:`,
@@ -975,7 +975,7 @@ describe('Success Criteria Regression Tests', () => {
           console.log(
             `Template version ${template.version} compatibility confirmed`
           );
-        } catch {
+        } catch (error) {
           console.log(
             `Template version ${template.version} compatibility issue:`,
             _error.message
@@ -1131,20 +1131,20 @@ describe('Success Criteria Regression Tests', () => {
           // Safe: Test comparison, not security-sensitive
           // eslint-disable-next-line security/detect-possible-timing-attacks
           if (api === 'success-criteria:init') {
-            const RESULT = await execAPI(api);
+            const result = await execAPI(api);
             expect(result).toBeDefined();
 
             // Safe: Test comparison, not security-sensitive
             // eslint-disable-next-line security/detect-possible-timing-attacks
           } else if (api === 'success-criteria:status') {
-            const RESULT = await execAPI(api);
+            const result = await execAPI(api);
             expect(result).toBeDefined();
             // Status should always have certain fields
             expect(result.projectCriteria !== undefined).toBe(true);
           }
 
           loggers.stopHook.log(`API contract for ${api} is stable`);
-        } catch {
+        } catch (error) {
           loggers.stopHook.log(
             `API contract issue for ${api}:`,
             _error.message
@@ -1186,7 +1186,7 @@ describe('Success Criteria Regression Tests', () => {
         {
           name: 'Basic Validation',
           test: async () => {
-            const RESULT = await execAPI('success-criteria:validate');
+            const result = await execAPI('success-criteria:validate');
             return result.results !== undefined;
           },
         },
@@ -1218,7 +1218,7 @@ describe('Success Criteria Regression Tests', () => {
           loggers.stopHook.log(
             `Essential function '${func.name}' is preserved`
           );
-        } catch {
+        } catch (error) {
           console.error(
             `Essential function '${func.name}' failed:`,
             _error.message
@@ -1273,7 +1273,7 @@ describe('Success Criteria Regression Tests', () => {
 
       // Use for-await-of to maintain sequential processing for performance testing
       for await (const test of PERFORMANCE_TESTS) {
-        const RESULT = await test.test();
+        const result = await test.test();
         expect(result.duration).toBeLessThan(result.threshold);
 
         console.log(

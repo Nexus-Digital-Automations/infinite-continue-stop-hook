@@ -69,7 +69,7 @@ class MiscellaneousLintFixer {
       // result unused
       {
         pattern: /(\s+)(const|let|var)\s+result\s*=/g,
-        replacement: '$1$2 RESULT =',
+        replacement: '$1$2 result =',
       },
     ];
 
@@ -218,7 +218,7 @@ class MiscellaneousLintFixer {
 
       this.filesProcessed++;
       return totalFixes;
-    } catch {
+    } catch (error) {
       // eslint-disable-next-line no-console
       console.error(`❌ Error processing ${filePath}:`, error.message);
       return 0;
@@ -292,7 +292,7 @@ class MiscellaneousLintFixer {
         execSync('npm run lint > /dev/null 2>&1');
         // eslint-disable-next-line no-console
         console.log('✅ All miscellaneous linting errors have been fixed!');
-      } catch {
+      } catch (error) {
         // eslint-disable-next-line no-console
         console.log(
           'ℹ️  Some linting errors may remain - running final check...'

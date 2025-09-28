@@ -1,4 +1,5 @@
 /**
+const { loggers } = require('../lib/logger');
  * RAG System End-to-End Integration Tests
  *
  * === OVERVIEW ===
@@ -130,7 +131,7 @@ describe('RAG System End-to-End Integration Tests', () => {
     // Clean up test files
     try {
       await FS.rm(testDataPath, { recursive: true, force: true });
-    } catch {
+    } catch (error) {
       loggers.stopHook.warn('Failed to clean up test data:', error.message);
     }
   });
@@ -311,7 +312,7 @@ describe('RAG System End-to-End Integration Tests', () => {
         tags: ['system', 'memory', 'distributed', 'cascade'],
       };
 
-      const RESULT = await ragOperations.storeError(_complexError);
+      const result = await ragOperations.storeError(_complexError);
       expect(result.success).toBe(true);
 
       // Search for the stored error
@@ -646,7 +647,7 @@ describe('RAG System End-to-End Integration Tests', () => {
 
       // System should continue to function
       const lesson = testDataGenerator.generateLessons(1)[0];
-      const RESULT = await ragOperations.storeLesson(lesson);
+      const result = await ragOperations.storeLesson(lesson);
       expect(result.success).toBe(true);
 
       const searchResults = await ragOperations.searchLessons(lesson.title);

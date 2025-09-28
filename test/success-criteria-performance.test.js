@@ -1,4 +1,5 @@
 /**
+const { loggers } = require('../lib/logger');
  * Success Criteria Performance Test Suite
  * Testing Agent #6 - Performance And Timing Validation
  *
@@ -63,7 +64,7 @@ class PerformanceMonitor {
     const startMemory = process.memoryUsage();
 
     try {
-      const RESULT = await OPERATION);
+      const result = await OPERATION);
       const END_TIME = performance.now();
       const END_MEMORY = process.memoryUsage();
 
@@ -83,7 +84,7 @@ class PerformanceMonitor {
 
       this.measurements.push(MEASUREMENT);
       return { result, MEASUREMENT };
-    } catch {
+    } catch (error) {
       const END_TIME = performance.now();
       const MEASUREMENT = {
         operationName,
@@ -173,7 +174,7 @@ class PerformanceMonitor {
         // Check for performance violations
         if (MAX_TIME > 30000) {
           report.performanceViolations.push({
-            OPERATION opType,
+            operation, opType,
             type: 'MAX_TIME_VIOLATION',
             value: MAX_TIME,
             threshold: 30000,
@@ -181,7 +182,7 @@ class PerformanceMonitor {
         }
         if (AVG_TIME > 30000) {
           report.performanceViolations.push({
-            OPERATION opType,
+            operation, opType,
             type: 'AVG_TIME_VIOLATION',
             value: AVG_TIME,
             threshold: 30000,
@@ -235,7 +236,7 @@ function execAPIWithMonitoring(
       CHILD.on('close', (code) => {
         if (code === 0) {
           try {
-            const RESULT = stdout.trim() ? JSON.parse(stdout) : {};
+            const result = stdout.trim() ? JSON.parse(stdout) : {};
             resolve(result);
           } catch {
             resolve({ rawOutput: stdout, stderr });
@@ -341,7 +342,7 @@ describe('Performance Test Suite', () => {
     await FS.writeFile(PATH.join(TEST_PROJECT_DIR, 'test.js'), testJs);
 
     loggers.stopHook.log('Performance test project setup completed');
-  } catch {
+  } catch (error) {
     loggers.stopHook.error('Failed to setup performance test project:', error);
     throw error;
   }
@@ -351,7 +352,7 @@ async function cleanupPerformanceTestProject() {
   try {
     await FS.rm(TEST_PROJECT_DIR, { recursive: true, force: true });
     loggers.stopHook.log('Performance test project cleanup completed');
-  } catch {
+  } catch (error) {
     loggers.stopHook.error(
       'Failed to cleanup performance test project:',
       error
@@ -825,7 +826,7 @@ describe('Success Criteria Performance Tests', () => {
           expect(REPORT.totalOperations).toBeGreaterThan(0);
           expect(REPORT.operationSummary).toBeDefined();
           expect(REPORT.memoryAnalysis).toBeDefined();
-        } catch {
+        } catch (error) {
           const REPORT = monitor.generateReport();
           console.log(
             'Performance stress test failed with report:',

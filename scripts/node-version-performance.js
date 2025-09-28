@@ -1,4 +1,5 @@
 /**
+const { loggers } = require('../lib/logger');
  * Node.js Version Performance Benchmarking Script
  *
  * Comprehensive performance testing across different Node.js versions
@@ -281,7 +282,7 @@ class NodeVersionPerformanceBenchmark {
       console.log(
         `✅ Native modules benchmark completed: ${duration.toFixed(2)}ms`
       );
-    } catch {
+    } catch (error) {
       this.results.benchmarks.native_modules = {
         duration_ms: 0,
         status: 'failed',
@@ -620,7 +621,7 @@ ${this.results.recommendations?.map((r) => `- ${r}`).join('\n')}
       this.displaySummary();
 
       loggers.stopHook.log('\n✅ Benchmark suite completed successfully!');
-    } catch {
+    } catch (error) {
       loggers.stopHook.error('❌ Benchmark suite failed:', error.message);
       throw new Error(`Benchmark suite failed: ${error.message}`);
     }

@@ -376,7 +376,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
 
       return criteria;
     } catch (_error) {
-      this.logger.log(`⚠️ Could not load task requirements: ${_error.message}`);
+      this.logger.log(`⚠️ Could not load task requirements: ${__error.message}`);
       return {};
     }
   }
@@ -477,15 +477,15 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
         encoding: 'utf-8',
         cwd: this.projectRoot,
       });
-      const RESULT = JSON.parse(output);
+      const result = JSON.parse(output);
 
-      if (RESULT.success) {
-        return RESULT;
+      if (result.success) {
+        return result;
       } else {
-        throw new Error(`TaskManager API error: ${JSON.stringify(RESULT)}`);
+        throw new Error(`TaskManager API error: ${JSON.stringify(result)}`);
       }
     } catch (_error) {
-      this.logger.error(`❌ Failed to create audit task: ${_error.message}`);
+      this.logger._error(`❌ Failed to create audit task: ${_error.message}`);
       throw _error;
     }
   }
@@ -567,7 +567,7 @@ Refer to development/essentials/audit-criteria.md for complete criteria definiti
         JSON.stringify(logEntry) + '\n',
       );
     } catch (_error) {
-      this.logger.log(`⚠️ Failed to log audit task creation: ${_error.message}`);
+      this.logger.log(`⚠️ Failed to log audit task creation: ${__error.message}`);
     }
   }
 

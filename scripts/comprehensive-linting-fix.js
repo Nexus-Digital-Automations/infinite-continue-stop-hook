@@ -36,7 +36,7 @@ class ComprehensiveLintingFix {
         hasChanges = true;
       }
 
-      // Pattern 2: } catch { ... ${error.message} }
+      // Pattern 2: } catch (error) { ... ${error.message} }
       // Fix: Change ${error.message} to ${_error.message}
       const errorTemplatePattern =
         /catch\s*\(\s*_error\s*\)\s*\{[^}]*?\$\{error\./g;
@@ -90,7 +90,7 @@ class ComprehensiveLintingFix {
       }
 
       return { content: newContent, hasChanges };
-    } catch {
+    } catch (error) {
       console.error(`Error processing ${filePath}:`, error.message);
       return { content: null, hasChanges: false };
     }
@@ -105,7 +105,7 @@ class ComprehensiveLintingFix {
       let newContent = content;
       let hasChanges = false;
 
-      // Pattern: } catch { with no usage of _error
+      // Pattern: } catch (error) { with no usage of _error
       const catchBlockPattern = /}\s*catch\s*\(\s*_error\s*\)\s*\{([^}]*)\}/g;
 
       let match;
@@ -121,7 +121,7 @@ class ComprehensiveLintingFix {
       }
 
       return { content: newContent, hasChanges };
-    } catch {
+    } catch (error) {
       console.error(`Error processing ${filePath}:`, error.message);
       return { content: null, hasChanges: false };
     }
@@ -166,7 +166,7 @@ class ComprehensiveLintingFix {
       }
 
       return { content: lines.join('\n'), hasChanges };
-    } catch {
+    } catch (error) {
       console.error(
         `Error processing unused parameters in ${filePath}:`,
         error.message
@@ -180,11 +180,11 @@ class ComprehensiveLintingFix {
    */
   getLintErrorsForFile(filePath) {
     try {
-      const RESULT = execSync(`npm run lint -- "${filePath}" 2>&1`, {
+      const result = execSync(`npm run lint -- "${filePath}" 2>&1`, {
         encoding: 'utf8',
       });
       return result.split('\n').filter((line) => line.includes('error'));
-    } catch {
+    } catch (error) {
       return error.stdout
         ? error.stdout.split('\n').filter((line) => line.includes('error'))
         : [];
@@ -208,7 +208,7 @@ class ComprehensiveLintingFix {
     ];
 
     for (const fix of fixes) {
-      const RESULT = fix();
+      const result = fix();
       if (result.hasChanges && result.content) {
         fs.writeFileSync(filePath, result.content);
         currentContent = result.content;
@@ -296,7 +296,7 @@ class ComprehensiveLintingFix {
       console.log('\n🔍 Running final lint check...');
       try {
         execSync('npm run lint -- --quiet', { stdio: 'inherit' });
-      } catch {
+      } catch (error) {
         console.log('⚠️  Some errors remain and may need manual intervention.');
       }
     }
@@ -307,7 +307,7 @@ class ComprehensiveLintingFix {
    */
   getCurrentErrorCount() {
     try {
-      const RESULT = execSync(
+      const result = execSync(
         'npm run lint 2>&1 | grep -E "(error|warning)" | wc -l',
         { encoding: 'utf8' }
       );

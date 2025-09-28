@@ -131,7 +131,7 @@ class CoverageThresholdChecker {
       if (shouldFail) {
         throw new Error('Coverage validation failed');
       }
-    } catch {
+    } catch (error) {
       CoverageLogger.error(`Coverage validation failed: ${error.message}`);
       if (process.env.DEBUG) {
         loggers.stopHook.error(error.stack);
@@ -178,7 +178,7 @@ class CoverageThresholdChecker {
       );
 
       return coverageData;
-    } catch {
+    } catch (error) {
       if (error.message.includes('Invalid coverage')) {
         throw error;
       }
@@ -513,7 +513,7 @@ Examples:
     try {
       const customThresholds = JSON.parse(thresholdArg.split('=')[1]);
       config.thresholds = { ...config.thresholds, ...customThresholds };
-    } catch {
+    } catch (error) {
       loggers.stopHook.error('❌ Invalid thresholds JSON:', error.message);
       throw error;
     }
@@ -522,7 +522,7 @@ Examples:
   const checker = new CoverageThresholdChecker(config);
   try {
     checker.run();
-  } catch {
+  } catch (error) {
     loggers.stopHook.error('❌ Fatal error:', error.message);
     throw error;
   }

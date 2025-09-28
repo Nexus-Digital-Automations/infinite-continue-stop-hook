@@ -282,8 +282,8 @@ if (require.main === module) {
 
   testCases.forEach((testCase) => {
     ValidationTestLogger.log(`Testing: ${testCase.name}`);
-    const RESULT = validator.validateTaskCreation(testCase.data);
-    ValidationTestLogger.log(validator.formatResult(RESULT));
+    const result = validator.validateTaskCreation(testCase.data);
+    ValidationTestLogger.log(validator.formatResult(result));
   });
 
   // Command validation tests
@@ -299,8 +299,8 @@ if (require.main === module) {
 
   commandTests.forEach((test) => {
     ValidationTestLogger.log(`Testing command: ${test.name}`);
-    const RESULT = validator.validateCommand(test.command, test.args);
-    ValidationTestLogger.log(validator.formatResult(RESULT));
+    const result = validator.validateCommand(test.command, test.args);
+    ValidationTestLogger.log(validator.formatResult(result));
   });
 }
 

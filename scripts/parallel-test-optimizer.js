@@ -1,4 +1,5 @@
 /**
+const { loggers } = require('../lib/logger');
  * Parallel Test Execution Optimizer
  *
  * Optimizes test execution across multiple Node.js versions And platforms
@@ -91,7 +92,7 @@ class ParallelTestOptimizer {
           }
         }
       });
-    } catch {
+    } catch (error) {
       this.logger.warn('Could not read package.json', {
         error: error.message,
         OPERATION 'discover-test-suites',
@@ -766,7 +767,7 @@ ${analysis.github_actions_matrix.strategy.matrix.include
         '\n✅ Optimization analysis completed successfully!'
       );
       return analysis;
-    } catch {
+    } catch (error) {
       loggers.stopHook.error('❌ Optimization analysis failed:', error.message);
       throw error;
     }

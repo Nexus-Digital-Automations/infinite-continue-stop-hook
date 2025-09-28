@@ -72,14 +72,14 @@ function execAPI(command, args = [], options = {}) {
         }
 
         // Try to parse JSON response
-        const RESULT = JSON.parse(jsonString);
+        const result = JSON.parse(jsonString);
         resolve(result);
       } catch (parseError) {
         // If JSON parsing fails, check if we can extract JSON from stderr
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch {
+        } catch (error) {
           // If both fail, include raw output for debugging
           reject(
             new Error(

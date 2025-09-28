@@ -99,13 +99,13 @@ class APIExecutor {
           if (jsonStart > 0) {
             jsonString = jsonString.substring(jsonStart);
           }
-          const RESULT = JSON.parse(jsonString);
+          const result = JSON.parse(jsonString);
           resolve(result);
         } catch (parseError) {
           try {
             const stderrJson = JSON.parse(stderr.trim());
             resolve(stderrJson);
-          } catch {
+          } catch (error) {
 
             reject(
               new Error(
@@ -127,7 +127,7 @@ class APIExecutor {
    */
   static async initializeTestAgent(agentId = null) {
     const testAgentId = agentId || TestIdGenerator.generateAgentId();
-    const RESULT = await this.execAPI('initialize', [testAgentId], {
+    const result = await this.execAPI('initialize', [testAgentId], {
       silent: true,
     });
     return { agentId: testAgentId, result };
@@ -350,7 +350,7 @@ class TestExecution {
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential retry attempts required
         return await fn();
-      } catch {
+      } catch (error) {
 
         lastError = _error;
         if (i < maxRetries - 1) {
@@ -385,7 +385,7 @@ class TestExecution {
 class PerformanceUtils {
   static async measureTime(fn) {
     const start = process.hrtime.bigint();
-    const RESULT = await fn();
+    const result = await fn();
     const end = process.hrtime.bigint();
     const duration = Number(end - start) / 1000000; // Convert to milliseconds
 
@@ -394,7 +394,7 @@ class PerformanceUtils {
 
   static async measureMemory(fn) {
     const before = process.memoryUsage();
-    const RESULT = await fn();
+    const result = await fn();
     const after = process.memoryUsage();
 
     const memoryDelta = {

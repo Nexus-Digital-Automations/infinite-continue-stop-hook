@@ -310,7 +310,7 @@ class JestCiCdReporter {
       }
 
       return info;
-    } catch {
+    } catch (error) {
       return {
         error: 'Failed to get Git information',
         message: error.message,
@@ -411,7 +411,7 @@ class JestCiCdReporter {
           pct: summary.lines.pct,
         },
       };
-    } catch {
+    } catch (error) {
       return { error: 'Failed to extract coverage summary' };
     }
   }
@@ -595,7 +595,7 @@ class JestCiCdReporter {
           status: 'sent',
           timestamp: new Date().toISOString(),
         });
-      } catch {
+      } catch (error) {
         notifications.push({
           type: 'slack',
           status: 'failed',
@@ -614,7 +614,7 @@ class JestCiCdReporter {
           status: 'sent',
           timestamp: new Date().toISOString(),
         });
-      } catch {
+      } catch (error) {
         notifications.push({
           type: 'teams',
           status: 'failed',

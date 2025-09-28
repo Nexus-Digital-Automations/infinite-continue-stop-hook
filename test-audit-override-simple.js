@@ -21,9 +21,9 @@ class TestLogger {
 
 function runCommand(cmd) {
   try {
-    const RESULT = execSync(cmd, { encoding: 'utf8' });
+    const result = execSync(cmd, { encoding: 'utf8' });
     return JSON.parse(result);
-  } catch {
+  } catch (error) {
     return { success: false, error: error.message };
   }
 }

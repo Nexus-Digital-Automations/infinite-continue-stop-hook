@@ -108,7 +108,7 @@ class CoverageMonitor {
       if (!this.validation.passed) {
         throw new Error('Coverage validation failed');
       }
-    } catch {
+    } catch (error) {
       LOGGER.error(`Coverage monitoring failed: ${error.message}`);
       LOGGER.debug(error.stack);
       throw error;
@@ -178,7 +178,7 @@ class CoverageMonitor {
       LOGGER.debug(
         `Total coverage: ${JSON.stringify(coverageData.total, null, 2)}`
       );
-    } catch {
+    } catch (error) {
       throw new Error(`Failed to parse coverage data: ${error.message}`);
     }
   }
@@ -381,7 +381,7 @@ if (require.main === module) {
   const monitor = new CoverageMonitor();
   try {
     monitor.run();
-  } catch {
+  } catch (error) {
     LOGGER.error(`Fatal error: ${error.message}`);
     throw error;
   }

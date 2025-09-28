@@ -1,4 +1,5 @@
 /**
+const { loggers } = require('../../lib/logger');
  * Stress Testing And Error Recovery Integration Tests
  *
  * Comprehensive integration tests for system resilience including:
@@ -118,7 +119,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
 
       const featureIds = [];
       for (const featureData of initialFeatures) {
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {
@@ -230,7 +231,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
 
       const featureIds = [];
       for (const featureData of bulkFeatures) {
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {
@@ -379,7 +380,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
       );
 
       for (const featureData of validFeatures) {
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {
@@ -482,7 +483,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
           category: 'enhancement',
         });
 
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(testFeature)],
           {
@@ -510,7 +511,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
       );
 
       for (const featureData of features) {
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {
@@ -535,7 +536,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
         category: 'bug-fix',
       });
 
-      const RESULT = await execAPI(
+      const result = await execAPI(
         'suggest-feature',
         [JSON.stringify(recoveryFeature)],
         {
@@ -569,7 +570,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
           await corruptFeaturesFile(testDir);
         }
 
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(feature)],
           {
@@ -686,7 +687,7 @@ describe('Stress Testing And Error Recovery Integration Tests', () => {
         });
 
         const startTime = Date.now();
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(feature)],
           {

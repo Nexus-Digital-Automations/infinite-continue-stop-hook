@@ -75,7 +75,7 @@ describe('Feature Lifecycle Integration Tests', () => {
       const suggestResults = [];
       for (const featureData of features) {
         // eslint-disable-next-line no-await-in-loop -- Sequential processing required for test data setup
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {
@@ -161,7 +161,7 @@ describe('Feature Lifecycle Integration Tests', () => {
       ];
 
       for (const incompleteFeature of incompleteFeatures) {
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(incompleteFeature)],
           {
@@ -298,7 +298,7 @@ describe('Feature Lifecycle Integration Tests', () => {
 
       const featureIds = [];
       for (const featureData of testFeatures) {
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {
@@ -387,7 +387,7 @@ describe('Feature Lifecycle Integration Tests', () => {
 
       const featureIds = [];
       for (const featureData of features) {
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {
@@ -531,7 +531,7 @@ describe('Feature Lifecycle Integration Tests', () => {
 
       const featureIds = [];
       for (const featureData of testFeatures) {
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {
@@ -846,7 +846,7 @@ describe('Feature Lifecycle Integration Tests', () => {
 
       const featureIds = [];
       for (const featureData of sprintFeatures) {
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {
@@ -952,7 +952,7 @@ describe('Feature Lifecycle Integration Tests', () => {
       // 2. Suggest all features
       const featureIds = [];
       for (const featureData of features) {
-        const RESULT = await execAPI(
+        const result = await execAPI(
           'suggest-feature',
           [JSON.stringify(featureData)],
           {

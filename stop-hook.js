@@ -116,7 +116,7 @@ function generateValidationProgressReport(flagData, logger, workingDir) {
           );
         }
       }
-    } catch {
+    } catch (error) {
       logger.warn(`Failed to load custom validation rules: ${error.message}`);
     }
 
@@ -143,7 +143,7 @@ function generateValidationProgressReport(flagData, logger, workingDir) {
   // Process validation results from flag data
   if (flagData.validation_results) {
     for (const criteria of validationCriteria) {
-      const RESULT = flagData.validation_results[criteria];
+      const result = flagData.validation_results[criteria];
       if (result) {
         progressReport.validationDetails.push({
           criterion: criteria,
@@ -262,7 +262,7 @@ ${progressReport.validationDetails
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- hook script with validated file path for cleanup
       FS.unlinkSync(stopFlagPath); // Remove flag after reading
       return flagData.stop_allowed === true;
-    } catch {
+    } catch (error) {
       // Invalid flag file, remove it
       console.error(
         `⚠️ Invalid validation progress file detected - cleaning up. Error: ${error.message}`
@@ -324,7 +324,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
   try {
     // eslint-disable-next-line security/detect-non-literal-fs-filename -- File path constructed from trusted hook configuration
     todoData = JSON.parse(FS.readFileSync(todoPath, 'utf8'));
-  } catch {
+  } catch (error) {
     logger.addFlow(
       `Failed to read TASKS.json in ${projectPath}: ${error.message}`
     );
@@ -430,7 +430,7 @@ function cleanupStaleAgentsInProject(projectPath, logger) {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Hook system path controlled by stop hook security protocols
       FS.writeFileSync(todoPath, JSON.stringify(todoData, null, 2));
       logger.addFlow(`Updated ${projectPath}/TASKS.json with cleanup results`);
-    } catch {
+    } catch (error) {
       logger.addFlow(
         `Failed to write TASKS.json in ${projectPath}: ${error.message}`
       );
@@ -477,7 +477,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename -- Stop hook path validated through hook configuration system
       if (FS.existsSync(projectPath)) {
-        const RESULT = await cleanupStaleAgentsInProject(projectPath, logger);
+        const result = await cleanupStaleAgentsInProject(projectPath, logger);
         return result;
       } else {
         logger.addFlow(
@@ -491,7 +491,7 @@ async function cleanupStaleAgentsAcrossProjects(logger) {
           skipped: true,
         };
       }
-    } catch {
+    } catch (error) {
       const errorMsg = `Failed to process ${projectPath}: ${error.message}`;
       logger.addFlow(errorMsg);
       return {
@@ -737,7 +737,7 @@ async function autoSortTasksByPriority(taskManager) {
       tasksUpdated,
       totalTasks: tasksOrFeatures.length,
     };
-  } catch {
+  } catch (error) {
     // Log error through logger for proper tracking
     const logger = new LOGGER.LOGGER(process.cwd());
     logger.logError(error, 'autoSortTasksByPriority');
@@ -1011,7 +1011,7 @@ If you want to enable task management for this project:
         logger.info('TASKS.json corruption automatically fixed', {
           fixesApplied: corruptionCheck.fixesApplied,
           component: 'StopHook',
-          OPERATION 'corruptionCheck',
+          operation: 'corruptionCheck',
         });
         console.log(
           `🔧 STOP HOOK: Automatically fixed TASKS.json corruption - ${corruptionCheck.fixesApplied.join(', ')}`
@@ -1021,7 +1021,7 @@ If you want to enable task management for this project:
       logger.error('TASKS.json corruption check failed', {
         error: corruptionError.message,
         component: 'StopHook',
-        OPERATION 'corruptionCheck',
+        operation: 'corruptionCheck',
       });
       console.error(
         `⚠️ STOP HOOK: Corruption check failed:`,
@@ -1070,7 +1070,7 @@ If you want to enable task management for this project:
           orphanedTasksReset: multiProjectResults.totalOrphanedTasksReset,
           errors: multiProjectResults.errors,
           component: 'StopHook',
-          OPERATION 'multiProjectCleanup',
+          operation: 'multiProjectCleanup',
         });
 
         console.error(`
@@ -1327,7 +1327,7 @@ If you want to enable task management for this project:
           testErrorsMoved: sortResult.tasksMoved,
           tasksUpdated: sortResult.tasksUpdated,
           component: 'StopHook',
-          OPERATION 'automaticTaskSorting',
+          operation: 'automaticTaskSorting',
         });
 
         console.error(`
@@ -1359,7 +1359,7 @@ This ensures proper priority ordering with test tasks only executed after all er
 
 Task sorting encountered an issue: ${sortingError.message}
 
-This is non-critical And won't prevent continued OPERATION
+This is non-critical And won't prevent continued operation,
 Tasks will continue to work but may not be optimally sorted.
       `);
     }
@@ -1611,7 +1611,7 @@ node -e "const TASK_MANAGER = require('/Users/jeremyparker/infinite-continue-sto
     let taskStatus;
     try {
       taskStatus = await taskManager.getTaskStatus();
-    } catch {
+    } catch (error) {
       // Handle corrupted TASKS.json by using autoFixer
       logger.addFlow(
         `Task status failed, attempting auto-fix: ${error.message}`
@@ -1669,7 +1669,7 @@ This keeps TASKS.json clean And prevents it from becoming crowded with completed
 
 Task archival encountered an issue: ${archivalError.message}
 
-This is non-critical And won't prevent continued OPERATION
+This is non-critical And won't prevent continued operation,
       `);
     }
 
@@ -1718,7 +1718,7 @@ This system operates in infinite continue mode. To authorize a stop, use:
 
     // eslint-disable-next-line n/no-process-exit
     process.exit(2); // Always continue - never allow natural stops
-  } catch {
+  } catch (error) {
     logger.logError(error, 'stop-hook-main');
     logger.logExit(
       2,

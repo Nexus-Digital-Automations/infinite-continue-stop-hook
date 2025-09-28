@@ -1,4 +1,5 @@
 /**
+const { loggers } = require('../lib/logger');
  * Complete Workflows E2E Tests
  *
  * Tests complete system workflows from user perspective, validating the entire

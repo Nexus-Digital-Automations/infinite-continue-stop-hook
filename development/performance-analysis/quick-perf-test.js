@@ -98,7 +98,7 @@ class QuickPerfTest {
       try {
         const startTime = process.hrtime.bigint();
         const cmd = `timeout 10s node ${this.apiPath} ${command} ${args.join(' ')}`;
-        const RESULT = execSync(cmd, { encoding: 'utf8', timeout: 15000 });
+        const result = execSync(cmd, { encoding: 'utf8', timeout: 15000 });
         const endTime = process.hrtime.bigint();
 
         const responseTime = Number(endTime - startTime) / 1000000; // Convert to ms
@@ -106,7 +106,7 @@ class QuickPerfTest {
         successCount++;
 
         // Check if result contains success indicator
-        if (RESULT.includes('"success": false') || RESULT.includes('error')) {
+        if (result.includes('"success": false') || result.includes('error')) {
           errors.push(`Iteration ${i + 1}: API returned error`);
         }
       } catch (_error) {
@@ -156,19 +156,19 @@ class QuickPerfTest {
         endpoint.args,
       );
 
-      const RESULT = this.results[endpoint.cmd];
+      const result = this.results[endpoint.cmd];
       loggers.stopHook.log(
-        `  ✅ Success Rate: ${RESULT.successRate.toFixed(1)}%`,
+        `  ✅ Success Rate: ${result.successRate.toFixed(1)}%`,
       );
       console.log(
-        `  ⏱️  Avg Response: ${RESULT.averageResponseTime.toFixed(2)}ms`,
+        `  ⏱️  Avg Response: ${result.averageResponseTime.toFixed(2)}ms`,
       );
       console.log(
-        `  📈 Range: ${RESULT.minResponseTime.toFixed(2)} - ${RESULT.maxResponseTime.toFixed(2)}ms`,
+        `  📈 Range: ${result.minResponseTime.toFixed(2)} - ${result.maxResponseTime.toFixed(2)}ms`,
       );
 
-      if (RESULT.errors.length > 0) {
-        loggers.stopHook.log(`  ❌ Errors: ${RESULT.errors.length}`);
+      if (result.errors.length > 0) {
+        loggers.stopHook.log(`  ❌ Errors: ${result.errors.length}`);
       }
     }
 
@@ -333,7 +333,7 @@ function main() {
 
     loggers.stopHook.log(`\n📄 Full report saved to: ${outputFile}`);
   } catch (_error) {
-    loggers.stopHook.error('❌ Performance test failed:', _error);
+    loggers.stopHook._error('❌ Performance test failed:', _error);
     throw _error;
   }
 }

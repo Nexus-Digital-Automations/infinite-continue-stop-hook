@@ -1,4 +1,5 @@
 /**
+const { loggers } = require('./lib/logger');
  * Quick TaskManager Performance Test
  * Focused performance analysis with faster execution
  */
@@ -100,7 +101,7 @@ class QuickPerformanceTest {
     for (const test of tests) {
       loggers.stopHook.log(`📊 Testing: ${test.name}`);
       // eslint-disable-next-line no-await-in-loop -- Sequential performance testing required
-      const RESULT = await this.executeCommand(test.command);
+      const result = await this.executeCommand(test.command);
 
       this.results.push({
         testName: test.name,
@@ -203,7 +204,7 @@ class QuickPerformanceTest {
     if (avgMemoryPerOp > 10 * 1024 * 1024) {
       // 10MB per operation
       console.log(
-        `   • Review memory usage patterns - average ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB per OPERATION
+        `   • Review memory usage patterns - average ${(avgMemoryPerOp / (1024 * 1024)).toFixed(2)}MB per operation,
       );
     }
 

@@ -263,7 +263,7 @@ class EnhancedCoverageSystem {
       if (hasFailures) {
         throw new Error('Coverage validation failed with blocking failures');
       }
-    } catch {
+    } catch (error) {
       this.logger.error('Coverage pipeline failed', {
         error: error.message,
         stack: error.stack,
@@ -453,7 +453,7 @@ class EnhancedCoverageSystem {
 
       this.logger.success('Coverage data loaded successfully');
       this.logger.debug('Coverage summary', this.results.coverage.summary);
-    } catch {
+    } catch (error) {
       throw new Error(`Failed to load coverage data: ${error.message}`);
     }
   }
@@ -1143,7 +1143,7 @@ Last updated: ${new Date().toISOString()}
       }
 
       this.logger.success('Integrations updated');
-    } catch {
+    } catch (error) {
       this.logger.warning(`Integration update failed: ${error.message}`);
     }
   }
@@ -1462,7 +1462,7 @@ Last updated: ${new Date().toISOString()}
           encoding: 'utf8',
         }).trim(),
       };
-    } catch {
+    } catch (error) {
       this.logger.debug('Could not get Git information', {
         error: error.message,
       });
@@ -1535,7 +1535,7 @@ Examples:
     try {
       const customConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
       Object.assign(options, customConfig);
-    } catch {
+    } catch (error) {
       loggers.stopHook.error(`❌ Failed to load config: ${error.message}`);
       throw error;
     }
@@ -1574,7 +1574,7 @@ Examples:
   const system = new EnhancedCoverageSystem(options);
   try {
     system.run();
-  } catch {
+  } catch (error) {
     loggers.stopHook.error(
       '❌ Enhanced coverage system failed:',
       error.message

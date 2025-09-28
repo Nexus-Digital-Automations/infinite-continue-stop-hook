@@ -1,4 +1,5 @@
 /**
+const { loggers } = require('./lib/logger');
  * TaskManager Performance Benchmarking Suite
  *
  * Comprehensive performance analysis of TaskManager API endpoints,
@@ -120,7 +121,7 @@ class TaskManagerPerformanceBenchmark {
       // Run each endpoint multiple times for statistical significance
       for (let i = 0; i < 5; i++) {
         // eslint-disable-next-line no-await-in-loop -- Sequential timing measurements required
-        const RESULT = await this.executeTimedCommand(
+        const result = await this.executeTimedCommand(
           endpoint[0],
           endpoint.slice(1)
         );
@@ -196,7 +197,7 @@ class TaskManagerPerformanceBenchmark {
         };
 
         // eslint-disable-next-line no-await-in-loop -- Sequential subtask creation required for timing
-        const RESULT = await this.executeTimedCommand('create-subtask', [
+        const result = await this.executeTimedCommand('create-subtask', [
           taskId,
           JSON.stringify(subtaskData),
           agentId,
@@ -220,7 +221,7 @@ class TaskManagerPerformanceBenchmark {
         taskId,
         ...listResult,
       });
-    } catch {
+    } catch (error) {
       loggers.stopHook.log(
         `   ❌ Error in subtask benchmarking: ${error.message}`
       );
@@ -258,13 +259,13 @@ class TaskManagerPerformanceBenchmark {
       for (const [command, ...args] of operations) {
         loggers.stopHook.log(`   Testing ${command}...`);
         // eslint-disable-next-line no-await-in-loop -- Sequential command testing required for timing
-        const RESULT = await this.executeTimedCommand(command, args);
+        const result = await this.executeTimedCommand(command, args);
         this.results.successCriteriaValidation.push({
-          OPERATION command,
+          operation, command,
           ...result,
         });
       }
-    } catch {
+    } catch (error) {
       console.log(
         `   ❌ Error in success criteria benchmarking: ${error.message}`
       );
@@ -309,7 +310,7 @@ class TaskManagerPerformanceBenchmark {
 
       const listResults = await Promise.all(listOperations);
       this.results.concurrentAccess.push(...listResults);
-    } catch {
+    } catch (error) {
       console.log(
         `   ❌ Error in concurrent access benchmarking: ${error.message}`
       );
@@ -695,7 +696,7 @@ class TaskManagerPerformanceBenchmark {
       );
 
       return report;
-    } catch {
+    } catch (error) {
       loggers.stopHook.error(`❌ Benchmark suite failed: ${error.message}`);
       loggers.stopHook.error(error.stack);
       throw error;

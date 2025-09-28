@@ -1,4 +1,5 @@
 /**
+const { loggers } = require('../lib/logger');
  * RAG System Test Setup
  *
  * Global test setup And utilities for RAG system testing.
@@ -140,7 +141,7 @@ global.RAG_TEST_UTILS = {
    */
   measureTime: async (fn) => {
     const start = process.hrtime.bigint();
-    const RESULT = await fn();
+    const result = await fn();
     const end = process.hrtime.bigint();
     const duration = Number(end - start) / 1000000; // Convert to milliseconds
     return { result, duration };
@@ -152,7 +153,7 @@ global.RAG_TEST_UTILS = {
   assertPerformance: (duration, threshold, OPERATION => {
     if (duration > threshold) {
       throw new Error(
-        `Performance threshold exceeded for ${OPERATION: ${duration}ms > ${threshold}ms`,
+        `Performance threshold exceeded for ${operation: ${duration}ms > ${threshold}ms`,
       );
     }
   },
@@ -195,7 +196,7 @@ global.RAG_TEST_UTILS = {
   cleanupTestDirectory: async (dirPath) => {
     try {
       await FS.rm(dirPath, { recursive: true, force: true });
-    } catch {
+    } catch (error) {
       loggers.stopHook.warn(`Cleanup warning for ${dirPath}:`, error.message);
     }
   },
@@ -259,7 +260,7 @@ afterEach(async () => {
         }),
       ),
     );
-  } catch {
+  } catch (error) {
     // Ignore cleanup errors
   }
 });

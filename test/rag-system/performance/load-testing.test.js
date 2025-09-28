@@ -1,4 +1,5 @@
 /**
+const { loggers } = require('../lib/logger');
  * RAG System Performance And Load Testing
  *
  * Tests system performance under various load conditions including
@@ -329,7 +330,7 @@ describe('RAG System Performance And Load Testing', () => {
             // Add small random delay to simulate realistic usage
             await new Promise(resolve => setTimeout(resolve, Math.random() * 100));
 
-          } catch {
+          } catch (error) {
             userResults.errors.push(error);
           }
         }
@@ -406,7 +407,7 @@ describe('RAG System Performance And Load Testing', () => {
               version: updateResult.version,
               timestamp: Date.now()
             };
-          } catch {
+          } catch (error) {
             return {
               modifierId,
               success: false,
@@ -488,7 +489,7 @@ describe('RAG System Performance And Load Testing', () => {
         loggers.stopHook.log('Pre-_operationmemory:', formatMemoryUsage(preOpMemory));
 
         const START_TIME = Date.now();
-        const RESULT = await testOperation.OPERATION);
+        const result = await testOperation.OPERATION);
         const END_TIME = Date.now();
 
         const _postOpMemory = process.memoryUsage();
@@ -560,7 +561,7 @@ describe('RAG System Performance And Load Testing', () => {
             expect(duration).toBeLessThan(5000); // Should complete within 5 seconds
           }
         }
-      } catch {
+      } catch (error) {
         // System should handle memory errors gracefully
         expect(error.message).toContain('memory');
         loggers.stopHook.log('Expected memory error handled gracefully:', error.message);
@@ -629,7 +630,7 @@ describe('RAG System Performance And Load Testing', () => {
 
         for (const queryTest of queryTests) {
           const _queryStartTime = Date.now();
-          const RESULT = await queryTest.query();
+          const result = await queryTest.query();
           const _queryEndTime = Date.now();
 
           const QUERY_TIME = queryEndTime - queryStartTime;
@@ -666,7 +667,7 @@ describe('RAG System Performance And Load Testing', () => {
           try {
             const _queryStartTime = Date.now();
 
-            const RESULT = await ragSystem.searchLessons(
+            const result = await ragSystem.searchLessons(
               `connection test query ${connId}-${i}`,
               { limit: 5 }
             );
@@ -677,7 +678,7 @@ describe('RAG System Performance And Load Testing', () => {
             connectionResults.queryTimes.push(queryTime);
             expect(result.success).toBe(true);
 
-          } catch {
+          } catch (error) {
             connectionResults.errors.push(error);
           }
         }

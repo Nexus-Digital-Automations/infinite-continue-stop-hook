@@ -76,14 +76,14 @@ function execAPI(command, args = [], timeout = TIMEOUT) {
         }
 
         // Try to parse JSON response
-        const RESULT = JSON.parse(jsonString);
+        const result = JSON.parse(jsonString);
         resolve(result);
       } catch (parseError) {
         // If JSON parsing fails, check if we can extract JSON from stderr
         try {
           const stderrJson = JSON.parse(stderr.trim());
           resolve(stderrJson);
-        } catch {
+        } catch (error) {
           // If both fail, include raw output for debugging
           reject(
             new Error(
@@ -216,9 +216,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         priority: 'high',
       };
 
-      const RESULT = await execAPI('create', [
-        JSON.stringify(featureTaskData),
-      ]);
+      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
 
       expect(result.success).toBe(true);
       expect(result.taskId).toBeDefined();
@@ -269,7 +267,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         priority: 'medium',
       };
 
-      const RESULT = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(SIMPLE_TASK_DATA),
       ]);
 
@@ -308,9 +306,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         priority: 'critical',
       };
 
-      const RESULT = await execAPI('create', [
-        JSON.stringify(ERROR_TASK_DATA),
-      ]);
+      const result = await execAPI('create', [JSON.stringify(ERROR_TASK_DATA)]);
 
       expect(result.success).toBe(true);
       testTaskId = result.taskId;
@@ -333,9 +329,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         skip_embedded_subtasks: true,
       };
 
-      const RESULT = await execAPI('create', [
-        JSON.stringify(featureTaskData),
-      ]);
+      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
 
       expect(result.success).toBe(true);
       testFeatureTaskId = result.taskId;
@@ -371,7 +365,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         priority: 'high',
       };
 
-      const RESULT = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(DATABASE_TASK_DATA),
       ]);
       testFeatureTaskId = result.taskId;
@@ -420,7 +414,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         priority: 'high',
       };
 
-      const RESULT = await execAPI('create', [JSON.stringify(API_TASK_DATA)]);
+      const result = await execAPI('create', [JSON.stringify(API_TASK_DATA)]);
       testFeatureTaskId = result.taskId;
 
       const listResult = await execAPI('list');
@@ -452,7 +446,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         priority: 'high',
       };
 
-      const RESULT = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(COMPLEX_TASK_DATA),
       ]);
       testFeatureTaskId = result.taskId;
@@ -488,9 +482,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         priority: 'medium',
       };
 
-      const RESULT = await execAPI('create', [
-        JSON.stringify(featureTaskData),
-      ]);
+      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       testFeatureTaskId = result.taskId;
 
       const listResult = await execAPI('list');
@@ -520,9 +512,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         priority: 'medium',
       };
 
-      const RESULT = await execAPI('create', [
-        JSON.stringify(featureTaskData),
-      ]);
+      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       testFeatureTaskId = result.taskId;
 
       const listResult = await execAPI('list');
@@ -548,9 +538,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         priority: 'high',
       };
 
-      const RESULT = await execAPI('create', [
-        JSON.stringify(featureTaskData),
-      ]);
+      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
       testFeatureTaskId = result.taskId;
 
       const listResult = await execAPI('list');
@@ -593,7 +581,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     });
 
     test('should list tasks with embedded subtasks information', async () => {
-      const RESULT = await execAPI('list');
+      const result = await execAPI('list');
 
       expect(result.success).toBe(true);
       expect(result.tasks.length).toBeGreaterThan(0);
@@ -615,7 +603,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
 
     test('should filter tasks by subtask properties', async () => {
       // This would test advanced filtering once implemented
-      const RESULT = await execAPI('list', [
+      const result = await execAPI('list', [
         JSON.stringify({ has_research_subtasks: true }),
       ]);
 
@@ -631,7 +619,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
     });
 
     test('should provide subtask status in task statistics', async () => {
-      const RESULT = await execAPI('stats');
+      const result = await execAPI('stats');
 
       expect(result.success).toBe(true);
       expect(result.statistics).toBeDefined();
@@ -664,9 +652,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         priority: 'high',
       };
 
-      const RESULT = await execAPI('create', [
-        JSON.stringify(featureTaskData),
-      ]);
+      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
 
       const END_TIME = Date.now();
       const EXECUTION_TIME = END_TIME - START_TIME;
@@ -724,7 +710,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
       await Promise.all(taskCreationPromises);
 
       const START_TIME = Date.now();
-      const RESULT = await execAPI('list');
+      const result = await execAPI('list');
       const END_TIME = Date.now();
       const QUERY_TIME = END_TIME - START_TIME;
 
@@ -768,9 +754,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         priority: 'medium',
       };
 
-      const RESULT = await execAPI('create', [
-        JSON.stringify(featureTaskData),
-      ]);
+      const result = await execAPI('create', [JSON.stringify(featureTaskData)]);
 
       expect(result.success).toBe(true);
       testFeatureTaskId = result.taskId;
@@ -800,7 +784,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         subtasks: 'invalid_subtasks_data', // Should be an array
       };
 
-      const RESULT = await execAPI('create', [
+      const result = await execAPI('create', [
         JSON.stringify(TASK_DATA_WITH_INVALID_SUBTASKS),
       ]);
 
@@ -832,7 +816,7 @@ describe('Embedded Subtasks System - Comprehensive Integration Tests', () => {
         priority: 'medium',
       };
 
-      const RESULT = await execAPI('create', [JSON.stringify(taskData)]);
+      const result = await execAPI('create', [JSON.stringify(taskData)]);
 
       expect(result.success).toBe(true);
       testFeatureTaskId = result.taskId;

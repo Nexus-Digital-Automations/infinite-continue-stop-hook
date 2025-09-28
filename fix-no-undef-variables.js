@@ -2,7 +2,7 @@
  * Automated No-Undef Variable Fixer
  *
  * Fixes common no-undef variable issues:
- * - Replaces RESULT with result consistently
+ * - Replaces result with result consistently
  * - Ensures proper variable declarations
  * - Fixes path/PATH inconsistencies
  * - Handles error variable references
@@ -36,19 +36,19 @@ function fixVariableIssues(filePath) {
   let content = fs.readFileSync(filePath, 'utf8');
   const originalContent = content;
 
-  // Fix: const RESULT = ... followed by expect(result...)
+  // Fix: const result = ... followed by expect(result...)
   content = content.replace(
-    /const RESULT = ([^;]+);[\s\S]*?expect\(result/g,
+    /const result = ([^;]+);[\s\S]*?expect\(result/g,
     (match) => {
-      return match.replace('const RESULT =', 'const result =');
+      return match.replace('const result =', 'const result =');
     }
   );
 
-  // Fix: const RESULT = ... followed by expect(result...)
+  // Fix: const result = ... followed by expect(result...)
   content = content.replace(
-    /const RESULT = ([^;]+);[\s\S]*?expect\(result/g,
+    /const result = ([^;]+);[\s\S]*?expect\(result/g,
     (match) => {
-      return match.replace('const RESULT =', 'const result =');
+      return match.replace('const result =', 'const result =');
     }
   );
 
@@ -73,17 +73,17 @@ function fixVariableIssues(filePath) {
     }
   );
 
-  // Fix: result variable usage when RESULT is declared
+  // Fix: result variable usage when result is declared
   content = content.replace(
-    /const RESULT = ([^;]+);([\s\S]*?)resolve\(result\)/g,
+    /const result = ([^;]+);([\s\S]*?)resolve\(result\)/g,
     (match, assignment, body) => {
       return `const result = ${assignment};${body}resolve(result)`;
     }
   );
 
-  // Fix: return { result } when RESULT was declared
+  // Fix: return { result } when result was declared
   content = content.replace(
-    /const RESULT = ([^;]+);([\s\S]*?)return\s*{\s*[^}]*result[^}]*}/g,
+    /const result = ([^;]+);([\s\S]*?)return\s*{\s*[^}]*result[^}]*}/g,
     (match, assignment, body) => {
       return `const result = ${assignment};${body.replace(
         /return\s*{\s*([^}]*)\s*}/,

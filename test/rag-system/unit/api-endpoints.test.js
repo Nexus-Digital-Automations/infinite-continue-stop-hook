@@ -1,4 +1,5 @@
 /**
+const { loggers } = require('../lib/logger');
  * RAG System API Endpoints Unit Tests
  *
  * Comprehensive testing of RAG-based lessons And error database API endpoints
@@ -130,7 +131,7 @@ describe('RAG System API Endpoints', () => {
 
           const DURATION = Date.now() - start;
           expect(duration).toBeLessThan(10000);
-        } catch {
+        } catch (error) {
         expect(error.code).toBe('ECONNABORTED');
         }
         */

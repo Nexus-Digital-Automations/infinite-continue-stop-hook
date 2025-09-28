@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "timestamp": "2025-09-28T04:18:31.344Z",
+    "timestamp": "2025-09-28T04:26:17.567Z",
     "reporter": "jest-json-reporter",
     "version": "1.0.0",
     "generator": "Enhanced Coverage System"
@@ -10,30 +10,26 @@
     "numPassedTestSuites": 0,
     "numFailedTestSuites": 1,
     "numPendingTestSuites": 0,
-    "numTotalTests": 12,
+    "numTotalTests": 0,
     "numPassedTests": 0,
-    "numFailedTests": 12,
+    "numFailedTests": 0,
     "numPendingTests": 0,
     "numTodoTests": 0,
-    "startTime": 1759033110239,
-    "endTime": 1759033111344,
-    "duration": 1105,
+    "startTime": 1759033576682,
+    "endTime": 1759033577567,
+    "duration": 885,
     "success": false
   },
   "testResults": [
     {
       "testFilePath": "/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js",
-      "displayName": {
-        "color": "white",
-        "name": "unit"
-      },
-      "status": "failed",
-      "startTime": 1759033110447,
-      "endTime": 1759033111322,
-      "duration": 875,
-      "numTests": 12,
+      "status": "passed",
+      "startTime": 0,
+      "endTime": 0,
+      "duration": 0,
+      "numTests": 0,
       "numPassingTests": 0,
-      "numFailingTests": 12,
+      "numFailingTests": 0,
       "numPendingTests": 0,
       "snapshot": {
         "added": 0,
@@ -42,274 +38,8 @@
         "updated": 0,
         "unchecked": 0
       },
-      "testCases": [
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "get-verification-requirements"
-          ],
-          "title": "should successfully retrieve verification requirements for a task",
-          "fullName": "Verification Endpoints get-verification-requirements should successfully retrieve verification requirements for a task",
-          "status": "failed",
-          "duration": 2,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "get-verification-requirements"
-          ],
-          "title": "should throw error when task ID does not exist",
-          "fullName": "Verification Endpoints get-verification-requirements should throw error when task ID does not exist",
-          "status": "failed",
-          "duration": 1,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "get-verification-requirements"
-          ],
-          "title": "should throw error when task has no verification gate",
-          "fullName": "Verification Endpoints get-verification-requirements should throw error when task has no verification gate",
-          "status": "failed",
-          "duration": 1,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "get-verification-requirements"
-          ],
-          "title": "should throw error when no tasks exist in system",
-          "fullName": "Verification Endpoints get-verification-requirements should throw error when no tasks exist in system",
-          "status": "failed",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "submit-verification-evidence"
-          ],
-          "title": "should successfully submit valid verification evidence",
-          "fullName": "Verification Endpoints submit-verification-evidence should successfully submit valid verification evidence",
-          "status": "failed",
-          "duration": 1,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "submit-verification-evidence"
-          ],
-          "title": "should reject evidence when verification gate already passed",
-          "fullName": "Verification Endpoints submit-verification-evidence should reject evidence when verification gate already passed",
-          "status": "failed",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "submit-verification-evidence"
-          ],
-          "title": "should reject evidence missing required fields",
-          "fullName": "Verification Endpoints submit-verification-evidence should reject evidence missing required fields",
-          "status": "failed",
-          "duration": 1,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "submit-verification-evidence"
-          ],
-          "title": "should reject evidence with invalid reviewedItems format",
-          "fullName": "Verification Endpoints submit-verification-evidence should reject evidence with invalid reviewedItems format",
-          "status": "failed",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "submit-verification-evidence"
-          ],
-          "title": "should reject null or undefined evidence data",
-          "fullName": "Verification Endpoints submit-verification-evidence should reject null or undefined evidence data",
-          "status": "failed",
-          "duration": 1,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "submit-verification-evidence"
-          ],
-          "title": "should handle task without verification gate",
-          "fullName": "Verification Endpoints submit-verification-evidence should handle task without verification gate",
-          "status": "failed",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "Evidence validation logic"
-          ],
-          "title": "should validate evidence against requirements properly",
-          "fullName": "Verification Endpoints Evidence validation logic should validate evidence against requirements properly",
-          "status": "failed",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        },
-        {
-          "ancestorTitles": [
-            "Verification Endpoints",
-            "Integration scenarios"
-          ],
-          "title": "should handle complete verification workflow",
-          "fullName": "Verification Endpoints Integration scenarios should handle complete verification workflow",
-          "status": "failed",
-          "duration": 0,
-          "numPassingAsserts": 0,
-          "location": null
-        }
-      ],
-      "failureDetails": [
-        {
-          "title": "should successfully retrieve verification requirements for a task",
-          "fullName": "Verification Endpoints get-verification-requirements should successfully retrieve verification requirements for a task",
-          "failureMessages": [
-            "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:114:13)\n    at new _initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:59:10)\n    at new AutonomousTaskManagerAPI (/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js:306:30)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:82:11)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusHook (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:975:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:940:5)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should throw error when task ID does not exist",
-          "fullName": "Verification Endpoints get-verification-requirements should throw error when task ID does not exist",
-          "failureMessages": [
-            "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:114:13)\n    at new _initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:59:10)\n    at new AutonomousTaskManagerAPI (/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js:306:30)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:82:11)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusHook (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:975:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:940:5)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should throw error when task has no verification gate",
-          "fullName": "Verification Endpoints get-verification-requirements should throw error when task has no verification gate",
-          "failureMessages": [
-            "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:114:13)\n    at new _initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:59:10)\n    at new AutonomousTaskManagerAPI (/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js:306:30)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:82:11)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusHook (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:975:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:940:5)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should throw error when no tasks exist in system",
-          "fullName": "Verification Endpoints get-verification-requirements should throw error when no tasks exist in system",
-          "failureMessages": [
-            "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:114:13)\n    at new _initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:59:10)\n    at new AutonomousTaskManagerAPI (/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js:306:30)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:82:11)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusHook (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:975:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:940:5)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should successfully submit valid verification evidence",
-          "fullName": "Verification Endpoints submit-verification-evidence should successfully submit valid verification evidence",
-          "failureMessages": [
-            "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:114:13)\n    at new _initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:59:10)\n    at new AutonomousTaskManagerAPI (/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js:306:30)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:82:11)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusHook (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:975:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:940:5)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should reject evidence when verification gate already passed",
-          "fullName": "Verification Endpoints submit-verification-evidence should reject evidence when verification gate already passed",
-          "failureMessages": [
-            "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:114:13)\n    at new _initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:59:10)\n    at new AutonomousTaskManagerAPI (/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js:306:30)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:82:11)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusHook (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:975:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:940:5)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should reject evidence missing required fields",
-          "fullName": "Verification Endpoints submit-verification-evidence should reject evidence missing required fields",
-          "failureMessages": [
-            "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:114:13)\n    at new _initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:59:10)\n    at new AutonomousTaskManagerAPI (/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js:306:30)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:82:11)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusHook (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:975:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:940:5)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should reject evidence with invalid reviewedItems format",
-          "fullName": "Verification Endpoints submit-verification-evidence should reject evidence with invalid reviewedItems format",
-          "failureMessages": [
-            "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:114:13)\n    at new _initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:59:10)\n    at new AutonomousTaskManagerAPI (/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js:306:30)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:82:11)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusHook (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:975:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:940:5)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should reject null or undefined evidence data",
-          "fullName": "Verification Endpoints submit-verification-evidence should reject null or undefined evidence data",
-          "failureMessages": [
-            "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:114:13)\n    at new _initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:59:10)\n    at new AutonomousTaskManagerAPI (/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js:306:30)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:82:11)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusHook (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:975:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:940:5)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should handle task without verification gate",
-          "fullName": "Verification Endpoints submit-verification-evidence should handle task without verification gate",
-          "failureMessages": [
-            "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:114:13)\n    at new _initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:59:10)\n    at new AutonomousTaskManagerAPI (/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js:306:30)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:82:11)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusHook (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:975:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:940:5)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should validate evidence against requirements properly",
-          "fullName": "Verification Endpoints Evidence validation logic should validate evidence against requirements properly",
-          "failureMessages": [
-            "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:114:13)\n    at new _initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:59:10)\n    at new AutonomousTaskManagerAPI (/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js:306:30)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:82:11)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusHook (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:975:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:940:5)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        },
-        {
-          "title": "should handle complete verification workflow",
-          "fullName": "Verification Endpoints Integration scenarios should handle complete verification workflow",
-          "failureMessages": [
-            "Error: Audit infrastructure initialization failed: fs.existsSync is not a function\n    at ValidationAuditTrailManager._initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:114:13)\n    at new _initializeAuditInfrastructure (/Users/jeremyparker/infinite-continue-stop-hook/lib/validation-audit-trail-manager.js:59:10)\n    at new AutonomousTaskManagerAPI (/Users/jeremyparker/infinite-continue-stop-hook/taskmanager-api.js:306:30)\n    at Object.<anonymous> (/Users/jeremyparker/infinite-continue-stop-hook/test/unit/verification-endpoints.test.js:82:11)\n    at Promise.finally.completed (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1556:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1496:10)\n    at _callCircusHook (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:975:40)\n    at _runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:940:5)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:839:13)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at _runTestsForDescribeBlock (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:829:11)\n    at run (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:757:3)\n    at runAndTransformResultsToJestFormat (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/jestAdapterInit.js:1917:21)\n    at jestAdapter (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/jeremyparker/infinite-continue-stop-hook/node_modules/jest-runner/build/index.js:343:7)"
-          ],
-          "failureDetails": [
-            {}
-          ]
-        }
-      ]
+      "testCases": [],
+      "failureDetails": []
     }
   ],
   "coverageMap": null,

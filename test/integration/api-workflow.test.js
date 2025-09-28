@@ -710,13 +710,13 @@ describe('API Workflow Integration Tests', () => {
         await execAPI('invalid-command', [], { projectRoot: testDir });
         // Should not reach here
         expect(true).toBe(false);
-      } catch {
+      } catch (error) {
         expect(error.message).toContain('Command failed');
       }
     });
 
     test('should handle malformed JSON in feature suggestion', async () => {
-      const RESULT = await execAPI('suggest-feature', ['{ invalid json }'], {
+      const result = await execAPI('suggest-feature', ['{ invalid json }'], {
         projectRoot: testDir,
       });
 

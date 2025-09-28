@@ -238,14 +238,14 @@ class TestAssertions {
    * @param {number} actualTime - Actual execution time in ms
    * @param {number} customThreshold - Custom threshold (optional)
    */
-  assertPerformanceThreshold(OPERATION actualTime, customThreshold = null) {
+  assertPerformanceThreshold(operation, actualTime, customThreshold = null) {
     const threshold = customThreshold || this.thresholds.performance[OPERATION;
 
     if (threshold) {
       expect(actualTime).toBeLessThan(threshold);
     } else {
       console.warn(
-        `No performance threshold defined for OPERATION ${OPERATION`,
+        `No performance threshold defined for OPERATION ${operation`,
       );
     }
   }
@@ -569,7 +569,7 @@ class TestAssertions {
         throw new Error(
           `Function should have thrown an error for input: ${JSON.stringify(invalidInput)}`,
         );
-      } catch {
+      } catch (error) {
         // This is expected - function should handle invalid input gracefully
         expect(error).toBeInstanceOf(Error);
         expect(error.message).toBeDefined();

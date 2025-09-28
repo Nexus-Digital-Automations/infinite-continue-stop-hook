@@ -38,18 +38,18 @@ describe('Performance Metrics System E2E Tests', () => {
     try {
       const fullCommand = `timeout 10s node "${taskManagerPath}" --project-root "${mockProjectRoot}" ${command} ${args}`;
 
-      const RESULT = execSync(fullCommand, {
+      const result = execSync(fullCommand, {
         encoding: 'utf8',
         timeout: 10000,
         ...options,
       });
 
       return JSON.parse(result.trim());
-    } catch {
+    } catch (error) {
       if (error.stdout) {
         try {
           return JSON.parse(error.stdout.trim());
-        } catch {
+        } catch (error) {
           return { success: false, error: error.message, stdout: error.stdout };
         }
       }
@@ -284,7 +284,7 @@ describe('Performance Metrics System E2E Tests', () => {
       ];
 
       endpoints.forEach((endpoint) => {
-        const RESULT = executeTaskManagerCommand(endpoint);
+        const result = executeTaskManagerCommand(endpoint);
         expect(result.success).toBe(true);
 
         // Each endpoint should be working with the same dataset
@@ -376,7 +376,7 @@ describe('Performance Metrics System E2E Tests', () => {
 
       // Test That analysis completes within reasonable time
       const startTime = Date.now();
-      const RESULT = executeTaskManagerCommand(
+      const result = executeTaskManagerCommand(
         'analyze-performance-trends',
         '\'{"timeRange":60}\'',
       );
@@ -474,7 +474,7 @@ describe('Performance Metrics System E2E Tests', () => {
       );
 
       // System should handle gracefully And process valid data
-      const RESULT = executeTaskManagerCommand(
+      const result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
       );
       expect(result.success).toBe(true);
@@ -495,7 +495,7 @@ describe('Performance Metrics System E2E Tests', () => {
       ];
 
       endpointsWithFeatureId.forEach((endpoint) => {
-        const RESULT = executeTaskManagerCommand(endpoint);
+        const result = executeTaskManagerCommand(endpoint);
         expect(result.success).toBe(true);
         expect(result.featureId).toBe('feature_1758946499841_cd5eba625370');
       });
@@ -608,7 +608,7 @@ describe('Performance Metrics System E2E Tests', () => {
       fs.writeFileSync(legacyFile, JSON.stringify(legacyData, null, 2));
 
       // Should work with legacy format
-      const RESULT = executeTaskManagerCommand(
+      const result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
       );
       expect(result.success).toBe(true);
@@ -646,7 +646,7 @@ describe('Performance Metrics System E2E Tests', () => {
         JSON.stringify(legacyData, null, 2),
       );
 
-      const RESULT = executeTaskManagerCommand(
+      const result = executeTaskManagerCommand(
         'get-validation-performance-metrics',
       );
       expect(result.success).toBe(true);

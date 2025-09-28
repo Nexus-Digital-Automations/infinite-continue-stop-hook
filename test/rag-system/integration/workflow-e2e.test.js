@@ -1,4 +1,5 @@
 /**
+const { loggers } = require('../lib/logger');
  * RAG System End-to-End Workflow Integration Tests
  *
  * Comprehensive testing of complete RAG workflows including lesson storage,
@@ -45,7 +46,7 @@ describe('RAG System End-to-End Workflows', () => {
     loggers.stopHook.log('Cleaning up E2E test environment...');
     try {
       await __fs.rm(__testProjectRoot, { recursive: true, force: true });
-    } catch {
+    } catch (error) {
       loggers.stopHook.warn('Cleanup warning:', error.message);
     }
   });

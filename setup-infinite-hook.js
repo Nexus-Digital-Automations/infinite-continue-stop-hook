@@ -466,7 +466,7 @@ async function processProject(targetPath) {
     }
 
     return { success: true, project: projectName };
-  } catch {
+  } catch (error) {
     loggers.stopHook.error(`❌ ${projectName} - Error:`, error.message);
     return { success: false, project: projectName, error: error.message };
   }
@@ -534,7 +534,7 @@ function migrateToFeatureBasedSystem(targetPath) {
         `   🗑️  Removed features.json (dual system eliminated)`
       );
     }
-  } catch {
+  } catch (error) {
     loggers.stopHook.log(`   ❌ Feature migration failed: ${error.message}`);
     // Don't fail the entire setup for migration issues
   }
@@ -826,7 +826,7 @@ async function main() {
     loggers.stopHook.log(
       `Processing single project: ${PATH.basename(targetPath)}`
     );
-    const RESULT = await processProject(targetPath);
+    const result = await processProject(targetPath);
     results.push(result);
 
     // Summary
@@ -904,7 +904,7 @@ async function main() {
     console.log(
       'node "/Users/jeremyparker/Desktop/Claude Coding Projects/infinite-continue-stop-hook/stop-hook.js"'
     );
-  } catch {
+  } catch (error) {
     loggers.stopHook.error('\n❌ Batch setup error:', error.message);
     throw error;
   } finally {

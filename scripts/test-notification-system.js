@@ -65,7 +65,7 @@ class TestNotificationSystem {
       await this.updateNotificationHistory(notifications);
 
       loggers.stopHook.log(`📤 Sent ${notifications.length} notification(s)`);
-    } catch {
+    } catch (error) {
       loggers.stopHook.error(
         '❌ Failed to process notifications:',
         error.message
@@ -523,7 +523,7 @@ class TestNotificationSystem {
       if (fs.existsSync(path)) {
         return JSON.parse(fs.readFileSync(path, 'utf8'));
       }
-    } catch {
+    } catch (error) {
       loggers.stopHook.warn('⚠️ Could not load test results:', error.message);
     }
     return null;
@@ -535,7 +535,7 @@ class TestNotificationSystem {
       if (fs.existsSync(path)) {
         return JSON.parse(fs.readFileSync(path, 'utf8'));
       }
-    } catch {
+    } catch (error) {
       loggers.stopHook.warn('⚠️ Could not load coverage data:', error.message);
     }
     return null;
@@ -547,7 +547,7 @@ class TestNotificationSystem {
       if (fs.existsSync(path)) {
         return JSON.parse(fs.readFileSync(path, 'utf8'));
       }
-    } catch {
+    } catch (error) {
       loggers.stopHook.warn('⚠️ Could not load CI/CD data:', error.message);
     }
     return null;
@@ -558,7 +558,7 @@ class TestNotificationSystem {
       if (fs.existsSync(this.options.historyFile)) {
         return JSON.parse(fs.readFileSync(this.options.historyFile, 'utf8'));
       }
-    } catch {
+    } catch (error) {
       loggers.stopHook.warn(
         '⚠️ Could not load notification history:',
         error.message
@@ -603,7 +603,7 @@ class TestNotificationSystem {
         this.options.historyFile,
         JSON.stringify(this.notificationHistory, null, 2)
       );
-    } catch {
+    } catch (error) {
       loggers.stopHook.warn(
         '⚠️ Could not update notification history:',
         error.message

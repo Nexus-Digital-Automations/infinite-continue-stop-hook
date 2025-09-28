@@ -88,7 +88,7 @@ async function testLearningRecommendationEngine() {
     console.log(
       '\n✅ Feature 6: Learning Recommendation Engine integration test completed successfully!'
     );
-  } catch {
+  } catch (error) {
     loggers.stopHook.error('❌ Feature 6 test failed:', error.message);
     loggers.stopHook.error('Stack:', error.stack);
   }

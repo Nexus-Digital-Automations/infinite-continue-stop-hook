@@ -76,7 +76,7 @@ class PerformanceLogger {
 /**
  * System resource monitor
  */
-class RESOURCE_MONITOR {
+class ResourceMonitor {
   constructor() {
     this.startTime = Date.now();
     this.startMemory = process.memoryUsage();
@@ -186,7 +186,7 @@ class TestPerformanceMonitor {
     this.startTime = Date.now();
     this.testResults = [];
     this.suiteResults = [];
-    this.resourceMonitor = new RESOURCE_MONITOR();
+    this.resourceMonitor = new ResourceMonitor();
     this.warnings = [];
     this.errors = [];
   }
@@ -219,7 +219,7 @@ class TestPerformanceMonitor {
       if (hasErrors) {
         throw new Error('Test performance monitoring completed with errors');
       }
-    } catch {
+    } catch (error) {
       PerformanceLogger.error(
         `Test performance monitoring failed: ${error.message}`
       );
@@ -287,7 +287,7 @@ class TestPerformanceMonitor {
     const suiteStartMemory = process.memoryUsage();
 
     try {
-      const RESULT = await this.executeTestCommand(testSuite);
+      const result = await this.executeTestCommand(testSuite);
       const duration = Date.now() - suiteStartTime;
       const endMemory = process.memoryUsage();
 
@@ -314,7 +314,7 @@ class TestPerformanceMonitor {
       this.checkSuitePerformance(suiteResult);
 
       PerformanceLogger.success(`${testSuite.name} completed in ${duration}ms`);
-    } catch {
+    } catch (error) {
       const duration = Date.now() - suiteStartTime;
       PerformanceLogger.error(
         `${testSuite.name} failed after ${duration}ms: ${error.message}`

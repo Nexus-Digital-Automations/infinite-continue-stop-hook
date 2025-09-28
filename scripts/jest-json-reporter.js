@@ -94,7 +94,7 @@ class JestJsonReporter {
 
   processTestResults(testResults) {
     return testResults.map((testResult) => {
-      const RESULT = {
+      const result = {
         testFilePath: testResult.testFilePath,
         displayName: testResult.displayName,
         status: testResult.numFailingTests > 0 ? 'failed' : 'passed',
@@ -189,7 +189,7 @@ class JestJsonReporter {
           pct: summary.lines.pct,
         },
       };
-    } catch {
+    } catch (error) {
       return {
         error: 'Failed to process coverage map',
         message: error.message,

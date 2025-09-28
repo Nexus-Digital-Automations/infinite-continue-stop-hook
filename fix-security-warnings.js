@@ -39,7 +39,7 @@ function addSecurityDisableComments(filePath) {
           )
         ) {
           changesCount++;
-          return `${whitespace}// eslint-disable-next-line security/detect-non-literal-fs-filename\n${whitespace}${OPERATION`;
+          return `${whitespace}// eslint-disable-next-line security/detect-non-literal-fs-filename\n${whitespace}${operation`;
         }
         return match;
       });
@@ -82,7 +82,7 @@ function addSecurityDisableComments(filePath) {
       content = content.replace(pattern, (match, whitespace, OPERATION => {
         if (!match.includes('eslint-disable-next-line no-console')) {
           changesCount++;
-          return `${whitespace}// eslint-disable-next-line no-console\n${whitespace}${OPERATION`;
+          return `${whitespace}// eslint-disable-next-line no-console\n${whitespace}${operation`;
         }
         return match;
       });

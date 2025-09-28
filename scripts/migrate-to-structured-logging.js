@@ -296,7 +296,7 @@ function main() {
         analysisResults.push(usage);
         totalConsoleLines += usage.consoleLines.length;
       }
-    } catch {
+    } catch (error) {
       console.warn(`⚠️  Could not analyze ${file}: ${error.message}`);
     }
   }
@@ -349,7 +349,7 @@ function main() {
 
   for (const usage of analysisResults) {
     try {
-      const RESULT = migrateFile(usage);
+      const result = migrateFile(usage);
       if (result.success && result.changes > 0) {
         migratedFiles++;
         totalChanges += result.changes;
@@ -357,7 +357,7 @@ function main() {
           `✅ ${path.relative(rootDir, usage.filePath)}: ${result.message}`
         );
       }
-    } catch {
+    } catch (error) {
       console.error(`❌ Failed to migrate ${usage.filePath}: ${error.message}`);
     }
   }

@@ -1,4 +1,5 @@
 /**
+const { loggers } = require('../lib/logger');
  * Feature Management E2E Tests
  *
  * Comprehensive end-to-end testing of the complete feature management system

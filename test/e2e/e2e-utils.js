@@ -1,4 +1,5 @@
 /**
+const { loggers } = require('../lib/logger');
  * E2E Test Utilities - Comprehensive Testing Infrastructure
  *
  * Provides utilities for end-to-end testing of the infinite-continue-stop-hook system
@@ -136,7 +137,7 @@ class E2EEnvironment {
       try {
         // eslint-disable-next-line no-await-in-loop -- Sequential cleanup required for proper teardown order
         await task();
-      } catch {
+      } catch (error) {
         loggers.stopHook.warn(`Cleanup task failed: ${error.message}`);
       }
     }
@@ -157,7 +158,7 @@ class E2EEnvironment {
       } else {
         await fs.unlink(dirPath);
       }
-    } catch {
+    } catch (error) {
       if (error.code !== 'ENOENT') {
         throw error;
       }
@@ -169,7 +170,7 @@ class E2EEnvironment {
    */
   async getFeatures() {
     try {
-      const RESULT = await CommandExecutor.executeAPI('list-features', [], {
+      const result = await CommandExecutor.executeAPI('list-features', [], {
         projectRoot: this.testDir,
       });
 
@@ -188,7 +189,7 @@ class E2EEnvironment {
       } else {
         throw new Error(`TaskManager API error: ${apiResponse.error}`);
       }
-    } catch {
+    } catch (error) {
       throw new Error(
         `Failed to get features from TaskManager API: ${error.message}`,
       );
@@ -270,7 +271,7 @@ class CommandExecutor {
         }
         isResolved = true;
 
-        const RESULT = {
+        const result = {
           code,
           stdout: stdout.trim(),
           stderr: stderr.trim(),
@@ -406,7 +407,7 @@ class FeatureTestHelpers {
       category: data.category,
     });
 
-    const RESULT = await CommandExecutor.executeAPI(
+    const result = await CommandExecutor.executeAPI(
       'suggest-feature',
       [jsonData],
       { projectRoot: environment.testDir },
@@ -537,7 +538,7 @@ class StopHookTestHelpers {
     for (let i = 0; i < maxIterations; i++) {
       // Test the stop hook - should always block (exit code 2) in infinite mode
       // eslint-disable-next-line no-await-in-loop -- Sequential processing required for testing infinite continue behavior over time
-      const RESULT = await CommandExecutor.executeStopHook(
+      const result = await CommandExecutor.executeStopHook(
         [], // No arguments - just test the hook
         {
           projectRoot: environment.testDir,
@@ -739,7 +740,7 @@ class E2EAssertions {
         return responseJson.feature.id;
       }
       throw new Error('No feature ID found in response');
-    } catch {
+    } catch (error) {
       throw new Error(
         `Failed to extract feature ID: ${error.message}\nResponse: ${commandResult.stdout}`,
       );

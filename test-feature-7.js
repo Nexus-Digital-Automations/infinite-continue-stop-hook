@@ -130,7 +130,7 @@ async function testAdaptiveLearningPaths() {
     console.log(
       '\n✅ Feature 7: Adaptive Learning Paths System integration test completed successfully!'
     );
-  } catch {
+  } catch (error) {
     loggers.stopHook.error('❌ Feature 7 test failed:', error.message);
     loggers.stopHook.error('Stack:', error.stack);
   }

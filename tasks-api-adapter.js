@@ -5,7 +5,7 @@
  * And new TASKS.json schema, enabling backward compatibility during migration
  */
 
-class TASKS_API_ADAPTER {
+class TasksApiAdapter {
   constructor() {
     this.taskIdCounter = Date.now();
   }
@@ -309,4 +309,4 @@ class TASKS_API_ADAPTER {
   }
 }
 
-module.exports = TASKS_API_ADAPTER;
+module.exports = TasksApiAdapter;
