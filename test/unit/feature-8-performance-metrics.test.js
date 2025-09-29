@@ -497,7 +497,7 @@ const cutoffDate = new Date(Date.now() - timeRange * 24 * 60 * 60 * 1000);
     test('should return metrics with proper filtering', async () => {
       // Create mock metrics data;
 const mockMetrics = {
-    metrics: [ {,
+    metrics: [ {
     criterion: 'linter-validation',
             startTime: '2025-09-27T01:00:00.000Z',
             durationMs: 1500,
@@ -535,7 +535,7 @@ const mockMetrics = {
 
     test('should calculate enhanced performance statistics correctly', async () => {
       const mockMetrics = {
-    metrics: [ {,
+    metrics: [ {
     criterion: 'test-validation',
             durationMs: 1000,
             success: true,
@@ -638,7 +638,7 @@ const mockMetrics = {
 
     test('should respect custom thresholds', async () => {
       const mockMetrics = {
-    metrics: [ {,
+    metrics: [ {
     criterion: 'test-validation',
             durationMs: 3000,
             success: true,
@@ -679,7 +679,7 @@ const mockMetrics = {
 
     test('should calculate benchmarks correctly', async () => {
       const mockMetrics = {
-    metrics: [ {,
+    metrics: [ {
     criterion: 'linter-validation',
             durationMs: 1500,
             success: true,
@@ -729,7 +729,7 @@ const mockMetrics = {
 
     test('should generate benchmark recommendations for slow criteria', async () => {
       const mockMetrics = {
-    metrics: [ {,
+    metrics: [ {
     criterion: 'linter-validation',
             durationMs: 3000, // Exceeds 2000ms target
             success: true,

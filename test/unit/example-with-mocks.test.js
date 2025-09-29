@@ -66,7 +66,7 @@ describe('Example Test with Mock Framework', () => {
 
   afterEach(() => {
     // Cleanup test environment
-    if (testEnvironment, _agentId) {
+    if (testEnvironment) {
       testEnvironment.cleanup();
     }
   });
@@ -112,7 +112,7 @@ describe('Example Test with Mock Framework', () => {
 
     test('should mock agent initialization', async () => {
       const AGENT_ID = TestIdGenerator.generateAgentId();
-      const _result = await APIExecutor.initializeTestAgent(AGENT_ID);
+      const result = await APIExecutor.initializeTestAgent(AGENT_ID);
 
       expect(result.agentId).toBe(AGENT_ID);
       expect(result.result.success).toBe(true);
@@ -130,7 +130,7 @@ describe('Example Test with Mock Framework', () => {
         category: 'enhancement',
       });
 
-      const _result = await APIExecutor.createTestFeature(featureData);
+      const result = await APIExecutor.createTestFeature(featureData);
 
       expect(result.success).toBe(true);
       expect(result.feature).toBeDefined();
@@ -172,7 +172,7 @@ describe('Example Test with Mock Framework', () => {
         TestDataFactory.createFeatureData({ category: 'bug-fix' }),
       );
 
-      const _result = await APIExecutor.execAPI('list-features', [
+      const result = await APIExecutor.execAPI('list-features', [
         JSON.stringify({ category: 'enhancement' }),
       ]);
 
@@ -346,9 +346,9 @@ describe('Example Test with Mock Framework', () => {
       try {
         await APIExecutor.execAPI('invalid-command');
         expect.fail('Should have thrown an error');
-      } catch (_) {
-        expect(_error.message).toBeDefined();
-        TestLogger.debug('Handled expected error', { error: _error.message });
+      } catch (error) {
+        expect(error.message).toBeDefined();
+        TestLogger.debug('Handled expected error', { error: error.message });
       }
     });
 
@@ -356,7 +356,7 @@ describe('Example Test with Mock Framework', () => {
       const AGENT_ID = TestIdGenerator.generateAgentId();
       await APIExecutor.initializeTestAgent(AGENT_ID);
 
-      const _result = await APIExecutor.execAPI('approve-feature', [
+      const result = await APIExecutor.execAPI('approve-feature', [
         'non-existent-feature',
       ]);
 
